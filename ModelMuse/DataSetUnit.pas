@@ -7512,6 +7512,7 @@ begin
   end
   else if (Name = StrMODFLOWCHDStartingHead)
     or (Name = StrMODFLOWCHDEndingHead)
+    or (Pos('CHD ', Name) = 1)
     then
   begin
     Result := btMfChd;

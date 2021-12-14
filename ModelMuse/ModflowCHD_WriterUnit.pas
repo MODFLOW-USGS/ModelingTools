@@ -12,11 +12,9 @@ type
   private
     NPCHD: integer;
     MXL: integer;
-//    FFileName: string;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
     FChdCells: array of array of array of TCHD_Cell;
-//    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSets3And4;
@@ -52,6 +50,7 @@ type
     Class function Mf6ObType: TObGeneral; override;
     function ObsFactors: TFluxObservationGroups; override;
     procedure DoBeforeWriteCells; override;
+    procedure WriteAdditionalAuxVariables; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -65,7 +64,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  ModflowGridUnit, Forms, DataSetUnit;
+  ModflowGridUnit, Forms, DataSetUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrErrorInCHDPackage = 'Error in CHD package';
@@ -156,6 +155,9 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorInCHDPackage);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrCHDStartingHeadSe);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrCHDEndingHeadSet);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrCHDConcentrationSe);
     frmErrorsAndWarnings.RemoveWarningGroup(Model,  Format(StrInvalidCHDS, [StrStartingHead]));
     frmErrorsAndWarnings.RemoveWarningGroup(Model,  Format(StrInvalidCHDS, [StrEndingHead]));
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMODFLOW6DoesNotA);
@@ -208,6 +210,21 @@ begin
   NewLine
 end;
 
+procedure TModflowCHD_Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+  end;
+end;
+
 procedure TModflowCHD_Writer.WriteCell(Cell: TValueCell;
   const DataSetIdentifier, VariableIdentifiers: string);
 var
@@ -218,7 +235,8 @@ var
   OtherCell: TCHD_Cell;
   CurrentScreenObject: TScreenObject;
   OtherScreenObject: TScreenObject;
-//  DataArray: TDataArray;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -266,6 +284,17 @@ begin
     end;
   end;
 
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      if (CHD_Cell.ConcentrationPestNames[SpeciesIndex] <> '')
+       or (CHD_Cell.ConcentrationPestSeriesNames[SpeciesIndex] <> '') then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
+  end;
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
@@ -294,6 +323,15 @@ begin
     WriteValueOrFormula(CHD_Cell, ChdEndHeadPosition);
   end;
   WriteIface(CHD_Cell.IFace);
+
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      WriteValueOrFormula(CHD_Cell, ChdStartConcentration + SpeciesIndex);
+    end;
+  end;
+
   WriteBoundName(CHD_Cell);
 
   if Model.DisvUsed then
@@ -328,13 +366,22 @@ const
   DS5 = ' # Data Set 5: ITMP NP';
   DataSetIdentifier = 'Data Set 6:';
   VariableIdentifiers = 'Shead Ehead IFACE';
-  VariableIdentifiersMF6 = 'Shead IFACE boundname';
+  VariableIdentifiersMF6 = 'Shead IFACE';
 var
   VarID: string;
+  SpeciesIndex: Integer;
 begin
   if Model.ModelSelection = msModflow2015 then
   begin
     VarID := VariableIdentifiersMF6;
+    if Model.GwtUsed then
+    begin
+      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+      begin
+        VarID := VarID + ' ' + Model.MobileComponents[SpeciesIndex].Name;
+      end;
+    end;
+    VarID := VarID + ' boundname';
   end
   else
   begin

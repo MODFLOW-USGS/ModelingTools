@@ -17,13 +17,21 @@ type
     StartingTime: double;
     EndingTime: double;
     RechargeRateAnnotation: string;
-//    TimeSeriesName: string;
     RechargeParameterName: string;
     RechargeParameterValue: double;
+    // PEST
     RechargePest: string;
     RechargePestSeries: string;
     RechargePestMethod: TPestParamMethod;
     RechargeTimeSeriesName: string;
+    // GWT Concentrations
+    Concentrations: array of double;
+    ConcentrationAnnotations: array of string;
+    ConcentrationPestNames: array of string;
+    ConcentrationPestSeriesNames: array of string;
+    ConcentrationPestSeriesMethods: array of TPestParamMethod;
+    ConcentrationTimeSeriesNames: array of string;
+    procedure Assign(const Item: TRchRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -72,15 +80,24 @@ type
     property RchLayerArray: TRchLayerArray read GetRchLayerArray;
   end;
 
+  TRchCollection = class;
+
+  TRchGwtConcCollection = class(TGwtConcStringCollection)
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TRchCollection);
+  end;
+
   // @name represents a MODFLOW recharge for one time interval.
   // @name is stored by @link(TRchCollection).
   TRchItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(RechargeRate).
     FRechargeRate: TFormulaObject;
+    FGwtConcentrations: TRchGwtConcCollection;
     // See @link(RechargeRate).
     procedure SetRechargeRate(const Value: string);
     function GetRechargeRate: string;
+    procedure SetGwtConcentrations(const Value: TRchGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -92,15 +109,23 @@ type
     procedure SetBoundaryFormula(Index: integer; const Value: string); override;
     // @name checks whether AnotherItem is the same as the current @classname.
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    procedure InvalidateModel; override;
     function BoundaryFormulaCount: integer; override;
   public
-    Destructor Destroy; override;
-  published
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent);override;
+    constructor Create(Collection: TCollection); override;
+    Destructor Destroy; override;
+  published
     // @name is the formula used to set the recharge rate
     // or the recharge rate multiplier of this boundary.
     property RechargeRate: string read GetRechargeRate write SetRechargeRate;
+    property GwtConcentrations: TRchGwtConcCollection read FGwtConcentrations
+      write SetGwtConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
   // @name represents a MODFLOW recharge layer for one time interval.
@@ -139,6 +164,7 @@ type
     // @name is used to compute the recharge rates for a series of
     // cells over a series of time intervals.
     FRechargeRateData: TModflowTimeList;
+    FConcList: TList;
   protected
     procedure CreateTimeLists; override;
     property RechargeRateData: TModflowTimeList read FRechargeRateData;
@@ -151,6 +177,7 @@ type
   TRchCollection = class(TCustomMF_ArrayBoundColl)
   private
     procedure InvalidateRechargeData(Sender: TObject);
+    procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -239,6 +266,13 @@ type
     function GetRechargePestSeries: string;
     function GetRechargeTimeSeriesName: string;
     procedure SetRechargeTimeSeriesName(const Value: string);
+    function GetConcentration(const Index: Integer): double;
+    function GetConcentrationAnnotation(const Index: Integer): string;
+    function GetConcentrationPestName(const Index: Integer): string;
+    function GetConcentrationPestSeriesMethod(
+      const Index: Integer): TPestParamMethod;
+    function GetConcentrationPestSeriesName(const Index: Integer): string;
+    function GetConcentrationTimeSeriesName(const Index: Integer): string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -274,6 +308,19 @@ type
     property RechargePestMethod: TPestParamMethod read GetRechargePestMethod;
     property RechargeTimeSeriesName: string read GetRechargeTimeSeriesName
       write SetRechargeTimeSeriesName;
+    // GWT
+    property Concentrations[const Index: Integer]: double
+      read GetConcentration;
+    property ConcentrationAnnotations[const Index: Integer]: string
+      read GetConcentrationAnnotation;
+    property ConcentrationPestNames[const Index: Integer]: string
+      read GetConcentrationPestName;
+    property ConcentrationPestSeriesNames[const Index: Integer]: string
+      read GetConcentrationPestSeriesName;
+    property ConcentrationPestSeriesMethods[const Index: Integer]: TPestParamMethod
+      read GetConcentrationPestSeriesMethod;
+    property ConcentrationTimeSeriesNames[const Index: Integer]: string
+      read GetConcentrationTimeSeriesName;
   end;
 
   TRechargeLayerCell = class(TRechargeCell)
@@ -312,6 +359,9 @@ type
     FPestRechargeFormula: TFormulaObject;
     FPestRechargeObserver: TObserver;
     FUsedObserver: TObserver;
+    FPestConcentrationMethods: TPestMethodCollection;
+    FPestConcentrationFormulas: TRchGwtConcCollection;
+    FConcentrationObservers: TObserverList;
     procedure SetRechargeLayers(const Value: TRchLayerCollection);
     function GetTimeVaryingRechargeLayers: boolean;
     procedure AssignRechargeLayerCells(BoundaryStorage: TRchLayerStorage;
@@ -320,7 +370,11 @@ type
     procedure SetPestRechargeFormula(const Value: string);
     procedure SetPestRechargeMethod(const Value: TPestParamMethod);
     procedure InvalidateRechargeData(Sender: TObject);
+    procedure InvalidateConcData(Sender: TObject);
     function GetPestRechargeObserver: TObserver;
+    procedure SetPestConcentrationFormulas(const Value: TRchGwtConcCollection);
+    procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
+    function GetConcentrationObserver(const Index: Integer): TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -348,6 +402,8 @@ type
     function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
+    property ConcentrationObserver[const Index: Integer]: TObserver
+      read GetConcentrationObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -391,17 +447,31 @@ type
       Stored False
       {$ENDIF}
       ;
+    property PestConcentrationFormulas: TRchGwtConcCollection
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConcentrationMethods: TPestMethodCollection
+      read FPestConcentrationMethods write SetPestConcentrationMethods
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 const
   RechPosition = 0;
+  RchStartConcentration = 1;
 
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   frmGoPhastUnit, TempFiles,
   AbstractGridUnit, ModflowIrregularMeshUnit, ModflowTimeSeriesUnit,
-  ModflowParameterUnit, ModelMuseUtilities, CustomModflowWriterUnit;
+  ModflowParameterUnit, ModelMuseUtilities, CustomModflowWriterUnit,
+  System.Generics.Collections;
 
 resourcestring
   StrRechargeLayer = 'Recharge layer';
@@ -415,11 +485,15 @@ const
 { TRchItem }
 
 procedure TRchItem.Assign(Source: TPersistent);
+var
+  RchItem: TRchItem;
 begin
   // if Assign is updated, update IsSame too.
   if Source is TRchItem then
   begin
-    RechargeRate := TRchItem(Source).RechargeRate;
+    RchItem := TRchItem(Source);
+    RechargeRate := RchItem.RechargeRate;
+    GwtConcentrations := RchItem.GwtConcentrations;
   end;
   inherited;
 end;
@@ -428,15 +502,36 @@ procedure TRchItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TRchCollection;
   RechObserver: TObserver;
+  ConcIndex: Integer;
 begin
   ParentCollection := Collection as TRchCollection;
   RechObserver := FObserverList[RechPosition];
   RechObserver.OnUpToDateSet := ParentCollection.InvalidateRechargeData;
+
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    GwtConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateGwtConcentrations;
+  end;
 end;
 
 function TRchItem.BoundaryFormulaCount: integer;
 begin
   result := 1;
+  if GwtConcentrations <> nil then
+  begin
+    result := result + GwtConcentrations.Count;
+  end;
+end;
+
+constructor TRchItem.Create(Collection: TCollection);
+var
+  RchCol: TRchCollection;
+begin
+  RchCol := Collection as TRchCollection;
+  FGwtConcentrations := TRchGwtConcCollection.Create(Model, ScreenObject,
+    RchCol);
+  inherited;
 end;
 
 procedure TRchItem.CreateFormulaObjects;
@@ -446,29 +541,73 @@ begin
 end;
 
 destructor TRchItem.Destroy;
+var
+  Index: Integer;
 begin
   RechargeRate := '0';
+  for Index := 0 to FGwtConcentrations.Count - 1 do
+  begin
+    FGwtConcentrations[Index].Value := '0';
+  end;
+  FGwtConcentrations.Free;
   inherited;
 end;
 
 function TRchItem.GetBoundaryFormula(Index: integer): string;
+var
+  Item: TGwtConcStringValueItem;
 begin
   case Index of
     RechPosition: result := RechargeRate;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 1);
+        while GwtConcentrations.Count <= Index do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        result := Item.Value;
+      end;
   end;
 end;
 
 procedure TRchItem.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  Item: TGwtConcStringValueItem;
+  ConcIndex: Integer;
 begin
   Assert(Sender = FRechargeRate);
   List.Add(FObserverList[RechPosition]);
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    Item := GwtConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
 end;
 
 function TRchItem.GetRechargeRate: string;
 begin
   Result := FRechargeRate.Formula;
   ResetItemObserver(RechPosition);
+end;
+
+procedure TRchItem.InvalidateModel;
+var
+  PhastModel: TPhastModel;
+begin
+  inherited;
+  PhastModel := Model as TPhastModel;
+  if (PhastModel <> nil)
+    and not (csDestroying in PhastModel.ComponentState)
+    and not PhastModel.Clearing then
+  begin
+    PhastModel.InvalidateMfRchRate(self);
+    PhastModel.InvalidateMfRchConc(self);
+  end;
 end;
 
 function TRchItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -480,6 +619,7 @@ begin
   begin
     Item := TRchItem(AnotherItem);
     result := (Item.RechargeRate = RechargeRate)
+      and (Item.GwtConcentrations.IsSame(GwtConcentrations));
   end;
 end;
 
@@ -490,11 +630,27 @@ begin
 end;
 
 procedure TRchItem.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  Item: TGwtConcStringValueItem;
 begin
   case Index of
     RechPosition: RechargeRate := Value;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 1);
+        while Index >= GwtConcentrations.Count do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        Item.Value := Value;
+      end;
   end;
+end;
+
+procedure TRchItem.SetGwtConcentrations(const Value: TRchGwtConcCollection);
+begin
+  FGwtConcentrations.Assign(Value);
 end;
 
 procedure TRchItem.SetRechargeRate(const Value: string);
@@ -532,13 +688,21 @@ var
   LocalRechargePest: string;
   RechargeTimeItems: TStringList;
   LocalRechargeTimeSeries: string;
+  SpeciesIndex: Integer;
+  ConcentrationArray: TDataArray;
+  LocalConcentrationPestSeries: string;
+  LocalConcentrationPestMethod: TPestParamMethod;
+  ConcentrationPestItems: TStringList;
+  LocalConcentrationPest: string;
+  ConcentrationTimeItems: TStringList;
+  LocalConcentrationTimeSeries: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
+  Boundary := Boundaries[ItemIndex, AModel] as TRchStorage;
   // Note that TRchCollection is also used in UZF where RechPosition
   // is the same as UzfInfiltrationBoundaryPosition.
   RechargeRateArray := DataSets[RechPosition];
-  Boundary := Boundaries[ItemIndex, AModel] as TRchStorage;
   RechargeRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
 
@@ -584,6 +748,60 @@ begin
     end;
   end;
   RechargeRateArray.CacheData;
+
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      ConcentrationArray := DataSets[RchStartConcentration+SpeciesIndex];
+      ConcentrationArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
+        LayerMax, RowMax, ColMax);
+
+      LocalConcentrationPestSeries := PestSeries[RchStartConcentration+SpeciesIndex];
+      LocalConcentrationPestMethod := PestMethods[RchStartConcentration+SpeciesIndex];
+      ConcentrationPestItems := PestItemNames[RchStartConcentration+SpeciesIndex];
+      LocalConcentrationPest := ConcentrationPestItems[ItemIndex];
+      ConcentrationTimeItems := TimeSeriesNames[RchStartConcentration+SpeciesIndex];
+      LocalConcentrationTimeSeries := ConcentrationTimeItems[ItemIndex];
+
+      if LayerMin >= 0 then
+      begin
+        for LayerIndex := LayerMin to LayerMax do
+        begin
+          if LocalModel.IsLayerSimulated(LayerIndex) then
+          begin
+            for RowIndex := RowMin to RowMax do
+            begin
+              for ColIndex := ColMin to ColMax do
+              begin
+                if ConcentrationArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+                begin
+                  with Boundary.RchArray[BoundaryIndex] do
+                  begin
+//                    Cell.Layer := LayerIndex;
+//                    Cell.Row := RowIndex;
+//                    Cell.Column := ColIndex;
+    //                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
+                    Concentrations[SpeciesIndex] := ConcentrationArray.
+                      RealData[LayerIndex, RowIndex, ColIndex];
+                    ConcentrationAnnotations[SpeciesIndex] := ConcentrationArray.
+                      Annotation[LayerIndex, RowIndex, ColIndex];
+                    ConcentrationPestNames[SpeciesIndex] := LocalConcentrationPest;
+                    ConcentrationPestSeriesNames[SpeciesIndex] := LocalConcentrationPestSeries;
+                    ConcentrationPestSeriesMethods[SpeciesIndex] := LocalConcentrationPestMethod;
+                    ConcentrationTimeSeriesNames[SpeciesIndex] := LocalConcentrationTimeSeries;
+                  end;
+                  Inc(BoundaryIndex);
+                end;
+              end;
+            end;
+          end;
+        end;
+      end;
+      ConcentrationArray.CacheData;
+    end;
+  end;
+
   Boundary.CacheData;
 end;
 
@@ -618,76 +836,205 @@ var
   RechargeItems: TStringList;
   ItemFormula: string;
   TimeSeriesItems: TStringList;
+  SpeciesCount: Integer;
+  SpeciesIndex: Integer;
+  ConcentrationSeriesName: string;
+  ConcentrationMethod: TPestParamMethod;
+  ConcentrationItems: TStringList;
+  ConcentrationTimeSeriesItems: TStringList;
+  ConcPestItemList: TList<TStringList>;
+  ConcTimeSeriesItemList: TList<TStringList>;
+  ConcentrationData: TModflowTimeList;
+  ConcDataArray: TTransientRealSparseDataSet;
 begin
-  LocalModel := AModel as TCustomModel;
-  ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
-  SetLength(BoundaryValues, Count);
+  ConcPestItemList := TList<TStringList>.Create;
+  ConcTimeSeriesItemList := TList<TStringList>.Create;
+  try
+    LocalModel := AModel as TCustomModel;
+    ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
+    SetLength(BoundaryValues, Count);
+    SpeciesCount := LocalModel.MobileComponents.Count;
+//    if LocalModel.GwtUsed then
+//    begin
+//      for Index := 0 to Length(BoundaryValues) - 1 do
+//      begin
+//        SetLength(BoundaryValues[Index].Concentrations, SpeciesCount);
+//        SetLength(BoundaryValues[Index].ConcentrationAnnotations, SpeciesCount);
+//        SetLength(BoundaryValues[Index].ConcentrationPestNames, SpeciesCount);
+//        SetLength(BoundaryValues[Index].ConcentrationPestSeriesNames, SpeciesCount);
+//        SetLength(BoundaryValues[Index].ConcentrationPestSeriesMethods, SpeciesCount);
+//        SetLength(BoundaryValues[Index].ConcentrationTimeSeriesNames, SpeciesCount);
+//      end;
+//    end;
 
-  // Note that TRchCollection is also used in UZF where RechPosition
-  // is the same as UzfInfiltrationBoundaryPosition.
-  PestRechargeSeriesName := BoundaryGroup.PestBoundaryFormula[RechPosition];
-  PestSeries.Add(PestRechargeSeriesName);
-  RechargeMethod := BoundaryGroup.PestBoundaryMethod[RechPosition];
-  PestMethods.Add(RechargeMethod);
+    // Note that TRchCollection is also used in UZF where RechPosition
+    // is the same as UzfInfiltrationBoundaryPosition.
+    PestRechargeSeriesName := BoundaryGroup.PestBoundaryFormula[RechPosition];
+    PestSeries.Add(PestRechargeSeriesName);
+    RechargeMethod := BoundaryGroup.PestBoundaryMethod[RechPosition];
+    PestMethods.Add(RechargeMethod);
 
-  RechargeItems := TStringList.Create;
-  PestItemNames.Add(RechargeItems);
+    RechargeItems := TStringList.Create;
+    PestItemNames.Add(RechargeItems);
 
-  TimeSeriesItems := TStringList.Create;
-  TimeSeriesNames.Add(TimeSeriesItems);
+    TimeSeriesItems := TStringList.Create;
+    TimeSeriesNames.Add(TimeSeriesItems);
 
-  for Index := 0 to Count - 1 do
-  begin
-    Item := Items[Index] as TRchItem;
-    BoundaryValues[Index].Time := Item.StartTime;
-
-    ItemFormula := Item.RechargeRate;
-    AssignBoundaryFormula(AModel, PestRechargeSeriesName, RechargeMethod,
-      RechargeItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
-
-  end;
-  ALink := TimeListLink.GetLink(AModel) as TRchTimeListLink;
-  RechargeRateData := ALink.FRechargeRateData;
-  RechargeRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(RechargeRateData.Count = Count);
-
-  if PackageAssignmentMethod(AModel) = umAdd then
-  begin
-
-    RowCount := LocalModel.RowCount;
-    ColumnCount := LocalModel.ColumnCount;
-    LayerCount := LocalModel.LayerCount;
-    for DataArrayIndex := 0 to RechargeRateData.Count - 1 do
+    if LocalModel.GwtUsed then
     begin
-      DataArray := RechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
-      for RowIndex := 0 to RowCount - 1 do
+      for SpeciesIndex := 0 to SpeciesCount - 1 do
       begin
-        for ColIndex := 0 to ColumnCount - 1 do
+        ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[RchStartConcentration + SpeciesIndex];
+        PestSeries.Add(ConcentrationSeriesName);
+        ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[RchStartConcentration + SpeciesIndex];
+        PestMethods.Add(ConcentrationMethod);
+
+        ConcentrationItems := TStringList.Create;
+        PestItemNames.Add(ConcentrationItems);
+        ConcPestItemList.Add(ConcentrationItems);
+
+        ConcentrationTimeSeriesItems := TStringList.Create;
+        TimeSeriesNames.Add(ConcentrationTimeSeriesItems);
+        ConcTimeSeriesItemList.Add(ConcentrationTimeSeriesItems);
+      end;
+    end;
+
+    for Index := 0 to Count - 1 do
+    begin
+      Item := Items[Index] as TRchItem;
+      BoundaryValues[Index].Time := Item.StartTime;
+
+      ItemFormula := Item.RechargeRate;
+      AssignBoundaryFormula(AModel, PestRechargeSeriesName, RechargeMethod,
+        RechargeItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+
+//      if LocalModel.GwtUsed  then
+//      begin
+//        for SpeciesIndex := 0 to SpeciesCount - 1 do
+//        begin
+//          ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[RchStartConcentration + SpeciesIndex];
+//          ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[RchStartConcentration + SpeciesIndex];
+//          ConcentrationItems := ConcPestItemList[SpeciesIndex];
+//          ConcentrationTimeSeriesItems := ConcTimeSeriesItemList[SpeciesIndex];
+//          ItemFormula := Item.GwtConcentrations[SpeciesIndex].Value;
+//          AssignBoundaryFormula(AModel, ConcentrationSeriesName, ConcentrationMethod,
+//            ConcentrationItems, ConcentrationTimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+//        end;
+//      end;
+    end;
+    ALink := TimeListLink.GetLink(AModel) as TRchTimeListLink;
+    RechargeRateData := ALink.FRechargeRateData;
+    RechargeRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
+    Assert(RechargeRateData.Count = Count);
+
+    if LocalModel.GwtUsed then
+    begin
+      for SpeciesIndex := 0 to SpeciesCount - 1 do
+      begin
+        for Index := 0 to Count - 1 do
         begin
-          ShouldRemove := False;
-          for LayerIndex := LayerCount -1 downto 0 do
+          Item := Items[Index] as TRchItem;
+          BoundaryValues[Index].Time := Item.StartTime;
+
+          ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[RchStartConcentration + SpeciesIndex];
+          ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[RchStartConcentration + SpeciesIndex];
+          ConcentrationItems := ConcPestItemList[SpeciesIndex];
+          ConcentrationTimeSeriesItems := ConcTimeSeriesItemList[SpeciesIndex];
+          ItemFormula := Item.GwtConcentrations[SpeciesIndex].Value;
+          AssignBoundaryFormula(AModel, ConcentrationSeriesName, ConcentrationMethod,
+            ConcentrationItems, ConcentrationTimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+        end;
+
+        ConcentrationData := ALink.FConcList[SpeciesIndex];
+        ConcentrationData.Initialize(BoundaryValues, ScreenObject, lctUse);
+        Assert(ConcentrationData.Count = Count);
+      end;
+    end;
+
+    if PackageAssignmentMethod(AModel) = umAdd then
+    begin
+      RowCount := LocalModel.RowCount;
+      ColumnCount := LocalModel.ColumnCount;
+      LayerCount := LocalModel.LayerCount;
+      for DataArrayIndex := 0 to RechargeRateData.Count - 1 do
+      begin
+        DataArray := RechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
+        for RowIndex := 0 to RowCount - 1 do
+        begin
+          for ColIndex := 0 to ColumnCount - 1 do
           begin
-            if ShouldRemove then
+            ShouldRemove := False;
+            for LayerIndex := LayerCount -1 downto 0 do
             begin
-              DataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
-            end
-            else
-            begin
-              ShouldRemove := DataArray.IsValue[LayerIndex, RowIndex, ColIndex];
+              if ShouldRemove then
+              begin
+                DataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
+                if LocalModel.GwtUsed then
+                begin
+                  for SpeciesIndex := 0 to SpeciesCount - 1 do
+                  begin
+                    ConcentrationData := ALink.FConcList[SpeciesIndex];
+                    ConcDataArray := ConcentrationData[DataArrayIndex] as TTransientRealSparseDataSet;
+                    ConcDataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
+                  end;
+                end;
+              end
+              else
+              begin
+                ShouldRemove := DataArray.IsValue[LayerIndex, RowIndex, ColIndex];
+              end;
             end;
           end;
         end;
       end;
     end;
-  end;
 
-  ClearBoundaries(AModel);
-  SetBoundaryCapacity(RechargeRateData.Count, AModel);
-  for TimeIndex := 0 to RechargeRateData.Count - 1 do
-  begin
-    AddBoundary(TRchStorage.Create(AModel));
+    ClearBoundaries(AModel);
+    SetBoundaryCapacity(RechargeRateData.Count, AModel);
+    for TimeIndex := 0 to RechargeRateData.Count - 1 do
+    begin
+      AddBoundary(TRchStorage.Create(AModel));
+    end;
+    ListOfTimeLists.Add(RechargeRateData);
+  finally
+    ConcTimeSeriesItemList.Free;
+    ConcPestItemList.Free;
   end;
-  ListOfTimeLists.Add(RechargeRateData);
+end;
+
+procedure TRchCollection.InvalidateGwtConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TRchTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TRchTimeListLink;
+    for Index := 0 to Link.FConcList.Count - 1 do
+    begin
+      TimeList := Link.FConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TRchTimeListLink;
+      for Index := 0 to Link.FConcList.Count - 1 do
+      begin
+        TimeList := Link.FConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 procedure TRchCollection.InvalidateRechargeData(Sender: TObject);
@@ -730,8 +1077,30 @@ end;
 
 procedure TRchCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel);
+var
+  LocalModel: TCustomModel;
+  Index: Integer;
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TRchStorage).FRchArray, BoundaryCount);
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for Index := 0 to BoundaryCount - 1 do
+    begin
+      SetLength(TRchStorage(Boundaries[ItemIndex, AModel]).FRchArray[Index].Concentrations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRchStorage(Boundaries[ItemIndex, AModel]).FRchArray[Index].ConcentrationAnnotations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRchStorage(Boundaries[ItemIndex, AModel]).FRchArray[Index].ConcentrationPestNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRchStorage(Boundaries[ItemIndex, AModel]).FRchArray[Index].ConcentrationPestSeriesNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRchStorage(Boundaries[ItemIndex, AModel]).FRchArray[Index].ConcentrationPestSeriesMethods,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRchStorage(Boundaries[ItemIndex, AModel]).FRchArray[Index].ConcentrationTimeSeriesNames,
+        LocalModel.MobileComponents.Count);
+    end;
+  end;
   inherited;
 end;
 
@@ -754,6 +1123,37 @@ end;
 function TRch_Cell.GetColumn: integer;
 begin
   result := Values.Cell.Column;
+end;
+
+function TRch_Cell.GetConcentration(const Index: Integer): double;
+begin
+  result := FValues.Concentrations[Index];
+end;
+
+function TRch_Cell.GetConcentrationAnnotation(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationAnnotations[Index];
+end;
+
+function TRch_Cell.GetConcentrationPestName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationPestNames[Index];
+end;
+
+function TRch_Cell.GetConcentrationPestSeriesMethod(
+  const Index: Integer): TPestParamMethod;
+begin
+  result := FValues.ConcentrationPestSeriesMethods[Index];
+end;
+
+function TRch_Cell.GetConcentrationPestSeriesName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationPestSeriesNames[Index];
+end;
+
+function TRch_Cell.GetConcentrationTimeSeriesName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationTimeSeriesNames[Index];
 end;
 
 function TRch_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
@@ -781,6 +1181,8 @@ begin
 end;
 
 function TRch_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     RechPosition:
@@ -789,13 +1191,15 @@ begin
       end;
     else
       begin
-        result := inherited;
-        Assert(False);
+        ConcIndex := Index - RchStartConcentration;
+        result := FValues.ConcentrationTimeSeriesNames[ConcIndex];
       end;
   end;
 end;
 
 function TRch_Cell.GetPestName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     RechPosition:
@@ -804,13 +1208,15 @@ begin
       end;
     else
       begin
-        result := inherited;
-        Assert(False);
+        ConcIndex := Index - RchStartConcentration;
+        result := FValues.ConcentrationPestNames[ConcIndex];
       end;
   end;
 end;
 
 function TRch_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     RechPosition:
@@ -819,13 +1225,15 @@ begin
       end;
     else
       begin
-        result := inherited;
-        Assert(False);
+        ConcIndex := Index - RchStartConcentration;
+        result := FValues.ConcentrationPestSeriesMethods[ConcIndex];
       end;
   end;
 end;
 
 function TRch_Cell.GetPestSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     RechPosition:
@@ -834,27 +1242,39 @@ begin
       end;
     else
       begin
-        result := inherited;
-        Assert(False);
+        ConcIndex := Index - RchStartConcentration;
+        result := FValues.ConcentrationPestSeriesNames[ConcIndex];
       end;
   end;
 end;
 
 function TRch_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
+var
+  ConcIndex: Integer;
 begin
   result := '';
   case Index of
     RechPosition: result := RechargeRateAnnotation;
-    else Assert(False);
+    else
+      begin
+        ConcIndex := Index - RchStartConcentration;
+        result := FValues.ConcentrationAnnotations[ConcIndex];
+      end;
   end;
 end;
 
 function TRch_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
+var
+  ConcIndex: Integer;
 begin
   result := 0;
   case Index of
     RechPosition: result := RechargeRate;
-    else Assert(False);
+    else
+      begin
+        ConcIndex := Index - RchStartConcentration;
+        result := FValues.Concentrations[ConcIndex];
+      end;
   end;
 end;
 
@@ -950,6 +1370,8 @@ begin
 end;
 
 procedure TRch_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+var
+  ConcIndex: Integer;
 begin
   case Index of
     RechPosition:
@@ -958,8 +1380,8 @@ begin
       end;
     else
       begin
-        inherited;
-        Assert(False);
+        ConcIndex := Index - RchStartConcentration;
+        FValues.ConcentrationTimeSeriesNames[ConcIndex] := Value;
       end;
   end;
 end;
@@ -987,6 +1409,8 @@ begin
 
     PestRechargeFormula := SourceBoundary.PestRechargeFormula;
     PestRechargeMethod := SourceBoundary.PestRechargeMethod;
+    PestConcentrationFormulas := SourceBoundary.PestConcentrationFormulas;
+    PestConcentrationMethods := SourceBoundary.PestConcentrationMethods;
   end;
   inherited;
 end;
@@ -1132,6 +1556,9 @@ end;
 constructor TRchBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
+  FPestConcentrationFormulas:= TRchGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestConcentrationMethods := TPestMethodCollection.Create(Model);
+  FConcentrationObservers := TObserverList.Create;
 
   CreateFormulaObjects;
   CreateBoundaryObserver;
@@ -1144,15 +1571,32 @@ begin
 end;
 
 procedure TRchBoundary.CreateFormulaObjects;
+var
+  LocalModel: TPhastModel;
+  ConcIndex: Integer;
 begin
   FPestRechargeFormula := CreateFormulaObjectBlocks(dsoTop);
+  LocalModel := ParentModel as TPhastModel;
+  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  begin
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestConcentrationFormulas.Add;
+    end;
+  end;
 end;
 
 procedure TRchBoundary.CreateObservers;
+var
+  Index: Integer;
 begin
   if ScreenObject <> nil then
   begin
     FObserverList.Add(PestRechargeObserver);
+    for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+    begin
+      FObserverList.Add(ConcentrationObserver[Index]);
+    end;
   end;
 end;
 
@@ -1167,16 +1611,25 @@ begin
     else
       begin
         result := inherited;
-        Assert(False);
+//        Assert(False);
       end;
   end;
 end;
 
 destructor TRchBoundary.Destroy;
+var
+  Index: Integer;
 begin
   PestRechargeFormula := '';
   FRechargeLayers.Free;
+  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+  begin
+    FPestConcentrationFormulas[Index].Value := '';
+  end;
   inherited;
+  FPestConcentrationMethods.Free;
+  FPestConcentrationFormulas.Free;
+  FConcentrationObservers.Free;
 end;
 
 procedure TRchBoundary.EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject);
@@ -1293,7 +1746,22 @@ begin
   ClearBoundaries(AModel);
 end;
 
+function TRchBoundary.GetConcentrationObserver(const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('RchConc_%d', [Index+1]), AObserver, nil);
+    FConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidateConcData;
+  end;
+  result := FConcentrationObservers[Index];
+end;
+
 function TRchBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+var
+  ConcIndex: Integer;
 begin
   result := '';
   case FormulaIndex of
@@ -1303,14 +1771,20 @@ begin
       end;
     else
       begin
-        result := inherited;
-//        Assert(False);
+        ConcIndex := FormulaIndex - RchStartConcentration;
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        result := PestConcentrationFormulas[ConcIndex].Value;
       end;
   end;
 end;
 
 function TRchBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     RechPosition:
@@ -1319,8 +1793,12 @@ begin
       end;
     else
       begin
-        result := inherited;
-//        Assert(False);
+        ConcIndex := FormulaIndex - RchStartConcentration;
+        while ConcIndex >= FPestConcentrationMethods.Count do
+        begin
+          FPestConcentrationMethods.Add;
+        end;
+        result := FPestConcentrationMethods[ConcIndex].PestParamMethod;
       end;
   end;
 end;
@@ -1345,12 +1823,21 @@ begin
 end;
 
 procedure TRchBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  Index: Integer;
 begin
   if Sender = FPestRechargeFormula then
   begin
     if RechPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[RechPosition]);
+    end;
+  end;
+  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+  begin
+    if FPestConcentrationFormulas[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[RchStartConcentration + Index]);
     end;
   end;
 end;
@@ -1384,6 +1871,18 @@ begin
   InvalidateDisplay;
 end;
 
+procedure TRchBoundary.InvalidateConcData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateMfRchConc(self);
+end;
+
 procedure TRchBoundary.InvalidateDisplay;
 var
   Model: TCustomModel;
@@ -1394,6 +1893,7 @@ begin
     Model := ParentModel as TCustomModel;
     Model.InvalidateMfRchRate(self);
     Model.InvalidateMfRchLayer(self);
+    Model.InvalidateMfRchConc(self);
   end;
 end;
 
@@ -1445,8 +1945,9 @@ end;
 
 procedure TRchBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
+var
+  ConcIndex: Integer;
 begin
-
   case FormulaIndex of
     RechPosition:
       begin
@@ -1454,14 +1955,20 @@ begin
       end;
     else
       begin
-        inherited;
-        Assert(False);
+        ConcIndex := FormulaIndex - RchStartConcentration;
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        PestConcentrationFormulas[ConcIndex].Value := Value;
       end;
   end;
 end;
 
 procedure TRchBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     RechPosition:
@@ -1470,10 +1977,26 @@ begin
       end;
     else
       begin
-        inherited;
-        Assert(False);
+        ConcIndex := FormulaIndex - RchStartConcentration;
+        while ConcIndex >= FPestConcentrationMethods.Count do
+        begin
+          FPestConcentrationMethods.Add;
+        end;
+        FPestConcentrationMethods[ConcIndex].PestParamMethod := Value;
       end;
   end;
+end;
+
+procedure TRchBoundary.SetPestConcentrationFormulas(
+  const Value: TRchGwtConcCollection);
+begin
+  FPestConcentrationFormulas.Assign(Value);
+end;
+
+procedure TRchBoundary.SetPestConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestConcentrationMethods.Assign(Value);
 end;
 
 procedure TRchBoundary.SetPestRechargeFormula(const Value: string);
@@ -1986,7 +2509,21 @@ end;
 
 { TRchRecord }
 
+procedure TRchRecord.Assign(const Item: TRchRecord);
+begin
+  self := Item;
+  SetLength(Concentrations, Length(Concentrations));
+  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
+  SetLength(ConcentrationPestNames, Length(ConcentrationPestNames));
+  SetLength(ConcentrationPestSeriesNames, Length(ConcentrationPestSeriesNames));
+  SetLength(ConcentrationPestSeriesMethods, Length(ConcentrationPestSeriesMethods));
+  SetLength(ConcentrationTimeSeriesNames, Length(ConcentrationTimeSeriesNames));
+end;
+
 procedure TRchRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, RechargeRate);
@@ -1994,7 +2531,6 @@ begin
   WriteCompReal(Comp, EndingTime);
   WriteCompReal(Comp, RechargeParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(RechargeRateAnnotation));
-//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(RechargeParameterName));
 
   WriteCompInt(Comp, Strings.IndexOf(RechargePest));
@@ -2002,10 +2538,40 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(RechargeTimeSeriesName));
 
   WriteCompInt(Comp, Ord(RechargePestMethod));
-//  WriteCompString(Comp, RechargeRateAnnotation);
+
+  Count := Length(Concentrations);
+  WriteCompInt(Comp, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompReal(Comp, Concentrations[Index]);
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationTimeSeriesNames[Index]));
+  end;
+
+
 end;
 
 procedure TRchRecord.RecordStrings(Strings: TStringList);
+var
+  Index: Integer;
 begin
   Strings.Add(RechargeRateAnnotation);
 //  Strings.Add(TimeSeriesName);
@@ -2014,9 +2580,28 @@ begin
   Strings.Add(RechargePestSeries);
   Strings.Add(RechargeTimeSeriesName);
 
+  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
+  begin
+    Strings.Add(ConcentrationAnnotations[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestSeriesNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationTimeSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationTimeSeriesNames[Index]);
+  end;
 end;
 
 procedure TRchRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   RechargeRate := ReadCompReal(Decomp);
@@ -2031,6 +2616,38 @@ begin
   RechargePestSeries := Annotations[ReadCompInt(Decomp)];
   RechargeTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   RechargePestMethod := TPestParamMethod(ReadCompInt(Decomp));
+
+  Count := ReadCompInt(Decomp);
+  SetLength(Concentrations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    Concentrations[Index] := ReadCompReal(Decomp);
+  end;
+  SetLength(ConcentrationAnnotations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesMethods, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
+  end;
+  SetLength(ConcentrationTimeSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
 end;
 
 { TRchLayerRecord }
@@ -2085,6 +2702,11 @@ end;
 { TRchTimeListLink }
 
 procedure TRchTimeListLink.CreateTimeLists;
+var
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
 begin
   inherited;
   FRechargeRateData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
@@ -2095,12 +2717,39 @@ begin
   begin
     FRechargeRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfRchRate;
   end;
+
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
+    begin
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfRchConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FConcList.Add(ConcTimeList);
+    end;
+  end;
 end;
 
 destructor TRchTimeListLink.Destroy;
 begin
+  FConcList.Free;
   FRechargeRateData.Free;
   inherited;
+end;
+
+{ TRchGwtConcCollection }
+
+constructor TRchGwtConcCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TRchCollection);
+begin
+  inherited Create(Model, AScreenObject, ParentCollection);
 end;
 
 end.

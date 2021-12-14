@@ -2360,7 +2360,6 @@ begin
       FConcList.Add(ConcTimeList);
     end;
   end;
-
 end;
 
 destructor TGhbTimeListLink.Destroy;

@@ -215,7 +215,6 @@ type
     function GetConductanceAnnotation: string;
     function GetRiverBottomAnnotation: string;
     function GetRiverStageAnnotation: string;
-//    function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
     function GetConductanceParameterName: string;
@@ -2650,7 +2649,7 @@ begin
       if Model <> nil then
       begin
         LocalModel := Model as TCustomModel;
-        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfGhbConc;
+        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfRivConc;
       end;
       AddTimeList(ConcTimeList);
       FConcList.Add(ConcTimeList);

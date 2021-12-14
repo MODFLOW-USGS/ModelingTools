@@ -38,6 +38,7 @@ type
 //    TimeSeriesName: string;
     HeadParameterName: string;
     HeadParameterValue: double;
+    // PEST
     StartHeadPest: string;
     EndHeadPest: string;
     StartHeadPestSeriesName: string;
@@ -45,6 +46,14 @@ type
     HeadTimeSeriesName: string;
     StartHeadPestSeriesMethod: TPestParamMethod;
     EndHeadPestSeriesMethod: TPestParamMethod;
+    // GWT Concentrations
+    Concentrations: array of double;
+    ConcentrationAnnotations: array of string;
+    ConcentrationPestNames: array of string;
+    ConcentrationPestSeriesNames: array of string;
+    ConcentrationPestSeriesMethods: array of TPestParamMethod;
+    ConcentrationTimeSeriesNames: array of string;
+    procedure Assign(const Item: TChdRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -68,10 +77,18 @@ type
   private
     FStartData: TModflowTimeList;
     FEndData: TModflowTimeList;
+    FConcList: TList;
   protected
     procedure CreateTimeLists; override;
   public
     Destructor Destroy; override;
+  end;
+
+  TChdCollection = class;
+
+  TChdGwtConcCollection = class(TGwtConcStringCollection)
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TChdCollection);
   end;
 
   // @name represents MODFLOW Constant-Head boundaries
@@ -81,6 +98,7 @@ type
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure InvalidateStartData(Sender: TObject);
     procedure InvalidateEndData(Sender: TObject);
+    procedure InvalidateGwtConcentrations(Sender: TObject);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
@@ -101,6 +119,7 @@ type
       PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
+    procedure InvalidateModel; override;
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -123,12 +142,14 @@ type
     FEndHead: TFormulaObject;
     // See @link(StartHead).
     FStartHead: TFormulaObject;
+    FGwtConcentrations: TChdGwtConcCollection;
     // See @link(EndHead).
     procedure SetEndHead(const Value: string);
     // See @link(StartHead).
     procedure SetStartHead(const Value: string);
     function GetEndHead: string;
     function GetStartHead: string;
+    procedure SetGwtConcentrations(const Value: TChdGwtConcCollection);
   protected
     procedure RemoveFormulaObjects; override;
     procedure CreateFormulaObjects; override;
@@ -145,6 +166,7 @@ type
   public
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent);override;
+    constructor Create(Collection: TCollection); override;
     Destructor Destroy; override;
   published
     // @name is the formula used to set the ending head
@@ -153,17 +175,22 @@ type
     // @name is the formula used to set the starting head
     // or the starting head multiplier of this boundary.
     property StartHead: string read GetStartHead write SetStartHead;
+    property GwtConcentrations: TChdGwtConcCollection read FGwtConcentrations
+      write SetGwtConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
   TCHD_Cell = class(TValueCell)
   private
-    Values: TChdRecord;
+    FValues: TChdRecord;
     StressPeriod: integer;
     function GetEndingHead: double;
     function GetStartingHead: double;
     function GetEndingHeadAnnotation: string;
     function GetStartingHeadAnnotation: string;
-//    function GetTimeSeriesName: string;
     function GetHeadParameterName: string;
     function GetHeadParameterValue: double;
     function GetEndHeadPest: string;
@@ -174,7 +201,15 @@ type
     function GetStartHeadPestSeriesName: string;
     function GetHeadTimeSeriesName: string;
     procedure SetHeadTimeSeriesName(const Value: string);
+    function GetConcentration(const Index: Integer): double;
+    function GetConcentrationAnnotation(const Index: Integer): string;
+    function GetConcentrationPestName(const Index: Integer): string;
+    function GetConcentrationPestSeriesMethod(
+      const Index: Integer): TPestParamMethod;
+    function GetConcentrationPestSeriesName(const Index: Integer): string;
+    function GetConcentrationTimeSeriesName(const Index: Integer): string;
   protected
+    property Values: TChdRecord read FValues;
     function GetColumn: integer; override;
     function GetLayer: integer; override;
     function GetRow: integer; override;
@@ -205,7 +240,6 @@ type
   public
     property StartingHead: double read GetStartingHead;
     property EndingHead: double read GetEndingHead;
-//    property TimeSeriesName: string read GetTimeSeriesName;
     property StartingHeadAnnotation: string read GetStartingHeadAnnotation;
     property EndingHeadAnnotation: string read GetEndingHeadAnnotation;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
@@ -222,6 +256,19 @@ type
       read GetEndHeadPestSeriesMethod;
     property HeadTimeSeriesName: string read GetHeadTimeSeriesName
       write SetHeadTimeSeriesName;
+    // GWT
+    property Concentrations[const Index: Integer]: double
+      read GetConcentration;
+    property ConcentrationAnnotations[const Index: Integer]: string
+      read GetConcentrationAnnotation;
+    property ConcentrationPestNames[const Index: Integer]: string
+      read GetConcentrationPestName;
+    property ConcentrationPestSeriesNames[const Index: Integer]: string
+      read GetConcentrationPestSeriesName;
+    property ConcentrationPestSeriesMethods[const Index: Integer]: TPestParamMethod
+      read GetConcentrationPestSeriesMethod;
+    property ConcentrationTimeSeriesNames[const Index: Integer]: string
+      read GetConcentrationTimeSeriesName;
   end;
 
 
@@ -239,6 +286,9 @@ type
     FPestEndingObserver: TObserver;
     FPestStartingObserver: TObserver;
     FUsedObserver: TObserver;
+    FPestConcentrationMethods: TPestMethodCollection;
+    FPestConcentrationFormulas: TChdGwtConcCollection;
+    FConcentrationObservers: TObserverList;
     function GetPestEndingHeadObserver: TObserver;
     function GetPestStartingHeadObserver: TObserver;
     function GetPestEndingHeadFormula: string;
@@ -249,6 +299,10 @@ type
     procedure SetPestStartingHeadMethod(const Value: TPestParamMethod);
     procedure InvalidateStartingHeadData(Sender: TObject);
     procedure InvalidateEndingHeadData(Sender: TObject);
+    procedure InvalidateConcData(Sender: TObject);
+    procedure SetPestConcentrationFormulas(const Value: TChdGwtConcCollection);
+    procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
+    function GetConcentrationObserver(const Index: Integer): TObserver;
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -266,6 +320,8 @@ type
     procedure CreateObservers; //override;
     property PestStartingHeadObserver: TObserver read GetPestStartingHeadObserver;
     property PestEndingHeadObserver: TObserver read GetPestEndingHeadObserver;
+    property ConcentrationObserver[const Index: Integer]: TObserver
+      read GetConcentrationObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
       const Value: string); override;
@@ -309,11 +365,31 @@ type
       Stored False
       {$ENDIF}
       ;
+    property PestConcentrationFormulas: TChdGwtConcCollection
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConcentrationMethods: TPestMethodCollection
+      read FPestConcentrationMethods write SetPestConcentrationMethods
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 const
   ChdStartHeadPosition = 0;
   ChdEndHeadPosition = 1;
+  ChdStartConcentration = 2;
+
+resourcestring
+  StrCHDStartingHeadSe = 'CHD Starting Head set to zero because of a math er' +
+  'ror';
+  StrCHDEndingHeadSet = 'CHD Ending Head set to zero because of a math error';
+  StrCHDConcentrationSe = 'CHD Concentration set to zero because of a math e' +
+  'rror';
 
 implementation
 
@@ -344,6 +420,7 @@ begin
     Chd := TChdItem(Source);
     StartHead := Chd.StartHead;
     EndHead := Chd.EndHead;
+    GwtConcentrations := Chd.GwtConcentrations;
   end;
   inherited;
 end;
@@ -356,6 +433,16 @@ begin
     GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
+constructor TChdItem.Create(Collection: TCollection);
+var
+  ChdCol: TChdCollection;
+begin
+  ChdCol := Collection as TChdCollection;
+  FGwtConcentrations := TChdGwtConcCollection.Create(Model, ScreenObject,
+    ChdCol);
+  inherited;
+end;
+
 procedure TChdItem.CreateFormulaObjects;
 begin
   FStartHead := CreateFormulaObject(dso3D);
@@ -364,6 +451,7 @@ end;
 
 destructor TChdItem.Destroy;
 begin
+  FGwtConcentrations.Free;
   StartHead := '0';
   EndHead := '0';
   inherited;
@@ -374,25 +462,46 @@ var
   EndObserver: TObserver;
   StartObserver: TObserver;
   ParentCollection: TChdCollection;
+  ConcIndex: Integer;
 begin
   ParentCollection := Collection as TChdCollection;
   StartObserver := FObserverList[ChdStartHeadPosition];
   StartObserver.OnUpToDateSet := ParentCollection.InvalidateStartData;
   EndObserver := FObserverList[ChdEndHeadPosition];
   EndObserver.OnUpToDateSet := ParentCollection.InvalidateEndData;
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    GwtConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateGwtConcentrations;
+  end;
 end;
 
 function TChdItem.BoundaryFormulaCount: integer;
 begin
   result := 2;
+  if GwtConcentrations <> nil then
+  begin
+    result := result + GwtConcentrations.Count;
+  end;
 end;
 
 function TChdItem.GetBoundaryFormula(Index: integer): string;
+var
+  Item: TGwtConcStringValueItem;
 begin
   case Index of
     ChdStartHeadPosition: result := StartHead;
     ChdEndHeadPosition: result := EndHead;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 2);
+        while GwtConcentrations.Count <= Index do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        result := Item.Value;
+      end;
   end;
 end;
 
@@ -403,6 +512,9 @@ begin
 end;
 
 procedure TChdItem.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  ConcIndex: Integer;
+  Item: TGwtConcStringValueItem;
 begin
   if Sender = FStartHead then
   begin
@@ -411,6 +523,14 @@ begin
   if Sender = FEndHead then
   begin
     List.Add(FObserverList[ChdEndHeadPosition]);
+  end;
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    Item := GwtConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
   end;
 end;
 
@@ -432,6 +552,7 @@ begin
   begin
     PhastModel.InvalidateMfChdStartingHead(self);
     PhastModel.InvalidateMfChdEndingHead(self);
+    PhastModel.InvalidateMfChdConc(self);
   end;
 end;
 
@@ -444,24 +565,41 @@ begin
   begin
     Item := TChdItem(AnotherItem);
     result := (Item.EndHead = EndHead)
-      and (Item.StartHead = StartHead);
+      and (Item.StartHead = StartHead)
+      and (Item.GwtConcentrations.IsSame(GwtConcentrations));
   end;
 end;
 
 { TChdParamItem }
 procedure TChdItem.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  Item: TGwtConcStringValueItem;
 begin
   inherited;
   case Index of
     ChdStartHeadPosition: StartHead := Value;
     ChdEndHeadPosition: EndHead := Value;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 2);
+        while Index >= GwtConcentrations.Count do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        Item.Value := Value;
+      end;
   end;
 end;
 
 procedure TChdItem.SetEndHead(const Value: string);
 begin
   UpdateFormulaBlocks(Value, ChdEndHeadPosition, FEndHead);
+end;
+
+procedure TChdItem.SetGwtConcentrations(const Value: TChdGwtConcCollection);
+begin
+  FGwtConcentrations.Assign(Value);
 end;
 
 procedure TChdItem.SetStartHead(const Value: string);
@@ -508,6 +646,9 @@ var
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
+  ConcIndex: Integer;
+  ErrorMessage: string;
+  LocalScreenObject: TScreenObject;
 begin
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   Assert(Expression <> nil);
@@ -519,32 +660,128 @@ begin
     ACell := CellList[Index];
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+    try
     Expression.Evaluate;
-//    if BoundaryFunctionIndex = 0 then
-//    begin
-//      ChdStorage.ChdArray[Index].HeadTimeSeriesName := TimeSeriesName;
-//    end;
-    with ChdStorage.ChdArray[Index] do
-    begin
-      case BoundaryFunctionIndex of
-        0:
-          begin
-            StartingHead := Expression.DoubleResult;
-            StartAnnotation := ACell.Annotation;
-            StartHeadPest := PestName;
-            StartHeadPestSeriesName := PestSeriesName;
-            StartHeadPestSeriesMethod := PestSeriesMethod;
-            HeadTimeSeriesName := TimeSeriesName;
+      with ChdStorage.ChdArray[Index] do
+      begin
+        case BoundaryFunctionIndex of
+          0:
+            begin
+              StartingHead := Expression.DoubleResult;
+              StartAnnotation := ACell.Annotation;
+              StartHeadPest := PestName;
+              StartHeadPestSeriesName := PestSeriesName;
+              StartHeadPestSeriesMethod := PestSeriesMethod;
+              HeadTimeSeriesName := TimeSeriesName;
+            end;
+          1:
+            begin
+              EndingHead := Expression.DoubleResult;
+              EndAnnotation := ACell.Annotation;
+              EndHeadPest := PestName;
+              EndHeadPestSeriesName := PestSeriesName;
+              EndHeadPestSeriesMethod := PestSeriesMethod;
+            end;
+          else
+            begin
+              ConcIndex := BoundaryFunctionIndex - ChdStartConcentration;
+              Concentrations[ConcIndex] := Expression.DoubleResult;
+              ConcentrationAnnotations[ConcIndex] := ACell.Annotation;;
+              ConcentrationPestNames[ConcIndex] := PestName;
+              ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+              ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+              ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+            end;
+        end;
+      end;
+    except
+      on E: EMathError do
+      begin
+        with ChdStorage.ChdArray[Index] do
+        begin
+          case BoundaryFunctionIndex of
+            0:
+              begin
+                ErrorMessage :=   StrCHDStartingHeadSe;
+                StartingHead := 0;
+                StartAnnotation := ErrorMessage;
+                StartHeadPest := PestName;
+                StartHeadPestSeriesName := PestSeriesName;
+                StartHeadPestSeriesMethod := PestSeriesMethod;
+                HeadTimeSeriesName := TimeSeriesName;
+              end;
+            1:
+              begin
+                ErrorMessage :=  StrCHDEndingHeadSet;
+                EndingHead := 0;
+                EndAnnotation := ErrorMessage;
+                EndHeadPest := PestName;
+                EndHeadPestSeriesName := PestSeriesName;
+                EndHeadPestSeriesMethod := PestSeriesMethod;
+              end;
+            else
+              begin
+                ErrorMessage := StrCHDConcentrationSe;
+                ConcIndex := BoundaryFunctionIndex - ChdStartConcentration;
+                Concentrations[ConcIndex] := 0;
+                ConcentrationAnnotations[ConcIndex] := ErrorMessage;
+                ConcentrationPestNames[ConcIndex] := PestName;
+                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              end;
           end;
-        1:
-          begin
-            EndingHead := Expression.DoubleResult;
-            EndAnnotation := ACell.Annotation;
-            EndHeadPest := PestName;
-            EndHeadPestSeriesName := PestSeriesName;
-            EndHeadPestSeriesMethod := PestSeriesMethod;
+        end;
+        LocalScreenObject := ScreenObject as TScreenObject;
+
+        frmErrorsAndWarnings.AddError(AModel, ErrorMessage,
+          Format(StrObject0sLayerError,
+          [LocalScreenObject.Name, ACell.Layer+1, ACell.Row+1,
+          ACell.Column+1, E.Message]), LocalScreenObject);
+      end;
+      on E: ERbwParserError do
+      begin
+        with ChdStorage.ChdArray[Index] do
+        begin
+          case BoundaryFunctionIndex of
+            0:
+              begin
+                ErrorMessage :=   StrCHDStartingHeadSe;
+                StartingHead := 0;
+                StartAnnotation := ErrorMessage;
+                StartHeadPest := PestName;
+                StartHeadPestSeriesName := PestSeriesName;
+                StartHeadPestSeriesMethod := PestSeriesMethod;
+                HeadTimeSeriesName := TimeSeriesName;
+              end;
+            1:
+              begin
+                ErrorMessage :=  StrCHDEndingHeadSet;
+                EndingHead := 0;
+                EndAnnotation := ErrorMessage;
+                EndHeadPest := PestName;
+                EndHeadPestSeriesName := PestSeriesName;
+                EndHeadPestSeriesMethod := PestSeriesMethod;
+              end;
+            else
+              begin
+                ErrorMessage := StrCHDConcentrationSe;
+                ConcIndex := BoundaryFunctionIndex - ChdStartConcentration;
+                Concentrations[ConcIndex] := 0;
+                ConcentrationAnnotations[ConcIndex] := ErrorMessage;
+                ConcentrationPestNames[ConcIndex] := PestName;
+                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              end;
           end;
-        else Assert(False);
+        end;
+        LocalScreenObject := ScreenObject as TScreenObject;
+
+        frmErrorsAndWarnings.AddError(AModel, ErrorMessage,
+          Format(StrObject0sLayerError,
+          [LocalScreenObject.Name, ACell.Layer+1, ACell.Row+1,
+          ACell.Column+1, E.Message]), LocalScreenObject);
       end;
     end;
   end;
@@ -582,8 +819,30 @@ end;
 
 procedure TChdCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel);
+var
+  LocalModel: TCustomModel;
+  Index: Integer;
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TChdStorage).FChdArray, BoundaryCount);
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for Index := 0 to BoundaryCount - 1 do
+    begin
+      SetLength(TChdStorage(Boundaries[ItemIndex, AModel]).FChdArray[Index].Concentrations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TChdStorage(Boundaries[ItemIndex, AModel]).FChdArray[Index].ConcentrationAnnotations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TChdStorage(Boundaries[ItemIndex, AModel]).FChdArray[Index].ConcentrationPestNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TChdStorage(Boundaries[ItemIndex, AModel]).FChdArray[Index].ConcentrationPestSeriesNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TChdStorage(Boundaries[ItemIndex, AModel]).FChdArray[Index].ConcentrationPestSeriesMethods,
+        LocalModel.MobileComponents.Count);
+      SetLength(TChdStorage(Boundaries[ItemIndex, AModel]).FChdArray[Index].ConcentrationTimeSeriesNames,
+        LocalModel.MobileComponents.Count);
+    end;
+  end;
   inherited;
 end;
 
@@ -609,6 +868,57 @@ begin
       Link := TimeListLink.GetLink(ChildModel) as TChdTimeListLink;
       Link.FEndData.Invalidate;
     end;
+  end;
+end;
+
+procedure TChdCollection.InvalidateGwtConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TChdTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TChdTimeListLink;
+    for Index := 0 to Link.FConcList.Count - 1 do
+    begin
+      TimeList := Link.FConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TChdTimeListLink;
+      for Index := 0 to Link.FConcList.Count - 1 do
+      begin
+        TimeList := Link.FConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
+end;
+
+procedure TChdCollection.InvalidateModel;
+var
+  PhastModel: TPhastModel;
+begin
+  inherited;
+  PhastModel := Model as TPhastModel;
+  if (PhastModel <> nil)
+    and not (csDestroying in PhastModel.ComponentState)
+    and not PhastModel.Clearing then
+  begin
+    PhastModel.InvalidateMfChdStartingHead(self);
+    PhastModel.InvalidateMfChdEndingHead(self);
+    PhastModel.InvalidateMfChdConc(self);
   end;
 end;
 
@@ -656,6 +966,8 @@ begin
     PestEndingHeadFormula := SourceChd.PestEndingHeadFormula;
     PestStartingHeadMethod := SourceChd.PestStartingHeadMethod;
     PestEndingHeadMethod := SourceChd.PestEndingHeadMethod;
+    PestConcentrationFormulas := SourceChd.PestConcentrationFormulas;
+    PestConcentrationMethods := SourceChd.PestConcentrationMethods;
   end;
   inherited;
 end;
@@ -755,41 +1067,42 @@ begin
         Cell.IFace := (ScreenObject as TScreenObject).IFace;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
-        Cell.Values.HeadParameterName := BoundaryValues.HeadParameterName;
-        Cell.Values.HeadParameterValue := BoundaryValues.HeadParameterValue;
-//        Cell.Values.TimeSeriesName := BoundaryValues.TimeSeriesName;
-        Cell.Values.StartHeadPest := BoundaryValues.StartHeadPest;
-        Cell.Values.EndHeadPest := BoundaryValues.EndHeadPest;
-        Cell.Values.StartHeadPestSeriesName := BoundaryValues.StartHeadPestSeriesName;
-        Cell.Values.EndHeadPestSeriesName := BoundaryValues.EndHeadPestSeriesName;
-        Cell.Values.StartHeadPestSeriesMethod := BoundaryValues.StartHeadPestSeriesMethod;
-        Cell.Values.EndHeadPestSeriesMethod := BoundaryValues.EndHeadPestSeriesMethod;
-        Cell.Values.HeadTimeSeriesName := BoundaryValues.HeadTimeSeriesName;
-        Cell.Values.Cell := BoundaryValues.Cell;
-        Cell.Values.StartingHead :=
-          StartHeadFactor * BoundaryValues.StartingHead
-          + (1 - StartHeadFactor) * BoundaryValues.EndingHead;
-        Cell.Values.EndingHead :=
-          EndHeadFactor * BoundaryValues.StartingHead
-          + (1 - EndHeadFactor) * BoundaryValues.EndingHead;
+        Cell.FValues := BoundaryValues;
+//        Cell.FValues.HeadParameterName := BoundaryValues.HeadParameterName;
+//        Cell.FValues.HeadParameterValue := BoundaryValues.HeadParameterValue;
+////        Cell.FValues.TimeSeriesName := BoundaryValues.TimeSeriesName;
+//        Cell.FValues.StartHeadPest := BoundaryValues.StartHeadPest;
+//        Cell.FValues.EndHeadPest := BoundaryValues.EndHeadPest;
+//        Cell.FValues.StartHeadPestSeriesName := BoundaryValues.StartHeadPestSeriesName;
+//        Cell.FValues.EndHeadPestSeriesName := BoundaryValues.EndHeadPestSeriesName;
+//        Cell.FValues.StartHeadPestSeriesMethod := BoundaryValues.StartHeadPestSeriesMethod;
+//        Cell.FValues.EndHeadPestSeriesMethod := BoundaryValues.EndHeadPestSeriesMethod;
+//        Cell.FValues.HeadTimeSeriesName := BoundaryValues.HeadTimeSeriesName;
+//        Cell.FValues.Cell := BoundaryValues.Cell;
+//        Cell.FValues.StartingHead :=
+//          StartHeadFactor * BoundaryValues.StartingHead
+//          + (1 - StartHeadFactor) * BoundaryValues.EndingHead;
+//        Cell.FValues.EndingHead :=
+//          EndHeadFactor * BoundaryValues.StartingHead
+//          + (1 - EndHeadFactor) * BoundaryValues.EndingHead;
         if StartHeadFactor = 1 then
         begin
-          Cell.Values.StartAnnotation := BoundaryValues.StartAnnotation;
+          Cell.FValues.StartAnnotation := BoundaryValues.StartAnnotation;
         end
         else
         begin
-          Cell.Values.StartAnnotation := Format(FormatString,
+          Cell.FValues.StartAnnotation := Format(FormatString,
             [BoundaryValues.StartingHead, BoundaryValues.StartingTime,
             BoundaryValues.StartAnnotation, BoundaryValues.EndingHead,
             BoundaryValues.EndingTime, BoundaryValues.EndAnnotation]);
         end;
         if EndHeadFactor = 0 then
         begin
-          Cell.Values.EndAnnotation := BoundaryValues.EndAnnotation;
+          Cell.FValues.EndAnnotation := BoundaryValues.EndAnnotation;
         end
         else
         begin
-          Cell.Values.EndAnnotation := Format(FormatString,
+          Cell.FValues.EndAnnotation := Format(FormatString,
             [BoundaryValues.StartingHead, BoundaryValues.StartingTime,
             BoundaryValues.StartAnnotation, BoundaryValues.EndingHead,
             BoundaryValues.EndingTime, BoundaryValues.EndAnnotation]);
@@ -819,6 +1132,10 @@ begin
   inherited;
   Interp := mimLinearEnd;
 
+  FPestConcentrationFormulas:= TChdGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestConcentrationMethods := TPestMethodCollection.Create(Model);
+  FConcentrationObservers := TObserverList.Create;
+
   CreateFormulaObjects;
   CreateBoundaryObserver;
   CreateObservers;
@@ -831,17 +1148,34 @@ begin
 end;
 
 procedure TChdBoundary.CreateFormulaObjects;
+var
+  LocalModel: TPhastModel;
+  ConcIndex: Integer;
 begin
   FPestStartingHeadFormula := CreateFormulaObjectBlocks(dso3D);
   FPestEndingHeadFormula := CreateFormulaObjectBlocks(dso3D);
+  LocalModel := ParentModel as TPhastModel;
+  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  begin
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestConcentrationFormulas.Add;
+    end;
+  end;
 end;
 
 procedure TChdBoundary.CreateObservers;
+var
+  Index: Integer;
 begin
   if ScreenObject <> nil then
   begin
     FObserverList.Add(PestStartingHeadObserver);
     FObserverList.Add(PestEndingHeadObserver);
+    for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+    begin
+      FObserverList.Add(ConcentrationObserver[Index]);
+    end;
   end;
 end;
 
@@ -859,16 +1193,25 @@ begin
       end;
     else
       result := inherited;
-      Assert(False);
+//      Assert(False);
   end;
 end;
 
 destructor TChdBoundary.Destroy;
+var
+  Index: Integer;
 begin
   PestStartingHeadFormula := '';
   PestEndingHeadFormula := '';
 
+  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+  begin
+    FPestConcentrationFormulas[Index].Value := '';
+  end;
   inherited;
+  FPestConcentrationMethods.Free;
+  FPestConcentrationFormulas.Free;
+  FConcentrationObservers.Free;
 end;
 
 procedure TChdBoundary.GetCellValues(ValueTimeList: TList;
@@ -930,7 +1273,22 @@ begin
   end;
 end;
 
+function TChdBoundary.GetConcentrationObserver(const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('ChdConc_%d', [Index+1]), AObserver, nil);
+    FConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidateConcData;
+  end;
+  result := FConcentrationObservers[Index];
+end;
+
 function TChdBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+var
+  ConcIndex: Integer;
 begin
   result := '';
   case FormulaIndex of
@@ -943,12 +1301,21 @@ begin
         result := PestEndingHeadFormula;
       end;
     else
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - ChdStartConcentration;
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        result := PestConcentrationFormulas[ConcIndex].Value;
+      end;
   end;
 end;
 
 function TChdBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     ChdStartHeadPosition:
@@ -961,8 +1328,12 @@ begin
       end;
     else
       begin
-        result := inherited;
-        Assert(False);
+        ConcIndex := FormulaIndex - ChdStartConcentration;
+        while ConcIndex >= FPestConcentrationMethods.Count do
+        begin
+          FPestConcentrationMethods.Add;
+        end;
+        result := FPestConcentrationMethods[ConcIndex].PestParamMethod;
       end;
   end;
 end;
@@ -1006,6 +1377,8 @@ begin
 end;
 
 procedure TChdBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  Index: Integer;
 begin
   if Sender = FPestStartingHeadFormula then
   begin
@@ -1019,6 +1392,13 @@ begin
     if ChdEndHeadPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[ChdEndHeadPosition]);
+    end;
+  end;
+  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+  begin
+    if FPestConcentrationFormulas[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[ChdStartConcentration + Index]);
     end;
   end;
 end;
@@ -1038,6 +1418,18 @@ begin
   InvalidateDisplay;
 end;
 
+procedure TChdBoundary.InvalidateConcData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateMfChdConc(self);
+end;
+
 procedure TChdBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -1048,6 +1440,7 @@ begin
     Model := ParentModel as TPhastModel;
     Model.InvalidateMfChdStartingHead(self);
     Model.InvalidateMfChdEndingHead(self);
+    Model.InvalidateMfChdConc(self);
   end;
 end;
 
@@ -1117,6 +1510,8 @@ end;
 
 procedure TChdBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     ChdStartHeadPosition:
@@ -1128,12 +1523,21 @@ begin
         PestEndingHeadFormula := Value;
       end;
     else
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - ChdStartConcentration;
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        PestConcentrationFormulas[ConcIndex].Value := Value;
+      end;
   end;
 end;
 
 procedure TChdBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     ChdStartHeadPosition:
@@ -1145,9 +1549,27 @@ begin
         PestEndingHeadMethod := Value;
       end;
     else
-      inherited;
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - ChdStartConcentration;
+        while ConcIndex >= FPestConcentrationMethods.Count do
+        begin
+          FPestConcentrationMethods.Add;
+        end;
+        FPestConcentrationMethods[ConcIndex].PestParamMethod := Value;
+      end;
   end;
+end;
+
+procedure TChdBoundary.SetPestConcentrationFormulas(
+  const Value: TChdGwtConcCollection);
+begin
+  FPestConcentrationFormulas.Assign(Value);
+end;
+
+procedure TChdBoundary.SetPestConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestConcentrationMethods.Assign(Value);
 end;
 
 procedure TChdBoundary.SetPestEndingHeadFormula(const Value: string);
@@ -1191,6 +1613,37 @@ end;
 function TCHD_Cell.GetColumn: integer;
 begin
   result := Values.Cell.Column;
+end;
+
+function TCHD_Cell.GetConcentration(const Index: Integer): double;
+begin
+  result := FValues.Concentrations[Index];
+end;
+
+function TCHD_Cell.GetConcentrationAnnotation(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationAnnotations[Index];
+end;
+
+function TCHD_Cell.GetConcentrationPestName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationPestNames[Index];
+end;
+
+function TCHD_Cell.GetConcentrationPestSeriesMethod(
+  const Index: Integer): TPestParamMethod;
+begin
+  result := FValues.ConcentrationPestSeriesMethods[Index];
+end;
+
+function TCHD_Cell.GetConcentrationPestSeriesName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationPestSeriesNames[Index];
+end;
+
+function TCHD_Cell.GetConcentrationTimeSeriesName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationTimeSeriesNames[Index];
 end;
 
 function TCHD_Cell.GetEndHeadPest: string;
@@ -1251,73 +1704,92 @@ begin
 end;
 
 function TCHD_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   if Index = ChdStartHeadPosition then
   begin
     result := HeadTimeSeriesName;
   end
   else
-  begin
-    result := inherited;
-  end;
+    begin
+      ConcIndex := Index - ChdStartConcentration;
+      result := FValues.ConcentrationTimeSeriesNames[ConcIndex];
+    end;
 end;
 
 function TCHD_Cell.GetPestName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     ChdStartHeadPosition: result := StartHeadPest;
     ChdEndHeadPosition: result := EndHeadPest;
     else
       begin
-        result := inherited;
-        Assert(False);
+        ConcIndex := Index - ChdStartConcentration;
+        result := FValues.ConcentrationPestNames[ConcIndex];
       end;
   end;
 end;
 
 function TCHD_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     ChdStartHeadPosition: result := StartHeadPestSeriesMethod;
     ChdEndHeadPosition: result := EndHeadPestSeriesMethod;
     else
       begin
-        result := inherited;
-        Assert(False);
+        ConcIndex := Index - ChdStartConcentration;
+        result := FValues.ConcentrationPestSeriesMethods[ConcIndex];
       end;
   end;
 end;
 
 function TCHD_Cell.GetPestSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     ChdStartHeadPosition: result := StartHeadPestSeriesName;
     ChdEndHeadPosition: result := EndHeadPestSeriesName;
     else
       begin
-        result := inherited;
-        Assert(False);
+        ConcIndex := Index - ChdStartConcentration;
+        result := FValues.ConcentrationPestSeriesNames[ConcIndex];
       end;
   end;
 end;
 
 function TCHD_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
+var
+  ConcIndex: Integer;
 begin
-  result := '';
   case Index of
     ChdStartHeadPosition: result := StartingHeadAnnotation;
     ChdEndHeadPosition: result := EndingHeadAnnotation;
-    else Assert(False);
+    else
+      begin
+        ConcIndex := Index - ChdStartConcentration;
+        result := FValues.ConcentrationAnnotations[ConcIndex];
+      end;
   end;
 end;
 
 function TCHD_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
+var
+  ConcIndex: Integer;
 begin
-  result := 0;
   case Index of
     ChdStartHeadPosition: result := StartingHead;
     ChdEndHeadPosition: result := EndingHead;
-    else Assert(False);
+    else
+      begin
+        ConcIndex := Index - ChdStartConcentration;
+        result := FValues.Concentrations[ConcIndex];
+      end;
   end;
 end;
 
@@ -1393,39 +1865,56 @@ end;
 
 procedure TCHD_Cell.SetColumn(const Value: integer);
 begin
-  Values.Cell.Column := Value;
+  FValues.Cell.Column := Value;
 end;
 
 procedure TCHD_Cell.SetHeadTimeSeriesName(const Value: string);
 begin
-  Values.HeadTimeSeriesName := Value;
+  FValues.HeadTimeSeriesName := Value;
 end;
 
 procedure TCHD_Cell.SetLayer(const Value: integer);
 begin
-  Values.Cell.Layer := Value;
+  FValues.Cell.Layer := Value;
 end;
 
 procedure TCHD_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+var
+  ConcIndex: Integer;
 begin
   if Index = ChdStartHeadPosition then
   begin
     HeadTimeSeriesName := Value;
   end
   else
-  begin
-    inherited;
-  end;
+    begin
+      ConcIndex := Index - ChdStartConcentration;
+      FValues.ConcentrationTimeSeriesNames[ConcIndex] := Value;
+    end;
 end;
 
 procedure TCHD_Cell.SetRow(const Value: integer);
 begin
-  Values.Cell.Row := Value;
+  FValues.Cell.Row := Value;
 end;
 
 { TChdRecord }
 
+procedure TChdRecord.Assign(const Item: TChdRecord);
+begin
+  self := Item;
+  SetLength(Concentrations, Length(Concentrations));
+  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
+  SetLength(ConcentrationPestNames, Length(ConcentrationPestNames));
+  SetLength(ConcentrationPestSeriesNames, Length(ConcentrationPestSeriesNames));
+  SetLength(ConcentrationPestSeriesMethods, Length(ConcentrationPestSeriesMethods));
+  SetLength(ConcentrationTimeSeriesNames, Length(ConcentrationTimeSeriesNames));
+end;
+
 procedure TChdRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  Index: Integer;
+  Count: Integer;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, StartingHead);
@@ -1444,9 +1933,39 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(HeadTimeSeriesName));
   WriteCompInt(Comp, Ord(StartHeadPestSeriesMethod));
   WriteCompInt(Comp, Ord(EndHeadPestSeriesMethod));
+
+  Count := Length(Concentrations);
+  WriteCompInt(Comp, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompReal(Comp, Concentrations[Index]);
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationTimeSeriesNames[Index]));
+  end;
+
 end;
 
 procedure TChdRecord.RecordStrings(Strings: TStringList);
+var
+  Index: Integer;
 begin
   Strings.Add(StartAnnotation);
   Strings.Add(EndAnnotation);
@@ -1457,9 +1976,29 @@ begin
   Strings.Add(StartHeadPestSeriesName);
   Strings.Add(EndHeadPestSeriesName);
   Strings.Add(HeadTimeSeriesName);
+
+  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
+  begin
+    Strings.Add(ConcentrationAnnotations[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestSeriesNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationTimeSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationTimeSeriesNames[Index]);
+  end;
 end;
 
 procedure TChdRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   StartingHead := ReadCompReal(Decomp);
@@ -1478,6 +2017,38 @@ begin
   HeadTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   StartHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   EndHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
+  Count := ReadCompInt(Decomp);
+  SetLength(Concentrations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    Concentrations[Index] := ReadCompReal(Decomp);
+  end;
+  SetLength(ConcentrationAnnotations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesMethods, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
+  end;
+  SetLength(ConcentrationTimeSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
 end;
 
 { TChdStorage }
@@ -1549,7 +2120,12 @@ end;
 procedure TChdTimeListLink.CreateTimeLists;
 var
   LocalModel: TCustomModel;
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
+  ConcTimeList: TModflowTimeList;
 begin
+  FConcList := TObjectList.Create;
+
   FStartData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FEndData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FStartData.NonParamDescription := StrStartingHead;
@@ -1564,13 +2140,40 @@ begin
   end;
   AddTimeList(FStartData);
   AddTimeList(FEndData);
+
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
+    begin
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfChdConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FConcList.Add(ConcTimeList);
+    end;
+  end;
 end;
 
 destructor TChdTimeListLink.Destroy;
 begin
+  FConcList.Free;
   FStartData.Free;
   FEndData.Free;
   inherited;
+end;
+
+{ TChdGwtConcCollection }
+
+constructor TChdGwtConcCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TChdCollection);
+begin
+  inherited Create(Model, AScreenObject, ParentCollection);
 end;
 
 end.

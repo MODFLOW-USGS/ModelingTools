@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = False
+      Display = True
     end
     item
       Name = 'core code'
@@ -102,7 +102,7 @@ object TTaskHistory
     end
     item
       Name = 'RCH'
-      Display = False
+      Display = True
     end
     item
       Name = 'EVT'
@@ -28626,6 +28626,19 @@ object TTaskHistory
       Date = 44540.000000000000000000
       Categories.Strings = (
         'RIV'
+        'MF6 GWT')
+    end
+    item
+      Date = 44541.000000000000000000
+    end
+    item
+      Date = 44542.000000000000000000
+    end
+    item
+      Date = 44543.000000000000000000
+      Categories.Strings = (
+        'CHD'
+        'RCH'
         'MF6 GWT')
     end>
 end

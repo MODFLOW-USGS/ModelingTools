@@ -255,6 +255,8 @@ Type
 
   TChdPackage = class(TModflowPackageSelection)
   private
+    // @name is implemented as a TObjectList;
+    FGwtConcentrationList: TList;
     FMfChdStartingHead: TModflowBoundaryDisplayTimeList;
     FMfChdEndingHead: TModflowBoundaryDisplayTimeList;
     procedure InitializeChdDisplay(Sender: TObject);
@@ -262,6 +264,7 @@ Type
       NewUseList: TStringList);
     procedure GetMfChdEndingHeadUseList(Sender: TObject;
       NewUseList: TStringList);
+    procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -272,6 +275,8 @@ Type
     property MfChdEndingHead: TModflowBoundaryDisplayTimeList
       read FMfChdEndingHead;
     procedure InvalidateAllTimeLists; override;
+    procedure InvalidateConcentrations;
+    procedure AddRemoveRenameGwtConcentrationTimeLists;
   end;
 
   TCustomTransientArrayItem = class(TCollectionItem)
@@ -5876,6 +5881,7 @@ resourcestring
   StrGHBS = 'GHB %s';
   StrWelS = 'WEL %s';
   StrRIVS = 'RIV %s';
+  StrCHDS = 'CHD %s';
 
 { TModflowPackageSelection }
 
@@ -11163,6 +11169,46 @@ end;
 
 { TChdPackage }
 
+procedure TChdPackage.AddRemoveRenameGwtConcentrationTimeLists;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  Components: TMobileChemSpeciesCollection;
+begin
+  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+  begin
+    Components := frmGoPhast.PhastModel.MobileComponents;
+    while FGwtConcentrationList.Count > Components.Count do
+    begin
+      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
+      RemoveTimeList(TimeList);
+      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
+    end;
+    while FGwtConcentrationList.Count < Components.Count do
+    begin
+      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      AddTimeList(TimeList);
+      FGwtConcentrationList.Add(TimeList);
+      TimeList.OnInitialize := InitializeChdDisplay;
+      TimeList.OnGetUseList := GetGwtConcUseList;
+    end;
+    for Index := 0 to Components.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      TimeList.Name := Format(StrCHDS, [Components[Index].Name])
+    end;
+  end
+  else
+  begin
+    for Index := 0 to FGwtConcentrationList.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      RemoveTimeList(TimeList);
+    end;
+    FGwtConcentrationList.Clear;
+  end;
+end;
+
 constructor TChdPackage.Create(Model: TBaseModel);
 begin
   inherited;
@@ -11181,14 +11227,30 @@ begin
     MfChdEndingHead.OnTimeListUsed := PackageUsed;
     MfChdEndingHead.Name := StrMODFLOWCHDEndingHead;
     AddTimeList(MfChdEndingHead);
+
+    FGwtConcentrationList := TObjectList.Create;
   end;
 end;
 
 destructor TChdPackage.Destroy;
 begin
+  FGwtConcentrationList.Free;
   FMfChdStartingHead.Free;
   FMfChdEndingHead.Free;
   inherited;
+end;
+
+procedure TChdPackage.GetGwtConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FGwtConcentrationList.IndexOf(Sender);
+  DataSetName := Format(StrCHDS,
+     [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
+  Index := Index+2;
+  UpdatePkgUseList(NewUseList, ptCHD, Index, DataSetName);
 end;
 
 procedure TChdPackage.GetMfChdEndingHeadUseList(Sender: TObject;
@@ -11207,6 +11269,8 @@ procedure TChdPackage.InitializeChdDisplay(Sender: TObject);
 var
   ChdWriter: TModflowCHD_Writer;
   List: TModflowBoundListOfTimeLists;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
 begin
   MfChdStartingHead.CreateDataSets;
   MfChdEndingHead.CreateDataSets;
@@ -11216,6 +11280,14 @@ begin
   try
     List.Add(MfChdStartingHead);
     List.Add(MfChdEndingHead);
+
+    for Index := 0 to FGwtConcentrationList.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      TimeList.CreateDataSets;
+      List.Add(TimeList);
+    end;
+
     ChdWriter.UpdateDisplay(List, [0,1]);
   finally
     ChdWriter.Free;
@@ -11232,6 +11304,19 @@ begin
   begin
     FMfChdStartingHead.Invalidate;
     FMfChdEndingHead.Invalidate;
+    InvalidateConcentrations;
+  end;
+end;
+
+procedure TChdPackage.InvalidateConcentrations;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FGwtConcentrationList.Count - 1 do
+  begin
+    TimeList := FGwtConcentrationList[Index];
+    TimeList.Invalidate;
   end;
 end;
 

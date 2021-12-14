@@ -3062,6 +3062,7 @@ that affects the model output should also have a comment. }
       write SetSomeSegmentsUpToDate;
     procedure InvalidateMfChdStartingHead(Sender: TObject);
     procedure InvalidateMfChdEndingHead(Sender: TObject);
+    procedure InvalidateMfChdConc(Sender: TObject);
     procedure InvalidateMfGhbConductance(Sender: TObject);
     procedure InvalidateMfGhbBoundaryHead(Sender: TObject);
     procedure InvalidateMfGhbConc(Sender: TObject);
@@ -3077,6 +3078,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfDrtElevation(Sender: TObject);
     procedure InvalidateMfDrtReturnFraction(Sender: TObject);
     procedure InvalidateMfRchRate(Sender: TObject);
+    procedure InvalidateMfRchConc(Sender: TObject);
     procedure InvalidateMfUzfInfiltration(Sender: TObject);
     procedure InvalidateMfEvtEvapRate(Sender: TObject);
     procedure InvalidateMfEvtEvapSurface(Sender: TObject);
@@ -16513,6 +16515,7 @@ end;
 
 procedure TCustomModel.UpdateGwtConc;
 begin
+  ModflowPackages.ChdBoundary.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.GhbBoundary.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.WelPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.RivPackage.AddRemoveRenameGwtConcentrationTimeLists;
@@ -24166,6 +24169,11 @@ begin
   Mt3dTobCond.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfChdConc(Sender: TObject);
+begin
+  ModflowPackages.ChdBoundary.InvalidateConcentrations;
+end;
+
 procedure TCustomModel.InvalidateRipCoverages(Sender: TObject);
 begin
   ModflowPackages.RipPackage.InvalidateCoverages;
@@ -24179,6 +24187,12 @@ end;
 procedure TCustomModel.InvalidateMfHobHeads(Sender: TObject);
 begin
   MfHobHeads.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfRchConc(Sender: TObject);
+begin
+  Assert(False);
+  // this needs to be finished.
 end;
 
 procedure TCustomModel.InvalidateMfRchLayer(Sender: TObject);

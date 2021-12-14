@@ -2748,7 +2748,9 @@ begin
   UsedEvalAt := eaBlocks;
    { TODO  -cPEST: Support PEST here }
 
-  if (Sender = frameGhbParam.rdgModflowBoundary) then
+  if (Sender = frameGhbParam.rdgModflowBoundary)
+    or (Sender = frameChdParam.rdgModflowBoundary)
+    then
   begin
     PestParameterColumns := [2,3];
     if frmGoPhast.PhastModel.GwtUsed then
@@ -2760,8 +2762,6 @@ begin
     end;
   end
   else if (Sender = frameDrnParam.rdgModflowBoundary)
-//    or (Sender = frameGhbParam.rdgModflowBoundary)
-    or (Sender = frameChdParam.rdgModflowBoundary)
     or (Sender = frameHfbMf6.rdgModflowBoundary)
     or (Sender = frameRes.rdgModflowBoundary)
     then
@@ -6546,7 +6546,7 @@ var
   MobileSpeciesCount: Integer;
 begin
   MobileSpeciesCount := GwtColumnCount;
-  frameChdParam.rdgModflowBoundary.ColCount := 4;
+  frameChdParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
   frameGhbParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
   frameWellParam.rdgModflowBoundary.ColCount := 3 + MobileSpeciesCount;
   frameRivParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
