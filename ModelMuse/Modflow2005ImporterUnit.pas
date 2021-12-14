@@ -114,6 +114,10 @@ resourcestring
   StrTheHeadFileYouSelecte = 'The head file you selected is empty.';
   StrTheFlowFileYouSelecte = 'The flow file you selected is empty.';
   StrImportedFromExisti = 'Imported from existing model on %s';
+  StrInvalidReferenceSt = 'Invalid reference stress period.';
+  StrOneOrMoreObservat = 'Observation %0:d in the observation group ' +
+  '"%1:s" is invalid because its references stress period (%2:d) it is great' +
+  'er than the number of stress periods.';
 
 const
   StrParentModelHeads = 'ParentModelHeads';
@@ -22401,7 +22405,17 @@ begin
       ObsTime := ObsGroup.FTimes[TimeIndex];
       FlowObs := Group.ObservationTimes.Add;
       FlowObs.ObservedValue := ObsTime.FLWOBS;
-      RefStressPeriod := FModel.ModflowStressPeriods.Items[ObsTime.IREFSP - 1];
+      if ObsTime.IREFSP - 1 >= FModel.ModflowStressPeriods.Count then
+      begin
+        RefStressPeriod := FModel.ModflowStressPeriods.Last;
+        frmErrorsAndWarnings.AddError(FModel, StrInvalidReferenceSt,
+          Format(StrOneOrMoreObservat,
+          [TimeIndex + 1, Group.ObservationName, ObsTime.IREFSP]));
+      end
+      else
+      begin
+        RefStressPeriod := FModel.ModflowStressPeriods.Items[ObsTime.IREFSP - 1];
+      end;
       FlowObs.Time := RefStressPeriod.StartTime + ObsTime.TOFFSET * TOMULT;
     end;
   end;
