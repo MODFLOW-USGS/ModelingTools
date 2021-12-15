@@ -6480,7 +6480,7 @@ var
   Index: integer;
   DataSetName: string;
 begin
-  Index := FGwtConcentrationList.IndexOf(Sender);
+  Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
   DataSetName := Format(StrRCHS,
      [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
   Index := Index+1;
@@ -10644,7 +10644,7 @@ var
   Index: integer;
   DataSetName: string;
 begin
-  Index := FGwtConcentrationList.IndexOf(Sender);
+  Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
   DataSetName := Format(StrWelS,
      [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
   Index := Index+1;
@@ -10846,7 +10846,7 @@ var
   Index: integer;
   DataSetName: string;
 begin
-  Index := FGwtConcentrationList.IndexOf(Sender);
+  Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
   DataSetName := Format(StrGHBS,
      [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
   Index := Index+2;
@@ -11212,7 +11212,7 @@ var
   Index: integer;
   DataSetName: string;
 begin
-  Index := FGwtConcentrationList.IndexOf(Sender);
+  Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
   DataSetName := Format(StrRIVS,
      [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
   Index := Index+3;
@@ -11388,7 +11388,7 @@ var
   Index: integer;
   DataSetName: string;
 begin
-  Index := FGwtConcentrationList.IndexOf(Sender);
+  Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
   DataSetName := Format(StrCHDS,
      [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
   Index := Index+2;
