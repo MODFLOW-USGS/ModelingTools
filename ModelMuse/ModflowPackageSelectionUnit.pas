@@ -1467,6 +1467,8 @@ Type
 
   TRchPackageSelection = class(TCustomTransientLayerPackageSelection)
   private
+    // @name is implemented as a TObjectList;
+    FGwtConcentrationList: TList;
     FMfRchLayer: TModflowBoundaryDisplayTimeList;
     FMfRchRate: TModflowBoundaryDisplayTimeList;
     FAssignmentMethod: TUpdateMethod;
@@ -1474,6 +1476,7 @@ Type
     procedure GetMfRchLayerUseList(Sender: TObject; NewUseList: TStringList);
     procedure InitializeRchDisplay(Sender: TObject);
     procedure SetAssignmentMethod(const Value: TUpdateMethod);
+    procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -1484,6 +1487,8 @@ Type
     property MfRchLayer: TModflowBoundaryDisplayTimeList read FMfRchLayer;
     procedure InvalidateAllTimeLists; override;
     procedure InvalidateMfRchLayer(Sender: TObject);
+    procedure InvalidateConcentrations;
+    procedure AddRemoveRenameGwtConcentrationTimeLists;
   published
     property AssignmentMethod: TUpdateMethod read FAssignmentMethod
       write SetAssignmentMethod Stored True;
@@ -5882,6 +5887,7 @@ resourcestring
   StrWelS = 'WEL %s';
   StrRIVS = 'RIV %s';
   StrCHDS = 'CHD %s';
+  StrRCHS = 'RCH %s';
 
 { TModflowPackageSelection }
 
@@ -6341,6 +6347,46 @@ end;
 
 { TRchPackageSelection }
 
+procedure TRchPackageSelection.AddRemoveRenameGwtConcentrationTimeLists;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  Components: TMobileChemSpeciesCollection;
+begin
+  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+  begin
+    Components := frmGoPhast.PhastModel.MobileComponents;
+    while FGwtConcentrationList.Count > Components.Count do
+    begin
+      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
+      RemoveTimeList(TimeList);
+      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
+    end;
+    while FGwtConcentrationList.Count < Components.Count do
+    begin
+      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      AddTimeList(TimeList);
+      FGwtConcentrationList.Add(TimeList);
+      TimeList.OnInitialize := InitializeRchDisplay;
+      TimeList.OnGetUseList := GetGwtConcUseList;
+    end;
+    for Index := 0 to Components.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      TimeList.Name := Format(StrRCHS, [Components[Index].Name])
+    end;
+  end
+  else
+  begin
+    for Index := 0 to FGwtConcentrationList.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      RemoveTimeList(TimeList);
+    end;
+    FGwtConcentrationList.Clear;
+  end;
+end;
+
 procedure TRchPackageSelection.Assign(Source: TPersistent);
 begin
   if Source is TRchPackageSelection then
@@ -6371,14 +6417,30 @@ begin
     MfRchLayer.OnTimeListUsed := PackageUsed;
     MfRchLayer.Name := StrMODFLOWRchLayer;
     AddTimeList(MfRchLayer);
+
+    FGwtConcentrationList := TObjectList.Create;
   end;
 end;
 
 destructor TRchPackageSelection.Destroy;
 begin
+  FGwtConcentrationList.Free;
   FMfRchRate.Free;
   FMfRchLayer.Free;
   inherited;
+end;
+
+procedure TRchPackageSelection.GetGwtConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FGwtConcentrationList.IndexOf(Sender);
+  DataSetName := Format(StrRCHS,
+     [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
+  Index := Index+1;
+  UpdatePkgUseList(NewUseList, ptRch, Index, DataSetName);
 end;
 
 procedure TRchPackageSelection.GetMfRchLayerUseList(Sender: TObject;
@@ -6447,6 +6509,8 @@ procedure TRchPackageSelection.InitializeRchDisplay(Sender: TObject);
 var
   RchWriter: TModflowRCH_Writer;
   List: TModflowBoundListOfTimeLists;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
 begin
   MfRchRate.CreateDataSets;
   if LayerOption = loSpecified then
@@ -6473,6 +6537,14 @@ begin
     begin
       List.Add(nil);
     end;
+
+    for Index := 0 to FGwtConcentrationList.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      TimeList.CreateDataSets;
+      List.Add(TimeList);
+    end;
+
     RchWriter.UpdateDisplay(List);
   finally
     RchWriter.Free;
@@ -6488,6 +6560,19 @@ begin
   begin
     MfRchRate.Invalidate;
     MfRchLayer.Invalidate;
+    InvalidateConcentrations;
+  end;
+end;
+
+procedure TRchPackageSelection.InvalidateConcentrations;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FGwtConcentrationList.Count - 1 do
+  begin
+    TimeList := FGwtConcentrationList[Index];
+    TimeList.Invalidate;
   end;
 end;
 
@@ -10557,6 +10642,11 @@ begin
     List.Free;
   end;
   MfWellPumpage.LabelAsSum;
+  for Index := 0 to FGwtConcentrationList.Count - 1 do
+  begin
+    TimeList := FGwtConcentrationList[Index];
+    TimeList.ComputeAverage;
+  end;
 end;
 
 procedure TWellPackage.InitializeVariables;
@@ -11295,6 +11385,11 @@ begin
   end;
   MfChdStartingHead.LabelAsSum;
   MfChdEndingHead.LabelAsSum;
+  for Index := 0 to FGwtConcentrationList.Count - 1 do
+  begin
+    TimeList := FGwtConcentrationList[Index];
+    TimeList.ComputeAverage;
+  end;
 end;
 
 procedure TChdPackage.InvalidateAllTimeLists;

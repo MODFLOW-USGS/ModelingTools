@@ -112,41 +112,17 @@ type
     // over the length of the previous time step in the same stress period.
     property TimeStepMultiplier: double read FTimeStepMultiplier
       write SetTimeStepMultiplier;
-    property AtsUsed: Boolean read FAtsUsed write SetAtsUsed
-    {$IFNDEF ATS}
-      stored False
-    {$ENDIF}
-    ;
+    property AtsUsed: Boolean read FAtsUsed write SetAtsUsed;
     property StoredAtsInitialStepSize: TRealStorage
-      read FStoredAtsInitialStepSize write SetStoredAtsInitialStepSize
-    {$IFNDEF ATS}
-      stored False
-    {$ENDIF}
-    ;
+      read FStoredAtsInitialStepSize write SetStoredAtsInitialStepSize;
     property StoredAtsMinimumStepSize: TRealStorage
-      read FStoredAtsMinimumStepSize write SetStoredAtsMinimumStepSize
-    {$IFNDEF ATS}
-      stored False
-    {$ENDIF}
-    ;
+      read FStoredAtsMinimumStepSize write SetStoredAtsMinimumStepSize;
     property StoredAtsMaximumStepSize: TRealStorage
-      read FStoredAtsMaximumStepSize write SetStoredAtsMaximumStepSize
-    {$IFNDEF ATS}
-      stored False
-    {$ENDIF}
-    ;
+      read FStoredAtsMaximumStepSize write SetStoredAtsMaximumStepSize;
     property StoredAtsAdjustmentFactor: TRealStorage
-      read FStoredAtsAdjustmentFactor write SetStoredAtsAdjustmentFactor
-    {$IFNDEF ATS}
-      stored False
-    {$ENDIF}
-    ;
+      read FStoredAtsAdjustmentFactor write SetStoredAtsAdjustmentFactor;
     property StoredAtsFailureFactor: TRealStorage
-      read FStoredAtsFailureFactor write SetStoredAtsFailureFactor
-    {$IFNDEF ATS}
-      stored False
-    {$ENDIF}
-    ;
+      read FStoredAtsFailureFactor write SetStoredAtsFailureFactor;
   end;
 
   // @name is a collection of the data defining all the stress periods

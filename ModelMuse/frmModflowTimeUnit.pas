@@ -795,11 +795,7 @@ var
 begin
   FGettingData := True;
   try
-    {$IFDEF ATS}
     tabATS.TabVisible := frmGoPhast.ModelSelection = msModflow2015;
-    {$ELSE}
-    tabATS.TabVisible := False;
-    {$ENDIF}
     comboTimeUnit.ItemIndex := frmGoPhast.PhastModel.ModflowOptions.TimeUnit;
     seNumPeriods.AsInteger := frmGoPhast.PhastModel.ModflowStressPeriods.Count;
     FillEmptyCells;

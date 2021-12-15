@@ -321,7 +321,6 @@ var
   ParameterName: string;
   MultiplierValue: double;
   SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter

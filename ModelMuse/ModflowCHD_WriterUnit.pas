@@ -236,7 +236,7 @@ var
   CurrentScreenObject: TScreenObject;
   OtherScreenObject: TScreenObject;
   SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
+//  ASpecies: TMobileChemSpeciesItem;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter

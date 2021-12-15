@@ -692,7 +692,7 @@ end;
 procedure TPestObsCollection.CalculateMaxValues;
 var
   Obs: TPestObsResult;
-  UsedObs: TList<TPestObsResult>;
+//  UsedObs: TList<TPestObsResult>;
   ObsIndex: Integer;
 begin
   FMaxObjectResidual := 0;

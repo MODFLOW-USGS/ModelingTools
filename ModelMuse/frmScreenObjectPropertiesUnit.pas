@@ -2775,6 +2775,7 @@ begin
     end;
   end
   else if (Sender = frameWellParam.rdgModflowBoundary)
+    or (Sender = frameRchParam.rdgModflowBoundary)
     then
   begin
     PestParameterColumns := [2];
@@ -2787,7 +2788,6 @@ begin
     end;
   end
   else if (Sender = frameFarmWell.rdgModflowBoundary)
-    or (Sender = frameRchParam.rdgModflowBoundary)
     or (Sender = frameCSUB.rdgModflowBoundary)
     then
   begin
@@ -6566,11 +6566,11 @@ begin
   end;
   if frmGoPhast.PhastModel.RchTimeVaryingLayers then
   begin
-    frameRchParam.rdgModflowBoundary.ColCount := 4;
+    frameRchParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
   end
   else
   begin
-    frameRchParam.rdgModflowBoundary.ColCount := 3;
+    frameRchParam.rdgModflowBoundary.ColCount := 3 + MobileSpeciesCount;
   end;
   if frmGoPhast.PhastModel.EvtTimeVaryingLayers then
   begin
@@ -17384,11 +17384,11 @@ begin
 
     if frmGoPhast.PhastModel.RchTimeVaryingLayers then
     begin
-      frameRchParam.rdgModflowBoundary.ColCount := 4;
+      frameRchParam.rdgModflowBoundary.ColCount := 4 + GwtColumnCount;
     end
     else
     begin
-      frameRchParam.rdgModflowBoundary.ColCount := 3;
+      frameRchParam.rdgModflowBoundary.ColCount := 3 + GwtColumnCount;
     end;
     AScreenObject.CreateRchBoundary;
     frameRchParam.InitializeFrame(AScreenObject.ModflowRchBoundary);

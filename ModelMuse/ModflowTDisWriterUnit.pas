@@ -136,12 +136,10 @@ begin
     CloseFile;
   end;
 
-  {$IFDEF ATS}
   if FAtsCount > 0 then
   begin
     WriteAtsFile;
   end;
-  {$ENDIF}
 end;
 
 procedure TTemporalDiscretizationWriter.WriteOptions;
@@ -165,7 +163,6 @@ begin
   end;
   NewLine;
 
-  {$IFDEF ATS}
   FAtsCount := 0;
   StressPeriods := Model.ModflowFullStressPeriods;
   for StressPeriodIndex := 0 to StressPeriods.Count - 1 do
@@ -183,7 +180,6 @@ begin
     WriteString(ExtractFileName(FAtsFileName));
     NewLine;
   end;
-  {$ENDIF}
 
   WriteEndOptions;
 end;

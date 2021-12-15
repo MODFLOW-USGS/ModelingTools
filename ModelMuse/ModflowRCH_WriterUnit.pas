@@ -43,6 +43,7 @@ Type
     function ObsType: string; override;
     function Mf6ObservationsUsed: Boolean; override;
     Class function Mf6ObType: TObGeneral; override;
+    procedure WriteAdditionalAuxVariables;
   public
     procedure WriteFile(const AFileName: string);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
@@ -56,7 +57,7 @@ implementation
 uses RbwParser, ModflowUnitNumbers, ModflowTransientListParameterUnit,
   frmErrorsAndWarningsUnit, ModflowRchUnit, GoPhastTypes,
   frmProgressUnit, Forms, ModflowOutputControlUnit, System.Math,
-  SparseArrayUnit;
+  SparseArrayUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrNoRechargeDefined = 'No recharge defined';
@@ -554,6 +555,7 @@ begin
 //  WriteString('  READASARRAYS');
 //  NewLine;
   WriteString('  AUXILIARY IFACE');
+  WriteAdditionalAuxVariables;
   NewLine;
 
   PrintOutputOptions;
@@ -572,6 +574,21 @@ begin
   WriteMf6ParamListOption;
 
   WriteEndOptions;
+end;
+
+procedure TModflowRCH_Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+  end;
 end;
 
 procedure TModflowRCH_Writer.WriteCells(CellList: TValueCellList;
@@ -633,7 +650,7 @@ var
   Layer: Integer;
   ParameterName: string;
   MultiplierValue: double;
-//  DataArray: TDataArray;
+  SpeciesIndex: Integer;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -668,6 +685,20 @@ begin
           FPestParamUsed := True;
         end;
 
+
+        if Model.GwtUsed then
+        begin
+          for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+          begin
+            if (RchCell.ConcentrationPestNames[SpeciesIndex] <> '')
+             or (RchCell.ConcentrationPestSeriesNames[SpeciesIndex] <> '') then
+            begin
+              FPestParamUsed := True;
+            end;
+          end;
+        end;
+
+
         if Model.PestUsed and (Model.ModelSelection = msModflow2015)
           and WritingTemplate
           and ( RchCell.RechargeParameterName <> '') then
@@ -691,6 +722,14 @@ begin
         end;
 
         WriteIface(RchCell.IFace);
+
+        if Model.GwtUsed then
+        begin
+          for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+          begin
+            WriteValueOrFormula(RchCell, RchStartConcentration + SpeciesIndex);
+          end;
+        end;
 
         WriteBoundName(RchCell);
 

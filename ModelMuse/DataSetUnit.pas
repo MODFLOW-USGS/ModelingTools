@@ -7537,6 +7537,7 @@ begin
   end
   else if (Name = StrMODFLOWRchRate)
     or (Name = StrMODFLOWRchLayer)
+    or (Pos('RCH ', Name) = 1)
     then
   begin
     Result := btMfRch;

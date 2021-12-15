@@ -24191,8 +24191,7 @@ end;
 
 procedure TCustomModel.InvalidateMfRchConc(Sender: TObject);
 begin
-  Assert(False);
-  // this needs to be finished.
+  ModflowPackages.RchPackage.InvalidateConcentrations;
 end;
 
 procedure TCustomModel.InvalidateMfRchLayer(Sender: TObject);
