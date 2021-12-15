@@ -16519,6 +16519,7 @@ begin
   ModflowPackages.GhbBoundary.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.WelPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.RivPackage.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.RchPackage.AddRemoveRenameGwtConcentrationTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);

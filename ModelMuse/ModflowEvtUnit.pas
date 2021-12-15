@@ -34,7 +34,7 @@ type
     ConcentrationPestSeriesNames: array of string;
     ConcentrationPestSeriesMethods: array of TPestParamMethod;
     ConcentrationTimeSeriesNames: array of string;
-    procedure Assign(const Item: TRchRecord);
+    procedure Assign(const Item: TEvtRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -3334,7 +3334,7 @@ end;
 
 { TEvtRecord }
 
-procedure TEvtRecord.Assign(const Item: TRchRecord);
+procedure TEvtRecord.Assign(const Item: TEvtRecord);
 begin
   self := Item;
   SetLength(Concentrations, Length(Concentrations));

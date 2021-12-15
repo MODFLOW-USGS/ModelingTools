@@ -28,6 +28,8 @@ Type
   // Newtown formulation. It is now obsolete.
   TNewtonFormulation = (nfOff, nfOn);
 
+  TOnGetConcUseList = procedure (Sender: TObject; NewUseList: TStringList) of object;
+
   TModflowPackageSelection = class(TPersistent)
   private
     FComments: TStrings;
@@ -72,6 +74,9 @@ Type
     procedure SetStringProperty(var Field: string; const Value: string);
     procedure UpdatePkgUseList(NewUseList: TStringList;
       ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
+    procedure UpdateConcentrationLists(List: TMfBoundDispObjectList;
+      OnInitialize: TNotifyEvent; OnGetUseList: TOnGetConcUseList;
+      const NameFormat: string);
 //    Function StoreNewtonRapheson: boolean;
   public
     procedure Assign(Source: TPersistent); override;
@@ -114,8 +119,7 @@ Type
 
   TWellPackage = class(TModflowPackageSelection)
   private
-    // @name is implemented as a TObjectList;
-    FGwtConcentrationList: TList;
+    FGwtConcentrationList: TMfBoundDispObjectList;
     FMfWellPumpage: TModflowBoundaryDisplayTimeList;
     FPublishedPhiRamp: TRealStorage;
     FUseTabFiles: boolean;
@@ -152,8 +156,7 @@ Type
 
   TGhbPackage = class(TModflowPackageSelection)
   private
-    // @name is implemented as a TObjectList;
-    FGwtConcentrationList: TList;
+    FGwtConcentrationList: TMfBoundDispObjectList;
     FMfGhbConductance: TModflowBoundaryDisplayTimeList;
     FMfGhbBoundaryHead: TModflowBoundaryDisplayTimeList;
     procedure GetMfGhbConductanceUseList(Sender: TObject;
@@ -227,8 +230,7 @@ Type
 
   TRivPackage = class(TModflowPackageSelection)
   private
-    // @name is implemented as a TObjectList;
-    FGwtConcentrationList: TList;
+    FGwtConcentrationList: TMfBoundDispObjectList;
     FMfRivConductance: TModflowBoundaryDisplayTimeList;
     FMfRivBottom: TModflowBoundaryDisplayTimeList;
     FMfRivStage: TModflowBoundaryDisplayTimeList;
@@ -255,8 +257,7 @@ Type
 
   TChdPackage = class(TModflowPackageSelection)
   private
-    // @name is implemented as a TObjectList;
-    FGwtConcentrationList: TList;
+    FGwtConcentrationList: TMfBoundDispObjectList;
     FMfChdStartingHead: TModflowBoundaryDisplayTimeList;
     FMfChdEndingHead: TModflowBoundaryDisplayTimeList;
     procedure InitializeChdDisplay(Sender: TObject);
@@ -1467,8 +1468,7 @@ Type
 
   TRchPackageSelection = class(TCustomTransientLayerPackageSelection)
   private
-    // @name is implemented as a TObjectList;
-    FGwtConcentrationList: TList;
+    FGwtConcentrationList: TMfBoundDispObjectList;
     FMfRchLayer: TModflowBoundaryDisplayTimeList;
     FMfRchRate: TModflowBoundaryDisplayTimeList;
     FAssignmentMethod: TUpdateMethod;
@@ -6039,6 +6039,48 @@ begin
   end;
 end;
 
+procedure TModflowPackageSelection.UpdateConcentrationLists(
+  List: TMfBoundDispObjectList; OnInitialize: TNotifyEvent;
+  OnGetUseList: TOnGetConcUseList; const NameFormat: string);
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  Components: TMobileChemSpeciesCollection;
+begin
+  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+  begin
+    Components := frmGoPhast.PhastModel.MobileComponents;
+    while List.Count > Components.Count do
+    begin
+      TimeList := List[List.Count-1];
+      RemoveTimeList(TimeList);
+      List.Delete(List.Count-1);
+    end;
+    while List.Count < Components.Count do
+    begin
+      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      AddTimeList(TimeList);
+      List.Add(TimeList);
+      TimeList.OnInitialize := OnInitialize;
+      TimeList.OnGetUseList := OnGetUseList;
+    end;
+    for Index := 0 to Components.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.Name := Format(NameFormat, [Components[Index].Name])
+    end;
+  end
+  else
+  begin
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      RemoveTimeList(TimeList);
+    end;
+    List.Clear;
+  end;
+end;
+
 procedure TModflowPackageSelection.UpdateDisplayUseList(NewUseList: TStringList;
   ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
 begin
@@ -6348,43 +6390,45 @@ end;
 { TRchPackageSelection }
 
 procedure TRchPackageSelection.AddRemoveRenameGwtConcentrationTimeLists;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  Components: TMobileChemSpeciesCollection;
+//var
+//  Index: Integer;
+//  TimeList: TModflowBoundaryDisplayTimeList;
+//  Components: TMobileChemSpeciesCollection;
 begin
-  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
-  begin
-    Components := frmGoPhast.PhastModel.MobileComponents;
-    while FGwtConcentrationList.Count > Components.Count do
-    begin
-      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
-      RemoveTimeList(TimeList);
-      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
-    end;
-    while FGwtConcentrationList.Count < Components.Count do
-    begin
-      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      AddTimeList(TimeList);
-      FGwtConcentrationList.Add(TimeList);
-      TimeList.OnInitialize := InitializeRchDisplay;
-      TimeList.OnGetUseList := GetGwtConcUseList;
-    end;
-    for Index := 0 to Components.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      TimeList.Name := Format(StrRCHS, [Components[Index].Name])
-    end;
-  end
-  else
-  begin
-    for Index := 0 to FGwtConcentrationList.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      RemoveTimeList(TimeList);
-    end;
-    FGwtConcentrationList.Clear;
-  end;
+  UpdateConcentrationLists(FGwtConcentrationList, InitializeRchDisplay,
+    GetGwtConcUseList, StrRCHS);
+//  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+//  begin
+//    Components := frmGoPhast.PhastModel.MobileComponents;
+//    while FGwtConcentrationList.Count > Components.Count do
+//    begin
+//      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
+//      RemoveTimeList(TimeList);
+//      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
+//    end;
+//    while FGwtConcentrationList.Count < Components.Count do
+//    begin
+//      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+//      AddTimeList(TimeList);
+//      FGwtConcentrationList.Add(TimeList);
+//      TimeList.OnInitialize := InitializeRchDisplay;
+//      TimeList.OnGetUseList := GetGwtConcUseList;
+//    end;
+//    for Index := 0 to Components.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      TimeList.Name := Format(StrRCHS, [Components[Index].Name])
+//    end;
+//  end
+//  else
+//  begin
+//    for Index := 0 to FGwtConcentrationList.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      RemoveTimeList(TimeList);
+//    end;
+//    FGwtConcentrationList.Clear;
+//  end;
 end;
 
 procedure TRchPackageSelection.Assign(Source: TPersistent);
@@ -6418,7 +6462,7 @@ begin
     MfRchLayer.Name := StrMODFLOWRchLayer;
     AddTimeList(MfRchLayer);
 
-    FGwtConcentrationList := TObjectList.Create;
+    FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
 end;
 
@@ -10508,43 +10552,45 @@ end;
 { TWellPackage }
 
 procedure TWellPackage.AddRemoveRenameGwtConcentrationTimeLists;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  Components: TMobileChemSpeciesCollection;
+//var
+//  Index: Integer;
+//  TimeList: TModflowBoundaryDisplayTimeList;
+//  Components: TMobileChemSpeciesCollection;
 begin
-  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
-  begin
-    Components := frmGoPhast.PhastModel.MobileComponents;
-    while FGwtConcentrationList.Count > Components.Count do
-    begin
-      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
-      RemoveTimeList(TimeList);
-      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
-    end;
-    while FGwtConcentrationList.Count < Components.Count do
-    begin
-      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      AddTimeList(TimeList);
-      FGwtConcentrationList.Add(TimeList);
-      TimeList.OnInitialize := InitializeMfWellPumpage;
-      TimeList.OnGetUseList := GetGwtConcUseList;
-    end;
-    for Index := 0 to Components.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      TimeList.Name := Format(StrWelS, [Components[Index].Name])
-    end;
-  end
-  else
-  begin
-    for Index := 0 to FGwtConcentrationList.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      RemoveTimeList(TimeList);
-    end;
-    FGwtConcentrationList.Clear;
-  end;
+  UpdateConcentrationLists(FGwtConcentrationList, InitializeMfWellPumpage,
+    GetGwtConcUseList, StrWelS);
+//  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+//  begin
+//    Components := frmGoPhast.PhastModel.MobileComponents;
+//    while FGwtConcentrationList.Count > Components.Count do
+//    begin
+//      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
+//      RemoveTimeList(TimeList);
+//      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
+//    end;
+//    while FGwtConcentrationList.Count < Components.Count do
+//    begin
+//      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+//      AddTimeList(TimeList);
+//      FGwtConcentrationList.Add(TimeList);
+//      TimeList.OnInitialize := InitializeMfWellPumpage;
+//      TimeList.OnGetUseList := GetGwtConcUseList;
+//    end;
+//    for Index := 0 to Components.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      TimeList.Name := Format(StrWelS, [Components[Index].Name])
+//    end;
+//  end
+//  else
+//  begin
+//    for Index := 0 to FGwtConcentrationList.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      RemoveTimeList(TimeList);
+//    end;
+//    FGwtConcentrationList.Clear;
+//  end;
 end;
 
 procedure TWellPackage.Assign(Source: TPersistent);
@@ -10574,7 +10620,7 @@ begin
     MfWellPumpage.Name := StrMODFLOWWellPumping;
     AddTimeList(MfWellPumpage);
 
-    FGwtConcentrationList := TObjectList.Create;
+    FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
   InitializeVariables;
 end;
@@ -10721,43 +10767,45 @@ end;
 { TGhbPackage }
 
 procedure TGhbPackage.AddRemoveRenameGwtConcentrationTimeLists;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  Components: TMobileChemSpeciesCollection;
+//var
+//  Index: Integer;
+//  TimeList: TModflowBoundaryDisplayTimeList;
+//  Components: TMobileChemSpeciesCollection;
 begin
-  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
-  begin
-    Components := frmGoPhast.PhastModel.MobileComponents;
-    while FGwtConcentrationList.Count > Components.Count do
-    begin
-      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
-      RemoveTimeList(TimeList);
-      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
-    end;
-    while FGwtConcentrationList.Count < Components.Count do
-    begin
-      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      AddTimeList(TimeList);
-      FGwtConcentrationList.Add(TimeList);
-      TimeList.OnInitialize := InitializeGhbDisplay;
-      TimeList.OnGetUseList := GetGwtConcUseList;
-    end;
-    for Index := 0 to Components.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      TimeList.Name := Format(StrGHBS, [Components[Index].Name])
-    end;
-  end
-  else
-  begin
-    for Index := 0 to FGwtConcentrationList.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      RemoveTimeList(TimeList);
-    end;
-    FGwtConcentrationList.Clear;
-  end;
+  UpdateConcentrationLists(FGwtConcentrationList, InitializeGhbDisplay,
+    GetGwtConcUseList, StrGHBS);
+//  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+//  begin
+//    Components := frmGoPhast.PhastModel.MobileComponents;
+//    while FGwtConcentrationList.Count > Components.Count do
+//    begin
+//      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
+//      RemoveTimeList(TimeList);
+//      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
+//    end;
+//    while FGwtConcentrationList.Count < Components.Count do
+//    begin
+//      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+//      AddTimeList(TimeList);
+//      FGwtConcentrationList.Add(TimeList);
+//      TimeList.OnInitialize := InitializeGhbDisplay;
+//      TimeList.OnGetUseList := GetGwtConcUseList;
+//    end;
+//    for Index := 0 to Components.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      TimeList.Name := Format(StrGHBS, [Components[Index].Name])
+//    end;
+//  end
+//  else
+//  begin
+//    for Index := 0 to FGwtConcentrationList.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      RemoveTimeList(TimeList);
+//    end;
+//    FGwtConcentrationList.Clear;
+//  end;
 end;
 
 constructor TGhbPackage.Create(Model: TBaseModel);
@@ -10779,7 +10827,7 @@ begin
     MfGhbBoundaryHead.Name := StrMODFLOWGhbHead;
     AddTimeList(MfGhbBoundaryHead);
 
-    FGwtConcentrationList := TObjectList.Create;
+    FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
   InitializeVariables;
 end;
@@ -11077,43 +11125,45 @@ end;
 { TRivPackage }
 
 procedure TRivPackage.AddRemoveRenameGwtConcentrationTimeLists;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  Components: TMobileChemSpeciesCollection;
+//var
+//  Index: Integer;
+//  TimeList: TModflowBoundaryDisplayTimeList;
+//  Components: TMobileChemSpeciesCollection;
 begin
-  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
-  begin
-    Components := frmGoPhast.PhastModel.MobileComponents;
-    while FGwtConcentrationList.Count > Components.Count do
-    begin
-      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
-      RemoveTimeList(TimeList);
-      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
-    end;
-    while FGwtConcentrationList.Count < Components.Count do
-    begin
-      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      AddTimeList(TimeList);
-      FGwtConcentrationList.Add(TimeList);
-      TimeList.OnInitialize := InitializeRivDisplay;
-      TimeList.OnGetUseList := GetGwtConcUseList;
-    end;
-    for Index := 0 to Components.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      TimeList.Name := Format(StrRivS, [Components[Index].Name])
-    end;
-  end
-  else
-  begin
-    for Index := 0 to FGwtConcentrationList.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      RemoveTimeList(TimeList);
-    end;
-    FGwtConcentrationList.Clear;
-  end;
+  UpdateConcentrationLists(FGwtConcentrationList, InitializeRivDisplay,
+    GetGwtConcUseList, StrRivS);
+//  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+//  begin
+//    Components := frmGoPhast.PhastModel.MobileComponents;
+//    while FGwtConcentrationList.Count > Components.Count do
+//    begin
+//      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
+//      RemoveTimeList(TimeList);
+//      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
+//    end;
+//    while FGwtConcentrationList.Count < Components.Count do
+//    begin
+//      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+//      AddTimeList(TimeList);
+//      FGwtConcentrationList.Add(TimeList);
+//      TimeList.OnInitialize := InitializeRivDisplay;
+//      TimeList.OnGetUseList := GetGwtConcUseList;
+//    end;
+//    for Index := 0 to Components.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      TimeList.Name := Format(StrRivS, [Components[Index].Name])
+//    end;
+//  end
+//  else
+//  begin
+//    for Index := 0 to FGwtConcentrationList.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      RemoveTimeList(TimeList);
+//    end;
+//    FGwtConcentrationList.Clear;
+//  end;
 end;
 
 constructor TRivPackage.Create(Model: TBaseModel);
@@ -11142,7 +11192,7 @@ begin
     MfRivBottom.Name := StrMODFLOWRiverBottom;
     AddTimeList(MfRivBottom);
 
-    FGwtConcentrationList := TObjectList.Create;
+    FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
   InitializeVariables;
 end;
@@ -11260,43 +11310,45 @@ end;
 { TChdPackage }
 
 procedure TChdPackage.AddRemoveRenameGwtConcentrationTimeLists;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  Components: TMobileChemSpeciesCollection;
+//var
+//  Index: Integer;
+//  TimeList: TModflowBoundaryDisplayTimeList;
+//  Components: TMobileChemSpeciesCollection;
 begin
-  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
-  begin
-    Components := frmGoPhast.PhastModel.MobileComponents;
-    while FGwtConcentrationList.Count > Components.Count do
-    begin
-      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
-      RemoveTimeList(TimeList);
-      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
-    end;
-    while FGwtConcentrationList.Count < Components.Count do
-    begin
-      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      AddTimeList(TimeList);
-      FGwtConcentrationList.Add(TimeList);
-      TimeList.OnInitialize := InitializeChdDisplay;
-      TimeList.OnGetUseList := GetGwtConcUseList;
-    end;
-    for Index := 0 to Components.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      TimeList.Name := Format(StrCHDS, [Components[Index].Name])
-    end;
-  end
-  else
-  begin
-    for Index := 0 to FGwtConcentrationList.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      RemoveTimeList(TimeList);
-    end;
-    FGwtConcentrationList.Clear;
-  end;
+  UpdateConcentrationLists(FGwtConcentrationList, InitializeChdDisplay,
+    GetGwtConcUseList, StrCHDS);
+//  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+//  begin
+//    Components := frmGoPhast.PhastModel.MobileComponents;
+//    while FGwtConcentrationList.Count > Components.Count do
+//    begin
+//      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
+//      RemoveTimeList(TimeList);
+//      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
+//    end;
+//    while FGwtConcentrationList.Count < Components.Count do
+//    begin
+//      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+//      AddTimeList(TimeList);
+//      FGwtConcentrationList.Add(TimeList);
+//      TimeList.OnInitialize := InitializeChdDisplay;
+//      TimeList.OnGetUseList := GetGwtConcUseList;
+//    end;
+//    for Index := 0 to Components.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      TimeList.Name := Format(StrCHDS, [Components[Index].Name])
+//    end;
+//  end
+//  else
+//  begin
+//    for Index := 0 to FGwtConcentrationList.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      RemoveTimeList(TimeList);
+//    end;
+//    FGwtConcentrationList.Clear;
+//  end;
 end;
 
 constructor TChdPackage.Create(Model: TBaseModel);
@@ -11318,7 +11370,7 @@ begin
     MfChdEndingHead.Name := StrMODFLOWCHDEndingHead;
     AddTimeList(MfChdEndingHead);
 
-    FGwtConcentrationList := TObjectList.Create;
+    FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
 end;
 

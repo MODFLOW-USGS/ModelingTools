@@ -48,6 +48,8 @@ type
     property AddMethod: TValueAddMethod read FAddMethod write FAddMethod;
   end;
 
+  TMfBoundDispObjectList = TObjectList<TModflowBoundaryDisplayTimeList>;
+
   THobDisplayTimeList = class(TModflowBoundaryDisplayTimeList)
   protected
     procedure CreateNewDataSets; override;
