@@ -202,9 +202,6 @@ type
     // See @link(Items).
     function GetItem(Index: Integer): TCustomBoundaryItem;
   protected
-//    function GetScreenObject: TObject;
-    // @name is the @link(TModflowBoundary) that owns @classname.
-    property BoundaryGroup: TModflowScreenObjectProperty read FBoundary;
 //    property BoundaryGroup: TModflowBoundary read FBoundary;
     // @name is the descendant of @link(TCustomModflowBoundaryItem)
     // stored by classname.
@@ -219,6 +216,8 @@ type
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
   public
+    // @name is the @link(TModflowBoundary) that owns @classname.
+    property BoundaryGroup: TModflowScreenObjectProperty read FBoundary;
     // @name is the @link(TScreenObject) for this boundary.
     // @name provides access to @link(TCustomModflowBoundaryItem) representing
     // the boundary conditions for different time periods.

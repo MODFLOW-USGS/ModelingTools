@@ -110,7 +110,7 @@ object TTaskHistory
     end
     item
       Name = 'ETS'
-      Display = False
+      Display = True
     end
     item
       Name = 'RES'
@@ -28640,5 +28640,19 @@ object TTaskHistory
         'CHD'
         'RCH'
         'MF6 GWT')
+    end
+    item
+      Date = 44544.000000000000000000
+      Categories.Strings = (
+        'RCH'
+        'ETS'
+        'MF6 GWT')
+    end
+    item
+      Date = 44545.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT'
+        'ETS'
+        'Bug fix')
     end>
 end

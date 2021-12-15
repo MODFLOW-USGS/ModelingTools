@@ -73,6 +73,7 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure comboModelChange(Sender: TObject);
     procedure btnPasteDataClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     FGrids: TList;
     FRealIgnoreValues: array of double;
@@ -1805,6 +1806,7 @@ begin
   finally
     Grid.EndUpdate;
   end;
+  Grid.HideEditor;
 end;
 
 procedure TfrmImportGriddedData.InitializeGridForCellListForGriddedData(DataSet: TDataArray);
@@ -2145,6 +2147,14 @@ begin
   inherited;
   lblColumns.Left := (jvspGrid.Width - lblColumns.Width) div 2;
   lblRows.Top := (jvspGrid.Height - lblRows.Height) div 2;
+end;
+
+procedure TfrmImportGriddedData.FormShow(Sender: TObject);
+begin
+  inherited;
+  OnShow := nil;
+  rdgIgnoreValues.HideEditor;
+  seIgnoreValueCount.AsInteger := 0;
 end;
 
 procedure TfrmImportGriddedData.btnOKClick(Sender: TObject);

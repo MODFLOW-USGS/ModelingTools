@@ -250,6 +250,7 @@ type
     // @name is used to compute the recharge rates for a series of
     // cells over a series of time intervals.
     FEvapotranspirationRateData: TModflowTimeList;
+    FConcList: TList;
   protected
     procedure CreateTimeLists; override;
     property EvapotranspirationRateData: TModflowTimeList read FEvapotranspirationRateData;
@@ -387,7 +388,6 @@ type
     FStressPeriod: integer;
     function GetEvapotranspirationRate: double;
     function GetEvapotranspirationRateAnnotation: string;
-    function GetTimeSeriesName: string;
     function GetETParameterName: string;
     function GetETParameterValue: double;
     function GetRatePest: string;
@@ -418,7 +418,6 @@ type
   public
     property EvapotranspirationRate: double read GetEvapotranspirationRate;
     property EvapotranspirationRateAnnotation: string read GetEvapotranspirationRateAnnotation;
-    property TimeSeriesName: string read GetTimeSeriesName;
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TEvtRecord read FValues write FValues;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
@@ -664,7 +663,7 @@ resourcestring
 
 const
   EvtRatePosition = 0;
-  EvtConcentrationStart = 1;
+  EvtStartConcentration = 1;
 
   EvtSurfacePosition = 0;
   EvtDepthPosition = 1;
@@ -674,7 +673,8 @@ implementation
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
   frmErrorsAndWarningsUnit, ModflowParameterUnit, ModelMuseUtilities,
-  CustomModflowWriterUnit, ModflowUzfUnit;
+  CustomModflowWriterUnit, ModflowUzfUnit, System.Generics.Collections,
+  ModflowEtsUnit;
 
 resourcestring
   StrEvapoTranspirationRate = 'Evapo- transpiration rate';
@@ -746,6 +746,8 @@ begin
 end;
 
 destructor TEvtItem.Destroy;
+var
+  Index: Integer;
 begin
   EvapotranspirationRate := '0';
   for Index := 0 to FGwtConcentrations.Count - 1 do
@@ -939,7 +941,7 @@ begin
   end;
   EvapotranspirationRateArray.CacheData;
 
-  if LocalModel.GwtUsed then
+  if LocalModel.GwtUsed and (BoundaryGroup is TEtsBoundary) then
   begin
     for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
     begin
@@ -1052,13 +1054,13 @@ begin
     TimeSeriesItems := TStringList.Create;
     TimeSeriesNames.Add(TimeSeriesItems);
 
-    if LocalModel.GwtUsed and (BoundaryGroup = TEtsBoundary) then
+    if LocalModel.GwtUsed and (BoundaryGroup is TEtsBoundary) then
     begin
       for SpeciesIndex := 0 to SpeciesCount - 1 do
       begin
-        ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[RchStartConcentration + SpeciesIndex];
+        ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[EvtStartConcentration + SpeciesIndex];
         PestSeries.Add(ConcentrationSeriesName);
-        ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[RchStartConcentration + SpeciesIndex];
+        ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[EvtStartConcentration + SpeciesIndex];
         PestMethods.Add(ConcentrationMethod);
 
         ConcentrationItems := TStringList.Create;
@@ -1085,17 +1087,17 @@ begin
     FEvapotranspirationRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
     Assert(FEvapotranspirationRateData.Count = Count);
 
-    if LocalModel.GwtUsed and (BoundaryGroup = TEtsBoundary) then
+    if LocalModel.GwtUsed and (BoundaryGroup is TEtsBoundary) then
     begin
       for SpeciesIndex := 0 to SpeciesCount - 1 do
       begin
         for Index := 0 to Count - 1 do
         begin
-          Item := Items[Index] as TRchItem;
+          Item := Items[Index] as TEvtItem;
           BoundaryValues[Index].Time := Item.StartTime;
 
-          ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[RchStartConcentration + SpeciesIndex];
-          ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[RchStartConcentration + SpeciesIndex];
+          ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[EvtStartConcentration + SpeciesIndex];
+          ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[EvtStartConcentration + SpeciesIndex];
           ConcentrationItems := ConcPestItemList[SpeciesIndex];
           ConcentrationTimeSeriesItems := ConcTimeSeriesItemList[SpeciesIndex];
           ItemFormula := Item.GwtConcentrations[SpeciesIndex].Value;
@@ -1107,7 +1109,7 @@ begin
         ConcentrationData.Initialize(BoundaryValues, ScreenObject, lctUse);
         Assert(ConcentrationData.Count = Count);
       end;
-    end
+    end;
 
     ClearBoundaries(AModel);
     SetBoundaryCapacity(FEvapotranspirationRateData.Count, AModel);
@@ -1185,7 +1187,7 @@ begin
       end;
     end;
   end;
-endend;
+end;
 
 class function TEvtCollection.ItemClass: TBoundaryItemClass;
 begin
@@ -1370,11 +1372,6 @@ end;
 function TEvt_Cell.GetSection: integer;
 begin
   result := Values.Cell.Section;
-end;
-
-function TEvt_Cell.GetTimeSeriesName: string;
-begin
-  result := Values.TimeSeriesName;
 end;
 
 function TEvt_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
@@ -3567,8 +3564,15 @@ end;
 { TEvtTimeListLink }
 
 procedure TEvtTimeListLink.CreateTimeLists;
+var
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
 begin
   inherited;
+  FConcList := TObjectList.Create;
+
   FEvapotranspirationRateData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FEvapotranspirationRateData.NonParamDescription := StrEvapoTranspirationRate;
   FEvapotranspirationRateData.ParamDescription := StrEvapoTranspiratioMult;
@@ -3578,6 +3582,25 @@ begin
     FEvapotranspirationRateData.OnInvalidate :=
       (Model as TCustomModel).InvalidateMfEvtEvapRate;
   end;
+
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed and (Boundary.BoundaryGroup is TEtsBoundary) then
+  begin
+    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
+    begin
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+        ConcTimeList.OnInvalidate := LocalModel.InvalidateEtsConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FConcList.Add(ConcTimeList);
+    end;
+  end;
+
 end;
 
 destructor TEvtTimeListLink.Destroy;

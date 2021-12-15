@@ -18,7 +18,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
     Top = 185
     Width = 436
     Height = 216
-    ActivePage = jvspCellList
+    ActivePage = jvspGrid
     PropagateEnable = False
     Align = alClient
     object jvspCellList: TJvStandardPage
@@ -492,6 +492,8 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       Tree.OnGetText = combotreeDataSetsDropDownTreeGetText
       Tree.OnGetNodeDataSize = combotreeDataSetsDropDownTreeGetNodeDataSize
       Tree.OnInitNode = combotreeDataSets1TreeInitNode
+      Tree.Touch.InteractiveGestures = [igPan, igPressAndTap]
+      Tree.Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
       Tree.ExplicitWidth = 200
       Tree.ExplicitHeight = 100
       Tree.Columns = <>

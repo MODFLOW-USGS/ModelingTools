@@ -3090,6 +3090,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfEtsEvapLayer(Sender: TObject);
     procedure InvalidateEtsDepthFractions(Sender: TObject);
     procedure InvalidateEtsRateFractions(Sender: TObject);
+    procedure InvalidateEtsConc(Sender: TObject);
     procedure InvalidateMfUzfEtDemand(Sender: TObject);
     procedure InvalidateMfUzfExtinctionDepth(Sender: TObject);
     procedure InvalidateMfUzfWaterContent(Sender: TObject);
@@ -10432,6 +10433,9 @@ const
 
 //               Change: Changed the formula for the initial head in MODFLOW
 //                models to Model_Top.
+//               Bug fix: Fixed the Import Gridded Data dialog box so that it
+//                no longer automatically changes the number of ignored values
+//                to 1 when a data set is selected.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -23939,6 +23943,12 @@ end;
 procedure TCustomModel.InvalidateCSubStressOffset(Sender: TObject);
 begin
   ModflowPackages.CSubPackage.StressOffset.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateEtsConc(Sender: TObject);
+begin
+  Assert(False);
+  // This needs to be finished
 end;
 
 procedure TCustomModel.InvalidateEtsDepthFractions(Sender: TObject);
