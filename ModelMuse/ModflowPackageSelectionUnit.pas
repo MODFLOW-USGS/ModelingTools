@@ -1496,6 +1496,7 @@ Type
 
   TEtsPackageSelection = class(TCustomTransientLayerPackageSelection)
   private
+    FGwtConcentrationList: TMfBoundDispObjectList;
     FSegmentCount: integer;
     // @name is implemnted as a TObjectList.
     FEtsRateFractionLists: TList;
@@ -1517,6 +1518,7 @@ Type
       NewUseList: TStringList);
     procedure UpdateEtsUseList(NewUseList: TStringList;
       ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
+    procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -1537,6 +1539,8 @@ Type
     procedure InvalidateEtsRateFractions(Sender: TObject);
     procedure UpdateEtsSegmentCount;
     procedure InvalidateAllTimeLists; override;
+    procedure InvalidateConcentrations;
+    procedure AddRemoveRenameGwtConcentrationTimeLists;
   published
     property SegmentCount: integer read FSegmentCount
       write SetSegmentCount default 1;
@@ -5888,6 +5892,7 @@ resourcestring
   StrRIVS = 'RIV %s';
   StrCHDS = 'CHD %s';
   StrRCHS = 'RCH %s';
+  StrETSS = 'ETS %s';
 
 { TModflowPackageSelection }
 
@@ -6390,45 +6395,9 @@ end;
 { TRchPackageSelection }
 
 procedure TRchPackageSelection.AddRemoveRenameGwtConcentrationTimeLists;
-//var
-//  Index: Integer;
-//  TimeList: TModflowBoundaryDisplayTimeList;
-//  Components: TMobileChemSpeciesCollection;
 begin
   UpdateConcentrationLists(FGwtConcentrationList, InitializeRchDisplay,
     GetGwtConcUseList, StrRCHS);
-//  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
-//  begin
-//    Components := frmGoPhast.PhastModel.MobileComponents;
-//    while FGwtConcentrationList.Count > Components.Count do
-//    begin
-//      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
-//      RemoveTimeList(TimeList);
-//      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
-//    end;
-//    while FGwtConcentrationList.Count < Components.Count do
-//    begin
-//      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-//      AddTimeList(TimeList);
-//      FGwtConcentrationList.Add(TimeList);
-//      TimeList.OnInitialize := InitializeRchDisplay;
-//      TimeList.OnGetUseList := GetGwtConcUseList;
-//    end;
-//    for Index := 0 to Components.Count - 1 do
-//    begin
-//      TimeList := FGwtConcentrationList[Index];
-//      TimeList.Name := Format(StrRCHS, [Components[Index].Name])
-//    end;
-//  end
-//  else
-//  begin
-//    for Index := 0 to FGwtConcentrationList.Count - 1 do
-//    begin
-//      TimeList := FGwtConcentrationList[Index];
-//      RemoveTimeList(TimeList);
-//    end;
-//    FGwtConcentrationList.Clear;
-//  end;
 end;
 
 procedure TRchPackageSelection.Assign(Source: TPersistent);
@@ -6640,6 +6609,12 @@ begin
 end;
 { TEtsPackageSelection }
 
+procedure TEtsPackageSelection.AddRemoveRenameGwtConcentrationTimeLists;
+begin
+  UpdateConcentrationLists(FGwtConcentrationList, InitializeEtsDisplay,
+    GetGwtConcUseList, StrETSS);
+end;
+
 procedure TEtsPackageSelection.Assign(Source: TPersistent);
 var
   EtsSource: TEtsPackageSelection;
@@ -6696,11 +6671,14 @@ begin
     AddTimeList(MfEtsEvapLayer);
 
     UpdateEtsSegmentCount;
+
+    FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
 end;
 
 destructor TEtsPackageSelection.Destroy;
 begin
+  FGwtConcentrationList.Free;
   FEtsRateFractionLists.Free;
   FEtsDepthFractionLists.Free;
   FMfEtsEvapLayer.Free;
@@ -6708,6 +6686,19 @@ begin
   FMfEtsEvapDepth.Free;
   FMfEtsEvapSurface.Free;
   inherited;
+end;
+
+procedure TEtsPackageSelection.GetGwtConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+  DataSetName := Format(StrETSS,
+     [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
+  Index := Index+1;
+  UpdatePkgUseList(NewUseList, ptEts, Index, DataSetName);
 end;
 
 procedure TEtsPackageSelection.GetMfEtsDepthFractionUseList(Sender: TObject;
@@ -6853,6 +6844,15 @@ begin
       TimeList.CreateDataSets;
       List.Add(TimeList);
     end;
+
+    for Index := 0 to FGwtConcentrationList.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      TimeList.CreateDataSets;
+      List.Add(TimeList);
+    end;
+
+
     EtsWriter.UpdateDisplay(List);
   finally
     EtsWriter.Free;
@@ -6878,6 +6878,19 @@ begin
     MfEtsEvapSurface.Invalidate;
     InvalidateEtsDepthFractions(nil);
     InvalidateEtsRateFractions(nil);
+    InvalidateConcentrations;
+  end;
+end;
+
+procedure TEtsPackageSelection.InvalidateConcentrations;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FGwtConcentrationList.Count - 1 do
+  begin
+    TimeList := FGwtConcentrationList[Index];
+    TimeList.Invalidate;
   end;
 end;
 

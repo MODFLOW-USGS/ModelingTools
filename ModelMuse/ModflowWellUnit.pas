@@ -391,7 +391,6 @@ procedure TWellItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TWellCollection;
   PumpingRateObserver: TObserver;
-//  ConductanceObserver: TObserver;
   ConcIndex: Integer;
 begin
   ParentCollection := Collection as TWellCollection;

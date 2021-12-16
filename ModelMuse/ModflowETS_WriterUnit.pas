@@ -34,6 +34,7 @@ Type
     procedure WriteOptions(InputFileName: string);
     procedure WriteDimensions;
     procedure WriteFileInternal;
+    procedure WriteAdditionalAuxVariables;
   protected
     function CellType: TValueCellType; override;
     function Prefix: string; override;
@@ -92,7 +93,7 @@ implementation
 uses ModflowUnitNumbers, ModflowTransientListParameterUnit,
   frmErrorsAndWarningsUnit, ModflowEtsUnit, GoPhastTypes,
   frmProgressUnit, Forms, frmGoPhastUnit, ModflowEvtUnit, System.Math,
-  SparseArrayUnit, SparseDataSets;
+  SparseArrayUnit, SparseDataSets, Mt3dmsChemSpeciesUnit;
 
 { TModflowETS_Writer }
 
@@ -753,6 +754,7 @@ begin
   WriteBeginOptions;
 
   WriteString('  AUXILIARY IFACE');
+  WriteAdditionalAuxVariables;
   NewLine;
 
   PrintOutputOptions;
@@ -770,6 +772,21 @@ begin
   WriteMf6ParamListOption;
 
   WriteEndOptions;
+end;
+
+procedure TModflowETS_Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+  end;
 end;
 
 procedure TModflowETS_Writer.WriteCells(CellList: TList;
@@ -800,7 +817,7 @@ var
   Layer: Integer;
   ParameterName: string;
   MultiplierValue: double;
-//  DataArray: TDataArray;
+  SpeciesIndex: Integer;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -843,6 +860,19 @@ begin
           FPestParamUsed := True;
         end;
 
+        if Model.GwtUsed then
+        begin
+          for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+          begin
+            if (EvtCell.ConcentrationPestNames[SpeciesIndex] <> '')
+             or (EvtCell.ConcentrationPestSeriesNames[SpeciesIndex] <> '') then
+            begin
+              FPestParamUsed := True;
+            end;
+          end;
+        end;
+
+
         WriteValueOrFormula(SurfDepthCell, EtsSurfacePosition);
 
 
@@ -881,6 +911,14 @@ begin
           WriteFloat(SurfDepthCell.EtFractions[SegmentIndex-1]);
         end;
         WriteIface(EvtCell.IFace);
+
+        if Model.GwtUsed then
+        begin
+          for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+          begin
+            WriteValueOrFormula(EvtCell, EvtStartConcentration + SpeciesIndex);
+          end;
+        end;
 
         WriteBoundName(EvtCell);
 

@@ -290,6 +290,7 @@ type
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
       PestItemNames, TimeSeriesNames: TStringListObjectList); virtual;
     function SpeciesCount: Integer; virtual;
+    procedure InvalidateGwtConcentrations(Sender: TObject); virtual;
   end;
 
   TEvtLayerTimeListLink = class(TTimeListsModelLink)
@@ -695,7 +696,7 @@ implementation
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
   frmErrorsAndWarningsUnit, ModflowParameterUnit, ModelMuseUtilities,
-  CustomModflowWriterUnit, ModflowUzfUnit, ModflowEtsUnit;
+  CustomModflowWriterUnit, ModflowUzfUnit;
 
 resourcestring
   StrEvapoTranspirationRate = 'Evapo- transpiration rate';
@@ -730,21 +731,15 @@ var
   ParentCollection: TEvtCollection;
   RateObserver: TObserver;
   ConcIndex: Integer;
-  EtsCollection: TEtsCollection;
 begin
   ParentCollection := Collection as TEvtCollection;
   RateObserver := FObserverList[EvtRatePosition];
   RateObserver.OnUpToDateSet := ParentCollection.InvalidateEtRateData;
 
-  if ParentCollection is TEtsCollection then
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
-    EtsCollection := TEtsCollection(Collection);
-    for ConcIndex := 0 to GwtConcentrations.Count - 1 do
-    begin
-      GwtConcentrations[ConcIndex].Observer.OnUpToDateSet
-        := EtsCollection.InvalidateGwtConcentrations;
-    end;
-
+    GwtConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateGwtConcentrations;
   end;
 end;
 
@@ -1004,9 +999,7 @@ var
   BoundaryPosition: Integer;
   ItemFormula: string;
   TimeSeriesItems: TStringList;
-//  LocalModel: TCustomModel;
 begin
-//  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
@@ -1075,6 +1068,11 @@ begin
       Link.FEvapotranspirationRateData.Invalidate;
     end;
   end;
+end;
+
+procedure TEvtCollection.InvalidateGwtConcentrations(Sender: TObject);
+begin
+  // do nothing.
 end;
 
 class function TEvtCollection.ItemClass: TBoundaryItemClass;

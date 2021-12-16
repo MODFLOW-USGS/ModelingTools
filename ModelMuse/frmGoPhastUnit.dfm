@@ -323,7 +323,7 @@ inherited frmGoPhast: TfrmGoPhast
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
     object tbarEdit: TToolBar
-      Left = 151
+      Left = 152
       Top = 34
       Width = 146
       Height = 28

@@ -2794,6 +2794,7 @@ begin
     PestParameterColumns := [2];
   end
   else if (Sender = frameRivParam.rdgModflowBoundary)
+    or (Sender = frameEtsParam.rdgModflowBoundary)
     then
   begin
     PestParameterColumns := [2,3,4];
@@ -2807,7 +2808,6 @@ begin
   end
   else if (Sender = frameDrtParam.rdgModflowBoundary)
     or (Sender = frameEvtParam.rdgModflowBoundary)
-    or (Sender = frameEtsParam.rdgModflowBoundary)
     then
   begin
     PestParameterColumns := [2,3,4];
@@ -6583,12 +6583,14 @@ begin
   if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
   begin
     frameEtsParam.rdgModflowBoundary.ColCount :=
-      6 + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
+      6 + MobileSpeciesCount
+      + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
   end
   else
   begin
     frameEtsParam.rdgModflowBoundary.ColCount :=
-      5 + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
+      5 + MobileSpeciesCount
+      + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
   end;
   frameMT3DMS_SSM.rdgModflowBoundary.ColCount :=
     2 + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
@@ -16974,7 +16976,7 @@ begin
   if (DataGrid = frameEtsParam.rdgModflowBoundary)
     and frmGoPhast.PhastModel.EtsTimeVaryingLayers then
   begin
-    EtsLayerCol := 5 +
+    EtsLayerCol := 5 + GwtColumnCount +
       (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
     if ACol = EtsLayerCol then
     begin
@@ -16986,9 +16988,9 @@ begin
   if (DataGrid = frameEtsParam.rdgModflowBoundary) and
     (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount > 1) then
   begin
-    EtsLayerCol := 5 +
+    EtsLayerCol := 5 + GwtColumnCount +
       (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
-    FirstSegmentLayer := 4;
+    FirstSegmentLayer := 4 + GwtColumnCount;
     if (ACol >= FirstSegmentLayer) and (ACol < EtsLayerCol) then
     begin
       // We are setting the formula for  the segment fractions
@@ -17309,6 +17311,7 @@ var
   StoredUpToDate: boolean;
   PriorCanInvalidateModel: Boolean;
   ColIndex: Integer;
+  NumberOfSpecies: Integer;
 begin
   StoredUpToDate := frmGoPhast.PhastModel.UpToDate;
   PriorCanInvalidateModel := AScreenObject.CanInvalidateModel;
@@ -17446,14 +17449,15 @@ begin
       AScreenObject.ModflowEvtBoundary := nil;
     end;
 
+    NumberOfSpecies := GwtColumnCount;
     if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
     begin
-      EtsColCount := 6
+      EtsColCount := 6 + NumberOfSpecies
         + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount -1) * 2;
     end
     else
     begin
-      EtsColCount := 5
+      EtsColCount := 5 + NumberOfSpecies
         + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount -1) * 2;
     end;
     frameEtsParam.rdgModflowBoundary.ColCount := EtsColCount;
@@ -17471,14 +17475,15 @@ begin
         frameEtsParam.rdgModflowBoundary.WidthNeededToFitText(EtsColCount-1,0);
     end;
 
+    NumberOfSpecies := GwtColumnCount;
     for Index := 0 to AScreenObject.ModflowEtsBoundary.
       EtsSurfDepthCollection.TimeListCount(frmGoPhast.PhastModel) - 1 do
     begin
-      frameEtsParam.rdgModflowBoundary.Columns[3+Index].WordWrapCaptions := True;
-      frameEtsParam.rdgModflowBoundary.Columns[3+Index].AutoAdjustColWidths := True;
+      frameEtsParam.rdgModflowBoundary.Columns[3+Index + NumberOfSpecies].WordWrapCaptions := True;
+      frameEtsParam.rdgModflowBoundary.Columns[3+Index + NumberOfSpecies].AutoAdjustColWidths := True;
       TimeList := AScreenObject.ModflowEtsBoundary.EtsSurfDepthCollection.TimeLists[Index, frmGoPhast.PhastModel];
-      frameEtsParam.rdgModflowBoundary.Cells[3+Index, 0] := TimeList.NonParamDescription;
-      frameEtsParam.rdgModflowBoundary.Columns[3+Index].AutoAdjustColWidths := False;
+      frameEtsParam.rdgModflowBoundary.Cells[3+Index + NumberOfSpecies, 0] := TimeList.NonParamDescription;
+      frameEtsParam.rdgModflowBoundary.Columns[3+Index + NumberOfSpecies].AutoAdjustColWidths := False;
     end;
     if (AScreenObject.ModflowEtsBoundary <> nil)
       and not AScreenObject.ModflowEtsBoundary.Used then
@@ -19173,6 +19178,143 @@ var
   TimeList: TParameterTimeList;
   ValuesFunction: TGetBoundaryCollectionEvent;
   ColumnOffset: integer;
+  NumberOfSpecies: Integer;
+  procedure GetEvtModifiers;
+  var
+    ValuesFunction: TGetBoundaryCollectionEvent;
+    ColumnOffset: Integer;
+    BoundaryCount: Integer;
+    ScreenObjectIndex: Integer;
+    AScreenObject: TScreenObject;
+    Boundary: TEtsBoundary;
+    Values: TCustomMF_BoundColl;
+    BoundaryIndex: Integer;
+    First: Boolean;
+    Identical: Boolean;
+    Method: TPestParamMethod;
+    Modifier: string;
+    StorageIndex: Integer;
+  begin
+    {$IFDEF PEST}
+    ValuesFunction := GetBoundaryValues;
+    ColumnOffset := 2;
+
+    BoundaryCount := -1;
+    for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+    begin
+      AScreenObject := ScreenObjectList[ScreenObjectIndex];
+      Boundary := AScreenObject.ModflowEtsBoundary;
+      if (Boundary <> nil) and Boundary.Used then
+      begin
+        Values := ValuesFunction(Boundary);
+        BoundaryCount := Values.TimeListCount(frmGoPhast.PhastModel);
+        break;
+      end;
+    end;
+    if BoundaryCount = -1 then
+    begin
+      Exit;
+    end;
+
+    Frame.rdgModflowBoundary.BeginUpdate;
+    try
+      for BoundaryIndex := 0 to BoundaryCount - 1 do
+      begin
+        if BoundaryIndex = 0 then
+        begin
+          StorageIndex := 0;
+        end
+        else
+        begin
+          StorageIndex := BoundaryIndex + EtsStartConcentration -1;
+        end;
+        First := True;
+        Identical := True;
+        Method := ppmMultiply;
+        for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+        begin
+          AScreenObject := ScreenObjectList[ScreenObjectIndex];
+          Boundary := AScreenObject.ModflowEtsBoundary;
+          if (Boundary <> nil) and Boundary.Used then
+          begin
+            if First then
+            begin
+              Method := Boundary.PestBoundaryMethod[StorageIndex];
+              First := False;
+            end
+            else
+            begin
+              Identical := Method = Boundary.PestBoundaryMethod[StorageIndex];
+              if not Identical then
+              begin
+                break;
+              end;
+            end;
+          end;
+        end;
+        if Identical then
+        begin
+          PestMethod[Frame.rdgModflowBoundary, ColumnOffset+BoundaryIndex] := Method;
+        end
+        else
+        begin
+          Frame.rdgModflowBoundary.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] := '';
+        end;
+      end;
+
+      for BoundaryIndex := 0 to BoundaryCount - 1 do
+      begin
+        if BoundaryIndex = 0 then
+        begin
+          StorageIndex := 0;
+        end
+        else
+        begin
+          StorageIndex := BoundaryIndex + EtsStartConcentration -1;
+        end;
+        First := True;
+        Identical := True;
+        for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+        begin
+          AScreenObject := ScreenObjectList[ScreenObjectIndex];
+          Boundary := AScreenObject.ModflowEtsBoundary;
+          if (Boundary <> nil) and Boundary.Used then
+          begin
+            if First then
+            begin
+              Modifier := Boundary.PestBoundaryFormula[StorageIndex];
+              First := False;
+            end
+            else
+            begin
+              Identical := Modifier = Boundary.PestBoundaryFormula[StorageIndex];
+              if not Identical then
+              begin
+                break;
+              end;
+            end;
+          end;
+        end;
+        if Identical then
+        begin
+          if (Modifier = '') or (Modifier = '0') then
+          begin
+            Modifier := StrNone
+          end;
+          PestModifier[Frame.rdgModflowBoundary,
+            ColumnOffset+BoundaryIndex] := Modifier;
+        end
+        else
+        begin
+          PestModifier[Frame.rdgModflowBoundary,
+            ColumnOffset+BoundaryIndex] := '';
+        end;
+      end;
+    finally
+      Frame.rdgModflowBoundary.EndUpdate;
+    end;
+    {$ENDIF}
+  end;
   procedure GetSurfDepthModifiers;
   var
     BoundaryIndex: Integer;
@@ -19215,11 +19357,11 @@ var
         end;
         if Identical then
         begin
-          PestMethod[Frame.rdgModflowBoundary, ColOffset+BoundaryIndex] := Method;
+          PestMethod[Frame.rdgModflowBoundary, ColOffset+BoundaryIndex+NumberOfSpecies] := Method;
         end
         else
         begin
-          Frame.rdgModflowBoundary.Cells[ColOffset+BoundaryIndex,PestMethodRow] := '';
+          Frame.rdgModflowBoundary.Cells[ColOffset+BoundaryIndex,PestMethodRow+NumberOfSpecies] := '';
         end;
       end;
 
@@ -19255,12 +19397,12 @@ var
             Modifier := StrNone
           end;
           PestModifier[Frame.rdgModflowBoundary,
-            ColOffset+BoundaryIndex] := Modifier;
+            ColOffset+BoundaryIndex+NumberOfSpecies] := Modifier;
         end
         else
         begin
           PestModifier[Frame.rdgModflowBoundary,
-            ColOffset+BoundaryIndex] := '';
+            ColOffset+BoundaryIndex+NumberOfSpecies] := '';
         end;
       end;
     finally
@@ -19278,13 +19420,14 @@ begin
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FETS_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FETS_Node);
 
+  NumberOfSpecies := GwtColumnCount;
   if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
   begin
     TimeList := TParameterTimeList.Create;
     try
       GetModflowBoundaryTimes(ScreenObjectList, Parameter, TimeList);
-      ColumnOffset := 5 + (frmGoPhast.PhastModel.ModflowPackages.
-        EtsPackage.SegmentCount -1) * 2;
+      ColumnOffset := 5 + NumberOfSpecies
+        + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount -1) * 2;
       ValuesFunction := GetEtsLayers;
 
       GetModflowBoundaryCollection(Frame.rdgModflowBoundary, ValuesFunction,
@@ -19297,7 +19440,7 @@ begin
   TimeList := TParameterTimeList.Create;
   try
     GetModflowBoundaryTimes(ScreenObjectList, Parameter, TimeList);
-    ColumnOffset := 3;
+    ColumnOffset := 3 + NumberOfSpecies;
     ValuesFunction := GetEtsSurfaceDepth;
 
     GetModflowBoundaryCollection(Frame.rdgModflowBoundary, ValuesFunction,
@@ -19308,11 +19451,12 @@ begin
   {$IFDEF PEST}
   PestMethod[Frame.rdgModflowBoundary, ColOffset+RateBoundaryPosition] :=
     TEtsBoundary.DefaultBoundaryMethod(RateBoundaryPosition);
-  PestMethod[Frame.rdgModflowBoundary, ColOffset+SurfaceBoundaryPosition] :=
+  PestMethod[Frame.rdgModflowBoundary, ColOffset+SurfaceBoundaryPosition+NumberOfSpecies] :=
     TEtsBoundary.DefaultBoundaryMethod(SurfaceBoundaryPosition);
-  PestMethod[Frame.rdgModflowBoundary, ColOffset+DepthBoundaryPosition] :=
+  PestMethod[Frame.rdgModflowBoundary, ColOffset+DepthBoundaryPosition+NumberOfSpecies] :=
     TEtsBoundary.DefaultBoundaryMethod(DepthBoundaryPosition);
-  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+//  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  GetEvtModifiers;
   GetSurfDepthModifiers;
   {$ENDIF}
   Frame.rdgModflowBoundary.HideEditor;
@@ -20436,7 +20580,7 @@ begin
     else if (DataGrid = frameEtsParam.rdgModflowBoundary)
       and frmGoPhast.PhastModel.EtsTimeVaryingLayers then
     begin
-      EtsLayerCol := 5 +
+      EtsLayerCol := 5 + GwtColumnCount +
         (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
       if ACol = EtsLayerCol then
       begin
@@ -25640,7 +25784,65 @@ var
   Boundary: TEtsBoundary;
   ColumnOffset: Integer;
   BoundaryLayers: TCustomMF_BoundColl;
-  procedure StoreEvtSurfaceDepth(Node: TJvPageIndexNode);
+  NumberOfSpecies: Integer;
+  procedure StoreEtsPest(Node: TJvPageIndexNode);
+  var
+    Index: Integer;
+    Item: TScreenObjectEditItem;
+    Boundary: TEtsBoundary;
+    BoundaryValues: TCustomMF_BoundColl;
+    DataGrid: TRbwDataGrid4;
+    BoundaryIndex: Integer;
+    Modifier: string;
+    ColumnOffset: Integer;
+    BoundaryCount: Integer;
+    StorageIndex: Integer;
+  begin
+    if (Node = nil) then
+    begin
+      Exit;
+    end;
+
+    Assert(Node <> nil);
+    DataGrid := Frame.rdgModflowBoundary;
+
+    for Index := 0 to FNewProperties.Count - 1 do
+    begin
+      Item := FNewProperties[Index];
+      Boundary := Item.ScreenObject.ModflowEtsBoundary;
+      Assert(Boundary <> nil);
+      if ShouldStoreBoundary(Node, Boundary) then
+      begin
+        ColumnOffset := 2;
+        BoundaryValues := Boundary.Values;
+        BoundaryCount := BoundaryValues.TimeListCount(frmGoPhast.PhastModel);
+        {$ifdef PEST}
+        for BoundaryIndex := 0 to BoundaryCount - 1 do
+        begin
+          if BoundaryIndex = 0 then
+          begin
+            StorageIndex := 0;
+          end
+          else
+          begin
+            StorageIndex := EtsStartConcentration + BoundaryIndex -1;
+          end;
+          if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
+          begin
+            Boundary.PestBoundaryMethod[StorageIndex] :=
+              PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
+          end;
+          if PestModifierAssigned[DataGrid, ColumnOffset+BoundaryIndex] then
+          begin
+            Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
+            Boundary.PestBoundaryFormula[StorageIndex] := Modifier;
+          end;
+        end;
+        {$endif}
+      end;
+    end
+  end;
+  procedure StoreEtsSurfaceDepth(Node: TJvPageIndexNode);
   const
     ColumnOffset = 2;
   var
@@ -25669,14 +25871,14 @@ var
         {$IFDEF PEST}
         for BoundaryIndex := 1 to 2 do
         begin
-          if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
+          if DataGrid.Cells[ColumnOffset+BoundaryIndex+NumberOfSpecies,PestMethodRow] <> '' then
           begin
             Boundary.PestBoundaryMethod[BoundaryIndex] :=
-              PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
+              PestMethod[DataGrid, ColumnOffset+BoundaryIndex+NumberOfSpecies];
           end;
-          if PestModifierAssigned[DataGrid, ColumnOffset+BoundaryIndex] then
+          if PestModifierAssigned[DataGrid, ColumnOffset+BoundaryIndex+NumberOfSpecies] then
           begin
-            Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
+            Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex+NumberOfSpecies];
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
@@ -25712,6 +25914,7 @@ begin
       end;
     end;
 
+    NumberOfSpecies := GwtColumnCount;
     GetMF_BoundaryTimes(Times, Frame);
     if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
     begin
@@ -25721,8 +25924,8 @@ begin
         Item.ScreenObject.CreateEtsBoundary;
         Boundary := Item.ScreenObject.ModflowEtsBoundary;
         Assert(Boundary <> nil);
-        ColumnOffset := 5 + (
-          frmGoPhast.PhastModel.ModflowPackages.
+        ColumnOffset := 5 + NumberOfSpecies
+          + (frmGoPhast.PhastModel.ModflowPackages.
           EtsPackage.SegmentCount-1)*2;
         BoundaryLayers := Boundary.EvapotranspirationLayers;
         if ShouldStoreBoundary(FETS_Node, Boundary) then
@@ -25741,7 +25944,7 @@ begin
       Item.ScreenObject.CreateEtsBoundary;
       Boundary := Item.ScreenObject.ModflowEtsBoundary;
       Assert(Boundary <> nil);
-      ColumnOffset := 3;
+      ColumnOffset := 3 + NumberOfSpecies;
       BoundaryLayers := Boundary.EtsSurfDepthCollection;
       if ShouldStoreBoundary(FETS_Node, Boundary) then
       begin
@@ -25753,8 +25956,8 @@ begin
       end;
     end;
     {$IFDEF PEST}
-    StorePestModifiers(Frame, ParamType, FETS_Node);
-    StoreEvtSurfaceDepth(FETS_Node);
+    StoreEtsPest(FETS_Node);
+    StoreEtsSurfaceDepth(FETS_Node);
     {$ENDIF}
   end;
 end;

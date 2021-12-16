@@ -273,8 +273,8 @@ type
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
       PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     function SpeciesCount: Integer; override;
+    procedure InvalidateGwtConcentrations(Sender: TObject); override;
   public
-    procedure InvalidateGwtConcentrations(Sender: TObject);
   end;
 
   // @name represents the MODFLOW Evapotranspiration boundaries associated with
@@ -457,6 +457,12 @@ const
   EtsSurfacePosition = 0;
   EtsDepthPosition = 1;
 
+const
+  RateBoundaryPosition = 0;
+  SurfaceBoundaryPosition = 1;
+  DepthBoundaryPosition = 2;
+  EtsStartConcentration = 3;
+
 implementation
 
 uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit, TempFiles,
@@ -468,12 +474,6 @@ resourcestring
   StrFractionalRateS = 'Fractional rate %s';
   StrInSEvaportionsDe = 'In %s evaporation depth or rate fractions have not been ass' +
   'igned.';
-
-const
-  RateBoundaryPosition = 0;
-  SurfaceBoundaryPosition = 1;
-  DepthBoundaryPosition = 2;
-  EtsStartConcentration = 3;
 
 { TEtsBoundary }
 
@@ -2921,7 +2921,6 @@ var
   ConcPestItemList: TList<TStringList>;
   ConcTimeSeriesItemList: TList<TStringList>;
   ConcentrationData: TModflowTimeList;
-//  ConcDataArray: TTransientRealSparseDataSet;
   LocalModel: TCustomModel;
   Index: Integer;
   Item: TEvtItem;
@@ -2944,10 +2943,10 @@ begin
       for SpeciesIndex := 0 to SpeciesCount - 1 do
       begin
         ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[
-          EvtStartConcentration + SpeciesIndex];
+          EtsStartConcentration + SpeciesIndex];
         PestSeries.Add(ConcentrationSeriesName);
         ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[
-          EvtStartConcentration + SpeciesIndex];
+          EtsStartConcentration + SpeciesIndex];
         PestMethods.Add(ConcentrationMethod);
 
         ConcentrationItems := TStringList.Create;
@@ -2967,9 +2966,9 @@ begin
           BoundaryValues[Index].Time := Item.StartTime;
 
           ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[
-            EvtStartConcentration + SpeciesIndex];
+            EtsStartConcentration + SpeciesIndex];
           ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[
-            EvtStartConcentration + SpeciesIndex];
+            EtsStartConcentration + SpeciesIndex];
           ConcentrationItems := ConcPestItemList[SpeciesIndex];
           ConcentrationTimeSeriesItems := ConcTimeSeriesItemList[SpeciesIndex];
           ItemFormula := Item.GwtConcentrations[SpeciesIndex].Value;

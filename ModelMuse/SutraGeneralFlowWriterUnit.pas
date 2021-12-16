@@ -285,7 +285,7 @@ var
   HigherFlowRatePestNames: TStringList;
   UInPestNames: TStringList;
   UOutPestNames: TStringList;
-  SeriesPestName: TStringList;
+//  SeriesPestName: TStringList;
   LowerPressurePestNamesList: TStringListObjectList;
   LowerFlowRatePestNamesList: TStringListObjectList;
   HigherPressurePestNamesList: TStringListObjectList;

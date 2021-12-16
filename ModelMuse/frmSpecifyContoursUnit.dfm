@@ -5,8 +5,8 @@ inherited frmSpecifyContours: TfrmSpecifyContours
   ClientHeight = 301
   ClientWidth = 316
   ExplicitWidth = 332
-  ExplicitHeight = 339
-  PixelsPerInch = 120
+  ExplicitHeight = 340
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -66,7 +66,7 @@ inherited frmSpecifyContours: TfrmSpecifyContours
           Value = 33.333333333333340000
         end
         item
-          Value = 33.333333333333340000
+          Value = 33.333333333333310000
         end>
       ControlCollection = <
         item
@@ -180,15 +180,18 @@ inherited frmSpecifyContours: TfrmSpecifyContours
       Top = 14
       Width = 77
       Height = 26
+      CheckMaxValue = False
       ButtonKind = bkClassic
+      MinValue = 1.000000000000000000
+      Value = 1.000000000000000000
       TabOrder = 1
       OnChange = seRowCountChange
     end
     object cbAutomaticColors: TJvCheckBox
       Left = 12
       Top = 49
-      Width = 140
-      Height = 20
+      Width = 137
+      Height = 18
       Caption = 'Automatic colors'
       TabOrder = 2
       OnClick = cbAutomaticColorsClick
@@ -230,6 +233,7 @@ inherited frmSpecifyContours: TfrmSpecifyContours
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -253,6 +257,7 @@ inherited frmSpecifyContours: TfrmSpecifyContours
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -276,6 +281,7 @@ inherited frmSpecifyContours: TfrmSpecifyContours
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -299,6 +305,7 @@ inherited frmSpecifyContours: TfrmSpecifyContours
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'Edit'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

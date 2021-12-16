@@ -10436,6 +10436,9 @@ const
 //               Bug fix: Fixed the Import Gridded Data dialog box so that it
 //                no longer automatically changes the number of ignored values
 //                to 1 when a data set is selected.
+//               Bug fix: The specify Contours dialog box no longer allows
+//                the users to attempt to set the number of contours to a
+//                value less than 1.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -16524,6 +16527,7 @@ begin
   ModflowPackages.WelPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.RivPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.RchPackage.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.EtsPackage.AddRemoveRenameGwtConcentrationTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
@@ -23947,8 +23951,7 @@ end;
 
 procedure TCustomModel.InvalidateEtsConc(Sender: TObject);
 begin
-  Assert(False);
-  // This needs to be finished
+  ModflowPackages.EtsPackage.InvalidateConcentrations;
 end;
 
 procedure TCustomModel.InvalidateEtsDepthFractions(Sender: TObject);

@@ -202,7 +202,8 @@ type
     // See @link(Items).
     function GetItem(Index: Integer): TCustomBoundaryItem;
   protected
-//    property BoundaryGroup: TModflowBoundary read FBoundary;
+    // @name is the @link(TModflowBoundary) that owns @classname.
+    property BoundaryGroup: TModflowScreenObjectProperty read FBoundary;
     // @name is the descendant of @link(TCustomModflowBoundaryItem)
     // stored by classname.
     class function ItemClass: TBoundaryItemClass; virtual; abstract;
@@ -216,8 +217,6 @@ type
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
   public
-    // @name is the @link(TModflowBoundary) that owns @classname.
-    property BoundaryGroup: TModflowScreenObjectProperty read FBoundary;
     // @name is the @link(TScreenObject) for this boundary.
     // @name provides access to @link(TCustomModflowBoundaryItem) representing
     // the boundary conditions for different time periods.
@@ -632,7 +631,9 @@ type
     property Value: string read GetValue write SetValue;
   end;
 
-  TGwtConcStringValueItem = class(TCustomStringValueItem);
+  TGwtConcStringValueItem = class(TCustomStringValueItem)
+    constructor Create(Collection: TCollection); override;
+  end;
 
   TCustomStringCollection = class abstract(TCustomObjectOrderedCollection)
   private
@@ -5118,6 +5119,10 @@ end;
 function TGwtConcStringCollection.GetItems(
   Index: Integer): TGwtConcStringValueItem;
 begin
+  while Index >= Count do
+  begin
+    Add;
+  end;
   result := inherited Items[Index] as  TGwtConcStringValueItem
 end;
 
@@ -5125,6 +5130,14 @@ procedure TGwtConcStringCollection.SetItems(Index: Integer;
   const Value: TGwtConcStringValueItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+{ TGwtConcStringValueItem }
+
+constructor TGwtConcStringValueItem.Create(Collection: TCollection);
+begin
+  inherited;
+  Value := '0';
 end;
 
 end.
