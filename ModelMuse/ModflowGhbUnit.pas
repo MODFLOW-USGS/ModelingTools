@@ -2024,8 +2024,8 @@ begin
 end;
 
 procedure TGhbBoundary.SetPestConcentrationFormulas(const Value: TGhbGwtConcCollection);
-var
-  Index: Integer;
+//var
+//  Index: Integer;
 begin
   FPestConcentrationFormulas.Assign(Value);
 end;
