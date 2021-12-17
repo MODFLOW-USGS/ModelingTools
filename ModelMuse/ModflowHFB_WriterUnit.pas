@@ -4,10 +4,13 @@ interface
 
 uses SysUtils, Classes, Contnrs, PhastModelUnit, CustomModflowWriterUnit,
   ScreenObjectUnit, ModflowPackageSelectionUnit, ModflowParameterUnit,
-  EdgeDisplayUnit, GoPhastTypes, System.Generics.Collections, RbwParser;
+  EdgeDisplayUnit, GoPhastTypes, System.Generics.Collections, RbwParser,
+  Vcl.Dialogs;
 
 type
   TModflowHfb_Writer = class;
+
+  EHfbError = class(Exception);
 
   TBarrier = class(TCustomModflowGridEdgeFeature)
   protected
@@ -196,6 +199,10 @@ resourcestring
   'en defined.';
   Str0sMultipliedByTParam = '%0:s multiplied by the parameter value "%1:g" a' +
   'ssigned to the parameter "%2:s."';
+  StrTheFormulaForHFBK = 'The formula for HFB hydraulic conductivity in %s r' +
+  'esults in the wrong data type.';
+  StrTheFormulaForHFBThick = 'The formula for HFB thickness in %s results in' +
+  ' the wrong data type.';
 
 { TModflowHfb_Writer }
 
@@ -1238,10 +1245,16 @@ begin
                 TransientExpressions.HydraulicConductivityFormula;
               DataToCompile.AlternateName := StrHFBHydraulicConduc;
               DataToCompile.AlternateDataType := rdtDouble;
-              ScreenObject.Delegate.InitializeExpression(
-                Compiler, DataSetFunction,
-                TransientExpressions.HydraulicConductivityExpression, nil,
-                DataToCompile, Model);
+              try
+                ScreenObject.Delegate.InitializeExpression(
+                  Compiler, DataSetFunction,
+                  TransientExpressions.HydraulicConductivityExpression, nil,
+                  DataToCompile, Model);
+              except on EInvalidDataType do
+                begin
+                  raise EHfbError.Create(Format(StrTheFormulaForHFBK, [ScreenObject.Name]));
+                end;
+              end;
               TransientExpressions.HydraulicConductivityComment :=
                 Format(Str0sIn1s,
                 [HfbItem.HydraulicConductivity,
@@ -1250,10 +1263,16 @@ begin
               DataToCompile.DataSetFunction := TransientExpressions.ThicknessFormula;
               DataToCompile.AlternateName := StrHFBThickness;
               DataToCompile.AlternateDataType := rdtDouble;
-              ScreenObject.Delegate.InitializeExpression(
-                Compiler, DataSetFunction,
-                TransientExpressions.ThicknessExpression, nil,
-                DataToCompile, Model);
+              try
+                ScreenObject.Delegate.InitializeExpression(
+                  Compiler, DataSetFunction,
+                  TransientExpressions.ThicknessExpression, nil,
+                  DataToCompile, Model);
+              except on EInvalidDataType do
+                begin
+                  raise EHfbError.Create(Format(StrTheFormulaForHFBThick, [ScreenObject.Name]));
+                end;
+              end;
               TransientExpressions.ThicknessComment :=
                 Format(Str0sIn1s,
                 [HfbItem.Thickness,
@@ -1358,8 +1377,14 @@ begin
   begin
     Model.UpdateModflowFullStressPeriods;
     RemoveAllButOneStressPeriods;
-
-    EvaluateModflow6;
+    try
+      EvaluateModflow6;
+    except on E: EHfbError do
+      begin
+        MessageDlg(E.message, mtError, [mbOK], 0);
+        Exit;
+      end;
+    end;
   end
   else
   begin
@@ -1692,7 +1717,14 @@ begin
   WriteToNameFile(StrHFB, Model.UnitNumbers.UnitNumber(StrHFB), NameOfFile, foInput, Model, False, 'HFB');
   if Model.ModelSelection = msModflow2015 then
   begin
-    EvaluateModflow6;
+    try
+      EvaluateModflow6;
+    except on E: EHfbError do
+      begin
+        MessageDlg(E.message, mtError, [mbOK], 0);
+        Exit;
+      end;
+    end;
   end
   else
   begin
