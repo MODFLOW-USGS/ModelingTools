@@ -10430,8 +10430,7 @@ const
 //                MODFLOW 6 to be created incorrectly if the lake only had
 //                vertical connections.
 //    '4.3.0.74' No change
-
-//               Change: Changed the formula for the initial head in MODFLOW
+//    '4.3.0.75' Change: Changed the formula for the initial head in MODFLOW
 //                models to Model_Top.
 //               Bug fix: Fixed the Import Gridded Data dialog box so that it
 //                no longer automatically changes the number of ignored values
@@ -10446,7 +10445,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.74';
+  IIModelVersion = '4.3.0.75';
 
 function IModelVersion: string;
 begin
