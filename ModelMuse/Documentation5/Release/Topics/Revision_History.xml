@@ -37,9 +37,9 @@
           <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now creates a file named &quot;usgs.model.reference.&quot; for the groundwater flow model. Previously, the &quot;model&quot; part of the file name would be the name of the model. A file with the model name as part of the file name is still created.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">file extension for the Reservoir package input file change from &quot;.res&quot; to &quot;.resv&quot; to avoid conflict with a PEST output file.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">When reading pathline, endpoint, or time-series files from MODPATH 7, ModelMuse will skip lines that contain NaN instead of numbers.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now creates a file named &quot;usgs.model.reference.&quot; for the groundwater flow model. Previously, the &quot;model&quot; part of the file name would be the name of the model. A file with the model name as part of the file name is still created. &quot;Usgs.model.reference&quot; is used for model archives. If multiple models are in the same directory, the duplicate with the &quot;model&quot; replaced by the name of the model can be used to create a new copy of &quot;usgs.model.reference&quot; for the desired model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">File extension for the Reservoir package input file change from &quot;.res&quot; to &quot;.resv&quot; to avoid conflict with a PEST output file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When reading pathline, endpoint, or time-series files from MODPATH 7, ModelMuse will skip lines that contain NaN instead of numbers and displays an error message.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now creates backups of several files such as the RunModel file for use in tests of ModelMuse.</text></para>
               </td>
             </tr>
@@ -48,7 +48,7 @@
           <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">If not MODFLOW stress periods are defined when the user attempts to generate the MODFLOW input files, one will now be created automatically.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If no MODFLOW stress periods are defined when the user attempts to generate the MODFLOW input files, one will now be created automatically.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">It is no longer possible to define two parameters with the same name in the Manage Parameters dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when drawing contours with a MODFLOW DISV model.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">In some cases where a circular reference error would have resulted in a bug report, a message to the user will be displayed instead.</text></para>
@@ -60,7 +60,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed the ^ operator so that it will accept two real-number arguments.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in the Manage Head Observations dialog box when the user clicked the Highlight Selected Object button without first selecting any objects in the table.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now creates UCN file in MT3D-USGS for the sorbed phase when the sorbtion choice is linear.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now longer generates a bug report if the user specifies more than one contour value for a boolean data set.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse no longer generates a bug report if the user specifies more than one contour value for a boolean data set.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When writing real number array values, real numbers close to zero will be written as zero if they require more precision than is provided by a single precision real number.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an assertion failure when accessing vertex values.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations when evaluating the RCH or ETS packages after disabling MODFLOW 6 observations.</text></para>
@@ -71,7 +71,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause an error when importing data in the Import Points dialog box if the decimal separator was not a period.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When attempting to read or save a global variables file, ModelMuse will now show an error message to the user instead of issuing a bug report if there is an error reading the file.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause ModelMuse to encounter an error when evaluating the IDOMAIN data set in MODFLOW 6 models.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing UZF data from shapefiles in models in which the UZT package is active, UZT will also be imported too.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing UZF data from shapefiles in models in which the UZT package is active, UZT will also be imported.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause WellFootprint models to fail when exporting withdrawals.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause a range check error when deleting an item in the SWR Range Geometry dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">If the user attempts to edit CSUB data for an object without first defining any interbeds, ModelMuse will display a warning message for the user instead of generating a bug report.</text></para>
@@ -80,10 +80,10 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause access violations when shutting down ModelMuse.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When moving vertices of an object to the location of a vertex in another object, there could be a slight error in the location to which the vertex was moved. This has been corrected.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Not in released version. &#160;Error displaying the Manage parameters dialog box.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation if opening a model the model that is already open had contours displayed or a data set used to color the grid or mesh.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error when exporting SUTRA model if not time schedule has been defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation when opening a model if the model that is already open had contours displayed or a data set used to color the grid or mesh.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error when exporting SUTRA model if no time schedule has been defined.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of multiple ASCII grid files simultaneously.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of Shapefile mesh data from SUTRA 2D models that could cause a &#160;range check error.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of Shapefile mesh data from SUTRA 2D models that could cause a range check error.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in the Errors and Warnings dialog box that could cause an Invalid class typecast error when right clicking in the dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an assertion failure when working with the Object Properties dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation in the SUTRA Time Controls dialog box.</text></para>
@@ -100,9 +100,9 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">If there is an out of memory error when drawing the 3D view, the 3D view will be hidden until ModelMuse is restarted.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug pasting objects from the clipboard when the clipboard can not be accessed.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error when exporting data to a CSV file.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing data from a file, &#160;ModelMuse now only allows you to specify files that actually exist.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing data from a file, ModelMuse now only allows you to specify files that actually exist.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation when exporting the ETS package if EVT depth or rate fractions have not been assigned.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Geo Reference dialog box, the model start date now displays the format for dates used in the computer in which which the starting date is being edited.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Geo Reference dialog box, the model start date now displays the format for dates used in the computer in which the starting date is being edited.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that caused panning the model or resizing the main form to be unnecessarily slow.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause a bug report to be generated if the Used item of a SUTRA boundary condition did not evaluate to true or false. Now an error message is displayed.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW 6 models, including lines for the RCH or EVT packages in the MODFLOW Name File dialog box will now prevent ModelMuse from exporting the input files for those packages.</text></para>
@@ -111,9 +111,8 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation when closing a MODFLOW LGR model.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in the &quot;File|Import|Grid Data Files&quot; dialog box in which the &quot;Open files&quot; button did not work unless more than one file was selected.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting the UZF input in MODFLOW 6 that caused the convergence history file to be misnamed.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">not in released version. ModelMuse no longer Generates PEST control file if PEST is not activated.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in implementation of the K22OVERK and K33OVERK options in the NPF package.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause some cells to be incorrectly selected two or more times fy the same object when the object selects both enclosed and intersected cells.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause some cells to be incorrectly selected two or more times by the same object when the object selects both enclosed and intersected cells.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that prevented MT3D concentration results from being imported.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in deleting Subsidence-related interbeds.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Not in released version. Fixed export of PLPROC script.</text></para>
@@ -142,7 +141,6 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">If a MODFLOW 6 Lake outlet has no transient data assigned, ModelMuse now issues an error message instead of failing.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause MODFLOW 6 MVR receivers to sometimes not be found if the receiver was a lake.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed assigning values to nodes or elements in SUTRA and cells in MODFLOW 6 DISV models when both intersected and enclosed items are to be assigned values when there are two elevation formulas.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">not in released version. Fixed upper and lower bounds of pilot points.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed saving CREFT in SUTRA models.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug where the LakeID was not set properly.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed the ability to define recharge solute flux observations in MT3D.</text></para>
