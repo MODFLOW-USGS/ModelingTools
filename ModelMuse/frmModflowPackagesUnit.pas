@@ -326,6 +326,7 @@ type
     procedure frameGridMobileGridExit(Sender: TObject);
     procedure frameGridImmobileGridExit(Sender: TObject);
     procedure framePkgMt3dmsRctcomboKineticChoiceChange(Sender: TObject);
+    procedure jvspNPFShow(Sender: TObject);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -2921,6 +2922,12 @@ begin
   inherited;
   framePkgGMG.MoveControlsToTab(framePkgGMG.pcGMG);
 
+end;
+
+procedure TfrmModflowPackages.jvspNPFShow(Sender: TObject);
+begin
+  inherited;
+  framePkgNpf.rdgOptions.HideEditor;
 end;
 
 procedure TfrmModflowPackages.jvspSUBShow(Sender: TObject);

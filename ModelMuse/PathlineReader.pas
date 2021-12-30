@@ -6516,11 +6516,7 @@ end;
 {$HINTS OFF}
 procedure TTimeSeriesReader.ReadFileV7;
 var
-//  AFile: TFileStream;
-//  AChar: AnsiChar;
-//  IsTextFile: Boolean;
   ALine: string;
-//  CompactFormat: Boolean;
   ParticleIndex: integer;
   XPrime: single;
   YPrime: single;
@@ -6531,8 +6527,6 @@ var
   TrackingTime: single;
   Column: integer;
   TS: integer;
-//  NRow: integer;
-//  NCol: integer;
   Layer: integer;
   Row: integer;
   TimeSeries: TTimeSeriesV7;
@@ -6549,14 +6543,12 @@ var
   LastPoint: TTimeSeriesPoint;
   FirstTimeFound: Boolean;
   FTextFile: TextFile;
-//  FFile: TFileStream;
   TimeStepIndex: integer;
   MaxPoints: Integer;
   Splitter: TStringList;
   TrackingDirection: Integer;
   ReferenceTime: double;
   ParticleGroup: integer;
-//  GridNumber: Integer;
   FirstRow: boolean;
   XOrigin: double;
   YOrigin: double;
@@ -6591,8 +6583,6 @@ var
   end;
 
   procedure CellNumberToRowCol(CellNumber: Integer; out ARow, ACol: Integer);
-//  var
-//    Layer: Integer;
   begin
     if Grid = nil then
     begin
@@ -6601,7 +6591,6 @@ var
     end
     else
     begin
-//      Layer := (CellNumber -1) div (NRow * NCol) + 1;
       CellNumber := (CellNumber -1) mod (NRow * NCol);
       ARow := CellNumber div NCol + 1;
       ACol := CellNumber mod ARow + 1;
@@ -6646,12 +6635,9 @@ var
     Point2D.X := XPrime + XOrigin;
     Point2D.Y := YPrime + YOrigin;
     Point2D := RotateToRealWorldCoordinates(Point2D);
-//    ConvertCoordinates(Grid, XPrime, YPrime, Point2D);
 
     APoint.ParticleIndex := ParticleIndex;
     APoint.FTimeStepIndex := TimeStepIndex;
-//    APoint.FXPrime := XPrime;
-//    APoint.FYPrime := YPrime;
     APoint.FX := Point2D.X;
     APoint.FY := Point2D.Y;
     APoint.FLocalZ := LocalZ;
@@ -6734,40 +6720,40 @@ begin
       Assert(Splitter.Count = 14);
 
       try
-      TimeStepIndex := StrToInt(Splitter[0]);
-      TS := StrToInt(Splitter[1]);
-      TrackingTime := FortranStrToFloat(Splitter[2]);
-      SequenceNumber := StrToInt(Splitter[3]);
-      ParticleGroup := StrToInt(Splitter[4]);
-      ParticleIndex := StrToInt(Splitter[5]);
-      CellNumber := StrToInt(Splitter[6]);
-      LocalX := FortranStrToFloat(Splitter[7]);
-      Localy := FortranStrToFloat(Splitter[8]);
-      LocalZ := FortranStrToFloat(Splitter[9]);
-      XPrime := FortranStrToFloat(Splitter[10]);
-      YPrime := FortranStrToFloat(Splitter[11]);
-      Z := FortranStrToFloat(Splitter[12]);
-      Layer := StrToInt(Splitter[13]);
+        TimeStepIndex := StrToInt(Splitter[0]);
+        TS := StrToInt(Splitter[1]);
+        TrackingTime := FortranStrToFloat(Splitter[2]);
+        SequenceNumber := StrToInt(Splitter[3]);
+        ParticleGroup := StrToInt(Splitter[4]);
+        ParticleIndex := StrToInt(Splitter[5]);
+        CellNumber := StrToInt(Splitter[6]);
+        LocalX := FortranStrToFloat(Splitter[7]);
+        Localy := FortranStrToFloat(Splitter[8]);
+        LocalZ := FortranStrToFloat(Splitter[9]);
+        XPrime := FortranStrToFloat(Splitter[10]);
+        YPrime := FortranStrToFloat(Splitter[11]);
+        Z := FortranStrToFloat(Splitter[12]);
+        Layer := StrToInt(Splitter[13]);
 
-      CreateParticle;
+        CreateParticle;
 
-      if FirstRow then
-      begin
-        FirstRow := False;
-        MinParticleGroup := ParticleGroup;
-        MaxParticleGroup := ParticleGroup;
-      end
-      else
-      begin
-        if ParticleGroup < MinParticleGroup then
+        if FirstRow then
         begin
-          MinParticleGroup := ParticleGroup
-        end;
-        if ParticleGroup > MaxParticleGroup then
+          FirstRow := False;
+          MinParticleGroup := ParticleGroup;
+          MaxParticleGroup := ParticleGroup;
+        end
+        else
         begin
-          MaxParticleGroup := ParticleGroup
+          if ParticleGroup < MinParticleGroup then
+          begin
+            MinParticleGroup := ParticleGroup
+          end;
+          if ParticleGroup > MaxParticleGroup then
+          begin
+            MaxParticleGroup := ParticleGroup
+          end;
         end;
-      end;
       except on EConvertError do
         begin
           if ErrorLines.Count < 10 then

@@ -5266,7 +5266,7 @@ end;
 
 procedure TCustomRBWDataGrid.HideEditor;
 begin
-  if EditorMode then
+//  if EditorMode then
   begin
     inherited;
   end;

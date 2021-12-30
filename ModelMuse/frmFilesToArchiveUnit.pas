@@ -467,6 +467,7 @@ var
   ANode: TTreeNode;
   NextNode: TTreeNode;
   NodesToDelete: TObjectList;
+  ChildNode: TTreeNode;
 begin
   inherited;
   NodesToDelete := TObjectList.Create;
@@ -475,9 +476,21 @@ begin
     while ANode <> nil do
     begin
       NextNode := ANode.GetNext;
-      if ANode.Selected and (FRootNodes.IndexOf(ANode) < 0) then
+      if ANode.Selected then
       begin
-        NodesToDelete.Add(ANode);
+        if FRootNodes.IndexOf(ANode) < 0 then
+        begin
+          NodesToDelete.Add(ANode);
+        end
+        else
+        begin
+          ChildNode := ANode.getFirstChild;
+          while ChildNode <> nil do
+          begin
+            NodesToDelete.Add(ChildNode);
+            ChildNode := ChildNode.getNextSibling;
+          end;
+        end;
       end;
       ANode := NextNode
     end;
