@@ -188,10 +188,6 @@ object frameModpathDisplay: TframeModpathDisplay
     object tabOptions: TTabSheet
       Caption = 'Options'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         457
         458)
@@ -253,6 +249,7 @@ object frameModpathDisplay: TframeModpathDisplay
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -276,6 +273,7 @@ object frameModpathDisplay: TframeModpathDisplay
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -301,6 +299,7 @@ object frameModpathDisplay: TframeModpathDisplay
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
