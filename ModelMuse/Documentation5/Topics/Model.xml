@@ -145,7 +145,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:387px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">SWR dialog boxes|Reach Geometry...</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">SWR Dialog Boxes|Reach Geometry...</text></para>
         </td>
         <td style="vertical-align:top; width:485px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Reach_Geometry_Dialog_Box" styleclass="Strong" translate="true">SWR Reach Geometry</link><text styleclass="Table Cell" translate="true"> dialog box which is used to define the geometry of reaches. The same geometry can be used in multiple reaches.</text></para>
@@ -153,7 +153,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:387px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">SWR dialog boxes|Structures...</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">SWR Dialog Boxes|Structures...</text></para>
         </td>
         <td style="vertical-align:top; width:485px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Structures_Dialog_Box" styleclass="Strong" translate="true">SWR Structures</link><text styleclass="Table Cell" translate="true"> dialog box which is used to define structures that control flow between reaches.</text></para>
@@ -161,7 +161,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:387px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">SWR dialog boxes|Tab Files...</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">SWR Dialog Boxes|Tab Files...</text></para>
         </td>
         <td style="vertical-align:top; width:485px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Tab_Files_Dialog_Box" styleclass="Strong" translate="true">SWR Tab Files</link><text styleclass="Table Cell" translate="true"> dialog box which is used to select external files that contain certain types of input for the SWR package.</text></para>
@@ -169,7 +169,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:387px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">SWR dialog boxes|Observations...</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">SWR Dialog Boxes|Observations...</text></para>
         </td>
         <td style="vertical-align:top; width:485px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Observations_Dialog_Box" styleclass="Strong" translate="true">SWR Observations</link><text styleclass="Table Cell" translate="true"> dialog box which is used to define observations in the SWR package. This dialog box can only be displayed if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Print_Flags" anchor="SaveObservations" styleclass="Table Cell" translate="true">Save observations</link><text styleclass="Table Cell" translate="true"> in the SWR package has been set to SAVE_SWROBSERVATIONS or SAVE_SWROBSERVATIONS_ALL</text></para>
