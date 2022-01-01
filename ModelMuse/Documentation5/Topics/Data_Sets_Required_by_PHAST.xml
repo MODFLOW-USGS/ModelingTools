@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Data Sets Required by PHAST</title>
   <body>
     <header>
@@ -117,7 +117,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, longitudinal_­dispersivity</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -131,7 +131,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, horizontal_­dispersivity</text></para>
         </td>
         <td style="vertical-align:top; width:183px; height:30px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -145,7 +145,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, vertical_dispersivity</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -159,7 +159,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">HEAD_IC, head</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Neither Use free surface nor Use water table for initial condition checked in PHAST Free Surface Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Neither Use free surface nor Use water table for initial condition checked in PHAST Free Surface dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -173,7 +173,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">HEAD_IC, water_table</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use free surface and Use water table for initial condition checked in PHAST Free Surface Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use free surface and Use water table for initial condition checked in PHAST Free Surface dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -187,7 +187,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, solution</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -201,7 +201,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, equilibrium_phases</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use equilibrium phases checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use equilibrium phases checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -215,7 +215,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, surface</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use surface assemblages checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use surface assemblages checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -229,7 +229,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, exchange</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use exchange checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use exchange checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -243,7 +243,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, gas_phase</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use gas phases checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use gas phases checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -257,7 +257,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, solid_solution</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use solid solution checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use solid solution checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -271,7 +271,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, kinetics</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use kinetics checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use kinetics checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -285,7 +285,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">PRINT_LOCATIONS, chemistry</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -299,7 +299,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">PRINT_LOCATIONS, xyz_chemistry</text></para>
         </td>
         <td style="vertical-align:top; width:183px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options dialog box</text></para>
         </td>
       </tr>
     </table></para>

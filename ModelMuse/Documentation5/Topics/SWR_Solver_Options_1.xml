@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Solver Options 1</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Solver Options 1</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Solver Options 1 pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Surface_Water_Routing_Proc" styleclass="Normal" translate="true">SWR: Surface-Water Routing Process Pane</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Solver Options 1 pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Surface_Water_Routing_Proc" styleclass="Normal" translate="true">SWR: Surface-Water Routing Process Pane</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs dialog box</link><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Solver Options 1 pane is used to specify parameters related to solving the surface-water flow equations.</text></para>
     <para styleclass="Normal"><anchor id="ISOLVER" styleclass="Strong"></anchor><text styleclass="Strong" translate="true">Solver (ISOLVER)</text><text styleclass="Normal" translate="true">: ISOLVER defines the solver used by the SWR1 Process to solve the defined surface-water equations for each reach group.</text></para>
     <list id="4" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">

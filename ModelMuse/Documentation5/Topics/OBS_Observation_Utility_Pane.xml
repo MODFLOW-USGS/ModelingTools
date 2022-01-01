@@ -26,6 +26,6 @@
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Comment</text><text styleclass="Normal" translate="true"> is an optional comment about the observation.</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Comparison Observations</text></para>
     <para styleclass="Normal"><snippet src="ObsComparisons"/></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OBS_Observation_Utility_Packag" styleclass="Normal" translate="true">OBS: Observation Utility Package Pane</link><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs Dialog Box</link><text styleclass="Normal" translate="true">. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OBS_Observation_Utility_Packag" styleclass="Normal" translate="true">OBS: Observation Utility Package Pane</link><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs dialog box</link><text styleclass="Normal" translate="true">. </text></para>
   </body>
 </topic>

@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">LastVertexValue</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LastVertexValue</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Strong" translate="true">LastVertexValue</text><text styleclass="Normal" translate="true">(Key [, DefaultValue]) returns the value of the last vertex of an object in the current element or cell that has a value associated with Key as defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Normal" translate="true">Vertex Values Dialog Box</link><text styleclass="Normal" translate="true">. If no such vertex values are defined, the function returns the default value if a default value has been defined. If no default value is defined, the function returns zero. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">LastVertexValue</text><text styleclass="Normal" translate="true">(Key [, DefaultValue]) returns the value of the last vertex of an object in the current element or cell that has a value associated with Key as defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Normal" translate="true">Vertex Values dialog box</link><text styleclass="Normal" translate="true">. If no such vertex values are defined, the function returns the default value if a default value has been defined. If no default value is defined, the function returns zero. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Example: If the formula were LastVertexValue(&quot;A_Key&quot;) and there were four vertices of the object in the current cell and the values associated with &quot;A_Key&quot; in those vertices were 1, 3, 5, and 2, the value returned would be 2 because it is the last value.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Normal" translate="true">Vertex Values Dialog Box</link></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Normal" translate="true">Vertex Values dialog box</link></para>
   </body>
 </topic>
