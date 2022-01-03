@@ -2659,8 +2659,10 @@ var
   RowIndex: Integer;
   ActiveGrid: TRbwDataGrid4;
   ActiveFrame: TframeListParameterDefinition;
+  seNumberOfParameters: TJvSpinEdit;
 begin
   ActiveFrame := ParameterFrame;
+  seNumberOfParameters := ActiveFrame.seNumberOfParameters;
   ActiveGrid := ParameterFrame.dgParameters;
   for RowIndex := 1 to ActiveGrid.RowCount - 1 do
   begin
@@ -2739,13 +2741,19 @@ begin
       end;
       ActiveFrame.PriorNumberOfParameters := ParamList.Count;
       Assert(ActiveGrid <> nil);
-      if ParamList.Count = 0 then
-      begin
-        ActiveGrid.RowCount := 2;
-      end
-      else
-      begin
-        ActiveGrid.RowCount := ParamList.Count + 1;
+      FSettingNumber := True;
+      try
+        seNumberOfParameters.AsInteger := ParamList.Count;
+        if ParamList.Count = 0 then
+        begin
+          ActiveGrid.RowCount := 2;
+        end
+        else
+        begin
+          ActiveGrid.RowCount := ParamList.Count + 1;
+        end;
+      finally
+        FSettingNumber := False;
       end;
       for RowIndex := 1 to ParamList.Count do
       begin

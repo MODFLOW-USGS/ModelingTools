@@ -10439,6 +10439,10 @@ const
 //                the users to attempt to set the number of contours to a
 //                value less than 1.
 
+//               Bug fix: Fixed bug that could cause extra LPF or HUF parameters
+//                to be generated when switching among parameter types in the
+//                MODFLOW Packages and Programs dialog box.
+
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.

@@ -29,7 +29,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspNPF
+    ActivePage = jvspHUF
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -395,6 +395,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         ReadOnly = True
         TabOrder = 1
         OnChange = tvHufParameterTypesChange
+        ExplicitLeft = -4
+        ExplicitTop = 291
       end
       inline frameHufParameterDefinition: TframeListParameterDefinition
         Left = 131
@@ -430,9 +432,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitTop = 9
           end
           inherited seNumberOfParameters: TJvSpinEdit
+            Top = 3
             Height = 26
             TabOrder = 0
             OnChange = frameParameterDefinition_seNumberOfParametersChange
+            ExplicitTop = 3
             ExplicitHeight = 26
           end
         end
