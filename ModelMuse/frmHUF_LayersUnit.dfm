@@ -5,8 +5,8 @@ inherited frmHUF_Layers: TfrmHUF_Layers
   ClientHeight = 353
   ClientWidth = 525
   ExplicitWidth = 541
-  ExplicitHeight = 391
-  PixelsPerInch = 120
+  ExplicitHeight = 392
+  PixelsPerInch = 96
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 137
@@ -37,7 +37,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
           Value = 33.333333333333330000
         end
         item
-          Value = 33.333333333333330000
+          Value = 33.333333333333340000
         end>
       ControlCollection = <
         item
@@ -87,7 +87,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
         ExplicitTop = 6
       end
       object sbInsertUnit: TSpeedButton
-        Left = 55
+        Left = 56
         Top = 5
         Width = 23
         Height = 22
@@ -180,10 +180,6 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       HelpType = htKeyword
       HelpKeyword = 'Properties_TabHUF'
       Caption = 'Properties'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         375
         279)
@@ -302,10 +298,6 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       HelpKeyword = 'Parameters_Tab'
       Caption = 'Parameters'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgParameters: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -330,6 +322,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -353,6 +346,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -384,6 +378,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -407,6 +402,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -429,8 +425,6 @@ inherited frmHUF_Layers: TfrmHUF_Layers
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitLeft = -3
-        ExplicitTop = 2
       end
     end
     object tabPrint: TTabSheet
@@ -438,10 +432,6 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       HelpKeyword = 'Print_Tab'
       Caption = 'Print'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblPrintFormat: TLabel
         Left = 103
         Top = 7

@@ -10442,6 +10442,9 @@ const
 //               Bug fix: Fixed bug that could cause extra LPF or HUF parameters
 //                to be generated when switching among parameter types in the
 //                MODFLOW Packages and Programs dialog box.
+//               Enhancement: Added new functions HGU_HK, HGU_HANI, HGU_VK,
+//                HGU_VANI, HGU_SS, HGU_SY, and HGU_KDEP which return the value
+//                of the corresponding data for a particular hydrogeologic unit.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.

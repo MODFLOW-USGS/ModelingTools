@@ -107,6 +107,7 @@ type
   protected
     function GetVariablesUsed: TStringList; override;
   end;
+
 {
  @name adds a series of (mostly) GIS function to Parser.
  The functions are defined in the initialization section.
@@ -178,6 +179,7 @@ const
   StrVerticalSubdivision = 'Vertical_Subdivision';
   StrSelectedCount = 'SelectedCount';
   StrSUTRA_MeshEdgeNode = 'SUTRA_MeshEdgeNode';
+  StrHGU_Unit_Number = '(HGU_Unit_Number)';
 //  StrMaxSutraNodeValueInElement = ;
   ObjectCurrentSegmentAngle = 'ObjectCurrentSegmentAngle';
   ObjectDegrees = 'ObjectCurrentSegmentAngleDegrees';
@@ -406,6 +408,14 @@ var
 
   SelectedCount_Function: TFunctionRecord;
   SutraMeshEdgeNodeFunction: TFunctionRecord;
+
+  HguK: TFunctionRecord;
+  HguHani: TFunctionRecord;
+  HguVk: TFunctionRecord;
+  HguVani: TFunctionRecord;
+  HguSs: TFunctionRecord;
+  HguSy: TFunctionRecord;
+  HguKdep: TFunctionRecord;
 
 //  SutraMaxRealNodeValueFuntion: TFunctionRecord;
 
@@ -646,6 +656,13 @@ begin
   AddItem(VerticalSubdivision_Function, True);
   AddItem(SelectedCount_Function, True);
   AddItem(SutraMeshEdgeNodeFunction, True);
+  AddItem(HguK, True);
+  AddItem(HguHani, True);
+  AddItem(HguVk, True);
+  AddItem(HguVani, True);
+  AddItem(HguSs, True);
+  AddItem(HguSy, True);
+  AddItem(HguKdep, True);
 
 //  AddItem(DipDirectionRadiansFunction, True);
 end;
@@ -1670,9 +1687,136 @@ begin
       end;
     end;
   end;
-
 end;
 
+type
+  THguParamUsed = function (HGU: THydrogeologicUnit): Boolean;
+
+function HguParameterAlwaysUsed(HGU: THydrogeologicUnit): Boolean;
+begin
+  result := True;
+end;
+
+function HguVkParameterUsed(HGU: THydrogeologicUnit): Boolean;
+begin
+  result := HGU.VK_Method = vkVK;
+end;
+
+function HguVaniParameterUsed(HGU: THydrogeologicUnit): Boolean;
+begin
+  result := HGU.VK_Method = vkVANI;
+end;
+
+function _HguValue(Values: array of pointer;
+  ParameterType: TParameterType; HguParamUsed: THguParamUsed): double;
+var
+  HguUnitNumber: Integer;
+  LocalModel: TCustomModel;
+  HGU: THydrogeologicUnit;
+  Parameters: THufUsedParameters;
+  ParamIndex: Integer;
+  HufParam: THufUsedParameter;
+  ParamValue: Double;
+  ZoneDataArray: TDataArray;
+  Layer: Integer;
+  Row: Integer;
+  Column: Integer;
+  UseZone: Boolean;
+  MultiplierDataArray: TDataArray;
+begin
+  result := 0;
+  if (GlobalCurrentModel.ModelSelection in ModflowSelection)
+    and (GlobalCurrentModel.ModelSelection <> msModflow2015) then
+  begin
+    LocalModel := GlobalCurrentModel as TCustomModel;
+    if not LocalModel.ModflowPackages.HufPackage.IsSelected then
+    begin
+      Exit;
+    end;
+
+    HguUnitNumber := PInteger(Values[0])^ - 1;
+    if (HguUnitNumber < 0)
+      or (HguUnitNumber >= LocalModel.HydrogeologicUnits.Count) then
+    begin
+      Exit;
+    end;
+
+    HGU := LocalModel.HydrogeologicUnits[HguUnitNumber];
+    if not HguParamUsed(HGU) then
+    begin
+      Exit;
+    end;
+
+    Layer := GlobalLayer-1;
+    Row := GlobalRow-1;
+    Column := GlobalColumn-1;
+
+    Parameters := HGU.HufUsedParameters;
+    for ParamIndex := 0 to Parameters.Count - 1 do
+    begin
+      HufParam := Parameters[ParamIndex];
+      if HufParam.Parameter.ParameterType = ParameterType then
+      begin
+        ParamValue := HufParam.Parameter.Value;
+        if HufParam.UseZone then
+        begin
+          ZoneDataArray := LocalModel.DataArrayManager.
+            GetDataSetByName(HufParam.ZoneDataSetName);
+          Assert(ZoneDataArray <> nil);
+          UseZone := ZoneDataArray.BooleanData[Layer, Row, Column];
+          if not UseZone then
+          begin
+            Continue;
+          end;
+        end;
+        if HufParam.UseMultiplier then
+        begin
+          MultiplierDataArray := LocalModel.DataArrayManager.
+            GetDataSetByName(HufParam.MultiplierDataSetName);
+          Assert(MultiplierDataArray <> nil);
+          ParamValue := ParamValue
+            * MultiplierDataArray.RealData[Layer, Row, Column];
+        end;
+        result := result + ParamValue;
+      end;
+    end;
+  end;
+end;
+
+function _HguK(Values: array of pointer): double;
+begin
+  result := _HguValue(Values, ptHUF_HK, HguParameterAlwaysUsed);
+end;
+
+function _HguHani(Values: array of pointer): double;
+begin
+  result := _HguValue(Values, ptHUF_HANI, HguParameterAlwaysUsed);
+end;
+
+function _HguVk(Values: array of pointer): double;
+begin
+  result := _HguValue(Values, ptHUF_VK, HguVkParameterUsed);
+end;
+
+function _HguVani(Values: array of pointer): double;
+begin
+  result := _HguValue(Values, ptHUF_VANI, HguVaniParameterUsed);
+end;
+
+function _HguSS(Values: array of pointer): double;
+begin
+  result := _HguValue(Values, ptHUF_SS, HguParameterAlwaysUsed);
+end;
+
+function _HguSy(Values: array of pointer): double;
+begin
+  result := _HguValue(Values, ptHUF_SY, HguParameterAlwaysUsed);
+end;
+
+function _HguKdep(Values: array of pointer): double;
+begin
+  result := _HguValue(Values, ptHUF_KDEP, HguParameterAlwaysUsed);
+end;
 
 function _SelectedCount(Values: array of pointer): integer;
 var
@@ -8682,6 +8826,76 @@ initialization
   SutraMeshEdgeNodeFunction.Name := StrSUTRA_MeshEdgeNode;
   SutraMeshEdgeNodeFunction.Prototype := StrSutra + StrSUTRA_MeshEdgeNode;
   SutraMeshEdgeNodeFunction.Hidden := False;
+
+  HguK.ResultType := rdtDouble;
+  HguK.RFunctionAddr := _HguK;
+  SetLength(HguK.InputDataTypes, 1);
+  HguK.InputDataTypes[0] := rdtInteger;
+  HguK.OptionalArguments := 0;
+  HguK.CanConvertToConstant := False;
+  HguK.Name := 'HGU_HK';
+  HguK.Prototype := StrMODFLOW + 'HGU_HK' + StrHGU_Unit_Number;
+  HguK.Hidden := False;
+
+  HguHani.ResultType := rdtDouble;
+  HguHani.RFunctionAddr := _HguHani;
+  SetLength(HguHani.InputDataTypes, 1);
+  HguHani.InputDataTypes[0] := rdtInteger;
+  HguHani.OptionalArguments := 0;
+  HguHani.CanConvertToConstant := False;
+  HguHani.Name := 'HGU_HANI';
+  HguHani.Prototype := StrMODFLOW + 'HGU_HANI' + StrHGU_Unit_Number;
+  HguHani.Hidden := False;
+
+  HguVk.ResultType := rdtDouble;
+  HguVk.RFunctionAddr := _HguVk;
+  SetLength(HguVk.InputDataTypes, 1);
+  HguVk.InputDataTypes[0] := rdtInteger;
+  HguVk.OptionalArguments := 0;
+  HguVk.CanConvertToConstant := False;
+  HguVk.Name := 'HGU_VK';
+  HguVk.Prototype := StrMODFLOW + 'HGU_VK' + StrHGU_Unit_Number;
+  HguVk.Hidden := False;
+
+  HguVani.ResultType := rdtDouble;
+  HguVani.RFunctionAddr := _HguVani;
+  SetLength(HguVani.InputDataTypes, 1);
+  HguVani.InputDataTypes[0] := rdtInteger;
+  HguVani.OptionalArguments := 0;
+  HguVani.CanConvertToConstant := False;
+  HguVani.Name := 'HGU_VANI';
+  HguVani.Prototype := StrMODFLOW + 'HGU_VANI' + StrHGU_Unit_Number;
+  HguVani.Hidden := False;
+
+  HguSs.ResultType := rdtDouble;
+  HguSs.RFunctionAddr := _HguSS;
+  SetLength(HguSs.InputDataTypes, 1);
+  HguSs.InputDataTypes[0] := rdtInteger;
+  HguSs.OptionalArguments := 0;
+  HguSs.CanConvertToConstant := False;
+  HguSs.Name := 'HGU_SS';
+  HguSs.Prototype := StrMODFLOW + 'HGU_SS' + StrHGU_Unit_Number;
+  HguSs.Hidden := False;
+
+  HguSy.ResultType := rdtDouble;
+  HguSy.RFunctionAddr := _HguSy;
+  SetLength(HguSy.InputDataTypes, 1);
+  HguSy.InputDataTypes[0] := rdtInteger;
+  HguSy.OptionalArguments := 0;
+  HguSy.CanConvertToConstant := False;
+  HguSy.Name := 'HGU_SY';
+  HguSy.Prototype := StrMODFLOW + 'HGU_SY' + StrHGU_Unit_Number;
+  HguSy.Hidden := False;
+
+  HguKdep.ResultType := rdtDouble;
+  HguKdep.RFunctionAddr := _HguKdep;
+  SetLength(HguKdep.InputDataTypes, 1);
+  HguKdep.InputDataTypes[0] := rdtInteger;
+  HguKdep.OptionalArguments := 0;
+  HguKdep.CanConvertToConstant := False;
+  HguKdep.Name := 'HGU_KDEP';
+  HguKdep.Prototype := StrMODFLOW + 'HGU_KDEP' + StrHGU_Unit_Number;
+  HguKdep.Hidden := False;
 
   SutraMaxNodeValueInElement := TFunctionClass.Create;
   SutraMaxNodeValueInElement.InputDataCount := 1;
