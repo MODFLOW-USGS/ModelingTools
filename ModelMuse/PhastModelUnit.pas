@@ -1939,6 +1939,7 @@ that affects the model output should also have a comment. }
     procedure RemoveDataSet(ADataArray: TDataArray);
     procedure Loaded;
     property DataSetNames: TStringList read GetDataSetNames;
+    procedure InvalidateHguFormulaDataSets;
   end;
 
   TChildModelCollection = class;
@@ -37461,6 +37462,59 @@ end;
 procedure TDataArrayManager.InvalidateDataSetLookupList;
 begin
   FreeAndNil(FDataSetLookUpList);
+end;
+
+procedure TDataArrayManager.InvalidateHguFormulaDataSets;
+var
+  Index: Integer;
+  DS: TDataArray;
+  Formula: string;
+  HguFunctionNames: TStringList;
+  NameIndex: Integer;
+begin
+  HguFunctionNames := TStringList.Create;
+  try
+    HguFunctionNames.Add(KHGU_HK);
+    HguFunctionNames.Add(KHGU_HANI);
+    HguFunctionNames.Add(KHGU_VK);
+    HguFunctionNames.Add(KHGU_VANI);
+    HguFunctionNames.Add(KHGU_SS);
+    HguFunctionNames.Add(KHGU_SY);
+    HguFunctionNames.Add(KHGU_KDEP);
+
+    for Index := 0 to DataSetCount - 1 do
+    begin
+      DS := DataSets[Index];
+      Formula := UpperCase(DS.Formula);
+      for NameIndex := 0 to HguFunctionNames.Count - 1 do
+      begin
+        if Pos(HguFunctionNames[NameIndex], Formula) >= 1 then
+        begin
+          DS.Invalidate;
+          break;
+        end;
+      end;
+    end;
+    for Index := 0 to BoundaryDataSetCount - 1 do
+    begin
+      DS := BoundaryDataSets[Index];
+      Formula := DS.Formula;
+      for NameIndex := 0 to HguFunctionNames.Count - 1 do
+      begin
+        if Pos(HguFunctionNames[NameIndex], Formula) >= 1 then
+        begin
+          DS.Invalidate;
+          break;
+        end;
+      end;
+    end;
+    for Index := 0 to ChildDataArrayManagerCount - 1 do
+    begin
+      ChildDataArrayManagers[Index].InvalidateHguFormulaDataSets;
+    end;
+  finally
+    HguFunctionNames.Free;
+  end;
 end;
 
 procedure TDataArrayManager.RemoveDataSet(ADataArray: TDataArray);

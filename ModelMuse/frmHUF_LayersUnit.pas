@@ -1035,7 +1035,7 @@ begin
   AModel := frmGoPhast.PhastModel;
   AssignNewHufUnits(AModel);
   UpdatedRequiredDataSets;
-  (AModel as TPhastModel).DataArrayManager.InvalidateAllDataSets;
+  (AModel as TPhastModel).DataArrayManager.InvalidateHguFormulaDataSets;
 end;
 
 procedure TUndoHufLayers.Undo;
@@ -1046,7 +1046,7 @@ begin
   AModel := frmGoPhast.PhastModel;
   AssignOldHufUnits(AModel);
   UpdatedRequiredDataSets;
-  (AModel as TPhastModel).DataArrayManager.InvalidateAllDataSets;
+  (AModel as TPhastModel).DataArrayManager.InvalidateHguFormulaDataSets;
 end;
 
 procedure TUndoHufLayers.AssignOldHufUnits(AModel: TBaseModel);

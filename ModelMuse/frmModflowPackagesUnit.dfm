@@ -395,8 +395,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         ReadOnly = True
         TabOrder = 1
         OnChange = tvHufParameterTypesChange
-        ExplicitLeft = -4
-        ExplicitTop = 291
       end
       inline frameHufParameterDefinition: TframeListParameterDefinition
         Left = 131

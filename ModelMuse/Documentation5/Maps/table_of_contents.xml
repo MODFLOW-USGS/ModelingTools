@@ -462,6 +462,27 @@
         <topicref type="topic" id="2260897603" build="ALL" modified="2017-10-31T11:56:24.000Z" icon="0" href="GetHufSytp">
           <caption translate="true">GetHufSytp</caption>
         </topicref>
+        <topicref type="topic" id="445651956314723" build="ALL" modified="2022-01-04T06:22:58.314Z" icon="0" href="HGU_HANI">
+          <caption translate="true">HGU_HANI</caption>
+        </topicref>
+        <topicref type="topic" id="445653333106128" build="ALL" modified="2022-01-04T06:23:15.762Z" icon="0" href="HGU_HK">
+          <caption translate="true">HGU_HK</caption>
+        </topicref>
+        <topicref type="topic" id="445654368031241" build="ALL" modified="2022-01-04T06:23:36.241Z" icon="0" href="HGU_KDEP">
+          <caption translate="true">HGU_KDEP</caption>
+        </topicref>
+        <topicref type="topic" id="445654251042493" build="ALL" modified="2022-01-04T06:23:51.026Z" icon="0" href="HGU_SS">
+          <caption translate="true">HGU_SS</caption>
+        </topicref>
+        <topicref type="topic" id="445651719573870" build="ALL" modified="2022-01-04T06:24:14.306Z" icon="0" href="HGU_SY">
+          <caption translate="true">HGU_SY</caption>
+        </topicref>
+        <topicref type="topic" id="445652884096695" build="ALL" modified="2022-01-04T06:24:31.268Z" icon="0" href="HGU_VANI">
+          <caption translate="true">HGU_VANI</caption>
+        </topicref>
+        <topicref type="topic" id="445651036126222" build="ALL" modified="2022-01-04T06:25:09.907Z" icon="0" href="HGU_VK">
+          <caption translate="true">HGU_VK</caption>
+        </topicref>
         <topicref type="topic" id="393237167724137" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-08-29T15:48:03.250Z" icon="0" href="SimulatedLayer">
           <caption translate="true">SimulatedLayer</caption>
         </topicref>

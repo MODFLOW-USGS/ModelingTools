@@ -8,7 +8,8 @@ unit GIS_Functions;
 
 interface
 
-uses Windows, SysUtils, Classes, RbwParser, ScreenObjectUnit, GoPhastTypes;
+uses Windows, SysUtils, Classes, RbwParser, ScreenObjectUnit, GoPhastTypes,
+  OrderedCollectionUnit;
 
 type
   TLayerHeight = class(TExpression)
@@ -108,6 +109,48 @@ type
     function GetVariablesUsed: TStringList; override;
   end;
 
+  TCustomHguExpression = class(TCustomHufExpression)
+  private
+    function GetHufParamType: TParameterType; virtual; abstract;
+  protected
+    function GetVariablesUsed: TStringList; override;
+  end;
+
+  THGU_K = class(TCustomHguExpression)
+  protected
+    function GetHufParamType: TParameterType; override;
+  end;
+
+  THguHani = class(TCustomHguExpression)
+  protected
+    function GetHufParamType: TParameterType; override;
+  end;
+
+  THguVk = class(TCustomHguExpression)
+  protected
+    function GetHufParamType: TParameterType; override;
+  end;
+
+  THguVani = class(TCustomHguExpression)
+  protected
+    function GetHufParamType: TParameterType; override;
+  end;
+
+  THguSs = class(TCustomHguExpression)
+  protected
+    function GetHufParamType: TParameterType; override;
+  end;
+
+  THguSy = class(TCustomHguExpression)
+  protected
+    function GetHufParamType: TParameterType; override;
+  end;
+
+  THguKdep = class(TCustomHguExpression)
+  protected
+    function GetHufParamType: TParameterType; override;
+  end;
+
 {
  @name adds a series of (mostly) GIS function to Parser.
  The functions are defined in the initialization section.
@@ -197,8 +240,13 @@ const
   StrMedianVertexValue = 'MedianVertexValue';
   StrFirstVertexValue = 'FirstVertexValue';
   StrLastVertexValue = 'LastVertexValue';
-//  StrVertexValueSlope = 'VertexValueSlope';
-
+  KHGU_HK = 'HGU_HK';
+  KHGU_HANI = 'HGU_HANI';
+  KHGU_VK = 'HGU_VK';
+  KHGU_VANI = 'HGU_VANI';
+  KHGU_SS = 'HGU_SS';
+  KHGU_SY = 'HGU_SY';
+  KHGU_KDEP = 'HGU_KDEP';
 
 function GetColumnWidth(Column: Integer): Double;
 function GetRowWidth(Row: Integer): Double;
@@ -220,7 +268,7 @@ function CurrentObject: TScreenObject;
 implementation
 
 uses frmGoPhastUnit, DataSetUnit, FastGEO, LayerStructureUnit, PhastModelUnit,
-  ValueArrayStorageUnit, HufDefinition, OrderedCollectionUnit,
+  ValueArrayStorageUnit, HufDefinition,
   ModflowPackageSelectionUnit, Math, ModflowGridUnit, ModflowParameterUnit,
   frmErrorsAndWarningsUnit, SutraMeshUnit, AbstractGridUnit,
   RasterValuesAlongSegmentsUnit, ModflowPackagesUnit, RealListUnit,
@@ -409,14 +457,6 @@ var
   SelectedCount_Function: TFunctionRecord;
   SutraMeshEdgeNodeFunction: TFunctionRecord;
 
-  HguK: TFunctionRecord;
-  HguHani: TFunctionRecord;
-  HguVk: TFunctionRecord;
-  HguVani: TFunctionRecord;
-  HguSs: TFunctionRecord;
-  HguSy: TFunctionRecord;
-  HguKdep: TFunctionRecord;
-
 //  SutraMaxRealNodeValueFuntion: TFunctionRecord;
 
 //  DipDirectionRadiansFunction: TFunctionRecord;
@@ -476,6 +516,27 @@ var
 
   HufSYTP: TFunctionClass;
   HufSYTPSpecialImplementor: TSpecialImplementor;
+
+  HguK: TFunctionClass;
+  HguK_SpecImp: TSpecialImplementor;
+
+  HguHani: TFunctionClass;
+  HguHani_SpecImp: TSpecialImplementor;
+
+  HguVk: TFunctionClass;
+  HguVk_SpecImp: TSpecialImplementor;
+
+  HguVani: TFunctionClass;
+  HguVani_SpecImp: TSpecialImplementor;
+
+  HguSs: TFunctionClass;
+  HguSs_SpecImp: TSpecialImplementor;
+
+  HguSy: TFunctionClass;
+  HguSy_SpecImp: TSpecialImplementor;
+
+  HguKdep: TFunctionClass;
+  HguKdep_SpecImp: TSpecialImplementor;
 
   InvalidNames: TStringList;
 
@@ -656,13 +717,6 @@ begin
   AddItem(VerticalSubdivision_Function, True);
   AddItem(SelectedCount_Function, True);
   AddItem(SutraMeshEdgeNodeFunction, True);
-  AddItem(HguK, True);
-  AddItem(HguHani, True);
-  AddItem(HguVk, True);
-  AddItem(HguVani, True);
-  AddItem(HguSs, True);
-  AddItem(HguSy, True);
-  AddItem(HguKdep, True);
 
 //  AddItem(DipDirectionRadiansFunction, True);
 end;
@@ -8061,6 +8115,93 @@ begin
 
 end;
 
+{ THGU_K }
+
+function THGU_K.GetHufParamType: TParameterType;
+begin
+  result := ptHUF_HK;
+end;
+
+{ TCustomHguExpression }
+
+function TCustomHguExpression.GetVariablesUsed: TStringList;
+var
+  LocalModel: TCustomModel;
+  Index: Integer;
+  AParam: THufParameter;
+  HguIndex: Integer;
+  ParamIndex: Integer;
+  HGU: THydrogeologicUnit;
+  Parameters: THufUsedParameters;
+  HufParam: THufUsedParameter;
+begin
+  result := inherited GetVariablesUsed;
+
+  LocalModel := TCustomModel(GlobalCurrentModel);
+  for HguIndex := 0 to LocalModel.HydrogeologicUnits.Count - 1 do
+  begin
+    HGU := LocalModel.HydrogeologicUnits[HguIndex];
+    Parameters := HGU.HufUsedParameters;
+    for ParamIndex := 0 to Parameters.Count - 1 do
+    begin
+      HufParam := Parameters[ParamIndex];
+      if HufParam.Parameter.ParameterType = GetHufParamType then
+      begin
+        if HufParam.UseZone then
+        begin
+          result.Add(HufParam.ZoneDataSetName)
+        end;
+        if HufParam.UseMultiplier then
+        begin
+          result.Add(HufParam.MultiplierDataSetName)
+        end;
+      end;
+    end;
+  end;
+end;
+
+{ THguHani }
+
+function THguHani.GetHufParamType: TParameterType;
+begin
+  result := ptHUF_HANI;
+end;
+
+{ THguVk }
+
+function THguVk.GetHufParamType: TParameterType;
+begin
+  result := ptHUF_VK;
+end;
+
+{ THguVani }
+
+function THguVani.GetHufParamType: TParameterType;
+begin
+  result := ptHUF_VANI;
+end;
+
+{ THguSs }
+
+function THguSs.GetHufParamType: TParameterType;
+begin
+  result := ptHUF_SS;
+end;
+
+{ THguSy }
+
+function THguSy.GetHufParamType: TParameterType;
+begin
+  result := ptHUF_SY;
+end;
+
+{ THguKdep }
+
+function THguKdep.GetHufParamType: TParameterType;
+begin
+  result := ptHUF_KDEP;
+end;
+
 initialization
   SpecialImplementors := TList.Create;
 
@@ -8827,76 +8968,6 @@ initialization
   SutraMeshEdgeNodeFunction.Prototype := StrSutra + StrSUTRA_MeshEdgeNode;
   SutraMeshEdgeNodeFunction.Hidden := False;
 
-  HguK.ResultType := rdtDouble;
-  HguK.RFunctionAddr := _HguK;
-  SetLength(HguK.InputDataTypes, 1);
-  HguK.InputDataTypes[0] := rdtInteger;
-  HguK.OptionalArguments := 0;
-  HguK.CanConvertToConstant := False;
-  HguK.Name := 'HGU_HK';
-  HguK.Prototype := StrMODFLOW + 'HGU_HK' + StrHGU_Unit_Number;
-  HguK.Hidden := False;
-
-  HguHani.ResultType := rdtDouble;
-  HguHani.RFunctionAddr := _HguHani;
-  SetLength(HguHani.InputDataTypes, 1);
-  HguHani.InputDataTypes[0] := rdtInteger;
-  HguHani.OptionalArguments := 0;
-  HguHani.CanConvertToConstant := False;
-  HguHani.Name := 'HGU_HANI';
-  HguHani.Prototype := StrMODFLOW + 'HGU_HANI' + StrHGU_Unit_Number;
-  HguHani.Hidden := False;
-
-  HguVk.ResultType := rdtDouble;
-  HguVk.RFunctionAddr := _HguVk;
-  SetLength(HguVk.InputDataTypes, 1);
-  HguVk.InputDataTypes[0] := rdtInteger;
-  HguVk.OptionalArguments := 0;
-  HguVk.CanConvertToConstant := False;
-  HguVk.Name := 'HGU_VK';
-  HguVk.Prototype := StrMODFLOW + 'HGU_VK' + StrHGU_Unit_Number;
-  HguVk.Hidden := False;
-
-  HguVani.ResultType := rdtDouble;
-  HguVani.RFunctionAddr := _HguVani;
-  SetLength(HguVani.InputDataTypes, 1);
-  HguVani.InputDataTypes[0] := rdtInteger;
-  HguVani.OptionalArguments := 0;
-  HguVani.CanConvertToConstant := False;
-  HguVani.Name := 'HGU_VANI';
-  HguVani.Prototype := StrMODFLOW + 'HGU_VANI' + StrHGU_Unit_Number;
-  HguVani.Hidden := False;
-
-  HguSs.ResultType := rdtDouble;
-  HguSs.RFunctionAddr := _HguSS;
-  SetLength(HguSs.InputDataTypes, 1);
-  HguSs.InputDataTypes[0] := rdtInteger;
-  HguSs.OptionalArguments := 0;
-  HguSs.CanConvertToConstant := False;
-  HguSs.Name := 'HGU_SS';
-  HguSs.Prototype := StrMODFLOW + 'HGU_SS' + StrHGU_Unit_Number;
-  HguSs.Hidden := False;
-
-  HguSy.ResultType := rdtDouble;
-  HguSy.RFunctionAddr := _HguSy;
-  SetLength(HguSy.InputDataTypes, 1);
-  HguSy.InputDataTypes[0] := rdtInteger;
-  HguSy.OptionalArguments := 0;
-  HguSy.CanConvertToConstant := False;
-  HguSy.Name := 'HGU_SY';
-  HguSy.Prototype := StrMODFLOW + 'HGU_SY' + StrHGU_Unit_Number;
-  HguSy.Hidden := False;
-
-  HguKdep.ResultType := rdtDouble;
-  HguKdep.RFunctionAddr := _HguKdep;
-  SetLength(HguKdep.InputDataTypes, 1);
-  HguKdep.InputDataTypes[0] := rdtInteger;
-  HguKdep.OptionalArguments := 0;
-  HguKdep.CanConvertToConstant := False;
-  HguKdep.Name := 'HGU_KDEP';
-  HguKdep.Prototype := StrMODFLOW + 'HGU_KDEP' + StrHGU_Unit_Number;
-  HguKdep.Hidden := False;
-
   SutraMaxNodeValueInElement := TFunctionClass.Create;
   SutraMaxNodeValueInElement.InputDataCount := 1;
   SutraMaxNodeValueInElement.OptionalArguments := -0;
@@ -9203,6 +9274,104 @@ initialization
   HufSYTPSpecialImplementor.Implementor := THufSYTP;
   SpecialImplementors.Add(HufSYTPSpecialImplementor);
 
+  HguK := TFunctionClass.Create;
+  HguK.InputDataCount := 1;
+  HguK.OptionalArguments := 0;
+  HguK.RFunctionAddr := _HguK;
+  HguK.Name := KHGU_HK;
+  HguK.Prototype := StrMODFLOW + KHGU_HK + StrHGU_Unit_Number;
+  HguK.AllowConversionToConstant := False;
+  HguK.InputDataTypes[0] := rdtInteger;
+
+  HguK_SpecImp := TSpecialImplementor.Create;
+  HguK_SpecImp.FunctionClass := HguK;
+  HguK_SpecImp.Implementor := THGU_K;
+  SpecialImplementors.Add(HguK_SpecImp);
+
+  HguHani := TFunctionClass.Create;
+  HguHani.InputDataCount := 1;
+  HguHani.OptionalArguments := 0;
+  HguHani.RFunctionAddr := _HguHani;
+  HguHani.Name := KHGU_HANI;
+  HguHani.Prototype := StrMODFLOW + KHGU_HANI + StrHGU_Unit_Number;
+  HguHani.AllowConversionToConstant := False;
+  HguHani.InputDataTypes[0] := rdtInteger;
+
+  HguHani_SpecImp := TSpecialImplementor.Create;
+  HguHani_SpecImp.FunctionClass := HguHani;
+  HguHani_SpecImp.Implementor := THguHani;
+  SpecialImplementors.Add(HguHani_SpecImp);
+
+  HguVk := TFunctionClass.Create;
+  HguVk.InputDataCount := 1;
+  HguVk.OptionalArguments := 0;
+  HguVk.RFunctionAddr := _HguVk;
+  HguVk.Name := KHGU_VK;
+  HguVk.Prototype := StrMODFLOW + KHGU_VK + StrHGU_Unit_Number;
+  HguVk.AllowConversionToConstant := False;
+  HguVk.InputDataTypes[0] := rdtInteger;
+
+  HguVk_SpecImp := TSpecialImplementor.Create;
+  HguVk_SpecImp.FunctionClass := HguVk;
+  HguVk_SpecImp.Implementor := THguVk;
+  SpecialImplementors.Add(HguVk_SpecImp);
+
+  HguVani := TFunctionClass.Create;
+  HguVani.InputDataCount := 1;
+  HguVani.OptionalArguments := 0;
+  HguVani.RFunctionAddr := _HguVani;
+  HguVani.Name := KHGU_VANI;
+  HguVani.Prototype := StrMODFLOW + KHGU_VANI + StrHGU_Unit_Number;
+  HguVani.AllowConversionToConstant := False;
+  HguVani.InputDataTypes[0] := rdtInteger;
+
+  HguVani_SpecImp := TSpecialImplementor.Create;
+  HguVani_SpecImp.FunctionClass := HguVani;
+  HguVani_SpecImp.Implementor := THguVani;
+  SpecialImplementors.Add(HguVani_SpecImp);
+
+  HguSs := TFunctionClass.Create;
+  HguSs.InputDataCount := 1;
+  HguSs.OptionalArguments := 0;
+  HguSs.RFunctionAddr := _HguSs;
+  HguSs.Name := KHGU_SS;
+  HguSs.Prototype := StrMODFLOW + KHGU_SS + StrHGU_Unit_Number;
+  HguSs.AllowConversionToConstant := False;
+  HguSs.InputDataTypes[0] := rdtInteger;
+
+  HguSs_SpecImp := TSpecialImplementor.Create;
+  HguSs_SpecImp.FunctionClass := HguSs;
+  HguSs_SpecImp.Implementor := THguSs;
+  SpecialImplementors.Add(HguSs_SpecImp);
+
+  HguSy := TFunctionClass.Create;
+  HguSy.InputDataCount := 1;
+  HguSy.OptionalArguments := 0;
+  HguSy.RFunctionAddr := _HguSy;
+  HguSy.Name := KHGU_SY;
+  HguSy.Prototype := StrMODFLOW + KHGU_SY + StrHGU_Unit_Number;
+  HguSy.AllowConversionToConstant := False;
+  HguSy.InputDataTypes[0] := rdtInteger;
+
+  HguSy_SpecImp := TSpecialImplementor.Create;
+  HguSy_SpecImp.FunctionClass := HguSy;
+  HguSy_SpecImp.Implementor := THguSy;
+  SpecialImplementors.Add(HguSy_SpecImp);
+
+  HguKdep := TFunctionClass.Create;
+  HguKdep.InputDataCount := 1;
+  HguKdep.OptionalArguments := 0;
+  HguKdep.RFunctionAddr := _HguKdep;
+  HguKdep.Name := KHGU_KDEP;
+  HguKdep.Prototype := StrMODFLOW + KHGU_KDEP + StrHGU_Unit_Number;
+  HguKdep.AllowConversionToConstant := False;
+  HguKdep.InputDataTypes[0] := rdtInteger;
+
+  HguKdep_SpecImp := TSpecialImplementor.Create;
+  HguKdep_SpecImp.FunctionClass := HguKdep;
+  HguKdep_SpecImp.Implementor := THguKdep;
+  SpecialImplementors.Add(HguKdep_SpecImp);
+
   InvalidNames := TStringList.Create;
   InvalidNames.Sorted := True;
   InvalidNames.CaseSensitive := False;
@@ -9265,6 +9434,27 @@ finalization
 
   HufSYTP.Free;
   HufSYTPSpecialImplementor.Free;
+
+  HguK.Free;
+  HguK_SpecImp.Free;
+
+  HguHani.Free;
+  HguHani_SpecImp.Free;
+
+  HguVk.Free;
+  HguVk_SpecImp.Free;
+
+  HguVani.Free;
+  HguVani_SpecImp.Free;
+
+  HguSs.Free;
+  HguSs_SpecImp.Free;
+
+  HguSy.Free;
+  HguSy_SpecImp.Free;
+
+  HguKdep.Free;
+  HguKdep_SpecImp.Free;
 
   SpecialImplementors.Free;
 

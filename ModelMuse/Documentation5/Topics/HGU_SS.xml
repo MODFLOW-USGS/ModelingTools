@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">HGU_SS</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">HGU_SS</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">HGU_SS</text><text styleclass="Normal" translate="true">(HGU_Unit_Number) returns the specific storage in a hydrogeologic unit as defined by SS parameters in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HUF2_Hydrogeologic_Unit_Flow" styleclass="Normal" translate="true">HUF</link><text styleclass="Normal" translate="true"> package. The primary purpose of this function is to enable comparison of the values specified with parameters for a hydrogeologic unit with the conceptual model.</text></para>
+  </body>
+</topic>

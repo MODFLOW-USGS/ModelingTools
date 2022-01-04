@@ -4139,6 +4139,8 @@ var
 begin
   inherited;
   PhastModel := frmGoPhast.PhastModel;
+  PhastModel.DataArrayManager.InvalidateHguFormulaDataSets;
+
   OldPackages := PhastModel.ModflowPackages;
   PhastModel.ModflowPackages.SfrPackage.AssignParameterInstances := False;
   try
@@ -4304,6 +4306,7 @@ var
 begin
   frmGoPhast.PhastModel.Mt3dmsTimes := FOldMt3dTimes;
   PhastModel := frmGoPhast.PhastModel;
+  PhastModel.DataArrayManager.InvalidateHguFormulaDataSets;
 
   frmGoPhast.PhastModel.ModflowPackages.SfrPackage.AssignParameterInstances := False;
   try

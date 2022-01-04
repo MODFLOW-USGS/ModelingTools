@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4293</config-value>
+      <config-value name="autohelpstart">4300</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1015,6 +1015,13 @@ document.write('</frameset>');
       <helpcontext-number href="Henry_2D_Model" value="3771"/>
       <helpcontext-number href="HFB_Horizontal_Flow_Barrier_Package" value="3382"/>
       <helpcontext-number href="HFB_Horizontal_Flow_Barrier_Pane" value="3383"/>
+      <helpcontext-number href="HGU_HANI" value="4294"/>
+      <helpcontext-number href="HGU_HK" value="4295"/>
+      <helpcontext-number href="HGU_KDEP" value="4296"/>
+      <helpcontext-number href="HGU_SS" value="4297"/>
+      <helpcontext-number href="HGU_SY" value="4298"/>
+      <helpcontext-number href="HGU_VANI" value="4299"/>
+      <helpcontext-number href="HGU_VK" value="4300"/>
       <helpcontext-number href="HighestActiveLayer" value="4129"/>
       <helpcontext-number href="HighestVertexValue" value="3969"/>
       <helpcontext-number href="Hint_Display_Time_Dialog_Box" value="2370"/>
@@ -1423,6 +1430,7 @@ document.write('</frameset>');
       <helpcontext-number href="Properties_Tab#SetValues" value="3978"/>
       <helpcontext-number href="Properties_Tab#Z_Coordinate" value="3539"/>
       <helpcontext-number href="Properties_TabHUF" value="3516"/>
+      <helpcontext-number href="Properties_TabHUF#HGUVANI" value="4301"/>
       <helpcontext-number href="Quick_Start_Guide" value="3386"/>
       <helpcontext-number href="RadToDeg" value="1400"/>
       <helpcontext-number href="Rain_in_SWR_Surface_Water_Rout" value="3860"/>

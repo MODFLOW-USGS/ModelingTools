@@ -2507,6 +2507,7 @@ begin
   begin
     frmShowHideObjects.UpdateScreenObjects;
   end;
+  frmGoPhast.PhastModel.DataArrayManager.InvalidateHguFormulaDataSets;
 end;
 
 procedure TUndoChangeParameters.Undo;
@@ -2517,6 +2518,7 @@ begin
   begin
     frmShowHideObjects.UpdateScreenObjects;
   end;
+  frmGoPhast.PhastModel.DataArrayManager.InvalidateHguFormulaDataSets;
 end;
 
 procedure InitializeSortOrder;

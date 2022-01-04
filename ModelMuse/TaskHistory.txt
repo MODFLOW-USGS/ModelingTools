@@ -194,7 +194,7 @@ object TTaskHistory
     end
     item
       Name = 'HUF'
-      Display = False
+      Display = True
     end
     item
       Name = 'Batch file additions'
@@ -28727,5 +28727,11 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'Documentation')
+    end
+    item
+      Date = 44565.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'HUF')
     end>
 end
