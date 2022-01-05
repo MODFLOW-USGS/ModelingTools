@@ -10439,13 +10439,16 @@ const
 //               Bug fix: The specify Contours dialog box no longer allows
 //                the users to attempt to set the number of contours to a
 //                value less than 1.
-
-//               Bug fix: Fixed bug that could cause extra LPF or HUF parameters
+//    '4.3.0.76' Bug fix: Fixed bug that could cause extra LPF or HUF parameters
 //                to be generated when switching among parameter types in the
 //                MODFLOW Packages and Programs dialog box.
 //               Enhancement: Added new functions HGU_HK, HGU_HANI, HGU_VK,
 //                HGU_VANI, HGU_SS, HGU_SY, and HGU_KDEP which return the value
 //                of the corresponding data for a particular hydrogeologic unit.
+//               Enhancement: Added new function GetValueFromLayer that allows
+//                a 2D data set to retrieve a value from a specific layer of a
+//                3D data set.
+
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -10453,7 +10456,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.75';
+  IIModelVersion = '4.3.0.76';
 
 function IModelVersion: string;
 begin

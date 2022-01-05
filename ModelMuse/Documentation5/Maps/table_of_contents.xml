@@ -273,6 +273,9 @@
         <topicref type="topic" id="393234463988357" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-08-29T15:40:34.159Z" icon="0" href="ElevationToModelLayer">
           <caption translate="true">ElevationToModelLayer</caption>
         </topicref>
+        <topicref type="topic" id="445653555360649" build="ALL" modified="2022-01-04T12:06:28.019Z" icon="0" href="GetValueFromLayer">
+          <caption translate="true">GetValueFromLayer</caption>
+        </topicref>
         <topicref type="topic" id="440223741008536" build="ALL" modified="2020-07-10T11:58:05.902Z" icon="0" href="HighestActiveLayer">
           <caption translate="true">HighestActiveLayer</caption>
         </topicref>

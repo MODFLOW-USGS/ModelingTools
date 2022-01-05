@@ -711,6 +711,7 @@ end;
 
 destructor TTimesSeriesCollections.Destroy;
 begin
+  FTimeSeriesNames.Free;
   FTimeSeriesDictionary.Free;
   FTimeSeriesGroupsDictionary.Free;
   inherited;

@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = True
+      Display = False
     end
     item
       Name = 'core code'
@@ -82,15 +82,15 @@ object TTaskHistory
     end
     item
       Name = 'GHB'
-      Display = True
+      Display = False
     end
     item
       Name = 'WEL'
-      Display = True
+      Display = False
     end
     item
       Name = 'RIV'
-      Display = True
+      Display = False
     end
     item
       Name = 'DRN'
@@ -102,7 +102,7 @@ object TTaskHistory
     end
     item
       Name = 'RCH'
-      Display = True
+      Display = False
     end
     item
       Name = 'EVT'
@@ -110,7 +110,7 @@ object TTaskHistory
     end
     item
       Name = 'ETS'
-      Display = True
+      Display = False
     end
     item
       Name = 'RES'
@@ -28726,12 +28726,14 @@ object TTaskHistory
       Date = 44564.000000000000000000
       Categories.Strings = (
         'Bug fix'
-        'Documentation')
+        'Documentation'
+        'HUF')
     end
     item
       Date = 44565.000000000000000000
       Categories.Strings = (
         'Documentation'
-        'HUF')
+        'HUF'
+        'core code')
     end>
 end

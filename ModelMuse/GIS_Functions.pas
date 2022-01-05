@@ -151,6 +151,17 @@ type
     function GetHufParamType: TParameterType; override;
   end;
 
+  TGetValueFromLayer = class(TExpression)
+  protected
+    function GetVariablesUsed: TStringList; override;
+  public
+    {
+      @Name returns True if Variable is used by the @Link(TExpression)
+      or if the variable is named "Kz", "Confining_Bed_Kz",
+      or one of the variables for grid layer elevations.
+    }
+    function UsesVariable(const Variable: TCustomVariable): boolean; override;
+  end;
 {
  @name adds a series of (mostly) GIS function to Parser.
  The functions are defined in the initialization section.
@@ -247,6 +258,8 @@ const
   KHGU_SS = 'HGU_SS';
   KHGU_SY = 'HGU_SY';
   KHGU_KDEP = 'HGU_KDEP';
+  KGetValueFromLayer = 'GetValueFromLayer';
+
 
 function GetColumnWidth(Column: Integer): Double;
 function GetRowWidth(Row: Integer): Double;
@@ -537,6 +550,9 @@ var
 
   HguKdep: TFunctionClass;
   HguKdep_SpecImp: TSpecialImplementor;
+
+  GetValueFromLayer: TFunctionClass;
+  GetValueFromLayer_SpecImp: TSpecialImplementor;
 
   InvalidNames: TStringList;
 
@@ -1870,6 +1886,49 @@ end;
 function _HguKdep(Values: array of pointer): double;
 begin
   result := _HguValue(Values, ptHUF_KDEP, HguParameterAlwaysUsed);
+end;
+
+function _GetValueFromLayer(Values: array of pointer): double;
+var
+  LocalModel: TCustomModel;
+  DataSetName: string;
+  DataArray: TDataArray;
+  Layer: Integer;
+  Row: Integer;
+  Column: Integer;
+begin
+  result := 0;
+  LocalModel := GlobalCurrentModel as TCustomModel;
+  DataSetName := PString(Values[0])^;
+  DataArray := LocalModel.DataArrayManager.GetDataSetByName(DataSetName);
+  if DataArray = nil then
+  begin
+    Exit;
+  end;
+  if not (DataArray.DataType in [rdtInteger, rdtDouble]) then
+  begin
+    Exit;
+  end;
+  if DataArray.EvaluatedAt <> GlobalEvaluatedAt then
+  begin
+    Exit;
+  end;
+  Layer := PInteger(Values[1])^ - 1;
+  Row := GlobalRow-1;
+  Column := GlobalColumn-1;
+  if (Layer < 0) or (Layer >= DataArray.LayerCount) then
+  begin
+    Exit;
+  end;
+  if (Row < 0) or (Row >= DataArray.RowCount) then
+  begin
+    Exit;
+  end;
+  if (Column < 0) or (Column >= DataArray.ColumnCount) then
+  begin
+    Exit;
+  end;
+  result := DataArray.RealData[Layer, Row, Column];
 end;
 
 function _SelectedCount(Values: array of pointer): integer;
@@ -8127,8 +8186,6 @@ end;
 function TCustomHguExpression.GetVariablesUsed: TStringList;
 var
   LocalModel: TCustomModel;
-  Index: Integer;
-  AParam: THufParameter;
   HguIndex: Integer;
   ParamIndex: Integer;
   HGU: THydrogeologicUnit;
@@ -8200,6 +8257,37 @@ end;
 function THguKdep.GetHufParamType: TParameterType;
 begin
   result := ptHUF_KDEP;
+end;
+
+{ TGetValueFromLayer }
+
+function TGetValueFromLayer.GetVariablesUsed: TStringList;
+var
+  ArrayLength: Integer;
+  AVariable: TConstant;
+begin
+  result := inherited GetVariablesUsed;
+  ArrayLength := Length(Data);
+  if (ArrayLength > 0) then
+  begin
+    if Data[0].Datum <> nil then
+    begin
+      AVariable := TConstant(Data[0].Datum);
+      if AVariable.ResultType = rdtString then
+      begin
+        result.Add(AVariable.StringResult);
+      end;
+    end;
+  end;
+end;
+
+function TGetValueFromLayer.UsesVariable(
+  const Variable: TCustomVariable): boolean;
+var
+  List: TStringList;
+begin
+  List := GetVariablesUsed;
+  result := List.IndexOf(Variable.Name) >= 0;
 end;
 
 initialization
@@ -9372,6 +9460,21 @@ initialization
   HguKdep_SpecImp.Implementor := THguKdep;
   SpecialImplementors.Add(HguKdep_SpecImp);
 
+  GetValueFromLayer := TFunctionClass.Create;
+  GetValueFromLayer.InputDataCount := 2;
+  GetValueFromLayer.OptionalArguments := 0;
+  GetValueFromLayer.RFunctionAddr := _GetValueFromLayer;
+  GetValueFromLayer.Name := KGetValueFromLayer;
+  GetValueFromLayer.Prototype := StrGridOrMesh + KGetValueFromLayer + '(DataSetName, Layer)';
+  GetValueFromLayer.AllowConversionToConstant := False;
+  GetValueFromLayer.InputDataTypes[0] := rdtString;
+  GetValueFromLayer.InputDataTypes[1] := rdtInteger;
+
+  GetValueFromLayer_SpecImp := TSpecialImplementor.Create;
+  GetValueFromLayer_SpecImp.FunctionClass := GetValueFromLayer;
+  GetValueFromLayer_SpecImp.Implementor := TGetValueFromLayer;
+  SpecialImplementors.Add(GetValueFromLayer_SpecImp);
+
   InvalidNames := TStringList.Create;
   InvalidNames.Sorted := True;
   InvalidNames.CaseSensitive := False;
@@ -9455,6 +9558,9 @@ finalization
 
   HguKdep.Free;
   HguKdep_SpecImp.Free;
+
+  GetValueFromLayer.Free;
+  GetValueFromLayer_SpecImp.Free;
 
   SpecialImplementors.Free;
 

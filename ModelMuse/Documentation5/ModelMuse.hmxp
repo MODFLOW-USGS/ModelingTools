@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4300</config-value>
+      <config-value name="autohelpstart">4302</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -988,6 +988,7 @@ document.write('</frameset>');
       <helpcontext-number href="GetHufSs" value="3553"/>
       <helpcontext-number href="GetHufSy" value="3555"/>
       <helpcontext-number href="GetHufSytp" value="4001"/>
+      <helpcontext-number href="GetValueFromLayer" value="4302"/>
       <helpcontext-number href="GHB_General_Head_Boundary_Package" value="2710"/>
       <helpcontext-number href="GHB_Object_Pane" value="2000"/>
       <helpcontext-number href="GIS" value="290"/>

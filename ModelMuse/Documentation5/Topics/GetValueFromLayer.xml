@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GetValueFromLayer</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GetValueFromLayer</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GetValueFromLayer</text><text styleclass="Normal" translate="true">(DataSetName, Layer) is used to retrieve real number data from a 3D data set in a &quot;2D Top&quot; data set. GetValueFromLayer retrieves the value of the data set whose name is DataSetName at the row and column that is being evaluated and the layer specified by the &quot;Layer&quot; argument. GetValueFromLayer should never be used when defining a grid or mesh elevation even indirectly and may cause a circular reference error if attempted. In SUTRA and PHAST models it is important that the data set named by DataSetName be evaluated at the same location as the data set to which the result of the function is applied.</text></para>
+  </body>
+</topic>
