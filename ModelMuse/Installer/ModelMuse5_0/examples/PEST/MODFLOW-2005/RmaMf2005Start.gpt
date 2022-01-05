@@ -32,7 +32,7 @@ object PhastModel: TPhastModel
   ModflowGrid.DisplayLayer = 0
   ModflowGrid.ColumnPositions = (
     1696.20102745308300000
-    1796.04831547159200000
+    1796.04831547159100000
     1895.89560349010000000
     1995.74289150860900000
     2095.59017952711800000
@@ -43,7 +43,7 @@ object PhastModel: TPhastModel
     2594.82661961966200000
     2694.67390763817000000
     2794.52119565667900000
-    2894.36848367518800000
+    2894.36848367518700000
     2994.21577169369600000
     3094.06305971220500000
     3193.91034773071400000
@@ -63,7 +63,7 @@ object PhastModel: TPhastModel
     4591.77237998983700000
     4691.61966800834500000
     4791.46695602685600000
-    4891.31424404536200000
+    4891.31424404536100000
     4991.16153206387100000
     5091.00882008238000000
     5190.85610810088800000
@@ -88,7 +88,7 @@ object PhastModel: TPhastModel
     7870.61059020201000000
     7770.16350571286800000
     7669.71642122372500000
-    7569.26933673458200000
+    7569.26933673458300000
     7468.82225224543700000
     7368.37516775629800000
     7267.92808326715400000
@@ -98,19 +98,19 @@ object PhastModel: TPhastModel
     6866.13974531058400000
     6765.69266082144100000
     6665.24557633229800000
-    6564.79849184315400000
+    6564.79849184315500000
     6464.35140735401200000
     6363.90432286486900000
     6263.45723837572700000
     6163.01015388658700000
-    6062.56306939744100000
+    6062.56306939744300000
     5962.11598490830000000
     5861.66890041915900000
     5761.22181593001500000
     5660.77473144087200000
     5560.32764695172900000
     5459.88056246258800000
-    5359.43347797344300000
+    5359.43347797344400000
     5258.98639348430000000
     5158.53930899516000000
     5058.09222450601500000
@@ -118,7 +118,7 @@ object PhastModel: TPhastModel
     4857.19805552773100000
     4756.75097103858800000
     4656.30388654944700000
-    4555.85680206030400000
+    4555.85680206030300000
     4455.40971757116000000
     4354.96263308201700000
     4254.51554859287600000
@@ -265,7 +265,7 @@ object PhastModel: TPhastModel
   ModflowPackages.De4Package.HCLOSE.Value = 0.00100000000000000
   ModflowPackages.De4Package.IPRD4 = 1
   ModflowPackages.HobPackage.IsSelected = False
-  ModflowPackages.HobPackage.DryHead = -1000000.00000000000000000
+  ModflowPackages.HobPackage.DryHead = -999999.99999999990000000
   ModflowPackages.HfbPackage.IsSelected = False
   ModflowPackages.ModPath.IsSelected = True
   ModflowPackages.ModPath.MaximumSize = 0
@@ -735,8 +735,12 @@ object PhastModel: TPhastModel
           GUID = '{FDAAB5BB-876E-449A-9B07-8436005638D1}'
         end>
     end>
+  FilesToArchive.Strings = (
+    
+      'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
+      'MODFLOW-2005\RmaMf2005Start.gpt')
   ModelFileName = 
-    'D:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
+    'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
     'MODFLOW-2005\RmaMf2005Start.gpt'
   ModflowOptions.HDry = -2E20
   ModflowOptions.HNoFlow = -1E20
@@ -796,9 +800,16 @@ object PhastModel: TPhastModel
   SutraMesh.NodeDrawingChoice = dcEdge
   SutraMesh.MeshType = mt3D
   SutraMesh.SelectedLayer = 0
+  SutraMesh.CrossSection.StartX = -990.95754199274740000
+  SutraMesh.CrossSection.EndX = 985.25810030540080000
+  SutraMesh.CrossSection.StartY = -4.68997009456427500
+  SutraMesh.CrossSection.EndY = -4.68997009456427500
   SutraMesh.CrossSection.Color = clPurple
   SutraMesh.NodeNumbers = <>
   SutraMesh.ElementNumbers = <>
+  SutraOptions.TitleLines = 
+    'SUTRA Model created using ModelMuse'#13#10'U.S. Geological Survey exam' +
+    'ple parameter values'#13#10
   SutraOptions.TransportChoice = tcSolute
   SutraOptions.SaturationChoice = scSaturated
   SutraOptions.SimulationType = stSteadyFlowSteadyTransport
@@ -842,6 +853,7 @@ object PhastModel: TPhastModel
   SutraOptions.StoredGravityY.Value = 0.00000000000000000
   SutraOptions.StoredGravityZ.Value = -9.81000000000000000
   SutraOptions.ReadStart = rsNone
+  SutraOptions.ReadStartRestartFileName = '..\S\SUTRA\Island3DSlopingK_InitialPressure.rst'
   SutraOptions.LakeOptions.StoredRechargeFraction.Value = 0.00000000000000000
   SutraOptions.LakeOptions.StoredDischargeFraction.Value = 0.00000000000000000
   SutraOptions.LakeOptions.StoredSubmergedOutput.Value = -9E99
@@ -1361,7 +1373,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 2432.58254296710000000
-          Y = 4627.41409342944100000
+          Y = 4627.41409342944000000
         end
         item
           X = 2516.34662935162000000
@@ -1385,10 +1397,10 @@ object PhastModel: TPhastModel
         end
         item
           X = 2055.64415423675900000
-          Y = 6051.40356196628100000
+          Y = 6051.40356196628000000
         end
         item
-          X = 2023.63430693981800000
+          X = 2023.63430693981700000
           Y = 6247.95000751852500000
         end
         item
@@ -1424,7 +1436,7 @@ object PhastModel: TPhastModel
           Y = 8449.15053472316300000
         end
         item
-          X = 5332.91403403110200000
+          X = 5332.91403403110300000
           Y = 8438.68002392509700000
         end
         item
@@ -1436,7 +1448,7 @@ object PhastModel: TPhastModel
           Y = 8155.97623237734300000
         end
         item
-          X = 5647.02935797305300000
+          X = 5647.02935797305200000
           Y = 7894.21346242571800000
         end
         item
@@ -1445,14 +1457,14 @@ object PhastModel: TPhastModel
         end
         item
           X = 5762.20497675176800000
-          Y = 7464.92251970505300000
+          Y = 7464.92251970505200000
         end
         item
           X = 5950.67417111693800000
           Y = 7255.51230374375400000
         end
         item
-          X = 6065.84978989565300000
+          X = 6065.84978989565400000
           Y = 6909.98544740760700000
         end
         item
@@ -1461,7 +1473,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 6047.60118536188200000
-          Y = 6051.40356196628100000
+          Y = 6051.40356196628000000
         end
         item
           X = 6013.49723590533100000
@@ -1497,7 +1509,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 6170.55489787630200000
-          Y = 3779.30271878617500000
+          Y = 3779.30271878617600000
         end
         item
           X = 6288.72209116875100000
@@ -1528,7 +1540,7 @@ object PhastModel: TPhastModel
           Y = 3465.18739484422500000
         end
         item
-          X = 4809.38849412785300000
+          X = 4809.38849412785200000
           Y = 3465.18739484422500000
         end
         item
@@ -1569,11 +1581,11 @@ object PhastModel: TPhastModel
         end
         item
           X = 2484.93509695742400000
-          Y = 3234.83615728679600000
+          Y = 3234.83615728679700000
         end
         item
           X = 2149.87875141934500000
-          Y = 3140.60156010421100000
+          Y = 3140.60156010421200000
         end
         item
           X = 1919.52751386191500000
@@ -1588,7 +1600,7 @@ object PhastModel: TPhastModel
           Y = 3402.36433005583500000
         end
         item
-          X = 3721.91988825033100000
+          X = 3721.91988825033200000
           Y = 5886.65528977547100000
         end
         item
@@ -1616,11 +1628,11 @@ object PhastModel: TPhastModel
           Y = 5383.90520475834400000
         end
         item
-          X = 4034.77757454202200000
-          Y = 5190.42742507795600000
+          X = 4034.77757454202300000
+          Y = 5190.42742507795500000
         end
         item
-          X = 4050.84539289571200000
+          X = 4050.84539289571300000
           Y = 5051.79269481966700000
         end
         item
@@ -1660,7 +1672,7 @@ object PhastModel: TPhastModel
           Y = 5793.70096872106200000
         end
         item
-          X = 3721.91988825033100000
+          X = 3721.91988825033200000
           Y = 5886.65528977547100000
         end
         item
@@ -1672,11 +1684,11 @@ object PhastModel: TPhastModel
           Y = 6475.18893393709100000
         end
         item
-          X = 5277.84243081389400000
+          X = 5277.84243081389600000
           Y = 6560.97249308159000000
         end
         item
-          X = 5386.46619456033100000
+          X = 5386.46619456033200000
           Y = 6527.77452127644200000
         end
         item
@@ -1685,7 +1697,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 5397.35512931241900000
-          Y = 6345.05288446092200000
+          Y = 6345.05288446092000000
         end
         item
           X = 5302.94009749858600000
@@ -1704,7 +1716,7 @@ object PhastModel: TPhastModel
           Y = 5921.84513988892400000
         end
         item
-          X = 5149.83105153325400000
+          X = 5149.83105153325500000
           Y = 5756.91761596096100000
         end
         item
@@ -1713,7 +1725,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 4871.63204780613200000
-          Y = 5706.45669881713900000
+          Y = 5706.45669881713800000
         end
         item
           X = 4800.19001248146100000
@@ -1748,7 +1760,6 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
       ScreenObject.ViewDirection = vdTop
-      ScreenObject.Visible = False
       ScreenObject.InterpValues = <
         item
           Values.InterpolationDirection = pidX
@@ -1867,11 +1878,11 @@ object PhastModel: TPhastModel
           Y = 3456.93205441667000000
         end
         item
-          X = 6055.30860132885900000
+          X = 6055.30860132886000000
           Y = 3381.88914409489000000
         end
         item
-          X = 6317.95878745509800000
+          X = 6317.95878745509900000
           Y = 3344.36768893400000000
         end>
       ScreenObject.Name = 'Southern_Top_Elevation'
@@ -2187,7 +2198,6 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
       ScreenObject.ViewDirection = vdTop
-      ScreenObject.Visible = False
       ScreenObject.InterpValues = <
         item
           Values.InterpolationDirection = pidX
@@ -2268,9 +2278,9 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Height = -13
       ScreenObject.ObjectLabel.Font.Name = 'Tahoma'
       ScreenObject.ObjectLabel.Font.Style = []
-      ScreenObject.ObjectLabel.OffSetX = 0
-      ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.OffSetX = 20
+      ScreenObject.ObjectLabel.OffSetY = 0
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -13
@@ -2292,11 +2302,11 @@ object PhastModel: TPhastModel
       Points = <
         item
           X = 4490.96511263409200000
-          Y = 7263.09118213060600000
+          Y = 7263.09118213060500000
         end
         item
-          X = 4594.94961495830100000
-          Y = 7313.00374324622300000
+          X = 4594.94961495830000000
+          Y = 7313.00374324622200000
         end
         item
           X = 4690.61535709657300000
@@ -2312,7 +2322,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 4490.96511263409200000
-          Y = 7263.09118213060600000
+          Y = 7263.09118213060500000
         end>
       ScreenObject.Name = 'Disposal_Pond'
       ScreenObject.CellSize = 1.00000000000000000
@@ -2331,7 +2341,6 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
       ScreenObject.ViewDirection = vdTop
-      ScreenObject.Visible = False
       ScreenObject.InterpValues = <>
       ScreenObject.ModflowWellBoundary.Values = <
         item
@@ -2419,7 +2428,7 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Style = []
       ScreenObject.ObjectLabel.OffSetX = 0
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -13
@@ -2458,7 +2467,6 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
       ScreenObject.ViewDirection = vdTop
-      ScreenObject.Visible = False
       ScreenObject.InterpValues = <>
       ScreenObject.ModflowWellBoundary.Values = <
         item
@@ -2534,7 +2542,7 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Style = []
       ScreenObject.ObjectLabel.OffSetX = 0
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -13
@@ -2573,7 +2581,6 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
       ScreenObject.ViewDirection = vdTop
-      ScreenObject.Visible = False
       ScreenObject.InterpValues = <>
       ScreenObject.ModflowWellBoundary.Values = <
         item
@@ -2649,7 +2656,7 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Style = []
       ScreenObject.ObjectLabel.OffSetX = 0
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -13
@@ -2697,7 +2704,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 5884.35744377848800000
-          Y = 3432.30211650676500000
+          Y = 3432.30211650676400000
         end
         item
           X = 6291.97669288938400000
@@ -2720,7 +2727,6 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
       ScreenObject.ViewDirection = vdTop
-      ScreenObject.Visible = False
       ScreenObject.InterpValues = <
         item
           Values.InterpolationDirection = pidX
@@ -2801,9 +2807,9 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Height = -13
       ScreenObject.ObjectLabel.Font.Name = 'Tahoma'
       ScreenObject.ObjectLabel.Font.Style = []
-      ScreenObject.ObjectLabel.OffSetX = 0
-      ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.OffSetX = 287
+      ScreenObject.ObjectLabel.OffSetY = 15
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -13
@@ -2824,7 +2830,7 @@ object PhastModel: TPhastModel
       LowerElevationFormula = 'Aquifer_Bottom'
       Points = <
         item
-          X = 3721.91988825033100000
+          X = 3721.91988825033200000
           Y = 5886.65528977547100000
         end
         item
@@ -2852,11 +2858,11 @@ object PhastModel: TPhastModel
           Y = 5383.90520475834400000
         end
         item
-          X = 4034.77757454202200000
-          Y = 5190.42742507795600000
+          X = 4034.77757454202300000
+          Y = 5190.42742507795500000
         end
         item
-          X = 4050.84539289571200000
+          X = 4050.84539289571300000
           Y = 5051.79269481966700000
         end
         item
@@ -2896,7 +2902,7 @@ object PhastModel: TPhastModel
           Y = 5793.70096872106200000
         end
         item
-          X = 3721.91988825033100000
+          X = 3721.91988825033200000
           Y = 5886.65528977547100000
         end
         item
@@ -2908,11 +2914,11 @@ object PhastModel: TPhastModel
           Y = 6475.18893393709100000
         end
         item
-          X = 5277.84243081389400000
+          X = 5277.84243081389600000
           Y = 6560.97249308159000000
         end
         item
-          X = 5386.46619456033100000
+          X = 5386.46619456033200000
           Y = 6527.77452127644200000
         end
         item
@@ -2921,7 +2927,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 5397.35512931241900000
-          Y = 6345.05288446092200000
+          Y = 6345.05288446092000000
         end
         item
           X = 5302.94009749858600000
@@ -2940,7 +2946,7 @@ object PhastModel: TPhastModel
           Y = 5921.84513988892400000
         end
         item
-          X = 5149.83105153325400000
+          X = 5149.83105153325500000
           Y = 5756.91761596096100000
         end
         item
@@ -2949,7 +2955,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 4871.63204780613200000
-          Y = 5706.45669881713900000
+          Y = 5706.45669881713800000
         end
         item
           X = 4800.19001248146100000
@@ -3151,7 +3157,7 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Style = []
       ScreenObject.ObjectLabel.OffSetX = 0
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -11
@@ -3251,9 +3257,9 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Height = -11
       ScreenObject.ObjectLabel.Font.Name = 'Tahoma'
       ScreenObject.ObjectLabel.Font.Style = []
-      ScreenObject.ObjectLabel.OffSetX = 0
+      ScreenObject.ObjectLabel.OffSetX = -20
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -11
@@ -3287,7 +3293,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = 'Model_Top'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = 'Aquifer_Bottom'
-      ScreenObject.Selected = False
+      ScreenObject.Selected = True
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -3353,9 +3359,9 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Height = -11
       ScreenObject.ObjectLabel.Font.Name = 'Tahoma'
       ScreenObject.ObjectLabel.Font.Style = []
-      ScreenObject.ObjectLabel.OffSetX = 0
+      ScreenObject.ObjectLabel.OffSetX = -53
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -11
@@ -3457,7 +3463,7 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Style = []
       ScreenObject.ObjectLabel.OffSetX = 0
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -11
@@ -3476,7 +3482,7 @@ object PhastModel: TPhastModel
       LowerElevationFormula = 'Aquifer_Bottom'
       Points = <
         item
-          X = 4563.53968253968100000
+          X = 4563.53968253968000000
           Y = 6030.75682539682400000
         end>
       ScreenObject.Name = 'Head_Obs5'
@@ -3557,9 +3563,9 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Height = -11
       ScreenObject.ObjectLabel.Font.Name = 'Tahoma'
       ScreenObject.ObjectLabel.Font.Style = []
-      ScreenObject.ObjectLabel.OffSetX = 0
+      ScreenObject.ObjectLabel.OffSetX = -50
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -11
@@ -3661,7 +3667,7 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Style = []
       ScreenObject.ObjectLabel.OffSetX = 0
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -11
@@ -3763,7 +3769,7 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Style = []
       ScreenObject.ObjectLabel.OffSetX = 0
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -11
@@ -3865,7 +3871,7 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Style = []
       ScreenObject.ObjectLabel.OffSetX = 0
       ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -11
@@ -3888,7 +3894,7 @@ object PhastModel: TPhastModel
           Y = 3132.34412698412500000
         end
         item
-          X = 2293.69841269841300000
+          X = 2293.69841269841200000
           Y = 3464.09015873015700000
         end
         item
@@ -3905,7 +3911,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 5681.00000000000000000
-          Y = 3149.80444444444500000
+          Y = 3149.80444444444400000
         end
         item
           X = 5209.57142857142800000
@@ -3917,7 +3923,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 3341.31746031746000000
-          Y = 3272.02666666666700000
+          Y = 3272.02666666666800000
         end
         item
           X = 2154.01587301587300000
@@ -4006,8 +4012,8 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectLabel.Font.Name = 'Tahoma'
       ScreenObject.ObjectLabel.Font.Style = []
       ScreenObject.ObjectLabel.OffSetX = 0
-      ScreenObject.ObjectLabel.OffSetY = 20
-      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectLabel.OffSetY = 40
+      ScreenObject.ObjectLabel.Visible = True
       ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectVertexLabel.Font.Color = clBlack
       ScreenObject.ObjectVertexLabel.Font.Height = -11
@@ -4020,15 +4026,15 @@ object PhastModel: TPhastModel
       ScreenObject.QuadtreeRefinementLevel = 0
       SelectedVertices = <>
     end>
-  Version = '4.3.0.74'
+  Version = '4.3.0.75'
   GuiSettings.FrontHeight = 133
   GuiSettings.Height = 800
   GuiSettings.FrontX = 720.44903719223370000
   GuiSettings.FrontY = 12.01085221106777000
   GuiSettings.Left = 269
-  GuiSettings.MagnificationFront = 0.07434846053689228
-  GuiSettings.MagnificationSide = 0.07434846053689228
-  GuiSettings.MagnificationTop = 0.07434846053689228
+  GuiSettings.MagnificationFront = 0.07434846053689229
+  GuiSettings.MagnificationSide = 0.07434846053689229
+  GuiSettings.MagnificationTop = 0.07434846053689229
   GuiSettings.SideWidth = 219
   GuiSettings.SideX = -18.58830187459252000
   GuiSettings.SideY = 2761.83220665430200000
@@ -5324,6 +5330,7 @@ object PhastModel: TPhastModel
   ContourFont.Name = 'Arial'
   ContourFont.Pitch = fpVariable
   ContourFont.Style = []
+  ShowContourLabels = False
   SfrStreamLinkPlot.StreamsToPlot = stpNone
   StrStreamLinkPlot.StreamsToPlot = stpNone
   SfrMf6StreamLinkPlot.StreamsToPlot = stpNone

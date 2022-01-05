@@ -368,7 +368,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             ExplicitWidth = 478
             inherited Panel: TPanel
               Width = 478
-              ExplicitTop = 169
               ExplicitWidth = 478
               inherited seNumber: TJvSpinEdit
                 OnChange = frameObservationsseNumberChange
@@ -407,14 +406,15 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 31
     object edObsName: TLabeledEdit
       Left = 6
       Top = 19
       Width = 278
       Height = 21
-      EditLabel.Width = 167
+      EditLabel.Width = 176
       EditLabel.Height = 13
-      EditLabel.Caption = 'Observation group name (obsnam)'
+      EditLabel.Caption = 'Observation location name (obsnam)'
       MaxLength = 40
       TabOrder = 0
       OnChange = edObsNameChange
