@@ -1362,6 +1362,9 @@ var
   AttribIndex: Integer;
   AnAttribute: TCsvAttribute;
   AttributeName: string;
+  Letters: Array of Char;
+  AChar: Char;
+  CharIndex: Integer;
   procedure InitializeAttributeObjects;
   begin
     FCsvAttributes.Clear;
@@ -1377,10 +1380,15 @@ var
     end;
 
     SetLength(FFieldTypes, FValidIndiciesCount);
-
-
   end;
 begin
+  SetLength(Letters, 26);
+  AChar := 'A';
+  for CharIndex := 0 to 25 do
+  begin
+    Letters[CharIndex] := AChar;
+    Inc(AChar);
+  end;
   Splitter := TStringList.Create;
   Warnings := TStringList.Create;
   try
@@ -1415,6 +1423,19 @@ begin
           for AttribIndex := 0 to Splitter.Count - 1 do
           begin
             AttributeName := FieldToVarName(Trim(Splitter[AttribIndex]));
+            If AttributeName = '' then
+            begin
+              if AttribIndex < 26 then
+              begin
+                AttributeName := 'Col' + Letters[AttribIndex];
+              end
+              else
+              begin
+                AttributeName := 'Col' + Letters[AttribIndex div 26]
+                  + Letters[AttribIndex mod 26];
+              end;
+            end;
+
             if FCsvDictionary.ContainsKey(AttributeName) then
             begin
               Beep;

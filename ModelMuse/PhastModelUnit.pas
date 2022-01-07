@@ -10449,7 +10449,9 @@ const
 //               Enhancement: Added new function GetValueFromLayer that allows
 //                a 2D data set to retrieve a value from a specific layer of a
 //                3D data set.
-
+//    '4.3.0.77' Bug fix: Fixed a bug that could cause an assertion failures
+//                when importing shapefiles data from CSV files, if one or more
+//                columns did not have column headers.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -10457,7 +10459,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.76';
+  IIModelVersion = '4.3.0.77';
 
 function IModelVersion: string;
 begin
@@ -15402,11 +15404,7 @@ end;
 
 procedure TPhastModel.AddModelProgramsToList(FileNames: TStringList);
 var
-//  ChildIndex: Integer;
-//  InputIndex: Integer;
-//  AChildModel: TChildModel;
   ModelFile: string;
-//  Index: Integer;
   procedure GetOldFileVersion;
   var
     Index: Integer;
@@ -15416,7 +15414,6 @@ var
       if ExtractFileName(FModelInputFiles[Index]) = ExtractFileName(ModelFile) then
       begin
         ModelFile := FModelInputFiles[Index];
-  //      FModelInputFiles.Delete(Index);
       end;
     end;
   end;
@@ -15424,7 +15421,7 @@ var
 begin
   case ModelSelection of
     msUndefined:
-      Assert(False);
+      Exit;
     msPhast:
       ModelFile := ProgramLocations.PhastLocation;
     msModflow:
