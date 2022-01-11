@@ -32,6 +32,8 @@ type
     Fx: double;
     Fy: double;
     FPestObsCollection: TPestObsCollection;
+    FMeasurementStdDeviationText: string;
+    FNaturalWeightText: string;
     procedure SetGroupName(const Value: string);
     procedure SetMeasured(const Value: double);
     procedure SetMeasurementStdDeviation(const Value: double);
@@ -70,6 +72,8 @@ type
     function GetTime: double;
     procedure SetTime(const Value: double);
     procedure Draw(const BitMap: TPersistent; const ZoomBox: TQrbwZoomBox2);
+    procedure SetMeasurementStdDeviationText(const Value: string);
+    procedure SetNaturalWeightText(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -102,6 +106,8 @@ type
     property OriginalOrder: Integer read FOriginalOrder write SetOriginalOrder;
     property ObjectName: string read GetObjectName write SetObjectName;
     property StoredTime: TRealStorage read FStoredTime write SetStoredTime;
+    property MeasurementStdDeviationText: string read FMeasurementStdDeviationText write SetMeasurementStdDeviationText;
+    property NaturalWeightText: string read FNaturalWeightText write SetNaturalWeightText;
     property Visible: Boolean read FVisible write SetVisible;
   end;
 
@@ -234,6 +240,8 @@ begin
     Time := ObsSource.Time;
     OriginalOrder := ObsSource.OriginalOrder;
     ObjectName := ObsSource.ObjectName;
+    MeasurementStdDeviationText := ObsSource.MeasurementStdDeviationText;
+    NaturalWeightText := ObsSource.NaturalWeightText;
     FScreenObject := ObsSource.ScreenObject;
   end
   else
@@ -472,6 +480,11 @@ begin
   StoredMeasurementStdDeviation.Value := Value;
 end;
 
+procedure TPestObsResult.SetMeasurementStdDeviationText(const Value: string);
+begin
+  FMeasurementStdDeviationText := Value;
+end;
+
 procedure TPestObsResult.SetModeled(const Value: double);
 begin
   StoredModeled.Value := Value;
@@ -485,6 +498,11 @@ end;
 procedure TPestObsResult.SetNaturalWeight(const Value: double);
 begin
   StoredNaturalWeight.Value := Value;
+end;
+
+procedure TPestObsResult.SetNaturalWeightText(const Value: string);
+begin
+  FNaturalWeightText := Value;
 end;
 
 procedure TPestObsResult.SetObjectName(const Value: string);
@@ -897,6 +915,7 @@ var
   TimeObs: ITimeObservationItem;
   AList: TList;
   Index: Integer;
+  AValue: Extended;
 begin
   GetExistingObservations;
   result := False;
@@ -930,8 +949,28 @@ begin
           Item.WeightedMeasured := FortranStrToFloat(Splitter[6]);
           Item.WeightedModeled := FortranStrToFloat(Splitter[7]);
           Item.WeightedResidual := FortranStrToFloat(Splitter[8]);
-          Item.MeasurementStdDeviation := FortranStrToFloat(Splitter[9]);
-          Item.NaturalWeight := FortranStrToFloat(Splitter[10]);
+          if TryFortranStrToFloat(Splitter[9], AValue) then
+          begin
+            Item.MeasurementStdDeviation := AValue;
+            Item.MeasurementStdDeviationText := '';
+          end
+          else
+          begin
+            Item.MeasurementStdDeviation := 0;
+            Item.MeasurementStdDeviationText := Splitter[9];
+          end;
+          if TryFortranStrToFloat(Splitter[10], AValue) then
+          begin
+            Item.NaturalWeight := AValue;
+            Item.NaturalWeightText := '';
+          end
+          else
+          begin
+            Item.NaturalWeight := 0;
+            Item.NaturalWeightText := Splitter[10];
+          end;
+//          Item.MeasurementStdDeviation := FortranStrToFloat(Splitter[9]);
+//          Item.NaturalWeight := FortranStrToFloat(Splitter[10]);
 //          Item.OriginalOrder := LineIndex-1;
 
           if FUsedObservations.TryGetValue(LowerCase(Item.Name), Obs) then

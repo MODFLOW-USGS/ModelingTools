@@ -2994,6 +2994,13 @@ begin
       Exit;
     end;
 
+    Extent := ACanvas.TextExtent('Explanation');
+    ACanvas.TextOut(Offset, YCoord, 'Explanation');
+    HeadObsRect.Bottom := HeadObsRect.Bottom + Extent.cy;
+    YCoord := YCoord + Extent.cy;
+    HeadObsRect.Right := Extent.cx;
+
+
     MaxSymbolSize := PhastModel.HeadObsResults.MaxSymbolSize;
 
     AColor := ACanvas.Brush.Color;
@@ -3010,7 +3017,8 @@ begin
     TextLeft := MaxSymbolSize+2*Offset;
     TextTop :=  YCoord + (MaxSymbolSize-Extent.cy) div 2;
     ACanvas.TextOut(TextLeft, TextTop, ResidString);
-    HeadObsRect.Right := TextLeft + Extent.cx;
+    HeadObsRect.Right := Max(HeadObsRect.Right, TextLeft + Extent.cx);
+//    HeadObsRect.Right := TextLeft + Extent.cx;
 
     YCoord := YCoord+MaxSymbolSize + Offset;
 
@@ -3083,24 +3091,17 @@ begin
       else
         Assert(False);
     end;
-//    if frmGoPhast.PhastModel.LgrUsed then
-//    begin
-//      for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
-//      begin
-//        AChild := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-//        ObsImported := ObsImported or (AChild.PestObsCollection.Count > 0);
-//        AChild.PestObsCollection.CalculateMaxValues(AChild);
-//        if MaxResid < AChild.PestObsCollection.MaxResidual then
-//        begin
-//          MaxResid := AChild.PestObsCollection.MaxResidual;
-//        end;
-//      end;
-//    end;
 
     if not ObsImported then
     begin
       Exit;
     end;
+
+    Extent := ACanvas.TextExtent('Explanation');
+    ACanvas.TextOut(Offset, YCoord, 'Explanation');
+    PestObsRect.Bottom := PestObsRect.Bottom + Extent.cy;
+    YCoord := YCoord + Extent.cy;
+    PestObsRect.Right := Extent.cx;
 
     MaxSymbolSize := PhastModel.PestObsCollection.MaxSymbolSize;
 
@@ -3118,7 +3119,8 @@ begin
     TextLeft := MaxSymbolSize+2*Offset;
     TextTop :=  YCoord + (MaxSymbolSize-Extent.cy) div 2;
     ACanvas.TextOut(TextLeft, TextTop, ResidString);
-    PestObsRect.Right := TextLeft + Extent.cx;
+    PestObsRect.Right := Max(PestObsRect.Right, TextLeft + Extent.cx);
+//    PestObsRect.Right := TextLeft + Extent.cx;
 
     YCoord := YCoord+MaxSymbolSize + Offset;
 

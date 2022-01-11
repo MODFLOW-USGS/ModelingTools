@@ -81,7 +81,7 @@ procedure TPestGridSpecificationWriter.WriteFile(const AFileName: string);
 var
   NameOfFile: string;
 begin
-  Assert(Model.ModelSelection <> msModflow2015);
+  Assert(not Model.DisvUsed);
   NameOfFile := FileName(AFileName);
   FInputFileName := NameOfFile;
   OpenFile(NameOfFile);

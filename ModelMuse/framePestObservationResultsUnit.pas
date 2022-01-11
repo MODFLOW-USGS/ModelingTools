@@ -792,8 +792,24 @@ begin
           rdgPestObs.RealValue[Ord(pocWtMeas), ItemIndex+1] := AnItem.WeightedMeasured;
           rdgPestObs.RealValue[Ord(pocWtMod), ItemIndex+1] := AnItem.WeightedModeled;
           rdgPestObs.RealValue[Ord(pocWtRes), ItemIndex+1] := AnItem.WeightedResidual;
-          rdgPestObs.RealValue[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviation;
-          rdgPestObs.RealValue[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeight;
+          if AnItem.MeasurementStdDeviationText = '' then
+          begin
+            rdgPestObs.RealValue[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviation;
+          end
+          else
+          begin
+            rdgPestObs.Cells[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviationText;
+          end;
+          if AnItem.NaturalWeightText = '' then
+          begin
+            rdgPestObs.RealValue[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeight;
+          end
+          else
+          begin
+            rdgPestObs.Cells[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeightText;
+          end;
+//          rdgPestObs.RealValue[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviation;
+//          rdgPestObs.RealValue[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeight;
         end;
       finally
         AList.Free;

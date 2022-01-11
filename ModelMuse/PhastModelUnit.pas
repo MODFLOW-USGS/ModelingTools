@@ -42008,7 +42008,7 @@ begin
           end;
           frmProgressMM.StepIt;
 
-          if ModelSelection <> msModflow2015 then
+          if not DisvUsed then
           begin
             PestGridSpecificationWriter := TPestGridSpecificationWriter.
               Create(self, etExport);

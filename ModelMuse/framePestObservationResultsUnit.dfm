@@ -33,7 +33,7 @@ object framePestObservationResults: TframePestObservationResults
     Top = 0
     Width = 555
     Height = 454
-    ActivePage = tabControls
+    ActivePage = tabValues
     Align = alClient
     TabOrder = 1
     OnChange = pgcObservationsChange
@@ -69,7 +69,7 @@ object framePestObservationResults: TframePestObservationResults
       end
       object flnmedHeadObsResults: TJvFilenameEdit
         Left = 3
-        Top = 27
+        Top = 22
         Width = 505
         Height = 21
         Filter = 'PEST Residuals file (*.res)|*.res'
@@ -588,7 +588,7 @@ object framePestObservationResults: TframePestObservationResults
             CheckMax = False
             CheckMin = False
             ComboUsed = False
-            Format = rcf4Real
+            Format = rcf4String
             LimitToList = False
             MaxLength = 0
             ParentButtonFont = False
@@ -612,7 +612,7 @@ object framePestObservationResults: TframePestObservationResults
             CheckMax = False
             CheckMin = False
             ComboUsed = False
-            Format = rcf4Real
+            Format = rcf4String
             LimitToList = False
             MaxLength = 0
             ParentButtonFont = False
@@ -721,7 +721,7 @@ object framePestObservationResults: TframePestObservationResults
         object lblGraphInstructions: TLabel
           Left = 279
           Top = 6
-          Width = 250
+          Width = 141
           Height = 13
           Caption = 'Click on a point to highlight it.'
           WordWrap = True
