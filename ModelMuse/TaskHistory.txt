@@ -366,7 +366,7 @@ object TTaskHistory
     end
     item
       Name = 'PEST'
-      Display = False
+      Display = True
     end
     item
       Name = 'SUTRA 3.0'
@@ -28748,5 +28748,17 @@ object TTaskHistory
       Date = 44568.000000000000000000
       Categories.Strings = (
         'Bug fix')
+    end
+    item
+      Date = 44569.000000000000000000
+    end
+    item
+      Date = 44570.000000000000000000
+    end
+    item
+      Date = 44571.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'PEST')
     end>
 end

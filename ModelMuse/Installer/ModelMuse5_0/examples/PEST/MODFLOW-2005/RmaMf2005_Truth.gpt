@@ -32,7 +32,7 @@ object PhastModel: TPhastModel
   ModflowGrid.DisplayLayer = 0
   ModflowGrid.ColumnPositions = (
     1696.20102745308300000
-    1796.04831547159200000
+    1796.04831547159100000
     1895.89560349010000000
     1995.74289150860900000
     2095.59017952711800000
@@ -43,7 +43,7 @@ object PhastModel: TPhastModel
     2594.82661961966200000
     2694.67390763817000000
     2794.52119565667900000
-    2894.36848367518800000
+    2894.36848367518700000
     2994.21577169369600000
     3094.06305971220500000
     3193.91034773071400000
@@ -63,7 +63,7 @@ object PhastModel: TPhastModel
     4591.77237998983700000
     4691.61966800834500000
     4791.46695602685600000
-    4891.31424404536200000
+    4891.31424404536100000
     4991.16153206387100000
     5091.00882008238000000
     5190.85610810088800000
@@ -88,7 +88,7 @@ object PhastModel: TPhastModel
     7870.61059020201000000
     7770.16350571286800000
     7669.71642122372500000
-    7569.26933673458200000
+    7569.26933673458300000
     7468.82225224543700000
     7368.37516775629800000
     7267.92808326715400000
@@ -98,19 +98,19 @@ object PhastModel: TPhastModel
     6866.13974531058400000
     6765.69266082144100000
     6665.24557633229800000
-    6564.79849184315400000
+    6564.79849184315500000
     6464.35140735401200000
     6363.90432286486900000
     6263.45723837572700000
     6163.01015388658700000
-    6062.56306939744100000
+    6062.56306939744300000
     5962.11598490830000000
     5861.66890041915900000
     5761.22181593001500000
     5660.77473144087200000
     5560.32764695172900000
     5459.88056246258800000
-    5359.43347797344300000
+    5359.43347797344400000
     5258.98639348430000000
     5158.53930899516000000
     5058.09222450601500000
@@ -118,7 +118,7 @@ object PhastModel: TPhastModel
     4857.19805552773100000
     4756.75097103858800000
     4656.30388654944700000
-    4555.85680206030400000
+    4555.85680206030300000
     4455.40971757116000000
     4354.96263308201700000
     4254.51554859287600000
@@ -265,7 +265,7 @@ object PhastModel: TPhastModel
   ModflowPackages.De4Package.HCLOSE.Value = 0.00100000000000000
   ModflowPackages.De4Package.IPRD4 = 1
   ModflowPackages.HobPackage.IsSelected = True
-  ModflowPackages.HobPackage.DryHead = -1000000.00000000000000000
+  ModflowPackages.HobPackage.DryHead = -999999.99999999990000000
   ModflowPackages.HfbPackage.IsSelected = False
   ModflowPackages.ModPath.IsSelected = True
   ModflowPackages.ModPath.MaximumSize = 0
@@ -742,6 +742,10 @@ object PhastModel: TPhastModel
           GUID = '{9FA70317-EFD7-4303-A6B1-AA33503C176D}'
         end>
     end>
+  FilesToArchive.Strings = (
+    
+      'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
+      'MODFLOW-2005\RmaMf2005_Truth.gpt')
   ModelOutputFiles.Strings = (
     
       'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
@@ -765,7 +769,7 @@ object PhastModel: TPhastModel
       'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
       'RmaMf2005_Truth.lst')
   ModelFileName = 
-    'D:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
+    'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
     'MODFLOW-2005\RmaMf2005_Truth.gpt'
   ModflowOptions.HDry = -2E20
   ModflowOptions.HNoFlow = -1E20
@@ -1397,7 +1401,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 2432.58254296710000000
-          Y = 4627.41409342944100000
+          Y = 4627.41409342944000000
         end
         item
           X = 2516.34662935162000000
@@ -1421,10 +1425,10 @@ object PhastModel: TPhastModel
         end
         item
           X = 2055.64415423675900000
-          Y = 6051.40356196628100000
+          Y = 6051.40356196628000000
         end
         item
-          X = 2023.63430693981800000
+          X = 2023.63430693981700000
           Y = 6247.95000751852500000
         end
         item
@@ -1460,7 +1464,7 @@ object PhastModel: TPhastModel
           Y = 8449.15053472316300000
         end
         item
-          X = 5332.91403403110200000
+          X = 5332.91403403110300000
           Y = 8438.68002392509700000
         end
         item
@@ -1472,7 +1476,7 @@ object PhastModel: TPhastModel
           Y = 8155.97623237734300000
         end
         item
-          X = 5647.02935797305300000
+          X = 5647.02935797305200000
           Y = 7894.21346242571800000
         end
         item
@@ -1481,14 +1485,14 @@ object PhastModel: TPhastModel
         end
         item
           X = 5762.20497675176800000
-          Y = 7464.92251970505300000
+          Y = 7464.92251970505200000
         end
         item
           X = 5950.67417111693800000
           Y = 7255.51230374375400000
         end
         item
-          X = 6065.84978989565300000
+          X = 6065.84978989565400000
           Y = 6909.98544740760700000
         end
         item
@@ -1497,7 +1501,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 6047.60118536188200000
-          Y = 6051.40356196628100000
+          Y = 6051.40356196628000000
         end
         item
           X = 6013.49723590533100000
@@ -1533,7 +1537,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 6170.55489787630200000
-          Y = 3779.30271878617500000
+          Y = 3779.30271878617600000
         end
         item
           X = 6288.72209116875100000
@@ -1564,7 +1568,7 @@ object PhastModel: TPhastModel
           Y = 3465.18739484422500000
         end
         item
-          X = 4809.38849412785300000
+          X = 4809.38849412785200000
           Y = 3465.18739484422500000
         end
         item
@@ -1605,11 +1609,11 @@ object PhastModel: TPhastModel
         end
         item
           X = 2484.93509695742400000
-          Y = 3234.83615728679600000
+          Y = 3234.83615728679700000
         end
         item
           X = 2149.87875141934500000
-          Y = 3140.60156010421100000
+          Y = 3140.60156010421200000
         end
         item
           X = 1919.52751386191500000
@@ -1624,7 +1628,7 @@ object PhastModel: TPhastModel
           Y = 3402.36433005583500000
         end
         item
-          X = 3721.91988825033100000
+          X = 3721.91988825033200000
           Y = 5886.65528977547100000
         end
         item
@@ -1652,11 +1656,11 @@ object PhastModel: TPhastModel
           Y = 5383.90520475834400000
         end
         item
-          X = 4034.77757454202200000
-          Y = 5190.42742507795600000
+          X = 4034.77757454202300000
+          Y = 5190.42742507795500000
         end
         item
-          X = 4050.84539289571200000
+          X = 4050.84539289571300000
           Y = 5051.79269481966700000
         end
         item
@@ -1696,7 +1700,7 @@ object PhastModel: TPhastModel
           Y = 5793.70096872106200000
         end
         item
-          X = 3721.91988825033100000
+          X = 3721.91988825033200000
           Y = 5886.65528977547100000
         end
         item
@@ -1708,11 +1712,11 @@ object PhastModel: TPhastModel
           Y = 6475.18893393709100000
         end
         item
-          X = 5277.84243081389400000
+          X = 5277.84243081389600000
           Y = 6560.97249308159000000
         end
         item
-          X = 5386.46619456033100000
+          X = 5386.46619456033200000
           Y = 6527.77452127644200000
         end
         item
@@ -1721,7 +1725,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 5397.35512931241900000
-          Y = 6345.05288446092200000
+          Y = 6345.05288446092000000
         end
         item
           X = 5302.94009749858600000
@@ -1740,7 +1744,7 @@ object PhastModel: TPhastModel
           Y = 5921.84513988892400000
         end
         item
-          X = 5149.83105153325400000
+          X = 5149.83105153325500000
           Y = 5756.91761596096100000
         end
         item
@@ -1749,7 +1753,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 4871.63204780613200000
-          Y = 5706.45669881713900000
+          Y = 5706.45669881713800000
         end
         item
           X = 4800.19001248146100000
@@ -1903,11 +1907,11 @@ object PhastModel: TPhastModel
           Y = 3456.93205441667000000
         end
         item
-          X = 6055.30860132885900000
+          X = 6055.30860132886000000
           Y = 3381.88914409489000000
         end
         item
-          X = 6317.95878745509800000
+          X = 6317.95878745509900000
           Y = 3344.36768893400000000
         end>
       ScreenObject.Name = 'Southern_Top_Elevation'
@@ -2328,11 +2332,11 @@ object PhastModel: TPhastModel
       Points = <
         item
           X = 4490.96511263409200000
-          Y = 7263.09118213060600000
+          Y = 7263.09118213060500000
         end
         item
-          X = 4594.94961495830100000
-          Y = 7313.00374324622300000
+          X = 4594.94961495830000000
+          Y = 7313.00374324622200000
         end
         item
           X = 4690.61535709657300000
@@ -2348,7 +2352,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 4490.96511263409200000
-          Y = 7263.09118213060600000
+          Y = 7263.09118213060500000
         end>
       ScreenObject.Name = 'Disposal_Pond'
       ScreenObject.CellSize = 1.00000000000000000
@@ -2733,7 +2737,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 5884.35744377848800000
-          Y = 3432.30211650676500000
+          Y = 3432.30211650676400000
         end
         item
           X = 6291.97669288938400000
@@ -2860,7 +2864,7 @@ object PhastModel: TPhastModel
       LowerElevationFormula = 'Aquifer_Bottom'
       Points = <
         item
-          X = 3721.91988825033100000
+          X = 3721.91988825033200000
           Y = 5886.65528977547100000
         end
         item
@@ -2888,11 +2892,11 @@ object PhastModel: TPhastModel
           Y = 5383.90520475834400000
         end
         item
-          X = 4034.77757454202200000
-          Y = 5190.42742507795600000
+          X = 4034.77757454202300000
+          Y = 5190.42742507795500000
         end
         item
-          X = 4050.84539289571200000
+          X = 4050.84539289571300000
           Y = 5051.79269481966700000
         end
         item
@@ -2932,7 +2936,7 @@ object PhastModel: TPhastModel
           Y = 5793.70096872106200000
         end
         item
-          X = 3721.91988825033100000
+          X = 3721.91988825033200000
           Y = 5886.65528977547100000
         end
         item
@@ -2944,11 +2948,11 @@ object PhastModel: TPhastModel
           Y = 6475.18893393709100000
         end
         item
-          X = 5277.84243081389400000
+          X = 5277.84243081389600000
           Y = 6560.97249308159000000
         end
         item
-          X = 5386.46619456033100000
+          X = 5386.46619456033200000
           Y = 6527.77452127644200000
         end
         item
@@ -2957,7 +2961,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 5397.35512931241900000
-          Y = 6345.05288446092200000
+          Y = 6345.05288446092000000
         end
         item
           X = 5302.94009749858600000
@@ -2976,7 +2980,7 @@ object PhastModel: TPhastModel
           Y = 5921.84513988892400000
         end
         item
-          X = 5149.83105153325400000
+          X = 5149.83105153325500000
           Y = 5756.91761596096100000
         end
         item
@@ -2985,7 +2989,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 4871.63204780613200000
-          Y = 5706.45669881713900000
+          Y = 5706.45669881713800000
         end
         item
           X = 4800.19001248146100000
@@ -3107,7 +3111,7 @@ object PhastModel: TPhastModel
       Points = <
         item
           X = 2607.98412698412700000
-          Y = 5419.64571428571300000
+          Y = 5419.64571428571100000
         end>
       ScreenObject.Name = 'Object57'
       ScreenObject.CellSize = 1.00000000000000000
@@ -4694,7 +4698,7 @@ object PhastModel: TPhastModel
       LowerElevationFormula = 'Aquifer_Bottom'
       Points = <
         item
-          X = 4563.53968253968100000
+          X = 4563.53968253968000000
           Y = 6030.75682539682400000
         end>
       ScreenObject.Name = 'Head_Obs5'
@@ -5162,7 +5166,7 @@ object PhastModel: TPhastModel
           Y = 3132.34412698412500000
         end
         item
-          X = 2293.69841269841300000
+          X = 2293.69841269841200000
           Y = 3464.09015873015700000
         end
         item
@@ -5179,7 +5183,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 5681.00000000000000000
-          Y = 3149.80444444444500000
+          Y = 3149.80444444444400000
         end
         item
           X = 5209.57142857142800000
@@ -5191,7 +5195,7 @@ object PhastModel: TPhastModel
         end
         item
           X = 3341.31746031746000000
-          Y = 3272.02666666666700000
+          Y = 3272.02666666666800000
         end
         item
           X = 2154.01587301587300000
@@ -5303,23 +5307,23 @@ object PhastModel: TPhastModel
       MixtureFormulas.Strings = (
         '')
     end>
-  Version = '4.3.0.74'
+  Version = '4.3.0.76'
   GuiSettings.FrontHeight = 133
   GuiSettings.Height = 800
-  GuiSettings.FrontX = 1242.00233882370800000
-  GuiSettings.FrontY = 5.33600173656086700
+  GuiSettings.FrontX = 1248.65446362431200000
+  GuiSettings.FrontY = 6.33382045665169400
   GuiSettings.Left = 549
-  GuiSettings.MagnificationFront = 0.07516395362192991
-  GuiSettings.MagnificationSide = 0.07516395362192991
-  GuiSettings.MagnificationTop = 0.07516395362192991
+  GuiSettings.MagnificationFront = 0.07516395362192992
+  GuiSettings.MagnificationSide = 0.07516395362192992
+  GuiSettings.MagnificationTop = 0.07516395362192992
   GuiSettings.SideWidth = 219
-  GuiSettings.SideX = -24.93116610619404000
-  GuiSettings.SideY = 2817.98919790212100000
+  GuiSettings.SideX = -23.93334738610324000
+  GuiSettings.SideY = 2857.90194670575300000
   GuiSettings.Top = 3
   GuiSettings.TopViewHeight = 502
   GuiSettings.TopViewWidth = 718
-  GuiSettings.TopX = 1242.00233882370800000
-  GuiSettings.TopY = 2817.98919790212100000
+  GuiSettings.TopX = 1248.65446362431300000
+  GuiSettings.TopY = 2857.90194670575300000
   GuiSettings.Width = 963
   GuiSettings.WindowState = wsNormal
   GuiSettings.TopHorizontalDigits = 0
@@ -5340,7 +5344,257 @@ object PhastModel: TPhastModel
   GuiSettings.SideVerticalDigits = 0
   GuiSettings.SideVerticalPrecision = 5
   GuiSettings.SideVerticalDesiredSpacing = 60
-  DisplaySettings = <>
+  DisplaySettings = <
+    item
+      ViewToDisplay = vdTop
+      Title.Font.Charset = ANSI_CHARSET
+      Title.Font.Color = clBlack
+      Title.Font.Height = -16
+      Title.Font.Name = 'Arial'
+      Title.Font.Pitch = fpVariable
+      Title.Font.Style = []
+      Title.Top = 0
+      Title.Bottom = 0
+      Title.Left = 0
+      Title.Right = 0
+      AdditionalText = <>
+      GridDisplayChoice = gldcActiveEdge
+      ShowColoredGridLines = False
+      HorizontalRuler.RulerPrecision = 5
+      HorizontalRuler.RulerDigits = 0
+      HorizontalRuler.Visible = False
+      VerticalRuler.RulerPrecision = 5
+      VerticalRuler.RulerDigits = 0
+      VerticalRuler.Visible = False
+      ModpathEndPointSettings.ColorParameters.ColorScheme = 0
+      ModpathEndPointSettings.ColorParameters.ColorExponent = 0.60000000000000000
+      ModpathEndPointSettings.ColorLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.ShowChoice = escAll
+      ModpathEndPointSettings.DisplayLimits.LimitToCurrentIn2D = False
+      ModpathEndPointSettings.DisplayLimits.StartColumnLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.StartColumnLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartColumnLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartRowLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.StartRowLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartRowLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartLayerLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.StartLayerLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartLayerLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartZoneLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.StartZoneLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartZoneLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.ReleaseTimeLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndColumnLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndColumnLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndColumnLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndRowLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndRowLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndRowLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndLayerLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndLayerLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndLayerLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndZoneLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndZoneLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndZoneLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.TrackingTimeLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.ParticleGroupLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.ParticleGroupLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.ParticleGroupLimits.EndLimit = 0
+      ModpathEndPointSettings.EndPointSize = 4
+      ModpathPathLineSettings.ColorParameters.ColorScheme = 0
+      ModpathPathLineSettings.ColorParameters.ColorExponent = 0.60000000000000000
+      ModpathPathLineSettings.DisplayLimits.ShowChoice = scAll
+      ModpathPathLineSettings.DisplayLimits.ColumnLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.ColumnLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.ColumnLimits.EndLimit = 0
+      ModpathPathLineSettings.DisplayLimits.RowLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.RowLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.RowLimits.EndLimit = 0
+      ModpathPathLineSettings.DisplayLimits.LayerLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.LayerLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.LayerLimits.EndLimit = 0
+      ModpathPathLineSettings.DisplayLimits.TimeLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.ParticleGroupLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.ParticleGroupLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.ParticleGroupLimits.EndLimit = 0
+      ModpathPathLineSettings.DisplayLimits.LineNumberLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.LineNumberLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.LineNumberLimits.EndLimit = 0
+      ModpathPathLineSettings.ColorLimits.UseLimit = False
+      ModpathTimeSeriesSettings.ColorParameters.ColorScheme = 0
+      ModpathTimeSeriesSettings.ColorParameters.ColorExponent = 0.60000000000000000
+      ModpathTimeSeriesSettings.ColorLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.ShowChoice = scAll
+      ModpathTimeSeriesSettings.DisplayLimits.ColumnLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.ColumnLimits.StartLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.ColumnLimits.EndLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.RowLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.RowLimits.StartLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.RowLimits.EndLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.LayerLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.LayerLimits.StartLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.LayerLimits.EndLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.ParticleGroupLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.ParticleGroupLimits.StartLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.ParticleGroupLimits.EndLimit = 0
+      ModpathTimeSeriesSettings.TimeSeriesSize = 4
+      ColorDisplaySettings.DataSetName = 'Kx'
+      ColorDisplaySettings.Legend.ColorParameters.ColorScheme = 0
+      ColorDisplaySettings.Legend.ColorParameters.ColorExponent = 0.60000000000000000
+      ColorDisplaySettings.Legend.ColoringLimits.ActiveOnly = True
+      ColorDisplaySettings.Legend.ColoringLimits.LowerLimit.BooleanLimitValue = False
+      ColorDisplaySettings.Legend.ColoringLimits.LowerLimit.DataType = rdtDouble
+      ColorDisplaySettings.Legend.ColoringLimits.LowerLimit.IntegerLimitValue = 0
+      ColorDisplaySettings.Legend.ColoringLimits.LowerLimit.UseLimit = False
+      ColorDisplaySettings.Legend.ColoringLimits.UpperLimit.BooleanLimitValue = True
+      ColorDisplaySettings.Legend.ColoringLimits.UpperLimit.DataType = rdtDouble
+      ColorDisplaySettings.Legend.ColoringLimits.UpperLimit.IntegerLimitValue = 0
+      ColorDisplaySettings.Legend.ColoringLimits.UpperLimit.UseLimit = False
+      ColorDisplaySettings.Legend.ColoringLimits.LogTransform = False
+      ColorDisplaySettings.Legend.ColoringLimits.StoredEpsilon.Value = 0.00000100000000000
+      ColorDisplaySettings.Legend.LegendType = ltColor
+      ColorDisplaySettings.Legend.Values.DataType = rdtDouble
+      ColorDisplaySettings.Legend.Values.Count = 6
+      ColorDisplaySettings.Legend.Values.Values = (
+        6
+        0.00001000000000000
+        0.00005000000000000
+        0.00010000000000000
+        0.00010000000000000
+        0.00015000000000000
+        0.00019000000000000)
+      ColorDisplaySettings.Legend.ValueAssignmentMethod = vamManual
+      ColorDisplaySettings.Legend.EdgeDataToPlot = 0
+      ColorDisplaySettings.Legend.Caption = 'Hydraulic Conductivity'
+      ColorDisplaySettings.LegendVisible = True
+      ColorDisplaySettings.Limits.ActiveOnly = True
+      ColorDisplaySettings.Limits.LowerLimit.BooleanLimitValue = False
+      ColorDisplaySettings.Limits.LowerLimit.DataType = rdtDouble
+      ColorDisplaySettings.Limits.LowerLimit.IntegerLimitValue = 0
+      ColorDisplaySettings.Limits.LowerLimit.UseLimit = False
+      ColorDisplaySettings.Limits.UpperLimit.BooleanLimitValue = True
+      ColorDisplaySettings.Limits.UpperLimit.DataType = rdtDouble
+      ColorDisplaySettings.Limits.UpperLimit.IntegerLimitValue = 0
+      ColorDisplaySettings.Limits.UpperLimit.UseLimit = False
+      ColorDisplaySettings.Limits.LogTransform = False
+      ColorDisplaySettings.Limits.StoredEpsilon.Value = 0.00000100000000000
+      ColorDisplaySettings.ContourAlgorithm = caSimple
+      ColorDisplaySettings.Caption = 'Hydraulic Conductivity'
+      ColorDisplaySettings.ShadeInactiveArea = False
+      ContourDisplaySettings.Legend.ColorParameters.ColorScheme = 0
+      ContourDisplaySettings.Legend.ColorParameters.ColorExponent = 0.60000000000000000
+      ContourDisplaySettings.Legend.ColoringLimits.LowerLimit.BooleanLimitValue = False
+      ContourDisplaySettings.Legend.ColoringLimits.LowerLimit.DataType = rdtDouble
+      ContourDisplaySettings.Legend.ColoringLimits.LowerLimit.IntegerLimitValue = 0
+      ContourDisplaySettings.Legend.ColoringLimits.LowerLimit.UseLimit = False
+      ContourDisplaySettings.Legend.ColoringLimits.UpperLimit.BooleanLimitValue = True
+      ContourDisplaySettings.Legend.ColoringLimits.UpperLimit.DataType = rdtDouble
+      ContourDisplaySettings.Legend.ColoringLimits.UpperLimit.IntegerLimitValue = 0
+      ContourDisplaySettings.Legend.ColoringLimits.UpperLimit.UseLimit = False
+      ContourDisplaySettings.Legend.ColoringLimits.LogTransform = False
+      ContourDisplaySettings.Legend.ColoringLimits.StoredEpsilon.Value = 0.00000100000000000
+      ContourDisplaySettings.Legend.LegendType = ltColor
+      ContourDisplaySettings.Legend.Values.DataType = rdtDouble
+      ContourDisplaySettings.Legend.Values.Count = 0
+      ContourDisplaySettings.Legend.Values.Values = (
+        0)
+      ContourDisplaySettings.Legend.ValueAssignmentMethod = vamNoLegend
+      ContourDisplaySettings.Legend.EdgeDataToPlot = 0
+      ContourDisplaySettings.LegendVisible = False
+      ContourDisplaySettings.Limits.LowerLimit.BooleanLimitValue = False
+      ContourDisplaySettings.Limits.LowerLimit.DataType = rdtDouble
+      ContourDisplaySettings.Limits.LowerLimit.IntegerLimitValue = 0
+      ContourDisplaySettings.Limits.LowerLimit.UseLimit = False
+      ContourDisplaySettings.Limits.UpperLimit.BooleanLimitValue = True
+      ContourDisplaySettings.Limits.UpperLimit.DataType = rdtDouble
+      ContourDisplaySettings.Limits.UpperLimit.IntegerLimitValue = 0
+      ContourDisplaySettings.Limits.UpperLimit.UseLimit = False
+      ContourDisplaySettings.Limits.LogTransform = False
+      ContourDisplaySettings.Limits.StoredEpsilon.Value = 0.00000100000000000
+      ContourDisplaySettings.ContourAlgorithm = caSimple
+      ContourDisplaySettings.Contours.AutomaticColors = True
+      ContourDisplaySettings.Contours.Count = 0
+      ContourDisplaySettings.Contours.SpecifyContours = False
+      ContourDisplaySettings.Contours.LogTransform = False
+      EdgeDisplaySettings.Limits.LowerLimit.BooleanLimitValue = False
+      EdgeDisplaySettings.Limits.LowerLimit.DataType = rdtDouble
+      EdgeDisplaySettings.Limits.LowerLimit.IntegerLimitValue = 0
+      EdgeDisplaySettings.Limits.LowerLimit.UseLimit = False
+      EdgeDisplaySettings.Limits.UpperLimit.BooleanLimitValue = False
+      EdgeDisplaySettings.Limits.UpperLimit.DataType = rdtDouble
+      EdgeDisplaySettings.Limits.UpperLimit.IntegerLimitValue = 0
+      EdgeDisplaySettings.Limits.UpperLimit.UseLimit = False
+      EdgeDisplaySettings.Limits.LogTransform = False
+      EdgeDisplaySettings.Limits.StoredEpsilon.Value = 0.00000100000000000
+      EdgeDisplaySettings.DataToPlot = 0
+      EdgeDisplaySettings.Visible = False
+      Magnification = 0.07516395362192992
+      ReferencePointX = 1242.00233882370800000
+      ReferencePointY = 8778.29301924463000000
+      VerticalExaggeration = 20.00000000000000000
+      Name = 'Kx'
+      ImageWidth = 400
+      ImageHeight = 448
+      ContourFont.Charset = ANSI_CHARSET
+      ContourFont.Color = clBlack
+      ContourFont.Height = -17
+      ContourFont.Name = 'Arial'
+      ContourFont.Pitch = fpVariable
+      ContourFont.Style = []
+      LabelContours = True
+      SfrStreamLinkPlot.StreamsToPlot = stpNone
+      SutraSettings.NodeFont.Charset = DEFAULT_CHARSET
+      SutraSettings.NodeFont.Color = clWindowText
+      SutraSettings.NodeFont.Height = -13
+      SutraSettings.NodeFont.Name = 'Tahoma'
+      SutraSettings.NodeFont.Style = []
+      SutraSettings.ElementFont.Charset = DEFAULT_CHARSET
+      SutraSettings.ElementFont.Color = clWindowText
+      SutraSettings.ElementFont.Height = -13
+      SutraSettings.ElementFont.Name = 'Tahoma'
+      SutraSettings.ElementFont.Style = []
+      SutraSettings.ShowNodeNumbers = False
+      SutraSettings.ShowElementNumbers = False
+      SutraSettings.ElementDrawingChoice = dcAll
+      SutraSettings.NodeDrawingChoice = dcEdge
+      SutraSettings.DrawElementCenters = True
+      MaxVectors.Visible = False
+      MaxVectors.StoredScale.Value = 0.00000000000000000
+      MaxVectors.StoredScale3D.Value = 0.00000000000000000
+      MaxVectors.Color = clRed
+      MaxVectors.MinimumSeparation2D = 0
+      MaxVectors.StoredMinSeparationHorizontal3D.Value = 0.00000000000000000
+      MaxVectors.StoredMinSeparationVertical3D.Value = 0.00000000000000000
+      MaxVectors.LogScaled = False
+      MaxVectors.VectorType = pvtPermeability
+      MaxVectors.VectorDirection = pvdMax
+      MidVectors.Visible = False
+      MidVectors.StoredScale.Value = 0.00000000000000000
+      MidVectors.StoredScale3D.Value = 0.00000000000000000
+      MidVectors.Color = clGreen
+      MidVectors.MinimumSeparation2D = 0
+      MidVectors.StoredMinSeparationHorizontal3D.Value = 0.00000000000000000
+      MidVectors.StoredMinSeparationVertical3D.Value = 0.00000000000000000
+      MidVectors.LogScaled = False
+      MidVectors.VectorType = pvtPermeability
+      MidVectors.VectorDirection = pvdMid
+      MinVectors.Visible = False
+      MinVectors.StoredScale.Value = 0.00000000000000000
+      MinVectors.StoredScale3D.Value = 0.00000000000000000
+      MinVectors.Color = clBlue
+      MinVectors.MinimumSeparation2D = 0
+      MinVectors.StoredMinSeparationHorizontal3D.Value = 0.00000000000000000
+      MinVectors.StoredMinSeparationVertical3D.Value = 0.00000000000000000
+      MinVectors.LogScaled = False
+      MinVectors.VectorType = pvtPermeability
+      MinVectors.VectorDirection = pvdMin
+      VelocityVectors.SelectedItem = -1
+      VelocityVectors = <>
+      ShowHeadObsLegend = True
+      CrossSectionColors = <>
+      CrossSectionLayersToUse = <>
+      ShowPilotPoints = False
+    end>
   SaveDataSetValues = sdsvNever
   ModflowSteadyParameters = <>
   LayerStructure = <

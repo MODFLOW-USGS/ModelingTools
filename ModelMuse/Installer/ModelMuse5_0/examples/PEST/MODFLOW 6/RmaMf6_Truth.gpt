@@ -32991,7 +32991,7 @@ object Model: TPhastModel
     end
     item
       X = 2793.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1822
       NodeNumbers = <
         item
@@ -33009,7 +33009,7 @@ object Model: TPhastModel
     end
     item
       X = 2818.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1823
       NodeNumbers = <
         item
@@ -33027,7 +33027,7 @@ object Model: TPhastModel
     end
     item
       X = 2843.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1824
       NodeNumbers = <
         item
@@ -33045,7 +33045,7 @@ object Model: TPhastModel
     end
     item
       X = 2868.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1825
       NodeNumbers = <
         item
@@ -33279,7 +33279,7 @@ object Model: TPhastModel
     end
     item
       X = 2893.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1838
       NodeNumbers = <
         item
@@ -33297,7 +33297,7 @@ object Model: TPhastModel
     end
     item
       X = 2918.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1839
       NodeNumbers = <
         item
@@ -33315,7 +33315,7 @@ object Model: TPhastModel
     end
     item
       X = 2943.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1840
       NodeNumbers = <
         item
@@ -33333,7 +33333,7 @@ object Model: TPhastModel
     end
     item
       X = 2968.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1841
       NodeNumbers = <
         item
@@ -33567,7 +33567,7 @@ object Model: TPhastModel
     end
     item
       X = 2993.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1854
       NodeNumbers = <
         item
@@ -33585,7 +33585,7 @@ object Model: TPhastModel
     end
     item
       X = 3018.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1855
       NodeNumbers = <
         item
@@ -33603,7 +33603,7 @@ object Model: TPhastModel
     end
     item
       X = 3043.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1856
       NodeNumbers = <
         item
@@ -33621,7 +33621,7 @@ object Model: TPhastModel
     end
     item
       X = 3068.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1857
       NodeNumbers = <
         item
@@ -33855,7 +33855,7 @@ object Model: TPhastModel
     end
     item
       X = 3093.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1870
       NodeNumbers = <
         item
@@ -33873,7 +33873,7 @@ object Model: TPhastModel
     end
     item
       X = 3118.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1871
       NodeNumbers = <
         item
@@ -33891,7 +33891,7 @@ object Model: TPhastModel
     end
     item
       X = 3143.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1872
       NodeNumbers = <
         item
@@ -33909,7 +33909,7 @@ object Model: TPhastModel
     end
     item
       X = 3168.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1873
       NodeNumbers = <
         item
@@ -34143,7 +34143,7 @@ object Model: TPhastModel
     end
     item
       X = 3193.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1886
       NodeNumbers = <
         item
@@ -34161,7 +34161,7 @@ object Model: TPhastModel
     end
     item
       X = 3218.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1887
       NodeNumbers = <
         item
@@ -34179,7 +34179,7 @@ object Model: TPhastModel
     end
     item
       X = 3243.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1888
       NodeNumbers = <
         item
@@ -34197,7 +34197,7 @@ object Model: TPhastModel
     end
     item
       X = 3268.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1889
       NodeNumbers = <
         item
@@ -34431,7 +34431,7 @@ object Model: TPhastModel
     end
     item
       X = 3293.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1902
       NodeNumbers = <
         item
@@ -34449,7 +34449,7 @@ object Model: TPhastModel
     end
     item
       X = 3318.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1903
       NodeNumbers = <
         item
@@ -34467,7 +34467,7 @@ object Model: TPhastModel
     end
     item
       X = 3343.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1904
       NodeNumbers = <
         item
@@ -34485,7 +34485,7 @@ object Model: TPhastModel
     end
     item
       X = 3368.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1905
       NodeNumbers = <
         item
@@ -34719,7 +34719,7 @@ object Model: TPhastModel
     end
     item
       X = 3393.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1918
       NodeNumbers = <
         item
@@ -34737,7 +34737,7 @@ object Model: TPhastModel
     end
     item
       X = 3418.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1919
       NodeNumbers = <
         item
@@ -34755,7 +34755,7 @@ object Model: TPhastModel
     end
     item
       X = 3443.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1920
       NodeNumbers = <
         item
@@ -34773,7 +34773,7 @@ object Model: TPhastModel
     end
     item
       X = 3468.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1921
       NodeNumbers = <
         item
@@ -35007,7 +35007,7 @@ object Model: TPhastModel
     end
     item
       X = 3493.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1934
       NodeNumbers = <
         item
@@ -35025,7 +35025,7 @@ object Model: TPhastModel
     end
     item
       X = 3518.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1935
       NodeNumbers = <
         item
@@ -35043,7 +35043,7 @@ object Model: TPhastModel
     end
     item
       X = 3543.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1936
       NodeNumbers = <
         item
@@ -35061,7 +35061,7 @@ object Model: TPhastModel
     end
     item
       X = 3568.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1937
       NodeNumbers = <
         item
@@ -35295,7 +35295,7 @@ object Model: TPhastModel
     end
     item
       X = 3593.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1950
       NodeNumbers = <
         item
@@ -35313,7 +35313,7 @@ object Model: TPhastModel
     end
     item
       X = 3618.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1951
       NodeNumbers = <
         item
@@ -35331,7 +35331,7 @@ object Model: TPhastModel
     end
     item
       X = 3643.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1952
       NodeNumbers = <
         item
@@ -35349,7 +35349,7 @@ object Model: TPhastModel
     end
     item
       X = 3668.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1953
       NodeNumbers = <
         item
@@ -35583,7 +35583,7 @@ object Model: TPhastModel
     end
     item
       X = 3693.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1966
       NodeNumbers = <
         item
@@ -35601,7 +35601,7 @@ object Model: TPhastModel
     end
     item
       X = 3718.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1967
       NodeNumbers = <
         item
@@ -35619,7 +35619,7 @@ object Model: TPhastModel
     end
     item
       X = 3743.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1968
       NodeNumbers = <
         item
@@ -35637,7 +35637,7 @@ object Model: TPhastModel
     end
     item
       X = 3768.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1969
       NodeNumbers = <
         item
@@ -35871,7 +35871,7 @@ object Model: TPhastModel
     end
     item
       X = 3793.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1982
       NodeNumbers = <
         item
@@ -35889,7 +35889,7 @@ object Model: TPhastModel
     end
     item
       X = 3818.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1983
       NodeNumbers = <
         item
@@ -35907,7 +35907,7 @@ object Model: TPhastModel
     end
     item
       X = 3843.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1984
       NodeNumbers = <
         item
@@ -35925,7 +35925,7 @@ object Model: TPhastModel
     end
     item
       X = 3868.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1985
       NodeNumbers = <
         item
@@ -36159,7 +36159,7 @@ object Model: TPhastModel
     end
     item
       X = 3893.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1998
       NodeNumbers = <
         item
@@ -36177,7 +36177,7 @@ object Model: TPhastModel
     end
     item
       X = 3918.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 1999
       NodeNumbers = <
         item
@@ -36195,7 +36195,7 @@ object Model: TPhastModel
     end
     item
       X = 3943.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2000
       NodeNumbers = <
         item
@@ -36213,7 +36213,7 @@ object Model: TPhastModel
     end
     item
       X = 3968.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2001
       NodeNumbers = <
         item
@@ -36447,7 +36447,7 @@ object Model: TPhastModel
     end
     item
       X = 3993.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2014
       NodeNumbers = <
         item
@@ -36465,7 +36465,7 @@ object Model: TPhastModel
     end
     item
       X = 4018.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2015
       NodeNumbers = <
         item
@@ -36483,7 +36483,7 @@ object Model: TPhastModel
     end
     item
       X = 4043.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2016
       NodeNumbers = <
         item
@@ -36501,7 +36501,7 @@ object Model: TPhastModel
     end
     item
       X = 4068.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2017
       NodeNumbers = <
         item
@@ -36735,7 +36735,7 @@ object Model: TPhastModel
     end
     item
       X = 4093.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2030
       NodeNumbers = <
         item
@@ -36753,7 +36753,7 @@ object Model: TPhastModel
     end
     item
       X = 4118.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2031
       NodeNumbers = <
         item
@@ -36771,7 +36771,7 @@ object Model: TPhastModel
     end
     item
       X = 4143.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2032
       NodeNumbers = <
         item
@@ -36789,7 +36789,7 @@ object Model: TPhastModel
     end
     item
       X = 4168.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2033
       NodeNumbers = <
         item
@@ -37023,7 +37023,7 @@ object Model: TPhastModel
     end
     item
       X = 4193.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2046
       NodeNumbers = <
         item
@@ -37041,7 +37041,7 @@ object Model: TPhastModel
     end
     item
       X = 4218.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2047
       NodeNumbers = <
         item
@@ -37059,7 +37059,7 @@ object Model: TPhastModel
     end
     item
       X = 4243.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2048
       NodeNumbers = <
         item
@@ -37077,7 +37077,7 @@ object Model: TPhastModel
     end
     item
       X = 4268.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2049
       NodeNumbers = <
         item
@@ -37311,7 +37311,7 @@ object Model: TPhastModel
     end
     item
       X = 4293.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2062
       NodeNumbers = <
         item
@@ -37329,7 +37329,7 @@ object Model: TPhastModel
     end
     item
       X = 4318.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2063
       NodeNumbers = <
         item
@@ -37347,7 +37347,7 @@ object Model: TPhastModel
     end
     item
       X = 4343.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2064
       NodeNumbers = <
         item
@@ -37365,7 +37365,7 @@ object Model: TPhastModel
     end
     item
       X = 4368.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2065
       NodeNumbers = <
         item
@@ -37599,7 +37599,7 @@ object Model: TPhastModel
     end
     item
       X = 4393.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2078
       NodeNumbers = <
         item
@@ -37617,7 +37617,7 @@ object Model: TPhastModel
     end
     item
       X = 4418.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2079
       NodeNumbers = <
         item
@@ -37635,7 +37635,7 @@ object Model: TPhastModel
     end
     item
       X = 4443.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2080
       NodeNumbers = <
         item
@@ -37653,7 +37653,7 @@ object Model: TPhastModel
     end
     item
       X = 4468.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2081
       NodeNumbers = <
         item
@@ -37887,7 +37887,7 @@ object Model: TPhastModel
     end
     item
       X = 4493.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2094
       NodeNumbers = <
         item
@@ -37905,7 +37905,7 @@ object Model: TPhastModel
     end
     item
       X = 4518.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2095
       NodeNumbers = <
         item
@@ -37923,7 +37923,7 @@ object Model: TPhastModel
     end
     item
       X = 4543.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2096
       NodeNumbers = <
         item
@@ -37941,7 +37941,7 @@ object Model: TPhastModel
     end
     item
       X = 4568.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2097
       NodeNumbers = <
         item
@@ -38175,7 +38175,7 @@ object Model: TPhastModel
     end
     item
       X = 4593.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2110
       NodeNumbers = <
         item
@@ -38193,7 +38193,7 @@ object Model: TPhastModel
     end
     item
       X = 4618.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2111
       NodeNumbers = <
         item
@@ -38211,7 +38211,7 @@ object Model: TPhastModel
     end
     item
       X = 4643.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2112
       NodeNumbers = <
         item
@@ -38229,7 +38229,7 @@ object Model: TPhastModel
     end
     item
       X = 4668.50000000000000000
-      Y = 4696.43142857143000000
+      Y = 4696.43142857143100000
       ElementNumber = 2113
       NodeNumbers = <
         item
@@ -149122,10 +149122,10 @@ object Model: TPhastModel
     item
       Count = 6191
     end>
-  DisvGrid.CrossSection.StartX = 1211.00000000000000000
-  DisvGrid.CrossSection.EndX = 6851.00000000000000000
-  DisvGrid.CrossSection.StartY = 5733.93142857142700000
-  DisvGrid.CrossSection.EndY = 5733.93142857142700000
+  DisvGrid.CrossSection.StartX = 1053.85714285714300000
+  DisvGrid.CrossSection.EndX = 6693.85714285714300000
+  DisvGrid.CrossSection.StartY = 1910.12190476190400000
+  DisvGrid.CrossSection.EndY = 1910.12190476190400000
   DisvGrid.CrossSection.Color = clPurple
   Mf6GridType = mgtLayered
   PhastGrid.ColumnCount = -1
@@ -149844,8 +149844,12 @@ object Model: TPhastModel
   ModflowPackages.CSubPackage.OutputTypes = []
   ModflowPackages.CSubPackage.Interbeds = <>
   ModflowPackages.CSubPackage.WriteConvergenceData = True
+  FilesToArchive.Strings = (
+    
+      'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
+      'MODFLOW 6\RmaMf6_Truth.gpt')
   ModelFileName = 
-    'D:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
+    'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
     'MODFLOW 6\RmaMf6_Truth.gpt'
   ModflowOptions.Description.Strings = (
     'Rocky Mountain Arsenal Flow Model with PEST.')
@@ -150705,11 +150709,11 @@ object Model: TPhastModel
           Y = 4766.38857142857300000
         end
         item
-          X = 4657.05714285714500000
+          X = 4657.05714285714600000
           Y = 4766.38857142857300000
         end
         item
-          X = 4657.05714285714500000
+          X = 4657.05714285714600000
           Y = 3628.10285714285600000
         end
         item
@@ -152396,6 +152400,7 @@ object Model: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
       ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
       ScreenObject.InterpValues = <>
       ScreenObject.ModflowWellBoundary.Values = <
         item
@@ -158522,23 +158527,23 @@ object Model: TPhastModel
       MixtureFormulas.Strings = (
         '')
     end>
-  Version = '4.3.0.74'
+  Version = '4.3.0.76'
   GuiSettings.FrontHeight = 159
   GuiSettings.Height = 728
-  GuiSettings.FrontX = -45.98412698412676000
-  GuiSettings.FrontY = -9.62033441550826900
-  GuiSettings.Left = 572
+  GuiSettings.FrontX = 1516.71428571428400000
+  GuiSettings.FrontY = -8.31081060598445700
+  GuiSettings.Left = 413
   GuiSettings.MagnificationFront = 0.05727272727272728
   GuiSettings.MagnificationSide = 0.05727272727272728
   GuiSettings.MagnificationTop = 0.05727272727272728
   GuiSettings.SideWidth = 229
   GuiSettings.SideX = -81.82539682539684000
   GuiSettings.SideY = 2713.29650793650800000
-  GuiSettings.Top = 160
+  GuiSettings.Top = 53
   GuiSettings.TopViewHeight = 404
   GuiSettings.TopViewWidth = 759
-  GuiSettings.TopX = -45.98412698412676000
-  GuiSettings.TopY = 2730.75682539682600000
+  GuiSettings.TopX = 1516.71428571428400000
+  GuiSettings.TopY = 2591.07428571428600000
   GuiSettings.Width = 775
   GuiSettings.WindowState = wsNormal
   GuiSettings.TopHorizontalDigits = 0
@@ -158559,7 +158564,259 @@ object Model: TPhastModel
   GuiSettings.SideVerticalDigits = 0
   GuiSettings.SideVerticalPrecision = 5
   GuiSettings.SideVerticalDesiredSpacing = 60
-  DisplaySettings = <>
+  DisplaySettings = <
+    item
+      ViewToDisplay = vdTop
+      Title.Font.Charset = ANSI_CHARSET
+      Title.Font.Color = clBlack
+      Title.Font.Height = -16
+      Title.Font.Name = 'Arial'
+      Title.Font.Pitch = fpVariable
+      Title.Font.Style = []
+      Title.Top = 0
+      Title.Bottom = 0
+      Title.Left = 0
+      Title.Right = 0
+      AdditionalText = <>
+      GridDisplayChoice = gldcAll
+      ShowColoredGridLines = False
+      HorizontalRuler.RulerPrecision = 5
+      HorizontalRuler.RulerDigits = 0
+      HorizontalRuler.Visible = False
+      VerticalRuler.RulerPrecision = 5
+      VerticalRuler.RulerDigits = 0
+      VerticalRuler.Visible = False
+      ModpathEndPointSettings.ColorParameters.ColorScheme = 0
+      ModpathEndPointSettings.ColorParameters.ColorExponent = 0.60000000000000000
+      ModpathEndPointSettings.ColorLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.ShowChoice = escAll
+      ModpathEndPointSettings.DisplayLimits.LimitToCurrentIn2D = False
+      ModpathEndPointSettings.DisplayLimits.StartColumnLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.StartColumnLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartColumnLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartRowLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.StartRowLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartRowLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartLayerLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.StartLayerLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartLayerLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartZoneLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.StartZoneLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.StartZoneLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.ReleaseTimeLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndColumnLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndColumnLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndColumnLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndRowLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndRowLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndRowLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndLayerLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndLayerLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndLayerLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndZoneLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.EndZoneLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.EndZoneLimits.EndLimit = 0
+      ModpathEndPointSettings.DisplayLimits.TrackingTimeLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.ParticleGroupLimits.UseLimit = False
+      ModpathEndPointSettings.DisplayLimits.ParticleGroupLimits.StartLimit = 0
+      ModpathEndPointSettings.DisplayLimits.ParticleGroupLimits.EndLimit = 0
+      ModpathEndPointSettings.EndPointSize = 4
+      ModpathPathLineSettings.ColorParameters.ColorScheme = 0
+      ModpathPathLineSettings.ColorParameters.ColorExponent = 0.60000000000000000
+      ModpathPathLineSettings.DisplayLimits.ShowChoice = scAll
+      ModpathPathLineSettings.DisplayLimits.ColumnLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.ColumnLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.ColumnLimits.EndLimit = 0
+      ModpathPathLineSettings.DisplayLimits.RowLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.RowLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.RowLimits.EndLimit = 0
+      ModpathPathLineSettings.DisplayLimits.LayerLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.LayerLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.LayerLimits.EndLimit = 0
+      ModpathPathLineSettings.DisplayLimits.TimeLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.ParticleGroupLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.ParticleGroupLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.ParticleGroupLimits.EndLimit = 0
+      ModpathPathLineSettings.DisplayLimits.LineNumberLimits.UseLimit = False
+      ModpathPathLineSettings.DisplayLimits.LineNumberLimits.StartLimit = 0
+      ModpathPathLineSettings.DisplayLimits.LineNumberLimits.EndLimit = 0
+      ModpathPathLineSettings.ColorLimits.UseLimit = False
+      ModpathTimeSeriesSettings.ColorParameters.ColorScheme = 0
+      ModpathTimeSeriesSettings.ColorParameters.ColorExponent = 0.60000000000000000
+      ModpathTimeSeriesSettings.ColorLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.ShowChoice = scAll
+      ModpathTimeSeriesSettings.DisplayLimits.ColumnLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.ColumnLimits.StartLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.ColumnLimits.EndLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.RowLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.RowLimits.StartLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.RowLimits.EndLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.LayerLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.LayerLimits.StartLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.LayerLimits.EndLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.ParticleGroupLimits.UseLimit = False
+      ModpathTimeSeriesSettings.DisplayLimits.ParticleGroupLimits.StartLimit = 0
+      ModpathTimeSeriesSettings.DisplayLimits.ParticleGroupLimits.EndLimit = 0
+      ModpathTimeSeriesSettings.TimeSeriesSize = 4
+      ColorDisplaySettings.DataSetName = 'Kx'
+      ColorDisplaySettings.Legend.ColorParameters.ColorScheme = 0
+      ColorDisplaySettings.Legend.ColorParameters.ColorExponent = 0.60000000000000000
+      ColorDisplaySettings.Legend.ColoringLimits.ActiveOnly = True
+      ColorDisplaySettings.Legend.ColoringLimits.LowerLimit.BooleanLimitValue = False
+      ColorDisplaySettings.Legend.ColoringLimits.LowerLimit.DataType = rdtDouble
+      ColorDisplaySettings.Legend.ColoringLimits.LowerLimit.IntegerLimitValue = 0
+      ColorDisplaySettings.Legend.ColoringLimits.LowerLimit.UseLimit = False
+      ColorDisplaySettings.Legend.ColoringLimits.UpperLimit.BooleanLimitValue = True
+      ColorDisplaySettings.Legend.ColoringLimits.UpperLimit.DataType = rdtDouble
+      ColorDisplaySettings.Legend.ColoringLimits.UpperLimit.IntegerLimitValue = 0
+      ColorDisplaySettings.Legend.ColoringLimits.UpperLimit.UseLimit = False
+      ColorDisplaySettings.Legend.ColoringLimits.LogTransform = False
+      ColorDisplaySettings.Legend.ColoringLimits.StoredEpsilon.Value = 0.00000100000000000
+      ColorDisplaySettings.Legend.LegendType = ltColor
+      ColorDisplaySettings.Legend.Values.DataType = rdtDouble
+      ColorDisplaySettings.Legend.Values.Count = 8
+      ColorDisplaySettings.Legend.Values.Values = (
+        8
+        0.00001000000000000
+        0.00006000000000000
+        0.00008000000000000
+        0.00010000000000000
+        0.00012000000000000
+        0.00014000000000000
+        0.00016000000000000
+        0.00019000000000000)
+      ColorDisplaySettings.Legend.ValueAssignmentMethod = vamManual
+      ColorDisplaySettings.Legend.EdgeDataToPlot = 0
+      ColorDisplaySettings.Legend.Caption = 'Hydraulic Conductivity'
+      ColorDisplaySettings.LegendVisible = True
+      ColorDisplaySettings.Limits.ActiveOnly = True
+      ColorDisplaySettings.Limits.LowerLimit.BooleanLimitValue = False
+      ColorDisplaySettings.Limits.LowerLimit.DataType = rdtDouble
+      ColorDisplaySettings.Limits.LowerLimit.IntegerLimitValue = 0
+      ColorDisplaySettings.Limits.LowerLimit.UseLimit = False
+      ColorDisplaySettings.Limits.UpperLimit.BooleanLimitValue = True
+      ColorDisplaySettings.Limits.UpperLimit.DataType = rdtDouble
+      ColorDisplaySettings.Limits.UpperLimit.IntegerLimitValue = 0
+      ColorDisplaySettings.Limits.UpperLimit.UseLimit = False
+      ColorDisplaySettings.Limits.LogTransform = False
+      ColorDisplaySettings.Limits.StoredEpsilon.Value = 0.00000100000000000
+      ColorDisplaySettings.ContourAlgorithm = caSimple
+      ColorDisplaySettings.Caption = 'Hydraulic Conductivity'
+      ColorDisplaySettings.ShadeInactiveArea = False
+      ContourDisplaySettings.Legend.ColorParameters.ColorScheme = 0
+      ContourDisplaySettings.Legend.ColorParameters.ColorExponent = 0.60000000000000000
+      ContourDisplaySettings.Legend.ColoringLimits.LowerLimit.BooleanLimitValue = False
+      ContourDisplaySettings.Legend.ColoringLimits.LowerLimit.DataType = rdtDouble
+      ContourDisplaySettings.Legend.ColoringLimits.LowerLimit.IntegerLimitValue = 0
+      ContourDisplaySettings.Legend.ColoringLimits.LowerLimit.UseLimit = False
+      ContourDisplaySettings.Legend.ColoringLimits.UpperLimit.BooleanLimitValue = True
+      ContourDisplaySettings.Legend.ColoringLimits.UpperLimit.DataType = rdtDouble
+      ContourDisplaySettings.Legend.ColoringLimits.UpperLimit.IntegerLimitValue = 0
+      ContourDisplaySettings.Legend.ColoringLimits.UpperLimit.UseLimit = False
+      ContourDisplaySettings.Legend.ColoringLimits.LogTransform = False
+      ContourDisplaySettings.Legend.ColoringLimits.StoredEpsilon.Value = 0.00000100000000000
+      ContourDisplaySettings.Legend.LegendType = ltColor
+      ContourDisplaySettings.Legend.Values.DataType = rdtDouble
+      ContourDisplaySettings.Legend.Values.Count = 0
+      ContourDisplaySettings.Legend.Values.Values = (
+        0)
+      ContourDisplaySettings.Legend.ValueAssignmentMethod = vamNoLegend
+      ContourDisplaySettings.Legend.EdgeDataToPlot = 0
+      ContourDisplaySettings.LegendVisible = False
+      ContourDisplaySettings.Limits.LowerLimit.BooleanLimitValue = False
+      ContourDisplaySettings.Limits.LowerLimit.DataType = rdtDouble
+      ContourDisplaySettings.Limits.LowerLimit.IntegerLimitValue = 0
+      ContourDisplaySettings.Limits.LowerLimit.UseLimit = False
+      ContourDisplaySettings.Limits.UpperLimit.BooleanLimitValue = True
+      ContourDisplaySettings.Limits.UpperLimit.DataType = rdtDouble
+      ContourDisplaySettings.Limits.UpperLimit.IntegerLimitValue = 0
+      ContourDisplaySettings.Limits.UpperLimit.UseLimit = False
+      ContourDisplaySettings.Limits.LogTransform = False
+      ContourDisplaySettings.Limits.StoredEpsilon.Value = 0.00000100000000000
+      ContourDisplaySettings.ContourAlgorithm = caSimple
+      ContourDisplaySettings.Contours.AutomaticColors = True
+      ContourDisplaySettings.Contours.Count = 0
+      ContourDisplaySettings.Contours.SpecifyContours = False
+      ContourDisplaySettings.Contours.LogTransform = False
+      EdgeDisplaySettings.Limits.LowerLimit.BooleanLimitValue = False
+      EdgeDisplaySettings.Limits.LowerLimit.DataType = rdtDouble
+      EdgeDisplaySettings.Limits.LowerLimit.IntegerLimitValue = 0
+      EdgeDisplaySettings.Limits.LowerLimit.UseLimit = False
+      EdgeDisplaySettings.Limits.UpperLimit.BooleanLimitValue = False
+      EdgeDisplaySettings.Limits.UpperLimit.DataType = rdtDouble
+      EdgeDisplaySettings.Limits.UpperLimit.IntegerLimitValue = 0
+      EdgeDisplaySettings.Limits.UpperLimit.UseLimit = False
+      EdgeDisplaySettings.Limits.LogTransform = False
+      EdgeDisplaySettings.Limits.StoredEpsilon.Value = 0.00000100000000000
+      EdgeDisplaySettings.DataToPlot = 0
+      EdgeDisplaySettings.Visible = False
+      Magnification = 0.05727272727272728
+      ReferencePointX = 1516.71428571428400000
+      ReferencePointY = 8702.18539682539600000
+      VerticalExaggeration = 20.00000000000000000
+      Name = 'Kx'
+      ImageWidth = 290
+      ImageHeight = 350
+      ContourFont.Charset = ANSI_CHARSET
+      ContourFont.Color = clBlack
+      ContourFont.Height = -16
+      ContourFont.Name = 'Arial'
+      ContourFont.Pitch = fpVariable
+      ContourFont.Style = []
+      LabelContours = True
+      SfrStreamLinkPlot.StreamsToPlot = stpNone
+      SutraSettings.NodeFont.Charset = DEFAULT_CHARSET
+      SutraSettings.NodeFont.Color = clWindowText
+      SutraSettings.NodeFont.Height = -11
+      SutraSettings.NodeFont.Name = 'Tahoma'
+      SutraSettings.NodeFont.Style = []
+      SutraSettings.ElementFont.Charset = DEFAULT_CHARSET
+      SutraSettings.ElementFont.Color = clWindowText
+      SutraSettings.ElementFont.Height = -11
+      SutraSettings.ElementFont.Name = 'Tahoma'
+      SutraSettings.ElementFont.Style = []
+      SutraSettings.ShowNodeNumbers = False
+      SutraSettings.ShowElementNumbers = False
+      SutraSettings.ElementDrawingChoice = dcAll
+      SutraSettings.NodeDrawingChoice = dcEdge
+      SutraSettings.DrawElementCenters = True
+      MaxVectors.Visible = False
+      MaxVectors.StoredScale.Value = 0.00000000000000000
+      MaxVectors.StoredScale3D.Value = 0.00000000000000000
+      MaxVectors.Color = clRed
+      MaxVectors.MinimumSeparation2D = 0
+      MaxVectors.StoredMinSeparationHorizontal3D.Value = 0.00000000000000000
+      MaxVectors.StoredMinSeparationVertical3D.Value = 0.00000000000000000
+      MaxVectors.LogScaled = False
+      MaxVectors.VectorType = pvtPermeability
+      MaxVectors.VectorDirection = pvdMax
+      MidVectors.Visible = False
+      MidVectors.StoredScale.Value = 0.00000000000000000
+      MidVectors.StoredScale3D.Value = 0.00000000000000000
+      MidVectors.Color = clGreen
+      MidVectors.MinimumSeparation2D = 0
+      MidVectors.StoredMinSeparationHorizontal3D.Value = 0.00000000000000000
+      MidVectors.StoredMinSeparationVertical3D.Value = 0.00000000000000000
+      MidVectors.LogScaled = False
+      MidVectors.VectorType = pvtPermeability
+      MidVectors.VectorDirection = pvdMid
+      MinVectors.Visible = False
+      MinVectors.StoredScale.Value = 0.00000000000000000
+      MinVectors.StoredScale3D.Value = 0.00000000000000000
+      MinVectors.Color = clBlue
+      MinVectors.MinimumSeparation2D = 0
+      MinVectors.StoredMinSeparationHorizontal3D.Value = 0.00000000000000000
+      MinVectors.StoredMinSeparationVertical3D.Value = 0.00000000000000000
+      MinVectors.LogScaled = False
+      MinVectors.VectorType = pvtPermeability
+      MinVectors.VectorDirection = pvdMin
+      VelocityVectors.SelectedItem = -1
+      VelocityVectors = <>
+      ShowHeadObsLegend = True
+      CrossSectionColors = <>
+      CrossSectionLayersToUse = <>
+      ShowPilotPoints = False
+    end>
   SaveDataSetValues = sdsvNever
   ModflowSteadyParameters = <>
   LayerStructure = <

@@ -1714,7 +1714,7 @@ end;
 procedure TPestControlData.InitializeVariables;
 begin
   FPestRestart := prRestart;
-  FPestMode := pmEstimation;
+  FPestMode := pmRegularisation;
   FMaxCompressionDimension := 1;
   ZeroLimit := 0;
   InitalLambda := 10;
