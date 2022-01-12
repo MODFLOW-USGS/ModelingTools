@@ -1079,12 +1079,12 @@ begin
 //        Cell.FValues.EndHeadPestSeriesMethod := BoundaryValues.EndHeadPestSeriesMethod;
 //        Cell.FValues.HeadTimeSeriesName := BoundaryValues.HeadTimeSeriesName;
 //        Cell.FValues.Cell := BoundaryValues.Cell;
-//        Cell.FValues.StartingHead :=
-//          StartHeadFactor * BoundaryValues.StartingHead
-//          + (1 - StartHeadFactor) * BoundaryValues.EndingHead;
-//        Cell.FValues.EndingHead :=
-//          EndHeadFactor * BoundaryValues.StartingHead
-//          + (1 - EndHeadFactor) * BoundaryValues.EndingHead;
+        Cell.FValues.StartingHead :=
+          StartHeadFactor * BoundaryValues.StartingHead
+          + (1 - StartHeadFactor) * BoundaryValues.EndingHead;
+        Cell.FValues.EndingHead :=
+          EndHeadFactor * BoundaryValues.StartingHead
+          + (1 - EndHeadFactor) * BoundaryValues.EndingHead;
         if StartHeadFactor = 1 then
         begin
           Cell.FValues.StartAnnotation := BoundaryValues.StartAnnotation;

@@ -967,10 +967,13 @@ begin
       AddBoundary(TRchStorage.Create(AModel));
     end;
     ListOfTimeLists.Add(RechargeRateData);
-    for SpeciesIndex := 0 to SpeciesCount - 1 do
+    if LocalModel.GwtUsed then
     begin
-      ConcentrationData := ALink.FConcList[SpeciesIndex];
-      ListOfTimeLists.Add(ConcentrationData);
+      for SpeciesIndex := 0 to SpeciesCount - 1 do
+      begin
+        ConcentrationData := ALink.FConcList[SpeciesIndex];
+        ListOfTimeLists.Add(ConcentrationData);
+      end;
     end;
   finally
     ConcTimeSeriesItemList.Free;

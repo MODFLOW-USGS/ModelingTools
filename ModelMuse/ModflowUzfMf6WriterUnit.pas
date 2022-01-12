@@ -534,7 +534,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
-  WriteToNameFile(StrUZF6, 0, FNameOfFile, foInput, Model, False, 'UZF');
+  WriteToNameFile(StrUZF6, 0, FNameOfFile, foInput, Model, False, 'UZF-1');
 
   FInputFileName := FNameOfFile;
   WriteFileInternal;

@@ -10452,6 +10452,8 @@ const
 //    '4.3.0.77' Bug fix: Fixed a bug that could cause an assertion failures
 //                when importing shapefiles data from CSV files, if one or more
 //                columns did not have column headers.
+//    '4.3.0.78' Bug fix: not in released version. Fixed list index out of
+//                bounds while RCH and MT3D were active.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -10459,7 +10461,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.77';
+  IIModelVersion = '4.3.0.78';
 
 function IModelVersion: string;
 begin

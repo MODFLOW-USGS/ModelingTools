@@ -10,7 +10,7 @@ uses
   Classes, SysUtils, Generics.Collections, Generics.Defaults;
 
 const
-  MissingValue = -1e-31;
+  MissingValue = -1e31;
 
 type
   TDoubleArray = array of double;

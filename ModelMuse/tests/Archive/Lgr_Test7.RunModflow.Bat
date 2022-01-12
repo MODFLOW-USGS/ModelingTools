@@ -1,4 +1,4 @@
-call "C:\Program Files\USGS\ModelMuse4\bin\ModelMonitor.exe" -m C:\WRDAPP\mflgr.1_2\bin\mflgr.exe -n Lgr_Test7.lgr
+call C:\ModelingTools\ModelMuse\Release\Win32\ModelMonitor.exe -m C:\WRDAPP\mflgr.1_2\bin\mflgr.exe -n Lgr_Test7.lgr
 C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe Lgr_Test7.lst
 C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe Lgr_Test7_Child_1.lst
 pause

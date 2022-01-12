@@ -10,6 +10,7 @@
   <model Model_Name="LakeMf6" FileType="Model Input">
     <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.chd</FileName>
     <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.dis</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.gsf</FileName>
     <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.ic</FileName>
     <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.ims</FileName>
     <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.lak6</FileName>
