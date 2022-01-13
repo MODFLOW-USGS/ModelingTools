@@ -67,10 +67,18 @@ resourcestring
   StrMT3DMSVersion53D = 'MT3DMS version 5.3 does not suppport the RES packag' +
   'e.';
   StrTheReservoirsAtThStart = 'The reservoirs at the following cells will be inac' +
-  'tive because the start sendtage is less than the bottom of the cell';
+  'tive because the start stage is less than the bottom of the cell';
   StrTheReservoirsAtThEnd = 'The reservoirs at the following cells will be inac' +
   'tive because the end stage is less than the bottom of the cell';
   StrLayerRowColumn = '(Layer, Row, Column), Head, Object) = (%0:d, %1:d, %2:d), %3:g %4:s';
+  StrInvalidReservoirLa = 'Invalid Reservoir layer.  If this is a quasi-3d m' +
+  'odel, remember that non-simulated layers are not MODFLOW layers.';
+  StrTheReservoirLayer = 'The reservoir layer (%0:d) at (Row, Col) = (%1:d, ' +
+  '%2:d) is outside the range of valid MODFLOW layers.';
+  StrTheReservoirLayers = 'The reservoir layers at the following cells are b' +
+  'elow non-simulated layers. Be careful that this is the correct MODFLOW la' +
+  'yer rather than model layer.';
+  StrReservoirLayer0 = 'Reservoir layer = %0:d. (Row, Col) = (%1:d, %2:d)';
 
 { TModflowRES_Writer }
 
@@ -106,7 +114,10 @@ var
   ScreenObject: TScreenObject;
   StartHeadPest: TPestData;
   EndHeadPest: TPestData;
+  ResLayer: Integer;
+  LayerCount: Integer;
 begin
+  LayerCount := Model.ModflowLayerCount;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheReservoirsAtThStart);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheReservoirsAtThEnd);
   if Values.Count > 0 then
@@ -190,7 +201,29 @@ begin
                     end;
                   2:
                     begin
-                      Layer := Model.ModflowLayerToDataSetLayer(IRESL.IntegerData[0,RowIndex,ColIndex]);
+                      ResLayer := IRESL.IntegerData[0,RowIndex,ColIndex];
+                      if (ResLayer < 1) or (ResLayer > LayerCount) then
+                      begin
+                        frmErrorsAndWarnings.AddError(Model, StrInvalidReservoirLa,
+                          Format(StrTheReservoirLayer, [ResLayer, RowIndex+1,
+                          ColIndex+1]));
+                        Layer := 0;
+                      end
+                      else
+                      begin
+                        Layer := Model.ModflowLayerToDataSetLayer(ResLayer);
+                        for LayerIndex := 0 to Layer do
+                        begin
+                          if not Model.IsLayerSimulated(LayerIndex) then
+                          begin
+                            frmErrorsAndWarnings.AddWarning(Model,
+                              StrTheReservoirLayers,
+                              Format(StrReservoirLayer0, [ResLayer, RowIndex+1,
+                              ColIndex+1]));
+                            break;
+                          end;
+                        end;
+                      end;
                     end;
                   3:
                     begin
@@ -252,6 +285,8 @@ begin
     frmProgressMM.AddMessage(StrEvaluatingRESPacka);
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoReservoirsDefine);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheRESPackageIsN);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidReservoirLa);
+    frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheReservoirLayers);
 
     if Model.ModflowPackages.Mt3dBasic.IsSelected then
     begin

@@ -5775,7 +5775,9 @@ resourcestring
   StrPHASTCHEMISTRYIC_kinetics = 'PHAST: CHEMISTRY_IC-kinetics';
   StrPHASTPRINTLOCATIO_chemistry = 'PHAST: PRINT_LOCATIONS-chemistry';
   StrPHASTPRINTLOCATIO_xyz_chemistry = 'PHAST: PRINT_LOCATIONS-xyz_chemistry';
-  StrRESISRESL = 'RES: ISRESL';
+  StrRESISRESL = 'RES: ISRESL (Note: this represents the MODFLOW layer. If the'
+  + ' model is a quasi-3D model, the model layer and MODFLOW layer may not be '
+  + 'the same.)';
   StrRESBRES = 'RES: BRES';
   StrRESHCres = 'RES: HCres';
   StrRESRbthck = 'RES: Rbthck';
@@ -10454,6 +10456,10 @@ const
 //                columns did not have column headers.
 //    '4.3.0.78' Bug fix: not in released version. Fixed list index out of
 //                bounds while RCH and MT3D were active.
+
+//               Enhancement: When writing the reservoir layer, ModelMuse now
+//                checks for invalid layer numbers and layers that are beneath
+//                non-simulated layers.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -34951,7 +34957,7 @@ begin
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := rsResKv;
   FDataArrayCreationRecords[Index].DisplayName := rsResKvDisplayName;
-  FDataArrayCreationRecords[Index].Formula := '100.';
+  FDataArrayCreationRecords[Index].Formula := '1E-5.';
   FDataArrayCreationRecords[Index].Classification := rsResClassificaton;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.ReservoirPackageUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
