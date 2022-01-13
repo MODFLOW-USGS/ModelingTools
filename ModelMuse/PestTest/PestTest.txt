@@ -1,11 +1,12 @@
 ..\Debug\Win32\ModelMuse.exe
-1534
+1537
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
 	Archive\PestPilotPointTest.dis
 	Archive\PestPilotPointTest.drn
 	Archive\PestPilotPointTest.drn.tpl
+	Archive\PestPilotPointTest.gsf
 	Archive\PestPilotPointTest.ic
 	Archive\PestPilotPointTest.ims
 	Archive\PestPilotPointTest.jtf
@@ -753,6 +754,7 @@ RechAddTestMf6.gpt
 	Archive\RechAddTestMf6.chd
 	Archive\RechAddTestMf6.chd.tpl
 	Archive\RechAddTestMf6.dis
+	Archive\RechAddTestMf6.gsf
 	Archive\RechAddTestMf6.ic
 	Archive\RechAddTestMf6.ims
 	Archive\RechAddTestMf6.jtf
@@ -1021,6 +1023,7 @@ Prediction.gpt
 	Archive\Prediction.evt.tpl
 	Archive\Prediction.ghb
 	Archive\Prediction.ghb.tpl
+	Archive\Prediction.gsf
 	Archive\Prediction.ic
 	Archive\Prediction.ims
 	Archive\Prediction.jtf
