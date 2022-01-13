@@ -13,6 +13,7 @@
     <FileName Model_Name="Prediction" FileType="Model Input">Prediction.drn</FileName>
     <FileName Model_Name="Prediction" FileType="Model Input">Prediction.evt</FileName>
     <FileName Model_Name="Prediction" FileType="Model Input">Prediction.ghb</FileName>
+    <FileName Model_Name="Prediction" FileType="Model Input">Prediction.gsf</FileName>
     <FileName Model_Name="Prediction" FileType="Model Input">Prediction.ic</FileName>
     <FileName Model_Name="Prediction" FileType="Model Input">Prediction.ims</FileName>
     <FileName Model_Name="Prediction" FileType="Model Input">Prediction.jtf</FileName>

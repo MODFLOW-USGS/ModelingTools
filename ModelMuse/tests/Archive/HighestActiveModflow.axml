@@ -10,6 +10,7 @@
     <FileName Model_Name="HighestActiveModflow" FileType="Model Input">HighestActiveModflow.chd</FileName>
     <FileName Model_Name="HighestActiveModflow" FileType="Model Input">HighestActiveModflow.dis</FileName>
     <FileName Model_Name="HighestActiveModflow" FileType="Model Input">HighestActiveModflow.ghb</FileName>
+    <FileName Model_Name="HighestActiveModflow" FileType="Model Input">HighestActiveModflow.gsf</FileName>
     <FileName Model_Name="HighestActiveModflow" FileType="Model Input">HighestActiveModflow.ic</FileName>
     <FileName Model_Name="HighestActiveModflow" FileType="Model Input">HighestActiveModflow.ims</FileName>
     <FileName Model_Name="HighestActiveModflow" FileType="Model Input">HighestActiveModflow.nam.archive</FileName>

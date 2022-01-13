@@ -9,6 +9,7 @@
   <model Model_Name="HfbMf6Test" FileType="Model Input">
     <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.chd</FileName>
     <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.dis</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.gsf</FileName>
     <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.hfb</FileName>
     <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.ic</FileName>
     <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.ims</FileName>

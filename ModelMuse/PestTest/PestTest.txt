@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1529
+1534
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -219,6 +219,7 @@ MF6_TestSfrMawLakMvrUzf.gpt
 	Archive\MF6_TestSfrMawLakMvrUzf.drn
 	Archive\MF6_TestSfrMawLakMvrUzf.evt
 	Archive\MF6_TestSfrMawLakMvrUzf.ghb
+	Archive\MF6_TestSfrMawLakMvrUzf.gsf
 	Archive\MF6_TestSfrMawLakMvrUzf.ic
 	Archive\MF6_TestSfrMawLakMvrUzf.ims
 	Archive\MF6_TestSfrMawLakMvrUzf.jtf
@@ -454,6 +455,7 @@ CSubExampletest.gpt
 	Archive\CSubExampletest.csub.tpl
 	Archive\CSubExampletest.csub.txt
 	Archive\CSubExampletest.dis
+	Archive\CSubExampletest.gsf
 	Archive\CSubExampletest.ic
 	Archive\CSubExampletest.ims
 	Archive\CSubExampletest.jtf
@@ -700,6 +702,7 @@ HfbMf6Test2.gpt
 	Archive\HfbMf6Test2.chd
 	Archive\HfbMf6Test2.chd.tpl
 	Archive\HfbMf6Test2.dis
+	Archive\HfbMf6Test2.gsf
 	Archive\HfbMf6Test2.hfb
 	Archive\HfbMf6Test2.hfb.tpl
 	Archive\HfbMf6Test2.ic
@@ -782,6 +785,7 @@ ParamMf6Test.gpt
 	Archive\ParamMf6Test.evt.tpl
 	Archive\ParamMf6Test.ghb
 	Archive\ParamMf6Test.ghb.tpl
+	Archive\ParamMf6Test.gsf
 	Archive\ParamMf6Test.ic
 	Archive\ParamMf6Test.ims
 	Archive\ParamMf6Test.jtf
@@ -1054,6 +1058,7 @@ Pareto.gpt
 	Archive\Pareto.evt.tpl
 	Archive\Pareto.ghb
 	Archive\Pareto.ghb.tpl
+	Archive\Pareto.gsf
 	Archive\Pareto.ic
 	Archive\Pareto.ims
 	Archive\Pareto.jtf

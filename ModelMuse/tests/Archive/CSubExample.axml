@@ -13,6 +13,7 @@
     <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.chd</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.csub</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.dis</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.gsf</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.ic</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.ims</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.nam.archive</FileName>

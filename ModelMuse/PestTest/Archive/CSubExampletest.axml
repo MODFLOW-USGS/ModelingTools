@@ -17,6 +17,7 @@
     <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.chd</FileName>
     <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.csub</FileName>
     <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.dis</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.gsf</FileName>
     <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.ic</FileName>
     <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.ims</FileName>
     <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.jtf</FileName>

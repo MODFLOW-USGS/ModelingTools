@@ -1,4 +1,4 @@
-call "C:\Program Files\USGS\ModelMuse4\bin\ModelMonitor.exe" -m C:\WRDAPP\MF2005.1_12\bin\mf2005.exe -n ChdTest.nam
+call C:\ModelingTools\ModelMuse\Release\Win32\ModelMonitor.exe -m C:\WRDAPP\MF2005.1_12\bin\mf2005.exe -n ChdTest.nam
 "C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" ChdTest.Mf2005WriteIns
 C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe ChdTest.lst
 pause

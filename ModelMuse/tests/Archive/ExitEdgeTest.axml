@@ -8,6 +8,7 @@
   </ancillary>
   <model Model_Name="ExitEdgeTest" FileType="Model Input">
     <FileName Model_Name="ExitEdgeTest" FileType="Model Input">ExitEdgeTest.dis</FileName>
+    <FileName Model_Name="ExitEdgeTest" FileType="Model Input">ExitEdgeTest.gsf</FileName>
     <FileName Model_Name="ExitEdgeTest" FileType="Model Input">ExitEdgeTest.ic</FileName>
     <FileName Model_Name="ExitEdgeTest" FileType="Model Input">ExitEdgeTest.ims</FileName>
     <FileName Model_Name="ExitEdgeTest" FileType="Model Input">ExitEdgeTest.nam.archive</FileName>

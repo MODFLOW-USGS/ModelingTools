@@ -4010,7 +4010,7 @@ begin
         end;
 
         ADataSet := LocalModel.DataArrayManager.GetDataSetByName(UnmodifiedFormula);
-        if (ADataSet <> nil) and ADataSet.PestParametersUsed and CanUsePestParmeters then
+        if (ADataSet <> nil) and ADataSet.PestParametersUsed {and CanUsePestParmeters} then
         begin
           PestParamName := ADataSet.Name;
         end
@@ -4020,14 +4020,14 @@ begin
         end
         else
         begin
-          if CanUsePestParmeters then
-          begin
+//          if CanUsePestParmeters then
+//          begin
             PestParam := LocalModel.GetPestParameterByName(UnmodifiedFormula);
-          end
-          else
-          begin
-            PestParam := nil;
-          end;
+//          end
+//          else
+//          begin
+//            PestParam := nil;
+//          end;
           // handle the situation if it is a PEST parameter
           if PestParam = nil then
           begin

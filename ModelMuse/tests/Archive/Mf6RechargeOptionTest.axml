@@ -9,6 +9,7 @@
   <model Model_Name="Mf6RechargeOptionTest" FileType="Model Input">
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.chd</FileName>
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.dis</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.gsf</FileName>
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.ic</FileName>
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.ims</FileName>
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.nam.archive</FileName>

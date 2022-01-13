@@ -13,6 +13,7 @@
     <FileName Model_Name="Pareto" FileType="Model Input">Pareto.drn</FileName>
     <FileName Model_Name="Pareto" FileType="Model Input">Pareto.evt</FileName>
     <FileName Model_Name="Pareto" FileType="Model Input">Pareto.ghb</FileName>
+    <FileName Model_Name="Pareto" FileType="Model Input">Pareto.gsf</FileName>
     <FileName Model_Name="Pareto" FileType="Model Input">Pareto.ic</FileName>
     <FileName Model_Name="Pareto" FileType="Model Input">Pareto.ims</FileName>
     <FileName Model_Name="Pareto" FileType="Model Input">Pareto.jtf</FileName>

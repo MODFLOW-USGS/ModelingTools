@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 12/3/2021 by ModelMuse Version 4.3.0.74
+# Name File for MODFLOW created on 1/12/2022 by ModelMuse Version 4.3.0.78
 BEGIN OPTIONS
   LIST ..\..\output\output.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.lst
   PRINT_INPUT
@@ -21,6 +21,6 @@ BEGIN PACKAGES
   RCH6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.rch  RCH-1
   EVT6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.evt  EVT-1
   LAK6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.lak6  LAK-1
-  UZF6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.uzf  UZF
+  UZF6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.uzf  UZF-1
   MVR6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.mvr  MVR-1
 END PACKAGES
