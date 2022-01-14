@@ -71,7 +71,7 @@ uses
   ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit,
   ModflowPackagesUnit, DataSetUnit, PilotPointDataUnit, System.Math,
   QuadTreeClass, PointCollectionUnit, System.Generics.Collections, FastGEO,
-  System.Generics.Defaults, System.IOUtils;
+  System.Generics.Defaults, System.IOUtils, PilotPointCovarinceFileWriterUnit;
 
 resourcestring
   StrNoParametersHaveB = 'No parameters have been defined';
@@ -346,7 +346,7 @@ var
         if AParam.VertSpatialContinuityGroupName = '' then
         begin
           AParam.VertSpatialContinuityGroupName :=
-            'Grp' + IntToStr(ObservationGroups.Count);
+            'Grp' + IntToStr(ObservationGroups.Count +1);
         end;
         ObsGroupIndex := ObservationGroupNames.IndexOf(
           AParam.VertSpatialContinuityGroupName);
@@ -511,11 +511,12 @@ var
     end;
   end;
   procedure WriteInitialValueEquation(Param: TModflowParameter; InitialValue: double;
-    ParameterName: string = '');
+    ParameterName: string = ''; PilotPointItem: TStoredPilotParamDataItem = nil);
   var
     EquationName: string;
     ObsGroupName: string;
     Equation: string;
+    IsPilotPoint: Boolean;
   begin
     if not Model.PestProperties.UseInitialValuePriorInfo then
     begin
@@ -525,17 +526,39 @@ var
     begin
       ParameterName := Param.ParameterName;
     end;
+    IsPilotPoint := PilotPointItem <> nil;
     Inc(EquationCount);
     EquationName := EquationRoot + IntToStr(EquationCount);
-    if Param.RegularizationGroup = '' then
+    if IsPilotPoint then
     begin
-      Param.RegularizationGroup := 'Grp' + IntToStr(ObservationGroups.Count);
+      if PilotPointItem.ObsGroupName = '' then
+      begin
+        PilotPointItem.ObsGroupName := 'Grp' + IntToStr(ObservationGroups.Count +1);
+      end;
+      ObsGroupIndex := ObservationGroupNames.IndexOf(PilotPointItem.ObsGroupName);
+    end
+    else
+    begin
+      if Param.RegularizationGroup = '' then
+      begin
+        Param.RegularizationGroup := 'Grp' + IntToStr(ObservationGroups.Count);
+      end;
+      ObsGroupIndex := ObservationGroupNames.IndexOf(Param.RegularizationGroup);
     end;
-    ObsGroupIndex := ObservationGroupNames.IndexOf(Param.RegularizationGroup);
     if ObsGroupIndex < 0 then
     begin
       ObsGroup := ObservationGroups.Add;
-      ObsGroup.ObsGroupName := Param.RegularizationGroup;
+      if IsPilotPoint then
+      begin
+        ObsGroup.ObsGroupName := PilotPointItem.ObsGroupName;
+        PilotPointItem.PestObsGroup := ObsGroup;
+        ObsGroup.RelativCorrelationFileName :=
+          ChangeFileExt(PilotPointItem.FileName, StrCov);
+      end
+      else
+      begin
+        ObsGroup.ObsGroupName := Param.RegularizationGroup;
+      end;
       ObsGroup.IsRegularizationGroup := True;
       ObservationGroupNames.AddObject(ObsGroup.ObsGroupName, ObsGroup);
     end
@@ -643,7 +666,8 @@ begin
             begin
               PilotParamName := PilotPointItem.ParameterName(ParameterIndex);
               WriteInitialValueEquation(ASteadyParam,
-                PilotPointItem.Values[ParameterIndex-1].Value, PilotParamName);
+                PilotPointItem.Values[ParameterIndex-1].Value, PilotParamName,
+                PilotPointItem);
             end;
           end;
 
@@ -1810,7 +1834,7 @@ var
   ParameterIndex: Integer;
   PilotParamName: string;
   procedure WriteParameter(AParam: TModflowParameter; ParameterName: string = '';
-    Value: double = 0);
+    Value: double = 0; IsPilotPoint: Boolean = False);
   var
     PARNME: string;
     N: Integer;
@@ -1929,16 +1953,32 @@ var
     end;
 
     //PARGP
-    if AParam.ParameterGroup = '' then
-    begin
-      WriteString(' none');
-      frmErrorsAndWarnings.AddError(Model, StrParameterGroupName,
-        Format(StrTheParameterSH, [AParam.ParameterName]));
-    end
-    else
-    begin
-      WriteString(' ' + AParam.ParameterGroup);
-    end;
+//    if IsPilotPoint then
+//    begin
+//      if AParam.PilotPointParameterGroup = '' then
+//      begin
+//        WriteString(' none');
+//        frmErrorsAndWarnings.AddError(Model, StrParameterGroupName,
+//          Format(StrTheParameterSH, [AParam.ParameterName]));
+//      end
+//      else
+//      begin
+//        WriteString(' ' + AParam.PilotPointParameterGroup);
+//      end;
+//    end
+//    else
+//    begin
+      if AParam.ParameterGroup = '' then
+      begin
+        WriteString(' none');
+        frmErrorsAndWarnings.AddError(Model, StrParameterGroupName,
+          Format(StrTheParameterSH, [AParam.ParameterName]));
+      end
+      else
+      begin
+        WriteString(' ' + AParam.ParameterGroup);
+      end;
+//    end;
 
     //SCALE
     WriteFloat(AParam.Scale);

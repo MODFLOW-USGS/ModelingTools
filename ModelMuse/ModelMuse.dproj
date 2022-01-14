@@ -1776,6 +1776,7 @@
         </DCCReference>
         <DCCReference Include="Modflow6TimeSeriesCollectionsUnit.pas"/>
         <DCCReference Include="ModflowMf6TimeSeriesWriterUnit.pas"/>
+        <DCCReference Include="PilotPointCovarinceFileWriterUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
@@ -1867,6 +1868,12 @@
                 <DeployFile LocalName="ObserverProxyU.PAS" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Debug\Win32\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win32">
+                        <RemoteName>ModelMuse.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

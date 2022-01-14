@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.Generics.Collections, DataSetUnit,
-  OrderedCollectionUnit, ModflowParameterUnit, GoPhastTypes,
+  OrderedCollectionUnit, ModflowParameterUnit, GoPhastTypes, PestObsGroupUnit,
   PointCollectionUnit;
 
 type
@@ -56,6 +56,8 @@ type
     FLayer: Integer;
     FDataArrayName: string;
     FPoints: TSimplePointCollection;
+    FObsGroupName: string;
+    FPestObsGroup: TPestObservationGroup;
     procedure SetBaseParamName(const Value: string);
     procedure SetCount(const Value: Integer);
     procedure SetParamFamily(const Value: string);
@@ -64,12 +66,16 @@ type
     procedure SetLayer(const Value: Integer);
     procedure SetDataArrayName(const Value: string);
     procedure SetPoints(const Value: TSimplePointCollection);
+    procedure SetObsGroupName(const Value: string);
+    procedure SetPestObsGroup(const Value: TPestObservationGroup);
+    function GetObsGroupName: string;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure AssignPilotPointFileObject(Source: TPilotPointFileObject);
     function ParameterName(Index: Integer): string;
+    property PestObsGroup: TPestObservationGroup read FPestObsGroup write SetPestObsGroup;
   published
     property ParamFamily: string read FParamFamily write SetParamFamily;
     property Count: Integer read FCount write SetCount;
@@ -79,6 +85,7 @@ type
     property Layer: Integer read FLayer write SetLayer;
     Property DataArrayName: string read FDataArrayName write SetDataArrayName;
     property Points: TSimplePointCollection read FPoints write SetPoints;
+    property ObsGroupName: string read GetObsGroupName write SetObsGroupName;
   end;
 
 
@@ -196,6 +203,8 @@ begin
     Layer := SourceItem.Layer;
     DataArrayName := SourceItem.DataArrayName;
     Points := SourceItem.Points;
+    ObsGroupName := SourceItem.ObsGroupName;
+    PestObsGroup := SourceItem.PestObsGroup;
   end
   else
   begin
@@ -240,6 +249,18 @@ begin
   inherited;
 end;
 
+function TStoredPilotParamDataItem.GetObsGroupName: string;
+begin
+  if FPestObsGroup <> nil then
+  begin
+    result := FPestObsGroup.ObsGroupName;
+  end
+  else
+  begin
+    result := FObsGroupName;
+  end;
+end;
+
 function TStoredPilotParamDataItem.ParameterName(Index: Integer): string;
 begin
   result := ParName(Index, Count, ParamFamily);
@@ -270,9 +291,24 @@ begin
   FLayer := Value;
 end;
 
+procedure TStoredPilotParamDataItem.SetObsGroupName(const Value: string);
+begin
+  FObsGroupName := Value;
+end;
+
 procedure TStoredPilotParamDataItem.SetParamFamily(const Value: string);
 begin
   FParamFamily := Value;
+end;
+
+procedure TStoredPilotParamDataItem.SetPestObsGroup(
+  const Value: TPestObservationGroup);
+begin
+  FPestObsGroup := Value;
+  if FPestObsGroup <> nil then
+  begin
+    FObsGroupName := FPestObsGroup.ObsGroupName;
+  end;
 end;
 
 procedure TStoredPilotParamDataItem.SetPoints(

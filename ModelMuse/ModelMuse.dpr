@@ -738,7 +738,8 @@ uses
   frmTimeSeriesUnit in 'frmTimeSeriesUnit.pas' {frmTimeSeries},
   frameModflow6TimeSeriesUnit in 'frameModflow6TimeSeriesUnit.pas' {frameModflow6TimeSeries: TFrame},
   Modflow6TimeSeriesCollectionsUnit in 'Modflow6TimeSeriesCollectionsUnit.pas',
-  ModflowMf6TimeSeriesWriterUnit in 'ModflowMf6TimeSeriesWriterUnit.pas';
+  ModflowMf6TimeSeriesWriterUnit in 'ModflowMf6TimeSeriesWriterUnit.pas',
+  PilotPointCovarinceFileWriterUnit in 'PilotPointCovarinceFileWriterUnit.pas';
 
 {$R *.res}
 

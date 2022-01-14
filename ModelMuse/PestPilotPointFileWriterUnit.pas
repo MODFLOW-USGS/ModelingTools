@@ -28,7 +28,7 @@ implementation
 
 uses
   QuadTreeClass, FastGEO, PestPropertiesUnit, frmErrorsAndWarningsUnit,
-  SutraMeshUnit, System.IOUtils;
+  SutraMeshUnit, System.IOUtils, PilotPointCovarinceFileWriterUnit;
 
 resourcestring
   StrNoPilotPointsDefi = 'No pilot points defined';
@@ -100,6 +100,7 @@ var
   CriticalDistance: Double;
   PIndex: Integer;
   ActiveDataSet: TDataArray;
+  PPCovWriter: TPilotPointCovarinceFileWriter;
 //  PilotPointsDefined: Boolean;
   function IsActive(LayerIndex, RowIndex, ColIndex: Integer): boolean;
   var
@@ -361,6 +362,12 @@ begin
             end
             else
             begin
+              PPCovWriter := TPilotPointCovarinceFileWriter.Create;
+              try
+                PPCovWriter.WriteConvarianceFiles(FileProperties);
+              finally
+                PPCovWriter.Free;
+              end;
               PilotPointFiles.Add(FileProperties);
             end;
           end;
