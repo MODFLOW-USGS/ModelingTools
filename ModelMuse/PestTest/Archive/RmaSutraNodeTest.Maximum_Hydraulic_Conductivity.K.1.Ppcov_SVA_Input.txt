@@ -1,0 +1,6 @@
+RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.Variogram.txt
+y
+0.0
+g
+RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.Cov.txt
+

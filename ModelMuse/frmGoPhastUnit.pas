@@ -1693,6 +1693,7 @@ type
     FChangingSelection: boolean;
     FHelpFormat: THelpFormat;
     FRulersVisible: Boolean;
+    FExportingFromCommandLine: Boolean;
     function ModelUpToDate(const FileName: string;
       CorrectDate: TDateTime): boolean;
     function ModflowUpToDate: boolean;
@@ -1879,6 +1880,8 @@ type
     procedure EnableEditRipPlantGroups(Sender: TObject);
   public
     FCubeControl: TRbwModelCube;
+    property ExportingFromCommandLine: Boolean read FExportingFromCommandLine
+      write FExportingFromCommandLine;
     procedure EnableFarmMenuItems;
     procedure UpdateFrontCubeForMeshCrossSection(Sender: TObject);
     procedure UpdateVerticalExaggeration(VerticalExaggeration: Double);
@@ -6903,6 +6906,7 @@ var
     PhastModel.SaveArchiveList(ChangeFileExt(FileName, '.axml'));
   end;
 begin
+  ExportingFromCommandLine := True;
   case PhastModel.ModelSelection of
     msUndefined:
       Assert(False);

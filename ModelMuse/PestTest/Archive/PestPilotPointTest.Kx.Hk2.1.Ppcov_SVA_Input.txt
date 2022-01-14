@@ -1,0 +1,6 @@
+PestPilotPointTest.Kx.Hk2.1.Variogram.txt
+y
+0.0
+g
+PestPilotPointTest.Kx.Hk2.1.Cov.txt
+

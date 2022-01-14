@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1537
+1607
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -10,34 +10,94 @@ PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.ic
 	Archive\PestPilotPointTest.ims
 	Archive\PestPilotPointTest.jtf
+	Archive\PestPilotPointTest.Kx.Hk1.1.Cov.txt
+	Archive\PestPilotPointTest.Kx.Hk1.1.CreateCov.Bat
+	Archive\PestPilotPointTest.Kx.Hk1.1.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Kx.Hk1.1.pp
 	Archive\PestPilotPointTest.Kx.Hk1.1.pp.tpl
+	Archive\PestPilotPointTest.Kx.Hk1.1.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Kx.Hk1.1.Variogram.txt
+	Archive\PestPilotPointTest.Kx.Hk1.2.Cov.txt
+	Archive\PestPilotPointTest.Kx.Hk1.2.CreateCov.Bat
+	Archive\PestPilotPointTest.Kx.Hk1.2.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Kx.Hk1.2.pp
 	Archive\PestPilotPointTest.Kx.Hk1.2.pp.tpl
+	Archive\PestPilotPointTest.Kx.Hk1.2.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Kx.Hk1.2.Variogram.txt
+	Archive\PestPilotPointTest.Kx.Hk1.3.Cov.txt
+	Archive\PestPilotPointTest.Kx.Hk1.3.CreateCov.Bat
+	Archive\PestPilotPointTest.Kx.Hk1.3.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Kx.Hk1.3.pp
 	Archive\PestPilotPointTest.Kx.Hk1.3.pp.tpl
+	Archive\PestPilotPointTest.Kx.Hk1.3.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Kx.Hk1.3.Variogram.txt
+	Archive\PestPilotPointTest.Kx.Hk2.1.Cov.txt
+	Archive\PestPilotPointTest.Kx.Hk2.1.CreateCov.Bat
+	Archive\PestPilotPointTest.Kx.Hk2.1.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Kx.Hk2.1.pp
 	Archive\PestPilotPointTest.Kx.Hk2.1.pp.tpl
+	Archive\PestPilotPointTest.Kx.Hk2.1.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Kx.Hk2.1.Variogram.txt
+	Archive\PestPilotPointTest.Kx.Hk2.2.Cov.txt
+	Archive\PestPilotPointTest.Kx.Hk2.2.CreateCov.Bat
+	Archive\PestPilotPointTest.Kx.Hk2.2.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Kx.Hk2.2.pp
 	Archive\PestPilotPointTest.Kx.Hk2.2.pp.tpl
+	Archive\PestPilotPointTest.Kx.Hk2.2.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Kx.Hk2.2.Variogram.txt
+	Archive\PestPilotPointTest.Kx.Hk2.3.Cov.txt
+	Archive\PestPilotPointTest.Kx.Hk2.3.CreateCov.Bat
+	Archive\PestPilotPointTest.Kx.Hk2.3.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Kx.Hk2.3.pp
 	Archive\PestPilotPointTest.Kx.Hk2.3.pp.tpl
+	Archive\PestPilotPointTest.Kx.Hk2.3.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Kx.Hk2.3.Variogram.txt
 	Archive\PestPilotPointTest.Kx.krig_factors_script
 	Archive\PestPilotPointTest.Kx.PstValues
 	Archive\PestPilotPointTest.Kx.script
 	Archive\PestPilotPointTest.Kx.script.tpl
+	Archive\PestPilotPointTest.Ky.Hk1.1.Cov.txt
+	Archive\PestPilotPointTest.Ky.Hk1.1.CreateCov.Bat
+	Archive\PestPilotPointTest.Ky.Hk1.1.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Ky.Hk1.1.pp
 	Archive\PestPilotPointTest.Ky.Hk1.1.pp.tpl
+	Archive\PestPilotPointTest.Ky.Hk1.1.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Ky.Hk1.1.Variogram.txt
+	Archive\PestPilotPointTest.Ky.Hk1.2.Cov.txt
+	Archive\PestPilotPointTest.Ky.Hk1.2.CreateCov.Bat
+	Archive\PestPilotPointTest.Ky.Hk1.2.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Ky.Hk1.2.pp
 	Archive\PestPilotPointTest.Ky.Hk1.2.pp.tpl
+	Archive\PestPilotPointTest.Ky.Hk1.2.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Ky.Hk1.2.Variogram.txt
+	Archive\PestPilotPointTest.Ky.Hk1.3.Cov.txt
+	Archive\PestPilotPointTest.Ky.Hk1.3.CreateCov.Bat
+	Archive\PestPilotPointTest.Ky.Hk1.3.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Ky.Hk1.3.pp
 	Archive\PestPilotPointTest.Ky.Hk1.3.pp.tpl
+	Archive\PestPilotPointTest.Ky.Hk1.3.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Ky.Hk1.3.Variogram.txt
+	Archive\PestPilotPointTest.Ky.Hk2.1.Cov.txt
+	Archive\PestPilotPointTest.Ky.Hk2.1.CreateCov.Bat
+	Archive\PestPilotPointTest.Ky.Hk2.1.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Ky.Hk2.1.pp
 	Archive\PestPilotPointTest.Ky.Hk2.1.pp.tpl
+	Archive\PestPilotPointTest.Ky.Hk2.1.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Ky.Hk2.1.Variogram.txt
+	Archive\PestPilotPointTest.Ky.Hk2.2.Cov.txt
+	Archive\PestPilotPointTest.Ky.Hk2.2.CreateCov.Bat
+	Archive\PestPilotPointTest.Ky.Hk2.2.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Ky.Hk2.2.pp
 	Archive\PestPilotPointTest.Ky.Hk2.2.pp.tpl
+	Archive\PestPilotPointTest.Ky.Hk2.2.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Ky.Hk2.2.Variogram.txt
+	Archive\PestPilotPointTest.Ky.Hk2.3.Cov.txt
+	Archive\PestPilotPointTest.Ky.Hk2.3.CreateCov.Bat
+	Archive\PestPilotPointTest.Ky.Hk2.3.Mkppstat_Input.txt
 	Archive\PestPilotPointTest.Ky.Hk2.3.pp
 	Archive\PestPilotPointTest.Ky.Hk2.3.pp.tpl
+	Archive\PestPilotPointTest.Ky.Hk2.3.Ppcov_SVA_Input.txt
+	Archive\PestPilotPointTest.Ky.Hk2.3.Variogram.txt
 	Archive\PestPilotPointTest.Ky.krig_factors_script
 	Archive\PestPilotPointTest.Ky.PstValues
 	Archive\PestPilotPointTest.Ky.script
@@ -1471,8 +1531,13 @@ RmaSutraNodeTest.gpt
 	Archive\RmaSutraNodeTest.Longitudinal_Dispersivity_Max_Dir
 	Archive\RmaSutraNodeTest.Longitudinal_Dispersivity_Min_Dir
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.Cov.txt
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.CreateCov.Bat
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.Mkppstat_Input.txt
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.pp
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.pp.tpl
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.Ppcov_SVA_Input.txt
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.Variogram.txt
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.krig_factors_script
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.PstValues
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script
@@ -1513,8 +1578,13 @@ RmaSutraCompleted.gpt
 	Archive\RmaSutraCompleted.Longitudinal_Dispersivity_Max_Dir
 	Archive\RmaSutraCompleted.Longitudinal_Dispersivity_Min_Dir
 	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity
+	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.Cov.txt
+	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.CreateCov.Bat
+	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.Mkppstat_Input.txt
 	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.pp
 	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.pp.tpl
+	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.Ppcov_SVA_Input.txt
+	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.Variogram.txt
 	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.krig_factors_script
 	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.PstValues
 	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.script
