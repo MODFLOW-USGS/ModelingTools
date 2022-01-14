@@ -1450,6 +1450,7 @@ procedure TPestProperties.SetPriorInfoObservatioGroups(
   const Value: TPestObservationGroups);
 begin
   FPriorInfoObservatioGroups.Assign(Value);
+  FPriorInfoObservatioGroups.ReleaseFreedObsGrouopReferences;
 end;
 
 procedure TPestProperties.SetRegularization(const Value: TPestRegularization);

@@ -9907,7 +9907,6 @@ begin
   PhastModel.PestTemplateLines.Clear;
   PhastModel.SutraPestScripts.Clear;
   PhastModel.KrigfactorsScriptLines.Clear;
-  PhastModel.RemovePilotPointDataObsGroups;
   PhastModel.PilotPointData.Clear;
   PhastModel.ClearPestArrayFileNames;
 

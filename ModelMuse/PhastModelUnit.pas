@@ -3408,8 +3408,6 @@ that affects the model output should also have a comment. }
       ;
     property GwtUsed: Boolean read GetGwtUsed;
     Procedure UpdateGwtConc;
-    procedure RemovePilotPointDataObsGroups;
-    procedure RefreshPilotPointDataObsGroups;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -13044,7 +13042,6 @@ procedure TCustomModel.SetPilotPointData(
   const Value: TStoredPilotParamDataCollection);
 begin
   FPilotPointData.Assign(Value);
-  RefreshPilotPointDataObsGroups;
 end;
 
 function TPhastModel.GetHufParameters: THufModflowParameters;
@@ -38911,7 +38908,6 @@ begin
   ModflowPackages.Loaded;
   DataArrayManager.Loaded;
   UpdateGwtConc;
-  RefreshPilotPointDataObsGroups;
 end;
 
 function TCustomModel.LongitudinalDispersionUsed(Sender: TObject): boolean;
@@ -39775,20 +39771,6 @@ begin
   end;
 end;
 
-procedure TCustomModel.RefreshPilotPointDataObsGroups;
-var
-  PPItemIndex: Integer;
-  ObservationGroups: TPestObservationGroups;
-  PPItem: TStoredPilotParamDataItem;
-begin
-  ObservationGroups := PestProperties.PriorInfoObservationGroups;
-  for PPItemIndex := 0 to PilotPointData.Count - 1 do
-  begin
-    PPItem := PilotPointData[PPItemIndex];
-    PPItem.PestObsGroup := ObservationGroups.GetObsGroupByName(PPItem.ObsGroupName);
-  end;
-end;
-
 function TCustomModel.RelativeFileName(const FullFileName: string): string;
 var
   BaseDir: string;
@@ -39800,22 +39782,6 @@ begin
     BaseDir := ExtractFileDir(BaseDir);
     BaseDir := IncludeTrailingPathDelimiter(BaseDir);
     Result := ExtractRelativePath(BaseDir, Result);
-  end;
-end;
-
-procedure TCustomModel.RemovePilotPointDataObsGroups;
-var
-  PPItemIndex: Integer;
-  ObsGroupName: string;
-  ObservationGroups: TPestObservationGroups;
-  ObsGroup: TPestObservationGroup;
-begin
-  ObservationGroups := PestProperties.PriorInfoObservationGroups;
-  for PPItemIndex := 0 to PilotPointData.Count - 1 do
-  begin
-    ObsGroupName := PilotPointData[PPItemIndex].ObsGroupName;
-    ObsGroup := ObservationGroups.GetObsGroupByName(ObsGroupName);
-    ObsGroup.Free;
   end;
 end;
 
@@ -41984,7 +41950,6 @@ var
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
 //  PestDataArrayWriter: TPestDataArrayWriter;
 begin
-  RemovePilotPointDataObsGroups;
   PilotPointData.Clear;
 
   frmErrorsAndWarnings.RemoveWarningGroup(self, StrTheFollowingObjectNoCells);

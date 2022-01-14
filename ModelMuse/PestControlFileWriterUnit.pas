@@ -301,6 +301,18 @@ var
   ItemIndex: Integer;
   PilotPointItem1: TStoredPilotParamDataItem;
   PilotPointItem2: TStoredPilotParamDataItem;
+  function NewGroupName: string;
+  var
+    Index: Integer;
+  begin
+    Index := ObservationGroups.Count +1;
+    result := 'Grp' + IntToStr(Index);
+    While ObservationGroupNames.IndexOf(result) >= 0 do
+    begin
+      Inc(Index);
+      result := 'Grp' + IntToStr(Index);
+    end;
+  end;
   procedure WriteVerticalContinuityEquation(
     PPItem1, PPItem2: TStoredPilotParamDataItem; AParam: TModflowSteadyParameter);
   var
@@ -345,8 +357,7 @@ var
       begin
         if AParam.VertSpatialContinuityGroupName = '' then
         begin
-          AParam.VertSpatialContinuityGroupName :=
-            'Grp' + IntToStr(ObservationGroups.Count +1);
+          AParam.VertSpatialContinuityGroupName := NewGroupName;
         end;
         ObsGroupIndex := ObservationGroupNames.IndexOf(
           AParam.VertSpatialContinuityGroupName);
@@ -467,8 +478,7 @@ var
           EquationName := EquationRoot + IntToStr(EquationCount);
           if Param.HorizontalSpatialContinuityGroupName = '' then
           begin
-            Param.HorizontalSpatialContinuityGroupName :=
-              'Grp' + IntToStr(ObservationGroups.Count);
+            Param.HorizontalSpatialContinuityGroupName := NewGroupName;
           end;
           ObsGroupIndex := ObservationGroupNames.IndexOf(
             Param.HorizontalSpatialContinuityGroupName);
@@ -517,6 +527,7 @@ var
     ObsGroupName: string;
     Equation: string;
     IsPilotPoint: Boolean;
+    GroupName: string;
   begin
     if not Model.PestProperties.UseInitialValuePriorInfo then
     begin
@@ -531,11 +542,13 @@ var
     EquationName := EquationRoot + IntToStr(EquationCount);
     if IsPilotPoint then
     begin
-      if PilotPointItem.ObsGroupName = '' then
+      GroupName := Param.PilotPointObsGrpCollection.
+        GetGroupNameByLayer(PilotPointItem.Layer);
+      if GroupName = '' then
       begin
-        PilotPointItem.ObsGroupName := 'Grp' + IntToStr(ObservationGroups.Count +1);
+        GroupName := NewGroupName;
       end;
-      ObsGroupIndex := ObservationGroupNames.IndexOf(PilotPointItem.ObsGroupName);
+      ObsGroupIndex := ObservationGroupNames.IndexOf(GroupName);
     end
     else
     begin
@@ -550,10 +563,11 @@ var
       ObsGroup := ObservationGroups.Add;
       if IsPilotPoint then
       begin
-        ObsGroup.ObsGroupName := PilotPointItem.ObsGroupName;
-        PilotPointItem.PestObsGroup := ObsGroup;
+        ObsGroup.ObsGroupName := GroupName;
         ObsGroup.RelativCorrelationFileName :=
           ChangeFileExt(PilotPointItem.FileName, StrCov);
+        Param.PilotPointObsGrpCollection.
+          SetGroupNameByLayer(PilotPointItem.Layer, GroupName);
       end
       else
       begin

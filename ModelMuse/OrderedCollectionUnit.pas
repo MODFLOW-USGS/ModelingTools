@@ -323,6 +323,38 @@ type
   TPestTransform = (ptNoTransform, ptLog, ptFixed, ptTied);
   TPestChangeLimitation = (pclRelative, pclFactor, pclAbsolute);
 
+  TPilotPointObsGrp = class(TPhastCollectionItem)
+  private
+    FObsGroupName: string;
+    FLayer: Integer;
+    FObsGroup: TObject;
+    procedure SetLayer(const Value: Integer);
+    procedure SetObsGroupName(const Value: string);
+    function GetObsGroupName: string;
+  public
+    procedure Assign(Source: TPersistent); override;
+    function IsSame(OtherItem: TPilotPointObsGrp): Boolean;
+    property ObsGroup: TObject read FObsGroup write FObsGroup;
+  published
+    Property ObsGroupName: string read GetObsGroupName write SetObsGroupName;
+    property Layer: Integer read FLayer write SetLayer;
+  end;
+
+  TPPObsGrpCollection = class(TPhastCollection)
+  private
+    FModel: TBaseModel;
+    function GetItem(Index: Integer): TPilotPointObsGrp;
+    procedure SetItem(Index: Integer; const Value: TPilotPointObsGrp);
+  public
+    Constructor Create(Model: TBaseModel);
+    function Add: TPilotPointObsGrp;
+    function IsSame(OtherCollection: TPPObsGrpCollection): Boolean;
+    property Items[Index: Integer]: TPilotPointObsGrp read GetItem
+      write SetItem; default;
+    function GetGroupNameByLayer(Layer: integer): string;
+    procedure SetGroupNameByLayer(Layer: integer; const GroupName: string);
+  end;
+
   // @name represents a MODFLOW parameter
   TModflowParameter = class abstract (TOrderedItem)
   private
@@ -343,6 +375,7 @@ type
     FRegularizationGroup: string;
     FAddedToPval: Boolean;
     FStoredInitialValuePriorInfoWeight: TRealStorage;
+    FPilotPointObsGrpCollection: TPPObsGrpCollection;
     procedure NotifyHufKx;
     procedure NotifyHufKy;
     procedure NotifyHufKz;
@@ -372,6 +405,7 @@ type
     procedure SetStoredInitialValuePriorInfoWeight(const Value: TRealStorage);
     function GetInitialValuePriorInfoWeight: double;
     procedure SetInitialValuePriorInfoWeight(const Value: double);
+    procedure SetPilotPointObsGrpCollection(const Value: TPPObsGrpCollection);
   protected
     // See @link(ParameterName).
     FParameterName: string;
@@ -492,11 +526,21 @@ type
     Stored False
     {$ENDIF}
     ;
-    property StoredInitialValuePriorInfoWeight: TRealStorage read FStoredInitialValuePriorInfoWeight write SetStoredInitialValuePriorInfoWeight;
+    property StoredInitialValuePriorInfoWeight: TRealStorage
+      read FStoredInitialValuePriorInfoWeight
+      write SetStoredInitialValuePriorInfoWeight;
     // @name is the regularization group of the parameter in the
     // initial value prior information equation.
     property RegularizationGroup: string read FRegularizationGroup
       write SetRegularizationGroup
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
+    property PilotPointObsGrpCollection: TPPObsGrpCollection
+      read FPilotPointObsGrpCollection write SetPilotPointObsGrpCollection
     {$IFDEF PEST}
     Stored True
     {$ELSE}
@@ -526,7 +570,8 @@ implementation
 uses ModflowParameterUnit, LayerStructureUnit, PhastModelUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowTransientListParameterUnit,
   ModflowSfrParamIcalcUnit, Generics.Collections, Modflow6TimeSeriesUnit,
-  Generics.Defaults, Math, frmGoPhastUnit, LockedGlobalVariableChangers;
+  Generics.Defaults, Math, frmGoPhastUnit, LockedGlobalVariableChangers,
+  PestObsGroupUnit;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
 begin
@@ -916,7 +961,7 @@ begin
     UseInitialValuePriorInfo := SourceParameter.UseInitialValuePriorInfo;
     InitialValuePriorInfoWeight := SourceParameter.InitialValuePriorInfoWeight;
     RegularizationGroup := SourceParameter.RegularizationGroup;
-    // RegularizationGroup
+    PilotPointObsGrpCollection := SourceParameter.PilotPointObsGrpCollection;
   end;
   inherited;
 end;
@@ -958,6 +1003,7 @@ begin
   FStoredInitialValuePriorInfoWeight := TRealStorage.Create;
   FStoredInitialValuePriorInfoWeight.Value := 1;
   FStoredInitialValuePriorInfoWeight.OnChange := OnInvalidateModelEvent;
+  FPilotPointObsGrpCollection := TPPObsGrpCollection.Create(Model);
   Scale := 1;
   FUseInitialValuePriorInfo := True;
 end;
@@ -969,6 +1015,7 @@ var
   ScreenObject: TScreenObject;
   Boundary: TModflowParamBoundary;
 begin
+  FPilotPointObsGrpCollection.Free;
   if ParameterType in [ptRCH, ptEVT, ptETS, ptCHD, ptGHB, ptQ, ptRIV, ptDRN, ptDRT] then
   begin
     if (Collection as TOrderedCollection).Model <> nil then
@@ -1168,7 +1215,8 @@ begin
     (AbsoluteN = AnotherParameter.AbsoluteN) and
     (UseInitialValuePriorInfo = AnotherParameter.UseInitialValuePriorInfo) and
     (InitialValuePriorInfoWeight = AnotherParameter.InitialValuePriorInfoWeight) and
-    (RegularizationGroup = AnotherParameter.RegularizationGroup);
+    (RegularizationGroup = AnotherParameter.RegularizationGroup) and
+    PilotPointObsGrpCollection.IsSame(AnotherParameter.PilotPointObsGrpCollection);
 end;
 
 procedure TModflowParameter.SetAbsoluteN(const Value: double);
@@ -1482,6 +1530,12 @@ begin
     FParameterType := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TModflowParameter.SetPilotPointObsGrpCollection(
+  const Value: TPPObsGrpCollection);
+begin
+  FPilotPointObsGrpCollection.Assign(Value);
 end;
 
 procedure TModflowParameter.SetRegularizationGroup(const Value: string);
@@ -1940,6 +1994,154 @@ end;
 
 procedure TPestMethodCollection.SetItems(const Index: Integer;
   const Value: TPestMethodItem);
+begin
+  inherited Items[Index] := Value;
+end;
+
+{ TPilotPointObsGrp }
+
+procedure TPilotPointObsGrp.Assign(Source: TPersistent);
+var
+  SrcGrp: TPilotPointObsGrp;
+begin
+  if Source is TPilotPointObsGrp then
+  begin
+    SrcGrp := TPilotPointObsGrp(Source);
+    Layer := SrcGrp.Layer;
+    ObsGroupName := SrcGrp.ObsGroupName;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+function TPilotPointObsGrp.GetObsGroupName: string;
+begin
+  if FObsGroup <> nil then
+  begin
+    FObsGroupName := (FObsGroup as TPestObservationGroup).ObsGroupName;
+  end;
+  result := FObsGroupName
+end;
+
+function TPilotPointObsGrp.IsSame(OtherItem: TPilotPointObsGrp): Boolean;
+begin
+  result := (Layer = OtherItem.Layer) and
+    (ObsGroupName = OtherItem.ObsGroupName);
+end;
+
+procedure TPilotPointObsGrp.SetLayer(const Value: Integer);
+begin
+  FLayer := Value;
+end;
+
+procedure TPilotPointObsGrp.SetObsGroupName(const Value: string);
+var
+  LocalModel: TCustomModel;
+  ObservationGroups: TPestObservationGroups;
+begin
+  FObsGroupName := Value;
+  if (Collection as TPPObsGrpCollection).FModel <> nil then
+  begin
+    LocalModel := (Collection as TPPObsGrpCollection).FModel as TCustomModel;
+    ObservationGroups := LocalModel.PestProperties.PriorInfoObservationGroups;
+    FObsGroup := ObservationGroups.GetObsGroupByName(Value);
+    if FObsGroup <> nil then
+    begin
+      FObsGroupName := (FObsGroup as TPestObservationGroup).ObsGroupName;
+    end;
+  end;
+
+end;
+
+{ TPPObsGrpCollection }
+
+function TPPObsGrpCollection.Add: TPilotPointObsGrp;
+begin
+  result := inherited Add as TPilotPointObsGrp;
+end;
+
+
+constructor TPPObsGrpCollection.Create(Model: TBaseModel);
+var
+  InvalidateEvent: TNotifyEvent;
+begin
+  FModel := Model;
+  InvalidateEvent := nil;
+  inherited Create(TPilotPointObsGrp, InvalidateEvent);
+end;
+
+function TPPObsGrpCollection.GetGroupNameByLayer(Layer: integer): string;
+var
+  Index: Integer;
+begin
+  result := '';
+  for Index := 0 to Count - 1 do
+  begin
+    if Items[Index].Layer = Layer then
+    begin
+      result := Items[Index].ObsGroupName;
+      break;
+    end;
+  end;
+end;
+
+function TPPObsGrpCollection.GetItem(Index: Integer): TPilotPointObsGrp;
+begin
+  result := inherited Items[Index] as TPilotPointObsGrp;
+end;
+
+function TPPObsGrpCollection.IsSame(
+  OtherCollection: TPPObsGrpCollection): Boolean;
+var
+  Index: Integer;
+begin
+  result := Count = OtherCollection.Count;
+  if result then
+  begin
+    for Index := 0 to Count - 1 do
+    begin
+      result := Items[Index].IsSame(OtherCollection[Index]);
+      if not result then
+      begin
+        break;
+      end;
+    end;
+  end;
+end;
+
+procedure TPPObsGrpCollection.SetGroupNameByLayer(Layer: integer;
+  const GroupName: string);
+var
+  Item: TPilotPointObsGrp;
+  Index: Integer;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    if Items[Index].Layer = Layer then
+    begin
+      if GroupName = '' then
+      begin
+        Items[Index].Free;
+      end
+      else
+      begin
+        Items[Index].ObsGroupName := GroupName;
+      end;
+      Exit;
+    end;
+  end;
+  if GroupName <> '' then
+  begin
+    Item := Add;
+    Item.Layer := Layer;
+    Item.ObsGroupName := GroupName;
+  end;
+end;
+
+procedure TPPObsGrpCollection.SetItem(Index: Integer;
+  const Value: TPilotPointObsGrp);
 begin
   inherited Items[Index] := Value;
 end;

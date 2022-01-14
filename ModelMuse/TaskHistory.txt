@@ -462,11 +462,11 @@ object TTaskHistory
     end
     item
       Name = 'PEST Pilot Points'
-      Display = False
+      Display = True
     end
     item
       Name = 'PEST Regularization'
-      Display = False
+      Display = True
     end
     item
       Name = 'MT3D-USGS RCT'
@@ -28773,5 +28773,19 @@ object TTaskHistory
         'Testing'
         'Bug fix'
         'Documentation')
+    end
+    item
+      Date = 44574.000000000000000000
+      Categories.Strings = (
+        'PEST'
+        'PEST Pilot Points'
+        'PEST Regularization')
+    end
+    item
+      Date = 44575.000000000000000000
+      Categories.Strings = (
+        'PEST Pilot Points'
+        'PEST Regularization'
+        'PEST')
     end>
 end

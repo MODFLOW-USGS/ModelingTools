@@ -68,6 +68,7 @@ type
     property Items[Index: Integer]: TPestObservationGroup read GetParamGroup
       write SetParamGroup; default;
     function GetObsGroupByName(ObsGroupName: string): TPestObservationGroup;
+    procedure ReleaseFreedObsGrouopReferences;
   end;
 
   function ValidObsGroupName(Value: string): string;
@@ -82,7 +83,8 @@ const
 implementation
 
 uses
-  frmGoPhastUnit;
+  frmGoPhastUnit, PhastModelUnit, System.Generics.Collections,
+  ModflowParameterUnit, System.Generics.Defaults;
 
 function ValidObsGroupName(Value: string): string;
 const
@@ -296,6 +298,50 @@ begin
     begin
       result := AnItem;
       Exit;
+    end;
+  end;
+end;
+
+procedure TPestObservationGroups.ReleaseFreedObsGrouopReferences;
+var
+  List: System.Generics.Collections.TList<TObject>;
+  ItemIndex: Integer;
+  LocalModel: TCustomModel;
+  ParamIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  ObItem: TPilotPointObsGrp;
+begin
+  if Model <> nil then
+  begin
+    List := TList<TObject>.Create;
+    try
+      for ItemIndex := 0 to Count - 1 do
+      begin
+        List.Add(Items[ItemIndex]);
+      end;
+      //      List.Sort(
+      //        TComparer<TObject>.Construct(
+      //          function(const A, B: TObject): Integer
+      //          begin
+      //            Result := NativeUInt(A) - NativeUInt(B);
+      //          end
+      //        )
+      //      );
+      LocalModel := Model as TCustomModel;
+      for ParamIndex := 0 to LocalModel.ModflowSteadyParameters.Count - 1 do
+      begin
+        AParam := LocalModel.ModflowSteadyParameters[ParamIndex];
+        for ItemIndex := AParam.PilotPointObsGrpCollection.Count - 1 downto 0 do
+        begin
+          ObItem := AParam.PilotPointObsGrpCollection[ItemIndex];
+          if List.IndexOf(ObItem.ObsGroup) < 0 then
+          begin
+            ObItem.Free;
+          end;
+        end;
+      end;
+    finally
+      List.Free;
     end;
   end;
 end;
