@@ -34,6 +34,10 @@ type
     FPestObsCollection: TPestObsCollection;
     FMeasurementStdDeviationText: string;
     FNaturalWeightText: string;
+    FWeightedResidualText: string;
+    FWeightedModeledText: string;
+    FWeightText: string;
+    FWeightedMeasuredText: string;
     procedure SetGroupName(const Value: string);
     procedure SetMeasured(const Value: double);
     procedure SetMeasurementStdDeviation(const Value: double);
@@ -74,6 +78,10 @@ type
     procedure Draw(const BitMap: TPersistent; const ZoomBox: TQrbwZoomBox2);
     procedure SetMeasurementStdDeviationText(const Value: string);
     procedure SetNaturalWeightText(const Value: string);
+    procedure SetWeightedMeasuredText(const Value: string);
+    procedure SetWeightedModeledText(const Value: string);
+    procedure SetWeightedResidualText(const Value: string);
+    procedure SetWeightText(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -106,6 +114,10 @@ type
     property OriginalOrder: Integer read FOriginalOrder write SetOriginalOrder;
     property ObjectName: string read GetObjectName write SetObjectName;
     property StoredTime: TRealStorage read FStoredTime write SetStoredTime;
+    property WeightText: string read FWeightText write SetWeightText;
+    property WeightedMeasuredText: string read FWeightedMeasuredText write SetWeightedMeasuredText;
+    property WeightedModeledText: string read FWeightedModeledText write SetWeightedModeledText;
+    property WeightedResidualText: string read FWeightedResidualText write SetWeightedResidualText;
     property MeasurementStdDeviationText: string read FMeasurementStdDeviationText write SetMeasurementStdDeviationText;
     property NaturalWeightText: string read FNaturalWeightText write SetNaturalWeightText;
     property Visible: Boolean read FVisible write SetVisible;
@@ -197,7 +209,8 @@ type
 implementation
 
 uses RbwParser, System.IOUtils, frmErrorsAndWarningsUnit, ModelMuseUtilities,
-  PestObsUnit, PhastModelUnit, frmGoPhastUnit, BigCanvasMethods, System.Math;
+  PestObsUnit, PhastModelUnit, frmGoPhastUnit, BigCanvasMethods, System.Math,
+  System.StrUtils;
 
 resourcestring
   StrTheFileFromWhich = 'The file from which you are attempting to read ' +
@@ -240,6 +253,10 @@ begin
     Time := ObsSource.Time;
     OriginalOrder := ObsSource.OriginalOrder;
     ObjectName := ObsSource.ObjectName;
+    WeightText := ObsSource.WeightText;
+    WeightedMeasuredText := ObsSource.WeightedMeasuredText;
+    WeightedModeledText := ObsSource.WeightedModeledText;
+    WeightedResidualText := ObsSource.WeightedResidualText;
     MeasurementStdDeviationText := ObsSource.MeasurementStdDeviationText;
     NaturalWeightText := ObsSource.NaturalWeightText;
     FScreenObject := ObsSource.ScreenObject;
@@ -591,14 +608,34 @@ begin
   StoredWeightedMeasured.Value := Value;
 end;
 
+procedure TPestObsResult.SetWeightedMeasuredText(const Value: string);
+begin
+  FWeightedMeasuredText := Value;
+end;
+
 procedure TPestObsResult.SetWeightedModeled(const Value: double);
 begin
   StoredWeightedModeled.Value := Value;
 end;
 
+procedure TPestObsResult.SetWeightedModeledText(const Value: string);
+begin
+  FWeightedModeledText := Value;
+end;
+
 procedure TPestObsResult.SetWeightedResidual(const Value: double);
 begin
   StoredWeightedResidual.Value := Value;
+end;
+
+procedure TPestObsResult.SetWeightedResidualText(const Value: string);
+begin
+  FWeightedResidualText := Value;
+end;
+
+procedure TPestObsResult.SetWeightText(const Value: string);
+begin
+  FWeightText := Value;
 end;
 
 { TPestObsCollection }
@@ -916,6 +953,7 @@ var
   AList: TList;
   Index: Integer;
   AValue: Extended;
+  ALine: string;
 begin
   GetExistingObservations;
   result := False;
@@ -935,6 +973,8 @@ begin
       ResidualsFile.LoadFromFile(FileName);
       for LineIndex := 1 to ResidualsFile.Count - 1 do
       begin
+        ALine := ResidualsFile[LineIndex];
+        ALine := ReplaceStr(ALine, 'Cov. Mat.', 'Covariance_Matrix');
         Splitter.DelimitedText := ResidualsFile[LineIndex];
         if Splitter.Count > 0 then
         begin
@@ -945,10 +985,51 @@ begin
           Item.Measured := FortranStrToFloat(Splitter[2]);
           Item.Modeled := FortranStrToFloat(Splitter[3]);
           Item.Residual := FortranStrToFloat(Splitter[4]);
-          Item.Weight := FortranStrToFloat(Splitter[5]);
-          Item.WeightedMeasured := FortranStrToFloat(Splitter[6]);
-          Item.WeightedModeled := FortranStrToFloat(Splitter[7]);
-          Item.WeightedResidual := FortranStrToFloat(Splitter[8]);
+
+          if TryFortranStrToFloat(Splitter[5], AValue) then
+          begin
+            Item.Weight := AValue;
+            Item.WeightText := '';
+          end
+          else
+          begin
+            Item.Weight := 0;
+            Item.WeightText := Splitter[5];
+          end;
+
+          if TryFortranStrToFloat(Splitter[6], AValue) then
+          begin
+            Item.WeightedMeasured := AValue;
+            Item.WeightedMeasuredText := '';
+          end
+          else
+          begin
+            Item.WeightedMeasured := 0;
+            Item.WeightedMeasuredText := Splitter[6];
+          end;
+
+          if TryFortranStrToFloat(Splitter[7], AValue) then
+          begin
+            Item.WeightedModeled := AValue;
+            Item.WeightedModeledText := '';
+          end
+          else
+          begin
+            Item.WeightedModeled := 0;
+            Item.WeightedModeledText := Splitter[7];
+          end;
+
+          if TryFortranStrToFloat(Splitter[8], AValue) then
+          begin
+            Item.WeightedResidual := AValue;
+            Item.WeightedResidualText := '';
+          end
+          else
+          begin
+            Item.WeightedResidual := 0;
+            Item.WeightedResidualText := Splitter[8];
+          end;
+
           if TryFortranStrToFloat(Splitter[9], AValue) then
           begin
             Item.MeasurementStdDeviation := AValue;

@@ -28787,6 +28787,7 @@ object TTaskHistory
         'PEST Pilot Points'
         'PEST Regularization'
         'PEST'
-        'Testing')
+        'Testing'
+        'Documentation')
     end>
 end

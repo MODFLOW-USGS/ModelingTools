@@ -33,7 +33,7 @@ object framePestObservationResults: TframePestObservationResults
     Top = 0
     Width = 555
     Height = 454
-    ActivePage = tabValues
+    ActivePage = tabControls
     Align = alClient
     TabOrder = 1
     OnChange = pgcObservationsChange

@@ -788,28 +788,71 @@ begin
           rdgPestObs.RealValue[Ord(pocMeasured), ItemIndex+1] := AnItem.Measured;
           rdgPestObs.RealValue[Ord(pocModeled), ItemIndex+1] := AnItem.Modeled;
           rdgPestObs.RealValue[Ord(pocResidual), ItemIndex+1] := AnItem.Residual;
-          rdgPestObs.RealValue[Ord(pocWeight), ItemIndex+1] := AnItem.Weight;
-          rdgPestObs.RealValue[Ord(pocWtMeas), ItemIndex+1] := AnItem.WeightedMeasured;
-          rdgPestObs.RealValue[Ord(pocWtMod), ItemIndex+1] := AnItem.WeightedModeled;
-          rdgPestObs.RealValue[Ord(pocWtRes), ItemIndex+1] := AnItem.WeightedResidual;
-          if AnItem.MeasurementStdDeviationText = '' then
+
+          if AnItem.WeightText = '' then
           begin
-            rdgPestObs.RealValue[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviation;
+            rdgPestObs.RealValue[Ord(pocWeight), ItemIndex+1] :=
+              AnItem.Weight;
           end
           else
           begin
-            rdgPestObs.Cells[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviationText;
+            rdgPestObs.Cells[Ord(pocWeight), ItemIndex+1] :=
+              AnItem.WeightText;
+          end;
+
+          if AnItem.WeightedMeasuredText = '' then
+          begin
+            rdgPestObs.RealValue[Ord(pocWtMeas), ItemIndex+1] :=
+              AnItem.WeightedMeasured;
+          end
+          else
+          begin
+            rdgPestObs.Cells[Ord(pocWtMeas), ItemIndex+1] :=
+              AnItem.WeightedMeasuredText;
+          end;
+
+          if AnItem.WeightedModeledText = '' then
+          begin
+            rdgPestObs.RealValue[Ord(pocWtMod), ItemIndex+1] :=
+              AnItem.WeightedModeled;
+          end
+          else
+          begin
+            rdgPestObs.Cells[Ord(pocWtMod), ItemIndex+1] :=
+              AnItem.WeightedModeledText;
+          end;
+
+          if AnItem.WeightedResidualText = '' then
+          begin
+            rdgPestObs.RealValue[Ord(pocWtRes), ItemIndex+1] :=
+              AnItem.WeightedResidual;
+          end
+          else
+          begin
+            rdgPestObs.Cells[Ord(pocWtRes), ItemIndex+1] :=
+              AnItem.WeightedResidualText;
+          end;
+
+          if AnItem.MeasurementStdDeviationText = '' then
+          begin
+            rdgPestObs.RealValue[Ord(pocMeasSD), ItemIndex+1] :=
+              AnItem.MeasurementStdDeviation;
+          end
+          else
+          begin
+            rdgPestObs.Cells[Ord(pocMeasSD), ItemIndex+1] :=
+              AnItem.MeasurementStdDeviationText;
           end;
           if AnItem.NaturalWeightText = '' then
           begin
-            rdgPestObs.RealValue[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeight;
+            rdgPestObs.RealValue[Ord(pocNaturalWeight), ItemIndex+1] :=
+              AnItem.NaturalWeight;
           end
           else
           begin
-            rdgPestObs.Cells[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeightText;
+            rdgPestObs.Cells[Ord(pocNaturalWeight), ItemIndex+1] :=
+              AnItem.NaturalWeightText;
           end;
-//          rdgPestObs.RealValue[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviation;
-//          rdgPestObs.RealValue[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeight;
         end;
       finally
         AList.Free;
