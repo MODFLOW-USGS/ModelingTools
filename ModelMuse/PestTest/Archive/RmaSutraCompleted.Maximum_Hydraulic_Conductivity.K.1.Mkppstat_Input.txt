@@ -1,4 +1,4 @@
-D:\ModelingTools\ModelMuse\PestTest\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.pp
+RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.pp
 4
 1
 RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.Variogram.txt

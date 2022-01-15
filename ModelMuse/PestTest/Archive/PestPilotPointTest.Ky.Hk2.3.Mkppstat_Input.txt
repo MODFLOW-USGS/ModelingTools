@@ -1,4 +1,4 @@
-D:\ModelingTools\ModelMuse\PestTest\PestPilotPointTest.Ky.Hk2.3.pp
+PestPilotPointTest.Ky.Hk2.3.pp
 4
 1
 PestPilotPointTest.Ky.Hk2.3.Variogram.txt

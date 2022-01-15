@@ -40,7 +40,7 @@ begin
   Lines := TStringList.Create;
   try
     // MKPPSTAT Input
-    Lines.Add(PilotPointFileObject.FileName);
+    Lines.Add(ExtractFileName(PilotPointFileObject.FileName));
     Lines.Add(IntToStr(PestProp.MaxPilotPointsInRange));
     Lines.Add('1');
     VariogramFileName := ChangeFileExt(PilotPointFileObject.FileName, '.Variogram.txt');
