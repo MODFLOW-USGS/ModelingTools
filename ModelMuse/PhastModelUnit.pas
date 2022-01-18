@@ -4892,9 +4892,16 @@ that affects the model output should also have a comment. }
     property ParamGroups;
     property PestProperties;
     property SvdaPrepProperties: TSvdaPrepProperties read FSvdaPrepProperties
-      write SetSvdaPrepProperties;
+      write SetSvdaPrepProperties
+      {$IFNDEF PEST}
+      stored False;
+      {$ENDIF}
+
     property SupCalcProperties: TSupCalcProperties read FSupCalcProperties
-      write SetSupCalcProperties;
+      write SetSupCalcProperties
+      {$IFNDEF PEST}
+      stored False;
+      {$ENDIF}
   end;
 
   TChildDiscretization = class(TOrderedItem)
