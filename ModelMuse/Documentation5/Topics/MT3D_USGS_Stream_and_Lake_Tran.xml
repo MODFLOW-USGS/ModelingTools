@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MT3D-USGS Stream and Lake Transport</title>
@@ -7,7 +7,7 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MT3D-USGS Stream and Lake Transport</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This illustrates the gwt example from the MT3D-USGS model. The model is described starting on page 56 of the MT3D-USGS documentation (Bedekar and others, 2016). The model simulates solute transport with transfer of solutes among lakes, streams, and groundwater. This model was based on one presented in the documentation of the SFR package in Prudic and others (2004) starting on page 24.</text></para>
-    <para styleclass="Normal"><image src="GWT_ConceptualModel.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Locations of inactive cells, lakes, streams, and constant head cells</title><caption translate="true"><![CDATA[Finite-difference model grid of layer 1, boundary conditions, and locations of lakes and streams (from Prudic and others, 2004).]]></caption></image></para>
+    <para styleclass="Normal"><image src="GWT_ConceptualModel.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Locations of inactive cells, lakes, streams, and constant head cells</title><caption translate="true"><![CDATA[Finite-difference model grid of layer 1, boundary conditions, and locations of lakes and streams (from Prudic and others, 2004).]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In general, flow is from North to South due to constant head boundaries. The model has four stream segments and two lakes. Two of the stream segments (segments 1 and 3) have small amounts of solute in them but the main source of solute is from a few of the constant head boundary cells on the Northern edge of the model with concentrations of 500 mg/l.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Because the main interest in this model is the solute transport portion, we will import the existing flow model and then show how to add the solute transport portion.</text></para>
     <para styleclass="Normal"></para>

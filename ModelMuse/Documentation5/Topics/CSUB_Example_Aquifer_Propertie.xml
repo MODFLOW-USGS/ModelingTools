@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">CSUB Example: Aquifer Properties</title>
@@ -159,7 +159,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><image src="CSubExampleDefaultFormulas.png" scale="60.00%" width="383" height="297" styleclass="Image Caption"><title translate="true">CSUB Example: Default formula in Data Sets dialog box</title></image></para>
-    <para styleclass="Normal"><image src="CSubExampleFormulaEditor.png" scale="60.00%" width="463" height="307" styleclass="Image Caption"><title translate="true">CSUB Example: Using Formula Editor</title></image></para>
+    <para styleclass="Normal"><image src="CSubExampleDefaultFormulas.png" scale="-99.90%" width="383" height="297" styleclass="Image Caption"><title translate="true">CSUB Example: Default formula in Data Sets dialog box</title></image></para>
+    <para styleclass="Normal"><image src="CSubExampleFormulaEditor.png" scale="-99.90%" width="463" height="307" styleclass="Image Caption"><title translate="true">CSUB Example: Using Formula Editor</title></image></para>
   </body>
 </topic>

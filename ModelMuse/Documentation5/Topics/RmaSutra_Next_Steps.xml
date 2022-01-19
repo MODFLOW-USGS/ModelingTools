@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RmaSutra: Next Steps</title>
@@ -7,8 +7,8 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaSutra: Next Steps</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">As with the MODFLOW versions of this model, the next steps might be to further investigate the risk posed by the contaminants in the flow from the disposal pond to the water supply wells. Solute transport was simulated in this version of the model. It is a simple matter to import the model results from the calibrated model and compare them with the uncalibrated model and true models. In the uncalibrated model, the solute plum is much wider than in the calibrated or true models. In the calibrated and true model, low hydraulic conductivities on the east and west sides directed more flow toward the center of the model resulting in a narrower plume. </text></para>
-    <para styleclass="Normal"><image src="RmaSutraConentrationsUncalibrated.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Diagram of simulated concentrations in the final time step of the uncalibrated model.</title><caption translate="true"><![CDATA[Diagram of simulated concentrations in the final time step of the uncalibrated model.]]></caption></image></para>
-    <para styleclass="Normal"><image src="RmaSutraConentrationsCalibrated.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Diagram of simulated concentrations in the final time step of the calibrated model.</title><caption translate="true"><![CDATA[Diagram of simulated concentrations in the final time step of the calibrated model.]]></caption></image></para>
-    <para styleclass="Normal"><image src="RmaSutraConentrationsTrue.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Diagram of simulated concentrations in the final time step of the true model.</title><caption translate="true"><![CDATA[Diagram of simulated concentrations in the final time step of the true model.]]></caption></image></para>
+    <para styleclass="Normal"><image src="RmaSutraConentrationsUncalibrated.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Diagram of simulated concentrations in the final time step of the uncalibrated model.</title><caption translate="true"><![CDATA[Diagram of simulated concentrations in the final time step of the uncalibrated model.]]></caption></image></para>
+    <para styleclass="Normal"><image src="RmaSutraConentrationsCalibrated.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Diagram of simulated concentrations in the final time step of the calibrated model.</title><caption translate="true"><![CDATA[Diagram of simulated concentrations in the final time step of the calibrated model.]]></caption></image></para>
+    <para styleclass="Normal"><image src="RmaSutraConentrationsTrue.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Diagram of simulated concentrations in the final time step of the true model.</title><caption translate="true"><![CDATA[Diagram of simulated concentrations in the final time step of the true model.]]></caption></image></para>
   </body>
 </topic>

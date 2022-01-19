@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">The Ruler</title>
@@ -10,7 +10,7 @@
     <para styleclass="Normal" style="text-align:center;"><table rowcount="2" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Image Caption"><image src="Ruler.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Example of a ruler</title></image></para>
+          <para styleclass="Image Caption"><image src="Ruler.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Example of a ruler</title></image></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

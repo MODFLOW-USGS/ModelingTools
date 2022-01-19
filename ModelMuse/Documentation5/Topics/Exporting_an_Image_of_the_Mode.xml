@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Exporting an Image of the Model</title>
@@ -7,7 +7,7 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Exporting an Image of the Model</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">After importing the model results, you may wish to save a plot of the model results for use in a report. To do that first get the top, front, or side view of the model looking the way you want and optionally edit the legend on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Color_Grid_Dialog_Box" styleclass="Strong" translate="true">Color Grid</link><text styleclass="Normal" translate="true"> or the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Contour_Data_Dialog_Box" styleclass="Strong" translate="true">Contour Data</link><text styleclass="Normal" translate="true"> panes of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Visualization_Dialog_Box" styleclass="Strong" translate="true">Data Visualization</link><text styleclass="Normal" translate="true"> dialog box. Then select </text><text styleclass="Strong" translate="true">File|Export|Image...</text><text styleclass="Normal" translate="true"> The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Image_Dialog_Box" styleclass="Strong" translate="true">Export Image</link><text styleclass="Normal" translate="true"> dialog box will appear. Click the </text><text styleclass="Strong" translate="true">Save image</text><text styleclass="Normal" translate="true"> button to save the image to a file. The controls on the left can be used to change the appearance of the image.</text></para>
-    <para styleclass="Image Caption"><image src="ExportImageExample.bmp" scale="50.00%" width="500" height="276" styleclass="Image Caption"></image></para>
+    <para styleclass="Image Caption"><image src="ExportImageExample.bmp" scale="-99.90%" width="500" height="276" styleclass="Image Caption"></image></para>
     <para styleclass="Image Caption"><text styleclass="Image Caption" translate="true">The Export Image dialog box</text></para>
   </body>
 </topic>

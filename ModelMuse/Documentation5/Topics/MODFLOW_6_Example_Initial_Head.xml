@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MODFLOW 6 Example: Initial Head</title>
@@ -7,9 +7,9 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Example: Initial Head</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">For this example, we are using the default values for all the aquifer properties. We could have specified them by changing the default formulas or using objects. However, we will change the default formula for the initial head.</text></para>
-    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+    <list id="1" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:'Times New Roman'; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Select Data|Edit Data Sets.</text></li>
-      <li styleclass="Normal"><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">Select the Modflow_Initial_Head data set and set its formula to Model_Top. Then click the Apply and Close buttons.</text><br/><image src="Modflow6ExampleInitialHead.bmp" scale="60.00%" width="383" height="297" styleclass="Image Caption"><title translate="true">Initial Head formula</title><caption translate="true"><![CDATA[Initial Head formula]]></caption></image></li>
+      <li styleclass="Normal"><text styleclass="Normal" style="font-family:'Times New Roman'; font-size:12pt; color:#000000;" translate="true">Select the Modflow_Initial_Head data set and set its formula to Model_Top. Then click the Apply and Close buttons.</text><br /><image src="Modflow6ExampleInitialHead.bmp" scale="-99.90%" width="383" height="297" styleclass="Image Caption"><title translate="true">Initial Head formula</title><caption translate="true"><![CDATA[Initial Head formula]]></caption></image></li>
     </list>
   </body>
 </topic>

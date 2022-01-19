@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Mesh</title>
@@ -29,18 +29,18 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="GenerateGrid.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Generate Grid button</title></image><text styleclass="Table Header" translate="true"> Generate Mesh... </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="GenerateGrid.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Generate Grid button</title></image><text styleclass="Table Header" translate="true"> Generate Mesh... </text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Create a grid using objects. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Objects_to_Specify_the_M" styleclass="Table Cell" translate="true">Using Objects to Specify the Mesh</link><text styleclass="Table Cell" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mesh_Generation_Control_Variab" styleclass="Table Cell" style="font-weight:bold;" translate="true">Mesh Generation Control Variables</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true">&#32;</text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Create a grid using objects. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Objects_to_Specify_the_M" styleclass="Table Cell" translate="true">Using Objects to Specify the Mesh</link><text styleclass="Table Cell" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mesh_Generation_Control_Variab" styleclass="Table Cell" style="font-weight:bold;" translate="true">Mesh Generation Control Variables</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true"> </text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="FishnetMeshButton.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Draw Fishnet Mesh Quadrilaterals button</title></image><text styleclass="Table Header" translate="true"> Draw Fishnet-Mesh Quadrilaterals</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="FishnetMeshButton.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Draw Fishnet Mesh Quadrilaterals button</title></image><text styleclass="Table Header" translate="true"> Draw Fishnet-Mesh Quadrilaterals</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Draw quadrilaterals to define a fishnet mesh. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Fishnet_Mesh_Quadrilater" styleclass="Table Cell" translate="true">Using Fishnet-Mesh Quadrilaterals to Specify the Mesh</link><text styleclass="Table Cell" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Fishnet_Quadrilateral_Properti" styleclass="Table Cell" style="font-weight:bold;" translate="true">Fishnet Quadrilateral Properties</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true">&#32;</text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Draw quadrilaterals to define a fishnet mesh. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Fishnet_Mesh_Quadrilater" styleclass="Table Cell" translate="true">Using Fishnet-Mesh Quadrilaterals to Specify the Mesh</link><text styleclass="Table Cell" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Fishnet_Quadrilateral_Properti" styleclass="Table Cell" style="font-weight:bold;" translate="true">Fishnet Quadrilateral Properties</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true"> </text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -48,7 +48,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">View Mesh Information</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">View information about the mesh such as the number of nodes and elements. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mesh_Information_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Mesh Information</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true">&#32;</text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">View information about the mesh such as the number of nodes and elements. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mesh_Information_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Mesh Information</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true"> </text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -56,7 +56,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Renumber Mesh...</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Renumber the nodes and elements in the mesh to improve bandwidth. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mesh_Renumbering_Method_Dialog" styleclass="Table Cell" style="font-weight:bold;" translate="true">Mesh Renumbering Method</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true">&#32;</text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Renumber the nodes and elements in the mesh to improve bandwidth. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mesh_Renumbering_Method_Dialog" styleclass="Table Cell" style="font-weight:bold;" translate="true">Mesh Renumbering Method</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true"> </text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -85,7 +85,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><anchor id="MoveCrossSection" styleclass="Image Caption"></anchor><image src="MoveCrossSectionButton.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Move Cross Section button</title></image><text styleclass="Table Header" translate="true"> Move Cross Section</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><anchor id="MoveCrossSection" styleclass="Image Caption"></anchor><image src="MoveCrossSectionButton.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Move Cross Section button</title></image><text styleclass="Table Header" translate="true"> Move Cross Section</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">Move Cross Section</text><text styleclass="Table Cell" translate="true"> is selected, the user can drag the cross section line or either of its end points to a new location by clicking on it with the cursor and dragging it. Just one end point will be moved if the user clicks on an end point. The entire cross section will be moved if the user clicks on the cross section between the end points.</text></para>
@@ -93,7 +93,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><anchor id="RotateCrossSection" styleclass="Image Caption"></anchor><image src="RotateCrossSectionButton.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Rotate Cross Section button</title></image><text styleclass="Table Header" translate="true"> Rotate Cross Section</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><anchor id="RotateCrossSection" styleclass="Image Caption"></anchor><image src="RotateCrossSectionButton.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Rotate Cross Section button</title></image><text styleclass="Table Header" translate="true"> Rotate Cross Section</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">Rotate Cross Section</text><text styleclass="Table Cell" translate="true"> is selected, the user can rotate the cross section line by clicking and dragging on the top view of the model.</text></para>
@@ -104,12 +104,12 @@
           <para styleclass="Table Header" style="text-align:left;"><anchor id="SpecifyCrossSection" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Specify Cross Section...</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specify the coordinates of the cross section line numerically. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Cross_Section_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">SUTRA/DISV Cross Section</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true">&#32;</text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specify the coordinates of the cross section line numerically. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Cross_Section_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">SUTRA/DISV Cross Section</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true"> </text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="MoveNodesOrElementsButton.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Move or Delete Nodes or Elements button</title></image><text styleclass="Table Header" translate="true"> Move or Delete Nodes or Elements</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="MoveNodesOrElementsButton.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Move or Delete Nodes or Elements button</title></image><text styleclass="Table Header" translate="true"> Move or Delete Nodes or Elements</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">Move or Delete Nodes or Elements</text><text styleclass="Table Cell" translate="true"> is selected, the user can click on nodes or elements to select them and then either move or delete them. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_a_Mesh" styleclass="Table Cell" translate="true">Editing the Mesh</link><text styleclass="Table Cell" translate="true">. The user can also select one or more nodes double-click on a node to specify the locations of the selected nodes numerically. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Node_Location_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Node Location</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -117,7 +117,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="DrawElementsButton.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Draw Elements Button</title></image><text styleclass="Table Header" translate="true"> Draw Elements</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="DrawElementsButton.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Draw Elements Button</title></image><text styleclass="Table Header" translate="true"> Draw Elements</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">Draw Elements</text><text styleclass="Table Cell" translate="true"> is selected, the user can create new elements on the top view of the model by clicking on the top view. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_a_Mesh" styleclass="Table Cell" translate="true">Editing the Mesh</link><text styleclass="Table Cell" translate="true">.</text></para>

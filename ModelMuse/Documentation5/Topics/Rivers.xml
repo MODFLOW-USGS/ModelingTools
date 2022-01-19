@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Rivers</title>
@@ -70,7 +70,7 @@
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Make the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Selection_Cube" styleclass="Normal" translate="true">selected layer</link><text styleclass="Normal" translate="true"> the bottom layer and then try coloring the grid (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Color_Grid_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Data|Data Visualization|Color Grid…</link><text styleclass="Normal" translate="true">) with the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">River_Head</text><text styleclass="Normal" translate="true"> (under Boundary Conditions|PHAST River) (fig. 54). </text></li>
     </list>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal" style="text-align:center;"><image src="Ex3Rivers.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="Ex3Rivers.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
     <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 54.</text><text styleclass="Image Caption" translate="true"> The top view of the model with grid cells colored to reflect the river head in example 3. The river objects are shown with red lines.</text></para>
     <para styleclass="Normal"></para>
   </body>

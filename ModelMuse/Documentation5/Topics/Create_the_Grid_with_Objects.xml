@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Create the Grid with Objects</title>
@@ -12,7 +12,7 @@
       <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">Select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Object|Create|Rectangle</text><text styleclass="Normal" translate="true"> and click twice on the top view of the model to create a rectangle whose opposite corners are close to (0, 0) and (100, 20.5) (fig. 50). The locations do not need to be precise because they will be edited later.</text></li>
     </list>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true"> </text><image src="Ex2Rectangle.BMP" scale="100.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+    <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true"> </text><image src="Ex2Rectangle.BMP" scale="-99.90%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
     <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 50.</text><text styleclass="Image Caption" translate="true"> Creating a rectangle object in ModelMuse.</text></para>
     <para styleclass="Normal"></para>
     <list id="3" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="6" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">

@@ -1,15 +1,37 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="1.5" isskin="false" isrepository="false">
+<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="2.0" isskin="false" isrepository="false">
   <config>
     <namespaces>
       <namespace name="ModflowGuide" href=".\ModflowGuide\ModflowGuide.hmxp"/>
       <namespace name="ModPathGuide" href=".\ModPathGuide\ModPathGuide.hmxp"/>
       <namespace name="ZoneBudgetGuide" href="./ZoneBudgetGuide/ZoneBudgetGuide.hmxp"/>
     </namespaces>
+    <export-task-groups>
+      <export-task-group name="Recent Publishes">
+        <export-tasks>
+          <export-task name="Publish as CHM" format="CHM">
+            <task-config-group name="settings">
+              <task-config-value name="outputfile">ModelMuse.chm</task-config-value>
+              <task-config-value name="skin">Webhelp, Integrated IFrames Green Header.hmskin</task-config-value>
+              <task-config-value name="deletetemp">1</task-config-value>
+              <task-config-value name="make0include">CHM,ALLMODELS,SUTRA30</task-config-value>
+              <task-config-value name="make0status">*</task-config-value>
+            </task-config-group>
+          </export-task>
+          <export-task name="Publish as HTM" format="HTM">
+            <task-config-group name="settings">
+              <task-config-value name="outputfile">.\HTML\index.html</task-config-value>
+              <task-config-value name="skin">Modern_Standard_Gentle_Blue_WebHelp.hmskin</task-config-value>
+              <task-config-value name="make3include">HTML,ALLMODELS</task-config-value>
+              <task-config-value name="make3status">*</task-config-value>
+            </task-config-group>
+          </export-task>
+        </export-tasks>
+      </export-task-group>
+    </export-task-groups>
     <helpwindows>
       <helpwindow name="Main" left="-1" top="-1" width="-1" height="-1">
         <caption translate="true">&lt;%TITLE%&gt;</caption>
-        <window-options-hlp autosize="true" maximize="false" posabsolute="false" keepontop="false" buttons="0" headercolor="#55DB5F" textcolor="#FFFFFF"/>
         <window-options-chm navigation="true" navigationwidth="200" search="true" favorite="true" saveregistry="true" buttons="12366">
           <user-button name="home">
             <caption translate="true">home</caption>
@@ -116,10 +138,10 @@
         <config-value name="MODFLOW6">MODFLOW6</config-value>
       </config-group>
       <config-value name="imageshortcuts_includebaggage">1</config-value>
-      <config-value name="make0include">CHM,ALLMODELS,OPT_ATOC,OPT_BREADTRAIL,OPT_PRINT,OPT_SORTABLE,OPT_TOGGLE,OPT_TOGTOC,OPT_URL,SUTRA30</config-value>
+      <config-value name="make0include">CHM,ALLMODELS,SUTRA30</config-value>
       <config-value name="make0status">*</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
-      <config-value name="make3status">(Complete)</config-value>
+      <config-value name="make3status">*</config-value>
     </config-group>
     <config-group name="hlp">
       <config-value name="citation" translate="true"></config-value>
@@ -140,7 +162,7 @@
       <config-value name="usesecondarywindows">1</config-value>
       <config-value name="outputfile">ModelMuse.chm</config-value>
       <config-value name="deletetemp">1</config-value>
-      <config-value name="skin">..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\forest_green_horiz.hmskin</config-value>
+      <config-value name="skin">Webhelp, Integrated IFrames Green Header.hmskin</config-value>
     </config-group>
     <config-group name="hxs">
       <config-value name="namespace"></config-value>
@@ -496,7 +518,7 @@ document.write('</frameset>');
       <config-value name="jpgquality">90</config-value>
       <config-value name="imagehint">1</config-value>
       <config-value name="outputfile">.\HTML\index.html</config-value>
-      <config-value name="skin">..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\forest_green_horiz.hmskin</config-value>
+      <config-value name="skin">Modern_Standard_Gentle_Blue_WebHelp.hmskin</config-value>
       <config-value name="layoutthreeframe">0</config-value>
     </config-group>
     <config-group name="pdf">
@@ -596,7 +618,7 @@ document.write('</frameset>');
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">0</config-value>
+          <config-value name="lastexport">3</config-value>
         </config-group>
       </config-group>
     </config-group>
@@ -2271,9 +2293,6 @@ document.write('</frameset>');
       <file-mod href="_Legend_Tab.xml"/>
       <file-mod href="LinkToManageParameters.xml"/>
       <file-mod href="External_Flow_File.xml" build="CHM,DEMO,HLP,HTML,HXS,USER2,USER3"/>
-      <file-mod href="Generalized_Flow_Pane.xml" build="SUTRA30"/>
-      <file-mod href="Generalized_Transport_Pane.xml" build="SUTRA30"/>
-      <file-mod href="Lake.xml" build="SUTRA30"/>
       <file-mod href="Import_Filter_Methods.xml"/>
       <file-mod href="ConvertUnits.xml"/>
       <file-mod href="Time_series_interpolation.xml"/>

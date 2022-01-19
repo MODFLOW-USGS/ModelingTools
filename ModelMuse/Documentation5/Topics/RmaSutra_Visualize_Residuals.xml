@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RmaSutra: Visualize Residuals</title>
@@ -6,10 +6,10 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaSutra: Visualize Residuals</text></para>
     </header>
-    <para styleclass="Normal"><snippet src="Visualize_Residuals"/></para>
-    <para styleclass="Normal"><image src="RmaSutraResidPlot.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Plot of weighted residuals following parameter estimation in a SUTRA model.</title><caption translate="true"><![CDATA[Plot of weighted residuals following parameter estimation in a SUTRA model.]]></caption></image></para>
+    <para styleclass="Normal"><snippet src="Visualize_Residuals" /></para>
+    <para styleclass="Normal"><image src="RmaSutraResidPlot.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Plot of weighted residuals following parameter estimation in a SUTRA model.</title><caption translate="true"><![CDATA[Plot of weighted residuals following parameter estimation in a SUTRA model.]]></caption></image></para>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal"><image src="RmaSutraResVsObs.png" scale="60.00%" width="589" height="430" styleclass="Image Caption"><title translate="true">Screen capture showing graph of weighted residuals vs observed values in a SUTRA model.</title><caption translate="true"><![CDATA[Screen capture showing graph of weighted residuals vs observed values in a SUTRA model.]]></caption></image></para>
-    <para styleclass="Normal"><image src="RmaSutraSimVsObs.png" scale="60.00%" width="589" height="430" styleclass="Image Caption"><title translate="true">Screen capture showing graph of simulated values vs observed values in a SUTRA model.</title><caption translate="true"><![CDATA[Screen capture showing graph of simulated values vs observed values in a SUTRA model.]]></caption></image></para>
+    <para styleclass="Normal"><image src="RmaSutraResVsObs.png" scale="-99.90%" width="589" height="430" styleclass="Image Caption"><title translate="true">Screen capture showing graph of weighted residuals vs observed values in a SUTRA model.</title><caption translate="true"><![CDATA[Screen capture showing graph of weighted residuals vs observed values in a SUTRA model.]]></caption></image></para>
+    <para styleclass="Normal"><image src="RmaSutraSimVsObs.png" scale="-99.90%" width="589" height="430" styleclass="Image Caption"><title translate="true">Screen capture showing graph of simulated values vs observed values in a SUTRA model.</title><caption translate="true"><![CDATA[Screen capture showing graph of simulated values vs observed values in a SUTRA model.]]></caption></image></para>
   </body>
 </topic>

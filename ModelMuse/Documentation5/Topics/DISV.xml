@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">DISV</title>
@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">DISV</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true"> The menu items under </text><text styleclass="Strong" translate="true">DISV</text><text styleclass="Normal" translate="true"> are listed below. The items under this menu relate to creating or editing the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Discretization_with_Vertices_D" styleclass="Normal" translate="true">Discretization by Vertices</link><text styleclass="Normal" translate="true"> or cross section or to viewing information about the mesh. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Mesh</text><text styleclass="Normal" translate="true"> menu is only visible with MODFLOW 6 models using &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Discretization_with_Vertices_D" styleclass="Normal" translate="true">Discretization by Vertices</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> The menu items under </text><text styleclass="Strong" translate="true">DISV</text><text styleclass="Normal" translate="true"> are listed below. The items under this menu relate to creating or editing the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Discretization_with_Vertices_D" styleclass="Normal" translate="true">Discretization by Vertices</link><text styleclass="Normal" translate="true"> or cross section or to viewing information about the mesh. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Mesh</text><text styleclass="Normal" translate="true"> menu is only visible with MODFLOW 6 models using  </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Discretization_with_Vertices_D" styleclass="Normal" translate="true">Discretization by Vertices</link><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">DISV Menu</text></para>
     <para styleclass="Normal" style="text-align:center;"><table rowcount="11" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:0px; border-spacing:2px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
@@ -37,7 +37,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:206px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="MoveCrossSectionButton.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Move Cross Section button</title></image><text styleclass="Table Header" translate="true"> Move Cross Section</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="MoveCrossSectionButton.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Move Cross Section button</title></image><text styleclass="Table Header" translate="true"> Move Cross Section</text></para>
         </td>
         <td style="vertical-align:top; width:420px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">Move Cross Section</text><text styleclass="Table Cell" translate="true"> is selected, the user can drag the cross section line or either of its end points to a new location by clicking on it with the cursor and dragging it. Just one end point will be moved if the user clicks on an end point. The entire cross section will be moved if the user clicks on the cross section between the end points</text></para>
@@ -45,7 +45,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:206px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RotateCrossSectionButton.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Rotate Cross Section button</title></image><text styleclass="Table Header" translate="true"> Rotate Cross Section</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RotateCrossSectionButton.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Rotate Cross Section button</title></image><text styleclass="Table Header" translate="true"> Rotate Cross Section</text></para>
         </td>
         <td style="vertical-align:top; width:420px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">Rotate Cross Section</text><text styleclass="Table Cell" translate="true"> is selected, the user can rotate the cross section line by clicking and dragging on the top view of the model.</text></para>
@@ -53,7 +53,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:206px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RefreshDISV.png" scale="100.00%" styleclass="Table Header"><title translate="true">Image of Refresh DISV button</title></image><text styleclass="Table Header" translate="true">Refresh Quadtree Refinement</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RefreshDISV.png" scale="-99.90%" styleclass="Table Header"><title translate="true">Image of Refresh DISV button</title></image><text styleclass="Table Header" translate="true">Refresh Quadtree Refinement</text></para>
         </td>
         <td style="vertical-align:top; width:420px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Generate a new DISV grid from the structured grid without recreating the structured grid.</text></para>
@@ -61,7 +61,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:206px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="GenerateGrid.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Generate Grid button</title></image><text styleclass="Table Header" translate="true"> Generate Grid..</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="GenerateGrid.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Generate Grid button</title></image><text styleclass="Table Header" translate="true"> Generate Grid..</text></para>
         </td>
         <td style="vertical-align:top; width:420px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Create a structured grid using objects. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Objects_to_Specify_the_G" styleclass="Table Cell" translate="true">Using Objects to Specify the Grid</link><text styleclass="Table Cell" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Generate_Grid_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Generate Grid</link><text styleclass="Table Cell" translate="true"> dialog box and then convert it to a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Discretization_with_Vertices_D" styleclass="Table Cell" translate="true">DISV grid</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -80,7 +80,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Specify Cross Section...</text></para>
         </td>
         <td style="vertical-align:top; width:420px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specify the coordinates of the cross section line numerically. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Cross_Section_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">SUTRA/DISV Cross Section</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true">&#32;</text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specify the coordinates of the cross section line numerically. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Cross_Section_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">SUTRA/DISV Cross Section</link><text styleclass="Table Cell" style="font-weight:bold;" translate="true"> </text><text styleclass="Table Cell" translate="true">dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

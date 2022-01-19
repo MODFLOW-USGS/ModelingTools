@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Data</title>
@@ -45,7 +45,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:257px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="DataVisualizationButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Data Visualization</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="DataVisualizationButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Data Visualization</text></para>
         </td>
         <td style="width:369px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Color the grid with the values of a data set, boundary condition or observations, contour the values of a data set or visualize data in other ways. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH_Time_Series_Display" styleclass="Strong" translate="true">Data Visualization</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -53,7 +53,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:257px;">
-          <para styleclass="Normal"><image src="ShowGridValuesButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Show Grid or Mesh Values ...</text></para>
+          <para styleclass="Normal"><image src="ShowGridValuesButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Show Grid or Mesh Values ...</text></para>
         </td>
         <td style="width:369px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid_Value_Dialog_Box" styleclass="Strong" translate="true">Grid or Mesh Value</link><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid_Value_Dialog_Box" styleclass="Table Cell" translate="true"> dialog box</link><text styleclass="Table Cell" translate="true"> which shows the value of the current data set in the grid cell under the cursor along with an explanation of how that value was assigned.</text></para>
@@ -72,7 +72,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Delete Model Results</text></para>
         </td>
         <td style="width:369px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Delete all the data sets for the model results classified under &quot;Optional|Model results&quot; as well as all the objects that set the values of those data sets. If you want to save some of the model results data sets, rename the ones you want to save first.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Delete all the data sets for the model results classified under "Optional|Model results" as well as all the objects that set the values of those data sets. If you want to save some of the model results data sets, rename the ones you want to save first.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

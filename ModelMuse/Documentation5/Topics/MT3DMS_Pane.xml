@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MT3D Pane</title>
@@ -7,7 +7,7 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MT3D Pane</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">MT3D</text><text styleclass="Normal" translate="true"> pane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Output_Control_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Output Control</link><text styleclass="Normal" translate="true"> dialog box is used to control how what is saved in MT3DMS and MT3D-USGS. </text></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[SAVUCN]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[SAVUCN]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -17,7 +17,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPRS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPRS]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -28,7 +28,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPROBS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPROBS]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -36,7 +36,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[CHKMAS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[CHKMAS]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -46,7 +46,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPRMAS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPRMAS]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -54,7 +54,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[TIMPRS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[TIMPRS]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>

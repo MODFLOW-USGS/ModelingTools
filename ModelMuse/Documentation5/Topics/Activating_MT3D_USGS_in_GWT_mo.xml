@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Activating MT3D-USGS in GWT Model</title>
@@ -6,11 +6,11 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Activating MT3D-USGS in GWT Model</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to activate MT3D-USGS and the required packages that are part of the model. The packages that need to be activated are the BTN, ADV, DSP, SSM, GCG, LKT, and SFT. You must specify one mobile species in the BTN package. Name it &quot;Chem.&quot; On the MT3D Options tab of the BTN pane, set the mass unit to g and the minimum saturated fraction to 0.001.</text></para>
-    <para styleclass="Normal"><image src="GWT_Packages.png" scale="60.00%" width="470" height="353" styleclass="Image Caption"><title translate="true">Illustration of the packages to select</title></image></para>
-    <para styleclass="Normal"><image src="GWT_BTN_Options.png" scale="60.00%" width="470" height="353" styleclass="Image Caption"><title translate="true">BTN options</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to activate MT3D-USGS and the required packages that are part of the model. The packages that need to be activated are the BTN, ADV, DSP, SSM, GCG, LKT, and SFT. You must specify one mobile species in the BTN package. Name it "Chem." On the MT3D Options tab of the BTN pane, set the mass unit to g and the minimum saturated fraction to 0.001.</text></para>
+    <para styleclass="Normal"><image src="GWT_Packages.png" scale="-99.90%" width="470" height="353" styleclass="Image Caption"><title translate="true">Illustration of the packages to select</title></image></para>
+    <para styleclass="Normal"><image src="GWT_BTN_Options.png" scale="-99.90%" width="470" height="353" styleclass="Image Caption"><title translate="true">BTN options</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Advection package, choose the standard finite difference option.</text></para>
-    <para styleclass="Normal"><image src="GWT_ADV_Options.png" scale="60.00%" width="470" height="353" styleclass="Image Caption"><title translate="true">ADV package options</title></image></para>
+    <para styleclass="Normal"><image src="GWT_ADV_Options.png" scale="-99.90%" width="470" height="353" styleclass="Image Caption"><title translate="true">ADV package options</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the GCG package set the following variables.</text></para>
     <para styleclass="Normal"><table styleclass="Default" rowcount="4" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
       <tr style="vertical-align:top">
@@ -46,9 +46,9 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><image src="GWT_GCG_Options.png" scale="60.00%" width="470" height="353" styleclass="Image Caption"><title translate="true">GCG Options</title></image></para>
+    <para styleclass="Normal"><image src="GWT_GCG_Options.png" scale="-99.90%" width="470" height="353" styleclass="Image Caption"><title translate="true">GCG Options</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the SFT package, set CLOSEFF to 0.001.</text></para>
-    <para styleclass="Normal"><image src="GWT_SFT_Options.png" scale="60.00%" width="470" height="353" styleclass="Image Caption"><title translate="true">SFT Options</title></image></para>
+    <para styleclass="Normal"><image src="GWT_SFT_Options.png" scale="-99.90%" width="470" height="353" styleclass="Image Caption"><title translate="true">SFT Options</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Click OK when you have set these variables.</text></para>
   </body>
 </topic>

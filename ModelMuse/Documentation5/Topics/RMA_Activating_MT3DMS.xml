@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RMA: Activating MT3DMS</title>
@@ -11,8 +11,8 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">You must define at least one mobile species. In this case, we will use chloride.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">On the </text><text styleclass="Strong" translate="true">MT3D Options</text><text styleclass="Normal" translate="true"> tab, select MT3DMS.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Click OK to close the dialog box. You will get a message telling you that you will need to run MODFLOW again before you can run MT3DMS.</text></para>
-    <para styleclass="Normal"><image src="Mt3dmsRma1.png" scale="60.00%" width="705" height="530" styleclass="Image Caption"><title translate="true">MT3DMS BTN package page with Cl as the solute</title></image></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma1.png" scale="-99.90%" width="705" height="530" styleclass="Image Caption"><title translate="true">MT3DMS BTN package page with Cl as the solute</title></image></para>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal"><image src="RmaMt3dmsSelection.png" scale="60.00%" width="705" height="530" styleclass="Image Caption"><title translate="true">MT3D Options tab with MT3DMS selected</title></image></para>
+    <para styleclass="Normal"><image src="RmaMt3dmsSelection.png" scale="-99.90%" width="705" height="530" styleclass="Image Caption"><title translate="true">MT3D Options tab with MT3DMS selected</title></image></para>
   </body>
 </topic>

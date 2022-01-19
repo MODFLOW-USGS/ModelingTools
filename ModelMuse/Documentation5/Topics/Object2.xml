@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Object</title>
@@ -29,7 +29,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Select.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Select Objects button</title></image><text styleclass="Table Header" translate="true"> Select Objects </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Select.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Select Objects button</title></image><text styleclass="Table Header" translate="true"> Select Objects </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Click or drag to select objects. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Selecting_Objects" styleclass="Table Cell" translate="true">Selecting Objects</link><text styleclass="Table Cell" translate="true">. Double click to edit objects. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -37,7 +37,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="SelectPoint.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Select Vertices button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Select Vertices </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="SelectPoint.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Select Vertices button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Select Vertices </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Click or drag to select individual vertices. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Selecting_Objects" styleclass="Table Cell" translate="true">Selecting Objects</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -45,7 +45,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Lasso.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Select With Lasso button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Select With Lasso </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Lasso.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Select With Lasso button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Select With Lasso </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Drag to select objects. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Selecting_Objects" styleclass="Table Cell" translate="true">Selecting Objects</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -53,7 +53,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="CreatePoint.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Point Object button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Create|Point </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="CreatePoint.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Create Point Object button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Create|Point </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Create a point object. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Points" styleclass="Table Cell" translate="true">Points</link><text styleclass="Table Cell" translate="true"> and the</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -61,7 +61,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="CreatePolyline.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Line Object button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Create|Polyline </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="CreatePolyline.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Create Line Object button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Create|Polyline </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Create a polyline object. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Polylines" styleclass="Table Cell" translate="true">Polylines</link><text styleclass="Table Cell" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -69,7 +69,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="CreatePolygon.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Polygon Object button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Create|Polygon </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="CreatePolygon.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Create Polygon Object button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Create|Polygon </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Create a polygon object. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Polygons" styleclass="Table Cell" translate="true">Polygons</link><text styleclass="Table Cell" translate="true"> and the</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -77,7 +77,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="CreateStraightLine.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Straight-Line Object button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Create|Straight Line </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="CreateStraightLine.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Create Straight-Line Object button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Create|Straight Line </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Create a polyline object whose segments are parallel to the grid. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Straight-Lines" styleclass="Table Cell" translate="true">Straight-Lines</link><text styleclass="Table Cell" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -85,7 +85,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="CreateRectangle.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Rectangle Object button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Create|Rectangle </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="CreateRectangle.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Create Rectangle Object button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Create|Rectangle </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Create a rectangular polygon object. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Rectangles" styleclass="Table Cell" translate="true">Rectangles</link><text styleclass="Table Cell" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -109,7 +109,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="AddPoints.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Add Point Sections button</title></image><text styleclass="Table Header" translate="true"> Edit|Add Point Sections</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="AddPoints.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Add Point Sections button</title></image><text styleclass="Table Header" translate="true"> Edit|Add Point Sections</text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Add new point sections to an existing object. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_Objects" styleclass="Table Cell" translate="true">Editing Objects</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -117,7 +117,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="AddPolylines.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Add Polyline Sections button</title></image><text styleclass="Table Header" translate="true"> Edit|Add Polyline Sections</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="AddPolylines.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Add Polyline Sections button</title></image><text styleclass="Table Header" translate="true"> Edit|Add Polyline Sections</text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Add new polyline sections to an existing object. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_Objects" styleclass="Table Cell" translate="true">Editing Objects</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -125,7 +125,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="AddPolygons.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Add Polygon Sections button</title></image><text styleclass="Table Header" translate="true"> Edit|Add Polygon Sections</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="AddPolygons.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Add Polygon Sections button</title></image><text styleclass="Table Header" translate="true"> Edit|Add Polygon Sections</text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Add new polygon sections to an existing object. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_Objects" styleclass="Table Cell" translate="true">Editing Objects</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -133,7 +133,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="InsertPoint.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Insert Vertex button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Edit|Insert Vertex </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="InsertPoint.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Insert Vertex button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Edit|Insert Vertex </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Insert a new vertex into the selected object by clicking the location on the object where a new vertex is desired. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_Objects" styleclass="Table Cell" translate="true">Editing Objects</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -141,7 +141,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="DeleteSegment.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Delete Segment button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Edit|Delete Segment </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="DeleteSegment.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Delete Segment button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Edit|Delete Segment </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Delete a segment from an object by clicking on it. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_Objects" styleclass="Table Cell" translate="true">Editing Objects</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -181,7 +181,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:bottom; width:173px;">
-          <para styleclass="Normal" style="text-align:left;"><image src="EditVertexValuesButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Edit|Vertex Values</text></para>
+          <para styleclass="Normal" style="text-align:left;"><image src="EditVertexValuesButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Edit|Vertex Values</text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Associated numerical values with individual vertices. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Strong" translate="true">Vertex Values</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -261,7 +261,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:173px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="ShowHideObjectsButton.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show or Hide Objects button</title></image><text styleclass="Table Header" translate="true"> Show or Hide Objects... </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="ShowHideObjectsButton.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show or Hide Objects button</title></image><text styleclass="Table Header" translate="true"> Show or Hide Objects... </text></para>
         </td>
         <td style="vertical-align:top; width:453px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show or hide objects based on the data sets or boundary conditions they affect or individually. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Objects_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Show or Hide Objects</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>

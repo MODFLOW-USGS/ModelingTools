@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Evaluating the Effects of the LKT and SFT Packages</title>
@@ -7,8 +7,8 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Evaluating the Effects of the LKT and SFT Packages</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">To evaluate the effects of the Lake Transport (LKT) and Streamflow Transport (SFT) packages, we can run the model again without including those two packages. Deactivate those two packages in the Model|MODFLOW Packages and Programs dialog box. It will be necessary to run MODFLOW again so that options in the MT3D-Link package are specified correctly. After running MODFLOW and MT3D-USGS again, import the concentrations as before. </text></para>
-    <para styleclass="Normal"><image src="FinalConcentrationsNowGwtLkt.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Final Concentrations in layer 2 without LKT or SFT</title></image></para>
+    <para styleclass="Normal"><image src="FinalConcentrationsNowGwtLkt.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Final Concentrations in layer 2 without LKT or SFT</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">You can create a data set that shows the difference between the two models by subtracting the concentrations without the LKT and SFT packages from the concentrations in the model in which the LKT and SFT packages are used. </text></para>
-    <para styleclass="Normal"><image src="DifferenceInConcInGWT.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Difference in concentration between a model with LKT and SFT and a model without them</title></image></para>
+    <para styleclass="Normal"><image src="DifferenceInConcInGWT.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Difference in concentration between a model with LKT and SFT and a model without them</title></image></para>
   </body>
 </topic>

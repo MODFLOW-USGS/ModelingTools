@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MODFLOW 6 Example: Convertible Upper Layer</title>
@@ -7,9 +7,9 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Example: Convertible Upper Layer</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In versions of MODFLOW prior to version 6, the user could designate a whole layer of cells as either convertible or confined. With MODFLOW 6, that is changed. With MODFLOW 6, the CellType data set is used to specify individual cells as convertible or confined. In this model, we will make all the cells in the top layer convertible. </text></para>
-    <list id="2" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+    <list id="2" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:'Times New Roman'; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Create an object that covers the entire top surface of the grid.</text></li>
-      <li styleclass="Normal"><text styleclass="Normal" translate="true">In the Object Properties dialog box, go to the Data Sets tab and set the formula for the Data Sets data set to 1.</text><br/><image src="Modflow6ExampleCellType.bmp" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying Convertible Cells</title><caption translate="true"><![CDATA[Specifying Convertible Cells]]></caption></image></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">In the Object Properties dialog box, go to the Data Sets tab and set the formula for the Data Sets data set to 1.</text><br /><image src="Modflow6ExampleCellType.bmp" scale="-99.90%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying Convertible Cells</title><caption translate="true"><![CDATA[Specifying Convertible Cells]]></caption></image></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Click OK to close the dialog box.</text></li>
     </list>
     <para styleclass="Normal"></para>

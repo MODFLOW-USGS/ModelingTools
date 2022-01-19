@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RMA: View Results</title>
@@ -7,7 +7,7 @@
       <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">RMA: View Results</text></para>
     </header>
     <para styleclass="Figure Referrer"><text styleclass="Figure Referrer" translate="true">To view the results of the model select </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">File|Import|Model Results...</text><text styleclass="Figure Referrer" translate="true"> Select the file containing the type of data to import. (The user can change </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">File of type</text><text styleclass="Figure Referrer" translate="true"> to see what the different type of file are.) In this case, select the *.fhd file and click the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Open</text><text styleclass="Figure Referrer" translate="true"> button. Then click the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">OK</text><text styleclass="Figure Referrer" translate="true"> button in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Select_Results_to_Import_Dialog_Box" styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Select Model Results to Import</link><text styleclass="Figure Referrer" translate="true"> dialog box. The grid will be colored with the head in the cells (fig. 118). If the *.cbc file is selected, the user can plot the various </text><text styleclass="Normal" translate="true">flow</text><text styleclass="Figure Referrer" translate="true"> terms in the model.</text></para>
-    <para styleclass="Image"><image src="RMA_Heads.bmp" scale="100.00%" styleclass="Image"><title translate="true">See caption</title></image></para>
+    <para styleclass="Image"><image src="RMA_Heads.bmp" scale="-99.90%" styleclass="Image"><title translate="true">See caption</title></image></para>
     <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 118. </text><text styleclass="Image Caption" translate="true">Simulated head in Rocky Mountain Arsenal study area.</text></para>
   </body>
 </topic>

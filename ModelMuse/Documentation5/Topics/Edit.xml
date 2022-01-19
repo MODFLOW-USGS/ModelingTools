@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Edit</title>
@@ -29,7 +29,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:149px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Undo.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Undo button</title></image><text styleclass="Table Header" translate="true"> Undo</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Undo.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Undo button</title></image><text styleclass="Table Header" translate="true"> Undo</text></para>
         </td>
         <td style="vertical-align:top; width:477px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Reverses the last action.</text></para>
@@ -37,7 +37,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:149px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Redo.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Redo button</title></image><text styleclass="Table Header" translate="true"> Redo</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Redo.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Redo button</title></image><text styleclass="Table Header" translate="true"> Redo</text></para>
         </td>
         <td style="vertical-align:top; width:477px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Cancels undo.</text></para>
@@ -45,7 +45,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:149px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Cut.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Cut</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Cut.png" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Cut</text></para>
         </td>
         <td style="vertical-align:top; width:477px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Cuts the selected object or objects to the clipboard.</text></para>
@@ -53,7 +53,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:149px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Copy.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Copy</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Copy.png" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Copy</text></para>
         </td>
         <td style="vertical-align:top; width:477px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Copies the selected object or objects to the clipboard.</text></para>
@@ -61,7 +61,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:149px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Paste.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Paste</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Paste.png" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Paste</text></para>
         </td>
         <td style="vertical-align:top; width:477px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Pastes the object or objects on the clipboard into ModelMuse. If any of the formulas for data sets are invalid in the model into which the object or objects have been pasted, those formulas will be reset to default values.</text></para>
@@ -117,7 +117,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:149px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="AddPilotPoint.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Screen capture of the &quot;Add pilot point&quot; button.</title></image><text styleclass="Table Header" translate="true"> Add Pilot Point</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="AddPilotPoint.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Screen capture of the "Add pilot point" button.</title></image><text styleclass="Table Header" translate="true"> Add Pilot Point</text></para>
         </td>
         <td style="vertical-align:top; width:477px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">After selecting this choice, the user can click on the top view of the model to add a pilot point at the location of the pilot point. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Parameters_with_Data_Set" styleclass="Table Cell" translate="true">Using Parameters with Data Sets</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -125,10 +125,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:149px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="DeletePilotPoints.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Screen capture of the &quot;Delete pilot point(s)&quot; button</title></image><text styleclass="Table Header" translate="true"> Delete Pilot Point(s)</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="DeletePilotPoints.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Screen capture of the "Delete pilot point(s)" button</title></image><text styleclass="Table Header" translate="true"> Delete Pilot Point(s)</text></para>
         </td>
         <td style="vertical-align:top; width:477px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">After selecting this choice, the user can delete individually specified pilot points or pilot points created between point observations by clicking down with the mouse on the top view of the model, dragging the mouse, and then releasing the mouse button. Pilot points in the rectangle defined by &#160;where the mouse button was depressed and released will be deleted. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Parameters_with_Data_Set" styleclass="Table Cell" translate="true">Using Parameters with Data Sets</link><text styleclass="Table Cell" translate="true">.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">After selecting this choice, the user can delete individually specified pilot points or pilot points created between point observations by clicking down with the mouse on the top view of the model, dragging the mouse, and then releasing the mouse button. Pilot points in the rectangle defined by  where the mouse button was depressed and released will be deleted. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Parameters_with_Data_Set" styleclass="Table Cell" translate="true">Using Parameters with Data Sets</link><text styleclass="Table Cell" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

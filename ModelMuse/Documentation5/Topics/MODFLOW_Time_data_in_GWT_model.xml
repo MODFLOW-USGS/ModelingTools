@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MT3D-USGS Time data in GWT Model</title>
@@ -41,6 +41,6 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><image src="GWT_Time.png" scale="50.00%" width="566" height="269" styleclass="Image Caption"><title translate="true">GWT time data</title></image></para>
+    <para styleclass="Normal"><image src="GWT_Time.png" scale="-99.90%" width="566" height="269" styleclass="Image Caption"><title translate="true">GWT time data</title></image></para>
   </body>
 </topic>

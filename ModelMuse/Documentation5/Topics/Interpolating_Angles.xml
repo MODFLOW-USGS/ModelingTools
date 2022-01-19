@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Specifying Angles for SUTRA</title>
@@ -10,12 +10,12 @@
     <para styleclass="Normal"><table styleclass="Default" rowcount="3" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">A. </text><image src="AngleInterpolation.png" scale="70.00%" width="330" height="271" styleclass="Image Caption"></image></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">A. </text><image src="AngleInterpolation.png" scale="-99.90%" width="330" height="271" styleclass="Image Caption"></image></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">B. </text><image src="WithoutAngleInterpolation.png" scale="70.00%" width="330" height="271" styleclass="Image Caption"></image></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">B. </text><image src="WithoutAngleInterpolation.png" scale="-99.90%" width="330" height="271" styleclass="Image Caption"></image></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

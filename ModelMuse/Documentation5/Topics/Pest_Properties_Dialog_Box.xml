@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">PEST Properties Dialog Box</title>
@@ -6,13 +6,13 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Dialog Box</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">PEST Properties</text><text styleclass="Normal" translate="true"> dialog box is used to specify many of the input variables in the PEST control file. It is also used to activate or deactivate PEST, to specify the directory in which PEST is located, and to define pilot points. The dialog box is displayed by selecting &quot;Model|PEST Properties...&quot; ModelMuse only supports the use of PEST with MODFLOW and SUTRA </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">PEST Properties</text><text styleclass="Normal" translate="true"> dialog box is used to specify many of the input variables in the PEST control file. It is also used to activate or deactivate PEST, to specify the directory in which PEST is located, and to define pilot points. The dialog box is displayed by selecting "Model|PEST Properties..." ModelMuse only supports the use of PEST with MODFLOW and SUTRA </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The dialog box is a tree control on the left. Selecting one of the items in the tree control will cause the associated pane to appear on the right side of the dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Most of the controls in this dialog relate directly to input variables in PEST. The descriptions of these variables come from the PEST manual for PEST version 17.3.</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Panes on the PEST Properties dialog box.</text></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Basic_Pane" styleclass="Normal" translate="true"> Basic Pane</link></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Pilot_Points_P" styleclass="Normal" translate="true">Pilot Points Pane</link></para>
-    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Control Data]]></caption></toggle></para>
+    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Control Data]]></caption></toggle></para>
     <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -28,7 +28,7 @@
     </table></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Singular_Value" styleclass="Normal" translate="true">Singular Value Decomposition Pane</link></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_LQSR_Pane" styleclass="Normal" translate="true">LQSR Pane</link></para>
-    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Observation Group Properties]]></caption></toggle></para>
+    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Observation Group Properties]]></caption></toggle></para>
     <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -37,7 +37,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Prior Information]]></caption></toggle></para>
+    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Prior Information]]></caption></toggle></para>
     <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -48,7 +48,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Prediction Analysis]]></caption></toggle></para>
+    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Prediction Analysis]]></caption></toggle></para>
     <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -57,7 +57,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Regularization]]></caption></toggle></para>
+    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Regularization]]></caption></toggle></para>
     <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -66,7 +66,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Pareto]]></caption></toggle></para>
+    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Pareto]]></caption></toggle></para>
     <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MODFLOW 6 Example: Run MODPATH</title>
@@ -6,11 +6,11 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Example: Run MODPATH</text></para>
     </header>
-    <list id="5" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
-      <li styleclass="Normal"><text styleclass="Normal" translate="true">Export MODPATH using the drop-down item next to the Run MODFLOW 6 button.</text><br/><image src="Modflow6ExampleRunModpath.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Run MODPATH</title><caption translate="true"><![CDATA[Run MODPATH]]></caption></image></li>
+    <list id="5" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Export MODPATH using the drop-down item next to the Run MODFLOW 6 button.</text><br /><image src="Modflow6ExampleRunModpath.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Run MODPATH</title><caption translate="true"><![CDATA[Run MODPATH]]></caption></image></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">After MODPATH has run, the listing file for MODPATH will open. You can close it.</text></li>
-      <li styleclass="Normal"><text styleclass="Normal" translate="true">To view the pathlines, click the &quot;Data visualization&quot; button </text><image src="DataVisualizationButton.bmp" scale="100.00%" styleclass="Normal"><title translate="true">Data visualization button</title></image><text styleclass="Normal" translate="true">. and go to the MODPATH Pathlines tab.</text></li>
-      <li styleclass="Normal"><text styleclass="Normal" translate="true">Select the Pathline file and click Apply. View the pathlines. Then uncheck the &quot;Limit to current column, row, and layer in 2D views&quot; check box and click Apply again to see the difference. You can also see the pathlines in the 3D view.</text><br/><image src="Modflow6ExamplePathlines.bmp" scale="60.00%" width="484" height="367" styleclass="Image Caption"><title translate="true">Pathlines</title><caption translate="true"><![CDATA[Pathlines]]></caption></image><br/><br/></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">To view the pathlines, click the "Data visualization" button </text><image src="DataVisualizationButton.bmp" scale="-99.90%" styleclass="Normal"><title translate="true">Data visualization button</title></image><text styleclass="Normal" translate="true">. and go to the MODPATH Pathlines tab.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Select the Pathline file and click Apply. View the pathlines. Then uncheck the "Limit to current column, row, and layer in 2D views" check box and click Apply again to see the difference. You can also see the pathlines in the 3D view.</text><br /><image src="Modflow6ExamplePathlines.bmp" scale="-99.90%" width="484" height="367" styleclass="Image Caption"><title translate="true">Pathlines</title><caption translate="true"><![CDATA[Pathlines]]></caption></image><br /><br /></li>
     </list>
   </body>
 </topic>

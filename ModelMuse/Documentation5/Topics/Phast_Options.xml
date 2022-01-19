@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">PHAST Options</title>
@@ -10,7 +10,7 @@
       <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">Next, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Title and Units…</text><text styleclass="Normal" translate="true"> With ex1.trans.dat in a text editor, copy the title section to the clipboard and paste it into the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Title</text><text styleclass="Normal" translate="true"> section of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Title_and_Units_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">PHAST Title and Units</link><text styleclass="Normal" translate="true"> dialog box (fig. 38). The title can be edited to remove the blank spaces, “#”and quote characters at the beginnings of the lines. If desired, a different title of the user’s choice can be specified. The dialog box can be resized so that more of the title is visible. Click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the dialog box.</text></li>
     </list>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal" style="text-align:center;"><image src="Ex1Title.bmp" scale="80.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="Ex1Title.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
     <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 38. </text><text styleclass="Image Caption" translate="true">Top section of the </text><text styleclass="Image Caption" translate="true">PHAST </text><text styleclass="Image Caption" translate="true">Title and Units dialog box showing the title for example 1.</text></para>
     <para styleclass="Normal"></para>
     <list id="4" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="4" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
@@ -89,7 +89,7 @@
       <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">The grid is one-dimensional so the model will be more efficient if the chemistry dimension is specified as X. Select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Grid Options…</link><text styleclass="Normal" translate="true">and change the chemistry dimensions to just X (fig. 39). Click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the dialog box.</text></li>
     </list>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal" style="text-align:center;"><image src="Ex1GridOptions.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="Ex1GridOptions.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
     <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 39. </text><text styleclass="Image Caption" translate="true">PHAST </text><text styleclass="Image Caption" translate="true">Grid Options dialog box showing selection of just the X Chemistry dimensions.</text></para>
     <para styleclass="Normal"></para>
   </body>

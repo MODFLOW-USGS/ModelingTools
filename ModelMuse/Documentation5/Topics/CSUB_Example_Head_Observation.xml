@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">CSUB Example: Head Observations</title>
@@ -6,14 +6,14 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: Head Observations</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has head observations at the locations of the wells and all the layers above and below them. We can&apos;t use the same objects that we used to define the wells because that wouldn&apos;t make the cells above and below the wells observation locations.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has head observations at the locations of the wells and all the layers above and below them. We can't use the same objects that we used to define the wells because that wouldn't make the cells above and below the wells observation locations.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The first step is to check the check box for the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OBS_Observation_Utility_Packag" styleclass="Normal" translate="true">MODFLOW 6 Observation Utility</link><text styleclass="Normal" translate="true"> in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. For this example, we will use a text format and set the number of digits to 10. Then click OK to close the dialog box.</text></para>
-    <para styleclass="Normal"><image src="CSubExampleActivateObsUtil.png" scale="60.00%" width="470" height="353" styleclass="Image Caption"><title translate="true">Activating the MODFLOW 6 Observation Utility</title></image></para>
+    <para styleclass="Normal"><image src="CSubExampleActivateObsUtil.png" scale="-99.90%" width="470" height="353" styleclass="Image Caption"><title translate="true">Activating the MODFLOW 6 Observation Utility</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Next, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Points" styleclass="Normal" translate="true">create a point object</link><text styleclass="Normal" translate="true"> on the top view of the model at the location of one of the wells. Make sure the Z-coordinates of the object go through all the layers.</text></para>
-    <para styleclass="Normal"><image src="CSubExampleHeadObsBasic.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying Elevations for Head Observation</title></image></para>
+    <para styleclass="Normal"><image src="CSubExampleHeadObsBasic.png" scale="-99.90%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying Elevations for Head Observation</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">On the MODFLOW Features tab, specify that the object will define a head observation and specify a name for the observations.</text></para>
-    <para styleclass="Normal"><image src="CSubExampleHeadObsSelect.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying Head Observations</title></image></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">After clicking OK to close the dialog box, add a new section to the object at the location of the other well using the </text><text styleclass="Strong" translate="true">Add point sections</text><text styleclass="Normal" translate="true"> </text><image src="AddPoints.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Add Point Sections button</title></image><text styleclass="Image Caption" translate="true"> button</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleHeadObsSelect.png" scale="-99.90%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying Head Observations</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">After clicking OK to close the dialog box, add a new section to the object at the location of the other well using the </text><text styleclass="Strong" translate="true">Add point sections</text><text styleclass="Normal" translate="true"> </text><image src="AddPoints.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Add Point Sections button</title></image><text styleclass="Image Caption" translate="true"> button</text><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

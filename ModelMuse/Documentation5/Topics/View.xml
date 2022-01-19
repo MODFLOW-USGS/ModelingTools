@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">View</title>
@@ -22,7 +22,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Vertical Exaggeration...</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Change the vertical exaggeration. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertical_Exaggeration_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Vertical Exaggeration</link><text styleclass="Table Cell" translate="true">&#32;</text><text styleclass="Normal" translate="true">dialog box</text><text styleclass="Table Cell" translate="true">.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Change the vertical exaggeration. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertical_Exaggeration_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Vertical Exaggeration</link><text styleclass="Table Cell" translate="true"> </text><text styleclass="Normal" translate="true">dialog box</text><text styleclass="Table Cell" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -30,7 +30,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Show Formula Errors</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display formulas that have been set to a default value because they were invalid. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Errors_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Formula Errors</link><text styleclass="Table Cell" translate="true">&#32;</text><text styleclass="Normal" translate="true">dialog box</text><text styleclass="Table Cell" translate="true">.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display formulas that have been set to a default value because they were invalid. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Errors_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Formula Errors</link><text styleclass="Table Cell" translate="true"> </text><text styleclass="Normal" translate="true">dialog box</text><text styleclass="Table Cell" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -38,7 +38,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Errors and Warnings</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show error and warning messages generated during export of a model. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Errors_and_Warnings_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Errors and Warnings</link><text styleclass="Table Cell" translate="true">&#32;</text><text styleclass="Normal" translate="true">dialog box</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show error and warning messages generated during export of a model. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Errors_and_Warnings_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Errors and Warnings</link><text styleclass="Table Cell" translate="true"> </text><text styleclass="Normal" translate="true">dialog box</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -51,7 +51,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px; height:22px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="GridShell.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show Grid Shell button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Show Grid Shell</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="GridShell.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show Grid Shell button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Show Grid Shell</text></para>
         </td>
         <td style="vertical-align:top; width:465px; height:22px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show or hide the grid shell in the 3-D view of the model.</text></para>
@@ -59,7 +59,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="GridTop.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show Top Grid button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Show Top Grid</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="GridTop.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show Top Grid button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Show Top Grid</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show or hide the grid lines for a horizontal cross section of the model in the 3-D view of the model. The selected layer determines where the grid lines are drawn.</text></para>
@@ -67,7 +67,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="GridFront.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show Front Grid button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Show Front Grid</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="GridFront.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show Front Grid button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Show Front Grid</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show or hide the grid lines for a vertical cross section parallel to the front view of the model in the 3-D view of the model. The selected row determines where the grid lines are drawn.</text></para>
@@ -75,7 +75,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="GridSide.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show Side Grid button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Show Side Grid</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="GridSide.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show Side Grid button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Show Side Grid</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show or hide the grid lines for a vertical cross section parallel to the side view of the model in the 3-D view of the model. The selected column determines where the grid lines are drawn.</text></para>
@@ -83,7 +83,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Colored3DGrid.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show 3D Colored Grid button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Show 3-D Colored Grid</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Colored3DGrid.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show 3D Colored Grid button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Show 3-D Colored Grid</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show or hide colored cells or elements in the 3-D grid. This control is disabled, if the grid is not being colored.</text></para>
@@ -91,7 +91,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="ShowTopMeshButton.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Show Top Mesh</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="ShowTopMeshButton.png" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Show Top Mesh</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show or hide the top view of the mesh in the 3-D view of the model.</text></para>
@@ -99,7 +99,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="ShowFrontMeshButton.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Show Front Cross Section</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="ShowFrontMeshButton.png" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Show Front Cross Section</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show or hide the cross section of the mesh in the 3-D view of the model.</text></para>
@@ -107,7 +107,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="3DObjects.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show 3D Objects button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Show 3-D Objects</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="3DObjects.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show 3D Objects button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Show 3-D Objects</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show or hide objects in the 3-D view of the model. By default, objects are shown in the 3-D view but if the grid gets too big, the </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">Show 3-D objects</text><text styleclass="Table Cell" translate="true"> button will be changed so that objects are no longer shown in the 3-D view. The user can show them again by selecting </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">View|Show 3-D Objects</text><text styleclass="Table Cell" translate="true">.</text></para>
@@ -115,15 +115,15 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Show2dGrid.bmp" scale="100.00%" styleclass="Normal"><title translate="true">Show 2D Grid button</title></image><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Table Header" translate="true"> Show or Hide 2-D Grid</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Show2dGrid.bmp" scale="-99.90%" styleclass="Normal"><title translate="true">Show 2D Grid button</title></image><text styleclass="Normal" translate="true"> </text><text styleclass="Table Header" translate="true"> Show or Hide 2-D Grid</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Control how the grid lines are displayed. The choices are to </text></para>
-          <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Table Cell" style="font-family:Symbol; font-size:12pt; color:#000000;">
-            <li styleclass="Table Cell"><image src="ShowGridLines.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show all grid lines or element outlines</title></image><text styleclass="Table Cell" translate="true"> show all the grid lines or mesh elements, </text></li>
-            <li styleclass="Table Cell"><image src="ShowGridOutline.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show only the outline of the grid or mesh</title></image><text styleclass="Table Cell" translate="true"> show only the outline of the grid or mesh, </text></li>
-            <li styleclass="Table Cell"><image src="ShowActiveGridLines.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show only the active cells or elements</title></image><text styleclass="Table Cell" translate="true"> show only the grid lines for the active part of the grid or mesh, or </text></li>
-            <li styleclass="Table Cell"><image src="ShowActiveGridOutline.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show only the outline of the active part of the grid or mesh</title></image><text styleclass="Table Cell" translate="true"> show only the outline of the active part of the grid or mesh.</text></li>
+          <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Table Cell" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Table Cell"><image src="ShowGridLines.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show all grid lines or element outlines</title></image><text styleclass="Table Cell" translate="true"> show all the grid lines or mesh elements, </text></li>
+            <li styleclass="Table Cell"><image src="ShowGridOutline.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show only the outline of the grid or mesh</title></image><text styleclass="Table Cell" translate="true"> show only the outline of the grid or mesh, </text></li>
+            <li styleclass="Table Cell"><image src="ShowActiveGridLines.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show only the active cells or elements</title></image><text styleclass="Table Cell" translate="true"> show only the grid lines for the active part of the grid or mesh, or </text></li>
+            <li styleclass="Table Cell"><image src="ShowActiveGridOutline.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Show only the outline of the active part of the grid or mesh</title></image><text styleclass="Table Cell" translate="true"> show only the outline of the active part of the grid or mesh.</text></li>
           </list>
         </td>
       </tr>
@@ -140,7 +140,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">3-D Lighting...</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Change the lighting for the 3-D view. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="3D_Lighting_Controls_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">3-D Lighting Controls</link><text styleclass="Table Cell" translate="true">&#32;</text><text styleclass="Normal" translate="true">dialog box</text><text styleclass="Table Cell" translate="true">.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Change the lighting for the 3-D view. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="3D_Lighting_Controls_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">3-D Lighting Controls</link><text styleclass="Table Cell" translate="true"> </text><text styleclass="Normal" translate="true">dialog box</text><text styleclass="Table Cell" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -148,7 +148,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Customize SUTRA Mesh</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Change many aspects of how the SUTRA mesh is displayed. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Customize_SUTRA_Mesh_Dialog_Bo" styleclass="Table Cell" style="font-weight:bold;" translate="true">Customize SUTRA Mesh</link><text styleclass="Table Cell" translate="true">&#32;</text><text styleclass="Normal" translate="true">dialog box for more details.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Change many aspects of how the SUTRA mesh is displayed. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Customize_SUTRA_Mesh_Dialog_Bo" styleclass="Table Cell" style="font-weight:bold;" translate="true">Customize SUTRA Mesh</link><text styleclass="Table Cell" translate="true"> </text><text styleclass="Normal" translate="true">dialog box for more details.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

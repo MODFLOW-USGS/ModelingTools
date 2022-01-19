@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">File</title>
@@ -29,7 +29,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="New.png" scale="100.00%" styleclass="Table Header"><title translate="true">New|New MODFLOW Model button</title></image><text styleclass="Table Header" translate="true"> New|New MODFLOW Model</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="New.png" scale="-99.90%" styleclass="Table Header"><title translate="true">New|New MODFLOW Model button</title></image><text styleclass="Table Header" translate="true"> New|New MODFLOW Model</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates a new MODFLOW model.</text></para>
@@ -61,7 +61,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Open.png" scale="100.00%" styleclass="Table Header"><title translate="true">Open button</title></image><text styleclass="Table Header" translate="true"> Open </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Open.png" scale="-99.90%" styleclass="Table Header"><title translate="true">Open button</title></image><text styleclass="Table Header" translate="true"> Open </text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Opens an existing model. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ModelMuse_Files" styleclass="Table Cell" translate="true">ModelMuse Files</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -69,7 +69,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Save.png" scale="100.00%" styleclass="Table Header"><title translate="true">Save button</title></image><text styleclass="Table Header" translate="true"> Save </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Save.png" scale="-99.90%" styleclass="Table Header"><title translate="true">Save button</title></image><text styleclass="Table Header" translate="true"> Save </text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Saves the current model to disk using the current file name. The user may be prompted to create an archive file. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ModelMuse_Files" styleclass="Table Cell" translate="true">ModelMuse Files</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -85,7 +85,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Normal"><image src="ImportModelResults.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Import and display model results button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Import|Model Results...</text></para>
+          <para styleclass="Normal"><image src="ImportModelResults.bmp" scale="-99.90%" styleclass="Image Caption"><title translate="true">Import and display model results button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Import|Model Results...</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Import, head, drawdown, flows, or Well Footprint data from a MODFLOW, SUTRA, or Well Footprint model into ModelMuse and optionally color the grid using one of the imported data sets. For MODFLOW models, see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Select_Results_to_Import_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Select Model Results to Import</link><text styleclass="Table Cell" translate="true"> dialog box. For SUTRA models, see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_SUTRA_Model_Results_Dia" styleclass="Normal" style="font-weight:bold;" translate="true">Import SUTRA Model Results</link><text styleclass="Normal" translate="true"> dialog box. For Footprint projects, see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_Footprint_Results" styleclass="Strong" translate="true">Import Footprint Results</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
@@ -229,7 +229,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Export|PHAST Input File </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Export|PHAST Input File </text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates the transport data file for PHAST and optionally executes PHAST. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Batch_File_Additions_Dialog" styleclass="Strong" translate="true">Batch File Additions</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -237,16 +237,16 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Export|MODFLOW-2005 Input Files </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Export|MODFLOW-2005 Input Files </text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"><anchor id="ExportModflow" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Creates the input files for MODFLOW-2005 and optionally executes MODFLOW-2005. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Batch_File_Additions_Dialog" styleclass="Strong" translate="true">Batch File Additions</link><text styleclass="Table Cell" translate="true"> dialog box. If the &quot;Export MODPATH input&quot; check box is checked and MODPATH is selected, the input for MODPATH will also be created. If the &quot;Create new composite budget file&quot; check box is checked, MODPATH will create a new composite budget file when it is run. If the &quot;Export ZONEBUDGET input&quot; check box is checked and ZONEBUDGET is selected, the input for ZONEBUDGET will also be created. </text></para>
+          <para styleclass="Table Cell"><anchor id="ExportModflow" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Creates the input files for MODFLOW-2005 and optionally executes MODFLOW-2005. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Batch_File_Additions_Dialog" styleclass="Strong" translate="true">Batch File Additions</link><text styleclass="Table Cell" translate="true"> dialog box. If the "Export MODPATH input" check box is checked and MODPATH is selected, the input for MODPATH will also be created. If the "Create new composite budget file" check box is checked, MODPATH will create a new composite budget file when it is run. If the "Export ZONEBUDGET input" check box is checked and ZONEBUDGET is selected, the input for ZONEBUDGET will also be created. </text></para>
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">The project description can also be edited here. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Description_Tab" styleclass="Table Cell" translate="true">Description Tab</link><text styleclass="Table Cell" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Options_Dialog_Box" styleclass="Table Cell" translate="true">MODFLOW Options dialog box</link><text styleclass="Table Cell" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true">Export_MODFLOW 6 Input Files</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true">Export_MODFLOW 6 Input Files</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates the input files for MODFLOW 6 and optionally executes MODFLOW 6. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File" anchor="ExportModflow" styleclass="Table Cell" translate="true">Export|MODFLOW-2005 Input Files</link><text styleclass="Table Cell" translate="true"> for more details..</text></para>
@@ -254,7 +254,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Export|MODFLOW-LGR Input Files</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Export|MODFLOW-LGR Input Files</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates the input files for MODFLOW-LGR version 1 or version 2 and optionally executes MODFLOW-LGR. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Batch_File_Additions_Dialog" styleclass="Strong" translate="true">Batch File Additions</link><text styleclass="Table Cell" translate="true"> dialog box. A combobox at the bottom of the Save dialog box allows the user to select between exporting the input files for a combined model or for just the parent or just one of the child models. The project description for the parent model can also be edited here. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Description_Tab" styleclass="Table Cell" translate="true">Description Tab</link><text styleclass="Table Cell" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Options_Dialog_Box" styleclass="Table Cell" translate="true">MODFLOW Options dialog box</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -262,7 +262,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Export|MODFLOW-NWT Input Files</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Export|MODFLOW-NWT Input Files</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates the input files for MODFLOW-NWT and optionally executes MODFLOW-NWT. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File" anchor="ExportModflow" styleclass="Table Cell" translate="true">Export|MODFLOW-2005 Input Files</link><text styleclass="Table Cell" translate="true"> for more details.</text></para>
@@ -270,7 +270,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Export|MODFLOW-OWHM Input Files</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Export|MODFLOW-OWHM Input Files</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates the input files for MODFLOW-OWHM (One Water Hydrologic Model) and optionally executes MODFLOW-OWHM. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File" anchor="ExportModflow" styleclass="Table Cell" translate="true">Export|MODFLOW-2005 Input Files</link><text styleclass="Table Cell" translate="true"> for more details.</text></para>
@@ -278,7 +278,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Export|MODFLOW-CFP Input Files</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Export|MODFLOW-CFP Input Files</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates the input files for MODFLOW-CFP (Conduit Flow Process) and optionally executes MODFLOW-CFP. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File" anchor="ExportModflow" styleclass="Table Cell" translate="true">Export|MODFLOW-2005 Input Files</link><text styleclass="Table Cell" translate="true"> for more details.</text></para>
@@ -286,7 +286,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Table Header" translate="true">Export|SUTRA Input Files</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Export|SUTRA Input Files</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates the input files for SUTRA and optionally executes SUTRA.</text></para>
@@ -438,7 +438,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="ExportImageButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Export|Image...</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="ExportImageButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Export|Image...</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Export an image of the top, front, or side view of the model as an Enhanced Windows Metafile, Windows bitmap, Portable Network Graphics (PNG) or Joint Photographic Export Group (JPEG) image. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Image_Dialog_Box" styleclass="Strong" translate="true">Export Image</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -457,7 +457,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export|SUTRA 2D Mesh</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"><anchor id="ExportSutraMesh" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Export a 2D SUTRA mesh in a format compatible with Argus ONE®. The first line contains the number of elements and the number of nodes. This is followed by lines defining the node positions. Each such line starts with &quot;N&quot; followed by the node number and the X and Y coordinates of the node. These are followed by lines defining the elements. Each line starts with &quot;E&quot; followed by the element number and then the numbers of the four nodes in the element. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File" anchor="ImportSutraMesh" styleclass="Table Cell" translate="true">Import|SUTRA Mesh</link><text styleclass="Table Cell" translate="true">.</text></para>
+          <para styleclass="Table Cell"><anchor id="ExportSutraMesh" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Export a 2D SUTRA mesh in a format compatible with Argus ONE®. The first line contains the number of elements and the number of nodes. This is followed by lines defining the node positions. Each such line starts with "N" followed by the node number and the X and Y coordinates of the node. These are followed by lines defining the elements. Each line starts with "E" followed by the element number and then the numbers of the four nodes in the element. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File" anchor="ImportSutraMesh" styleclass="Table Cell" translate="true">Import|SUTRA Mesh</link><text styleclass="Table Cell" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

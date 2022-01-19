@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Rma2005: Define Observation Groups</title>
@@ -7,9 +7,9 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Rma2005: Define Observation Groups</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">PEST also requires that observations be assigned to observation groups and with MODFLOW-2005 models several observation groups may be predefined. We can edit them in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Observation_Gr" styleclass="Normal" translate="true">PEST Properties</link><text styleclass="Normal" translate="true"> dialog box. Select </text><text styleclass="Strong" translate="true">Model|Pest Properties</text><text styleclass="Normal" translate="true"> and select the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Observation_Gr" styleclass="Strong" translate="true">Observation Group Properties</link><text styleclass="Normal" translate="true"> pane, and add a new observation group named Comparison.</text></para>
-    <para styleclass="Normal"><image src="RmaMf2005ObsGroups.png" scale="60.00%" width="574" height="388" styleclass="Image Caption"><title translate="true">Screen capture illustrating the definition of the observation groups.</title><caption translate="true"><![CDATA[Screen capture illustrating the definition of the observation groups.]]></caption></image></para>
+    <para styleclass="Normal"><image src="RmaMf2005ObsGroups.png" scale="-99.90%" width="574" height="388" styleclass="Image Caption"><title translate="true">Screen capture illustrating the definition of the observation groups.</title><caption translate="true"><![CDATA[Screen capture illustrating the definition of the observation groups.]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Next go to the Obseration group assignments tab and select all the head observations. You can select them by clicking on the first one, holding the shift key down and then clicking on the last one. Then click down on one of them again and while holding the mouse button down, drag the cursor to the Heads group and releasing the mouse. Assign the other two observations to the CHOB_flows and Comparison groups respectively.</text></para>
-    <para styleclass="Normal"><image src="RmaMf2005AssignObsGroups.png" scale="60.00%" width="574" height="388" styleclass="Image Caption"><title translate="true">Screen capture illustrating assigning observation groups</title><caption translate="true"><![CDATA[Screen capture illustrating assigning observation groups]]></caption></image></para>
+    <para styleclass="Normal"><image src="RmaMf2005AssignObsGroups.png" scale="-99.90%" width="574" height="388" styleclass="Image Caption"><title translate="true">Screen capture illustrating assigning observation groups</title><caption translate="true"><![CDATA[Screen capture illustrating assigning observation groups]]></caption></image></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

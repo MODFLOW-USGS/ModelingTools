@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Grid</title>
@@ -29,7 +29,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="GenerateGrid.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Generate Grid button</title></image><text styleclass="Table Header" translate="true"> Generate Grid... </text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="GenerateGrid.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Generate Grid button</title></image><text styleclass="Table Header" translate="true"> Generate Grid... </text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Create a grid using objects. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Objects_to_Specify_the_G" styleclass="Table Cell" translate="true">Using Objects to Specify the Grid</link><text styleclass="Table Cell" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Generate_Grid_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Generate Grid</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -45,7 +45,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="DeleteGridLineA.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Delete Grid Line button</title></image><text styleclass="Table Header" translate="true"> Delete Grid Line</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="DeleteGridLineA.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Delete Grid Line button</title></image><text styleclass="Table Header" translate="true"> Delete Grid Line</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Click on a grid line to delete it. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_the_Grid" styleclass="Table Cell" translate="true">Editing the Grid</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -53,7 +53,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="MoveGridLineA.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Move Grid Line button</title></image><text styleclass="Table Header" translate="true"> Move Grid Line</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="MoveGridLineA.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Move Grid Line button</title></image><text styleclass="Table Header" translate="true"> Move Grid Line</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Click and drag a grid line to move it. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_the_Grid" styleclass="Table Cell" translate="true">Editing the Grid</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -61,7 +61,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="InsertVerticalGridLine.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Add Vertical Grid Line button</title></image><text styleclass="Table Header" translate="true"> Add Vertical Grid Line</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="InsertVerticalGridLine.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Add Vertical Grid Line button</title></image><text styleclass="Table Header" translate="true"> Add Vertical Grid Line</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Click to add a vertical grid line. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_the_Grid" styleclass="Table Cell" translate="true">Editing the Grid</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -69,7 +69,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="InsertHorizontalGridLine.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Add Horizontal Grid Line button</title></image><text styleclass="Table Header" translate="true"> Add Horizontal Grid Line</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="InsertHorizontalGridLine.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Add Horizontal Grid Line button</title></image><text styleclass="Table Header" translate="true"> Add Horizontal Grid Line</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Click to add a horizontal grid line. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_the_Grid" styleclass="Table Cell" translate="true">Editing the Grid</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -85,7 +85,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="SubdivideElements.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Subdivide Grid Elements.../Cells...</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="SubdivideElements.png" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Subdivide Grid Elements.../Cells...</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Click and drag to select elements (PHAST) or cells (MODFLOW) to subdivide. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Subdivide_Columns_Rows_and_Layers" styleclass="Table Cell" style="font-weight:bold;" translate="true">Subdivide Columns, Rows, and Layers</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -93,7 +93,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="SetElementWidth.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Set Width button</title></image><text styleclass="Table Header" translate="true"> Set Width...</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="SetElementWidth.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Set Width button</title></image><text styleclass="Table Header" translate="true"> Set Width...</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Set the width of grid elements. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Set_Widths_of_Columns_Rows_and_Layers" styleclass="Table Cell" style="font-weight:bold;" translate="true">Set Widths of Columns, Rows, and Layers</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
@@ -109,7 +109,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RotateGrid.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Drag to Rotate button</title></image><text styleclass="Table Header" translate="true"> Drag to Rotate</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RotateGrid.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Drag to Rotate button</title></image><text styleclass="Table Header" translate="true"> Drag to Rotate</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Click and drag to rotate the grid. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_the_Grid" styleclass="Table Cell" translate="true">Editing the Grid</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -149,7 +149,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:185px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="SelectColumnRowOrLayer.bmp" scale="100.00%" styleclass="Table Header"><title translate="true">Select Column, Row, or Layer button</title></image><text styleclass="Table Header" translate="true"> Select Column, Row, or Layer</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="SelectColumnRowOrLayer.bmp" scale="-99.90%" styleclass="Table Header"><title translate="true">Select Column, Row, or Layer button</title></image><text styleclass="Table Header" translate="true"> Select Column, Row, or Layer</text></para>
         </td>
         <td style="vertical-align:top; width:441px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Click on the grid to select a column, row, or layer. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Select_Column_Row_and_Layer" styleclass="Table Cell" style="font-weight:bold;" translate="true">Select Column, Row, and Layer</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>

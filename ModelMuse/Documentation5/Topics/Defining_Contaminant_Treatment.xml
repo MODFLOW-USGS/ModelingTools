@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Defining Contaminant Treatment System in CTS1</title>
@@ -6,10 +6,10 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Defining Contaminant Treatment System in CTS1</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Contaminant Treatment System is defined in a separate dialog box which is displayed by selecting </text><text styleclass="Strong" translate="true">Model|Contaminant Treatment Systems...</text><text styleclass="Normal" translate="true"> We will define two contaminant treatment systems named &quot;ICTS 1&quot; and &quot;ICTS 2.&quot; Display the dialog box and click the Add button in the dialog box and name the treatment system.</text></para>
-    <para styleclass="Normal"><image src="CTS1_NameTreatmentSystem.png" scale="60.00%" width="453" height="256" styleclass="Image Caption"><title translate="true">Create and Name treatment systems</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Contaminant Treatment System is defined in a separate dialog box which is displayed by selecting </text><text styleclass="Strong" translate="true">Model|Contaminant Treatment Systems...</text><text styleclass="Normal" translate="true"> We will define two contaminant treatment systems named "ICTS 1" and "ICTS 2." Display the dialog box and click the Add button in the dialog box and name the treatment system.</text></para>
+    <para styleclass="Normal"><image src="CTS1_NameTreatmentSystem.png" scale="-99.90%" width="453" height="256" styleclass="Image Caption"><title translate="true">Create and Name treatment systems</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Next we will specify the wells as either as extraction or injection wells that are part of each treatment system for each time step. The wells in each treatement system will be different in each stress period. A comma-separated list of the objects that define the wells are listed in the appropriate cells of the table in the </text><text styleclass="Strong" translate="true">Wells</text><text styleclass="Normal" translate="true"> tab of the </text><text styleclass="Strong" translate="true">Contaminant Treatment System</text><text styleclass="Normal" translate="true"> dialog box. An easy way create the list of objects is to select one of the cells and click the </text><text styleclass="Strong" translate="true">Edit</text><text styleclass="Normal" translate="true"> button that appears in the cell. In the dialog box, select one of more objects in the </text><text styleclass="Strong" translate="true">Available well objects</text><text styleclass="Normal" translate="true"> list and use the right-arrow button to move the objects to the </text><text styleclass="Strong" translate="true">Selected well objects</text><text styleclass="Normal" translate="true"> list.</text></para>
-    <para styleclass="Normal"><image src="CTS1_EditSelectedWells.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Edit Selected Wells dialog box.</title></image></para>
+    <para styleclass="Normal"><image src="CTS1_EditSelectedWells.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Edit Selected Wells dialog box.</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Specify the wells as indicated in the table below.</text></para>
     <para styleclass="Normal"><table styleclass="Default" rowcount="5" colcount="4" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
       <tr style="vertical-align:top">
@@ -83,6 +83,6 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><image src="CTS1_SelectedWellsSystem1.png" scale="60.00%" width="453" height="256" styleclass="Image Caption"><title translate="true">Wells in treatment system 1.</title></image></para>
+    <para styleclass="Normal"><image src="CTS1_SelectedWellsSystem1.png" scale="-99.90%" width="453" height="256" styleclass="Image Caption"><title translate="true">Wells in treatment system 1.</title></image></para>
   </body>
 </topic>

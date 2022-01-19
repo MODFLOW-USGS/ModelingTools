@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">FractionOfObjectLength</title>
@@ -10,7 +10,7 @@
       <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">FractionOfObjectLength</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">FractionOfObjectLength</text><text styleclass="Normal" translate="true"> is intended for use with objects that are lines rather than points or polygons. If the object being evaluated does not intersect the cell or element being evaluated, FractionOfObjectLength returns zero. If the object being evaluated intersects the cell or element being evaluated, FractionOfObjectLength returns zero if the first vertex of the object is in the element or cell, and returns one if the last vertex of the object is in the element or cell. It returns a fraction between zero and one for all other elements or cells. The value that is returned represents the fraction of an object’s length between the start of the object and the midpoint of an object’s intersection with a cell or element (fig. 24). If an object intersects a cell or element more than once, the value that will be applied is the result of the last intersection between the object and the cell or element. </text></para>
-    <para style="text-align:center;"><image src="FractionOfObjectLength.png" scale="50.00%" width="250" height="134" styleclass="Image Caption"><title translate="true">Illustration of FractionOfObjectLength</title></image></para>
+    <para style="text-align:center;"><image src="FractionOfObjectLength.png" scale="-99.90%" width="250" height="134" styleclass="Image Caption"><title translate="true">Illustration of FractionOfObjectLength</title></image></para>
     <para style="text-align:center;"></para>
     <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 24.</text><text styleclass="Image Caption" translate="true"> FractionOfObjectLength returns 0.30.</text></para>
   </body>

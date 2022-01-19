@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Defining MT3D-USGS Time data in CTS1</title>
@@ -7,6 +7,6 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Defining MT3D-USGS Time data in CTS1</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to set the time data for MT3D-USGS. Select </text><text styleclass="Strong" translate="true">Model|MODFLOW Time...</text><text styleclass="Normal" translate="true"> Set </text><text styleclass="Strong" translate="true">DTO</text><text styleclass="Normal" translate="true"> to 56.25 and set </text><text styleclass="Strong" translate="true">MXSTRN</text><text styleclass="Normal" translate="true"> to 500 for both stress periods.</text></para>
-    <para styleclass="Normal"><image src="CTS1_TimeData.png" scale="60.00%" width="454" height="215" styleclass="Image Caption"><title translate="true">MT3D-USGS Time data</title></image></para>
+    <para styleclass="Normal"><image src="CTS1_TimeData.png" scale="-99.90%" width="454" height="215" styleclass="Image Caption"><title translate="true">MT3D-USGS Time data</title></image></para>
   </body>
 </topic>

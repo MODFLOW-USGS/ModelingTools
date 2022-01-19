@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">CSUB Example: CSUB Cell Observations at Wells</title>
@@ -17,6 +17,6 @@
       <li styleclass="Normal"><text styleclass="Normal" translate="true">preconstress-cell</text></li>
     </list>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Next, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Points" styleclass="Normal" translate="true">create a point object</link><text styleclass="Normal" translate="true"> on the top view of the model at the location of one of the wells. Just as when defining the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CSUB_Example_Head_Observation" styleclass="Normal" translate="true">head observations</link><text styleclass="Normal" translate="true">, make sure the object extends through all the layers. Use it to define the CSUB observations listed above. When you are done create a similar object at the location of the other well.</text></para>
-    <para styleclass="Normal"><image src="CSubExampleCSubCellsAtWellObs1.png" scale="60.00%" width="472" height="457" styleclass="Image Caption"><title translate="true">Defining additional CSUB observations</title></image></para>
+    <para styleclass="Normal"><image src="CSubExampleCSubCellsAtWellObs1.png" scale="-99.90%" width="472" height="457" styleclass="Image Caption"><title translate="true">Defining additional CSUB observations</title></image></para>
   </body>
 </topic>

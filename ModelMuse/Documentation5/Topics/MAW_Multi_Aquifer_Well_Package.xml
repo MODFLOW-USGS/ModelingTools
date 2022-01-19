@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MAW: Multi-Aquifer Well Package Pane</title>
@@ -10,7 +10,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">MAW: Multi-Aquifer Well package</text><text styleclass="Normal" translate="true"> pane can only be selected if the object being edited is a point object on the top view of the model with zero Z formulas.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW 6 does not allow a single multi-aquifer well to define more than one well screen in a single cell.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">There are three tabs on the pane: </text><text styleclass="Strong" translate="true">Well definition</text><text styleclass="Normal" translate="true">, </text><text styleclass="Strong" translate="true">Well screens</text><text styleclass="Normal" translate="true">, and </text><text styleclass="Strong" translate="true">Transient</text><text styleclass="Normal" translate="true">.</text></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Well definition]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Well definition]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -19,7 +19,7 @@
           <para styleclass="Normal"><text styleclass="Strong" translate="true">Bottom</text><text styleclass="Normal" translate="true"> —bottom elevation of the multi-aquifer well.</text></para>
           <para styleclass="Normal"><text styleclass="Strong" translate="true">Starting head (strt)</text><text styleclass="Normal" translate="true">—starting head for the multi-aquifer well.</text></para>
           <para styleclass="Normal"><text styleclass="Strong" translate="true">Conductance Equation (condeqn)</text><text styleclass="Normal" translate="true"> defines the conductance equation that is used to calculate the saturated conductance for the multi-aquifer well. Possible multi-aquifer well condeqn strings include: </text></para>
-          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="9" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">SPECIFIED– to indicate the multi-aquifer well saturated conductance will be specified. </text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">THEIM– to indicate the multi-aquifer well saturated conductance will be calculated using the Theim equation. </text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">SKIN– to indicate that the multi-aquifer well saturated conductance will be calculated using the screen top and bottom, screen hydraulic conductivity, and skin radius. </text></li>
@@ -29,7 +29,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Well screens]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Well screens]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -41,7 +41,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Transient]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Transient]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -54,12 +54,12 @@
           <para styleclass="Strong"><text styleclass="Strong" translate="true">FW elevation</text><text styleclass="Normal" translate="true">: (fwelev) elevation used to determine whether or not the well is flowing.</text></para>
           <para styleclass="Strong"><text styleclass="Strong" translate="true">FW conductance</text><text styleclass="Normal" translate="true">: (fwcond) conductance used to calculate the discharge of a free flowing well. Flow occurs when the head in the well is above the well top elevation (fwelev).</text></para>
           <para styleclass="Normal"><text styleclass="Strong" translate="true">FW reduction length:</text><text styleclass="Normal" translate="true"> (fwrlen) length used to reduce the conductance of the flowing well. When the head in the well drops below the well top plus the reduction length, then the conductance is reduced. This reduction length can be used to improve the stability of simulations with flowing wells so that there is not an abrupt change in flowing well rates.</text></para>
-          <para styleclass="Strong"><text styleclass="Strong" translate="true">Rate limitation</text><text styleclass="Normal" translate="true">: &#160;Choices are none, Scaling and Shutoff.</text></para>
-          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <para styleclass="Strong"><text styleclass="Strong" translate="true">Rate limitation</text><text styleclass="Normal" translate="true">:  Choices are none, Scaling and Shutoff.</text></para>
+          <list id="10" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Strong"><text styleclass="Strong" translate="true">none</text></li>
             <li styleclass="Strong"><text styleclass="Strong" translate="true">Scaling</text><text styleclass="Normal" translate="true"> activates rate scaling. If rate scaling is specified, both pump elevation and scaling length must be specified. rate scaling cannot be used with </text><text styleclass="Strong" translate="true">Use head limit</text><text styleclass="Normal" translate="true">.</text></li>
           </list>
-          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:11pt; color:#000000;">
+          <list id="11" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:11pt; color:#000000;">
             <li styleclass="Strong"><text styleclass="Strong" translate="true">Shutoff</text><text styleclass="Normal" translate="true"> activates well shut off capability. Subsequent values define the minimum and maximum pumping rate that a well must exceed to shutoff or reactivate a well, respectively, during a stress period. shut off is only applied to discharging wells (rate&lt; 0) and if head limit is specified (not set to ‘off’). If head limit is specified, shut off can be deactivated by specifying a minimum value equal to zero. The shut off option is based on the shut off functionality available in the MNW2 (Konikow and others, 2009) package for MODFLOW-2005. The shut off option has been included to facilitate backward compatibility with previous versions of MODFLOW but use of the rate scaling option instead of the shut off option is recommended. By default, shut off is not used</text><text styleclass="Font Style" style="font-family:NimbusRomNo9L-Regu; font-size:11pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">.</text></li>
           </list>
           <para styleclass="Normal"><text styleclass="Strong" translate="true">Pump elevation: </text><text styleclass="Normal" translate="true">pump elevation is the elevation of the multi-aquifer well pump (pump elevation). pump elevation cannot be less than the bottom elevation (bottom) of the multi-aquifer well. By default, pump elevation is set equal to the bottom of the lowest cell connected to a MAW well.</text></para>

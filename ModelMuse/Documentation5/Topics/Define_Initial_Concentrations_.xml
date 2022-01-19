@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Define Initial Concentrations in CTS1</title>
@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Define Initial Concentrations in CTS1</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the model, the initial concentration in row 16, column 16 is 100 but at all other locations is set to 0. This is specified in the data set </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Initial_Concentration_Chem</text><text styleclass="Normal" translate="true"> (if the species name is &quot;Chem&quot;). The default formula for this data set is zero so it does not need to be changed. To set the initial concentration at row 16, column 16 </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Points" styleclass="Normal" translate="true">create a point object</link><text styleclass="Normal" translate="true"> in that cell and use it to set the value of </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Initial_Concentration_Chem</text><text styleclass="Normal" translate="true"> to 100.</text></para>
-    <para styleclass="Normal"><image src="CTS1_InitalConc.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying initial concentration at row 16, column 16</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the model, the initial concentration in row 16, column 16 is 100 but at all other locations is set to 0. This is specified in the data set </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Initial_Concentration_Chem</text><text styleclass="Normal" translate="true"> (if the species name is "Chem"). The default formula for this data set is zero so it does not need to be changed. To set the initial concentration at row 16, column 16 </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Points" styleclass="Normal" translate="true">create a point object</link><text styleclass="Normal" translate="true"> in that cell and use it to set the value of </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Initial_Concentration_Chem</text><text styleclass="Normal" translate="true"> to 100.</text></para>
+    <para styleclass="Normal"><image src="CTS1_InitalConc.png" scale="-99.90%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying initial concentration at row 16, column 16</title></image></para>
   </body>
 </topic>

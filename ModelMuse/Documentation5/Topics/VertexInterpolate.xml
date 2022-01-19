@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">VertexInterpolate</title>
@@ -11,7 +11,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">VertexInterpolate</text><text styleclass="Normal" translate="true">(Value1, Value2, ...) is intended for use with objects that are polylines rather than points or polygons. If the object that is being evaluated does not intersect the cell or element that is being evaluated, VertexInterpolate returns zero. If the object that is being evaluated does intersect the cell or element that is being evaluated, VertexInterpolate assigns Values1 to ValueN to vertices 1 to N respectively, of the object where N is the smaller of the number of arguments in VertexInterpolate and the number of vertices in the object. If the number of vertices in the object is greater than the number of arguments, the value of the last argument will be assigned to each of the vertices in the object that would not otherwise have an associated value. If a vertex of the object is in an element or cell, the associated value will be assigned to the element or cell. Otherwise, the values will be interpolated from the end points of the line segment that intersects the cell or element using linear interpolation based on the distance from the center point of the line segment within the cell or element to the adjacent vertices in the object (fig. 25). If more than one vertex of an object is in a cell or element or the object intersects a cell or element more than once, the value applied is the value for the last vertex or segment to intersect the cell or element. VertexInterpolate returns a real number.</text></para>
     <para style="text-indent:48px;"></para>
-    <para style="text-align:center; page-break-after:avoid;"><image src="VertexInterpolate.png" scale="50.00%" width="250" height="41" styleclass="Image Caption"></image></para>
+    <para style="text-align:center; page-break-after:avoid;"><image src="VertexInterpolate.png" scale="-99.90%" width="250" height="41" styleclass="Image Caption"></image></para>
     <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 25.</text><text styleclass="Image Caption" translate="true"> VertexInterpolate(1,2,3) returns the values shown for each element.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="InterpolatedVertexValue" styleclass="Normal" translate="true">InterpolatedVertexValue</link></para>
   </body>

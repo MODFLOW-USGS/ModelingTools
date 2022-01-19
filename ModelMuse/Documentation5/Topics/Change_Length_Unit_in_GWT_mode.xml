@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Change Length Unit in GWT Model</title>
@@ -7,6 +7,6 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Change Length Unit in GWT Model</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">We need to specify the length units of the model. In this case the length unit is feet. You can specify the length unit in the </text><text styleclass="Strong" translate="true">Model|MODFLOW Options</text><text styleclass="Normal" translate="true"> dialog box on the </text><text styleclass="Strong" translate="true">Options</text><text styleclass="Normal" translate="true"> tab.</text></para>
-    <para styleclass="Normal"><image src="GWT_MODFLOW_Options.png" scale="60.00%" width="327" height="325" styleclass="Image Caption"><title translate="true">Specify length units</title></image></para>
+    <para styleclass="Normal"><image src="GWT_MODFLOW_Options.png" scale="-99.90%" width="327" height="325" styleclass="Image Caption"><title translate="true">Specify length units</title></image></para>
   </body>
 </topic>

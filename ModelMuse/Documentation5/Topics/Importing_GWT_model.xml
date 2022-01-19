@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Importing GWT Model</title>
@@ -6,9 +6,9 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Importing GWT Model</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The first step is to import the existing groundwater flow model. The model is found in &quot;data|gwt&quot; directory of the MT3D-USGS distribution file. Make a copy of the entire &quot;data|gwt&quot; directory and import from the copy of the directory rather than the original one. This is because in the process of importing the model, ModelMuse will overwrite the existing output files.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">To import the model, start ModelMuse and select </text><text styleclass="Strong" translate="true">Import MODFLOW-2005 or MODFLOW-NWT model</text><text styleclass="Normal" translate="true">. After clicking the Next button, you will be shown a dialog box in which you can select the name file for the model. Select &quot;gwt_mf.nam&quot; and click OK.</text></para>
-    <para styleclass="Normal"><image src="Gwt_Import.png" scale="60.00%" width="324" height="286" styleclass="Image Caption"><title translate="true">Import gwt_mt.nam.</title></image></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Incidentally, the original model from Prudic and others (2004) was simulated using a version of MODFLOW called mf2k-gwt. MF2k stands for &quot;MODFLOW-2000 and GWT stands for groundwater transport. Mf2k-gwt incorporates groundwater flow and solute transport into one program. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The first step is to import the existing groundwater flow model. The model is found in "data|gwt" directory of the MT3D-USGS distribution file. Make a copy of the entire "data|gwt" directory and import from the copy of the directory rather than the original one. This is because in the process of importing the model, ModelMuse will overwrite the existing output files.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To import the model, start ModelMuse and select </text><text styleclass="Strong" translate="true">Import MODFLOW-2005 or MODFLOW-NWT model</text><text styleclass="Normal" translate="true">. After clicking the Next button, you will be shown a dialog box in which you can select the name file for the model. Select "gwt_mf.nam" and click OK.</text></para>
+    <para styleclass="Normal"><image src="Gwt_Import.png" scale="-99.90%" width="324" height="286" styleclass="Image Caption"><title translate="true">Import gwt_mt.nam.</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Incidentally, the original model from Prudic and others (2004) was simulated using a version of MODFLOW called mf2k-gwt. MF2k stands for "MODFLOW-2000 and GWT stands for groundwater transport. Mf2k-gwt incorporates groundwater flow and solute transport into one program. </text></para>
   </body>
 </topic>

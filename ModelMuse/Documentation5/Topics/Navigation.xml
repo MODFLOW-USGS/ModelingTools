@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Navigation</title>
@@ -19,7 +19,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Zoom.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Zoom button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Zoom</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Zoom.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Zoom button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Zoom</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Drag to zoom in to a specific area. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Changing_the_Magnification" styleclass="Table Cell" translate="true">Changing the Magnification</link><text styleclass="Table Cell" translate="true"> for more information.</text></para>
@@ -27,7 +27,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomIn.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Zoom In button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Zoom In</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomIn.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Zoom In button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Zoom In</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Zoom in by a factor of two. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Changing_the_Magnification" styleclass="Table Cell" translate="true">Changing the Magnification</link><text styleclass="Table Cell" translate="true"> for more information.</text></para>
@@ -35,7 +35,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomOut.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Zoom Out button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Zoom Out</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomOut.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Zoom Out button</title></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Zoom Out</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Zoom out by a factor of two. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Changing_the_Magnification" styleclass="Table Cell" translate="true">Changing the Magnification</link><text styleclass="Table Cell" translate="true"> for more information.</text></para>
@@ -43,7 +43,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="Pan.PNG" scale="100.00%" styleclass="Image Caption"><title translate="true">Pan button</title></image><anchor id="Pan" styleclass="Image Caption"></anchor><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Pan</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="Pan.PNG" scale="-99.90%" styleclass="Image Caption"><title translate="true">Pan button</title></image><anchor id="Pan" styleclass="Image Caption"></anchor><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Pan</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Move the displayed area that is shown on the top, front, or side view of the model by clicking with the left mouse button and dragging while holding the mouse down. It is also possible to move the displayed area by clicking and dragging with the middle mouse button even if another tool is selected.</text></para>
@@ -51,7 +51,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomToFit.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Restore Default 2-D View</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomToFit.png" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Restore Default 2-D View</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Position the 2-D views so that most or all of the grid is visible and so that the grid nearly fills the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Working_Area" styleclass="Table Cell" translate="true">working area</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -59,7 +59,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomUndo.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Undo Position</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomUndo.png" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Undo Position</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Return the top, front, and side views to the previous position and magnification</text></para>
@@ -67,7 +67,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomRedo.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Redo Position</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="ZoomRedo.png" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Redo Position</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Cancels Undo Position</text></para>
@@ -83,7 +83,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:161px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="RulerButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Measure</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="RulerButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Measure</text></para>
         </td>
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Measure the distance between locations on the top, front, or side views of the model. Click on one of the 2D views to begin measuring. Double-click to stop measuring. The distance will be displayed near the cursor.</text></para>

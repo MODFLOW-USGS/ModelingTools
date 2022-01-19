@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">BlockAreaTop</title>
@@ -11,7 +11,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">BlockAreaTop</text><text styleclass="Normal" translate="true">({Column, Row}) is like </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BlockAreaFront" styleclass="Normal" translate="true">BlockAreaFront</link><text styleclass="Normal" translate="true"> except that the value returned is the cross-sectional area of an element or cell as seen from the top of the grid or mesh (fig. 23). The function has two optional arguments: Column and Row. If these arguments are provided, they specify the element or cell for which the area should be calculated. If they are not provided, the function uses the column, and row of the element or cell for which the formula is being calculated. If any of the arguments has an invalid value, the function returns zero.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">For SUTRA and MODFLOW 6 DISV models, Row should always be 1 and Column represents the cell or element number.</text></para>
-    <para style="text-align:center; page-break-after:avoid;"><image src="BlockAreaTop.png" scale="50.00%" width="364" height="179" styleclass="Image Caption"><title translate="true">Illustration of BlockAreaTop</title></image></para>
-    <para style="text-align:center; margin-top:16px; margin-bottom:16px;"><text style="font-family:&apos;Univers 57 Condensed&apos;; font-size:12pt; font-weight:bold; color:#000000;" translate="true">Figure 23.</text><text style="font-family:&apos;Univers 57 Condensed&apos;; font-size:12pt; color:#000000;" translate="true"> For grids, BlockAreaTop returns the product of b times c.</text></para>
+    <para style="text-align:center; page-break-after:avoid;"><image src="BlockAreaTop.png" scale="-99.90%" width="364" height="179" styleclass="Image Caption"><title translate="true">Illustration of BlockAreaTop</title></image></para>
+    <para style="text-align:center; margin-top:16px; margin-bottom:16px;"><text style="font-family:'Univers 57 Condensed'; font-size:12pt; font-weight:bold; color:#000000;" translate="true">Figure 23.</text><text style="font-family:'Univers 57 Condensed'; font-size:12pt; color:#000000;" translate="true"> For grids, BlockAreaTop returns the product of b times c.</text></para>
   </body>
 </topic>
