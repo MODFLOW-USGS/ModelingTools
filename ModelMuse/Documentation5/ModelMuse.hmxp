@@ -123,7 +123,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4302</config-value>
+      <config-value name="autohelpstart">4303</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -142,6 +142,7 @@
       <config-value name="make0status">*</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">*</config-value>
+      <config-group name="bookmarks"/>
     </config-group>
     <config-group name="hlp">
       <config-value name="citation" translate="true"></config-value>
@@ -2280,6 +2281,7 @@ document.write('</frameset>');
       <file-mod href="PestModifierAndMethod.xml"/>
       <file-mod href="Pilot_Point_Explanation.xml"/>
       <file-mod href="Visualize_Residuals.xml"/>
+      <file-mod href="Unsupported_PEST_Capabilities.xml"/>
     </file>
     <file href="Topics/Invisible/*.xml" build="ALL" filetype="topic"/>
     <file href="Baggage/*.*" build="ALL" filetype="baggage"/>
