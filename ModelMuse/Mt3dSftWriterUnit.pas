@@ -653,37 +653,51 @@ var
   ISFBCTYP: Integer;
   CompIndex: Integer;
 begin
-  for TimeIndex := 0 to Values.Count - 1 do
+  if Values.Count = 0 then
   begin
-//    FTimeIndex := TimeIndex;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
+    NTMP := 0;
+    for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
     begin
-      Exit;
-    end;
-    SftRateList := Values[TimeIndex];
-
-    // Data Set 7
-    NTMP := SftRateList.Count;
-    WriteI10Integer(NTMP, 'NTMP, Data set 7 MT3D-USGS, SFT package');
-    WriteString(' # NTMP, Stress Period');
-    WriteInteger(TimeIndex+1);
-    NewLine;
-
-    // Data Set 8;
-    for CellIndex := 0 to SftRateList.Count - 1 do
-    begin
-      SftConcCell := SftRateList[CellIndex] as TMt3dmsSftConc_Cell;
-      ISFNBC := SftConcCell.ReachNumber + 1;
-      ISFBCTYP := Ord(SftConcCell.BoundaryType);
-      WriteInteger(ISFNBC);
-      WriteInteger(ISFBCTYP);
-      for CompIndex := 0 to NCOMP - 1 do
-      begin
-        WriteFloat(SftConcCell.Concentration[CompIndex]);
-      end;
-      WriteString(' # Data Set 8: ISFNBC, ISFBCTYP, (CBCSF(n), n=1, NCOMP)');
+      WriteI10Integer(NTMP, 'NTMP, Data set 7 MT3D-USGS, SFT package');
+      WriteString(' # NTMP, Stress Period');
+      WriteInteger(TimeIndex+1);
       NewLine;
+    end;
+  end
+  else
+  begin
+    for TimeIndex := 0 to Values.Count - 1 do
+    begin
+  //    FTimeIndex := TimeIndex;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+      SftRateList := Values[TimeIndex];
+
+      // Data Set 7
+      NTMP := SftRateList.Count;
+      WriteI10Integer(NTMP, 'NTMP, Data set 7 MT3D-USGS, SFT package');
+      WriteString(' # NTMP, Stress Period');
+      WriteInteger(TimeIndex+1);
+      NewLine;
+
+      // Data Set 8;
+      for CellIndex := 0 to SftRateList.Count - 1 do
+      begin
+        SftConcCell := SftRateList[CellIndex] as TMt3dmsSftConc_Cell;
+        ISFNBC := SftConcCell.ReachNumber + 1;
+        ISFBCTYP := Ord(SftConcCell.BoundaryType);
+        WriteInteger(ISFNBC);
+        WriteInteger(ISFBCTYP);
+        for CompIndex := 0 to NCOMP - 1 do
+        begin
+          WriteFloat(SftConcCell.Concentration[CompIndex]);
+        end;
+        WriteString(' # Data Set 8: ISFNBC, ISFBCTYP, (CBCSF(n), n=1, NCOMP)');
+        NewLine;
+      end;
     end;
   end;
 
