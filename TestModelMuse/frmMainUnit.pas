@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ActivApp, Menus, Spin, ComCtrls, Buttons, ImgList,
   Mask, JvExMask, JvToolEdit, IniFiles, JvComponentBase, JvCreateProcess,
-  System.ImageList;
+  System.ImageList, System.IOUtils;
 
 type
   TfrmMain = class(TForm)
@@ -490,11 +490,12 @@ begin
 
         if FileExists(OutputFileName) then
         begin
-          DeleteFile(OutputFileName);
+          TFile.Delete(OutputFileName);
         end;
 
         ChildNode := ChildNode.getNextSibling;
       end;
+      Sleep(10000);
 
       StatusBar1.SimpleText := 'testing ' + ModelFileName;
       ActivApp1.ExePath := '"' + GoPhastExeName + '" "' + ModelFileName + '" -E -C';

@@ -106,8 +106,8 @@ object frmMain: TfrmMain
       OnClick = btnBrowseClick
     end
     object seTimeDelay: TSpinEdit
-      Left = 311
-      Top = 8
+      Left = 312
+      Top = 6
       Width = 49
       Height = 22
       MaxValue = 0

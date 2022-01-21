@@ -10241,6 +10241,13 @@ begin
 
           PhastModel.AddFilesToDeleteToBatchFile(ParamEstBatFile, ParamEstBatFileName);
           PLPROC_Location := GetPLPROC_Location(FileName, PhastModel);
+          {$IFDEF PEST}
+          if PhastModel.PestUsed then
+          begin
+            MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+            PLPROC_Location := ExtractFileName(PLPROC_Location);
+          end;
+          {$ENDIF}
           PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
           for DSIndex := 0 to PhastModel.DataArrayManager.DataSetCount - 1 do
           begin
@@ -10256,6 +10263,15 @@ begin
           BatchFile.AddStrings(PhastModel.KrigfactorsScriptLines);
 //          BatchFile.AddStrings(PhastModel.PestTemplateLines);
           ParamEstBatFile.AddStrings(PhastModel.PestTemplateLines);
+
+
+          {$IFDEF PEST}
+          if PhastModel.PestUsed then
+          begin
+            MoveAppToDirectory(SutraFileName, ModelDirectory);
+            SutraFileName := ExtractFileName(SutraFileName);
+          end;
+          {$ENDIF}
 
           BatchFile.Add('"' + SutraFileName + '"');
           ParamEstBatFile.Add('"' + SutraFileName + '"');

@@ -1066,6 +1066,10 @@ end;
     procedure WriteFile(FileName: string);
   end;
 
+{$IFDEF PEST}
+procedure MoveAppToDirectory(const AppFullPath, Directory: string);
+{$ENDIF}
+
 // name writes a batch-file used to run MODFLOW.
 function WriteModflowBatchFile(ProgramLocations: TProgramLocations;
   const FileName: string; ListFiles: TStringList; OpenListFile: boolean;
@@ -1406,6 +1410,34 @@ begin
   StoredPLPROC_Location := result;
 end;
 
+{$IFDEF PEST}
+procedure MoveAppToDirectory(const AppFullPath, Directory: string);
+var
+  AppName: string;
+  NewFileName: string;
+begin
+  if not TFile.Exists(AppFullPath) then
+  begin
+    Exit;
+  end;
+  AppName := ExtractFileName(AppFullPath);
+  NewFileName := IncludeTrailingPathDelimiter(Directory) + AppName;
+  if SameText(AppFullPath, AppName) then
+  begin
+    Exit;
+  end;
+  if TFile.Exists(NewFileName) then
+  begin
+    if TFile.GetCreationTime(AppFullPath)
+      = TFile.GetCreationTime(NewFileName) then
+    begin
+      Exit;
+    end;
+  end;
+  TFile.Copy(AppFullPath, NewFileName, True);
+end;
+{$ENDIF}
+
 function WriteModflowBatchFile(ProgramLocations: TProgramLocations;
   const FileName: string; ListFiles: TStringList; OpenListFile: boolean;
   Before, After: TStrings; ExportModpath, ExportZoneBudget: boolean;
@@ -1506,6 +1538,13 @@ begin
       Model.AddFilesToDeleteToBatchFile(ParamEstBatchFile, ParamEstBatFileName);
 
       PLPROC_Location := GetPLPROC_Location(FileName, Model);
+      {$IFDEF PEST}
+      if Model.PestUsed then
+      begin
+        MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+        PLPROC_Location := ExtractFileName(PLPROC_Location);
+      end;
+      {$ENDIF}
       PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
       for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
       begin
@@ -1592,6 +1631,14 @@ begin
       end;
 
       AFileName :=  QuoteFileName(ExpandFileName(ModflowLocation));
+      {$IFDEF PEST}
+      if Model.PestUsed then
+      begin
+        MoveAppToDirectory(ExpandFileName(ModflowLocation), ModelDirectory);
+        AFileName := ExtractFileName(AFileName);
+      end;
+      {$ENDIF}
+
       if (Model.ModelSelection <> msModflow2015) then
       begin
         ParamEstBatchFile.Add(AFileName + ' ' + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
@@ -10273,9 +10320,15 @@ end;
 class function TCustomFileWriter.PestUtilityProgramPath(UtilityProgramName,
   AFileName: string): string;
 begin
-  result := IncludeTrailingPathDelimiter(ExtractFileDir(AFileName))
-     + UtilityProgramName;
+//  result := IncludeTrailingPathDelimiter(ExtractFileDir(AFileName))
+//     + UtilityProgramName;
   try
+//    if TFile.Exists(result) then
+//    begin
+//      Exit;
+//    end;
+    result := IncludeTrailingPathDelimiter
+      (frmGoPhast.PhastModel.ProgramLocations.PestDirectory) + UtilityProgramName;
     if TFile.Exists(result) then
     begin
       Exit;
@@ -10286,15 +10339,16 @@ begin
     begin
       Exit;
     end;
-    result := IncludeTrailingPathDelimiter
-      (frmGoPhast.PhastModel.ProgramLocations.PestDirectory) + UtilityProgramName;
+    result := IncludeTrailingPathDelimiter(ExtractFileDir(AFileName))
+       + UtilityProgramName;
     if TFile.Exists(result) then
     begin
       Exit;
     end;
     result := UtilityProgramName;
   finally
-    result := '"' + result + '"';
+    MoveAppToDirectory(ExpandFileName(result), ExtractFileDir(AFileName));
+    result := '"' + UtilityProgramName + '"';
   end;
 end;
 

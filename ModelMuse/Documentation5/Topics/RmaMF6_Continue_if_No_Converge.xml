@@ -1,13 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2022-01-21T12:07:18.473-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RmaMF6: Continue if No Convergence</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Continue if No Convergence</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">PEST will run your model multiple times. Sometimes the model might not meet the convergence criteria but still reach an acceptable solution. If the model halts prematurely because of this PEST may not be able to continue. There is an option in MODFLOW 6 to deal with just this situation. Select Model|MODFLOW Packages and Programs and go to the pane for the IMS solver. Check the </text><text styleclass="Strong" translate="true">Continue even if no convergence</text><text styleclass="Normal" translate="true"> check box.</text></para>
-    <para styleclass="Normal"><image src="RmaMF6Continue.png" scale="-99.90%" width="588" height="442" styleclass="Image Caption"><title translate="true">Screen capture illustrating the "Continue even if no convergence" option.</title><caption translate="true"><![CDATA[Screen capture illustrating the "Continue even if no convergence" option.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PEST will run your model multiple times. Sometimes during the testing of potential parameters, the model might not meet the convergence criteria but still reach an acceptable solution. If the model halts prematurely because of this, PEST may not be able to continue. There is an option in MODFLOW 6 to deal with just this situation. Select Model|MODFLOW Packages and Programs and go to the pane for the IMS solver. Check the “</text><text styleclass="Strong" translate="true">Continue even if no convergence</text><text styleclass="Normal" translate="true">” check box as illustrated below.</text></para>
+    <para styleclass="Normal"><image src="RmaMF6Continue.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture illustrating the &quot;Continue even if no convergence&quot; option.</title><caption translate="true"><![CDATA[Screen capture illustrating the "Continue even if no convergence" option.]]></caption></image></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

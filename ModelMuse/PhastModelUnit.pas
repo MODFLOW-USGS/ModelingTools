@@ -10465,10 +10465,11 @@ const
 //                columns did not have column headers.
 //    '4.3.0.78' Bug fix: not in released version. Fixed list index out of
 //                bounds while RCH and MT3D were active.
-
-//               Enhancement: When writing the reservoir layer, ModelMuse now
+//    '4.3.0.79' Enhancement: When writing the reservoir layer, ModelMuse now
 //                checks for invalid layer numbers and layers that are beneath
 //                non-simulated layers.
+//               Bug fix: Fixed export of SFT when no SFT boundaries are
+//                defined.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -10476,7 +10477,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.78';
+  IIModelVersion = '4.3.0.79';
 
 function IModelVersion: string;
 begin
