@@ -141,7 +141,6 @@
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
         <DCC_Define>LeakChecking;$(DCC_Define)</DCC_Define>
-        <Debugger_RunParams>&quot;C:\ModelingTools\ModelMuse\PestTest\PestPilotPointTest.gpt&quot;  -e -c</Debugger_RunParams>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <BRCC_Defines>STR_Package;FullDebugMode;$(BRCC_Defines)</BRCC_Defines>

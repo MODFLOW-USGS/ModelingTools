@@ -8,7 +8,7 @@ if exist "RechAddTestMf6.InnerSolution.CSV" del "RechAddTestMf6.InnerSolution.CS
 if exist "RechAddTestMf6.lst" del "RechAddTestMf6.lst"
 if exist "RechAddTestMf6.ob_gw_out_head.csv" del "RechAddTestMf6.ob_gw_out_head.csv"
 if exist "RechAddTestMf6.OuterSolution.CSV" del "RechAddTestMf6.OuterSolution.CSV"
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" RechAddTestMf6.chd.tpl RechAddTestMf6.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" RechAddTestMf6.rch.tpl RechAddTestMf6.pval
-C:\WRDAPP\mf6.2.2\bin\mf6.exe
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf6ObsExtractor.exe" RechAddTestMf6.Mf6ExtractValues
+"EnhancedTemplateProcessor.exe" RechAddTestMf6.chd.tpl RechAddTestMf6.pval
+"EnhancedTemplateProcessor.exe" RechAddTestMf6.rch.tpl RechAddTestMf6.pval
+mf6.exe
+"Mf6ObsExtractor.exe" RechAddTestMf6.Mf6ExtractValues

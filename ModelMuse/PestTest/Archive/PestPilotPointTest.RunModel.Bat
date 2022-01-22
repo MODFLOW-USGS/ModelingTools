@@ -14,8 +14,8 @@ if exist "PestPilotPointTest.InnerSolution.CSV" del "PestPilotPointTest.InnerSol
 if exist "PestPilotPointTest.lst" del "PestPilotPointTest.lst"
 if exist "PestPilotPointTest.ob_gw_out_head.csv" del "PestPilotPointTest.ob_gw_out_head.csv"
 if exist "PestPilotPointTest.OuterSolution.CSV" del "PestPilotPointTest.OuterSolution.CSV"
-"C:\Pest17.3\plproc.exe" PestPilotPointTest.Kx.script
-"C:\Pest17.3\plproc.exe" PestPilotPointTest.Ky.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" PestPilotPointTest.drn.tpl PestPilotPointTest.pval
-C:\WRDAPP\mf6.2.2\bin\mf6.exe
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf6ObsExtractor.exe" PestPilotPointTest.Mf6ExtractValues
+"plproc.exe" PestPilotPointTest.Kx.script
+"plproc.exe" PestPilotPointTest.Ky.script
+"EnhancedTemplateProcessor.exe" PestPilotPointTest.drn.tpl PestPilotPointTest.pval
+mf6.exe
+"Mf6ObsExtractor.exe" PestPilotPointTest.Mf6ExtractValues

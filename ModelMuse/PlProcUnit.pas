@@ -717,8 +717,10 @@ procedure TParameterZoneWriter.WriteKrigingFactorsScript(
 var
   ScriptFileName: string;
   PLPROC_Location: string;
+  ModelDirectory: string;
 begin
   ScriptFileName := ChangeFileExt(FParamValuesFileName, StrKrigfactorsscript);
+  ModelDirectory := ExtractFileDir(ScriptFileName);
   OpenFile(ScriptFileName);
   try
     WriteString('#Script for PLPROC for saving kriging factors');
@@ -732,6 +734,13 @@ begin
   end;
 
   PLPROC_Location := GetPLPROC_Location(FParamValuesFileName, Model);
+  {$IFDEF PEST}
+  if Model.PestUsed then
+  begin
+    MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+    PLPROC_Location := ExtractFileName(PLPROC_Location);
+  end;
+  {$ENDIF}
   Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
     [PLPROC_Location, ExtractFileName(ScriptFileName)]));
 end;
@@ -2194,10 +2203,19 @@ end;
 procedure TSutraData14BScriptWriter.WriteFiles(var AFileName: string);
 var
   PLPROC_Location: string;
+  ModelDirectory: string;
 begin
   FFileName := FileName(AFileName);
+  ModelDirectory := ExtractFileDir(FFileName);
   Model.SutraPestScripts.Add(FFileName);
   PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+  {$IFDEF PEST}
+  if Model.PestUsed then
+  begin
+    MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+    PLPROC_Location := ExtractFileName(PLPROC_Location);
+  end;
+  {$ENDIF}
   Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
@@ -2275,6 +2293,7 @@ procedure TSutraData14BScriptWriter.WriteKrigingFactors;
 var
   ScriptFileName: string;
   PLPROC_Location: string;
+  ModelDirectory: string;
 begin
   if (FPorosityPilotPointFiles.Count > 0)
     or (FThicknessPilotPointFiles.Count > 0) then
@@ -2289,6 +2308,14 @@ begin
       ReadDiscretization;
       SaveKrigingFactors;
       PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+      ModelDirectory := ExtractFileDir(FFileName);
+      {$IFDEF PEST}
+      if Model.PestUsed then
+      begin
+        MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+        PLPROC_Location := ExtractFileName(PLPROC_Location);
+      end;
+      {$ENDIF}
       Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
         [PLPROC_Location, ExtractFileName(ScriptFileName)]));
 
@@ -3314,11 +3341,20 @@ var
 //  Index: Integer;
   PLPROC_Location: string;
   ScriptLine: string;
+  ModelDirectory: string;
 begin
   FFileName := FileName(AFileName);
   Model.SutraPestScripts.Add(FFileName);
 
   PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+  ModelDirectory := ExtractFileDir(FFileName);
+  {$IFDEF PEST}
+  if Model.PestUsed then
+  begin
+    MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+    PLPROC_Location := ExtractFileName(PLPROC_Location);
+  end;
+  {$ENDIF}
   ScriptLine := Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]);
 
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
@@ -3878,6 +3914,7 @@ procedure TSutraInitCondScriptWriter.WriteFiles(var AFileName: string;
   const DataArrayName: string; ID, Prefix: string);
 var
   PLPROC_Location: string;
+  ModelDirectory: string;
 begin
   FID := ID;
   FDataArrayName := DataArrayName;
@@ -3886,6 +3923,14 @@ begin
   FFileName := ChangeFileExt(AFileName, '.' + FDataArrayName + '.script');
   Model.SutraPestScripts.Add(FFileName);
   PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+  ModelDirectory := ExtractFileDir(FFileName);
+  {$IFDEF PEST}
+  if Model.PestUsed then
+  begin
+    MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+    PLPROC_Location := ExtractFileName(PLPROC_Location);
+  end;
+  {$ENDIF}
   Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''',
    [PLPROC_Location, ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
@@ -3982,6 +4027,7 @@ var
   ScriptFileName: string;
   PilotPointsUsed: Boolean;
   PLPROC_Location: string;
+  ModelDirectory: string;
 begin
   PilotPointsUsed := FPilotPointFiles.Count > 0;
   if PilotPointsUsed then
@@ -3996,6 +4042,14 @@ begin
       ReadDiscretization;
       SaveKrigingFactors;
       PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+      ModelDirectory := ExtractFileDir(FFileName);
+      {$IFDEF PEST}
+      if Model.PestUsed then
+      begin
+        MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+        PLPROC_Location := ExtractFileName(PLPROC_Location);
+      end;
+      {$ENDIF}
       Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
         [PLPROC_Location, ExtractFileName(ScriptFileName)]));
     finally

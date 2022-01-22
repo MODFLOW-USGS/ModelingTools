@@ -15,7 +15,7 @@ if exist "lakeTestObs.hob_out" del "lakeTestObs.hob_out"
 if exist "lakeTestObs.lakg1" del "lakeTestObs.lakg1"
 if exist "lakeTestObs.lakg2" del "lakeTestObs.lakg2"
 if exist "lakeTestObs.lst" del "lakeTestObs.lst"
-"C:\Pest17.3\plproc.exe" lakeTestObs.Lakebed_Leakance.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" lakeTestObs.lak.tpl lakeTestObs.pval
-C:\WRDAPP\MF2005.1_12\bin\mf2005.exe lakeTestObs.nam /wait
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" lakeTestObs.Mf2005ExtractValues
+"plproc.exe" lakeTestObs.Lakebed_Leakance.script
+"EnhancedTemplateProcessor.exe" lakeTestObs.lak.tpl lakeTestObs.pval
+mf2005.exe lakeTestObs.nam /wait
+"Mf2005ObsExtractor.exe" lakeTestObs.Mf2005ExtractValues

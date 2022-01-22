@@ -7,6 +7,6 @@ if exist "UzfTest.fhd" del "UzfTest.fhd"
 if exist "UzfTest.lst" del "UzfTest.lst"
 if exist "UzfTest.sfrg1" del "UzfTest.sfrg1"
 if exist "UzfTest.sfrg2" del "UzfTest.sfrg2"
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" UzfTest.uzf.tpl UzfTest.pval
-C:\WRDAPP\MF2005.1_12\bin\mf2005.exe UzfTest.nam /wait
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" UzfTest.Mf2005ExtractValues
+"EnhancedTemplateProcessor.exe" UzfTest.uzf.tpl UzfTest.pval
+mf2005.exe UzfTest.nam /wait
+"Mf2005ObsExtractor.exe" UzfTest.Mf2005ExtractValues

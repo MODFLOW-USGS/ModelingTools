@@ -13,8 +13,8 @@ if exist "SutraTest2a.smy" del "SutraTest2a.smy"
 if exist "SutraTest2a_Object13.OBC" del "SutraTest2a_Object13.OBC"
 if exist "SutraTest2a_Observatio.OBC" del "SutraTest2a_Observatio.OBC"
 if exist "SutraTest2a_ObsSchec.OBS" del "SutraTest2a_ObsSchec.OBS"
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest2a.FluxBcs.tpl SutraTest2a.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest2a.SPecPBcs.tpl SutraTest2a.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest2a.inp.tpl SutraTest2a.pval
-"C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe"
-"C:\ModelingTools\ModelMuse\Debug\Win32\SutraObsExtractor.exe" SutraTest2a.soe_ev
+"EnhancedTemplateProcessor.exe" SutraTest2a.FluxBcs.tpl SutraTest2a.pval
+"EnhancedTemplateProcessor.exe" SutraTest2a.SPecPBcs.tpl SutraTest2a.pval
+"EnhancedTemplateProcessor.exe" SutraTest2a.inp.tpl SutraTest2a.pval
+"sutra_2_2.exe"
+"SutraObsExtractor.exe" SutraTest2a.soe_ev

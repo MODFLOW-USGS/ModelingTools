@@ -19,12 +19,12 @@ if exist "SutraGenBoundLakeTest.rst" del "SutraGenBoundLakeTest.rst"
 if exist "SutraGenBoundLakeTest.smy" del "SutraGenBoundLakeTest.smy"
 if exist "SutraGenBoundLakeTest_Object7.OBC" del "SutraGenBoundLakeTest_Object7.OBC"
 if exist "SutraGenBoundLakeTest_Object7.OBS" del "SutraGenBoundLakeTest_Object7.OBS"
-"C:\Pest17.3\plproc.exe" SutraGenBoundLakeTest.TestDS.script
-"C:\Pest17.3\plproc.exe" SutraGenBoundLakeTest.Lake_Bottom.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.GfbBCS.tpl SutraGenBoundLakeTest.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.GtbBCS.tpl SutraGenBoundLakeTest.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.lkin.tpl SutraGenBoundLakeTest.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.lkar.tpl SutraGenBoundLakeTest.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.inp.tpl SutraGenBoundLakeTest.pval
-"C:\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe"
-"C:\ModelingTools\ModelMuse\Debug\Win32\SutraObsExtractor.exe" SutraGenBoundLakeTest.soe_ev
+"plproc.exe" SutraGenBoundLakeTest.TestDS.script
+"plproc.exe" SutraGenBoundLakeTest.Lake_Bottom.script
+"EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.GfbBCS.tpl SutraGenBoundLakeTest.pval
+"EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.GtbBCS.tpl SutraGenBoundLakeTest.pval
+"EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.lkin.tpl SutraGenBoundLakeTest.pval
+"EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.lkar.tpl SutraGenBoundLakeTest.pval
+"EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.inp.tpl SutraGenBoundLakeTest.pval
+"sutra_3_0.exe"
+"SutraObsExtractor.exe" SutraGenBoundLakeTest.soe_ev

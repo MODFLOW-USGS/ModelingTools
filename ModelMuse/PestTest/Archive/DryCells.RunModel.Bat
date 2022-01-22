@@ -9,6 +9,6 @@ if exist "DryCells.fdn" del "DryCells.fdn"
 if exist "DryCells.hob_out" del "DryCells.hob_out"
 if exist "DryCells.lst" del "DryCells.lst"
 if exist "DryCells.sfrg1" del "DryCells.sfrg1"
-"C:\Pest17.3\plproc.exe" DryCells.Kx.script
-C:\WRDAPP\MF2005.1_12\bin\mf2005.exe DryCells.nam /wait
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" DryCells.Mf2005ExtractValues
+"plproc.exe" DryCells.Kx.script
+mf2005.exe DryCells.nam /wait
+"Mf2005ObsExtractor.exe" DryCells.Mf2005ExtractValues

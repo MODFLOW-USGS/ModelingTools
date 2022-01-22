@@ -88,12 +88,12 @@ if exist "MF6_TestSfrMawLakMvrUzf.uzf-gwet_ob.csv" del "MF6_TestSfrMawLakMvrUzf.
 if exist "MF6_TestSfrMawLakMvrUzf.uzf-gwrch_ob.csv" del "MF6_TestSfrMawLakMvrUzf.uzf-gwrch_ob.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.water-content_ob.csv" del "MF6_TestSfrMawLakMvrUzf.water-content_ob.csv"
 if exist "mfsim.lst" del "mfsim.lst"
-"C:\Pest17.3\plproc.exe" MF6_TestSfrMawLakMvrUzf.UZF6_Surface_Depression_Depth.script
-"C:\Pest17.3\plproc.exe" MF6_TestSfrMawLakMvrUzf.SfrWidth.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.sfr.tpl MF6_TestSfrMawLakMvrUzf.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.maw6.tpl MF6_TestSfrMawLakMvrUzf.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.lak6.tpl MF6_TestSfrMawLakMvrUzf.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.3.laktab.tpl MF6_TestSfrMawLakMvrUzf.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.uzf.tpl MF6_TestSfrMawLakMvrUzf.pval
-C:\WRDAPP\mf6.2.2\bin\mf6.exe
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf6ObsExtractor.exe" MF6_TestSfrMawLakMvrUzf.Mf6ExtractValues
+"plproc.exe" MF6_TestSfrMawLakMvrUzf.UZF6_Surface_Depression_Depth.script
+"plproc.exe" MF6_TestSfrMawLakMvrUzf.SfrWidth.script
+"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.sfr.tpl MF6_TestSfrMawLakMvrUzf.pval
+"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.maw6.tpl MF6_TestSfrMawLakMvrUzf.pval
+"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.lak6.tpl MF6_TestSfrMawLakMvrUzf.pval
+"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.3.laktab.tpl MF6_TestSfrMawLakMvrUzf.pval
+"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.uzf.tpl MF6_TestSfrMawLakMvrUzf.pval
+mf6.exe
+"Mf6ObsExtractor.exe" MF6_TestSfrMawLakMvrUzf.Mf6ExtractValues

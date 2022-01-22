@@ -6,6 +6,6 @@ if exist "Mnw1Test.fdn" del "Mnw1Test.fdn"
 if exist "Mnw1Test.fhd" del "Mnw1Test.fhd"
 if exist "Mnw1Test.hob_out" del "Mnw1Test.hob_out"
 if exist "Mnw1Test.lst" del "Mnw1Test.lst"
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" Mnw1Test.mnw1.tpl Mnw1Test.pval
-C:\WRDAPP\MF2005.1_12\bin\mf2005.exe Mnw1Test.nam /wait
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" Mnw1Test.Mf2005ExtractValues
+"EnhancedTemplateProcessor.exe" Mnw1Test.mnw1.tpl Mnw1Test.pval
+mf2005.exe Mnw1Test.nam /wait
+"Mf2005ObsExtractor.exe" Mnw1Test.Mf2005ExtractValues

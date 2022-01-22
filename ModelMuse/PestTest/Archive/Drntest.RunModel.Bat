@@ -7,8 +7,8 @@ if exist "Drntest.Mf2005Values" del "Drntest.Mf2005Values"
 if exist "Drntest.bdn" del "Drntest.bdn"
 if exist "Drntest.hob_out" del "Drntest.hob_out"
 if exist "Drntest.lst" del "Drntest.lst"
-"C:\Pest17.3\plproc.exe" Drntest.Kx.script
-"C:\Pest17.3\plproc.exe" Drntest.test.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" Drntest.drn.tpl Drntest.pval
-C:\WRDAPP\MF2005.1_12\bin\mf2005.exe Drntest.nam /wait
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" Drntest.Mf2005ExtractValues
+"plproc.exe" Drntest.Kx.script
+"plproc.exe" Drntest.test.script
+"EnhancedTemplateProcessor.exe" Drntest.drn.tpl Drntest.pval
+mf2005.exe Drntest.nam /wait
+"Mf2005ObsExtractor.exe" Drntest.Mf2005ExtractValues

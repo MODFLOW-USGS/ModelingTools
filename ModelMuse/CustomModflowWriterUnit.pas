@@ -1795,6 +1795,13 @@ begin
       if Model.PestUsed then
       begin
         PLPROC_Location := GetPLPROC_Location(FileName, Model);
+        {$IFDEF PEST}
+        if Model.PestUsed then
+        begin
+          MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+          PLPROC_Location := ExtractFileName(PLPROC_Location);
+        end;
+        {$ENDIF}
         PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
         for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
         begin
@@ -10347,8 +10354,14 @@ begin
     end;
     result := UtilityProgramName;
   finally
-    MoveAppToDirectory(ExpandFileName(result), ExtractFileDir(AFileName));
-    result := '"' + UtilityProgramName + '"';
+    {$IFDEF PEST}
+    if frmGoPhast.PhastModel.PestUsed then
+    begin
+      MoveAppToDirectory(ExpandFileName(result), ExtractFileDir(AFileName));
+      result := UtilityProgramName;
+    end;
+    {$ENDIF}
+    result := '"' + result + '"';
   end;
 end;
 

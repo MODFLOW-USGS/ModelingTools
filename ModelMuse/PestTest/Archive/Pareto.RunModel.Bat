@@ -13,12 +13,12 @@ if exist "Pareto.InnerSolution.CSV" del "Pareto.InnerSolution.CSV"
 if exist "Pareto.lst" del "Pareto.lst"
 if exist "Pareto.ob_gw_out_head.csv" del "Pareto.ob_gw_out_head.csv"
 if exist "Pareto.OuterSolution.CSV" del "Pareto.OuterSolution.CSV"
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" Pareto.chd.tpl Pareto.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" Pareto.ghb.tpl Pareto.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" Pareto.wel.tpl Pareto.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" Pareto.riv.tpl Pareto.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" Pareto.drn.tpl Pareto.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" Pareto.rch.tpl Pareto.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" Pareto.evt.tpl Pareto.pval
-C:\WRDAPP\mf6.2.2\bin\mf6.exe
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf6ObsExtractor.exe" Pareto.Mf6ExtractValues
+"EnhancedTemplateProcessor.exe" Pareto.chd.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.ghb.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.wel.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.riv.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.drn.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.rch.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.evt.tpl Pareto.pval
+mf6.exe
+"Mf6ObsExtractor.exe" Pareto.Mf6ExtractValues

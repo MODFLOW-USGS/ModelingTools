@@ -17,8 +17,8 @@ if exist "SutraTest1_ObsSched2.OBS" del "SutraTest1_ObsSched2.OBS"
 if exist "SutraTest1_SCHED_1.OBC" del "SutraTest1_SCHED_1.OBC"
 if exist "SutraTest1_TIME_STEPS.OBC" del "SutraTest1_TIME_STEPS.OBC"
 if exist "SutraTest1_TIME_STEPS.OBS" del "SutraTest1_TIME_STEPS.OBS"
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest1.FluxBcs.tpl SutraTest1.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest1.SPecPBcs.tpl SutraTest1.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest1.inp.tpl SutraTest1.pval
-"C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe"
-"C:\ModelingTools\ModelMuse\Debug\Win32\SutraObsExtractor.exe" SutraTest1.soe_ev
+"EnhancedTemplateProcessor.exe" SutraTest1.FluxBcs.tpl SutraTest1.pval
+"EnhancedTemplateProcessor.exe" SutraTest1.SPecPBcs.tpl SutraTest1.pval
+"EnhancedTemplateProcessor.exe" SutraTest1.inp.tpl SutraTest1.pval
+"sutra_2_2.exe"
+"SutraObsExtractor.exe" SutraTest1.soe_ev

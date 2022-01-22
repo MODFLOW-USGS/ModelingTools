@@ -27,7 +27,7 @@ if exist "CSubExampletest.sk-cell_ob.csv" del "CSubExampletest.sk-cell_ob.csv"
 if exist "CSubExampletest.theta_ob.csv" del "CSubExampletest.theta_ob.csv"
 if exist "CSubExampletest.wcomp-csub-cell_ob.csv" del "CSubExampletest.wcomp-csub-cell_ob.csv"
 if exist "mfsim.lst" del "mfsim.lst"
-"C:\Pest17.3\plproc.exe" CSubExampletest.Confining_Bed_InitialPorosity.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" CSubExampletest.csub.tpl CSubExampletest.pval
-C:\WRDAPP\mf6.2.2\bin\mf6.exe
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf6ObsExtractor.exe" CSubExampletest.Mf6ExtractValues
+"plproc.exe" CSubExampletest.Confining_Bed_InitialPorosity.script
+"EnhancedTemplateProcessor.exe" CSubExampletest.csub.tpl CSubExampletest.pval
+mf6.exe
+"Mf6ObsExtractor.exe" CSubExampletest.Mf6ExtractValues

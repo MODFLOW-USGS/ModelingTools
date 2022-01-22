@@ -495,7 +495,7 @@ begin
 
         ChildNode := ChildNode.getNextSibling;
       end;
-      Sleep(10000);
+//      Sleep(10000);
 
       StatusBar1.SimpleText := 'testing ' + ModelFileName;
       ActivApp1.ExePath := '"' + GoPhastExeName + '" "' + ModelFileName + '" -E -C';
@@ -509,11 +509,12 @@ begin
       end;
 
       Index := 0;
+      ParentNode.Expand(False);
       ChildNode := ParentNode.getFirstChild;
       while ChildNode <> nil do
       begin
         if FAbort then Exit;
-        ChildNode.Selected := True;
+//        ChildNode.Selected := True;
         ArchiveFileName := ChildNode.Text;
         OutputFileName := OutPutFiles[Index];
         StatusBar1.SimpleText := 'testing ' + OutputFileName;

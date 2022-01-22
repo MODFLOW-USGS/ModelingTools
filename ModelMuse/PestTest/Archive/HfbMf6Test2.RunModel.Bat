@@ -8,7 +8,7 @@ if exist "HfbMf6Test2.lst" del "HfbMf6Test2.lst"
 if exist "HfbMf6Test2.ob_gw_out_head.csv" del "HfbMf6Test2.ob_gw_out_head.csv"
 if exist "HfbMf6Test2.OuterSolution.CSV" del "HfbMf6Test2.OuterSolution.CSV"
 if exist "mfsim.lst" del "mfsim.lst"
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" HfbMf6Test2.chd.tpl HfbMf6Test2.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" HfbMf6Test2.hfb.tpl HfbMf6Test2.pval
-C:\WRDAPP\mf6.2.2\bin\mf6.exe
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf6ObsExtractor.exe" HfbMf6Test2.Mf6ExtractValues
+"EnhancedTemplateProcessor.exe" HfbMf6Test2.chd.tpl HfbMf6Test2.pval
+"EnhancedTemplateProcessor.exe" HfbMf6Test2.hfb.tpl HfbMf6Test2.pval
+mf6.exe
+"Mf6ObsExtractor.exe" HfbMf6Test2.Mf6ExtractValues

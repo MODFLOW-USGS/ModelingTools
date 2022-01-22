@@ -9867,7 +9867,6 @@ begin
     else
       Assert(False);
   end;
-  PhastModel.AddModelInputFile(SutraFileName);
 
   if not TFile.Exists(SutraFileName) then
   begin
@@ -9898,6 +9897,7 @@ begin
       end;
     end;
   end;
+  PhastModel.AddModelInputFile(SutraFileName);
 
   if PhastModel.PestUsed then
   begin

@@ -12,7 +12,7 @@ if exist "importedSWR.Swr_ReachExchange_B" del "importedSWR.Swr_ReachExchange_B"
 if exist "importedSWR.Swr_ReachGroupFlows_B" del "importedSWR.Swr_ReachGroupFlows_B"
 if exist "importedSWR.Swr_ReachStage_A" del "importedSWR.Swr_ReachStage_A"
 if exist "importedSWR.Swr_RIV" del "importedSWR.Swr_RIV"
-"C:\Pest17.3\plproc.exe" importedSWR.MyVertOffset.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" importedSWR.swr.tpl importedSWR.pval
-C:\WRDAPP\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT.exe importedSWR.nam /wait
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" importedSWR.Mf2005ExtractValues
+"plproc.exe" importedSWR.MyVertOffset.script
+"EnhancedTemplateProcessor.exe" importedSWR.swr.tpl importedSWR.pval
+MODFLOW-NWT.exe importedSWR.nam /wait
+"Mf2005ObsExtractor.exe" importedSWR.Mf2005ExtractValues

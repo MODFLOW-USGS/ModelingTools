@@ -5,6 +5,6 @@ if exist "DrtTest.chob_out" del "DrtTest.chob_out"
 if exist "DrtTest.fdn" del "DrtTest.fdn"
 if exist "DrtTest.fhd" del "DrtTest.fhd"
 if exist "DrtTest.lst" del "DrtTest.lst"
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" DrtTest.drt.tpl DrtTest.pval
-C:\WRDAPP\MF2005.1_12\bin\mf2005.exe DrtTest.nam /wait
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" DrtTest.Mf2005ExtractValues
+"EnhancedTemplateProcessor.exe" DrtTest.drt.tpl DrtTest.pval
+mf2005.exe DrtTest.nam /wait
+"Mf2005ObsExtractor.exe" DrtTest.Mf2005ExtractValues

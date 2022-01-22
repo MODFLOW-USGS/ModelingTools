@@ -8,7 +8,7 @@ if exist "EtsTest.fdn" del "EtsTest.fdn"
 if exist "EtsTest.fhd" del "EtsTest.fhd"
 if exist "EtsTest.hob_out" del "EtsTest.hob_out"
 if exist "EtsTest.lst" del "EtsTest.lst"
-"C:\Pest17.3\plproc.exe" EtsTest.Kx.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" EtsTest.ets.tpl EtsTest.pval
-C:\WRDAPP\MF2005.1_12\bin\mf2005.exe EtsTest.nam /wait
-"C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" EtsTest.Mf2005ExtractValues
+"plproc.exe" EtsTest.Kx.script
+"EnhancedTemplateProcessor.exe" EtsTest.ets.tpl EtsTest.pval
+mf2005.exe EtsTest.nam /wait
+"Mf2005ObsExtractor.exe" EtsTest.Mf2005ExtractValues
