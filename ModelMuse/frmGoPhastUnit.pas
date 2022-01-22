@@ -9867,6 +9867,7 @@ begin
     else
       Assert(False);
   end;
+  PhastModel.AddModelInputFile(SutraFileName);
 
   if not TFile.Exists(SutraFileName) then
   begin
@@ -10316,7 +10317,6 @@ begin
           ParamEstBatFile.Free;
         end;
         PhastModel.AddModelInputFile(BatchFileName + ArchiveExt);
-        PhastModel.AddModelInputFile(SutraFileName);
         if ShouldRunSutra then
         begin
           RunAProgram(BatchFileName);
