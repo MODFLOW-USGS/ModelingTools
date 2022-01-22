@@ -1,1 +1,1 @@
-C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM_Win32.exe RipImport.nam /wait
+C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM.exe RipImport.nam /wait

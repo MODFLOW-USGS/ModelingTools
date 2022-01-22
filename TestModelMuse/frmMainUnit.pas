@@ -235,6 +235,7 @@ begin
     ReadArraysLine := False;
     for Index := 0 to ArchiveFile.Count - 1 do
     begin
+      Application.ProcessMessages;
       ArchiveLine := ArchiveFile[Index];
       OutputLine := OutputFile[Index];
       if PestTemplate then
@@ -329,6 +330,7 @@ begin
     begin
       for LineIndex := 0 to OutPutFile.Count - 1 do
       begin
+        Application.ProcessMessages;
         if OutPutFile[LineIndex] <> TestFile[LineIndex] then
         begin
           result := False;
@@ -451,6 +453,7 @@ var
   BatName: string;
   LocalErrorMessage: string;
   InArrays: Boolean;
+  TimeIndex2: Integer;
 begin
   AllFilesTheSame := True;
   ErrorMessage := '';
@@ -461,6 +464,7 @@ begin
 
     pbFiles.Max := tvModflow.Items.Count;
     pbFiles.Position := 0;
+
     ParentNode := tvModflow.Items.GetFirstNode;
     while ParentNode <> nil do
     begin
@@ -497,16 +501,327 @@ begin
       end;
 //      Sleep(10000);
 
+//      StatusBar1.SimpleText := 'testing ' + ModelFileName;
+//      ActivApp1.ExePath := '"' + GoPhastExeName + '" "' + ModelFileName + '" -E -C';
+//      ActivApp1.ExecuteApp(Success);
+      Application.ProcessMessages;
+////      pbFiles.StepIt;
+//      if not Success then
+//      begin
+//        result := false;
+//        ErrorMessage := 'Failed to execute "' + ModelFileName + '".';
+//        Exit;
+//      end;
+
+      Index := 0;
+      ParentNode.Expand(False);
+//      ChildNode := ParentNode.getFirstChild;
+//      while ChildNode <> nil do
+//      begin
+//        if FAbort then Exit;
+////        ChildNode.Selected := True;
+//        ArchiveFileName := ChildNode.Text;
+//        OutputFileName := OutPutFiles[Index];
+//        StatusBar1.SimpleText := 'testing ' + OutputFileName;
+//
+//        Application.ProcessMessages;
+//        FileDate := 0;
+//        // Wait for a few seconds
+//        for TimeIndex := 0 to seTimeDelay.Value - 1 do
+//        begin
+//          Time := Now;
+//          while Now - Time < 1 / 24 / 3600 do
+//          begin
+//            if FAbort then Exit;
+//            Application.ProcessMessages;
+//            Sleep(100);
+//          end;
+//          if FileExists(OutputFileName) then
+//          begin
+//            TestDate := FileLastModified(OutputFileName);
+//            if TestDate <> FileDate then
+//            begin
+//              FileDate := TestDate;
+//            end
+//            else
+//            begin
+//              break;
+//            end;
+//          end;
+//        end;
+//
+//        if Pos(StrTransdat, OutputFileName) =
+//          Length(OutputFileName) - Length(StrTransdat) +1 then
+//        begin
+//          if ComparePhastFiles(OutputFileName, ArchiveFileName,
+//            LocalErrorMessage) then
+//          begin
+//            Assert(FileExists(OutputFileName));
+//            DeleteFile(OutputFileName);
+//            ChildNode.StateIndex := 1;
+//            if ParentNode.StateIndex < ChildNode.StateIndex then
+//            begin
+//              ParentNode.StateIndex := ChildNode.StateIndex
+//            end;
+//          end
+//          else
+//          begin
+//            AllFilesTheSame := false;
+//            ChildNode.StateIndex := 2;
+//            if ParentNode.StateIndex < ChildNode.StateIndex then
+//            begin
+//              ParentNode.StateIndex := ChildNode.StateIndex
+//            end;
+//            Assert(LocalErrorMessage <> '');
+//            memoErrors.Lines.Add(OutputFileName);
+//            memoErrors.Lines.Add(LocalErrorMessage);
+//            memoErrors.Lines.Add('');
+////            Exit;
+//          end;
+//        end
+//        else
+//        begin
+//          if CompareModflowFiles(OutputFileName, ArchiveFileName, LocalErrorMessage) then
+//          begin
+//            Assert(FileExists(OutputFileName));
+//            DeleteFile(OutputFileName);
+//            ChildNode.StateIndex := 1;
+//            if ParentNode.StateIndex < ChildNode.StateIndex then
+//            begin
+//              ParentNode.StateIndex := ChildNode.StateIndex
+//            end;
+//          end
+//          else
+//          begin
+//            AllFilesTheSame := false;
+//            Assert(LocalErrorMessage <> '');
+//            memoErrors.Lines.Add(OutputFileName);
+//            memoErrors.Lines.Add(LocalErrorMessage);
+//            memoErrors.Lines.Add('');
+//            ChildNode.StateIndex := 2;
+//            if ParentNode.StateIndex < ChildNode.StateIndex then
+//            begin
+//              ParentNode.StateIndex := ChildNode.StateIndex
+//            end;
+////            Exit;
+//          end;
+//        end;
+//        pbFiles.StepIt;
+//
+//        Inc(Index);
+//        ChildNode := ChildNode.getNextSibling;
+//      end;
+      ParentNode.Collapse(False);
+//      BatName := ModelDirectory + '\RunModflow.Bat';
+//      if FileExists(BatName) then
+//      begin
+//        DeleteFile(BatName);
+//      end;
+      ParentNode := ParentNode.getNextSibling;
+    end;
+
+    ParentNode := tvModflow.Items.GetFirstNode;
+    while ParentNode <> nil do
+    begin
+      if FAbort then Exit;
+      ParentNode.Selected := True;
+      ModelFileName := ParentNode.Text;
+      ModelDirectory := ExtractFileDir(ModelFileName);
+
+      // make a list of the output files to be tested and
+      // delete any that already exist.
+      OutPutFiles.Clear;
+      ChildNode := ParentNode.getFirstChild;
+      while ChildNode <> nil do
+      begin
+        OutputFileName := ChildNode.Text;
+        InArrays := Pos('\arrays\',OutputFileName) > 0;
+        OutputFileName := ExtractFileName(OutputFileName);
+        if InArrays then
+        begin
+          OutputFileName := ModelDirectory + '\arrays\' + OutputFileName;
+        end
+        else
+        begin
+          OutputFileName := ModelDirectory + '\' + OutputFileName;
+        end;
+        OutPutFiles.Add(OutputFileName);
+
+//        if FileExists(OutputFileName) then
+//        begin
+//          TFile.Delete(OutputFileName);
+//        end;
+
+        ChildNode := ChildNode.getNextSibling;
+      end;
+//      Sleep(10000);
+
       StatusBar1.SimpleText := 'testing ' + ModelFileName;
       ActivApp1.ExePath := '"' + GoPhastExeName + '" "' + ModelFileName + '" -E -C';
       ActivApp1.ExecuteApp(Success);
-      pbFiles.StepIt;
+      Application.ProcessMessages;
+//      pbFiles.StepIt;
       if not Success then
       begin
         result := false;
         ErrorMessage := 'Failed to execute "' + ModelFileName + '".';
         Exit;
       end;
+
+      Index := 0;
+      ParentNode.Expand(False);
+//      ChildNode := ParentNode.getFirstChild;
+//      while ChildNode <> nil do
+//      begin
+//        if FAbort then Exit;
+////        ChildNode.Selected := True;
+//        ArchiveFileName := ChildNode.Text;
+//        OutputFileName := OutPutFiles[Index];
+//        StatusBar1.SimpleText := 'testing ' + OutputFileName;
+//
+//        Application.ProcessMessages;
+//        FileDate := 0;
+//        // Wait for a few seconds
+//        for TimeIndex := 0 to seTimeDelay.Value - 1 do
+//        begin
+//          Time := Now;
+//          while Now - Time < 1 / 24 / 3600 do
+//          begin
+//            if FAbort then Exit;
+//            Application.ProcessMessages;
+//            Sleep(100);
+//          end;
+//          if FileExists(OutputFileName) then
+//          begin
+//            TestDate := FileLastModified(OutputFileName);
+//            if TestDate <> FileDate then
+//            begin
+//              FileDate := TestDate;
+//            end
+//            else
+//            begin
+//              break;
+//            end;
+//          end;
+//        end;
+//
+//        if Pos(StrTransdat, OutputFileName) =
+//          Length(OutputFileName) - Length(StrTransdat) +1 then
+//        begin
+//          if ComparePhastFiles(OutputFileName, ArchiveFileName,
+//            LocalErrorMessage) then
+//          begin
+//            Assert(FileExists(OutputFileName));
+//            DeleteFile(OutputFileName);
+//            ChildNode.StateIndex := 1;
+//            if ParentNode.StateIndex < ChildNode.StateIndex then
+//            begin
+//              ParentNode.StateIndex := ChildNode.StateIndex
+//            end;
+//          end
+//          else
+//          begin
+//            AllFilesTheSame := false;
+//            ChildNode.StateIndex := 2;
+//            if ParentNode.StateIndex < ChildNode.StateIndex then
+//            begin
+//              ParentNode.StateIndex := ChildNode.StateIndex
+//            end;
+//            Assert(LocalErrorMessage <> '');
+//            memoErrors.Lines.Add(OutputFileName);
+//            memoErrors.Lines.Add(LocalErrorMessage);
+//            memoErrors.Lines.Add('');
+////            Exit;
+//          end;
+//        end
+//        else
+//        begin
+//          if CompareModflowFiles(OutputFileName, ArchiveFileName, LocalErrorMessage) then
+//          begin
+//            Assert(FileExists(OutputFileName));
+//            DeleteFile(OutputFileName);
+//            ChildNode.StateIndex := 1;
+//            if ParentNode.StateIndex < ChildNode.StateIndex then
+//            begin
+//              ParentNode.StateIndex := ChildNode.StateIndex
+//            end;
+//          end
+//          else
+//          begin
+//            AllFilesTheSame := false;
+//            Assert(LocalErrorMessage <> '');
+//            memoErrors.Lines.Add(OutputFileName);
+//            memoErrors.Lines.Add(LocalErrorMessage);
+//            memoErrors.Lines.Add('');
+//            ChildNode.StateIndex := 2;
+//            if ParentNode.StateIndex < ChildNode.StateIndex then
+//            begin
+//              ParentNode.StateIndex := ChildNode.StateIndex
+//            end;
+////            Exit;
+//          end;
+//        end;
+//        pbFiles.StepIt;
+//
+//        Inc(Index);
+//        ChildNode := ChildNode.getNextSibling;
+//      end;
+//      ParentNode.Collapse(False);
+//      BatName := ModelDirectory + '\RunModflow.Bat';
+//      if FileExists(BatName) then
+//      begin
+//        DeleteFile(BatName);
+//      end;
+      ParentNode := ParentNode.getNextSibling;
+    end;
+
+    ParentNode := tvModflow.Items.GetFirstNode;
+    ParentNode.Selected := True;
+    while ParentNode <> nil do
+    begin
+      if FAbort then Exit;
+//      ParentNode.Selected := True;
+      ModelFileName := ParentNode.Text;
+      ModelDirectory := ExtractFileDir(ModelFileName);
+
+      // make a list of the output files to be tested and
+      // delete any that already exist.
+      OutPutFiles.Clear;
+      ChildNode := ParentNode.getFirstChild;
+      while ChildNode <> nil do
+      begin
+        OutputFileName := ChildNode.Text;
+        InArrays := Pos('\arrays\',OutputFileName) > 0;
+        OutputFileName := ExtractFileName(OutputFileName);
+        if InArrays then
+        begin
+          OutputFileName := ModelDirectory + '\arrays\' + OutputFileName;
+        end
+        else
+        begin
+          OutputFileName := ModelDirectory + '\' + OutputFileName;
+        end;
+        OutPutFiles.Add(OutputFileName);
+
+//        if FileExists(OutputFileName) then
+//        begin
+//          TFile.Delete(OutputFileName);
+//        end;
+
+        ChildNode := ChildNode.getNextSibling;
+      end;
+//      Sleep(10000);
+
+      StatusBar1.SimpleText := 'testing ' + ModelFileName;
+//      ActivApp1.ExePath := '"' + GoPhastExeName + '" "' + ModelFileName + '" -E -C';
+//      ActivApp1.ExecuteApp(Success);
+      pbFiles.StepIt;
+//      if not Success then
+//      begin
+//        result := false;
+//        ErrorMessage := 'Failed to execute "' + ModelFileName + '".';
+//        Exit;
+//      end;
 
       Index := 0;
       ParentNode.Expand(False);
@@ -521,30 +836,95 @@ begin
 
         Application.ProcessMessages;
         FileDate := 0;
-        // Wait for a few seconds
-        for TimeIndex := 0 to seTimeDelay.Value - 1 do
+        if not FileExists(OutputFileName) then
         begin
-          Time := Now;
-          while Now - Time < 1 / 24 / 3600 do
+          TimeIndex := 0;
+          for TimeIndex2 := 0 to seTimeDelay.Value - 1 do
           begin
-            if FAbort then Exit;
-            Application.ProcessMessages;
-            Sleep(100);
-          end;
-          if FileExists(OutputFileName) then
-          begin
-            TestDate := FileLastModified(OutputFileName);
-            if TestDate <> FileDate then
+            if TimeIndex > seTimeDelay.Value + 3 then
             begin
-              FileDate := TestDate;
-            end
-            else
+              break;
+            end;
+            Inc(TimeIndex);
+            Time := Now;
+            while Now - Time < 1 / 24 / 3600 do
+            begin
+              if FAbort then Exit;
+              Application.ProcessMessages;
+              Sleep(100);
+            end;
+            if FileExists(OutputFileName) then
             begin
               break;
             end;
           end;
         end;
 
+        if FileExists(OutputFileName) then
+        begin
+          TestDate := FileLastModified(OutputFileName);
+//          Sleep(100);
+          // Wait for a few seconds
+          for TimeIndex := 0 to seTimeDelay.Value*10 - 1 do
+          begin
+            Time := Now;
+            Sleep(100);
+//            while Now - Time < 1 / 24 / 3600 do
+//            begin
+//              if FAbort then Exit;
+//              Application.ProcessMessages;
+//              Sleep(100);
+//            end;
+//            if FileExists(OutputFileName) then
+            begin
+              TestDate := FileLastModified(OutputFileName);
+              if TestDate <> FileDate then
+              begin
+                FileDate := TestDate;
+              end
+              else
+              begin
+                break;
+              end;
+            end;
+          end;
+//
+//
+//          if TestDate <> FileDate then
+//          begin
+//            FileDate := TestDate;
+//          end
+//          else
+//          begin
+//            break;
+//          end;
+        end;
+
+        // Wait for a few seconds
+//        for TimeIndex := 0 to seTimeDelay.Value - 1 do
+//        begin
+//          Time := Now;
+//          while Now - Time < 1 / 24 / 3600 do
+//          begin
+//            if FAbort then Exit;
+//            Application.ProcessMessages;
+//            Sleep(100);
+//          end;
+//          if FileExists(OutputFileName) then
+//          begin
+//            TestDate := FileLastModified(OutputFileName);
+//            if TestDate <> FileDate then
+//            begin
+//              FileDate := TestDate;
+//            end
+//            else
+//            begin
+//              break;
+//            end;
+//          end;
+//        end;
+
+        Application.ProcessMessages;
         if Pos(StrTransdat, OutputFileName) =
           Length(OutputFileName) - Length(StrTransdat) +1 then
         begin
@@ -606,7 +986,10 @@ begin
         Inc(Index);
         ChildNode := ChildNode.getNextSibling;
       end;
-      ParentNode.Collapse(False);
+      if ParentNode.StateIndex = 1 then
+      begin
+        ParentNode.Collapse(False);
+      end;
       BatName := ModelDirectory + '\RunModflow.Bat';
       if FileExists(BatName) then
       begin

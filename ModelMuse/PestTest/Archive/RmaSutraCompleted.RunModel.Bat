@@ -19,10 +19,10 @@ if exist "RmaSutraCompleted_Head_Obs6.OBC" del "RmaSutraCompleted_Head_Obs6.OBC"
 if exist "RmaSutraCompleted_Head_Obs7.OBC" del "RmaSutraCompleted_Head_Obs7.OBC"
 if exist "RmaSutraCompleted_Head_Obs8.OBC" del "RmaSutraCompleted_Head_Obs8.OBC"
 if exist "RmaSutraCompleted_TIME_STEPS.OBS" del "RmaSutraCompleted_TIME_STEPS.OBS"
-"C:\Pest17.3\plproc.exe" RmaSutraCompleted.Maximum_Hydraulic_Conductivity.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" RmaSutraCompleted.FluxBcs.tpl RmaSutraCompleted.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\RmaSutraCompleted.Minimum_Hydraulic_Conductivity_1.arrays.tpl
-"C:\Pest17.3\plproc.exe" 'RmaSutraCompleted.15B.script'
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" RmaSutraCompleted.inp.tpl RmaSutraCompleted.pval
-"C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe"
-"C:\ModelingTools\ModelMuse\Debug\Win32\SutraObsExtractor.exe" RmaSutraCompleted.soe_ev
+"plproc.exe" RmaSutraCompleted.Maximum_Hydraulic_Conductivity.script
+"EnhancedTemplateProcessor.exe" RmaSutraCompleted.FluxBcs.tpl RmaSutraCompleted.pval
+"EnhancedTemplateProcessor.exe" arrays\RmaSutraCompleted.Minimum_Hydraulic_Conductivity_1.arrays.tpl
+"plproc.exe" 'RmaSutraCompleted.15B.script'
+"EnhancedTemplateProcessor.exe" RmaSutraCompleted.inp.tpl RmaSutraCompleted.pval
+"sutra_2_2.exe"
+"SutraObsExtractor.exe" RmaSutraCompleted.soe_ev

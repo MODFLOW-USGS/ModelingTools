@@ -37,19 +37,19 @@ if exist "SutraTest1a_ObsSched2.OBS" del "SutraTest1a_ObsSched2.OBS"
 if exist "SutraTest1a_SCHED_1.OBC" del "SutraTest1a_SCHED_1.OBC"
 if exist "SutraTest1a_TIME_STEPS.OBC" del "SutraTest1a_TIME_STEPS.OBC"
 if exist "SutraTest1a_TIME_STEPS.OBS" del "SutraTest1a_TIME_STEPS.OBS"
-"C:\Pest17.3\plproc.exe" SutraTest1a.Nodal_Porosity.script
-"C:\Pest17.3\plproc.exe" SutraTest1a.Maximum_Permeability.script
-"C:\Pest17.3\plproc.exe" SutraTest1a.MyMult.script
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest1a.FluxBcs.tpl SutraTest1a.pval
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest1a.SPecPBcs.tpl SutraTest1a.pval
-"C:\Pest17.3\plproc.exe" 'SutraTest1a.14B.script'
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_1.arrays.tpl
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_2.arrays.tpl
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_3.arrays.tpl
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_1.arrays.tpl
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_2.arrays.tpl
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_3.arrays.tpl
-"C:\Pest17.3\plproc.exe" 'SutraTest1a.15B.script'
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest1a.inp.tpl SutraTest1a.pval
-"C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe"
-"C:\ModelingTools\ModelMuse\Debug\Win32\SutraObsExtractor.exe" SutraTest1a.soe_ev
+"plproc.exe" SutraTest1a.Nodal_Porosity.script
+"plproc.exe" SutraTest1a.Maximum_Permeability.script
+"plproc.exe" SutraTest1a.MyMult.script
+"EnhancedTemplateProcessor.exe" SutraTest1a.FluxBcs.tpl SutraTest1a.pval
+"EnhancedTemplateProcessor.exe" SutraTest1a.SPecPBcs.tpl SutraTest1a.pval
+"plproc.exe" 'SutraTest1a.14B.script'
+"EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_1.arrays.tpl
+"EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_2.arrays.tpl
+"EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_3.arrays.tpl
+"EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_1.arrays.tpl
+"EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_2.arrays.tpl
+"EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_3.arrays.tpl
+"plproc.exe" 'SutraTest1a.15B.script'
+"EnhancedTemplateProcessor.exe" SutraTest1a.inp.tpl SutraTest1a.pval
+"sutra_2_2.exe"
+"SutraObsExtractor.exe" SutraTest1a.soe_ev

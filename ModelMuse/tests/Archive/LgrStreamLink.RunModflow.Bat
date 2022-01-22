@@ -1,4 +1,4 @@
-call C:\ModelingTools\ModelMuse\Release\Win32\ModelMonitor.exe -m C:\WRDAPP\mflgr.1_2\bin\mflgr.exe -n LgrStreamLink.lgr
-C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe LgrStreamLink.lst
-C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe LgrStreamLink_Child_1.lst
+call C:\ModelingTools\ModelMuse\Debug\Win64\ModelMonitor.exe -m C:\WRDAPP\mflgr.1_2\bin\mflgr.exe -n LgrStreamLink.lgr
+C:\ModelingTools\ModelMonitor\Release\Win64\ListingAnalyst.exe LgrStreamLink.lst
+C:\ModelingTools\ModelMonitor\Release\Win64\ListingAnalyst.exe LgrStreamLink_Child_1.lst
 pause

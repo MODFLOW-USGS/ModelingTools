@@ -2,7 +2,7 @@
 <Model_Archive_List>
   <bin Model_Name="LakeNWT" FileType="bin">
     <FileName Model_Name="LakeNWT" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT.exe</FileName>
-    <FileName Model_Name="LakeNWT" FileType="bin">..\..\..\WRDAPP\mt3dusgs1.1.0\bin\mt3d-usgs_1.1.0_64.exe</FileName>
+    <FileName Model_Name="LakeNWT" FileType="bin">..\..\..\WRDAPP\mt3dusgs1.1.0\bin\mt3d-usgs_1.1.0_32.exe</FileName>
   </bin>
   <ancillary Model_Name="LakeNWT" FileType="ancillary">
     <FileName Model_Name="LakeNWT" FileType="ancillary">LakeNWT.gpt</FileName>
