@@ -1416,6 +1416,11 @@ var
   AppName: string;
   NewFileName: string;
 begin
+  if Directory = '' then
+  begin
+    Exit;
+  end;
+
   if not TFile.Exists(AppFullPath) then
   begin
     Exit;
