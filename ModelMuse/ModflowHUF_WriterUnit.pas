@@ -832,7 +832,7 @@ begin
   begin
     Exit
   end;
-  if FlowPackageFileGeneratedExternally then
+  if FlowPackageFileGeneratedExternally(Model) then
   begin
     Exit;
   end;

@@ -1,0 +1,45 @@
+QUITONERROR
+
+FILES=mf2k.f
+COMPILE=@lf95 -ndbl  -o0 -I %id -c -trace -trap dio  -nchkglobal -nco -nlst -nxref -nobanner -f95 -nsav -stchk -nw %fi -o %od%sf%oe -winconsole
+INCLUDE=.
+OBJDIR=.\objLF95
+
+# The following lines should be un-commented if the algebraic multigrid package is being compiled.
+#AND
+#
+#FILES=amg1r6.f
+#COMPILE=@lf95 -ndbl  -o1 -I %id -c -trace -trap dio  -Nchkglobal -nco -nlst -nxref -nobanner -f95 -nsav -stchk -nw %fi -o %od%sf%oe -winconsole
+#INCLUDE=.
+#OBJDIR=.\objLF95
+
+AND
+
+FILES=*.f90
+COMPILE=@lf95 -ndbl  -o1 -I %id -c -trace -trap dio  -nchkglobal -nco -nlst -nxref -nobanner -f95 -nsav -stchk -nw %fi -o %od%sf%oe -winconsole
+INCLUDE=.
+OBJDIR=.\objLF95
+
+AND
+
+FILES=*.f
+COMPILE=@lf95 -ndbl  -o1 -I %id -c -trace -trap dio  -nchkglobal -nco -nlst -nxref -nobanner -f95 -nsav -stchk -nw %fi -o %od%sf%oe -winconsole
+INCLUDE=.
+OBJDIR=.\objLF95
+
+AND
+
+FILES=.\serial\para-non.f
+COMPILE=@lf95 -ndbl  -o1 -I %id -c -trace -trap dio  -nchkglobal -nco -nlst -nxref -nobanner -f95 -nsav -stchk -nw %fi -o %od%sf%oe -winconsole
+INCLUDE=.
+OBJDIR=.\objLF95
+
+AND
+
+FILES=*.c
+COMPILE=@fcc /c /D _UF /I C:\Compilers\Lahey\LF9557\Include /o .\objLF95\%sf%oe %fi
+OBJDIR=.\objLF95
+
+LINK=@lf95 @%rf  -nobanner -warn -nco -exe %ex -Stack 350000 -winconsole
+TARGET=..\Bin\mf2k.exe
+

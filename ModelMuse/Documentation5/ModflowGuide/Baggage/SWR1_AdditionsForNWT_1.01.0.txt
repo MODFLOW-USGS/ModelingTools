@@ -1,0 +1,73 @@
+Surface-Water Routing (SWR1) Process (version 1.01.0)
+
+The SWR1 Process was modified to allow incorporation of SWR1 derivative terms into the
+groundwater flow equation solved by MODFLOW-NWT. The SWR1 Process was also modified to
+allow downstream discharge from a SFR2 reach to be routed to a SWR1 reach using an
+additional SWR1 surface-water control structure. The SWR1 Process was also modified to
+allow surface-water control structures discharging from the SWR1 network (ISTRCONN=0)
+to discharge to SFR2 reaches.
+
+SWR1 Process source files that were modified include: gwf2swr7_NWT.f
+
+Modified input instructions for the SWR1 input file
+
+Items 0-1a: As in previous versions of the code.
+
+1b.  CSWROPT [IOPTUNIT]
+
+USE_IMPLICIT_NEWTON_CORRECTION keyword for implicitly calculating the
+  Newton correction term for the groundwater flow equation. This option
+  requires solving SWR1 equations using the current and perturbed heads.
+  As a result, SWR1 Process runtimes will be approximately a factor of 2
+  greater.
+
+USE_EXPLICIT_NEWTON_CORRECTION keyword for explicitly calculating the
+  Newton correction term for the groundwater flow equation. This option
+  calculates the Newton correction terms using the current SWR1 stage
+  solution and current and perturbed heads within the aquifer-reach 
+  exchange calculation routine (SSWR_CALC_QAQ). This option does not have 
+  a significant effect on SWR1 Process runtimes and is sufficient for the 
+  test problems evaluated.
+
+By default, Newton corrections are not calculated. Only one of the keywords
+  specified above should be used if Newton correction terms for the SWR1
+  Process are desired. As a result, SWR1 Process runtimes will be approximately 
+  a factor of 2 greater.
+
+Items 2-12: As in previous versions of the code.
+
+13a. ISTRRCH ISTRNUM ISTRCONN ISTRTYPE [NSTRPTS] [STRCD] [STRCD2] [STRCD3] 
+     [STRINV] [STRINV2] [STRWID] [STRWID2] [STRLEN] [STRMAN] [STRVAL] [ISTRDIR]
+     [ISFRSEG] [ISFRRCH]
+     
+ISTRRCH  - No changes
+ISTRNUM  - Must be 0 if: (1) ISTRTYPE=11; or (2) SFR is specified in the MODFLOW-NWT name
+           file and ISFRSEG and ISFRRCH > 0. No changes otherwise.
+ISTRTYPE - ISTRTYPE=11 for an inflow structure from SFR2 segment ISFRSEG and reach ISFRRCH. 
+           ISTRCONN must be 0 if ISTRTYPE=11. All other surface-water control structures
+           detailed in the documentation report are available.
+NSTRPTS  - No changes
+STRCD    - No changes
+STRCD2   - No changes
+STRCD3   - No changes
+STRINV   - No changes
+STRINV2  - No changes
+STRWID   - No changes
+STRWID2  - No changes
+STRLEN   - No changes
+STRMAN   - No changes
+STRVAL   - No changes
+ISTRDIR  - No changes
+ISFRSEG  - SFR2 segment that (1) supplies downstream segment discharge to SWR1 reach 
+           ISTRRCH or (2) SFR2 segment that receives SWR2 surface-water control 
+           structure discharge. ISFRSEG is not read if SFR is not specified in the 
+           MODFLOW-NWT name file.
+ISFRRCH  - SFR2 reach in SFR2 segment ISFRSEG that receives SWR2 surface-water control  
+           structure discharge. Any SFR2 reach number can be specified if ISTRTYPE=11.
+           ISFRRCH is not read if SFR is not specified in the MODFLOW-NWT name file.
+
+Items 13b-15: As in previous versions of the code.
+
+Hughes, J.D., Langevin, C.D., Chartier, K.L., and White, J.T., 2012, Documentation of the Surface-Water 
+Routing (SWR1) Process for modeling surface-water flow with the U.S. Geological Survey Modular Ground-Water 
+Model (MODFLOW-2005): U.S. Geological Survey Techniques and Methods, book 6, chap. A40 (Version 1.0), 113 p.   

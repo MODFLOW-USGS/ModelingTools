@@ -1,0 +1,159 @@
+underscore.txt
+
+This file documents modifications and additions to the set of files
+generated when OUTNAM of the OBS input file (USGS Open-File Report 00-184,
+page 27) is not NONE.  These files are identified by the underscore ("_")
+character as the first character of the filename extension.
+
+--------------------------------------------------------------------------
+
+Version 1.1 of Modflow-2000 added support for generation of an output file
+with the extension _pc when OUTNAM is not 'NONE', the Parameter-Estimation
+Process is active, and parameter estimation converges.  This file contains a
+record for each estimated parameter, listing: parameter name, LN, optimized
+parameter value, BL, BU, lower 95-percent confidence limit on the parameter
+value, and upper 95-percent confidence limit on the parameter value.
+
+--------------------------------------------------------------------------
+
+Version 1.12 of Modflow-2000 includes a modification to the _os file.
+A fifth column has been added to the _os output file, which was originally
+described in table 5 on page 28 of USGS Open-File Report 00-184.  The fifth
+column lists the observation time, in model time units, from the beginning
+of the simulation.  For prior information, -1.0 is written.  The code
+modification for ADV assumes that all ADV observations are in the first
+stress period.
+
+--------------------------------------------------------------------------
+
+Version 1.12 also added support for a new optional setting in the OBS
+Process input file is available.  If "ALLFILES" is specified following the
+ISCALS value, and if the value specified for OUTNAM is not "NONE", up to
+three additional output files ("_wt", "_su", and "_mc") are generated with
+the filename base defined by OUTNAM:
+
+(1) OUTNAM._wt:
+
+When OUTNAM in the OBS input file is not "NONE", and "ALLFILES" is specified
+after ISCALS, a new file is generated, identified by the extension "_wt".
+This file contains observation weights, or the full weight matrix if any of
+the observation types is entered with a variance-covariance matrix (WTQ in
+the Observation Process input instructions of USGS Open-File Report 00-184).
+The first line of this file indicates whether the rest of the file contains
+a vector of weights or a correlated-weight matrix.  In either case, the
+ordering of weights is such that weights on all head observations are listed
+first, followed by weights on observations of the Drain, River, General Head
+Boundary, and Streamflow Routing (STR) Packages; observations of
+constant-head flow (Basic Package); and observations of the Drain-Return and
+Advective-Transport Packages.
+
+If no package has observations for which a variance-covariance matrix has
+been entered, the first line contains the word "VECTOR", the second line
+contains ND (the number of observations), and the following ND lines contain
+the weight calculated for each observation, with one weight (one
+observation) per line.
+
+If any package has observations for which a variance-covariance matrix has
+been entered, the matrix is written to the _wt file in the compressed format
+described in the file "compressedmatrix.txt" in the doc directory.  The
+first line contains the word "COMPRESSEDMATRIX".  The second line contains
+NNZ (the number of non-zero entries in the full weight matrix for all
+observations) and the two dimensions of the full weight matrix (always ND
+and ND, since it is a square matrix).  The following lines contain the
+position and value of the NNZ non-zero values of the ND-by-ND
+correlated-weight matrix.  The position is an integer indicating the element
+number where each non-zero entry belongs in the full matrix, assuming a
+column-major storage scheme.  Example: assume a simulation uses 3 head
+observations, 4 (correlated) observations using the Drain Package, and 2
+(correlated) observations of the River Package.  This order is the same
+order in which observations are printed in other "_" output files.  The full
+weight matrix (noting that the matrix is symmetrical) would be a 9-by-9
+matrix and might look like this:
+
+  11.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+   0.0  22.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+   0.0   0.0  33.0   0.0   0.0   0.0   0.0   0.0   0.0
+   0.0   0.0   0.0  44.0  0.54  0.64  0.74   0.0   0.0
+   0.0   0.0   0.0  0.54  55.0  0.65  0.75   0.0   0.0
+   0.0   0.0   0.0  0.64  0.65  66.0  0.76   0.0   0.0
+   0.0   0.0   0.0  0.74  0.75  0.76  77.0   0.0   0.0
+   0.0   0.0   0.0   0.0   0.0   0.0   0.0  88.0  0.98
+   0.0   0.0   0.0   0.0   0.0   0.0   0.0  0.98  99.0
+
+For this simulation, the _wt file would look like this:
+
+COMPRESSEDMATRIX
+             23              9              9
+                   1        11.00000
+                  11        22.00000
+                  21        33.00000
+                  31        44.00000
+                  32        0.540000
+                  33        0.640000
+                  34        0.740000
+                  40        0.540000
+                  41        55.00000
+                  42        0.650000
+                  43        0.750000
+                  49        0.640000
+                  50        0.650000
+                  51        66.00000
+                  52        0.760000
+                  58        0.740000
+                  59        0.750000
+                  60        0.760000
+                  61        77.00000
+                  71        88.00000
+                  72        0.980000
+                  80        0.980000
+                  81        99.00000
+
+(2) OUTNAM._su:
+
+When the OBS and SEN Processes are active, OUTNAM in the OBS input file is
+not "NONE", and "ALLFILES" is specified after ISCALS, a new file is
+generated, identified by the extension "_su".  This file contains the
+sensitivity of the simulated equivalent of each observation to each
+parameter.  The first line of the file contains column names, where the
+first two columns, named "OBSERVATION" and "SYMBOL", hold the user-supplied
+observation names and plot symbols, respectively.  The remaining column
+names identify the parameters for which ISENS > 0 in the SEN input file.
+Following the line of column names is a line for each observation,
+containing the observation name, plot symbol, and simulated-equivalent
+sensitivity for that observation relative to each parameter for which ISENS
+> 0.
+
+(3) OUTNAM._mc:
+
+When the PES Process is active, OUTNAM in the OBS input file is
+not "NONE", and "ALLFILES" is specified after ISCALS, a new file is
+generated, identified by the extension "_mc".  This file contains the matrix
+of parameter correlations.  The first line of this file lists the names of
+all parameters for which ISENS > 0 in the SEN input file.
+
+--------------------------------------------------------------------------
+
+Richard Yager of USGS in Ithaca, NY, kindly supplied the following
+information related to the _rc and _rb files produced by RESAN-2000:
+
+     The "_rc" file lists Cook's D, a measure of the influence of the
+     observation on the set of estimated parameter values, along with the
+     observation name and plot symbol. The "_rb" file lists the name and
+     plot symbol of each observation along with the set of DFBETAS, a
+     measure of the influence of the observation on each parameter value.
+     The derivation of Cook's D is given in Cook and Weisburg (1982) and
+     the derivation of DFBETAS is given in Belsley and others (1980). The
+     application of both influence statistics to nonlinear regression of
+     ground-water flow modeling is discussed by Yager (1998).
+
+     Belsley, D.A., Kuh, E., and Welsch, R.E., 1980, Regression
+     diagnostics: identifying influential data and sources of colinearity,
+     John Wiley, New York.
+
+     Cook, R.D., and Weisburg, S., 1982, Residuals and influence in
+     regression, Monographs on Statistics and Applied Probability, v. 128,
+     Chapman and Hall, New York.
+
+     Yager, R.M., 1998, Detecting influential observations in nonlinear
+     regression modeling of groundwater flow: Water Resources Research,
+     v. 34, no. 7, p. 1623-1633.

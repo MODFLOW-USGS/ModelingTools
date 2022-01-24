@@ -969,8 +969,9 @@ inherited frmManageParameters: TfrmManageParameters
   end
   object dlgOpenPval: TOpenDialog
     Filter = 
-      'Pval or Par files|*.pval;*.par;*.par.*|Pval files (*.pval)|*.pva' +
-      'l| Par files|*.par;*.par.*|All files|*.*'
+      'Pval, Par, or Bpa files|*.pval;*.par;*.par.*;.bpa|Pval files (*.' +
+      'pval)|*.pval|Par files|*.par;*.par.*|Bpa files|*.bpa|All files|*' +
+      '.*'
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 168
     Top = 48

@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-01-24T13:54:53.813-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SUTRA Boundary Condition Panes</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUTRA Boundary Condition Panes</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are four SUTRA boundary condition panes on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Sutra Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box:</text></para>
-    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are four similar SUTRA boundary condition panes on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Sutra Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box:</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Specified Head</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Specified Pressure,</text></li>
       <li styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Specified Concentration</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> or </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Specified Pressure,</text></li>
       <li styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Fluid Flux</text><text styleclass="Normal" style="font-weight:normal;" translate="true">, and</text></li>

@@ -2629,6 +2629,8 @@ that affects the model output should also have a comment. }
     function GetContourLabelSpacing: Integer; virtual; abstract;
     procedure SetContourLabelSpacing(const Value: Integer);virtual; abstract;
   public
+    function ChdIsSelected: Boolean; virtual;
+    function FhbIsSelected: Boolean; virtual;
     function Mt3dMSUsed(Sender: TObject): boolean; virtual;
     procedure ClearPval;
     procedure FinalizePvalAndTemplate(FileName: string);
@@ -4604,7 +4606,7 @@ that affects the model output should also have a comment. }
     function LgrUsed: boolean;
     function LgrV1Used: boolean;
     function BcfIsSelected: Boolean;
-    function ChdIsSelected: Boolean;
+    function ChdIsSelected: Boolean; override;
     function ChobIsSelected: Boolean;
     function De4IsSelected: Boolean;
     function DrnIsSelected: Boolean;
@@ -4612,7 +4614,7 @@ that affects the model output should also have a comment. }
     function DrtIsSelected: Boolean;
     function EtsIsSelected: Boolean;
     function EvtIsSelected: Boolean;
-    function FhbIsSelected: Boolean;
+    function FhbIsSelected: Boolean; override;
     function GbobIsSelected: Boolean;
     function GhbIsSelected: Boolean;
     function GmgIsSelected: Boolean;
@@ -5995,6 +5997,12 @@ resourcestring
   StrParcalcexeAndPica = 'parcalc.exe and picalc.exe must both be present in' +
   ' the PEST directory to run PEST wish SVD Assist. You must install them th' +
   'ere before continuing.';
+  StrNoSolverPackageSe = 'No solver package selected';
+  StrNoFlowPackageSele = 'No flow package selected';
+  StrYouMustSpecifyA = 'You must specify a %s package for this model in the ' +
+  'MODFLOW Packages and Progams dialog box.';
+  StrSolver = 'solver';
+  StrFlow = 'flow';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -12843,7 +12851,7 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := ModflowPackages.ChdBoundary.IsSelected;
+  result := inherited;
   if not result and frmGoPhast.PhastModel.LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -12851,7 +12859,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.ModflowPackages.ChdBoundary.IsSelected;
+        result := result or ChildModel.ChdIsSelected;
       end;
     end;
   end;
@@ -17343,13 +17351,41 @@ var
   PriorNegatedString: string;
   PriorMadePositiveString: string;
 begin
+  // MODPATH version 3-5 used a version of the IBOUND array to designate
+  // both which cells were active and zone numbers.
+  // Those two arrays were separated in MODPATH 6.
+  if ModflowPackages.ModPath.MpathVersion <> mp5 then
+  begin
+    Exit;
+  end;
   PriorNegatedString := '';
   PriorMadePositiveString := '';
   ModPathZoneArray := FDataArrayManager.GetDataSetByName(StrModpathZone);
   ActiveArray := FDataArrayManager.GetDataSetByName(rsActive);
   Assert(ActiveArray <> nil);
   ActiveArray.Initialize;
-  SpecifiedHeadArray := FDataArrayManager.GetDataSetByName(rsModflowSpecifiedHead);
+
+  SpecifiedHeadArray := nil;
+  if ModelSelection in ModflowSelection then
+  begin
+    if ModelSelection = msModflow2015 then
+    begin
+      // You can't really use MODPATH 5 with MODFLOW 6 but just in case...
+      if ChdIsSelected then
+      begin
+        SpecifiedHeadArray := FDataArrayManager.
+          GetDataSetByName(rsModflowSpecifiedHead);
+      end;
+    end
+    else
+    begin
+      if ChdIsSelected or FhbIsSelected then
+      begin
+        SpecifiedHeadArray := FDataArrayManager.
+          GetDataSetByName(rsModflowSpecifiedHead);
+      end;
+    end;
+  end;
   if SpecifiedHeadArray <> nil then
   begin
     SpecifiedHeadArray.Initialize;
@@ -21913,7 +21949,7 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := ModflowPackages.FhbPackage.IsSelected;
+  result := inherited;
   if not result and frmGoPhast.PhastModel.LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -21921,7 +21957,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.ModflowPackages.FhbPackage.IsSelected;
+        result := result or ChildModel.FhbIsSelected;
       end;
     end;
   end;
@@ -32670,6 +32706,11 @@ begin
   result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
 end;
 
+function TCustomModel.FhbIsSelected: Boolean;
+begin
+  result := ModflowPackages.FhbPackage.IsSelected;
+end;
+
 procedure TCustomModel.FillObsInterfaceItemList(List: TObservationInterfaceList;
   IncludeComparisons: Boolean = False);
 var
@@ -38295,7 +38336,8 @@ end;
 
 function TCustomModel.UzfMf6PackageUsed(Sender: TObject): boolean;
 begin
-  result := (ModelSelection = msModflow2015) and ModflowPackages.UzfMf6Package.IsSelected;
+  result := (ModelSelection = msModflow2015)
+    and ModflowPackages.UzfMf6Package.IsSelected;
 end;
 
 function TCustomModel.UzfMf6ScreenObjects: TStringList;
@@ -40653,6 +40695,11 @@ begin
   result := LayerStructure.Chani;
 end;
 
+function TCustomModel.ChdIsSelected: Boolean;
+begin
+  result := ModflowPackages.ChdBoundary.IsSelected;
+end;
+
 function TCustomModel.CheckWetting: boolean;
 var
   Group: TLayerGroup;
@@ -42171,6 +42218,34 @@ begin
             Exit;
           end;
           frmProgressMM.StepIt;
+
+          if ModelSelection <> msModflow2015 then
+          begin
+            if not ModflowPackages.PcgPackage.IsSelected
+              and not ModflowPackages.PcgnPackage.IsSelected
+              and not ModflowPackages.GmgPackage.IsSelected
+              and not ModflowPackages.SipPackage.IsSelected
+              and not ModflowPackages.De4Package.IsSelected
+              and not ModflowPackages.NwtPackage.IsSelected
+              and not TCustomSolverWriter.SolverFileGeneratedExternally(self)
+              then
+            begin
+              frmErrorsAndWarnings.AddError(self, StrNoSolverPackageSe,
+                Format(StrYouMustSpecifyA, [StrSolver]));
+            end;
+
+            if not ModflowPackages.LpfPackage.IsSelected
+              and not ModflowPackages.UpwPackage.IsSelected
+              and not ModflowPackages.BcfPackage.IsSelected
+              and not ModflowPackages.HufPackage.IsSelected
+              and not TCustomFlowPackageWriter.
+                FlowPackageFileGeneratedExternally(self)
+              then
+            begin
+              frmErrorsAndWarnings.AddError(self, StrNoFlowPackageSele,
+                Format(StrYouMustSpecifyA, [StrFlow]));
+            end;
+          end;
 
           PcgWriter := TPcgWriter.Create(self, etExport);
           try

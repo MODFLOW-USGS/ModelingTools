@@ -1,0 +1,1139 @@
+release.txt
+
+                           MODFLOW-2000 Release Notes
+
+     This file describes changes introduced into MODFLOW-2000 with each
+official release; these changes may substantially affect users.  Changes to
+the post-processing programs RESAN-2000, YCINT-2000, and BEALE-2000 also are
+described.  In this file, packages and processes are referred to by their 3-
+or 4-character abbreviation.  For information and references related to
+these packages and processes, see mf2k.txt ("Summary of MODFLOW-2000").
+
+NOTE: Any use of trade, product or firm names is for descriptive purposes 
+      only and does not imply endorsement by the U.S. Government.
+
+o Version 1.19.01 03/25/2010:
+
+This version fixes a minor bug in the GMG Package.  Also, in the Unix 
+distribution, the openspec.inc file was changed to correct a minor problem
+introduced at ver. 1.19.00.
+      
+o Version 1.19.00 03/15/2010:
+
+This version includes the addition of a new package (MNW2), minor changes, 
+and bug fixes.
+
+The revised Multi-Node Well (MNW2) Package was added.  The MNW2 Package is
+documented in USGS Techniques and Methods 6-A30 by Konikow and others.
+
+The SFR2 Package was updated.  This update is described in the 
+readme_SFR2.pdf file, which is located in the doc\updates directory.
+
+The LAK3 Package was updated.  This update is described in the 
+readme_LAK3.pdf file, which is located in the doc\updates directory.
+
+The GAGE Package was updated.  This update is described in the 
+Gage_input_instructions.pdf file, which is located in the doc\updates 
+directory.
+
+The ETS Package was updated to add support for NETSOP=3.  When NETSOP is
+specified as 3, ET is simulated from the uppermost active cell in each
+stack of cells.
+
+The Link-MT3DMS (LMT6) Package was updated to version 6.4.  The update is 
+described in doc/updates/lmt6.txt.
+
+The directory and file organization of the MODFLOW-2000 distribution has
+changed slightly, relative to previous versions.  Now the top-level 
+directory contains the files cases.txt, Mf2k.txt, Readme.txt, and 
+release.txt.  The doc directory contains PDF files of the two original 
+documentation reports for MODFLOW-2000 (USGS Open-File Reports 00-92 and 
+00-184, and corresponding errata files) and an "updates" directory.  All 
+documentation files that supplement the original two reports or other 
+documentation are provided in the updates directory.
+
+The maximum number of zone arrays and multiplier arrays is changed from 500
+to 1000.
+
+PCG2 now writes locations of isolated cells that are converted to no-flow.
+
+Output related to the table of STR-Package streamflow observations was 
+modified to explain the situation that applies when leakage to aquifer is 
+limited by flow into the reach.
+
+Bug fix, DRT: Program failed when LayR of DRT input was specified as 0, 
+which is used to indicate a DRT cell with no associated return cell.
+
+Bug fix, DRT: Binary cell-by-cell flow file would be generated incorrectly
+when a recipient cell is inactive.
+
+Bug fix, LPF: Output identifying effect of a HANI parameter was incorrect.
+
+Bug fix, HUF: Interpolated head in hydrogeologic units were incorrectly 
+calculated in some situations.
+
+o Version 1.18.01 06/20/2008:      
+
+This version includes minor changes and bug fixes.
+
+An "Examples" section has been added to Time-varying-parameters.pdf in the 
+"doc" directory.  Two example input files illustrate the use of time-varying 
+list-type and array-type parameters.
+
+Changes were made to HUF2 to check for input errors related to parameter type 
+SYTP.
+
+HUF2, LPF, and BCF were revised to change handling of the situation where input 
+specifies no nonzero conductances to a cell specified as active.  In previous 
+versions, head at these cells was assigned a value of 888.88.  Now the head is 
+assigned the value input for HNOFLO.  In HUF2, a similar situation arises when 
+input defines cell thickness less than or equal to zero; in this case, head now 
+is assigned as HNOFLO (rather than 888.88) and a warning is written to the List 
+or Global output file.
+
+Bug fix: HUF2 output related to errors encountered in calculation of vertical
+conductance incorrectly identified row and column indices.
+
+Bug fix: Multiple SY parameters and clusters were not handled correctly by 
+HUF2.  Previously, contributions to the coefficient matrix from multiple SY 
+parameters/clusters were not summed; only the last cluster processed by the 
+storage conversion routine made a contribution.  This resulted in erroneous 
+handling of unconfined storage when more than one SY parameter or cluster 
+was applied at a given cell.
+
+Bug fix: A bug was fixed to allow proper calculation of SC1. When SC1 is
+computed for a cell, the contribution from a given hydrogeologic unit
+(HGU) depends on the thickness of the HGU within the cell. Previously,
+the method of computing SC1 allowed the portion an HGU that is above
+the topmost active cell or below the bottommost active cell to be
+included in the HGU thickness within those cells.
+
+Bug fix: A divide-by-zero error occurred when the SUB package was used in a 
+model for which PERLEN was specified as 0.0 for a steady-state stress period.
+      
+o Version 1.18.00 08/23/2007:      
+
+This version introduces the Subsidence for Water-Table Aquifers (SWT) Package.
+Details on theory and use of the new package can be found in U.S. Geological
+Survey Techniques and Methods 6-A23, by Leake and Galloway. The SWT Package is
+an alternative to the existing SUB and IBS packages.
+
+This version fixes a bug that was introduced at version 1.17.04 that 
+affected the use of SFR2 with BCF and HUF.
+
+Also fixed is a bug that affected compilation of the MNW1 Package.
+
+o Version 1.17.04 08/03/2007:
+
+This version includes minor changes and bug fixes.
+
+The maximum number of parameters that can be defined in MODFLOW-2000 was 
+increased from 500 to 999.
+
+Partial support for use of SFR2 with the HUF Package has been added.  Simulation
+of unsaturated flow below streams by SFR2 in combination with use of the HUF 
+Package is not supported.  Other capabilities of SFR2 may be used with HUF.
+
+In the GMG Package, the format used for printing of damping parameter to unit 
+IUNITMHC was changed to accomodate a larger range of numeric values.
+
+Bug fixed: SFR2 did not work correctly when some segments were defined using 
+parameters and others were defined without using parameters.
+
+Bug fixed: Program incorrectly stopped with the message "PARAMETER ESTIMATION 
+DID NOT CONVERGE IN THE ALLOTTED NUMBER OF ITERATIONS" when MAX-ITER of the 
+Parameter-Estimation Process input file was specified as 0 and parameter 
+sensitivities were exceedingly small.
+
+Bug fixed: Comment lines in data input files, which are supposed to allow 200 
+characters, were truncated at 79 characters.  
+
+In previous versions of the post-processing program RESAN-2000, the table of 
+"INFLUENTIAL OBSERVATIONS WITH DFBETA > CRITICAL VALUE" in the .#rs output file 
+was incorrectly generated when the number of parameters exceeded 20.  Now, 999 
+parameters are supported.  The current version of RESAN-2000 is 
+'1.5 07/25/2007'. 
+ 
+o Version 1.17.02 02/14/2007:
+
+This version includes fixes to bugs and minor changes in the following 
+packages:
+
+LAK - Several arrays were converted from single precision to double 
+      precision.
+      
+GAG - Two arrays that are common to GAG and LAK were converted from single
+      precision to double precision.
+
+SFR - A bug that caused non-parameter data for stress period 2 and later 
+      stress periods not to be read correctly when unsaturated flow is not
+      simulated was fixed.
+
+RCH - Interpretation of the IRCH array was modified to add support for 0 
+      (zero) values in the array.  A value of 0 is now interpreted to mean
+      no recharge is to be simulated at this location.
+      
+EVT - Interpretation of the IEVT array was modified to add support for 0 
+      (zero) values in the array.  A value of 0 is now interpreted to mean
+      no evapotranspiration is to be simulated at this location.
+      
+ETS - Interpretation of the IETS array was modified to add support for 0 
+      (zero) values in the array.  A value of 0 is now interpreted to mean
+      no evapotranspiration is to be simulated at this location.
+      
+HUF - Output identifying the zone array associated with each hydrogeologic 
+      unit now uses text "ZONE ARRAY" instead of "ZONE".
+
+o Version 1.17.01 09/22/2006:
+
+This version includes fixes to bugs in the following packages:
+
+SFR - Previous version (1.17.00) wrote incorrect flow values to the compact 
+      cell-by-cell budget file when a cell contains more than one SFR reach.
+      
+    - Non-parameter data for stress period 1 were not read correctly.
+    
+FHB - A bug affected assignment of head for the special cases of having only 
+      one time at which heads are specified and having a steady-state stress 
+      period.
+      
+    - A bug caused an invalid entry to be written to a compact cell-by-cell 
+      budget file.
+      
+LAK - Bug caused program to crash when THETA was specified as a negative, 
+      floating-point number.
+
+o Version 1.17.00 07/25/2006:
+
+Note to users of the Hydraulic-Conductivity Depth-Dependence (KDEP) 
+capability of the HUF Package: A program error was found in the KDEP 
+capability beginning with its first release with version 1.12 of MODFLOW-2000 
+(Mf2k) and continuing through version 1.15 of the code. The error was fixed 
+beginning with version 1.16.  The error has been found to cause problems in 
+some (but not all) models that specified input variable IFKDEP equal to 0. 
+Variable IFKDEP is a flag indicating the source of the array specifying 
+reference-surface elevations used for the depth-dependent hydraulic-
+conductivity calculations. When IFKDEP = 0, the TOP array specified in the 
+Discretization Package Input File is used; when IFKDEP = 1, the array is 
+specified in the KDEP input file (variable RS). In some circumstances, 
+specification of IFKDEP = 0 led to mis-allocation of elements in the Mf2k X 
+array, which led to errors in some of the budget calculations. Models that 
+used IFKDEP = 1 should not be affected by this error.  If KDEP users of Mf2k 
+versions 1.12 - 1.15 are uncertain as to whether or not their results are 
+affected by this error, they are encouraged to run their data sets with Mf2k 
+versions 1.16 and higher and compare the results calculated by version 1.16 
+with those of the earlier version.
+
+The LAK3, SFR2, and GAG5 Packages have been updated to support new 
+capabilities.  The new capabilities and other changes are documented in 
+files "Read_me.LAK3.v1.17.txt" and "Read_me.SFR2.v1.17.txt" in the 
+doc directory.  Changes that should be made to USGS Techniques and 
+Methods 6-A13 are documented in "tma6a13_SFR2revision_history.pdf", also 
+in the doc directory.
+
+The GMG Package has been updated to support a new adaptive damping option, 
+which may be useful in obtaining solutions to highly nonlinear problems.  
+The new damping option is documented in "GMG_Damping.pdf" and 
+"Banta_damping_paper.pdf" in the doc directory.
+
+The SUB Package was modified to allow comment lines to be inserted into 
+the SUB input file anywhere except where arrays are to be read by one of 
+the array-reader subroutines (U2DREL or U2DINT).
+
+A minor bug affecting output of the ADV Package has been fixed.
+
+Several bugs in the MNW Package have been fixed.
+
+A bug in the DRT Package that caused a budget error when a drain-return cell 
+is inactive has been fixed.  Now, if the return cell is inactive (IBOUND=0) 
+or constant-head (IBOUND<0), no return flow takes place, and all drain flow 
+exits the model.
+
+o Version 1.16.00 03/28/2006:
+
+This version includes updates to three packages, and several bug fixes.
+
+Version 2 of the SFR Package replaces SFR1 in this version.  SFR2 adds 
+support for simulation of unsaturated flow beneath streams.  Files prepared 
+according to SFR1 instructions will work as they did with SFR1.  The GAGE
+and LAK3 Packages were revised to work with SFR2.  SFR2 is documented in 
+USGS report TM6-A13.
+
+The ADV2 Package has been modified to improve compatibility with MODPATH.
+The changes are documented in MODPATH-ADV_compatibility_3-2006.pdf, which
+is included in the doc directory of the MODFLOW-2000 distribution.
+
+Values in some tables produced by the STR Package have been modified to be
+written with additional decimal places.
+
+This version includes fixes to the following bugs:
+
+Calculation of sensitivities to EVT parameters failed when NEVTOP was 
+specified as 3.
+
+"ALLOCATION OF ARRAYS RX, IR, RZ FAILED" when batch mode was used.
+
+Compact budget file was incorrectly written when drain-return cells 
+specified in the DRT Package are dry.
+
+In LAK3, in cases in which a lake that had gone dry was underlain by a 
+confined type of layer, an undefined variable caused a run-time error.
+
+Several bugs in HUF2.
+
+Array-bound access error was caused when there were LPF parameters of type 
+HK or HANI not listed in the SEN file.
+
+o Version 1.15.01 04/05/2005:
+
+This version includes fixes to bugs in the following packages and
+post-processing program:
+
+SUB - Minor bug fix
+
+SFR - Fix to bug that prevents time-varying SFR parameters from working
+      correctly
+    - Fixed bugs that causes incorrect handling of no active cell at reach
+      location
+    - Fixes to other minor problems, which should improve precision and
+      execute faster
+
+GMG - Fixes to problems in FORMAT statements
+
+LPF - Changed to skip calculation of sensitivities for a confined layer
+      when PID equals 'SY'.
+    - Fixed bug that caused incorrect deactivation of cells that
+      have nonzero vertical K and all horizontal Ks zero
+
+BAS - Changed to flag parameters with zero sensitivities.
+
+MNW - Bug fix (divide by zero when a cell goes dry).
+    - Converted MNW to use all double precision (except arrays from other
+      packages).
+
+YCINT - Minor bug fix
+
+o Version 1.15.00 8/06/2004:
+
+A new solver is introduced with this release.  The Geometric Multi-Grid
+(GMG) Solver Package is documented in USGS Open-File Report 2004-1261 by
+Wilson and Naff.  
+
+Minor bugs in the RES and HUF Packages were fixed.
+
+This release also includes the following modifications to the SFR1 Package:
+
+The solution scheme in GWF1SFR1FM has been changed to a mixed
+bisection-newton method.  Convergence using this method to estimate stream
+depth at the midpoint is faster then using the bisection method alone.
+
+For the solution scheme to work correctly, the DLEAK term used to solve for
+stream depth at the midpoint should be equal to or less than the closure
+criteria used in MODFLOW, although some problems may solve when DLEAK is
+greater than the closure criteria.
+
+Some slight modifications were also made to GWF1SFR1BD to properly account
+for overland runoff, precipitation, and evapotranspiration for all ICALC
+values. Also, when there is no flow into the stream reach, as surface inflow
+(including runoff); as ground-water discharge to the stream; and
+evapotranspiration exceeds precipitation, then evapotranspiration is set to
+zero.
+
+One additional change was made by Suzanne Tillery of New Mexico State
+University.  She changed the program in GWF1SFR1FM and GWF1SFR1BD to allow
+for multiple diversions at the end of a stream segment. For multiple
+diversions from a single segment, each diversion must be a new segment and
+its flow is diverted from the end of the same segment in order of the
+segment numbering. This means that a diversion placed first in the data
+input has its flow subtracted first.
+
+o Version 1.14.00 7/01/2004:
+
+The new Stream-Flow Routing (SFR1) Package is introduced with this release.
+The new package encompasses the capabilities of the STR Package that are
+part of the Ground Water Flow Process and adds enhancements.  The SFR1
+Package is documented in USGS Open-File Report 2004-1042.  The SFR1 Package
+is integrated with the MODFLOW Ground Water Transport Process to allow
+simulation of solute transport in streams.  The report also describes
+enhancements to the GAGE capability to work with the SFR Package.
+
+The LAK3 Package is updated to work with the new SFR1 Package.
+
+The maximum number of layers has been increased from 200 to 999.
+
+Simulated equivalents are now calculated using double-precision variables;
+differences are expected to be small.
+
+If available system memory is insufficient to allocate the main arrays, a
+message explaining the problem is printed and the program stops.
+
+Two minor bugs were fixed in the MNW Package.
+
+Errata sheets for USGS Open-File Reports 00-92 and 00-184 have been added to
+the doc directory.  The names of the files are ofr-00-92-errata.pdf and
+ofr-00-184-errata.pdf.
+
+o Version 1.13.00 1/22/2004:
+
+This release includes revisions to the LAK3 Package, including changes that
+affect: (1) Simulation of mixed steady-state and transient stress periods;
+(2) Simulation of the top layer as confined; (3) Lake stage saved or printed
+in the head array, rather than HNOFLO; (4) Checking of consistency between
+lake cells and IBOUND; (5) Simulation of lake cells in the bottom layer; and
+(6) other minor output changes.  Please see LakePackage.read_me.txt in the
+doc directory of the Modflow-2000 distribution for more details.
+
+Additional explanatory text is written to the Global output file when the
+simulation time is truncated by the Sensitivity Process, to the time step
+required for the last observation, to reduce execution time.
+
+The SUB Package was modified to work correctly when batch mode is used.
+
+A minor change was made to the PCG2 Package to correct a problem with
+damping when the polynomial preconditioner is used (NPCOND=2 in PCG2 input).
+
+Documentation of a previously undocumented feature that allows control of
+printing of a multiplier array that is a function of other multiplier
+arrays: An IPRN value can be specified after the last multipler-array name
+in item 4 of the MULT file.  Valid IPRN values are listed on p. 87 of
+Open-File Report 00-92.  Assign IPRN<0 to suppress printing.
+
+A bug that caused a problem reading the DRT Package input file in fixed
+format was corrected.  Other bugs related to the use of DRT-Package
+parameters were fixed.
+
+A revised version of the HUF2 Package, which fixes bugs that affected
+calculation of flow in hydrogeologic units, replaces the previous version.
+
+o Version 1.12.01 10/03/2003:
+
+The version number (1.12.01) for this release uses a modified identification
+scheme.  The addition of a subrelease number (".01" in this case) is used to
+identify releases that are made only to fix bugs.  This release fixes the
+following bugs:
+
+In previous versions, incorrect final simulated-equivalent sensitivities
+were printed when LASTX > 0 in the PES input file and parameter estimation
+converged.  Note that these simulated-equivalent sensitivities are never
+used in the regression.
+
+Previous versions had an error in the calculation of the weight matrix for
+correlated prior information.  This bug would have affected regression
+results only when correlated prior information is used by entering a WTP
+array in item 9 of the PES input file.
+
+In previous versions, incorrect weighted residuals were printed for
+correlated flow observations when an observation is correlated with another
+observation that is omitted due to drying of cells included in the
+observation.  The bug affected correlated flow observations for the DRN,
+RIV, GHB, STR, and DRT Packages.
+
+In version 1.12 simulated-equivalent sensitivities of constant-head flow
+observations to LPF-Package parameter types HK, VK, VANI, or VKCB were
+incorrectly calculated when a constant-head cell used as a flow observation
+location had an overlying or underlying active cell.
+
+In previous versions of BEALE2K, incorrect results were produced when
+correlated prior information was used.  The new version of BEALE2K has the
+version identifier "1.2.01 10/03/2003".
+
+Numbers up to 30 characters in length can now be read from input files when
+the FREE option of the Basic Package is specified.  The previous limit was
+20 characters.
+
+o Version 1.12 09/08/2003:
+
+The new Subsidence and Aquifer-System Compaction (SUB) Package is introduced
+with this release.  The new package encompasses all the capabilities of the
+Interbed Storage (IBS) Package and adds enhancements.  This version of
+Modflow-2000 also includes the IBS Package, but the IBS Package is
+considered obsolescent, and future versions of Modflow-2000 may not support
+it.  Concurrent use of the SUB and IBS Packages will result in an error
+message.  The SUB Package is documented in USGS Open-File Report 03-233.
+
+Version 2 of the HUF Package replaces version 1.  The new version of HUF
+includes the Layer Variable-Direction Horizontal Anisotropy (LVDA)
+capability documented in USGS Open-File Report 02-409, as well as three
+additional capabilities documented in USGS Open-File Report 03-347.
+
+The ADV Package has been updated to version 2.4.  The new version adds
+support for porosity parameters, documented in ADV-porosity-parameters.pdf
+in the doc directory of the Modflow-2000 distribution.  The use of the ADV
+Package is now restricted to simulations in which the first stress period is
+steady-state, and which include no other steady-state stress periods.
+
+Unfortunately, due to licensing restrictions, the USGS is no longer able to
+publicly distribute the Algebraic Multi-Grid (AMG) solver, on which the
+Link-AMG (LMG) Package relies.  USGS users can download a version of
+Modflow-2000 that includes AMG from a restricted web site (please contact
+Ned Banta or Arlen Harbaugh for the URL).  Users outside the USGS can
+request the code directly from Dr. Klaus Stuben of Fraunhofer-Institute for
+Algorithms and Scientific Computing (SCAI), Sankt Augustin, Germany, at
+amg1r5@scai.fraunhofer.de.
+
+A new optional setting in the OBS Process input file is available.  If
+"ALLFILES" is specified following the ISCALS value, and if the value
+specified for OUTNAM is not "NONE", up to three additional output files
+are generated with the filename base defined by OUTNAM.  The
+"underscore.txt" file in the doc directory describes the new files.
+
+A fifth column has been added to the _os output file, which was originally
+described in table 5 on page 28 of USGS Open-File Report 00-184.  The fifth
+column lists the observation time, in model time units, from the beginning
+of the simulation.  For prior information, -1.0 is written.  The code
+modification for ADV assumes that all ADV observations are in the first
+stress period.
+
+Efficiency of the check for duplicate observation names was improved.
+
+The DATA AT HEAD LOCATIONS table was edited to improve clarity.
+
+The LMT6 Package (which provides linkage between Modflow-2000 and the MT3DMS
+multi-species mass transport model, see USGS Open-File Report 01-82) has
+been updated to support the HUF Package, version 2, and the MNW, ETS, and
+DRT Packages.  Please see lmt6.txt in the doc directory for more information.
+
+Bug fixes:
+
+A bug that caused problems when the <tab> character is used as a delimiter
+in input files has been fixed.
+
+A bug that could incorrectly cause printing of an error message referring
+to incorrect specification of interblock transmissivity averaging method
+when calculating sensitivity for "HK" or "HANI" type parameters, even if
+averaging method is correctly specified as HARMONIC MEAN, has been fixed.
+
+A bug that caused inaccurate sensitivity results or program failure when
+calculating sensitivities in a situation where one or both cells adjacent to
+a horizontal flow barrier (of the HFB Package) are inactive (IBOUND=0) has
+been fixed.
+
+Fixed bug that caused calculated heads to be incorrect when OBS Process is
+active, SEN Process is inactive, LPF Package is active, and first parameter
+defined in LPF file is either of type VKCB or HK.
+
+Several bugs in the MNW Package were fixed.
+
+A minor bug in the DAF Package was fixed.
+
+In Resan2k, a bug in the calculation of Cook's D was fixed, and the table
+showing Cook's D was modified to eliminate colums VAR(E) and VAR(Y), and add
+column VAR(Y)/VAR(E).
+
+o Version 1.11 04/10/2003:
+
+     This version includes two new packages.  The DAF Package supports
+coupling of Modflow-2000 with the Diffusion Analogy Surface-Water Flow Model
+(DAFLOW), documented in Jobson, H.E. and Harbaugh, A.W. (1999, Modifications
+to the Diffusion Analogy Surface-Water Flow Model (DAFLOW) for coupling to
+the modular finite-difference ground-water flow model (MODFLOW), USGS
+Open-File Report 99-217, 107 p.).  The MNW Package allows simulation of
+wells completed in intervals represented by multiple cells.  The MNW Package
+is documented in Halford, K.J. and Hanson, R.T. (2002, User guide for the
+Drawdown-Limited, Multi-Node Well (MNW) Package for the U.S. Geological
+Survey's modular three-dimensional finite-difference ground-water flow
+model, versions MODFLOW-96 and MODFLOW-2000, USGS Open-File Report 02-293,
+33 p.).
+
+     A modification to the PCG2 Package changes the way the DAMP variable
+works.  In previous versions of PCG2, DAMP was used to control oscillations
+that could occur within a single call to the solver routine, among inner
+iterations.  In the current version of PCG2, DAMP does not affect inner
+iterations; instead, it affects outer iterations.  This change likely will
+allow the solver to behave more predictably in solving highly nonlinear
+problems.  Note that for a given model, DAMP may need to be set to a
+different value than for previous versions to achieve optimum results.  In
+addition, this version of PCG2 includes changes that should make the solver
+less prone to errors that cause the program to abort, possibly generating
+diagnostic messages referring to a floating overflow exception in PCG2AP.
+
+     A new Output Control option allows users to specify that drawdowns,
+which can be printed to the List file or saved in a separate output file,
+are to be calculated relative to model-calculated heads at specified time
+steps.  In previous versions of Modflow and by default in the current
+version, all drawdowns are calculated relative to heads entered by the user
+in the STRT array read by the BAS Package.  The new option allows the user,
+when using the word method of Output Control, to indicate one or more time
+steps, relative to which subsequent drawdowns are to be calculated.  To use
+this option, the keyword "DDREFERENCE" is entered following the value
+entered for ITSOC of item 2 of the Output Control file (USGS Open-File
+Report 00-92, pp.  52-54) for a time step relative to which drawdown in
+later time steps is to be calculated.  "DDREFERENCE" can be entered for as
+many time steps as desired.  In each case, heads calculated for the time
+step for which "DDREFERENCE" is entered will serve as the basis relative to
+which drawdowns for subsequent time steps are to be calculated, until the
+next occurrence of "DDREFERENCE" is found.  The following example of an
+Output Control file illustrates the use of the DDREFERENCE option:
+
+          DRAWDOWN PRINT FORMAT 11
+          PERIOD 1 STEP 1 DDREFERENCE
+              PRINT DRAWDOWN
+          PERIOD 2 STEP 3
+              PRINT DRAWDOWN
+          PERIOD 2 STEP 5 DDREFERENCE
+              PRINT DRAWDOWN
+          PERIOD 3 STEP 5
+              PRINT DRAWDOWN
+          
+In this example, drawdowns printed (in the List file in format 20F5.4) for
+stress period 1 time step 1 are the differences between the heads entered by
+the user in the STRT array and heads calculated for stress period 1 time
+step 1.  No output control is entered for time steps 1 and 2 of stress
+period 2, so no drawdown arrays are printed for these time steps.  Drawdowns
+printed for stress period 2 time step 3 are the differences between heads
+calculated for the end of stress period 1 time step 1 and heads calculated
+for the end of stress period 2 time step 3.  Drawdowns printed for stress
+period 2 time step 5 are the differences between heads calculated for the
+end of stress period 1 time step 1 and heads calculated for the end of
+stress period 2 time step 5.  Drawdowns printed for stress period 3 time
+step 5 are the differences between heads calculated for the end of stress
+period 2 time step 5 and heads calculated for the end of stress period 3
+time step 5.
+
+     A new BASIC Package option, which allows progress to be monitored as
+the program solves the ground-water flow and sensitivity equations, has been
+added.  To invoke this option, list the keyword "SHOWPROGRESS" as an option
+in item 1 of the BAS input file.  When invoked, this option displays on the
+monitor the stress period, time step, and the equation currently being
+solved.  Unfortunately, support for this option is processor-dependent; as a
+result, when this option is selected on some systems, lines showing progress
+will not be overwritten by subsequent lines.  In these cases, use of this
+option will cause the display to scroll as the progress line is updated.
+
+     Prior to the current version, duplicate observation names were accepted
+without notifying the user of the duplication.  However, support in
+Modflow-2000 for duplicate observation names is obsolescent -- future
+versions of Modflow-2000 may require unique names.  The current version
+accepts duplicate observation names, but if duplicate names are found, a
+warning concerning the duplication is written to the Global file.
+
+     The maximum allowed numbers of zone and multiplier arrays were
+increased from 200 to 500.
+
+     The effect of the IFHBSS variable in input to the FHB Package was
+modified slightly.  Please see Readme_FHB.txt in the doc directory for
+details.
+
+     The format of the "DATA AT HEAD LOCATIONS" table was modified slightly
+to match that of the "DATA FOR FLOWS" tables.
+
+     Observations specified at the exact end of the simulation are no longer
+flagged as being after the end of the simulation.
+
+     The table of residuals for parameters with correlated prior information
+no longer refers to "parameter sums".
+
+     A rarely-encountered bug, identified by an error message referring to a
+floating division exception in SSEN1LPF1NL, was fixed.
+
+     For the LMG Package, the AMG1R5 solver was updated to AMG1R6, which
+fixes a bug related to memory usage. 
+
+     For the HFB Package, minor output changes were made, and bugs related
+to calculation of sensitivities were fixed.
+
+     Two bugs related to correlated flow observations were fixed.  A minor
+bug in the NOPRINT capability was fixed.  A minor bug related to the
+printing of DRN and DRT Package observations was fixed.
+
+     If MAX-ITER of the PES-Process input is less than zero, the program
+now stops with an appropriate error message.
+
+     Now, when a parameter value is changed because it is unreasonable (for
+example, a negative hydraulic conductivity) in the final parameter-
+estimation iteration, the reasonable value that takes its place is written
+to the Global and _b files and to the screen.  In previous versions, the
+unreasonable value was written.
+
+     A bug related to correlated prior information for log-transformed
+parameters was fixed.
+
+     The program now stops with an error message if sensitivities are to be
+calculated for HK or HANI type parameters of the LPF Package if the
+transmissivity averaging method for a layer affected by the parameter is
+other than HARMONIC MEAN.
+
+     For developers, all STOP statements have been replaced by calls to a
+new subroutine, USTOP.
+
+     Richard Yager of USGS in Ithaca, NY, kindly supplied the following 
+information related to the _rc and _rb files produced by RESAN-2000:
+
+     The "_rc" file lists Cook's D, a measure of the influence of the
+     observation on the set of estimated parameter values, along with the
+     observation name and plot symbol. The "_rb" file lists the name and
+     plot symbol of each observation along with the set of DFBETAS, a
+     measure of the influence of the observation on each parameter value.
+     The derivation of Cook's D is given in Cook and Weisburg (1982) and
+     the derivation of DFBETAS is given in Belsley and others (1980). The
+     application of both influence statistics to nonlinear regression of
+     ground-water flow modeling is discussed by Yager (1998).
+
+     Belsley, D.A., Kuh, E., and Welsch, R.E., 1980, Regression
+     diagnostics: identifying influential data and sources of colinearity,
+     John Wiley, New York.
+
+     Cook, R.D., and Weisburg, S., 1982, Residuals and influence in
+     regression, Monographs on Statistics and Applied Probability, v. 128,
+     Chapman and Hall, New York.
+
+     Yager, R.M., 1998, Detecting influential observations in nonlinear
+     regression modeling of groundwater flow: Water Resources Research,
+     v. 34, no. 7, p. 1623-1633.
+
+o Version 1.10 07/26/2002:
+
+     This version incorporates fixes to bugs that showed up when compiling
+the source code distributed with version 1.9.  It also fixes a bug related
+to a seldom-used part of the LMG Package involving a random-number
+generating algorithm.
+
+o Version 1.9 07/15/2002:
+
+     In this version, the LAK package was modified to add compatibility 
+with the LPF and HUF packages, and MODPATH.  Output of lake information to 
+the listing file is clarified, and cumulative lake budget reports are added.
+The default value of MXLKND (the maximum allowable number of lake/aquifer 
+cell interfaces) is reduced.
+
+     In the GAGE package, options are added for additional output for lake 
+gages.  The changes to the input are described in the file 
+\doc\gage_input.pdf.  The options are invoked in the gage input by 
+specifying a negative value of UNIT.  If a negative UNIT is specified, an 
+additional parameter is read from Data Set 2 (after UNIT) called OUTTYPE.  
+OUTTYPE is a code for the format of expanded listing desired in output file:
+
+ 0  Use standard default listing of time, stage, volume, and concentration.
+ 1  Default values plus time-step fluxes for lake and total lake conductance.
+ 2  Default values plus changes in stage, volume, and concentration for lake.
+ 3  All of the above.
+
+     In the HUF Package, a problem in the calculation of horizontal-
+conductance sensitivities was fixed.  The current version of HUF is 
+"1.04, ERA 5/14/2002."
+
+     Some problems related to omission of observations (from the sum of
+squared, weighted residuals objective function and other statistics and the
+underscore ("_") output files) were corrected.  Now, these rules apply:
+
+     1.  For a given set of parameter values, the statistics have the same
+values and "_" files include the same observations, regardless of whether
+the Sensitivity Process is active or inactive, whether a particular
+parameter is one for which sensitivities are being calculated, whether the
+Parameter-Estimation Process is active or inactive, the value of MAX-ITER,
+which parameter-estimation iteration is being performed, or whether or not
+parameter estimation converged.
+
+     2.  When a simulated-equivalent head cannot be calculated, for example,
+when the observation cell is dry or one or more cells needed for a
+multilayer head observation is dry, that observation is flagged as omitted
+in the DATA AT HEAD LOCATIONS table, is not listed in the "_" files, and
+does not contribute to the statistics.
+
+     3.  Regarding flow observations where the heads in all the cells
+included in an observation are below the bottom of the river or stream bed
+or below the drain elevation: These cases now conform to item 1 above.  Flow
+observations of this type are never be omitted from either the statistics or
+the "_" files.
+
+     4.  Regarding flow observations where all the cells included in an
+observation are inactive: Flow observations like this are flagged as omitted
+in the "DATA FOR FLOWS..." tables and omitted from statistics and the "_"
+files.
+
+     The following bug was fixed: When the DE45 was used and IFREQ was
+specified as 3, external iterations were not being performed in solving the
+sensitivity equation.  In the current version, external iterations are
+performed in solving both the ground-water flow equation and the sensitivity
+equation when ITMX > 1 and IFREQ = 3.
+
+o Version 1.8 05/01/2002:
+
+     This version adds support for an option that can be used to suppress
+printing of cell lists in any or all of the RIV, GHB, DRN, DRT, HFB, WEL,
+and CHD packages.  In input to the RIV, GHB, DRN, WEL, and CHD packages, the
+NOPRINT option is invoked by entering the keyword "NOPRINT" as an option on
+Item 2.  In input to the DRT package, the NOPRINT option is invoked by
+entering "NOPRINT" as an option on Item 1.  In input to the HFB package, the
+NOPRINT option is invoked by entering "NOPRINT" in Item 1 after the value
+entered for NHFBNP.
+
+     In the LPF Package, the sensitivity of vertical conductance to head in
+the calculation of sensitivities for unconfined cells is now correctly
+calculated.
+
+     In the HUF Package: a number of small issues were uncovered by John 
+Doherty, and many thanks go to him for his careful scrutiny of the HUF code. 
+Among these changes, geohydrologic units are now truncated if the bottom of 
+the unit is in an inactive cell.  A problem with the rewetting capability 
+was fixed. The sensitivity of vertical conductance to head in the 
+calculation of sensitivities for unconfined cells is now correctly 
+calculated.  The current version of HUF is 1.03.
+
+     In the ADV Package: the current version (2.3) fixes a problem with 
+threshold for stagnant velocities.  Also fixed: a problem with scaled 
+sensitivities in a confining unit.
+
+     In the LMT Package: This version corrects an inconsistency between the
+Link-MT3DMS (LMT6) package and MT3DMS 4.0.  This inconsistency causes an I/O
+error when the flow-transport link file saved by LMT6 is read by MT3DMS.
+The problem only occurs when the STR package is used in the flow simulation,
+and when the Extended header option is specified for saving the
+flow-transport link file.  The current version of LMT is 6.1.
+
+     The RESAN2K, BEALE2K, and YCINT2K post-processing programs were
+converted to use dynamic memory allocation.  This means that the programs
+will not need to be recompiled to accommodate data sets that include large
+numbers of observations.
+
+     This version also fixes the following bugs:
+
+     In previous versions of MODFLOW-2000, when the OBS Process was active
+and the PES Process was inactive, one element (for the cell in layer 1,
+column 1, row 1) of one array (the affected array depended on which flow
+package was active) was overwritten with an invalid value.  The bug did not
+affect parameter estimation, and it did not affect simulations in which that
+cell was specified as inactive.  Thanks to Evan Anderman for identifying
+this bug.
+
+     In previous versions of RESAN2K, observation names were not being
+ordered in the ORDERED, INDEPENDENT NORMAL DEVIATES table.  The ordering
+problem also affected the _rd file, where the plot symbols also were not
+being ordered.  Thanks to Claire Tiedeman for identifying this bug.
+
+     This version fixes compiler- and operating-system-dependent problems
+related to writing of the _sc, _sd, _s1, and _rs files.  Thanks to Terrence
+Conlon for identifying these problems.
+
+     Also included in the 1.8 release is a revised str6.pdf file, which
+describes the implementation of the STR Package in MODFLOW-2000.  The
+revisions describe limitations related to use of parameters in the STR
+Package.
+
+     A distribution file prepared for the Unix operating system is available
+for MODFLOW-2000 for the first time.  For the current version, the Unix
+distribution file is mf2k1_8.tar.Z.
+
+o Version 1.7 12/04/2001:
+
+     Time-varying parameters are introduced with this version.  Most
+packages that read input each stress period support time-varying parameters.
+These include both list-type packages such as RIV and STR and array-type
+packages such as RCH and EVT.  Time-varying parameters are useful when the
+user desires to estimate one parameter but vary properties included in the
+parameter definition from one stress period to another.  In the RIV Package
+for example, a parameter may be defined to control riverbed conductance at a
+group of model cells throughout a simulation, and multiple user-defined
+"instances" associated with that parameter may be used to specify a series
+of values for river stage for different stress periods in the simulation.
+See files Time-varying-parameters.pdf and str6.pdf in the doc directory for
+details.
+
+     The start time, end time, and elapsed time required to execute
+MODFLOW-2000 are now written to the screen.  These times also can be written
+to the global output file by specifying "PRINTTIME" as an option in Item 1
+of the BAS Package input file.  When the program is used in batch mode,
+these times are determined and written for each simulation, that is, for
+each name file listed in modflow.bf.  This capability is expected to be
+particularly useful in evaluating performance of the program in different
+serial- and parallel-processing environments.
+
+     Fixed problem where, when using parallel processing, files of type
+DATA, DATA(BINARY), DATAGLO, and DATAGLO(BINARY) may not be opened correctly
+for MPI processes other than the master process.  This version uses the name
+file options described for version 1.6 below to determine the correct method
+for opening files of these types.  To correctly generate output files of
+these types, use the "REPLACE" option.  The "OLD" option may be used to
+designate input files.
+
+     Output related to observations of flow at constant-head boundaries no
+longer refers (mistakenly) to the "Constant-Head Boundary Package."
+
+o Version 1.6 10/19/2001:
+
+     New options for the name file allow users to designate files of type
+DATA, DATA(BINARY), DATAGLO, or DATAGLO(BINARY) as either input or output
+files.  One of the options (either "OLD" for an input file or "REPLACE" for
+an output file) may be placed after the file name on the line listing the
+file type, unit number, and file name.  If "OLD" is specified, the file must
+exist when the program is started.  If "REPLACE" is specified and the file
+exists when the program is started, the existing file is deleted, then
+opened.  The status of each file ("OLD", "REPLACE", or "UNKNOWN") is now
+shown in the global output file.  Note that the "OLD" or "REPLACE" option is
+not required.  If neither is listed, the file status is shown as "UNKNOWN"
+and program execution continues normally.  When output to a BINARY file from
+an earlier model run exceeds the amount of output generated by the current
+model run, specifying "REPLACE" may be required to ensure the file does not
+include output from the previous run after the output generated by the
+current run.  The options may be entered in any combination of uppercase and
+lowercase letters.
+
+     This version fixes a bug that caused simulation time to be truncated,
+for runs that involve calculation of sensitivities, to a simulation period
+one time step too short when the last flow observation in a transient
+simulation falls in a later time step than the final head observation.
+
+     Corrected problem that caused observation sensitivities for
+constant-head flow observations to be incorrect for log-transformed
+parameters.
+
+     STR6 documentation (str6.pdf) was modified to clarify the format for
+STR input.
+
+     ADV2 was updated to fix a problem in the calculation of particles
+released to weak sinks.  In addition, a change was made in the reading of
+the WTQ array.  See adv.txt for the modified format required to input the
+WTQ array.
+
+o Version 1.5 08/16/2001:
+
+     The LMT Package was added -- it adds support for generating a link
+file to be read by the contaminant-transport program MT3DMS (see
+<http://hydro.geo.ua.edu/mt3d/>).
+
+     Fixed bug that caused interpolation to be incorrect for a head
+observation that occurs before the end of the first time step of an initial
+transient stress period.
+
+     LMG was revised to work without causing program to bomb when using
+parallel processing.
+
+     Fixed bug where divide-by-zero error would occur if using parallel
+processing with more than one MPI process and one parameter is being
+estimated.
+
+     Hydfmt and hydpost were revised to enable them to read the binary files 
+generated by MODFLOW-2000 beginning with version 1.2.
+
+o Version 1.4 07/10/2001:
+
+     A new solver package, the LMG (Link-AMG) Package, was added.  LMG
+provides a link to the Algebraic Multi-Grid (AMG) solver.
+
+     A problem related to RMAR of the Parameter-Estimation (PES) Process
+input file was fixed.  Prior to the fix, RMAR was set to 0.001 regardless of
+the value entered in the PES input file.  Output describing RMAR, which is
+written to the global file, was corrected.
+
+     Support for the use of the tab character as a separator in free-format
+input was added.
+
+     YCINT2K was modified to correct an error in calculated confidence
+intervals.  Previously, the variance of the measurement error expected for
+prediction was incorrectly included in the calculation of confidence
+intervals.
+
+o Version 1.3 06/11/2001:
+
+     Fixed problem in LPF where if a lower cell goes dry while the cell above
+is still wet, there is a non-zero vertical conductance to a dry cell, causing
+calculated heads and flows to be in error.
+
+     Fixed problem in PCG2 that caused tables of maximum head and residual
+changes each iteration to be printed when MUTPCG is set to 1.
+
+     Fixed bug in modified Gauss-Newton routine PES1GAU1AP that caused
+divide-by-zero error when a sensitivity equals zero.
+
+     Support for printing of auxiliary variables was increased from 2 to 5
+auxiliary variables.
+
+     Added support for calculation of approximate sensitivities for STR
+parameters when ICALC of the STR Package is > 0.  The formulation relies on
+the assumption that the dependence of the stream stage on SFR parameter
+values is negligible.  In most cases, the error introduced by this
+assumption is small and the sensitivities can be used for parameter
+estimation.  If the user does not feel that this assumption is justifiable,
+the use of UCODE (Poeter, E.P., and Hill, M.C., 1998, Documentation of
+UCODE, a computer code for universal inverse modeling: U.S. Geological
+Survey Water-Resources Investigations Report 98-4080, 116 p.) is
+recommended.
+
+     Fixed bug that caused sensitivities of STR-Package flow observations to
+STR parameters to be incorrectly calculated in some cases.
+
+     The ADV Package was modified to fix a problem with tracking through
+confining layers.  The problem occured when observation times or
+particle-tracking time step (ADVSTP) times were reached when the particle
+was within a confining unit, the subsequent tracking was incorrect.
+
+     The HUF Package was modified to fix a number of bugs.  Updated the way
+flow between constant-head cells are calculated to correspond to the
+equivalent calculation in the LPF Package.
+
+     Messages printed when STAT-FLAG for a prior-information equation is
+invalid were reworded to improve clarity.
+
+     Several bug(s) related to parallel processing were fixed.
+
+     Corrected output of calculated error variance (variable VAR) to _b1
+files.  BEALE2K was modified to read the revised format of _b1 files.
+
+     MFPTO2K was corrected to correctly account for common error variance
+(variable EV of MODFLOWP input data set 5) values other than 1.0, and to
+account for numbers of time steps and stress periods correctly.
+
+o Version 1.2 04/12/2001:
+
+     The program was modified to support the use of non-standard
+options in OPEN statements for unformatted files. This is useful on
+personal computers because it makes it possible to use different
+compilers and still have MODFLOW produce unformatted files with the
+same structure.  When standard Fortran is used, different compilers
+result in unformatted files that have different structures. In
+MODFLOW-2000, the files affected are those listed in the name file with
+file type DATA(BINARY) or DATAGLO(BINARY) and those referenced in
+array-control records for the array-reading utility modules U2DINT and
+U2DREL where FMTIN is specified as "(BINARY)".  The include file
+openspec.inc (in the \src\mf2k\ directory in the MODFLOW-2000
+distribution) describes the specifiers for the OPEN statement that can
+be modified.
+
+     The runfile distributed by the USGS for use on personal computers
+uses options in the OPEN statement that cause the structure of
+unformatted files to be different than what was used in previous
+versions of the runfile.  The new files are referred to as
+"unstructured" because they eliminate the vendor-specific structure
+normally included in such files.
+
+     Programs that will read unformatted files produced by the USGS
+distributed MODFLOW-2000 runfile will need to be modified to read
+unstructured, unformatted files (using OPEN-statement specifiers and
+options appropriate for the compiler being used) and recompiled. 
+Updated versions of ZONEBUDGET and MODPATH that read the new
+unstructured unformatted files are being released concurrently with
+this new release of MODFLOW.
+
+     The calculation of dimensionless scaled sensitivities (DSS) for
+log-transformed parameters was modified.  Previously, DSS was calculated as
+X*B*(WT**0.5)*abs(ln(B)), where X is the sensitivity of the observation to
+the native parameter value, B is the parameter value, WT is the weight
+associated with an observation, abs() is the absolute-value function, and
+ln() is the natural logarithm function.  Now, DSS is calculated as
+X*B*(WT**0.5).  The revised formula allows DSS and composite scaled
+sensitivity (CSS) values to be the same whether a parameter is
+log-transformed or not.  This change also eliminates the problem that for
+log-transformed parameters with a value of 1.0, DSS and CSS would be listed
+as 0.0.
+
+     The format of _rs files generated when OUTNAM is not 'NONE' was changed
+to provide more significant figures for values passed to RESAN2K.  RESAN2K
+was similarly changed to read the new format of _rs files.
+
+     Fixed bug in RESAN2K that caused incorrect results when
+prior-information equations were used.
+
+     Fixed bug in LPF Package that caused incorrect results when VKCB
+parameters are used and a layer without a confining bed overlies a layer with
+a confining bed.
+
+     Fixed two bugs in parallel-processing capability.  The first bug caused
+the program to fail occasionally and inconsistently.  The second caused
+incorrect values of solver discrepancy to be output to the global file in
+some circumstances.
+
+     Fixed bug that caused program to fail or produce incorrect results when
+ISENS > 0 for a single, non-log-transformed parameter.
+
+     Fixed bug in HFB Package that caused program to generate zero
+sensitivities for HFB parameters in some circumstances.  This bug would have
+had unpredictable, incorrect results for sensitivities when nonparameterized
+flow barriers were specified.
+
+     Revised format of table of smallest and largest weighted residuals to
+list percent contribution to the sum of squared, weighted residuals
+objective function.  This table now may include residuals related to prior
+information.
+
+     Clarified messages written to LIST file when head observations are
+omitted because IBOUND=0 at cell(s) required for interpolation.
+
+     Corrected problem related to cases where a prior-information equation
+is for a log-transformed parameter and STAT-FLAG indicates that STAT is a
+coefficient of variation.  Previously, the weight was not being calculated
+correctly in this situation.
+
+     Output related to prior information was clarified.  Fixed bug that
+caused printed unweighted measured, calculated, and residual values for
+correlated prior information to be incorrect.
+
+     Made change to allow user, when prompted to enter a name file
+interactively, to enter either the full name file name or just the base
+name, to which ".nam" will be added when the program tries to find the name
+file.
+
+     ADV Package was changed to fix a problem related to tracking a particle
+through a confining bed.
+
+     Fixed bug that caused error when LASTX (in PES file) was specified > 0.
+
+     Fixed bug that caused RMAR (in PES file) to be ignored.
+
+     Fixed bug that caused _rs file to contain incorrect parameter number
+for parameters with correlated prior information in certain circumstances.
+
+     If a parameter definition for a list-type parameter does not include at
+least one cell, the program now stops with an error message.
+
+     Moved printing of ordered residuals from GLOBAL file to LIST file.
+
+     Modified program to allow it to run in batch mode successfully even if
+parameter estimation fails to converge for one of the data sets.
+
+     Array dimensions in RESAN-2000 were increased to allow up to 500
+parameters, 10,000 observations (total), 500 flow observations, 100
+prior-information equations, and 100 parameters with correlated prior
+information.
+
+     BEALE-2000 was changed to correctly write names of observations other
+than head observations.  Array dimensions were increased to allow up to
+10,000 observations (total), 10,000 head observations, 500 parameters.
+
+o Version 1.1 01/17/2001:
+
+     Added IBS, HUF, LAK, ETS, and DRT Packages.  Added support for the
+HYDMOD option -- Please see Hanson and Leake (1999, USGS Open-File Report
+98-564) for documentation.  The EVT Package was modified as described in the
+LAK documentation to include the option (NEVTOP=3) to apply ET to the
+uppermost wet cell in a vertical column of cells as done in the RCH Package.
+
+     Added support for generation of an output file with the extension _pc
+when OUTNAM is not 'NONE', the Parameter-Estimation Process is active, and
+parameter estimation converges.  This file contains a record for each
+estimated parameter listing: parameter name, LN, optimized parameter value,
+BL, BU, lower 95-percent confidence limit on the parameter value, and upper
+95-percent confidence limit on the parameter value.
+
+     Fixed bug that incorrectly allowed substantial parameter changes in
+some circumstances when MAX-ITER was specified as 0 in the PES input file.
+An effect of this fix is that if MAX-CHANGE is specified as a value smaller
+than 0.4, the MAX-CHANGE (used) value never differs from MAX-CHANGE.
+
+     Fixed bugs related to writing of _ww and _ws files.  Previously,
+incorrect values were written for weighted observed and weighted simulated
+values for flow observations. 
+
+     Fixed bug that caused MODFLOW-2000 to incorrectly stop with an error
+message when constant-head flow observations were specified and the GHB
+Package was inactive.
+
+     Fixed problem where incorrect values of BL and BU were written to the
+GLOBAL file under some circumstances.
+
+     Increased the maximum number of allowed parameters from 40 to 500.
+
+     Eliminated 1000-observation limit.  Now the number of observations and
+prior-information equations are not limited by the program.
+
+     Changed the file-type identifier required in the name file to activate
+the ADV Package from ADV to ADV2.
+
+     The directory structure was changed to put para-non.f into the
+\src\mf2k\serial\ directory and para-mpi.f into the \src\mf2k\parallel\
+directory.
+
+o Version 1.0 07/20/2000:
+
+     Initial release of MODFLOW-2000, RESAN-2000, YCINT-2000, and
+BEALE-2000.
+

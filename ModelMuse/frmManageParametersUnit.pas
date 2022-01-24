@@ -531,6 +531,10 @@ begin
           end;
         4:
           begin
+            Success := ReadParFile(dlgOpenPval.FileName, PvalList);
+          end;
+        5:
+          begin
             Success := ReadPvalFile(dlgOpenPval.FileName, PvalList);
             if not Success then
             begin
@@ -600,9 +604,9 @@ begin
       begin
         Beep;
         case dlgOpenPval.FilterIndex of
-          1, 4:
+          1, 5:
             begin
-              MessageDlg(Format(StrErrorReadingPvalF, ['PVAR or PAR']), mtError, [mbOK], 0);
+              MessageDlg(Format(StrErrorReadingPvalF, ['PVAR, PAR, or BPA']), mtError, [mbOK], 0);
             end;
           2:
             begin
@@ -611,6 +615,10 @@ begin
           3:
             begin
               MessageDlg(Format(StrErrorReadingPvalF, ['PAR']), mtError, [mbOK], 0);
+            end;
+          4:
+            begin
+              MessageDlg(Format(StrErrorReadingPvalF, ['BPA']), mtError, [mbOK], 0);
             end;
           else
             Assert(False);

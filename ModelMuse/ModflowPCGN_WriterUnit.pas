@@ -138,7 +138,7 @@ begin
   begin
     Exit
   end;
-  if SolverFileGeneratedExternally then
+  if SolverFileGeneratedExternally(Model) then
   begin
     Exit;
   end;

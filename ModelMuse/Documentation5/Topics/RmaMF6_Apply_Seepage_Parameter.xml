@@ -1,12 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-01-21T12:38:13.788-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-01-24T16:05:34.085-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RmaMF6: Apply Seepage Parameter</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Apply Seepage Parameter</text></para>
     </header>
-    <para styleclass="Normal"></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">We want to apply the Seepage parameter to the well flow rate for the Disposal_Pond object. To do that, open the Object Properties dialog box by double-clicking on the Disposal_Pond object on the top view of the model. Then, on the MODFLOW Features tab, select &quot;Seepage&quot; as the </text><text styleclass="Strong" translate="true">PEST Modifier</text><text styleclass="Normal" translate="true"> as illustrated below. The </text><text styleclass="Strong" translate="true">Modification Method</text><text styleclass="Normal" translate="true"> can be left at the default value of </text><text styleclass="Strong" translate="true">Multiply</text><text styleclass="Normal" translate="true">. Note that besides the PEST parameters, you could also choose the Kx data set because it is a data set that is modified by PEST. In this case choosing Kx does not make sense. You could also could have set the value of the Seepage parameter to 0.03 and instead of specifying a PEST modifier, you could just have used Seepage as the formula for the pumping rate.</text></para>
     <para styleclass="Normal"><image src="RmaMf6_DisposalPondParameter.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture illustrating the application of the Seepage parameter to the disposal pond flow rate.</title><caption translate="true"><![CDATA[Screen capture illustrating the application of the Seepage parameter to the disposal pond flow rate.]]></caption></image></para>
   </body>

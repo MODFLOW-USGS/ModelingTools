@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Edit</title>
   <body>
     <header>
@@ -11,7 +11,7 @@
     <para styleclass="Table Header"><table rowcount="17" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:middle">
         <td colspan="2" style="width:626px; height:5px;">
-          <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+          <para styleclass="Normal"><line style="height:1px; color:#000000;"/></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -24,7 +24,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td colspan="2" style="vertical-align:top; width:626px; height:2px;">
-          <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+          <para styleclass="Normal"><line style="height:1px; color:#000000;"/></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -117,7 +117,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:149px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="AddPilotPoint.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Screen capture of the "Add pilot point" button.</title></image><text styleclass="Table Header" translate="true"> Add Pilot Point</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="AddPilotPoint.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Screen capture of the &quot;Add pilot point&quot; button.</title></image><text styleclass="Table Header" translate="true"> Add Pilot Point</text></para>
         </td>
         <td style="vertical-align:top; width:477px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">After selecting this choice, the user can click on the top view of the model to add a pilot point at the location of the pilot point. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Parameters_with_Data_Set" styleclass="Table Cell" translate="true">Using Parameters with Data Sets</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -125,7 +125,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:149px;">
-          <para styleclass="Table Header" style="text-align:left;"><image src="DeletePilotPoints.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Screen capture of the "Delete pilot point(s)" button</title></image><text styleclass="Table Header" translate="true"> Delete Pilot Point(s)</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><image src="DeletePilotPoints.png" scale="-99.90%" styleclass="Image Caption"><title translate="true">Screen capture of the &quot;Delete pilot point(s)&quot; button</title></image><text styleclass="Table Header" translate="true"> Delete Pilot Point(s)</text></para>
         </td>
         <td style="vertical-align:top; width:477px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">After selecting this choice, the user can delete individually specified pilot points or pilot points created between point observations by clicking down with the mouse on the top view of the model, dragging the mouse, and then releasing the mouse button. Pilot points in the rectangle defined by  where the mouse button was depressed and released will be deleted. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Parameters_with_Data_Set" styleclass="Table Cell" translate="true">Using Parameters with Data Sets</link><text styleclass="Table Cell" translate="true">.</text></para>
@@ -133,7 +133,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td colspan="2" style="vertical-align:top; width:626px;">
-          <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+          <para styleclass="Normal"><line style="height:1px; color:#000000;"/></para>
         </td>
       </tr>
     </table></para>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">File</title>
   <body>
     <header>
@@ -11,7 +11,7 @@
     <para styleclass="Normal" style="text-align:center;"><table rowcount="61" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td colspan="2" style="width:626px;">
-          <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+          <para styleclass="Normal"><line style="height:1px; color:#000000;"/></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -24,7 +24,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td colspan="2" style="width:626px;">
-          <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+          <para styleclass="Normal"><line style="height:1px; color:#000000;"/></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -240,7 +240,7 @@
           <para styleclass="Table Header" style="text-align:left;"><image src="RunButton.bmp" scale="-99.90%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true"> </text><text styleclass="Table Header" translate="true">Export|MODFLOW-2005 Input Files </text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"><anchor id="ExportModflow" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Creates the input files for MODFLOW-2005 and optionally executes MODFLOW-2005. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Batch_File_Additions_Dialog" styleclass="Strong" translate="true">Batch File Additions</link><text styleclass="Table Cell" translate="true"> dialog box. If the "Export MODPATH input" check box is checked and MODPATH is selected, the input for MODPATH will also be created. If the "Create new composite budget file" check box is checked, MODPATH will create a new composite budget file when it is run. If the "Export ZONEBUDGET input" check box is checked and ZONEBUDGET is selected, the input for ZONEBUDGET will also be created. </text></para>
+          <para styleclass="Table Cell"><anchor id="ExportModflow" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Creates the input files for MODFLOW-2005 and optionally executes MODFLOW-2005. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Batch_File_Additions_Dialog" styleclass="Strong" translate="true">Batch File Additions</link><text styleclass="Table Cell" translate="true"> dialog box. If the &quot;Export MODPATH input&quot; check box is checked and MODPATH is selected, the input for MODPATH will also be created. If the &quot;Create new composite budget file&quot; check box is checked, MODPATH will create a new composite budget file when it is run. If the &quot;Export ZONEBUDGET input&quot; check box is checked and ZONEBUDGET is selected, the input for ZONEBUDGET will also be created. </text></para>
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">The project description can also be edited here. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Description_Tab" styleclass="Table Cell" translate="true">Description Tab</link><text styleclass="Table Cell" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Options_Dialog_Box" styleclass="Table Cell" translate="true">MODFLOW Options dialog box</link><text styleclass="Table Cell" translate="true">.</text></para>
         </td>
       </tr>
@@ -457,7 +457,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export|SUTRA 2D Mesh</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"><anchor id="ExportSutraMesh" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Export a 2D SUTRA mesh in a format compatible with Argus ONE®. The first line contains the number of elements and the number of nodes. This is followed by lines defining the node positions. Each such line starts with "N" followed by the node number and the X and Y coordinates of the node. These are followed by lines defining the elements. Each line starts with "E" followed by the element number and then the numbers of the four nodes in the element. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File" anchor="ImportSutraMesh" styleclass="Table Cell" translate="true">Import|SUTRA Mesh</link><text styleclass="Table Cell" translate="true">.</text></para>
+          <para styleclass="Table Cell"><anchor id="ExportSutraMesh" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Export a 2D SUTRA mesh in a format compatible with Argus ONE®. The first line contains the number of elements and the number of nodes. This is followed by lines defining the node positions. Each such line starts with &quot;N&quot; followed by the node number and the X and Y coordinates of the node. These are followed by lines defining the elements. Each line starts with &quot;E&quot; followed by the element number and then the numbers of the four nodes in the element. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File" anchor="ImportSutraMesh" styleclass="Table Cell" translate="true">Import|SUTRA Mesh</link><text styleclass="Table Cell" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -486,7 +486,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td colspan="2" style="width:626px;">
-          <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+          <para styleclass="Normal"><line style="height:1px; color:#000000;"/></para>
         </td>
       </tr>
     </table></para>

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-01-24T16:05:41.282-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RmaMf2005: Next Steps</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMf2005: Next Steps</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">As with the MODFLOW 6 version of this model, the next steps might be to further investigate the risk posed by the contaminants in the flow from the disposal pond to the water supply wells using MODPATH or a solute transport simulation. Both MODPATH and MT3DMS are included in this version of the model. If you wish, you could try running them. Be sure not to rerun the MODFLOW model input and output or you will overwrite the model with estimated parameters.</text></para>
+    <para styleclass="Normal"><snippet src="RmaMF6_Next_Steps" inline="false"/></para>
   </body>
 </topic>

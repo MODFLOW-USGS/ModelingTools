@@ -463,8 +463,8 @@ end;
   end;
 
   TCustomSolverWriter = class(TCustomPackageWriter)
-  protected
-    function SolverFileGeneratedExternally: boolean;
+  public
+    class function SolverFileGeneratedExternally(Model: TCustomModel): boolean;
   end;
 
   TCustomFlowPackageWriter = class(TCustomPackageWriter)
@@ -476,7 +476,8 @@ end;
     // return Kz or conductance in Z direction
     function ZConnection(LayerIndex: Integer): TDataArray; virtual;
     procedure CheckSpecifiedHeadsConnected;
-    function FlowPackageFileGeneratedExternally: boolean;
+  public
+    class function FlowPackageFileGeneratedExternally(Model: TCustomModel): boolean;
   end;
 
   // @name is used to export input files for MODFLOW for packages with
@@ -8338,7 +8339,7 @@ end;
 
 { TCustomSolverWriter }
 
-function TCustomSolverWriter.SolverFileGeneratedExternally: boolean;
+class function TCustomSolverWriter.SolverFileGeneratedExternally(Model: TCustomModel): boolean;
 var
   Index: Integer;
 begin
@@ -8420,7 +8421,8 @@ begin
   end;
 end;
 
-function TCustomFlowPackageWriter.FlowPackageFileGeneratedExternally: boolean;
+class function TCustomFlowPackageWriter.FlowPackageFileGeneratedExternally(
+  Model: TCustomModel): boolean;
 var
   Index: Integer;
 begin

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-01-21T09:54:07.733-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-01-24T16:05:07.192-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Mf6ObsExtractor</title>
   <body>
     <header>
@@ -34,12 +34,12 @@
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Example;</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN OPTIONS</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The file name for the listing file contains white space so it must be enclosed in double quotes</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LISTING &quot;MyListing file.txt&quot;</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LISTING &quot;MyListing file.txt&quot;</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The VALUES file contains the values extracted from the observation file. </text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">VALUES Example.der_obs</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">VALUES Example.der_obs</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The INSTRUCTION file contains instructions for PEST to extract the values from the </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># VALUES file. &#160;</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INSTRUCTION Example.ins</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># VALUES file.  </text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INSTRUCTION Example.ins</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END OPTIONS</text></para>
     <para styleclass="Heading2_atoc_" style="margin-top:6px;"><text styleclass="Heading2_atoc_" translate="true">OBSERVATION_FILES Block</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Purpose:</text></para>
@@ -58,8 +58,8 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;file type&gt; is a keyword indicating the type of MODFLOW 6 output file that will be read. &lt;file type&gt; must be either BINARY or TEXT</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Example:</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN OBSERVATION_FILES</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FILENAME Mf6_ObsExample.ob_gw_out_head.csv TEXT</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FILENAME Mf6_ObsExample.rvob_out_riv.bin BINARY</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FILENAME Mf6_ObsExample.ob_gw_out_head.csv TEXT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FILENAME Mf6_ObsExample.rvob_out_riv.bin BINARY</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END OBSERVATION_FILES</text></para>
     <para styleclass="Heading2_atoc_" style="margin-top:6px; margin-left:6px;"><text styleclass="Heading2_atoc_" translate="true">IDENTIFIERS Block</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Purpose:</text></para>
@@ -71,7 +71,7 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; &lt;observation_time&gt; [PRINT]</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">[OBSNAME &lt;Observation_name&gt; &lt;observation_time&gt; [PRINT]]</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">[OBSNAME &lt;Observation_name&gt; &lt;observation_time&gt; [PRINT]]</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&#32;</text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true"> </text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">...</text></para>
     <para styleclass="IndentedExplanation"></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">ID &lt;identifier&gt;</text></para>
@@ -95,65 +95,65 @@
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># heads in layer 1</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># heads will be interpolated in time to times 3.5 and 6.5.</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Locations are provided for spatial interpolation.</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD1</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 550 -550</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H1_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H1_2 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD2</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 550 -650</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H2_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H2_2 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD3</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 650 -650</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H3_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H3_2 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD4</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 650 -550</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H4_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H4_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD1</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 550 -550</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H1_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H1_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD2</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 550 -650</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H2_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H2_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD3</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 650 -650</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H3_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H3_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD4</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 650 -550</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H4_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H4_2 6.5</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">#heads in layer 2</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 550 -550</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H5_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H5_2 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD6</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 550 -650</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H6_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H6_2 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD7</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 650 -650</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H7_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H7_2 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD8</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 650 -550</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H8_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H8_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 550 -550</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H5_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H5_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD6</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 550 -650</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H6_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H6_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD7</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 650 -650</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H7_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H7_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD8</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 650 -550</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H8_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H8_2 6.5</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># These heads (H9_1 and H9_2) will be printed to the Example.der_obs file. </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The rest won’t be printed.</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># No locations are required for H9_1 and H9_2 because they will not </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># be used for spatial interpolation.</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD9</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H9_1 3.5 PRINT</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H9_2 6.5 PRINT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD9</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H9_1 3.5 PRINT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H9_2 6.5 PRINT</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># River observations</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Rivers will be interpolated in time to times 3.5 and 6.5</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Only the rivers associated RIVER1 will be printed to the Example.der_obs file. </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The rest won’t be printed.</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID RIVER1</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV1_1 3.5 PRINT</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV1_2 6.5 PRINT</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID RIVER2</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV2_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV2_2 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID RIVER3</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV3_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV3_2 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID RIVER4</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV4_1 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV4_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID RIVER1</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV1_1 3.5 PRINT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV1_2 6.5 PRINT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID RIVER2</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV2_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV2_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID RIVER3</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV3_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV3_2 6.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID RIVER4</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV4_1 3.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV4_2 6.5</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END IDENTIFIERS</text></para>
     <para styleclass="Heading2_atoc_" style="margin-top:6px;"><text styleclass="Heading2_atoc_" translate="true">DERIVED_OBSERVATIONS Block</text></para>
@@ -166,7 +166,7 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">FORMULA &lt;formula&gt;</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">...</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; [PRINT]</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">INTERPOLATE &lt;x&gt; &lt;y&gt; &lt;obs&gt; [&lt;obs&gt; &lt;obs&gt; &#160;&lt;obs&gt;] </text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">INTERPOLATE &lt;x&gt; &lt;y&gt; &lt;obs&gt; [&lt;obs&gt; &lt;obs&gt;  &lt;obs&gt;] </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">END DERIVED_OBSERVATIONS</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Explanations:</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">OBSNAME is a keyword indicating that the line will specify an observation name.</text></para>
@@ -181,44 +181,44 @@
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">#(Optional)</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN DERIVED_OBSERVATIONS</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Spatially Interpolate the head in layer 1 at (575, -575) at time 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Layer1_Time1</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H1_1 H2_1 H3_1 H4_1 &#160;</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Layer1_Time1</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H1_1 H2_1 H3_1 H4_1  </text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Spatially Interpolate the head in layer 1 at (575, -575) at time 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Layer1_Time2</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H1_2 H2_2 H3_2 H4_2 </text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Layer1_Time2</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H1_2 H2_2 H3_2 H4_2 </text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Spatially Interpolate the head in layer 2 at (575, -575) at time 3.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Layer2_Time1</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H5_1 H6_1 H7_1 H7_1 &#160;</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Layer2_Time1</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H5_1 H6_1 H7_1 H7_1  </text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Spatially Interpolate the head in layer 2 at (575, -575) at time 6.5</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Layer2_Time2</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H5_2 H6_2 H7_2 H8_2 </text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Layer2_Time2</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H5_2 H6_2 H7_2 H8_2 </text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Calculate multilayer head observations at times 3.5 and 6.5 weighted by transmissivity</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Transmissivity of layer 1 = 3</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Transmissivity of layer 2 = 6</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Print the multilayer head observations</text></para>
     <para styleclass="Code Example"></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Time1 PRINT</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; &#160; &#160; &#160; &#160;(H_Layer1_Time1 * 3 + H_Layer2_Time1 * 6) / (3 + 6)</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Time1 PRINT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA              (H_Layer1_Time1 * 3 + H_Layer2_Time1 * 6) / (3 + 6)</text></para>
     <para styleclass="Code Example"></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Time2 PRINT</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; &#160; &#160; &#160; &#160;(H_Layer1_Time2 * 3 + H_Layer2_Time2 * 6) / (3 + 6)</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Time2 PRINT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA              (H_Layer1_Time2 * 3 + H_Layer2_Time2 * 6) / (3 + 6)</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Calculate a drawdown observation too.</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME Drawdown PRINT</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; &#160; &#160; H_Time1 - H_Time2</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME Drawdown PRINT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA           H_Time1 - H_Time2</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Calculate a river observation by combining several separate river observations.</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Only half of rivers 2 and 4 will be used.</text></para>
     <para styleclass="Code Example"></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME MyRiver_1 PRINT</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; RIV2_1*0.5 + RIV3_1 + RIV4_1*0.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME MyRiver_1 PRINT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA       RIV2_1*0.5 + RIV3_1 + RIV4_1*0.5</text></para>
     <para styleclass="Code Example"></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME MyRiver_2 PRINT</text></para>
-    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; RIV2_2*0.5 + RIV3_2 + RIV4_2*0.5</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME MyRiver_2 PRINT</text></para>
+    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA       RIV2_2*0.5 + RIV3_2 + RIV4_2*0.5</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END DERIVED_OBSERVATIONS</text></para>
   </body>
