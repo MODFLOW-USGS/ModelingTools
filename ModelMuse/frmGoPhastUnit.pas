@@ -3110,6 +3110,10 @@ begin
   ArrangeToolBarRow([tbarEditGrid, tbarEditDisv, tlbMesh,
     tbarCreateScreenObject, tlb3dViewMesh, tbarView3D, tbarShowGrid,
     tbarPilotPoints], 34);
+  ArrangeToolBarRow([tbarFile, tbarEdit, tbarEditScreenObjects, tbarView], 0);
+  ArrangeToolBarRow([tbarEditGrid, tbarEditDisv, tlbMesh,
+    tbarCreateScreenObject, tlb3dViewMesh, tbarView3D, tbarShowGrid,
+    tbarPilotPoints], 34);
 end;
 
 procedure TfrmGoPhast.WMMenuSelect(var Msg: TWMMenuSelect);
@@ -3410,11 +3414,20 @@ begin
     if ToolBars[Index].Visible then
     begin
       ToolBars[Index].Top := TTop;
-      ToolBars[Index].Left := Width - ToolBars[Index].Width;
+      Application.ProcessMessages;
       TTop := TTop + ToolBars[Index].Height;
     end;
   end;
-  TLeft := 11;
+  for Index := Length(ToolBars) - 1 downto 0 do
+  begin
+    if ToolBars[Index].Visible then
+    begin
+      ToolBars[Index].Left := Width - ToolBars[Index].Width;
+      Application.ProcessMessages;
+    end;
+  end;
+  TLeft := ((Width - ClientWidth)
+    + (cbControlBar.Width - cbControlBar.ClientWidth)) div 2 + 1;
   for Index := 0 to Length(ToolBars) - 1 do
   begin
     if ToolBars[Index].Visible then

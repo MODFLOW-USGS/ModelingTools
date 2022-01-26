@@ -1836,9 +1836,23 @@ begin
       BatchFile.Add('pause');
       ArchiveBatchFile.Add('pause');
 
+      try
       BatchFile.SaveToFile(result);
+      except
+        begin
+          Sleep(1000);
+          BatchFile.SaveToFile(result);
+        end;
+      end;
       TFile.Copy(result, BackupRunModflow, True);
-      ParamEstBatchFile.SaveToFile(ParamEstBatFileName);
+      try
+        ParamEstBatchFile.SaveToFile(ParamEstBatFileName);
+      except
+        begin
+          Sleep(1000);
+          ParamEstBatchFile.SaveToFile(ParamEstBatFileName);
+        end;
+      end;
       TFile.Copy(ParamEstBatFileName, BackupParamEstBatFileName, True);
       ArchiveBatchFile.SaveToFile(result + ArchiveExt);
       Model.AddModelInputFile(result + ArchiveExt);

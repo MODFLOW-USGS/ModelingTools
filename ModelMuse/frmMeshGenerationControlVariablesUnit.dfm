@@ -136,6 +136,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -159,6 +160,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -257,6 +259,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
         Rows = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -279,6 +282,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -301,6 +305,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -323,6 +328,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -345,6 +351,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -368,6 +375,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -390,6 +398,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -414,6 +423,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -437,6 +447,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -461,6 +472,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -488,6 +500,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -510,6 +523,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -532,6 +546,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -556,6 +571,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -580,6 +596,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

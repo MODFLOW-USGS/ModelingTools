@@ -146,7 +146,7 @@
       <config-value name="imageshortcuts_includebaggage">1</config-value>
       <config-value name="make0include">CHM,ALLMODELS</config-value>
       <config-value name="make0status">*</config-value>
-      <config-value name="make3include">HTML,ALLMODELS,FOOTPRINT,INSIDE-MODFLOW,MODFLOW-2005,MODFLOW6,MODFLOW-CFP,SUTRA30</config-value>
+      <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">*</config-value>
     </config-group>
     <config-group name="hlp">
@@ -624,7 +624,7 @@ document.write('</frameset>');
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">0</config-value>
+          <config-value name="lastexport">3</config-value>
         </config-group>
       </config-group>
     </config-group>

@@ -5525,10 +5525,10 @@ resourcestring
   // See also GMshDate in frmMeshGenerationControlVariablesUnit.pas
 {$IFDEF WIN64}
 //  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows64\gmsh.exe';
-  StrDefaultGmshPath = 'C:\gmsh-4.6.0-Windows64\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.9.3-Windows64\gmsh.exe';
 {$ELSE}
 //  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows32\gmsh.exe';
-  StrDefaultGmshPath = 'C:\gmsh-4.6.0-Windows32\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.9.3-Windows32\gmsh.exe';
 {$ENDIF}
 
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';

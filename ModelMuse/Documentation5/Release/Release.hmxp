@@ -1,11 +1,33 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="1.5" isskin="false" isrepository="false">
+<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="2.0" isskin="false" isrepository="false">
   <config>
     <namespaces/>
+    <export-task-groups>
+      <export-task-group name="Recent Publishes">
+        <export-tasks>
+          <export-task name="Publish as CHM" format="CHM">
+            <task-config-group name="settings">
+              <task-config-value name="outputfile">Release.chm</task-config-value>
+              <task-config-value name="skin">..\Webhelp, Integrated IFrames Green Header.hmskin</task-config-value>
+              <task-config-value name="deletetemp">1</task-config-value>
+              <task-config-value name="make0include">CHM</task-config-value>
+              <task-config-value name="make0status">*</task-config-value>
+            </task-config-group>
+          </export-task>
+          <export-task name="Publish as HTM" format="HTM">
+            <task-config-group name="settings">
+              <task-config-value name="outputfile">.\HTML\index.html</task-config-value>
+              <task-config-value name="skin">..\Modern_Standard_Gentle_Blue_WebHelp.hmskin</task-config-value>
+              <task-config-value name="make3include">HTML</task-config-value>
+              <task-config-value name="make3status">*</task-config-value>
+            </task-config-group>
+          </export-task>
+        </export-tasks>
+      </export-task-group>
+    </export-task-groups>
     <helpwindows>
       <helpwindow name="Main" left="-1" top="-1" width="-1" height="-1">
         <caption translate="true">&lt;%TITLE%&gt;</caption>
-        <window-options-hlp autosize="true" maximize="false" posabsolute="false" keepontop="false" buttons="0" headercolor="#F0F0F0" textcolor="#FFFFFF"/>
         <window-options-chm navigation="true" navigationwidth="200" search="true" favorite="true" saveregistry="true" buttons="12366">
           <user-button name="jump1">
             <caption translate="true">jump1</caption>
@@ -85,10 +107,10 @@
       </tablestyleclass>
     </styleclasses>
     <config-group name="project">
-      <config-value name="title">ModelMuse Release</config-value>
-      <config-value name="author" translate="true">Enter your company name</config-value>
+      <config-value name="title" translate="true">ModelMuse Release History</config-value>
+      <config-value name="author" translate="true">U.S. Geological Survey</config-value>
       <config-value name="copyright" translate="true">© &lt;%YEAR%&gt; &lt;%AUTHOR%&gt;</config-value>
-      <config-value name="versionmajor">1</config-value>
+      <config-value name="versionmajor">5</config-value>
       <config-value name="versionminor">0</config-value>
       <config-value name="versionbuild">0</config-value>
       <config-value name="lcid">en-us</config-value>
@@ -118,7 +140,7 @@
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">0</config-value>
+          <config-value name="lastexport">3</config-value>
         </config-group>
       </config-group>
     </config-group>
@@ -213,12 +235,12 @@ document.write('</frameset>');
   </frameset>
 </noscript>
 </html>]]></config-value>
-      <config-value name="skin">..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\sky_blue_horiz.hmskin</config-value>
+      <config-value name="skin">..\Modern_Standard_Gentle_Blue_WebHelp.hmskin</config-value>
     </config-group>
     <config-group name="chm">
       <config-value name="outputfile">Release.chm</config-value>
       <config-value name="deletetemp">1</config-value>
-      <config-value name="skin">..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\sky_blue_horiz.hmskin</config-value>
+      <config-value name="skin">..\Webhelp, Integrated IFrames Green Header.hmskin</config-value>
     </config-group>
     <variables/>
     <helpcontext-numbers/>
