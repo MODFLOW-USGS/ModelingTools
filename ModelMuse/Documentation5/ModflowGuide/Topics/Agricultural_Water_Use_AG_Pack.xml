@@ -1,6 +1,6 @@
 Ôªø<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-01-26T10:40:41.113-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">AG - Agricultural Water Use Package</title>
   <body>
     <header>
@@ -11,8 +11,8 @@
         <td style="vertical-align:middle;">
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Abbreviations in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Table Header" translate="true">Name file</link></para>
         </td>
-        <td>
-          <list id="32" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+        <td style="width:523px;">
+          <list id="0" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">AG</text></li>
           </list>
         </td>
@@ -21,7 +21,7 @@
         <td style="vertical-align:middle;">
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
         </td>
-        <td>
+        <td style="width:523px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">The AG was developed for GSFLOW to simulate irrigation and water use by cultivated and natural plants.</text></para>
         </td>
       </tr>
@@ -29,8 +29,8 @@
         <td style="vertical-align:middle;">
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
         </td>
-        <td>
-          <list id="33" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+        <td style="width:523px;">
+          <list id="1" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://doi.org/10.1016/j.envsoft.2019.104617" target="_blank" styleclass="Citation" translate="true">Niswonger, R.G., 2020. An Agricultural Water Use Package for MODFLOW and GSFLOW. Environmental Modelling &amp; Software, p.104617.</link></li>
             <li styleclass="Citation"><text styleclass="Normal" translate="true">Input_instructions_AG.pdf</text></li>
           </list>
@@ -40,8 +40,8 @@
         <td style="vertical-align:middle;">
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
         </td>
-        <td>
-          <list id="34" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+        <td style="width:523px;">
+          <list id="2" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">Streamflow-Routing (SFR)</link></li>
             <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_-_Unsaturated_Zone_Flow_Pa_3" styleclass="Normal" translate="true">UZF - Unsaturated Zone Flow Package</link></li>
           </list>
@@ -51,7 +51,7 @@
         <td style="vertical-align:middle;">
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
         </td>
-        <td>
+        <td style="width:523px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></para>
         </td>
       </tr>
@@ -59,8 +59,8 @@
         <td style="vertical-align:middle;">
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
         </td>
-        <td>
-          <list id="35" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+        <td style="width:523px;">
+          <list id="3" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">The AG was developed for GSFLOW to simulate irrigation and water use by cultivated and natural plants. The AG Package works with the Streamflow-Routing (SFR2) and the Unsaturated Flow (UZF1) Packages and includes capabilities for simulating pumping wells like the WELL Package. Input required for simulating agricultural diversions, supplementary pumping, irrigation, and demand calculations are all specified within the AG Package input file. All exchanges between different packages (SFR2, UZF1, and AG) are calculated within the AG Package; however, the SFR2 and UZF1 Packages must be active to use their capabilities in conjunction with the AG Package. Diversion segments must be specified within the SFR2 Package to apply diverted water as irrigation. All data for supplementary and irrigation wells is specified within the AG Package input file; the AG Package calculates and applies its own boundary conditions to the groundwater flow equation for representing irrigation and/or supplementary wells.</text></li>
           </list>
         </td>
@@ -77,10 +77,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 1</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[OPTIONS]]></caption></toggle></para>
+          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[OPTIONS]]></caption></toggle></para>
           <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -92,10 +92,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 2</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[[NOPRINT]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[[NOPRINT]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -103,11 +103,11 @@
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[IRRIGATION_DIVERSION]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Numirrdiversions  Maxcellsdiversion]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[IRRIGATION_DIVERSION]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Numirrdiversions  Maxcellsdiversion]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="36" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="4" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true">: An optional character variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> is specified, the option to use surface water (SW) for irrigation is activated.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Numirrdiversions: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> is specified, the integer variable Numirrdiversions also is specified. Numirrdiversions is the maximum number of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR2</link><text styleclass="Normal" translate="true"> diversion segments in any stress period that will be used for irrigation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxcellsdiversion: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> is specified, the integer variable Maxcellsdiversion also is specified. Maxcellsdiversion is the maximum number of MODFLOW cells or PRMS HRUs that will receive irrigation from a single </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR2</link><text styleclass="Normal" translate="true"> diversion segment in any stress period.</text></li>
@@ -115,46 +115,46 @@
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[IRRIGATION_WELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[  Numirrwells  Maxcellswell]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[IRRIGATION_WELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[  Numirrwells  Maxcellswell]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="37" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
-                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true">:</text><text styleclass="Keywords" translate="true">&#32;</text><text styleclass="Normal" translate="true">An optional character variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the option to use groundwater for irrigation is activate. &#160;</text></li>
+                <list id="5" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true">:</text><text styleclass="Keywords" translate="true"> </text><text styleclass="Normal" translate="true">An optional character variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the option to use groundwater for irrigation is activate. ¬†</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Numirrwells: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Numirrwells also is specified. Numirrwells is the maximum number of AG wells in any stress period that will be used for irrigation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxcellswell: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Maxellswell also is specified. Maxcellswell is the maximum number of MODFLOW cells or PRMS HRUs that will receive irrigation from a single AG well in any stress period.</text></li>
                 </list>
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[SUPPLEMENTAL_WELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Numsupwells  Maxdiversions]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[SUPPLEMENTAL_WELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Numsupwells  Maxdiversions]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="38" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
-                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true">:</text><text styleclass="Keywords" translate="true">&#32;</text><text styleclass="Normal" translate="true">An optional character variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the option to simulate supplemental groundwater for irrigation is active. The AG Package calculates supplemental GW pumping using the difference between the irrigation demand and the surface water diversion. &#160; </text></li>
+                <list id="6" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true">:</text><text styleclass="Keywords" translate="true"> </text><text styleclass="Normal" translate="true">An optional character variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the option to simulate supplemental groundwater for irrigation is active. The AG Package calculates supplemental GW pumping using the difference between the irrigation demand and the surface water diversion. ¬† </text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Numsupwells: An optional integer variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Numsupwells also is specified. Numsupwells is the maximum number of supplemental wells in any stress period that will pump groundwater.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxdiversions: An optional integer variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Maxdiversions also is specified. Maxdiversions is the maximum number of SFR2 diversion segments that are supplemented by a well.</text></li>
                 </list>
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[MAXWELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Nummaxwell]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[MAXWELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Nummaxwell]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="39" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
-                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">MAXWELL</text><text styleclass="Normal" translate="true">: An optional character variable. If </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified then &#160;</text><text styleclass="Keywords" translate="true">MAXWELL </text><text styleclass="Normal" translate="true">also is specified. </text><text styleclass="Keywords" translate="true">MAXWELL</text><text styleclass="Normal" translate="true"> is included to indicate that the maximum number of unique supplemental and irrigation wells used during a simulation (Nummaxwell) also will be read.</text></li>
+                <list id="7" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">MAXWELL</text><text styleclass="Normal" translate="true">: An optional character variable. If </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified then ¬†</text><text styleclass="Keywords" translate="true">MAXWELL </text><text styleclass="Normal" translate="true">also is specified. </text><text styleclass="Keywords" translate="true">MAXWELL</text><text styleclass="Normal" translate="true"> is included to indicate that the maximum number of unique supplemental and irrigation wells used during a simulation (Nummaxwell) also will be read.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Nummaxwell: The maximum number of unique supplemental and irrigation wells used during a simulation.</text></li>
                 </list>
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TABFILES]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Numtab Maxval]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TABFILES]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Numtab Maxval]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="40" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="8" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><anchor id="TABFILES" styleclass="Keywords"></anchor><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true">: An optional character variable. </text><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true"> is included in order set pumping rates using time series input files.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Numtab: An integer variable equal to the total number of tabular input files for setting the maximum pumping rate for AG irrigation and supplemental wells.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxval: An integer variable equal to the maximum number of values specified for any TABFILE. </text></li>
@@ -162,7 +162,7 @@
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[PHIRAMP]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[PHIRAMP]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -170,18 +170,18 @@
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[ETDEMAND]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Accel]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[ETDEMAND]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Accel]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="41" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="9" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true">: An optional character variable. </text><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true"> is included in order to activate automatic calculation of the net irrigation water requirement. </text><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Keywords" translate="true">TRIGGER</text><text styleclass="Normal" translate="true"> cannot be used in the same simulation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Accel: An real variable that controls the maximum change in the irrigation diversion or pumped amount between iterations. Values between 0.5 and 10 work well. </text></li>
                 </list>
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TRIGGER]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TRIGGER]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -189,7 +189,7 @@
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIMESERIES_DIVERSION]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIMESERIES_DIVERSION]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -197,7 +197,7 @@
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIMESERIES_WELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIMESERIES_WELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -205,7 +205,7 @@
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIMESERIES_DIVERSIONET]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIMESERIES_DIVERSIONET]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -213,7 +213,7 @@
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIMESERIES_WELLET]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIMESERIES_WELLET]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -221,51 +221,51 @@
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[DIVERSIONLIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Unit_diversionlist] ]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[DIVERSIONLIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Unit_diversionlist] ]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="42" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="10" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">DIVERSIONLIST</text><text styleclass="Normal" translate="true">: An optional character variable for outputting a list of all diversion segments and diversion amounts used for irrigation in the AG Package when &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="SaveBudget" styleclass="Keywords" translate="true">SAVE BUDGET</link><text styleclass="Normal" translate="true">&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unit_diversionlist: An optional integer variable that is the file unit number to which </text><text styleclass="Keywords" translate="true">DIVERSIONLIST</text><text styleclass="Normal" translate="true"> output is written. This unit number must correspond to a file of type </text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true"> specified in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">. A negative value indicates output will be written to the LIST file.</text></li>
                 </list>
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[WELLLIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Unit_welllist]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[WELLLIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Unit_welllist]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="43" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="11" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLLIST</text><text styleclass="Normal" translate="true"> An optional character variable for outputting a list of all active wells in the AG Package and pumped amounts when &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="SaveBudget" styleclass="Keywords" translate="true">SAVE BUDGET</link><text styleclass="Normal" translate="true">&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unit_welllist An optional integer variable that is the file unit number to which </text><text styleclass="Keywords" translate="true">WELLLIST</text><text styleclass="Normal" translate="true"> output is written. This unit number must correspond to a file of type </text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true"> specified in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">. A negative value indicates output will be written to the LIST file.</text></li>
                 </list>
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[WELLIRRLIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Unit_wellirrlist]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[WELLIRRLIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Unit_wellirrlist]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="44" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="12" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLIRRLIST</text><text styleclass="Normal" translate="true">: An optional character variable for outputting a list of MODFLOW cells or PRMS HRUs that are irrigated by AG wells and the irrigated amounts when &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="SaveBudget" styleclass="Keywords" translate="true">SAVE BUDGET</link><text styleclass="Normal" translate="true">&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unit_wellirrlist: An optional integer variable that is the file unit number to which </text><text styleclass="Keywords" translate="true">WELLIRRLIST</text><text styleclass="Normal" translate="true"> output is written. This unit number must correspond to a file of type </text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true"> specified in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">. A negative value indicates output will be written to the LIST file.</text></li>
                 </list>
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[DIVERSIONIRRLIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[  Unit_diversionirrlist]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[DIVERSIONIRRLIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[  Unit_diversionirrlist]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="45" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="13" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">DIVERSIONIRRLIST</text><text styleclass="Normal" translate="true">: An optional character variable for outputting a list of MODFLOW cells or PRMS HRUs irrigated by irrigation segments and the irrigated amounts when &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="SaveBudget" styleclass="Keywords" translate="true">SAVE BUDGET</link><text styleclass="Normal" translate="true">&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unit_diversionirrlist: An optional integer variable that is the file unit number to which </text><text styleclass="Keywords" translate="true">DIVERSIONIRRLIST</text><text styleclass="Normal" translate="true"> output is written. This unit number must correspond to a file of type </text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true"> specified in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">. A negative value indicates output will be written to the LIST file.</text></li>
                 </list>
               </td>
             </tr>
           </table></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[WELLCBC]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Unitcbc]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[WELLCBC]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Unitcbc]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -278,10 +278,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 3</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[END]]></caption></toggle></para>
+          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[END]]></caption></toggle></para>
           <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -299,10 +299,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 4</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIME SERIES]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TIME SERIES]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -314,7 +314,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 5</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">DIVERSION</text><text styleclass="Normal" translate="true"> Segmentnum</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> Unit_diversion</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -322,11 +322,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">DIVERSION</text><text styleclass="Normal" translate="true"> Segmentnum</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numtimeseriesdiversion</text><text styleclass="Normal" translate="true"> Unit_diversion</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numtimeseriesdiversion</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="46" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="14" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">DIVERSION</text><text styleclass="Normal" translate="true"> Character variable indicating that irrigation information for a diversion will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Segmentnum Integer variable that is the SFR2 segment number.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitdiversion Integer variable that is the formatted output file unit number.</text></li>
@@ -338,7 +338,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 6</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">DIVERSIONET</text><text styleclass="Normal" translate="true"> Segmentnum</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> Unit_diversionet</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -346,11 +346,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">DIVERSIONET</text><text styleclass="Normal" translate="true"> Segmentnum</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numtimeseriesdiversionet</text><text styleclass="Normal" translate="true"> Unit_diversionet</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numtimeseriesdiversionett</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="47" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="15" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">DIVERSIONET</text><text styleclass="Normal" translate="true"> Character variable indicating that crop ET for all cells/HRUs irrigated by a diversion will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Segmentnum Integer variable that is the SFR2 segment number.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitdiversionet Integer variable that is the formatted output file unit number.</text></li>
@@ -362,7 +362,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 7</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">WELL</text><text styleclass="Normal" translate="true"> Wellnum</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> Unit_well</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -370,11 +370,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">WELL</text><text styleclass="Normal" translate="true"> Wellnum</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numtimeserieswell</text><text styleclass="Normal" translate="true"> Unit_well</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numtimeserieswell</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="48" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="16" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELL</text><text styleclass="Normal" translate="true"> Character variable indicating that irrigation information for a well will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Wellnum Integer variable that is the AG well number.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitwell Integer variable that is the formatted output file unit number. This file is of type ‚Äú</text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true">‚Äù and is included in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">.</text></li>
@@ -386,7 +386,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 8</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 8</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">WELLET</text><text styleclass="Normal" translate="true"> Welletnum</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> Unit_wellet</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -394,11 +394,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">WELLET</text><text styleclass="Normal" translate="true"> Wellnum</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numtimeserieswellet</text><text styleclass="Normal" translate="true"> Unit_wellet</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numtimeserieswellet</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="49" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="17" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLET</text><text styleclass="Normal" translate="true"> Character variable indicating that evapotranspiration information for a well will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Welletnum Integer variable that is the AG well number.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitwellet Integer variable that is the formatted output file unit number. This file is of type ‚Äú</text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true">‚Äù and is included in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">.</text></li>
@@ -410,15 +410,15 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 9</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 9</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">WELLALL</text><text styleclass="Normal" translate="true"> Unitwellall]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="50" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="18" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLETALL</text><text styleclass="Normal" translate="true"> Character variable indicating that evapotranspiration information summed for all wells will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitwelletall Integer variable that is the formatted output file unit number. This file is of type ‚Äú</text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true">‚Äù and is included in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">.</text></li>
                 </list>
@@ -429,15 +429,15 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 10</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 10</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">WELLETALL</text><text styleclass="Normal" translate="true"> Unitwelletall]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td style="height:23px;">
-                <list id="51" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="19" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLALL</text><text styleclass="Normal" translate="true"> Character variable indicating that irrigation information summed for all wells will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitwellall Integer variable that is the formatted output file unit number. This file is of type ‚Äú</text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true">‚Äù and is included in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">.</text></li>
                 </list>
@@ -448,10 +448,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 11</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 11</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[END]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[END]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -473,10 +473,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 12</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 12</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[SEGMEMNT LIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[SEGMEMNT LIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -488,7 +488,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 13</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 13</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[SEGMENTNUMBER</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -496,11 +496,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[SEGMENTNUMBER</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">MAXNUMSEGS</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="52" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="20" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SEGMENTNUMBER</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1 </text><text styleclass="Normal" translate="true">Integer value equal to the first irrigation segment used in a simulation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SEGMENTNUMBER</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">MAXNUMSEGS</text><text styleclass="Normal" translate="true"> Integer value equal to the last irrigation segment used in a simulation.</text></li>
                 </list>
@@ -511,10 +511,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 14</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 14</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">[</text><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[END]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">[</text><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[END]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -532,10 +532,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 15</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 15</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[WELL LIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[WELL LIST]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -552,7 +552,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 16a</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 16a</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[TABUNIT</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> TABVAL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> WELLLAY</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> WELLROW</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> WELLCOL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -560,11 +560,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[TABUNIT</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Numtab</text><text styleclass="Normal" translate="true"> TABVAL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Numtab</text><text styleclass="Normal" translate="true"> WELLLAY</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Numtab</text><text styleclass="Normal" translate="true"> WELLROW</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Numtab</text><text styleclass="Normal" translate="true"> WELLCOL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Numtab</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="53" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="21" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">TABUNIT Integer variable equal to the unit number for the TABFILE used to specify pumping rates for a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">TABVAL Integer variable equal to the maximum number of rows to be read from a TABFILE.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">WELLLAY Integer variable equal to the layer number of the cell containing a well.</text></li>
@@ -583,7 +583,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 16b</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 16b</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[WELLLAY</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> WELLROW</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> WELLCOL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> Q</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -591,11 +591,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[WELLLAY</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true"> WELLROW</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true"> WELLCOL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true"> Q</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="54" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="22" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">WELLLAY Integer variable equal to the layer number of the cell containing a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">WELLROW Integer variable equal to the row number of the cell containing a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">WELLCOL Integer variable equal to the column number of the cell containing a well.</text></li>
@@ -608,10 +608,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 17</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 17</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[END]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[END]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -641,10 +641,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 18</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 18</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[IRRDIVERSION]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[IRRDIVERSION]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -656,10 +656,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 19</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 19</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[NUMIRRSEGSP]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[NUMIRRSEGSP]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -671,15 +671,15 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 20</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 20</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[SEGID NUMCELLSEG IRRPERIODSEG TRIGGERFACTSEG]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="55" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="23" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SEGID An integer variable equal to the SFR2 segment number for the diversion used for irrigation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">NUMCELLSEG An integer variable equal to the total number of MODFLOW cells or PRMS HRUs that will be irrigated by SFR2 diversion segment SEGID.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRPERIODSEG A real variable equal to the length of time water will be diverted for a single irrigation event. Although this variable is specified for each SEGID, it only is used if the character variable TRIGGER is specified in the options block. Units for this variable are determined from the DIS file input variable ITMUNI. Values should be greater than or equal to the length of the largest model time step during irrigation periods.</text></li>
@@ -692,7 +692,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 21a (MODFLOW)</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 21a (MODFLOW)</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[IRRROW_DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> IRRCOL_DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> EFF_FACT_DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> FIELD_FACT_DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -700,11 +700,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[IRRROW_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numcellseg</text><text styleclass="Normal" translate="true"> IRRCOL_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numcellseg</text><text styleclass="Normal" translate="true"> EFF_FACT_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numcellseg</text><text styleclass="Normal" translate="true"> FIELD_FACT_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numcellseg</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="56" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="24" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRROW_DIVERSION An integer variable equal to the cell row number that will be irrigated by segment SEGID. This variable only is specified for MODFLOW-only simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRCOL_ DIVERSION An integer variable equal to the cell column number that will be irrigated by segment SEGID. This variable only is specified for MODFLOW-only simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF_FACT_ DIVERSION A real variable equal to the fraction of surface water applied to a cell that can be used to represent crop evapotranspiration and other field losses. If evapotranspiration is being simulated explicitly then set EFF_FACT_ DIVERSION to zero.</text></li>
@@ -717,7 +717,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 21b (GSFLOW)</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 21b (GSFLOW)</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[HRU_ID_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> DUM_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> EFF_FACT_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> FIELD_FACT_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -725,11 +725,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[HRU_ID_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numhruseg</text><text styleclass="Normal" translate="true"> DUM_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numhruseg</text><text styleclass="Normal" translate="true"> EFF_FACT_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numhruseg</text><text styleclass="Normal" translate="true"> FIELD_FACT_ DIVERSION</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numhruseg</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="57" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="25" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">HRU_ID_ WELL An integer variable equal to the HRU ID to which pumped water will be applied as irrigation. An integer variable that must be specified but is not used and can be set to zero. This variable only is specified for PRMS-only and GSFLOW simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">DUM_ DIVERSION An integer variable that must be specified but is not used and can be set to zero. This variable only is specified for PRMS-only and GSFLOW simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF_FACT_WELL A real variable equal to the fraction of groundwater applied to a cell that can be used to represent crop evapotranspiration and other field losses. If evapotranspiration is being simulated explicitly then set EFF_FACT_WELL to zero.</text></li>
@@ -742,10 +742,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 22</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 22</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[IRRWELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[IRRWELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td style="height:23px;">
@@ -757,10 +757,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 23</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 23</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[NUMIRRWELLSP]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[NUMIRRWELLSP]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -772,15 +772,15 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 24</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 24</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[IRRWELLID NUMCELLWELL IRRPERIODWELL TRIGGERFACTWELL]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="58" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="26" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRWELLID An integer variable equal to the well identification number used to pump groundwater for irrigation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">NUMCELLWELL An integer variable equal to the total number of MODFLOW cells or PRMS HRUs that receive water from a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRPERIODWELL A real variable equal to the length of time water will be pumped for a single irrigation event. Although this variable is specified for each WELL, it only is used if the character variable TRIGGER is specified in the options block and for wells that are not SUP wells. Units for this variable are determined from the DIS file input variable ITMUNI. Values should be greater than or equal to the length of the largest model time step during irrigation periods.</text></li>
@@ -793,7 +793,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 25a (MODFLOW)</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 25a (MODFLOW)</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[IRRROW_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> IRRCOL_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> EFF_FACT_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> FIELD_FACT_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -801,11 +801,11 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[IRRROW_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numcellwell</text><text styleclass="Normal" translate="true"> IRRCOL_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numcellwell</text><text styleclass="Normal" translate="true"> EFF_FACT_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numcellwell</text><text styleclass="Normal" translate="true"> FIELD_FACT_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numcellwell</text><text styleclass="Normal" translate="true"> KCROP</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numcellwell</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="59" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="27" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRROW_WELL An integer variable equal to the cell row number to which pumped water will be applied as irrigation. This variable only is specified for MODFLOW-only simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRCOL_WELL An integer variable equal to the cell column number to which pumped water will be applied as irrigation. This variable only is specified for MODFLOW-only simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF_FACT_WELL A real variable equal to the fraction of groundwater applied to a cell that can be used to represent crop evapotranspiration and other field losses. If evapotranspiration is being simulated explicitly then set EFF_FACT_WELL to zero.</text></li>
@@ -819,7 +819,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 25b (GSFLOW)</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 25b (GSFLOW)</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[HRU_ID_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> DUM_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> EFF_FACT_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true"> FIELD_FACT_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">]</text></para>
@@ -827,15 +827,15 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[HRU_ID_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numhruwell</text><text styleclass="Normal" translate="true"> DUM_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numhruwell</text><text styleclass="Normal" translate="true"> EFF_FACT_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numhruwell</text><text styleclass="Normal" translate="true"> FIELD_FACT_WELL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">numhruwell</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="60" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="28" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">HRU_ID_ WELL An integer variable equal to the HRU ID to which pumped water will be applied as irrigation. An integer variable that must be specified but is not used and can be set to zero. This variable only is specified for PRMS-only and GSFLOW simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">DUM_WELL An integer variable that must be specified but is not used. This variable only is specified for PRMS-only and GSFLOW simulations. Any 4-byte integer values can be specified as a dummy value that is not used in the simulation.</text></li>
                 </list>
-                <list id="61" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="29" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF_FACT_WELL A real variable equal to the fraction of groundwater applied to a cell that can be used to represent crop evapotranspiration and other field losses. If evapotranspiration is being simulated explicitly then set EFF_FACT_WELL to zero.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">FIELD_FACT_WELL A real variable equal to the fraction of the groundwater applied to a cell that is used to distribute water pumped from a well among multiple cells. The sum of all FIELD_FACT_WELL values for a well should sum to 1.</text></li>
                 </list>
@@ -846,10 +846,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 26</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 26</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[SUPWELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[SUPWELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -861,10 +861,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 27</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 27</text></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[NUMSUPWELLSP]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[NUMSUPWELLSP]]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -876,15 +876,15 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 28</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 28</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[SUPWELLNUM NUMSEGWELL]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="62" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="30" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SUPWELLNUM An integer variable equal to the AG well number that supplements one or more surface water diversions.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">NUMSEGWELL An integer variable equal to the number of SFR2 segments that will be supplemented by a well.</text></li>
                 </list>
@@ -895,7 +895,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 29</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 29</text></para>
         </td>
         <td style="width:785px;">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[SEGWELLID1 FRACSUP1 FRACSUPMAX1]</text></para>
@@ -903,14 +903,14 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[SEGWELLIDnumsegwell FRACSUPnumsegwell FRACSUPMAXnumsegwell]</text></para>
-          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="63" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="31" type="ul" listtype="bullet" formatstring="¬∑" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SEGWELLID An integer variable equal to the SFR2 segment number that will be supplemented by a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">FRACSUP A real variable between 0 and 1 that is equal to the fraction of the surface water shortfall for segment SEGWELLID that will be supplemented by a well.</text></li>
-                  <li styleclass="Normal"><text styleclass="Normal" translate="true">FRACSUPMAX A real variable between 0 and 1 that is equal to the fraction of the surface water demand that is used to calculate the net irrigation water requirement with supplemental groundwater pumping. Supplemental groundwater pumping (Ì†µÌ±ÑÌ†µÌ±†Ì†µÌ±¢Ì†µÌ±ù) will be calculated as Ì†µÌ±ÑÌ†µÌ±†Ì†µÌ±¢Ì†µÌ±ù=Ì†µÌ∞πÌ†µÌ±ÖÌ†µÌ∞¥Ì†µÌ∞∂Ì†µÌ±ÜÌ†µÌ±àÌ†µÌ±É‚àó[FRACSUPMAX‚àóÌ†µÌ±ÑÌ†µÌ±ëÌ†µÌ±íÌ†µÌ±öÌ†µÌ±éÌ†µÌ±õÌ†µÌ±ë‚àíÌ†µÌ±ÑÌ†µÌ±ëÌ†µÌ±ñÌ†µÌ±£], where Ì†µÌ±ÑÌ†µÌ±ëÌ†µÌ±íÌ†µÌ±öÌ†µÌ±éÌ†µÌ±õÌ†µÌ±ë is the specified surface water diversion rate for irrigation.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">FRACSUPMAX A real variable between 0 and 1 that is equal to the fraction of the surface water demand that is used to calculate the net irrigation water requirement with supplemental groundwater pumping. Supplemental groundwater pumping (ùëÑùë†ùë¢ùëù) will be calculated as ùëÑùë†ùë¢ùëù=ùêπùëÖùê¥ùê∂ùëÜùëàùëÉ‚àó[FRACSUPMAX‚àóùëÑùëëùëíùëöùëéùëõùëë‚àíùëÑùëëùëñùë£], where ùëÑùëëùëíùëöùëéùëõùëë is the specified surface water diversion rate for irrigation.</text></li>
                 </list>
               </td>
             </tr>
@@ -922,7 +922,7 @@
           <para styleclass="Heading2_atoc_"></para>
         </td>
         <td style="width:785px;">
-          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[[END]]]></caption></toggle></para>
+          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[[END]]]></caption></toggle></para>
           <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>

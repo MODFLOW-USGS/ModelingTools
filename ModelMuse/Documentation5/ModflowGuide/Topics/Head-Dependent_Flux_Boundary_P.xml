@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-01-26T10:40:33.782-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Head-Dependent Flux Boundary Packages</title>
   <keywords>
     <keyword translate="true">Head-Dependent Flux</keyword>
@@ -10,31 +10,31 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Head-Dependent Flux Boundary Packages</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">There are a large number of head-dependent flux boundary packages. &#160;They include the following.</text></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the General-Head Boundary (GHB) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the General-Head Boundary (GHB) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GHB" styleclass="Normal" translate="true">General-Head Boundary</link><text styleclass="Normal" translate="true"> package is the simplest of all the head-dependent flux boundary packages. &#160;In it, there is a linear relationship between the flux into (or out of) ground water and the head in the cell. The user specifies a reference head and a conductance. &#160;When the head in the cell equals the reference head, the flux is zero. &#160;If the head in the cell is less than the reference head, water enters the groundwater system through the general-head boundary. &#160;If the head in the cell is greater than the reference head, water leaves the groundwater system through the general-head boundary. parameters can be used to specify the conductance. The linear relationship between flux and head makes parameter estimation simpler than when other packages are used in which the relationship is non-linear. </text></para>
-          <para styleclass="Normal" style="text-align:center;"><image src="GHB.png" scale="100.00%" styleclass="Image Caption"><caption translate="true"><![CDATA[Relationship between flux and head in the General-Head Boundary package]]></caption></image></para>
+          <para styleclass="Normal" style="text-align:center;"><image src="GHB.png" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[Relationship between flux and head in the General-Head Boundary package]]></caption></image></para>
           <para styleclass="Normal"></para>
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Drain (DRN) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Drain (DRN) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRN" styleclass="Normal" translate="true">Drain</link><text styleclass="Normal" translate="true"> package the user also specifies a reference head and a conductance but in drain boundaries, water can only leave the groundwater system through the drain cell; it never re-enters the groundwater system through a drain.</text></para>
-          <para styleclass="Normal" style="text-align:center;"><image src="DRN.png" scale="100.00%" styleclass="Image Caption"><caption translate="true"><![CDATA[Relationship between flux and head in the Drain package]]></caption></image></para>
+          <para styleclass="Normal" style="text-align:center;"><image src="DRN.png" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[Relationship between flux and head in the Drain package]]></caption></image></para>
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Drain-Return (DRT) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Drain-Return (DRT) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
@@ -43,19 +43,19 @@
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the River (RIV) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the River (RIV) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RIV" styleclass="Normal" translate="true">River</link><text styleclass="Normal" translate="true"> package, the user specifies two elevations. &#160;One represents the elevation of the bottom of the river bed. &#160;The other represents the head in the river. &#160;If the head in the cell connected to the river drops below the bottom of the river bed, water enters the groundwater system from the river at a constant rate. &#160;If the head is above the bottom of the river, water will either leave or enter the ground water system depending on whether the head is above or below the head in the river. &#160;A conductance term will be multiplied by the difference between the head in the cell and the head in the river to determine the flux.</text></para>
-          <para styleclass="Normal" style="text-align:center;"><image src="RIV.png" scale="100.00%" styleclass="Image Caption"><caption translate="true"><![CDATA[Relationship between flux and head in the River package]]></caption></image></para>
+          <para styleclass="Normal" style="text-align:center;"><image src="RIV.png" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[Relationship between flux and head in the River package]]></caption></image></para>
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Reservoir (RES) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Reservoir (RES) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
@@ -64,41 +64,41 @@
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Evapotranspiration (EVT) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Evapotranspiration (EVT) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="EVT" styleclass="Normal" translate="true">Evapotranspiration</link><text styleclass="Normal" translate="true"> package, the user specifies the elevation of ET surface, &#160;If the head in the cell is higher than the ET surface, the evapotranspiration rate is set to a maximum value. &#160;The user also specifies an extinction depth. If the head in the cells is lower than the ET surface minus the extinction depth the the evapotranspiration rate is set to zero. &#160;At intermediate heads the evapotranspiration rate is set to intermediate rates.</text></para>
-          <para styleclass="Normal" style="text-align:center;"><image src="EVT.png" scale="100.00%" styleclass="Image Caption"><caption translate="true"><![CDATA[Relationship between flux and head in the Evapotranspiration package]]></caption></image></para>
+          <para styleclass="Normal" style="text-align:center;"><image src="EVT.png" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[Relationship between flux and head in the Evapotranspiration package]]></caption></image></para>
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Evapotranspiration Segments (ETS) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Evapotranspiration Segments (ETS) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ETS" styleclass="Normal" translate="true">Evapotranspiration Segments</link><text styleclass="Normal" translate="true"> package is like the Evapotranspiration package except that between the ET surface and the ET surface minus the extinction depth &#160;one or more additional evapotranspiration rates and depths may be specified.</text></para>
-          <para styleclass="Normal" style="text-align:center;"><image src="ETS.png" scale="100.00%" styleclass="Image Caption"><caption translate="true"><![CDATA[Relationship between flux and head in the Evapotranspiration Segments package]]></caption></image></para>
+          <para styleclass="Normal" style="text-align:center;"><image src="ETS.png" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[Relationship between flux and head in the Evapotranspiration Segments package]]></caption></image></para>
         </td>
       </tr>
     </table></para>
-    <list id="4" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Riparian Evapotranspiration (RIP) package]]></caption></toggle></li>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Riparian Evapotranspiration (RIP) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><link displaytype="text" defaultstyle="true" type="topiclink" href="RIP_Riparian_Evapotranspiratio" styleclass="Normal" translate="true">RIP: Riparian Evapotranspiration Package</link><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">RIP: Riparian Evapotranspiration Package</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> is only supported in MODFLOW-OWHM. In it, the user specifies evapotranspiration flux curves for one or more plant groups. The coverage of the cells by each plant group is specified along with a ground elevation for the plant group. In this package, evapotranspiration may decrease if the head gets too high. this simulates harm to the plants by too high a water level.</text></para>
-          <para styleclass="Normal" style="text-align:center;"><image src="RIP.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Relationship between flux and head for one plant group in the Riparian Evapotranspiration package</title></image></para>
+          <para styleclass="Normal" style="text-align:center;"><image src="RIP.png" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Relationship between flux and head for one plant group in the Riparian Evapotranspiration package</title></image></para>
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Stream (STR) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Stream (STR) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
@@ -107,8 +107,8 @@
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Streamflow-Routing (SFR) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Streamflow-Routing (SFR) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
@@ -117,8 +117,8 @@
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Lake (LAK) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Lake (LAK) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
@@ -127,8 +127,8 @@
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the DAFLOW (DAF and DAFG) package (only in MODFLOW-2000)]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the DAFLOW (DAF and DAFG) package (only in MODFLOW-2000)]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
@@ -137,8 +137,8 @@
         </td>
       </tr>
     </table></para>
-    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Multi-Node, Drawdown-Limited Well (MNW1) package]]></caption></toggle></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Multi-Node, Drawdown-Limited Well (MNW1) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
@@ -147,8 +147,8 @@
         </td>
       </tr>
     </table></para>
-    <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Multi-Node Well (MNW2) package]]></caption></toggle></li>
+    <list id="2" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the Multi-Node Well (MNW2) package]]></caption></toggle></li>
     </list>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
@@ -157,7 +157,17 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"></para>
+    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[the AG - Agricultural Water Use Package]]></caption></toggle></li>
+    </list>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The AG was developed for GSFLOW to simulate irrigation and water use by cultivated and natural plants. The AG Package works with the Streamflow-Routing (SFR2) and the Unsaturated Flow (UZF1) Packages and includes capabilities for simulating pumping wells like the WELL Package. Input required for simulating agricultural diversions, supplementary pumping, irrigation, and demand calculations are all specified within the AG Package input file. All exchanges between different packages (SFR2, UZF1, and AG) are calculated within the AG Package; however, the SFR2 and UZF1 Packages must be active to use their capabilities in conjunction with the AG Package. Diversion segments must be specified within the SFR2 Package to apply diverted water as irrigation. All data for supplementary and irrigation wells is specified within the AG Package input file; the AG Package calculates and applies its own boundary conditions to the groundwater flow equation for representing irrigation and/or supplementary wells.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>
