@@ -1336,6 +1336,17 @@ begin
         end
         else
         begin
+          // This criterion for skipping printing a cell must
+          // consistent the one in
+          // TMt3dmsConc_Cell.PointSinkCount
+
+          if (BoundaryID in [ISSTYPE_RCH, ISSTYPE_EVT, ISSTYPE_ETS]) and
+            (Model.ModelSelection <> msModflow2015) then
+          begin
+            Continue;
+          end;
+
+
           LocalLayer := Model.
             DataSetLayerToModflowLayer(ACell.Layer);
           WriteI10Integer(LocalLayer, 'SSM package, KSS');

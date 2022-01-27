@@ -1020,7 +1020,28 @@ var
   ActiveDataArray: TDataArray;
   TestLayer: Integer;
 begin
+  LocalModel := Model as TCustomModel;
   result := FBoundaryTypes.Count;
+
+  if (LocalModel.ModelSelection <> msModflow2015) then
+  begin
+    // This criterion for skipping counting a cell must be consistent with
+    // the one in TMt3dmsSsmWriter.WriteDataSets7and8
+
+    if (BoundaryTypes.IndexOf(ISSTYPE_RCH) >= 0)  then
+    begin
+      Dec(result);
+    end;
+    if (BoundaryTypes.IndexOf(ISSTYPE_EVT) >= 0)  then
+    begin
+      Dec(result);
+    end;
+    if (BoundaryTypes.IndexOf(ISSTYPE_ETS) >= 0)  then
+    begin
+      Dec(result);
+    end;
+  end;
+
   if BoundaryTypes.IndexOf(ISSTYPE_MNW) >= 0 then
   begin
     if Mnw2Layers.Count > 0 then
@@ -1031,7 +1052,6 @@ begin
   if BoundaryTypes.IndexOf(ISSTYPE_LAK) >= 0 then
   begin
     Dec(result);
-    LocalModel := Model as TCustomModel;
     ActiveDataArray := LocalModel.DataArrayManager.GetDataSetByName(rsActive);
     ActiveDataArray.Initialize;
     TestLayer := Layer+1;
