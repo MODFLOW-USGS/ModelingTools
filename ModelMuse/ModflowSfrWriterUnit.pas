@@ -5450,7 +5450,7 @@ begin
           WriteString(ScreenObject.Name);
           NewLine;
           WriteString('  FILENAME ');
-          WriteString(Observations.GageOutputName);
+          WriteString(ExtractFileName(Observations.GageOutputName));
           NewLine;
 
           for ObsIndex := 0 to Observations.Count - 1 do
