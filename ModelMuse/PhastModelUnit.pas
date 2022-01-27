@@ -10479,6 +10479,9 @@ const
 //               Bug fix: Fixed export of SFT when no SFT boundaries are
 //                defined.
 
+//               Change: ModelMuse no longer includes RCH, EVT, or ETS among
+//                the point sources in MT3D-USGS in non MODFLOW 6 models.
+
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
