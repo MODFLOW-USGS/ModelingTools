@@ -10478,8 +10478,7 @@ const
 //                non-simulated layers.
 //               Bug fix: Fixed export of SFT when no SFT boundaries are
 //                defined.
-
-//               Change: ModelMuse no longer includes RCH, EVT, or ETS among
+//    '4.3.0.80' Change: ModelMuse no longer includes RCH, EVT, or ETS among
 //                the point sources in MT3D-USGS in non MODFLOW 6 models.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
@@ -10488,7 +10487,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.79';
+  IIModelVersion = '4.3.0.80';
 
 function IModelVersion: string;
 begin
@@ -43826,9 +43825,6 @@ begin
       begin
         Exit;
       end;
-
-
-
 
       ListFileNames := TStringList.Create;
       try
