@@ -72,10 +72,10 @@ begin
     Lines.Add(Format('%0:sppcov_sva.exe <%1:s', [PestDirectory, ExtractFileName(Ppcov_svaFileName)]));
     Lines.Add('');
     Lines.Add('rem After the previous line executes, sppcov_sva should show that a covariance file was written.');
-    if not frmGoPhast.ExportingFromCommandLine then
-    begin
-      Lines.Add('pause');
-    end;
+//    if not frmGoPhast.ExportingFromCommandLine then
+//    begin
+//      Lines.Add('pause');
+//    end;
     BatchFileName := ChangeFileExt(PilotPointFileObject.FileName, '.CreateCov.Bat');
     Lines.SaveToFile(BatchFileName);
   finally
