@@ -3414,7 +3414,7 @@ begin
     if ToolBars[Index].Visible then
     begin
       ToolBars[Index].Top := TTop;
-      Application.ProcessMessages;
+//      Application.ProcessMessages;
       TTop := TTop + ToolBars[Index].Height;
     end;
   end;
@@ -3423,7 +3423,7 @@ begin
     if ToolBars[Index].Visible then
     begin
       ToolBars[Index].Left := Width - ToolBars[Index].Width;
-      Application.ProcessMessages;
+//      Application.ProcessMessages;
     end;
   end;
   TLeft := ((Width - ClientWidth)

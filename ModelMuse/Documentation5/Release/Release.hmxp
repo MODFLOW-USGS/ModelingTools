@@ -8,7 +8,7 @@
           <export-task name="Publish as CHM" format="CHM">
             <task-config-group name="settings">
               <task-config-value name="outputfile">Release.chm</task-config-value>
-              <task-config-value name="skin">..\Webhelp, Integrated IFrames Green Header.hmskin</task-config-value>
+              <task-config-value name="skin">..\CHM_LightBlue.hmskin</task-config-value>
               <task-config-value name="deletetemp">1</task-config-value>
               <task-config-value name="make0include">CHM</task-config-value>
               <task-config-value name="make0status">*</task-config-value>
@@ -140,7 +140,7 @@
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">3</config-value>
+          <config-value name="lastexport">0</config-value>
         </config-group>
       </config-group>
     </config-group>
@@ -240,7 +240,7 @@ document.write('</frameset>');
     <config-group name="chm">
       <config-value name="outputfile">Release.chm</config-value>
       <config-value name="deletetemp">1</config-value>
-      <config-value name="skin">..\Webhelp, Integrated IFrames Green Header.hmskin</config-value>
+      <config-value name="skin">..\CHM_LightBlue.hmskin</config-value>
     </config-group>
     <variables/>
     <helpcontext-numbers/>
