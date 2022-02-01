@@ -12,7 +12,7 @@
           <export-task name="Publish as CHM" format="CHM">
             <task-config-group name="settings">
               <task-config-value name="outputfile">.\chm\.chm</task-config-value>
-              <task-config-value name="skin">Webhelp, Integrated IFrames Green Header.hmskin</task-config-value>
+              <task-config-value name="skin">CHM_LightBlue.hmskin</task-config-value>
               <task-config-value name="deletetemp">1</task-config-value>
               <task-config-value name="make0include">CHM,ALLMODELS</task-config-value>
               <task-config-value name="make0status">*</task-config-value>
@@ -166,9 +166,9 @@
       <config-value name="hhp" translate="true"></config-value>
       <config-value name="hhcwindowstyles">8388645</config-value>
       <config-value name="usesecondarywindows">1</config-value>
-      <config-value name="outputfile">.\chm\ModelMuse.chm</config-value>
+      <config-value name="outputfile">.\chm\.chm</config-value>
       <config-value name="deletetemp">1</config-value>
-      <config-value name="skin">Webhelp, Integrated IFrames Green Header.hmskin</config-value>
+      <config-value name="skin">CHM_LightBlue.hmskin</config-value>
     </config-group>
     <config-group name="hxs">
       <config-value name="namespace"></config-value>
@@ -624,7 +624,7 @@ document.write('</frameset>');
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">3</config-value>
+          <config-value name="lastexport">0</config-value>
         </config-group>
       </config-group>
     </config-group>
