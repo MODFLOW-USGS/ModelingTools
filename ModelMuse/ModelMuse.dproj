@@ -119,7 +119,7 @@
         <DCC_DebugInformation>2</DCC_DebugInformation>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <DCC_Define>MF2015;LeakChecking;$(DCC_Define)</DCC_Define>
+        <DCC_Define>LeakChecking;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <BRCC_IncludePath>D:\jedi\jcl\jcl\lib\d16\win64;$(BRCC_IncludePath)</BRCC_IncludePath>

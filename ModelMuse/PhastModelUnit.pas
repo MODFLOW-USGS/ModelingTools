@@ -10483,6 +10483,9 @@ const
 
 //               Bug fix: Fixed export of SFT package in MT3D-USGS when
 //                there is more than one chemical species.
+//               Bug fix: Fixed a bug that caused an access violation if 
+//                the InterpolatedVertexValues function was used without an 
+//                argument.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.

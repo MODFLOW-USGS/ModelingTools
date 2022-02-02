@@ -3529,8 +3529,14 @@ var
   end;
 begin
   Assert(Length(Values) >= 1);
-  Assert(Values[0] <> nil);
-  VertexValueName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    VertexValueName := '';
+  end
+  else
+  begin
+    VertexValueName := PString(Values[0])^;
+  end;
   result := 0;
   if TestVertexValuesCanBeTested(StrInterpolatedVertexValues, VertexValueName) then
   begin
