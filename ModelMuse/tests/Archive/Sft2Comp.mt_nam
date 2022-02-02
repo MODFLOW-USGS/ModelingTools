@@ -1,0 +1,14 @@
+# Name File for MT3DMS created on 2/1/2022 by ModelMuse
+LIST 16 Sft2Comp.mls
+FTL 10 Sft2Comp.ftl
+DATA 17 Sft2Comp.cnf
+SFT 19 Sft2Comp.sft
+BTN 1 Sft2Comp.btn
+DATA(BINARY) 201 Sft2Comp_a.ucn
+DATA(BINARY) 202 Sft2Comp_b.ucn
+DATA 601 Sft2Comp_a._mas
+DATA 602 Sft2Comp_b._mas
+ADV 2 Sft2Comp.adv
+DSP 3 Sft2Comp.dsp
+SSM 4 Sft2Comp.ssm
+GCG 9 Sft2Comp.gcg

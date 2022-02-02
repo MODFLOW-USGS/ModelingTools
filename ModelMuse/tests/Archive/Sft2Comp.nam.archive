@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 2/1/2022 by ModelMuse Version 4.3.0.80
+LIST             11 ..\..\output\output.Sft2Comp\Sft2Comp.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.Sft2Comp\Sft2Comp.cbc REPLACE
+DIS              12 ..\..\model\model.Sft2Comp\Sft2Comp.dis OLD
+BAS6             13 ..\..\model\model.Sft2Comp\Sft2Comp.bas OLD
+OC               39 ..\..\model\model.Sft2Comp\Sft2Comp.oc OLD
+DATA(BINARY)     37 ..\..\output\output.Sft2Comp\Sft2Comp.bhd REPLACE
+DATA             38 ..\..\output\output.Sft2Comp\Sft2Comp.fdn REPLACE
+PCG              18 ..\..\model\model.Sft2Comp\Sft2Comp.pcg OLD
+LPF              14 ..\..\model\model.Sft2Comp\Sft2Comp.lpf OLD
+LMT6            135 ..\..\model\model.Sft2Comp\Sft2Comp.lmt OLD
+SFR              29 ..\..\model\model.Sft2Comp\Sft2Comp.sfr OLD

@@ -26,12 +26,7 @@ type
     PumpingParameterValue: double;
     PumpingRateTimeSeriesName: string;
     // GWT Concentrations
-    Concentrations: array of double;
-    ConcentrationAnnotations: array of string;
-    ConcentrationPestNames: array of string;
-    ConcentrationPestSeriesNames: array of string;
-    ConcentrationPestSeriesMethods: array of TPestParamMethod;
-    ConcentrationTimeSeriesNames: array of string;
+    GwtConcentrations: TGwtCellData;
     procedure Assign(const Item: TWellRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -615,12 +610,12 @@ begin
             ConcIndex := BoundaryFunctionIndex - WelStartConcentration;
             with WellStorage.WellArray[Index] do
             begin
-              Concentrations[ConcIndex] := Expression.DoubleResult;
-              ConcentrationAnnotations[ConcIndex] := ACell.Annotation;
-              ConcentrationPestNames[ConcIndex] := PestName;
-              ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
-              ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
-              ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              GwtConcentrations.Concentrations[ConcIndex] := Expression.DoubleResult;
+              GwtConcentrations.ConcentrationAnnotations[ConcIndex] := ACell.Annotation;
+              GwtConcentrations.ConcentrationPestNames[ConcIndex] := PestName;
+              GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+              GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+              GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
             end;
           end;
       end;
@@ -646,12 +641,12 @@ begin
               ConcIndex := BoundaryFunctionIndex - WelStartConcentration;
               with WellStorage.WellArray[Index] do
               begin
-                Concentrations[ConcIndex] := 0;
-                ConcentrationAnnotations[ConcIndex] := StrWellConcentrationS;
-                ConcentrationPestNames[ConcIndex] := PestName;
-                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
-                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
-                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+                GwtConcentrations.Concentrations[ConcIndex] := 0;
+                GwtConcentrations.ConcentrationAnnotations[ConcIndex] := StrWellConcentrationS;
+                GwtConcentrations.ConcentrationPestNames[ConcIndex] := PestName;
+                GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
               end;
             end;
         end;
@@ -683,12 +678,12 @@ begin
               ConcIndex := BoundaryFunctionIndex - WelStartConcentration;
               with WellStorage.WellArray[Index] do
               begin
-                Concentrations[ConcIndex] := 0;
-                ConcentrationAnnotations[ConcIndex] := StrWellConcentrationS;
-                ConcentrationPestNames[ConcIndex] := PestName;
-                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
-                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
-                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+                GwtConcentrations.Concentrations[ConcIndex] := 0;
+                GwtConcentrations.ConcentrationAnnotations[ConcIndex] := StrWellConcentrationS;
+                GwtConcentrations.ConcentrationPestNames[ConcIndex] := PestName;
+                GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
               end;
             end;
         end;
@@ -887,17 +882,17 @@ begin
   begin
     for Index := 0 to BoundaryCount - 1 do
     begin
-      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].Concentrations,
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].GwtConcentrations.Concentrations,
         LocalModel.MobileComponents.Count);
-      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationAnnotations,
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].GwtConcentrations.ConcentrationAnnotations,
         LocalModel.MobileComponents.Count);
-      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationPestNames,
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].GwtConcentrations.ConcentrationPestNames,
         LocalModel.MobileComponents.Count);
-      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationPestSeriesNames,
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].GwtConcentrations.ConcentrationPestSeriesNames,
         LocalModel.MobileComponents.Count);
-      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationPestSeriesMethods,
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].GwtConcentrations.ConcentrationPestSeriesMethods,
         LocalModel.MobileComponents.Count);
-      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationTimeSeriesNames,
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].GwtConcentrations.ConcentrationTimeSeriesNames,
         LocalModel.MobileComponents.Count);
     end;
   end;
@@ -927,35 +922,35 @@ end;
 
 function TWell_Cell.GetConcentration(const Index: Integer): double;
 begin
-  result := Values.Concentrations[Index];
+  result := Values.GwtConcentrations.Concentrations[Index];
 end;
 
 function TWell_Cell.GetConcentrationAnnotation(const Index: Integer): string;
 begin
-  result := Values.ConcentrationAnnotations[Index];
+  result := Values.GwtConcentrations.ConcentrationAnnotations[Index];
 end;
 
 function TWell_Cell.GetConcentrationPestName(const Index: Integer): string;
 begin
-  result := FValues.ConcentrationPestNames[Index];
+  result := FValues.GwtConcentrations.ConcentrationPestNames[Index];
 end;
 
 function TWell_Cell.GetConcentrationPestSeriesMethod(
   const Index: Integer): TPestParamMethod;
 begin
-  result := FValues.ConcentrationPestSeriesMethods[Index];
+  result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[Index];
 end;
 
 function TWell_Cell.GetConcentrationPestSeriesName(
   const Index: Integer): string;
 begin
-  result := FValues.ConcentrationPestSeriesNames[Index];
+  result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[Index];
 end;
 
 function TWell_Cell.GetConcentrationTimeSeriesName(
   const Index: Integer): string;
 begin
-  result := FValues.ConcentrationTimeSeriesNames[Index];
+  result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[Index];
 end;
 
 function TWell_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
@@ -984,7 +979,7 @@ begin
     else
       begin
         ConcIndex := Index - WelStartConcentration;
-        result := FValues.ConcentrationTimeSeriesNames[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex];
       end;
   end;
 end;
@@ -1008,7 +1003,7 @@ begin
     else
       begin
         ConcIndex := Index - WelStartConcentration;
-        result := FValues.ConcentrationPestNames[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationPestNames[ConcIndex];
       end;
   end;
 end;
@@ -1022,7 +1017,7 @@ begin
     else
       begin
         ConcIndex := Index - WelStartConcentration;
-        result := FValues.ConcentrationPestSeriesMethods[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex];
       end;
   end;
 end;
@@ -1036,7 +1031,7 @@ begin
     else
       begin
         ConcIndex := Index - WelStartConcentration;
-        result := FValues.ConcentrationPestSeriesNames[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex];
       end;
   end;
 end;
@@ -1091,7 +1086,7 @@ begin
     else
       begin
         ConcIndex := Index - WelStartConcentration;
-        result := FValues.ConcentrationAnnotations[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationAnnotations[ConcIndex];
       end;
   end;
 end;
@@ -1106,7 +1101,7 @@ begin
     else
       begin
         ConcIndex := Index - WelStartConcentration;
-        result := FValues.Concentrations[ConcIndex];
+        result := FValues.GwtConcentrations.Concentrations[ConcIndex];
       end;
   end;
 end;
@@ -1169,7 +1164,7 @@ begin
     else
       begin
         ConcIndex := Index - WelStartConcentration;
-        FValues.ConcentrationTimeSeriesNames[ConcIndex] := Value;
+        FValues.GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := Value;
       end;
   end;
 end;
@@ -1754,18 +1749,10 @@ end;
 procedure TWellRecord.Assign(const Item: TWellRecord);
 begin
   self := Item;
-  SetLength(Concentrations, Length(Concentrations));
-  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
-  SetLength(ConcentrationPestNames, Length(ConcentrationPestNames));
-  SetLength(ConcentrationPestSeriesNames, Length(ConcentrationPestSeriesNames));
-  SetLength(ConcentrationPestSeriesMethods, Length(ConcentrationPestSeriesMethods));
-  SetLength(ConcentrationTimeSeriesNames, Length(ConcentrationTimeSeriesNames));
+  GwtConcentrations.Assign(Item.GwtConcentrations);
 end;
 
 procedure TWellRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
-var
-  Count: Integer;
-  Index: Integer;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, PumpingRate);
@@ -1779,68 +1766,23 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(PumpingParameterName));
   WriteCompInt(Comp, Strings.IndexOf(PumpingRateTimeSeriesName));
 
-  Count := Length(Concentrations);
-  WriteCompInt(Comp, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompReal(Comp, Concentrations[Index]);
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestNames[Index]));
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationTimeSeriesNames[Index]));
-  end;
+  GwtConcentrations.Cache(Comp, Strings);
 
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
 
 procedure TWellRecord.RecordStrings(Strings: TStringList);
-var
-  Index: Integer;
 begin
   Strings.Add(PumpingRateAnnotation);
   Strings.Add(PumpingRatePest);
   Strings.Add(PumpingRatePestSeriesName);
   Strings.Add(PumpingParameterName);
   Strings.Add(PumpingRateTimeSeriesName);
-  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
-  begin
-    Strings.Add(ConcentrationAnnotations[Index]);
-  end;
-  for Index := 0 to Length(ConcentrationPestNames) - 1 do
-  begin
-    Strings.Add(ConcentrationPestNames[Index]);
-  end;
-  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
-  begin
-    Strings.Add(ConcentrationPestSeriesNames[Index]);
-  end;
-  for Index := 0 to Length(ConcentrationTimeSeriesNames) - 1 do
-  begin
-    Strings.Add(ConcentrationTimeSeriesNames[Index]);
-  end;
+  GwtConcentrations.RecordStrings(Strings);
 end;
 
 procedure TWellRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
-var
-  Count: Integer;
-  Index: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   PumpingRate := ReadCompReal(Decomp);
@@ -1854,37 +1796,7 @@ begin
   PumpingParameterName := Annotations[ReadCompInt(Decomp)];
   PumpingRateTimeSeriesName := Annotations[ReadCompInt(Decomp)];
 
-  Count := ReadCompInt(Decomp);
-  SetLength(Concentrations, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    Concentrations[Index] := ReadCompReal(Decomp);
-  end;
-  SetLength(ConcentrationAnnotations, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
-  end;
-  SetLength(ConcentrationPestNames, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
-  end;
-  SetLength(ConcentrationPestSeriesNames, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
-  end;
-  SetLength(ConcentrationPestSeriesMethods, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
-  end;
-  SetLength(ConcentrationTimeSeriesNames, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
-  end;
+  GwtConcentrations.Restore(Decomp,Annotations);
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);

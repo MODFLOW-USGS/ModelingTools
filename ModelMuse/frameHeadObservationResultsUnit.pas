@@ -728,6 +728,10 @@ var
     end;
   end;
 begin
+  if CurrentModelLink = nil then
+  begin
+    Exit;
+  end;
   Observations := CurrentModelLink.FNewHeadObsCollection;
 
   HobDry := frmGoPhast.PhastModel.ModflowPackages.HobPackage.DryHead;

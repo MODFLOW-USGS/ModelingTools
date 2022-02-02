@@ -28,12 +28,7 @@ type
     RatePestMethod: TPestParamMethod;
     RateTimeSeries: string;
     // GWT Concentrations
-    Concentrations: array of double;
-    ConcentrationAnnotations: array of string;
-    ConcentrationPestNames: array of string;
-    ConcentrationPestSeriesNames: array of string;
-    ConcentrationPestSeriesMethods: array of TPestParamMethod;
-    ConcentrationTimeSeriesNames: array of string;
+    GwtConcentrations: TGwtCellData;
     procedure Assign(const Item: TEvtRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1090,17 +1085,17 @@ begin
   NumberOfSpecies := SpeciesCount;
   for Index := 0 to BoundaryCount - 1 do
   begin
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].Concentrations,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.Concentrations,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].ConcentrationAnnotations,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationAnnotations,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].ConcentrationPestNames,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationPestNames,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].ConcentrationPestSeriesNames,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationPestSeriesNames,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].ConcentrationPestSeriesMethods,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationPestSeriesMethods,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].ConcentrationTimeSeriesNames,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationTimeSeriesNames,
       NumberOfSpecies);
   end;
   inherited;
@@ -1134,33 +1129,33 @@ end;
 
 function TEvt_Cell.GetConcentration(const Index: Integer): double;
 begin
-  result := FValues.Concentrations[Index];
+  result := FValues.GwtConcentrations.Concentrations[Index];
 end;
 
 function TEvt_Cell.GetConcentrationAnnotation(const Index: Integer): string;
 begin
-  result := FValues.ConcentrationAnnotations[Index];
+  result := FValues.GwtConcentrations.ConcentrationAnnotations[Index];
 end;
 
 function TEvt_Cell.GetConcentrationPestName(const Index: Integer): string;
 begin
-  result := FValues.ConcentrationPestNames[Index];
+  result := FValues.GwtConcentrations.ConcentrationPestNames[Index];
 end;
 
 function TEvt_Cell.GetConcentrationPestSeriesMethod(
   const Index: Integer): TPestParamMethod;
 begin
-  result := FValues.ConcentrationPestSeriesMethods[Index];
+  result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[Index];
 end;
 
 function TEvt_Cell.GetConcentrationPestSeriesName(const Index: Integer): string;
 begin
-  result := FValues.ConcentrationPestSeriesNames[Index];
+  result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[Index];
 end;
 
 function TEvt_Cell.GetConcentrationTimeSeriesName(const Index: Integer): string;
 begin
-  result := FValues.ConcentrationTimeSeriesNames[Index];
+  result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[Index];
 end;
 
 function TEvt_Cell.GetLayer: integer;
@@ -1180,7 +1175,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.ConcentrationTimeSeriesNames[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex];
       end;
   end;
 end;
@@ -1197,7 +1192,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.ConcentrationPestNames[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationPestNames[ConcIndex];
       end;
   end;
 end;
@@ -1214,7 +1209,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.ConcentrationPestSeriesMethods[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex];
       end;
   end;
 end;
@@ -1231,7 +1226,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.ConcentrationPestSeriesNames[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex];
       end;
   end;
 end;
@@ -1304,7 +1299,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.ConcentrationAnnotations[ConcIndex];
+        result := FValues.GwtConcentrations.ConcentrationAnnotations[ConcIndex];
       end;
   end;
 end;
@@ -1318,7 +1313,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.Concentrations[ConcIndex];
+        result := FValues.GwtConcentrations.Concentrations[ConcIndex];
       end;
   end;
 end;
@@ -1381,7 +1376,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        FValues.ConcentrationTimeSeriesNames[ConcIndex] := Value;
+        FValues.GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := Value;
 //        Assert(False);
       end;
   end;
@@ -3282,18 +3277,10 @@ end;
 procedure TEvtRecord.Assign(const Item: TEvtRecord);
 begin
   self := Item;
-  SetLength(Concentrations, Length(Concentrations));
-  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
-  SetLength(ConcentrationPestNames, Length(ConcentrationPestNames));
-  SetLength(ConcentrationPestSeriesNames, Length(ConcentrationPestSeriesNames));
-  SetLength(ConcentrationPestSeriesMethods, Length(ConcentrationPestSeriesMethods));
-  SetLength(ConcentrationTimeSeriesNames, Length(ConcentrationTimeSeriesNames));
+  GwtConcentrations.Assign(Item.GwtConcentrations);
 end;
 
 procedure TEvtRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
-var
-  Count: Integer;
-  Index: Integer;
 begin
   Comp.Write(Cell, SizeOf(Cell));
   Comp.Write(EvapotranspirationRate, SizeOf(EvapotranspirationRate));
@@ -3302,7 +3289,6 @@ begin
   Comp.Write(EndingTime, SizeOf(ETParameterValue));
 
   WriteCompInt(Comp, Strings.IndexOf(EvapotranspirationRateAnnotation));
-//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ETParameterName));
 
   WriteCompInt(Comp, Strings.IndexOf(RatePest));
@@ -3310,68 +3296,22 @@ begin
   WriteCompInt(Comp, Ord(RatePestMethod));
   WriteCompInt(Comp, Strings.IndexOf(RateTimeSeries));
 
-  Count := Length(Concentrations);
-  WriteCompInt(Comp, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompReal(Comp, Concentrations[Index]);
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestNames[Index]));
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
-  end;
-  for Index := 0 to Count - 1 do
-  begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationTimeSeriesNames[Index]));
-  end;
+  GwtConcentrations.Cache(Comp, Strings);
 end;
 
 procedure TEvtRecord.RecordStrings(Strings: TStringList);
-var
-  Index: Integer;
 begin
   Strings.Add(EvapotranspirationRateAnnotation);
-//  Strings.Add(TimeSeriesName);
   Strings.Add(ETParameterName);
   Strings.Add(RatePest);
   Strings.Add(RatePestSeries);
   Strings.Add(RateTimeSeries);
 
-  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
-  begin
-    Strings.Add(ConcentrationAnnotations[Index]);
-  end;
-  for Index := 0 to Length(ConcentrationPestNames) - 1 do
-  begin
-    Strings.Add(ConcentrationPestNames[Index]);
-  end;
-  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
-  begin
-    Strings.Add(ConcentrationPestSeriesNames[Index]);
-  end;
-  for Index := 0 to Length(ConcentrationTimeSeriesNames) - 1 do
-  begin
-    Strings.Add(ConcentrationTimeSeriesNames[Index]);
-  end;
+  GwtConcentrations.RecordStrings(Strings);
 end;
 
 procedure TEvtRecord.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
-var
-  Count: Integer;
-  Index: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   EvapotranspirationRate := ReadCompReal(Decomp);
@@ -3379,44 +3319,13 @@ begin
   EndingTime := ReadCompReal(Decomp);
   ETParameterValue := ReadCompReal(Decomp);
   EvapotranspirationRateAnnotation := Annotations[ReadCompInt(Decomp)];
-//  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   ETParameterName := Annotations[ReadCompInt(Decomp)];
   RatePest := Annotations[ReadCompInt(Decomp)];
   RatePestSeries := Annotations[ReadCompInt(Decomp)];
   RatePestMethod := TPestParamMethod(ReadCompInt(Decomp));
   RateTimeSeries := Annotations[ReadCompInt(Decomp)];
 
-  Count := ReadCompInt(Decomp);
-  SetLength(Concentrations, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    Concentrations[Index] := ReadCompReal(Decomp);
-  end;
-  SetLength(ConcentrationAnnotations, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
-  end;
-  SetLength(ConcentrationPestNames, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
-  end;
-  SetLength(ConcentrationPestSeriesNames, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
-  end;
-  SetLength(ConcentrationPestSeriesMethods, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
-  end;
-  SetLength(ConcentrationTimeSeriesNames, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
-  end;
+  GwtConcentrations.Restore(Decomp,Annotations);
 end;
 
 { TEvtSurfDepthRecord }

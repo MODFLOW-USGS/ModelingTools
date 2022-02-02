@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Sft2Comp" FileType="bin">
+    <FileName Model_Name="Sft2Comp" FileType="bin">C:\WRDAPP\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT.exe</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="bin">C:\WRDAPP\mt3dusgs1.1.0\bin\mt3d-usgs_1.1.0_32.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Sft2Comp" FileType="ancillary">
+    <FileName Model_Name="Sft2Comp" FileType="ancillary">Sft2Comp.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Sft2Comp" FileType="Model Input">
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">Sft2Comp.bas</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">Sft2Comp.dis</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">Sft2Comp.gsf</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">Sft2Comp.lmt</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">Sft2Comp.lpf</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">Sft2Comp.nam.archive</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">Sft2Comp.oc</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">Sft2Comp.pcg</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">Sft2Comp.sfr</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Input">usgs.Sft2Comp.reference</FileName>
+  </model>
+  <output Model_Name="Sft2Comp" FileType="Model Output">
+    <FileName Model_Name="Sft2Comp" FileType="Model Output">Sft2Comp.bhd</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Output">Sft2Comp.cbc</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Output">Sft2Comp.fdn</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Output">Sft2Comp.ftl</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Model Output">Sft2Comp.lst</FileName>
+  </output>
+  <Mt3d-USGS_Input_Files Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">RunMt3d-USGS.Bat.archive</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">Sft2Comp.adv</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">Sft2Comp.btn</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">Sft2Comp.dsp</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">Sft2Comp.gcg</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">Sft2Comp.mt_nam.archive</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">Sft2Comp.sft</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">Sft2Comp.ssm</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Input">usgs.Sft2Comp_MT3D-USGS.reference</FileName>
+  </Mt3d-USGS_Input_Files>
+  <Mt3d-USGS_Output_Files Model_Name="Sft2Comp" FileType="Mt3d-USGS Output">
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Output">Sft2Comp.cnf</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Output">Sft2Comp.mls</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Output">Sft2Comp_a._mas</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Output">Sft2Comp_a.ucn</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Output">Sft2Comp_b._mas</FileName>
+    <FileName Model_Name="Sft2Comp" FileType="Mt3d-USGS Output">Sft2Comp_b.ucn</FileName>
+  </Mt3d-USGS_Output_Files>
+</Model_Archive_List>

@@ -6,7 +6,8 @@ interface
 
 uses
   GR32, // defines TColor32.
-  SysUtils, Types, Classes, FastGEO, Graphics, Generics.Collections, Character;
+  SysUtils, Types, Classes, FastGEO, Graphics, Generics.Collections, Character,
+  System.ZLib;
 
 type
   PReal = ^Real;
@@ -288,6 +289,20 @@ type
 
   TPestMethodList = TList<TPestParamMethod>;
   TStringListObjectList = TObjectList<TStringList>;
+
+  TGwtCellData = record
+    Concentrations: array of double;
+    ConcentrationAnnotations: array of string;
+    ConcentrationPestNames: array of string;
+    ConcentrationPestSeriesNames: array of string;
+    ConcentrationPestSeriesMethods: array of TPestParamMethod;
+    ConcentrationTimeSeriesNames: array of string;
+    procedure Assign(const Item: TGwtCellData);
+    procedure Cache(Comp: TCompressionStream; Strings: TStringList);
+    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+    procedure RecordStrings(Strings: TStringList);
+  end;
+
 
 const
   ModflowSelection = [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
@@ -687,6 +702,17 @@ procedure AssignLengthUnitStringsToPicklist(LengthPickList: TStrings;
 
 procedure AssignTimeUnitStringsToPicklist(TimePickList: TStrings;
   ModelType: TModelSelection);
+
+procedure WriteCompInt(Stream: TStream; Value: integer);
+procedure WriteCompReal(Stream: TStream; Value: double);
+procedure WriteCompBoolean(Stream: TStream; Value: Boolean);
+procedure WriteCompString(Stream: TStream; Value: string);
+
+function ReadCompInt(Stream: TStream): integer;
+function ReadCompReal(Stream: TStream): double;
+function ReadCompBoolean(Stream: TStream): Boolean;
+function ReadCompStringSimple(Stream: TStream): string;
+function ReadCompString(Stream: TStream; Annotations: TStringList): string;
 
 resourcestring
   StrPestModifier = 'PEST Modifier';
@@ -2095,6 +2121,190 @@ begin
   end;
   FScreenObject := ScreenObject;
 end;
+
+{ TGwtCellData }
+
+procedure TGwtCellData.Assign(const Item: TGwtCellData);
+begin
+  self := Item;
+  SetLength(Concentrations, Length(Concentrations));
+  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
+  SetLength(ConcentrationPestNames, Length(ConcentrationPestNames));
+  SetLength(ConcentrationPestSeriesNames, Length(ConcentrationPestSeriesNames));
+  SetLength(ConcentrationPestSeriesMethods, Length(ConcentrationPestSeriesMethods));
+  SetLength(ConcentrationTimeSeriesNames, Length(ConcentrationTimeSeriesNames));
+end;
+
+procedure TGwtCellData.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  Index: Integer;
+  Count: Integer;
+begin
+  Count := Length(Concentrations);
+  WriteCompInt(Comp, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompReal(Comp, Concentrations[Index]);
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationTimeSeriesNames[Index]));
+  end;
+
+end;
+
+procedure TGwtCellData.RecordStrings(Strings: TStringList);
+var
+  Index: Integer;
+begin
+  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
+  begin
+    Strings.Add(ConcentrationAnnotations[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestSeriesNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationTimeSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationTimeSeriesNames[Index]);
+  end;
+end;
+
+procedure TGwtCellData.Restore(Decomp: TDecompressionStream;
+  Annotations: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
+begin
+  Count := ReadCompInt(Decomp);
+  SetLength(Concentrations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    Concentrations[Index] := ReadCompReal(Decomp);
+  end;
+  SetLength(ConcentrationAnnotations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesMethods, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
+  end;
+  SetLength(ConcentrationTimeSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+end;
+
+procedure WriteCompInt(Stream: TStream; Value: integer);
+begin
+  Stream.Write(Value, SizeOf(Value));
+end;
+
+function ReadCompInt(Stream: TStream): integer;
+begin
+  Stream.Read(result, SizeOf(result));
+end;
+
+procedure WriteCompReal(Stream: TStream; Value: double);
+begin
+  Stream.Write(Value, SizeOf(Value));
+end;
+
+function ReadCompReal(Stream: TStream): double;
+begin
+  Stream.Read(result, SizeOf(result));
+end;
+
+procedure WriteCompBoolean(Stream: TStream; Value: Boolean);
+begin
+  Stream.Write(Value, SizeOf(Value));
+end;
+
+function ReadCompBoolean(Stream: TStream): Boolean;
+begin
+  Stream.Read(result, SizeOf(result));
+end;
+
+procedure WriteCompString(Stream: TStream; Value: string);
+var
+  StringLength: integer;
+begin
+  StringLength := Length(Value);
+  WriteCompInt(Stream, StringLength);
+  if StringLength > 0 then
+  begin
+    Stream.WriteBuffer(Pointer(Value)^, ByteLength(Value));
+  end;
+end;
+
+function ReadCompStringSimple(Stream: TStream): string;
+var
+  StringLength: Integer;
+begin
+  Stream.Read(StringLength, SizeOf(StringLength));
+  if StringLength > 0 then
+  begin
+    SetString(result, nil, StringLength);
+    Stream.Read(Pointer(result)^, StringLength * SizeOf(Char));
+  end
+  else
+  begin
+    result := ''
+  end;
+end;
+
+function ReadCompString(Stream: TStream; Annotations: TStringList): string;
+var
+  StringPostion: integer;
+begin
+  result := ReadCompStringSimple(Stream);
+  StringPostion := Annotations.IndexOf(result);
+  if StringPostion < 0 then
+  begin
+    Annotations.Add(result);
+  end
+  else
+  begin
+    result := Annotations[StringPostion]
+  end;
+end;
+
+
 
 initialization
   InitializeStatTypeLabels;

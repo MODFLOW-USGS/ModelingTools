@@ -887,6 +887,8 @@ var
   ExpressionIndex: Integer;
   InitConcExpressionAnnotations: TStringList;
   DispExpressionAnnotations: TStringList;
+  InitItem: TMt3dSftInitConcItem;
+  InitDispItem: TMt3dSftDispItem;
   procedure UpdateRequiredData;
   var
     ADataSet: TDataArray;
@@ -955,9 +957,10 @@ begin
   try
     UsedVariables.Sorted := True;
     UsedVariables.Duplicates := dupIgnore;
-    for FormulaIndex := 0 to InitialConcentration.Count - 1 do
+    InitItem := InitialConcentration[0] as TMt3dSftInitConcItem;
+    for FormulaIndex := 0 to InitItem.BoundaryFormulaCount - 1 do
     begin
-      AFormula := (InitialConcentration[FormulaIndex] as TMt3dSftInitConcItem).BoundaryFormula[0];
+      AFormula := InitItem.BoundaryFormula[FormulaIndex];
       try
         Parser.Compile(AFormula);
       except on E: ERbwParserError do
@@ -981,9 +984,10 @@ begin
       InitConcExpressionAnnotations.Add(Format(StrAssignedBy0sWit, [LocalScreenObject.Name, AFormula]));
       UsedVariables.AddStrings(Expression.VariablesUsed);
     end;
-    for FormulaIndex := 0 to DispersionCoefficient.Count - 1 do
+    InitDispItem := DispersionCoefficient[0] as TMt3dSftDispItem;
+    for FormulaIndex := 0 to InitDispItem.BoundaryFormulaCount - 1 do
     begin
-      AFormula := (DispersionCoefficient[FormulaIndex] as TMt3dSftDispItem).BoundaryFormula[0];
+      AFormula := InitDispItem.BoundaryFormula[FormulaIndex];
       try
         Parser.Compile(AFormula);
       except on E: ERbwParserError do
@@ -1404,19 +1408,22 @@ end;
 
 procedure TMt3dSftBoundary.InsertNewSpecies(SpeciesIndex: integer;
   const Name: string);
-var
-  SftItem: TCollectionItem;
+//var
+//  SftItem: TCollectionItem;
 begin
   inherited;
   Precipitation.InsertNewSpecies(SpeciesIndex, Name);
   RunOff.InsertNewSpecies(SpeciesIndex, Name);
   ConstConc.InsertNewSpecies(SpeciesIndex, Name);
 
-  SftItem := FInitialConcentration.Add;
-  SftItem.Index := SpeciesIndex;
+  FInitialConcentration.InsertNewSpecies(SpeciesIndex, Name);
+  FDispersionCoefficient.InsertNewSpecies(SpeciesIndex, Name);
 
-  SftItem := FDispersionCoefficient.Add;
-  SftItem.Index := SpeciesIndex;
+//  SftItem := FInitialConcentration.Add;
+//  SftItem.Index := SpeciesIndex;
+//
+//  SftItem := FDispersionCoefficient.Add;
+//  SftItem.Index := SpeciesIndex;
 end;
 
 procedure TMt3dSftBoundary.InvalidateDisplay;

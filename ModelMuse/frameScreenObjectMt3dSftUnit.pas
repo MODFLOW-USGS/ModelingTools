@@ -228,9 +228,9 @@ begin
         for ComponentIndex := 0 to NCOMP - 1 do
         begin
           rdgSftInitConcAndDisp.Cells[Ord(sidcInitialConc), ComponentIndex+1] :=
-            Mt3dSftConcBoundary.InitialConcentration[ComponentIndex].BoundaryFormula[0];
+            Mt3dSftConcBoundary.InitialConcentration[0].BoundaryFormula[ComponentIndex];
           rdgSftInitConcAndDisp.Cells[Ord(sidcDispersion), ComponentIndex+1] :=
-            Mt3dSftConcBoundary.DispersionCoefficient[ComponentIndex].BoundaryFormula[0];
+            Mt3dSftConcBoundary.DispersionCoefficient[0].BoundaryFormula[ComponentIndex];
         end;
 
         HeadWatersConc :=  Mt3dSftConcBoundary.Values as THeadWaterMt3dSftReachCollection;
@@ -298,12 +298,12 @@ begin
         for ComponentIndex := 0 to NCOMP - 1 do
         begin
           if rdgSftInitConcAndDisp.Cells[Ord(sidcInitialConc), ComponentIndex+1] <>
-              Mt3dSftConcBoundary.InitialConcentration[ComponentIndex].BoundaryFormula[0] then
+              Mt3dSftConcBoundary.InitialConcentration[0].BoundaryFormula[ComponentIndex] then
           begin
             rdgSftInitConcAndDisp.Cells[Ord(sidcInitialConc), ComponentIndex+1] := ''
           end;
           if rdgSftInitConcAndDisp.Cells[Ord(sidcDispersion), ComponentIndex+1] <>
-              Mt3dSftConcBoundary.DispersionCoefficient[ComponentIndex].BoundaryFormula[0] then
+              Mt3dSftConcBoundary.DispersionCoefficient[0].BoundaryFormula[ComponentIndex] then
           begin
             rdgSftInitConcAndDisp.Cells[Ord(sidcDispersion), ComponentIndex+1] := ''
           end;
@@ -861,32 +861,40 @@ begin
                 TSftObsLocation(comboObsLocation.ItemIndex);
             end;
 
-            while Mt3dSftConcBoundary.InitialConcentration.Count < NCOMP do
-            begin
-              Mt3dSftConcBoundary.InitialConcentration.Add;
-            end;
-            while Mt3dSftConcBoundary.InitialConcentration.Count > NCOMP do
-            begin
-              Mt3dSftConcBoundary.InitialConcentration.Last.Free;
-            end;
-            while Mt3dSftConcBoundary.DispersionCoefficient.Count < NCOMP do
-            begin
-              Mt3dSftConcBoundary.DispersionCoefficient.Add;
-            end;
-            while Mt3dSftConcBoundary.DispersionCoefficient.Count > NCOMP do
-            begin
-              Mt3dSftConcBoundary.DispersionCoefficient.Last.Free;
-            end;
+              if Mt3dSftConcBoundary.InitialConcentration.Count < 1 then
+              begin
+                Mt3dSftConcBoundary.InitialConcentration.Add;
+              end;
+              if Mt3dSftConcBoundary.DispersionCoefficient.Count < 1 then
+              begin
+                Mt3dSftConcBoundary.DispersionCoefficient.Add;
+              end;
+//            while Mt3dSftConcBoundary.InitialConcentration.Count < NCOMP do
+//            begin
+//              Mt3dSftConcBoundary.InitialConcentration.Add;
+//            end;
+//            while Mt3dSftConcBoundary.InitialConcentration.Count > NCOMP do
+//            begin
+//              Mt3dSftConcBoundary.InitialConcentration.Last.Free;
+//            end;
+//            while Mt3dSftConcBoundary.DispersionCoefficient.Count < NCOMP do
+//            begin
+//              Mt3dSftConcBoundary.DispersionCoefficient.Add;
+//            end;
+//            while Mt3dSftConcBoundary.DispersionCoefficient.Count > NCOMP do
+//            begin
+//              Mt3dSftConcBoundary.DispersionCoefficient.Last.Free;
+//            end;
             for ComponentIndex := 1 to rdgSftInitConcAndDisp.RowCount - 1 do
             begin
               if rdgSftInitConcAndDisp.Cells[Ord(sidcInitialConc), ComponentIndex] <> '' then
               begin
-                Mt3dSftConcBoundary.InitialConcentration[ComponentIndex-1].BoundaryFormula[0]
+                Mt3dSftConcBoundary.InitialConcentration[0].BoundaryFormula[ComponentIndex-1]
                   := rdgSftInitConcAndDisp.Cells[Ord(sidcInitialConc), ComponentIndex];
               end;
               if rdgSftInitConcAndDisp.Cells[Ord(sidcDispersion), ComponentIndex] <> '' then
               begin
-                Mt3dSftConcBoundary.DispersionCoefficient[ComponentIndex-1].BoundaryFormula[0]
+                Mt3dSftConcBoundary.DispersionCoefficient[0].BoundaryFormula[ComponentIndex-1]
                   := rdgSftInitConcAndDisp.Cells[Ord(sidcDispersion), ComponentIndex];
               end;
             end;

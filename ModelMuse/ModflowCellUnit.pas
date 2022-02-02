@@ -178,17 +178,17 @@ type
     procedure InvalidateCache;
   end;
 
-procedure WriteCompInt(Stream: TStream; Value: integer);
-procedure WriteCompReal(Stream: TStream; Value: double);
-procedure WriteCompBoolean(Stream: TStream; Value: Boolean);
-procedure WriteCompString(Stream: TStream; Value: string);
+//procedure WriteCompInt(Stream: TStream; Value: integer);
+//procedure WriteCompReal(Stream: TStream; Value: double);
+//procedure WriteCompBoolean(Stream: TStream; Value: Boolean);
+//procedure WriteCompString(Stream: TStream; Value: string);
 procedure WriteCompCell(Stream: TStream; Cell: TCellLocation);
 
-function ReadCompInt(Stream: TStream): integer;
-function ReadCompReal(Stream: TStream): double;
-function ReadCompBoolean(Stream: TStream): Boolean;
-function ReadCompStringSimple(Stream: TStream): string;
-function ReadCompString(Stream: TStream; Annotations: TStringList): string;
+//function ReadCompInt(Stream: TStream): integer;
+//function ReadCompReal(Stream: TStream): double;
+//function ReadCompBoolean(Stream: TStream): Boolean;
+//function ReadCompStringSimple(Stream: TStream): string;
+//function ReadCompString(Stream: TStream; Annotations: TStringList): string;
 function ReadCompCell(Stream: TStream): TCellLocation;
 
 implementation
@@ -198,80 +198,80 @@ uses TempFiles, ScreenObjectUnit, frmGoPhastUnit;
 const
   MaxCondensed = 100;
 
-procedure WriteCompInt(Stream: TStream; Value: integer);
-begin
-  Stream.Write(Value, SizeOf(Value));
-end;
-
-function ReadCompInt(Stream: TStream): integer;
-begin
-  Stream.Read(result, SizeOf(result));
-end;
-
-procedure WriteCompReal(Stream: TStream; Value: double);
-begin
-  Stream.Write(Value, SizeOf(Value));
-end;
-
-function ReadCompReal(Stream: TStream): double;
-begin
-  Stream.Read(result, SizeOf(result));
-end;
-
-procedure WriteCompBoolean(Stream: TStream; Value: Boolean);
-begin
-  Stream.Write(Value, SizeOf(Value));
-end;
-
-function ReadCompBoolean(Stream: TStream): Boolean;
-begin
-  Stream.Read(result, SizeOf(result));
-end;
-
-procedure WriteCompString(Stream: TStream; Value: string);
-var
-  StringLength: integer;
-begin
-  StringLength := Length(Value);
-  WriteCompInt(Stream, StringLength);
-  if StringLength > 0 then
-  begin
-    Stream.WriteBuffer(Pointer(Value)^, ByteLength(Value));
-  end;
-end;
-
-function ReadCompStringSimple(Stream: TStream): string;
-var
-  StringLength: Integer;
-begin
-  Stream.Read(StringLength, SizeOf(StringLength));
-  if StringLength > 0 then
-  begin
-    SetString(result, nil, StringLength);
-    Stream.Read(Pointer(result)^, StringLength * SizeOf(Char));
-  end
-  else
-  begin
-    result := ''
-  end;
-end;
-
-function ReadCompString(Stream: TStream; Annotations: TStringList): string;
-var
-  StringPostion: integer;
-begin
-  result := ReadCompStringSimple(Stream);
-  StringPostion := Annotations.IndexOf(result);
-  if StringPostion < 0 then
-  begin
-    Annotations.Add(result);
-  end
-  else
-  begin
-    result := Annotations[StringPostion]
-  end;
-end;
-
+//procedure WriteCompInt(Stream: TStream; Value: integer);
+//begin
+//  Stream.Write(Value, SizeOf(Value));
+//end;
+//
+//function ReadCompInt(Stream: TStream): integer;
+//begin
+//  Stream.Read(result, SizeOf(result));
+//end;
+//
+//procedure WriteCompReal(Stream: TStream; Value: double);
+//begin
+//  Stream.Write(Value, SizeOf(Value));
+//end;
+//
+//function ReadCompReal(Stream: TStream): double;
+//begin
+//  Stream.Read(result, SizeOf(result));
+//end;
+//
+//procedure WriteCompBoolean(Stream: TStream; Value: Boolean);
+//begin
+//  Stream.Write(Value, SizeOf(Value));
+//end;
+//
+//function ReadCompBoolean(Stream: TStream): Boolean;
+//begin
+//  Stream.Read(result, SizeOf(result));
+//end;
+//
+//procedure WriteCompString(Stream: TStream; Value: string);
+//var
+//  StringLength: integer;
+//begin
+//  StringLength := Length(Value);
+//  WriteCompInt(Stream, StringLength);
+//  if StringLength > 0 then
+//  begin
+//    Stream.WriteBuffer(Pointer(Value)^, ByteLength(Value));
+//  end;
+//end;
+//
+//function ReadCompStringSimple(Stream: TStream): string;
+//var
+//  StringLength: Integer;
+//begin
+//  Stream.Read(StringLength, SizeOf(StringLength));
+//  if StringLength > 0 then
+//  begin
+//    SetString(result, nil, StringLength);
+//    Stream.Read(Pointer(result)^, StringLength * SizeOf(Char));
+//  end
+//  else
+//  begin
+//    result := ''
+//  end;
+//end;
+//
+//function ReadCompString(Stream: TStream; Annotations: TStringList): string;
+//var
+//  StringPostion: integer;
+//begin
+//  result := ReadCompStringSimple(Stream);
+//  StringPostion := Annotations.IndexOf(result);
+//  if StringPostion < 0 then
+//  begin
+//    Annotations.Add(result);
+//  end
+//  else
+//  begin
+//    result := Annotations[StringPostion]
+//  end;
+//end;
+//
 procedure WriteCompCell(Stream: TStream; Cell: TCellLocation);
 begin
   Stream.Write(Cell, SizeOf(Cell));

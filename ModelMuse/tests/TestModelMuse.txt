@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-4686
+4710
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4686,3 +4686,27 @@ DisvIntersectAssignment.gpt
 	Archive\DisvIntersectAssignment.RunModflow.Bat
 	Archive\DisvIntersectAssignment.tdis
 	Archive\usgs.DisvIntersectAssignment.reference
+Sft2Comp.gpt
+	Archive\Sft2Comp.adv
+	Archive\Sft2Comp.axml
+	Archive\Sft2Comp.bas
+	Archive\Sft2Comp.btn
+	Archive\Sft2Comp.dis
+	Archive\Sft2Comp.dsp
+	Archive\Sft2Comp.gcg
+	Archive\Sft2Comp.gsf
+	Archive\Sft2Comp.lmt
+	Archive\Sft2Comp.lpf
+	Archive\Sft2Comp.mt_nam
+	Archive\Sft2Comp.mt_nam.archive
+	Archive\Sft2Comp.nam
+	Archive\Sft2Comp.nam.archive
+	Archive\Sft2Comp.oc
+	Archive\Sft2Comp.pcg
+	Archive\Sft2Comp.RunModel.Bat
+	Archive\Sft2Comp.RunModflow.Bat
+	Archive\Sft2Comp.sfr
+	Archive\Sft2Comp.sft
+	Archive\Sft2Comp.ssm
+	Archive\usgs.Sft2Comp.reference
+	Archive\usgs.Sft2Comp_MT3D-USGS.reference

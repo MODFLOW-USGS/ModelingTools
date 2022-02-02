@@ -2879,14 +2879,14 @@ begin
                 begin
                   with Boundary.EvtArray[BoundaryIndex] do
                   begin
-                    Concentrations[SpeciesIndex] := ConcentrationArray.
+                    GwtConcentrations.Concentrations[SpeciesIndex] := ConcentrationArray.
                       RealData[LayerIndex, RowIndex, ColIndex];
-                    ConcentrationAnnotations[SpeciesIndex] := ConcentrationArray.
+                    GwtConcentrations.ConcentrationAnnotations[SpeciesIndex] := ConcentrationArray.
                       Annotation[LayerIndex, RowIndex, ColIndex];
-                    ConcentrationPestNames[SpeciesIndex] := LocalConcentrationPest;
-                    ConcentrationPestSeriesNames[SpeciesIndex] := LocalConcentrationPestSeries;
-                    ConcentrationPestSeriesMethods[SpeciesIndex] := LocalConcentrationPestMethod;
-                    ConcentrationTimeSeriesNames[SpeciesIndex] := LocalConcentrationTimeSeries;
+                    GwtConcentrations.ConcentrationPestNames[SpeciesIndex] := LocalConcentrationPest;
+                    GwtConcentrations.ConcentrationPestSeriesNames[SpeciesIndex] := LocalConcentrationPestSeries;
+                    GwtConcentrations.ConcentrationPestSeriesMethods[SpeciesIndex] := LocalConcentrationPestMethod;
+                    GwtConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex] := LocalConcentrationTimeSeries;
                   end;
                   Inc(BoundaryIndex);
                 end;

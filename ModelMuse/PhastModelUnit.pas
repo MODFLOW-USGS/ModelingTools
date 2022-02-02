@@ -10481,6 +10481,9 @@ const
 //    '4.3.0.80' Change: ModelMuse no longer includes RCH, EVT, or ETS among
 //                the point sources in MT3D-USGS in non MODFLOW 6 models.
 
+//               Bug fix: Fixed export of SFT package in MT3D-USGS when
+//                there is more than one chemical species.
+
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.

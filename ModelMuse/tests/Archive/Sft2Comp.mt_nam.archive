@@ -1,0 +1,14 @@
+# Name File for MT3DMS created on 2/1/2022 by ModelMuse
+LIST 16 ..\..\output\output.Sft2Comp_MT3D-USGS\Sft2Comp.mls
+FTL 10 ..\..\output\output.Sft2Comp\Sft2Comp.ftl
+DATA 17 ..\..\output\output.Sft2Comp_MT3D-USGS\Sft2Comp.cnf
+SFT 19 ..\..\model\model.Sft2Comp_MT3D-USGS\Sft2Comp.sft
+BTN 1 ..\..\model\model.Sft2Comp_MT3D-USGS\Sft2Comp.btn
+DATA(BINARY) 201 ..\..\output\output.Sft2Comp_MT3D-USGS\Sft2Comp_a.ucn
+DATA(BINARY) 202 ..\..\output\output.Sft2Comp_MT3D-USGS\Sft2Comp_b.ucn
+DATA 601 ..\..\output\output.Sft2Comp_MT3D-USGS\Sft2Comp_a._mas
+DATA 602 ..\..\output\output.Sft2Comp_MT3D-USGS\Sft2Comp_b._mas
+ADV 2 ..\..\model\model.Sft2Comp_MT3D-USGS\Sft2Comp.adv
+DSP 3 ..\..\model\model.Sft2Comp_MT3D-USGS\Sft2Comp.dsp
+SSM 4 ..\..\model\model.Sft2Comp_MT3D-USGS\Sft2Comp.ssm
+GCG 9 ..\..\model\model.Sft2Comp_MT3D-USGS\Sft2Comp.gcg
