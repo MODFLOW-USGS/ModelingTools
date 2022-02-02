@@ -10480,8 +10480,7 @@ const
 //                defined.
 //    '4.3.0.80' Change: ModelMuse no longer includes RCH, EVT, or ETS among
 //                the point sources in MT3D-USGS in non MODFLOW 6 models.
-
-//               Bug fix: Fixed export of SFT package in MT3D-USGS when
+//    '4.3.0.81' Bug fix: Fixed export of SFT package in MT3D-USGS when
 //                there is more than one chemical species.
 //               Bug fix: Fixed a bug that caused an access violation if 
 //                the InterpolatedVertexValues function was used without an 
@@ -10493,7 +10492,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.80';
+  IIModelVersion = '4.3.0.81';
 
 function IModelVersion: string;
 begin

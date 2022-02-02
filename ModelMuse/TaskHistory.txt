@@ -158,7 +158,7 @@ object TTaskHistory
     end
     item
       Name = 'Video'
-      Display = False
+      Display = True
     end
     item
       Name = 'Running MODFLOW ModelMonitor'
@@ -170,7 +170,7 @@ object TTaskHistory
     end
     item
       Name = 'Export Shapefile'
-      Display = True
+      Display = False
     end
     item
       Name = 'MODPATH'
@@ -194,7 +194,7 @@ object TTaskHistory
     end
     item
       Name = 'HUF'
-      Display = True
+      Display = False
     end
     item
       Name = 'Batch file additions'
@@ -350,7 +350,7 @@ object TTaskHistory
     end
     item
       Name = 'SMS'
-      Display = True
+      Display = False
     end
     item
       Name = 'SimulationNameFile'
@@ -28879,5 +28879,10 @@ object TTaskHistory
       Date = 44594.000000000000000000
       Categories.Strings = (
         'Bug fix')
+    end
+    item
+      Date = 44595.000000000000000000
+      Categories.Strings = (
+        'Video')
     end>
 end

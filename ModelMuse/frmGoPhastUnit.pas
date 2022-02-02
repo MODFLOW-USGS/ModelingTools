@@ -2071,7 +2071,8 @@ resourcestring
   StrSelectedColD = 'Selected Col: %d';
 
 const
-  VideoUrl = 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseVideos.html';
+//  VideoUrl = 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseVideos.html';
+  VideoUrl = 'https://www.usgs.gov/mission-areas/water-resources/modelmuse-tutorial-videos-0';
   StrCustomization = 'Customization';
   StrShowTips = 'ShowTips';
 
