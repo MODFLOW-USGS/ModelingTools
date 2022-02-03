@@ -1,0 +1,29 @@
+Disconnect and turn off E drive.
+Shut down other computer.
+Shut off speakers for computer.
+Shut off air conditioner.
+Shut of Washer and Dryer.
+close windows and door.
+Use quieter chair.
+Check for other sources of noise.
+Uncheck "View|Show Desktop icons" from desktop context menu.
+Set Screen resolution to 800 x 600
+Select "Properties" from task bar context menu and check "Auto-hide the taskbar".
+Select "Show the Desktop" from task bar context menu.
+Start Camtasia
+Start ModelMuse
+(optional) Start other programs if needed for demo 
+Close Launcher
+Start recording.
+
+Before starting to produce the video, select "View|Project|Project Information" and enter appropriate information.
+When editing recording use custom settings 
+On the Flash/HTML5 dialog box, set the width to 800.
+On the Flash / HTML5 Player Option screen, click the Options tab. 
+Make sure the Captions and Under video captions options are selected.
+On The Video Options pane of the Production Wizard dialog box, click the "HTML options" button and enter a title.
+Also click the "Options" button and check the information there.
+Insert google-analytics code.
+Insert instructions for turning off automatic opening of video web pages.
+
+
