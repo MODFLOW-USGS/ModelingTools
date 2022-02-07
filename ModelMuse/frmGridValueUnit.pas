@@ -302,6 +302,15 @@ var
   end;
 begin
   inherited;
+  if frmGoPhast.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+//  Npf := frmGoPhast.PhastModel.ModflowPackages.NpfPackage;
+//  if not Npf.UseXT3D then
+//  begin
+//    Exit;
+//  end;
   DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
   UpdateDataArray(KXT3DAngle1);
   UpdateDataArray(KXT3DAngle2);
@@ -854,12 +863,12 @@ begin
     rrlXt3d.Visible := False;
     Exit;
   end;
-  LocalModel := FModel as TCustomModel;
-  if not LocalModel.ModflowPackages.NpfPackage.UseXT3D then
-  begin
-    rrlXt3d.Visible := False;
-    Exit;
-  end;
+  LocalModel := frmGoPhast.PhastModel;
+//  if not frmGoPhast.PhastModel.ModflowPackages.NpfPackage.UseXT3D then
+//  begin
+//    rrlXt3d.Visible := False;
+//    Exit;
+//  end;
 
   rrlXt3d.Visible := True;
   if (FLayer >= 0) and (FRow >= 0) and (FColumn >= 0) then

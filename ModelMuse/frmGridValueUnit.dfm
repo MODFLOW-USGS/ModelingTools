@@ -1166,6 +1166,8 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'XT3D Data'
       LabelWidth = 27
       ExpandedWidth = 288
+      ExplicitLeft = 597
+      ExplicitTop = 2
       object lblAngle1: TLabel
         Left = 40
         Top = 76

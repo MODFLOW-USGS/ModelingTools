@@ -10486,6 +10486,9 @@ const
 //                the InterpolatedVertexValues function was used without an 
 //                argument.
 
+//               Bug fix: Fixed display of XT3D data in the Grid or Mesh Values
+//                dialog box.
+
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
