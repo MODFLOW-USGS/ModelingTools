@@ -69,6 +69,7 @@ begin
       PvalFile := Format('%0:s%1:d', [NewName, Index]);
       Inc(Index);
     end;
+    SensFile.WriteBOM := False;
     SensFile.SaveToFile(PvalFile);
   finally
     SensFile.Free;

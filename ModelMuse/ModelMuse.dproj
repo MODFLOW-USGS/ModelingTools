@@ -8,7 +8,7 @@
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>19.2</ProjectVersion>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -70,7 +70,7 @@
         <VerInfo_MajorVer>4</VerInfo_MajorVer>
         <DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>FileVersion=4.3.0.81;ProductVersion=4.3.0.81</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=4.3.0.82;ProductVersion=4.3.0.82</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Manifest_File>None</Manifest_File>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
@@ -92,7 +92,7 @@
         <SanitizedProjectName>ModelMuse</SanitizedProjectName>
         <VerInfo_MinorVer>3</VerInfo_MinorVer>
         <DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
-        <VerInfo_Build>81</VerInfo_Build>
+        <VerInfo_Build>82</VerInfo_Build>
         <DCC_UseMSBuildExternally>true</DCC_UseMSBuildExternally>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">

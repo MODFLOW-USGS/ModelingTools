@@ -3122,6 +3122,7 @@ begin
     Script.Add('');
     Script.Add(Format('report_all_entities(file=''%s'')', [ExtractFileName(FFinishedFileName)]));
 
+    Script.WriteBOM := False;
     Script.SaveToFile(FScriptFileName);
   finally
     Script.Free;

@@ -287,6 +287,7 @@ begin
       WriteToNameFile(StrGAG, Model.UnitNumbers.UnitNumber(StrGAG),
         FNameOfFile, foInput, Model);
     end;
+    Gages.WriteBOM := False;
     Gages.SaveToFile(FNameOfFile);
   end;
   WriteObsScript(AFileName);

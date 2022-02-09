@@ -385,6 +385,7 @@ begin
       NameFileName := IncludeTrailingPathDelimiter(ExtractFileDir(fedNameFile.FileName))
         + 'TempNameFile.nam';
       try
+        NameFile.WriteBOM := False;
         NameFile.SaveToFile(NameFileName);
       except  on EFCreateError do
         begin
@@ -416,6 +417,7 @@ begin
       begin
         With TStringList.Create do
         begin
+          WriteBOM := False;
           SaveToFile(OldFile);
           Free;
         end;

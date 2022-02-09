@@ -10485,9 +10485,10 @@ const
 //               Bug fix: Fixed a bug that caused an access violation if 
 //                the InterpolatedVertexValues function was used without an 
 //                argument.
-
-//               Bug fix: Fixed display of XT3D data in the Grid or Mesh Values
+//    '4.3.0.82' Bug fix: Fixed display of XT3D data in the Grid or Mesh Values
 //                dialog box.
+//               Bug fix: When saving the MODFLOW Name file, the Byte Order Mark
+//                should no longer be written.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -10495,7 +10496,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.81';
+  IIModelVersion = '4.3.0.82';
 
 function IModelVersion: string;
 begin
@@ -33304,11 +33305,10 @@ begin
     PValFileName := ChangeFileExt(FileName, StrPvalExt);
     TemplateFileName := ChangeFileExt(FileName, StrJtf);
 
-//    if not WritingTemplate then
-//    begin
-      FPValFile.SaveToFile(PValFileName);
-      FPvalTemplate.SaveToFile(TemplateFileName);
-//    end;
+    FPValFile.WriteBOM := False;
+    FPValFile.SaveToFile(PValFileName);
+    FPvalTemplate.WriteBOM := False;
+    FPvalTemplate.SaveToFile(TemplateFileName);
 
     if UseWithMF2005 and (ModelSelection in Modflow2005Selection) then
     begin
@@ -41167,6 +41167,7 @@ begin
     SupCalcInput.Add(IntToStr(Ord(SupCalcProperties.Method)+1));
     SupCalcInput.Add('b');
     SupCalcInput.Add(WorkingDirectory + CaseName + '_SupCalcOut.txt');
+    SupCalcInput.WriteBOM := False;
     SupCalcInput.SaveToFile(SupCalcInputName);
   finally
     SupCalcInput.Free;
@@ -41256,6 +41257,7 @@ begin
     SvdaPrepInput.Add('');
     SvdaPrepInput.Add('');
     SvdaPrepInput.Add('');
+    SvdaPrepInput.WriteBOM := False;
     SvdaPrepInput.SaveToFile(SvdaPrepInputFileName);
   finally
     SvdaPrepInput.Free;

@@ -245,7 +245,9 @@ begin
         end;
       end;
 
+      NameFile.WriteBOM := False;
       NameFile.SaveToFile(FileName);
+      NameArchiveFile.WriteBOM := False;
       NameArchiveFile.SaveToFile(FileName + ArchiveExt);
       Model.AddModpathInputFile(FileName + ArchiveExt)
     finally
@@ -347,7 +349,9 @@ begin
       end;
 
       Model.AddModpathInputFile(FileName + ArchiveExt);
+      NameFile.WriteBOM := False;
       NameFile.SaveToFile(FileName);
+      NameArchiveFile.WriteBOM := False;
       NameArchiveFile.SaveToFile(FileName + ArchiveExt);
     finally
       NameFile.Free;
@@ -476,7 +480,9 @@ begin
       end;
 
       Model.AddModpathInputFile(FileName + ArchiveExt);
+      NameFile.WriteBOM := False;
       NameFile.SaveToFile(FileName);
+      NameArchiveFile.WriteBOM := False;
       NameArchiveFile.SaveToFile(FileName + ArchiveExt);
     finally
       NameFile.Free;

@@ -2334,6 +2334,7 @@ begin
         ObsFile.Insert(0, '# ' + ObservationPackage.Comments[Index]);
       end;
       ObsFile.Insert(0, '# ' + PackageID_Comment(ObservationPackage));
+      ObsFile.WriteBOM := False;
       ObsFile.SaveToFile(NameOfFile);
 
       SavePestInstructionFile(OutputName);

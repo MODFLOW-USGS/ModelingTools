@@ -213,6 +213,7 @@ begin
         end;
 
         FileName := ChangeFileExt(FileName, StrMf6WriteIns);
+        Lines.WriteBOM := False;
         Lines.SaveToFile(FileName);
 
         Lines[LinePostion] := '  VALUES ' + ExtractFileName(ChangeFileExt(FileName, StrMf6Values));
@@ -245,6 +246,7 @@ begin
 //        end;
 
         FileName := ChangeFileExt(FileName, StrMf2005WriteIns);
+        Lines.WriteBOM := False;
         Lines.SaveToFile(FileName);
 
         Lines[LinePostion] := '  OBSERVATIONS_FILE ' + ExtractFileName(ChangeFileExt(FileName, StrMf2005Values));

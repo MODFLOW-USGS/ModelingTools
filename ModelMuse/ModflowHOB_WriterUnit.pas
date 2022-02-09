@@ -506,6 +506,7 @@ begin
 
   if Model.PestUsed then
   begin
+    FPestInstructionFile.WriteBOM := False;
     FPestInstructionFile.SaveToFile(FOutFileName + '.ins');
   end;
 end;

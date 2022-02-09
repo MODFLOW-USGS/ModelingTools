@@ -46,6 +46,7 @@ begin
     VariogramFileName := ChangeFileExt(PilotPointFileObject.FileName, '.Variogram.txt');
     Lines.Add(ExtractFileName(VariogramFileName));
     MkppstatInputFileName := ChangeFileExt(PilotPointFileObject.FileName, '.Mkppstat_Input.txt');
+    Lines.WriteBOM := False;
     Lines.SaveToFile(MkppstatInputFileName);
 
     // PPCOV-SVA input
@@ -58,6 +59,7 @@ begin
     Lines.Add(ExtractFileName(CovarianceFileName));
     Lines.Add('');
     Ppcov_svaFileName := ChangeFileExt(PilotPointFileObject.FileName, '.Ppcov_SVA_Input.txt');
+    Lines.WriteBOM := False;
     Lines.SaveToFile(Ppcov_svaFileName);
 
     // Batchfile
@@ -77,6 +79,7 @@ begin
 //      Lines.Add('pause');
 //    end;
     BatchFileName := ChangeFileExt(PilotPointFileObject.FileName, '.CreateCov.Bat');
+    Lines.WriteBOM := False;
     Lines.SaveToFile(BatchFileName);
   finally
     Lines.Free;

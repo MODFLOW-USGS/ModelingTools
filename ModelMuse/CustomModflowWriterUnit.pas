@@ -4450,10 +4450,9 @@ begin
       Format(StrTheMaximumAllowed, [AFileName, Length(AFileName)]));
   end;
   AFileName := ChangeFileExt(AFileName, '.nam') + ArchiveExt;
+  NameFile.WriteBOM := False;
   NameFile.SaveToFile(AFileName);
   Model.AddModelInputFile(AFileName);
-
-
 end;
 
 procedure TCustomModflowWriter.GetFlowUnitNumber(var UnitNumber: Integer);
@@ -7467,6 +7466,7 @@ procedure TFluxObsWriter.SavePestInstructionFile(OutputName: string);
 begin
   if Model.PestUsed then
   begin
+    FPestInstructionFile.WriteBOM := False;
     FPestInstructionFile.SaveToFile(OutputName + '.ins');
   end;
 end;
@@ -7866,6 +7866,7 @@ begin
         ObsFile.Insert(0, '# ' + ObservationPackage.Comments[Index]);
       end;
       ObsFile.Insert(0, '# ' + PackageID_Comment(ObservationPackage));
+      ObsFile.WriteBOM := False;
       ObsFile.SaveToFile(NameOfFile);
       SavePestInstructionFile(OutputName);
     finally
@@ -8798,6 +8799,7 @@ begin
 
 
   AFileName := FileName(AFileName) + ArchiveExt;
+  NameFile.WriteBOM := False;
   NameFile.SaveToFile(AFileName);
   Model.AddMt3dmsInputFile(AFileName);
 end;
@@ -8827,6 +8829,7 @@ var
 begin
   AFileName := FileName(AFileName);
   HandleMF6Files;
+  NameFile.WriteBOM := False;
   NameFile.SaveToFile(AFileName);
 //  Model.AddModelInputFile(AFileName);
 
