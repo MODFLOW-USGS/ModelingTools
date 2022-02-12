@@ -10489,6 +10489,10 @@ const
 //                dialog box.
 //               Bug fix: When saving the MODFLOW Name file, the Byte Order Mark
 //                should no longer be written.
+//    '4.3.0.83' Bug fix: Fixed bug that could cause an error when merging
+//                objects.
+//               Bug fix: Fixed bug that could cause incorrect values to be
+//                exported when exporting contours to Shapefiles.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -10496,7 +10500,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.82';
+  IIModelVersion = '4.3.0.83';
 
 function IModelVersion: string;
 begin

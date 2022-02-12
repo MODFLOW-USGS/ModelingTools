@@ -298,6 +298,15 @@ begin
       ChildDataArray.Contours := DataSet.Contours;
     end;
 
+    if (frmGoPhast.PhastModel.TopContourDataSet = DataSet)
+      or (frmGoPhast.PhastModel.FrontContourDataSet = DataSet)
+      or (frmGoPhast.PhastModel.SideContourDataSet = DataSet)
+      or (frmGoPhast.PhastModel.ThreeDContourDataSet = DataSet)
+      then
+    begin
+      FreeAndNil(FStoredLegend);
+    end;
+
     Grid := frmGoPhast.Grid;
     if Grid <> nil then
     begin
