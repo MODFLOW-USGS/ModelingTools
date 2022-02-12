@@ -3396,6 +3396,11 @@ var
   LocalEpsilon: double;
   P1: TPoint2D;
   P2: TPoint2D;
+  StartPoint: TPoint2D;
+  EndPoint: TPoint2D;
+  PP1: TPoint2D;
+  PP2: TPoint2D;
+  SI_Index: Integer;
   function NearlyTheSame(const A, B: real): boolean;
   begin
     result := A = B;
@@ -3417,7 +3422,14 @@ begin
       and (not ScreenObject.Closed)
       and (not (ScreenObject.Count = 1)) then
     begin
-      FScreenObjects.Add(ScreenObject);
+      StartPoint := ScreenObject.Points[0];
+      EndPoint := ScreenObject.Points[ScreenObject.Count -1];
+      if (StartPoint.x <> EndPoint.x) or (StartPoint.y <> EndPoint.y) then
+      begin
+        // the object will not be considered closed if it doesn't have
+        // at least 4 vertices.
+        FScreenObjects.Add(ScreenObject);
+      end;
     end;
   end;
   FScreenObjects.Capacity := FScreenObjects.Count;
@@ -3467,13 +3479,33 @@ begin
       begin
         OriginalCount := ScreenObject.Count;
         try
-          OtherScreenObject := StoredObjects[0];
+          for SI_Index := 0 to Length(StoredObjects) - 1 do
+          begin
+            OtherScreenObject := StoredObjects[SI_Index];
+            if ScreenObject <> OtherScreenObject then
+            begin
+              break;
+            end;
+          end;
+            if ScreenObject = OtherScreenObject then
+            begin
+              // the object will not be considered closed if it doesn't have
+              // at least 4 vertices.
+              Continue;
+            end;
           AnotherPoint := OtherScreenObject.Points[0];
           if NearlyTheSame(APoint.x, AnotherPoint.x)
             and NearlyTheSame(APoint.y, AnotherPoint.y) then
           begin
             // The first point of ScreenObject is at the same location as
             // the first point of OtherScreenObject
+            PP1 := OtherScreenObject.Points[1];
+            PP2 := ScreenObject.Points[1];
+            if (PP1.x = PP2.x) and (PP1.y = PP2.y) then
+            begin
+              // Don't connect if it's backtracking.
+              Continue;
+            end;
             TempScreenObject := TScreenObject.Create(nil);
             try
               TempScreenObject.Capacity :=
@@ -3518,6 +3550,13 @@ begin
             AnotherPoint := OtherScreenObject.Points[OtherScreenObject.Count-1];
             Assert(NearlyTheSame(APoint.x, AnotherPoint.x)
               and NearlyTheSame(APoint.y, AnotherPoint.y));
+            PP1 := OtherScreenObject.Points[OtherScreenObject.Count-2];
+            PP2 := ScreenObject.Points[1];
+            if (PP1.x = PP2.x) and (PP1.y = PP2.y) then
+            begin
+              // Don't connect if it's backtracking.
+              Continue;
+            end;
             TempScreenObject := TScreenObject.Create(nil);
             try
               // The first point of ScreenObject is at the same location as
@@ -3540,7 +3579,12 @@ begin
               AnotherPoint := OtherScreenObject.Points[0];
               Assert(FQuadTree.RemovePoint(
                 AnotherPoint.X, AnotherPoint.Y, OtherScreenObject));
-              if not ScreenObject.Closed then
+//              end;
+              if ScreenObject.Closed then
+              begin
+                FQuadTree.RemovePoint(AnotherPoint.X, AnotherPoint.Y, ScreenObject);
+              end
+              else
               begin
                 FQuadTree.AddPoint(AnotherPoint.X, AnotherPoint.Y, ScreenObject);
               end;
@@ -3575,13 +3619,35 @@ begin
         begin
           OriginalCount := ScreenObject.Count;
           try
-            OtherScreenObject := StoredObjects[0];
+            for SI_Index := 0 to Length(StoredObjects) - 1 do
+            begin
+              OtherScreenObject := StoredObjects[SI_Index];
+              if ScreenObject <> OtherScreenObject then
+              begin
+                break;
+              end;
+            end;
+            if ScreenObject = OtherScreenObject then
+            begin
+              FQuadTree.AddPoint(APoint.x, APoint.y, ScreenObject);
+              // the object will not be considered closed if it doesn't have
+              // at least 4 vertices.
+              Continue;
+            end;
             ScreenObject.Capacity := ScreenObject.Count + OtherScreenObject.Count -1;
             AnotherPoint := OtherScreenObject.Points[0];
             if (APoint.x = AnotherPoint.x) and (APoint.y = AnotherPoint.y) then
             begin
               // The last point of ScreenObject is at the same location as
               // the first point of OtherScreenObject
+              PP1 := OtherScreenObject.Points[1];
+              PP2 := ScreenObject.Points[ScreenObject.Count-2];
+              if (PP1.x = PP2.x) and (PP1.y = PP2.y) then
+              begin
+                // Don't connect if it's backtracking.
+                FQuadTree.AddPoint(APoint.x, APoint.y, ScreenObject);
+                Continue;
+              end;
               for PointIndex := 1 to OtherScreenObject.Count - 1 do
               begin
                 ScreenObject.AddPoint(OtherScreenObject.Points[PointIndex], False);
@@ -3590,7 +3656,11 @@ begin
               AnotherPoint := OtherScreenObject.Points[OtherScreenObject.Count-1];
               Assert(FQuadTree.RemovePoint(
                 AnotherPoint.X, AnotherPoint.Y, OtherScreenObject));
-              if not ScreenObject.Closed then
+              if ScreenObject.Closed then
+              begin
+                FQuadTree.RemovePoint(AnotherPoint.X, AnotherPoint.Y, ScreenObject);
+              end
+              else
               begin
                 FQuadTree.AddPoint(AnotherPoint.X, AnotherPoint.Y, ScreenObject);
               end;
@@ -3606,6 +3676,15 @@ begin
                 raise EIllegalMerge.Create(Format(StrTheEndpointsOfThe,
                   [ScreenObject.Name, OtherScreenObject.Name ]));
               end;
+              PP1 := OtherScreenObject.Points[OtherScreenObject.Count-2];
+              PP2 := ScreenObject.Points[ScreenObject.Count-2];
+              if (PP1.x = PP2.x) and (PP1.y = PP2.y) then
+              begin
+                // Don't connect if it's backtracking.
+                FQuadTree.AddPoint(APoint.x, APoint.y, ScreenObject);
+                Continue;
+              end;
+
               for PointIndex := OtherScreenObject.Count - 2 downto 0 do
               begin
                 ScreenObject.AddPoint(OtherScreenObject.Points[PointIndex], False);
@@ -3614,7 +3693,11 @@ begin
               AnotherPoint := OtherScreenObject.Points[0];
               Assert(FQuadTree.RemovePoint(
                 AnotherPoint.X, AnotherPoint.Y, OtherScreenObject));
-              if not ScreenObject.Closed then
+              if ScreenObject.Closed then
+              begin
+                FQuadTree.RemovePoint(AnotherPoint.X, AnotherPoint.Y, ScreenObject);
+              end
+              else
               begin
                 FQuadTree.AddPoint(AnotherPoint.X, AnotherPoint.Y, ScreenObject);
               end;
