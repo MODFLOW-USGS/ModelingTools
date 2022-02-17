@@ -5693,7 +5693,8 @@ begin
       end;
     end;
 
-    Epsilon := Sqr(Max(MaxX-MinX, MaxY-MinY)/10000000);
+//    Epsilon := Sqr(Max(MaxX-MinX, MaxY-MinY)/10000000);
+    Epsilon := (MaxX-MinX)*(MaxY-MinY)/10000;
 //    P2.NumberOfContours := 1;
 //    P2.VertexCount[0] := 4;
 
