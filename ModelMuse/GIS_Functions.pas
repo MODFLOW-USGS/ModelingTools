@@ -1709,7 +1709,14 @@ begin
   begin
     Exit;
   end;
-  NodeDataName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    NodeDataName := '';
+  end
+  else
+  begin
+    NodeDataName := PString(Values[0])^;
+  end;
 
   LocalModel := GlobalCurrentModel as TCustomModel;
   DataArray := LocalModel.DataArrayManager.GetDataSetByName(NodeDataName);
@@ -1899,7 +1906,16 @@ var
 begin
   result := 0;
   LocalModel := GlobalCurrentModel as TCustomModel;
-  DataSetName := PString(Values[0])^;
+//  DataSetName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    DataSetName := '';
+  end
+  else
+  begin
+    DataSetName := PString(Values[0])^;
+  end;
+
   DataArray := LocalModel.DataArrayManager.GetDataSetByName(DataSetName);
   if DataArray = nil then
   begin
@@ -2029,7 +2045,15 @@ begin
   end
   else
   begin
-    RasterName := PString(Values[0])^;
+    if Values[0] = nil then
+    begin
+      RasterName := '';
+    end
+    else
+    begin
+      RasterName := PString(Values[0])^;
+    end;
+//    RasterName := PString(Values[0])^;
     Raster := (GlobalCurrentModel as TCustomModel).
       LinkedRasters.RasterByName(RasterName);
     if Assigned(Raster) then
@@ -2148,7 +2172,15 @@ begin
   end
   else
   begin
-    RasterName := PString(Values[0])^;
+    if Values[0] = nil then
+    begin
+      RasterName := '';
+    end
+    else
+    begin
+      RasterName := PString(Values[0])^;
+    end;
+//    RasterName := PString(Values[0])^;
     Raster := (GlobalCurrentModel as TCustomModel).
       LinkedRasters.RasterByName(RasterName);
     if Assigned(Raster) then
@@ -2208,7 +2240,15 @@ begin
   end
   else
   begin
-    DataSetName := PString(Values[0])^;
+    if Values[0] = nil then
+    begin
+      DataSetName := '';
+    end
+    else
+    begin
+      DataSetName := PString(Values[0])^;
+    end;
+//    DataSetName := PString(Values[0])^;
     with TMultiValueScreenObject(GlobalCurrentScreenObject) do
     begin
       Item := RealValues.GetItemByName(DataSetName) as TRealDataListItem;
@@ -2240,7 +2280,15 @@ begin
   end
   else
   begin
-    DataSetName := PString(Values[0])^;
+    if Values[0] = nil then
+    begin
+      DataSetName := '';
+    end
+    else
+    begin
+      DataSetName := PString(Values[0])^;
+    end;
+//    DataSetName := PString(Values[0])^;
     with TMultiValueScreenObject(GlobalCurrentScreenObject) do
     begin
       Item := IntegerValues.GetItemByName(DataSetName) as TIntegerDataListItem;
@@ -2287,7 +2335,14 @@ var
   end;
 begin
   Assert(Length(Values) >= 2);
-  VertexValueName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    VertexValueName := '';
+  end
+  else
+  begin
+    VertexValueName := PString(Values[0])^;
+  end;
   DefaultValue := PDouble(Values[1])^;
   result := DefaultValue;
   if (GlobalCurrentSegment = nil) or (GlobalCurrentScreenObject = nil)
@@ -2893,13 +2948,21 @@ function TestVertexValuesCanBeTested(const FunctionName, VertexValueName: string
 begin
   result := True;
   if (GlobalCurrentSegment = nil) or (GlobalCurrentScreenObject = nil)
-    or (GlobalCurrentScreenObject.PointPositionValues = nil) then
+    or (GlobalCurrentScreenObject.PointPositionValues = nil)
+    or (VertexValueName = '') then
   begin
     result := False;
     if  (GlobalCurrentScreenObject = nil) then
     begin
       frmErrorsAndWarnings.AddWarning(GlobalCurrentModel,
         Format(StrTheSFunctionCan, [FunctionName]), '');
+      frmErrorsAndWarnings.Show;
+    end
+    else if VertexValueName = '' then
+    begin
+      frmErrorsAndWarnings.AddWarning(GlobalCurrentModel,Format(
+        'The %s function requires that a key be specified.', [FunctionName]),
+        GlobalCurrentScreenObject.Name, GlobalCurrentScreenObject);
       frmErrorsAndWarnings.Show;
     end
     else if (GlobalCurrentSegment = nil) then
@@ -2935,7 +2998,14 @@ var
   DefaultValueAssigned: Boolean;
 begin
   Assert(Length(Values) >= 1);
-  VertexValueName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    VertexValueName := '';
+  end
+  else
+  begin
+    VertexValueName := PString(Values[0])^;
+  end;
   DefaultValueAssigned := False;
   if (Length(Values) > 1) and (Values[1] <> nil) then
   begin
@@ -3018,7 +3088,14 @@ var
   DefaultValueAssigned: Boolean;
 begin
   Assert(Length(Values) >= 1);
-  VertexValueName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    VertexValueName := '';
+  end
+  else
+  begin
+    VertexValueName := PString(Values[0])^;
+  end;
   DefaultValueAssigned := False;
   if (Length(Values) > 1) and (Values[1] <> nil) then
   begin
@@ -3102,7 +3179,14 @@ var
   DefaultAssigned: Boolean;
 begin
   Assert(Length(Values) >= 1);
-  VertexValueName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    VertexValueName := '';
+  end
+  else
+  begin
+    VertexValueName := PString(Values[0])^;
+  end;
   DefaultAssigned := False;
   if (Length(Values) > 1) and (Values[1] <> nil) then
   begin
@@ -3293,7 +3377,14 @@ var
   DefaultAssigned: Boolean;
 begin
   Assert(Length(Values) >= 1);
-  VertexValueName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    VertexValueName := '';
+  end
+  else
+  begin
+    VertexValueName := PString(Values[0])^;
+  end;
   DefaultAssigned := False;
   if (Length(Values) > 1) and (Values[1] <> nil) then
   begin
@@ -3380,7 +3471,14 @@ var
   DefaultAssigned: Boolean;
 begin
   Assert(Length(Values) >= 1);
-  VertexValueName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    VertexValueName := '';
+  end
+  else
+  begin
+    VertexValueName := PString(Values[0])^;
+  end;
   DefaultAssigned := False;
   if (Length(Values) > 1) and (Values[1] <> nil) then
   begin
@@ -3447,7 +3545,14 @@ var
   DefaultAssigned: Boolean;
 begin
   Assert(Length(Values) >= 1);
-  VertexValueName := PString(Values[0])^;
+  if Values[0] = nil then
+  begin
+    VertexValueName := '';
+  end
+  else
+  begin
+    VertexValueName := PString(Values[0])^;
+  end;
   DefaultAssigned := False;
   if (Length(Values) > 1) and (Values[1] <> nil) then
   begin
@@ -5641,7 +5746,14 @@ begin
         and (GlobalCurrentScreenObject.SectionLength[SectionIndex] in [4,5]) then
       begin
         Assert(Length(Values) >= 1);
-        VertexValueName := PString(Values[0])^;
+        if Values[0] = nil then
+        begin
+          VertexValueName := '';
+        end
+        else
+        begin
+          VertexValueName := PString(Values[0])^;
+        end;
         LocalPPV := GlobalCurrentScreenObject.PointPositionValues;
         StartIndex := GlobalCurrentScreenObject.SectionStart[SectionIndex];
         EndIndex := GlobalCurrentScreenObject.SectionEnd[SectionIndex]-1;
@@ -5974,7 +6086,15 @@ procedure GetImportedValues(var ImportedValues: TValueArrayStorage;
 begin
   if (Length(Values) > 0) and (Values[0] <> nil) then
   begin
-    ImportedName := PString(Values[0])^;
+    if Values[0] = nil then
+    begin
+      ImportedName := '';
+    end
+    else
+    begin
+      ImportedName := PString(Values[0])^;
+    end;
+//    ImportedName := PString(Values[0])^;
     if ImportedName = StrImportedHigherElev then
     begin
       ImportedValues :=
