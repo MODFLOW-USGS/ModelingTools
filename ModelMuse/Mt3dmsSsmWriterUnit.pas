@@ -193,7 +193,7 @@ begin
       begin
         CellList.Clear;
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
-        Inc(MaximumNumberOfCells, CellList.Count);
+        Inc(MaximumNumberOfCells, CellList.Count*2);
       end;
 
       if (Model.ModelSelection <> msModflow2015) and
@@ -294,7 +294,7 @@ begin
           if LakeID.IntegerData[LayerIndex, RowIndex, ColIndex] > 0 then
           begin
             if (LayerIndex < LakeID.LayerCount - 1)
-              and (LakeID.IntegerData[LayerIndex+1, RowIndex, ColIndex] > 0)  then
+              and (LakeID.IntegerData[LayerIndex+1, RowIndex, ColIndex] = 0)  then
             begin
               Inc(MaximumNumberOfCells);
             end;
