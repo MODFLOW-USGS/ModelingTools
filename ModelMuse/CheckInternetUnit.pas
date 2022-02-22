@@ -53,7 +53,7 @@ implementation
 
 uses
   Math, RbwInternetUtilities, frmGoPhastUnit, IniFileUtilities, GoPhastTypes, 
-  StdCtrls, frmNewVersionUnit, System.IOUtils;
+  StdCtrls, frmNewVersionUnit, System.IOUtils, Xml.VerySimple;
 
 resourcestring
   StrYourVersionS = 'Your version: %s';
@@ -64,6 +64,7 @@ resourcestring
 
 const
   UpdateURL = 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseInternetUpdate.txt';
+  VideoUpdateURL = 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Videos.xml';
 
 { TCheckInternetThread }
 
@@ -123,6 +124,7 @@ var
 //  VersionOnWeb: string;
   VerCompar: TVersionCompare;
   Index: Integer;
+  MemStream: TMemoryStream;
 begin
   try
     try
@@ -172,7 +174,32 @@ begin
           begin
             Synchronize(NewVideoMessage);
           end;
+
+          if ReadInternetFile(VideoUpdateURL, FUpdateText, FAppName) then
+          begin
+            MemStream := TMemoryStream.Create;
+            try
+              FUpdateText.SaveToStream(MemStream);
+              MemStream.Position := 0;
+              Videos := TXmlVerySimple.Create;
+              try
+                try
+                  Videos.LoadFromStream(MemStream);
+                except
+                  Exit;
+                end;
+              finally
+                Videos.Free;
+              end;
+            finally
+              MemStream.Free;
+            end;
+          end;
+
         end;
+
+
+
         Synchronize(UpdateIniFile);
 
       end;
