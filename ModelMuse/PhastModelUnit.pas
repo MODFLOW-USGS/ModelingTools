@@ -10493,8 +10493,7 @@ const
 //                objects.
 //               Bug fix: Fixed bug that could cause incorrect values to be
 //                exported when exporting contours to Shapefiles.
-
-//               Bug fix: Fixed export of SSM in MT3D-USGS when the DRT package
+//    '4.3.0.84' Bug fix: Fixed export of SSM in MT3D-USGS when the DRT package
 //                is used.
 //               Bug fix: Fixed evaluation of node outlines in the front view of
 //                3D SUTRA models.
@@ -10505,7 +10504,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.83';
+  IIModelVersion = '4.3.0.84';
 
 function IModelVersion: string;
 begin
