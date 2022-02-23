@@ -17,7 +17,7 @@ type
     miSave: TMenuItem;
     dlgOpen: TOpenDialog;
     dlgSave: TSaveDialog;
-    edText: TEdit;
+    edURL: TEdit;
     btnAddChild: TButton;
     btnDeleteNode: TButton;
     btnAddNode: TButton;
@@ -30,7 +30,7 @@ type
     edTopic: TEdit;
     lblTopic: TLabel;
     procedure tvVideosChange(Sender: TObject; Node: TTreeNode);
-    procedure edTextChange(Sender: TObject);
+    procedure edURLChange(Sender: TObject);
     procedure btnAddChildClick(Sender: TObject);
     procedure btnDeleteNodeClick(Sender: TObject);
     procedure btnAddNodeClick(Sender: TObject);
@@ -63,7 +63,7 @@ resourcestring
   StrYear = 'Year';
   StrMonth = 'Month';
   StrDay = 'Day';
-  StrTitle = 'Title';
+//  StrTitle = 'Title';
   StrTopic = 'Topic';
   StrDoYouWantToSave = 'Do you want to save the file?';
 
@@ -75,7 +75,7 @@ var
   AnXmlNode: TXmlNode;
   NewXmlNode: TXmlNode;
 begin
-  if tvVideos.Selected <> nil then
+  if (tvVideos.Selected <> nil) and not tvVideos.Selected.HasChildren then
   begin
     FChanged := True;
     ANode := tvVideos.Items.AddChild(tvVideos.Selected, 'NewNode');
@@ -83,7 +83,7 @@ begin
     begin
       AnXmlNode := tvVideos.Selected.Data;
       NewXmlNode := AnXmlNode.AddChild('URL');
-      NewXmlNode.Text := 'NewNode';
+      NewXmlNode.Text := '';
       ANode.Data := NewXmlNode;
     end;
     tvVideos.Selected := ANode;
@@ -99,7 +99,7 @@ var
 begin
   ANode := tvVideos.Items.Add(nil, 'NewNode');
   AnXmlNode := FVideoList.AddChild('URL');
-  AnXmlNode.Text := 'NewNode';
+  AnXmlNode.Text := '';
   ANode.Data := AnXmlNode;
   tvVideos.Selected := ANode;
   jvdDate.Text := '';
@@ -109,27 +109,47 @@ end;
 procedure TfrmMain.btnDeleteNodeClick(Sender: TObject);
 var
   AnXmlNode: TXmlNode;
+  ParentTreeNode: TTreeNode;
+  ParentXmlNode: TXmlNode;
 begin
   if tvVideos.Selected <> nil then
   begin
+    ParentTreeNode := tvVideos.Selected.Parent;
     AnXmlNode := tvVideos.Selected.Data;
-    AnXmlNode.Free;
+    if ParentTreeNode = nil then
+    begin
+      FVideoList.ChildNodes.Remove(AnXmlNode);
+    end
+    else
+    begin
+      ParentXmlNode := ParentTreeNode.Data;
+      ParentXmlNode.ChildNodes.Remove(AnXmlNode);
+    end;
     tvVideos.Selected.Free;
     FChanged := True;
   end;
 end;
 
-procedure TfrmMain.edTextChange(Sender: TObject);
+procedure TfrmMain.edURLChange(Sender: TObject);
 var
   AnXmlNode: TXmlNode;
 begin
   if tvVideos.Selected <> nil then
   begin
-    tvVideos.Selected.Text := EdText.Text;
     if tvVideos.Selected.Data <> nil then
     begin
       AnXmlNode := tvVideos.Selected.Data;
-      AnXmlNode.Text := EdText.Text;
+      AnXmlNode.Name := edURL.Text;
+
+      if AnXmlNode.text <> '' then
+      begin
+        tvVideos.Selected.Text :=
+          AnXmlNode.text + '; ' + edURL.Text;
+      end
+      else
+      begin
+        tvVideos.Selected.Text := edURL.Text;
+      end;
     end;
     FChanged := True;
   end;
@@ -143,7 +163,16 @@ begin
   begin
     AnXmlNode := tvVideos.Selected.Data;
     Assert(AnXmlNode <> nil);
-    AnXmlNode.SetAttribute(StrTitle, edTitle.Text);
+    AnXmlNode.Text := edTitle.Text;
+      if AnXmlNode.text <> '' then
+      begin
+        tvVideos.Selected.Text :=
+          AnXmlNode.text + '; ' + edURL.Text;
+      end
+      else
+      begin
+        tvVideos.Selected.Text := edURL.Text;
+      end;
     FChanged := True;
   end;
 end;
@@ -187,11 +216,30 @@ begin
       AnXmlNode := FVideoList.ChildNodes[NodeIndex];
       ATreeNode := tvVideos.Items.Add(nil, AnXmlNode.Text);
       ATreeNode.Data := AnXmlNode;
+      if AnXmlNode.text <> '' then
+      begin
+        ATreeNode.Text :=
+          AnXmlNode.text + '; ' + AnXmlNode.Name;
+      end
+      else
+      begin
+        ATreeNode.Text := AnXmlNode.Name;
+      end;
+
       for InnerNodeIndex := 0 to AnXmlNode.ChildNodes.Count - 1 do
       begin
         ChildXmlNode := AnXmlNode.ChildNodes[InnerNodeIndex];
         ChildTreeNode := tvVideos.Items.AddChild(ATreeNode, ChildXmlNode.Text);
         ChildTreeNode.Data := ChildXmlNode;
+        if ChildXmlNode.text <> '' then
+        begin
+          ChildTreeNode.Text :=
+            ChildXmlNode.text + '; ' + ChildXmlNode.Name;
+        end
+        else
+        begin
+          ChildTreeNode.Text := ChildXmlNode.Name;
+        end;
       end;
     end;
 
@@ -254,16 +302,9 @@ var
 begin
   if Node <> nil then
   begin
-    EdText.Text := Node.Text;
     AnXmlNode := Node.Data;
-    if AnXmlNode.HasAttribute(StrTitle) then
-    begin
-      edTitle.Text := AnXmlNode.Attributes[StrTitle];
-    end
-    else
-    begin
-      edTitle.Text := ''
-    end;
+    edURL.Text := AnXmlNode.Name;
+    edTitle.Text := AnXmlNode.Text;
     if AnXmlNode.HasAttribute(StrTopic) then
     begin
       edTopic.Text := AnXmlNode.Attributes[StrTopic];
@@ -298,14 +339,14 @@ begin
     Exit
   end;
   AnXmlNode := ANode.Data;
-  if AnXmlNode.HasAttribute(StrTitle) then
+  if AnXmlNode.Text <> '' then
   begin
-    sbStatus.SimpleText := AnXmlNode.Attributes[StrTitle]
-     + '; ' + ANode.Text;
+    sbStatus.SimpleText := AnXmlNode.Text
+     + '; ' + AnXmlNode.Name;
   end
   else
   begin
-    sbStatus.SimpleText := ANode.Text;
+    sbStatus.SimpleText := AnXmlNode.Name;
   end;
 end;
 

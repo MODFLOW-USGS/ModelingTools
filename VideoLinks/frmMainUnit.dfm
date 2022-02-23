@@ -48,23 +48,25 @@ object frmMain: TfrmMain
     Caption = 'Topic Group'
   end
   object tvVideos: TTreeView
-    Left = 8
+    Left = 9
     Top = 8
     Width = 121
     Height = 283
     Anchors = [akLeft, akTop, akBottom]
+    AutoExpand = True
+    HideSelection = False
     Indent = 19
     TabOrder = 0
     OnChange = tvVideosChange
     OnMouseMove = tvVideosMouseMove
   end
-  object edText: TEdit
+  object edURL: TEdit
     Left = 135
     Top = 30
     Width = 492
     Height = 21
     TabOrder = 1
-    OnChange = edTextChange
+    OnChange = edURLChange
   end
   object btnAddChild: TButton
     Left = 135
@@ -76,7 +78,7 @@ object frmMain: TfrmMain
     OnClick = btnAddChildClick
   end
   object btnDeleteNode: TButton
-    Left = 135
+    Left = 136
     Top = 119
     Width = 75
     Height = 25
@@ -108,9 +110,6 @@ object frmMain: TfrmMain
     Height = 19
     Panels = <>
     SimplePanel = True
-    ExplicitLeft = 312
-    ExplicitTop = 304
-    ExplicitWidth = 0
   end
   object jvdDate: TJvDateEdit
     Left = 135
@@ -122,8 +121,8 @@ object frmMain: TfrmMain
     OnChange = jvdDateChange
   end
   object edTopic: TEdit
-    Left = 136
-    Top = 264
+    Left = 135
+    Top = 267
     Width = 281
     Height = 21
     TabOrder = 8
