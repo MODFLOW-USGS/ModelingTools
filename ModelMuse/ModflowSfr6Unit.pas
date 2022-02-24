@@ -18,6 +18,26 @@ type
   // ssActive = stage is calculated.
   // ssSimple = stage is specified.
   TStreamStatus = (ssInactive, ssActive, ssSimple);
+  TGwtStreamStatus = (gssInactive, gssActive, gssConstant);
+
+  TGwtStrStatusItem = class(TCollectionItem)
+  private
+    FGwtStreamStatus: TGwtStreamStatus;
+    procedure SetGwtStreamStatus(const Value: TGwtStreamStatus);
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    Property GwtStreamStatus: TGwtStreamStatus read FGwtStreamStatus write SetGwtStreamStatus;
+  end;
+
+  TGwtStrStatusCollection = class(TCollection)
+  private
+    function GetItems(Index: Integer): TGwtStrStatusItem;
+    procedure SetItems(Index: Integer; const Value: TGwtStrStatusItem);
+  public
+    constructor Create;
+    property Items[Index: Integer]: TGwtStrStatusItem read GetItems write SetItems; default;
+  end;
 
   TSfrMF6Record = record
     Cell: TCellLocation;
@@ -78,6 +98,16 @@ type
     ReachNumber: Integer;
     MvrUsed: Boolean;
     MvrIndex: Integer;
+
+    // GWT
+    GwtStatus: array of TGwtStreamStatus;
+    SpecifiedConcentrations: TGwtCellData;
+    RainfallConcentrations: TGwtCellData;
+    EvapConcentrations: TGwtCellData;
+    RunoffConcentrations: TGwtCellData;
+    InflowConcentrations: TGwtCellData;
+
+    procedure Assign(const Item: TSfrMF6Record);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -97,6 +127,13 @@ type
     property SfrMF6Array: TSfrMF6Array read GetStrMF6Array;
   end;
 
+  TSfrMf6Collection = class;
+
+  TSftGwtConcCollection = class(TGwtConcStringCollection)
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TSfrMf6Collection);
+  end;
+
   TSfrMf6Item = class(TCustomModflowBoundaryItem)
   private
     FDiversions: TStringList;
@@ -110,6 +147,13 @@ type
     FStage: TFormulaObject;
     FRoughness: TFormulaObject;
     FStreamStatus: TStreamStatus;
+    // GWT
+    FGwtStatus: TGwtStrStatusCollection;
+    FSpecifiedConcentrations: TSftGwtConcCollection;
+    FRainfallConcentrations: TSftGwtConcCollection;
+    FEvapConcentrations: TSftGwtConcCollection;
+    FRunoffConcentrations: TSftGwtConcCollection;
+    FInflowConcentrations: TSftGwtConcCollection;
     function GetDiversions: TStrings;
     function GetEvaporation: string;
     function GetInflow: string;
@@ -132,6 +176,12 @@ type
     function GetStage: string;
     procedure SetRoughness(const Value: string);
     procedure SetStage(const Value: string);
+    procedure SetEvapConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetGwtStatus(const Value: TGwtStrStatusCollection);
+    procedure SetInflowConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetRainfallConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetRunoffConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetSpecifiedConcentrations(const Value: TSftGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -172,6 +222,42 @@ type
     // @link(DiversionFormulas) from a file but otherwise, use
     // @link(DiversionFormulas) instead of @name.
     property Diversions: TStrings read GetDiversions write SetDiversions;
+    // GWT
+    property GwtStatus: TGwtStrStatusCollection read FGwtStatus write SetGwtStatus
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property SpecifiedConcentrations: TSftGwtConcCollection read FSpecifiedConcentrations
+      write SetSpecifiedConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property RainfallConcentrations: TSftGwtConcCollection read FRainfallConcentrations
+      write SetRainfallConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property EvapConcentrations: TSftGwtConcCollection read FEvapConcentrations
+      write SetEvapConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property RunoffConcentrations: TSftGwtConcCollection read FRunoffConcentrations
+      write SetRunoffConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property InflowConcentrations: TSftGwtConcCollection read FInflowConcentrations
+      write SetInflowConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
   TSfrMf6TimeListLink = class(TTimeListsModelLink)
@@ -185,6 +271,14 @@ type
     FRoughness: TModflowTimeList;
     FStreamStatus: TModflowTimeList;
     FReachNumber: TModflowTimeList;
+    // GWT
+    FGwtStatusList: TModflowTimeLists;
+    FSpecifiedConcList: TModflowTimeLists;
+    FRainfallConcList: TModflowTimeLists;
+    FEvapConcList: TModflowTimeLists;
+    FRunoffConcList: TModflowTimeLists;
+    FInflowConcList: TModflowTimeLists;
+
   protected
     procedure CreateTimeLists; override;
   public
@@ -204,6 +298,13 @@ type
     procedure InvalidateDiversionsData(Sender: TObject);
     procedure InvalidateStageData(Sender: TObject);
     procedure InvalidateRoughnessData(Sender: TObject);
+    // GWT
+    procedure InvalidateGwtStatus(Sender: TObject);
+    procedure InvalidateSpecifiedConcentrations(Sender: TObject);
+    procedure InvalidateRainfallConcentrations(Sender: TObject);
+    procedure InvalidateEvapConcentrations(Sender: TObject);
+    procedure InvalidateRunoffConcentrations(Sender: TObject);
+    procedure InvalidateInflowConcentrations(Sender: TObject);
   protected
     class function ItemClass: TBoundaryItemClass; override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -689,9 +790,22 @@ resourcestring
 
 { TStrMF6Record }
 
+procedure TSfrMF6Record.Assign(const Item: TSfrMF6Record);
+begin
+  self := Item;
+  SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
+  RainfallConcentrations.Assign(Item.RainfallConcentrations);
+  EvapConcentrations.Assign(Item.EvapConcentrations);
+  RunoffConcentrations.Assign(Item.RunoffConcentrations);
+  InflowConcentrations.Assign(Item.InflowConcentrations);
+  SetLength(GwtStatus, Length(GwtStatus));
+end;
+
 procedure TSfrMF6Record.Cache(Comp: TCompressionStream; Strings: TStringList);
 var
   index: Integer;
+  GwtStatusCount: Integer;
+  SpeciesIndex: Integer;
 begin
   WriteCompCell(Comp, Cell);
 
@@ -774,13 +888,25 @@ begin
     WriteCompInt(Comp, Strings.IndexOf(DiversionTimeSeriesName[index]));
   end;
 
-
   WriteCompInt(Comp, ReachNumber);
 
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
   SetLength(Diversions, 0);
   SetLength(DiversionAnnotations, 0);
+
+  SpecifiedConcentrations.Cache(Comp, Strings);
+  RainfallConcentrations.Cache(Comp, Strings);
+  EvapConcentrations.Cache(Comp, Strings);
+  RunoffConcentrations.Cache(Comp, Strings);
+  InflowConcentrations.Cache(Comp, Strings);
+
+  GwtStatusCount := Length(GwtStatus);
+  WriteCompInt(Comp, GwtStatusCount);
+  for SpeciesIndex := 0 to GwtStatusCount - 1 do
+  begin
+    WriteCompInt(Comp, Ord(GwtStatus[SpeciesIndex]));
+  end;
 end;
 
 procedure TSfrMF6Record.RecordStrings(Strings: TStringList);
@@ -833,6 +959,12 @@ begin
   begin
     Strings.Add(DiversionTimeSeriesName[index]);
   end;
+
+  SpecifiedConcentrations.RecordStrings(Strings);
+  RainfallConcentrations.RecordStrings(Strings);
+  EvapConcentrations.RecordStrings(Strings);
+  RunoffConcentrations.RecordStrings(Strings);
+  InflowConcentrations.RecordStrings(Strings);
 end;
 
 procedure TSfrMF6Record.Restore(Decomp: TDecompressionStream;
@@ -840,6 +972,8 @@ procedure TSfrMF6Record.Restore(Decomp: TDecompressionStream;
 var
   ArraySize: Integer;
   index: Integer;
+  GwtStatusCount: Integer;
+  SpeciesIndex: Integer;
 begin
   Cell := ReadCompCell(Decomp);
 
@@ -931,6 +1065,20 @@ begin
   ReachNumber := ReadCompInt(Decomp);
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
+
+  SpecifiedConcentrations.Restore(Decomp, Annotations);
+  RainfallConcentrations.Restore(Decomp, Annotations);
+  EvapConcentrations.Restore(Decomp, Annotations);
+  RunoffConcentrations.Restore(Decomp, Annotations);
+  InflowConcentrations.Restore(Decomp, Annotations);
+
+  GwtStatusCount := ReadCompInt(Decomp);
+  SetLength(GwtStatus, GwtStatusCount);
+  for SpeciesIndex := 0 to GwtStatusCount - 1 do
+  begin
+    GwtStatus[SpeciesIndex] := TGwtStreamStatus(ReadCompInt(Decomp));
+  end;
+
 end;
 
 { TStrMf6Storage }
@@ -1023,6 +1171,12 @@ begin
     begin
       DiversionFormulas[DivIndex] := StrSource.Diversions[DivIndex];
     end;
+    GwtStatus := StrSource.GwtStatus;
+    SpecifiedConcentrations := StrSource.SpecifiedConcentrations;
+    RainfallConcentrations := StrSource.RainfallConcentrations;
+    EvapConcentrations := StrSource.EvapConcentrations;
+    RunoffConcentrations := StrSource.RunoffConcentrations;
+    InflowConcentrations := StrSource.InflowConcentrations;
   end
   else if Source is TSfrParamIcalcItem then
   begin
@@ -1076,6 +1230,7 @@ var
   ParentCollection: TSfrMf6Collection;
   Observer: TObserver;
   DivIndex: Integer;
+  ConcIndex: Integer;
 begin
   ParentCollection := Collection as TSfrMf6Collection;
   Observer := FObserverList[SfrMf6InflowPosition];
@@ -1104,17 +1259,70 @@ begin
     Observer := FObserverList[DivIndex + SfrMf6DiversionStartPosition];
     Observer.OnUpToDateSet := ParentCollection.InvalidateDiversionsData;
   end;
+
+//  for ConcIndex := 0 to GwtStatus.Count - 1 do
+//  begin
+//    GwtStatus[ConcIndex].Observer.OnUpToDateSet
+//      := ParentCollection.InvalidateSpecifiedConcentrations;
+//  end;
+
+  for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
+  begin
+    SpecifiedConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateSpecifiedConcentrations;
+  end;
+
+  for ConcIndex := 0 to RainfallConcentrations.Count - 1 do
+  begin
+    RainfallConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateRainfallConcentrations;
+  end;
+
+  for ConcIndex := 0 to EvapConcentrations.Count - 1 do
+  begin
+    EvapConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateEvapConcentrations;
+  end;
+
+  for ConcIndex := 0 to RunoffConcentrations.Count - 1 do
+  begin
+    RunoffConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateRunoffConcentrations;
+  end;
+
+  for ConcIndex := 0 to InflowConcentrations.Count - 1 do
+  begin
+    InflowConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateInflowConcentrations;
+  end;
 end;
 
 function TSfrMf6Item.BoundaryFormulaCount: integer;
 begin
-  result := DiversionCount + 7;
+  result := DiversionCount + 7
+    + frmGoPhast.PhastModel.MobileComponents.Count *5;
 end;
 
 constructor TSfrMf6Item.Create(Collection: TCollection);
+var
+  SftCollection: TSfrMf6Collection;
 begin
   FDiversions := TStringList.Create;
   FDiversionFormulas := TList<TFormulaObject>.Create;
+
+  SftCollection := Collection as TSfrMf6Collection;
+  FGwtStatus := TGwtStrStatusCollection.Create;
+  FSpecifiedConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+    SftCollection);
+  FRainfallConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+    SftCollection);
+  FEvapConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+    SftCollection);
+  FRunoffConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+    SftCollection);
+  FInflowConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+    SftCollection);
+
   inherited;
   FStatus := True;
 
@@ -1142,7 +1350,40 @@ begin
 end;
 
 destructor TSfrMf6Item.Destroy;
+var
+  Index: Integer;
 begin
+  FGwtStatus.Free;
+  for Index := 0 to FSpecifiedConcentrations.Count - 1 do
+  begin
+    FSpecifiedConcentrations[Index].Value := '0';
+  end;
+  FSpecifiedConcentrations.Free;
+
+  for Index := 0 to FRainfallConcentrations.Count - 1 do
+  begin
+    FRainfallConcentrations[Index].Value := '0';
+  end;
+  FRainfallConcentrations.Free;
+
+  for Index := 0 to FEvapConcentrations.Count - 1 do
+  begin
+    FEvapConcentrations[Index].Value := '0';
+  end;
+  FEvapConcentrations.Free;
+
+  for Index := 0 to FRunoffConcentrations.Count - 1 do
+  begin
+    FRunoffConcentrations[Index].Value := '0';
+  end;
+  FRunoffConcentrations.Free;
+
+  for Index := 0 to FInflowConcentrations.Count - 1 do
+  begin
+    FInflowConcentrations[Index].Value := '0';
+  end;
+  FInflowConcentrations.Free;
+
   DiversionCount := 0;
   inherited;
   // FDiversionFormulas is accessed in RemoveFormulaObjects which is called
@@ -1152,6 +1393,8 @@ begin
 end;
 
 function TSfrMf6Item.GetBoundaryFormula(Index: integer): string;
+var
+  ChemSpeciesCount: Integer;
 begin
   case Index of
     SfrMf6InflowPosition: result := Inflow;
@@ -1161,7 +1404,80 @@ begin
     SfrMf6UpstreamFractionPosition: result := UpstreamFraction;
     SfrMf6StagePosition: result := Stage;
     SfrMf6RoughnessPosition: result := Roughness;
-    else result := DiversionFormulas[Index-SfrMf6DiversionStartPosition];
+    else 
+      begin
+        Index := Index-SfrMf6DiversionStartPosition; 
+        if Index < FDiversionFormulas.Count then
+        begin
+          result := DiversionFormulas[Index];
+          Exit;
+        end;
+        Index := Index - FDiversionFormulas.Count;
+        // GWT
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        while SpecifiedConcentrations.Count <= ChemSpeciesCount do
+        begin
+          SpecifiedConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          result := SpecifiedConcentrations[Index].Value;
+          Exit;
+        end;
+        Index := Index - ChemSpeciesCount;
+
+        while RainfallConcentrations.Count <= ChemSpeciesCount do
+        begin
+          RainfallConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          result := RainfallConcentrations[Index].Value;
+          Exit;
+        end;
+        Index := Index - ChemSpeciesCount;
+
+        while EvapConcentrations.Count <= ChemSpeciesCount do
+        begin
+          EvapConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          result := EvapConcentrations[Index].Value;
+          Exit;
+        end;
+        Index := Index - ChemSpeciesCount;
+
+        while RunoffConcentrations.Count <= ChemSpeciesCount do
+        begin
+          RunoffConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          result := RunoffConcentrations[Index].Value;
+          Exit;
+        end;
+        Index := Index - ChemSpeciesCount;
+
+        while InflowConcentrations.Count <= ChemSpeciesCount do
+        begin
+          InflowConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          result := InflowConcentrations[Index].Value;
+          Exit;
+        end;
+        Assert(False);
+//        Index := Index - ChemSpeciesCount;
+      end;
+
+//  SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
+//  RainfallConcentrations.Assign(Item.RainfallConcentrations);
+//  EvapConcentrations.Assign(Item.EvapConcentrations);
+//  RunoffConcentrations.Assign(Item.RunoffConcentrations);
+//  InflowConcentrations.Assign(Item.InflowConcentrations);
+      
   end;
 end;
 
@@ -1207,6 +1523,9 @@ begin
 end;
 
 procedure TSfrMf6Item.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  ConcIndex: Integer;
+  Item: TGwtConcStringValueItem;
 begin
   if Sender = FInflow then
   begin
@@ -1240,6 +1559,58 @@ begin
   begin
     List.Add(FObserverList[SfrMf6DiversionStartPosition]);
   end;
+  // GWT
+  for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
+  begin
+    Item := SpecifiedConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+  for ConcIndex := 0 to RainfallConcentrations.Count - 1 do
+  begin
+    Item := RainfallConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+  for ConcIndex := 0 to EvapConcentrations.Count - 1 do
+  begin
+    Item := EvapConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+  for ConcIndex := 0 to RunoffConcentrations.Count - 1 do
+  begin
+    Item := RunoffConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+  for ConcIndex := 0 to InflowConcentrations.Count - 1 do
+  begin
+    Item := InflowConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+//  SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
+//  RainfallConcentrations.Assign(Item.RainfallConcentrations);
+//  EvapConcentrations.Assign(Item.EvapConcentrations);
+//  RunoffConcentrations.Assign(Item.RunoffConcentrations);
+//  InflowConcentrations.Assign(Item.InflowConcentrations);
+
 end;
 
 function TSfrMf6Item.GetRainfall: string;
@@ -1295,12 +1666,67 @@ begin
       and (Item.Stage = Stage)
       and (Item.Roughness = Roughness)
       and (Item.StreamStatus = StreamStatus)
-      and (Item.DiversionCount = DiversionCount);
+      and (Item.DiversionCount = DiversionCount)
+      and (Item.SpecifiedConcentrations.Count = SpecifiedConcentrations.Count)
+      and (Item.RainfallConcentrations.Count = RainfallConcentrations.Count)
+      and (Item.EvapConcentrations.Count = EvapConcentrations.Count)
+      and (Item.RunoffConcentrations.Count = RunoffConcentrations.Count)
+      and (Item.InflowConcentrations.Count = InflowConcentrations.Count)
+      and (Item.GwtStatus.Count = GwtStatus.Count);
+      
     if result then
     begin
       for Index := 0 to DiversionCount - 1 do
       begin
         result := Item.Diversions[Index] = Diversions[Index];
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to GwtStatus.Count - 1 do
+      begin
+        result := Item.GwtStatus[Index].GwtStreamStatus = GwtStatus[Index].GwtStreamStatus;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to SpecifiedConcentrations.Count - 1 do
+      begin
+        result := Item.SpecifiedConcentrations[Index].Value = SpecifiedConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to RainfallConcentrations.Count - 1 do
+      begin
+        result := Item.RainfallConcentrations[Index].Value = RainfallConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to EvapConcentrations.Count - 1 do
+      begin
+        result := Item.EvapConcentrations[Index].Value = EvapConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to RunoffConcentrations.Count - 1 do
+      begin
+        result := Item.RunoffConcentrations[Index].Value = RunoffConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to InflowConcentrations.Count - 1 do
+      begin
+        result := Item.InflowConcentrations[Index].Value = InflowConcentrations[Index].Value;
         if not Result then
         begin
           Exit;
@@ -1357,6 +1783,8 @@ begin
 end;
 
 procedure TSfrMf6Item.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  ChemSpeciesCount: Integer;
 begin
   case Index of
     SfrMf6InflowPosition:
@@ -1375,7 +1803,71 @@ begin
       Roughness := Value;
 
     else
-      DiversionFormulas[Index-SfrMf6DiversionStartPosition] := Value;
+      begin
+        Index := Index-SfrMf6DiversionStartPosition;
+        if Index < FDiversionFormulas.Count then
+        begin
+          DiversionFormulas[Index-SfrMf6DiversionStartPosition] := Value;
+        end;
+        Index := Index - FDiversionFormulas.Count;
+
+        // GWT
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        while SpecifiedConcentrations.Count <= ChemSpeciesCount do
+        begin
+          SpecifiedConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          SpecifiedConcentrations[Index].Value := Value;
+          Exit;
+        end;
+        Index := Index - ChemSpeciesCount;
+
+        while RainfallConcentrations.Count <= ChemSpeciesCount do
+        begin
+          RainfallConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          RainfallConcentrations[Index].Value := Value;
+          Exit;
+        end;
+        Index := Index - ChemSpeciesCount;
+
+        while EvapConcentrations.Count <= ChemSpeciesCount do
+        begin
+          EvapConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          EvapConcentrations[Index].Value := Value;
+          Exit;
+        end;
+        Index := Index - ChemSpeciesCount;
+
+        while RunoffConcentrations.Count <= ChemSpeciesCount do
+        begin
+          RunoffConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          RunoffConcentrations[Index].Value := Value;
+          Exit;
+        end;
+        Index := Index - ChemSpeciesCount;
+
+        while InflowConcentrations.Count <= ChemSpeciesCount do
+        begin
+          InflowConcentrations.Add;
+        end;
+        if Index < ChemSpeciesCount then
+        begin
+          InflowConcentrations[Index].Value := Value;
+          Exit;
+        end;
+        Assert(False);
+      end;
   end;
 end;
 
@@ -1416,6 +1908,11 @@ begin
   FDiversions.Assign(Value);
 end;
 
+procedure TSfrMf6Item.SetEvapConcentrations(const Value: TSftGwtConcCollection);
+begin
+  FEvapConcentrations.Assign(Value);
+end;
+
 procedure TSfrMf6Item.SetEvaporation(const Value: string);
 var
   PhastModel: TPhastModel;
@@ -1437,6 +1934,11 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TSfrMf6Item.SetGwtStatus(const Value: TGwtStrStatusCollection);
+begin
+  FGwtStatus.Assign(Value);
 end;
 
 procedure TSfrMf6Item.SetInflow(const Value: string);
@@ -1462,9 +1964,21 @@ begin
   end;
 end;
 
+procedure TSfrMf6Item.SetInflowConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FInflowConcentrations.Assign(Value);
+end;
+
 procedure TSfrMf6Item.SetRainfall(const Value: string);
 begin
   UpdateFormulaBlocks(Value, SfrMf6RainfallPosition, FRainfall);
+end;
+
+procedure TSfrMf6Item.SetRainfallConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FRainfallConcentrations.Assign(Value);
 end;
 
 procedure TSfrMf6Item.SetRoughness(const Value: string);
@@ -1511,6 +2025,18 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TSfrMf6Item.SetRunoffConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FRunoffConcentrations.Assign(Value);
+end;
+
+procedure TSfrMf6Item.SetSpecifiedConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FSpecifiedConcentrations.Assign(Value);
 end;
 
 procedure TSfrMf6Item.SetStage(const Value: string);
@@ -1688,6 +2214,9 @@ var
   ACell: TCellAssignment;
   RequiredLength: Integer;
   FractionAnnotation: string;
+  FormulaIndex: Integer;
+  DiversionCount: Integer;
+  SpeciesCount: Integer;
 begin
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   Assert(Expression <> nil);
@@ -1780,30 +2309,112 @@ begin
           end;
         else
           begin
-            if Index = CellList.Count - 1 then
+            DiversionCount := FSfrMf6Boundary.Diversions.Count;
+            FormulaIndex := BoundaryFunctionIndex - SfrMf6DiversionStartPosition;
+            if FormulaIndex < DiversionCount then
             begin
-              RequiredLength := BoundaryFunctionIndex - SfrMf6DiversionStartPosition + 1;
-              if Length(Diversions) <> RequiredLength then
+              if Index = CellList.Count - 1 then
               begin
-                SetLength(Diversions, RequiredLength);
-                SetLength(DiversionAnnotations, RequiredLength);
-                SetLength(DiversionPests, RequiredLength);
-                SetLength(DiversionPestSeriesNames, RequiredLength);
-                SetLength(DiversionPestSeriesMethods, RequiredLength);
-                SetLength(DiversionTimeSeriesName, RequiredLength);
+                RequiredLength := BoundaryFunctionIndex - SfrMf6DiversionStartPosition + 1;
+                if Length(Diversions) <> RequiredLength then
+                begin
+                  SetLength(Diversions, RequiredLength);
+                  SetLength(DiversionAnnotations, RequiredLength);
+                  SetLength(DiversionPests, RequiredLength);
+                  SetLength(DiversionPestSeriesNames, RequiredLength);
+                  SetLength(DiversionPestSeriesMethods, RequiredLength);
+                  SetLength(DiversionTimeSeriesName, RequiredLength);
+                end;
+                Diversions[FormulaIndex]
+                  := Expression.DoubleResult;
+                DiversionAnnotations[FormulaIndex]
+                  := ACell.Annotation;
+                DiversionPests[FormulaIndex]
+                  := PestName;
+                DiversionPestSeriesNames[FormulaIndex]
+                  := PestSeriesName;
+                DiversionPestSeriesMethods[FormulaIndex]
+                  := PestSeriesMethod;
+                DiversionTimeSeriesName[FormulaIndex]
+                  := TimeSeriesName;
               end;
-              Diversions[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
-                := Expression.DoubleResult;
-              DiversionAnnotations[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
-                := ACell.Annotation;
-              DiversionPests[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
-                := PestName;
-              DiversionPestSeriesNames[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
-                := PestSeriesName;
-              DiversionPestSeriesMethods[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
-                := PestSeriesMethod;
-              DiversionTimeSeriesName[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
-                := TimeSeriesName;
+              Exit;
+            end;
+            // GWT
+            SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+            FormulaIndex := FormulaIndex - DiversionCount;
+            if FormulaIndex < SpeciesCount then
+            begin
+              with Sfr6Storage.SfrMF6Array[Index] do
+              begin
+                SpecifiedConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
+                SpecifiedConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
+                SpecifiedConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
+                SpecifiedConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
+                SpecifiedConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                SpecifiedConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+              end;
+              Exit;
+            end;
+            
+            FormulaIndex := FormulaIndex - SpeciesCount;
+            if FormulaIndex < SpeciesCount then
+            begin
+              with Sfr6Storage.SfrMF6Array[Index] do
+              begin
+                RainfallConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
+                RainfallConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
+                RainfallConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
+                RainfallConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
+                RainfallConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                RainfallConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+              end;
+              Exit;
+            end;
+            
+            FormulaIndex := FormulaIndex - SpeciesCount;
+            if FormulaIndex < SpeciesCount then
+            begin
+              with Sfr6Storage.SfrMF6Array[Index] do
+              begin
+                EvapConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
+                EvapConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
+                EvapConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
+                EvapConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
+                EvapConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                EvapConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+              end;
+              Exit;
+            end;
+            
+            FormulaIndex := FormulaIndex - SpeciesCount;
+            if FormulaIndex < SpeciesCount then
+            begin
+              with Sfr6Storage.SfrMF6Array[Index] do
+              begin
+                RunoffConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
+                RunoffConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
+                RunoffConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
+                RunoffConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
+                RunoffConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                RunoffConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+              end;
+              Exit;
+            end;
+            
+            FormulaIndex := FormulaIndex - SpeciesCount;
+            if FormulaIndex < SpeciesCount then
+            begin
+              with Sfr6Storage.SfrMF6Array[Index] do
+              begin
+                InflowConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
+                InflowConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
+                InflowConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
+                InflowConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
+                InflowConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                InflowConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+              end;
+              Exit;
             end;
           end;
       end;
@@ -1817,8 +2428,19 @@ var
   Sfr6Storage: TSfrMf6Storage;
   index: integer;
   SfrMf6Item: TSfrMf6Item;
+  SpeciesCount: Integer;
+  SpeciesIndex: Integer;
 begin
   inherited;
+  // GWT
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+  end
+  else
+  begin
+    SpeciesCount := 0;
+  end;
   Sfr6Storage := BoundaryStorage as TSfrMf6Storage;
   SfrMf6Item := AnItem as TSfrMf6Item;
 
@@ -1831,6 +2453,12 @@ begin
       Sfr6Storage.FSfrMF6Array[index].UpstreamFraction := 0;
       Sfr6Storage.FSfrMF6Array[index].UpstreamFractionAnnotation
         := StrUpstreamFractionIs
+    end;
+    SetLength(Sfr6Storage.FSfrMF6Array[index].GwtStatus, SpeciesCount);
+    for SpeciesIndex := 0 to SpeciesCount - 1 do
+    begin
+      Sfr6Storage.FSfrMF6Array[index].GwtStatus[SpeciesIndex] := 
+        SfrMf6Item.GwtStatus[SpeciesIndex].GwtStreamStatus
     end;
   end;
 end;
@@ -1896,6 +2524,41 @@ begin
 //  end;
 end;
 
+procedure TSfrMf6Collection.InvalidateEvapConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TSfrMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TSfrMf6TimeListLink;
+    for Index := 0 to Link.FEvapConcList.Count - 1 do
+    begin
+      TimeList := Link.FEvapConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+      for Index := 0 to Link.FEvapConcList.Count - 1 do
+      begin
+        TimeList := Link.FEvapConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
+end;
+
 procedure TSfrMf6Collection.InvalidateEvaporationData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -1921,6 +2584,46 @@ begin
   end;
 end;
 
+procedure TSfrMf6Collection.InvalidateGwtStatus(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrMf6Collection.InvalidateInflowConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TSfrMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TSfrMf6TimeListLink;
+    for Index := 0 to Link.FInflowConcList.Count - 1 do
+    begin
+      TimeList := Link.FInflowConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+      for Index := 0 to Link.FInflowConcList.Count - 1 do
+      begin
+        TimeList := Link.FInflowConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
+end;
+
 procedure TSfrMf6Collection.InvalidateInflowData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -1942,6 +2645,41 @@ begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
       Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
       Link.FInflow.Invalidate;
+    end;
+  end;
+end;
+
+procedure TSfrMf6Collection.InvalidateRainfallConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TSfrMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TSfrMf6TimeListLink;
+    for Index := 0 to Link.FRainfallConcList.Count - 1 do
+    begin
+      TimeList := Link.FRainfallConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+      for Index := 0 to Link.FRainfallConcList.Count - 1 do
+      begin
+        TimeList := Link.FRainfallConcList[Index];
+        TimeList.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1996,6 +2734,41 @@ begin
   end;
 end;
 
+procedure TSfrMf6Collection.InvalidateRunoffConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TSfrMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TSfrMf6TimeListLink;
+    for Index := 0 to Link.FRunoffConcList.Count - 1 do
+    begin
+      TimeList := Link.FRunoffConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+      for Index := 0 to Link.FRunoffConcList.Count - 1 do
+      begin
+        TimeList := Link.FRunoffConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
+end;
+
 procedure TSfrMf6Collection.InvalidateRunoffData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -2017,6 +2790,41 @@ begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
       Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
       Link.FRunoff.Invalidate;
+    end;
+  end;
+end;
+
+procedure TSfrMf6Collection.InvalidateSpecifiedConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TSfrMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TSfrMf6TimeListLink;
+    for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+    begin
+      TimeList := Link.FSpecifiedConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+      for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+      begin
+        TimeList := Link.FSpecifiedConcList[Index];
+        TimeList.Invalidate;
+      end;
     end;
   end;
 end;
@@ -4223,6 +5031,9 @@ end;
 procedure TSfrMf6TimeListLink.CreateTimeLists;
 var
   LocalModel: TCustomModel;
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
+  ConcTimeList: TModflowTimeList;
 begin
   FInflow := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FInflow.NonParamDescription := StrSFR6Inflow;
@@ -4283,10 +5094,97 @@ begin
   AddTimeList(FRoughness);
   AddTimeList(FStreamStatus);
   AddTimeList(FReachNumber);
+
+  FGwtStatusList := TModflowTimeLists.Create;
+  FSpecifiedConcList := TModflowTimeLists.Create;
+  FRainfallConcList := TModflowTimeLists.Create;
+  FEvapConcList := TModflowTimeLists.Create;
+  FRunoffConcList := TModflowTimeLists.Create;
+  FInflowConcList := TModflowTimeLists.Create;
+  
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
+    begin
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Status';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FGwtStatusList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Specified Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FSpecifiedConcList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Rainfall Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FRainfallConcList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Evaporation Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FEvapConcList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Runoff Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FRunoffConcList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Inflow Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FInflowConcList.Add(ConcTimeList);
+    end;
+  end;
 end;
 
 destructor TSfrMf6TimeListLink.Destroy;
 begin
+  FGwtStatusList.Free;
+  FSpecifiedConcList.Free;
+  FRainfallConcList.Free;
+  FEvapConcList.Free;
+  FRunoffConcList.Free;
+  FInflowConcList.Free;
+
   FReachNumber.Free;
   FStreamStatus.Free;
   FRoughness.Free;
@@ -4297,6 +5195,51 @@ begin
   FRainfall.Free;
   FInflow.Free;
   inherited;
+end;
+
+{ TSftGwtConcCollection }
+
+constructor TSftGwtConcCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TSfrMf6Collection);
+begin
+  inherited Create(Model, AScreenObject, ParentCollection);
+end;
+
+{ TGwtStrStatusItem }
+
+procedure TGwtStrStatusItem.Assign(Source: TPersistent);
+begin
+  if Source is TGwtStrStatusItem then
+  begin
+    GwtStreamStatus := TGwtStrStatusItem(Source).GwtStreamStatus;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+procedure TGwtStrStatusItem.SetGwtStreamStatus(const Value: TGwtStreamStatus);
+begin
+  FGwtStreamStatus := Value;
+end;
+
+{ TGwtStrStatusCollection }
+
+constructor TGwtStrStatusCollection.Create;
+begin
+  inherited Create(TGwtStrStatusItem);
+end;
+
+function TGwtStrStatusCollection.GetItems(Index: Integer): TGwtStrStatusItem;
+begin
+  result := inherited Items[Index] as TGwtStrStatusItem
+end;
+
+procedure TGwtStrStatusCollection.SetItems(Index: Integer;
+  const Value: TGwtStrStatusItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 initialization

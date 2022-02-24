@@ -159,7 +159,7 @@ type
     // @name is used to compute the recharge rates for a series of
     // cells over a series of time intervals.
     FRechargeRateData: TModflowTimeList;
-    FConcList: TList;
+    FConcList: TModflowTimeLists;
   protected
     procedure CreateTimeLists; override;
     property RechargeRateData: TModflowTimeList read FRechargeRateData;
@@ -2592,7 +2592,7 @@ var
   LocalModel: TCustomModel;
 begin
   inherited;
-  FConcList := TObjectList.Create;
+  FConcList := TModflowTimeLists.Create;
 
   FRechargeRateData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FRechargeRateData.NonParamDescription := StrRechargeRate;

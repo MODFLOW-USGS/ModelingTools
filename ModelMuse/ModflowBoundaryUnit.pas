@@ -5129,6 +5129,11 @@ end;
 procedure TGwtConcStringCollection.SetItems(Index: Integer;
   const Value: TGwtConcStringValueItem);
 begin
+  Assert(Index >= 0);
+  while Index >= Count do
+  begin
+    Add;
+  end;
   inherited Items[Index] := Value;
 end;
 

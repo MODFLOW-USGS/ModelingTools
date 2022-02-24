@@ -72,7 +72,7 @@ type
   private
     FStartData: TModflowTimeList;
     FEndData: TModflowTimeList;
-    FConcList: TList;
+    FConcList: TModflowTimeLists;
   protected
     procedure CreateTimeLists; override;
   public
@@ -2033,7 +2033,7 @@ var
   SpeciesIndex: Integer;
   ConcTimeList: TModflowTimeList;
 begin
-  FConcList := TObjectList.Create;
+  FConcList := TModflowTimeLists.Create;
 
   FStartData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FEndData := TModflowTimeList.Create(Model, Boundary.ScreenObject);

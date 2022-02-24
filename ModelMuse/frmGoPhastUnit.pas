@@ -6428,24 +6428,25 @@ begin
 end;
 
 procedure TfrmGoPhast.PlayIntroductoryVideo;
-var
-  URL: string;
+//var
+//  URL: string;
 begin
-  URL := ExtractFileDir(ParamStr(0));
-  if URL[Length(URL)] <> PathDelim then
-  begin
-    URL := URL + PathDelim;
-  end;
-  URL := URL + 'Videos\IntroductoryVideo\IntroductoryVideo.html';
-  if FileExists(URL) then
-  begin
-    URL := FileNameToURL(URL);
-  end
-  else
-  begin
-    URL := 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/IntroductoryVideo/IntroductoryVideo.html';
-  end;
-  LaunchURL(FBrowser, URL);
+//  URL := ExtractFileDir(ParamStr(0));
+//  if URL[Length(URL)] <> PathDelim then
+//  begin
+//    URL := URL + PathDelim;
+//  end;
+//  URL := URL + 'Videos\IntroductoryVideo\IntroductoryVideo.html';
+//  if FileExists(URL) then
+//  begin
+//    URL := FileNameToURL(URL);
+//  end
+//  else
+//  begin
+//    URL := StrIntroVideoURL;
+//    URL := 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/IntroductoryVideo/IntroductoryVideo.html';
+//  end;
+  LaunchURL(FBrowser, StrIntroVideoURL);
 end;
 
 procedure TfrmGoPhast.EnableManageFlowObservations;

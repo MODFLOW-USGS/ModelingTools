@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
   SubscriptionUnit, SparseDataSets, RbwParser, GoPhastTypes,
-  ModflowTransientListParameterUnit, RealListUnit;
+  ModflowTransientListParameterUnit, RealListUnit, System.Generics.Collections;
 
 type
   {
@@ -103,7 +103,7 @@ type
     // @name is used to compute the pumping rates for a series of
     // Wells over a series of time intervals.
     FPumpingRateData: TModflowTimeList;
-    FConcList: TList;
+    FConcList: TModflowTimeLists;
   protected
     procedure CreateTimeLists; override;
   public
@@ -164,13 +164,14 @@ type
     function GetPumpingRatePestSeriesName: string;
     function GetPumpingRateTimeSeriesName: string;
     procedure SetPumpingRateTimeSeriesName(const Value: string);
-    function GetConcentration(const Index: Integer): double;
-    function GetConcentrationAnnotation(const Index: Integer): string;
-    function GetConcentrationPestName(const Index: Integer): string;
-    function GetConcentrationPestSeriesMethod(
-      const Index: Integer): TPestParamMethod;
-    function GetConcentrationPestSeriesName(const Index: Integer): string;
-    function GetConcentrationTimeSeriesName(const Index: Integer): string;
+//    function GetConcentration(const Index: Integer): double;
+//    function GetConcentrationAnnotation(const Index: Integer): string;
+//    function GetConcentrationPestName(const Index: Integer): string;
+//    function GetConcentrationPestSeriesMethod(
+//      const Index: Integer): TPestParamMethod;
+//    function GetConcentrationPestSeriesName(const Index: Integer): string;
+//    function GetConcentrationTimeSeriesName(const Index: Integer): string;
+    function GetGwtConcentrations: TGwtCellData;
   protected
     property Values: TWellRecord read FValues;
     function GetColumn: integer; override;
@@ -210,18 +211,19 @@ type
     property PumpingRateTimeSeriesName: string read GetPumpingRateTimeSeriesName
       write SetPumpingRateTimeSeriesName;
     // GWT
-    property Concentrations[const Index: Integer]: double
-      read GetConcentration;
-    property ConcentrationAnnotations[const Index: Integer]: string
-      read GetConcentrationAnnotation;
-    property ConcentrationPestNames[const Index: Integer]: string
-      read GetConcentrationPestName;
-    property ConcentrationPestSeriesNames[const Index: Integer]: string
-      read GetConcentrationPestSeriesName;
-    property ConcentrationPestSeriesMethods[const Index: Integer]: TPestParamMethod
-      read GetConcentrationPestSeriesMethod;
-    property ConcentrationTimeSeriesNames[const Index: Integer]: string
-      read GetConcentrationTimeSeriesName;
+    property GwtConcentrations: TGwtCellData read GetGwtConcentrations;
+//    property Concentrations[const Index: Integer]: double
+//      read GetConcentration;
+//    property ConcentrationAnnotations[const Index: Integer]: string
+//      read GetConcentrationAnnotation;
+//    property ConcentrationPestNames[const Index: Integer]: string
+//      read GetConcentrationPestName;
+//    property ConcentrationPestSeriesNames[const Index: Integer]: string
+//      read GetConcentrationPestSeriesName;
+//    property ConcentrationPestSeriesMethods[const Index: Integer]: TPestParamMethod
+//      read GetConcentrationPestSeriesMethod;
+//    property ConcentrationTimeSeriesNames[const Index: Integer]: string
+//      read GetConcentrationTimeSeriesName;
 
   end;
 
@@ -460,7 +462,7 @@ var
   Item: TGwtConcStringValueItem;
   ConcIndex: Integer;
 begin
-  Assert(Sender = FPumpingRate);
+//  Assert(Sender = FPumpingRate);
   List.Add(FObserverList[WelPumpingRatePosition]);
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
@@ -920,37 +922,42 @@ begin
   result := Values.Cell.Column;
 end;
 
-function TWell_Cell.GetConcentration(const Index: Integer): double;
-begin
-  result := Values.GwtConcentrations.Concentrations[Index];
-end;
+//function TWell_Cell.GetConcentration(const Index: Integer): double;
+//begin
+//  result := Values.GwtConcentrations.Concentrations[Index];
+//end;
+//
+//function TWell_Cell.GetConcentrationAnnotation(const Index: Integer): string;
+//begin
+//  result := Values.GwtConcentrations.ConcentrationAnnotations[Index];
+//end;
+//
+//function TWell_Cell.GetConcentrationPestName(const Index: Integer): string;
+//begin
+//  result := FValues.GwtConcentrations.ConcentrationPestNames[Index];
+//end;
+//
+//function TWell_Cell.GetConcentrationPestSeriesMethod(
+//  const Index: Integer): TPestParamMethod;
+//begin
+//  result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[Index];
+//end;
+//
+//function TWell_Cell.GetConcentrationPestSeriesName(
+//  const Index: Integer): string;
+//begin
+//  result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[Index];
+//end;
+//
+//function TWell_Cell.GetConcentrationTimeSeriesName(
+//  const Index: Integer): string;
+//begin
+//  result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[Index];
+//end;
 
-function TWell_Cell.GetConcentrationAnnotation(const Index: Integer): string;
+function TWell_Cell.GetGwtConcentrations: TGwtCellData;
 begin
-  result := Values.GwtConcentrations.ConcentrationAnnotations[Index];
-end;
-
-function TWell_Cell.GetConcentrationPestName(const Index: Integer): string;
-begin
-  result := FValues.GwtConcentrations.ConcentrationPestNames[Index];
-end;
-
-function TWell_Cell.GetConcentrationPestSeriesMethod(
-  const Index: Integer): TPestParamMethod;
-begin
-  result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[Index];
-end;
-
-function TWell_Cell.GetConcentrationPestSeriesName(
-  const Index: Integer): string;
-begin
-  result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[Index];
-end;
-
-function TWell_Cell.GetConcentrationTimeSeriesName(
-  const Index: Integer): string;
-begin
-  result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[Index];
+  result := FValues.GwtConcentrations;
 end;
 
 function TWell_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
@@ -1875,7 +1882,7 @@ var
   ConcTimeList: TModflowTimeList;
 begin
   inherited;
-  FConcList := TObjectList.Create;
+  FConcList := TModflowTimeLists.Create;
 
   FPumpingRateData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FPumpingRateData.NonParamDescription := StrPumpingRate;

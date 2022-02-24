@@ -155,7 +155,7 @@ type
     // @name is used to compute the Conductances for a series of
     // River Boundaries over a series of time intervals.
     FConductanceData: TModflowTimeList;
-    FConcList: TList;
+    FConcList: TModflowTimeLists;
   protected
     procedure CreateTimeLists; override;
   public
@@ -2623,7 +2623,7 @@ var
   ConcTimeList: TModflowTimeList;
 begin
   inherited;
-  FConcList := TObjectList.Create;
+  FConcList := TModflowTimeLists.Create;
 
   FRiverBottomData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FRiverStageData := TModflowTimeList.Create(Model, Boundary.ScreenObject);

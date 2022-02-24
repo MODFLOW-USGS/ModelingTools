@@ -2,7 +2,7 @@
 is started when ModelMuse starts.  It checks a file on the Internet to
 see if ModelMuse has been updated.  It also downloads a list of available
 videos about ModelMuse and will start one if appropriate.)
-@author(Richard B. Winston <rbwinst@usgs.gov>) 
+@author(Richard B. Winston <rbwinst@usgs.gov>)
 }
 unit CheckInternetUnit;
 
@@ -52,11 +52,14 @@ const
   StrVideoDisplayed = 'VideoDisplayed';
   StrTipDate = 'TipDate';
   StrInternetCheckDate = 'InternetCheckDate';
-  
+  StrIntroVideoURL = 'https://www.usgs.gov/mission-areas/water-resources/mod' +
+  'elmuse-introductory-video';
+
+
 implementation
 
 uses
-  Math, RbwInternetUtilities, frmGoPhastUnit, IniFileUtilities, GoPhastTypes, 
+  Math, RbwInternetUtilities, frmGoPhastUnit, IniFileUtilities, GoPhastTypes,
   StdCtrls, frmNewVersionUnit, System.IOUtils;
 
 resourcestring
@@ -227,15 +230,28 @@ begin
           begin
             if (Now - FLastTipDate) > 0.95 then
             begin
-              for Index := 0 to FVideoURLs.Count - 1 do
+              FCurrentURL := StrIntroVideoURL;
+              Synchronize(CheckCurrentUrl);
+              if not FCurrentUrlHasBeenDisplayed then
               begin
-                FCurrentURL := FVideoURLs[Index];
-                Synchronize(CheckCurrentUrl);
-                if not FCurrentUrlHasBeenDisplayed then
+                LaunchURL(FBrowser, FCurrentURL);
+                Synchronize(UpdateIniFile);
+              end
+              else
+              begin
+                for Index := 0 to FVideoURLs.Count - 1 do
                 begin
-                  LaunchURL(FBrowser, FCurrentURL);
-                  Synchronize(UpdateIniFile);
-                  break;
+                  FCurrentURL := FVideoURLs[Index];
+                  if FNewToOldDictionary.ContainsKey(FCurrentURL) then
+                  begin
+                    Synchronize(CheckCurrentUrl);
+                    if not FCurrentUrlHasBeenDisplayed then
+                    begin
+                      LaunchURL(FBrowser, FCurrentURL);
+                      Synchronize(UpdateIniFile);
+                      break;
+                    end;
+                  end;
                 end;
               end;
             end;

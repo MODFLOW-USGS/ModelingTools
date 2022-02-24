@@ -249,7 +249,7 @@ type
 
   TEtsTimeListLink = class(TEvtTimeListLink)
   private
-    FConcList: TList;
+    FConcList: TModflowTimeLists;
   protected
     procedure CreateTimeLists; override;
   public
@@ -3125,7 +3125,7 @@ begin
       (Model as TCustomModel).InvalidateMfEtsEvapRate;
   end;
 
-  FConcList := TObjectList.Create;
+  FConcList := TModflowTimeLists.Create;
 
   PhastModel := frmGoPhast.PhastModel;
   if PhastModel.GwtUsed then
