@@ -39,7 +39,7 @@ var
 begin
   inherited;
   Browser := '';
-  LaunchURL(Browser, 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuse.html');
+  LaunchURL(Browser, 'https://www.usgs.gov/software/modelmuse-graphical-user-interface-groundwater-models');
 end;
 
 procedure TfrmNewVersion.FormCreate(Sender: TObject);

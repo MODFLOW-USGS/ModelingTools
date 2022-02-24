@@ -9844,7 +9844,7 @@ var
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
   SutraNod3DDisWriter: TSutraNod3DDisWriter;
-  ParamEstBatchFile: TStringList;
+//  ParamEstBatchFile: TStringList;
   PLPROC_Location: string;
   DSIndex: Integer;
   ADataArray: TDataArray;

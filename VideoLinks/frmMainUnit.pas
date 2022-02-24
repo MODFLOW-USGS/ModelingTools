@@ -57,7 +57,7 @@ var
 implementation
 
 uses
-  System.DateUtils;
+  System.DateUtils, System.StrUtils;
 
 resourcestring
   StrYear = 'Year';
@@ -133,22 +133,29 @@ end;
 procedure TfrmMain.edURLChange(Sender: TObject);
 var
   AnXmlNode: TXmlNode;
+  Url: string;
 begin
   if tvVideos.Selected <> nil then
   begin
     if tvVideos.Selected.Data <> nil then
     begin
+      Url := ReplaceStr(edURL.Text, 'http:', 'https:');
+      if Url <> edURL.Text then
+      begin
+        edURL.Text := Url;
+      end;
+
       AnXmlNode := tvVideos.Selected.Data;
-      AnXmlNode.Name := edURL.Text;
+      AnXmlNode.Name := Url;
 
       if AnXmlNode.text <> '' then
       begin
         tvVideos.Selected.Text :=
-          AnXmlNode.text + '; ' + edURL.Text;
+          AnXmlNode.text + '; ' + Url;
       end
       else
       begin
-        tvVideos.Selected.Text := edURL.Text;
+        tvVideos.Selected.Text := Url;
       end;
     end;
     FChanged := True;

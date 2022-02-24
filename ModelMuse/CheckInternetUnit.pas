@@ -41,6 +41,7 @@ type
     procedure UpdateIniFile;
     procedure DestroyIniFile;
     procedure NewVideoMessage;
+    procedure GetLastDates;
   public
     Constructor Create(ModelVersion: string; IniFile: TMemInifile; ShowTips: boolean);
     destructor Destroy; override;
@@ -124,76 +125,83 @@ end;
 
 procedure TCheckInternetThread.CheckWeb;
 var
-//  VersionOnWeb: string;
   VerCompar: TVersionCompare;
   Index: Integer;
   XmlText: TStringList;
-  TestVideoFile: Boolean;
-  VideoUpdateFileName: string;
   MemStream: TMemoryStream;
-  Videos: TXmlVerySimple;
   NodeIndex: Integer;
   ANode: TXmlNode;
   NewUrl: string;
   InnerNodeIndex: Integer;
   ChildNode: TXmlNode;
   OldUrl: string;
+  ErrorUrl: Boolean;
 begin
   XmlText := TStringList.Create;
   try
-    {$IFDEF DEBUG}
-    TestVideoFile := True;
-    VideoUpdateFileName := IncludeTrailingPathDelimiter(ExtractFileDir(Application.ExeName))
-      + 'Videos.xml';
-    XmlText.LoadFromFile(VideoUpdateFileName);
-    {$ELSE}
-    TestVideoFile := ReadInternetFile(VideoUpdateURL, XmlText, FAppName);
-    {$ENDIF}
-//    if ReadInternetFile(VideoUpdateURL, XmlText, FAppName) then
-    if TestVideoFile then
-    begin
-      MemStream := TMemoryStream.Create;
-      try
-        XmlText.SaveToStream(MemStream);
-        MemStream.Position := 0;
-        try
-          FVideos.LoadFromStream(MemStream);
-        except
-          Exit;
-        end;
-      finally
-        MemStream.Free;
-      end;
-      for NodeIndex := 1 to FVideos.ChildNodes.Count - 1 do
+    try
+      ErrorUrl := True;
+      if ReadInternetFile(VideoUpdateURL, XmlText, FAppName) then
       begin
-        ANode := FVideos.ChildNodes[NodeIndex];
-        NewUrl := Trim(ANode.Name);
-        if NewUrl = '' then
+        if (XmlText.Count >= 2) and (XmlText[1] = '<html>') then
         begin
-          Continue;
-        end;
-        for InnerNodeIndex := 0 to ANode.ChildNodes.Count - 1 do
+          ErrorUrl := True;
+        end
+        else
         begin
-          ChildNode := ANode.ChildNodes[InnerNodeIndex];
-          OldUrl := ChildNode.Name;
-          FOldToNewDictionary.Add(OldUrl, NewUrl);
-          FNewToOldDictionary.Add(NewUrl, OldUrl);
+          ErrorUrl := False;
         end;
       end;
+      if not ErrorUrl then
+      begin
+        MemStream := TMemoryStream.Create;
+        try
+          XmlText.SaveToStream(MemStream);
+          MemStream.Position := 0;
+          FVideos.LoadFromStream(MemStream);
+        finally
+          MemStream.Free;
+        end;
+        for NodeIndex := 1 to FVideos.ChildNodes.Count - 1 do
+        begin
+          ANode := FVideos.ChildNodes[NodeIndex];
+          NewUrl := Trim(ANode.Name);
+          if Pos('https:', NewUrl) <> 1 then
+          begin
+            raise Exception.Create('Invalid URL');
+          end;
+          if NewUrl = '' then
+          begin
+            Continue;
+          end;
+          for InnerNodeIndex := 0 to ANode.ChildNodes.Count - 1 do
+          begin
+            ChildNode := ANode.ChildNodes[InnerNodeIndex];
+            OldUrl := ChildNode.Name;
+            if Pos('https:', OldUrl) <> 1 then
+            begin
+              raise Exception.Create('Invalid URL');
+            end;
+            FOldToNewDictionary.Add(OldUrl, NewUrl);
+            FNewToOldDictionary.Add(NewUrl, OldUrl);
+          end;
+        end;
+      end;
+    except
+      FVideos.Clear;
+      FOldToNewDictionary.Clear;
+      FNewToOldDictionary.Clear;
     end;
   finally
     XmlText.Free;
   end;
 
-
   try
     try
       Synchronize(GetAppName);
-      Synchronize(ReadIniFile);
+      Synchronize(GetLastDates);
 
-      {$IFNDEF DEBUG}
       if (Now - FLastCheckInternetDate) > 0.95 then
-      {$endif}
       begin
         if ReadInternetFile(UpdateURL, FUpdateText, FAppName) then
         begin
@@ -300,10 +308,6 @@ begin
   FIniFile.WriteDateTime(StrCustomization, StrTipDate, Now);
   FIniFile.WriteDateTime(StrCustomization, StrInternetCheckDate, Now);
   BackupFilename := ChangeFileExt(FIniFile.FileName, BackupExtension);
-//  if TFile.Exists(BackupFilename) then
-//  begin
-//    TFile.Delete(BackupFilename);
-//  end;
   if TFile.Exists(FIniFile.FileName) then
   begin
     try
@@ -362,7 +366,7 @@ begin
     Lbl.Parent := AForm;
 //    Lbl.Caption := '<u><a href="http://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseVideos.html">'
 //      + StrClickHereForModel+'</a></u>';
-    Lbl.Caption := Format('<u><a href="https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseVideos.html">%s</a></u>', [StrClickHereForModel]);
+    Lbl.Caption := Format('<u><a href="https://www.usgs.gov/mission-areas/water-resources/modelmuse-tutorial-videos-0">%s</a></u>', [StrClickHereForModel]);
     Lbl.Left := (AForm.ClientWidth - Lbl.Width) div 2;
     Lbl.Top := 40;
     AForm.ShowModal;
@@ -394,16 +398,6 @@ var
   OldURL: string;
   NewURL: string;
   HasDisplayed: Boolean;
-  TestVideoFile: Boolean;
-  VideoUpdateFileName: string;
-  NodeIndex: Integer;
-  ANode: TXmlNode;
-  XmlText: TStringList;
-  MemStream: TMemoryStream;
-  Videos: TXmlVerySimple;
-  InnerNodeIndex: Integer;
-  ChildNode: TXmlNode;
-  OldPosition: Integer;
   NewerUrl: string;
   OlderURL: string;
   OldPos: Integer;
@@ -433,7 +427,12 @@ begin
       end
       else if FNewToOldDictionary.TryGetValue(NewUrl, OlderURL) then
       begin
-        // do nothing.
+        OldPos := FUpdateText.IndexOf(OlderURL);
+        if OldPos >= 0 then
+        begin
+          FUpdateText[OldPos] := NewUrl;
+          FIniFile.DeleteKey(StrVideoDisplayed, OlderURL);
+        end;
       end
       else if FUpdateText.IndexOf(OldURL) < 0 then
       begin
@@ -451,80 +450,6 @@ begin
     end;
   end;
 
-//  {$IFDEF PEST}
-//  if FUpdateText.Count > 0 then
-//  begin
-//    XmlText := TStringList.Create;
-//    try
-//      {$IFDEF DEBUG}
-//      TestVideoFile := True;
-//      VideoUpdateFileName := IncludeTrailingPathDelimiter(ExtractFileDir(Application.ExeName))
-//        + 'Videos.xml';
-//      XmlText.LoadFromFile(VideoUpdateFileName);
-//      {$ELSE}
-//      TestVideoFile := ReadInternetFile(VideoUpdateURL, XmlText, FAppName);
-//      {$ENDIF}
-//  //    if ReadInternetFile(VideoUpdateURL, XmlText, FAppName) then
-//      if TestVideoFile then
-//      begin
-//        MemStream := TMemoryStream.Create;
-//        try
-//          XmlText.SaveToStream(MemStream);
-//          MemStream.Position := 0;
-//          Videos := TXmlVerySimple.Create;
-//          try
-//            try
-//              Videos.LoadFromStream(MemStream);
-//              for NodeIndex := 1 to Videos.ChildNodes.Count - 1 do
-//              begin
-//                ANode := Videos.ChildNodes[NodeIndex];
-//                NewUrl := ANode.Name;
-//                HasDisplayed := False;
-//                OldPosition := -1;
-//                for InnerNodeIndex := 0 to ANode.ChildNodes.Count - 1 do
-//                begin
-//                  ChildNode := ANode.ChildNodes[InnerNodeIndex];
-//                  OldUrl := ChildNode.Name;
-//                  OldPosition := FUpdateText.IndexOf(OldUrl);
-//                  if OldPosition >= 0 then
-//                  begin
-//                    HasDisplayed := FIniFile.ReadBool(StrVideoDisplayed, OldUrl, False);
-//                    FUpdateText[OldPosition] := NewUrl;
-//                  end;
-//                  FIniFile.DeleteKey(StrVideoDisplayed, OldURL);
-//                  if HasDisplayed then
-//                  begin
-//                    break;
-//                  end;
-//                end;
-//                if OldPosition < 0 then
-//                begin
-//                  FUpdateText.Add(NewURL);
-//                end;
-//                if FVideoURLs.IndexOf(NewURL) < 0 then
-//                begin
-//                  FVideoURLs.Add(NewURL);
-//                  Inc(FNewVideoCount);
-//                end;
-//
-//                FIniFile.WriteBool(StrVideoDisplayed, NewURL, HasDisplayed);
-//              end;
-//            except
-//              Exit;
-//            end;
-//          finally
-//            Videos.Free;
-//          end;
-//        finally
-//          MemStream.Free;
-//        end;
-//      end;
-//    finally
-//      XmlText.Free;
-//    end;
-//  end;
-//  {$ENDIF}
-
   for Index := 0 to FUpdateText.Count - 1 do
   begin
     NewURL := FUpdateText[Index];
@@ -536,19 +461,22 @@ begin
       Inc(FNewVideoCount);
     end;
   end;
-//  if FShowVideos then
-  begin
-    try
-      FLastTipDate := FIniFile.ReadDateTime(StrCustomization, StrTipDate, 0);
-    except on EConvertError do
-      FLastTipDate := Now;
-    end;
+end;
+
+procedure TCheckInternetThread.GetLastDates;
+begin
+  try
+    FLastTipDate := FIniFile.ReadDateTime(StrCustomization, StrTipDate, 0);
+  except on EConvertError do
+    FLastTipDate := Now;
   end;
+
   try
     FLastCheckInternetDate := FIniFile.ReadDateTime(StrCustomization, StrInternetCheckDate, FLastTipDate);
   except on EConvertError do
     FLastCheckInternetDate := Now;
   end;
 end;
+
 
 end.
