@@ -165,6 +165,7 @@ type
     property RechargeRateData: TModflowTimeList read FRechargeRateData;
   public
     Destructor Destroy; override;
+    procedure CreateGwtTimeLists;
   end;
 
   // @name represents MODFLOW Recharge boundaries
@@ -197,6 +198,7 @@ type
     // TCustomMF_BoundColl.SetBoundaryStartAndEndTime)
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel); override;
+    procedure CreateGwtTimeLists(AModel: TBaseModel); override;
   end;
 
   TRchLayerTimeListLink = class(TTimeListsModelLink)
@@ -426,6 +428,7 @@ type
     procedure Clear; override;
     class function DefaultBoundaryMethod(
       FormulaIndex: integer): TPestParamMethod; override;
+    procedure CreateGwtTimeLists(AModel: TBaseModel);
   published
     property RechargeLayers: TRchLayerCollection read FRechargeLayers
       write SetRechargeLayers;
@@ -795,6 +798,15 @@ begin
   end;
 
   Boundary.CacheData;
+end;
+
+procedure TRchCollection.CreateGwtTimeLists(AModel: TBaseModel);
+var
+  Link: TRchTimeListLink;
+begin
+  inherited;
+  Link := TimeListLink.GetLink(AModel) as TRchTimeListLink;
+  Link.CreateGwtTimeLists;
 end;
 
 function TRchCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
@@ -1557,6 +1569,11 @@ begin
       FPestConcentrationFormulas.Add;
     end;
   end;
+end;
+
+procedure TRchBoundary.CreateGwtTimeLists(AModel: TBaseModel);
+begin
+  (Values as TRchCollection).CreateGwtTimeLists(AModel);
 end;
 
 procedure TRchBoundary.CreateObservers;
@@ -2583,6 +2600,34 @@ begin
 end;
 
 { TRchTimeListLink }
+procedure TRchTimeListLink.CreateGwtTimeLists;
+var
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed then
+  begin
+    SpeciesIndex := 0;
+    while SpeciesIndex < PhastModel.MobileComponents.Count do
+    begin
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfRchConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FConcList.Add(ConcTimeList);
+      Inc(SpeciesIndex);
+    end;
+  end;
+end;
+
 
 procedure TRchTimeListLink.CreateTimeLists;
 var
@@ -2603,23 +2648,7 @@ begin
     FRechargeRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfRchRate;
   end;
 
-  PhastModel := frmGoPhast.PhastModel;
-  if PhastModel.GwtUsed then
-  begin
-    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
-    begin
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfRchConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FConcList.Add(ConcTimeList);
-    end;
-  end;
+  CreateGwtTimeLists;
 end;
 
 destructor TRchTimeListLink.Destroy;

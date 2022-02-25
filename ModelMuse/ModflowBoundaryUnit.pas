@@ -414,6 +414,7 @@ type
       const SeriesName: string; SeriesMethod: TPestParamMethod;
       PestItems, TimeSeriesItems: TStringList; const ItemFormula: string; Writer: TObject;
       var BoundaryValue: TBoundaryValue);
+    procedure CreateGwtTimeLists(AModel: TBaseModel); virtual;
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -654,6 +655,7 @@ type
       ParentCollection: TCustomListArrayBoundColl);
     property Items[Index: Integer]: TGwtConcStringValueItem read GetItems
       write SetItems; default;
+    function Add: TGwtConcStringValueItem;
   end;
 
   // @name is used to store a series of @link(TDataArray)s for boundary
@@ -1475,6 +1477,11 @@ begin
   inherited ;
   FTimeListLink:= TTimeListModelLinkList.Create(self);
   FBoundaries:= TBoundaryModelLinkList.Create;
+end;
+
+procedure TCustomMF_BoundColl.CreateGwtTimeLists(AModel: TBaseModel);
+begin
+
 end;
 
 function TCustomMF_BoundColl.DataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean;
@@ -5108,6 +5115,11 @@ begin
 end;
 
 { TGwtConcStringCollection }
+
+function TGwtConcStringCollection.Add: TGwtConcStringValueItem;
+begin
+  result := inherited Add as TGwtConcStringValueItem;
+end;
 
 constructor TGwtConcStringCollection.Create(Model: TBaseModel;
   AScreenObject: TObject; ParentCollection: TCustomListArrayBoundColl);

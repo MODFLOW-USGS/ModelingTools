@@ -1399,6 +1399,7 @@ var
   FreeStack: boolean;
   Position: integer;
   ShouldCheck: Boolean;
+  StackIndex: Integer;
 begin
   if UpToDate and not DimensionsChanged then
   begin
@@ -1417,7 +1418,15 @@ begin
     if Stack.IndexOf(Name) >= 0 then
     begin
       UpToDate := True;
-      raise ECircularReference.Create(Format(StrCircularReferenceI, [Name]));
+      Stack[0] := Stack[0] + ' depends on';
+      for StackIndex := 1 to Stack.Count - 2 do
+      begin
+        Stack[StackIndex] := Stack[StackIndex] + ' which depends on';
+      end;
+      HandleCircularReferenceError(Format(StrCircularReferenceI2, [Name, Stack.Text]), nil);
+      Exit;
+
+//      raise ECircularReference.Create(Format(StrCircularReferenceI, [Name]));
     end;
     Position := Stack.Add(Name);
 
@@ -2967,6 +2976,7 @@ var
   ScreenObjectIndex: integer;
   AScreenObject: TScreenObject;
   FreeStack: boolean;
+  StackIndex: Integer;
 begin
   // Values are assigned only using screen objects. Neither iterpolation nor
   // global expressions are used.
@@ -2984,7 +2994,14 @@ begin
     if Stack.IndexOf(Name) >= 0 then
     begin
       UpToDate := True;
-      raise ECircularReference.Create(Format(StrCircularReferenceI, [Name]));
+      Stack[0] := Stack[0] + ' depends on';
+      for StackIndex := 1 to Stack.Count - 2 do
+      begin
+        Stack[StackIndex] := Stack[StackIndex] + ' which depends on';
+      end;
+      HandleCircularReferenceError(Format(StrCircularReferenceI2, [Name, Stack.Text]), nil);
+      Exit;
+//      raise ECircularReference.Create(Format(StrCircularReferenceI, [Name]));
     end;
     Stack.Add(Name);
 

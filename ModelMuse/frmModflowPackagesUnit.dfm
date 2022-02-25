@@ -29,7 +29,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspHUF
+    ActivePage = jvspMt3dmsBasic
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -6107,7 +6107,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pcMt3d_Basic: TPageControl
           Width = 595
           Height = 396
-          ActivePage = framePkgMt3dBasic.tabSpecies
           ExplicitWidth = 595
           ExplicitHeight = 396
           inherited tabSpecies: TTabSheet

@@ -1787,7 +1787,6 @@ begin
   FFrameNodeLinks := TObjectList.Create;
   framePkgGMG.pcGMG.ActivePageIndex := 0;
   frameMt3dmsAdvPkg.pcAdvection.ActivePageIndex := 0;
-
 end;
 
 procedure TfrmModflowPackages.FormDestroy(Sender: TObject);

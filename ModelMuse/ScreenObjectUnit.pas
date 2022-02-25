@@ -1592,6 +1592,7 @@ view. }
     procedure RemoveModelLink(AModel: TBaseModel);
     procedure Loaded;
     procedure ReplaceGUID;
+    procedure CreateGwtTimeLists(AModel: TBaseModel);
   end;
 
   TUsedWithModelItem = class(TPhastCollectionItem)
@@ -3820,6 +3821,7 @@ view. }
     procedure SimplifyStraightEdges(AngleEpsilon, DistanceEpsilon: double);
     procedure ReplaceGUID;
     property SutraScheduleName: string read FSutraScheduleName write FSutraScheduleName;
+    procedure CreateGwtTimeLists(AModel: TBaseModel);
   published
     // @name is deprecated.
     property ChildModelDiscretization: integer read FChildModelDiscretization
@@ -18797,6 +18799,14 @@ begin
       end;
       Inc(ClosedSectionCount);
     end;
+  end;
+end;
+
+procedure TScreenObject.CreateGwtTimeLists(AModel: TBaseModel);
+begin
+  if FModflowBoundaries <> nil then
+  begin
+    FModflowBoundaries.CreateGwtTimeLists(AModel);
   end;
 end;
 
@@ -40412,6 +40422,14 @@ begin
   FScreenObject := ScreenObject;
 end;
 
+procedure TModflowBoundaries.CreateGwtTimeLists(AModel: TBaseModel);
+begin
+  if ModflowRchBoundary <> nil then
+  begin
+    ModflowRchBoundary.CreateGwtTimeLists(AModel);
+  end;
+end;
+
 destructor TModflowBoundaries.Destroy;
 begin
   FModflowSwtObservations.Free;
@@ -41605,11 +41623,6 @@ begin
   if FModflowRivBoundary <> nil then
   begin
     FModflowRivBoundary.StopTalkingToAnyone;
-  end;
-
-  if FModflowSfrBoundary <> nil then
-  begin
-    FModflowSfrBoundary.StopTalkingToAnyone;
   end;
 
   if FModflowSfrBoundary <> nil then

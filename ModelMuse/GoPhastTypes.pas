@@ -291,6 +291,10 @@ type
   TStringListObjectList = TObjectList<TStringList>;
 
   TGwtCellData = record
+  private
+    FSpeciesCount: Integer;
+    procedure SetSpeciesCount(const Value: Integer);
+  public
     Concentrations: array of double;
     ConcentrationAnnotations: array of string;
     ConcentrationPestNames: array of string;
@@ -301,6 +305,7 @@ type
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
+    Property SpeciesCount: Integer read FSpeciesCount write SetSpeciesCount;
   end;
 
 
@@ -2228,6 +2233,17 @@ begin
   begin
     ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
   end;
+end;
+
+procedure TGwtCellData.SetSpeciesCount(const Value: Integer);
+begin
+  FSpeciesCount := Value;
+  SetLength(Concentrations, FSpeciesCount);
+  SetLength(ConcentrationAnnotations, FSpeciesCount);
+  SetLength(ConcentrationPestNames, FSpeciesCount);
+  SetLength(ConcentrationPestSeriesNames, FSpeciesCount);
+  SetLength(ConcentrationPestSeriesMethods, FSpeciesCount);
+  SetLength(ConcentrationTimeSeriesNames, FSpeciesCount);
 end;
 
 procedure WriteCompInt(Stream: TStream; Value: integer);

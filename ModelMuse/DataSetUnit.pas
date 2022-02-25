@@ -71,7 +71,7 @@ type
   // @abstract(@name is raised if, when
   // assigning values to a data set, a circular
   // reference is encountered so that the @link(TDataArray) depends on itself.)
-  ECircularReference = class(Exception);
+//  ECircularReference = class(Exception);
 
   ECorruptedData = class(Exception);
 
@@ -692,6 +692,8 @@ type
     procedure UpdateNotifiers; virtual;
     function IsSparseArray: boolean; virtual;
     function ShouldUseOnInitialize: Boolean;
+    procedure HandleCircularReferenceError(ErrorMessage: string;
+      ScreenObject: TObject);
 //    procedure SetName(const Value: TComponentName); override;
     // LayerIndex should be between 0 and @link(LayerCount) -1
 //    function IsLayerUsedWithParameters(const ALayer: Integer): Boolean;
@@ -1667,8 +1669,8 @@ procedure GlobalDataArrayRestoreSubscription(Sender: TObject; Subject: TObject;
 
 var
   // @name Stack is used in @link(TDataArray.Initialize) to
-  // detect circular references.  A @link(ECircularReference) is raised
-  // if one is found.
+  // detect circular references.  @link(TDataArray.HandleCircularReferenceError)
+  // is called if one is found.
   Stack: TStringList = nil;
 
 resourcestring
@@ -1791,6 +1793,8 @@ resourcestring
   StrNoPESTParameterAs = 'No PEST parameter assigned';
   StrNoPESTParametersA = 'No PEST parameters are assigned to any cell in the' +
   ' data set "%s."';
+  StrSHasBeenAssigned = '%s has been assigned a default value because of a c' +
+  'ircular reference error.';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 //function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -2249,6 +2253,48 @@ resourcestring
   ErrorMessageFormulaNamedString = 'An invalid value assigned by a formula '
     + 'has been replaced by "" in Data Set: %s.';
 
+procedure TDataArray.HandleCircularReferenceError(ErrorMessage: string; ScreenObject: TObject);
+var
+  LIndex: Integer;
+  RIndex: Integer;
+  CIndex: Integer;
+begin
+  ErrorMessage := Format(StrSHasBeenAssigned + sLineBreak, [Name]) + ErrorMessage;
+  for LIndex := 0 to LayerCount - 1 do
+  begin
+    for RIndex := 0 to RowCount - 1 do
+    begin
+      for CIndex := 0 to ColumnCount - 1 do
+      begin
+        case DataType of
+          rdtDouble:
+            begin
+              RealData[LIndex, RIndex, CIndex] := 0.0;
+            end;
+          rdtInteger:
+            begin
+              IntegerData[LIndex, RIndex, CIndex] := 0;
+            end;
+          rdtBoolean:
+            begin
+              BooleanData[LIndex, RIndex, CIndex] := False;
+            end;
+          rdtString:
+            begin
+              StringData[LIndex, RIndex, CIndex] := 'Error';
+            end;
+        end;
+        Annotation[LIndex, RIndex, CIndex] := ErrorMessage;
+      end;
+    end;
+  end;
+  FCleared := False;
+  UpToDate := True;
+  frmErrorsAndWarnings.AddError(Model, StrCircularReferenceE, ErrorMessage, ScreenObject);
+  Beep;
+  MessageDlg(ErrorMessage, mtError, [mbOK], 0);
+end;
+
 procedure TDataArray.Initialize;
 const
   MaxReal = 3.4E38;
@@ -2286,6 +2332,7 @@ var
   ErrorMessage: string;
   NameDataArray: TDataArray;
   OkAssignment: Boolean;
+  StackIndex: Integer;
   procedure GetLimits;
   begin
     if LocalModel.ModelSelection in SutraSelection then
@@ -2495,7 +2542,13 @@ begin
         UpToDate := True;
         if CurrentObject = nil then
         begin
-          raise ECircularReference.Create(Format(StrCircularReferenceI2, [Name, Stack.Text]));
+          Stack[0] := Stack[0] + ' depends on';
+          for StackIndex := 1 to Stack.Count - 2 do
+          begin
+            Stack[StackIndex] := Stack[StackIndex] + ' which depends on';
+          end;
+          HandleCircularReferenceError(Format(StrCircularReferenceI2, [Name, Stack.Text]), nil);
+          Exit;
         end
         else
         begin
@@ -2510,8 +2563,14 @@ begin
           end
           else
           begin
-            raise ECircularReference.Create(Format(StrCircularReferenceScreen,
-              [Name, Stack.Text, CurrentObject.Name]));
+            Stack[0] := Stack[0] + ' depends on';
+            for StackIndex := 1 to Stack.Count - 2 do
+            begin
+              Stack[StackIndex] := Stack[StackIndex] + ' which depends on';
+            end;
+            HandleCircularReferenceError(Format(StrCircularReferenceScreen,
+              [Name, Stack.Text, CurrentObject.Name]), CurrentObject);
+            Exit;
           end;
         end;
       end;
@@ -6374,6 +6433,7 @@ var
   AScreenObject: TScreenObject;
   FreeStack: boolean;
   StackPosition: Integer;
+  StackIndex: Integer;
 begin
   // Values are assigned only using screen objects. Neither iterpolation nor
   // default expressions are used.
@@ -6397,7 +6457,14 @@ begin
     if Stack.IndexOf(Name) >= 0 then
     begin
       UpToDate := True;
-      raise ECircularReference.Create(Format(StrCircularReferenceI2, [Name, Stack.Text]));
+      Stack[0] := Stack[0] + ' depends on';
+      for StackIndex := 1 to Stack.Count - 2 do
+      begin
+        Stack[StackIndex] := Stack[StackIndex] + ' which depends on';
+      end;
+      HandleCircularReferenceError(Format(StrCircularReferenceI2, [Name, Stack.Text]), nil);
+      Exit;
+//      raise ECircularReference.Create(Format(StrCircularReferenceI2, [Name, Stack.Text]));
     end;
     StackPosition := Stack.Add(Name);
 

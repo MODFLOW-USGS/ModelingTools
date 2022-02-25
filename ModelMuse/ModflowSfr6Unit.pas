@@ -20,6 +20,8 @@ type
   TStreamStatus = (ssInactive, ssActive, ssSimple);
   TGwtStreamStatus = (gssInactive, gssActive, gssConstant);
 
+  TGwtStreamStatusArray = array of TGwtStreamStatus;
+
   TGwtStrStatusItem = class(TCollectionItem)
   private
     FGwtStreamStatus: TGwtStreamStatus;
@@ -100,7 +102,7 @@ type
     MvrIndex: Integer;
 
     // GWT
-    GwtStatus: array of TGwtStreamStatus;
+    GwtStatus: TGwtStreamStatusArray;
     SpecifiedConcentrations: TGwtCellData;
     RainfallConcentrations: TGwtCellData;
     EvapConcentrations: TGwtCellData;
@@ -118,13 +120,16 @@ type
   TSfrMf6Storage = class(TCustomBoundaryStorage)
   private
     FSfrMF6Array: TSfrMF6Array;
+    FSpeciesCount: Integer;
     function GetStrMF6Array: TSfrMF6Array;
+    procedure SetSpeciesCount(const Value: Integer);
   protected
     procedure Restore(DecompressionStream: TDecompressionStream; Annotations: TStringList); override;
     procedure Store(Compressor: TCompressionStream); override;
     procedure Clear; override;
   public
     property SfrMF6Array: TSfrMF6Array read GetStrMF6Array;
+    property SpeciesCount: Integer read FSpeciesCount write SetSpeciesCount;
   end;
 
   TSfrMf6Collection = class;
@@ -335,6 +340,12 @@ type
     StressPeriod: integer;
     function GetMvrIndex: Integer;
     function GetMvrUsed: Boolean;
+    function GetEvapConcentrations: TGwtCellData;
+    function GetGwtStatus: TGwtStreamStatusArray;
+    function GetInflowConcentrations: TGwtCellData;
+    function GetRainfallConcentrations: TGwtCellData;
+    function GetRunoffConcentrations: TGwtCellData;
+    function GetSpecifiedConcentrations: TGwtCellData;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -359,6 +370,14 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    // GWT
+    Property GwtStatus: TGwtStreamStatusArray read GetGwtStatus;
+    Property SpecifiedConcentrations: TGwtCellData read GetSpecifiedConcentrations;
+    Property RainfallConcentrations: TGwtCellData read GetRainfallConcentrations;
+    Property EvapConcentrations: TGwtCellData read GetEvapConcentrations;
+    Property RunoffConcentrations: TGwtCellData read GetRunoffConcentrations;
+    Property InflowConcentrations: TGwtCellData read GetInflowConcentrations;
+
   end;
 
   TDivisionPriority = (cpFraction, cpExcess, cpThreshold, cpUpTo);
@@ -1112,6 +1131,22 @@ begin
   end;
 end;
 
+procedure TSfrMf6Storage.SetSpeciesCount(const Value: Integer);
+var
+  Index: Integer;
+begin
+  FSpeciesCount := Value;
+  for Index := 0 to Length(FSfrMF6Array)-1 do
+  begin
+    SetLength(FSfrMF6Array[Index].GwtStatus, FSpeciesCount);
+    FSfrMF6Array[Index].SpecifiedConcentrations.SpeciesCount := FSpeciesCount;
+    FSfrMF6Array[Index].RainfallConcentrations.SpeciesCount := FSpeciesCount;
+    FSfrMF6Array[Index].EvapConcentrations.SpeciesCount := FSpeciesCount;
+    FSfrMF6Array[Index].RunoffConcentrations.SpeciesCount := FSpeciesCount;
+    FSfrMF6Array[Index].InflowConcentrations.SpeciesCount := FSpeciesCount;
+  end;
+end;
+
 procedure TSfrMf6Storage.Store(Compressor: TCompressionStream);
 var
   Index: Integer;
@@ -1299,8 +1334,11 @@ end;
 
 function TSfrMf6Item.BoundaryFormulaCount: integer;
 begin
-  result := DiversionCount + 7
-    + frmGoPhast.PhastModel.MobileComponents.Count *5;
+  result := DiversionCount + 7;
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    result := result + frmGoPhast.PhastModel.MobileComponents.Count *5;
+  end;
 end;
 
 constructor TSfrMf6Item.Create(Collection: TCollection);
@@ -1414,70 +1452,66 @@ begin
         end;
         Index := Index - FDiversionFormulas.Count;
         // GWT
-        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
-        while SpecifiedConcentrations.Count <= ChemSpeciesCount do
+        if frmGoPhast.PhastModel.GwtUsed then
         begin
-          SpecifiedConcentrations.Add;
-        end;
-        if Index < ChemSpeciesCount then
-        begin
-          result := SpecifiedConcentrations[Index].Value;
-          Exit;
-        end;
-        Index := Index - ChemSpeciesCount;
+          ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+          while SpecifiedConcentrations.Count < ChemSpeciesCount do
+          begin
+            SpecifiedConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := SpecifiedConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
 
-        while RainfallConcentrations.Count <= ChemSpeciesCount do
-        begin
-          RainfallConcentrations.Add;
-        end;
-        if Index < ChemSpeciesCount then
-        begin
-          result := RainfallConcentrations[Index].Value;
-          Exit;
-        end;
-        Index := Index - ChemSpeciesCount;
+          while RainfallConcentrations.Count < ChemSpeciesCount do
+          begin
+            RainfallConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := RainfallConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
 
-        while EvapConcentrations.Count <= ChemSpeciesCount do
-        begin
-          EvapConcentrations.Add;
-        end;
-        if Index < ChemSpeciesCount then
-        begin
-          result := EvapConcentrations[Index].Value;
-          Exit;
-        end;
-        Index := Index - ChemSpeciesCount;
+          while EvapConcentrations.Count < ChemSpeciesCount do
+          begin
+            EvapConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := EvapConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
 
-        while RunoffConcentrations.Count <= ChemSpeciesCount do
-        begin
-          RunoffConcentrations.Add;
-        end;
-        if Index < ChemSpeciesCount then
-        begin
-          result := RunoffConcentrations[Index].Value;
-          Exit;
-        end;
-        Index := Index - ChemSpeciesCount;
+          while RunoffConcentrations.Count < ChemSpeciesCount do
+          begin
+            RunoffConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := RunoffConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
 
-        while InflowConcentrations.Count <= ChemSpeciesCount do
-        begin
-          InflowConcentrations.Add;
+          while InflowConcentrations.Count < ChemSpeciesCount do
+          begin
+            InflowConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := InflowConcentrations[Index].Value;
+            Exit;
+          end;
+          Assert(False);
         end;
-        if Index < ChemSpeciesCount then
-        begin
-          result := InflowConcentrations[Index].Value;
-          Exit;
-        end;
-        Assert(False);
 //        Index := Index - ChemSpeciesCount;
       end;
-
-//  SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
-//  RainfallConcentrations.Assign(Item.RainfallConcentrations);
-//  EvapConcentrations.Assign(Item.EvapConcentrations);
-//  RunoffConcentrations.Assign(Item.RunoffConcentrations);
-//  InflowConcentrations.Assign(Item.InflowConcentrations);
-      
   end;
 end;
 
@@ -1812,61 +1846,65 @@ begin
         Index := Index - FDiversionFormulas.Count;
 
         // GWT
-        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
-        while SpecifiedConcentrations.Count <= ChemSpeciesCount do
+        if frmGoPhast.PhastModel.GwtUsed then
         begin
-          SpecifiedConcentrations.Add;
-        end;
-        if Index < ChemSpeciesCount then
-        begin
-          SpecifiedConcentrations[Index].Value := Value;
-          Exit;
-        end;
-        Index := Index - ChemSpeciesCount;
 
-        while RainfallConcentrations.Count <= ChemSpeciesCount do
-        begin
-          RainfallConcentrations.Add;
-        end;
-        if Index < ChemSpeciesCount then
-        begin
-          RainfallConcentrations[Index].Value := Value;
-          Exit;
-        end;
-        Index := Index - ChemSpeciesCount;
+          ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+          while SpecifiedConcentrations.Count < ChemSpeciesCount do
+          begin
+            SpecifiedConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            SpecifiedConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
 
-        while EvapConcentrations.Count <= ChemSpeciesCount do
-        begin
-          EvapConcentrations.Add;
-        end;
-        if Index < ChemSpeciesCount then
-        begin
-          EvapConcentrations[Index].Value := Value;
-          Exit;
-        end;
-        Index := Index - ChemSpeciesCount;
+          while RainfallConcentrations.Count < ChemSpeciesCount do
+          begin
+            RainfallConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            RainfallConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
 
-        while RunoffConcentrations.Count <= ChemSpeciesCount do
-        begin
-          RunoffConcentrations.Add;
-        end;
-        if Index < ChemSpeciesCount then
-        begin
-          RunoffConcentrations[Index].Value := Value;
-          Exit;
-        end;
-        Index := Index - ChemSpeciesCount;
+          while EvapConcentrations.Count < ChemSpeciesCount do
+          begin
+            EvapConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            EvapConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
 
-        while InflowConcentrations.Count <= ChemSpeciesCount do
-        begin
-          InflowConcentrations.Add;
+          while RunoffConcentrations.Count < ChemSpeciesCount do
+          begin
+            RunoffConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            RunoffConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while InflowConcentrations.Count < ChemSpeciesCount do
+          begin
+            InflowConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            InflowConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Assert(False);
         end;
-        if Index < ChemSpeciesCount then
-        begin
-          InflowConcentrations[Index].Value := Value;
-          Exit;
-        end;
-        Assert(False);
       end;
   end;
 end;
@@ -2119,7 +2157,7 @@ var
   Observer: TObserver;
   LocalScreenObject: TScreenObject;
 begin
-  if ScreenObject <> nil then
+  if (ScreenObject <> nil) and not frmGoPhast.PhastModel.Clearing then
   begin
     while FObserverList.Count < BoundaryFormulaCount do
     begin
@@ -2356,7 +2394,7 @@ begin
               end;
               Exit;
             end;
-            
+
             FormulaIndex := FormulaIndex - SpeciesCount;
             if FormulaIndex < SpeciesCount then
             begin
@@ -2454,7 +2492,12 @@ begin
       Sfr6Storage.FSfrMF6Array[index].UpstreamFractionAnnotation
         := StrUpstreamFractionIs
     end;
+
     SetLength(Sfr6Storage.FSfrMF6Array[index].GwtStatus, SpeciesCount);
+    while SfrMf6Item.GwtStatus.Count < SpeciesCount do
+    begin
+      SfrMf6Item.GwtStatus.Add;
+    end;
     for SpeciesIndex := 0 to SpeciesCount - 1 do
     begin
       Sfr6Storage.FSfrMF6Array[index].GwtStatus[SpeciesIndex] := 
@@ -2900,6 +2943,8 @@ procedure TSfrMf6Collection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel);
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TSfrMf6Storage).FSfrMF6Array, BoundaryCount);
+  (Boundaries[ItemIndex, AModel] as TSfrMf6Storage).SpeciesCount
+    := (AModel as TCustomModel).MobileComponents.Count;
   inherited;
 end;
 
@@ -3595,7 +3640,7 @@ begin
     else
       begin
         result := inherited;
-        Assert(False);
+//        Assert(False);
       end;
   end;
 end;
@@ -3635,7 +3680,7 @@ begin
     else
       begin
         result := inherited;
-        Assert(False);
+//        Assert(False);
       end;
   end;
 end;
@@ -4266,7 +4311,7 @@ begin
     else
       begin
         inherited;
-        Assert(False);
+//        Assert(False);
       end;
   end;
 end;
@@ -4306,7 +4351,7 @@ begin
     else
       begin
         inherited;
-        Assert(False);
+//        Assert(False);
       end;
   end;
 end;
@@ -4458,6 +4503,21 @@ begin
   result := FValues.Cell.Column;
 end;
 
+function TSfrMf6_Cell.GetEvapConcentrations: TGwtCellData;
+begin
+  result := FValues.EvapConcentrations
+end;
+
+function TSfrMf6_Cell.GetGwtStatus: TGwtStreamStatusArray;
+begin
+  result := FValues.GwtStatus
+end;
+
+function TSfrMf6_Cell.GetInflowConcentrations: TGwtCellData;
+begin
+  result := FValues.InflowConcentrations
+end;
+
 function TSfrMf6_Cell.GetIntegerAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
@@ -4555,6 +4615,11 @@ begin
   end;
 end;
 
+function TSfrMf6_Cell.GetRainfallConcentrations: TGwtCellData;
+begin
+  result := FValues.RainfallConcentrations
+end;
+
 function TSfrMf6_Cell.GetRealAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
@@ -4597,9 +4662,19 @@ begin
   result := FValues.Cell.Row;
 end;
 
+function TSfrMf6_Cell.GetRunoffConcentrations: TGwtCellData;
+begin
+  result := FValues.RunoffConcentrations
+end;
+
 function TSfrMf6_Cell.GetSection: integer;
 begin
   result := FValues.Cell.Section;
+end;
+
+function TSfrMf6_Cell.GetSpecifiedConcentrations: TGwtCellData;
+begin
+  result := FValues.SpecifiedConcentrations
 end;
 
 procedure TSfrMf6_Cell.RecordStrings(Strings: TStringList);

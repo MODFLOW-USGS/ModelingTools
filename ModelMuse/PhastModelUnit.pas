@@ -21927,9 +21927,15 @@ begin
 end;
 
 procedure TPhastModel.UpdateMt3dmsChemDataSets;
+var
+  ScreenObjectIndex: Integer;
 begin
   MobileComponents.UpdateDataArrays;
   ImMobileComponents.UpdateDataArrays;
+  for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+  begin
+    ScreenObjects[ScreenObjectIndex].CreateGwtTimeLists(self);
+  end;
 end;
 
 function TPhastModel.FarmProcessIsSelected: Boolean;
