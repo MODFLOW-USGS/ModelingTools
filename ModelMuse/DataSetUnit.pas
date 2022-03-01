@@ -1795,6 +1795,8 @@ resourcestring
   ' data set "%s."';
   StrSHasBeenAssigned = '%s has been assigned a default value because of a c' +
   'ircular reference error.';
+  StrErrorAssigningValu = 'Error assigning values to Data set "%0:s" using t' +
+  'he interpolation algorithm "%1:s." The error message was %2:s"';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 //function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -2621,11 +2623,19 @@ begin
                   begin
 
                   end;
-                Except on E: ESfrProcedureException do
+                Except
+                  on E: ESfrProcedureException do
                   begin
                     OkAssignment := False;
                     Exception.RaiseOuterException(EInterpolationException.Create(Format(
-                      'Error assigning values to Data set "%0:s" using the interpolation algorithm "%1:s." The error message was %2:s"',
+                      StrErrorAssigningValu,
+                      [Name, TwoDInterpolator.InterpolatorName, E.Message])));
+                  end;
+                  on E: ERbwParserError do
+                  begin
+                    OkAssignment := False;
+                    Exception.RaiseOuterException(EInterpolationException.Create(Format(
+                      StrErrorAssigningValu,
                       [Name, TwoDInterpolator.InterpolatorName, E.Message])));
                   end;
                 end;
