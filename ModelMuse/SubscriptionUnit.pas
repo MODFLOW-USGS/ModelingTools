@@ -137,7 +137,12 @@ type
 
 implementation
 
-uses Contnrs;
+uses
+  {$IFDEF DEBUG}
+    frmGoPhastUnit,
+  {$ENDIF}
+
+Contnrs;
 
 constructor TObserver.Create(AnOwner: TComponent);
 begin
@@ -290,6 +295,12 @@ end;
 
 procedure TObserver.TalksTo(const Observer: TObserver);
 begin
+  {$IFDEF DEBUG}
+  if frmGoPhast.PhastModel <> nil then
+  begin
+    Assert(Not frmGoPhast.PhastModel.Clearing);
+  end;
+  {$ENDIF}
   Assert(Observer <> nil);
   Subject.Subscribe(Observer.Observer);
   if FSubscribers = nil then

@@ -1359,7 +1359,7 @@ begin
           LocalCollection.AddOwnedDataArray(DataArray);
 //          NewNames.Add(DataArray.Name);
         end;
-        if DataArray <> nil then
+        if (DataArray <> nil) and (not LocalModel.Clearing) then
         begin
           LocalModel.TopGridObserver.TalksTo(DataArray);
 //          DataArray.TalksTo(LocalModel.ThreeDGridObserver);

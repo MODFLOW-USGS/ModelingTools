@@ -739,6 +739,12 @@ begin
       MessageDlg(Format(StrUnableToOpen0s, [FNodeFileName, E.message]), mtWarning, [mbOK], 0);
       result := False;
     end;
+    on E: EEncodingError do
+    begin
+      Beep;
+      MessageDlg(Format(StrUnableToOpen0s, [FNodeFileName, E.message]), mtWarning, [mbOK], 0);
+      result := False;
+    end;
   end;
   if result then
   begin
