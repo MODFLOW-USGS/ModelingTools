@@ -69,6 +69,9 @@ type
     procedure WriteStressPeriods;
     procedure InternalUpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure WriteFileInternal;
+    procedure WriteAdditionalAuxVariables;
+    // SFT
+    procedure WriteSftOptions;
 //    // Check that stage decreases in the downstream direction.
 //    procedure CheckStage;
   protected
@@ -96,7 +99,7 @@ uses
   RbwParser, GIS_Functions, DataSetUnit, frmFormulaErrorsUnit, ModflowCellUnit,
   AbstractGridUnit, Modflow6ObsWriterUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, ModflowIrregularMeshUnit, FastGEO,
-  Vcl.Dialogs, ModflowParameterUnit, ModelMuseUtilities;
+  Vcl.Dialogs, ModflowParameterUnit, ModelMuseUtilities, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrTheFollowingPairO = 'The following pair of objects have the same SFR se' +
@@ -172,6 +175,9 @@ resourcestring
   ' inactive period has been inserted to fill that time.';
   StrTheSFRSegmentDefi = 'The SFR segment defined by %s doesn''t appear to i' +
   'ntersect any active cells.';
+
+const
+  StrFlowPackageName = 'SFR-1';
 
 { TModflowSFR_MF6_Writer }
 
@@ -1476,6 +1482,21 @@ begin
 
 end;
 
+procedure TModflowSFR_MF6_Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+  end;
+end;
+
 procedure TModflowSFR_MF6_Writer.WriteConnections;
 var
   SegmentIndex: Integer;
@@ -1617,7 +1638,7 @@ begin
   end;
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
-  WriteToNameFile(Abbreviation, -1, FNameOfFile, foInput, Model, False, 'SFR-1');
+  WriteToNameFile(Abbreviation, -1, FNameOfFile, foInput, Model, False, StrFlowPackageName);
   frmErrorsAndWarnings.BeginUpdate;
   try
 
@@ -1726,6 +1747,13 @@ begin
 
 //  WriteNoNewtown;
 
+  if SfrMf6Package.MaxPicardIteration <> KSfrDefaultPicardIterations then
+  begin
+    WriteString('    MAXIMUM_PICARD_ITERATIONS');
+    WriteInteger(SfrMf6Package.MaxPicardIteration);
+    NewLine;
+  end;
+
   WriteString('    MAXIMUM_ITERATIONS');
   WriteInteger(SfrMf6Package.MaxIteration);
   NewLine;
@@ -1757,6 +1785,7 @@ begin
     end;
   end;
 
+  WriteAdditionalAuxVariables;
 
   WriteEndOptions
 end;
@@ -1876,6 +1905,47 @@ begin
   Assert(ReachNumber <= FReachCount);
 end;
 
+procedure TModflowSFR_MF6_Writer.WriteSftOptions;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+  budgetfile: string;
+  BaseFileName: string;
+  SfrMf6Package: TSfrModflow6PackageSelection;
+begin
+  WriteString('FLOW_PACKAGE_NAME ');
+  WriteString(StrFlowPackageName);
+  NewLine;
+
+  for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+  begin
+    WriteString('FLOW_PACKAGE_AUXILIARY_NAME ');
+    ASpecies := Model.MobileComponents[SpeciesIndex];
+    WriteString(' ' + ASpecies.Name);
+  end;
+
+  PrintListInputOption;
+  PrintConcentrationOption;
+  PrintFlowsOption;
+  WriteSaveFlowsOption;
+
+  SfrMf6Package := Model.ModflowPackages.SfrModflow6Package;
+  BaseFileName := ChangeFileExt(FNameOfFile, '');
+  if SfrMf6Package.SaveGwtBudget then
+  begin
+    WriteString('    BUDGET FILEOUT ');
+    budgetfile := ChangeFileExt(BaseFileName, '.sft_budget');
+    Model.AddModelOutputFile(budgetfile);
+    budgetfile := ExtractFileName(budgetfile);
+    WriteString(budgetfile);
+    NewLine;
+  end;
+
+//  [TS6 FILEIN <ts6_filename>]
+//  [OBS6 FILEIN <obs6_filename>]
+
+end;
+
 procedure TModflowSFR_MF6_Writer.WriteStressPeriods;
 const
   // equivalent to DEM6 in MODFLOW 6.
@@ -1902,6 +1972,8 @@ var
   ConnectIndex: Integer;
   HasDownstreamReaches: Boolean;
   ConnectedStreams: TStringList;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 begin
   if MvrWriter <> nil then
   begin
@@ -2049,6 +2121,18 @@ begin
           MvrSource.SourceKey.MvrIndex := ACell.MvrIndex;
           MvrSource.SourceKey.ScreenObject := ASegment.FScreenObject;
           TModflowMvrWriter(MvrWriter).AddMvrSource(MvrSource);
+        end;
+      end;
+
+      if Model.GwtUsed then
+      begin
+        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          WriteInteger(ReachNumber);
+          WriteString(' AUXILIARY ');
+          ASpecies := Model.MobileComponents[SpeciesIndex];
+          WriteString(' ' + ASpecies.Name);
+          WriteFloat(0);
         end;
       end;
 

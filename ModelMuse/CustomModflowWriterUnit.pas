@@ -456,6 +456,7 @@ end;
     procedure WriteEndConnectionData;
     procedure WriteBoundNamesOption;
     procedure WriteTimeSeriesFiles(InputFileName: string);
+    procedure PrintConcentrationOption;
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -9723,6 +9724,18 @@ begin
     and (Pos(')', AName) <= 0)
     and (Pos('!', AName) <= 0)
     and (Pos('@', AName) <= 0)
+end;
+
+procedure TCustomPackageWriter.PrintConcentrationOption;
+var
+  ConcentrationOC: THeadDrawdownOutputControl;
+begin
+  ConcentrationOC := Model.ModflowOutputControl.ConcentrationOC;
+  if ConcentrationOC.PrintInListing then
+  begin
+    WriteString('  PRINT_CONCENTRATION');
+    NewLine;
+  end;
 end;
 
 procedure TCustomPackageWriter.PrintFlowsOption;

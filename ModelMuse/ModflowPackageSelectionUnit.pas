@@ -7,6 +7,9 @@ uses SysUtils, Classes, GoPhastTypes, OrderedCollectionUnit, DataSetUnit,
   ModflowBoundaryUnit, Mt3dmsChemSpeciesUnit, System.Generics.Collections,
   Mt3dSftUnit, ModflowCSubInterbed;
 
+const
+  KSfrDefaultPicardIterations = 100;
+
 Type
   TSelectionType = (stCheckBox, stRadioButton);
 
@@ -2106,6 +2109,8 @@ Type
     FReachNumber: TModflowBoundaryDisplayTimeList;
     FPrintFlows: Boolean;
     FWriteConvergenceData: Boolean;
+    FMaxPicardIteration: Integer;
+    FSaveGwtBudget: Boolean;
     procedure SetMaxIteration(const Value: Integer);
     procedure SetStoredMaxDepthChange(const Value: TRealStorage);
     procedure SetSaveBudgetFile(const Value: Boolean);
@@ -2135,6 +2140,8 @@ Type
       NewUseList: TStringList);
     procedure SetPrintFlows(const Value: Boolean);
     procedure SetWriteConvergenceData(const Value: Boolean);
+    procedure SetMaxPicardIteration(const Value: Integer);
+    procedure SetSaveGwtBudget(const Value: Boolean);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -2157,6 +2164,8 @@ Type
   published
     // MAXIMUM_ITERATION
     property MaxIteration: Integer read FMaxIteration write SetMaxIteration;
+    // MAXIMUM_PICARD_ITERATIONS
+    property MaxPicardIteration: Integer read FMaxPicardIteration write SetMaxPicardIteration;
     // MAXIMUM_DEPTH_CHANGE
     property StoredMaxDepthChange: TRealStorage read FStoredMaxDepthChange
       write SetStoredMaxDepthChange;
@@ -2175,6 +2184,15 @@ Type
     // PACKAGE_CONVERGENCE
     property WriteConvergenceData: Boolean read FWriteConvergenceData
       write SetWriteConvergenceData Stored True;
+    // GWT
+
+    // BUDGET FILEOUT budgetfile
+    property SaveGwtBudget: Boolean read FSaveGwtBudget write SetSaveGwtBudget
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
   end;
 
   TSftSolverPrintChoice = (sftNone, sftSummary, sftDetailed);
@@ -20092,6 +20110,7 @@ begin
     PrintFlows := SourceSfr.PrintFlows;
     MaxDepthChange := SourceSfr.MaxDepthChange;
     MaxIteration := SourceSfr.MaxIteration;
+    MaxPicardIteration := SourceSfr.MaxPicardIteration;
     SaveStageFile := SourceSfr.SaveStageFile;
     SaveBudgetFile := SourceSfr.SaveBudgetFile;
     WriteConvergenceData := SourceSfr.WriteConvergenceData;
@@ -20332,6 +20351,7 @@ procedure TSfrModflow6PackageSelection.InitializeVariables;
 begin
   inherited;
   FMaxIteration := 100;
+  FMaxPicardIteration := KSfrDefaultPicardIterations;
   FStoredMaxDepthChange.Value := 1E-5;
   FSaveStageFile := True;
   FSaveBudgetFile := True;
@@ -20351,6 +20371,12 @@ begin
   SetIntegerProperty(FMaxIteration, Value);
 end;
 
+procedure TSfrModflow6PackageSelection.SetMaxPicardIteration(
+  const Value: Integer);
+begin
+  SetIntegerProperty(FMaxPicardIteration, Value);
+end;
+
 procedure TSfrModflow6PackageSelection.SetPrintFlows(const Value: Boolean);
 begin
   SetBooleanProperty(FPrintFlows, Value);
@@ -20364,6 +20390,11 @@ end;
 procedure TSfrModflow6PackageSelection.SetSaveBudgetFile(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveBudgetFile, Value);
+end;
+
+procedure TSfrModflow6PackageSelection.SetSaveGwtBudget(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtBudget, Value);
 end;
 
 procedure TSfrModflow6PackageSelection.SetSaveStageFile(const Value: Boolean);

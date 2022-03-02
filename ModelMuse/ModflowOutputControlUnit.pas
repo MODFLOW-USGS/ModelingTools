@@ -102,6 +102,7 @@ type
     FPrintObservations: boolean;
     FOutputSuppression: TOutputSuppression;
     FSaveBudgetSummary: boolean;
+    FConcentrationOC: THeadDrawdownOutputControl;
     procedure SetPrintInputArrays(const Value: boolean);
     procedure SetSaveCellFlows(const Value: TCellSaveFormat);
     procedure SetPrintInputCellLists(const Value: boolean);
@@ -114,6 +115,7 @@ type
     procedure SetPrintObservations(const Value: boolean);
     procedure SetOutputSuppression(const Value: TOutputSuppression);
     procedure SetSaveBudgetSummary(const Value: boolean);
+    procedure SetConcentrationOC(const Value: THeadDrawdownOutputControl);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
@@ -167,6 +169,12 @@ type
     // WBGT in OC file (MODFLOW-OWHM).
     property SaveBudgetSummary: boolean read FSaveBudgetSummary
       write SetSaveBudgetSummary default True;
+    property ConcentrationOC: THeadDrawdownOutputControl read FConcentrationOC
+      write SetConcentrationOC
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
   TMt3dmsOutputFreq = (mofSpecifiedTimes, mofEndOfSimulation, mofPeriodic);
@@ -244,6 +252,7 @@ begin
     PrintInputCellLists := SourceOutputControl.PrintInputCellLists;
     OutputSuppression := SourceOutputControl.OutputSuppression;
     SaveBudgetSummary := SourceOutputControl.SaveBudgetSummary;
+    ConcentrationOC := SourceOutputControl.ConcentrationOC;
   end
   else
   begin
@@ -256,6 +265,7 @@ begin
   inherited;
   FHeadOC := THeadDrawdownOutputControl.Create(InvalidateModelEvent);
   FDrawdownOC := THeadDrawdownOutputControl.Create(InvalidateModelEvent);
+  FConcentrationOC := THeadDrawdownOutputControl.Create(InvalidateModelEvent);
   FComments := TStringList.Create;
   Initialize;
 end;
@@ -265,6 +275,7 @@ begin
   FComments.Free;
   FHeadOC.Free;
   FDrawdownOC.Free;
+  FConcentrationOC.Free;
   inherited;
 end;
 
@@ -341,6 +352,12 @@ begin
     FCompact := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TModflowOutputControl.SetConcentrationOC(
+  const Value: THeadDrawdownOutputControl);
+begin
+  FConcentrationOC.Assign(Value);
 end;
 
 procedure TModflowOutputControl.SetDrawdownOC(
