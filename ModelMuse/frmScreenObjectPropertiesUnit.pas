@@ -727,6 +727,8 @@ type
     procedure jvspSutraGenTransObsShow(Sender: TObject);
     procedure jvspSutraSpecPresObsShow(Sender: TObject);
     procedure jvspSutraSpecUObsShow(Sender: TObject);
+    procedure jvspCSUBShow(Sender: TObject);
+    procedure tabModflowBoundaryConditionsShow(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -3502,9 +3504,13 @@ begin
     begin
       Assert(False);
     end;
-
-
   end;
+end;
+
+procedure TfrmScreenObjectProperties.jvspCSUBShow(Sender: TObject);
+begin
+  inherited;
+  frameCSUB.tabInterbedSystemsShow(nil);
 end;
 
 procedure TfrmScreenObjectProperties.jvspSutraGenFlowObsShow(Sender: TObject);
@@ -24070,6 +24076,13 @@ begin
   begin
     FSwtPestObs_Node.StateIndex := 2;
   end;
+end;
+
+procedure TfrmScreenObjectProperties.tabModflowBoundaryConditionsShow(
+  Sender: TObject);
+begin
+  inherited;
+  jvspCSUBShow(nil);
 end;
 
 procedure TfrmScreenObjectProperties.frameSutraSpecPresObsrdgObservationGroupsStateChange(

@@ -148,6 +148,7 @@ type
     procedure WriteDataArrayValueOrFormula(DataArray: TDataArray;
       Layer, Row, Col: Integer);
   public
+    function GwtFileName(const AFileName: string; SpeciesIndex: Integer): string;
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
     {@name is the model to be exported.}
@@ -373,6 +374,8 @@ end;
       const Option: TFileOption; OutputSuppression: TOutputSuppression;
       AModel: TCustomModel;
       RelativeFileName: boolean = False; PackageName: String = ''); overload;
+    class procedure WriteToGwtNameFile(const Ftype: string; FileName: string;
+      SpeciesIndex: Integer);
     class procedure WriteToMt3dMsNameFile(const Ftype: string;
       const UnitNumber: integer; FileName: string; FileOption: TFileOption;
       AModel: TCustomModel; RelativeFileName: boolean = False; Option: String = '');
@@ -3364,6 +3367,15 @@ begin
   end;
 end;
 
+function TCustomFileWriter.GwtFileName(const AFileName: string;
+  SpeciesIndex: Integer): string;
+var
+  ASpeciesName: String;
+begin
+  ASpeciesName := '.' + Model.MobileComponents[SpeciesIndex].Name;
+  result := ChangeFileExt(AFileName, ASpeciesName) + Extension;
+end;
+
 procedure TCustomFileWriter.NewLine;
 begin
   WriteString(sLineBreak);
@@ -3860,6 +3872,12 @@ begin
 //    FFileStream.Write(StringToWrite[1], Length(StringToWrite)*SizeOf(AnsiChar));
 ////    UpdateExportTime;
 //  end;
+end;
+
+class procedure TCustomModflowWriter.WriteToGwtNameFile(const Ftype: string;
+  FileName: string; SpeciesIndex: Integer);
+begin
+
 end;
 
 class procedure TCustomModflowWriter.WriteToMt3dMsNameFile(const Ftype: string;

@@ -126,7 +126,7 @@ object TTaskHistory
     end
     item
       Name = 'OC'
-      Display = False
+      Display = True
     end
     item
       Name = 'SFR'
@@ -29001,5 +29001,11 @@ object TTaskHistory
       Date = 44622.000000000000000000
       Categories.Strings = (
         'MF6 GWT')
+    end
+    item
+      Date = 44623.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT'
+        'OC')
     end>
 end

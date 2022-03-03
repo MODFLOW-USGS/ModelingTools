@@ -5361,6 +5361,7 @@ const
   StrZonebudgetMf6 = 'ZoneBudget 6';
   StrFhd = '.fhd';
   StrBhd = '.bhd';
+  StrConc = '.conc';
   StrFdn = '.fdn';
   StrBdn = '.bdn';
   StrCbcExt = '.cbc';
@@ -42031,6 +42032,7 @@ var
   CSubWriter: TCSubWriter;
   ObsScriptWriter: TGlobalComparisonScriptWriter;
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
+  SpeciesIndex: Integer;
 //  PestDataArrayWriter: TPestDataArrayWriter;
 begin
   PilotPointData.Clear;
@@ -42235,6 +42237,16 @@ begin
           OCWriter := TOutputControlWriter.Create(self, etExport);
           try
             OCWriter.WriteFile(FileName);
+            if GwtUsed then
+            begin
+              OCWriter.OutputType := otTransport;
+              for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+              begin
+                OCWriter.SpeciesIndex := SpeciesIndex;
+                OCWriter.WriteFile(FileName);
+              end;
+            end;
+
           finally
             OCWriter.Free;
           end;

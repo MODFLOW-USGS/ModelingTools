@@ -36,6 +36,7 @@ const
   StrDE4 = 'DE4';
   StrHEAD = 'HEAD';
   StrDRAWDOWN = 'DRAWDOWN';
+  StrConcentration = 'CONCENTRATION';
   StrOC = 'OC';
   StrGAG = 'GAGE';
   StrHOB = 'HOB';

@@ -6,29 +6,33 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Menus, Vcl.StdCtrls,
   Xml.VerySimple, Vcl.WinXPickers, JvToolEdit, Vcl.Mask, JvExMask, JvMaskEdit,
-  JvCheckedMaskEdit, JvDatePickerEdit;
+  JvCheckedMaskEdit, JvDatePickerEdit, Vcl.ExtCtrls;
 
 type
   TfrmMain = class(TForm)
     tvVideos: TTreeView;
+    dlgOpen: TOpenDialog;
+    dlgSave: TSaveDialog;
+    sbStatus: TStatusBar;
+    Panel1: TPanel;
+    btnAddChild: TButton;
+    btnAddNode: TButton;
+    btnDeleteNode: TButton;
+    edTitle: TEdit;
+    edURL: TEdit;
+    jvdDate: TJvDateEdit;
+    lblDate: TLabel;
+    lblTitle: TLabel;
+    lblTopic: TLabel;
+    lblURL: TLabel;
     MainMenu1: TMainMenu;
     File1: TMenuItem;
     miOpen: TMenuItem;
     miSave: TMenuItem;
-    dlgOpen: TOpenDialog;
-    dlgSave: TSaveDialog;
-    edURL: TEdit;
-    btnAddChild: TButton;
-    btnDeleteNode: TButton;
-    btnAddNode: TButton;
-    edTitle: TEdit;
-    lblURL: TLabel;
-    lblTitle: TLabel;
-    lblDate: TLabel;
-    sbStatus: TStatusBar;
-    jvdDate: TJvDateEdit;
-    edTopic: TEdit;
-    lblTopic: TLabel;
+    Splitter1: TSplitter;
+    comtoTitleGroup: TComboBox;
+    btnSortByTitle: TButton;
+    btnSortByGroup: TButton;
     procedure tvVideosChange(Sender: TObject; Node: TTreeNode);
     procedure edURLChange(Sender: TObject);
     procedure btnAddChildClick(Sender: TObject);
@@ -42,10 +46,17 @@ type
     procedure tvVideosMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure jvdDateChange(Sender: TObject);
-    procedure edTopicChange(Sender: TObject);
+    procedure comtoTitleGroupChange(Sender: TObject);
+    procedure comtoTitleGroupExit(Sender: TObject);
+    procedure btnSortByTitleClick(Sender: TObject);
+    procedure tvVideosCompare(Sender: TObject; Node1, Node2: TTreeNode;
+      Data: Integer; var Compare: Integer);
+    procedure btnSortByGroupClick(Sender: TObject);
   private
     FVideoList: TXmlVerySimple;
     FChanged: Boolean;
+    FTitleGroups: TStringList;
+    FSortByGroup: Boolean;
     { Private declarations }
   public
     { Public declarations }
@@ -130,10 +141,57 @@ begin
   end;
 end;
 
+procedure TfrmMain.btnSortByGroupClick(Sender: TObject);
+begin
+  FSortByGroup := True;
+  tvVideos.AlphaSort;
+end;
+
+procedure TfrmMain.btnSortByTitleClick(Sender: TObject);
+begin
+  FSortByGroup := False;
+  tvVideos.AlphaSort;
+end;
+
+procedure TfrmMain.comtoTitleGroupChange(Sender: TObject);
+var
+  AnXmlNode: TXmlNode;
+  TopicName: string;
+begin
+  if tvVideos.Selected <> nil then
+  begin
+    AnXmlNode := tvVideos.Selected.Data;
+    Assert(AnXmlNode <> nil);
+    if AnXmlNode.HasAttribute(StrTopic) then
+    begin
+      TopicName := AnXmlNode.Attributes[StrTopic];
+    end
+    else
+    begin
+      TopicName := ''
+    end;
+    if TopicName <> comtoTitleGroup.Text then
+    begin
+      AnXmlNode.SetAttribute(StrTopic, comtoTitleGroup.Text);
+      FChanged := True;
+    end;
+  end;
+end;
+
+procedure TfrmMain.comtoTitleGroupExit(Sender: TObject);
+begin
+  if comtoTitleGroup.Text <> '' then
+  begin
+    FTitleGroups.Add(comtoTitleGroup.Text);
+    comtoTitleGroup.Items := FTitleGroups;
+  end;
+end;
+
 procedure TfrmMain.edURLChange(Sender: TObject);
 var
   AnXmlNode: TXmlNode;
   Url: string;
+  NewText: string;
 begin
   if tvVideos.Selected <> nil then
   begin
@@ -148,17 +206,20 @@ begin
       AnXmlNode := tvVideos.Selected.Data;
       AnXmlNode.Name := Url;
 
-      if AnXmlNode.text <> '' then
+      if (AnXmlNode.text <> '') then
       begin
-        tvVideos.Selected.Text :=
-          AnXmlNode.text + '; ' + Url;
+        NewText := AnXmlNode.text + '; ' + Url;
       end
       else
       begin
-        tvVideos.Selected.Text := Url;
+        NewText := Url;
       end;
     end;
-    FChanged := True;
+    if tvVideos.Selected.Text <> NewText then
+    begin
+      tvVideos.Selected.Text := NewText;
+      FChanged := True;
+    end;
   end;
 end;
 
@@ -170,30 +231,20 @@ begin
   begin
     AnXmlNode := tvVideos.Selected.Data;
     Assert(AnXmlNode <> nil);
-    AnXmlNode.Text := edTitle.Text;
-      if AnXmlNode.text <> '' then
-      begin
-        tvVideos.Selected.Text :=
-          AnXmlNode.text + '; ' + edURL.Text;
-      end
-      else
-      begin
-        tvVideos.Selected.Text := edURL.Text;
-      end;
-    FChanged := True;
-  end;
-end;
-
-procedure TfrmMain.edTopicChange(Sender: TObject);
-var
-  AnXmlNode: TXmlNode;
-begin
-  if tvVideos.Selected <> nil then
-  begin
-    AnXmlNode := tvVideos.Selected.Data;
-    Assert(AnXmlNode <> nil);
-    AnXmlNode.SetAttribute(StrTopic, edTopic.Text);
-    FChanged := True;
+    if AnXmlNode.Text <> edTitle.Text then
+    begin
+      AnXmlNode.Text := edTitle.Text;
+      FChanged := True;
+    end;
+    if AnXmlNode.text <> '' then
+    begin
+      tvVideos.Selected.Text :=
+        AnXmlNode.text + '; ' + edURL.Text;
+    end
+    else
+    begin
+      tvVideos.Selected.Text := edURL.Text;
+    end;
   end;
 end;
 
@@ -205,6 +256,7 @@ var
   InnerNodeIndex: Integer;
   ChildXmlNode: TXmlNode;
   ChildTreeNode: TTreeNode;
+  TopicName: string;
 begin
   if FChanged then
   begin
@@ -221,6 +273,13 @@ begin
     for NodeIndex := 1 to FVideoList.ChildNodes.Count - 1 do
     begin
       AnXmlNode := FVideoList.ChildNodes[NodeIndex];
+//      AnXmlNode.
+      if AnXmlNode.HasAttribute(StrTopic) then
+      begin
+        TopicName := AnXmlNode.Attributes[StrTopic];
+        FTitleGroups.Add(TopicName);
+      end;
+
       ATreeNode := tvVideos.Items.Add(nil, AnXmlNode.Text);
       ATreeNode.Data := AnXmlNode;
       if AnXmlNode.text <> '' then
@@ -249,6 +308,7 @@ begin
         end;
       end;
     end;
+    comtoTitleGroup.Items := FTitleGroups;
 
     dlgSave.FileName := dlgOpen.FileName;
   end;
@@ -257,6 +317,10 @@ end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   FVideoList := TXmlVerySimple.Create;
+  FTitleGroups := TStringList.Create;
+  FTitleGroups.CaseSensitive := False;
+  FTitleGroups.Duplicates := dupIgnore;
+  FTitleGroups.Sorted := True;
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
@@ -268,6 +332,7 @@ begin
       miSaveClick(nil);
     end;
   end;
+  FTitleGroups.Free;
   FVideoList.Free;
 end;
 
@@ -277,16 +342,57 @@ var
   AYear: Word;
   AMonth: Word;
   ADay: Word;
+  YearString: string;
+  MonthString: string;
+  DayString: string;
 begin
   if tvVideos.Selected <> nil then
   begin
     AnXmlNode := tvVideos.Selected.Data;
     Assert(AnXmlNode <> nil);
     DecodeDate(jvdDate.Date, AYear, AMonth, ADay);
-    AnXmlNode.SetAttribute(StrYear, AYear.ToString);
-    AnXmlNode.SetAttribute(StrMonth, AMonth.ToString);
-    AnXmlNode.SetAttribute(StrDay, ADay.ToString);
-    FChanged := True;
+    if AnXmlNode.HasAttribute(StrYear) then
+    begin
+      YearString := AnXmlNode.Attributes[StrYear];
+    end
+    else
+    begin
+      YearString := ''
+    end;
+
+    if AnXmlNode.HasAttribute(StrMonth) then
+    begin
+      MonthString := AnXmlNode.Attributes[StrMonth];
+    end
+    else
+    begin
+      MonthString := ''
+    end;
+
+    if AnXmlNode.HasAttribute(StrDay) then
+    begin
+      DayString := AnXmlNode.Attributes[StrDay];
+    end
+    else
+    begin
+      DayString := ''
+    end;
+
+    if YearString <> AYear.ToString then
+    begin
+      AnXmlNode.SetAttribute(StrYear, AYear.ToString);
+      FChanged := True;
+    end;
+    if MonthString <> AMonth.ToString then
+    begin
+      AnXmlNode.SetAttribute(StrMonth, AMonth.ToString);
+      FChanged := True;
+    end;
+    if DayString <> ADay.ToString then
+    begin
+      AnXmlNode.SetAttribute(StrDay, ADay.ToString);
+      FChanged := True;
+    end;
   end;
 
 end;
@@ -314,11 +420,12 @@ begin
     edTitle.Text := AnXmlNode.Text;
     if AnXmlNode.HasAttribute(StrTopic) then
     begin
-      edTopic.Text := AnXmlNode.Attributes[StrTopic];
+      comtoTitleGroup.Text := AnXmlNode.Attributes[StrTopic];
     end
     else
     begin
-      edTopic.Text := ''
+      comtoTitleGroup.Text := '';
+//      edTopic.Text := ''
     end;
     if AnXmlNode.HasAttribute(StrYear) then
     begin
@@ -331,6 +438,45 @@ begin
     begin
       jvdDate.Text := '';
     end;
+  end;
+end;
+
+procedure TfrmMain.tvVideosCompare(Sender: TObject; Node1, Node2: TTreeNode;
+  Data: Integer; var Compare: Integer);
+var
+  AnXmlNode: TXmlNode;
+  Group1: string;
+  Group2: string;
+begin
+  if FSortByGroup then
+  begin
+    AnXmlNode := Node1.Data;
+    if AnXmlNode.HasAttribute(StrTopic) then
+    begin
+      Group1 := AnXmlNode.Attributes[StrTopic];
+    end
+    else
+    begin
+      Group1 := '';
+    end;
+    AnXmlNode := Node2.Data;
+    if AnXmlNode.HasAttribute(StrTopic) then
+    begin
+      Group2 := AnXmlNode.Attributes[StrTopic];
+    end
+    else
+    begin
+      Group2 := '';
+    end;
+    Compare := CompareText(Group1, Group2);
+    if Compare = 0 then
+    begin
+      Compare := CompareText(Node1.Text, Node2.Text);
+    end;
+  end
+  else
+  begin
+    Compare := CompareText(Node1.Text, Node2.Text);
   end;
 end;
 

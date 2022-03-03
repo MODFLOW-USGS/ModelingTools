@@ -1,8 +1,10 @@
 inherited frameScreenObjectCSub: TframeScreenObjectCSub
   inherited pcMain: TPageControl
+    ActivePage = tabInterbedSystems
     object tabInterbedSystems: TTabSheet [0]
       Caption = 'Interbed systems'
       ImageIndex = 1
+      OnShow = tabInterbedSystemsShow
       object rdgSubGroups: TRbwDataGrid4
         Left = 0
         Top = 56

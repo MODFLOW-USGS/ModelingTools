@@ -35,6 +35,7 @@ type
     procedure rdeFormulaPkgPropChange(Sender: TObject);
     procedure rdgSubGroupsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
+    procedure tabInterbedSystemsShow(Sender: TObject);
   private
 //    FPackageDataCleared: Boolean;
     FTimeDataCleared: Boolean;
@@ -759,6 +760,12 @@ begin
     CSubPackageData.Free;
     CSubValues.Free;
   end;
+end;
+
+procedure TframeScreenObjectCSub.tabInterbedSystemsShow(Sender: TObject);
+begin
+  inherited;
+  rdgSubGroups.HideEditor;
 end;
 
 end.

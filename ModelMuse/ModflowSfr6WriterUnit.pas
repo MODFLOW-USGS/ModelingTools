@@ -57,6 +57,7 @@ type
     FDirectObsLines: TStrings;
     FFileNameLines: TStrings;
     FCalculatedObsLines: TStrings;
+    FSpeciesIndex: Integer;
     procedure Evaluate;
     procedure EvaluateSteadyData;
     procedure AssignSteadyData(ASegment: TSfr6Segment);
@@ -72,6 +73,8 @@ type
     procedure WriteAdditionalAuxVariables;
     // SFT
     procedure WriteSftOptions;
+    procedure WriteSftPackageData;
+    procedure WriteSftStressPeriods;
 //    // Check that stage decreases in the downstream direction.
 //    procedure CheckStage;
   protected
@@ -1907,7 +1910,6 @@ end;
 
 procedure TModflowSFR_MF6_Writer.WriteSftOptions;
 var
-  SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
   budgetfile: string;
   BaseFileName: string;
@@ -1917,12 +1919,11 @@ begin
   WriteString(StrFlowPackageName);
   NewLine;
 
-  for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-  begin
-    WriteString('FLOW_PACKAGE_AUXILIARY_NAME ');
-    ASpecies := Model.MobileComponents[SpeciesIndex];
-    WriteString(' ' + ASpecies.Name);
-  end;
+  Assert(FSpeciesIndex >= 0);
+  Assert(FSpeciesIndex < Model.MobileComponents.Count);
+  WriteString('FLOW_PACKAGE_AUXILIARY_NAME ');
+  ASpecies := Model.MobileComponents[FSpeciesIndex];
+  WriteString(' ' + ASpecies.Name);
 
   PrintListInputOption;
   PrintConcentrationOption;
@@ -1931,10 +1932,11 @@ begin
 
   SfrMf6Package := Model.ModflowPackages.SfrModflow6Package;
   BaseFileName := ChangeFileExt(FNameOfFile, '');
+  BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
   if SfrMf6Package.SaveGwtBudget then
   begin
     WriteString('    BUDGET FILEOUT ');
-    budgetfile := ChangeFileExt(BaseFileName, '.sft_budget');
+    budgetfile := BaseFileName + '.sft_budget';
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);
@@ -1944,6 +1946,291 @@ begin
 //  [TS6 FILEIN <ts6_filename>]
 //  [OBS6 FILEIN <obs6_filename>]
 
+end;
+
+procedure TModflowSFR_MF6_Writer.WriteSftPackageData;
+var
+  SegmentIndex: Integer;
+  ASegment: TSfr6Segment;
+  ReachNumber: Integer;
+  ReachIndex: Integer;
+  ReachProp: TSfrMF6ConstantRecord;
+//  ncon: Integer;
+//  ndiv: Integer;
+  ACellList: TValueCellList;
+  ACell: TSfrMf6_Cell;
+//  boundname: string;
+begin
+  WriteBeginPackageData;
+  WriteString('# <rno>   <strt>  ');
+  NewLine;
+
+  ReachNumber := 0;
+  for SegmentIndex := 0 to FSegments.Count - 1 do
+  begin
+    ASegment := FSegments[SegmentIndex];
+    ACellList := ASegment.FReaches[0];
+    Assert(ACellList.Count = Length(ASegment.SteadyValues));
+    for ReachIndex := 0 to Length(ASegment.SteadyValues) - 1 do
+    begin
+      if ReachIndex = 0 then
+      begin
+        WriteString(Format('# defined by %s',
+          [ASegment.FScreenObject.Name]));
+        NewLine;
+      end;
+      Inc(ReachNumber);
+      WriteInteger(ReachNumber);
+
+      ReachProp := ASegment.SteadyValues[ReachIndex];
+      WriteFormulaOrValueBasedOnAPestName(
+        ReachProp.StartingConcentrations.ConcentrationPestNames[FSpeciesIndex],
+        ReachProp.StartingConcentrations.Concentrations[FSpeciesIndex],
+        ReachProp.Cell.Layer, ReachProp.Cell.Row, ReachProp.Cell.Column);
+
+//      boundname := ' ' + Copy(ReachProp.BoundName, 1, MaxBoundNameLength);
+//      WriteString(boundname);
+
+      NewLine;
+    end;
+  end;
+  WriteEndPackageData;
+
+  Assert(ReachNumber <= FReachCount);
+end;
+
+procedure TModflowSFR_MF6_Writer.WriteSftStressPeriods;
+const
+  // equivalent to DEM6 in MODFLOW 6.
+  Epsilon = 1e-6;
+var
+  StressPeriodIndex: Integer;
+  SegmentIndex: Integer;
+  ASegment: TSfr6Segment;
+  ACellList: TValueCellList;
+  CellIndex: Integer;
+  ACell: TSfrMF6_Cell;
+  ReachNumber: Integer;
+  DivIndex: Integer;
+  idv: Integer;
+  ReachCount: Integer;
+  MoverWriter: TModflowMvrWriter;
+  MvrReceiver: TMvrReceiver;
+  MvrSource: TMvrRegisterKey;
+//  UpstreamFractions: array of double;
+//  SumUpstreamFractions: double;
+//  AssociatedScreenObjects: array of TScreenObject;
+  ReachIndex: Integer;
+  AReach: TSfrMF6ConstantRecord;
+  ConnectIndex: Integer;
+  GwtStatus: TGwtStreamStatus;
+  DiversionCount: Integer;
+  FormulaIndex: Integer;
+//  HasDownstreamReaches: Boolean;
+//  ConnectedStreams: TStringList;
+//  SpeciesIndex: Integer;
+//  ASpecies: TMobileChemSpeciesItem;
+begin
+  if MvrWriter <> nil then
+  begin
+    MoverWriter := MvrWriter as TModflowMvrWriter;
+  end
+  else
+  begin
+    MoverWriter := nil;
+  end;
+  MvrReceiver.ReceiverKey.ReceiverPackage := rpcSfr;
+//  SetLength(UpstreamFractions, FReachCount);
+//  SetLength(AssociatedScreenObjects, FReachCount);
+  for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count -1 do
+  begin
+    frmProgressMM.AddMessage(Format(
+      StrWritingSFRStre, [StressPeriodIndex+1]));
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    ReachCount := 0;
+//    for ReachIndex := 0 to FReachCount - 1 do
+//    begin
+//      UpstreamFractions[ReachIndex] := 0;
+//      AssociatedScreenObjects[ReachIndex] := nil;
+//    end;
+
+    MvrSource.StressPeriod := StressPeriodIndex;
+    MvrReceiver.ReceiverKey.StressPeriod := StressPeriodIndex;
+
+    WriteBeginPeriod(StressPeriodIndex);
+    ReachNumber := 0;
+    for SegmentIndex := 0 to FSegments.Count - 1 do
+    begin
+      ASegment := FSegments[SegmentIndex];
+      MvrReceiver.ReceiverKey.ScreenObject := ASegment.FScreenObject;
+
+      Assert(ASegment.FReaches.Count = Model.ModflowFullStressPeriods.Count);
+      WriteString(Format('# rno sftsetting (defined by %s)',
+        [ASegment.FScreenObject.Name]));
+      NewLine;
+
+      ACellList := ASegment.FReaches[StressPeriodIndex];
+      SetLength(MvrReceiver.ReceiverValues.StreamCells, ACellList.Count);
+      MvrReceiver.ReceiverValues.Index := ReachCount+1;
+      for CellIndex := 0 to ACellList.Count - 1 do
+      begin
+        Inc(ReachCount);
+
+        ACell := ACellList[CellIndex] as TSfrMF6_Cell;
+        MvrReceiver.ReceiverValues.StreamCells[CellIndex] := ACell.Values.Cell;
+        Inc(ReachNumber);
+
+//        AssociatedScreenObjects[ReachNumber-1] := ASegment.ScreenObject;
+//        if ACell.Values.Status <> ssInactive then
+//        begin
+//          UpstreamFractions[ReachNumber-1] := ACell.Values.UpstreamFraction;
+//        end;
+
+        WriteInteger(ReachNumber);
+        WriteString(' STATUS');
+        case ACell.Values.Status of
+          ssInactive:
+            begin
+              GwtStatus := gssInactive
+            end;
+          ssActive, ssSimple:
+            begin
+              GwtStatus := ACell.GwtStatus[FSpeciesIndex]
+            end;
+        end;
+        case GwtStatus of
+          gssInactive:
+            begin
+              WriteString(' INACTIVE,');
+            end;
+          gssActive:
+            begin
+              WriteString(' ACTIVE');
+            end;
+          gssConstant:
+            begin
+              WriteString(' CONSTANT');
+            end;
+          else
+            Assert(False);
+        end;
+        NewLine;
+
+        DiversionCount := ASegment.FSfr6Boundary.Diversions.Count;
+        if GwtStatus = gssConstant then
+        begin
+          WriteInteger(ReachNumber);
+          WriteString(' CONCENTRATION');
+          Assert(False);
+
+          FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
+            + GwtConcCount*GwtSpecifiedConcentrationPosition + FSpeciesIndex;
+          WriteValueOrFormula(ACell, FormulaIndex);
+          NewLine;
+        end;
+
+        if GwtStatus <> gssInactive then
+        begin
+          WriteInteger(ReachNumber);
+          WriteString(' RAINFALL');
+          FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
+            + GwtConcCount*GwtRainfallConcentrationsPosition + FSpeciesIndex;
+          WriteValueOrFormula(ACell, FormulaIndex);
+          NewLine;
+
+          WriteInteger(ReachNumber);
+          WriteString(' EVAPORATION');
+          FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
+            + GwtConcCount*GwtEvapConcentrationsPosition + FSpeciesIndex;
+          WriteValueOrFormula(ACell, FormulaIndex);
+          NewLine;
+
+          WriteInteger(ReachNumber);
+          WriteString(' RUNOFF');
+          FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
+            + GwtConcCount*GwtRunoffConcentrationsPosition + FSpeciesIndex;
+          WriteValueOrFormula(ACell, FormulaIndex);
+          NewLine;
+
+          WriteInteger(ReachNumber);
+          WriteString(' INFLOW');
+          FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
+            + GwtConcCount*GwtInflowConcentrationsPosition + FSpeciesIndex;
+          WriteValueOrFormula(ACell, FormulaIndex);
+          NewLine;
+        end;
+
+        if ACell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then
+        begin
+          MvrSource.Index := ReachNumber;
+          MvrSource.SourceKey.MvrIndex := ACell.MvrIndex;
+          MvrSource.SourceKey.ScreenObject := ASegment.FScreenObject;
+          TModflowMvrWriter(MvrWriter).AddMvrSource(MvrSource);
+        end;
+      end;
+
+
+      if (MoverWriter <> nil) and not WritingTemplate then
+      begin
+        MoverWriter.AddMvrReceiver(MvrReceiver);
+      end;
+
+    end;
+    WriteEndPeriod;
+    Assert(ReachCount <= FReachCount);
+
+//    ConnectedStreams := TStringList.Create;
+//    try
+//      for SegmentIndex := 0 to FSegments.Count - 1 do
+//      begin
+//        ASegment := FSegments[SegmentIndex];
+//        ACellList := ASegment.FReaches[StressPeriodIndex];
+//        Assert(ACellList.Count = Length(ASegment.SteadyValues));
+//        for ReachIndex := 0 to Length(ASegment.SteadyValues) - 1 do
+//        begin
+//          AReach := ASegment.SteadyValues[ReachIndex];
+//          ACell := ACellList[ReachIndex] as TSfrMF6_Cell;
+//          if ACell.Values.Status = ssInactive then
+//          begin
+//            Continue;
+//          end;
+//
+////          HasDownstreamReaches := False;
+////          ConnectedStreams.Clear;
+////          SumUpstreamFractions := 0;
+////          if Length(AReach.ConnectedReaches) > 0 then
+////          begin
+////            for ConnectIndex := 0 to Length(AReach.ConnectedReaches) - 1 do
+////            begin
+////              if AReach.ConnectedReaches[ConnectIndex] < 0 then
+////              begin
+////                HasDownstreamReaches := True;
+////                SumUpstreamFractions := SumUpstreamFractions
+////                  + UpstreamFractions[-AReach.ConnectedReaches[ConnectIndex]-1];
+////                ConnectedStreams.Add(AssociatedScreenObjects[
+////                  -AReach.ConnectedReaches[ConnectIndex]-1].Name);
+////              end;
+////            end;
+////          end;
+////          if HasDownstreamReaches and (Abs(SumUpstreamFractions -1) > Epsilon) then
+////          begin
+////            frmErrorsAndWarnings.AddError(Model, StrSFRUpstreamValues,
+////              format(StrTheSumOfTheUpstr,
+////              [StressPeriodIndex+1, AReach.ReachNumber,
+////              AssociatedScreenObjects[AReach.ReachNumber-1].Name,
+////              ConnectedStreams.Text]));
+////          end;
+//        end;
+//      end;
+//    finally
+//      ConnectedStreams.Free;
+//    end;
+  end;
 end;
 
 procedure TModflowSFR_MF6_Writer.WriteStressPeriods;

@@ -6,16 +6,24 @@ uses System.Classes, SysUtils, PhastModelUnit, CustomModflowWriterUnit,
   ModflowOutputControlUnit;
 
 type
+  TOutputType = (otFlow, otTransport);
+
   TOutputControlWriter = class(TCustomModflowWriter)
   private
     FOutputControl: TModflowOutputControl;
     FNameOfFile: string;
+    FSpeciesIndex: Integer;
+    FOutputType: TOutputType;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
     procedure WriteDataSets2and3;
+    procedure SetOutputType(const Value: TOutputType);
+    procedure SetSpeciesIndex(const Value: Integer);
   protected
     class function Extension: string; override;
   public
+    property OutputType: TOutputType read FOutputType write SetOutputType;
+    property SpeciesIndex: Integer read FSpeciesIndex write SetSpeciesIndex;
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     procedure WriteFile(const AFileName: string);
   end;
@@ -40,7 +48,7 @@ resourcestring
   StrInMODFLOW6Heads = 'In MODFLOW 6, heads can only be saved in binary form' +
   'at. The option will be changed to use the binary format.';
 const
-  StrOC8 = 'OC6';
+  StrOC6 = 'OC6';
 
 { TOutputControlWriter }
 
@@ -48,11 +56,23 @@ constructor TOutputControlWriter.Create(AModel: TCustomModel; EvaluationType: TE
 begin
   inherited Create(AModel, EvaluationType);
   FOutputControl := Model.ModflowOutputControl;
+  FOutputType := otFlow;
+  FSpeciesIndex := 0;
 end;
 
 class function TOutputControlWriter.Extension: string;
 begin
   result := '.oc';
+end;
+
+procedure TOutputControlWriter.SetOutputType(const Value: TOutputType);
+begin
+  FOutputType := Value;
+end;
+
+procedure TOutputControlWriter.SetSpeciesIndex(const Value: Integer);
+begin
+  FSpeciesIndex := Value;
 end;
 
 procedure TOutputControlWriter.WriteDataSet0;
@@ -74,9 +94,10 @@ var
   COLUMNS: Integer;
   WIDTH: Integer;
   DIGITS: Integer;
-//  PrintFormatType: TPrintNumberType;
   CellFlowsName: string;
   BudgetSummaryUnitNumber: Integer;
+  BaseNameOfFile: string;
+  ASpeciesName: string;
   procedure WriteSingleQuoteMF6;
   begin
     if Model.ModelSelection = msModflow2015 then
@@ -114,119 +135,102 @@ var
               COLUMNS := 11;
               WIDTH := 10;
               DIGITS := 3;
-//              PrintFormatType := pntGeneral;
             end;
           nf9G_13_6:
             begin
               COLUMNS := 9;
               WIDTH := 13;
               DIGITS := 6;
-//              PrintFormatType := pntGeneral;
             end;
           nf15F_7_1:
             begin
               COLUMNS := 15;
               WIDTH := 7;
               DIGITS := 1;
-//              PrintFormatType := pntFixed;
             end;
           nf15F_7_2:
             begin
               COLUMNS := 15;
               WIDTH := 7;
               DIGITS := 2;
-//              PrintFormatType := pntFixed;
             end;
           nf15F_7_3:
             begin
               COLUMNS := 15;
               WIDTH := 7;
               DIGITS := 3;
-//              PrintFormatType := pntFixed;
             end;
           nf15F_7_4:
             begin
               COLUMNS := 15;
               WIDTH := 7;
               DIGITS := 4;
-//              PrintFormatType := pntFixed;
             end;
           nf20F_5_0:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 0;
-//              PrintFormatType := pntFixed;
             end;
           nf20F_5_1:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 1;
-//              PrintFormatType := pntFixed;
             end;
           nf20F_5_2:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 2;
-//              PrintFormatType := pntFixed;
             end;
           nf20F_5_3:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 3;
-//              PrintFormatType := pntFixed;
             end;
           nf20F_5_4:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 4;
-//              PrintFormatType := pntFixed;
             end;
           nf10G_11_4:
             begin
               COLUMNS := 10;
               WIDTH := 11;
               DIGITS := 4;
-//              PrintFormatType := pntFixed;
             end;
           nf10F_6_0:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 0;
-//              PrintFormatType := pntFixed;
             end;
           nf10F_6_1:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 1;
-//              PrintFormatType := pntFixed;
             end;
           nf10F_6_2:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 2;
-//              PrintFormatType := pntFixed;
             end;
           nf10F_6_3:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 3;
-//              PrintFormatType := pntFixed;
             end;
           nf10F_6_4:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 4;
-//              PrintFormatType := pntFixed;
             end;
           else
             Assert(False);
@@ -262,20 +266,6 @@ var
         WriteString(' DIGITS ');
         WriteInteger(DIGITS);
 
-//        case HeadDrawdownOC.Wrapping of
-//          wStrip: WriteString('STRIP ');
-//          wWrap: WriteString('WRAP ');
-//          else Assert(False);
-//        end;
-//
-//        case PrintFormatType of
-//          pntExponential: WriteString(' EXPONENTIAL ');
-//          pntFixed: WriteString(' FIXED ');
-//          pntGeneral: WriteString(' GENERAL ');
-//          pntScientific: WriteString(' SCIENTIFIC ');
-//          else Assert(False);
-//        end;
-
       end
       else
       begin
@@ -299,7 +289,7 @@ var
       case HeadDrawdownOC.OutputFileType of
         oftText:
           begin
-            NameOfFile := ChangeFileExt(FNameOfFile, FormatedExtension);
+            NameOfFile := BaseNameOfFile + FormatedExtension;
             WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(DataLabel),
               NameOfFile, foOutput, Model);
             if Model.ModelSelection = msModflow2015 then
@@ -324,7 +314,7 @@ var
           end;
         oftBinary:
           begin
-            NameOfFile := ChangeFileExt(FNameOfFile, BinaryExtension);
+            NameOfFile := BaseNameOfFile + BinaryExtension;
             WriteToNameFile(StrDATABINARY,
               Model.UnitNumbers.UnitNumber(DataLabel), NameOfFile, foOutput, Model);
             if Model.ModelSelection = msModflow2015 then
@@ -357,11 +347,19 @@ begin
     WriteBeginOptions;
   end;
 
+  BaseNameOfFile := ChangeFileExt(FNameOfFile, '');
+  if FOutputType = otTransport then
+  begin
+    ASpeciesName := '.' + Model.MobileComponents[FSpeciesIndex].Name;
+    BaseNameOfFile := BaseNameOfFile + ASpeciesName
+  end;
+
+
   if Model.ModelSelection = msModflow2015 then
   begin
     if FOutputControl.SaveCellFlows = csfBinary then
     begin
-      CellFlowsName := ChangeFileExt(FNameOfFile, StrCbcExt);
+      CellFlowsName := BaseNameOfFile + StrCbcExt;
       Model.AddModelOutputFile(CellFlowsName);
       WriteString('  BUDGET FILEOUT ');
       WriteSingleQuoteMF6;
@@ -371,9 +369,20 @@ begin
     end;
   end;
 
-  WritePrintFormat(FOutputControl.HeadOC, StrHEAD);
-
-  WriteSaveFile(FOutputControl.HeadOC, StrHEAD, StrFhd, StrBhd);
+  case FOutputType of
+    otFlow:
+      begin
+        WritePrintFormat(FOutputControl.HeadOC, StrHEAD);
+        WriteSaveFile(FOutputControl.HeadOC, StrHEAD, StrFhd, StrBhd);
+      end;
+    otTransport:
+      begin
+        WritePrintFormat(FOutputControl.ConcentrationOC, StrConcentration);
+        WriteSaveFile(FOutputControl.ConcentrationOC, StrConcentration, StrConc, StrConc);
+      end;
+    else
+      Assert(False);
+  end;
 
   if Model.ModelSelection <> msModflow2015 then
   begin
@@ -432,6 +441,7 @@ var
   BudgetFrequencyChoice: TFrequencyChoice;
   BudgetFrequency: integer;
   WarningMessage: string;
+  DataLabel: string;
   function ShouldExport(FrequencyChoice: TFrequencyChoice;
     Frequency: integer; TimeStepIndex: Integer): boolean;
   begin
@@ -533,8 +543,27 @@ var
 begin
   StressPeriods := Model.ModflowFullStressPeriods;
 
-  HeadFrequency := FOutputControl.HeadOC.Frequency;
-  HeadFrequencyChoice := FOutputControl.HeadOC.FrequencyChoice;
+  case FOutputType of
+    otFlow:
+      begin
+        HeadFrequency := FOutputControl.HeadOC.Frequency;
+        HeadFrequencyChoice := FOutputControl.HeadOC.FrequencyChoice;
+        DataLabel := StrHEAD;
+      end;
+    otTransport:
+      begin
+        HeadFrequency := FOutputControl.ConcentrationOC.Frequency;
+        HeadFrequencyChoice := FOutputControl.ConcentrationOC.FrequencyChoice;
+        DataLabel := StrConcentration;
+      end;
+    else
+      begin
+        HeadFrequency := FOutputControl.HeadOC.Frequency;
+        HeadFrequencyChoice := FOutputControl.HeadOC.FrequencyChoice;
+        DataLabel := StrHEAD;
+        Assert(False);
+      end;
+  end;
   DrawdownFrequency := FOutputControl.DrawdownOC.Frequency;
   DrawdownFrequencyChoice := FOutputControl.DrawdownOC.FrequencyChoice;
   BudgetFrequencyChoice := FOutputControl.BudgetFrequencyChoice;
@@ -552,12 +581,12 @@ begin
 
       if FOutputControl.HeadOC.PrintInListing then
       begin
-        WriteOC_MF6(StrHEAD, HeadFrequency, HeadFrequencyChoice, psPrint);
+        WriteOC_MF6(DataLabel, HeadFrequency, HeadFrequencyChoice, psPrint);
       end;
 
       if FOutputControl.HeadOC.SaveInExternalFile then
       begin
-        WriteOC_MF6(StrHEAD, HeadFrequency, HeadFrequencyChoice, psSave);
+        WriteOC_MF6(DataLabel, HeadFrequency, HeadFrequencyChoice, psSave);
       end;
 
 //      if FOutputControl.DrawdownOC.PrintInListing then
@@ -698,7 +727,7 @@ var
 begin
   if Model.ModelSelection = msModflow2015 then
   begin
-    FTYPE := StrOC8;
+    FTYPE := StrOC6;
   end
   else
   begin
@@ -711,12 +740,34 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrStressPeriodWarning);
-    FNameOfFile := FileName(AFileName);
+    case FOutputType of
+      otFlow:
+        begin
+          FNameOfFile := FileName(AFileName);
+        end;
+      otTransport:
+        begin
+          FNameOfFile := GwtFileName(AFileName, FSpeciesIndex);
+        end;
+      else
+        Assert(False);
+    end;
     FInputFileName := FNameOfFile;
-    
+
     if Model.ModelSelection = msModflow2015 then
     begin
-      WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model, False, 'OC');
+      case FOutputType of
+        otFlow:
+          begin
+            WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model, False, 'OC');
+          end;
+        otTransport:
+          begin
+            WriteToGwtNameFile(FTYPE, FNameOfFile, FSpeciesIndex);
+          end;
+        else
+          Assert(False);
+      end;
     end
     else
     begin
