@@ -75,6 +75,7 @@ type
     procedure WriteSftOptions;
     procedure WriteSftPackageData;
     procedure WriteSftStressPeriods;
+    procedure WriteGwtFileInternal;
 //    // Check that stage decreases in the downstream direction.
 //    procedure CheckStage;
   protected
@@ -86,6 +87,7 @@ type
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
+    procedure WriteSftFile(const AFileName: string; SpeciesIndex: Integer);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateSteadyData;
     property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
@@ -102,7 +104,8 @@ uses
   RbwParser, GIS_Functions, DataSetUnit, frmFormulaErrorsUnit, ModflowCellUnit,
   AbstractGridUnit, Modflow6ObsWriterUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, ModflowIrregularMeshUnit, FastGEO,
-  Vcl.Dialogs, ModflowParameterUnit, ModelMuseUtilities, Mt3dmsChemSpeciesUnit;
+  Vcl.Dialogs, ModflowParameterUnit, ModelMuseUtilities, Mt3dmsChemSpeciesUnit,
+  Mt3dmsChemUnit;
 
 resourcestring
   StrTheFollowingPairO = 'The following pair of objects have the same SFR se' +
@@ -329,7 +332,6 @@ begin
         end;
       end;
 
-
       for ConnectedIndex := 0 to
         ASegment.FSfr6Boundary.DownstreamSegments.Count - 1 do
       begin
@@ -477,7 +479,6 @@ end;
 
 procedure TModflowSFR_MF6_Writer.AssignSteadyData(ASegment: TSfr6Segment);
 var
-//  Grid: TModflowGrid;
   Compiler: TRbwParser;
   CellList: TCellAssignmentList;
   Formula: string;
@@ -508,6 +509,11 @@ var
   Param: TModflowSteadyParameter;
   PestParamName: string;
   DataArray: TDataArray;
+  StartingConcentrations: TStringConcCollection;
+  FormulaItem: TStringConcValueItem;
+  SpeciesIndex: Integer;
+  Species: TMobileChemSpeciesItem;
+  SpeciesCount: Integer;
 begin
   CellList := TCellAssignmentList.Create;
   UseList := TStringList.Create;
@@ -526,6 +532,26 @@ begin
     PropertyFormulas.Add(ASegment.FSfr6Boundary.StreambedThickness);
     PropertyNames.Add(StrHydraulicConductivi);
     PropertyFormulas.Add(ASegment.FSfr6Boundary.HydraulicConductivity);
+
+    SpeciesCount := 0;
+    if Model.GwtUsed then
+    begin
+      SpeciesCount := Model.MobileComponents.Count;
+      StartingConcentrations := ASegment.FSfr6Boundary.StartingConcentrations;
+      while StartingConcentrations.Count < Model.MobileComponents.Count do
+      begin
+        FormulaItem := StartingConcentrations.Add;
+        FormulaItem.Value := '0.';
+      end;
+
+      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+      begin
+        Species := Model.MobileComponents[SpeciesIndex];
+        PropertyNames.Add(Format('StartingConcentration_%s', [Species.Name]));
+        PropertyFormulas.Add(StartingConcentrations[SpeciesIndex].Value);
+      end;
+    end;
+
     Compiler := Model.rpThreeDFormulaCompiler;
 
     ASegment.FScreenObject.GetCellsToAssign('0', nil, nil, CellList,
@@ -615,6 +641,7 @@ begin
           ASegment.FSteadyValues[CellIndex].Cell.Layer := ACell.Layer;
           ASegment.FSteadyValues[CellIndex].Cell.Row := ACell.Row;
           ASegment.FSteadyValues[CellIndex].Cell.Column := ACell.Column;
+          ASegment.FSteadyValues[CellIndex].StartingConcentrations.SpeciesCount := SpeciesCount;
         end;
 
         UpdateCurrentScreenObject(ASegment.FScreenObject);
@@ -729,11 +756,6 @@ begin
 
 end;
 
-//procedure TModflowSFR_MF6_Writer.CheckStage;
-//begin
-//
-//end;
-
 constructor TModflowSFR_MF6_Writer.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
@@ -778,9 +800,7 @@ var
   ItemIndex: Integer;
   Item1: TSfrMf6Item;
   Item2: TSfrMf6Item;
-//  StreambedThickness: Double;
 begin
-//  Grid := Model.Grid;
   FReachCount := 0;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, NoSegmentsWarning);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoReaches);
@@ -900,7 +920,6 @@ begin
                 Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
                 ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
             end;
-//            StreambedThickness := ASegment.FSteadyValues[CellIndex].StreambedThickness;
             if ACell.Values.Stage < CellBottom then
             begin
               frmErrorsAndWarnings.AddWarning(Model, StrBelowBottom,
@@ -1142,16 +1161,13 @@ begin
     ReachNumberComment := Format(StrReachNumberIn, [Segment.FScreenObject.Name]);
 
     Assert(Segment.FReaches.Count = 1);
-//    for TimeIndex := 0 to Segment.FReaches.Count - 1 do
-//    begin
-      ACellList := Segment.FReaches[0];
-      for ReachIndex := 0 to ACellList.Count -1 do
-      begin
-        Reach := ACellList[ReachIndex] as TSfrMf6_Cell;
-        AssignReachValues;
-        Inc(CurrentReachNumber);
-      end;
-//    end;
+    ACellList := Segment.FReaches[0];
+    for ReachIndex := 0 to ACellList.Count -1 do
+    begin
+      Reach := ACellList[ReachIndex] as TSfrMf6_Cell;
+      AssignReachValues;
+      Inc(CurrentReachNumber);
+    end;
   end;
 
   // Mark all the data arrays and time lists as up to date.
@@ -1248,6 +1264,23 @@ begin
   end;
 end;
 
+procedure TModflowSFR_MF6_Writer.WriteGwtFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+
+    WriteSftOptions;
+    WriteSftPackageData;
+    WriteSftStressPeriods;
+
+  finally
+    CloseFile;
+  end;
+end;
+
 function TModflowSFR_MF6_Writer.ObservationsUsed: Boolean;
 begin
   result := (Model.ModelSelection = msModflow2015)
@@ -1275,7 +1308,6 @@ begin
   end;
 
   InternalUpdateDisplay(TimeLists);
-
 end;
 
 procedure TModflowSFR_MF6_Writer.UpdateSteadyData;
@@ -1290,7 +1322,6 @@ var
   StreambedTopDataArray: TModflowBoundaryDisplayDataArray;
   StreambedThicknessDataArray: TModflowBoundaryDisplayDataArray;
   HydraulicConductivityDataArray: TModflowBoundaryDisplayDataArray;
-//  RoughnessDataArray: TModflowBoundaryDisplayDataArray;
 begin
   if not frmProgressMM.ShouldContinue then
   begin
@@ -1310,8 +1341,6 @@ begin
     as TModflowBoundaryDisplayDataArray;
   HydraulicConductivityDataArray := Model.DataArrayManager.GetDataSetByName(KHydraulicConductivitySFR6)
     as TModflowBoundaryDisplayDataArray;
-//  RoughnessDataArray := Model.DataArrayManager.GetDataSetByName(KRoughnessSFR6)
-//    as TModflowBoundaryDisplayDataArray;
 
   if ReachLengthDataArray <> nil then
   begin
@@ -1432,57 +1461,6 @@ begin
     HydraulicConductivityDataArray.ComputeAverage;
     HydraulicConductivityDataArray.UpToDate := True;
   end;
-
-//  if RoughnessDataArray <> nil then
-//  begin
-//    RoughnessDataArray.Clear;
-//
-//    for SegmentIndex := 0 to FSegments.Count - 1 do
-//    begin
-//      ASegment := FSegments[SegmentIndex];
-//      for ReachIndex := 0 to Length(ASegment.SteadyValues) - 1 do
-//      begin
-//        ReachProp := ASegment.SteadyValues[ReachIndex];
-//
-//        RoughnessDataArray.AddDataValue(ReachProp.RoughnessAnnotation,
-//          ReachProp.Roughness, ReachProp.Cell.Column,
-//          ReachProp.Cell.Row, ReachProp.Cell.Layer);
-//      end;
-//    end;
-//    RoughnessDataArray.ComputeAverage;
-//    RoughnessDataArray.UpToDate := True;
-//  end;
-
-//  HydraulicConductivityDataArray := Model.DataArrayManager.GetDataSetByName(KHydraulicConductivitySFR6)
-//  RoughnessDataArray := Model.DataArrayManager.GetDataSetByName(KRoughnessSFR6)
-
-
-//      WriteFloat(ReachProp.HydraulicConductivity);
-//      WriteFloat(ACell.Values.Roughness);
-
-
-//    Cell: TCellLocation;
-//    ReachLength: Double;
-//    ReachWidth: Double;
-//    Gradient: Double;
-//    StreambedTop: Double;
-//    StreambedThickness: Double;
-//    HydraulicConductivity: Double;
-////    Roughness: Double;
-////    UpstreamFraction: Double;
-//    ConnectedReaches: array of integer;
-//    DownstreamDiversions: TDiversionArray;
-//    ReachLengthAnnotation: string;
-//    ReachWidthAnnotation: string;
-//    GradientAnnotation: string;
-//    StreambedTopAnnotation: string;
-//    StreambedThicknessAnnotation: string;
-//    HydraulicConductivityAnnotation: string;
-////    RoughnessAnnotation: string;
-////    UpstreamFractionAnnotation: string;
-//    ConnectedReacheAnnotations: array of string;
-
-
 end;
 
 procedure TModflowSFR_MF6_Writer.WriteAdditionalAuxVariables;
@@ -1595,7 +1573,6 @@ begin
               end;
             end;
             WriteInteger(AReach.ReachNumber);
-//            WriteInteger(ADiversion.DiversionNumber);
             WriteInteger(DiverIndex+1);
             WriteInteger(OtherReach.ReachNumber);
             case ADiversion.Priority of
@@ -1748,8 +1725,6 @@ begin
     NewLine;
   end;
 
-//  WriteNoNewtown;
-
   if SfrMf6Package.MaxPicardIteration <> KSfrDefaultPicardIterations then
   begin
     WriteString('    MAXIMUM_PICARD_ITERATIONS');
@@ -1841,37 +1816,30 @@ begin
         WriteInteger(ReachProp.Cell.Row+1);
       end;
       WriteInteger(ReachProp.Cell.Column+1);
-//      WriteFloat(ReachProp.ReachLength);
       WriteFormulaOrValueBasedOnAPestName(ReachProp.PestReachLength,
         ReachProp.ReachLength, ReachProp.Cell.Layer, ReachProp.Cell.Row,
         ReachProp.Cell.Column);
 
-//      WriteFloat(ReachProp.ReachWidth);
       WriteFormulaOrValueBasedOnAPestName(ReachProp.PestReachWidth,
         ReachProp.ReachWidth, ReachProp.Cell.Layer, ReachProp.Cell.Row,
         ReachProp.Cell.Column);
 
-//      WriteFloat(ReachProp.Gradient);
       WriteFormulaOrValueBasedOnAPestName(ReachProp.PestGradient,
         ReachProp.Gradient, ReachProp.Cell.Layer, ReachProp.Cell.Row,
         ReachProp.Cell.Column);
 
-//      WriteFloat(ReachProp.StreambedTop);
       WriteFormulaOrValueBasedOnAPestName(ReachProp.PestStreambedTop,
         ReachProp.StreambedTop, ReachProp.Cell.Layer, ReachProp.Cell.Row,
         ReachProp.Cell.Column);
 
-//      WriteFloat(ReachProp.StreambedThickness);
       WriteFormulaOrValueBasedOnAPestName(ReachProp.PestStreambedThickness,
         ReachProp.StreambedThickness, ReachProp.Cell.Layer, ReachProp.Cell.Row,
         ReachProp.Cell.Column);
 
-//      WriteFloat(ReachProp.HydraulicConductivity);
       WriteFormulaOrValueBasedOnAPestName(ReachProp.PestHydraulicConductivity,
         ReachProp.HydraulicConductivity, ReachProp.Cell.Layer, ReachProp.Cell.Row,
         ReachProp.Cell.Column);
 
-//      WriteFloat(ACell.Values.Roughness);
       WriteValueOrFormula(ACell, SfrMf6RoughnessPosition);
 
       ncon := Length(ReachProp.ConnectedReaches);
@@ -1880,7 +1848,6 @@ begin
       if ACell.Values.Status <> ssInactive then
       begin
         WriteValueOrFormula(ACell, SfrMf6UpstreamFractionPosition);
-//        WriteFloat(ACell.Values.UpstreamFraction);
       end
       else
       begin
@@ -1906,6 +1873,44 @@ begin
   WriteEndPackageData;
 
   Assert(ReachNumber <= FReachCount);
+end;
+
+procedure TModflowSFR_MF6_Writer.WriteSftFile(const AFileName: string;
+  SpeciesIndex: Integer);
+var
+  SpeciesName: string;
+  Abbreviation: string;
+begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Abbreviation := 'SFT6';
+  end
+  else
+  begin
+    Exit;
+  end;
+  if Model.PackageGeneratedExternally(Abbreviation) then
+  begin
+    Exit;
+  end;
+  FSpeciesIndex :=  SpeciesIndex;
+  SpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
+  FNameOfFile := ChangeFileExt(AFileName, '') + '.' + SpeciesName + '.sft';
+  FInputFileName := FNameOfFile;
+
+  WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    WriteGwtFileInternal;
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+
 end;
 
 procedure TModflowSFR_MF6_Writer.WriteSftOptions;
@@ -1955,11 +1960,7 @@ var
   ReachNumber: Integer;
   ReachIndex: Integer;
   ReachProp: TSfrMF6ConstantRecord;
-//  ncon: Integer;
-//  ndiv: Integer;
   ACellList: TValueCellList;
-  ACell: TSfrMf6_Cell;
-//  boundname: string;
 begin
   WriteBeginPackageData;
   WriteString('# <rno>   <strt>  ');
@@ -2000,9 +2001,6 @@ begin
 end;
 
 procedure TModflowSFR_MF6_Writer.WriteSftStressPeriods;
-const
-  // equivalent to DEM6 in MODFLOW 6.
-  Epsilon = 1e-6;
 var
   StressPeriodIndex: Integer;
   SegmentIndex: Integer;
@@ -2011,25 +2009,13 @@ var
   CellIndex: Integer;
   ACell: TSfrMF6_Cell;
   ReachNumber: Integer;
-  DivIndex: Integer;
-  idv: Integer;
   ReachCount: Integer;
   MoverWriter: TModflowMvrWriter;
   MvrReceiver: TMvrReceiver;
   MvrSource: TMvrRegisterKey;
-//  UpstreamFractions: array of double;
-//  SumUpstreamFractions: double;
-//  AssociatedScreenObjects: array of TScreenObject;
-  ReachIndex: Integer;
-  AReach: TSfrMF6ConstantRecord;
-  ConnectIndex: Integer;
   GwtStatus: TGwtStreamStatus;
   DiversionCount: Integer;
   FormulaIndex: Integer;
-//  HasDownstreamReaches: Boolean;
-//  ConnectedStreams: TStringList;
-//  SpeciesIndex: Integer;
-//  ASpecies: TMobileChemSpeciesItem;
 begin
   if MvrWriter <> nil then
   begin
@@ -2040,8 +2026,7 @@ begin
     MoverWriter := nil;
   end;
   MvrReceiver.ReceiverKey.ReceiverPackage := rpcSfr;
-//  SetLength(UpstreamFractions, FReachCount);
-//  SetLength(AssociatedScreenObjects, FReachCount);
+
   for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count -1 do
   begin
     frmProgressMM.AddMessage(Format(
@@ -2053,11 +2038,6 @@ begin
     end;
 
     ReachCount := 0;
-//    for ReachIndex := 0 to FReachCount - 1 do
-//    begin
-//      UpstreamFractions[ReachIndex] := 0;
-//      AssociatedScreenObjects[ReachIndex] := nil;
-//    end;
 
     MvrSource.StressPeriod := StressPeriodIndex;
     MvrReceiver.ReceiverKey.StressPeriod := StressPeriodIndex;
@@ -2085,28 +2065,27 @@ begin
         MvrReceiver.ReceiverValues.StreamCells[CellIndex] := ACell.Values.Cell;
         Inc(ReachNumber);
 
-//        AssociatedScreenObjects[ReachNumber-1] := ASegment.ScreenObject;
-//        if ACell.Values.Status <> ssInactive then
-//        begin
-//          UpstreamFractions[ReachNumber-1] := ACell.Values.UpstreamFraction;
-//        end;
-
         WriteInteger(ReachNumber);
         WriteString(' STATUS');
         case ACell.Values.Status of
           ssInactive:
             begin
-              GwtStatus := gssInactive
+              GwtStatus := gssInactive;
             end;
           ssActive, ssSimple:
             begin
-              GwtStatus := ACell.GwtStatus[FSpeciesIndex]
+              GwtStatus := ACell.GwtStatus[FSpeciesIndex];
+            end;
+          else
+            begin
+              GwtStatus := gssInactive;
+              Assert(False);
             end;
         end;
         case GwtStatus of
           gssInactive:
             begin
-              WriteString(' INACTIVE,');
+              WriteString(' INACTIVE');
             end;
           gssActive:
             begin
@@ -2174,7 +2153,6 @@ begin
         end;
       end;
 
-
       if (MoverWriter <> nil) and not WritingTemplate then
       begin
         MoverWriter.AddMvrReceiver(MvrReceiver);
@@ -2184,52 +2162,6 @@ begin
     WriteEndPeriod;
     Assert(ReachCount <= FReachCount);
 
-//    ConnectedStreams := TStringList.Create;
-//    try
-//      for SegmentIndex := 0 to FSegments.Count - 1 do
-//      begin
-//        ASegment := FSegments[SegmentIndex];
-//        ACellList := ASegment.FReaches[StressPeriodIndex];
-//        Assert(ACellList.Count = Length(ASegment.SteadyValues));
-//        for ReachIndex := 0 to Length(ASegment.SteadyValues) - 1 do
-//        begin
-//          AReach := ASegment.SteadyValues[ReachIndex];
-//          ACell := ACellList[ReachIndex] as TSfrMF6_Cell;
-//          if ACell.Values.Status = ssInactive then
-//          begin
-//            Continue;
-//          end;
-//
-////          HasDownstreamReaches := False;
-////          ConnectedStreams.Clear;
-////          SumUpstreamFractions := 0;
-////          if Length(AReach.ConnectedReaches) > 0 then
-////          begin
-////            for ConnectIndex := 0 to Length(AReach.ConnectedReaches) - 1 do
-////            begin
-////              if AReach.ConnectedReaches[ConnectIndex] < 0 then
-////              begin
-////                HasDownstreamReaches := True;
-////                SumUpstreamFractions := SumUpstreamFractions
-////                  + UpstreamFractions[-AReach.ConnectedReaches[ConnectIndex]-1];
-////                ConnectedStreams.Add(AssociatedScreenObjects[
-////                  -AReach.ConnectedReaches[ConnectIndex]-1].Name);
-////              end;
-////            end;
-////          end;
-////          if HasDownstreamReaches and (Abs(SumUpstreamFractions -1) > Epsilon) then
-////          begin
-////            frmErrorsAndWarnings.AddError(Model, StrSFRUpstreamValues,
-////              format(StrTheSumOfTheUpstr,
-////              [StressPeriodIndex+1, AReach.ReachNumber,
-////              AssociatedScreenObjects[AReach.ReachNumber-1].Name,
-////              ConnectedStreams.Text]));
-////          end;
-//        end;
-//      end;
-//    finally
-//      ConnectedStreams.Free;
-//    end;
   end;
 end;
 
@@ -2334,7 +2266,6 @@ begin
         WriteInteger(ReachNumber);
         WriteString(' UPSTREAM_FRACTION');
         WriteValueOrFormula(ACell, SfrMf6UpstreamFractionPosition);
-//        WriteFloat(ACell.Values.UpstreamFraction);
         NewLine;
 
         if ACell.Values.Status = ssSimple then
@@ -2342,7 +2273,6 @@ begin
           WriteInteger(ReachNumber);
           WriteString(' STAGE');
           WriteValueOrFormula(ACell, SfrMf6StagePosition);
-//          WriteFloat(ACell.Values.Stage);
           NewLine;
         end;
 
@@ -2351,25 +2281,21 @@ begin
           WriteInteger(ReachNumber);
           WriteString(' INFLOW');
           WriteValueOrFormula(ACell, SfrMf6InflowPosition);
-//          WriteFloat(ACell.Values.Inflow);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' RAINFALL');
           WriteValueOrFormula(ACell, SfrMf6RainfallPosition);
-//          WriteFloat(ACell.Values.Rainfall);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' EVAPORATION');
           WriteValueOrFormula(ACell, SfrMf6EvaporationPosition);
-//          WriteFloat(ACell.Values.Evaporation);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' RUNOFF');
           WriteValueOrFormula(ACell, SfrMf6RunoffPosition);
-//          WriteFloat(ACell.Values.Runoff);
           NewLine;
         end;
 
@@ -2378,7 +2304,6 @@ begin
           WriteInteger(ReachNumber);
           WriteString(' MANNING');
           WriteValueOrFormula(ACell, SfrMf6RoughnessPosition);
-//          WriteFloat(ACell.Values.Roughness);
           NewLine;
         end;
 
@@ -2392,7 +2317,6 @@ begin
             begin
               WriteInteger(ReachNumber);
               WriteString(' DIVERSION');
-//              idv := ASegment.FSfr6Boundary.Diversions[DivIndex].DiversionNumber;
               idv := DivIndex+1;
               WriteInteger(idv);
               WriteFloat(ACell.Values.Diversions[DivIndex]);
@@ -2485,27 +2409,8 @@ end;
 
 procedure TSfr6Segment.AssignReachNumbers(var StartingNumber: Integer);
 var
-//  TimeIndex: Integer;
-//  ACellList: TValueCellList;
-//  ActiveDataArray: TDataArray;
   CellIndex: Integer;
-//  CellCount: Integer;
-//  CellLocation: TCellLocation;
-//  ACell: TSfrMF6_Cell;
-//  StartIndex: integer;
 begin
-//  for TimeIndex := 0 to FReaches.Count - 1 do
-//  begin
-//    StartIndex := StartingNumber;
-//    ACellList := FReaches[TimeIndex];
-//    for CellIndex := ACellList.Count - 1 downto 0 do
-//    begin
-//      ACell := ACellList[CellIndex] as TSfrMF6_Cell;
-//      ACell.ReachNumber := StartIndex;
-//      Inc(StartIndex);
-//    end;
-//  end;
-
   for CellIndex := 0 to Length(FSteadyValues) - 1 do
   begin
     FSteadyValues[CellIndex].ReachNumber := StartingNumber;
@@ -2536,7 +2441,6 @@ var
   ACell: TSfrMF6_Cell;
 begin
   IDomainArray := FModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
-//  ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(rsActive);
   for TimeIndex := 0 to FReaches.Count - 1 do
   begin
     ACellList := FReaches[TimeIndex];

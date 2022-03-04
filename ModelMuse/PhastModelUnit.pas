@@ -42629,6 +42629,13 @@ begin
           try
             Sfr6Writer.MvrWriter := ModflowMvrWriter;
             Sfr6Writer.WriteFile(FileName);
+            if GwtUsed then
+            begin
+              for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+              begin
+                Sfr6Writer.WriteSftFile(FileName, SpeciesIndex);
+              end;
+            end;
           finally
             Sfr6Writer.Free;
           end;

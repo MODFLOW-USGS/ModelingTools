@@ -4,7 +4,7 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowCellUnit,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, GoPhastTypes,
-  System.Generics.Collections, SubscriptionUnit, RbwParser;
+  System.Generics.Collections, SubscriptionUnit, RbwParser, Mt3dmsChemUnit;
 
 type
   TSfrOb = (soStage, soExtInflow, soInflow, soFromMvr, soRainfall, soRunoff, soSfr,
@@ -430,6 +430,7 @@ type
     // GWT
     StartingConcentrations: TGwtCellData;
 
+    procedure Assign(const Item: TSfrMF6ConstantRecord);
     property ReachNumber: integer read FReachNumber write SetReachNumber;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -517,6 +518,9 @@ type
     FPestStageObserver: TObserver;
     FPestUpstreamFractionObserver: TObserver;
     FUsedObserver: TObserver;
+    FStartingConcentrations: TStringConcCollection;
+//    FStartingConcentrations: TStringList;
+//    FStartConcFormulas: TFormulaObjectList;
     procedure SetDiversions(const Value: TDiversionCollection);
     procedure SetDownstreamSegments(const Value: TIntegerCollection);
     procedure SetSegmentNumber(const Value: Integer);
@@ -582,6 +586,7 @@ type
     procedure SetPestStageMethod(const Value: TPestParamMethod);
     procedure SetPestUpstreamFractionFormula(const Value: string);
     procedure SetPestUpstreamFractionMethod(const Value: TPestParamMethod);
+    procedure SetStartingConcentrations(const Value: TStringConcCollection);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -614,6 +619,7 @@ type
     property PestUpstreamFractionObserver: TObserver read GetPestUpstreamFractionObserver;
     property PestStageObserver: TObserver read GetPestStageObserver;
     property PestRoughnessObserver: TObserver read GetPestRoughnessObserver;
+//    property StartingConcentrations[Index: Integer]: string read GetSConc write SetSConc;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -727,6 +733,12 @@ type
       Stored False
       {$ENDIF}
       ;
+    property StartingConcentrations: TStringConcCollection read FStartingConcentrations
+      write SetStartingConcentrations
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 const
@@ -824,6 +836,8 @@ resourcestring
 procedure TSfrMF6Record.Assign(const Item: TSfrMF6Record);
 begin
   self := Item;
+  SetLength(Diversions, Length(Diversions));
+  SetLength(DiversionAnnotations, Length(DiversionAnnotations));
   SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
   RainfallConcentrations.Assign(Item.RainfallConcentrations);
   EvapConcentrations.Assign(Item.EvapConcentrations);
@@ -2404,7 +2418,7 @@ begin
                 SpecifiedConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 SpecifiedConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              Exit;
+              break;
             end;
 
             FormulaIndex := FormulaIndex - SpeciesCount;
@@ -2419,7 +2433,7 @@ begin
                 RainfallConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 RainfallConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              Exit;
+              break;
             end;
             
             FormulaIndex := FormulaIndex - SpeciesCount;
@@ -2434,7 +2448,7 @@ begin
                 EvapConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 EvapConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              Exit;
+              break;
             end;
             
             FormulaIndex := FormulaIndex - SpeciesCount;
@@ -2449,7 +2463,7 @@ begin
                 RunoffConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 RunoffConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              Exit;
+              break;
             end;
             
             FormulaIndex := FormulaIndex - SpeciesCount;
@@ -2464,7 +2478,7 @@ begin
                 InflowConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 InflowConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              Exit;
+              break;
             end;
           end;
       end;
@@ -3126,6 +3140,7 @@ begin
     PestStageMethod := SourceSfr6.PestStageMethod;
     PestRoughnessFormula := SourceSfr6.PestRoughnessFormula;
     PestRoughnessMethod := SourceSfr6.PestRoughnessMethod;
+    StartingConcentrations := SourceSfr6.StartingConcentrations;
   end
   else if Source is TSfrBoundary then
   begin
@@ -3399,9 +3414,9 @@ begin
         Cell.IFace := (ScreenObject as TScreenObject).IFace;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
-        Cell.FValues := BoundaryValues;
-        SetLength(Cell.FValues.Diversions, Length(Cell.FValues.Diversions));
-        SetLength(Cell.FValues.DiversionAnnotations, Length(Cell.FValues.DiversionAnnotations));
+        Cell.FValues.Assign(BoundaryValues);
+//        SetLength(Cell.FValues.Diversions, Length(Cell.FValues.Diversions));
+//        SetLength(Cell.FValues.DiversionAnnotations, Length(Cell.FValues.DiversionAnnotations));
         Cell.ScreenObject := ScreenObject;
         LocalModel.AdjustCellPosition(Cell);
       end;
@@ -3435,6 +3450,8 @@ begin
   begin
     InvalidateEvent := Model.Invalidate;
   end;
+  FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
+//  FStartConcFormulas := TFormulaObjectList.Create;
   FDownstreamSegments := TIntegerCollection.Create(InvalidateEvent);
   FDiversions := TDiversionCollection.Create(Model);
   CreateFormulaObjects;
@@ -3563,6 +3580,8 @@ begin
   FDiversions.Free;
   FDownstreamSegments.Free;
   RemoveFormulaObjects;
+//  FStartConcFormulas.Free;
+  FStartingConcentrations.Free;
   inherited;
 end;
 
@@ -3941,6 +3960,21 @@ end;
 //    CreateObserver('SFR6_Roughness_', FRoughnessObserver, nil);
 //  end;
 //  result := FRoughnessObserver;
+//end;
+
+//function TSfrMf6Boundary.GetSConc(Index: Integer): string;
+//begin
+//
+//end;
+//
+//function TSfrMf6Boundary.GetStartingConcentrations: TStringlist;
+//begin
+//  result := FStartingConcentrations;
+//end;
+
+//function TSfrMf6Boundary.GetStartingConcentrations: TStringConcCollection;
+//begin
+//  F
 //end;
 
 function TSfrMf6Boundary.GetStreambedThickness: string;
@@ -4456,6 +4490,11 @@ end;
 //end;
 //
 
+//procedure TSfrMf6Boundary.SetSConc(Index: Integer; const Value: string);
+//begin
+//
+//end;
+
 procedure TSfrMf6Boundary.SetSegmentNumber(const Value: Integer);
 begin
   if FSegmentNumber <> Value then
@@ -4473,6 +4512,17 @@ end;
 //    InvalidateModel;
 //  end;
 //end;
+
+//procedure TSfrMf6Boundary.SetStartingConcentrations(const Value: TStringlist);
+//begin
+//  FStartingConcentrations.Assign(Value);
+//end;
+
+procedure TSfrMf6Boundary.SetStartingConcentrations(
+  const Value: TStringConcCollection);
+begin
+  FStartingConcentrations.Assign(Value);
+end;
 
 procedure TSfrMf6Boundary.SetStreambedThickness(const Value: string);
 begin
@@ -4981,6 +5031,12 @@ begin
 end;
 
 { TStrMF6ConstantRecord }
+
+procedure TSfrMF6ConstantRecord.Assign(const Item: TSfrMF6ConstantRecord);
+begin
+  self := Item;
+  self.StartingConcentrations := Item.StartingConcentrations;
+end;
 
 procedure TSfrMF6ConstantRecord.Cache(Comp: TCompressionStream;
   Strings: TStringList);

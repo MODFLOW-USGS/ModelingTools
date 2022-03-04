@@ -315,8 +315,20 @@ var
         oftBinary:
           begin
             NameOfFile := BaseNameOfFile + BinaryExtension;
-            WriteToNameFile(StrDATABINARY,
-              Model.UnitNumbers.UnitNumber(DataLabel), NameOfFile, foOutput, Model);
+            case FOutputType of
+              otFlow:
+                begin
+                  WriteToNameFile(StrDATABINARY,
+                    Model.UnitNumbers.UnitNumber(DataLabel), NameOfFile, foOutput, Model);
+                end;
+              otTransport:
+                begin
+                  WriteToGwtNameFile(StrDATABINARY, DataLabel, FSpeciesIndex);
+                end;
+              else
+                Assert(False);
+            end;
+
             if Model.ModelSelection = msModflow2015 then
             begin
               WriteString('  ');
@@ -348,12 +360,6 @@ begin
   end;
 
   BaseNameOfFile := ChangeFileExt(FNameOfFile, '');
-  if FOutputType = otTransport then
-  begin
-    ASpeciesName := '.' + Model.MobileComponents[FSpeciesIndex].Name;
-    BaseNameOfFile := BaseNameOfFile + ASpeciesName
-  end;
-
 
   if Model.ModelSelection = msModflow2015 then
   begin
