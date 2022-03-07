@@ -2013,7 +2013,7 @@ var
   MoverWriter: TModflowMvrWriter;
   MvrReceiver: TMvrReceiver;
   MvrSource: TMvrRegisterKey;
-  GwtStatus: TGwtStreamStatus;
+  GwtStatus: TGwtBoundaryStatus;
   DiversionCount: Integer;
   FormulaIndex: Integer;
 begin
@@ -2070,7 +2070,7 @@ begin
         case ACell.Values.Status of
           ssInactive:
             begin
-              GwtStatus := gssInactive;
+              GwtStatus := gbsInactive;
             end;
           ssActive, ssSimple:
             begin
@@ -2078,20 +2078,20 @@ begin
             end;
           else
             begin
-              GwtStatus := gssInactive;
+              GwtStatus := gbsInactive;
               Assert(False);
             end;
         end;
         case GwtStatus of
-          gssInactive:
+          gbsInactive:
             begin
               WriteString(' INACTIVE');
             end;
-          gssActive:
+          gbsActive:
             begin
               WriteString(' ACTIVE');
             end;
-          gssConstant:
+          gbsConstant:
             begin
               WriteString(' CONSTANT');
             end;
@@ -2101,7 +2101,7 @@ begin
         NewLine;
 
         DiversionCount := ASegment.FSfr6Boundary.Diversions.Count;
-        if GwtStatus = gssConstant then
+        if GwtStatus = gbsConstant then
         begin
           WriteInteger(ReachNumber);
           WriteString(' CONCENTRATION');
@@ -2113,7 +2113,7 @@ begin
           NewLine;
         end;
 
-        if GwtStatus <> gssInactive then
+        if GwtStatus <> gbsInactive then
         begin
           WriteInteger(ReachNumber);
           WriteString(' RAINFALL');

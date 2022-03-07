@@ -18,29 +18,6 @@ type
   // ssActive = stage is calculated.
   // ssSimple = stage is specified.
   TStreamStatus = (ssInactive, ssActive, ssSimple);
-  TGwtStreamStatus = (gssInactive, gssActive, gssConstant);
-
-  TGwtStreamStatusArray = array of TGwtStreamStatus;
-
-  TGwtStrStatusItem = class(TCollectionItem)
-  private
-    FGwtStreamStatus: TGwtStreamStatus;
-    procedure SetGwtStreamStatus(const Value: TGwtStreamStatus);
-  public
-    procedure Assign(Source: TPersistent); override;
-  published
-    Property GwtStreamStatus: TGwtStreamStatus read FGwtStreamStatus write SetGwtStreamStatus;
-  end;
-
-  TGwtStrStatusCollection = class(TCollection)
-  private
-    function GetItems(Index: Integer): TGwtStrStatusItem;
-    procedure SetItems(Index: Integer; const Value: TGwtStrStatusItem);
-  public
-    constructor Create;
-    property Items[Index: Integer]: TGwtStrStatusItem read GetItems write SetItems; default;
-  end;
-
   TSfrMF6Record = record
     Cell: TCellLocation;
     Inflow: double;
@@ -102,7 +79,7 @@ type
     MvrIndex: Integer;
 
     // GWT
-    GwtStatus: TGwtStreamStatusArray;
+    GwtStatus: TGwtBoundaryStatusArray;
     SpecifiedConcentrations: TGwtCellData;
     RainfallConcentrations: TGwtCellData;
     EvapConcentrations: TGwtCellData;
@@ -153,7 +130,7 @@ type
     FRoughness: TFormulaObject;
     FStreamStatus: TStreamStatus;
     // GWT
-    FGwtStatus: TGwtStrStatusCollection;
+    FGwtStatus: TGwtBoundaryStatusCollection;
     FSpecifiedConcentrations: TSftGwtConcCollection;
     FRainfallConcentrations: TSftGwtConcCollection;
     FEvapConcentrations: TSftGwtConcCollection;
@@ -182,7 +159,7 @@ type
     procedure SetRoughness(const Value: string);
     procedure SetStage(const Value: string);
     procedure SetEvapConcentrations(const Value: TSftGwtConcCollection);
-    procedure SetGwtStatus(const Value: TGwtStrStatusCollection);
+    procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
     procedure SetInflowConcentrations(const Value: TSftGwtConcCollection);
     procedure SetRainfallConcentrations(const Value: TSftGwtConcCollection);
     procedure SetRunoffConcentrations(const Value: TSftGwtConcCollection);
@@ -228,7 +205,7 @@ type
     // @link(DiversionFormulas) instead of @name.
     property Diversions: TStrings read GetDiversions write SetDiversions;
     // GWT
-    property GwtStatus: TGwtStrStatusCollection read FGwtStatus write SetGwtStatus
+    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
@@ -341,7 +318,7 @@ type
     function GetMvrIndex: Integer;
     function GetMvrUsed: Boolean;
     function GetEvapConcentrations: TGwtCellData;
-    function GetGwtStatus: TGwtStreamStatusArray;
+    function GetGwtStatus: TGwtBoundaryStatusArray;
     function GetInflowConcentrations: TGwtCellData;
     function GetRainfallConcentrations: TGwtCellData;
     function GetRunoffConcentrations: TGwtCellData;
@@ -371,7 +348,7 @@ type
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
     // GWT
-    Property GwtStatus: TGwtStreamStatusArray read GetGwtStatus;
+    Property GwtStatus: TGwtBoundaryStatusArray read GetGwtStatus;
     Property SpecifiedConcentrations: TGwtCellData read GetSpecifiedConcentrations;
     Property RainfallConcentrations: TGwtCellData read GetRainfallConcentrations;
     Property EvapConcentrations: TGwtCellData read GetEvapConcentrations;
@@ -1121,7 +1098,7 @@ begin
   SetLength(GwtStatus, GwtStatusCount);
   for SpeciesIndex := 0 to GwtStatusCount - 1 do
   begin
-    GwtStatus[SpeciesIndex] := TGwtStreamStatus(ReadCompInt(Decomp));
+    GwtStatus[SpeciesIndex] := TGwtBoundaryStatus(ReadCompInt(Decomp));
   end;
 
 end;
@@ -1369,23 +1346,23 @@ end;
 
 constructor TSfrMf6Item.Create(Collection: TCollection);
 var
-  SftCollection: TSfrMf6Collection;
+  SfrCollection: TSfrMf6Collection;
 begin
   FDiversions := TStringList.Create;
   FDiversionFormulas := TList<TFormulaObject>.Create;
 
-  SftCollection := Collection as TSfrMf6Collection;
-  FGwtStatus := TGwtStrStatusCollection.Create;
+  SfrCollection := Collection as TSfrMf6Collection;
+  FGwtStatus := TGwtBoundaryStatusCollection.Create;
   FSpecifiedConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
-    SftCollection);
+    SfrCollection);
   FRainfallConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
-    SftCollection);
+    SfrCollection);
   FEvapConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
-    SftCollection);
+    SfrCollection);
   FRunoffConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
-    SftCollection);
+    SfrCollection);
   FInflowConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
-    SftCollection);
+    SfrCollection);
 
   inherited;
   FStatus := True;
@@ -1746,7 +1723,7 @@ begin
       end;
       for Index := 0 to GwtStatus.Count - 1 do
       begin
-        result := Item.GwtStatus[Index].GwtStreamStatus = GwtStatus[Index].GwtStreamStatus;
+        result := Item.GwtStatus[Index].GwtBoundaryStatus = GwtStatus[Index].GwtBoundaryStatus;
         if not Result then
         begin
           Exit;
@@ -2000,7 +1977,7 @@ begin
   end;
 end;
 
-procedure TSfrMf6Item.SetGwtStatus(const Value: TGwtStrStatusCollection);
+procedure TSfrMf6Item.SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
 begin
   FGwtStatus.Assign(Value);
 end;
@@ -2527,7 +2504,7 @@ begin
     for SpeciesIndex := 0 to SpeciesCount - 1 do
     begin
       Sfr6Storage.FSfrMF6Array[index].GwtStatus[SpeciesIndex] := 
-        SfrMf6Item.GwtStatus[SpeciesIndex].GwtStreamStatus
+        SfrMf6Item.GwtStatus[SpeciesIndex].GwtBoundaryStatus
     end;
   end;
 end;
@@ -4570,7 +4547,7 @@ begin
   result := FValues.EvapConcentrations
 end;
 
-function TSfrMf6_Cell.GetGwtStatus: TGwtStreamStatusArray;
+function TSfrMf6_Cell.GetGwtStatus: TGwtBoundaryStatusArray;
 begin
   result := FValues.GwtStatus
 end;
@@ -5616,43 +5593,6 @@ constructor TSftGwtConcCollection.Create(Model: TBaseModel;
   AScreenObject: TObject; ParentCollection: TSfrMf6Collection);
 begin
   inherited Create(Model, AScreenObject, ParentCollection);
-end;
-
-{ TGwtStrStatusItem }
-
-procedure TGwtStrStatusItem.Assign(Source: TPersistent);
-begin
-  if Source is TGwtStrStatusItem then
-  begin
-    GwtStreamStatus := TGwtStrStatusItem(Source).GwtStreamStatus;
-  end
-  else
-  begin
-    inherited;
-  end;
-end;
-
-procedure TGwtStrStatusItem.SetGwtStreamStatus(const Value: TGwtStreamStatus);
-begin
-  FGwtStreamStatus := Value;
-end;
-
-{ TGwtStrStatusCollection }
-
-constructor TGwtStrStatusCollection.Create;
-begin
-  inherited Create(TGwtStrStatusItem);
-end;
-
-function TGwtStrStatusCollection.GetItems(Index: Integer): TGwtStrStatusItem;
-begin
-  result := inherited Items[Index] as TGwtStrStatusItem
-end;
-
-procedure TGwtStrStatusCollection.SetItems(Index: Integer;
-  const Value: TGwtStrStatusItem);
-begin
-  inherited Items[Index] := Value;
 end;
 
 initialization

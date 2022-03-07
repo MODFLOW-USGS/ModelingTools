@@ -651,6 +651,31 @@ type
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
   end;
 
+  TGwtBoundaryStatus = (gbsInactive, gbsActive, gbsConstant);
+
+  TGwtBoundaryStatusArray = array of TGwtBoundaryStatus;
+
+  TGwtBoundaryStatusItem = class(TCollectionItem)
+  private
+    FGwtBoundaryStatus: TGwtBoundaryStatus;
+    procedure SetGwtBoundaryStatus(const Value: TGwtBoundaryStatus);
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    Property GwtBoundaryStatus: TGwtBoundaryStatus read FGwtBoundaryStatus write SetGwtBoundaryStatus;
+  end;
+
+  TGwtBoundaryStatusCollection = class(TCollection)
+  private
+    function GetItems(Index: Integer): TGwtBoundaryStatusItem;
+    procedure SetItems(Index: Integer; const Value: TGwtBoundaryStatusItem);
+  public
+    constructor Create;
+    property Items[Index: Integer]: TGwtBoundaryStatusItem read GetItems write SetItems; default;
+  end;
+
+
+
   TBaseModel = class abstract(TComponent)
   private
     // See @link(UpToDate).
@@ -2318,6 +2343,43 @@ begin
   begin
     result := Annotations[StringPostion]
   end;
+end;
+
+{ TGwtBoundaryStatusItem }
+
+procedure TGwtBoundaryStatusItem.Assign(Source: TPersistent);
+begin
+  if Source is TGwtBoundaryStatusItem then
+  begin
+    GwtBoundaryStatus := TGwtBoundaryStatusItem(Source).GwtBoundaryStatus;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+procedure TGwtBoundaryStatusItem.SetGwtBoundaryStatus(const Value: TGwtBoundaryStatus);
+begin
+  FGwtBoundaryStatus := Value;
+end;
+
+{ TGwtBoundaryStatusCollection }
+
+constructor TGwtBoundaryStatusCollection.Create;
+begin
+  inherited Create(TGwtBoundaryStatusItem);
+end;
+
+function TGwtBoundaryStatusCollection.GetItems(Index: Integer): TGwtBoundaryStatusItem;
+begin
+  result := inherited Items[Index] as TGwtBoundaryStatusItem
+end;
+
+procedure TGwtBoundaryStatusCollection.SetItems(Index: Integer;
+  const Value: TGwtBoundaryStatusItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 

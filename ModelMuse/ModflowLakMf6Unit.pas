@@ -217,6 +217,13 @@ type
     procedure StopTalkingToAnyone;
   end;
 
+  TLakTimeCollection = class;
+
+  TLktGwtConcCollection = class(TGwtConcStringCollection)
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TLakTimeCollection);
+  end;
+
   TLakeTimeItem = class(TCustomModflowBoundaryItem)
   private
     FStatus: TLakeStatus;
@@ -226,6 +233,13 @@ type
     FEvaporation: TFormulaObject;
     FInflow: TFormulaObject;
     FWithdrawal: TFormulaObject;
+    // GWT
+    FGwtStatus: TGwtBoundaryStatusCollection;
+    FSpecifiedConcentrations: TSftGwtConcCollection;
+    FRainfallConcentrations: TSftGwtConcCollection;
+    FEvapConcentrations: TSftGwtConcCollection;
+    FRunoffConcentrations: TSftGwtConcCollection;
+    FInflowConcentrations: TSftGwtConcCollection;
     function GetStage: string;
     procedure SetStage(const Value: string);
     function GetRainfall: string;
@@ -239,6 +253,12 @@ type
     procedure SetWithdrawal(const Value: string);
     function GetInflow: string;
     procedure SetInflow(const Value: string);
+    procedure SetEvapConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
+    procedure SetInflowConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetRainfallConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetRunoffConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetSpecifiedConcentrations(const Value: TSftGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -250,6 +270,8 @@ type
     function BoundaryFormulaCount: integer; override;
   public
     procedure Assign(Source: TPersistent); override;
+    constructor Create(Collection: TCollection); override;
+    Destructor Destroy; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   published
     property Status: TLakeStatus read FStatus write SetStatus;
@@ -259,6 +281,42 @@ type
     property Runoff: string read GetRunoff write SetRunoff;
     property Inflow: string read GetInflow write SetInflow;
     property Withdrawal: string read GetWithdrawal write SetWithdrawal;
+    // GWT
+    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property SpecifiedConcentrations: TSftGwtConcCollection read FSpecifiedConcentrations
+      write SetSpecifiedConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property RainfallConcentrations: TSftGwtConcCollection read FRainfallConcentrations
+      write SetRainfallConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property EvapConcentrations: TSftGwtConcCollection read FEvapConcentrations
+      write SetEvapConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property RunoffConcentrations: TSftGwtConcCollection read FRunoffConcentrations
+      write SetRunoffConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property InflowConcentrations: TSftGwtConcCollection read FInflowConcentrations
+      write SetInflowConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
   TLakTimeCollection = class(TCustomMF_BoundColl)
@@ -525,29 +583,27 @@ implementation
 uses
   frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit, DataSetUnit;
 
-{ TLakeTimeItem }
-
 const
   LakeObName: array[TLakOb] of string = ('Stage', 'ExternalInflow', 'SimOutletInflow', 'SumInflow', 'FromMvr', 'Rain',
     'Runoff', 'FlowRate', 'Withdrawal', 'Evap', 'ExternalOutflow', 'ToMvr', 'Storage',
     'ConstantFlow', 'Outlet', 'Volume', 'SurfaceArea', 'WettedArea',
     'Conductance');
-	
+
 var
   LakeObNames: TStringList;
-  
+
 procedure InitializeLakeObNames;
 var
-  Index: TLakOb; 
+  Index: TLakOb;
 begin
   LakeObNames := TStringList.Create;
   LakeObNames.CaseSensitive := False;
   for Index := Low(TLakOb) to High(TLakOb) do
   begin
     LakeObNames.Add(LakeObName[Index]);
-  end;  
-end;  
-	
+  end;
+end;
+
 
 function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
 var
@@ -570,13 +626,8 @@ function LakObToString(const LakOb: TLakOb): string;
 begin
   result := LakeObName[LakOb];
 end;
-  
-{
-  TLakOb = (loStage, loExternalInflow, loSimOutletInflow, loSumInflow, loFromMvr, loRain,
-    loRunoff, loFlowRate, loWithdrawal, loEvap, loExternalOutflow, loToMvr, loStorage,
-    loConstantFlow, loOutlet, loVolume, loSurfaceArea, loWettedArea,
-    loConductance);
-}  
+
+{ TLakeTimeItem }
 
 procedure TLakeTimeItem.Assign(Source: TPersistent);
 var
@@ -592,6 +643,12 @@ begin
     Runoff := LakeItem.Runoff;
     Inflow := LakeItem.Inflow;
     Withdrawal := LakeItem.Withdrawal;
+    GwtStatus := LakeItem.GwtStatus;
+    SpecifiedConcentrations := LakeItem.SpecifiedConcentrations;
+    RainfallConcentrations := LakeItem.RainfallConcentrations;
+    EvapConcentrations := LakeItem.EvapConcentrations;
+    RunoffConcentrations := LakeItem.RunoffConcentrations;
+    InflowConcentrations := LakeItem.InflowConcentrations;
   end;
   inherited;
 end;
@@ -634,6 +691,25 @@ begin
   result := 6;
 end;
 
+constructor TLakeTimeItem.Create(Collection: TCollection);
+begin
+  inherited;
+
+  LakCollection := Collection as TLakTimeCollection;
+  FGwtStatus := TGwtBoundaryStatusCollection.Create;
+  FSpecifiedConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+    LakCollection);
+  FRainfallConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+    LakCollection);
+  FEvapConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+    LakCollection);
+  FRunoffConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+    LakCollection);
+  FInflowConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+    LakCollection);
+
+end;
+
 procedure TLakeTimeItem.CreateFormulaObjects;
 begin
   inherited;
@@ -643,6 +719,44 @@ begin
   FEvaporation := CreateFormulaObject(dsoTop);
   FInflow := CreateFormulaObject(dsoTop);
   FWithdrawal := CreateFormulaObject(dsoTop);
+end;
+
+destructor TLakeTimeItem.Destroy;
+var
+  Index: Integer;
+begin
+  FGwtStatus.Free;
+  for Index := 0 to FSpecifiedConcentrations.Count - 1 do
+  begin
+    FSpecifiedConcentrations[Index].Value := '0';
+  end;
+  FSpecifiedConcentrations.Free;
+
+  for Index := 0 to FRainfallConcentrations.Count - 1 do
+  begin
+    FRainfallConcentrations[Index].Value := '0';
+  end;
+  FRainfallConcentrations.Free;
+
+  for Index := 0 to FEvapConcentrations.Count - 1 do
+  begin
+    FEvapConcentrations[Index].Value := '0';
+  end;
+  FEvapConcentrations.Free;
+
+  for Index := 0 to FRunoffConcentrations.Count - 1 do
+  begin
+    FRunoffConcentrations[Index].Value := '0';
+  end;
+  FRunoffConcentrations.Free;
+
+  for Index := 0 to FInflowConcentrations.Count - 1 do
+  begin
+    FInflowConcentrations[Index].Value := '0';
+  end;
+  FInflowConcentrations.Free;
+
+  inherited;
 end;
 
 function TLakeTimeItem.GetBoundaryFormula(Index: integer): string;
@@ -727,6 +841,7 @@ end;
 function TLakeTimeItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
   LakeItem: TLakeTimeItem;
+  Index: Integer;
 begin
   Result := inherited IsSame(AnotherItem) and (AnotherItem is TLakeTimeItem);
   if result then
@@ -739,7 +854,72 @@ begin
       and (Evaporation = LakeItem.Evaporation)
       and (Runoff = LakeItem.Runoff)
       and (Inflow = LakeItem.Inflow)
-      and (Withdrawal = LakeItem.Withdrawal);
+      and (Withdrawal = LakeItem.Withdrawal)
+      and (LakeItem.SpecifiedConcentrations.Count = SpecifiedConcentrations.Count)
+      and (LakeItem.RainfallConcentrations.Count = RainfallConcentrations.Count)
+      and (LakeItem.EvapConcentrations.Count = EvapConcentrations.Count)
+      and (LakeItem.RunoffConcentrations.Count = RunoffConcentrations.Count)
+      and (LakeItem.InflowConcentrations.Count = InflowConcentrations.Count)
+      and (LakeItem.GwtStatus.Count = GwtStatus.Count);
+    if result then
+    begin
+//      for Index := 0 to DiversionCount - 1 do
+//      begin
+//        result := Item.Diversions[Index] = Diversions[Index];
+//        if not Result then
+//        begin
+//          Exit;
+//        end;
+//      end;
+      for Index := 0 to GwtStatus.Count - 1 do
+      begin
+        result := Item.GwtStatus[Index].GwtBoundaryStatus = GwtStatus[Index].GwtBoundaryStatus;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to SpecifiedConcentrations.Count - 1 do
+      begin
+        result := Item.SpecifiedConcentrations[Index].Value = SpecifiedConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to RainfallConcentrations.Count - 1 do
+      begin
+        result := Item.RainfallConcentrations[Index].Value = RainfallConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to EvapConcentrations.Count - 1 do
+      begin
+        result := Item.EvapConcentrations[Index].Value = EvapConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to RunoffConcentrations.Count - 1 do
+      begin
+        result := Item.RunoffConcentrations[Index].Value = RunoffConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to InflowConcentrations.Count - 1 do
+      begin
+        result := Item.InflowConcentrations[Index].Value = InflowConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+    end
   end;
 end;
 
@@ -786,9 +966,20 @@ begin
   end;
 end;
 
+procedure TLakeTimeItem.SetEvapConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FEvapConcentrations.Assign(Value);
+end;
+
 procedure TLakeTimeItem.SetEvaporation(const Value: string);
 begin
   UpdateFormulaBlocks(Value, Lak6EvaporationPosition, FEvaporation);
+end;
+
+procedure TLakeTimeItem.SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
+begin
+  FGwtStatus.Assign(Value);
 end;
 
 procedure TLakeTimeItem.SetInflow(const Value: string);
@@ -796,14 +987,38 @@ begin
   UpdateFormulaBlocks(Value, Lak6InflowPosition, FInflow);
 end;
 
+procedure TLakeTimeItem.SetInflowConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FInflowConcentrations.Assign(Value);
+end;
+
 procedure TLakeTimeItem.SetRainfall(const Value: string);
 begin
   UpdateFormulaBlocks(Value, Lak6RainfallPosition, FRainfall);
 end;
 
+procedure TLakeTimeItem.SetRainfallConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FRainfallConcentrations.Assign(Value);
+end;
+
 procedure TLakeTimeItem.SetRunoff(const Value: string);
 begin
   UpdateFormulaBlocks(Value, Lak6RunoffPosition, FRunoff);
+end;
+
+procedure TLakeTimeItem.SetRunoffConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FRunoffConcentrations.Assign(Value);
+end;
+
+procedure TLakeTimeItem.SetSpecifiedConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FSpecifiedConcentrations := Value;
 end;
 
 procedure TLakeTimeItem.SetStage(const Value: string);
@@ -2400,6 +2615,14 @@ begin
   begin
     Items[index].StopTalkingToAnyone;
   end;
+end;
+
+{ TLktGwtConcCollection }
+
+constructor TLktGwtConcCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TLakTimeCollection);
+begin
+  inherited Create(Model, AScreenObject, ParentCollection);
 end;
 
 initialization
