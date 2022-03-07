@@ -29024,6 +29024,7 @@ object TTaskHistory
       Date = 44627.000000000000000000
       Categories.Strings = (
         'Refactoring'
-        'Video')
+        'Video'
+        'MF6 GWT')
     end>
 end

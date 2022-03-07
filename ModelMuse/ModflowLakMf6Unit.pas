@@ -327,6 +327,13 @@ type
     procedure InvalidateRunoff(Sender: TObject);
     procedure InvalidateInflow(Sender: TObject);
     procedure InvalidateWithdrawal(Sender: TObject);
+    // GWT
+    procedure InvalidateGwtStatus(Sender: TObject);
+    procedure InvalidateSpecifiedConcentrations(Sender: TObject);
+    procedure InvalidateRainfallConcentrations(Sender: TObject);
+    procedure InvalidateEvapConcentrations(Sender: TObject);
+    procedure InvalidateRunoffConcentrations(Sender: TObject);
+    procedure InvalidateInflowConcentrations(Sender: TObject);
   protected
     class function ItemClass: TBoundaryItemClass; override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -349,6 +356,7 @@ type
     FPestInflowMethod: TPestParamMethod;
     FPestEvaporationMethod: TPestParamMethod;
     FPestStageMethod: TPestParamMethod;
+    FStartingConcentrations: TStringConcCollection;
     function GetPestEvaporationFormula: string;
     function GetPestEvaporationObserver: TObserver;
     function GetPestInflowFormula: string;
@@ -373,6 +381,7 @@ type
     procedure SetPestStageMethod(const Value: TPestParamMethod);
     procedure SetPestWithdrawalFormula(const Value: string);
     procedure SetPestWithdrawalMethod(const Value: TPestParamMethod);
+    procedure SetStartingConcentrations(const Value: TStringConcCollection);
   var
     FOutlets: TLakeOutlets;
     FLakeTable: TLakeTableMf6;
@@ -564,6 +573,12 @@ type
       Stored False
       {$ENDIF}
       ;
+    property StartingConcentrations: TStringConcCollection read FStartingConcentrations
+      write SetStartingConcentrations
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
@@ -662,6 +677,7 @@ var
   EvaporationObserver: TObserver;
   WithdrawalObserver: TObserver;
   InflowObserver: TObserver;
+  ConcIndex: Integer;
 begin
   inherited;
 //  inherited;
@@ -684,17 +700,56 @@ begin
 
   WithdrawalObserver := FObserverList[Lak6WithdrawalPosition];
   WithdrawalObserver.OnUpToDateSet := ParentCollection.InvalidateWithdrawal;
+
+//  for ConcIndex := 0 to GwtStatus.Count - 1 do
+//  begin
+//    GwtStatus[ConcIndex].Observer.OnUpToDateSet
+//      := ParentCollection.InvalidateSpecifiedConcentrations;
+//  end;
+
+  for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
+  begin
+    SpecifiedConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateSpecifiedConcentrations;
+  end;
+
+  for ConcIndex := 0 to RainfallConcentrations.Count - 1 do
+  begin
+    RainfallConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateRainfallConcentrations;
+  end;
+
+  for ConcIndex := 0 to EvapConcentrations.Count - 1 do
+  begin
+    EvapConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateEvapConcentrations;
+  end;
+
+  for ConcIndex := 0 to RunoffConcentrations.Count - 1 do
+  begin
+    RunoffConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateRunoffConcentrations;
+  end;
+
+  for ConcIndex := 0 to InflowConcentrations.Count - 1 do
+  begin
+    InflowConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateInflowConcentrations;
+  end;
+
 end;
 
 function TLakeTimeItem.BoundaryFormulaCount: integer;
 begin
   result := 6;
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    result := result + frmGoPhast.PhastModel.MobileComponents.Count *5;
+  end;
 end;
 
 constructor TLakeTimeItem.Create(Collection: TCollection);
 begin
-  inherited;
-
   LakCollection := Collection as TLakTimeCollection;
   FGwtStatus := TGwtBoundaryStatusCollection.Create;
   FSpecifiedConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
@@ -708,6 +763,7 @@ begin
   FInflowConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
     LakCollection);
 
+  inherited;
 end;
 
 procedure TLakeTimeItem.CreateFormulaObjects;
@@ -760,6 +816,8 @@ begin
 end;
 
 function TLakeTimeItem.GetBoundaryFormula(Index: integer): string;
+var
+  ChemSpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition: result := Stage;
@@ -769,7 +827,68 @@ begin
     Lak6InflowPosition: result := Inflow;
     Lak6WithdrawalPosition: result := Withdrawal;
     else
-      Assert(False);
+      begin
+        Index := Index-Lak6WithdrawalPosition -1;
+        // GWT
+        if frmGoPhast.PhastModel.GwtUsed then
+        begin
+          ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+          while SpecifiedConcentrations.Count < ChemSpeciesCount do
+          begin
+            SpecifiedConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := SpecifiedConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while RainfallConcentrations.Count < ChemSpeciesCount do
+          begin
+            RainfallConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := RainfallConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while EvapConcentrations.Count < ChemSpeciesCount do
+          begin
+            EvapConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := EvapConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while RunoffConcentrations.Count < ChemSpeciesCount do
+          begin
+            RunoffConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := RunoffConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while InflowConcentrations.Count < ChemSpeciesCount do
+          begin
+            InflowConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := InflowConcentrations[Index].Value;
+            Exit;
+          end;
+          Assert(False);
+        end;
+      end;
   end;
 end;
 
@@ -786,6 +905,9 @@ begin
 end;
 
 procedure TLakeTimeItem.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  ConcIndex: Integer;
+  Item: TGwtConcStringValueItem;
 begin
   inherited;
   if Sender = FStage then
@@ -812,6 +934,53 @@ begin
   begin
     List.Add(FObserverList[Lak6WithdrawalPosition]);
   end;
+
+  // GWT
+  for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
+  begin
+    Item := SpecifiedConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+  for ConcIndex := 0 to RainfallConcentrations.Count - 1 do
+  begin
+    Item := RainfallConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+  for ConcIndex := 0 to EvapConcentrations.Count - 1 do
+  begin
+    Item := EvapConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+  for ConcIndex := 0 to RunoffConcentrations.Count - 1 do
+  begin
+    Item := RunoffConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+  for ConcIndex := 0 to InflowConcentrations.Count - 1 do
+  begin
+    Item := InflowConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
 end;
 
 function TLakeTimeItem.GetRainfall: string;
@@ -863,14 +1032,6 @@ begin
       and (LakeItem.GwtStatus.Count = GwtStatus.Count);
     if result then
     begin
-//      for Index := 0 to DiversionCount - 1 do
-//      begin
-//        result := Item.Diversions[Index] = Diversions[Index];
-//        if not Result then
-//        begin
-//          Exit;
-//        end;
-//      end;
       for Index := 0 to GwtStatus.Count - 1 do
       begin
         result := Item.GwtStatus[Index].GwtBoundaryStatus = GwtStatus[Index].GwtBoundaryStatus;
@@ -962,7 +1123,68 @@ begin
     Lak6WithdrawalPosition:
       Withdrawal := Value;
     else
-      Assert(False);
+      begin
+        Index := Index - Lak6WithdrawalPosition - 1;
+        // GWT
+        if frmGoPhast.PhastModel.GwtUsed then
+        begin
+          ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+          while SpecifiedConcentrations.Count < ChemSpeciesCount do
+          begin
+            SpecifiedConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := SpecifiedConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while RainfallConcentrations.Count < ChemSpeciesCount do
+          begin
+            RainfallConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := RainfallConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while EvapConcentrations.Count < ChemSpeciesCount do
+          begin
+            EvapConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := EvapConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while RunoffConcentrations.Count < ChemSpeciesCount do
+          begin
+            RunoffConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := RunoffConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while InflowConcentrations.Count < ChemSpeciesCount do
+          begin
+            InflowConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := InflowConcentrations[Index].Value;
+            Exit;
+          end;
+          Assert(False);
+        end
+      end;
   end;
 end;
 
@@ -1519,7 +1741,17 @@ begin
   Assert(False);
 end;
 
+procedure TLakTimeCollection.InvalidateEvapConcentrations(Sender: TObject);
+begin
+
+end;
+
 procedure TLakTimeCollection.InvalidateEvaporation(Sender: TObject);
+begin
+
+end;
+
+procedure TLakTimeCollection.InvalidateGwtStatus(Sender: TObject);
 begin
 
 end;
@@ -1529,12 +1761,32 @@ begin
 
 end;
 
+procedure TLakTimeCollection.InvalidateInflowConcentrations(Sender: TObject);
+begin
+
+end;
+
 procedure TLakTimeCollection.InvalidateRainfall(Sender: TObject);
 begin
 
 end;
 
+procedure TLakTimeCollection.InvalidateRainfallConcentrations(Sender: TObject);
+begin
+
+end;
+
 procedure TLakTimeCollection.InvalidateRunoff(Sender: TObject);
+begin
+
+end;
+
+procedure TLakTimeCollection.InvalidateRunoffConcentrations(Sender: TObject);
+begin
+
+end;
+
+procedure TLakTimeCollection.InvalidateSpecifiedConcentrations(Sender: TObject);
 begin
 
 end;
@@ -1574,6 +1826,7 @@ begin
     BedThickness := LakeSource.BedThickness;
     ConnectionLength := LakeSource.ConnectionLength;
     StartingStage := LakeSource.StartingStage;
+    StartingConcentrations := SourceSfr6.StartingConcentrations;
 
     for Index := Lak6StagePosition to Lak6WithdrawalPosition do
     begin
@@ -1606,6 +1859,7 @@ var
   Index: Integer;
 begin
   inherited;
+  FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
   CreateBoundaryObserver;
   FOutlets := TLakeOutlets.Create(Model, ScreenObject);
   FLakeTable := TLakeTableMf6.Create(Model);
@@ -1703,7 +1957,7 @@ begin
     else
       begin
         result := inherited;
-        Assert(False);
+//        Assert(False);
       end;
   end;
 end;
@@ -1725,6 +1979,7 @@ begin
   PestInflowFormula := '';
   PestWithdrawalFormula := '';
 
+  FStartingConcentrations.Free;
   FLakeTable.Free;
   FOutlets.Free;
   inherited;
@@ -2362,6 +2617,12 @@ end;
 procedure TLakeMf6.SetPestWithdrawalMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestWithdrawalMethod, Value);
+end;
+
+procedure TLakeMf6.SetStartingConcentrations(
+  const Value: TStringConcCollection);
+begin
+  FStartingConcentrations.Assign(Value);
 end;
 
 procedure TLakeMf6.SetStartingStage(const Value: string);

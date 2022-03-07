@@ -651,7 +651,7 @@ type
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
   end;
 
-  TGwtBoundaryStatus = (gbsInactive, gbsActive, gbsConstant);
+  TGwtBoundaryStatus = (gbsActive, gbsInactive, gbsConstant);
 
   TGwtBoundaryStatusArray = array of TGwtBoundaryStatus;
 

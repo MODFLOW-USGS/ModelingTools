@@ -260,7 +260,6 @@ type
     FEvapConcList: TModflowTimeLists;
     FRunoffConcList: TModflowTimeLists;
     FInflowConcList: TModflowTimeLists;
-
   protected
     procedure CreateTimeLists; override;
   public
@@ -1641,12 +1640,6 @@ begin
       List.Add(Item.Observer);
     end;
   end;
-
-//  SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
-//  RainfallConcentrations.Assign(Item.RainfallConcentrations);
-//  EvapConcentrations.Assign(Item.EvapConcentrations);
-//  RunoffConcentrations.Assign(Item.RunoffConcentrations);
-//  InflowConcentrations.Assign(Item.InflowConcentrations);
 
 end;
 
@@ -3539,7 +3532,7 @@ begin
     else
       begin
         result := inherited;
-        Assert(False);
+//        Assert(False);
       end;
   end;
 end;
