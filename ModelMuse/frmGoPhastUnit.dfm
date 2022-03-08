@@ -2430,8 +2430,8 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object alActionList: TActionList
     Images = ilImageList
-    Left = 112
-    Top = 40
+    Left = 104
+    Top = 32
     object acCut: TAction
       Category = 'Edit'
       Caption = '&Cut'

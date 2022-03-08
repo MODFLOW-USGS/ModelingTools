@@ -468,6 +468,7 @@ var
   CurrentLength: double;
   StopIndex: Integer;
   StartIndex: Integer;
+  Temp: Real;
 begin
   Assert(MeshControls.Count >= 1);
   SetLength(Result, MeshControls.Count + 1);
@@ -510,6 +511,12 @@ begin
           for InteriorIndex := 1 to MeshControls.Count-1 do
           begin
             result[InteriorIndex] := result[InteriorIndex]/ Sum;
+          end;
+          for InteriorIndex := 0 to (Length(result) div 2) - 1 do
+          begin
+            Temp := result[InteriorIndex];
+            result[InteriorIndex] := result[Length(result) -1 - InteriorIndex];
+            result[Length(result) -1 - InteriorIndex] := Temp;
           end;
         end;
       gmMiddle, gmEdge:
