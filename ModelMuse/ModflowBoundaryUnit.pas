@@ -652,7 +652,7 @@ type
     procedure SetItems(Index: Integer; const Value: TGwtConcStringValueItem);
   public
     constructor Create(Model: TBaseModel; AScreenObject: TObject;
-      ParentCollection: TCustomListArrayBoundColl);
+      ParentCollection: TCustomMF_BoundColl);
     property Items[Index: Integer]: TGwtConcStringValueItem read GetItems
       write SetItems; default;
     function Add: TGwtConcStringValueItem;
@@ -5122,7 +5122,7 @@ begin
 end;
 
 constructor TGwtConcStringCollection.Create(Model: TBaseModel;
-  AScreenObject: TObject; ParentCollection: TCustomListArrayBoundColl);
+  AScreenObject: TObject; ParentCollection: TCustomMF_BoundColl);
 begin
   inherited Create(TGwtConcStringValueItem, Model, AScreenObject,
     ParentCollection);

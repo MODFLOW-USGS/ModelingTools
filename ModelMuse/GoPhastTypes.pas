@@ -775,7 +775,7 @@ const
   // @name is the maximum length of boundary names in MODFLOW 6.
   MaxBoundNameLength = 40;
 
-  MaxTimeSeriesNameLength = 24;
+  MaxTimeSeriesNameLength = 40;
 
   // @name is the section name in the ini file that holds the
   // names of the most recently opened files.

@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, ModflowBoundaryUnit, GoPhastTypes, OrderedCollectionUnit,
   FormulaManagerUnit, SubscriptionUnit, System.Generics.Collections,
-  ModflowCellUnit, RealListUnit;
+  ModflowCellUnit, RealListUnit, Mt3dmsChemUnit;
 
 type
   // related to claktype.
@@ -235,11 +235,11 @@ type
     FWithdrawal: TFormulaObject;
     // GWT
     FGwtStatus: TGwtBoundaryStatusCollection;
-    FSpecifiedConcentrations: TSftGwtConcCollection;
-    FRainfallConcentrations: TSftGwtConcCollection;
-    FEvapConcentrations: TSftGwtConcCollection;
-    FRunoffConcentrations: TSftGwtConcCollection;
-    FInflowConcentrations: TSftGwtConcCollection;
+    FSpecifiedConcentrations: TLktGwtConcCollection;
+    FRainfallConcentrations: TLktGwtConcCollection;
+    FEvapConcentrations: TLktGwtConcCollection;
+    FRunoffConcentrations: TLktGwtConcCollection;
+    FInflowConcentrations: TLktGwtConcCollection;
     function GetStage: string;
     procedure SetStage(const Value: string);
     function GetRainfall: string;
@@ -253,12 +253,12 @@ type
     procedure SetWithdrawal(const Value: string);
     function GetInflow: string;
     procedure SetInflow(const Value: string);
-    procedure SetEvapConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetEvapConcentrations(const Value: TLktGwtConcCollection);
     procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
-    procedure SetInflowConcentrations(const Value: TSftGwtConcCollection);
-    procedure SetRainfallConcentrations(const Value: TSftGwtConcCollection);
-    procedure SetRunoffConcentrations(const Value: TSftGwtConcCollection);
-    procedure SetSpecifiedConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetInflowConcentrations(const Value: TLktGwtConcCollection);
+    procedure SetRainfallConcentrations(const Value: TLktGwtConcCollection);
+    procedure SetRunoffConcentrations(const Value: TLktGwtConcCollection);
+    procedure SetSpecifiedConcentrations(const Value: TLktGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -287,31 +287,31 @@ type
       stored False
       {$ENDIF}
       ;
-    property SpecifiedConcentrations: TSftGwtConcCollection read FSpecifiedConcentrations
+    property SpecifiedConcentrations: TLktGwtConcCollection read FSpecifiedConcentrations
       write SetSpecifiedConcentrations
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
       ;
-    property RainfallConcentrations: TSftGwtConcCollection read FRainfallConcentrations
+    property RainfallConcentrations: TLktGwtConcCollection read FRainfallConcentrations
       write SetRainfallConcentrations
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
       ;
-    property EvapConcentrations: TSftGwtConcCollection read FEvapConcentrations
+    property EvapConcentrations: TLktGwtConcCollection read FEvapConcentrations
       write SetEvapConcentrations
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
       ;
-    property RunoffConcentrations: TSftGwtConcCollection read FRunoffConcentrations
+    property RunoffConcentrations: TLktGwtConcCollection read FRunoffConcentrations
       write SetRunoffConcentrations
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
       ;
-    property InflowConcentrations: TSftGwtConcCollection read FInflowConcentrations
+    property InflowConcentrations: TLktGwtConcCollection read FInflowConcentrations
       write SetInflowConcentrations
       {$IFNDEF GWT}
       stored False
@@ -749,6 +749,8 @@ begin
 end;
 
 constructor TLakeTimeItem.Create(Collection: TCollection);
+var
+  LakCollection: TLakTimeCollection;
 begin
   LakCollection := Collection as TLakTimeCollection;
   FGwtStatus := TGwtBoundaryStatusCollection.Create;
@@ -1034,7 +1036,7 @@ begin
     begin
       for Index := 0 to GwtStatus.Count - 1 do
       begin
-        result := Item.GwtStatus[Index].GwtBoundaryStatus = GwtStatus[Index].GwtBoundaryStatus;
+        result := LakeItem.GwtStatus[Index].GwtBoundaryStatus = GwtStatus[Index].GwtBoundaryStatus;
         if not Result then
         begin
           Exit;
@@ -1042,7 +1044,7 @@ begin
       end;
       for Index := 0 to SpecifiedConcentrations.Count - 1 do
       begin
-        result := Item.SpecifiedConcentrations[Index].Value = SpecifiedConcentrations[Index].Value;
+        result := LakeItem.SpecifiedConcentrations[Index].Value = SpecifiedConcentrations[Index].Value;
         if not Result then
         begin
           Exit;
@@ -1050,7 +1052,7 @@ begin
       end;
       for Index := 0 to RainfallConcentrations.Count - 1 do
       begin
-        result := Item.RainfallConcentrations[Index].Value = RainfallConcentrations[Index].Value;
+        result := LakeItem.RainfallConcentrations[Index].Value = RainfallConcentrations[Index].Value;
         if not Result then
         begin
           Exit;
@@ -1058,7 +1060,7 @@ begin
       end;
       for Index := 0 to EvapConcentrations.Count - 1 do
       begin
-        result := Item.EvapConcentrations[Index].Value = EvapConcentrations[Index].Value;
+        result := LakeItem.EvapConcentrations[Index].Value = EvapConcentrations[Index].Value;
         if not Result then
         begin
           Exit;
@@ -1066,7 +1068,7 @@ begin
       end;
       for Index := 0 to RunoffConcentrations.Count - 1 do
       begin
-        result := Item.RunoffConcentrations[Index].Value = RunoffConcentrations[Index].Value;
+        result := LakeItem.RunoffConcentrations[Index].Value = RunoffConcentrations[Index].Value;
         if not Result then
         begin
           Exit;
@@ -1074,7 +1076,7 @@ begin
       end;
       for Index := 0 to InflowConcentrations.Count - 1 do
       begin
-        result := Item.InflowConcentrations[Index].Value = InflowConcentrations[Index].Value;
+        result := LakeItem.InflowConcentrations[Index].Value = InflowConcentrations[Index].Value;
         if not Result then
         begin
           Exit;
@@ -1108,6 +1110,8 @@ begin
 end;
 
 procedure TLakeTimeItem.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  ChemSpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -1135,7 +1139,7 @@ begin
           end;
           if Index < ChemSpeciesCount then
           begin
-            result := SpecifiedConcentrations[Index].Value;
+            SpecifiedConcentrations[Index].Value := Value;
             Exit;
           end;
           Index := Index - ChemSpeciesCount;
@@ -1146,7 +1150,7 @@ begin
           end;
           if Index < ChemSpeciesCount then
           begin
-            result := RainfallConcentrations[Index].Value;
+            RainfallConcentrations[Index].Value := Value;
             Exit;
           end;
           Index := Index - ChemSpeciesCount;
@@ -1157,7 +1161,7 @@ begin
           end;
           if Index < ChemSpeciesCount then
           begin
-            result := EvapConcentrations[Index].Value;
+            EvapConcentrations[Index].Value := Value;
             Exit;
           end;
           Index := Index - ChemSpeciesCount;
@@ -1168,7 +1172,7 @@ begin
           end;
           if Index < ChemSpeciesCount then
           begin
-            result := RunoffConcentrations[Index].Value;
+            RunoffConcentrations[Index].Value := Value;
             Exit;
           end;
           Index := Index - ChemSpeciesCount;
@@ -1179,7 +1183,7 @@ begin
           end;
           if Index < ChemSpeciesCount then
           begin
-            result := InflowConcentrations[Index].Value;
+            InflowConcentrations[Index].Value := Value;
             Exit;
           end;
           Assert(False);
@@ -1189,7 +1193,7 @@ begin
 end;
 
 procedure TLakeTimeItem.SetEvapConcentrations(
-  const Value: TSftGwtConcCollection);
+  const Value: TLktGwtConcCollection);
 begin
   FEvapConcentrations.Assign(Value);
 end;
@@ -1210,7 +1214,7 @@ begin
 end;
 
 procedure TLakeTimeItem.SetInflowConcentrations(
-  const Value: TSftGwtConcCollection);
+  const Value: TLktGwtConcCollection);
 begin
   FInflowConcentrations.Assign(Value);
 end;
@@ -1221,7 +1225,7 @@ begin
 end;
 
 procedure TLakeTimeItem.SetRainfallConcentrations(
-  const Value: TSftGwtConcCollection);
+  const Value: TLktGwtConcCollection);
 begin
   FRainfallConcentrations.Assign(Value);
 end;
@@ -1232,13 +1236,13 @@ begin
 end;
 
 procedure TLakeTimeItem.SetRunoffConcentrations(
-  const Value: TSftGwtConcCollection);
+  const Value: TLktGwtConcCollection);
 begin
   FRunoffConcentrations.Assign(Value);
 end;
 
 procedure TLakeTimeItem.SetSpecifiedConcentrations(
-  const Value: TSftGwtConcCollection);
+  const Value: TLktGwtConcCollection);
 begin
   FSpecifiedConcentrations := Value;
 end;
@@ -1826,7 +1830,7 @@ begin
     BedThickness := LakeSource.BedThickness;
     ConnectionLength := LakeSource.ConnectionLength;
     StartingStage := LakeSource.StartingStage;
-    StartingConcentrations := SourceSfr6.StartingConcentrations;
+    StartingConcentrations := LakeSource.StartingConcentrations;
 
     for Index := Lak6StagePosition to Lak6WithdrawalPosition do
     begin

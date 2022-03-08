@@ -72,9 +72,9 @@ type
     procedure WriteFileInternal;
     procedure WriteAdditionalAuxVariables;
     // SFT
-    procedure WriteSftOptions;
-    procedure WriteSftPackageData;
-    procedure WriteSftStressPeriods;
+    procedure WriteGwtOptions;
+    procedure WriteGwtPackageData;
+    procedure WriteGwtStressPeriods;
     procedure WriteGwtFileInternal;
 //    // Check that stage decreases in the downstream direction.
 //    procedure CheckStage;
@@ -183,7 +183,7 @@ resourcestring
   'ntersect any active cells.';
 
 const
-  StrFlowPackageName = 'SFR-1';
+  StrSfrFlowPackageName = 'SFR-1';
 
 { TModflowSFR_MF6_Writer }
 
@@ -1272,9 +1272,9 @@ begin
 
     WriteDataSet0;
 
-    WriteSftOptions;
-    WriteSftPackageData;
-    WriteSftStressPeriods;
+    WriteGwtOptions;
+    WriteGwtPackageData;
+    WriteGwtStressPeriods;
 
   finally
     CloseFile;
@@ -1618,7 +1618,7 @@ begin
   end;
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
-  WriteToNameFile(Abbreviation, -1, FNameOfFile, foInput, Model, False, StrFlowPackageName);
+  WriteToNameFile(Abbreviation, -1, FNameOfFile, foInput, Model, False, StrSfrFlowPackageName);
   frmErrorsAndWarnings.BeginUpdate;
   try
 
@@ -1780,6 +1780,7 @@ var
   ACellList: TValueCellList;
   ACell: TSfrMf6_Cell;
   boundname: string;
+  SpeciesIndex: Integer;
 begin
   WriteBeginPackageData;
   WriteString('# <rno>   <cellid>  ');
@@ -1864,6 +1865,14 @@ begin
       end;
       WriteInteger(ndiv);
 
+      if Model.GwtUsed then
+      begin
+        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          WriteFloat(0);
+        end;
+      end;
+
       boundname := ' ' + Copy(ReachProp.BoundName, 1, MaxBoundNameLength);
       WriteString(boundname);
 
@@ -1913,22 +1922,28 @@ begin
 
 end;
 
-procedure TModflowSFR_MF6_Writer.WriteSftOptions;
+procedure TModflowSFR_MF6_Writer.WriteGwtOptions;
 var
   ASpecies: TMobileChemSpeciesItem;
   budgetfile: string;
   BaseFileName: string;
   SfrMf6Package: TSfrModflow6PackageSelection;
+  concentrationfile: string;
+  budgetCsvFile: string;
 begin
-  WriteString('FLOW_PACKAGE_NAME ');
-  WriteString(StrFlowPackageName);
+  WriteString('    FLOW_PACKAGE_NAME ');
+  WriteString(StrSfrFlowPackageName);
   NewLine;
 
   Assert(FSpeciesIndex >= 0);
   Assert(FSpeciesIndex < Model.MobileComponents.Count);
-  WriteString('FLOW_PACKAGE_AUXILIARY_NAME ');
+  WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
   ASpecies := Model.MobileComponents[FSpeciesIndex];
   WriteString(' ' + ASpecies.Name);
+  NewLine;
+
+  WriteString('    BOUNDNAMES');
+  NewLine;
 
   PrintListInputOption;
   PrintConcentrationOption;
@@ -1938,6 +1953,17 @@ begin
   SfrMf6Package := Model.ModflowPackages.SfrModflow6Package;
   BaseFileName := ChangeFileExt(FNameOfFile, '');
   BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
+
+  if SfrMf6Package.SaveGwtConcentration then
+  begin
+    WriteString('    CONCENTRATION FILEOUT ');
+    concentrationfile := BaseFileName + '.sft_conc';
+    Model.AddModelOutputFile(concentrationfile);
+    concentrationfile := ExtractFileName(concentrationfile);
+    WriteString(concentrationfile);
+    NewLine;
+  end;
+
   if SfrMf6Package.SaveGwtBudget then
   begin
     WriteString('    BUDGET FILEOUT ');
@@ -1948,12 +1974,22 @@ begin
     NewLine;
   end;
 
+  if SfrMf6Package.SaveGwtBudgetCsv then
+  begin
+    WriteString('    BUDGETCSV FILEOUT ');
+    budgetCsvFile := BaseFileName + '.sft_budget.csv';
+    Model.AddModelOutputFile(budgetCsvFile);
+    budgetCsvFile := ExtractFileName(budgetCsvFile);
+    WriteString(budgetCsvFile);
+    NewLine;
+  end;
+
 //  [TS6 FILEIN <ts6_filename>]
 //  [OBS6 FILEIN <obs6_filename>]
 
 end;
 
-procedure TModflowSFR_MF6_Writer.WriteSftPackageData;
+procedure TModflowSFR_MF6_Writer.WriteGwtPackageData;
 var
   SegmentIndex: Integer;
   ASegment: TSfr6Segment;
@@ -1961,9 +1997,10 @@ var
   ReachIndex: Integer;
   ReachProp: TSfrMF6ConstantRecord;
   ACellList: TValueCellList;
+  boundname: string;
 begin
   WriteBeginPackageData;
-  WriteString('# <rno>   <strt>  ');
+  WriteString('# <rno> <strt> <boundname>');
   NewLine;
 
   ReachNumber := 0;
@@ -1989,8 +2026,8 @@ begin
         ReachProp.StartingConcentrations.Concentrations[FSpeciesIndex],
         ReachProp.Cell.Layer, ReachProp.Cell.Row, ReachProp.Cell.Column);
 
-//      boundname := ' ' + Copy(ReachProp.BoundName, 1, MaxBoundNameLength);
-//      WriteString(boundname);
+      boundname := ' ' + Copy(ReachProp.BoundName, 1, MaxBoundNameLength);
+      WriteString(boundname);
 
       NewLine;
     end;
@@ -2000,7 +2037,7 @@ begin
   Assert(ReachNumber <= FReachCount);
 end;
 
-procedure TModflowSFR_MF6_Writer.WriteSftStressPeriods;
+procedure TModflowSFR_MF6_Writer.WriteGwtStressPeriods;
 var
   StressPeriodIndex: Integer;
   SegmentIndex: Integer;
@@ -2066,7 +2103,6 @@ begin
         Inc(ReachNumber);
 
         WriteInteger(ReachNumber);
-        WriteString(' STATUS');
         case ACell.Values.Status of
           ssInactive:
             begin
@@ -2082,6 +2118,7 @@ begin
               Assert(False);
             end;
         end;
+        WriteString(' STATUS');
         case GwtStatus of
           gbsInactive:
             begin
@@ -2113,7 +2150,7 @@ begin
           NewLine;
         end;
 
-        if GwtStatus <> gbsInactive then
+        if GwtStatus = gbsActive then
         begin
           WriteInteger(ReachNumber);
           WriteString(' RAINFALL');

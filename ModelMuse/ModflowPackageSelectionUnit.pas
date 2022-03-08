@@ -1623,6 +1623,9 @@ Type
     FSaveBudget: Boolean;
     FPrintFlows: Boolean;
     FWriteConvergenceData: Boolean;
+    FSaveGwtBudget: Boolean;
+    FSaveGwtConcentration: Boolean;
+    FSaveGwtBudgetCsv: Boolean;
     function GetSurfDepDepth: Double;
     procedure SetPrintFlows(const Value: Boolean);
     procedure SetPrintStage(const Value: Boolean);
@@ -1631,6 +1634,9 @@ Type
     procedure SetStoredSurfDepDepth(const Value: TRealStorage);
     procedure SetSurfDepDepth(const Value: Double);
     procedure SetWriteConvergenceData(const Value: Boolean);
+    procedure SetSaveGwtBudget(const Value: Boolean);
+    procedure SetSaveGwtConcentration(const Value: Boolean);
+    procedure SetSaveGwtBudgetCsv(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
@@ -1656,6 +1662,28 @@ Type
     // PACKAGE_CONVERGENCE
     property WriteConvergenceData: Boolean read FWriteConvergenceData
       write SetWriteConvergenceData Stored True;
+    // BUDGET FILEOUT budgetfile
+    property SaveGwtBudget: Boolean read FSaveGwtBudget write SetSaveGwtBudget
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
+    // [CONCENTRATION FILEOUT <concfile>]
+    property SaveGwtConcentration: Boolean read FSaveGwtConcentration
+      write SetSaveGwtConcentration
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
+    // [BUDGETCSV FILEOUT <budgetcsvfile>]
+    property SaveGwtBudgetCsv: Boolean read FSaveGwtBudgetCsv write SetSaveGwtBudgetCsv
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
   end;
 
 
@@ -2111,6 +2139,8 @@ Type
     FWriteConvergenceData: Boolean;
     FMaxPicardIteration: Integer;
     FSaveGwtBudget: Boolean;
+    FSaveGwtConcentration: Boolean;
+    FSaveGwtBudgetCsv: Boolean;
     procedure SetMaxIteration(const Value: Integer);
     procedure SetStoredMaxDepthChange(const Value: TRealStorage);
     procedure SetSaveBudgetFile(const Value: Boolean);
@@ -2142,6 +2172,8 @@ Type
     procedure SetWriteConvergenceData(const Value: Boolean);
     procedure SetMaxPicardIteration(const Value: Integer);
     procedure SetSaveGwtBudget(const Value: Boolean);
+    procedure SetSaveGwtConcentration(const Value: Boolean);
+    procedure SetSaveGwtBudgetCsv(const Value: Boolean);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -2186,8 +2218,23 @@ Type
       write SetWriteConvergenceData Stored True;
     // GWT
 
+    // [BUDGETCSV FILEOUT <budgetcsvfile>]
+    property SaveGwtBudgetCsv: Boolean read FSaveGwtBudgetCsv write SetSaveGwtBudgetCsv
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
     // BUDGET FILEOUT budgetfile
     property SaveGwtBudget: Boolean read FSaveGwtBudget write SetSaveGwtBudget
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
+    // [CONCENTRATION FILEOUT <concfile>]
+    property SaveGwtConcentration: Boolean read FSaveGwtConcentration
+      write SetSaveGwtConcentration
     {$IFDEF GWT}
       stored True;
     {$else}
@@ -20114,6 +20161,9 @@ begin
     SaveStageFile := SourceSfr.SaveStageFile;
     SaveBudgetFile := SourceSfr.SaveBudgetFile;
     WriteConvergenceData := SourceSfr.WriteConvergenceData;
+    SaveGwtBudget := SourceSfr.SaveGwtBudget;
+    SaveGwtConcentration := SourceSfr.SaveGwtConcentration;
+    SaveGwtBudgetCsv := SourceSfr.SaveGwtBudgetCsv;
   end;
   inherited;
 end;
@@ -20359,6 +20409,11 @@ begin
   FPrintStage := True;
   FPrintFlows := True;
   FWriteConvergenceData := True;
+
+  // GWT
+  FSaveGwtBudgetCsv := True;
+  FSaveGwtBudget := True;
+  FSaveGwtConcentration := True;
 end;
 
 procedure TSfrModflow6PackageSelection.SetMaxDepthChange(const Value: double);
@@ -20395,6 +20450,18 @@ end;
 procedure TSfrModflow6PackageSelection.SetSaveGwtBudget(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveGwtBudget, Value);
+end;
+
+procedure TSfrModflow6PackageSelection.SetSaveGwtBudgetCsv(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtBudgetCsv, Value);
+end;
+
+procedure TSfrModflow6PackageSelection.SetSaveGwtConcentration(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtConcentration, Value);
 end;
 
 procedure TSfrModflow6PackageSelection.SetSaveStageFile(const Value: Boolean);
@@ -20847,6 +20914,9 @@ begin
     SaveBudget := LakeSource.SaveBudget;
     SurfDepDepth := LakeSource.SurfDepDepth;
     WriteConvergenceData := LakeSource.WriteConvergenceData;
+    SaveGwtBudget := LakeSource.SaveGwtBudget;
+    SaveGwtConcentration := LakeSource.SaveGwtConcentration;
+    SaveGwtBudgetCsv := LakeSource.SaveGwtBudgetCsv;
   end;
 end;
 
@@ -20878,6 +20948,10 @@ begin
   SaveBudget := False;
   SurfDepDepth := 0.2;
   FWriteConvergenceData := True;
+  // GWT
+  FSaveGwtBudget := True;
+  FSaveGwtConcentration := True;
+  FSaveGwtBudgetCsv := True;
 end;
 
 procedure TLakeMf6PackageSelection.SetPrintFlows(const Value: Boolean);
@@ -20893,6 +20967,22 @@ end;
 procedure TLakeMf6PackageSelection.SetSaveBudget(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveBudget, Value);
+end;
+
+procedure TLakeMf6PackageSelection.SetSaveGwtBudget(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtBudget, Value);
+end;
+
+procedure TLakeMf6PackageSelection.SetSaveGwtBudgetCsv(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtBudgetCsv, Value);
+end;
+
+procedure TLakeMf6PackageSelection.SetSaveGwtConcentration(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtConcentration, Value);
 end;
 
 procedure TLakeMf6PackageSelection.SetSaveStage(const Value: Boolean);
