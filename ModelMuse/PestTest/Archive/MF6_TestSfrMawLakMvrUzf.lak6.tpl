@@ -1,6 +1,6 @@
 ptf @
 etf %
-# LAK: Lake package for MODFLOW 6 file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# LAK: Lake package for MODFLOW 6 file created on 3/8/2022 by ModelMuse version 4.3.0.84.
 # (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     BOUNDNAMES
@@ -24,6 +24,7 @@ BEGIN DIMENSIONS
 END DIMENSIONS
 
 BEGIN PACKAGEDATA
+# <lakeno> <strt> <nlakeconn> [<aux(naux)>] [<boundname>]
        1 @                    LakeS@     16 'Lake' 
        2  0.000000000000E+000      7 'Lake2' 
        3 @                    LakeS@      1 'Object1' 

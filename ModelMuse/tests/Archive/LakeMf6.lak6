@@ -1,4 +1,4 @@
-# LAK: Lake package for MODFLOW 6 file created on 10/2/2020 by ModelMuse version 4.3.0.14.
+# LAK: Lake package for MODFLOW 6 file created on 3/8/2022 by ModelMuse version 4.3.0.84.
 BEGIN OPTIONS
     BOUNDNAMES
     PRINT_INPUT
@@ -17,6 +17,7 @@ BEGIN DIMENSIONS
 END DIMENSIONS
 
 BEGIN PACKAGEDATA
+# <lakeno> <strt> <nlakeconn> [<aux(naux)>] [<boundname>]
        1  4.400000000000E+001     78 'Lake1' 
        2  3.520000000000E+001     32 'Lake2' 
 END PACKAGEDATA
