@@ -10500,6 +10500,8 @@ const
 //                3D SUTRA models.
 //    '4.3.0.85' Bug fix: Fixed bug that resulted in an invalid SUTRA fishnet
 //                mesh when the "increase backwards" option was used.
+//    '4.3.0.86' Bug fix: Fixed bug that could result in Assertion failures when
+//                creating BCS files.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
@@ -10507,7 +10509,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.85';
+  IIModelVersion = '4.3.0.86';
 
 function IModelVersion: string;
 begin

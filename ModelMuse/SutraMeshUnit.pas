@@ -607,6 +607,7 @@ Type
     function GetBottom: Double;
     function GetTop: Double;
     function GetBoundaryNode: Boolean;
+    procedure SetActive(const Value: Boolean);
   protected
     function GetActiveElementCount: integer;
     function GetActiveElement(Index: Integer): IElement;
@@ -638,7 +639,7 @@ Type
   published
     property Z: FastGEO.TFloat read GetZ write SetZ;
     property Node2D_Number: integer read GetNode2D_Number write SetNode2D_Number;
-    property Active: Boolean read GetActive write FActive;
+    property Active: Boolean read GetActive write SetActive;
   end;
 
   TSutraNode3D_List = TList<TSutraNode3D>;
@@ -747,6 +748,7 @@ Type
     function GetLayer: Integer;
     function GetNodeI(Index: integer): INode3D;
     function GetNodeLocation(Index: integer): TPoint3D;
+    procedure SetActive(const Value: Boolean);
   protected
     function GetActiveNode(Index: Integer): INode;
     function GetActiveNodeCount: integer;
@@ -773,7 +775,7 @@ Type
     property NodeLocation[Index: integer]: TPoint3D read GetNodeLocation;
   published
     property Nodes: TSutraNodeNumber3D_Collection read FNodes write SetNodes;
-    property Active: Boolean read GetActive write FActive;
+    property Active: Boolean read GetActive write SetActive;
   end;
 
   TSutraElement3DList = class(TList<TSutraElement3D>);
@@ -5016,6 +5018,11 @@ begin
   result := Sqrt(Sqr(FNode2D.ReferenceLength) + Sqr(Top-Bottom));
 end;
 
+procedure TSutraNode3D.SetActive(const Value: Boolean);
+begin
+  FActive := Value;
+end;
+
 procedure TSutraNode3D.SetLocation(const Value: TPoint2D);
 begin
   Node2D.X := Value.x;
@@ -6329,6 +6336,11 @@ function TSutraElement3D.ReferenceLength: double;
 begin
   result := Sqrt(Sqr(FElement2D.ReferenceLength)
     + Sqr(UpperElevation-LowerElevation));
+end;
+
+procedure TSutraElement3D.SetActive(const Value: Boolean);
+begin
+  FActive := Value;
 end;
 
 procedure TSutraElement3D.SetNodes(const Value: TSutraNodeNumber3D_Collection);

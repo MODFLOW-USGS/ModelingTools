@@ -1489,29 +1489,32 @@ begin
           for ColIndex := StartCol to
             Max(PriorUDataArray.MaxColumn, UDataArray.MaxColumn) do
           begin
-            if UDataArray.IsValue[LayerIndex, RowIndex, ColIndex]
-              <> PriorUDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+            if FNodeNumbers.IsValue[LayerIndex, RowIndex, ColIndex] then
             begin
-              Inc(Count);
-            end
-            else if UDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
-            begin
-              if (UDataArray.RealData[LayerIndex, RowIndex, ColIndex]
-                <> PriorUDataArray.RealData[LayerIndex, RowIndex, ColIndex])
-                or UFormulasUsed[LayerIndex, ColIndex] then
+              if UDataArray.IsValue[LayerIndex, RowIndex, ColIndex]
+                <> PriorUDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
               begin
                 Inc(Count);
               end
-              else
+              else if UDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
               begin
-                if PQDataArray <> nil then
+                if (UDataArray.RealData[LayerIndex, RowIndex, ColIndex]
+                  <> PriorUDataArray.RealData[LayerIndex, RowIndex, ColIndex])
+                  or UFormulasUsed[LayerIndex, ColIndex] then
                 begin
-                  if (PQDataArray.RealData[LayerIndex, RowIndex, ColIndex]
-                    <> PriorPQDataArray.RealData[LayerIndex, RowIndex, ColIndex])
-                    or PQFormulasUsed[LayerIndex, ColIndex]  then
+                  Inc(Count);
+                end
+                else
+                begin
+                  if PQDataArray <> nil then
                   begin
-                    Inc(Count);
-                  end
+                    if (PQDataArray.RealData[LayerIndex, RowIndex, ColIndex]
+                      <> PriorPQDataArray.RealData[LayerIndex, RowIndex, ColIndex])
+                      or PQFormulasUsed[LayerIndex, ColIndex]  then
+                    begin
+                      Inc(Count);
+                    end
+                  end;
                 end;
               end;
             end;
@@ -1720,74 +1723,77 @@ begin
       begin
         for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
         begin
-          Changed := False;
-          if PriorUDataArray.IsValue[LayerIndex, RowIndex,ColIndex]
-            <> UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+          if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex] then
           begin
-            Changed := True;
-          end
-          else
-          begin
-            if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+            Changed := False;
+            if PriorUDataArray.IsValue[LayerIndex, RowIndex,ColIndex]
+              <> UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
             begin
-              Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
-              Assert(PriorPQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
-              Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
-                <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex])
-                or (PQDataArray.RealData[LayerIndex, RowIndex,ColIndex]
-                <> PriorPqDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
-              if not Changed {and WritingTemplate} then
-              begin
-                if PQFormulasUsed[LayerIndex, ColIndex]
-                  or UFormulasUsed[LayerIndex, ColIndex] then
-                begin
-                  Changed := True;
-                end;
-              end;
-            end;
-          end;
-          if Changed then
-          begin
-            PQFormula := '';
-            UFormula := '';
-            if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
-            begin
-              Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
-              IQCP1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
-              Assert(IQCP1 > 0);
-              if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
-              begin
-                IQCP1 := -IQCP1;
-              end;
-              QINC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
-              UINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
-
-              Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
-              Assert(PQFormulasUsed.IsValue[LayerIndex, ColIndex]);
-              Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
-              Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
-              if PQFormulasUsed[LayerIndex, ColIndex] then
-              begin
-                PQFormula := PQFormulas[LayerIndex, RowIndex,ColIndex];
-                ExtendedTemplateFormula(PQFormula);
-//                  PQFormula := Format(StrExtendedTemplateFormat, [PQFormula]);
-              end;
-              if UFormulasUsed[LayerIndex, ColIndex] then
-              begin
-                UFormula := UFormulas[LayerIndex, RowIndex,ColIndex];
-                ExtendedTemplateFormula(UFormula);
-//                  UFormula := Format(StrExtendedTemplateFormat, [UFormula]);
-              end;
+              Changed := True;
             end
             else
             begin
-              Assert(not PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
-              IQCP1 := -FNodeNumbers[LayerIndex, RowIndex,ColIndex] - 1;
-              Assert(IQCP1 < 0);
-              QINC1 := 0.0;
-              UINC1 := 0.0;
+              if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
+                Assert(PriorPQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
+                Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
+                  <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex])
+                  or (PQDataArray.RealData[LayerIndex, RowIndex,ColIndex]
+                  <> PriorPqDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
+                if not Changed {and WritingTemplate} then
+                begin
+                  if PQFormulasUsed[LayerIndex, ColIndex]
+                    or UFormulasUsed[LayerIndex, ColIndex] then
+                  begin
+                    Changed := True;
+                  end;
+                end;
+              end;
             end;
-            WriteALine;
+            if Changed then
+            begin
+              PQFormula := '';
+              UFormula := '';
+              if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
+                IQCP1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
+                Assert(IQCP1 > 0);
+                if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  IQCP1 := -IQCP1;
+                end;
+                QINC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+                UINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+
+                Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                Assert(PQFormulasUsed.IsValue[LayerIndex, ColIndex]);
+                Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
+                if PQFormulasUsed[LayerIndex, ColIndex] then
+                begin
+                  PQFormula := PQFormulas[LayerIndex, RowIndex,ColIndex];
+                  ExtendedTemplateFormula(PQFormula);
+  //                  PQFormula := Format(StrExtendedTemplateFormat, [PQFormula]);
+                end;
+                if UFormulasUsed[LayerIndex, ColIndex] then
+                begin
+                  UFormula := UFormulas[LayerIndex, RowIndex,ColIndex];
+                  ExtendedTemplateFormula(UFormula);
+  //                  UFormula := Format(StrExtendedTemplateFormat, [UFormula]);
+                end;
+              end
+              else
+              begin
+                Assert(not PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
+                IQCP1 := -FNodeNumbers[LayerIndex, RowIndex,ColIndex] - 1;
+                Assert(IQCP1 < 0);
+                QINC1 := 0.0;
+                UINC1 := 0.0;
+              end;
+              WriteALine;
+            end;
           end;
         end;
       end;
@@ -1937,53 +1943,56 @@ begin
       begin
         for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
         begin
-          Changed := False;
-          if PriorUDataArray.IsValue[LayerIndex, RowIndex,ColIndex]
-            <> UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+          if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex] then
           begin
-            Changed := True;
-          end
-          else
-          begin
-            if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+            Changed := False;
+            if PriorUDataArray.IsValue[LayerIndex, RowIndex,ColIndex]
+              <> UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
             begin
-              Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
-                <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
-              if not Changed {and WritingTemplate} then
-              begin
-                if UFormulasUsed[LayerIndex, ColIndex] then
-                begin
-                  Changed := True;
-                end;
-              end;
-            end;
-          end;
-          if Changed then
-          begin
-            if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
-            begin
-              IQCU1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
-              Assert(IQCU1 > 0);
-              if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
-              begin
-                IQCU1 := -IQCU1;
-              end;
-              QUINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
-              Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
-              Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
-              if UFormulasUsed[LayerIndex, ColIndex] then
-              begin
-                UFormula := UFormulas[LayerIndex, RowIndex,ColIndex];
-                ExtendedTemplateFormula(UFormula);
-              end;
+              Changed := True;
             end
             else
             begin
-              IQCU1 := -FNodeNumbers[LayerIndex, RowIndex,ColIndex] - 1;
-              Assert(IQCU1 < 0);
-              QUINC1 := 0.0;
+              if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
+                  <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
+                if not Changed {and WritingTemplate} then
+                begin
+                  if UFormulasUsed[LayerIndex, ColIndex] then
+                  begin
+                    Changed := True;
+                  end;
+                end;
+              end;
             end;
-            WriteALine;
+            if Changed then
+            begin
+              if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                IQCU1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
+                Assert(IQCU1 > 0);
+                if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  IQCU1 := -IQCU1;
+                end;
+                QUINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+                Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
+                if UFormulasUsed[LayerIndex, ColIndex] then
+                begin
+                  UFormula := UFormulas[LayerIndex, RowIndex,ColIndex];
+                  ExtendedTemplateFormula(UFormula);
+                end;
+              end
+              else
+              begin
+                IQCU1 := -FNodeNumbers[LayerIndex, RowIndex,ColIndex] - 1;
+                Assert(IQCU1 < 0);
+                QUINC1 := 0.0;
+              end;
+              WriteALine;
+            end;
           end;
         end;
       end;
@@ -2161,74 +2170,77 @@ begin
         begin
           for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
           begin
-            Changed := False;
-            if PriorUDataArray.IsValue[LayerIndex, RowIndex,ColIndex]
-              <> UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+            if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex] then
             begin
-              Changed := True;
-            end
-            else
-            begin
-              if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+              Changed := False;
+              if PriorUDataArray.IsValue[LayerIndex, RowIndex,ColIndex]
+                <> UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
               begin
-                Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
-                Assert(PriorPQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
-                Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
-                  <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex])
-                  or (PQDataArray.RealData[LayerIndex, RowIndex,ColIndex]
-                  <> PriorPqDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
-                if not Changed {and WritingTemplate} then
-                begin
-                  if PQFormulasUsed[LayerIndex, ColIndex]
-                    or UFormulasUsed[LayerIndex, ColIndex] then
-                  begin
-                    Changed := True;
-                  end;
-                end;
-              end;
-            end;
-            if Changed then
-            begin
-              PQFormula := '';
-              UFormula := '';
-              if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
-              begin
-                Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
-                IPBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
-                Assert(IPBC1 > 0);
-                if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
-                begin
-                  IPBC1 := -IPBC1;
-                end;
-                PBC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
-                UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
-
-                Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
-                Assert(PQFormulasUsed.IsValue[LayerIndex, ColIndex]);
-                Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
-                Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
-                if PQFormulasUsed[LayerIndex, ColIndex] then
-                begin
-                  PQFormula := PQFormulas[LayerIndex, RowIndex,ColIndex];
-                  ExtendedTemplateFormula(PQFormula);
-//                  PQFormula := Format(StrExtendedTemplateFormat, [PQFormula]);
-                end;
-                if UFormulasUsed[LayerIndex, ColIndex] then
-                begin
-                  UFormula := UFormulas[LayerIndex, RowIndex,ColIndex];
-                  ExtendedTemplateFormula(UFormula);
-//                  UFormula := Format(StrExtendedTemplateFormat, [UFormula]);
-                end;
+                Changed := True;
               end
               else
               begin
-                Assert(not PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
-                IPBC1 := -FNodeNumbers[LayerIndex, RowIndex,ColIndex] - 1;
-                Assert(IPBC1 < 0);
-                PBC1 := 0.0;
-                UBC1 := 0.0;
+                if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
+                  Assert(PriorPQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
+                  Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
+                    <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex])
+                    or (PQDataArray.RealData[LayerIndex, RowIndex,ColIndex]
+                    <> PriorPqDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
+                  if not Changed {and WritingTemplate} then
+                  begin
+                    if PQFormulasUsed[LayerIndex, ColIndex]
+                      or UFormulasUsed[LayerIndex, ColIndex] then
+                    begin
+                      Changed := True;
+                    end;
+                  end;
+                end;
               end;
-              WriteALine;
+              if Changed then
+              begin
+                PQFormula := '';
+                UFormula := '';
+                if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
+                  IPBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
+                  Assert(IPBC1 > 0);
+                  if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+                  begin
+                    IPBC1 := -IPBC1;
+                  end;
+                  PBC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+                  UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+
+                  Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                  Assert(PQFormulasUsed.IsValue[LayerIndex, ColIndex]);
+                  Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                  Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
+                  if PQFormulasUsed[LayerIndex, ColIndex] then
+                  begin
+                    PQFormula := PQFormulas[LayerIndex, RowIndex,ColIndex];
+                    ExtendedTemplateFormula(PQFormula);
+  //                  PQFormula := Format(StrExtendedTemplateFormat, [PQFormula]);
+                  end;
+                  if UFormulasUsed[LayerIndex, ColIndex] then
+                  begin
+                    UFormula := UFormulas[LayerIndex, RowIndex,ColIndex];
+                    ExtendedTemplateFormula(UFormula);
+  //                  UFormula := Format(StrExtendedTemplateFormat, [UFormula]);
+                  end;
+                end
+                else
+                begin
+                  Assert(not PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
+                  IPBC1 := -FNodeNumbers[LayerIndex, RowIndex,ColIndex] - 1;
+                  Assert(IPBC1 < 0);
+                  PBC1 := 0.0;
+                  UBC1 := 0.0;
+                end;
+                WriteALine;
+              end;
             end;
           end;
         end;
@@ -2372,53 +2384,56 @@ begin
       begin
         for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
         begin
-          Changed := False;
-          if PriorUDataArray.IsValue[LayerIndex, RowIndex,ColIndex]
-            <> UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+          if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex] then
           begin
-            Changed := True;
-          end
-          else
-          begin
-            if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+            Changed := False;
+            if PriorUDataArray.IsValue[LayerIndex, RowIndex,ColIndex]
+              <> UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
             begin
-              Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
-                <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
-              if not Changed {and WritingTemplate} then
-              begin
-                if UFormulasUsed[LayerIndex, ColIndex] then
-                begin
-                  Changed := True;
-                end;
-              end;
-            end;
-          end;
-          if Changed then
-          begin
-            if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
-            begin
-              IUBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
-              Assert(IUBC1 > 0);
-              if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
-              begin
-                IUBC1 := -IUBC1;
-              end;
-              UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
-              Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
-              Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
-              if UFormulasUsed[LayerIndex, ColIndex] then
-              begin
-                UFormula := UFormulas[LayerIndex, RowIndex,ColIndex];
-                ExtendedTemplateFormula(UFormula);
-              end;
+              Changed := True;
             end
             else
             begin
-              IUBC1 := -FNodeNumbers[LayerIndex, RowIndex,ColIndex] - 1;
-              Assert(IUBC1 < 0);
-              UBC1 := 0.0;
+              if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
+                  <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
+                if not Changed {and WritingTemplate} then
+                begin
+                  if UFormulasUsed[LayerIndex, ColIndex] then
+                  begin
+                    Changed := True;
+                  end;
+                end;
+              end;
             end;
-            WriteALine;
+            if Changed then
+            begin
+              if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                IUBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
+                Assert(IUBC1 > 0);
+                if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  IUBC1 := -IUBC1;
+                end;
+                UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+                Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
+                if UFormulasUsed[LayerIndex, ColIndex] then
+                begin
+                  UFormula := UFormulas[LayerIndex, RowIndex,ColIndex];
+                  ExtendedTemplateFormula(UFormula);
+                end;
+              end
+              else
+              begin
+                IUBC1 := -FNodeNumbers[LayerIndex, RowIndex,ColIndex] - 1;
+                Assert(IUBC1 < 0);
+                UBC1 := 0.0;
+              end;
+              WriteALine;
+            end;
           end;
         end;
       end;
