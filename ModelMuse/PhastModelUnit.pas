@@ -10502,7 +10502,9 @@ const
 //                mesh when the "increase backwards" option was used.
 //    '4.3.0.86' Bug fix: Fixed bug that could result in Assertion failures when
 //                creating BCS files.
-//    '4.3.0.87' Bug fix: Fixed export of MT3D-USGS lake transport package for
+//    '4.3.0.87' Bug fix: Fixed bug that resulted in an invalid SUTRA fishnet
+//                mesh when the "increase forward" option was used.
+//    '4.3.0.88' Bug fix: Fixed export of MT3D-USGS lake transport package for
 //                models with more than one chemical species.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
@@ -10511,7 +10513,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.87';
+  IIModelVersion = '4.3.0.88';
 
 function IModelVersion: string;
 begin

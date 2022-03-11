@@ -29033,5 +29033,11 @@ object TTaskHistory
         'MF6 GWT'
         'Bug fix'
         'Testing')
+    end
+    item
+      Date = 44629.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Video')
     end>
 end

@@ -497,6 +497,12 @@ begin
           begin
             result[InteriorIndex] := result[InteriorIndex]/ Sum;
           end;
+          for InteriorIndex := 0 to (Length(result) div 2) - 1 do
+          begin
+            Temp := result[InteriorIndex];
+            result[InteriorIndex] := result[Length(result) -1 - InteriorIndex];
+            result[Length(result) -1 - InteriorIndex] := Temp;
+          end;
         end;
       gmDown:
         begin
