@@ -262,9 +262,9 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
 begin
-  WriteU2DRELHeader('CINITLAK', matStructured, '');
   for RowIndex := 0 to Length(FInitialConcentrations) - 1 do
   begin
+    WriteU2DRELHeader('CINITLAK', matStructured, '');
     for ColIndex := 0 to Length(FInitialConcentrations[0]) - 1 do
     begin
       WriteFloat(FInitialConcentrations[RowIndex,ColIndex]);
@@ -401,7 +401,7 @@ var
   LakeNum: Integer;
 begin
   NCOMP := Model.NumberOfMt3dChemComponents;
-  SetLength(FInitialConcentrations, FLakeObjects.Count, NCOMP);
+  SetLength(FInitialConcentrations, NCOMP, FLakeObjects.Count);
   Compiler := Model.rpThreeDFormulaCompiler;
   for ScreenObjectIndex := 0 to FLakeObjects.Count - 1 do
   begin
@@ -425,14 +425,14 @@ begin
         UpdateCurrentScreenObject(AScreenObject);
         Expression := Compiler.CurrentExpression;
         Expression.Evaluate;
-        FInitialConcentrations[LakeNum, ComponentIndex] := Expression.DoubleResult;
+        FInitialConcentrations[ComponentIndex, LakeNum] := Expression.DoubleResult;
       end;
     end
     else
     begin
       for ComponentIndex := 0 to NCOMP - 1 do
       begin
-        FInitialConcentrations[LakeNum, ComponentIndex] := 0;
+        FInitialConcentrations[ComponentIndex, LakeNum] := 0;
       end;
     end;
   end;
