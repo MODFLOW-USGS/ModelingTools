@@ -2262,13 +2262,16 @@ end;
 
 procedure TGwtCellData.SetSpeciesCount(const Value: Integer);
 begin
-  FSpeciesCount := Value;
-  SetLength(Concentrations, FSpeciesCount);
-  SetLength(ConcentrationAnnotations, FSpeciesCount);
-  SetLength(ConcentrationPestNames, FSpeciesCount);
-  SetLength(ConcentrationPestSeriesNames, FSpeciesCount);
-  SetLength(ConcentrationPestSeriesMethods, FSpeciesCount);
-  SetLength(ConcentrationTimeSeriesNames, FSpeciesCount);
+  if FSpeciesCount <> Value then
+  begin
+    FSpeciesCount := Value;
+    SetLength(Concentrations, FSpeciesCount);
+    SetLength(ConcentrationAnnotations, FSpeciesCount);
+    SetLength(ConcentrationPestNames, FSpeciesCount);
+    SetLength(ConcentrationPestSeriesNames, FSpeciesCount);
+    SetLength(ConcentrationPestSeriesMethods, FSpeciesCount);
+    SetLength(ConcentrationTimeSeriesNames, FSpeciesCount);
+  end;
 end;
 
 procedure WriteCompInt(Stream: TStream; Value: integer);

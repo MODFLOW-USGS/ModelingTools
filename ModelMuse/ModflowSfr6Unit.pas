@@ -4585,7 +4585,7 @@ begin
     SfrMf6RoughnessPosition: result := FValues.RoughnessTimeSeriesName;
     else
       begin
-        GwtPosition := Index - SfrMf6RoughnessPosition - Length(FValues.Diversions) - 1;
+        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition div GwtConcCount;
         SpeciesIndex := GwtPosition mod GwtConcCount;
@@ -4643,7 +4643,7 @@ begin
     SfrMf6RoughnessPosition: result := FValues.RoughnessPest;
     else
       begin
-        GwtPosition := Index - SfrMf6RoughnessPosition - Length(FValues.Diversions) - 1;
+        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition div GwtConcCount;
         SpeciesIndex := GwtPosition mod GwtConcCount;
@@ -4692,7 +4692,7 @@ begin
     SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesMethod;
     else
       begin
-        GwtPosition := Index - SfrMf6RoughnessPosition - Length(FValues.Diversions) - 1;
+        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition div GwtConcCount;
         SpeciesIndex := GwtPosition mod GwtConcCount;
@@ -4744,7 +4744,7 @@ begin
     SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesName;
     else
       begin
-        GwtPosition := Index - SfrMf6RoughnessPosition - Length(FValues.Diversions) - 1;
+        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition div GwtConcCount;
         SpeciesIndex := GwtPosition mod GwtConcCount;
@@ -4806,7 +4806,7 @@ begin
         end
         else
         begin
-          GwtPosition := Index - Length(FValues.Diversions);
+          GwtPosition := Index - Length(FValues.Diversions) - 1;
           GwtSource := GwtPosition div GwtConcCount;
           SpeciesIndex := GwtPosition mod GwtConcCount;
           case GwtSource of
@@ -4862,7 +4862,7 @@ begin
         end
         else
         begin
-          GwtPosition := Index - Length(FValues.Diversions);
+          GwtPosition := Index - Length(FValues.Diversions) - 1;
           GwtSource := GwtPosition div GwtConcCount;
           SpeciesIndex := GwtPosition mod GwtConcCount;
           case GwtSource of
@@ -4963,7 +4963,7 @@ begin
       FValues.RoughnessTimeSeriesName := Value;
     else
       begin
-        GwtPosition := Index - SfrMf6RoughnessPosition - Length(FValues.Diversions) - 1;
+        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition div GwtConcCount;
         SpeciesIndex := GwtPosition mod GwtConcCount;

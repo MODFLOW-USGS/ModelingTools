@@ -253,7 +253,7 @@ uses
   frmFormulaErrorsUnit, System.Math, Modflow6ObsWriterUnit,
   FastGEO, ModflowBoundaryDisplayUnit, ModflowMvrWriterUnit, ModflowMvrUnit,
   ModflowParameterUnit, ModelMuseUtilities, Modflow6TimeSeriesUnit,
-  Mt3dmsChemSpeciesUnit, frmGoPhastUnit;
+  Mt3dmsChemSpeciesUnit, frmGoPhastUnit, Mt3dmsChemUnit;
 
 resourcestring
   StrTheFollowingObject = 'The following objects are supposed to define lake' +
@@ -330,6 +330,7 @@ resourcestring
   StrNoOutletProperties = 'No outlet properties defined';
   StrInTheLakeDefinedProperties = 'In the lake defined by the object %0:s, n' +
   'o outlet properties are defined for outlet %1:d.';
+  StrLakeChemSpeciesD = 'Lake Chem Species %d';
 
 const
   StrLakeFlowPackageName = 'LAK-1';
@@ -1388,6 +1389,9 @@ var
   TimeIndex: Integer;
   LakeItem: TLakeTimeItem;
   LakeSetting: TLakeSetting;
+  SpeciesIndex: Integer;
+  GwtFormulaIndex: Integer;
+  FormulaIndex: Integer;
   procedure AssignValue(DataSetIdentifier: Integer; const FormatString: string);
   var
     Formula: string;
@@ -1483,6 +1487,20 @@ begin
       AssignValue(Lak6RunoffPosition, StrLakeRunoffAt0g);
       AssignValue(Lak6InflowPosition, StrLakeInflowAt0g);
       AssignValue(Lak6WithdrawalPosition, StrLakeWithdrawalAt);
+
+      if Model.GwtUsed then
+      begin
+//        GwtFormulaIndex := Lak6GwtPestStartPosition;
+//        for FormulaIndex := 0 to 5 - 1 do
+//        begin
+          for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+          begin
+            AssignValue(Lak6GwtPestStartPosition + SpeciesIndex,
+              Format(StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+//            Inc(GwtFormulaIndex);
+          end;
+//        end;
+      end;
     end;
   end;
 end;
@@ -2159,6 +2177,8 @@ var
   Obs: TLakObservation;
   MfObs: TModflow6Obs;
   PestParameterName: string;
+  SpeciesIndex: Integer;
+  Item: TStringConcValueItem;
 begin
   if Model.DisvUsed then
   begin
@@ -2195,6 +2215,25 @@ begin
         ALake.FStartingStage := EvaluateFormula(LakeBoundary.StartingStage,
           StrLakeStartingStage, ALake.FScreenObject.Name, PestParameterName);
         ALake.FStartingStagePestName := PestParameterName;
+
+        if Model.GwtUsed then
+        begin
+          ALake.FStartingConcentrations.SpeciesCount :=
+            Model.MobileComponents.Count;
+          While LakeBoundary.StartingConcentrations.Count <
+            Model.MobileComponents.Count do
+          begin
+            Item := LakeBoundary.StartingConcentrations.Add;
+            Item.Value := '0';
+            Item.Name := Model.MobileComponents[
+              LakeBoundary.StartingConcentrations.Count-1].Name;
+          end;
+          While LakeBoundary.StartingConcentrationPestNames.Count <
+            Model.MobileComponents.Count do
+          begin
+            LakeBoundary.StartingConcentrationPestNames.Add('');
+          end;
+        end;
 
         ScreenObject.GetCellsToAssign('0', nil, nil, ALake.FCellList, alAll, Model);
         if LakeBoundary.Embedded and (ALake.FCellList.Count <> 1) then
@@ -3059,7 +3098,7 @@ begin
       if frmGoPhast.PhastModel.GwtUsed then
       begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
-        Index := Index - Lak6WithdrawalPosition -1;
+        Index := Index - Lak6GwtPestStartPosition;
         if Index < Length(SpecifiedConcentrations.ConcentrationPestSeriesMethods) then
         begin
           result := SpecifiedConcentrations.ConcentrationPestSeriesMethods[Index];
@@ -3106,6 +3145,8 @@ begin
 end;
 
 function TLakeSetting.GetPestName(Index: Integer): string;
+var
+  SpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -3134,13 +3175,58 @@ begin
       end;
     else
     begin
-      result := '';
-      Assert(False);
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        Index := Index - Lak6GwtPestStartPosition;
+        if Index < Length(SpecifiedConcentrations.ConcentrationPestNames) then
+        begin
+          result := SpecifiedConcentrations.ConcentrationPestNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(RainfallConcentrations.ConcentrationPestNames) then
+        begin
+          result := RainfallConcentrations.ConcentrationPestNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(EvapConcentrations.ConcentrationPestNames) then
+        begin
+          result := EvapConcentrations.ConcentrationPestNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(RunoffConcentrations.ConcentrationPestNames) then
+        begin
+          result := RunoffConcentrations.ConcentrationPestNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(InflowConcentrations.ConcentrationPestNames) then
+        begin
+          result := InflowConcentrations.ConcentrationPestNames[Index];
+          Exit;
+        end;
+        result := '';
+        Assert(False);
+      end
+      else
+      begin
+        result := '';
+        Assert(False);
+      end;
     end;
   end;
 end;
 
 function TLakeSetting.GetPestSeries(Index: Integer): string;
+var
+  SpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -3169,13 +3255,58 @@ begin
       end;
     else
     begin
-      result := '';
-      Assert(False);
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        Index := Index - Lak6GwtPestStartPosition;
+        if Index < Length(SpecifiedConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          result := SpecifiedConcentrations.ConcentrationPestSeriesNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(RainfallConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          result := RainfallConcentrations.ConcentrationPestSeriesNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(EvapConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          result := EvapConcentrations.ConcentrationPestSeriesNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(RunoffConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          result := RunoffConcentrations.ConcentrationPestSeriesNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(InflowConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          result := InflowConcentrations.ConcentrationPestSeriesNames[Index];
+          Exit;
+        end;
+        result := '';
+        Assert(False);
+      end
+      else
+      begin
+        result := '';
+        Assert(False);
+      end;
     end;
   end;
 end;
 
 function TLakeSetting.GetTimeSeriesName(Index: Integer): string;
+var
+  SpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -3204,13 +3335,58 @@ begin
       end;
     else
     begin
-      result := '';
-      Assert(False);
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        Index := Index - Lak6GwtPestStartPosition;
+        if Index < Length(SpecifiedConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          result := SpecifiedConcentrations.ConcentrationTimeSeriesNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(RainfallConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          result := RainfallConcentrations.ConcentrationTimeSeriesNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(EvapConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          result := EvapConcentrations.ConcentrationTimeSeriesNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(RunoffConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          result := RunoffConcentrations.ConcentrationTimeSeriesNames[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(InflowConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          result := InflowConcentrations.ConcentrationTimeSeriesNames[Index];
+          Exit;
+        end;
+        result := '';
+        Assert(False);
+      end
+      else
+      begin
+        result := '';
+        Assert(False);
+      end;
     end;
   end;
 end;
 
 function TLakeSetting.GetValue(Index: Integer): double;
+var
+  SpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -3239,14 +3415,59 @@ begin
       end;
     else
     begin
-      result := 0;
-      Assert(False);
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        Index := Index - Lak6GwtPestStartPosition;
+        if Index < Length(SpecifiedConcentrations.Concentrations) then
+        begin
+          result := SpecifiedConcentrations.Concentrations[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(RainfallConcentrations.Concentrations) then
+        begin
+          result := RainfallConcentrations.Concentrations[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(EvapConcentrations.Concentrations) then
+        begin
+          result := EvapConcentrations.Concentrations[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(RunoffConcentrations.Concentrations) then
+        begin
+          result := RunoffConcentrations.Concentrations[Index];
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        if Index < Length(InflowConcentrations.Concentrations) then
+        begin
+          result := InflowConcentrations.Concentrations[Index];
+          Exit;
+        end;
+        result := 0;
+        Assert(False);
+      end
+      else
+      begin
+        result := 0;
+        Assert(False);
+      end;
     end;
   end;
 end;
 
 procedure TLakeSetting.SetPestMethod(Index: Integer;
   const Value: TPestParamMethod);
+var
+  SpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -3275,12 +3496,61 @@ begin
       end;
     else
     begin
-      Assert(False);
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        SpecifiedConcentrations.SpeciesCount := SpeciesCount;
+        Index := Index - Lak6GwtPestStartPosition;
+        if Index < Length(SpecifiedConcentrations.ConcentrationPestSeriesMethods) then
+        begin
+          SpecifiedConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RainfallConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RainfallConcentrations.ConcentrationPestSeriesMethods) then
+        begin
+          RainfallConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        EvapConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(EvapConcentrations.ConcentrationPestSeriesMethods) then
+        begin
+          EvapConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RunoffConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RunoffConcentrations.ConcentrationPestSeriesMethods) then
+        begin
+          RunoffConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        InflowConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(InflowConcentrations.ConcentrationPestSeriesMethods) then
+        begin
+          InflowConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          Exit;
+        end;
+        Assert(False);
+      end
+      else
+      begin
+        Assert(False);
+      end;
     end;
   end;
 end;
 
 procedure TLakeSetting.SetPestName(Index: Integer; const Value: string);
+var
+  SpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -3309,12 +3579,61 @@ begin
       end;
     else
     begin
-      Assert(False);
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        SpecifiedConcentrations.SpeciesCount := SpeciesCount;
+        Index := Index - Lak6GwtPestStartPosition;
+        if Index < Length(SpecifiedConcentrations.ConcentrationPestNames) then
+        begin
+          SpecifiedConcentrations.ConcentrationPestNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RainfallConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RainfallConcentrations.ConcentrationPestNames) then
+        begin
+          RainfallConcentrations.ConcentrationPestNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        EvapConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(EvapConcentrations.ConcentrationPestNames) then
+        begin
+          EvapConcentrations.ConcentrationPestNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RunoffConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RunoffConcentrations.ConcentrationPestNames) then
+        begin
+          RunoffConcentrations.ConcentrationPestNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        InflowConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(InflowConcentrations.ConcentrationPestNames) then
+        begin
+          InflowConcentrations.ConcentrationPestNames[Index] := Value;
+          Exit;
+        end;
+        Assert(False);
+      end
+      else
+      begin
+        Assert(False);
+      end;
     end;
   end;
 end;
 
 procedure TLakeSetting.SetPestSeries(Index: Integer; const Value: string);
+var
+  SpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -3343,12 +3662,61 @@ begin
       end;
     else
     begin
-      Assert(False);
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        SpecifiedConcentrations.SpeciesCount := SpeciesCount;
+        Index := Index - Lak6GwtPestStartPosition;
+        if Index < Length(SpecifiedConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          SpecifiedConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RainfallConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RainfallConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          RainfallConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        EvapConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(EvapConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          EvapConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RunoffConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RunoffConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          RunoffConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        InflowConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(InflowConcentrations.ConcentrationPestSeriesNames) then
+        begin
+          InflowConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Assert(False);
+      end
+      else
+      begin
+        Assert(False);
+      end;
     end;
   end;
 end;
 
 procedure TLakeSetting.SetTimeSeriesName(Index: Integer; const Value: string);
+var
+  SpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -3377,12 +3745,61 @@ begin
       end;
     else
     begin
-      Assert(False);
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        SpecifiedConcentrations.SpeciesCount := SpeciesCount;
+        Index := Index - Lak6GwtPestStartPosition;
+        if Index < Length(SpecifiedConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          SpecifiedConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RainfallConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RainfallConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          RainfallConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        EvapConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(EvapConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          EvapConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RunoffConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RunoffConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          RunoffConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        InflowConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(InflowConcentrations.ConcentrationTimeSeriesNames) then
+        begin
+          InflowConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          Exit;
+        end;
+        Assert(False);
+      end
+      else
+      begin
+        Assert(False);
+      end;
     end;
   end;
 end;
 
 procedure TLakeSetting.SetValue(Index: Integer; const Value: double);
+var
+  SpeciesCount: Integer;
 begin
   case Index of
     Lak6StagePosition:
@@ -3411,7 +3828,54 @@ begin
       end;
     else
     begin
-      Assert(False);
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+        SpecifiedConcentrations.SpeciesCount := SpeciesCount;
+        Index := Index - Lak6GwtPestStartPosition;
+        if Index < Length(SpecifiedConcentrations.Concentrations) then
+        begin
+          SpecifiedConcentrations.Concentrations[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RainfallConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RainfallConcentrations.Concentrations) then
+        begin
+          RainfallConcentrations.Concentrations[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        EvapConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(EvapConcentrations.Concentrations) then
+        begin
+          EvapConcentrations.Concentrations[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        RunoffConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(RunoffConcentrations.Concentrations) then
+        begin
+          RunoffConcentrations.Concentrations[Index] := Value;
+          Exit;
+        end;
+        Index := Index - SpeciesCount;
+        Assert(Index >= 0);
+        InflowConcentrations.SpeciesCount := SpeciesCount;
+        if Index < Length(InflowConcentrations.Concentrations) then
+        begin
+          InflowConcentrations.Concentrations[Index] := Value;
+          Exit;
+        end;
+        Assert(False);
+      end
+      else
+      begin
+        Assert(False);
+      end;
     end;
   end;
 end;

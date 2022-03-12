@@ -357,6 +357,7 @@ type
     FPestEvaporationMethod: TPestParamMethod;
     FPestStageMethod: TPestParamMethod;
     FStartingConcentrations: TStringConcCollection;
+    FStartingConcentrationPestNames: TStrings;
     function GetPestEvaporationFormula: string;
     function GetPestEvaporationObserver: TObserver;
     function GetPestInflowFormula: string;
@@ -382,6 +383,7 @@ type
     procedure SetPestWithdrawalFormula(const Value: string);
     procedure SetPestWithdrawalMethod(const Value: TPestParamMethod);
     procedure SetStartingConcentrations(const Value: TStringConcCollection);
+    procedure SetStartingConcentrationPestNames(const Value: TStrings);
   var
     FOutlets: TLakeOutlets;
     FLakeTable: TLakeTableMf6;
@@ -579,6 +581,13 @@ type
       Stored False
       {$ENDIF}
       ;
+      property StartingConcentrationPestNames: TStrings
+        read FStartingConcentrationPestNames
+        write SetStartingConcentrationPestNames
+        {$IFNDEF GWT}
+        Stored False
+        {$ENDIF}
+        ;
   end;
 
 function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
@@ -592,6 +601,7 @@ const
   Lak6EvaporationPosition = 3;
   Lak6InflowPosition = 4;
   Lak6WithdrawalPosition = 5;
+  Lak6GwtPestStartPosition = 6;
 
 implementation
 
@@ -830,7 +840,7 @@ begin
     Lak6WithdrawalPosition: result := Withdrawal;
     else
       begin
-        Index := Index-Lak6WithdrawalPosition -1;
+        Index := Index-Lak6GwtPestStartPosition;
         // GWT
         if frmGoPhast.PhastModel.GwtUsed then
         begin
@@ -1128,7 +1138,7 @@ begin
       Withdrawal := Value;
     else
       begin
-        Index := Index - Lak6WithdrawalPosition - 1;
+        Index := Index - Lak6GwtPestStartPosition;
         // GWT
         if frmGoPhast.PhastModel.GwtUsed then
         begin
@@ -1831,6 +1841,7 @@ begin
     ConnectionLength := LakeSource.ConnectionLength;
     StartingStage := LakeSource.StartingStage;
     StartingConcentrations := LakeSource.StartingConcentrations;
+    StartingConcentrationPestNames := LakeSource.StartingConcentrationPestNames;
 
     for Index := Lak6StagePosition to Lak6WithdrawalPosition do
     begin
@@ -1864,6 +1875,7 @@ var
 begin
   inherited;
   FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
+  FStartingConcentrationPestNames := TStringList.Create;
   CreateBoundaryObserver;
   FOutlets := TLakeOutlets.Create(Model, ScreenObject);
   FLakeTable := TLakeTableMf6.Create(Model);
@@ -1983,6 +1995,7 @@ begin
   PestInflowFormula := '';
   PestWithdrawalFormula := '';
 
+  FStartingConcentrationPestNames.Free;
   FStartingConcentrations.Free;
   FLakeTable.Free;
   FOutlets.Free;
@@ -2132,6 +2145,8 @@ begin
 end;
 
 function TLakeMf6.GetPestBoundaryFormula(FormulaIndex: integer): string;
+var
+  Item: TStringConcValueItem;
 begin
   case FormulaIndex of
     Lak6StagePosition:
@@ -2160,8 +2175,10 @@ begin
       end;
     else
       begin
-        result := inherited;
-        Assert(False);
+        FormulaIndex := FormulaIndex - Lak6GwtPestStartPosition;
+        result := StartingConcentrationPestNames[FormulaIndex];
+//        result := inherited;
+//        Assert(False);
       end;
   end;
 end;
@@ -2621,6 +2638,11 @@ end;
 procedure TLakeMf6.SetPestWithdrawalMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestWithdrawalMethod, Value);
+end;
+
+procedure TLakeMf6.SetStartingConcentrationPestNames(const Value: TStrings);
+begin
+  FStartingConcentrationPestNames := Value;
 end;
 
 procedure TLakeMf6.SetStartingConcentrations(

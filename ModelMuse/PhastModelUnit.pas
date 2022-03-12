@@ -42873,6 +42873,13 @@ begin
           try
             LakeMf6Writer.MvrWriter := ModflowMvrWriter;
             LakeMf6Writer.WriteFile(FileName);
+            if GwtUsed then
+            begin
+              for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+              begin
+                LakeMf6Writer.WriteLktFile(FileName, SpeciesIndex);
+              end;
+            end;
           finally
             LakeMf6Writer.Free;
           end;
