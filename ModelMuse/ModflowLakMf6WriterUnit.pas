@@ -1391,7 +1391,7 @@ var
   LakeSetting: TLakeSetting;
   SpeciesIndex: Integer;
   GwtFormulaIndex: Integer;
-  FormulaIndex: Integer;
+//  FormulaIndex: Integer;
   procedure AssignValue(DataSetIdentifier: Integer; const FormatString: string);
   var
     Formula: string;
@@ -1473,6 +1473,19 @@ begin
       LakeSetting.StartTime := LakeItem.StartTime;
       LakeSetting.EndTime := LakeItem.EndTime;
       LakeSetting.Status := LakeItem.Status;
+      if Model.GwtUsed then
+      begin
+        SetLength(LakeSetting.GwtStatus, Model.MobileComponents.Count);
+        while LakeItem.GwtStatus.Count < Model.MobileComponents.Count do
+        begin
+          LakeItem.GwtStatus.Add;
+        end;
+        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          LakeSetting.GwtStatus[SpeciesIndex]
+            := LakeItem.GwtStatus[SpeciesIndex].GwtBoundaryStatus;
+        end;
+      end;
 
       AssignValue(Lak6StagePosition, StrLakeStageAt0g);
       AssignValue(Lak6RainfallPosition, StrLakeRainfallAt0);
@@ -1490,16 +1503,11 @@ begin
 
       if Model.GwtUsed then
       begin
-//        GwtFormulaIndex := Lak6GwtPestStartPosition;
-//        for FormulaIndex := 0 to 5 - 1 do
-//        begin
-          for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-          begin
-            AssignValue(Lak6GwtPestStartPosition + SpeciesIndex,
-              Format(StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
-//            Inc(GwtFormulaIndex);
-          end;
-//        end;
+        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          AssignValue(Lak6GwtPestStartPosition + SpeciesIndex,
+            Format(StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+        end;
       end;
     end;
   end;
@@ -1696,7 +1704,19 @@ end;
 
 procedure TModflowLAKMf6Writer.WriteGwtFileInternal;
 begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
 
+    WriteDataSet0;
+
+    WriteGwtOptions;
+    WriteGwtPackageData;
+    WriteGwtStressPeriods;
+
+  finally
+    CloseFile;
+  end;
 end;
 
 procedure TModflowLAKMf6Writer.WriteGwtOptions;
@@ -1708,61 +1728,66 @@ var
   concentrationfile: string;
   budgetCsvFile: string;
 begin
-  WriteString('    FLOW_PACKAGE_NAME ');
-  WriteString(StrLakeFlowPackageName);
-  NewLine;
-
-  Assert(FSpeciesIndex >= 0);
-  Assert(FSpeciesIndex < Model.MobileComponents.Count);
-  WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
-  ASpecies := Model.MobileComponents[FSpeciesIndex];
-  WriteString(' ' + ASpecies.Name);
-  NewLine;
-
-  WriteString('    BOUNDNAMES');
-  NewLine;
-
-  PrintListInputOption;
-  PrintConcentrationOption;
-  PrintFlowsOption;
-  WriteSaveFlowsOption;
-
-  SfrMf6Package := Model.ModflowPackages.SfrModflow6Package;
-  BaseFileName := ChangeFileExt(FNameOfFile, '');
-  BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
-
-  if SfrMf6Package.SaveGwtConcentration then
-  begin
-    WriteString('    CONCENTRATION FILEOUT ');
-    concentrationfile := BaseFileName + '.lkt_conc';
-    Model.AddModelOutputFile(concentrationfile);
-    concentrationfile := ExtractFileName(concentrationfile);
-    WriteString(concentrationfile);
+  WriteBeginOptions;
+  try
+    WriteString('    FLOW_PACKAGE_NAME ');
+    WriteString(StrLakeFlowPackageName);
     NewLine;
-  end;
 
-  if SfrMf6Package.SaveGwtBudget then
-  begin
-    WriteString('    BUDGET FILEOUT ');
-    budgetfile := BaseFileName + '.lkt_budget';
-    Model.AddModelOutputFile(budgetfile);
-    budgetfile := ExtractFileName(budgetfile);
-    WriteString(budgetfile);
+    Assert(FSpeciesIndex >= 0);
+    Assert(FSpeciesIndex < Model.MobileComponents.Count);
+    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
+    ASpecies := Model.MobileComponents[FSpeciesIndex];
+    WriteString(' ' + ASpecies.Name);
     NewLine;
-  end;
 
-  if SfrMf6Package.SaveGwtBudgetCsv then
-  begin
-    WriteString('    BUDGETCSV FILEOUT ');
-    budgetCsvFile := BaseFileName + '.lkt_budget.csv';
-    Model.AddModelOutputFile(budgetCsvFile);
-    budgetCsvFile := ExtractFileName(budgetCsvFile);
-    WriteString(budgetCsvFile);
+    WriteString('    BOUNDNAMES');
     NewLine;
-  end;
 
-//  [TS6 FILEIN <ts6_filename>]
-//  [OBS6 FILEIN <obs6_filename>]
+    PrintListInputOption;
+    PrintConcentrationOption;
+    PrintFlowsOption;
+    WriteSaveFlowsOption;
+
+    SfrMf6Package := Model.ModflowPackages.SfrModflow6Package;
+    BaseFileName := ChangeFileExt(FNameOfFile, '');
+    BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
+
+    if SfrMf6Package.SaveGwtConcentration then
+    begin
+      WriteString('    CONCENTRATION FILEOUT ');
+      concentrationfile := BaseFileName + '.lkt_conc';
+      Model.AddModelOutputFile(concentrationfile);
+      concentrationfile := ExtractFileName(concentrationfile);
+      WriteString(concentrationfile);
+      NewLine;
+    end;
+
+    if SfrMf6Package.SaveGwtBudget then
+    begin
+      WriteString('    BUDGET FILEOUT ');
+      budgetfile := BaseFileName + '.lkt_budget';
+      Model.AddModelOutputFile(budgetfile);
+      budgetfile := ExtractFileName(budgetfile);
+      WriteString(budgetfile);
+      NewLine;
+    end;
+
+    if SfrMf6Package.SaveGwtBudgetCsv then
+    begin
+      WriteString('    BUDGETCSV FILEOUT ');
+      budgetCsvFile := BaseFileName + '.lkt_budget.csv';
+      Model.AddModelOutputFile(budgetCsvFile);
+      budgetCsvFile := ExtractFileName(budgetCsvFile);
+      WriteString(budgetCsvFile);
+      NewLine;
+    end;
+
+  //  [TS6 FILEIN <ts6_filename>]
+  //  [OBS6 FILEIN <obs6_filename>]
+  finally
+    WriteEndOptions
+  end;
 
 end;
 

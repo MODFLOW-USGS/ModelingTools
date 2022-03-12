@@ -349,6 +349,8 @@ type
     BedThicknessPosition = 9;
     ConnectionLengthPosition = 10;
     StartingStagePosition = 11;
+//    FGwtStatus: TGwtBoundaryStatusCollection;
+//    procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
   var
     FPestRainfallMethod: TPestParamMethod;
     FPestRunoffMethod: TPestParamMethod;
@@ -581,13 +583,14 @@ type
       Stored False
       {$ENDIF}
       ;
-      property StartingConcentrationPestNames: TStrings
-        read FStartingConcentrationPestNames
-        write SetStartingConcentrationPestNames
-        {$IFNDEF GWT}
-        Stored False
-        {$ENDIF}
-        ;
+    property StartingConcentrationPestNames: TStrings
+      read FStartingConcentrationPestNames
+      write SetStartingConcentrationPestNames
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
+//    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
   end;
 
 function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
@@ -2492,6 +2495,11 @@ procedure TLakeMf6.SetEmbedded(const Value: Boolean);
 begin
   FEmbedded := Value;
 end;
+
+//procedure TLakeMf6.SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
+//begin
+//  FGwtStatus.Assign(Value);
+//end;
 
 procedure TLakeMf6.SetLakeConnections(const Value: TLakeConnectionTypes);
 begin

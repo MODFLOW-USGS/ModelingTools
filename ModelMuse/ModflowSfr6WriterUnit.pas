@@ -1931,62 +1931,66 @@ var
   concentrationfile: string;
   budgetCsvFile: string;
 begin
-  WriteString('    FLOW_PACKAGE_NAME ');
-  WriteString(StrSfrFlowPackageName);
-  NewLine;
-
-  Assert(FSpeciesIndex >= 0);
-  Assert(FSpeciesIndex < Model.MobileComponents.Count);
-  WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
-  ASpecies := Model.MobileComponents[FSpeciesIndex];
-  WriteString(' ' + ASpecies.Name);
-  NewLine;
-
-  WriteString('    BOUNDNAMES');
-  NewLine;
-
-  PrintListInputOption;
-  PrintConcentrationOption;
-  PrintFlowsOption;
-  WriteSaveFlowsOption;
-
-  SfrMf6Package := Model.ModflowPackages.SfrModflow6Package;
-  BaseFileName := ChangeFileExt(FNameOfFile, '');
-  BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
-
-  if SfrMf6Package.SaveGwtConcentration then
-  begin
-    WriteString('    CONCENTRATION FILEOUT ');
-    concentrationfile := BaseFileName + '.sft_conc';
-    Model.AddModelOutputFile(concentrationfile);
-    concentrationfile := ExtractFileName(concentrationfile);
-    WriteString(concentrationfile);
+  WriteBeginOptions;
+  try
+    WriteString('    FLOW_PACKAGE_NAME ');
+    WriteString(StrSfrFlowPackageName);
     NewLine;
-  end;
 
-  if SfrMf6Package.SaveGwtBudget then
-  begin
-    WriteString('    BUDGET FILEOUT ');
-    budgetfile := BaseFileName + '.sft_budget';
-    Model.AddModelOutputFile(budgetfile);
-    budgetfile := ExtractFileName(budgetfile);
-    WriteString(budgetfile);
+    Assert(FSpeciesIndex >= 0);
+    Assert(FSpeciesIndex < Model.MobileComponents.Count);
+    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
+    ASpecies := Model.MobileComponents[FSpeciesIndex];
+    WriteString(' ' + ASpecies.Name);
     NewLine;
-  end;
 
-  if SfrMf6Package.SaveGwtBudgetCsv then
-  begin
-    WriteString('    BUDGETCSV FILEOUT ');
-    budgetCsvFile := BaseFileName + '.sft_budget.csv';
-    Model.AddModelOutputFile(budgetCsvFile);
-    budgetCsvFile := ExtractFileName(budgetCsvFile);
-    WriteString(budgetCsvFile);
+    WriteString('    BOUNDNAMES');
     NewLine;
+
+    PrintListInputOption;
+    PrintConcentrationOption;
+    PrintFlowsOption;
+    WriteSaveFlowsOption;
+
+    SfrMf6Package := Model.ModflowPackages.SfrModflow6Package;
+    BaseFileName := ChangeFileExt(FNameOfFile, '');
+    BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
+
+    if SfrMf6Package.SaveGwtConcentration then
+    begin
+      WriteString('    CONCENTRATION FILEOUT ');
+      concentrationfile := BaseFileName + '.sft_conc';
+      Model.AddModelOutputFile(concentrationfile);
+      concentrationfile := ExtractFileName(concentrationfile);
+      WriteString(concentrationfile);
+      NewLine;
+    end;
+
+    if SfrMf6Package.SaveGwtBudget then
+    begin
+      WriteString('    BUDGET FILEOUT ');
+      budgetfile := BaseFileName + '.sft_budget';
+      Model.AddModelOutputFile(budgetfile);
+      budgetfile := ExtractFileName(budgetfile);
+      WriteString(budgetfile);
+      NewLine;
+    end;
+
+    if SfrMf6Package.SaveGwtBudgetCsv then
+    begin
+      WriteString('    BUDGETCSV FILEOUT ');
+      budgetCsvFile := BaseFileName + '.sft_budget.csv';
+      Model.AddModelOutputFile(budgetCsvFile);
+      budgetCsvFile := ExtractFileName(budgetCsvFile);
+      WriteString(budgetCsvFile);
+      NewLine;
+    end;
+
+  //  [TS6 FILEIN <ts6_filename>]
+  //  [OBS6 FILEIN <obs6_filename>]
+  finally
+    WriteEndOptions
   end;
-
-//  [TS6 FILEIN <ts6_filename>]
-//  [OBS6 FILEIN <obs6_filename>]
-
 end;
 
 procedure TModflowSFR_MF6_Writer.WriteGwtPackageData;
