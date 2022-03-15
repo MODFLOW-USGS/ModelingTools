@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-01-27T17:32:04.192-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-03-15T17:05:45.253-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Revision History</title>
   <body>
     <header>
@@ -162,6 +162,18 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an assertion failures when importing shapefiles data from CSV files, if one or more columns did not have column headers.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">not in released version. Fixed list index out of bounds while RCH and MT3D were active.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SFT when no SFT boundaries are defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SFT package in MT3D-USGS when there is more than one chemical species.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that caused an access violation if the InterpolatedVertexValues function was used without an &#160;argument.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of XT3D data in the Grid or Mesh Values dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When saving the MODFLOW Name file, the Byte Order Mark should no longer be written.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error when merging objects.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause incorrect values to be exported when exporting contours to Shapefiles.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SSM in MT3D-USGS when the DRT package is used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed evaluation of node outlines in the front view of 3D SUTRA models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that resulted in an invalid SUTRA fishnet mesh when the &quot;increase backwards&quot; option was used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could result in Assertion failures when creating BCS files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that resulted in an invalid SUTRA fishnet mesh when the &quot;increase forward&quot; option was used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of MT3D-USGS lake transport package for models with more than one chemical species.</text></para>
               </td>
             </tr>
           </table></para>
