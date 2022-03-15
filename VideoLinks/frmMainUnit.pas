@@ -33,6 +33,7 @@ type
     comtoTitleGroup: TComboBox;
     btnSortByTitle: TButton;
     btnSortByGroup: TButton;
+    cbUpdated: TCheckBox;
     procedure tvVideosChange(Sender: TObject; Node: TTreeNode);
     procedure edURLChange(Sender: TObject);
     procedure btnAddChildClick(Sender: TObject);
@@ -52,6 +53,7 @@ type
     procedure tvVideosCompare(Sender: TObject; Node1, Node2: TTreeNode;
       Data: Integer; var Compare: Integer);
     procedure btnSortByGroupClick(Sender: TObject);
+    procedure cbUpdatedClick(Sender: TObject);
   private
     FVideoList: TXmlVerySimple;
     FChanged: Boolean;
@@ -70,13 +72,16 @@ implementation
 uses
   System.DateUtils, System.StrUtils;
 
-resourcestring
+const
   StrYear = 'Year';
   StrMonth = 'Month';
   StrDay = 'Day';
 //  StrTitle = 'Title';
   StrTopic = 'Topic';
   StrDoYouWantToSave = 'Do you want to save the file?';
+  StrUpdated = 'Updated';
+  StrTrue = 'True';
+  StrFalse = 'False';
 
 {$R *.dfm}
 
@@ -93,7 +98,7 @@ begin
     if tvVideos.Selected.Data <> nil then
     begin
       AnXmlNode := tvVideos.Selected.Data;
-      NewXmlNode := AnXmlNode.AddChild('URL');
+      NewXmlNode := AnXmlNode.AddChild('');
       NewXmlNode.Text := '';
       ANode.Data := NewXmlNode;
     end;
@@ -109,7 +114,7 @@ var
   AnXmlNode: TXmlNode;
 begin
   ANode := tvVideos.Items.Add(nil, 'NewNode');
-  AnXmlNode := FVideoList.AddChild('URL');
+  AnXmlNode := FVideoList.AddChild('');
   AnXmlNode.Text := '';
   ANode.Data := AnXmlNode;
   tvVideos.Selected := ANode;
@@ -151,6 +156,25 @@ procedure TfrmMain.btnSortByTitleClick(Sender: TObject);
 begin
   FSortByGroup := False;
   tvVideos.AlphaSort;
+end;
+
+procedure TfrmMain.cbUpdatedClick(Sender: TObject);
+var
+  AnXmlNode: TXmlNode;
+begin
+  if tvVideos.Selected <> nil then
+  begin
+    AnXmlNode := tvVideos.Selected.Data;
+    Assert(AnXmlNode <> nil);
+    if cbUpdated.Checked then
+    begin
+      AnXmlNode.SetAttribute(StrUpdated, StrTrue);
+    end
+    else
+    begin
+      AnXmlNode.SetAttribute(StrUpdated, StrFalse);
+    end;
+  end;
 end;
 
 procedure TfrmMain.comtoTitleGroupChange(Sender: TObject);
@@ -412,6 +436,8 @@ var
   Year: Word;
   Month: Word;
   Day: Word;
+  AValue: string;
+  Checked: Boolean;
 begin
   if Node <> nil then
   begin
@@ -427,6 +453,7 @@ begin
       comtoTitleGroup.Text := '';
 //      edTopic.Text := ''
     end;
+
     if AnXmlNode.HasAttribute(StrYear) then
     begin
       Year := AnXmlNode.Attributes[StrYear].ToInteger;
@@ -437,6 +464,20 @@ begin
     else
     begin
       jvdDate.Text := '';
+    end;
+
+    if AnXmlNode.HasAttribute(StrUpdated) then
+    begin
+      AValue := AnXmlNode.Attributes[StrUpdated];
+      Checked := AValue.ToBoolean(AValue);
+      if Checked <> cbUpdated.Checked then
+      begin
+        cbUpdated.Checked := Checked;
+      end;
+    end
+    else
+    begin
+      cbUpdated.Checked := False;
     end;
   end;
 end;

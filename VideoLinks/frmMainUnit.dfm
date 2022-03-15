@@ -2,8 +2,8 @@ object frmMain: TfrmMain
   Left = 0
   Top = 0
   Caption = 'Video Links'
-  ClientHeight = 367
-  ClientWidth = 638
+  ClientHeight = 353
+  ClientWidth = 709
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,18 +17,19 @@ object frmMain: TfrmMain
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
-    Left = 121
+    Left = 189
     Top = 0
     Width = 5
-    Height = 348
-    ExplicitHeight = 724
+    Height = 334
+    Align = alRight
+    ExplicitLeft = 642
   end
   object tvVideos: TTreeView
     Left = 0
     Top = 0
-    Width = 121
-    Height = 348
-    Align = alLeft
+    Width = 189
+    Height = 334
+    Align = alClient
     AutoExpand = True
     HideSelection = False
     Indent = 19
@@ -36,30 +37,25 @@ object frmMain: TfrmMain
     OnChange = tvVideosChange
     OnCompare = tvVideosCompare
     OnMouseMove = tvVideosMouseMove
-    ExplicitLeft = -1
-    ExplicitTop = -6
   end
   object sbStatus: TStatusBar
     Left = 0
-    Top = 348
-    Width = 638
+    Top = 334
+    Width = 709
     Height = 19
     Panels = <>
     SimplePanel = True
-    ExplicitTop = 302
-    ExplicitWidth = 635
   end
   object Panel1: TPanel
-    Left = 126
+    Left = 194
     Top = 0
-    Width = 512
-    Height = 348
-    Align = alClient
+    Width = 515
+    Height = 334
+    Align = alRight
     TabOrder = 2
-    ExplicitLeft = 136
-    ExplicitTop = 304
-    ExplicitWidth = 937
-    ExplicitHeight = 353
+    DesignSize = (
+      515
+      334)
     object lblDate: TLabel
       Left = 6
       Top = 197
@@ -69,7 +65,7 @@ object frmMain: TfrmMain
     end
     object lblTitle: TLabel
       Left = 6
-      Top = 150
+      Top = 105
       Width = 20
       Height = 13
       Caption = 'Title'
@@ -83,7 +79,7 @@ object frmMain: TfrmMain
     end
     object lblURL: TLabel
       Left = 6
-      Top = 104
+      Top = 151
       Width = 19
       Height = 13
       Caption = 'URL'
@@ -117,18 +113,21 @@ object frmMain: TfrmMain
     end
     object edTitle: TEdit
       Left = 6
-      Top = 169
-      Width = 492
+      Top = 124
+      Width = 499
       Height = 21
+      Anchors = [akLeft, akTop, akRight]
       TabOrder = 3
       OnChange = edTitleChange
     end
     object edURL: TEdit
       Left = 6
-      Top = 123
-      Width = 492
+      Top = 170
+      Width = 499
       Height = 21
+      Anchors = [akLeft, akTop, akRight]
       TabOrder = 4
+      TextHint = 'URL'
       OnChange = edURLChange
     end
     object jvdDate: TJvDateEdit
@@ -166,6 +165,15 @@ object frmMain: TfrmMain
       Caption = 'Sort by Group'
       TabOrder = 8
       OnClick = btnSortByGroupClick
+    end
+    object cbUpdated: TCheckBox
+      Left = 6
+      Top = 294
+      Width = 97
+      Height = 17
+      Caption = 'Updated'
+      TabOrder = 9
+      OnClick = cbUpdatedClick
     end
   end
   object dlgOpen: TOpenDialog
