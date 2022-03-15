@@ -819,7 +819,7 @@ var
   MultiplierValue: double;
   SpeciesIndex: Integer;
 begin
-    { TODO -cPEST : Add PEST support for PEST here }
+    { Add PEST support for PEST here }
     // handle pest parameter
     // handle multiply or add
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);

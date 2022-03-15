@@ -333,7 +333,6 @@ begin
                 := Ord(ADiversion.Priority);
             end;
 
-            {$IFDEF PEST}
             PestModifier[rdgModflowBoundary, Ord(s6cStage)] := Sf6Boundary.PestStageFormula;
             PestMethod[rdgModflowBoundary, Ord(s6cStage)] := Sf6Boundary.PestStageMethod;
             PestModifier[rdgModflowBoundary, Ord(s6cInflow)] := Sf6Boundary.PestInflowFormula;
@@ -348,7 +347,6 @@ begin
             PestMethod[rdgModflowBoundary, Ord(s6cRoughness)] := Sf6Boundary.PestRoughnessMethod;
             PestModifier[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := Sf6Boundary.PestUpstreamFractionFormula;
             PestMethod[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := Sf6Boundary.PestUpstreamFractionMethod;
-            {$ENDIF}
 
             FirstBoundary := Sf6Boundary;
 
@@ -390,8 +388,6 @@ begin
           else
           begin
             rdeSegmentNumber.Enabled := False;
-
-            {$IFDEF PEST}
 
             if Sf6Boundary.PestStageFormula <> FirstBoundary.PestStageFormula then
             begin
@@ -449,7 +445,6 @@ begin
             begin
               PestMethodAssigned[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := False;
             end;
-            {$ENDIF}
 
             if not Values.isSame(Sf6Boundary.Values) then
             begin
@@ -568,7 +563,6 @@ begin
     rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction),0] := StrUpstreamFractionMf6;
     rdgModflowBoundary.Cells[Ord(s6cRoughness),0] := StrRoughnessMf6;
 
-    {$IFDEF PEST}
     rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
     rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
     rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
@@ -590,9 +584,7 @@ begin
       TSfrMf6Boundary.DefaultBoundaryMethod(SfrMf6RoughnessPosition);
     PestMethod[rdgModflowBoundary, Ord(s6cUpstreamFraction)] :=
       TSfrMf6Boundary.DefaultBoundaryMethod(SfrMf6UpstreamFractionPosition);
-    {$ENDIF}
 
-//    rdgModflowBoundary.ItemIndex[Ord(s6cStatus),0] := 0;
     rdgModflowBoundary.Cells[Ord(s6cStage),1+PestRowOffset] := '0';
     rdgModflowBoundary.Cells[Ord(s6cInflow),1+PestRowOffset] := '0';
     rdgModflowBoundary.Cells[Ord(s6cRainfall),1+PestRowOffset] := '0';
@@ -1084,7 +1076,6 @@ begin
 
       if tabRates.TabVisible then
       begin
-        {$IFDEF PEST}
         if PestModifierAssigned[rdgModflowBoundary, Ord(s6cStage)] then
         begin
           Boundary.PestStageFormula := PestModifier[rdgModflowBoundary, Ord(s6cStage)];
@@ -1147,7 +1138,6 @@ begin
         begin
           Boundary.PestUpstreamFractionMethod := PestMethod[rdgModflowBoundary, Ord(s6cUpstreamFraction)];
         end;
-        {$ENDIF}
 
         if not FValuesCleared then
         begin

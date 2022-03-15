@@ -257,17 +257,10 @@ type
       FormulaIndex: integer): TPestParamMethod; override;
   published
     property PestMaxPumpingRateFormula: string read GetPestMaxPumpingRateFormula
-      write SetPestMaxPumpingRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestMaxPumpingRateMethod: TPestParamMethod read FPestMaxPumpingRateMethod
-      write SetPestMaxPumpingRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestMaxPumpingRateFormula;
+    property PestMaxPumpingRateMethod: TPestParamMethod
+      read FPestMaxPumpingRateMethod
+      write SetPestMaxPumpingRateMethod;
   end;
 
 const

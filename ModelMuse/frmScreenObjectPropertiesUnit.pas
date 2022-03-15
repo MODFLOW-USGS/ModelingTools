@@ -2748,7 +2748,7 @@ begin
   ParametersOnly := False;
   PestParameterColumns := [];
   UsedEvalAt := eaBlocks;
-   { TODO  -cPEST: Support PEST here }
+   {Support PEST here }
 
   if (Sender = frameGhbParam.rdgModflowBoundary)
     or (Sender = frameChdParam.rdgModflowBoundary)
@@ -3291,11 +3291,7 @@ end;
 
 procedure TfrmScreenObjectProperties.ShowGageObservations;
 begin
-{$IFDEF PEST}
   tabGageObservations.TabVisible := (FObjectCount = 1) and (FVertexCount = 1)
-{$ELSE}  
-  tabGageObservations.TabVisible := False;
-{$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.ShowOrHideObsTabs;
@@ -4242,11 +4238,7 @@ var
   ParameterIndex: Integer;
   AParameter: TModflowSteadyParameter;
 begin
-  {$IFDEF PEST}
-    frameLak.tabObservations.Visible := frmGoPhast.PhastModel.PestUsed;
-  {$ELSE}
-    frameLak.tabObservations.Visible := False;
-  {$ENDIF}
+  frameLak.tabObservations.Visible := frmGoPhast.PhastModel.PestUsed;
 
   FPestBlockParametersAndDataSets.Clear;
   FPestNodeParametersAndDataSets.Clear;
@@ -4681,13 +4673,11 @@ begin
   Parameter := ptCHD;
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FCHD_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FCHD_Node);
-  {$IFDEF PEST}
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+StartHeadPosition] :=
     TChdBoundary.DefaultBoundaryMethod(StartHeadPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+EndHeadPosition] :=
     TChdBoundary.DefaultBoundaryMethod(EndHeadPosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
-  {$ENDIF}
   Frame.rdgModflowBoundary.HideEditor;
 end;
 
@@ -5852,7 +5842,7 @@ begin
   framePestObsSwt.SpecifyObservationTypes(SwtTypes);
   framePestObsSwt.OnControlsChange := SwtObsChanged;
 
-   { TODO  -cPEST: Support PEST here }
+   { Support PEST here }
   frameDrnParam.OnCheckPestCell := EnablePestCells;
   frameGhbParam.OnCheckPestCell := EnablePestCells;
   frameWellParam.OnCheckPestCell := EnablePestCells;
@@ -8360,7 +8350,6 @@ begin
       Gage.Gage3 := False;
     end;
 
-  {$IFDEF PEST}
     if Gage <> nil then
     begin
       if Gage.Observations.Count > 0 then
@@ -8371,7 +8360,6 @@ begin
         Gage.Gage3 := True;
       end;
     end;
-  {$ENDIF}
 
     if (cbGage5.State = cbChecked) then
     begin
@@ -8700,7 +8688,6 @@ var
   Identical: Boolean;
   Method: TPestParamMethod;
   Modifier: string;
-//  First: Boolean;
 begin
   if not frmGoPhast.PhastModel.SwrIsSelected then
   begin
@@ -8719,7 +8706,6 @@ begin
     begin
       FSWR_Evap_Node.StateIndex := Ord(State)+1;
     end;
-//    First := True;
     for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
     begin
       AScreenObject := ScreenObjectList[ScreenObjectIndex];
@@ -8768,7 +8754,6 @@ begin
       GetSwrEvapBoundaryCollection(DataGrid, ColumnOffset,
         ScreenObjectList, TimeList);
 
-      {$IFDEF PEST}
       Frame := frameSWR_Evap;
       Frame.PestMethod[ColumnOffset] :=
         TCustomSwrBoundary.DefaultBoundaryMethod(SwrValuePosition);
@@ -8838,9 +8823,6 @@ begin
       begin
         Frame.PestModifierAssigned[ColumnOffset] := False;
       end;
-      {$ENDIF}
-
-
     finally
       DataGrid.EndUpdate;
     end;
@@ -8954,7 +8936,6 @@ begin
       GetSwrLatInflowBoundaryCollection(DataGrid, ColumnOffset,
         ScreenObjectList, TimeList);
 
-      {$IFDEF PEST}
       Frame := frameSWR_LatInfl;
       Frame.PestMethod[ColumnOffset] :=
         TCustomSwrBoundary.DefaultBoundaryMethod(SwrValuePosition);
@@ -9024,8 +9005,6 @@ begin
       begin
         Frame.PestModifierAssigned[ColumnOffset] := False;
       end;
-      {$ENDIF}
-
     finally
       DataGrid.EndUpdate;
     end;
@@ -9075,7 +9054,6 @@ begin
       FSWR_Rain_Node.StateIndex := Ord(State)+1;
     end;
 
-    {$IFDEF PEST}
     Frame := frameSWR_Rain;
     Frame.PestMethod[ColumnOffset] :=
       TCustomSwrBoundary.DefaultBoundaryMethod(SwrValuePosition);
@@ -9145,7 +9123,6 @@ begin
     begin
       Frame.PestModifierAssigned[ColumnOffset] := False;
     end;
-    {$ENDIF}
 
     for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
     begin
@@ -9381,12 +9358,8 @@ begin
       GetSwrStageBoundaryCollection(DataGrid, ColumnOffset,
         ScreenObjectList, TimeList);
 
-      {$IFDEF PEST}
       PestMethod[DataGrid, ColumnOffset] :=
         TSwrStageBoundary.DefaultBoundaryMethod(SwrValuePosition);
-//      PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
-//        TDrnBoundary.DefaultBoundaryMethod(ConductancePosition);
-//      GetPestModifiers(Frame, Parameter, ScreenObjectList);
 
       Frame := frameSWR_Stage;
       First := True;
@@ -9455,8 +9428,6 @@ begin
       begin
         Frame.PestModifierAssigned[ColumnOffset] := False;
       end;
-      {$ENDIF}
-
     finally
       DataGrid.EndUpdate;
     end;
@@ -12950,7 +12921,6 @@ end;
 function TfrmScreenObjectProperties.GetPestModifierAssigned(Grid: TRbwDataGrid4;
   ACol: Integer): Boolean;
 begin
-  {$IFDEF PEST}
   if PestRowOffset = 0 then
   begin
     result := False;
@@ -12958,7 +12928,6 @@ begin
     Exit;
   end;
   result := Grid.Cells[ACol, PestModifierRow] <> '';
-  {$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.GetPestModifiers(
@@ -12978,7 +12947,6 @@ var
   Method: TPestParamMethod;
   Modifier: string;
 begin
-  {$IFDEF PEST}
   ValuesFunction := GetBoundaryValues;
   ColumnOffset := 2;
 
@@ -13080,7 +13048,6 @@ begin
   finally
     Frame.rdgModflowBoundary.EndUpdate;
   end;
-  {$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.GetPhastBoundariesForSingleObject;
@@ -13401,15 +13368,8 @@ var
   Node: TJvPageIndexNode;
 begin
   FSWiObs_Node := nil;
-{$IFDEF PEST}
-  {$DEFINE SWIObs}
-{$ENDIF}
-{$IFNDEF SWIObs}
-  Exit;
-{$ENDIF}
   if frmGoPhast.PhastModel.SwiObsUsed(nil)
     and (AScreenObject.Count = 1)
-//    and (AScreenObject.ElevationCount = ecOne) then
     and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin
     Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
@@ -15556,7 +15516,6 @@ begin
     end;
   end;
 
-  {$IFDEF PEST}
 //  GetPestModifiers(frameRes, Parameter, ScreenObjectList);
   for BoundaryIndex := 0 to 1 do
   begin
@@ -15628,7 +15587,6 @@ begin
       frameRes.PestModifierAssigned[ColumnOffset + BoundaryIndex] := False;
     end;
   end;
-  {$ENDIF}
 
   if ValuesIdentical and (Values <> nil) then
   begin
@@ -16056,13 +16014,11 @@ begin
   DataGrid := frameLak.rdgModflowBoundary;
   ColumnOffset := 2;
 
-  {$IFDEF PEST}
   for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
   begin
     frameLak.PestMethod[BoundaryIndex + ColumnOffset] :=
       TLakBoundary.DefaultBoundaryMethod(BoundaryIndex);
   end;
-  {$ENDIF}
 
   frameLak.tabBathymetry.TabVisible := (ScreenObjectList.Count = 1)
     and frmGoPhast.PhastModel.LakBathymetryUsed;
@@ -16114,10 +16070,8 @@ begin
     end;
   end;
   Assert(Boundary <> nil);
-//  FirstBoundary := Boundary;
   Values := Boundary.Values;
 
-  {$IFDEF PEST}
   for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
   begin
     frameLak.PestModifier[BoundaryIndex + ColumnOffset] :=
@@ -16125,7 +16079,7 @@ begin
     frameLak.PestMethod[BoundaryIndex + ColumnOffset] :=
       Boundary.PestBoundaryMethod[BoundaryIndex];
   end;
-  {$ENDIF}
+
   for ScreenObjectIndex := FirstIndex+1 to ScreenObjectList.Count - 1 do
   begin
     AScreenObject := ScreenObjectList[ScreenObjectIndex];
@@ -18286,13 +18240,13 @@ begin
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FGHB_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FGHB_Node);
-  {$IFDEF PEST}
+
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+HeadPosition] :=
     TGhbBoundary.DefaultBoundaryMethod(HeadPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
     TGhbBoundary.DefaultBoundaryMethod(ConductancePosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
-  {$ENDIF}
+
   Frame.rdgModflowBoundary.HideEditor;
 end;
 
@@ -18317,11 +18271,11 @@ begin
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FWEL_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FWEL_Node);
-  {$IFDEF PEST}
+
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+PumpingRatePosition] :=
     TMfWellBoundary.DefaultBoundaryMethod(PumpingRatePosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
-  {$ENDIF}
+
   Frame.rdgModflowBoundary.HideEditor;
   First := True;
   for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
@@ -18359,11 +18313,11 @@ begin
   Parameter := ptQMAX;
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FFarmWell_Node);
-  {$IFDEF PEST}
+
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+FmpWellMaxPumpingRatePosition] :=
     TFmpWellBoundary.DefaultBoundaryMethod(FmpWellMaxPumpingRatePosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
-  {$ENDIF}
+
   Frame.rdgModflowBoundary.HideEditor;
 end;
 
@@ -18386,7 +18340,7 @@ begin
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FRIV_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FRIV_Node);
-  {$IFDEF PEST}
+
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+StagePosition] :=
     TRivBoundary.DefaultBoundaryMethod(StagePosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
@@ -18394,7 +18348,7 @@ begin
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+BottomPosition] :=
     TRivBoundary.DefaultBoundaryMethod(BottomPosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
-  {$ENDIF}
+
   Frame.rdgModflowBoundary.HideEditor;
 end;
 
@@ -18580,7 +18534,6 @@ var
     Boundary: TUzfBoundary;
     Modifier: string;
   begin
-    {$IFDEF PEST}
     Frame.rdgModflowBoundary.BeginUpdate;
     try
       for BoundaryIndex := First to Last do
@@ -18662,7 +18615,6 @@ var
     finally
       Frame.rdgModflowBoundary.EndUpdate;
     end;
-    {$ENDIF}
   end;
 begin
   if not frmGoPhast.PhastModel.UzfIsSelected then
@@ -18849,18 +18801,15 @@ begin
       end;
 
       Frame := frameScreenObjectUZF;
-      {$IFDEF PEST}
+
       for FormulaIndex := First to Last do
       begin
         PestMethod[frameScreenObjectUZF.rdgModflowBoundary, ColOffset+FormulaIndex] :=
           TUzfBoundary.DefaultBoundaryMethod(FormulaIndex);
         GetUzfModifiers;
       end;
-      {$ENDIF}
+
       Frame.rdgModflowBoundary.HideEditor;
-
-
-
     finally
       DataGrid.EndUpdate;
     end;
@@ -18934,13 +18883,13 @@ begin
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FDRN_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FDRN_Node);
-  {$IFDEF PEST}
+
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ElevationPosition] :=
     TDrnBoundary.DefaultBoundaryMethod(ElevationPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
     TDrnBoundary.DefaultBoundaryMethod(ConductancePosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
-  {$ENDIF}
+
   Frame.rdgModflowBoundary.HideEditor;
 end;
 function TfrmScreenObjectProperties.GetRechargeLayers(
@@ -19008,11 +18957,10 @@ begin
     end;
   end;
 
-  {$IFDEF PEST}
   PestMethod[Frame.rdgModflowBoundary, ColOffset+RechPostion] :=
     TRchBoundary.DefaultBoundaryMethod(RechPostion);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
-  {$ENDIF}
+
   Frame.rdgModflowBoundary.HideEditor;
 end;
 
@@ -19039,7 +18987,6 @@ var
     Boundary: TEvtBoundary;
     Modifier: string;
   begin
-  {$IFDEF PEST}
     Frame.rdgModflowBoundary.BeginUpdate;
     try
       for BoundaryIndex := 1 to 2 do
@@ -19121,7 +19068,6 @@ var
     finally
       Frame.rdgModflowBoundary.EndUpdate;
     end;
-    {$ENDIF}
   end;
 begin
   if not frmGoPhast.PhastModel.EvtIsSelected then
@@ -19159,7 +19105,6 @@ begin
     TimeList.Free;
   end;
 
-  {$IFDEF PEST}
   PestMethod[Frame.rdgModflowBoundary, ColOffset+RateBoundaryPosition] :=
     TEvtBoundary.DefaultBoundaryMethod(RateBoundaryPosition);
   PestMethod[Frame.rdgModflowBoundary, ColOffset+SurfaceBoundaryPosition] :=
@@ -19168,7 +19113,7 @@ begin
     TEvtBoundary.DefaultBoundaryMethod(DepthBoundaryPosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
   GetSurfDepthModifiers;
-  {$ENDIF}
+
   Frame.rdgModflowBoundary.HideEditor;
 end;
 
@@ -19201,7 +19146,6 @@ var
     Modifier: string;
     StorageIndex: Integer;
   begin
-    {$IFDEF PEST}
     ValuesFunction := GetBoundaryValues;
     ColumnOffset := 2;
 
@@ -19319,7 +19263,6 @@ var
     finally
       Frame.rdgModflowBoundary.EndUpdate;
     end;
-    {$ENDIF}
   end;
   procedure GetSurfDepthModifiers;
   var
@@ -19332,7 +19275,6 @@ var
     Boundary: TEtsBoundary;
     Modifier: string;
   begin
-    {$IFDEF PEST}
     Frame.rdgModflowBoundary.BeginUpdate;
     try
       for BoundaryIndex := 1 to 2 do
@@ -19414,7 +19356,6 @@ var
     finally
       Frame.rdgModflowBoundary.EndUpdate;
     end;
-    {$ENDIF}
   end;
 begin
   if not frmGoPhast.PhastModel.EtsIsSelected then
@@ -19454,17 +19395,16 @@ begin
   finally
     TimeList.Free;
   end;
-  {$IFDEF PEST}
+
   PestMethod[Frame.rdgModflowBoundary, ColOffset+RateBoundaryPosition] :=
     TEtsBoundary.DefaultBoundaryMethod(RateBoundaryPosition);
   PestMethod[Frame.rdgModflowBoundary, ColOffset+SurfaceBoundaryPosition+NumberOfSpecies] :=
     TEtsBoundary.DefaultBoundaryMethod(SurfaceBoundaryPosition);
   PestMethod[Frame.rdgModflowBoundary, ColOffset+DepthBoundaryPosition+NumberOfSpecies] :=
     TEtsBoundary.DefaultBoundaryMethod(DepthBoundaryPosition);
-//  GetPestModifiers(Frame, Parameter, ScreenObjectList);
   GetEvtModifiers;
   GetSurfDepthModifiers;
-  {$ENDIF}
+
   Frame.rdgModflowBoundary.HideEditor;
 end;
 
@@ -19486,13 +19426,11 @@ var
   DataGrid: TRbwDataGrid4;
   State: TCheckBoxState;
 begin
-  {$IFDEF PEST}
   PestMethod[frameRes.rdgModflowBoundary, 2] :=
     TResBoundary.DefaultBoundaryMethod(StartPosition);
   PestMethod[frameRes.rdgModflowBoundary, 3] :=
     TResBoundary.DefaultBoundaryMethod(EndPosition);
-//  GetPestModifiers(frameRes, Parameter, ScreenObjectList);
-  {$ENDIF}
+
   if not frmGoPhast.PhastModel.ResIsSelected then
   begin
     Exit;
@@ -20469,7 +20407,7 @@ begin
   Parameter := ptDRT;
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FDRT_Node);
-  {$IFDEF PEST}
+
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ElevationPosition] :=
     TDrtBoundary.DefaultBoundaryMethod(ElevationPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
@@ -20477,7 +20415,7 @@ begin
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ReturnPosition] :=
     TDrtBoundary.DefaultBoundaryMethod(ReturnPosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
-  {$ENDIF}
+
   Frame.rdgModflowBoundary.HideEditor;
 end;
 
@@ -23651,7 +23589,7 @@ begin
   // edit the formula that is not part of a data set or boundary data set.
   ed := Sender as TJvComboEdit;
 
-  { TODO -cPEST : Support PEST here }
+  { Support PEST here }
   PestParamOK := False;
   if (ed = frameMAW.edWellRadius)
     or (ed = frameMAW.edBottom)
@@ -25072,9 +25010,7 @@ begin
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FGHB_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FGHB_Node);
-    {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FGHB_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -25106,7 +25042,6 @@ begin
       if ShouldStoreBoundary(FRES_Node, Boundary) then
       begin
         StoreModflowBoundaryValues(Frame, Times, Boundary);
-        {$IFDEF PEST}
         if Frame.PestModifierAssigned[2] then
         begin
           Boundary.PestStartHeadFormula := Frame.PestModifier[2];
@@ -25123,7 +25058,6 @@ begin
         begin
           Boundary.PestEndHeadMethod := Frame.PestMethod[3];
         end;
-        {$ENDIF}
       end
       else if FRES_Node.StateIndex = 1 then
       begin
@@ -25369,8 +25303,6 @@ begin
       Assert(Boundary <> nil);
       if ShouldStoreBoundary(FLAK_Node, Boundary) then
       begin
-
-        {$IFDEF PEST}
         for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
         begin
           if frameLak.PestModifierAssigned[BoundaryIndex + ColumnOffset] then
@@ -25384,7 +25316,6 @@ begin
               frameLak.PestMethod[BoundaryIndex + ColumnOffset];
           end;
         end;
-        {$ENDIF}
 
         StoreModflowBoundaryValues(Frame, Times, Boundary);
         if frameLak.cbGagStandard.State <> cbGrayed then
@@ -25593,9 +25524,7 @@ begin
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FDRN_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FDRN_Node);
-    {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FDRN_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -25657,9 +25586,7 @@ begin
         end;
       end;
     end;
-    {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FRCH_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -25699,7 +25626,6 @@ var
       Assert(Boundary <> nil);
       if ShouldStoreBoundary(Node, Boundary) then
       begin
-        {$IFDEF PEST}
         for BoundaryIndex := 1 to 2 do
         begin
           if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
@@ -25713,7 +25639,6 @@ var
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
-        {$ENDIF}
       end;
     end;
   end;
@@ -25780,10 +25705,8 @@ begin
         Boundary.Clear;
       end;
     end;
-    {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FEVT_Node);
     StoreEvtSurfaceDepth(FEVT_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -25829,7 +25752,6 @@ var
         ColumnOffset := 2;
         BoundaryValues := Boundary.Values;
         BoundaryCount := BoundaryValues.TimeListCount(frmGoPhast.PhastModel);
-        {$ifdef PEST}
         for BoundaryIndex := 0 to BoundaryCount - 1 do
         begin
           if BoundaryIndex = 0 then
@@ -25851,7 +25773,6 @@ var
             Boundary.PestBoundaryFormula[StorageIndex] := Modifier;
           end;
         end;
-        {$endif}
       end;
     end
   end;
@@ -25881,7 +25802,6 @@ var
       Assert(Boundary <> nil);
       if ShouldStoreBoundary(Node, Boundary) then
       begin
-        {$IFDEF PEST}
         for BoundaryIndex := 1 to 2 do
         begin
           if DataGrid.Cells[ColumnOffset+BoundaryIndex+NumberOfSpecies,PestMethodRow] <> '' then
@@ -25895,7 +25815,6 @@ var
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
-        {$ENDIF}
       end;
     end;
   end;
@@ -25968,10 +25887,8 @@ begin
         Boundary.Clear;
       end;
     end;
-    {$IFDEF PEST}
     StoreEtsPest(FETS_Node);
     StoreEtsSurfaceDepth(FETS_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -26058,9 +25975,7 @@ begin
     ParamType := ptDRT;
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FDRT_Node);
-    {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FDRT_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -26101,11 +26016,7 @@ begin
     StoreModflowBoundary(Frame, ParamType, FWEL_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FWEL_Node);
 
-    {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FWEL_Node);
-    {$ENDIF}
-//    Frame.rdgModflowBoundary.HideEditor;
-
   end;
 end;
 
@@ -26135,9 +26046,7 @@ begin
     end;
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FFarmWell_Node);
-    {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FFarmWell_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -26168,9 +26077,7 @@ begin
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FRIV_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FRIV_Node);
-    {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FRIV_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -26202,7 +26109,6 @@ begin
       if ShouldStoreBoundary(FSWR_Evap_Node, Boundary) then
       begin
         StoreModflowBoundaryValues(Frame, Times, Boundary);
-        {$IFDEF PEST}
         if Frame.PestModifierAssigned[2] then
         begin
           Boundary.PestValueFormula := Frame.PestModifier[2];
@@ -26211,7 +26117,6 @@ begin
         begin
           Boundary.PestValueMethod := Frame.PestMethod[2];
         end;
-        {$ENDIF}
       end
       else if FSWR_Evap_Node.StateIndex = 1 then
       begin
@@ -26254,7 +26159,6 @@ begin
           Boundary.FormulaInterpretation :=
             TFormulaInterpretation(frameSWR_LatInfl.comboFormulaInterp.ItemIndex)
         end;
-        {$IFDEF PEST}
         if Frame.PestModifierAssigned[2] then
         begin
           Boundary.PestValueFormula := Frame.PestModifier[2];
@@ -26263,7 +26167,6 @@ begin
         begin
           Boundary.PestValueMethod := Frame.PestMethod[2];
         end;
-        {$ENDIF}
       end
       else if FSWR_LatInflow_Node.StateIndex = 1 then
       begin
@@ -26302,7 +26205,6 @@ begin
       begin
         StoreModflowBoundaryValues(Frame, Times, Boundary);
 
-        {$IFDEF PEST}
         if Frame.PestModifierAssigned[2] then
         begin
           Boundary.PestValueFormula := Frame.PestModifier[2];
@@ -26311,7 +26213,6 @@ begin
         begin
           Boundary.PestValueMethod := Frame.PestMethod[2];
         end;
-        {$ENDIF}
       end
       else if FSWR_Rain_Node.StateIndex = 1 then
       begin
@@ -26349,7 +26250,6 @@ begin
       if ShouldStoreBoundary(FSWR_Stage_Node, Boundary) then
       begin
         StoreModflowBoundaryValues(Frame, Times, Boundary);
-        {$IFDEF PEST}
         if Frame.PestModifierAssigned[2] then
         begin
           Boundary.PestValueFormula := Frame.PestModifier[2];
@@ -26358,7 +26258,6 @@ begin
         begin
           Boundary.PestValueMethod := Frame.PestMethod[2];
         end;
-        {$ENDIF}
       end
       else if FSWR_Stage_Node.StateIndex = 1 then
       begin
@@ -26480,7 +26379,6 @@ var
       Assert(Boundary <> nil);
       if ShouldStoreBoundary(Node, Boundary) then
       begin
-       {$IFDEF PEST}
         for BoundaryIndex := First to Last do
         begin
           if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
@@ -26494,7 +26392,6 @@ var
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
-        {$endif}
       end;
     end;
   end;
@@ -26550,9 +26447,7 @@ begin
         Boundary.GageOption2 := Gage;
       end;
     end;
-    {$IFDEF PEST}
     StoreUzfPest(FUZF_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -26600,9 +26495,7 @@ begin
     end;
     StoreModflowBoundary(Frame, ParamType, FCHD_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FCHD_Node);
-    {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FCHD_Node);
-    {$ENDIF}
   end;
 end;
 
@@ -26654,7 +26547,7 @@ end;
 function TfrmScreenObjectProperties.GetPestParameterAllowed(
   DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
 begin
- { TODO -cPEST: Support PEST here }
+ { Support PEST here }
   result :=
     (DataGrid = frameDrnParam.rdgModflowBoundary)
     or (DataGrid = frameGhbParam.rdgModflowBoundary)
@@ -29121,7 +29014,6 @@ begin
       ColumnOffset := 2;
       BoundaryValues := Boundary.Values;
       BoundaryCount := BoundaryValues.TimeListCount(frmGoPhast.PhastModel);
-      {$ifdef PEST}
       for BoundaryIndex := 0 to BoundaryCount - 1 do
       begin
         if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
@@ -29135,7 +29027,6 @@ begin
           Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
         end;
       end;
-      {$endif}
     end;
   end;
 

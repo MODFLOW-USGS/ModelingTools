@@ -196,13 +196,8 @@ type
       read FStoredUzfObsDepthFraction write SetStoredUzfObsDepthFraction;
     property CalibrationObservations: TMf6CalibrationObservations
       read FCalibrationObservations write SetCalibrationObservations
-  {$IFNDEF PEST}
-    stored False
-  {$ELSE}
-    stored StoreCalibObs
-  {$ENDIF}
-      ;
-//    property Used: Boolean read GetUsed write SetUsed;// stored False;
+        stored StoreCalibObs;
+    // @name is retained for backwards compatibility.
     property Used: Boolean read GetUsed write SetUsed stored False;
     // @name is retained for backwards compatibility.
     property HeadObs: Boolean read GetHeadObs  write SetHeadObs stored False;

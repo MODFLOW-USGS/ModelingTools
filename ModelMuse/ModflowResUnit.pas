@@ -188,29 +188,13 @@ type
       FormulaIndex: integer): TPestParamMethod; override;
   published
     property PestStartHeadFormula: string read GetPestStartHeadFormula
-      write SetPestStartHeadFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStartHeadFormula;
     property PestStartHeadMethod: TPestParamMethod read FPestStartHeadMethod
-      write SetPestStartHeadMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStartHeadMethod;
     property PestEndHeadFormula: string read GetPestEndHeadFormula
-      write SetPestEndHeadFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEndHeadFormula;
     property PestEndHeadMethod: TPestParamMethod read FPestEndHeadMethod
-      write SetPestEndHeadMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEndHeadMethod;
   end;
 
 implementation

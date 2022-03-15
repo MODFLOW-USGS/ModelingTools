@@ -429,41 +429,17 @@ type
   published
     property Interp;
     property PestRiverBottomFormula: string read GetPestRiverBottomFormula
-      write SetPestRiverBottomFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRiverBottomFormula;
     property PestRiverStageFormula: string read GetPestRiverStageFormula
-      write SetPestRiverStageFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRiverStageFormula;
     property PestConductanceFormula: string read GetPestConductanceFormula
-      write SetPestConductanceFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestConductanceFormula;
     property PestRiverBottomMethod: TPestParamMethod read FPestRiverBottomMethod
-      write SetPestRiverBottomMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRiverBottomMethod;
     property PestRiverStageMethod: TPestParamMethod read FPestRiverStageMethod
-      write SetPestRiverStageMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRiverStageMethod;
     property PestConductanceMethod: TPestParamMethod
-      read FPestConductanceMethod write SetPestConductanceMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConductanceMethod write SetPestConductanceMethod;
     property PestConcentrationFormulas: TRivGwtConcCollection
       read FPestConcentrationFormulas write SetPestConcentrationFormulas
       {$IFNDEF GWT}

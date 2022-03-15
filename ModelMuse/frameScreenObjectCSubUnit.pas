@@ -131,12 +131,10 @@ begin
             FoundFirst := True;
             FirstCSub := ModflowCSub;
 
-            {$IFDEF PEST}
             PestModifier[CsubStressOffsetPosition + PestRowOffset] :=
               ModflowCSub.PestStressOffsetFormula;
             PestMethod[CsubStressOffsetPosition + PestRowOffset] :=
               ModflowCSub.PestStressOffsetMethod;
-            {$ENDIF}
 
             for InterbedIndex := 0 to ModflowCSub.CSubPackageData.Count -1 do
             begin
@@ -182,8 +180,6 @@ begin
           end
           else
           begin
-
-            {$IFDEF PEST}
             if ModflowCSub.PestStressOffsetFormula <> FirstCSub.PestStressOffsetFormula then
             begin
               PestModifierAssigned[CsubStressOffsetPosition + PestRowOffset] := False;
@@ -192,7 +188,6 @@ begin
             begin
               PestMethodAssigned[CsubStressOffsetPosition + PestRowOffset] := False;
             end;
-            {$ENDIF}
 
             if not ModflowCSub.CSubPackageData.IsSame(FirstCSub.CSubPackageData) then
             begin
@@ -365,12 +360,10 @@ begin
     rdgModflowBoundary.Cells[Ord(scStressOffset), 0] := StrStressOffset;
     FillPicklistsWithStartTimes;
 
-    {$IFDEF PEST}
     rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
     rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
     PestMethod[CsubStressOffsetPosition + PestRowOffset] :=
       TCSubBoundary.DefaultBoundaryMethod(CsubStressOffsetPosition);
-    {$ENDIF}
   finally
     rdgModflowBoundary.EndUpdate;
   end;
@@ -623,7 +616,6 @@ begin
       
       if (Boundary <> nil) then
       begin
-        {$IFDEF PEST}
         if PestModifierAssigned[CsubStressOffsetPosition + PestRowOffset] then
         begin
           Boundary.PestStressOffsetFormula := PestModifier[CsubStressOffsetPosition + PestRowOffset]
@@ -632,14 +624,12 @@ begin
         begin
           Boundary.PestStressOffsetMethod := PestMethod[CsubStressOffsetPosition + PestRowOffset]
         end;
-        {$ENDIF}
 
         Boundary.CSubPackageData := CSubPackageData;
         for PackageDataIndex := 0 to Boundary.CSubPackageData.Count - 1 do
         begin
           InterBedSystem := Boundary.CSubPackageData[PackageDataIndex];
           AnInterBed := Interbeds.GetInterbedByName(InterBedSystem.InterbedSystemName);
-//          AnInterBed := InterBedSystem.Interbed as TCSubInterbed;
           Assert(AnInterBed <> nil);
           if InterBedSystem.Used then
           begin

@@ -479,283 +479,74 @@ type
       write SetGageLocation;
     property ExternalFlow: TExternalFlowProperties read FExternalFlow
       write SetExternalFlow;
-    property Observations: TSfrObservations read FObservations write SetObservations
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-      ;
+    property Observations: TSfrObservations read FObservations
+      write SetObservations;
     property PestUpstreamKFormula: string read GetPestUpstreamKFormula
-      write SetPestUpstreamKFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestUpstreamKFormula;
     property PestUpstreamKMethod: TPestParamMethod
-      read FPestUpstreamKMethod write SetPestUpstreamKMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestUpstreamKMethod write SetPestUpstreamKMethod;
     property PestDownstreamKFormula: string read GetPestDownstreamKFormula
-      write SetPestDownstreamKFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestDownstreamKFormula;
     property PestDownstreamKMethod: TPestParamMethod
-      read FPestDownstreamKMethod write SetPestDownstreamKMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestUpstreamBedThicknessFormula: string read GetPestUpstreamBedThicknessFormula
-      write SetPestUpstreamBedThicknessFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestDownstreamKMethod write SetPestDownstreamKMethod;
+    property PestUpstreamBedThicknessFormula: string
+      read GetPestUpstreamBedThicknessFormula
+      write SetPestUpstreamBedThicknessFormula;
     property PestUpstreamBedThicknessMethod: TPestParamMethod
-      read FPestUpstreamBedThicknessMethod write SetPestUpstreamBedThicknessMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestDownstreamBedThicknessFormula: string read GetPestDownstreamBedThicknessFormula
-      write SetPestDownstreamBedThicknessFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestUpstreamBedThicknessMethod
+      write SetPestUpstreamBedThicknessMethod;
+    property PestDownstreamBedThicknessFormula: string
+      read GetPestDownstreamBedThicknessFormula
+      write SetPestDownstreamBedThicknessFormula;
     property PestDownstreamBedThicknessMethod: TPestParamMethod
-      read FPestDownstreamBedThicknessMethod write SetPestDownstreamBedThicknessMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestUpstreamBedElevationFormula: string read GetPestUpstreamBedElevationFormula
-      write SetPestUpstreamBedElevationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestDownstreamBedThicknessMethod
+      write SetPestDownstreamBedThicknessMethod;
+    property PestUpstreamBedElevationFormula: string
+      read GetPestUpstreamBedElevationFormula
+      write SetPestUpstreamBedElevationFormula;
     property PestUpstreamBedElevationMethod: TPestParamMethod
-      read FPestUpstreamBedElevationMethod write SetPestUpstreamBedElevationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestDownstreamBedElevationFormula: string read GetPestDownstreamBedElevationFormula
-      write SetPestDownstreamBedElevationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestUpstreamBedElevationMethod
+      write SetPestUpstreamBedElevationMethod;
+    property PestDownstreamBedElevationFormula: string
+      read GetPestDownstreamBedElevationFormula
+      write SetPestDownstreamBedElevationFormula;
     property PestDownstreamBedElevationMethod: TPestParamMethod
-      read FPestDownstreamBedElevationMethod write SetPestDownstreamBedElevationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestDownstreamBedElevationMethod
+      write SetPestDownstreamBedElevationMethod;
     property PestUpstreamWidthFormula: string read GetPestUpstreamWidthFormula
-      write SetPestUpstreamWidthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestUpstreamWidthFormula;
     property PestUpstreamWidthMethod: TPestParamMethod
-      read FPestUpstreamWidthMethod write SetPestUpstreamWidthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestDownstreamWidthFormula: string read GetPestDownstreamWidthFormula
-      write SetPestDownstreamWidthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestUpstreamWidthMethod write SetPestUpstreamWidthMethod;
+    property PestDownstreamWidthFormula: string
+      read GetPestDownstreamWidthFormula
+      write SetPestDownstreamWidthFormula;
     property PestDownstreamWidthMethod: TPestParamMethod
-      read FPestDownstreamWidthMethod write SetPestDownstreamWidthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestDownstreamWidthMethod write SetPestDownstreamWidthMethod;
     property PestUpstreamDepthFormula: string read GetPestUpstreamDepthFormula
-      write SetPestUpstreamDepthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestUpstreamDepthFormula;
     property PestUpstreamDepthMethod: TPestParamMethod
-      read FPestUpstreamDepthMethod write SetPestUpstreamDepthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestDownstreamDepthFormula: string read GetPestDownstreamDepthFormula
-      write SetPestDownstreamDepthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestUpstreamDepthMethod write SetPestUpstreamDepthMethod;
+    property PestDownstreamDepthFormula: string
+      read GetPestDownstreamDepthFormula
+      write SetPestDownstreamDepthFormula;
     property PestDownstreamDepthMethod: TPestParamMethod
-      read FPestDownstreamDepthMethod write SetPestDownstreamDepthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-
-//    property PestUpstreamSaturatedWaterContentFormula: string read GetPestUpstreamSaturatedWaterContentFormula
-//      write SetPestUpstreamSaturatedWaterContentFormula
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestUpstreamSaturatedWaterContentMethod: TPestParamMethod
-//      read FPestUpstreamSaturatedWaterContentMethod write SetPestUpstreamSaturatedWaterContentMethod
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestDownstreamSaturatedWaterContentFormula: string read GetPestDownstreamSaturatedWaterContentFormula
-//      write SetPestDownstreamSaturatedWaterContentFormula
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestDownstreamSaturatedWaterContentMethod: TPestParamMethod
-//      read FPestDownstreamSaturatedWaterContentMethod write SetPestDownstreamSaturatedWaterContentMethod
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//
-//    property PestUpstreamInitialWaterContentFormula: string read GetPestUpstreamInitialWaterContentFormula
-//      write SetPestUpstreamInitialWaterContentFormula
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestUpstreamInitialWaterContentMethod: TPestParamMethod
-//      read FPestUpstreamInitialWaterContentMethod write SetPestUpstreamInitialWaterContentMethod
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestDownstreamInitialWaterContentFormula: string read GetPestDownstreamInitialWaterContentFormula
-//      write SetPestDownstreamInitialWaterContentFormula
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestDownstreamInitialWaterContentMethod: TPestParamMethod
-//      read FPestDownstreamInitialWaterContentMethod write SetPestDownstreamInitialWaterContentMethod
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//
-//    property PestUpstreamBrooksCoreyExponentFormula: string read GetPestUpstreamBrooksCoreyExponentFormula
-//      write SetPestUpstreamBrooksCoreyExponentFormula
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestUpstreamBrooksCoreyExponentMethod: TPestParamMethod
-//      read FPestUpstreamBrooksCoreyExponentMethod write SetPestUpstreamBrooksCoreyExponentMethod
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestDownstreamBrooksCoreyExponentFormula: string read GetPestDownstreamBrooksCoreyExponentFormula
-//      write SetPestDownstreamBrooksCoreyExponentFormula
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestDownstreamBrooksCoreyExponentMethod: TPestParamMethod
-//      read FPestDownstreamBrooksCoreyExponentMethod write SetPestDownstreamBrooksCoreyExponentMethod
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//
-//    property PestUpstreamVerticalSaturatedKFormula: string read GetPestUpstreamVerticalSaturatedKFormula
-//      write SetPestUpstreamVerticalSaturatedKFormula
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestUpstreamVerticalSaturatedKMethod: TPestParamMethod
-//      read FPestUpstreamVerticalSaturatedKMethod write SetPestUpstreamVerticalSaturatedKMethod
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestDownstreamVerticalSaturatedKFormula: string read GetPestDownstreamVerticalSaturatedKFormula
-//      write SetPestDownstreamVerticalSaturatedKFormula
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-//    property PestDownstreamVerticalSaturatedKMethod: TPestParamMethod
-//      read FPestDownstreamVerticalSaturatedKMethod write SetPestDownstreamVerticalSaturatedKMethod
-//      {$IFNDEF PEST}
-//      Stored False
-//      {$ENDIF}
-//      ;
-
-
-
-
+      read FPestDownstreamDepthMethod write SetPestDownstreamDepthMethod;
     property PestFlowFormula: string read GetPestFlowFormula
-      write SetPestFlowFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestFlowFormula;
     property PestFlowMethod: TPestParamMethod
-      read FPestFlowMethod write SetPestFlowMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestFlowMethod write SetPestFlowMethod;
     property PestPrecipFormula: string read GetPestPrecipFormula
-      write SetPestPrecipFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPrecipFormula;
     property PestPrecipMethod: TPestParamMethod
-      read FPestPrecipMethod write SetPestPrecipMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestPrecipMethod write SetPestPrecipMethod;
     property PestEvapFormula: string read GetPestEvapFormula
-      write SetPestEvapFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvapFormula;
     property PestEvapMethod: TPestParamMethod
-      read FPestEvapMethod write SetPestEvapMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestEvapMethod write SetPestEvapMethod;
     property PestRunoffFormula: string read GetPestRunoffFormula
-      write SetPestRunoffFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRunoffFormula;
     property PestRunoffMethod: TPestParamMethod
-      read FPestRunoffMethod write SetPestRunoffMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestRunoffMethod write SetPestRunoffMethod;
   end;
 
 resourcestring

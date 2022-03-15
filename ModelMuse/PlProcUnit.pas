@@ -734,13 +734,11 @@ begin
   end;
 
   PLPROC_Location := GetPLPROC_Location(FParamValuesFileName, Model);
-  {$IFDEF PEST}
   if Model.PestUsed then
   begin
     MoveAppToDirectory(PLPROC_Location, ModelDirectory);
     PLPROC_Location := ExtractFileName(PLPROC_Location);
   end;
-  {$ENDIF}
   Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
     [PLPROC_Location, ExtractFileName(ScriptFileName)]));
 end;
@@ -2209,13 +2207,11 @@ begin
   ModelDirectory := ExtractFileDir(FFileName);
   Model.SutraPestScripts.Add(FFileName);
   PLPROC_Location := GetPLPROC_Location(FFileName, Model);
-  {$IFDEF PEST}
   if Model.PestUsed then
   begin
     MoveAppToDirectory(PLPROC_Location, ModelDirectory);
     PLPROC_Location := ExtractFileName(PLPROC_Location);
   end;
-  {$ENDIF}
   Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
@@ -2309,13 +2305,11 @@ begin
       SaveKrigingFactors;
       PLPROC_Location := GetPLPROC_Location(FFileName, Model);
       ModelDirectory := ExtractFileDir(FFileName);
-      {$IFDEF PEST}
       if Model.PestUsed then
       begin
         MoveAppToDirectory(PLPROC_Location, ModelDirectory);
         PLPROC_Location := ExtractFileName(PLPROC_Location);
       end;
-      {$ENDIF}
       Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
         [PLPROC_Location, ExtractFileName(ScriptFileName)]));
 
@@ -3348,13 +3342,11 @@ begin
 
   PLPROC_Location := GetPLPROC_Location(FFileName, Model);
   ModelDirectory := ExtractFileDir(FFileName);
-  {$IFDEF PEST}
   if Model.PestUsed then
   begin
     MoveAppToDirectory(PLPROC_Location, ModelDirectory);
     PLPROC_Location := ExtractFileName(PLPROC_Location);
   end;
-  {$ENDIF}
   ScriptLine := Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]);
 
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
@@ -3924,13 +3916,11 @@ begin
   Model.SutraPestScripts.Add(FFileName);
   PLPROC_Location := GetPLPROC_Location(FFileName, Model);
   ModelDirectory := ExtractFileDir(FFileName);
-  {$IFDEF PEST}
   if Model.PestUsed then
   begin
     MoveAppToDirectory(PLPROC_Location, ModelDirectory);
     PLPROC_Location := ExtractFileName(PLPROC_Location);
   end;
-  {$ENDIF}
   Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''',
    [PLPROC_Location, ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
@@ -4043,13 +4033,11 @@ begin
       SaveKrigingFactors;
       PLPROC_Location := GetPLPROC_Location(FFileName, Model);
       ModelDirectory := ExtractFileDir(FFileName);
-      {$IFDEF PEST}
       if Model.PestUsed then
       begin
         MoveAppToDirectory(PLPROC_Location, ModelDirectory);
         PLPROC_Location := ExtractFileName(PLPROC_Location);
       end;
-      {$ENDIF}
       Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
         [PLPROC_Location, ExtractFileName(ScriptFileName)]));
     finally

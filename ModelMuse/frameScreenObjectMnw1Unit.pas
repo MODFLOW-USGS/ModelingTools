@@ -279,7 +279,6 @@ begin
           Mnw1Item.ReactivationPumpingRate;
       end;
 
-      {$IFDEF PEST}
       PestModifier[Ord(mcDesiredPumpingRate)] := FirstMnw1.PestDesiredPumpingRateFormula;
       PestMethod[Ord(mcDesiredPumpingRate)] := FirstMnw1.PestDesiredPumpingRateMethod;
 
@@ -309,7 +308,6 @@ begin
 
       PestModifier[Ord(mcReactivationPumpingRate)] := FirstMnw1.PestMaximumPumpingRateFormula;
       PestMethod[Ord(mcReactivationPumpingRate)] := FirstMnw1.PestMaximumPumpingRateMethod;
-      {$ENDIF}
 
       for BoundaryIndex := 1 to Mnw1List.Count - 1 do
       begin
@@ -343,7 +341,6 @@ begin
         end;
       end;
 
-      {$IFDEF PEST}
       for BoundaryIndex := 1 to Mnw1List.Count - 1 do
       begin
         Mnw1Boundary := Mnw1List[BoundaryIndex];
@@ -438,7 +435,6 @@ begin
           PestMethodAssigned[Ord(mcReactivationPumpingRate)] := False;
         end;
       end;
-      {$ENDIF}
     finally
       Mnw1List.Free;
     end;
@@ -461,14 +457,8 @@ begin
     begin
       seNumberOfTimes.OnChange(seNumberOfTimes);
     end;
-    {$IFDEF PEST}
-//    rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
-//    rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
-//    rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
-//    rdgModflowBoundary.SpecialFormat[0, PestMethodRow] := rcf4String;
     rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
     rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
-     {$ENDIF}
 
     frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes
       (rdgModflowBoundary, Ord(mcStartTime));
@@ -685,7 +675,6 @@ begin
 
       Boundary.Site := edSiteLabel.Text;
 
-      {$IFDEF PEST}
       if PestModifierAssigned[Ord(mcDesiredPumpingRate)] then
       begin
         Boundary.PestDesiredPumpingRateFormula := PestModifier[Ord(mcDesiredPumpingRate)];
@@ -775,7 +764,6 @@ begin
       begin
         Boundary.PestMaximumPumpingRateMethod := PestMethod[Ord(mcReactivationPumpingRate)];
       end;
-      {$ENDIF}
 
       Mnw1Collection := Boundary.Values as TMnw1WellCollection;
       while Mnw1Collection.Count > seNumberOfTimes.AsInteger do

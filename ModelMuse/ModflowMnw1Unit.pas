@@ -504,126 +504,59 @@ type
     property Site: string read FSite write SetSite;
 
     // PEST parameters
-    property PestDesiredPumpingRateFormula: string read GetPestDesiredPumpingRateFormula
-      write SetPestDesiredPumpingRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestDesiredPumpingRateMethod: TPestParamMethod read FPestDesiredPumpingRateMethod
-      write SetPestDesiredPumpingRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+    property PestDesiredPumpingRateFormula: string
+      read GetPestDesiredPumpingRateFormula
+      write SetPestDesiredPumpingRateFormula;
+    property PestDesiredPumpingRateMethod: TPestParamMethod
+      read FPestDesiredPumpingRateMethod
+      write SetPestDesiredPumpingRateMethod;
     property PestWaterQualityFormula: string read GetPestWaterQualityFormula
-      write SetPestWaterQualityFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestWaterQualityMethod: TPestParamMethod read FPestWaterQualityMethod
-      write SetPestWaterQualityMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWaterQualityFormula;
+    property PestWaterQualityMethod: TPestParamMethod
+      read FPestWaterQualityMethod
+      write SetPestWaterQualityMethod;
     property PestWellRadiusFormula: string read GetPestWellRadiusFormula
-      write SetPestWellRadiusFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWellRadiusFormula;
     property PestWellRadiusMethod: TPestParamMethod read FPestWellRadiusMethod
-      write SetPestWellRadiusMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWellRadiusMethod;
     property PestConductanceFormula: string read GetPestConductanceFormula
-      write SetPestConductanceFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestConductanceFormula;
     property PestConductanceMethod: TPestParamMethod read FPestConductanceMethod
-      write SetPestConductanceMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestConductanceMethod;
     property PestSkinFactorFormula: string read GetPestSkinFactorFormula
-      write SetPestSkinFactorFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestSkinFactorFormula;
     property PestSkinFactorMethod: TPestParamMethod read FPestSkinFactorMethod
-      write SetPestSkinFactorMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestLimitingWaterLevelFormula: string read GetPestLimitingWaterLevelFormula
-      write SetPestLimitingWaterLevelFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestLimitingWaterLevelMethod: TPestParamMethod read FPestLimitingWaterLevelMethod
-      write SetPestLimitingWaterLevelMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestReferenceElevationFormula: string read GetPestReferenceElevationFormula
-      write SetPestReferenceElevationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestReferenceElevationMethod: TPestParamMethod read FPestReferenceElevationMethod
-      write SetPestReferenceElevationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestNonLinearLossCoefficientFormula: string read GetPestNonLinearLossCoefficientFormula
-      write SetPestNonLinearLossCoefficientFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestNonLinearLossCoefficientMethod: TPestParamMethod read FPestNonLinearLossCoefficientMethod
-      write SetPestNonLinearLossCoefficientMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestMinimumPumpingRateFormula: string read GetPestMinimumPumpingRateFormula
-      write SetPestMinimumPumpingRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestMinimumPumpingRateMethod: TPestParamMethod read FPestMinimumPumpingRateMethod
-      write SetPestMinimumPumpingRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestMaximumPumpingRateFormula: string read GetPestMaximumPumpingRateFormula
-      write SetPestMaximumPumpingRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestMaximumPumpingRateMethod: TPestParamMethod read FPestMaximumPumpingRateMethod
-      write SetPestMaximumPumpingRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestSkinFactorMethod;
+    property PestLimitingWaterLevelFormula: string
+      read GetPestLimitingWaterLevelFormula
+      write SetPestLimitingWaterLevelFormula;
+    property PestLimitingWaterLevelMethod: TPestParamMethod
+      read FPestLimitingWaterLevelMethod
+      write SetPestLimitingWaterLevelMethod ;
+    property PestReferenceElevationFormula: string
+      read GetPestReferenceElevationFormula
+      write SetPestReferenceElevationFormula;
+    property PestReferenceElevationMethod: TPestParamMethod
+      read FPestReferenceElevationMethod
+      write SetPestReferenceElevationMethod;
+    property PestNonLinearLossCoefficientFormula: string
+      read GetPestNonLinearLossCoefficientFormula
+      write SetPestNonLinearLossCoefficientFormula;
+    property PestNonLinearLossCoefficientMethod: TPestParamMethod
+      read FPestNonLinearLossCoefficientMethod
+      write SetPestNonLinearLossCoefficientMethod;
+    property PestMinimumPumpingRateFormula: string
+      read GetPestMinimumPumpingRateFormula
+      write SetPestMinimumPumpingRateFormula;
+    property PestMinimumPumpingRateMethod: TPestParamMethod
+      read FPestMinimumPumpingRateMethod
+      write SetPestMinimumPumpingRateMethod;
+    property PestMaximumPumpingRateFormula: string
+      read GetPestMaximumPumpingRateFormula
+      write SetPestMaximumPumpingRateFormula;
+    property PestMaximumPumpingRateMethod: TPestParamMethod
+      read FPestMaximumPumpingRateMethod
+      write SetPestMaximumPumpingRateMethod;
   end;
 
 const

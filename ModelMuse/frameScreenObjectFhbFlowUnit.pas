@@ -104,10 +104,8 @@ begin
   comboFormulaInterp.ItemIndex := 0;
   AssignFlowCaption;
   LayoutMultiRowEditControls;
-  {$IFDEF PEST}
   PestMethod[Ord(fhcHead)]
     := TFhbFlowBoundary.DefaultBoundaryMethod(BoundaryValuePosition);
-  {$ENDIF}
 end;
 
 procedure TframeScreenObjectFhbFlow.AssignFlowCaption;

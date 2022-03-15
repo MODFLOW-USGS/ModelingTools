@@ -384,41 +384,17 @@ type
   published
     property DrainReturn: TDrainReturn read FDrainReturn write SetDrainReturn;
     property PestElevFormula: string read GetPestElevFormula
-      write SetPestElevFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestElevFormula;
     property PestConductanceFormula: string read GetPestConductanceFormula
-      write SetPestConductanceFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestConductanceFormula;
     property PestReturnFractionFormula: string read GetPestReturnFractionFormula
-      write SetPestReturnFractionFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestReturnFractionFormula;
     property PestElevMethod: TPestParamMethod read FPestElevMethod
-      write SetPestElevMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestElevMethod;
     property PestConductanceMethod: TPestParamMethod
-      read FPestConductanceMethod write SetPestConductanceMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConductanceMethod write SetPestConductanceMethod;
     property PestReturnFractionMethod: TPestParamMethod
-      read FPestReturnFractionMethod write SetPestReturnFractionMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestReturnFractionMethod write SetPestReturnFractionMethod;
   end;
 
 const

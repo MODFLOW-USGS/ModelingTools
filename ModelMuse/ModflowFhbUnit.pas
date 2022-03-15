@@ -235,17 +235,9 @@ type
       FormulaIndex: integer): TPestParamMethod; override;
   published
     property PestFhbBoundaryFormula: string read GetPestFhbBoundaryFormula
-      write SetPestFhbBoundaryFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestFhbBoundaryFormula;
     property PestFhbBoundaryMethod: TPestParamMethod read FPestFhbBoundaryMethod
-      write SetFhbBoundaryMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetFhbBoundaryMethod;
   end;
 
   // @name represents the MODFLOW FHB flow boundaries associated with

@@ -490,94 +490,30 @@ type
   published
     property SegmentNumber: Integer read FSegmentNumber write SetSegmentNumber;
     property ConductancePest: string read GetConductancePest
-      write SetConductancePest
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property StagePest: string read GetStagePest write SetStagePest
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property BedTopPest: string read GetBedTopPest write SetBedTopPest
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property BedBottomPest: string read GetBedBottomPest write SetBedBottomPest
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property FlowPest: string read GetFlowPest write SetFlowPest
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property WidthPest: string read GetWidthPest write SetWidthPest
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property SlopePest: string read GetSlopePest write SetSlopePest
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property RoughnessPest: string read GetRoughnessPest write SetRoughnessPest
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetConductancePest;
+    property StagePest: string read GetStagePest write SetStagePest;
+    property BedTopPest: string read GetBedTopPest write SetBedTopPest;
+    property BedBottomPest: string read GetBedBottomPest write SetBedBottomPest;
+    property FlowPest: string read GetFlowPest write SetFlowPest;
+    property WidthPest: string read GetWidthPest write SetWidthPest;
+    property SlopePest: string read GetSlopePest write SetSlopePest;
+    property RoughnessPest: string read GetRoughnessPest write SetRoughnessPest;
     property ConductancePestMethod: TPestParamMethod read FConductancePestMethod
-      write SetConductancePestMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetConductancePestMethod;
     property StagePestMethod: TPestParamMethod read FStagePestMethod
-      write SetStagePestMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetStagePestMethod;
     property BedTopPestMethod: TPestParamMethod read FBedTopPestMethod
-      write SetBedTopPestMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetBedTopPestMethod;
     property BedBottomPestMethod: TPestParamMethod read FBedBottomPestMethod
-      write SetBedBottomPestMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetBedBottomPestMethod;
     property FlowPestMethod: TPestParamMethod read FFlowPestMethod
-      write SetFlowPestMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetFlowPestMethod;
     property WidthPestMethod: TPestParamMethod read FWidthPestMethod
-      write SetWidthPestMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetWidthPestMethod;
     property SlopePestMethod: TPestParamMethod read FSlopePestMethod
-      write SetSlopePestMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetSlopePestMethod;
     property RoughnessPestMethod: TPestParamMethod read FRoughnessPestMethod
-      write SetRoughnessPestMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetRoughnessPestMethod;
   end;
 
 const

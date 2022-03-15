@@ -489,9 +489,6 @@ var
   Item: TScreenObjectEditItem;
   VerticalState: TCheckBoxState;
 begin
-{$IFNDEF PEST}
-  tabObservations.TabVisible := False;
-{$ENDIF}  
   Changing := True;
   try
     InitializeControls;
@@ -568,7 +565,6 @@ begin
         begin
           Boundary := LocalList[BoundaryIndex];
 
-          {$IFDEF PEST}
           if FFirstBoundary.PestPumpingRateFormula <> Boundary.PestPumpingRateFormula then
           begin
             PestModifierAssigned[rdgTimeTable, Ord(mtcPumpingRate)] := False
@@ -613,7 +609,6 @@ begin
           begin
             PestMethodAssigned[rdgTimeTable, Ord(mtcMaxRate)] := False
           end;
-          {$ENDIF}
 
           if comboLossType.ItemIndex <> Ord(Boundary.LossType) then
           begin
@@ -1031,7 +1026,6 @@ begin
   seTimeTableRowsChange(nil);
   rdgTimeTable.BeginUpdate;
   try
-    {$IFDEF PEST}
     PestModifier[rdgTimeTable, Ord(mtcPumpingRate)] := Boundary.PestPumpingRateFormula;
     PestMethod[rdgTimeTable, Ord(mtcPumpingRate)] := Boundary.PestPumpingRateMethod;
 
@@ -1046,8 +1040,6 @@ begin
 
     PestModifier[rdgTimeTable, Ord(mtcMaxRate)] := Boundary.PestReactivationPumpingRateFormula;
     PestMethod[rdgTimeTable, Ord(mtcMaxRate)] := Boundary.PestReactivationPumpingRateMethod;
-
-    {$ENDIF}
 
     for TimeIndex := 0 to Boundary.TimeValues.Count - 1 do
     begin
@@ -1183,7 +1175,6 @@ begin
 
   rdgTimeTable.BeginUpdate;
   try
-    {$IFDEF PEST}
     seTimeTableRowsChange(nil);
     rdgTimeTable.Cells[0, PestModifierRow] := StrPestModifier;
     rdgTimeTable.Cells[0, PestMethodRow] := StrModificationMethod;
@@ -1207,8 +1198,6 @@ begin
     PestModifier[rdgTimeTable, Ord(mtcMaxRate)] := '';
     PestMethod[rdgTimeTable, Ord(mtcMaxRate)] :=
       TMnw2Boundary.DefaultBoundaryMethod(ReactivationPumpingRatePosition);
-
-    {$ENDIF}
 
     rdgTimeTable.Cells[Ord(mtcStartTime), 0] := StrStartingTime;
     rdgTimeTable.Cells[Ord(mtcEndTime), 0] := StrEndingTime;
@@ -1841,7 +1830,6 @@ begin
         end;
       end;
 
-      {$IFDEF PEST}
       if PestModifierAssigned[rdgTimeTable, Ord(mtcPumpingRate)]  then
       begin
         Boundary.PestPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcPumpingRate)];
@@ -1886,7 +1874,6 @@ begin
       begin
         Boundary.PestReactivationPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcMaxRate)];
       end;
-      {$ENDIF}
 
       TimeCount := 0;
       for RowIndex := 1 + PestRowOffset to rdgTimeTable.RowCount - 1 do

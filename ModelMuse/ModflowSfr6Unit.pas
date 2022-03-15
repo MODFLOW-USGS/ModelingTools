@@ -610,7 +610,8 @@ type
     property SegmentNumber: Integer read FSegmentNumber write SetSegmentNumber;
     property DownstreamSegments: TIntegerCollection read FDownstreamSegments
       write SetDownstreamSegments;
-    property Diversions: TDiversionCollection read FDiversions write SetDiversions;
+    property Diversions: TDiversionCollection read FDiversions
+      write SetDiversions;
     property ReachLength: string read GetReachLength Write SetReachLength;
     property ReachWidth: string read GetReachWidth write SetReachWidth;
     property Gradient: string read GetGradient write SetGradient;
@@ -626,95 +627,38 @@ type
       write FUpstreamFraction stored False;
 
     property PestInflowFormula: string read GetPestInflowFormula
-      write SetPestInflowFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestInflowFormula;
     property PestInflowMethod: TPestParamMethod read FPestInflowMethod
-      write SetPestInflowMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestInflowMethod;
     property PestRainfallFormula: string read GetPestRainfallFormula
-      write SetPestRainfallFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRainfallFormula;
     property PestRainfallMethod: TPestParamMethod read FPestRainfallMethod
-      write SetPestRainfallMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRainfallMethod;
     property PestEvaporationFormula: string read GetPestEvaporationFormula
-      write SetPestEvaporationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvaporationFormula;
     property PestEvaporationMethod: TPestParamMethod read FPestEvaporationMethod
-      write SetPestEvaporationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvaporationMethod;
     property PestRunoffFormula: string read GetPestRunoffFormula
-      write SetPestRunoffFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRunoffFormula;
     property PestRunoffMethod: TPestParamMethod read FPestRunoffMethod
-      write SetPestRunoffMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestUpstreamFractionFormula: string read GetPestUpstreamFractionFormula
-      write SetPestUpstreamFractionFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestUpstreamFractionMethod: TPestParamMethod read FPestUpstreamFractionMethod
-      write SetPestUpstreamFractionMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRunoffMethod;
+    property PestUpstreamFractionFormula: string
+      read GetPestUpstreamFractionFormula
+      write SetPestUpstreamFractionFormula;
+    property PestUpstreamFractionMethod: TPestParamMethod
+      read FPestUpstreamFractionMethod
+      write SetPestUpstreamFractionMethod;
     property PestStageFormula: string read GetPestStageFormula
-      write SetPestStageFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStageFormula;
     property PestStageMethod: TPestParamMethod read FPestStageMethod
-      write SetPestStageMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStageMethod;
     property PestRoughnessFormula: string read GetPestRoughnessFormula
-      write SetPestRoughnessFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRoughnessFormula;
     property PestRoughnessMethod: TPestParamMethod read FPestRoughnessMethod
-      write SetPestRoughnessMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property StartingConcentrations: TStringConcCollection read FStartingConcentrations
-      write SetStartingConcentrations
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRoughnessMethod;
+    property StartingConcentrations: TStringConcCollection
+      read FStartingConcentrations
+      write SetStartingConcentrations;
   end;
 
 const

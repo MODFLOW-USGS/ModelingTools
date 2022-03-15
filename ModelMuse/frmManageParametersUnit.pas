@@ -1761,9 +1761,6 @@ var
   AnObject: TObject;
   RowIndex: Integer;
 begin
-{$IFNDEF PEST}
-  Exit;
-{$ENDIF}
   if not frmGoPhast.PhastModel.PestUsed then
   begin
     Exit;

@@ -174,17 +174,9 @@ type
       FormulaIndex: integer): TPestParamMethod; override;
   published
     property PestRunoffFormula: string read GetPestRunoffFormula
-      write SetPestRunoffFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestRunoffMethod: TPestParamMethod
-      read FPestRunoffMethod write SetPestRunoffMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRunoffFormula;
+    property PestRunoffMethod: TPestParamMethod read FPestRunoffMethod
+      write SetPestRunoffMethod;
   end;
 
 implementation

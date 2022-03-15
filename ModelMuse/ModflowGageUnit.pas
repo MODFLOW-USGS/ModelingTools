@@ -40,11 +40,8 @@ Type
     property Gage5: boolean read FGage5 write SetGage5;
     property Gage6: boolean read FGage6 write SetGage6;
     property Gage7: boolean read FGage7 write SetGage7;
-    property Observations: TSfrObservations read FObservations write SetObservations
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-      ;
+    property Observations: TSfrObservations read FObservations
+      write SetObservations;
   end;
 
 implementation

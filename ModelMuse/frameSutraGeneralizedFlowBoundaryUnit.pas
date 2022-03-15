@@ -123,8 +123,6 @@ begin
   begin
     ChangeSelectedCellsInColumn(rdgSutraFeature, Ord(Col), comboLimit.Text);
   end;
-//  TGenFlowCol = (gfcTime, gfcUsed, gfcPress1, gfcFlow1, gfcPress2, gfcFlow2,
-//    gfcLimit1, gfcLimit2, gfcInflowU, gfcOutflowType, gfcOutflowU);
 end;
 
 procedure TframeSutraGeneralizedFlowBoundary.DisplayBoundaries(
@@ -133,16 +131,13 @@ var
   ItemIndex: Integer;
   Item: TSutraGeneralFlowItem;
 begin
-//  FDisplayingData := True;
   rdgSutraFeature.BeginUpdate;
   try
     seNumberOfTimes.AsInteger := BoundColl.Count + PestRowOffset;
     rdgSutraFeature.RowCount := BoundColl.Count+1 + PestRowOffset;
 
-    {$IFDEF PEST}
     rdgSutraFeature.Cells[Ord(gfcTime), PestModifierRow] := StrPestModifier;
     rdgSutraFeature.Cells[Ord(gfcTime), PestMethodRow] := StrModificationMethod;
-    {$ENDIF}
 
     for ItemIndex := 0 to BoundColl.Count - 1 do
     begin
@@ -218,7 +213,6 @@ begin
     ClearBoundaries;
   end;
 
-  {$IFDEF PEST}
   Columns := TGenericIntegerList.Create;
   FormulaIndexes := TGenericIntegerList.Create;
   try
@@ -293,7 +287,6 @@ begin
     FormulaIndexes.Free;
     Columns.Free;
   end;
-  {$ENDIF}
 end;
 
 procedure TframeSutraGeneralizedFlowBoundary.GetData(
@@ -785,7 +778,6 @@ begin
       end;
     end;
 
-    {$IFDEF PEST}
     Columns := TGenericIntegerList.Create;
     FormulaIndexes := TGenericIntegerList.Create;
     try
@@ -827,7 +819,6 @@ begin
       FormulaIndexes.Free;
       Columns.Free;
     end;
-    {$ENDIF}
   finally
     BoundaryList.Free;
     LocalScreenObjects.Free;

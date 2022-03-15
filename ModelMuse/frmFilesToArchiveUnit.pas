@@ -8,10 +8,6 @@ uses System.UITypes,
   UndoItems, StrUtils, JvExControls, JvLinkLabel, ComCtrls, JvRichEdit,
   Vcl.Menus, System.Generics.Collections;
 
-{$IFDEF PEST}
-  {$DEFINE SWIObs}
-{$ENDIF}
-
 type
   TfrmFilesToArchive = class(TfrmCustomGoPhast)
     pnlBottom: TPanel;
@@ -55,10 +51,8 @@ type
     FZonebudgetOutputFiles: TTreeNode;
     FMt3dmsInputFiles: TTreeNode;
     FMt3dmsOutputFiles: TTreeNode;
-  {$IFDEF SWIObs}
     FSwiObsExtInputFiles: TTreeNode;
     FSwiObsExtOutputFiles: TTreeNode;
-  {$ENDIF}
     FRootNodes: TList<TTreeNode>;
     FChildInputFileNodes: TList<TTreeNode>;
     FChildOutputFileNodes: TList<TTreeNode>;
@@ -66,10 +60,8 @@ type
     FChildModpathOutputFileNodes: TList<TTreeNode>;
     FChildZoneBudgetInputFileNodes: TList<TTreeNode>;
     FChildZoneBudgetOutputFileNodes: TList<TTreeNode>;
-  {$IFDEF SWIObs}
     FChildSwiObsExtractorInputFileNodes: TList<TTreeNode>;
     FChildSwiObsExtractorOutputFileNodes: TList<TTreeNode>;
-  {$ENDIF}
     FChildMt3dmsInputFileNodes: TList<TTreeNode>;
     FChildMt3dmsOutputFileNodes: TList<TTreeNode>;
     procedure GetData;
@@ -93,10 +85,8 @@ type
     FZonebudgetOutputFiles: TStringList;
     FMt3dmsInputFiles: TStringList;
     FMt3dmsOutputFiles: TStringList;
-  {$IFDEF SWIObs}
     FSwiObsExtInputFiles: TStringList;
     FSwiObsExtOutputFiles: TStringList;
-  {$ENDIF}
     function SameContents(Strings1, Strings2: TStrings): boolean;
   public
     constructor Create;
@@ -216,32 +206,25 @@ begin
   FChildModpathOutputFileNodes := TList<TTreeNode>.Create;
   FChildZoneBudgetInputFileNodes := TList<TTreeNode>.Create;
   FChildZoneBudgetOutputFileNodes := TList<TTreeNode>.Create;
-{$IFDEF SWIObs}
   FChildSwiObsExtractorInputFileNodes := TList<TTreeNode>.Create;
   FChildSwiObsExtractorOutputFileNodes := TList<TTreeNode>.Create;
-{$ENDIF}
   FChildMt3dmsInputFileNodes := TList<TTreeNode>.Create;
   FChildMt3dmsOutputFileNodes := TList<TTreeNode>.Create;
-//  FFilesToArchive := TStringList.Create;
   GetData;
   EnableCreateArchive;
-//  btnArchive.Enabled := FFilesToArchive.Count > 0;
 end;
 
 procedure TfrmFilesToArchive.FormDestroy(Sender: TObject);
 begin
   inherited;
-//  FFilesToArchive.Free;
   FChildOutputFileNodes.Free;
   FChildInputFileNodes.Free;
   FChildModpathInputFileNodes.Free;
   FChildModpathOutputFileNodes.Free;
   FChildZoneBudgetInputFileNodes.Free;
   FChildZoneBudgetOutputFileNodes.Free;
-{$IFDEF SWIObs}
   FChildSwiObsExtractorInputFileNodes.Free;
   FChildSwiObsExtractorOutputFileNodes.Free;
-{$ENDIF}
   FChildMt3dmsInputFileNodes.Free;
   FChildMt3dmsOutputFileNodes.Free;
   FRootNodes.Free;
@@ -384,7 +367,6 @@ begin
     FChildZoneBudgetOutputFileNodes.Add(ChildNode);
   end;
 
-{$IFDEF SWIObs}
   AddFilesToTree(frmGoPhast.PhastModel.SwiObsExtractorInputFiles, StrSWIObservationExtr,
     FSwiObsExtInputFiles);
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
@@ -404,7 +386,6 @@ begin
       AChildModel.ModelName + ' - ' + StrSWIObservationExtrOut, ChildNode);
     FChildSwiObsExtractorInputFileNodes.Add(ChildNode);
   end;
-{$ENDIF}
 
   AddFilesToTree(frmGoPhast.PhastModel.Mt3dmsInputFiles, StrMT3DMSInput,
     FMt3dmsInputFiles);
@@ -431,8 +412,6 @@ procedure TfrmFilesToArchive.JvLinkLabel1LinkClick(Sender: TObject;
   LinkNumber: Integer; LinkText, LinkParam: string);
 begin
   inherited;
-//  TWebTools.OpenWebPage('http://water.usgs.gov/admin/memo/GW/gw11.01.html');
-//  TWebTools.OpenWebPage('http://water.usgs.gov/admin/memo/GW/gw2015.02.pdf');
   TWebTools.OpenWebPage('https://water.usgs.gov/admin/memo/GW/gw2016.02.pdf');
 end;
 
@@ -548,10 +527,8 @@ begin
     AddNodeTextToStrings(FModpathOutputFiles, AList.FModpathOutputFiles);
     AddNodeTextToStrings(FZonebudgetInputFiles, AList.FZonebudgetInputFiles);
     AddNodeTextToStrings(FZonebudgetOutputFiles, AList.FZonebudgetOutputFiles);
-  {$IFDEF SWIObs}
     AddNodeTextToStrings(FSwiObsExtInputFiles, AList.FSwiObsExtInputFiles);
     AddNodeTextToStrings(FSwiObsExtOutputFiles, AList.FSwiObsExtOutputFiles);
-  {$ENDIF}
     AddNodeTextToStrings(FMt3dmsInputFiles, AList.FMt3dmsInputFiles);
     AddNodeTextToStrings(FMt3dmsOutputFiles, AList.FMt3dmsOutputFiles);
 
@@ -566,10 +543,8 @@ begin
       AddNodeTextToStrings(FChildModpathOutputFileNodes[ChildIndex], AList.FModpathOutputFiles);
       AddNodeTextToStrings(FChildZoneBudgetInputFileNodes[ChildIndex], AList.FZonebudgetInputFiles);
       AddNodeTextToStrings(FChildZoneBudgetOutputFileNodes[ChildIndex], AList.FZonebudgetOutputFiles);
-    {$IFDEF SWIObs}
       AddNodeTextToStrings(FChildSwiObsExtractorInputFileNodes[ChildIndex], AList.FSwiObsExtInputFiles);
       AddNodeTextToStrings(FChildSwiObsExtractorOutputFileNodes[ChildIndex], AList.FZonebudgetOutputFiles);
-    {$ENDIF}
       AddNodeTextToStrings(FChildMt3dmsInputFileNodes[ChildIndex], AList.FMt3dmsInputFiles);
       AddNodeTextToStrings(FChildMt3dmsOutputFileNodes[ChildIndex], AList.FMt3dmsOutputFiles);
    end;
@@ -673,10 +648,8 @@ begin
   FModpathOutputFiles := TStringList.Create;
   FZonebudgetInputFiles := TStringList.Create;
   FZonebudgetOutputFiles := TStringList.Create;
-{$IFDEF SWIObs}
   FSwiObsExtInputFiles := TStringList.Create;
   FSwiObsExtOutputFiles := TStringList.Create;
-{$ENDIF}
   FMt3dmsInputFiles := TStringList.Create;
   FMt3dmsOutputFiles := TStringList.Create;
 end;
@@ -690,10 +663,8 @@ begin
   FModpathOutputFiles.Free;
   FZonebudgetInputFiles.Free;
   FZonebudgetOutputFiles.Free;
-{$IFDEF SWIObs}
   FSwiObsExtInputFiles.Free;
   FSwiObsExtOutputFiles.Free;
-{$ENDIF}
   FMt3dmsInputFiles.Free;
   FMt3dmsOutputFiles.Free;
   inherited;
@@ -708,10 +679,8 @@ begin
     and SameContents(FModpathOutputFiles, OtherFiles.FModpathOutputFiles)
     and SameContents(FZonebudgetInputFiles, OtherFiles.FZonebudgetInputFiles)
     and SameContents(FZonebudgetOutputFiles, OtherFiles.FZonebudgetOutputFiles)
-  {$IFDEF SWIObs}
     and SameContents(FSwiObsExtInputFiles, OtherFiles.FSwiObsExtInputFiles)
     and SameContents(FSwiObsExtOutputFiles, OtherFiles.FSwiObsExtOutputFiles)
-  {$ENDIF}
     and SameContents(FMt3dmsInputFiles, OtherFiles.FMt3dmsInputFiles)
     and SameContents(FMt3dmsOutputFiles, OtherFiles.FMt3dmsOutputFiles)
 end;
@@ -752,10 +721,8 @@ begin
   frmGoPhast.PhastModel.ModpathOutputFiles := AList.FModpathOutputFiles;
   frmGoPhast.PhastModel.ZonebudgetInputFiles := AList.FZonebudgetInputFiles;
   frmGoPhast.PhastModel.ZonebudgetOutputFiles := AList.FZonebudgetOutputFiles;
-{$IFDEF SWIObs}
   frmGoPhast.PhastModel.SwiObsExtractorInputFiles := AList.FSwiObsExtInputFiles;
   frmGoPhast.PhastModel.SwiObsExtractorOutputFiles := AList.FSwiObsExtOutputFiles;
-{$ENDIF}
   frmGoPhast.PhastModel.Mt3dmsInputFiles := AList.FMt3dmsInputFiles;
   frmGoPhast.PhastModel.Mt3dmsOutputFiles := AList.FMt3dmsOutputFiles;
 
@@ -770,10 +737,8 @@ begin
     AChildModel.ModpathOutputFiles := AList.FModpathOutputFiles;
     AChildModel.ZonebudgetInputFiles := AList.FZonebudgetInputFiles;
     AChildModel.ZonebudgetOutputFiles := AList.FZonebudgetOutputFiles;
-  {$IFDEF SWIObs}
     AChildModel.SwiObsExtractorInputFiles := AList.FSwiObsExtInputFiles;
     AChildModel.SwiObsExtractorOutputFiles := AList.FSwiObsExtOutputFiles;
-  {$ENDIF}
     AChildModel.Mt3dmsInputFiles := AList.FMt3dmsInputFiles;
     AChildModel.Mt3dmsOutputFiles := AList.FMt3dmsOutputFiles;
   end;
@@ -801,10 +766,8 @@ begin
   AList.FModpathOutputFiles.AddStrings(frmGoPhast.PhastModel.ModpathOutputFiles);
   AList.FZonebudgetInputFiles.AddStrings(frmGoPhast.PhastModel.ZonebudgetInputFiles);
   AList.FZonebudgetOutputFiles.AddStrings(frmGoPhast.PhastModel.ZonebudgetOutputFiles);
-{$IFDEF SWIObs}
   AList.FSwiObsExtInputFiles.AddStrings(frmGoPhast.PhastModel.SwiObsExtractorInputFiles);
   AList.FSwiObsExtOutputFiles.AddStrings(frmGoPhast.PhastModel.SwiObsExtractorOutputFiles);
-{$ENDIF}
   AList.FMt3dmsInputFiles.AddStrings(frmGoPhast.PhastModel.Mt3dmsInputFiles);
   AList.FMt3dmsOutputFiles.AddStrings(frmGoPhast.PhastModel.Mt3dmsOutputFiles);
 
@@ -820,10 +783,8 @@ begin
     AList.FModpathOutputFiles.AddStrings(AChildModel.ModpathOutputFiles);
     AList.FZonebudgetInputFiles.AddStrings(AChildModel.ZonebudgetInputFiles);
     AList.FZonebudgetOutputFiles.AddStrings(AChildModel.ZonebudgetOutputFiles);
-  {$IFDEF SWIObs}
     AList.FSwiObsExtInputFiles.AddStrings(AChildModel.SwiObsExtractorInputFiles);
     AList.FSwiObsExtOutputFiles.AddStrings(AChildModel.SwiObsExtractorOutputFiles);
-  {$ENDIF}
     AList.FMt3dmsInputFiles.AddStrings(AChildModel.Mt3dmsInputFiles);
     AList.FMt3dmsOutputFiles.AddStrings(AChildModel.Mt3dmsOutputFiles);
   end;

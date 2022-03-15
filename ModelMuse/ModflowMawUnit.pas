@@ -676,16 +676,21 @@ type
     function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
-    property PestFlowingWellElevationObserver: TObserver read GetPestFlowingWellElevationObserver;
-    property PestFlowingWellConductanceObserver: TObserver read GetPestFlowingWellConductanceObserver;
+    property PestFlowingWellElevationObserver: TObserver
+      read GetPestFlowingWellElevationObserver;
+    property PestFlowingWellConductanceObserver: TObserver
+      read GetPestFlowingWellConductanceObserver;
     property PestRateObserver: TObserver read GetPestRateObserver;
     property PestWellHeadObserver: TObserver read GetPestWellHeadObserver;
     property PestHeadLimitObserver: TObserver read GetPestHeadLimitObserver;
     property PestMinRateObserver: TObserver read GetPestMinRateObserver;
     property PestMaxRateObserver: TObserver read GetPestMaxRateObserver;
-    property PestPumpElevationObserver: TObserver read GetPestPumpElevationObserver;
-    property PestScalingLengthObserver: TObserver read GetPestScalingLengthObserver;
-    property PestFlowingWellReductionLengthObserver: TObserver read GetPestFlowingWellReductionLengthObserver;
+    property PestPumpElevationObserver: TObserver
+      read GetPestPumpElevationObserver;
+    property PestScalingLengthObserver: TObserver
+      read GetPestScalingLengthObserver;
+    property PestFlowingWellReductionLengthObserver: TObserver
+      read GetPestFlowingWellReductionLengthObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -712,135 +717,63 @@ type
     property WellScreens: TMawWellScreenCollection read FWellScreens
       write SetWellScreens;
 
-    property PestFlowingWellElevationFormula: string read GetPestFlowingWellElevationFormula
-      write SetPestFlowingWellElevationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestFlowingWellElevationMethod: TPestParamMethod read FPestFlowingWellElevationMethod
-      write SetPestFlowingWellElevationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+    property PestFlowingWellElevationFormula: string
+      read GetPestFlowingWellElevationFormula
+      write SetPestFlowingWellElevationFormula;
+    property PestFlowingWellElevationMethod: TPestParamMethod
+      read FPestFlowingWellElevationMethod
+      write SetPestFlowingWellElevationMethod;
 
-    property PestFlowingWellConductanceFormula: string read GetPestFlowingWellConductanceFormula
-      write SetPestFlowingWellConductanceFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestFlowingWellConductanceMethod: TPestParamMethod read FPestFlowingWellConductanceMethod
-      write SetPestFlowingWellConductanceMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+    property PestFlowingWellConductanceFormula: string
+      read GetPestFlowingWellConductanceFormula
+      write SetPestFlowingWellConductanceFormula;
+    property PestFlowingWellConductanceMethod: TPestParamMethod
+      read FPestFlowingWellConductanceMethod
+      write SetPestFlowingWellConductanceMethod;
 
     property PestRateFormula: string read GetPestRateFormula
-      write SetPestRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRateFormula;
     property PestRateMethod: TPestParamMethod read FPestRateMethod
-      write SetPestRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRateMethod;
 
     property PestWellHeadFormula: string read GetPestWellHeadFormula
-      write SetPestWellHeadFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWellHeadFormula;
     property PestWellHeadMethod: TPestParamMethod read FPestWellHeadMethod
-      write SetPestWellHeadMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWellHeadMethod;
 
     property PestHeadLimitFormula: string read GetPestHeadLimitFormula
-      write SetPestHeadLimitFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHeadLimitFormula ;
     property PestHeadLimitMethod: TPestParamMethod read FPestHeadLimitMethod
-      write SetPestHeadLimitMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHeadLimitMethod;
 
     property PestMinRateFormula: string read GetPestMinRateFormula
-      write SetPestMinRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestMinRateFormula;
     property PestMinRateMethod: TPestParamMethod read FPestMinRateMethod
-      write SetPestMinRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestMinRateMethod;
 
     property PestMaxRateFormula: string read GetPestMaxRateFormula
-      write SetPestMaxRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestMaxRateFormula;
     property PestMaxRateMethod: TPestParamMethod read FPestMaxRateMethod
-      write SetPestMaxRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestMaxRateMethod;
 
     property PestPumpElevationFormula: string read GetPestPumpElevationFormula
-      write SetPestPumpElevationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestPumpElevationMethod: TPestParamMethod read FPestPumpElevationMethod
-      write SetPestPumpElevationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPumpElevationFormula;
+    property PestPumpElevationMethod: TPestParamMethod
+      read FPestPumpElevationMethod
+      write SetPestPumpElevationMethod;
 
     property PestScalingLengthFormula: string read GetPestScalingLengthFormula
-      write SetPestScalingLengthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestScalingLengthMethod: TPestParamMethod read FPestScalingLengthMethod
-      write SetPestScalingLengthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestScalingLengthFormula;
+    property PestScalingLengthMethod: TPestParamMethod
+      read FPestScalingLengthMethod
+      write SetPestScalingLengthMethod;
 
-    property PestFlowingWellReductionLengthFormula: string read GetPestFlowingWellReductionLengthFormula
-      write SetPestFlowingWellReductionLengthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestFlowingWellReductionLengthMethod: TPestParamMethod read FPestFlowingWellReductionLengthMethod
-      write SetPestFlowingWellReductionLengthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+    property PestFlowingWellReductionLengthFormula: string
+      read GetPestFlowingWellReductionLengthFormula
+      write SetPestFlowingWellReductionLengthFormula;
+    property PestFlowingWellReductionLengthMethod: TPestParamMethod
+      read FPestFlowingWellReductionLengthMethod
+      write SetPestFlowingWellReductionLengthMethod;
   end;
 
 const
@@ -866,9 +799,11 @@ uses
   GIS_Functions, ModflowTimeUnit, DataSetUnit, ModflowMnw2Unit,
   ModelMuseUtilities, ModflowMvrUnit;
 
-const MawObName: array[TMawOb] of string = ('Head', 'FromMvr', 'FlowRate', 'FlowRateCells', 'PumpRate', 'RateToMvr',
-    'FlowingWellFlowRate', 'FlowWellToMvr', 'StorageFlowRate', 'ConstantFlowRate', 'Conductance',
-    'ConductanceCells', 'FlowingWellConductance');
+const MawObName: array[TMawOb] of string = ('Head', 'FromMvr', 'FlowRate',
+  'FlowRateCells', 'PumpRate', 'RateToMvr',
+  'FlowingWellFlowRate', 'FlowWellToMvr', 'StorageFlowRate',
+  'ConstantFlowRate', 'Conductance',
+  'ConductanceCells', 'FlowingWellConductance');
 
 var
   MawObNames: TStringList;

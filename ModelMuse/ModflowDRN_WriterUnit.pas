@@ -305,7 +305,7 @@ var
   ParameterName: string;
   MultiplierValue: double;
 begin
-    { DONE -cPEST : Add PEST support for PEST here }
+    { Add PEST support for PEST here }
     // handle pest data
     // handle multiply or add
   Inc(FBoundaryIndex);

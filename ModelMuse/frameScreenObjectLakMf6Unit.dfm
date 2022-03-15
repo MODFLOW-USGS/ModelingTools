@@ -44,7 +44,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     ExplicitHeight = 144
     inherited pnlEditGrid: TPanel
       Width = 483
-      ExplicitWidth = 449
+      ExplicitWidth = 483
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
       Width = 483

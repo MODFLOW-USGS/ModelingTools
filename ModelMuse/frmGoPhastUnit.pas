@@ -3454,14 +3454,6 @@ var
 begin
   inherited;
   FDefaultCreateArchive := dcaUnknown;
-  {$IFNDEF PEST}
-  acEditObservationComparisons.Visible := False;
-  acPEST.Visible := False;
-  acRunPest.Visible := False;
-  miPEST.Visible := False;
-  acImportMf6FeatureFromPest.Visible := False;
-  acImportSutraFeaturesFromPest.Visible := False;
-  {$ENDIF}
   {$IFNDEF Mf6TimeSeries}
   acTimeSeries.Visible := False;
   {$ENDIF}
@@ -4221,13 +4213,8 @@ var
   ControlIndex: Integer;
   AComponent: TComponent;
 begin
-  {$IFDEF PEST}
   acImportMf6FeatureFromPest.Visible := PhastModel.ModelSelection = msModflow2015;
   acImportSutraFeaturesFromPest.Visible := PhastModel.ModelSelection in SutraSelection;
-  {$ELSE}
-  acImportMf6FeatureFromPest.Visible := False;
-  acImportSutraFeaturesFromPest.Visible := False;
-  {$ENDIF}
 
   {$IFDEF Mf6TimeSeries}
     acTimeSeries.Visible := PhastModel.ModelSelection in ModflowSelection;
@@ -4298,12 +4285,8 @@ begin
         miSetSelectedColRowLayer.Enabled := not DisvUsed;
         acGridDragRotate.Enabled := not DisvUsed;
         acGridAngle.Enabled := not DisvUsed;
-        {$IFDEF PEST}
         acEditObservationComparisons.Visible := True;
         acEditObservationComparisons.Enabled := PhastModel.PestUsed;
-        {$ELSE}
-        acEditObservationComparisons.Visible := False;
-        {$ENDIF}
         acEditSutraFluxObs.Visible := False;
       end;
     msSutra22, msSutra30:
@@ -4313,9 +4296,6 @@ begin
         frameTopView.ModelCube.ZOrigin := zoTop;
         frameFrontView.ModelCube.YOrigin := yoSouth;
         acSubdivide.Visible := False;
-//        acSubdivide.Caption := 'Subdivide Grid &Cells...';
-//        acSubdivide.Hint := 'Subdivide grid cells|'
-//          + 'Click down and drag to select cells to be subdivided.';
         btnRunModel.DropDown := pmExportModelSutra;
         miExportShapefile.Caption := StrMeshDataToShapef;
         acGenerateGrid.Caption := StrGenerateMesh1;
@@ -4334,15 +4314,10 @@ begin
         miSetSelectedColRowLayer.Enabled := False;
         acGridDragRotate.Enabled := False;
         acGridAngle.Enabled := False;
-        {$IFDEF PEST}
         acEditObservationComparisons.Visible := True;
         acEditObservationComparisons.Enabled := PhastModel.PestUsed;
         acEditSutraFluxObs.Visible := True;
-        acEditSutraFluxObs.Enabled := True; //PhastModel.PestUsed;
-        {$ELSE}
-        acEditObservationComparisons.Visible := False;
-        acEditSutraFluxObs.Visible := False;
-        {$ENDIF}
+        acEditSutraFluxObs.Enabled := True;
       end;
     msFootPrint:
       begin
@@ -6455,18 +6430,8 @@ begin
   begin
     if PhastModel.ModelSelection = msModflow2015 then
     begin
-//      {$IFDEF PEST}
-//        miManageFluxObservations.Enabled :=
-//          (PhastModel.ChobIsSelected
-//          or PhastModel.DrobIsSelected
-//          or PhastModel.GbobIsSelected
-//          or PhastModel.RvobIsSelected
-////          or PhastModel.StobIsSelected
-//          or PhastModel.TobIsSelected);
-//      {$ELSE}
-        miManageFluxObservations.Enabled :=
-          PhastModel.TobIsSelected;
-//      {$ENDIF}
+      miManageFluxObservations.Enabled :=
+        PhastModel.TobIsSelected;
     end
     else
     begin
@@ -10257,13 +10222,11 @@ begin
 
           PhastModel.AddFilesToDeleteToBatchFile(ParamEstBatFile, ParamEstBatFileName);
           PLPROC_Location := GetPLPROC_Location(FileName, PhastModel);
-          {$IFDEF PEST}
           if PhastModel.PestUsed then
           begin
             MoveAppToDirectory(PLPROC_Location, ModelDirectory);
             PLPROC_Location := ExtractFileName(PLPROC_Location);
           end;
-          {$ENDIF}
           PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
           for DSIndex := 0 to PhastModel.DataArrayManager.DataSetCount - 1 do
           begin
@@ -10277,17 +10240,13 @@ begin
           end;
 
           BatchFile.AddStrings(PhastModel.KrigfactorsScriptLines);
-//          BatchFile.AddStrings(PhastModel.PestTemplateLines);
           ParamEstBatFile.AddStrings(PhastModel.PestTemplateLines);
 
-
-          {$IFDEF PEST}
           if PhastModel.PestUsed then
           begin
             MoveAppToDirectory(SutraFileName, ModelDirectory);
             SutraFileName := ExtractFileName(SutraFileName);
           end;
-          {$ENDIF}
 
           BatchFile.Add('"' + SutraFileName + '"');
           ParamEstBatFile.Add('"' + SutraFileName + '"');

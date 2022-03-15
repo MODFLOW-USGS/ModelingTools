@@ -4,8 +4,7 @@ inherited frmFileTypes: TfrmFileTypes
   Caption = 'File Types'
   ClientWidth = 829
   OnClose = FormClose
-  ExplicitWidth = 847
-  ExplicitHeight = 271
+  ExplicitWidth = 845
   PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
@@ -63,6 +62,7 @@ inherited frmFileTypes: TfrmFileTypes
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -86,6 +86,7 @@ inherited frmFileTypes: TfrmFileTypes
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -109,6 +110,7 @@ inherited frmFileTypes: TfrmFileTypes
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

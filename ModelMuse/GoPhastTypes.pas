@@ -749,11 +749,8 @@ resourcestring
   StrModificationMethod = 'Modification Method';
 
 const
-{$IFDEF PEST}
   PestRowOffset = 2;
-{$ELSE}
-  PestRowOffset = 0;
-{$ENDIF}
+//  PestRowOffset = 0;
 
   PestModifierRow = 1;
   PestMethodRow = 2;

@@ -238,7 +238,7 @@ var
   SpeciesIndex: Integer;
 //  ASpecies: TMobileChemSpeciesItem;
 begin
-    { TODO -cPEST : Add PEST support for PEST here }
+    { Add PEST support for PEST here }
     // handle pest parameter
     // handle multiply or add
   CHD_Cell := Cell as TCHD_Cell;

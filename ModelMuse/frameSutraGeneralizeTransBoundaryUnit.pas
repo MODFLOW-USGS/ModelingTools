@@ -103,16 +103,13 @@ var
   ItemIndex: Integer;
   Item: TSutraGenTransportItem;
 begin
-//  FDisplayingData := True;
   rdgSutraFeature.BeginUpdate;
   try
     seNumberOfTimes.AsInteger := BoundColl.Count + PestRowOffset;
     rdgSutraFeature.RowCount := BoundColl.Count+1 + PestRowOffset;
 
-    {$IFDEF PEST}
     rdgSutraFeature.Cells[Ord(gtcTime), PestModifierRow] := StrPestModifier;
     rdgSutraFeature.Cells[Ord(gtcTime), PestMethodRow] := StrModificationMethod;
-    {$ENDIF}
 
     for ItemIndex := 0 to BoundColl.Count - 1 do
     begin
@@ -183,7 +180,6 @@ begin
     end;
   end;
 
-  {$IFDEF PEST}
   Columns := TGenericIntegerList.Create;
   FormulaIndexes := TGenericIntegerList.Create;
   try
@@ -252,8 +248,6 @@ begin
     FormulaIndexes.Free;
     Columns.Free;
   end;
-  {$ENDIF}
-
 end;
 
 procedure TframeSutraGeneralizeTransBoundary.GetData(
@@ -677,7 +671,6 @@ begin
       SetBoundaryValues(BoundValues);
     end;
 
-    {$IFDEF PEST}
     Columns := TGenericIntegerList.Create;
     FormulaIndexes := TGenericIntegerList.Create;
     try
@@ -715,8 +708,6 @@ begin
       FormulaIndexes.Free;
       Columns.Free;
     end;
-    {$ENDIF}
-
   finally
     BoundaryList.Free;
     LocalScreenObjects.Free;

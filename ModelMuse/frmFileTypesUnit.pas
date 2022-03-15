@@ -43,9 +43,7 @@ const
     = ('Model Input', 'Model Output', 'Modpath Input', 'Modpath Output',
     'ZoneBudget Input', 'ZoneBudget Output', 'MT3DMS or MT3D-USGS Input',
     'MT3DMS or MT3D-USGS Output',
-  {$IFDEF SwiObsExtractor}
     'SwiObsExtractor Input', 'SwiObsExtractor Output',
-  {$ENDIF}
     'Other Input', 'Other Output', 'Ancillary');
 
 procedure TfrmFileTypes.FormClose(Sender: TObject; var Action: TCloseAction);

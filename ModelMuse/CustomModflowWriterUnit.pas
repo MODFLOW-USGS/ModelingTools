@@ -1071,9 +1071,7 @@ end;
     procedure WriteFile(FileName: string);
   end;
 
-{$IFDEF PEST}
 procedure MoveAppToDirectory(const AppFullPath, Directory: string);
-{$ENDIF}
 
 // name writes a batch-file used to run MODFLOW.
 function WriteModflowBatchFile(ProgramLocations: TProgramLocations;
@@ -1415,7 +1413,6 @@ begin
   StoredPLPROC_Location := result;
 end;
 
-{$IFDEF PEST}
 procedure MoveAppToDirectory(const AppFullPath, Directory: string);
 var
   AppName: string;
@@ -1446,7 +1443,6 @@ begin
   end;
   TFile.Copy(AppFullPath, NewFileName, True);
 end;
-{$ENDIF}
 
 function WriteModflowBatchFile(ProgramLocations: TProgramLocations;
   const FileName: string; ListFiles: TStringList; OpenListFile: boolean;
@@ -1479,10 +1475,7 @@ var
   ADataArray: TDataArray;
   INFLE: string;
   PLPROC_Location: string;
-//  DataArrayIndex: Integer;
-{$IFDEF PEST}
   KrigFactorsFileName: string;
-{$ENDIF}
   FileRoot: string;
   BackupParamEstBatFileName: string;
   BackupRunModflow: string;
@@ -1548,13 +1541,11 @@ begin
       Model.AddFilesToDeleteToBatchFile(ParamEstBatchFile, ParamEstBatFileName);
 
       PLPROC_Location := GetPLPROC_Location(FileName, Model);
-      {$IFDEF PEST}
       if Model.PestUsed then
       begin
         MoveAppToDirectory(PLPROC_Location, ModelDirectory);
         PLPROC_Location := ExtractFileName(PLPROC_Location);
       end;
-      {$ENDIF}
       PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
       for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
       begin
@@ -1641,13 +1632,11 @@ begin
       end;
 
       AFileName :=  QuoteFileName(ExpandFileName(ModflowLocation));
-      {$IFDEF PEST}
       if Model.PestUsed then
       begin
         MoveAppToDirectory(ExpandFileName(ModflowLocation), ModelDirectory);
         AFileName := ExtractFileName(AFileName);
       end;
-      {$ENDIF}
 
       if (Model.ModelSelection <> msModflow2015) then
       begin
@@ -1801,17 +1790,14 @@ begin
             + ' ' + InsFileName);
         end;
       end;
-    {$IFDEF PEST}
       if Model.PestUsed then
       begin
         PLPROC_Location := GetPLPROC_Location(FileName, Model);
-        {$IFDEF PEST}
         if Model.PestUsed then
         begin
           MoveAppToDirectory(PLPROC_Location, ModelDirectory);
           PLPROC_Location := ExtractFileName(PLPROC_Location);
         end;
-        {$ENDIF}
         PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
         for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
         begin
@@ -1824,8 +1810,7 @@ begin
           end;
         end;
       end;
-    {$ENDIF}
-      // displaying the list file should be the last command before 
+      // displaying the list file should be the last command before
       // exiting from the network drive.
       for ListFileIndex := 0 to ListFiles.Count - 1 do
       begin
@@ -10409,13 +10394,11 @@ begin
     end;
     result := UtilityProgramName;
   finally
-    {$IFDEF PEST}
     if frmGoPhast.PhastModel.PestUsed then
     begin
       MoveAppToDirectory(ExpandFileName(result), ExtractFileDir(AFileName));
       result := UtilityProgramName;
     end;
-    {$ENDIF}
     result := '"' + result + '"';
   end;
 end;

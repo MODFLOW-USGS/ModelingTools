@@ -172,41 +172,17 @@ type
     // PestAssociatedValueFormula is used with LowerUFormula,UBG1
 
     property PestHigherUFormula: string read GetPestHigherUFormula
-      write SetPestHigherUFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHigherUFormula;
     property PestHigherUMethod: TPestParamMethod read FPestHigherUMethod
-      write SetPestHigherUMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHigherUMethod;
     property PestLowerFlowUFormula: string read GetPestLowerFlowUFormula
-      write SetPestLowerFlowUFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestLowerFlowUFormula;
     property PestLowerFlowUMethod: TPestParamMethod read FPestLowerFlowUMethod
-      write SetPestLowerFlowUMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestLowerFlowUMethod;
     property PestHigherFlowUFormula: string read GetPestHigherFlowUFormula
-      write SetPestHigherFlowUFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHigherFlowUFormula;
     property PestHigherFlowUMethod: TPestParamMethod read FPestHigherFlowUMethod
-      write SetPestHigherFlowUMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHigherFlowUMethod;
   end;
 
   TSutraGeneralTransBoundaryList = TList<TSutraGeneralTransportBoundary>;

@@ -124,67 +124,26 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name lists the zone array names exported to MODFLOW.
     function ZoneArrayName(ModflowLayer: integer; AModel: TBaseModel): string;
-    property UsePilotPoints: Boolean read FUsePilotPoints write SetUsePilotPoints
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+    property UsePilotPoints: Boolean read FUsePilotPoints
+      write SetUsePilotPoints Stored True;
     property UseHorizontalSpatialContinuityPriorInfo: Boolean
       read FUseHorizontalSpatialContinuityPriorInfo
-      write SetUseHorizontalSpatialContinuityPriorInfo
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetUseHorizontalSpatialContinuityPriorInfo Stored True;
     property HorizontalSpatialContinuityGroupName: string
       read FHorizontalSpatialContinuityGroupName
-      write SetHorizontalSpatialContinuityGroupName
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetHorizontalSpatialContinuityGroupName Stored True;
     property StoredHorizontalSpatialContinuityPriorInfoWeight: TRealStorage
       read FStoredHorizontalSpatialContinuityPriorInfoWeight
-      write SetStoredHorizontalSpatialContinuityPriorInfoWeight
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetStoredHorizontalSpatialContinuityPriorInfoWeight Stored True;
     Property UseVertSpatialContinuityPriorInfo: Boolean
       read FUseVertSpatialContinuityPriorInfo
-      write SetUseVertSpatialContinuityPriorInfo
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetUseVertSpatialContinuityPriorInfo Stored True;
     property VertSpatialContinuityGroupName: string
       read FVertSpatialContinuityGroupName
-      write SetVertSpatialContinuityGroupName
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetVertSpatialContinuityGroupName Stored True;
     property StoredVertSpatialContinuityPriorInfoWeight: TRealStorage
       read FStoredVertSpatialContinuityPriorInfoWeight
-      write SetStoredVertSpatialContinuityPriorInfoWeight
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetStoredVertSpatialContinuityPriorInfoWeight Stored True;
   end;
 
   // @name is a collection of @link(TModflowSteadyParameter)s.

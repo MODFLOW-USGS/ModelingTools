@@ -503,102 +503,46 @@ type
 
     property PestInfiltrationFormula: string
       read GetPestInfiltrationFormula
-      write SetPestInfiltrationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestInfiltrationFormula;
     property PestInfiltrationMethod: TPestParamMethod
       read FPestInfiltrationMethod
-      write SetPestInfiltrationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestInfiltrationMethod;
     property PestPotentialETFormula: string
       read GetPestPotentialETFormula
-      write SetPestPotentialETFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPotentialETFormula;
     property PestPotentialETMethod: TPestParamMethod
       read FPestPotentialETMethod
-      write SetPestPotentialETMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPotentialETMethod;
     property PestExtinctionDepthFormula: string
       read GetPestExtinctionDepthFormula
-      write SetPestExtinctionDepthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestExtinctionDepthFormula;
     property PestExtinctionDepthMethod: TPestParamMethod
       read FPestExtinctionDepthMethod
-      write SetPestExtinctionDepthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestExtinctionDepthMethod;
     property PestExtinctionWaterContentFormula: string
       read GetPestExtinctionWaterContentFormula
-      write SetPestExtinctionWaterContentFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestExtinctionWaterContentFormula;
     property PestExtinctionWaterContentMethod: TPestParamMethod
       read FPestExtinctionWaterContentMethod
-      write SetPestExtinctionWaterContentMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestExtinctionWaterContentMethod;
     property PestAirEntryPotentialFormula: string
       read GetPestAirEntryPotentialFormula
-      write SetPestAirEntryPotentialFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestAirEntryPotentialFormula;
     property PestAirEntryPotentialMethod: TPestParamMethod
       read FPestAirEntryPotentialMethod
-      write SetPestAirEntryPotentialMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestAirEntryPotentialMethod;
     property PestRootPotentialFormula: string
       read GetPestRootPotentialFormula
-      write SetPestRootPotentialFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRootPotentialFormula;
     property PestRootPotentialMethod: TPestParamMethod
       read FPestRootPotentialMethod
-      write SetPestRootPotentialMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRootPotentialMethod;
     property PestRootActivityFormula: string
       read GetPestRootActivityFormula
-      write SetPestRootActivityFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRootActivityFormula;
     property PestRootActivityMethod: TPestParamMethod
       read FPestRootActivityMethod
-      write SetPestRootActivityMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRootActivityMethod;
   end;
 
 const

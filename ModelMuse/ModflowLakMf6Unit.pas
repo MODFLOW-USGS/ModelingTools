@@ -494,7 +494,8 @@ type
       write SetLakeConnections Stored True;
     property Embedded: Boolean read FEmbedded write SetEmbedded Stored True;
     // belev
-    Property BottomElevation: string read GetBottomElevation write SetBottomElevation;
+    Property BottomElevation: string read GetBottomElevation
+      write SetBottomElevation;
     // telev
     Property TopElevation: string read GetTopElevation write SetTopElevation;
     // bedleak
@@ -502,94 +503,40 @@ type
     // bedleak
     Property BedThickness: string read GetBedThickness write SetBedThickness;
     // connlen
-    property ConnectionLength: string read GetConnectionLength write SetConnectionLength;
+    property ConnectionLength: string read GetConnectionLength
+      write SetConnectionLength;
     // strt
     property StartingStage: string read GetStartingStage write SetStartingStage;
     property PestStageFormula: string read GetPestStageFormula
-      write SetPestStageFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStageFormula;
     property PestStageMethod: TPestParamMethod read FPestStageMethod
-      write SetPestStageMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStageMethod;
     property PestRainfallFormula: string read GetPestRainfallFormula
-      write SetPestRainfallFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRainfallFormula;
     property PestRainfallMethod: TPestParamMethod read FPestRainfallMethod
-      write SetPestRainfallMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRainfallMethod;
     property PestRunoffFormula: string read GetPestRunoffFormula
-      write SetPestRunoffFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRunoffFormula;
     property PestRunoffMethod: TPestParamMethod read FPestRunoffMethod
-      write SetPestRunoffMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRunoffMethod;
     property PestEvaporationFormula: string read GetPestEvaporationFormula
-      write SetPestEvaporationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvaporationFormula;
     property PestEvaporationMethod: TPestParamMethod read FPestEvaporationMethod
-      write SetPestEvaporationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvaporationMethod;
     property PestInflowFormula: string read GetPestInflowFormula
-      write SetPestInflowFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestInflowFormula;
     property PestInflowMethod: TPestParamMethod read FPestInflowMethod
-      write SetPestInflowMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestInflowMethod;
     property PestWithdrawalFormula: string read GetPestWithdrawalFormula
-      write SetPestWithdrawalFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWithdrawalFormula;
     property PestWithdrawalMethod: TPestParamMethod read FPestWithdrawalMethod
-      write SetPestWithdrawalMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property StartingConcentrations: TStringConcCollection read FStartingConcentrations
-      write SetStartingConcentrations
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWithdrawalMethod;
+    property StartingConcentrations: TStringConcCollection
+      read FStartingConcentrations
+      write SetStartingConcentrations;
     property StartingConcentrationPestNames: TStrings
       read FStartingConcentrationPestNames
-      write SetStartingConcentrationPestNames
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetStartingConcentrationPestNames;
 //    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
   end;
 

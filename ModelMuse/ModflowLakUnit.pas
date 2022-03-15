@@ -446,83 +446,31 @@ type
     property Gage4: boolean read FGage4 write SetGage4;
     property ExternalLakeTable: TExternalLakeTable read FExternalLakeTable write SetExternalLakeTable;
     property Observations: TLakeObservations read FObservations
-      write SetObservations
-      {$IFNDEF PEST}
-      stored False
-      {$ENDIF}
-      ;
+      write SetObservations;
     property PestMinimumStageFormula: string read GetPestMinimumStageFormula
-      write SetPestMinimumStageFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestMinimumStageFormula;
     property PestMinimumStageMethod: TPestParamMethod read FPestMinimumStageMethod
-      write SetPestMinimumStageMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestMinimumStageMethod;
     property PestMaximumStageFormula: string read GetPestMaximumStageFormula
-      write SetPestMaximumStageFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestMaximumStageFormula;
     property PestMaximumStageMethod: TPestParamMethod read FPestMaximumStageMethod
-      write SetPestMaximumStageMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestMaximumStageMethod;
     property PestPrecipitationFormula: string read GetPestPrecipitationFormula
-      write SetPestPrecipitationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPrecipitationFormula;
     property PestPrecipitationMethod: TPestParamMethod read FPestPrecipitationMethod
-      write SetPestPrecipitationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPrecipitationMethod;
     property PestEvaporationFormula: string read GetPestEvaporationFormula
-      write SetPestEvaporationFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvaporationFormula;
     property PestEvaporationMethod: TPestParamMethod read FPestEvaporationMethod
-      write SetPestEvaporationMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvaporationMethod;
     property PestOverlandRunoffFormula: string read GetPestOverlandRunoffFormula
-      write SetPestOverlandRunoffFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestOverlandRunoffFormula;
     property PestOverlandRunoffMethod: TPestParamMethod read FPestOverlandRunoffMethod
-      write SetPestOverlandRunoffMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestOverlandRunoffMethod;
     property PestWithdrawalFormula: string read GetPestWithdrawalFormula
-      write SetPestWithdrawalFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWithdrawalFormula;
     property PestWithdrawalMethod: TPestParamMethod read FPestWithdrawalMethod
-      write SetPestWithdrawalMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWithdrawalMethod;
   end;
 
 var

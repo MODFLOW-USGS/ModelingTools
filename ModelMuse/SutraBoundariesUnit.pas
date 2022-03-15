@@ -238,11 +238,7 @@ end;
 
 function TSutraBoundaries.StoreSutraStateObs: Boolean;
 begin
-{$IFDEF PEST}
   result := SutraStateObs.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 end.

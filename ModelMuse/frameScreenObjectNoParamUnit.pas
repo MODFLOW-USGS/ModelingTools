@@ -193,10 +193,8 @@ begin
   end;
   rdgModflowBoundary.Cells[0, 0] := StrStartingTime;
   rdgModflowBoundary.Cells[1, 0] := StrEndingTime;
-  {$IFDEF PEST}
   rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
   rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
-  {$ENDIF}
   if Boundary <> nil then
   begin
     for Index := 0 to Boundary.Values.TimeListCount(frmGoPhast.PhastModel) - 1 do

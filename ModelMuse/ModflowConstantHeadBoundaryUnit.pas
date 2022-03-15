@@ -337,41 +337,17 @@ type
   published
     property Interp;
     property PestStartingHeadFormula: string read GetPestStartingHeadFormula
-      write SetPestStartingHeadFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStartingHeadFormula;
     property PestEndingHeadFormula: string read GetPestEndingHeadFormula
-      write SetPestEndingHeadFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEndingHeadFormula;
     property PestStartingHeadMethod: TPestParamMethod read FPestStartingHeadMethod
-      write SetPestStartingHeadMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStartingHeadMethod;
     property PestEndingHeadMethod: TPestParamMethod
-      read FPestEndingHeadMethod write SetPestEndingHeadMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestEndingHeadMethod write SetPestEndingHeadMethod;
     property PestConcentrationFormulas: TChdGwtConcCollection
-      read FPestConcentrationFormulas write SetPestConcentrationFormulas
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas;
     property PestConcentrationMethods: TPestMethodCollection
-      read FPestConcentrationMethods write SetPestConcentrationMethods
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationMethods write SetPestConcentrationMethods;
   end;
 
 const

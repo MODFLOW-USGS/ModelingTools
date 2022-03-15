@@ -5416,9 +5416,6 @@ var
     Result := PrefixedObsName('R' + (ReachIndex+1).ToString, ObjectIndex, Obs);
   end;
 begin
-{$IFNDEF PEST}
-  Exit;
-{$ENDIF}
   if not FSfrObservationsUsed then
   begin
     Exit;

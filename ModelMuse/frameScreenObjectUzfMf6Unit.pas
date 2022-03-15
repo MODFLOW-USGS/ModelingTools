@@ -89,7 +89,6 @@ var
 begin
   pcUzf.ActivePageIndex := 0;
 
-  {$IFDEF PEST}
   seNumberOfTimes.OnChange(seNumberOfTimes);
   rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
   rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
@@ -112,7 +111,6 @@ begin
     TUzfMf6Boundary.DefaultBoundaryMethod(RootPotentialPosition);
   PestMethod[Ord(ucRootActivity)] :=
     TUzfMf6Boundary.DefaultBoundaryMethod(RootActivityPosition);
-  {$ENDIF}
 
   if FIntializedFrame then
   begin
@@ -260,7 +258,6 @@ begin
           edInitialWaterContent.Text := UzfBoundary.InitialWaterContent;
           edBrooksCoreyEpsilon.Text := UzfBoundary.BrooksCoreyEpsilon;
 
-          {$IFDEF PEST}
           PestModifier[Ord(ucInfiltration)] := UzfBoundary.PestInfiltrationFormula;
           PestMethod[Ord(ucInfiltration)] := UzfBoundary.PestInfiltrationMethod;
           PestModifier[Ord(ucPotentialEt)] := UzfBoundary.PestPotentialETFormula;
@@ -275,7 +272,6 @@ begin
           PestMethod[Ord(ucRootPotential)] := UzfBoundary.PestRootPotentialMethod;
           PestModifier[Ord(ucRootActivity)] := UzfBoundary.PestRootActivityFormula;
           PestMethod[Ord(ucRootActivity)] := UzfBoundary.PestRootActivityMethod;
-          {$ENDIF}
 
           seNumberOfTimes.asInteger := UzfBoundary.Values.Count;
           seNumberOfTimes.OnChange(seNumberOfTimes);
@@ -395,7 +391,6 @@ begin
             rdgModflowBoundary.Cells[Ord(ucRootActivity), PestMethodRow] := '';
           end;
 
-          {$IFDEF PEST}
           if FirstUzf.PestInfiltrationFormula <> UzfBoundary.PestInfiltrationFormula then
           begin
             PestModifierAssigned[Ord(ucInfiltration)] := False;
@@ -458,7 +453,6 @@ begin
           begin
             PestMethodAssigned[Ord(ucRootActivity)] := False;
           end;
-          {$ENDIF}
 
           if TimeDataIdentical
             and not UzfBoundary.Values.IsSame(FirstUzf.Values) then
@@ -667,7 +661,6 @@ begin
           end;
         end;
 
-        {$IFDEF PEST}
         if rdgModflowBoundary.Cells[Ord(ucInfiltration), PestModifierRow] <> '' then
         begin
           Boundary.PestInfiltrationFormula := PestModifier[Ord(ucInfiltration)];
@@ -730,7 +723,6 @@ begin
         begin
           Boundary.PestRootActivityMethod := PestMethod[Ord(ucRootActivity)];
         end;
-        {$ENDIF}
 
         if NewValues.Count > 0 then
         begin

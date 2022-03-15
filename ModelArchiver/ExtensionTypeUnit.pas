@@ -7,11 +7,7 @@ uses Classes, sysUtils, Generics.Collections, Generics.Defaults;
 Type
   TExtensionType = (etModelInput, etModelOutput, etModpathInput,
   etModpathOutput, etZoneBudgetInput, etZoneBudgetOutput, etMt3dmsInput,
-  etMt3dmsOutput,
-{$IFDEF SwiObsExtractor}
-  etSwiObsExtInput, etSwiObsExtOutput,
-{$ENDIF}
-  etOtherInput,
+  etMt3dmsOutput, etSwiObsExtInput, etSwiObsExtOutput, etOtherInput,
   etOtherOutput, etAncillary);
 
   TExtensionObject = Class(TObject)
@@ -2319,7 +2315,6 @@ begin
   ExtRec.Description := 'MODFLOW-2000 error output file';
   Add(ExtRec);
 
-{$IFDEF SwiObsExtractor}
   ExtRec := TExtensionObject.Create;
   ExtRec.Extension := '.swi_obsi';
   ExtRec.ExtensionType := etSwiObsExtInput;
@@ -2337,7 +2332,6 @@ begin
   ExtRec.ExtensionType := etSwiObsExtOutput;
   ExtRec.Description := 'SWI Observation Extractor output file';
   Add(ExtRec);
-{$ENDIF}
 
   ExtRec := TExtensionObject.Create;
   ExtRec.Extension := '.ob_gw';
@@ -2444,10 +2438,8 @@ initialization
   ExtensionTypeNames.Add('Zonebudget output');
   ExtensionTypeNames.Add('MT3D input');
   ExtensionTypeNames.Add('MT3D output');
-{$IFDEF SwiObsExtractor}
   ExtensionTypeNames.Add('Swi Observation Extractor input');
   ExtensionTypeNames.Add('Swi Observation Extractor output');
-{$ENDIF}
   ExtensionTypeNames.Add('Other input');
   ExtensionTypeNames.Add('Other output');
   ExtensionTypeNames.Add('Ancillary');

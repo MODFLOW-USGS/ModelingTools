@@ -114,10 +114,8 @@ begin
     inherited;
     ClearData;
 
-    {$IFDEF PEST}
     rdgSutraFeature.Cells[Ord(sbgtTime), PestModifierRow] := StrPestModifier;
     rdgSutraFeature.Cells[Ord(sbgtTime), PestMethodRow] := StrModificationMethod;
-    {$ENDIF}
 
     cbBCTime.Checked := False;
 
@@ -303,7 +301,6 @@ begin
       ABoundary := BoundaryList[index];
       BoundValues := ABoundary.Values as TCustomSutraBoundaryCollection;
 
-      {$IFDEF PEST}
       case BoundaryType of
         sbtFluidSource, sbtSpecPress:
           begin
@@ -336,7 +333,6 @@ begin
             end;
           end;
       end;
-      {$ENDIF}
 
       if comboSchedule.ItemIndex > 0 then
       begin
@@ -531,7 +527,6 @@ var
 begin
   FirstBoundary := BoundaryList[0];
 
-  {$IFDEF PEST}
   if (FirstBoundary is TSutraFluidBoundary)
     or (FirstBoundary is TSutraSpecifiedPressureBoundary) then
   begin
@@ -666,7 +661,6 @@ begin
       PestMethodAssigned[Ord(sbgtVariable1)] := False;
     end;
   end;
-  {$ENDIF}
 
   cbBCTime.Checked := FirstBoundary.UseBCTime;
   BoundColl := FirstBoundary.Values as TCustomSutraBoundaryCollection;

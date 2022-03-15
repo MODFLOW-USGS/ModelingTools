@@ -3843,39 +3843,16 @@ begin
   end
   else
   begin
-//    frameModpath.NilNode;
-//    {$IFDEF PEST}
-//    Packages.ChobPackage.Frame := framePkgCHOB;
-//    FPackageList.Add(Packages.ChobPackage);
-//
-//    Packages.DrobPackage.Frame := framePkgDROB;
-//    FPackageList.Add(Packages.DrobPackage);
-//
-//    Packages.GbobPackage.Frame := framePkgGBOB;
-//    FPackageList.Add(Packages.GbobPackage);
-//
-//    Packages.RvobPackage.Frame := framePkgRVOB;
-//    FPackageList.Add(Packages.RvobPackage);
-//
-//    {$ELSE}
     framePkgCHOB.NilNode;
     framePkgDROB.NilNode;
     framePkgGBOB.NilNode;
     framePkgRVOB.NilNode;
-//    {$ENDIF}
     framePkgSTOB.NilNode;
     framePkgHOB.NilNode;
   end;
 
-//  if frmGoPhast.ModelSelection <> msModflow2015 then
-//  begin
-    Packages.ZoneBudget.Frame := frameZoneBudget;
-    FPackageList.Add(Packages.ZoneBudget);
-//  end
-//  else
-//  begin
-//    frameZoneBudget.NilNode;
-//  end;
+  Packages.ZoneBudget.Frame := frameZoneBudget;
+  FPackageList.Add(Packages.ZoneBudget);
 
   if frmGoPhast.ModelSelection <> msModflow2015 then
   begin

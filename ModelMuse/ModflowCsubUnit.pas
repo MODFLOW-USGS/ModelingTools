@@ -342,17 +342,9 @@ type
   published
     property CSubPackageData: TCSubPackageDataCollection read FCSubPackageData write SetCSubPackageData;
     property PestStressOffsetFormula: string read GetPestStressOffsetFormula
-      write SetPestStressOffsetFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStressOffsetFormula;
     property PestStressOffsetMethod: TPestParamMethod read FPestStressOffsetMethod
-      write SetPestStressOffsetMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStressOffsetMethod;
   end;
 
 function TryGetCSubOb(const CSubObName: string; var CSubOb: TCSubOb): Boolean;

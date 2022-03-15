@@ -929,9 +929,6 @@ var
     Result := PrefixedObsName('Lak', ObjectIndex, Obs);
   end;
 begin
-{$IFNDEF PEST}
-  Exit;
-{$ENDIF}
   if not FLakeObservationsUsed then
   begin
     Exit;

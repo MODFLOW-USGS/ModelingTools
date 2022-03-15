@@ -325,29 +325,13 @@ type
   published
     property Interp;
     property PestElevFormula: string read GetPestElevFormula
-      write SetPestElevFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestElevFormula;
     property PestElevMethod: TPestParamMethod read FPestElevMethod
-      write SetPestElevMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestElevMethod;
     property PestConductanceFormula: string read GetPestConductanceFormula
-      write SetPestConductanceFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestConductanceFormula;
     property PestConductanceMethod: TPestParamMethod
-      read FPestConductanceMethod write SetPestConductanceMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConductanceMethod write SetPestConductanceMethod;
   end;
 
 const

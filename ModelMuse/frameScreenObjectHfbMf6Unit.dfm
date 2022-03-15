@@ -186,7 +186,6 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
           AutoAdjustColWidths = True
         end>
       ExplicitLeft = 2
-      ExplicitTop = 52
       ExplicitWidth = 457
       ExplicitHeight = 67
     end

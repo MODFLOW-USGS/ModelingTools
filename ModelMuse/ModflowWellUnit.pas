@@ -324,17 +324,9 @@ type
       write SetRelativeTabFileName;
     property Interp;
     property PestPumpingRateFormula: string read GetPestPumpingRateFormula
-      write SetPestPumpingRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPumpingRateFormula;
     property PestPumpingRateMethod: TPestParamMethod read FPestPumpingRateMethod
-      write SetPestPumpingRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPumpingRateMethod;
     property PestConcentrationFormulas: TWelGwtConcCollection
       read FPestConcentrationFormulas write SetPestConcentrationFormulas
       {$IFNDEF GWT}

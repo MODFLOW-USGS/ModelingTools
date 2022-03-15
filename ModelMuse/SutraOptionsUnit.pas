@@ -638,13 +638,8 @@ type
       write SetReadStartRestartFileName;
     property LakeOptions: TSutraLakeOptions read FLakeOptions
       write SetLakeOptions;
-    property PestAnisotropyOptions: TSutraPestAnisotropyOptions read FPestAnisotropyOptions
-      write SetPestAnisotropyOptions
-    {$IFNDEF PEST}
-    stored False
-    {$ENDIF}
-    ;
-
+    property PestAnisotropyOptions: TSutraPestAnisotropyOptions
+      read FPestAnisotropyOptions write SetPestAnisotropyOptions;
   end;
 
 

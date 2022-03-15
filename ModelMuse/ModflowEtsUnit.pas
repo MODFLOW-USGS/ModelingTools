@@ -398,54 +398,22 @@ type
     property Interp;
     property PestEvapotranspirationRateFormula: string
       read GetPestEvapotranspirationRateFormula
-      write SetPestEvapotranspirationRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvapotranspirationRateFormula;
     property PestEvapotranspirationRateMethod: TPestParamMethod
       read FPestEvapotranspirationRateMethod
-      write SetPestEvapotranspirationRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvapotranspirationRateMethod;
     property PestSurfaceFormula: string read GetPestSurfaceFormula
-      write SetPestSurfaceFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestSurfaceFormula;
     property PestSurfaceMethod: TPestParamMethod read FPestSurfaceMethod
-      write SetPestSurfaceMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestSurfaceMethod;
     property PestDepthFormula: string read GetPestDepthFormula
-      write SetPestDepthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestDepthFormula;
     property PestDepthMethod: TPestParamMethod read FPestDepthMethod
-      write SetPestDepthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestDepthMethod;
     property PestConcentrationFormulas: TEtsGwtConcCollection
-      read FPestConcentrationFormulas write SetPestConcentrationFormulas
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas;
     property PestConcentrationMethods: TPestMethodCollection
-      read FPestConcentrationMethods write SetPestConcentrationMethods
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationMethods write SetPestConcentrationMethods;
   end;
 
 resourcestring

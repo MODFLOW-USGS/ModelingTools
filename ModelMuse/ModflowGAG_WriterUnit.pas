@@ -311,9 +311,6 @@ var
     Result := PrefixedObsName('Gag', ObjectIndex, Obs);
   end;
 begin
-{$IFNDEF PEST}
-  Exit;
-{$ENDIF}
   if not FGagObservationsUsed then
   begin
     Exit;

@@ -203,7 +203,6 @@ begin
     ClearGrid(rdgModflowBoundary);
     seNumberOfTimes.AsInteger := 0;
     seNumberOfTimesChange(seNumberOfTimes);
-    {$IFDEF PEST}
     rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
     rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
     rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
@@ -223,7 +222,6 @@ begin
       TLakeMf6.DefaultBoundaryMethod(Lak6InflowPosition);
     PestMethod[Ord(lcWithdrawal)] :=
       TLakeMf6.DefaultBoundaryMethod(Lak6WithdrawalPosition);
-    {$ENDIF}
 
     ClearGrid(frameLakeTable.Grid);
     ALake := nil;
@@ -286,8 +284,6 @@ begin
       begin
         if not FoundFirst then
         begin
-
-          {$IFDEF PEST}
           PestModifier[Ord(lcStage)] := ALake.PestStageFormula;
           PestMethod[Ord(lcStage)] := ALake.PestStageMethod;
           PestModifier[Ord(lcRainfall)] := ALake.PestRainfallFormula;
@@ -300,12 +296,7 @@ begin
           PestMethod[Ord(lcInflow)] := ALake.PestInflowMethod;
           PestModifier[Ord(lcWithdrawal)] := ALake.PestWithdrawalFormula;
           PestMethod[Ord(lcWithdrawal)] := ALake.PestWithdrawalMethod;
-          {$ENDIF}
 
-{
-  TLakeColumns = (lcStart, lcEnd, lcStatus, lcStage, lcRainfall, lcEvaporation,
-    lcRunoff, lcInflow, lcWithdrawal);
-}
           seNumberOfTimes.AsInteger := ALake.Values.Count;
           for TimeIndex := 0 to ALake.Values.Count - 1 do
           begin
@@ -332,14 +323,12 @@ begin
           edLakebedK.Text := ALake.BedK;
           edLakebedThickness.Text := ALake.BedThickness;
           edConnLength.Text := ALake.ConnectionLength;
-//          edConnWidth.Text := ALake.ConnectionWidth;
 
           FirstLake := ALake;
           FoundFirst := True;
         end
         else
         begin
-          {$IFDEF PEST}
           if ALake.PestStageFormula <> FirstLake.PestStageFormula then
           begin
             PestModifierAssigned[Ord(lcStage)] := False
@@ -393,7 +382,6 @@ begin
           begin
             PestMethodAssigned[Ord(lcWithdrawal)] := False;
           end;
-          {$ENDIF}
 
           if  (cbHorizontal.State <> cbGrayed) and
           (cbHorizontal.Checked <> (lctHorizontal in ALake.LakeConnections)) then
@@ -770,7 +758,6 @@ begin
           ALake.Values.Clear;
         end;
 
-        {$IFDEF PEST}
         if PestModifierAssigned[Ord(lcStage)] then
         begin
           ALake.PestStageFormula := PestModifier[Ord(lcStage)];
@@ -824,7 +811,6 @@ begin
         begin
           ALake.PestWithdrawalMethod := PestMethod[Ord(lcWithdrawal)];
         end;
-        {$ENDIF}
 
         if Outlets <> nil then
         begin

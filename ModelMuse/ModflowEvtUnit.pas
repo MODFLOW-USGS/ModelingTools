@@ -19,7 +19,6 @@ type
     StartingTime: double;
     EndingTime: double;
     EvapotranspirationRateAnnotation: string;
-//    TimeSeriesName: string;
     ETParameterName: string;
     ETParameterValue: double;
     // PEST
@@ -635,42 +634,18 @@ type
 
     property PestEvapotranspirationRateFormula: string
       read GetPestEvapotranspirationRateFormula
-      write SetPestEvapotranspirationRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvapotranspirationRateFormula;
     property PestEvapotranspirationRateMethod: TPestParamMethod
       read FPestEvapotranspirationRateMethod
-      write SetPestEvapotranspirationRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestEvapotranspirationRateMethod;
     property PestSurfaceFormula: string read GetPestSurfaceFormula
-      write SetPestSurfaceFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestSurfaceFormula;
     property PestSurfaceMethod: TPestParamMethod read FPestSurfaceMethod
-      write SetPestSurfaceMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestSurfaceMethod;
     property PestDepthFormula: string read GetPestDepthFormula
-      write SetPestDepthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestDepthFormula;
     property PestDepthMethod: TPestParamMethod read FPestDepthMethod
-      write SetPestDepthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestDepthMethod;
   end;
 
 resourcestring

@@ -175,20 +175,10 @@ type
     class function DefaultBoundaryMethod(
       FormulaIndex: integer): TPestParamMethod; override;
   published
-    property PestValueFormula: string
-      read GetPestValueFormula
-      write SetPestValueFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestValueMethod: TPestParamMethod
-      read FPestValueMethod
-      write SetPestValueMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+    property PestValueFormula: string read GetPestValueFormula
+      write SetPestValueFormula;
+    property PestValueMethod: TPestParamMethod read FPestValueMethod
+      write SetPestValueMethod;
   end;
 
   TCustomFormulaInterpSwrBoundary = class(TCustomSwrBoundary)

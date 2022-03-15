@@ -431,53 +431,21 @@ type
     property WaterContent: TUzfWaterContentCollection
       read FWaterContent write SetWaterContent;
     property PestInfiltrationRateFormula: string read GetPestInfiltrationRateFormula
-      write SetPestInfiltrationRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestInfiltrationRateFormula;
     property PestInfiltrationRateMethod: TPestParamMethod read FPestInfiltrationRateMethod
-      write SetPestInfiltrationRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestInfiltrationRateMethod;
     property PestETDemandFormula: string read GetPestETDemandFormula
-      write SetPestETDemandFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestETDemandFormula ;
     property PestETDemandMethod: TPestParamMethod read FPestETDemandMethod
-      write SetPestETDemandMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestETDemandMethod;
     property PestExtinctionDepthFormula: string read GetPestExtinctionDepthFormula
-      write SetPestExtinctionDepthFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestExtinctionDepthFormula;
     property PestExtinctionDepthMethod: TPestParamMethod read FPestExtinctionDepthMethod
-      write SetPestExtinctionDepthMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestExtinctionDepthMethod;
     property PestWaterContentFormula: string read GetPestWaterContentFormula
-      write SetPestWaterContentFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWaterContentFormula;
     property PestWaterContentMethod: TPestParamMethod read FPestWaterContentMethod
-      write SetPestWaterContentMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestWaterContentMethod;
   end;
 
 const

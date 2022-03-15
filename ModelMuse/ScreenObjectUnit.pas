@@ -1556,18 +1556,10 @@ view. }
 
     property ModflowCSub: TCSubBoundary read FModflowCSub write FModflowCSub;
 
-    property ModflowSubObservations: TSubObservations read FModflowSubObservations
-      write FModflowSubObservations
-    {$IFNDEF PEST}
-      Stored False
-    {$ENDIF}
-      ;
-    property ModflowSwtObservations: TSwtObservations read FModflowSwtObservations
-      write FModflowSwtObservations
-    {$IFNDEF PEST}
-      Stored False
-    {$ENDIF}
-      ;
+    property ModflowSubObservations: TSubObservations
+      read FModflowSubObservations write FModflowSubObservations;
+    property ModflowSwtObservations: TSwtObservations
+      read FModflowSwtObservations write FModflowSwtObservations;
 
     // Be sure to update Invalidate, FreeUnusedBoundaries,
     // StopTalkingToAnyone, UsesATime, ReplaceATime, Destroy,
@@ -31664,15 +31656,8 @@ end;
 
 function TScreenObject.StoreModflowSwiObservations: Boolean;
 begin
-{$IFDEF PEST}
-  {$DEFINE SWIObs}
-{$ENDIF}
-  {$IFDEF SWIObs}
   result := (FModflowBoundaries <> nil)
     and (ModflowSwiObservations <> nil) and ModflowSwiObservations.Used;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TScreenObject.StoreModflowSwrDirectRunoff: Boolean;
@@ -31712,12 +31697,8 @@ end;
 
 function TScreenObject.StoreModflowSwtObservations: Boolean;
 begin
-{$IFDEF PEST}
   result := (FModflowBoundaries <> nil)
     and (ModflowSwtObservations <> nil) and ModflowSwtObservations.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowUzfBoundary: Boolean;
@@ -31826,12 +31807,8 @@ end;
 
 function TScreenObject.StoreModflowSubObservations: Boolean;
 begin
-{$IFDEF PEST}
   result := (FModflowBoundaries <> nil)
     and (ModflowSubObservations <> nil) and ModflowSubObservations.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreWell: boolean;

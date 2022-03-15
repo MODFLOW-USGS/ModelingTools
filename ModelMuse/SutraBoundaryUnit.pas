@@ -150,30 +150,13 @@ type
     property UseBCTime: Boolean read FUseBCTime write SetUseBCTime stored True;
 
     property PestBoundaryValueFormula: string read GetPestBoundaryValueFormula
-      write SetPestBoundaryValueFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestBoundaryValueFormula;
     property PestBoundaryValueMethod: TPestParamMethod read FPestBoundaryValueMethod
-      write SetPestBoundaryValueMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestBoundaryValueMethod;
     property PestAssociatedValueFormula: string read GetPestAssociatedValueFormula
-      write SetPestAssociatedValueFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestAssociatedValueFormula;
     property PestAssociatedValueMethod: TPestParamMethod
-      read FPestAssociatedValueMethod write SetPestAssociatedValueMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-
+      read FPestAssociatedValueMethod write SetPestAssociatedValueMethod;
   end;
 
   TSutraBoundaryList = TList<TSutraBoundary>;

@@ -237,29 +237,13 @@ type
       write SetLayerOffsetFormula;
     property Values: THfbCollection read FValues write SetValues;
     property PestHydraulicConductivityFormula: string read GetPestHydraulicConductivityFormula
-      write SetPestHydraulicConductivityFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHydraulicConductivityFormula;
     property PestHydraulicConductivityMethod: TPestParamMethod read FPestHydraulicConductivityMethod
-      write SetPestHydraulicConductivityMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHydraulicConductivityMethod;
     property PestThicknessFormula: string read GetPestThicknessFormula
-      write SetPestThicknessFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestThicknessFormula;
     property PestThicknessMethod: TPestParamMethod read FPestThicknessMethod
-      write SetPestThicknessMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestThicknessMethod;
   end;
 
 const

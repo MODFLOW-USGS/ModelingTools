@@ -973,35 +973,11 @@ type
     property ContourInterval: TRealStorage read FContourInterval
       write SetContourInterval;
     property PestParametersUsed: Boolean read FPestParametersUsed
-      write SetPestParametersUsed
-      {$IFDEF PEST}
-      stored True
-      {$ELSE}
-      stored False
-      {$ENDIF}
-      ;
-
+      write SetPestParametersUsed stored True;
     property UsedPestParameters: TStrings read FUsedPestParameters
-      write SetUsedPestParameters
-      {$IFNDEF PEST}
-      stored False
-      {$ENDIF}
-      ;
+      write SetUsedPestParameters;
     property PestParametersAllowed: Boolean read FPestParametersAllowed
-      write SetPestParametersAllowed
-      {$IFNDEF PEST}
-      stored False
-      {$ELSE}
-      stored True
-      {$ENDIF}
-      ;
-    // @name should be 'All' or a comma separated list of layer numbers or layer
-    // number ranges.
-    // Examples
-    //   All
-    //   1, 2, 4..7
-//    property ParameterLayersUsed: string read FParameterLayersUsed
-//      write SetParameterLayersUsed;
+      write SetPestParametersAllowed stored True;
   end;
 
   TDataArrayList = TList<TDataArray>;

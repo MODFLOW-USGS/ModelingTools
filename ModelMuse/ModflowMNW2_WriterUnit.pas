@@ -799,9 +799,6 @@ var
     Result := PrefixedObsName('Mnw2', ObjectIndex, Obs);
   end;
 begin
-{$IFNDEF PEST}
-  Exit;
-{$ENDIF}
   if FObsLinks.Count = 0 then
   begin
     Exit;
@@ -915,11 +912,8 @@ var
   WELLID: string;
   Boundary: TMnw2Boundary;
   WellIndex: Integer;
-
   OutputFileName: string;
-  {$IFDEF PEST}
   ObsFileLink: TObsFileLink;
-  {$ENDIF}
 begin
   AFileName := ExtractFileName(AFileName);
   AFileName := ChangeFileExt(AFileName, '');
@@ -968,7 +962,6 @@ begin
         OutputFileName, foOutput, Model);
     end;
 
-  {$IFDEF PEST}
     if Boundary.Observations.Count > 0 then
     begin
       ObsFileLink := TObsFileLink.Create;
@@ -976,7 +969,6 @@ begin
       ObsFileLink.FileName := OutputFileName;
       ObsFileLink.WellBoundary := Boundary;
     end;
-  {$ENDIF}
   end;
 end;
 

@@ -337,29 +337,14 @@ type
     property GroupNumber: Integer read FGroupNumber write SetGroupNumber;
     property ObsTypes: TSwrObsTypes read FObsTypes write SetObjectObs;
     property PestStageFormula: string read GetPestStageFormula
-      write SetPestStageFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestStageMethod: TPestParamMethod
-      read FPestStageMethod write SetPestStageMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestVerticalOffsetFormula: string read GetPestVerticalOffsetFormula
-      write SetPestVerticalOffsetFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestStageFormula;
+    property PestStageMethod: TPestParamMethod read FPestStageMethod
+      write SetPestStageMethod;
+    property PestVerticalOffsetFormula: string
+      read GetPestVerticalOffsetFormula
+      write SetPestVerticalOffsetFormula;
     property PestVerticalOffsetMethod: TPestParamMethod
-      read FPestVerticalOffsetMethod write SetPestVerticalOffsetMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestVerticalOffsetMethod write SetPestVerticalOffsetMethod;
   end;
 
 resourcestring

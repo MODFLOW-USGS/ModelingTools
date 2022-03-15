@@ -3360,11 +3360,7 @@ that affects the model output should also have a comment. }
     property Discretization: TCustomDiscretization read GetDiscretization;
     property PilotPointDataArrays: TDataArrayList read FPilotPointDataArrays;
     property ParamGroups: TPestParamGroups read GetParamGroups
-      write SetParamGroups
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-    ;
+      write SetParamGroups;
     procedure SetMf2005ObsGroupNames; virtual;
     procedure FillFluxObsList(List: TFluxObservationList);
     procedure FillHobList(List: THobList);
@@ -3374,11 +3370,7 @@ that affects the model output should also have a comment. }
     function PointToCell(EvalAt: TEvaluatedAt; APoint: TPoint2D): T2DTopCell;
     function CellToPoint(ACell: TCellLocation; EvalAt: TEvaluatedAt): TPoint3D;
     property PestProperties: TPestProperties read GetPestProperties
-      write SetPestProperties
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-      ;
+      write SetPestProperties;
     property PilotPointCount: integer read GetPilotPointCount;
     property PilotPointBuffer: double read GetPilotPointBuffer;
     property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
@@ -3585,55 +3577,30 @@ that affects the model output should also have a comment. }
     property CtsSystems: TCtsSystemCollection read GetCtsSystems
       write SetCtsSystems;
     property GlobalObservationComparisons: TGlobalObservationComparisons
-      read FModflowGlobalObservationComparisons write SetModflowGlobalObservationComparisons
+      read FModflowGlobalObservationComparisons
+      write SetModflowGlobalObservationComparisons
       stored False;
     property ModflowGlobalObservationComparisons: TGlobalObservationComparisons
-      read FModflowGlobalObservationComparisons write SetModflowGlobalObservationComparisons
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-      ;
+      read FModflowGlobalObservationComparisons
+      write SetModflowGlobalObservationComparisons;
     property SutraGlobalObservationComparisons: TGlobalObservationComparisons
       read FSutraGlobalObservationComparisons
-      write SetSutraGlobalObservationComparisons
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-      ;
+      write SetSutraGlobalObservationComparisons;
     property Modflow6GlobalObservationComparisons: TGlobalObservationComparisons
-      read FModflow6GlobalObservationComparisons write SetModflow6GlobalObservationComparisons
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-      ;
+      read FModflow6GlobalObservationComparisons
+      write SetModflow6GlobalObservationComparisons;
     property SutraFluxObs: TSutraFluxObs read FSutraFluxObs
-      write SetSutraFluxObs
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-      ;
+      write SetSutraFluxObs;
     property VelocityVectors: TVectorCollection read FVelocityVectors
       write SetVelocityVectors;
 
     // Name contains the names of scripts that are to be run before running
     // SUTRA.
-    property SutraPestScripts: TStringList read FSutraPestScripts
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-    ;
+    property SutraPestScripts: TStringList read FSutraPestScripts;
     property PilotPointData: TStoredPilotParamDataCollection
-      read FPilotPointData write SetPilotPointData
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-    ;
+      read FPilotPointData write SetPilotPointData;
     property PestObsCollection: TPestObsCollection read FPestObsCollection
-      write SetPestObsCollection
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-    ;
+      write SetPestObsCollection;
     { Any new members added to TCustomModel should be cleared in InternalClear.}
 
 //    property GeoRefFileName: string read FGeoRefFileName write SetGeoRefFileName;
@@ -4894,18 +4861,9 @@ that affects the model output should also have a comment. }
     property ParamGroups;
     property PestProperties;
     property SvdaPrepProperties: TSvdaPrepProperties read FSvdaPrepProperties
-      write SetSvdaPrepProperties
-      {$IFNDEF PEST}
-      stored False
-      {$ENDIF}
-      ;
-
+      write SetSvdaPrepProperties;
     property SupCalcProperties: TSupCalcProperties read FSupCalcProperties
-      write SetSupCalcProperties
-      {$IFNDEF PEST}
-      stored False
-      {$ENDIF}
-      ;
+      write SetSupCalcProperties;
   end;
 
   TChildDiscretization = class(TOrderedItem)
@@ -10506,14 +10464,16 @@ const
 //                mesh when the "increase forward" option was used.
 //    '4.3.0.88' Bug fix: Fixed export of MT3D-USGS lake transport package for
 //                models with more than one chemical species.
-
-//               Enhancement: Added support for PEST with MODFLOW and SUTRA
+//     '5.0.0.0' Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
+
+
+
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.88';
+  IIModelVersion = '5.0.0.0';
 
 function IModelVersion: string;
 begin
@@ -20991,7 +20951,6 @@ begin
               LocalFilesToArchive.Delete(AncFileIndex);
               FZoneBudgetOutputFiles.Add(AFileName);
             end;
-        {$IFDEF SwiObsExtractor}
           etSwiObsExtInput:
             begin
               LocalFilesToArchive.Delete(AncFileIndex);
@@ -21002,7 +20961,6 @@ begin
               LocalFilesToArchive.Delete(AncFileIndex);
               FSwiObsExtractorOutputFiles.Add(AFileName);
             end;
-        {$ENDIF}
           etMt3dmsInput:
             begin
               LocalFilesToArchive.Delete(AncFileIndex);
@@ -47602,11 +47560,7 @@ end;
 
 function TCustomModel.GetPestUsed: Boolean;
 begin
-{$IFDEF PEST}
   result := PestProperties.PestUsed;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.StorePathLine: boolean;

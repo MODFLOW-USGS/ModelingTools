@@ -596,10 +596,8 @@ begin
     frameReceivers.Grid.Cells[Ord(rcPackage), 0] := StrReceiverPackage;
     frameReceivers.Grid.Cells[Ord(rcSfrChoice), 0] := StrSFRReceiverReach;
     frameReceivers.Grid.Cells[Ord(rcObject), 0] := StrReceiverObject;
-    {$IFDEF PEST}
     rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
     rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
-    {$ENDIF}
   finally
     frameReceivers.Grid.EndUpdate;
   end;
@@ -610,7 +608,6 @@ begin
 
     seNumberOfTimes.AsInteger := 0;
     seNumberOfTimesChange(seNumberOfTimes);
-//    rdgModflowBoundary.RowCount := 2;
 
     frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes
       (rdgModflowBoundary, Ord(mtcStartTime));
@@ -704,12 +701,10 @@ procedure TframeScreenObjectMvr.rdgModflowBoundarySelectCell(Sender: TObject;
   ACol, ARow: Integer; var CanSelect: Boolean);
 begin
   inherited;
-  {$IFDEF PEST}
   if ARow <= PestRowOffset then
   begin
     CanSelect := False;
   end;
-  {$ENDIF}
 end;
 
 procedure TframeScreenObjectMvr.rdgModflowBoundarySetEditText(Sender: TObject;

@@ -224,53 +224,24 @@ type
 
     // QPBG11
     property PestLowerFlowRateFormula: string read GetPestLowerFlowRateFormula
-      write SetPestLowerFlowRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestLowerFlowRateMethod: TPestParamMethod read FPestLowerFlowRateMethod
-      write SetPestLowerFlowRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestLowerFlowRateFormula;
+    property PestLowerFlowRateMethod: TPestParamMethod
+      read FPestLowerFlowRateMethod
+      write SetPestLowerFlowRateMethod;
     property PestHigherPressureFormula: string read GetPestHigherPressureFormula
-      write SetPestHigherPressureFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestHigherPressureMethod: TPestParamMethod read FPestHigherPressureMethod
-      write SetPestHigherPressureMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHigherPressureFormula;
+    property PestHigherPressureMethod: TPestParamMethod
+      read FPestHigherPressureMethod
+      write SetPestHigherPressureMethod;
     property PestHigherFlowRateFormula: string read GetPestHigherFlowRateFormula
-      write SetPestHigherFlowRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestHigherFlowRateMethod: TPestParamMethod read FPestHigherFlowRateMethod
-      write SetPestHigherFlowRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestHigherFlowRateFormula;
+    property PestHigherFlowRateMethod: TPestParamMethod
+      read FPestHigherFlowRateMethod
+      write SetPestHigherFlowRateMethod;
     property PestUOutFormula: string read GetPestUOutFormula
-      write SetPestUOutFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestUOutFormula;
     property PestUOutMethod: TPestParamMethod read FPestUOutMethod
-      write SetPestUOutMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestUOutMethod;
   end;
 
   TSutraGeneralFlowBoundaryList = TList<TSutraGeneralFlowBoundary>;

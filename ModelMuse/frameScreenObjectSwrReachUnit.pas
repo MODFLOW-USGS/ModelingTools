@@ -264,7 +264,7 @@ begin
   comboRouteType.ItemIndex := 0;
   edReachLength.Text := TSwrReachBoundary.DefaultReachLengthFormula;
   ClearGrid(frameSwr.rdgModflowBoundary);
-  {$IFDEF PEST}
+
   frameSwr.rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
   frameSwr.rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
   frameSwr.PestMethod[Ord(srcVerticalOffset)] :=
@@ -274,7 +274,7 @@ begin
     frameSwr.PestMethod[Ord(srcStage)] :=
       TSwrReachBoundary.DefaultBoundaryMethod(SwrStagePosition);
   end;
-  {$ENDIF}
+
   ClearGrid(frameConnections.Grid);
   ScreenObjectList := TList.Create;
   try
@@ -306,7 +306,6 @@ begin
       cbGrouped.Checked := Reaches.Grouped;
       rdeGroupNumber.IntegerValue := Reaches.GroupNumber;
 
-      {$IFDEF PEST}
       frameSwr.PestModifier[Ord(srcVerticalOffset)] :=
         Reaches.PestVerticalOffsetFormula;
       frameSwr.PestMethod[Ord(srcVerticalOffset)] :=
@@ -319,7 +318,6 @@ begin
         frameSwr.PestMethod[Ord(srcStage)] :=
           Reaches.PestStageMethod;
       end;
-      {$ENDIF}
 
       frameSwr.seNumberOfTimes.AsInteger := Reaches.Values.Count;
 
@@ -366,7 +364,6 @@ begin
         AScreenObject := ScreenObjectList[ObjectIndex];
         Reaches := AScreenObject.ModflowSwrReaches;
 
-        {$IFDEF PEST}
         if frameSwr.PestModifierAssigned[Ord(srcVerticalOffset)]
           and (frameSwr.PestModifier[Ord(srcVerticalOffset)] <>
           Reaches.PestVerticalOffsetFormula) then
@@ -395,7 +392,6 @@ begin
             frameSwr.PestMethodAssigned[Ord(srcStage)] := False
           end;
         end;
-        {$ENDIF}
 
         if comboRouteType.ItemIndex <> Ord(Reaches.RouteType) then
         begin
@@ -638,7 +634,6 @@ begin
         Reaches := AScreenObject.ModflowSwrReaches;
         if Reaches <> nil then
         begin
-          {$IFDEF PEST}
           if frameSwr.PestModifierAssigned[Ord(srcVerticalOffset)] then
           begin
             Reaches.PestVerticalOffsetFormula :=
@@ -662,7 +657,6 @@ begin
               Reaches.PestStageMethod := frameSwr.PestMethod[Ord(srcStage)];
             end;
           end;
-          {$ENDIF}
 
           if comboRouteType.ItemIndex >= 0 then
           begin

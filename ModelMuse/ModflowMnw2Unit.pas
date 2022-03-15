@@ -693,73 +693,36 @@ type
     property VerticalScreens: TVerticalScreenCollection read FVerticalScreens
       write SetVerticalScreens;
     property Observations: TMnw2Observations read FObservations
-      write SetObservations
-      {$IFNDEF PEST}
-      stored False
-      {$ENDIF}
-      ;
+      write SetObservations;
     // PEST parameters
     property PestPumpingRateFormula: string read GetPestPumpingRateFormula
-      write SetPestPumpingRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPumpingRateFormula;
     property PestPumpingRateMethod: TPestParamMethod read FPestPumpingRateMethod
-      write SetPestPumpingRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestHeadCapacityMultiplierFormula: string read GetPestHeadCapacityMultiplierFormula
-      write SetPestHeadCapacityMultiplierFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestHeadCapacityMultiplierMethod: TPestParamMethod read FPestHeadCapacityMultiplierMethod
-      write SetPestHeadCapacityMultiplierMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-
-    property PestLimitingWaterLevelFormula: string read GetPestLimitingWaterLevelFormula
-      write SetPestLimitingWaterLevelFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestLimitingWaterLevelMethod: TPestParamMethod read FPestLimitingWaterLevelMethod
-      write SetPestLimitingWaterLevelMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestInactivationPumpingRateFormula: string read GetPestInactivationPumpingRateFormula
-      write SetPestInactivationPumpingRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestInactivationPumpingRateMethod: TPestParamMethod read FPestInactivationPumpingRateMethod
-      write SetPestInactivationPumpingRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestReactivationPumpingRateFormula: string read GetPestReactivationPumpingRateFormula
-      write SetPestReactivationPumpingRateFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
-    property PestReactivationPumpingRateMethod: TPestParamMethod read FPestReactivationPumpingRateMethod
-      write SetPestReactivationPumpingRateMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestPumpingRateMethod;
+    property PestHeadCapacityMultiplierFormula: string
+      read GetPestHeadCapacityMultiplierFormula
+      write SetPestHeadCapacityMultiplierFormula;
+    property PestHeadCapacityMultiplierMethod: TPestParamMethod
+      read FPestHeadCapacityMultiplierMethod
+      write SetPestHeadCapacityMultiplierMethod;
+    property PestLimitingWaterLevelFormula: string
+      read GetPestLimitingWaterLevelFormula
+      write SetPestLimitingWaterLevelFormula;
+    property PestLimitingWaterLevelMethod: TPestParamMethod
+      read FPestLimitingWaterLevelMethod
+      write SetPestLimitingWaterLevelMethod;
+    property PestInactivationPumpingRateFormula: string
+      read GetPestInactivationPumpingRateFormula
+      write SetPestInactivationPumpingRateFormula;
+    property PestInactivationPumpingRateMethod: TPestParamMethod
+      read FPestInactivationPumpingRateMethod
+      write SetPestInactivationPumpingRateMethod;
+    property PestReactivationPumpingRateFormula: string
+      read GetPestReactivationPumpingRateFormula
+      write SetPestReactivationPumpingRateFormula;
+    property PestReactivationPumpingRateMethod: TPestParamMethod
+      read FPestReactivationPumpingRateMethod
+      write SetPestReactivationPumpingRateMethod;
   end;
 
 const
@@ -1250,7 +1213,7 @@ var
   LocalMnw2Cwc: string;
   LocalMnw2Pp: string;
 begin
-{ TODO -cPEST : Support PEST here }
+{ Support PEST here }
   LocalModel := AModel as TCustomModel;
   PriorCol := -1;
   PriorRow := -1;
@@ -1681,7 +1644,7 @@ var
     end;
   end;
 begin
-  { TODO -cPEST : Support PEST here }
+  { Support PEST here }
 
   PestSeries.Add('');
   PestSeries.Add('');

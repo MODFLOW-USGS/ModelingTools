@@ -457,96 +457,45 @@ type
     // PARVAL1 in PEST
     property Value: double read FValue write SetValue;
     // PARTRANS in PEST
-    property Transform: TPestTransform read FTransform write SetTransform
-    {$IFNDEF PEST}
-    Stored False
-    {$ENDIF}
-    ;
+    property Transform: TPestTransform read FTransform write SetTransform;
     // PARCHGLIM in PEST
     property ChangeLimitation: TPestChangeLimitation read FChangeLimitation
-      write SetChangeLimitation
-    {$IFNDEF PEST}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetChangeLimitation;
     // PARLBND in PEST
     property StoredLowerBound: TRealStorage read FStoredLowerBound
-      write SetStoredLowerBound
-    {$IFNDEF PEST}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetStoredLowerBound;
     // PARUBND in PEST
     property StoredUpperBound: TRealStorage read FStoredUpperBound
-      write SetStoredUpperBound
-    {$IFNDEF PEST}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetStoredUpperBound;
     // PARGP in PEST
-    property ParameterGroup: string read FParameterGroup write SetParameterGroup
-    {$IFNDEF PEST}
-    Stored False
-    {$ENDIF}
-    ;
+    property ParameterGroup: string read FParameterGroup write SetParameterGroup;
     // SCALE in PEST
-    property StoredScale: TRealStorage read FStoredScale write SetStoredScale
-    {$IFNDEF PEST}
-    Stored False
-    {$ENDIF}
-    ;
+    property StoredScale: TRealStorage read FStoredScale write SetStoredScale;
     // OFFSET in PEST
     property StoredOffset: TRealStorage read FStoredOffset write SetStoredOffset
+      Stored False;
     // DERCOM in PEST is not currently supported.
+
     // PARTIED in PEST
-    {$IFNDEF PEST}
-    Stored False
-    {$ENDIF}
-    ;
     property TiedParameterName: string read FTiedParameterName
-      write SetTiedParameterName
+      write SetTiedParameterName;
     // Absolute(N) and ABSPARMAX(N) in PEST
-    {$IFNDEF PEST}
-    Stored False
-    {$ENDIF}
-    ;
     property StoredAbsoluteN: TRealStorage read FStoredAbsoluteN
-      write SetStoredAbsoluteN
+      write SetStoredAbsoluteN;
     // @name determines whether or not the parameter will be included in
     // a prior information equation setting it equal to its initial value.
-    {$IFNDEF PEST}
-    Stored False
-    {$ENDIF}
-    ;
     property UseInitialValuePriorInfo: Boolean read FUseInitialValuePriorInfo
-      write SetUseInitialValuePriorInfo
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetUseInitialValuePriorInfo Stored True;
     property StoredInitialValuePriorInfoWeight: TRealStorage
       read FStoredInitialValuePriorInfoWeight
       write SetStoredInitialValuePriorInfoWeight;
     // @name is the regularization group of the parameter in the
     // initial value prior information equation.
     property RegularizationGroup: string read FRegularizationGroup
-      write SetRegularizationGroup
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+      write SetRegularizationGroup Stored True;
     property PilotPointObsGrpCollection: TPPObsGrpCollection
       read FPilotPointObsGrpCollection write SetPilotPointObsGrpCollection
-    {$IFDEF PEST}
-    Stored True
-    {$ELSE}
-    Stored False
-    {$ENDIF}
-    ;
+      Stored True;
   end;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;

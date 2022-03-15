@@ -374,8 +374,6 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitLeft = 1
-      ExplicitTop = 1
       ExplicitWidth = 585
       ExplicitHeight = 158
     end

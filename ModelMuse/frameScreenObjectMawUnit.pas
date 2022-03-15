@@ -288,7 +288,6 @@ begin
                 := MawItem.HeadLimit;
             end;
 
-            {$IFDEF PEST}
             PestModifier[rdgModflowBoundary, Ord(wfRate)] := MawBound.PestRateFormula;
             PestMethod[rdgModflowBoundary, Ord(wfRate)] := MawBound.PestRateMethod;
 
@@ -318,7 +317,6 @@ begin
 
             PestModifier[rdgModflowBoundary, Ord(wtHeadLimit)] := MawBound.PestHeadLimitFormula;
             PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)] := MawBound.PestHeadLimitMethod;
-            {$ENDIF}
           end
           else
           begin
@@ -348,7 +346,6 @@ begin
               end;
             end;
 
-            {$IFDEF PEST}
             if FirstMawBound.PestRateFormula <> MawBound.PestRateFormula then
             begin
               PestModifierAssigned[rdgModflowBoundary, Ord(wfRate)] := False
@@ -438,7 +435,6 @@ begin
             begin
               PestMethodAssigned[rdgModflowBoundary, Ord(wtHeadLimit)] := False;
             end;
-            {$ENDIF}
 
             if not FWellTimeDataCleared then
             begin
@@ -711,7 +707,6 @@ begin
           TMawConductanceMethod(comboConductEq.ItemIndex);
       end;
 
-      {$IFDEF PEST}
       if PestModifierAssigned[rdgModflowBoundary, Ord(wfRate)] then
       begin
         Boundary.PestRateFormula := PestModifier[rdgModflowBoundary, Ord(wfRate)];
@@ -801,7 +796,6 @@ begin
       begin
         Boundary.PestHeadLimitMethod := PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)];
       end;
-      {$ENDIF}
 
       if not FWellScreensCleared then
       begin
@@ -925,7 +919,6 @@ begin
     rdgModflowBoundary.Cells[Ord(wtHeadLimitChoice), 0] := StrUseHeadLimit;
     rdgModflowBoundary.Cells[Ord(wtHeadLimit), 0] := StrLimitingHead;
 
-    {$IFDEF PEST}
     rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
     rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
     rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
@@ -953,9 +946,6 @@ begin
       TMawBoundary.DefaultBoundaryMethod(MawMaxRatePosition);
     PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)] :=
       TMawBoundary.DefaultBoundaryMethod(MawHeadLimitPosition);
-
-    {$ENDIF}
-
   finally
     rdgModflowBoundary.EndUpdate
   end;

@@ -58,9 +58,6 @@ var
     end;
   end;
 begin
-{$IFNDEF PEST}
-  Exit;
-{$ENDIF}
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrUnableToExportObs);
 
   if Model.ModflowGlobalObservationComparisons.Count = 0 then

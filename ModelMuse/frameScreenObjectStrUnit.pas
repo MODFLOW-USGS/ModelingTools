@@ -143,8 +143,6 @@ begin
     end;
   end;
 
-  {$IFDEF PEST}
-
   PestMethod[Ord(stcFlow)] := Boundary.PestBoundaryMethod[StreamFlowPosition];
   PestMethod[Ord(stcStage)] := Boundary.PestBoundaryMethod[StreamStagePosition];
   PestMethod[Ord(stcCond)] := Boundary.PestBoundaryMethod[StreamConductancePosition];
@@ -162,9 +160,6 @@ begin
   PestModifier[Ord(stcWidth)] := Boundary.PestBoundaryFormula[StreamWidthPosition];
   PestModifier[Ord(stcSlope)] := Boundary.PestBoundaryFormula[StreamSlopePosition];
   PestModifier[Ord(stcRough)] := Boundary.PestBoundaryFormula[StreamRoughnessPosition];
-
-  {$ENDIF}
-
 end;
 
 procedure TframeScreenObjectStr.clbParametersClick(Sender: TObject);
@@ -407,7 +402,6 @@ begin
       rdgModflowBoundary.Columns[ColIndex].ButtonWidth := 40;
     end;
 
-    {$IFDEF PEST}
     rdgModflowBoundary.Cells[0,PestMethodRow] := StrModificationMethod;
     rdgModflowBoundary.Cells[0,PestModifierRow] := StrPestModifier;
 
@@ -419,7 +413,6 @@ begin
     PestMethod[Ord(stcWidth)] := TStrBoundary.DefaultBoundaryMethod(StreamWidthPosition);
     PestMethod[Ord(stcSlope)] := TStrBoundary.DefaultBoundaryMethod(StreamSlopePosition);
     PestMethod[Ord(stcRough)] := TStrBoundary.DefaultBoundaryMethod(StreamRoughnessPosition);
-    {$ENDIF}
   finally
     rdgModflowBoundary.EndUpdate
   end;
@@ -616,7 +609,6 @@ begin
       end;
       Values.Count := ItemIndex;
     end;
-    {$IFDEF PEST}
     if rdgModflowBoundary.Cells[Ord(stcFlow),PestMethodRow] <> '' then
     begin
       Boundary.PestBoundaryMethod[StreamFlowPosition] := PestMethod[Ord(stcFlow)];
@@ -696,7 +688,6 @@ begin
     begin
       Boundary.PestBoundaryFormula[StreamRoughnessPosition] := PestModifier[Ord(stcRough)];
     end;
-    {$ENDIF}
   end;
 end;
 
@@ -777,7 +768,6 @@ begin
     clbParameters.CheckedIndex := -1;
   end;
 
-  {$IFDEF PEST}
   if rdgModflowBoundary.Cells[Ord(stcFlow),PestMethodRow] <> '' then
   begin
     if PestMethod[Ord(stcFlow)] <> Boundary.PestBoundaryMethod[StreamFlowPosition] then
@@ -905,7 +895,6 @@ begin
       rdgModflowBoundary.Cells[Ord(stcRough),PestModifierRow] := ''
     end;
   end;
-  {$ENDIF}
 
   if Values.Count = seNumberOfTimes.AsInteger then
   begin

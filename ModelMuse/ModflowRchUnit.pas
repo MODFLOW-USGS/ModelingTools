@@ -434,17 +434,9 @@ type
       write SetRechargeLayers;
     property Interp;
     property PestRechargeFormula: string read GetPestRechargeFormula
-      write SetPestRechargeFormula
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRechargeFormula;
     property PestRechargeMethod: TPestParamMethod read FPestRechargeMethod
-      write SetPestRechargeMethod
-      {$IFNDEF PEST}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetPestRechargeMethod;
     property PestConcentrationFormulas: TRchGwtConcCollection
       read FPestConcentrationFormulas write SetPestConcentrationFormulas
       {$IFNDEF GWT}
