@@ -154,7 +154,7 @@ resourcestring
 
 implementation
 
-uses SubPolygonUnit, BasisFunctionUnit;
+uses SubPolygonUnit, BasisFunctionUnit, DisclaimerTextUnit;
 
 const
   InactiveValue = -1E30;
@@ -986,6 +986,8 @@ begin
 end;
 
 procedure TCustomInputHandler.HandleOption;
+var
+  Index: Integer;
   procedure RecordOutputFile;
   begin
     if (FOutputFileName <> '') and (FListingFile <> nil) then
@@ -1011,7 +1013,6 @@ procedure TCustomInputHandler.HandleOption;
       end;
     end;
   end;
-
 begin
   Assert(FSplitter.Count in [2, 3], Format(rsExactlyTwoOrThree, [FLineIndex+1,
     FInputFileLines[FLineIndex]]));
@@ -1024,6 +1025,13 @@ begin
     FListingFile := TStringList.Create;
     FListingFile.Add(ApplicationTitle);
     FListingFile.Add('');
+
+    for Index := 0 to Disclaimer.Count - 1 do
+    begin
+      FListingFile.Add(Disclaimer[Index]);
+    end;
+    FListingFile.Add('');
+
     FListingFile.Add(rsBeginOPTIONS);
     FListingFile.Add(Format(rsListingFileS, [FListingFileName]));
 

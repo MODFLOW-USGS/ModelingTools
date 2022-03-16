@@ -29065,5 +29065,10 @@ object TTaskHistory
       Categories.Strings = (
         'Documentation'
         'PEST')
+    end
+    item
+      Date = 44636.000000000000000000
+      Categories.Strings = (
+        'Installer')
     end>
 end

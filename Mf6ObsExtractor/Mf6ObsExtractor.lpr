@@ -141,11 +141,14 @@ var
   Application: TMf6ObsExtractor;
   StartTime: TDateTime;
   ElapsedTime: TDateTime;
+
+{$R *.res}
+
 begin
   StartTime := Now;
   Application:=TMf6ObsExtractor.Create(nil);
   try
-    Application.Title:='MODFLOW 6 Observation Extractor';
+  Application.Title:='MODFLOW 6 Observation Extractor';
     Application.Run;
   finally
     Application.Free;

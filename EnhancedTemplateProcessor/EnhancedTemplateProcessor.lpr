@@ -53,6 +53,9 @@ var
   Application: TEnhancedTemplateProcessor;
   StartTime: TDateTime;
   ElapsedTime: TDateTime;
+
+{$R *.res}
+
 begin
   StartTime := Now;
   Application:=TEnhancedTemplateProcessor.Create(nil);

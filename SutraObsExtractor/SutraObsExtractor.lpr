@@ -139,6 +139,9 @@ var
   Application: TSutraObsExtractor;
   StartTime: TDateTime;
   ElapsedTime: TDateTime;
+
+{$R *.res}
+
 begin
   StartTime := Now;
   Application:=TSutraObsExtractor.Create(nil);

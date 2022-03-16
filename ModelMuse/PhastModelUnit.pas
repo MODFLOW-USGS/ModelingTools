@@ -5468,7 +5468,7 @@ resourcestring
   StrPhastDefaultPath = 'C:\Program Files\USGS\phast-1.5.1\bin\phast.bat';
   StrPhastDefaultPath64 = 'C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat';
   StrZoneBudgetDefaultPath = 'C:\WRDAPP\Zonbud.3_01\Bin\zonbud.exe';
-  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.1.1\bin\zbud6.exe';
+  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.3.0\bin\zbud6.exe';
   StrModelMateDefaultPath = 'C:\WRDAPP\ModelMate_1_0_3\Bin\ModelMate.exe';
   strModflowLgrDefaultPath = 'C:\WRDAPP\mflgr.1_2\bin\mflgr.exe';
   strModflowLgr2DefaultPath = 'C:\WRDAPP\mflgr.2_0\bin\mflgr.exe';
@@ -5482,17 +5482,15 @@ resourcestring
   StrPestDefaultDir = 'C:\Pest17\';
 
   // See also GMshDate in frmMeshGenerationControlVariablesUnit.pas
-{$IFDEF WIN64}
-//  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows64\gmsh.exe';
-  StrDefaultGmshPath = 'C:\gmsh-4.9.3-Windows64\gmsh.exe';
-{$ELSE}
-//  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows32\gmsh.exe';
-  StrDefaultGmshPath = 'C:\gmsh-4.9.3-Windows32\gmsh.exe';
-{$ENDIF}
+{ $IFDEF WIN64}
+  StrDefaultGmshPath = 'C:\gmsh-4.9.5-Windows64\gmsh.exe';
+{ $ELSE}
+//  StrDefaultGmshPath = 'C:\gmsh-4.9.5-Windows32\gmsh.exe';
+{ $ENDIF}
 
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
-  StrDefaultModflow6Path = 'C:\WRDAPP\mf6.1.1\bin\mf6.exe';
+  StrDefaultModflow6Path = 'C:\WRDAPP\mf6.3.0\bin\mf6.exe';
 
   StrProgramLocations = 'Program Locations';
   StrMODFLOW2005 = 'MODFLOW-2005';

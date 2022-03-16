@@ -268,8 +268,8 @@ begin
     for ColIndex := 0 to Length(FInitialConcentrations[0]) - 1 do
     begin
       WriteFloat(FInitialConcentrations[RowIndex,ColIndex]);
+      NewLine;
     end;
-    NewLine;
   end;
 end;
 

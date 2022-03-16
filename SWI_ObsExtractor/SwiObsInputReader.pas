@@ -5,6 +5,8 @@ unit SwiObsInputReader;
 {$ENDIF}  
 
 {#BACKUP SimpleTextWriter.pas}
+{#BACKUP SwiObsExtractor.lpi}
+{#BACKUP SwiObsExtractor.lpr}
 
 interface
 

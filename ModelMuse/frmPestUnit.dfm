@@ -26,6 +26,7 @@ inherited frmPEST: TfrmPEST
     PageDefault = 0
     PageList = plMain
     Align = alLeft
+    HideSelection = False
     Indent = 19
     TabOrder = 0
     OnMouseDown = tvPESTMouseDown
@@ -3238,7 +3239,6 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitLeft = 1
         ColWidths = (
           64
           119)

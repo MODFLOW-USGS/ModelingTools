@@ -59,11 +59,11 @@ type
   end;
 
 const
-  IVersion = '0.1.0.0';
+  IVersion = '1.0.0.0';
 
 implementation
 
-uses readinstructions;
+uses readinstructions, DisclaimerTextUnit;
 
 resourcestring
   rsOnLine0DOf1S = 'On line %0:d of %1:s, the following line was not recognized'
@@ -304,6 +304,8 @@ begin
 end;
 
 constructor TNameFileReader.Create;
+var
+  Index: Integer;
 begin
   FListingFile := TStringList.Create;
   FOutputFile := TStringList.Create;
@@ -311,6 +313,12 @@ begin
 
   FListingFile.Add('MODFLOW Observation Extractor');
   FListingFile.Add('Version ' + IVersion);
+  FListingFile.Add('');
+
+  for Index := 0 to Disclaimer.Count -1 do
+  begin
+    FListingFile.Add(Disclaimer[Index]);
+  end;
   FListingFile.Add('');
 
   FObsDictionary := TCustomObsValueDictionary.Create;

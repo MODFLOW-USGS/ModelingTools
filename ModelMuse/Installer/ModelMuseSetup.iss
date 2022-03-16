@@ -3,10 +3,10 @@
 
 [Setup]
 ;MMVersion is only updated for major releases e.g. 4.0, 5.0 etc.
-#define MMVersion "4" 
+#define MMVersion "5" 
 ;MMCurrentVersion is updated for each version released
-#define MMCurrentVersion "4_3" 
-AppVerName=ModelMuse 4.3.0.0
+#define MMCurrentVersion "5_0" 
+AppVerName=ModelMuse 5.0.0.0
 
 ;enable or disable the following to install in 32-bit or 64-bit mode
 #define Win64
@@ -14,7 +14,8 @@ AppVerName=ModelMuse 4.3.0.0
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{8194A6A0-728E-4993-97C2-3A25EAA73F1E}
+AppId={{7CBC2803-8C18-42EE-86C0-949C415E1EEE}
+;AppId={{8194A6A0-728E-4993-97C2-3A25EAA73F1E}
 AppName=ModelMuse
 AppPublisher=U. S. Geological Survey
 AppPublisherURL=https://www.usgs.gov/software/modelmuse-a-graphical-user-interface-groundwater-models

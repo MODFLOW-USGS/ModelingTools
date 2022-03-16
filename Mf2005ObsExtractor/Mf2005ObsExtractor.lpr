@@ -140,6 +140,9 @@ var
   Application: TMf2005ObsExtractor;
   StartTime: TDateTime;
   ElapsedTime: TDateTime;
+
+{$R *.res}
+
 begin
   StartTime := Now;
   Application:=TMf2005ObsExtractor.Create(nil);
