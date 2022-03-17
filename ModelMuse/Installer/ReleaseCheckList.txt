@@ -7,7 +7,8 @@
 2b. Be sure the release version of disclaimer is used. See DisclaimerTextUnit.pas.
 3. Build 32 and 64-bit versions of ModelMuse, ModelMonitor and ModflowImporter and utility programs.
 4. Update revision history, including the release date.
-4a. If relevant, update About box with new citation.
+4a. Make sure no "not in released" bug fixes included. 
+4b. If relevant, update About box with new citation.
 5. Build help - chm and html
 5a. Check that help works for new things.
 6. Insert google analytics code for help and revision history.
@@ -37,8 +38,9 @@
 22. Transfer readme and ModelMuse.txt files to web.
 23. Transfer Download web page to web.
 23a. Check that links to installers and zip files work.
-23b. Activate main web page
-23c. Activate DOI
+23b. Activate DOI
+23c. Link to doi in main web page
+23d. Activate main web page
 24. Transfer ModelMuseInternetUpdate.txt to web.
 25. Send out email to OGW.
 25a. Update IPDS.

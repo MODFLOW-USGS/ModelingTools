@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-03-16T11:45:00.301-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-03-17T10:33:23.111-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Revision History</title>
   <body>
     <header>
@@ -86,7 +86,6 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause access violations if a formula started with a comma.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause access violations when shutting down ModelMuse.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When moving vertices of an object to the location of a vertex in another object, there could be a slight error in the location to which the vertex was moved. This has been corrected.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Not in released version. &#160;Error displaying the Manage parameters dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation when opening a model if the model that is already open had contours displayed or a data set used to color the grid or mesh.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error when exporting SUTRA model if no time schedule has been defined.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of multiple ASCII grid files simultaneously.</text></para>
@@ -122,8 +121,6 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause some cells to be incorrectly selected two or more times by the same object when the object selects both enclosed and intersected cells.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that prevented MT3D concentration results from being imported.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in deleting Subsidence-related interbeds.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Not in released version. Fixed export of PLPROC script.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Not in released version. Fixed double export of drain elevation.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation if the name of a global variable that was used in a model feature was changed.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug moving the first vertex of a closed object section.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an assertion failure when writing the UZF file in MODFLOW 6.</text></para>
@@ -160,7 +157,6 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The specify Contours dialog box no longer allows the users to attempt to set the number of contours to a value less than 1.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause extra LPF or HUF parameters to be generated when switching among parameter types in the MODFLOW Packages and Programs dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an assertion failures when importing shapefiles data from CSV files, if one or more columns did not have column headers.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">not in released version. Fixed list index out of bounds while RCH and MT3D were active.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SFT when no SFT boundaries are defined.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SFT package in MT3D-USGS when there is more than one chemical species.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that caused an access violation if the InterpolatedVertexValues function was used without an &#160;argument.</text></para>
@@ -527,8 +523,6 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When writing the input for the STR package in MODFLOW-LGR models, ModelMuse now writes them using the fixed format required by MODFLOW-LGR rather than the free format used by MODFLOW-2005.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When writing the MODFLOW-LGR LGR file, if no objects define the position of the child grid but a child grid does exist, the LGR file now specifies the location of the LGR grid within the parent grid correctly.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed exporting contours to shapefiles when the the &quot;Data|Display Data&quot; window has not yet been displayed.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">not in released version Fixed updating dimensions of multiplier zone data sets in DISV grids.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">not in released version. Fixed export of Point Shapefiles with DISV grids.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Warning message about MODFLOW-NWT version 1.0.9 has been fixed.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could allow semi routed deliveries and return flow to be included in the Farm Process input after disabling the SFR and SWR packages.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when &#160;displaying data in the &quot;Data|Data Set Values&quot; dialog box.</text></para>
@@ -567,12 +561,10 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that prevented Vertex values from being used to set elevation formulas.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">If the user attempts to create a MODFLOW model with a number of cells larger than the largest 32-bit signed integer, an error message will be displayed instead of generating a bug report.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug with creating invalid mesh with Fishnet Mesh.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Not in released version. Fixed use of parameters in MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">If an object whose number of Z formulas is not equal to zero sets the elevations of the grid or mesh, it&apos;s number of Z formulas is automatically reset to zero.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">If the number of values of a data set cached in a file is too large, the data set will be recalculated when next accessed</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Deleting an HFB parameter now changes any existing HFB boundaries to no longer use the deleted parameter.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">If the distance between all the points in a section of an object is small enough so that all the vertices map to the same pixel, the object or section of an object will be displayed as if it were a point object.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Not in released version. Drawing selected objects that have vertex values is fixed.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">&quot;Snap to vertex&quot; now works as described in the ModelMuse help. Previously, it would snap to the same pixel as the one containing the target vertex but not necessarily to the exact same location.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of data set 2 in the SWT package so that more layer numbers can be printed without exceeding the maximum line length of 200.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in importing Shapefiles in which the conductance interpretation was specified on a per shape basis using a text attribute of the shape.</text></para>
@@ -1551,7 +1543,6 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause assertion failures when interpolating.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that resulting in X_Prime and Y_Prime being exported to Shapefiles and CSV files instead of X and Y.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed bug that could cause an access violation when opening one of the recently opened files listed in the File menu.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">not in released version. Fixed pasting Argus ONE contours into ModelMuse when not all the contours on a layer were copied to the clipboard.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause and access violation if the Mesh Information dialog box was displayed for a 3D SUTRA mesh before any layer groups had been defined.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Specifying a file of the wrong type on the command line when starting ModelMuse no longer leads to the generation of a bug report.</text></para>
               </td>
