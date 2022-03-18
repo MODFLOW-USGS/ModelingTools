@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:20:06.624-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.14</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.14</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.14.1 May 1, 2012]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancement]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability to export .png and .jpg images.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Change]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Date for the current version of MODFLOW-2005 changed to the date for MODFLOW-2005 version 1.9.01.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Importing model results for MODFLOW-LGR model and contouring them no longer causes a range-check error.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused access violations when importing results from a MODFLOW-LGR child model but not the MODFLOW-LGR parent model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in which the Kz data set was not created when a MODFLOW model was first created.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that sometimes caused invalid elevation formulas in objects created by importing ShapeFiles.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.14 April 23, 2012]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for new options in MODFLOW-2005 version 1.9.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for running MODPATH with a child model in MODFLOW-LGR.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for visualizing MODPATH output with a child model in MODFLOW-LGR.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing ASCII raster files into a MODFLOW-LGR model, it is now possible to specify the grid to use for the imported data.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">You can now export grid data to a Shapefile for MODFLOW-LGR child grids.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">You can now use the command line option -mte to export just the MT3DMS input files.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the hydmod package, The name of each observation has a unique number added to the end of the label.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Changed SFR package to use new SFR format for MODFLOW-2000.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Reduced memory usage.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that would cause interpolation to fail if an object did not intersect the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed labeling of contours when contouring data sets whose data type is Text.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed labels for TRPT and TRPV in MT3DMS.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SSM package when no source or sink concentrations have been defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause an error if the user attempted to display data set values before generating the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that would cause an error if the user attempted to give an aquifer a name that started with a number or a name that was too similar to the name of another aquifer.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented the LPF options STORAGECOEFFICIENT and CONSTANTCV from being used simultaneously.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that would cause range-check errors in certain MODFLOW-LGR models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would sometimes cause invalid SFR input files to be created when unsaturated flow was simulated beneath streams.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would sometimes cause the assigning data set values to fail in a MODFLOW-LGR model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Checking elevations in MODFLOW-LGR child models no longer results in a range check error.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed problem with reading invalid files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Previously, attempting to display the &quot;Show or Hide Objects&quot; dialog box would sometimes cause an error.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW-LGR models, the legend displayed when coloring or contouring would not reflect more extreme values displayed in a child grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of IFMTCN, IFMTNP, IFMTRF, and IFMTDP in the MT3DMS basic transport package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing a Shapefile to a multipart object, formulas for the Z-coordinate can now be imported properly.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

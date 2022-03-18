@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:16:04.897-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 3.7</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 3.7</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 3.7.1 June 6, 2016]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in the generation of an error message in the MODFLOW CFP process when the node elevation is too high or to low.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed another bug that caused access violations when exporting the ETS package input file if the ETS boundaries were not defined properly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that made it impossible to delete a flow observation.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation in the Import Points dialog box when a boundary condition was first selected and then unselected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If an attempt is made to save an archive from the files to Archive dialog box and an unsupported archive type is selected, an error message will be displayed instead of a bug report being generated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations when opening the object properties dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed &#160;display of some controls after resizing the &quot;Select Results to Import&quot; dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed hints for adding, inserting, and deleting plant groups in the Riparian ET Plant Groups dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed access violation when drawing contours after importing model results.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 3.7 May 16, 2016]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for the RIP package in MODFLOW-OWHM.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added options to import gridded data to a child grid in the &quot;File|Import|Gridded Data&quot; and the &quot;File|Import|Gridded Data Files&quot; dialog boxes.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to hide everything except the legend on the Data Visualization dialog box and then resize the dialog box to a smaller size.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Objects now have a &quot;Minimum cell fraction&quot; property. Objects with a total length greater than zero that assign properties of intersected cells will only do so if the length of intersection is greater than the specified fraction of the cell or element size.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing MODFLOW model results, the user can now specify the name of the group containing the data sets and can specify a prefix for the data sets names. If this option is used, the &quot;Delete Model Results&quot; command will not affect the newly imported data sets.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to change the order of the imported images in the Show or Hide Images dialog box by dragging the image to a new position in the list.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added error checking for SWR tab files that are missing a file name.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Additional error checking for SFR segments that are on multiple layers in the same row and column or that are in confined layers when unsaturated flow beneath streams is simulated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Packages and Programs dialog box, expanding one of the nodes in the tree-view control automatically causes the first selected package or program under that node to be the selected node in the tree-view control.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now issues an error message if the lowest elevation in a SFR 8-point cross section is not zero.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Sink and Source Mixing package of MT3DMS, the full recharge and ET concentration arrays are only printed if they have non-zero values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Opening the Object Properties dialog box with objects that define SFR boundaries with numerous stress periods is no longer so slow.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now create a a batch file named &quot;RunModel.bat&quot; that is suitable for use with automated parameter estimation programs.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now import CFP pipes from Shapefiles.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now warns if the ET depth is less than zero in the EVT or ETS packages.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now export objects that define SFR boundaries to Shapefiles.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing Shapefiles, ModelMuse can now import Z and measured values for each Shape if they are included in the Shapefile. The values will be imported as Vertex Values.nhancement: The following new functions have been added: LowestVertexValue, HighestVertexValue, MeanVertexValue, MedianVertexValue, FirstVertexValue, and LastVertexValue. See the ModelMuse help for descriptions of these new functions. They are typically used when there is vertex value at every vertex of an object and every cell intersected by an object contains at least one vertex.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When changing stream linkages in the SFR or STR packages, ModelMuse can now renumber any duplicate stream numbers.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the &quot;Manage Flow Observations&quot; dialog box, a new tab has been added in which the user can edit multiple observation group names. A list of names can be pasted into the table on this tab to change the observation group names.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Linking SFR and STR streams with the Link Streams dialog box was made faster.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">the PEST Grid Specification File is now automatically created when exporting MODFLOW models. the file has the extension &quot;.gsf&quot;.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When saving the input files for MODFLOW model, the project description is included in the Save dialog box. The project description will be saved as comments in the Basic package input file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The log of tracking time can now be used to color MODPATH endpoints.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The log of tracking time can now be used to color MODPATH pathlines.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for writing the Summary budget to a separate file.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Trunc and Round functions were changed so that if the real number passed to the function is outside the range -(2^31-1) to +(2^31-1), the result returned will be whichever of those numbers is closest.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Real numbers and integers in printed by ModelMuse in MODFLOW and SUTRA input files now have consistent spacing.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to import a Surfer grid file in a model that lacks a grid no longer causes an access violation.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause floating point overflows when changing the layer type in a MODFLOW-LGR model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause a circular reference error when editing the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when displaying the MODFLOW Packages and Programs dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in evaluation of SpecifiedHeadOnLayer function when no specified head package is active.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused an error if an invalid formula was used in a SUTRA boundary condition.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed classification of data set created by importing a Surfer grid file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused access violations if FHB times were specified that were after the last time in the model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused an assertion failure when attempting to generate a fishnet mesh using a triangular fishnet-mesh quadrilaateral.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused access violations when editing SUTRA boundary conditions.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause importing a MODFLOW model to fail if a multiplier array calculated as a function of other mulitplier arrays resulted in a divide-by-zero or other error when calculating a multiplier array value.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause and access violation when starting a new model after already having had another model open already.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If an error occurs when importing multiple gridded data files because of invalid data in one of the files, an error message is displayed instead of a bug report being generated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now prevents the user from assigning the same name to two or more layer groups when creating a new MODFLOW model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now prevents the user from assigning the same name to two or more Hydrogeologic units.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the SFR package, NUMTIM, WEIGHT, and FLWTOL can now be edited.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed link to help for the MNW2 package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Head observations pane of the Data Visualization dialog box, double-clicking on on a point no longer causes some values in the grid from being hidden.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse no longer generates a warning message in the STR package for stages below the bottom of the stream if the stage is calculated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The ElevationToModelLayer function now works in child models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in opening files in which some objects have line segments that intersect.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of error messages regarding undefined parameters.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations when moving dragging with the mouse over the 3D view under certain rare circumstances.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The filters for limiting the display of head observation results by time were reversed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW STR package, a single object now defines more than a single reach in a cell if it intersects the cell more than once.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Layer Groups dialog box, pasting layer boundaries now works correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause values of some boundary conditions to be evaluated incorrectly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented a model from being opened when a global variable and data set have the same name. In such cases, the global variable is deleted.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the default name of a data set for a hydrogeologic unit conflicts with a preexisting global variable name, the name for the data set will be modified to avoid the conflict.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a resource leak.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When updating a ModelMate file with more than ten or more observation times for the same observation group, some of the observation names were not passed to ModelMate correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to export a shape file of contours will now generate a warning message if the user attempts to export contours for a data set that is uniform.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Duplicate Lake ID numbers now results in a error message for the user instead of a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation when editing objects.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now read MODPATH endpoint files in which some endpoint lavels contain spaces.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Deleting a MODFLOW stress period no longer causes the times of MODFLOW boundary conditions to change.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that prevented some files created by a beta version of ModelMuse from being opened by more recent versions.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in the export of the SSM file in MT3DMS when the ETS package is used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation in SUTRA models if the left, right, up, or down arrow keys on the keyboard were used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">It is no longer possible to delete all the Layer Groups in a MODFLOW model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Zooming in while a background bitmap is present no longer causes a range check error.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause a bug report to be generated if the user tries to import a background image that is too large.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation if the user deleted a parameter and then attempted to edit an object that used that parameter.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When adding new layer groups in MODFLOW models, each layer group automatically gets a name different from any other existing layer group.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that prevented the user from defining ETS boundaries properly on the first attempt.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that caused access violations when exporting the ETS package input file if the ETS boundaries were not defined properly.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

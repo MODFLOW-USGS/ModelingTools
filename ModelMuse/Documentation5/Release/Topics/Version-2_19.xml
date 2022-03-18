@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:18:56.846-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.19</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.19</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.19.1, May 13, 2013]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW models, ModelMuse now checks that there is a hydraulic connection between all the active cells.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">On some computers, bugs are encountered related to the 3D view. The 3D view is hidden on such computers to allow the program to continue running.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">A new checkbox has been added to the &quot;Object Properties&quot; dialog box labeled &quot;Duplicates &lt;cells/elements&gt; allowed. It is checked by default. Under some conditions, a single object can allow multiple values to be assigned at a single cell. For example, in MODFLOW models, an object might define two or more wells at a single cell by having two separate point sections that are in the same cell. This ability can be turned off by unchecking this check box.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to import a .dxf file that is locked by another program will result in an error message to the user instead of generating a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused problems on computers in which the decimal symbol is not a period when closing the &quot;MODFLOW Packages and Programs&quot; dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When reading an empty endpoint file, ModelMuse now displays a warning message to the user instead of generating a bug report. </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When an object is defining multiple values at the same cell or element, holes in the object no longer define such values. An example would be an object that defines wells in MODFLOW with an object that contains multiple sections and in which some of those sections define holes.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause ModelMuse to hang when importing an existing MODFLOW-2005 model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in limiting display of MODPATH end points with tracking time.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause access violations when generating the input file for the UZF package if a flow package other than the LPF or UPW was used.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.19, April 11, 2013]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added new contouring method based on the Association for Computing Machinery (ACM) algorithm 651.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability for the user to add a custom coloring scheme for coloring the grid or for contour lines.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for the NOPRINT option in MODFLOW observation files.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse will no longer use the XSECTION option in the Basic package if MODPATH is active because MODPATH version 6 does not support the XSECTION option.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing Shapefiles, if the number of Z-Formulas is set to 1 or 2, any new data sets that are created will be 3D data sets.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When drawing contour lines, a white background is now drawn behind the contour labels.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented layer elevations from being updated correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to import a file as a Surfer Grid file when it really is not one now results in an error message to the user instead of a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the user attempts to import a TProgs file before creating a grid, an error message is displayed to the user instead of generating a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The following functions all had bugs which have been corrected: ObjectCurrentVertexX, ObjectCurrentVertexY, ObjectCurrentVertexZ, ObjectCurrentSegmentAngle, ObjectCurrentSegmentAngleDegrees, ObjectCurrentSegmentAngleLimitedDegrees, ObjectCurrentSegmentLength</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in checking parameters in the SFR package that could cause ModelMuse to crash or to incorrect error messages.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause math errors when coloring data sets by the logarithm of their values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause extra stress periods of negligible length to be generated when exporting from the 64-bit version of ModelMuse.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed sampling of DEM data.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When saving ModelMuse projects to text files such as .gpt or .xml files, real numbers that were close to but not equal to zero were saved as zero.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the user enters an invalid formula for the Z coordinates of an object, ModelMuse will now display an error message to the user instead of generating a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Editing objects that defined streams in the SFR package when SFR parameters are defined works properly now.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If ModelMuse is unable to save an ini file, it displays a warning message to the user instead of generating a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to merge point objects no longer results in a bug report. However, point objects can not be merged.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that sometimes caused an error when ModelMuse was shutting down.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused an error if two components in MT3DMS were given the same name. Now if the user attempts to assign the same name to more than one component in MT3DMS, only the first one is accepted. The others are deleted.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

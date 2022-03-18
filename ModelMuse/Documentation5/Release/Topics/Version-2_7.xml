@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:21:27.329-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.7</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.7</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.7.0.0 Oct. 5, 2010]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now can create a series of bitmaps that can be used to create a video.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now will warn the user if a CHD, DRN, DRT, GHB, RIV, SFR, or WEL cell is in an inactive cell.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When coloring the grid with transient data, only the data for the time being used to color the grid is evaluated. This speeds up the display of transient data.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Contours can now be exported to a Shapefile.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Pathlines can now be exported to a Shapefile.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Endpoints can now be exported to a Shapefile.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">TimeSeries can now be exported to a Shapefile.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Images can now be exported as .bmp files as well as .emf files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The macros &quot;%SP&quot;, &quot;%TS&quot;, and &quot;%ET&quot; can now be used in text on the Export Image dialog box. &#160;They will be replaced by the stress period number, time step number, and elapsed time respectively if those data are in the comment for the data set.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Channel cross sections in the SFR package can now be imported from Shapefiles.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When coloring the grid causes a data set to be recalculated, there will be form displaying the steps involved in calculating the values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing SFR data from Shapefiles, formulas can now be used for SLOPE, STRTOP, STRTHICK, STRHC1, THTS, THTI, EPS, and UHC.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Improved error handling when importing an image.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Reduced flicker when drawing new objects. This may also have fixed a intermittent bug that caused access violations when coloring the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Improved speed of opening the Global Variables dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Select Objects by Name dialog box, the objects are sorted alphabetically.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Color Grid and Contour Data dialog boxes, when the user changes the data set used to color or contour the grid, the same limits as in the data set that is currently displayed can be used with a newly selected data set.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The elapased time is now included in the data set comment when importing MODFLOW results.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">All the commands for exporting Shapefiles have been moved to a submenu.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Updated memory manager to latest version.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Postprocessing for Geostatic Stress and changes in Geostatic stress has been fixed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Opening an object in the Object Properties dialog box no longer causes causes transient data to be recalculated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to write a locked file or attempting to open a file that doesn&apos;t exist now results in an error message instead of a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Exporting locations of MODPATH and ZONEBUDGET sometimes were not enclosed in quotes when quotes were required.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed coloring the grid when integer values were being used to color the grid and limits were used to filter what cells would be colored.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">VertexInterpolate didn&apos;t work properly if the grid was rotated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Pasting objects didn&apos;t work properly if the object had associated vertex values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Sometimes changing the number of Z formulas could lead to an assertion failure.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Opening the Object Properties dialog box would sometimes cause an access violation if another model had been opened previously.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Select Objects by Name dialog box, the objects are now placed on the correct tab instead of always being put on the tab for the top view if the model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">in the SFR package, NSTRAIL, ISUZN, and NSFRSETS were written when ISFROPT &gt; 0 instead of when ISFROPT &gt; 1.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Deleting the last vertex of an object no longer causes an error.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When the grid was colored with horizontal flow barriers, changing an object that defines a horizontal flow barrier now causes the displayed barriers to be updated correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Editing multiple objects in a new model no longer causes an error.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Inactive cells are no longer included in head observations.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">on the Import Image dialog box, it is no longer possible to set the number of rows in the table to less than 1.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Previously, the MODPATH zone was incorrectly limited to values greater than or equal to zero even for specified head cells.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to import model head or drawdown results from a file in which the number of layers is greater than the number of simulated layers now results in an error message instead of generating an error report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">MODPATH results were not cleared when opening a new model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Previously, the display of MODPATH times series points was incorrect when there was more than one release time.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">when opening a new model, bitmaps from the previous model are now removed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Sometimes moving an object did not cause the data sets that depend on it to be updated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing a shape file, the interpretation algorithm is now set correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When exporting .emf files, sometimes the image size was set to an incorrect value.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

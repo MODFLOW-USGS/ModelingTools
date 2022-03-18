@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:19:31.028-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.17</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.17</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.17.1, Oct. 16, 2012]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The display of the data for the RCH, EVT and ETS packages has been fixed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in which objects were not drawn as selected after clicking the OK button in the Object Properties dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The tree control in the Show Or Hide Objects dialog box no longer collapses all its nodes just because there has been a change in which object is selected.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.17, October, 11, 2012]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for MODPATH version 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for exporting data set values for display in Model Viewer.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Selection Cube for the top view of the model draws the grid outline only for simulated layers.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Head observations that are at the end of a steady-state stress period now have their reference stress period set to that stress period rather than the beginning of the following stress period.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Updated link for model archiving policy.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The ModelMuse.drc file is now included to facilitate translating ModelMuse into other languages.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When exporting ModelMate files, ModelMuse now specifies the correct version of MODFLOW to use.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The &quot;Function Help&quot; button on the Formula editor works again.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export and import of head change observations to ModelMate.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of gages for the Lake package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of Shapefiles in which the last character of the last field was not written to the file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of unit numbers for lake gages.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Renaming parameters for the HUF package now causes any formulas based on data arrays for those parameters to be updated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of file names in the Files to Archive dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The name file for MODFLOW models is now included in archives.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of binary Surfer grid files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed coloring the grid for certain PHAST data sets.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed how the &quot;Child Models&quot; dialog box for MODFLOW-LGR models responds to the user entering an invalid number for NCPP.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause some MODFLOW budget files to be incorrectly identified as invalid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of endpoints, pathlines and time series data from MODPATH on the front and side views when the grid is rotated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused too much memory to be used when exporting the SSM package in MT3DMS.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused exporting the SSM file in MT3DMS to take more time than it should have.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error in the export of the MT3DMS TOB package if duplicate times were specified.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

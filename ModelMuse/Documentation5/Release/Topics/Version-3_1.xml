@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:18:29.911-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 3.1</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 3.1</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 3.1.1 May 5, 2014]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed using objects on the front or side views to define pipes in MODFLOW-CFP.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when opening the Object Properties dialog box.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 3.1.0 May 1, 2014]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for MODFLOW-CFP.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The display of head observation residuals can now be limited by layer.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The head observations can now be exported to Shapefiles.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now use and online version of the help.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the initial step size for MT3DMS is larger than the maximum step size, the backgrounds of the cells in the table on the MODFLOW Times dialog box are colored in red.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The length of a MODPATH pathline is now displayed in the Grid or Mesh Value dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now paste contours from Argus ONE as objects in ModelMuse. Only the geometry is transferred; contour values are not transferred.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the Application Directory on a computer is blocked, ModelMuse will attempt to use the directory in which the program is installed instead.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The starting unit number for GAGE, MNWI, and UZF output files has been changed from 205 to 20205 to avoid potential conflicts with the COC package.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed using .ucn files to specify the initial concentration in MT3DMS.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed reading certain real numbers when opening a file on a computer in which the decimal separator is not a period.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in display of assigned layer in the RCH, EVT, and ETS packages.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed linkage to help system for the SUTRA Fluid Sources pane of the Object Properties dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed resizing panels on the Export Image dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Manage Parameters dialog box now enforces the 10 character limit on parameter names instead of generating a bug report if the number of characters in a parameter name is greater than 10 characters.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause assertion failures when interpolating.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that resulting in X_Prime and Y_Prime being exported to Shapefiles and CSV files instead of X and Y.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed bug that could cause an access violation when opening one of the recently opened files listed in the File menu.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause and access violation if the Mesh Information dialog box was displayed for a 3D SUTRA mesh before any layer groups had been defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Specifying a file of the wrong type on the command line when starting ModelMuse no longer leads to the generation of a bug report.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

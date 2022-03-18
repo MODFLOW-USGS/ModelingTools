@@ -1,2 +1,2 @@
-"C:\Users\rbwinst\Documents\RAD Studio\Projects\GoogleAnalytics\Win32\Release\GoogleAnalytics.exe" "C:\ModelingTools\ModelMuse\Documentation5\Release\HTML"
+"C:\Projects\GoogleAnalytics\Win32\Debug\GoogleAnalytics.exe" "C:\ModelingTools\ModelMuse\Documentation5\Release\HTML"
 pause

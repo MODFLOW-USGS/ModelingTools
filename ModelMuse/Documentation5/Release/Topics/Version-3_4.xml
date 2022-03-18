@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:17:40.998-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 3.4</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 3.4</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 3.4.0 Nov. 3, 2014]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Support for the MNW1 package has been added.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for generating meshes for SUTRA using Gmsh. Gmsh is an open source program available from http://geuz.org/gmsh/.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can now specify the spacing between contours labels.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse will now warn the user if no values are assigned for some types of data that vary with time.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now warns about linkages between SFR segments that are separated by more than one row or column.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">During grid generation, if the number of cells in the new grid will be larger than 1,000,000, a warning message will be displayed and the user will be given an opportunity to cancel grid generation.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Export Image dialog box, the font used for the scale can be changed.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to paste data from the clipboard into a table in the &quot;Import Gridded Data&quot; dialog box when the data set into which the data is imported is a Boolean data set.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">A corrupted name for MODFLOW or another model no longer prevents the MODFLOW Program Locations dialog &#160;box from being opened.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When the user imports a mesh, the mesh may have errors in it such as nodes that are not part of any element or elements whose nodes are in a clockwise rather than counterclockwise orientation. ModelMuse now fixes such errors.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now displays an error message instead of generating a bug report when attempting to import a raster file before generating a grid or mesh.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause the SUTRA mesh to be corrupted if it was renumbered.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when clicking on the graph of head observation results.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed bug that could cause an assertion failure when editing an object with corrupted or missing imported values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug when attempting to import a model from a directory in which the user does not have write privileges.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause an access violation in the Global Variables dialog box if it wasn&apos;t closed after clicking the Apply button.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause and assertion failure in models with a stress period with a length of zero.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">During grid generation, if the number of cells is too large, an error message will be displayed and grid generation will be canceled.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Export Image dialog box, contour labels are now drawn over the entire image.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing the the reach length in the SFR package in models in which some reaches in segments with multiple reaches were on a different layer from other reaches.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause access violations when exporting the SFR input file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause data set values to be calculated incorrectly &#160;or a variety of other errors due to mishandling of temporary files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause program locations to incorrectly revert to their default values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bugs that could cause access violation in the Object Properties dialog box when editing streams in the SFR package in MODFLOW.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If values are entered in the time step length calculator that result in a math error, the time step length is now set to zero and an error message is displayed instead of a bug report being generated.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

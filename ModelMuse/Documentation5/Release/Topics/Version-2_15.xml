@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:19:46.222-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.15</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.15</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.15, June 7, 2012]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added partial support for Unicode. Complete support is not possible because the groundwater models do not currently support Unicode.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The &quot;Data Sets&quot; dialog box can now remain open while the user works with other parts of ModelMuse. However, it can not remain open when the Object Properties dialog box is open so if the user attempts to open the Object Properties dialog box, The Edit Data Sets dialog box will automatically close.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Reduced the time required to open the Edit Data Sets dialog box in models with large numbers of data sets.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for importing the concentration in MT3DMS associated with a sink or source package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Tab ordering has been improved.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">X, Y, and Z axes are now drawn in the 3D view.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW models using the BCF package, the &quot;Vertical_Conductance&quot; data set is renamed &quot;Vertical_Leakance&quot;.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The extension for MT3DMS configuration file changed from ._cnf to .cnf to facilitate viewing the output in Model Viewer.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In order to prevent range check errors, it is no longer possible to display the Manage Flux Observations dialog box when MT3D has been selected unless at least one chemical species has been defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Specifying values of Stress period length, time step multiplier, and initial time step size that would cause the number of time steps to exceed the limits of a 32-bit signed integer causes an error message to the user rather than a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the object properties dialog box, clicking the button for the formula editor when editing the formula for the Factor in an MT3DMS Flux observation, no longer causes an Assertion failure.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Packages and Programs dialog box, changing the number of parameters in the UPW package no longer causes an Assertion failure.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Importing models containing the UZF package in which ET is not simulated, now works properly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused empty .bfh_head and .bfh_flux files to be created in MODFLOW-LGR models when one-way coupling is used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Merely selecting a data set in the Data Visualization dialog box no longer causes the data set values to be calculated. The user must now click &quot;Apply&quot; to cause the data set values to be calculated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing the Subsidence package from existing models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in importing Shapefiles that could allow an object to have one or more Z-formulas when setting the value of a layer definition data set.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

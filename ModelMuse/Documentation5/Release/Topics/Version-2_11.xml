@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:20:25.865-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.11</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.11</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.11 Sept. 27, 2011]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In LGR models, Streams in the SFR package are now linked between grids.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for GOFAIL option in MODFLOW-NWT.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Grid Value dialog box can now display data about the nearest visible MODPATH end point.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Error or warning messages are now issued when a boundary condition package has been activated but no boundaries for it have been defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now warns the user if duplicate SFR parameter instances are being used.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When closing a model, the prompt asking the user if they wish to save the model now includes the file name if the file name has been specified.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The most recent version of PHAST no longer supports specifying an initial water table. However, you can still use the initial water table option in ModelMuse. ModelMuse will use the data in the Initial_Water_Table data set to specify the initial head in a vertical column of nodes.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause a &quot;List index out of bounds&quot; error when exporting Shapefiles.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed bug that could ModelMuse to hang when starting a new model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When reading MODPATH pathline files, negative values of time were not handled properly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to export a model in which the reservoir package is selected but no reservoirs have been defined now results in an error message instead of a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of TBEGIN in MODPATH main file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug with selecting and drawing objects when zoomed in a great deal.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In LGR models, the selected column, row, and layer are now read correctly when opening a ModelMuse file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation if the number of columns or rows was set to zero.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In PHAST models, switching an object between being evaluated at nodes and elements no longer causes a bug report to be generated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When attempting to import model results, trying to import from a file that is being used by another program now results in an error message to the user instead of a bug report.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

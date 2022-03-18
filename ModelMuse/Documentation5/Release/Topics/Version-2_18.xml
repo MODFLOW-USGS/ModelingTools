@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:19:12.160-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.18</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.18</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.18.1, Feb. 22, 2013]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can now cut and paste data from the Imported Data tab of the Object Properties dialog box.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of RCH package when parameters are used but the layer is not time-varying.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused ModelMuse to hang on some computers when using the search function in the ModelMuse help.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that allowed an attempt to be made to export the PHAST input file even if the grid was not yet defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that sometimes incorrectly prevented the user from importing the shapes in a Shapefile as a single multipart object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that would cause an error opening a ModelMuse file if an object used in the definition of a flux observation had been deleted.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that allowed MT3DMS to have zero stress periods defined.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.18, Feb. 11, 2013]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Grid Value dialog box was modified to allow multiple tabs to be displayed simultaneously.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability to import binary grid files created by T-PROGS.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When exporting objects as Shapefiles, you can now export the formulas for many but not all MODFLOW Features.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added new function for use in Formulas: Closest. See the ModelMuse help for details.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for PHIRAMP in the Well package of MODFLOW-NWT.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for NODTOT in the MNW2 package of MODFLOW-NWT.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of starting locations file for MODPATH version 6 when no starting locations have been defined for some objects.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of MODPATH with MODFLOW-LGR child models when the MODPATH options differ between the parent and child models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed problem with editing objects in translated version of ModelMuse.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to read a head observation file in which some of the numbers are invalid now results in an error message to the user instead of a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Layers dialog box, deleting sublayers graphically now works correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in importing the MNW2 package from existing models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If a pathline just has a single point, it is now drawn as a single point instead of being skipped.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the grid value dialog box, data for MODPATH pathlines and endpoints are now displayed for child models in MODFLOW-LGR models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When exporting images with MODFLOW-LGR models, MODPATH pathlines and other data can now be displayed for child models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Streamlinks of MODFLOW-LGR child models are now displayed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of ModelMate files when the model files are in a different directory from the ModelMuse file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Layers dialog box, setting custom sub discretizations for layer groups now works properly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for IUNITRAMP in data set 2B of the well package of MODFLOW-NWT. </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting Shapefiles. Each record for the shapefile in the .dbf file now includes a space for indicating whether a record is deleted or not.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting the TOB file for MT3DMS when no concentration observations are defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused ModelMuse to crash when it first starts on some systems.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug displaying 3D view on Windows 8.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused ModelMuse to crash when changing the number of rows, columns or layers in the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in adding new data sets when child models from a MODFLOW-LGR model have been created but the model is no longer a MODFLOW-LGR model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Bug fix: Fixed bug that would cause divide-by-zero errors when calculating Interlayer Kz in the HUF package if some of the data was not properly defined.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

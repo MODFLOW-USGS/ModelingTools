@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:21:44.014-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.4</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.4</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.4  April 29, 2010]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for sampling DEM files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Grid Value dialog box has been changed to display the name of the selected object and to show its 3&apos;rd dimension coordinates for those cells intersected or enclosed by the object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Show or Hide Objects dialog box, any collapsed branch that contains a selected object is shown with a bold font.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added new function for use in formulas - PositionInList. See the ModelMuse help for usage.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Objects now have a comment field that can be used to document what the object does.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added warning messages in export of the MODPATH input files if the required MODFLOW input or output files are missing.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to paste multiple data set names in the table on the Data tab of the Import Shapefile dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Improved speed of importing and exporting data.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When the MODFLOW Hydrogeologic Units dialog box is closed, it now checks that at least one parameter has been associated with each hydrogeologic unit and that each parameter is associated with at least one hydrogeologic unit.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The thickness of HUF units is now constrained to be greater than or equal to zero.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added error message if a MODPATH particle start time was invalid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added Epsilon when specifying data values to skip when &#160;coloring the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing head observations, if the ModelMate interface is active, Statistic and StatFlag are imported too.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If additional vertices are added to an object that defines head observations, an error message is displayed when attempting to export the HOB input file or plot HOB data on the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When defining a new global variable, default values for the type and value are displayed in the Global Variables dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Bitmaps that were hidden because the magnification was too high, are now displayed again automatically when the magnification is sufficiently reduced.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Grid Spacing dialog box now allows negative numbers for the default spacing for columns, rows, and layers. &#160;In MODFLOW models, the default spacing for rows is set to -100 instead of 100.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When tips are turned off, ModelMuse will tell you when it detects new videos on the ModelMuse web site.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Boundary condition times prior to the beginning of the first defined boundary condition are now ignored.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing character attributes of Shapefiles, blank characters at the beginning or end will be removed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added pumping rate comment for wells in the MODFLOW Well input file. This can be helpful when using PEST.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The caption of a menu item switches between &quot;Show 2-D Grid&quot; and &quot;Hide 2-D Grid&quot; depending on whether or not the grid lines are visible.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">if a bitmap can not be displayed, it will be hidden and then will not be shown again until the magnification is decreased.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Reduced disk usage.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Statistic and Stat-Flag are no longer visible for head observations unless the ModelMate interface has been activated.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Corrected name of the &quot;Select Objects for Editing or Deletion&quot; menu item.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When deleting data sets, ModelMuse now checks that all data set formulas are still OK.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The text on the status panel is no longer truncated when it is over 110 characters in length.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed access violation when closing with the Color Grid or Contour data dialog boxes open.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of rate data in the UZF package when some rates are reused and others are not reused.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed access violations that occurred when closing ModelMuse after deleting a data set.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The row width is now displayed correctly on the Grid Values dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If attempting to draw a bitmap results in an out-of-resources error, drawing the bitmap will be skipped.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Various controls on the Color Grid and Contour Grid dialog boxes now changes position appropriately if the dialog box is changed in size.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The beginning and ending times for MODPATH can now be set to non-integer values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The name of a multiplier array would not be exported correctly if it was used in one of the HUF package input files but that input file was not being created by ModelMuse.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed &quot;List index out of bounds&quot; error when deleting a data set.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If every cell has gone dry, there is no longer an &quot;List index out of bounds&quot; error when attempting to import the model results.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The labels for the various Z-coordinate formulas in the Import Shapefile dialog box are now enabled when appropriate.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented the Packages and Programs dialog box from being displayed on some computers.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused an Assertion error when attempting to show the &quot;Select Objects By Name&quot; dialog box in a model that had no objects.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Saving the ModelMuse file with a new file name now results in the default name for the model input files being changed as well.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing Shapefiles, if the feature that is being imported requires that each shape be imported as separate objects, the Import Shapefile dialog box no longer allows them to be combined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When flow observations were used the GHB, DRN, RIV, and CHD packages were not always exported correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of the recharge, EVT, and ETS layers when no parameters were defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The SFR package input could be generated incorrectly if an object that was supposed to define a stream segment did not intersect the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of RCH, EVT, and ETS rates when parameters are first defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed when certain controls related to MODPATH become enabled.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">There no longer is an access violation if you attempt to create a new model while in the midst of creating a new object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed calculation of HUF_Kx.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of Reference time in the MODPATH response file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Access violations no longer occur when creating a new object after having closed a previous model and starting a new model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of BeginPeriod and BeginStep. &#160;They must both be set to 1 if any stress period in the model is a steady-state stress period.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed Assertion error in evaluation of MNW2 input.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of the RES package from existing models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of UZF transient data sets.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed deletion of verticies in an object when all but one vertices are deleted.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed default file names for the MODFLOW name file and for the default output files when the file name has a space in it.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of MODPATH particle release times.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed assignment of color to MODPATH pathlines.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed crash when entering multiple times for flow observations.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When attempting to import an incomplete Shapefile, ModelMuse now exits the procedure properly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true"> Entering a real number for the recharge layer no longer causes ModelMuse to hang. Instead an error message is displayed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If wetting is active but there are no convertible layers, a warning is displayed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If wetting is active but there are no convertible layers, data set 7 is no longer created in the LPF package and data set 4 is no longer created in the HUF package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When the ET Surface and the ET Depth are undefined in the EVT or ETS packages, an error message is displayed instead of the export failing.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Editing an object containing SFR data no longer results in an access violation if the SFR package is not selected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Editing an object that defines data for the SFR, MNW2, HOB or HFB packages no longer results in deletion of data for those packages when those packages are not selected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Object Properties dialog box, clicking the &quot;Edit F()...&quot; button on the Data Sets tab would cause an Assertion error when no data set was selected. &#160;The button is now disabled when no data set is selected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When performing coordinate conversions on Shapefiles, you can no longer select a UTM zone until you have chosen to perform the conversion.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed access violations when opening a model when a model is already open.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the flow package corresponding to a flow observation is not selected in the object properties dialog box, attempting to select the flow observation will no longer cause toggling of the selected node.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">After selecting the item with which to color the grid in the Color Grid dialog box, you can click directly on the Apply button without clicking elsewhere first.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Editing an object that defines an SFR stream with unsaturated properties defined no longer causes an assertion failure if the object is edited again.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Importing a model no longer causes an access violation when the previous model had objects that defined an SFR stream with unsaturated properties.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

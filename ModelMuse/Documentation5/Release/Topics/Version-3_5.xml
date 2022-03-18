@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:17:09.633-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 3.5</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 3.5</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 3.5.1 Mar. 6, 2015]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">LSTLVL option in MODFLOW-OWHM added.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">PROPPRINT option in MODFLOW-OWHM added.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Support for Internal Coordinate System&quot; option in MODFLOW-OWHM added.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Support for the Farm Process in MODFLOW-OWHM activated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed access violation that occurred when coloring the initial water table data set in PHAST.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed access violation that occurred with SUTRA models when changing the selected layer with the keyboard.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 3.5.0 Feb 27, 2015]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Support for the Farm Process in MODFLOW-OWHM added.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Improved error checking in SFR and STR packages. Among other changes, when evaluating data for the Stream (STR) package, ModelMuse will now issue a warning if adjacent reaches in a segment are separated by more than one cell or if the last reach in a tributary segment is separated by more than one cell from the first reach in the segment into which it flows.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When a data set value is assigned using the &quot;Nearest&quot; or &quot;Nearest Point&quot; interpolation methods, the explanation of the data set value will identify the object that is used to assign the value.</text></para>
+                <para styleclass="Normal"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; text-decoration:line-through; color:#000000;" translate="true">ModelMuse will prompt you to save your file once each hour.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When the user edits the times in the MODFLOW Time dialog box, the times defined by MODFLOW boundary conditions will be modified to match those times.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now import MODFLOW models in which the U2DREL subroutine reads a value of NAN. The NAN is converted to zero.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now import some MODFLOW use models that include certain proprietary packages in the name file by commenting out those packages in a temporary version of the name file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now export a 2D SUTRA mesh for use in other programs. To export the mesh, select &quot;File|Export|SUTRA 2D Mesh.&quot;</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing a mesh from Gmsh that contains triangular elements, the locations of the triangular elements is reported in the Errors and Warnings dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If ModelMuse runs out of memory when trying to save a .gpt or .xml file, the user will be instructed to save the file as a .mmZlib or .bin file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the &quot;Show or Hide Objects&quot; dialog box, a &quot;Go to&quot; menu item has been added to the popup menu. Selecting will move the view to the object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now import many MODFLOW-2000 models. However, MODFLOW-2000 models that use the Observation process generally can not be imported until all the files for the Observation process are commented-out in the name file.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Internally, the export of the RES package was changed to improve the time required to export it in models with multiple stress periods.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Sometimes it was impossible to edit objects that defined SFR stream boundaries because of extra information included in the stream boundaries.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Selecting &quot;File|New|MODFLOW Model&quot; after importing an existing model no longer causes an access violation.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would occasionally cause access violations when contouring data.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now handle SUTRA models with more than 1,000,000 nodes.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could sometimes cause an access violation when drawing the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can not run MODFLOW properly when the model file name or directory contains non-ASCII characters.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of existing models that use the SFR package with parameters and external flow files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of MNW1 input file when a unix-style path name is specified for an output file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of SWR input files with structure observations or when certain transient data are reused.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting Shapefiles that could cause exported Shapefiles to have duplicate attribute names.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in contouring or coloring the grid with a text data set in a SUTRA model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in generating contours with SUTRA.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting mesh data Shapefiles with SUTRA that would prevent attribute values from being assigned.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in generating finite element mesh.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing the STR package when invalid stream tributaries are assigned.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause access violations when deleting nodes from SUTRA meshes.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing the STR package when the locations of the streams changed between stress periods.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug with manually drawing new SUTRA elements.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would cause an error if the mouse wheel is used</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In SUTRA models, times for boundary conditions or observations that are after the final time are no longer included in the TIME_STEPS time schedule.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would occasionally cause access violations when drawing the selected row and column with the &quot;Select Column, Row, or Layer&quot; tool selected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export to ModelMate when STR parameters are defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Multinode wells in the MNW2 package were not placed in the correct cell if the LOSSTYPE was set to None.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of MODFLOW models using the SFR package when the option to simulate unsaturated flow beneath a stream is selected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SWR input files when tab files are not used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would sometimes cause data set values not to be updated when they needed to be.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

@@ -4,7 +4,7 @@
 1d. Pass all tests.
 2. Update version number.
 2a. Turn off check for resource leaks in MadExcept.
-2b. Be sure the release version of disclaimer is used. See DisclaimerTextUnit.pas.
+2b. Be sure the release version of disclaimer is used by adding "ApprovedSoftware" to the release conditional defines. See DisclaimerTextUnit.pas.
 3. Build 32 and 64-bit versions of ModelMuse, ModelMonitor and ModflowImporter and utility programs.
 4. Update revision history, including the release date.
 4a. Make sure no "not in released" bug fixes included. 
@@ -42,8 +42,9 @@
 23c. Link to doi in main web page
 23d. Activate main web page
 24. Transfer ModelMuseInternetUpdate.txt to web.
+24a. Transfer Videos.xml to web.
 25. Send out email to OGW.
-25a. Update IPDS.
+25a. Update and disseminate IPDS.
 26. Turn on check for resource leaks in MadExcept.
 27. Be sure the preliminary software version of disclaimer is used. See DisclaimerTextUnit.pas.
 

@@ -131,6 +131,7 @@
       <config-value name="make3status">*</config-value>
       <config-value name="make0include">CHM</config-value>
       <config-value name="make0status">*</config-value>
+      <config-group name="bookmarks"/>
     </config-group>
     <config-group name="user">
       <config-group name="rbwinst-pr">
@@ -140,7 +141,7 @@
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">0</config-value>
+          <config-value name="lastexport">3</config-value>
         </config-group>
       </config-group>
     </config-group>

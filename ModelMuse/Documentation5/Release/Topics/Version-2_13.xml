@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:20:14.992-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.13</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.13</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.13 Feb. 28, 2012]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for MT3DMS</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now checks the file date for MODFLOW and related models and warns the user if a more recent version has been released.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Reduced memory usage when importing MODFLOW models that use the UZF package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing MODFLOW features from Shapefiles, most features can be imported into a single, multi-part object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can now specify the precision with which contour labels are written.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added new macro for exporting images; %TrS will be replaced by the transport step.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The &quot;Run model&quot; button now has a drop down menu next to it which can be used to run MODPATH, ZONEBUDGET or MT3DMS.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to import parameter values from a MODFLOW PVAL file. This can be done either from the Manage Parameters dialog box or from the command line. To import a PVAL file from the command line, add -p &quot;Filename&quot; to the command line where Filename is the full path of the PVAL file. If the path contains any spaces, Filename should be enclosed in double quotes.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to import global variables from a text file. This can be done either from the Global Variables dialog box or from the command line. To import a global variables file from the command line, add -g &quot;Filename&quot; to the command line where Filename is the full path of the global variables file. If the path contains any spaces, Filename should be enclosed in double quotes. Each line of the global variables files must be either empty, start with the # character to identify the line as a comment or list the name and value of an existing global variable. On a line defining a new value for a global variable, the name of the global variable must be at the beginning of the line must be first followed by one or more spaces followed by the value. A period must be used as the decimal separator. For boolean global variables, the value must be either &quot;True&quot; or &quot;False&quot; (without the quotes). For text variables, the value may optionally be enclosed in quotes. &#160;A global variables may also be saved from the Global Variables dialog box.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When running MODFLOW from ModelMuse, the lines in the batch file to display the listing file now occurs immediately after MODFLOW has finished instead of after the lines to run MODPATH and Zonebudget.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added option to write SFR package input in the format used by GSFLOW.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse again responds to the mouse wheel.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now only allows a ModelMuse file to be saved if it has one of the correct extensions.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Access violations that sometimes occured when changing the names of layer groups have been fixed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Program Locations dialog box, &quot;ModelMuse.exe&quot; is no longer accepted as a valid name for any of the programs.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Undo/Redo capability added for changes to the output control.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now import the gage package correctly when a lake gage has an OUTTYPE of 4 or a stream gage has an OUTTYPE of 8.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now updates user-entered real numbers to the proper format when the the user changes the language settings.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed in bug in which attempting to delete a row from a table in which no row was selected caused an exception.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in which SFR data was corrupted if ICALC was not specified.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing the MNWI package from an existing MODFLOW-2005 model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could sometimes prevent the Object Properties dialog box from being displayed when attempting to edit multiple objects.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Time dialog box, attempting to use the Time Step Length Calculator without first specifying the Stress period length and multiplier now generates a warning message to the user instead of a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When the user has customized the regional settings to use a decimal separator that is different from the usual one, this no longer causes an error when converting text to floating point values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The menus and buttons are now disabled while opening a file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When a message box is displayed, the mouse will move to the default button if the user has specified that option in the Windows Control Panel.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing Shapefiles, failing to specify an attribute name or value no longer results in a range check error.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Failing to completely specify information streams in the SFR package now results in an error message instead of a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in setting data for SFR when multiple objects are being edited at once.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bugs relating to display of data in MODFLOW-LGR models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed another bug relating to display of data in MODFLOW-LGR models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed another bug relating to display of data in MODFLOW-LGR models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed export of SFR in MODFLOW-NWT or for GSFLOW.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug with setting multiple flux observation values at once not working.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in storing imported values when splitting objects.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When reading an exporting a file from the command line, the &quot;arrays&quot; directory will be created as a subdirectory of the directory containing the file even if the full file path is not specified.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">attempting to animate a series of data sets in the Export Image dialog box without first displaying the Display Data dialog box no longer causes access violations.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true"> Fixed bug with reading .ini file when multiple copies of ModelMuse are running.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed export of OC file when the defaults are selected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Contour lines are now drawn at the correct positions on the front and side views when the grid is rotated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">(fourth attempt) When more than one instance of ModelMuse was running, sometimes one copy would interfere with the other&apos;s temporary files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in which the Data Sets dialog box sometimes did not prevent the user from setting up a formula that caused a data set to depend on itself.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an assertion failure when coloring the grid with transient data such as the recharge rate.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting MT3DMS BTN data set A6 when there are more than 40 layers.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:14:46.520-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Versions 4.1</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Versions 4.1</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.1 Oct. 11, 2019]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Support for SUTRA 3.0 added. The new features are accessible through the SUTRA Options dialog box and the Object Properties dialog box and are documented in the help for those dialog boxes. The Examples/Tutorials item in the help also includes two new SUTRA example models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In SUTRA boundary conditions, &quot;Used&quot; can now be set using a formula.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the SFR package for MODFLOW 6, there is now a check that the sum of the upstream fractions of the downstream reaches of a reach add up to 1.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now warns if the bottom of the stream bed in an SFR reach in MODFLOW 6 is below the bottom of the cell.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">MT3D can now be used with child models in MODFLOW-LGR.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now warns about grid columns and rows that vary in size in MODFLOW 6 models that use MODPATH.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the user has not specified the location of one of the modeling programs and the program is not found at the default location, ModelMuse will strip &quot;C:\&quot; off the beginning of the default location and append that to the name of the subdirectory where ModelMuse is located and will check to see if the program is located there. This makes it simpler to bundle ModelMuse with the models using WineBottler to run it on the Mac.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The UZF input file has been changed so that infiltration and unsaturated zone ET are always saved to the cell-by-cell budget file.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause division by zero errors when drawing the top, front, or side views.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause errors in determining which cells were inside objects with multiple parts.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations when deactivating SFR in objects.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations when exporting the SFR package input in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause the wrong identifier to be displayed for an invalid formula in a model feature.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause divide by zero errors when drawing the top, front or side views.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an assertion failure when generating the input for the SFR package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error when attempting to create a fishnet mesh.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when the &quot;ObjectIntersectArea&quot; function is evaluated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented the user from specifying the MVR package information.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW 6 files can now be exported from the command line using command-line parameters.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause a range check error when Creating a DISV grid in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in reading SFR6 data from file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in writing idiv in MODFLOW 6 SFR6 input file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in which mxiter in the MODFLOW 6 Simulation Name File was not exported correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in identifying MVR sources when the UZF package is used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when editing and SFR stream in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The data sets for Angle1, Angle2, and Angle3 were only created and used if the XT3D option was selected instead of whenever the NPF package was selected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error if a lake outlet was a source for the MVR package in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in specifying lake outlets that could cause them not to be saved properly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODPATH_Zone data set was sometimes improperly marked as required with MODPATH 7 when in reality it wasn&apos;t used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error if the user tried to rename a data set.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause a bug report to be generated if the mouse wheel was moved over the NPF options grid in the MODFLOW Packages and Programs dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error if the number of time steps in a stress period was greater than or equal to 100,000.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error if multiple copies of ModelMuse are being run from the command line at the same time.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error if the last time defined for a stream in a MODFLOW 6 model was earlier than the last time in the model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Transient data for the MVR package was not displayed properly in the Object Properties dialog bos if the number of times was not equal to 1.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed coloring pathlines with the Z coordinate when DISV is used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error when assigning values to a data set using interpolation.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of Step Schedules in SUTRA. Previously, the exported time steps were smaller than then should have been by one time step.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error when deleting a custom color scheme.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation importing a MODFLOW model containing the MNW2 package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed the conversion of diversions from the the MODFLOW-2005 version of SFR and STR to the MODFLOW 6 version of SFR.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of the MODPATH input files for models with DISV grids.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when coloring the grid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause EVT and RCH cells to be defined in the wrong layers in MODFLOW 6 models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause some cells that are intersected by an object to not be recognized as being intersected by that object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when converting a structured grid to a DISV grid.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

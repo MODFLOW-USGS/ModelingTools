@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:14:40.109-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Versions 4.2</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Versions 4.2</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.2 Feb. 25, 2020]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Support for the SFT, LKT, UZT and CTS packages in MT3D-USGS has been added.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can now specify that BCTime has been programmed in SUTRA.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Time-series file interpolation methods in MODFLOW 6 are now supported.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">A &quot;Paste Data&quot; button was added to the &quot;Import Gridded Data dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The &quot;File|Import Gridded Data Files&quot; command now works with DISV MODFLOW 6 models and SUTRA models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The operators &quot;^&quot; and &quot;**&quot; have been added. Both allow one number to be raised to the power of another number.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for NOCHECK, MEMORY_PRINT_OPTION, and MAXERRORS in mfsim.nam options.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for INFLOW, in the MODFLOW 6 Lake package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for NO_PTC, in the MODFLOW 6 IMS package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for K22OVERK and K33OVERK in the the MODFLOW 6 NPF package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added additional error checking for MAW wells.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now convert the UZF package for MODFLOW-2005 to the UZF package for MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Improved display of actions during export of MAW package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Edit Feature Formula dialog box can now be used with the MAW package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If no data has been assigned to a data set, the legend tab in the Data Visualization dialog box will be empty.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The menu items used to select the type of model have been moved out of &quot;Model&quot; and into &quot;Model Selection&quot;.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If ModelMuse attempts to copy an image to the clipboard and fails because the clipboard is locked. it will now try three times before giving up.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The description of SIGMAS in SUTRA has been changed in the SUTRA Options dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When writing time-series files for MODFLOW 6, lines are now kept less than 2000 characters wide.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error if a data set type is changed after some data has been assigned.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an integer overflow when attempting to import an ascii raster that contains a larger number of points.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause a range check error when undoing or redoing the addition of new vertices to the object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause the BTN package input to include an incorrect option with MT3D-USGS.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation if the user attempts to open a ModelMuse file while the Edit Data Sets dialog box is open.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation in the &quot;Show Grid or Mesh Values&quot; dialog box when the selected objecte is changled.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause MXSS to be calculated incorrectly in the MT3D SSM package when the MNW2 package is used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause ModelMuse to fail to create the MVR file correctly when the UZF package was used as a source.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations when exporting MODFLOW boundary conditions.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bugs in archiving MODFLOW 6 and MODPATH 7 files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If HDRY and HNOFLO are set to zero, those values are saved to the file when a ModelMuse file is saved.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error when converting an existing model to MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could prevent SFR boundaries from being accepted as MVR sources.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed writing the status of the first MAW well in a stress period.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The MT3D_Active data set corresponding to MT3D input data set ICBUND set is no longer set to False if the Active data set is set to false.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed saving Lake outlet width in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed specifying recharge and evapotranspiration layer with MODFLOW 6 models when the top layer option is selected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause and assertion failure while generating the input for the Reservoir package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error when displaying the Data Visualization dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation in the &quot;Data|Display Data Set Values&quot; dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation when exporting the CHD input file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause ModelMuse to enter and infinite loop when evaluating a data set using an object on the front view of the model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented MNW1 wells from being edited correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented well screens in MAW wells from being edited correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now allows the user to specify a return location in DRT as a Farm in the Farm process or a SWR reach with MODFLOW-OWHM models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that prevented some DXF files from being imported correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now assigns IFACE values for recharge and evapotranspiration in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed assignment of UZF6 package data.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of Surfer Grid files into a DISV MODFLOW 6 model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause the Point Average Interpolation method to fail if a point was at the edge of two cells.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed option to select all the data from a single time step whem importing results.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added OUTER_RCLOSEBND to variables in that can be edited in the IMS solver.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the values of INNER_HCLOSE, INNER_MAXIMUM, INNER_MAXIMUM,LINEAR_ACCELERATION, OUTER_HCLOSE, OUTER_MAXIMUM, and BACKTRACKING_NUMBER are not overriden, the values that are written to the IMS input file are the values suggested in the MODFLOW 6 input instructions based on the complexity of the problem.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in importing Shapefiles in which two or more Shapefile Attributes have the same name.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of MAW. FLOWING_WELL now exported correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse will now generate an error message instead of sending a bug report if no valid times have been defined in the HFB package in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of grid lines for the active area to a Shapefile.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of active cells in MODFLOW 6 to IDOMAIN &gt; 0.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed specifying overirdes of nonlinear variables in IMS package in MODFLOW Packages and Programs dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bugs in specifying backtracking_tolerance and outer_rclosebnd in the IMS package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in the &quot;Show Grid or Mesh Values&quot; dialog box that could cause an access violation.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When converting to a MODFLOW 6 model, the Storage package is now automatically activated if the model is transient.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error when exporting the UZF input file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When converting MNW2 wells to MAW wells, the SKIN option in MNW2 is now converted to the CUMULATIVE option in MAW instead of the SKIN option in MAW.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause issues with evaluating formulas that involve only integers.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

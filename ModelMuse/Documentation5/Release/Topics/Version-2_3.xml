@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:21:49.542-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.3</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.3</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.3  March 8, 2010]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for BCF package.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for the SUB package.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing model results, heads and drawdowns equal to HDRY and HNOFLO are not used in assigning the minimum and maximum values for the array.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The mouse wheel can now be used to zoom in or out in the top, front, or side views of the model.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">When the HUF package is selected, optional data sets will be created that display hydaulic properties that result from applying the HUF parameters to the model.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for importing the MNWI package from an existing model.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added warning when an input file specified in the MODFLOW Name File dialog box does not exist.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Improved error messages for functions that retrieve imported data.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for importing Surfer Grid files.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">In Data Set Values dialog box, the layers are now in a list on the left.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Reduced memory usage when displaying transient input data.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a check of the fractional depth and fractional rates in the ETS package.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Disabled MODPATH export for PHAST models.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused the HFB and UZF packages to become deselected whenever the selected flow package was switched.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused the number of wetting iterations could be saved as zero incorrectly if it should have been a 1. However, MODFLOW would change it back to 1 so it would not affect model computations.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug exporting HUF files in which storage parameters were exported in steady-state models.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in LPF and HUF package export in which there could be no space between a multiplier array name and a zone array name.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in HUF package in which zone and multiplier arrays were not written.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bugs that could cause access violation when opening a new model after having edited objects in the currently opened model.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that kept the videos from being played automatically.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused an error when certain functions were used to assign values to data sets.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused errors creating temporary files if more than one model was being run at one time.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug getting temp file names.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Files specified in the MODFLOW Name File dialog box are now included in the archive.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of Shapefiles.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug deleting the last Layer group in a model.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in getting the formula from the Formula Editor.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing models that contain the HUF package when a zone array was not used with a parameter.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that allowed invalid formulas to be set for the Z elevation formulas for an object.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug with access violations when checking the internet.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in evaluating formulas that contain &quot;ActiveOnLayer&quot; for Z-coordinates</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug getting names of new temporary files.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that would sometimes cause access violations when accessing the File menu.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused access violations when undoing the setting of a boundary condition.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause layer elevations to be set incorrectly after changing the layer structure.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violation when deleting a data set.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

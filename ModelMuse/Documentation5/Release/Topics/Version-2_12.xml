@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:20:21.046-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.12</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.12</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.12 Nov. 7, 2011]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Data Visualization dialog box, it is now possible to display linkages between streams in the stream package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Contours are now labeled.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a measurement function that allows the user to measure distances easily.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The positions of objects can now be locked so that they can&apos;t be moved accidentally.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to import multiple ASCII raster files at one time.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing an existing MODFLOW model, .mfn is now recognized as a valid extension for a MODFLOW name file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Manage Head Observations dialog box, the user can now select multiple rows and then click the &quot;Highlight selected objects&quot; button to select all the objects that define objects on the selected rows.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Head Observation Results pane of the Data Visualization dialog box, the data can be sorted by clicking on the column headers</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Head Observation Results pane of the Data Visualization dialog box, the objects that define the observations in the selected row of the results table can be selected by clicking the &quot;Highlight selected objects&quot; button.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Strong"><text styleclass="Strong" translate="true">The following dialog boxes have been deleted and their functionality has been moved to the new Data Visualization dialog box: Color Grid, Contour Data, MODPATH Pathline Display, MODPATH Endpoint Display, MODPATH Time Series Display, and Head Observation Results.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">&quot;GOFAIL&quot; option in MODFLOW-NWT has been renamed &quot;CONTINUE&quot;.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The multiplier and zone arrays used by the RCH, EVT, and ETS packages are now exported to separate files that are accessed using the OPEN/CLOSE option. This allows the zone and multiplier arrays in other packages to be changed without the need to export the RCH, EVT, and ETS packages. The files are stored in a subdirectory named &quot;arrays.&quot;</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the NWT solver, the default value for flux tolerance has been increased from 0.006 to 0.06</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing the UZF package from an existing MODFLOW model, NUZTOP is now imported correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Object Properties dialog box, a &quot;no parameter&quot; checkbox has been added to the beginning of the list of parameters for MODFLOW features that allow multiple parameters to be used with a single object. The &quot;no parameter&quot; check box can be unchecked to turn off the definition of a boundary that does not use parameters.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When a data set defines the multiplier or zone array of a MODFLOW parameter, it now is possible to delete the data set if the associated parameter is deleted.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to read an invalid ModelMate file now generates a warning message instead of a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Attempting to open a ModelMuse file with a length of zero now results in an error message to the user rather than a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the PHAST Print Frequency dialog box, it is no longer possible to delete all the columns in the table.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Previously some erroneous error or warning messages were generated for data set values in inactive cells.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When a background image was replaced with a new one, the name of the image stored in ModelMuse is now updated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When editing objects that define SFR streams, the controls for editing multiple cells in tables are now positioned properly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that caused access violations when the system color was changed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Bug fix. Exporting a grid data to a shape file for data sets whose names are longer than 10 chanracters now works properly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Deleting data sets and then opening another ModelMuse project no longer results in an assertion failure.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a problem with invalid cast errors in PHAST models when creating or editing objects.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:22:15.913-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 2.1</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 2.1</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.1.1.0 September 2, 2009]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bugs in importing DIS, LPF, EVT, and ETS files from existing MODFLOW-2005 models.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 2.1.0.0 August 31, 2009]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Transient data after the end of the last defined stress period is now ignored.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Changed the way MODFLOW wells are exported so that if an object has multiple sections in the same cell, the exported pumping rate is the sum of the pumping rate for each section.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for HUF2 package including the LVDA and KDEP input files.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Formulas are now automatically updated when the name of a data set is changed.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability to specify additions to the batch files that run MODFLOW and PHAST.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Show/Hide Objects dialog box, the selected objects are now displayed with a bold font.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a new way to select objects for editing. See the help for &quot;Object|Edit|Select Objects for Editing...&quot;</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a way to see all the values for a data set and copy them to the clipboard. &#160;See the help for &quot;Data|Display Data Set Values&quot;.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing existing MODFLOW-2005 models, flow observations are now imported.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Reduced memory usage.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability to export objects as Shapefiles.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability to delete images that have been imported.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Deleting all the points in an object in the Object Properties dialog box now results in the object being deleted.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">When exporting boundary conditions, there is now a warning if no cells are defined.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Grid Values dialog box updated to show grid cell dimensions.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Observations outside the defined model times are no longer exported.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Holding down the Shift key when releasing the mouse while creating objects of moving nodes of objects now causes the new or moved vertex to &quot;snap&quot; to the location of a nearby node of another object if it is within 3 pixels of the cursor location.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added shortcut for displaying the Show/Hide objects dialog box.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Added Save and Clear buttons to Errors and Warnings dialog box.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting LAYWET in LPF package.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bugs in exporting MODPATH files.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting FACTOR in flow observations.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that allowed a global variable and data set to have the same name.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bugs importing existing MODFLOW-2005 models.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug pasting objects from the clipboard that had imported values.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in Nearest Point interpretation method.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing elevations formulas when importing Shapefiles.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing gridded data with rotated grid.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in reducing the number of items for a MODFLOW boundary condition.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing points; a blank file name is no longer added to the files to archive.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing EVT, ETS, and RCH packages when parameters were used.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

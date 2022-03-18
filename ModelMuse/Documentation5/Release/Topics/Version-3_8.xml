@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-03-18T06:15:43.226-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 3.8</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 3.8</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 3.8.1 August 26, 2016]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for new options in MODFLOW-NWT version 1.1.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Display Data dialog box, the SFR links and STR links now have an option to display invalid links.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed check of MT3DMS file name size. The size checked was 5 when it should have been 50.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed deletion of global variables that were added in some previous versions of ModelMuse.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in display of MODPATH time series.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in archiving models so that the batch files would work correctly in the archive.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed evaluation of the DischargeRouting data set (IRUNBND in the UZF package) when the SFR streams are not in strict numerical order.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed and access violation when opening a model after having previously a MODFLOW-LGR model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that caused an access violation when deleting all the global variables.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 3.8 August 12, 2016]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When creating an archive, ModelMuse now saves it in in a form that meets more of the USGS model archiving requirements.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now exports a usgs.model.reference file each time the model input files are exported. When starting a new model, the user is now prompted to specify the information for the usgs.model.reference file that ModelMuse can not determine automatically. The information can also be edited by selecting &quot;Model|Edit Geo Reference&quot;.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now exports an .axml file each time the model input files are exported. The files lists the input and output files for the model in XML format. These files can be used to help archive a model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability to export an outline of the grid or mesh to a Shapefile. When exporting a grid, the user has the option to export the outline of the entire grid, just the active cells in the grid or both the active and inactive cells.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Import Points dialog box was modified to allow the user to specify column and row instead of X and Y when importing data for models with grids on the top view of the model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added legend for MODPATH Endpoint colors.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In tables containing checkboxes, it is now possible to check a check box by typing or pasting a value into the cell containing the check box. Typing &quot;True&quot;, &quot;T&quot;, &quot;Yes&quot;, or &quot;Y&quot; will cause the check box to be checked. Any other text will cause it to be unchecked. Case is not important in the text that is typed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing objects, a comment is included in each object with the date the object was created and (if applicable) the file from which it was imported.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Enhancement: When importing Shapefiles, the minimum and maximum X, Y, and Z coordinates of the object can be used in the formula that determines whether or not an object is imported.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When exporting the CHD package, ModelMuse now checks whether the specified heads are below the bottom of the layer.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The &quot;SWR_Reach_Number&quot; data set has been changed from a 3D data set to a 2D data set. This allows it to be used in a formula for the reach number in SWR direct runoff. A suitable formula might be &quot;Round(SWR_Reach_Number)&quot;. However, the data set displays the average reach number for all the reaches at a particular row and column. Thus if there is more than one reach in a cell, the reach number in the data set might not be appropriate.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing gridded data for 3D data sets, the Z-coordinate of the data points is now determined by a formula related to the grid structure.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Bug fixes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of FMP package when formulas give results of the wrong type. Now a warning of an invalid formula will be displayed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of FMP package when some required time varying data is undefined. Now ModelMuse issues an error message to the user instead of generating a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented the user from specifying data set 15 in the FMP process when it was needed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bugs that could cause invalid meshes to be created with the fishnet mesh algorithm if one or more fishnet elements was invalid.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed how ModelMuse handles certain invalid formulas.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Failing to specify an elevation for a model layer in the Start Up dialog box for MODFLOW will no longer cause an error.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation in the Import Gridded Data dialog box in PHAST models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an assertion failure when exporting the FHB package input.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented valid FMP input files from being created if no Farm wells were defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SWI input files with MODFLOW-OWHM.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of SWR package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of UZF package when SWR package is also used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SWR ISTRORCH in data set 13b.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in deleting Custom color scheme.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented users from deactivating the UZF boundary in an object except by deleting the object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of Data set 16 in the Farm Process.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that prevented the export of the SWR input file in MODFLOW-OWHM.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in which data set 2 of the SWR package took up more space than was allowed.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in display of the data sets in the Edit Data Sets dialog box and other dialog boxes if the model had been switched from a SUTRA 3D model to a MODFLOW model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug so that models with incomplete transient data will display an error message to the user identifying the problem instead of generating a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the &quot;Files to Archive&quot; dialog box, file names referring to drives that do not exist or are not open no longer cause errors.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>
