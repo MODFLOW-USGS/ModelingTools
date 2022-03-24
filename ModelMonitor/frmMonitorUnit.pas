@@ -34,10 +34,18 @@ uses
   JvToolEdit, AppEvnts, RealListUnit, JvHtControls, JvPageList,
   JvExControls, JvExStdCtrls, JvExMask, Mask, JvExComCtrls,
   JvComCtrls, JvComponentBase, JvCreateProcess, ErrorMessages, SearchTrie,
-  JvRichEdit, System.ImageList, System.UITypes;
+  JvRichEdit, System.ImageList, System.UITypes, System.Generics.Collections;
 
 type
   TStatusChange = (scOK, scWarning, scError, scNone);
+
+  TInnerIterationData = record
+    TotalIterations: Integer;
+    OuterIteration: Integer;
+    InnerIteration: Integer;
+    MaxChange: double;
+    MaxResidual: double;
+  end;
 
   TStringFileStream = class(TFileStream)
   private
@@ -81,6 +89,10 @@ type
     FResultsNode: TTreeNode;
     FVolBudget: Boolean;
     FSearcher: TSearchTrie<TProblemType>;
+    FInnerIterationSummaryBegun: Boolean;
+    FIterationBoundaryCount: Integer;
+    FInnerIterationLineSplitter: TStringList;
+    FInnerIterations: TList<TInnerIterationData>;
     procedure CreateNewTabSheet(out ATabSheet: TjvStandardPage;
       NewCaption: string; out NewNode: TTreeNode);
     procedure CreateLineSeries(AColor: TColor; ATitle: string;
@@ -103,6 +115,7 @@ type
     function GetPageStatus(APage: TjvStandardPage): TStatusChange;
     procedure SetPageStatus(APage: TjvStandardPage;
       const Value: TStatusChange);
+    procedure HandleInnerIteration(const ALine: string);
     property PageStatus[APage: TjvStandardPage]: TStatusChange
       read GetPageStatus write SetPageStatus;
     function GetConnectedNode(APage: TJvStandardPage): TTreeNode;
@@ -190,6 +203,7 @@ type
     FProblem: Boolean;
     FModflow2015: boolean;
     FSaveIniFile: Boolean;
+//    FInnerIterationLineSplitter: TStringList;
     procedure GetListFile(AFileName: string; ListFiles: TStringList;
       var ListSuppressed: boolean);
     procedure FindStart(RichEdit: TJvRichEdit; PositionInLine: integer;
@@ -261,6 +275,31 @@ const
   WarningColor = clYellow;
 
 {$R *.dfm}
+
+function FortranStrToFloat(AString: string): Extended;
+var
+  OldDecimalSeparator: Char;
+  SignPos: Integer;
+begin
+  AString := Trim(AString);
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  try
+    FormatSettings.DecimalSeparator := '.';
+    AString := StringReplace(AString, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+    AString := StringReplace(AString, 'd', 'e', [rfReplaceAll, rfIgnoreCase]);
+    SignPos := Max(PosEx('+', AString, 2), PosEx('-', AString, 2));
+    if SignPos > 0 then
+    begin
+      if not CharInSet(AString[SignPos-1], ['e', 'E']) then
+      begin
+        Insert('E', AString, SignPos);
+      end;
+    end;
+    result := StrToFloat(AString);
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+  end;
+end;
 
 
 procedure TfrmMonitor.AppEventsIdle(Sender: TObject;
@@ -510,6 +549,9 @@ begin
 
   memoDisclaimer.Lines.Clear;
   memoDisclaimer.Lines.Add(DisclaimerString);
+
+//  FInnerIterationLineSplitter := TStringList.Create;
+//  FInnerIterationLineSplitter.Delimiter := ' ';
 end;
 
 procedure TfrmMonitor.FormDestroy(Sender: TObject);
@@ -517,6 +559,7 @@ var
   IniFName: string;
   IniFile: TMemIniFile;
 begin
+//  FInnerIterationLineSplitter.Free;
   if FSaveIniFile and TFile.Exists(jvfeModelName.FileName) then
   begin
     IniFName := IniFileName(Handle, Application.ExeName);
@@ -1368,6 +1411,10 @@ constructor TListFileHandler.Create(AFileName: string;
 var
   index: Integer;
 begin
+  FInnerIterationLineSplitter := TStringList.Create;
+  FInnerIterationLineSplitter.Delimiter := ' ';
+  FInnerIterations := TList<TInnerIterationData>.Create;
+
   FSearcher := TSearchTrie<TProblemType>.Create;
 
   for index := 0 to ErrorValues.Count - 1 do
@@ -1471,6 +1518,8 @@ begin
   FResultsTabSheet.Free;
   FListingTabSheet.Free;
   FSearcher.Free;
+  FInnerIterationLineSplitter.Free;
+  FInnerIterations.Free;
   inherited;
 end;
 
@@ -1528,6 +1577,24 @@ begin
   end;
 end;
 
+procedure TListFileHandler.HandleInnerIteration(const ALine: string);
+var
+  Line1: string;
+  Line2: String;
+  Data: TInnerIterationData;
+begin
+  Line1 := Trim(Copy(ALine, 1, 50));
+  Line2 := Trim(Copy(ALine, 85, 16));
+  FInnerIterationLineSplitter.DelimitedText := Line1;
+  Assert(FInnerIterationLineSplitter.Count = 4);
+  Data.TotalIterations := StrToInt(FInnerIterationLineSplitter[0]);
+  Data.OuterIteration := StrToInt(FInnerIterationLineSplitter[1]);
+  Data.InnerIteration := StrToInt(FInnerIterationLineSplitter[2]);
+  Data.MaxChange := FortranStrToFloat(FInnerIterationLineSplitter[3]);
+  Data.MaxResidual := FortranStrToFloat(Line2);
+  FInnerIterations.Add(Data);
+end;
+
 procedure TListFileHandler.HandleListFileLine(ALine: string);
 var
   IsError: boolean;
@@ -1548,6 +1615,31 @@ begin
     FErrorMessages.Lines.Add(ALine);
     HandleProblem(IsWarning, WarningColor, PositionInLine, KeyLength);
     HandleProblem(IsError, clRed, PositionInLine, KeyLength);
+
+    Exit;
+  end;
+
+  if Pos('ITERATION  ITERATION  ITERATION  MAXIMUM CHANGE', ALine) >= 1 then
+  begin
+    FInnerIterationSummaryBegun := True;
+    FIterationBoundaryCount := 0;
+    FInnerIterations.Clear;
+  end;
+
+  if FInnerIterationSummaryBegun then
+  begin
+    if Pos('-----------------------------------------------', ALine) >= 1 then
+    begin
+      Inc(FIterationBoundaryCount);
+      if FIterationBoundaryCount = 2 then
+      begin
+        FInnerIterationSummaryBegun := False;
+      end;
+    end
+    else
+    begin
+      HandleInnerIteration(ALine);
+    end;
   end;
 end;
 
