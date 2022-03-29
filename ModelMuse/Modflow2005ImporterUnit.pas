@@ -11797,6 +11797,7 @@ var
   ImportedData: T2DDoubleArray;
   RowIndex: Integer;
 begin
+  AssignedLayerDataSet := nil;
   ScreenObject := nil;
   if (Package.LayerOption = loSpecified)
     and not Package.TimeVaryingLayers then

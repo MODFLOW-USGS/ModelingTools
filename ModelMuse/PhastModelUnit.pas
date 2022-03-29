@@ -10464,15 +10464,17 @@ const
 //                models with more than one chemical species.
 //     '5.0.0.0' Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
-
-//               Bug fix: PLPROC Krigging is now only used when the PLPROC
+//     '5.0.0.1' Bug fix: PLPROC Krigging is now only used when the PLPROC
 //                executable is found.
+//               Bug fix: Fixed a bug that could cause an access violation
+//                when importing the Recharge, EVT, or ETS packages in an
+//                existing MODFLOW model.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.0';
+  IIModelVersion = '5.0.0.1';
 
 function IModelVersion: string;
 begin

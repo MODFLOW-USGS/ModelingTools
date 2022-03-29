@@ -1619,6 +1619,7 @@ begin
     Exit;
   end;
 
+  Exit;
   if Pos('ITERATION  ITERATION  ITERATION  MAXIMUM CHANGE', ALine) >= 1 then
   begin
     FInnerIterationSummaryBegun := True;
