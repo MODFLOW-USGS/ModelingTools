@@ -10465,7 +10465,8 @@ const
 //     '5.0.0.0' Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
 
-
+//               Bug fix: PLPROC Krigging is now only used when the PLPROC
+//                executable is found.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 

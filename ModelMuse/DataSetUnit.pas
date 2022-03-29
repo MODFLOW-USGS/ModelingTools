@@ -1691,7 +1691,11 @@ uses Contnrs, frmGoPhastUnit, frmConvertChoiceUnit, GIS_Functions,
   ScreenObjectUnit, frmFormulaErrorsUnit, InterpolationUnit,
   PhastModelUnit, AbstractGridUnit, frmErrorsAndWarningsUnit, frmProgressUnit,
   GlobalVariablesUnit, frmDisplayDataUnit, SutraMeshUnit, PhastDataSets,
-  ModflowParameterUnit, OrderedCollectionUnit, SfrProcedures;
+  ModflowParameterUnit, OrderedCollectionUnit, SfrProcedures
+  {$IFDEF MeasureTime}
+  , ModelMuseUtilities
+  {$ENDIF}
+  ;
 
 resourcestring
   StrUnassigned = 'Unassigned';
@@ -2288,8 +2292,6 @@ var
   Variable: TCustomValue;
   DataSetIndex: integer;
   AnotherDataSet: TDataArray;
-//  ScreenObjectIndex: integer;
-//  AScreenObject: TScreenObject;
   LayerToUse, RowToUse, ColToUse: integer;
   TempUseList: TStringList;
   CellCenter, CellCorner: TPoint2D;
@@ -2311,6 +2313,10 @@ var
   NameDataArray: TDataArray;
   OkAssignment: Boolean;
   StackIndex: Integer;
+  {$IFDEF MeasureTime}
+  StartTime: TDateTime;
+  ElapsedTime: double;
+  {$ENDIF}
   procedure GetLimits;
   begin
     if LocalModel.ModelSelection in SutraSelection then
@@ -2461,10 +2467,6 @@ begin
   begin
     Exit;
   end;
-//  if FWaitingOnInterpolator then
-//  begin
-//    Exit
-//  end;
 
 //  OutputDebugString('SAMPLING ON');
   if UpToDate and not DimensionsChanged then
@@ -2484,6 +2486,10 @@ begin
       end;
     end;
   end;
+
+  {$IFDEF MeasureTime}
+  StartTime := Now;
+  {$ENDIF}
 
   LocalModel := FModel as TCustomModel;
   DataArrayManager := LocalModel.DataArrayManager;
@@ -3383,6 +3389,16 @@ begin
     end;
   end;
   CheckIfUniform;
+
+  {$IFDEF MeasureTime}
+  ElapsedTime := Now;
+  ElapsedTime := ElapsedTime - StartTime;
+  ElapsedTime := ElapsedTime * 24 * 3600;
+  ElapsedTime := RoundSigDigits(ElapsedTime, 3);
+//  ElapsedTime := Round(ElapsedTime*1000)/1000;
+  ShowMessage(ElapsedTime.ToString);
+  {$ENDIF}
+
 end;
 
 procedure TDataArray.Invalidate;

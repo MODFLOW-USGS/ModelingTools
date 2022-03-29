@@ -381,7 +381,6 @@ type
     procedure WriteScript(const DataSet: TDataArray);
     procedure ReadResults;
     procedure RunPlProc;
-//    procedure PlProcTerminated(Sender: TObject; ExitCode: DWORD);
   protected
     procedure StoreDataValue(Count: Integer; const DataSet: TDataArray;
       APoint: TPoint2D; AScreenObject: TScreenObject; SectionIndex: integer);
@@ -395,6 +394,8 @@ type
     // distance squared interpolation.
     function RealResult(const Location: TPoint2D): real; override;
     procedure Finalize(const DataSet: TDataArray); override;
+    class function GetPlprocName: string;
+    function ShouldInterpolate: boolean; override;
   end;
 
 
@@ -411,11 +412,15 @@ resourcestring
   Str0sUsing1s = '%0:s using %1:s';
   StrErrorAssigningValu = 'Error assigning value to interpolate';
   StrErrorMessage0 = 'Error message = "%0:s" in %1:s';
-  StrNeitherPlproc64exe = 'Neither plproc64.exe nor plproc32.exe are in the ' +
-  'ModelMuse directory.';
+  StrNeitherPlproc64exe = 'plproc.exe was not found in the ' +
+  'ModelMuse directory or the PEST directory.';
   StrObjectHasNoVertic = 'Object has no vertices.';
   StrTheObjectNamedSNoVert = 'The object named "%s" will not be used to assi' +
   'gn values to data sets by interpolation because it has no vertices.';
+  StrKriggingCouldNotB = 'Kriging could not be performed in %s';
+  StrKriggingCouldNotB2 = 'Kriging could not be performed in %0:s because t' +
+  'he maximum allowed number of points for kriging is %1:d and the actual n' +
+  'umber of points was %2:d';
 
 type
   TSortRecord = record
@@ -2434,8 +2439,6 @@ var
   Index: Integer;
   AScreenObject: TScreenObject;
   DataSetIndex: Integer;
-//  PointCount: integer;
-//  PointList: TList<TPoint2D>;
   PointIndex: Integer;
   APoint: TPoint2D;
   QuadTree: TRbwQuadTree;
@@ -2444,7 +2447,6 @@ var
   Data: TPointerArray;
 begin
   result := False;
-//  PointCount := 0;
   QuadTree := TRbwQuadTree.Create(nil);
   try
     for Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
@@ -2486,22 +2488,7 @@ begin
             end;
           end;
         end;
-//        if PointList.IndexOf(APoint) < 0 then
-//        begin
-//          PointList.Add(APoint);
-//          if PointList.Count >= 3 then
-//          begin
-//            result := True;
-//            Exit;
-//          end;
-//        end;
       end;
-//      PointCount := PointCount + AScreenObject.Count;
-//      if PointCount >= 3 then
-//      begin
-//        result := True;
-//        break;
-//      end;
     end;
   finally
     QuadTree.Free
@@ -3033,6 +3020,32 @@ begin
   inherited;
 end;
 
+class function TCustomPlProcInterpolator.GetPlprocName: string;
+var
+  PestDirectory: string;
+  AppDir: string;
+begin
+  PestDirectory := frmGoPhast.PhastModel.ProgramLocations.PestDirectory;
+  result := IncludeTrailingPathDelimiter(PestDirectory) + 'plproc.exe';
+  if not TFile.Exists(result) then
+  begin
+    AppDir := IncludeTrailingPathDelimiter(ExtractFileDir(Application.ExeName));
+    result  := AppDir + 'plproc.exe';
+    if not TFile.Exists(result) then
+    begin
+      result  := AppDir + 'plproc64.exe';
+      if not TFile.Exists(result) then
+      begin
+        result  := AppDir + 'plproc32.exe';
+        if not TFile.Exists(result) then
+        begin
+          result := '';
+        end;
+      end;
+    end;
+  end;
+end;
+
 procedure TCustomPlProcInterpolator.ReadResults;
 var
   Locations: TStringList;
@@ -3160,28 +3173,18 @@ procedure TCustomPlProcInterpolator.RunPlProc;
 var
   Runner: TJvCreateProcess;
   PlProcName: string;
-//  P: TProcessInformation;
 begin
-    PlProcName  := ExtractFileDir(Application.ExeName)
-      + '\' + 'plproc64.exe';
-    if not TFile.Exists(PlProcName) then
-    begin
-      PlProcName  := ExtractFileDir(Application.ExeName)
-        + '\' + 'plproc32.exe';
-      if not TFile.Exists(PlProcName) then
-      begin
-        raise EPlProcException.Create(StrNeitherPlproc64exe);
-      end;
-    end;
+  PlProcName := GetPlprocName;
+  if PlProcName = '' then
+  begin
+    raise EPlProcException.Create(StrNeitherPlproc64exe);
+  end;
 
   Runner := TJvCreateProcess.Create(nil);
   try
     Runner.CurrentDirectory := GetAppSpecificTempDir;
     Runner.CommandLine := PlProcName + ' ' + ExtractFileName(FScriptFileName);
-//    Runner.OnTerminate := PlProcTerminated;
-//    Runner.WaitForTerminate := True;
     try
-//      FIsTerminated := False;
       Runner.Run;
       while not TFile.Exists(FFinishedFileName) do
       begin
@@ -3199,10 +3202,15 @@ begin
   end;
 end;
 
+function TCustomPlProcInterpolator.ShouldInterpolate: boolean;
+begin
+  result := (GetPlprocName <> '') and inherited;
+end;
+
 procedure TCustomPlProcInterpolator.StoreData(Sender: TObject;
   const DataSet: TDataArray);
 const
-  MaxAllowedPoints = 1800;
+  MaxAllowedPoints = 1800000;
 var
   ScreenObjectIndex: integer;
   AScreenObject: TScreenObject;
@@ -3224,10 +3232,8 @@ var
   ResultLocations: TResultLocationWriter;
   LocalModel: TCustomModel;
   Limits: TGridLimit;
-//  PlProcName: string;
   ViewDirection: TViewDirection;
-//  CurrentDir: string;
-  ErrorMessage: string;
+//  ErrorMessage: string;
 begin
   FReady := False;
   FKrigedResults.Clear;
@@ -3276,16 +3282,21 @@ begin
       Inc(Count, PointCount);
     end;
 
-    ErrorMessage := Format('Krigging could not be performed in %s', [DataSet.Name]);
+    {
+//    There no longer appears to be a limit on the number of data points
+//    that PLPROC can handle.
+
+    ErrorMessage := Format(StrKriggingCouldNotB, [DataSet.Name]);
     frmErrorsAndWarnings.RemoveErrorGroup(DataSet.Model, ErrorMessage);
     if Count > MaxAllowedPoints then
     begin
 //    PlProc can handle at most 1800 points.
       FReady := True;
       frmErrorsAndWarnings.AddError(DataSet.Model, ErrorMessage,
-        Format('Krigging could not be performed in %0:s because the maximum allowed number of points for krigging is %1:d and the actual number of points was %2:d', [DataSet.Name, MaxAllowedPoints, Count]));
+        Format(StrKriggingCouldNotB2, [DataSet.Name, MaxAllowedPoints, Count]));
       Exit;
     end;
+    }
 
     SetLength(FValues, Count);
 

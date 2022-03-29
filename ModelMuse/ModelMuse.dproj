@@ -3,7 +3,7 @@
         <ProjectGuid>{DBACE99F-0221-4660-936F-15A30233FA90}</ProjectGuid>
         <MainSource>ModelMuse.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
@@ -128,7 +128,7 @@
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
-        <DCC_Define>DEBUG;SwiObsExtractor;Mf6TimeSeries;GWT;$(DCC_Define)</DCC_Define>
+        <DCC_Define>DEBUG;Mf6TimeSeries;GWT;$(DCC_Define)</DCC_Define>
         <DCC_Optimize>false</DCC_Optimize>
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
@@ -142,7 +142,7 @@
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <BRCC_Defines>STR_Package;FullDebugMode;$(BRCC_Defines)</BRCC_Defines>
         <BT_BuildType>Debug</BT_BuildType>
-        <DCC_Define>LeakChecking;$(DCC_Define)</DCC_Define>
+        <DCC_Define>LeakChecking;MeasureTime;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">

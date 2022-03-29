@@ -444,6 +444,8 @@ resourcestring
   StrDefinedByParamet = '%s (defined by parameters)';
   StrYouMustSelectAMo = 'You must select a model type (MODFLOW, SUTRA, etc.)' +
   ' before displaying the Data Sets dialog box.';
+  StrSCanNotBeUsedB = '%s can not be used because plproc.exe is not in eithe' +
+  'r the PEST or ModelMuse directory.';
 
 {$R *.dfm}
 
@@ -463,7 +465,6 @@ begin
   AddNewInterpolator(List, TNearest2DInterpolator);
   AddNewInterpolator(List, TInvDistSqPoint2DInterpolator);
   AddNewInterpolator(List, TInvDistSq2DInterpolator);
-
   AddNewInterpolator(List, TCustomPlProcInterpolator);
 end;
 
@@ -3040,6 +3041,7 @@ procedure TfrmDataSets.SetCurrentInterpolator(
   const Value: TCustom2DInterpolater);
 var
   InterpValues: TPhastInterpolationValues;
+  PlProcName: string;
 begin
   if SelectedEdit = nil then
     Exit;
@@ -3061,6 +3063,17 @@ begin
     end
     else
     begin
+      if SelectedEdit.FTwoDInterpolator is TCustomPlProcInterpolator then
+      begin
+        PlProcName := TCustomPlProcInterpolator.GetPlprocName;
+        if PlProcName = '' then
+        begin
+          Beep;
+          MessageDlg(Format(StrSCanNotBeUsedB,
+            [TCustomPlProcInterpolator.InterpolatorName]),
+            mtWarning, [mbOK], 0);
+        end;
+      end;
       framePhastInterpolation.GetFirstData(nil);
     end;
   end
@@ -3073,15 +3086,6 @@ begin
       rdeAnisotropy.Text := FloatToStr(TCustomAnisotropicInterpolator(
         SelectedEdit.FTwoDInterpolator).Anisotropy);
       framePhastInterpolation.cbPhastInterpolation.Checked := False;
-//      if framePhastInterpolation.cbPhastInterpolation.Checked then
-//      begin
-//
-//      end;
-//      framePhastInterpolation.rdeDistance1.Enabled := False;
-//      framePhastInterpolation.rdeDistance2.Enabled := False;
-//      framePhastInterpolation.rdeValue1.Enabled := False;
-//      framePhastInterpolation.rdeValue2.Enabled := False;
-//      framePhastInterpolation.rgInterpolationDirection.Enabled := False;
     end;
   end;
 end;

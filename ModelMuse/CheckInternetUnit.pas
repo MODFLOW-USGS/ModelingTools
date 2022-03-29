@@ -148,7 +148,7 @@ begin
   XmlText := TStringList.Create;
   try
     try
-      {$IFNDEF DEBUG}
+//      {$IFNDEF DEBUG}
       ErrorUrl := True;
       if ReadInternetFile(VideoUpdateURL, XmlText, FAppName) then
       begin
@@ -161,10 +161,10 @@ begin
           ErrorUrl := False;
         end;
       end;
-      {$ELSE}
-      XmlText.LoadFromFile('D:\ModelingTools\VideoLinks\Videos.xml');
-      ErrorUrl := False;
-      {$ENDIF}
+//      {$ELSE}
+//      XmlText.LoadFromFile('D:\ModelingTools\VideoLinks\Videos.xml');
+//      ErrorUrl := False;
+//      {$ENDIF}
       if not ErrorUrl then
       begin
         MemStream := TMemoryStream.Create;
@@ -302,9 +302,9 @@ begin
 
         end;
 
-        {$IFNDEF DEBUG}
+        { $IFNDEF DEBUG}
         Synchronize(UpdateIniFile);
-        {$ENDIF}
+        { $ENDIF}
 
       end;
     except on E: EInternetConnectionError do

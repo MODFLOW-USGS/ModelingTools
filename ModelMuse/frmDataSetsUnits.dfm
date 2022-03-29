@@ -304,7 +304,7 @@ inherited frmDataSets: TfrmDataSets
           end>
       end
       object comboInterpolation: TJvImageComboBox
-        Left = 3
+        Left = 2
         Top = 206
         Width = 128
         Height = 29
@@ -560,10 +560,11 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 69
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Comment'
+          ExplicitWidth = 69
         end
         object reComment: TRichEdit
           AlignWithMargins = True
@@ -592,10 +593,11 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 164
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Associated model data'
+          ExplicitWidth = 164
         end
         object memoAssociatedDataSets: TMemo
           AlignWithMargins = True

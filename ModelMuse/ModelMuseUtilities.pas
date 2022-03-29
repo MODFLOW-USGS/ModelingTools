@@ -119,6 +119,8 @@ function IsEndOfSection(const ALine: string): Boolean;
 
 function Interpolate(X, StartX, EndX, StartY, EndY: double): double;
 
+function RoundSigDigits(ANumber: Extended; SignificantDigits: Integer): Extended;
+
 implementation
 
 uses AnsiStrings, StrUtils, Dialogs, Math, frmGoPhastUnit,
@@ -1250,6 +1252,24 @@ begin
     result := StartY + (EndY-StartY)/(EndX-StartX)*(X-StartX);
   end;
 
+end;
+
+function RoundSigDigits(ANumber: Extended; SignificantDigits: Integer): Extended;
+var
+  NumDigits: Integer;
+  Factor: Extended;
+begin
+  if ANumber = 0 then
+  begin
+    result := ANumber;
+  end
+  else
+  begin
+    NumDigits := Ceil(Log10(Abs(ANumber)));
+    NumDigits := SignificantDigits - NumDigits;
+    Factor := Power(10,NumDigits);
+    result := Round(ANumber*Factor)/Factor;
+  end;
 end;
 
 initialization
