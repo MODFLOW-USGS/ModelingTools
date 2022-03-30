@@ -58,6 +58,8 @@ type
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure rgSubmodelChoiceClick(Sender: TObject);
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   private
     FReadModflowInputProperly: Boolean;
     FConsoleLines: TStringList;
@@ -564,6 +566,13 @@ begin
     Enabled := True;
   end;
 end;
+procedure TfrmImportModflow.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.ExStyle := Params.ExStyle or WS_EX_APPWINDOW;
+  Params.WndParent := 0;
+end;
+
 procedure TfrmImportModflow.fedNameFileChange(Sender: TObject);
 begin
   inherited;

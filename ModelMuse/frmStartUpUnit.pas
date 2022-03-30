@@ -172,6 +172,7 @@ type
       ARow: Integer; var CanSelect: Boolean);
     procedure rdgLocationBeforeDrawCell(Sender: TObject; ACol, ARow: Integer);
     procedure rgTransportClick(Sender: TObject);
+  protected
     procedure CreateParams(var Params: TCreateParams); override;
   private
     // @name sets up the
