@@ -2620,6 +2620,13 @@ begin
                       StrErrorAssigningValu,
                       [Name, TwoDInterpolator.InterpolatorName, E.Message])));
                   end;
+                  on E: EPlProcException do
+                  begin
+                    OkAssignment := False;
+                    Exception.RaiseOuterException(EInterpolationException.Create(Format(
+                      StrErrorAssigningValu,
+                      [Name, TwoDInterpolator.InterpolatorName, E.Message])));
+                  end;
                 end;
 
                 if InterpAnnString = '' then

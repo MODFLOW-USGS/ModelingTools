@@ -5,9 +5,8 @@ inherited frmSwrStructures: TfrmSwrStructures
   ClientHeight = 555
   ClientWidth = 782
   OnResize = FormResize
-  ExplicitWidth = 798
-  ExplicitHeight = 594
-  PixelsPerInch = 96
+  ExplicitWidth = 800
+  ExplicitHeight = 602
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -61,10 +60,6 @@ inherited frmSwrStructures: TfrmSwrStructures
     TabOrder = 0
     object tabStructureDefinition: TTabSheet
       Caption = 'Structure Definition'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splttrMain: TJvNetscapeSplitter
         Left = 0
         Top = 272
@@ -119,6 +114,7 @@ inherited frmSwrStructures: TfrmSwrStructures
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -142,6 +138,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -165,6 +162,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -191,6 +189,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -214,6 +213,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -237,6 +237,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -260,6 +261,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -283,6 +285,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -437,6 +440,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               Columns = <
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -460,6 +464,7 @@ inherited frmSwrStructures: TfrmSwrStructures
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -522,6 +527,7 @@ inherited frmSwrStructures: TfrmSwrStructures
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -545,6 +551,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -571,6 +578,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -596,6 +604,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -621,6 +630,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -647,6 +657,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -673,6 +684,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'Browse...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -696,6 +708,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -719,6 +732,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -742,6 +756,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -765,6 +780,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -788,6 +804,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'Browse...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -977,6 +994,7 @@ inherited frmSwrStructures: TfrmSwrStructures
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1000,6 +1018,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1026,6 +1045,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1062,12 +1082,10 @@ inherited frmSwrStructures: TfrmSwrStructures
         Height = 272
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 296
-        ExplicitHeight = 272
+        ExplicitWidth = 614
+        ExplicitHeight = 150
         inherited lblType: TLabel
-          Width = 48
           Height = 18
-          ExplicitWidth = 48
           ExplicitHeight = 18
         end
         inherited lblRestrictions: TLabel
@@ -1156,10 +1174,6 @@ inherited frmSwrStructures: TfrmSwrStructures
     object tabTiming: TTabSheet
       Caption = 'Timing'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameTiming: TframeFormulaGrid
         Left = 0
         Top = 0
@@ -1210,6 +1224,7 @@ inherited frmSwrStructures: TfrmSwrStructures
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1233,6 +1248,7 @@ inherited frmSwrStructures: TfrmSwrStructures
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

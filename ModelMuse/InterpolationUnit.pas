@@ -3058,6 +3058,10 @@ var
   Index: Integer;
 begin
   FKrigedResults.Clear;
+  if not TFile.Exists(FKrigingOutputFileName) then
+  begin
+    Exit;
+  end;
   Locations := TStringList.Create;
   Values := TStringList.Create;
   Splitter := TStringList.Create;
@@ -3170,9 +3174,13 @@ begin
 end;
 
 procedure TCustomPlProcInterpolator.RunPlProc;
+const
+  ThirtySec = 1/24/120;
 var
   Runner: TJvCreateProcess;
   PlProcName: string;
+  StartTime: TDateTime;
+  EndTime: TDateTime;
 begin
   PlProcName := GetPlprocName;
   if PlProcName = '' then
@@ -3186,8 +3194,14 @@ begin
     Runner.CommandLine := PlProcName + ' ' + ExtractFileName(FScriptFileName);
     try
       Runner.Run;
+      StartTime := Now;
       while not TFile.Exists(FFinishedFileName) do
       begin
+        EndTime := Now;
+        if EndTime - StartTime > ThirtySec then
+        begin
+          raise EPlProcException.Create('Error: PLPROC did not finish within thirty seconds.')
+        end;
         Sleep(10);
       end;
 
@@ -3210,7 +3224,7 @@ end;
 procedure TCustomPlProcInterpolator.StoreData(Sender: TObject;
   const DataSet: TDataArray);
 const
-  MaxAllowedPoints = 1800000;
+  MaxAllowedPoints = 46500;
 var
   ScreenObjectIndex: integer;
   AScreenObject: TScreenObject;
@@ -3233,7 +3247,7 @@ var
   LocalModel: TCustomModel;
   Limits: TGridLimit;
   ViewDirection: TViewDirection;
-//  ErrorMessage: string;
+  ErrorMessage: string;
 begin
   FReady := False;
   FKrigedResults.Clear;
@@ -3282,21 +3296,16 @@ begin
       Inc(Count, PointCount);
     end;
 
-    {
-//    There no longer appears to be a limit on the number of data points
-//    that PLPROC can handle.
-
     ErrorMessage := Format(StrKriggingCouldNotB, [DataSet.Name]);
     frmErrorsAndWarnings.RemoveErrorGroup(DataSet.Model, ErrorMessage);
     if Count > MaxAllowedPoints then
     begin
-//    PlProc can handle at most 1800 points.
+//    PlProc can handle at most 46500 points.
       FReady := True;
       frmErrorsAndWarnings.AddError(DataSet.Model, ErrorMessage,
         Format(StrKriggingCouldNotB2, [DataSet.Name, MaxAllowedPoints, Count]));
       Exit;
     end;
-    }
 
     SetLength(FValues, Count);
 

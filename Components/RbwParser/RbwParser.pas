@@ -2987,7 +2987,7 @@ begin
                 begin
                   try
                     InternalStrToFloat(Copy(ALine, LastPosition + 1, Index -
-                        LastPosition));
+                      LastPosition + 1));
                     break;
                   except on EConvertError do
                     begin

@@ -1,0 +1,89 @@
+package GLScene_RT_D11;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'GLScene OpenGL 3D library'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl,
+  rtl,
+  vclimg,
+  xmlrtl,
+  GLScene_DT_D11;
+
+contains
+  FileX in '..\..\Source\FileFormats\FileX.pas',
+  GLAnimationUtils in '..\..\Source\GLAnimationUtils.pas',
+  GLBumpMapping in '..\..\Source\GLBumpMapping.pas',
+  GLFile3DPDF in '..\..\Source\FileFormats\GLFile3DPDF.pas',
+  GLFileDXF in '..\..\Source\FileFormats\GLFileDXF.pas',
+  GLFileGLB in '..\..\Source\FileFormats\GLFileGLB.pas',
+  GLFileGLTF in '..\..\Source\FileFormats\GLFileGLTF.pas',
+  GLFileGRD in '..\..\Source\FileFormats\GLFileGRD.pas',
+  GLFilePAK in '..\..\Source\FileFormats\GLFilePAK.pas',
+  GLFileX in '..\..\Source\FileFormats\GLFileX.pas',
+  GLFileZLIB in '..\..\Source\FileFormats\GLFileZLIB.pas',
+  GLGLUTesselation in '..\..\Source\GLGLUTesselation.pas',
+  GLGeometryCoordinates in '..\..\Source\Basis\GLGeometryCoordinates.pas',
+  GLGizmoEx in '..\..\Source\GLGizmoEx.pas',
+  GLIsosurface in '..\..\Source\GLIsosurface.pas',
+  GLKeyboard in '..\..\Source\Basis\GLKeyboard.pas',
+  GLMeshBuilder in '..\..\Source\GLMeshBuilder.pas',
+  GLMeshCSG in '..\..\Source\GLMeshCSG.pas',
+  GLMeshLines in '..\..\Source\GLMeshLines.pas',
+  GLMeshOptimizer in '..\..\Source\GLMeshOptimizer.pas',
+  GLMovement in '..\..\Source\GLMovement.pas',
+  GLRagdoll in '..\..\Source\GLRagdoll.pas',
+  GLRandomHDS in '..\..\Source\GLRandomHDS.pas',
+  GLSCrossXML in '..\..\Source\GLSCrossXML.pas',
+  GLSGenerics in '..\..\Source\GLSGenerics.pas',
+  GLSLErosionShader in '..\..\Source\Shaders\GLSLErosionShader.pas',
+  GLSLFurShader in '..\..\Source\Shaders\GLSLFurShader.pas',
+  GLSLGlassShader in '..\..\Source\Shaders\GLSLGlassShader.pas',
+  GLSLGoochShader in '..\..\Source\Shaders\GLSLGoochShader.pas',
+  GLSLIvoryShader in '..\..\Source\Shaders\GLSLIvoryShader.pas',
+  GLSLLatticeShader in '..\..\Source\Shaders\GLSLLatticeShader.pas',
+  GLSLSemShader in '..\..\Source\Shaders\GLSLSemShader.pas',
+  GLSLToonShader in '..\..\Source\Shaders\GLSLToonShader.pas',
+  GLSLVertexDisplacementShader in '..\..\Source\Shaders\GLSLVertexDisplacementShader.pas',
+  GLSRedBlackTree in '..\..\Source\GLSRedBlackTree.pas',
+  GLSpacePartition in '..\..\Source\Basis\GLSpacePartition.pas',
+  GLSpatialPartitioning in '..\..\Source\Basis\GLSpatialPartitioning.pas',
+  GLTriangulation in '..\..\Source\GLTriangulation.pas',
+  GLVerletClothify in '..\..\Source\Basis\GLVerletClothify.pas',
+  GLVerletHairClasses in '..\..\Source\Basis\GLVerletHairClasses.pas',
+  GLVerletSkeletonColliders in '..\..\Source\Basis\GLVerletSkeletonColliders.pas',
+  GLVerletTypes in '..\..\Source\Basis\GLVerletTypes.pas',
+  HDRImage in '..\..\Source\FileFormats\HDRImage.pas',
+  O3TCImage in '..\..\Source\FileFormats\O3TCImage.pas',
+  OpenGLVCL in '..\..\Source\Basis\OpenGLVCL.pas',
+  Q3MD3 in '..\..\Source\FileFormats\Q3MD3.pas';
+
+end.
+
+

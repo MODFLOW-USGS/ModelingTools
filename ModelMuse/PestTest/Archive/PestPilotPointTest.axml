@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="PestPilotPointTest" FileType="bin">
-    <FileName Model_Name="PestPilotPointTest" FileType="bin">..\..\..\WRDAPP\mf6.2.2\bin\mf6.exe</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="bin">..\..\..\WRDAPP\mf6.3.0\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="PestPilotPointTest" FileType="ancillary">
     <FileName Model_Name="PestPilotPointTest" FileType="ancillary">PestPilotPointTest.gpt</FileName>

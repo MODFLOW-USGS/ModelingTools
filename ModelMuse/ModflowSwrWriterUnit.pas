@@ -2172,7 +2172,7 @@ begin
       begin
         case AStructure.StructureType of
           sstUncontrolledZeroDepth: ISTRTYPE := -2;
-          sstNone: ISTRTYPE := 0;
+          TSwrStructureType.sstNone: ISTRTYPE := 0;
           sstSpecifiedElevation: ISTRTYPE := 1;
           sstUncontrolledCriticalDepth: ISTRTYPE := 2;
           sstPump: ISTRTYPE := 3;

@@ -3479,6 +3479,7 @@ begin
       begin
         OriginalCount := ScreenObject.Count;
         try
+          OtherScreenObject := ScreenObject;
           for SI_Index := 0 to Length(StoredObjects) - 1 do
           begin
             OtherScreenObject := StoredObjects[SI_Index];
@@ -3487,12 +3488,14 @@ begin
               break;
             end;
           end;
-            if ScreenObject = OtherScreenObject then
-            begin
-              // the object will not be considered closed if it doesn't have
-              // at least 4 vertices.
-              Continue;
-            end;
+
+          if ScreenObject = OtherScreenObject then
+          begin
+            // the object will not be considered closed if it doesn't have
+            // at least 4 vertices.
+            Continue;
+          end;
+
           AnotherPoint := OtherScreenObject.Points[0];
           if NearlyTheSame(APoint.x, AnotherPoint.x)
             and NearlyTheSame(APoint.y, AnotherPoint.y) then

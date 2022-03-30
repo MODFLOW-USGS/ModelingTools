@@ -600,7 +600,7 @@ begin
             begin
               jvplOptions.ActivePage := jvspSmoothing;
             end;
-          sstNone, sstFixedWeir, sstFixedSpillway,
+          TSwrStructureType.sstNone, sstFixedWeir, sstFixedSpillway,
             sstSfrInflow, sstManning:
             begin
               jvplOptions.ActivePage := jvspBlank;
@@ -1313,7 +1313,7 @@ begin
       AStructure := FStructures.Add;
       AStructure.Reach := Reach;
       AStructure.Name := 'Struct' + IntToStr(FStructures.Count);
-      AStructure.StructureType := sstNone;
+      AStructure.StructureType := TSwrStructureType.sstNone;
     end;
     frameMain.seNumber.AsInteger := FStructures.Count;
     frameMain.seNumber.OnChange(nil);
@@ -1603,7 +1603,7 @@ begin
                 begin
                   CanSelect := True;
                 end;
-              sstNone, sstSpecifiedElevation, sstPump, sstStageDishargeTable,
+              TSwrStructureType.sstNone, sstSpecifiedElevation, sstPump, sstStageDishargeTable,
                 sstFixedWeir, sstFixedSpillway, sstMoveableWeir,
                 sstGatedSpillway, sstSpillEquation, sstSfrInflow, sstOverbankFlow:
                 begin

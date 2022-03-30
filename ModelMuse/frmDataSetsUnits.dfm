@@ -311,6 +311,7 @@ inherited frmDataSets: TfrmDataSets
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
+        DropDownCount = 9
         ImageHeight = 0
         ImageWidth = 0
         ItemHeight = 23

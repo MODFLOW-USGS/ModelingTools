@@ -1987,6 +1987,7 @@ begin
           begin
             WriteString('  ');
             WriteInteger(LakeIndex+1);
+            GwtStatus := gbsActive;
             case ALakeSetting.Status of
               lsInactive:
                 begin
