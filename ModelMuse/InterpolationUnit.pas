@@ -377,7 +377,6 @@ type
     FKrigingOutputFileName: string;
     FKrigedResults: TRbwQuadTree;
     FFinishedFileName: string;
-//    FIsTerminated: Boolean;
     procedure WriteScript(const DataSet: TDataArray);
     procedure ReadResults;
     procedure RunPlProc;

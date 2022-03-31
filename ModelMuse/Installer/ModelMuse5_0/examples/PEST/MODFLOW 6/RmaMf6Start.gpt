@@ -149804,6 +149804,7 @@ object Model: TPhastModel
   ModflowPackages.RipPackage.WritePlantGroupET = wpgDontWrite
   ModflowPackages.SfrModflow6Package.IsSelected = False
   ModflowPackages.SfrModflow6Package.MaxIteration = 100
+  ModflowPackages.SfrModflow6Package.MaxPicardIteration = 100
   ModflowPackages.SfrModflow6Package.StoredMaxDepthChange.Value = 0.00001000000000000
   ModflowPackages.SfrModflow6Package.SaveStageFile = True
   ModflowPackages.SfrModflow6Package.SaveBudgetFile = True
@@ -150019,14 +150020,7 @@ object Model: TPhastModel
   CtsSystems = <>
   ModflowGlobalObservationComparisons = <>
   SutraGlobalObservationComparisons = <>
-  Modflow6GlobalObservationComparisons = <
-    item
-      Name = 'Gradient'
-      StoredObservedValue.Value = 24.30000000000000000
-      StoredWeight.Value = 3.00000000000000000
-      Guid1 = '{B7CB463B-F542-4574-8B48-1F4E2A8C3EAA}'
-      Guid2 = '{E05C2108-BF91-4EA3-8B2F-E4E0B90FF8E0}'
-    end>
+  Modflow6GlobalObservationComparisons = <>
   SutraFluxObs.SpecPres = <>
   SutraFluxObs.FluidFlow = <>
   SutraFluxObs.SpecConc = <>
@@ -150059,7 +150053,6 @@ object Model: TPhastModel
   PestObsCollection.MinTimeLimit.IntegerLimitValue = 0
   PestObsCollection.MinTimeLimit.UseLimit = False
   PestObsCollection = <>
-  Mf6TimesSeries = <>
   Diffusivity = 0.00000000100000000
   GridOptions.ChemicalDimensionX = True
   GridOptions.ChemicalDimensionY = True
@@ -151389,7 +151382,6 @@ object Model: TPhastModel
           EndTime = 631152000.00000000000000000
           EndHead = 'Interpolate(FractionOfObjectLength, 5., 0.1, 23.5, 0.9)'
           StartHead = 'Interpolate(FractionOfObjectLength, 5., 0.1, 23.5, 0.9)'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowChdBoundary.Parameters = <>
       ScreenObject.ModflowChdBoundary.Interp = mimLinearEnd
@@ -152417,14 +152409,11 @@ object Model: TPhastModel
         item
           EndTime = 631152000.00000000000000000
           PumpingRate = '0.03'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowWellBoundary.Parameters = <>
       ScreenObject.ModflowWellBoundary.FormulaInterpretation = fiTotal
       ScreenObject.ModflowWellBoundary.Interp = mimStepwise
       ScreenObject.ModflowWellBoundary.PestPumpingRateMethod = ppmMultiply
-      ScreenObject.ModflowWellBoundary.PestConcentrationFormulas = <>
-      ScreenObject.ModflowWellBoundary.PestConcentrationMethods = <>
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
       ScreenObject.SectionStarts.Values = (
@@ -153562,7 +153551,6 @@ object Model: TPhastModel
           EndTime = 631152000.00000000000000000
           EndHead = '75'
           StartHead = '75'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowChdBoundary.Parameters = <>
       ScreenObject.ModflowChdBoundary.Interp = mimLinearEnd
@@ -156140,14 +156128,11 @@ object Model: TPhastModel
         item
           EndTime = 631152000.00000000000000000
           PumpingRate = '-0.001'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowWellBoundary.Parameters = <>
       ScreenObject.ModflowWellBoundary.FormulaInterpretation = fiDirect
       ScreenObject.ModflowWellBoundary.Interp = mimStepwise
       ScreenObject.ModflowWellBoundary.PestPumpingRateMethod = ppmMultiply
-      ScreenObject.ModflowWellBoundary.PestConcentrationFormulas = <>
-      ScreenObject.ModflowWellBoundary.PestConcentrationMethods = <>
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
       ScreenObject.SectionStarts.Values = (
@@ -156254,14 +156239,11 @@ object Model: TPhastModel
         item
           EndTime = 631152000.00000000000000000
           PumpingRate = '-0.002'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowWellBoundary.Parameters = <>
       ScreenObject.ModflowWellBoundary.FormulaInterpretation = fiDirect
       ScreenObject.ModflowWellBoundary.Interp = mimStepwise
       ScreenObject.ModflowWellBoundary.PestPumpingRateMethod = ppmMultiply
-      ScreenObject.ModflowWellBoundary.PestConcentrationFormulas = <>
-      ScreenObject.ModflowWellBoundary.PestConcentrationMethods = <>
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
       ScreenObject.SectionStarts.Values = (
@@ -157394,7 +157376,7 @@ object Model: TPhastModel
       ScreenObject.QuadtreeRefinementLevel = 0
       SelectedVertices = <>
     end>
-  Version = '4.3.0.76'
+  Version = '5.0.0.0'
   GuiSettings.FrontHeight = 159
   GuiSettings.Height = 728
   GuiSettings.FrontX = -45.98412698412676000
@@ -158221,7 +158203,6 @@ object Model: TPhastModel
   PestProperties.ParetoProperties.IntermediateIterationCount = 1
   PestProperties.ParetoProperties.FinalIterationCount = 0
   PestProperties.ParetoProperties.AltTerminationOption = atoDontUse
-  PestProperties.ParetoProperties.ObservationName = 'Gradient'
   PestProperties.ParetoProperties.AltDirection = adAbove
   PestProperties.ParetoProperties.StoredAltThreshold.Value = 0.00000000000000000
   PestProperties.ParetoProperties.AltIterations = 1

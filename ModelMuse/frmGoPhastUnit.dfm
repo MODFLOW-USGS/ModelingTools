@@ -596,7 +596,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView: TToolBar
-      Left = 592
+      Left = 593
       Top = 2
       Width = 170
       Height = 28
@@ -673,7 +673,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 14
+      Left = 81
       Top = 34
       Width = 212
       Height = 28
@@ -775,7 +775,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 242
+      Left = 309
       Top = 34
       Width = 244
       Height = 28
@@ -890,7 +890,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView3D: TToolBar
-      Left = 502
+      Left = 569
       Top = 34
       Width = 141
       Height = 28
@@ -1091,7 +1091,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarShowGrid: TToolBar
-      Left = 659
+      Left = 726
       Top = 34
       Width = 30
       Height = 28
@@ -1115,7 +1115,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarPilotPoints: TToolBar
-      Left = 705
+      Left = 14
       Top = 34
       Width = 51
       Height = 28
