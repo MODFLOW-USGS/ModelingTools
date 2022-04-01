@@ -29,7 +29,7 @@ uses System.UITypes,
   frmExportModpathShapefileUnit, SutraMeshUnit, frmSwrObservationsUnit,
   JvExStdCtrls, JvCombobox, JvListComb, FootprintGridUnit, frmRunFootprintUnit,
   System.ImageList, System.Actions, ModflowIrregularMeshUnit, JvComponentBase,
-  JvBalloonHint, frmRunPestUnit, frmRunParRepUnit;
+  JvBalloonHint, frmRunPestUnit, frmRunParRepUnit, System.Generics.Collections;
 
   { TODO : 
 Consider making CurrentTool a property of TframeView instead of 
@@ -1694,6 +1694,8 @@ type
     FHelpFormat: THelpFormat;
     FRulersVisible: Boolean;
     FExportingFromCommandLine: Boolean;
+    FDataSetsPosition: TRect;
+    FObjectsPosition: TRect;
     function ModelUpToDate(const FileName: string;
       CorrectDate: TDateTime): boolean;
     function ModflowUpToDate: boolean;
@@ -1866,6 +1868,8 @@ type
     procedure SetSideDiscretizationChanged(const Value: boolean);
     procedure EnableModelMate;
     procedure ArrangeToolBarRow(ToolBars: array of TToolBar; ToolBarTop: Integer);
+    procedure SetDataSetsPosition(const Value: TRect);
+    procedure SetObjectsPosition(const Value: TRect);
 //    procedure NoClick(Sender: TObject);
 //    procedure OnSaveFormClose(Sender: TObject; var Action: TCloseAction);
 //    procedure YesClick(Sender: TObject);
@@ -1880,6 +1884,10 @@ type
     procedure EnableEditRipPlantGroups(Sender: TObject);
   public
     FCubeControl: TRbwModelCube;
+    FDataSetsExpanded: TDictionary<string, Boolean>;
+    FObjectsExpanded: TDictionary<string, Boolean>;
+    Property DataSetsPosition: TRect read FDataSetsPosition write SetDataSetsPosition;
+    property ObjectsPosition: TRect read FObjectsPosition write SetObjectsPosition;
     property ExportingFromCommandLine: Boolean read FExportingFromCommandLine
       write FExportingFromCommandLine;
     procedure EnableFarmMenuItems;
@@ -3453,6 +3461,10 @@ var
   HelpFileName: string;
 begin
   inherited;
+  FDataSetsExpanded := TDictionary<string, Boolean>.Create;
+  FObjectsExpanded := TDictionary<string, Boolean>.Create;
+  FDataSetsPosition.Create(Point(0,0));
+  FObjectsPosition.Create(Point(0,0));
   FDefaultCreateArchive := dcaUnknown;
   {$IFNDEF Mf6TimeSeries}
   acTimeSeries.Visible := False;
@@ -4017,6 +4029,8 @@ begin
   // Formula manager needs FPhastModel to be defined during FPhastModel.Free;
   FPhastModel.Free;
   FPhastModel := nil;
+  FObjectsExpanded.Free;
+  FDataSetsExpanded.Free;
 //  FPhastModel := nil;
   inherited;
 //  OutputDebugString('SAMPLING OFF');
@@ -8198,6 +8212,11 @@ begin
   end;
 end;
 
+procedure TfrmGoPhast.SetDataSetsPosition(const Value: TRect);
+begin
+  FDataSetsPosition := Value;
+end;
+
 procedure TfrmGoPhast.pnlLowerRightMouseMove(Sender: TObject;
   Shift: TShiftState; X, Y: Integer);
 begin
@@ -9464,6 +9483,11 @@ begin
         miRunMt3dmsPopup.Caption := 'Export GWT Input Files';
       end;
   end;
+end;
+
+procedure TfrmGoPhast.SetObjectsPosition(const Value: TRect);
+begin
+  FObjectsPosition := Value;
 end;
 
 procedure TfrmGoPhast.SetRulersVisible(const Value: Boolean);
@@ -11558,6 +11582,11 @@ begin
   SetCurrentDir(ExtractFileDir(FileName));
   MenuItemsSetEnabled(False);
   try
+    FObjectsExpanded.Clear;
+    FDataSetsExpanded.Clear;
+    FDataSetsPosition.Create(Point(0,0));
+    FObjectsPosition.Create(Point(0,0));
+
     UpdateVerticalExaggeration(1);
     FreeAndNil(frmModflowPackages);
     FreeAndNil(frmDataSets);

@@ -10469,12 +10469,15 @@ const
 //               Bug fix: Fixed a bug that could cause an access violation
 //                when importing the Recharge, EVT, or ETS packages in an
 //                existing MODFLOW model.
+//     '5.0.0.2' Enhancement: The Edit Data Sets and Show/Hide Objects dialog
+//                boxes retain their positions, size, and the expanded status
+//                of their nodes after closing and reopening.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.1';
+  IIModelVersion = '5.0.0.2';
 
 function IModelVersion: string;
 begin

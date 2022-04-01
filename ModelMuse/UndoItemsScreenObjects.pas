@@ -3622,6 +3622,7 @@ begin
         begin
           OriginalCount := ScreenObject.Count;
           try
+            OtherScreenObject := ScreenObject;
             for SI_Index := 0 to Length(StoredObjects) - 1 do
             begin
               OtherScreenObject := StoredObjects[SI_Index];

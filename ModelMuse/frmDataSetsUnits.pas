@@ -278,6 +278,7 @@ Type
     procedure tvDataSetsChanging(Sender: TObject; Node: TTreeNode;
       var AllowChange: Boolean);
     procedure cbParametersUsedClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { @name is the @link(TCustom2DInterpolater) of the currently
       selected @link(TDataArray).
@@ -492,7 +493,12 @@ begin
     MessageDlg(StrYouMustSelectAMo, mtError, [mbOK], 0);
     Exit;
   end;
-  
+
+  if not frmGoPhast.DataSetsPosition.IsEmpty then
+  begin
+    Position := poDesigned;
+  end;
+
   FLoading := True;
   pcDataSets.ActivePageIndex := 0;
   FDefaultConvertChoice := -1;
@@ -984,6 +990,10 @@ begin
 end;
 
 procedure TfrmDataSets.GetData;
+var
+  index: Integer;
+  AnItem: TTreeNode;
+  Expanded: Boolean;
 begin
   FLoading := True;
   try
@@ -992,6 +1002,18 @@ begin
     GetGlobalVariables;
 
     FillDataSetsTreeView;
+
+    for index := 0 to tvDataSets.Items.Count - 1 do
+    begin
+      AnItem := tvDataSets.Items[index];
+      if AnItem.HasChildren then
+      begin
+        if frmGoPhast.FDataSetsExpanded.TryGetValue(AnItem.Text, Expanded) then
+        begin
+          AnItem.Expanded := Expanded;
+        end;
+      end;
+    end;
   finally
     FLoading := False;
   end;
@@ -1145,6 +1167,7 @@ var
   NewDataSetProperties : TObjectList;
   ArrayEdit: TDataArrayEdit;
   DataSetsDeleted: Boolean;
+  ANode: TTreeNode;
 begin
   // This procedure updates the data sets based on the changes the
   // user has made.
@@ -1243,6 +1266,15 @@ begin
     end;
   finally
     Screen.Cursor := crDefault;
+  end;
+  frmGoPhast.FDataSetsExpanded.Clear;
+  for Index := 0 to tvDataSets.Items.Count - 1 do
+  begin
+    ANode := tvDataSets.Items[Index];
+    if ANode.HasChildren then
+    begin
+      frmGoPhast.FDataSetsExpanded.Add(ANode.Text, ANode.Expanded) ;
+    end;
   end;
 end;
 
@@ -1418,7 +1450,15 @@ begin
 end;
 
 procedure TfrmDataSets.FormDestroy(Sender: TObject);
+var
+  FormPosition: TRect;
 begin
+  FormPosition.Top := Top;
+  FormPosition.Left := Left;
+  FormPosition.Width := Width;
+  FormPosition.Height := Height;
+  frmGoPhast.DataSetsPosition := FormPosition;
+
   SelectedEdit := nil;
 
   // free up data.
@@ -1432,6 +1472,21 @@ begin
 //  Assert(frmDataSets = self);
   frmDataSets := nil;
   inherited;
+end;
+
+procedure TfrmDataSets.FormShow(Sender: TObject);
+var
+  FormPosition: TRect;
+begin
+  inherited;
+  FormPosition := frmGoPhast.DataSetsPosition;
+  if not (FormPosition.IsEmpty) then
+  begin
+    Top := FormPosition.Top;
+    Left := FormPosition.Left;
+    Width := FormPosition.Width;
+    Height := FormPosition.Height;
+  end;
 end;
 
 procedure TfrmDataSets.ValidateFormula(const DataEdit: TDataArrayEdit;

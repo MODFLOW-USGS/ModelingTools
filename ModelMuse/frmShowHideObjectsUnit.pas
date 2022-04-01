@@ -93,6 +93,8 @@ type
     function ShouldCheckBoxBeChecked(ScreenObject: TScreenObject): boolean; override;
     procedure HandleChecked(AScreenObject: TScreenObject); override;
     procedure HandleUnchecked(AScreenObject: TScreenObject); override;
+    procedure RecordExpandedObjectNodes;
+    procedure RestoreExpandedObjectNodes;
   public
     property SupressUndo: boolean read FSupressUndo write FSupressUndo;
     { Public declarations }
@@ -265,13 +267,23 @@ begin
   CreateAngleImages;
   FSupressUndo := False;
   GetData;
+  RestoreExpandedObjectNodes;
 end;
 
 
 procedure TfrmShowHideObjects.FormDestroy(Sender: TObject);
 var
   i: Integer;
+  FormPosition: TRect;
 begin
+  RecordExpandedObjectNodes;
+
+  FormPosition.Top := Top;
+  FormPosition.Left := Left;
+  FormPosition.Width := Width;
+  FormPosition.Height := Height;
+  frmGoPhast.ObjectsPosition := FormPosition;
+
   inherited;
 
   // Let vstObjects finish with any threads to prevent an access violation.
@@ -335,6 +347,52 @@ begin
   if ScreenObject <> nil then
   begin
     SelectAScreenObject(ScreenObject);
+  end;
+end;
+
+procedure TfrmShowHideObjects.RecordExpandedObjectNodes;
+var
+  ANode: PVirtualNode;
+begin
+  vstObjects.BeginUpdate;
+  try
+    frmGoPhast.FObjectsExpanded.Clear;
+    ANode := vstObjects.GetFirst;
+    while ANode <> nil do
+    begin
+      if vstObjects.Expanded[ANode] then
+      begin
+        frmGoPhast.FObjectsExpanded.Add(NodeString(ANode), True);
+      end;
+      ANode := vstObjects.GetNext(ANode)
+    end;
+  finally
+    vstObjects.EndUpdate;
+  end;
+end;
+
+procedure TfrmShowHideObjects.RestoreExpandedObjectNodes;
+var
+  ANode: PVirtualNode;
+  Expanded: Boolean;
+begin
+  vstObjects.BeginUpdate;
+  try
+    ANode := vstObjects.GetFirst;
+    while ANode <> nil do
+    begin
+      if frmGoPhast.FObjectsExpanded.TryGetValue(NodeString(ANode), Expanded) then
+      begin
+        vstObjects.Expanded[ANode] := Expanded;
+      end
+      else
+      begin
+        vstObjects.Expanded[ANode] := False;
+      end;
+      ANode := vstObjects.GetNext(ANode)
+    end;
+  finally
+    vstObjects.EndUpdate;
   end;
 end;
 
@@ -717,9 +775,22 @@ begin
 end;
 
 procedure TfrmShowHideObjects.FormShow(Sender: TObject);
+var
+  FormPosition: TRect;
 begin
   inherited;
-  AdjustFormPosition(dpRight);
+  if frmGoPhast.ObjectsPosition.IsEmpty then
+  begin
+    AdjustFormPosition(dpRight);
+  end
+  else
+  begin
+    FormPosition := frmGoPhast.ObjectsPosition;
+    Top := FormPosition.Top;
+    Left := FormPosition.Left;
+    Width := FormPosition.Width;
+    Height := FormPosition.Height;
+  end;
 end;
 
 procedure TfrmShowHideObjects.SetCanEdit(const Value: boolean);

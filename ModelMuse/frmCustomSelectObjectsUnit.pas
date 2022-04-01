@@ -126,8 +126,9 @@ type
     FUzfObs6List: TList;
     FvstCsubObsMf6Node: PVirtualNode;
     FCsubObs6List: TList;
+    procedure RecordExpandedNodes;
+    procedure RestoreExpandedNodes;
 
-    function NodeString(ANode: PVirtualNode): string;
     { Private declarations }
 
   { Public declarations }
@@ -383,8 +384,7 @@ type
     // @name creates all the nodes in @link(vstObjects)
     procedure GetData;
     function CanSelect(ScreenObject: TScreenObject): boolean; virtual;
-    procedure RecordExpandedNodes;
-    procedure RestoreExpandedNodes;
+    function NodeString(ANode: PVirtualNode): string;
   public
     // @name is used to prevent access violations caused by attempting to
     // edit a @link(TScreenObject) while another one is already being edited.

@@ -9,9 +9,8 @@ inherited frmDataSets: TfrmDataSets
   Font.Height = 19
   OnActivate = FormActivate
   OnClose = FormClose
-  ExplicitWidth = 652
-  ExplicitHeight = 502
-  PixelsPerInch = 96
+  ExplicitWidth = 654
+  ExplicitHeight = 510
   TextHeight = 19
   object Splitter1: TSplitter
     Left = 311
@@ -351,7 +350,6 @@ inherited frmDataSets: TfrmDataSets
         Anchors = [akLeft, akTop, akRight, akBottom]
         ScrollBars = ssBoth
         TabOrder = 8
-        Zoom = 100
         OnExit = reDefaultFormulaExit
       end
       object comboUnits: TComboBox
@@ -577,7 +575,6 @@ inherited frmDataSets: TfrmDataSets
           ScrollBars = ssBoth
           TabOrder = 0
           WordWrap = False
-          Zoom = 100
           OnEnter = reCommentEnter
           OnExit = reCommentExit
         end

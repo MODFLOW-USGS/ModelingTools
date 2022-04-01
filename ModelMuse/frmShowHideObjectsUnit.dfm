@@ -8,7 +8,6 @@ inherited frmShowHideObjects: TfrmShowHideObjects
   Position = poDesigned
   OnClose = FormClose
   OnKeyUp = FormKeyUp
-  PixelsPerInch = 96
   TextHeight = 18
   inherited pnlBottom: TPanel
     Top = 256
