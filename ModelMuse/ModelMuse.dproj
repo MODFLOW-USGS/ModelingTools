@@ -3,7 +3,7 @@
         <ProjectGuid>{DBACE99F-0221-4660-936F-15A30233FA90}</ProjectGuid>
         <MainSource>ModelMuse.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
@@ -1774,6 +1774,10 @@
         <DCCReference Include="Modflow6TimeSeriesCollectionsUnit.pas"/>
         <DCCReference Include="ModflowMf6TimeSeriesWriterUnit.pas"/>
         <DCCReference Include="PilotPointCovarinceFileWriterUnit.pas"/>
+        <DCCReference Include="frmNewVideoUnit.pas">
+            <Form>frmNewVideos</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

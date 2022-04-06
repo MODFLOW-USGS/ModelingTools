@@ -32,6 +32,8 @@ type
     FVersionOnWeb: string;
     FOldToNewDictionary: TDictionary<string, string>;
     FNewToOldDictionary: TDictionary<string, string>;
+    FUrlToXmlNodeDictionary: TDictionary<string, TXmlNode>;
+    FNewVideos: TList<TXmlNode>;
     FVideos: TXmlVerySimple;
     procedure CheckWeb;
     procedure ReadIniFile;
@@ -64,18 +66,20 @@ implementation
 
 uses
   Math, RbwInternetUtilities, frmGoPhastUnit, IniFileUtilities, GoPhastTypes,
-  StdCtrls, frmNewVersionUnit, System.IOUtils;
+  StdCtrls, frmNewVersionUnit, System.IOUtils, frmNewVideoUnit;
 
 resourcestring
   StrYourVersionS = 'Your version: %s';
   StrNewVersionS = 'New version: %s';
   StrClickHereForModel = 'Click here for ModelMuse Videos';
   StrThereIsANewVideo = 'There is a new video on the ModelMuse web site.';
+  StrThereAreDNewVi = 'There are  %d new videos on the ModelMuse web site.';
 
 
 const
   UpdateURL =      'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseInternetUpdate.txt';
   VideoUpdateURL = 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Videos.xml';
+  StrTopic = 'Topic';
 
 { TCheckInternetThread }
 
@@ -188,6 +192,7 @@ begin
           begin
             raise Exception.Create('Invalid URL');
           end;
+          FUrlToXmlNodeDictionary.Add(NewUrl,ANode);
           if ANode.HasAttribute(StrUpdated) then
           begin
             AValue := ANode.Attributes[StrUpdated];
@@ -329,17 +334,22 @@ begin
   FShowVideos := ShowTips;
   FOldToNewDictionary := TDictionary<string, string>.Create;
   FNewToOldDictionary := TDictionary<string, string>.Create;
+  FUrlToXmlNodeDictionary := TDictionary<string, TXmlNode>.Create;
+  FNewVideos := TList<TXmlNode>.Create;
+
   FVideos := TXmlVerySimple.Create;
 end;
 
 procedure TCheckInternetThread.DestroyIniFile;
 begin
-  FVideos.Free;
   FIniFile.Free;
 end;
 
 destructor TCheckInternetThread.Destroy;
 begin
+  FVideos.Free;
+  FNewVideos.FreeInstance;
+  FUrlToXmlNodeDictionary.Free;
   FNewToOldDictionary.Free;
   FOldToNewDictionary.Free;
   FVideoURLs.Free;
@@ -405,30 +415,32 @@ end;
 
 procedure TCheckInternetThread.NewVideoMessage;
 var
-  Lbl: TJvHTLabel;
-  AForm: TForm;
-  AMessage: string;
+  index: Integer;
+  ANode: TXmlNode;
+  TopicName: string;
 begin
-  if FNewVideoCount = 1 then
-  begin
-    AMessage := StrThereIsANewVideo;
-  end
-  else
-  begin
-    AMessage := Format('There are  %d new videos on the ModelMuse web site.', [FNewVideoCount]);
-  end;
-  AForm := CreateMessageDialog(AMessage, mtInformation, [mbOK]);
+  Application.CreateForm(TfrmNewVideos, frmNewVideos);
   try
-    Lbl := TJvHTLabel.Create(AForm);
-    Lbl.Parent := AForm;
-//    Lbl.Caption := '<u><a href="http://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseVideos.html">'
-//      + StrClickHereForModel+'</a></u>';
-    Lbl.Caption := Format('<u><a href="https://www.usgs.gov/mission-areas/water-resources/modelmuse-tutorial-videos-0">%s</a></u>', [StrClickHereForModel]);
-    Lbl.Left := (AForm.ClientWidth - Lbl.Width) div 2;
-    Lbl.Top := 40;
-    AForm.ShowModal;
+    frmNewVideos.memoNewVideos.Lines.BeginUpdate;
+    try
+      for index := 0 to FNewVideos.Count - 1 do
+      begin
+        ANode := FNewVideos[index];
+        if ANode.HasAttribute(StrTopic) then
+        begin
+          TopicName := ANode.Attributes[StrTopic];
+          if TopicName <> '' then
+          begin
+            frmNewVideos.memoNewVideos.Lines.Add(TopicName);
+          end;
+        end;
+      end;
+    finally
+      frmNewVideos.memoNewVideos.Lines.EndUpdate;
+    end;
+    frmNewVideos.ShowModal;
   finally
-    AForm.Free;
+    frmNewVideos.Free
   end;
 end;
 
@@ -458,6 +470,7 @@ var
   NewerUrl: string;
   OlderURL: string;
   UpdatedOldURL: string;
+  ANode: TXmlNode;
 begin
   FNewVideoCount := 0;
   FIniFile.ReadSection(StrVideoDisplayed, FVideoURLs);
@@ -489,7 +502,8 @@ begin
     end
     else if FNewToOldDictionary.TryGetValue(NewUrl, OlderURL) then
     begin
-      HasDisplayed := FIniFile.ReadBool(StrVideoDisplayed, OlderURL, False);
+      HasDisplayed := FIniFile.ReadBool(StrVideoDisplayed, OlderURL, False)
+        or FIniFile.ReadBool(StrVideoDisplayed, NewUrl, False);
       FIniFile.DeleteKey(StrVideoDisplayed, OlderURL);
       FIniFile.WriteBool(StrVideoDisplayed, NewUrl, HasDisplayed);
     end;
@@ -514,6 +528,10 @@ begin
     begin
       FVideoURLs.Add(NewURL);
       Inc(FNewVideoCount);
+      if FUrlToXmlNodeDictionary.TryGetValue(NewURL, ANode) then
+      begin
+        FNewVideos.Add(ANode);
+      end;
     end;
   end;
 end;

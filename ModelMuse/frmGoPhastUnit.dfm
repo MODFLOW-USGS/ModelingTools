@@ -279,6 +279,8 @@ inherited frmGoPhast: TfrmGoPhast
       inherited glWidModelView: TGLWidget
         Width = 229
         Height = 133
+        ExplicitLeft = -8
+        ExplicitTop = 56
         ExplicitWidth = 229
         ExplicitHeight = 133
       end
@@ -673,7 +675,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 76
+      Left = 233
       Top = 66
       Width = 212
       Height = 28
@@ -775,7 +777,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 304
+      Left = 461
       Top = 66
       Width = 244
       Height = 28
@@ -890,7 +892,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView3D: TToolBar
-      Left = 564
+      Left = 76
       Top = 66
       Width = 141
       Height = 28
