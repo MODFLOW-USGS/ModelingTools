@@ -1388,7 +1388,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 595
+          Width = 594
           Height = 36
           Align = alTop
           Caption = 
@@ -1396,7 +1396,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             ' and bottom of the object as defined by the higher and lower Z c' +
             'oordinates will define a well screen.'
           WordWrap = True
-          ExplicitWidth = 594
         end
         object lblWellScreenFormula: TLabel
           Left = 136

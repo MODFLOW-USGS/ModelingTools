@@ -323,6 +323,7 @@ begin
   frameMain.lblInitialValueMethod.Caption := StrSTRVAL;
   frameMain.lblInitialValueTabFile.Caption := StrInitialValueTabfil;
 
+  comboCulvertType.Items.ClearAndResetID;
   comboCulvertType.Items.Assign(rdgCulvert.Columns[Ord(ccCulvertType)].PickList);
 //  cbCulvert.Caption := StrSpecifyLengthsSTR
 
@@ -378,10 +379,15 @@ begin
     TabFiles.Free;
   end;
 
+  comboPumpWeirControlType.Items.ClearAndResetID;
   comboPumpWeirControlType.Items.Assign(rdgPumpWeir.Columns[Ord(pwcControlType)].PickList);
+  comboPumpWeirControlOperated.Items.ClearAndResetID;
   comboPumpWeirControlOperated.Items.Assign(rdgPumpWeir.Columns[Ord(pwcControlOperated)].PickList);
+  comboPumpWeirCriticalMethod.Items.ClearAndResetID;
   comboPumpWeirCriticalMethod.Items.Assign(rdgPumpWeir.Columns[Ord(pwcCriticalMethod)].PickList);
+  comboPumpWeirCriticalTabFileName.Items.ClearAndResetID;
   comboPumpWeirCriticalTabFileName.Items.Assign(rdgPumpWeir.Columns[Ord(pwcCriticalTabFileName)].PickList);
+  comboPumpWeirDischargeTabFile.Items.ClearAndResetID;
   comboPumpWeirDischargeTabFile.Items.Assign(rdgPumpWeir.Columns[Ord(pwcDischargeTabFile)].PickList);
 
   DummyEvent := nil;

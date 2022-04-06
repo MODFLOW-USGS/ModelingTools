@@ -11,7 +11,6 @@ object frmCustomGoPhast: TfrmCustomGoPhast
   Font.Name = 'Arial'
   Font.Pitch = fpVariable
   Font.Style = []
-  OldCreateOrder = False
   PopupMode = pmAuto
   Position = poMainFormCenter
   Scaled = False
@@ -19,6 +18,5 @@ object frmCustomGoPhast: TfrmCustomGoPhast
   OnDestroy = FormDestroy
   OnHelp = FormHelp
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 18
 end

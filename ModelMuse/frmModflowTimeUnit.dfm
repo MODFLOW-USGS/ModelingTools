@@ -5,9 +5,8 @@ inherited frmModflowTime: TfrmModflowTime
   ClientHeight = 327
   ClientWidth = 754
   OnResize = FormResize
-  ExplicitWidth = 770
-  ExplicitHeight = 366
-  PixelsPerInch = 96
+  ExplicitWidth = 772
+  ExplicitHeight = 374
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -66,7 +65,7 @@ inherited frmModflowTime: TfrmModflowTime
     Top = 0
     Width = 754
     Height = 292
-    ActivePage = tabATS
+    ActivePage = tabMt3dms
     Align = alClient
     TabOrder = 0
     OnChange = pgcMainChange
@@ -583,6 +582,7 @@ inherited frmModflowTime: TfrmModflowTime
           FixedCols = 1
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
           OnSelectCell = frameGridGridSelectCell
+          OnSetEditText = frameGridGridSetEditText
           OnBeforeDrawCell = frameGridGridBeforeDrawCell
           Columns = <
             item

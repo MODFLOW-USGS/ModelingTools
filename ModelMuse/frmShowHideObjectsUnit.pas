@@ -353,6 +353,7 @@ end;
 procedure TfrmShowHideObjects.RecordExpandedObjectNodes;
 var
   ANode: PVirtualNode;
+  Key: string;
 begin
   vstObjects.BeginUpdate;
   try
@@ -362,7 +363,11 @@ begin
     begin
       if vstObjects.Expanded[ANode] then
       begin
-        frmGoPhast.FObjectsExpanded.Add(NodeString(ANode), True);
+        Key := NodeString(ANode);
+        if not frmGoPhast.FObjectsExpanded.ContainsKey(Key) then
+        begin
+          frmGoPhast.FObjectsExpanded.Add(Key, True);
+        end;
       end;
       ANode := vstObjects.GetNext(ANode)
     end;

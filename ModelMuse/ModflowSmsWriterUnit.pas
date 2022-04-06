@@ -352,7 +352,9 @@ begin
 
     if FImsPackage.UnderRelaxation <> surNone then
     begin
-      if soUnderRelaxGamma in FImsPackage.SmsOverrides then
+      // You need to specify gamma even if it is not overridden.
+//      if (soUnderRelaxGamma in FImsPackage.SmsOverrides)
+//        or (FImsPackage.UnderRelaxation = surSimple) then
       begin
         WriteString('  UNDER_RELAXATION_GAMMA');
         WriteFloat(FImsPackage.UnderRelaxGamma);

@@ -10472,12 +10472,20 @@ const
 //     '5.0.0.2' Enhancement: The Edit Data Sets and Show/Hide Objects dialog
 //                boxes retain their positions, size, and the expanded status
 //                of their nodes after closing and reopening.
+//     '5.0.0.3' Enhancement: Changing the MT3D times in the MODFLOW Time
+//                dialog box causes those times to also be change in the
+//                MT3D boundaries.
+//               Change: Made changes throughout ModelMuse to account for a
+//                change in TJvImageComboBox.
+//               Bug fix: ModelMuse no longer identifies the formula for the
+//                IDOMAIN data set as invalid when creating a new model with
+//                no grid.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.2';
+  IIModelVersion = '5.0.0.3';
 
 function IModelVersion: string;
 begin

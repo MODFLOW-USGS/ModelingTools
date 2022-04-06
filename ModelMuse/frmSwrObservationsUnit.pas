@@ -111,6 +111,7 @@ begin
   Grid.Cells[Ord(ocLayer), 0] := StrObservationLayerI;
   Grid.Columns[Ord(ocLayer)].Max := frmGoPhast.PhastModel.Grid.LayerCount;
   Grid.Columns[Ord(ocLayer)].CheckMax := True;
+  comboType.Items.ClearAndResetID;
   comboType.Items.Assign(Grid.Columns[Ord(ocType)].PickList);
 
   PickList := Grid.Columns[Ord(ocStructure)].PickList;

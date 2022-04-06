@@ -954,7 +954,9 @@ begin
     rdgModflowBoundary.Columns[ColIndex].AutoAdjustColWidths := False;
   end;
 
+  comboStatus.Items.ClearAndResetID;
   comboStatus.Items.Assign(rdgModflowBoundary.Columns[Ord(wfStatus)].PickList);
+  comboRateLimitation.Items.ClearAndResetID;
   comboRateLimitation.Items.Assign(rdgModflowBoundary.
     Columns[Ord(wtRateLimitation)].PickList);
 end;

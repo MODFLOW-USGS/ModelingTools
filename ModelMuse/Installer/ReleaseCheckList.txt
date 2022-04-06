@@ -18,7 +18,7 @@
 8a. Check executables including .chm on www.virustotal.com. 
 9. Update readme and ModelMuse.txt files
 10. Build installers
-10a. Check installers on www.virustotal.com. 
+10a. Check installers on www.virustotal.com and https://www.microsoft.com/en-us/wdsi/filesubmission/. 
 11. Create zip files for installation
 12. Create folder for source code
 13. Update ModelMuse, ModelMonitor, and Component source code in folder for source code.

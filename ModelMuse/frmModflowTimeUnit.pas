@@ -83,6 +83,8 @@ type
     procedure cbUseAtsClick(Sender: TObject);
     procedure rdgAtsMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure frameGridGridSetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
   private
     FModflowStressPeriods: TModflowStressPeriods;
     FDeleting: Boolean;
@@ -111,6 +113,8 @@ type
     FNewMt3dmsTimes: TMt3dmsTimeCollection;
     FOldTimes: TList<Double>;
     FNewTimes: TList<Double>;
+    FOldMt3dTimeList: TList<Double>;
+    FNewMt3dTimeList: TList<Double>;
     FOldScreenObjects: TObjectList<TScreenObject>;
     FExistingScreenObjects: TList<TScreenObject>;
     FStoragePackageIsSelected: Boolean;
@@ -1252,6 +1256,19 @@ begin
   end;
 end;
 
+procedure TfrmModflowTime.frameGridGridSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+begin
+  inherited;
+  if (ARow >= 1) and (ACol = Ord(mtcEndTime)) then
+  begin
+    if ARow < frameGrid.Grid.RowCount -1 then
+    begin
+      frameGrid.Grid.Cells[Ord(mtcStartTime), ARow+1] := Value;
+    end;
+  end;
+end;
+
 { TUndoModflowStressPeriods }
 
 constructor TUndoModflowStressPeriods.Create(
@@ -1264,6 +1281,9 @@ var
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
   NewScreenObject: TScreenObject;
+  OldMtPeriod: TMt3dmsTimeItem;
+  NewMtPeriod: TMt3dmsTimeItem;
+  FoundTime: Boolean;
 begin
   inherited Create;
   FStoragePackageIsSelected := frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected;
@@ -1284,6 +1304,9 @@ begin
 
   FOldTimes := TList<Double>.Create;
   FNewTimes := TList<Double>.Create;
+  FOldMt3dTimeList := TList<Double>.Create;
+  FNewMt3dTimeList := TList<Double>.Create;
+
 
   for TimeIndex := 0 to
     Min(FNewStressPeriods.Count, FOldStressPeriods.Count) -1 do
@@ -1304,12 +1327,32 @@ begin
     end;
   end;
 
+  for TimeIndex := 0 to
+    Min(FNewMt3dmsTimes.Count, FOldMt3dmsTimes.Count) -1 do
+  begin
+    OldMtPeriod := FOldMt3dmsTimes[TimeIndex];
+    NewMtPeriod := FNewMt3dmsTimes[TimeIndex];
+    if (OldMtPeriod.StartTime <> NewMtPeriod.StartTime)
+      and (FOldMt3dTimeList.IndexOf(OldMtPeriod.StartTime) < 0) then
+    begin
+      FOldMt3dTimeList.Add(OldMtPeriod.StartTime);
+      FNewMt3dTimeList.Add(NewMtPeriod.StartTime);
+    end;
+    if (OldMtPeriod.EndTime <> NewMtPeriod.EndTime)
+      and (FOldMt3dTimeList.IndexOf(OldMtPeriod.EndTime) < 0) then
+    begin
+      FOldMt3dTimeList.Add(OldMtPeriod.EndTime);
+      FNewMt3dTimeList.Add(NewMtPeriod.EndTime);
+    end;
+  end;
+
   FOldScreenObjects := TObjectList<TScreenObject>.Create;
   FExistingScreenObjects := TList<TScreenObject>.Create;
 
   for ScreenObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
   begin
     AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
+    FoundTime := False;
     for TimeIndex := 0 to FOldTimes.Count - 1 do
     begin
       if AScreenObject.UsesATime(FOldTimes[TimeIndex]) then
@@ -1318,7 +1361,23 @@ begin
         NewScreenObject := TScreenObjectClass(AScreenObject.ClassType).Create(nil);
         NewScreenObject.Assign(AScreenObject);
         FOldScreenObjects.Add(NewScreenObject);
+        FoundTime := True;
         break;
+      end;
+    end;
+
+    if not FoundTime then
+    begin
+      for TimeIndex := 0 to FOldMt3dTimeList.Count - 1 do
+      begin
+        if AScreenObject.UsesAnMt3dTime(FOldMt3dTimeList[TimeIndex]) then
+        begin
+          FExistingScreenObjects.Add(AScreenObject);
+          NewScreenObject := TScreenObjectClass(AScreenObject.ClassType).Create(nil);
+          NewScreenObject.Assign(AScreenObject);
+          FOldScreenObjects.Add(NewScreenObject);
+          break;
+        end;
       end;
     end;
   end;
@@ -1340,6 +1399,8 @@ begin
   FOldStressPeriods.Free;
   FOldMt3dmsTimes.Free;
   FNewMt3dmsTimes.Free;
+  FOldMt3dTimeList.Free;
+  FNewMt3dTimeList.Free;
   inherited;
 end;
 
@@ -1384,7 +1445,30 @@ begin
         end;
       end;
     end;
+
+    for ScreenObjectIndex := 0 to FExistingScreenObjects.Count - 1 do
+    begin
+      AScreenObject := FExistingScreenObjects[ScreenObjectIndex];
+      for TimeIndex := FOldMt3dTimeList.Count - 1 downto 0 do
+      begin
+        if FOldMt3dTimeList[TimeIndex] < FNewMt3dTimeList[TimeIndex] then
+        begin
+          AScreenObject.ReplaceAnMt3dTime(FOldMt3dTimeList[TimeIndex],
+            FNewMt3dTimeList[TimeIndex]);
+        end;
+      end;
+      for TimeIndex := 0 to FOldMt3dTimeList.Count - 1 do
+      begin
+        if FOldMt3dTimeList[TimeIndex] > FNewMt3dTimeList[TimeIndex] then
+        begin
+          AScreenObject.ReplaceAnMt3dTime(FOldMt3dTimeList[TimeIndex],
+            FNewMt3dTimeList[TimeIndex]);
+        end;
+      end;
+    end;
   end;
+
+
 end;
 
 procedure TUndoModflowStressPeriods.Undo;

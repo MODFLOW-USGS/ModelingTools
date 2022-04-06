@@ -34,6 +34,7 @@ type
     btnSortByTitle: TButton;
     btnSortByGroup: TButton;
     cbUpdated: TCheckBox;
+    btnInsertParentNode: TButton;
     procedure tvVideosChange(Sender: TObject; Node: TTreeNode);
     procedure edURLChange(Sender: TObject);
     procedure btnAddChildClick(Sender: TObject);
@@ -54,6 +55,7 @@ type
       Data: Integer; var Compare: Integer);
     procedure btnSortByGroupClick(Sender: TObject);
     procedure cbUpdatedClick(Sender: TObject);
+    procedure btnInsertParentNodeClick(Sender: TObject);
   private
     FVideoList: TXmlVerySimple;
     FChanged: Boolean;
@@ -94,7 +96,7 @@ begin
   if (tvVideos.Selected <> nil) and not tvVideos.Selected.HasChildren then
   begin
     FChanged := True;
-    ANode := tvVideos.Items.AddChild(tvVideos.Selected, 'NewNode');
+    ANode := tvVideos.Items.AddChild(tvVideos.Selected, 'NewChildNode');
     if tvVideos.Selected.Data <> nil then
     begin
       AnXmlNode := tvVideos.Selected.Data;
@@ -116,6 +118,7 @@ begin
   ANode := tvVideos.Items.Add(nil, 'NewNode');
   AnXmlNode := FVideoList.AddChild('');
   AnXmlNode.Text := '';
+  AnXmlNode.Name := 'New URL';
   ANode.Data := AnXmlNode;
   tvVideos.Selected := ANode;
   jvdDate.Text := '';
@@ -143,6 +146,89 @@ begin
     end;
     tvVideos.Selected.Free;
     FChanged := True;
+  end;
+end;
+
+procedure TfrmMain.btnInsertParentNodeClick(Sender: TObject);
+var
+  ANode: TTreeNode;
+  AnXmlNode: TXmlNode;
+  NewXmlNode: TXmlNode;
+  SelectedNode: TTreeNode;
+  ExistingXmlNode: TXmlNode;
+  NewSelectedNode: TTreeNode;
+  NewSelectedXmlNode: TXmlNode;
+  YearString: string;
+  MonthString: string;
+  DayString: string;
+  TopicName: string;
+  UpdateValue: string;
+begin
+  if (tvVideos.Selected <> nil) and not tvVideos.Selected.HasChildren
+    and (tvVideos.Selected.Parent = nil)  then
+  begin
+    FChanged := True;
+    SelectedNode := tvVideos.Selected;
+    if SelectedNode.Data <> nil then
+    begin
+      ExistingXmlNode := SelectedNode.Data;
+    end;
+
+    btnAddNodeClick(nil);
+    ANode := tvVideos.Selected;
+    AnXmlNode := ANode.Data;
+    ANode.Text := 'New Parent Node';
+
+    ANode.MoveTo(SelectedNode, naInsert);
+
+    btnAddChildClick(nil);
+
+    NewSelectedNode := tvVideos.Selected;
+    NewSelectedXmlNode := NewSelectedNode.Data;
+
+    if SelectedNode.Data <> nil then
+    begin
+      ExistingXmlNode := SelectedNode.Data;
+      NewSelectedXmlNode.Name := ExistingXmlNode.Name;
+      NewSelectedXmlNode.Text := ExistingXmlNode.Text;
+      NewSelectedNode.Text := NewSelectedXmlNode.Name ;
+
+      if ExistingXmlNode.HasAttribute(StrYear) then
+      begin
+        YearString := ExistingXmlNode.Attributes[StrYear];
+        NewSelectedXmlNode.SetAttribute(StrYear, YearString);
+      end;
+
+      if ExistingXmlNode.HasAttribute(StrMonth) then
+      begin
+        MonthString := ExistingXmlNode.Attributes[StrMonth];
+        NewSelectedXmlNode.SetAttribute(StrMonth, MonthString);
+      end;
+
+      if ExistingXmlNode.HasAttribute(StrDay) then
+      begin
+        DayString := ExistingXmlNode.Attributes[StrDay];
+        NewSelectedXmlNode.SetAttribute(StrDay, DayString);
+      end;
+
+      TopicName := ExistingXmlNode.Attributes[StrTopic];
+      if TopicName <> '' then
+      begin
+        NewSelectedXmlNode.SetAttribute(StrTopic, TopicName);
+      end;
+
+      UpdateValue := ExistingXmlNode.Attributes[StrUpdated];
+      if UpdateValue <> '' then
+      begin
+        NewSelectedXmlNode.SetAttribute(StrUpdated, UpdateValue);
+      end;
+
+    end;
+    tvVideos.Selected := SelectedNode;
+    btnDeleteNodeClick(nil);
+    tvVideos.Selected := ANode;
+//    jvdDate.Text := '';
+
   end;
 end;
 

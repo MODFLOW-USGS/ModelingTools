@@ -1443,7 +1443,7 @@ begin
 
     rdgParameters.Columns[Ord(spicParameter)].PickList.Clear;
     rdgParameters.Columns[Ord(spicParameter)].PickList.Add(StrNone);
-    comboParameterChoices.Items.Clear;
+    comboParameterChoices.Items.ClearAndResetID;
     comboParameterChoices.Items.Add.Text := StrNone;
     for Index := 0 to frmGoPhast.PhastModel.ModflowTransientParameters.Count - 1 do
     begin

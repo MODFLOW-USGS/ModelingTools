@@ -8220,7 +8220,10 @@ begin
       for LayerIndex := 0 to ModflowLayerStructure.Count - 1 do
       begin
         ModflowLayerGroup := ModflowLayerStructure[LayerIndex];
-        result.Add(ModflowLayerGroup.DataArrayName);
+        if ModflowLayerGroup.DataArrayName <> '' then
+        begin
+          result.Add(ModflowLayerGroup.DataArrayName);
+        end;
       end;
     end;
   end
@@ -8233,7 +8236,10 @@ begin
       for LayerIndex := 0 to SutraLayerStructure.Count - 1 do
       begin
         LayerGroup := SutraLayerStructure[LayerIndex];
-        result.Add(LayerGroup.DataArrayName)
+        if LayerGroup.DataArrayName <> '' then
+        begin
+          result.Add(LayerGroup.DataArrayName)
+        end;
       end;
     end;
   end;

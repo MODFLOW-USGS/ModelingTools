@@ -29,9 +29,9 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
       ExplicitTop = 94
       ExplicitWidth = 568
       inherited lbNumber: TLabel
-        Width = 138
+        Width = 194
         Caption = 'Number of observation times'
-        ExplicitWidth = 138
+        ExplicitWidth = 194
       end
       inherited sbAdd: TSpeedButton
         Left = 297
@@ -61,6 +61,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -84,6 +85,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -107,6 +109,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -130,6 +133,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -153,6 +157,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -176,6 +181,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -211,28 +217,28 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
     object lblZetaSurfaceNumber: TLabel
       Left = 0
       Top = 6
-      Width = 100
-      Height = 13
+      Width = 136
+      Height = 20
       Caption = 'Zeta surface number'
     end
     object lblTreatment: TLabel
       Left = 200
       Top = 6
-      Width = 50
-      Height = 13
+      Width = 67
+      Height = 20
       Caption = 'Treatment'
     end
     object comboMultiStatFlag: TJvImageComboBox
       Left = 91
       Top = 51
       Width = 89
-      Height = 23
+      Height = 30
       Style = csOwnerDrawVariable
       ButtonStyle = fsLighter
       DroppedWidth = 145
       ImageHeight = 0
       ImageWidth = 0
-      ItemHeight = 17
+      ItemHeight = 24
       ItemIndex = -1
       TabOrder = 2
       OnChange = comboMultiStatFlagChange
@@ -283,7 +289,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
       Left = 200
       Top = 25
       Width = 145
-      Height = 21
+      Height = 28
       Style = csDropDownList
       ItemIndex = 0
       TabOrder = 1

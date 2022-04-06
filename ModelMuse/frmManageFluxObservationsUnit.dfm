@@ -8,13 +8,11 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
   ClientWidth = 792
   Constraints.MinHeight = 400
   Constraints.MinWidth = 550
-  OldCreateOrder = True
   Position = poScreenCenter
   OnActivate = ListClick
   OnResize = FormResize
-  ExplicitWidth = 808
-  ExplicitHeight = 430
-  PixelsPerInch = 96
+  ExplicitWidth = 810
+  ExplicitHeight = 438
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 121

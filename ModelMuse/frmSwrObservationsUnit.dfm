@@ -6,8 +6,7 @@ inherited frmSwrObservations: TfrmSwrObservations
   ClientWidth = 630
   OnResize = FormResize
   ExplicitWidth = 648
-  ExplicitHeight = 396
-  PixelsPerInch = 96
+  ExplicitHeight = 398
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -101,6 +100,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -124,6 +124,7 @@ inherited frmSwrObservations: TfrmSwrObservations
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -154,6 +155,7 @@ inherited frmSwrObservations: TfrmSwrObservations
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -179,6 +181,7 @@ inherited frmSwrObservations: TfrmSwrObservations
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -204,6 +207,7 @@ inherited frmSwrObservations: TfrmSwrObservations
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -227,6 +231,7 @@ inherited frmSwrObservations: TfrmSwrObservations
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText

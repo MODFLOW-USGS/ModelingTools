@@ -9,8 +9,8 @@ object frameHfbScreenObject: TframeHfbScreenObject
   object lblParameterName: TLabel
     Left = 8
     Top = 34
-    Width = 79
-    Height = 13
+    Width = 108
+    Height = 20
     Margins.Left = 8
     Caption = 'Parameter name'
     Enabled = False
@@ -18,8 +18,8 @@ object frameHfbScreenObject: TframeHfbScreenObject
   object lblHydraulicConductivity: TLabel
     Left = 8
     Top = 63
-    Width = 139
-    Height = 13
+    Width = 192
+    Height = 20
     Margins.Left = 8
     Caption = 'Barrier hydraulic conductivity'
     Enabled = False
@@ -27,8 +27,8 @@ object frameHfbScreenObject: TframeHfbScreenObject
   object lblBarrierThickness: TLabel
     Left = 8
     Top = 91
-    Width = 79
-    Height = 13
+    Width = 107
+    Height = 20
     Margins.Left = 8
     Caption = 'Barrier thickness'
     Enabled = False
@@ -37,7 +37,7 @@ object frameHfbScreenObject: TframeHfbScreenObject
     Left = 312
     Top = 31
     Width = 170
-    Height = 23
+    Height = 30
     Margins.Right = 8
     Style = csOwnerDrawVariable
     ButtonStyle = fsLighter
@@ -46,7 +46,7 @@ object frameHfbScreenObject: TframeHfbScreenObject
     Enabled = False
     ImageHeight = 0
     ImageWidth = 0
-    ItemHeight = 17
+    ItemHeight = 24
     ItemIndex = -1
     TabOrder = 1
     OnChange = comboHfbParametersChange

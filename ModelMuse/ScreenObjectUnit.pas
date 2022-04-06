@@ -1572,7 +1572,9 @@ view. }
     // @name returns @true if one of the MODFLOW boundary conditions uses
     // ATime.
     function UsesATime(ATime: Double): Boolean;
+    function UsesAnMt3dTime(ATime: Double): Boolean;
     procedure ReplaceATime(OldTime, NewTime: Double);
+    Procedure ReplaceAnMt3dTime(OldTime, NewTime: Double);
     property Model: TBaseModel read FModel write FModel;
     procedure Invalidate;
     procedure FreeUnusedBoundaries;
@@ -3802,7 +3804,9 @@ view. }
     // @name returns @true if one of the MODFLOW boundary conditions uses
     // ATime.
     function UsesATime(ATime: Double): Boolean;
+    function UsesAnMt3dTime(ATime: Double): Boolean;
     procedure ReplaceATime(OldTime, NewTime: Double);
+    procedure ReplaceAnMt3dTime(OldTime, NewTime: Double);
     property MinimumFraction: double read GetMinimumFraction
       write SetMinimumFraction;
     // Assigns a MODFLOW-2005 SFR stream to a MODFLOW-6 SFR stream
@@ -17417,6 +17421,15 @@ begin
   end;
 end;
 
+function TScreenObject.UsesAnMt3dTime(ATime: Double): Boolean;
+begin
+  result := False;
+  if FModflowBoundaries <> nil then
+  begin
+    Result := FModflowBoundaries.UsesAnMt3dTime(ATime);
+  end;
+end;
+
 function TScreenObject.UsesATime(ATime: Double): Boolean;
 begin
   result := False;
@@ -18240,6 +18253,14 @@ begin
     DS := (FModel as TPhastModel).GetObserverByName(AName);
     Assert(DS <> nil);
     DS.StopsTalkingTo(Observer);
+  end;
+end;
+
+procedure TScreenObject.ReplaceAnMt3dTime(OldTime, NewTime: Double);
+begin
+  if FModflowBoundaries <> nil then
+  begin
+    FModflowBoundaries.ReplaceAnMt3dTime(OldTime, NewTime);
   end;
 end;
 
@@ -41259,6 +41280,49 @@ begin
 
 end;
 
+procedure TModflowBoundaries.ReplaceAnMt3dTime(OldTime, NewTime: Double);
+begin
+  if FMt3dmsConcBoundary <> nil then
+  begin
+    FMt3dmsConcBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FMt3dUztRechConc <> nil then
+  begin
+    FMt3dUztRechConc.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FMt3dUztSatEtConcBoundary <> nil then
+  begin
+    FMt3dUztSatEtConcBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FMt3dUztUnsatEtConcBoundary <> nil then
+  begin
+    FMt3dUztUnsatEtConcBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FMt3dUzSsmSinkConcBoundary <> nil then
+  begin
+    FMt3dUzSsmSinkConcBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FMt3dLktConcBoundary <> nil then
+  begin
+    FMt3dLktConcBoundary.Values.ReplaceATime(OldTime, NewTime);
+    FMt3dLktConcBoundary.RunoffConcentration.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FMt3dSftConcBoundary <> nil then
+  begin
+    FMt3dSftConcBoundary.Values.ReplaceATime(OldTime, NewTime);
+    FMt3dSftConcBoundary.Precipitation.ReplaceATime(OldTime, NewTime);
+    FMt3dSftConcBoundary.RunOff.ReplaceATime(OldTime, NewTime);
+    FMt3dSftConcBoundary.ConstConc.ReplaceATime(OldTime, NewTime);
+  end;
+
+end;
+
 procedure TModflowBoundaries.ReplaceATime(OldTime, NewTime: Double);
 begin
   if FModflowChdBoundary <> nil then
@@ -41445,10 +41509,10 @@ begin
     FModflowRipBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
-  if FMt3dmsConcBoundary <> nil then
-  begin
-    FMt3dmsConcBoundary.Values.ReplaceATime(OldTime, NewTime);
-  end;
+//  if FMt3dmsConcBoundary <> nil then
+//  begin
+//    FMt3dmsConcBoundary.Values.ReplaceATime(OldTime, NewTime);
+//  end;
 
   if FMt3dUztRechConc <> nil then
   begin
@@ -41830,6 +41894,79 @@ begin
   end;
 end;
 
+function TModflowBoundaries.UsesAnMt3dTime(ATime: Double): Boolean;
+begin
+  Result := False;
+
+  if FMt3dmsConcBoundary <> nil then
+  begin
+    Result := FMt3dmsConcBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FMt3dUztRechConc <> nil then
+  begin
+    Result := FMt3dUztRechConc.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FMt3dUztSatEtConcBoundary <> nil then
+  begin
+    Result := FMt3dUztSatEtConcBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FMt3dUztUnsatEtConcBoundary <> nil then
+  begin
+    Result := FMt3dUztUnsatEtConcBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FMt3dUzSsmSinkConcBoundary <> nil then
+  begin
+    Result := FMt3dUzSsmSinkConcBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FMt3dLktConcBoundary <> nil then
+  begin
+    Result := FMt3dLktConcBoundary.Values.UsesATime(ATime)
+     or FMt3dLktConcBoundary.RunoffConcentration.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FMt3dSftConcBoundary <> nil then
+  begin
+    Result := FMt3dSftConcBoundary.Values.UsesATime(ATime)
+     or FMt3dSftConcBoundary.Precipitation.UsesATime(ATime)
+     or FMt3dSftConcBoundary.RunOff.UsesATime(ATime)
+     or FMt3dSftConcBoundary.ConstConc.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+end;
+
 function TModflowBoundaries.UsesATime(ATime: Double): Boolean;
 begin
   Result := False;
@@ -42099,6 +42236,15 @@ begin
   if FModflowRipBoundary <> nil then
   begin
     Result := FModflowRipBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FMt3dmsConcBoundary <> nil then
+  begin
+    Result := FMt3dmsConcBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

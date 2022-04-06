@@ -5,9 +5,8 @@ inherited frmLayers: TfrmLayers
   ClientHeight = 481
   ClientWidth = 583
   OnResize = FormResize
-  ExplicitWidth = 599
-  ExplicitHeight = 520
-  PixelsPerInch = 96
+  ExplicitWidth = 601
+  ExplicitHeight = 528
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 137
@@ -21,7 +20,7 @@ inherited frmLayers: TfrmLayers
     Top = 0
     Width = 441
     Height = 440
-    ActivePage = tabDiscretization
+    ActivePage = tabBasics
     Align = alClient
     TabOrder = 1
     OnChange = pcLayerGroupsChange

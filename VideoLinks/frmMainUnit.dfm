@@ -11,10 +11,8 @@ object frmMain: TfrmMain
   Font.Name = 'Tahoma'
   Font.Style = []
   Menu = MainMenu1
-  OldCreateOrder = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 189
@@ -149,7 +147,7 @@ object frmMain: TfrmMain
       OnExit = comtoTitleGroupExit
     end
     object btnSortByTitle: TButton
-      Left = 136
+      Left = 210
       Top = 9
       Width = 75
       Height = 25
@@ -158,7 +156,7 @@ object frmMain: TfrmMain
       OnClick = btnSortByTitleClick
     end
     object btnSortByGroup: TButton
-      Left = 136
+      Left = 210
       Top = 40
       Width = 75
       Height = 25
@@ -174,6 +172,15 @@ object frmMain: TfrmMain
       Caption = 'Updated'
       TabOrder = 9
       OnClick = cbUpdatedClick
+    end
+    object btnInsertParentNode: TButton
+      Left = 87
+      Top = 9
+      Width = 106
+      Height = 25
+      Caption = ' Insert Parent Node'
+      TabOrder = 10
+      OnClick = btnInsertParentNodeClick
     end
   end
   object dlgOpen: TOpenDialog

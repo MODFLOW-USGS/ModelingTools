@@ -331,7 +331,7 @@ var
 begin
   Packages := frmGoPhast.PhastModel.ModflowPackages;
 
-  comboInterblockMethod.Items.Clear;
+  comboInterblockMethod.Items.ClearAndResetID;
 
   Item := comboInterblockMethod.Items.Add;
   Item.Text := StrHarmonicMean0;
@@ -1827,7 +1827,7 @@ var
   Packages: TModflowPackages;
   Item: TJvImageItem;
 begin
-  comboAquiferType.Items.Clear;
+  comboAquiferType.Items.ClearAndResetID;
   Item := comboAquiferType.Items.Add;
   Item.Text := StrNonsimulated;
   Item.ImageIndex := 3;

@@ -395,6 +395,7 @@ Type
     procedure InitializeNewDataEdit(DataEdit: TDataArrayEdit);
     function GetCurrentInterpolator: TCustom2DInterpolater;
     procedure InitializeControls;
+    function ItemClassification(AnItem: TTreeNode): string;
     // @name is the @link(TCustom2DInterpolater) of the currently
     // selected item in @link(tvDataSets).
     property CurrentInterpolator: TCustom2DInterpolater
@@ -544,7 +545,7 @@ var
   Index: Integer;
   InterpolatorType: TInterpolatorType;
 begin
-  comboInterpolation.Items.Clear;
+  comboInterpolation.Items.ClearAndResetID;
   Item := comboInterpolation.Items.Add;
   Item.Text := StrNone;
   for Index := 0 to FInterpolatorList.Count - 1 do
@@ -989,6 +990,17 @@ begin
   tabPHAST.TabVisible := frmGoPhast.ModelSelection = msPhast;
 end;
 
+function TfrmDataSets.ItemClassification(AnItem: TTreeNode): string;
+begin
+  result := AnItem.Text;
+  AnItem := AnItem.Parent;
+  while AnItem <> nil do
+  begin
+    result := AnItem.Text + '|' + result;
+    AnItem := AnItem.Parent;
+  end;
+end;
+
 procedure TfrmDataSets.GetData;
 var
   index: Integer;
@@ -1008,9 +1020,13 @@ begin
       AnItem := tvDataSets.Items[index];
       if AnItem.HasChildren then
       begin
-        if frmGoPhast.FDataSetsExpanded.TryGetValue(AnItem.Text, Expanded) then
+        if frmGoPhast.FDataSetsExpanded.TryGetValue(ItemClassification(AnItem), Expanded) then
         begin
           AnItem.Expanded := Expanded;
+        end
+        else
+        begin
+          AnItem.Expanded := False;
         end;
       end;
     end;
@@ -1168,6 +1184,7 @@ var
   ArrayEdit: TDataArrayEdit;
   DataSetsDeleted: Boolean;
   ANode: TTreeNode;
+  Key: string;
 begin
   // This procedure updates the data sets based on the changes the
   // user has made.
@@ -1273,7 +1290,12 @@ begin
     ANode := tvDataSets.Items[Index];
     if ANode.HasChildren then
     begin
-      frmGoPhast.FDataSetsExpanded.Add(ANode.Text, ANode.Expanded) ;
+      Key := ItemClassification(ANode);
+      if not frmGoPhast.FDataSetsExpanded.ContainsKey(Key) then
+      begin
+        frmGoPhast.FDataSetsExpanded.Add(Key, ANode.Expanded);
+      end;
+
     end;
   end;
 end;

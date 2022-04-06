@@ -201,9 +201,13 @@ begin
     frameTabFiles.Grid.Columns[ColIndex].AutoAdjustColWidths := False;
   end;
 
+  comboType.Items.ClearAndResetID;
   comboType.Items.Assign(frameTabFiles.Grid.Columns[Ord(tcType)].PickList);
+  comboFileType.Items.ClearAndResetID;
   comboFileType.Items.Assign(frameTabFiles.Grid.Columns[Ord(tcFileType)].PickList);
+  comboInterpolation.Items.ClearAndResetID;
   comboInterpolation.Items.Assign(frameTabFiles.Grid.Columns[Ord(tcInterpolation)].PickList);
+  comboMethod.Items.ClearAndResetID;
   comboMethod.Items.Assign(frameTabFiles.Grid.Columns[Ord(tcMethod)].PickList);
 
   GetData;
