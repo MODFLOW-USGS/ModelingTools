@@ -40,6 +40,7 @@ type
     FNameFile: TStringList;
     FNameFileName: string;
     FObsDictionary: TCustomObsValueDictionary;
+    FOldDecimalSeparator: Char;
     function GetInputFile(Index: integer): TInputFileLink;
     function GetInputFileCount: Integer;
     procedure ReadOutputFileNames;
@@ -307,6 +308,9 @@ constructor TNameFileReader.Create;
 var
   Index: Integer;
 begin
+  FOldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+
   FListingFile := TStringList.Create;
   FOutputFile := TStringList.Create;
   FInputFileLinks := TInputFileLinks.Create;
@@ -369,6 +373,7 @@ begin
     FInputFileLinks.Free;
     FOutputFile.Free;
     FListingFile.Free;
+    FormatSettings.DecimalSeparator := FOldDecimalSeparator;
     inherited Destroy;
   end;
 end;

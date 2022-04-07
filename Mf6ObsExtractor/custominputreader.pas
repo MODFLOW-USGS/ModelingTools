@@ -82,6 +82,7 @@ type
     FOutputFileName: string;
     FInstructionFileName: string;
     FListingFileName: string;
+    FOldDecimalSeparator: Char;
     procedure AssignInactiveObs(var NewLocation: TLocationID);
     procedure RecordObs(const AnObs: TDerivedObs);
     procedure InterpOnePoint(DerivedObs: TDerivedObs; NewLocation: TLocationID);
@@ -1522,6 +1523,9 @@ end;
 constructor TCustomInputHandler.Create;
 begin
   inherited;
+  FOldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+
   FListingFileName := '';
   FOutputFileName := '';
   FInstructionFileName := '';
@@ -1567,6 +1571,8 @@ begin
   FListingFile.Free;
   FOutputFile.Free;
   FInstructionFile.Free;
+
+  FormatSettings.DecimalSeparator := FOldDecimalSeparator;
   inherited Destroy;
 end;
 

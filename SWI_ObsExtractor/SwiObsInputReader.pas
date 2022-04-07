@@ -82,6 +82,7 @@ type
     FOutputFile: TStreamWriter;
     FInstructionFile: TStreamWriter;
   {$ENDIF}
+    FOldDecimalSeparator: Char;
     procedure ReadInputOptions(Input: TStringList);
     procedure ReadFileOptions(Input: TStringList; var LineIndex: integer);
     procedure ReadObservationIDs(Input: TStringList; var LineIndex: integer);
@@ -161,37 +162,6 @@ resourcestring
   StrTheInstructionFilePest = 'The instruction file will be written in the f' +
   'ormat required by PEST.';
 
-{procedure ExtractSwiObservations;
-var
-  InputFile: string;
-  Extractor: TSwiObservationExtractor;
-begin
-  if ParamCount > 0 then
-  begin
-    InputFile := ParamStr(1)
-  end
-  else
-  begin
-    WriteLn('What is the name of the input file?');
-    Readln(InputFile);
-  end;
-  if FileExists(InputFile) then
-  begin
-    Extractor := TSwiObservationExtractor.Create(InputFile);
-    try
-
-    finally
-      Extractor.Free;
-    end;
-  end
-  else
-  begin
-    raise Exception.Create(Format('The input file "%s" does not exist.', [InputFile]));
-  end;
-end;
-}
-
-
 
 { TSwiObservationExtractor }
 
@@ -199,6 +169,9 @@ constructor TSwiObservationExtractor.Create(InputFile: string);
 var
   AStringList: TStringList;
 begin
+  FOldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+
   FLinesToSkip := 0;
   FObs := TInterpolatedSwiObsObjList.Create;
   FOutputFile := nil;
@@ -240,6 +213,8 @@ begin
   FSwiObs.Free;
   FOutputFile.Free;
   FObs.Free;
+  FormatSettings.DecimalSeparator := FOldDecimalSeparator;
+
   inherited Destroy;
 end;
 

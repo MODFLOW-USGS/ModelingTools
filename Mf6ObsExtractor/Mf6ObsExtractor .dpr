@@ -114,31 +114,16 @@ end;
 
 procedure TMf6ObsExtractor.DoRun;
 var
-//  ErrorMsg: String;
   InputHandler : TInputHandler;
   FileName: string;
   P: PChar;
-//  Opts: TStringList;
-//  NonOpts: TStringList;
-  //I: integer;
 begin
-//  Opts := TStringList.Create;
-//  NonOpts := TStringList.Create;
-//  try
-//    ErrorMsg := '';
-//    ErrorMsg:=CheckOptions('hf:', ['help', 'file'], Opts, NonOpts);
-//    if ErrorMsg<>'' then begin
-//      raise Exception.Create(ErrorMsg);
-//      Terminate;
-//      Exit;
-//    end;
     // quick check parameters
 
     // parse parameters
     if HasOption('h', 'help') then
     begin
       WriteHelp;
-//      Terminate;
       Exit;
     end;
 
@@ -163,7 +148,6 @@ begin
       if not FileExists(FileName) then
       begin
         WriteLn(FileName, ' was not found.');
-//        Terminate;
         Exit;
       end;
       WriteLn('Processing ', FileName);
@@ -186,13 +170,8 @@ begin
     end
     else begin
       WriteHelp;
-//      Terminate;
       Exit;
     end;
-//  finally
-//    Opts.Free;
-//    NonOpts.Free;
-//  end;
 
   { add your program here }
 
@@ -219,12 +198,12 @@ begin
   try
     StartTime := Now;
     Application:= TMf6ObsExtractor.Create(nil);
-  //  Application.Title:='MODFLOW 6 Observation Extractor';
     try
       Application.DoRun;
-	finally
-	  Application.Free;
-	end;
+    finally
+      Application.Free;
+    end;
+
     ElapsedTime := Now - StartTime;
     writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
   except on E: Exception do

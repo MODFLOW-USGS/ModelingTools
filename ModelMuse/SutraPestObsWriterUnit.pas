@@ -27,6 +27,7 @@ type
     FSchedule1: TSutraTimeSchedule;
     FSutraTimeChoice: TSutraTimeChoice;
     FInitialTime: Double;
+    FOldDecimalSeparator: Char;
     procedure Evaluate;
     procedure WriteOptions;
     procedure WriteObservationsFileNames;
@@ -72,15 +73,11 @@ resourcestring
 constructor TSutraPestObsWriterWriter.Create(AModel: TCustomModel);
 begin
   inherited Create(AModel, etExport);
+  FOldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
   FSutraLakeObjects := TScreenObjectList.Create;
   FSutraObsObjects := TScreenObjectList.Create;
   FSutraAllStateObsObjects := TScreenObjectList.Create;
-
-//  FSutraSpecPresObsObjects := TScreenObjectList.Create;
-//  FSutraFluidFlowObsObjects := TScreenObjectList.Create;
-//  FSutraSpecUObsObjects := TScreenObjectList.Create;
-//  FSutraGenPresObsObjects := TScreenObjectList.Create;
-//  FSutraGenPresTransObjects := TScreenObjectList.Create;
 
   FDerivedObsList := TStringList.Create;
 end;
@@ -98,6 +95,7 @@ begin
   FSutraAllStateObsObjects.Free;
   FSutraLakeObjects.Free;
   FSutraObsObjects.Free;
+  FormatSettings.DecimalSeparator := FOldDecimalSeparator;
   inherited;
 end;
 

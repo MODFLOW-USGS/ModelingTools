@@ -1204,7 +1204,7 @@ end;
 procedure TLakeTimeItem.SetSpecifiedConcentrations(
   const Value: TLktGwtConcCollection);
 begin
-  FSpecifiedConcentrations := Value;
+  FSpecifiedConcentrations.Assign(Value);
 end;
 
 procedure TLakeTimeItem.SetStage(const Value: string);
@@ -2597,7 +2597,7 @@ end;
 
 procedure TLakeMf6.SetStartingConcentrationPestNames(const Value: TStrings);
 begin
-  FStartingConcentrationPestNames := Value;
+  FStartingConcentrationPestNames.Assign(Value);
 end;
 
 procedure TLakeMf6.SetStartingConcentrations(

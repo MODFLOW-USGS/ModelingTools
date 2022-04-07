@@ -17,13 +17,13 @@ var
   ElapsedTime: TDateTime;
 begin
   StartTime := Now;
-try
+  try
     ProcessTemplate;
     { TODO -oUser -cConsole Main : Insert code here }
     writeln('Normal termination');
     ElapsedTime := Now - StartTime;
     writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
-except
+  except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);
   end;

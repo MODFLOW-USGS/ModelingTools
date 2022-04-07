@@ -99,28 +99,13 @@ end;
 
 procedure TMf2005ObsExtractor.DoRun;
 var
-//  ErrorMsg: String;
   FileName: string;
   P: PChar;
-//  Opts: TStringList;
-//  NonOpts: TStringList;
   NameFileReader: TNameFileReader;
 begin
-//  Opts := TStringList.Create;
-//  NonOpts := TStringList.Create;
-//  try
-//    // quick check parameters
-//    ErrorMsg:=CheckOptions('hf:', ['help', 'file:'], Opts, NonOpts);
-//    if ErrorMsg<>'' then begin
-//      ShowException(Exception.Create(ErrorMsg));
-//      Terminate;
-//      Exit;
-//    end;
-
     // parse parameters
     if HasOption('h', 'help') then begin
       WriteHelp;
-//      Terminate;
       Exit;
     end;
 
@@ -144,7 +129,6 @@ begin
       if not FileExists(FileName) then
       begin
         WriteLn(FileName, ' was not found.');
-//        Terminate;
         Exit;
       end;
       WriteLn('Processing ', FileName);
@@ -166,13 +150,8 @@ begin
     end
     else begin
       WriteHelp;
-//      Terminate;
       Exit;
     end;
-//  finally
-//    Opts.Free;
-//    NonOpts.Free;
-//  end;
   { add your program here }
 
   // stop program loop

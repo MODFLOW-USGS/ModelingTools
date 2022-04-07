@@ -2674,15 +2674,10 @@ procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
   PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
   ACell: TValueCell; FixedLength: Integer; ChangeSign: Boolean);
 var
-//  ExtendedTemplateCharacter: string;
-//  Formula: string;
   ACellLocation: TCellLocation;
   CellLocAddr: PCellLocation;
   ScreenObject: TObject;
-//  PCellLoc := TCellLocation;
 begin
-//  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-
   if ACell <> nil then
   begin
     ACellLocation := ACell.CellLocation;
@@ -2698,39 +2693,6 @@ begin
   WritePestTemplateFormula(Value, PestParValue, PestSeriesValue, Method,
     CellLocAddr, ScreenObject, FixedLength, ChangeSign);
 
-  {
-  Formula := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
-    Method, PCellLocation(Addr(ACellLocation)), ACell.ScreenObject as TScreenObject);
-  if ChangeSign then
-  begin
-    Formula := '-1*' + Formula;
-  end;
-  if Formula <> '' then
-  begin
-    Formula := Format(' %0:s                    %1:s%0:s ',
-      [ExtendedTemplateCharacter, Formula]);
-    WriteString(Formula);
-  end
-  else
-  begin
-    if FixedLength = 0 then
-    begin
-      WriteFloat(Value);
-    end
-    else if FixedLength = 10 then
-    begin
-      WriteF10Float(Value);
-    end
-    else if FixedLength = 15 then
-    begin
-      WriteF15Float(Value);
-    end
-    else
-    begin
-      Assert(False);
-    end;
-  end;
-  }
 end;
 
 procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
@@ -2739,36 +2701,43 @@ procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
   ChangeSign: Boolean);
 var
   Formula: string;
+  OldDecimalSeparator: Char;
 begin
-  Formula := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
-    Method, ACell, AScreenObject as TScreenObject);
-  if ChangeSign then
-  begin
-    Formula := '-1*(' + Formula + ')';
-  end;
-  if Formula <> '' then
-  begin
-    ExtendedTemplateFormula(Formula);
-    WriteString(Formula);
-  end
-  else
-  begin
-    if FixedLength = 0 then
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+  try
+    Formula := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
+      Method, ACell, AScreenObject as TScreenObject);
+    if ChangeSign then
     begin
-      WriteFloat(Value);
-    end
-    else if FixedLength = 10 then
+      Formula := '-1*(' + Formula + ')';
+    end;
+    if Formula <> '' then
     begin
-      WriteF10Float(Value);
-    end
-    else if FixedLength = 15 then
-    begin
-      WriteF15Float(Value);
+      ExtendedTemplateFormula(Formula);
+      WriteString(Formula);
     end
     else
     begin
-      Assert(False);
+      if FixedLength = 0 then
+      begin
+        WriteFloat(Value);
+      end
+      else if FixedLength = 10 then
+      begin
+        WriteF10Float(Value);
+      end
+      else if FixedLength = 15 then
+      begin
+        WriteF15Float(Value);
+      end
+      else
+      begin
+        Assert(False);
+      end;
     end;
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 end;
 
@@ -2936,20 +2905,27 @@ class function TCustomFileWriter.FixedFormattedReal(const Value: double;
 var
   Index : integer;
   PadIndex : integer;
+  OldDecimalSeparator: Char;
 begin
-  for Index := Width downto 1 do
-  begin
-    result := Format(' %.*g', [Index, Value]);
-    if Length(result) <= Width then
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+  try
+    for Index := Width downto 1 do
     begin
-      for PadIndex := 0 to Width - Length(result) -1 do
+      result := Format(' %.*g', [Index, Value]);
+      if Length(result) <= Width then
       begin
-        result := ' ' + result;
+        for PadIndex := 0 to Width - Length(result) -1 do
+        begin
+          result := ' ' + result;
+        end;
+        break;
       end;
-      break;
     end;
+    result := FortranDecimal(result);
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
-  result := FortranDecimal(result);
 end;
 
 class function TCustomFileWriter.FortranDecimal(
@@ -2983,6 +2959,7 @@ var
   ArrayTemplateCharacter: string;
   Value: Double;
   CellValueReplacement: string;
+  OldDecimalSeparator: Char;
   procedure GetCellData(out CellValueReplacement: string; out Value: Double);
   var
     ModifierValue: Double;
@@ -3028,19 +3005,25 @@ var
     end;
   end;
 begin
-  TemplateCharacter := Model.PestProperties.TemplateCharacter;
-  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+  try
+    TemplateCharacter := Model.PestProperties.TemplateCharacter;
+    ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
 
-  result := '';
-  begin
-    GetCellData(CellValueReplacement, Value);
-
-    if (CellValueReplacement <> '') then
+    result := '';
     begin
-      result := Format('%0:g * %1:s',
-        [Value, CellValueReplacement]);
-    end;
-  end
+      GetCellData(CellValueReplacement, Value);
+
+      if (CellValueReplacement <> '') then
+      begin
+        result := Format('%0:g * %1:s',
+          [Value, CellValueReplacement]);
+      end;
+    end
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+  end;
 end;
 
 function TCustomFileWriter.GetPestParamFormula(Value: double;
@@ -3079,6 +3062,7 @@ var
   SeriesReplacement: String;
   CellValueReplacement: string;
   Operation: String;
+  OldDecimalSeparator: Char;
   procedure GetSeriesData(out SeriesReplacement: string; var Value: double);
   var
     LocalLayer: Integer;
@@ -3237,8 +3221,6 @@ var
       begin
         if AScreenObject <> nil then
         begin
-//          Assert(AScreenObject <> nil);
-  //        AScreenObject := ACell.ScreenObject as TScreenObject;
           frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
             Format('%0:s was not recognized in %1:s',
             [PestParValue, (AScreenObject as TScreenObject).Name]), AScreenObject);
@@ -3265,61 +3247,67 @@ var
     end;
   end;
 begin
-  TemplateCharacter := Model.PestProperties.TemplateCharacter;
-  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
-  Case Method of
-    ppmAdd:
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+  try
+    TemplateCharacter := Model.PestProperties.TemplateCharacter;
+    ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+    Case Method of
+      ppmAdd:
+        begin
+          Operation := '+';
+        end;
+      ppmMultiply:
+        begin
+          Operation := '*';
+        end;
+      else
+        Assert(False);
+    end;
+
+    result := '';
+    if (PestParValue <> '') and (PestSeriesValue <> '') then
+    begin
+      GetSeriesData(SeriesReplacement, Value);
+      GetCellData(CellValueReplacement, Value);
+
+      if (CellValueReplacement <> '') and (SeriesReplacement <> '') then
       begin
-        Operation := '+';
-      end;
-    ppmMultiply:
+        result := Format('(%0:g * %1:s) %2:s %3:s',
+          [Value, CellValueReplacement, Operation, SeriesReplacement]);
+      end
+      else if (CellValueReplacement <> '') then
       begin
-        Operation := '*';
+        result := Format('%0:g * %1:s',
+          [Value, CellValueReplacement]);
+      end
+      else if (SeriesReplacement <> '') then
+      begin
+        result := Format('%0:g  %1:s %2:s',
+          [Value, Operation, SeriesReplacement]);
       end;
+    end
+    else if (PestParValue <> '') then
+    begin
+      GetCellData(CellValueReplacement, Value);
+      if (CellValueReplacement <> '') then
+      begin
+        result := Format('%0:g * %1:s',
+          [Value, CellValueReplacement]);
+      end;
+    end
     else
-      Assert(False);
-  end;
-
-  result := '';
-  if (PestParValue <> '') and (PestSeriesValue <> '') then
-  begin
-    GetSeriesData(SeriesReplacement, Value);
-    GetCellData(CellValueReplacement, Value);
-
-    if (CellValueReplacement <> '') and (SeriesReplacement <> '') then
     begin
-      result := Format('(%0:g * %1:s) %2:s %3:s',
-        [Value, CellValueReplacement, Operation, SeriesReplacement]);
-    end
-    else if (CellValueReplacement <> '') then
-    begin
-      result := Format('%0:g * %1:s',
-        [Value, CellValueReplacement]);
-    end
-    else if (SeriesReplacement <> '') then
-    begin
-      result := Format('%0:g  %1:s %2:s',
-        [Value, Operation, SeriesReplacement]);
+      Assert(PestSeriesValue <> '');
+      GetSeriesData(SeriesReplacement, Value);
+      if SeriesReplacement <> '' then
+      begin
+        result := Format('%0:g  %1:s %2:s',
+          [Value, Operation, SeriesReplacement]);
+      end;
     end;
-  end
-  else if (PestParValue <> '') then
-  begin
-    GetCellData(CellValueReplacement, Value);
-    if (CellValueReplacement <> '') then
-    begin
-      result := Format('%0:g * %1:s',
-        [Value, CellValueReplacement]);
-    end;
-  end
-  else
-  begin
-    Assert(PestSeriesValue <> '');
-    GetSeriesData(SeriesReplacement, Value);
-    if SeriesReplacement <> '' then
-    begin
-      result := Format('%0:g  %1:s %2:s',
-        [Value, Operation, SeriesReplacement]);
-    end;
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 end;
 
@@ -9189,39 +9177,7 @@ begin
   end
   else
   begin
-//    if FixedLength = 0 then
-//    begin
-      WriteFloat(Value);
-//    end
-//    else if FixedLength = 10 then
-//    begin
-//      WriteF10Float(Value);
-//    end
-//    else if FixedLength = 15 then
-//    begin
-//      WriteF15Float(Value);
-//    end
-//    else
-//    begin
-//      Assert(False);
-//    end;
-
-//    if PestName <> '' then
-//    begin
-//      DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
-//      if DataArray <> nil then
-//      begin
-//        AddUsedPestDataArray(DataArray);
-//      end;
-//    end;
-//    if PestSeriesName <> '' then
-//    begin
-//      DataArray := Model.DataArrayManager.GetDataSetByName(PestSeriesName);
-//      if DataArray <> nil then
-//      begin
-//        AddUsedPestDataArray(DataArray);
-//      end;
-//    end;
+    WriteFloat(Value);
   end;
 end;
 
@@ -9826,72 +9782,79 @@ var
   TemplateCharacter: string;
   Formula: WideString;
   ExtendedTemplateCharacter: Char;
+  OldDecimalSeparator: Char;
 begin
-  if not WritingTemplate then
-  begin
-    WriteFloat(Value);
-    if PestName <> '' then
-    begin
-      Param := Model.GetPestParameterByName(PestName);
-      if Param <> nil then
-      begin
-        Param.IsUsedInTemplate := True;
-        Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
-        FPestParamUsed := True;
-      end
-      else if Layer >= 0 then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
-        if DataArray <> nil then
-        begin
-          FPestParamUsed := True;
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
-  end
-  else
-  begin
-    if PestName = '' then
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+  try
+    if not WritingTemplate then
     begin
       WriteFloat(Value);
+      if PestName <> '' then
+      begin
+        Param := Model.GetPestParameterByName(PestName);
+        if Param <> nil then
+        begin
+          Param.IsUsedInTemplate := True;
+          Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+          FPestParamUsed := True;
+        end
+        else if Layer >= 0 then
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
+          if DataArray <> nil then
+          begin
+            FPestParamUsed := True;
+            AddUsedPestDataArray(DataArray);
+          end;
+        end;
+      end;
     end
     else
     begin
-      Param := Model.GetPestParameterByName(PestName);
-      if Param <> nil then
+      if PestName = '' then
       begin
-        Param.IsUsedInTemplate := True;
-        TemplateCharacter := Model.PestProperties.TemplateCharacter;
-        Formula := Format(' %0:s                    %1:s%0:s ',
-          [TemplateCharacter, Param.ParameterName]);
-        WriteString(Formula);
-      end
-      else if Layer >= 0 then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
-        Assert(DataArray <> nil);
-        Assert (DataArray.PestParametersUsed);
-        Formula := GetPestNonTransientTemplateFormula(DataArray,
-          Layer, Row, Column);
-        if Formula = '' then
-        begin
-          WriteFloat(Value);
-//          Exit;
-        end
-        else
-        begin
-          ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-          Formula := Format(' %0:s                    %1:s%0:s ',
-            [ExtendedTemplateCharacter, Formula]);
-          WriteString(Formula);
-        end;
+        WriteFloat(Value);
       end
       else
       begin
-        WriteFloat(Value);
+        Param := Model.GetPestParameterByName(PestName);
+        if Param <> nil then
+        begin
+          Param.IsUsedInTemplate := True;
+          TemplateCharacter := Model.PestProperties.TemplateCharacter;
+          Formula := Format(' %0:s                    %1:s%0:s ',
+            [TemplateCharacter, Param.ParameterName]);
+          WriteString(Formula);
+        end
+        else if Layer >= 0 then
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
+          Assert(DataArray <> nil);
+          Assert (DataArray.PestParametersUsed);
+          Formula := GetPestNonTransientTemplateFormula(DataArray,
+            Layer, Row, Column);
+          if Formula = '' then
+          begin
+            WriteFloat(Value);
+  //          Exit;
+          end
+          else
+          begin
+            ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+            Formula := Format(' %0:s                    %1:s%0:s ',
+              [ExtendedTemplateCharacter, Formula]);
+            WriteString(Formula);
+          end;
+        end
+        else
+        begin
+          WriteFloat(Value);
+        end;
       end;
     end;
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 end;
 
@@ -10143,6 +10106,7 @@ var
   TemplateCharacter: string;
   ExtendedTemplateCharacter: string;
   ArrayTemplateCharacter: Char;
+  OldDecimalSeparator: Char;
   procedure GetCellData;
   var
     ModifierValue: Double;
@@ -10222,21 +10186,27 @@ var
     end;
   end;
 begin
-  if PestParValue <> '' then
-  begin
-    TemplateCharacter := Model.PestProperties.TemplateCharacter;
-    ArrayTemplateCharacter :=Model.PestProperties.ArrayTemplateCharacter;
-    ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-    GetCellData;
-    WriteString
-      (Format(' %0:s                    %1:s                    %2:s%1:s * %3:g * %4:s%0:s ',
-      [ExtendedTemplateCharacter, TemplateCharacter, ModflowParameterName,
-      Value, CellValueReplacement]));
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+  try
+    if PestParValue <> '' then
+    begin
+      TemplateCharacter := Model.PestProperties.TemplateCharacter;
+      ArrayTemplateCharacter :=Model.PestProperties.ArrayTemplateCharacter;
+      ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+      GetCellData;
+      WriteString
+        (Format(' %0:s                    %1:s                    %2:s%1:s * %3:g * %4:s%0:s ',
+        [ExtendedTemplateCharacter, TemplateCharacter, ModflowParameterName,
+        Value, CellValueReplacement]));
 
-  end
-  else
-  begin
-    WriteTemplateFormula(ModflowParameterName, Value, ppmMultiply)
+    end
+    else
+    begin
+      WriteTemplateFormula(ModflowParameterName, Value, ppmMultiply)
+    end;
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 end;
 
@@ -10422,71 +10392,78 @@ var
   PestMethod: TPestParamMethod;
   DataArray: TDataArray;
   TimeSeriesName: string;
+  OldDecimalSeparator: Char;
 begin
-  if (Model.ModelSelection = msModflow2015) then
-  begin
-    TimeSeriesName := Cell.Mf6TimeSeriesName[Index];
-    if TimeSeriesName <> '' then
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+  try
+    if (Model.ModelSelection = msModflow2015) then
     begin
-      WriteString(' ');
-      WriteString(TimeSeriesName);
-      Exit;
+      TimeSeriesName := Cell.Mf6TimeSeriesName[Index];
+      if TimeSeriesName <> '' then
+      begin
+        WriteString(' ');
+        WriteString(TimeSeriesName);
+        Exit;
+      end;
     end;
-  end;
 
-  Value := Cell.RealValue[Index, Model];
-  if ChangeSign then
-  begin
-    Value := -Value;
-  end;
-  PestItem := Cell.PestName[Index];
-  PestSeries := Cell.PestSeriesName[Index];
-  if (PestItem <> '') or (PestSeries <> '') then
-  begin
-    FPestParamUsed := True;
-  end;
-  if Model.PestUsed and WritingTemplate and
-    ((PestItem <> '') or (PestSeries <> '')) then
-  begin
-    PestMethod := Cell.PestSeriesMethod[Index];
-    WritePestTemplateFormula(Value, PestItem, PestSeries, PestMethod, Cell,
-      FixedLength, ChangeSign);
-  end
-  else
-  begin
-    if FixedLength = 0 then
+    Value := Cell.RealValue[Index, Model];
+    if ChangeSign then
     begin
-      WriteFloat(Value);
-    end
-    else if FixedLength = 10 then
+      Value := -Value;
+    end;
+    PestItem := Cell.PestName[Index];
+    PestSeries := Cell.PestSeriesName[Index];
+    if (PestItem <> '') or (PestSeries <> '') then
     begin
-      WriteF10Float(Value);
-    end
-    else if FixedLength = 15 then
+      FPestParamUsed := True;
+    end;
+    if Model.PestUsed and WritingTemplate and
+      ((PestItem <> '') or (PestSeries <> '')) then
     begin
-      WriteF15Float(Value);
+      PestMethod := Cell.PestSeriesMethod[Index];
+      WritePestTemplateFormula(Value, PestItem, PestSeries, PestMethod, Cell,
+        FixedLength, ChangeSign);
     end
     else
     begin
-      Assert(False);
-    end;
+      if FixedLength = 0 then
+      begin
+        WriteFloat(Value);
+      end
+      else if FixedLength = 10 then
+      begin
+        WriteF10Float(Value);
+      end
+      else if FixedLength = 15 then
+      begin
+        WriteF15Float(Value);
+      end
+      else
+      begin
+        Assert(False);
+      end;
 
-    if PestItem <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(PestItem);
-      if DataArray <> nil then
+      if PestItem <> '' then
       begin
-        AddUsedPestDataArray(DataArray);
+        DataArray := Model.DataArrayManager.GetDataSetByName(PestItem);
+        if DataArray <> nil then
+        begin
+          AddUsedPestDataArray(DataArray);
+        end;
+      end;
+      if PestSeries <> '' then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(PestSeries);
+        if DataArray <> nil then
+        begin
+          AddUsedPestDataArray(DataArray);
+        end;
       end;
     end;
-    if PestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(PestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 end;
 
@@ -10521,79 +10498,82 @@ PestNames: TStringList);
 var
   Param: TModflowSteadyParameter;
   PestDataArray: TDataArray;
+  OldDecimalSeparator: Char;
 begin
-  Param := Model.GetPestParameterByName(Formula);
-  if Param <> nil then
-  begin
-    Param.IsUsedInTemplate := True;
-    PestNames.Add(Param.ParameterName);
-    Formula := FortranFloatToStr(Param.Value);
-    FPestParamUsed := True;
-  end
-  else
-  begin
-    PestDataArray := Model.DataArrayManager.GetDataSetByName(Formula);
-    if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-    begin
-      FPestParamUsed := True;
-      PestNames.Add(PestDataArray.Name);
-      AddUsedPestDataArray(PestDataArray);
-    end
-    else
-    begin
-      PestNames.Add('');
-    end;
-  end;
-  if PestSeriesName <> '' then
-  begin
-    Param := Model.GetPestParameterByName(PestSeriesName);
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+  try
+    Param := Model.GetPestParameterByName(Formula);
     if Param <> nil then
     begin
       Param.IsUsedInTemplate := True;
+      PestNames.Add(Param.ParameterName);
+      Formula := FortranFloatToStr(Param.Value);
       FPestParamUsed := True;
-      case SeriesMethod of
-        ppmMultiply:
-          begin
-            Formula := Format('(%0:s) * %1:g', [Formula, Param.Value]);
-          end;
-        ppmAdd:
-          begin
-            Formula := Format('(%0:s) + %1:g', [Formula, Param.Value]);
-          end;
-      end;
     end
     else
     begin
-      PestDataArray := Model.DataArrayManager.GetDataSetByName(PestSeriesName);
+      PestDataArray := Model.DataArrayManager.GetDataSetByName(Formula);
       if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
       begin
+        FPestParamUsed := True;
+        PestNames.Add(PestDataArray.Name);
+        AddUsedPestDataArray(PestDataArray);
+      end
+      else
+      begin
+        PestNames.Add('');
+      end;
+    end;
+    if PestSeriesName <> '' then
+    begin
+      Param := Model.GetPestParameterByName(PestSeriesName);
+      if Param <> nil then
+      begin
+        Param.IsUsedInTemplate := True;
         FPestParamUsed := True;
         case SeriesMethod of
           ppmMultiply:
             begin
-              Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+              Formula := Format('(%0:s) * %1:g', [Formula, Param.Value]);
             end;
           ppmAdd:
             begin
-              Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+              Formula := Format('(%0:s) + %1:g', [Formula, Param.Value]);
             end;
         end;
-        AddUsedPestDataArray(PestDataArray);
+      end
+      else
+      begin
+        PestDataArray := Model.DataArrayManager.GetDataSetByName(PestSeriesName);
+        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+        begin
+          FPestParamUsed := True;
+          case SeriesMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+              end;
+          end;
+          AddUsedPestDataArray(PestDataArray);
+        end;
       end;
     end;
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 end;
 
 function TCustomFileWriter.DataArrayUsesPestParameters(const DataArray
   : TDataArray): boolean;
 begin
-  // {$IFDEF DEBUG}
   Assert(Model <> nil);
   result := Model.PestUsed and (DataArray.DataType = rdtDouble) and
     DataArray.PestParametersUsed;
-  // {$ELSE}
-  // result := False;
-  // {$ENDIF}
 end;
 
 procedure TCustomFileWriter.WriteDataArrayValueOrFormula(DataArray: TDataArray;
@@ -10601,7 +10581,6 @@ Layer, Row, Col: Integer);
 var
   Formula: string;
   ExtendedTemplateCharacter: string;
-  // Value: Double;
 begin
   Formula := GetPestNonTransientTemplateFormula(DataArray, Layer, Row, Col);
   if not WritingTemplate or (Formula = '') then

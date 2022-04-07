@@ -51,6 +51,7 @@ type
     FHorizontalCells: TList<TCellAssignment>;
     FQuadTree: TRbwQuadTree;
     FNodeNumberQuadTree: TRbwQuadTree;
+    FOldDecimalSeparator: Char;
     function LocationQuadTree: TRbwQuadTree;
     function NodeNumberQuadTree: TRbwQuadTree;
     procedure HandleFlowObs(AScreenObject: TScreenObject; Obs: TModflow6Obs;
@@ -249,6 +250,8 @@ constructor TModflow6Obs_Writer.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited;
+  FOldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
   FHeadObs := THeadDrawdownObservationLocationList.Create;
   FDrawdownObs := THeadDrawdownObservationLocationList.Create;
   FFlowObs := TList<TFlowObservationLocation>.Create;
@@ -263,6 +266,7 @@ begin
   FFlowObs.Free;
   FDrawdownObs.Free;
   FHeadObs.Free;
+  FormatSettings.DecimalSeparator := FOldDecimalSeparator;
   inherited;
 end;
 

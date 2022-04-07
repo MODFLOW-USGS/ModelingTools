@@ -71,6 +71,7 @@ type
     FFormulaDelimiter: Char;
     FArrayDelimiter: Char;
     FArrayDictionary: TArrayDictionary;
+    FOldDecimalSeparator: Char;
     procedure CreateArrayNameReader;
     procedure WriteUsage;
     procedure WriteParameters;
@@ -280,6 +281,9 @@ constructor TParameterProcessor.Create;
 var
   LineIndex: Integer;
 begin
+  FOldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+
   FParser := TRbwParser.Create(nil);
   FParameters := TParameterDictionary.Create;
   FArrayDictionary := TArrayDictionary.Create;
@@ -300,6 +304,7 @@ begin
   FArrayDictionary.Free;
   FParameters.Free;
   FParser.Free;
+  FormatSettings.DecimalSeparator := FOldDecimalSeparator;
   inherited;
 end;
 

@@ -95,28 +95,13 @@ end;
 
 procedure TSutraObsExtractor.DoRun;
 var
-//  ErrorMsg: String;
   InputHandler : TSutraInputHandler;
   FileName: string;
   P: PChar;
-//  Opts: TStringList;
-//  NonOpts: TStringList;
 begin
-//  Opts := TStringList.Create;
-//  NonOpts := TStringList.Create;
-//  try
-//    // quick check parameters
-//    ErrorMsg:=CheckOptions('hf:', ['help', 'file:'], Opts, NonOpts);
-//    if ErrorMsg<>'' then begin
-//      ShowException(Exception.Create(ErrorMsg));
-//      Terminate;
-//      Exit;
-//    end;
-
     // parse parameters
     if HasOption('h', 'help') then begin
       WriteHelp;
-//      Terminate;
       Exit;
     end;
 
@@ -140,7 +125,6 @@ begin
       if not FileExists(FileName) then
       begin
         WriteLn(FileName, ' was not found.');
-//        Terminate;
         Exit;
       end;
       WriteLn('Processing ', FileName);
@@ -161,15 +145,10 @@ begin
     end
     else begin
       WriteHelp;
-//      Terminate;
       Exit;
     end;
 
   { add your program here }
-//  finally
-//    Opts.Free;
-//    NonOpts.Free;
-//  end;
 
   // stop program loop
 //  Terminate;

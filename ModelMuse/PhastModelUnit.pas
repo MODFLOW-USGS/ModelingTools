@@ -10480,12 +10480,16 @@ const
 //               Bug fix: ModelMuse no longer identifies the formula for the
 //                IDOMAIN data set as invalid when creating a new model with
 //                no grid.
+//     '5.0.0.4' Bug fix: Fixed running PEST on computers in which the decimal
+//                separator is not a period.
+//               Bug fix: Fixed a bug that could cause access violations when
+//                editing Lakes in MODFLOW 6 models.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.3';
+  IIModelVersion = '5.0.0.4';
 
 function IModelVersion: string;
 begin
