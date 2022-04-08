@@ -768,12 +768,12 @@ begin
           else
             begin
               ConcIndex := BoundaryFunctionIndex - GhbStartConcentration;
-              GwtConcentrations.Concentrations[ConcIndex] := Expression.DoubleResult;
-              GwtConcentrations.ConcentrationAnnotations[ConcIndex] := ACell.Annotation;;
-              GwtConcentrations.ConcentrationPestNames[ConcIndex] := PestName;
-              GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
-              GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
-              GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              GwtConcentrations.Values[ConcIndex] := Expression.DoubleResult;
+              GwtConcentrations.ValueAnnotations[ConcIndex] := ACell.Annotation;;
+              GwtConcentrations.ValuePestNames[ConcIndex] := PestName;
+              GwtConcentrations.ValuePestSeriesNames[ConcIndex] := PestSeriesName;
+              GwtConcentrations.ValuePestSeriesMethods[ConcIndex] := PestSeriesMethod;
+              GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := TimeSeriesName;
             end;
         end;
       end;
@@ -806,13 +806,13 @@ begin
             else
               begin
                 ConcIndex := BoundaryFunctionIndex - GhbStartConcentration;
-                GwtConcentrations.Concentrations[ConcIndex] := 0;
+                GwtConcentrations.Values[ConcIndex] := 0;
                 ErrorMessage := StrConcentrationSetTo;
-                GwtConcentrations.ConcentrationAnnotations[ConcIndex] := ErrorMessage;
-                GwtConcentrations.ConcentrationPestNames[ConcIndex] := PestName;
-                GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
-                GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
-                GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+                GwtConcentrations.ValueAnnotations[ConcIndex] := ErrorMessage;
+                GwtConcentrations.ValuePestNames[ConcIndex] := PestName;
+                GwtConcentrations.ValuePestSeriesNames[ConcIndex] := PestSeriesName;
+                GwtConcentrations.ValuePestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := TimeSeriesName;
               end;
           end;
         end;
@@ -851,13 +851,13 @@ begin
             else
               begin
                 ConcIndex := BoundaryFunctionIndex - GhbStartConcentration;
-                GwtConcentrations.Concentrations[ConcIndex] := 0;
+                GwtConcentrations.Values[ConcIndex] := 0;
                 ErrorMessage := StrConductanceSetToZ;
-                GwtConcentrations.ConcentrationAnnotations[ConcIndex] := ErrorMessage;
-                GwtConcentrations.ConcentrationPestNames[ConcIndex] := PestName;
-                GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
-                GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
-                GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+                GwtConcentrations.ValueAnnotations[ConcIndex] := ErrorMessage;
+                GwtConcentrations.ValuePestNames[ConcIndex] := PestName;
+                GwtConcentrations.ValuePestSeriesNames[ConcIndex] := PestSeriesName;
+                GwtConcentrations.ValuePestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := TimeSeriesName;
               end;
           end;
         end;
@@ -911,17 +911,17 @@ begin
   begin
     for Index := 0 to BoundaryCount - 1 do
     begin
-      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.Concentrations,
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.Values,
         LocalModel.MobileComponents.Count);
-      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ConcentrationAnnotations,
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ValueAnnotations,
         LocalModel.MobileComponents.Count);
-      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ConcentrationPestNames,
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ValuePestNames,
         LocalModel.MobileComponents.Count);
-      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ConcentrationPestSeriesNames,
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ValuePestSeriesNames,
         LocalModel.MobileComponents.Count);
-      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ConcentrationPestSeriesMethods,
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ValuePestSeriesMethods,
         LocalModel.MobileComponents.Count);
-      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ConcentrationTimeSeriesNames,
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].GwtConcentrations.ValueTimeSeriesNames,
         LocalModel.MobileComponents.Count);
     end;
   end;
@@ -1087,33 +1087,33 @@ end;
 
 function TGhb_Cell.GetConcentration(const Index: Integer): double;
 begin
-  result := FValues.GwtConcentrations.Concentrations[Index];
+  result := FValues.GwtConcentrations.Values[Index];
 end;
 
 function TGhb_Cell.GetConcentrationAnnotation(const Index: Integer): string;
 begin
-  result := FValues.GwtConcentrations.ConcentrationAnnotations[Index];
+  result := FValues.GwtConcentrations.ValueAnnotations[Index];
 end;
 
 function TGhb_Cell.GetConcentrationPestName(const Index: Integer): string;
 begin
-  result := FValues.GwtConcentrations.ConcentrationPestNames[Index];
+  result := FValues.GwtConcentrations.ValuePestNames[Index];
 end;
 
 function TGhb_Cell.GetConcentrationPestSeriesMethod(
   const Index: Integer): TPestParamMethod;
 begin
-  result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[Index];
+  result := FValues.GwtConcentrations.ValuePestSeriesMethods[Index];
 end;
 
 function TGhb_Cell.GetConcentrationPestSeriesName(const Index: Integer): string;
 begin
-  result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[Index];
+  result := FValues.GwtConcentrations.ValuePestSeriesNames[Index];
 end;
 
 function TGhb_Cell.GetConcentrationTimeSeriesName(const Index: Integer): string;
 begin
-  result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[Index];
+  result := FValues.GwtConcentrations.ValueTimeSeriesNames[Index];
 end;
 
 function TGhb_Cell.GetConductance: double;
@@ -1189,7 +1189,7 @@ begin
     else
       begin
         ConcIndex := Index - GhbStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex];
+        result := FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex];
       end;
   end;
 end;
@@ -1220,7 +1220,7 @@ begin
     else
       begin
         ConcIndex := Index - GhbStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationPestNames[ConcIndex];
+        result := FValues.GwtConcentrations.ValuePestNames[ConcIndex];
       end;
   end;
 end;
@@ -1241,7 +1241,7 @@ begin
     else
       begin
         ConcIndex := Index - GhbStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex];
+        result := FValues.GwtConcentrations.ValuePestSeriesMethods[ConcIndex];
       end;
   end;
 end;
@@ -1262,7 +1262,7 @@ begin
     else
       begin
         ConcIndex := Index - GhbStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex];
+        result := FValues.GwtConcentrations.ValuePestSeriesNames[ConcIndex];
       end;
   end;
 end;
@@ -1283,7 +1283,7 @@ begin
     else
       begin
         ConcIndex := Index - GhbStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationAnnotations[ConcIndex];
+        result := FValues.GwtConcentrations.ValueAnnotations[ConcIndex];
       end;
   end;
 end;
@@ -1304,7 +1304,7 @@ begin
     else
       begin
         ConcIndex := Index - GhbStartConcentration;
-        result := FValues.GwtConcentrations.Concentrations[ConcIndex];
+        result := FValues.GwtConcentrations.Values[ConcIndex];
       end;
   end;
 end;
@@ -1389,7 +1389,7 @@ begin
     else
       begin
         ConcIndex := Index - GhbStartConcentration;
-        FValues.GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := Value;
+        FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := Value;
       end;
   end;
 end;

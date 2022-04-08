@@ -42636,6 +42636,13 @@ begin
           try
             MawWriter.MvrWriter := ModflowMvrWriter;
             MawWriter.WriteFile(FileName);
+            if GwtUsed then
+            begin
+              for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+              begin
+                MawWriter.WriteMwtFile(FileName, SpeciesIndex);
+              end;
+            end;
           finally
             MawWriter.Free;
           end;
@@ -47823,8 +47830,10 @@ begin
 end;
 
 function TCustomModel.GetGwtUsed: Boolean;
+  {$IFDEF GWT}
 var
   Mt3dBasic: TMt3dBasic;
+  {$ENDIF}
 begin
   {$IFDEF GWT}
   if ModelSelection = msModflow2015 then

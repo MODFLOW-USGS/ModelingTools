@@ -2955,6 +2955,9 @@ Type
     FScalingLength: TModflowBoundaryDisplayTimeList;
     FPumpElevation: TModflowBoundaryDisplayTimeList;
     FFlowingWellReductionLength: TModflowBoundaryDisplayTimeList;
+    FSaveGwtBudget: Boolean;
+    FSaveGwtConcentration: Boolean;
+    FSaveGwtBudgetCsv: Boolean;
     procedure SetIncludeWellStorage(const Value: Boolean);
     procedure SetPrintHead(const Value: Boolean);
     procedure SetSaveMnwFlows(const Value: Boolean);
@@ -2986,6 +2989,9 @@ Type
       NewUseList: TStringList);
     procedure GetMfFlowingWellReductionLengthUseList(Sender: TObject;
       NewUseList: TStringList);
+    procedure SetSaveGwtBudget(const Value: Boolean);
+    procedure SetSaveGwtConcentration(const Value: Boolean);
+    procedure SetSaveGwtBudgetCsv(const Value: Boolean);
 
 
     procedure GetMawUseList(DataIndex: integer; NewUseList: TStringList;
@@ -3036,6 +3042,27 @@ Type
     property StoredShutDownTheta: TRealStorage read FStoredShutDownTheta write SetStoredShutDownTheta;
     // [SHUTDOWN_KAPPA <shutdown_kappa>]
     property StoredShutDownKappa: TRealStorage read FStoredShutDownKappa write SetStoredShutDownKappa;
+    property SaveGwtBudget: Boolean read FSaveGwtBudget write SetSaveGwtBudget
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
+    // [CONCENTRATION FILEOUT <concfile>]
+    property SaveGwtConcentration: Boolean read FSaveGwtConcentration
+      write SetSaveGwtConcentration
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
+    // [BUDGETCSV FILEOUT <budgetcsvfile>]
+    property SaveGwtBudgetCsv: Boolean read FSaveGwtBudgetCsv write SetSaveGwtBudgetCsv
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
   end;
 
   TCustomPrintItem = class(TOrderedItem)
@@ -20496,6 +20523,9 @@ begin
     SaveMnwHeads := MawSource.SaveMnwHeads;
     SaveMnwFlows := MawSource.SaveMnwFlows;
     IncludeWellStorage := MawSource.IncludeWellStorage;
+    SaveGwtBudget := MawSource.SaveGwtBudget;
+    SaveGwtConcentration := MawSource.SaveGwtConcentration;
+    SaveGwtBudgetCsv := MawSource.SaveGwtBudgetCsv;
   end;
   inherited;
 
@@ -20763,6 +20793,10 @@ begin
   SaveMnwHeads := True;
   SaveMnwFlows := True;
   IncludeWellStorage := True;
+  // GWT
+  FSaveGwtBudgetCsv := True;
+  FSaveGwtBudget := True;
+  FSaveGwtConcentration := True;
 end;
 
 procedure TMawPackage.SetIncludeWellStorage(const Value: Boolean);
@@ -20773,6 +20807,21 @@ end;
 procedure TMawPackage.SetPrintHead(const Value: Boolean);
 begin
   SetBooleanProperty(FPrintHead, Value);
+end;
+
+procedure TMawPackage.SetSaveGwtBudget(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtBudget, Value);
+end;
+
+procedure TMawPackage.SetSaveGwtBudgetCsv(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtBudgetCsv, Value);
+end;
+
+procedure TMawPackage.SetSaveGwtConcentration(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtConcentration, Value);
 end;
 
 procedure TMawPackage.SetSaveMnwFlows(const Value: Boolean);

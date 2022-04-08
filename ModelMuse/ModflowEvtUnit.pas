@@ -1060,17 +1060,17 @@ begin
   NumberOfSpecies := SpeciesCount;
   for Index := 0 to BoundaryCount - 1 do
   begin
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.Concentrations,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.Values,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationAnnotations,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValueAnnotations,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationPestNames,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValuePestNames,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationPestSeriesNames,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValuePestSeriesNames,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationPestSeriesMethods,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValuePestSeriesMethods,
       NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ConcentrationTimeSeriesNames,
+    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValueTimeSeriesNames,
       NumberOfSpecies);
   end;
   inherited;
@@ -1104,33 +1104,33 @@ end;
 
 function TEvt_Cell.GetConcentration(const Index: Integer): double;
 begin
-  result := FValues.GwtConcentrations.Concentrations[Index];
+  result := FValues.GwtConcentrations.Values[Index];
 end;
 
 function TEvt_Cell.GetConcentrationAnnotation(const Index: Integer): string;
 begin
-  result := FValues.GwtConcentrations.ConcentrationAnnotations[Index];
+  result := FValues.GwtConcentrations.ValueAnnotations[Index];
 end;
 
 function TEvt_Cell.GetConcentrationPestName(const Index: Integer): string;
 begin
-  result := FValues.GwtConcentrations.ConcentrationPestNames[Index];
+  result := FValues.GwtConcentrations.ValuePestNames[Index];
 end;
 
 function TEvt_Cell.GetConcentrationPestSeriesMethod(
   const Index: Integer): TPestParamMethod;
 begin
-  result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[Index];
+  result := FValues.GwtConcentrations.ValuePestSeriesMethods[Index];
 end;
 
 function TEvt_Cell.GetConcentrationPestSeriesName(const Index: Integer): string;
 begin
-  result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[Index];
+  result := FValues.GwtConcentrations.ValuePestSeriesNames[Index];
 end;
 
 function TEvt_Cell.GetConcentrationTimeSeriesName(const Index: Integer): string;
 begin
-  result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[Index];
+  result := FValues.GwtConcentrations.ValueTimeSeriesNames[Index];
 end;
 
 function TEvt_Cell.GetLayer: integer;
@@ -1150,7 +1150,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex];
+        result := FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex];
       end;
   end;
 end;
@@ -1167,7 +1167,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationPestNames[ConcIndex];
+        result := FValues.GwtConcentrations.ValuePestNames[ConcIndex];
       end;
   end;
 end;
@@ -1184,7 +1184,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationPestSeriesMethods[ConcIndex];
+        result := FValues.GwtConcentrations.ValuePestSeriesMethods[ConcIndex];
       end;
   end;
 end;
@@ -1201,7 +1201,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationPestSeriesNames[ConcIndex];
+        result := FValues.GwtConcentrations.ValuePestSeriesNames[ConcIndex];
       end;
   end;
 end;
@@ -1274,7 +1274,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.GwtConcentrations.ConcentrationAnnotations[ConcIndex];
+        result := FValues.GwtConcentrations.ValueAnnotations[ConcIndex];
       end;
   end;
 end;
@@ -1288,7 +1288,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        result := FValues.GwtConcentrations.Concentrations[ConcIndex];
+        result := FValues.GwtConcentrations.Values[ConcIndex];
       end;
   end;
 end;
@@ -1351,7 +1351,7 @@ begin
     else
       begin
         ConcIndex := Index - EvtStartConcentration;
-        FValues.GwtConcentrations.ConcentrationTimeSeriesNames[ConcIndex] := Value;
+        FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := Value;
 //        Assert(False);
       end;
   end;

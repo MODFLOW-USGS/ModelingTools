@@ -1807,8 +1807,8 @@ begin
     WriteString('  ');
     WriteInteger(LakeIndex+1);
 
-    WriteFormulaOrValueBasedOnAPestName(ALake.FStartingConcentrations.ConcentrationPestNames[FSpeciesIndex],
-      ALake.FStartingConcentrations.Concentrations[FSpeciesIndex], -1, -1, -1);
+    WriteFormulaOrValueBasedOnAPestName(ALake.FStartingConcentrations.ValuePestNames[FSpeciesIndex],
+      ALake.FStartingConcentrations.Values[FSpeciesIndex], -1, -1, -1);
 //    WriteFloat(ALake.FStartingStage);
 
     if Model.GwtUsed then
@@ -3125,37 +3125,37 @@ begin
       begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(SpecifiedConcentrations.ValuePestSeriesMethods) then
         begin
-          result := SpecifiedConcentrations.ConcentrationPestSeriesMethods[Index];
+          result := SpecifiedConcentrations.ValuePestSeriesMethods[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RainfallConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(RainfallConcentrations.ValuePestSeriesMethods) then
         begin
-          result := RainfallConcentrations.ConcentrationPestSeriesMethods[Index];
+          result := RainfallConcentrations.ValuePestSeriesMethods[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(EvapConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(EvapConcentrations.ValuePestSeriesMethods) then
         begin
-          result := EvapConcentrations.ConcentrationPestSeriesMethods[Index];
+          result := EvapConcentrations.ValuePestSeriesMethods[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RunoffConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(RunoffConcentrations.ValuePestSeriesMethods) then
         begin
-          result := RunoffConcentrations.ConcentrationPestSeriesMethods[Index];
+          result := RunoffConcentrations.ValuePestSeriesMethods[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(InflowConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(InflowConcentrations.ValuePestSeriesMethods) then
         begin
-          result := InflowConcentrations.ConcentrationPestSeriesMethods[Index];
+          result := InflowConcentrations.ValuePestSeriesMethods[Index];
           Exit;
         end;
         result := ppmMultiply;
@@ -3205,37 +3205,37 @@ begin
       begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.ConcentrationPestNames) then
+        if Index < Length(SpecifiedConcentrations.ValuePestNames) then
         begin
-          result := SpecifiedConcentrations.ConcentrationPestNames[Index];
+          result := SpecifiedConcentrations.ValuePestNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RainfallConcentrations.ConcentrationPestNames) then
+        if Index < Length(RainfallConcentrations.ValuePestNames) then
         begin
-          result := RainfallConcentrations.ConcentrationPestNames[Index];
+          result := RainfallConcentrations.ValuePestNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(EvapConcentrations.ConcentrationPestNames) then
+        if Index < Length(EvapConcentrations.ValuePestNames) then
         begin
-          result := EvapConcentrations.ConcentrationPestNames[Index];
+          result := EvapConcentrations.ValuePestNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RunoffConcentrations.ConcentrationPestNames) then
+        if Index < Length(RunoffConcentrations.ValuePestNames) then
         begin
-          result := RunoffConcentrations.ConcentrationPestNames[Index];
+          result := RunoffConcentrations.ValuePestNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(InflowConcentrations.ConcentrationPestNames) then
+        if Index < Length(InflowConcentrations.ValuePestNames) then
         begin
-          result := InflowConcentrations.ConcentrationPestNames[Index];
+          result := InflowConcentrations.ValuePestNames[Index];
           Exit;
         end;
         result := '';
@@ -3285,37 +3285,37 @@ begin
       begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(SpecifiedConcentrations.ValuePestSeriesNames) then
         begin
-          result := SpecifiedConcentrations.ConcentrationPestSeriesNames[Index];
+          result := SpecifiedConcentrations.ValuePestSeriesNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RainfallConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(RainfallConcentrations.ValuePestSeriesNames) then
         begin
-          result := RainfallConcentrations.ConcentrationPestSeriesNames[Index];
+          result := RainfallConcentrations.ValuePestSeriesNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(EvapConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(EvapConcentrations.ValuePestSeriesNames) then
         begin
-          result := EvapConcentrations.ConcentrationPestSeriesNames[Index];
+          result := EvapConcentrations.ValuePestSeriesNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RunoffConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(RunoffConcentrations.ValuePestSeriesNames) then
         begin
-          result := RunoffConcentrations.ConcentrationPestSeriesNames[Index];
+          result := RunoffConcentrations.ValuePestSeriesNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(InflowConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(InflowConcentrations.ValuePestSeriesNames) then
         begin
-          result := InflowConcentrations.ConcentrationPestSeriesNames[Index];
+          result := InflowConcentrations.ValuePestSeriesNames[Index];
           Exit;
         end;
         result := '';
@@ -3365,37 +3365,37 @@ begin
       begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(SpecifiedConcentrations.ValueTimeSeriesNames) then
         begin
-          result := SpecifiedConcentrations.ConcentrationTimeSeriesNames[Index];
+          result := SpecifiedConcentrations.ValueTimeSeriesNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RainfallConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(RainfallConcentrations.ValueTimeSeriesNames) then
         begin
-          result := RainfallConcentrations.ConcentrationTimeSeriesNames[Index];
+          result := RainfallConcentrations.ValueTimeSeriesNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(EvapConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(EvapConcentrations.ValueTimeSeriesNames) then
         begin
-          result := EvapConcentrations.ConcentrationTimeSeriesNames[Index];
+          result := EvapConcentrations.ValueTimeSeriesNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RunoffConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(RunoffConcentrations.ValueTimeSeriesNames) then
         begin
-          result := RunoffConcentrations.ConcentrationTimeSeriesNames[Index];
+          result := RunoffConcentrations.ValueTimeSeriesNames[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(InflowConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(InflowConcentrations.ValueTimeSeriesNames) then
         begin
-          result := InflowConcentrations.ConcentrationTimeSeriesNames[Index];
+          result := InflowConcentrations.ValueTimeSeriesNames[Index];
           Exit;
         end;
         result := '';
@@ -3445,37 +3445,37 @@ begin
       begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.Concentrations) then
+        if Index < Length(SpecifiedConcentrations.Values) then
         begin
-          result := SpecifiedConcentrations.Concentrations[Index];
+          result := SpecifiedConcentrations.Values[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RainfallConcentrations.Concentrations) then
+        if Index < Length(RainfallConcentrations.Values) then
         begin
-          result := RainfallConcentrations.Concentrations[Index];
+          result := RainfallConcentrations.Values[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(EvapConcentrations.Concentrations) then
+        if Index < Length(EvapConcentrations.Values) then
         begin
-          result := EvapConcentrations.Concentrations[Index];
+          result := EvapConcentrations.Values[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(RunoffConcentrations.Concentrations) then
+        if Index < Length(RunoffConcentrations.Values) then
         begin
-          result := RunoffConcentrations.Concentrations[Index];
+          result := RunoffConcentrations.Values[Index];
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
-        if Index < Length(InflowConcentrations.Concentrations) then
+        if Index < Length(InflowConcentrations.Values) then
         begin
-          result := InflowConcentrations.Concentrations[Index];
+          result := InflowConcentrations.Values[Index];
           Exit;
         end;
         result := 0;
@@ -3527,41 +3527,41 @@ begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         SpecifiedConcentrations.SpeciesCount := SpeciesCount;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(SpecifiedConcentrations.ValuePestSeriesMethods) then
         begin
-          SpecifiedConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          SpecifiedConcentrations.ValuePestSeriesMethods[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RainfallConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RainfallConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(RainfallConcentrations.ValuePestSeriesMethods) then
         begin
-          RainfallConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          RainfallConcentrations.ValuePestSeriesMethods[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         EvapConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(EvapConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(EvapConcentrations.ValuePestSeriesMethods) then
         begin
-          EvapConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          EvapConcentrations.ValuePestSeriesMethods[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RunoffConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RunoffConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(RunoffConcentrations.ValuePestSeriesMethods) then
         begin
-          RunoffConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          RunoffConcentrations.ValuePestSeriesMethods[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         InflowConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(InflowConcentrations.ConcentrationPestSeriesMethods) then
+        if Index < Length(InflowConcentrations.ValuePestSeriesMethods) then
         begin
-          InflowConcentrations.ConcentrationPestSeriesMethods[Index] := Value;
+          InflowConcentrations.ValuePestSeriesMethods[Index] := Value;
           Exit;
         end;
         Assert(False);
@@ -3610,41 +3610,41 @@ begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         SpecifiedConcentrations.SpeciesCount := SpeciesCount;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.ConcentrationPestNames) then
+        if Index < Length(SpecifiedConcentrations.ValuePestNames) then
         begin
-          SpecifiedConcentrations.ConcentrationPestNames[Index] := Value;
+          SpecifiedConcentrations.ValuePestNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RainfallConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RainfallConcentrations.ConcentrationPestNames) then
+        if Index < Length(RainfallConcentrations.ValuePestNames) then
         begin
-          RainfallConcentrations.ConcentrationPestNames[Index] := Value;
+          RainfallConcentrations.ValuePestNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         EvapConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(EvapConcentrations.ConcentrationPestNames) then
+        if Index < Length(EvapConcentrations.ValuePestNames) then
         begin
-          EvapConcentrations.ConcentrationPestNames[Index] := Value;
+          EvapConcentrations.ValuePestNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RunoffConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RunoffConcentrations.ConcentrationPestNames) then
+        if Index < Length(RunoffConcentrations.ValuePestNames) then
         begin
-          RunoffConcentrations.ConcentrationPestNames[Index] := Value;
+          RunoffConcentrations.ValuePestNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         InflowConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(InflowConcentrations.ConcentrationPestNames) then
+        if Index < Length(InflowConcentrations.ValuePestNames) then
         begin
-          InflowConcentrations.ConcentrationPestNames[Index] := Value;
+          InflowConcentrations.ValuePestNames[Index] := Value;
           Exit;
         end;
         Assert(False);
@@ -3693,41 +3693,41 @@ begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         SpecifiedConcentrations.SpeciesCount := SpeciesCount;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(SpecifiedConcentrations.ValuePestSeriesNames) then
         begin
-          SpecifiedConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          SpecifiedConcentrations.ValuePestSeriesNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RainfallConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RainfallConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(RainfallConcentrations.ValuePestSeriesNames) then
         begin
-          RainfallConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          RainfallConcentrations.ValuePestSeriesNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         EvapConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(EvapConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(EvapConcentrations.ValuePestSeriesNames) then
         begin
-          EvapConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          EvapConcentrations.ValuePestSeriesNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RunoffConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RunoffConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(RunoffConcentrations.ValuePestSeriesNames) then
         begin
-          RunoffConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          RunoffConcentrations.ValuePestSeriesNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         InflowConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(InflowConcentrations.ConcentrationPestSeriesNames) then
+        if Index < Length(InflowConcentrations.ValuePestSeriesNames) then
         begin
-          InflowConcentrations.ConcentrationPestSeriesNames[Index] := Value;
+          InflowConcentrations.ValuePestSeriesNames[Index] := Value;
           Exit;
         end;
         Assert(False);
@@ -3776,41 +3776,41 @@ begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         SpecifiedConcentrations.SpeciesCount := SpeciesCount;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(SpecifiedConcentrations.ValueTimeSeriesNames) then
         begin
-          SpecifiedConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          SpecifiedConcentrations.ValueTimeSeriesNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RainfallConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RainfallConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(RainfallConcentrations.ValueTimeSeriesNames) then
         begin
-          RainfallConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          RainfallConcentrations.ValueTimeSeriesNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         EvapConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(EvapConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(EvapConcentrations.ValueTimeSeriesNames) then
         begin
-          EvapConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          EvapConcentrations.ValueTimeSeriesNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RunoffConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RunoffConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(RunoffConcentrations.ValueTimeSeriesNames) then
         begin
-          RunoffConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          RunoffConcentrations.ValueTimeSeriesNames[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         InflowConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(InflowConcentrations.ConcentrationTimeSeriesNames) then
+        if Index < Length(InflowConcentrations.ValueTimeSeriesNames) then
         begin
-          InflowConcentrations.ConcentrationTimeSeriesNames[Index] := Value;
+          InflowConcentrations.ValueTimeSeriesNames[Index] := Value;
           Exit;
         end;
         Assert(False);
@@ -3859,41 +3859,41 @@ begin
         SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
         SpecifiedConcentrations.SpeciesCount := SpeciesCount;
         Index := Index - Lak6GwtPestStartPosition;
-        if Index < Length(SpecifiedConcentrations.Concentrations) then
+        if Index < Length(SpecifiedConcentrations.Values) then
         begin
-          SpecifiedConcentrations.Concentrations[Index] := Value;
+          SpecifiedConcentrations.Values[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RainfallConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RainfallConcentrations.Concentrations) then
+        if Index < Length(RainfallConcentrations.Values) then
         begin
-          RainfallConcentrations.Concentrations[Index] := Value;
+          RainfallConcentrations.Values[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         EvapConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(EvapConcentrations.Concentrations) then
+        if Index < Length(EvapConcentrations.Values) then
         begin
-          EvapConcentrations.Concentrations[Index] := Value;
+          EvapConcentrations.Values[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         RunoffConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(RunoffConcentrations.Concentrations) then
+        if Index < Length(RunoffConcentrations.Values) then
         begin
-          RunoffConcentrations.Concentrations[Index] := Value;
+          RunoffConcentrations.Values[Index] := Value;
           Exit;
         end;
         Index := Index - SpeciesCount;
         Assert(Index >= 0);
         InflowConcentrations.SpeciesCount := SpeciesCount;
-        if Index < Length(InflowConcentrations.Concentrations) then
+        if Index < Length(InflowConcentrations.Values) then
         begin
-          InflowConcentrations.Concentrations[Index] := Value;
+          InflowConcentrations.Values[Index] := Value;
           Exit;
         end;
         Assert(False);

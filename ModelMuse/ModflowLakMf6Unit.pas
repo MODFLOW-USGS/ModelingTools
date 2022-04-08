@@ -147,13 +147,11 @@ type
 
   TLakeOutlets = class(TCustomObjectOrderedCollection)
   private
-//    FScreenObject: TObject;
     function GetItems(Index: Integer): TLakeOutletItem;
     procedure SetItems(Index: Integer; const Value: TLakeOutletItem);
     procedure Loaded;
   public
     constructor Create(Model: TBaseModel; ScreenObject: TObject);
-//    constructor Create(InvalidateModelEvent: TNotifyEvent);
     property Items[Index: Integer]: TLakeOutletItem read GetItems write SetItems; default;
     function Add: TLakeOutletItem;
   end;

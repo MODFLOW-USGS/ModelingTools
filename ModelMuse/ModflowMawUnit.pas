@@ -4,7 +4,7 @@ interface
 
 uses
   ZLib, Classes, ModflowCellUnit, ModflowBoundaryUnit, OrderedCollectionUnit,
-  FormulaManagerUnit, GoPhastTypes, RbwParser, SubscriptionUnit;
+  FormulaManagerUnit, GoPhastTypes, RbwParser, SubscriptionUnit, Mt3dmsChemUnit;
 
 type
   TMawOb = (moHead, moFromMvr, moFlowRate, moFlowRateCells, moPumpRate,
@@ -92,6 +92,12 @@ type
     RateTimeSeriesName: string;
     WellHeadTimeSeriesName: string;
 
+    // GWT
+    GwtStatus: TGwtBoundaryStatusArray;
+    SpecifiedConcentrations: TGwtCellData;
+    InjectionConcentrations: TGwtCellData;
+
+    procedure Assign(const Item: TMawTransientRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -102,7 +108,9 @@ type
   TMawTransientStorage = class(TCustomBoundaryStorage)
   private
     FMawTransientArray: TMawTransientArray;
+    FSpeciesCount: Integer;
     function GetMawTransientArray: TMawTransientArray;
+    procedure SetSpeciesCount(const Value: Integer);
   protected
     procedure Restore(DecompressionStream: TDecompressionStream;
       Annotations: TStringList); override;
@@ -110,6 +118,14 @@ type
     procedure Clear; override;
   public
     property MawTransientArray: TMawTransientArray read GetMawTransientArray;
+    property SpeciesCount: Integer read FSpeciesCount write SetSpeciesCount;
+  end;
+
+  TMawWellCollection = class;
+
+  TMawGwtConcCollection = class(TGwtConcStringCollection)
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TMawWellCollection);
   end;
 
   TMawItem = class(TCustomModflowBoundaryItem)
@@ -128,6 +144,9 @@ type
     FWellHead: TFormulaObject;
     FHeadLimitChoice: Boolean;
     FRateLimitation: TRateLimitation;
+    FInjectionConcentrations: TMawGwtConcCollection;
+    FSpecifiedConcentrations: TMawGwtConcCollection;
+    FGwtStatus: TGwtBoundaryStatusCollection;
     function GetFlowingWellConductance: string;
     function GetFlowingWellElevation: string;
     function GetFlowingWellReductionLength: string;
@@ -154,6 +173,9 @@ type
     procedure SetRateLimitation(const Value: TRateLimitation);
     function GetRateScaling: Boolean;
     function GetShutoff: Boolean;
+    procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
+    procedure SetInjectionConcentrations(const Value: TMawGwtConcCollection);
+    procedure SetSpecifiedConcentrations(const Value: TMawGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -211,6 +233,23 @@ type
     property HeadLimitChoice: Boolean read FHeadLimitChoice write SetHeadLimitChoice;
     // head_limit
     property HeadLimit: string read GetHeadLimit write SetHeadLimit;
+    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property SpecifiedConcentrations: TMawGwtConcCollection read FSpecifiedConcentrations
+      write SetSpecifiedConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property InjectionConcentrations: TMawGwtConcCollection read FInjectionConcentrations
+      write SetInjectionConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
   TMawTimeListLink = class(TTimeListsModelLink)
@@ -225,6 +264,10 @@ type
     FMaxRate: TModflowTimeList;
     FPumpElevation: TModflowTimeList;
     FScalingLength: TModflowTimeList;
+    // GWT
+    FGwtStatusList: TModflowTimeLists;
+    FSpecifiedConcList: TModflowTimeLists;
+    FInjectionConcList: TModflowTimeLists;
     procedure CreateTimeLists; override;
   public
     Destructor Destroy; override;
@@ -242,6 +285,10 @@ type
     procedure InvalidateMaxRateData(Sender: TObject);
     procedure InvalidatePumpElevationData(Sender: TObject);
     procedure InvalidateScalingLengthData(Sender: TObject);
+    // GWT
+    procedure InvalidateGwtStatus(Sender: TObject);
+    procedure InvalidateSpecifiedConcentrations(Sender: TObject);
+    procedure InvalidateInjectionConcentrations(Sender: TObject);
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
@@ -305,6 +352,9 @@ type
     function GetMvrUsed: Boolean;
     function GetFlowingWellReductionLength: double;
     function GetFlowingWellReductionLengthAnnotation: string;
+    function GetGwtStatus: TGwtBoundaryStatusArray;
+    function GetSpecifiedConcentrations: TGwtCellData;
+    function GetInjectionConcentrations: TGwtCellData;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -366,9 +416,21 @@ type
     property MawBoundary: TMawBoundary read GetMawBoundary;
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
+    // GWT
+    Property GwtStatus: TGwtBoundaryStatusArray read GetGwtStatus;
+    Property SpecifiedConcentrations: TGwtCellData read GetSpecifiedConcentrations;
+    Property InjectionConcentrations: TGwtCellData read GetInjectionConcentrations;
   end;
 
   TMawSteadyWellRecord = record
+  private
+    function GetBoundaryAnnotation(Index: Integer): string;
+    function GetBoundaryValue(Index: Integer): double;
+    procedure SetBoundaryAnnotation(Index: Integer; const Value: string);
+    procedure SetBoundaryValue(Index: Integer; const Value: double);
+    function GetPestParamName(Index: Integer): string;
+    procedure SetPestParamName(Index: Integer; const Value: string);
+  public
     WellNumber: Integer;
     Radius: Double;
     Bottom: Double;
@@ -386,9 +448,18 @@ type
     Column: Integer;
     Row: Integer;
     Layer: Integer;
+    // GWT
+    StartingConcentrations: TGwtCellData;
+    procedure Assign(const Item: TMawSteadyWellRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
+    property BoundaryValue[Index: Integer]: double read GetBoundaryValue
+      write SetBoundaryValue;
+    property BoundaryAnnotation[Index: Integer]: string
+      read GetBoundaryAnnotation write SetBoundaryAnnotation;
+    property PestParamName[Index: Integer]: string read GetPestParamName
+      write SetPestParamName;
   end;
 
   // CONNECTIONDATA block
@@ -583,6 +654,7 @@ type
     FPestRateObserver: TObserver;
     FPestScalingLengthObserver: TObserver;
     FPestWellHeadObserver: TObserver;
+    FStartingConcentrations: TStringConcCollection;
     procedure SetWellNumber(const Value: Integer);
     function GetBottom: string;
     function GetInitialHead: string;
@@ -654,6 +726,7 @@ type
     function GetPestRateObserver: TObserver;
     function GetPestScalingLengthObserver: TObserver;
     function GetPestWellHeadObserver: TObserver;
+    procedure SetStartingConcentrations(const Value: TStringConcCollection);
   protected
     property RadiusObserver: TObserver read GetRadiusObserver;
     property BottomObserver: TObserver read GetBottomObserver;
@@ -774,6 +847,14 @@ type
     property PestFlowingWellReductionLengthMethod: TPestParamMethod
       read FPestFlowingWellReductionLengthMethod
       write SetPestFlowingWellReductionLengthMethod;
+    // GWT
+    property StartingConcentrations: TStringConcCollection
+      read FStartingConcentrations
+      write SetStartingConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
 const
@@ -787,6 +868,17 @@ const
   MawPumpElevationPosition = 7;
   MawScalingLengthPosition = 8;
   MawFlowingWellReductionLengthPosition = 9;
+  MawGwtStart = 10;
+
+  MawRadiusPosition = 0;
+  MawBottomPosition = 1;
+  MawStartingHeadPosition = 2;
+  MawGwtSteadyStart = 3;
+
+Const
+  MawGwtConcCount = 2;
+  MawGwtSpecifiedConcentrationPosition = 0;
+  MawGwtInjectionConcentrationsPosition = 1;
 
 function TryGetMawOb(const MawObName: string; var MawOb: TMawOb): Boolean;
 function MawObToString(const MawOb: TMawOb): string;
@@ -1658,6 +1750,7 @@ begin
     PestPumpElevationMethod := SourceMAW.PestPumpElevationMethod;
     PestScalingLengthMethod := SourceMAW.PestScalingLengthMethod;
     PestFlowingWellReductionLengthMethod := SourceMAW.PestFlowingWellReductionLengthMethod;
+    StartingConcentrations := SourceMAW.StartingConcentrations;
 
     inherited;
   end
@@ -1812,7 +1905,7 @@ begin
         Cell.IFace := (ScreenObject as TScreenObject).IFace;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
-        Cell.Values := BoundaryValues;
+        Cell.Values.Assign(BoundaryValues);
         Cell.ScreenObject := ScreenObject;
 //        LocalModel.AdjustCellPosition(Cell);
       end;
@@ -1835,6 +1928,7 @@ end;
 constructor TMawBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
+  FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
   CreateFormulaObjects;
   CreateBoundaryObserver;
   CreateObservers;
@@ -1953,6 +2047,7 @@ begin
 
   FWellScreens.Free;
   RemoveFormulaObjects;
+  FStartingConcentrations.Free;
   inherited;
 end;
 
@@ -3103,6 +3198,12 @@ begin
   UpdateFormulaBlocks(Value, RadiusPosition, FRadius);
 end;
 
+procedure TMawBoundary.SetStartingConcentrations(
+  const Value: TStringConcCollection);
+begin
+  FStartingConcentrations.Assign(Value);
+end;
+
 procedure TMawBoundary.SetWellNumber(const Value: Integer);
 begin
   if FWellNumber <> Value then
@@ -3119,8 +3220,19 @@ end;
 
 { TMawTransientRecord }
 
+procedure TMawTransientRecord.Assign(const Item: TMawTransientRecord);
+begin
+  self := Item;
+  SetLength(GwtStatus, Length(GwtStatus));
+  SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
+  InjectionConcentrations.Assign(Item.InjectionConcentrations);
+end;
+
 procedure TMawTransientRecord.Cache(Comp: TCompressionStream;
   Strings: TStringList);
+var
+  GwtStatusCount: Integer;
+  SpeciesIndex: Integer;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompInt(Comp, WellNumber);
@@ -3191,6 +3303,19 @@ begin
 
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
+
+  // GWT
+
+  SpecifiedConcentrations.Cache(Comp, Strings);
+  InjectionConcentrations.Cache(Comp, Strings);
+
+  GwtStatusCount := Length(GwtStatus);
+  WriteCompInt(Comp, GwtStatusCount);
+  for SpeciesIndex := 0 to GwtStatusCount - 1 do
+  begin
+    WriteCompInt(Comp, Ord(GwtStatus[SpeciesIndex]));
+  end;
+
 end;
 
 procedure TMawTransientRecord.RecordStrings(Strings: TStringList);
@@ -3230,10 +3355,18 @@ begin
 
   Strings.Add(RateTimeSeriesName);
   Strings.Add(WellHeadTimeSeriesName);
+
+  // GWT
+  SpecifiedConcentrations.RecordStrings(Strings);
+  InjectionConcentrations.RecordStrings(Strings);
+
 end;
 
 procedure TMawTransientRecord.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
+var
+  GwtStatusCount: Integer;
+  SpeciesIndex: Integer;
 begin
   Cell := ReadCompCell(Decomp);
 
@@ -3305,6 +3438,18 @@ begin
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
+
+  // GWT
+  SpecifiedConcentrations.Restore(Decomp, Annotations);
+  InjectionConcentrations.Restore(Decomp, Annotations);
+
+  GwtStatusCount := ReadCompInt(Decomp);
+  SetLength(GwtStatus, GwtStatusCount);
+  for SpeciesIndex := 0 to GwtStatusCount - 1 do
+  begin
+    GwtStatus[SpeciesIndex] := TGwtBoundaryStatus(ReadCompInt(Decomp));
+  end;
+
 end;
 
 { TMawTransientStorage }
@@ -3335,6 +3480,19 @@ begin
   for Index := 0 to Count - 1 do
   begin
     FMawTransientArray[Index].Restore(DecompressionStream, Annotations);
+  end;
+end;
+
+procedure TMawTransientStorage.SetSpeciesCount(const Value: Integer);
+var
+  Index: Integer;
+begin
+  FSpeciesCount := Value;
+  for Index := 0 to Length(FMawTransientArray)-1 do
+  begin
+    SetLength(FMawTransientArray[Index].GwtStatus, FSpeciesCount);
+    FMawTransientArray[Index].SpecifiedConcentrations.SpeciesCount := FSpeciesCount;
+    FMawTransientArray[Index].InjectionConcentrations.SpeciesCount := FSpeciesCount;
   end;
 end;
 
@@ -3372,6 +3530,12 @@ end;
 
 { TMawSteadyWellRecord }
 
+procedure TMawSteadyWellRecord.Assign(const Item: TMawSteadyWellRecord);
+begin
+  self := Item;
+  self.StartingConcentrations.Assign(Item.StartingConcentrations);
+end;
+
 procedure TMawSteadyWellRecord.Cache(Comp: TCompressionStream;
   Strings: TStringList);
 begin
@@ -3396,6 +3560,80 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(RadiusPestName));
   WriteCompInt(Comp, Strings.IndexOf(BottomPestName));
   WriteCompInt(Comp, Strings.IndexOf(StartingHeadPestName));
+
+  StartingConcentrations.Cache(Comp, Strings);
+end;
+
+function TMawSteadyWellRecord.GetBoundaryAnnotation(Index: Integer): string;
+begin
+  case Index of
+    MawRadiusPosition:
+      begin
+        result := RadiusAnnotation;
+      end;
+    MawBottomPosition:
+      begin
+        result := BottomAnnotation;
+      end;
+    MawStartingHeadPosition:
+      begin
+        result := StartingHeadAnnotation;
+      end;
+    else
+      begin
+        // GWT
+        Index := Index - MawGwtSteadyStart;
+        result := StartingConcentrations.ValueAnnotations[Index]
+      end;
+  end
+end;
+
+function TMawSteadyWellRecord.GetBoundaryValue(Index: Integer): double;
+begin
+  case Index of
+    MawRadiusPosition:
+      begin
+        result := Radius;
+      end;
+    MawBottomPosition:
+      begin
+        result := Bottom;
+      end;
+    MawStartingHeadPosition:
+      begin
+        result := StartingHead;
+      end;
+    else
+      begin
+        // GWT
+        Index := Index - MawGwtSteadyStart;
+        result := StartingConcentrations.Values[Index]
+      end;
+  end
+end;
+
+function TMawSteadyWellRecord.GetPestParamName(Index: Integer): string;
+begin
+  case Index of
+    MawRadiusPosition:
+      begin
+        result := RadiusPestName;
+      end;
+    MawBottomPosition:
+      begin
+        result := BottomPestName;
+      end;
+    MawStartingHeadPosition:
+      begin
+        result := StartingHeadPestName;
+      end;
+    else
+      begin
+        // GWT
+        Index := Index - MawGwtSteadyStart;
+        result := StartingConcentrations.ValuePestNames[Index];
+      end;
+  end
 end;
 
 procedure TMawSteadyWellRecord.RecordStrings(Strings: TStringList);
@@ -3408,6 +3646,8 @@ begin
   Strings.Add(RadiusPestName);
   Strings.Add(BottomPestName);
   Strings.Add(StartingHeadPestName);
+
+  StartingConcentrations.RecordStrings(Strings);
 end;
 
 procedure TMawSteadyWellRecord.Restore(Decomp: TDecompressionStream;
@@ -3433,6 +3673,89 @@ begin
   RadiusPestName := Annotations[ReadCompInt(Decomp)];
   BottomPestName := Annotations[ReadCompInt(Decomp)];
   StartingHeadPestName := Annotations[ReadCompInt(Decomp)];
+
+  StartingConcentrations.Restore(Decomp, Annotations);
+end;
+
+procedure TMawSteadyWellRecord.SetBoundaryAnnotation(Index: Integer;
+  const Value: string);
+begin
+  case Index of
+    MawRadiusPosition:
+      begin
+        RadiusAnnotation := Value;
+      end;
+    MawBottomPosition:
+      begin
+        BottomAnnotation := Value;
+      end;
+    MawStartingHeadPosition:
+      begin
+        StartingHeadAnnotation := Value;
+      end;
+    else
+      begin
+        // GWT
+        Index := Index - MawGwtSteadyStart;
+        StartingConcentrations.ValueAnnotations[Index] := Value;
+      end;
+  end
+end;
+
+procedure TMawSteadyWellRecord.SetBoundaryValue(Index: Integer;
+  const Value: double);
+begin
+  case Index of
+    MawRadiusPosition:
+      begin
+        Radius := Value;
+      end;
+    MawBottomPosition:
+      begin
+        Bottom := Value;
+      end;
+    MawStartingHeadPosition:
+      begin
+        StartingHead := Value;
+      end;
+    else
+      begin
+        // GWT
+        Index := Index - MawGwtSteadyStart;
+        StartingConcentrations.Values[Index] := Value;
+      end;
+  end
+
+//  MawRadiusPosition = 0;
+//  MawBottomPosition = 1;
+//  MawStartingHeadPosition = 2;
+//  MawGwtSteadyStart = 3;
+
+end;
+
+procedure TMawSteadyWellRecord.SetPestParamName(Index: Integer;
+  const Value: string);
+begin
+  case Index of
+    MawRadiusPosition:
+      begin
+        RadiusPestName := Value;
+      end;
+    MawBottomPosition:
+      begin
+        BottomPestName := Value;
+      end;
+    MawStartingHeadPosition:
+      begin
+        StartingHeadPestName := Value;
+      end;
+    else
+      begin
+        // GWT
+        Index := Index - MawGwtSteadyStart;
+        StartingConcentrations.ValuePestNames[Index] := Value;
+      end;
+  end
 end;
 
 { TMawItem }
@@ -3462,6 +3785,9 @@ begin
     MaxRate := MawSource.MaxRate;
     PumpElevation := MawSource.PumpElevation;
     ScalingLength := MawSource.ScalingLength;
+    GwtStatus := MawSource.GwtStatus;
+    SpecifiedConcentrations := MawSource.SpecifiedConcentrations;
+    InjectionConcentrations := MawSource.InjectionConcentrations;
   end
   else
   if Source is TMnw2TimeItem then
@@ -3512,6 +3838,7 @@ procedure TMawItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TMawWellCollection;
   AnObserver: TObserver;
+  ConcIndex: Integer;
 begin
   ParentCollection := Collection as TMawWellCollection;
 
@@ -3545,15 +3872,46 @@ begin
   AnObserver := FObserverList[MawFlowingWellReductionLengthPosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateFlowingWellReductionLengthData;
 
+//  for ConcIndex := 0 to GwtStatus.Count - 1 do
+//  begin
+//    GwtStatus[ConcIndex].Observer.OnUpToDateSet
+//      := ParentCollection.InvalidateSpecifiedConcentrations;
+//  end;
+
+  for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
+  begin
+    SpecifiedConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateSpecifiedConcentrations;
+  end;
+
+  for ConcIndex := 0 to InjectionConcentrations.Count - 1 do
+  begin
+    InjectionConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateInjectionConcentrations;
+  end;
+
 end;
 
 function TMawItem.BoundaryFormulaCount: integer;
 begin
   Result := 10;
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    result := result + frmGoPhast.PhastModel.MobileComponents.Count *2;
+  end;
 end;
 
 constructor TMawItem.Create(Collection: TCollection);
+var
+  MawCollection: TMawWellCollection;
 begin
+  MawCollection := Collection as TMawWellCollection;
+  FGwtStatus := TGwtBoundaryStatusCollection.Create;
+  FSpecifiedConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject,
+    MawCollection);
+  FInjectionConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject,
+    MawCollection);
+
   inherited;
   FMawStatus := mwActive;
   FFlowingWell := fwNotFlowing;
@@ -3579,7 +3937,22 @@ begin
 end;
 
 destructor TMawItem.Destroy;
+var
+ Index: Integer;
 begin
+  FGwtStatus.Free;
+  for Index := 0 to FSpecifiedConcentrations.Count - 1 do
+  begin
+    FSpecifiedConcentrations[Index].Value := '0';
+  end;
+  FSpecifiedConcentrations.Free;
+
+  for Index := 0 to FInjectionConcentrations.Count - 1 do
+  begin
+    FInjectionConcentrations[Index].Value := '0';
+  end;
+  FInjectionConcentrations.Free;
+
   Rate := '0';
   WellHead := '0';
   FlowingWellElevation := '0';
@@ -3595,6 +3968,8 @@ begin
 end;
 
 function TMawItem.GetBoundaryFormula(Index: integer): string;
+var
+  ChemSpeciesCount: Integer;
 begin
   case index of
     MawFlowingWellElevationPosition:
@@ -3618,7 +3993,37 @@ begin
     MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLength;
     else
-      Assert(False);
+      begin
+        // GWT
+        if frmGoPhast.PhastModel.GwtUsed then
+        begin
+          Index := Index-MawGwtStart;
+          ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+          while SpecifiedConcentrations.Count < ChemSpeciesCount do
+          begin
+            SpecifiedConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := SpecifiedConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while InjectionConcentrations.Count < ChemSpeciesCount do
+          begin
+            InjectionConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := InjectionConcentrations[Index].Value;
+            Exit;
+          end;
+          Assert(False);
+//          Index := Index - ChemSpeciesCount;
+        end;
+
+      end;
   end;
 end;
 
@@ -3659,6 +4064,9 @@ begin
 end;
 
 procedure TMawItem.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  ConcIndex: Integer;
+  Item: TGwtConcStringValueItem;
 begin
   inherited;
   if Sender = FFlowingWellConductance then
@@ -3700,7 +4108,25 @@ begin
   else if Sender = FWellHead then
   begin
     List.Add(FObserverList[MawWellHeadPosition]);
-  end
+  end;
+  // GWT
+  for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
+  begin
+    Item := SpecifiedConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
+  for ConcIndex := 0 to InjectionConcentrations.Count - 1 do
+  begin
+    Item := InjectionConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
 end;
 
 function TMawItem.GetPumpElevation: string;
@@ -3763,6 +4189,7 @@ end;
 function TMawItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
   SourceItem: TMawItem;
+  Index: Integer;
 begin
   result := inherited IsSame(AnotherItem) and (AnotherItem is TMawItem);
   if result then
@@ -3782,7 +4209,36 @@ begin
       and (PumpElevation = SourceItem.PumpElevation)
       and (ScalingLength = SourceItem.ScalingLength)
       and (HeadLimitChoice = SourceItem.HeadLimitChoice)
-
+      and (SpecifiedConcentrations.Count = SourceItem.SpecifiedConcentrations.Count)
+      and (InjectionConcentrations.Count = SourceItem.InjectionConcentrations.Count)
+      and (GwtStatus.Count = SourceItem.GwtStatus.Count);
+    if result then
+    begin
+      for Index := 0 to GwtStatus.Count - 1 do
+      begin
+        result := GwtStatus[Index].GwtBoundaryStatus = SourceItem.GwtStatus[Index].GwtBoundaryStatus;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to SpecifiedConcentrations.Count - 1 do
+      begin
+        result := SpecifiedConcentrations[Index].Value = SourceItem.SpecifiedConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+      for Index := 0 to InjectionConcentrations.Count - 1 do
+      begin
+        result := InjectionConcentrations[Index].Value = SourceItem.InjectionConcentrations[Index].Value;
+        if not Result then
+        begin
+          Exit;
+        end;
+      end;
+    end
   end;
 end;
 
@@ -3821,6 +4277,8 @@ begin
 end;
 
 procedure TMawItem.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  ChemSpeciesCount: Integer;
 begin
   case index of
     MawFlowingWellElevationPosition:
@@ -3844,7 +4302,35 @@ begin
     MawFlowingWellReductionLengthPosition:
       FlowingWellReductionLength := Value;
     else
-      Assert(False);
+      begin
+        // GWT
+        if frmGoPhast.PhastModel.GwtUsed then
+        begin
+          Index := Index-MawGwtStart;
+          ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+          while SpecifiedConcentrations.Count < ChemSpeciesCount do
+          begin
+            SpecifiedConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            SpecifiedConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while InjectionConcentrations.Count < ChemSpeciesCount do
+          begin
+            InjectionConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            InjectionConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Assert(False);
+        end;
+      end;
   end;
 end;
 
@@ -3869,6 +4355,11 @@ begin
     FFlowingWellReductionLength);
 end;
 
+procedure TMawItem.SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
+begin
+  FGwtStatus.Assign(Value);
+end;
+
 procedure TMawItem.SetHeadLimit(const Value: string);
 begin
   UpdateFormulaBlocks(Value, MawHeadLimitPosition, FHeadLimit);
@@ -3877,6 +4368,12 @@ end;
 procedure TMawItem.SetHeadLimitChoice(const Value: Boolean);
 begin
   FHeadLimitChoice := Value;
+end;
+
+procedure TMawItem.SetInjectionConcentrations(
+  const Value: TMawGwtConcCollection);
+begin
+  FInjectionConcentrations.Assign(Value);
 end;
 
 procedure TMawItem.SetMawStatus(const Value: TMawStatus);
@@ -3918,6 +4415,12 @@ begin
   UpdateFormulaBlocks(Value, MawScalingLengthPosition, FScalingLength);
 end;
 
+procedure TMawItem.SetSpecifiedConcentrations(
+  const Value: TMawGwtConcCollection);
+begin
+  FSpecifiedConcentrations.Assign(Value);
+end;
+
 procedure TMawItem.SetWellHead(const Value: string);
 begin
   UpdateFormulaBlocks(Value, MawWellHeadPosition, FWellHead);
@@ -3926,6 +4429,11 @@ end;
 { TMawTimeListLink }
 
 procedure TMawTimeListLink.CreateTimeLists;
+var
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
 begin
   inherited;
   FFlowingWellElevation := TModflowTimeList.Create(Model, Boundary.ScreenObject);
@@ -4018,10 +4526,58 @@ begin
   end;
   AddTimeList(FFlowingWellReductionLength);
 
+  FGwtStatusList := TModflowTimeLists.Create;
+  FSpecifiedConcList := TModflowTimeLists.Create;
+  FInjectionConcList := TModflowTimeLists.Create;
+
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
+    begin
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' MAW Status';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FGwtStatusList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' MAW Specified Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FSpecifiedConcList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' MAW Injection Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FInjectionConcList.Add(ConcTimeList);
+    end;
+  end;
+
 end;
 
 destructor TMawTimeListLink.Destroy;
 begin
+  FGwtStatusList.Free;
+  FSpecifiedConcList.Free;
+  FInjectionConcList.Free;
+
   FFlowingWellElevation.Free;
   FFlowingWellConductance.Free;
   FRate.Free;
@@ -4068,10 +4624,12 @@ var
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
+  FormulaIndex: Integer;
+  SpeciesCount: Integer;
 begin
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
-  Assert(BoundaryFunctionIndex in
-    [MawFlowingWellElevationPosition..MawFlowingWellReductionLengthPosition]);
+//  Assert(BoundaryFunctionIndex in
+//    [MawFlowingWellElevationPosition..MawFlowingWellReductionLengthPosition]);
   Assert(Expression <> nil);
 
   MawStorage := BoundaryStorage as TMawTransientStorage;
@@ -4169,7 +4727,40 @@ begin
             FlowingWellReductionLengthPestSeriesMethod := PestSeriesMethod;
           end
         else
-          Assert(False);
+          begin
+            FormulaIndex := BoundaryFunctionIndex - MawGwtStart;
+            // GWT
+            SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+            if FormulaIndex < SpeciesCount then
+            begin
+              with MawStorage.MawTransientArray[Index] do
+              begin
+                SpecifiedConcentrations.Values[FormulaIndex] := Expression.DoubleResult;
+                SpecifiedConcentrations.ValueAnnotations[FormulaIndex] := ACell.Annotation;
+                SpecifiedConcentrations.ValuePestNames[FormulaIndex] := PestName;
+                SpecifiedConcentrations.ValuePestSeriesNames[FormulaIndex] := PestSeriesName;
+                SpecifiedConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                SpecifiedConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+              end;
+              break;
+            end;
+
+            FormulaIndex := FormulaIndex - SpeciesCount;
+            if FormulaIndex < SpeciesCount then
+            begin
+              with MawStorage.MawTransientArray[Index] do
+              begin
+                InjectionConcentrations.Values[FormulaIndex] := Expression.DoubleResult;
+                InjectionConcentrations.ValueAnnotations[FormulaIndex] := ACell.Annotation;
+                InjectionConcentrations.ValuePestNames[FormulaIndex] := PestName;
+                InjectionConcentrations.ValuePestSeriesNames[FormulaIndex] := PestSeriesName;
+                InjectionConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                InjectionConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+              end;
+              break;
+            end;
+
+          end;
       end;
     end;
   end;
@@ -4182,8 +4773,19 @@ var
   index: integer;
   MawItem: TMawItem;
   MawBoundary: TMawBoundary;
+  SpeciesCount: Integer;
+  SpeciesIndex: Integer;
 begin
   inherited;
+  // GWT
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+  end
+  else
+  begin
+    SpeciesCount := 0;
+  end;
   MawStorage := BoundaryStorage as TMawTransientStorage;
   MawItem := AnItem as TMawItem;
 
@@ -4198,6 +4800,18 @@ begin
     MawStorage.MawTransientArray[index].Shutoff := MawItem.Shutoff;
     MawStorage.MawTransientArray[index].RateScaling := MawItem.RateScaling;
     MawStorage.MawTransientArray[index].HeadLimitChoice := MawItem.HeadLimitChoice;
+
+    SetLength(MawStorage.MawTransientArray[index].GwtStatus, SpeciesCount);
+    while MawItem.GwtStatus.Count < SpeciesCount do
+    begin
+      MawItem.GwtStatus.Add;
+    end;
+    for SpeciesIndex := 0 to SpeciesCount - 1 do
+    begin
+      MawStorage.MawTransientArray[index].GwtStatus[SpeciesIndex] :=
+        MawItem.GwtStatus[SpeciesIndex].GwtBoundaryStatus
+    end;
+
   end;
 end;
 
@@ -4311,6 +4925,11 @@ begin
   end;
 end;
 
+procedure TMawWellCollection.InvalidateGwtStatus(Sender: TObject);
+begin
+
+end;
+
 procedure TMawWellCollection.InvalidateHeadLimitData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -4332,6 +4951,41 @@ begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
       Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
       Link.FHeadLimit.Invalidate;
+    end;
+  end;
+end;
+
+procedure TMawWellCollection.InvalidateInjectionConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TMawTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TMawTimeListLink;
+    for Index := 0 to Link.FInjectionConcList.Count - 1 do
+    begin
+      TimeList := Link.FInjectionConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+      for Index := 0 to Link.FInjectionConcList.Count - 1 do
+      begin
+        TimeList := Link.FInjectionConcList[Index];
+        TimeList.Invalidate;
+      end;
     end;
   end;
 end;
@@ -4484,6 +5138,41 @@ begin
   end;
 end;
 
+procedure TMawWellCollection.InvalidateSpecifiedConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TMawTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TMawTimeListLink;
+    for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+    begin
+      TimeList := Link.FSpecifiedConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+      for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+      begin
+        TimeList := Link.FSpecifiedConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
+end;
+
 procedure TMawWellCollection.InvalidateWellHeadData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -4571,6 +5260,11 @@ begin
   result := FValues.FlowingWellReductionLengthAnnotation;
 end;
 
+function TMawCell.GetGwtStatus: TGwtBoundaryStatusArray;
+begin
+  result := FValues.GwtStatus
+end;
+
 function TMawCell.GetHeadLimit: double;
 begin
   result := FValues.HeadLimit
@@ -4584,6 +5278,11 @@ end;
 function TMawCell.GetHeadLimitChoice: Boolean;
 begin
   result := FValues.HeadLimitChoice;
+end;
+
+function TMawCell.GetInjectionConcentrations: TGwtCellData;
+begin
+  result := FValues.InjectionConcentrations
 end;
 
 function TMawCell.GetIntegerAnnotation(Index: integer;
@@ -4625,6 +5324,10 @@ begin
 end;
 
 function TMawCell.GetMf6TimeSeriesName(Index: Integer): string;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     MawFlowingWellElevationPosition:
@@ -4649,8 +5352,23 @@ begin
         result := inherited;
     else
       begin
-        result := inherited;
-        Assert(False);
+        Index := Index-MawGwtStart;
+        GwtPosition := Index ;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div MawGwtConcCount;
+        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        case GwtSource of
+          MawGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex]
+            end;
+          MawGwtInjectionConcentrationsPosition:
+            begin
+              result := FValues.InjectionConcentrations.ValueTimeSeriesNames[SpeciesIndex]
+            end;
+          else
+            Assert(False);
+        end;
       end;
   end;
 end;
@@ -4676,6 +5394,10 @@ begin
 end;
 
 function TMawCell.GetPestName(Index: Integer): string;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     MawFlowingWellElevationPosition:
@@ -4700,13 +5422,32 @@ begin
       result := FValues.FlowingWellReductionLengthPest;
     else
       begin
-        result := inherited;
-        Assert(False);
+        Index := Index-MawGwtStart;
+        GwtPosition := Index ;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div MawGwtConcCount;
+        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        case GwtSource of
+          MawGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValuePestNames[SpeciesIndex]
+            end;
+          MawGwtInjectionConcentrationsPosition:
+            begin
+              result := FValues.InjectionConcentrations.ValuePestNames[SpeciesIndex]
+            end;
+          else
+            Assert(False);
+        end;
       end;
   end;
 end;
 
 function TMawCell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     MawFlowingWellElevationPosition:
@@ -4731,13 +5472,35 @@ begin
       result := FValues.FlowingWellReductionLengthPestSeriesMethod;
     else
       begin
-        result := inherited;
-        Assert(False);
+        Index := Index-MawGwtStart;
+        GwtPosition := Index ;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div MawGwtConcCount;
+        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        case GwtSource of
+          MawGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValuePestSeriesMethods[SpeciesIndex]
+            end;
+          MawGwtInjectionConcentrationsPosition:
+            begin
+              result := FValues.InjectionConcentrations.ValuePestSeriesMethods[SpeciesIndex]
+            end;
+          else
+            begin
+              result := ppmMultiply;
+              Assert(False);
+            end;
+        end;
       end;
   end;
 end;
 
 function TMawCell.GetPestSeriesName(Index: Integer): string;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     MawFlowingWellElevationPosition:
@@ -4762,8 +5525,23 @@ begin
       result := FValues.FlowingWellReductionLengthPestSeriesName;
     else
       begin
-        result := inherited;
-        Assert(False);
+        Index := Index-MawGwtStart;
+        GwtPosition := Index ;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div MawGwtConcCount;
+        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        case GwtSource of
+          MawGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex]
+            end;
+          MawGwtInjectionConcentrationsPosition:
+            begin
+              result := FValues.InjectionConcentrations.ValueTimeSeriesNames[SpeciesIndex]
+            end;
+          else
+            Assert(False);
+        end;
       end;
   end;
 end;
@@ -4794,6 +5572,10 @@ begin
 end;
 
 function TMawCell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     MawFlowingWellElevationPosition:
@@ -4817,11 +5599,33 @@ begin
     MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLengthAnnotation;
     else
-      Assert(False);
+      begin
+        Index := Index-MawGwtStart;
+        GwtPosition := Index ;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div MawGwtConcCount;
+        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        case GwtSource of
+          MawGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValueAnnotations[SpeciesIndex]
+            end;
+          MawGwtInjectionConcentrationsPosition:
+            begin
+              result := FValues.InjectionConcentrations.ValueAnnotations[SpeciesIndex]
+            end;
+          else
+            Assert(False);
+        end;
+      end;
   end;
 end;
 
 function TMawCell.GetRealValue(Index: integer; AModel: TBaseModel): double;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   result := 0;
   case Index of
@@ -4846,7 +5650,28 @@ begin
     MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLength;
     else
-      Assert(False);
+      begin
+        Index := Index-MawGwtStart;
+        GwtPosition := Index ;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div MawGwtConcCount;
+        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        case GwtSource of
+          MawGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.Values[SpeciesIndex]
+            end;
+          MawGwtInjectionConcentrationsPosition:
+            begin
+              result := FValues.InjectionConcentrations.Values[SpeciesIndex]
+            end;
+          else
+            begin
+              result := inherited GetRealValue(Index, AModel);
+              Assert(False);
+            end;
+        end;
+      end;
   end;
 end;
 
@@ -4873,6 +5698,11 @@ end;
 function TMawCell.GetShutOff: Boolean;
 begin
   result := FValues.ShutOff
+end;
+
+function TMawCell.GetSpecifiedConcentrations: TGwtCellData;
+begin
+  result := FValues.SpecifiedConcentrations
 end;
 
 function TMawCell.GetWellHead: double;
@@ -4915,6 +5745,10 @@ begin
 end;
 
 procedure TMawCell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     MawFlowingWellElevationPosition:
@@ -4939,8 +5773,23 @@ begin
         inherited;
     else
       begin
-        inherited;
-        Assert(False);
+        Index := Index-MawGwtStart;
+        GwtPosition := Index ;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div MawGwtConcCount;
+        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        case GwtSource of
+          MawGwtSpecifiedConcentrationPosition:
+            begin
+              FValues.SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
+            end;
+          MawGwtInjectionConcentrationsPosition:
+            begin
+              FValues.InjectionConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
+            end;
+          else
+            Assert(False);
+        end;
       end;
   end;
 end;
@@ -4948,6 +5797,14 @@ end;
 procedure TMawCell.SetRow(const Value: integer);
 begin
   FValues.Cell.Row := Value;
+end;
+
+{ TMawGwtConcCollection }
+
+constructor TMawGwtConcCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TMawWellCollection);
+begin
+  inherited Create(Model, AScreenObject, ParentCollection);
 end;
 
 initialization

@@ -353,7 +353,6 @@ type
     Property EvapConcentrations: TGwtCellData read GetEvapConcentrations;
     Property RunoffConcentrations: TGwtCellData read GetRunoffConcentrations;
     Property InflowConcentrations: TGwtCellData read GetInflowConcentrations;
-
   end;
 
   TDivisionPriority = (cpFraction, cpExcess, cpThreshold, cpUpTo);
@@ -495,8 +494,6 @@ type
     FPestUpstreamFractionObserver: TObserver;
     FUsedObserver: TObserver;
     FStartingConcentrations: TStringConcCollection;
-//    FStartingConcentrations: TStringList;
-//    FStartConcFormulas: TFormulaObjectList;
     procedure SetDiversions(const Value: TDiversionCollection);
     procedure SetDownstreamSegments(const Value: TIntegerCollection);
     procedure SetSegmentNumber(const Value: Integer);
@@ -578,9 +575,7 @@ type
 
     procedure HandleChangedValue(Observer: TObserver); //override;
     function GetUsedObserver: TObserver; //override;
-//    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
     procedure CreateFormulaObjects; //override;
-//    function BoundaryObserverPrefix: string; override;
     procedure CreateObservers; //override;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
@@ -656,10 +651,15 @@ type
       write SetPestRoughnessFormula;
     property PestRoughnessMethod: TPestParamMethod read FPestRoughnessMethod
       write SetPestRoughnessMethod;
+    // GWT
     property StartingConcentrations: TStringConcCollection
       read FStartingConcentrations
-      write SetStartingConcentrations;
-  end;
+      write SetStartingConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+end;
 
 const
   SfrMf6InflowPosition = 0;
@@ -680,12 +680,12 @@ const
   SfrMf6PestBoundaryOffset = 6;
 
 Const
-  GwtConcCount = 5;
-  GwtSpecifiedConcentrationPosition = 0;
-  GwtRainfallConcentrationsPosition = 1;
-  GwtEvapConcentrationsPosition = 2;
-  GwtRunoffConcentrationsPosition = 3;
-  GwtInflowConcentrationsPosition = 4;
+  SfrGwtConcCount = 5;
+  SfrGwtSpecifiedConcentrationPosition = 0;
+  SfrGwtRainfallConcentrationsPosition = 1;
+  SfrGwtEvapConcentrationsPosition = 2;
+  SfrGwtRunoffConcentrationsPosition = 3;
+  SfrGwtInflowConcentrationsPosition = 4;
 
 function TryGetSfrOb(const SfrObName: string; var SfrOb: TSfrOb): Boolean;
 function SfrObToString(const SfrOb: TSfrOb): string;
@@ -860,6 +860,7 @@ begin
   SetLength(Diversions, 0);
   SetLength(DiversionAnnotations, 0);
 
+  // GWT
   SpecifiedConcentrations.Cache(Comp, Strings);
   RainfallConcentrations.Cache(Comp, Strings);
   EvapConcentrations.Cache(Comp, Strings);
@@ -925,6 +926,7 @@ begin
     Strings.Add(DiversionTimeSeriesName[index]);
   end;
 
+  // GWT
   SpecifiedConcentrations.RecordStrings(Strings);
   RainfallConcentrations.RecordStrings(Strings);
   EvapConcentrations.RecordStrings(Strings);
@@ -1031,6 +1033,7 @@ begin
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 
+  // GWT
   SpecifiedConcentrations.Restore(Decomp, Annotations);
   RainfallConcentrations.Restore(Decomp, Annotations);
   EvapConcentrations.Restore(Decomp, Annotations);
@@ -1283,7 +1286,7 @@ begin
   result := DiversionCount + 7;
   if frmGoPhast.PhastModel.GwtUsed then
   begin
-    result := result + frmGoPhast.PhastModel.MobileComponents.Count *5;
+    result := result + frmGoPhast.PhastModel.MobileComponents.Count * SfrGwtConcCount;
   end;
 end;
 
@@ -2122,61 +2125,10 @@ end;
 function TSfrMf6Collection.AdjustedFormula(FormulaIndex,
   ItemIndex: integer): string;
 var
-//  Boundary: TGhbBoundary;
-//  ScreenObject: TScreenObject;
   Item: TSfrMf6Item;
 begin
   Item := Items[ItemIndex] as TSfrMf6Item;
-//  if FormulaIndex = ConductancePosition then
-//  begin
-//    Boundary := BoundaryGroup as TGhbBoundary;
-//    ScreenObject := Boundary.ScreenObject as TScreenObject;
-//    case Boundary.FormulaInterpretation of
-//      fiSpecific:
-//        begin
-//          if ScreenObject.ScreenObjectLength = 0 then
-//          begin
-//            result := Item.Conductance;
-//          end
-//          else if ScreenObject.Closed then
-//          begin
-//            result := '(' + Item.Conductance
-//              + ') * ' + StrObjectIntersectArea;
-//          end
-//          else
-//          begin
-//            result := '(' + Item.Conductance
-//              + ') * ' + StrObjectSectionIntersectLength;
-//          end;
-//        end;
-//      fiDirect:
-//        begin
-//          result := Item.Conductance;
-//        end;
-//      fiTotal:
-//        begin
-//          if ScreenObject.ScreenObjectLength = 0 then
-//          begin
-//            result := Item.Conductance;
-//          end
-//          else if ScreenObject.Closed then
-//          begin
-//            result := '((' + Item.Conductance
-//              + ') * ' + StrObjectIntersectArea + ') / ' + StrObjectArea;
-//          end
-//          else
-//          begin
-//            result := '((' + Item.Conductance
-//              + ') * ' + StrObjectSectionIntersectLength+ ') / ' + StrObjectLength;
-//          end;
-//        end;
-//      else Assert(False);
-//    end;
-//  end
-//  else
-//  begin
-    result := Item.BoundaryFormula[FormulaIndex];
-//  end;
+  result := Item.BoundaryFormula[FormulaIndex];
 end;
 
 procedure TSfrMf6Collection.AssignCellList(Expression: TExpression;
@@ -2325,12 +2277,12 @@ begin
             begin
               with Sfr6Storage.SfrMF6Array[Index] do
               begin
-                SpecifiedConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
-                SpecifiedConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
-                SpecifiedConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
-                SpecifiedConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
-                SpecifiedConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
-                SpecifiedConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+                SpecifiedConcentrations.Values[FormulaIndex] := Expression.DoubleResult;
+                SpecifiedConcentrations.ValueAnnotations[FormulaIndex] := ACell.Annotation;
+                SpecifiedConcentrations.ValuePestNames[FormulaIndex] := PestName;
+                SpecifiedConcentrations.ValuePestSeriesNames[FormulaIndex] := PestSeriesName;
+                SpecifiedConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                SpecifiedConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
               break;
             end;
@@ -2340,57 +2292,57 @@ begin
             begin
               with Sfr6Storage.SfrMF6Array[Index] do
               begin
-                RainfallConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
-                RainfallConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
-                RainfallConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
-                RainfallConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
-                RainfallConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
-                RainfallConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+                RainfallConcentrations.Values[FormulaIndex] := Expression.DoubleResult;
+                RainfallConcentrations.ValueAnnotations[FormulaIndex] := ACell.Annotation;
+                RainfallConcentrations.ValuePestNames[FormulaIndex] := PestName;
+                RainfallConcentrations.ValuePestSeriesNames[FormulaIndex] := PestSeriesName;
+                RainfallConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                RainfallConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
               break;
             end;
-            
+
             FormulaIndex := FormulaIndex - SpeciesCount;
             if FormulaIndex < SpeciesCount then
             begin
               with Sfr6Storage.SfrMF6Array[Index] do
               begin
-                EvapConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
-                EvapConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
-                EvapConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
-                EvapConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
-                EvapConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
-                EvapConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+                EvapConcentrations.Values[FormulaIndex] := Expression.DoubleResult;
+                EvapConcentrations.ValueAnnotations[FormulaIndex] := ACell.Annotation;
+                EvapConcentrations.ValuePestNames[FormulaIndex] := PestName;
+                EvapConcentrations.ValuePestSeriesNames[FormulaIndex] := PestSeriesName;
+                EvapConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                EvapConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
               break;
             end;
-            
+
             FormulaIndex := FormulaIndex - SpeciesCount;
             if FormulaIndex < SpeciesCount then
             begin
               with Sfr6Storage.SfrMF6Array[Index] do
               begin
-                RunoffConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
-                RunoffConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
-                RunoffConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
-                RunoffConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
-                RunoffConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
-                RunoffConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+                RunoffConcentrations.Values[FormulaIndex] := Expression.DoubleResult;
+                RunoffConcentrations.ValueAnnotations[FormulaIndex] := ACell.Annotation;
+                RunoffConcentrations.ValuePestNames[FormulaIndex] := PestName;
+                RunoffConcentrations.ValuePestSeriesNames[FormulaIndex] := PestSeriesName;
+                RunoffConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                RunoffConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
               break;
             end;
-            
+
             FormulaIndex := FormulaIndex - SpeciesCount;
             if FormulaIndex < SpeciesCount then
             begin
               with Sfr6Storage.SfrMF6Array[Index] do
               begin
-                InflowConcentrations.Concentrations[FormulaIndex] := Expression.DoubleResult;
-                InflowConcentrations.ConcentrationAnnotations[FormulaIndex] := ACell.Annotation;
-                InflowConcentrations.ConcentrationPestNames[FormulaIndex] := PestName;
-                InflowConcentrations.ConcentrationPestSeriesNames[FormulaIndex] := PestSeriesName;
-                InflowConcentrations.ConcentrationPestSeriesMethods[FormulaIndex] := PestSeriesMethod;
-                InflowConcentrations.ConcentrationTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+                InflowConcentrations.Values[FormulaIndex] := Expression.DoubleResult;
+                InflowConcentrations.ValueAnnotations[FormulaIndex] := ACell.Annotation;
+                InflowConcentrations.ValuePestNames[FormulaIndex] := PestName;
+                InflowConcentrations.ValuePestSeriesNames[FormulaIndex] := PestSeriesName;
+                InflowConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+                InflowConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
               break;
             end;
@@ -3259,8 +3211,6 @@ begin
     Exit;
   end;
   inherited;
-
-
 end;
 
 procedure TSfrMf6Boundary.AssignCells(BoundaryStorage: TCustomBoundaryStorage;
@@ -3858,39 +3808,6 @@ begin
   result := FReachWidthObserver;
 end;
 
-//function TSfrMf6Boundary.GetRoughness: string;
-//begin
-//  Result := FRoughness.Formula;
-//  if ScreenObject <> nil then
-//  begin
-//    ResetItemObserver(RoughnessPosition);
-//  end;
-//end;
-
-//function TSfrMf6Boundary.GetRoughnessObserver: TObserver;
-//begin
-//  if FRoughnessObserver = nil then
-//  begin
-//    CreateObserver('SFR6_Roughness_', FRoughnessObserver, nil);
-//  end;
-//  result := FRoughnessObserver;
-//end;
-
-//function TSfrMf6Boundary.GetSConc(Index: Integer): string;
-//begin
-//
-//end;
-//
-//function TSfrMf6Boundary.GetStartingConcentrations: TStringlist;
-//begin
-//  result := FStartingConcentrations;
-//end;
-
-//function TSfrMf6Boundary.GetStartingConcentrations: TStringConcCollection;
-//begin
-//  F
-//end;
-
 function TSfrMf6Boundary.GetStreambedThickness: string;
 begin
   Result := FStreambedThickness.Formula;
@@ -4418,20 +4335,6 @@ begin
   end;
 end;
 
-//procedure TSfrMf6Boundary.SetSfrInflowLocation(const Value: TSfrInflowLocation);
-//begin
-//  if FSfrInflowLocation <> Value then
-//  begin
-//    FSfrInflowLocation := Value;
-//    InvalidateModel;
-//  end;
-//end;
-
-//procedure TSfrMf6Boundary.SetStartingConcentrations(const Value: TStringlist);
-//begin
-//  FStartingConcentrations.Assign(Value);
-//end;
-
 procedure TSfrMf6Boundary.SetStartingConcentrations(
   const Value: TStringConcCollection);
 begin
@@ -4520,39 +4423,39 @@ var
   SpeciesIndex: Integer;
 begin
   case Index of
-    SfrMf6InflowPosition: result := FValues.InflowTimeSeriesName;
-    SfrMf6RainfallPosition: result := FValues.RainfallTimeSeriesName;
-    SfrMf6EvaporationPosition: result := FValues.EvaporationTimeSeriesName;
-    SfrMf6RunoffPosition: result := FValues.RunoffTimeSeriesName;
+    SfrMf6InflowPosition: result := FValues.InflowPestSeriesName;
+    SfrMf6RainfallPosition: result := FValues.RainfallPestSeriesName;
+    SfrMf6EvaporationPosition: result := FValues.EvaporationPestSeriesName;
+    SfrMf6RunoffPosition: result := FValues.RunoffPestSeriesName;
     SfrMf6UpstreamFractionPosition: result := inherited;
-    SfrMf6StagePosition: result := FValues.StageTimeSeriesName;
-    SfrMf6RoughnessPosition: result := FValues.RoughnessTimeSeriesName;
+    SfrMf6StagePosition: result := FValues.StagePestSeriesName;
+    SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesName;
     else
       begin
         GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div GwtConcCount;
-        SpeciesIndex := GwtPosition mod GwtConcCount;
+        GwtSource := GwtPosition div SfrGwtConcCount;
+        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
         case GwtSource of
-          GwtSpecifiedConcentrationPosition:
+          SfrGwtSpecifiedConcentrationPosition:
             begin
-              result := FValues.SpecifiedConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex];
+              result := FValues.SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex];
             end;
-          GwtRainfallConcentrationsPosition:
+          SfrGwtRainfallConcentrationsPosition:
             begin
-              result := FValues.RainfallConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex];
+              result := FValues.RainfallConcentrations.ValueTimeSeriesNames[SpeciesIndex];
             end;
-          GwtEvapConcentrationsPosition:
+          SfrGwtEvapConcentrationsPosition:
             begin
-              result := FValues.EvapConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex];
+              result := FValues.EvapConcentrations.ValueTimeSeriesNames[SpeciesIndex];
             end;
-          GwtRunoffConcentrationsPosition:
+          SfrGwtRunoffConcentrationsPosition:
             begin
-              result := FValues.RunoffConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex];
+              result := FValues.RunoffConcentrations.ValueTimeSeriesNames[SpeciesIndex];
             end;
-          GwtInflowConcentrationsPosition:
+          SfrGwtInflowConcentrationsPosition:
             begin
-              result := FValues.InflowConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex];
+              result := FValues.InflowConcentrations.ValueTimeSeriesNames[SpeciesIndex];
             end;
           else
             Assert(False);
@@ -4589,28 +4492,28 @@ begin
       begin
         GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div GwtConcCount;
-        SpeciesIndex := GwtPosition mod GwtConcCount;
+        GwtSource := GwtPosition div SfrGwtConcCount;
+        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
         case GwtSource of
-          GwtSpecifiedConcentrationPosition:
+          SfrGwtSpecifiedConcentrationPosition:
             begin
-              result := FValues.SpecifiedConcentrations.ConcentrationPestNames[SpeciesIndex]
+              result := FValues.SpecifiedConcentrations.ValuePestNames[SpeciesIndex]
             end;
-          GwtRainfallConcentrationsPosition:
+          SfrGwtRainfallConcentrationsPosition:
             begin
-              result := FValues.RainfallConcentrations.ConcentrationPestNames[SpeciesIndex]
+              result := FValues.RainfallConcentrations.ValuePestNames[SpeciesIndex]
             end;
-          GwtEvapConcentrationsPosition:
+          SfrGwtEvapConcentrationsPosition:
             begin
-              result := FValues.EvapConcentrations.ConcentrationPestNames[SpeciesIndex]
+              result := FValues.EvapConcentrations.ValuePestNames[SpeciesIndex]
             end;
-          GwtRunoffConcentrationsPosition:
+          SfrGwtRunoffConcentrationsPosition:
             begin
-              result := FValues.RunoffConcentrations.ConcentrationPestNames[SpeciesIndex]
+              result := FValues.RunoffConcentrations.ValuePestNames[SpeciesIndex]
             end;
-          GwtInflowConcentrationsPosition:
+          SfrGwtInflowConcentrationsPosition:
             begin
-              result := FValues.InflowConcentrations.ConcentrationPestNames[SpeciesIndex]
+              result := FValues.InflowConcentrations.ValuePestNames[SpeciesIndex]
             end;
           else
             Assert(False);
@@ -4638,28 +4541,28 @@ begin
       begin
         GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div GwtConcCount;
-        SpeciesIndex := GwtPosition mod GwtConcCount;
+        GwtSource := GwtPosition div SfrGwtConcCount;
+        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
         case GwtSource of
-          GwtSpecifiedConcentrationPosition:
+          SfrGwtSpecifiedConcentrationPosition:
             begin
-              result := FValues.SpecifiedConcentrations.ConcentrationPestSeriesMethods[SpeciesIndex]
+              result := FValues.SpecifiedConcentrations.ValuePestSeriesMethods[SpeciesIndex]
             end;
-          GwtRainfallConcentrationsPosition:
+          SfrGwtRainfallConcentrationsPosition:
             begin
-              result := FValues.RainfallConcentrations.ConcentrationPestSeriesMethods[SpeciesIndex]
+              result := FValues.RainfallConcentrations.ValuePestSeriesMethods[SpeciesIndex]
             end;
-          GwtEvapConcentrationsPosition:
+          SfrGwtEvapConcentrationsPosition:
             begin
-              result := FValues.EvapConcentrations.ConcentrationPestSeriesMethods[SpeciesIndex]
+              result := FValues.EvapConcentrations.ValuePestSeriesMethods[SpeciesIndex]
             end;
-          GwtRunoffConcentrationsPosition:
+          SfrGwtRunoffConcentrationsPosition:
             begin
-              result := FValues.RunoffConcentrations.ConcentrationPestSeriesMethods[SpeciesIndex]
+              result := FValues.RunoffConcentrations.ValuePestSeriesMethods[SpeciesIndex]
             end;
-          GwtInflowConcentrationsPosition:
+          SfrGwtInflowConcentrationsPosition:
             begin
-              result := FValues.InflowConcentrations.ConcentrationPestSeriesMethods[SpeciesIndex]
+              result := FValues.InflowConcentrations.ValuePestSeriesMethods[SpeciesIndex]
             end;
           else
             begin
@@ -4690,28 +4593,28 @@ begin
       begin
         GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div GwtConcCount;
-        SpeciesIndex := GwtPosition mod GwtConcCount;
+        GwtSource := GwtPosition div SfrGwtConcCount;
+        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
         case GwtSource of
-          GwtSpecifiedConcentrationPosition:
+          SfrGwtSpecifiedConcentrationPosition:
             begin
-              result := FValues.SpecifiedConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex]
+              result := FValues.SpecifiedConcentrations.ValuePestSeriesNames[SpeciesIndex]
             end;
-          GwtRainfallConcentrationsPosition:
+          SfrGwtRainfallConcentrationsPosition:
             begin
-              result := FValues.RainfallConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex]
+              result := FValues.RainfallConcentrations.ValuePestSeriesNames[SpeciesIndex]
             end;
-          GwtEvapConcentrationsPosition:
+          SfrGwtEvapConcentrationsPosition:
             begin
-              result := FValues.EvapConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex]
+              result := FValues.EvapConcentrations.ValuePestSeriesNames[SpeciesIndex]
             end;
-          GwtRunoffConcentrationsPosition:
+          SfrGwtRunoffConcentrationsPosition:
             begin
-              result := FValues.RunoffConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex]
+              result := FValues.RunoffConcentrations.ValuePestSeriesNames[SpeciesIndex]
             end;
-          GwtInflowConcentrationsPosition:
+          SfrGwtInflowConcentrationsPosition:
             begin
-              result := FValues.InflowConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex]
+              result := FValues.InflowConcentrations.ValuePestSeriesNames[SpeciesIndex]
             end;
           else
             Assert(False);
@@ -4751,28 +4654,28 @@ begin
         else
         begin
           GwtPosition := Index - Length(FValues.Diversions) - 1;
-          GwtSource := GwtPosition div GwtConcCount;
-          SpeciesIndex := GwtPosition mod GwtConcCount;
+          GwtSource := GwtPosition div SfrGwtConcCount;
+          SpeciesIndex := GwtPosition mod SfrGwtConcCount;
           case GwtSource of
-            GwtSpecifiedConcentrationPosition:
+            SfrGwtSpecifiedConcentrationPosition:
               begin
-                result := FValues.SpecifiedConcentrations.ConcentrationAnnotations[SpeciesIndex]
+                result := FValues.SpecifiedConcentrations.ValueAnnotations[SpeciesIndex]
               end;
-            GwtRainfallConcentrationsPosition:
+            SfrGwtRainfallConcentrationsPosition:
               begin
-                result := FValues.RainfallConcentrations.ConcentrationAnnotations[SpeciesIndex]
+                result := FValues.RainfallConcentrations.ValueAnnotations[SpeciesIndex]
               end;
-            GwtEvapConcentrationsPosition:
+            SfrGwtEvapConcentrationsPosition:
               begin
-                result := FValues.EvapConcentrations.ConcentrationAnnotations[SpeciesIndex]
+                result := FValues.EvapConcentrations.ValueAnnotations[SpeciesIndex]
               end;
-            GwtRunoffConcentrationsPosition:
+            SfrGwtRunoffConcentrationsPosition:
               begin
-                result := FValues.RunoffConcentrations.ConcentrationAnnotations[SpeciesIndex]
+                result := FValues.RunoffConcentrations.ValueAnnotations[SpeciesIndex]
               end;
-            GwtInflowConcentrationsPosition:
+            SfrGwtInflowConcentrationsPosition:
               begin
-                result := FValues.InflowConcentrations.ConcentrationAnnotations[SpeciesIndex]
+                result := FValues.InflowConcentrations.ValueAnnotations[SpeciesIndex]
               end;
             else
               Assert(False);
@@ -4807,28 +4710,28 @@ begin
         else
         begin
           GwtPosition := Index - Length(FValues.Diversions) - 1;
-          GwtSource := GwtPosition div GwtConcCount;
-          SpeciesIndex := GwtPosition mod GwtConcCount;
+          GwtSource := GwtPosition div SfrGwtConcCount;
+          SpeciesIndex := GwtPosition mod SfrGwtConcCount;
           case GwtSource of
-            GwtSpecifiedConcentrationPosition:
+            SfrGwtSpecifiedConcentrationPosition:
               begin
-                result := FValues.SpecifiedConcentrations.Concentrations[SpeciesIndex]
+                result := FValues.SpecifiedConcentrations.Values[SpeciesIndex]
               end;
-            GwtRainfallConcentrationsPosition:
+            SfrGwtRainfallConcentrationsPosition:
               begin
-                result := FValues.RainfallConcentrations.Concentrations[SpeciesIndex]
+                result := FValues.RainfallConcentrations.Values[SpeciesIndex]
               end;
-            GwtEvapConcentrationsPosition:
+            SfrGwtEvapConcentrationsPosition:
               begin
-                result := FValues.EvapConcentrations.Concentrations[SpeciesIndex]
+                result := FValues.EvapConcentrations.Values[SpeciesIndex]
               end;
-            GwtRunoffConcentrationsPosition:
+            SfrGwtRunoffConcentrationsPosition:
               begin
-                result := FValues.RunoffConcentrations.Concentrations[SpeciesIndex]
+                result := FValues.RunoffConcentrations.Values[SpeciesIndex]
               end;
-            GwtInflowConcentrationsPosition:
+            SfrGwtInflowConcentrationsPosition:
               begin
-                result := FValues.InflowConcentrations.Concentrations[SpeciesIndex]
+                result := FValues.InflowConcentrations.Values[SpeciesIndex]
               end;
             else
               begin
@@ -4909,28 +4812,28 @@ begin
       begin
         GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div GwtConcCount;
-        SpeciesIndex := GwtPosition mod GwtConcCount;
+        GwtSource := GwtPosition div SfrGwtConcCount;
+        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
         case GwtSource of
-          GwtSpecifiedConcentrationPosition:
+          SfrGwtSpecifiedConcentrationPosition:
             begin
-              FValues.SpecifiedConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex] := Value;
+              FValues.SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
             end;
-          GwtRainfallConcentrationsPosition:
+          SfrGwtRainfallConcentrationsPosition:
             begin
-              FValues.RainfallConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex] := Value;
+              FValues.RainfallConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
             end;
-          GwtEvapConcentrationsPosition:
+          SfrGwtEvapConcentrationsPosition:
             begin
-              FValues.EvapConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex] := Value;
+              FValues.EvapConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
             end;
-          GwtRunoffConcentrationsPosition:
+          SfrGwtRunoffConcentrationsPosition:
             begin
-              FValues.RunoffConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex] := Value;
+              FValues.RunoffConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
             end;
-          GwtInflowConcentrationsPosition:
+          SfrGwtInflowConcentrationsPosition:
             begin
-              FValues.InflowConcentrations.ConcentrationTimeSeriesNames[SpeciesIndex] := Value;
+              FValues.InflowConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
             end;
           else
             Assert(False);
@@ -4949,7 +4852,7 @@ end;
 procedure TSfrMF6ConstantRecord.Assign(const Item: TSfrMF6ConstantRecord);
 begin
   self := Item;
-  self.StartingConcentrations := Item.StartingConcentrations;
+  self.StartingConcentrations.Assign(Item.StartingConcentrations);
 end;
 
 procedure TSfrMF6ConstantRecord.Cache(Comp: TCompressionStream;
@@ -5041,7 +4944,7 @@ begin
       begin
         // GWT
         Index := Index - SfrMf6HydraulicConductivityPosition - 1;
-        result := StartingConcentrations.ConcentrationAnnotations[Index]
+        result := StartingConcentrations.ValueAnnotations[Index]
       end;
   end
 end;
@@ -5078,7 +4981,7 @@ begin
       begin
         // GWT
         Index := Index - SfrMf6HydraulicConductivityPosition - 1;
-        result := StartingConcentrations.Concentrations[Index]
+        result := StartingConcentrations.Values[Index]
       end;
   end;
 end;
@@ -5115,7 +5018,7 @@ begin
       begin
         // GWT
         Index := Index - SfrMf6HydraulicConductivityPosition - 1;
-        result := StartingConcentrations.ConcentrationPestNames[Index]
+        result := StartingConcentrations.ValuePestNames[Index]
       end;
   end;
 end;
@@ -5261,7 +5164,7 @@ begin
       begin
         // GWT
         Index := Index - SfrMf6HydraulicConductivityPosition - 1;
-        StartingConcentrations.ConcentrationAnnotations[Index] := Value;
+        StartingConcentrations.ValueAnnotations[Index] := Value;
       end;
   end;
 end;
@@ -5306,7 +5209,7 @@ begin
       begin
         // GWT
         Index := Index - SfrMf6HydraulicConductivityPosition - 1;
-        StartingConcentrations.Concentrations[Index] := Value;
+        StartingConcentrations.Values[Index] := Value;
       end;
   end;
 end;
@@ -5343,7 +5246,7 @@ begin
       begin
         // GWT
         Index := Index - SfrMf6HydraulicConductivityPosition - 1;
-        StartingConcentrations.ConcentrationPestNames[Index] := Value;
+        StartingConcentrations.ValuePestNames[Index] := Value;
       end;
   end;
 end;

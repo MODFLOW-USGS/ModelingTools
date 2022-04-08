@@ -608,7 +608,8 @@ type
 
   // @name is used to set multiple formulas of a similar
   // type in one boundary. A descendent is used in the ETS package for
-  // depth and rate fractions
+  // depth and rate fractions. It is also used with concentrations or rates of
+  // different chemical species in GWT.
   TCustomStringValueItem = class abstract(TFormulaOrderedItem)
   private
     FObserver: TObserver;

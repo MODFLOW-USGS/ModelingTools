@@ -290,17 +290,18 @@ type
   TPestMethodList = TList<TPestParamMethod>;
   TStringListObjectList = TObjectList<TStringList>;
 
+  // @name  is mainly used for concentrations in boundaries.
   TGwtCellData = record
   private
     FSpeciesCount: Integer;
     procedure SetSpeciesCount(const Value: Integer);
   public
-    Concentrations: array of double;
-    ConcentrationAnnotations: array of string;
-    ConcentrationPestNames: array of string;
-    ConcentrationPestSeriesNames: array of string;
-    ConcentrationPestSeriesMethods: array of TPestParamMethod;
-    ConcentrationTimeSeriesNames: array of string;
+    Values: array of double;
+    ValueAnnotations: array of string;
+    ValuePestNames: array of string;
+    ValuePestSeriesNames: array of string;
+    ValuePestSeriesMethods: array of TPestParamMethod;
+    ValueTimeSeriesNames: array of string;
     procedure Assign(const Item: TGwtCellData);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -2154,12 +2155,12 @@ end;
 procedure TGwtCellData.Assign(const Item: TGwtCellData);
 begin
   self := Item;
-  SetLength(Concentrations, Length(Concentrations));
-  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
-  SetLength(ConcentrationPestNames, Length(ConcentrationPestNames));
-  SetLength(ConcentrationPestSeriesNames, Length(ConcentrationPestSeriesNames));
-  SetLength(ConcentrationPestSeriesMethods, Length(ConcentrationPestSeriesMethods));
-  SetLength(ConcentrationTimeSeriesNames, Length(ConcentrationTimeSeriesNames));
+  SetLength(Values, Length(Values));
+  SetLength(ValueAnnotations, Length(ValueAnnotations));
+  SetLength(ValuePestNames, Length(ValuePestNames));
+  SetLength(ValuePestSeriesNames, Length(ValuePestSeriesNames));
+  SetLength(ValuePestSeriesMethods, Length(ValuePestSeriesMethods));
+  SetLength(ValueTimeSeriesNames, Length(ValueTimeSeriesNames));
 end;
 
 procedure TGwtCellData.Cache(Comp: TCompressionStream; Strings: TStringList);
@@ -2167,31 +2168,31 @@ var
   Index: Integer;
   Count: Integer;
 begin
-  Count := Length(Concentrations);
+  Count := Length(Values);
   WriteCompInt(Comp, Count);
   for Index := 0 to Count - 1 do
   begin
-    WriteCompReal(Comp, Concentrations[Index]);
+    WriteCompReal(Comp, Values[Index]);
   end;
   for Index := 0 to Count - 1 do
   begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
+    WriteCompInt(Comp, Strings.IndexOf(ValueAnnotations[Index]));
   end;
   for Index := 0 to Count - 1 do
   begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestNames[Index]));
+    WriteCompInt(Comp, Strings.IndexOf(ValuePestNames[Index]));
   end;
   for Index := 0 to Count - 1 do
   begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
+    WriteCompInt(Comp, Strings.IndexOf(ValuePestSeriesNames[Index]));
   end;
   for Index := 0 to Count - 1 do
   begin
-    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
+    WriteCompInt(Comp, Ord(ValuePestSeriesMethods[Index]));
   end;
   for Index := 0 to Count - 1 do
   begin
-    WriteCompInt(Comp, Strings.IndexOf(ConcentrationTimeSeriesNames[Index]));
+    WriteCompInt(Comp, Strings.IndexOf(ValueTimeSeriesNames[Index]));
   end;
 
 end;
@@ -2200,21 +2201,21 @@ procedure TGwtCellData.RecordStrings(Strings: TStringList);
 var
   Index: Integer;
 begin
-  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
+  for Index := 0 to Length(ValueAnnotations) - 1 do
   begin
-    Strings.Add(ConcentrationAnnotations[Index]);
+    Strings.Add(ValueAnnotations[Index]);
   end;
-  for Index := 0 to Length(ConcentrationPestNames) - 1 do
+  for Index := 0 to Length(ValuePestNames) - 1 do
   begin
-    Strings.Add(ConcentrationPestNames[Index]);
+    Strings.Add(ValuePestNames[Index]);
   end;
-  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
+  for Index := 0 to Length(ValuePestSeriesNames) - 1 do
   begin
-    Strings.Add(ConcentrationPestSeriesNames[Index]);
+    Strings.Add(ValuePestSeriesNames[Index]);
   end;
-  for Index := 0 to Length(ConcentrationTimeSeriesNames) - 1 do
+  for Index := 0 to Length(ValueTimeSeriesNames) - 1 do
   begin
-    Strings.Add(ConcentrationTimeSeriesNames[Index]);
+    Strings.Add(ValueTimeSeriesNames[Index]);
   end;
 end;
 
@@ -2225,35 +2226,35 @@ var
   Index: Integer;
 begin
   Count := ReadCompInt(Decomp);
-  SetLength(Concentrations, Count);
+  SetLength(Values, Count);
   for Index := 0 to Count - 1 do
   begin
-    Concentrations[Index] := ReadCompReal(Decomp);
+    Values[Index] := ReadCompReal(Decomp);
   end;
-  SetLength(ConcentrationAnnotations, Count);
+  SetLength(ValueAnnotations, Count);
   for Index := 0 to Count - 1 do
   begin
-    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
+    ValueAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
   end;
-  SetLength(ConcentrationPestNames, Count);
+  SetLength(ValuePestNames, Count);
   for Index := 0 to Count - 1 do
   begin
-    ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
+    ValuePestNames[Index] := Annotations[ReadCompInt(Decomp)];
   end;
-  SetLength(ConcentrationPestSeriesNames, Count);
+  SetLength(ValuePestSeriesNames, Count);
   for Index := 0 to Count - 1 do
   begin
-    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+    ValuePestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
   end;
-  SetLength(ConcentrationPestSeriesMethods, Count);
+  SetLength(ValuePestSeriesMethods, Count);
   for Index := 0 to Count - 1 do
   begin
-    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
+    ValuePestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
   end;
-  SetLength(ConcentrationTimeSeriesNames, Count);
+  SetLength(ValueTimeSeriesNames, Count);
   for Index := 0 to Count - 1 do
   begin
-    ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+    ValueTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
   end;
 end;
 
@@ -2262,12 +2263,12 @@ begin
   if FSpeciesCount <> Value then
   begin
     FSpeciesCount := Value;
-    SetLength(Concentrations, FSpeciesCount);
-    SetLength(ConcentrationAnnotations, FSpeciesCount);
-    SetLength(ConcentrationPestNames, FSpeciesCount);
-    SetLength(ConcentrationPestSeriesNames, FSpeciesCount);
-    SetLength(ConcentrationPestSeriesMethods, FSpeciesCount);
-    SetLength(ConcentrationTimeSeriesNames, FSpeciesCount);
+    SetLength(Values, FSpeciesCount);
+    SetLength(ValueAnnotations, FSpeciesCount);
+    SetLength(ValuePestNames, FSpeciesCount);
+    SetLength(ValuePestSeriesNames, FSpeciesCount);
+    SetLength(ValuePestSeriesMethods, FSpeciesCount);
+    SetLength(ValueTimeSeriesNames, FSpeciesCount);
   end;
 end;
 

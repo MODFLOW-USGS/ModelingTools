@@ -498,8 +498,8 @@ begin
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
-      if (Well_Cell.GwtConcentrations.ConcentrationPestNames[SpeciesIndex] <> '')
-       or (Well_Cell.GwtConcentrations.ConcentrationPestSeriesNames[SpeciesIndex] <> '') then
+      if (Well_Cell.GwtConcentrations.ValuePestNames[SpeciesIndex] <> '')
+       or (Well_Cell.GwtConcentrations.ValuePestSeriesNames[SpeciesIndex] <> '') then
       begin
         FPestParamUsed := True;
       end;

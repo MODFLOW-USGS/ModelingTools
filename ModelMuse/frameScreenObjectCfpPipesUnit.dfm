@@ -57,10 +57,11 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 105
-    EditLabel.Height = 13
+    EditLabel.Width = 147
+    EditLabel.Height = 20
     EditLabel.Caption = 'Diameter (DIAMETER)'
     TabOrder = 2
+    Text = ''
     OnChange = edDiameterChange
   end
   object edTortuosity: TLabeledEdit
@@ -69,10 +70,11 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 124
-    EditLabel.Height = 13
+    EditLabel.Width = 162
+    EditLabel.Height = 20
     EditLabel.Caption = 'Tortuosity (TORTUOSITY)'
     TabOrder = 4
+    Text = ''
     OnChange = edTortuosityChange
   end
   object edRoughnessHeight: TLabeledEdit
@@ -81,10 +83,11 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 141
-    EditLabel.Height = 13
+    EditLabel.Width = 192
+    EditLabel.Height = 20
     EditLabel.Caption = 'Roughness height (RHEIGHT)'
     TabOrder = 6
+    Text = ''
     OnChange = edRoughnessHeightChange
   end
   object edLowerCriticalR: TLabeledEdit
@@ -93,12 +96,13 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 324
-    EditLabel.Height = 13
+    EditLabel.Width = 442
+    EditLabel.Height = 20
     EditLabel.Caption = 
       'Lower critical Reynolds number (turbulent to laminar) (LCRITREY_' +
       'P)'
     TabOrder = 8
+    Text = ''
     OnChange = edLowerCriticalRChange
   end
   object edHigherCriticalR: TLabeledEdit
@@ -107,12 +111,13 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 327
-    EditLabel.Height = 13
+    EditLabel.Width = 448
+    EditLabel.Height = 20
     EditLabel.Caption = 
       'Higher critical Reynolds number (laminar to turbulent) (TCRITREY' +
       '_P)'
     TabOrder = 10
+    Text = ''
     OnChange = edHigherCriticalRChange
   end
   object btnHigherCriticalR: TButton
@@ -130,10 +135,11 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 213
-    EditLabel.Height = 13
+    EditLabel.Width = 297
+    EditLabel.Height = 20
     EditLabel.Caption = 'Conductance or permeability (K_EXCHANGE)'
     TabOrder = 12
+    Text = ''
     OnChange = edConductancePermeabilityChange
   end
   object btnConductancePermeability: TButton
@@ -151,10 +157,11 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 133
-    EditLabel.Height = 13
+    EditLabel.Width = 182
+    EditLabel.Height = 20
     EditLabel.Caption = 'Pipe elevation (ELEVATION)'
     TabOrder = 14
+    Text = ''
     OnChange = edConductancePermeabilityChange
   end
   object btnElevation: TButton

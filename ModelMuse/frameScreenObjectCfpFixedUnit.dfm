@@ -9,8 +9,8 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
   object lblHint: TLabel
     Left = 3
     Top = 69
-    Width = 317
-    Height = 96
+    Width = 314
+    Height = 120
     Caption = 
       'CFP Fixed heads must be greater than or equal to -1. It is only ' +
       'necessary to specify CFP fixed heads for nodes that are CFP fixe' +
@@ -35,10 +35,11 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
     Width = 233
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 62
-    EditLabel.Height = 16
+    EditLabel.Width = 72
+    EditLabel.Height = 20
     EditLabel.Caption = 'Fixed head'
     TabOrder = 2
+    Text = ''
     OnChange = edFixedHeadChange
     ExplicitWidth = 227
   end

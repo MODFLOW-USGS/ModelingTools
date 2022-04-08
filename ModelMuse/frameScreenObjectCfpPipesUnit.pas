@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frameScreenObjectUnit, ExtCtrls,
-  StdCtrls, RbwEdit, UndoItemsScreenObjects;
+  StdCtrls, RbwEdit, UndoItemsScreenObjects, Vcl.Mask;
 
 type
   TframeScreenObjectCfpPipes = class(TframeScreenObject)

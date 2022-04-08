@@ -25,10 +25,10 @@ type
     FMawNames: TStringList;
     FWellProperties: array of TMawSteadyWellRecord;
     FWellConnections: TList<TMawSteadyConnectionRecord>;
-//    FNameOfFile: string;
     FMawPackage: TMawPackage;
     FFlowingWells: Boolean;
     FMawObservations: TMawObservationList;
+    FSpeciesIndex: Integer;
     procedure AssignWellScreensAndWellProperties;
     procedure WriteOptions;
     procedure WriteDimensions;
@@ -38,6 +38,11 @@ type
     function CheckOK(AScreenObject: TScreenObject;
       Boundary: TMawBoundary): Boolean;
     procedure WriteFileInternal;
+    // MWT
+    procedure WriteGwtOptions;
+    procedure WriteGwtPackageData;
+    procedure WriteGwtStressPeriods;
+    procedure WriteGwtFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
     procedure Evaluate; override;
@@ -51,6 +56,7 @@ type
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
+    procedure WriteMwtFile(const AFileName: string; SpeciesIndex: Integer);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateSteadyData;
     class function ObservationOutputExtension: string; override;
@@ -66,7 +72,7 @@ uses
   DataSetUnit, GIS_Functions, AbstractGridUnit, System.Math, ModflowUnitNumbers,
   MeshRenumberingTypes, Vcl.Dialogs, Modflow6ObsWriterUnit,
   ModflowMvrUnit, ModflowMvrWriterUnit, ModflowParameterUnit,
-  ModelMuseUtilities;
+  ModelMuseUtilities, Mt3dmsChemUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrTheFollowingObject = 'The following objects can not be used to define m' +
@@ -130,6 +136,15 @@ resourcestring
   'ined by %s makes the well skin diameter larger than the cell size.';
   StrMAWStartingHeadLe = 'MAW starting head less than well bottom';
   StrMAWStartingHeadTo = 'MAW starting head too low at (%0:d, %1:d, %2:d)';
+  StrMAWTimeExtended = 'MAW Time extended';
+  StrIn0sTheLastDe = 'In %0:s, the last defined time was %1:g which was befo' +
+  're the end of the model. It has been extended to %2:g';
+  StrInactiveMAWPeriod = 'Inactive MAW period added';
+  StrIn0sThereWasA = 'In %0:s, there was a gap in time from %1:g to %2:g. An' +
+  ' inactive period has been inserted to fill that time.';
+
+const
+  StrMAW1 = 'MAW-1';
 
 { TModflowMAW_Writer }
 
@@ -205,6 +220,10 @@ var
   StartTime: Double;
   FirstItem: TMawItem;
   ItemIndex: Integer;
+  EndTime: Double;
+  Item1: TMawItem;
+  Item2: TMawItem;
+  NewItem: TMawItem;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingObject);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrECountZero);
@@ -225,6 +244,7 @@ begin
   FFlowingWells := False;
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
+  EndTime := Model.ModflowFullStressPeriods.Last.Endtime;
 //  StartTime := Model.ModflowStressPeriods.First.StartTime;
 
   FMawObjects.Clear;
@@ -263,7 +283,7 @@ begin
         Exit;
       end;
 
-      MawItem := Boundary.Values[0] as TMawItem;
+      MawItem := Boundary.Values.First as TMawItem;
       if MawItem.StartTime > StartTime then
       begin
         FirstItem := Boundary.Values.Insert(0) as TMawItem;
@@ -272,6 +292,34 @@ begin
         FirstItem.EndTime := MawItem.StartTime;
         FirstItem.MawStatus := mwInactive;
       end;
+
+      MawItem := Boundary.Values.Last as TMawItem;
+      if MawItem.Endtime < Endtime then
+      begin
+        frmErrorsAndWarnings.AddWarning(Model, StrMAWTimeExtended,
+          Format(StrIn0sTheLastDe, [AScreenObject.Name, MawItem.Endtime,
+          Endtime]), AScreenObject);
+        MawItem.Endtime := Endtime;
+      end;
+
+      for ItemIndex := Boundary.Values.Count - 2 downto 0 do
+      begin
+        Item1 := Boundary.Values[ItemIndex] as TMawItem;
+        Item2 := Boundary.Values[ItemIndex+1] as TMawItem;
+        if Item1.EndTime < Item2.StartTime then
+        begin
+          NewItem := Boundary.Values.Add as TMawItem;
+          NewItem.Assign(Item1);
+          NewItem.MawStatus := mwInactive;;
+          NewItem.Starttime := Item1.EndTime;
+          NewItem.Endtime := Item2.Starttime;
+          NewItem.Index := ItemIndex+1;
+          frmErrorsAndWarnings.AddWarning(Model, StrInactiveMAWPeriod,
+            Format(StrIn0sThereWasA,
+            [AScreenObject.Name, NewItem.Starttime, NewItem.Endtime]), AScreenObject);
+        end;
+      end;
+
       Boundary.WellNumber := FMawObjects.Add(AScreenObject) + 1;
       FMawNames.AddObject(AScreenObject.Name, AScreenObject);
       Boundary.GetCellValues(Values, Dummy, Model, self);
@@ -377,6 +425,377 @@ begin
   finally
     CloseFile;
   end;
+end;
+
+procedure TModflowMAW_Writer.WriteGwtFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+
+    WriteGwtOptions;
+    WriteGwtPackageData;
+    WriteGwtStressPeriods;
+
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TModflowMAW_Writer.WriteGwtOptions;
+var
+  ASpecies: TMobileChemSpeciesItem;
+  budgetfile: string;
+  BaseFileName: string;
+//  SfrMf6Package: TSfrModflow6PackageSelection;
+  concentrationfile: string;
+  budgetCsvFile: string;
+  MawPackage: TMawPackage;
+begin
+  WriteBeginOptions;
+  try
+    WriteString('    FLOW_PACKAGE_NAME ');
+    WriteString(StrMAW1);
+    NewLine;
+
+    Assert(FSpeciesIndex >= 0);
+    Assert(FSpeciesIndex < Model.MobileComponents.Count);
+    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
+    ASpecies := Model.MobileComponents[FSpeciesIndex];
+    WriteString(' ' + ASpecies.Name);
+    NewLine;
+
+    WriteString('    BOUNDNAMES');
+    NewLine;
+
+    PrintListInputOption;
+    PrintConcentrationOption;
+    PrintFlowsOption;
+    WriteSaveFlowsOption;
+
+    MawPackage := Model.ModflowPackages.MawPackage;
+    BaseFileName := ChangeFileExt(FNameOfFile, '');
+    BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
+
+    if MawPackage.SaveGwtConcentration then
+    begin
+      WriteString('    CONCENTRATION FILEOUT ');
+      concentrationfile := BaseFileName + '.sft_conc';
+      Model.AddModelOutputFile(concentrationfile);
+      concentrationfile := ExtractFileName(concentrationfile);
+      WriteString(concentrationfile);
+      NewLine;
+    end;
+
+    if MawPackage.SaveGwtBudget then
+    begin
+      WriteString('    BUDGET FILEOUT ');
+      budgetfile := BaseFileName + '.sft_budget';
+      Model.AddModelOutputFile(budgetfile);
+      budgetfile := ExtractFileName(budgetfile);
+      WriteString(budgetfile);
+      NewLine;
+    end;
+
+    if MawPackage.SaveGwtBudgetCsv then
+    begin
+      WriteString('    BUDGETCSV FILEOUT ');
+      budgetCsvFile := BaseFileName + '.sft_budget.csv';
+      Model.AddModelOutputFile(budgetCsvFile);
+      budgetCsvFile := ExtractFileName(budgetCsvFile);
+      WriteString(budgetCsvFile);
+      NewLine;
+    end;
+
+  //  [TS6 FILEIN <ts6_filename>]
+  //  [OBS6 FILEIN <obs6_filename>]
+  finally
+    WriteEndOptions
+  end;
+end;
+
+procedure TModflowMAW_Writer.WriteGwtPackageData;
+var
+  WellIndex: Integer;
+  AWell: TMawSteadyWellRecord;
+  BoundName: string;
+begin
+  WriteBeginPackageData;
+
+  WriteString('# <mawno> <strt> [<boundname>]');
+  NewLine;
+
+  for WellIndex := 0 to Length(FWellProperties) - 1 do
+  begin
+    AWell := FWellProperties[WellIndex];
+    WriteInteger(AWell.WellNumber);
+
+    WriteFormulaOrValueBasedOnAPestName(
+      AWell.StartingConcentrations.ValuePestNames[FSpeciesIndex],
+      AWell.StartingConcentrations.Values[FSpeciesIndex],
+      AWell.Layer, AWell.Row, AWell.Column);
+
+    BoundName := Copy(AWell.BoundName, 1, MaxBoundNameLength);
+    BoundName := ' ''' + BoundName + ''' ';
+    WriteString(BoundName);
+
+    NewLine;
+  end;
+
+  WriteEndPackageData;
+end;
+
+procedure TModflowMAW_Writer.WriteGwtStressPeriods;
+var
+  StressPeriodIndex: Integer;
+  Cells: TValueCellList;
+  CellIndex: Integer;
+  ACell: TMawCell;
+  MoverWriter: TModflowMvrWriter;
+  MvrReceiver: TMvrReceiver;
+  MvrSource: TMvrRegisterKey;
+  AScreenObject: TScreenObject;
+  GwtStatus: TGwtBoundaryStatus;
+  FormulaIndex: Integer;
+begin
+  if MvrWriter <> nil then
+  begin
+    MoverWriter := MvrWriter as TModflowMvrWriter;
+  end
+  else
+  begin
+    MoverWriter := nil;
+  end;
+  MvrReceiver.ReceiverKey.ReceiverPackage := rpcMaw;
+  MvrReceiver.ReceiverValues.StreamCells := nil;
+
+  for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count -1 do
+  begin
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+    frmProgressMM.AddMessage(Format(
+      StrWritingMAWStre, [StressPeriodIndex+1]));
+
+    MvrSource.StressPeriod := StressPeriodIndex;
+
+    WriteBeginPeriod(StressPeriodIndex);
+    WriteString('# <wellno> <<mwtsetting>>');
+    NewLine;
+    MvrReceiver.ReceiverKey.StressPeriod := StressPeriodIndex;
+
+    Cells := Values[StressPeriodIndex];
+
+    for CellIndex := 0 to Cells.Count - 1 do
+    begin
+      ACell := Cells[CellIndex] as TMawCell;
+
+      MvrReceiver.ReceiverKey.ScreenObject :=
+        ACell.MawBoundary.ScreenObject;
+      MvrReceiver.ReceiverValues.Index := ACell.WellNumber;
+      if (MoverWriter <> nil) and not WritingTemplate then
+      begin
+        MoverWriter.AddMvrReceiver(MvrReceiver);
+      end;
+
+      WriteInteger(ACell.WellNumber);
+
+      case ACell.MawStatus of
+        mwInactive:
+          begin
+            GwtStatus := gbsInactive;
+          end;
+        mwActive, mwConstantHead:
+          begin
+            GwtStatus := ACell.GwtStatus[FSpeciesIndex];
+          end;
+        else
+          begin
+            GwtStatus := gbsInactive;
+            Assert(False);
+          end;
+      end;
+      WriteString(' STATUS');
+      case GwtStatus of
+        gbsInactive:
+          begin
+            WriteString(' INACTIVE');
+          end;
+        gbsActive:
+          begin
+            WriteString(' ACTIVE');
+          end;
+        gbsConstant:
+          begin
+            WriteString(' CONSTANT');
+          end;
+        else
+          Assert(False);
+      end;
+      NewLine;
+
+      case GwtStatus of
+        gbsActive:
+          begin
+            WriteInteger(ACell.WellNumber);
+            WriteString(' RATE');
+            FormulaIndex := MawGwtStart
+              + MawGwtConcCount*MawGwtInjectionConcentrationsPosition + FSpeciesIndex;
+            WriteValueOrFormula(ACell, FormulaIndex);
+            NewLine;
+          end;
+        gbsInactive:
+          begin
+            // do nothing
+          end;
+        gbsConstant:
+          begin
+            WriteInteger(ACell.WellNumber);
+            WriteString(' CONCENTRATION');
+            FormulaIndex := MawGwtStart
+              + MawGwtConcCount*MawGwtSpecifiedConcentrationPosition + FSpeciesIndex;
+            WriteValueOrFormula(ACell, FormulaIndex);
+            NewLine;
+          end;
+        else
+          Assert(False);
+      end;
+
+      case ACell.FlowingWell of
+        fwNotFlowing:
+          begin
+            // do nothing
+          end;
+        fwFlowing:
+          begin
+            WriteInteger(ACell.WellNumber);
+            WriteString(' FLOWING_WELL');
+            WriteValueOrFormula(ACell, MawFlowingWellElevationPosition);
+//            WriteFloat(ACell.FlowingWellElevation);
+
+            WriteValueOrFormula(ACell, MawFlowingWellConductancePosition);
+//            WriteFloat(ACell.FlowingWellConductance);
+
+            WriteValueOrFormula(ACell, MawFlowingWellReductionLengthPosition);
+//            WriteFloat(ACell.FlowingWellReductionLength);
+            if ACell.FlowingWellReductionLength <= 0 then
+            begin
+              AScreenObject := ACell.ScreenObject as TScreenObject;
+              frmErrorsAndWarnings.AddError(Model, StrFlowingWellReducti,
+                Format(StrIn0sInStressPe,
+                [AScreenObject.Name, StressPeriodIndex+1]),
+                AScreenObject);
+            end;
+            NewLine;
+          end;
+      end;
+
+      if ACell.MawStatus <> mwInactive then
+      begin
+        WriteInteger(ACell.WellNumber);
+        WriteString(' RATE');
+        WriteValueOrFormula(ACell, MawRatePosition);
+//        WriteFloat(ACell.Rate);
+        NewLine;
+      end;
+
+        // Formerly, head was exported for inactive cells.
+        // Was this to compensate for a bug in MODFLOW that has now been fixed?
+//      if ACell.MawStatus in [mwInactive, mwConstantHead] then
+      if ACell.MawStatus = mwConstantHead then
+      begin
+        WriteInteger(ACell.WellNumber);
+        WriteString(' WELL_HEAD');
+        WriteValueOrFormula(ACell, MawWellHeadPosition);
+//        WriteFloat(ACell.WellHead);
+        NewLine;
+      end;
+
+      if ACell.HeadLimitChoice then
+      begin
+        WriteInteger(ACell.WellNumber);
+        WriteString(' HEAD_LIMIT');
+        WriteValueOrFormula(ACell, MawHeadLimitPosition);
+//        WriteFloat(ACell.HeadLimit);
+        NewLine;
+      end;
+
+      if ACell.ShutOff then
+      begin
+        WriteInteger(ACell.WellNumber);
+        WriteString(' SHUT_OFF');
+        WriteValueOrFormula(ACell, MawMinRatePosition);
+//        WriteFloat(ACell.MinRate);
+        WriteValueOrFormula(ACell, MawMaxRatePosition);
+//        WriteFloat(ACell.MaxRate);
+        NewLine;
+      end;
+
+      if ACell.RateScaling then
+      begin
+        WriteInteger(ACell.WellNumber);
+        WriteString(' RATE_SCALING');
+        WriteValueOrFormula(ACell, MawPumpElevationPosition);
+//        WriteFloat(ACell.PumpElevation);
+        WriteValueOrFormula(ACell, MawScalingLengthPosition);
+//        WriteFloat(ACell.ScalingLength);
+        NewLine;
+      end;
+
+      if ACell.MvrUsed and (MvrWriter <> nil)
+        and (ACell.MawStatus <> mwInactive) and not WritingTemplate then
+      begin
+        MvrSource.Index := ACell.WellNumber;
+        MvrSource.SourceKey.MvrIndex := ACell.MvrIndex;
+        MvrSource.SourceKey.ScreenObject := ACell.MawBoundary.ScreenObject;
+        MoverWriter.AddMvrSource(MvrSource);
+      end;
+    end;
+
+    WriteEndPeriod;
+  end;
+end;
+
+procedure TModflowMAW_Writer.WriteMwtFile(const AFileName: string;
+  SpeciesIndex: Integer);
+var
+  SpeciesName: string;
+  Abbreviation: string;
+begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Abbreviation := 'MWT6';
+  end
+  else
+  begin
+    Exit;
+  end;
+  if Model.PackageGeneratedExternally(Abbreviation) then
+  begin
+    Exit;
+  end;
+  FSpeciesIndex :=  SpeciesIndex;
+  SpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
+  FNameOfFile := ChangeFileExt(AFileName, '') + '.' + SpeciesName + '.mwt';
+  FInputFileName := FNameOfFile;
+
+  WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    WriteGwtFileInternal;
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+
 end;
 
 function TModflowMAW_Writer.Mf6ObservationsUsed: Boolean;
@@ -838,7 +1257,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
-  WriteToNameFile(StrMAW, 0, FNameOfFile, foInput, Model, False, 'MAW-1');
+  WriteToNameFile(StrMAW, 0, FNameOfFile, foInput, Model, False, StrMAW1);
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then
   begin
@@ -1236,6 +1655,13 @@ var
   Column: Integer;
   Row: Integer;
   Layer: Integer;
+  SpeciesCount: Integer;
+  StartingConcentrations: TStringConcCollection;
+  SpeciesIndex: Integer;
+  Species: TMobileChemSpeciesItem;
+  PropertyFormula: string;
+  FormulaItem: TStringConcValueItem;
+  PropertyName: string;
   procedure CompileFormula(Formula: string; const FormulaName: string;
     var OutFormula: string; out PestParamName: string;
     out Column, Row, Layer: Integer; SpecifiedLayer: Integer = 0);
@@ -1302,8 +1728,6 @@ var
           Column := AWell.Column;
           Row := AWell.Row;
           Layer := SpecifiedLayer;
-          //      AnotherDataSet := (FModel as TPhastModel).DataSets[DataSetIndex];
-          //              Assert(AnotherDataSet <> DataSet);
           Assert(AnotherDataSet.DataType = Variable.ResultType);
           if AnotherDataSet.Orientation = dsoTop then
           begin
@@ -1440,8 +1864,44 @@ begin
 
         AWellRecord.BoundName := AScreenObject.Name;
 
+        SpeciesCount := 0;
+        if Model.GwtUsed then
+        begin
+          SpeciesCount := Model.MobileComponents.Count;
+          AWellRecord.StartingConcentrations.SpeciesCount := SpeciesCount;
+          StartingConcentrations := Boundary.StartingConcentrations;
+          while StartingConcentrations.Count < Model.MobileComponents.Count do
+          begin
+            FormulaItem := StartingConcentrations.Add;
+            FormulaItem.Value := '0.';
+          end;
+
+          for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+          begin
+            Species := Model.MobileComponents[SpeciesIndex];
+            PropertyName := Format('StartingConcentration_%s', [Species.Name]);
+            PropertyFormula := StartingConcentrations[SpeciesIndex].Value;
+
+            CompileFormula(PropertyFormula, PropertyName, Formula,
+              PestParamName, Column, Row, Layer);
+            Expression.Evaluate;
+            AWellRecord.StartingConcentrations.
+              Values[SpeciesIndex] := Expression.DoubleResult;
+            AWellRecord.StartingConcentrations.
+              ValueAnnotations[SpeciesIndex] := AScreenObject.IntersectAnnotation(Formula, nil);
+            AWellRecord.StartingConcentrations.
+              ValuePestNames[SpeciesIndex] := PestParamName;
+          end;
+        end
+        else
+        begin
+          AWellRecord.StartingConcentrations.SpeciesCount := SpeciesCount;
+        end;
+
         AWellConnection.WellNumber := Boundary.WellNumber;
         AWellConnection.ScreenObjectName := AScreenObject.Name;
+
+
 
         Cell.Column := AWell.Column;
         Cell.Row := AWell.Row;

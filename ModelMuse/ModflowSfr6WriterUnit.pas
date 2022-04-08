@@ -181,6 +181,7 @@ resourcestring
   ' inactive period has been inserted to fill that time.';
   StrTheSFRSegmentDefi = 'The SFR segment defined by %s doesn''t appear to i' +
   'ntersect any active cells.';
+  StrStartingConcentratio = 'StartingConcentration_%s';
 
 const
   StrSfrFlowPackageName = 'SFR-1';
@@ -547,7 +548,7 @@ begin
       for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
       begin
         Species := Model.MobileComponents[SpeciesIndex];
-        PropertyNames.Add(Format('StartingConcentration_%s', [Species.Name]));
+        PropertyNames.Add(Format(StrStartingConcentratio, [Species.Name]));
         PropertyFormulas.Add(StartingConcentrations[SpeciesIndex].Value);
       end;
     end;
@@ -965,9 +966,6 @@ begin
 
   AssignConnections;
   FReachCount := NextReachNumber-1;
-
-//  CheckStage;
-
 end;
 
 procedure TModflowSFR_MF6_Writer.EvaluateSteadyData;
@@ -2026,8 +2024,8 @@ begin
 
       ReachProp := ASegment.SteadyValues[ReachIndex];
       WriteFormulaOrValueBasedOnAPestName(
-        ReachProp.StartingConcentrations.ConcentrationPestNames[FSpeciesIndex],
-        ReachProp.StartingConcentrations.Concentrations[FSpeciesIndex],
+        ReachProp.StartingConcentrations.ValuePestNames[FSpeciesIndex],
+        ReachProp.StartingConcentrations.Values[FSpeciesIndex],
         ReachProp.Cell.Layer, ReachProp.Cell.Row, ReachProp.Cell.Column);
 
       boundname := ' ' + Copy(ReachProp.BoundName, 1, MaxBoundNameLength);
@@ -2149,7 +2147,7 @@ begin
           Assert(False);
 
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + GwtConcCount*GwtSpecifiedConcentrationPosition + FSpeciesIndex;
+            + SfrGwtConcCount*SfrGwtSpecifiedConcentrationPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
         end;
@@ -2159,28 +2157,28 @@ begin
           WriteInteger(ReachNumber);
           WriteString(' RAINFALL');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + GwtConcCount*GwtRainfallConcentrationsPosition + FSpeciesIndex;
+            + SfrGwtConcCount*SfrGwtRainfallConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' EVAPORATION');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + GwtConcCount*GwtEvapConcentrationsPosition + FSpeciesIndex;
+            + SfrGwtConcCount*SfrGwtEvapConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' RUNOFF');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + GwtConcCount*GwtRunoffConcentrationsPosition + FSpeciesIndex;
+            + SfrGwtConcCount*SfrGwtRunoffConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' INFLOW');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + GwtConcCount*GwtInflowConcentrationsPosition + FSpeciesIndex;
+            + SfrGwtConcCount*SfrGwtInflowConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
         end;
