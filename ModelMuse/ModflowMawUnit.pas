@@ -2105,6 +2105,8 @@ begin
 end;
 
 function TMawBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+//var
+//  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     MawFlowingWellElevationPosition:
@@ -2150,7 +2152,19 @@ begin
     else
       begin
         result := inherited;
-        Assert(False);
+//        FormulaIndex := FormulaIndex-MawGwtStart;
+//        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+//
+//        while StartingConcentrations.Count < ChemSpeciesCount do
+//        begin
+//          StartingConcentrations.Add;
+//        end;
+//        if FormulaIndex < ChemSpeciesCount then
+//        begin
+//          result := StartingConcentrations[FormulaIndex].Value;
+//          Exit;
+//        end;
+//        Assert(False);
       end;
   end;
 end;
@@ -2202,7 +2216,7 @@ begin
     else
       begin
         result := inherited;
-        Assert(False);
+//        Assert(False);
       end;
   end;
 end;
@@ -3897,7 +3911,7 @@ begin
   Result := 10;
   if frmGoPhast.PhastModel.GwtUsed then
   begin
-    result := result + frmGoPhast.PhastModel.MobileComponents.Count *2;
+    result := result + frmGoPhast.PhastModel.MobileComponents.Count*2;
   end;
 end;
 
@@ -5209,6 +5223,8 @@ begin
   inherited;
   SetLength((Boundaries[ItemIndex, AModel] as TMawTransientStorage).FMawTransientArray,
     BoundaryCount);
+  (Boundaries[ItemIndex, AModel] as TMawTransientStorage).SpeciesCount
+    := (AModel as TCustomModel).MobileComponents.Count;
 end;
 
 { TMawCell }

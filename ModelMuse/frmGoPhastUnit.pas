@@ -4029,8 +4029,8 @@ begin
   // Formula manager needs FPhastModel to be defined during FPhastModel.Free;
   FPhastModel.Free;
   FPhastModel := nil;
-  FObjectsExpanded.Free;
-  FDataSetsExpanded.Free;
+  FreeAndNil(FObjectsExpanded);
+  FreeAndNil(FDataSetsExpanded);
 //  FPhastModel := nil;
   inherited;
 //  OutputDebugString('SAMPLING OFF');

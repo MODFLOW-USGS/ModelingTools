@@ -692,6 +692,7 @@ begin
   begin
     Exit;
   end;
+  FPestParamUsed := False;
   FSpeciesIndex :=  SpeciesIndex;
   SpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
   FNameOfFile := ChangeFileExt(AFileName, '') + '.' + SpeciesName + '.mwt';

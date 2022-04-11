@@ -355,8 +355,12 @@ var
   ANode: PVirtualNode;
   Key: string;
 begin
-  vstObjects.BeginUpdate;
-  try
+  if frmGoPhast.FObjectsExpanded = nil then
+  begin
+    Exit;
+  end;
+//  vstObjects.BeginUpdate;
+//  try
     frmGoPhast.FObjectsExpanded.Clear;
     ANode := vstObjects.GetFirst;
     while ANode <> nil do
@@ -371,9 +375,9 @@ begin
       end;
       ANode := vstObjects.GetNext(ANode)
     end;
-  finally
-    vstObjects.EndUpdate;
-  end;
+//  finally
+//    vstObjects.EndUpdate;
+//  end;
 end;
 
 procedure TfrmShowHideObjects.RestoreExpandedObjectNodes;
