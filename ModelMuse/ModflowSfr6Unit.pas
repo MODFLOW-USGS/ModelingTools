@@ -494,6 +494,21 @@ type
     FPestUpstreamFractionObserver: TObserver;
     FUsedObserver: TObserver;
     FStartingConcentrations: TStringConcCollection;
+    FPestRainfallConcentrations: TSftGwtConcCollection;
+    FPestRainfallConcentrationMethods: TPestMethodCollection;
+    FPestSpecifiedConcentrations: TSftGwtConcCollection;
+    FPestRunoffConcentrations: TSftGwtConcCollection;
+    FPestSpecifiedConcentrationMethods: TPestMethodCollection;
+    FPestInflowConcentrations: TSftGwtConcCollection;
+    FPestRunoffConcentrationMethods: TPestMethodCollection;
+    FPestEvaporationConcentrations: TSftGwtConcCollection;
+    FPestInflowConcentrationMethods: TPestMethodCollection;
+    FPestEvaporationConcentrationMethods: TPestMethodCollection;
+    FPestSpecifiedConcentrationObservers: TObserverList;
+    FPestRainfallConcentrationObservers: TObserverList;
+    FPestEvaporationConcentrationObservers: TObserverList;
+    FPestInflowConcentrationObservers: TObserverList;
+    FPestRunoffConcentrationObservers: TObserverList;
     procedure SetDiversions(const Value: TDiversionCollection);
     procedure SetDownstreamSegments(const Value: TIntegerCollection);
     procedure SetSegmentNumber(const Value: Integer);
@@ -560,6 +575,31 @@ type
     procedure SetPestUpstreamFractionFormula(const Value: string);
     procedure SetPestUpstreamFractionMethod(const Value: TPestParamMethod);
     procedure SetStartingConcentrations(const Value: TStringConcCollection);
+    procedure SetPestEvaporationConcentrationMethods(
+      const Value: TPestMethodCollection);
+    procedure SetPestEvaporationConcentrations(
+      const Value: TSftGwtConcCollection);
+    procedure SetPestInflowConcentrationMethods(
+      const Value: TPestMethodCollection);
+    procedure SetPestInflowConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetPestRainfallConcentrationMethods(
+      const Value: TPestMethodCollection);
+    procedure SetPestRainfallConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetPestRunoffConcentrationMethods(
+      const Value: TPestMethodCollection);
+    procedure SetPestRunoffConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetPestSpecifiedConcentrationMethods(
+      const Value: TPestMethodCollection);
+    procedure SetPestSpecifiedConcentrations(
+      const Value: TSftGwtConcCollection);
+    function GetPestEvaporationConcentrationObserver(
+      const Index: Integer): TObserver;
+    function GetPestInflowConcentrationObserver(
+      const Index: Integer): TObserver;
+    function GetPestRainfallConcentrationObserver(
+      const Index: Integer): TObserver;
+    function GetPestSpecifiedConcentrationObserver(
+      const Index: Integer): TObserver;
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -591,6 +631,14 @@ type
     property PestStageObserver: TObserver read GetPestStageObserver;
     property PestRoughnessObserver: TObserver read GetPestRoughnessObserver;
 //    property StartingConcentrations[Index: Integer]: string read GetSConc write SetSConc;
+    property PestSpecifiedConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestSpecifiedConcentrationObserver;
+    property PestRainfallConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestRainfallConcentrationObserver;
+    property PestEvaporationConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestEvaporationConcentrationObserver;
+    property PestInflowConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestInflowConcentrationObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -655,6 +703,66 @@ type
     property StartingConcentrations: TStringConcCollection
       read FStartingConcentrations
       write SetStartingConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestSpecifiedConcentrations: TSftGwtConcCollection
+        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestSpecifiedConcentrationMethods: TPestMethodCollection
+      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestRainfallConcentrations: TSftGwtConcCollection
+        read FPestRainfallConcentrations write SetPestRainfallConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestRainfallConcentrationMethods: TPestMethodCollection
+      read FPestRainfallConcentrationMethods write SetPestRainfallConcentrationMethods
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestEvaporationConcentrations: TSftGwtConcCollection
+        read FPestEvaporationConcentrations write SetPestEvaporationConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestEvaporationConcentrationMethods: TPestMethodCollection
+      read FPestEvaporationConcentrationMethods write SetPestEvaporationConcentrationMethods
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestRunoffConcentrations: TSftGwtConcCollection
+        read FPestRunoffConcentrations write SetPestRunoffConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestRunoffConcentrationMethods: TPestMethodCollection
+      read FPestRunoffConcentrationMethods write SetPestRunoffConcentrationMethods
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestInflowConcentrations: TSftGwtConcCollection
+        read FPestInflowConcentrations write SetPestInflowConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestInflowConcentrationMethods: TPestMethodCollection
+      read FPestInflowConcentrationMethods write SetPestInflowConcentrationMethods
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
@@ -3007,6 +3115,17 @@ begin
     PestRoughnessFormula := SourceSfr6.PestRoughnessFormula;
     PestRoughnessMethod := SourceSfr6.PestRoughnessMethod;
     StartingConcentrations := SourceSfr6.StartingConcentrations;
+
+    PestSpecifiedConcentrations := SourceSfr6.PestSpecifiedConcentrations;
+    PestSpecifiedConcentrationMethods := SourceSfr6.PestSpecifiedConcentrationMethods;
+    PestRainfallConcentrations := SourceSfr6.PestRainfallConcentrations;
+    PestRainfallConcentrationMethods := SourceSfr6.PestRainfallConcentrationMethods;
+    PestEvaporationConcentrations := SourceSfr6.PestEvaporationConcentrations;
+    PestEvaporationConcentrationMethods := SourceSfr6.PestEvaporationConcentrationMethods;
+    PestRunoffConcentrations := SourceSfr6.PestRunoffConcentrations;
+    PestRunoffConcentrationMethods := SourceSfr6.PestRunoffConcentrationMethods;
+    PestInflowConcentrations := SourceSfr6.PestInflowConcentrations;
+    PestInflowConcentrationMethods := SourceSfr6.PestInflowConcentrationMethods;
   end
   else if Source is TSfrBoundary then
   begin
@@ -3306,6 +3425,29 @@ var
   Index: Integer;
 begin
   inherited;
+  FPestSpecifiedConcentrationObservers := TObserverList.Create;
+  FPestRainfallConcentrationObservers := TObserverList.Create;
+  FPestEvaporationConcentrationObservers := TObserverList.Create;
+  FPestRunoffConcentrationObservers := TObserverList.Create;
+  FPestInflowConcentrationObservers := TObserverList.Create;
+
+  FPestSpecifiedConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestSpecifiedConcentrations.UsedForPestSeries := True;
+  FPestRainfallConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestRainfallConcentrations.UsedForPestSeries := True;
+  FPestEvaporationConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestEvaporationConcentrations.UsedForPestSeries := True;
+  FPestRunoffConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestRunoffConcentrations.UsedForPestSeries := True;
+  FPestInflowConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestInflowConcentrations.UsedForPestSeries := True;
+
+  FPestSpecifiedConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestRainfallConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestEvaporationConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestRunoffConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestInflowConcentrationMethods := TPestMethodCollection.Create(Model);
+
   if Model = nil then
   begin
     InvalidateEvent := nil;
@@ -3351,6 +3493,9 @@ begin
 end;
 
 procedure TSfrMf6Boundary.CreateFormulaObjects;
+var
+  LocalModel: TCustomModel;
+  ConcIndex: Integer;
 begin
   FReachLength := CreateFormulaObjectBlocks(dso3D);
   FReachWidth := CreateFormulaObjectBlocks(dso3D);
@@ -3366,6 +3511,31 @@ begin
   FUpstreamFractionFormula := CreateFormulaObjectBlocks(dso3D);
   FStage := CreateFormulaObjectBlocks(dso3D);
   FRoughnessFormula := CreateFormulaObjectBlocks(dso3D);
+
+  LocalModel := ParentModel as TCustomModel;
+  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  begin
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestSpecifiedConcentrations.Add;
+    end;
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestRainfallConcentrations.Add;
+    end;
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestEvaporationConcentrations.Add;
+    end;
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestRunoffConcentrations.Add;
+    end;
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestInflowConcentrations.Add;
+    end;
+  end;
 
 end;
 
@@ -3446,6 +3616,25 @@ begin
   RemoveFormulaObjects;
 //  FStartConcFormulas.Free;
   FStartingConcentrations.Free;
+
+  FPestSpecifiedConcentrationMethods.Free;
+  FPestRainfallConcentrationMethods.Free;
+  FPestEvaporationConcentrationMethods.Free;
+  FPestRunoffConcentrationMethods.Free;
+  FPestInflowConcentrationMethods.Free;
+
+  FPestSpecifiedConcentrations.Free;
+  FPestRainfallConcentrations.Free;
+  FPestEvaporationConcentrations.Free;
+  FPestRunoffConcentrations.Free;
+  FPestInflowConcentrations.Free;
+
+  FPestSpecifiedConcentrationObservers.Free;
+  FPestRainfallConcentrationObservers.Free;
+  FPestEvaporationConcentrationObservers.Free;
+  FPestRunoffConcentrationObservers.Free;
+  FPestInflowConcentrationObservers.Free;
+
   inherited;
 end;
 
@@ -3502,6 +3691,8 @@ begin
 end;
 
 function TSfrMf6Boundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     SfrMf6InflowPosition:
@@ -3534,8 +3725,66 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex-SfrMf6DiversionStartPosition;
+
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestSpecifiedConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRainfallConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestRainfallConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestRainfallConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestEvaporationConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRunoffConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestRunoffConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestRunoffConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInflowConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestInflowConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestInflowConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+
         result := inherited;
-//        Assert(False);
+        Assert(False);
       end;
   end;
 end;
@@ -3580,6 +3829,12 @@ begin
   end;
 end;
 
+function TSfrMf6Boundary.GetPestEvaporationConcentrationObserver(
+  const Index: Integer): TObserver;
+begin
+
+end;
+
 function TSfrMf6Boundary.GetPestEvaporationFormula: string;
 begin
   Result := FEvaporation.Formula;
@@ -3599,6 +3854,12 @@ begin
   result := FPestEvaporationObserver;
 end;
 
+function TSfrMf6Boundary.GetPestInflowConcentrationObserver(
+  const Index: Integer): TObserver;
+begin
+
+end;
+
 function TSfrMf6Boundary.GetPestInflowFormula: string;
 begin
   Result := FInflow.Formula;
@@ -3616,6 +3877,12 @@ begin
     FPestInflowObserver.OnUpToDateSet := InvalidateInflowData;
   end;
   result := FPestInflowObserver;
+end;
+
+function TSfrMf6Boundary.GetPestRainfallConcentrationObserver(
+  const Index: Integer): TObserver;
+begin
+
 end;
 
 function TSfrMf6Boundary.GetPestRainfallFormula: string;
@@ -3675,6 +3942,12 @@ begin
   result := FPestRunoffObserver;
 end;
 
+function TSfrMf6Boundary.GetPestSpecifiedConcentrationObserver(
+  const Index: Integer): TObserver;
+begin
+
+end;
+
 function TSfrMf6Boundary.GetPestStageFormula: string;
 begin
   Result := FStage.Formula;
@@ -3714,6 +3987,9 @@ begin
 end;
 
 procedure TSfrMf6Boundary.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  StartIndex: Integer;
+  Index: Integer;
 begin
   if Sender = FReachLength then
   begin
@@ -3769,6 +4045,50 @@ begin
     List.Add(FObserverList[SfrMf6RoughnessPosition + SfrMf6PestBoundaryOffset]);
   end;
 
+  StartIndex := SfrMf6DiversionStartPosition + Diversions.Count;
+  for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
+  begin
+    if FPestSpecifiedConcentrations[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
+
+  StartIndex := StartIndex + FPestSpecifiedConcentrations.Count;
+  for Index := 0 to PestRainfallConcentrations.Count - 1 do
+  begin
+    if PestRainfallConcentrations[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
+
+  StartIndex := StartIndex + PestRainfallConcentrations.Count;
+  for Index := 0 to PestEvaporationConcentrations.Count - 1 do
+  begin
+    if PestEvaporationConcentrations[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
+
+  StartIndex := StartIndex + PestEvaporationConcentrations.Count;
+  for Index := 0 to PestRunoffConcentrations.Count - 1 do
+  begin
+    if PestRunoffConcentrations[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
+
+  StartIndex := StartIndex + PestRunoffConcentrations.Count;
+  for Index := 0 to PestInflowConcentrations.Count - 1 do
+  begin
+    if PestInflowConcentrations[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
 
 end;
 
@@ -4155,6 +4475,8 @@ end;
 
 procedure TSfrMf6Boundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     SfrMf6InflowPosition:
@@ -4187,8 +4509,54 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex-SfrMf6PestBoundaryOffset;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestSpecifiedConcentrations[FormulaIndex].Value := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRainfallConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestRainfallConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestRainfallConcentrations[FormulaIndex].Value := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestEvaporationConcentrations[FormulaIndex].Value := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInflowConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestInflowConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestInflowConcentrations[FormulaIndex].Value := Value;
+          Exit;
+        end;
+
         inherited;
-//        Assert(False);
+        Assert(False);
       end;
   end;
 end;
@@ -4233,6 +4601,18 @@ begin
   end;
 end;
 
+procedure TSfrMf6Boundary.SetPestEvaporationConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestEvaporationConcentrationMethods.Assign(Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestEvaporationConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FPestEvaporationConcentrations.Assign(Value);
+end;
+
 procedure TSfrMf6Boundary.SetPestEvaporationFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, SfrMf6EvaporationPosition + SfrMf6PestBoundaryOffset, FEvaporation);
@@ -4244,6 +4624,18 @@ begin
   SetPestParamMethod(FPestEvaporationMethod, Value);
 end;
 
+procedure TSfrMf6Boundary.SetPestInflowConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestInflowConcentrationMethods.Assign(Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestInflowConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FPestInflowConcentrations.Assign(Value);
+end;
+
 procedure TSfrMf6Boundary.SetPestInflowFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, SfrMf6InflowPosition + SfrMf6PestBoundaryOffset, FInflow);
@@ -4252,6 +4644,18 @@ end;
 procedure TSfrMf6Boundary.SetPestInflowMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestInflowMethod, Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestRainfallConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestRainfallConcentrationMethods.Assign(Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestRainfallConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FPestRainfallConcentrations.Assign(Value);
 end;
 
 procedure TSfrMf6Boundary.SetPestRainfallFormula(const Value: string);
@@ -4274,6 +4678,18 @@ begin
   SetPestParamMethod(FPestRoughnessMethod, Value);
 end;
 
+procedure TSfrMf6Boundary.SetPestRunoffConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestRunoffConcentrationMethods.Assign(Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestRunoffConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FPestRunoffConcentrations.Assign(Value);
+end;
+
 procedure TSfrMf6Boundary.SetPestRunoffFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, SfrMf6RunoffPosition + SfrMf6PestBoundaryOffset, FRunoff);
@@ -4282,6 +4698,18 @@ end;
 procedure TSfrMf6Boundary.SetPestRunoffMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestRunoffMethod, Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestSpecifiedConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestSpecifiedConcentrationMethods.Assign(Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestSpecifiedConcentrations(
+  const Value: TSftGwtConcCollection);
+begin
+  FPestSpecifiedConcentrations.Assign(Value);
 end;
 
 procedure TSfrMf6Boundary.SetPestStageFormula(const Value: string);
@@ -4943,7 +5371,7 @@ begin
     else
       begin
         // GWT
-        Index := Index - SfrMf6HydraulicConductivityPosition - 1;
+        Index := Index - SfrMf6PestBoundaryOffset;
         result := StartingConcentrations.ValueAnnotations[Index]
       end;
   end
@@ -4980,7 +5408,7 @@ begin
     else
       begin
         // GWT
-        Index := Index - SfrMf6HydraulicConductivityPosition - 1;
+        Index := Index - SfrMf6PestBoundaryOffset;
         result := StartingConcentrations.Values[Index]
       end;
   end;
@@ -5017,7 +5445,7 @@ begin
     else
       begin
         // GWT
-        Index := Index - SfrMf6HydraulicConductivityPosition - 1;
+        Index := Index - SfrMf6PestBoundaryOffset;
         result := StartingConcentrations.ValuePestNames[Index]
       end;
   end;
@@ -5163,7 +5591,7 @@ begin
     else
       begin
         // GWT
-        Index := Index - SfrMf6HydraulicConductivityPosition - 1;
+        Index := Index - SfrMf6PestBoundaryOffset;
         StartingConcentrations.ValueAnnotations[Index] := Value;
       end;
   end;
@@ -5208,7 +5636,7 @@ begin
     else
       begin
         // GWT
-        Index := Index - SfrMf6HydraulicConductivityPosition - 1;
+        Index := Index - SfrMf6PestBoundaryOffset;
         StartingConcentrations.Values[Index] := Value;
       end;
   end;
@@ -5245,7 +5673,7 @@ begin
     else
       begin
         // GWT
-        Index := Index - SfrMf6HydraulicConductivityPosition - 1;
+        Index := Index - SfrMf6PestBoundaryOffset;
         StartingConcentrations.ValuePestNames[Index] := Value;
       end;
   end;

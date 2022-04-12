@@ -1534,6 +1534,7 @@ constructor TRchBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
   FPestConcentrationFormulas:= TRchGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestConcentrationFormulas.UsedForPestSeries := True;
   FPestConcentrationMethods := TPestMethodCollection.Create(Model);
   FConcentrationObservers := TObserverList.Create;
 
@@ -2605,28 +2606,47 @@ begin
     SpeciesIndex := 0;
     while SpeciesIndex < PhastModel.MobileComponents.Count do
     begin
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
+      if SpeciesIndex < FConcList.Count then
       begin
-        LocalModel := Model as TCustomModel;
-        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfRchConc;
+        ConcTimeList := FConcList[SpeciesIndex];
+        ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+        ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      end
+      else
+      begin
+        ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+        ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+        ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+        if Model <> nil then
+        begin
+          LocalModel := Model as TCustomModel;
+          ConcTimeList.OnInvalidate := LocalModel.InvalidateMfRchConc;
+        end;
+        AddTimeList(ConcTimeList);
+        FConcList.Add(ConcTimeList);
       end;
-      AddTimeList(ConcTimeList);
-      FConcList.Add(ConcTimeList);
       Inc(SpeciesIndex);
     end;
+    while FConcList.Count > PhastModel.MobileComponents.Count do
+    begin
+      ConcTimeList := FConcList.Last;
+      RemoveTimeList(ConcTimeList);
+      FConcList.Create.Delete(FConcList.Count--1);
+    end;
+  end
+  else
+  begin
+    for SpeciesIndex := 0 to FConcList.Count - 1 do
+    begin
+      ConcTimeList := FConcList[SpeciesIndex];
+      RemoveTimeList(ConcTimeList);
+    end;
+    FConcList.Clear;
   end;
 end;
 
 
 procedure TRchTimeListLink.CreateTimeLists;
-var
-  PhastModel: TPhastModel;
-  SpeciesIndex: Integer;
-  ConcTimeList: TModflowTimeList;
-  LocalModel: TCustomModel;
 begin
   inherited;
   FConcList := TModflowTimeLists.Create;
@@ -2649,6 +2669,7 @@ begin
   FRechargeRateData.Free;
   inherited;
 end;
+
 
 { TRchGwtConcCollection }
 

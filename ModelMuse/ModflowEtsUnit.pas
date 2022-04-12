@@ -688,6 +688,7 @@ constructor TEtsBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
   FPestConcentrationFormulas:= TEtsGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestConcentrationFormulas.UsedForPestSeries := True;
   FPestConcentrationMethods := TPestMethodCollection.Create(Model);
   FConcentrationObservers := TObserverList.Create;
 

@@ -1983,7 +1983,9 @@ begin
   FPestInjectionConcentrationObservers := TObserverList.Create;
   FPestSpecifiedConcentrationObservers := TObserverList.Create;
   FPestInjectionConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestInjectionConcentrations.UsedForPestSeries := True;
   FPestSpecifiedConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestSpecifiedConcentrations.UsedForPestSeries := True;
   FPestInjectionConcentrationMethods := TPestMethodCollection.Create(Model);
   FPestSpecifiedConcentrationMethods := TPestMethodCollection.Create(Model);
 
@@ -2359,6 +2361,7 @@ begin
           result := PestInjectionConcentrationMethods[FormulaIndex].PestParamMethod;
           Exit;
         end;
+        Result := inherited;
         Assert(False);
       end;
   end;
@@ -2648,7 +2651,7 @@ begin
     end;
   end;
 
-  StartIndex := StartIndex + FPestInjectionConcentrations.Count;
+  StartIndex := StartIndex + FPestSpecifiedConcentrations.Count;
   for Index := 0 to FPestInjectionConcentrations.Count - 1 do
   begin
     if FPestInjectionConcentrations[Index].ValueObject = Sender then
@@ -2930,13 +2933,13 @@ end;
 procedure TMawBoundary.InvalidatePestInjConcData(Sender: TObject);
 begin
   { TODO -cGWT : This needs to be implemented }
-  Assert(False);
+  //Assert(False);
 end;
 
 procedure TMawBoundary.InvalidatePestSpecConcData(Sender: TObject);
 begin
   { TODO -cGWT : This needs to be implemented }
-  Assert(False);
+  //Assert(False);
 end;
 
 procedure TMawBoundary.InvalidatePumpElevationData(Sender: TObject);

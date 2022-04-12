@@ -1104,6 +1104,7 @@ begin
   Interp := mimLinearEnd;
 
   FPestConcentrationFormulas:= TChdGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestConcentrationFormulas.UsedForPestSeries := True;
   FPestConcentrationMethods := TPestMethodCollection.Create(Model);
   FConcentrationObservers := TObserverList.Create;
 

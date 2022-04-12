@@ -1289,6 +1289,7 @@ constructor TMfWellBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
   FPestConcentrationFormulas:= TWelGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestConcentrationFormulas.UsedForPestSeries := True;
   FPestConcentrationMethods := TPestMethodCollection.Create(Model);
   FConcentrationObservers := TObserverList.Create;
 

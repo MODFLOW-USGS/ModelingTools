@@ -267,6 +267,7 @@ type
     Destructor Destroy; override;
     property TimeLists: TList read FTimeLists;
     procedure AddTimeList(List: TModflowTimeList);
+    procedure RemoveTimeList(List: TModflowTimeList);
   end;
 
   TTimeListsModelLinkClass = class of TTimeListsModelLink;
@@ -649,9 +650,12 @@ type
 
   TGwtConcStringCollection = class(TCustomStringCollection)
   private
+    FUsedForPestSeries: Boolean;
     function GetItems(Index: Integer): TGwtConcStringValueItem;
     procedure SetItems(Index: Integer; const Value: TGwtConcStringValueItem);
+    procedure SetUsedForPestSeries(const Value: Boolean);
   public
+    property UsedForPestSeries: Boolean read FUsedForPestSeries write SetUsedForPestSeries;
     constructor Create(Model: TBaseModel; AScreenObject: TObject;
       ParentCollection: TCustomMF_BoundColl);
     property Items[Index: Integer]: TGwtConcStringValueItem read GetItems
@@ -3198,6 +3202,11 @@ begin
 end;
 
 
+procedure TTimeListsModelLink.RemoveTimeList(List: TModflowTimeList);
+begin
+  TimeLists.Remove(List);
+end;
+
 procedure TTimeListsModelLink.UpdateTimeLists;
 begin
   // do nothing
@@ -5150,12 +5159,27 @@ begin
   inherited Items[Index] := Value;
 end;
 
+procedure TGwtConcStringCollection.SetUsedForPestSeries(const Value: Boolean);
+begin
+  FUsedForPestSeries := Value;
+end;
+
 { TGwtConcStringValueItem }
 
 constructor TGwtConcStringValueItem.Create(Collection: TCollection);
 begin
   inherited;
-  Value := '0';
+  if Collection is TGwtConcStringCollection then
+  begin
+    if not TGwtConcStringCollection(Collection).UsedForPestSeries then
+    begin
+      Value := '0';
+    end;
+  end
+  else
+  begin
+    Value := '0';
+  end;
 end;
 
 end.
