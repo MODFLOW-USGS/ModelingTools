@@ -412,9 +412,17 @@ type
     property PestDepthMethod: TPestParamMethod read FPestDepthMethod
       write SetPestDepthMethod;
     property PestConcentrationFormulas: TEtsGwtConcCollection
-      read FPestConcentrationFormulas write SetPestConcentrationFormulas;
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
     property PestConcentrationMethods: TPestMethodCollection
-      read FPestConcentrationMethods write SetPestConcentrationMethods;
+      read FPestConcentrationMethods write SetPestConcentrationMethods
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
 resourcestring

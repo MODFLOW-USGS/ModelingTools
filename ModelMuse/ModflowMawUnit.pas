@@ -655,6 +655,12 @@ type
     FPestScalingLengthObserver: TObserver;
     FPestWellHeadObserver: TObserver;
     FStartingConcentrations: TStringConcCollection;
+    FPestInjectionConcentrationObservers: TObserverList;
+    FPestSpecifiedConcentrationObservers: TObserverList;
+    FPestInjectionConcentrations: TMawGwtConcCollection;
+    FPestSpecifiedConcentrations: TMawGwtConcCollection;
+    FPestInjectionConcentrationMethods: TPestMethodCollection;
+    FPestSpecifiedConcentrationMethods: TPestMethodCollection;
     procedure SetWellNumber(const Value: Integer);
     function GetBottom: string;
     function GetInitialHead: string;
@@ -727,6 +733,18 @@ type
     function GetPestScalingLengthObserver: TObserver;
     function GetPestWellHeadObserver: TObserver;
     procedure SetStartingConcentrations(const Value: TStringConcCollection);
+    procedure SetPestInjectionConcentrations(
+      const Value: TMawGwtConcCollection);
+    procedure SetPestSpecifiedConcentrations(
+      const Value: TMawGwtConcCollection);
+    procedure SetPestInjectionConcentrationMethods(
+      const Value: TPestMethodCollection);
+    procedure SetPestSpecifiedConcentrationMethods(
+      const Value: TPestMethodCollection);
+    function GetPestInjectionConcentrationObserver(const Index: Integer): TObserver;
+    function GetPestSpecifiedConcentrationObserver(const Index: Integer): TObserver;
+    procedure InvalidatePestSpecConcData(Sender: TObject);
+    procedure InvalidatePestInjConcData(Sender: TObject);
   protected
     property RadiusObserver: TObserver read GetRadiusObserver;
     property BottomObserver: TObserver read GetBottomObserver;
@@ -764,6 +782,10 @@ type
       read GetPestScalingLengthObserver;
     property PestFlowingWellReductionLengthObserver: TObserver
       read GetPestFlowingWellReductionLengthObserver;
+    property PestSpecifiedConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestSpecifiedConcentrationObserver;
+    property PestInjectionConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestInjectionConcentrationObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -851,6 +873,30 @@ type
     property StartingConcentrations: TStringConcCollection
       read FStartingConcentrations
       write SetStartingConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestInjectionConcentrations: TMawGwtConcCollection
+        read FPestInjectionConcentrations write SetPestInjectionConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestSpecifiedConcentrations: TMawGwtConcCollection
+        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestInjectionConcentrationMethods: TPestMethodCollection
+      read FPestInjectionConcentrationMethods write SetPestInjectionConcentrationMethods
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestSpecifiedConcentrationMethods: TPestMethodCollection
+      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
@@ -1752,6 +1798,11 @@ begin
     PestFlowingWellReductionLengthMethod := SourceMAW.PestFlowingWellReductionLengthMethod;
     StartingConcentrations := SourceMAW.StartingConcentrations;
 
+    PestSpecifiedConcentrations := SourceBoundary.PestSpecifiedConcentrations;
+    PestSpecifiedConcentrationMethods := SourceBoundary.PestSpecifiedConcentrationMethods;
+    PestInjectionConcentrations := SourceBoundary.PestInjectionConcentrations;
+    PestInjectionConcentrationMethods := SourceBoundary.PestInjectionConcentrationMethods;
+
     inherited;
   end
   else if Source is TMnw2Boundary then
@@ -1928,6 +1979,13 @@ end;
 constructor TMawBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
+  FPestInjectionConcentrationObservers := TObserverList.Create;
+  FPestSpecifiedConcentrationObservers := TObserverList.Create;
+  FPestInjectionConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestSpecifiedConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestInjectionConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestSpecifiedConcentrationMethods := TPestMethodCollection.Create(Model);
+
   FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
   CreateFormulaObjects;
   CreateBoundaryObserver;
@@ -1942,6 +2000,8 @@ begin
 end;
 
 procedure TMawBoundary.CreateFormulaObjects;
+var
+  ConcIndex: Integer;
 begin
   FPestFlowingWellElevationFormula := CreateFormulaObjectBlocks(dsoTop);
   FPestFlowingWellConductanceFormula := CreateFormulaObjectBlocks(dsoTop);
@@ -1957,6 +2017,19 @@ begin
   FRadius := CreateFormulaObjectBlocks(dso3D);
   FBottom := CreateFormulaObjectBlocks(dso3D);
   FInitialHead := CreateFormulaObjectBlocks(dso3D);
+
+  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  begin
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestSpecifiedConcentrations.Add;
+    end;
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestInjectionConcentrations.Add;
+    end;
+  end;
+
 end;
 
 procedure TMawBoundary.CreateObservers;
@@ -1977,6 +2050,16 @@ begin
     FObserverList.Add(RadiusObserver);
     FObserverList.Add(BottomObserver);
     FObserverList.Add(InitialHeadObserver);
+
+    for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestSpecifiedConcentrationObserver[Index]);
+    end;
+    for Index := 0 to FPestInjectionConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestInjectionConcentrationObserver[Index]);
+    end;
+
   end;
 end;
 
@@ -2049,6 +2132,13 @@ begin
   RemoveFormulaObjects;
   FStartingConcentrations.Free;
   inherited;
+
+  FPestInjectionConcentrationMethods.Free;
+  FPestSpecifiedConcentrationMethods.Free;
+  FPestInjectionConcentrations.Free;
+  FPestSpecifiedConcentrations.Free;
+  FPestInjectionConcentrationObservers.Free;
+  FPestSpecifiedConcentrationObservers.Free;
 end;
 
 function TMawBoundary.GetBottom: string;
@@ -2104,9 +2194,21 @@ begin
   result := FInitialHeadObserver;
 end;
 
+function TMawBoundary.GetPestInjectionConcentrationObserver(
+  const Index: Integer): TObserver;
+begin
+  while Index >= FPestInjectionConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('MawPestInjConc_%d', [Index+1]), AObserver, nil);
+    FPestInjectionConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestInjConcData;
+  end;
+  result := FPestInjectionConcentrationObservers[Index];
+end;
+
 function TMawBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
-//var
-//  ChemSpeciesCount: Integer;
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     MawFlowingWellElevationPosition:
@@ -2151,26 +2253,38 @@ begin
       end;
     else
       begin
-        result := inherited;
-//        FormulaIndex := FormulaIndex-MawGwtStart;
-//        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
-//
-//        while StartingConcentrations.Count < ChemSpeciesCount do
-//        begin
-//          StartingConcentrations.Add;
-//        end;
-//        if FormulaIndex < ChemSpeciesCount then
-//        begin
-//          result := StartingConcentrations[FormulaIndex].Value;
-//          Exit;
-//        end;
-//        Assert(False);
+        FormulaIndex := FormulaIndex-MawGwtStart;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestSpecifiedConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInjectionConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestInjectionConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestInjectionConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+        Assert(False);
       end;
   end;
 end;
 
 function TMawBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     MawFlowingWellElevationPosition:
@@ -2215,8 +2329,30 @@ begin
       end;
     else
       begin
-        result := inherited;
-//        Assert(False);
+        FormulaIndex := FormulaIndex-MawGwtStart;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestSpecifiedConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInjectionConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestInjectionConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestInjectionConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+        Assert(False);
       end;
   end;
 end;
@@ -2412,6 +2548,8 @@ begin
 end;
 
 procedure TMawBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  StartIndex: Integer;
 begin
   if Sender = FPestFlowingWellElevationFormula then
   begin
@@ -2493,6 +2631,24 @@ begin
     end;
   end;
 
+  StartIndex := MawGwtStart;
+  for Index := 0 to FPestSpecifiedConcentrationFormulas.Count - 1 do
+  begin
+    if FPestSpecifiedConcentrationFormulas[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
+
+  StartIndex := StartIndex + FPestInjectionConcentrationFormulas.Count;
+  for Index := 0 to FPestInjectionConcentrationFormulas.Count - 1 do
+  begin
+    if FPestInjectionConcentrationFormulas[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
+
 end;
 
 function TMawBoundary.GetRadius: string;
@@ -2512,6 +2668,18 @@ begin
 
   end;
   result := FRadiusObserver;
+end;
+
+function TMawBoundary.GetPestSpecifiedConcentrationObserver(
+  const Index: Integer): TObserver;
+begin
+  while Index >= FPestSpecifiedConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('MawPestSpecConc_%d', [Index+1]), AObserver, nil);
+    FPestSpecifiedConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestSpecConcData;
+  end;
+  result := FPestSpecifiedConcentrationObservers[Index];
 end;
 
 function TMawBoundary.GetUsedObserver: TObserver;
@@ -2747,6 +2915,18 @@ begin
       ChildModel.InvalidateMawMinimumPumpRate(self);
     end;
   end;
+end;
+
+procedure TMawBoundary.InvalidatePestInjConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+  Assert(False);
+end;
+
+procedure TMawBoundary.InvalidatePestSpecConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+  Assert(False);
 end;
 
 procedure TMawBoundary.InvalidatePumpElevationData(Sender: TObject);
@@ -2998,6 +3178,8 @@ end;
 
 procedure TMawBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     MawFlowingWellElevationPosition:
@@ -3042,7 +3224,29 @@ begin
       end;
     else
       begin
-        inherited;
+        FormulaIndex := FormulaIndex-MawGwtStart;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestSpecifiedConcentrations[FormulaIndex].Value := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInjectionConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestInjectionConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestInjectionConcentrations[FormulaIndex].Value := Value;
+          Exit;
+        end;
         Assert(False);
       end;
   end;
@@ -3050,6 +3254,8 @@ end;
 
 procedure TMawBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     MawFlowingWellElevationPosition:
@@ -3094,7 +3300,29 @@ begin
       end;
     else
       begin
-        inherited;
+        FormulaIndex := FormulaIndex-MawGwtStart;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestSpecifiedConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInjectionConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestInjectionConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestInjectionConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
         Assert(False);
       end;
   end;
@@ -3143,6 +3371,18 @@ end;
 procedure TMawBoundary.SetPestHeadLimitMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestHeadLimitMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestInjectionConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestInjectionConcentrationMethods.Assgin(Value);
+end;
+
+procedure TMawBoundary.SetPestInjectionConcentrations(
+  const Value: TMawGwtConcCollection);
+begin
+  FPestInjectionConcentrations.Assgin(Value);
 end;
 
 procedure TMawBoundary.SetPestMaxRateFormula(const Value: string);
@@ -3195,6 +3435,18 @@ procedure TMawBoundary.SetPestScalingLengthMethod(
   const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestScalingLengthMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestSpecifiedConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestSpecifiedConcentrationMethods.Assgin(Value);
+end;
+
+procedure TMawBoundary.SetPestSpecifiedConcentrations(
+  const Value: TMawGwtConcCollection);
+begin
+  FPestSpecifiedConcentrations.Assgin(Value);
 end;
 
 procedure TMawBoundary.SetPestWellHeadFormula(const Value: string);

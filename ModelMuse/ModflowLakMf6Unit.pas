@@ -2123,6 +2123,7 @@ begin
       end;
     else
       begin
+        { TODO -cGWT : Is this incorrect? Maybe what is needed is a pest series item for each type of concentration for each species; rainfall, runnoff, inflow, and specified concentrations }
         FormulaIndex := FormulaIndex - Lak6GwtPestStartPosition;
         result := StartingConcentrationPestNames[FormulaIndex];
 //        result := inherited;
