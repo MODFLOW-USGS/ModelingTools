@@ -84,7 +84,7 @@ type
 implementation
 
 uses
-  frmGoPhastUnit, frmFileTypesUnit;
+  frmGoPhastUnit, frmFileTypesUnit, GoPhastTypes;
 
 resourcestring
   StrChangeMODFLOWName = 'change MODFLOW name file';
@@ -134,6 +134,11 @@ begin
   try
     FillComboWithModelNames(comboModel);
     pnlModel.Visible := frmGoPhast.PhastModel.LgrUsed;
+    if frmGoPhast.ModelSelection = msModflow2015 then
+    begin
+      cbFlowPackage.Caption := 'Flow package other than NPR included';
+      cbSolvers.Caption := 'Solver other than IMS included';
+    end;
   finally
     FCreating := False;
   end;

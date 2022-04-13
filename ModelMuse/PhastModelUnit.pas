@@ -10484,12 +10484,19 @@ const
 //                separator is not a period.
 //               Bug fix: Fixed a bug that could cause access violations when
 //                editing Lakes in MODFLOW 6 models.
+//     '5.0.0.5' Bug fix: In the MODFLOW 6 lake package if the bottom of a lake
+//                cell with a horizontal connection is above the top of the lake
+//                cell, the lake cell bottom is reduced to be equal to the lake
+//                cell top.
+//               Bug fix: The text on the MODFLOW Name package checkboxes
+//                now reflects the flow and solver packages in MODFLOW 6 for
+//                MODFLOW 6 models.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.4';
+  IIModelVersion = '5.0.0.5';
 
 function IModelVersion: string;
 begin

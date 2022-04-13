@@ -326,7 +326,8 @@ resourcestring
   StrLakeBottomAndTop = 'Lake bottom and top elevations inconsistent';
   StrAtLayerRowColumn = 'At (Layer,Row,Column) = (%0:d,%1:d,%2:d), the lake ' +
   'bottom was greater than or equal to the lake top. The lake bottom and top' +
-  ' were assigned via the following methods: "%3:s" and "%4:s"';
+  ' were assigned via the following methods: "%3:s" and "%4:s".' +
+  'The lake bottom has been changed to be equal to the lake top.';
   StrNoOutletProperties = 'No outlet properties defined';
   StrInTheLakeDefinedProperties = 'In the lake defined by the object %0:s, n' +
   'o outlet properties are defined for outlet %1:d.';
@@ -367,7 +368,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObjectNoCells);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoOutletLakeDefin);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeEtError);
-  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeBottomAndTop);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrLakeBottomAndTop);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoOutletProperties);
 //  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeTopIsAboveTh);
 
@@ -465,10 +466,11 @@ begin
       if (ACell.BotElev >= ACell.TopElev)
         and (ACell.LakeType in [ltHoriz, ltHorizEmbed]) then
       begin
-        frmErrorsAndWarnings.AddError(Model, StrLakeBottomAndTop,
+        frmErrorsAndWarnings.AddWarning(Model, StrLakeBottomAndTop,
           Format(StrAtLayerRowColumn,
             [ACell.Cell.Layer+1, ACell.Cell.Row+1, ACell.Cell.Column+1,
             ACell.BotElevAnnotation, ACell.TopElevAnnotation]));
+        ACell.BotElev := ACell.TopElev;
       end;
 
       WriteFormulaOrValueBasedOnAPestName(ACell.BotElevPestName,
@@ -1521,6 +1523,8 @@ var
   CellIndex: Integer;
   ALakeCell: TLakeCell;
   Annotation: string;
+  LakeBottomDataArray: TModflowBoundaryDisplayDataArray;
+  LakeTopDataArray: TModflowBoundaryDisplayDataArray;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model,StrTheFollowingObject);
   frmErrorsAndWarnings.RemoveWarningGroup(Model,StrTheLakesDefinedBy);
@@ -1580,10 +1584,10 @@ begin
   LakeDataArray.ComputeAverage;
   LakeDataArray.UpToDate := True;
 
-  LakeDataArray := Model.DataArrayManager.GetDataSetByName(
+  LakeBottomDataArray := Model.DataArrayManager.GetDataSetByName(
     KLake_Bottom_Elevation) as TModflowBoundaryDisplayDataArray;
-  Assert(LakeDataArray <> nil);
-  LakeDataArray.Clear;
+  Assert(LakeBottomDataArray <> nil);
+  LakeBottomDataArray.Clear;
 
   Annotation := '';
   for LakeIndex := 0 to FLakes.Count - 1 do
@@ -1596,17 +1600,17 @@ begin
       begin
         Annotation := ALakeCell.BotElevAnnotation;
       end;
-      LakeDataArray.AddDataValue(Annotation, ALakeCell.BotElev,
+      LakeBottomDataArray.AddDataValue(Annotation, ALakeCell.BotElev,
         ALakeCell.Cell.Column, ALakeCell.Cell.Row, ALakeCell.Cell.Layer);
     end;
   end;
-  LakeDataArray.ComputeAverage;
-  LakeDataArray.UpToDate := True;
+  LakeBottomDataArray.ComputeAverage;
+  LakeBottomDataArray.UpToDate := True;
 
-  LakeDataArray := Model.DataArrayManager.GetDataSetByName(
+  LakeTopDataArray := Model.DataArrayManager.GetDataSetByName(
     KLake_Top_Elevation) as TModflowBoundaryDisplayDataArray;
-  Assert(LakeDataArray <> nil);
-  LakeDataArray.Clear;
+  Assert(LakeTopDataArray <> nil);
+  LakeTopDataArray.Clear;
 
   Annotation := '';
   for LakeIndex := 0 to FLakes.Count - 1 do
@@ -1619,12 +1623,12 @@ begin
       begin
         Annotation := ALakeCell.TopElevAnnotation;
       end;
-      LakeDataArray.AddDataValue(Annotation, ALakeCell.TopElev,
+      LakeTopDataArray.AddDataValue(Annotation, ALakeCell.TopElev,
         ALakeCell.Cell.Column, ALakeCell.Cell.Row, ALakeCell.Cell.Layer);
     end;
   end;
-  LakeDataArray.ComputeAverage;
-  LakeDataArray.UpToDate := True;
+  LakeTopDataArray.ComputeAverage;
+  LakeTopDataArray.UpToDate := True;
 
   LakeDataArray := Model.DataArrayManager.GetDataSetByName(
     KLake_Connection_Length) as TModflowBoundaryDisplayDataArray;

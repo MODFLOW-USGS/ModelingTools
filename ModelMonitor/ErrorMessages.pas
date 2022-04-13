@@ -1106,6 +1106,10 @@ begin
     WarningValues.Add('END OF FILE DETECTED IN OUTPUT CONTROL.');
     WarningValues.Add('WAS DEPRECATED IN VERSION');
     WarningValues.Add('WARNING REPORT');
+    WarningValues.Add('MOVER PACKAGE REQUIRES AT LEAST TWO OUTER ITERATIONS');
+//    WarningValues.Add('aaa');
+//    WarningValues.Add('aaa');
+//    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');
 
