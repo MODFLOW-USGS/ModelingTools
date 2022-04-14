@@ -673,6 +673,7 @@ type
   public
     constructor Create;
     property Items[Index: Integer]: TGwtBoundaryStatusItem read GetItems write SetItems; default;
+    function IsSame(OtherCollection: TGwtBoundaryStatusCollection): Boolean;
   end;
 
 
@@ -2375,6 +2376,25 @@ end;
 function TGwtBoundaryStatusCollection.GetItems(Index: Integer): TGwtBoundaryStatusItem;
 begin
   result := inherited Items[Index] as TGwtBoundaryStatusItem
+end;
+
+function TGwtBoundaryStatusCollection.IsSame(
+  OtherCollection: TGwtBoundaryStatusCollection): Boolean;
+var
+  Index: Integer;
+begin
+  result := Count = OtherCollection.Count;
+  if Result then
+  begin
+    for Index := 0 to Count - 1 do
+    begin
+      result := Items[Index].GwtBoundaryStatus = OtherCollection[Index].GwtBoundaryStatus;
+      if not Result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
 end;
 
 procedure TGwtBoundaryStatusCollection.SetItems(Index: Integer;

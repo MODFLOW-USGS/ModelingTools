@@ -4,7 +4,7 @@ interface
 
 uses Windows, ZLib, SysUtils, ModflowCellUnit, System.Classes,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, GoPhastTypes,
-  SubscriptionUnit;
+  SubscriptionUnit, Mt3dmsChemUnit;
 
 type
   TUzfOb = (uoGW_Recharge, uoGW_Discharge, uoDischargeToMvr,
@@ -68,6 +68,14 @@ type
 
     MvrUsed: Boolean;
     MvrIndex: Integer;
+
+    // GWT
+    GwtStatus: TGwtBoundaryStatusArray;
+    SpecifiedConcentrations: TGwtCellData;
+    InfiltrationConcentrations: TGwtCellData;
+    EvapConcentrations: TGwtCellData;
+
+    procedure Assign(const Item: TUzfMf6Record);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -78,7 +86,9 @@ type
   TUzfMf6Storage = class(TCustomBoundaryStorage)
   private
     FUzfMf6Array: TUzfMf6Array;
+    FSpeciesCount: Integer;
     function GetUzfMf6Array: TUzfMf6Array;
+    procedure SetSpeciesCount(const Value: Integer);
   protected
     procedure Restore(DecompressionStream: TDecompressionStream;
       Annotations: TStringList); override;
@@ -86,6 +96,14 @@ type
     procedure Clear; override;
   public
     property UzfMf6Array: TUzfMf6Array read GetUzfMf6Array;
+    property SpeciesCount: Integer read FSpeciesCount write SetSpeciesCount;
+  end;
+
+  TUzfMf6Collection = class;
+
+  TUztGwtConcCollection = class(TGwtConcStringCollection)
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TUzfMf6Collection);
   end;
 
   TUzfMf6Item = class(TCustomModflowBoundaryItem)
@@ -98,6 +116,11 @@ type
     FAirEntryPotential: TFormulaObject;
     FRootPotential: TFormulaObject;
     FRootActivity: TFormulaObject;
+    // GWT
+    FGwtStatus: TGwtBoundaryStatusCollection;
+    FSpecifiedConcentrations: TUztGwtConcCollection;
+    FInfiltrationConcentrations: TUztGwtConcCollection;
+    FEvapConcentrations: TUztGwtConcCollection;
     // See @link(UzfExtinctDepth).
     function GetAirEntryPotential: string;
     function GetExtinctionDepth: string;
@@ -113,6 +136,10 @@ type
     procedure SetPotentialET(const Value: string);
     procedure SetRootActivity(const Value: string);
     procedure SetRootPotential(const Value: string);
+    procedure SetEvapConcentrations(const Value: TUztGwtConcCollection);
+    procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
+    procedure SetInfiltrationConcentrations(const Value: TUztGwtConcCollection);
+    procedure SetSpecifiedConcentrations(const Value: TUztGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -128,6 +155,7 @@ type
   public
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent);override;
+    constructor Create(Collection: TCollection); override;
     Destructor Destroy; override;
   published
     // finf (always used)
@@ -144,6 +172,29 @@ type
     property RootPotential: string read GetRootPotential write SetRootPotential;
     // rootact (Use only if SIMULATE_ET and UNSAT_ETAE have been specified.)
     property RootActivity: string read GetRootActivity write SetRootActivity;
+    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property SpecifiedConcentrations: TUztGwtConcCollection read FSpecifiedConcentrations
+      write SetSpecifiedConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property InfiltrationConcentrations: TUztGwtConcCollection read FInfiltrationConcentrations
+      write SetInfiltrationConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property EvapConcentrations: TUztGwtConcCollection read FEvapConcentrations
+      write SetEvapConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
   TUzfMf6TimeListLink = class(TTimeListsModelLink)
@@ -157,6 +208,11 @@ type
     FAirEntryPotentialData: TModflowTimeList;
     FRootPotentialData: TModflowTimeList;
     FRootActivityData: TModflowTimeList;
+    // GWT
+    FGwtStatusList: TModflowTimeLists;
+    FSpecifiedConcList: TModflowTimeLists;
+    FInfiltrationConcList: TModflowTimeLists;
+    FEvapConcList: TModflowTimeLists;
   protected
     procedure CreateTimeLists; override;
   public
@@ -172,6 +228,11 @@ type
     procedure InvalidateUzfAirEntryPotentialData(Sender: TObject);
     procedure InvalidateUzfRootPotentialData(Sender: TObject);
     procedure InvalidateUzfRootActivityData(Sender: TObject);
+    // GWT
+    procedure InvalidateGwtStatus(Sender: TObject);
+    procedure InvalidateSpecifiedConcentrations(Sender: TObject);
+    procedure InvalidateInfiltrationConcentrations(Sender: TObject);
+    procedure InvalidateEvapConcentrations(Sender: TObject);
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -195,6 +256,8 @@ type
     // TCustomMF_BoundColl.SetBoundaryStartAndEndTime)
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel); override;
+    procedure AssignDirectlySpecifiedValues( AnItem: TCustomModflowBoundaryItem;
+      BoundaryStorage: TCustomBoundaryStorage); override;
   end;
 
   TUzfMf6_Cell = class(TValueCell)
@@ -252,6 +315,10 @@ type
     procedure SetRootActivityTimeSeriesName(const Value: string);
     procedure SetRootPotentialTimeSeriesName(const Value: string);
     function GetInfiltrationTimeSeriesName: string;
+    function GeInfiltrationConcentrations: TGwtCellData;
+    function GetEvapConcentrations: TGwtCellData;
+    function GetGwtStatus: TGwtBoundaryStatusArray;
+    function GetSpecifiedConcentrations: TGwtCellData;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -334,6 +401,11 @@ type
     property RootActivityTimeSeriesName: string
       read GetRootActivityTimeSeriesName
       write SetRootActivityTimeSeriesName;
+    // GWT
+    Property GwtStatus: TGwtBoundaryStatusArray read GetGwtStatus;
+    Property SpecifiedConcentrations: TGwtCellData read GetSpecifiedConcentrations;
+    Property InfiltrationConcentrations: TGwtCellData read GeInfiltrationConcentrations;
+    Property EvapConcentrations: TGwtCellData read GetEvapConcentrations;
   end;
 
   TUzfMf6Boundary = class(TModflowBoundary)
@@ -374,6 +446,16 @@ type
     FPestRootActivityObserver: TObserver;
     FPestRootPotentialObserver: TObserver;
     FUsedObserver: TObserver;
+    FStartingConcentrations: TStringConcCollection;
+    FPestSpecifiedConcentrations: TUztGwtConcCollection;
+    FPestSpecifiedConcentrationMethods: TPestMethodCollection;
+    FPestEvaporationConcentrations: TUztGwtConcCollection;
+    FPestEvaporationConcentrationMethods: TPestMethodCollection;
+    FPestInfiltrationConcentrations: TUztGwtConcCollection;
+    FPestInfiltrationConcentrationMethods: TPestMethodCollection;
+    FPestSpecifiedConcentrationObservers: TObserverList;
+    FPestInfiltrationConcentrationObservers: TObserverList;
+    FPestEvaporationConcentrationObservers: TObserverList;
 
     function GetBrooksCoreyEpsilon: string;
     function GetInitialWaterContent: string;
@@ -429,6 +511,19 @@ type
     procedure SetPestRootActivityMethod(const Value: TPestParamMethod);
     procedure SetPestRootPotentialFormula(const Value: string);
     procedure SetPestRootPotentialMethod(const Value: TPestParamMethod);
+    procedure SetPestEvaporationConcentrationMethods(
+      const Value: TPestMethodCollection);
+    procedure SetPestEvaporationConcentrations(
+      const Value: TUztGwtConcCollection);
+    procedure SetPestInfiltrationConcentrationMethods(
+      const Value: TPestMethodCollection);
+    procedure SetPestInfiltrationConcentrations(
+      const Value: TUztGwtConcCollection);
+    procedure SetPestSpecifiedConcentrationMethods(
+      const Value: TPestMethodCollection);
+    procedure SetPestSpecifiedConcentrations(
+      const Value: TUztGwtConcCollection);
+    procedure SetStartingConcentrations(const Value: TStringConcCollection);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -543,6 +638,50 @@ type
     property PestRootActivityMethod: TPestParamMethod
       read FPestRootActivityMethod
       write SetPestRootActivityMethod;
+    // GWT
+    property StartingConcentrations: TStringConcCollection
+      read FStartingConcentrations
+      write SetStartingConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestSpecifiedConcentrations: TUztGwtConcCollection
+        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestSpecifiedConcentrationMethods: TPestMethodCollection
+      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestInfiltrationConcentrations: TUztGwtConcCollection
+        read FPestInfiltrationConcentrations write SetPestInfiltrationConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestInfiltrationConcentrationMethods: TPestMethodCollection
+      read FPestInfiltrationConcentrationMethods write SetPestInfiltrationConcentrationMethods
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+      property PestEvaporationConcentrations: TUztGwtConcCollection
+        read FPestEvaporationConcentrations write SetPestEvaporationConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestEvaporationConcentrationMethods: TPestMethodCollection
+      read FPestEvaporationConcentrationMethods write SetPestEvaporationConcentrationMethods
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
 const
@@ -553,6 +692,13 @@ const
   UzfMf6AirEntryPotentialPosition = 4;
   UzfMf6RootPotentialPosition = 5;
   UzfMf6RootActivityPosition = 6;
+  UzfGwtStart = 7;
+
+  UztGwtConcCount = 3;
+  UzfGwtSpecifiedConcentrationPosition = 0;
+  UzfGwtInfiltrationConcentrationsPosition = 1;
+  UzfGwtEvapConcentrationsPosition = 2;
+
 
 function TryGetUzfOb(const UzfObName: string; var UzfOb: TUzfOb): Boolean;
 function UzfObToString(const UzfOb: TUzfOb): string;
@@ -639,10 +785,23 @@ const
   AirEntryPotentialPosition = 10;
   RootPotentialPosition = 11;
   RootActivityPosition = 12;
+  UzfBoundaryGwtStart = 13;
 
 { TUzfMf6Record }
 
+procedure TUzfMf6Record.Assign(const Item: TUzfMf6Record);
+begin
+  self := Item;
+  SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
+  InfiltrationConcentrations.Assign(Item.InfiltrationConcentrations);
+  EvapConcentrations.Assign(Item.EvapConcentrations);
+  SetLength(GwtStatus, Length(GwtStatus));
+end;
+
 procedure TUzfMf6Record.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  GwtStatusCount: Integer;
+  SpeciesIndex: Integer;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, StartingTime);
@@ -699,6 +858,18 @@ begin
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 
+  // GWT
+  SpecifiedConcentrations.Cache(Comp, Strings);
+  InfiltrationConcentrations.Cache(Comp, Strings);
+  EvapConcentrations.Cache(Comp, Strings);
+
+  GwtStatusCount := Length(GwtStatus);
+  WriteCompInt(Comp, GwtStatusCount);
+  for SpeciesIndex := 0 to GwtStatusCount - 1 do
+  begin
+    WriteCompInt(Comp, Ord(GwtStatus[SpeciesIndex]));
+  end;
+
 end;
 
 procedure TUzfMf6Record.RecordStrings(Strings: TStringList);
@@ -734,10 +905,19 @@ begin
   Strings.Add(AirEntryPotentialTimeSeriesName);
   Strings.Add(RootPotentialTimeSeriesName);
   Strings.Add(RootActivityTimeSeriesName);
+
+  // GWT
+  SpecifiedConcentrations.RecordStrings(Strings);
+  InfiltrationConcentrations.RecordStrings(Strings);
+  EvapConcentrations.RecordStrings(Strings);
+
 end;
 
 procedure TUzfMf6Record.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
+var
+  GwtStatusCount: Integer;
+  SpeciesIndex: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   StartingTime := ReadCompReal(Decomp);
@@ -794,6 +974,18 @@ begin
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 
+  // GWT
+  SpecifiedConcentrations.Restore(Decomp, Annotations);
+  InfiltrationConcentrations.Restore(Decomp, Annotations);
+  EvapConcentrations.Restore(Decomp, Annotations);
+
+  GwtStatusCount := ReadCompInt(Decomp);
+  SetLength(GwtStatus, GwtStatusCount);
+  for SpeciesIndex := 0 to GwtStatusCount - 1 do
+  begin
+    GwtStatus[SpeciesIndex] := TGwtBoundaryStatus(ReadCompInt(Decomp));
+  end;
+
 end;
 
 { TUzfMf6Storage }
@@ -824,6 +1016,20 @@ begin
   for Index := 0 to Count - 1 do
   begin
     FUzfMf6Array[Index].Restore(DecompressionStream, Annotations);
+  end;
+end;
+
+procedure TUzfMf6Storage.SetSpeciesCount(const Value: Integer);
+var
+  Index: Integer;
+begin
+  FSpeciesCount := Value;
+  for Index := 0 to Length(FUzfMf6Array)-1 do
+  begin
+    SetLength(FUzfMf6Array[Index].GwtStatus, FSpeciesCount);
+    FUzfMf6Array[Index].SpecifiedConcentrations.SpeciesCount := FSpeciesCount;
+    FUzfMf6Array[Index].InfiltrationConcentrations.SpeciesCount := FSpeciesCount;
+    FUzfMf6Array[Index].EvapConcentrations.SpeciesCount := FSpeciesCount;
   end;
 end;
 
@@ -880,6 +1086,12 @@ begin
     AirEntryPotential := UzfMf6Item.AirEntryPotential;
     RootPotential := UzfMf6Item.RootPotential;
     RootActivity := UzfMf6Item.RootActivity;
+
+    // GWT
+    GwtStatus := UzfMf6Item.GwtStatus;
+    SpecifiedConcentrations := UzfMf6Item.SpecifiedConcentrations;
+    InfiltrationConcentrations := UzfMf6Item.InfiltrationConcentrations;
+    EvapConcentrations := UzfMf6Item.EvapConcentrations;
   end
   else if Source is TRchItem then
   begin
@@ -909,6 +1121,7 @@ procedure TUzfMf6Item.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TUzfMf6Collection;
   Observer: TObserver;
+  ConcIndex: Integer;
 begin
   ParentCollection := Collection as TUzfMf6Collection;
 
@@ -932,11 +1145,46 @@ begin
 
   Observer := FObserverList[UzfMf6RootActivityPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateUzfRootActivityData;
+
+  for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
+  begin
+    SpecifiedConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateSpecifiedConcentrations;
+  end;
+
+  for ConcIndex := 0 to InfiltrationConcentrations.Count - 1 do
+  begin
+    InfiltrationConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateInfiltrationConcentrations;
+  end;
+
+  for ConcIndex := 0 to EvapConcentrations.Count - 1 do
+  begin
+    EvapConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateEvapConcentrations;
+  end;
+
 end;
 
 function TUzfMf6Item.BoundaryFormulaCount: integer;
 begin
   result := 7;
+end;
+
+constructor TUzfMf6Item.Create(Collection: TCollection);
+var
+  UzfCollection: TUzfMf6Collection;
+begin
+  UzfCollection := Collection as TUzfMf6Collection;
+  FGwtStatus := TGwtBoundaryStatusCollection.Create;
+  FSpecifiedConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject,
+    UzfCollection);
+  FInfiltrationConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject,
+    UzfCollection);
+  FEvapConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject,
+    UzfCollection);
+  inherited;
+
 end;
 
 procedure TUzfMf6Item.CreateFormulaObjects;
@@ -952,7 +1200,29 @@ begin
 end;
 
 destructor TUzfMf6Item.Destroy;
+var
+  Index: Integer;
 begin
+  FGwtStatus.Free;
+  for Index := 0 to FSpecifiedConcentrations.Count - 1 do
+  begin
+    FSpecifiedConcentrations[Index].Value := '0';
+  end;
+  FSpecifiedConcentrations.Free;
+
+  for Index := 0 to FinfiltrationConcentrations.Count - 1 do
+  begin
+    FinfiltrationConcentrations[Index].Value := '0';
+  end;
+  FinfiltrationConcentrations.Free;
+
+  for Index := 0 to FEvapConcentrations.Count - 1 do
+  begin
+    FEvapConcentrations[Index].Value := '0';
+  end;
+  FEvapConcentrations.Free;
+
+
   Infiltration := '0';
   PotentialET := '0';
   ExtinctionDepth := '0';
@@ -970,6 +1240,8 @@ begin
 end;
 
 function TUzfMf6Item.GetBoundaryFormula(Index: integer): string;
+var
+  ChemSpeciesCount: Integer;
 begin
   case Index of
     UzfMf6InfiltrationPosition: result := Infiltration;
@@ -979,7 +1251,47 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotential;
     UzfMf6RootPotentialPosition: result := RootPotential;
     UzfMf6RootActivityPosition: result := RootActivity;
-    else Assert(False);
+    else
+      begin
+        // GWT
+        if frmGoPhast.PhastModel.GwtUsed then
+        begin
+          Index := Index-UzfGwtStart;
+          ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+          while SpecifiedConcentrations.Count < ChemSpeciesCount do
+          begin
+            SpecifiedConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := SpecifiedConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while InfiltrationConcentrations.Count < ChemSpeciesCount do
+          begin
+            InfiltrationConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := InfiltrationConcentrations[Index].Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while EvapConcentrations.Count < ChemSpeciesCount do
+          begin
+            EvapConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            result := EvapConcentrations[Index].Value;
+            Exit;
+          end;
+          Assert(False);
+        end;
+      end
   end;
 end;
 
@@ -1008,6 +1320,9 @@ begin
 end;
 
 procedure TUzfMf6Item.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  ConcIndex: Integer;
+  Item: TGwtConcStringValueItem;
 begin
   if (Sender = FInfiltration) then
   begin
@@ -1039,7 +1354,33 @@ begin
   end
   else
   begin
-    Assert(False);
+    // GWT
+    for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
+    begin
+      Item := SpecifiedConcentrations.Items[ConcIndex];
+      if Item.ValueObject = Sender then
+      begin
+        List.Add(Item.Observer);
+      end;
+    end;
+
+    for ConcIndex := 0 to InfiltrationConcentrations.Count - 1 do
+    begin
+      Item := InfiltrationConcentrations.Items[ConcIndex];
+      if Item.ValueObject = Sender then
+      begin
+        List.Add(Item.Observer);
+      end;
+    end;
+
+    for ConcIndex := 0 to EvapConcentrations.Count - 1 do
+    begin
+      Item := EvapConcentrations.Items[ConcIndex];
+      if Item.ValueObject = Sender then
+      begin
+        List.Add(Item.Observer);
+      end;
+    end;
   end;
 end;
 
@@ -1070,6 +1411,10 @@ begin
       and (Item.AirEntryPotential = AirEntryPotential)
       and (Item.RootPotential = RootPotential)
       and (Item.RootActivity = RootActivity)
+      and Item.SpecifiedConcentrations.IsSame(SpecifiedConcentrations)
+      and Item.InfiltrationConcentrations.IsSame(InfiltrationConcentrations)
+      and Item.EvapConcentrations.IsSame(EvapConcentrations)
+      and Item.GwtStatus.IsSame(GwtStatus);
   end;
 end;
 
@@ -1104,6 +1449,8 @@ begin
 end;
 
 procedure TUzfMf6Item.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  ChemSpeciesCount: Integer;
 begin
   case Index of
     UzfMf6InfiltrationPosition:
@@ -1120,8 +1467,57 @@ begin
       RootPotential := Value;
     UzfMf6RootActivityPosition:
       RootActivity := Value;
-    else Assert(False);
+    else
+      begin
+        // GWT
+        if frmGoPhast.PhastModel.GwtUsed then
+        begin
+          Index := Index-UzfGwtStart;
+          ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+          while SpecifiedConcentrations.Count < ChemSpeciesCount do
+          begin
+            SpecifiedConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            SpecifiedConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while InfiltrationConcentrations.Count < ChemSpeciesCount do
+          begin
+            InfiltrationConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            InfiltrationConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Index := Index - ChemSpeciesCount;
+
+          while EvapConcentrations.Count < ChemSpeciesCount do
+          begin
+            EvapConcentrations.Add;
+          end;
+          if Index < ChemSpeciesCount then
+          begin
+            EvapConcentrations[Index].Value := Value;
+            Exit;
+          end;
+          Assert(False);
+        end
+        else
+        begin
+          Assert(False);
+        end;
+      end
   end;
+end;
+
+procedure TUzfMf6Item.SetEvapConcentrations(const Value: TUztGwtConcCollection);
+begin
+  FEvapConcentrations.Assign(Value);
 end;
 
 procedure TUzfMf6Item.SetExtinctionDepth(const Value: string);
@@ -1134,6 +1530,11 @@ begin
   UpdateFormulaBlocks(Value, UzfMf6ExtinctionWaterContentPosition, FExtinctionWaterContent);
 end;
 
+procedure TUzfMf6Item.SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
+begin
+  FGwtStatus.Assign(Value);
+end;
+
 procedure TUzfMf6Item.SetInfiltration(const Value: string);
 begin
   UpdateFormulaBlocks(Value, UzfMf6InfiltrationPosition, FInfiltration);
@@ -1144,6 +1545,12 @@ begin
   UpdateFormulaBlocks(Value, UzfMf6PotentialETPosition, FPotentialET);
 end;
 
+procedure TUzfMf6Item.SetInfiltrationConcentrations(
+  const Value: TUztGwtConcCollection);
+begin
+  FInfiltrationConcentrations.Assign(Value);
+end;
+
 procedure TUzfMf6Item.SetRootActivity(const Value: string);
 begin
   UpdateFormulaBlocks(Value, UzfMf6RootActivityPosition, FRootActivity);
@@ -1152,6 +1559,12 @@ end;
 procedure TUzfMf6Item.SetRootPotential(const Value: string);
 begin
   UpdateFormulaBlocks(Value, UzfMf6RootPotentialPosition, FRootPotential);
+end;
+
+procedure TUzfMf6Item.SetSpecifiedConcentrations(
+  const Value: TUztGwtConcCollection);
+begin
+  FSpecifiedConcentrations.Assign(Value);
 end;
 
 { TUzfMf6Collection }
@@ -1229,181 +1642,382 @@ var
   LocalRootPotentialTimeSeriesName: String;
   RootActivityTimeSeries: TStringList;
   LocalRootActivityTimeSeriesName: String;
+  LocalSpecifiedConcentrations: TDataArrayList;
+  LocalInfiltrationConcentrations: TDataArrayList;
+  LocalEvapConcentrations: TDataArrayList;
+  ChemSpeciesCount: Integer;
+  SpeciesIndex: Integer;
+  DataSetIndex: Integer;
+  SpecifiedConcentrationPestSeriesNames: TStringList;
+  InfiltrationConcentrationPestSeriesNames: TStringList;
+  EvapConcentrationPestSeriesNames: TStringList;
+  APestSeriesName: string;
+  SpecifiedConcentrationPestSeriesMethods: TPestMethodList;
+  InfiltrationConcentrationPestSeriesMethods: TPestMethodList;
+  EvapConcentrationPestSeriesMethods: TPestMethodList;
+  APestSeriesMethod: TPestParamMethod;
+  SpecifiedConcItemsList: TStringList;
+  InfiltrationConcItemsList: TStringList;
+  EvapConcItemsList: TStringList;
+  PestItems: TStringList;
+  SpecifiedConcentrationTimeSeriesNames: TStringList;
+  InfiltrationConcentrationTimeSeriesNames: TStringList;
+  EvapConcentrationTimeSeriesNames: TStringList;
+  ATimeSeries: TStringList;
+  ADataArray: TDataArray;
+  PestItem: string;
+  ATimeSeriesName: string;
 begin
-  LocalModel := AModel as TCustomModel;
-  BoundaryIndex := 0;
+  LocalSpecifiedConcentrations := TDataArrayList.Create;
+  LocalInfiltrationConcentrations := TDataArrayList.Create;
+  LocalEvapConcentrations := TDataArrayList.Create;
+  SpecifiedConcentrationPestSeriesNames := TStringList.Create;
+  InfiltrationConcentrationPestSeriesNames := TStringList.Create;
+  EvapConcentrationPestSeriesNames := TStringList.Create;
+  SpecifiedConcentrationPestSeriesMethods := TPestMethodList.Create;
+  InfiltrationConcentrationPestSeriesMethods := TPestMethodList.Create;
+  EvapConcentrationPestSeriesMethods := TPestMethodList.Create;
+  SpecifiedConcItemsList := TStringList.Create;
+  InfiltrationConcItemsList := TStringList.Create;
+  EvapConcItemsList := TStringList.Create;
+  SpecifiedConcentrationTimeSeriesNames := TStringList.Create;
+  InfiltrationConcentrationTimeSeriesNames := TStringList.Create;
+  EvapConcentrationTimeSeriesNames := TStringList.Create;
+  try
+    LocalModel := AModel as TCustomModel;
+    BoundaryIndex := 0;
+    ChemSpeciesCount := LocalModel.MobileComponents.Count;
 
-  InfiltrationArray := DataSets[UzfMf6InfiltrationPosition];
-  PotentialETArray := DataSets[UzfMf6PotentialETPosition];
-  ExtinctionDepthArray := DataSets[UzfMf6ExtinctionDepthPosition];
-  ExtinctionWaterContentArray := DataSets[UzfMf6ExtinctionWaterContentPosition];
-  AirEntryPotentialArray := DataSets[UzfMf6AirEntryPotentialPosition];
-  RootPotentialArray := DataSets[UzfMf6RootPotentialPosition];
-  RootActivityArray := DataSets[UzfMf6RootActivityPosition];
-
-  LocalInfiltrationPestSeriesName := PestSeries[InfiltrationPosition-PestOffset];
-  LocalInfiltrationPestSeriesMethod := PestMethods[InfiltrationPosition-PestOffset];
-  InfiltrationItems := PestItemNames[InfiltrationPosition-PestOffset];
-  LocalInfiltrationPest := InfiltrationItems[ItemIndex];
-
-  InfiltrationTimeSeries := TimeSeriesNames[InfiltrationPosition-PestOffset];
-  LocalInfiltrationTimeSeriesName := InfiltrationTimeSeries[ItemIndex];
-
-  LocalPotentialETPestSeriesName := PestSeries[PotentialETPosition-PestOffset];
-  LocalPotentialETPestSeriesMethod := PestMethods[PotentialETPosition-PestOffset];
-  PotentialETItems := PestItemNames[PotentialETPosition-PestOffset];
-  LocalPotentialETPest := PotentialETItems[ItemIndex];
-
-  PotentialETTimeSeries := TimeSeriesNames[PotentialETPosition-PestOffset];
-  LocalPotentialETTimeSeriesName := PotentialETTimeSeries[ItemIndex];
-
-  LocalExtinctionDepthPestSeriesName := PestSeries[ExtinctionDepthPosition-PestOffset];
-  LocalExtinctionDepthPestSeriesMethod := PestMethods[ExtinctionDepthPosition-PestOffset];
-  ExtinctionDepthItems := PestItemNames[ExtinctionDepthPosition-PestOffset];
-  LocalExtinctionDepthPest := ExtinctionDepthItems[ItemIndex];
-
-  ExtinctionDepthTimeSeries := TimeSeriesNames[ExtinctionDepthPosition-PestOffset];
-  LocalExtinctionDepthTimeSeriesName := ExtinctionDepthTimeSeries[ItemIndex];
-
-  LocalExtinctionWaterContentPestSeriesName := PestSeries[ExtinctionWaterContentPosition-PestOffset];
-  LocalExtinctionWaterContentPestSeriesMethod := PestMethods[ExtinctionWaterContentPosition-PestOffset];
-  ExtinctionWaterContentItems := PestItemNames[ExtinctionWaterContentPosition-PestOffset];
-  LocalExtinctionWaterContentPest := ExtinctionWaterContentItems[ItemIndex];
-
-  ExtinctionWaterContentTimeSeries := TimeSeriesNames[ExtinctionWaterContentPosition-PestOffset];
-  LocalExtinctionWaterContentTimeSeriesName := ExtinctionWaterContentTimeSeries[ItemIndex];
-
-  LocalAirEntryPotentialPestSeriesName := PestSeries[AirEntryPotentialPosition-PestOffset];
-  LocalAirEntryPotentialPestSeriesMethod := PestMethods[AirEntryPotentialPosition-PestOffset];
-  AirEntryPotentialItems := PestItemNames[AirEntryPotentialPosition-PestOffset];
-  LocalAirEntryPotentialPest := AirEntryPotentialItems[ItemIndex];
-
-  AirEntryPotentialTimeSeries := TimeSeriesNames[AirEntryPotentialPosition-PestOffset];
-  LocalAirEntryPotentialTimeSeriesName := AirEntryPotentialTimeSeries[ItemIndex];
-
-  LocalRootPotentialPestSeriesName := PestSeries[RootPotentialPosition-PestOffset];
-  LocalRootPotentialPestSeriesMethod := PestMethods[RootPotentialPosition-PestOffset];
-  RootPotentialItems := PestItemNames[RootPotentialPosition-PestOffset];
-  LocalRootPotentialPest := RootPotentialItems[ItemIndex];
-
-  RootPotentialTimeSeries := TimeSeriesNames[RootPotentialPosition-PestOffset];
-  LocalRootPotentialTimeSeriesName := RootPotentialTimeSeries[ItemIndex];
-
-  LocalRootActivityPestSeriesName := PestSeries[RootActivityPosition-PestOffset];
-  LocalRootActivityPestSeriesMethod := PestMethods[RootActivityPosition-PestOffset];
-  RootActivityItems := PestItemNames[RootActivityPosition-PestOffset];
-  LocalRootActivityPest := RootActivityItems[ItemIndex];
-
-  RootActivityTimeSeries := TimeSeriesNames[RootActivityPosition-PestOffset];
-  LocalRootActivityTimeSeriesName := RootActivityTimeSeries[ItemIndex];
-
-  Boundary := Boundaries[ItemIndex, AModel] as TUzfMf6Storage;
-  InfiltrationArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
-    LayerMax, RowMax, ColMax);
-  if LayerMin >= 0 then
-  begin
-    for LayerIndex := LayerMin to LayerMax do
+    InfiltrationArray := DataSets[UzfMf6InfiltrationPosition];
+    PotentialETArray := DataSets[UzfMf6PotentialETPosition];
+    ExtinctionDepthArray := DataSets[UzfMf6ExtinctionDepthPosition];
+    ExtinctionWaterContentArray := DataSets[UzfMf6ExtinctionWaterContentPosition];
+    AirEntryPotentialArray := DataSets[UzfMf6AirEntryPotentialPosition];
+    RootPotentialArray := DataSets[UzfMf6RootPotentialPosition];
+    RootActivityArray := DataSets[UzfMf6RootActivityPosition];
+    if LocalModel.GwtUsed then
     begin
-      if LocalModel.IsLayerSimulated(LayerIndex) then
+      DataSetIndex := UzfGwtStart;
+      for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
       begin
-        for RowIndex := RowMin to RowMax do
+        ADataArray := DataSets[DataSetIndex+SpeciesIndex];
+        LocalSpecifiedConcentrations.Add(ADataArray);
+        APestSeriesName := PestSeries[DataSetIndex+SpeciesIndex-PestOffset];
+        SpecifiedConcentrationPestSeriesNames.Add(APestSeriesName);
+        APestSeriesMethod := PestMethods[DataSetIndex+SpeciesIndex-PestOffset];
+        SpecifiedConcentrationPestSeriesMethods.Add(APestSeriesMethod);
+        PestItems := PestItemNames[DataSetIndex+SpeciesIndex-PestOffset];
+        SpecifiedConcItemsList.Add(PestItems[ItemIndex]);
+        ATimeSeries := TimeSeriesNames[DataSetIndex+SpeciesIndex-PestOffset];
+        SpecifiedConcentrationTimeSeriesNames.Add(ATimeSeries[ItemIndex]);
+      end;
+      Inc(DataSetIndex, ChemSpeciesCount);
+      for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
+      begin
+        ADataArray := DataSets[DataSetIndex+SpeciesIndex];
+        LocalInfiltrationConcentrations.Add(ADataArray);
+        APestSeriesName := PestSeries[DataSetIndex+SpeciesIndex-PestOffset];
+        InfiltrationConcentrationPestSeriesNames.Add(APestSeriesName);
+        APestSeriesMethod := PestMethods[DataSetIndex+SpeciesIndex-PestOffset];
+        InfiltrationConcentrationPestSeriesMethods.Add(APestSeriesMethod);
+        PestItems := PestItemNames[DataSetIndex+SpeciesIndex-PestOffset];
+        InfiltrationConcItemsList.Add(PestItems[ItemIndex]);
+        ATimeSeries := TimeSeriesNames[DataSetIndex+SpeciesIndex-PestOffset];
+        InfiltrationConcentrationTimeSeriesNames.Add(ATimeSeries[ItemIndex]);
+//        LocalInfiltrationTimeSeriesName := InfiltrationTimeSeries[ItemIndex];
+
+      end;
+      Inc(DataSetIndex, ChemSpeciesCount);
+      for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
+      begin
+        ADataArray := DataSets[DataSetIndex+SpeciesIndex];
+        LocalEvapConcentrations.Add(ADataArray);
+        APestSeriesName := PestSeries[DataSetIndex+SpeciesIndex-PestOffset];
+        EvapConcentrationPestSeriesNames.Add(APestSeriesName);
+        APestSeriesMethod := PestMethods[DataSetIndex+SpeciesIndex-PestOffset];
+        EvapConcentrationPestSeriesMethods.Add(APestSeriesMethod);
+        PestItems := PestItemNames[DataSetIndex+SpeciesIndex-PestOffset];
+        EvapConcItemsList.Add(PestItems[ItemIndex]);
+        ATimeSeries := TimeSeriesNames[DataSetIndex+SpeciesIndex-PestOffset];
+        EvapConcentrationTimeSeriesNames.Add(ATimeSeries[ItemIndex]);
+      end;
+
+    end;
+
+    LocalInfiltrationPestSeriesName := PestSeries[InfiltrationPosition-PestOffset];
+    LocalInfiltrationPestSeriesMethod := PestMethods[InfiltrationPosition-PestOffset];
+    InfiltrationItems := PestItemNames[InfiltrationPosition-PestOffset];
+    LocalInfiltrationPest := InfiltrationItems[ItemIndex];
+
+    InfiltrationTimeSeries := TimeSeriesNames[InfiltrationPosition-PestOffset];
+    LocalInfiltrationTimeSeriesName := InfiltrationTimeSeries[ItemIndex];
+
+    LocalPotentialETPestSeriesName := PestSeries[PotentialETPosition-PestOffset];
+    LocalPotentialETPestSeriesMethod := PestMethods[PotentialETPosition-PestOffset];
+    PotentialETItems := PestItemNames[PotentialETPosition-PestOffset];
+    LocalPotentialETPest := PotentialETItems[ItemIndex];
+
+    PotentialETTimeSeries := TimeSeriesNames[PotentialETPosition-PestOffset];
+    LocalPotentialETTimeSeriesName := PotentialETTimeSeries[ItemIndex];
+
+    LocalExtinctionDepthPestSeriesName := PestSeries[ExtinctionDepthPosition-PestOffset];
+    LocalExtinctionDepthPestSeriesMethod := PestMethods[ExtinctionDepthPosition-PestOffset];
+    ExtinctionDepthItems := PestItemNames[ExtinctionDepthPosition-PestOffset];
+    LocalExtinctionDepthPest := ExtinctionDepthItems[ItemIndex];
+
+    ExtinctionDepthTimeSeries := TimeSeriesNames[ExtinctionDepthPosition-PestOffset];
+    LocalExtinctionDepthTimeSeriesName := ExtinctionDepthTimeSeries[ItemIndex];
+
+    LocalExtinctionWaterContentPestSeriesName := PestSeries[ExtinctionWaterContentPosition-PestOffset];
+    LocalExtinctionWaterContentPestSeriesMethod := PestMethods[ExtinctionWaterContentPosition-PestOffset];
+    ExtinctionWaterContentItems := PestItemNames[ExtinctionWaterContentPosition-PestOffset];
+    LocalExtinctionWaterContentPest := ExtinctionWaterContentItems[ItemIndex];
+
+    ExtinctionWaterContentTimeSeries := TimeSeriesNames[ExtinctionWaterContentPosition-PestOffset];
+    LocalExtinctionWaterContentTimeSeriesName := ExtinctionWaterContentTimeSeries[ItemIndex];
+
+    LocalAirEntryPotentialPestSeriesName := PestSeries[AirEntryPotentialPosition-PestOffset];
+    LocalAirEntryPotentialPestSeriesMethod := PestMethods[AirEntryPotentialPosition-PestOffset];
+    AirEntryPotentialItems := PestItemNames[AirEntryPotentialPosition-PestOffset];
+    LocalAirEntryPotentialPest := AirEntryPotentialItems[ItemIndex];
+
+    AirEntryPotentialTimeSeries := TimeSeriesNames[AirEntryPotentialPosition-PestOffset];
+    LocalAirEntryPotentialTimeSeriesName := AirEntryPotentialTimeSeries[ItemIndex];
+
+    LocalRootPotentialPestSeriesName := PestSeries[RootPotentialPosition-PestOffset];
+    LocalRootPotentialPestSeriesMethod := PestMethods[RootPotentialPosition-PestOffset];
+    RootPotentialItems := PestItemNames[RootPotentialPosition-PestOffset];
+    LocalRootPotentialPest := RootPotentialItems[ItemIndex];
+
+    RootPotentialTimeSeries := TimeSeriesNames[RootPotentialPosition-PestOffset];
+    LocalRootPotentialTimeSeriesName := RootPotentialTimeSeries[ItemIndex];
+
+    LocalRootActivityPestSeriesName := PestSeries[RootActivityPosition-PestOffset];
+    LocalRootActivityPestSeriesMethod := PestMethods[RootActivityPosition-PestOffset];
+    RootActivityItems := PestItemNames[RootActivityPosition-PestOffset];
+    LocalRootActivityPest := RootActivityItems[ItemIndex];
+
+    RootActivityTimeSeries := TimeSeriesNames[RootActivityPosition-PestOffset];
+    LocalRootActivityTimeSeriesName := RootActivityTimeSeries[ItemIndex];
+
+    Boundary := Boundaries[ItemIndex, AModel] as TUzfMf6Storage;
+    InfiltrationArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
+      LayerMax, RowMax, ColMax);
+    if LayerMin >= 0 then
+    begin
+      for LayerIndex := LayerMin to LayerMax do
+      begin
+        if LocalModel.IsLayerSimulated(LayerIndex) then
         begin
-          for ColIndex := ColMin to ColMax do
+          for RowIndex := RowMin to RowMax do
           begin
-            if InfiltrationArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+            for ColIndex := ColMin to ColMax do
             begin
-              Assert(PotentialETArray.IsValue[LayerIndex, RowIndex, ColIndex]);
-              Assert(ExtinctionDepthArray.IsValue[LayerIndex, RowIndex, ColIndex]);
-              Assert(ExtinctionWaterContentArray.IsValue[LayerIndex, RowIndex, ColIndex]);
-              Assert(AirEntryPotentialArray.IsValue[LayerIndex, RowIndex, ColIndex]);
-              Assert(RootPotentialArray.IsValue[LayerIndex, RowIndex, ColIndex]);
-              Assert(RootActivityArray.IsValue[LayerIndex, RowIndex, ColIndex]);
-
-              with Boundary.UzfMf6Array[BoundaryIndex] do
+              if InfiltrationArray.IsValue[LayerIndex, RowIndex, ColIndex] then
               begin
-                Cell.Layer := LayerIndex;
-                Cell.Row := RowIndex;
-                Cell.Column := ColIndex;
+                Assert(PotentialETArray.IsValue[LayerIndex, RowIndex, ColIndex]);
+                Assert(ExtinctionDepthArray.IsValue[LayerIndex, RowIndex, ColIndex]);
+                Assert(ExtinctionWaterContentArray.IsValue[LayerIndex, RowIndex, ColIndex]);
+                Assert(AirEntryPotentialArray.IsValue[LayerIndex, RowIndex, ColIndex]);
+                Assert(RootPotentialArray.IsValue[LayerIndex, RowIndex, ColIndex]);
+                Assert(RootActivityArray.IsValue[LayerIndex, RowIndex, ColIndex]);
 
-                Infiltration := InfiltrationArray.
-                  RealData[LayerIndex, RowIndex, ColIndex];
-                InfiltrationAnnotation := InfiltrationArray.
-                  Annotation[LayerIndex, RowIndex, ColIndex];
-                InfiltrationPest := LocalInfiltrationPest;
-                InfiltrationPestSeriesMethod := LocalInfiltrationPestSeriesMethod;
-                InfiltrationPestSeriesName := LocalInfiltrationPestSeriesName;
-                InfiltrationTimeSeriesName := LocalInfiltrationTimeSeriesName;
+                with Boundary.UzfMf6Array[BoundaryIndex] do
+                begin
+                  Cell.Layer := LayerIndex;
+                  Cell.Row := RowIndex;
+                  Cell.Column := ColIndex;
 
-                PotentialET := PotentialETArray.
-                  RealData[LayerIndex, RowIndex, ColIndex];
-                PotentialETAnnotation := PotentialETArray.
-                  Annotation[LayerIndex, RowIndex, ColIndex];
-                PotentialETPest := LocalPotentialETPest;
-                PotentialETPestSeriesMethod := LocalPotentialETPestSeriesMethod;
-                PotentialETPestSeriesName := LocalPotentialETPestSeriesName;
-                PotentialETTimeSeriesName := LocalPotentialETTimeSeriesName;
+                  Infiltration := InfiltrationArray.
+                    RealData[LayerIndex, RowIndex, ColIndex];
+                  InfiltrationAnnotation := InfiltrationArray.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  InfiltrationPest := LocalInfiltrationPest;
+                  InfiltrationPestSeriesMethod := LocalInfiltrationPestSeriesMethod;
+                  InfiltrationPestSeriesName := LocalInfiltrationPestSeriesName;
+                  InfiltrationTimeSeriesName := LocalInfiltrationTimeSeriesName;
 
-                ExtinctionDepth := ExtinctionDepthArray.
-                  RealData[LayerIndex, RowIndex, ColIndex];
-                ExtinctionDepthAnnotation := ExtinctionDepthArray.
-                  Annotation[LayerIndex, RowIndex, ColIndex];
-                ExtinctionDepthPest := LocalExtinctionDepthPest;
-                ExtinctionDepthPestSeriesMethod := LocalExtinctionDepthPestSeriesMethod;
-                ExtinctionDepthPestSeriesName := LocalExtinctionDepthPestSeriesName;
-                ExtinctionDepthTimeSeriesName := LocalExtinctionDepthTimeSeriesName;
+                  PotentialET := PotentialETArray.
+                    RealData[LayerIndex, RowIndex, ColIndex];
+                  PotentialETAnnotation := PotentialETArray.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  PotentialETPest := LocalPotentialETPest;
+                  PotentialETPestSeriesMethod := LocalPotentialETPestSeriesMethod;
+                  PotentialETPestSeriesName := LocalPotentialETPestSeriesName;
+                  PotentialETTimeSeriesName := LocalPotentialETTimeSeriesName;
 
-                ExtinctionWaterContent := ExtinctionWaterContentArray.
-                  RealData[LayerIndex, RowIndex, ColIndex];
-                ExtinctionWaterContentAnnotation := ExtinctionWaterContentArray.
-                  Annotation[LayerIndex, RowIndex, ColIndex];
-                ExtinctionWaterContentPest := LocalExtinctionWaterContentPest;
-                ExtinctionWaterContentPestSeriesMethod := LocalExtinctionWaterContentPestSeriesMethod;
-                ExtinctionWaterContentPestSeriesName := LocalExtinctionWaterContentPestSeriesName;
-                ExtinctionWaterContentTimeSeriesName := LocalExtinctionWaterContentTimeSeriesName;
+                  ExtinctionDepth := ExtinctionDepthArray.
+                    RealData[LayerIndex, RowIndex, ColIndex];
+                  ExtinctionDepthAnnotation := ExtinctionDepthArray.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  ExtinctionDepthPest := LocalExtinctionDepthPest;
+                  ExtinctionDepthPestSeriesMethod := LocalExtinctionDepthPestSeriesMethod;
+                  ExtinctionDepthPestSeriesName := LocalExtinctionDepthPestSeriesName;
+                  ExtinctionDepthTimeSeriesName := LocalExtinctionDepthTimeSeriesName;
 
-                AirEntryPotential := AirEntryPotentialArray.
-                  RealData[LayerIndex, RowIndex, ColIndex];
-                AirEntryPotentialAnnotation := AirEntryPotentialArray.
-                  Annotation[LayerIndex, RowIndex, ColIndex];
-                AirEntryPotentialPest := LocalAirEntryPotentialPest;
-                AirEntryPotentialPestSeriesMethod := LocalAirEntryPotentialPestSeriesMethod;
-                AirEntryPotentialPestSeriesName := LocalAirEntryPotentialPestSeriesName;
-                AirEntryPotentialTimeSeriesName := LocalAirEntryPotentialTimeSeriesName;
+                  ExtinctionWaterContent := ExtinctionWaterContentArray.
+                    RealData[LayerIndex, RowIndex, ColIndex];
+                  ExtinctionWaterContentAnnotation := ExtinctionWaterContentArray.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  ExtinctionWaterContentPest := LocalExtinctionWaterContentPest;
+                  ExtinctionWaterContentPestSeriesMethod := LocalExtinctionWaterContentPestSeriesMethod;
+                  ExtinctionWaterContentPestSeriesName := LocalExtinctionWaterContentPestSeriesName;
+                  ExtinctionWaterContentTimeSeriesName := LocalExtinctionWaterContentTimeSeriesName;
 
-                RootPotential := RootPotentialArray.
-                  RealData[LayerIndex, RowIndex, ColIndex];
-                RootPotentialAnnotation := RootPotentialArray.
-                  Annotation[LayerIndex, RowIndex, ColIndex];
-                RootPotentialPest := LocalRootPotentialPest;
-                RootPotentialPestSeriesMethod := LocalRootPotentialPestSeriesMethod;
-                RootPotentialPestSeriesName := LocalRootPotentialPestSeriesName;
-                RootPotentialTimeSeriesName := LocalRootPotentialTimeSeriesName;
+                  AirEntryPotential := AirEntryPotentialArray.
+                    RealData[LayerIndex, RowIndex, ColIndex];
+                  AirEntryPotentialAnnotation := AirEntryPotentialArray.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  AirEntryPotentialPest := LocalAirEntryPotentialPest;
+                  AirEntryPotentialPestSeriesMethod := LocalAirEntryPotentialPestSeriesMethod;
+                  AirEntryPotentialPestSeriesName := LocalAirEntryPotentialPestSeriesName;
+                  AirEntryPotentialTimeSeriesName := LocalAirEntryPotentialTimeSeriesName;
 
-                RootActivity := RootActivityArray.
-                  RealData[LayerIndex, RowIndex, ColIndex];
-                RootActivityAnnotation := RootActivityArray.
-                  Annotation[LayerIndex, RowIndex, ColIndex];
-                RootActivityPest := LocalRootActivityPest;
-                RootActivityPestSeriesMethod := LocalRootActivityPestSeriesMethod;
-                RootActivityPestSeriesName := LocalRootActivityPestSeriesName;
-                RootActivityTimeSeriesName := LocalRootActivityTimeSeriesName;
+                  RootPotential := RootPotentialArray.
+                    RealData[LayerIndex, RowIndex, ColIndex];
+                  RootPotentialAnnotation := RootPotentialArray.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  RootPotentialPest := LocalRootPotentialPest;
+                  RootPotentialPestSeriesMethod := LocalRootPotentialPestSeriesMethod;
+                  RootPotentialPestSeriesName := LocalRootPotentialPestSeriesName;
+                  RootPotentialTimeSeriesName := LocalRootPotentialTimeSeriesName;
+
+                  RootActivity := RootActivityArray.
+                    RealData[LayerIndex, RowIndex, ColIndex];
+                  RootActivityAnnotation := RootActivityArray.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  RootActivityPest := LocalRootActivityPest;
+                  RootActivityPestSeriesMethod := LocalRootActivityPestSeriesMethod;
+                  RootActivityPestSeriesName := LocalRootActivityPestSeriesName;
+                  RootActivityTimeSeriesName := LocalRootActivityTimeSeriesName;
+
+                  if LocalModel.GwtUsed then
+                  begin
+                    SpecifiedConcentrations.SpeciesCount := ChemSpeciesCount;
+                    InfiltrationConcentrations.SpeciesCount := ChemSpeciesCount;
+                    EvapConcentrations.SpeciesCount := ChemSpeciesCount;
+                    for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
+                    begin
+                      ADataArray := LocalSpecifiedConcentrations[SpeciesIndex];
+                      APestSeriesName := SpecifiedConcentrationPestSeriesNames[SpeciesIndex];
+                      APestSeriesMethod := SpecifiedConcentrationPestSeriesMethods[SpeciesIndex];
+                      PestItem := SpecifiedConcItemsList[SpeciesIndex];
+                      ATimeSeriesName := SpecifiedConcentrationTimeSeriesNames[SpeciesIndex];
+
+                      SpecifiedConcentrations.Values[SpeciesIndex] :=
+                        ADataArray.RealData[LayerIndex, RowIndex, ColIndex];
+                      SpecifiedConcentrations.ValueAnnotations[SpeciesIndex] :=
+                        ADataArray.Annotation[LayerIndex, RowIndex, ColIndex];
+                      SpecifiedConcentrations.ValuePestNames[SpeciesIndex] := PestItem;
+                      SpecifiedConcentrations.ValuePestSeriesNames[SpeciesIndex] := APestSeriesName;
+                      SpecifiedConcentrations.ValuePestSeriesMethods[SpeciesIndex] := APestSeriesMethod;
+                      SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex] := ATimeSeriesName;
+
+                      ADataArray := LocalInfiltrationConcentrations[SpeciesIndex];
+                      APestSeriesName := InfiltrationConcentrationPestSeriesNames[SpeciesIndex];
+                      APestSeriesMethod := InfiltrationConcentrationPestSeriesMethods[SpeciesIndex];
+                      PestItem := InfiltrationConcItemsList[SpeciesIndex];
+                      ATimeSeriesName := InfiltrationConcentrationTimeSeriesNames[SpeciesIndex];
+
+                      InfiltrationConcentrations.Values[SpeciesIndex] :=
+                        ADataArray.RealData[LayerIndex, RowIndex, ColIndex];
+                      InfiltrationConcentrations.ValueAnnotations[SpeciesIndex] :=
+                        ADataArray.Annotation[LayerIndex, RowIndex, ColIndex];
+                      InfiltrationConcentrations.ValuePestNames[SpeciesIndex] := PestItem;
+                      InfiltrationConcentrations.ValuePestSeriesNames[SpeciesIndex] := APestSeriesName;
+                      InfiltrationConcentrations.ValuePestSeriesMethods[SpeciesIndex] := APestSeriesMethod;
+                      InfiltrationConcentrations.ValueTimeSeriesNames[SpeciesIndex] := ATimeSeriesName;
+
+                      ADataArray := LocalEvapConcentrations[SpeciesIndex];
+                      APestSeriesName := EvapConcentrationPestSeriesNames[SpeciesIndex];
+                      APestSeriesMethod := EvapConcentrationPestSeriesMethods[SpeciesIndex];
+                      PestItem := EvapConcItemsList[SpeciesIndex];
+                      ATimeSeriesName := EvapConcentrationTimeSeriesNames[SpeciesIndex];
+
+                      EvapConcentrations.Values[SpeciesIndex] :=
+                        ADataArray.RealData[LayerIndex, RowIndex, ColIndex];
+                      EvapConcentrations.ValueAnnotations[SpeciesIndex] :=
+                        ADataArray.Annotation[LayerIndex, RowIndex, ColIndex];
+                      EvapConcentrations.ValuePestNames[SpeciesIndex] := PestItem;
+                      EvapConcentrations.ValuePestSeriesNames[SpeciesIndex] := APestSeriesName;
+                      EvapConcentrations.ValuePestSeriesMethods[SpeciesIndex] := APestSeriesMethod;
+                      EvapConcentrations.ValueTimeSeriesNames[SpeciesIndex] := ATimeSeriesName;
+                    end;
+                  end;
+                end;
+                Inc(BoundaryIndex);
               end;
-              Inc(BoundaryIndex);
             end;
           end;
         end;
       end;
     end;
-  end;
-  InfiltrationArray.CacheData;
-  PotentialETArray.CacheData;
-  ExtinctionDepthArray.CacheData;
-  ExtinctionWaterContentArray.CacheData;
-  AirEntryPotentialArray.CacheData;
-  RootPotentialArray.CacheData;
-  RootActivityArray.CacheData;
+    InfiltrationArray.CacheData;
+    PotentialETArray.CacheData;
+    ExtinctionDepthArray.CacheData;
+    ExtinctionWaterContentArray.CacheData;
+    AirEntryPotentialArray.CacheData;
+    RootPotentialArray.CacheData;
+    RootActivityArray.CacheData;
 
-  Boundary.CacheData;
+    Boundary.CacheData;
+  finally
+    LocalEvapConcentrations.Free;
+    LocalInfiltrationConcentrations.Free;
+    LocalSpecifiedConcentrations.Free;
+    SpecifiedConcentrationPestSeriesNames.Free;
+    InfiltrationConcentrationPestSeriesNames.Free;
+    EvapConcentrationPestSeriesNames.Free;
+    SpecifiedConcentrationPestSeriesMethods.Free;
+    InfiltrationConcentrationPestSeriesMethods.Free;
+    EvapConcentrationPestSeriesMethods.Free;
+    SpecifiedConcItemsList.Free;
+    InfiltrationConcItemsList.Free;
+    EvapConcItemsList.Free;
+    SpecifiedConcentrationTimeSeriesNames.Free;
+    InfiltrationConcentrationTimeSeriesNames.Free;
+    EvapConcentrationTimeSeriesNames.Free;
+  end;
+end;
+
+procedure TUzfMf6Collection.AssignDirectlySpecifiedValues(
+  AnItem: TCustomModflowBoundaryItem; BoundaryStorage: TCustomBoundaryStorage);
+var
+  UzfStorage: TUzfMf6Storage;
+  index: integer;
+  UzfMf6Item: TUzfMf6Item;
+  SpeciesCount: Integer;
+  SpeciesIndex: Integer;
+begin
+  inherited;
+  // GWT
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+  end
+  else
+  begin
+    SpeciesCount := 0;
+  end;
+  UzfStorage := BoundaryStorage as TUzfMf6Storage;
+  UzfMf6Item := AnItem as TUzfMf6Item;
+
+  for index := 0 to Length(UzfStorage.UzfMF6Array) - 1 do
+  begin
+
+    // Is this needed?
+//    SetLength(UzfStorage.UzfMF6Array[index].GwtStatus, SpeciesCount);
+
+    while UzfMf6Item.GwtStatus.Count < SpeciesCount do
+    begin
+      UzfMf6Item.GwtStatus.Add;
+    end;
+    for SpeciesIndex := 0 to SpeciesCount - 1 do
+    begin
+      UzfStorage.UzfMF6Array[index].GwtStatus[SpeciesIndex] :=
+        UzfMf6Item.GwtStatus[SpeciesIndex].GwtBoundaryStatus
+    end;
+  end;
 end;
 
 function TUzfMf6Collection.GetTimeListLinkClass: TTimeListsModelLinkClass;
@@ -1427,10 +2041,16 @@ var
   TimeSeriesItems: TStringList;
   ItemFormula: string;
   TimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
+  SpeciesIndex: Integer;
+  BoundaryFormulaIndex: Integer;
+  ChemSpeciesCount: Integer;
 begin
+  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
+  // Infiltration
   SeriesName := BoundaryGroup.PestBoundaryFormula[InfiltrationPosition];
   PestSeries.Add(SeriesName);
   SeriesMethod := BoundaryGroup.PestBoundaryMethod[InfiltrationPosition];
@@ -1449,8 +2069,6 @@ begin
     ItemFormula := Item.Infiltration;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
       PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
-
-//    BoundaryValues[Index].Formula := Item.Infiltration;
   end;
   ALink := TimeListLink.GetLink(AModel) as TUzfMf6TimeListLink;
 
@@ -1458,6 +2076,7 @@ begin
   TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(TimeList.Count = Count);
 
+  // Potential ET
   SeriesName := BoundaryGroup.PestBoundaryFormula[PotentialETPosition];
   PestSeries.Add(SeriesName);
   SeriesMethod := BoundaryGroup.PestBoundaryMethod[PotentialETPosition];
@@ -1476,13 +2095,12 @@ begin
     ItemFormula := Item.PotentialET;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
       PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
-
-//    BoundaryValues[Index].Formula := Item.PotentialET;
   end;
   TimeList := ALink.FPotentialETData;
   TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(TimeList.Count = Count);
 
+  // Extinction depth
   SeriesName := BoundaryGroup.PestBoundaryFormula[ExtinctionDepthPosition];
   PestSeries.Add(SeriesName);
   SeriesMethod := BoundaryGroup.PestBoundaryMethod[ExtinctionDepthPosition];
@@ -1501,14 +2119,12 @@ begin
     ItemFormula := Item.ExtinctionDepth;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
       PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
-
-
-//    BoundaryValues[Index].Formula := Item.ExtinctionDepth;
   end;
   TimeList := ALink.FExtinctionDepthData;
   TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(TimeList.Count = Count);
 
+  // Extinction water content
   SeriesName := BoundaryGroup.PestBoundaryFormula[ExtinctionWaterContentPosition];
   PestSeries.Add(SeriesName);
   SeriesMethod := BoundaryGroup.PestBoundaryMethod[ExtinctionWaterContentPosition];
@@ -1527,14 +2143,12 @@ begin
     ItemFormula := Item.ExtinctionWaterContent;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
       PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
-
-
-//    BoundaryValues[Index].Formula := Item.ExtinctionWaterContent;
   end;
   TimeList := ALink.FExtinctionWaterContentData;
   TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(TimeList.Count = Count);
 
+  // air entry potential
   SeriesName := BoundaryGroup.PestBoundaryFormula[AirEntryPotentialPosition];
   PestSeries.Add(SeriesName);
   SeriesMethod := BoundaryGroup.PestBoundaryMethod[AirEntryPotentialPosition];
@@ -1553,13 +2167,12 @@ begin
     ItemFormula := Item.AirEntryPotential;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
       PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
-
-//    BoundaryValues[Index].Formula := Item.AirEntryPotential;
   end;
   TimeList := ALink.FAirEntryPotentialData;
   TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(TimeList.Count = Count);
 
+  // root potential
   SeriesName := BoundaryGroup.PestBoundaryFormula[RootPotentialPosition];
   PestSeries.Add(SeriesName);
   SeriesMethod := BoundaryGroup.PestBoundaryMethod[RootPotentialPosition];
@@ -1578,14 +2191,12 @@ begin
     ItemFormula := Item.RootPotential;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
       PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
-
-
-//    BoundaryValues[Index].Formula := Item.RootPotential;
   end;
   TimeList := ALink.FRootPotentialData;
   TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(TimeList.Count = Count);
 
+  // root activity
   SeriesName := BoundaryGroup.PestBoundaryFormula[RootActivityPosition];
   PestSeries.Add(SeriesName);
   SeriesMethod := BoundaryGroup.PestBoundaryMethod[RootActivityPosition];
@@ -1604,12 +2215,99 @@ begin
     ItemFormula := Item.RootActivity;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
       PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
-
-//    BoundaryValues[Index].Formula := Item.RootActivity;
   end;
   TimeList := ALink.FRootActivityData;
   TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(TimeList.Count = Count);
+
+  if LocalModel.GwtUsed then
+  begin
+    ChemSpeciesCount := LocalModel.MobileComponents.Count;
+    BoundaryFormulaIndex := UzfBoundaryGwtStart;
+
+    // specified concentrations
+    for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
+    begin
+      SeriesName := BoundaryGroup.PestBoundaryFormula[BoundaryFormulaIndex+SpeciesIndex];
+      PestSeries.Add(SeriesName);
+      SeriesMethod := BoundaryGroup.PestBoundaryMethod[BoundaryFormulaIndex+SpeciesIndex];
+      PestMethods.Add(SeriesMethod);
+
+      PestItems := TStringList.Create;
+      PestItemNames.Add(PestItems);
+      TimeSeriesItems := TStringList.Create;
+      TimeSeriesNames.Add(TimeSeriesItems);
+
+      for Index := 0 to Count - 1 do
+      begin
+        Item := Items[Index] as TUzfMf6Item;
+        BoundaryValues[Index].Time := Item.StartTime;
+
+        ItemFormula := Item.SpecifiedConcentrations[SpeciesIndex].Value;
+        AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
+          PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+      end;
+      TimeList := ALink.FSpecifiedConcList[SpeciesIndex];
+      TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+      Assert(TimeList.Count = Count);
+    end;
+
+    // infiltration concentrations
+    Inc(BoundaryFormulaIndex, ChemSpeciesCount);
+    for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
+    begin
+      SeriesName := BoundaryGroup.PestBoundaryFormula[BoundaryFormulaIndex+SpeciesIndex];
+      PestSeries.Add(SeriesName);
+      SeriesMethod := BoundaryGroup.PestBoundaryMethod[BoundaryFormulaIndex+SpeciesIndex];
+      PestMethods.Add(SeriesMethod);
+
+      PestItems := TStringList.Create;
+      PestItemNames.Add(PestItems);
+      TimeSeriesItems := TStringList.Create;
+      TimeSeriesNames.Add(TimeSeriesItems);
+
+      for Index := 0 to Count - 1 do
+      begin
+        Item := Items[Index] as TUzfMf6Item;
+        BoundaryValues[Index].Time := Item.StartTime;
+
+        ItemFormula := Item.InfiltrationConcentrations[SpeciesIndex].Value;
+        AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
+          PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+      end;
+      TimeList := ALink.FInfiltrationConcList[SpeciesIndex];
+      TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+      Assert(TimeList.Count = Count);
+    end;
+
+    // evaporation concentrations
+    Inc(BoundaryFormulaIndex, ChemSpeciesCount);
+    for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
+    begin
+      SeriesName := BoundaryGroup.PestBoundaryFormula[BoundaryFormulaIndex+SpeciesIndex];
+      PestSeries.Add(SeriesName);
+      SeriesMethod := BoundaryGroup.PestBoundaryMethod[BoundaryFormulaIndex+SpeciesIndex];
+      PestMethods.Add(SeriesMethod);
+
+      PestItems := TStringList.Create;
+      PestItemNames.Add(PestItems);
+      TimeSeriesItems := TStringList.Create;
+      TimeSeriesNames.Add(TimeSeriesItems);
+
+      for Index := 0 to Count - 1 do
+      begin
+        Item := Items[Index] as TUzfMf6Item;
+        BoundaryValues[Index].Time := Item.StartTime;
+
+        ItemFormula := Item.EvapConcentrations[SpeciesIndex].Value;
+        AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
+          PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+      end;
+      TimeList := ALink.FEvapConcList[SpeciesIndex];
+      TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+      Assert(TimeList.Count = Count);
+    end;
+  end;
 
   ClearBoundaries(AModel);
   SetBoundaryCapacity(TimeList.Count, AModel);
@@ -1624,6 +2322,77 @@ begin
   ListOfTimeLists.Add(ALink.FAirEntryPotentialData);
   ListOfTimeLists.Add(ALink.FRootPotentialData);
   ListOfTimeLists.Add(ALink.FRootActivityData);
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
+    begin
+      TimeList := ALink.FSpecifiedConcList[SpeciesIndex];
+      ListOfTimeLists.Add(TimeList);
+    end;
+
+    for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
+    begin
+      TimeList := ALink.FInfiltrationConcList[SpeciesIndex];
+      ListOfTimeLists.Add(TimeList);
+    end;
+
+    for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
+    begin
+      TimeList := ALink.FEvapConcList[SpeciesIndex];
+      ListOfTimeLists.Add(TimeList);
+    end;
+  end;
+end;
+
+procedure TUzfMf6Collection.InvalidateEvapConcentrations(Sender: TObject);
+begin
+
+end;
+
+procedure TUzfMf6Collection.InvalidateGwtStatus(Sender: TObject);
+begin
+
+end;
+
+procedure TUzfMf6Collection.InvalidateInfiltrationConcentrations(
+  Sender: TObject);
+begin
+
+end;
+
+procedure TUzfMf6Collection.InvalidateSpecifiedConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TUzfMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
+    for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+    begin
+      TimeList := Link.FSpecifiedConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+      for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+      begin
+        TimeList := Link.FSpecifiedConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 procedure TUzfMf6Collection.InvalidateUzfAirEntryPotentialData(Sender: TObject);
@@ -1812,11 +2581,18 @@ procedure TUzfMf6Collection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TUzfMf6Storage).
     FUzfMf6Array, BoundaryCount);
+  (Boundaries[ItemIndex, AModel] as TUzfMf6Storage).SpeciesCount
+    := (AModel as TCustomModel).MobileComponents.Count;
   inherited;
 end;
 { TUzfMf6TimeListLink }
 
 procedure TUzfMf6TimeListLink.CreateTimeLists;
+var
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
 begin
   inherited;
 
@@ -1889,10 +2665,74 @@ begin
     FRootActivityData.OnInvalidate :=
       (Model as TCustomModel).InvalidateUzfMf6RootActivity;
   end;
+
+  FGwtStatusList := TModflowTimeLists.Create;
+  FSpecifiedConcList := TModflowTimeLists.Create;
+  FInfiltrationConcList := TModflowTimeLists.Create;
+  FEvapConcList := TModflowTimeLists.Create;
+//  FRunoffConcList := TModflowTimeLists.Create;
+//  FInflowConcList := TModflowTimeLists.Create;
+
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
+    begin
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Status';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FGwtStatusList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Specified Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FSpecifiedConcList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Rainfall Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FInfiltrationConcList.Add(ConcTimeList);
+
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Evaporation Concentration';
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FEvapConcList.Add(ConcTimeList);
+    end;
+  end;
+
 end;
 
 destructor TUzfMf6TimeListLink.Destroy;
 begin
+  FGwtStatusList.Free;
+  FSpecifiedConcList.Free;
+  FInfiltrationConcList.Free;
+  FEvapConcList.Free;
+
   FInfiltrationData.Free;
   FPotentialETData.Free;
   FExtinctionDepthData.Free;
@@ -1910,6 +2750,11 @@ begin
   inherited;
   FValues.Cache(Comp, Strings);
   WriteCompInt(Comp, FStressPeriod);
+end;
+
+function TUzfMf6_Cell.GeInfiltrationConcentrations: TGwtCellData;
+begin
+  result := FValues.InfiltrationConcentrations
 end;
 
 function TUzfMf6_Cell.GetAirEntryPotential: double;
@@ -1945,6 +2790,11 @@ end;
 function TUzfMf6_Cell.GetColumn: integer;
 begin
   result := FValues.Cell.Column;
+end;
+
+function TUzfMf6_Cell.GetEvapConcentrations: TGwtCellData;
+begin
+  result := FValues.EvapConcentrations
 end;
 
 function TUzfMf6_Cell.GetExtinctionDepth: double;
@@ -2007,6 +2857,11 @@ begin
   result := FValues.ExtinctionWaterContentTimeSeriesName;
 end;
 
+function TUzfMf6_Cell.GetGwtStatus: TGwtBoundaryStatusArray;
+begin
+  result := FValues.GwtStatus
+end;
+
 function TUzfMf6_Cell.GetInfiltration: double;
 begin
   result := FValues.Infiltration;
@@ -2057,6 +2912,10 @@ begin
 end;
 
 function TUzfMf6_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     UzfMf6InfiltrationPosition: result := InfiltrationTimeSeriesName;
@@ -2068,8 +2927,26 @@ begin
     UzfMf6RootActivityPosition: result := RootActivityTimeSeriesName;
     else
       begin
-        result := inherited;
-        Assert(False);
+        GwtPosition := Index - UzfGwtStart;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div UztGwtConcCount;
+        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        case GwtSource of
+          UzfGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex];
+            end;
+          UzfGwtInfiltrationConcentrationsPosition:
+            begin
+              result := FValues.InfiltrationConcentrations.ValueTimeSeriesNames[SpeciesIndex];
+            end;
+          UzfGwtEvapConcentrationsPosition:
+            begin
+              result := FValues.EvapConcentrations.ValueTimeSeriesNames[SpeciesIndex];
+            end;
+          else
+            Assert(False);
+        end;
       end;
   end;
 end;
@@ -2085,6 +2962,10 @@ begin
 end;
 
 function TUzfMf6_Cell.GetPestName(Index: Integer): string;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     UzfMf6InfiltrationPosition: result := InfiltrationPest;
@@ -2096,13 +2977,35 @@ begin
     UzfMf6RootActivityPosition: result := RootActivityPest;
     else
       begin
-        result := inherited;
-        Assert(False);
+        GwtPosition := Index - UzfGwtStart;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div UztGwtConcCount;
+        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        case GwtSource of
+          UzfGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValuePestNames[SpeciesIndex];
+            end;
+          UzfGwtInfiltrationConcentrationsPosition:
+            begin
+              result := FValues.InfiltrationConcentrations.ValuePestNames[SpeciesIndex];
+            end;
+          UzfGwtEvapConcentrationsPosition:
+            begin
+              result := FValues.EvapConcentrations.ValuePestNames[SpeciesIndex];
+            end;
+          else
+            Assert(False);
+        end;
       end;
   end;
 end;
 
 function TUzfMf6_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     UzfMf6InfiltrationPosition: result := InfiltrationPestSeriesMethod;
@@ -2114,13 +3017,35 @@ begin
     UzfMf6RootActivityPosition: result := RootActivityPestSeriesMethod;
     else
       begin
-        result := inherited;
-        Assert(False);
+        GwtPosition := Index - UzfGwtStart;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div UztGwtConcCount;
+        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        case GwtSource of
+          UzfGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValuePestSeriesMethods[SpeciesIndex];
+            end;
+          UzfGwtInfiltrationConcentrationsPosition:
+            begin
+              result := FValues.InfiltrationConcentrations.ValuePestSeriesMethods[SpeciesIndex];
+            end;
+          UzfGwtEvapConcentrationsPosition:
+            begin
+              result := FValues.EvapConcentrations.ValuePestSeriesMethods[SpeciesIndex];
+            end;
+          else
+            Assert(False);
+        end;
       end;
   end;
 end;
 
 function TUzfMf6_Cell.GetPestSeriesName(Index: Integer): string;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     UzfMf6InfiltrationPosition: result := InfiltrationPestSeriesName;
@@ -2132,8 +3057,26 @@ begin
     UzfMf6RootActivityPosition: result := RootActivityPestSeriesName;
     else
       begin
-        result := inherited;
-        Assert(False);
+        GwtPosition := Index - UzfGwtStart;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div UztGwtConcCount;
+        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        case GwtSource of
+          UzfGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValuePestSeriesNames[SpeciesIndex];
+            end;
+          UzfGwtInfiltrationConcentrationsPosition:
+            begin
+              result := FValues.InfiltrationConcentrations.ValuePestSeriesNames[SpeciesIndex];
+            end;
+          UzfGwtEvapConcentrationsPosition:
+            begin
+              result := FValues.EvapConcentrations.ValuePestSeriesNames[SpeciesIndex];
+            end;
+          else
+            Assert(False);
+        end;
       end;
   end;
 end;
@@ -2170,6 +3113,10 @@ end;
 
 function TUzfMf6_Cell.GetRealAnnotation(Index: integer;
   AModel: TBaseModel): string;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   result := '';
   case Index of
@@ -2180,11 +3127,37 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialAnnotation;
     UzfMf6RootPotentialPosition: result := RootPotentialAnnotation;
     UzfMf6RootActivityPosition: result := RootActivityAnnotation;
-    else Assert(False);
+    else
+      begin
+        GwtPosition := Index - UzfGwtStart;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div UztGwtConcCount;
+        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        case GwtSource of
+          UzfGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.ValueAnnotations[SpeciesIndex];
+            end;
+          UzfGwtInfiltrationConcentrationsPosition:
+            begin
+              result := FValues.InfiltrationConcentrations.ValueAnnotations[SpeciesIndex];
+            end;
+          UzfGwtEvapConcentrationsPosition:
+            begin
+              result := FValues.EvapConcentrations.ValueAnnotations[SpeciesIndex];
+            end;
+          else
+            Assert(False);
+        end;
+      end;
   end;
 end;
 
 function TUzfMf6_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   result := 0;
   case Index of
@@ -2195,7 +3168,29 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotential;
     UzfMf6RootPotentialPosition: result := RootPotential;
     UzfMf6RootActivityPosition: result := RootActivity;
-    else Assert(False);
+    else
+      begin
+        GwtPosition := Index - UzfGwtStart;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div UztGwtConcCount;
+        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        case GwtSource of
+          UzfGwtSpecifiedConcentrationPosition:
+            begin
+              result := FValues.SpecifiedConcentrations.Values[SpeciesIndex];
+            end;
+          UzfGwtInfiltrationConcentrationsPosition:
+            begin
+              result := FValues.InfiltrationConcentrations.Values[SpeciesIndex];
+            end;
+          UzfGwtEvapConcentrationsPosition:
+            begin
+              result := FValues.EvapConcentrations.Values[SpeciesIndex];
+            end;
+          else
+            Assert(False);
+        end;
+      end
   end;
 end;
 
@@ -2269,6 +3264,11 @@ begin
   result := FValues.Cell.Section;
 end;
 
+function TUzfMf6_Cell.GetSpecifiedConcentrations: TGwtCellData;
+begin
+  result := FValues.SpecifiedConcentrations
+end;
+
 function TUzfMf6_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
   Uzf_Cell: TUzfMf6_Cell;
@@ -2335,6 +3335,10 @@ end;
 
 procedure TUzfMf6_Cell.SetMf6TimeSeriesName(Index: Integer;
   const Value: string);
+var
+  GwtPosition: Integer;
+  GwtSource: Integer;
+  SpeciesIndex: Integer;
 begin
   case Index of
     UzfMf6InfiltrationPosition:
@@ -2353,8 +3357,26 @@ begin
       RootActivityTimeSeriesName := Value;
     else
       begin
-        inherited;
-        Assert(False);
+        GwtPosition := Index - UzfGwtStart;
+        Assert(GwtPosition >= 0);
+        GwtSource := GwtPosition div UztGwtConcCount;
+        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        case GwtSource of
+          UzfGwtSpecifiedConcentrationPosition:
+            begin
+              FValues.SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
+            end;
+          UzfGwtInfiltrationConcentrationsPosition:
+            begin
+              FValues.InfiltrationConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
+            end;
+          UzfGwtEvapConcentrationsPosition:
+            begin
+              FValues.EvapConcentrations.ValueTimeSeriesNames[SpeciesIndex] := Value;
+            end;
+          else
+            Assert(False);
+        end;
       end;
   end;
 end;
@@ -2641,6 +3663,20 @@ end;
 constructor TUzfMf6Boundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
+  FPestSpecifiedConcentrationObservers := TObserverList.Create;
+  FPestInfiltrationConcentrationObservers := TObserverList.Create;
+  FPestEvaporationConcentrationObservers := TObserverList.Create;
+
+  FPestSpecifiedConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestSpecifiedConcentrations.UsedForPestSeries := True;
+  FPestInfiltrationConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestInfiltrationConcentrations.UsedForPestSeries := True;
+  FPestEvaporationConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestEvaporationConcentrations.UsedForPestSeries := True;
+
+  FPestSpecifiedConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestInfiltrationConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestEvaporationConcentrationMethods := TPestMethodCollection.Create(Model);
 
   CreateFormulaObjects;
   CreateBoundaryObserver;
@@ -2767,6 +3803,19 @@ begin
   PestRootPotentialFormula := '';
   PestRootActivityFormula := '';
 
+  FStartingConcentrations.Free;
+
+  FPestSpecifiedConcentrationMethods.Free;
+  FPestInfiltrationConcentrationMethods.Free;
+  FPestEvaporationConcentrationMethods.Free;
+
+  FPestSpecifiedConcentrations.Free;
+  FPestInfiltrationConcentrations.Free;
+  FPestEvaporationConcentrations.Free;
+
+  FPestSpecifiedConcentrationObservers.Free;
+  FPestInfiltrationConcentrationObservers.Free;
+  FPestEvaporationConcentrationObservers.Free;
   inherited;
 end;
 
@@ -3628,6 +4677,18 @@ begin
   end;
 end;
 
+procedure TUzfMf6Boundary.SetPestEvaporationConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestEvaporationConcentrationMethods.Assign(Value);
+end;
+
+procedure TUzfMf6Boundary.SetPestEvaporationConcentrations(
+  const Value: TUztGwtConcCollection);
+begin
+  FPestEvaporationConcentrations.Assign(Value);
+end;
+
 procedure TUzfMf6Boundary.SetPestExtinctionDepthFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, ExtinctionDepthPosition, FExtinctionDepth);
@@ -3649,6 +4710,18 @@ procedure TUzfMf6Boundary.SetPestExtinctionWaterContentMethod(
   const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestExtinctionWaterContentMethod, Value);
+end;
+
+procedure TUzfMf6Boundary.SetPestInfiltrationConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestInfiltrationConcentrationMethods.Assign(Value);
+end;
+
+procedure TUzfMf6Boundary.SetPestInfiltrationConcentrations(
+  const Value: TUztGwtConcCollection);
+begin
+  FPestInfiltrationConcentrations.Assign(Value);
 end;
 
 procedure TUzfMf6Boundary.SetPestInfiltrationFormula(const Value: string);
@@ -3695,6 +4768,18 @@ begin
   SetPestParamMethod(FPestRootPotentialMethod, Value);
 end;
 
+procedure TUzfMf6Boundary.SetPestSpecifiedConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestSpecifiedConcentrationMethods.Assign(Value);
+end;
+
+procedure TUzfMf6Boundary.SetPestSpecifiedConcentrations(
+  const Value: TUztGwtConcCollection);
+begin
+  FPestSpecifiedConcentrations.Assign(Value);
+end;
+
 procedure TUzfMf6Boundary.SetResidualWaterContent(const Value: string);
 begin
   UpdateFormulaBlocks(Value, ResidualWaterContentPosition, FResidualWaterContent);
@@ -3705,6 +4790,12 @@ begin
   UpdateFormulaBlocks(Value, SaturatedWaterContentPosition, FSaturatedWaterContent);
 end;
 
+procedure TUzfMf6Boundary.SetStartingConcentrations(
+  const Value: TStringConcCollection);
+begin
+  FStartingConcentrations.Assign(Value);
+end;
+
 procedure TUzfMf6Boundary.SetSurfaceDepressionDepth(const Value: string);
 begin
   UpdateFormulaBlocks(Value, SurfaceDepressionDepthPosition, FSurfaceDepressionDepth);
@@ -3713,6 +4804,14 @@ end;
 procedure TUzfMf6Boundary.SetVerticalSaturatedK(const Value: string);
 begin
   UpdateFormulaBlocks(Value, VerticalSaturatedKPosition, FVerticalSaturatedK);
+end;
+
+{ TUztGwtConcCollection }
+
+constructor TUztGwtConcCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TUzfMf6Collection);
+begin
+  inherited Create(Model, AScreenObject, ParentCollection);
 end;
 
 initialization

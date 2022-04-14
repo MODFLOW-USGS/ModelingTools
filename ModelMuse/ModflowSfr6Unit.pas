@@ -425,14 +425,12 @@ type
   private
     FDownstreamSegment: Integer;
     FPriority: TDivisionPriority;
-//    FDiversionNumber: Integer;
     procedure SetPriority(const Value: TDivisionPriority);
     procedure SetDownstreamSegment(const Value: Integer);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     procedure Assign(Source: TPersistent); override;
-//    property DiversionNumber: Integer read FDiversionNumber write FDiversionNumber;
   published
     property DownstreamSegment: Integer read FDownstreamSegment
       write SetDownstreamSegment;
@@ -449,8 +447,6 @@ type
     property Items[Index: Integer]: TSDiversionItem read GetItem write SetItem; default;
     function Add: TSDiversionItem;
   end;
-
-//  TSfrInflowLocation = (silAllCells, silFirstCell);
 
   TSfrMf6Boundary = class(TModflowBoundary)
   private
@@ -598,8 +594,15 @@ type
       const Index: Integer): TObserver;
     function GetPestRainfallConcentrationObserver(
       const Index: Integer): TObserver;
+    function GetPestRunoffConcentrationObserver(
+      const Index: Integer): TObserver;
     function GetPestSpecifiedConcentrationObserver(
       const Index: Integer): TObserver;
+    procedure InvalidatePestSpecConcData(Sender: TObject);
+    procedure InvalidatePestEvapConcData(Sender: TObject);
+    procedure InvalidatePestRainfallConcData(Sender: TObject);
+    procedure InvalidatePestInflowConcData(Sender: TObject);
+    procedure InvalidatePestRunoffConcData(Sender: TObject);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -630,13 +633,14 @@ type
     property PestUpstreamFractionObserver: TObserver read GetPestUpstreamFractionObserver;
     property PestStageObserver: TObserver read GetPestStageObserver;
     property PestRoughnessObserver: TObserver read GetPestRoughnessObserver;
-//    property StartingConcentrations[Index: Integer]: string read GetSConc write SetSConc;
     property PestSpecifiedConcentrationObserver[const Index: Integer]: TObserver
       read GetPestSpecifiedConcentrationObserver;
     property PestRainfallConcentrationObserver[const Index: Integer]: TObserver
       read GetPestRainfallConcentrationObserver;
     property PestEvaporationConcentrationObserver[const Index: Integer]: TObserver
       read GetPestEvaporationConcentrationObserver;
+    property PestRunoffConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestRunoffConcentrationObserver;
     property PestInflowConcentrationObserver[const Index: Integer]: TObserver
       read GetPestInflowConcentrationObserver;
   public
@@ -1499,9 +1503,9 @@ begin
     SfrMf6UpstreamFractionPosition: result := UpstreamFraction;
     SfrMf6StagePosition: result := Stage;
     SfrMf6RoughnessPosition: result := Roughness;
-    else 
+    else
       begin
-        Index := Index-SfrMf6DiversionStartPosition; 
+        Index := Index-SfrMf6DiversionStartPosition;
         if Index < FDiversionFormulas.Count then
         begin
           result := DiversionFormulas[Index];
@@ -1566,8 +1570,11 @@ begin
             Exit;
           end;
           Assert(False);
+        end
+        else
+        begin
+          Assert(False);
         end;
-//        Index := Index - ChemSpeciesCount;
       end;
   end;
 end;
@@ -1752,66 +1759,18 @@ begin
       and (Item.Roughness = Roughness)
       and (Item.StreamStatus = StreamStatus)
       and (Item.DiversionCount = DiversionCount)
-      and (Item.SpecifiedConcentrations.Count = SpecifiedConcentrations.Count)
-      and (Item.RainfallConcentrations.Count = RainfallConcentrations.Count)
-      and (Item.EvapConcentrations.Count = EvapConcentrations.Count)
-      and (Item.RunoffConcentrations.Count = RunoffConcentrations.Count)
-      and (Item.InflowConcentrations.Count = InflowConcentrations.Count)
-      and (Item.GwtStatus.Count = GwtStatus.Count);
+      and Item.SpecifiedConcentrations.IsSame(SpecifiedConcentrations)
+      and Item.RainfallConcentrations.IsSame(RainfallConcentrations)
+      and Item.EvapConcentrations.IsSame(EvapConcentrations)
+      and Item.RunoffConcentrations.IsSame(RunoffConcentrations)
+      and Item.InflowConcentrations.IsSame(InflowConcentrations)
+      and Item.GwtStatus.IsSame(GwtStatus);
       
     if result then
     begin
       for Index := 0 to DiversionCount - 1 do
       begin
         result := Item.Diversions[Index] = Diversions[Index];
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-      for Index := 0 to GwtStatus.Count - 1 do
-      begin
-        result := Item.GwtStatus[Index].GwtBoundaryStatus = GwtStatus[Index].GwtBoundaryStatus;
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-      for Index := 0 to SpecifiedConcentrations.Count - 1 do
-      begin
-        result := Item.SpecifiedConcentrations[Index].Value = SpecifiedConcentrations[Index].Value;
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-      for Index := 0 to RainfallConcentrations.Count - 1 do
-      begin
-        result := Item.RainfallConcentrations[Index].Value = RainfallConcentrations[Index].Value;
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-      for Index := 0 to EvapConcentrations.Count - 1 do
-      begin
-        result := Item.EvapConcentrations[Index].Value = EvapConcentrations[Index].Value;
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-      for Index := 0 to RunoffConcentrations.Count - 1 do
-      begin
-        result := Item.RunoffConcentrations[Index].Value = RunoffConcentrations[Index].Value;
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-      for Index := 0 to InflowConcentrations.Count - 1 do
-      begin
-        result := Item.InflowConcentrations[Index].Value = InflowConcentrations[Index].Value;
         if not Result then
         begin
           Exit;
@@ -1893,13 +1852,13 @@ begin
         if Index < FDiversionFormulas.Count then
         begin
           DiversionFormulas[Index-SfrMf6DiversionStartPosition] := Value;
+          Exit;
         end;
-        Index := Index - FDiversionFormulas.Count;
 
         // GWT
         if frmGoPhast.PhastModel.GwtUsed then
         begin
-
+          Index := Index - FDiversionFormulas.Count;
           ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
           while SpecifiedConcentrations.Count < ChemSpeciesCount do
           begin
@@ -1954,6 +1913,10 @@ begin
             InflowConcentrations[Index].Value := Value;
             Exit;
           end;
+          Assert(False);
+        end
+        else
+        begin
           Assert(False);
         end;
       end;
@@ -2493,14 +2456,16 @@ begin
         := StrUpstreamFractionIs
     end;
 
-    SetLength(Sfr6Storage.FSfrMF6Array[index].GwtStatus, SpeciesCount);
+    // Is this needed?
+//    SetLength(Sfr6Storage.FSfrMF6Array[index].GwtStatus, SpeciesCount);
+
     while SfrMf6Item.GwtStatus.Count < SpeciesCount do
     begin
       SfrMf6Item.GwtStatus.Add;
     end;
     for SpeciesIndex := 0 to SpeciesCount - 1 do
     begin
-      Sfr6Storage.FSfrMF6Array[index].GwtStatus[SpeciesIndex] := 
+      Sfr6Storage.FSfrMF6Array[index].GwtStatus[SpeciesIndex] :=
         SfrMf6Item.GwtStatus[SpeciesIndex].GwtBoundaryStatus
     end;
   end;
@@ -3540,6 +3505,8 @@ begin
 end;
 
 procedure TSfrMf6Boundary.CreateObservers;
+var
+  Index: Integer;
 begin
   if ScreenObject <> nil then
   begin
@@ -3558,6 +3525,26 @@ begin
     FObserverList.Add(PestStageObserver);
     FObserverList.Add(PestRoughnessObserver);
 
+    for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestSpecifiedConcentrationObserver[Index]);
+    end;
+    for Index := 0 to FPestRainfallConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestRainfallConcentrationObserver[Index]);
+    end;
+    for Index := 0 to FPestEvaporationConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestEvaporationConcentrationObserver[Index]);
+    end;
+    for Index := 0 to FPestRunoffConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestRunoffConcentrationObserver[Index]);
+    end;
+    for Index := 0 to FPestInflowConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestInflowConcentrationObserver[Index]);
+    end;
   end;
 end;
 
@@ -3614,7 +3601,7 @@ begin
   FDiversions.Free;
   FDownstreamSegments.Free;
   RemoveFormulaObjects;
-//  FStartConcFormulas.Free;
+
   FStartingConcentrations.Free;
 
   FPestSpecifiedConcentrationMethods.Free;
@@ -3726,7 +3713,6 @@ begin
     else
       begin
         FormulaIndex := FormulaIndex-SfrMf6DiversionStartPosition;
-
         ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
 
         while PestSpecifiedConcentrations.Count < ChemSpeciesCount do
@@ -3831,8 +3817,16 @@ end;
 
 function TSfrMf6Boundary.GetPestEvaporationConcentrationObserver(
   const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
 begin
-
+  while Index >= FPestEvaporationConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('SfrPestEvapConc_%d', [Index+1]), AObserver, nil);
+    FPestEvaporationConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestEvapConcData;
+  end;
+  result := FPestEvaporationConcentrationObservers[Index];
 end;
 
 function TSfrMf6Boundary.GetPestEvaporationFormula: string;
@@ -3856,8 +3850,16 @@ end;
 
 function TSfrMf6Boundary.GetPestInflowConcentrationObserver(
   const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
 begin
-
+  while Index >= FPestInflowConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('SfrPestInflowConc_%d', [Index+1]), AObserver, nil);
+    FPestInflowConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestInflowConcData;
+  end;
+  result := FPestInflowConcentrationObservers[Index];
 end;
 
 function TSfrMf6Boundary.GetPestInflowFormula: string;
@@ -3881,8 +3883,16 @@ end;
 
 function TSfrMf6Boundary.GetPestRainfallConcentrationObserver(
   const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
 begin
-
+  while Index >= FPestRainfallConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('SfrPestRainfallConc_%d', [Index+1]), AObserver, nil);
+    FPestRainfallConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestRainfallConcData;
+  end;
+  result := FPestRainfallConcentrationObservers[Index];
 end;
 
 function TSfrMf6Boundary.GetPestRainfallFormula: string;
@@ -3923,6 +3933,20 @@ begin
   result := FPestRoughnessObserver;
 end;
 
+function TSfrMf6Boundary.GetPestRunoffConcentrationObserver(
+  const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FPestRunoffConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('SfrPestRunoffConc_%d', [Index+1]), AObserver, nil);
+    FPestRunoffConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestRunoffConcData;
+  end;
+  result := FPestRunoffConcentrationObservers[Index];
+end;
+
 function TSfrMf6Boundary.GetPestRunoffFormula: string;
 begin
   Result := FRunoff.Formula;
@@ -3944,8 +3968,16 @@ end;
 
 function TSfrMf6Boundary.GetPestSpecifiedConcentrationObserver(
   const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
 begin
-
+  while Index >= FPestSpecifiedConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('SfrPestSpecConc_%d', [Index+1]), AObserver, nil);
+    FPestSpecifiedConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestSpecConcData;
+  end;
+  result := FPestSpecifiedConcentrationObservers[Index];
 end;
 
 function TSfrMf6Boundary.GetPestStageFormula: string;
@@ -4222,6 +4254,31 @@ begin
   begin
     (ParentModel as TPhastModel).InvalidateSfr6Inflow(self);
   end;
+end;
+
+procedure TSfrMf6Boundary.InvalidatePestEvapConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+end;
+
+procedure TSfrMf6Boundary.InvalidatePestInflowConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+end;
+
+procedure TSfrMf6Boundary.InvalidatePestRainfallConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+end;
+
+procedure TSfrMf6Boundary.InvalidatePestRunoffConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+end;
+
+procedure TSfrMf6Boundary.InvalidatePestSpecConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
 end;
 
 procedure TSfrMf6Boundary.InvalidateRainfallData(Sender: TObject);

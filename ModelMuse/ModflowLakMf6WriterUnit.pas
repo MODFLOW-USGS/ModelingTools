@@ -2258,11 +2258,11 @@ begin
             Item.Name := Model.MobileComponents[
               LakeBoundary.StartingConcentrations.Count-1].Name;
           end;
-          While LakeBoundary.StartingConcentrationPestNames.Count <
-            Model.MobileComponents.Count do
-          begin
-            LakeBoundary.StartingConcentrationPestNames.Add('');
-          end;
+//          While LakeBoundary.StartingConcentrationPestNames.Count <
+//            Model.MobileComponents.Count do
+//          begin
+//            LakeBoundary.StartingConcentrationPestNames.Add('');
+//          end;
         end;
 
         ScreenObject.GetCellsToAssign('0', nil, nil, ALake.FCellList, alAll, Model);

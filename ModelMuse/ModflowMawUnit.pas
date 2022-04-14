@@ -4300,6 +4300,10 @@ begin
           end;
           Assert(False);
 //          Index := Index - ChemSpeciesCount;
+        end
+        else
+        begin
+          Assert(False);
         end;
 
       end;
@@ -4488,36 +4492,9 @@ begin
       and (PumpElevation = SourceItem.PumpElevation)
       and (ScalingLength = SourceItem.ScalingLength)
       and (HeadLimitChoice = SourceItem.HeadLimitChoice)
-      and (SpecifiedConcentrations.Count = SourceItem.SpecifiedConcentrations.Count)
-      and (InjectionConcentrations.Count = SourceItem.InjectionConcentrations.Count)
-      and (GwtStatus.Count = SourceItem.GwtStatus.Count);
-    if result then
-    begin
-      for Index := 0 to GwtStatus.Count - 1 do
-      begin
-        result := GwtStatus[Index].GwtBoundaryStatus = SourceItem.GwtStatus[Index].GwtBoundaryStatus;
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-      for Index := 0 to SpecifiedConcentrations.Count - 1 do
-      begin
-        result := SpecifiedConcentrations[Index].Value = SourceItem.SpecifiedConcentrations[Index].Value;
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-      for Index := 0 to InjectionConcentrations.Count - 1 do
-      begin
-        result := InjectionConcentrations[Index].Value = SourceItem.InjectionConcentrations[Index].Value;
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-    end
+      and SpecifiedConcentrations.IsSame(SourceItem.SpecifiedConcentrations)
+      and InjectionConcentrations.IsSame(SourceItem.InjectionConcentrations)
+      and GwtStatus.IsSame(SourceItem.GwtStatus);
   end;
 end;
 
@@ -4607,6 +4584,10 @@ begin
             InjectionConcentrations[Index].Value := Value;
             Exit;
           end;
+          Assert(False);
+        end
+        else
+        begin
           Assert(False);
         end;
       end;
