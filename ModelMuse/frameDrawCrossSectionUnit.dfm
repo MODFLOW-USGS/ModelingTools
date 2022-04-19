@@ -80,9 +80,12 @@ object frameDrawCrossSection: TframeDrawCrossSection
     TabOrder = 1
     TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]
     OnChange = vstAvailableDataSetsChange
+    OnDblClick = vstAvailableDataSetsDblClick
     OnGetText = vstAvailableDataSetsGetText
     OnGetNodeDataSize = vstAvailableDataSetsGetNodeDataSize
     OnInitNode = vstAvailableDataSetsInitNode
+    Touch.InteractiveGestures = [igPan, igPressAndTap]
+    Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
     Columns = <>
   end
   object clrbtnSelectedColor: TJvColorButton
@@ -124,8 +127,8 @@ object frameDrawCrossSection: TframeDrawCrossSection
       object lblDataSets: TLabel
         Left = 8
         Top = 8
-        Width = 80
-        Height = 13
+        Width = 110
+        Height = 20
         Caption = 'Data sets to plot'
       end
       object lstSelectedDataSets: TListBox
@@ -141,6 +144,7 @@ object frameDrawCrossSection: TframeDrawCrossSection
         MultiSelect = True
         TabOrder = 0
         OnClick = lstSelectedDataSetsClick
+        OnDblClick = lstSelectedDataSetsDblClick
         OnDrawItem = lstSelectedDataSetsDrawItem
         OnExit = lstSelectedDataSetsExit
       end
@@ -156,15 +160,15 @@ object frameDrawCrossSection: TframeDrawCrossSection
       object lblLayers: TLabel
         Left = 11
         Top = 3
-        Width = 66
-        Height = 13
+        Width = 90
+        Height = 20
         Caption = 'Layers to plot'
       end
       object lblLineThickness: TLabel
         Left = 82
         Top = 107
-        Width = 66
-        Height = 13
+        Width = 90
+        Height = 20
         Caption = 'Line thickness'
       end
       object clbLayers: TJvCheckListBox
@@ -177,6 +181,7 @@ object frameDrawCrossSection: TframeDrawCrossSection
         Margins.Bottom = 30
         Align = alClient
         DoubleBuffered = False
+        ItemHeight = 20
         ParentDoubleBuffered = False
         TabOrder = 0
       end
@@ -184,7 +189,7 @@ object frameDrawCrossSection: TframeDrawCrossSection
         Left = 3
         Top = 104
         Width = 73
-        Height = 21
+        Height = 28
         MaxValue = 1000000.000000000000000000
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000

@@ -41,6 +41,8 @@ type
       Rect: TRect; State: TOwnerDrawState);
     procedure clrbtnSelectedColorChange(Sender: TObject);
     procedure lstSelectedDataSetsExit(Sender: TObject);
+    procedure vstAvailableDataSetsDblClick(Sender: TObject);
+    procedure lstSelectedDataSetsDblClick(Sender: TObject);
   private
     FDataSetDummyObjects: TList;
     FColors: TList<TColor>;
@@ -300,6 +302,11 @@ begin
   lstSelectedDataSets.Invalidate;
 end;
 
+procedure TframeDrawCrossSection.lstSelectedDataSetsDblClick(Sender: TObject);
+begin
+  btnRemoveDataSetClick(Sender);
+end;
+
 procedure TframeDrawCrossSection.lstSelectedDataSetsDrawItem(
   Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
 var
@@ -379,6 +386,11 @@ begin
       ANode := Sender.GetNextSibling(ANode)
     end;
   end;
+end;
+
+procedure TframeDrawCrossSection.vstAvailableDataSetsDblClick(Sender: TObject);
+begin
+  btnAddDataSetClick(Sender);
 end;
 
 procedure TframeDrawCrossSection.vstAvailableDataSetsGetNodeDataSize(Sender: TBaseVirtualTree;

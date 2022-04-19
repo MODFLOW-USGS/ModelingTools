@@ -50,13 +50,6 @@ Type
     procedure SetStoredHNoFlow(const Value: TRealStorage);
     function GetHDry: real;
     function GetHNoFlow: real;
-  protected
-    // @name stores a value for @link(HNoFlow) when @link(HNoFlow) is zero.
-    procedure DefineProperties(Filer: TFiler); override;
-    // read a value for @link(HNoFlow).
-    procedure ReadHNoFlow(Reader: TReader);
-    // write a value for @link(HNoFlow).
-    procedure WriteHNoFlow(Writer: TWriter);
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(InvalidateModelEvent: TNotifyEvent);
@@ -69,8 +62,8 @@ Type
       read FComputeFluxesBetweenConstantHeadCells
       write SetComputeFluxesBetweenConstantHeadCells default True;
     property Description: TStrings read FDescription write SetDescription;
-    property HDry: real read GetHDry write SetHDry;
-    property HNoFlow: real read GetHNoFlow write SetHNoFlow;
+    property HDry: real read GetHDry write SetHDry stored False;
+    property HNoFlow: real read GetHNoFlow write SetHNoFlow stored False;
     property StoredHDry: TRealStorage read FStoredHDry write SetStoredHDry;
     property StoredHNoFlow: TRealStorage read FStoredHNoFlow write SetStoredHNoFlow;
     {
@@ -136,7 +129,7 @@ Type
 implementation
 
 uses
-  frmErrorsAndWarningsUnit, System.Math;
+  frmErrorsAndWarningsUnit, System.Math, frmGoPhastUnit;
 
 const
   DefaultHNoFlow: real = -1e20;
@@ -159,8 +152,8 @@ begin
     ComputeFluxesBetweenConstantHeadCells := SourceModel.ComputeFluxesBetweenConstantHeadCells;
     Description := SourceModel.Description;
     LengthUnit := SourceModel.LengthUnit;
-    HDry := SourceModel.HDry;
-    HNoFlow := SourceModel.HNoFlow;
+    StoredHDry := SourceModel.StoredHDry;
+    StoredHNoFlow := SourceModel.StoredHNoFlow;
     Modeler := SourceModel.Modeler;
     PrintTime := SourceModel.PrintTime;
     ProjectName := SourceModel.ProjectName;
@@ -193,16 +186,6 @@ begin
   FProjectDate := DateTimeToStr(Trunc(Now));
 end;
 
-procedure TModflowOptions.DefineProperties(Filer: TFiler);
-begin
-  inherited;
-  // Real-value properties that are equal to zero are not stored
-  // even if the storage specifier is set to true.
-  // This is a work-around for that limitation
-  Filer.DefineProperty('HNoFlow', ReadHNoFlow,
-    WriteHNoFlow, (HNoFlow = 0));
-end;
-
 destructor TModflowOptions.Destroy;
 begin
   FStoredHDry.Free;
@@ -213,13 +196,31 @@ begin
 end;
 
 function TModflowOptions.GetHDry: real;
+const
+  MF6HDry = -1E30;
 begin
-  result := StoredHDry.Value;
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    result := MF6HDry;
+  end
+  else
+  begin
+    result := StoredHDry.Value;
+  end;
 end;
 
 function TModflowOptions.GetHNoFlow: real;
+const
+  MF6NoFlow = 1E30;
 begin
-  result := StoredHNoFlow.Value;
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    result := MF6NoFlow;
+  end
+  else
+  begin
+    result := StoredHNoFlow.Value;
+  end;
 end;
 
 function TModflowOptions.GetStopErrorCriterion: double;
@@ -230,8 +231,8 @@ end;
 procedure TModflowOptions.Clear;
 begin
   FDescription.Clear;
-  HDry := DefaultHDry;
-  HNoFlow := DefaultHNoFlow;
+  StoredHDry.Value := DefaultHDry;
+  StoredHNoFlow.Value := DefaultHNoFlow;
   FTimeUnit := 1;
   FLengthUnit := 2;
   FPrintTime := True;
@@ -256,11 +257,6 @@ begin
   end;
 end;
 
-procedure TModflowOptions.ReadHNoFlow(Reader: TReader);
-begin
-  HNoFlow := Reader.ReadFloat;
-end;
-
 procedure TModflowOptions.SetComputeFluxesBetweenConstantHeadCells(
   const Value: boolean);
 begin
@@ -283,12 +279,18 @@ end;
 
 procedure TModflowOptions.SetHDry(const Value: real);
 begin
-  StoredHDry.Value := Value;
+  if frmGoPhast.ModelSelection <> msModflow2015 then
+  begin
+    StoredHDry.Value := Value;
+  end;
 end;
 
 procedure TModflowOptions.SetHNoFlow(const Value: real);
 begin
-  StoredHNoFlow.Value := Value;
+  if frmGoPhast.ModelSelection <> msModflow2015 then
+  begin
+    StoredHNoFlow.Value := Value;
+  end;
 end;
 
 procedure TModflowOptions.SetInitialHeadFileName(const Value: string);
@@ -481,11 +483,6 @@ begin
   else
     Assert(False);
   end;
-end;
-
-procedure TModflowOptions.WriteHNoFlow(Writer: TWriter);
-begin
-  Writer.WriteFloat(HNoFlow);
 end;
 
 { TWettingOptions }

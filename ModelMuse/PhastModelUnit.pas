@@ -10491,12 +10491,14 @@ const
 //               Bug fix: The text on the MODFLOW Name package checkboxes
 //                now reflects the flow and solver packages in MODFLOW 6 for
 //                MODFLOW 6 models.
+//     '5.0.0.6' Bug fix: fixed bug in displaying cross section data in
+//                MODFLOW 6 models.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.5';
+  IIModelVersion = '5.0.0.6';
 
 function IModelVersion: string;
 begin
@@ -47937,41 +47939,68 @@ end;
 procedure TCrossSection.Draw(ABitMap: TPersistent; ViewDirection: TViewDirection);
 const
   Epsilon = 1e-6;
+//  Mf2005HnoFlo = 1E30;
+//  Mf2005HDry = -1E30;
 var
   ADataArray: TDataArray;
   ActiveDataArray: TDataArray;
   DataArrayIndex: Integer;
   LayerIndex: Integer;
   AColor: TColor;
+  IDomain: TDataArray;
   function UseCell(Layer, Row, Col: Integer; Orientation: TDataSetOrientation): boolean;
   var
     LayerIndex: Integer;
+    Value: double;
   begin
     result := False;
     case Orientation of
       dsoTop:
         begin
-          if Not NearlyTheSame(ADataArray.RealData[0,Row,Col],
+          if IDomain <> nil then
+          begin
+            Value := ADataArray.RealData[0,Row,Col];
+            if (Not NearlyTheSame(Value, FModel.ModflowOptions.HNoFlow, Epsilon))
+              and (Not NearlyTheSame(Value, FModel.ModflowOptions.HDry, Epsilon)) then
+            begin
+              result := True;
+              Exit;
+            end;
+          end
+          else if Not NearlyTheSame(ADataArray.RealData[0,Row,Col],
             FModel.ModflowOptions.HDry, Epsilon) then
           begin
             if ActiveDataArray = nil then
             begin
               result := True;
               Exit;
-            end;
-            for LayerIndex := 0 to ActiveDataArray.LayerCount - 1 do
+            end
+            else
             begin
-              if ActiveDataArray.BooleanData[LayerIndex, Row, Col] then
+              for LayerIndex := 0 to ActiveDataArray.LayerCount - 1 do
               begin
-                result := True;
-                Exit;
+                if ActiveDataArray.BooleanData[LayerIndex, Row, Col] then
+                begin
+                  result := True;
+                  Exit;
+                end;
               end;
             end;
           end;
         end;
       dso3D:
         begin
-          if ActiveDataArray = nil then
+          if IDomain <> nil then
+          begin
+            Value := ADataArray.RealData[Layer,Row,Col];
+            if (Not NearlyTheSame(Value, FModel.ModflowOptions.HNoFlow, Epsilon))
+              and (Not NearlyTheSame(Value, FModel.ModflowOptions.HDry, Epsilon)) then
+            begin
+              result := True;
+              Exit;
+            end;
+          end
+          else if ActiveDataArray = nil then
           begin
             result := True;
             Exit;
@@ -47980,7 +48009,7 @@ var
           begin
             if FModel.ModelSelection in ModflowSelection then
             begin
-              if Not NearlyTheSame(ADataArray.RealData[Layer,Row,Col],
+              if not NearlyTheSame(ADataArray.RealData[Layer,Row,Col],
                 FModel.ModflowOptions.HDry, Epsilon) then
               begin
                 result := True;
@@ -48237,6 +48266,15 @@ begin
   begin
     ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(rsActive);
     ActiveDataArray.Initialize;
+  end;
+  if FModel.ModelSelection = msModflow2015 then
+  begin
+    IDomain := FModel.DataArrayManager.GetDataSetByName(StrIDOMAIN);
+//    IDomain.Initialize;
+  end
+  else
+  begin
+    IDomain := nil;
   end;
   for DataArrayIndex := 0 to DataArrays.Count - 1 do
   begin
