@@ -3422,6 +3422,7 @@ begin
     InvalidateEvent := Model.Invalidate;
   end;
   FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
+
 //  FStartConcFormulas := TFormulaObjectList.Create;
   FDownstreamSegments := TIntegerCollection.Create(InvalidateEvent);
   FDiversions := TDiversionCollection.Create(Model);
@@ -3777,6 +3778,8 @@ end;
 
 function TSfrMf6Boundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     SfrMf6InflowPosition:
@@ -3809,8 +3812,65 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex-SfrMf6DiversionStartPosition;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestSpecifiedConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRainfallConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestRainfallConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestRainfallConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestEvaporationConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRunoffConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestRunoffConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestRunoffConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInflowConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestInflowConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestInflowConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
         result := inherited;
-//        Assert(False);
+        Assert(False);
       end;
   end;
 end;
@@ -4620,6 +4680,8 @@ end;
 
 procedure TSfrMf6Boundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     SfrMf6InflowPosition:
@@ -4652,8 +4714,65 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex-SfrMf6DiversionStartPosition;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestSpecifiedConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRainfallConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestRainfallConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestRainfallConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestEvaporationConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRunoffConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestRunoffConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestRunoffConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInflowConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestInflowConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestInflowConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
         inherited;
-//        Assert(False);
+        Assert(False);
       end;
   end;
 end;
@@ -4906,18 +5025,34 @@ var
   GwtPosition: Integer;
   GwtSource: Integer;
   SpeciesIndex: Integer;
+
+  {
+    InflowTimeSeriesName: string;
+    RainfallTimeSeriesName: string;
+    EvaporationTimeSeriesName: string;
+    RunoffTimeSeriesName: string;
+    StageTimeSeriesName: string;
+    RoughnessTimeSeriesName: string;
+    DiversionTimeSeriesName: array of string;
+  }
 begin
   case Index of
-    SfrMf6InflowPosition: result := FValues.InflowPestSeriesName;
-    SfrMf6RainfallPosition: result := FValues.RainfallPestSeriesName;
-    SfrMf6EvaporationPosition: result := FValues.EvaporationPestSeriesName;
-    SfrMf6RunoffPosition: result := FValues.RunoffPestSeriesName;
+    SfrMf6InflowPosition: result := FValues.InflowTimeSeriesName;
+    SfrMf6RainfallPosition: result := FValues.RainfallTimeSeriesName;
+    SfrMf6EvaporationPosition: result := FValues.EvaporationTimeSeriesName;
+    SfrMf6RunoffPosition: result := FValues.RunoffTimeSeriesName;
     SfrMf6UpstreamFractionPosition: result := inherited;
-    SfrMf6StagePosition: result := FValues.StagePestSeriesName;
-    SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesName;
+    SfrMf6StagePosition: result := FValues.StageTimeSeriesName;
+    SfrMf6RoughnessPosition: result := FValues.RoughnessTimeSeriesName;
     else
       begin
-        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
+        Index := Index - SfrMf6DiversionStartPosition;
+        if Index < Length(FValues.Diversions) then
+        begin
+          result := FValues.DiversionTimeSeriesName[Index];
+          Exit;
+        end;
+        GwtPosition := Index - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition div SfrGwtConcCount;
         SpeciesIndex := GwtPosition mod SfrGwtConcCount;
@@ -5295,7 +5430,13 @@ begin
       FValues.RoughnessTimeSeriesName := Value;
     else
       begin
-        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
+        Index := Index - SfrMf6DiversionStartPosition;
+        if Index < Length(FValues.Diversions) then
+        begin
+          FValues.DiversionTimeSeriesName[Index] := Value;
+          Exit;
+        end;
+        GwtPosition := Index - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition div SfrGwtConcCount;
         SpeciesIndex := GwtPosition mod SfrGwtConcCount;

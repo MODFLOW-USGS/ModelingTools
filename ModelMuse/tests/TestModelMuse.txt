@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-4710
+4720
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4290,6 +4290,7 @@ Sf6Mf6.gpt
 	Archive\Sf6Mf6.axml
 	Archive\Sf6Mf6.chd
 	Archive\Sf6Mf6.dis
+	Archive\Sf6Mf6.gsf
 	Archive\Sf6Mf6.ic
 	Archive\Sf6Mf6.ims
 	Archive\Sf6Mf6.mfsim.nam
@@ -4367,6 +4368,7 @@ MF6_TestSfrMawLak.gpt
 	Archive\MF6_TestSfrMawLak.drn
 	Archive\MF6_TestSfrMawLak.evt
 	Archive\MF6_TestSfrMawLak.ghb
+	Archive\MF6_TestSfrMawLak.gsf
 	Archive\MF6_TestSfrMawLak.ic
 	Archive\MF6_TestSfrMawLak.ims
 	Archive\MF6_TestSfrMawLak.lak6
@@ -4402,6 +4404,7 @@ MF6_TestSfrMawLakMvrUzf.gpt
 	Archive\MF6_TestSfrMawLakMvrUzf.drn
 	Archive\MF6_TestSfrMawLakMvrUzf.evt
 	Archive\MF6_TestSfrMawLakMvrUzf.ghb
+	Archive\MF6_TestSfrMawLakMvrUzf.gsf
 	Archive\MF6_TestSfrMawLakMvrUzf.ic
 	Archive\MF6_TestSfrMawLakMvrUzf.ims
 	Archive\MF6_TestSfrMawLakMvrUzf.lak6
@@ -4452,6 +4455,7 @@ DipKTest.gpt
 ExitEdgeTest.gpt
 	Archive\ExitEdgeTest.axml
 	Archive\ExitEdgeTest.dis
+	Archive\ExitEdgeTest.gsf
 	Archive\ExitEdgeTest.ic
 	Archive\ExitEdgeTest.ims
 	Archive\ExitEdgeTest.mfsim.nam
@@ -4549,6 +4553,7 @@ ParamMf6Test.gpt
 	Archive\ParamMf6Test.drn
 	Archive\ParamMf6Test.evt
 	Archive\ParamMf6Test.ghb
+	Archive\ParamMf6Test.gsf
 	Archive\ParamMf6Test.ic
 	Archive\ParamMf6Test.ims
 	Archive\ParamMf6Test.jtf
@@ -4570,6 +4575,7 @@ Mf6RechargeOptionTest.gpt
 	Archive\Mf6RechargeOptionTest.axml
 	Archive\Mf6RechargeOptionTest.chd
 	Archive\Mf6RechargeOptionTest.dis
+	Archive\Mf6RechargeOptionTest.gsf
 	Archive\Mf6RechargeOptionTest.ic
 	Archive\Mf6RechargeOptionTest.ims
 	Archive\Mf6RechargeOptionTest.mfsim.nam
@@ -4590,6 +4596,7 @@ HighestActiveModflow.gpt
 	Archive\HighestActiveModflow.chd
 	Archive\HighestActiveModflow.dis
 	Archive\HighestActiveModflow.ghb
+	Archive\HighestActiveModflow.gsf
 	Archive\HighestActiveModflow.ic
 	Archive\HighestActiveModflow.ims
 	Archive\HighestActiveModflow.mfsim.nam
@@ -4620,6 +4627,7 @@ CSubExample.gpt
 	Archive\CSubExample.chd
 	Archive\CSubExample.csub
 	Archive\CSubExample.dis
+	Archive\CSubExample.gsf
 	Archive\CSubExample.ic
 	Archive\CSubExample.ims
 	Archive\CSubExample.mfsim.nam
@@ -4640,6 +4648,7 @@ HfbMf6Test2.gpt
 	Archive\HfbMf6Test2.axml
 	Archive\HfbMf6Test2.chd
 	Archive\HfbMf6Test2.dis
+	Archive\HfbMf6Test2.gsf
 	Archive\HfbMf6Test2.hfb
 	Archive\HfbMf6Test2.ic
 	Archive\HfbMf6Test2.ims
@@ -4658,6 +4667,7 @@ HfbMf6Test.gpt
 	Archive\HfbMf6Test.axml
 	Archive\HfbMf6Test.chd
 	Archive\HfbMf6Test.dis
+	Archive\HfbMf6Test.gsf
 	Archive\HfbMf6Test.hfb
 	Archive\HfbMf6Test.ic
 	Archive\HfbMf6Test.ims

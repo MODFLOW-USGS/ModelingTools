@@ -4692,6 +4692,8 @@ that affects the model output should also have a comment. }
 //    property PilotPointSpacing: double read GetPilotPointSpacing;
     procedure DisconnectObservers;
     function GetPestName: string;
+    function Mf6UzfInitialConcentrationUsed(Sender: TObject): boolean;
+    function AnyUzfInitialConcentrationUsed: Boolean;
   published
     property Mf6TimesSeries;
 
@@ -11072,6 +11074,28 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
         and (ChildModel.ModflowPackages.Mt3dmsChemReact.KineticChoice = kcMonod);
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.AnyUzfInitialConcentrationUsed: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := (ModelSelection = msModflow2015)
+    and ModflowPackages.UzfMf6Package.IsSelected and GWTUsed;
+  if not Result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      result := ChildModel.ModflowPackages.UzfMf6Package.IsSelected
+        and ChildModel.GWTUsed;
       if result then
       begin
         Exit;
@@ -18442,6 +18466,37 @@ begin
         result := result or ChildModel.Mf6ObsIsSelected;
       end;
     end;
+  end;
+end;
+
+function TPhastModel.Mf6UzfInitialConcentrationUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.UztInitialConcDataArrayName = DataArray.Name;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := (ModelSelection = msModflow2015)
+    and GwtUsed
+    and ModflowPackages.UzfMf6Package.IsSelected;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+//      or DataArrayUsed(ImmobileComponents);
   end;
 end;
 

@@ -446,6 +446,7 @@ type
     FPestRootActivityObserver: TObserver;
     FPestRootPotentialObserver: TObserver;
     FUsedObserver: TObserver;
+    // GWT
     FStartingConcentrations: TStringConcCollection;
     FPestSpecifiedConcentrations: TUztGwtConcCollection;
     FPestSpecifiedConcentrationMethods: TPestMethodCollection;
@@ -524,6 +525,12 @@ type
     procedure SetPestSpecifiedConcentrations(
       const Value: TUztGwtConcCollection);
     procedure SetStartingConcentrations(const Value: TStringConcCollection);
+    function GetPestEvaporationConcentrationObserver(
+      const Index: Integer): TObserver;
+    function GetPestInfiltrationConcentrationObserver(
+      const Index: Integer): TObserver;
+    function GetPestSpecifiedConcentrationObserver(
+      const Index: Integer): TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -561,6 +568,16 @@ type
     property PestAirEntryPotentialObserver: TObserver read GetPestAirEntryPotentialObserver;
     property PestRootPotentialObserver: TObserver read GetPestRootPotentialObserver;
     property PestRootActivityObserver: TObserver read GetPestRootActivityObserver;
+
+    property PestSpecifiedConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestSpecifiedConcentrationObserver;
+    property PestInfiltrationConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestInfiltrationConcentrationObserver;
+    property PestEvaporationConcentrationObserver[const Index: Integer]: TObserver
+      read GetPestEvaporationConcentrationObserver;
+    procedure InvalidatePestSpecConcData(Sender: TObject);
+    procedure InvalidatePestEvapConcData(Sender: TObject);
+    procedure InvalidatePestInfiltrationConcData(Sender: TObject);
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -640,8 +657,7 @@ type
       write SetPestRootActivityMethod;
     // GWT
     property StartingConcentrations: TStringConcCollection
-      read FStartingConcentrations
-      write SetStartingConcentrations
+      read FStartingConcentrations write SetStartingConcentrations
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
@@ -1169,6 +1185,10 @@ end;
 function TUzfMf6Item.BoundaryFormulaCount: integer;
 begin
   result := 7;
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    result := result + frmGoPhast.PhastModel.MobileComponents.Count * UztGwtConcCount;
+  end;
 end;
 
 constructor TUzfMf6Item.Create(Collection: TCollection);
@@ -2345,8 +2365,38 @@ begin
 end;
 
 procedure TUzfMf6Collection.InvalidateEvapConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TUzfMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
-
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
+    for Index := 0 to Link.FEvapConcList.Count - 1 do
+    begin
+      TimeList := Link.FEvapConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+      for Index := 0 to Link.FEvapConcList.Count - 1 do
+      begin
+        TimeList := Link.FEvapConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 procedure TUzfMf6Collection.InvalidateGwtStatus(Sender: TObject);
@@ -2356,8 +2406,38 @@ end;
 
 procedure TUzfMf6Collection.InvalidateInfiltrationConcentrations(
   Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TUzfMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
-
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
+    for Index := 0 to Link.FInfiltrationConcList.Count - 1 do
+    begin
+      TimeList := Link.FInfiltrationConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+      for Index := 0 to Link.FInfiltrationConcList.Count - 1 do
+      begin
+        TimeList := Link.FInfiltrationConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 procedure TUzfMf6Collection.InvalidateSpecifiedConcentrations(Sender: TObject);
@@ -2670,8 +2750,6 @@ begin
   FSpecifiedConcList := TModflowTimeLists.Create;
   FInfiltrationConcList := TModflowTimeLists.Create;
   FEvapConcList := TModflowTimeLists.Create;
-//  FRunoffConcList := TModflowTimeLists.Create;
-//  FInflowConcList := TModflowTimeLists.Create;
 
   PhastModel := frmGoPhast.PhastModel;
   if PhastModel.GwtUsed then
@@ -2679,7 +2757,7 @@ begin
     for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
     begin
       ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Status';
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' UZT Status';
       ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
       if Model <> nil then
       begin
@@ -2690,7 +2768,7 @@ begin
       FGwtStatusList.Add(ConcTimeList);
 
       ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Specified Concentration';
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' UZT Specified Concentration';
       ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
       if Model <> nil then
       begin
@@ -2701,7 +2779,7 @@ begin
       FSpecifiedConcList.Add(ConcTimeList);
 
       ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Rainfall Concentration';
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' UZT Infiltration Concentration';
       ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
       if Model <> nil then
       begin
@@ -2712,7 +2790,7 @@ begin
       FInfiltrationConcList.Add(ConcTimeList);
 
       ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Evaporation Concentration';
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' UZT Evaporation Concentration';
       ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
       if Model <> nil then
       begin
@@ -3434,6 +3512,16 @@ begin
     PestAirEntryPotentialMethod := Uzf6Source.PestAirEntryPotentialMethod;
     PestRootPotentialMethod := Uzf6Source.PestRootPotentialMethod;
     PestRootActivityMethod := Uzf6Source.PestRootActivityMethod;
+    // GWT
+    StartingConcentrations := Uzf6Source.StartingConcentrations;
+
+    PestSpecifiedConcentrations := Uzf6Source.PestSpecifiedConcentrations;
+    PestSpecifiedConcentrationMethods := Uzf6Source.PestSpecifiedConcentrationMethods;
+    PestInfiltrationConcentrations := Uzf6Source.PestInfiltrationConcentrations;
+    PestInfiltrationConcentrationMethods := Uzf6Source.PestInfiltrationConcentrationMethods;
+    PestEvaporationConcentrations := Uzf6Source.PestEvaporationConcentrations;
+    PestEvaporationConcentrationMethods := Uzf6Source.PestEvaporationConcentrationMethods;
+
 
   end
   else if Source is TUzfBoundary then
@@ -3514,64 +3602,6 @@ begin
     end;
 
     Loaded;
-
-//    Brooks_Corey_Epsilon := LocalModel.DataArrayManager.
-//      GetDataSetByName(StrUzfMf6BrooksCoreyEpsilon);
-//    Initial_Unsaturated_Water_Content := LocalModel.DataArrayManager.
-//      GetDataSetByName(StrUzfMf6InitialUnsaturatedWaterContent);
-//    Residual_Water_Content := LocalModel.DataArrayManager.
-//      GetDataSetByName(StrUzfMf6ReisidualWaterContent);
-//    Saturated_Water_Content := LocalModel.DataArrayManager.
-//      GetDataSetByName(StrUzfMf6SaturatedWaterContent);
-//    Surface_Depression_Depth := LocalModel.DataArrayManager.
-//      GetDataSetByName(StrUzfMf6SurfaceDepressionDepth);
-//    Vertical_Saturated_K := LocalModel.DataArrayManager.
-//      GetDataSetByName(StrUzfMf6VerticalSaturatedK);
-//
-//    Assert(ScreenObject <> nil);
-//    AScreenObject := ScreenObject as TScreenObject;
-//
-//    if Surface_Depression_Depth <> nil then
-//    begin
-//      DataSetIndex := AScreenObject.AddDataSet(Surface_Depression_Depth);
-//      AScreenObject.DataSetFormulas[DataSetIndex] :=
-//        SurfaceDepressionDepth;
-//    end;
-//
-//    if Vertical_Saturated_K <> nil then
-//    begin
-//      DataSetIndex := AScreenObject.AddDataSet(Vertical_Saturated_K);
-//      AScreenObject.DataSetFormulas[DataSetIndex] :=
-//        VerticalSaturatedK;
-//    end;
-//
-//    if Residual_Water_Content <> nil then
-//    begin
-//      DataSetIndex := AScreenObject.AddDataSet(Residual_Water_Content);
-//      AScreenObject.DataSetFormulas[DataSetIndex] :=
-//        ResidualWaterContent;
-//    end;
-//
-//    if Saturated_Water_Content <> nil then
-//    begin
-//      DataSetIndex := AScreenObject.AddDataSet(Saturated_Water_Content);
-//      AScreenObject.DataSetFormulas[DataSetIndex] :=
-//        SaturatedWaterContent;
-//    end;
-//
-//    if Initial_Unsaturated_Water_Content <> nil then
-//    begin
-//      DataSetIndex := AScreenObject.AddDataSet(Initial_Unsaturated_Water_Content);
-//      AScreenObject.DataSetFormulas[DataSetIndex] :=
-//        InitialWaterContent;
-//    end;
-//
-//    if Brooks_Corey_Epsilon <> nil then
-//    begin
-//      DataSetIndex := AScreenObject.AddDataSet(Brooks_Corey_Epsilon);
-//      AScreenObject.DataSetFormulas[DataSetIndex] :=
-//        BrooksCoreyEpsilon;
-//    end;
   end;
 
 end;
@@ -3661,8 +3691,19 @@ begin
 end;
 
 constructor TUzfMf6Boundary.Create(Model: TBaseModel; ScreenObject: TObject);
+var
+  InvalidateEvent: TNotifyEvent;
 begin
   inherited;
+  if Model = nil then
+  begin
+    InvalidateEvent := nil;
+  end
+  else
+  begin
+    InvalidateEvent := Model.Invalidate;
+  end;
+  FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
   FPestSpecifiedConcentrationObservers := TObserverList.Create;
   FPestInfiltrationConcentrationObservers := TObserverList.Create;
   FPestEvaporationConcentrationObservers := TObserverList.Create;
@@ -3707,6 +3748,9 @@ begin
 end;
 
 procedure TUzfMf6Boundary.CreateFormulaObjects;
+var
+  LocalModel: TCustomModel;
+  ConcIndex: Integer;
 begin
   inherited;
   FSurfaceDepressionDepth := CreateFormulaObjectBlocks(dsoTop);
@@ -3723,9 +3767,29 @@ begin
   FAirEntryPotential := CreateFormulaObjectBlocks(dsoTop);
   FRootPotential := CreateFormulaObjectBlocks(dsoTop);
   FRootActivity := CreateFormulaObjectBlocks(dsoTop);
+
+  LocalModel := ParentModel as TCustomModel;
+  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  begin
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestSpecifiedConcentrations.Add;
+    end;
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestInfiltrationConcentrations.Add;
+    end;
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestEvaporationConcentrations.Add;
+    end;
+  end;
+
 end;
 
 procedure TUzfMf6Boundary.CreateObservers;
+var
+  Index: Integer;
 begin
   if ScreenObject <> nil then
   begin
@@ -3743,6 +3807,19 @@ begin
     FObserverList.Add(PestAirEntryPotentialObserver);
     FObserverList.Add(PestRootPotentialObserver);
     FObserverList.Add(PestRootActivityObserver);
+
+    for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestSpecifiedConcentrationObserver[Index]);
+    end;
+    for Index := 0 to FPestInfiltrationConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestInfiltrationConcentrationObserver[Index]);
+    end;
+    for Index := 0 to FPestEvaporationConcentrations.Count - 1 do
+    begin
+      FObserverList.Add(PestEvaporationConcentrationObserver[Index]);
+    end;
   end;
 end;
 
@@ -3916,6 +3993,8 @@ begin
 end;
 
 function TUzfMf6Boundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     InfiltrationPosition:
@@ -3948,6 +4027,41 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex-UzfBoundaryGwtStart;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestSpecifiedConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInfiltrationConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestInfiltrationConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestInfiltrationConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestEvaporationConcentrations[FormulaIndex].Value;
+          Exit;
+        end;
+
         result := inherited;
         Assert(False);
       end;
@@ -3957,6 +4071,8 @@ end;
 
 function TUzfMf6Boundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     InfiltrationPosition:
@@ -3989,11 +4105,59 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex-UzfBoundaryGwtStart;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestSpecifiedConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInfiltrationConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestInfiltrationConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestInfiltrationConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestEvaporationConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
         result := inherited;
         Assert(False);
       end;
-
   end;
+end;
+
+function TUzfMf6Boundary.GetPestEvaporationConcentrationObserver(
+  const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FPestEvaporationConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('UzfPestEvapConc_%d', [Index+1]), AObserver, nil);
+    FPestEvaporationConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestEvapConcData;
+  end;
+  result := FPestEvaporationConcentrationObservers[Index];
 end;
 
 function TUzfMf6Boundary.GetPestExtinctionDepthFormula: string;
@@ -4072,6 +4236,20 @@ begin
   result := FPestPotentialETObserver;
 end;
 
+function TUzfMf6Boundary.GetPestInfiltrationConcentrationObserver(
+  const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FPestInfiltrationConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('UzfPestInfiltrationConc_%d', [Index+1]), AObserver, nil);
+    FPestInfiltrationConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestInfiltrationConcData;
+  end;
+  result := FPestInfiltrationConcentrationObservers[Index];
+end;
+
 function TUzfMf6Boundary.GetPestRootActivityFormula: string;
 begin
   Result := FRootActivity.Formula;
@@ -4110,7 +4288,24 @@ begin
   result := FPestRootPotentialObserver;
 end;
 
+function TUzfMf6Boundary.GetPestSpecifiedConcentrationObserver(
+  const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FPestSpecifiedConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('UzfPestSpecConc_%d', [Index+1]), AObserver, nil);
+    FPestSpecifiedConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestSpecConcData;
+  end;
+  result := FPestSpecifiedConcentrationObservers[Index];
+end;
+
 procedure TUzfMf6Boundary.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  StartIndex: Integer;
+  Index: Integer;
 begin
   if Sender = FSurfaceDepressionDepth then
   begin
@@ -4164,8 +4359,34 @@ begin
   else if Sender = FRootActivity then
   begin
     List.Add(FObserverList[RootActivityPosition]);
-  end
+  end;
 
+  StartIndex := UzfGwtStart;
+  for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
+  begin
+    if FPestSpecifiedConcentrations[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
+
+  StartIndex := StartIndex + FPestSpecifiedConcentrations.Count;
+  for Index := 0 to PestInfiltrationConcentrations.Count - 1 do
+  begin
+    if PestInfiltrationConcentrations[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
+
+  StartIndex := StartIndex + PestInfiltrationConcentrations.Count;
+  for Index := 0 to PestEvaporationConcentrations.Count - 1 do
+  begin
+    if PestEvaporationConcentrations[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[StartIndex + Index]);
+    end;
+  end;
 end;
 
 function TUzfMf6Boundary.GetResidualWaterContent: string;
@@ -4429,6 +4650,21 @@ begin
   end;
 end;
 
+procedure TUzfMf6Boundary.InvalidatePestEvapConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+end;
+
+procedure TUzfMf6Boundary.InvalidatePestInfiltrationConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+end;
+
+procedure TUzfMf6Boundary.InvalidatePestSpecConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+end;
+
 procedure TUzfMf6Boundary.InvalidatePotentialETData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -4597,6 +4833,8 @@ end;
 
 procedure TUzfMf6Boundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     InfiltrationPosition:
@@ -4629,6 +4867,41 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex-UzfBoundaryGwtStart;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestSpecifiedConcentrations[FormulaIndex].Value := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInfiltrationConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestInfiltrationConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestInfiltrationConcentrations[FormulaIndex].Value := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrations.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrations.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestEvaporationConcentrations[FormulaIndex].Value := Value;
+          Exit;
+        end;
+
         inherited;
         Assert(False);
       end;
@@ -4638,6 +4911,8 @@ end;
 
 procedure TUzfMf6Boundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     InfiltrationPosition:
@@ -4670,6 +4945,41 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex-UzfBoundaryGwtStart;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestSpecifiedConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInfiltrationConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestInfiltrationConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestInfiltrationConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestEvaporationConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
         inherited;
         Assert(False);
       end;

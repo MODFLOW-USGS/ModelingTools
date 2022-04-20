@@ -680,23 +680,11 @@ var
   InnerLayerIndex: Integer;
   landflag: Integer;
   ivertcon: Integer;
-//  surfdep: Double;
-//  vks: Double;
   thtr: Double;
   thts: Double;
   thti: Double;
-//  eps: Double;
   ScreenObject: TScreenObject;
-//  SurfaceDepressionDepthPestNames: TDataArray;
-//  PestParamName: string;
-//  Param: TModflowSteadyParameter;
-//  TemplateCharacter: Char;
-//  ArrayTemplateCharacter: Char;
-//  Formula: string;
 begin
-//  TemplateCharacter := Model.PestProperties.TemplateCharacter;
-//  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
-
   WriteBeginPackageData;
   WriteString('# <iuzno> <cellid(ncelldim)> <landflag> <ivertcon> <surfdep> <vks> <thtr> <thts> <thti> <eps> [<boundname>]');
   NewLine;

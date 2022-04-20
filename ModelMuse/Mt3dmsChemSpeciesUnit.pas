@@ -32,6 +32,8 @@ type
     FUseInitialConcentrationFile: boolean;
     FImmobilePartioningCoefficientDataArrayName: string;
     FImmobilePartioningCoefficientDisplayName: string;
+    FUztInitialConcDataArrayName: string;
+    FUztInitialConcDisplayName: string;
     procedure SetName(const Value: string); virtual;
     procedure SetInitialConcDataArrayName(const NewName: string);
     function Collection: TCustomChemSpeciesCollection;
@@ -48,6 +50,7 @@ type
     procedure SetUseInitialConcentrationFile(const Value: boolean);
     procedure SetHalfSaturationConstantDataArrayName(const NewName: string);
     procedure SetImmobilePartioningCoefficientDataArrayName(const NewName: string);
+    procedure SetUztInitialConcDataArrayName(const NewName: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -86,6 +89,10 @@ type
     property ImmobilePartioningCoefficientDataArrayName:string
       read FImmobilePartioningCoefficientDataArrayName
       write SetImmobilePartioningCoefficientDataArrayName;
+   // MF6 UZF GWT initial Concentration
+    property UztInitialConcDataArrayName:string
+      read FUztInitialConcDataArrayName
+      write SetUztInitialConcDataArrayName;
     property UseInitialConcentrationFile: boolean
       read FUseInitialConcentrationFile write SetUseInitialConcentrationFile;
     property InitialConcentrationFileName: string
@@ -158,6 +165,7 @@ const
   kDiffCoefPrefix = 'Diffusion_Coefficient_';
   kRC3Prefix = 'Half_Saturation_Constant_';
   kSP1IMPrefix = 'Immobile_Partioning_Coefficient_';
+  kUztStartConct = 'UZT_Unsaturated_Initial_Conc_';
 
 resourcestring
   StrInitConcPrefix = kInitConcPrefix;
@@ -170,6 +178,7 @@ resourcestring
   StrRC3Prefix = kRC3Prefix;
   StrDiffCoefPrefix = kDiffCoefPrefix;
   StrSP1IMPrefix = kSP1IMPrefix;
+  StrUztStartConct = kUztStartConct;
 
   { TChemSpeciesItem }
 
@@ -231,6 +240,10 @@ begin
     FImmobilePartioningCoefficientDataArrayName :='';
     ImmobilePartioningCoefficientDataArrayName :=
       SourceChem.ImmobilePartioningCoefficientDataArrayName;
+
+    FUztInitialConcDataArrayName := '';
+    UztInitialConcDataArrayName :=
+      SourceChem.UztInitialConcDataArrayName;
 
     UseInitialConcentrationFile := SourceChem.UseInitialConcentrationFile;
     InitialConcentrationFileName := SourceChem.InitialConcentrationFileName;
@@ -484,6 +497,7 @@ begin
       and (ReactionRateSorbedDataArrayName = ChemItem.ReactionRateSorbedDataArrayName)
       and (HalfSaturationConstantDataArrayName = ChemItem.HalfSaturationConstantDataArrayName)
       and (ImmobilePartioningCoefficientDataArrayName = ChemItem.ImmobilePartioningCoefficientDataArrayName)
+      and (UztInitialConcDataArrayName = ChemItem.UztInitialConcDataArrayName)
       and (UseInitialConcentrationFile = ChemItem.UseInitialConcentrationFile)
       and (InitialConcentrationFileName = ChemItem.InitialConcentrationFileName)
   end;
@@ -782,6 +796,12 @@ begin
         ImmobilePartioningCoefficientDataArrayName,
         GenerateNewRoot(FName),GenerateNewRoot(Value), []);
 
+      FUztInitialConcDisplayName := StringReplace(
+        FUztInitialConcDisplayName,
+        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+      UztInitialConcDataArrayName := StringReplace(
+        UztInitialConcDataArrayName,
+        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
     end
     else
     begin
@@ -836,6 +856,11 @@ begin
         GenerateNewRoot(StrSP1IMPrefix + Value);
       ImmobilePartioningCoefficientDataArrayName :=
         GenerateNewRoot(kSP1IMPrefix + Value);
+
+      FUztInitialConcDisplayName :=
+        GenerateNewRoot(StrUztStartConct + Value);
+      UztInitialConcDataArrayName :=
+        GenerateNewRoot(kUztStartConct + Value);
     end;
     RenameDependents(Value);
     SetCaseSensitiveStringProperty(FName, Value);
@@ -914,6 +939,21 @@ end;
 procedure TChemSpeciesItem.SetUseInitialConcentrationFile(const Value: boolean);
 begin
   SetBooleanProperty(FUseInitialConcentrationFile, Value);
+end;
+
+procedure TChemSpeciesItem.SetUztInitialConcDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    UpdateDataArray(LocalModel.Mf6UzfInitialConcentrationUsed,
+      FUztInitialConcDataArrayName, NewName,
+      FUztInitialConcDisplayName, '0.', 'MODFLOW 6 UZT package, strt',
+      LocalModel.AnyUzfInitialConcentrationUsed);
+  end;
+  SetCaseSensitiveStringProperty(FUztInitialConcDataArrayName, NewName);
 end;
 
 { TConcentrationCollection }
