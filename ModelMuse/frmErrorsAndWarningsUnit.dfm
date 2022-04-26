@@ -3,9 +3,9 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
   HelpKeyword = 'Errors_and_Warnings_Dialog_Box'
   Caption = 'Errors and Warnings'
   ClientWidth = 472
+  OnHide = FormHide
   OnResize = FormResize
-  ExplicitWidth = 488
-  PixelsPerInch = 96
+  ExplicitWidth = 490
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -100,6 +100,9 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
     OnGetText = vstWarningsAndErrorsGetText
     OnInitNode = vstWarningsAndErrorsInitNode
     OnMeasureItem = vstWarningsAndErrorsMeasureItem
+    Touch.InteractiveGestures = [igPan, igPressAndTap]
+    Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+    ExplicitTop = -2
     Columns = <
       item
         Position = 0
@@ -137,6 +140,10 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       Caption = 'Go to'
       Hint = 'Go to the location of the related object'
       OnClick = miGotoClick
+    end
+    object miIgnorethistypeoferrororwarning1: TMenuItem
+      Caption = 'Ignore this'
+      OnClick = miIgnorethistypeoferrororwarning1Click
     end
   end
 end

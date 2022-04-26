@@ -279,6 +279,8 @@ Type
       var AllowChange: Boolean);
     procedure cbParametersUsedClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure tvDataSetsMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { @name is the @link(TCustom2DInterpolater) of the currently
       selected @link(TDataArray).
@@ -2863,6 +2865,20 @@ procedure TfrmDataSets.tvDataSetsChanging(Sender: TObject; Node: TTreeNode;
 begin
   inherited;
   edNameExit(nil);
+end;
+
+procedure TfrmDataSets.tvDataSetsMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  HitInfo: THitTests;
+begin
+  inherited;
+  HitInfo := tvDataSets.GetHitTestInfoAt(X, Y);
+  if (htOnLabel in HitInfo) and (tvDataSets.Selected <> nil)
+    and (tvDataSets.Selected.Count > 0) then
+  begin
+    tvDataSets.Selected.Expanded := not tvDataSets.Selected.Expanded ;
+  end;
 end;
 
 procedure TfrmDataSets.SetSelectedEdit(const Value: TDataArrayEdit);

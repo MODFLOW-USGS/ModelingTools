@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-04-26T16:44:31.949-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RMA: Using MODPATH</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Using MODPATH</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">MODPATH can be used to help determine whether water from the disposal pond will reach either of the two production wells. First activate MODPATH in the Packages and Programs dialog box.</text></para>
-    <list id="17" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+    <list id="0" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;Model|MODFLOW Packages and Programs...&quot;</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Expand Post processors and check the checkbox for MODPATH.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Go to the </text><text styleclass="Strong" translate="true">Simulation File Options</text><text styleclass="Normal" translate="true"> tab and change the </text><text styleclass="Strong" translate="true">Output mode</text><text styleclass="Normal" translate="true"> to </text><text styleclass="Strong" translate="true">Pathlines</text><text styleclass="Normal" translate="true">.</text></li>
@@ -15,8 +15,9 @@
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Go to the </text><text styleclass="Strong" translate="true">Version 6 &amp; 7 options</text><text styleclass="Normal" translate="true"> tab and change </text><text styleclass="Strong" translate="true">End of particle tracking (StopOption)</text><text styleclass="Normal" translate="true"> to &quot;Stop at termination points (steady-state) (2).&quot;</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Click OK to close the dialog box.</text></li>
     </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You may get a warning that the wrong format is used for saving heads with MODPATH 6. To fix this, select </text><text styleclass="Strong" translate="true">Model|MODFLOW Output Control</text><text styleclass="Normal" translate="true"> and select </text><text styleclass="Strong" translate="true">Head</text><text styleclass="Normal" translate="true"> from the list on the left. Change the </text><text styleclass="Strong" translate="true">External file type</text><text styleclass="Normal" translate="true"> to </text><text styleclass="Strong" translate="true">Binary</text><text styleclass="Normal" translate="true"> and click OK.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Next select the object that represents the disposal pond and use it to define the starting particle locations for MODPATH. You changed its name to &quot;Disposal_Pond&quot; in a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RMA_Wells" styleclass="Normal" translate="true">previous topic</link><text styleclass="Normal" translate="true">.</text></para>
-    <list id="18" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;Object|Show or Hide Objects.&quot;</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Expand </text><text styleclass="Strong" translate="true">All Objects</text><text styleclass="Normal" translate="true">.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Double click on the Disposal_Pond object to open the Object Properties dialog box.</text></li>
@@ -25,12 +26,13 @@
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Click OK to close the dialog box.</text></li>
     </list>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Six particles will now be created in each of the well cells.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If you had to change the </text><text styleclass="Strong" translate="true">External file type</text><text styleclass="Normal" translate="true"> to </text><text styleclass="Strong" translate="true">Binary</text><text styleclass="Normal" translate="true">, run MODFLOW again.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Next run MODPATH and display the results.</text></para>
-    <list id="19" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+    <list id="2" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">File|Export|MODPATH Input Files</text><text styleclass="Normal" translate="true"> and then click the </text><text styleclass="Strong" translate="true">Save</text><text styleclass="Normal" translate="true"> button.</text></li>
     </list>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">After MODFLOW has finished running, Import the model results.</text></para>
-    <list id="20" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="margin-left:0px; font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+    <list id="3" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="margin-left:0px; font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
       <li styleclass="Normal" style="margin-left:0px;"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Data|Data Visualization..</text><text styleclass="Normal" translate="true">. and select </text><text styleclass="Strong" translate="true">MODPATH Pathlines</text><text styleclass="Strong" style="font-weight:normal;" translate="true">.</text></li>
       <li styleclass="Normal" style="margin-left:0px;"><text styleclass="Normal" translate="true">Click on the button in the box for the MODPATH Pathline file.</text></li>
       <li styleclass="Normal" style="margin-left:0px;"><text styleclass="Normal" translate="true">Select the MODPATH Pathline file.</text></li>

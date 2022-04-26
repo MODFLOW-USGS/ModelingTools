@@ -69,6 +69,7 @@ type
     miSelect: TMenuItem;
     miGoto: TMenuItem;
     miEdit: TMenuItem;
+    miIgnorethistypeoferrororwarning1: TMenuItem;
     // @name creates the lists that hold the errors and warnings.
     // It also initializes the size of the record associated with
     // nodes in @link(vstWarningsAndErrors).
@@ -97,6 +98,8 @@ type
     procedure miSelectClick(Sender: TObject);
     procedure miEditClick(Sender: TObject);
     procedure miGotoClick(Sender: TObject);
+    procedure FormHide(Sender: TObject);
+    procedure miIgnorethistypeoferrororwarning1Click(Sender: TObject);
   private
     // @name is a list of the PVirtualNodes beneath @link(FErrorNode).
     FErrorChildNodes: TList;
@@ -123,6 +126,10 @@ type
     FWarningModelMessageList: TModelMessageList;
     FDelayShowing: boolean;
     FShouldShow: Boolean;
+    class var FFormTop: Integer;
+    class var FFormLeft: Integer;
+//    class var FFormTop: Integer;
+//    class var FFormLeft: Integer;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name is used to add an error or warning to @classname.
     // It first creates RootNode if it does not exist and associates
@@ -154,6 +161,10 @@ type
     procedure InitializeRootNode(var Node: PVirtualNode; List: TErrMessages);
     procedure GetSelectedScreenObjects(ScreenObjects: TScreenObjectList);
     procedure SetDelayShowing(const Value: boolean);
+    class procedure SetFormLeft(const Value: Integer); static;
+    class procedure SetFormTop(const Value: Integer); static;
+//    class procedure SetFormTop(const Value: Integer); static;
+//    class procedure SetFormLeft(const Value: Integer); static;
     { Private declarations }
   public
     function HasMessages: boolean;
@@ -184,6 +195,8 @@ type
     procedure EndUpdate;
     property DelayShowing: boolean read FDelayShowing write SetDelayShowing;
     procedure Show;
+    class property FormTop: Integer read FFormTop write SetFormTop;
+    class property FormLeft: Integer read FFormLeft write SetFormLeft;
     { Public declarations }
   end;
 
@@ -203,6 +216,7 @@ resourcestring
 
 var
   FfrmErrorsAndWarnings: TfrmErrorsAndWarnings = nil;
+  TextToIgnore: TStringList;
 
 type
   PErrorWarningRec = ^TErrorWarningRec;
@@ -240,6 +254,10 @@ var
   ModelMessages: TModelMessages;
   NewLeft: integer;
 begin
+  if TextToIgnore.IndexOf(TypeOfErrorOrWarning) >= 0 then
+  begin
+    Exit;
+  end;
   Assert(Model <> nil);
   if RootNode = nil then
   begin
@@ -311,6 +329,25 @@ begin
       end;
       Left := NewLeft;
     end;
+  end;
+end;
+
+procedure TfrmErrorsAndWarnings.miIgnorethistypeoferrororwarning1Click(
+  Sender: TObject);
+var
+  Node: PVirtualNode;
+  IgnoreText: string;
+begin
+  inherited;
+  Node := vstWarningsAndErrors.FocusedNode;
+  if not vstWarningsAndErrors.HasChildren[Node] then
+  begin
+    Node := vstWarningsAndErrors.NodeParent[Node]
+  end;
+  if (Node <> FErrorNode) and (Node <> FWarningNode) then
+  begin
+    IgnoreText := vstWarningsAndErrors.Text[Node, 0];
+    TextToIgnore.Add(IgnoreText);
   end;
 end;
 
@@ -431,6 +468,26 @@ begin
   end;
 
 end;
+
+class procedure TfrmErrorsAndWarnings.SetFormLeft(const Value: Integer);
+begin
+  FFormLeft := Value;
+end;
+
+class procedure TfrmErrorsAndWarnings.SetFormTop(const Value: Integer);
+begin
+  FFormTop := Value;
+end;
+
+//class procedure TfrmErrorsAndWarnings.SetFormLeft(const Value: Integer);
+//begin
+//  FFormLeft := Value;
+//end;
+//
+//class procedure TfrmErrorsAndWarnings.SetFormTop(const Value: Integer);
+//begin
+//  FFormTop := Value;
+//end;
 
 procedure TfrmErrorsAndWarnings.Show;
 begin
@@ -680,6 +737,8 @@ end;
 procedure TfrmErrorsAndWarnings.FormDestroy(Sender: TObject);
 begin
   inherited;
+  FormTop := Top;
+  FormLeft := Left;
   Clear;
   FErrorModels.Free;
   FWarningModels.Free;
@@ -688,6 +747,13 @@ begin
   FErrorModelMessageList.Free;
   FWarningModelMessageList.Free;
   vstWarningsAndErrors.Clear;
+end;
+
+procedure TfrmErrorsAndWarnings.FormHide(Sender: TObject);
+begin
+  inherited;
+  FormTop := Top;
+  FormLeft := Left;
 end;
 
 procedure TfrmErrorsAndWarnings.FormResize(Sender: TObject);
@@ -708,6 +774,12 @@ var
   NewTop: integer;
   NewBottom: Integer;
 begin
+  inherited;
+  if (FormTop <> 0) and (FormLeft <> 0)  then
+  begin
+    Top := FormTop;
+    Left := FormLeft;
+  end;
   if (frmProgressMM <> nil) and frmProgressMM.Visible then
   begin
     NewTop := Top + frmProgressMM.Top;
@@ -718,7 +790,6 @@ begin
     end;
     Top := NewTop;
   end;
-  inherited;
 end;
 
 function TfrmErrorsAndWarnings.HasMessages: boolean;
@@ -825,6 +896,7 @@ begin
   vstWarningsAndErrors.NodeHeight[Node] := NodeHeight;
 end;
 
+
 { TModelMessages }
 
 constructor TModelMessages.Create(Model: TBaseModel);
@@ -904,8 +976,12 @@ begin
 end;
 
 initialization
+  TextToIgnore := TStringList.Create;
+  TextToIgnore.Sorted := True;
+  TextToIgnore.Duplicates := dupIgnore;
 
 finalization
+  TextToIgnore.Free;
   FfrmErrorsAndWarnings.Free;
 
 end.

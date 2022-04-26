@@ -98,6 +98,8 @@ type
     procedure timerLegendTimer(Sender: TObject);
     procedure btnColorSchemesClick(Sender: TObject);
     procedure btnFontClick(Sender: TObject);
+    procedure virttreecomboDataSetsTreeMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   private
     // @name is implemented as a TObjectList.
     FDataSetDummyObjects: TList;
@@ -980,6 +982,25 @@ var
   CellText: string;
 begin
   GetNodeCaption(Node, CellText, Sender);
+end;
+
+procedure TframeCustomColor.virttreecomboDataSetsTreeMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  HitInfo: THitInfo;
+  Node: PVirtualNode;
+begin
+  virttreecomboDataSets.Tree.GetHitTestInfoAt(X, Y, False, HitInfo);
+  if (hiOnItemLabel in HitInfo.HitPositions) then
+  begin
+    Node := virttreecomboDataSets.Tree.GetNodeAt(X, Y);
+    if virttreecomboDataSets.Tree.HasChildren[Node]  then
+    begin
+      virttreecomboDataSets.Tree.Expanded[Node] :=
+        not virttreecomboDataSets.Tree.Expanded[Node];
+    end;
+  end;
+
 end;
 
 end.

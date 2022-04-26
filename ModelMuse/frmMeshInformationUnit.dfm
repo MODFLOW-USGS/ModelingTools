@@ -4,9 +4,8 @@ inherited frmMeshInformation: TfrmMeshInformation
   Caption = 'Mesh Information'
   ClientHeight = 405
   ClientWidth = 524
-  ExplicitWidth = 540
-  ExplicitHeight = 443
-  PixelsPerInch = 96
+  ExplicitWidth = 542
+  ExplicitHeight = 452
   TextHeight = 18
   object pnl1: TPanel
     Left = 0
@@ -75,10 +74,6 @@ inherited frmMeshInformation: TfrmMeshInformation
     TabOrder = 1
     object tabElementAngles: TTabSheet
       Caption = 'Element Angles'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splitterVertical: TSplitter
         Left = 299
         Top = 41
@@ -165,6 +160,7 @@ inherited frmMeshInformation: TfrmMeshInformation
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'Go to'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -211,6 +207,7 @@ inherited frmMeshInformation: TfrmMeshInformation
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -234,6 +231,7 @@ inherited frmMeshInformation: TfrmMeshInformation
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'Go to'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -265,10 +263,6 @@ inherited frmMeshInformation: TfrmMeshInformation
     object tabAspectRatio: TTabSheet
       Caption = 'Aspect Ratios'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splAspectRatio: TSplitter
         Left = 511
         Top = 41
@@ -313,6 +307,7 @@ inherited frmMeshInformation: TfrmMeshInformation
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -336,6 +331,7 @@ inherited frmMeshInformation: TfrmMeshInformation
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'Go to'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -393,10 +389,6 @@ inherited frmMeshInformation: TfrmMeshInformation
     object tabElementCounts: TTabSheet
       Caption = 'Elements per Node'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splNodes: TSplitter
         Left = 307
         Top = 0
@@ -440,6 +432,7 @@ inherited frmMeshInformation: TfrmMeshInformation
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -463,6 +456,7 @@ inherited frmMeshInformation: TfrmMeshInformation
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'Go to'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

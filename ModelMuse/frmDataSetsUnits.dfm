@@ -126,6 +126,7 @@ inherited frmDataSets: TfrmDataSets
     TabOrder = 0
     OnChange = tvDataSetsChange
     OnChanging = tvDataSetsChanging
+    OnMouseDown = tvDataSetsMouseDown
   end
   object pcDataSets: TJvPageControl
     Left = 316
@@ -559,10 +560,11 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 69
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Comment'
+          ExplicitWidth = 69
         end
         object reComment: TRichEdit
           AlignWithMargins = True
@@ -590,10 +592,11 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 164
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Associated model data'
+          ExplicitWidth = 164
         end
         object memoAssociatedDataSets: TMemo
           AlignWithMargins = True

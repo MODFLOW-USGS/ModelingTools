@@ -131,40 +131,6 @@ begin
 end;
 
 procedure TfrmMeshInformation.FormShow(Sender: TObject);
-//  procedure AssignFonts(AChart: TChart);
-//    procedure AssignAFont(ChartFont: TTeeFont);
-//    begin
-//      ChartFont.Charset := Font.Charset;
-//      ChartFont.Color := Font.Color;
-//      ChartFont.Height := Font.Height;
-//      ChartFont.Name := Font.Name;
-//      ChartFont.Orientation := Font.Orientation;
-//
-//      // Assigning the Pitch messes up the font.
-////      ChartFont.Pitch := Font.Pitch;
-//      // incompatible types
-////      ChartFont.Quality := Font.Quality;
-//
-//      ChartFont.Size := Font.Size;
-//      ChartFont.Style := Font.Style;
-//      ChartFont.Charset := Font.Charset;
-//    end;
-//  begin
-//    AssignAFont(AChart.Title.Font);
-//    AssignAFont(AChart.LeftAxis.Title.Font);
-//    AssignAFont(AChart.BottomAxis.Title.Font);
-//    AssignAFont(AChart.LeftAxis.LabelsFont);
-//    AssignAFont(AChart.BottomAxis.LabelsFont);
-//    AChart.Title.Font.Assign(Font);
-//    AChart.LeftAxis.Title.Font.Assign(Font);
-//    AChart.BottomAxis.Title.Font.Assign(Font);
-//    AChart.LeftAxis.LabelsFont.Assign(Font);
-//    AChart.BottomAxis.LabelsFont.Assign(Font);
-//    AChart.LeftAxis.LabelsFont.Size :=
-//      AChart.LeftAxis.LabelsFont.Size-2;
-//    AChart.BottomAxis.LabelsFont.Size :=
-//      AChart.BottomAxis.LabelsFont.Size-2;
-//  end;
 begin
   inherited;
 //  AssignFonts(chtHistogram);

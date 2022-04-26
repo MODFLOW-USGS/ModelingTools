@@ -10495,12 +10495,17 @@ const
 //                MODFLOW 6 models.
 //     '5.0.0.6' Bug fix: fixed bug in displaying cross section data in
 //                MODFLOW 6 models.
+//     '5.0.0.7' Enhancement: An "Ignore this" option has been added to the
+//                pop-up menu in the Errors and Warnings dialog box.
+//               Bug fix: If no grid has been defined in a structured grid model
+//                attempting to restore the default 2D view results in nothing
+//                happening instead of generating an error.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.6';
+  IIModelVersion = '5.0.0.7';
 
 function IModelVersion: string;
 begin
@@ -13585,7 +13590,7 @@ begin
     end
     else
     begin
-      if Grid <> nil then
+      if (Grid <> nil) and (Grid.ColumnCount > 0) and (Grid.RowCount > 0) then
       begin
         result := Grid.GridLimits(ViewDirection);
       end;

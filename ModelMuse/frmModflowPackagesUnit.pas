@@ -327,6 +327,8 @@ type
     procedure frameGridImmobileGridExit(Sender: TObject);
     procedure framePkgMt3dmsRctcomboKineticChoiceChange(Sender: TObject);
     procedure jvspNPFShow(Sender: TObject);
+    procedure tvPackagesMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -3348,53 +3350,25 @@ begin
 end;
 
 
+procedure TfrmModflowPackages.tvPackagesMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  HitInfo: THitTests;
+begin
+  inherited;
+  HitInfo := tvPackages.GetHitTestInfoAt(X, Y);
+  if (htOnLabel in HitInfo) and (tvPackages.Selected <> nil)
+    and (tvPackages.Selected.Count > 0) then
+  begin
+    tvPackages.Selected.Expanded := not tvPackages.Selected.Expanded ;
+  end;
+end;
+
 procedure TfrmModflowPackages.tvPackagesMouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   Frame, SelectedFrame: TFramePackage;
   Node, ParentNode, ChildNode: TTreeNode;
-//  function NodeToFrame(Node: TTreeNode): TFramePackage;
-//  var
-//    Page, FramePage: TJvStandardPage;
-//    Frame: TFramePackage;
-//    Index: Integer;
-//    Component: TComponent;
-//    Control: TControl;
-//  begin
-//    result := nil;
-//    Page := Node.Data;
-//    for Index := 0 to ComponentCount - 1 do
-//    begin
-//      Component := Components[Index];
-//      if (Component is TFramePackage) then
-//      begin
-//        Frame := TFramePackage(Component);
-//        if (Frame.Parent = Page) then
-//        begin
-//          result := Frame;
-//          Exit;
-//        end
-//        else if Frame = framePkgSFR then
-//        begin
-//          Control := Frame;
-//          while Control.Parent <> nil do
-//          begin
-//            Control := Control.Parent;
-//            if Control is TJvStandardPage then
-//            begin
-//              FramePage := TJvStandardPage(Control);
-//              if FramePage = Page then
-//              begin
-//                result := Frame;
-//                Exit;
-//              end;
-//            end;
-//          end;
-//        end;
-//      end;
-//    end;
-//    Assert(result <> nil);
-//  end;
 begin
   inherited;
   if htOnStateIcon in tvPackages.GetHitTestInfoAt(X, Y) then

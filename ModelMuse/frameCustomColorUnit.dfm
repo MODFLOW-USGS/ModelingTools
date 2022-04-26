@@ -17,31 +17,29 @@ object frameCustomColor: TframeCustomColor
       Caption = 'Selection'
       DesignSize = (
         562
-        400)
+        393)
       object lblDataSet: TLabel
         Left = 8
         Top = 4
-        Width = 149
-        Height = 13
+        Width = 207
+        Height = 20
         Caption = 'Data set or boundary condition'
       end
       object lblColorScheme: TLabel
         Left = 8
         Top = 239
-        Width = 64
-        Height = 13
+        Width = 90
+        Height = 20
         Anchors = [akLeft, akBottom]
         Caption = 'Color scheme'
-        ExplicitTop = 236
       end
       object lblCycles: TLabel
         Left = 456
         Top = 266
-        Width = 31
-        Height = 13
+        Width = 41
+        Height = 20
         Anchors = [akRight, akBottom]
         Caption = 'Cycles'
-        ExplicitTop = 263
       end
       object pbColorScheme: TPaintBox
         Left = 3
@@ -55,24 +53,23 @@ object frameCustomColor: TframeCustomColor
       object lblColorAdjustment: TLabel
         Left = 8
         Top = 342
-        Width = 82
-        Height = 13
+        Width = 114
+        Height = 20
         Anchors = [akLeft, akBottom]
         Caption = 'Color adjustment'
-        ExplicitTop = 339
       end
       object lblComment: TLabel
         Left = 8
         Top = 61
-        Width = 143
-        Height = 13
+        Width = 198
+        Height = 20
         Caption = 'Data set comment (read only)'
       end
       object comboColorScheme: TComboBox
         Left = 8
         Top = 252
         Width = 442
-        Height = 21
+        Height = 28
         Style = csDropDownList
         Anchors = [akLeft, akRight, akBottom]
         DropDownCount = 12
@@ -98,7 +95,7 @@ object frameCustomColor: TframeCustomColor
         Left = 456
         Top = 297
         Width = 101
-        Height = 21
+        Height = 28
         ButtonKind = bkClassic
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
@@ -124,7 +121,7 @@ object frameCustomColor: TframeCustomColor
         Left = 160
         Top = 363
         Width = 65
-        Height = 21
+        Height = 28
         ButtonKind = bkClassic
         Increment = 0.010000000000000000
         MaxValue = 2.000000000000000000
@@ -146,7 +143,7 @@ object frameCustomColor: TframeCustomColor
       object udDataSets: TJvUpDown
         Left = 479
         Top = 28
-        Width = 17
+        Width = 21
         Height = 25
         Anchors = [akTop, akRight]
         TabOrder = 1
@@ -169,11 +166,11 @@ object frameCustomColor: TframeCustomColor
         Left = 8
         Top = 25
         Width = 465
-        Height = 21
+        Height = 28
         Tree.Left = 0
         Tree.Top = 0
-        Tree.Width = 304
-        Tree.Height = 201
+        Tree.Width = 622
+        Tree.Height = 433
         Tree.Align = alClient
         Tree.Header.AutoSizeIndex = 0
         Tree.Header.MainColumn = -1
@@ -182,6 +179,9 @@ object frameCustomColor: TframeCustomColor
         Tree.OnChange = virttreecomboDataSetsTreeChange
         Tree.OnGetText = virttreecomboDataSetsTreeGetText
         Tree.OnInitNode = virttreecomboDataSetsTreeInitNode
+        Tree.OnMouseDown = virttreecomboDataSetsTreeMouseDown
+        Tree.Touch.InteractiveGestures = [igPan, igPressAndTap]
+        Tree.Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
         Tree.ExplicitWidth = 200
         Tree.ExplicitHeight = 100
         Tree.Columns = <>
@@ -226,7 +226,6 @@ object frameCustomColor: TframeCustomColor
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 2
-        Zoom = 100
       end
       object btnColorSchemes: TButton
         Left = 360
@@ -246,42 +245,41 @@ object frameCustomColor: TframeCustomColor
       ImageIndex = 1
       DesignSize = (
         562
-        400)
+        393)
       object lblLowerLimit: TLabel
         Left = 8
         Top = 3
-        Width = 50
-        Height = 13
+        Width = 74
+        Height = 20
         Caption = 'Lower limit'
       end
       object lblUpperLimit: TLabel
         Left = 299
         Top = 3
-        Width = 50
-        Height = 13
+        Width = 75
+        Height = 20
         Caption = 'Upper limit'
       end
       object lblValuesToIgnore: TLabel
         Left = 8
         Top = 81
-        Width = 77
-        Height = 13
+        Width = 107
+        Height = 20
         Caption = 'Values to ignore'
       end
       object lblNumberOfValuesToIgnore: TLabel
         Left = 130
         Top = 373
-        Width = 130
-        Height = 13
+        Width = 182
+        Height = 20
         Anchors = [akLeft, akBottom]
         Caption = 'Number of values to ignore'
-        ExplicitTop = 370
       end
       object lblEpsilon: TLabel
         Left = 203
         Top = 81
-        Width = 116
-        Height = 13
+        Width = 163
+        Height = 20
         Caption = 'Epsilon (margin of error)'
       end
       inline frameCheck3DMax: TframeDisplayLimit
@@ -302,7 +300,7 @@ object frameCustomColor: TframeCustomColor
           Left = 89
           TabOrder = 1
           ExplicitLeft = 89
-          ExplicitHeight = 21
+          ExplicitHeight = 28
         end
       end
       inline frameCheck3DMin: TframeDisplayLimit
@@ -319,7 +317,7 @@ object frameCustomColor: TframeCustomColor
           ExplicitHeight = 28
         end
         inherited comboBoolLimit: TComboBox
-          ExplicitHeight = 21
+          ExplicitHeight = 28
         end
       end
       object cbActiveOnly: TCheckBox
@@ -381,7 +379,7 @@ object frameCustomColor: TframeCustomColor
         Left = 8
         Top = 364
         Width = 121
-        Height = 21
+        Height = 28
         CheckMinValue = True
         ButtonKind = bkClassic
         Anchors = [akLeft, akBottom]
@@ -409,7 +407,7 @@ object frameCustomColor: TframeCustomColor
         Left = 206
         Top = 0
         Width = 356
-        Height = 400
+        Height = 393
         Align = alClient
         ExplicitLeft = 224
         ExplicitTop = -2
@@ -420,33 +418,34 @@ object frameCustomColor: TframeCustomColor
         Left = 201
         Top = 0
         Width = 5
-        Height = 400
+        Height = 393
         ExplicitLeft = 218
+        ExplicitHeight = 400
       end
       object pnlLegend: TPanel
         Left = 0
         Top = 0
         Width = 201
-        Height = 400
+        Height = 393
         Align = alLeft
         BevelInner = bvRaised
         BevelOuter = bvNone
         TabOrder = 0
         DesignSize = (
           201
-          400)
+          393)
         object lblMethod: TLabel
           Left = 8
           Top = 6
-          Width = 36
-          Height = 13
+          Width = 52
+          Height = 20
           Caption = 'Method'
         end
         object lblColorLegendRows: TLabel
           Left = 8
           Top = 303
-          Width = 76
-          Height = 13
+          Width = 107
+          Height = 20
           Anchors = [akLeft, akBottom]
           Caption = 'Number of rows'
         end
@@ -454,7 +453,7 @@ object frameCustomColor: TframeCustomColor
           Left = 8
           Top = 27
           Width = 145
-          Height = 21
+          Height = 28
           Style = csDropDownList
           ItemIndex = 0
           TabOrder = 0
@@ -468,7 +467,7 @@ object frameCustomColor: TframeCustomColor
           Left = 8
           Top = 322
           Width = 121
-          Height = 21
+          Height = 28
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 1.000000000000000000

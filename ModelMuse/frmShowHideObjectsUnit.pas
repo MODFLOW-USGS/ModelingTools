@@ -582,6 +582,14 @@ begin
       end;
     end;
   end;
+  if (hiOnItemLabel in HitInfo.HitPositions) then
+  begin
+    Node := vstObjects.GetNodeAt(X, Y);
+    if vstObjects.HasChildren[Node]  then
+    begin
+      vstObjects.Expanded[Node] := not vstObjects.Expanded[Node];
+    end;
+  end;
 end;
 
 procedure TfrmShowHideObjects.vstObjectsPaintText(Sender: TBaseVirtualTree;

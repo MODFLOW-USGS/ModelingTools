@@ -3,8 +3,7 @@ inherited frmColorSchemes: TfrmColorSchemes
   HelpKeyword = 'Custom_Color_Schemes_Dialog_Bo'
   Caption = 'Custom Color Schemes'
   ClientHeight = 307
-  ExplicitHeight = 346
-  PixelsPerInch = 96
+  ExplicitHeight = 354
   TextHeight = 18
   object spl1: TSplitter
     Left = 137
@@ -126,7 +125,7 @@ inherited frmColorSchemes: TfrmColorSchemes
         ExplicitTop = 6
       end
       object btnInsertUnit: TSpeedButton
-        Left = 55
+        Left = 56
         Top = 5
         Width = 23
         Height = 22
@@ -229,6 +228,7 @@ inherited frmColorSchemes: TfrmColorSchemes
       EditLabel.Caption = 'Name'
       LabelPosition = lpRight
       TabOrder = 0
+      Text = ''
       OnChange = edNameChange
     end
     inline frameColorScheme: TframeGrid
@@ -290,6 +290,7 @@ inherited frmColorSchemes: TfrmColorSchemes
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -314,6 +315,7 @@ inherited frmColorSchemes: TfrmColorSchemes
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

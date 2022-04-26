@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frmCustomGoPhastUnit, ComCtrls,
   ExtCtrls, Buttons, StdCtrls, frameGridUnit, ColorSchemes,
-  UndoItems;
+  UndoItems, Vcl.Mask;
 
 type
   TUndoColorSchemes = class(TCustomUndo)
