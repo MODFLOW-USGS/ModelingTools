@@ -11,10 +11,8 @@ object frmTree: TfrmTree
   Font.Height = -10
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   Position = poDesigned
   OnHide = FormHide
   OnMouseDown = FormMouseDown
-  PixelsPerInch = 96
   TextHeight = 12
 end

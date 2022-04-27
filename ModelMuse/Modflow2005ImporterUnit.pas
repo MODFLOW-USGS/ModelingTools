@@ -10330,8 +10330,7 @@ begin
               AnotherBoundary := Instance.Locations[InnerBoundaryIndex];
               if not AnotherBoundary.Used
                 and (Boundary.Layer = AnotherBoundary.Layer)
-                and not UsedLocations[AnotherBoundary.Row-1,
-                AnotherBoundary.Column-1]
+                and not UsedLocations[AnotherBoundary.Row-1,AnotherBoundary.Column-1]
                 and Boundary.SameObservations(AnotherBoundary)
                 then
               begin

@@ -1591,7 +1591,7 @@ var
           WriteFloat(ObsGroup.GroupTarget);
         end;
       end;
-      if ObsGroup. AbsoluteCorrelationFileName <> '' then
+      if ObsGroup.AbsoluteCorrelationFileName <> '' then
       begin
         CorrelationFileName := ' ' + ExtractRelativePath(FNameOfFile, ObsGroup.AbsoluteCorrelationFileName);
         WriteString(CorrelationFileName);

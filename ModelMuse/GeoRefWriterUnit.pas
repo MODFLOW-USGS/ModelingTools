@@ -173,7 +173,13 @@ begin
 
   if SubModelType = smtMain then
   begin
-    TFile.Copy(FFileName, Directory + 'usgs.model.reference', True);
+    try
+      TFile.Copy(FFileName, Directory + 'usgs.model.reference', True);
+    except on EInOutError do
+      begin
+        // ignore
+      end;
+    end;
   end;
 end;
 

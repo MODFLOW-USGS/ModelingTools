@@ -25,10 +25,12 @@ type
     FDropDownHeight: integer;
     FfrmTree: TfrmTree;
     FFocusedNode: PVirtualNode;
+    FOnCanClose: TCanCloseEvent;
     procedure SetDropDownHeight(const Value: integer);
     procedure EnsureForm;
     procedure AssignDefaultGlyph;
     procedure SetFocusedNode(const Value: PVirtualNode);
+    procedure SetOnCanClose(const Value: TCanCloseEvent);
     { Private declarations }
   protected
      procedure DoButtonClick; override;
@@ -81,6 +83,7 @@ type
     {$IFNDEF VER80}
     property OnStartDrag;
     {$ENDIF}
+    property OnCanClose: TCanCloseEvent read FOnCanClose write SetOnCanClose;
     { Published declarations }
   end;
 
@@ -155,6 +158,7 @@ begin
   if FfrmTree = nil then
   begin
     FfrmTree := TfrmTree.Create(self);
+    FfrmTree.OnCanClose := OnCanClose;
     FTree.Parent := FfrmTree;
     FTree.Align := alClient;
     // TVirtualStringTree does not currently publish OnMouseEnter
@@ -226,6 +230,15 @@ begin
   begin
     FTree.OnGetText(FTree, FFocusedNode, 0, ttNormal, CellText);
     Text := CellText
+  end;
+end;
+
+procedure TRbwStringTreeCombo.SetOnCanClose(const Value: TCanCloseEvent);
+begin
+  FOnCanClose := Value;
+  if FfrmTree <> nil then
+  begin
+    FfrmTree.OnCanClose := OnCanClose;
   end;
 end;
 

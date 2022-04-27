@@ -675,6 +675,7 @@ object PhastModel: TPhastModel
   ModflowPackages.RipPackage.WritePlantGroupET = wpgDontWrite
   ModflowPackages.SfrModflow6Package.IsSelected = False
   ModflowPackages.SfrModflow6Package.MaxIteration = 100
+  ModflowPackages.SfrModflow6Package.MaxPicardIteration = 100
   ModflowPackages.SfrModflow6Package.StoredMaxDepthChange.Value = 0.00001000000000000
   ModflowPackages.SfrModflow6Package.SaveStageFile = True
   ModflowPackages.SfrModflow6Package.SaveBudgetFile = True
@@ -952,7 +953,6 @@ object PhastModel: TPhastModel
   PestObsCollection.MinTimeLimit.IntegerLimitValue = 0
   PestObsCollection.MinTimeLimit.UseLimit = False
   PestObsCollection = <>
-  Mf6TimesSeries = <>
   Diffusivity = 0.00000000100000000
   GridOptions.ChemicalDimensionX = True
   GridOptions.ChemicalDimensionY = True
@@ -2210,7 +2210,6 @@ object PhastModel: TPhastModel
           EndTime = 631152000.00000000000000000
           EndHead = '75'
           StartHead = '75'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowChdBoundary.Parameters = <>
       ScreenObject.ModflowChdBoundary.Interp = mimLinearEnd
@@ -2346,14 +2345,11 @@ object PhastModel: TPhastModel
         item
           EndTime = 631152000.00000000000000000
           PumpingRate = '0.3'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowWellBoundary.Parameters = <>
       ScreenObject.ModflowWellBoundary.FormulaInterpretation = fiTotal
       ScreenObject.ModflowWellBoundary.Interp = mimStepwise
       ScreenObject.ModflowWellBoundary.PestPumpingRateMethod = ppmMultiply
-      ScreenObject.ModflowWellBoundary.PestConcentrationFormulas = <>
-      ScreenObject.ModflowWellBoundary.PestConcentrationMethods = <>
       ScreenObject.Mt3dmsConcBoundary.Values = <
         item
           EndTime = 631152000.00000000000000000
@@ -2472,14 +2468,11 @@ object PhastModel: TPhastModel
         item
           EndTime = 631152000.00000000000000000
           PumpingRate = '-0.001'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowWellBoundary.Parameters = <>
       ScreenObject.ModflowWellBoundary.FormulaInterpretation = fiSpecific
       ScreenObject.ModflowWellBoundary.Interp = mimStepwise
       ScreenObject.ModflowWellBoundary.PestPumpingRateMethod = ppmMultiply
-      ScreenObject.ModflowWellBoundary.PestConcentrationFormulas = <>
-      ScreenObject.ModflowWellBoundary.PestConcentrationMethods = <>
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
       ScreenObject.SectionStarts.Values = (
@@ -2586,14 +2579,11 @@ object PhastModel: TPhastModel
         item
           EndTime = 631152000.00000000000000000
           PumpingRate = '-0.002'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowWellBoundary.Parameters = <>
       ScreenObject.ModflowWellBoundary.FormulaInterpretation = fiSpecific
       ScreenObject.ModflowWellBoundary.Interp = mimStepwise
       ScreenObject.ModflowWellBoundary.PestPumpingRateMethod = ppmMultiply
-      ScreenObject.ModflowWellBoundary.PestConcentrationFormulas = <>
-      ScreenObject.ModflowWellBoundary.PestConcentrationMethods = <>
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
       ScreenObject.SectionStarts.Values = (
@@ -2739,7 +2729,6 @@ object PhastModel: TPhastModel
           EndTime = 631152000.00000000000000000
           EndHead = 'Interpolate(FractionOfObjectLength, 5., 0.1, 23.5, 0.9)'
           StartHead = 'Interpolate(FractionOfObjectLength, 5., 0.1, 23.5, 0.9)'
-          GwtConcentrations = <>
         end>
       ScreenObject.ModflowChdBoundary.Parameters = <>
       ScreenObject.ModflowChdBoundary.Interp = mimLinearEnd
@@ -3293,7 +3282,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = 'Model_Top'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = 'Aquifer_Bottom'
-      ScreenObject.Selected = True
+      ScreenObject.Selected = False
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -4026,19 +4015,19 @@ object PhastModel: TPhastModel
       ScreenObject.QuadtreeRefinementLevel = 0
       SelectedVertices = <>
     end>
-  Version = '4.3.0.75'
+  Version = '5.0.0.0'
   GuiSettings.FrontHeight = 133
   GuiSettings.Height = 800
   GuiSettings.FrontX = 720.44903719223370000
   GuiSettings.FrontY = 12.01085221106777000
-  GuiSettings.Left = 269
+  GuiSettings.Left = 380
   GuiSettings.MagnificationFront = 0.07434846053689229
   GuiSettings.MagnificationSide = 0.07434846053689229
   GuiSettings.MagnificationTop = 0.07434846053689229
   GuiSettings.SideWidth = 219
   GuiSettings.SideX = -18.58830187459252000
   GuiSettings.SideY = 2761.83220665430200000
-  GuiSettings.Top = 3
+  GuiSettings.Top = 12
   GuiSettings.TopViewHeight = 502
   GuiSettings.TopViewWidth = 530
   GuiSettings.TopX = 720.44903719223370000
@@ -5421,7 +5410,7 @@ object PhastModel: TPhastModel
   PestProperties.ShowPilotPoints = False
   PestProperties.StoredPilotPointSpacing.Value = 0.00000000000000000
   PestProperties.PestControlData.PestRestart = prRestart
-  PestProperties.PestControlData.PestMode = pmEstimation
+  PestProperties.PestControlData.PestMode = pmRegularisation
   PestProperties.PestControlData.MaxCompressionDimension = 1
   PestProperties.PestControlData.StoredZeroLimit.Value = 0.00000000000000000
   PestProperties.PestControlData.StoredInitalLambda.Value = 10.00000000000000000
@@ -5566,7 +5555,6 @@ object PhastModel: TPhastModel
   PestProperties.ParetoProperties.IntermediateIterationCount = 1
   PestProperties.ParetoProperties.FinalIterationCount = 0
   PestProperties.ParetoProperties.AltTerminationOption = atoDontUse
-  PestProperties.ParetoProperties.ObservationName = 'Gradient'
   PestProperties.ParetoProperties.AltDirection = adAbove
   PestProperties.ParetoProperties.StoredAltThreshold.Value = 0.00000000000000000
   PestProperties.ParetoProperties.AltIterations = 1

@@ -45,6 +45,10 @@ type
       ARow: Integer; var CanSelect: Boolean);
     procedure frameObsComparisonsGridExit(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
+    procedure treecomboInPlaceEditorTreeMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure treecomboInPlaceEditorCanClose(Sender: TObject;
+      var CanClose: Boolean);
   private
     { Private declarations }
     FObsDictionary: TDictionary<string, PVirtualNode>;
@@ -54,6 +58,7 @@ type
 
     FCol: Integer;
     FRow: Integer;
+    FCanClose: Boolean;
     procedure GetData;
     procedure SetData;
     procedure InitializeInPlaceEditor;
@@ -550,6 +555,13 @@ begin
   end;
 end;
 
+procedure TfrmObservationComparisons.treecomboInPlaceEditorCanClose(
+  Sender: TObject; var CanClose: Boolean);
+begin
+  inherited;
+  CanClose := FCanClose;
+end;
+
 procedure TfrmObservationComparisons.treecomboInPlaceEditorTreeChange(
   Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
@@ -629,6 +641,27 @@ begin
       or (ObsTreeItem^.ObsCollection <> nil)
       or (ObsTreeItem^.FluxGroup <> nil));
   end;
+end;
+
+procedure TfrmObservationComparisons.treecomboInPlaceEditorTreeMouseDown(
+  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  HitInfo: THitInfo;
+  Node: PVirtualNode;
+begin
+  inherited;
+  treecomboInPlaceEditor.Tree.GetHitTestInfoAt(X, Y, False, HitInfo);
+  if (hiOnItemLabel in HitInfo.HitPositions) then
+  begin
+    Node := treecomboInPlaceEditor.Tree.GetNodeAt(X, Y);
+    if treecomboInPlaceEditor.Tree.HasChildren[Node]  then
+    begin
+      treecomboInPlaceEditor.Tree.Expanded[Node] :=
+        not treecomboInPlaceEditor.Tree.Expanded[Node];
+    end;
+    FCanClose := not treecomboInPlaceEditor.Tree.HasChildren[Node];
+  end;
+//
 end;
 
 { TObsTreeItem }

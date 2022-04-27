@@ -4,9 +4,8 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 485
   ClientWidth = 764
-  ExplicitWidth = 780
-  ExplicitHeight = 524
-  PixelsPerInch = 96
+  ExplicitWidth = 782
+  ExplicitHeight = 532
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
@@ -37,7 +36,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jsvpPareto2
+    ActivePage = jvspObservationGroups
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange

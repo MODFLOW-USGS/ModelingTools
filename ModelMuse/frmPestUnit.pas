@@ -429,6 +429,7 @@ type
     FNewHufParameters: THufModflowParameters;
     FNewTransientListParameters: TModflowTransientListParameters;
     FSettingIREGADJ: Boolean;
+    FChangingNumberOfGroups: Boolean;
     procedure GetData;
     procedure SetData;
     procedure FixObsGroupNames(ObsGridFrame: TframeGrid);
@@ -3114,10 +3115,7 @@ begin
       Group.ObsGroupName := ValidObsGroupName(Value);
       if Group.ObsGroupName <> '' then
       begin
-        if not FGroupNameDictionary.ContainsKey(UpperCase(Group.ObsGroupName)) then
-        begin
-          FGroupNameDictionary.Add(UpperCase(Group.ObsGroupName), Group);
-        end;
+        FGroupNameDictionary.AddOrSetValue(UpperCase(Group.ObsGroupName), Group);
       end;
       if FGroupDictionary.TryGetValue(Group, TreeNode) then
       begin
@@ -3200,26 +3198,35 @@ var
   OldGroup: TPestObservationGroup;
   index: Integer;
 begin
-  Grid := ObsNameGrid.Grid;
-  Names := Grid.Cols[Ord(pogcName)];
-  ObsNameGrid.seNumberChange(nil);
-  while ObsNameGrid.seNumber.AsInteger > EditedObsGroups.Count do
+  if FChangingNumberOfGroups then
   begin
-    NewGroup := EditedObsGroups.Add;
-    Grid.Objects[Ord(pogcName), EditedObsGroups.Count] := NewGroup;
-    NewGroup.ObsGroupName := ValidObsGroupName(Grid.Cells[Ord(pogcName), EditedObsGroups.Count]);
-    HandleAddedGroup(frameParentObsGroups, NewGroup);
+    Exit;
   end;
-  while ObsNameGrid.seNumber.AsInteger < EditedObsGroups.Count do
-  begin
-    OldGroup := EditedObsGroups.Last as TPestObservationGroup;
-    index := Names.IndexOfObject(OldGroup);
-    HandleGroupDeletion(OldGroup);
-    OldGroup.Free;
-    if index >= 1 then
+  FChangingNumberOfGroups := True;
+  try
+    Grid := ObsNameGrid.Grid;
+    Names := Grid.Cols[Ord(pogcName)];
+    ObsNameGrid.seNumberChange(nil);
+    while ObsNameGrid.seNumber.AsInteger > EditedObsGroups.Count do
     begin
-      Grid.Objects[Ord(pogcName), index] := nil;
+      NewGroup := EditedObsGroups.Add;
+      Grid.Objects[Ord(pogcName), EditedObsGroups.Count] := NewGroup;
+      NewGroup.ObsGroupName := ValidObsGroupName(Grid.Cells[Ord(pogcName), EditedObsGroups.Count]);
+      HandleAddedGroup(frameParentObsGroups, NewGroup);
     end;
+    while ObsNameGrid.seNumber.AsInteger < EditedObsGroups.Count do
+    begin
+      OldGroup := EditedObsGroups.Last as TPestObservationGroup;
+      index := Names.IndexOfObject(OldGroup);
+      HandleGroupDeletion(OldGroup);
+      OldGroup.Free;
+      if index >= 1 then
+      begin
+        Grid.Objects[Ord(pogcName), index] := nil;
+      end;
+    end;
+  finally
+    FChangingNumberOfGroups := False;
   end;
 end;
 
@@ -3682,19 +3689,14 @@ procedure TfrmPEST.HandleAddedGroup(TreeObsGroupFrame: TframeParentChild;
 var
   NewNode: TTreeNode;
   ParetoGroupIndex: Integer;
-//  TreeObsGroupFrame: TframeParentChild;
 begin
-//  TreeObsGroupFrame := frameParentObsGroups;
   NewNode := TreeObsGroupFrame.tvTree.Items.AddChild(nil,
     ObsGroup.ObsGroupName);
   NewNode.Data := ObsGroup;
-  FGroupDictionary.Add(ObsGroup, NewNode);
+  FGroupDictionary.AddOrSetValue(ObsGroup, NewNode);
   if ObsGroup.ObsGroupName <> '' then
   begin
-    if not FGroupNameDictionary.ContainsKey(UpperCase(ObsGroup.ObsGroupName)) then
-    begin
-      FGroupNameDictionary.Add(UpperCase(ObsGroup.ObsGroupName), ObsGroup);
-    end;
+    FGroupNameDictionary.AddOrSetValue(UpperCase(ObsGroup.ObsGroupName), ObsGroup);
   end;
   ParetoGroupIndex := comboParetoGroup.ItemIndex;
   comboParetoGroup.Items.AddObject(ObsGroup.ObsGroupName, ObsGroup);

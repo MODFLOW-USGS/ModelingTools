@@ -4,9 +4,8 @@ inherited frmObservationComparisons: TfrmObservationComparisons
   Caption = 'Comparison Observations'
   ClientHeight = 312
   ClientWidth = 784
-  ExplicitWidth = 800
-  ExplicitHeight = 351
-  PixelsPerInch = 96
+  ExplicitWidth = 802
+  ExplicitHeight = 359
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -58,8 +57,8 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     Height = 26
     Tree.Left = 0
     Tree.Top = 0
-    Tree.Width = 304
-    Tree.Height = 201
+    Tree.Width = 622
+    Tree.Height = 433
     Tree.Align = alClient
     Tree.Colors.BorderColor = 15987699
     Tree.Colors.DisabledColor = clGray
@@ -87,6 +86,9 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     Tree.OnGetText = treecomboInPlaceEditorTreeGetText
     Tree.OnGetNodeDataSize = treecomboInPlaceEditorTreeGetNodeDataSize
     Tree.OnInitNode = treecomboInPlaceEditorTreeInitNode
+    Tree.OnMouseDown = treecomboInPlaceEditorTreeMouseDown
+    Tree.Touch.InteractiveGestures = [igPan, igPressAndTap]
+    Tree.Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
     Tree.ExplicitWidth = 200
     Tree.ExplicitHeight = 100
     Tree.Columns = <>
@@ -112,6 +114,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000}
     NumGlyphs = 2
     TabOrder = 1
+    OnCanClose = treecomboInPlaceEditorCanClose
   end
   inline frameObsComparisons: TframeGrid
     Left = 0

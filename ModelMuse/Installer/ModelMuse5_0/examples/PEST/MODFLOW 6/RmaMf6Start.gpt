@@ -158100,7 +158100,7 @@ object Model: TPhastModel
   PestProperties.ShowPilotPoints = False
   PestProperties.StoredPilotPointSpacing.Value = 0.00000000000000000
   PestProperties.PestControlData.PestRestart = prRestart
-  PestProperties.PestControlData.PestMode = pmEstimation
+  PestProperties.PestControlData.PestMode = pmRegularisation
   PestProperties.PestControlData.MaxCompressionDimension = 1
   PestProperties.PestControlData.StoredZeroLimit.Value = 0.00000000000000000
   PestProperties.PestControlData.StoredInitalLambda.Value = 10.00000000000000000

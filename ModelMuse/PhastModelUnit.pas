@@ -10501,6 +10501,9 @@ const
 //                attempting to restore the default 2D view results in nothing
 //                happening instead of generating an error.
 
+//               Bug fix: Fixed bug that could cause an error when adding or
+//                removing PEST observations groups.
+
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const

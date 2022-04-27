@@ -7,6 +7,8 @@ uses
   Dialogs, VirtualTrees, StdCtrls;
 
 type
+  TCanCloseEvent = procedure(Sender: TObject; var CanClose: Boolean) of object;
+
   TfrmTree = class(TForm)
     procedure TreeEnter(Sender: TObject);
     procedure TreeLeave(Sender: TObject);
@@ -16,9 +18,11 @@ type
     procedure TreeMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
   private
+    FOnCanClose: TCanCloseEvent;
     { Private declarations }
   public
     StoredMouseDown: TMouseEvent;
+    property OnCanClose: TCanCloseEvent read FOnCanClose write FOnCanClose;
     { Public declarations }
   end;
 
@@ -61,6 +65,7 @@ procedure TfrmTree.TreeMouseDown(Sender: TObject;
 var
   ATree: TVirtualStringTree;
   HitInfo: THitInfo;
+  ShouldClose: Boolean;
 begin
   if Assigned(StoredMouseDown) then
   begin
@@ -70,7 +75,19 @@ begin
   ATree.GetHitTestInfoAt(X, Y, True, HitInfo);
   if (HitInfo.HitNode <> nil) and (hiOnItemLabel in HitInfo.HitPositions) then
   begin
-    ModalResult := mrOK;
+    if Assigned(OnCanClose) then
+    begin
+      ShouldClose := True;
+      OnCanClose(ATree, ShouldClose);
+      if ShouldClose then
+      begin
+        ModalResult := mrOK;
+      end;
+    end
+    else
+    begin
+      ModalResult := mrOK;
+    end;
   end;
 end;
 
