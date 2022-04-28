@@ -85,9 +85,6 @@ type
     procedure SetObsTypeIndex(Value: Integer); virtual; abstract;
     function GetObsTypeString: string; virtual; abstract;
     procedure SetObsTypeString(const Value: string); virtual; abstract;
-//    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
-//    function _AddRef: Integer; stdcall;
-//    function _Release: Integer; stdcall;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -456,18 +453,7 @@ end;
 procedure TCustomTimeObservationItem.SetTime(const Value: double);
 begin
   FStoredTime.Value := Value;
-//  SetRealProperty(FTime, Value);
 end;
-
-//function TCustomTimeObservationItem._AddRef: Integer;
-//begin
-//  result := -1;
-//end;
-
-//function TCustomTimeObservationItem._Release: Integer;
-//begin
-//  result := -1;
-//end;
 
 { TObsCompareItem }
 

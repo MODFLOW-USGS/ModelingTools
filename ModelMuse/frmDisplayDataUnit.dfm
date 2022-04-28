@@ -1294,7 +1294,9 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited udDataSets: TJvUpDown
               Left = 312
+              Width = 17
               ExplicitLeft = 312
+              ExplicitWidth = 17
             end
             inherited virttreecomboDataSets: TRbwStringTreeCombo
               Height = 26
@@ -2107,23 +2109,29 @@ inherited frmDisplayData: TfrmDisplayData
           end
           inherited tabGraph: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 421
+            ExplicitWidth = 570
+            ExplicitHeight = 432
             inherited pbObservations: TPaintBox
               Width = 570
-              Height = 351
+              Height = 334
               ExplicitWidth = 570
               ExplicitHeight = 351
             end
             inherited pnlGraphControls: TPanel
-              Top = 351
+              Top = 334
               Width = 570
-              ExplicitTop = 351
+              ExplicitTop = 334
               ExplicitWidth = 570
               inherited lblGraphInstructions: TLabel
-                Width = 128
-                Height = 36
-                ExplicitWidth = 128
-                ExplicitHeight = 36
+                Height = 18
+                ExplicitHeight = 18
+              end
+              inherited lblWhatToPlot: TLabel
+                Width = 82
+                ExplicitWidth = 82
+              end
+              inherited clbWhatToPlot: TCheckListBox
+                ItemHeight = 18
               end
             end
           end

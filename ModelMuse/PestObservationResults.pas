@@ -4,7 +4,7 @@ interface
 
 uses DataSetUnit, Graphics, GR32, Classes, System.SysUtils,
   Vcl.Dialogs, ObsInterfaceUnit, System.Generics.Collections, ScreenObjectUnit,
-  ZoomBox2, GoPhastTypes, GR32_Polygons;
+  ZoomBox2, GoPhastTypes, GR32_Polygons, PestObsUnit;
 
 type
   TDrawChoice = (dcResidual, dcWeightedResidual);
@@ -126,6 +126,7 @@ type
   TPestObsCollection = class(TPhastCollection)
   strict private
     FUsedObservations : TDictionary<string, IObservationItem>;
+    FGuidObs : TDictionary<string, IObservationItem>;
   private
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
     //
@@ -147,6 +148,7 @@ type
     FMaxObjectResidual: double;
     FMaxObjectWeightedResidual: double;
     FDrawChoice: TDrawChoice;
+//    FObsItemDictionary: TObsItemDictionary;
     procedure SetVisible(const Value: boolean);
     procedure SetFileDate(const Value: TDateTime);
     procedure SetFileName(const Value: string);
@@ -209,8 +211,8 @@ type
 implementation
 
 uses RbwParser, System.IOUtils, frmErrorsAndWarningsUnit, ModelMuseUtilities,
-  PestObsUnit, PhastModelUnit, frmGoPhastUnit, BigCanvasMethods, System.Math,
-  System.StrUtils;
+  PhastModelUnit, frmGoPhastUnit, BigCanvasMethods, System.Math,
+  System.StrUtils, ObservationComparisonsUnit;
 
 resourcestring
   StrTheFileFromWhich = 'The file from which you are attempting to read ' +
@@ -721,6 +723,7 @@ begin
 //  if FModel <> nil then
   begin
     FUsedObservations := TDictionary<string, IObservationItem>.Create;
+    FGuidObs := TDictionary<string, IObservationItem>.Create;
   end;
 
 //  FMaxLayerLimit.DataType := rdtInteger;
@@ -730,6 +733,7 @@ end;
 
 destructor TPestObsCollection.Destroy;
 begin
+  FGuidObs.Free;
   FUsedObservations.Free;
   FMinWeightedResidualLimit.Free;
   FMaxWeightedResidualLimit.Free;
@@ -897,13 +901,16 @@ var
   AnObs: TCustomObservationItem;
 begin
   FUsedObservations.Clear;
+  FGuidObs.Clear;
   TempList := TObservationInterfaceList.Create;
   try
     frmGoPhast.PhastModel.FillObsInterfaceItemList(TempList, True);
     FUsedObservations.Capacity := TempList.Count;
+    FGuidObs.Capacity := TempList.Count;
     for ObsIndex := 0 to TempList.Count - 1 do
     begin
       IObs := TempList[ObsIndex];
+      FGuidObs.Add(IObs.GUID, IObs);
       if IObs is TCustomObservationItem then
       begin
         AnObs := TCustomObservationItem(IObs);
@@ -954,6 +961,8 @@ var
   Index: Integer;
   AValue: Extended;
   ALine: string;
+  CompItem: TGlobalObsComparisonItem;
+  OtherObs: IObservationItem;
 begin
   GetExistingObservations;
   result := False;
@@ -1056,7 +1065,18 @@ begin
 
           if FUsedObservations.TryGetValue(LowerCase(Item.Name), Obs) then
           begin
-            Item.FScreenObject := Obs.ScreenObject as TScreenObject;
+            if Obs is TGlobalObsComparisonItem then
+            begin
+              CompItem := TGlobalObsComparisonItem(Obs);
+              if FGuidObs.TryGetValue(CompItem.Guid1, OtherObs) then
+              begin
+                Item.FScreenObject := OtherObs.ScreenObject as TScreenObject;
+              end;
+            end
+            else
+            begin
+              Item.FScreenObject := Obs.ScreenObject as TScreenObject;
+            end;
             if Item.FScreenObject <> nil then
             begin
               Item.ObjectName := Item.FScreenObject.Name;

@@ -14,13 +14,15 @@ uses
   JvColorBox, JvColorButton, frameDisplayLimitUnit, Vcl.Mask, JvExMask,
   JvToolEdit, QuadTreeClass, ObsInterfaceUnit, PestObservationResults,
   frmCustomGoPhastUnit, System.Generics.Collections, UndoItems,
-  ScreenObjectUnit, System.Generics.Defaults;
+  ScreenObjectUnit, System.Generics.Defaults, Vcl.CheckLst;
 
 type
   TUndoType = (utChange, utImport);
   TPestObsColumns = (pocName, pocGroup, pocObject, pocTime, pocMeasured,
     pocModeled, pocResidual, pocWeight, pocWtMeas, pocWtMod, pocWtRes,
     pocMeasSD, pocNaturalWeight, pocOriginalOrder);
+
+  TWhatToPlot = (wtpObservations, wtpPriorInformation);
 
   TCustomUndoChangePestObsResults = class(TCustomUndo)
   private
@@ -94,6 +96,8 @@ type
     rgGraphType: TRadioGroup;
     qtreeObservations: TRbwQuadTree;
     rgDrawChoice: TRadioGroup;
+    clbWhatToPlot: TCheckListBox;
+    lblWhatToPlot: TLabel;
     procedure flnmedHeadObsResultsChange(Sender: TObject);
     procedure btnCopyClick(Sender: TObject);
     procedure btnHightlightObjectsClick(Sender: TObject);
@@ -111,6 +115,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure btnRestoreClick(Sender: TObject);
     procedure rgDrawChoiceClick(Sender: TObject);
+    procedure clbWhatToPlotClickCheck(Sender: TObject);
   public
     procedure UpdateChildModels;
   protected
@@ -425,6 +430,11 @@ begin
 end;
 
 
+procedure TframePestObservationResults.clbWhatToPlotClickCheck(Sender: TObject);
+begin
+  PlotValues;
+end;
+
 constructor TframePestObservationResults.Create(Owner: TComponent);
 begin
   inherited;
@@ -515,9 +525,6 @@ var
   ObservedMax: Double;
   SimulatedMax: Double;
   SimValue: Double;
-//  HobDry: Double;
-//  HDry: Real;
-//  HNoFlow: Real;
   Initialized: Boolean;
   Min1To1: double;
   Max1To1: double;
@@ -571,6 +578,21 @@ begin
       for index := 0 to FObservations.Count - 1 do
       begin
         ObsItem := FObservations[index];
+        if ObsItem.ScreenObject = nil then
+        begin
+          if not clbWhatToPlot.Checked[Ord(wtpPriorInformation)] then
+          begin
+            Continue;
+          end;
+        end
+        else
+        begin
+          if not clbWhatToPlot.Checked[Ord(wtpObservations)] then
+          begin
+            Continue;
+          end;
+        end;
+
         if ObsItem.Measured < ObservedMin then
         begin
           ObservedMin := ObsItem.Measured
@@ -607,6 +629,12 @@ begin
             SimulatedMax := SimulatedMin;
           end;
         end;
+      end;
+
+      if SimList.Count = 0 then
+      begin
+        xycleargraph(pbObservations,clWhite,clBlack,1);
+        Exit;
       end;
 
       SimList.Sort(TComparer<TPestObsResult>.Construct(
@@ -893,6 +921,7 @@ procedure TframePestObservationResults.GetData;
 begin
   FGettingData := True;
   try
+    clbWhatToPlot.CheckAll(cbChecked);
     lblRMS.Caption := 'Root Mean Square Weighted Residual = ?';
     InitializeTableHeaders;
     if FObservations = nil then

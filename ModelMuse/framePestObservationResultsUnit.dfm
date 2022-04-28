@@ -33,7 +33,7 @@ object framePestObservationResults: TframePestObservationResults
     Top = 0
     Width = 555
     Height = 454
-    ActivePage = tabControls
+    ActivePage = tabGraph
     Align = alClient
     TabOrder = 1
     OnChange = pgcObservationsChange
@@ -718,13 +718,21 @@ object framePestObservationResults: TframePestObservationResults
         Align = alBottom
         ParentBackground = False
         TabOrder = 0
+        ExplicitLeft = 3
+        ExplicitTop = 326
         object lblGraphInstructions: TLabel
           Left = 279
           Top = 6
-          Width = 141
+          Width = 250
           Height = 13
           Caption = 'Click on a point to highlight it.'
-          WordWrap = True
+        end
+        object lblWhatToPlot: TLabel
+          Left = 279
+          Top = 30
+          Width = 105
+          Height = 18
+          Caption = 'What to plot'
         end
         object rgGraphType: TRadioGroup
           Left = 4
@@ -739,6 +747,18 @@ object framePestObservationResults: TframePestObservationResults
             'Weighted Residual vs. Observed')
           TabOrder = 0
           OnClick = rgGraphTypeClick
+        end
+        object clbWhatToPlot: TCheckListBox
+          Left = 279
+          Top = 48
+          Width = 194
+          Height = 40
+          OnClickCheck = clbWhatToPlotClickCheck
+          ItemHeight = 13
+          Items.Strings = (
+            'Observations'
+            'Prior Information')
+          TabOrder = 1
         end
       end
     end
