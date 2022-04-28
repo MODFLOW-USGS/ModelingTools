@@ -10503,6 +10503,9 @@ const
 
 //               Bug fix: Fixed bug that could cause an error when adding or
 //                removing PEST observations groups.
+//               Enhancement: Added an option to plot PEST direct observations,
+//                prior information, or both in the Data Visualization dialog
+//                box.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 

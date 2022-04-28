@@ -36,7 +36,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspObservationGroups
+    ActivePage = jvspPriorInfoObsGroups
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -1234,6 +1234,7 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitLeft = 1
           ExplicitWidth = 566
           ExplicitHeight = 402
         end
@@ -2167,6 +2168,7 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitLeft = 1
           ExplicitWidth = 566
           ExplicitHeight = 345
         end
@@ -3368,6 +3370,7 @@ inherited frmPEST: TfrmPEST
     end
   end
   object dlgOpenCovarianceMatrixFile: TOpenDialog
+    Filter = 'All Files|*.*'
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 62
     Top = 128

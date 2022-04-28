@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-01-24T16:05:32.042-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-04-27T21:13:02.684-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RmaMF6: Model Summary</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Model Summary</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODFLOW 6 model differs from </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Rocky_Mountain_Arsenal" styleclass="Normal" translate="true">the MODFLOW-2005 version of the model</link><text styleclass="Normal" translate="true"> by having a DISV grid. The DISV grid has a refined area around the extraction wells in the southern half of the model. The Ghost Node Correction package is used with the explicit option; the implicit option makes the model unstable. To use PEST with the model we will perform the following tasks.</text></para>
-    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Make a few small but important changes to the model.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Activate PEST.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Define parameters to use in the model.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Define parameter groups and assign parameters to them.</text></li>

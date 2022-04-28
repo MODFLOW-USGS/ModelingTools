@@ -9,9 +9,8 @@ inherited frmFormula: TfrmFormula
   ClientWidth = 769
   Font.Height = 16
   Position = poOwnerFormCenter
-  ExplicitWidth = 785
-  ExplicitHeight = 518
-  PixelsPerInch = 96
+  ExplicitWidth = 787
+  ExplicitHeight = 526
   TextHeight = 16
   object Splitter: TSplitter
     Left = 539
@@ -647,6 +646,7 @@ inherited frmFormula: TfrmFormula
       TabOrder = 1
       OnChange = tvItemsChange
       OnDblClick = tvItemsDblClick
+      OnMouseDown = tvItemsMouseDown
     end
   end
   object Timer: TTimer

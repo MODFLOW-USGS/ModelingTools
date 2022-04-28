@@ -188,6 +188,8 @@ many will be displayed at one time. }
     procedure jreFormulaMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure jreFormulaSelectionChange(Sender: TObject);
+    procedure tvItemsMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     // See @link(DataSetGroupName)
     FDataSetGroupName: string;
@@ -1457,6 +1459,20 @@ begin
     begin
       InsertText(String(TMf6TimeSeries(AnObject).SeriesName));
     end;
+  end;
+end;
+
+procedure TfrmFormula.tvItemsMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  HitInfo: THitTests;
+begin
+  inherited;
+  HitInfo := tvItems.GetHitTestInfoAt(X, Y);
+  if (htOnLabel in HitInfo) and (tvItems.Selected <> nil)
+    and (tvItems.Selected.Count > 0) then
+  begin
+    tvItems.Selected.Expanded := not tvItems.Selected.Expanded ;
   end;
 end;
 

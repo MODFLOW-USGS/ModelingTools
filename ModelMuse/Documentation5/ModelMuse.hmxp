@@ -11,11 +11,11 @@
         <export-tasks>
           <export-task name="Publish as CHM" format="CHM">
             <task-config-group name="settings">
-              <task-config-value name="outputfile">.\chm\.chm</task-config-value>
+              <task-config-value name="outputfile">.\chm\ModelMuse.chm</task-config-value>
               <task-config-value name="skin">CHM_LightBlue.hmskin</task-config-value>
               <task-config-value name="deletetemp">1</task-config-value>
               <task-config-value name="make0include">CHM,ALLMODELS</task-config-value>
-              <task-config-value name="make0status">*</task-config-value>
+              <task-config-value name="make0status">(Complete)</task-config-value>
             </task-config-group>
           </export-task>
           <export-task name="Publish as HTM" format="HTM">
@@ -24,6 +24,17 @@
               <task-config-value name="skin">Modern_Standard_Gentle_Blue_WebHelp.hmskin</task-config-value>
               <task-config-value name="make3include">HTML,ALLMODELS</task-config-value>
               <task-config-value name="make3status">*</task-config-value>
+            </task-config-group>
+          </export-task>
+          <export-task name="Publish as PDF" format="PDF">
+            <task-config-group name="settings">
+              <task-config-value name="outputfile">WashintonClass2022_Exercise1.pdf</task-config-value>
+              <task-config-value name="template">13WashSympWorkshop_Exercise1_Minimalist_BlackBlue.mnl</task-config-value>
+              <task-config-value name="highlighthotspots">0</task-config-value>
+              <task-config-value name="exportcomments">0</task-config-value>
+              <task-config-value name="exportcommentsdate">36526</task-config-value>
+              <task-config-value name="make4include">CLASS2022</task-config-value>
+              <task-config-value name="make4status">(Complete)</task-config-value>
             </task-config-group>
           </export-task>
         </export-tasks>
@@ -142,12 +153,15 @@
         <config-value name="USER1">Class Exercise</config-value>
         <config-value name="USER2">User defined 2</config-value>
         <config-value name="USER3">User defined 3</config-value>
+        <config-value name="CLASS2022">CLASS2022</config-value>
       </config-group>
       <config-value name="imageshortcuts_includebaggage">1</config-value>
       <config-value name="make0include">CHM,ALLMODELS</config-value>
-      <config-value name="make0status">*</config-value>
+      <config-value name="make0status">(Complete)</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">*</config-value>
+      <config-value name="make4include">CLASS2022</config-value>
+      <config-value name="make4status">(Complete)</config-value>
     </config-group>
     <config-group name="hlp">
       <config-value name="citation" translate="true"></config-value>
@@ -166,7 +180,7 @@
       <config-value name="hhp" translate="true"></config-value>
       <config-value name="hhcwindowstyles">8388645</config-value>
       <config-value name="usesecondarywindows">1</config-value>
-      <config-value name="outputfile">.\chm\.chm</config-value>
+      <config-value name="outputfile">.\chm\ModelMuse.chm</config-value>
       <config-value name="deletetemp">1</config-value>
       <config-value name="skin">CHM_LightBlue.hmskin</config-value>
     </config-group>
@@ -528,7 +542,7 @@ document.write('</frameset>');
       <config-value name="layoutthreeframe">0</config-value>
     </config-group>
     <config-group name="pdf">
-      <config-value name="template">ModelMuseManual.mnl</config-value>
+      <config-value name="template">13WashSympWorkshop_Exercise1_Minimalist_BlackBlue.mnl</config-value>
       <config-value name="style">0</config-value>
       <config-value name="createoutline">1</config-value>
       <config-value name="createhotspots">1</config-value>
@@ -556,7 +570,10 @@ document.write('</frameset>');
       <config-value name="cidfontmode">0</config-value>
       <config-value name="newfontsubsetting">1</config-value>
       <config-value name="textasglyphs">0</config-value>
-      <config-value name="outputfile">ModelMuse.pdf</config-value>
+      <config-value name="outputfile">WashintonClass2022_Exercise1.pdf</config-value>
+      <config-value name="highlighthotspots">0</config-value>
+      <config-value name="exportcomments">0</config-value>
+      <config-value name="exportcommentsdate">36526</config-value>
     </config-group>
     <config-group name="rtf">
       <config-value name="papersize">A4 210 x 297 mm</config-value>
@@ -627,6 +644,15 @@ document.write('</frameset>');
           <config-value name="lastexport">0</config-value>
         </config-group>
       </config-group>
+    </config-group>
+    <config-group name="print">
+      <config-value name="include">CLASS2022</config-value>
+      <config-value name="template">13WashSympWorkshop_Minimalist_BlackBlue.mnl</config-value>
+      <config-value name="colortext">0</config-value>
+      <config-value name="insertseealso">0</config-value>
+      <config-value name="insertseealsostyle">-1</config-value>
+      <config-value name="printoptions">0</config-value>
+      <config-value name="printoptionscutmarks">0</config-value>
     </config-group>
     <variables>
       <variable id="HEADDEPENDANTFLUXDESC" type="text" translate="true">In head dependant flux boundaries, the rate of flow from the boundary into or out of the groundwater varies in response to changes in head in the boundary cell.</variable>
@@ -1836,6 +1862,7 @@ document.write('</frameset>');
       <helpcontext-number href="Vertical_Subdivision" value="3959"/>
       <helpcontext-number href="Vertices_Tab" value="2200"/>
       <helpcontext-number href="View" value="2260"/>
+      <helpcontext-number href="View#ShorOrHideGrid" value="4331"/>
       <helpcontext-number href="Viewing_Model_Results2" value="3456"/>
       <helpcontext-number href="Visualize_Residuals" value="4287"/>
       <helpcontext-number href="Visualizing_Data" value="3000"/>
