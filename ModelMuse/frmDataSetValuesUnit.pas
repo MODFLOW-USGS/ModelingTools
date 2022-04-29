@@ -380,7 +380,14 @@ begin
           Lines.Add(StringBuilder.ToString);
         end;
       end;
-      Lines.SaveToFile(dlgSave.FileName);
+      try
+        Lines.SaveToFile(dlgSave.FileName);
+      except on E: EFCreateError do
+        begin
+          Beep;
+          MessageDlg(E.message, mtError, [mbOK], 0);
+        end;
+      end;
     finally
       StringBuilder.Free;
       Lines.Free;

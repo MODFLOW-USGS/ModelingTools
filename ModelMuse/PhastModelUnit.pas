@@ -2472,6 +2472,7 @@ that affects the model output should also have a comment. }
     procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections);
       virtual; abstract;
     function GetGwtUsed: Boolean;
+    procedure FixSutraMeshEdge;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -10500,18 +10501,19 @@ const
 //               Bug fix: If no grid has been defined in a structured grid model
 //                attempting to restore the default 2D view results in nothing
 //                happening instead of generating an error.
-
-//               Bug fix: Fixed bug that could cause an error when adding or
+//     '5.0.0.8' Bug fix: Fixed bug that could cause an error when adding or
 //                removing PEST observations groups.
 //               Enhancement: Added an option to plot PEST direct observations,
 //                prior information, or both in the Data Visualization dialog
 //                box.
+//               Bug Fix: Fixed bug that could sometimes cause interior edges
+//                of SUTRA meshes to be treated like the edge of the mesh.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.7';
+  IIModelVersion = '5.0.0.8';
 
 function IModelVersion: string;
 begin
@@ -20927,6 +20929,12 @@ begin
   begin
     PestProperties.ArrayPilotPointSelection := appsRectangular;
     PestProperties.PilotPointBuffer := PestProperties.PilotPointSpacing * Sqrt(2);
+  end;
+
+  if FileVersionEqualOrEarlier('5.0.0.7')
+    and (ModelSelection in SutraSelection) then
+  begin
+    FixSutraMeshEdge;
   end;
 
   // prevent rounding errors in saved files from being used.
@@ -32237,6 +32245,85 @@ procedure TCustomModel.GenerateFishNetMesh(var ErrorMessage: string);
 begin
 end;
 
+procedure TCustomModel.FixSutraMeshEdge;
+var
+  Edges: TRbwQuadTree;
+  ElementIndex: Integer;
+  AnElement: TSutraElement2D;
+  Node1: TSutraNode2D;
+  NodeIndex: Integer;
+  Node2: TSutraNode2D;
+  LowerNumber: double;
+  HigherNumber: double;
+  LowerNodeList: TList;
+  HigherNodeList: TList;
+  LowNode: TSutraNode2D;
+  HighNode: TSutraNode2D;
+  DataArray: TPointerArray;
+begin
+  Edges := TRbwQuadtree.Create(nil);
+  LowerNodeList := TList.Create;
+  HigherNodeList := TList.Create;
+  try
+    Edges.XMin := 0;
+    Edges.YMin := 0;
+    Edges.XMax := SutraMesh.Mesh2D.Nodes.Count;
+    Edges.YMax := SutraMesh.Mesh2D.Nodes.Count;
+    for ElementIndex := 0 to SutraMesh.Mesh2D.Elements.Count - 1 do
+    begin
+      AnElement := SutraMesh.Mesh2D.Elements[ElementIndex];
+      Node1 := AnElement.Nodes[3].Node;
+      for NodeIndex := 0 to AnElement.Nodes.Count - 1 do
+      begin
+        Node2 := AnElement.Nodes[NodeIndex].Node;
+        if Node1.EdgeNode and Node2.EdgeNode then
+        begin
+          if Node1.Number < Node2.Number then
+          begin
+            LowNode := Node1;
+            HighNode := Node2;
+          end
+          else
+          begin
+            LowNode := Node2;
+            HighNode := Node1;
+          end;
+          LowerNodeList.Add(LowNode);
+          HigherNodeList.Add(HighNode);
+          LowerNumber := LowNode.Number;
+          HigherNumber := HighNode.Number;
+          Edges.AddPoint(LowerNumber, HigherNumber, nil);
+        end;
+        Node1 := Node2;
+      end;
+    end;
+    for NodeIndex := 0 to LowerNodeList.Count - 1 do
+    begin
+      LowNode := LowerNodeList[NodeIndex];
+      HighNode := HigherNodeList[NodeIndex];
+      LowNode.NodeType := ntInner;
+      HighNode.NodeType := ntInner;
+    end;
+    for NodeIndex := 0 to LowerNodeList.Count - 1 do
+    begin
+      LowNode := LowerNodeList[NodeIndex];
+      HighNode := HigherNodeList[NodeIndex];
+      LowerNumber := LowNode.Number;
+      HigherNumber := HighNode.Number;
+      Edges.FindClosestPointsData(LowerNumber, HigherNumber, DataArray);
+      if Length(DataArray) = 1 then
+      begin
+        LowNode.NodeType := ntEdge;
+        HighNode.NodeType := ntEdge;
+      end;
+    end;
+  finally
+    HigherNodeList.Free;
+    LowerNodeList.Free;
+    Edges.Free;
+  end;
+end;
+
 procedure TCustomModel.GenerateSutraMesh(var ErrorMessage: string);
 var
   MeshGenControls: TMeshGenerationControls;
@@ -32266,6 +32353,9 @@ begin
       else
         Assert(False);
     end;
+
+    FixSutraMeshEdge;
+
     DataArrayManager.UpdateDataSetDimensions;
     if (frmMeshInformation <> nil) and frmMeshInformation.Visible then
     begin

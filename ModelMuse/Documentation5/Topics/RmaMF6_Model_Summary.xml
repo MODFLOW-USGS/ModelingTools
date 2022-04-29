@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-04-27T21:13:02.684-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-04-29T11:16:12.164-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RmaMF6: Model Summary</title>
   <body>
     <header>
@@ -23,5 +23,6 @@
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Visualize weighted residuals.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Visualize the modified model input.</text></li>
     </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The estimated time required to complete this exercise is 1 to 3 hours but the time required can be greatly affected by the speed at which the model runs on the computer used for the exercise.</text></para>
   </body>
 </topic>

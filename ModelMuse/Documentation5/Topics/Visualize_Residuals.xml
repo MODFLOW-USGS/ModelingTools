@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-04-27T22:29:34.905-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-04-29T09:58:24.536-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Visualize Residuals</title>
   <body>
     <header>
@@ -8,6 +8,5 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">PEST prints the weighted residuals and other information from the run with the best fit in a .res file. Data from this file can be plotted on the top view of the model or in a graph using the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Observation_Results_Pane" styleclass="Normal" translate="true">PEST Observation Results</link><text styleclass="Normal" translate="true"> pane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Visualization_Dialog_Box" styleclass="Normal" translate="true">Data Visualization</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Data|Data Visualization</text><text styleclass="Normal" translate="true"> and select the PEST Observation Results pane. Select the .res file for the model and click the Apply button and the weighted residuals will be plotted on the top view of the model as shown in the first figure below. Only observations associated with a single object that has a single vertex will be plotted. Weighted residuals for prior information equations are not plotted. In addition, the Graphs tab can show plots of simulated values, residuals, or weighted residuals vs. observed values. Ideally, the weighted residuals should be equally distributed on each side of the zero line on the graph as shown in the second figure below. The simulated values should all lie close to the 1:1 line of simulated vs observed as shown in the third figure below.</text></para>
-    <para styleclass="" style="text-align:left; text-indent:48px; margin-top:8px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:2.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
   </body>
 </topic>

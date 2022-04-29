@@ -2521,26 +2521,39 @@ begin
           begin
             AScreenObject := NewScreenObjects[Index];
             AScreenObject.Free;
-//            if not AScreenObject.Deleted then
-//            begin
-//              AScreenObject.Deleted := True;
-//            end;
           end;
 
           frmGoPhast.PhastModel.DataArrayManager.HandleDeletedDataArrays(FAllNewDataSets);
           raise
         end;
+        on E: EFOpenError do
+        begin
+          Beep;
+          MessageDlg(E.message, mtError, [mbOK], 0);
+          for Index := 0 to NewScreenObjects.Count - 1 do
+          begin
+            AScreenObject := NewScreenObjects[Index];
+            AScreenObject.Free;
+          end;
+
+          frmGoPhast.PhastModel.DataArrayManager.HandleDeletedDataArrays(FAllNewDataSets);
+          FreeAndNil(Undo)
+        end;
+
       end;
 
-      Undo.StoreNewScreenObjects(NewScreenObjects);
-      Undo.StoreNewDataSets(FAllNewDataSets);
-      Undo.DisplayChoice := DisplayChoice;
-      Undo.DisplayDataSet := FColorContourDataArray;
-      frmGoPhast.BeginSuppressDrawing;
-      try
-        frmGoPhast.UndoStack.Submit(Undo)
-      finally
-        frmGoPhast.EndSupressDrawing;
+      if Undo <> nil then
+      begin
+        Undo.StoreNewScreenObjects(NewScreenObjects);
+        Undo.StoreNewDataSets(FAllNewDataSets);
+        Undo.DisplayChoice := DisplayChoice;
+        Undo.DisplayDataSet := FColorContourDataArray;
+        frmGoPhast.BeginSuppressDrawing;
+        try
+          frmGoPhast.UndoStack.Submit(Undo)
+        finally
+          frmGoPhast.EndSupressDrawing;
+        end;
       end;
     except
       Undo.Free;
