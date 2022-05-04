@@ -211,6 +211,7 @@ var
   SIGMAS: Double;
   RHOS: Double;
 begin
+  { TODO -cSUTRA4 : This data set is omitted in SUTRA 4 }
   WriteCommentLine('Data set 10');
   COMPMA := FOptions.MatrixCompressibility;
 
@@ -253,6 +254,11 @@ var
   CHI1: double;
   CHI2: double;
 begin
+  { TODO -cSUTRA4 : There can now be multiple regions each with their own Data sets 11A to 11E }
+  { TODO -cSUTRA4 : NPMREG, the number of regions, is the only thing in data set 11. }
+  // Implement as a series of Panes either in the SUTRA Options dialog box or a separate dialog box.
+  // Give each set of data a name that could be used as a global variable
+  // to specify node and element region numbers.
   WriteCommentLine('Data set 11');
   case FOptions.TransportChoice of
     tcSolute, tcSoluteHead:
@@ -312,6 +318,7 @@ var
   PRODF1: Double;
   PRODS1: Double;
 begin
+  { TODO -cSUTRA4 : This data set is not used in SUTRA 4. }
   WriteCommentLine('Data set 12');
   PRODFØ := FOptions.ZeroFluidProduction;
   PRODSØ := FOptions.ZeroImmobileProduction;
@@ -370,6 +377,9 @@ const
   SCALZ = 1.;
   PORFAC = 1.;
 begin
+  { TODO -cSUTRA4 :
+COMPMAF, CSF, RHOSF, PRODFØF, PRODSØF, PRODF1F, PRODS1F, and PRODI0F
+have been added. in SUTRA 4 }
   WriteCommentLine('Data set 14A');
   WriteString('''NODE'' ');
   WriteFloat(SCALX);
@@ -417,6 +427,9 @@ var
         WriteFloat(NodeData.Y);
         WriteFloat(NodeData.Z);
         WriteFloat(NodeData.Porosity);
+        { TODO -cSUTRA4 :
+Input variables COMPMA, CS, RHOS, PRODLØ, PRODSØ, PRODL1, PRODS1, and PRODI0
+have been added in SUTRA 4. }
         NewLine;
       end;
     end;
@@ -673,6 +686,7 @@ const
   ATMIDF = 1.;
   ATMINF = 1.;
 begin
+  { TODO -cSUTRA4 : Input variables SIGMASF and SIGMAAF have been added. }
   WriteCommentLine('Data set 15A');
   WriteString('''ELEMENT'' ');
   WriteFloat(PMAXFA);
@@ -784,6 +798,7 @@ var
           WriteFloat(ElData.ATMID);
         end;
         WriteFloat(ElData.ATMIN);
+        { TODO -cSUTRA4 : Input variables SIGMAS and SIGMAA been added. }
         NewLine;
         case FMesh.MeshType of
           mt2D, mtProfile:
@@ -1404,12 +1419,14 @@ begin
       Assert(False);
   end;
   WriteFloat(COMPFL);
+  { TODO -cSUTRA4 : CW, SIGMAW, RHOWØ, URHOWØ, and DRWDU renamed CL , SIGMAL, RHOWØ, URHOLØ, and DRLDU. }
   WriteFloat(CW);
   WriteFloat(SIGMAW);
   WriteFloat(RHOWØ);
   WriteFloat(URHOWØ);
   WriteFloat(DRWDU);
   WriteFloat(VISCØ);
+  { TODO -cSUTRA4 : COMPI, CI, SIGMAI, and RHOI have been added for FREEZING simulations }
   NewLine;
 end;
 
@@ -1798,6 +1815,9 @@ begin
   else
     Assert(False);
   end;
+  { TODO -cSUTRA4 : Add new option: "FREEZING TRANSPORT" }
+  // If the model version is less than 4, use ENERGY TRANSPORT if
+  // FREEZING TRANSPORT is selected.
   case FOptions.TransportChoice of
     tcSolute, tcSoluteHead:
       SIMULA := SIMULA + ' SOLUTE TRANSPORT''';
@@ -2266,6 +2286,7 @@ begin
   begin
     WriteString(' ''S'' ');
   end;
+  { TODO -cSUTRA4 : Add new option: "L" and "I" for liquid and ice saturation respectively. }
   WriteString(' ''-''');
   NewLine;
 end;
@@ -2301,6 +2322,7 @@ begin
       WriteString('''VZ'' ');
     end;
   end;
+  { TODO -cSUTRA4 : Add new options: "qX", "qY", and "qZ" for Darcy velocity components. }
   WriteString(' ''-''');
   NewLine;
 end;

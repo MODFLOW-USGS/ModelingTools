@@ -1782,7 +1782,12 @@ end;
 
 procedure TRealCollection.SetInitialValue(const Value: Real);
 begin
-  FInitialValue := Value;
+ if FInitialValue <> Value then
+ begin
+   FInitialValue := Value;
+   InvalidateModel;
+ end;
+
 end;
 
 procedure TRealCollection.SetItems(Index: Integer; const Value:TRealItem );

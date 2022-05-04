@@ -12410,6 +12410,10 @@ begin
         FrontScreenObjectsChanged := True;
         frame3DView.SetDefaultOrientation;
         InvalidateAllViews;
+        if frmMeshInformation <> nil then
+        begin
+          frmMeshInformation.GetData;
+        end;
       finally
         Screen.Cursor := crDefault;
       end;
