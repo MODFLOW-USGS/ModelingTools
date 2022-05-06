@@ -638,16 +638,19 @@ begin
     NewLine;
   end;
 
-  if FUzfPackage.UnsatET = uuecWaterContent then
+  if FUzfPackage.SimulateET then
   begin
-    WriteString('  UNSAT_ETWC');
-    NewLine;
-  end;
+    if FUzfPackage.UnsatET = uuecWaterContent then
+    begin
+      WriteString('  UNSAT_ETWC');
+      NewLine;
+    end;
 
-  if FUzfPackage.UnsatET = uuecCapillaryPressure then
-  begin
-    WriteString('  UNSAT_ETAE');
-    NewLine;
+    if FUzfPackage.UnsatET = uuecCapillaryPressure then
+    begin
+      WriteString('  UNSAT_ETAE');
+      NewLine;
+    end;
   end;
 
   WriteTimeSeriesFiles(FInputFileName);
@@ -916,7 +919,9 @@ var
   ReceiverComparer: IEqualityComparer<TMvrReceiverKey>;
   ReceiverDictionary: TDictionary<TMvrReceiverKey, TUzfCellList>;
   CellListIndex: Integer;
+  SimulateET: Boolean;
 begin
+  SimulateET :=FUzfPackage.SimulateET;
   if MvrWriter <> nil then
   begin
     MoverWriter := MvrWriter as TModflowMvrWriter;
@@ -995,7 +1000,14 @@ begin
                 WriteString('  ');
                 WriteInteger(FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex]);
                 WriteValueOrFormula(UzfCell, UzfMf6InfiltrationPosition);
-                WriteValueOrFormula(UzfCell, UzfMf6PotentialETPosition);
+                if SimulateET then
+                begin
+                  WriteValueOrFormula(UzfCell, UzfMf6PotentialETPosition);
+                end
+                else
+                begin
+                  WriteFloat(0);
+                end;
                 WriteValueOrFormula(UzfCell, UzfMf6ExtinctionDepthPosition);
                 WriteValueOrFormula(UzfCell, UzfMf6ExtinctionWaterContentPosition);
                 WriteValueOrFormula(UzfCell, UzfMf6AirEntryPotentialPosition);

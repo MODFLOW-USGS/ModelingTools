@@ -85,6 +85,11 @@ type
     procedure WriteDataSet9;
     procedure WriteDataSet10;
     procedure WriteDataSet11;
+    procedure WriteDataSet11A(ARegion: TRegionalProperty);
+    procedure WriteDataSet11B(ARegion: TRegionalProperty);
+    procedure WriteDataSet11C(ARegion: TRegionalProperty);
+    procedure WriteDataSet11D(ARegion: TRegionalProperty);
+    procedure WriteDataSet11E(ARegion: TRegionalProperty);
     procedure WriteDataSet12;
     procedure WriteDataSet13;
     procedure WriteDataSet14A;
@@ -211,7 +216,10 @@ var
   SIGMAS: Double;
   RHOS: Double;
 begin
-  { TODO -cSUTRA4 : This data set is omitted in SUTRA 4 }
+  if Model.ModelSelection = msSutra40 then
+  begin
+    Exit;
+  end;
   WriteCommentLine('Data set 10');
   COMPMA := FOptions.MatrixCompressibility;
 
@@ -253,62 +261,325 @@ var
   ADSMOD: AnsiString;
   CHI1: double;
   CHI2: double;
+  RegionIndex: Integer;
+  NR: Integer;
+  ARegion: TRegionalProperty;
 begin
   { TODO -cSUTRA4 : There can now be multiple regions each with their own Data sets 11A to 11E }
   { TODO -cSUTRA4 : NPMREG, the number of regions, is the only thing in data set 11. }
   // Implement as a series of Panes either in the SUTRA Options dialog box or a separate dialog box.
   // Give each set of data a name that could be used as a global variable
   // to specify node and element region numbers.
-  WriteCommentLine('Data set 11');
-  case FOptions.TransportChoice of
-    tcSolute, tcSoluteHead:
-      begin
-        ADSMOD := '';
-        CHI1 := 0.;
-        CHI2 := 0.;
-        case FOptions.SorptionModel of
-          smNone:
-            begin
-              ADSMOD := '''NONE'' ';
-              CHI1 := 0.;
-              CHI2 := 0.;
-            end;
-          smLinear:
-            begin
-              ADSMOD := '''LINEAR'' ';
-              CHI1 := FOptions.FirstDistributionCoefficient;
-              CHI2 := 0.;
-            end;
-          smFreundlich:
-            begin
-              ADSMOD := '''FREUNDLICH'' ';
-              CHI1 := FOptions.FirstDistributionCoefficient;
-              CHI2 := FOptions.SecondDistributionCoefficient;
-            end;
-          smLangmuir:
-            begin
-              ADSMOD := '''LANGMUIR'' ';
-              CHI1 := FOptions.FirstDistributionCoefficient;
-              CHI2 := FOptions.SecondDistributionCoefficient;
-            end;
-          else
-            Assert(False);
-        end;
-        WriteString(ADSMOD);
-        if FOptions.SorptionModel <> smNone then
+  if Model.ModelSelection = msSutra40 then
+  begin
+    WriteCommentLine('Data set 11');
+    WriteInteger(FOptions.RegionalProperties.Count);
+    WriteString('  # NPMREG');
+    NewLine;
+    for RegionIndex := 0 to FOptions.RegionalProperties.Count - 1 do
+    begin
+      NR := RegionIndex + 1;
+      WriteInteger(NR);
+      WriteCommentLine(' # NR');
+      NewLine;
+
+      ARegion := FOptions.RegionalProperties[RegionIndex];
+      WriteDataSet11A(ARegion);
+      WriteDataSet11B(ARegion);
+      WriteDataSet11C(ARegion);
+      WriteDataSet11D(ARegion);
+      WriteDataSet11E(ARegion);
+    end;
+  end
+  else
+  begin
+    WriteCommentLine('Data set 11');
+    case FOptions.TransportChoice of
+      tcSolute, tcSoluteHead:
         begin
-          WriteFloat(CHI1);
-          WriteFloat(CHI2);
+          ADSMOD := '';
+          CHI1 := 0.;
+          CHI2 := 0.;
+          case FOptions.SorptionModel of
+            smNone:
+              begin
+                ADSMOD := '''NONE'' ';
+                CHI1 := 0.;
+                CHI2 := 0.;
+              end;
+            smLinear:
+              begin
+                ADSMOD := '''LINEAR'' ';
+                CHI1 := FOptions.FirstDistributionCoefficient;
+                CHI2 := 0.;
+              end;
+            smFreundlich:
+              begin
+                ADSMOD := '''FREUNDLICH'' ';
+                CHI1 := FOptions.FirstDistributionCoefficient;
+                CHI2 := FOptions.SecondDistributionCoefficient;
+              end;
+            smLangmuir:
+              begin
+                ADSMOD := '''LANGMUIR'' ';
+                CHI1 := FOptions.FirstDistributionCoefficient;
+                CHI2 := FOptions.SecondDistributionCoefficient;
+              end;
+            else
+              Assert(False);
+          end;
+          WriteString(ADSMOD);
+          if FOptions.SorptionModel <> smNone then
+          begin
+            WriteFloat(CHI1);
+            WriteFloat(CHI2);
+          end;
         end;
-      end;
-    tcEnergy:
-      begin
-        ADSMOD := '''NONE''';
-        WriteString(ADSMOD);
-      end;
-    else Assert(False);
+      tcEnergy:
+        begin
+          ADSMOD := '''NONE''';
+          WriteString(ADSMOD);
+        end;
+      else Assert(False);
+    end;
+    NewLine;
+  end;
+end;
+
+procedure TSutraInputWriter.WriteDataSet11A(ARegion: TRegionalProperty);
+var
+  AbsorbptionProperties: TAbsorbptionProperties;
+begin
+  AbsorbptionProperties := ARegion.AbsorbptionProperties;
+  if FOptions.TransportChoice in [tcSolute, tcSoluteHead] then
+  begin
+    case AbsorbptionProperties.AdsorptionModel of
+      smNone:
+        begin
+          WriteString('''NONE'' ');
+          WriteString(' # DATASET 11a: ADSMOD');
+        end;
+      smLinear:
+        begin
+          WriteString('''LINEAR'' ');
+          WriteFloat(AbsorbptionProperties.FirstDistributionCoefficient);
+          WriteFloat(AbsorbptionProperties.SecondDistributionCoefficient);
+          WriteString(' # DATASET 11a: ADSMOD CHI1, CHI2');
+        end;
+      smFreundlich:
+        begin
+          WriteString('''FREUNDLICH'' ');
+          WriteFloat(AbsorbptionProperties.FirstDistributionCoefficient);
+          WriteFloat(AbsorbptionProperties.SecondDistributionCoefficient);
+          WriteString(' # DATASET 11a: ADSMOD CHI1, CHI2');
+        end;
+      smLangmuir:
+        begin
+          WriteString('''LANGMUIR'' ');
+          WriteFloat(AbsorbptionProperties.FirstDistributionCoefficient);
+          WriteFloat(AbsorbptionProperties.SecondDistributionCoefficient);
+          WriteString(' # DATASET 11a: ADSMOD CHI1, CHI2');
+        end;
+      else
+        Assert(False);
+    end;
+  end
+  else
+  begin
+    Assert(FOptions.TransportChoice in [tcEnergy, tcFreezing]);
+    case AbsorbptionProperties.ThermalConductivityModel of
+      tcmAritnmetic:
+        begin
+          WriteString('''ARITHM'' ');
+        end;
+      tcmGeometric:
+        begin
+          WriteString('''GEOMET'' ');
+        end;
+      tcmHarmonic:
+        begin
+          WriteString('''HARMON'' ');
+        end;
+      else
+        Assert(False);
+    end;
+    WriteString(' # DATASET 11a: TCMOD');
   end;
   NewLine;
+end;
+
+procedure TSutraInputWriter.WriteDataSet11B(ARegion: TRegionalProperty);
+var
+  WaterSaturationProperties: TWaterSaturationProperties;
+  Index: Integer;
+begin
+  if (FOptions.TransportChoice = tcFreezing)
+    or (FOptions.SaturationChoice = scUnsaturated) then
+  begin
+     WaterSaturationProperties := ARegion.WaterSaturationProperties;
+     case WaterSaturationProperties.WaterSaturationChoice of
+       wscNone:
+         begin
+           WriteString('''NONE'' ');
+           WriteString(' # DATASET 11B: SWMOD');
+         end;
+       wscVanGenuchten:
+         begin
+           WriteString('''VGEN'' ');
+           WriteFloat(WaterSaturationProperties.VanGenuchtenAlpha);
+           WriteFloat(WaterSaturationProperties.VanGenuchtenExponent);
+           WriteString(' # DATASET 11B: SWMOD AA VN');
+         end;
+       wscBrooksCorey:
+         begin
+           WriteString('''BCOR'' ');
+           WriteFloat(WaterSaturationProperties.ResidualWaterContent);
+           WriteFloat(WaterSaturationProperties.AirEntryPressure);
+           WriteFloat(WaterSaturationProperties.PoreSizeDistributionIndex);
+           WriteString(' # DATASET 11B: SWMOD SWRES PENT RLAMB');
+         end;
+       wscPiecewiseLinear:
+         begin
+           WriteString('''PLIN'' ');
+           WriteFloat(WaterSaturationProperties.ResidualWaterContent);
+           WriteFloat(WaterSaturationProperties.AirEntryPressure);
+           WriteFloat(WaterSaturationProperties.PressureForResidualWaterContent);
+           WriteString(' # DATASET 11B: SWMOD SWRES PENT PSWRES');
+         end;
+       wscUserDefined:
+         begin
+           WriteString('''UDEF'' ');
+           WriteInteger(WaterSaturationProperties.FunctionParameters.Count);
+           for Index := 0 to WaterSaturationProperties.FunctionParameters.Count - 1 do
+           begin
+             WriteFloat(WaterSaturationProperties.FunctionParameters[Index].Value);
+           end;
+           WriteString(' # DATASET 11B: SWMOD NSWPAR SWPAR(0..N)');
+         end;
+       else
+         Assert(False);
+     end;
+     NewLine;
+  end;
+end;
+
+procedure TSutraInputWriter.WriteDataSet11C(ARegion: TRegionalProperty);
+var
+  RelativePermeabilityParameters: TRelativePermeabilityParameters;
+  Index: Integer;
+begin
+  if (FOptions.TransportChoice = tcFreezing)
+    or (FOptions.SaturationChoice = scUnsaturated) then
+  begin
+    RelativePermeabilityParameters := ARegion.RelativePermeabilityParameters;
+    case RelativePermeabilityParameters.RelativePermeabilityChoice of
+      rpcNone:
+        begin
+          WriteString('''NONE'' ');
+          WriteString(' # DATASET 11C: RKMOD');
+        end;
+      rpcVanGenuchten:
+        begin
+          WriteString('''VGEN'' ');
+          WriteFloat(RelativePermeabilityParameters.RelativePermParam);
+          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
+          WriteString(' # DATASET 11C: RKMOD, VN, RKMIN');
+        end;
+      rpcBrooksCorey:
+        begin
+          WriteString('''BCOR'' ');
+          WriteFloat(RelativePermeabilityParameters.PoreSizeDistributionIndex);
+          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
+          WriteString(' # DATASET 11C: RKMOD, RLAMB, RKMIN');
+        end;
+      rpcPiecewiseLinear:
+        begin
+          WriteString('''PLIN'' ');
+          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
+          WriteString(' # DATASET 11C: RKMOD, RKMIN');
+        end;
+      rpcUserDefined:
+        begin
+          WriteString('''UDEF'' ');
+          WriteInteger(RelativePermeabilityParameters.FunctionParameters.Count);
+          for Index := 0 to RelativePermeabilityParameters.FunctionParameters.Count - 1 do
+          begin
+            WriteFloat(RelativePermeabilityParameters.FunctionParameters[Index].Value);
+          end;
+          WriteString(' # DATASET 11C: RKMOD NRKPAR RKPAR(0..N)');
+        end;
+      else
+        Assert(False);
+    end;
+    NewLine;
+  end;
+end;
+
+procedure TSutraInputWriter.WriteDataSet11D(ARegion: TRegionalProperty);
+var
+  LiquidWaterSaturationParameters: TLiquidWaterSaturationParameters;
+  Index: Integer;
+begin
+  if (FOptions.TransportChoice = tcFreezing) then
+  begin
+    LiquidWaterSaturationParameters := ARegion.LiquidWaterSaturationParameters;
+    case LiquidWaterSaturationParameters.LiquidWaterSaturationChoice of
+      lwscNone:
+        begin
+          WriteString('''NONE'' ');
+          WriteString(' # DATASET 11D: SLMOD');
+        end;
+      lwscExponential:
+        begin
+          WriteString('''EXPO’'' ');
+          WriteFloat(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation);
+          WriteFloat(LiquidWaterSaturationParameters.ExponentialParameter);
+          WriteString(' # DATASET 11D: SLMOD, SLSATRES, W');
+        end;
+      lwscPowerLaw:
+        begin
+          WriteString('''POWR'' ');
+          WriteFloat(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation);
+          WriteFloat(LiquidWaterSaturationParameters.PowerLawAlpha);
+          WriteFloat(LiquidWaterSaturationParameters.PowerLawBeta);
+          WriteString(' # DATASET 11D: SLMOD, SLSATRES, W');
+        end;
+      lwscPiecewiseLinear:
+        begin
+          WriteString('''PLIN'' ');
+          WriteFloat(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation);
+          WriteFloat(LiquidWaterSaturationParameters.TempAtResidualLiquidWaterSaturation);
+          WriteString(' # DATASET 11D: SLMOD, SLSATRES, TLRES');
+        end;
+      lwscUserDefined:
+        begin
+          WriteString('''UDEF'' ');
+          WriteInteger(LiquidWaterSaturationParameters.FunctionParameters.Count);
+          for Index := 0 to LiquidWaterSaturationParameters.FunctionParameters.Count - 1 do
+          begin
+            WriteFloat(LiquidWaterSaturationParameters.FunctionParameters[Index].Value);
+          end;
+          WriteString(' # DATASET 11D: SLMOD NRKPAR SLPAR(0..N)');
+        end;
+      else
+        Assert(False);
+    end;
+    NewLine;
+  end;
+end;
+
+procedure TSutraInputWriter.WriteDataSet11E(ARegion: TRegionalProperty);
+var
+  FreezingTempAndLatentHeat: TFreezingTempAndLatentHeat;
+begin
+  if (FOptions.TransportChoice = tcFreezing) then
+  begin
+    FreezingTempAndLatentHeat := ARegion.FreezingTempAndLatentHeat;
+    WriteFloat(FreezingTempAndLatentHeat.MaxFreezePoreWaterTemperature);
+    WriteFloat(FreezingTempAndLatentHeat.LatentHeatOfFusion);
+    WriteString(' # DATASET 11DE: TFREEZ, HTLAT');
+    NewLine;
+  end;
 end;
 
 procedure TSutraInputWriter.WriteDataSet12;
@@ -318,7 +589,10 @@ var
   PRODF1: Double;
   PRODS1: Double;
 begin
-  { TODO -cSUTRA4 : This data set is not used in SUTRA 4. }
+  if Model.ModelSelection = msSutra40 then
+  begin
+    Exit;
+  end;
   WriteCommentLine('Data set 12');
   PRODFØ := FOptions.ZeroFluidProduction;
   PRODSØ := FOptions.ZeroImmobileProduction;

@@ -740,7 +740,8 @@ uses
   Modflow6TimeSeriesCollectionsUnit in 'Modflow6TimeSeriesCollectionsUnit.pas',
   ModflowMf6TimeSeriesWriterUnit in 'ModflowMf6TimeSeriesWriterUnit.pas',
   PilotPointCovarinceFileWriterUnit in 'PilotPointCovarinceFileWriterUnit.pas',
-  frmNewVideoUnit in 'frmNewVideoUnit.pas' {frmNewVideos};
+  frmNewVideoUnit in 'frmNewVideoUnit.pas' {frmNewVideos},
+  frameSutraRegionalPropertyUnit in 'frameSutraRegionalPropertyUnit.pas' {frameSutraRegionalProperty: TFrame};
 
 {$R *.res}
 

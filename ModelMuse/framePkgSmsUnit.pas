@@ -88,7 +88,7 @@ resourcestring
   StrOption = 'Option';
   StrOverride = 'Override';
   StrValue = 'Value';
-  StrOuterHClose = 'Outer HClose';
+  StrOuterHClose = 'Outer DVClose';
   StrOuterMaximumIterat = 'Outer maximum iterations';
   StrUnderrelaxationSch = 'Under-relaxation scheme';
   StrUnderRelaxationThe = 'Under relaxation theta';
@@ -100,7 +100,7 @@ resourcestring
   StrBacktrackingReducti = 'Backtracking reduction factor';
   StrBacktrackingResidua = 'Backtracking residual limit';
   StrInnerMaximumIterat = 'Inner maximum iterations';
-  StrInnerHClose = 'Inner HClose';
+  StrInnerHClose = 'Inner DVClose';
   StrInnerRClose = 'Inner RClose';
   StrLinearAcceleration = 'Linear acceleration';
   StrPreconditionerLevel = 'Preconditioner levels';

@@ -10508,12 +10508,17 @@ const
 //                box.
 //               Bug Fix: Fixed bug that could sometimes cause interior edges
 //                of SUTRA meshes to be treated like the edge of the mesh.
+//     '5.0.0.9' Bug fix: ModelMuse now only exports the UNSAT_ETWC or
+//                UNSAT_ETAE options in the MODFLOW 6 UZF package if
+//                evapotranspiration is simulated. In addition, the ET rate
+//                in the MODFLOW 6 UZF package is automatically set to zero
+//                if evapotranspiration is not simulated.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.8';
+  IIModelVersion = '5.0.0.9';
 
 function IModelVersion: string;
 begin

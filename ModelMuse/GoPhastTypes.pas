@@ -283,7 +283,7 @@ type
   // The type of model should never be set to msUndefined.
   TModelSelection = (msUndefined, msPhast, msModflow, msModflowLGR,
     msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp, msSutra22,
-    msSutra30, msFootPrint, msModflow2015);
+    msSutra30, msSutra40, msFootPrint, msModflow2015);
 
   TPestParamMethod = (ppmMultiply, ppmAdd);
 
@@ -315,7 +315,7 @@ const
     msModflowFmp, msModflowCfp, msModflow2015];
   Modflow2005Selection =  [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
     msModflowFmp, msModflowCfp];
-  SutraSelection = [msSutra22, msSutra30];
+  SutraSelection = [msSutra22, msSutra30, msSutra40];
   ModelsWithGrid  = [msPhast, msModflow, msModflowLGR, msModflowLGR2,
     msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint, msModflow2015];
   HighGradient = 0.01;

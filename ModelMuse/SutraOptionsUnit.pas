@@ -6,7 +6,7 @@ uses
   GoPhastTypes, Classes, SysUtils;
 
 type
-  TTransportChoice = (tcSolute, tcSoluteHead, tcEnergy);
+  TTransportChoice = (tcSolute, tcSoluteHead, tcEnergy, tcFreezing);
   TSaturationChoice = (scSaturated, scUnsaturated);
   TSimulationType = (stSteadyFlowSteadyTransport,
     stSteadyFlowTransientTransport, stTransientFlowTransientTransport);
@@ -21,7 +21,7 @@ type
   TThermalConductivityModel = (tcmAritnmetic, tcmGeometric, tcmHarmonic);
   TWaterSaturationChoice = (wscNone, wscVanGenuchten , wscBrooksCorey,
     wscPiecewiseLinear, wscUserDefined);
-  TRelativePermeabilityChoice = (rpcNone, rpcVanGenuchten , rpcBrooksCorey,
+  TRelativePermeabilityChoice = (rpcNone, rpcVanGenuchten, rpcBrooksCorey,
     rpcPiecewiseLinear, rpcUserDefined);
   TLiquidWaterSaturationChoice = (lwscNone, lwscExponential, lwscPowerLaw,
     lwscPiecewiseLinear, lwscUserDefined);
@@ -46,6 +46,7 @@ type
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    procedure SetInitialValues;
     // CHI1
     property FirstDistributionCoefficient: double
       read GetFirstDistributionCoefficient
@@ -107,6 +108,7 @@ type
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    procedure SetInitialValues;
     // AA
     property VanGenuchtenAlpha: Double read GetVanGenuchtenAlpha
       write SetVanGenuchtenAlpha;
@@ -184,6 +186,7 @@ type
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    procedure SetInitialValues;
     // VN
     property RelativePermParam: Double read GetRelativePermParam
       write SetRelativePermParam;
@@ -198,6 +201,7 @@ type
       read GetWaterSaturationAtMinPermeability
       write SetWaterSaturationAtMinPermeability;
   published
+    // RKMOD
     property RelativePermeabilityChoice: TRelativePermeabilityChoice
       read FRelativePermeabilityChoice write SetRelativePermeabilityChoice;
     // VN
@@ -252,6 +256,7 @@ type
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    procedure SetInitialValues;
     // SLSATRES
     property ResidualLiquidWaterSaturation: Double
       read GetResidualLiquidWaterSaturation
@@ -269,19 +274,28 @@ type
       write SetTempAtResidualLiquidWaterSaturation;
   published
     // SLMOD
-    property LiquidWaterSaturationChoice: TLiquidWaterSaturationChoice read FLiquidWaterSaturationChoice write SetLiquidWaterSaturationChoice;
+    property LiquidWaterSaturationChoice: TLiquidWaterSaturationChoice
+      read FLiquidWaterSaturationChoice write SetLiquidWaterSaturationChoice;
     // SLSATRES
-    property StoredResidualLiquidWaterSaturation: TRealStorage read FStoredResidualLiquidWaterSaturation write SetStoredResidualLiquidWaterSaturation;
+    property StoredResidualLiquidWaterSaturation: TRealStorage
+      read FStoredResidualLiquidWaterSaturation
+      write SetStoredResidualLiquidWaterSaturation;
     // W
-    property StoredExponentialParameter: TRealStorage read FStoredExponentialParameter write SetStoredExponentialParameter;
+    property StoredExponentialParameter: TRealStorage
+      read FStoredExponentialParameter write SetStoredExponentialParameter;
     // ALPHA
-    property StoredPowerLawAlpha: TRealStorage read FStoredPowerLawAlpha write SetStoredPowerLawAlpha;
+    property StoredPowerLawAlpha: TRealStorage read FStoredPowerLawAlpha
+      write SetStoredPowerLawAlpha;
     // BETA
-    property StoredPowerLawBeta: TRealStorage read FStoredPowerLawBeta write SetStoredPowerLawBeta;
+    property StoredPowerLawBeta: TRealStorage read FStoredPowerLawBeta
+      write SetStoredPowerLawBeta;
     // TLRES
-    property StoredTempAtResidualLiquidWaterSaturation: TRealStorage read FStoredTempAtResidualLiquidWaterSaturation write SetStoredTempAtResidualLiquidWaterSaturation;
+    property StoredTempAtResidualLiquidWaterSaturation: TRealStorage
+      read FStoredTempAtResidualLiquidWaterSaturation
+      write SetStoredTempAtResidualLiquidWaterSaturation;
     // NSLPAR, SLPAR
-    property FunctionParameters: TRealCollection read FFunctionParameters write SetFunctionParameters;
+    property FunctionParameters: TRealCollection read FFunctionParameters
+      write SetFunctionParameters;
   end;
 
   // SUTRA 4 data set 11E
@@ -299,6 +313,7 @@ type
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    procedure SetInitialValues;
     // TFREEZ
     property MaxFreezePoreWaterTemperature: Double
       read GetMaxFreezePoreWaterTemperature
@@ -308,9 +323,12 @@ type
       write SetLatentHeatOfFusion;
   published
     // TFREEZ
-    property StoredMaxFreezePoreWaterTemperature: TRealStorage read FStoredMaxFreezePoreWaterTemperature write SetStoredMaxFreezePoreWaterTemperature;
+    property StoredMaxFreezePoreWaterTemperature: TRealStorage
+      read FStoredMaxFreezePoreWaterTemperature
+      write SetStoredMaxFreezePoreWaterTemperature;
     // HTLAT
-    property StoredLatentHeatOfFusion: TRealStorage read FStoredLatentHeatOfFusion write SetStoredLatentHeatOfFusion;
+    property StoredLatentHeatOfFusion: TRealStorage
+      read FStoredLatentHeatOfFusion write SetStoredLatentHeatOfFusion;
   end;
 
   TRegionalProperty = class(TPhastCollectionItem)
@@ -334,11 +352,18 @@ type
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
   published
-    property AbsorbptionProperties: TAbsorbptionProperties read FAbsorbptionProperties write SetAbsorbptionProperties;
-    property WaterSaturationProperties: TWaterSaturationProperties read FWaterSaturationProperties write SetWaterSaturationProperties;
-    property RelativePermeabilityParameters: TRelativePermeabilityParameters read FRelativePermeabilityParameters write SetRelativePermeabilityParameters;
-    property LiquidWaterSaturationParameters: TLiquidWaterSaturationParameters read FLiquidWaterSaturationParameters write SetLiquidWaterSaturationParameters;
-    property FreezingTempAndLatentHeat: TFreezingTempAndLatentHeat read FFreezingTempAndLatentHeat write SetFreezingTempAndLatentHeat;
+    property AbsorbptionProperties: TAbsorbptionProperties
+      read FAbsorbptionProperties write SetAbsorbptionProperties;
+    property WaterSaturationProperties: TWaterSaturationProperties
+      read FWaterSaturationProperties write SetWaterSaturationProperties;
+    property RelativePermeabilityParameters: TRelativePermeabilityParameters
+      read FRelativePermeabilityParameters
+      write SetRelativePermeabilityParameters;
+    property LiquidWaterSaturationParameters: TLiquidWaterSaturationParameters
+      read FLiquidWaterSaturationParameters
+      write SetLiquidWaterSaturationParameters;
+    property FreezingTempAndLatentHeat: TFreezingTempAndLatentHeat
+      read FFreezingTempAndLatentHeat write SetFreezingTempAndLatentHeat;
   end;
 
   TRegionalProperties = class(TPhastCollection)
@@ -347,7 +372,8 @@ type
     procedure SetItems(Index: Integer; const Value: TRegionalProperty);
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent);
-    property Items[Index: Integer]: TRegionalProperty read GetItems write SetItems;
+    procedure Initialize;
+    property Items[Index: Integer]: TRegionalProperty read GetItems write SetItems; default;
   end;
 
   TSutraLakeOptions = class(TGoPhastPersistent)
@@ -590,6 +616,7 @@ type
     FReadStart: TReadStart;
     FLakeOptions: TSutraLakeOptions;
     FPestAnisotropyOptions: TSutraPestAnisotropyOptions;
+    FRegionalProperties: TRegionalProperties;
     procedure SetTransportChoice(const Value: TTransportChoice);
     procedure SetSaturationChoice(const Value: TSaturationChoice);
     procedure SetTitleLines(const Value: AnsiString);
@@ -707,6 +734,7 @@ type
     procedure SetLakeOptions(const Value: TSutraLakeOptions);
     procedure SetPestAnisotropyOptions(
       const Value: TSutraPestAnisotropyOptions);
+    procedure SetRegionalProperties(const Value: TRegionalProperties);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -971,7 +999,14 @@ type
       write SetLakeOptions;
     property PestAnisotropyOptions: TSutraPestAnisotropyOptions
       read FPestAnisotropyOptions write SetPestAnisotropyOptions;
+    property RegionalProperties: TRegionalProperties read FRegionalProperties
+      write SetRegionalProperties
+    {$IFNDEF SUTRA4}
+      stored False
+    {$ENDIF}
+      ;
   end;
+
 
 
 implementation
@@ -1048,6 +1083,7 @@ begin
     // SimulationType := SourceOptions.SimulationType;
     // SimulationType := SourceOptions.SimulationType;
     // SimulationType := SourceOptions.SimulationType;
+    RegionalProperties  := SourceOptions.RegionalProperties;
   end
   else
   begin
@@ -1145,10 +1181,12 @@ begin
   FStoredZeroImmobileProduction.OnChange := ValueChanged;
   FStoredFirstImmobileProduction.OnChange := ValueChanged;
 
+  FRegionalProperties := TRegionalProperties.Create(ValueChanged);
 end;
 
 destructor TSutraOptions.Destroy;
 begin
+  FRegionalProperties.Free;
   FPestAnisotropyOptions.Free;
   FLakeOptions.Free;
 
@@ -1418,6 +1456,7 @@ begin
 
   FLakeOptions.Initialize;
   FPestAnisotropyOptions.Initialize;
+  RegionalProperties.Initialize;
 end;
 
 procedure TSutraOptions.SetBaseFluidDensity(const Value: double);
@@ -1576,6 +1615,11 @@ end;
 procedure TSutraOptions.SetReadStartRestartFileName(const Value: string);
 begin
   FullReadStartRestartFileName := Value;
+end;
+
+procedure TSutraOptions.SetRegionalProperties(const Value: TRegionalProperties);
+begin
+  FRegionalProperties.Assign(Value);
 end;
 
 procedure TSutraOptions.SetFullReadStartRestartFileName(Value: string);
@@ -2314,8 +2358,9 @@ end;
 constructor TAbsorbptionProperties.Create(InvalidateModelEvent: TNotifyEvent);
 begin
   inherited;
-  FStoredFirstDistributionCoefficient.Create(InvalidateModelEvent);
-  FStoredSecondDistributionCoefficient.Create(InvalidateModelEvent);
+  FStoredFirstDistributionCoefficient := TRealStorage.Create(InvalidateModelEvent);
+  FStoredSecondDistributionCoefficient := TRealStorage.Create(InvalidateModelEvent);
+  SetInitialValues
 end;
 
 destructor TAbsorbptionProperties.Destroy;
@@ -2349,6 +2394,14 @@ procedure TAbsorbptionProperties.SetFirstDistributionCoefficient(
   const Value: double);
 begin
   StoredFirstDistributionCoefficient.Value := Value;
+end;
+
+procedure TAbsorbptionProperties.SetInitialValues;
+begin
+  AdsorptionModel := smNone;
+  FirstDistributionCoefficient := 0;
+  SecondDistributionCoefficient := 0;
+  ThermalConductivityModel := tcmAritnmetic;
 end;
 
 procedure TAbsorbptionProperties.SetSecondDistributionCoefficient(
@@ -2414,6 +2467,7 @@ begin
   FStoredPoreSizeDistributionIndex := TRealStorage.Create(InvalidateModelEvent);
   FStoredPressureForResidualWaterContent := TRealStorage.Create(InvalidateModelEvent);
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
+  SetInitialValues;
 end;
 
 destructor TWaterSaturationProperties.Destroy;
@@ -2468,6 +2522,26 @@ procedure TWaterSaturationProperties.SetFunctionParameters(
   const Value: TRealCollection);
 begin
   FFunctionParameters.Assign(Value);
+end;
+
+procedure TWaterSaturationProperties.SetInitialValues;
+begin
+    // SWRES
+  WaterSaturationChoice := wscNone;
+    // AA
+  VanGenuchtenAlpha := 0.1;
+    // VN
+  VanGenuchtenExponent := -0.5;
+    // SWRES
+  ResidualWaterContent := 0.05;
+  // PENT
+  AirEntryPressure := 0;
+    // RLAMB
+  PoreSizeDistributionIndex := 0;
+  // PSWRES(usually negative)
+  PressureForResidualWaterContent := 0;
+  // NSWPAR, SWPAR
+  FunctionParameters.Clear;
 end;
 
 procedure TWaterSaturationProperties.SetPoreSizeDistributionIndex(
@@ -2576,6 +2650,7 @@ begin
   FStoredPoreSizeDistributionIndex := TRealStorage.Create(InvalidateModelEvent);
   FStoredWaterSaturationAtMinPermeability := TRealStorage.Create(InvalidateModelEvent);
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
+  SetInitialValues;
 end;
 
 destructor TRelativePermeabilityParameters.Destroy;
@@ -2601,20 +2676,6 @@ end;
 function TRelativePermeabilityParameters.GetRelativePermParam: Double;
 begin
   result := StoredRelativePermParam.Value;
-{
-    property RelativePermeabilityChoice: TRelativePermeabilityChoice read FRelativePermeabilityChoice write SetRelativePermeabilityChoice;
-    // VN
-    property StoredRelativePermParam: TRealStorage read FStoredRelativePermParam write SetStoredRelativePermParam;
-    // RKMIN
-    property StoredMinRelativePerm: TRealStorage read FStoredMinRelativePerm write SetStoredMinRelativePerm;
-    // RLAMB
-    property StoredPoreSizeDistributionIndex: TRealStorage read FStoredPoreSizeDistributionIndex write SetStoredPoreSizeDistributionIndex;
-    // SLRKMIN
-    property StoredWaterSaturationAtMinPermeability: TRealStorage read FStoredWaterSaturationAtMinPermeability write SetStoredWaterSaturationAtMinPermeability;
-    // NRKPAR, RKPAR
-    property FunctionParameters: TRealCollection read FFunctionParameters write SetFunctionParameters;
-}
-
 end;
 
 function TRelativePermeabilityParameters.GetWaterSaturationAtMinPermeability: Double;
@@ -2626,6 +2687,16 @@ procedure TRelativePermeabilityParameters.SetFunctionParameters(
   const Value: TRealCollection);
 begin
   FFunctionParameters.Assign(Value)
+end;
+
+procedure TRelativePermeabilityParameters.SetInitialValues;
+begin
+  RelativePermeabilityChoice := rpcNone;
+  RelativePermParam := 0;
+  MinRelativePerm := 1E-3;
+  PoreSizeDistributionIndex := 0;
+  WaterSaturationAtMinPermeability := 1E-2;
+  FunctionParameters.Clear;
 end;
 
 procedure TRelativePermeabilityParameters.SetMinRelativePerm(
@@ -2720,6 +2791,7 @@ begin
   FStoredPowerLawBeta := TRealStorage.Create(InvalidateModelEvent) ;
   FStoredTempAtResidualLiquidWaterSaturation := TRealStorage.Create(InvalidateModelEvent);
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
+  SetInitialValues;
 end;
 
 destructor TLiquidWaterSaturationParameters.Destroy;
@@ -2768,6 +2840,24 @@ procedure TLiquidWaterSaturationParameters.SetFunctionParameters(
   const Value: TRealCollection);
 begin
   FFunctionParameters.Assign(Value);
+end;
+
+procedure TLiquidWaterSaturationParameters.SetInitialValues;
+begin
+    // SLMLOD
+  LiquidWaterSaturationChoice := lwscNone;
+    // SLSATRES
+  ResidualLiquidWaterSaturation := 1E-2;
+  // W
+  ExponentialParameter := 0;
+  // ALPHA
+  PowerLawAlpha := 0;
+  // BETA
+  PowerLawBeta := 0;
+  // TLRES
+  TempAtResidualLiquidWaterSaturation := -2;
+  // NSLPAR, SLPAR
+  FunctionParameters.Clear;
 end;
 
 procedure TLiquidWaterSaturationParameters.SetLiquidWaterSaturationChoice(
@@ -2857,6 +2947,7 @@ begin
   inherited;
   FStoredMaxFreezePoreWaterTemperature := TRealStorage.Create(InvalidateModelEvent);
   FStoredLatentHeatOfFusion := TRealStorage.Create(InvalidateModelEvent);
+  SetInitialValues;
 end;
 
 destructor TFreezingTempAndLatentHeat.Destroy;
@@ -2874,6 +2965,14 @@ end;
 function TFreezingTempAndLatentHeat.GetMaxFreezePoreWaterTemperature: Double;
 begin
   Result := StoredMaxFreezePoreWaterTemperature.Value;
+end;
+
+procedure TFreezingTempAndLatentHeat.SetInitialValues;
+begin
+  // TFREEZ
+  MaxFreezePoreWaterTemperature := 0;
+  // HTLAT
+  LatentHeatOfFusion := 3.34E5;
 end;
 
 procedure TFreezingTempAndLatentHeat.SetLatentHeatOfFusion(const Value: double);
@@ -2983,6 +3082,12 @@ end;
 function TRegionalProperties.GetItems(Index: Integer): TRegionalProperty;
 begin
   result := inherited Items[Index] as TRegionalProperty;
+end;
+
+procedure TRegionalProperties.Initialize;
+begin
+  Clear;
+  Add;
 end;
 
 procedure TRegionalProperties.SetItems(Index: Integer;

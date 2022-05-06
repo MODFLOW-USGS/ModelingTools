@@ -2446,6 +2446,7 @@ var
   AScreenObject: TScreenObject;
   Index: Integer;
 begin
+  DisplayChoice := dcNone;
   FColorContourDataArray := nil;
   if (dlgOpenSutraFile.FilterIndex <> 7) then
   begin

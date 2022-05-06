@@ -2240,6 +2240,7 @@ begin
   TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(TimeList.Count = Count);
 
+  ChemSpeciesCount := 0;
   if LocalModel.GwtUsed then
   begin
     ChemSpeciesCount := LocalModel.MobileComponents.Count;
@@ -3113,7 +3114,10 @@ begin
               result := FValues.EvapConcentrations.ValuePestSeriesMethods[SpeciesIndex];
             end;
           else
-            Assert(False);
+            begin
+              Result := inherited;
+              Assert(False);
+            end;
         end;
       end;
   end;
