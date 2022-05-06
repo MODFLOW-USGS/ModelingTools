@@ -4,9 +4,8 @@ inherited frmSutraOptions: TfrmSutraOptions
   Caption = 'SUTRA Options'
   ClientHeight = 562
   ClientWidth = 784
-  ExplicitWidth = 800
-  ExplicitHeight = 601
-  PixelsPerInch = 96
+  ExplicitWidth = 802
+  ExplicitHeight = 609
   TextHeight = 18
   object splttrVertical: TJvNetscapeSplitter
     Left = 179
@@ -1427,8 +1426,6 @@ inherited frmSutraOptions: TfrmSutraOptions
       HelpType = htKeyword
       HelpKeyword = 'Anisotropy_Pane'
       Caption = 'jvspAnisotropy'
-      ExplicitLeft = -4
-      ExplicitTop = 1
       object gbAnisotropy: TGroupBox
         Left = 0
         Top = 0
@@ -1437,7 +1434,6 @@ inherited frmSutraOptions: TfrmSutraOptions
         Align = alClient
         Caption = 'Anisotropy option during parameter estimation'
         TabOrder = 0
-        ExplicitLeft = -4
         object cbAnisoPmaxPmid: TCheckBox
           Left = 16
           Top = 32

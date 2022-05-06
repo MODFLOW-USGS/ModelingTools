@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-05-06T10:29:57.527-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">IMS variable values for the available complexity options</title>
   <body>
     <header>
@@ -23,7 +23,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="height:28px;">
-          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">OUTER_HCLOSE</text></para>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">OUTER_DVCLOSE</text></para>
         </td>
         <td style="height:28px;">
           <para styleclass="Table Cell" style="text-align:center;"><text styleclass="Table Cell" translate="true">0.001</text></para>

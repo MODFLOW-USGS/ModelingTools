@@ -1144,6 +1144,8 @@ begin
   FStoredZeroImmobileProduction := TRealStorage.Create;
   FStoredFirstImmobileProduction := TRealStorage.Create;
 
+  FRegionalProperties := TRegionalProperties.Create(ValueChanged);
+
   Initialize;
 
   FStoredTransportCriterion.OnChange := ValueChanged;
@@ -1181,7 +1183,6 @@ begin
   FStoredZeroImmobileProduction.OnChange := ValueChanged;
   FStoredFirstImmobileProduction.OnChange := ValueChanged;
 
-  FRegionalProperties := TRegionalProperties.Create(ValueChanged);
 end;
 
 destructor TSutraOptions.Destroy;

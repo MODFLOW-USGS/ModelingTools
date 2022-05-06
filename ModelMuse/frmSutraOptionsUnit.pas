@@ -8,7 +8,8 @@ uses System.UITypes,
   SutraOptionsUnit, SutraMeshUnit, ComCtrls, JvExComCtrls,
   JvPageListTreeView, JvPageList, JvExControls, Mask, JvExMask, JvToolEdit,
   JvSpin, JvEditorCommon, JvEditor, ArgusDataEntry, RequiredDataSetsUndoUnit,
-  JvExExtCtrls, JvNetscapeSplitter, Vcl.ImgList, RbwController;
+  JvExExtCtrls, JvNetscapeSplitter, Vcl.ImgList, RbwController,
+  frameSutraRegionalPropertyUnit;
 
 type
   TfrmSutraOptions = class(TfrmCustomGoPhast)
@@ -236,6 +237,7 @@ resourcestring
   StrDefaultLakeBoundar = 'Lake-Boundary Interactions';
   StrLakesCanOnlyBeUs = 'Lakes can only be used with 3D models.';
   StrAnisotropy = 'Anisotropy';
+  StrRegionalProperties = 'Regional Properties';
 
 {$R *.dfm}
 
@@ -393,10 +395,20 @@ begin
   Node.PageIndex := jvspSolverControls.PageIndex;
   Node := jvpltvNavigation.Items.Add(nil, StrFluidProperties) as TJvPageIndexNode;
   Node.PageIndex := jvspFluidProperties.PageIndex;
-  Node := jvpltvNavigation.Items.Add(nil, StrSolidMatrixAdsorp) as TJvPageIndexNode;
-  Node.PageIndex := jvspSolidAdsorption.PageIndex;
-  Node := jvpltvNavigation.Items.Add(nil, StrProduction) as TJvPageIndexNode;
-  Node.PageIndex := jvspProdGrav.PageIndex;
+
+  if frmGoPhast.ModelSelection in [msSutra22, msSutra30] then
+  begin
+    Node := jvpltvNavigation.Items.Add(nil, StrSolidMatrixAdsorp) as TJvPageIndexNode;
+    Node.PageIndex := jvspSolidAdsorption.PageIndex;
+    Node := jvpltvNavigation.Items.Add(nil, StrProduction) as TJvPageIndexNode;
+    Node.PageIndex := jvspProdGrav.PageIndex;
+  end
+  else
+  begin
+    Node := jvpltvNavigation.Items.Add(nil, StrRegionalProperties) as TJvPageIndexNode;
+    { TODO -cSUTRA4 : Have it link to the first child }
+    Node.PageIndex := -1;
+  end;
 
   // Lakes are available in SUTRA 3.0 and above.
   if frmGoPhast.ModelSelection <> msSutra22 then
