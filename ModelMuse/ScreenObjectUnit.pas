@@ -5360,8 +5360,6 @@ procedure GlobalRemoveScreenObjectDataArraySubscription(Sender: TObject; Subject
 procedure GlobalRestoreScreenObjectDataArraySubscription(Sender: TObject; Subject: TObject;
   const AName: string);
 
-procedure GlobalDummyHandleSubscription(Sender: TObject; Subject: TObject;
-  const AName: string);
 procedure GlobalRemoveElevationSubscription(Sender: TObject; Subject: TObject;
   const AName: string);
 procedure GlobalRestoreElevationSubscription(Sender: TObject; Subject: TObject;
@@ -12781,12 +12779,6 @@ begin
     Observer.TalksTo(FBottomElevSubscription);
     Observer.TalksTo(self);
   end;
-end;
-
-procedure GlobalDummyHandleSubscription(Sender: TObject; Subject: TObject;
-  const AName: string);
-begin
-  // do nothing
 end;
 
 procedure GlobalRemoveElevationSubscription(Sender: TObject; Subject: TObject;

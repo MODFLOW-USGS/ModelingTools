@@ -147,6 +147,11 @@ type
     // or a formula to be evaluated by EnhancedTemplateProcessor
     procedure WriteDataArrayValueOrFormula(DataArray: TDataArray;
       Layer, Row, Col: Integer);
+    // Write a formula for EnhancedTemplateProcessor or write a value
+    // based on an identified parameter or PEST-modified data set.
+    // If Layer < 0, only parameters will be used, not data sets.
+    procedure WriteFormulaOrValueBasedOnAPestName(const PestName: string;
+      Value: double; Layer, Row, Column: Integer);
   public
     function GwtFileName(const AFileName: string; SpeciesIndex: Integer): string;
     // @name converts AFileName to use the correct extension for the file.
@@ -293,11 +298,6 @@ end;
     procedure WriteValueOrFormula(Cell: TValueCell; Index: integer;
       FixedLength: Integer = 0; ChangeSign: Boolean = False);
 
-    // Write a formula for EnhancedTemplateProcessor or write a value
-    // based on an identified parameter or PEST-modified data set.
-    // If Layer < 0, only parameters will be used, not data sets.
-    procedure WriteFormulaOrValueBasedOnAPestName(const PestName: string;
-      Value: double; Layer, Row, Column: Integer);
     procedure WritePestFormulaOrValue(const PestName, PestSeriesName: string;
       PestMethod: TPestParamMethod; Value: double);
   public
@@ -9774,7 +9774,7 @@ begin
   end;
 end;
 
-procedure TCustomModflowWriter.WriteFormulaOrValueBasedOnAPestName(
+procedure TCustomFileWriter.WriteFormulaOrValueBasedOnAPestName(
   const PestName: string; Value: double; Layer, Row, Column: Integer);
 var
   Param: TModflowSteadyParameter;

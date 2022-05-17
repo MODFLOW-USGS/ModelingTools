@@ -3,7 +3,7 @@ unit SutraOptionsUnit;
 interface
 
 uses
-  GoPhastTypes, Classes, SysUtils;
+  GoPhastTypes, Classes, SysUtils, FormulaManagerUnit;
 
 type
   TTransportChoice = (tcSolute, tcSoluteHead, tcEnergy, tcFreezing);
@@ -27,19 +27,23 @@ type
     lwscPiecewiseLinear, lwscUserDefined);
 
   // SUTRA 4 data set 11A
-  TAdsorptionProperties = class(TGoPhastPersistent)
+  TCustomSutraPersistent = class(TGoPhastPersistent)
+  protected
+    function CreateFormulaObject: TFormulaObject;
+    procedure ChangeFormula(const Value: string; var AField: TFormulaObject);
+  end;
+
+  TAdsorptionProperties = class(TCustomSutraPersistent)
   private
     FThermalConductivityModel: TThermalConductivityModel;
     FAdsorptionModel: TSorptionModel;
-    FStoredFirstDistributionCoefficient: TRealStorage;
-    FStoredSecondDistributionCoefficient: TRealStorage;
-    function GetFirstDistributionCoefficient: double;
-    function GetSecondDistributionCoefficient: double;
+    FFirstDistributionCoefficient: TFormulaObject;
+    FSecondDistributionCoefficient: TFormulaObject;
+    function GetFirstDistributionCoefficient: string;
+    function GetSecondDistributionCoefficient: string;
     procedure SetAdsorptionModel(const Value: TSorptionModel);
-    procedure SetFirstDistributionCoefficient(const Value: double);
-    procedure SetSecondDistributionCoefficient(const Value: double);
-    procedure SetStoredFirstDistributionCoefficient(const Value: TRealStorage);
-    procedure SetStoredSecondDistributionCoefficient(const Value: TRealStorage);
+    procedure SetFirstDistributionCoefficient(const Value: string);
+    procedure SetSecondDistributionCoefficient(const Value: string);
     procedure SetThermalConductivityModel(
       const Value: TThermalConductivityModel);
   public
@@ -47,288 +51,202 @@ type
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
-    // CHI1
-    property FirstDistributionCoefficient: double
-      read GetFirstDistributionCoefficient
-      write SetFirstDistributionCoefficient;
-    // CHI2
-    property SecondDistributionCoefficient: double
-      read GetSecondDistributionCoefficient
-      write SetSecondDistributionCoefficient;
   published
     // ADSMOD
     property AdsorptionModel: TSorptionModel read FAdsorptionModel
       write SetAdsorptionModel;
     // CHI1
-    property StoredFirstDistributionCoefficient: TRealStorage
-      read FStoredFirstDistributionCoefficient
-      write SetStoredFirstDistributionCoefficient;
+    property FirstDistributionCoefficient: string
+      read GetFirstDistributionCoefficient
+      write SetFirstDistributionCoefficient;
     // CHI2
-    property StoredSecondDistributionCoefficient: TRealStorage
-      read FStoredSecondDistributionCoefficient
-      write SetStoredSecondDistributionCoefficient;
+    property SecondDistributionCoefficient: string
+      read GetSecondDistributionCoefficient
+      write SetSecondDistributionCoefficient;
       // TCMOD
     property ThermalConductivityModel: TThermalConductivityModel
       read FThermalConductivityModel write SetThermalConductivityModel;
   end;
 
   // SUTRA 4 data set 11B
-  TWaterSaturationProperties = class(TGoPhastPersistent)
+  TWaterSaturationProperties = class(TCustomSutraPersistent)
   private
-    FStoredResidualWaterContent: TRealStorage;
+    FResidualWaterContent: TFormulaObject;
     FFunctionParameters: TRealCollection;
     FWaterSaturationChoice: TWaterSaturationChoice;
-    FStoredVanGenuchtenExponent: TRealStorage;
-    FStoredAirEntryPressure: TRealStorage;
-    FStoredVanGenuchtenAlpha: TRealStorage;
-    FStoredPressureForResidualWaterContent: TRealStorage;
-    FStoredPoreSizeDistributionIndex: TRealStorage;
-    function GetAirEntryPressure: double;
-    function GetPoreSizeDistributionIndex: double;
-    function GetPressureForResidualWaterContent: Double;
-    function GetResidualWaterContent: Double;
-    function GetVanGenuchtenAlpha: Double;
-    function GetVanGenuchtenExponent: double;
-    procedure SetAirEntryPressure(const Value: double);
+    FVanGenuchtenExponent: TFormulaObject;
+    FAirEntryPressure: TFormulaObject;
+    FVanGenuchtenAlpha: TFormulaObject;
+    FPressureForResidualWaterContent: TFormulaObject;
+    FPoreSizeDistributionIndex: TFormulaObject;
+    function GetAirEntryPressure: string;
+    function GetPoreSizeDistributionIndex: string;
+    function GetPressureForResidualWaterContent: string;
+    function GetResidualWaterContent: string;
+    function GetVanGenuchtenAlpha: string;
+    function GetVanGenuchtenExponent: string;
+    procedure SetAirEntryPressure(const Value: string);
     procedure SetFunctionParameters(const Value: TRealCollection);
-    procedure SetPoreSizeDistributionIndex(const Value: double);
-    procedure SetPressureForResidualWaterContent(const Value: Double);
-    procedure SetResidualWaterContent(const Value: Double);
-    procedure SetStoredAirEntryPressure(const Value: TRealStorage);
-    procedure SetStoredPoreSizeDistributionIndex(const Value: TRealStorage);
-    procedure SetStoredPressureForResidualWaterContent(
-      const Value: TRealStorage);
-    procedure SetStoredResidualWaterContent(const Value: TRealStorage);
-    procedure SetStoredVanGenuchtenAlpha(const Value: TRealStorage);
-    procedure SetStoredVanGenuchtenExponent(const Value: TRealStorage);
-    procedure SetVanGenuchtenAlpha(const Value: Double);
-    procedure SetVanGenuchtenExponent(const Value: double);
+    procedure SetPoreSizeDistributionIndex(const Value: string);
+    procedure SetPressureForResidualWaterContent(const Value: string);
+    procedure SetResidualWaterContent(const Value: string);
+    procedure SetVanGenuchtenAlpha(const Value: string);
+    procedure SetVanGenuchtenExponent(const Value: string);
     procedure SetWaterSaturationChoice(const Value: TWaterSaturationChoice);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
-    // AA
-    property VanGenuchtenAlpha: Double read GetVanGenuchtenAlpha
-      write SetVanGenuchtenAlpha;
-    // VN
-    property VanGenuchtenExponent: double read GetVanGenuchtenExponent
-      write SetVanGenuchtenExponent;
-    // SWRES
-    property ResidualWaterContent: Double read GetResidualWaterContent
-      write SetResidualWaterContent;
-    // PENT (zero or negative)
-    property AirEntryPressure: double read GetAirEntryPressure
-      write SetAirEntryPressure;
-    // RLAMB
-    property PoreSizeDistributionIndex: double read GetPoreSizeDistributionIndex
-      write SetPoreSizeDistributionIndex;
-    // PSWRES
-    property PressureForResidualWaterContent: Double
-      read GetPressureForResidualWaterContent
-      write SetPressureForResidualWaterContent;
   published
     // SWRES
     property WaterSaturationChoice: TWaterSaturationChoice
       read FWaterSaturationChoice write SetWaterSaturationChoice;
     // AA
-    property StoredVanGenuchtenAlpha: TRealStorage read FStoredVanGenuchtenAlpha
-      write SetStoredVanGenuchtenAlpha;
+    property VanGenuchtenAlpha: string read GetVanGenuchtenAlpha
+      write SetVanGenuchtenAlpha;
     // VN
-    property StoredVanGenuchtenExponent: TRealStorage
-      read FStoredVanGenuchtenExponent write SetStoredVanGenuchtenExponent;
+    property VanGenuchtenExponent: string read GetVanGenuchtenExponent
+      write SetVanGenuchtenExponent;
     // SWRES
-    property StoredResidualWaterContent: TRealStorage
-      read FStoredResidualWaterContent write SetStoredResidualWaterContent;
+    property ResidualWaterContent: string read GetResidualWaterContent
+      write SetResidualWaterContent;
     // PENT (zero or negative)
-     property StoredAirEntryPressure: TRealStorage read FStoredAirEntryPressure
-       write SetStoredAirEntryPressure;
+    property AirEntryPressure: string read GetAirEntryPressure
+      write SetAirEntryPressure;
     // RLAMB
-    property StoredPoreSizeDistributionIndex: TRealStorage
-      read FStoredPoreSizeDistributionIndex
-      write SetStoredPoreSizeDistributionIndex;
+    property PoreSizeDistributionIndex: string read GetPoreSizeDistributionIndex
+      write SetPoreSizeDistributionIndex;
     // PSWRES(usually negative)
-    property StoredPressureForResidualWaterContent: TRealStorage
-      read FStoredPressureForResidualWaterContent
-      write SetStoredPressureForResidualWaterContent;
+    property PressureForResidualWaterContent: string
+      read GetPressureForResidualWaterContent
+      write SetPressureForResidualWaterContent;
     // NSWPAR, SWPAR
     property FunctionParameters: TRealCollection read FFunctionParameters
       write SetFunctionParameters;
   end;
 
   // SUTRA 4 data set 11C
-  TRelativePermeabilityParameters = class(TGoPhastPersistent)
+  TRelativePermeabilityParameters = class(TCustomSutraPersistent)
   private
-    FStoredWaterSaturationAtMinPermeability: TRealStorage;
+    FWaterSaturationAtMinPermeability: TFormulaObject;
     FFunctionParameters: TRealCollection;
-    FStoredRelativePermParam: TRealStorage;
-    FStoredMinRelativePerm: TRealStorage;
+    FRelativePermParam: TFormulaObject;
+    FMinRelativePerm: TFormulaObject;
     FRelativePermeabilityChoice: TRelativePermeabilityChoice;
-    FStoredPoreSizeDistributionIndex: TRealStorage;
-    function GetMinRelativePerm: Double;
-    function GetPoreSizeDistributionIndex: double;
-    function GetRelativePermParam: Double;
-    function GetWaterSaturationAtMinPermeability: Double;
+    FPoreSizeDistributionIndex: TFormulaObject;
+    function GetMinRelativePerm: string;
+    function GetPoreSizeDistributionIndex: string;
+    function GetRelativePermParam: string;
+    function GetWaterSaturationAtMinPermeability: string;
     procedure SetFunctionParameters(const Value: TRealCollection);
-    procedure SetMinRelativePerm(const Value: Double);
-    procedure SetPoreSizeDistributionIndex(const Value: double);
+    procedure SetMinRelativePerm(const Value: string);
+    procedure SetPoreSizeDistributionIndex(const Value: string);
     procedure SetRelativePermeabilityChoice(
       const Value: TRelativePermeabilityChoice);
-    procedure SetRelativePermParam(const Value: Double);
-    procedure SetStoredMinRelativePerm(const Value: TRealStorage);
-    procedure SetStoredPoreSizeDistributionIndex(const Value: TRealStorage);
-    procedure SetStoredRelativePermParam(const Value: TRealStorage);
-    procedure SetStoredWaterSaturationAtMinPermeability(
-      const Value: TRealStorage);
-    procedure SetWaterSaturationAtMinPermeability(const Value: Double);
+    procedure SetRelativePermParam(const Value: string);
+    procedure SetWaterSaturationAtMinPermeability(const Value: string);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
-    // VN
-    property RelativePermParam: Double read GetRelativePermParam
-      write SetRelativePermParam;
-    // RKMIN
-    property MinRelativePerm: Double read GetMinRelativePerm
-      write SetMinRelativePerm;
-    // RLAMB
-    property PoreSizeDistributionIndex: double read GetPoreSizeDistributionIndex
-      write SetPoreSizeDistributionIndex;
-    // SLRKMIN
-    property WaterSaturationAtMinPermeability: Double
-      read GetWaterSaturationAtMinPermeability
-      write SetWaterSaturationAtMinPermeability;
   published
     // RKMOD
     property RelativePermeabilityChoice: TRelativePermeabilityChoice
       read FRelativePermeabilityChoice write SetRelativePermeabilityChoice;
     // VN
-    property StoredRelativePermParam: TRealStorage read FStoredRelativePermParam
-      write SetStoredRelativePermParam;
+    property RelativePermParam: string read GetRelativePermParam
+      write SetRelativePermParam;
     // RKMIN
-    property StoredMinRelativePerm: TRealStorage read FStoredMinRelativePerm
-      write SetStoredMinRelativePerm;
+    property MinRelativePerm: string read GetMinRelativePerm
+      write SetMinRelativePerm;
     // RLAMB
-    property StoredPoreSizeDistributionIndex: TRealStorage
-      read FStoredPoreSizeDistributionIndex
-      write SetStoredPoreSizeDistributionIndex;
+    property PoreSizeDistributionIndex: string read GetPoreSizeDistributionIndex
+      write SetPoreSizeDistributionIndex;
     // SLRKMIN
-    property StoredWaterSaturationAtMinPermeability: TRealStorage
-      read FStoredWaterSaturationAtMinPermeability
-      write SetStoredWaterSaturationAtMinPermeability;
+    property WaterSaturationAtMinPermeability: string
+      read GetWaterSaturationAtMinPermeability
+      write SetWaterSaturationAtMinPermeability;
     // NRKPAR, RKPAR
     property FunctionParameters: TRealCollection read FFunctionParameters
       write SetFunctionParameters;
   end;
 
   // SUTRA 4 data set 11D
-  TLiquidWaterSaturationParameters = class(TGoPhastPersistent)
+  TLiquidWaterSaturationParameters = class(TCustomSutraPersistent)
   private
-    FStoredExponentialParameter: TRealStorage;
-    FStoredPowerLawAlpha: TRealStorage;
+    FExponentialParameter: TFormulaObject;
+    FPowerLawAlpha: TFormulaObject;
     FFunctionParameters: TRealCollection;
-    FStoredTempAtResidualLiquidWaterSaturation: TRealStorage;
-    FStoredPowerLawBeta: TRealStorage;
-    FStoredResidualLiquidWaterSaturation: TRealStorage;
+    FTempAtResidualLiquidWaterSaturation: TFormulaObject;
+    FPowerLawBeta: TFormulaObject;
+    FResidualLiquidWaterSaturation: TFormulaObject;
     FLiquidWaterSaturationChoice: TLiquidWaterSaturationChoice;
-    function GetExponentialParameter: Double;
-    function GetPowerLawAlpha: Double;
-    function GetPowerLawBeta: Double;
-    function GetResidualLiquidWaterSaturation: Double;
-    function GetTempAtResidualLiquidWaterSaturation: double;
-    procedure SetExponentialParameter(const Value: Double);
+    function GetExponentialParameter: string;
+    function GetPowerLawAlpha: string;
+    function GetPowerLawBeta: string;
+    function GetResidualLiquidWaterSaturation: string;
+    function GetTempAtResidualLiquidWaterSaturation: string;
+    procedure SetExponentialParameter(const Value: string);
     procedure SetFunctionParameters(const Value: TRealCollection);
     procedure SetLiquidWaterSaturationChoice(
       const Value: TLiquidWaterSaturationChoice);
-    procedure SetPowerLawAlpha(const Value: Double);
-    procedure SetPowerLawBeta(const Value: Double);
-    procedure SetResidualLiquidWaterSaturation(const Value: Double);
-    procedure SetStoredExponentialParameter(const Value: TRealStorage);
-    procedure SetStoredPowerLawAlpha(const Value: TRealStorage);
-    procedure SetStoredPowerLawBeta(const Value: TRealStorage);
-    procedure SetStoredResidualLiquidWaterSaturation(const Value: TRealStorage);
-    procedure SetStoredTempAtResidualLiquidWaterSaturation(
-      const Value: TRealStorage);
-    procedure SetTempAtResidualLiquidWaterSaturation(const Value: double);
+    procedure SetPowerLawAlpha(const Value: string);
+    procedure SetPowerLawBeta(const Value: string);
+    procedure SetResidualLiquidWaterSaturation(const Value: string);
+    procedure SetTempAtResidualLiquidWaterSaturation(const Value: string);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
-    // SLSATRES
-    property ResidualLiquidWaterSaturation: Double
-      read GetResidualLiquidWaterSaturation
-      write SetResidualLiquidWaterSaturation;
-    // W
-    property ExponentialParameter: Double read GetExponentialParameter
-      write SetExponentialParameter;
-    // ALPHA
-    property PowerLawAlpha: Double read GetPowerLawAlpha write SetPowerLawAlpha;
-    // BETA
-    property PowerLawBeta: Double read GetPowerLawBeta write SetPowerLawBeta;
-    // TLRES
-    property TempAtResidualLiquidWaterSaturation: double
-      read GetTempAtResidualLiquidWaterSaturation
-      write SetTempAtResidualLiquidWaterSaturation;
   published
     // SLMOD
     property LiquidWaterSaturationChoice: TLiquidWaterSaturationChoice
       read FLiquidWaterSaturationChoice write SetLiquidWaterSaturationChoice;
     // SLSATRES
-    property StoredResidualLiquidWaterSaturation: TRealStorage
-      read FStoredResidualLiquidWaterSaturation
-      write SetStoredResidualLiquidWaterSaturation;
+    property ResidualLiquidWaterSaturation: string
+      read GetResidualLiquidWaterSaturation
+      write SetResidualLiquidWaterSaturation;
     // W
-    property StoredExponentialParameter: TRealStorage
-      read FStoredExponentialParameter write SetStoredExponentialParameter;
+    property ExponentialParameter: string read GetExponentialParameter
+      write SetExponentialParameter;
     // ALPHA
-    property StoredPowerLawAlpha: TRealStorage read FStoredPowerLawAlpha
-      write SetStoredPowerLawAlpha;
+    property PowerLawAlpha: string read GetPowerLawAlpha write SetPowerLawAlpha;
     // BETA
-    property StoredPowerLawBeta: TRealStorage read FStoredPowerLawBeta
-      write SetStoredPowerLawBeta;
+    property PowerLawBeta: string read GetPowerLawBeta write SetPowerLawBeta;
     // TLRES
-    property StoredTempAtResidualLiquidWaterSaturation: TRealStorage
-      read FStoredTempAtResidualLiquidWaterSaturation
-      write SetStoredTempAtResidualLiquidWaterSaturation;
+    property TempAtResidualLiquidWaterSaturation: string
+      read GetTempAtResidualLiquidWaterSaturation
+      write SetTempAtResidualLiquidWaterSaturation;
     // NSLPAR, SLPAR
     property FunctionParameters: TRealCollection read FFunctionParameters
       write SetFunctionParameters;
   end;
 
   // SUTRA 4 data set 11E
-  TFreezingTempAndLatentHeat = class(TGoPhastPersistent)
+  TFreezingTempAndLatentHeat = class(TCustomSutraPersistent)
   private
-    FStoredMaxFreezePoreWaterTemperature: TRealStorage;
-    FStoredLatentHeatOfFusion: TRealStorage;
-    function GetLatentHeatOfFusion: double;
-    function GetMaxFreezePoreWaterTemperature: Double;
-    procedure SetLatentHeatOfFusion(const Value: double);
-    procedure SetMaxFreezePoreWaterTemperature(const Value: Double);
-    procedure SetStoredLatentHeatOfFusion(const Value: TRealStorage);
-    procedure SetStoredMaxFreezePoreWaterTemperature(const Value: TRealStorage);
+    FMaxFreezePoreWaterTemperature: TFormulaObject;
+    FLatentHeatOfFusion: TFormulaObject;
+    function GetLatentHeatOfFusion: string;
+    function GetMaxFreezePoreWaterTemperature: string;
+    procedure SetLatentHeatOfFusion(const Value: string);
+    procedure SetMaxFreezePoreWaterTemperature(const Value: string);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
+  published
     // TFREEZ
-    property MaxFreezePoreWaterTemperature: Double
+    property MaxFreezePoreWaterTemperature: string
       read GetMaxFreezePoreWaterTemperature
       write SetMaxFreezePoreWaterTemperature;
     // HTLAT
-    property LatentHeatOfFusion: double read GetLatentHeatOfFusion
+    property LatentHeatOfFusion: string read GetLatentHeatOfFusion
       write SetLatentHeatOfFusion;
-  published
-    // TFREEZ
-    property StoredMaxFreezePoreWaterTemperature: TRealStorage
-      read FStoredMaxFreezePoreWaterTemperature
-      write SetStoredMaxFreezePoreWaterTemperature;
-    // HTLAT
-    property StoredLatentHeatOfFusion: TRealStorage
-      read FStoredLatentHeatOfFusion write SetStoredLatentHeatOfFusion;
   end;
 
   TRegionalProperty = class(TPhastCollectionItem)
@@ -1012,7 +930,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, VectorDisplayUnit;
+  PhastModelUnit, VectorDisplayUnit, frmGoPhastUnit;
 
 { TSutraOptions }
 
@@ -2359,26 +2277,34 @@ end;
 constructor TAdsorptionProperties.Create(InvalidateModelEvent: TNotifyEvent);
 begin
   inherited;
-  FStoredFirstDistributionCoefficient := TRealStorage.Create(InvalidateModelEvent);
-  FStoredSecondDistributionCoefficient := TRealStorage.Create(InvalidateModelEvent);
+  FFirstDistributionCoefficient := CreateFormulaObject;
+  FSecondDistributionCoefficient := CreateFormulaObject;
+
   SetInitialValues
 end;
 
 destructor TAdsorptionProperties.Destroy;
 begin
-  FStoredFirstDistributionCoefficient.Free;
-  FStoredSecondDistributionCoefficient.Free;
+  frmGoPhast.PhastModel.FormulaManager.Remove(FFirstDistributionCoefficient,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FFirstDistributionCoefficient := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FSecondDistributionCoefficient,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FSecondDistributionCoefficient := nil;
   inherited;
 end;
 
-function TAdsorptionProperties.GetFirstDistributionCoefficient: double;
+function TAdsorptionProperties.GetFirstDistributionCoefficient: string;
 begin
-  result := StoredFirstDistributionCoefficient.Value;
+  result := FFirstDistributionCoefficient.Formula
 end;
 
-function TAdsorptionProperties.GetSecondDistributionCoefficient: double;
+function TAdsorptionProperties.GetSecondDistributionCoefficient: string;
 begin
-  result := StoredSecondDistributionCoefficient.Value;
+  result := FSecondDistributionCoefficient.Formula;
 end;
 
 procedure TAdsorptionProperties.SetAdsorptionModel(
@@ -2392,35 +2318,36 @@ begin
 end;
 
 procedure TAdsorptionProperties.SetFirstDistributionCoefficient(
-  const Value: double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredFirstDistributionCoefficient.Value := Value;
+  OldFormula := FirstDistributionCoefficient;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FFirstDistributionCoefficient);
+  end;
 end;
 
 procedure TAdsorptionProperties.SetInitialValues;
 begin
   AdsorptionModel := smNone;
-  FirstDistributionCoefficient := 0;
-  SecondDistributionCoefficient := 0;
+  FirstDistributionCoefficient := '0';
+  SecondDistributionCoefficient := '0';
   ThermalConductivityModel := tcmAritnmetic;
 end;
 
 procedure TAdsorptionProperties.SetSecondDistributionCoefficient(
-  const Value: double);
+  const Value: string);
+var
+  OldFormula: string;
+  AField: TFormulaObject;
 begin
-  StoredSecondDistributionCoefficient.Value := Value;
-end;
-
-procedure TAdsorptionProperties.SetStoredFirstDistributionCoefficient(
-  const Value: TRealStorage);
-begin
-  FStoredFirstDistributionCoefficient.Assign(Value);
-end;
-
-procedure TAdsorptionProperties.SetStoredSecondDistributionCoefficient(
-  const Value: TRealStorage);
-begin
-  FStoredSecondDistributionCoefficient.Assign(Value);
+  OldFormula := SecondDistributionCoefficient;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FSecondDistributionCoefficient);
+  end;
 end;
 
 procedure TAdsorptionProperties.SetThermalConductivityModel(
@@ -2461,62 +2388,93 @@ constructor TWaterSaturationProperties.Create(
   InvalidateModelEvent: TNotifyEvent);
 begin
   inherited;
-  FStoredVanGenuchtenAlpha := TRealStorage.Create(InvalidateModelEvent);
-  FStoredVanGenuchtenExponent := TRealStorage.Create(InvalidateModelEvent);
-  FStoredResidualWaterContent := TRealStorage.Create(InvalidateModelEvent);
-  FStoredAirEntryPressure := TRealStorage.Create(InvalidateModelEvent);
-  FStoredPoreSizeDistributionIndex := TRealStorage.Create(InvalidateModelEvent);
-  FStoredPressureForResidualWaterContent := TRealStorage.Create(InvalidateModelEvent);
+  FVanGenuchtenAlpha := CreateFormulaObject;
+  FVanGenuchtenExponent := CreateFormulaObject;
+  FResidualWaterContent := CreateFormulaObject;
+  FAirEntryPressure := CreateFormulaObject;
+  FPoreSizeDistributionIndex := CreateFormulaObject;
+  FPressureForResidualWaterContent := CreateFormulaObject;
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
   SetInitialValues;
 end;
 
 destructor TWaterSaturationProperties.Destroy;
 begin
-  FStoredVanGenuchtenAlpha.Free;
-  FStoredVanGenuchtenExponent.Free;
-  FStoredResidualWaterContent.Free;
-  FStoredAirEntryPressure.Free;
-  FStoredPoreSizeDistributionIndex.Free;
-  FStoredPressureForResidualWaterContent.Free;
+  frmGoPhast.PhastModel.FormulaManager.Remove(FVanGenuchtenAlpha,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FVanGenuchtenAlpha := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FVanGenuchtenExponent,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FVanGenuchtenExponent := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FResidualWaterContent,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FResidualWaterContent := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FAirEntryPressure,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FAirEntryPressure := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPoreSizeDistributionIndex,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FPoreSizeDistributionIndex := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPressureForResidualWaterContent,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FPressureForResidualWaterContent := nil;
+
   FFunctionParameters.Free;
 
   inherited;
 end;
 
-function TWaterSaturationProperties.GetAirEntryPressure: double;
+function TWaterSaturationProperties.GetAirEntryPressure: string;
 begin
-  result := StoredAirEntryPressure.Value;
+  result := FAirEntryPressure.Formula;
 end;
 
-function TWaterSaturationProperties.GetPoreSizeDistributionIndex: double;
+function TWaterSaturationProperties.GetPoreSizeDistributionIndex: string;
 begin
-  result := StoredPoreSizeDistributionIndex.Value;
+  result := FPoreSizeDistributionIndex.Formula;
 end;
 
-function TWaterSaturationProperties.GetPressureForResidualWaterContent: Double;
+function TWaterSaturationProperties.GetPressureForResidualWaterContent: string;
 begin
-  result := StoredPressureForResidualWaterContent.Value;
+  result := FPressureForResidualWaterContent.Formula;
 end;
 
-function TWaterSaturationProperties.GetResidualWaterContent: Double;
+function TWaterSaturationProperties.GetResidualWaterContent: string;
 begin
-  result := StoredResidualWaterContent.Value;
+  result := FResidualWaterContent.Formula;
 end;
 
-function TWaterSaturationProperties.GetVanGenuchtenAlpha: Double;
+function TWaterSaturationProperties.GetVanGenuchtenAlpha: string;
 begin
-  result := StoredVanGenuchtenAlpha.Value;
+  result := FVanGenuchtenAlpha.Formula;
 end;
 
-function TWaterSaturationProperties.GetVanGenuchtenExponent: double;
+function TWaterSaturationProperties.GetVanGenuchtenExponent: string;
 begin
-  result := StoredVanGenuchtenExponent.Value;
+  result := FVanGenuchtenExponent.Formula;
 end;
 
-procedure TWaterSaturationProperties.SetAirEntryPressure(const Value: double);
+procedure TWaterSaturationProperties.SetAirEntryPressure(const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredAirEntryPressure.Value := Value;
+  OldFormula := AirEntryPressure;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FAirEntryPressure);
+  end;
+//  StoredAirEntryPressure.Value := Value;
 end;
 
 procedure TWaterSaturationProperties.SetFunctionParameters(
@@ -2530,84 +2488,78 @@ begin
     // SWRES
   WaterSaturationChoice := wscNone;
     // AA
-  VanGenuchtenAlpha := 0.1;
+  VanGenuchtenAlpha := '0.1';
     // VN
-  VanGenuchtenExponent := -0.5;
+  VanGenuchtenExponent := '-0.5';
     // SWRES
-  ResidualWaterContent := 0.05;
+  ResidualWaterContent := '0.05';
   // PENT
-  AirEntryPressure := 0;
+  AirEntryPressure := '0';
     // RLAMB
-  PoreSizeDistributionIndex := 0;
+  PoreSizeDistributionIndex := '0';
   // PSWRES(usually negative)
-  PressureForResidualWaterContent := 0;
+  PressureForResidualWaterContent := '0';
   // NSWPAR, SWPAR
   FunctionParameters.Clear;
 end;
 
 procedure TWaterSaturationProperties.SetPoreSizeDistributionIndex(
-  const Value: double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredPoreSizeDistributionIndex.Value := Value;
+  OldFormula := PoreSizeDistributionIndex;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FPoreSizeDistributionIndex);
+  end;
 end;
 
 procedure TWaterSaturationProperties.SetPressureForResidualWaterContent(
-  const Value: Double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredPressureForResidualWaterContent.Value := Value;
+  OldFormula := PressureForResidualWaterContent;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FPressureForResidualWaterContent);
+  end;
 end;
 
 procedure TWaterSaturationProperties.SetResidualWaterContent(
-  const Value: Double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredResidualWaterContent.Value := Value;
+  OldFormula := ResidualWaterContent;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FResidualWaterContent);
+  end;
 end;
 
-procedure TWaterSaturationProperties.SetStoredAirEntryPressure(
-  const Value: TRealStorage);
+procedure TWaterSaturationProperties.SetVanGenuchtenAlpha(const Value: string);
+var
+  OldFormula: string;
 begin
-  FStoredAirEntryPressure.Assign(Value);
-end;
-
-procedure TWaterSaturationProperties.SetStoredPoreSizeDistributionIndex(
-  const Value: TRealStorage);
-begin
-  FStoredPoreSizeDistributionIndex.Assign(Value);
-end;
-
-procedure TWaterSaturationProperties.SetStoredPressureForResidualWaterContent(
-  const Value: TRealStorage);
-begin
-  FStoredPressureForResidualWaterContent.Assign(Value);
-end;
-
-procedure TWaterSaturationProperties.SetStoredResidualWaterContent(
-  const Value: TRealStorage);
-begin
-  FStoredResidualWaterContent.Assign(Value);
-end;
-
-procedure TWaterSaturationProperties.SetStoredVanGenuchtenAlpha(
-  const Value: TRealStorage);
-begin
-  FStoredVanGenuchtenAlpha.Assign(Value);
-end;
-
-procedure TWaterSaturationProperties.SetStoredVanGenuchtenExponent(
-  const Value: TRealStorage);
-begin
-  FStoredVanGenuchtenExponent.Assign(Value);
-end;
-
-procedure TWaterSaturationProperties.SetVanGenuchtenAlpha(const Value: Double);
-begin
-  StoredVanGenuchtenAlpha.Value := Value;
+  OldFormula := VanGenuchtenAlpha;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FVanGenuchtenAlpha);
+  end;
 end;
 
 procedure TWaterSaturationProperties.SetVanGenuchtenExponent(
-  const Value: double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredVanGenuchtenExponent.Value := Value;
+  OldFormula := VanGenuchtenExponent;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FVanGenuchtenExponent);
+  end;
 end;
 
 procedure TWaterSaturationProperties.SetWaterSaturationChoice(
@@ -2646,42 +2598,58 @@ constructor TRelativePermeabilityParameters.Create(
   InvalidateModelEvent: TNotifyEvent);
 begin
   inherited;
-  FStoredRelativePermParam := TRealStorage.Create(InvalidateModelEvent);
-  FStoredMinRelativePerm := TRealStorage.Create(InvalidateModelEvent);
-  FStoredPoreSizeDistributionIndex := TRealStorage.Create(InvalidateModelEvent);
-  FStoredWaterSaturationAtMinPermeability := TRealStorage.Create(InvalidateModelEvent);
+  FRelativePermParam := CreateFormulaObject;
+  FMinRelativePerm := CreateFormulaObject;
+  FPoreSizeDistributionIndex := CreateFormulaObject;
+  FWaterSaturationAtMinPermeability := CreateFormulaObject;
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
   SetInitialValues;
 end;
 
 destructor TRelativePermeabilityParameters.Destroy;
 begin
-  FStoredRelativePermParam.Free;
-  FStoredMinRelativePerm.Free;
-  FStoredPoreSizeDistributionIndex.Free;
-  FStoredWaterSaturationAtMinPermeability.Free;
+  frmGoPhast.PhastModel.FormulaManager.Remove(FRelativePermParam,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FRelativePermParam := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FMinRelativePerm,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FMinRelativePerm := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPoreSizeDistributionIndex,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FPoreSizeDistributionIndex := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FWaterSaturationAtMinPermeability,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FWaterSaturationAtMinPermeability := nil;
+
   FFunctionParameters.Free;
   inherited;
 end;
 
-function TRelativePermeabilityParameters.GetMinRelativePerm: Double;
+function TRelativePermeabilityParameters.GetMinRelativePerm: string;
 begin
-  result := StoredMinRelativePerm.Value;
+  result := FMinRelativePerm.Formula;
 end;
 
-function TRelativePermeabilityParameters.GetPoreSizeDistributionIndex: double;
+function TRelativePermeabilityParameters.GetPoreSizeDistributionIndex: string;
 begin
-  result := StoredPoreSizeDistributionIndex.Value;
+  result := FPoreSizeDistributionIndex.Formula;
 end;
 
-function TRelativePermeabilityParameters.GetRelativePermParam: Double;
+function TRelativePermeabilityParameters.GetRelativePermParam: string;
 begin
-  result := StoredRelativePermParam.Value;
+  result := FRelativePermParam.Formula;
 end;
 
-function TRelativePermeabilityParameters.GetWaterSaturationAtMinPermeability: Double;
+function TRelativePermeabilityParameters.GetWaterSaturationAtMinPermeability: string;
 begin
-  result := StoredWaterSaturationAtMinPermeability.Value;
+  result := FWaterSaturationAtMinPermeability.Formula;
 end;
 
 procedure TRelativePermeabilityParameters.SetFunctionParameters(
@@ -2693,23 +2661,35 @@ end;
 procedure TRelativePermeabilityParameters.SetInitialValues;
 begin
   RelativePermeabilityChoice := rpcNone;
-  RelativePermParam := 0;
-  MinRelativePerm := 1E-3;
-  PoreSizeDistributionIndex := 0;
-  WaterSaturationAtMinPermeability := 1E-2;
+  RelativePermParam := '0';
+  MinRelativePerm := '1E-3';
+  PoreSizeDistributionIndex := '0';
+  WaterSaturationAtMinPermeability := '1E-2';
   FunctionParameters.Clear;
 end;
 
 procedure TRelativePermeabilityParameters.SetMinRelativePerm(
-  const Value: Double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredMinRelativePerm.Value := Value;
+  OldFormula := MinRelativePerm;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FMinRelativePerm);
+  end;
 end;
 
 procedure TRelativePermeabilityParameters.SetPoreSizeDistributionIndex(
-  const Value: double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredPoreSizeDistributionIndex.Value := Value;
+  OldFormula := PoreSizeDistributionIndex;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FPoreSizeDistributionIndex);
+  end;
 end;
 
 procedure TRelativePermeabilityParameters.SetRelativePermeabilityChoice(
@@ -2720,43 +2700,30 @@ begin
     FRelativePermeabilityChoice := Value;
     InvalidateModel;
   end;
-
 end;
 
 procedure TRelativePermeabilityParameters.SetRelativePermParam(
-  const Value: Double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredRelativePermParam.Value := Value;
-end;
-
-procedure TRelativePermeabilityParameters.SetStoredMinRelativePerm(
-  const Value: TRealStorage);
-begin
-  FStoredMinRelativePerm.Assign(Value);
-end;
-
-procedure TRelativePermeabilityParameters.SetStoredPoreSizeDistributionIndex(
-  const Value: TRealStorage);
-begin
-  FStoredPoreSizeDistributionIndex.Assign(Value);
-end;
-
-procedure TRelativePermeabilityParameters.SetStoredRelativePermParam(
-  const Value: TRealStorage);
-begin
-  FStoredRelativePermParam.Assign(Value);
-end;
-
-procedure TRelativePermeabilityParameters.SetStoredWaterSaturationAtMinPermeability(
-  const Value: TRealStorage);
-begin
-  FStoredWaterSaturationAtMinPermeability.Assign(Value);
+  OldFormula := RelativePermParam;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FRelativePermParam);
+  end;
 end;
 
 procedure TRelativePermeabilityParameters.SetWaterSaturationAtMinPermeability(
-  const Value: Double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredWaterSaturationAtMinPermeability.Value := Value;
+  OldFormula := WaterSaturationAtMinPermeability;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FWaterSaturationAtMinPermeability);
+  end;
 end;
 
 { TLiquidWaterSaturationParameters }
@@ -2786,55 +2753,81 @@ constructor TLiquidWaterSaturationParameters.Create(
   InvalidateModelEvent: TNotifyEvent);
 begin
   inherited;
-  FStoredResidualLiquidWaterSaturation := TRealStorage.Create(InvalidateModelEvent);
-  FStoredExponentialParameter := TRealStorage.Create(InvalidateModelEvent);
-  FStoredPowerLawAlpha := TRealStorage.Create(InvalidateModelEvent);
-  FStoredPowerLawBeta := TRealStorage.Create(InvalidateModelEvent) ;
-  FStoredTempAtResidualLiquidWaterSaturation := TRealStorage.Create(InvalidateModelEvent);
+  FResidualLiquidWaterSaturation := CreateFormulaObject;
+  FExponentialParameter := CreateFormulaObject;
+  FPowerLawAlpha := CreateFormulaObject;
+  FPowerLawBeta := CreateFormulaObject;
+  FTempAtResidualLiquidWaterSaturation := CreateFormulaObject;
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
   SetInitialValues;
 end;
 
 destructor TLiquidWaterSaturationParameters.Destroy;
 begin
-  FStoredResidualLiquidWaterSaturation.Free;
-  FStoredExponentialParameter.Free;
-  FStoredPowerLawAlpha.Free;
-  FStoredPowerLawBeta.Free;
-  FStoredTempAtResidualLiquidWaterSaturation.Free;
+  frmGoPhast.PhastModel.FormulaManager.Remove(FResidualLiquidWaterSaturation,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FResidualLiquidWaterSaturation := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FExponentialParameter,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FExponentialParameter := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPowerLawAlpha,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FPowerLawAlpha := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPowerLawBeta,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FPowerLawBeta := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FTempAtResidualLiquidWaterSaturation,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FTempAtResidualLiquidWaterSaturation := nil;
+
   FFunctionParameters.Free;
   inherited;
 end;
 
-function TLiquidWaterSaturationParameters.GetExponentialParameter: Double;
+function TLiquidWaterSaturationParameters.GetExponentialParameter: string;
 begin
-  result := StoredExponentialParameter.Value;
+  result := FExponentialParameter.Formula;
 end;
 
-function TLiquidWaterSaturationParameters.GetPowerLawAlpha: Double;
+function TLiquidWaterSaturationParameters.GetPowerLawAlpha: string;
 begin
-  result := StoredPowerLawAlpha.Value;
+  result := FPowerLawAlpha.Formula;
 end;
 
-function TLiquidWaterSaturationParameters.GetPowerLawBeta: Double;
+function TLiquidWaterSaturationParameters.GetPowerLawBeta: string;
 begin
-  result := StoredPowerLawBeta.Value;
+  result := FPowerLawBeta.Formula;
 end;
 
-function TLiquidWaterSaturationParameters.GetResidualLiquidWaterSaturation: Double;
+function TLiquidWaterSaturationParameters.GetResidualLiquidWaterSaturation: string;
 begin
-  result := StoredResidualLiquidWaterSaturation.Value;
+  result := FResidualLiquidWaterSaturation.Formula;
 end;
 
-function TLiquidWaterSaturationParameters.GetTempAtResidualLiquidWaterSaturation: double;
+function TLiquidWaterSaturationParameters.GetTempAtResidualLiquidWaterSaturation: string;
 begin
-  result := StoredTempAtResidualLiquidWaterSaturation.Value;
+  result := FTempAtResidualLiquidWaterSaturation.Formula;
 end;
 
 procedure TLiquidWaterSaturationParameters.SetExponentialParameter(
-  const Value: Double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredExponentialParameter.Value := Value;
+  OldFormula := ExponentialParameter;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FExponentialParameter);
+  end;
 end;
 
 procedure TLiquidWaterSaturationParameters.SetFunctionParameters(
@@ -2848,15 +2841,15 @@ begin
     // SLMLOD
   LiquidWaterSaturationChoice := lwscNone;
     // SLSATRES
-  ResidualLiquidWaterSaturation := 1E-2;
+  ResidualLiquidWaterSaturation := '1E-2';
   // W
-  ExponentialParameter := 0;
+  ExponentialParameter := '0';
   // ALPHA
-  PowerLawAlpha := 0;
+  PowerLawAlpha := '0';
   // BETA
-  PowerLawBeta := 0;
+  PowerLawBeta := '0';
   // TLRES
-  TempAtResidualLiquidWaterSaturation := -2;
+  TempAtResidualLiquidWaterSaturation := '-2';
   // NSLPAR, SLPAR
   FunctionParameters.Clear;
 end;
@@ -2872,56 +2865,50 @@ begin
 end;
 
 procedure TLiquidWaterSaturationParameters.SetPowerLawAlpha(
-  const Value: Double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredPowerLawAlpha.Value := Value;
+  OldFormula := PowerLawAlpha;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FPowerLawAlpha);
+  end;
 end;
 
-procedure TLiquidWaterSaturationParameters.SetPowerLawBeta(const Value: Double);
+procedure TLiquidWaterSaturationParameters.SetPowerLawBeta(const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredPowerLawBeta.Value := Value;
+  OldFormula := PowerLawBeta;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FPowerLawBeta);
+  end;
 end;
 
 procedure TLiquidWaterSaturationParameters.SetResidualLiquidWaterSaturation(
-  const Value: Double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredResidualLiquidWaterSaturation.Value := Value;
-end;
-
-procedure TLiquidWaterSaturationParameters.SetStoredExponentialParameter(
-  const Value: TRealStorage);
-begin
-  FStoredExponentialParameter.Assign(Value);
-end;
-
-procedure TLiquidWaterSaturationParameters.SetStoredPowerLawAlpha(
-  const Value: TRealStorage);
-begin
-  FStoredPowerLawAlpha.Assign(Value);
-end;
-
-procedure TLiquidWaterSaturationParameters.SetStoredPowerLawBeta(
-  const Value: TRealStorage);
-begin
-  FStoredPowerLawBeta.Assign(Value);
-end;
-
-procedure TLiquidWaterSaturationParameters.SetStoredResidualLiquidWaterSaturation(
-  const Value: TRealStorage);
-begin
-  FStoredResidualLiquidWaterSaturation.Assign(Value);
-end;
-
-procedure TLiquidWaterSaturationParameters.SetStoredTempAtResidualLiquidWaterSaturation(
-  const Value: TRealStorage);
-begin
-  FStoredTempAtResidualLiquidWaterSaturation.Assign(Value);
+  OldFormula := ResidualLiquidWaterSaturation;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FResidualLiquidWaterSaturation);
+  end;
 end;
 
 procedure TLiquidWaterSaturationParameters.SetTempAtResidualLiquidWaterSaturation(
-  const Value: double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredTempAtResidualLiquidWaterSaturation.Value := Value;
+  OldFormula := TempAtResidualLiquidWaterSaturation;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FTempAtResidualLiquidWaterSaturation);
+  end;
 end;
 
 { TFreezingTempAndLatentHeat }
@@ -2946,57 +2933,65 @@ constructor TFreezingTempAndLatentHeat.Create(
   InvalidateModelEvent: TNotifyEvent);
 begin
   inherited;
-  FStoredMaxFreezePoreWaterTemperature := TRealStorage.Create(InvalidateModelEvent);
-  FStoredLatentHeatOfFusion := TRealStorage.Create(InvalidateModelEvent);
+  FMaxFreezePoreWaterTemperature := CreateFormulaObject;
+  FLatentHeatOfFusion := CreateFormulaObject;
   SetInitialValues;
 end;
 
 destructor TFreezingTempAndLatentHeat.Destroy;
 begin
-  FStoredMaxFreezePoreWaterTemperature.Free;
-  FStoredLatentHeatOfFusion.Free;
+  frmGoPhast.PhastModel.FormulaManager.Remove(FMaxFreezePoreWaterTemperature,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FMaxFreezePoreWaterTemperature := nil;
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FLatentHeatOfFusion,
+    GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+  FLatentHeatOfFusion := nil;
+
   inherited;
 end;
 
-function TFreezingTempAndLatentHeat.GetLatentHeatOfFusion: double;
+function TFreezingTempAndLatentHeat.GetLatentHeatOfFusion: string;
 begin
-  Result := StoredLatentHeatOfFusion.Value;
+  Result := FLatentHeatOfFusion.Formula;
 end;
 
-function TFreezingTempAndLatentHeat.GetMaxFreezePoreWaterTemperature: Double;
+function TFreezingTempAndLatentHeat.GetMaxFreezePoreWaterTemperature: string;
 begin
-  Result := StoredMaxFreezePoreWaterTemperature.Value;
+  Result := FMaxFreezePoreWaterTemperature.Formula;
 end;
 
 procedure TFreezingTempAndLatentHeat.SetInitialValues;
 begin
   // TFREEZ
-  MaxFreezePoreWaterTemperature := 0;
+  MaxFreezePoreWaterTemperature := '0';
   // HTLAT
-  LatentHeatOfFusion := 3.34E5;
+  LatentHeatOfFusion := '3.34E5';
 end;
 
-procedure TFreezingTempAndLatentHeat.SetLatentHeatOfFusion(const Value: double);
+procedure TFreezingTempAndLatentHeat.SetLatentHeatOfFusion(const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredLatentHeatOfFusion.Value := Value;
+  OldFormula := LatentHeatOfFusion;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FLatentHeatOfFusion);
+  end;
 end;
 
 procedure TFreezingTempAndLatentHeat.SetMaxFreezePoreWaterTemperature(
-  const Value: Double);
+  const Value: string);
+var
+  OldFormula: string;
 begin
-  StoredMaxFreezePoreWaterTemperature.Value := Value;
-end;
-
-procedure TFreezingTempAndLatentHeat.SetStoredLatentHeatOfFusion(
-  const Value: TRealStorage);
-begin
-  FStoredLatentHeatOfFusion.Assign(Value);
-end;
-
-procedure TFreezingTempAndLatentHeat.SetStoredMaxFreezePoreWaterTemperature(
-  const Value: TRealStorage);
-begin
-  FStoredMaxFreezePoreWaterTemperature.Assign(Value);
+  OldFormula := MaxFreezePoreWaterTemperature;
+  if OldFormula <> Value then
+  begin
+    ChangeFormula(Value, FMaxFreezePoreWaterTemperature);
+  end;
 end;
 
 { TRegionalProperty }
@@ -3096,5 +3091,24 @@ procedure TRegionalProperties.SetItems(Index: Integer;
 begin
   inherited Items[Index] := Value;
 end;
+
+{ TCustomSutraPersistent }
+
+procedure TCustomSutraPersistent.ChangeFormula(const Value: string;
+  var AField: TFormulaObject);
+begin
+  frmGoPhast.PhastModel.FormulaManager.ChangeFormula(AField, Value,
+    frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+    GlobalDummyHandleSubscription, GlobalDummyHandleSubscription, self);
+end;
+
+function TCustomSutraPersistent.CreateFormulaObject: TFormulaObject;
+begin
+  result := frmGoPhast.PhastModel.FormulaManager.Add;
+  result.Parser := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
+  result.AddSubscriptionEvents(GlobalDummyHandleSubscription,
+    GlobalDummyHandleSubscription, self);
+end;
+
 
 end.

@@ -94,6 +94,9 @@ type
     function FunctionUsed(AString: string): boolean;
   end;
 
+procedure GlobalDummyHandleSubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+
 implementation
 
 uses
@@ -1078,5 +1081,13 @@ begin
     end;
   end;
 end;
+
+procedure GlobalDummyHandleSubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+begin
+  // do nothing
+end;
+
+
 
 end.

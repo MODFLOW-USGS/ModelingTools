@@ -105,6 +105,8 @@ type
     procedure WriteDataSet22;
     procedure SetHasLakes(const Value: Boolean);
     procedure WriteFileInternal;
+    function EvaluateFormula(Formula: string; const DataIdentifier: string;
+      out PestParamName: string): double;
   protected
     class function Extension: string; override;
   public
@@ -123,7 +125,8 @@ implementation
 
 uses
   DataSetUnit, SutraFileWriterUnit, frmErrorsAndWarningsUnit, PlProcUnit,
-  ModflowParameterUnit, OrderedCollectionUnit, RbwParser;
+  ModflowParameterUnit, OrderedCollectionUnit, RbwParser,
+  frmFormulaErrorsUnit;
 
 resourcestring
   StrMaxPermMinPerm = 'Maximum permeability < Minimum permeability';
@@ -149,7 +152,10 @@ resourcestring
   'TRA to reat this model as having an irregular mesh. Lakes have been defin' +
   'ed for the model but lakes are only allowed in models with layered meshes' +
   ' not irregular meshes.';
-//  StrDispersivityMayBe = 'Dispersivity may be too low at the following eleme' +
+//  StrDispersivityMayBe = 'Dispersivity may be too low at the following eleme' +      resourcestring
+  StrErrorInTheFormula = 'Error in the formula for %0:s. Error message was "' +
+  '%1:s". "0" will be used instead.';
+
 //  'nts. See section 7.2 of the SUTRA documentation.';
 
 { TSutraInputWriter }
@@ -349,6 +355,8 @@ end;
 procedure TSutraInputWriter.WriteDataSet11A(ARegion: TRegionalProperty);
 var
   AbsorbptionProperties: TAdsorptionProperties;
+  Value: Double;
+  PestParam: string;
 begin
   AbsorbptionProperties := ARegion.AdsorptionProperties;
   if FOptions.TransportChoice in [tcSolute, tcSoluteHead] then
@@ -362,26 +370,32 @@ begin
       smLinear:
         begin
           WriteString('''LINEAR'' ');
-          WriteFloat(AbsorbptionProperties.FirstDistributionCoefficient);
-          WriteFloat(AbsorbptionProperties.SecondDistributionCoefficient);
-          WriteString(' # DATASET 11a: ADSMOD CHI1, CHI2');
         end;
       smFreundlich:
         begin
           WriteString('''FREUNDLICH'' ');
-          WriteFloat(AbsorbptionProperties.FirstDistributionCoefficient);
-          WriteFloat(AbsorbptionProperties.SecondDistributionCoefficient);
-          WriteString(' # DATASET 11a: ADSMOD CHI1, CHI2');
         end;
       smLangmuir:
         begin
           WriteString('''LANGMUIR'' ');
-          WriteFloat(AbsorbptionProperties.FirstDistributionCoefficient);
-          WriteFloat(AbsorbptionProperties.SecondDistributionCoefficient);
-          WriteString(' # DATASET 11a: ADSMOD CHI1, CHI2');
         end;
       else
         Assert(False);
+    end;
+    if AbsorbptionProperties.AdsorptionModel in [smLinear, smFreundlich, smLangmuir] then
+    begin
+      Value := EvaluateFormula(AbsorbptionProperties.FirstDistributionCoefficient,
+         'DATASET 11a: CHI1, FirstDistributionCoefficient', PestParam);
+      WriteFormulaOrValueBasedOnAPestName(PestParam,
+        Value, -1, -1, -1);
+
+      Value := EvaluateFormula(AbsorbptionProperties.SecondDistributionCoefficient,
+         'DATASET 11a: CHI2, SecondDistributionCoefficient', PestParam);
+      WriteFormulaOrValueBasedOnAPestName(PestParam,
+        Value, -1, -1, -1);
+//      WriteFloat(AbsorbptionProperties.FirstDistributionCoefficient);
+//      WriteFloat(AbsorbptionProperties.SecondDistributionCoefficient);
+      WriteString(' # DATASET 11a: ADSMOD CHI1, CHI2');
     end;
   end
   else
@@ -412,6 +426,8 @@ procedure TSutraInputWriter.WriteDataSet11B(ARegion: TRegionalProperty);
 var
   WaterSaturationProperties: TWaterSaturationProperties;
   Index: Integer;
+  Value: Double;
+  PestParam: string;
 begin
   if (FOptions.TransportChoice = tcFreezing)
     or (FOptions.SaturationChoice = scUnsaturated) then
@@ -426,24 +442,66 @@ begin
        wscVanGenuchten:
          begin
            WriteString('''VGEN'' ');
-           WriteFloat(WaterSaturationProperties.VanGenuchtenAlpha);
-           WriteFloat(WaterSaturationProperties.VanGenuchtenExponent);
+
+           Value := EvaluateFormula(WaterSaturationProperties.VanGenuchtenAlpha,
+             'DATASET 11B: van Genuchten function parameter alpha_VG (AA)', PestParam);
+           WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
+           Value := EvaluateFormula(WaterSaturationProperties.VanGenuchtenExponent,
+             'DATASET 11B: van Genuchten function parameter eta_VG (VN)', PestParam);
+           WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
+//           WriteFloat(WaterSaturationProperties.VanGenuchtenAlpha);
+//           WriteFloat(WaterSaturationProperties.VanGenuchtenExponent);
            WriteString(' # DATASET 11B: SWMOD AA VN');
          end;
        wscBrooksCorey:
          begin
            WriteString('''BCOR'' ');
-           WriteFloat(WaterSaturationProperties.ResidualWaterContent);
-           WriteFloat(WaterSaturationProperties.AirEntryPressure);
-           WriteFloat(WaterSaturationProperties.PoreSizeDistributionIndex);
+
+           Value := EvaluateFormula(WaterSaturationProperties.ResidualWaterContent,
+             'DATASET 11B: Residual total water saturation (SWRES)', PestParam);
+           WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
+           Value := EvaluateFormula(WaterSaturationProperties.AirEntryPressure,
+             'DATASET 11B: Air-entry pressure (PENT)', PestParam);
+           WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
+           Value := EvaluateFormula(WaterSaturationProperties.PoreSizeDistributionIndex,
+             'DATASET 11B: Pore size distribution index (RLAMB)', PestParam);
+           WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
+//           WriteFloat(WaterSaturationProperties.ResidualWaterContent);
+//           WriteFloat(WaterSaturationProperties.AirEntryPressure);
+//           WriteFloat(WaterSaturationProperties.PoreSizeDistributionIndex);
            WriteString(' # DATASET 11B: SWMOD SWRES PENT RLAMB');
          end;
        wscPiecewiseLinear:
          begin
            WriteString('''PLIN'' ');
-           WriteFloat(WaterSaturationProperties.ResidualWaterContent);
-           WriteFloat(WaterSaturationProperties.AirEntryPressure);
-           WriteFloat(WaterSaturationProperties.PressureForResidualWaterContent);
+           Value := EvaluateFormula(WaterSaturationProperties.ResidualWaterContent,
+             'DATASET 11B: Residual total water saturation (SWRES)', PestParam);
+           WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
+           Value := EvaluateFormula(WaterSaturationProperties.AirEntryPressure,
+             'DATASET 11B: Air-entry pressure (PENT)', PestParam);
+           WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
+           Value := EvaluateFormula(WaterSaturationProperties.PressureForResidualWaterContent,
+             'DATASET 11B: Pressure at which the saturation reaches the residual saturation (PSWRES)', PestParam);
+           WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
+//           WriteFloat(WaterSaturationProperties.ResidualWaterContent);
+//           WriteFloat(WaterSaturationProperties.AirEntryPressure);
+//           WriteFloat(WaterSaturationProperties.PressureForResidualWaterContent);
            WriteString(' # DATASET 11B: SWMOD SWRES PENT PSWRES');
          end;
        wscUserDefined:
@@ -467,6 +525,8 @@ procedure TSutraInputWriter.WriteDataSet11C(ARegion: TRegionalProperty);
 var
   RelativePermeabilityParameters: TRelativePermeabilityParameters;
   Index: Integer;
+  Value: Double;
+  PestParam: string;
 begin
   if (FOptions.TransportChoice = tcFreezing)
     or (FOptions.SaturationChoice = scUnsaturated) then
@@ -481,21 +541,49 @@ begin
       rpcVanGenuchten:
         begin
           WriteString('''VGEN'' ');
-          WriteFloat(RelativePermeabilityParameters.RelativePermParam);
-          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
+
+          Value := EvaluateFormula(RelativePermeabilityParameters.RelativePermParam,
+            'DATASET 11C: van Genuchten function parameter eta_VG (VN)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+          Value := EvaluateFormula(RelativePermeabilityParameters.MinRelativePerm,
+            'DATASET 11C: Minimum relative permeability (RKMIN)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
+//          WriteFloat(RelativePermeabilityParameters.RelativePermParam);
+//          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
           WriteString(' # DATASET 11C: RKMOD, VN, RKMIN');
         end;
       rpcBrooksCorey:
         begin
           WriteString('''BCOR'' ');
-          WriteFloat(RelativePermeabilityParameters.PoreSizeDistributionIndex);
-          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
+
+          Value := EvaluateFormula(RelativePermeabilityParameters.PoreSizeDistributionIndex,
+            'DATASET 11C: Pore size distribution index (RLAMB)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+          Value := EvaluateFormula(RelativePermeabilityParameters.MinRelativePerm,
+            'DATASET 11C: Minimum relative permeability (RKMIN)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+//          WriteFloat(RelativePermeabilityParameters.PoreSizeDistributionIndex);
+//          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
           WriteString(' # DATASET 11C: RKMOD, RLAMB, RKMIN');
         end;
       rpcPiecewiseLinear:
         begin
           WriteString('''PLIN'' ');
-          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
+
+          Value := EvaluateFormula(RelativePermeabilityParameters.MinRelativePerm,
+            'DATASET 11C: Minimum relative permeability (RKMIN)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+//          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
           WriteString(' # DATASET 11C: RKMOD, RKMIN');
         end;
       rpcUserDefined:
@@ -519,6 +607,8 @@ procedure TSutraInputWriter.WriteDataSet11D(ARegion: TRegionalProperty);
 var
   LiquidWaterSaturationParameters: TLiquidWaterSaturationParameters;
   Index: Integer;
+  Value: Double;
+  PestParam: string;
 begin
   if (FOptions.TransportChoice = tcFreezing) then
   begin
@@ -532,23 +622,61 @@ begin
       lwscExponential:
         begin
           WriteString('''EXPO’'' ');
-          WriteFloat(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation);
-          WriteFloat(LiquidWaterSaturationParameters.ExponentialParameter);
+
+          Value := EvaluateFormula(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation,
+            'DATASET 11D: Residual liquid water saturation  (SLSATRES)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+          Value := EvaluateFormula(LiquidWaterSaturationParameters.ExponentialParameter,
+            'DATASET 11D: Exponential parameter w_EXP (W)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+//          WriteFloat(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation);
+//          WriteFloat(LiquidWaterSaturationParameters.ExponentialParameter);
           WriteString(' # DATASET 11D: SLMOD, SLSATRES, W');
         end;
       lwscPowerLaw:
         begin
           WriteString('''POWR'' ');
-          WriteFloat(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation);
-          WriteFloat(LiquidWaterSaturationParameters.PowerLawAlpha);
-          WriteFloat(LiquidWaterSaturationParameters.PowerLawBeta);
+
+          Value := EvaluateFormula(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation,
+            'DATASET 11D: Residual liquid water saturation  (SLSATRES)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+          Value := EvaluateFormula(LiquidWaterSaturationParameters.PowerLawAlpha,
+            'DATASET 11D: Modified power law model parameter, alpha_POW (ALPHA)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+          Value := EvaluateFormula(LiquidWaterSaturationParameters.PowerLawBeta,
+            'DATASET 11D: Modified power law model parameter, Beta_POW(BETA)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+//          WriteFloat(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation);
+//          WriteFloat(LiquidWaterSaturationParameters.PowerLawAlpha);
+//          WriteFloat(LiquidWaterSaturationParameters.PowerLawBeta);
           WriteString(' # DATASET 11D: SLMOD, SLSATRES, W');
         end;
       lwscPiecewiseLinear:
         begin
           WriteString('''PLIN'' ');
-          WriteFloat(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation);
-          WriteFloat(LiquidWaterSaturationParameters.TempAtResidualLiquidWaterSaturation);
+
+          Value := EvaluateFormula(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation,
+            'DATASET 11D: Residual liquid water saturation  (SLSATRES)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+          Value := EvaluateFormula(LiquidWaterSaturationParameters.TempAtResidualLiquidWaterSaturation,
+            'DATASET 11D: Relative temperature at which the liquid saturation reaches the residual liquid saturation (TLRES)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+//          WriteFloat(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation);
+//          WriteFloat(LiquidWaterSaturationParameters.TempAtResidualLiquidWaterSaturation);
           WriteString(' # DATASET 11D: SLMOD, SLSATRES, TLRES');
         end;
       lwscUserDefined:
@@ -571,12 +699,25 @@ end;
 procedure TSutraInputWriter.WriteDataSet11E(ARegion: TRegionalProperty);
 var
   FreezingTempAndLatentHeat: TFreezingTempAndLatentHeat;
+  Value: Double;
+  PestParam: string;
 begin
   if (FOptions.TransportChoice = tcFreezing) then
   begin
     FreezingTempAndLatentHeat := ARegion.FreezingTempAndLatentHeat;
-    WriteFloat(FreezingTempAndLatentHeat.MaxFreezePoreWaterTemperature);
-    WriteFloat(FreezingTempAndLatentHeat.LatentHeatOfFusion);
+
+    Value := EvaluateFormula(FreezingTempAndLatentHeat.MaxFreezePoreWaterTemperature,
+      'DATASET 11E: Maximum freezing temperature of pore water (TFREEZ)', PestParam);
+    WriteFormulaOrValueBasedOnAPestName(PestParam,
+      Value, -1, -1, -1);
+
+    Value := EvaluateFormula(FreezingTempAndLatentHeat.LatentHeatOfFusion,
+      'DATASET 11E: Latent heat of fusion (HTLAT)', PestParam);
+    WriteFormulaOrValueBasedOnAPestName(PestParam,
+      Value, -1, -1, -1);
+
+//    WriteFloat(FreezingTempAndLatentHeat.MaxFreezePoreWaterTemperature);
+//    WriteFloat(FreezingTempAndLatentHeat.LatentHeatOfFusion);
     WriteString(' # DATASET 11DE: TFREEZ, HTLAT');
     NewLine;
   end;
@@ -2760,6 +2901,89 @@ begin
   finally
     CloseFile;
   end;
+end;
+
+function TSutraInputWriter.EvaluateFormula(Formula: string;
+  const DataIdentifier: string; out PestParamName: string): double;
+var
+  Param: TModflowSteadyParameter;
+  Compiler: TRbwParser;
+  ErrorFunction: string;
+  Expression: TExpression;
+  ResultTypeOK: Boolean;
+  ErrorMessage: string;
+  procedure HandleError(E: Exception);
+  var
+    ErrorMessage: string;
+    Formula: string;
+  begin
+    ErrorMessage := Format(StrErrorInTheFormula, [DataIdentifier, E.message]);
+    frmFormulaErrors.AddFormulaError('', DataIdentifier,
+      Expression.Decompile, ErrorMessage);
+    Formula := '0';
+    Compiler.Compile(Formula);
+    Expression := Compiler.CurrentExpression;
+    Expression.Evaluate;
+  end;
+begin
+  Param := Model.GetPestParameterByName(Formula);
+  if Param <> nil then
+  begin
+    Param.IsUsedInTemplate := True;
+    result := Param.Value;
+    PestParamName := Param.ParameterName;
+    Exit;
+  end
+  else
+  begin
+    PestParamName := '';
+  end;
+
+
+  Compiler := Model.rpThreeDFormulaCompiler;
+  ErrorFunction := Formula;
+  try
+    Compiler.Compile(Formula);
+  except on E: ERbwParserError do
+    begin
+      ErrorMessage := Format(StrErrorInTheFormula, [DataIdentifier, E.message]);
+      frmFormulaErrors.AddFormulaError('',
+        DataIdentifier, Formula, ErrorMessage);
+      Formula := '0';
+      Compiler.Compile(Formula);
+    end;
+  end;
+
+  Expression := Compiler.CurrentExpression;
+  ResultTypeOK := Expression.ResultType in [rdtInteger, rdtDouble];
+  if not ResultTypeOK then
+  begin
+    raise EInvalidDataType.Create(StrInvalidDataType, Formula);
+  end;
+
+  try
+    Expression.Evaluate;
+  except
+    on E: ERbwParserError do
+    begin
+      HandleError(E);
+    end;
+    on E: EInvalidOp do
+    begin
+      HandleError(E);
+    end;
+    on E: EDivByZero do
+    begin
+      HandleError(E);
+    end;
+    on E: EZeroDivide do
+    begin
+      HandleError(E);
+    end;
+  end;
+
+  result := Expression.DoubleResult;
+
 end;
 
 class function TSutraInputWriter.Extension: string;

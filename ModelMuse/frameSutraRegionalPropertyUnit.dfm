@@ -9,7 +9,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
     Top = 0
     Width = 679
     Height = 480
-    ActivePage = tsIceProperties
+    ActivePage = tsLiquidWater
     Align = alClient
     OwnerDraw = True
     TabHeight = 75
@@ -21,20 +21,20 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
         Left = 0
         Top = 0
         Width = 671
-        Height = 193
+        Height = 209
         Align = alTop
         Caption = 'Adsorption parameters/Thermal conductivity model'
         TabOrder = 0
         object lblFirstDistributionCoefficient: TLabel
-          Left = 106
-          Top = 132
+          Left = 133
+          Top = 135
           Width = 227
           Height = 20
           Caption = 'First distribution coefficient (CHI1)'
         end
         object lblSecondDistributionCoefficient: TLabel
-          Left = 106
-          Top = 159
+          Left = 133
+          Top = 168
           Width = 249
           Height = 20
           Caption = 'Second distribution coefficient (CHI2)'
@@ -52,29 +52,25 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             'Langmuir')
           TabOrder = 0
         end
-        object rdeFirstDistributionCoefficient: TRbwDataEntry
+        object btnedFirstDistributionCoefficient: TssButtonEdit
           Left = 6
-          Top = 129
-          Width = 94
-          Height = 22
+          Top = 132
+          Width = 121
+          Height = 28
+          Enabled = True
+          NumGlyphs = 1
           TabOrder = 1
-          Text = '0'
-          DataType = dtReal
-          Max = 1.000000000000000000
-          CheckMin = True
-          ChangeDisabledColor = True
+          OnButtonClick = DoFormulaButtonClick
         end
-        object rdeSecondDistributionCoefficient: TRbwDataEntry
+        object btnedSecondDistributionCoefficient: TssButtonEdit
           Left = 6
-          Top = 155
-          Width = 94
-          Height = 22
+          Top = 165
+          Width = 121
+          Height = 28
+          Enabled = True
+          NumGlyphs = 1
           TabOrder = 2
-          Text = '0'
-          DataType = dtReal
-          Max = 1.000000000000000000
-          CheckMin = True
-          ChangeDisabledColor = True
+          OnButtonClick = DoFormulaButtonClick
         end
       end
       object rgTransportModel: TRadioGroup
@@ -135,116 +131,110 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Width = 667
             Height = 241
             Caption = 'jvspTotSatControls'
+            ExplicitLeft = 1
             object lblResidWatSat: TLabel
               Left = 164
-              Top = 16
+              Top = 10
               Width = 263
               Height = 20
               Caption = 'Residual total water saturation (SWRES)'
             end
             object lblVgenAlpha: TLabel
               Left = 164
-              Top = 42
+              Top = 41
               Width = 300
               Height = 20
               Caption = 'van Genuchten function parameter '#945'_VG (AA)'
             end
             object lblVgenEta: TLabel
               Left = 164
-              Top = 68
+              Top = 70
               Width = 300
               Height = 20
               Caption = 'van Genuchten function parameter '#951'_VG (VN)'
             end
             object lblAirEntryPressure: TLabel
               Left = 164
-              Top = 94
+              Top = 99
               Width = 166
               Height = 20
               Caption = 'Air-entry pressure (PENT)'
             end
             object lblPoreDistIndex: TLabel
               Left = 164
-              Top = 120
+              Top = 128
               Width = 240
               Height = 20
               Caption = 'Pore size distribution index (RLAMB)'
             end
-            object lblPoreDistInd: TLabel
+            object lblPresAtResid: TLabel
               Left = 164
-              Top = 146
+              Top = 157
               Width = 482
               Height = 20
               Caption = 
                 'Pressure at which the saturation reaches the residual saturation' +
                 ' (PSWRES)'
             end
-            object rdeResidWatSat: TRbwDataEntry
-              Left = 13
-              Top = 10
-              Width = 145
-              Height = 22
-              TabOrder = 0
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              CheckMin = True
-              ChangeDisabledColor = True
-            end
-            object rdeVgenAlpha: TRbwDataEntry
+            object btnedVgenAlpha: TssButtonEdit
               Left = 13
               Top = 38
               Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
+              TabOrder = 0
+              OnButtonClick = DoFormulaButtonClick
+            end
+            object btnedVgenEta: TssButtonEdit
+              Left = 13
+              Top = 67
+              Width = 145
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 1
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
             end
-            object rdeVgenEta: TRbwDataEntry
+            object btnedResidWatSat: TssButtonEdit
               Left = 13
-              Top = 66
+              Top = 7
               Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 2
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
             end
-            object rdePoreDistIndex: TRbwDataEntry
+            object btnedAirEntryPressure: TssButtonEdit
               Left = 13
-              Top = 122
+              Top = 96
               Width = 145
-              Height = 22
-              TabOrder = 4
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
-            end
-            object rdePresAtResid: TRbwDataEntry
-              Left = 13
-              Top = 150
-              Width = 145
-              Height = 22
-              TabOrder = 5
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
-            end
-            object rdeAirEntryPressure: TRbwDataEntry
-              Left = 13
-              Top = 94
-              Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 3
-              Text = '0'
-              DataType = dtReal
-              CheckMax = True
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
+            end
+            object btnedPoreDistIndex: TssButtonEdit
+              Left = 13
+              Top = 125
+              Width = 145
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
+              TabOrder = 4
+              OnButtonClick = DoFormulaButtonClick
+            end
+            object btnedPresAtResid: TssButtonEdit
+              Left = 13
+              Top = 154
+              Width = 145
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
+              TabOrder = 5
+              OnButtonClick = DoFormulaButtonClick
             end
           end
           object jvspTotSatUserDefined: TJvStandardPage
@@ -350,28 +340,28 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Caption = 'jvspRelativePermControls'
             object lblMinRelPerm: TLabel
               Left = 164
-              Top = 16
+              Top = 11
               Width = 264
               Height = 20
               Caption = 'Minimum relative permeability (RKMIN)'
             end
             object lblRelPermEta: TLabel
               Left = 164
-              Top = 44
+              Top = 45
               Width = 300
               Height = 20
               Caption = 'van Genuchten function parameter '#951'_VG (VN)'
             end
             object lblRelPermPoreDistIndex: TLabel
               Left = 164
-              Top = 68
+              Top = 79
               Width = 240
               Height = 20
               Caption = 'Pore size distribution index (RLAMB)'
             end
             object lblSatAtMinPerm: TLabel
               Left = 164
-              Top = 94
+              Top = 113
               Width = 470
               Height = 40
               Caption = 
@@ -379,51 +369,45 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                 'nimum (SLRKMIN)'
               WordWrap = True
             end
-            object rdeMinRelPerm: TRbwDataEntry
+            object btnedMinRelPerm: TssButtonEdit
               Left = 13
-              Top = 10
+              Top = 8
               Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 0
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              CheckMin = True
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
             end
-            object rdeRelPermEta: TRbwDataEntry
+            object btnedRelPermEta: TssButtonEdit
               Left = 13
               Top = 42
               Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 1
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
             end
-            object rdeRelPermPoreDistIndex: TRbwDataEntry
+            object btnedRelPermPoreDistIndex: TssButtonEdit
               Left = 13
-              Top = 70
+              Top = 76
               Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 2
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
             end
-            object rdeSatAtMinPerm: TRbwDataEntry
+            object btnedSatAtMinPerm: TssButtonEdit
               Left = 13
-              Top = 98
+              Top = 110
               Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 3
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              CheckMin = True
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
             end
           end
           object jvspRelativePermUserDefined: TJvStandardPage
@@ -525,37 +509,39 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Width = 667
             Height = 241
             Caption = 'jvspRelativePermControls'
+            ExplicitLeft = -2
+            ExplicitTop = 3
             object lblResidLiqWatSat: TLabel
               Left = 164
-              Top = 16
+              Top = 11
               Width = 292
               Height = 20
               Caption = 'Residual liquid water saturation  (SLSATRES)'
             end
             object lblExpParamW: TLabel
               Left = 164
-              Top = 42
+              Top = 40
               Width = 225
               Height = 20
               Caption = 'Exponential parameter w_EXP (W)'
             end
             object lblPowerAlpha: TLabel
               Left = 164
-              Top = 68
+              Top = 69
               Width = 369
               Height = 20
               Caption = 'Modified power law model parameter, '#945'_POW (ALPHA)'
             end
             object lblPowerBeta: TLabel
               Left = 164
-              Top = 94
+              Top = 98
               Width = 352
               Height = 20
               Caption = 'Modified power law model parameter, '#946'_POW(BETA)'
             end
             object lblLiqWatRelTemSatMin: TLabel
               Left = 164
-              Top = 118
+              Top = 127
               Width = 418
               Height = 40
               Caption = 
@@ -563,61 +549,55 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                 'residual liquid saturation (TLRES)'
               WordWrap = True
             end
-            object rdeResidLiqWatSat: TRbwDataEntry
+            object btnedResidLiqWatSat: TssButtonEdit
               Left = 13
-              Top = 10
+              Top = 8
               Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 0
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              CheckMin = True
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
             end
-            object rdeExpParamW: TRbwDataEntry
+            object btnedExpParamW: TssButtonEdit
               Left = 13
-              Top = 38
+              Top = 37
               Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 1
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
             end
-            object rdePowerAlpha: TRbwDataEntry
+            object btnedPowerAlpha: TssButtonEdit
               Left = 13
               Top = 66
               Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 2
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
             end
-            object rdeLiqWatRelTemSatMin: TRbwDataEntry
+            object btnedPowerBeta: TssButtonEdit
               Left = 13
-              Top = 122
+              Top = 95
               Width = 145
-              Height = 22
-              TabOrder = 4
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
-            end
-            object rdePowerBeta: TRbwDataEntry
-              Left = 13
-              Top = 94
-              Width = 145
-              Height = 22
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
               TabOrder = 3
-              Text = '0'
-              DataType = dtReal
-              Max = 1.000000000000000000
-              ChangeDisabledColor = True
+              OnButtonClick = DoFormulaButtonClick
+            end
+            object btnedLiqWatRelTemSatMin: TssButtonEdit
+              Left = 13
+              Top = 124
+              Width = 145
+              Height = 28
+              Enabled = True
+              NumGlyphs = 1
+              TabOrder = 4
+              OnButtonClick = DoFormulaButtonClick
             end
           end
           object jvspLiqWatSatParameters: TJvStandardPage
@@ -687,41 +667,37 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
         TabOrder = 0
         object lblMaxFreezeTemp: TLabel
           Left = 164
-          Top = 32
+          Top = 27
           Width = 367
           Height = 20
           Caption = 'Maximum freezing temperature of pore water (TFREEZ)'
         end
         object lblLatentHeat: TLabel
           Left = 164
-          Top = 58
+          Top = 61
           Width = 193
           Height = 20
           Caption = 'Latent heat of fusion (HTLAT)'
         end
-        object rdeMaxFreezeTemp: TRbwDataEntry
+        object btnedMaxFreezeTemp: TssButtonEdit
           Left = 13
-          Top = 26
+          Top = 24
           Width = 145
-          Height = 22
+          Height = 28
+          Enabled = True
+          NumGlyphs = 1
           TabOrder = 0
-          Text = '0'
-          DataType = dtReal
-          Max = 1.000000000000000000
-          CheckMax = True
-          ChangeDisabledColor = True
+          OnButtonClick = DoFormulaButtonClick
         end
-        object rdeLatentHeat: TRbwDataEntry
+        object btnedLatentHeat: TssButtonEdit
           Left = 13
-          Top = 54
+          Top = 58
           Width = 145
-          Height = 22
+          Height = 28
+          Enabled = True
+          NumGlyphs = 1
           TabOrder = 1
-          Text = '3.34E5'
-          DataType = dtReal
-          Max = 1.000000000000000000
-          CheckMin = True
-          ChangeDisabledColor = True
+          OnButtonClick = DoFormulaButtonClick
         end
       end
     end
