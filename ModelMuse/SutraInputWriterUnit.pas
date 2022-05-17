@@ -348,9 +348,9 @@ end;
 
 procedure TSutraInputWriter.WriteDataSet11A(ARegion: TRegionalProperty);
 var
-  AbsorbptionProperties: TAbsorbptionProperties;
+  AbsorbptionProperties: TAdsorptionProperties;
 begin
-  AbsorbptionProperties := ARegion.AbsorbptionProperties;
+  AbsorbptionProperties := ARegion.AdsorptionProperties;
   if FOptions.TransportChoice in [tcSolute, tcSoluteHead] then
   begin
     case AbsorbptionProperties.AdsorptionModel of

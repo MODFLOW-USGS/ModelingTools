@@ -27,7 +27,7 @@ type
     lwscPiecewiseLinear, lwscUserDefined);
 
   // SUTRA 4 data set 11A
-  TAbsorbptionProperties = class(TGoPhastPersistent)
+  TAdsorptionProperties = class(TGoPhastPersistent)
   private
     FThermalConductivityModel: TThermalConductivityModel;
     FAdsorptionModel: TSorptionModel;
@@ -56,7 +56,7 @@ type
       read GetSecondDistributionCoefficient
       write SetSecondDistributionCoefficient;
   published
-  // ADSMOD
+    // ADSMOD
     property AdsorptionModel: TSorptionModel read FAdsorptionModel
       write SetAdsorptionModel;
     // CHI1
@@ -333,12 +333,12 @@ type
 
   TRegionalProperty = class(TPhastCollectionItem)
   private
-    FAbsorbptionProperties: TAbsorbptionProperties;
+    FAdsorptionProperties: TAdsorptionProperties;
     FWaterSaturationProperties: TWaterSaturationProperties;
     FRelativePermeabilityParameters: TRelativePermeabilityParameters;
     FLiquidWaterSaturationParameters: TLiquidWaterSaturationParameters;
     FFreezingTempAndLatentHeat: TFreezingTempAndLatentHeat;
-    procedure SetAbsorbptionProperties(const Value: TAbsorbptionProperties);
+    procedure SetAdsorptionProperties(const Value: TAdsorptionProperties);
     procedure SetFreezingTempAndLatentHeat(
       const Value: TFreezingTempAndLatentHeat);
     procedure SetLiquidWaterSaturationParameters(
@@ -352,8 +352,8 @@ type
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
   published
-    property AbsorbptionProperties: TAbsorbptionProperties
-      read FAbsorbptionProperties write SetAbsorbptionProperties;
+    property AdsorptionProperties: TAdsorptionProperties
+      read FAdsorptionProperties write SetAdsorptionProperties;
     property WaterSaturationProperties: TWaterSaturationProperties
       read FWaterSaturationProperties write SetWaterSaturationProperties;
     property RelativePermeabilityParameters: TRelativePermeabilityParameters
@@ -2338,13 +2338,13 @@ end;
 
 { TAbsorbptionProperties }
 
-procedure TAbsorbptionProperties.Assign(Source: TPersistent);
+procedure TAdsorptionProperties.Assign(Source: TPersistent);
 var
-  APSource: TAbsorbptionProperties;
+  APSource: TAdsorptionProperties;
 begin
-  if Source is TAbsorbptionProperties then
+  if Source is TAdsorptionProperties then
   begin
-    APSource := TAbsorbptionProperties(Source);
+    APSource := TAdsorptionProperties(Source);
     AdsorptionModel := APSource.AdsorptionModel;
     FirstDistributionCoefficient := APSource.FirstDistributionCoefficient;
     SecondDistributionCoefficient := APSource.SecondDistributionCoefficient;
@@ -2356,7 +2356,7 @@ begin
   end;
 end;
 
-constructor TAbsorbptionProperties.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TAdsorptionProperties.Create(InvalidateModelEvent: TNotifyEvent);
 begin
   inherited;
   FStoredFirstDistributionCoefficient := TRealStorage.Create(InvalidateModelEvent);
@@ -2364,24 +2364,24 @@ begin
   SetInitialValues
 end;
 
-destructor TAbsorbptionProperties.Destroy;
+destructor TAdsorptionProperties.Destroy;
 begin
   FStoredFirstDistributionCoefficient.Free;
   FStoredSecondDistributionCoefficient.Free;
   inherited;
 end;
 
-function TAbsorbptionProperties.GetFirstDistributionCoefficient: double;
+function TAdsorptionProperties.GetFirstDistributionCoefficient: double;
 begin
   result := StoredFirstDistributionCoefficient.Value;
 end;
 
-function TAbsorbptionProperties.GetSecondDistributionCoefficient: double;
+function TAdsorptionProperties.GetSecondDistributionCoefficient: double;
 begin
   result := StoredSecondDistributionCoefficient.Value;
 end;
 
-procedure TAbsorbptionProperties.SetAdsorptionModel(
+procedure TAdsorptionProperties.SetAdsorptionModel(
   const Value: TSorptionModel);
 begin
   if FAdsorptionModel <> Value then
@@ -2391,13 +2391,13 @@ begin
   end;
 end;
 
-procedure TAbsorbptionProperties.SetFirstDistributionCoefficient(
+procedure TAdsorptionProperties.SetFirstDistributionCoefficient(
   const Value: double);
 begin
   StoredFirstDistributionCoefficient.Value := Value;
 end;
 
-procedure TAbsorbptionProperties.SetInitialValues;
+procedure TAdsorptionProperties.SetInitialValues;
 begin
   AdsorptionModel := smNone;
   FirstDistributionCoefficient := 0;
@@ -2405,25 +2405,25 @@ begin
   ThermalConductivityModel := tcmAritnmetic;
 end;
 
-procedure TAbsorbptionProperties.SetSecondDistributionCoefficient(
+procedure TAdsorptionProperties.SetSecondDistributionCoefficient(
   const Value: double);
 begin
   StoredSecondDistributionCoefficient.Value := Value;
 end;
 
-procedure TAbsorbptionProperties.SetStoredFirstDistributionCoefficient(
+procedure TAdsorptionProperties.SetStoredFirstDistributionCoefficient(
   const Value: TRealStorage);
 begin
   FStoredFirstDistributionCoefficient.Assign(Value);
 end;
 
-procedure TAbsorbptionProperties.SetStoredSecondDistributionCoefficient(
+procedure TAdsorptionProperties.SetStoredSecondDistributionCoefficient(
   const Value: TRealStorage);
 begin
   FStoredSecondDistributionCoefficient.Assign(Value);
 end;
 
-procedure TAbsorbptionProperties.SetThermalConductivityModel(
+procedure TAdsorptionProperties.SetThermalConductivityModel(
   const Value: TThermalConductivityModel);
 begin
   if FThermalConductivityModel <> Value then
@@ -3008,7 +3008,7 @@ begin
   if Source is TRegionalProperty then
   begin
     RpSource := TRegionalProperty(Source);
-    AbsorbptionProperties := RpSource.AbsorbptionProperties;
+    AdsorptionProperties := RpSource.AdsorptionProperties;
     WaterSaturationProperties := RpSource.WaterSaturationProperties;
     RelativePermeabilityParameters := RpSource.RelativePermeabilityParameters;
     LiquidWaterSaturationParameters := RpSource.LiquidWaterSaturationParameters;
@@ -3026,7 +3026,7 @@ var
 begin
   inherited;
   RpCollection := Collection as TRegionalProperties;
-  FAbsorbptionProperties := TAbsorbptionProperties.Create(RpCollection.OnInvalidateModel);
+  FAdsorptionProperties := TAdsorptionProperties.Create(RpCollection.OnInvalidateModel);
   FWaterSaturationProperties := TWaterSaturationProperties.Create(RpCollection.OnInvalidateModel);
   FRelativePermeabilityParameters := TRelativePermeabilityParameters.Create(RpCollection.OnInvalidateModel);
   FLiquidWaterSaturationParameters := TLiquidWaterSaturationParameters.Create(RpCollection.OnInvalidateModel);
@@ -3035,7 +3035,7 @@ end;
 
 destructor TRegionalProperty.Destroy;
 begin
-  FAbsorbptionProperties.Free;
+  FAdsorptionProperties.Free;
   FWaterSaturationProperties.Free;
   FRelativePermeabilityParameters.Free;
   FLiquidWaterSaturationParameters.Free;
@@ -3043,10 +3043,10 @@ begin
   inherited;
 end;
 
-procedure TRegionalProperty.SetAbsorbptionProperties(
-  const Value: TAbsorbptionProperties);
+procedure TRegionalProperty.SetAdsorptionProperties(
+  const Value: TAdsorptionProperties);
 begin
-  FAbsorbptionProperties.Assign(Value);
+  FAdsorptionProperties.Assign(Value);
 end;
 
 procedure TRegionalProperty.SetFreezingTempAndLatentHeat(

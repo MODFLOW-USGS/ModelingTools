@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, JvExControls, JvPageList,
-  Vcl.StdCtrls, ArgusDataEntry, Vcl.ExtCtrls, Vcl.ComCtrls, frameGridUnit;
+  Vcl.StdCtrls, ArgusDataEntry, Vcl.ExtCtrls, Vcl.ComCtrls, frameGridUnit,
+  SutraOptionsUnit;
 
 type
   TframeSutraRegionalProperty = class(TFrame)
@@ -83,15 +84,20 @@ type
     procedure rgRelativePermChoiceClick(Sender: TObject);
     procedure rgLiqWatSatChoiceClick(Sender: TObject);
   private
+    procedure EnableTabs(TransportChoice: TTransportChoice;
+      SaturationChoice: TSaturationChoice);
     { Private declarations }
   public
-    { Public declarations }
+   procedure GetData(ARegion: TRegionalProperty;
+     TransportChoice: TTransportChoice; SaturationChoice: TSaturationChoice);
+   procedure SetData(ARegion: TRegionalProperty);
+   { Public declarations }
   end;
 
 implementation
 
 uses
-  frmGoPhastUnit, SutraOptionsUnit;
+  frmGoPhastUnit;
 
 {$R *.dfm}
 
@@ -119,6 +125,53 @@ begin
   begin
     frameTotSatUserDefined.sbInsertClick(Sender);
   end;
+end;
+
+procedure TframeSutraRegionalProperty.GetData(ARegion: TRegionalProperty;
+     TransportChoice: TTransportChoice; SaturationChoice: TSaturationChoice);
+var
+  Adsorp: TAdsorptionProperties;
+  TotalWaterSat: TWaterSaturationProperties;
+  RelPerm: TRelativePermeabilityParameters;
+  LiqWat: TLiquidWaterSaturationParameters;
+  Freeze: TFreezingTempAndLatentHeat;
+begin
+  Assert(ARegion <> nil);
+  EnableTabs(TransportChoice, SaturationChoice);
+
+  Adsorp := ARegion.AdsorptionProperties;
+  rgSorptionModel.ItemIndex := Ord(Adsorp.AdsorptionModel);
+  rdeFirstDistributionCoefficient.RealValue := Adsorp.FirstDistributionCoefficient;
+  rdeSecondDistributionCoefficient.RealValue := Adsorp.SecondDistributionCoefficient;
+  rgTransportModel.ItemIndex := Ord(Adsorp.ThermalConductivityModel);
+
+  TotalWaterSat := ARegion.WaterSaturationProperties;
+  rgWatSatFunct.ItemIndex := Ord(TotalWaterSat.WaterSaturationChoice);
+  rdeResidWatSat.RealValue := TotalWaterSat.ResidualWaterContent;
+  rdeVgenAlpha.RealValue := TotalWaterSat.VanGenuchtenAlpha;
+  rdeVgenEta.RealValue := TotalWaterSat.VanGenuchtenExponent;
+  rdeAirEntryPressure.RealValue := TotalWaterSat.AirEntryPressure;
+  rdePoreDistIndex.RealValue := TotalWaterSat.PoreSizeDistributionIndex;
+  rdePresAtResid.RealValue := TotalWaterSat.PressureForResidualWaterContent;
+
+  RelPerm := ARegion.RelativePermeabilityParameters;
+  rgRelativePermChoice.ItemIndex := Ord(RelPerm.RelativePermeabilityChoice);
+  rdeMinRelPerm.RealValue := RelPerm.MinRelativePerm;
+  rdeRelPermEta.RealValue := RelPerm.RelativePermParam;
+  rdeRelPermPoreDistIndex.RealValue := RelPerm.PoreSizeDistributionIndex;
+  rdeSatAtMinPerm.RealValue := RelPerm.WaterSaturationAtMinPermeability;
+
+  LiqWat := ARegion.LiquidWaterSaturationParameters;
+  rgLiqWatSatChoice.ItemIndex := Ord(LiqWat.LiquidWaterSaturationChoice);
+  rdeResidLiqWatSat.RealValue := LiqWat.ResidualLiquidWaterSaturation;
+  rdeExpParamW.RealValue := LiqWat.ExponentialParameter;
+  rdePowerAlpha.RealValue := LiqWat.PowerLawAlpha;
+  rdePowerBeta.RealValue := LiqWat.PowerLawBeta;
+  rdeLiqWatRelTemSatMin.RealValue := LiqWat.TempAtResidualLiquidWaterSaturation;
+
+  Freeze := ARegion.FreezingTempAndLatentHeat;
+  rdeMaxFreezeTemp.RealValue := Freeze.MaxFreezePoreWaterTemperature;
+  rdeLatentHeat.RealValue := Freeze.LatentHeatOfFusion;
 end;
 
 procedure TframeSutraRegionalProperty.pgcMainDrawTab(Control: TCustomTabControl;
@@ -238,6 +291,124 @@ begin
     [wscBrooksCorey, wscPiecewiseLinear];
   rdePoreDistIndex.Enabled := (SatChoice = wscBrooksCorey);
   rdePresAtResid.Enabled := (SatChoice = wscPiecewiseLinear);
+end;
+
+procedure TframeSutraRegionalProperty.SetData(ARegion: TRegionalProperty);
+var
+  Adsorp: TAdsorptionProperties;
+  TotalWaterSat: TWaterSaturationProperties;
+  RelPerm: TRelativePermeabilityParameters;
+  LiqWat: TLiquidWaterSaturationParameters;
+  Freeze: TFreezingTempAndLatentHeat;
+  AValue: double;
+begin
+  Assert(ARegion <> nil);
+
+  Adsorp := ARegion.AdsorptionProperties;
+  Adsorp.AdsorptionModel := TSorptionModel(rgSorptionModel.ItemIndex);
+  if rdeFirstDistributionCoefficient.TryGetRealValue(AValue) then
+  begin
+    Adsorp.FirstDistributionCoefficient := AValue;
+  end;
+  if rdeSecondDistributionCoefficient.TryGetRealValue(AValue) then
+  begin
+    Adsorp.SecondDistributionCoefficient := AValue;
+  end;
+  Adsorp.ThermalConductivityModel :=
+    TThermalConductivityModel(rgTransportModel.ItemIndex);
+
+  TotalWaterSat := ARegion.WaterSaturationProperties;
+  TotalWaterSat.WaterSaturationChoice :=
+    TWaterSaturationChoice(rgWatSatFunct.ItemIndex);
+  if rdeResidWatSat.TryGetRealValue(AValue) then
+  begin
+    TotalWaterSat.ResidualWaterContent := AValue;
+  end;
+  if rdeVgenAlpha.TryGetRealValue(AValue) then
+  begin
+    TotalWaterSat.VanGenuchtenAlpha := AValue;
+  end;
+  if rdeVgenEta.TryGetRealValue(AValue) then
+  begin
+    TotalWaterSat.VanGenuchtenExponent := AValue;
+  end;
+  if rdeAirEntryPressure.TryGetRealValue(AValue) then
+  begin
+    TotalWaterSat.AirEntryPressure := AValue;
+  end;
+  if rdePoreDistIndex.TryGetRealValue(AValue) then
+  begin
+    TotalWaterSat.PoreSizeDistributionIndex := AValue;
+  end;
+  if rdePresAtResid.TryGetRealValue(AValue) then
+  begin
+    TotalWaterSat.PressureForResidualWaterContent := AValue;
+  end;
+
+  RelPerm := ARegion.RelativePermeabilityParameters;
+  RelPerm.RelativePermeabilityChoice :=
+    TRelativePermeabilityChoice(rgRelativePermChoice.ItemIndex);
+  if rdeMinRelPerm.TryGetRealValue(AValue) then
+  begin
+    RelPerm.MinRelativePerm := AValue;
+  end;
+  if rdeRelPermEta.TryGetRealValue(AValue) then
+  begin
+    RelPerm.RelativePermParam := AValue;
+  end;
+  if rdeRelPermPoreDistIndex.TryGetRealValue(AValue) then
+  begin
+    RelPerm.PoreSizeDistributionIndex := AValue;
+  end;
+  if rdeSatAtMinPerm.TryGetRealValue(AValue) then
+  begin
+    RelPerm.WaterSaturationAtMinPermeability := AValue;
+  end;
+
+  LiqWat := ARegion.LiquidWaterSaturationParameters;
+  LiqWat.LiquidWaterSaturationChoice :=
+    TLiquidWaterSaturationChoice(rgLiqWatSatChoice.ItemIndex);
+  if rdeResidLiqWatSat.TryGetRealValue(AValue) then
+  begin
+    LiqWat.ResidualLiquidWaterSaturation := AValue;
+  end;
+  if rdeExpParamW.TryGetRealValue(AValue) then
+  begin
+    LiqWat.ExponentialParameter := AValue;
+  end;
+  if rdePowerAlpha.TryGetRealValue(AValue) then
+  begin
+    LiqWat.PowerLawAlpha := AValue;
+  end;
+  if rdePowerBeta.TryGetRealValue(AValue) then
+  begin
+    LiqWat.PowerLawBeta := AValue;
+  end;
+  if rdeLiqWatRelTemSatMin.TryGetRealValue(AValue) then
+  begin
+    LiqWat.TempAtResidualLiquidWaterSaturation := AValue;
+  end;
+
+  Freeze := ARegion.FreezingTempAndLatentHeat;
+  if rdeMaxFreezeTemp.TryGetRealValue(AValue) then
+  begin
+    Freeze.MaxFreezePoreWaterTemperature := AValue;
+  end;
+  if rdeLatentHeat.TryGetRealValue(AValue) then
+  begin
+    Freeze.LatentHeatOfFusion := AValue;
+  end;
+end;
+
+procedure TframeSutraRegionalProperty.EnableTabs(
+  TransportChoice: TTransportChoice; SaturationChoice: TSaturationChoice);
+begin
+  tsTotalSaturation.TabVisible := (TransportChoice = tcFreezing)
+    or (SaturationChoice = scUnsaturated);
+  tsPermeability.TabVisible := (TransportChoice = tcFreezing)
+    or (SaturationChoice = scUnsaturated);
+  tsLiquidWater.TabVisible := (TransportChoice = tcFreezing);
+  tsIceProperties.TabVisible := (TransportChoice = tcFreezing);
 end;
 
 end.

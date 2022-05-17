@@ -214,6 +214,7 @@ type
     property RealValue: Double read GetRealValue write SetRealValue;
     function RealValueDefault(DefaultValue: double): double;
     property IntegerValue: Integer read GetIntegerValue write SetIntegerValue;
+    function TryGetRealValue(var AValue: Double): Boolean;
   published
     { Published declarations }
     property DataType: TDataType read FDataType write SetDataType default dtString;
@@ -890,6 +891,11 @@ begin
       end;
   end;
   Update;
+end;
+
+function TArgusDataEntry.TryGetRealValue(var AValue: Double): Boolean;
+begin
+  Result := TextToFloat(Text, AValue);
 end;
 
 procedure TArgusDataEntry.CheckRange;

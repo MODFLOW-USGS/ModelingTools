@@ -23,7 +23,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
         Width = 671
         Height = 193
         Align = alTop
-        Caption = 'Adsorption parameters'
+        Caption = 'Adsorption parameters/Thermal conductivity model'
         TabOrder = 0
         object lblFirstDistributionCoefficient: TLabel
           Left = 106
@@ -188,6 +188,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Text = '0'
               DataType = dtReal
               Max = 1.000000000000000000
+              CheckMin = True
               ChangeDisabledColor = True
             end
             object rdeVgenAlpha: TRbwDataEntry
@@ -242,7 +243,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               TabOrder = 3
               Text = '0'
               DataType = dtReal
-              Max = 1.000000000000000000
+              CheckMax = True
               ChangeDisabledColor = True
             end
           end
@@ -356,21 +357,21 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             end
             object lblRelPermEta: TLabel
               Left = 164
-              Top = 68
+              Top = 44
               Width = 300
               Height = 20
               Caption = 'van Genuchten function parameter '#951'_VG (VN)'
             end
             object lblRelPermPoreDistIndex: TLabel
               Left = 164
-              Top = 120
+              Top = 68
               Width = 240
               Height = 20
               Caption = 'Pore size distribution index (RLAMB)'
             end
             object lblSatAtMinPerm: TLabel
               Left = 164
-              Top = 146
+              Top = 94
               Width = 470
               Height = 40
               Caption = 
@@ -387,11 +388,12 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Text = '0'
               DataType = dtReal
               Max = 1.000000000000000000
+              CheckMin = True
               ChangeDisabledColor = True
             end
             object rdeRelPermEta: TRbwDataEntry
               Left = 13
-              Top = 66
+              Top = 42
               Width = 145
               Height = 22
               TabOrder = 1
@@ -402,7 +404,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             end
             object rdeRelPermPoreDistIndex: TRbwDataEntry
               Left = 13
-              Top = 122
+              Top = 70
               Width = 145
               Height = 22
               TabOrder = 2
@@ -413,13 +415,14 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             end
             object rdeSatAtMinPerm: TRbwDataEntry
               Left = 13
-              Top = 150
+              Top = 98
               Width = 145
               Height = 22
               TabOrder = 3
               Text = '0'
               DataType = dtReal
               Max = 1.000000000000000000
+              CheckMin = True
               ChangeDisabledColor = True
             end
           end
@@ -552,7 +555,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             end
             object lblLiqWatRelTemSatMin: TLabel
               Left = 164
-              Top = 146
+              Top = 118
               Width = 418
               Height = 40
               Caption = 
@@ -569,6 +572,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Text = '0'
               DataType = dtReal
               Max = 1.000000000000000000
+              CheckMin = True
               ChangeDisabledColor = True
             end
             object rdeExpParamW: TRbwDataEntry
@@ -595,7 +599,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             end
             object rdeLiqWatRelTemSatMin: TRbwDataEntry
               Left = 13
-              Top = 150
+              Top = 122
               Width = 145
               Height = 22
               TabOrder = 4
@@ -704,6 +708,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Text = '0'
           DataType = dtReal
           Max = 1.000000000000000000
+          CheckMax = True
           ChangeDisabledColor = True
         end
         object rdeLatentHeat: TRbwDataEntry
@@ -712,9 +717,10 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Width = 145
           Height = 22
           TabOrder = 1
-          Text = '0'
+          Text = '3.34E5'
           DataType = dtReal
           Max = 1.000000000000000000
+          CheckMin = True
           ChangeDisabledColor = True
         end
       end
