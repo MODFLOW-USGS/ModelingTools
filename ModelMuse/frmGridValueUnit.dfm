@@ -7,12 +7,11 @@ inherited frmGridValue: TfrmGridValue
   KeyPreview = True
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitWidth = 664
-  ExplicitHeight = 552
+  ExplicitWidth = 666
+  ExplicitHeight = 560
   DesignSize = (
     648
     513)
-  PixelsPerInch = 96
   TextHeight = 18
   object btnHelp: TBitBtn
     Left = 452
@@ -335,8 +334,8 @@ inherited frmGridValue: TfrmGridValue
         Height = 26
         Tree.Left = 0
         Tree.Top = 0
-        Tree.Width = 304
-        Tree.Height = 201
+        Tree.Width = 622
+        Tree.Height = 433
         Tree.Align = alClient
         Tree.Colors.BorderColor = 15987699
         Tree.Colors.DisabledColor = clGray
@@ -363,6 +362,8 @@ inherited frmGridValue: TfrmGridValue
         Tree.OnChange = virttreecomboDataSetsTreeChange
         Tree.OnGetText = virttreecomboDataSetsTreeGetText
         Tree.OnGetNodeDataSize = virttreecomboDataSetsTreeGetNodeDataSize
+        Tree.Touch.InteractiveGestures = [igPan, igPressAndTap]
+        Tree.Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
         Tree.Columns = <>
         Enabled = True
         Glyph.Data = {
@@ -605,6 +606,7 @@ inherited frmGridValue: TfrmGridValue
             LabelPosition = lpLeft
             ReadOnly = True
             TabOrder = 0
+            Text = ''
           end
           object lbledtTerminationCode: TLabeledEdit
             Left = 136
@@ -617,6 +619,7 @@ inherited frmGridValue: TfrmGridValue
             LabelPosition = lpLeft
             ReadOnly = True
             TabOrder = 1
+            Text = ''
           end
           object lbledtTrackingTime: TLabeledEdit
             Left = 136
@@ -629,6 +632,7 @@ inherited frmGridValue: TfrmGridValue
             LabelPosition = lpLeft
             ReadOnly = True
             TabOrder = 2
+            Text = ''
           end
         end
         object rdgEndPoints: TRbwDataGrid4
@@ -768,11 +772,10 @@ inherited frmGridValue: TfrmGridValue
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 371
+            Width = 103
             Height = 18
             Align = alTop
             Caption = 'SWR Reaches'
-            ExplicitWidth = 103
           end
           object rdgSwrReaches: TRbwDataGrid4
             Left = 1
@@ -903,11 +906,10 @@ inherited frmGridValue: TfrmGridValue
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 371
+            Width = 111
             Height = 18
             Align = alTop
             Caption = 'SWR Structures'
-            ExplicitWidth = 111
           end
           object rdgSwrStructures: TRbwDataGrid4
             Left = 1

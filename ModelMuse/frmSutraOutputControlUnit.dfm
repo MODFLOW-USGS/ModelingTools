@@ -4,9 +4,8 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
   Caption = 'SUTRA Output Control'
   ClientHeight = 438
   ClientWidth = 722
-  ExplicitWidth = 738
-  ExplicitHeight = 477
-  PixelsPerInch = 96
+  ExplicitWidth = 740
+  ExplicitHeight = 485
   TextHeight = 18
   object spl1: TSplitter
     Left = 136
@@ -21,10 +20,9 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
     Top = 0
     Width = 581
     Height = 388
-    ActivePage = jvspObsBound
+    ActivePage = jvspNodEle
     PropagateEnable = False
     Align = alClient
-    ExplicitHeight = 344
     object jvspListing: TJvStandardPage
       Left = 0
       Top = 0
@@ -121,7 +119,10 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
           'Pressure (P)'
           'Concentration or temperature (U)'
           'Saturation (S)'
-          'X, Y, and Z-components of fluid velocity (VX, VY, VZ)')
+          'X, Y, and Z-components of fluid velocity (VX, VY, VZ)'
+          'Liquid saturation (L)'
+          'Ice Saturation (I)'
+          'Darcy velocities (qX, qY, qZ)')
         ParentDoubleBuffered = False
         ScrollWidth = 332
         TabOrder = 1
@@ -132,7 +133,6 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       Top = 0
       Width = 581
       Height = 388
-      ExplicitHeight = 344
       object lblNoblin: TLabel
         Left = 133
         Top = 6
@@ -291,7 +291,6 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
     TabOrder = 0
     OnCustomDrawItem = jvpltvNavigatorCustomDrawItem
     Items.Links = {00000000}
-    ExplicitHeight = 344
   end
   object pnlBottom: TPanel
     Left = 0
@@ -301,7 +300,6 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 344
     DesignSize = (
       722
       50)

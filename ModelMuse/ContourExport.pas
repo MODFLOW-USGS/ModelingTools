@@ -283,7 +283,7 @@ begin
     end;
   end;
   Exaggeration := 1;
-  if (frmGoPhast.ModelSelection in [msSutra22, msSutra30])
+  if (frmGoPhast.ModelSelection in [msSutra22, msSutra30, msSutra40])
     and (frmGoPhast.SutraMesh.MeshType = mtProfile) then
   begin
     Exaggeration := frmGoPhast.PhastModel.Exaggeration;
@@ -474,7 +474,7 @@ var
       Exit;
     end;
     Exaggeration := 1;
-    if frmGoPhast.ModelSelection in [msSutra22, msSutra30] then
+    if frmGoPhast.ModelSelection in [msSutra22, msSutra30, msSutra40] then
     begin
       if (Mesh as TSutraMesh3D).MeshType = mtProfile then
       begin

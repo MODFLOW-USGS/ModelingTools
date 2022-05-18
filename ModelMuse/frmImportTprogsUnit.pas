@@ -186,7 +186,7 @@ begin
           Exit;
         end
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         rgEvaluatedAt.ItemIndex := 1;
         GridAngle := 0;

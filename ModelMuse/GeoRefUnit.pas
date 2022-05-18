@@ -377,6 +377,7 @@ begin
     msModflowCfp: Result := 'MODFLOW-CFP';
     msSutra22: Result := 'SUTRA 2.2';
     msSutra30: Result := 'SUTRA 3.0';
+    msSutra40: Result := 'SUTRA 4.0';
     msFootPrint: Result := 'WellFootprint';
     msModflow2015: Result := 'MODFLOW 6';
     else

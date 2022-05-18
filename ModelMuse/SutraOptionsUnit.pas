@@ -28,9 +28,13 @@ type
 
   // SUTRA 4 data set 11A
   TCustomSutraPersistent = class(TGoPhastPersistent)
+  private
+    FModel: TBaseModel;
   protected
     function CreateFormulaObject: TFormulaObject;
     procedure ChangeFormula(const Value: string; var AField: TFormulaObject);
+  public
+    Constructor Create(AModel: TBaseModel);
   end;
 
   TAdsorptionProperties = class(TCustomSutraPersistent)
@@ -47,7 +51,7 @@ type
     procedure SetThermalConductivityModel(
       const Value: TThermalConductivityModel);
   public
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(AModel: TBaseModel);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
@@ -94,7 +98,7 @@ type
     procedure SetVanGenuchtenExponent(const Value: string);
     procedure SetWaterSaturationChoice(const Value: TWaterSaturationChoice);
   public
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(AModel: TBaseModel);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
@@ -147,7 +151,7 @@ type
     procedure SetRelativePermParam(const Value: string);
     procedure SetWaterSaturationAtMinPermeability(const Value: string);
   public
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(AModel: TBaseModel);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
@@ -197,7 +201,7 @@ type
     procedure SetResidualLiquidWaterSaturation(const Value: string);
     procedure SetTempAtResidualLiquidWaterSaturation(const Value: string);
   public
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(AModel: TBaseModel);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
@@ -235,7 +239,7 @@ type
     procedure SetLatentHeatOfFusion(const Value: string);
     procedure SetMaxFreezePoreWaterTemperature(const Value: string);
   public
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(AModel: TBaseModel);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure SetInitialValues;
@@ -286,10 +290,11 @@ type
 
   TRegionalProperties = class(TPhastCollection)
   private
+    FModel: TBaseModel;
     function GetItems(Index: Integer): TRegionalProperty;
     procedure SetItems(Index: Integer; const Value: TRegionalProperty);
   public
-    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    constructor Create(AModel: TBaseModel);
     procedure Initialize;
     property Items[Index: Integer]: TRegionalProperty read GetItems write SetItems; default;
   end;
@@ -535,6 +540,10 @@ type
     FLakeOptions: TSutraLakeOptions;
     FPestAnisotropyOptions: TSutraPestAnisotropyOptions;
     FRegionalProperties: TRegionalProperties;
+    FStoredIceCompressibility: TRealStorage;
+    FStoredIceSpecificHeat: TRealStorage;
+    FStoredIceThermalConductivity: TRealStorage;
+    FStoredIceDensity: TRealStorage;
     procedure SetTransportChoice(const Value: TTransportChoice);
     procedure SetSaturationChoice(const Value: TSaturationChoice);
     procedure SetTitleLines(const Value: AnsiString);
@@ -653,6 +662,19 @@ type
     procedure SetPestAnisotropyOptions(
       const Value: TSutraPestAnisotropyOptions);
     procedure SetRegionalProperties(const Value: TRegionalProperties);
+
+    procedure SetStoredIceCompressibility(const Value: TRealStorage);
+    procedure SetStoredIceSpecificHeat(const Value: TRealStorage);
+    procedure SetStoredIceThermalConductivity(const Value: TRealStorage);
+    procedure SetStoredIceDensity(const Value: TRealStorage);
+    function GetIceCompressibility: double;
+    function GetIceDensity: double;
+    procedure SetIceSpecificHeat(const Value: double);
+    procedure SetIceThermalConductivity(const Value: double);
+    procedure SetIceCompressibility(const Value: double);
+    procedure SetIceDensity(const Value: double);
+    function GetIceSpecificHeat: double;
+    function GetIceThermalConductivity: double;
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -718,6 +740,18 @@ type
       write SetViscosity;
     // Data Set 9: VISC0 for energy transport. @seealso(Viscosity).
     property ScaleFactor: double read GetScaleFactor write SetScaleFactor;
+
+    // Data set 9: COMPI
+    property IceCompressibility: double
+      read GetIceCompressibility write SetIceCompressibility;
+    // Data set 9: CI
+    property IceSpecificHeat: double read GetIceSpecificHeat
+      write SetIceSpecificHeat;
+    // Data set 9: SIGMAI
+    property IceThermalConductivity: double read GetIceThermalConductivity
+      write SetIceThermalConductivity;
+    // Data set 9: RHOI
+    property IceDensity: double read GetIceDensity write SetIceDensity;
 
     // Data Set 10: COMPMA
     property MatrixCompressibility: double read GetMatrixCompressibility
@@ -820,37 +854,37 @@ type
     property StoredTransportCriterion: TRealStorage
       read FStoredTransportCriterion write SetStoredTransportCriterion;
 
-    // Data Set 9: COMPFL
+    // Data Set 9: COMPL
     property StoredFluidCompressibility: TRealStorage
       read FStoredFluidCompressibility write SetStoredFluidCompressibility;
-    // Data Set 9: CW
+    // Data Set 9: CL
     property StoredFluidSpecificHeat: TRealStorage read FStoredFluidSpecificHeat
       write SetStoredFluidSpecificHeat;
 
-    // Data Set 9: SIGMAW for solute transport.
+    // Data Set 9: SIGMAL for solute transport.
     // @seealso(StoredFluidThermalConductivity).
     property StoredFluidDiffusivity: TRealStorage read FStoredFluidDiffusivity
       write SetStoredFluidDiffusivity;
-    // Data Set 9: SIGMAW for energy transport.
+    // Data Set 9: SIGMAL for energy transport.
     // @seealso(StoredFluidDiffusivity).
     property StoredFluidThermalConductivity: TRealStorage
       read FStoredFluidThermalConductivity
       write SetStoredFluidThermalConductivity;
 
-    // Data Set 9: RHOW0
+    // Data Set 9: RHOl0
     property StoredBaseFluidDensity: TRealStorage read FStoredBaseFluidDensity
       write SetStoredBaseFluidDensity;
-    // Data Set 9: URHOW0 for solute transport.
+    // Data Set 9: URHOl0 for solute transport.
     property StoredBaseConcentration: TRealStorage read FStoredBaseConcentration
       write SetStoredBaseConcentration;
-    // Data Set 9: URHOW0 for energy transport.
+    // Data Set 9: URHOl0 for energy transport.
     property StoredBaseTemperature: TRealStorage read FStoredBaseTemperature
       write SetStoredBaseTemperature;
-    // Data Set 9: DRWDU for solute transport
+    // Data Set 9: DRLDU for solute transport
     property StoredFluidDensityCoefficientConcentration: TRealStorage
       read FStoredFluidDensityCoefficientConcentration
       write SetStoredFluidDensityCoefficientConcentration;
-    // Data Set 9: DRWDU for energy transport
+    // Data Set 9: DRLDU for energy transport
     property StoredFluidDensityCoefficientTemperature: TRealStorage
       read FStoredFluidDensityCoefficientTemperature
       write SetStoredFluidDensityCoefficientTemperature;
@@ -860,6 +894,19 @@ type
     // Data Set 9: VISC0 for energy transport. @seealso(StoredViscosity).
     property StoredScaleFactor: TRealStorage
       read FStoredScaleFactor write SetStoredScaleFactor;
+
+    // Data set 9: COMPI
+    property StoredIceCompressibility: TRealStorage
+      read FStoredIceCompressibility write SetStoredIceCompressibility;
+    // Data set 9: CI
+    property StoredIceSpecificHeat: TRealStorage read FStoredIceSpecificHeat
+      write SetStoredIceSpecificHeat;
+    // Data set 9: SIGMAI
+    property StoredIceThermalConductivity: TRealStorage
+      read FStoredIceThermalConductivity write SetStoredIceThermalConductivity;
+    // Data set 9: RHOI
+    property StoredIceDensity: TRealStorage read FStoredIceDensity
+      write SetStoredIceDensity;
 
     // Data Set 10: COMPMA
     property StoredMatrixCompressibility: TRealStorage
@@ -976,6 +1023,11 @@ begin
     Viscosity := SourceOptions.Viscosity;
     ScaleFactor := SourceOptions.ScaleFactor;
 
+    IceCompressibility := SourceOptions.IceCompressibility;
+    IceSpecificHeat := SourceOptions.IceSpecificHeat;
+    IceThermalConductivity := SourceOptions.IceThermalConductivity;
+    IceDensity := SourceOptions.IceDensity;
+
     MatrixCompressibility := SourceOptions.MatrixCompressibility;
     SolidGrainSpecificHeat := SourceOptions.SolidGrainSpecificHeat;
     SolidGrainDiffusivity := SourceOptions.SolidGrainDiffusivity;
@@ -1047,6 +1099,11 @@ begin
   FStoredFluidDensityCoefficientTemperature := TRealStorage.Create;
   FStoredFluidSpecificHeat := TRealStorage.Create;
 
+  FStoredIceCompressibility := TRealStorage.Create;
+  FStoredIceSpecificHeat := TRealStorage.Create;
+  FStoredIceThermalConductivity := TRealStorage.Create;
+  FStoredIceDensity := TRealStorage.Create;
+
   FStoredSolidGrainSpecificHeat := TRealStorage.Create;
   FStoredMatrixCompressibility := TRealStorage.Create;
   FStoredSolidGrainDensity := TRealStorage.Create;
@@ -1062,7 +1119,7 @@ begin
   FStoredZeroImmobileProduction := TRealStorage.Create;
   FStoredFirstImmobileProduction := TRealStorage.Create;
 
-  FRegionalProperties := TRegionalProperties.Create(ValueChanged);
+  FRegionalProperties := TRegionalProperties.Create(Model);
 
   Initialize;
 
@@ -1085,6 +1142,11 @@ begin
   FStoredFluidDensityCoefficientConcentration.OnChange := ValueChanged;
   FStoredFluidDensityCoefficientTemperature.OnChange := ValueChanged;
   FStoredFluidSpecificHeat.OnChange := ValueChanged;
+
+  FStoredIceCompressibility.OnChange := ValueChanged;
+  FStoredIceSpecificHeat.OnChange := ValueChanged;
+  FStoredIceThermalConductivity.OnChange := ValueChanged;
+  FStoredIceDensity.OnChange := ValueChanged;
 
   FStoredSolidGrainSpecificHeat.OnChange := ValueChanged;
   FStoredMatrixCompressibility.OnChange := ValueChanged;
@@ -1128,6 +1190,11 @@ begin
   FStoredFluidDensityCoefficientConcentration.Free;
   FStoredFluidDensityCoefficientTemperature.Free;
   FStoredFluidSpecificHeat.Free;
+
+  FStoredIceCompressibility.Free;
+  FStoredIceSpecificHeat.Free;
+  FStoredIceThermalConductivity.Free;
+  FStoredIceDensity.Free;
 
   FStoredSolidGrainSpecificHeat.Free;
   FStoredMatrixCompressibility.Free;
@@ -1225,6 +1292,26 @@ end;
 function TSutraOptions.GetGravityZ: double;
 begin
   result := StoredGravityZ.Value;
+end;
+
+function TSutraOptions.GetIceCompressibility: double;
+begin
+  result := StoredIceCompressibility.Value;
+end;
+
+function TSutraOptions.GetIceDensity: double;
+begin
+  result := StoredIceDensity.Value;
+end;
+
+procedure TSutraOptions.SetIceSpecificHeat(const Value: double);
+begin
+  StoredIceSpecificHeat.Value := Value;
+end;
+
+procedure TSutraOptions.SetIceThermalConductivity(const Value: double);
+begin
+  StoredIceThermalConductivity.Value := Value;
 end;
 
 function TSutraOptions.GetMatrixCompressibility: double;
@@ -1463,6 +1550,26 @@ end;
 procedure TSutraOptions.SetGravityZ(const Value: double);
 begin
   StoredGravityZ.Value := Value;
+end;
+
+procedure TSutraOptions.SetIceCompressibility(const Value: double);
+begin
+  StoredIceCompressibility.Value := Value
+end;
+
+procedure TSutraOptions.SetIceDensity(const Value: double);
+begin
+  StoredIceDensity.Value := Value;
+end;
+
+function TSutraOptions.GetIceSpecificHeat: double;
+begin
+  result := StoredIceSpecificHeat.Value;
+end;
+
+function TSutraOptions.GetIceThermalConductivity: double;
+begin
+  result := StoredIceThermalConductivity.Value;
 end;
 
 procedure TSutraOptions.SetLakeOptions(const Value: TSutraLakeOptions);
@@ -1787,6 +1894,31 @@ procedure TSutraOptions.SetStoredZeroImmobileProduction
 begin
   FStoredZeroImmobileProduction.Assign(Value);
 end;
+
+procedure TSutraOptions.SetStoredIceCompressibility
+  (const Value: TRealStorage);
+begin
+  FStoredIceCompressibility.Assign(Value);
+end;
+
+procedure TSutraOptions.SetStoredIceSpecificHeat
+  (const Value: TRealStorage);
+begin
+  FStoredIceSpecificHeat.Assign(Value);
+end;
+
+procedure TSutraOptions.SetStoredIceThermalConductivity
+  (const Value: TRealStorage);
+begin
+  FStoredIceThermalConductivity.Assign(Value);
+end;
+
+procedure TSutraOptions.SetStoredIceDensity
+  (const Value: TRealStorage);
+begin
+  FStoredIceDensity.Assign(Value);
+end;
+
 
 procedure TSutraOptions.SetTitleLines(const Value: AnsiString);
 begin
@@ -2274,7 +2406,7 @@ begin
   end;
 end;
 
-constructor TAdsorptionProperties.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TAdsorptionProperties.Create(AModel: TBaseModel);
 begin
   inherited;
   FFirstDistributionCoefficient := CreateFormulaObject;
@@ -2384,8 +2516,9 @@ begin
   end;
 end;
 
-constructor TWaterSaturationProperties.Create(
-  InvalidateModelEvent: TNotifyEvent);
+constructor TWaterSaturationProperties.Create(AModel: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
 begin
   inherited;
   FVanGenuchtenAlpha := CreateFormulaObject;
@@ -2394,6 +2527,14 @@ begin
   FAirEntryPressure := CreateFormulaObject;
   FPoreSizeDistributionIndex := CreateFormulaObject;
   FPressureForResidualWaterContent := CreateFormulaObject;
+  if AModel = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := (AModel as TCustomModel).Invalidate;
+  end;
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
   SetInitialValues;
 end;
@@ -2594,14 +2735,23 @@ begin
   end;
 end;
 
-constructor TRelativePermeabilityParameters.Create(
-  InvalidateModelEvent: TNotifyEvent);
+constructor TRelativePermeabilityParameters.Create(AModel: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
 begin
   inherited;
   FRelativePermParam := CreateFormulaObject;
   FMinRelativePerm := CreateFormulaObject;
   FPoreSizeDistributionIndex := CreateFormulaObject;
   FWaterSaturationAtMinPermeability := CreateFormulaObject;
+  if AModel = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := (AModel as TCustomModel).Invalidate;
+  end;
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
   SetInitialValues;
 end;
@@ -2749,8 +2899,9 @@ begin
   end;
 end;
 
-constructor TLiquidWaterSaturationParameters.Create(
-  InvalidateModelEvent: TNotifyEvent);
+constructor TLiquidWaterSaturationParameters.Create(AModel: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
 begin
   inherited;
   FResidualLiquidWaterSaturation := CreateFormulaObject;
@@ -2758,6 +2909,14 @@ begin
   FPowerLawAlpha := CreateFormulaObject;
   FPowerLawBeta := CreateFormulaObject;
   FTempAtResidualLiquidWaterSaturation := CreateFormulaObject;
+  if AModel = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := (AModel as TCustomModel).Invalidate;
+  end;
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
   SetInitialValues;
 end;
@@ -2929,8 +3088,7 @@ begin
   end;
 end;
 
-constructor TFreezingTempAndLatentHeat.Create(
-  InvalidateModelEvent: TNotifyEvent);
+constructor TFreezingTempAndLatentHeat.Create(AModel: TBaseModel);
 begin
   inherited;
   FMaxFreezePoreWaterTemperature := CreateFormulaObject;
@@ -3021,11 +3179,11 @@ var
 begin
   inherited;
   RpCollection := Collection as TRegionalProperties;
-  FAdsorptionProperties := TAdsorptionProperties.Create(RpCollection.OnInvalidateModel);
-  FWaterSaturationProperties := TWaterSaturationProperties.Create(RpCollection.OnInvalidateModel);
-  FRelativePermeabilityParameters := TRelativePermeabilityParameters.Create(RpCollection.OnInvalidateModel);
-  FLiquidWaterSaturationParameters := TLiquidWaterSaturationParameters.Create(RpCollection.OnInvalidateModel);
-  FFreezingTempAndLatentHeat := TFreezingTempAndLatentHeat.Create(RpCollection.OnInvalidateModel);
+  FAdsorptionProperties := TAdsorptionProperties.Create(RpCollection.FModel);
+  FWaterSaturationProperties := TWaterSaturationProperties.Create(RpCollection.FModel);
+  FRelativePermeabilityParameters := TRelativePermeabilityParameters.Create(RpCollection.FModel);
+  FLiquidWaterSaturationParameters := TLiquidWaterSaturationParameters.Create(RpCollection.FModel);
+  FFreezingTempAndLatentHeat := TFreezingTempAndLatentHeat.Create(RpCollection.FModel);
 end;
 
 destructor TRegionalProperty.Destroy;
@@ -3070,8 +3228,19 @@ end;
 
 { TRegionalProperties }
 
-constructor TRegionalProperties.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TRegionalProperties.Create(AModel: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
 begin
+  FModel := AModel;
+  if AModel = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := (AModel as TCustomModel).Invalidate;
+  end;
   inherited Create(TRegionalProperty, InvalidateModelEvent);
 end;
 
@@ -3096,16 +3265,38 @@ end;
 
 procedure TCustomSutraPersistent.ChangeFormula(const Value: string;
   var AField: TFormulaObject);
+var
+  LocalModel: TCustomModel;
 begin
-  frmGoPhast.PhastModel.FormulaManager.ChangeFormula(AField, Value,
-    frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+  LocalModel := (FModel as TCustomModel);
+  LocalModel.FormulaManager.ChangeFormula(AField, Value,
+    LocalModel.rpThreeDFormulaCompiler,
     GlobalDummyHandleSubscription, GlobalDummyHandleSubscription, self);
 end;
 
-function TCustomSutraPersistent.CreateFormulaObject: TFormulaObject;
+constructor TCustomSutraPersistent.Create(AModel: TBaseModel);
+var
+  Event: TNotifyEvent;
 begin
-  result := frmGoPhast.PhastModel.FormulaManager.Add;
-  result.Parser := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
+  FModel := AModel;
+  if AModel = nil then
+  begin
+    Event := nil;
+  end
+  else
+  begin
+    Event := (AModel as TCustomModel).Invalidate;
+  end;
+  inherited Create(Event);
+end;
+
+function TCustomSutraPersistent.CreateFormulaObject: TFormulaObject;
+var
+  LocalModel: TCustomModel;
+begin
+  LocalModel := (FModel as TCustomModel);
+  result := LocalModel.FormulaManager.Add;
+  result.Parser := LocalModel.rpThreeDFormulaCompiler;
   result.AddSubscriptionEvents(GlobalDummyHandleSubscription,
     GlobalDummyHandleSubscription, self);
 end;

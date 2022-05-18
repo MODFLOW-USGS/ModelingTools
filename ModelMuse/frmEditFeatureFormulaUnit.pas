@@ -289,7 +289,7 @@ begin
         frmGoPhast.PhastModel.ModflowStressPeriods.FillStringsWithStartTimes(comboStartingTime.Items);
         frmGoPhast.PhastModel.ModflowStressPeriods.FillStringsWithEndTimes(comboEndingTime.Items);
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         frmGoPhast.PhastModel.SutraTimeOptions.CalculateAllTimes;
         AllTimes := frmGoPhast.PhastModel.SutraTimeOptions.AllTimes;
@@ -827,7 +827,7 @@ begin
           PackageList.Free;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         case Model.ModelSelection of
           msSutra22:
@@ -835,7 +835,7 @@ begin
               FSutraFeatureTypes := [sftSpecPressure, sftSpecU, sftSpecifiedFlux,
                 sftSpecifiedFluxU];
             end;
-          msSutra30:
+          msSutra30, msSutra40:
             begin
               FSutraFeatureTypes := [sftSpecPressure, sftSpecU, sftSpecifiedFlux,
                 sftSpecifiedFluxU, sftLake, sftGeneralFlow, sftGenTransport];

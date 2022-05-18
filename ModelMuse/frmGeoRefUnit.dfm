@@ -4,9 +4,8 @@ inherited frmGeoRef: TfrmGeoRef
   Caption = 'Geo Reference'
   ClientHeight = 341
   ClientWidth = 298
-  ExplicitWidth = 314
-  ExplicitHeight = 380
-  PixelsPerInch = 96
+  ExplicitWidth = 316
+  ExplicitHeight = 388
   TextHeight = 18
   object rrdgGeoRef: TRbwRowDataGrid
     Left = 0
@@ -40,6 +39,7 @@ inherited frmGeoRef: TfrmGeoRef
     Rows = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -62,28 +62,7 @@ inherited frmGeoRef: TfrmGeoRef
       end
       item
         AutoAdjustRowHeights = False
-        ButtonCaption = '...'
-        ButtonFont.Charset = DEFAULT_CHARSET
-        ButtonFont.Color = clWindowText
-        ButtonFont.Height = -11
-        ButtonFont.Name = 'Tahoma'
-        ButtonFont.Style = []
-        ButtonUsed = False
-        ButtonWidth = 20
-        CheckMax = False
-        CheckMin = False
-        ComboUsed = False
-        Format = rcf4Real
-        LimitToList = False
-        MaxLength = 0
-        ParentButtonFont = False
-        WordWrapCaptions = False
-        WordWrapCells = False
-        CaseSensitivePicklist = False
-        CheckStyle = csCheck
-      end
-      item
-        AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -106,6 +85,7 @@ inherited frmGeoRef: TfrmGeoRef
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -128,6 +108,30 @@ inherited frmGeoRef: TfrmGeoRef
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
+        ButtonCaption = '...'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -11
+        ButtonFont.Name = 'Tahoma'
+        ButtonFont.Style = []
+        ButtonUsed = False
+        ButtonWidth = 20
+        CheckMax = False
+        CheckMin = False
+        ComboUsed = False
+        Format = rcf4Real
+        LimitToList = False
+        MaxLength = 0
+        ParentButtonFont = False
+        WordWrapCaptions = False
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+      end
+      item
+        AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -150,6 +154,7 @@ inherited frmGeoRef: TfrmGeoRef
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -172,6 +177,7 @@ inherited frmGeoRef: TfrmGeoRef
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -194,6 +200,7 @@ inherited frmGeoRef: TfrmGeoRef
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -216,6 +223,7 @@ inherited frmGeoRef: TfrmGeoRef
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -238,6 +246,7 @@ inherited frmGeoRef: TfrmGeoRef
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -263,6 +272,7 @@ inherited frmGeoRef: TfrmGeoRef
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

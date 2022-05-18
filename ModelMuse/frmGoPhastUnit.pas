@@ -547,6 +547,8 @@ type
     miExportPESTcontrolfile: TMenuItem;
     acTimeSeries: TAction;
     EditTimeSeries1: TMenuItem;
+    acSutra40Active: TAction;
+    miSutra40Active: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -749,6 +751,7 @@ type
     procedure acImportMf6FeatureFromPestExecute(Sender: TObject);
     procedure acImportSutraFeaturesFromPestExecute(Sender: TObject);
     procedure acTimeSeriesExecute(Sender: TObject);
+    procedure acSutra40ActiveExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -3469,7 +3472,9 @@ begin
   {$IFNDEF Mf6TimeSeries}
   acTimeSeries.Visible := False;
   {$ENDIF}
-
+  {$IFNDEF SUTRA4}
+  acSutra40Active.Visible := False;
+  {$ENDIF}
   tbarEditScreenObjects.Width := 227;
   tbarView.Width := 176;
   tbarCreateScreenObject.Width := 231;
@@ -4194,7 +4199,7 @@ begin
           end;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         ShowAForm(TfrmImportSutraModelResults);
       end;
@@ -4303,7 +4308,7 @@ begin
         acEditObservationComparisons.Enabled := PhastModel.PestUsed;
         acEditSutraFluxObs.Visible := False;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         frameSideView.Visible := False;
         splitVertTop.Visible := False;
@@ -4417,8 +4422,8 @@ begin
 
   acImportModelResults.Enabled :=
     PhastModel.ModelSelection in [msModflow, msModflowLGR, msModflowLGR2,
-      msModflowNWT, msModflowFmp, msModflowCfp, msSutra22, msSutra30, msFootPrint,
-      msModflow2015];
+      msModflowNWT, msModflowFmp, msModflowCfp, msSutra22, msSutra30,
+      msSutra40, msFootPrint, msModflow2015];
   acImportSutraModelResults.Enabled :=
     PhastModel.ModelSelection  in SutraSelection;
 
@@ -4646,6 +4651,8 @@ begin
         acSutra22Active.Checked := True;
     msSutra30:
         acSutra30Active.Checked := True;
+    msSutra40:
+        acSutra40Active.Checked := True;
     msFootPrint:
         acFootPrintActive.Checked := True;
     msModflow2015:
@@ -5738,6 +5745,16 @@ begin
   ShowAForm(TfrmTimeSeries);
 end;
 
+procedure TfrmGoPhast.acSutra40ActiveExecute(Sender: TObject);
+begin
+  inherited;
+  if ModelSelection <> msSutra40 then
+  begin
+    UndoStack.Submit(TUndoModelSelectionChange.Create(msSutra40));
+    HaveUsersDefineSutraLayers;
+  end;
+end;
+
 procedure TfrmGoPhast.acEditObservationComparisonsExecute(Sender: TObject);
 begin
   inherited;
@@ -6612,7 +6629,7 @@ begin
             end;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Mesh := PhastModel.SutraMesh;
         acDisplayData.Enabled := (Mesh <> nil)
@@ -6827,7 +6844,7 @@ begin
           end;
         end;
       end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         Assert(False);
       end
@@ -6992,7 +7009,7 @@ begin
           PhastModel.SaveArchiveList(ChangeFileExt(FileName, '.axml'));
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         RunSutraOK := True;
         if PhastModel.SutraMesh = nil then
@@ -9397,7 +9414,8 @@ begin
     case Value of
       msUndefined: Assert(False);
       msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msSutra22, msSutra30, msFootPrint, msModflow2015:
+        msModflowFmp, msModflowCfp, msSutra22, msSutra30, msSutra40,
+        msFootPrint, msModflow2015:
         begin
           InvalidateViewOfModel;
           InvalidateAllViews;
@@ -9444,6 +9462,14 @@ begin
     msSutra30:
       begin
         acSutra30Active.Checked := True;
+        if SutraMesh <> nil then
+        begin
+          SutraMesh.OnSelectedLayerChange := frameTopView.ItemChange;
+        end;
+      end;
+    msSutra40:
+      begin
+        acSutra40Active.Checked := True;
         if SutraMesh <> nil then
         begin
           SutraMesh.OnSelectedLayerChange := frameTopView.ItemChange;
@@ -9868,6 +9894,10 @@ begin
       begin
         SutraFileName := PhastModel.ProgramLocations.Sutra30Location;
       end;
+    msSutra40:
+      begin
+        SutraFileName := PhastModel.ProgramLocations.Sutra40Location;
+      end;
     else
       Assert(False);
   end;
@@ -9884,6 +9914,10 @@ begin
       msSutra30:
         begin
           SutraFileName := PhastModel.ProgramLocations.Sutra30Location;
+        end;
+      msSutra40:
+        begin
+          SutraFileName := PhastModel.ProgramLocations.Sutra40Location;
         end;
       else
         Assert(False);
@@ -11935,6 +11969,7 @@ begin
         msModflowCFP: acModflowCfpActive.Checked := True;
         msSutra22: acSutra22Active.Checked := True;
         msSutra30: acSutra30Active.Checked := True;
+        msSutra40: acSutra40Active.Checked := True;
         msFootPrint: acFootPrintActive.Checked := True;
         msModflow2015: acModflow6Active.Checked := True;
         else Assert(False);

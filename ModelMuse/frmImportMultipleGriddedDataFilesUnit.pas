@@ -89,7 +89,7 @@ begin
   inherited;
   FillComboBoxWithModels(comboModel);
   rgEvaluatedAt.Enabled := frmGoPhast.ModelSelection
-    in [msPhast, msSutra22, msSutra30];
+    in [msPhast, msSutra22, msSutra30, msSutra40];
   frameGridFiles.Grid.Cells[0,0] := 'Files';
 end;
 

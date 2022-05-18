@@ -3,9 +3,8 @@ inherited frmImportDEM: TfrmImportDEM
   Caption = 'Sample Digital Elevation Model'
   ClientHeight = 379
   ClientWidth = 562
-  ExplicitWidth = 578
-  ExplicitHeight = 418
-  PixelsPerInch = 96
+  ExplicitWidth = 580
+  ExplicitHeight = 426
   TextHeight = 18
   object Label1: TLabel [2]
     Left = 319

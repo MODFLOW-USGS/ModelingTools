@@ -809,7 +809,7 @@ begin
         WriteString(Format('%0:s = read_mf_grid_specs(file="%1:s")',
           [KDisName, GrbFileName]));
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         GrbFileName := ChangeFileExt(AFileName, '');
         GrbFileName := ChangeFileExt(GrbFileName, '');

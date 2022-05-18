@@ -111,7 +111,7 @@ begin
   clIncluded.CheckAll;
   FDataSets := TObjectList.Create;
   rgEvaluatedAt.Enabled := frmGoPhast.PhastModel.ModelSelection
-    in [msPhast, msSutra22, msSutra30];
+    in [msPhast, msSutra22, msSutra30, msSutra40];
 
   comboModel.AddItem(StrParentModel, frmGoPhast.PhastModel);
   if frmGoPhast.PhastModel.LgrUsed then
@@ -227,7 +227,7 @@ begin
           Mesh := LocalModel.Mesh3D;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Mesh := LocalModel.Mesh3D;
       end;
@@ -548,7 +548,7 @@ begin
           end;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Mesh := LocalModel.Mesh3D;
         if not Mesh.Is3DMesh then

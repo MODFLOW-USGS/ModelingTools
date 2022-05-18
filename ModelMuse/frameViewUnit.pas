@@ -4072,7 +4072,7 @@ begin
         begin
           ShowValue := (Layer <= frmGoPhast.PhastModel.SelectedModel.Grid.LayerCount);
         end;
-        msSutra22, msSutra30:
+        msSutra22, msSutra30, msSutra40:
         begin
           Mesh := frmGoPhast.PhastModel.SutraMesh;
           ShowValue := (Mesh <> nil) and (Layer <= Mesh.LayerCount);
@@ -4149,7 +4149,7 @@ begin
         begin
           Layer := frmGoPhast.PhastModel.SelectedModel.SelectedLayer;
         end;
-        msSutra22, msSutra30:
+        msSutra22, msSutra30, msSutra40:
         begin
 //          Layer := frmGoPhast.PhastModel.SutraMesh.SelectedLayer;
         end;
@@ -4179,7 +4179,7 @@ begin
         begin
           ShowValue := (Layer < frmGoPhast.PhastModel.SelectedModel.LayerCount);
         end;
-        msSutra22, msSutra30:
+        msSutra22, msSutra30, msSutra40:
         begin
           Mesh := frmGoPhast.PhastModel.SutraMesh;
           ShowValue := (Mesh <> nil) and (Layer < Mesh.LayerCount);

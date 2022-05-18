@@ -9,7 +9,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
     Top = 0
     Width = 679
     Height = 480
-    ActivePage = tsLiquidWater
+    ActivePage = tsAdsorption
     Align = alClient
     OwnerDraw = True
     TabHeight = 75
@@ -61,6 +61,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           NumGlyphs = 1
           TabOrder = 1
           OnButtonClick = DoFormulaButtonClick
+          OnExit = btnedExit
         end
         object btnedSecondDistributionCoefficient: TssButtonEdit
           Left = 6
@@ -71,6 +72,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           NumGlyphs = 1
           TabOrder = 2
           OnButtonClick = DoFormulaButtonClick
+          OnExit = btnedExit
         end
       end
       object rgTransportModel: TRadioGroup
@@ -131,7 +133,6 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Width = 667
             Height = 241
             Caption = 'jvspTotSatControls'
-            ExplicitLeft = 1
             object lblResidWatSat: TLabel
               Left = 164
               Top = 10
@@ -175,16 +176,18 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Caption = 
                 'Pressure at which the saturation reaches the residual saturation' +
                 ' (PSWRES)'
+              WordWrap = True
             end
             object btnedVgenAlpha: TssButtonEdit
               Left = 13
-              Top = 38
+              Top = 36
               Width = 145
               Height = 28
               Enabled = True
               NumGlyphs = 1
               TabOrder = 0
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedVgenEta: TssButtonEdit
               Left = 13
@@ -195,6 +198,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 1
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedResidWatSat: TssButtonEdit
               Left = 13
@@ -205,6 +209,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 2
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedAirEntryPressure: TssButtonEdit
               Left = 13
@@ -215,6 +220,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 3
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedPoreDistIndex: TssButtonEdit
               Left = 13
@@ -225,6 +231,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 4
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedPresAtResid: TssButtonEdit
               Left = 13
@@ -235,6 +242,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 5
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
           end
           object jvspTotSatUserDefined: TJvStandardPage
@@ -285,6 +293,31 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               inherited Grid: TRbwDataGrid4
                 Width = 667
                 Height = 200
+                Columns = <
+                  item
+                    AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
+                    ButtonCaption = '...'
+                    ButtonFont.Charset = DEFAULT_CHARSET
+                    ButtonFont.Color = clWindowText
+                    ButtonFont.Height = -11
+                    ButtonFont.Name = 'Tahoma'
+                    ButtonFont.Style = []
+                    ButtonUsed = False
+                    ButtonWidth = 20
+                    CheckMax = False
+                    CheckMin = False
+                    ComboUsed = False
+                    Format = rcf4Real
+                    LimitToList = False
+                    MaxLength = 0
+                    ParentButtonFont = False
+                    WordWrapCaptions = True
+                    WordWrapCells = False
+                    CaseSensitivePicklist = False
+                    CheckStyle = csCheck
+                    AutoAdjustColWidths = True
+                  end>
                 ExplicitWidth = 667
                 ExplicitHeight = 200
               end
@@ -378,6 +411,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 0
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedRelPermEta: TssButtonEdit
               Left = 13
@@ -388,6 +422,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 1
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedRelPermPoreDistIndex: TssButtonEdit
               Left = 13
@@ -398,6 +433,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 2
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedSatAtMinPerm: TssButtonEdit
               Left = 13
@@ -408,6 +444,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 3
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
           end
           object jvspRelativePermUserDefined: TJvStandardPage
@@ -456,6 +493,32 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               inherited Grid: TRbwDataGrid4
                 Width = 667
                 Height = 200
+                Columns = <
+                  item
+                    AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
+                    ButtonCaption = '...'
+                    ButtonFont.Charset = DEFAULT_CHARSET
+                    ButtonFont.Color = clWindowText
+                    ButtonFont.Height = -11
+                    ButtonFont.Name = 'Tahoma'
+                    ButtonFont.Style = []
+                    ButtonUsed = False
+                    ButtonWidth = 20
+                    CheckMax = False
+                    CheckMin = False
+                    ComboUsed = False
+                    Format = rcf4Real
+                    LimitToList = False
+                    MaxLength = 0
+                    ParentButtonFont = False
+                    WordWrapCaptions = True
+                    WordWrapCells = False
+                    CaseSensitivePicklist = False
+                    CheckStyle = csCheck
+                    AutoAdjustColWidths = True
+                  end>
+                ExplicitLeft = 1
                 ExplicitWidth = 667
                 ExplicitHeight = 200
               end
@@ -509,8 +572,6 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Width = 667
             Height = 241
             Caption = 'jvspRelativePermControls'
-            ExplicitLeft = -2
-            ExplicitTop = 3
             object lblResidLiqWatSat: TLabel
               Left = 164
               Top = 11
@@ -558,6 +619,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 0
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedExpParamW: TssButtonEdit
               Left = 13
@@ -568,6 +630,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 1
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedPowerAlpha: TssButtonEdit
               Left = 13
@@ -578,6 +641,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 2
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedPowerBeta: TssButtonEdit
               Left = 13
@@ -588,6 +652,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 3
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
             object btnedLiqWatRelTemSatMin: TssButtonEdit
               Left = 13
@@ -598,6 +663,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               NumGlyphs = 1
               TabOrder = 4
               OnButtonClick = DoFormulaButtonClick
+              OnExit = btnedExit
             end
           end
           object jvspLiqWatSatParameters: TJvStandardPage
@@ -606,7 +672,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Width = 667
             Height = 241
             Caption = 'jvspTotSatUserDefined'
-            inline frameGrid1: TframeGrid
+            inline frameLiquidWaterSatUserDefined: TframeGrid
               Left = 0
               Top = 0
               Width = 667
@@ -646,6 +712,31 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               inherited Grid: TRbwDataGrid4
                 Width = 667
                 Height = 200
+                Columns = <
+                  item
+                    AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
+                    ButtonCaption = '...'
+                    ButtonFont.Charset = DEFAULT_CHARSET
+                    ButtonFont.Color = clWindowText
+                    ButtonFont.Height = -11
+                    ButtonFont.Name = 'Tahoma'
+                    ButtonFont.Style = []
+                    ButtonUsed = False
+                    ButtonWidth = 20
+                    CheckMax = False
+                    CheckMin = False
+                    ComboUsed = False
+                    Format = rcf4Real
+                    LimitToList = False
+                    MaxLength = 0
+                    ParentButtonFont = False
+                    WordWrapCaptions = True
+                    WordWrapCells = False
+                    CaseSensitivePicklist = False
+                    CheckStyle = csCheck
+                    AutoAdjustColWidths = True
+                  end>
                 ExplicitWidth = 667
                 ExplicitHeight = 200
               end
@@ -688,6 +779,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           NumGlyphs = 1
           TabOrder = 0
           OnButtonClick = DoFormulaButtonClick
+          OnExit = btnedExit
         end
         object btnedLatentHeat: TssButtonEdit
           Left = 13
@@ -698,6 +790,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           NumGlyphs = 1
           TabOrder = 1
           OnButtonClick = DoFormulaButtonClick
+          OnExit = btnedExit
         end
       end
     end

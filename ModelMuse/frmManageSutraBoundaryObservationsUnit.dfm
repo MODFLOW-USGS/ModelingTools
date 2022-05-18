@@ -6,9 +6,8 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
   ClientWidth = 784
   OnKeyDown = FormKeyDown
   OnResize = FormResize
-  ExplicitWidth = 800
-  ExplicitHeight = 600
-  PixelsPerInch = 96
+  ExplicitWidth = 802
+  ExplicitHeight = 608
   TextHeight = 18
   object spltr1: TJvNetscapeSplitter
     Left = 165

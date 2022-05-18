@@ -566,7 +566,7 @@ begin
           begin
             Data.Caption := StrSetGridCellSize;
           end;
-        msSutra22, msSutra30:
+        msSutra22, msSutra30, msSutra40:
           begin
             Data.Caption := StrSetMeshElementSize
           end

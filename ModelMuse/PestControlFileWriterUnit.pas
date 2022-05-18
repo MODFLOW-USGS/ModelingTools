@@ -978,7 +978,7 @@ begin
       begin
         NINSFLE := 1;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         NINSFLE := 1;
       end;

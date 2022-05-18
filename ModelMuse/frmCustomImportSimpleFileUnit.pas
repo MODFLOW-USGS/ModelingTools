@@ -533,7 +533,7 @@ begin
   rgEvaluatedAt.Items[Ord(eaNodes)] :=
     EvalAtToString(eaNodes, frmGoPhast.PhastModel.ModelSelection, True, True);
   rgEvaluatedAt.Enabled :=
-    frmGoPhast.PhastModel.ModelSelection in [msPhast, msSutra22, msSutra30];
+    frmGoPhast.PhastModel.ModelSelection in [msPhast, msSutra22, msSutra30, msSutra40];
 end;
 
 procedure TfrmCustomImportSimpleFile.rgEvaluatedAtClick(Sender: TObject);

@@ -53,7 +53,7 @@ type
     lblPowerBeta: TLabel;
     lblLiqWatRelTemSatMin: TLabel;
     jvspLiqWatSatParameters: TJvStandardPage;
-    frameGrid1: TframeGrid;
+    frameLiquidWaterSatUserDefined: TframeGrid;
     grpFreezeHeat: TGroupBox;
     lblMaxFreezeTemp: TLabel;
     lblLatentHeat: TLabel;
@@ -84,24 +84,27 @@ type
     procedure rgRelativePermChoiceClick(Sender: TObject);
     procedure rgLiqWatSatChoiceClick(Sender: TObject);
     procedure DoFormulaButtonClick(Sender: TObject);
+    procedure btnedExit(Sender: TObject);
   private
-    FOnFormulaButtonClick: TNotifyEvent;
-    procedure EnableTabs(TransportChoice: TTransportChoice;
-      SaturationChoice: TSaturationChoice);
+//    FOnFormulaButtonClick: TNotifyEvent;
+    procedure AssignButtonImages;
+    function FormulaOK(AFormula: string): Boolean;
     { Private declarations }
   public
-   property OnFormulaButtonClick: TNotifyEvent read FOnFormulaButtonClick
-     write FOnFormulaButtonClick;
+//   property OnFormulaButtonClick: TNotifyEvent read FOnFormulaButtonClick
+//     write FOnFormulaButtonClick;
    procedure GetData(ARegion: TRegionalProperty;
      TransportChoice: TTransportChoice; SaturationChoice: TSaturationChoice);
    procedure SetData(ARegion: TRegionalProperty);
    { Public declarations }
+    procedure EnableTabs(TransportChoice: TTransportChoice;
+      SaturationChoice: TSaturationChoice);
   end;
 
 implementation
 
 uses
-  frmGoPhastUnit;
+  frmGoPhastUnit, GoPhastTypes, frmFormulaUnit, ModflowParameterUnit, RbwParser;
 
 {$R *.dfm}
 
@@ -112,6 +115,7 @@ resourcestring
   StrRelativePerm = 'Relative'#13#10'Permeability'#13#10'Parameters';
   StrLiquidWater = 'Liquid'#13#10'Water'#13#10'Saturation';
   StrIceProperties = 'Freezing'#13#10'Temperature'#13#10'and Latent Heat';
+  StrThisFormulaMustRe = 'This formula must result in a real number.';
 
 procedure TframeSutraRegionalProperty.frameTotSatUserDefinedsbAddClick(
   Sender: TObject);
@@ -131,6 +135,40 @@ begin
   end;
 end;
 
+procedure TframeSutraRegionalProperty.AssignButtonImages;
+var
+  BitMap: TBitMap;
+begin
+  BitMap := TBitMap.Create;
+  try
+    BitMap.Width := 18;
+    BitMap.Height := 18;
+    BitMap.Canvas.TextOut(0,0, 'F()');
+    btnedFirstDistributionCoefficient.Glyph := BitMap;
+    btnedSecondDistributionCoefficient.Glyph := BitMap;
+    btnedResidWatSat.Glyph := BitMap;
+    btnedVgenAlpha.Glyph := BitMap;
+    btnedVgenEta.Glyph := BitMap;
+    btnedAirEntryPressure.Glyph := BitMap;
+    btnedPoreDistIndex.Glyph := BitMap;
+    btnedPresAtResid.Glyph := BitMap;
+    btnedMinRelPerm.Glyph := BitMap;
+    btnedRelPermEta.Glyph := BitMap;
+    btnedRelPermPoreDistIndex.Glyph := BitMap;
+    btnedSatAtMinPerm.Glyph := BitMap;
+    btnedResidLiqWatSat.Glyph := BitMap;
+    btnedExpParamW.Glyph := BitMap;
+    btnedPowerAlpha.Glyph := BitMap;
+    btnedPowerBeta.Glyph := BitMap;
+    btnedLiqWatRelTemSatMin.Glyph := BitMap;
+    btnedMaxFreezeTemp.Glyph := BitMap;
+    btnedLatentHeat.Glyph := BitMap;
+  finally
+    BitMap.Free;
+  end;
+
+end;
+
 procedure TframeSutraRegionalProperty.GetData(ARegion: TRegionalProperty;
      TransportChoice: TTransportChoice; SaturationChoice: TSaturationChoice);
 var
@@ -139,9 +177,26 @@ var
   RelPerm: TRelativePermeabilityParameters;
   LiqWat: TLiquidWaterSaturationParameters;
   Freeze: TFreezingTempAndLatentHeat;
+  procedure GetFunctionParameters(AFrame: TframeGrid;
+    FunctionParameters: TRealCollection);
+  var
+    UserDefinedIndex: Integer;
+  begin
+    AFrame.seNumber.AsInteger := FunctionParameters.Count;
+    for UserDefinedIndex := 0 to FunctionParameters.Count - 1 do
+    begin
+      AFrame.Grid.RealValue[0, UserDefinedIndex+1] :=
+        FunctionParameters[UserDefinedIndex].Value;
+    end;
+  end;
 begin
+  AssignButtonImages;
+
   Assert(ARegion <> nil);
   EnableTabs(TransportChoice, SaturationChoice);
+  frameTotSatUserDefined.Grid.Cells[0,0] := 'Parameter Value';
+  frameRelPermParam.Grid.Cells[0,0] := 'Parameter Value';
+  frameLiquidWaterSatUserDefined.Grid.Cells[0,0] := 'Parameter Value';
 
   Adsorp := ARegion.AdsorptionProperties;
   rgSorptionModel.ItemIndex := Ord(Adsorp.AdsorptionModel);
@@ -157,6 +212,8 @@ begin
   btnedAirEntryPressure.Text := TotalWaterSat.AirEntryPressure;
   btnedPoreDistIndex.Text := TotalWaterSat.PoreSizeDistributionIndex;
   btnedPresAtResid.Text := TotalWaterSat.PressureForResidualWaterContent;
+  GetFunctionParameters(frameTotSatUserDefined, TotalWaterSat.FunctionParameters);
+//  frameTotSatUserDefined.seNumber.AsInteger := TotalWaterSat.FunctionParameters;
 
   RelPerm := ARegion.RelativePermeabilityParameters;
   rgRelativePermChoice.ItemIndex := Ord(RelPerm.RelativePermeabilityChoice);
@@ -164,6 +221,7 @@ begin
   btnedRelPermEta.Text := RelPerm.RelativePermParam;
   btnedRelPermPoreDistIndex.Text := RelPerm.PoreSizeDistributionIndex;
   btnedSatAtMinPerm.Text := RelPerm.WaterSaturationAtMinPermeability;
+  GetFunctionParameters(frameRelPermParam, RelPerm.FunctionParameters);
 
   LiqWat := ARegion.LiquidWaterSaturationParameters;
   rgLiqWatSatChoice.ItemIndex := Ord(LiqWat.LiquidWaterSaturationChoice);
@@ -172,6 +230,7 @@ begin
   btnedPowerAlpha.Text := LiqWat.PowerLawAlpha;
   btnedPowerBeta.Text := LiqWat.PowerLawBeta;
   btnedLiqWatRelTemSatMin.Text := LiqWat.TempAtResidualLiquidWaterSaturation;
+  GetFunctionParameters(frameLiquidWaterSatUserDefined, LiqWat.FunctionParameters);
 
   Freeze := ARegion.FreezingTempAndLatentHeat;
   btnedMaxFreezeTemp.Text := Freeze.MaxFreezePoreWaterTemperature;
@@ -269,7 +328,7 @@ procedure TframeSutraRegionalProperty.rgWatSatFunctClick(Sender: TObject);
 var
   SatChoice: TWaterSaturationChoice;
 begin
-  if rgWatSatFunct.ItemIndex >= 0 then
+  if rgWatSatFunct.ItemIndex < 0 then
   begin
     SatChoice := wscNone;
   end
@@ -305,6 +364,18 @@ var
   LiqWat: TLiquidWaterSaturationParameters;
   Freeze: TFreezingTempAndLatentHeat;
   AValue: double;
+  procedure SetFunctionParameters(AFrame: TframeGrid;
+    FunctionParameters: TRealCollection);
+  var
+    UserDefinedIndex: Integer;
+  begin
+    FunctionParameters.Count := AFrame.seNumber.AsInteger;
+    for UserDefinedIndex := 0 to FunctionParameters.Count - 1 do
+    begin
+      FunctionParameters[UserDefinedIndex].Value :=
+        AFrame.Grid.RealValue[0, UserDefinedIndex+1];
+    end;
+  end;
 begin
   Assert(ARegion <> nil);
 
@@ -324,6 +395,7 @@ begin
   TotalWaterSat.AirEntryPressure := btnedAirEntryPressure.Text;
   TotalWaterSat.PoreSizeDistributionIndex := btnedPoreDistIndex.Text;
   TotalWaterSat.PressureForResidualWaterContent := btnedPresAtResid.Text;
+  SetFunctionParameters(frameTotSatUserDefined, TotalWaterSat.FunctionParameters);
 
   RelPerm := ARegion.RelativePermeabilityParameters;
   RelPerm.RelativePermeabilityChoice :=
@@ -332,6 +404,7 @@ begin
   RelPerm.RelativePermParam := btnedRelPermEta.Text;
   RelPerm.PoreSizeDistributionIndex := btnedRelPermPoreDistIndex.Text;
   RelPerm.WaterSaturationAtMinPermeability := btnedSatAtMinPerm.Text;
+  SetFunctionParameters(frameRelPermParam, RelPerm.FunctionParameters);
 
   LiqWat := ARegion.LiquidWaterSaturationParameters;
   LiqWat.LiquidWaterSaturationChoice :=
@@ -341,17 +414,93 @@ begin
   LiqWat.PowerLawAlpha := btnedPowerAlpha.Text;
   LiqWat.PowerLawBeta := btnedPowerBeta.Text;
   LiqWat.TempAtResidualLiquidWaterSaturation := btnedLiqWatRelTemSatMin.Text;
+  SetFunctionParameters(frameLiquidWaterSatUserDefined, LiqWat.FunctionParameters);
 
   Freeze := ARegion.FreezingTempAndLatentHeat;
   Freeze.MaxFreezePoreWaterTemperature := btnedMaxFreezeTemp.Text;
   Freeze.LatentHeatOfFusion := btnedLatentHeat.Text;
 end;
 
-procedure TframeSutraRegionalProperty.DoFormulaButtonClick(Sender: TObject);
+function TframeSutraRegionalProperty.FormulaOK(AFormula: string): Boolean;
+var
+  PestParam: TModflowSteadyParameter;
+  Expression: TExpression;
 begin
-  if Assigned(OnFormulaButtonClick) then
+  PestParam := frmGoPhast.PhastModel.GetPestParameterByName(AFormula);
+  if PestParam <> nil then
   begin
-    OnFormulaButtonClick(Sender)
+    result := True;
+  end
+  else
+  begin
+    try
+      frmGoPhast.PhastModel.rpThreeDFormulaCompiler.Compile(AFormula)
+    except on E: ERbwParserError do
+      begin
+        Beep;
+        MessageDlg(E.message, mtError, [mbOK], 0);
+        result := False;
+        Exit;
+      end;
+    end;
+    Expression := frmGoPhast.PhastModel.rpThreeDFormulaCompiler.CurrentExpression;
+    result := Expression.ResultType in [rdtDouble, rdtInteger];
+    if not result then
+    begin
+      Beep;
+      MessageDlg(StrThisFormulaMustRe, mtError, [mbOK], 0);
+    end;
+  end;
+end;
+
+procedure TframeSutraRegionalProperty.btnedExit(Sender: TObject);
+var
+  AnEdit: TssButtonEdit;
+  AFormula: string;
+begin
+  AnEdit := Sender as TssButtonEdit;
+  AFormula := AnEdit.Text;
+  if FormulaOK(AFormula) then
+  begin
+    AnEdit.Color := clWindow;
+  end
+  else
+  begin
+    AnEdit.Color := clRed;
+  end;                                 
+end;
+
+procedure TframeSutraRegionalProperty.DoFormulaButtonClick(Sender: TObject);
+var
+  AnEdit: TCustomEdit;
+  OldFormula: string;
+  NewFormula: string;
+begin
+  AnEdit := Sender as TCustomEdit;
+  OldFormula := AnEdit.Text;
+
+  with frmFormula do
+  begin
+    try
+      Initialize;
+      IncludeTimeSeries := False;
+      UpdateTreeList;
+      Formula := OldFormula;
+      ShowModal;
+      if ResultSet then
+      begin
+        NewFormula := Formula;
+        if FormulaOK(NewFormula) then
+        begin
+          AnEdit.Text := NewFormula;
+
+        end;
+      end;
+
+
+    finally
+      Initialize;
+    end;
   end;
 end;
 

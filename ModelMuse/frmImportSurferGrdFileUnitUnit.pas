@@ -256,7 +256,7 @@ begin
       begin
         Assert(False);
       end;
-    msPhast, msSutra22, msSutra30:
+    msPhast, msSutra22, msSutra30, msSutra40:
       begin
         case EvalAt of
           eaBlocks:

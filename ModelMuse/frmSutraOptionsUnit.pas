@@ -9,7 +9,7 @@ uses System.UITypes,
   JvPageListTreeView, JvPageList, JvExControls, Mask, JvExMask, JvToolEdit,
   JvSpin, JvEditorCommon, JvEditor, ArgusDataEntry, RequiredDataSetsUndoUnit,
   JvExExtCtrls, JvNetscapeSplitter, Vcl.ImgList, RbwController,
-  frameSutraRegionalPropertyUnit;
+  frameSutraRegionalPropertyUnit, System.Generics.Collections;
 
 type
   TfrmSutraOptions = class(TfrmCustomGoPhast)
@@ -145,7 +145,7 @@ type
     comboGeneralizedTransportPresent: TComboBox;
     comboLakeGeneralizedFlowType: TComboBox;
     lblLakeGeneralizedFlowType: TLabel;
-    lbl1: TLabel;
+    lblLakeGeneralizedTransportType: TLabel;
     comboLakeGeneralizedTransportType: TComboBox;
     grpGeneral: TGroupBox;
     cbUseLakes: TCheckBox;
@@ -160,6 +160,14 @@ type
     cbAnisoAlmaxAlmin: TCheckBox;
     cbAnisoAtmaxAtmid: TCheckBox;
     cbAnisoAtmaxAtmin: TCheckBox;
+    rdeIceCompress: TRbwDataEntry;
+    rdeIceSpecHeat: TRbwDataEntry;
+    lblIceSpecHeat: TLabel;
+    rdeIceThemCond: TRbwDataEntry;
+    lblIceThemCond: TLabel;
+    rdeIceDensity: TRbwDataEntry;
+    lblIceDensity: TLabel;
+    lblIceCompress: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure seMaxIterationsChange(Sender: TObject);
@@ -180,15 +188,21 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure EnableLakeBottom(Sender: TObject);
     procedure cbUseLakesClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject); override;
+    procedure rgSaturationClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     FGettingData: Boolean;
     FLakeNode: TJvPageIndexNode;
     FLakeInteractionsNode: TJvPageIndexNode;
+    FRegionNode: TJvPageIndexNode;
+    FRegionList: TList<TframeSutraRegionalProperty>;
     procedure GetData;
     procedure SetData;
     procedure EnableRhos;
     procedure EnableLakeNode;
     procedure EnableControls;
+    procedure EnableRegionControls;
     { Private declarations }
   public
     { Public declarations }
@@ -339,6 +353,23 @@ begin
   end;
 end;
 
+procedure TfrmSutraOptions.EnableRegionControls;
+var
+  TransportChoice: TTransportChoice;
+  SaturationChoice: TSaturationChoice;
+  RegionIndex: Integer;
+begin
+  if frmGoPhast.ModelSelection = msSutra40 then
+  begin
+    TransportChoice := TTransportChoice(rgTransport.ItemIndex);
+    SaturationChoice := TSaturationChoice(rgSaturation.ItemIndex);
+    for RegionIndex := 0 to FRegionList.Count - 1 do
+    begin
+      FRegionList[RegionIndex].EnableTabs(TransportChoice, SaturationChoice)
+    end;
+  end;
+end;
+
 procedure TfrmSutraOptions.EnableRhos;
 begin
   rdeSolidGrainDensity.Enabled :=
@@ -378,6 +409,7 @@ var
   Node: TJvPageIndexNode;
   StoredHelpKeyword: string;
 begin
+  FRegionList := TList<TframeSutraRegionalProperty>.Create;
   inherited;
   StoredHelpKeyword := HelpKeyword;
   Handle;
@@ -396,18 +428,18 @@ begin
   Node := jvpltvNavigation.Items.Add(nil, StrFluidProperties) as TJvPageIndexNode;
   Node.PageIndex := jvspFluidProperties.PageIndex;
 
-  if frmGoPhast.ModelSelection in [msSutra22, msSutra30] then
+  if frmGoPhast.ModelSelection = msSutra40 then
+  begin
+    FRegionNode := jvpltvNavigation.Items.Add(nil, StrRegionalProperties) as TJvPageIndexNode;
+    { TODO -cSUTRA4 : Have it link to the first child }
+    FRegionNode.PageIndex := -1;
+  end
+  else
   begin
     Node := jvpltvNavigation.Items.Add(nil, StrSolidMatrixAdsorp) as TJvPageIndexNode;
     Node.PageIndex := jvspSolidAdsorption.PageIndex;
     Node := jvpltvNavigation.Items.Add(nil, StrProduction) as TJvPageIndexNode;
     Node.PageIndex := jvspProdGrav.PageIndex;
-  end
-  else
-  begin
-    Node := jvpltvNavigation.Items.Add(nil, StrRegionalProperties) as TJvPageIndexNode;
-    { TODO -cSUTRA4 : Have it link to the first child }
-    Node.PageIndex := -1;
   end;
 
   // Lakes are available in SUTRA 3.0 and above.
@@ -428,8 +460,24 @@ begin
 
   HelpKeyword := StoredHelpKeyword;
 
-
   GetData;
+end;
+
+procedure TfrmSutraOptions.FormDestroy(Sender: TObject);
+begin
+  inherited;
+  FRegionList.Free;
+end;
+
+procedure TfrmSutraOptions.FormShow(Sender: TObject);
+begin
+  inherited;
+  {$IFDEF SUTRA4}
+  rgTransport.Buttons[3].Enabled := frmGoPhast.ModelSelection = msSutra40;
+  {$ELSE}
+  // Delete Freezing
+  rgTransport.Delete(3);
+  {$ENDIF}
 end;
 
 procedure TfrmSutraOptions.GetData;
@@ -437,6 +485,11 @@ var
   SutraOptions: TSutraOptions;
   LakeOptions: TSutraLakeOptions;
   AnisotropyOptions: TSutraPestAnisotropyOptions;
+  RegionIndex: Integer;
+  APage: TJvStandardPage;
+  ANode: TJvPageIndexNode;
+  AFrame: TframeSutraRegionalProperty;
+  ARegion: TRegionalProperty;
 begin
   FGettingData := true;
   try
@@ -513,6 +566,11 @@ begin
     rdeViscosity.RealValue := SutraOptions.Viscosity;
     rdeScaleFactor.RealValue := SutraOptions.ScaleFactor;
 
+    rdeIceCompress.RealValue := SutraOptions.IceCompressibility;
+    rdeIceSpecHeat.RealValue := SutraOptions.IceSpecificHeat;
+    rdeIceThemCond.RealValue := SutraOptions.IceThermalConductivity;
+    rdeIceDensity.RealValue := SutraOptions.IceDensity;
+
     rdeMatrixCompressibility.RealValue := SutraOptions.MatrixCompressibility;
     rdeSolidGrainSpecificHeat.RealValue := SutraOptions.SolidGrainSpecificHeat;
     rdeSolidGrainDiffusivity.RealValue := SutraOptions.SolidGrainDiffusivity;
@@ -566,6 +624,28 @@ begin
     cbAnisoAlmaxAlmin.Checked := AnisotropyOptions.UseAlmaxAlminAnisotropy;
     cbAnisoAtmaxAtmid.Checked := AnisotropyOptions.UseAtmaxAtmidAnisotropy;
     cbAnisoAtmaxAtmin.Checked := AnisotropyOptions.UseAtmaxAtminAnisotropy;
+
+    if frmGoPhast.ModelSelection = msSutra40 then
+    begin
+      for RegionIndex := 0 to SutraOptions.RegionalProperties.Count - 1 do
+      begin
+        APage := TJvStandardPage.Create(self);
+        APage.PageList := jplMain;
+
+        ANode := jvpltvNavigation.Items.AddChild(FRegionNode,
+          Format('Region %d', [RegionIndex+1])) as TJvPageIndexNode;
+        ANode.PageIndex := APage.PageIndex;
+
+        AFrame := TframeSutraRegionalProperty.Create(self);
+        AFrame.Parent := APage;
+        AFrame.Align :=alClient;
+        FRegionList.Add(AFrame);
+
+        ARegion := SutraOptions.RegionalProperties[RegionIndex];
+        AFrame.GetData(ARegion, SutraOptions.TransportChoice,
+          SutraOptions.SaturationChoice);
+      end;
+    end;
 
     EnableControls;
   finally
@@ -718,6 +798,12 @@ begin
 
 end;
 
+procedure TfrmSutraOptions.rgSaturationClick(Sender: TObject);
+begin
+  inherited;
+  EnableRegionControls;
+end;
+
 procedure TfrmSutraOptions.rgSorptionModelClick(Sender: TObject);
 var
   TransportChoice: TTransportChoice;
@@ -802,13 +888,14 @@ begin
   rdeGravX.Enabled := TransportChoice in [tcSolute, tcEnergy];
   rdeGravY.Enabled := TransportChoice in [tcSolute, tcEnergy];
   rgMeshTypeClick(nil);
-  rgSaturation.Enabled := TransportChoice in [tcSolute, tcEnergy];
+  rgSaturation.Enabled := TransportChoice in [tcSolute, tcEnergy, tcFreezing];
   if not rgSaturation.Enabled then
   begin
     rgSaturation.ItemIndex := 0;
   end;
 
   EnableRhos;
+  EnableRegionControls;
 end;
 
 procedure TfrmSutraOptions.rgUSolutionMethodClick(Sender: TObject);
@@ -858,6 +945,9 @@ var
   MeshType: TMeshType;
   LakeOptions: TSutraLakeOptions;
   AnisotropyOptions: TSutraPestAnisotropyOptions;
+  RegionIndex: Integer;
+  ARegion: TRegionalProperty;
+  AFrame: TframeSutraRegionalProperty;
 begin
   SutraOptions := TSutraOptions.Create(nil);
   try
@@ -901,6 +991,11 @@ begin
     SutraOptions.FluidDensityCoefficientTemperature := rdeFluidDensityCoefficientTemperature.RealValue;
     SutraOptions.Viscosity := rdeViscosity.RealValue;
     SutraOptions.ScaleFactor := rdeScaleFactor.RealValue;
+
+    SutraOptions.IceCompressibility := rdeIceCompress.RealValue;
+    SutraOptions.IceSpecificHeat := rdeIceSpecHeat.RealValue;
+    SutraOptions.IceThermalConductivity := rdeIceThemCond.RealValue;
+    SutraOptions.IceDensity := rdeIceDensity.RealValue;
 
     SutraOptions.MatrixCompressibility := rdeMatrixCompressibility.RealValue;
     SutraOptions.SolidGrainSpecificHeat := rdeSolidGrainSpecificHeat.RealValue;
@@ -954,6 +1049,24 @@ begin
     AnisotropyOptions.UseAlmaxAlminAnisotropy := cbAnisoAlmaxAlmin.Checked;
     AnisotropyOptions.UseAtmaxAtmidAnisotropy := cbAnisoAtmaxAtmid.Checked;
     AnisotropyOptions.UseAtmaxAtminAnisotropy := cbAnisoAtmaxAtmin.Checked;
+
+    if frmGoPhast.ModelSelection = msSutra40 then
+    begin
+      while SutraOptions.RegionalProperties.Count < FRegionList.Count do
+      begin
+        SutraOptions.RegionalProperties.Add;
+      end;
+      while SutraOptions.RegionalProperties.Count > FRegionList.Count do
+      begin
+        SutraOptions.RegionalProperties.Last.Free;
+      end;
+      for RegionIndex := 0 to FRegionList.Count - 1 do
+      begin
+        ARegion := SutraOptions.RegionalProperties[RegionIndex];
+        AFrame := FRegionList[RegionIndex];
+        AFrame.SetData(ARegion);
+      end;
+    end;
 
     UndoItem := TUndoChangeSutraOptions.Create(SutraOptions, MeshType);
     frmGoPhast.UndoStack.Submit(UndoItem);

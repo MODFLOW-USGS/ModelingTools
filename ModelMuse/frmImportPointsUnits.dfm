@@ -9,9 +9,8 @@ inherited frmImportPoints: TfrmImportPoints
   ClientWidth = 585
   KeyPreview = True
   OnKeyUp = FormKeyUp
-  ExplicitWidth = 601
-  ExplicitHeight = 557
-  PixelsPerInch = 96
+  ExplicitWidth = 603
+  ExplicitHeight = 565
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -350,6 +349,7 @@ inherited frmImportPoints: TfrmImportPoints
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -373,6 +373,7 @@ inherited frmImportPoints: TfrmImportPoints
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

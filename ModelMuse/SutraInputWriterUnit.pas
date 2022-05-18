@@ -126,7 +126,7 @@ implementation
 uses
   DataSetUnit, SutraFileWriterUnit, frmErrorsAndWarningsUnit, PlProcUnit,
   ModflowParameterUnit, OrderedCollectionUnit, RbwParser,
-  frmFormulaErrorsUnit;
+  frmFormulaErrorsUnit, frmGoPhastUnit;
 
 resourcestring
   StrMaxPermMinPerm = 'Maximum permeability < Minimum permeability';
@@ -1785,62 +1785,89 @@ end;
 
 procedure TSutraInputWriter.WriteDataSet9;
 var
-  COMPFL: double;
-  CW: double;
-  RHOWØ: Double;
-  SIGMAW: Double;
-  URHOWØ: Double;
-  DRWDU: Double;
-  VISCØ: Double;
+  COMPL: double;
+  CL: double;
+  RHOL0: Double;
+  SIGMAL: Double;
+  URHOL0: Double;
+  DRLDU: Double;
+  VISC0: Double;
+  COMPI: Double;
+  CI: Double;
+  SIGMAI: Double;
+  RHOI: Double;
 begin
   WriteCommentLine('Data set 9');
-  COMPFL := FOptions.FluidCompressibility;
+  COMPL := FOptions.FluidCompressibility;
 
-  CW := 0.;
-  SIGMAW := 0.;
-  URHOWØ := 0.;
-  DRWDU := 0.;
-  VISCØ := 0.;
-  RHOWØ := 0.;
+  CL := 0.;
+  SIGMAL := 0.;
+  URHOL0 := 0.;
+  DRLDU := 0.;
+  VISC0 := 0.;
+  RHOL0 := 0.;
+  COMPI := 0.;
+  CI := 0.;
+  SIGMAI := 0.;
+  RHOI := 0.;
   case FOptions.TransportChoice of
     tcSolute:
       begin
-        CW := 0.;
-        SIGMAW := FOptions.FluidDiffusivity;
-        URHOWØ := FOptions.BaseConcentration;
-        DRWDU := FOptions.FluidDensityCoefficientConcentration;
-        VISCØ := FOptions.Viscosity;
-        RHOWØ := FOptions.BaseFluidDensity;
+        CL := 0.;
+        SIGMAL := FOptions.FluidDiffusivity;
+        URHOL0 := FOptions.BaseConcentration;
+        DRLDU := FOptions.FluidDensityCoefficientConcentration;
+        VISC0 := FOptions.Viscosity;
+        RHOL0 := FOptions.BaseFluidDensity;
       end;
     tcSoluteHead:
       begin
-        CW := 0.;
-        SIGMAW := FOptions.FluidDiffusivity;
-        URHOWØ := 0;
-        DRWDU := 0;
-        VISCØ := 1;
-        RHOWØ := 1;
+        CL := 0.;
+        SIGMAL := FOptions.FluidDiffusivity;
+        URHOL0 := 0;
+        DRLDU := 0;
+        VISC0 := 1;
+        RHOL0 := 1;
       end;
     tcEnergy:
       begin
-        CW := FOptions.FluidSpecificHeat;
-        SIGMAW := FOptions.FluidThermalConductivity;
-        URHOWØ := FOptions.BaseTemperature;
-        DRWDU := FOptions.FluidDensityCoefficientTemperature;
-        VISCØ := FOptions.ScaleFactor;
-        RHOWØ := FOptions.BaseFluidDensity;
+        CL := FOptions.FluidSpecificHeat;
+        SIGMAL := FOptions.FluidThermalConductivity;
+        URHOL0 := FOptions.BaseTemperature;
+        DRLDU := FOptions.FluidDensityCoefficientTemperature;
+        VISC0 := FOptions.ScaleFactor;
+        RHOL0 := FOptions.BaseFluidDensity;
+      end;
+    tcFreezing:
+      begin
+        CL := FOptions.FluidSpecificHeat;
+        SIGMAL := FOptions.FluidThermalConductivity;
+        URHOL0 := FOptions.BaseTemperature;
+        DRLDU := FOptions.FluidDensityCoefficientTemperature;
+        VISC0 := FOptions.ScaleFactor;
+        RHOL0 := FOptions.BaseFluidDensity;
+        COMPI := FOptions.IceCompressibility;
+        CI := FOptions.IceSpecificHeat;
+        SIGMAI := FOptions.IceThermalConductivity;
+        RHOI := FOptions.IceDensity;
       end
     else
       Assert(False);
   end;
-  WriteFloat(COMPFL);
-  { TODO -cSUTRA4 : CW, SIGMAW, RHOWØ, URHOWØ, and DRWDU renamed CL , SIGMAL, RHOWØ, URHOLØ, and DRLDU. }
-  WriteFloat(CW);
-  WriteFloat(SIGMAW);
-  WriteFloat(RHOWØ);
-  WriteFloat(URHOWØ);
-  WriteFloat(DRWDU);
-  WriteFloat(VISCØ);
+  WriteFloat(COMPL);
+  WriteFloat(CL);
+  WriteFloat(SIGMAL);
+  WriteFloat(RHOL0);
+  WriteFloat(URHOL0);
+  WriteFloat(DRLDU);
+  WriteFloat(VISC0);
+  if FOptions.TransportChoice = tcFreezing then
+  begin
+    WriteFloat(COMPI);
+    WriteFloat(CI);
+    WriteFloat(SIGMAI);
+    WriteFloat(RHOI);
+  end;
   { TODO -cSUTRA4 : COMPI, CI, SIGMAI, and RHOI have been added for FREEZING simulations }
   NewLine;
 end;
@@ -2227,6 +2254,7 @@ begin
   case Model.ModelSelection of
     msSutra22: SIMULA := SIMULA + '2.2';
     msSutra30: SIMULA := SIMULA + '3.0';
+    msSutra40: SIMULA := SIMULA + '4.0';
   else
     Assert(False);
   end;
@@ -2701,7 +2729,17 @@ begin
   begin
     WriteString(' ''S'' ');
   end;
-  { TODO -cSUTRA4 : Add new option: "L" and "I" for liquid and ice saturation respectively. }
+  if Model.ModelSelection = msSutra40 then
+  begin
+    if neoLiquidSaturation in FOutputControl.NodeElementOptions then
+    begin
+      WriteString(' ''L'' ');
+    end;
+    if neoIceSaturation in FOutputControl.NodeElementOptions then
+    begin
+      WriteString(' ''I'' ');
+    end;
+  end;
   WriteString(' ''-''');
   NewLine;
 end;
@@ -2737,7 +2775,17 @@ begin
       WriteString('''VZ'' ');
     end;
   end;
-  { TODO -cSUTRA4 : Add new options: "qX", "qY", and "qZ" for Darcy velocity components. }
+  if frmGoPhast.ModelSelection = msSutra40 then
+  begin
+    if neoDarcyVelocities in FOutputControl.NodeElementOptions then
+    begin
+      WriteString(' ''qX'' ''qY'' ');
+      if (Model.SutraMesh.MeshType = mt3D) then
+      begin
+        WriteString('''qZ'' ');
+      end;
+    end;
+  end;
   WriteString(' ''-''');
   NewLine;
 end;

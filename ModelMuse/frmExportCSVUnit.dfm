@@ -4,9 +4,8 @@ inherited frmExportCSV: TfrmExportCSV
   Caption = 'Export Data as CSV'
   ClientHeight = 452
   ClientWidth = 578
-  ExplicitWidth = 594
-  ExplicitHeight = 491
-  PixelsPerInch = 96
+  ExplicitWidth = 596
+  ExplicitHeight = 499
   TextHeight = 18
   object Panel1: TPanel
     Left = 0
@@ -56,6 +55,8 @@ inherited frmExportCSV: TfrmExportCSV
       OnChecked = vstDataSetsChecked
       OnGetText = vstDataSetsGetText
       OnGetNodeDataSize = vstDataSetsGetNodeDataSize
+      Touch.InteractiveGestures = [igPan, igPressAndTap]
+      Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
       Columns = <>
     end
     object rgOrientation: TRadioGroup

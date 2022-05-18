@@ -5033,6 +5033,11 @@ SectionStarts.}
     constructor Create(ScreenObject: TScreenObject); override;
   end;
 
+  TSutra40Delegate = class(TCustomMeshDelegate)
+  public
+    constructor Create(ScreenObject: TScreenObject); override;
+  end;
+
   TResetProcedure = procedure(Compiler: TRbwParser) of object;
 
   {@abstract(@name is and abstract base class.  Its descendants,
@@ -8052,7 +8057,7 @@ begin
               (Model as TPhastModel).SelectedModel);
           end;
         end;
-      msSutra22, msSutra30:
+      msSutra22, msSutra30, msSutra40:
         begin
           Draw1ElevSutra(Direction, Bitmap32, DrawAsSelected);
         end;
@@ -14637,7 +14642,7 @@ begin
             Draw2ElevModflow(Direction, Bitmap32, (Model as TPhastModel).SelectedModel);
           end;
         end;
-      msSutra22, msSutra30:
+      msSutra22, msSutra30, msSutra40:
         begin
           Draw2ElevSutra(Direction, Bitmap32);
         end;
@@ -23676,6 +23681,10 @@ begin
         msSutra30:
           begin
             Item.DelegateClass := TSutra30Delegate.ClassName;
+          end;
+        msSutra40:
+          begin
+            Item.DelegateClass := TSutra40Delegate.ClassName;
           end;
         msFootPrint:
           begin
@@ -46289,6 +46298,14 @@ end;
 //  X := Value.x;
 //  Y := Value.y;
 //end;
+
+{ TSutra40Delegate }
+
+constructor TSutra40Delegate.Create(ScreenObject: TScreenObject);
+begin
+  inherited;
+  FModelSelection := msSutra40;
+end;
 
 initialization
   RegisterClass(TScreenObject);

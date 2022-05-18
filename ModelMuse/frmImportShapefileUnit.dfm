@@ -7,9 +7,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
   Caption = 'Import Shapefile'
   ClientHeight = 596
   ClientWidth = 771
-  ExplicitWidth = 787
-  ExplicitHeight = 635
-  PixelsPerInch = 96
+  ExplicitWidth = 789
+  ExplicitHeight = 643
   TextHeight = 18
   object pnlButton: TPanel
     Left = 0

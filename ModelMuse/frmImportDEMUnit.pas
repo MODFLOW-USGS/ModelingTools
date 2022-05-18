@@ -192,7 +192,7 @@ begin
   result := False;
   Mesh := frmGoPhast.PhastModel.Mesh3D;
   case frmGoPhast.ModelSelection of
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         result := (Mesh <> nil) and (Mesh.Mesh2DI.NodeCount > 0);
         if result then
@@ -293,7 +293,7 @@ begin
       begin
         Assert(False);
       end;
-    msPhast, msSutra22, msSutra30:
+    msPhast, msSutra22, msSutra30, msSutra40:
       begin
         case EvalAt of
           eaBlocks:

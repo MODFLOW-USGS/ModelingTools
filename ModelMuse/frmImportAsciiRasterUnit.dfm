@@ -3,9 +3,8 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
   Caption = 'Import ASCII Raster File'
   ClientHeight = 336
   ClientWidth = 640
-  ExplicitWidth = 656
-  ExplicitHeight = 375
-  PixelsPerInch = 96
+  ExplicitWidth = 658
+  ExplicitHeight = 383
   TextHeight = 18
   inherited lblDataSet: TLabel
     Top = 13
@@ -32,8 +31,8 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
   object lblWarning: TLabel [4]
     Left = 8
     Top = 299
-    Width = 257
-    Height = 57
+    Width = 249
+    Height = 38
     Caption = 'When importing multiple files, all must have the same points. '
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -143,6 +142,7 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -166,6 +166,7 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = ANSI_CHARSET
         ButtonFont.Color = clBlack
@@ -190,6 +191,7 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = ANSI_CHARSET
         ButtonFont.Color = clBlack

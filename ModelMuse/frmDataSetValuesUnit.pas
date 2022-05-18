@@ -430,7 +430,8 @@ var
   ChildModel: TChildModel;
 begin
   case frmGoPhast.ModelSelection of
-    msPhast, msModflow, msModflowNWT, msModflowCfp, msSutra22, msSutra30, msFootPrint, msModflow2015:
+    msPhast, msModflow, msModflowNWT, msModflowCfp, msSutra22, msSutra30,
+    msSutra40, msFootPrint, msModflow2015:
       begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel)
       end;

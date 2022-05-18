@@ -1319,7 +1319,7 @@ function EvalAtToString(const Eval: TEvaluatedAt; const Model: TModelSelection;
 begin
   result := '';
   case Model of
-    msUndefined, msPhast, msSutra22, msSutra30:
+    msUndefined, msPhast, msSutra22, msSutra30, msSutra40:
       begin
         case Eval of
           eaBlocks:

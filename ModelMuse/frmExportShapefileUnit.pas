@@ -195,7 +195,7 @@ begin
   case DataArray.EvaluatedAt of
     eaBlocks: result := True;
     eaNodes: result := frmGoPhast.PhastModel.ModelSelection
-      in [msPhast, msSutra22, msSutra30];
+      in [msPhast, msSutra22, msSutra30, msSutra40];
     else Assert(False);
   end;
 end;
@@ -440,7 +440,7 @@ begin
             RealList.AddUnique(StressPeriod.EndTime);
           end;
         end;
-      msSutra22, msSutra30:
+      msSutra22, msSutra30, msSutra40:
         begin
           SutraTimeOptions := frmGoPhast.PhastModel.SutraTimeOptions;
           SutraTimeOptions.CalculateAllTimes;
@@ -1958,7 +1958,7 @@ var
 begin
   case frmGoPhast.ModelSelection of
     msPhast, msModflow, msModflowNWT
-      , msModflowCfp, msSutra22, msSutra30, msFootPrint, msModflow2015:
+      , msModflowCfp, msSutra22, msSutra30, msSutra40, msFootPrint, msModflow2015:
       begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel);
         comboModel.Visible := False;
@@ -2519,7 +2519,7 @@ begin
         lblNodes.Caption := StrCellCornerShapefi;
         Caption := StrExportGridDataTo;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         lblElements.Caption := StrElementShapefileN;
         lblNodes.Caption := StrNodeShapefileName;

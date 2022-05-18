@@ -975,7 +975,7 @@ begin
         comboOrientation.Items[2].Brush.Color := clWhite;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msSutra22, msSutra30, msModflow2015:
+      msModflowFmp, msModflowCfp, msSutra22, msSutra30, msSutra40, msModflow2015:
       begin
         comboOrientation.Items[1].Brush.Color := clBtnFace;
         comboOrientation.Items[2].Brush.Color := clBtnFace;
@@ -1406,7 +1406,7 @@ begin
           TDataSetOrientation(comboOrientation.ItemIndex);
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msSutra22, msSutra30, msModflow2015:
+      msModflowFmp, msModflowCfp, msSutra22, msSutra30, msSutra40, msModflow2015:
       begin
         case comboOrientation.ItemIndex of
           0,3:
@@ -2935,7 +2935,7 @@ begin
 
       comboEvaluatedAt.ItemIndex := Ord(FSelectedEdit.EvaluatedAt);
       comboEvaluatedAt.Enabled := (frmGoPhast.ModelSelection
-        in [msPhast, msSutra22, msSutra30])
+        in [msPhast, msSutra22, msSutra30, msSutra40])
         and ((FSelectedEdit.DataArray = nil)
         or not (dcEvaluatedAt in FSelectedEdit.DataArray.Lock));
 

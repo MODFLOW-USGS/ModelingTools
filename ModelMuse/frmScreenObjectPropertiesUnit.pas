@@ -4379,7 +4379,7 @@ begin
   InitializeGridObjects;
   seBoundaryTimes.Value := 1;
   rgEvaluatedAt.Enabled := frmGoPhast.PhastModel.ModelSelection in
-    [msPhast, msSutra22, msSutra30];
+    [msPhast, msSutra22, msSutra30, msSutra40];
 
   rgEvaluatedAt.Items[Ord(eaBlocks)] := EvalAtToString(eaBlocks,
     frmGoPhast.PhastModel.ModelSelection, True, True);
@@ -6674,7 +6674,7 @@ begin
     AScreenObject := FScreenObject
   end;
 
-  result := (LocalModel.ModelSelection = msSutra30)
+  result := (LocalModel.ModelSelection in [msSutra30, msSutra40])
     and LocalModel.SutraOptions.LakeOptions.UseLakes
 //    and (not LocalModel.SutraOptions.LakeOptions.AllNodesLakes)
     and (LocalModel.SutraMesh <> nil)
@@ -6689,7 +6689,7 @@ var
   LocalModel: TPhastModel;
 begin
   LocalModel := frmGoPhast.PhastModel;
-  result := (LocalModel.ModelSelection = msSutra30)
+  result := (LocalModel.ModelSelection in [msSutra30, msSutra40])
     and (LocalModel.SutraMesh <> nil)
     and (rgEvaluatedAt.ItemIndex = Ord(eaNodes))
 end;
@@ -22812,7 +22812,7 @@ begin
         cbSetGridCellSize.Caption := StrUseToSetGridCell;
         lblGridCellSize.Caption := StrGridCellSize;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         cbSetGridCellSize.Caption := StrUseToSetMeshElem;
         lblGridCellSize.Caption := StrMeshElementSize;

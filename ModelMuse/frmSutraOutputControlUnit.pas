@@ -117,6 +117,10 @@ var
   OptIndex: TSutraListingOption;
   NodeElOptIndex: TSutraNodeEleOption;
 begin
+  clbNcol.ItemEnabled[Ord(neoLiquidSaturation)] := frmGoPhast.ModelSelection = msSutra40;
+  clbNcol.ItemEnabled[Ord(neoIceSaturation)] := frmGoPhast.ModelSelection = msSutra40;
+  clbNcol.ItemEnabled[Ord(neoDarcyVelocities)] := frmGoPhast.ModelSelection = msSutra40;
+
   SutraOutputControl := frmGoPhast.PhastModel.SutraOutputControl;
   seNprint.AsInteger := SutraOutputControl.ListingPrintFrequency;
   for OptIndex in SutraOutputControl.ListingOptions do

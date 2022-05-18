@@ -266,7 +266,7 @@ begin
   case DataArray.EvaluatedAt of
     eaBlocks: result := True;
     eaNodes: result := frmGoPhast.PhastModel.ModelSelection
-      in [msPhast, msSutra22, msSutra30];
+      in [msPhast, msSutra22, msSutra30, msSutra40];
     else Assert(False);
   end;
 end;

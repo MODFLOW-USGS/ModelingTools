@@ -7,9 +7,8 @@ inherited frmGoTo: TfrmGoTo
   Caption = 'Go To'
   ClientHeight = 320
   ClientWidth = 297
-  ExplicitWidth = 313
-  ExplicitHeight = 359
-  PixelsPerInch = 96
+  ExplicitWidth = 315
+  ExplicitHeight = 367
   TextHeight = 18
   object pcMain: TPageControl
     Left = 0
@@ -24,10 +23,6 @@ inherited frmGoTo: TfrmGoTo
       HelpType = htKeyword
       HelpKeyword = 'The_Position_Tab'
       Caption = 'Position'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         289
         205)
@@ -147,10 +142,6 @@ inherited frmGoTo: TfrmGoTo
       HelpKeyword = 'The_Element_Tab'
       Caption = 'Element'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         289
         205)
@@ -242,10 +233,6 @@ inherited frmGoTo: TfrmGoTo
       HelpKeyword = 'The_Mesh_Tab'
       Caption = 'Mesh'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblNumber: TLabel
         Left = 130
         Top = 115
@@ -280,10 +267,6 @@ inherited frmGoTo: TfrmGoTo
     object tabDISV: TTabSheet
       Caption = 'DISV'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         289
         205)
@@ -333,10 +316,6 @@ inherited frmGoTo: TfrmGoTo
       HelpKeyword = 'The_Object_Tab'
       Caption = 'Object'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lvScreenObjects: TListView
         Left = 0
         Top = 0
@@ -374,10 +353,6 @@ inherited frmGoTo: TfrmGoTo
       HelpKeyword = 'The_Image_Tab'
       Caption = 'Image'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lvImages: TListView
         Left = 0
         Top = 0

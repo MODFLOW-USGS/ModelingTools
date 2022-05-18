@@ -8,9 +8,10 @@ inherited frmStartUp: TfrmStartUp
   ClientHeight = 406
   ClientWidth = 751
   OnClose = FormClose
-  ExplicitWidth = 767
-  ExplicitHeight = 445
-  PixelsPerInch = 96
+  ExplicitLeft = 3
+  ExplicitTop = 3
+  ExplicitWidth = 769
+  ExplicitHeight = 453
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -80,7 +81,7 @@ inherited frmStartUp: TfrmStartUp
     Top = 0
     Width = 751
     Height = 359
-    ActivePage = tabModelChoice
+    ActivePage = tabInitialSutraMesh
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
@@ -173,6 +174,7 @@ inherited frmStartUp: TfrmStartUp
           EditLabel.Height = 18
           EditLabel.Caption = 'Projection'
           TabOrder = 4
+          Text = ''
         end
         object rgProjectionType: TRadioGroup
           Left = 203
@@ -400,9 +402,7 @@ inherited frmStartUp: TfrmStartUp
             ExplicitHeight = 18
           end
           inherited lblOriginZ: TLabel
-            Width = 9
             Height = 18
-            ExplicitWidth = 9
             ExplicitHeight = 18
           end
           inherited rdeExaggeration: TRbwDataEntry
@@ -815,13 +815,14 @@ inherited frmStartUp: TfrmStartUp
         Left = 216
         Top = 8
         Width = 230
-        Height = 87
+        Height = 98
         Caption = 'Transport (SIMULA)'
         ItemIndex = 1
         Items.Strings = (
           'Solute using pressure'
           'Solute using head'
-          'Energy')
+          'Energy'
+          'Freezing')
         TabOrder = 1
         OnClick = rgTransportClick
       end
@@ -942,9 +943,9 @@ inherited frmStartUp: TfrmStartUp
       end
       object rgSaturation: TRadioGroup
         Left = 216
-        Top = 101
+        Top = 112
         Width = 230
-        Height = 96
+        Height = 85
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
         Enabled = False

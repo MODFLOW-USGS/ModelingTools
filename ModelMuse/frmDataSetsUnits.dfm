@@ -560,11 +560,10 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 306
+          Width = 69
           Height = 19
           Align = alTop
           Caption = 'Comment'
-          ExplicitWidth = 69
         end
         object reComment: TRichEdit
           AlignWithMargins = True
@@ -592,11 +591,10 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 306
+          Width = 164
           Height = 19
           Align = alTop
           Caption = 'Associated model data'
-          ExplicitWidth = 164
         end
         object memoAssociatedDataSets: TMemo
           AlignWithMargins = True

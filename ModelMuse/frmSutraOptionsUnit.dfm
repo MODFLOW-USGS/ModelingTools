@@ -4,6 +4,7 @@ inherited frmSutraOptions: TfrmSutraOptions
   Caption = 'SUTRA Options'
   ClientHeight = 562
   ClientWidth = 784
+  ExplicitTop = -12
   ExplicitWidth = 802
   ExplicitHeight = 609
   TextHeight = 18
@@ -68,7 +69,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 595
     Height = 512
-    ActivePage = jvspAnisotropy
+    ActivePage = jvspDefaultLakeInteractions
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -130,10 +131,11 @@ inherited frmSutraOptions: TfrmSutraOptions
           'Saturated'
           'Unsaturated')
         TabOrder = 5
+        OnClick = rgSaturationClick
       end
       object rgTransport: TRadioGroup
         Left = 6
-        Top = 146
+        Top = 145
         Width = 251
         Height = 97
         Caption = 'Transport (SIMULA)'
@@ -141,7 +143,8 @@ inherited frmSutraOptions: TfrmSutraOptions
         Items.Strings = (
           'Solute using pressure'
           'Solute using head'
-          'Energy')
+          'Energy'
+          'Freezing')
         TabOrder = 4
         OnClick = rgTransportClick
       end
@@ -612,82 +615,113 @@ inherited frmSutraOptions: TfrmSutraOptions
       object lblFluidCompressibility: TLabel
         Left = 106
         Top = 14
-        Width = 223
+        Width = 264
         Height = 18
-        Caption = 'Fluid compressibility (COMPFL)'
+        Caption = 'Liquid water compressibility (COMPL)'
       end
       object lblFluidSpecificHeat: TLabel
         Left = 106
         Top = 42
-        Width = 167
+        Width = 212
         Height = 18
-        Caption = 'Fluid specific heat (CW)'
+        Caption = 'Liquid water specific heat (CL)'
       end
       object lblFluidDiffusivity: TLabel
         Left = 106
         Top = 70
-        Width = 179
+        Width = 225
         Height = 18
-        Caption = 'Fluid diffusivity (SIGMAW)'
+        Caption = 'Liquid water diffusivity (SIGMAL)'
       end
       object lblBaseFluidDensity: TLabel
         Left = 106
         Top = 126
-        Width = 435
+        Width = 477
         Height = 18
-        Caption = 'Density of fluid at base concentration or temperature (RHOW'#216')'
+        Caption = 
+          'Density of liquid water at base concentration or temperature (RH' +
+          'OL0)'
+        WordWrap = True
       end
       object lblBaseU: TLabel
         Left = 106
-        Top = 154
-        Width = 322
+        Top = 162
+        Width = 313
         Height = 18
-        Caption = 'Base value of solute concentration (URHOW'#216')'
+        Caption = 'Base value of solute concentration (URHOL0)'
       end
       object lblFluidDensityCoefficientConcentration: TLabel
         Left = 106
-        Top = 205
+        Top = 213
         Width = 429
         Height = 36
         Caption = 
           'Coefficient of fluid density change with concentration (fraction' +
-          ') (DRWDU) '
+          ') (DRLDU) '
         WordWrap = True
       end
       object lblViscosityScaleFactor: TLabel
         Left = 106
-        Top = 271
-        Width = 160
+        Top = 280
+        Width = 208
         Height = 18
-        Caption = 'Fluid viscosity (VISC'#216')'
+        Caption = 'Liquid water viscosity (VISC0)'
       end
       object lblScaleFactor: TLabel
         Left = 106
-        Top = 299
-        Width = 146
+        Top = 307
+        Width = 143
         Height = 18
-        Caption = 'Scale factor (VISC'#216')'
+        Caption = 'Scale factor (VISC0)'
       end
       object lblFluidThermalConductivity: TLabel
         Left = 106
         Top = 98
-        Width = 251
+        Width = 297
         Height = 18
-        Caption = 'Fluid thermal conductivity (SIGMAW)'
+        Caption = 'Liquid water thermal conductivity (SIGMAL)'
       end
       object lblFluidDensityCoefficientTemperature: TLabel
         Left = 106
-        Top = 243
-        Width = 430
+        Top = 251
+        Width = 424
         Height = 18
-        Caption = 'Coefficient of fluid density change with temperature (DRWDU) '
+        Caption = 'Coefficient of fluid density change with temperature (DRLDU) '
       end
       object lblBaseTemperature: TLabel
         Left = 106
-        Top = 181
-        Width = 268
+        Top = 189
+        Width = 259
         Height = 18
-        Caption = 'Base value of temperature (URHOW'#216')'
+        Caption = 'Base value of temperature (URHOL0)'
+      end
+      object lblIceSpecHeat: TLabel
+        Left = 106
+        Top = 363
+        Width = 141
+        Height = 18
+        Caption = 'Ice specific heat (CI)'
+      end
+      object lblIceThemCond: TLabel
+        Left = 106
+        Top = 391
+        Width = 226
+        Height = 18
+        Caption = 'Ice thermal conductivity (SIGMAI)'
+      end
+      object lblIceDensity: TLabel
+        Left = 106
+        Top = 415
+        Width = 137
+        Height = 18
+        Caption = 'Ice density  (RHOI0)'
+      end
+      object lblIceCompress: TLabel
+        Left = 106
+        Top = 335
+        Width = 193
+        Height = 18
+        Caption = 'Ice compressibility (COMPI)'
       end
       object rdeFluidCompressibility: TRbwDataEntry
         Left = 6
@@ -739,7 +773,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdeBaseConcentration: TRbwDataEntry
         Left = 6
-        Top = 151
+        Top = 159
         Width = 94
         Height = 22
         TabOrder = 5
@@ -751,7 +785,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdeFluidDensityCoefficientConcentration: TRbwDataEntry
         Left = 6
-        Top = 212
+        Top = 220
         Width = 94
         Height = 22
         TabOrder = 7
@@ -763,7 +797,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdeViscosity: TRbwDataEntry
         Left = 6
-        Top = 268
+        Top = 276
         Width = 94
         Height = 22
         TabOrder = 9
@@ -775,7 +809,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdeScaleFactor: TRbwDataEntry
         Left = 6
-        Top = 296
+        Top = 304
         Width = 94
         Height = 22
         TabOrder = 10
@@ -799,7 +833,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdeFluidDensityCoefficientTemperature: TRbwDataEntry
         Left = 6
-        Top = 240
+        Top = 248
         Width = 94
         Height = 22
         TabOrder = 8
@@ -810,10 +844,58 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdeBaseTemperature: TRbwDataEntry
         Left = 6
-        Top = 178
+        Top = 186
         Width = 94
         Height = 22
         TabOrder = 6
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeIceCompress: TRbwDataEntry
+        Left = 6
+        Top = 332
+        Width = 94
+        Height = 22
+        TabOrder = 11
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeIceSpecHeat: TRbwDataEntry
+        Left = 6
+        Top = 360
+        Width = 94
+        Height = 22
+        TabOrder = 12
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeIceThemCond: TRbwDataEntry
+        Left = 6
+        Top = 388
+        Width = 94
+        Height = 22
+        TabOrder = 13
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeIceDensity: TRbwDataEntry
+        Left = 6
+        Top = 416
+        Width = 94
+        Height = 22
+        TabOrder = 14
         Text = '0'
         DataType = dtReal
         Max = 1.000000000000000000
@@ -1380,7 +1462,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           Height = 18
           Caption = 'If lake water present or absent'
         end
-        object lbl1: TLabel
+        object lblLakeGeneralizedTransportType: TLabel
           Left = 320
           Top = 19
           Width = 104
@@ -1490,6 +1572,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 179
     Height = 512
+    ShowButtons = True
     PageDefault = 0
     PageList = jplMain
     Align = alLeft

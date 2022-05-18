@@ -23,7 +23,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
     Top = 22
     Width = 609
     Height = 454
-    ActivePage = tabObservations
+    ActivePage = tabLossControls
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -223,6 +223,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         end
         inherited comboLocationChoice: TJvImageComboBox
           Left = 173
+          ItemIndex = -1
           OnChange = framePumpLocationMethodcomboLocationChoiceChange
           ExplicitLeft = 173
         end
@@ -1388,7 +1389,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 594
+          Width = 595
           Height = 36
           Align = alTop
           Caption = 
@@ -1396,6 +1397,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             ' and bottom of the object as defined by the higher and lower Z c' +
             'oordinates will define a well screen.'
           WordWrap = True
+          ExplicitWidth = 594
         end
         object lblWellScreenFormula: TLabel
           Left = 136

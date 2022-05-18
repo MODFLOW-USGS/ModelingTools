@@ -543,6 +543,7 @@ const
   StrMt3dUsgs = 'MT3D-USGS';
   KSutra22  = 'SUTRA2.2';
   KSutra30  = 'SUTRA3.0';
+  KSutra40  = 'SUTRA4.0';
   StrDisvgrb = '.disv.grb';
   StrDisgrb = '.dis.grb';
 
@@ -863,6 +864,7 @@ type
     FZoneBudgetLocationMf6: string;
     FSutra30Location: string;
     FPestDirectory: string;
+    FSutra40Location: string;
     function GetTextEditorLocation: string;
     procedure SetModflowLocation(const Value: string);
     function RemoveQuotes(const Value: string): string;
@@ -888,6 +890,7 @@ type
     procedure SetZoneBudgetLocationMf6(const Value: string);
     procedure SetSutra30Location(const Value: string);
     procedure SetPestDirectory(const Value: string);
+    procedure SetSutra40Location(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create;
@@ -929,6 +932,8 @@ type
       write SetSutra22Location;
     property Sutra30Location: string read FSutra30Location
       write SetSutra30Location;
+    property Sutra40Location: string read FSutra40Location
+      write SetSutra40Location;
     property ModflowCfpLocation: string read FModflowCfpLocation
       write SetModflowCfpLocation;
     property GmshLocation: string read FGmshLocation write SetGmshLocation;
@@ -2099,7 +2104,7 @@ that affects the model output should also have a comment. }
     function SwtOffsetsUsed(Sender: TObject): boolean; virtual;
     function SwtSpecifiedUsed(Sender: TObject): boolean; virtual;
     function SutraUsed(Sender: TObject): boolean;
-    function Sutra30Used(Sender: TObject): boolean;
+    function Sutra30OrAboveUsed(Sender: TObject): boolean;
     function SutraLakeUsed(Sender: TObject): boolean;
     function SutraLakeBottomUsed(Sender: TObject): boolean;
     function UztUsed(Sender: TObject): boolean; virtual;
@@ -5463,6 +5468,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
   KSutra30DefaultPath = 'C:\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe';
+  KSutra40DefaultPath = 'C:\SutraSuite\SUTRA_3_0\bin\sutra_4_0.exe';
   StrMpathDefaultPath = 'C:\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe';
   StrMpathDefaultPathVersion6 = 'C:\WRDAPP\modpath.6_0\bin\mp6.exe';
   StrMpathDefaultPathVersion7 = 'C:\WRDAPP\modpath_7_2_001\bin\mpath7.exe';
@@ -11272,6 +11278,7 @@ constructor TPhastModel.Create(AnOwner: TComponent);
 var
   ChangeNotifier: IChangeNotifier;
 begin
+  FFormulaManager:= TFormulaManager.Create(self);
   inherited;
   FTimesSeries:= TTimesSeriesCollections.Create(self);
 //  FUnitNumbers := TUnitNumbers.Create(self);
@@ -11295,7 +11302,6 @@ begin
   FEndPointLegend.ValueAssignmentMethod := vamAutomatic;
 
   FHufParameters := THufModflowParameters.Create(self);
-  FFormulaManager:= TFormulaManager.Create(self);
   FUpdatingFullStressPeriods := False;
 
   FGridColors := TColorParameters.Create;
@@ -12240,7 +12246,7 @@ begin
           end;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         result := (SutraMesh <> nil) and (SutraMesh.MeshType = mt3D);
         if result then
@@ -13528,7 +13534,7 @@ begin
           end;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if FSutraLayerStructure.Count = 0 then
         begin
@@ -13566,7 +13572,7 @@ begin
           ModflowGrid.NotifyGridChanged(Sender);
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         OnTopSutraMeshChanged(Sender);
       end;
@@ -13641,7 +13647,7 @@ begin
           ModflowGrid.TopGridObserver := nil;
           ModflowGrid.ThreeDGridObserver := nil;
         end;
-      msSutra22, msSutra30:
+      msSutra22, msSutra30, msSutra40:
         begin
 
         end;
@@ -13683,7 +13689,7 @@ begin
             FGrid := ModflowGrid;
           end;
         end;
-      msSutra22, msSutra30:
+      msSutra22, msSutra30, msSutra40:
         begin
           FGrid := nil;
           TopGridObserver.OnUpToDateSet := OnTopSutraMeshChanged;
@@ -14831,7 +14837,7 @@ begin
         ModflowGrid.ThreeDContourDataSet := Value;
         DisvGrid.ThreeDContourDataSet := Value;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (Mesh <> nil) then
         begin
@@ -14864,7 +14870,7 @@ begin
         ModflowGrid.ThreeDDataSet := Value;
         DisvGrid.ThreeDDataSet := Value;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (Mesh <> nil) then
         begin
@@ -15521,6 +15527,8 @@ begin
       ModelFile := ProgramLocations.Sutra22Location;
     msSutra30:
       ModelFile := ProgramLocations.Sutra30Location;
+    msSutra40:
+      ModelFile := ProgramLocations.Sutra40Location;
     msFootPrint:
       ModelFile := ProgramLocations.FootprintLocation;
     msModflow2015:
@@ -16295,7 +16303,7 @@ begin
           result := 'MODFLOW';
         end;
     msModflowLGR, msModflowLGR2, msModflowFmp: result := 'Parent model';
-    msSutra22, msSutra30: result := 'SUTRA';
+    msSutra22, msSutra30, msSutra40: result := 'SUTRA';
     msFootprint: Result := 'WellFootprint';
     else Assert(False);
   end;
@@ -16354,7 +16362,7 @@ begin
             Assert(False);
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (Mesh <> nil) then
         begin
@@ -16398,7 +16406,7 @@ begin
             Assert(False);
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (Mesh <> nil) then
         begin
@@ -18183,7 +18191,7 @@ begin
           Inc(result, MaxChildColumnsPerColumn(ColIndex));
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         result := 0;
 //        if SutraMesh = nil then
@@ -18296,7 +18304,7 @@ begin
           Inc(result, MaxChildRowsPerRow(RowIndex));
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         result := 0;
 //        if SutraMesh = nil then
@@ -18347,7 +18355,7 @@ begin
           Inc(result, MaxChildLayersPerLayer(LayerIndex));
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if SutraMesh = nil then
         begin
@@ -18836,7 +18844,7 @@ begin
       begin
         result := LayerStructure.LayerCount;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if self is TPhastModel then
         begin
@@ -24520,7 +24528,7 @@ begin
           Grid.GridChanged;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (Mesh <> nil) then
         begin
@@ -24685,7 +24693,7 @@ begin
                 end;
               end;
             end;
-          msSutra22, msSutra30:
+          msSutra22, msSutra30, msSutra40:
             begin
              if ((Mesh as TSutraMesh3D).MeshType = mt3D) and ((Mesh as TSutraMesh3D).LayerCount > 0) then
               begin
@@ -24777,7 +24785,7 @@ begin
                 end;
               end;
             end;
-          msSutra22, msSutra30:
+          msSutra22, msSutra30, msSutra40:
             begin
 
               ALine := EquateLine(SutraMesh.CrossSection.StartPoint,
@@ -24874,7 +24882,7 @@ begin
         end;
         LocalLayerStructure := LayerStructure;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Layer := SutraMesh.SelectedLayer;
         if Layer >= SutraMesh.LayerCount then
@@ -24998,7 +25006,7 @@ begin
                 end;
               end;
             end;
-          msSutra22, msSutra30:
+          msSutra22, msSutra30, msSutra40:
             begin
               if (SutraMesh.MeshType = mt3D) and (SutraMesh.LayerCount > 0) then
               begin
@@ -25093,7 +25101,7 @@ begin
                 end;
               end;
             end;
-          msSutra22, msSutra30:
+          msSutra22, msSutra30, msSutra40:
             begin
               result := FortranFloatToStr(SutraMesh.MaxDist);
             end
@@ -25223,7 +25231,7 @@ begin
                 end;
               end;
             end;
-          msSutra22, msSutra30:
+          msSutra22, msSutra30, msSutra40:
             begin
               if (SutraMesh.MeshType = mt3D) and (SutraMesh.LayerCount > 0) then
               begin
@@ -25318,7 +25326,7 @@ begin
                 end;
               end;
             end;
-          msSutra22, msSutra30:
+          msSutra22, msSutra30, msSutra40:
             begin
               result := FortranFloatToStr(SutraMesh.MinDist);
             end
@@ -28453,6 +28461,7 @@ begin
     FootprintLocation := SourceLocations.FootprintLocation;
     Modflow6Location := SourceLocations.Modflow6Location;
     Sutra30Location := SourceLocations.Sutra30Location;
+    Sutra40Location := SourceLocations.Sutra40Location;
     PestDirectory := SourceLocations.PestDirectory;
   end
   else
@@ -28479,6 +28488,7 @@ begin
   Mt3dUsgsLocation := strMt3dUsgsDefaultPath;
   Sutra22Location := KSutraDefaultPath;
   Sutra30Location := KSutra30DefaultPath;
+  Sutra40Location := KSutra40DefaultPath;
   ModflowOwhmLocation := DefaultModflowOwhmPath;
   ModflowCfpLocation := strModflowCfpDefaultPath;
   GMshLocation := StrDefaultGmshPath;
@@ -28762,6 +28772,20 @@ begin
     end;
   end;
 
+  Sutra40Location := IniFile.ReadString(StrProgramLocations, KSutra40,
+    KSutra40DefaultPath);
+  if (Sutra40Location = '') or not FileExists(Sutra40Location) then
+  begin
+    if FileExists(KSutra40DefaultPath) then
+    begin
+      Sutra40Location := KSutra40DefaultPath;
+    end
+    else if FileExists(AlternatePath(KSutra40DefaultPath)) then
+    begin
+      Sutra40Location := AlternatePath(KSutra40DefaultPath);
+    end;
+  end;
+
   GmshLocation := IniFile.ReadString(StrProgramLocations, StrGmsh,
     StrDefaultGmshPath);
   if (GmshLocation = '') or not FileExists(GmshLocation) then
@@ -28990,6 +29014,11 @@ begin
   FSutra30Location := RemoveQuotes(Value);
 end;
 
+procedure TProgramLocations.SetSutra40Location(const Value: string);
+begin
+  FSutra40Location := RemoveQuotes(Value);
+end;
+
 procedure TProgramLocations.SetZoneBudgetLocation(const Value: string);
 begin
   FZoneBudgetLocation := RemoveQuotes(Value);
@@ -29021,6 +29050,7 @@ begin
   IniFile.WriteString(StrProgramLocations, StrMt3dUsgs, Mt3dUsgsLocation);
   IniFile.WriteString(StrProgramLocations, KSutra22, Sutra22Location);
   IniFile.WriteString(StrProgramLocations, KSutra30, Sutra30Location);
+  IniFile.WriteString(StrProgramLocations, KSutra40, Sutra40Location);
   IniFile.WriteString(StrProgramLocations, strModflowOWHM, ModflowOwhmLocation);
   IniFile.WriteString(StrProgramLocations, strModflowCFP, ModflowCfpLocation);
   IniFile.WriteString(StrProgramLocations, StrGmsh, GmshLocation);
@@ -29312,7 +29342,7 @@ begin
     tcEnergy: FSutraGenFlowPress1.Name := StrLowerHeadValue;
     else Assert(False);
   end;
-  FSutraGenFlowPress1.OnTimeListUsed := Sutra30Used;
+  FSutraGenFlowPress1.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenFlowPress1.OnInitialize := InitializeSutraGeneralFlow;
   AddTimeList(FSutraGenFlowPress1);
 
@@ -29322,7 +29352,7 @@ begin
     tcEnergy: FSutraGenFlowPress2.Name := StrHigherHeadValue;
     else Assert(False);
   end;
-  FSutraGenFlowPress2.OnTimeListUsed := Sutra30Used;
+  FSutraGenFlowPress2.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenFlowPress2.OnInitialize := InitializeSutraGeneralFlow;
   AddTimeList(FSutraGenFlowPress2);
 
@@ -29332,7 +29362,7 @@ begin
     tcEnergy: FSutraGenFlowRate1.Name := StrLowerRateH;
     else Assert(False);
   end;
-  FSutraGenFlowRate1.OnTimeListUsed := Sutra30Used;
+  FSutraGenFlowRate1.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenFlowRate1.OnInitialize := InitializeSutraGeneralFlow;
   AddTimeList(FSutraGenFlowRate1);
 
@@ -29342,7 +29372,7 @@ begin
     tcEnergy: FSutraGenFlowRate2.Name := StrHigherRateH;
     else Assert(False);
   end;
-  FSutraGenFlowRate2.OnTimeListUsed := Sutra30Used;
+  FSutraGenFlowRate2.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenFlowRate2.OnInitialize := InitializeSutraGeneralFlow;
   AddTimeList(FSutraGenFlowRate2);
 
@@ -29353,7 +29383,7 @@ begin
     tcEnergy: FSutraGenFlowU1.Name := StrLowerTemperature;
     else Assert(False);
   end;
-  FSutraGenFlowU1.OnTimeListUsed := Sutra30Used;
+  FSutraGenFlowU1.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenFlowU1.OnInitialize := InitializeSutraGeneralFlow;
   AddTimeList(FSutraGenFlowU1);
 
@@ -29364,7 +29394,7 @@ begin
     tcEnergy: FSutraGenFlowU2.Name := StrHigherTemperature;
     else Assert(False);
   end;
-  FSutraGenFlowU2.OnTimeListUsed := Sutra30Used;
+  FSutraGenFlowU2.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenFlowU2.OnInitialize := InitializeSutraGeneralFlow;
   AddTimeList(FSutraGenFlowU2);
 
@@ -29374,7 +29404,7 @@ begin
     tcEnergy: FSutraGenTranU1.Name := StrLowerTemperatureValue;
     else Assert(False);
   end;
-  FSutraGenTranU1.OnTimeListUsed := Sutra30Used;
+  FSutraGenTranU1.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenTranU1.OnInitialize := InitializeSutraGeneralTransport;
   AddTimeList(FSutraGenTranU1);
 
@@ -29384,7 +29414,7 @@ begin
     tcEnergy: FSutraGenTranU2.Name := StrHigherTemperatureValue;
     else Assert(False);
   end;
-  FSutraGenTranU2.OnTimeListUsed := Sutra30Used;
+  FSutraGenTranU2.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenTranU2.OnInitialize := InitializeSutraGeneralTransport;
   AddTimeList(FSutraGenTranU2);
 
@@ -29394,7 +29424,7 @@ begin
     tcEnergy: FSutraGenTranQU1.Name := StrEnergyFlowAtLowerTemperature;
     else Assert(False);
   end;
-  FSutraGenTranQU1.OnTimeListUsed := Sutra30Used;
+  FSutraGenTranQU1.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenTranQU1.OnInitialize := InitializeSutraGeneralTransport;
   AddTimeList(FSutraGenTranQU1);
 
@@ -29404,7 +29434,7 @@ begin
     tcEnergy: FSutraGenTranQU2.Name := StrEnergyFlowAtHigherTemperature;
     else Assert(False);
   end;
-  FSutraGenTranQU2.OnTimeListUsed := Sutra30Used;
+  FSutraGenTranQU2.OnTimeListUsed := Sutra30OrAboveUsed;
   FSutraGenTranQU2.OnInitialize := InitializeSutraGeneralTransport;
   AddTimeList(FSutraGenTranQU2);
 
@@ -30402,7 +30432,7 @@ begin
           Grid.SelectedColumn := Value;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         // do nothing
       end;
@@ -30458,7 +30488,7 @@ begin
           Grid.SelectedRow := Value;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         // do nothing
       end;
@@ -30483,7 +30513,7 @@ begin
 	  begin
         ModflowGrid.SideContourDataSet := Value;
 	  end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         // do nothing
       end;
@@ -30512,7 +30542,7 @@ begin
 	  begin
         ModflowGrid.SideDataSet := Value;
 	  end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         // do nothing
       end;
@@ -30579,7 +30609,7 @@ begin
         ModflowGrid.TopContourDataSet := Value;
         DisvGrid.TopContourDataSet := Value;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (Mesh <> nil) then
         begin
@@ -30612,7 +30642,7 @@ begin
         ModflowGrid.TopDataSet := Value;
         DisvGrid.TopDataSet := Value;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (Mesh <> nil) then
         begin
@@ -30693,7 +30723,7 @@ begin
         ModflowGrid.FrontContourDataSet := Value;
         DisvGrid.FrontContourDataSet := Value;
 	    end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         // do nothing
       end;
@@ -30723,7 +30753,7 @@ begin
         ModflowGrid.FrontDataSet := Value;
         DisvGrid.FrontDataSet := Value;
 	    end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         // do nothing
       end;
@@ -32784,7 +32814,7 @@ begin
           result := nil
         end;
       end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         // do nothing
       end;
@@ -32817,7 +32847,7 @@ begin
           result := nil
         end;
       end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         // do nothing
       end;
@@ -32828,7 +32858,7 @@ end;
 
 function TCustomModel.GetSutraLakesUsed: Boolean;
 begin
-  result := (ModelSelection = msSutra30)
+  result := (ModelSelection in [msSutra30, msSutra40])
           and SutraOptions.LakeOptions.UseLakes;
 end;
 
@@ -38044,7 +38074,7 @@ begin
         result := ModflowPackages.LpfPackage.IsSelected
           or ModflowPackages.UpwPackage.IsSelected;
       end;
-    msSutra22, msSutra30: result := false;
+    msSutra22, msSutra30, msSutra40: result := false;
     msFootPrint: result := false;
     msModflow2015:
       begin
@@ -38132,7 +38162,7 @@ begin
         result := ModflowPackages.NpfPackage.IsSelected
           and not ModflowPackages.NpfPackage.UseVerticalAnisotropy;
       end;
-    msSutra22, msSutra30, msFootPrint: result := False;
+    msSutra22, msSutra30, msSutra40, msFootPrint: result := False;
     else Assert(False);
   end;
 end;
@@ -38150,7 +38180,7 @@ begin
       begin
         result := Grid.TopContainingCell(APoint, EvalAt, False);
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         case EvalAt of
           eaBlocks:
@@ -38215,7 +38245,7 @@ begin
         result := ModflowPackages.StoPackage.IsSelected;
 //          and (ModflowPackages.StoPackage.StorageChoice = scSpecificStorage)
       end;
-    msSutra22, msSutra30, msFootPrint: result := False;
+    msSutra22, msSutra30, msSutra40, msFootPrint: result := False;
     else Assert(False);
   end;
 end;
@@ -38242,9 +38272,9 @@ begin
   result := ChemistryUsed(Sender) and ChemistryOptions.UseSurfaceAssemblages;
 end;
 
-function TCustomModel.Sutra30Used(Sender: TObject): boolean;
+function TCustomModel.Sutra30OrAboveUsed(Sender: TObject): boolean;
 begin
-  result := (ModelSelection = msSutra30)
+  result := (ModelSelection in [msSutra30, msSutra40])
 end;
 
 function TCustomModel.Sutra3DModel(Sender: TObject): boolean;
@@ -38288,7 +38318,7 @@ end;
 
 function TCustomModel.SutraLakeUsed(Sender: TObject): boolean;
 begin
-  result := Sutra30Used(Sender) and (SutraMesh.MeshType = mt3d)
+  result := Sutra30OrAboveUsed(Sender) and (SutraMesh.MeshType = mt3d)
     and SutraOptions.LakeOptions.UseLakes;
 
 end;
@@ -39031,7 +39061,7 @@ begin
   result := False;
   case ModelSelection of
     msUndefined: result := False;
-    msPhast, msSutra22, msSutra30, msFootPrint: result := False;
+    msPhast, msSutra22, msSutra30, msSutra40, msFootPrint: result := False;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
       msModflowFmp, msModflowCfp:
       begin
@@ -40730,7 +40760,7 @@ begin
       begin
         result := Grid;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         result := SutraMesh;
       end;
@@ -40830,7 +40860,7 @@ begin
       begin
         result := Grid.ItemTopLocation[EvalAt, Column, Row];
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         result := SutraMesh.ItemTopLocation[EvalAt, Column, Row];
       end;
@@ -47815,7 +47845,7 @@ begin
         result := nil;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (Mesh <> nil) then
         begin
@@ -47854,7 +47884,7 @@ begin
           result := DisvGrid.TopDataSet;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (Mesh <> nil) then
         begin
@@ -47939,7 +47969,7 @@ begin
           result := nil;
         end;
       end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         // do nothing
       end;
@@ -47972,7 +48002,7 @@ begin
           result := DisvGrid.FrontDataSet;
         end;
       end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         // do nothing
       end;

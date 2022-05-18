@@ -4066,7 +4066,7 @@ begin
             GetContainingLayer(GlobalColumn-1, Elevation);
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Mesh := TCustomModel(GlobalCurrentModel).Mesh as TSutraMesh3D;
         Result := 0;
@@ -4237,7 +4237,7 @@ begin
           result := result - NonSimulatedUnits + 1;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Result := _ElevationToLayer(Values);
       end;
@@ -4575,7 +4575,7 @@ begin
           end;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Result := 0;
         Mesh := TCustomModel(GlobalCurrentModel).Mesh as TSutraMesh3D;
@@ -4648,7 +4648,7 @@ begin
           result := _ColumnWidth([Values[0]]) * _RowWidth([Values[1]]);
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         if (frmGoPhast.PhastModel <> nil)
           and (frmGoPhast.PhastModel.Mesh <> nil) then
@@ -4776,7 +4776,7 @@ begin
           result := Area(CellOutline);
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         result := 0;
         Mesh := frmGoPhast.PhastModel.Mesh as TSutraMesh3D;
@@ -4906,7 +4906,7 @@ begin
         CellOutline[5] := CellPoints[Row*2,Layer+1];
         result := Area(CellOutline);
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         result := 0;
       end;
@@ -4949,7 +4949,7 @@ begin
             GetLayerHeight(Col, Row, Lay);
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         result := 0;
         Mesh := frmGoPhast.PhastModel.Mesh as TSutraMesh3D;
@@ -5108,7 +5108,7 @@ begin
           end;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Mesh := TCustomModel(GlobalCurrentModel).Mesh as TSutraMesh3D;
         if Mesh.MeshType in [mt2D, mtProfile] then
@@ -5210,7 +5210,7 @@ begin
           end;
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Mesh := (GlobalCurrentModel as TCustomModel).Mesh as TSutraMesh3D;
         result := 0;

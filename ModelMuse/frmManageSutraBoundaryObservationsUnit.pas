@@ -843,7 +843,7 @@ begin
     ANode.Data := SpecConcObsItem;
   end;
 
-  if frmGoPhast.ModelSelection = msSutra30 then
+  if frmGoPhast.ModelSelection in [msSutra30, msSutra40] then
   begin
     ParentNode := tvFluxObservations.Items.Add(nil, StrGenFlowObs);
     ParentNode.Data := FFluxObs.GenFlow;

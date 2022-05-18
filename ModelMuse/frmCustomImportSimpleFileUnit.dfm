@@ -6,9 +6,8 @@ inherited frmCustomImportSimpleFile: TfrmCustomImportSimpleFile
   Caption = 'frmCustomImportSimpleFile'
   ClientHeight = 269
   ClientWidth = 564
-  ExplicitWidth = 580
-  ExplicitHeight = 308
-  PixelsPerInch = 96
+  ExplicitWidth = 582
+  ExplicitHeight = 316
   TextHeight = 18
   object lblDataSet: TLabel
     Left = 8

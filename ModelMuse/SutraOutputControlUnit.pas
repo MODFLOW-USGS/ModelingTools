@@ -11,7 +11,8 @@ type
   TSutraListingOptions = set of TSutraListingOption;
 
   TSutraNodeEleOption = (neoPrintFirst, neoNumber, neoCoordinates,
-    neoPressure, neoU, neoSaturation, neoVelocities);
+    neoPressure, neoU, neoSaturation, neoVelocities,
+    neoLiquidSaturation, neoIceSaturation, neoDarcyVelocities);
   TSutraNodeEleOptions = set of TSutraNodeEleOption;
 
   TSutraOutputControl = class(TGoPhastPersistent)

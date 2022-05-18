@@ -7,7 +7,7 @@ uses
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, ScreenObjectUnit,
   ComCtrls, DataSetUnit, VirtualTrees, FastGEO, GoPhastTypes, SsButtonEd,
   RbwStringTreeCombo, Grids, RbwDataGrid4, ExtCtrls, JvExExtCtrls,
-  JvExtComponent, JvRollOut, RbwRollupPanel;
+  JvExtComponent, JvRollOut, RbwRollupPanel, Vcl.Mask;
 
 type
   TPathLineColumn = (plcLabel, plcFirst, plcLast, plcClosest);
@@ -371,7 +371,7 @@ begin
 
   case frmGoPhast.ModelSelection of
     msPhast, msModflow, msModflowNWT, msModflowCfp, msModflow2015, msSutra22,
-       msSutra30, msFootPrint:
+       msSutra30, msSutra40, msFootPrint:
       begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel)
       end;
@@ -995,7 +995,7 @@ var
               Assert(False);
           end;
         end;
-      msSutra22, msSutra30:
+      msSutra22, msSutra30, msSutra40:
         begin
           Mesh := frmGoPhast.PhastModel.Mesh as TSutraMesh3D;
           case FSelectedScreenObject.ViewDirection of
@@ -1388,7 +1388,7 @@ begin
             and (Grid.RowCount >= 1) and (Grid.ColumnCount >= 1);
         end;
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         Mesh := frmGoPhast.PhastModel.Mesh as TSutraMesh3D;
         result := (Mesh <> nil) and (Mesh.Mesh2D.Nodes.Count > 0);
@@ -1425,7 +1425,7 @@ begin
   begin
     Exit;
   end;
-  if frmGoPhast.ModelSelection in [msPhast, msSutra22, msSutra30, msFootPrint] then
+  if frmGoPhast.ModelSelection in [msPhast, msSutra22, msSutra30, msSutra40, msFootPrint] then
   begin
     rrlEndPoint.Visible := False;
     Exit;
@@ -1727,7 +1727,7 @@ begin
   begin
     Exit;
   end;
-  if frmGoPhast.ModelSelection in [msPhast, msSutra22, msSutra30, msFootPrint] then
+  if frmGoPhast.ModelSelection in [msPhast, msSutra22, msSutra30, msSutra40, msFootPrint] then
   begin
     rrlPathline.Visible := False;
     Exit;

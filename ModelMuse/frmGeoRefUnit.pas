@@ -180,7 +180,7 @@ begin
         rrdgGeoRef.Rows[Ord(grrLengthUnit)].LimitToList := True;
         rrdgGeoRef.Rows[Ord(grrTimeUnit)].LimitToList := True;
       end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         rrdgGeoRef.Rows[Ord(grrLengthUnit)].LimitToList := False;
         rrdgGeoRef.Rows[Ord(grrTimeUnit)].LimitToList := False;
@@ -256,7 +256,7 @@ begin
       msModflowCfp, msModflow2015:
       begin
       end;
-    msSutra22, msSutra30, msFootPrint:
+    msSutra22, msSutra30, msSutra40, msFootPrint:
       begin
         FGeoRef.OtherLengthUnits := rrdgGeoRef.Cells[Ord(grcValue), Ord(grrLengthUnit)];
         FGeoRef.OtherTimeUnits := rrdgGeoRef.Cells[Ord(grcValue), Ord(grrTimeUnit)];

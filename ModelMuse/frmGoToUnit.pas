@@ -1054,7 +1054,7 @@ begin
   tabCell.Visible := seCol.Enabled;
   case frmGoPhast.ModelSelection of
     msUndefined: Assert(False);
-    msPhast, msSutra22, msSutra30: tabCell.Caption := StrElement;
+    msPhast, msSutra22, msSutra30, msSutra40: tabCell.Caption := StrElement;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
       msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
       begin

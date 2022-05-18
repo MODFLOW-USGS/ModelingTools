@@ -2427,7 +2427,7 @@ procedure TfrmImportShapefile.EnableEvalAt;
 begin
   rgEvaluatedAt.Enabled := cbImportObjects.Checked
     and (frmGoPhast.PhastModel.ModelSelection in
-    [msPhast, msSutra22, msSutra30]);
+    [msPhast, msSutra22, msSutra30, msSutra40]);
 end;
 
 procedure TfrmImportShapefile.AssignColFeatureProperties;
@@ -8491,7 +8491,7 @@ begin
         AddModflowPackageToImportChoices(Packages.SfrModflow6Package);
         AddModflowPackageToImportChoices(Packages.WelPackage);
       end;
-    msSutra22, msSutra30:
+    msSutra22, msSutra30, msSutra40:
       begin
         { TODO -cSUTRA : Enable import SUTRA boundaries from Shapefiles. }
       end;

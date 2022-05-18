@@ -673,7 +673,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 233
+      Left = 493
       Top = 66
       Width = 212
       Height = 28
@@ -775,7 +775,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 461
+      Left = 233
       Top = 66
       Width = 244
       Height = 28
@@ -2357,6 +2357,10 @@ inherited frmGoPhast: TfrmGoPhast
         Action = acSutra30Active
         GroupIndex = 1
       end
+      object miSutra40Active: TMenuItem
+        Action = acSutra40Active
+        GroupIndex = 1
+      end
       object miFootPrintActive: TMenuItem
         Action = acFootPrintActive
         GroupIndex = 1
@@ -2910,7 +2914,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = miShowHideObjectsClick
     end
     object acModflowActive: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'MODFLOW-2005'
       GroupIndex = 1
       HelpContext = 2390
@@ -2919,7 +2923,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = acModflowActiveExecute
     end
     object acPhastActive: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'PHAST'
       Checked = True
       GroupIndex = 1
@@ -3134,7 +3138,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = acShowGridValuesClick
     end
     object acModflowLgrActive: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'MODFLOW-LGR V1'
       GroupIndex = 1
       HelpContext = 2390
@@ -3178,7 +3182,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = tbRedoClick
     end
     object acModflowLgr2Active: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'MODFLOW-LGR V2'
       GroupIndex = 1
       HelpContext = 2390
@@ -3187,7 +3191,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = acModflowLgr2ActiveExecute
     end
     object acModflowNwtActive: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'MODFLOW-NWT'
       GroupIndex = 1
       HelpContext = 2390
@@ -3232,7 +3236,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = miZONEBUDGETInputFilesClick
     end
     object acModflowCfpActive: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'MODFLOW-CFP'
       GroupIndex = 1
       HelpContext = 2390
@@ -3241,7 +3245,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = acModflowCfpActiveExecute
     end
     object acModflowFmpActive: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'MODFLOW-OWHM'
       GroupIndex = 1
       HelpContext = 2390
@@ -3250,7 +3254,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = acModflowFmpActiveExecute
     end
     object acSutra22Active: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'SUTRA 2.2'
       GroupIndex = 1
       HelpContext = 2390
@@ -3259,7 +3263,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = acSutra22ActiveExecute
     end
     object acSutra30Active: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'SUTRA 3.0'
       GroupIndex = 1
       HelpContext = 2390
@@ -3268,7 +3272,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = acSutra30ActiveExecute
     end
     object acFootPrintActive: TAction
-      Category = 'Model'
+      Category = 'ModelSelection'
       Caption = 'WellFootprint'
       GroupIndex = 1
       HelpContext = 2390
@@ -3521,7 +3525,7 @@ inherited frmGoPhast: TfrmGoPhast
       OnExecute = acFootprintProgramLocationExecute
     end
     object acModflow6Active: TAction
-      Category = 'Model'
+      Category = 'Modflow Options'
       Caption = 'MODFLOW-6'
       GroupIndex = 1
       HelpContext = 2390
@@ -3709,6 +3713,14 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'Model'
       Caption = 'Edit Time Series...'
       OnExecute = acTimeSeriesExecute
+    end
+    object acSutra40Active: TAction
+      Category = 'ModelSelection'
+      Caption = 'SUTRA 4.0'
+      HelpContext = 2390
+      HelpKeyword = 'Model'
+      Hint = 'Make SUTRA 4.0 the selected model type'
+      OnExecute = acSutra40ActiveExecute
     end
   end
   object ilDisabledImageList: TImageList

@@ -482,7 +482,12 @@ begin
     TTransportChoice(rgTransport.ItemIndex);
   PhastModel.SutraOptions.SaturationChoice :=
     TSaturationChoice(rgSaturation.ItemIndex);
+
+{$IFDEF SUTRA4}
+  PhastModel.ModelSelection := msSutra40;
+{$ELSE}
   PhastModel.ModelSelection := msSutra30;
+{$ENDIF}
   Values:= TRealList.Create;
   try
     if PhastModel.SutraMesh.MeshType = mt3D then
@@ -1277,7 +1282,7 @@ var
 begin
   inherited;
   TransportChoice := TTransportChoice(rgTransport.ItemIndex);
-  rgSaturation.Enabled := TransportChoice in [tcSolute, tcEnergy];
+  rgSaturation.Enabled := TransportChoice in [tcSolute, tcEnergy, tcFreezing];
   if not rgSaturation.Enabled then
   begin
     rgSaturation.ItemIndex := 0;
