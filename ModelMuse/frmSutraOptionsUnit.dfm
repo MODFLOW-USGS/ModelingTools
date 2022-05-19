@@ -4,7 +4,6 @@ inherited frmSutraOptions: TfrmSutraOptions
   Caption = 'SUTRA Options'
   ClientHeight = 562
   ClientWidth = 784
-  ExplicitTop = -12
   ExplicitWidth = 802
   ExplicitHeight = 609
   TextHeight = 18
@@ -69,7 +68,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 595
     Height = 512
-    ActivePage = jvspDefaultLakeInteractions
+    ActivePage = jvspProductionSutra4
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -1564,6 +1563,31 @@ inherited frmSutraOptions: TfrmSutraOptions
           Caption = 'Use Anisotropy for ATMIN vs ATMAX'
           TabOrder = 5
         end
+      end
+    end
+    object jvspProductionSutra4: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 595
+      Height = 512
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'jvspProductionSutra4'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object cbProductionUsed: TCheckBox
+        Left = 16
+        Top = 22
+        Width = 529
+        Height = 21
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Caption = 'Production used (PROD or NOPROD) data set 14A'
+        TabOrder = 0
       end
     end
   end

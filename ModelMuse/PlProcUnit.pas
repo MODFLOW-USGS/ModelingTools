@@ -2645,7 +2645,7 @@ begin
   {$REGION 'PMAX'}
   DataArray := nil;
   case Options.TransportChoice of
-    tcSolute, tcEnergy:
+    tcSolute, tcEnergy, tcFreezing:
       DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumPermeability);
     tcSoluteHead:
       DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumK);
@@ -2660,7 +2660,7 @@ begin
   if Mesh.MeshType = mt3D then
   begin
     case Options.TransportChoice of
-      tcSolute, tcEnergy:
+      tcSolute, tcEnergy, tcFreezing:
         DataArray := Model.DataArrayManager.GetDataSetByName(KMiddlePermeability);
       tcSoluteHead:
         DataArray := Model.DataArrayManager.GetDataSetByName(KMiddleK);
@@ -2677,7 +2677,7 @@ begin
   {$REGION 'PMIN'}
   DataArray := nil;
   case Options.TransportChoice of
-    tcSolute, tcEnergy:
+    tcSolute, tcEnergy, tcFreezing:
       DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumPermeability);
     tcSoluteHead:
       DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumK);
@@ -3074,7 +3074,7 @@ begin
     {$REGION 'PMAX'}
     DataArray := nil;
     case Options.TransportChoice of
-      tcSolute, tcEnergy:
+      tcSolute, tcEnergy, tcFreezing:
         DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumPermeability);
       tcSoluteHead:
         DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumK);
@@ -3090,7 +3090,7 @@ begin
     if Mesh.MeshType = mt3D then
     begin
       case Options.TransportChoice of
-        tcSolute, tcEnergy:
+        tcSolute, tcEnergy, tcFreezing:
           DataArray := Model.DataArrayManager.GetDataSetByName(KMiddlePermeability);
         tcSoluteHead:
           DataArray := Model.DataArrayManager.GetDataSetByName(KMiddleK);
@@ -3108,7 +3108,7 @@ begin
     {$REGION 'PMIN'}
     DataArray := nil;
     case Options.TransportChoice of
-      tcSolute, tcEnergy:
+      tcSolute, tcEnergy, tcFreezing:
         DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumPermeability);
       tcSoluteHead:
         DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumK);

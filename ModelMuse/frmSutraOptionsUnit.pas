@@ -168,6 +168,8 @@ type
     rdeIceDensity: TRbwDataEntry;
     lblIceDensity: TLabel;
     lblIceCompress: TLabel;
+    jvspProductionSutra4: TJvStandardPage;
+    cbProductionUsed: TCheckBox;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure seMaxIterationsChange(Sender: TObject);
@@ -373,7 +375,7 @@ end;
 procedure TfrmSutraOptions.EnableRhos;
 begin
   rdeSolidGrainDensity.Enabled :=
-    (TTransportChoice(rgTransport.ItemIndex) = tcEnergy)
+    (TTransportChoice(rgTransport.ItemIndex) in [tcEnergy, tcFreezing])
     or (TSorptionModel(rgSorptionModel.ItemIndex) <> smNone);
 end;
 
@@ -433,6 +435,8 @@ begin
     FRegionNode := jvpltvNavigation.Items.Add(nil, StrRegionalProperties) as TJvPageIndexNode;
     { TODO -cSUTRA4 : Have it link to the first child }
     FRegionNode.PageIndex := -1;
+    Node := jvpltvNavigation.Items.Add(nil, StrProduction) as TJvPageIndexNode;
+    Node.PageIndex := jvspProductionSutra4.PageIndex;
   end
   else
   begin
@@ -587,6 +591,8 @@ begin
     rdeGravX.RealValue := SutraOptions.GravityX;
     rdeGravY.RealValue := SutraOptions.GravityY;
     rdeGravZ.RealValue := SutraOptions.GravityZ;
+
+    cbProductionUsed.Checked :=  SutraOptions.ProductionUsed;
 
     LakeOptions := SutraOptions.LakeOptions;
     cbUseLakes.Checked := LakeOptions.UseLakes;
@@ -748,7 +754,7 @@ begin
   inherited;
   TransportChoice := TTransportChoice(rgTransport.ItemIndex);
   rdeGravZ.Enabled := (TMeshType(rgMeshType.ItemIndex) = mt3D)
-    and (TransportChoice in [tcSolute, tcEnergy]);
+    and (TransportChoice in [tcSolute, tcEnergy, tcFreezing]);
 
   if not FGettingData and (Sender <> nil) then
   begin
@@ -864,13 +870,13 @@ begin
 
 
   // energy transport
-  rdeFluidSpecificHeat.Enabled := TransportChoice = tcEnergy;
-  rdeScaleFactor.Enabled := TransportChoice = tcEnergy;
-  rdeFluidThermalConductivity.Enabled := TransportChoice = tcEnergy;
-  rdeFluidDensityCoefficientTemperature.Enabled := TransportChoice = tcEnergy;
-  rdeBaseTemperature.Enabled := TransportChoice = tcEnergy;
-  rdeSolidGrainSpecificHeat.Enabled := TransportChoice = tcEnergy;
-  rdeSolidGrainDiffusivity.Enabled := TransportChoice = tcEnergy;
+  rdeFluidSpecificHeat.Enabled := TransportChoice in [tcEnergy, tcFreezing];
+  rdeScaleFactor.Enabled := TransportChoice in [tcEnergy, tcFreezing];
+  rdeFluidThermalConductivity.Enabled := TransportChoice in [tcEnergy, tcFreezing];
+  rdeFluidDensityCoefficientTemperature.Enabled := TransportChoice in [tcEnergy, tcFreezing];
+  rdeBaseTemperature.Enabled := TransportChoice in [tcEnergy, tcFreezing];
+  rdeSolidGrainSpecificHeat.Enabled := TransportChoice in [tcEnergy, tcFreezing];
+  rdeSolidGrainDiffusivity.Enabled := TransportChoice in [tcEnergy, tcFreezing];
 
   // solute transport with pressure or head
   rgSorptionModel.Enabled := TransportChoice in [tcSolute, tcSoluteHead];
@@ -884,9 +890,9 @@ begin
   rdeBaseConcentration.Enabled := TransportChoice in [tcSolute];
 
   // solute with pressure or energy
-  rdeBaseFluidDensity.Enabled := TransportChoice in [tcSolute, tcEnergy];
-  rdeGravX.Enabled := TransportChoice in [tcSolute, tcEnergy];
-  rdeGravY.Enabled := TransportChoice in [tcSolute, tcEnergy];
+  rdeBaseFluidDensity.Enabled := TransportChoice in [tcSolute, tcEnergy, tcFreezing];
+  rdeGravX.Enabled := TransportChoice in [tcSolute, tcEnergy, tcFreezing];
+  rdeGravY.Enabled := TransportChoice in [tcSolute, tcEnergy, tcFreezing];
   rgMeshTypeClick(nil);
   rgSaturation.Enabled := TransportChoice in [tcSolute, tcEnergy, tcFreezing];
   if not rgSaturation.Enabled then
@@ -1013,6 +1019,8 @@ begin
     SutraOptions.GravityX := rdeGravX.RealValue;
     SutraOptions.GravityY := rdeGravY.RealValue;
     SutraOptions.GravityZ := rdeGravZ.RealValue;
+
+    SutraOptions.ProductionUsed  := cbProductionUsed.Checked;
 
     LakeOptions := SutraOptions.LakeOptions;
     LakeOptions.UseLakes := cbUseLakes.Checked;

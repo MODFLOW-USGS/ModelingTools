@@ -847,7 +847,7 @@ begin
     else if Node = FvstSutraSpecPressureNode then
     begin
       case SutraOptions.TransportChoice of
-        tcSolute, tcEnergy: Data.Caption := StrSpecifiedPressure;
+        tcSolute, tcEnergy, tcFreezing: Data.Caption := StrSpecifiedPressure;
         tcSoluteHead: Data.Caption := StrSpecifiedHead;
         else Assert(False);
       end;
@@ -857,7 +857,7 @@ begin
     begin
       case SutraOptions.TransportChoice of
         tcSolute, tcSoluteHead: Data.Caption := StrSpecifiedConcentrat;
-        tcEnergy: Data.Caption := StrSpecifiedTemperatur;
+        tcEnergy, tcFreezing: Data.Caption := StrSpecifiedTemperatur;
         else Assert(False);
       end;
       Node.CheckType := ctTriStateCheckBox;
@@ -871,7 +871,7 @@ begin
     begin
       case SutraOptions.TransportChoice of
         tcSolute, tcSoluteHead: Data.Caption := StrMassFlux;
-        tcEnergy: Data.Caption := StrEnergyFlux;
+        tcEnergy, tcFreezing: Data.Caption := StrEnergyFlux;
         else Assert(False);
       end;
       Node.CheckType := ctTriStateCheckBox;

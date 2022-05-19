@@ -962,7 +962,7 @@ begin
         rdgSutraFeature.Cells[2,0] := StrFluidSource;
         case TransportChoice of
           tcSolute, tcSoluteHead: rdgSutraFeature.Cells[3,0] := StrAssociatedConcentra;
-          tcEnergy: rdgSutraFeature.Cells[3,0] := StrAssociatedTemp;
+          tcEnergy, tcFreezing: rdgSutraFeature.Cells[3,0] := StrAssociatedTemp;
           else Assert(False);
         end;
       end;
@@ -970,14 +970,14 @@ begin
       begin
         case TransportChoice of
           tcSolute, tcSoluteHead: rdgSutraFeature.Cells[2,0] := StrSoluteSource;
-          tcEnergy: rdgSutraFeature.Cells[2,0] := StrEnergySouce;
+          tcEnergy, tcFreezing: rdgSutraFeature.Cells[2,0] := StrEnergySouce;
           else Assert(False);
         end;
       end;
     sbtSpecPress:
       begin
         case TransportChoice of
-          tcSolute, tcEnergy:
+          tcSolute, tcEnergy, tcFreezing:
             begin
               rdgSutraFeature.Cells[2,0] := StrSpecifiedPressure;
             end;
@@ -988,7 +988,7 @@ begin
         end;
         case TransportChoice of
           tcSolute, tcSoluteHead: rdgSutraFeature.Cells[3,0] := StrAssociatedConcentra;
-          tcEnergy: rdgSutraFeature.Cells[3,0] := StrAssociatedTemp;
+          tcEnergy, tcFreezing: rdgSutraFeature.Cells[3,0] := StrAssociatedTemp;
           else Assert(False);
         end;
       end;
@@ -996,7 +996,7 @@ begin
       begin
         case TransportChoice of
           tcSolute, tcSoluteHead: rdgSutraFeature.Cells[2,0] := StrSpecifiedConcentration;
-          tcEnergy: rdgSutraFeature.Cells[2,0] := StrSpecifiedTemperatur;
+          tcEnergy, tcFreezing: rdgSutraFeature.Cells[2,0] := StrSpecifiedTemperatur;
           else Assert(False);
         end;
       end;

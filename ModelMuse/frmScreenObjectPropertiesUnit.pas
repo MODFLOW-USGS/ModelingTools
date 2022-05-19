@@ -14277,7 +14277,7 @@ begin
   begin
     NodeName := '';
     case frmGoPhast.PhastModel.SutraOptions.TransportChoice of
-      tcSolute, tcEnergy:
+      tcSolute, tcEnergy, tcFreezing:
         begin
           NodeName := StrSpecifiedPressure;
         end;
@@ -14314,7 +14314,7 @@ begin
           Node := jvpltvSutraFeatures.Items.AddChild(nil,
             StrSpecifiedConc) as TJvPageIndexNode;
         end;
-      tcEnergy:
+      tcEnergy, tcFreezing:
         begin
           Node := jvpltvSutraFeatures.Items.AddChild(nil,
             StrSpecifiedTemp) as TJvPageIndexNode;
@@ -14402,7 +14402,7 @@ begin
           Node := jvpltvSutraFeatures.Items.AddChild(nil,
             StrMassFlux) as TJvPageIndexNode;
         end;
-      tcEnergy:
+      tcEnergy, tcFreezing:
         begin
           Node := jvpltvSutraFeatures.Items.AddChild(nil,
             StrEnergyFlux) as TJvPageIndexNode;

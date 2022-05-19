@@ -46318,6 +46318,7 @@ initialization
   RegisterClass(TModflowCfpDelegate);
   RegisterClass(TSutra22Delegate);
   RegisterClass(TSutra30Delegate);
+  RegisterClass(TSutra40Delegate);
   RegisterClass(TFootprintDelegate);
   RegisterClass(TMultiValueScreenObject);
   RegisterClass(TScreenObjectClipboard);

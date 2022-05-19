@@ -548,7 +548,7 @@ begin
                 chklstDataToImport.Items.Add(StrHead);
                 chklstDataToImport.Items.Add(StrConcentration);
               end;
-            tcEnergy:
+            tcEnergy, tcFreezing:
               begin
                 chklstDataToImport.Items.Add(StrPressure);
                 chklstDataToImport.Items.Add(StrTemperature);
@@ -1093,7 +1093,7 @@ begin
               begin
                 Labels.Add(StrConcentration);
               end;
-            tcEnergy:
+            tcEnergy, tcFreezing:
               begin
                 Labels.Add(StrTemperature);
               end;
@@ -1117,7 +1117,7 @@ begin
                 Labels.Add(StrSpecifiedConcentrat);
                 Labels.Add(StrSpecifiedSoluteFlu);
               end;
-            tcEnergy:
+            tcEnergy, tcFreezing:
               begin
                 Labels.Add(StrSpecifiedTemperatur);
                 Labels.Add(StrSpecifiedEnergyFlu);
@@ -1136,7 +1136,7 @@ begin
               begin
                 Labels.Add(StrSpecifiedConcentrat);
               end;
-            tcEnergy:
+            tcEnergy, tcFreezing:
               begin
                 Labels.Add(StrSpecifiedTemperatur);
               end;
@@ -1156,7 +1156,7 @@ begin
                 Labels.Add(StrConcentration);
                 Labels.Add(StrResultantSoluteFlu);
               end;
-            tcEnergy:
+            tcEnergy, tcFreezing:
               begin
                 Labels.Add(StrTemperature);
                 Labels.Add(StrResultantEnergyFlu);
@@ -1179,7 +1179,7 @@ begin
                 Labels.Add(StrComputedConcentrati);
                 Labels.Add(StrSpecifiedConcentrat);
               end;
-            tcEnergy:
+            tcEnergy, tcFreezing:
               begin
                 Labels.Add(StrResultantEnergyFlu);
                 Labels.Add(StrComputedTemperature);
@@ -1205,7 +1205,7 @@ begin
                 Labels.Add(StrHead);
                 Labels.Add(StrConcentration);
               end;
-            tcEnergy:
+            tcEnergy, tcFreezing:
               begin
                 Labels.Add(StrPressure);
                 Labels.Add(StrTemperature);

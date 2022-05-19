@@ -266,7 +266,18 @@ const
   KLakeTransportConce = 'Lake_Transport_Concentration';
   KNodeActive = 'Active_Node';
 
-
+  // Sutra 4 node data sets
+  KSolidMatrixComp = 'SolidMatrixCompressibility';
+  KSolidGrainSpecificHeat = 'SolidGrain_SpecificHeat';
+  KSolidGrainDensity = 'SolidGrainDensity';
+  KZeroOrderProductionRateInLiquid = 'ZeroOrderProductionRateInLiquid';
+  KZeroOrderProductionRateInImmobile = 'ZeroOrderProductionRateInImmobile';
+  KFirstOrderProductionRateInLiquid = 'FirstOrderProductionRateInLiquid';
+  KFirstOrderProductionRateInImmobile = 'FirstOrderProductionRateInImmobile';
+  KZeroOrderProductionRateInIce = 'ZeroOrderProductionRateInIce';
+  // Sutra 4 element data sets
+  KScaledSolidGrainThermalConductivity = 'ScaledSolidGrainThermalConductivity';
+  KScaledEffectiveAirThermalConductivity = 'ScaledEffectiveAirThermalConductivity';
 
   // @name is the name of the @link(TDataArray) that specifies
   // the hydraulic conductivity for the leaky boundary condition on the top
@@ -2478,6 +2489,7 @@ that affects the model output should also have a comment. }
       virtual; abstract;
     function GetGwtUsed: Boolean;
     procedure FixSutraMeshEdge;
+    function Sutra4SorptionUsed(Sender: TObject): boolean;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -2884,7 +2896,12 @@ that affects the model output should also have a comment. }
       RunModel, EmbeddedExport: boolean);
     procedure ExportMt3dmsModel(const FileName: string;
       RunModel, ShowWarning: Boolean);
-
+    function Sutra4Used(Sender: TObject): boolean;
+    function Sutra4EnergyUsed(Sender: TObject): boolean;
+    function Sutra4SoluteUsed(Sender: TObject): boolean;
+    function Sutra4EnergyOrSorptionUsed(Sender: TObject): boolean;
+    function Sutra4FreezingUsed(Sender: TObject): boolean;
+    function Sutra4ProductionUsed(Sender: TObject): boolean;
 
     // @name is the @link(TCustomTimeList) for
     // the transient data set used to color
@@ -5969,6 +5986,19 @@ resourcestring
   'MODFLOW Packages and Progams dialog box.';
   StrSolver = 'solver';
   StrFlow = 'flow';
+
+  // Sutra 4 node data sets
+  StrSolidMatrixComp = KSolidMatrixComp;
+  StrSolidGrainSpecificHeat = KSolidGrainSpecificHeat;
+  StrSolidGrainDensity = KSolidGrainDensity;
+  StrZeroOrderProductionRateInLiquid = KZeroOrderProductionRateInLiquid;
+  StrZeroOrderProductionRateInImmobile = KZeroOrderProductionRateInImmobile;
+  StrFirstOrderProductionRateInLiquid = KFirstOrderProductionRateInLiquid;
+  StrFirstOrderProductionRateInImmobile = KFirstOrderProductionRateInImmobile;
+  StrZeroOrderProductionRateInIce = KZeroOrderProductionRateInIce;
+  // Sutra 4 element data sets
+  StrScaledSolidGrainThermalConductivity = KScaledSolidGrainThermalConductivity;
+  StrScaledEffectiveAirThermalConductivity = KScaledEffectiveAirThermalConductivity;
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -13647,9 +13677,12 @@ begin
           ModflowGrid.TopGridObserver := nil;
           ModflowGrid.ThreeDGridObserver := nil;
         end;
-      msSutra22, msSutra30, msSutra40:
+      msSutra22, msSutra30:
         begin
 
+        end;
+      msSutra40:
+        begin
         end;
       msFootprint:
         begin
@@ -13689,11 +13722,19 @@ begin
             FGrid := ModflowGrid;
           end;
         end;
-      msSutra22, msSutra30, msSutra40:
+      msSutra22, msSutra30:
         begin
           FGrid := nil;
           TopGridObserver.OnUpToDateSet := OnTopSutraMeshChanged;
-//          ThreeDGridObserver.OnUpToDateSet := OnTopSutraMeshChanged;
+        end;
+      msSutra40:
+        begin
+          FGrid := nil;
+          TopGridObserver.OnUpToDateSet := OnTopSutraMeshChanged;
+          if SutraOptions.RegionalProperties.Count = 0 then
+          begin
+            SutraOptions.RegionalProperties.Add;
+          end;
         end;
       msFootprint:
         begin
@@ -29281,7 +29322,7 @@ begin
   case SutraOptions.TransportChoice of
     tcSolute: FSutraSpecPressureTimeList.Name := StrSpecifiedPressure;
     tcSoluteHead: FSutraSpecPressureTimeList.Name := StrSutraSpecifiedHead;
-    tcEnergy: FSutraSpecPressureTimeList.Name := StrSpecifiedPressure;
+    tcEnergy, tcFreezing: FSutraSpecPressureTimeList.Name := StrSpecifiedPressure;
     else Assert(False);
   end;
   FSutraSpecPressureTimeList.OnTimeListUsed := SutraUsed;
@@ -29292,7 +29333,7 @@ begin
   case SutraOptions.TransportChoice of
     tcSolute: FSutraSpecPresUTimeList.Name := StrAssocPresConc;
     tcSoluteHead: FSutraSpecPresUTimeList.Name := StrAssocHeadConc;
-    tcEnergy: FSutraSpecPresUTimeList.Name := StrAssocPresTemp;
+    tcEnergy, tcFreezing: FSutraSpecPresUTimeList.Name := StrAssocPresTemp;
     else Assert(False);
   end;
   FSutraSpecPresUTimeList.OnTimeListUsed := SutraUsed;
@@ -29302,7 +29343,7 @@ begin
   FSutraConcTempTimeList := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraConcTempTimeList.Name := StrSpecifiedConc;
-    tcEnergy: FSutraConcTempTimeList.Name := StrSpecifiedTemp;
+    tcEnergy, tcFreezing: FSutraConcTempTimeList.Name := StrSpecifiedTemp;
     else Assert(False);
   end;
   FSutraConcTempTimeList.OnTimeListUsed := SutraUsed;
@@ -29319,7 +29360,7 @@ begin
   FSutraFluidFluxUTimeList := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraFluidFluxUTimeList.Name := StrFluxAssocPresConc;
-    tcEnergy: FSutraFluidFluxUTimeList.Name := StrFluxAssocPresTemp;
+    tcEnergy, tcFreezing: FSutraFluidFluxUTimeList.Name := StrFluxAssocPresTemp;
     else Assert(False);
   end;
   FSutraFluidFluxUTimeList.OnTimeListUsed := SutraUsed;
@@ -29329,7 +29370,7 @@ begin
   FSutraMassEnergyFluxTimeList := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraMassEnergyFluxTimeList.Name := StrMassFlux;
-    tcEnergy: FSutraMassEnergyFluxTimeList.Name := StrEnergyFlux;
+    tcEnergy, tcFreezing: FSutraMassEnergyFluxTimeList.Name := StrEnergyFlux;
     else Assert(False);
   end;
   FSutraMassEnergyFluxTimeList.OnTimeListUsed := SutraUsed;
@@ -29339,7 +29380,7 @@ begin
   FSutraGenFlowPress1 := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraGenFlowPress1.Name := StrLowerPressureValue;
-    tcEnergy: FSutraGenFlowPress1.Name := StrLowerHeadValue;
+    tcEnergy, tcFreezing: FSutraGenFlowPress1.Name := StrLowerHeadValue;
     else Assert(False);
   end;
   FSutraGenFlowPress1.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29349,7 +29390,7 @@ begin
   FSutraGenFlowPress2 := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraGenFlowPress2.Name := StrHigherPressureValue;
-    tcEnergy: FSutraGenFlowPress2.Name := StrHigherHeadValue;
+    tcEnergy, tcFreezing: FSutraGenFlowPress2.Name := StrHigherHeadValue;
     else Assert(False);
   end;
   FSutraGenFlowPress2.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29359,7 +29400,7 @@ begin
   FSutraGenFlowRate1 := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraGenFlowRate1.Name := StrLowerRateP;
-    tcEnergy: FSutraGenFlowRate1.Name := StrLowerRateH;
+    tcEnergy, tcFreezing: FSutraGenFlowRate1.Name := StrLowerRateH;
     else Assert(False);
   end;
   FSutraGenFlowRate1.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29369,7 +29410,7 @@ begin
   FSutraGenFlowRate2 := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraGenFlowRate2.Name := StrHigherRateP;
-    tcEnergy: FSutraGenFlowRate2.Name := StrHigherRateH;
+    tcEnergy, tcFreezing: FSutraGenFlowRate2.Name := StrHigherRateH;
     else Assert(False);
   end;
   FSutraGenFlowRate2.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29380,7 +29421,7 @@ begin
   case SutraOptions.TransportChoice of
     tcSolute: FSutraGenFlowU1.Name := StrLowerConcentrationP;
     tcSoluteHead: FSutraGenFlowU1.Name := StrLowerConcentrationH;
-    tcEnergy: FSutraGenFlowU1.Name := StrLowerTemperature;
+    tcEnergy, tcFreezing: FSutraGenFlowU1.Name := StrLowerTemperature;
     else Assert(False);
   end;
   FSutraGenFlowU1.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29391,7 +29432,7 @@ begin
   case SutraOptions.TransportChoice of
     tcSolute: FSutraGenFlowU2.Name := StrHigherConcentrationP;
     tcSoluteHead: FSutraGenFlowU2.Name := StrHigherConcentrationH;
-    tcEnergy: FSutraGenFlowU2.Name := StrHigherTemperature;
+    tcEnergy, tcFreezing: FSutraGenFlowU2.Name := StrHigherTemperature;
     else Assert(False);
   end;
   FSutraGenFlowU2.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29401,7 +29442,7 @@ begin
   FSutraGenTranU1 := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraGenTranU1.Name := StrLowerConcentrationValue;
-    tcEnergy: FSutraGenTranU1.Name := StrLowerTemperatureValue;
+    tcEnergy, tcFreezing: FSutraGenTranU1.Name := StrLowerTemperatureValue;
     else Assert(False);
   end;
   FSutraGenTranU1.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29411,7 +29452,7 @@ begin
   FSutraGenTranU2 := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraGenTranU2.Name := StrHigherConcentrationValue;
-    tcEnergy: FSutraGenTranU2.Name := StrHigherTemperatureValue;
+    tcEnergy, tcFreezing: FSutraGenTranU2.Name := StrHigherTemperatureValue;
     else Assert(False);
   end;
   FSutraGenTranU2.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29421,7 +29462,7 @@ begin
   FSutraGenTranQU1 := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraGenTranQU1.Name := StrMassFlowAtLowerConcentration;
-    tcEnergy: FSutraGenTranQU1.Name := StrEnergyFlowAtLowerTemperature;
+    tcEnergy, tcFreezing: FSutraGenTranQU1.Name := StrEnergyFlowAtLowerTemperature;
     else Assert(False);
   end;
   FSutraGenTranQU1.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29431,7 +29472,7 @@ begin
   FSutraGenTranQU2 := TSutraMergedTimeList.Create(self);
   case SutraOptions.TransportChoice of
     tcSolute, tcSoluteHead: FSutraGenTranQU2.Name := StrMassFlowAtHigherConcentration;
-    tcEnergy: FSutraGenTranQU2.Name := StrEnergyFlowAtHigherTemperature;
+    tcEnergy, tcFreezing: FSutraGenTranQU2.Name := StrEnergyFlowAtHigherTemperature;
     else Assert(False);
   end;
   FSutraGenTranQU2.OnTimeListUsed := Sutra30OrAboveUsed;
@@ -29493,7 +29534,7 @@ begin
         FSutraGenTranQU1.Name := StrMassFlowAtLowerConcentration;
         FSutraGenTranQU2.Name := StrMassFlowAtHigherConcentration;
       end;
-    tcEnergy:
+    tcEnergy, tcFreezing:
       begin
         FSutraSpecPressureTimeList.Name := StrSpecifiedPressure;
         FSutraConcTempTimeList.Name := StrSpecifiedTemp;
@@ -34764,7 +34805,11 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
+{$IFDEF Sutra4}
+  ArrayCount = 167;
+{$ELSE}
   ArrayCount = 157;
+{$ENDIF}
 var
   Index: integer;
 begin
@@ -37314,6 +37359,146 @@ begin
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KSolidMatrixComp;
+  FDataArrayCreationRecords[Index].DisplayName := StrSolidMatrixComp;
+  FDataArrayCreationRecords[Index].Formula := '1E-8';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4Used;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 14B: COMPMA';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KSolidGrainSpecificHeat;
+  FDataArrayCreationRecords[Index].DisplayName := StrSolidGrainSpecificHeat;
+  FDataArrayCreationRecords[Index].Formula := '840';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4EnergyUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 14B: CS';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KSolidGrainDensity;
+  FDataArrayCreationRecords[Index].DisplayName := StrSolidGrainDensity;
+  FDataArrayCreationRecords[Index].Formula := '2600';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4EnergyOrSorptionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 14B: RHOS';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KZeroOrderProductionRateInLiquid;
+  FDataArrayCreationRecords[Index].DisplayName := StrZeroOrderProductionRateInLiquid;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4ProductionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 14B: PRODLØ';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KZeroOrderProductionRateInImmobile;
+  FDataArrayCreationRecords[Index].DisplayName := StrZeroOrderProductionRateInImmobile;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4ProductionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 14B: PRODSØ';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KFirstOrderProductionRateInLiquid;
+  FDataArrayCreationRecords[Index].DisplayName := StrFirstOrderProductionRateInLiquid;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4SoluteUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 14B: PRODL1';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KFirstOrderProductionRateInImmobile;
+  FDataArrayCreationRecords[Index].DisplayName := StrFirstOrderProductionRateInImmobile;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4SoluteUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 14B: PRODS1';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KZeroOrderProductionRateInIce;
+  FDataArrayCreationRecords[Index].DisplayName := StrZeroOrderProductionRateInIce;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4FreezingUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 14B: PRODIØ';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KScaledSolidGrainThermalConductivity;
+  FDataArrayCreationRecords[Index].DisplayName := StrScaledSolidGrainThermalConductivity;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4EnergyUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 15B: SIGMAS';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KScaledEffectiveAirThermalConductivity;
+  FDataArrayCreationRecords[Index].DisplayName := StrScaledEffectiveAirThermalConductivity;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4EnergyUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'SUTRA Data Set 15B: SIGMAA';
+  Inc(Index);
+
   // See ArrayCount.
   Assert(Length(FDataArrayCreationRecords) = Index);
 end;
@@ -38287,6 +38472,59 @@ begin
   end;
 end;
 
+function TCustomModel.Sutra4SoluteUsed(Sender: TObject): boolean;
+begin
+  result := Sutra4Used(Sender) and  SutraOptions.ProductionUsed
+    and (SutraOptions.TransportChoice in [tcSolute, tcSoluteHead]);
+end;
+
+function TCustomModel.Sutra4SorptionUsed(Sender: TObject): boolean;
+var
+  RegionIndex: Integer;
+  ARegion: TRegionalProperty;
+//  AdsorptionModel: TSorptionModel;
+begin
+  result := False;
+  for RegionIndex := 0 to SutraOptions.RegionalProperties.Count - 1 do
+  begin
+    ARegion := SutraOptions.RegionalProperties[RegionIndex];
+    result := ARegion.AdsorptionProperties.AdsorptionModel
+      <> TSorptionModel.smNone;
+    if result then
+    begin
+      Exit;
+    end;
+  end;
+end;
+
+function TCustomModel.Sutra4EnergyOrSorptionUsed(Sender: TObject): boolean;
+begin
+  result := Sutra4Used(Sender) and
+    ((SutraOptions.TransportChoice in [tcEnergy, tcFreezing])
+    or Sutra4SorptionUsed(Sender));
+end;
+
+function TCustomModel.Sutra4EnergyUsed(Sender: TObject): boolean;
+begin
+  result := Sutra4Used(Sender) and (SutraOptions.TransportChoice in [tcEnergy, tcFreezing]);
+end;
+
+function TCustomModel.Sutra4FreezingUsed(Sender: TObject): boolean;
+begin
+  result := Sutra4Used(Sender) and  SutraOptions.ProductionUsed
+    and (SutraOptions.TransportChoice = tcFreezing);
+end;
+
+function TCustomModel.Sutra4ProductionUsed(Sender: TObject): boolean;
+begin
+  result := Sutra4Used(nil) and SutraOptions.ProductionUsed;
+end;
+
+function TCustomModel.Sutra4Used(Sender: TObject): boolean;
+begin
+  result := ModelSelection = msSutra40;
+end;
+
 function TCustomModel.SutraConcentrationUsed(Sender: TObject): boolean;
 begin
   result := SutraUsed(Sender)
@@ -38295,7 +38533,7 @@ end;
 
 function TCustomModel.SutraTemperatureUsed(Sender: TObject): boolean;
 begin
-  result := SutraUsed(Sender) and (SutraOptions.TransportChoice = tcEnergy);
+  result := SutraUsed(Sender) and (SutraOptions.TransportChoice in [tcEnergy, tcFreezing]);
 end;
 
 function TCustomModel.SutraUsed(Sender: TObject): boolean;
@@ -38332,7 +38570,7 @@ end;
 function TCustomModel.SutraPermeabilityUsed(Sender: TObject): boolean;
 begin
   result := SutraUsed(Sender)
-    and (SutraOptions.TransportChoice in [tcSolute, tcEnergy]);
+    and (SutraOptions.TransportChoice in [tcSolute, tcEnergy, tcFreezing]);
 end;
 
 function TCustomModel.SutraMiddlePermeabilityUsed(Sender: TObject): boolean;

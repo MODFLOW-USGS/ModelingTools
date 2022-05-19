@@ -269,13 +269,14 @@ type
       const Value: TRelativePermeabilityParameters);
     procedure SetWaterSaturationProperties(
       const Value: TWaterSaturationProperties);
+    function GetAdsorptionProperties: TAdsorptionProperties;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
   published
     property AdsorptionProperties: TAdsorptionProperties
-      read FAdsorptionProperties write SetAdsorptionProperties;
+      read GetAdsorptionProperties write SetAdsorptionProperties;
     property WaterSaturationProperties: TWaterSaturationProperties
       read FWaterSaturationProperties write SetWaterSaturationProperties;
     property RelativePermeabilityParameters: TRelativePermeabilityParameters
@@ -544,6 +545,7 @@ type
     FStoredIceSpecificHeat: TRealStorage;
     FStoredIceThermalConductivity: TRealStorage;
     FStoredIceDensity: TRealStorage;
+    FProductionUsed: Boolean;
     procedure SetTransportChoice(const Value: TTransportChoice);
     procedure SetSaturationChoice(const Value: TSaturationChoice);
     procedure SetTitleLines(const Value: AnsiString);
@@ -675,6 +677,8 @@ type
     procedure SetIceDensity(const Value: double);
     function GetIceSpecificHeat: double;
     function GetIceThermalConductivity: double;
+    function GetRegionalProperties: TRegionalProperties;
+    procedure SetProductionUsed(const Value: Boolean);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -897,16 +901,32 @@ type
 
     // Data set 9: COMPI
     property StoredIceCompressibility: TRealStorage
-      read FStoredIceCompressibility write SetStoredIceCompressibility;
+      read FStoredIceCompressibility write SetStoredIceCompressibility
+    {$IFNDEF Sutra4}
+      stored False
+    {$ENDIF}
+      ;
     // Data set 9: CI
     property StoredIceSpecificHeat: TRealStorage read FStoredIceSpecificHeat
-      write SetStoredIceSpecificHeat;
+      write SetStoredIceSpecificHeat
+    {$IFNDEF Sutra4}
+      stored False
+    {$ENDIF}
+      ;
     // Data set 9: SIGMAI
     property StoredIceThermalConductivity: TRealStorage
-      read FStoredIceThermalConductivity write SetStoredIceThermalConductivity;
+      read FStoredIceThermalConductivity write SetStoredIceThermalConductivity
+    {$IFNDEF Sutra4}
+      stored False
+    {$ENDIF}
+      ;
     // Data set 9: RHOI
     property StoredIceDensity: TRealStorage read FStoredIceDensity
-      write SetStoredIceDensity;
+      write SetStoredIceDensity
+    {$IFNDEF Sutra4}
+      stored False
+    {$ENDIF}
+      ;
 
     // Data Set 10: COMPMA
     property StoredMatrixCompressibility: TRealStorage
@@ -964,12 +984,13 @@ type
       write SetLakeOptions;
     property PestAnisotropyOptions: TSutraPestAnisotropyOptions
       read FPestAnisotropyOptions write SetPestAnisotropyOptions;
-    property RegionalProperties: TRegionalProperties read FRegionalProperties
+    property RegionalProperties: TRegionalProperties read GetRegionalProperties
       write SetRegionalProperties
     {$IFNDEF SUTRA4}
       stored False
     {$ENDIF}
       ;
+    property ProductionUsed: Boolean read FProductionUsed write SetProductionUsed;
   end;
 
 
@@ -1054,6 +1075,8 @@ begin
     // SimulationType := SourceOptions.SimulationType;
     // SimulationType := SourceOptions.SimulationType;
     RegionalProperties  := SourceOptions.RegionalProperties;
+
+    ProductionUsed := SourceOptions.ProductionUsed;
   end
   else
   begin
@@ -1345,6 +1368,11 @@ begin
   end;
 end;
 
+function TSutraOptions.GetRegionalProperties: TRegionalProperties;
+begin
+  result := FRegionalProperties;
+end;
+
 function TSutraOptions.GetRestartFileName: string;
 //var
 //  BaseDir: string;
@@ -1457,12 +1485,20 @@ begin
   StoredGravityX.Value := 0;
   StoredGravityY.Value := 0;
   StoredGravityZ.Value := -9.81;
+
+  StoredIceCompressibility.Value := 0;
+  StoredIceSpecificHeat.Value := 2108;
+  StoredIceThermalConductivity.Value := 2.14;
+  StoredIceDensity.Value := 920;
+
   ReadStart := rsNone;
   FullReadStartRestartFileName := '';
 
   FLakeOptions.Initialize;
   FPestAnisotropyOptions.Initialize;
   RegionalProperties.Initialize;
+
+  ProductionUsed := False;
 end;
 
 procedure TSutraOptions.SetBaseFluidDensity(const Value: double);
@@ -1627,6 +1663,11 @@ end;
 procedure TSutraOptions.SetPressureFactor(const Value: double);
 begin
   StoredPressureFactor.Value := Value;
+end;
+
+procedure TSutraOptions.SetProductionUsed(const Value: Boolean);
+begin
+  SetBooleanProperty(FProductionUsed, Value);
 end;
 
 procedure TSutraOptions.SetReadStart(const Value: TReadStart);
@@ -2473,7 +2514,6 @@ procedure TAdsorptionProperties.SetSecondDistributionCoefficient(
   const Value: string);
 var
   OldFormula: string;
-  AField: TFormulaObject;
 begin
   OldFormula := SecondDistributionCoefficient;
   if OldFormula <> Value then
@@ -3196,6 +3236,11 @@ begin
   inherited;
 end;
 
+function TRegionalProperty.GetAdsorptionProperties: TAdsorptionProperties;
+begin
+  result := FAdsorptionProperties;
+end;
+
 procedure TRegionalProperty.SetAdsorptionProperties(
   const Value: TAdsorptionProperties);
 begin
@@ -3250,9 +3295,22 @@ begin
 end;
 
 procedure TRegionalProperties.Initialize;
+var
+  LocalModel: TCustomModel;
 begin
   Clear;
-  Add;
+  if FModel = nil then
+  begin
+    LocalModel := frmGoPhast.PhastModel;
+  end
+  else
+  begin
+    LocalModel := FModel as TCustomModel;
+  end;
+  if LocalModel.ModelSelection = msSutra40 then
+  begin
+    Add;
+  end;
 end;
 
 procedure TRegionalProperties.SetItems(Index: Integer;
@@ -3268,7 +3326,14 @@ procedure TCustomSutraPersistent.ChangeFormula(const Value: string;
 var
   LocalModel: TCustomModel;
 begin
-  LocalModel := (FModel as TCustomModel);
+  if FModel = nil then
+  begin
+    LocalModel := frmGoPhast.PhastModel;
+  end
+  else
+  begin
+    LocalModel := FModel as TCustomModel;
+  end;
   LocalModel.FormulaManager.ChangeFormula(AField, Value,
     LocalModel.rpThreeDFormulaCompiler,
     GlobalDummyHandleSubscription, GlobalDummyHandleSubscription, self);
@@ -3294,7 +3359,14 @@ function TCustomSutraPersistent.CreateFormulaObject: TFormulaObject;
 var
   LocalModel: TCustomModel;
 begin
-  LocalModel := (FModel as TCustomModel);
+  if FModel = nil then
+  begin
+    LocalModel := frmGoPhast.PhastModel;
+  end
+  else
+  begin
+    LocalModel := FModel as TCustomModel;
+  end;
   result := LocalModel.FormulaManager.Add;
   result.Parser := LocalModel.rpThreeDFormulaCompiler;
   result.AddSubscriptionEvents(GlobalDummyHandleSubscription,

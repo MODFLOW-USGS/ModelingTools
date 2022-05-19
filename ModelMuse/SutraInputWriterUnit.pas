@@ -16,6 +16,14 @@ type
     Y: double;
     Z: double;
     Porosity: double;
+    COMPMA: double;
+    CS: double;
+    RHOS: double;
+    PRODL0: double;
+    PRODS0: double;
+    PRODL1: double;
+    PRODS1: double;
+    PRODI: double;
     Layer: Integer;
   end;
 
@@ -38,6 +46,8 @@ type
     ATMAX: double;
     ATMID: double;
     ATMIN: double;
+    SIGMAS: double;
+    SIGMAA: double;
     // X, Y, and Z are used when importing model results.
     X: Double;
     Y: double;
@@ -246,7 +256,7 @@ begin
           RHOS := FOptions.SolidGrainDensity;
         end;
       end;
-    tcEnergy:
+    tcEnergy, tcFreezing:
       begin
         CS := FOptions.SolidGrainSpecificHeat;
         SIGMAS := FOptions.SolidGrainDiffusivity;
@@ -286,7 +296,7 @@ begin
     begin
       NR := RegionIndex + 1;
       WriteInteger(NR);
-      WriteCommentLine(' # NR');
+      WriteString(' # NR');
       NewLine;
 
       ARegion := FOptions.RegionalProperties[RegionIndex];
@@ -341,7 +351,7 @@ begin
             WriteFloat(CHI2);
           end;
         end;
-      tcEnergy:
+      tcEnergy, tcFreezing:
         begin
           ADSMOD := '''NONE''';
           WriteString(ADSMOD);
@@ -757,7 +767,7 @@ begin
   GRAVZ := 0;
   WriteCommentLine('Data set 13');
   case FOptions.TransportChoice of
-    tcSolute, tcEnergy:
+    tcSolute, tcEnergy, tcFreezing:
       begin
         GRAVX := FOptions.GravityX;
         GRAVY := FOptions.GravityY;
@@ -791,16 +801,93 @@ const
   SCALY = 1.;
   SCALZ = 1.;
   PORFAC = 1.;
+  COMPMAF = 1.;
+  CSF = 1.;
+  RHOSF = 1.;
+  PRODLØF = 1.;
+  PRODSØF = 1.;
+  PRODL1F = 1.;
+  PRODS1F = 1.;
+  PRODI0F = 1.;
+var
+  Comment: string;
 begin
-  { TODO -cSUTRA4 :
-COMPMAF, CSF, RHOSF, PRODFØF, PRODSØF, PRODF1F, PRODS1F, and PRODI0F
-have been added. in SUTRA 4 }
   WriteCommentLine('Data set 14A');
+  Comment := 'NODE   SCALX                 SCALY                 SCALZ                 PORFAC             ';
+  if Model.Sutra4Used(nil) then
+  begin
+    Comment := Comment + '   COMPMAF            ';
+  end;
+//  if Model.Sutra4EnergyUsed(nil) then
+  begin
+    Comment := Comment + '   CSF                ';
+  end;
+//  if Model.Sutra4EnergyOrSorptionUsed(nil) then
+  begin
+    Comment := Comment + '   RHOSF              ';
+  end;
+  if Model.Sutra4ProductionUsed(nil) then
+  begin
+    Comment := Comment + '    PROD            ';
+    Comment := Comment + '   PRODL0F            ';
+    Comment := Comment + '   PRODS0F            ';
+  end
+  else
+  begin
+    Comment := Comment + '    NOPROD          ';
+  end;
+  if Model.Sutra4SoluteUsed(nil) then
+  begin
+    Comment := Comment + '   PRODL1F            ';
+    Comment := Comment + '   PRODS1F            ';
+  end;
+  if Model.Sutra4FreezingUsed(nil) then
+  begin
+    Comment := Comment + '   PRODI0F            ';
+  end;
+  WriteCommentLine(Comment);
+
   WriteString('''NODE'' ');
   WriteFloat(SCALX);
   WriteFloat(SCALY);
   WriteFloat(SCALZ);
   WriteFloat(PORFAC);
+
+  if Model.Sutra4Used(nil) then
+  begin
+    WriteFloat(COMPMAF);
+  end;
+  if Model.Sutra4EnergyUsed(nil) then
+  begin
+    WriteFloat(CSF);
+  end
+  else
+  begin
+    WriteFloat(0);
+  end;
+//  if Model.Sutra4EnergyOrSorptionUsed(nil) then
+  begin
+    WriteFloat(RHOSF);
+  end;
+  if Model.Sutra4ProductionUsed(nil) then
+  begin
+    WriteString('   ''PROD''           ');
+    WriteFloat(PRODLØF);
+    WriteFloat(PRODSØF);
+  end
+  else
+  begin
+    WriteString('   ''NOPROD''         ');
+  end;
+  if Model.Sutra4SoluteUsed(nil) then
+  begin
+    WriteFloat(PRODL1F);
+    WriteFloat(PRODS1F);
+  end;
+  if Model.Sutra4FreezingUsed(nil) then
+  begin
+    WriteFloat(PRODI0F);
+  end;
   NewLine;
 end;
 
@@ -822,13 +909,56 @@ var
   TempFile: string;
   ParameterZoneWriter: TParameterZoneWriter;
   TempFileRoot: string;
+  COMPMA: TDataArray;
+  CS: TDataArray;
+  RHOS: TDataArray;
+  PRODL0: TDataArray;
+  PRODS0: TDataArray;
+  PRODL1: TDataArray;
+  PRODS1: TDataArray;
+  PRODI: TDataArray;
+  Sutra4Used: Boolean;
+  Sutra4EnergyUsed: Boolean;
+  Sutra4SoluteUsed: Boolean;
+  Sutra4EnergyOrSorptionUsed: Boolean;
+  Sutra4FreezingUsed: Boolean;
+  Sutra4ProductionUsed: Boolean;
   procedure Write14BInternal(Layer: Integer);
   var
     NodeIndex: Integer;
+    Comment: string;
   begin
     if Layer <= 1 then
     begin
       WriteCommentLine('Data set 14B');
+      Comment := '  II  NREG  X                     Y                     Z                     POR                ';
+      if Model.Sutra4Used(nil) then
+      begin
+        Comment := Comment + '   COMPMA             ';
+      end;
+//      if Model.Sutra4EnergyUsed(nil) then
+      begin
+        Comment := Comment + '   CS                 ';
+      end;
+//      if Model.Sutra4EnergyOrSorptionUsed(nil) then
+      begin
+        Comment := Comment + '   RHOS               ';
+      end;
+      if Model.Sutra4ProductionUsed(nil) then
+      begin
+        Comment := Comment + '   PRODL0             ';
+        Comment := Comment + '   PRODS0             ';
+      end;
+      if Model.Sutra4SoluteUsed(nil) then
+      begin
+        Comment := Comment + '   PRODL1             ';
+        Comment := Comment + '   PRODS1             ';
+      end;
+      if Model.Sutra4FreezingUsed(nil) then
+      begin
+        Comment := Comment + '   PRODI              ';
+      end;
+      WriteCommentLine(Comment);
     end;
     for NodeIndex := 0 to Nodes.Count - 1 do
     begin
@@ -842,17 +972,94 @@ var
         WriteFloat(NodeData.Y);
         WriteFloat(NodeData.Z);
         WriteFloat(NodeData.Porosity);
-        { TODO -cSUTRA4 :
-Input variables COMPMA, CS, RHOS, PRODLØ, PRODSØ, PRODL1, PRODS1, and PRODI0
-have been added in SUTRA 4. }
+
+        if Sutra4Used then
+        begin
+          WriteFloat(NodeData.COMPMA);
+        end;
+//        if Sutra4EnergyUsed then
+        begin
+          WriteFloat(NodeData.CS);
+        end;
+//        if Sutra4EnergyOrSorptionUsed then
+        begin
+          WriteFloat(NodeData.RHOS);
+        end;
+        if Sutra4ProductionUsed then
+        begin
+          WriteFloat(NodeData.PRODL0);
+          WriteFloat(NodeData.PRODS0);
+        end;
+        if Sutra4SoluteUsed then
+        begin
+          WriteFloat(NodeData.PRODL1);
+          WriteFloat(NodeData.PRODS1);
+        end;
+        if Sutra4FreezingUsed then
+        begin
+          WriteFloat(NodeData.PRODI);
+        end;
+
         NewLine;
       end;
     end;
   end;
 begin
+  Sutra4Used := Model.Sutra4Used(nil);
+  Sutra4EnergyUsed := Model.Sutra4EnergyUsed(nil);
+  Sutra4SoluteUsed := Model.Sutra4SoluteUsed(nil);
+  Sutra4EnergyOrSorptionUsed := Model.Sutra4EnergyOrSorptionUsed(nil);
+  Sutra4FreezingUsed := Model.Sutra4FreezingUsed(nil);
+  Sutra4ProductionUsed := Model.Sutra4ProductionUsed(nil);
+  { TODO -cSUTRA4 :
+  Implement PEST for  COMPMA, CS, RHOS, PRODLØ, PRODSØ, PRODL1, PRODS1, and PRODI0. }
   PestParametersUsed := False;
   Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
   Porosity.Initialize;
+
+  COMPMA := nil;
+  if Sutra4Used then
+  begin
+    COMPMA := Model.DataArrayManager.GetDataSetByName(KSolidMatrixComp);
+    COMPMA.Initialize;
+  end;
+  CS := nil;
+  if Sutra4EnergyUsed then
+  begin
+    CS := Model.DataArrayManager.GetDataSetByName(KSolidGrainSpecificHeat);
+    CS.Initialize;
+  end;
+  RHOS := nil;
+  if Sutra4EnergyOrSorptionUsed then
+  begin
+    RHOS := Model.DataArrayManager.GetDataSetByName(KSolidGrainDensity);
+    RHOS.Initialize;
+  end;
+  PRODL0 := nil;
+  PRODS0 := nil;
+  if Sutra4ProductionUsed then
+  begin
+    PRODL0 := Model.DataArrayManager.GetDataSetByName(KZeroOrderProductionRateInLiquid);
+    PRODL0.Initialize;
+    PRODS0 := Model.DataArrayManager.GetDataSetByName(KZeroOrderProductionRateInImmobile);
+    PRODS0.Initialize;
+  end;
+  PRODL1 := nil;
+  PRODS1 := nil;
+  if Sutra4SoluteUsed then
+  begin
+    PRODL1 := Model.DataArrayManager.GetDataSetByName(KFirstOrderProductionRateInLiquid);
+    PRODL1.Initialize;
+    PRODS1 := Model.DataArrayManager.GetDataSetByName(KFirstOrderProductionRateInImmobile);
+    PRODS1.Initialize;
+  end;
+  PRODI := nil;
+  if Sutra4FreezingUsed then
+  begin
+    PRODI := Model.DataArrayManager.GetDataSetByName(KZeroOrderProductionRateInIce);
+    PRODI.Initialize;
+  end;
+
   if Model.PestUsed then
   begin
     DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
@@ -961,6 +1168,40 @@ begin
         NodeData.Y := ANode2D.Y;
         NodeData.Z := Thickness.RealData[0,0,NodeIndex];
         NodeData.Porosity := Porosity.RealData[0,0,NodeIndex];
+        if Sutra4Used then
+        begin
+          NodeData.COMPMA := COMPMA.RealData[0,0,NodeIndex];
+        end;
+        if Sutra4EnergyUsed then
+        begin
+          NodeData.CS := CS.RealData[0,0,NodeIndex];
+        end
+        else
+        begin
+          NodeData.CS := 0;
+        end;
+        if Sutra4EnergyOrSorptionUsed then
+        begin
+          NodeData.RHOS := RHOS.RealData[0,0,NodeIndex];
+        end
+        else
+        begin
+          NodeData.RHOS := 0;
+        end;
+        if Sutra4ProductionUsed then
+        begin
+          NodeData.PRODL0 := PRODL0.RealData[0,0,NodeIndex];
+          NodeData.PRODS0 := PRODS0.RealData[0,0,NodeIndex];
+        end;
+        if Sutra4SoluteUsed then
+        begin
+          NodeData.PRODL1 := PRODL1.RealData[0,0,NodeIndex];
+          NodeData.PRODS1 := PRODS1.RealData[0,0,NodeIndex];
+        end;
+        if Sutra4FreezingUsed then
+        begin
+          NodeData.PRODI := PRODI.RealData[0,0,NodeIndex];
+        end;
       end;
     end
     else
@@ -989,6 +1230,40 @@ begin
             NodeData.Y := ANode3D.Y;
             NodeData.Z := ANode3D.Z;
             NodeData.Porosity := Porosity.RealData[LayerIndex,0,NodeIndex];
+            if Sutra4Used then
+            begin
+              NodeData.COMPMA := COMPMA.RealData[LayerIndex,0,NodeIndex];
+            end;
+            if Sutra4EnergyUsed then
+            begin
+              NodeData.CS := CS.RealData[LayerIndex,0,NodeIndex];
+            end
+            else
+            begin
+              NodeData.CS := 0;
+            end;
+            if Sutra4EnergyOrSorptionUsed then
+            begin
+              NodeData.RHOS := RHOS.RealData[LayerIndex,0,NodeIndex];
+            end
+            else
+            begin
+              NodeData.RHOS := 0;
+            end;
+            if Sutra4ProductionUsed then
+            begin
+              NodeData.PRODL0 := PRODL0.RealData[LayerIndex,0,NodeIndex];
+              NodeData.PRODS0 := PRODS0.RealData[LayerIndex,0,NodeIndex];
+            end;
+            if Sutra4SoluteUsed then
+            begin
+              NodeData.PRODL1 := PRODL1.RealData[LayerIndex,0,NodeIndex];
+              NodeData.PRODS1 := PRODS1.RealData[LayerIndex,0,NodeIndex];
+            end;
+            if Sutra4FreezingUsed then
+            begin
+              NodeData.PRODI := PRODI.RealData[LayerIndex,0,NodeIndex];
+            end;
           end;
         end;
       end;
@@ -1056,19 +1331,6 @@ begin
     else
     begin
       Write14BInternal(-1);
-//      WriteCommentLine('Data set 14B');
-//      for NodeIndex := 0 to Nodes.Count - 1 do
-//      begin
-//        NodeData := Nodes[NodeIndex];
-//        Assert(NodeIndex = NodeData.Number);
-//        WriteInteger(NodeData.Number + 1);
-//        WriteInteger(NodeData.NREG);
-//        WriteFloat(NodeData.X);
-//        WriteFloat(NodeData.Y);
-//        WriteFloat(NodeData.Z);
-//        WriteFloat(NodeData.Porosity);
-//        NewLine;
-//      end;
     end;
   finally
     Nodes.Free;
@@ -1083,6 +1345,40 @@ begin
   begin
     Model.DataArrayManager.AddDataSetToCache(Thickness);
   end;
+
+  if COMPMA <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(COMPMA);
+  end;
+  if CS <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(CS);
+  end;
+  if RHOS <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(RHOS);
+  end;
+  if PRODL0 <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(PRODL0);
+  end;
+  if PRODS0 <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(PRODS0);
+  end;
+  if PRODL1 <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(PRODL1);
+  end;
+  if PRODS1 <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(PRODS1);
+  end;
+  if PRODI <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(PRODI);
+  end;
+
   Model.DataArrayManager.CacheDataArrays;
 end;
 
@@ -1100,9 +1396,44 @@ const
   ATMAXF = 1.;
   ATMIDF = 1.;
   ATMINF = 1.;
+  SIGMASF = 1.;
+  SIGMAAF = 1.;
+var
+  Comment: string;
 begin
-  { TODO -cSUTRA4 : Input variables SIGMASF and SIGMAAF have been added. }
   WriteCommentLine('Data set 15A');
+  Comment := 'ELEMENT   PMAXFA             ';
+  if FMesh.MeshType = mt3D then
+  begin
+    Comment := Comment + '   PMIDFA             ';
+  end;
+  Comment := Comment + '   PMINFA             ';
+  Comment := Comment + '   ANG1FA             ';
+  if FMesh.MeshType = mt3D then
+  begin
+    Comment := Comment + '   ANG2FA             ';
+    Comment := Comment + '   ANG3FA             ';
+  end;
+  Comment := Comment + '   ALMAXF             ';
+  if FMesh.MeshType = mt3D then
+  begin
+    Comment := Comment + '   ALMIDF             ';
+  end;
+  Comment := Comment + '   ALMINF             ';
+  Comment := Comment + '   ATMAXF             ';
+  if FMesh.MeshType = mt3D then
+  begin
+    Comment := Comment + '   ATMIDF             ';
+  end;
+  Comment := Comment + '   ATMINF             ';
+
+  if Model.Sutra4EnergyUsed(nil) then
+  begin
+    Comment := Comment + '   SIGMASF            ';
+    Comment := Comment + '   SIGMAAF            ';
+  end;
+  WriteCommentLine(Comment);
+
   WriteString('''ELEMENT'' ');
   WriteFloat(PMAXFA);
   if FMesh.MeshType = mt3D then
@@ -1128,6 +1459,12 @@ begin
     WriteFloat(ATMIDF);
   end;
   WriteFloat(ATMINF);
+
+  if Model.Sutra4EnergyUsed(nil) then
+  begin
+    WriteFloat(SIGMASF);
+    WriteFloat(SIGMAAF);
+  end;
   NewLine;
 end;
 
@@ -1157,6 +1494,9 @@ var
   DataFileWriter: TSutraElementDataWriter;
   Sutra15BWriter: TSutraData15BScriptWriter;
   TempFileRoot: string;
+  Sutra4EnergyUsed: Boolean;
+  SIGMAS: TDataArray;
+  SIGMAA: TDataArray;
   procedure ExportDataForPest(DataArray: TDataArray);
   begin
     if Model.PestUsed then
@@ -1176,10 +1516,41 @@ var
   procedure InternalWrite15B(Layer: Integer);
   var
     ElementIndex: Integer;
+    Comment: string;
   begin
     if Layer <= 1 then
     begin
       WriteCommentLine('Data set 15B');
+      Comment := '   L  LREG  PMAX                  ';
+      if FMesh.MeshType = mt3D then
+      begin
+        Comment := Comment + 'PMID                  ';
+      end;
+      Comment := Comment + 'PMIN                  ';
+      Comment := Comment + 'ANGLE1                ';
+      if FMesh.MeshType = mt3D then
+      begin
+        Comment := Comment + 'ANGLE2                ';
+        Comment := Comment + 'ANGLE3                ';
+      end;
+      Comment := Comment + 'ALMAX                 ';
+      if FMesh.MeshType = mt3D then
+      begin
+        Comment := Comment + 'ALMID                 ';
+      end;
+      Comment := Comment + 'ALMIN                 ';
+      Comment := Comment + 'ATMAX                 ';
+      if FMesh.MeshType = mt3D then
+      begin
+        Comment := Comment + 'ATMID                 ';
+      end;
+      Comment := Comment + 'ATMIN                 ';
+      if Sutra4EnergyUsed then
+      begin
+        Comment := Comment + 'SIGMAS                ';
+        Comment := Comment + 'SIGMAA                ';
+      end;
+      WriteCommentLine(Comment);
     end;
     for ElementIndex := 0 to ElementList.Count - 1 do
     begin
@@ -1213,6 +1584,11 @@ var
           WriteFloat(ElData.ATMID);
         end;
         WriteFloat(ElData.ATMIN);
+        if Sutra4EnergyUsed then
+        begin
+          WriteFloat(ElData.SIGMAS);
+          WriteFloat(ElData.SIGMAA);
+        end;
         { TODO -cSUTRA4 : Input variables SIGMAS and SIGMAA been added. }
         NewLine;
         case FMesh.MeshType of
@@ -1221,7 +1597,7 @@ var
               if ElData.PMAX < ElData.PMIN then
               begin
                 case FOptions.TransportChoice of
-                  tcSolute, tcEnergy:
+                  tcSolute, tcEnergy, tcFreezing:
                     begin
                       frmErrorsAndWarnings.AddWarning(Model,
                         StrMaxPermMinPerm, IntToStr(ElData.Number+1));
@@ -1240,7 +1616,7 @@ var
               if ElData.PMAX < ElData.PMID then
               begin
                 case FOptions.TransportChoice of
-                  tcSolute, tcEnergy:
+                  tcSolute, tcEnergy, tcFreezing:
                     begin
                       frmErrorsAndWarnings.AddWarning(Model,
                         StrMaxPermMidPerm, IntToStr(ElData.Number+1));
@@ -1256,7 +1632,7 @@ var
               if ElData.PMID < ElData.PMIN then
               begin
                 case FOptions.TransportChoice of
-                  tcSolute, tcEnergy:
+                  tcSolute, tcEnergy, tcFreezing:
                     begin
                       frmErrorsAndWarnings.AddWarning(Model,
                         StrMidPermMinPerm, IntToStr(ElData.Number+1));
@@ -1275,10 +1651,11 @@ var
     end
   end;
 begin
+  Sutra4EnergyUsed := Model.Sutra4EnergyUsed(nil);
   PestParametersUsed := False;
   MaxPerm := nil;
   case FOptions.TransportChoice of
-    tcSolute, tcEnergy:
+    tcSolute, tcEnergy, tcFreezing:
       MaxPerm := Model.DataArrayManager.GetDataSetByName(KMaximumPermeability);
     tcSoluteHead:
       MaxPerm := Model.DataArrayManager.GetDataSetByName(KMaximumK);
@@ -1291,7 +1668,7 @@ begin
   if FMesh.MeshType = mt3D then
   begin
     case FOptions.TransportChoice of
-      tcSolute, tcEnergy:
+      tcSolute, tcEnergy, tcFreezing:
         MidPerm := Model.DataArrayManager.GetDataSetByName(KMiddlePermeability);
       tcSoluteHead:
         MidPerm := Model.DataArrayManager.GetDataSetByName(KMiddleK);
@@ -1307,7 +1684,7 @@ begin
 
   MinPerm := nil;
   case FOptions.TransportChoice of
-    tcSolute, tcEnergy:
+    tcSolute, tcEnergy, tcFreezing:
       MinPerm := Model.DataArrayManager.GetDataSetByName(KMinimumPermeability);
     tcSoluteHead:
       MinPerm := Model.DataArrayManager.GetDataSetByName(KMinimumK);
@@ -1378,6 +1755,28 @@ begin
   MinTransvDisp.Initialize;
   ExportDataForPest(MinTransvDisp);
 
+  if Sutra4EnergyUsed then
+  begin
+    SIGMAS := Model.DataArrayManager.GetDataSetByName(KScaledSolidGrainThermalConductivity);
+    SIGMAS.Initialize;
+    ExportDataForPest(SIGMAS);
+  end
+  else
+  begin
+    SIGMAS := nil;
+  end;
+
+  if Sutra4EnergyUsed then
+  begin
+    SIGMAA := Model.DataArrayManager.GetDataSetByName(KScaledEffectiveAirThermalConductivity);
+    SIGMAA.Initialize;
+    ExportDataForPest(SIGMAA);
+  end
+  else
+  begin
+    SIGMAA := nil;
+  end;
+
   if FOptions.SaturationChoice = scUnsaturated then
   begin
     UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionElements);
@@ -1429,12 +1828,16 @@ begin
         ElData.ATMAX := MaxTransvDisp.RealData[0,0,ElementIndex];
         ElData.ATMID := 0;
         ElData.ATMIN := MinTransvDisp.RealData[0,0,ElementIndex];
-
-//        if AnElement2D.ReferenceLength > ElData.ALMAX*4 then
-//        begin
-//          frmErrorsAndWarnings.AddWarning(Model,
-//            StrDispersivityMayBe, IntToStr(ElData.Number+1))
-//        end;
+        if Sutra4EnergyUsed then
+        begin
+          ElData.SIGMAS := SIGMAS.RealData[0,0,ElementIndex];
+          ElData.SIGMAA := SIGMAA.RealData[0,0,ElementIndex];
+        end
+        else
+        begin
+          ElData.SIGMAS := 0;
+          ElData.SIGMAA := 0;
+        end;
       end;
     end
     else
@@ -1471,11 +1874,16 @@ begin
             ElData.ATMAX := MaxTransvDisp.RealData[LayerIndex,0,ElementIndex];
             ElData.ATMID := MidTransvDisp.RealData[LayerIndex,0,ElementIndex];
             ElData.ATMIN := MinTransvDisp.RealData[LayerIndex,0,ElementIndex];
-//            if AnElement3D.ReferenceLength > ElData.ALMAX*4 then
-//            begin
-//              frmErrorsAndWarnings.AddWarning(Model,
-//                StrDispersivityMayBe, IntToStr(ElData.Number+1))
-//            end;
+            if Sutra4EnergyUsed then
+            begin
+              ElData.SIGMAS := SIGMAS.RealData[LayerIndex,0,ElementIndex];
+              ElData.SIGMAA := SIGMAA.RealData[LayerIndex,0,ElementIndex];
+            end
+            else
+            begin
+              ElData.SIGMAS := 0;
+              ElData.SIGMAA := 0;
+            end;
           end;
         end;
       end;
@@ -1579,6 +1987,14 @@ begin
   if MidTransvDisp <> nil then
   begin
     Model.DataArrayManager.AddDataSetToCache(MidTransvDisp);
+  end;
+  if SIGMAS <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(SIGMAS);
+  end;
+  if SIGMAA <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(SIGMAA);
   end;
   Model.DataArrayManager.AddDataSetToCache(MinTransvDisp);
 end;
@@ -2266,6 +2682,11 @@ begin
       SIMULA := SIMULA + ' SOLUTE TRANSPORT''';
     tcEnergy:
       SIMULA := SIMULA + ' ENERGY TRANSPORT''';
+    tcFreezing:
+      begin
+        Assert(Model.ModelSelection = msSutra40);
+        SIMULA := SIMULA + ' FREEZING TRANSPORT''';
+      end
   else
     Assert(False);
   end;
