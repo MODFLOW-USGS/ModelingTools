@@ -817,33 +817,27 @@ begin
   if Model.Sutra4Used(nil) then
   begin
     Comment := Comment + '   COMPMAF            ';
-  end;
-//  if Model.Sutra4EnergyUsed(nil) then
-  begin
     Comment := Comment + '   CSF                ';
-  end;
-//  if Model.Sutra4EnergyOrSorptionUsed(nil) then
-  begin
     Comment := Comment + '   RHOSF              ';
-  end;
-  if Model.Sutra4ProductionUsed(nil) then
-  begin
-    Comment := Comment + '    PROD            ';
-    Comment := Comment + '   PRODL0F            ';
-    Comment := Comment + '   PRODS0F            ';
-  end
-  else
-  begin
-    Comment := Comment + '    NOPROD          ';
-  end;
-  if Model.Sutra4SoluteUsed(nil) then
-  begin
-    Comment := Comment + '   PRODL1F            ';
-    Comment := Comment + '   PRODS1F            ';
-  end;
-  if Model.Sutra4FreezingUsed(nil) then
-  begin
-    Comment := Comment + '   PRODI0F            ';
+    if Model.Sutra4ProductionUsed(nil) then
+    begin
+      Comment := Comment + '    PROD            ';
+      Comment := Comment + '   PRODL0F            ';
+      Comment := Comment + '   PRODS0F            ';
+    end
+    else
+    begin
+      Comment := Comment + '    NOPROD          ';
+    end;
+    if Model.Sutra4SoluteUsed(nil) then
+    begin
+      Comment := Comment + '   PRODL1F            ';
+      Comment := Comment + '   PRODS1F            ';
+    end;
+    if Model.Sutra4FreezingUsed(nil) then
+    begin
+      Comment := Comment + '   PRODI0F            ';
+    end;
   end;
   WriteCommentLine(Comment);
 
@@ -856,37 +850,34 @@ begin
   if Model.Sutra4Used(nil) then
   begin
     WriteFloat(COMPMAF);
-  end;
-  if Model.Sutra4EnergyUsed(nil) then
-  begin
-    WriteFloat(CSF);
-  end
-  else
-  begin
-    WriteFloat(0);
-  end;
-//  if Model.Sutra4EnergyOrSorptionUsed(nil) then
-  begin
+    if Model.Sutra4EnergyUsed(nil) then
+    begin
+      WriteFloat(CSF);
+    end
+    else
+    begin
+      WriteFloat(0);
+    end;
     WriteFloat(RHOSF);
-  end;
-  if Model.Sutra4ProductionUsed(nil) then
-  begin
-    WriteString('   ''PROD''           ');
-    WriteFloat(PRODLØF);
-    WriteFloat(PRODSØF);
-  end
-  else
-  begin
-    WriteString('   ''NOPROD''         ');
-  end;
-  if Model.Sutra4SoluteUsed(nil) then
-  begin
-    WriteFloat(PRODL1F);
-    WriteFloat(PRODS1F);
-  end;
-  if Model.Sutra4FreezingUsed(nil) then
-  begin
-    WriteFloat(PRODI0F);
+    if Model.Sutra4ProductionUsed(nil) then
+    begin
+      WriteString('   ''PROD''           ');
+      WriteFloat(PRODLØF);
+      WriteFloat(PRODSØF);
+    end
+    else
+    begin
+      WriteString('   ''NOPROD''         ');
+    end;
+    if Model.Sutra4SoluteUsed(nil) then
+    begin
+      WriteFloat(PRODL1F);
+      WriteFloat(PRODS1F);
+    end;
+    if Model.Sutra4FreezingUsed(nil) then
+    begin
+      WriteFloat(PRODI0F);
+    end;
   end;
   NewLine;
 end;
@@ -923,6 +914,31 @@ var
   Sutra4EnergyOrSorptionUsed: Boolean;
   Sutra4FreezingUsed: Boolean;
   Sutra4ProductionUsed: Boolean;
+  procedure ExportDataForPest(ADataArray: TDataArray);
+  begin
+    if Model.PestUsed then
+    begin
+      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+      try
+        DataFileWriter.WriteFile(FFileName, ADataArray);
+      finally
+        DataFileWriter.Free;
+      end;
+      if ADataArray.PestParametersUsed and not WritingTemplate then
+      begin
+        PestParametersUsed := True;
+        // Create an array file too in case the data set is used in
+        // a boundary condition.
+        ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
+        try
+          TempFile := ChangeFileExt(FNameOfFile, '');
+          ParameterZoneWriter.WriteFile(TempFile, ADataArray, ADataArray.Name);
+        finally
+          ParameterZoneWriter.Free;
+        end;
+      end;
+    end;
+  end;
   procedure Write14BInternal(Layer: Integer);
   var
     NodeIndex: Integer;
@@ -935,28 +951,22 @@ var
       if Model.Sutra4Used(nil) then
       begin
         Comment := Comment + '   COMPMA             ';
-      end;
-//      if Model.Sutra4EnergyUsed(nil) then
-      begin
         Comment := Comment + '   CS                 ';
-      end;
-//      if Model.Sutra4EnergyOrSorptionUsed(nil) then
-      begin
         Comment := Comment + '   RHOS               ';
-      end;
-      if Model.Sutra4ProductionUsed(nil) then
-      begin
-        Comment := Comment + '   PRODL0             ';
-        Comment := Comment + '   PRODS0             ';
-      end;
-      if Model.Sutra4SoluteUsed(nil) then
-      begin
-        Comment := Comment + '   PRODL1             ';
-        Comment := Comment + '   PRODS1             ';
-      end;
-      if Model.Sutra4FreezingUsed(nil) then
-      begin
-        Comment := Comment + '   PRODI              ';
+        if Model.Sutra4ProductionUsed(nil) then
+        begin
+          Comment := Comment + '   PRODL0             ';
+          Comment := Comment + '   PRODS0             ';
+        end;
+        if Model.Sutra4SoluteUsed(nil) then
+        begin
+          Comment := Comment + '   PRODL1             ';
+          Comment := Comment + '   PRODS1             ';
+        end;
+        if Model.Sutra4FreezingUsed(nil) then
+        begin
+          Comment := Comment + '   PRODI              ';
+        end;
       end;
       WriteCommentLine(Comment);
     end;
@@ -976,28 +986,22 @@ var
         if Sutra4Used then
         begin
           WriteFloat(NodeData.COMPMA);
-        end;
-//        if Sutra4EnergyUsed then
-        begin
           WriteFloat(NodeData.CS);
-        end;
-//        if Sutra4EnergyOrSorptionUsed then
-        begin
           WriteFloat(NodeData.RHOS);
-        end;
-        if Sutra4ProductionUsed then
-        begin
-          WriteFloat(NodeData.PRODL0);
-          WriteFloat(NodeData.PRODS0);
-        end;
-        if Sutra4SoluteUsed then
-        begin
-          WriteFloat(NodeData.PRODL1);
-          WriteFloat(NodeData.PRODS1);
-        end;
-        if Sutra4FreezingUsed then
-        begin
-          WriteFloat(NodeData.PRODI);
+          if Sutra4ProductionUsed then
+          begin
+            WriteFloat(NodeData.PRODL0);
+            WriteFloat(NodeData.PRODS0);
+          end;
+          if Sutra4SoluteUsed then
+          begin
+            WriteFloat(NodeData.PRODL1);
+            WriteFloat(NodeData.PRODS1);
+          end;
+          if Sutra4FreezingUsed then
+          begin
+            WriteFloat(NodeData.PRODI);
+          end;
         end;
 
         NewLine;
@@ -1016,24 +1020,28 @@ begin
   PestParametersUsed := False;
   Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
   Porosity.Initialize;
+  ExportDataForPest(Porosity);
 
   COMPMA := nil;
   if Sutra4Used then
   begin
     COMPMA := Model.DataArrayManager.GetDataSetByName(KSolidMatrixComp);
     COMPMA.Initialize;
+    ExportDataForPest(COMPMA);
   end;
   CS := nil;
   if Sutra4EnergyUsed then
   begin
     CS := Model.DataArrayManager.GetDataSetByName(KSolidGrainSpecificHeat);
     CS.Initialize;
+    ExportDataForPest(CS);
   end;
   RHOS := nil;
   if Sutra4EnergyOrSorptionUsed then
   begin
     RHOS := Model.DataArrayManager.GetDataSetByName(KSolidGrainDensity);
     RHOS.Initialize;
+    ExportDataForPest(RHOS);
   end;
   PRODL0 := nil;
   PRODS0 := nil;
@@ -1041,8 +1049,10 @@ begin
   begin
     PRODL0 := Model.DataArrayManager.GetDataSetByName(KZeroOrderProductionRateInLiquid);
     PRODL0.Initialize;
+    ExportDataForPest(PRODL0);
     PRODS0 := Model.DataArrayManager.GetDataSetByName(KZeroOrderProductionRateInImmobile);
     PRODS0.Initialize;
+    ExportDataForPest(PRODS0);
   end;
   PRODL1 := nil;
   PRODS1 := nil;
@@ -1050,67 +1060,71 @@ begin
   begin
     PRODL1 := Model.DataArrayManager.GetDataSetByName(KFirstOrderProductionRateInLiquid);
     PRODL1.Initialize;
+    ExportDataForPest(PRODL1);
     PRODS1 := Model.DataArrayManager.GetDataSetByName(KFirstOrderProductionRateInImmobile);
     PRODS1.Initialize;
+    ExportDataForPest(PRODS1);
   end;
   PRODI := nil;
   if Sutra4FreezingUsed then
   begin
     PRODI := Model.DataArrayManager.GetDataSetByName(KZeroOrderProductionRateInIce);
     PRODI.Initialize;
+    ExportDataForPest(PRODI);
   end;
 
-  if Model.PestUsed then
-  begin
-    DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
-    try
-      DataFileWriter.WriteFile(FFileName, Porosity);
-    finally
-      DataFileWriter.Free;
-    end;
-    if Porosity.PestParametersUsed and not WritingTemplate then
-    begin
-      PestParametersUsed := True;
-      // Create an array file too in case the data set is used in
-      // a boundary condition.
-      ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
-      try
-        TempFile := ChangeFileExt(FNameOfFile, '');
-        ParameterZoneWriter.WriteFile(TempFile, Porosity, Porosity.Name);
-      finally
-        ParameterZoneWriter.Free;
-      end;
-    end;
-  end;
+//  if Model.PestUsed then
+//  begin
+//    DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+//    try
+//      DataFileWriter.WriteFile(FFileName, Porosity);
+//    finally
+//      DataFileWriter.Free;
+//    end;
+//    if Porosity.PestParametersUsed and not WritingTemplate then
+//    begin
+//      PestParametersUsed := True;
+//      // Create an array file too in case the data set is used in
+//      // a boundary condition.
+//      ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
+//      try
+//        TempFile := ChangeFileExt(FNameOfFile, '');
+//        ParameterZoneWriter.WriteFile(TempFile, Porosity, Porosity.Name);
+//      finally
+//        ParameterZoneWriter.Free;
+//      end;
+//    end;
+//  end;
 
   if FMesh.MeshType in [mt2D, mtProfile] then
   begin
     Thickness := Model.DataArrayManager.GetDataSetByName(KNodalThickness);
     Thickness.Initialize;
-    if Model.PestUsed then
-    begin
-      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
-      try
-        DataFileWriter.WriteFile(FFileName, Thickness);
-      finally
-        DataFileWriter.Free;
-      end;
-      if Thickness.PestParametersUsed and not WritingTemplate then
-      begin
-        PestParametersUsed := True;
-
-
-        // Create an array file too in case the data set is used in
-        // a boundary condition.
-        ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
-        try
-          TempFile := ChangeFileExt(FNameOfFile, '');
-          ParameterZoneWriter.WriteFile(TempFile, Thickness, Thickness.Name);
-        finally
-          ParameterZoneWriter.Free;
-        end;
-      end;
-    end;
+    ExportDataForPest(Thickness);
+//    if Model.PestUsed then
+//    begin
+//      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+//      try
+//        DataFileWriter.WriteFile(FFileName, Thickness);
+//      finally
+//        DataFileWriter.Free;
+//      end;
+//      if Thickness.PestParametersUsed and not WritingTemplate then
+//      begin
+//        PestParametersUsed := True;
+//
+//
+//        // Create an array file too in case the data set is used in
+//        // a boundary condition.
+//        ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
+//        try
+//          TempFile := ChangeFileExt(FNameOfFile, '');
+//          ParameterZoneWriter.WriteFile(TempFile, Thickness, Thickness.Name);
+//        finally
+//          ParameterZoneWriter.Free;
+//        end;
+//      end;
+//    end;
   end
   else
   begin
@@ -1698,8 +1712,6 @@ begin
   HorizAngle.Initialize;
   ExportDataForPest(HorizAngle);
 
-//  RotationAngleParamArray := nil;
-//  VerticalAngleParamArray := nil;
   if FMesh.MeshType = mt3D then
   begin
     VerticalAngle := Model.DataArrayManager.GetDataSetByName(KVerticalAngle);

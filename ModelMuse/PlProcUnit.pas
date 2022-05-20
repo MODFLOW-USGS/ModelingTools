@@ -204,14 +204,12 @@ type
     FParameterNames: TStringList;
     FDataRecordList: TDataRecordList;
     FUsedParamList: TStringList;
+    // @name must be modified if new variables are added to data set 15B.
     procedure WriteAFile(ScriptChoice: TScriptChoice);
     procedure WritePilotPointFiles;
+    // @name must be modified if new variables are added to data set 15B.
     procedure GetUsedParameters;
-//    procedure WriteKrigingFactors;
-//    procedure ReadPilotPoints;
     procedure ReadDiscretization;
-//    procedure SaveKrigingFactors;
-//    function GetKrigFactorRoot(ADataRec: TDataRecord): string;
   protected
     class function Extension: string; override;
   public
@@ -1248,12 +1246,12 @@ begin
         end;
         if UsedFileProperties = nil then
         begin
-          WriteString('    # Substituting parameter values in zones');
-          NewLine;
-          WriteString(Format(
-            '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
-            [LayerIndex + 1, ParamIndex+1, AParam.ParameterName]));
-          NewLine;
+//          WriteString('    # Substituting parameter values in zones');
+//          NewLine;
+//          WriteString(Format(
+//            '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
+//            [LayerIndex + 1, ParamIndex+1, AParam.ParameterName]));
+//          NewLine;
         end;
       end;
     end;
@@ -1845,6 +1843,8 @@ var
   FileProperties: TPilotPointFileObject;
   UsedFileProperties: TPilotPointFileObject;
   PListName: string;
+  DataSetName: string;
+  ID: Boolean;
 begin
   if ScriptChoice = scWriteTemplate then
   begin
@@ -1888,9 +1888,9 @@ begin
     NewLine;
     WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
     NewLine;
-    ColIndex := 1;
+    ColIndex := 2;
 
-    Inc(ColIndex);
+//    Inc(ColIndex);
 
     WriteString(Format('  file=''%s.Nodal_Porosity'')', [FRoot]));
     NewLine;
@@ -1903,8 +1903,6 @@ begin
       NewLine;
       if FMesh.MeshType = mt3D then
       begin
-  //      WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
-  //      NewLine;
         Inc(ColIndex);
 
         WriteString(Format('  slist=s_Layer%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
@@ -1957,7 +1955,7 @@ begin
       begin
         Inc(ColIndex,2);
       end;
-//      Inc(ColIndex);
+
       WriteString(Format('  slist=s_Unsat_Region%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
       NewLine;
       Inc(ColIndex);
@@ -1967,6 +1965,52 @@ begin
     end;
     NewLine;
     {$ENDREGION}
+
+    if Model.Sutra4Used(nil) then
+    begin
+      {$REGION 'COMPMA'}
+      DataSetName := KSolidMatrixComp;
+      ID = 'COMPMA';
+
+      WriteString('# Read COMPMA');
+      NewLine;
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
+      ColIndex := 2;
+
+  //    Inc(ColIndex);
+
+      WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, DataSetName]));
+      NewLine;
+
+      for LayerIndex := 1 to LayerCount do
+      begin
+        // PLPROC has a limit of 5 s_lists per call of read_list_file.
+        // To avoid reaching that limit, a separate call is used for each layer.
+        WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+        NewLine;
+        if FMesh.MeshType = mt3D then
+        begin
+          Inc(ColIndex);
+
+          WriteString(Format('  slist=s_Layer%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+          NewLine;
+          Inc(ColIndex);
+        end;
+
+        WriteString(Format('  plist=p_%0:s%1:d;column=%2:d, &', [ID, LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+
+        WriteString(Format('  slist=s_%0:sPar%1:d;column=%2:d, &', [ID, LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+        WriteString(Format('  file=''%0:s.%1:s'')', [FRoot,DataSetName]));
+        NewLine;
+      end;
+      NewLine;
+    {$ENDREGION}
+    end;
 
     WriteString('#Read parameter values');
     NewLine;
@@ -2076,6 +2120,8 @@ begin
           NewLine;
         end;
       end;
+
+    {$REGION 'Porosity'}
       for LayerIndex := 0 to LayerCount-1 do
       begin
         if AParam.UsePilotPoints then
@@ -2141,6 +2187,7 @@ begin
         end;
       end;
       NewLine;
+    {$ENDREGION}
     end;
     {$ENDREGION}
 
@@ -2759,6 +2806,30 @@ begin
   CreateDataRecord(DataArray, 'ATMIN', 'TMN');
 {$ENDREGION}
 
+{$REGION 'SIGMAS'}
+  if Model.Sutra4EnergyUsed(nil) then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(KScaledSolidGrainThermalConductivity);
+  end
+  else
+  begin
+    DataArray := nil;
+  end;
+  CreateDataRecord(DataArray, 'SIGMAS', 'SGS');
+{$ENDREGION}
+
+{$REGION 'SIGMAA'}
+  if Model.Sutra4EnergyUsed(nil) then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(KScaledEffectiveAirThermalConductivity);
+  end
+  else
+  begin
+    DataArray := nil;
+  end;
+  CreateDataRecord(DataArray, 'SIGMAA', 'SGA');
+{$ENDREGION}
+
   for Index := 0 to FDataRecordList.Count - 1 do
   begin
     DataArray := FDataRecordList[Index].DataArray;
@@ -3196,6 +3267,30 @@ begin
     ReadData(DataArray, 'ATMIN',
       ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UseAtmaxAtminAnisotropy);
     {$ENDREGION}
+
+  {$REGION 'SIGMAS'}
+    if Model.Sutra4EnergyUsed(nil) then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(KScaledSolidGrainThermalConductivity);
+    end
+    else
+    begin
+      DataArray := nil;
+    end;
+    ReadData(DataArray, 'SIGMAS', False);
+  {$ENDREGION}
+
+ {$REGION 'SIGMAA'}
+   if Model.Sutra4EnergyUsed(nil) then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(KScaledEffectiveAirThermalConductivity);
+    end
+    else
+    begin
+      DataArray := nil;
+    end;
+    ReadData(DataArray, 'SIGMAA', False);
+ {$ENDREGION}
 
     WriteString('#Read parameter values');
     NewLine;
