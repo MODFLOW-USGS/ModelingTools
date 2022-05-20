@@ -86,19 +86,17 @@ type
     procedure DoFormulaButtonClick(Sender: TObject);
     procedure btnedExit(Sender: TObject);
   private
-//    FOnFormulaButtonClick: TNotifyEvent;
-    procedure AssignButtonImages;
     function FormulaOK(AFormula: string): Boolean;
     { Private declarations }
   public
-//   property OnFormulaButtonClick: TNotifyEvent read FOnFormulaButtonClick
-//     write FOnFormulaButtonClick;
    procedure GetData(ARegion: TRegionalProperty;
      TransportChoice: TTransportChoice; SaturationChoice: TSaturationChoice);
    procedure SetData(ARegion: TRegionalProperty);
    { Public declarations }
     procedure EnableTabs(TransportChoice: TTransportChoice;
       SaturationChoice: TSaturationChoice);
+    procedure AssignButtonImages;
+    procedure EnableControls;
   end;
 
 implementation
@@ -141,8 +139,9 @@ var
 begin
   BitMap := TBitMap.Create;
   try
-    BitMap.Width := 18;
-    BitMap.Height := 18;
+    BitMap.Canvas.Font := Font;
+    BitMap.Width := 22;
+    BitMap.Height := 22;
     BitMap.Canvas.TextOut(0,0, 'F()');
     btnedFirstDistributionCoefficient.Glyph := BitMap;
     btnedSecondDistributionCoefficient.Glyph := BitMap;
@@ -502,6 +501,13 @@ begin
       Initialize;
     end;
   end;
+end;
+
+procedure TframeSutraRegionalProperty.EnableControls;
+begin
+  rgWatSatFunctClick(nil);
+  rgRelativePermChoiceClick(nil);
+  rgLiqWatSatChoiceClick(nil);
 end;
 
 procedure TframeSutraRegionalProperty.EnableTabs(

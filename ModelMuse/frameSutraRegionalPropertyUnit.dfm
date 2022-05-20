@@ -9,7 +9,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
     Top = 0
     Width = 679
     Height = 480
-    ActivePage = tsAdsorption
+    ActivePage = tsLiquidWater
     Align = alClient
     OwnerDraw = True
     TabHeight = 75
@@ -45,6 +45,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Width = 417
           Height = 105
           Caption = 'Sorption model (ADSMOD)'
+          ItemIndex = 0
           Items.Strings = (
             'None'
             'Linear'
@@ -60,6 +61,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Enabled = True
           NumGlyphs = 1
           TabOrder = 1
+          Text = '0'
           OnButtonClick = DoFormulaButtonClick
           OnExit = btnedExit
         end
@@ -71,16 +73,18 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Enabled = True
           NumGlyphs = 1
           TabOrder = 2
+          Text = '0'
           OnButtonClick = DoFormulaButtonClick
           OnExit = btnedExit
         end
       end
       object rgTransportModel: TRadioGroup
-        Left = 6
-        Top = 199
+        Left = 3
+        Top = 215
         Width = 417
         Height = 105
         Caption = 'Thermal conductivity model (TCMOD)'
+        ItemIndex = 0
         Items.Strings = (
           'Arithmetic-mean'
           'Geometric-mean'
@@ -105,6 +109,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Width = 417
           Height = 124
           Caption = 'Specified total water saturation function (SWMOD)'
+          ItemIndex = 0
           Items.Strings = (
             'None'
             'van Genuchten'
@@ -186,6 +191,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 0
+              Text = '0.1'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -197,6 +203,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 1
+              Text = '-0.5'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -208,6 +215,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 2
+              Text = '0.05'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -219,6 +227,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 3
+              Text = '0'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -230,6 +239,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 4
+              Text = '0'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -241,6 +251,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 5
+              Text = '0'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -343,6 +354,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Width = 417
           Height = 124
           Caption = 'Specified relative permeability function (RKMOD)'
+          ItemIndex = 0
           Items.Strings = (
             'None'
             'van Genuchten'
@@ -410,6 +422,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 0
+              Text = '0.001'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -421,6 +434,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 1
+              Text = '0'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -432,6 +446,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 2
+              Text = '0'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -443,6 +458,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 3
+              Text = '0.01'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -518,7 +534,6 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
-                ExplicitLeft = 1
                 ExplicitWidth = 667
                 ExplicitHeight = 200
               end
@@ -544,6 +559,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Width = 417
           Height = 124
           Caption = 'Specified liquid water saturation function (SLMOD)'
+          ItemIndex = 0
           Items.Strings = (
             'None'
             'Exponential'
@@ -612,12 +628,13 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             end
             object btnedResidLiqWatSat: TssButtonEdit
               Left = 13
-              Top = 8
+              Top = 6
               Width = 145
               Height = 28
               Enabled = True
               NumGlyphs = 1
               TabOrder = 0
+              Text = '0.01'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -629,6 +646,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 1
+              Text = '0'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -640,6 +658,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 2
+              Text = '0'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -651,6 +670,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 3
+              Text = '0'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -662,6 +682,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Enabled = True
               NumGlyphs = 1
               TabOrder = 4
+              Text = '-2'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -778,6 +799,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Enabled = True
           NumGlyphs = 1
           TabOrder = 0
+          Text = '0'
           OnButtonClick = DoFormulaButtonClick
           OnExit = btnedExit
         end
@@ -789,6 +811,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Enabled = True
           NumGlyphs = 1
           TabOrder = 1
+          Text = '334000'
           OnButtonClick = DoFormulaButtonClick
           OnExit = btnedExit
         end

@@ -30,6 +30,17 @@ inherited frmSutraOptions: TfrmSutraOptions
     DesignSize = (
       784
       50)
+    object lblRegionCount: TLabel
+      Left = 89
+      Top = 10
+      Width = 128
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'Number of regions'
+    end
     object btnCancel: TBitBtn
       Left = 674
       Top = 7
@@ -61,6 +72,47 @@ inherited frmSutraOptions: TfrmSutraOptions
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+    end
+    object seRegionCount: TJvSpinEdit
+      Left = 14
+      Top = 7
+      Width = 67
+      Height = 26
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      CheckMaxValue = False
+      MinValue = 1.000000000000000000
+      Value = 1.000000000000000000
+      TabOrder = 3
+      OnChange = seRegionCountChange
+    end
+    object btnAddRegion: TButton
+      Left = 225
+      Top = 7
+      Width = 94
+      Height = 31
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'Add region'
+      TabOrder = 4
+      OnClick = btnAddRegionClick
+    end
+    object btnDeleteRegion: TButton
+      Left = 327
+      Top = 7
+      Width = 114
+      Height = 31
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'Delete region'
+      TabOrder = 5
+      OnClick = btnDeleteRegionClick
     end
   end
   object jplMain: TJvPageList
@@ -1575,8 +1627,6 @@ inherited frmSutraOptions: TfrmSutraOptions
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspProductionSutra4'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object cbProductionUsed: TCheckBox
         Left = 16
         Top = 22
@@ -1586,7 +1636,7 @@ inherited frmSutraOptions: TfrmSutraOptions
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = 'Production used (PROD or NOPROD) data set 14A'
+        Caption = 'Production used (PROD or NOPROD, data set 14A)'
         TabOrder = 0
       end
     end
@@ -1603,6 +1653,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     HideSelection = False
     Indent = 19
     TabOrder = 0
+    OnChange = jvpltvNavigationChange
     OnCustomDrawItem = jvpltvNavigationCustomDrawItem
     OnMouseDown = jvpltvNavigationMouseDown
     Items.NodeData = {

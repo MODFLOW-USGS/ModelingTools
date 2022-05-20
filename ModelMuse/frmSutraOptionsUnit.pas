@@ -170,6 +170,10 @@ type
     lblIceCompress: TLabel;
     jvspProductionSutra4: TJvStandardPage;
     cbProductionUsed: TCheckBox;
+    seRegionCount: TJvSpinEdit;
+    lblRegionCount: TLabel;
+    btnAddRegion: TButton;
+    btnDeleteRegion: TButton;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure seMaxIterationsChange(Sender: TObject);
@@ -193,18 +197,26 @@ type
     procedure FormDestroy(Sender: TObject); override;
     procedure rgSaturationClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure btnAddRegionClick(Sender: TObject);
+    procedure btnDeleteRegionClick(Sender: TObject);
+    procedure seRegionCountChange(Sender: TObject);
+    procedure jvpltvNavigationChange(Sender: TObject; Node: TTreeNode);
   private
     FGettingData: Boolean;
     FLakeNode: TJvPageIndexNode;
     FLakeInteractionsNode: TJvPageIndexNode;
     FRegionNode: TJvPageIndexNode;
-    FRegionList: TList<TframeSutraRegionalProperty>;
+    FRegionList: TObjectList<TframeSutraRegionalProperty>;
     procedure GetData;
     procedure SetData;
     procedure EnableRhos;
     procedure EnableLakeNode;
     procedure EnableControls;
     procedure EnableRegionControls;
+    procedure CreateNewRegionPage(RegionNumber: Integer;
+       var AFrame: TframeSutraRegionalProperty);
+    procedure DeleteRegionalProperty(APage: TJvCustomPage; ANode: TJvPageIndexNode);
+    procedure EnableDeleteNode(Node: TTreeNode);
     { Private declarations }
   public
     { Public declarations }
@@ -254,10 +266,35 @@ resourcestring
   StrLakesCanOnlyBeUs = 'Lakes can only be used with 3D models.';
   StrAnisotropy = 'Anisotropy';
   StrRegionalProperties = 'Regional Properties';
+  StrRegionD = 'Region %d';
 
 {$R *.dfm}
 
 { TfrmSutraOptions }
+
+procedure TfrmSutraOptions.btnAddRegionClick(Sender: TObject);
+var
+  AFrame: TframeSutraRegionalProperty;
+begin
+  inherited;
+  CreateNewRegionPage(FRegionList.Count, AFrame);
+  seRegionCount.AsInteger := FRegionList.Count;
+end;
+
+procedure TfrmSutraOptions.btnDeleteRegionClick(Sender: TObject);
+var
+  ANode: TJvPageIndexNode;
+  APage: TJvCustomPage;
+begin
+  inherited;
+  APage := jplMain.ActivePage;
+  ANode := jvpltvNavigation.Selected as TJvPageIndexNode;
+  Assert(ANode.PageIndex = APage.PageIndex);
+
+  DeleteRegionalProperty(APage, ANode);
+
+  seRegionCount.AsInteger := FRegionList.Count;
+end;
 
 procedure TfrmSutraOptions.btnOKClick(Sender: TObject);
 var
@@ -372,6 +409,77 @@ begin
   end;
 end;
 
+procedure TfrmSutraOptions.CreateNewRegionPage(RegionNumber: Integer;
+  var AFrame: TframeSutraRegionalProperty);
+var
+  APage: TJvStandardPage;
+  ANode: TJvPageIndexNode;
+begin
+  APage := TJvStandardPage.Create(self);
+  APage.PageList := jplMain;
+
+  ANode := jvpltvNavigation.Items.AddChild(FRegionNode,
+    Format(StrRegionD, [RegionNumber])) as TJvPageIndexNode;
+  ANode.PageIndex := APage.PageIndex;
+
+  AFrame := TframeSutraRegionalProperty.Create(nil);
+  FRegionList.Add(AFrame);
+  AFrame.Parent := APage;
+  AFrame.Align := alClient;
+  AFrame.AssignButtonImages;
+  AFrame.EnableControls;
+end;
+
+procedure TfrmSutraOptions.DeleteRegionalProperty(APage: TJvCustomPage; ANode: TJvPageIndexNode);
+var
+  AControl: TControl;
+  NextNode: TJvPageIndexNode;
+  ANodeList: TList<TJvPageIndexNode>;
+  APageList: TList<TJvCustomPage>;
+  NextPage: TJvCustomPage;
+  PageIndex: Integer;
+begin
+  ANodeList := TList<TJvPageIndexNode>.Create;
+  APageList := TList<TJvCustomPage>.Create;
+  try
+    NextNode := ANode.getNextSibling as TJvPageIndexNode;
+    while NextNode <> nil do
+    begin
+      NextPage := jplMain.Pages[NextNode.PageIndex];
+      ANodeList.Add(NextNode);
+      APageList.Add(NextPage);
+      NextNode := NextNode.getNextSibling as TJvPageIndexNode;
+    end;
+
+    if APage.ControlCount > 0 then
+    begin
+      AControl := APage.Controls[0];
+      if (AControl is TframeSutraRegionalProperty) and (FRegionList.Count > 1) then
+      begin
+        FRegionList.Remove(TframeSutraRegionalProperty(AControl));
+        ANode.Free;
+        APage.Free;
+
+        for PageIndex := 0 to ANodeList.Count - 1 do
+        begin
+          NextNode := ANodeList[PageIndex];
+          NextPage := APageList[PageIndex];
+          NextNode.PageIndex := NextPage.PageIndex;
+        end;
+      end;
+    end;
+  finally
+    ANodeList.Free;
+    APageList.Free;
+  end;
+end;
+
+procedure TfrmSutraOptions.EnableDeleteNode(Node: TTreeNode);
+begin
+  btnDeleteRegion.Enabled := (Node <> nil) and (Node.Parent = FRegionNode)
+    and (FRegionList.Count > 1);
+end;
+
 procedure TfrmSutraOptions.EnableRhos;
 begin
   rdeSolidGrainDensity.Enabled :=
@@ -411,7 +519,7 @@ var
   Node: TJvPageIndexNode;
   StoredHelpKeyword: string;
 begin
-  FRegionList := TList<TframeSutraRegionalProperty>.Create;
+  FRegionList := TObjectList<TframeSutraRegionalProperty>.Create;
   inherited;
   StoredHelpKeyword := HelpKeyword;
   Handle;
@@ -490,10 +598,9 @@ var
   LakeOptions: TSutraLakeOptions;
   AnisotropyOptions: TSutraPestAnisotropyOptions;
   RegionIndex: Integer;
-  APage: TJvStandardPage;
-  ANode: TJvPageIndexNode;
   AFrame: TframeSutraRegionalProperty;
   ARegion: TRegionalProperty;
+  RegionNumber: Integer;
 begin
   FGettingData := true;
   try
@@ -635,17 +742,9 @@ begin
     begin
       for RegionIndex := 0 to SutraOptions.RegionalProperties.Count - 1 do
       begin
-        APage := TJvStandardPage.Create(self);
-        APage.PageList := jplMain;
+        RegionNumber := RegionIndex+1;
 
-        ANode := jvpltvNavigation.Items.AddChild(FRegionNode,
-          Format('Region %d', [RegionIndex+1])) as TJvPageIndexNode;
-        ANode.PageIndex := APage.PageIndex;
-
-        AFrame := TframeSutraRegionalProperty.Create(self);
-        AFrame.Parent := APage;
-        AFrame.Align :=alClient;
-        FRegionList.Add(AFrame);
+        CreateNewRegionPage(RegionNumber, AFrame);
 
         ARegion := SutraOptions.RegionalProperties[RegionIndex];
         AFrame.GetData(ARegion, SutraOptions.TransportChoice,
@@ -666,6 +765,13 @@ procedure TfrmSutraOptions.jplMainChange(Sender: TObject);
 begin
   inherited;
   HelpKeyWord := jplMain.ActivePage.HelpKeyword;
+end;
+
+procedure TfrmSutraOptions.jvpltvNavigationChange(Sender: TObject;
+  Node: TTreeNode);
+begin
+  inherited;
+  EnableDeleteNode(Node);
 end;
 
 procedure TfrmSutraOptions.jvpltvNavigationCustomDrawItem(
@@ -942,6 +1048,44 @@ begin
 
   rdeNonLinPressureCriterion.Enabled := seMaxIterations.AsInteger > 1;
   rdeUCriterion.Enabled := rdeNonLinPressureCriterion.Enabled;
+end;
+
+procedure TfrmSutraOptions.seRegionCountChange(Sender: TObject);
+var
+  AFrame: TframeSutraRegionalProperty;
+  APage: TJvCustomPage;
+  ANode: TJvPageIndexNode;
+  NodeToRename: TTreeNode;
+  NodeNumber: Integer;
+begin
+  inherited;
+  if FRegionList.Count <> seRegionCount.AsInteger then
+  begin
+    while FRegionList.Count < seRegionCount.AsInteger do
+    begin
+      CreateNewRegionPage(FRegionList.Count, AFrame);
+    end;
+    while FRegionList.Count > seRegionCount.AsInteger do
+    begin
+      ANode :=  FRegionNode.GetLastChild as TJvPageIndexNode;
+      APage := jplMain.Pages[ANode.PageIndex];
+      DeleteRegionalProperty(APage, ANode);
+    end;
+  end;
+
+  EnableDeleteNode(jvpltvNavigation.Selected);
+
+  NodeNumber := 1;
+  NodeToRename := FRegionNode.getFirstChild;
+  while NodeToRename <> nil do
+  begin
+    NodeToRename.Text := Format(StrRegionD, [NodeNumber]);
+    Inc(NodeNumber);
+    NodeToRename := NodeToRename.getNextSibling;
+  end;
+
+  EnableRegionControls;
+
 end;
 
 procedure TfrmSutraOptions.SetData;
