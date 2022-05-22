@@ -645,7 +645,8 @@ end;
 constructor TParameterZoneWriter.Create(AModel: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
-  inherited;
+  inherited Create(AModel, EvaluationType);
+//  FSubstituteParamValuesInZones := SubstituteParamValuesInZones;
   FPilotPointFiles := TPilotPointFiles.Create;
 end;
 
@@ -1244,14 +1245,14 @@ begin
             NewLine;
           end;
         end;
-        if UsedFileProperties = nil then
+        if (UsedFileProperties = nil) then
         begin
-//          WriteString('    # Substituting parameter values in zones');
-//          NewLine;
-//          WriteString(Format(
-//            '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
-//            [LayerIndex + 1, ParamIndex+1, AParam.ParameterName]));
-//          NewLine;
+          WriteString('    # Substituting parameter values in zones');
+          NewLine;
+          WriteString(Format(
+            '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
+            [LayerIndex + 1, ParamIndex+1, AParam.ParameterName]));
+          NewLine;
         end;
       end;
     end;
@@ -1661,45 +1662,73 @@ var
   Thickness: TDataArray;
   NodeIndex: Integer;
   LayerIndex: Integer;
+  DataSetNames: TStringList;
+  DataSetAbbreviations: TStringList;
 begin
-  FMesh := Model.SutraMesh;
-
-  Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
-  if Porosity.PestParametersUsed then
-  begin
-    ParamArray := Model.DataArrayManager.GetDataSetByName
-      (Porosity.ParamDataSetName);
-
-    for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
+  DataSetNames := TStringList.Create;
+  DataSetAbbreviations := TStringList.Create;
+  try
+    if Model.Sutra4Used(nil) then
     begin
-      for LayerIndex := 0 to ParamArray.LayerCount - 1 do
-      begin
-        PIndex := FParameterNames.IndexOf(LowerCase(
-          ParamArray.StringData[LayerIndex, 0, NodeIndex]));
-        if PIndex >=0 then
-        begin
-          AParam := FParameterNames.Objects[PIndex] as TModflowSteadyParameter;
-        end
-        else
-        begin
-          AParam := nil;
-        end;
+      DataSetNames.Add(KSolidMatrixComp);
+      DataSetAbbreviations.Add('COMPMA');
 
-        if AParam <> nil then
-        begin
-          FUsedParamList.AddObject(AParam.ParameterName, AParam);
-        end;
+      if Model.Sutra4EnergyUsed(nil) then
+      begin
+        DataSetNames.Add(KSolidGrainSpecificHeat);
+        DataSetAbbreviations.Add('CS');
+      end
+      else
+      begin
+        // An empty data set name means that an arbitrary value must
+        // be exported.
+        DataSetNames.Add('');
+        DataSetAbbreviations.Add('CS');
+      end;
+
+      if Model.Sutra4EnergyOrSorptionUsed(nil) then
+      begin
+        DataSetNames.Add(KSolidGrainDensity);
+        DataSetAbbreviations.Add('RHOS');
+      end
+      else
+      begin
+        // An empty data set name means that an arbitrary value must
+        // be exported.
+        DataSetNames.Add('');
+        DataSetAbbreviations.Add('RHOS');
+      end;
+
+      if Model.Sutra4ProductionUsed(nil) then
+      begin
+        DataSetNames.Add(KZeroOrderProductionRateInLiquid);
+        DataSetAbbreviations.Add('PRODL0');
+        DataSetNames.Add(KZeroOrderProductionRateInImmobile);
+        DataSetAbbreviations.Add('PRODS0');
+      end;
+
+      if Model.Sutra4SoluteUsed(nil) then
+      begin
+        DataSetNames.Add(KFirstOrderProductionRateInLiquid);
+        DataSetAbbreviations.Add('PRODL1');
+        DataSetNames.Add(KFirstOrderProductionRateInImmobile);
+        DataSetAbbreviations.Add('PRODS1');
+      end;
+
+      if Model.Sutra4FreezingUsed(nil) then
+      begin
+        DataSetNames.Add(KZeroOrderProductionRateInIce);
+        DataSetAbbreviations.Add('PRODI');
       end;
     end;
-  end;
 
-  if Model.SutraMesh.MeshType in [mt2D, mtProfile] then
-  begin
-    Thickness := Model.DataArrayManager.GetDataSetByName(KNodalThickness);
-    if Thickness.PestParametersUsed then
+    FMesh := Model.SutraMesh;
+
+    Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
+    if Porosity.PestParametersUsed then
     begin
       ParamArray := Model.DataArrayManager.GetDataSetByName
-        (Thickness.ParamDataSetName);
+        (Porosity.ParamDataSetName);
 
       for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
       begin
@@ -1722,9 +1751,44 @@ begin
           end;
         end;
       end;
-    end
-  end;
+    end;
 
+    if Model.SutraMesh.MeshType in [mt2D, mtProfile] then
+    begin
+      Thickness := Model.DataArrayManager.GetDataSetByName(KNodalThickness);
+      if Thickness.PestParametersUsed then
+      begin
+        ParamArray := Model.DataArrayManager.GetDataSetByName
+          (Thickness.ParamDataSetName);
+
+        for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
+        begin
+          for LayerIndex := 0 to ParamArray.LayerCount - 1 do
+          begin
+            PIndex := FParameterNames.IndexOf(LowerCase(
+              ParamArray.StringData[LayerIndex, 0, NodeIndex]));
+            if PIndex >=0 then
+            begin
+              AParam := FParameterNames.Objects[PIndex] as TModflowSteadyParameter;
+            end
+            else
+            begin
+              AParam := nil;
+            end;
+
+            if AParam <> nil then
+            begin
+              FUsedParamList.AddObject(AParam.ParameterName, AParam);
+            end;
+          end;
+        end;
+      end
+    end;
+
+  finally
+    DataSetAbbreviations.Free;
+    DataSetNames.Free;
+  end;
 end;
 
 procedure TSutraData14BScriptWriter.ReadPilotPoints;
@@ -1844,7 +1908,7 @@ var
   UsedFileProperties: TPilotPointFileObject;
   PListName: string;
   DataSetName: string;
-  ID: Boolean;
+  ID: string;
 begin
   if ScriptChoice = scWriteTemplate then
   begin
@@ -1970,7 +2034,7 @@ begin
     begin
       {$REGION 'COMPMA'}
       DataSetName := KSolidMatrixComp;
-      ID = 'COMPMA';
+      ID := 'COMPMA';
 
       WriteString('# Read COMPMA');
       NewLine;
@@ -2193,7 +2257,7 @@ begin
 
     WriteString('# Write new data values');
     NewLine;
-  {$REGION 'Write values'}
+    {$REGION 'Write values'}
     if FMesh.MeshType = mt3D then
     begin
       for LayerIndex := 1 to LayerCount do
@@ -2239,7 +2303,7 @@ begin
       WriteString('  plist=p_Porosity1)');
       NewLine;
     end;
-  {$ENDREGION}
+    {$ENDREGION}
   finally
     CloseFile;
   end;
@@ -3346,11 +3410,11 @@ begin
           end
           else
           begin
-            WriteString('    # Substituting parameter values in zones');
-            NewLine;
-            WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
-              [LayerIndex+1, AParam.ParameterName, ParameterIndex+1, DataRoot]));
-            NewLine;
+//            WriteString('    # Substituting parameter values in zones');
+//            NewLine;
+//            WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
+//              [LayerIndex+1, AParam.ParameterName, ParameterIndex+1, DataRoot]));
+//            NewLine;
           end;
         end;
       end;
@@ -3944,11 +4008,11 @@ begin
         end
         else
         begin
-          WriteString('    # Substituting parameter values in zones');
-          NewLine;
-          WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
-            [LayerIndex, AParam.ParameterName, ParameterIndex+1, 'Data']));
-          NewLine;
+//          WriteString('    # Substituting parameter values in zones');
+//          NewLine;
+//          WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
+//            [LayerIndex, AParam.ParameterName, ParameterIndex+1, 'Data']));
+//          NewLine;
         end;
 
       end;

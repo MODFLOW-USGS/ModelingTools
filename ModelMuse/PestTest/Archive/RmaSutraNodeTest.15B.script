@@ -63,20 +63,6 @@ temp=new_plist(reference_clist=cl_Discretization,value=0.0)
 # applying parameter K
 
 # applying parameter Seepage
-    # Substituting parameter values in zones
-p_PMAX1(select=(s_PMAXPar1 == 2)) = p_PMAX1 * Seepage
-    # Substituting parameter values in zones
-p_PMIN1(select=(s_PMINPar1 == 2)) = p_PMIN1 * Seepage
-    # Substituting parameter values in zones
-p_ANGLE11(select=(s_ANGLE1Par1 == 2)) = p_ANGLE11 * Seepage
-    # Substituting parameter values in zones
-p_ALMAX1(select=(s_ALMAXPar1 == 2)) = p_ALMAX1 * Seepage
-    # Substituting parameter values in zones
-p_ALMIN1(select=(s_ALMINPar1 == 2)) = p_ALMIN1 * Seepage
-    # Substituting parameter values in zones
-p_ATMAX1(select=(s_ATMAXPar1 == 2)) = p_ATMAX1 * Seepage
-    # Substituting parameter values in zones
-p_ATMIN1(select=(s_ATMINPar1 == 2)) = p_ATMIN1 * Seepage
 
 # Write new data values
 write_column_data_file(header = 'no', &
