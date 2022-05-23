@@ -1,0 +1,4 @@
+Rocky2D_IrregularS4Interpolate.Nodal_Porosity.Density.2.pp
+4
+1
+Rocky2D_IrregularS4Interpolate.Nodal_Porosity.Density.2.Variogram.txt

@@ -12783,6 +12783,7 @@ begin
   AlternateFlowPackage := False;
   AlternateSolver := False;
 
+  FSutraOptions.RegionalProperties.Clear;
   FormulaManager.Clear;
   FDisplaySettings.Clear;
 

@@ -1,0 +1,4 @@
+Rocky2D_IrregularS4Interpolate.SolidMatrixCompressibility.Density.1.pp
+4
+1
+Rocky2D_IrregularS4Interpolate.SolidMatrixCompressibility.Density.1.Variogram.txt

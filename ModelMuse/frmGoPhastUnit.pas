@@ -9871,6 +9871,7 @@ var
   BackupParamEstBatFileName: string;
   BackupBatchFileName: string;
   ArrayDir: string;
+  EnhancedTemplateProcLoc: string;
   procedure AddPestDataArraysToDictionary(InputPestDataArrays: TArray<TDataArray>);
   var
     DataArray: TDataArray;
@@ -10304,6 +10305,11 @@ begin
           begin
             MoveAppToDirectory(SutraFileName, ModelDirectory);
             SutraFileName := ExtractFileName(SutraFileName);
+
+            EnhancedTemplateProcLoc := TCustomFileWriter.PestUtilityProgramPath(
+              StrEnhancedTemplateProc, FileName);
+            MoveAppToDirectory(EnhancedTemplateProcLoc, ModelDirectory);
+
           end;
 
           BatchFile.Add('"' + SutraFileName + '"');
@@ -10329,6 +10335,9 @@ begin
           end;
           BatchFile.Add('pause');
           BatchFile.SaveToFile(BatchFileName);
+
+
+
           ParamEstBatFile.SaveToFile(ParamEstBatFileName);
           TFile.Copy(ParamEstBatFileName, BackupParamEstBatFileName, True);
           TFile.Copy(BatchFileName, BackupBatchFileName, True);

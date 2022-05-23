@@ -2458,26 +2458,46 @@ end;
 
 destructor TAdsorptionProperties.Destroy;
 begin
-  frmGoPhast.PhastModel.FormulaManager.Remove(FFirstDistributionCoefficient,
-    GlobalDummyHandleSubscription,
-    GlobalDummyHandleSubscription, self);
+  if not frmGoPhast.PhastModel.Clearing then
+  begin
+    frmGoPhast.PhastModel.FormulaManager.Remove(FFirstDistributionCoefficient,
+      GlobalDummyHandleSubscription,
+      GlobalDummyHandleSubscription, self);
+  end;
   FFirstDistributionCoefficient := nil;
 
-  frmGoPhast.PhastModel.FormulaManager.Remove(FSecondDistributionCoefficient,
-    GlobalDummyHandleSubscription,
-    GlobalDummyHandleSubscription, self);
+  if not frmGoPhast.PhastModel.Clearing then
+  begin
+    frmGoPhast.PhastModel.FormulaManager.Remove(FSecondDistributionCoefficient,
+      GlobalDummyHandleSubscription,
+      GlobalDummyHandleSubscription, self);
+  end;
   FSecondDistributionCoefficient := nil;
   inherited;
 end;
 
 function TAdsorptionProperties.GetFirstDistributionCoefficient: string;
 begin
-  result := FFirstDistributionCoefficient.Formula
+  if FFirstDistributionCoefficient = nil then
+  begin
+    result := '';
+  end
+  else
+  begin
+    result := FFirstDistributionCoefficient.Formula
+  end;
 end;
 
 function TAdsorptionProperties.GetSecondDistributionCoefficient: string;
 begin
-  result := FSecondDistributionCoefficient.Formula;
+  if FSecondDistributionCoefficient = nil then
+  begin
+    result := '';
+  end
+  else
+  begin
+    result := FSecondDistributionCoefficient.Formula;
+  end;
 end;
 
 procedure TAdsorptionProperties.SetAdsorptionModel(

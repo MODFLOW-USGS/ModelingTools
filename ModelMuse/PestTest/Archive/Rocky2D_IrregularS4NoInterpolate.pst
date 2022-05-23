@@ -1,0 +1,57 @@
+pcf
+* control data
+restart regularisation # RSTFLE PESTMODE
+     1     0     1     1     5     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
+     8     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
+  1.000000000000E+001   2.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
+  3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
+  1.000000000000E-001      3  0.000000000000E+000  noaui nosenreuse boundscale # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE
+    50  5.000000000000E-003      4     4  5.000000000000E-003      4  0.000000000000E+000      1  0.000000000000E+000  # NOPTMAX, PHIREDSTP, NPHISTP, NPHINORED, RELPARSTP, NRELPAR, PHISTOPTHRESH, LASTRUN, PHIABANDON
+     0     0     0     0 jcosave nojcosaveitn verboserec reisaveitn parsaveitn noparsaverun # ICOV, ICOR, IEIG, IRES, JCOSAVE, JCOSAVEITN, VERBOSEREC, RESSAVEITN, PARSAVEITN, PARSAVERUN
+
+* singular value decomposition
+     1 # SVDMODE
+  1000  5.000000000000E-007  # MAXSING, EIGTHRESH
+     0 # EIGWRITE
+
+* lsqr
+     0 # LSQRMODE
+  1.000000000000E-004   1.000000000000E-004   1.000000000000E+003      4 # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM
+     1 # LSQRWRITE
+
+* parameter groups
+D relative  1.000000000000E-002   0.000000000000E+000  switch  1.500000000000E+000  parabolic
+
+* parameter data
+Density none relative  1.100000000000E+000   0.000000000000E+000   1.800000000000E+001  D  1.000000000000E+000   0.000000000000E+000 
+
+* observation groups
+regul_Grp0
+regul_Grp2 ..\Rocky2D_Irregular.SolidMatrixCompressibility.Density.1.Cov.txt
+regul_Grp3 WithoutParam\Rocky2D_Irregular.SolidMatrixCompressibility.Density.2.Cov.txt
+regul_Grp4 WithoutParam\Rocky2D_Irregular.SolidMatrixCompressibility.Density.3.Cov.txt
+regul_Grp5
+
+* observation data
+
+* model command line
+RunModel.Bat
+
+* model input/output
+Rocky2D_IrregularS4NoInterpolate.ptf Rocky2D_IrregularS4NoInterpolate.pval
+Rocky2D_IrregularS4NoInterpolate.14B.script.tpl Rocky2D_IrregularS4NoInterpolate.14B.script
+Rocky2D_IrregularS4NoInterpolate.15B.script.tpl Rocky2D_IrregularS4NoInterpolate.15B.script
+Rocky2D_IrregularS4NoInterpolate.Nodal_Porosity.script.tpl Rocky2D_IrregularS4NoInterpolate.Nodal_Porosity.script
+Rocky2D_IrregularS4NoInterpolate.SolidMatrixCompressibility.script.tpl Rocky2D_IrregularS4NoInterpolate.SolidMatrixCompressibility.script
+Rocky2D_IrregularS4NoInterpolate.Maximum_Permeability.script.tpl Rocky2D_IrregularS4NoInterpolate.Maximum_Permeability.script
+Rocky2D_IrregularS4NoInterpolate.SolidGrain_SpecificHeat.script.tpl Rocky2D_IrregularS4NoInterpolate.SolidGrain_SpecificHeat.script
+Rocky2D_IrregularS4NoInterpolate.ScaledEffectiveAirThermalConductivity.script.tpl Rocky2D_IrregularS4NoInterpolate.ScaledEffectiveAirThermalConductivity.script
+Rocky2D_IrregularS4NoInterpolate.PestIns Rocky2D_IrregularS4NoInterpolate.SutraValues
+
+* prior information
+ eq_1          1.0 * Density = 1.1       1     regul_Grp0
+
+* regularisation
+  1.000000000000E-010   1.050000000000E-010   1.000000000000E-001  nomemsave
+  1.000000000000E+000   1.000000000000E-010   1.000000000000E+010  nonlinreg nocontinue # WFINIT WFMIN WFMAX LINREG REGCONTINUE
+  1.300000000000E+000   1.000000000000E-002      1 # WFFAC WFTOL IREGADJ

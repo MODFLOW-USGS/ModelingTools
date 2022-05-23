@@ -1,0 +1,9 @@
+# Fluid Flux Boundary Condition File file created on 5/23/2022 by ModelMuse version 5.0.0.9.
+# Data set 1
+'STEP_0' # BCSSCH
+# Data set 2; Time = 0
+'Fluid sources'     2     0     0     0     0     0 # Data Set 2: BCSID, NSOP1, NSOU1, NPBC1, NUBC1, NPBG1, NUBG1
+# Data set 3; Time = 0
+  3049 -2.000000000000E-003   0.000000000000E+000  # Data Set 3: IQCP1, QINC1, UINC1
+  6418 -1.000000000000E-003   0.000000000000E+000  # Data Set 3: IQCP1, QINC1, UINC1
+     0

@@ -1,0 +1,46 @@
+#Script for PLPROC for saving kriging factors
+
+#Read pilot point data
+POR_PilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
+  plist='POR_Density_1';column=5, &
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Nodal_Porosity.Density.1.pp')
+POR_PilotPoints2 = read_list_file(skiplines=0,dimensions=2, &
+  plist='POR_Density_2';column=5, &
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Nodal_Porosity.Density.2.pp')
+POR_PilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
+  plist='POR_Density_3';column=5, &
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Nodal_Porosity.Density.3.pp')
+COMPMA_PilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
+  plist='COMPMA_Density_1';column=5, &
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.SolidMatrixCompressibility.Density.1.pp')
+COMPMA_PilotPoints2 = read_list_file(skiplines=0,dimensions=2, &
+  plist='COMPMA_Density_2';column=5, &
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.SolidMatrixCompressibility.Density.2.pp')
+COMPMA_PilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
+  plist='COMPMA_Density_3';column=5, &
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.SolidMatrixCompressibility.Density.3.pp')
+
+#Read SUTRA node information file
+cl_Discretization = read_list_file(skiplines=1,dimensions=2, &
+  plist=p_x;column=2, &
+  plist=p_y;column=3, &
+  slist=s_NN2D;column=4, &
+  id_type='indexed',file='Rocky2D_IrregularS4Interpolate.c_nod')
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  plist=p_z1;column=5, &
+  slist=s_NN3D1;column=6, &
+  slist=s_Active_1;column=7, &
+  id_type='indexed',file='Rocky2D_IrregularS4Interpolate.c_nod')
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  plist=p_z2;column=8, &
+  slist=s_NN3D2;column=9, &
+  slist=s_Active_2;column=10, &
+  id_type='indexed',file='Rocky2D_IrregularS4Interpolate.c_nod')
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  plist=p_z3;column=11, &
+  slist=s_NN3D3;column=12, &
+  slist=s_Active_3;column=13, &
+  id_type='indexed',file='Rocky2D_IrregularS4Interpolate.c_nod')
+
+#Save Kriging factors
+
