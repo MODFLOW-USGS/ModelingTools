@@ -588,7 +588,7 @@ begin
   rgTransport.Buttons[3].Enabled := frmGoPhast.ModelSelection = msSutra40;
   {$ELSE}
   // Delete Freezing
-  rgTransport.Delete(3);
+  rgTransport.Items.Delete(3);
   {$ENDIF}
 end;
 

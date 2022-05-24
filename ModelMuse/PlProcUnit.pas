@@ -2479,6 +2479,10 @@ begin
         if FDataSetAbbreviations.Count > 0 then
         begin
           WriteString(', &');
+        end
+        else
+        begin
+          WriteString(')');
         end;
         NewLine;
         for Sutra4Index := 0 to FDataSetAbbreviations.Count - 1 do
@@ -2517,6 +2521,10 @@ begin
       if FDataSetAbbreviations.Count > 0 then
       begin
         WriteString(', &');
+      end
+      else
+      begin
+        WriteString(')');
       end;
       NewLine;
       for Sutra4Index := 0 to FDataSetAbbreviations.Count - 1 do

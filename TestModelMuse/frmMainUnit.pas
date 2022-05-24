@@ -45,6 +45,7 @@ type
     lblBeyondCompareLocation: TLabel;
     jvcrtprcs1: TJvCreateProcess;
     miRefreshAll: TMenuItem;
+    jvcrtprcsRunModelMuse: TJvCreateProcess;
     procedure btnBrowseClick(Sender: TObject);
     procedure btnRunTestsClick(Sender: TObject);
     procedure Exit1Click(Sender: TObject);
@@ -71,6 +72,7 @@ type
     function ComparePhastFiles(
       const OutputFileName, ArchiveFileName: string; var ErrorMessage: string): Boolean;
     procedure AddModelOutputFiles(Node: TTreeNode; InputFiles: TStringList);
+    function EncloseQuotes(const AString: string): string;
     { Private declarations }
   public
     { Public declarations }
@@ -451,6 +453,7 @@ var
   BatName: string;
   LocalErrorMessage: string;
   InArrays: Boolean;
+  CommandLine: string;
 begin
   AllFilesTheSame := True;
   ErrorMessage := '';
@@ -461,6 +464,7 @@ begin
 
     pbFiles.Max := tvModflow.Items.Count;
     pbFiles.Position := 0;
+    ChildNode := nil;
     ParentNode := tvModflow.Items.GetFirstNode;
     while ParentNode <> nil do
     begin
@@ -495,10 +499,27 @@ begin
 
         ChildNode := ChildNode.getNextSibling;
       end;
+      ParentNode := ParentNode.getNextSibling;
+    end;
 
+    ChildNode := nil;
+    ParentNode := tvModflow.Items.GetFirstNode;
+    while ParentNode <> nil do
+    begin
       StatusBar1.SimpleText := 'testing ' + ModelFileName;
-      ActivApp1.ExePath := '"' + GoPhastExeName + '" "' + ModelFileName + '" -E -C';
-      ActivApp1.ExecuteApp(Success);
+
+      ChildNode := ParentNode.getFirstChild;
+//      CommandLine := EncloseQuotes(GoPhastExeName)
+//        + ' ' + EncloseQuotes(ModelFileName) + ' ' + EncloseQuotes(ChildNode.Text);
+//      ShowMessage(CommandLine);
+//      jvcrtprcsRunModelMuse.CommandLine := CommandLine;
+      jvcrtprcsRunModelMuse.CommandLine := EncloseQuotes(GoPhastExeName)
+        + ' ' + EncloseQuotes(ModelFileName)
+        + ' -E -C';
+      jvcrtprcsRunModelMuse.Run;
+
+//      ActivApp1.ExePath := '"' + GoPhastExeName + '" "' + ModelFileName + '" -E -C';
+//      ActivApp1.ExecuteApp(Success);
       pbFiles.StepIt;
       if not Success then
       begin
@@ -627,6 +648,19 @@ begin
   end;
 end;
 
+function TfrmMain.EncloseQuotes(const AString: string): string;
+begin
+  if Pos(' ', AString) > 0 then
+  begin
+    result := '"' + AString + '"';
+  end
+  else
+  begin
+    result := AString;
+  end;
+end;
+
+
 procedure TfrmMain.tvModflowDblClick(Sender: TObject);
 var
   ParentNode: TTreeNode;
@@ -635,17 +669,6 @@ var
   ChildNode: TTreeNode;
   OutputFileName: string;
   InArrays: Boolean;
-  function EncloseQuotes(const AString: string): string;
-  begin
-    if Pos(' ', AString) > 0 then
-    begin
-      result := '"' + AString + '"';
-    end
-    else
-    begin
-      result := AString;
-    end;
-  end;
 begin
   if tvModflow.Selected.HasChildren  then
   begin

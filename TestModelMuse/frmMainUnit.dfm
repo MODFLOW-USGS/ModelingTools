@@ -11,10 +11,8 @@ object frmMain: TfrmMain
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Menu = MainMenu1
-  OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
@@ -371,5 +369,9 @@ object frmMain: TfrmMain
   object jvcrtprcs1: TJvCreateProcess
     Left = 344
     Top = 216
+  end
+  object jvcrtprcsRunModelMuse: TJvCreateProcess
+    Left = 648
+    Top = 272
   end
 end

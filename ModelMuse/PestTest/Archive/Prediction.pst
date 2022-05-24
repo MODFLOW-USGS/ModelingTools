@@ -1,7 +1,7 @@
 pcf
 * control data
 restart prediction # RSTFLE PESTMODE
-    10     3     1     1    12     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
+    10     3     1     1     3     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
      1     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
   1.000000000000E+001  -3.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 nolamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
   3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     0 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
@@ -37,16 +37,7 @@ RIV_Par1 fixed relative  2.000000000000E+000   0.000000000000E+000   1.000000000
 * observation groups
 grp1
 predict
-regul_Grp0
-regul_Grp1
-regul_Grp2
-regul_Grp3
-regul_Grp4
 regul_Grp5
-regul_Grp6
-regul_Grp7
-regul_Grp8
-regul_Grp9
 
 * observation data
 test1 -1.000000000000E+000   1.000000000000E+000  grp1

@@ -290,14 +290,12 @@ inherited frmSutraOptions: TfrmSutraOptions
           AlignWithMargins = True
           Left = 4
           Top = 4
-          Width = 587
-          Height = 41
+          Width = 458
+          Height = 36
           Align = alClient
           Caption = 
             'The first 80 characters of the first two lines are TITLE1 and TI' +
             'TLE2.'#13#10'The remaining lines will be treated as comments.'
-          ExplicitWidth = 458
-          ExplicitHeight = 36
         end
       end
     end

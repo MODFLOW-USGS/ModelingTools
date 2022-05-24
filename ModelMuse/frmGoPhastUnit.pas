@@ -3729,7 +3729,7 @@ begin
     begin
       try
       FileName := ParamStr(1);
-      if FileExists(FileName) then
+      if TFile.Exists(FileName) then
       begin
         FileName := ExpandFileName(FileName);
         PhastModel.UpToDate := True;
@@ -9945,6 +9945,7 @@ begin
     begin
       TDirectory.CreateDirectory(ArrayDir)
     end;
+    PhastModel.PestProperties.PriorInfoObservationGroups.Clear;
   end;
 
   PhastModel.ClearPval;

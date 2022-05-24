@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1872
+1870
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1670,7 +1670,6 @@ Rocky2D_IrregularS4Interpolate.gpt
 	Archive\Rocky2D_IrregularS4Interpolate.c_nod
 	Archive\Rocky2D_IrregularS4Interpolate.c_nod3D
 	Archive\Rocky2D_IrregularS4Interpolate.FluxBcs
-	Archive\Rocky2D_IrregularS4Interpolate.gpt
 	Archive\Rocky2D_IrregularS4Interpolate.ics
 	Archive\Rocky2D_IrregularS4Interpolate.inp
 	Archive\Rocky2D_IrregularS4Interpolate.jtf
@@ -1818,7 +1817,6 @@ Rocky2D_IrregularS4NoInterpolate.gpt
 	Archive\Rocky2D_IrregularS4NoInterpolate.c_nod
 	Archive\Rocky2D_IrregularS4NoInterpolate.c_nod3D
 	Archive\Rocky2D_IrregularS4NoInterpolate.FluxBcs
-	Archive\Rocky2D_IrregularS4NoInterpolate.gpt
 	Archive\Rocky2D_IrregularS4NoInterpolate.ics
 	Archive\Rocky2D_IrregularS4NoInterpolate.inp
 	Archive\Rocky2D_IrregularS4NoInterpolate.jtf

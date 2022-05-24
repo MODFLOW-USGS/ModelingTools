@@ -993,8 +993,8 @@ type
       write SetLsqrProperties;
     property ObservationGroups: TPestObservationGroups read FObservatioGroups
       write SetObservatioGroups;
-    property PriorInfoObservationGroups: TPestObservationGroups read FPriorInfoObservatioGroups
-      write SetPriorInfoObservatioGroups;
+    property PriorInfoObservationGroups: TPestObservationGroups
+      read FPriorInfoObservatioGroups write SetPriorInfoObservatioGroups;
     property SpecifiedPilotPoints: TSimplePointCollection
       read FSpecifiedPilotPoints write SetSpecifiedPilotPoints;
     property BetweenObservationsPilotPoints: TSimplePointCollection

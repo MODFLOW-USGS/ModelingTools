@@ -1,7 +1,7 @@
 pcf
 * control data
 restart regularisation # RSTFLE PESTMODE
-     1     0     1     1     5     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
+     1     0     1     1     1     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
      8     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
   1.000000000000E+001   2.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
   3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
@@ -27,10 +27,6 @@ Density none relative  1.100000000000E+000   0.000000000000E+000   1.80000000000
 
 * observation groups
 regul_Grp0
-regul_Grp2 ..\Rocky2D_Irregular.SolidMatrixCompressibility.Density.1.Cov.txt
-regul_Grp3 WithoutParam\Rocky2D_Irregular.SolidMatrixCompressibility.Density.2.Cov.txt
-regul_Grp4 WithoutParam\Rocky2D_Irregular.SolidMatrixCompressibility.Density.3.Cov.txt
-regul_Grp5
 
 * observation data
 

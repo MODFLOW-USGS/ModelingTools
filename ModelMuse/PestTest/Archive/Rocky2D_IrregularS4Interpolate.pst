@@ -699,9 +699,9 @@ SGA16_42 none relative  1.100000000000E+000   0.000000000000E+000   1.8000000000
 
 * observation groups
 regul_Grp0
-regul_Grp2 ..\Rocky2D_Irregular.SolidMatrixCompressibility.Density.1.Cov.txt
-regul_Grp3 WithoutParam\Rocky2D_Irregular.SolidMatrixCompressibility.Density.2.Cov.txt
-regul_Grp4 WithoutParam\Rocky2D_Irregular.SolidMatrixCompressibility.Density.3.Cov.txt
+regul_Grp2 Rocky2D_IrregularS4Interpolate.Nodal_Porosity.Density.1.Cov.txt
+regul_Grp3 Rocky2D_IrregularS4Interpolate.Nodal_Porosity.Density.2.Cov.txt
+regul_Grp4 Rocky2D_IrregularS4Interpolate.Nodal_Porosity.Density.3.Cov.txt
 regul_Grp5
 
 * observation data

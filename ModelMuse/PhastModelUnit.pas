@@ -10549,12 +10549,14 @@ const
 //                evapotranspiration is simulated. In addition, the ET rate
 //                in the MODFLOW 6 UZF package is automatically set to zero
 //                if evapotranspiration is not simulated.
+//    '5.0.0.10' Bug fix: Fixed export of prior-information groups in PEST.
+//               Change: Changed the export of SUTRA template files for PEST.
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.9';
+  IIModelVersion = '5.0.0.10';
 
 function IModelVersion: string;
 begin
@@ -42130,6 +42132,10 @@ begin
         if not frmProgressMM.ShouldContinue then
         begin
           Exit;
+        end;
+        if PestUsed then
+        begin
+          PestProperties.PriorInfoObservationGroups.Clear;
         end;
         InternalExportModflowModel(FileName, False);
       finally

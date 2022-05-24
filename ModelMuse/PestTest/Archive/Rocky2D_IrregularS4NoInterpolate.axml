@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="Rocky2D_IrregularS4NoInterpolate" FileType="bin">
-    <FileName Model_Name="Rocky2D_IrregularS4NoInterpolate" FileType="bin">..\..\..\..\..\Support\Provost\SUTRA 4\SutraSuite\SUTRA_4_0\bin\sutra_4_0.exe</FileName>
+    <FileName Model_Name="Rocky2D_IrregularS4NoInterpolate" FileType="bin">..\..\..\Support\Provost\SUTRA 4\SutraSuite\SUTRA_4_0\bin\sutra_4_0.exe</FileName>
   </bin>
   <ancillary Model_Name="Rocky2D_IrregularS4NoInterpolate" FileType="ancillary">
     <FileName Model_Name="Rocky2D_IrregularS4NoInterpolate" FileType="ancillary">Rocky2D_IrregularS4NoInterpolate.gpt</FileName>
