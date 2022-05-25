@@ -10551,12 +10551,13 @@ const
 //                if evapotranspiration is not simulated.
 //    '5.0.0.10' Bug fix: Fixed export of prior-information groups in PEST.
 //               Change: Changed the export of SUTRA template files for PEST.
+//    '5.0.0.11' No real change
 
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.10';
+  IIModelVersion = '5.0.0.11';
 
 function IModelVersion: string;
 begin
@@ -37362,6 +37363,7 @@ begin
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
+  {$IFDEF SUTRA4}
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
@@ -37501,6 +37503,7 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'SUTRA Data Set 15B: SIGMAA';
   Inc(Index);
+  {$ENDIF}
 
   // See ArrayCount.
   Assert(Length(FDataArrayCreationRecords) = Index);

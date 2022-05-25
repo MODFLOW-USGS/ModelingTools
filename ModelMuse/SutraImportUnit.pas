@@ -156,9 +156,38 @@ var
   PointCount: Integer;
   Locations: TNELocationArray;
   NodeNumber: Integer;
+  Sutra4Used: Boolean;
+  Sutra4SoluteUsed: Boolean;
+  Sutra4FreezingUsed: Boolean;
+  Sutra4ProductionUsed: Boolean;
+  COMPMA: TDataArray;
+  COMPMAValueArrayItem: TValueArrayItem;
+  CS: TDataArray;
+  CS_ValueArrayItem: TValueArrayItem;
+  RHOS: TDataArray;
+  RHOS_ValueArrayItem: TValueArrayItem;
+  PRODL0: TDataArray;
+  PRODL0_ValueArrayItem: TValueArrayItem;
+  PRODS0: TDataArray;
+  PRODS0_ValueArrayItem: TValueArrayItem;
+  PRODL1: TDataArray;
+  PRODL1_ValueArrayItem: TValueArrayItem;
+  PRODS1_ValueArrayItem: TValueArrayItem;
+  PRODS1: TDataArray;
+  PRODI: TDataArray;
+  PRODI_ValueArrayItem: TValueArrayItem;
   procedure HandleFileStream(FileName: string);
   var
     TextStream: TStreamReader;
+    COMPMA_Value: Double;
+    CS_Value: double;
+    RHOS_Value: Double;
+    ValueIndex: Integer;
+    PRODL0_Value: Double;
+    PRODS0_Value: Double;
+    PRODL1_Value: Double;
+    PRODS1_Value: Double;
+    PRODI_Value: Extended;
   begin
     TextStream := TFile.OpenText(FileName);
     try
@@ -182,13 +211,87 @@ var
           NodeNumber := StrToInt(Splitter[0]);
           Z := FortranStrToFloat(Splitter[4]);
           Por := FortranStrToFloat(Splitter[5]);
+
+          if Sutra4Used then
+          begin
+            COMPMA_Value := FortranStrToFloat(Splitter[6]);
+            CS_Value := FortranStrToFloat(Splitter[7]);
+            RHOS_Value := FortranStrToFloat(Splitter[8]);
+            ValueIndex := 8;
+            if Sutra4ProductionUsed then
+            begin
+              Inc(ValueIndex);
+              PRODL0_Value := FortranStrToFloat(Splitter[ValueIndex]);
+              Inc(ValueIndex);
+              PRODS0_Value := FortranStrToFloat(Splitter[ValueIndex]);
+            end
+            else
+            begin
+              PRODL0_Value := 0;
+              PRODS0_Value := 0;
+            end;
+            if Sutra4SoluteUsed then
+            begin
+              Inc(ValueIndex);
+              PRODL1_Value := FortranStrToFloat(Splitter[ValueIndex]);
+              Inc(ValueIndex);
+              PRODS1_Value := FortranStrToFloat(Splitter[ValueIndex]);
+            end
+            else
+            begin
+              PRODL1_Value := 0;
+              PRODS1_Value := 0;
+            end;
+            if Sutra4FreezingUsed then
+            begin
+              Inc(ValueIndex);
+              PRODI_Value := FortranStrToFloat(Splitter[ValueIndex]);
+            end
+            else
+            begin
+              PRODI_Value := 0;
+            end;
+          end
+          else
+          begin
+            COMPMA_Value := 0;
+            CS_Value := 0;
+            RHOS_Value := 0;
+            PRODL0_Value := 0;
+            PRODS0_Value := 0;
+            PRODL1_Value := 0;
+            PRODS1_Value := 0;
+            PRODI_Value := 0;
+          end;
+
+
+
           Inc(PointCount);
 
           AScreenObject.AddPoint(Locations[NodeNumber-1].Location, True);
           ThicknessValues.Add(Z);
           PorosityValueArrayItem.Values.Add(Por);
 
-
+          if Sutra4Used then
+          begin
+            COMPMAValueArrayItem.Values.Add(COMPMA_Value);
+            CS_ValueArrayItem.Values.Add(CS_Value);
+            RHOS_ValueArrayItem.Values.Add(RHOS_Value);
+            if Sutra4ProductionUsed then
+            begin
+              PRODL0_ValueArrayItem.Values.Add(PRODL0_Value);
+              PRODS0_ValueArrayItem.Values.Add(PRODS0_Value);
+            end;
+            if Sutra4SoluteUsed then
+            begin
+              PRODL1_ValueArrayItem.Values.Add(PRODL1_Value);
+              PRODS1_ValueArrayItem.Values.Add(PRODS1_Value);
+            end;
+            if Sutra4FreezingUsed then
+            begin
+              PRODI_ValueArrayItem.Values.Add(PRODI_Value);
+            end;
+          end;
           frmProgressMM.ProgressLabelCaption :=
             Format('%0:d out of %1:d.', [PointCount, AScreenObject.Capacity]);
           frmProgressMM.StepIt;
@@ -203,6 +306,13 @@ begin
   Assert(TFile.Exists(FileName));
   LocalModel := frmGoPhast.PhastModel;
   Assert(LocalModel.ModelSelection in SutraSelection);
+
+
+  Sutra4Used := LocalModel.Sutra4Used(nil);
+  Sutra4SoluteUsed := LocalModel.Sutra4SoluteUsed(nil);
+  Sutra4FreezingUsed := LocalModel.Sutra4FreezingUsed(nil);
+  Sutra4ProductionUsed := LocalModel.Sutra4ProductionUsed(nil);
+
   Mesh := LocalModel.SutraMesh;
 
   GetNodeLocations(Locations);
@@ -248,7 +358,6 @@ begin
           AScreenObject.DataSetFormulas[Position]
             := rsObjectImportedValuesR + '("' + PorosityValueArrayItem.Name + '")';
 
-
           if Mesh.MeshType <> mt3D then
           begin
             MakeNewDataSet(NewDataSets, '_Imported_Thickness',
@@ -267,6 +376,106 @@ begin
           begin
             Thickness := nil;
             ThicknessValues := AScreenObject.ImportedSectionElevations;
+          end;
+
+          if Sutra4Used then
+          begin
+            MakeNewDataSet(NewDataSets, '_Imported_COMPMA',
+              StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
+              FileName, eaNodes, COMPMA);
+
+            Position := AScreenObject.AddDataSet(COMPMA);
+            COMPMAValueArrayItem := AScreenObject.ImportedValues.Add;
+            COMPMAValueArrayItem.Name :=  COMPMA.Name;
+            COMPMAValueArrayItem.Values.DataType := rdtDouble;
+            AScreenObject.DataSetFormulas[Position]
+              := rsObjectImportedValuesR + '("' + COMPMAValueArrayItem.Name + '")';
+
+            MakeNewDataSet(NewDataSets, '_Imported_CS',
+              StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
+              FileName, eaNodes, CS);
+
+            Position := AScreenObject.AddDataSet(CS);
+            CS_ValueArrayItem := AScreenObject.ImportedValues.Add;
+            CS_ValueArrayItem.Name :=  CS.Name;
+            CS_ValueArrayItem.Values.DataType := rdtDouble;
+            AScreenObject.DataSetFormulas[Position]
+              := rsObjectImportedValuesR + '("' + CS_ValueArrayItem.Name + '")';
+
+            MakeNewDataSet(NewDataSets, '_Imported_RHOS',
+              StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
+              FileName, eaNodes, RHOS);
+
+            Position := AScreenObject.AddDataSet(RHOS);
+            RHOS_ValueArrayItem := AScreenObject.ImportedValues.Add;
+            RHOS_ValueArrayItem.Name :=  RHOS.Name;
+            RHOS_ValueArrayItem.Values.DataType := rdtDouble;
+            AScreenObject.DataSetFormulas[Position]
+              := rsObjectImportedValuesR + '("' + RHOS_ValueArrayItem.Name + '")';
+
+            if Sutra4ProductionUsed then
+            begin
+              MakeNewDataSet(NewDataSets, '_Imported_PRODL0',
+                StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
+                FileName, eaNodes, PRODL0);
+
+              Position := AScreenObject.AddDataSet(PRODL0);
+              PRODL0_ValueArrayItem := AScreenObject.ImportedValues.Add;
+              PRODL0_ValueArrayItem.Name :=  PRODL0.Name;
+              PRODL0_ValueArrayItem.Values.DataType := rdtDouble;
+              AScreenObject.DataSetFormulas[Position]
+                := rsObjectImportedValuesR + '("' + PRODL0_ValueArrayItem.Name + '")';
+
+              MakeNewDataSet(NewDataSets, '_Imported_PRODS0',
+                StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
+                FileName, eaNodes, PRODS0);
+
+              Position := AScreenObject.AddDataSet(PRODS0);
+              PRODS0_ValueArrayItem := AScreenObject.ImportedValues.Add;
+              PRODS0_ValueArrayItem.Name :=  PRODS0.Name;
+              PRODS0_ValueArrayItem.Values.DataType := rdtDouble;
+              AScreenObject.DataSetFormulas[Position]
+                := rsObjectImportedValuesR + '("' + PRODS0_ValueArrayItem.Name + '")';
+            end;
+
+            if Sutra4SoluteUsed then
+            begin
+              MakeNewDataSet(NewDataSets, '_Imported_PRODL1',
+                StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
+                FileName, eaNodes, PRODL1);
+
+              Position := AScreenObject.AddDataSet(PRODL1);
+              PRODL1_ValueArrayItem := AScreenObject.ImportedValues.Add;
+              PRODL1_ValueArrayItem.Name :=  PRODL1.Name;
+              PRODL1_ValueArrayItem.Values.DataType := rdtDouble;
+              AScreenObject.DataSetFormulas[Position]
+                := rsObjectImportedValuesR + '("' + PRODL1_ValueArrayItem.Name + '")';
+
+              MakeNewDataSet(NewDataSets, '_Imported_PRODS1',
+                StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
+                FileName, eaNodes, PRODS1);
+
+              Position := AScreenObject.AddDataSet(PRODS1);
+              PRODS1_ValueArrayItem := AScreenObject.ImportedValues.Add;
+              PRODS1_ValueArrayItem.Name :=  PRODS1.Name;
+              PRODS1_ValueArrayItem.Values.DataType := rdtDouble;
+              AScreenObject.DataSetFormulas[Position]
+                := rsObjectImportedValuesR + '("' + PRODS1_ValueArrayItem.Name + '")';
+            end;
+
+            if Sutra4FreezingUsed then
+            begin
+              MakeNewDataSet(NewDataSets, '_Imported_PRODI',
+                StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
+                FileName, eaNodes, PRODI);
+
+              Position := AScreenObject.AddDataSet(PRODI);
+              PRODI_ValueArrayItem := AScreenObject.ImportedValues.Add;
+              PRODI_ValueArrayItem.Name :=  PRODI.Name;
+              PRODI_ValueArrayItem.Values.DataType := rdtDouble;
+              AScreenObject.DataSetFormulas[Position]
+                := rsObjectImportedValuesR + '("' + PRODI_ValueArrayItem.Name + '")';
+            end;
           end;
 
           frmProgressMM.Caption := '';
@@ -362,6 +571,11 @@ var
   AValue: double;
   ALMIN: TDataArray;
   AlminValueArrayItem: TValueArrayItem;
+  Sutra4EnergyUsed: Boolean;
+  SIGMAS: TDataArray;
+  SIGMASValueArrayItem: TValueArrayItem;
+  SIGMAA: TDataArray;
+  SIGMAAValueArrayItem: TValueArrayItem;
   procedure GetDataSet(const Suffix: string; var DataSet: TDataArray;
     var ValueArrayItem: TValueArrayItem);
   begin
@@ -442,6 +656,14 @@ var
 
             AValue := FortranStrToFloat(Splitter[13]);
             AtminValueArrayItem.Values.Add(AValue);
+            if Sutra4EnergyUsed then
+            begin
+              AValue := FortranStrToFloat(Splitter[14]);
+              SIGMASValueArrayItem.Values.Add(AValue);
+
+              AValue := FortranStrToFloat(Splitter[15]);
+              SIGMAAValueArrayItem.Values.Add(AValue);
+            end;
           end
           else
           begin
@@ -465,6 +687,15 @@ var
 
             AValue := FortranStrToFloat(Splitter[8]);
             AtminValueArrayItem.Values.Add(AValue);
+
+            if Sutra4EnergyUsed then
+            begin
+              AValue := FortranStrToFloat(Splitter[9]);
+              SIGMASValueArrayItem.Values.Add(AValue);
+
+              AValue := FortranStrToFloat(Splitter[10]);
+              SIGMAAValueArrayItem.Values.Add(AValue);
+            end;
           end;
 
           frmProgressMM.ProgressLabelCaption :=
@@ -481,6 +712,7 @@ begin
   Assert(TFile.Exists(FileName));
   LocalModel := frmGoPhast.PhastModel;
   Assert(LocalModel.ModelSelection in SutraSelection);
+  Sutra4EnergyUsed := LocalModel.Sutra4EnergyUsed(nil);
   Mesh := LocalModel.SutraMesh;
 
   if Mesh.MeshType = mt3D then
@@ -605,6 +837,12 @@ begin
           end;
 
           GetDataSet('_Imported_ATMIN', ATMIN, AtminValueArrayItem);
+
+          if Sutra4EnergyUsed then
+          begin
+            GetDataSet('_Imported_SIGMAS', SIGMAS, SIGMASValueArrayItem);
+            GetDataSet('_Imported_SIGMAA', SIGMAA, SIGMAAValueArrayItem);
+          end;
 
           frmProgressMM.Caption := '';
           frmProgressMM.Prefix := StrObject;
