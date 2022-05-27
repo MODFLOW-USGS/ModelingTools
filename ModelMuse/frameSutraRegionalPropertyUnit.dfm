@@ -156,9 +156,9 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             object lblVgenEta: TLabel
               Left = 164
               Top = 70
-              Width = 300
+              Width = 299
               Height = 20
-              Caption = 'van Genuchten function parameter '#951'_VG (VN)'
+              Caption = 'van Genuchten function parameter n_VG (VN)'
             end
             object lblAirEntryPressure: TLabel
               Left = 164
@@ -394,9 +394,9 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             object lblRelPermEta: TLabel
               Left = 164
               Top = 45
-              Width = 300
+              Width = 299
               Height = 20
-              Caption = 'van Genuchten function parameter '#951'_VG (VN)'
+              Caption = 'van Genuchten function parameter n_VG (VN)'
             end
             object lblRelPermPoreDistIndex: TLabel
               Left = 164
@@ -408,11 +408,11 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             object lblSatAtMinPerm: TLabel
               Left = 164
               Top = 113
-              Width = 470
+              Width = 456
               Height = 40
               Caption = 
-                'Liquid-water saturation at which the permeability reaches its mi' +
-                'nimum (SLRKMIN)'
+                'Liquid-water saturation at which the relative permeability reach' +
+                'es its minimum (SLRKMIN)'
               WordWrap = True
             end
             object btnedMinRelPerm: TssButtonEdit

@@ -2689,17 +2689,17 @@ begin
     // SWRES
   WaterSaturationChoice := wscNone;
     // AA
-  VanGenuchtenAlpha := '0.1';
+  VanGenuchtenAlpha := '5.E-5';
     // VN
-  VanGenuchtenExponent := '-0.5';
+  VanGenuchtenExponent := '2';
     // SWRES
-  ResidualWaterContent := '0.05';
+  ResidualWaterContent := '0.3';
   // PENT
   AirEntryPressure := '0';
     // RLAMB
   PoreSizeDistributionIndex := '0';
   // PSWRES(usually negative)
-  PressureForResidualWaterContent := '0';
+  PressureForResidualWaterContent := '-0.01';
   // NSWPAR, SWPAR
   FunctionParameters.Clear;
 end;

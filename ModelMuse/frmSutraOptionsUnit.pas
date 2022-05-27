@@ -244,7 +244,7 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, frmShowHideObjectsUnit, GoPhastTypes;
+  frmGoPhastUnit, frmShowHideObjectsUnit, GoPhastTypes, System.Math;
 
 resourcestring
   StrYouMustSetAtLeas = 'You must set at least one of the gravity vector com' +
@@ -265,7 +265,7 @@ resourcestring
   StrDefaultLakeBoundar = 'Lake-Boundary Interactions';
   StrLakesCanOnlyBeUs = 'Lakes can only be used with 3D models.';
   StrAnisotropy = 'Anisotropy';
-  StrRegionalProperties = 'Regional Properties';
+  StrRegionalProperties = 'Regionwise Properties';
   StrRegionD = 'Region %d';
 
 {$R *.dfm}
@@ -428,7 +428,8 @@ begin
   AFrame.Parent := APage;
   AFrame.Align := alClient;
   AFrame.AssignButtonImages;
-  AFrame.EnableControls;
+  AFrame.EnableTabs(TTransportChoice(Max(0, rgTransport.ItemIndex)),
+    TSaturationChoice(Max(0, rgSaturation.ItemIndex)));
 
   APage.HelpKeyword := 'Regional-Properties-Pane';
 end;

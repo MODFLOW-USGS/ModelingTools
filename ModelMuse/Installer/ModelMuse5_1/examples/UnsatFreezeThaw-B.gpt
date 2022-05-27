@@ -625,6 +625,7 @@ object Model: TPhastModel
   ModelInputFiles.Strings = (
     'C:\ModelingTools\ModelMuse\PracticeModels\RunSutra.bat.archive'
     'C:\ModelingTools\ModelMuse\PracticeModels\SUTRA.FIL.archive'
+    'C:\ModelingTools\ModelMuse\PracticeModels\UnsatFreezeThaw-A.rst'
     
       'C:\ModelingTools\ModelMuse\PracticeModels\UnsatFreezeThaw-B.Flux' +
       'Bcs'
@@ -3410,8 +3411,9 @@ object Model: TPhastModel
   SutraMesh.NodeNumbers = <>
   SutraMesh.ElementNumbers = <>
   SutraOptions.TitleLines = 
-    'Thawing of unsaturated partially frozen column due to water infl' +
-    'ow at bottom'#13#10
+    'SUTRA 4.0 - Unsaturated Freeze/Thaw Example - Part B (continued ' +
+    'from Part A)'#13#10'Thawing of unsaturated partially frozen column due' +
+    ' to water inflow at bottom'#13#10
   SutraOptions.TransportChoice = tcFreezing
   SutraOptions.SaturationChoice = scUnsaturated
   SutraOptions.SimulationType = stTransientFlowTransientTransport
@@ -3421,7 +3423,7 @@ object Model: TPhastModel
   SutraOptions.StoredPressureFactor.Value = 0.100000000000000000
   SutraOptions.StoredUFactor.Value = 1.000000000000000000
   SutraOptions.MaxIterations = 10
-  SutraOptions.StoredNonLinPressureCriterion.Value = 275.000000000000000000
+  SutraOptions.StoredNonLinPressureCriterion.Value = 285.000000000000000000
   SutraOptions.StoredUCriterion.Value = 999999.000000000000000000
   SutraOptions.PresSolutionMethod = psmDirect
   SutraOptions.MaxPressureIterations = 300
@@ -3458,7 +3460,8 @@ object Model: TPhastModel
   SutraOptions.StoredGravityX.Value = 0.000000000000000000
   SutraOptions.StoredGravityY.Value = -9.810000000000001000
   SutraOptions.StoredGravityZ.Value = -9.810000000000001000
-  SutraOptions.ReadStart = rsNone
+  SutraOptions.ReadStart = rsBoth
+  SutraOptions.ReadStartRestartFileName = 'UnsatFreezeThaw-A.rst'
   SutraOptions.LakeOptions.StoredRechargeFraction.Value = 0.000000000000000000
   SutraOptions.LakeOptions.StoredDischargeFraction.Value = 0.000000000000000000
   SutraOptions.LakeOptions.StoredSubmergedOutput.Value = -9E99
@@ -3509,7 +3512,7 @@ object Model: TPhastModel
       FreezingTempAndLatentHeat.MaxFreezePoreWaterTemperature = '0'
       FreezingTempAndLatentHeat.LatentHeatOfFusion = '334000.'
     end>
-  SutraOptions.ProductionUsed = False
+  SutraOptions.ProductionUsed = True
   SutraOutputControl.ListingPrintFrequency = 100
   SutraOutputControl.ListingOptions = [sloNPrint, sloCPandS, sloCVel, sloCCorT, sloCBudg, sloCScrn, sloCPause]
   SutraOutputControl.NE_PrintFrequency = 100
@@ -4384,7 +4387,7 @@ object Model: TPhastModel
       ScreenObject.SutraBoundaries.FluidSource.Values.ScheduleName = 'TIME_STEPS'
       ScreenObject.SutraBoundaries.FluidSource.Values = <
         item
-          StartTime = 8640.000000000000000000
+          StartTime = 864.000000000000000000
           UFormula = '2'
           UsedFormula = 'True'
           PQFormula = '5.787037037E-5'
@@ -4403,7 +4406,7 @@ object Model: TPhastModel
       ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values.ScheduleName = 'TIME_STEPS'
       ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values = <
         item
-          StartTime = 8640.000000000000000000
+          StartTime = 864.000000000000000000
           UFormula = '2'
           UsedFormula = 'True'
           ConcTemp = '2'
@@ -4580,12 +4583,12 @@ object Model: TPhastModel
   GuiSettings.Height = 601
   GuiSettings.FrontX = -0.928988043161271700
   GuiSettings.FrontY = 2692.995418108399000000
-  GuiSettings.Left = 369
+  GuiSettings.Left = 272
   GuiSettings.MagnificationFront = 171.450000000000000000
   GuiSettings.MagnificationSide = 171.450000000000000000
   GuiSettings.MagnificationTop = 171.450000000000000000
   GuiSettings.SideWidth = 229
-  GuiSettings.Top = 111
+  GuiSettings.Top = 78
   GuiSettings.TopViewHeight = 435
   GuiSettings.TopViewWidth = 782
   GuiSettings.TopX = -1.625984251968504000
@@ -4761,7 +4764,7 @@ object Model: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '1'
-      DataSet.Name = 'Node_Regions'
+      DataSet.Name = 'Region_Nodes'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -4797,7 +4800,7 @@ object Model: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '1'
-      DataSet.Name = 'Element_Regions'
+      DataSet.Name = 'Region_Elements'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -5157,7 +5160,7 @@ object Model: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '1E-8'
-      DataSet.Name = 'SolidMatrixCompressibility'
+      DataSet.Name = 'Solid_Matrix_Compressibility'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -5193,7 +5196,7 @@ object Model: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '840'
-      DataSet.Name = 'SolidGrain_SpecificHeat'
+      DataSet.Name = 'Solid_Grain_Specific_Heat'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -5229,7 +5232,7 @@ object Model: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '2600'
-      DataSet.Name = 'SolidGrainDensity'
+      DataSet.Name = 'Solid_Grain_Density'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -5265,7 +5268,7 @@ object Model: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '3.5'
-      DataSet.Name = 'ScaledSolidGrainThermalConductivity'
+      DataSet.Name = 'Scaled_Solid_Grain_Thermal_Conductivity'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -5301,12 +5304,120 @@ object Model: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '0'
-      DataSet.Name = 'ScaledEffectiveAirThermalConductivity'
+      DataSet.Name = 'Scaled_Effective_Air_Thermal_Conductivity'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
       DataSet.DataType = rdtDouble
       DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '0'
+      DataSet.Name = 'Zero_Order_Production_Rate_In_Liquid'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '0'
+      DataSet.Name = 'Zero_Order_Production_Rate_In_Immobile'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '0'
+      DataSet.Name = 'Zero_Order_Production_Rate_In_Ice'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
       DataSet.Limits.LowerLimit.BooleanLimitValue = False
       DataSet.Limits.LowerLimit.DataType = rdtDouble
       DataSet.Limits.LowerLimit.IntegerLimitValue = 0
@@ -5366,8 +5477,8 @@ object Model: TPhastModel
       Schedule.MaxTimeCycle = 999999
       Schedule.InitialTimeStored.Value = 0.000000000000000000
       Schedule.LimitingTimeStored.Value = 15552000.000000000000000000
-      Schedule.InitialTimeIncrementStored.Value = 8640.000000000000000000
-      Schedule.IncrementUpdateCount = 999999
+      Schedule.InitialTimeIncrementStored.Value = 864.000000000000000000
+      Schedule.IncrementUpdateCount = 99999
       Schedule.TimeMultiplierStored.Value = 1.000000000000000000
       Schedule.MinIncrementStored.Value = 0.000000000000000864
       Schedule.MinIncrementStored.StringValue = '8.64E-16'
@@ -5394,10 +5505,10 @@ object Model: TPhastModel
       Schedule.MinIncrementStored.StringValue = '9.999999999999999E-21'
       Schedule.MaxIncrementStored.Value = 1E99
       Schedule.Steps = <>
-      Schedule.MaxSteps = 45000
+      Schedule.MaxSteps = 18001
       Schedule.InitialTimeStep = 0
       Schedule.LimitingTimeStep = 45000
-      Schedule.TimeStepIncrement = 10
+      Schedule.TimeStepIncrement = 100
     end>
   ColorSchemes = <>
   FishnetMeshGenerator.Nodes = <

@@ -655,8 +655,8 @@ object Model: TPhastModel
     'C:\ModelingTools\ModelMuse\PracticeModels\UnsatFreezeThaw-A.rst'
     'C:\ModelingTools\ModelMuse\PracticeModels\UnsatFreezeThaw-A.smy'
     
-      'C:\ModelingTools\ModelMuse\PracticeModels\UnsatFreezeThaw-A_Time' +
-      'd_Obs.OBC')
+      'C:\ModelingTools\ModelMuse\PracticeModels\UnsatFreezeThaw-A_Obje' +
+      'ct0.OBC')
   ModelFileName = 'C:\ModelingTools\ModelMuse\PracticeModels\UnsatFreezeThaw-A.gpt'
   ModflowOptions.StoredHDry.Value = -2E20
   ModflowOptions.StoredHNoFlow.Value = -1E20
@@ -5196,7 +5196,6 @@ object Model: TPhastModel
       ScreenObject.SutraBoundaries.FluidSource.Values.ScheduleName = 'TIME_STEPS'
       ScreenObject.SutraBoundaries.FluidSource.Values = <
         item
-          StartTime = 864.000000000000000000
           UFormula = '2'
           UsedFormula = 'True'
           PQFormula = '0'
@@ -5221,7 +5220,6 @@ object Model: TPhastModel
       ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values.ScheduleName = 'TIME_STEPS'
       ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values = <
         item
-          StartTime = 864.000000000000000000
           UFormula = '2'
           UsedFormula = 'True'
           ConcTemp = '2'
@@ -5300,7 +5298,7 @@ object Model: TPhastModel
       ScreenObject.HigherElevationFormula = '0'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = '0'
-      ScreenObject.Selected = True
+      ScreenObject.Selected = False
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -5338,7 +5336,6 @@ object Model: TPhastModel
       ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values.ScheduleName = 'TIME_STEPS'
       ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values = <
         item
-          StartTime = 864.000000000000000000
           UFormula = '-8'
           UsedFormula = 'True'
           ConcTemp = '-8'
@@ -6159,6 +6156,258 @@ object Model: TPhastModel
       DataSet.ContourInterval.Value = 0.000000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '1'
+      DataSet.Name = 'Region_Nodes'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '1'
+      DataSet.Name = 'Region_Elements'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '1E-8'
+      DataSet.Name = 'Solid_Matrix_Compressibility'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '840'
+      DataSet.Name = 'Solid_Grain_Specific_Heat'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '2600'
+      DataSet.Name = 'Solid_Grain_Density'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '3.5'
+      DataSet.Name = 'Scaled_Solid_Grain_Thermal_Conductivity'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '0'
+      DataSet.Name = 'Scaled_Effective_Air_Thermal_Conductivity'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
     end>
   CombinedDisplayColumn = 0
   CombinedDisplayRow = 0
@@ -6189,11 +6438,11 @@ object Model: TPhastModel
       Schedule.ScaleFactorStored.Value = 1.000000000000000000
       Schedule.SutraTimeChoice = stcElapsed
       Schedule.Times = <>
-      Schedule.MaxTimeCycle = 999999
+      Schedule.MaxTimeCycle = 99999
       Schedule.InitialTimeStored.Value = 0.000000000000000000
       Schedule.LimitingTimeStored.Value = 15552000.000000000000000000
-      Schedule.InitialTimeIncrementStored.Value = 864.000000000000000000
-      Schedule.IncrementUpdateCount = 9999
+      Schedule.InitialTimeIncrementStored.Value = 8640.000000000000000000
+      Schedule.IncrementUpdateCount = 9999999
       Schedule.TimeMultiplierStored.Value = 1.000000000000000000
       Schedule.MinIncrementStored.Value = 0.000000000000000864
       Schedule.MinIncrementStored.StringValue = '8.64E-16'

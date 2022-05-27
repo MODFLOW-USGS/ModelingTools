@@ -15,7 +15,7 @@
               <task-config-value name="skin">CHM_LightBlue.hmskin</task-config-value>
               <task-config-value name="deletetemp">1</task-config-value>
               <task-config-value name="make0include">CHM,ALLMODELS</task-config-value>
-              <task-config-value name="make0status">(Complete)</task-config-value>
+              <task-config-value name="make0status">*</task-config-value>
             </task-config-group>
           </export-task>
           <export-task name="Publish as HTM" format="HTM">
@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4332</config-value>
+      <config-value name="autohelpstart">4333</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -157,7 +157,7 @@
       </config-group>
       <config-value name="imageshortcuts_includebaggage">1</config-value>
       <config-value name="make0include">CHM,ALLMODELS</config-value>
-      <config-value name="make0status">(Complete)</config-value>
+      <config-value name="make0status">*</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">*</config-value>
       <config-value name="make4include">CLASS2022</config-value>
@@ -1133,6 +1133,7 @@ document.write('</frameset>');
       <helpcontext-number href="Initial_Set_Up" value="3030"/>
       <helpcontext-number href="Initial_Set_Up2" value="3090"/>
       <helpcontext-number href="Initial_Set_Up3" value="3160"/>
+      <helpcontext-number href="Initial-Model-Area-Dialog-box-for-SU" value="4333"/>
       <helpcontext-number href="Interpolate" value="740"/>
       <helpcontext-number href="InterpolatedVertexValue" value="3569"/>
       <helpcontext-number href="Interpolating_Angles" value="3777"/>

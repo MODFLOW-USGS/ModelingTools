@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-05-27T12:27:30.942-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Data Sets Required by SUTRA</title>
   <body>
     <header>
@@ -65,7 +65,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Unsat_Region_Nodes</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Region_Nodes</text></para>
         </td>
         <td>
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Unsaturated flow property region number </text></para>
@@ -74,12 +74,12 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 14B: NREG</text></para>
         </td>
         <td>
-          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="CUNSAT" styleclass="Table Cell" translate="true">when unsaturated conditions are simulated</link></para>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="CUNSAT" styleclass="Table Cell" translate="true">when unsaturated or freezing conditions are simulated</link></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Unsat_Region_Elements</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Region_Elements</text></para>
         </td>
         <td>
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Unsaturated flow property region number </text></para>
@@ -88,7 +88,7 @@
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: LREG</text></para>
         </td>
         <td>
-          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="CUNSAT" styleclass="Table Cell" translate="true">when unsaturated conditions are simulated</link></para>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="CUNSAT" styleclass="Table Cell" translate="true">when unsaturated or freezing conditions are simulated</link></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

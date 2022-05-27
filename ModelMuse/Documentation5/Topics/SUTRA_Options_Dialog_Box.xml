@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-05-26T22:04:19.168-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-05-27T12:20:12.244-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SUTRA Options Dialog Box</title>
   <body>
     <header>
@@ -17,7 +17,7 @@
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Solver_Pane" styleclass="Normal" style="font-weight:bold;" translate="true">Solver</link><text styleclass="Normal" translate="true">,</text></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Fluid_Properties_Pane" styleclass="Normal" style="font-weight:bold;" translate="true">Fluid Properties</link><text styleclass="Normal" translate="true">,</text></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Solid_Matrix__Adsorption_Pane" styleclass="Normal" style="font-weight:bold;" translate="true">Solid Matrix, Adsorption</link><text styleclass="Normal" translate="true">, </text></para>
-    <para styleclass="Strong"><link displaytype="text" defaultstyle="true" type="topiclink" href="Regional-Properties-Pane" styleclass="Strong" translate="true">Regional Properties Pane</link><text styleclass="Strong" translate="true">,</text></para>
+    <para styleclass="Strong"><link displaytype="text" defaultstyle="true" type="topiclink" href="Regional-Properties-Pane" styleclass="Strong" translate="true">Regionwise Properties Panes</link><text styleclass="Strong" translate="true">,</text></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Production_Pane" styleclass="Normal" style="font-weight:bold;" translate="true">Production</link><text styleclass="Normal" translate="true">,</text></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Lakes_Pane" styleclass="Strong" translate="true">Lakes Pane</link><text styleclass="Normal" translate="true">, and</text></para>
     <para styleclass="Strong"><link displaytype="text" defaultstyle="true" type="topiclink" href="Lake_Boundary_Interaction" styleclass="Strong" translate="true">Lake-Boundary Interaction</link></para>

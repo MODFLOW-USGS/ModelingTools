@@ -206,9 +206,9 @@ const
 
   KNodalPorosity = 'Nodal_Porosity';
   KNodalThickness = 'Nodal_Thickness';
-  KUnsatRegionNodes = 'Node_Regions';
+  KUnsatRegionNodes = 'Region_Nodes';
 //  KUnsatRegionNodes = 'Unsat_Region_Nodes';
-  KUnsatRegionElements = 'Element_Regions';
+  KUnsatRegionElements = 'Region_Elements';
 //  KUnsatRegionElements = 'Unsat_Region_Elements';
   KMaximumPermeability = 'Maximum_Permeability';
   KMiddlePermeability = 'Middle_Permeability';
@@ -269,17 +269,17 @@ const
   KNodeActive = 'Active_Node';
 
   // Sutra 4 node data sets
-  KSolidMatrixComp = 'SolidMatrixCompressibility';
-  KSolidGrainSpecificHeat = 'SolidGrain_SpecificHeat';
-  KSolidGrainDensity = 'SolidGrainDensity';
-  KZeroOrderProductionRateInLiquid = 'ZeroOrderProductionRateInLiquid';
-  KZeroOrderProductionRateInImmobile = 'ZeroOrderProductionRateInImmobile';
-  KFirstOrderProductionRateInLiquid = 'FirstOrderProductionRateInLiquid';
-  KFirstOrderProductionRateInImmobile = 'FirstOrderProductionRateInImmobile';
-  KZeroOrderProductionRateInIce = 'ZeroOrderProductionRateInIce';
+  KSolidMatrixComp = 'Solid_Matrix_Compressibility';
+  KSolidGrainSpecificHeat = 'Solid_Grain_Specific_Heat';
+  KSolidGrainDensity = 'Solid_Grain_Density';
+  KZeroOrderProductionRateInLiquid = 'Zero_Order_Production_Rate_In_Liquid';
+  KZeroOrderProductionRateInImmobile = 'Zero_Order_Production_Rate_In_Immobile';
+  KFirstOrderProductionRateInLiquid = 'First_Order_Production_Rate_In_Liquid';
+  KFirstOrderProductionRateInImmobile = 'First_Order_Production_Rate_In_Immobile';
+  KZeroOrderProductionRateInIce = 'Zero_Order_Production_Rate_In_Ice';
   // Sutra 4 element data sets
-  KScaledSolidGrainThermalConductivity = 'ScaledSolidGrainThermalConductivity';
-  KScaledEffectiveAirThermalConductivity = 'ScaledEffectiveAirThermalConductivity';
+  KScaledSolidGrainThermalConductivity = 'Scaled_Solid_Grain_Thermal_Conductivity';
+  KScaledEffectiveAirThermalConductivity = 'Scaled_Effective_Air_Thermal_Conductivity';
 
   // @name is the name of the @link(TDataArray) that specifies
   // the hydraulic conductivity for the leaky boundary condition on the top

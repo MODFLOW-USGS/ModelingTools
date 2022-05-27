@@ -165,6 +165,9 @@ resourcestring
 //  StrDispersivityMayBe = 'Dispersivity may be too low at the following eleme' +      resourcestring
   StrErrorInTheFormula = 'Error in the formula for %0:s. Error message was "' +
   '%1:s". "0" will be used instead.';
+  StrInvalidValuesOfPE = 'Invalid values of PENT and PSWRES';
+  StrInRegion0dThe = 'In region %0:d, the value of PSWRES (%1:g) is greater ' +
+  'than or equal to PENT (%2:g) in the water saturation properties.';
 
 //  'nts. See section 7.2 of the SUTRA documentation.';
 
@@ -436,6 +439,8 @@ var
   Index: Integer;
   Value: Double;
   PestParam: string;
+  PSWRES_Value: Double;
+  PENT_Value: Double;
 begin
   if (FOptions.TransportChoice = tcFreezing)
     or (FOptions.SaturationChoice = scUnsaturated) then
@@ -457,7 +462,7 @@ begin
              Value, -1, -1, -1);
 
            Value := EvaluateFormula(WaterSaturationProperties.VanGenuchtenExponent,
-             'DATASET 11B: van Genuchten function parameter eta_VG (VN)', PestParam);
+             'DATASET 11B: van Genuchten function parameter n_VG (VN)', PestParam);
            WriteFormulaOrValueBasedOnAPestName(PestParam,
              Value, -1, -1, -1);
 
@@ -497,15 +502,22 @@ begin
            WriteFormulaOrValueBasedOnAPestName(PestParam,
              Value, -1, -1, -1);
 
-           Value := EvaluateFormula(WaterSaturationProperties.AirEntryPressure,
+           PENT_Value := EvaluateFormula(WaterSaturationProperties.AirEntryPressure,
              'DATASET 11B: Air-entry pressure (PENT)', PestParam);
            WriteFormulaOrValueBasedOnAPestName(PestParam,
-             Value, -1, -1, -1);
+             PENT_Value, -1, -1, -1);
 
-           Value := EvaluateFormula(WaterSaturationProperties.PressureForResidualWaterContent,
+           PSWRES_Value := EvaluateFormula(WaterSaturationProperties.PressureForResidualWaterContent,
              'DATASET 11B: Pressure at which the saturation reaches the residual saturation (PSWRES)', PestParam);
            WriteFormulaOrValueBasedOnAPestName(PestParam,
-             Value, -1, -1, -1);
+             PSWRES_Value, -1, -1, -1);
+
+           if PSWRES_Value >= PENT_Value then
+           begin
+             frmErrorsAndWarnings.AddError(Model, StrInvalidValuesOfPE,
+               Format(StrInRegion0dThe,
+               [ARegion.Index + 1, PSWRES_Value, PENT_Value]));
+           end;
 
 //           WriteFloat(WaterSaturationProperties.ResidualWaterContent);
 //           WriteFloat(WaterSaturationProperties.AirEntryPressure);
@@ -551,7 +563,7 @@ begin
           WriteString('''VGEN'' ');
 
           Value := EvaluateFormula(RelativePermeabilityParameters.RelativePermParam,
-            'DATASET 11C: van Genuchten function parameter eta_VG (VN)', PestParam);
+            'DATASET 11C: van Genuchten function parameter n_VG (VN)', PestParam);
           WriteFormulaOrValueBasedOnAPestName(PestParam,
             Value, -1, -1, -1);
 

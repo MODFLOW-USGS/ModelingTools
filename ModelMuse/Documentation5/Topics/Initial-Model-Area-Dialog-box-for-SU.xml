@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-05-27T12:42:05.704-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Initial Model Area Dialog box for SUTRA</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Initial Model Area Dialog box for SUTRA</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Unlike with MODFLOW and SUTRA models, there is not an option to create an initial mesh for SUTRA models. However, you can specify the location of the model area, the mesh type, the type of transport, then number of layers, and some other aspects of the model. </text></para>
+  </body>
+</topic>

@@ -109,6 +109,7 @@ uses
 
 resourcestring
   StrAdsorption = 'Adsorption'#13#10'Parameters';
+  StrThermalConductivity = 'Thermal'#13#10'Conductivity';
   StrTransportModel = 'Transport'#13#10'Model';
   StrTotalWater = 'Total'#13#10'Water'#13#10'Saturation';
   StrRelativePerm = 'Relative'#13#10'Permeability'#13#10'Parameters';
@@ -235,6 +236,8 @@ begin
   Freeze := ARegion.FreezingTempAndLatentHeat;
   btnedMaxFreezeTemp.Text := Freeze.MaxFreezePoreWaterTemperature;
   btnedLatentHeat.Text := Freeze.LatentHeatOfFusion;
+
+  EnableTabs(TransportChoice, SaturationChoice);
 end;
 
 procedure TframeSutraRegionalProperty.pgcMainDrawTab(Control: TCustomTabControl;
@@ -254,7 +257,7 @@ begin
         end
         else
         begin
-          tabCaption := StrTransportModel;
+          tabCaption := StrThermalConductivity;
         end;
       end;
     1:
@@ -531,6 +534,15 @@ begin
 
   rgSorptionModel.Enabled := TransportChoice in [tcSolute, tcSoluteHead];
   rgTransportModel.Enabled := TransportChoice in [tcEnergy, tcFreezing];
+
+  if TransportChoice in [tcSolute, tcSoluteHead] then
+  begin
+    tsAdsorption.Caption := StrAdsorption;
+  end
+  else
+  begin
+    tsAdsorption.Caption := StrThermalConductivity;
+  end;
 
   EnableControls;
 end;

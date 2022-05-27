@@ -120,7 +120,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 595
     Height = 512
-    ActivePage = jvspProductionSutra4
+    ActivePage = jvspConfiguration
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -1666,7 +1666,6 @@ inherited frmSutraOptions: TfrmSutraOptions
       FF000000000200000000000000011149006E0069007400690061006C0043006F
       006E0064006900740069006F006E007300}
     Items.Links = {03000000000000000100000002000000}
-    ExplicitLeft = 3
   end
   object rcLakes: TRbwController
     ControlList = <

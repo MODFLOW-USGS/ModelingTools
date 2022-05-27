@@ -643,8 +643,20 @@ object PhastModel: TPhastModel
     'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall.rst'
     'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall.smy'
     
-      'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall_Timed_Obs' +
-      '.OBS')
+      'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall_N_2257.OB' +
+      'S'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall_N_3233.OB' +
+      'S'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall_N_4209.OB' +
+      'S'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall_N_5185.OB' +
+      'S'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall_N_6161.OB' +
+      'S')
   ModelFileName = 'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall.gpt'
   ModflowOptions.StoredHDry.Value = -2E20
   ModflowOptions.StoredHNoFlow.Value = -1E20
@@ -133582,9 +133594,9 @@ object PhastModel: TPhastModel
       WaterSaturationProperties.FunctionParameters = <>
       RelativePermeabilityParameters.RelativePermeabilityChoice = rpcPiecewiseLinear
       RelativePermeabilityParameters.RelativePermParam = '0'
-      RelativePermeabilityParameters.MinRelativePerm = '0.01'
+      RelativePermeabilityParameters.MinRelativePerm = '1E-6'
       RelativePermeabilityParameters.PoreSizeDistributionIndex = '0'
-      RelativePermeabilityParameters.WaterSaturationAtMinPermeability = '1E-6'
+      RelativePermeabilityParameters.WaterSaturationAtMinPermeability = '0.01'
       RelativePermeabilityParameters.FunctionParameters = <>
       LiquidWaterSaturationParameters.LiquidWaterSaturationChoice = lwscPiecewiseLinear
       LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation = '0.01'
@@ -133600,7 +133612,7 @@ object PhastModel: TPhastModel
   SutraOutputControl.ListingPrintFrequency = 10
   SutraOutputControl.ListingOptions = [sloNPrint, sloCPandS, sloCVel, sloCCorT, sloCBudg, sloCScrn]
   SutraOutputControl.NE_PrintFrequency = 10
-  SutraOutputControl.NodeElementOptions = [neoPrintFirst, neoCoordinates, neoPressure, neoU, neoSaturation, neoVelocities]
+  SutraOutputControl.NodeElementOptions = [neoPrintFirst, neoCoordinates, neoPressure, neoU, neoSaturation, neoVelocities, neoLiquidSaturation, neoIceSaturation]
   SutraOutputControl.MaxObsPerLine = 10000
   SutraOutputControl.FluidSourcePrintFrequency = 9999
   SutraOutputControl.SoluteEnergySourcePrintFrequency = 9999
@@ -134071,9 +134083,10 @@ object PhastModel: TPhastModel
       ScreenObject.SutraBoundaries.SpecifiedPressure.UseBCTime = False
       ScreenObject.SutraBoundaries.SpecifiedPressure.PestBoundaryValueMethod = ppmMultiply
       ScreenObject.SutraBoundaries.SpecifiedPressure.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values.ScheduleName = 'TIME_STEPS'
       ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values = <
         item
-          StartTime = 1.000000000000000000
+          StartTime = 3600.000000000000000000
           UFormula = '-5'
           UsedFormula = 'True'
           ConcTemp = '-5'
@@ -140990,7 +141003,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = '0'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = '0'
-      ScreenObject.Selected = True
+      ScreenObject.Selected = False
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
@@ -141082,14 +141095,14 @@ object PhastModel: TPhastModel
   GuiSettings.Height = 601
   GuiSettings.FrontX = -1.276428250112463000
   GuiSettings.FrontY = 40.651634635303820000
-  GuiSettings.Left = 500
+  GuiSettings.Left = 369
   GuiSettings.MagnificationFront = 17.784000000000000000
   GuiSettings.MagnificationSide = 17.784000000000000000
   GuiSettings.MagnificationTop = 17.784000000000000000
   GuiSettings.SideWidth = 229
   GuiSettings.SideX = -80.000000000000000000
   GuiSettings.SideY = -1000.000000000000000000
-  GuiSettings.Top = 142
+  GuiSettings.Top = 111
   GuiSettings.TopViewHeight = 435
   GuiSettings.TopViewWidth = 782
   GuiSettings.TopX = -7.995951417004051000
@@ -141265,7 +141278,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '1'
-      DataSet.Name = 'Node_Regions'
+      DataSet.Name = 'Region_Nodes'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -141301,7 +141314,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '1'
-      DataSet.Name = 'Element_Regions'
+      DataSet.Name = 'Region_Elements'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -141661,7 +141674,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '1E-8'
-      DataSet.Name = 'SolidMatrixCompressibility'
+      DataSet.Name = 'Solid_Matrix_Compressibility'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -141697,7 +141710,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '840'
-      DataSet.Name = 'SolidGrain_SpecificHeat'
+      DataSet.Name = 'Solid_Grain_Specific_Heat'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -141733,7 +141746,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '2600'
-      DataSet.Name = 'SolidGrainDensity'
+      DataSet.Name = 'Solid_Grain_Density'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -141769,7 +141782,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '3.5'
-      DataSet.Name = 'ScaledSolidGrainThermalConductivity'
+      DataSet.Name = 'Scaled_Solid_Grain_Thermal_Conductivity'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -141805,7 +141818,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '0'
-      DataSet.Name = 'ScaledEffectiveAirThermalConductivity'
+      DataSet.Name = 'Scaled_Effective_Air_Thermal_Conductivity'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -141841,7 +141854,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '0'
-      DataSet.Name = 'ZeroOrderProductionRateInLiquid'
+      DataSet.Name = 'Zero_Order_Production_Rate_In_Liquid'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -141877,7 +141890,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '0'
-      DataSet.Name = 'ZeroOrderProductionRateInImmobile'
+      DataSet.Name = 'Zero_Order_Production_Rate_In_Immobile'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False
@@ -141913,7 +141926,7 @@ object PhastModel: TPhastModel
     item
       DataSetClass = 'TDataArray'
       DataSetFormula = '0'
-      DataSet.Name = 'ZeroOrderProductionRateInIce'
+      DataSet.Name = 'Zero_Order_Production_Rate_In_Ice'
       DataSet.Classification = 'Hydrology'
       DataSet.CheckMax = False
       DataSet.CheckMin = False

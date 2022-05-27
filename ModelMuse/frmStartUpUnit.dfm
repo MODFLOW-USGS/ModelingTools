@@ -8,8 +8,6 @@ inherited frmStartUp: TfrmStartUp
   ClientHeight = 406
   ClientWidth = 751
   OnClose = FormClose
-  ExplicitLeft = 3
-  ExplicitTop = 3
   ExplicitWidth = 769
   ExplicitHeight = 453
   TextHeight = 18
@@ -81,7 +79,9 @@ inherited frmStartUp: TfrmStartUp
     Top = 0
     Width = 751
     Height = 359
-    ActivePage = tabInitialSutraMesh
+    HelpType = htKeyword
+    HelpKeyword = 'Initial_Grid_Dialog_Box'
+    ActivePage = tabGeoRef
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
@@ -110,6 +110,8 @@ inherited frmStartUp: TfrmStartUp
       end
     end
     object tabGeoRef: TTabSheet
+      HelpType = htKeyword
+      HelpKeyword = 'Initial_Grid_Dialog_Box'
       Caption = 'tabGeoRef'
       ImageIndex = 5
       object grpGeoRef: TGroupBox
@@ -648,6 +650,8 @@ inherited frmStartUp: TfrmStartUp
       end
     end
     object tabInitialSutraMesh: TTabSheet
+      HelpType = htKeyword
+      HelpKeyword = 'Initial_Grid_Dialog_Box'
       Caption = 'tabInitialSutraMesh'
       ImageIndex = 3
       DesignSize = (
