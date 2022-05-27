@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-05-25T19:19:13.623-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Solid Matrix, Adsorption Pane</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Solid Matrix, Adsorption Pane</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Solid Matrix, Adsorption</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Options</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">It is only present for SUTRA models prior to SUTRA 4.0.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Solid matrix properties:</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">COMPMA</text><text styleclass="Normal" translate="true"> is the solid matrix compressibility which is related to the storativity.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">CS</text><text styleclass="Normal" translate="true"> is the solid grain specific heat. It is not used for solute transport.</text></para>

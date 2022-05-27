@@ -9,7 +9,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
     Top = 0
     Width = 679
     Height = 480
-    ActivePage = tsLiquidWater
+    ActivePage = tsPermeability
     Align = alClient
     OwnerDraw = True
     TabHeight = 75
@@ -52,6 +52,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             'Freundlich'
             'Langmuir')
           TabOrder = 0
+          OnClick = rgSorptionModelClick
         end
         object btnedFirstDistributionCoefficient: TssButtonEdit
           Left = 6
@@ -111,11 +112,11 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Caption = 'Specified total water saturation function (SWMOD)'
           ItemIndex = 0
           Items.Strings = (
-            'None'
-            'van Genuchten'
-            'Brooks-Corey'
-            'Piecewise-linear'
-            'User-defined')
+            'None (NONE)'
+            'van Genuchten (VGEN)'
+            'Brooks-Corey (BCOR)'
+            'Piecewise-linear (PLIN)'
+            'User-defined (UDEF)')
           TabOrder = 0
           OnClick = rgWatSatFunctClick
         end
@@ -356,11 +357,11 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Caption = 'Specified relative permeability function (RKMOD)'
           ItemIndex = 0
           Items.Strings = (
-            'None'
-            'van Genuchten'
-            'Brooks-Corey'
-            'Piecewise-linear'
-            'User-defined')
+            'None (NONE)'
+            'van Genuchten (VGEN)'
+            'Brooks-Corey (BCOR)'
+            'Piecewise-linear (PLIN)'
+            'User-defined (UDEF)')
           TabOrder = 0
           OnClick = rgRelativePermChoiceClick
         end
@@ -561,11 +562,11 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Caption = 'Specified liquid water saturation function (SLMOD)'
           ItemIndex = 0
           Items.Strings = (
-            'None'
-            'Exponential'
-            'Modified power law'
-            'Piecewise-linear'
-            'User-defined')
+            'None (NONE)'
+            'Exponential (EXPO)'
+            'Modified power law (POWR)'
+            'Piecewise-linear (PLIN)'
+            'User-defined (UDEF)')
           TabOrder = 0
           OnClick = rgLiqWatSatChoiceClick
         end

@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4303</config-value>
+      <config-value name="autohelpstart">4332</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1515,6 +1515,7 @@ document.write('</frameset>');
       <helpcontext-number href="References_Cited#Sutra2" value="4226"/>
       <helpcontext-number href="References_Cited#Sutra3" value="4225"/>
       <helpcontext-number href="References_Cited#TPROGS" value="3673"/>
+      <helpcontext-number href="Regional-Properties-Pane" value="4332"/>
       <helpcontext-number href="RES_Object_Pane" value="2030"/>
       <helpcontext-number href="RES_Reservoir_Package_Pane" value="2730"/>
       <helpcontext-number href="Return_Flow_Location" value="3805"/>

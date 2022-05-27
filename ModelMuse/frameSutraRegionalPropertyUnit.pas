@@ -85,6 +85,7 @@ type
     procedure rgLiqWatSatChoiceClick(Sender: TObject);
     procedure DoFormulaButtonClick(Sender: TObject);
     procedure btnedExit(Sender: TObject);
+    procedure rgSorptionModelClick(Sender: TObject);
   private
     function FormulaOK(AFormula: string): Boolean;
     { Private declarations }
@@ -323,6 +324,14 @@ begin
   btnedSatAtMinPerm.Enabled := (PermeabilityChoice = rpcPiecewiseLinear);
 end;
 
+procedure TframeSutraRegionalProperty.rgSorptionModelClick(Sender: TObject);
+begin
+  btnedFirstDistributionCoefficient.Enabled :=
+    rgSorptionModel.Enabled and (rgSorptionModel.ItemIndex > 0);
+  btnedSecondDistributionCoefficient.Enabled :=
+    rgSorptionModel.Enabled and (rgSorptionModel.ItemIndex > 0);
+end;
+
 procedure TframeSutraRegionalProperty.rgWatSatFunctClick(Sender: TObject);
 var
   SatChoice: TWaterSaturationChoice;
@@ -519,6 +528,11 @@ begin
     or (SaturationChoice = scUnsaturated);
   tsLiquidWater.TabVisible := (TransportChoice = tcFreezing);
   tsIceProperties.TabVisible := (TransportChoice = tcFreezing);
+
+  rgSorptionModel.Enabled := TransportChoice in [tcSolute, tcSoluteHead];
+  rgTransportModel.Enabled := TransportChoice in [tcEnergy, tcFreezing];
+
+  EnableControls;
 end;
 
 end.

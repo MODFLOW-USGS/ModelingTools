@@ -206,8 +206,10 @@ const
 
   KNodalPorosity = 'Nodal_Porosity';
   KNodalThickness = 'Nodal_Thickness';
-  KUnsatRegionNodes = 'Unsat_Region_Nodes';
-  KUnsatRegionElements = 'Unsat_Region_Elements';
+  KUnsatRegionNodes = 'Node_Regions';
+//  KUnsatRegionNodes = 'Unsat_Region_Nodes';
+  KUnsatRegionElements = 'Element_Regions';
+//  KUnsatRegionElements = 'Unsat_Region_Elements';
   KMaximumPermeability = 'Maximum_Permeability';
   KMiddlePermeability = 'Middle_Permeability';
   KMinimumPermeability = 'Minimum_Permeability';
@@ -2372,7 +2374,6 @@ that affects the model output should also have a comment. }
     function ModpathZonesNeeded(Sender: TObject): boolean; virtual;
     procedure SetSutraOutputControl(const Value: TSutraOutputControl);
     function SutraThicknessUsed(Sender: TObject): boolean;
-    function SutraUnsatRegionUsed(Sender: TObject): boolean;
     function GetSutraMesh: TSutraMesh3D;
     procedure InitializeSutraSpecPres(Sender: TObject);
     procedure InitializeSutraSpecifiedConcTemp(Sender: TObject);
@@ -3425,6 +3426,7 @@ that affects the model output should also have a comment. }
       ;
     property GwtUsed: Boolean read GetGwtUsed;
     Procedure UpdateGwtConc;
+    function SutraUnsatRegionUsed(Sender: TObject): boolean;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -20564,6 +20566,8 @@ var
   FootprintWell: TFootprintWell;
   Withdrawals: TDataArray;
   Position: Integer;
+  UnsatNodeDataArray: TDataArray;
+  UnsatElementDataArray: TDataArray;
 //  ModflowSwiObservations: TSwiObsBoundary;
 //  StressPeriodIndex: Integer;
 //  StressPeriod: TModflowStressPeriod;
@@ -21013,6 +21017,23 @@ begin
 //    Mt3dStressPeriod.EndTime := FortranStrToFloat(FortranFloatToStr(
 //      Mt3dStressPeriod.EndTime));
 //  end;
+  if FileVersionEqualOrEarlier('5.0.0.11') then
+  begin
+    UnsatNodeDataArray := FDataArrayManager.GetDataSetByName('Unsat_Region_Nodes');
+    if UnsatNodeDataArray <> nil then
+    begin
+      UnsatNodeDataArray.Name := KUnsatRegionNodes;
+      UnsatNodeDataArray.DisplayName := StrUnsatRegionNodesDisplayName;
+    end;
+
+    UnsatElementDataArray := FDataArrayManager.GetDataSetByName('Unsat_Region_Elements');
+    if UnsatElementDataArray <> nil then
+    begin
+      UnsatElementDataArray.Name := KUnsatRegionElements;
+      UnsatElementDataArray.DisplayName := StrUnsatRegionElementsDisplayName;
+    end;
+  end;
+
 end;
 
 procedure TPhastModel.RemoveNonAncillaryFiles;
@@ -37481,7 +37502,7 @@ begin
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KScaledSolidGrainThermalConductivity;
   FDataArrayCreationRecords[Index].DisplayName := StrScaledSolidGrainThermalConductivity;
-  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Formula := '3.5';
   FDataArrayCreationRecords[Index].Classification := StrHydrology;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra4EnergyUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
@@ -38594,7 +38615,8 @@ end;
 function TCustomModel.SutraUnsatRegionUsed(Sender: TObject): boolean;
 begin
   result := SutraUsed(Sender)
-    and (SutraOptions.SaturationChoice = scUnsaturated);
+    and ((SutraOptions.SaturationChoice = scUnsaturated)
+    or Sutra4Used(Sender));
 end;
 
 function TCustomModel.ActiveUsed(Sender: TObject): boolean;

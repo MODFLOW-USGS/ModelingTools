@@ -281,10 +281,8 @@ var
   NR: Integer;
   ARegion: TRegionalProperty;
 begin
-  { TODO -cSUTRA4 : There can now be multiple regions each with their own Data sets 11A to 11E }
-  { TODO -cSUTRA4 : NPMREG, the number of regions, is the only thing in data set 11. }
   // Implement as a series of Panes either in the SUTRA Options dialog box or a separate dialog box.
-  // Give each set of data a name that could be used as a global variable
+  // Consider giving each set of data a name that could be used as a global variable
   // to specify node and element region numbers.
   if Model.ModelSelection = msSutra40 then
   begin
@@ -588,13 +586,19 @@ begin
         begin
           WriteString('''PLIN'' ');
 
+          Value := EvaluateFormula(RelativePermeabilityParameters.WaterSaturationAtMinPermeability,
+            'DATASET 11C: Saturation at minimum permeability (SLRKMIN)', PestParam);
+          WriteFormulaOrValueBasedOnAPestName(PestParam,
+            Value, -1, -1, -1);
+
+
           Value := EvaluateFormula(RelativePermeabilityParameters.MinRelativePerm,
             'DATASET 11C: Minimum relative permeability (RKMIN)', PestParam);
           WriteFormulaOrValueBasedOnAPestName(PestParam,
             Value, -1, -1, -1);
 
 //          WriteFloat(RelativePermeabilityParameters.MinRelativePerm);
-          WriteString(' # DATASET 11C: RKMOD, RKMIN');
+          WriteString(' # DATASET 11C: RKMOD, SLRKMIN, RKMIN');
         end;
       rpcUserDefined:
         begin
@@ -1015,8 +1019,6 @@ begin
   Sutra4EnergyOrSorptionUsed := Model.Sutra4EnergyOrSorptionUsed(nil);
   Sutra4FreezingUsed := Model.Sutra4FreezingUsed(nil);
   Sutra4ProductionUsed := Model.Sutra4ProductionUsed(nil);
-  { TODO -cSUTRA4 :
-  Implement PEST for  COMPMA, CS, RHOS, PRODLØ, PRODSØ, PRODL1, PRODS1, and PRODI0. }
   PestParametersUsed := False;
   Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
   Porosity.Initialize;
@@ -1131,7 +1133,7 @@ begin
     Thickness := nil;
   end;
 
-  if FOptions.SaturationChoice = scUnsaturated then
+  if Model.SutraUnsatRegionUsed(nil) then
   begin
     UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionNodes);
     UnsatRegion.Initialize;
@@ -1603,7 +1605,6 @@ var
           WriteFloat(ElData.SIGMAS);
           WriteFloat(ElData.SIGMAA);
         end;
-        { TODO -cSUTRA4 : Input variables SIGMAS and SIGMAA been added. }
         NewLine;
         case FMesh.MeshType of
           mt2D, mtProfile:
@@ -1789,7 +1790,7 @@ begin
     SIGMAA := nil;
   end;
 
-  if FOptions.SaturationChoice = scUnsaturated then
+  if Model.SutraUnsatRegionUsed(nil) then
   begin
     UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionElements);
     UnsatRegion.Initialize;
@@ -2296,7 +2297,6 @@ begin
     WriteFloat(SIGMAI);
     WriteFloat(RHOI);
   end;
-  { TODO -cSUTRA4 : COMPI, CI, SIGMAI, and RHOI have been added for FREEZING simulations }
   NewLine;
 end;
 
@@ -2686,7 +2686,6 @@ begin
   else
     Assert(False);
   end;
-  { TODO -cSUTRA4 : Add new option: "FREEZING TRANSPORT" }
   // If the model version is less than 4, use ENERGY TRANSPORT if
   // FREEZING TRANSPORT is selected.
   case FOptions.TransportChoice of
@@ -3158,10 +3157,6 @@ begin
   begin
     WriteString(' ''U'' ');
   end;
-  if neoSaturation in FOutputControl.NodeElementOptions then
-  begin
-    WriteString(' ''S'' ');
-  end;
   if Model.ModelSelection = msSutra40 then
   begin
     if neoLiquidSaturation in FOutputControl.NodeElementOptions then
@@ -3172,6 +3167,10 @@ begin
     begin
       WriteString(' ''I'' ');
     end;
+  end;
+  if neoSaturation in FOutputControl.NodeElementOptions then
+  begin
+    WriteString(' ''S'' ');
   end;
   WriteString(' ''-''');
   NewLine;

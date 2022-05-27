@@ -829,7 +829,7 @@ begin
         begin
           rdgSutraFeature.RowCount := rdgSutraFeature.RowCount+1;
           seNumberOfTimes.AsInteger := seNumberOfTimes.AsInteger + 1;
-          rdgSutraFeature.Cells[0,RowIndex] := FloatToStr(TimeList[RowIndex-1]);
+          rdgSutraFeature.Cells[0,RowIndex] := FloatToStr(TimeList[RowIndex-1-PestRowOffset]);
           rdgSutraFeature.Checked[1,RowIndex] := False;
           Inc(RowIndex);
         end;

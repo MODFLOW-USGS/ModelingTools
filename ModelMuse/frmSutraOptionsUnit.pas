@@ -423,11 +423,14 @@ begin
   ANode.PageIndex := APage.PageIndex;
 
   AFrame := TframeSutraRegionalProperty.Create(nil);
+  AFrame.pgcMain.ActivePageIndex := 0;
   FRegionList.Add(AFrame);
   AFrame.Parent := APage;
   AFrame.Align := alClient;
   AFrame.AssignButtonImages;
   AFrame.EnableControls;
+
+  APage.HelpKeyword := 'Regional-Properties-Pane';
 end;
 
 procedure TfrmSutraOptions.DeleteRegionalProperty(APage: TJvCustomPage; ANode: TJvPageIndexNode);
@@ -541,13 +544,13 @@ begin
   if frmGoPhast.ModelSelection = msSutra40 then
   begin
     FRegionNode := jvpltvNavigation.Items.Add(nil, StrRegionalProperties) as TJvPageIndexNode;
-    { TODO -cSUTRA4 : Have it link to the first child }
     FRegionNode.PageIndex := -1;
     Node := jvpltvNavigation.Items.Add(nil, StrProduction) as TJvPageIndexNode;
     Node.PageIndex := jvspProductionSutra4.PageIndex;
   end
   else
   begin
+    FRegionNode := nil;
     Node := jvpltvNavigation.Items.Add(nil, StrSolidMatrixAdsorp) as TJvPageIndexNode;
     Node.PageIndex := jvspSolidAdsorption.PageIndex;
     Node := jvpltvNavigation.Items.Add(nil, StrProduction) as TJvPageIndexNode;
@@ -789,6 +792,7 @@ procedure TfrmSutraOptions.jvpltvNavigationMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   ANode: TTreeNode;
+  FirstRegionNode: TTreeNode;
 begin
   inherited;
   ANode := jvpltvNavigation.GetNodeAt(X,Y);
@@ -796,11 +800,28 @@ begin
   begin
     Exit;
   end;
+
   if ((ANode = FLakeNode) or (ANode = FLakeInteractionsNode))
     and not ANode.Enabled then
   begin
     Beep;
     MessageDlg(StrLakesCanOnlyBeUs, mtInformation, [mbOK], 0);
+  end;
+
+  if ANode = FRegionNode then
+  begin
+//    if FRegionNode.Expanded then
+//    begin
+//      FRegionNode.Expanded := False;
+//    end
+//    else
+//    begin
+      FirstRegionNode := FRegionNode.getFirstChild;
+      if FirstRegionNode <> nil then
+      begin
+        FirstRegionNode.Selected := True;
+      end;
+//    end;
   end;
 //
 end;

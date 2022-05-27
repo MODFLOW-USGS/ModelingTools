@@ -290,12 +290,14 @@ inherited frmSutraOptions: TfrmSutraOptions
           AlignWithMargins = True
           Left = 4
           Top = 4
-          Width = 458
-          Height = 36
+          Width = 587
+          Height = 41
           Align = alClient
           Caption = 
             'The first 80 characters of the first two lines are TITLE1 and TI' +
             'TLE2.'#13#10'The remaining lines will be treated as comments.'
+          ExplicitWidth = 458
+          ExplicitHeight = 36
         end
       end
     end
@@ -1620,6 +1622,8 @@ inherited frmSutraOptions: TfrmSutraOptions
       Top = 0
       Width = 595
       Height = 512
+      HelpType = htKeyword
+      HelpKeyword = 'Production_Pane'
       Margins.Left = 4
       Margins.Top = 4
       Margins.Right = 4
@@ -1634,7 +1638,7 @@ inherited frmSutraOptions: TfrmSutraOptions
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = 'Production used (PROD or NOPROD, data set 14A)'
+        Caption = 'Production simulated (PROD or NOPROD, data set 14A)'
         TabOrder = 0
       end
     end
@@ -1662,6 +1666,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       FF000000000200000000000000011149006E0069007400690061006C0043006F
       006E0064006900740069006F006E007300}
     Items.Links = {03000000000000000100000002000000}
+    ExplicitLeft = 3
   end
   object rcLakes: TRbwController
     ControlList = <
