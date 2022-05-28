@@ -28,8 +28,10 @@ type
 const
   FirstNodeItem = iiPressure;
   LastNodeItem = iiIceSaturation;
-  FirstElementItem = iiXVel;
-  LastElementItem = iiZDarcyVelocity;
+  FirstVelocityElementItem = iiXVel;
+  LastVelocityElementItem = iiZVel;
+  FirstDarcyVelocityElementItem = iiXDarcyVelocity;
+  LastDarcyVelocityElementItem = iiZDarcyVelocity;
 
 type
   TUndoImportSutraResults = class(TUndoImportShapefile)
@@ -90,8 +92,6 @@ type
     F_CCItem: TColorContourItem;
     FNodeFileName: string;
     FElementFileName: string;
-//    FAskedUser: Boolean;
-//    FCreateNewDataSet: Boolean;
     FAllNewDataSets: TList;
     procedure GetData;
     procedure SetData;
@@ -122,7 +122,6 @@ type
     procedure ImportSpecifiedPressureData(NewScreenObjects: TList);
     procedure ImportSpecifiedConcentrationData(NewScreenObjects: TList);
     procedure ImportLakeStageData(NewScreenObjects: TList);
-//    function AskUserIfNewDataSet: boolean;
     procedure ImportRestartData(NewScreenObjects: TList);
     procedure CreateRestartNodeDataSets(DataSets: TList);
     procedure AssignRestartNodeValues(DataSets: TList;
@@ -209,8 +208,6 @@ resourcestring
   StrComputedTemperature = 'Computed temperature';
   StrStep0dTime1 = 'Step: %0:d; Time: %1:g';
   Str0sTS1d = '%0:s, TS: %1:d';
-//  StrPressure = 'Pressure';
-//  StrConcentration = 'Concentration';
   StrHead = 'Head';
   StrYourSelectedFileT = 'Your selected file type did not match your file na' +
   'me. Did you mean to select %s';
@@ -225,8 +222,6 @@ resourcestring
   StrXDarcyVelocity = 'X Darcy velocity';
   StrYDarcyVelocity = 'Y Darcy velocity';
   StrZDarcyVelocity = 'Z Darcy velocity';
-//  StrTemperature = 'Temperature';
-
 
 { TfrmImportSutraModelResults }
 
@@ -587,11 +582,6 @@ begin
   Constraints.MinHeight := Height;
 end;
 
-//function TfrmImportSutraModelResults.AskUserIfNewDataSet: boolean;
-//begin
-////  result := AskIfNewDataSet(FAskedUser, FCreateNewDataSet);
-//end;
-
 procedure TfrmImportSutraModelResults.ImportBoundaryDataForOneTimeStep(
   CustomList: TCustomItemList; TimeIndex: Integer;
   NewDataSets, NewScreenObjects: TList;
@@ -812,7 +802,6 @@ procedure TfrmImportSutraModelResults.CreateRestartNodeScreenObject(
   Out ScreenObject: TScreenObject);
 var
   UndoCreateScreenObject: TCustomUndo;
-//  NeedLocations: Boolean;
   Mesh: TSutraMesh3D;
   NodeIndex: Integer;
   ANode2D: TSutraNode2D;
@@ -827,7 +816,6 @@ begin
   Mesh := frmGoPhast.PhastModel.SutraMesh;
   Nodes := TNodeDataList.Create;
   try
-//    NeedLocations := False;
     case Mesh.MeshType of
       mt2D, mtProfile:
         begin
@@ -906,7 +894,6 @@ begin
       APoint.X := Nodes[NodeIndex].X;
       APoint.Y := Nodes[NodeIndex].Y;
       ScreenObject.AddPoint(APoint, True);
-
 
       if ScreenObject.ElevationCount = ecOne then
       begin
@@ -1041,22 +1028,22 @@ begin
     begin
       if (Length(FNodeReader.X) = 0) or not NeedLocations then
       begin
-        // The X coordinates were NOT stored in the .node file
+        // The X coordinates were NOT stored in the .nod file
         APoint.X := Nodes[NodeIndex].X;
       end
       else
       begin
-        // The X coordinates WERE stored in the .node file
+        // The X coordinates WERE stored in the .nod file
         APoint.X := FNodeReader.X[NodeIndex];
       end;
       if (Length(FNodeReader.Y) = 0) or not NeedLocations then
       begin
-        // The Y coordinates were NOT stored in the .node file
+        // The Y coordinates were NOT stored in the .nod file
         APoint.Y := Nodes[NodeIndex].Y;
       end
       else
       begin
-        // The Y coordinates WERE stored in the .node file
+        // The Y coordinates WERE stored in the .nod file
         APoint.Y := FNodeReader.Y[NodeIndex];
       end;
       ScreenObject.AddPoint(APoint, True);
@@ -1067,12 +1054,12 @@ begin
         // 3D model
         if (Length(FNodeReader.Z) = 0) or not NeedLocations then
         begin
-          // The Z coordinates were NOT stored in the .node file
+          // The Z coordinates were NOT stored in the .nod file
           Z := Nodes[NodeIndex].Z;
         end
         else
         begin
-          // The Z coordinates WERE stored in the .node file
+          // The Z coordinates WERE stored in the .nod file
           Z := FNodeReader.Z[NodeIndex];
         end;
         ScreenObject.ImportedSectionElevations.Add(Z);
@@ -1081,7 +1068,6 @@ begin
   finally
     Nodes.Free;
   end;
-
 end;
 
 procedure TfrmImportSutraModelResults.dlgOpenSutraFileTypeChange(
@@ -1257,7 +1243,6 @@ begin
     chklstDataToImport.ItemEnabled[Ord(iiZDarcyVelocity)]  := False;
     chklstDataToImport.Checked[Ord(iiZDarcyVelocity)]  := False;
   end;
-
 end;
 
 procedure TfrmImportSutraModelResults.EnableOkButton;
@@ -1292,26 +1277,21 @@ end;
 procedure TfrmImportSutraModelResults.CreateElementDataSets(StepIndex: Integer;
   DataSets: TList);
 var
-  index: TImportItem;
-  NewName: string;
-  DataSet: TDataArray;
-  NewFormula: string;
-  NewDataType: TRbwDataType;
   MeshType: TMeshType;
-  VItem: TVectorItem;
   Vectors: TVectorCollection;
-  Classification: string;
-  AnObserver: TObserver;
-  procedure AssignCommonProperties;
+  VelocityDataSets: TList;
+  procedure AssignCommonProperties(Prefix: string);
   var
     PriorItem: TVectorItem;
+    DataSet: TDataArray;
+    VItem: TVectorItem;
   begin
     VItem := Vectors.Add as TVectorItem;
-    DataSet := DataSets[0];
+    DataSet := VelocityDataSets[0];
     VItem.Vectors.XVelocityName := DataSet.Name;
-    DataSet := DataSets[1];
+    DataSet := VelocityDataSets[1];
     VItem.Vectors.YVelocityName := DataSet.Name;
-    VItem.Description := Format(StrVelocityAtTimeSte,
+    VItem.Description := Prefix + Format(StrVelocityAtTimeSte,
       [FResultList[StepIndex].TimeStep, DateTimeToStr(Now)]);
     if Vectors.Count = 1 then
     begin
@@ -1323,130 +1303,150 @@ var
       VItem.Vectors.Color := PriorItem.Vectors.Color;
     end;
   end;
-begin
-  Assert(DataSets.Count = 0);
-  for index := FirstElementItem to LastElementItem do
+  procedure AssignVelocityItems(StartIndex, EndIndex: TImportItem;
+    Prefix: string);
+  var
+    Index: TImportItem;
+    NewName: string;
+    DataSet: TDataArray;
+    NewFormula: string;
+    NewDataType: TRbwDataType;
+    Classification: string;
+    AnObserver: TObserver;
+    VItem: TVectorItem;
   begin
-    if chklstDataToImport.Checked[Ord(index)] then
+    for index := StartIndex to EndIndex do
     begin
-      case index of
-        iiXVel:
-          begin
-            if Length(FEleReader.FXVelocity) = 0 then
+      if chklstDataToImport.Checked[Ord(index)] then
+      begin
+        case index of
+          iiXVel:
             begin
-              Continue;
+              if Length(FEleReader.FXVelocity) = 0 then
+              begin
+                Continue;
+              end;
+              Classification := SutraXVelocityResults;
             end;
-            Classification := SutraXVelocityResults;
-          end;
-        iiYVel:
-          begin
-            if Length(FEleReader.FYVelocity) = 0 then
+          iiYVel:
             begin
-              Continue;
+              if Length(FEleReader.FYVelocity) = 0 then
+              begin
+                Continue;
+              end;
+              Classification := SutraYVelocityResults;
             end;
-            Classification := SutraYVelocityResults;
-          end;
-        iiZVel:
-          begin
-            if Length(FEleReader.FZVelocity) = 0 then
+          iiZVel:
             begin
-              Continue;
+              if Length(FEleReader.FZVelocity) = 0 then
+              begin
+                Continue;
+              end;
+              Classification := SutraZVelocityResults;
             end;
-            Classification := SutraZVelocityResults;
-          end;
-        iiXDarcyVelocity:
-          begin
-            if Length(FEleReader.FXDarcyVelocity) = 0 then
+          iiXDarcyVelocity:
             begin
-              Continue;
+              if Length(FEleReader.FXDarcyVelocity) = 0 then
+              begin
+                Continue;
+              end;
+              Classification := SutraXDarcyVelocityResults;
             end;
-            Classification := SutraXDarcyVelocityResults;
-          end;
-        iiYDarcyVelocity:
-          begin
-            if Length(FEleReader.FYDarcyVelocity) = 0 then
+          iiYDarcyVelocity:
             begin
-              Continue;
+              if Length(FEleReader.FYDarcyVelocity) = 0 then
+              begin
+                Continue;
+              end;
+              Classification := SutraYDarcyVelocityResults;
             end;
-            Classification := SutraYDarcyVelocityResults;
-          end;
-        iiZDarcyVelocity:
-          begin
-            if Length(FEleReader.FZDarcyVelocity) = 0 then
+          iiZDarcyVelocity:
             begin
-              Continue;
+              if Length(FEleReader.FZDarcyVelocity) = 0 then
+              begin
+                Continue;
+              end;
+              Classification := SutraZDarcyVelocityResults;
             end;
-            Classification := SutraZDarcyVelocityResults;
-          end;
+          else
+            Assert(False);
+        end;
+
+        NewName := GenerateNewRoot(chklstDataToImport.Items[Ord(index)] + '_'
+          + IntToStr(FResultList[StepIndex].TimeStep));
+
+        AnObserver := frmGoPhast.PhastModel.GetObserverByName(NewName);
+        if (AnObserver = nil) or AskUserIfNewDataSet then
+        begin
+          NewName := GenerateNewName(NewName, nil, '_');
+          NewDataType := rdtDouble;
+          NewFormula := '0.';
+
+          DataSet := frmGoPhast.PhastModel.DataArrayManager.CreateNewDataArray(
+            TDataArray, NewName, NewFormula, NewName, [], NewDataType,
+            eaBlocks, dso3D, Classification);
+
+          FAllNewDataSets.Add(DataSet);
+        end
         else
-          Assert(False);
+        begin
+          DataSet := AnObserver as TDataArray;
+        end;
+        DataSets.Add(DataSet);
+        VelocityDataSets.Add(DataSet);
+
+        DataSet.Comment := Format(StrReadFrom0sOn,
+          [FElementFileName, DateTimeToStr(Now), FResultList[StepIndex].TimeStep,
+          FResultList[StepIndex].Time,
+          DateTimeToStr(TFile.GetLastWriteTime(FElementFileName))]);
+
+        if (F_CCItem <> nil) and (F_CCItem.ImportChoice = index)
+          and (F_CCItem.TimeStep = FResultList[StepIndex].TimeStep) then
+        begin
+          FColorContourDataArray  := DataSet;
+        end;
+
+        frmGoPhast.PhastModel.UpdateDataArrayDimensions(DataSet);
+
+        DataSet.Units := '';
       end;
+    end;
 
-      NewName := GenerateNewRoot(chklstDataToImport.Items[Ord(index)] + '_'
-        + IntToStr(FResultList[StepIndex].TimeStep));
-
-      AnObserver := frmGoPhast.PhastModel.GetObserverByName(NewName);
-      if (AnObserver = nil) {or (not (AnObserver is TDataArray))}
-        or AskUserIfNewDataSet then
-      begin
-        NewName := GenerateNewName(NewName, nil, '_');
-        NewDataType := rdtDouble;
-        NewFormula := '0.';
-
-      DataSet := frmGoPhast.PhastModel.DataArrayManager.CreateNewDataArray(
-        TDataArray, NewName, NewFormula, NewName, [], NewDataType,
-        eaBlocks, dso3D, Classification);
-
-        FAllNewDataSets.Add(DataSet);
-      end
+    case MeshType of
+      mt2D, mtProfile:
+        begin
+          if VelocityDataSets.Count = 2 then
+          begin
+            AssignCommonProperties(Prefix);
+          end;
+        end;
+      mt3D:
+        begin
+          if VelocityDataSets.Count = 3 then
+          begin
+            AssignCommonProperties(Prefix);
+            DataSet := VelocityDataSets[2];
+            VItem.Vectors.ZVelocityName := DataSet.Name;
+          end;
+        end;
       else
-      begin
-        DataSet := AnObserver as TDataArray;
-      end;
-      DataSets.Add(DataSet);
-
-      DataSet.Comment := Format(StrReadFrom0sOn,
-        [FElementFileName, DateTimeToStr(Now), FResultList[StepIndex].TimeStep,
-        FResultList[StepIndex].Time,
-        DateTimeToStr(TFile.GetLastWriteTime(FElementFileName))]);
-
-      if (F_CCItem <> nil) and (F_CCItem.ImportChoice = index)
-        and (F_CCItem.TimeStep = FResultList[StepIndex].TimeStep) then
-      begin
-        FColorContourDataArray  := DataSet;
-      end;
-
-      frmGoPhast.PhastModel.UpdateDataArrayDimensions(DataSet);
-
-      DataSet.Units := '';
-
+        Assert(False);
     end;
   end;
-  MeshType := frmGoPhast.PhastModel.SutraMesh.MeshType;
-  Vectors := frmGoPhast.PhastModel.VelocityVectors;
-  case MeshType of
-    mt2D, mtProfile:
-      begin
-        if DataSets.Count = 2 then
-        begin
-          AssignCommonProperties;
-        end;
-      end;
-    mt3D:
-      begin
-        if DataSets.Count = 3 then
-        begin
-          AssignCommonProperties;
-          DataSet := DataSets[2];
-          VItem.Vectors.ZVelocityName := DataSet.Name;
-//        end
-//        else
-//        begin
-//          VItem.Vectors.ZVelocityName := '';
-        end;
-      end;
-    else
-      Assert(False);
+begin
+  Assert(DataSets.Count = 0);
+  VelocityDataSets := TList.Create;
+  try
+    MeshType := frmGoPhast.PhastModel.SutraMesh.MeshType;
+    Vectors := frmGoPhast.PhastModel.VelocityVectors;
+
+    AssignVelocityItems(FirstVelocityElementItem, LastVelocityElementItem,'');
+
+    VelocityDataSets.Clear;
+    AssignVelocityItems(FirstDarcyVelocityElementItem,
+      LastDarcyVelocityElementItem, 'Darcy ');
+  finally
+    VelocityDataSets.Free;
   end;
 end;
 
@@ -1569,22 +1569,22 @@ begin
     begin
       if (Length(FEleReader.X) = 0) or not NeedLocations then
       begin
-        // The X coordinates were NOT stored in the .node file
+        // The X coordinates were NOT stored in the .nod file
         APoint.X := Elements[ElementIndex].X;
       end
       else
       begin
-        // The X coordinates WERE stored in the .node file
+        // The X coordinates WERE stored in the .nod file
         APoint.X := FEleReader.X[ElementIndex];
       end;
       if (Length(FEleReader.Y) = 0) or not NeedLocations then
       begin
-        // The Y coordinates were NOT stored in the .node file
+        // The Y coordinates were NOT stored in the .nod file
         APoint.Y := Elements[ElementIndex].Y;
       end
       else
       begin
-        // The Y coordinates WERE stored in the .node file
+        // The Y coordinates WERE stored in the .nod file
         APoint.Y := FEleReader.Y[ElementIndex];
       end;
       ScreenObject.AddPoint(APoint, True);
@@ -1595,12 +1595,12 @@ begin
         // 3D model
         if (Length(FEleReader.Z) = 0) or not NeedLocations then
         begin
-          // The Z coordinates were NOT stored in the .node file
+          // The Z coordinates were NOT stored in the .nod file
           Z := Elements[ElementIndex].Z;
         end
         else
         begin
-          // The Z coordinates WERE stored in the .node file
+          // The Z coordinates WERE stored in the .nod file
           Z := FEleReader.Z[ElementIndex];
         end;
         ScreenObject.ImportedSectionElevations.Add(Z);
@@ -1670,7 +1670,6 @@ begin
       frmGoPhast.PhastModel.UpdateDataArrayDimensions(DataSet);
 
       DataSet.Units := '';
-
     end;
   end;
 end;
@@ -1772,7 +1771,6 @@ begin
       frmGoPhast.PhastModel.UpdateDataArrayDimensions(DataSet);
 
       DataSet.Units := '';
-
     end;
   end;
 end;
@@ -1845,7 +1843,6 @@ begin
 
       DataSet.Units := '';
     end;
-
   end;
 end;
 
@@ -1859,7 +1856,6 @@ var
   APoint: TPoint2D;
   Z: Double;
 begin
-
   Nodes := TNodeDataList.Create;
   try
     GetNodeLocations(Nodes);
@@ -1902,7 +1898,7 @@ var
   ItemIndex: TImportItem;
 begin
   DSIndex := 0;
-  for ItemIndex := FirstElementItem to LastElementItem do
+  for ItemIndex := FirstVelocityElementItem to LastDarcyVelocityElementItem do
   begin
     if chklstDataToImport.Checked[Ord(ItemIndex)] then
     begin
@@ -2003,7 +1999,6 @@ begin
       DataSetPosition := AScreenObject.AddDataSet(DataArray);
       AScreenObject.DataSetFormulas[DataSetPosition] :=
         rsObjectImportedValuesR + '("' + DataArray.Name + '")';
-
     end;
   end
 end;
@@ -2058,7 +2053,6 @@ begin
         rsObjectImportedValuesR + '("' + DataArray.Name + '")';
     end;
   end;
-
 end;
 
 procedure TfrmImportSutraModelResults.AssignNodeValues(DataSets: TList;
@@ -2161,7 +2155,6 @@ begin
       DataSetPosition := AScreenObject.AddDataSet(DataArray);
       AScreenObject.DataSetFormulas[DataSetPosition] :=
         rsObjectImportedValuesR + '("' + DataArray.Name + '")';
-
     end;
   end
 end;
@@ -2192,7 +2185,6 @@ begin
   DataSets := TList.Create;
   StepList := TIntegerList.Create;
   try
-//    FirstResults := True;
     if chklstDataToImport.Checked[Ord(iiPressure)]
       or chklstDataToImport.Checked[Ord(iiU)]
       or chklstDataToImport.Checked[Ord(iiSaturation)]
@@ -2232,7 +2224,6 @@ begin
 
               AssignNodeValues(DataSets, NodeScreenObject);
             end;
-
           end
           else
           begin
@@ -2256,7 +2247,6 @@ begin
       begin
         StepList.AddUnique(FEleReader.StoredResults[index].TimeStep);
       end;
-//        StepList.Sorted := True;
       Assert(FResultList.Count = chklstTimeStepsToImport.Items.Count);
       FirstResults := True;
       ElementScreenObject := nil;
@@ -2284,7 +2274,6 @@ begin
 
               AssignElementValues(DataSets, ElementScreenObject);
             end;
-
           end
           else
           begin
@@ -2672,7 +2661,6 @@ begin
           frmGoPhast.PhastModel.DataArrayManager.HandleDeletedDataArrays(FAllNewDataSets);
           FreeAndNil(Undo)
         end;
-
       end;
 
       if Undo <> nil then
@@ -2776,7 +2764,8 @@ begin
                 TimeStep := FEleReader.StoredResults[Index].TimeStep;
                 if IntList.IndexOf(TimeStep) >= 0 then
                 begin
-                  for ItemIndex := FirstElementItem to LastElementItem do
+                  for ItemIndex := FirstVelocityElementItem
+                    to LastDarcyVelocityElementItem do
                   begin
                     if ItemIndex in ImportItems then
                     begin
@@ -2834,7 +2823,6 @@ begin
               end;
             end;
           end;
-
         end;
       7:
         begin
@@ -2965,7 +2953,6 @@ begin
 
   UpdateFrmDisplayData;
   UpdateFrmGridValue;
-
 end;
 
 initialization
@@ -2984,5 +2971,4 @@ initialization
   SutraYDarcyVelocityResults := StrModelResults + '|' + 'Y Darcy Velocity';
   SutraZDarcyVelocityResults := StrModelResults + '|' + 'Darcy Z Velocity';
   SutraBoundaryResults := StrModelResults + '|' + 'Sutra Boundary Results';
-
 end.
