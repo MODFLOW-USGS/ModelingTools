@@ -51,8 +51,11 @@ type
     FZ: TOneDRealArray;
     FPressure: TOneDRealArray;
     FU: TOneDRealArray;
-    FSaturation: TOneDRealArray;
+    FTotalSaturation: TOneDRealArray;
+    FLiquidSaturation: TOneDRealArray;
+    FIceSaturation: TOneDRealArray;
     FHasNode: Boolean;
+    FSutra4: Boolean;
   protected
     function CountSearchString: string; override;
     procedure ReadValueHeader; override;
@@ -64,7 +67,9 @@ type
     property Z: TOneDRealArray read FZ;
     property Pressure: TOneDRealArray read FPressure;
     property U: TOneDRealArray read FU;
-    property Saturation: TOneDRealArray read FSaturation;
+    property Saturation: TOneDRealArray read FTotalSaturation;
+    property LiquidSaturation: TOneDRealArray read FLiquidSaturation;
+    property IceSaturation: TOneDRealArray read FIceSaturation;
   end;
 
   TEleReader = class(TCustomSutraOutputReader)
@@ -74,6 +79,9 @@ type
     FXVelocity: TOneDRealArray;
     FYVelocity: TOneDRealArray;
     FZVelocity: TOneDRealArray;
+    FXDarcyVelocity: TOneDRealArray;
+    FYDarcyVelocity: TOneDRealArray;
+    FZDarcyVelocity: TOneDRealArray;
   private
     FHasElement: Boolean;
   protected
@@ -88,6 +96,9 @@ type
     property XVelocity: TOneDRealArray read FXVelocity;
     property YVelocity: TOneDRealArray read FYVelocity;
     property ZVelocity: TOneDRealArray read FZVelocity;
+    property XDarcyVelocity: TOneDRealArray read FXDarcyVelocity;
+    property YDarcyVelocity: TOneDRealArray read FYDarcyVelocity;
+    property ZDarcyVelocity: TOneDRealArray read FZDarcyVelocity;
   end;
 
 implementation
@@ -258,6 +269,7 @@ procedure TNodReader.ReadValueHeader;
 var
   ALine: string;
 begin
+  FSutra4 := False;
   ALine := FReader.ReadLine;
   FHasNode := Pos('Node', ALine) > 0;
   if Pos('X', ALine) > 0 then
@@ -300,13 +312,35 @@ begin
   begin
     SetLength(FU, 0);
   end;
-  if Pos('Saturation', ALine) > 0 then
+  if (Pos(' Saturation', ALine) > 0) then
   begin
-    SetLength(FSaturation, Count);
+    SetLength(FTotalSaturation, Count);
+  end
+  else if (Pos('TotSaturation', ALine) > 0) then
+  begin
+    SetLength(FTotalSaturation, Count);
+    FSutra4 := True;
+  end;
+  begin
+    SetLength(FTotalSaturation, 0);
+  end;
+  if (Pos('LiqSaturation', ALine) > 0) then
+  begin
+    SetLength(FLiquidSaturation, Count);
+    FSutra4 := True;
   end
   else
   begin
-    SetLength(FSaturation, 0);
+    SetLength(FLiquidSaturation, 0);
+  end;
+  if (Pos('IceSaturation', ALine) > 0) then
+  begin
+    SetLength(FIceSaturation, Count);
+    FSutra4 := True;
+  end
+  else
+  begin
+    SetLength(FIceSaturation, 0);
   end;
 end;
 
@@ -340,7 +374,12 @@ begin
       ReadItem(FZ);
       ReadItem(FPressure);
       ReadItem(FU);
-      ReadItem(FSaturation);
+      if FSutra4 then
+      begin
+        ReadItem(FLiquidSaturation);
+        ReadItem(FIceSaturation);
+      end;
+      ReadItem(FTotalSaturation);
     end;
   finally
     FormatSettings.DecimalSeparator := StoredDecimalSeparator;
@@ -355,7 +394,9 @@ begin
   SetLength(FZ, 0);
   SetLength(FPressure, 0);
   SetLength(FU, 0);
-  SetLength(FSaturation, 0);
+  SetLength(FTotalSaturation, 0);
+  SetLength(FLiquidSaturation, 0);
+  SetLength(FIceSaturation, 0);
 end;
 
 { TEleReader }
@@ -419,6 +460,30 @@ begin
   begin
     SetLength(FZVelocity, 0);
   end;
+  if Pos('x darcyvel', ALine) > 0 then
+  begin
+    SetLength(FXDarcyVelocity, Count);
+  end
+  else
+  begin
+    SetLength(FXDarcyVelocity, 0);
+  end;
+  if Pos('y darcyvel', ALine) > 0 then
+  begin
+    SetLength(FYDarcyVelocity, Count);
+  end
+  else
+  begin
+    SetLength(FYDarcyVelocity, 0);
+  end;
+  if Pos('z darcyvel', ALine) > 0 then
+  begin
+    SetLength(FZDarcyVelocity, Count);
+  end
+  else
+  begin
+    SetLength(FZDarcyVelocity, 0);
+  end;
 end;
 
 procedure TEleReader.ReadValues;
@@ -452,6 +517,9 @@ begin
       ReadItem(FXVelocity);
       ReadItem(FYVelocity);
       ReadItem(FZVelocity);
+      ReadItem(FXDarcyVelocity);
+      ReadItem(FYDarcyVelocity);
+      ReadItem(FZDarcyVelocity);
     end;
   finally
     FormatSettings.DecimalSeparator := StoredDecimalSeparator;
@@ -466,6 +534,9 @@ begin
   SetLength(FXVelocity, 0);
   SetLength(FYVelocity, 0);
   SetLength(FZVelocity, 0);
+  SetLength(FXDarcyVelocity, 0);
+  SetLength(FYDarcyVelocity, 0);
+  SetLength(FZDarcyVelocity, 0);
 end;
 
 end.

@@ -11,7 +11,10 @@ uses
   JvDialogs;
 
 type
-  TImportItem = (iiPressure, iiU, iiSaturation, iiXVel, iiYVel, iiZVel);
+  TImportItem = (iiPressure, iiU, iiSaturation, iiLiquidSaturation,
+    iiIceSaturation,
+    iiXVel, iiYVel, iiZVel,
+    iiXDarcyVelocity, iiYDarcyVelocity, iiZDarcyVelocity);
   TImportItems = set of TImportItem;
 
   TColorContourItem = class(TObject)
@@ -24,9 +27,9 @@ type
 
 const
   FirstNodeItem = iiPressure;
-  LastNodeItem = iiSaturation;
+  LastNodeItem = iiIceSaturation;
   FirstElementItem = iiXVel;
-  LastElementItem = iiZVel;
+  LastElementItem = iiZDarcyVelocity;
 
 type
   TUndoImportSutraResults = class(TUndoImportShapefile)
@@ -140,9 +143,14 @@ var
   SutraPressureResults: string;
   SutraUResults: string;
   SutraSaturationResults: string;
+  SutraLiquidSaturationResults: string;
+  SutraIceSaturationResults: string;
   SutraXVelocityResults: string;
   SutraYVelocityResults: string;
   SutraZVelocityResults: string;
+  SutraXDarcyVelocityResults: string;
+  SutraYDarcyVelocityResults: string;
+  SutraZDarcyVelocityResults: string;
   SutraBoundaryResults: string;
 
 
@@ -212,6 +220,11 @@ resourcestring
   'point value, SUTRA performed an invalid numerical operation such as ' +
   'attempting to divide by zero. Typically, this is because an error in the ' +
   'conceptual model of the system.';
+  StrLiquidSaturation = 'Liquid Saturation';
+  StrIceSaturation = 'Ice Saturation';
+  StrXDarcyVelocity = 'X Darcy velocity';
+  StrYDarcyVelocity = 'Y Darcy velocity';
+  StrZDarcyVelocity = 'Z Darcy velocity';
 //  StrTemperature = 'Temperature';
 
 
@@ -1100,9 +1113,14 @@ begin
             else Assert(False);
           end;
           Labels.Add(StrSaturation);
+          Labels.Add(StrLiquidSaturation);
+          Labels.Add(StrIceSaturation);
           Labels.Add(StrXVelocity);
           Labels.Add(StrYVelocity);
           Labels.Add(StrZVelocity);
+          Labels.Add(StrXDarcyVelocity);
+          Labels.Add(StrYDarcyVelocity);
+          Labels.Add(StrZDarcyVelocity);
         end;
       3:
         begin
@@ -1236,6 +1254,8 @@ begin
   begin
     chklstDataToImport.ItemEnabled[Ord(iiZVel)]  := False;
     chklstDataToImport.Checked[Ord(iiZVel)]  := False;
+    chklstDataToImport.ItemEnabled[Ord(iiZDarcyVelocity)]  := False;
+    chklstDataToImport.Checked[Ord(iiZDarcyVelocity)]  := False;
   end;
 
 end;
@@ -1333,6 +1353,30 @@ begin
               Continue;
             end;
             Classification := SutraZVelocityResults;
+          end;
+        iiXDarcyVelocity:
+          begin
+            if Length(FEleReader.FXDarcyVelocity) = 0 then
+            begin
+              Continue;
+            end;
+            Classification := SutraXDarcyVelocityResults;
+          end;
+        iiYDarcyVelocity:
+          begin
+            if Length(FEleReader.FYDarcyVelocity) = 0 then
+            begin
+              Continue;
+            end;
+            Classification := SutraYDarcyVelocityResults;
+          end;
+        iiZDarcyVelocity:
+          begin
+            if Length(FEleReader.FZDarcyVelocity) = 0 then
+            begin
+              Continue;
+            end;
+            Classification := SutraZDarcyVelocityResults;
           end;
         else
           Assert(False);
@@ -1672,6 +1716,22 @@ begin
             end;
             Classification := SutraSaturationResults;
           end;
+        iiLiquidSaturation:
+          begin
+            if Length(FNodeReader.LiquidSaturation) = 0 then
+            begin
+              Continue;
+            end;
+            Classification := SutraLiquidSaturationResults;
+          end;
+        iiIceSaturation:
+          begin
+            if Length(FNodeReader.IceSaturation) = 0 then
+            begin
+              Continue;
+            end;
+            Classification := SutraIceSaturationResults;
+          end;
         else
           Assert(False);
       end;
@@ -1887,6 +1947,45 @@ begin
               Inc(DSIndex);
             end;
           end;
+        iiXDarcyVelocity:
+          begin
+            if Length(FEleReader.XDarcyVelocity) = 0 then
+            begin
+              Continue;
+            end
+            else
+            begin
+              ValueArray := FEleReader.XDarcyVelocity;
+              DataArray := DataSets[DSIndex];
+              Inc(DSIndex);
+            end;
+          end;
+        iiYDarcyVelocity:
+          begin
+            if Length(FEleReader.YDarcyVelocity) = 0 then
+            begin
+              Continue;
+            end
+            else
+            begin
+              ValueArray := FEleReader.YDarcyVelocity;
+              DataArray := DataSets[DSIndex];
+              Inc(DSIndex);
+            end;
+          end;
+        iiZDarcyVelocity:
+          begin
+            if Length(FEleReader.ZDarcyVelocity) = 0 then
+            begin
+              Continue;
+            end
+            else
+            begin
+              ValueArray := FEleReader.ZDarcyVelocity;
+              DataArray := DataSets[DSIndex];
+              Inc(DSIndex);
+            end;
+          end;
         else
           Assert(False);
       end;
@@ -2019,6 +2118,32 @@ begin
               Inc(DSIndex);
             end;
           end;
+        iiLiquidSaturation:
+          begin
+            if Length(FNodeReader.LiquidSaturation) = 0 then
+            begin
+              Continue;
+            end
+            else
+            begin
+              ValueArray := FNodeReader.LiquidSaturation;
+              DataArray := DataSets[DSIndex];
+              Inc(DSIndex);
+            end;
+          end;
+        iiIceSaturation:
+          begin
+            if Length(FNodeReader.IceSaturation) = 0 then
+            begin
+              Continue;
+            end
+            else
+            begin
+              ValueArray := FNodeReader.IceSaturation;
+              DataArray := DataSets[DSIndex];
+              Inc(DSIndex);
+            end;
+          end;
         else
           Assert(False);
       end;
@@ -2070,7 +2195,10 @@ begin
 //    FirstResults := True;
     if chklstDataToImport.Checked[Ord(iiPressure)]
       or chklstDataToImport.Checked[Ord(iiU)]
-      or chklstDataToImport.Checked[Ord(iiSaturation)] then
+      or chklstDataToImport.Checked[Ord(iiSaturation)]
+      or chklstDataToImport.Checked[Ord(iiLiquidSaturation)]
+      or chklstDataToImport.Checked[Ord(iiIceSaturation)]
+      then
     begin
       for index := 0 to FNodeReader.StoredResults.Count - 1 do
       begin
@@ -2117,7 +2245,11 @@ begin
 
     if chklstDataToImport.Checked[Ord(iiXVel)]
       or chklstDataToImport.Checked[Ord(iiYVel)]
-      or chklstDataToImport.Checked[Ord(iiZVel)] then
+      or chklstDataToImport.Checked[Ord(iiZVel)]
+      or chklstDataToImport.Checked[Ord(iiXDarcyVelocity)]
+      or chklstDataToImport.Checked[Ord(iiYDarcyVelocity)]
+      or chklstDataToImport.Checked[Ord(iiZDarcyVelocity)]
+      then
     begin
       StepList.Clear;
       for index := 0 to FEleReader.StoredResults.Count - 1 do
@@ -2614,7 +2746,8 @@ begin
             begin
               Exit;
             end;
-            if (ImportItems * [iiPressure, iiU, iiSaturation]) <> [] then
+            if (ImportItems * [iiPressure, iiU, iiSaturation,
+              iiLiquidSaturation, iiIceSaturation]) <> [] then
             begin
               for Index := 0 to FNodeReader.StoredResults.Count - 1 do
               begin
@@ -2635,7 +2768,8 @@ begin
                 end;
               end;
             end;
-            if (ImportItems * [iiXVel, iiYVel, iiZVel]) <> [] then
+            if (ImportItems * [iiXVel, iiYVel, iiZVel,
+              iiXDarcyVelocity, iiYDarcyVelocity, iiZDarcyVelocity]) <> [] then
             begin
               for Index := 0 to FEleReader.StoredResults.Count - 1 do
               begin
@@ -2839,9 +2973,16 @@ initialization
   SutraUResults := StrModelResults + '|' + 'U Values';
   SutraSaturationResults := StrModelResults + '|' + 'Saturation';
 
+  SutraLiquidSaturationResults := StrModelResults + '|' + 'Liquid Saturation';
+  SutraIceSaturationResults := StrModelResults + '|' + 'Ice Saturation';
+
+
   SutraXVelocityResults := StrModelResults + '|' + 'X Velocity';
   SutraYVelocityResults := StrModelResults + '|' + 'Y Velocity';
   SutraZVelocityResults := StrModelResults + '|' + 'Z Velocity';
+  SutraXDarcyVelocityResults := StrModelResults + '|' + 'X Darcy Velocity';
+  SutraYDarcyVelocityResults := StrModelResults + '|' + 'Y Darcy Velocity';
+  SutraZDarcyVelocityResults := StrModelResults + '|' + 'Darcy Z Velocity';
   SutraBoundaryResults := StrModelResults + '|' + 'Sutra Boundary Results';
 
 end.

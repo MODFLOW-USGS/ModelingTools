@@ -43,7 +43,12 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
       'Saturation'
       'X velocity'
       'Y velocity'
-      'Z velocity')
+      'Z velocity'
+      'Liquid saturation'
+      'Ice saturation'
+      'X Darcy velocity'
+      'Y Darcy velocity'
+      'Z Darcy velocity')
     TabOrder = 0
     OnClick = chklstDataToImportClick
   end
