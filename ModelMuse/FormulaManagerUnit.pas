@@ -266,6 +266,10 @@ begin
                 begin
                   GlobalRestoreMf6CalibrationObsSubscription(self, Subject, UsedVariables[VariableIndex])
                 end
+                else if RestoreEvent = Addr(GlobalDummyHandleSubscription) then
+                begin
+                  // do nothing.
+                end
                 else
                 begin
                   Assert(False);

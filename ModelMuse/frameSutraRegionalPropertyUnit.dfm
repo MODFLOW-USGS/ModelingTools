@@ -9,7 +9,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
     Top = 0
     Width = 679
     Height = 480
-    ActivePage = tsPermeability
+    ActivePage = tsAdsorption
     Align = alClient
     OwnerDraw = True
     TabHeight = 75
@@ -40,7 +40,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Caption = 'Second distribution coefficient (CHI2)'
         end
         object rgSorptionModel: TRadioGroup
-          Left = 6
+          Left = 3
           Top = 21
           Width = 417
           Height = 105

@@ -10555,6 +10555,7 @@ const
 //               Change: Changed the export of SUTRA template files for PEST.
 //    '5.0.0.11' No real change
 
+//               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const

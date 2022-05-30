@@ -1,0 +1,17 @@
+if exist "FreezingWallPest.inp" del "FreezingWallPest.inp"
+if exist "FreezingWallPest.bcof" del "FreezingWallPest.bcof"
+if exist "FreezingWallPest.bcop" del "FreezingWallPest.bcop"
+if exist "FreezingWallPest.bcou" del "FreezingWallPest.bcou"
+if exist "FreezingWallPest.ele" del "FreezingWallPest.ele"
+if exist "FreezingWallPest.lst" del "FreezingWallPest.lst"
+if exist "FreezingWallPest.nod" del "FreezingWallPest.nod"
+if exist "FreezingWallPest.rst" del "FreezingWallPest.rst"
+if exist "FreezingWallPest.smy" del "FreezingWallPest.smy"
+if exist "FreezingWallPest_N_2257.OBS" del "FreezingWallPest_N_2257.OBS"
+if exist "FreezingWallPest_N_3233.OBS" del "FreezingWallPest_N_3233.OBS"
+if exist "FreezingWallPest_N_4209.OBS" del "FreezingWallPest_N_4209.OBS"
+if exist "FreezingWallPest_N_5185.OBS" del "FreezingWallPest_N_5185.OBS"
+if exist "FreezingWallPest_N_6161.OBS" del "FreezingWallPest_N_6161.OBS"
+"EnhancedTemplateProcessor.exe" FreezingWallPest.inp.tpl FreezingWallPest.pval
+"sutra_4_0.exe"
+"SutraObsExtractor.exe" FreezingWallPest.soe_ev

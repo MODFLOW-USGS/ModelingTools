@@ -87,6 +87,8 @@ type
     procedure btnedExit(Sender: TObject);
     procedure rgSorptionModelClick(Sender: TObject);
   private
+    FTransportChoice: TTransportChoice;
+    FSaturationChoice: TSaturationChoice;
     function FormulaOK(AFormula: string): Boolean;
     { Private declarations }
   public
@@ -244,14 +246,14 @@ procedure TframeSutraRegionalProperty.pgcMainDrawTab(Control: TCustomTabControl;
   TabIndex: Integer; const Rect: TRect; Active: Boolean);
 var
   tabCaption: string;
-  SutraOptions: TSutraOptions;
+//  SutraOptions: TSutraOptions;
   R: TRect;
 begin
-  SutraOptions := frmGoPhast.PhastModel.SutraOptions;
+//  SutraOptions := frmGoPhast.PhastModel.SutraOptions;
   case TabIndex of
     0:
       begin
-        if SutraOptions.TransportChoice in [tcSolute, tcSoluteHead] then
+        if FTransportChoice in [tcSolute, tcSoluteHead] then
         begin
           tabCaption := StrAdsorption;
         end
@@ -520,11 +522,14 @@ begin
   rgWatSatFunctClick(nil);
   rgRelativePermChoiceClick(nil);
   rgLiqWatSatChoiceClick(nil);
+  rgSorptionModelClick(nil);
 end;
 
 procedure TframeSutraRegionalProperty.EnableTabs(
   TransportChoice: TTransportChoice; SaturationChoice: TSaturationChoice);
 begin
+  FTransportChoice := TransportChoice;
+  FSaturationChoice := SaturationChoice;
   tsTotalSaturation.TabVisible := (TransportChoice = tcFreezing)
     or (SaturationChoice = scUnsaturated);
   tsPermeability.TabVisible := (TransportChoice = tcFreezing)
@@ -535,14 +540,16 @@ begin
   rgSorptionModel.Enabled := TransportChoice in [tcSolute, tcSoluteHead];
   rgTransportModel.Enabled := TransportChoice in [tcEnergy, tcFreezing];
 
-  if TransportChoice in [tcSolute, tcSoluteHead] then
-  begin
-    tsAdsorption.Caption := StrAdsorption;
-  end
-  else
-  begin
-    tsAdsorption.Caption := StrThermalConductivity;
-  end;
+//  if TransportChoice in [tcSolute, tcSoluteHead] then
+//  begin
+//    tsAdsorption.Caption := StrAdsorption;
+//    tsAdsorption.Invalidate;
+//  end
+//  else
+//  begin
+//    tsAdsorption.Caption := StrThermalConductivity;
+//    tsAdsorption.Invalidate;
+//  end;
 
   EnableControls;
 end;
