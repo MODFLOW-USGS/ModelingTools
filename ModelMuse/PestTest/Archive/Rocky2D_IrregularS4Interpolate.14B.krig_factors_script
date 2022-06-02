@@ -12,13 +12,22 @@ POR_PilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
   id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Nodal_Porosity.Density.3.pp')
 COMPMA_PilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
   plist='COMPMA_Density_1';column=5, &
-  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.SolidMatrixCompressibility.Density.1.pp')
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Solid_Matrix_Compressibility.Density.1.pp')
 COMPMA_PilotPoints2 = read_list_file(skiplines=0,dimensions=2, &
   plist='COMPMA_Density_2';column=5, &
-  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.SolidMatrixCompressibility.Density.2.pp')
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Solid_Matrix_Compressibility.Density.2.pp')
 COMPMA_PilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
   plist='COMPMA_Density_3';column=5, &
-  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.SolidMatrixCompressibility.Density.3.pp')
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Solid_Matrix_Compressibility.Density.3.pp')
+CS_PilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
+  plist='CS_Density_1';column=5, &
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Solid_Grain_Specific_Heat.Density.1.pp')
+CS_PilotPoints2 = read_list_file(skiplines=0,dimensions=2, &
+  plist='CS_Density_2';column=5, &
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Solid_Grain_Specific_Heat.Density.2.pp')
+CS_PilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
+  plist='CS_Density_3';column=5, &
+  id_type='character',file='Rocky2D_IrregularS4Interpolate.14B.Solid_Grain_Specific_Heat.Density.3.pp')
 
 #Read SUTRA node information file
 cl_Discretization = read_list_file(skiplines=1,dimensions=2, &

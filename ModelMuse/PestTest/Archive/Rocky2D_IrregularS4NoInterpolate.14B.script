@@ -48,61 +48,61 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
 # Read Unsaturated Zone
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_Unsat_Region1;column=4, &
-  file='Rocky2D_IrregularS4NoInterpolate.Unsat_Region_Nodes')
+  file='Rocky2D_IrregularS4NoInterpolate.Region_Nodes')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_Unsat_Region2;column=7, &
-  file='Rocky2D_IrregularS4NoInterpolate.Unsat_Region_Nodes')
+  file='Rocky2D_IrregularS4NoInterpolate.Region_Nodes')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_Unsat_Region3;column=10, &
-  file='Rocky2D_IrregularS4NoInterpolate.Unsat_Region_Nodes')
+  file='Rocky2D_IrregularS4NoInterpolate.Region_Nodes')
 
 # Read COMPMA
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidMatrixCompressibility')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Matrix_Compressibility')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_COMPMA1;column=4, &
   slist=s_COMPMAPar1;column=5, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidMatrixCompressibility')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Matrix_Compressibility')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_COMPMA2;column=8, &
   slist=s_COMPMAPar2;column=9, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidMatrixCompressibility')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Matrix_Compressibility')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_COMPMA3;column=12, &
   slist=s_COMPMAPar3;column=13, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidMatrixCompressibility')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Matrix_Compressibility')
 
 # Read CS
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidGrain_SpecificHeat')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Grain_Specific_Heat')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_CS1;column=4, &
   slist=s_CSPar1;column=5, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidGrain_SpecificHeat')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Grain_Specific_Heat')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_CS2;column=8, &
   slist=s_CSPar2;column=9, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidGrain_SpecificHeat')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Grain_Specific_Heat')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_CS3;column=12, &
   slist=s_CSPar3;column=13, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidGrain_SpecificHeat')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Grain_Specific_Heat')
 
 # Read RHOS
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidGrainDensity')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Grain_Density')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_RHOS1;column=4, &
   slist=s_RHOSPar1;column=5, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidGrainDensity')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Grain_Density')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_RHOS2;column=8, &
   slist=s_RHOSPar2;column=9, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidGrainDensity')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Grain_Density')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_RHOS3;column=12, &
   slist=s_RHOSPar3;column=13, &
-  file='Rocky2D_IrregularS4NoInterpolate.SolidGrainDensity')
+  file='Rocky2D_IrregularS4NoInterpolate.Solid_Grain_Density')
 
 #Read parameter values
 #Density = $                        Density$

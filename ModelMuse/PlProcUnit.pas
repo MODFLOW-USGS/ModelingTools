@@ -2123,7 +2123,7 @@ begin
       NewLine;
       Inc(ColIndex);
 
-      WriteString(Format('  file=''%s.Unsat_Region_Nodes'')', [FRoot]));
+      WriteString(Format('  file=''%0:s.%1:s'')', [FRoot,KUnsatRegionNodes]));
       NewLine;
     end;
     NewLine;
@@ -2475,7 +2475,7 @@ begin
         NewLine;
         WriteString(Format('  plist=p_z%0:d, &', [LayerIndex]));
         NewLine;
-        WriteString(Format('  plist=p_Porosity%0:d ', [LayerIndex]));
+        WriteString(Format('  plist=p_Porosity%0:d', [LayerIndex]));
         if FDataSetAbbreviations.Count > 0 then
         begin
           WriteString(', &');
@@ -3492,7 +3492,7 @@ begin
       NewLine;
       Inc(ColIndex);
 
-      WriteString(Format('  file=''%s.Unsat_Region_Elements'')', [FRoot]));
+      WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, KUnsatRegionElements]));
       NewLine;
     end;
     NewLine;

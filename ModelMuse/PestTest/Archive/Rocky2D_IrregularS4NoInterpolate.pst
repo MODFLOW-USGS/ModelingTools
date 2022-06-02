@@ -2,7 +2,7 @@ pcf
 * control data
 restart regularisation # RSTFLE PESTMODE
      1     0     1     1     1     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
-     8     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
+     9     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
   1.000000000000E+001   2.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
   3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
   1.000000000000E-001      3  0.000000000000E+000  noaui nosenreuse boundscale # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE
@@ -42,6 +42,7 @@ Rocky2D_IrregularS4NoInterpolate.SolidMatrixCompressibility.script.tpl Rocky2D_I
 Rocky2D_IrregularS4NoInterpolate.Maximum_Permeability.script.tpl Rocky2D_IrregularS4NoInterpolate.Maximum_Permeability.script
 Rocky2D_IrregularS4NoInterpolate.SolidGrain_SpecificHeat.script.tpl Rocky2D_IrregularS4NoInterpolate.SolidGrain_SpecificHeat.script
 Rocky2D_IrregularS4NoInterpolate.ScaledEffectiveAirThermalConductivity.script.tpl Rocky2D_IrregularS4NoInterpolate.ScaledEffectiveAirThermalConductivity.script
+Rocky2D_IrregularS4NoInterpolate.Scaled_Effective_Air_Thermal_Conductivity.script.tpl Rocky2D_IrregularS4NoInterpolate.Scaled_Effective_Air_Thermal_Conductivity.script
 Rocky2D_IrregularS4NoInterpolate.PestIns Rocky2D_IrregularS4NoInterpolate.SutraValues
 
 * prior information

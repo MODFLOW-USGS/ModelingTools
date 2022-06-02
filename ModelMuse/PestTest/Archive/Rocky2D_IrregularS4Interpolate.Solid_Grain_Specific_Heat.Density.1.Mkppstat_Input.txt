@@ -1,0 +1,4 @@
+Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat.Density.1.pp
+4
+1
+Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat.Density.1.Variogram.txt

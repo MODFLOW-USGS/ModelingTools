@@ -1,0 +1,6 @@
+Rocky2D_IrregularS4Interpolate.Solid_Matrix_Compressibility.Density.3.Variogram.txt
+y
+0.0
+g
+Rocky2D_IrregularS4Interpolate.Solid_Matrix_Compressibility.Density.3.Cov.txt
+

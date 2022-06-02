@@ -23,10 +23,10 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
 # Read Unsaturated Zone
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_LREG1;column=4, &
-  file='Rocky2D_IrregularS4NoInterpolate.Unsat_Region_Elements')
+  file='Rocky2D_IrregularS4NoInterpolate.Region_Elements')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_LREG2;column=7, &
-  file='Rocky2D_IrregularS4NoInterpolate.Unsat_Region_Elements')
+  file='Rocky2D_IrregularS4NoInterpolate.Region_Elements')
 
 # Read Maximum_Permeability
   p_PMAX1=new_plist(reference_clist='cl_Discretization',value=1.0)
@@ -142,22 +142,22 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_ATMINPar2;column=9, &
   file='Rocky2D_IrregularS4NoInterpolate.Transverse_Dispersivity_Min_Dir')
 
-# Read ScaledSolidGrainThermalConductivity
+# Read Scaled_Solid_Grain_Thermal_Conductivity
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_SIGMAS1;column=4, &
   slist=s_SIGMASPar1;column=5, &
-  file='Rocky2D_IrregularS4NoInterpolate.ScaledSolidGrainThermalConductivity')
+  file='Rocky2D_IrregularS4NoInterpolate.Scaled_Solid_Grain_Thermal_Conductivity')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_SIGMAS2;column=8, &
   slist=s_SIGMASPar2;column=9, &
-  file='Rocky2D_IrregularS4NoInterpolate.ScaledSolidGrainThermalConductivity')
+  file='Rocky2D_IrregularS4NoInterpolate.Scaled_Solid_Grain_Thermal_Conductivity')
 
-# Read ScaledEffectiveAirThermalConductivity
+# Read Scaled_Effective_Air_Thermal_Conductivity
   p_SIGMAA1=new_plist(reference_clist='cl_Discretization',value=1.0)
-  p_SIGMAA1.read_list_as_array(file='arrays\Rocky2D_IrregularS4NoInterpolate.ScaledEffectiveAirThermalConductivity_1.arrays')
+  p_SIGMAA1.read_list_as_array(file='arrays\Rocky2D_IrregularS4NoInterpolate.Scaled_Effective_Air_Thermal_Conductivity_1.arrays')
   s_SIGMAAPar1=new_slist(reference_clist='cl_Discretization',value=1)
   p_SIGMAA2=new_plist(reference_clist='cl_Discretization',value=1.0)
-  p_SIGMAA2.read_list_as_array(file='arrays\Rocky2D_IrregularS4NoInterpolate.ScaledEffectiveAirThermalConductivity_2.arrays')
+  p_SIGMAA2.read_list_as_array(file='arrays\Rocky2D_IrregularS4NoInterpolate.Scaled_Effective_Air_Thermal_Conductivity_2.arrays')
   s_SIGMAAPar2=new_slist(reference_clist='cl_Discretization',value=2)
 
 #Read parameter values

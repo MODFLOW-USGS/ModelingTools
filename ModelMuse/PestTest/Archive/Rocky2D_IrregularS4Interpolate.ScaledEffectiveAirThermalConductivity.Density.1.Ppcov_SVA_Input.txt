@@ -1,6 +1,0 @@
-Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity.Density.1.Variogram.txt
-y
-0.0
-g
-Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity.Density.1.Cov.txt
-

@@ -4,8 +4,6 @@ if exist "arrays\Rocky2D_IrregularS4Interpolate.Middle_Permeability_1.arrays" de
 if exist "arrays\Rocky2D_IrregularS4Interpolate.Middle_Permeability_2.arrays" del "arrays\Rocky2D_IrregularS4Interpolate.Middle_Permeability_2.arrays"
 if exist "arrays\Rocky2D_IrregularS4Interpolate.Minimum_Permeability_1.arrays" del "arrays\Rocky2D_IrregularS4Interpolate.Minimum_Permeability_1.arrays"
 if exist "arrays\Rocky2D_IrregularS4Interpolate.Minimum_Permeability_2.arrays" del "arrays\Rocky2D_IrregularS4Interpolate.Minimum_Permeability_2.arrays"
-if exist "arrays\Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity_1.arrays" del "arrays\Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity_1.arrays"
-if exist "arrays\Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity_2.arrays" del "arrays\Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity_2.arrays"
 if exist "Rocky2D_IrregularS4Interpolate.14B_1" del "Rocky2D_IrregularS4Interpolate.14B_1"
 if exist "Rocky2D_IrregularS4Interpolate.14B_2" del "Rocky2D_IrregularS4Interpolate.14B_2"
 if exist "Rocky2D_IrregularS4Interpolate.14B_3" del "Rocky2D_IrregularS4Interpolate.14B_3"
@@ -23,6 +21,8 @@ if exist "Rocky2D_IrregularS4Interpolate.smy" del "Rocky2D_IrregularS4Interpolat
 "plproc.exe" Rocky2D_IrregularS4Interpolate.Maximum_Permeability.script
 "plproc.exe" Rocky2D_IrregularS4Interpolate.SolidGrain_SpecificHeat.script
 "plproc.exe" Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity.script
+"plproc.exe" Rocky2D_IrregularS4Interpolate.Solid_Matrix_Compressibility.script
+"plproc.exe" Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat.script
 "plproc.exe" 'Rocky2D_IrregularS4Interpolate.14B.script'
 "EnhancedTemplateProcessor.exe" arrays\Rocky2D_IrregularS4Interpolate.Middle_Permeability_1.arrays.tpl
 "EnhancedTemplateProcessor.exe" arrays\Rocky2D_IrregularS4Interpolate.Middle_Permeability_2.arrays.tpl

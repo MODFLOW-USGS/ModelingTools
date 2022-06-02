@@ -28,13 +28,13 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
 # Read Unsaturated Zone
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_LREG1;column=4, &
-  file='SutraTest5.Unsat_Region_Elements')
+  file='SutraTest5.Region_Elements')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_LREG2;column=7, &
-  file='SutraTest5.Unsat_Region_Elements')
+  file='SutraTest5.Region_Elements')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_LREG3;column=10, &
-  file='SutraTest5.Unsat_Region_Elements')
+  file='SutraTest5.Region_Elements')
 
 # Read Maximum_Permeability
   p_PMAX1=new_plist(reference_clist='cl_Discretization',value=1.0)

@@ -12,7 +12,7 @@ cl_Discretization = read_list_file(skiplines=1,dimensions=2, &
 # Read Unsaturated Zone
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_LREG1;column=2, &
-  file='RmaSutraNodeTest.Unsat_Region_Elements')
+  file='RmaSutraNodeTest.Region_Elements')
 
 # Read Maximum_Hydraulic_Conductivity
   p_PMAX1=new_plist(reference_clist='cl_Discretization',value=1.0)

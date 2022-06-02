@@ -23,10 +23,10 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
 # Read Unsaturated Zone
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_LREG1;column=4, &
-  file='Rocky2D_IrregularS4Interpolate.Unsat_Region_Elements')
+  file='Rocky2D_IrregularS4Interpolate.Region_Elements')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_LREG2;column=7, &
-  file='Rocky2D_IrregularS4Interpolate.Unsat_Region_Elements')
+  file='Rocky2D_IrregularS4Interpolate.Region_Elements')
 
 # Read Maximum_Permeability
   p_PMAX1=new_plist(reference_clist='cl_Discretization',value=1.0)
@@ -142,23 +142,25 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_ATMINPar2;column=9, &
   file='Rocky2D_IrregularS4Interpolate.Transverse_Dispersivity_Min_Dir')
 
-# Read ScaledSolidGrainThermalConductivity
+# Read Scaled_Solid_Grain_Thermal_Conductivity
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_SIGMAS1;column=4, &
   slist=s_SIGMASPar1;column=5, &
-  file='Rocky2D_IrregularS4Interpolate.ScaledSolidGrainThermalConductivity')
+  file='Rocky2D_IrregularS4Interpolate.Scaled_Solid_Grain_Thermal_Conductivity')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_SIGMAS2;column=8, &
   slist=s_SIGMASPar2;column=9, &
-  file='Rocky2D_IrregularS4Interpolate.ScaledSolidGrainThermalConductivity')
+  file='Rocky2D_IrregularS4Interpolate.Scaled_Solid_Grain_Thermal_Conductivity')
 
-# Read ScaledEffectiveAirThermalConductivity
-  p_SIGMAA1=new_plist(reference_clist='cl_Discretization',value=1.0)
-  p_SIGMAA1.read_list_as_array(file='arrays\Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity_1.arrays')
-  s_SIGMAAPar1=new_slist(reference_clist='cl_Discretization',value=1)
-  p_SIGMAA2=new_plist(reference_clist='cl_Discretization',value=1.0)
-  p_SIGMAA2.read_list_as_array(file='arrays\Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity_2.arrays')
-  s_SIGMAAPar2=new_slist(reference_clist='cl_Discretization',value=2)
+# Read Scaled_Effective_Air_Thermal_Conductivity
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  plist=p_SIGMAA1;column=4, &
+  slist=s_SIGMAAPar1;column=5, &
+  file='Rocky2D_IrregularS4Interpolate.Scaled_Effective_Air_Thermal_Conductivity')
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  plist=p_SIGMAA2;column=8, &
+  slist=s_SIGMAAPar2;column=9, &
+  file='Rocky2D_IrregularS4Interpolate.Scaled_Effective_Air_Thermal_Conductivity')
 
 #Read parameter values
 

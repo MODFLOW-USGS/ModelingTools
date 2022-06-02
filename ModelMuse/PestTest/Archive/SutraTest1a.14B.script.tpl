@@ -58,16 +58,16 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
 # Read Unsaturated Zone
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_Unsat_Region1;column=4, &
-  file='SutraTest1a.Unsat_Region_Nodes')
+  file='SutraTest1a.Region_Nodes')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_Unsat_Region2;column=7, &
-  file='SutraTest1a.Unsat_Region_Nodes')
+  file='SutraTest1a.Region_Nodes')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_Unsat_Region3;column=10, &
-  file='SutraTest1a.Unsat_Region_Nodes')
+  file='SutraTest1a.Region_Nodes')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_Unsat_Region4;column=13, &
-  file='SutraTest1a.Unsat_Region_Nodes')
+  file='SutraTest1a.Region_Nodes')
 
 #Read parameter values
 a = $                        a$
