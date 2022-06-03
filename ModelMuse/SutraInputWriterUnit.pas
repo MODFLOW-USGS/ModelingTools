@@ -456,6 +456,11 @@ begin
          begin
            WriteString('''VGEN'' ');
 
+           Value := EvaluateFormula(WaterSaturationProperties.ResidualWaterContent,
+             'DATASET 11B: Residual total water saturation (SWRES)', PestParam);
+           WriteFormulaOrValueBasedOnAPestName(PestParam,
+             Value, -1, -1, -1);
+
            Value := EvaluateFormula(WaterSaturationProperties.VanGenuchtenAlpha,
              'DATASET 11B: van Genuchten function parameter alpha_VG (AA)', PestParam);
            WriteFormulaOrValueBasedOnAPestName(PestParam,
@@ -647,7 +652,7 @@ begin
         end;
       lwscExponential:
         begin
-          WriteString('''EXPO’'' ');
+          WriteString('''EXPO'' ');
 
           Value := EvaluateFormula(LiquidWaterSaturationParameters.ResidualLiquidWaterSaturation,
             'DATASET 11D: Residual liquid water saturation  (SLSATRES)', PestParam);
