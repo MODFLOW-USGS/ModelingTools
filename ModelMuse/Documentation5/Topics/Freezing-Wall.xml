@@ -1,0 +1,699 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-06-02T21:57:44.666-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Freezing Wall</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Freezing Wall</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example reproduces the first example from the SUTRA 4.0 documentation. In it, a 4m x 4m contaminated zone is surrounded on two sides by a frozen wall and on a third size by the edge of the model in order to isolate it.</text></para>
+    <para styleclass="Normal"><table rowcount="48" colcount="4" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; border-collapse:collapse; cell-border-width:1px; border-color:#000000; border-style:solid; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:avoid; border:none; tabstops:none;"><text style="font-family:&apos;Arial Narrow&apos;; font-size:10pt; font-weight:bold; color:#000000;" translate="true">Parameter</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:avoid; border:none; tabstops:none;"><text style="font-family:&apos;Arial Narrow&apos;; font-size:10pt; font-weight:bold; color:#000000;" translate="true">Implementation in ModelMuse</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:avoid; border:none; tabstops:none;"><text style="font-family:&apos;Arial Narrow&apos;; font-size:10pt; font-weight:bold; color:#000000;" translate="true">Name</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:avoid; border:none; tabstops:none;"><text style="font-family:&apos;Arial Narrow&apos;; font-size:10pt; font-weight:bold; color:#000000;" translate="true"> Value and Unit</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">aquifer thickness</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Nodal_Thickness</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1 m</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">model extent (east-west </text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; font-style:italic; color:#000000;" translate="true">x</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">, north-south </text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; font-style:italic; color:#000000;" translate="true">y</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">25 m, 15 m</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">porosity</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Nodal_Porosity</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">0.1 </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">fluid compressibility</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Fluid Properties</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">COMPL</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">4.47×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">-10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true"> [kg/(m</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">s</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">2</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">)]</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">-1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">fluid specific heat</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Fluid Properties</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">CL</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">4,182. J/(kg</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">°C)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">fluid thermal conductivity</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Fluid Properties</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SIGMAL</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">0.6 J/(s</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">m</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">°C)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; font-style:italic; color:#000000;" translate="true">linear fluid density function</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">:</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">[here set to a constant density of 1000. kg/m</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">3</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">]</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">base density (RHOL0)</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">base temperature (URHOL0)</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">coefficient of density change (DRLDU)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Fluid Properties</text></para>
+        </td>
+        <td style="vertical-align:bottom; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">RHOL0</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">URHOL0</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">DRLDU</text></para>
+        </td>
+        <td style="vertical-align:bottom; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1,000 kg/m</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">3</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">20 °C</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">0 kg/( m</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">3</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">°C)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">solid matrix compressibility (COMPMA)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Solid_Matrix_Compressibility</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">-8</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true"> [kg/(m</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">s</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">2</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">)]</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">-1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">solid grain density (RHOS)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Solid_Grain_Density</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">2,600 kg/m</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">solid grain specific heat</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Solid_Grain_Specific_Heat</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">840 J/(kg</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">°C)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">solid grain thermal conductivity</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Scaled_Solid_Grain_Thermal_Conductivity</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">3.5 J/(s</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">m</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">°C)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">ice compressibility (COMPI)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Fluid Properties</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">COMPI</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">0 [kg/(m</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">s</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">2</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">)]</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">-1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">ice density</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Fluid Properties</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Ice density (RHOI0)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">920 kg/m</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">ice thermal conductivity</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Fluid Properties</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SIGMAI</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">2.14 J/(s</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">m</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">°C)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">ice specific heat</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Fluid Properties</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">CI</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">2,108 J/(kg</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">°C)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">latent heat of fusion</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Regionwise Properties/Freezing Temperature and Latent Heat</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">HTLAT</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">3.34×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">5</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true"> J/kg</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">permeability (max and min)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Maximum_Permeability and Minimum_Permeability</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">-10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true"> m</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">2</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">&#32;</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">(hydraulic conductivity ~10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">-3</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true"> m/s)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">longitudinal dispersivity (in max and min permeability directions)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Longitudinal_Dispersivity_Max_Dir and Longitudinal_Dispersivity_Min_Dir</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">0.1 m</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">transverse dispersivity (in max and min permeability directions)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Transverse_Dispersivity_Max_Dir and Longitudinal_Dispersivity_Min_Dir</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">0.01 m</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">gravity vector components (GRAVX, GRAVY)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Configuration</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">GRAVX, GRAVY</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">0, 0 m/s</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; font-style:italic; color:#000000;" translate="true">piecewise-linear liquid-water saturation function</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">: </text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">minimum liquid saturation (SLSATRES)</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">temperature at which minimum liquid saturation occurs (TLRES)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Regionwise Properties/Liquid Water Saturation</text></para>
+        </td>
+        <td style="vertical-align:bottom; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SLMOD</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SLSATRES</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">TLRES</text></para>
+        </td>
+        <td style="vertical-align:bottom; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">0.01</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">–2 °C</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; font-style:italic; color:#000000;" translate="true">piecewise-linear relative permeability function</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">: </text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">liquid saturation at which minimum relative permeability occurs (SLRKMIN)</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">minimum relative permeability (RKMIN)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Option/Regionwise Properties/Relative Permeability Parameters</text></para>
+        </td>
+        <td style="vertical-align:bottom; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">RKMOD</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SLRKMIN</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">RKMIN</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">0.01</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">-6</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="4" style="vertical-align:middle; width:1182px;">
+          <para styleclass="" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:avoid; border:none; tabstops:none;"><text style="font-family:&apos;Arial Narrow&apos;; font-size:10pt; font-weight:bold; color:#000000;" translate="true">Numerical parameters/controls</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">finite elements (in x,y directions) &#160; &#160; &#160; &#160;-fishnet mesh-</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">100, 60</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">initial time step</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SUTRA Time Controls/Schedules</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">TIMEC</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1 hr = 3600 sec</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">time step change cycle (NTCYC)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SUTRA Time Controls/Schedules</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">NTCYC</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">time step multiplier (TCMULT)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SUTRA Time Controls/Schedules</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">TCMULT</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1.02</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">maximum allowed time step (TCMAX)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SUTRA Time Controls/Schedules</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">TCMAX</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">730.5 hr (= 1 month) = 2629800 sec</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">time steps in pressure and temperature solution cycle </text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">(NPCYC, NUCYC)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SUTRA Time Controls/Options</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">NPCYC, NUCYC</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1, 1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">maximum time steps in simulation (NTMAX)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SUTRA Time Controls/Schedules</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">NTMAX</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1,000 (any number ≥ 420)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">maximum absolute simulation time</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SUTRA Time Controls/Schedules</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">TIMEL</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">5</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true"> hr = 360,000,000</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">output cycles (NPRINT, NCOLPR, LCOLPR)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">SUTRA Output Control</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">NPRINT, NCOLPR, LCOLPR</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">10, 10, 10</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">iterations for nonlinearity (ITRMAX)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Options/Numerical Controls</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">ITRMAX</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">solver for pressure, solver for temperature</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Options/Solver Controls</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">CSOLVP, CSOLVU</text></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">DIRECT, DIRECT</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">observation locations </text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">(5 selected nodes along southern edge, y = 0 m, figure 5)</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">x = 90 m, 130 m, 170 m, 210 m, 250 m</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">observation output cycle NOBCYC</text></para>
+        </td>
+        <td style="vertical-align:middle; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">no longer part of the input</text></para>
+        </td>
+        <td style="vertical-align:middle; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:middle; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:top; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:top; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:top; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="4" style="vertical-align:top; width:1182px;">
+          <para styleclass="" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:avoid; border:none; tabstops:none;"><text style="font-family:&apos;Arial Narrow&apos;; font-size:10pt; font-weight:bold; color:#000000;" translate="true">Initial and boundary conditions</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">initial temperature of aquifer</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:top; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">InitialTemperature</text></para>
+        </td>
+        <td style="vertical-align:top; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">+5 °C</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:430px; height:15px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">temperature of cooling system </text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:15px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Object/SUTRA Features</text></para>
+        </td>
+        <td style="vertical-align:top; width:276px; height:15px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Specified Temperature</text></para>
+        </td>
+        <td style="vertical-align:top; width:248px; height:15px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">specified T = -5. °C</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">initial pressure of aquifer</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Data set</text></para>
+        </td>
+        <td style="vertical-align:top; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">InitialPressure</text></para>
+        </td>
+        <td style="vertical-align:top; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">p = 500 – 20x &#160;[kg/(m</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">s</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">2</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">)]</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">initial temperature of column</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:top; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:top; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">+2 °C</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">west boundary condition for fluid mass balance</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Object/SUTRA Features</text></para>
+        </td>
+        <td style="vertical-align:top; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Specified Pressure</text></para>
+        </td>
+        <td style="vertical-align:top; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">specified p = 500 [kg/(m</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">s</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">2</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">)]</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">(~5 cm hydraulic head)</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">-- inflowing water has </text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">T = +5 °C</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">east boundary condition for fluid mass balance</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Object/SUTRA Features</text></para>
+        </td>
+        <td style="vertical-align:top; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">Specified Pressure</text></para>
+        </td>
+        <td style="vertical-align:top; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">specified p = 0 [kg/(m</text><text style="font-family:Wingdings; font-size:10pt; color:#000000;" translate="true">ž</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">s</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; vertical-align:super; color:#000000;" translate="true">2</text><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">)] </text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">(0. cm hydraulic head)</text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">-- any inflowing water has </text></para>
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">T = +9,999 °C (none ever flows in here)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:430px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">east and west boundary conditions for energy balance</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:top; width:276px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+        </td>
+        <td style="vertical-align:top; width:248px;">
+          <para styleclass="" style="text-align:left; text-indent:-12px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:12px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:10pt; color:#000000;" translate="true">insulated (energy enters via the western inflow and exits via the eastern outflow)</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
+  </body>
+</topic>

@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4333</config-value>
+      <config-value name="autohelpstart">4334</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1018,6 +1018,7 @@ document.write('</frameset>');
       <helpcontext-number href="Frac" value="730"/>
       <helpcontext-number href="FractionOfObjectLength" value="990"/>
       <helpcontext-number href="Free_Surface_Dialog_Box" value="2880"/>
+      <helpcontext-number href="Freezing-Wall" value="4334"/>
       <helpcontext-number href="Frequency_and_N" value="3290"/>
       <helpcontext-number href="Function_Help_Button" value="1850"/>
       <helpcontext-number href="Functions" value="280"/>
