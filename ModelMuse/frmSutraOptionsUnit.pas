@@ -567,6 +567,11 @@ begin
     FLakeInteractionsNode := jvpltvNavigation.Items.Add(nil,
       StrDefaultLakeBoundar) as TJvPageIndexNode;
     FLakeInteractionsNode.PageIndex := jvspDefaultLakeInteractions.PageIndex;
+  end
+  else
+  begin
+    FLakeNode := nil;
+    FLakeInteractionsNode := nil;
   end;
 
   Node := jvpltvNavigation.Items.Add(nil, StrAnisotropy) as TJvPageIndexNode;

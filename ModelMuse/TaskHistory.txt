@@ -29426,5 +29426,13 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'SUTRA 4')
+    end
+    item
+      Date = 44716.000000000000000000
+    end
+    item
+      Date = 44717.000000000000000000
+      Categories.Strings = (
+        'Documentation')
     end>
 end

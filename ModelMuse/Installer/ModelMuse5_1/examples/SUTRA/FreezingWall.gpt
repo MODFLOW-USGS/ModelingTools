@@ -621,7 +621,9 @@ object PhastModel: TPhastModel
   ModflowPackages.CSubPackage.Interbeds = <>
   ModflowPackages.CSubPackage.WriteConvergenceData = True
   FilesToArchive.Strings = (
-    'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall.gpt')
+    
+      'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_1\examples\SUTRA' +
+      '\FreezingWall.gpt')
   ModelInputFiles.Strings = (
     'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall.FluxBcs'
     'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall.ics'
@@ -657,7 +659,9 @@ object PhastModel: TPhastModel
     
       'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall_N_6161.OB' +
       'S')
-  ModelFileName = 'C:\ModelingTools\ModelMuse\PracticeModels\FreezingWall.gpt'
+  ModelFileName = 
+    'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_1\examples\SUTRA' +
+    '\FreezingWall.gpt'
   ModflowOptions.StoredHDry.Value = -2E20
   ModflowOptions.StoredHNoFlow.Value = -1E20
   ModflowOptions.ProjectDate = '5/26/2022'
@@ -134156,7 +134160,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = '0'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = '0'
-      ScreenObject.Selected = False
+      ScreenObject.Selected = True
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -141008,6 +141012,7 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
       ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
       ScreenObject.InterpValues = <>
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
@@ -141094,15 +141099,15 @@ object PhastModel: TPhastModel
   GuiSettings.FrontHeight = 1
   GuiSettings.Height = 601
   GuiSettings.FrontX = -1.276428250112463000
-  GuiSettings.FrontY = 40.651634635303820000
-  GuiSettings.Left = 369
+  GuiSettings.FrontY = 40.664563181178890000
+  GuiSettings.Left = 80
   GuiSettings.MagnificationFront = 17.784000000000000000
   GuiSettings.MagnificationSide = 17.784000000000000000
   GuiSettings.MagnificationTop = 17.784000000000000000
   GuiSettings.SideWidth = 229
   GuiSettings.SideX = -80.000000000000000000
   GuiSettings.SideY = -1000.000000000000000000
-  GuiSettings.Top = 111
+  GuiSettings.Top = 138
   GuiSettings.TopViewHeight = 435
   GuiSettings.TopViewWidth = 782
   GuiSettings.TopX = -7.995951417004051000

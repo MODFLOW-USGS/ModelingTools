@@ -4,8 +4,9 @@ inherited frmSutraOptions: TfrmSutraOptions
   Caption = 'SUTRA Options'
   ClientHeight = 562
   ClientWidth = 784
-  ExplicitWidth = 802
-  ExplicitHeight = 609
+  ExplicitWidth = 800
+  ExplicitHeight = 601
+  PixelsPerInch = 96
   TextHeight = 18
   object splttrVertical: TJvNetscapeSplitter
     Left = 179
