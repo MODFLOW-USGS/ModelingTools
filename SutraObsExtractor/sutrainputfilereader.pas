@@ -220,7 +220,15 @@ begin
     end
     else if ObservationType = 'S' then
     begin
-      FListingFile.Add('  Saturation in OBC file');
+      FListingFile.Add('  Total Saturation in OBC file');
+    end
+    else if ObservationType = 'LS' then
+    begin
+      FListingFile.Add('  Liquid Saturation in OBC file');
+    end
+    else if ObservationType = 'IS' then
+    begin
+      FListingFile.Add('  Ice Saturation in OBC file');
     end
     else if ObservationType = 'LKST' then
     begin

@@ -380,8 +380,10 @@ var
 const
   StrPressure = 'Pressure';
   StrConcOrTemp = 'Conc or Temp';
-  StrSaturation = 'Saturation';
+  StrSaturation = 'Total Saturation';
   StrLakeStage = 'Lake stage';
+  StrLiquidSaturation = 'Liquid Saturation';
+  StrIceSaturation = 'Ice Saturation';
 
 implementation
 
@@ -394,6 +396,10 @@ begin
   SutraStateObsTypes.Add(StrPressure); // single node, use OBC
   SutraStateObsTypes.Add(StrConcOrTemp);  // single node, use OBC
   SutraStateObsTypes.Add(StrSaturation);  // single node, use OBC
+
+  SutraStateObsTypes.Add(StrLiquidSaturation);  // single node, use OBC
+  SutraStateObsTypes.Add(StrIceSaturation);  // single node, use OBC
+
 //  SutraStateObsTypes.Add('Fluid flow rate at specified pressure nodes'); // Units = Mass/sec, Add selected nodes, use .bcop file
 //  SutraStateObsTypes.Add('Fluid flow rate at generalized flow nodes'); // Units = Mass/sec, Add selected nodes, Use .bcopg file
 //  SutraStateObsTypes.Add('Resultant U rate at specified pressure nodes'); // Units = solute mass/sec, Add selected nodes, use .bcop file

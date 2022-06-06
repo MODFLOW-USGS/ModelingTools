@@ -18,6 +18,7 @@ type
     FSplitter: TStringList;
     FNumberOfValues: Integer;
     FLocationDictionary: TLocationDictionary;
+    FItemCount: Integer;
   protected
     procedure ReadHeader; override;
   public
@@ -550,8 +551,26 @@ end;
 { TSutraObsOutputFile }
 
 procedure TSutraObsOutputFile.ReadHeader;
+const
+  SearchString = 'Time (sec)';
+var
+  ALine: string;
+  ID_LinePos: Integer;
 begin
-  // do nothing
+  repeat
+    Readln(FTextFile, ALine);
+    ID_LinePos := Pos(SearchString, ALine);
+    if ID_LinePos > 0 then
+    begin
+      ID_LinePos := ID_LinePos + Length(SearchString);
+      ALine := Trim(Copy(ALine, ID_LinePos, MaxInt));
+      FSplitter.DelimitedText := ALine;
+      FItemCount := FSplitter.Count;
+      Assert(FItemCount in [3,5]);
+      break;
+    end;
+  until EOF(FTextFile);
+
 end;
 
 procedure TSutraObsOutputFile.ReadTimeAndValues;
@@ -564,6 +583,8 @@ var
   PressurePos: Integer;
   ConcTempPos: Integer;
   SatPos: Integer;
+  LiqSatPos: Integer;
+  IceSatPos: Integer;
   Values: TDoubleArray;
   NewIds: Boolean;
   ObsIndex: Integer;
@@ -627,6 +648,16 @@ begin
       PressurePos := FSplitter.IndexOf('Pressure');
       ConcTempPos := PressurePos + 1;
       SatPos := PressurePos + 2;
+      if FItemCount = 3 then
+      begin
+        LiqSatPos := -1;
+        IceSatPos := -1;
+      end
+      else
+      begin
+        LiqSatPos := PressurePos + 3;
+        IceSatPos := PressurePos + 4;
+      end;
       CurrentLines := TStringList.Create;
       try
         repeat
@@ -645,11 +676,11 @@ begin
         NewIds := FNumberOfValues = -1;
         if NewIds then
         begin
-          FNumberOfValues := CurrentLines.Count * 3;
+          FNumberOfValues := CurrentLines.Count * FItemCount;
         end
         else
         begin
-          Assert(FNumberOfValues = CurrentLines.Count * 3);
+          Assert(FNumberOfValues = CurrentLines.Count * FItemCount);
         end;
         SetLength(Values, FNumberOfValues);
 
@@ -676,6 +707,19 @@ begin
           AddKey;
           Values[ObsIndex] := StrToFloat(FSplitter[SatPos]);
           Inc(ObsIndex);
+
+          if FItemCount = 5 then
+          begin
+            ObsName := ObsNameRoot + '_LS';
+            AddKey;
+            Values[ObsIndex] := StrToFloat(FSplitter[LiqSatPos]);
+            Inc(ObsIndex);
+
+            ObsName := ObsNameRoot + '_IS';
+            AddKey;
+            Values[ObsIndex] := StrToFloat(FSplitter[IceSatPos]);
+            Inc(ObsIndex);
+          end;
         end;
       finally
         CurrentLines.Free;

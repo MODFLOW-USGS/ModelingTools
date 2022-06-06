@@ -4690,8 +4690,12 @@ begin
             While not ConversionOK do
             begin
               ConversionOK := TextToFloat(PChar(NewValue), AFloat, fvExtended);
+              if not ConversionOK then
+              begin
+                ConversionOK := TextToFloat(PChar(NewValue + '0'), AFloat, fvExtended);
+              end;
 
-              if Not ConversionOK and (Length(NewValue) > 0) then
+              if not ConversionOK and (Length(NewValue) > 0) then
               begin
                 NewValue := Copy(NewValue,1,Length(NewValue)-1);
               end;

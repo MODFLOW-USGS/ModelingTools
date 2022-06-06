@@ -751,6 +751,41 @@ begin
   end;
   if result then
   begin
+    FNodeReader.ReadNextResults;
+    if Length(FNodeReader.Pressure) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiPressure)] := False;
+      chklstDataToImport.Checked[Ord(iiPressure)] := False;
+    end;
+
+    if Length(FNodeReader.U) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiU)] := False;
+      chklstDataToImport.Checked[Ord(iiU)] := False;
+    end;
+
+    if Length(FNodeReader.Saturation) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiSaturation)] := False;
+      chklstDataToImport.Checked[Ord(iiSaturation)] := False;
+    end;
+
+    if Length(FNodeReader.LiquidSaturation) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiLiquidSaturation)] := False;
+      chklstDataToImport.Checked[Ord(iiLiquidSaturation)] := False;
+    end;
+
+    if Length(FNodeReader.IceSaturation) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiIceSaturation)] := False;
+      chklstDataToImport.Checked[Ord(iiIceSaturation)] := False;
+    end;
+    FNodeReader.Free;
+    FNodeReader := TNodReader.Create(FNodeFileName);
+  end;
+  if result then
+  begin
     try
       FEleReader := TEleReader.Create(FElementFileName);
     except
@@ -767,6 +802,48 @@ begin
         result := False;
       end;
     end;
+  end;
+
+  if result then
+  begin
+    FEleReader.ReadNextResults;
+    if Length(FEleReader.XVelocity) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiXVel)] := False;
+      chklstDataToImport.Checked[Ord(iiXVel)] := False;
+    end;
+
+    if Length(FEleReader.YVelocity) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiYVel)] := False;
+      chklstDataToImport.Checked[Ord(iiYVel)] := False;
+    end;
+
+    if Length(FEleReader.ZVelocity) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiZVel)] := False;
+      chklstDataToImport.Checked[Ord(iiZVel)] := False;
+    end;
+
+    if Length(FEleReader.XDarcyVelocity) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiXDarcyVelocity)] := False;
+      chklstDataToImport.Checked[Ord(iiXDarcyVelocity)] := False;
+    end;
+
+    if Length(FEleReader.YDarcyVelocity) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiYDarcyVelocity)] := False;
+      chklstDataToImport.Checked[Ord(iiYDarcyVelocity)] := False;
+    end;
+
+    if Length(FEleReader.ZDarcyVelocity) = 0 then
+    begin
+      chklstDataToImport.ItemEnabled[Ord(iiZDarcyVelocity)] := False;
+      chklstDataToImport.Checked[Ord(iiZDarcyVelocity)] := False;
+    end;
+    FEleReader.Free;
+    FEleReader := TEleReader.Create(FElementFileName);
   end;
 end;
 

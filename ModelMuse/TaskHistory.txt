@@ -446,7 +446,7 @@ object TTaskHistory
     end
     item
       Name = 'PEST Observations'
-      Display = False
+      Display = True
     end
     item
       Name = 'Anonymize Objects'
@@ -29434,5 +29434,14 @@ object TTaskHistory
       Date = 44717.000000000000000000
       Categories.Strings = (
         'Documentation')
+    end
+    item
+      Date = 44718.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'SUTRA 4'
+        'PEST Observations'
+        'Components'
+        'Graphics')
     end>
 end

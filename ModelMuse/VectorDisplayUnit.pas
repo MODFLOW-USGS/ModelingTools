@@ -26,6 +26,7 @@ type
     FStoredMinSeparationVertical3D: TRealStorage;
     FStoredMinSeparationHorizontal3D: TRealStorage;
     FLogScaled: boolean;
+    FLineThickness: single;
     procedure SetStoredScale(const Value: TRealStorage);
     function GetScale: Double;
     procedure SetScale(const Value: Double);
@@ -44,6 +45,7 @@ type
     procedure SetMinSeparationHorizontal3D(const Value: double);
     procedure SetMinSeparationVertical3D(const Value: double);
     procedure SetLogScaled(const Value: boolean);
+    procedure SetLineThickness(const Value: single);
   protected
     // @name contains the starting points of each vector
     FOrigins: TLayerPoints;
@@ -84,6 +86,7 @@ type
       read GetMinSeparationHorizontal3D write SetMinSeparationHorizontal3D;
     property MinSeparationVertical3D: double read GetMinSeparationVertical3D
       write SetMinSeparationVertical3D;
+    property LineThickness: single read FLineThickness write SetLineThickness;
   published
     property Visible: boolean read FVisible write SetVisible;
     property StoredScale: TRealStorage read FStoredScale write SetStoredScale;
@@ -287,7 +290,8 @@ begin
     MinimumSeparation2D := SourceVectors.MinimumSeparation2D;
     MinSeparationHorizontal3D := SourceVectors.MinSeparationHorizontal3D;
     MinSeparationVertical3D := SourceVectors.MinSeparationVertical3D;
-    LogScaled := SourceVectors.LogScaled
+    LogScaled := SourceVectors.LogScaled;
+    LineThickness := SourceVectors.LineThickness;
   end
   else
   begin
@@ -421,6 +425,7 @@ begin
   MinSeparationHorizontal3D := 0;
   MinSeparationVertical3D := 0;
   FLogScaled := False;
+  FLineThickness := 2;
 end;
 
 procedure TCustomVectors.InvalidateAllViews;
@@ -443,8 +448,6 @@ end;
 
 procedure TCustomVectors.PlotVectors2D(ViewDirection: TViewDirection;
   const BitMap: TPersistent);
-const
-  LineThickness: single = 2;
 var
   LayerIndex: Integer;
   ColIndex: Integer;
@@ -991,6 +994,16 @@ begin
   if FColor <> Value then
   begin
     FColor := Value;
+    InvalidateModel;
+    InvalidateAllViews;
+  end;
+end;
+
+procedure TCustomVectors.SetLineThickness(const Value: single);
+begin
+  if FLineThickness <> Value then
+  begin
+    FLineThickness := Value;
     InvalidateModel;
     InvalidateAllViews;
   end;

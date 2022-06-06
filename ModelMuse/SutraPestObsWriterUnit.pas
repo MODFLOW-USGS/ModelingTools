@@ -1082,6 +1082,24 @@ begin
                 ObsTime := FInitialTime;
               end;
             end;
+          3:
+            begin
+              WriteString(' LS');
+              if FSimulationType = stSteadyFlowSteadyTransport then
+              begin
+                ObsTime := FInitialTime;
+              end;
+            end;
+          4:
+            begin
+              WriteString(' IS');
+              if FSimulationType = stSteadyFlowSteadyTransport then
+              begin
+                ObsTime := FInitialTime;
+              end;
+            end;
+          else
+            Assert(False)
         end;
         NewLine;
 
@@ -1103,6 +1121,18 @@ begin
               StateObs.ExportedName := StateObs.Name + '_S';
               WriteString('_S');
             end;
+          3:
+            begin
+              StateObs.ExportedName := StateObs.Name + '_LS';
+              WriteString('_LS');
+            end;
+          4:
+            begin
+              StateObs.ExportedName := StateObs.Name + '_IS';
+              WriteString('_IS');
+            end;
+          else
+            Assert(False);
         end;
         WriteFloat(ObsTime);
         WriteString(' PRINT');

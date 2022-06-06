@@ -108,7 +108,9 @@ For all other files, <identifier> is the sequence number in which the values app
 <observation_type> is used to identify the type of data to be extracted. The allowed values of <observation_type> vary depending on the type of file from which values are to be extracted. The allowed observation types are as follows
 P: Pressure in an OBC file.
 U: Temperature or concentration in an OBC file.
-S: Saturation in an OBC file.
+S: Total Saturation in an OBC file.
+LS: Liquid Saturation in an OBC file.
+IS: Ice Saturation in an OBC file.
 LKST: Lake stage in a LKST file.
 PF: Resultant source/sink(+/-) of fluid in BCOP file.
 PU: Solute conc/temperature of fluid source/sink in BCOP file.

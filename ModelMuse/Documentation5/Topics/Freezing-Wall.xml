@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-06-05T10:59:23.415-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-06-06T11:01:09.996-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Freezing Wall</title>
   <body>
     <header>
@@ -789,7 +789,11 @@
       </tr>
     </table></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Model Results</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">S</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You can plot the ice saturation and groundwater velocity vectors by importing data from the .nod and .ele files. </text></para>
+    <para styleclass="Normal"><image src="FreezingImportIceSaturation.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Import SUTRA Model Results dialog box illustrating the import of the ice saturation and x and y velocities.</title><caption translate="true"><![CDATA[Screen capture of the Import SUTRA Model Results dialog box illustrating the import of the ice saturation and x and y velocities.]]></caption></image></para>
+    <para styleclass="Normal"><image src="FreezingIceSaturation.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Plot of Ice Saturation and Velocity Vectors at Time Step 40.</title><caption translate="true"><![CDATA[Plot of Ice Saturation and Velocity Vectors at Time Step 40.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The data from the .obs file or files can be imported into a spreadsheet program and plotted.</text></para>
+    <para styleclass="Normal"></para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal"></para>

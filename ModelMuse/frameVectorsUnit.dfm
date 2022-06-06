@@ -2,79 +2,86 @@ object frameVectors: TframeVectors
   Left = 0
   Top = 0
   Width = 380
-  Height = 437
+  Height = 490
   HelpType = htKeyword
   HelpKeyword = 'Vectors_Pane'
   TabOrder = 0
   object lblScale: TLabel
     Left = 3
     Top = 64
-    Width = 89
-    Height = 13
+    Width = 124
+    Height = 20
     Caption = 'Scaling factor (2D)'
   end
   object lblMaxColor: TLabel
     Left = 3
     Top = 197
-    Width = 70
-    Height = 13
+    Width = 104
+    Height = 20
     Caption = 'Maximum color'
   end
   object lblMidColor: TLabel
     Left = 3
     Top = 249
-    Width = 56
-    Height = 13
+    Width = 85
+    Height = 20
     Caption = 'Middle color'
   end
   object lblMinColor: TLabel
     Left = 3
     Top = 301
-    Width = 66
-    Height = 13
+    Width = 101
+    Height = 20
     Caption = 'Minimum color'
   end
   object lblVelocityColor: TLabel
     Left = 3
     Top = 355
-    Width = 63
-    Height = 13
+    Width = 90
+    Height = 20
     Caption = 'Velocity color'
   end
   object lblVectorSource: TLabel
     Left = 3
     Top = 8
-    Width = 66
-    Height = 13
+    Width = 89
+    Height = 20
     Caption = 'Vector source'
   end
   object lblScale3D: TLabel
     Left = 3
     Top = 110
-    Width = 89
-    Height = 13
+    Width = 124
+    Height = 20
     Caption = 'Scaling factor (3D)'
   end
   object lblMinSpacing2D: TLabel
     Left = 154
     Top = 64
-    Width = 167
-    Height = 13
+    Width = 238
+    Height = 20
     Caption = 'Minimum vector spacing 2D (pixels)'
   end
   object lblMinHorizontalSpacing3D: TLabel
     Left = 154
     Top = 110
-    Width = 145
-    Height = 13
+    Width = 212
+    Height = 20
     Caption = 'Minimum horizontal spacing 3D'
   end
   object lblMinVerticalSpacing3D: TLabel
     Left = 154
     Top = 157
-    Width = 133
-    Height = 13
+    Width = 193
+    Height = 20
     Caption = 'Minimum vertical spacing 3D'
+  end
+  object lblLineThickness: TLabel
+    Left = 3
+    Top = 425
+    Width = 90
+    Height = 20
+    Caption = 'Line thickness'
   end
   object rdeScale: TRbwDataEntry
     Left = 3
@@ -94,7 +101,7 @@ object frameVectors: TframeVectors
     Left = 3
     Top = 27
     Width = 302
-    Height = 21
+    Height = 28
     Style = csDropDownList
     TabOrder = 0
     OnChange = comboVectorSourceChange
@@ -152,8 +159,8 @@ object frameVectors: TframeVectors
   object udVectors: TJvUpDown
     Left = 305
     Top = 27
-    Width = 16
-    Height = 21
+    Width = 20
+    Height = 28
     Associate = comboVectorSource
     Min = -1
     TabOrder = 1
@@ -163,7 +170,7 @@ object frameVectors: TframeVectors
     Left = 154
     Top = 83
     Width = 121
-    Height = 21
+    Height = 28
     MaxValue = 2147483647.000000000000000000
     Enabled = False
     TabOrder = 3
@@ -236,5 +243,15 @@ object frameVectors: TframeVectors
     Height = 17
     Caption = 'Log transform'
     TabOrder = 14
+  end
+  object seLineThickness: TJvSpinEdit
+    Left = 3
+    Top = 447
+    Width = 145
+    Height = 28
+    MaxValue = 100.000000000000000000
+    ValueType = vtFloat
+    Enabled = False
+    TabOrder = 15
   end
 end

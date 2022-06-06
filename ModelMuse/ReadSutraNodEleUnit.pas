@@ -280,6 +280,7 @@ begin
   begin
     SetLength(FX, 0);
   end;
+
   if Pos('Y', ALine) > 0 then
   begin
     SetLength(FY, Count);
@@ -288,6 +289,7 @@ begin
   begin
     SetLength(FY, 0);
   end;
+
   if Pos('Z', ALine) > 0 then
   begin
     SetLength(FZ, Count);
@@ -296,6 +298,7 @@ begin
   begin
     SetLength(FZ, 0);
   end;
+
   if Pos('Pressure', ALine) > 0 then
   begin
     SetLength(FPressure, Count);
@@ -304,6 +307,7 @@ begin
   begin
     SetLength(FPressure, 0);
   end;
+
   if (Pos('Concentration', ALine) > 0) or (Pos('Temperature', ALine) > 0) then
   begin
     SetLength(FU, Count);
@@ -312,6 +316,7 @@ begin
   begin
     SetLength(FU, 0);
   end;
+
   if (Pos(' Saturation', ALine) > 0) then
   begin
     SetLength(FTotalSaturation, Count);
@@ -320,10 +325,12 @@ begin
   begin
     SetLength(FTotalSaturation, Count);
     FSutra4 := True;
-  end;
+  end
+  else
   begin
     SetLength(FTotalSaturation, 0);
   end;
+
   if (Pos('LiqSaturation', ALine) > 0) then
   begin
     SetLength(FLiquidSaturation, Count);
@@ -333,6 +340,7 @@ begin
   begin
     SetLength(FLiquidSaturation, 0);
   end;
+
   if (Pos('IceSaturation', ALine) > 0) then
   begin
     SetLength(FIceSaturation, Count);
@@ -420,6 +428,7 @@ begin
   begin
     SetLength(FX, 0);
   end;
+
   if Pos('y origin', ALine) > 0 then
   begin
     SetLength(FY, Count);
@@ -428,6 +437,7 @@ begin
   begin
     SetLength(FY, 0);
   end;
+
   if Pos('z origin', ALine) > 0 then
   begin
     SetLength(FZ, Count);
@@ -436,6 +446,7 @@ begin
   begin
     SetLength(FZ, 0);
   end;
+
   if Pos('x velocity', ALine) > 0 then
   begin
     SetLength(FXVelocity, Count);
@@ -444,6 +455,7 @@ begin
   begin
     SetLength(FXVelocity, 0);
   end;
+
   if Pos('y velocity', ALine) > 0 then
   begin
     SetLength(FYVelocity, Count);
@@ -452,6 +464,7 @@ begin
   begin
     SetLength(FYVelocity, 0);
   end;
+
   if Pos('z velocity', ALine) > 0 then
   begin
     SetLength(FZVelocity, Count);
@@ -460,6 +473,7 @@ begin
   begin
     SetLength(FZVelocity, 0);
   end;
+
   if Pos('x darcyvel', ALine) > 0 then
   begin
     SetLength(FXDarcyVelocity, Count);
@@ -468,6 +482,7 @@ begin
   begin
     SetLength(FXDarcyVelocity, 0);
   end;
+
   if Pos('y darcyvel', ALine) > 0 then
   begin
     SetLength(FYDarcyVelocity, Count);
@@ -476,6 +491,7 @@ begin
   begin
     SetLength(FYDarcyVelocity, 0);
   end;
+
   if Pos('z darcyvel', ALine) > 0 then
   begin
     SetLength(FZDarcyVelocity, Count);

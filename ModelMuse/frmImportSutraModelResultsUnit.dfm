@@ -2,10 +2,12 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
   HelpType = htKeyword
   HelpKeyword = 'Import_SUTRA_Model_Results_Dia'
   Caption = 'Import SUTRA Model Results'
-  ClientHeight = 417
+  ClientHeight = 491
   ClientWidth = 417
+  ExplicitLeft = 3
+  ExplicitTop = 3
   ExplicitWidth = 435
-  ExplicitHeight = 464
+  ExplicitHeight = 538
   TextHeight = 18
   object lblTimeStepsToImport: TLabel
     Left = 223
@@ -25,41 +27,45 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     Left = 223
     Top = 29
     Width = 186
-    Height = 240
+    Height = 314
     Anchors = [akLeft, akTop, akRight, akBottom]
     ItemHeight = 18
     TabOrder = 1
     OnClick = chklstTimeStepsToImportClick
+    ExplicitHeight = 240
   end
   object chklstDataToImport: TCheckListBox
     Left = 8
     Top = 29
     Width = 209
-    Height = 137
+    Height = 211
+    Anchors = [akLeft, akTop, akBottom]
     ItemHeight = 18
     Items.Strings = (
       'Pressure'
       'Concentration or temperature'
       'Saturation'
+      'Liquid saturation'
+      'Ice saturation'
       'X velocity'
       'Y velocity'
       'Z velocity'
-      'Liquid saturation'
-      'Ice saturation'
       'X Darcy velocity'
       'Y Darcy velocity'
       'Z Darcy velocity')
     TabOrder = 0
     OnClick = chklstDataToImportClick
+    ExplicitHeight = 137
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 276
+    Top = 350
     Width = 417
     Height = 141
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 6
+    ExplicitTop = 276
     DesignSize = (
       417
       141)
@@ -129,43 +135,51 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
   end
   object btnSelectAll: TButton
     Left = 8
-    Top = 172
+    Top = 246
     Width = 104
     Height = 47
+    Anchors = [akLeft, akBottom]
     Caption = 'Select all data sets'
     TabOrder = 2
     WordWrap = True
     OnClick = btnSelectAllClick
+    ExplicitTop = 172
   end
   object btnSelectNone: TButton
     Left = 8
-    Top = 223
+    Top = 297
     Width = 104
     Height = 47
+    Anchors = [akLeft, akBottom]
     Caption = 'Deselect all data sets'
     TabOrder = 4
     WordWrap = True
     OnClick = btnSelectNoneClick
+    ExplicitTop = 223
   end
   object btnSelectAllTimes: TButton
     Left = 113
-    Top = 172
+    Top = 246
     Width = 104
     Height = 47
+    Anchors = [akLeft, akBottom]
     Caption = 'Select all times'
     TabOrder = 3
     WordWrap = True
     OnClick = btnSelectAllTimesClick
+    ExplicitTop = 172
   end
   object btnDeselectAllTimes: TButton
     Left = 113
-    Top = 223
+    Top = 297
     Width = 104
     Height = 47
+    Anchors = [akLeft, akBottom]
     Caption = 'Deselect all times'
     TabOrder = 5
     WordWrap = True
     OnClick = btnDeselectAllTimesClick
+    ExplicitTop = 223
   end
   object dlgOpenSutraFile: TJvOpenDialog
     DefaultExt = '.nod'

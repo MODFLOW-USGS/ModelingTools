@@ -35,6 +35,8 @@ type
     lblMinHorizontalSpacing3D: TLabel;
     lblMinVerticalSpacing3D: TLabel;
     cbLogTransform: TCheckBox;
+    seLineThickness: TJvSpinEdit;
+    lblLineThickness: TLabel;
     procedure comboVectorSourceChange(Sender: TObject);
     procedure udVectorsChangingEx(Sender: TObject; var AllowChange: Boolean;
       NewValue: Integer; Direction: TUpDownDirection);
@@ -87,6 +89,7 @@ begin
   rdeMinVerticalSpacing3D.Enabled := seMinSpacing2D.Enabled;
   rdeScale.Enabled := seMinSpacing2D.Enabled;
   rdeScale3D.Enabled := seMinSpacing2D.Enabled;
+  seLineThickness.Enabled := seMinSpacing2D.Enabled;
 
   clrbxMax.Enabled := (comboVectorSource.ItemIndex > 0)
     and (comboVectorSource.ItemIndex < FFirstVectorItem);
@@ -114,6 +117,7 @@ begin
     clrbxMax.Selected := LocalModel.MaxVectors.Color;
     clrbxMid.Selected := LocalModel.MidVectors.Color;
     clrbxMin.Selected := LocalModel.MinVectors.Color;
+    seLineThickness.Value := LocalModel.MaxVectors.LineThickness;
   end;
 
   if clrbxVelocity.Enabled then
@@ -121,6 +125,7 @@ begin
     VItem := comboVectorSource.Items.Objects[
       comboVectorSource.ItemIndex] as TVectorItem;
     clrbxVelocity.Selected := VItem.Vectors.Color;
+    seLineThickness.Value := VItem.Vectors.LineThickness;
   end;
 
   udVectors.Position := comboVectorSource.ItemIndex;
@@ -172,6 +177,7 @@ begin
   begin
     comboVectorSource.ItemIndex := 0;
     rdeScale.Text := '1';
+    seLineThickness.Value := 2;
   end
   else
   begin
@@ -279,6 +285,9 @@ begin
     LocalModel.MaxVectors.Color := clrbxMax.Selected;
     LocalModel.MidVectors.Color := clrbxMid.Selected;
     LocalModel.MinVectors.Color := clrbxMin.Selected;
+    LocalModel.MaxVectors.LineThickness := seLineThickness.Value;
+    LocalModel.MidVectors.LineThickness := seLineThickness.Value;
+    LocalModel.MinVectors.LineThickness := seLineThickness.Value;
 
     if SourceText = StrHydraulicConductivi then
     begin
@@ -349,6 +358,7 @@ begin
       VItem.Vectors.MinSeparationVertical3D := rdeMinVerticalSpacing3D.RealValue;
       VItem.Vectors.MinSeparationHorizontal3D := rdeMinHorizontalSpacing3D.RealValue;
       VItem.Vectors.LogScaled := cbLogTransform.Checked;
+      VItem.Vectors.LineThickness := seLineThickness.Value;
     end;
   end;
 end;

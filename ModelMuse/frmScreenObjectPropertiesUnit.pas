@@ -4228,7 +4228,6 @@ var
   SelectCell: TGridRect;
   ObjectLabel: TObjectLabel;
   ObjectVertexLabel: TObjectVertexLabel;
-//  ItemIndex: integer;
   TempList: TList;
   SutraStateObs: TSutraStateObservations;
   DataArrayManager: TDataArrayManager;
