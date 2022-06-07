@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4334</config-value>
+      <config-value name="autohelpstart">4335</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1832,6 +1832,7 @@ document.write('</frameset>');
       <helpcontext-number href="Trunc" value="940"/>
       <helpcontext-number href="Unsat_ET_conc_in_UZT_Unsaturat" value="4069"/>
       <helpcontext-number href="Unsaturated_Tab" value="2160"/>
+      <helpcontext-number href="Unsaturated-Freeze-Thaw-Column" value="4335"/>
       <helpcontext-number href="Unsupported_PEST_Capabilities" value="4275"/>
       <helpcontext-number href="UpperCase" value="1290"/>
       <helpcontext-number href="UPW_Upstream_Weighting_Package_Pane" value="3626"/>

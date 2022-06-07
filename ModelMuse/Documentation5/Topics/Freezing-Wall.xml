@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-06-06T11:01:09.996-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-06-07T17:06:25.444-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Freezing Wall</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Freezing Wall</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">This shows how to reproduce the first example from the SUTRA 4.0 documentation. In it, a 4m x 4m contaminated zone is surrounded on two sides by a frozen wall and on a third size by the edge of the model in order to isolate the contaminated zone. The model is simulated with a 2D areal model. The following table shows the model properties and how those properties are implemented in ModelMuse </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This shows how to reproduce the first example from the SUTRA 4.0 documentation where a more complete description of the model can be found. In it, a 4m x 4m contaminated zone is surrounded on two sides by a frozen wall and on a third size by the edge of the model in order to isolate the contaminated zone. The model is simulated with a 2D areal model. The following table shows the model properties and how those properties are implemented in ModelMuse </text></para>
     <para styleclass="Normal"><table rowcount="48" colcount="4" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; border-collapse:collapse; cell-border-width:1px; border-color:#000000; border-style:solid; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td style="vertical-align:middle; width:430px;">
@@ -789,7 +789,7 @@
       </tr>
     </table></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Model Results</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">You can plot the ice saturation and groundwater velocity vectors by importing data from the .nod and .ele files. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">After running the model, you can plot the ice saturation and groundwater velocity vectors by importing data from the .nod and .ele files. </text></para>
     <para styleclass="Normal"><image src="FreezingImportIceSaturation.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Import SUTRA Model Results dialog box illustrating the import of the ice saturation and x and y velocities.</title><caption translate="true"><![CDATA[Screen capture of the Import SUTRA Model Results dialog box illustrating the import of the ice saturation and x and y velocities.]]></caption></image></para>
     <para styleclass="Normal"><image src="FreezingIceSaturation.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Plot of Ice Saturation and Velocity Vectors at Time Step 40.</title><caption translate="true"><![CDATA[Plot of Ice Saturation and Velocity Vectors at Time Step 40.]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The data from the .obs file or files can be imported into a spreadsheet program and plotted.</text></para>
