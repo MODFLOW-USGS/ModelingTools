@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-05-27T12:26:00.206-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-06-08T17:36:26.563-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Regionwise Properties Panes</title>
   <body>
     <header>
@@ -10,6 +10,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">It is only present for SUTRA 4.0 models.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">There can be multiple copies of the </text><text styleclass="Strong" translate="true">Regionwise Properties</text><text styleclass="Normal" translate="true"> pane. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Each </text><text styleclass="Strong" translate="true">Regionwise Properties pane</text><text styleclass="Normal" translate="true"> has up to five tabs. Which panes are present depends on the options selected for the model.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Adsorption Parameters or Transport Model tab</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Adsorption Parameters</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Strong" translate="true">Transport Model</text><text styleclass="Normal" translate="true"> tab is used to define the input for dataset 11A. It is always visible. Depending on whether solute or energy transport is being simulated, the user specifies either an </text><text styleclass="Strong" translate="true">adsorption model</text><text styleclass="Normal" translate="true"> or a </text><text styleclass="Strong" translate="true">thermal transport model</text><text styleclass="Normal" translate="true">.</text></para>
     <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <list id="0" level="1" type="ul" listtype="bullet" formatstring="&#111;" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;">
@@ -18,6 +19,7 @@
         <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">first distribution coefficient</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Strong" translate="true">second distribution coefficient</text><text styleclass="Normal" translate="true"> are specified with Linear, Freundlich, or Langmuir adsorption models.</text></li>
       </list>
     </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Total Water Saturation tab</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Total Water Saturation</text><text styleclass="Normal" translate="true"> tab is used to define the input for dataset 11B. It is visible if unsaturated flow or freezing transport is simulated. See section 2.2 of the SUTRA 4.0 documentation.</text></para>
     <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <list id="1" level="1" type="ul" listtype="bullet" formatstring="&#111;" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;">
@@ -31,6 +33,7 @@
         <li styleclass="Normal"><text styleclass="Normal" translate="true">For a user-defined </text><text styleclass="Strong" translate="true">total water saturation function</text><text styleclass="Normal" translate="true">, the user must program the subroutine UNSAT. The regionwise inputs for that subroutine, if any, are specified in a table that appears at the bottom of the </text><text styleclass="Strong" translate="true">Total Water Saturation</text><text styleclass="Normal" translate="true"> tab. The table is only visible if </text><text styleclass="Strong" translate="true">User-defined</text><text styleclass="Normal" translate="true"> is selected.</text></li>
       </list>
     </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Relative Permeability Parameters tab</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Relative Permeability Parameters</text><text styleclass="Normal" translate="true"> tab is used to define the input for dataset 11C. It is visible if unsaturated flow or freezing transport is simulated. See section 2.4 of the SUTRA 4.0 documentation.</text></para>
     <list id="2" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <list id="2" level="1" type="ul" listtype="bullet" formatstring="&#111;" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;">
@@ -46,6 +49,7 @@
         <li styleclass="Normal"><text styleclass="Normal" translate="true">For a user-defined </text><text styleclass="Strong" translate="true">specified relative permeability function</text><text styleclass="Normal" translate="true">, the user must program the subroutine RELPERM. The regionwise inputs for that subroutine, if any, are specified in a table that appears at the bottom of the </text><text styleclass="Strong" translate="true">Relative Permeability Parameters</text><text styleclass="Normal" translate="true"> tab. The table is only visible if </text><text styleclass="Strong" translate="true">User-defined</text><text styleclass="Normal" translate="true"> is selected.</text></li>
       </list>
     </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Liquid Water Saturation tab</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Liquid Water Saturation</text><text styleclass="Normal" translate="true"> tab is used to define the input for dataset 11D. It is visible if freezing transport is simulated. See section 2.3 of the SUTRA 4.0 documentation.</text></para>
     <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <list id="3" level="1" type="ul" listtype="bullet" formatstring="&#111;" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;">
@@ -62,6 +66,7 @@
         <li styleclass="Normal"><text styleclass="Normal" translate="true">For a user-defined </text><text styleclass="Strong" translate="true">specified liquid water saturation function</text><text styleclass="Normal" translate="true">, the user must program the subroutine LIQSAT. The regionwise inputs for that subroutine, if any, are specified in a table that appears at the bottom of the </text><text styleclass="Strong" translate="true">Liquid Water Saturation</text><text styleclass="Normal" translate="true"> tab. The table is only visible if </text><text styleclass="Strong" translate="true">User-defined</text><text styleclass="Normal" translate="true"> is selected.</text></li>
       </list>
     </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Freezing Water and Latent Heat. tab</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Freezing Water and Latent Heat</text><text styleclass="Normal" translate="true">. tab is used to define the input for dataset 11E. It is visible if freezing transport is simulated.</text></para>
     <list id="4" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <list id="4" level="1" type="ul" listtype="bullet" formatstring="&#111;" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;">
