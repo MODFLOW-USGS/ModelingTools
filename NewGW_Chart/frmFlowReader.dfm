@@ -1,10 +1,10 @@
 object frmCellFlows: TfrmCellFlows
   Left = 313
   Top = 132
-  Width = 646
-  Height = 544
   HelpContext = 635
   Caption = 'Flow Rates vs. Time'
+  ClientHeight = 505
+  ClientWidth = 630
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -31,11 +31,12 @@ object frmCellFlows: TfrmCellFlows
   end
   object Panel1: TPanel
     Left = 0
-    Top = 379
+    Top = 399
     Width = 630
     Height = 106
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 379
     object lblCounts: TLabel
       Left = 184
       Top = 43
@@ -89,8 +90,9 @@ object frmCellFlows: TfrmCellFlows
       Top = 39
       Width = 64
       Height = 26
-      TabOrder = 3
       Kind = bkClose
+      NumGlyphs = 2
+      TabOrder = 3
     end
     object btnUpdatePlot: TButton
       Left = 7
@@ -120,7 +122,6 @@ object frmCellFlows: TfrmCellFlows
       Width = 345
       Height = 27
       Style = csDropDownList
-      ItemHeight = 19
       TabOrder = 2
       Items.Strings = (
         'MODFLOW (MF96 or MF2K Version 1.1 or earlier)'
@@ -132,8 +133,9 @@ object frmCellFlows: TfrmCellFlows
       Width = 75
       Height = 25
       HelpContext = 635
-      TabOrder = 5
       Kind = bkHelp
+      NumGlyphs = 2
+      TabOrder = 5
     end
     object btnPlotAll: TButton
       Left = 8
@@ -166,8 +168,7 @@ object frmCellFlows: TfrmCellFlows
     Left = 0
     Top = 164
     Width = 630
-    Height = 215
-    BackWall.Brush.Color = clWhite
+    Height = 235
     BackWall.Brush.Style = bsClear
     Title.Font.Charset = ANSI_CHARSET
     Title.Font.Height = -19
@@ -186,6 +187,9 @@ object frmCellFlows: TfrmCellFlows
     Align = alClient
     Color = clWindow
     TabOrder = 1
+    ExplicitHeight = 215
+    DefaultCanvas = 'TGDIPlusCanvas'
+    ColorPaletteIndex = 0
   end
   object Panel2: TPanel
     Left = 0
@@ -233,6 +237,7 @@ object frmCellFlows: TfrmCellFlows
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -258,6 +263,7 @@ object frmCellFlows: TfrmCellFlows
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -283,6 +289,7 @@ object frmCellFlows: TfrmCellFlows
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -308,6 +315,7 @@ object frmCellFlows: TfrmCellFlows
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -341,6 +349,10 @@ object frmCellFlows: TfrmCellFlows
   object ChartEditor1: TChartEditor
     Chart = chartFlow
     Title = 'Editing Flow Rate Plot'
+    GalleryHeight = 0
+    GalleryWidth = 0
+    Height = 0
+    Width = 0
     Left = 64
     Top = 20
   end

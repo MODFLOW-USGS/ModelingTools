@@ -7,8 +7,8 @@ uses SysUtils, Classes;
 type
   TModflowFloat = single;
   TModflowDouble = double;
-  TModflowDesc = Array[0..15] of Char;
-  TModflowDesc2 = Array[0..17] of Char;
+  TModflowDesc = Array[0..15] of AnsiChar;
+  TModflowDesc2 = Array[0..17] of AnsiChar;
   TModflowSingleArray = array of array of TModflowFloat;
   TModflowDoubleArray = array of array of TModflowDouble;
   T3DTModflowArray = array of TModflowDoubleArray;

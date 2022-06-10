@@ -1932,7 +1932,6 @@ object frmModChart: TfrmModChart
       Width = 232
       Height = 437
       Caption = 'jvsp_nm'
-      ExplicitTop = -6
       object lblPlotSymbolsNM: TLabel
         Left = 8
         Top = 120

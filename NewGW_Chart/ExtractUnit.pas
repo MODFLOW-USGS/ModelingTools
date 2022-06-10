@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, ArgusDataEntry, Menus, Grids, Buttons, TeeProcs, TeEngine,
   Chart, ExtCtrls, Series, DataGrid, ComCtrls, MyFormUnit, TeeEdit,
-  ReaderUnit, addbtn95, JvExStdCtrls, JvRichEdit;
+  ReaderUnit, addbtn95, JvExStdCtrls, JvRichEdit, VclTee.TeeGDIPlus;
 
 { TODO : Tracy wrote  that he would like GWChart to calculate
 "elevation head" instead of, or in addition to, pressure head, but I'm sure
@@ -59,12 +59,12 @@ type
     SaveCellLocations1: TMenuItem;
     SaveHeadsorDrawdown1: TMenuItem;
     SaveDialog2: TSaveDialog;
-    dgDataPoints: TDataGrid;
+    dgDataPoints: TEcDataGrid;
     OpenDialog2: TOpenDialog;
     rgProgramChoice: TRadioGroup;
     rgMOC3D: TRadioGroup;
     rgSutra: TRadioGroup;
-    dgDataNodes: TDataGrid;
+    dgDataNodes: TEcDataGrid;
     sbFormat: TSpeedButton;
     sbImage: TSpeedButton;
     ChartHydExtractor: TChart;

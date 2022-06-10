@@ -894,8 +894,20 @@ begin
 end;
 
 function TArgusDataEntry.TryGetRealValue(var AValue: Double): Boolean;
+var
+  Value: Extended;
 begin
-  Result := TextToFloat(Text, AValue);
+  {$IFDEF CONDITIONALEXPRESSIONS}
+    {$IF CompilerVersion > 23.0}
+      Result := TextToFloat(Text, AValue);
+    {$ELSE}
+      Result := TryStrToFloat(PChar(Text), Value);
+      AValue := Value;
+    {$IFEND}
+  {$ELSE}
+    Result := TryStrToFloat(PChar(Text), Value);
+    AValue := Value;
+  {$ENDIF}
 end;
 
 procedure TArgusDataEntry.CheckRange;

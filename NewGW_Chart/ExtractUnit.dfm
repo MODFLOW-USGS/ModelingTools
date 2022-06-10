@@ -1,12 +1,12 @@
 object frmExtract: TfrmExtract
   Left = 256
   Top = 94
-  Width = 851
-  Height = 600
   HelpContext = 400
   Caption = 
     'GW_Chart Hydrograph Extractor: Plots of model output through tim' +
     'e'
+  ClientHeight = 541
+  ClientWidth = 835
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -139,7 +139,7 @@ object frmExtract: TfrmExtract
         Left = 5
         Top = 48
         Width = 60
-        Height = 23
+        Height = 22
         Caption = 'Read'
         TabOrder = 3
         OnClick = btnReadClick
@@ -170,15 +170,15 @@ object frmExtract: TfrmExtract
         Width = 60
         Height = 23
         Caption = 'Close'
-        TabOrder = 6
         Kind = bkClose
+        NumGlyphs = 2
+        TabOrder = 6
       end
       object adeCellCount: TArgusDataEntry
         Left = 5
         Top = 24
         Width = 60
         Height = 22
-        ItemHeight = 13
         TabOrder = 2
         Text = '1'
         OnChange = adeCellCountChange
@@ -260,7 +260,6 @@ object frmExtract: TfrmExtract
         Style = csDropDownList
         Color = clBtnFace
         Enabled = False
-        ItemHeight = 13
         ParentShowHint = False
         ShowHint = True
         TabOrder = 1
@@ -290,7 +289,6 @@ object frmExtract: TfrmExtract
         Height = 18
         Color = clBtnFace
         Enabled = False
-        ItemHeight = 13
         TabOrder = 12
         Text = '999.73'
         OnExit = dgDataNodesExit
@@ -306,7 +304,6 @@ object frmExtract: TfrmExtract
         Height = 18
         Color = clBtnFace
         Enabled = False
-        ItemHeight = 13
         TabOrder = 13
         Text = '9.80665'
         OnExit = dgDataNodesExit
@@ -334,7 +331,7 @@ object frmExtract: TfrmExtract
         OnClick = btnPlotNoneClick
       end
     end
-    object dgDataPoints: TDataGrid
+    object dgDataPoints: TEcDataGrid
       Left = 1
       Top = 153
       Width = 227
@@ -372,7 +369,7 @@ object frmExtract: TfrmExtract
       SelectedIndex = 0
       Version = '2.0'
     end
-    object dgDataNodes: TDataGrid
+    object dgDataNodes: TEcDataGrid
       Left = 228
       Top = 153
       Width = 169
@@ -419,7 +416,13 @@ object frmExtract: TfrmExtract
       Width = 433
       Height = 111
       Align = alClient
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
       MaxLength = 2147483632
+      ParentFont = False
       ReadOnly = True
       TabOrder = 2
       WordWrap = False
@@ -430,7 +433,6 @@ object frmExtract: TfrmExtract
     Top = 269
     Width = 835
     Height = 272
-    BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
     Legend.LegendStyle = lsSeries
     MarginRight = 10
@@ -449,6 +451,8 @@ object frmExtract: TfrmExtract
     Align = alClient
     Color = clWindow
     TabOrder = 1
+    DefaultCanvas = 'TGDIPlusCanvas'
+    ColorPaletteIndex = 0
   end
   object SaveDialog1: TSaveDialog
     DefaultExt = 'txt'
@@ -535,6 +539,10 @@ object frmExtract: TfrmExtract
     Chart = ChartHydExtractor
     Options = [ceChange, ceTitle, ceHelp]
     Title = 'Editing Hydrograph Plot'
+    GalleryHeight = 0
+    GalleryWidth = 0
+    Height = 0
+    Width = 0
     Left = 152
     Top = 9
   end

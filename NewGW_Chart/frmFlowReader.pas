@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   Buttons, StdCtrls, ExtCtrls, ComCtrls, Grids, TeeProcs,
   TeEngine, Chart, CheckLst, Spin, contnrs, Series, TeeEdit,
-  Menus, MyFormUnit, RbwDataGrid4;
+  Menus, MyFormUnit, RbwDataGrid4, VclTee.TeeGDIPlus;
 
 type
   TfrmCellFlows = class(TMyForm)
@@ -258,12 +258,12 @@ begin
           begin
             if Text[CharIndex - 1] <> ' ' then
             begin
-              Text[CharIndex] := LowerCase(Text[CharIndex])[1];
+              Text[CharIndex] := AnsiChar(LowerCase(Text[CharIndex])[1]);
             end;
           end;
 
           AName := Trim(TEXT);
-          if AName = 'Flow-ja-face' then
+          if AName = 'flow-ja-face' then
           begin
             Continue;
           end;
