@@ -3427,7 +3427,7 @@ that affects the model output should also have a comment. }
     property GwtUsed: Boolean read GetGwtUsed;
     Procedure UpdateGwtConc;
     function SutraUnsatRegionUsed(Sender: TObject): boolean;
-    procedure ClearPestRegularizationGroupNameFromParameters;
+    procedure ClearPestPriorInfoGroupData;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -10561,13 +10561,17 @@ const
 //               Bug fix: Fixed bug in export of PEST prior information
 //                equations and prior information groups that resulted in
 //                invalid PEST control files.
+//    '5.0.0.14' Bug fix: Fixed bug in export of PEST prior information
+//                equations and prior information groups that caused an access
+//                violation if the model input was exported more than once
+//                after opening the model in ModelMuse.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.13';
+  IIModelVersion = '5.0.0.14';
 
 function IModelVersion: string;
 begin
@@ -32732,7 +32736,7 @@ begin
   FreeAndNil(FPestParamDictionay);
 end;
 
-procedure TCustomModel.ClearPestRegularizationGroupNameFromParameters;
+procedure TCustomModel.ClearPestPriorInfoGroupData;
 var
   ParamIndex: Integer;
   ASteadyParam: TModflowSteadyParameter;
@@ -32745,18 +32749,24 @@ begin
     ASteadyParam.RegularizationGroup := '';
     ASteadyParam.HorizontalSpatialContinuityGroupName := '';
     ASteadyParam.VertSpatialContinuityGroupName := '';
+
+    ASteadyParam.PilotPointObsGrpCollection.Clear;
   end;
 
   for ParamIndex := 0 to ModflowTransientParameters.Count - 1 do
   begin
     AParam := ModflowTransientParameters[ParamIndex];
     AParam.RegularizationGroup := '';
+
+    AParam.PilotPointObsGrpCollection.Clear;
   end;
 
   for ParamIndex := 0 to HufParameters.Count - 1 do
   begin
     AHufParam := HufParameters[ParamIndex];
     AHufParam.RegularizationGroup := '';
+
+    AHufParam.PilotPointObsGrpCollection.Clear;
   end;
 end;
 
@@ -42197,7 +42207,7 @@ begin
         if PestUsed then
         begin
           PestProperties.PriorInfoObservationGroups.Clear;
-          ClearPestRegularizationGroupNameFromParameters;
+          ClearPestPriorInfoGroupData;
         end;
         InternalExportModflowModel(FileName, False);
       finally

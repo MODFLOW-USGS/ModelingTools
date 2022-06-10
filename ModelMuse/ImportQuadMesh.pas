@@ -722,8 +722,15 @@ begin
       Splitter := TStringList.Create;
       try
         Splitter.Delimiter := ' ';
-        ALine := FileReader.ReadLine;
-
+		try
+          ALine := FileReader.ReadLine;
+        except on E: EEncodingError  do
+          begin
+            Beep;
+            MessageDlg(StrThereWasAnErrorIInvalidMesh, mtError, [mbOK], 0);
+            Exit;
+		  end;
+		end;
         try
         if ALine = '$MeshFormat' then
         begin

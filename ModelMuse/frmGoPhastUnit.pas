@@ -9946,7 +9946,7 @@ begin
       TDirectory.CreateDirectory(ArrayDir)
     end;
     PhastModel.PestProperties.PriorInfoObservationGroups.Clear;
-    PhastModel.ClearPestRegularizationGroupNameFromParameters;
+    PhastModel.ClearPestPriorInfoGroupData;
   end;
 
   PhastModel.ClearPval;

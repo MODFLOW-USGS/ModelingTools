@@ -68,7 +68,7 @@ type
     property Items[Index: Integer]: TPestObservationGroup read GetParamGroup
       write SetParamGroup; default;
     function GetObsGroupByName(ObsGroupName: string): TPestObservationGroup;
-    procedure ReleaseFreedObsGrouopReferences;
+    procedure ReleaseFreedObsGroupReferences;
   end;
 
   function ValidObsGroupName(Value: string): string;
@@ -302,7 +302,7 @@ begin
   end;
 end;
 
-procedure TPestObservationGroups.ReleaseFreedObsGrouopReferences;
+procedure TPestObservationGroups.ReleaseFreedObsGroupReferences;
 var
   List: System.Generics.Collections.TList<TObject>;
   ItemIndex: Integer;

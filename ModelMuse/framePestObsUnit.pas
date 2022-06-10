@@ -66,7 +66,7 @@ resourcestring
   StrComment = 'Comment';
   StrFirstObservation = 'First Observation (OBSNME1)';
   StrSecondObservation = 'Second Observation (OBSNME2)';
-  StrObservationGroup = 'Observation Group (OBGNME}';
+  StrObservationGroup = 'Observation Group (OBGNME)';
 
 implementation
 
