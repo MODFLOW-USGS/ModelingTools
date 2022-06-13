@@ -97,6 +97,8 @@ object frmModChart: TfrmModChart
     OnMouseDown = chartModflowMouseDown
     OnMouseMove = chartModflowMouseMove
     OnMouseUp = chartModflowMouseUp
+    ExplicitLeft = 2
+    ExplicitTop = 35
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 0
     object SerDataPoints: TPointSeries
@@ -164,10 +166,10 @@ object frmModChart: TfrmModChart
       SeriesColor = clWhite
       Title = 'Bubble Legend'
       ClickableLine = False
-      Pointer.HorizSize = 39
+      Pointer.HorizSize = 16
       Pointer.InflateMargins = False
       Pointer.Style = psCircle
-      Pointer.VertSize = 39
+      Pointer.VertSize = 16
       XValues.Name = 'X'
       XValues.Order = loAscending
       YValues.Name = 'Y'

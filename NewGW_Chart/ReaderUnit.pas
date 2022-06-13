@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, Grids, ExtCtrls, TeeProcs, TeEngine, Chart, Series, Buttons, Menus,
-  MyFormUnit, TeeEdit, TeeScroB, CheckLst, IntListUnit, TeeTools;
+  MyFormUnit, TeeEdit, TeeScroB, CheckLst, IntListUnit, TeeTools,
+  VclTee.TeeGDIPlus;
 
 type
   TBudget = class;
@@ -197,6 +198,7 @@ type
     procedure FillTitles(const InList, OutList: TStringList;
       const ZoneIndex: Integer);
     procedure ReadSutra2D3D_File;
+    procedure ReadSutra4_File;
     Function TimeStepLength(const StressPeriod, TimeStep: integer): double;
     function GetLineStorage(const Name: string): TLineStoredProperties;
     procedure StoreLineSeriesValues;
@@ -221,7 +223,7 @@ type
 //    ZBLStringList: TStringList;
     ZBLStringList: TLineReader;
 
-    BudgetList: TList;
+    FBudgetList: TList;
     procedure BudgetListClear;
     procedure PlotResults;
     { Public declarations }
@@ -264,8 +266,8 @@ type
     function RealValue: double;
   end;
 
-  TSourceTypes = (stZONEBDGT, stMODFLOW, stModflow6, stGWT, stSUTRA97, stSUTRA, stMT3D,
-    stHST3D, stSEAWAT2000, stGSFLOW);
+  TSourceTypes = (stZONEBDGT, stMODFLOW, stModflow6, stGWT, stSUTRA97, stSUTRA,
+    stSUTRA4, stMT3D, stHST3D, stSEAWAT2000, stGSFLOW);
 
 var
   frmZoneBdgtReader: TfrmZoneBdgtReader;
@@ -334,7 +336,7 @@ begin
   StoredLineValues:= TObjectList.Create;
   ExplanationVisible := False;
   ZBLStringList := TLineReader.Create;
-  BudgetList := TList.Create;
+  FBudgetList := TList.Create;
   Constraints.MinHeight := Height - Round(chartZONEBDGT.Height / 2);
   Width := rgPlotType.Left + rgPlotType.Width + 8
     + BitBtnClose.Left + BitBtnClose.Width + 12;
@@ -350,11 +352,11 @@ var
   Index: integer;
 begin
   ZBLStringList.Free;
-  for Index := BudgetList.Count - 1 downto 0 do
+  for Index := FBudgetList.Count - 1 downto 0 do
   begin
-    TBudget(BudgetList[Index]).Free;
+    TBudget(FBudgetList[Index]).Free;
   end;
-  BudgetList.Free;
+  FBudgetList.Free;
   StoredLineValues.Free;
   MarkedPoints.Free;
   if FFileName <> '' then
@@ -435,8 +437,8 @@ begin
   begin
     RateBudget := TBudget.Create;
     AmountBudget := TBudget.Create;
-    BudgetList.Add(RateBudget);
-    BudgetList.Add(AmountBudget);
+    FBudgetList.Add(RateBudget);
+    FBudgetList.Add(AmountBudget);
     CurrentLine := ZBLStringList.Strings[LineIndex];
 
     TimeStepString := GetStringBetween(CurrentLine, SearchTerm, '***');
@@ -504,8 +506,8 @@ begin
     begin
       RateBudget := TBudget.Create;
       AmountBudget := TBudget.Create;
-      BudgetList.Add(RateBudget);
-      BudgetList.Add(AmountBudget);
+      FBudgetList.Add(RateBudget);
+      FBudgetList.Add(AmountBudget);
 
       LineIndex := LineIndex + 2;
       CurrentLine := ZBLStringList.Strings[LineIndex];
@@ -575,8 +577,8 @@ begin
       begin
         RateBudget := TBudget.Create;
         AmountBudget := TBudget.Create;
-        BudgetList.Add(RateBudget);
-        BudgetList.Add(AmountBudget);
+        FBudgetList.Add(RateBudget);
+        FBudgetList.Add(AmountBudget);
 
         LineIndex := LineIndex + 2;
         CurrentLine := ZBLStringList.Strings[LineIndex];
@@ -630,7 +632,7 @@ begin
     end;
 
     StepTotalBudget := TBudget.Create;
-    BudgetList.Add(StepTotalBudget);
+    FBudgetList.Add(StepTotalBudget);
 
     StepTotalBudget.Zone := 'HST3D Flow Budget - Step Totals';
     StepTotalBudget.TimeStep := TimeStepString;
@@ -676,7 +678,7 @@ begin
     if CurrentLine <> 'Cumulative Summary' then
     begin
       StepTotalBudget := TBudget.Create;
-      BudgetList.Add(StepTotalBudget);
+      FBudgetList.Add(StepTotalBudget);
 
       if (Pos('specified T', CurrentLine) > 0) then
       begin
@@ -731,7 +733,7 @@ begin
       if CurrentLine <> 'Cumulative Summary' then
       begin
         StepTotalBudget := TBudget.Create;
-        BudgetList.Add(StepTotalBudget);
+        FBudgetList.Add(StepTotalBudget);
 
         StepTotalBudget.Zone := 'HST3D Solute Budget - Step Totals';
         StepTotalBudget.TimeStep := TimeStepString;
@@ -781,7 +783,7 @@ begin
     end;
 
     CumulativeBudget := TBudget.Create;
-    BudgetList.Add(CumulativeBudget);
+    FBudgetList.Add(CumulativeBudget);
 
     CumulativeBudget.Zone := 'HST3D Flow Budget - Cumulative';
     CumulativeBudget.TimeStep := TimeStepString;
@@ -827,7 +829,7 @@ begin
     if Pos('Cumulative', CurrentLine) = 0 then
     begin
       CumulativeBudget := TBudget.Create;
-      BudgetList.Add(CumulativeBudget);
+      FBudgetList.Add(CumulativeBudget);
 
       if (Pos('Heat', CurrentLine) > 0) then
       begin
@@ -891,7 +893,7 @@ begin
       if Pos('Cumulative', CurrentLine) = 0 then
       begin
         CumulativeBudget := TBudget.Create;
-        BudgetList.Add(CumulativeBudget);
+        FBudgetList.Add(CumulativeBudget);
 
         CumulativeBudget.Zone := 'HST3D Solute Budget - Cumulative';
         CumulativeBudget.TimeStep := TimeStepString;
@@ -948,7 +950,7 @@ begin
     end;
 
     BoundaryConditionBudget := TBudget.Create;
-    BudgetList.Add(BoundaryConditionBudget);
+    FBudgetList.Add(BoundaryConditionBudget);
 
     BoundaryConditionBudget.Zone := 'HST3D Flow Boundaries - Cumulative';
     BoundaryConditionBudget.TimeStep := TimeStepString;
@@ -999,7 +1001,7 @@ begin
     if Pos('Output at End of Time Step No.', CurrentLine) = 0 then
     begin
       BoundaryConditionBudget := TBudget.Create;
-      BudgetList.Add(BoundaryConditionBudget);
+      FBudgetList.Add(BoundaryConditionBudget);
 
       if Pos('specified T', CurrentLine) > 0 then
       begin
@@ -1058,7 +1060,7 @@ begin
       if Pos('Output at End of Time Step No.', CurrentLine) = 0 then
       begin
         BoundaryConditionBudget := TBudget.Create;
-        BudgetList.Add(BoundaryConditionBudget);
+        FBudgetList.Add(BoundaryConditionBudget);
 
         BoundaryConditionBudget.Zone := 'HST3D Solute Boundaries - Cumulative';
 
@@ -1137,7 +1139,7 @@ begin
   while LineIndex > -1 do
   begin
     ABudget := TBudget.Create;
-    BudgetList.Add(ABudget);
+    FBudgetList.Add(ABudget);
 
     CurrentLine := ZBLStringList.Strings[LineIndex];
 
@@ -1276,10 +1278,10 @@ begin
     end;
 
 
-    for Index := 0 to BudgetList.Count-1 do
+    for Index := 0 to FBudgetList.Count-1 do
     begin
       AComponentList := ComponentLists[Index mod ComponentCount];
-      AComponentList.Add(BudgetList[Index]);
+      AComponentList.Add(FBudgetList[Index]);
     end;
 
     for CompIndex := 0 to ComponentLists.Count -1 do
@@ -1293,7 +1295,7 @@ begin
       begin
         Budget2 := AComponentList[Index];
         ABudget := TBudget.Create;
-        BudgetList.Add(ABudget);
+        FBudgetList.Add(ABudget);
 
         if ComponentCount > 1 then
         begin
@@ -1393,7 +1395,7 @@ begin
   while LineIndex > -1 do
   begin
     ABudget := TBudget.Create;
-    BudgetList.Add(ABudget);
+    FBudgetList.Add(ABudget);
 
     SearchTerm := 'STRESS PERIOD';
     LineIndex := GetNextLine(SearchTerm, LineIndex);
@@ -1579,7 +1581,7 @@ begin
   while LineIndex > -1 do
   begin
     ABudget := TBudget.Create;
-    BudgetList.Add(ABudget);
+    FBudgetList.Add(ABudget);
     CurrentLine := ZBLStringList.Strings[LineIndex];
 
     CurrentZone := GetStringBetween(CurrentLine, SearchTerm, 'at');
@@ -1672,9 +1674,9 @@ begin
   BudgetGroups := TStringList.Create;
   try
     MultiplesFound := False;
-    for Index := 0 to BudgetList.Count -1 do
+    for Index := 0 to FBudgetList.Count -1 do
     begin
-      ABudget := BudgetList[Index];
+      ABudget := FBudgetList[Index];
       BudgetPos := BudgetGroups.IndexOf(ABudget.Zone);
       if BudgetPos < 0 then
       begin
@@ -1782,7 +1784,7 @@ begin
               PriorBudget := CumBudget;
               ABudget := AList[BudgetIndex];
               CumBudget:= TBudget.Create;
-              BudgetList.Add(CumBudget);
+              FBudgetList.Add(CumBudget);
               CumBudget.Zone := ABudget.Zone + ': Cumulative';
               CumBudget.StressPeriod := ABudget.StressPeriod;
               CumBudget.TimeStep := ABudget.TimeStep;
@@ -2000,7 +2002,7 @@ begin
       while LineIndex > -1 do
       begin
         ABudget := TBudget.Create;
-        BudgetList.Add(ABudget);
+        FBudgetList.Add(ABudget);
         CurrentLine := ZBLStringList.Strings[LineIndex];
 
         TimeStepString := GetStringBetween(CurrentLine, 'TIME STEP', ',');
@@ -2044,7 +2046,7 @@ begin
       while LineIndex > -1 do
       begin
         ABudget := TBudget.Create;
-        BudgetList.Add(ABudget);
+        FBudgetList.Add(ABudget);
         CurrentLine := ZBLStringList.Strings[LineIndex];
 
         TimeStepString := GetStringBetween(CurrentLine, 'TIME STEP', ',');
@@ -2102,7 +2104,7 @@ begin
       while LineIndex > -1 do
       begin
         ABudget := TBudget.Create;
-        BudgetList.Add(ABudget);
+        FBudgetList.Add(ABudget);
         CurrentLine := ZBLStringList.Strings[LineIndex];
 
         TimeStepString := GetStringBetween(CurrentLine, 'TIME STEP', ',');
@@ -2642,7 +2644,7 @@ begin
       while LineIndex > -1 do
       begin
         ABudget := TBudget.Create;
-        BudgetList.Add(ABudget);
+        FBudgetList.Add(ABudget);
         CurrentLine := ZBLStringList.Strings[LineIndex];
 
         TimeStepString := GetStringBetween(CurrentLine, 'TIME STEP', ',');
@@ -2797,7 +2799,7 @@ begin
       while LineIndex > -1 do
       begin
         ABudget := TBudget.Create;
-        BudgetList.Add(ABudget);
+        FBudgetList.Add(ABudget);
         CurrentLine := ZBLStringList.Strings[LineIndex];
 
         TimeStepString := GetStringBetween(CurrentLine, 'TIME STEP', ',');
@@ -2923,7 +2925,7 @@ begin
       while LineIndex > -1 do
       begin
         ABudget := TBudget.Create;
-        BudgetList.Add(ABudget);
+        FBudgetList.Add(ABudget);
         CurrentLine := ZBLStringList.Strings[LineIndex];
 
         TimeStepString := GetStringBetween(CurrentLine, 'TIME STEP', ',');
@@ -3049,6 +3051,308 @@ begin
       STerms.Free;
       ETerms.Free;
     end;
+  end;
+end;
+
+procedure TfrmZoneBdgtReader.ReadSutra4_File;
+const
+  KBalanceActivity = 'BALANCE ACTIVITY';
+  KRateOfChange = '  RATE OF CHANGE OF';
+  TermStart = 87;
+var
+  LineIndex: Integer;
+  SearchTerm: string;
+  TimeStep: Integer;
+  BudgetType: string;
+  ABudget: TBudget;
+  ALine: string;
+  BActivityPos: Integer;
+  RateOfChangePos: Integer;
+  InnerIndex: Integer;
+  ImpactsString: string;
+//  BudgetTerm: System.array;
+  DashPosition: Integer;
+  LinePosition: Integer;
+  ABudgetItem: TBudgetItem;
+  Rate: string;
+  BudgetTerm: string;
+  Splitter: TStringList;
+  function GetTimeStepString: string;
+  const
+    KTimeStep = 'AFTER TIME STEP';
+  var
+    ALine: string;
+    StepPosition: Integer;
+    TimeStepString: string;
+  begin
+    ALine := ZBLStringList.Strings[LineIndex];
+    result := Trim(GetStringBetween(ALine, KTimeStep, ','));
+  end;
+  procedure ReadBudget;
+  const
+    KGainLoss = 'GAIN/LOSS';
+  var
+//    TotalItem: String;
+    RateOfChangeDesc: String;
+    GainLossPos: Integer;
+    GainLossDesc: string;
+  begin
+    ABudget.Zone := Format('SUTRA %s Budget', [BudgetType]);
+    ABudget.TimeStep := GetTimeStepString;
+
+    repeat
+      Inc(LineIndex);
+      ALine := ZBLStringList[LineIndex];
+      RateOfChangePos := Pos(KRateOfChange, ALine);
+      if RateOfChangePos > 0 then
+      begin
+//        RateOfChangeDesc := Trim(Copy(ALine, 1, TermStart-1)) + ' ';
+        RateOfChangeDesc := Format('%s Rate of change: ', [BudgetType]);
+        Inc(LineIndex);
+        ALine := ZBLStringList[LineIndex];
+        ImpactsString := GetStringBetween(ALine, '', ':');
+        if Pos('CHANGE IMPACTS ON', ImpactsString) > 0 then
+        begin
+          ImpactsString:= GetStringBetween(ImpactsString, '',
+            'CHANGE IMPACTS ON');
+//          ImpactsString := Splitter.Strings[Splitter.Count-1];
+        end;
+        ImpactsString := RateOfChangeDesc + ImpactsString + ': ';
+
+        Inc(LineIndex);
+        ALine := ZBLStringList[LineIndex];
+        DashPosition := Pos('-----------', ALine);
+        LinePosition := Pos('___________', ALine);
+        while (DashPosition <= 0) and (LinePosition <= 0) do
+        begin
+          BudgetTerm := Trim(Copy(ALine, 1, TermStart-1));
+
+          ABudgetItem := TBudgetItem.Create;
+          ABudgetItem.Name := ImpactsString + BudgetTerm;
+          ALine := GetStringBetween(ALine, BudgetTerm, '');
+          Rate := GetStringBetween(ALine, '', ' ');
+          ABudgetItem.value := Rate;
+          ABudget.InList.Add(ABudgetItem);
+
+          ALine := GetStringBetween(ALine, Rate, '');
+          Rate := GetStringBetween(ALine, '', ' ');
+          ABudgetItem := TBudgetItem.Create;
+          ABudgetItem.Name := ImpactsString + BudgetTerm;
+          ABudgetItem.value := Rate;
+          ABudget.OutList.Add(ABudgetItem);
+
+          Rate := GetStringBetween(ALine, Rate, '');
+          ABudgetItem := TBudgetItem.Create;
+          ABudgetItem.Name := ImpactsString + BudgetTerm;;
+          ABudgetItem.value := Rate;
+          ABudget.NetList.Add(ABudgetItem);
+
+          Inc(LineIndex);
+          ALine := ZBLStringList[LineIndex];
+          DashPosition := Pos('-----------', ALine);
+          LinePosition := Pos('___________', ALine);
+
+          if (DashPosition > 0) or (LinePosition > 0) then
+          begin
+            Inc(LineIndex);
+            ALine := ZBLStringList[LineIndex];
+
+            BudgetTerm := Trim(Copy(ALine, 1, TermStart-1));
+            ABudgetItem := TBudgetItem.Create;
+            ABudgetItem.Name := BudgetTerm;
+
+            ALine := GetStringBetween(ALine, BudgetTerm, '');
+            Rate := GetStringBetween(ALine, '', ' ');
+            ABudgetItem.value := Rate;
+            ABudget.InList.Add(ABudgetItem);
+
+            ALine := GetStringBetween(ALine, Rate, '');
+            Rate := GetStringBetween(ALine, '', ' ');
+            ABudgetItem := TBudgetItem.Create;
+            ABudgetItem.Name := BudgetTerm;
+            ABudgetItem.value := Rate;
+            ABudget.OutList.Add(ABudgetItem);
+
+            Rate := GetStringBetween(ALine, Rate, '');
+            ABudgetItem := TBudgetItem.Create;
+            ABudgetItem.Name := BudgetTerm;;
+            ABudgetItem.value := Rate;
+            ABudget.NetList.Add(ABudgetItem);
+
+            break;
+          end;
+        end;
+      end;
+
+      GainLossPos := Pos(KGainLoss, ALine);
+      if GainLossPos > 0 then
+      begin
+//        GainLossDesc := Trim(Copy(ALine, 1, TermStart-1)) + ' ';
+        GainLossDesc := 'Gain/Loss: ';
+        Inc(LineIndex);
+        ALine := ZBLStringList[LineIndex];
+        ImpactsString := GainLossDesc + GetStringBetween(ALine, '', ':') + ' ';
+
+        Inc(LineIndex);
+        ALine := ZBLStringList[LineIndex];
+        DashPosition := Pos('-----------', ALine);
+        LinePosition := Pos('___________', ALine);
+        while (DashPosition <= 0) and (LinePosition <= 0) do
+        begin
+          BudgetTerm := Trim(Copy(ALine, 1, TermStart-1));
+          if Pos(':', BudgetTerm) > 0 then
+          begin
+            ImpactsString := GainLossDesc + GetStringBetween(ALine, '', ':') + ' ';
+
+            Inc(LineIndex);
+            ALine := ZBLStringList[LineIndex];
+
+            continue
+          end;
+
+          ABudgetItem := TBudgetItem.Create;
+          ABudgetItem.Name := GainLossDesc + BudgetTerm;
+          ALine := GetStringBetween(ALine, BudgetTerm, '');
+          Rate := GetStringBetween(ALine, '', ' ');
+          ABudgetItem.value := Rate;
+          ABudget.InList.Add(ABudgetItem);
+
+          ALine := GetStringBetween(ALine, Rate, '');
+          Rate := GetStringBetween(ALine, '', ' ');
+          ABudgetItem := TBudgetItem.Create;
+          ABudgetItem.Name := GainLossDesc + BudgetTerm;
+          ABudgetItem.value := Rate;
+          ABudget.OutList.Add(ABudgetItem);
+
+          Rate := GetStringBetween(ALine, Rate, '');
+          ABudgetItem := TBudgetItem.Create;
+          ABudgetItem.Name := GainLossDesc + BudgetTerm;;
+          ABudgetItem.value := Rate;
+          ABudget.NetList.Add(ABudgetItem);
+
+          Inc(LineIndex);
+          ALine := ZBLStringList[LineIndex];
+          DashPosition := Pos('-----------', ALine);
+          LinePosition := Pos('___________', ALine);
+
+          if (DashPosition > 0) or (LinePosition > 0) then
+          begin
+            Inc(LineIndex);
+            ALine := ZBLStringList[LineIndex];
+
+            BudgetTerm := Trim(Copy(ALine, 1, TermStart-1));
+            ABudgetItem := TBudgetItem.Create;
+            ABudgetItem.Name := BudgetTerm;
+
+            ALine := GetStringBetween(ALine, BudgetTerm, '');
+            Rate := GetStringBetween(ALine, '', ' ');
+            ABudgetItem.value := Rate;
+            ABudget.InList.Add(ABudgetItem);
+
+            ALine := GetStringBetween(ALine, Rate, '');
+            Rate := GetStringBetween(ALine, '', ' ');
+            ABudgetItem := TBudgetItem.Create;
+            ABudgetItem.Name := BudgetTerm;
+            ABudgetItem.value := Rate;
+            ABudget.OutList.Add(ABudgetItem);
+
+            Rate := GetStringBetween(ALine, Rate, '');
+            ABudgetItem := TBudgetItem.Create;
+            ABudgetItem.Name := BudgetTerm;;
+            ABudgetItem.value := Rate;
+            ABudget.NetList.Add(ABudgetItem);
+
+            break;
+          end;
+
+        end;
+      end;
+
+      BActivityPos := Pos(KBalanceActivity, ALine);
+      if BActivityPos > 0  then
+      begin
+        ABudget.Activity := GetStringBetween(ALine, ']', '');
+
+        Inc(LineIndex);
+        ALine := ZBLStringList[LineIndex];
+        ABudget.InMinusOut := GetStringBetween(ALine, ']', '');
+
+        Inc(LineIndex);
+        ALine := ZBLStringList[LineIndex];
+        ABudget.Discrepancy := GetStringBetween(ALine, ']', '(PERCENT)');
+
+        break;
+      end;
+    until False;
+  end;
+begin
+  Splitter := TStringList.Create;
+  try
+    Splitter.Delimiter := ' ';
+    LineIndex := 0;
+    SearchTerm := 'H 2 O   M A S S   B U D G E T';
+    LineIndex := GetNextLine(SearchTerm, LineIndex);
+    while LineIndex > -1 do
+    begin
+      ABudget := TBudget.Create;
+      FBudgetList.Add(ABudget);
+      BudgetType := 'Water';
+      BActivityPos := 0;
+
+      ReadBudget;
+
+      LineIndex := GetNextLine(SearchTerm, LineIndex);
+    end;
+
+    LineIndex := 0;
+    SearchTerm := 'H 2 O  M A S S   B U D G E T';
+    LineIndex := GetNextLine(SearchTerm, LineIndex);
+    while LineIndex > -1 do
+    begin
+      ABudget := TBudget.Create;
+      FBudgetList.Add(ABudget);
+      BudgetType := 'Water';
+
+      BActivityPos := 0;
+
+      ReadBudget;
+
+      LineIndex := GetNextLine(SearchTerm, LineIndex);
+    end;
+
+    LineIndex := 0;
+    SearchTerm := 'S O L U T E   B U D G E T';
+    LineIndex := GetNextLine(SearchTerm, LineIndex);
+    while LineIndex > -1 do
+    begin
+      ABudget := TBudget.Create;
+      FBudgetList.Add(ABudget);
+      BudgetType := 'Solute';
+
+      BActivityPos := 0;
+
+      ReadBudget;
+
+      LineIndex := GetNextLine(SearchTerm, LineIndex);
+    end;
+
+    LineIndex := 0;
+    SearchTerm := 'E N E R G Y   B U D G E T';
+    LineIndex := GetNextLine(SearchTerm, LineIndex);
+    while LineIndex > -1 do
+    begin
+      ABudget := TBudget.Create;
+      FBudgetList.Add(ABudget);
+      BudgetType := 'Energy';
+
+      BActivityPos := 0;
+
+      ReadBudget;
+
+      LineIndex := GetNextLine(SearchTerm, LineIndex);
+    end;
+  finally
+    Splitter.Free;
   end;
 end;
 
@@ -3255,14 +3559,14 @@ begin
     TimeStepString := GetStringBetween(CurrentLine, SearchTerm, 'STRESS PERIOD');
     StressPeriodString := GetStringBetween(CurrentLine, 'STRESS PERIOD', '');
     CumBudget := TBudget.Create;
-    BudgetList.Add(CumBudget);
+    FBudgetList.Add(CumBudget);
     CumBudget.Zone := CumBudgetName;
     CumBudget.InMinusOut := '0';
     CumBudget.Discrepancy := '0';
     CumBudget.StressPeriod := StressPeriodString;
     CumBudget.TimeStep := TimeStepString;
     RateBudget := TBudget.Create;
-    BudgetList.Add(RateBudget);
+    FBudgetList.Add(RateBudget);
     RateBudget.Zone := RateBudgetName;
     RateBudget.InMinusOut := '0';
     RateBudget.Discrepancy := '0';
@@ -3463,8 +3767,8 @@ begin
 
     CumBudget := TBudget.Create;
     RateBudget := TBudget.Create;
-    BudgetList.Add(CumBudget);
-    BudgetList.Add(RateBudget);
+    FBudgetList.Add(CumBudget);
+    FBudgetList.Add(RateBudget);
     CumBudget.Zone := 'CUMULATIVE';
     RateBudget.Zone := 'RATES';
 
@@ -3682,7 +3986,7 @@ begin
     Inc(Step);
 
     StreamBudget := TBudget.Create;
-    BudgetList.Add(StreamBudget);
+    FBudgetList.Add(StreamBudget);
     StreamBudget.Zone := 'Stream Flow';
     StreamBudget.InMinusOut := '0';
     StreamBudget.Discrepancy := '0';
@@ -3690,7 +3994,7 @@ begin
     StreamBudget.TimeStep := IntToStr(Step);
 
     StreamAquiferBudgetItem := TBudget.Create;
-    BudgetList.Add(StreamAquiferBudgetItem);
+    FBudgetList.Add(StreamAquiferBudgetItem);
     StreamAquiferBudgetItem.Zone := 'Stream-Aquifer';
     StreamAquiferBudgetItem.InMinusOut := '0';
     StreamAquiferBudgetItem.Discrepancy := '0';
@@ -3867,7 +4171,7 @@ begin
           StressPeriodString := GetStringBetween(TimeLine,'IN STRESS PERIOD', '');
 
           CumBudget := TBudget.Create;
-          BudgetList.Add(CumBudget);
+          FBudgetList.Add(CumBudget);
           CumBudget.Zone := 'SWI Cumulative Budget Zone ' + ZoneLine;
           CumBudget.InMinusOut := '0';
           CumBudget.Discrepancy := '0';
@@ -3875,7 +4179,7 @@ begin
           CumBudget.TimeStep := TimeStepString;
 
           RateBudget := TBudget.Create;
-          BudgetList.Add(RateBudget);
+          FBudgetList.Add(RateBudget);
           RateBudget.Zone := 'SWI Budget Rates Zone ' + ZoneLine;
           RateBudget.InMinusOut := '0';
           RateBudget.Discrepancy := '0';
@@ -3907,7 +4211,7 @@ begin
     StressPeriodString := GetStringBetween(CurrentLine,'STRESS PERIOD', '');
 
     CumBudget := TBudget.Create;
-    BudgetList.Add(CumBudget);
+    FBudgetList.Add(CumBudget);
     CumBudget.Zone := 'Stream Unsat Zone Cum Bud';
     CumBudget.InMinusOut := '0';
     CumBudget.Discrepancy := '0';
@@ -3915,7 +4219,7 @@ begin
     CumBudget.TimeStep := TimeStepString;
 
     RateBudget := TBudget.Create;
-    BudgetList.Add(RateBudget);
+    FBudgetList.Add(RateBudget);
     RateBudget.Zone := 'Stream Unsat Zone Bud Rates';
     RateBudget.InMinusOut := '0';
     RateBudget.Discrepancy := '0';
@@ -4158,7 +4462,7 @@ begin
       StressPeriod := GetStringBetween(CurrentLine, ', STRESS PERIOD', '');
 
       SoluteBudget := TBudget.Create;
-      BudgetList.Add(SoluteBudget);
+      FBudgetList.Add(SoluteBudget);
       SoluteBudget.Zone := 'Cumulative Mass Budget Component ' + ComponentNumber;
       SoluteBudget.InMinusOut := '0';
       SoluteBudget.Discrepancy := '0';
@@ -4246,8 +4550,8 @@ begin
     Inc(LineIndex);
     CumBudget := TBudget.Create;
     RateBudget := TBudget.Create;
-    BudgetList.Add(CumBudget);
-    BudgetList.Add(RateBudget);
+    FBudgetList.Add(CumBudget);
+    FBudgetList.Add(RateBudget);
     CumBudget.Zone := 'CUMULATIVE';
     RateBudget.Zone := 'RATES';
 
@@ -4585,6 +4889,10 @@ begin
           begin
             ReadSutra2D3D_File;
           end;
+        stSUTRA4:
+          begin
+            ReadSutra4_File;
+          end;
         stMT3D:
           begin
             ReadMT3DFile;
@@ -4802,9 +5110,9 @@ var
   ABudget: TBudget;
 begin
   comboZone.Items.Clear;
-  for Index := 0 to BudgetList.Count - 1 do
+  for Index := 0 to FBudgetList.Count - 1 do
   begin
-    ABudget := BudgetList[Index];
+    ABudget := FBudgetList[Index];
     if comboZone.Items.IndexOf(ABudget.Zone) = -1 then
     begin
       comboZone.Items.Add(ABudget.Zone);
@@ -4864,9 +5172,9 @@ begin
     clbNet.Items.Clear;
     if comboZone.ItemIndex > -1 then
     begin
-      for Index := 0 to BudgetList.Count - 1 do
+      for Index := 0 to FBudgetList.Count - 1 do
       begin
-        ABudget := BudgetList[Index];
+        ABudget := FBudgetList[Index];
         if comboZone.Text = ABudget.Zone then
         begin
           comboTimeStep.Items.Add(TimeText(ABudget));
@@ -4920,11 +5228,11 @@ procedure TfrmZoneBdgtReader.BudgetListClear;
 var
   Index: integer;
 begin
-  for Index := BudgetList.Count - 1 downto 0 do
+  for Index := FBudgetList.Count - 1 downto 0 do
   begin
-    TBudget(BudgetList[Index]).Free;
+    TBudget(FBudgetList[Index]).Free;
   end;
-  BudgetList.Clear;
+  FBudgetList.Clear;
 end;
 
 function TfrmZoneBdgtReader.GetLineStorage(const Name: string): TLineStoredProperties;
@@ -5009,9 +5317,9 @@ begin
         BarSeries.Marks.Visible := False;
 
         ABudget := nil;
-        for Index := 0 to BudgetList.Count - 1 do
+        for Index := 0 to FBudgetList.Count - 1 do
         begin
-          ABudget := BudgetList[Index];
+          ABudget := FBudgetList[Index];
           if (ABudget.Zone = comboZone.Text)
             and (comboTimeStep.text = TimeText(ABudget)) then
           begin
@@ -5069,8 +5377,7 @@ begin
                   BarSeries.Add(ABudgetItem.RealValue, ABudgetItem.Name,
                     AColor);
                 end
-                else if TSourceTypes(rgDataSource.ItemIndex) = stSUTRA
-                  {Pos('SUTRA',ABudget.Zone) > 0} then
+                else if TSourceTypes(rgDataSource.ItemIndex) in [stSUTRA, stSUTRA4] then
                 begin
                   BarSeries.Add(ABudgetItem.RealValue, '+ ' + ABudgetItem.Name,
                     AColor);
@@ -5094,8 +5401,7 @@ begin
                 ABudgetItem := ABudget.GetFromOutListByName(clbOut.Items[Index]);
                 if ABudgetItem <> nil then
                 begin
-                  if TSourceTypes(rgDataSource.ItemIndex) = stSUTRA {Pos('SUTRA',ABudget.Zone) > 0}
-                    then
+                  if TSourceTypes(rgDataSource.ItemIndex) in [stSUTRA, stSUTRA4] then
                   begin
                     BarSeries.Add(ABudgetItem.RealValue, '- ' + ABudgetItem.Name,
                       AColor);
@@ -5202,7 +5508,7 @@ begin
               ALineSeries.Title := clbIn.Items[BudgetItemIndex];
               ALineSeries.Marks.Visible := False;
             end
-            else if (TSourceTypes(rgDataSource.ItemIndex) = stSUTRA) then
+            else if (TSourceTypes(rgDataSource.ItemIndex) in [stSUTRA, stSUTRA4]) then
             begin // SUTRA
               ALineSeries.Title := '+ ' + clbIn.Items[BudgetItemIndex];
               ALineSeries.Marks.Visible := False;
@@ -5222,9 +5528,9 @@ begin
             ALineSeries.XValues.Order := loNone;
             ALineSeries.ParentChart := chartZONEBDGT;
             ALineSeries.Pointer.Visible := True;
-            for BudgetIndex := 0 to BudgetList.Count - 1 do
+            for BudgetIndex := 0 to FBudgetList.Count - 1 do
             begin
-              ABudget := BudgetList[BudgetIndex];
+              ABudget := FBudgetList[BudgetIndex];
               if (ABudget.Zone = comboZone.Text) then
               begin
                 BudgetTime := 0;
@@ -5278,10 +5584,10 @@ begin
               ALineSeries.OnGetMarkText := Series1GetMarkText;
               ALineSeries.OnClickPointer := Series1ClickPointer;
               ALineSeries.Marks.Visible := True;
-              if (TSourceTypes(rgDataSource.ItemIndex) = stSUTRA) then
+              if (TSourceTypes(rgDataSource.ItemIndex) in [stSUTRA, stSUTRA4]) then
               begin // SUTRA or HST3D
                 ALineSeries.Title := '- ' + clbOut.Items[BudgetItemIndex];
-              ALineSeries.Marks.Visible := False;
+                ALineSeries.Marks.Visible := False;
               end
               else
               begin
@@ -5297,9 +5603,9 @@ begin
               ALineSeries.SeriesColor := AColor;
               ALineSeries.ParentChart := chartZONEBDGT;
               ALineSeries.Pointer.Visible := True;
-              for BudgetIndex := 0 to BudgetList.Count - 1 do
+              for BudgetIndex := 0 to FBudgetList.Count - 1 do
               begin
-                ABudget := BudgetList[BudgetIndex];
+                ABudget := FBudgetList[BudgetIndex];
                 BudgetTime := 0;
                 if ABudget.Time <> '' then
                 begin
@@ -5363,9 +5669,9 @@ begin
               ALineSeries.SeriesColor := AColor;
               ALineSeries.ParentChart := chartZONEBDGT;
               ALineSeries.Pointer.Visible := True;
-              for BudgetIndex := 0 to BudgetList.Count - 1 do
+              for BudgetIndex := 0 to FBudgetList.Count - 1 do
               begin
-                ABudget := BudgetList[BudgetIndex];
+                ABudget := FBudgetList[BudgetIndex];
                 BudgetTime := 0;
                 if ABudget.Time <> '' then
                 begin
@@ -5425,9 +5731,9 @@ begin
           ALineSeries.SeriesColor := AColor;
           ALineSeries.ParentChart := chartZONEBDGT;
           ALineSeries.Pointer.Visible := True;
-          for BudgetIndex := 0 to BudgetList.Count - 1 do
+          for BudgetIndex := 0 to FBudgetList.Count - 1 do
           begin
-            ABudget := BudgetList[BudgetIndex];
+            ABudget := FBudgetList[BudgetIndex];
             if (ABudget.Zone = comboZone.Text) then
             begin
               ALineSeries.AddY(ABudget.GetDecay, '', clTeeColor);
@@ -5454,9 +5760,9 @@ begin
           ALineSeries.SeriesColor := AColor;
           ALineSeries.ParentChart := chartZONEBDGT;
           ALineSeries.Pointer.Visible := True;
-          for BudgetIndex := 0 to BudgetList.Count - 1 do
+          for BudgetIndex := 0 to FBudgetList.Count - 1 do
           begin
-            ABudget := BudgetList[BudgetIndex];
+            ABudget := FBudgetList[BudgetIndex];
             BudgetTime := 0;
             if ABudget.Time <> '' then
             begin
@@ -5507,9 +5813,9 @@ begin
           ALineSeries.SeriesColor := AColor;
           ALineSeries.ParentChart := chartZONEBDGT;
           ALineSeries.Pointer.Visible := True;
-          for BudgetIndex := 0 to BudgetList.Count - 1 do
+          for BudgetIndex := 0 to FBudgetList.Count - 1 do
           begin
-            ABudget := BudgetList[BudgetIndex];
+            ABudget := FBudgetList[BudgetIndex];
             BudgetTime := 0;
             if ABudget.Time <> '' then
             begin
@@ -5559,9 +5865,9 @@ begin
           ALineSeries.SeriesColor := AColor;
           ALineSeries.ParentChart := chartZONEBDGT;
           ALineSeries.Pointer.Visible := True;
-          for BudgetIndex := 0 to BudgetList.Count - 1 do
+          for BudgetIndex := 0 to FBudgetList.Count - 1 do
           begin
-            ABudget := BudgetList[BudgetIndex];
+            ABudget := FBudgetList[BudgetIndex];
             BudgetTime := 0;
             if ABudget.Time <> '' then
             begin
@@ -5652,9 +5958,9 @@ var
   ABudgetItem: TBudgetItem;
 begin
   CurrentZone := comboZone.Items[ZoneIndex];
-  for BudgetIndex := 0 to BudgetList.Count - 1 do
+  for BudgetIndex := 0 to FBudgetList.Count - 1 do
   begin
-    ABudget := BudgetList[BudgetIndex];
+    ABudget := FBudgetList[BudgetIndex];
     if (ABudget.Zone = CurrentZone) then
     begin
       for BudgetItemIndex := 0 to ABudget.InList.Count - 1 do
@@ -5722,9 +6028,9 @@ begin
           else
           begin
             TitleString := 'Stress Period' + Chr(9) + 'Time Step';
-            if BudgetList.Count > 0 then
+            if FBudgetList.Count > 0 then
             begin
-              ABudget := BudgetList[0];
+              ABudget := FBudgetList[0];
               if ABudget.Time <> '' then
               begin
                 TitleString := TitleString + Chr(9) + 'Time';
@@ -5736,9 +6042,9 @@ begin
             TitleString := TitleString + Chr(9) + 'Transport Step'
               + Chr(9) + 'Time';
           end;
-          for BudgetIndex := 0 to BudgetList.Count - 1 do
+          for BudgetIndex := 0 to FBudgetList.Count - 1 do
           begin
-            ABudget := BudgetList[BudgetIndex];
+            ABudget := FBudgetList[BudgetIndex];
             if (ABudget.Zone = CurrentZone) then
             begin
               if Pos('SUTRA', CurrentZone) > 0 then
@@ -5963,7 +6269,7 @@ begin
         btnOpen.Hint := 'Open MOC3D file';
         btnSave.Hint := 'Save MOC3D data in tab-delimited format';
       end;
-    stSUTRA97: // SUTRA
+    stSUTRA97:
       begin
         OpenDialog1.Filter :=
           'SUTRA Listing files (*.lst)|*.lst|All Files (*.*)|*.*';
@@ -5984,7 +6290,7 @@ begin
         btnOpen.Hint := 'Open SUTRA file';
         btnSave.Hint := 'Save SUTRA data in tab-delimited format';
       end;
-    stSUTRA: //SUTRA 2D3D
+    stSUTRA, stSUTRA4:
       begin
         cbIn.Caption := '"+" Budget Items';
         cbOut.Caption := '"-" Budget Items';
@@ -6106,7 +6412,7 @@ end;
 
 procedure TfrmZoneBdgtReader.FormResize(Sender: TObject);
 begin
-  if TSourceTypes(rgDataSource.ItemIndex) = stSUTRA then
+  if TSourceTypes(rgDataSource.ItemIndex) in [stSUTRA, stSUTRA4] then
   begin
     pnlNetBudget.Visible := True;
     splNet.Visible := True;
@@ -6670,7 +6976,7 @@ var
   BytesToRead: Int64;
   FileSize: Int64;
   PriorPosition: Int64;
-  AChar: Char;
+  AChar: AnsiChar;
   NewPosition: Int64;
 begin
   if FFileName <> Value then
@@ -6751,10 +7057,10 @@ begin
   while LineIndex > -1 do
   begin
     CumulativeBudget := TBudget.Create;
-    BudgetList.Add(CumulativeBudget);
+    FBudgetList.Add(CumulativeBudget);
 
     TimeStepBudget := TBudget.Create;
-    BudgetList.Add(TimeStepBudget);
+    FBudgetList.Add(TimeStepBudget);
 
     CurrentLine := ZBLStringList.Strings[LineIndex];
 

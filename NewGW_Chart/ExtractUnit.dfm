@@ -115,8 +115,8 @@ object frmExtract: TfrmExtract
         OnClick = sbImageClick
       end
       object lblLegend: TLabel
-        Left = 631
-        Top = 85
+        Left = 636
+        Top = 125
         Width = 60
         Height = 13
         Caption = 'Legend Text'
@@ -202,7 +202,7 @@ object frmExtract: TfrmExtract
           'GWT and MOC3D Observations'
           'SUTRA 09.97'
           'SUTRA 2D/3D'
-          'SUTRA 2.1, 2.2, or 3.0'
+          'SUTRA 2.1, 2.2, 3.0, or 4.0'
           'MODFLOW Hydmod package'
           'MODFLOW 6 Obs Utility output')
         TabOrder = 9
@@ -226,7 +226,7 @@ object frmExtract: TfrmExtract
         Left = 525
         Top = 5
         Width = 119
-        Height = 71
+        Height = 114
         Caption = 'SUTRA Data'
         Enabled = False
         ItemIndex = 0
@@ -274,8 +274,8 @@ object frmExtract: TfrmExtract
           'year')
       end
       object edExplanation: TEdit
-        Left = 527
-        Top = 82
+        Left = 532
+        Top = 122
         Width = 98
         Height = 21
         TabOrder = 14

@@ -1,12 +1,12 @@
 object frmZoneBdgtReader: TfrmZoneBdgtReader
   Left = 296
   Top = 95
-  Width = 622
-  Height = 575
   HelpContext = 350
   Caption = 
     'GW_Chart Water Budgets: Water and solute budgets for numerical m' +
     'odels'
+  ClientHeight = 516
+  ClientWidth = 606
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -26,19 +26,20 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
   TextHeight = 15
   object Splitter1: TSplitter
     Left = 0
-    Top = 237
-    Width = 614
+    Top = 232
+    Width = 606
     Height = 3
     Cursor = crVSplit
     Align = alBottom
     OnMoved = Splitter1Moved
+    ExplicitTop = 237
+    ExplicitWidth = 614
   end
   object chartZONEBDGT: TChart
     Left = 0
     Top = 0
-    Width = 614
-    Height = 237
-    BackWall.Brush.Color = clWhite
+    Width = 606
+    Height = 232
     BackWall.Brush.Style = bsClear
     Legend.Font.Charset = ANSI_CHARSET
     Legend.Font.Name = 'Times New Roman'
@@ -49,9 +50,9 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
       'ZONEBDGT Data')
     OnGetLegendPos = chartZONEBDGTGetLegendPos
     OnGetLegendRect = chartZONEBDGTGetLegendRect
-    BottomAxis.LabelsFont.Charset = ANSI_CHARSET
-    BottomAxis.LabelsFont.Height = -15
-    BottomAxis.LabelsFont.Name = 'Times New Roman'
+    BottomAxis.LabelsFormat.Font.Charset = ANSI_CHARSET
+    BottomAxis.LabelsFormat.Font.Height = -15
+    BottomAxis.LabelsFormat.Font.Name = 'Times New Roman'
     BottomAxis.LabelStyle = talValue
     BottomAxis.MinorTicks.Visible = False
     BottomAxis.TickInnerLength = 4
@@ -63,9 +64,9 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
     DepthAxis.TickInnerLength = 4
     DepthAxis.TickLength = 0
     LeftAxis.AxisValuesFormat = '#,##0.###,###,###'
-    LeftAxis.LabelsFont.Charset = ANSI_CHARSET
-    LeftAxis.LabelsFont.Height = -15
-    LeftAxis.LabelsFont.Name = 'Times New Roman'
+    LeftAxis.LabelsFormat.Font.Charset = ANSI_CHARSET
+    LeftAxis.LabelsFormat.Font.Height = -15
+    LeftAxis.LabelsFormat.Font.Name = 'Times New Roman'
     LeftAxis.MinorTicks.Visible = False
     LeftAxis.TickInnerLength = 4
     LeftAxis.TickLength = 0
@@ -86,19 +87,26 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
     OnMouseDown = chartZONEBDGTMouseDown
     OnMouseMove = chartZONEBDGTMouseMove
     OnMouseUp = chartZONEBDGTMouseUp
+    DefaultCanvas = 'TGDIPlusCanvas'
+    ColorPaletteIndex = 0
     object ChartTool1: TMarksTipTool
+      Format.CustomPosition = True
+      Format.Left = 0
+      Format.TextAlignment = taCenter
+      Format.Top = 0
+      Format.Visible = False
       MouseAction = mtmClick
     end
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 240
-    Width = 614
+    Top = 235
+    Width = 606
     Height = 281
     Align = alBottom
     TabOrder = 1
     object Panel1: TPanel
-      Left = 468
+      Left = 460
       Top = 1
       Width = 145
       Height = 279
@@ -109,8 +117,8 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
         145
         279)
       object btnOpen: TSpeedButton
-        Left = 9
-        Top = 246
+        Left = 11
+        Top = 247
         Width = 24
         Height = 31
         Hint = 'Open ZONEBDGT file'
@@ -217,7 +225,8 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
           'MODFLOW 6'
           'MOC3D or GWT'
           'SUTRA 09.97'
-          'SUTRA'
+          'SUTRA 2 or 3'
+          'SUTRA 4'
           'MT3D'
           'HST3D'
           'SEAWAT-2000'
@@ -233,16 +242,17 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
         Hint = 'Exit from Budgeteer'
         Anchors = [akLeft, akBottom]
         Caption = 'Close'
+        Kind = bkClose
+        NumGlyphs = 2
         ParentShowHint = False
         ShowHint = True
         TabOrder = 5
-        Kind = bkClose
       end
     end
     object Panel5: TPanel
       Left = 1
       Top = 1
-      Width = 467
+      Width = 459
       Height = 279
       Align = alClient
       BevelOuter = bvNone
@@ -250,13 +260,13 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
       object Panel2: TPanel
         Left = 0
         Top = 180
-        Width = 467
+        Width = 459
         Height = 99
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
         DesignSize = (
-          467
+          459
           99)
         object lblTime: TLabel
           Left = 8
@@ -401,7 +411,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
           OnMouseMove = ToolBar1MouseMove
         end
         object comboTimeStep: TComboBox
-          Left = 40
+          Left = 32
           Top = 2
           Width = 417
           Height = 23
@@ -410,7 +420,6 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
           Anchors = [akTop, akRight]
           Color = clBtnFace
           Enabled = False
-          ItemHeight = 15
           ParentShowHint = False
           ShowHint = True
           TabOrder = 0
@@ -419,20 +428,19 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
         object comboZone: TComboBox
           Left = 40
           Top = 34
-          Width = 160
+          Width = 152
           Height = 23
           Hint = 'Zone to plot'
           Style = csDropDownList
           Anchors = [akLeft, akTop, akRight]
           Color = clBtnFace
-          ItemHeight = 15
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
           OnChange = comboZoneChange
         end
         object rgPlotType: TRadioGroup
-          Left = 208
+          Left = 200
           Top = 27
           Width = 257
           Height = 70
@@ -449,17 +457,18 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
       object pnlBudgetItems: TPanel
         Left = 0
         Top = 0
-        Width = 467
+        Width = 459
         Height = 180
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
         object splBudget: TSplitter
-          Left = 309
+          Left = 301
           Top = 0
           Height = 180
           Align = alRight
           Beveled = True
+          ExplicitLeft = 309
         end
         object splNet: TSplitter
           Left = 155
@@ -470,7 +479,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
         object pnlInBudget: TPanel
           Left = 158
           Top = 0
-          Width = 151
+          Width = 143
           Height = 180
           Align = alClient
           BevelOuter = bvNone
@@ -478,7 +487,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
           object Panel7: TPanel
             Left = 0
             Top = 0
-            Width = 151
+            Width = 143
             Height = 24
             Align = alTop
             BevelOuter = bvNone
@@ -503,7 +512,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
           object clbIn: TCheckListBox
             Left = 0
             Top = 24
-            Width = 151
+            Width = 143
             Height = 156
             OnClickCheck = clbInClickCheck
             Align = alClient
@@ -512,7 +521,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
           end
         end
         object pnlOutBudget: TPanel
-          Left = 312
+          Left = 304
           Top = 0
           Width = 155
           Height = 180
@@ -699,6 +708,10 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
     Chart = chartZONEBDGT
     Options = [ceChange, ceTitle, ceHelp]
     Title = 'Editing Budget Plot'
+    GalleryHeight = 0
+    GalleryWidth = 0
+    Height = 0
+    Width = 0
     Left = 136
     Top = 17
   end

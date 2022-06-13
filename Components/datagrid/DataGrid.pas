@@ -272,7 +272,7 @@ type
 
 { TDBDataGrid }
 
-  TDBDataGrid = class(TDataGrid)
+  TDBDataGrid = class(TECDataGrid)
   private
     FDataLink: TFieldDataLink;
     procedure DataChange(Sender: TObject);
@@ -2135,7 +2135,7 @@ end;
 
 procedure Register;
 begin
-  RegisterComponents('EC', [TDataGrid,TDBDataGrid,TEcDataGrid]);
+  RegisterComponents('EC', [{TDataGrid,}TDBDataGrid,TEcDataGrid]);
 end;
 
 end.
