@@ -673,7 +673,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 233
+      Left = 493
       Top = 66
       Width = 212
       Height = 28
@@ -775,7 +775,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 461
+      Left = 233
       Top = 66
       Width = 244
       Height = 28
@@ -3717,6 +3717,7 @@ inherited frmGoPhast: TfrmGoPhast
     object acSutra40Active: TAction
       Category = 'ModelSelection'
       Caption = 'SUTRA 4.0'
+      GroupIndex = 1
       HelpContext = 2390
       HelpKeyword = 'Model'
       Hint = 'Make SUTRA 4.0 the selected model type'

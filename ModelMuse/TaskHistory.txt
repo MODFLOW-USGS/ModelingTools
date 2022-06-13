@@ -29476,6 +29476,7 @@ object TTaskHistory
     item
       Date = 44725.000000000000000000
       Categories.Strings = (
-        'GW_Chart')
+        'GW_Chart'
+        'SUTRA 4')
     end>
 end
