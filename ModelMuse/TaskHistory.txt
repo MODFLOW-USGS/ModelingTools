@@ -29466,5 +29466,16 @@ object TTaskHistory
         'Documentation'
         'Components'
         'GW_Chart')
+    end
+    item
+      Date = 44723.000000000000000000
+    end
+    item
+      Date = 44724.000000000000000000
+    end
+    item
+      Date = 44725.000000000000000000
+      Categories.Strings = (
+        'GW_Chart')
     end>
 end
