@@ -30,12 +30,19 @@ type
   	FUzflandflagLayers:  TTwoDIntegerArray;
     FUzfObjectArray: T3DSparsePointerArray;
     FObsList: TUzfObservationList;
+    FSpeciesIndex: Integer;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WritePackageData;
     procedure WriteStressPeriods; reintroduce;
     procedure IdentifyWaterContentObsLocations;
     procedure WriteFileInternal;
+    procedure WriteAdditionalAuxVariables;
+    // GWT
+    procedure WriteGwtOptions;
+    procedure WriteGwtPackageData;
+    procedure WriteGwtStressPeriods;
+    procedure WriteGwtFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
     procedure Evaluate; override;
@@ -63,6 +70,7 @@ type
     procedure WriteFile(const AFileName: string);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     class function Extension: string; override;
+    procedure WriteUztFile(const AFileName: string; SpeciesIndex: Integer);
   end;
 implementation
 
@@ -70,7 +78,8 @@ uses
   ModflowUnitNumbers, frmProgressUnit, DataSetUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, System.Generics.Defaults,
   Modflow6ObsWriterUnit, ModflowIrregularMeshUnit,
-  ModflowGridUnit, frmErrorsAndWarningsUnit, SparseArrayUnit;
+  ModflowGridUnit, frmErrorsAndWarningsUnit, SparseArrayUnit,
+  Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrWritingUZF6Package = 'Writing UZF6 Package input.';
@@ -96,6 +105,9 @@ resourcestring
   StrAtLayerRowColuInitSat = 'At (Layer, Row, Column) (%0:d, %1:d, %2:d), in' +
   'itial water content is set to %3:g by "%4:s" and saturated water content ' +
   'is set to %5:g by "%6:s".';
+
+const
+  KUZF1 = 'UZF-1';
 
 type
   TUzfCellList = TList<TMvrReceiver>;
@@ -453,6 +465,203 @@ begin
   end;
 end;
 
+procedure TModflowUzfMf6Writer.WriteGwtFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+
+    WriteGwtOptions;
+    WriteGwtPackageData;
+    WriteGwtStressPeriods;
+
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TModflowUzfMf6Writer.WriteGwtPackageData;
+var
+  InitConcDataArray: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColumnIndex: Integer;
+begin
+  InitConcDataArray := Model.DataArrayManager.GetDataSetByName(
+    KUztInitialConcentration + IntToStr(FSpeciesIndex+1));
+  InitConcDataArray.Initialize;
+
+  WriteBeginPackageData;
+  WriteString('# <uzfno> <strt> [<aux(naux)>] [<boundname>');
+  NewLine;
+
+  for LayerIndex := 0 to InitConcDataArray.LayerCount - 1 do
+  begin
+    for RowIndex := 0 to InitConcDataArray.RowCount - 1 do
+    begin
+      for ColumnIndex := 0 to InitConcDataArray.ColumnCount - 1 do
+      begin
+        if FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex] > 0 then
+        begin
+          WriteString('  ');
+          WriteInteger(FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex]);
+          WriteFloat(InitConcDataArray.RealData[LayerIndex, RowIndex, ColumnIndex]);
+          NewLine;
+        end;
+      end;
+    end;
+  end;
+
+  WriteEndPackageData;
+end;
+
+procedure TModflowUzfMf6Writer.WriteGwtStressPeriods;
+var
+  StressPeriodIndex: Integer;
+  CellList: TValueCellList;
+  IDOMAINDataArray: TDataArray;
+  UsedUzfCells: array of array of array of TUzfMf6_Cell;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColumnIndex: Integer;
+  CellIndex: Integer;
+  UzfCell: TUzfMf6_Cell;
+  GwtStatus: TGwtBoundaryStatus;
+  CellNumber: Integer;
+  FormulaIndex: Integer;
+begin
+  IDOMAINDataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+  begin
+    frmProgressMM.AddMessage(Format('    Writing UZT stress period %d', [StressPeriodIndex+1]));
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    SetLength(UsedUzfCells, IDOMAINDataArray.LayerCount,
+      IDOMAINDataArray.RowCount, IDOMAINDataArray.ColumnCount);
+    for LayerIndex := 0 to IDOMAINDataArray.LayerCount - 1 do
+    begin
+      for RowIndex := 0 to IDOMAINDataArray.RowCount - 1 do
+      begin
+        for ColumnIndex := 0 to IDOMAINDataArray.ColumnCount - 1 do
+        begin
+          UsedUzfCells[LayerIndex, RowIndex, ColumnIndex] := nil;
+        end;
+      end;
+    end;
+
+    CellList := Values[StressPeriodIndex];
+    WriteBeginPeriod(StressPeriodIndex);
+    WriteString('# <uzfno> <uztsetting>');
+    NewLine;
+
+    // Eliminate duplicate cells at the same location.
+    for CellIndex := 0 to CellList.Count - 1 do
+    begin
+      UzfCell := CellList[CellIndex] as TUzfMf6_Cell;
+      if IDOMAINDataArray.IntegerData[UzfCell.Layer, UzfCell.Row, UzfCell.Column] > 0 then
+      begin
+        Assert(FUzfCellNumbers[UzfCell.Layer, UzfCell.Row, UzfCell.Column] > 0);
+        UsedUzfCells[UzfCell.Layer, UzfCell.Row, UzfCell.Column] := UzfCell;
+      end;
+    end;
+
+    for LayerIndex := 0 to IDOMAINDataArray.LayerCount - 1 do
+    begin
+      for RowIndex := 0 to IDOMAINDataArray.RowCount - 1 do
+      begin
+        for ColumnIndex := 0 to IDOMAINDataArray.ColumnCount - 1 do
+        begin
+          UzfCell := UsedUzfCells[LayerIndex, RowIndex, ColumnIndex];
+          if (UzfCell <> nil) and
+            (FUzflandflagLayers[RowIndex, ColumnIndex] = UzfCell.Layer) then
+          begin
+            WriteString('  ');
+            CellNumber := FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex];
+            WriteInteger(CellNumber);
+
+            GwtStatus := UzfCell.GwtStatus[FSpeciesIndex];
+            WriteString(' STATUS');
+            case GwtStatus of
+              gbsInactive:
+                begin
+                  WriteString(' INACTIVE');
+                end;
+              gbsActive:
+                begin
+                  WriteString(' ACTIVE');
+                end;
+              gbsConstant:
+                begin
+                  WriteString(' CONSTANT');
+                end;
+              else
+                Assert(False);
+            end;
+            NewLine;
+
+            if GwtStatus = gbsConstant then
+            begin
+              WriteString('  ');
+              WriteInteger(CellNumber);
+              WriteString(' CONCENTRATION');
+              Assert(False);
+
+              FormulaIndex := UzfGwtStart
+                + UztGwtConcCount*UzfGwtSpecifiedConcentrationPosition + FSpeciesIndex;
+              WriteValueOrFormula(UzfCell, FormulaIndex);
+              NewLine;
+            end;
+
+            if GwtStatus = gbsActive then
+            begin
+              WriteInteger(CellNumber);
+              WriteString(' INFILTRATION');
+              FormulaIndex := UzfGwtStart
+                + UztGwtConcCount*UzfGwtInfiltrationConcentrationsPosition + FSpeciesIndex;
+              WriteValueOrFormula(UzfCell, FormulaIndex);
+              NewLine;
+
+              WriteInteger(CellNumber);
+              WriteString(' UZET');
+              FormulaIndex := UzfGwtStart
+                + UztGwtConcCount*UzfGwtEvapConcentrationsPosition + FSpeciesIndex;
+              WriteValueOrFormula(UzfCell, FormulaIndex);
+              NewLine;
+            end;
+            NewLine;
+
+          end;
+        end;
+      end;
+    end;
+    WriteEndPeriod;
+  end;
+
+end;
+
+procedure TModflowUzfMf6Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed and (Model.MobileComponents.Count > 0) then
+  begin
+    WriteString('  AUXILIARY');
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+    NewLine;
+  end;
+end;
+
 procedure TModflowUzfMf6Writer.WriteDimensions;
 var
   UzfDataArray: TDataArray;
@@ -534,7 +743,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
-  WriteToNameFile(StrUZF6, 0, FNameOfFile, foInput, Model, False, 'UZF-1');
+  WriteToNameFile(StrUZF6, 0, FNameOfFile, foInput, Model, False, KUZF1);
 
   FInputFileName := FNameOfFile;
   WriteFileInternal;
@@ -574,6 +783,7 @@ var
   ObsFileName: string;
   CsvFile: string;
   BaseName: string;
+  budget_csv_file: string;
 begin
   WriteBeginOptions;
 
@@ -589,6 +799,16 @@ begin
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);
+    NewLine;
+  end;
+
+  if FUzfPackage.SaveBudgetCsvFile then
+  begin
+    WriteString('  BUDGETCSV FILEOUT ');
+    budget_csv_file := ChangeFileExt(BaseName, '.uzf_budget.csv');
+    Model.AddModelOutputFile(budget_csv_file);
+    budget_csv_file := ExtractFileName(budget_csv_file);
+    WriteString(budget_csv_file);
     NewLine;
   end;
 
@@ -662,6 +882,8 @@ begin
     WriteString(ObsFileName);
     NewLine;
   end;
+
+  WriteAdditionalAuxVariables;
 
   WriteEndOptions;
 end;
@@ -920,6 +1142,7 @@ var
   ReceiverDictionary: TDictionary<TMvrReceiverKey, TUzfCellList>;
   CellListIndex: Integer;
   SimulateET: Boolean;
+  SpeciesIndex: Integer;
 begin
   SimulateET :=FUzfPackage.SimulateET;
   if MvrWriter <> nil then
@@ -1021,6 +1244,20 @@ begin
 //                WriteFloat(UzfCell.AirEntryPotential);
 //                WriteFloat(UzfCell.RootPotential);
 //                WriteFloat(UzfCell.RootActivity);
+
+                if Model.GwtUsed then
+                begin
+                  for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+                  begin
+//                    WriteInteger(ReachNumber);
+//                    WriteString(' AUXILIARY ');
+//                    ASpecies := Model.MobileComponents[SpeciesIndex];
+//                    WriteString(' ' + ASpecies.Name);
+                    WriteFloat(0);
+//                    NewLine;
+                  end;
+                end;
+
                 NewLine;
                 MvrReceiver.ReceiverKey.ScreenObject := UzfCell.ScreenObject;
 
@@ -1078,6 +1315,117 @@ begin
   finally
     ListOfUzfCellLists.Free;
   end;
+end;
+
+procedure TModflowUzfMf6Writer.WriteUztFile(const AFileName: string;
+  SpeciesIndex: Integer);
+var
+  Abbreviation: string;
+  SpeciesName: string;
+begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Abbreviation := 'UZT6';
+  end
+  else
+  begin
+    Exit;
+  end;
+  if Model.PackageGeneratedExternally(Abbreviation) then
+  begin
+    Exit;
+  end;
+  FSpeciesIndex :=  SpeciesIndex;
+  SpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
+  FNameOfFile := ChangeFileExt(AFileName, '') + '.' + SpeciesName + '.uzt';
+  FInputFileName := FNameOfFile;
+
+  WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    WriteGwtFileInternal;
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+end;
+
+procedure TModflowUzfMf6Writer.WriteGwtOptions;
+var
+  BaseName: string;
+  budgetfile: string;
+  budget_csv_file: string;
+  ASpecies: TMobileChemSpeciesItem;
+  UzfMf6Package: TUzfMf6PackageSelection;
+  concentrationfile: string;
+  BaseFileName: string;
+begin
+  WriteBeginOptions;
+
+  WriteString('    FLOW_PACKAGE_NAME ');
+  WriteString(KUZF1);
+  NewLine;
+
+//  [AUXILIARY <auxiliary(naux)>]
+
+  Assert(FSpeciesIndex >= 0);
+  Assert(FSpeciesIndex < Model.MobileComponents.Count);
+  WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
+  ASpecies := Model.MobileComponents[FSpeciesIndex];
+  WriteString(' ' + ASpecies.Name);
+  NewLine;
+
+  //[BOUNDNAMES]
+
+  PrintListInputOption;
+  PrintConcentrationOption;
+  PrintFlowsOption;
+
+  WriteSaveFlowsOption;
+
+  UzfMf6Package := Model.ModflowPackages.UzfMf6Package;
+  BaseFileName := ChangeFileExt(FNameOfFile, '');
+  BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
+
+  if UzfMf6Package.SaveGwtConcentration then
+  begin
+    WriteString('    CONCENTRATION FILEOUT ');
+    concentrationfile := BaseFileName + '.uzt_conc';
+    Model.AddModelOutputFile(concentrationfile);
+    concentrationfile := ExtractFileName(concentrationfile);
+    WriteString(concentrationfile);
+    NewLine;
+  end;
+
+  if FUzfPackage.SaveBudgetFile then
+  begin
+    WriteString('    BUDGET FILEOUT ');
+    budgetfile := ChangeFileExt(BaseName, '.uzt_budget');
+    Model.AddModelOutputFile(budgetfile);
+    budgetfile := ExtractFileName(budgetfile);
+    WriteString(budgetfile);
+    NewLine;
+  end;
+
+  if FUzfPackage.SaveBudgetCsvFile then
+  begin
+    WriteString('    BUDGETCSV FILEOUT ');
+    budget_csv_file := ChangeFileExt(BaseName, '.uzt_budget.csv');
+    Model.AddModelOutputFile(budget_csv_file);
+    budget_csv_file := ExtractFileName(budget_csv_file);
+    WriteString(budget_csv_file);
+    NewLine;
+  end;
+
+  { TODO -cGWT : The observation names need to be cleared before starting to write the GWT file. }
+  WriteTimeSeriesFiles(FInputFileName);
+//  [OBS6 FILEIN <obs6_filename>]
+
+  WriteEndOptions;
 end;
 
 end.

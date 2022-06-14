@@ -714,6 +714,8 @@ const
   UzfGwtSpecifiedConcentrationPosition = 0;
   UzfGwtInfiltrationConcentrationsPosition = 1;
   UzfGwtEvapConcentrationsPosition = 2;
+//  UzfBoundaryGwtStart = 13;
+
 
 
 function TryGetUzfOb(const UzfObName: string; var UzfOb: TUzfOb): Boolean;
@@ -802,6 +804,7 @@ const
   RootPotentialPosition = 11;
   RootActivityPosition = 12;
   UzfBoundaryGwtStart = 13;
+
 
 { TUzfMf6Record }
 
@@ -3024,7 +3027,29 @@ begin
               result := FValues.EvapConcentrations.ValueTimeSeriesNames[SpeciesIndex];
             end;
           else
-            Assert(False);
+            begin
+              Index := Index - UzfBoundaryGwtStart;
+              GwtPosition := Index;
+              Assert(GwtPosition >= 0);
+              GwtSource := GwtPosition div UztGwtConcCount;
+              SpeciesIndex := GwtPosition mod UztGwtConcCount;
+              case GwtSource of
+                UzfGwtSpecifiedConcentrationPosition:
+                  begin
+                    result := FValues.SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex];
+                  end;
+                UzfGwtInfiltrationConcentrationsPosition:
+                  begin
+                    result := FValues.InfiltrationConcentrations.ValueTimeSeriesNames[SpeciesIndex];
+                  end;
+                UzfGwtEvapConcentrationsPosition:
+                  begin
+                    result := FValues.EvapConcentrations.ValueTimeSeriesNames[SpeciesIndex];
+                  end;
+                else
+                  Assert(False);
+              end;
+            end
         end;
       end;
   end;
@@ -3270,7 +3295,29 @@ begin
               result := FValues.EvapConcentrations.Values[SpeciesIndex];
             end;
           else
-            Assert(False);
+            begin
+              Index := Index - UzfBoundaryGwtStart;
+              GwtPosition := Index;
+              Assert(GwtPosition >= 0);
+              GwtSource := GwtPosition div UztGwtConcCount;
+              SpeciesIndex := GwtPosition mod UztGwtConcCount;
+              case GwtSource of
+                UzfGwtSpecifiedConcentrationPosition:
+                  begin
+                    result := FValues.SpecifiedConcentrations.Values[SpeciesIndex];
+                  end;
+                UzfGwtInfiltrationConcentrationsPosition:
+                  begin
+                    result := FValues.InfiltrationConcentrations.Values[SpeciesIndex];
+                  end;
+                UzfGwtEvapConcentrationsPosition:
+                  begin
+                    result := FValues.EvapConcentrations.Values[SpeciesIndex];
+                  end;
+                else
+                  Assert(False);
+              end;
+            end
         end;
       end
   end;

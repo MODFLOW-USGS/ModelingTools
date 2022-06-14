@@ -18,6 +18,7 @@ type
     lblNumberOfWaveSets: TLabel;
     rdeNumberOfWaveSets: TRbwDataEntry;
     cbPackageConvergence: TCheckBox;
+    cbBudgetCsv: TCheckBox;
     procedure rcSelectionControllerEnabledChange(Sender: TObject);
     procedure rgEvapotranspirationClick(Sender: TObject);
   private
@@ -46,6 +47,7 @@ begin
   rgUnsatEt.ItemIndex := Ord(UzfPackage.UnsatET);
   cbSeepage.Checked := UzfPackage.SimulateGroundwaterSeepage;
   cbSaveBudget.Checked := UzfPackage.SaveBudgetFile;
+  cbBudgetCsv.Checked := UzfPackage.SaveBudgetCsvFile;
   rdeNumberOfTrailingWaves.IntegerValue := UzfPackage.NumberOfTrailingWaves;
   rdeNumberOfWaveSets.IntegerValue := UzfPackage.NumberOfWaveSets;
   cbPackageConvergence.Checked := UzfPackage.WriteConvergenceData;
@@ -74,6 +76,7 @@ begin
   UzfPackage.UnsatET := TUzfUnsatEtChoice(rgUnsatEt.ItemIndex);
   UzfPackage.SimulateGroundwaterSeepage := cbSeepage.checked;
   UzfPackage.SaveBudgetFile := cbSaveBudget.Checked;
+  UzfPackage.SaveBudgetCsvFile := cbBudgetCsv.Checked;
   UzfPackage.NumberOfTrailingWaves := rdeNumberOfTrailingWaves.IntegerValue;
   UzfPackage.NumberOfWaveSets := rdeNumberOfWaveSets.IntegerValue;
   UzfPackage.WriteConvergenceData := cbPackageConvergence.Checked;

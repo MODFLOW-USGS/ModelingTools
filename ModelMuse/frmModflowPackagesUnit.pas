@@ -4101,8 +4101,8 @@ begin
       and (PhastModel.GwtUsed = (NewPackages.Mt3dBasic.IsSelected
       and (NewPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt)));
 
-    Mt3dmsNewlySelected := not OldPackages.Mt3dBasic.IsSelected
-      and NewPackages.Mt3dBasic.IsSelected;
+    Mt3dmsNewlySelected := not OldPackages.Mt3dBasic.SimulateWithMt3D
+      and NewPackages.Mt3dBasic.SimulateWithMt3D;
     PhastModel.ModflowPackages := NewPackages;
     if PhastModel.LgrUsed then
     begin
@@ -4112,8 +4112,8 @@ begin
         ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
         OldPackages := ChildModel.ModflowPackages;
         NewPackages := FNewPackages[ChildIndex+1].Packages;
-        if not OldPackages.Mt3dBasic.IsSelected
-          and NewPackages.Mt3dBasic.IsSelected then
+        if not OldPackages.Mt3dBasic.SimulateWithMt3D
+          and NewPackages.Mt3dBasic.SimulateWithMt3D then
         begin
           Mt3dmsNewlySelected := True;
         end;

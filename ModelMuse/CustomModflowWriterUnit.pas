@@ -586,7 +586,6 @@ end;
     procedure WriteMF6ObsOption(InputFileName: string);
     procedure WriteBoundName(ACell: TValueCell);
     Class function Mf6ObType: TObGeneral; virtual;
-//    procedure WriteTimeSeriesFiles(InputFileName: string);
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;

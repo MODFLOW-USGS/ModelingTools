@@ -1466,13 +1466,15 @@ var
   SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
 begin
-  if Model.GwtUsed then
+  if Model.GwtUsed and (Model.MobileComponents.Count > 0) then
   begin
+    WriteString('  AUXILIARY');
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
       ASpecies := Model.MobileComponents[SpeciesIndex];
       WriteString(' ' + ASpecies.Name);
     end;
+    NewLine;
   end;
 end;
 
@@ -2383,6 +2385,7 @@ begin
           ASpecies := Model.MobileComponents[SpeciesIndex];
           WriteString(' ' + ASpecies.Name);
           WriteFloat(0);
+          NewLine;
         end;
       end;
 

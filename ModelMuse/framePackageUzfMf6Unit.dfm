@@ -8,25 +8,25 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
     526)
   object lblNumberOfTrailingWaves: TLabel [2]
     Left = 16
-    Top = 143
-    Width = 185
-    Height = 13
+    Top = 127
+    Width = 255
+    Height = 20
     Caption = 'Number of trailing waves (ntrailwaves)'
     Enabled = False
   end
   object lblNumberOfWaveSets: TLabel [3]
     Left = 16
-    Top = 190
-    Width = 165
-    Height = 13
+    Top = 174
+    Width = 220
+    Height = 20
     Caption = 'Number of wave sets (nwavesets)'
     Enabled = False
   end
   inherited memoComments: TMemo
     Width = 564
-    Height = 75
+    Height = 59
     ExplicitWidth = 564
-    ExplicitHeight = 75
+    ExplicitHeight = 59
   end
   object rgEvapotranspiration: TRadioGroup [5]
     Left = 16
@@ -62,7 +62,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object cbSeepage: TCheckBox [7]
     Left = 323
-    Top = 143
+    Top = 127
     Width = 257
     Height = 36
     Caption = 'Simulate groundwater seepage (SIMULATE_GWSEEP)'
@@ -72,7 +72,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object cbSaveBudget: TCheckBox [8]
     Left = 323
-    Top = 185
+    Top = 162
     Width = 257
     Height = 46
     Caption = 'Save binary UZF budget file (.uzf_budget)'
@@ -82,7 +82,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object rdeNumberOfTrailingWaves: TRbwDataEntry [9]
     Left = 16
-    Top = 162
+    Top = 146
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -97,7 +97,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object rdeNumberOfWaveSets: TRbwDataEntry [10]
     Left = 16
-    Top = 209
+    Top = 193
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -116,7 +116,18 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
     Width = 455
     Height = 18
     Caption = 'Write package convergence (PACKAGE_CONVERGENCE)'
+    Enabled = False
     TabOrder = 7
+  end
+  object cbBudgetCsv: TCheckBox [12]
+    Left = 323
+    Top = 206
+    Width = 222
+    Height = 35
+    Caption = 'Save text UZF budget file (.uzf_budget.csv)'
+    Enabled = False
+    TabOrder = 8
+    WordWrap = True
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -146,6 +157,12 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
       end
       item
         Control = rdeNumberOfWaveSets
+      end
+      item
+        Control = cbPackageConvergence
+      end
+      item
+        Control = cbBudgetCsv
       end>
     OnEnabledChange = rcSelectionControllerEnabledChange
   end

@@ -23,47 +23,47 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
       Caption = 'Main'
       DesignSize = (
         540
-        261)
+        254)
       object lblElectronAcceptor: TLabel
         Left = 154
         Top = 144
-        Width = 112
-        Height = 13
+        Width = 152
+        Height = 20
         Caption = 'Electron acceptor (IEA)'
       end
       object lblElectronDonor: TLabel
         Left = 3
         Top = 144
-        Width = 98
-        Height = 13
+        Width = 135
+        Height = 20
         Caption = 'Electron donor (IED)'
       end
       object lblKineticChoice: TLabel
         Left = 397
         Top = 43
-        Width = 112
-        Height = 13
+        Width = 154
+        Height = 20
         Caption = 'Kinetic choice (IREACT)'
       end
       object lblReactionChoice: TLabel
         Left = 354
         Top = 118
-        Width = 142
-        Height = 13
+        Width = 193
+        Height = 20
         Caption = 'Reaction choice (IREACTION)'
       end
       object lblSorptionChoice: TLabel
         Left = 397
         Top = 3
-        Width = 123
-        Height = 13
+        Width = 172
+        Height = 20
         Caption = 'Sorption choice (ISOTHM)'
       end
       object lblStochiometricRatio: TLabel
         Left = 305
         Top = 144
-        Width = 106
-        Height = 13
+        Width = 148
+        Height = 20
         Caption = 'Stochiometric ratio (F)'
       end
       object rdgYieldCoefficient: TRbwDataGrid4
@@ -153,7 +153,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 154
         Top = 163
         Width = 145
-        Height = 21
+        Height = 28
         Style = csDropDownList
         TabOrder = 2
       end
@@ -161,7 +161,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 3
         Top = 163
         Width = 145
-        Height = 21
+        Height = 28
         Style = csDropDownList
         TabOrder = 3
       end
@@ -169,7 +169,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 3
         Top = 40
         Width = 388
-        Height = 21
+        Height = 28
         Style = csDropDownList
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -211,7 +211,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 9
         Top = 117
         Width = 339
-        Height = 21
+        Height = 28
         Style = csDropDownList
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -243,7 +243,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 3
         Top = 3
         Width = 388
-        Height = 21
+        Height = 28
         Style = csDropDownList
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -314,29 +314,29 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
       object lblElectronDonors: TLabel
         Left = 0
         Top = 0
-        Width = 75
-        Height = 13
+        Width = 104
+        Height = 20
         Caption = 'Electron donors'
       end
       object lblElectronAcceptors: TLabel
         Left = 127
         Top = 3
-        Width = 89
-        Height = 13
+        Width = 122
+        Height = 20
         Caption = 'Electron acceptors'
       end
       object lblSpecialCases: TLabel
         Left = 256
         Top = 0
-        Width = 63
-        Height = 13
+        Width = 87
+        Height = 20
         Caption = 'Special cases'
       end
       object seElectronDonors: TJvSpinEdit
         Left = 3
         Top = 19
         Width = 121
-        Height = 21
+        Height = 28
         MaxValue = 2147483647.000000000000000000
         TabOrder = 0
         OnChange = seElectronDonorsChange
@@ -345,7 +345,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 127
         Top = 19
         Width = 121
-        Height = 21
+        Height = 28
         MaxValue = 2147483647.000000000000000000
         TabOrder = 1
         OnChange = seElectronAcceptorsChange
@@ -355,11 +355,11 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Top = 26
         Width = 121
         Height = 232
-        OnClickCheck = clbSpecialCasesClickCheck
         DoubleBuffered = False
-        ItemHeight = 13
+        ItemHeight = 20
         ParentDoubleBuffered = False
         TabOrder = 2
+        OnClickCheck = clbSpecialCasesClickCheck
         OnEnter = clbSpecialCasesEnter
         OnExit = clbSpecialCasesExit
       end
@@ -396,7 +396,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 0
         Top = 0
         Width = 540
-        Height = 261
+        Height = 254
         Align = alClient
         ColCount = 3
         FixedCols = 1
@@ -501,7 +501,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 0
         Top = 0
         Width = 540
-        Height = 261
+        Height = 254
         Align = alClient
         ColCount = 3
         FixedCols = 1
@@ -598,7 +598,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 0
         Top = 0
         Width = 540
-        Height = 261
+        Height = 254
         Align = alClient
         FixedCols = 1
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -742,7 +742,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
         Left = 0
         Top = 0
         Width = 540
-        Height = 261
+        Height = 254
         Align = alClient
         FixedCols = 1
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]

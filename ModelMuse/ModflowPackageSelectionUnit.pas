@@ -2491,6 +2491,8 @@ Type
     FMfUzfMf6ExtinctionDepth: TModflowBoundaryDisplayTimeList;
     FMfUzfMf6PotentialEt: TModflowBoundaryDisplayTimeList;
     FWriteConvergenceData: Boolean;
+    FSaveBudgetCsvFile: Boolean;
+    FSaveGwtConcentration: Boolean;
     procedure SetGroundwaterET(const Value: TUzfGwEtChoice);
     procedure SetSimulateGroundwaterSeepage(const Value: Boolean);
     procedure SetUnsatET(const Value: TUzfUnsatEtChoice);
@@ -2519,6 +2521,8 @@ Type
     function ModflowUzfMf6WaterContentUsed(Sender: TObject): boolean;
     function ModflowUzfMf6CapillaryPressureUsed(Sender: TObject): boolean;
     procedure SetWriteConvergenceData(const Value: Boolean);
+    procedure SetSaveBudgetCsvFile(const Value: Boolean);
+    procedure SetSaveGwtConcentration(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -2558,6 +2562,8 @@ Type
     // for GHB, RIV, DRN, etc.
     property SaveBudgetFile: Boolean read FSaveBudgetFile
       write SetSaveBudgetFile default True;
+    property SaveBudgetCsvFile: Boolean read FSaveBudgetCsvFile
+      write SetSaveBudgetCsvFile;
     property NumberOfTrailingWaves: Integer read FNumberOfTrailingWaves
       write SetNumberOfTrailingWaves default 7;
     property NumberOfWaveSets: Integer read FNumberOfWaveSets
@@ -2565,6 +2571,14 @@ Type
     // PACKAGE_CONVERGENCE
     property WriteConvergenceData: Boolean read FWriteConvergenceData
       write SetWriteConvergenceData Stored True;
+    // [CONCENTRATION FILEOUT <concfile>]
+    property SaveGwtConcentration: Boolean read FSaveGwtConcentration
+      write SetSaveGwtConcentration
+    {$IFDEF GWT}
+      stored True;
+    {$else}
+      stored False;
+    {$ENDIF}
   end;
 
   THobPackageSelection = class(TModflowPackageSelection)
@@ -3956,6 +3970,7 @@ Type
       write SetInactiveConcentration;
     property MinimumSaturatedFraction: double read GetMinimumSaturatedFraction
       write SetMinimumSaturatedFraction;
+    function SimulateWithMt3D: Boolean;
   published
     property StoredMassUnit: TStringStorage read FMassUnit
       write SetStoredMassUnit;
@@ -13966,6 +13981,11 @@ begin
   FMinimumSaturatedFraction.Assign(Value)
 end;
 
+function TMt3dBasic.SimulateWithMt3D: Boolean;
+begin
+  result := IsSelected and (Mt3dVersion in [mvUSGS, mvMS]);
+end;
+
 procedure TMt3dBasic.UpdateDataSets;
 var
   LocalModel: TCustomModel;
@@ -21173,9 +21193,11 @@ begin
     UnsatET := Uzf6Source.UnsatET;
     SimulateGroundwaterSeepage := Uzf6Source.SimulateGroundwaterSeepage;
     SaveBudgetFile := Uzf6Source.SaveBudgetFile;
+    SaveBudgetCsvFile := Uzf6Source.SaveBudgetCsvFile;
     NumberOfTrailingWaves := Uzf6Source.NumberOfTrailingWaves;
     NumberOfWaveSets := Uzf6Source.NumberOfWaveSets;
     WriteConvergenceData := Uzf6Source.WriteConvergenceData;
+    SaveGwtConcentration := Uzf6Source.SaveGwtConcentration;
   end
   else if Source is TUzfPackageSelection then
   begin
@@ -21432,6 +21454,8 @@ begin
   FNumberOfTrailingWaves := 7;
   FNumberOfWaveSets := 40;
   FWriteConvergenceData := True;
+  FSaveBudgetCsvFile := False;
+  FSaveGwtConcentration := True;
 end;
 
 function TUzfMf6PackageSelection.ModflowUzfMf6CapillaryPressureUsed(
@@ -21472,9 +21496,19 @@ begin
   SetIntegerProperty(FNumberOfWaveSets, Value);
 end;
 
+procedure TUzfMf6PackageSelection.SetSaveBudgetCsvFile(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveBudgetCsvFile, Value);
+end;
+
 procedure TUzfMf6PackageSelection.SetSaveBudgetFile(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveBudgetFile, Value);
+end;
+
+procedure TUzfMf6PackageSelection.SetSaveGwtConcentration(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveGwtConcentration, Value);
 end;
 
 procedure TUzfMf6PackageSelection.SetSimulateGroundwaterSeepage(

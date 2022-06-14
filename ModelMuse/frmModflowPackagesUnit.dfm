@@ -6423,7 +6423,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited chklstOptions: TJvgCheckListBox
               Width = 587
               Height = 363
-              ExplicitHeight = 279
+              ExplicitWidth = 587
+              ExplicitHeight = 363
             end
           end
         end

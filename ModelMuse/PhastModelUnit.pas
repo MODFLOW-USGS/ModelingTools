@@ -10,6 +10,9 @@ directly to settings in PHAST.  However @Link(TPhastModel.DataSetList) and
 @Link(TPhastModel.ObjectList) are are descendants of TCollection.  They store
 instances of @Link(TDataArray) and @Link(TScreenObject) respectively.
 
+@link(TDataArrayManager.DefinePackageDataArrays) is used to define
+@link(TDataArray)s that are used in the model.
+
 @author(Richard B. Winston <rbwinst@usgs.gov>)}
 unit PhastModelUnit;
 
@@ -267,6 +270,8 @@ const
   KSFTDispersion = 'SFT_Dispersion';
   KLakeTransportConce = 'Lake_Transport_Concentration';
   KNodeActive = 'Active_Node';
+
+  KUztInitialConcentration = 'UZT_Initial_Concentration';
 
   // Sutra 4 node data sets
   KSolidMatrixComp = 'Solid_Matrix_Compressibility';
@@ -1883,6 +1888,7 @@ that affects the model output should also have a comment. }
     FZetaDataDefinition: TDataSetCreationData;
     FSftInitConc: TDataSetCreationData;
     FSftDispersion: TDataSetCreationData;
+    FUztInitConc: TDataSetCreationData;
     procedure Assign(Source: TDataArrayManager);
     procedure AddDataSetToLookUpList(const DataSet: TDataArray);
     Constructor Create(Model: TCustomModel);
@@ -2121,6 +2127,7 @@ that affects the model output should also have a comment. }
     function SutraLakeUsed(Sender: TObject): boolean;
     function SutraLakeBottomUsed(Sender: TObject): boolean;
     function UztUsed(Sender: TObject): boolean; virtual;
+    function GwtUztUsed(Sender: TObject): boolean; virtual;
 //    function Xt3DUsed(Sender: TObject): boolean; virtual;
     function NpfUsed(Sender: TObject): boolean; virtual;
     function Sutra3DModel(Sender: TObject): boolean;
@@ -4033,6 +4040,7 @@ that affects the model output should also have a comment. }
     function SwtOffsetsUsed(Sender: TObject): boolean; override;
     function SwtSpecifiedUsed(Sender: TObject): boolean; override;
     function UztUsed(Sender: TObject): boolean; override;
+    function GwtUztUsed(Sender: TObject): boolean; override;
     function LongitudinalDispersionUsed(Sender: TObject): boolean; override;
 //    function Xt3DUsed(Sender: TObject): boolean; override;
     function NpfUsed(Sender: TObject): boolean; override;
@@ -5643,6 +5651,7 @@ resourcestring
   StrSwrRoutingType = 'SWR_Routing_Type';
   StrSwrReachLength = 'SWR_Reach_Length';
   StrSFTInitialConcentra = KSFTInitialConcentra;
+  StrUztInitialConcentration = KUztInitialConcentration;
   // See also GMshDate in frmMeshGenerationControlVariablesUnit
   StrGmsh = 'Gmsh';
   StrGeompack = 'Geompack';
@@ -10565,13 +10574,15 @@ const
 //                equations and prior information groups that caused an access
 //                violation if the model input was exported more than once
 //                after opening the model in ModelMuse.
+//    '5.0.0.15' Bug fix: Fixed bug in specifying yields in the MT3D-USGS
+//                reaction package.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.14';
+  IIModelVersion = '5.0.0.15';
 
 function IModelVersion: string;
 begin
@@ -18463,6 +18474,25 @@ begin
         begin
           result := result or ChildModel.ModflowPackages.GncPackage.IsSelected;
         end;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.GwtUztUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.GwtUztUsed(nil);
       end;
     end;
   end;
@@ -34748,6 +34778,25 @@ begin
     end;
   end;
 
+  if FCustomModel.GwtUztUsed(nil) then
+  begin
+    for Index := 1 to FCustomModel.MobileComponents.Count do
+    begin
+      DataSetName := FUztInitConc.Name + IntToStr(Index);
+      DisplayName := FUztInitConc.DisplayName + IntToStr(Index);
+      Orientation := FUztInitConc.Orientation;
+      DataType := FUztInitConc.DataType;
+      ArrayNeeded := FUztInitConc.DataSetNeeded;
+      ArrayArrayShouldBeCreated :=
+        FUztInitConc.DataSetShouldBeCreated;
+      NewFormula := FUztInitConc.Formula;
+      Classification := FUztInitConc.Classification;
+      Lock := FUztInitConc.Lock;
+      AngleType := FUztInitConc.AngleType;
+      HandleDataArray(FUztInitConc);
+    end;
+  end;
+
   for Index := 0 to Length(FDataArrayCreationRecords) - 1 do
   begin
     DataSetName := FDataArrayCreationRecords[Index].Name;
@@ -34925,6 +34974,20 @@ begin
   FSftDispersion.AssociatedDataSets := StrSTRPackageDataSetDISPSF;
   FSftDispersion.Visible := True;
   NoCheck(FSftDispersion);
+
+  FUztInitConc.DataSetType := TDataArray;
+  FUztInitConc.Orientation := dso3D;
+  FUztInitConc.DataType := rdtDouble;
+  FUztInitConc.Name := KUztInitialConcentration;
+  FUztInitConc.DisplayName := StrUztInitialConcentration;
+  FUztInitConc.Formula := '0';
+  FUztInitConc.Classification := StrUzt;
+  FUztInitConc.DataSetNeeded := FCustomModel.GwtUztUsed;
+  FUztInitConc.Lock := StandardLock;
+  FUztInitConc.EvaluatedAt := eaBlocks;
+  FUztInitConc.AssociatedDataSets := StrSTRPackageDataSet;
+  FUztInitConc.Visible := True;
+  NoCheck(FUztInitConc);
 
   // Whenever something in this is changed, be sure to update the help too.
   SetLength(FDataArrayCreationRecords, ArrayCount);
@@ -43397,6 +43460,13 @@ begin
           try
             UzfMf6Writer.MvrWriter := ModflowMvrWriter;
             UzfMf6Writer.WriteFile(FileName);
+            if GwtUsed then
+            begin
+              for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+              begin
+                UzfMf6Writer.WriteUztFile(FileName, SpeciesIndex);
+              end;
+            end;
           finally
             UzfMf6Writer.Free;
           end;
@@ -48221,6 +48291,11 @@ end;
 function TCustomModel.GroundSurfaceUsed(Sender: TObject): boolean;
 begin
   result := UzfPackageUsed(Sender) or FarmProcessUsed(Sender);
+end;
+
+function TCustomModel.GwtUztUsed(Sender: TObject): boolean;
+begin
+  result := GwtUsed and ModflowPackages.UzfMf6Package.IsSelected
 end;
 
 function TCustomModel.StoreEndPoints: boolean;

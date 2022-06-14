@@ -757,12 +757,12 @@ begin
   for RowIndex := 1 to RctPkg.Yields.Count do
   begin
     Yield := RctPkg.Yields[RowIndex-1];
-    Yield.Species := rdgDecayRates.Cells[Ord(dycSpecies), RowIndex];
+    Yield.Species := rdgYields.Cells[Ord(dycSpecies), RowIndex];
     Yield.Values.Count := RctPkg.ElectronDonorCount;
     for ColIndex := 1 to RctPkg.ElectronDonorCount do
     begin
       Yield.Values[ColIndex-1].Value :=
-        rdgDecayRates.RealValueDefault[ColIndex, RowIndex, 0];
+        rdgYields.RealValueDefault[ColIndex, RowIndex, 0];
     end;
   end;
 {
