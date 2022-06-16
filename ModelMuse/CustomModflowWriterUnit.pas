@@ -4580,6 +4580,8 @@ var
   ListIndex: Integer;
   ValueCellList: TValueCellList;
   AValueCell: TValueCell;
+  ParamBoundary: TModflowParamBoundary;
+  AParam: TModflowTransientListParameter;
   procedure AssignMf6ObsNames(ValueCellList: TValueCellList);
   var
     CellIndex: Integer;
@@ -4635,6 +4637,19 @@ begin
       Boundary := GetBoundary(ScreenObject);
       if Boundary <> nil then
       begin
+        if Boundary is TModflowParamBoundary then
+        begin
+          ParamBoundary := TModflowParamBoundary(Boundary);
+          for ParamIndex := ParamBoundary.Parameters.Count - 1 downto 0 do
+          begin
+            AParam := ParamBoundary.Parameters[ParamIndex].Param.Param;
+            if (AParam = nil) or (AParam.ParameterType <> ParameterType) then
+            begin
+              ParamBoundary.Parameters.Delete(ParamIndex);
+            end;
+          end;
+        end;
+
         if not ScreenObject.SetValuesOfEnclosedCells
           and not ScreenObject.SetValuesOfIntersectedCells then
         begin

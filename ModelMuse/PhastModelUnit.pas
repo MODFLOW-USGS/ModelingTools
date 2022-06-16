@@ -10576,13 +10576,15 @@ const
 //                after opening the model in ModelMuse.
 //    '5.0.0.15' Bug fix: Fixed bug in specifying yields in the MT3D-USGS
 //                reaction package.
+//    '5.0.0.16' Bug fix: Fixed bug that could cause access violations due
+//                to deleted parameters.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.15';
+  IIModelVersion = '5.0.0.16';
 
 function IModelVersion: string;
 begin
