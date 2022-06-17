@@ -9,7 +9,8 @@ uses
   Vcl.ComCtrls, Vcl.Grids, RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry,
   Vcl.Buttons, Vcl.Mask, JvExMask, JvSpin, Vcl.ExtCtrls, UndoItemsScreenObjects,
   frameLakeOutletUnit, System.Generics.Collections, frameGridUnit,
-  ScreenObjectUnit, frameFormulaGridUnit, JvToolEdit;
+  ScreenObjectUnit, frameFormulaGridUnit, JvToolEdit, JvExComCtrls,
+  JvPageListTreeView, JvExControls, JvPageList, frameLakeGwtConcentrationsUnit;
 
 type
   TLakeColumns = (lcStart, lcEnd, lcStatus, lcStage, lcRainfall, lcEvaporation,
@@ -41,6 +42,10 @@ type
     edConnLength: TJvComboEdit;
     edStartingStage: TJvComboEdit;
     lblStartingStage: TLabel;
+    tabGWT: TTabSheet;
+    tvGwt: TJvPageListTreeView;
+    splSplit: TSplitter;
+    jplGwt: TJvPageList;
     procedure seOutletCountEnter(Sender: TObject);
     procedure seOutletCountChange(Sender: TObject);
     procedure rdgModflowBoundarySetEditText(Sender: TObject; ACol,
@@ -60,6 +65,7 @@ type
     FOnChange: TNotifyEvent;
     FScreenObject: TScreenObject;
     FGettingData: Boolean;
+    FGwtFrameList: TLakeGwtObjectList;
     procedure InitializeControls;
     procedure SetOnChange(const Value: TNotifyEvent);
     procedure Changed;
@@ -84,11 +90,10 @@ implementation
 
 uses
   ModflowLakMf6Unit, GoPhastTypes, System.Math,
-  frmCustomGoPhastUnit, frmGoPhastUnit;
+  frmCustomGoPhastUnit, frmGoPhastUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrOutletD = 'Outlet %d';
-  StrStatus = 'Status';
   StrStage = 'Stage';
   StrRainfall = 'Rainfall';
   StrEvaporation = 'Evaporation';
@@ -166,10 +171,12 @@ constructor TframeScreenObjectLakMf6.Create(AOwner: TComponent);
 begin
   inherited;
   FFrameList := TObjectList<TframeLakeOutlet>.Create;
+  FGwtFrameList := TLakeGwtObjectList.Create;
 end;
 
 destructor TframeScreenObjectLakMf6.Destroy;
 begin
+  FGwtFrameList.Free;
   FOtherLakes.Free;
   FFrameList.Free;
   inherited;
@@ -196,6 +203,11 @@ var
   FirstLake: TLakeMf6;
   ItemIndex: Integer;
   LakeTableRow: TLakeTableItemMf6;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+  APage: TJvCustomPage;
+  AGwtFrame: TframeLakeGwtConcentrations;
+  ANode: TJvPageIndexNode;
 begin
   FGettingData := True;
   try
@@ -302,8 +314,8 @@ begin
           begin
             ALakeItem := ALake.Values[TimeIndex] as TLakeTimeItem;
 
-            rdgModflowBoundary.RealValue[Ord(lcStart), TimeIndex+1+PestRowOffset] := ALakeItem.StartTime;
-            rdgModflowBoundary.RealValue[Ord(lcEnd), TimeIndex+1+PestRowOffset] := ALakeItem.EndTime;
+            rdgModflowBoundary.RealValue[Ord(lcStart), TimeIndex + 1 + PestRowOffset] := ALakeItem.StartTime;
+            rdgModflowBoundary.RealValue[Ord(lcEnd), TimeIndex + 1 + PestRowOffset] := ALakeItem.EndTime;
             rdgModflowBoundary.ItemIndex[Ord(lcStatus), TimeIndex+1+PestRowOffset] := Ord(ALakeItem.Status);
             rdgModflowBoundary.Cells[Ord(lcStage), TimeIndex+1+PestRowOffset] := ALakeItem.Stage;
             rdgModflowBoundary.Cells[Ord(lcRainfall), TimeIndex+1+PestRowOffset] := ALakeItem.Rainfall;
@@ -445,6 +457,34 @@ begin
         end;
       end;
     end;
+
+    tabGWT.TabVisible := frmGoPhast.PhastModel.GwtUsed;
+    if tabGWT.TabVisible then
+    begin
+      tvGwt.Items.Clear;
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex];
+        if SpeciesIndex >= jplGwt.PageCount then
+        begin
+          APage := TJvStandardPage.Create(self);
+          APage.PageList := jplGwt;
+          AGwtFrame := TframeLakeGwtConcentrations.Create(nil);
+          FGwtFrameList.Add(AGwtFrame);
+          AGwtFrame.Parent := APage;
+          AGwtFrame.Align := alClient;
+        end
+        else
+        begin
+          APage := jplGwt.Pages[SpeciesIndex];
+          AGwtFrame := FGwtFrameList[SpeciesIndex];
+        end;
+        ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
+        ANode.PageIndex := SpeciesIndex;
+        AGwtFrame.GetData(List, SpeciesIndex);
+      end;
+    end;
+
   finally
     FGettingData := False;
   end;

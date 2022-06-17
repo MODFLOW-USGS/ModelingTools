@@ -586,8 +586,12 @@ type
       write SetPestWithdrawalMethod;
     property StartingConcentrations: TStringConcCollection
       read FStartingConcentrations
-      write SetStartingConcentrations;
-      property PestSpecifiedConcentrations: TLktGwtConcCollection
+      write SetStartingConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property PestSpecifiedConcentrations: TLktGwtConcCollection
         read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations
       {$IFNDEF GWT}
       stored False
@@ -632,7 +636,7 @@ type
     property PestRunoffConcentrationMethods: TPestMethodCollection
       read FPestRunoffConcentrationMethods write SetPestRunoffConcentrationMethods
       {$IFNDEF GWT}
-      stored False
+      stored False        PestInflowConcentrations
       {$ENDIF}
       ;
       property PestInflowConcentrations: TLktGwtConcCollection
@@ -2365,6 +2369,8 @@ end;
 
 function TLakeMf6.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     Lak6StagePosition:
@@ -2393,6 +2399,63 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex - Lak6GwtPestStartPosition;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestSpecifiedConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRainfallConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestRainfallConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestRainfallConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestEvaporationConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRunoffConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestRunoffConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestRunoffConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInflowConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestInflowConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          result := PestInflowConcentrationMethods[FormulaIndex].PestParamMethod;
+          Exit;
+        end;
+
         result := inherited;
         Assert(False);
       end;
@@ -2934,6 +2997,8 @@ end;
 
 procedure TLakeMf6.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
+var
+  ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of
     Lak6StagePosition:
@@ -2962,6 +3027,63 @@ begin
       end;
     else
       begin
+        FormulaIndex := FormulaIndex - Lak6GwtPestStartPosition;
+        ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
+
+        while PestSpecifiedConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestSpecifiedConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestSpecifiedConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRainfallConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestRainfallConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestRainfallConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestEvaporationConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestEvaporationConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestEvaporationConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestRunoffConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestRunoffConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestRunoffConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
+        FormulaIndex := FormulaIndex-ChemSpeciesCount;
+        while PestInflowConcentrationMethods.Count < ChemSpeciesCount do
+        begin
+          PestInflowConcentrationMethods.Add;
+        end;
+        if FormulaIndex < ChemSpeciesCount then
+        begin
+          PestInflowConcentrationMethods[FormulaIndex].PestParamMethod := Value;
+          Exit;
+        end;
+
         inherited;
         Assert(False);
       end;

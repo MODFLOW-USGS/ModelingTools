@@ -17,15 +17,15 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
     object lblNumTimes: TLabel
       Left = 64
       Top = 15
-      Width = 78
-      Height = 13
+      Width = 112
+      Height = 20
       Caption = 'Number of times'
     end
     object seNumberOfTimes: TJvSpinEdit
       Left = 9
       Top = 6
       Width = 49
-      Height = 21
+      Height = 25
       ButtonKind = bkClassic
       MaxValue = 2147483647.000000000000000000
       TabOrder = 0
@@ -125,8 +125,8 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
       object lblFormula: TLabel
         Left = 136
         Top = 5
-        Width = 38
-        Height = 13
+        Width = 54
+        Height = 20
         Alignment = taCenter
         Caption = 'Formula'
       end

@@ -384,12 +384,12 @@ function TframeScreenObjectNoParam.GetPestMethod(
 var
   ItemIndex: Integer;
 begin
-  if PestRowOffset = 0 then
-  begin
-    result := ppmMultiply;
-    Assert(False);
-    Exit;
-  end;
+//  if PestRowOffset = 0 then
+//  begin
+//    result := ppmMultiply;
+//    Assert(False);
+//    Exit;
+//  end;
   ItemIndex := FPestMethods.IndexOf(
     rdgModflowBoundary.Cells[ACol,PestMethodRow]);
   if ItemIndex >= 0 then
@@ -410,12 +410,12 @@ end;
 
 function TframeScreenObjectNoParam.GetPestModifier(ACol: Integer): string;
 begin
-  if PestRowOffset = 0 then
-  begin
-    result := '';
-    Assert(False);
-    Exit;
-  end;
+//  if PestRowOffset = 0 then
+//  begin
+//    result := '';
+//    Assert(False);
+//    Exit;
+//  end;
   result := rdgModflowBoundary.Cells[ACol, PestModifierRow];
   if result = strNone then
   begin
@@ -592,11 +592,11 @@ end;
 procedure TframeScreenObjectNoParam.SetPestModifier(ACol: Integer;
   const Value: string);
 begin
-  if PestRowOffset = 0 then
-  begin
-    Assert(False);
-    Exit;
-  end;
+//  if PestRowOffset = 0 then
+//  begin
+//    Assert(False);
+//    Exit;
+//  end;
   if Value = '' then
   begin
     rdgModflowBoundary.Cells[ACol, PestModifierRow] := strNone;

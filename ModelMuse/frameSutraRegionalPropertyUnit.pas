@@ -138,38 +138,27 @@ begin
 end;
 
 procedure TframeSutraRegionalProperty.AssignButtonImages;
-var
-  BitMap: TBitMap;
 begin
-  BitMap := TBitMap.Create;
-  try
-    BitMap.Canvas.Font := Font;
-    BitMap.Width := 22;
-    BitMap.Height := 22;
-    BitMap.Canvas.TextOut(0,0, 'F()');
-    btnedFirstDistributionCoefficient.Glyph := BitMap;
-    btnedSecondDistributionCoefficient.Glyph := BitMap;
-    btnedResidWatSat.Glyph := BitMap;
-    btnedVgenAlpha.Glyph := BitMap;
-    btnedVgenEta.Glyph := BitMap;
-    btnedAirEntryPressure.Glyph := BitMap;
-    btnedPoreDistIndex.Glyph := BitMap;
-    btnedPresAtResid.Glyph := BitMap;
-    btnedMinRelPerm.Glyph := BitMap;
-    btnedRelPermEta.Glyph := BitMap;
-    btnedRelPermPoreDistIndex.Glyph := BitMap;
-    btnedSatAtMinPerm.Glyph := BitMap;
-    btnedResidLiqWatSat.Glyph := BitMap;
-    btnedExpParamW.Glyph := BitMap;
-    btnedPowerAlpha.Glyph := BitMap;
-    btnedPowerBeta.Glyph := BitMap;
-    btnedLiqWatRelTemSatMin.Glyph := BitMap;
-    btnedMaxFreezeTemp.Glyph := BitMap;
-    btnedLatentHeat.Glyph := BitMap;
-  finally
-    BitMap.Free;
-  end;
-
+  FxButton.Canvas.Font := Font;
+  btnedFirstDistributionCoefficient.Glyph := FxButton;
+  btnedSecondDistributionCoefficient.Glyph := FxButton;
+  btnedResidWatSat.Glyph := FxButton;
+  btnedVgenAlpha.Glyph := FxButton;
+  btnedVgenEta.Glyph := FxButton;
+  btnedAirEntryPressure.Glyph := FxButton;
+  btnedPoreDistIndex.Glyph := FxButton;
+  btnedPresAtResid.Glyph := FxButton;
+  btnedMinRelPerm.Glyph := FxButton;
+  btnedRelPermEta.Glyph := FxButton;
+  btnedRelPermPoreDistIndex.Glyph := FxButton;
+  btnedSatAtMinPerm.Glyph := FxButton;
+  btnedResidLiqWatSat.Glyph := FxButton;
+  btnedExpParamW.Glyph := FxButton;
+  btnedPowerAlpha.Glyph := FxButton;
+  btnedPowerBeta.Glyph := FxButton;
+  btnedLiqWatRelTemSatMin.Glyph := FxButton;
+  btnedMaxFreezeTemp.Glyph := FxButton;
+  btnedLatentHeat.Glyph := FxButton;
 end;
 
 procedure TframeSutraRegionalProperty.GetData(ARegion: TRegionalProperty;

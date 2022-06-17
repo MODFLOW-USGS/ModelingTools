@@ -8,7 +8,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     Width = 485
     Height = 48
     ExplicitTop = 504
-    ExplicitWidth = 451
+    ExplicitWidth = 485
     ExplicitHeight = 48
     DesignSize = (
       485
@@ -17,21 +17,25 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
       Top = 8
       ExplicitTop = 8
     end
+    inherited seNumberOfTimes: TJvSpinEdit
+      Height = 28
+      ExplicitHeight = 28
+    end
     inherited btnDelete: TBitBtn
       Left = 385
-      ExplicitLeft = 351
+      ExplicitLeft = 385
     end
     inherited btnInsert: TBitBtn
       Left = 297
-      ExplicitLeft = 263
+      ExplicitLeft = 297
     end
   end
   inherited pnlTop: TPanel
     Width = 485
-    ExplicitWidth = 451
+    ExplicitWidth = 485
     inherited pnlCaption: TPanel
       Width = 483
-      ExplicitWidth = 449
+      ExplicitWidth = 483
     end
   end
   inherited pnlGrid: TPanel
@@ -40,7 +44,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     Height = 144
     Align = alBottom
     ExplicitTop = 360
-    ExplicitWidth = 451
+    ExplicitWidth = 485
     ExplicitHeight = 144
     inherited pnlEditGrid: TPanel
       Width = 483
@@ -273,7 +277,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end>
       ExplicitLeft = 1
       ExplicitTop = 51
-      ExplicitWidth = 449
+      ExplicitWidth = 483
       ExplicitHeight = 92
     end
   end
@@ -282,60 +286,59 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     Top = 25
     Width = 485
     Height = 335
-    ActivePage = tabLakeTable
+    ActivePage = tabGWT
     Align = alClient
     TabOrder = 3
-    ExplicitWidth = 451
     object tabLakeProperties: TTabSheet
       Caption = 'Lake Properties'
       ImageIndex = 2
       object lblOutletCount: TLabel
         Left = 60
         Top = 3
-        Width = 86
-        Height = 13
+        Width = 121
+        Height = 20
         Caption = 'Number of outlets'
       end
       object lblBottomElev: TLabel
         Left = 5
         Top = 130
-        Width = 118
-        Height = 13
+        Width = 165
+        Height = 20
         Caption = 'Bottom elevation (belev)'
       end
       object lblTopElev: TLabel
         Left = 5
         Top = 157
-        Width = 100
-        Height = 13
+        Width = 136
+        Height = 20
         Caption = 'Top elevation (telev)'
       end
       object lblLakebedK: TLabel
         Left = 5
         Top = 186
-        Width = 97
-        Height = 13
+        Width = 136
+        Height = 20
         Caption = 'Lakebed K (bedleak)'
       end
       object lblLakebedThickness: TLabel
         Left = 5
         Top = 213
-        Width = 135
-        Height = 13
+        Width = 186
+        Height = 20
         Caption = 'Lakebed thickness (bedleak)'
       end
       object lblConnLength: TLabel
         Left = 5
         Top = 240
-        Width = 135
-        Height = 13
+        Width = 187
+        Height = 20
         Caption = 'Connection length (connlen)'
       end
       object lblStartingStage: TLabel
         Left = 5
         Top = 103
-        Width = 96
-        Height = 13
+        Width = 127
+        Height = 20
         Caption = 'Starting stage (strt)'
       end
       object cbEmbedded: TCheckBox
@@ -380,7 +383,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Left = 5
         Top = 0
         Width = 49
-        Height = 21
+        Height = 28
         ButtonKind = bkClassic
         MaxValue = 2147483647.000000000000000000
         TabOrder = 0
@@ -391,7 +394,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Left = 157
         Top = 127
         Width = 208
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -420,7 +423,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Left = 157
         Top = 154
         Width = 208
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -449,7 +452,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Left = 157
         Top = 183
         Width = 208
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -478,7 +481,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Left = 157
         Top = 210
         Width = 208
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -507,7 +510,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Left = 157
         Top = 237
         Width = 208
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -536,7 +539,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Left = 157
         Top = 100
         Width = 208
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -572,20 +575,20 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Left = 0
         Top = 0
         Width = 477
-        Height = 307
+        Height = 300
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 443
-        ExplicitHeight = 307
+        ExplicitWidth = 477
+        ExplicitHeight = 300
         inherited Panel: TPanel
-          Top = 266
+          Top = 259
           Width = 477
-          ExplicitTop = 266
-          ExplicitWidth = 443
+          ExplicitTop = 259
+          ExplicitWidth = 477
           inherited lbNumber: TLabel
-            Width = 136
+            Width = 192
             Caption = 'Number of rows in lake table'
-            ExplicitWidth = 136
+            ExplicitWidth = 192
           end
           inherited sbAdd: TSpeedButton
             Left = 387
@@ -602,10 +605,14 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
             Anchors = [akTop, akRight]
             ExplicitLeft = 338
           end
+          inherited seNumber: TJvSpinEdit
+            Height = 28
+            ExplicitHeight = 28
+          end
         end
         inherited Grid: TRbwDataGrid4
           Width = 477
-          Height = 209
+          Height = 202
           ColCount = 4
           OnSetEditText = frameLakeTableGridSetEditText
           Columns = <
@@ -705,18 +712,57 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 443
-          ExplicitHeight = 209
+          ExplicitWidth = 477
+          ExplicitHeight = 202
         end
         inherited pnlTop: TPanel
           Width = 477
-          ExplicitWidth = 443
+          ExplicitWidth = 477
           inherited edFormula: TLabeledEdit
+            Height = 28
             EditLabel.ExplicitLeft = 0
             EditLabel.ExplicitTop = -16
             EditLabel.ExplicitWidth = 50
+            ExplicitHeight = 28
           end
         end
+      end
+    end
+    object tabGWT: TTabSheet
+      Caption = 'GWT'
+      ImageIndex = 3
+      object splSplit: TSplitter
+        Left = 121
+        Top = 0
+        Width = 5
+        Height = 300
+        ExplicitLeft = 178
+        ExplicitHeight = 420
+      end
+      object tvGwt: TJvPageListTreeView
+        Left = 0
+        Top = 0
+        Width = 121
+        Height = 300
+        PageDefault = 0
+        PageList = jplGwt
+        Align = alLeft
+        Indent = 19
+        TabOrder = 0
+        Items.Links = {00000000}
+        ExplicitLeft = 64
+        ExplicitTop = 152
+        ExplicitHeight = 97
+      end
+      object jplGwt: TJvPageList
+        Left = 126
+        Top = 0
+        Width = 351
+        Height = 300
+        PropagateEnable = False
+        Align = alClient
+        ExplicitLeft = 150
+        ExplicitTop = 3
       end
     end
   end

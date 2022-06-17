@@ -1,0 +1,187 @@
+unit frameCustomGwtConcentrationsUnit;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, RbwDataGrid4,
+  GoPhastTypes, Vcl.ExtCtrls, Vcl.StdCtrls, SsButtonEd;
+
+type
+  TframeCustomGwtConcentrations = class(TFrame)
+    rdgConcentrations: TRbwDataGrid4;
+    pnl1: TPanel;
+    btnedInitialConcentration: TssButtonEdit;
+    lblInitialConcentration: TLabel;
+    procedure btnedInitialConcentrationChange(Sender: TObject);
+    procedure rdgConcentrationsSetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
+  private
+    function GetPestMethod(ACol: Integer): TPestParamMethod;
+    function GetPestMethodAssigned(ACol: Integer): Boolean;
+    function GetPestModifier(ACol: Integer): string;
+    function GetPestModifierAssigned(ACol: Integer): Boolean;
+    procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
+    procedure SetPestMethodAssigned(ACol: Integer; const Value: Boolean);
+    procedure SetPestModifier(ACol: Integer; const Value: string);
+    procedure SetPestModifierAssigned(ACol: Integer; const Value: Boolean);
+    { Private declarations }
+  protected
+    FDataAssigned: Boolean;
+    procedure InitializeControls;
+  public
+    Property PestMethod[ACol: Integer]: TPestParamMethod
+      read GetPestMethod write SetPestMethod;
+    Property PestModifier[ACol: Integer]: string
+      read GetPestModifier write SetPestModifier;
+    Property PestMethodAssigned[ACol: Integer]: Boolean
+      read GetPestMethodAssigned write SetPestMethodAssigned;
+    Property PestModifierAssigned[ACol: Integer]: Boolean
+      read GetPestModifierAssigned write SetPestModifierAssigned;
+    { Public declarations }
+  end;
+
+implementation
+
+uses
+  frmCustomGoPhastUnit;
+
+
+
+{$R *.dfm}
+
+var
+  FPestMethods: TStringList;
+
+{ TframeCustomGwtConcentrations }
+
+procedure TframeCustomGwtConcentrations.InitializeControls;
+var
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  FxButton.Canvas.Font := Font;
+  btnedInitialConcentration.Glyph := FxButton;
+  btnedInitialConcentration.Text := '';
+
+  for RowIndex := 1 to rdgConcentrations.RowCount - 1 do
+  begin
+    for ColIndex := 0 to rdgConcentrations.ColCount - 1 do
+    begin
+      rdgConcentrations.Cells[ColIndex, RowIndex] := '';
+    end;
+  end;
+  rdgConcentrations.Cells[0,0] := StrStartingTime;
+  rdgConcentrations.Cells[1,0] := StrEndingTime;
+  rdgConcentrations.Cells[2,0] := StrStatus;
+
+  rdgConcentrations.UseSpecialFormat[0, PestModifierRow] := True;
+  rdgConcentrations.UseSpecialFormat[0, PestMethodRow] := True;
+  rdgConcentrations.SpecialFormat[0, PestModifierRow] := rcf4String;
+  rdgConcentrations.SpecialFormat[0, PestMethodRow] := rcf4String;
+  rdgConcentrations.Cells[0, PestModifierRow] := StrPestModifier;
+  rdgConcentrations.Cells[0, PestMethodRow] := StrModificationMethod;
+  for ColIndex := 3 to rdgConcentrations.ColCount - 1 do
+  begin
+    PestMethod[ColIndex] := ppmMultiply;
+  end;
+
+  FDataAssigned := False;
+end;
+
+procedure TframeCustomGwtConcentrations.rdgConcentrationsSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  FDataAssigned := True;
+end;
+
+procedure TframeCustomGwtConcentrations.btnedInitialConcentrationChange(
+  Sender: TObject);
+begin
+  FDataAssigned := True;
+end;
+
+function TframeCustomGwtConcentrations.GetPestMethod(
+  ACol: Integer): TPestParamMethod;
+var
+  ItemIndex: Integer;
+begin
+  ItemIndex := FPestMethods.IndexOf(
+    rdgConcentrations.Cells[ACol,PestMethodRow]);
+  if ItemIndex >= 0 then
+  begin
+    result := TPestParamMethod(ItemIndex);
+  end
+  else
+  begin
+    result := ppmMultiply;
+  end;
+end;
+
+function TframeCustomGwtConcentrations.GetPestMethodAssigned(
+  ACol: Integer): Boolean;
+begin
+  result := FPestMethods.IndexOf(rdgConcentrations.Cells[ACol,PestMethodRow]) >= 0;
+end;
+
+function TframeCustomGwtConcentrations.GetPestModifier(ACol: Integer): string;
+begin
+  result := rdgConcentrations.Cells[ACol, PestModifierRow];
+  if result = strNone then
+  begin
+    result := '';
+  end;
+end;
+
+function TframeCustomGwtConcentrations.GetPestModifierAssigned(
+  ACol: Integer): Boolean;
+begin
+  result := rdgConcentrations.Cells[ACol, PestModifierRow] <> '';
+end;
+
+procedure TframeCustomGwtConcentrations.SetPestMethod(ACol: Integer;
+  const Value: TPestParamMethod);
+begin
+  rdgConcentrations.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
+end;
+
+procedure TframeCustomGwtConcentrations.SetPestMethodAssigned(ACol: Integer;
+  const Value: Boolean);
+begin
+  if not Value then
+  begin
+    rdgConcentrations.Cells[ACol, PestModifierRow] := '';
+  end;
+end;
+
+procedure TframeCustomGwtConcentrations.SetPestModifier(ACol: Integer;
+  const Value: string);
+begin
+  if Value = '' then
+  begin
+    rdgConcentrations.Cells[ACol, PestModifierRow] := strNone;
+  end
+  else
+  begin
+    rdgConcentrations.Cells[ACol, PestModifierRow] := Value;
+  end;
+end;
+
+procedure TframeCustomGwtConcentrations.SetPestModifierAssigned(ACol: Integer;
+  const Value: Boolean);
+begin
+  if not Value then
+  begin
+    rdgConcentrations.Cells[ACol, PestModifierRow] := '';
+  end;
+end;
+
+initialization
+  FPestMethods := TStringList.Create;
+  FPestMethods.Add(StrMultiply);
+  FPestMethods.Add(StrAdd);
+
+finalization
+ FPestMethods.Free;
+
+end.

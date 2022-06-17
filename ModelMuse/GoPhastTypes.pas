@@ -676,8 +676,6 @@ type
     function IsSame(OtherCollection: TGwtBoundaryStatusCollection): Boolean;
   end;
 
-
-
   TBaseModel = class abstract(TComponent)
   private
     // See @link(UpToDate).
@@ -938,6 +936,7 @@ const
 resourcestring
   StrStartingTime = 'Starting time';
   StrEndingTime = 'Ending time';
+  StrStatus = 'Status';
   StrPumpingRate = 'Pumping rate';
   StrConductance = 'Conductance';
   StrConductanceMultipl = ' conductance multiplier';
@@ -1021,6 +1020,8 @@ resourcestring
   StrAllTheActiveCells = 'All the active cells in the following layers have ' +
   'thicknesses less than or equal to zero.';
 
+var
+  FxButton: TBitMap;
 
 implementation
 
@@ -2414,10 +2415,15 @@ initialization
   InitializeStatTypeLabels;
   LFormatSettings := TFormatSettings.Create('en-US'); // do not localize
   LFormatSettings.DecimalSeparator := AnsiChar('.');
+  FxButton := TBitMap.Create;
+  FxButton.Width := 22;
+  FxButton.Height := 22;
+  FxButton.Canvas.TextOut(0,0, 'F()');
 
 finalization
   ObservationStatFlagLabels.Free;
   PredictionStatFlagLabels.Free;
+  FxButton.Free;
 
 end.
 

@@ -1783,6 +1783,16 @@
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="frameCustomGwtConcentrationsUnit.pas">
+            <Form>frameCustomGwtConcentrations</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="frameLakeGwtConcentrationsUnit.pas">
+            <Form>frameLakeGwtConcentrations</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

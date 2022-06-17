@@ -741,7 +741,9 @@ uses
   ModflowMf6TimeSeriesWriterUnit in 'ModflowMf6TimeSeriesWriterUnit.pas',
   PilotPointCovarinceFileWriterUnit in 'PilotPointCovarinceFileWriterUnit.pas',
   frmNewVideoUnit in 'frmNewVideoUnit.pas' {frmNewVideos},
-  frameSutraRegionalPropertyUnit in 'frameSutraRegionalPropertyUnit.pas' {frameSutraRegionalProperty: TFrame};
+  frameSutraRegionalPropertyUnit in 'frameSutraRegionalPropertyUnit.pas' {frameSutraRegionalProperty: TFrame},
+  frameCustomGwtConcentrationsUnit in 'frameCustomGwtConcentrationsUnit.pas' {frameCustomGwtConcentrations: TFrame},
+  frameLakeGwtConcentrationsUnit in 'frameLakeGwtConcentrationsUnit.pas' {frameLakeGwtConcentrations: TFrame};
 
 {$R *.res}
 
