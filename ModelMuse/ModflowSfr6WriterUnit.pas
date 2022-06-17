@@ -2149,7 +2149,8 @@ begin
           Assert(False);
 
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + SfrGwtConcCount*SfrGwtSpecifiedConcentrationPosition + FSpeciesIndex;
+            + SfrGwtConcCount*FSpeciesIndex + SfrGwtSpecifiedConcentrationPosition;
+//            + SfrGwtConcCount*SfrGwtSpecifiedConcentrationPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
         end;
@@ -2159,28 +2160,32 @@ begin
           WriteInteger(ReachNumber);
           WriteString(' RAINFALL');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + SfrGwtConcCount*SfrGwtRainfallConcentrationsPosition + FSpeciesIndex;
+            + SfrGwtConcCount*FSpeciesIndex + SfrGwtRainfallConcentrationsPosition;
+//            + SfrGwtConcCount*SfrGwtRainfallConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' EVAPORATION');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + SfrGwtConcCount*SfrGwtEvapConcentrationsPosition + FSpeciesIndex;
+            + SfrGwtConcCount*FSpeciesIndex + SfrGwtEvapConcentrationsPosition;
+//            + SfrGwtConcCount*SfrGwtEvapConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' RUNOFF');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + SfrGwtConcCount*SfrGwtRunoffConcentrationsPosition + FSpeciesIndex;
+            + SfrGwtConcCount*FSpeciesIndex + SfrGwtRunoffConcentrationsPosition;
+//            + SfrGwtConcCount*SfrGwtRunoffConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' INFLOW');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-            + SfrGwtConcCount*SfrGwtInflowConcentrationsPosition + FSpeciesIndex;
+            + SfrGwtConcCount*FSpeciesIndex + SfrGwtInflowConcentrationsPosition;
+//            + SfrGwtConcCount*SfrGwtInflowConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
         end;

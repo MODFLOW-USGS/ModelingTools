@@ -5054,8 +5054,8 @@ begin
         end;
         GwtPosition := Index - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div SfrGwtConcCount;
-        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
+        GwtSource := GwtPosition mod SfrGwtConcCount;
+        SpeciesIndex := GwtPosition div SfrGwtConcCount;
         case GwtSource of
           SfrGwtSpecifiedConcentrationPosition:
             begin
@@ -5112,8 +5112,8 @@ begin
       begin
         GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div SfrGwtConcCount;
-        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
+        GwtSource := GwtPosition mod SfrGwtConcCount;
+        SpeciesIndex := GwtPosition div SfrGwtConcCount;
         case GwtSource of
           SfrGwtSpecifiedConcentrationPosition:
             begin
@@ -5161,8 +5161,8 @@ begin
       begin
         GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div SfrGwtConcCount;
-        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
+        GwtSource := GwtPosition mod SfrGwtConcCount;
+        SpeciesIndex := GwtPosition div SfrGwtConcCount;
         case GwtSource of
           SfrGwtSpecifiedConcentrationPosition:
             begin
@@ -5213,8 +5213,8 @@ begin
       begin
         GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div SfrGwtConcCount;
-        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
+        GwtSource := GwtPosition mod SfrGwtConcCount;
+        SpeciesIndex := GwtPosition div SfrGwtConcCount;
         case GwtSource of
           SfrGwtSpecifiedConcentrationPosition:
             begin
@@ -5274,8 +5274,8 @@ begin
         else
         begin
           GwtPosition := Index - Length(FValues.Diversions) - 1;
-          GwtSource := GwtPosition div SfrGwtConcCount;
-          SpeciesIndex := GwtPosition mod SfrGwtConcCount;
+          GwtSource := GwtPosition mod SfrGwtConcCount;
+          SpeciesIndex := GwtPosition div SfrGwtConcCount;
           case GwtSource of
             SfrGwtSpecifiedConcentrationPosition:
               begin
@@ -5330,8 +5330,8 @@ begin
         else
         begin
           GwtPosition := Index - Length(FValues.Diversions) - 1;
-          GwtSource := GwtPosition div SfrGwtConcCount;
-          SpeciesIndex := GwtPosition mod SfrGwtConcCount;
+          GwtSource := GwtPosition mod SfrGwtConcCount;
+          SpeciesIndex := GwtPosition div SfrGwtConcCount;
           case GwtSource of
             SfrGwtSpecifiedConcentrationPosition:
               begin
@@ -5438,8 +5438,8 @@ begin
         end;
         GwtPosition := Index - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div SfrGwtConcCount;
-        SpeciesIndex := GwtPosition mod SfrGwtConcCount;
+        GwtSource := GwtPosition mod SfrGwtConcCount;
+        SpeciesIndex := GwtPosition div SfrGwtConcCount;
         case GwtSource of
           SfrGwtSpecifiedConcentrationPosition:
             begin

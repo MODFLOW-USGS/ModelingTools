@@ -644,7 +644,8 @@ begin
             WriteInteger(ACell.WellNumber);
             WriteString(' RATE');
             FormulaIndex := MawGwtStart
-              + MawGwtConcCount*MawGwtInjectionConcentrationsPosition + FSpeciesIndex;
+              + MawGwtConcCount*FSpeciesIndex + MawGwtInjectionConcentrationsPosition;
+//              + MawGwtConcCount*MawGwtInjectionConcentrationsPosition + FSpeciesIndex;
             WriteValueOrFormula(ACell, FormulaIndex);
             NewLine;
           end;
@@ -657,7 +658,8 @@ begin
             WriteInteger(ACell.WellNumber);
             WriteString(' CONCENTRATION');
             FormulaIndex := MawGwtStart
-              + MawGwtConcCount*MawGwtSpecifiedConcentrationPosition + FSpeciesIndex;
+              + MawGwtConcCount*FSpeciesIndex + MawGwtSpecifiedConcentrationPosition;
+//              + MawGwtConcCount*MawGwtSpecifiedConcentrationPosition + FSpeciesIndex;
             WriteValueOrFormula(ACell, FormulaIndex);
             NewLine;
           end;

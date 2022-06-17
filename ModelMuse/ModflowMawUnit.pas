@@ -5617,8 +5617,8 @@ begin
         Index := Index-MawGwtStart;
         GwtPosition := Index ;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div MawGwtConcCount;
-        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        GwtSource := GwtPosition mod MawGwtConcCount;
+        SpeciesIndex := GwtPosition div MawGwtConcCount;
         case GwtSource of
           MawGwtSpecifiedConcentrationPosition:
             begin
@@ -5687,8 +5687,8 @@ begin
         Index := Index-MawGwtStart;
         GwtPosition := Index ;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div MawGwtConcCount;
-        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        GwtSource := GwtPosition mod MawGwtConcCount;
+        SpeciesIndex := GwtPosition div MawGwtConcCount;
         case GwtSource of
           MawGwtSpecifiedConcentrationPosition:
             begin
@@ -5737,8 +5737,8 @@ begin
         Index := Index-MawGwtStart;
         GwtPosition := Index ;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div MawGwtConcCount;
-        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        GwtSource := GwtPosition mod MawGwtConcCount;
+        SpeciesIndex := GwtPosition div MawGwtConcCount;
         case GwtSource of
           MawGwtSpecifiedConcentrationPosition:
             begin
@@ -5790,8 +5790,8 @@ begin
         Index := Index-MawGwtStart;
         GwtPosition := Index ;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div MawGwtConcCount;
-        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        GwtSource := GwtPosition mod MawGwtConcCount;
+        SpeciesIndex := GwtPosition div MawGwtConcCount;
         case GwtSource of
           MawGwtSpecifiedConcentrationPosition:
             begin
@@ -5865,8 +5865,8 @@ begin
         Index := Index-MawGwtStart;
         GwtPosition := Index ;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div MawGwtConcCount;
-        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        GwtSource := GwtPosition mod MawGwtConcCount;
+        SpeciesIndex := GwtPosition div MawGwtConcCount;
         case GwtSource of
           MawGwtSpecifiedConcentrationPosition:
             begin
@@ -5916,8 +5916,8 @@ begin
         Index := Index-MawGwtStart;
         GwtPosition := Index ;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div MawGwtConcCount;
-        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        GwtSource := GwtPosition mod MawGwtConcCount;
+        SpeciesIndex := GwtPosition div MawGwtConcCount;
         case GwtSource of
           MawGwtSpecifiedConcentrationPosition:
             begin
@@ -6038,8 +6038,8 @@ begin
         Index := Index-MawGwtStart;
         GwtPosition := Index ;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div MawGwtConcCount;
-        SpeciesIndex := GwtPosition mod MawGwtConcCount;
+        GwtSource := GwtPosition mod MawGwtConcCount;
+        SpeciesIndex := GwtPosition div MawGwtConcCount;
         case GwtSource of
           MawGwtSpecifiedConcentrationPosition:
             begin

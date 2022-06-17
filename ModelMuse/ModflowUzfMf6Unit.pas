@@ -708,7 +708,8 @@ const
   UzfMf6AirEntryPotentialPosition = 4;
   UzfMf6RootPotentialPosition = 5;
   UzfMf6RootActivityPosition = 6;
-  UzfGwtStart = 7;
+//  UzfGwtStart = 7;
+  UzfBoundaryGwtStart = 13;
 
   UztGwtConcCount = 3;
   UzfGwtSpecifiedConcentrationPosition = 0;
@@ -803,7 +804,6 @@ const
   AirEntryPotentialPosition = 10;
   RootPotentialPosition = 11;
   RootActivityPosition = 12;
-  UzfBoundaryGwtStart = 13;
 
 
 { TUzfMf6Record }
@@ -1279,7 +1279,8 @@ begin
         // GWT
         if frmGoPhast.PhastModel.GwtUsed then
         begin
-          Index := Index-UzfGwtStart;
+          Index := Index-UzfBoundaryGwtStart;
+          Assert(Index >= 0);
           ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
           while SpecifiedConcentrations.Count < ChemSpeciesCount do
           begin
@@ -1495,7 +1496,8 @@ begin
         // GWT
         if frmGoPhast.PhastModel.GwtUsed then
         begin
-          Index := Index-UzfGwtStart;
+          Index := Index-UzfBoundaryGwtStart;
+          Assert(Index >= 0);
           ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
           while SpecifiedConcentrations.Count < ChemSpeciesCount do
           begin
@@ -1602,7 +1604,7 @@ procedure TUzfMf6Collection.AssignArrayCellValues(DataSets: TList;
   PestMethods: TPestMethodList;
   PestItemNames, TimeSeriesNames: TStringListObjectList);
 const
-  PestOffset = 6;
+  PestOffset = 6; // 6 might not be the correct value.
 var
   InfiltrationArray: TDataArray;
   PotentialETArray: TDataArray;
@@ -1694,15 +1696,19 @@ begin
   LocalSpecifiedConcentrations := TDataArrayList.Create;
   LocalInfiltrationConcentrations := TDataArrayList.Create;
   LocalEvapConcentrations := TDataArrayList.Create;
+
   SpecifiedConcentrationPestSeriesNames := TStringList.Create;
   InfiltrationConcentrationPestSeriesNames := TStringList.Create;
   EvapConcentrationPestSeriesNames := TStringList.Create;
+
   SpecifiedConcentrationPestSeriesMethods := TPestMethodList.Create;
   InfiltrationConcentrationPestSeriesMethods := TPestMethodList.Create;
   EvapConcentrationPestSeriesMethods := TPestMethodList.Create;
+
   SpecifiedConcItemsList := TStringList.Create;
   InfiltrationConcItemsList := TStringList.Create;
   EvapConcItemsList := TStringList.Create;
+
   SpecifiedConcentrationTimeSeriesNames := TStringList.Create;
   InfiltrationConcentrationTimeSeriesNames := TStringList.Create;
   EvapConcentrationTimeSeriesNames := TStringList.Create;
@@ -1720,10 +1726,10 @@ begin
     RootActivityArray := DataSets[UzfMf6RootActivityPosition];
     if LocalModel.GwtUsed then
     begin
-      DataSetIndex := UzfGwtStart;
+      DataSetIndex := UzfBoundaryGwtStart;
       for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
       begin
-        ADataArray := DataSets[DataSetIndex+SpeciesIndex];
+        ADataArray := DataSets[DataSetIndex+SpeciesIndex-PestOffset];
         LocalSpecifiedConcentrations.Add(ADataArray);
         APestSeriesName := PestSeries[DataSetIndex+SpeciesIndex-PestOffset];
         SpecifiedConcentrationPestSeriesNames.Add(APestSeriesName);
@@ -1737,7 +1743,7 @@ begin
       Inc(DataSetIndex, ChemSpeciesCount);
       for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
       begin
-        ADataArray := DataSets[DataSetIndex+SpeciesIndex];
+        ADataArray := DataSets[DataSetIndex+SpeciesIndex-PestOffset];
         LocalInfiltrationConcentrations.Add(ADataArray);
         APestSeriesName := PestSeries[DataSetIndex+SpeciesIndex-PestOffset];
         InfiltrationConcentrationPestSeriesNames.Add(APestSeriesName);
@@ -1753,7 +1759,7 @@ begin
       Inc(DataSetIndex, ChemSpeciesCount);
       for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
       begin
-        ADataArray := DataSets[DataSetIndex+SpeciesIndex];
+        ADataArray := DataSets[DataSetIndex+SpeciesIndex-PestOffset];
         LocalEvapConcentrations.Add(ADataArray);
         APestSeriesName := PestSeries[DataSetIndex+SpeciesIndex-PestOffset];
         EvapConcentrationPestSeriesNames.Add(APestSeriesName);
@@ -3009,10 +3015,10 @@ begin
     UzfMf6RootActivityPosition: result := RootActivityTimeSeriesName;
     else
       begin
-        GwtPosition := Index - UzfGwtStart;
+        GwtPosition := Index - UzfBoundaryGwtStart;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div UztGwtConcCount;
-        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        GwtSource := GwtPosition mod UztGwtConcCount;
+        SpeciesIndex := GwtPosition div UztGwtConcCount;
         case GwtSource of
           UzfGwtSpecifiedConcentrationPosition:
             begin
@@ -3031,8 +3037,8 @@ begin
               Index := Index - UzfBoundaryGwtStart;
               GwtPosition := Index;
               Assert(GwtPosition >= 0);
-              GwtSource := GwtPosition div UztGwtConcCount;
-              SpeciesIndex := GwtPosition mod UztGwtConcCount;
+              GwtSource := GwtPosition mod UztGwtConcCount;
+              SpeciesIndex := GwtPosition div UztGwtConcCount;
               case GwtSource of
                 UzfGwtSpecifiedConcentrationPosition:
                   begin
@@ -3081,10 +3087,10 @@ begin
     UzfMf6RootActivityPosition: result := RootActivityPest;
     else
       begin
-        GwtPosition := Index - UzfGwtStart;
+        GwtPosition := Index - UzfBoundaryGwtStart;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div UztGwtConcCount;
-        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        GwtSource := GwtPosition mod UztGwtConcCount;
+        SpeciesIndex := GwtPosition div UztGwtConcCount;
         case GwtSource of
           UzfGwtSpecifiedConcentrationPosition:
             begin
@@ -3121,10 +3127,10 @@ begin
     UzfMf6RootActivityPosition: result := RootActivityPestSeriesMethod;
     else
       begin
-        GwtPosition := Index - UzfGwtStart;
+        GwtPosition := Index - UzfBoundaryGwtStart;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div UztGwtConcCount;
-        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        GwtSource := GwtPosition mod UztGwtConcCount;
+        SpeciesIndex := GwtPosition div UztGwtConcCount;
         case GwtSource of
           UzfGwtSpecifiedConcentrationPosition:
             begin
@@ -3164,10 +3170,10 @@ begin
     UzfMf6RootActivityPosition: result := RootActivityPestSeriesName;
     else
       begin
-        GwtPosition := Index - UzfGwtStart;
+        GwtPosition := Index - UzfBoundaryGwtStart;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div UztGwtConcCount;
-        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        GwtSource := GwtPosition mod UztGwtConcCount;
+        SpeciesIndex := GwtPosition div UztGwtConcCount;
         case GwtSource of
           UzfGwtSpecifiedConcentrationPosition:
             begin
@@ -3236,10 +3242,10 @@ begin
     UzfMf6RootActivityPosition: result := RootActivityAnnotation;
     else
       begin
-        GwtPosition := Index - UzfGwtStart;
+        GwtPosition := Index - UzfBoundaryGwtStart;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div UztGwtConcCount;
-        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        GwtSource := GwtPosition mod UztGwtConcCount;
+        SpeciesIndex := GwtPosition div UztGwtConcCount;
         case GwtSource of
           UzfGwtSpecifiedConcentrationPosition:
             begin
@@ -3277,10 +3283,10 @@ begin
     UzfMf6RootActivityPosition: result := RootActivity;
     else
       begin
-        GwtPosition := Index - UzfGwtStart;
+        GwtPosition := Index - UzfBoundaryGwtStart;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div UztGwtConcCount;
-        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        GwtSource := GwtPosition mod UztGwtConcCount;
+        SpeciesIndex := GwtPosition div UztGwtConcCount;
         case GwtSource of
           UzfGwtSpecifiedConcentrationPosition:
             begin
@@ -3299,8 +3305,8 @@ begin
               Index := Index - UzfBoundaryGwtStart;
               GwtPosition := Index;
               Assert(GwtPosition >= 0);
-              GwtSource := GwtPosition div UztGwtConcCount;
-              SpeciesIndex := GwtPosition mod UztGwtConcCount;
+              GwtSource := GwtPosition mod UztGwtConcCount;
+              SpeciesIndex := GwtPosition div UztGwtConcCount;
               case GwtSource of
                 UzfGwtSpecifiedConcentrationPosition:
                   begin
@@ -3486,10 +3492,10 @@ begin
       RootActivityTimeSeriesName := Value;
     else
       begin
-        GwtPosition := Index - UzfGwtStart;
+        GwtPosition := Index - UzfBoundaryGwtStart;
         Assert(GwtPosition >= 0);
-        GwtSource := GwtPosition div UztGwtConcCount;
-        SpeciesIndex := GwtPosition mod UztGwtConcCount;
+        GwtSource := GwtPosition mod UztGwtConcCount;
+        SpeciesIndex := GwtPosition div UztGwtConcCount;
         case GwtSource of
           UzfGwtSpecifiedConcentrationPosition:
             begin
@@ -4412,7 +4418,7 @@ begin
     List.Add(FObserverList[RootActivityPosition]);
   end;
 
-  StartIndex := UzfGwtStart;
+  StartIndex := UzfBoundaryGwtStart;
   for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
   begin
     if FPestSpecifiedConcentrations[Index].ValueObject = Sender then

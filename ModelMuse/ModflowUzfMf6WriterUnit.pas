@@ -581,7 +581,7 @@ begin
           if (UzfCell <> nil) and
             (FUzflandflagLayers[RowIndex, ColumnIndex] = UzfCell.Layer) then
           begin
-            WriteString('  ');
+//            WriteString('  ');
             CellNumber := FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex];
             WriteInteger(CellNumber);
 
@@ -607,13 +607,14 @@ begin
 
             if GwtStatus = gbsConstant then
             begin
-              WriteString('  ');
+//              WriteString('  ');
               WriteInteger(CellNumber);
               WriteString(' CONCENTRATION');
               Assert(False);
 
-              FormulaIndex := UzfGwtStart
-                + UztGwtConcCount*UzfGwtSpecifiedConcentrationPosition + FSpeciesIndex;
+              FormulaIndex := UzfBoundaryGwtStart
+                + UztGwtConcCount*FSpeciesIndex + UzfGwtSpecifiedConcentrationPosition;
+//                + UztGwtConcCount*UzfGwtSpecifiedConcentrationPosition + FSpeciesIndex;
               WriteValueOrFormula(UzfCell, FormulaIndex);
               NewLine;
             end;
@@ -622,15 +623,17 @@ begin
             begin
               WriteInteger(CellNumber);
               WriteString(' INFILTRATION');
-              FormulaIndex := UzfGwtStart
-                + UztGwtConcCount*UzfGwtInfiltrationConcentrationsPosition + FSpeciesIndex;
+              FormulaIndex := UzfBoundaryGwtStart
+                + UztGwtConcCount*FSpeciesIndex + UzfGwtInfiltrationConcentrationsPosition;
+//                + UztGwtConcCount*UzfGwtInfiltrationConcentrationsPosition + FSpeciesIndex;
               WriteValueOrFormula(UzfCell, FormulaIndex);
               NewLine;
 
               WriteInteger(CellNumber);
               WriteString(' UZET');
-              FormulaIndex := UzfGwtStart
-                + UztGwtConcCount*UzfGwtEvapConcentrationsPosition + FSpeciesIndex;
+              FormulaIndex := UzfBoundaryGwtStart
+                + UztGwtConcCount*FSpeciesIndex + UzfGwtEvapConcentrationsPosition;
+//                + UztGwtConcCount*UzfGwtEvapConcentrationsPosition + FSpeciesIndex;
               WriteValueOrFormula(UzfCell, FormulaIndex);
               NewLine;
             end;
@@ -1404,7 +1407,7 @@ begin
   if FUzfPackage.SaveBudgetFile then
   begin
     WriteString('    BUDGET FILEOUT ');
-    budgetfile := ChangeFileExt(BaseName, '.uzt_budget');
+    budgetfile := BaseFileName + '.uzt_budget';
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);
