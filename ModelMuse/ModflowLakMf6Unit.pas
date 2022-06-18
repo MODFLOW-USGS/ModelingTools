@@ -347,6 +347,7 @@ type
     BedThicknessPosition = 9;
     ConnectionLengthPosition = 10;
     StartingStagePosition = 11;
+    function GetStartingConcentrations: TStringConcCollection;
 //    FGwtStatus: TGwtBoundaryStatusCollection;
 //    procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
   var
@@ -358,15 +359,15 @@ type
     FPestStageMethod: TPestParamMethod;
     FStartingConcentrations: TStringConcCollection;
     FPestRainfallConcentrations: TLktGwtConcCollection;
-    FPestRainfallConcentrationMethods: TPestMethodCollection;
+    FPestRainfallConcentrationMethods: TGwtPestMethodCollection;
     FPestSpecifiedConcentrations: TLktGwtConcCollection;
     FPestRunoffConcentrations: TLktGwtConcCollection;
-    FPestSpecifiedConcentrationMethods: TPestMethodCollection;
+    FPestSpecifiedConcentrationMethods: TGwtPestMethodCollection;
     FPestInflowConcentrations: TLktGwtConcCollection;
-    FPestRunoffConcentrationMethods: TPestMethodCollection;
+    FPestRunoffConcentrationMethods: TGwtPestMethodCollection;
     FPestEvaporationConcentrations: TLktGwtConcCollection;
-    FPestInflowConcentrationMethods: TPestMethodCollection;
-    FPestEvaporationConcentrationMethods: TPestMethodCollection;
+    FPestInflowConcentrationMethods: TGwtPestMethodCollection;
+    FPestEvaporationConcentrationMethods: TGwtPestMethodCollection;
     function GetPestEvaporationFormula: string;
     function GetPestEvaporationObserver: TObserver;
     function GetPestInflowFormula: string;
@@ -393,20 +394,20 @@ type
     procedure SetPestWithdrawalMethod(const Value: TPestParamMethod);
     procedure SetStartingConcentrations(const Value: TStringConcCollection);
     procedure SetPestEvaporationConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     procedure SetPestEvaporationConcentrations(
       const Value: TLktGwtConcCollection);
     procedure SetPestInflowConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     procedure SetPestInflowConcentrations(const Value: TLktGwtConcCollection);
     procedure SetPestRainfallConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     procedure SetPestRainfallConcentrations(const Value: TLktGwtConcCollection);
     procedure SetPestRunoffConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     procedure SetPestRunoffConcentrations(const Value: TLktGwtConcCollection);
     procedure SetPestSpecifiedConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     procedure SetPestSpecifiedConcentrations(
       const Value: TLktGwtConcCollection);
     function GetPestEvaporationConcentrationObserver(
@@ -585,7 +586,7 @@ type
     property PestWithdrawalMethod: TPestParamMethod read FPestWithdrawalMethod
       write SetPestWithdrawalMethod;
     property StartingConcentrations: TStringConcCollection
-      read FStartingConcentrations
+      read GetStartingConcentrations
       write SetStartingConcentrations
       {$IFNDEF GWT}
       stored False
@@ -597,7 +598,7 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestSpecifiedConcentrationMethods: TPestMethodCollection
+    property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
       read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods
       {$IFNDEF GWT}
       stored False
@@ -609,7 +610,7 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestRainfallConcentrationMethods: TPestMethodCollection
+    property PestRainfallConcentrationMethods: TGwtPestMethodCollection
       read FPestRainfallConcentrationMethods write SetPestRainfallConcentrationMethods
       {$IFNDEF GWT}
       stored False
@@ -621,7 +622,7 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestEvaporationConcentrationMethods: TPestMethodCollection
+    property PestEvaporationConcentrationMethods: TGwtPestMethodCollection
       read FPestEvaporationConcentrationMethods write SetPestEvaporationConcentrationMethods
       {$IFNDEF GWT}
       stored False
@@ -633,7 +634,7 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestRunoffConcentrationMethods: TPestMethodCollection
+    property PestRunoffConcentrationMethods: TGwtPestMethodCollection
       read FPestRunoffConcentrationMethods write SetPestRunoffConcentrationMethods
       {$IFNDEF GWT}
       stored False        PestInflowConcentrations
@@ -645,7 +646,7 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestInflowConcentrationMethods: TPestMethodCollection
+    property PestInflowConcentrationMethods: TGwtPestMethodCollection
       read FPestInflowConcentrationMethods write SetPestInflowConcentrationMethods
       {$IFNDEF GWT}
       stored False
@@ -827,7 +828,6 @@ var
   LakCollection: TLakTimeCollection;
 begin
   LakCollection := Collection as TLakTimeCollection;
-  FGwtStatus := TGwtBoundaryStatusCollection.Create;
   FSpecifiedConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
     LakCollection);
   FRainfallConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
@@ -840,6 +840,7 @@ begin
     LakCollection);
 
   inherited;
+  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model);
 end;
 
 procedure TLakeTimeItem.CreateFormulaObjects;
@@ -1923,11 +1924,11 @@ begin
   FPestInflowConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestInflowConcentrations.UsedForPestSeries := True;
 
-  FPestSpecifiedConcentrationMethods := TPestMethodCollection.Create(Model);
-  FPestRainfallConcentrationMethods := TPestMethodCollection.Create(Model);
-  FPestEvaporationConcentrationMethods := TPestMethodCollection.Create(Model);
-  FPestRunoffConcentrationMethods := TPestMethodCollection.Create(Model);
-  FPestInflowConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestRainfallConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestEvaporationConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestRunoffConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestInflowConcentrationMethods := TGwtPestMethodCollection.Create(Model);
 
 
 
@@ -2751,6 +2752,19 @@ begin
 
 end;
 
+function TLakeMf6.GetStartingConcentrations: TStringConcCollection;
+var
+  LocalModel: TCustomModel;
+begin
+  LocalModel := FStartingConcentrations.Model as TCustomModel;
+  if (LocalModel <> nil)
+    and (FStartingConcentrations.Count < LocalModel.MobileComponents.Count) then
+  begin
+    FStartingConcentrations.Count := LocalModel.MobileComponents.Count;
+  end;
+  result := FStartingConcentrations;
+end;
+
 function TLakeMf6.GetStartingStage: string;
 begin
   Result := FStartingStage.Formula;
@@ -3091,7 +3105,7 @@ begin
 end;
 
 procedure TLakeMf6.SetPestEvaporationConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestEvaporationConcentrationMethods.Assign(Value);
 end;
@@ -3113,7 +3127,7 @@ begin
 end;
 
 procedure TLakeMf6.SetPestInflowConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestInflowConcentrationMethods.Assign(Value);
 end;
@@ -3135,7 +3149,7 @@ begin
 end;
 
 procedure TLakeMf6.SetPestRainfallConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestRainfallConcentrationMethods.Assign(Value);
 end;
@@ -3157,7 +3171,7 @@ begin
 end;
 
 procedure TLakeMf6.SetPestRunoffConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestRunoffConcentrationMethods.Assign(Value);
 end;
@@ -3179,7 +3193,7 @@ begin
 end;
 
 procedure TLakeMf6.SetPestSpecifiedConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestSpecifiedConcentrationMethods.Assign(Value);
 end;

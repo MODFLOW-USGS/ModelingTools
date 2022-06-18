@@ -666,16 +666,6 @@ type
     Property GwtBoundaryStatus: TGwtBoundaryStatus read FGwtBoundaryStatus write SetGwtBoundaryStatus;
   end;
 
-  TGwtBoundaryStatusCollection = class(TCollection)
-  private
-    function GetItems(Index: Integer): TGwtBoundaryStatusItem;
-    procedure SetItems(Index: Integer; const Value: TGwtBoundaryStatusItem);
-  public
-    constructor Create;
-    property Items[Index: Integer]: TGwtBoundaryStatusItem read GetItems write SetItems; default;
-    function IsSame(OtherCollection: TGwtBoundaryStatusCollection): Boolean;
-  end;
-
   TBaseModel = class abstract(TComponent)
   private
     // See @link(UpToDate).
@@ -698,6 +688,23 @@ type
   published
     property ModelSelection: TModelSelection read GetModelSelection
       write SetModelSelection;
+  end;
+
+  TGwtBoundaryStatusCollection = class(TCollection)
+  private
+    FModel: TBaseModel;
+    function GetItems(Index: Integer): TGwtBoundaryStatusItem;
+    procedure SetItems(Index: Integer; const Value: TGwtBoundaryStatusItem);
+    function GetCount: Integer;
+    procedure SetCount(const Value: Integer);
+  protected
+    property Model: TBaseModel read FModel;
+  public
+    constructor Create(Model: TBaseModel);
+    procedure Assign(Source: TPersistent); override;
+    property Items[Index: Integer]: TGwtBoundaryStatusItem read GetItems write SetItems; default;
+    function IsSame(OtherCollection: TGwtBoundaryStatusCollection): Boolean;
+    property Count: Integer read GetCount write SetCount;
   end;
 
   TLayerSort = class(TObject)
@@ -2374,13 +2381,55 @@ end;
 
 { TGwtBoundaryStatusCollection }
 
-constructor TGwtBoundaryStatusCollection.Create;
+procedure TGwtBoundaryStatusCollection.Assign(Source: TPersistent);
 begin
+  if Source is TGwtBoundaryStatusCollection then
+  begin
+    TGwtBoundaryStatusCollection(Source).Count;
+  end;
+  inherited;
+end;
+
+constructor TGwtBoundaryStatusCollection.Create(Model: TBaseModel);
+begin
+  FModel := Model;
   inherited Create(TGwtBoundaryStatusItem);
 end;
 
-function TGwtBoundaryStatusCollection.GetItems(Index: Integer): TGwtBoundaryStatusItem;
+function TGwtBoundaryStatusCollection.GetCount: integer;
+var
+  LocalModel: TCustomModel;
 begin
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    if inherited Count < LocalModel.MobileComponents.Count then
+    begin
+      Count := LocalModel.MobileComponents.Count;
+    end;
+  end;
+  result := inherited Count
+end;
+
+function TGwtBoundaryStatusCollection.GetItems(Index: Integer): TGwtBoundaryStatusItem;
+var
+  LocalModel: TCustomModel;
+begin
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    if inherited Count < LocalModel.MobileComponents.Count then
+    begin
+      Count := LocalModel.MobileComponents.Count;
+    end;
+  end
+  else
+  begin
+    while Index >= Count do
+    begin
+      Add;
+    end;
+  end;
   result := inherited Items[Index] as TGwtBoundaryStatusItem
 end;
 
@@ -2400,6 +2449,18 @@ begin
         Exit;
       end;
     end;
+  end;
+end;
+
+procedure TGwtBoundaryStatusCollection.SetCount(const Value: Integer);
+begin
+  while inherited Count < Value do
+  begin
+    Add;
+  end;
+  while inherited Count > Value do
+  begin
+    Delete(inherited Count -1);
   end;
 end;
 

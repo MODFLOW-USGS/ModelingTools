@@ -289,7 +289,7 @@ type
     FPestConductanceObserver: TObserver;
     FPestHeadObserver: TObserver;
     FPestConcentrationFormulas: TGhbGwtConcCollection;
-    FPestConcentrationMethods: TPestMethodCollection;
+    FPestConcentrationMethods: TGwtPestMethodCollection;
     FConcentrationObservers: TObserverList;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
@@ -306,7 +306,7 @@ type
     procedure InvalidateHeadData(Sender: TObject);
     procedure InvalidateConcData(Sender: TObject);
     procedure SetPestConcentrationFormulas(const Value: TGhbGwtConcCollection);
-    procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
+    procedure SetPestConcentrationMethods(const Value: TGwtPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
 //    function GetPConcentrationFormulas(const Index: Integer): string;
 //    procedure SetPConcentrationFormulas(const Index: Integer;
@@ -378,7 +378,7 @@ type
       read FPestConductanceMethod write SetPestConductanceMethod;
     property PestConcentrationFormulas: TGhbGwtConcCollection
       read FPestConcentrationFormulas write SetPestConcentrationFormulas;
-    property PestConcentrationMethods: TPestMethodCollection
+    property PestConcentrationMethods: TGwtPestMethodCollection
       read FPestConcentrationMethods write SetPestConcentrationMethods;
   end;
 
@@ -1511,7 +1511,7 @@ begin
   inherited;
   FPestConcentrationFormulas:= TGhbGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
   FConcentrationObservers := TObserverList.Create;
 
   CreateFormulaObjects;
@@ -2001,7 +2001,7 @@ begin
 end;
 
 procedure TGhbBoundary.SetPestConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestConcentrationMethods.Assign(Value);
 end;

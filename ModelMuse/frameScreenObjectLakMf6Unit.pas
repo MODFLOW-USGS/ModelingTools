@@ -105,7 +105,7 @@ resourcestring
   StrNone = 'none';
   StrInflow = 'Inflow';
 
-const NonOutletTabs = 3;
+const NonOutletTabs = 4;
 
 
 {$R *.dfm}
@@ -482,6 +482,10 @@ begin
         ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
         ANode.PageIndex := SpeciesIndex;
         AGwtFrame.GetData(List, SpeciesIndex);
+        if SpeciesIndex = 0 then
+        begin
+          ANode.Selected := True;
+        end;
       end;
     end;
 
@@ -657,6 +661,8 @@ var
   TableIndex: Integer;
   TableItem: TLakeTableItemMf6;
   LakeConnections: TLakeConnectionTypes;
+  SpeciesIndex: Integer;
+  AGwtFrame: TframeLakeGwtConcentrations;
 begin
   LakeTimes := nil;
   Outlets := nil;
@@ -856,6 +862,14 @@ begin
         begin
           ALake.Outlets.Assign(Outlets);
         end;
+      end;
+    end;
+    if tabGWT.TabVisible then
+    begin
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        AGwtFrame := FGwtFrameList[SpeciesIndex];
+        AGwtFrame.setData(List, SpeciesIndex);
       end;
     end;
   finally

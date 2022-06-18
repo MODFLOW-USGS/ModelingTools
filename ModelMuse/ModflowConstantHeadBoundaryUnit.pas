@@ -281,7 +281,7 @@ type
     FPestEndingObserver: TObserver;
     FPestStartingObserver: TObserver;
     FUsedObserver: TObserver;
-    FPestConcentrationMethods: TPestMethodCollection;
+    FPestConcentrationMethods: TGwtPestMethodCollection;
     FPestConcentrationFormulas: TChdGwtConcCollection;
     FConcentrationObservers: TObserverList;
     function GetPestEndingHeadObserver: TObserver;
@@ -296,7 +296,7 @@ type
     procedure InvalidateEndingHeadData(Sender: TObject);
     procedure InvalidateConcData(Sender: TObject);
     procedure SetPestConcentrationFormulas(const Value: TChdGwtConcCollection);
-    procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
+    procedure SetPestConcentrationMethods(const Value: TGwtPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -346,7 +346,7 @@ type
       read FPestEndingHeadMethod write SetPestEndingHeadMethod;
     property PestConcentrationFormulas: TChdGwtConcCollection
       read FPestConcentrationFormulas write SetPestConcentrationFormulas;
-    property PestConcentrationMethods: TPestMethodCollection
+    property PestConcentrationMethods: TGwtPestMethodCollection
       read FPestConcentrationMethods write SetPestConcentrationMethods;
   end;
 
@@ -1105,7 +1105,7 @@ begin
 
   FPestConcentrationFormulas:= TChdGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
   FConcentrationObservers := TObserverList.Create;
 
   CreateFormulaObjects;
@@ -1539,7 +1539,7 @@ begin
 end;
 
 procedure TChdBoundary.SetPestConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestConcentrationMethods.Assign(Value);
 end;

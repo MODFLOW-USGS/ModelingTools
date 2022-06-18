@@ -449,11 +449,11 @@ type
     // GWT
     FStartingConcentrations: TStringConcCollection;
     FPestSpecifiedConcentrations: TUztGwtConcCollection;
-    FPestSpecifiedConcentrationMethods: TPestMethodCollection;
+    FPestSpecifiedConcentrationMethods: TGwtPestMethodCollection;
     FPestEvaporationConcentrations: TUztGwtConcCollection;
-    FPestEvaporationConcentrationMethods: TPestMethodCollection;
+    FPestEvaporationConcentrationMethods: TGwtPestMethodCollection;
     FPestInfiltrationConcentrations: TUztGwtConcCollection;
-    FPestInfiltrationConcentrationMethods: TPestMethodCollection;
+    FPestInfiltrationConcentrationMethods: TGwtPestMethodCollection;
     FPestSpecifiedConcentrationObservers: TObserverList;
     FPestInfiltrationConcentrationObservers: TObserverList;
     FPestEvaporationConcentrationObservers: TObserverList;
@@ -513,15 +513,15 @@ type
     procedure SetPestRootPotentialFormula(const Value: string);
     procedure SetPestRootPotentialMethod(const Value: TPestParamMethod);
     procedure SetPestEvaporationConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     procedure SetPestEvaporationConcentrations(
       const Value: TUztGwtConcCollection);
     procedure SetPestInfiltrationConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     procedure SetPestInfiltrationConcentrations(
       const Value: TUztGwtConcCollection);
     procedure SetPestSpecifiedConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     procedure SetPestSpecifiedConcentrations(
       const Value: TUztGwtConcCollection);
     procedure SetStartingConcentrations(const Value: TStringConcCollection);
@@ -668,7 +668,7 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestSpecifiedConcentrationMethods: TPestMethodCollection
+    property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
       read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods
       {$IFNDEF GWT}
       stored False
@@ -680,7 +680,7 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestInfiltrationConcentrationMethods: TPestMethodCollection
+    property PestInfiltrationConcentrationMethods: TGwtPestMethodCollection
       read FPestInfiltrationConcentrationMethods write SetPestInfiltrationConcentrationMethods
       {$IFNDEF GWT}
       stored False
@@ -692,7 +692,7 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestEvaporationConcentrationMethods: TPestMethodCollection
+    property PestEvaporationConcentrationMethods: TGwtPestMethodCollection
       read FPestEvaporationConcentrationMethods write SetPestEvaporationConcentrationMethods
       {$IFNDEF GWT}
       stored False
@@ -1199,15 +1199,15 @@ var
   UzfCollection: TUzfMf6Collection;
 begin
   UzfCollection := Collection as TUzfMf6Collection;
-  FGwtStatus := TGwtBoundaryStatusCollection.Create;
   FSpecifiedConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject,
     UzfCollection);
   FInfiltrationConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject,
     UzfCollection);
   FEvapConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject,
     UzfCollection);
-  inherited;
 
+  inherited;
+  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model);
 end;
 
 procedure TUzfMf6Item.CreateFormulaObjects;
@@ -3772,9 +3772,9 @@ begin
   FPestEvaporationConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestEvaporationConcentrations.UsedForPestSeries := True;
 
-  FPestSpecifiedConcentrationMethods := TPestMethodCollection.Create(Model);
-  FPestInfiltrationConcentrationMethods := TPestMethodCollection.Create(Model);
-  FPestEvaporationConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestInfiltrationConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestEvaporationConcentrationMethods := TGwtPestMethodCollection.Create(Model);
 
   CreateFormulaObjects;
   CreateBoundaryObserver;
@@ -5045,7 +5045,7 @@ begin
 end;
 
 procedure TUzfMf6Boundary.SetPestEvaporationConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestEvaporationConcentrationMethods.Assign(Value);
 end;
@@ -5080,7 +5080,7 @@ begin
 end;
 
 procedure TUzfMf6Boundary.SetPestInfiltrationConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestInfiltrationConcentrationMethods.Assign(Value);
 end;
@@ -5136,7 +5136,7 @@ begin
 end;
 
 procedure TUzfMf6Boundary.SetPestSpecifiedConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestSpecifiedConcentrationMethods.Assign(Value);
 end;

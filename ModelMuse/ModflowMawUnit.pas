@@ -660,8 +660,8 @@ type
     FPestSpecifiedConcentrationObservers: TObserverList;
     FPestInjectionConcentrations: TMawGwtConcCollection;
     FPestSpecifiedConcentrations: TMawGwtConcCollection;
-    FPestInjectionConcentrationMethods: TPestMethodCollection;
-    FPestSpecifiedConcentrationMethods: TPestMethodCollection;
+    FPestInjectionConcentrationMethods: TGwtPestMethodCollection;
+    FPestSpecifiedConcentrationMethods: TGwtPestMethodCollection;
     procedure SetWellNumber(const Value: Integer);
     function GetBottom: string;
     function GetInitialHead: string;
@@ -739,9 +739,9 @@ type
     procedure SetPestSpecifiedConcentrations(
       const Value: TMawGwtConcCollection);
     procedure SetPestInjectionConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     procedure SetPestSpecifiedConcentrationMethods(
-      const Value: TPestMethodCollection);
+      const Value: TGwtPestMethodCollection);
     function GetPestInjectionConcentrationObserver(const Index: Integer): TObserver;
     function GetPestSpecifiedConcentrationObserver(const Index: Integer): TObserver;
     procedure InvalidatePestSpecConcData(Sender: TObject);
@@ -890,13 +890,13 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestInjectionConcentrationMethods: TPestMethodCollection
+    property PestInjectionConcentrationMethods: TGwtPestMethodCollection
       read FPestInjectionConcentrationMethods write SetPestInjectionConcentrationMethods
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
       ;
-    property PestSpecifiedConcentrationMethods: TPestMethodCollection
+    property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
       read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods
       {$IFNDEF GWT}
       stored False
@@ -1986,8 +1986,8 @@ begin
   FPestInjectionConcentrations.UsedForPestSeries := True;
   FPestSpecifiedConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestSpecifiedConcentrations.UsedForPestSeries := True;
-  FPestInjectionConcentrationMethods := TPestMethodCollection.Create(Model);
-  FPestSpecifiedConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestInjectionConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model);
 
   FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
   CreateFormulaObjects;
@@ -3387,7 +3387,7 @@ begin
 end;
 
 procedure TMawBoundary.SetPestInjectionConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestInjectionConcentrationMethods.Assign(Value);
 end;
@@ -3451,7 +3451,7 @@ begin
 end;
 
 procedure TMawBoundary.SetPestSpecifiedConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestSpecifiedConcentrationMethods.Assign(Value);
 end;
@@ -4185,13 +4185,15 @@ var
   MawCollection: TMawWellCollection;
 begin
   MawCollection := Collection as TMawWellCollection;
-  FGwtStatus := TGwtBoundaryStatusCollection.Create;
+
   FSpecifiedConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject,
     MawCollection);
   FInjectionConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject,
     MawCollection);
 
   inherited;
+  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model);
+
   FMawStatus := mwActive;
   FFlowingWell := fwNotFlowing;
   FRateLimitation := rlNone;

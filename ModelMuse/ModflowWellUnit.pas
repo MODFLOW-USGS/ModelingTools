@@ -249,7 +249,7 @@ type
     FPestPumpingRateObserver: TObserver;
     FUsedObserver: TObserver;
     FPestConcentrationFormulas: TWelGwtConcCollection;
-    FPestConcentrationMethods: TPestMethodCollection;
+    FPestConcentrationMethods: TGwtPestMethodCollection;
     FConcentrationObservers: TObserverList;
     procedure SetTabFileName(const Value: string);
     function GetRelativeTabFileName: string;
@@ -262,7 +262,7 @@ type
     procedure InvalidatePumpingRateData(Sender: TObject);
     procedure InvalidateConcData(Sender: TObject);
     procedure SetPestConcentrationFormulas(const Value: TWelGwtConcCollection);
-    procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
+    procedure SetPestConcentrationMethods(const Value: TGwtPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
@@ -333,7 +333,7 @@ type
       Stored False
       {$ENDIF}
       ;
-    property PestConcentrationMethods: TPestMethodCollection
+    property PestConcentrationMethods: TGwtPestMethodCollection
       read FPestConcentrationMethods write SetPestConcentrationMethods
       {$IFNDEF GWT}
       Stored False
@@ -1290,7 +1290,7 @@ begin
   inherited;
   FPestConcentrationFormulas:= TWelGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
   FConcentrationObservers := TObserverList.Create;
 
   CreateFormulaObjects;
@@ -1677,7 +1677,7 @@ begin
 end;
 
 procedure TMfWellBoundary.SetPestConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestConcentrationMethods.Assign(Value);
 end;

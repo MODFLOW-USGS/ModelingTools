@@ -222,7 +222,6 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // See @link(Model).
     FModel: TBaseModel;
-    function GetCount: Integer;
     procedure SetCount(const Value: Integer);
   protected
     // @name invalidates the model.
@@ -231,6 +230,7 @@ type
     // If @name returns true, @link(Assign) will sort the items
     // using the same order as in the collection that is being assigned to it.
     function SortItems: Boolean; virtual;
+    function GetCount: Integer; virtual;
   public
     function First: TCollectionItem;
     function Last: TCollectionItem;
@@ -272,14 +272,16 @@ type
     procedure Remove(Item: TOrderedItem);
   end;
 
-  TPestMethodCollection = class(TEnhancedOrderedCollection)
-  private
-    function GetItems(const Index: Integer): TPestMethodItem;
+  TGwtPestMethodCollection = class(TEnhancedOrderedCollection)
+  protected
+    function GetItems(const Index: Integer): TPestMethodItem; virtual;
     procedure SetItems(const Index: Integer; const Value: TPestMethodItem);
+    function GetCount: Integer; override;
   public
     constructor Create(Model: TBaseModel);
     property Items[const Index: Integer]: TPestMethodItem read GetItems
       write SetItems; default;
+
   end;
 
   TCustomObjectOrderedCollection = class(TEnhancedOrderedCollection)
@@ -1931,17 +1933,32 @@ end;
 
 { TPestMethodCollection }
 
-constructor TPestMethodCollection.Create(Model: TBaseModel);
+constructor TGwtPestMethodCollection.Create(Model: TBaseModel);
 begin
   inherited Create(TPestMethodItem, Model);
 end;
 
-function TPestMethodCollection.GetItems(const Index: Integer): TPestMethodItem;
+function TGwtPestMethodCollection.GetCount: Integer;
+var
+  LocalModel: TCustomModel;
+begin
+  if (Model <> nil)  then
+  begin
+    LocalModel := Model as TCustomModel;
+    if inherited GetCount < LocalModel.MobileComponents.Count then
+    begin
+      inherited Count := LocalModel.MobileComponents.Count
+    end;
+  end;
+  result := inherited;
+end;
+
+function TGwtPestMethodCollection.GetItems(const Index: Integer): TPestMethodItem;
 begin
   result := inherited Items[Index] as TPestMethodItem;
 end;
 
-procedure TPestMethodCollection.SetItems(const Index: Integer;
+procedure TGwtPestMethodCollection.SetItems(const Index: Integer;
   const Value: TPestMethodItem);
 begin
   inherited Items[Index] := Value;

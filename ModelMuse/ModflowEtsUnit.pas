@@ -299,7 +299,7 @@ type
     FPestEvapotranspirationRateObserver: TObserver;
     FPestSurfaceObserver: TObserver;
     FUsedObserver: TObserver;
-    FPestConcentrationMethods: TPestMethodCollection;
+    FPestConcentrationMethods: TGwtPestMethodCollection;
     FPestConcentrationFormulas: TEtsGwtConcCollection;
     FConcentrationObservers: TObserverList;
     procedure SetEvapotranspirationLayers(const Value: TEtsLayerCollection);
@@ -327,7 +327,7 @@ type
     procedure InvalidateSurfaceData(Sender: TObject);
     procedure InvalidateConcData(Sender: TObject);
     procedure SetPestConcentrationFormulas(const Value: TEtsGwtConcCollection);
-    procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
+    procedure SetPestConcentrationMethods(const Value: TGwtPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
@@ -417,7 +417,7 @@ type
       stored False
       {$ENDIF}
       ;
-    property PestConcentrationMethods: TPestMethodCollection
+    property PestConcentrationMethods: TGwtPestMethodCollection
       read FPestConcentrationMethods write SetPestConcentrationMethods
       {$IFNDEF GWT}
       stored False
@@ -689,7 +689,7 @@ begin
   inherited Create(Model, ScreenObject);
   FPestConcentrationFormulas:= TEtsGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
   FConcentrationObservers := TObserverList.Create;
 
   FEvapotranspirationLayers := TEtsLayerCollection.Create(self, Model, ScreenObject);
@@ -1408,7 +1408,7 @@ begin
 end;
 
 procedure TEtsBoundary.SetPestConcentrationMethods(
-  const Value: TPestMethodCollection);
+  const Value: TGwtPestMethodCollection);
 begin
   FPestConcentrationMethods.Assign(Value);
 end;

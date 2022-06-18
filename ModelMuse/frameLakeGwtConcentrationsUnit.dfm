@@ -1,7 +1,6 @@
 inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
   inherited rdgConcentrations: TRbwDataGrid4
     ColCount = 8
-    FixedCols = 0
     Columns = <
       item
         AutoAdjustRowHeights = False

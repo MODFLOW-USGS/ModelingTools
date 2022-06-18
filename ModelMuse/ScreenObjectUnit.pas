@@ -40600,6 +40600,11 @@ begin
   begin
     FreeAndNil(FFmpFarmIDBoundary);
   end;
+  if (FFmpCropIDBoundary <> nil) and not FFmpCropIDBoundary.Used then
+  begin
+    FreeAndNil(FFmpCropIDBoundary);
+  end;
+
   if (FCfpPipes <> nil) and not FCfpPipes.Used then
   begin
     FreeAndNil(FCfpPipes);
