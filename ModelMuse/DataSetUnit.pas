@@ -4028,7 +4028,8 @@ begin
   end;
   if (FLayerCount <> NumberOfLayers)
     or (FRowCount <> NumberOfRows)
-    or (FColumnCount <> NumberOfColumns) then
+    or (FColumnCount <> NumberOfColumns)
+    or ForceResize then
   begin
     if (FDataCached and FCleared) or (UpToDate and (IsUniform = iuTrue))
       and (FCachedLayerCount = NumberOfLayers)

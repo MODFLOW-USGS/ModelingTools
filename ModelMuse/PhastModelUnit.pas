@@ -10578,13 +10578,16 @@ const
 //                reaction package.
 //    '5.0.0.16' Bug fix: Fixed bug that could cause access violations due
 //                to deleted parameters.
+//    '5.0.0.17' Bug fix: Fixed bug that could cause access violations when
+//                evaluating the Ky and Kz data sets in MODFLOW 6 models when
+//                anisotropy was used.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.16';
+  IIModelVersion = '5.0.0.17';
 
 function IModelVersion: string;
 begin
@@ -30211,6 +30214,7 @@ begin
   Annotation := Format(StrSetByMultiplying, [rsKx, KKyOverKx]);
   Assert(Sender <> nil);
   KyDataArray := Sender as TDataArray;
+  KyDataArray.UpdateDimensions(LayerCount, RowCount, ColumnCount, True);
   Assert(KyDataArray.Name = rsKy);
   KxDataArray := DataARrayManager.GetDataSetByName(rsKx);
   KyOverKxDataArray := DataARrayManager.GetDataSetByName(KKyOverKx);
@@ -30243,6 +30247,7 @@ begin
   Annotation := Format(StrSetByMultiplying, [rsKx, KKzOverKx]);
   Assert(Sender <> nil);
   KzDataArray := Sender as TDataArray;
+  KzDataArray.UpdateDimensions(LayerCount, RowCount, ColumnCount, True);
   Assert(KzDataArray.Name = rsKz);
   KxDataArray := DataARrayManager.GetDataSetByName(rsKx);
   KzOverKxDataArray := DataARrayManager.GetDataSetByName(KKzOverKx);

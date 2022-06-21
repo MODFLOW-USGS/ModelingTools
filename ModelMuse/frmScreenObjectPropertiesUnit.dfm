@@ -2458,7 +2458,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspLakMf6
+        ActivePage = jvspRIV
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -5674,6 +5674,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pcSFR: TPageControl
               Width = 581
               Height = 476
+              ActivePage = frameScreenObjectSFR.tabTable
               OnChange = frameScreenObjectSFRpcSFRChange
               ExplicitWidth = 581
               ExplicitHeight = 476
@@ -6979,17 +6980,21 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabTable: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 472
+                ExplicitWidth = 573
+                ExplicitHeight = 442
                 inherited Splitter2: TSplitter
-                  Height = 315
+                  Left = 238
+                  Height = 285
                   ExplicitLeft = 218
                   ExplicitHeight = 300
                 end
                 inherited Panel4: TPanel
-                  Height = 315
+                  Width = 238
+                  Height = 285
                   ExplicitHeight = 315
                   inherited dgTableTime: TRbwDataGrid4
-                    Height = 313
+                    Width = 236
+                    Height = 283
                     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goTabs]
                     Columns = <
                       item
@@ -7052,7 +7057,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                 end
                 inherited gpFlowTable: TGridPanel
-                  Top = 315
+                  Top = 285
+                  Width = 573
                   ColumnCollection = <
                     item
                       Value = 49.909323456075350000
@@ -7073,17 +7079,25 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end>
                   ExplicitTop = 315
                   inherited zbFlowDepthTable: TQRbwZoomBox2
+                    Width = 279
                     Image32.Top = 0
+                    Image32.Width = 279
+                    Image32.ExplicitWidth = 279
                   end
                   inherited zbFlowWidthTable: TQRbwZoomBox2
+                    Left = 289
+                    Width = 280
                     Image32.Top = 0
+                    Image32.Width = 280
+                    Image32.ExplicitWidth = 280
                   end
                 end
                 inherited frameFlowTable1: TframeFlowTable
-                  Height = 315
+                  Left = 246
+                  Height = 285
                   ExplicitHeight = 315
                   inherited dgSfrTable: TRbwDataGrid4
-                    Height = 243
+                    Height = 213
                     OnSetEditText = frameFlowTable1dgSfrTableSetEditText
                     ExplicitHeight = 243
                     ColWidths = (
@@ -7092,7 +7106,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       64)
                   end
                   inherited pnl1: TPanel
-                    Top = 243
+                    Top = 213
                     ExplicitTop = 243
                     inherited lblNumberOfPoints: TLabel
                       Width = 124

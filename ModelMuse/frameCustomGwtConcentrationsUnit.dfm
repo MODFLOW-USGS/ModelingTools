@@ -14,6 +14,7 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
     RowCount = 4
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
     TabOrder = 0
+    OnSelectCell = rdgConcentrationsSelectCell
     OnSetEditText = rdgConcentrationsSetEditText
     ExtendedAutoDistributeText = False
     AutoMultiEdit = False

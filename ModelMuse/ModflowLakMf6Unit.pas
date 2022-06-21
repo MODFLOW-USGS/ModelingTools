@@ -637,7 +637,7 @@ type
     property PestRunoffConcentrationMethods: TGwtPestMethodCollection
       read FPestRunoffConcentrationMethods write SetPestRunoffConcentrationMethods
       {$IFNDEF GWT}
-      stored False        PestInflowConcentrations
+      stored False
       {$ENDIF}
       ;
       property PestInflowConcentrations: TLktGwtConcCollection

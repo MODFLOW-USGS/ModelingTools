@@ -17,11 +17,15 @@ type
   private
     FScreenObject: TScreenObject;
     { Private declarations }
+  protected
+    procedure InitializeControls;
+    function GetPestModifiers: TStringList; override;
   public
     procedure GetData(const List: TScreenObjectEditCollection;
       SpeciesIndex: Integer);
     procedure SetData(List: TScreenObjectEditCollection; SpeciesIndex: Integer);
     { Public declarations }
+
   end;
 
   TLakeGwtObjectList = TObjectList<TframeLakeGwtConcentrations>;
@@ -203,6 +207,21 @@ begin
   FDataAssigned := True;
 end;
 
+function TframeLakeGwtConcentrations.GetPestModifiers: TStringList;
+begin
+  result := FPestParameters;
+end;
+
+procedure TframeLakeGwtConcentrations.InitializeControls;
+begin
+  inherited;
+  rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), 0] := 'Specified Concentration';
+  rdgConcentrations.Cells[Ord(lccRainfall), 0] := 'Rainfall Concentration';
+  rdgConcentrations.Cells[Ord(lccEvaporation), 0] := 'Evaporation Concentration';
+  rdgConcentrations.Cells[Ord(lccRunoff), 0] := 'Runoff Concentration';
+  rdgConcentrations.Cells[Ord(lccInflow), 0] := 'Inflow Concentration';
+end;
+
 procedure TframeLakeGwtConcentrations.SetData(List: TScreenObjectEditCollection;
   SpeciesIndex: Integer);
 var
@@ -213,114 +232,114 @@ var
   ALakeItem: TLakeTimeItem;
   RowIndex: Integer;
 begin
-    for Index := 0 to List.Count - 1 do
+  for Index := 0 to List.Count - 1 do
+  begin
+    ScreenObject := List[Index].ScreenObject;
+    ALake := ScreenObject.ModflowLak6;
+    if ALake <> nil then
     begin
-      ScreenObject := List[Index].ScreenObject;
-      ALake := ScreenObject.ModflowLak6;
-      if ALake <> nil then
+      if btnedInitialConcentration.Text <> '' then
       begin
-        if btnedInitialConcentration.Text <> '' then
-        begin
-          ALake.StartingConcentrations[SpeciesIndex].Value := btnedInitialConcentration.Text;
-        end
-        else if not FDataAssigned then
-        begin
-          ALake.StartingConcentrations[SpeciesIndex].Value := '0';
-        end;
-
-        if PestModifierAssigned[Ord(lccSpecifiedConcentration)] then
-        begin
-          ALake.PestSpecifiedConcentrations[SpeciesIndex].Value
-            := PestModifier[Ord(lccSpecifiedConcentration)];
-        end;
-        if PestModifierAssigned[Ord(lccRainfall)] then
-        begin
-          ALake.PestRainfallConcentrations[SpeciesIndex].Value
-            := PestModifier[Ord(lccRainfall)];
-        end;
-        if PestModifierAssigned[Ord(lccEvaporation)] then
-        begin
-          ALake.PestEvaporationConcentrations[SpeciesIndex].Value
-            := PestModifier[Ord(lccEvaporation)];
-        end;
-        if PestModifierAssigned[Ord(lccRunoff)] then
-        begin
-          ALake.PestRunoffConcentrations[SpeciesIndex].Value
-            := PestModifier[Ord(lccRunoff)];
-        end;
-        if PestModifierAssigned[Ord(lccInflow)] then
-        begin
-          ALake.PestInflowConcentrations[SpeciesIndex].Value
-            := PestModifier[Ord(lccInflow)];
-        end;
-
-        if FDataAssigned and PestMethodAssigned[Ord(lccSpecifiedConcentration)] then
-        begin
-          ALake.PestSpecifiedConcentrationMethods[SpeciesIndex].PestParamMethod
-            := PestMethod[Ord(lccSpecifiedConcentration)];
-        end;
-        if FDataAssigned and PestMethodAssigned[Ord(lccRainfall)] then
-        begin
-          ALake.PestRainfallConcentrationMethods[SpeciesIndex].PestParamMethod
-            := PestMethod[Ord(lccRainfall)];
-        end;
-        if FDataAssigned and PestMethodAssigned[Ord(lccEvaporation)] then
-        begin
-          ALake.PestEvaporationConcentrationMethods[SpeciesIndex].PestParamMethod
-            := PestMethod[Ord(lccEvaporation)];
-        end;
-        if FDataAssigned and PestMethodAssigned[Ord(lccRunoff)] then
-        begin
-          ALake.PestRunoffConcentrationMethods[SpeciesIndex].PestParamMethod
-            := PestMethod[Ord(lccRunoff)];
-        end;
-        if FDataAssigned and PestMethodAssigned[Ord(lccInflow)] then
-        begin
-          ALake.PestInflowConcentrationMethods[SpeciesIndex].PestParamMethod
-            := PestMethod[Ord(lccInflow)];
-        end;
+        ALake.StartingConcentrations[SpeciesIndex].Value := btnedInitialConcentration.Text;
+      end
+      else if not FDataAssigned then
+      begin
+        ALake.StartingConcentrations[SpeciesIndex].Value := '0';
       end;
 
-      if FDataAssigned then
+      if PestModifierAssigned[Ord(lccSpecifiedConcentration)] then
       begin
-        for TimeIndex := 0 to ALake.Values.Count - 1 do
-        begin
-          ALakeItem := ALake.Values[TimeIndex] as TLakeTimeItem;
-          RowIndex := TimeIndex+1+PestRowOffset;
+        ALake.PestSpecifiedConcentrations[SpeciesIndex].Value
+          := PestModifier[Ord(lccSpecifiedConcentration)];
+      end;
+      if PestModifierAssigned[Ord(lccRainfall)] then
+      begin
+        ALake.PestRainfallConcentrations[SpeciesIndex].Value
+          := PestModifier[Ord(lccRainfall)];
+      end;
+      if PestModifierAssigned[Ord(lccEvaporation)] then
+      begin
+        ALake.PestEvaporationConcentrations[SpeciesIndex].Value
+          := PestModifier[Ord(lccEvaporation)];
+      end;
+      if PestModifierAssigned[Ord(lccRunoff)] then
+      begin
+        ALake.PestRunoffConcentrations[SpeciesIndex].Value
+          := PestModifier[Ord(lccRunoff)];
+      end;
+      if PestModifierAssigned[Ord(lccInflow)] then
+      begin
+        ALake.PestInflowConcentrations[SpeciesIndex].Value
+          := PestModifier[Ord(lccInflow)];
+      end;
 
-          if rdgConcentrations.ItemIndex[Ord(lccStatus), RowIndex] >= 0 then
-          begin
-            ALakeItem.GwtStatus[SpeciesIndex].GwtBoundaryStatus :=
-              TGwtBoundaryStatus(rdgConcentrations.ItemIndex[Ord(lccStatus), RowIndex]);
-          end;
-          if rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), RowIndex] <> '' then
-          begin
-            ALakeItem.SpecifiedConcentrations[SpeciesIndex].Value :=
-              rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), RowIndex];
-          end;
-          if rdgConcentrations.Cells[Ord(lccRainfall), RowIndex] <> '' then
-          begin
-            ALakeItem.RainfallConcentrations[SpeciesIndex].Value :=
-              rdgConcentrations.Cells[Ord(lccRainfall), RowIndex];
-          end;
-          if rdgConcentrations.Cells[Ord(lccEvaporation), RowIndex] <> '' then
-          begin
-            ALakeItem.EvapConcentrations[SpeciesIndex].Value :=
-              rdgConcentrations.Cells[Ord(lccEvaporation), RowIndex];
-          end;
-          if rdgConcentrations.Cells[Ord(lccRunoff), RowIndex] <> '' then
-          begin
-            ALakeItem.RunoffConcentrations[SpeciesIndex].Value :=
-              rdgConcentrations.Cells[Ord(lccRunoff), RowIndex];
-          end;
-          if rdgConcentrations.Cells[Ord(lccInflow), RowIndex] <> '' then
-          begin
-            ALakeItem.InflowConcentrations[SpeciesIndex].Value :=
-              rdgConcentrations.Cells[Ord(lccInflow), RowIndex];
-          end;
+      if FDataAssigned and PestMethodAssigned[Ord(lccSpecifiedConcentration)] then
+      begin
+        ALake.PestSpecifiedConcentrationMethods[SpeciesIndex].PestParamMethod
+          := PestMethod[Ord(lccSpecifiedConcentration)];
+      end;
+      if FDataAssigned and PestMethodAssigned[Ord(lccRainfall)] then
+      begin
+        ALake.PestRainfallConcentrationMethods[SpeciesIndex].PestParamMethod
+          := PestMethod[Ord(lccRainfall)];
+      end;
+      if FDataAssigned and PestMethodAssigned[Ord(lccEvaporation)] then
+      begin
+        ALake.PestEvaporationConcentrationMethods[SpeciesIndex].PestParamMethod
+          := PestMethod[Ord(lccEvaporation)];
+      end;
+      if FDataAssigned and PestMethodAssigned[Ord(lccRunoff)] then
+      begin
+        ALake.PestRunoffConcentrationMethods[SpeciesIndex].PestParamMethod
+          := PestMethod[Ord(lccRunoff)];
+      end;
+      if FDataAssigned and PestMethodAssigned[Ord(lccInflow)] then
+      begin
+        ALake.PestInflowConcentrationMethods[SpeciesIndex].PestParamMethod
+          := PestMethod[Ord(lccInflow)];
+      end;
+    end;
+
+    if FDataAssigned then
+    begin
+      for TimeIndex := 0 to ALake.Values.Count - 1 do
+      begin
+        ALakeItem := ALake.Values[TimeIndex] as TLakeTimeItem;
+        RowIndex := TimeIndex+1+PestRowOffset;
+
+        if rdgConcentrations.ItemIndex[Ord(lccStatus), RowIndex] >= 0 then
+        begin
+          ALakeItem.GwtStatus[SpeciesIndex].GwtBoundaryStatus :=
+            TGwtBoundaryStatus(rdgConcentrations.ItemIndex[Ord(lccStatus), RowIndex]);
+        end;
+        if rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), RowIndex] <> '' then
+        begin
+          ALakeItem.SpecifiedConcentrations[SpeciesIndex].Value :=
+            rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), RowIndex];
+        end;
+        if rdgConcentrations.Cells[Ord(lccRainfall), RowIndex] <> '' then
+        begin
+          ALakeItem.RainfallConcentrations[SpeciesIndex].Value :=
+            rdgConcentrations.Cells[Ord(lccRainfall), RowIndex];
+        end;
+        if rdgConcentrations.Cells[Ord(lccEvaporation), RowIndex] <> '' then
+        begin
+          ALakeItem.EvapConcentrations[SpeciesIndex].Value :=
+            rdgConcentrations.Cells[Ord(lccEvaporation), RowIndex];
+        end;
+        if rdgConcentrations.Cells[Ord(lccRunoff), RowIndex] <> '' then
+        begin
+          ALakeItem.RunoffConcentrations[SpeciesIndex].Value :=
+            rdgConcentrations.Cells[Ord(lccRunoff), RowIndex];
+        end;
+        if rdgConcentrations.Cells[Ord(lccInflow), RowIndex] <> '' then
+        begin
+          ALakeItem.InflowConcentrations[SpeciesIndex].Value :=
+            rdgConcentrations.Cells[Ord(lccInflow), RowIndex];
         end;
       end;
     end;
+  end;
 end;
 
 end.
