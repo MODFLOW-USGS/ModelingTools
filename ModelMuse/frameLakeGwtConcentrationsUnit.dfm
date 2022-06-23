@@ -3,7 +3,7 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
     ColCount = 8
     Columns = <
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -24,10 +24,10 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -48,10 +48,10 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -76,10 +76,10 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -100,10 +100,10 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -124,11 +124,11 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
-        AutoAdjustCaptionRowHeights = False
+        AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = True
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -144,15 +144,15 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
         LimitToList = False
         MaxLength = 0
         ParentButtonFont = False
-        WordWrapCaptions = False
+        WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
-        AutoAdjustCaptionRowHeights = False
+        AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = True
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -168,15 +168,15 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
         LimitToList = False
         MaxLength = 0
         ParentButtonFont = False
-        WordWrapCaptions = False
+        WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
-        AutoAdjustCaptionRowHeights = False
+        AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = True
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -192,12 +192,21 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
         LimitToList = False
         MaxLength = 0
         ParentButtonFont = False
-        WordWrapCaptions = False
+        WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end>
+    ColWidths = (
+      64
+      64
+      80
+      64
+      64
+      64
+      64
+      64)
   end
   inherited pnl1: TPanel
     inherited lblInitialConcentration: TLabel

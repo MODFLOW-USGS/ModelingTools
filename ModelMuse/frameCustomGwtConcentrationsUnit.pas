@@ -79,26 +79,31 @@ begin
   btnedInitialConcentration.Glyph := FxButton;
   btnedInitialConcentration.Text := '';
 
-  for RowIndex := 1 to rdgConcentrations.RowCount - 1 do
-  begin
-    for ColIndex := 0 to rdgConcentrations.ColCount - 1 do
+  rdgConcentrations.BeginUpdate;
+  try
+    for RowIndex := 1 to rdgConcentrations.RowCount - 1 do
     begin
-      rdgConcentrations.Cells[ColIndex, RowIndex] := '';
+      for ColIndex := 0 to rdgConcentrations.ColCount - 1 do
+      begin
+        rdgConcentrations.Cells[ColIndex, RowIndex] := '';
+      end;
     end;
-  end;
-  rdgConcentrations.Cells[0,0] := StrStartingTime;
-  rdgConcentrations.Cells[1,0] := StrEndingTime;
-  rdgConcentrations.Cells[2,0] := StrStatus;
+    rdgConcentrations.Cells[0,0] := StrStartingTime;
+    rdgConcentrations.Cells[1,0] := StrEndingTime;
+    rdgConcentrations.Cells[2,0] := StrStatus;
 
-  rdgConcentrations.UseSpecialFormat[0, PestModifierRow] := True;
-  rdgConcentrations.UseSpecialFormat[0, PestMethodRow] := True;
-  rdgConcentrations.SpecialFormat[0, PestModifierRow] := rcf4String;
-  rdgConcentrations.SpecialFormat[0, PestMethodRow] := rcf4String;
-  rdgConcentrations.Cells[0, PestModifierRow] := StrPestModifier;
-  rdgConcentrations.Cells[0, PestMethodRow] := StrModificationMethod;
-  for ColIndex := 3 to rdgConcentrations.ColCount - 1 do
-  begin
-    PestMethod[ColIndex] := ppmMultiply;
+    rdgConcentrations.UseSpecialFormat[0, PestModifierRow] := True;
+    rdgConcentrations.UseSpecialFormat[0, PestMethodRow] := True;
+    rdgConcentrations.SpecialFormat[0, PestModifierRow] := rcf4String;
+    rdgConcentrations.SpecialFormat[0, PestMethodRow] := rcf4String;
+    rdgConcentrations.Cells[0, PestModifierRow] := StrPestModifier;
+    rdgConcentrations.Cells[0, PestMethodRow] := StrModificationMethod;
+    for ColIndex := 3 to rdgConcentrations.ColCount - 1 do
+    begin
+      PestMethod[ColIndex] := ppmMultiply;
+    end;
+  finally
+    rdgConcentrations.EndUpdate;
   end;
 
   FPestParameters.Clear;
@@ -141,7 +146,15 @@ procedure TframeCustomGwtConcentrations.rdgConcentrationsSelectCell(
 var
   Column: TRbwColumn4;
 begin
-  if ACol >= 3 then
+  if (ACol = 2)  and  (ARow <= PestRowOffset) then
+  begin
+    CanSelect := False;
+  end;
+  if rdgConcentrations.Drawing then
+  begin
+    Exit;
+  end;
+  if (ARow >= 1) and (ACol >= 3) then
   begin
     Column := rdgConcentrations.Columns[ACol];
     if (ARow <= PestRowOffset)  then

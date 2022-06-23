@@ -214,12 +214,17 @@ end;
 
 procedure TframeLakeGwtConcentrations.InitializeControls;
 begin
-  inherited;
-  rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), 0] := 'Specified Concentration';
-  rdgConcentrations.Cells[Ord(lccRainfall), 0] := 'Rainfall Concentration';
-  rdgConcentrations.Cells[Ord(lccEvaporation), 0] := 'Evaporation Concentration';
-  rdgConcentrations.Cells[Ord(lccRunoff), 0] := 'Runoff Concentration';
-  rdgConcentrations.Cells[Ord(lccInflow), 0] := 'Inflow Concentration';
+  rdgConcentrations.BeginUpdate;
+  try
+    inherited;
+    rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), 0] := 'Specified Concentration';
+    rdgConcentrations.Cells[Ord(lccRainfall), 0] := 'Rainfall Concentration';
+    rdgConcentrations.Cells[Ord(lccEvaporation), 0] := 'Evaporation Concentration';
+    rdgConcentrations.Cells[Ord(lccRunoff), 0] := 'Runoff Concentration';
+    rdgConcentrations.Cells[Ord(lccInflow), 0] := 'Inflow Concentration';
+  finally
+    rdgConcentrations.EndUpdate;
+  end;
 end;
 
 procedure TframeLakeGwtConcentrations.SetData(List: TScreenObjectEditCollection;

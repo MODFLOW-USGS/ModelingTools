@@ -1186,11 +1186,13 @@ begin
 end;
 
 function TUzfMf6Item.BoundaryFormulaCount: integer;
+const
+  OffSet = 6;
 begin
   result := 7;
   if frmGoPhast.PhastModel.GwtUsed then
   begin
-    result := result + frmGoPhast.PhastModel.MobileComponents.Count * UztGwtConcCount;
+    result := result + frmGoPhast.PhastModel.MobileComponents.Count * UztGwtConcCount + OffSet;
   end;
 end;
 
@@ -1266,6 +1268,7 @@ function TUzfMf6Item.GetBoundaryFormula(Index: integer): string;
 var
   ChemSpeciesCount: Integer;
 begin
+  result := '';
   case Index of
     UzfMf6InfiltrationPosition: result := Infiltration;
     UzfMf6PotentialETPosition: result := PotentialET;
@@ -1280,7 +1283,11 @@ begin
         if frmGoPhast.PhastModel.GwtUsed then
         begin
           Index := Index-UzfBoundaryGwtStart;
-          Assert(Index >= 0);
+          if Index < 0 then
+          begin
+            Exit;
+          end;
+//          Assert(Index >= 0);
           ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
           while SpecifiedConcentrations.Count < ChemSpeciesCount do
           begin
@@ -1497,7 +1504,11 @@ begin
         if frmGoPhast.PhastModel.GwtUsed then
         begin
           Index := Index-UzfBoundaryGwtStart;
-          Assert(Index >= 0);
+          if Index < 0 then
+          begin
+            Exit;
+          end;
+//          Assert(Index >= 0);
           ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
           while SpecifiedConcentrations.Count < ChemSpeciesCount do
           begin

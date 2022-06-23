@@ -40,7 +40,6 @@ type
     BotElevPestName: string;
     TopElevPestName: string;
     ConnLengthPestName: string;
-//    ConnWidthPestName: string;
   end;
 
   TLakeCellList = TObjectList<TLakeCell>;
@@ -763,9 +762,21 @@ begin
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 
+  FPestParamUsed := False;
+  WritingTemplate := False;
+
   frmErrorsAndWarnings.BeginUpdate;
   try
     WriteGwtFileInternal;
+
+    if  Model.PestUsed and FPestParamUsed then
+    begin
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteGwtFileInternal;
+    end;
+
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;
@@ -1394,8 +1405,7 @@ var
   LakeItem: TLakeTimeItem;
   LakeSetting: TLakeSetting;
   SpeciesIndex: Integer;
-  GwtFormulaIndex: Integer;
-//  FormulaIndex: Integer;
+  SpeciesCount: Integer;
   procedure AssignValue(DataSetIdentifier: Integer; const FormatString: string);
   var
     Formula: string;
@@ -1465,6 +1475,7 @@ var
     end;
   end;
 begin
+  SpeciesCount := Model.MobileComponents.Count;
   for LakeIndex := 0 to FLakes.Count - 1 do
   begin
     ALake := FLakes[LakeIndex];
@@ -1479,12 +1490,12 @@ begin
       LakeSetting.Status := LakeItem.Status;
       if Model.GwtUsed then
       begin
-        SetLength(LakeSetting.GwtStatus, Model.MobileComponents.Count);
-        while LakeItem.GwtStatus.Count < Model.MobileComponents.Count do
+        SetLength(LakeSetting.GwtStatus, SpeciesCount);
+        while LakeItem.GwtStatus.Count < SpeciesCount do
         begin
           LakeItem.GwtStatus.Add;
         end;
-        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        for SpeciesIndex := 0 to SpeciesCount - 1 do
         begin
           LakeSetting.GwtStatus[SpeciesIndex]
             := LakeItem.GwtStatus[SpeciesIndex].GwtBoundaryStatus;
@@ -1507,10 +1518,35 @@ begin
 
       if Model.GwtUsed then
       begin
-        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        LakeSetting.SpecifiedConcentrations.SpeciesCount := SpeciesCount;
+        LakeSetting.RainfallConcentrations.SpeciesCount := SpeciesCount;
+        LakeSetting.EvapConcentrations.SpeciesCount := SpeciesCount;
+        LakeSetting.RunoffConcentrations.SpeciesCount := SpeciesCount;
+        LakeSetting.InflowConcentrations.SpeciesCount := SpeciesCount;
+        for SpeciesIndex := 0 to SpeciesCount - 1 do
         begin
           AssignValue(Lak6GwtPestStartPosition + SpeciesIndex,
-            Format(StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+            Format('Specified concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+        end;
+        for SpeciesIndex := 0 to SpeciesCount - 1 do
+        begin
+          AssignValue(Lak6GwtPestStartPosition + SpeciesCount + SpeciesIndex,
+            Format('rainfall concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+        end;
+        for SpeciesIndex := 0 to SpeciesCount - 1 do
+        begin
+          AssignValue(Lak6GwtPestStartPosition + SpeciesCount*2 + SpeciesIndex,
+            Format('evaporation concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+        end;
+        for SpeciesIndex := 0 to SpeciesCount - 1 do
+        begin
+          AssignValue(Lak6GwtPestStartPosition + SpeciesCount*3 + SpeciesIndex,
+            Format('runoff concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+        end;
+        for SpeciesIndex := 0 to SpeciesCount - 1 do
+        begin
+          AssignValue(Lak6GwtPestStartPosition + SpeciesCount*4 + SpeciesIndex,
+            Format('inflow concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
         end;
       end;
     end;
@@ -1847,30 +1883,13 @@ var
   OutletSetting: TOutletSetting;
   ATime: Double;
   StressPeriodIndex: Integer;
-  OutletNumber: Integer;
   FirstTime: Double;
   LastTime: Double;
-  MoverWriter: TModflowMvrWriter;
-  MvrReceiver: TMvrReceiver;
-  MvrRegSourceKey: TMvrRegisterKey;
-  LocalScreenObject: TScreenObject;
-  MvrUsed: Boolean;
   UsedOutlets: TList<Integer>;
-  ReceiverItem: TReceiverItem;
-  SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
   GwtStatus: TGwtBoundaryStatus;
+  SpeciesCount: Integer;
 begin
-//  if MvrWriter <> nil then
-//  begin
-//    MoverWriter := MvrWriter as TModflowMvrWriter;
-//  end
-//  else
-//  begin
-//    MoverWriter := nil;
-//  end;
-//  MvrReceiver.ReceiverKey.ReceiverPackage := rpcLak;
-//  MvrReceiver.ReceiverValues.StreamCells := nil;
+  SpeciesCount := Model.MobileComponents.Count;
 
   FirstTime := Model.ModflowFullStressPeriods.First.StartTime;
   LastTime := Model.ModflowFullStressPeriods.Last.EndTime;
@@ -1926,53 +1945,20 @@ begin
     end;
     StressPeriodStartTimes.Sorted := True;
 
-//    for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-//    begin
-//      MvrReceiver.ReceiverKey.StressPeriod := TimeIndex;
-//      for LakeIndex := 0 to FLakes.Count - 1 do
-//      begin
-//        ALake := FLakes[LakeIndex];
-//        Assert(ALake.FScreenObject <> nil);
-//        MvrReceiver.ReceiverValues.Index := LakeIndex+1;
-//        MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject;
-//          if (MoverWriter <> nil) and not WritingTemplate then
-//          begin
-//            MoverWriter.AddMvrReceiver(MvrReceiver);
-//          end;
-//      end;
-//    end;
-
     for TimeIndex := 0 to AllTimes.Count - 1 do
     begin
       ATime := AllTimes[TimeIndex];
       StressPeriodIndex := StressPeriodStartTimes.IndexOf(ATime);
       Assert(StressPeriodIndex >= 0);
-//      MvrRegSourceKey.StressPeriod := StressPeriodIndex;
 
       WriteString('BEGIN PERIOD ');
       WriteInteger(StressPeriodIndex + 1);
       NewLine;
 
-      OutletNumber := 0;
       for LakeIndex := 0 to FLakes.Count - 1 do
       begin
         ALake := FLakes[LakeIndex];
         Assert(ALake.FScreenObject <> nil);
-//        MvrRegSourceKey.SourceKey.ScreenObject := ALake.FScreenObject;
-        LocalScreenObject := ALake.FScreenObject as TScreenObject;
-//        MvrUsed := (MoverWriter <> nil)
-//          and (LocalScreenObject.ModflowMvr <> nil)
-//          and LocalScreenObject.ModflowMvr.Used
-//          and (LocalScreenObject.ModflowMvr.SourcePackageChoice = spcLak);
-//        if MvrUsed then
-//        begin
-//          UsedOutlets.Clear;
-//          for OutletIndex := 0 to LocalScreenObject.ModflowMvr.Receivers.Count - 1 do
-//          begin
-//            ReceiverItem := LocalScreenObject.ModflowMvr.Receivers[OutletIndex];
-//            UsedOutlets.Add(ReceiverItem.LakeOutlet);
-//          end;
-//        end;
 
         if ALake.FStartingTimeIndex < ALake.FLakeSettings.Count then
         begin
@@ -1991,7 +1977,6 @@ begin
           end;
           if ALakeSetting.StartTime = ATime then
           begin
-            WriteString('  ');
             WriteInteger(LakeIndex+1);
             GwtStatus := gbsActive;
             case ALakeSetting.Status of
@@ -2032,9 +2017,8 @@ begin
               WriteString(' CONCENTRATION');
               Assert(False);
 
-//              FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-//                + GwtConcCount*GwtSpecifiedConcentrationPosition + FSpeciesIndex;
-//              WriteValueOrFormula(ACell, FormulaIndex);
+              WriteLakeValueOrFormula(ALakeSetting,
+                Lak6GwtPestStartPosition + FSpeciesIndex);
               NewLine;
             end;
 
@@ -2042,141 +2026,32 @@ begin
             begin
               WriteInteger(LakeIndex+1);
               WriteString(' RAINFALL');
-//              FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-//                + GwtConcCount*GwtRainfallConcentrationsPosition + FSpeciesIndex;
-//              WriteValueOrFormula(ACell, FormulaIndex);
+              WriteLakeValueOrFormula(ALakeSetting,
+                Lak6GwtPestStartPosition + SpeciesCount + FSpeciesIndex);
               NewLine;
 
               WriteInteger(LakeIndex+1);
               WriteString(' EVAPORATION');
-//              FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-//                + GwtConcCount*GwtEvapConcentrationsPosition + FSpeciesIndex;
-//              WriteValueOrFormula(ACell, FormulaIndex);
+              WriteLakeValueOrFormula(ALakeSetting,
+                Lak6GwtPestStartPosition + SpeciesCount*2 + FSpeciesIndex);
               NewLine;
 
               WriteInteger(LakeIndex+1);
               WriteString(' RUNOFF');
-//              FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-//                + GwtConcCount*GwtRunoffConcentrationsPosition + FSpeciesIndex;
-//              WriteValueOrFormula(ACell, FormulaIndex);
+              WriteLakeValueOrFormula(ALakeSetting,
+                Lak6GwtPestStartPosition + SpeciesCount*3 + FSpeciesIndex);
               NewLine;
 
               WriteInteger(LakeIndex+1);
               WriteString(' EXT-INFLOW');
-//              FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
-//                + GwtConcCount*GwtInflowConcentrationsPosition + FSpeciesIndex;
-//              WriteValueOrFormula(ACell, FormulaIndex);
+              WriteLakeValueOrFormula(ALakeSetting,
+                Lak6GwtPestStartPosition + SpeciesCount*4 + FSpeciesIndex);
+              NewLine;
               NewLine;
             end;
 
           end;
         end;
-
-//        for OutletIndex := 0 to ALake.FLakeOutlets.Count - 1 do
-//        begin
-//          AnOutlet := ALake.FLakeOutlets[OutletIndex];
-//          Inc(OutletNumber);
-//
-//          MvrRegSourceKey.Index := OutletNumber;
-//          MvrRegSourceKey.SourceKey.MvrIndex := OutletIndex;
-//
-//          if AnOutlet.FStartingTimeIndex < AnOutlet.Count then
-//          begin
-//            OutletSetting := AnOutlet[AnOutlet.FStartingTimeIndex];
-//            while OutletSetting.StartTime < ATime do
-//            begin
-//              Inc(AnOutlet.FStartingTimeIndex);
-//              if AnOutlet.FStartingTimeIndex < AnOutlet.Count then
-//              begin
-//                OutletSetting := AnOutlet[AnOutlet.FStartingTimeIndex];
-//              end
-//              else
-//              begin
-//                break;
-//              end;
-//            end;
-//            if OutletSetting.StartTime = ATime then
-//            begin
-//              WriteString('  ');
-//              WriteInteger(OutletNumber);
-//              WriteString('  RATE');
-//              if OutletSetting.RateTimeSeriesName = '' then
-//              begin
-//                WriteFormulaOrValueBasedOnAPestName(OutletSetting.RatePestParam,
-//                  OutletSetting.Rate, -1, -1, -1);
-//              end
-//              else
-//              begin
-//                WriteString(' ' + OutletSetting.RateTimeSeriesName);
-//              end;
-//              NewLine;
-//
-//              WriteString('  ');
-//              WriteInteger(OutletNumber);
-//              WriteString('  INVERT');
-//              if OutletSetting.InvertTimeSeriesName = '' then
-//              begin
-//                WriteFormulaOrValueBasedOnAPestName(OutletSetting.InvertPestParam,
-//                  OutletSetting.Invert, -1, -1, -1);
-//              end
-//              else
-//              begin
-//                WriteString(' ' + OutletSetting.InvertTimeSeriesName);
-//              end;
-//              NewLine;
-//
-//              WriteString('  ');
-//              WriteInteger(OutletNumber);
-//              WriteString('  WIDTH');
-//              if OutletSetting.WidthTimeSeriesName = '' then
-//              begin
-//                WriteFormulaOrValueBasedOnAPestName(OutletSetting.WidthPestParam,
-//                  OutletSetting.Width, -1, -1, -1);
-//              end
-//              else
-//              begin
-//                WriteString(' ' + OutletSetting.WidthTimeSeriesName);
-//              end;
-//              NewLine;
-//
-//              WriteString('  ');
-//              WriteInteger(OutletNumber);
-//              WriteString('  SLOPE');
-//              if OutletSetting.SlopeTimeSeriesName = '' then
-//              begin
-//                WriteFormulaOrValueBasedOnAPestName(OutletSetting.SlopePestParam,
-//                  OutletSetting.Slope, -1, -1, -1);
-//              end
-//              else
-//              begin
-//                WriteString(' ' + OutletSetting.SlopeTimeSeriesName);
-//              end;
-////              WriteFloat(OutletSetting.Slope);
-//              NewLine;
-//
-//              WriteString('  ');
-//              WriteInteger(OutletNumber);
-//              WriteString('  ROUGH');
-//              if OutletSetting.RoughTimeSeriesName = '' then
-//              begin
-//                WriteFormulaOrValueBasedOnAPestName(OutletSetting.RoughPestParam,
-//                  OutletSetting.Rough, -1, -1, -1);
-//              end
-//              else
-//              begin
-//                WriteString(' ' + OutletSetting.RoughTimeSeriesName);
-//              end;
-////              WriteFloat(OutletSetting.Rough);
-//              NewLine;
-//
-//              if MvrUsed and (UsedOutlets.IndexOf(OutletIndex+1) >= 0 ) and not WritingTemplate then
-//              begin
-//                TModflowMvrWriter(MvrWriter).AddMvrSource(MvrRegSourceKey);
-//              end;
-//
-//            end;
-//          end;
-//        end;
       end;
 
       WriteString('END PERIOD ');
@@ -2209,7 +2084,6 @@ var
   Obs: TLakObservation;
   MfObs: TModflow6Obs;
   PestParameterName: string;
-  SpeciesIndex: Integer;
   Item: TStringConcValueItem;
 begin
   if Model.DisvUsed then

@@ -26,7 +26,7 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
     ColorRangeSelection = False
     Columns = <
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -47,10 +47,10 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -71,10 +71,10 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -99,10 +99,10 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -123,10 +123,10 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -147,9 +147,15 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+    ColWidths = (
+      64
+      64
+      80
+      64
+      64)
   end
   object pnl1: TPanel
     Left = 0
