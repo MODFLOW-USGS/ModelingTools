@@ -185,8 +185,9 @@ resourcestring
   StrNoHeadDrawdownO = 'No head, drawdown, or groundwater flow observations ' +
   'defined';
   StrBecauseNoHeadDra = 'Because no head, drawdown, or groundwater flow obse' +
-  'rvations have been defined, the OBS6 file for the name file will not be c' +
-  'reated.';
+  'rvations have been defined, the OBS6 file for the flow model file will ' +
+  'not be created. However, observation files for some individual packages ' +
+  'might be created.';
   StrEvaluatingHeadDra = 'Evaluating head, drawdown, and groundwater flow ob' +
   'servations.';
   StrWritingOBS6InputF = 'Writing OBS6 input for heads, drawdown, and ground' +
@@ -600,7 +601,6 @@ begin
           FHorizontalCells.Clear;
           FoundFirst := False;
           ErrorAdded := False;
-//          FirstCell := True;
           for CellIndex := CellListStart to CellListEnd do
           begin
             ACell := CellList[CellIndex];
@@ -877,10 +877,6 @@ begin
                         begin
                           MultiLayerFormula.Append(' + ');
                         end;
-//                        if ObservationIndex = Obs.CalibrationObservations.Count - 1 then
-//                        begin
-//                          FirstCell := False;
-//                        end;
                         MultiLayerFormula.Append(MLObsName);
                         MultiLayerFormula.Append('*');
                         MultiLayerFormula.Append(TransmissivityFactors[CellIndex]);
@@ -956,11 +952,6 @@ begin
           for MultiIndex := 0 to MultiLayerFormulaList.Count - 1 do
           begin
             MultiLayerFormula := MultiLayerFormulaList[MultiIndex];
-//            Splitter.DelimitedText := MultiLayerFormula.ToString;
-//            for SplitterIndex := 0 to Splitter.Count - 1 do
-//            begin
-//              CalculatedObsLines.Add(Splitter[SplitterIndex]);
-//            end;
             CalculatedObsLines.Add(MultiLayerFormula.ToString);
             CalculatedObsLines.Add('')
           end;

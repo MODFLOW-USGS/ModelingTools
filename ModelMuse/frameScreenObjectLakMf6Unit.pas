@@ -476,7 +476,7 @@ begin
         end
         else
         begin
-          APage := jplGwt.Pages[SpeciesIndex];
+//          APage := jplGwt.Pages[SpeciesIndex];
           AGwtFrame := FGwtFrameList[SpeciesIndex];
         end;
         ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;

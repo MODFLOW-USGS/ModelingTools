@@ -614,6 +614,7 @@ type
       RadiusPosition = 10;
       BottomPosition = 11;
       InitialHeadPosition = 12;
+    function GetStartingConcentrations: TStringConcCollection;
     var
     FPestFlowingWellElevationMethod: TPestParamMethod;
     FPestPumpElevationMethod: TPestParamMethod;
@@ -872,7 +873,7 @@ type
       write SetPestFlowingWellReductionLengthMethod;
     // GWT
     property StartingConcentrations: TStringConcCollection
-      read FStartingConcentrations
+      read GetStartingConcentrations
       write SetStartingConcentrations
       {$IFNDEF GWT}
       stored False
@@ -2679,6 +2680,19 @@ begin
 
   end;
   result := FRadiusObserver;
+end;
+
+function TMawBoundary.GetStartingConcentrations: TStringConcCollection;
+var
+  LocalModel: TCustomModel;
+begin
+  LocalModel := FStartingConcentrations.Model as TCustomModel;
+  if (LocalModel <> nil)
+    and (FStartingConcentrations.Count < LocalModel.MobileComponents.Count) then
+  begin
+    FStartingConcentrations.Count := LocalModel.MobileComponents.Count;
+  end;
+  result := FStartingConcentrations;
 end;
 
 function TMawBoundary.GetPestSpecifiedConcentrationObserver(

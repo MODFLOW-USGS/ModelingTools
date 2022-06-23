@@ -36,7 +36,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspPriorInfoObsGroups
+    ActivePage = jvspObservationGroups
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -1198,7 +1198,7 @@ inherited frmPEST: TfrmPEST
               ButtonUsed = False
               ButtonWidth = 20
               CheckMax = False
-              CheckMin = False
+              CheckMin = True
               ComboUsed = False
               Format = rcf4Real
               LimitToList = False
@@ -1234,7 +1234,6 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitLeft = 1
           ExplicitWidth = 566
           ExplicitHeight = 402
         end
@@ -2168,7 +2167,6 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitLeft = 1
           ExplicitWidth = 566
           ExplicitHeight = 345
         end

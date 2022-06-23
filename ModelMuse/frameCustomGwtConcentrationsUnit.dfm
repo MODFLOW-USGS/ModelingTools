@@ -23,6 +23,7 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
     AutoIncreaseRowCount = False
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBtnFace
+    OnButtonClick = rdgConcentrationsButtonClick
     ColorRangeSelection = False
     Columns = <
       item
@@ -180,7 +181,12 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
       NumGlyphs = 1
       TabOrder = 0
       Text = '0'
+      OnButtonClick = btnedInitialConcentrationButtonClick
       OnChange = btnedInitialConcentrationChange
     end
+  end
+  object rparserThreeDFormulaElements: TRbwParser
+    Left = 432
+    Top = 160
   end
 end

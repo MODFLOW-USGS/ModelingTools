@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, RbwDataGrid4,
-  GoPhastTypes, Vcl.ExtCtrls, Vcl.StdCtrls, SsButtonEd;
+  GoPhastTypes, Vcl.ExtCtrls, Vcl.StdCtrls, SsButtonEd, RbwParser;
 
 type
   TframeCustomGwtConcentrations = class(TFrame)
@@ -13,11 +13,15 @@ type
     pnl1: TPanel;
     btnedInitialConcentration: TssButtonEdit;
     lblInitialConcentration: TLabel;
+    rparserThreeDFormulaElements: TRbwParser;
     procedure btnedInitialConcentrationChange(Sender: TObject);
     procedure rdgConcentrationsSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
     procedure rdgConcentrationsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
+    procedure rdgConcentrationsButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure btnedInitialConcentrationButtonClick(Sender: TObject);
   private
     function GetPestMethod(ACol: Integer): TPestParamMethod;
     function GetPestMethodAssigned(ACol: Integer): Boolean;
@@ -27,6 +31,11 @@ type
     procedure SetPestMethodAssigned(ACol: Integer; const Value: Boolean);
     procedure SetPestModifier(ACol: Integer; const Value: string);
     procedure SetPestModifierAssigned(ACol: Integer; const Value: Boolean);
+    procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
+      const ACol, ARow: integer; Formula: string;
+      const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
+    procedure CreateInitialHeadFormula(Formula: string;
+      const Orientation: TDataSetOrientation);
     { Private declarations }
   protected
     FDataAssigned: Boolean;
@@ -35,6 +44,7 @@ type
     function GetPestModifiers: TStringList; virtual;
     procedure InitializeControls;
     property PestModifiers: TStringList read GetPestModifiers;
+    function EvaluateFormulasAtLocation: Boolean; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -53,14 +63,20 @@ implementation
 
 uses
   frmCustomGoPhastUnit, frmGoPhastUnit, PhastModelUnit, ModflowParameterUnit,
-  DataSetUnit, OrderedCollectionUnit;
-
-
+  DataSetUnit, OrderedCollectionUnit, frmFormulaUnit,
+  Modflow6TimeSeriesCollectionsUnit, Modflow6TimeSeriesUnit,
+  frmConvertChoiceUnit, System.UITypes;
 
 {$R *.dfm}
 
 var
   FPestMethods: TStringList;
+
+resourcestring
+  StrErrorIn0sRow = 'Error in %0:s Row: %1:d Column: %2:d. %3:s';
+  StrErrorInFormulaS = 'Error in formula: %s';
+  StrErrorInInitialCon = 'Error in initial concentration in the Lake transpo' +
+  'rt package. %s';
 
 { TframeCustomGwtConcentrations }
 
@@ -74,6 +90,8 @@ var
   ModflowSteadyParameters: TModflowSteadyParameters;
   ParameterIndex: Integer;
   AParameter: TModflowSteadyParameter;
+  CompilerList: TList;
+  Index: Integer;
 begin
   FxButton.Canvas.Font := Font;
   btnedInitialConcentration.Glyph := FxButton;
@@ -137,8 +155,122 @@ begin
   FPestBlockParametersAndDataSets.Insert(0, strNone);
   FPestParameters.Insert(0, strNone);
 
+  rparserThreeDFormulaElements.ClearExpressions;
+  rparserThreeDFormulaElements.ClearVariables;
+  CompilerList := TList.Create;
+  try
+    CompilerList.Add(rparserThreeDFormulaElements);
+    frmGoPhast.PhastModel.RefreshGlobalVariables(CompilerList);
+  finally
+    CompilerList.Free;
+  end;
+
+  for Index := 0 to DataArrayManager.DataSetCount - 1 do
+  begin
+    ADataArray := DataArrayManager.DataSets[Index];
+    if not ADataArray.Visible then
+    begin
+      Continue;
+    end;
+    if ADataArray is TCustomSparseDataSet then
+    begin
+      Continue;
+    end;
+    if (eaBlocks = ADataArray.EvaluatedAt) then
+    begin
+      case ADataArray.DataType of
+        rdtDouble:
+          begin
+            rparserThreeDFormulaElements.CreateVariable(ADataArray.Name,
+              ADataArray.FullClassification, 0.0, ADataArray.DisplayName);
+          end;
+        rdtInteger:
+          begin
+            rparserThreeDFormulaElements.CreateVariable(ADataArray.Name,
+              ADataArray.FullClassification, 0, ADataArray.DisplayName);
+          end;
+        rdtBoolean:
+          begin
+            rparserThreeDFormulaElements.CreateVariable(ADataArray.Name,
+              ADataArray.FullClassification, False, ADataArray.DisplayName);
+          end;
+        rdtString:
+          begin
+            rparserThreeDFormulaElements.CreateVariable(ADataArray.Name,
+              ADataArray.FullClassification, '', ADataArray.DisplayName);
+          end;
+        else
+          Assert(False);
+      end;
+    end;
+  end;
 
   FDataAssigned := False;
+end;
+
+procedure TframeCustomGwtConcentrations.rdgConcentrationsButtonClick(
+  Sender: TObject; ACol, ARow: Integer);
+var
+  NewValue: string;
+  Index: Integer;
+  Variable: TCustomValue;
+begin
+  NewValue := rdgConcentrations.Cells[ACol, ARow];
+  if (NewValue = '') then
+  begin
+    NewValue := '0';
+  end;
+
+  with frmFormula do
+  begin
+    try
+      Initialize;
+      // For lakes,
+      // GIS functions are not included and
+      // Data sets are not included
+      // because the variables will be evaluated for screen objects and
+      // not at specific locations.
+      if EvaluateFormulasAtLocation then
+      begin
+        IncludeGIS_Functions(eaBlocks);
+        RemoveGetVCont;
+        RemoveHufFunctions;
+        for Index := 0 to rparserThreeDFormulaElements.VariableCount - 1 do
+        begin
+          Variable := rparserThreeDFormulaElements.Variables[Index];
+          rbFormulaParser.RegisterVariable(Variable);
+        end;
+      end;
+
+      PopupParent := GetParentForm(self);
+
+      // Show the functions and global variables.
+      IncludeTimeSeries := True;
+      UpdateTreeList;
+
+      // put the formula in the TfrmFormula.
+      Formula := NewValue;
+      // The user edits the formula.
+      ShowModal;
+      if ResultSet then
+      begin
+        try
+          CreateBoundaryFormula(rdgConcentrations, ACol, ARow, Formula, dso3D,
+            eaBlocks);
+        except on E: Exception do
+          begin
+            Beep;
+            MessageDlg(Format(StrErrorIn0sRow,
+              ['Lake transport package',
+              ARow + 1, ACol+1, E.Message]), mtError,[mbOK], 0);
+            Exit;
+          end;
+        end;
+      end;
+    finally
+      Initialize;
+    end;
+  end
 end;
 
 procedure TframeCustomGwtConcentrations.rdgConcentrationsSelectCell(
@@ -184,6 +316,69 @@ begin
   FDataAssigned := True;
 end;
 
+procedure TframeCustomGwtConcentrations.btnedInitialConcentrationButtonClick(
+  Sender: TObject);
+var
+  NewValue: string;
+  Index: Integer;
+  Variable: TCustomValue;
+begin
+  NewValue := btnedInitialConcentration.Text;
+  if (NewValue = '') then
+  begin
+    NewValue := '0';
+  end;
+
+  with frmFormula do
+  begin
+    try
+      Initialize;
+      // For lakes,
+      // GIS functions are not included and
+      // Data sets are not included
+      // because the variables will be evaluated for screen objects and
+      // not at specific locations.
+      if EvaluateFormulasAtLocation then
+      begin
+        IncludeGIS_Functions(eaBlocks);
+        RemoveGetVCont;
+        RemoveHufFunctions;
+        for Index := 0 to rparserThreeDFormulaElements.VariableCount - 1 do
+        begin
+          Variable := rparserThreeDFormulaElements.Variables[Index];
+          rbFormulaParser.RegisterVariable(Variable);
+        end;
+      end;
+
+      PopupParent := GetParentForm(self);
+
+      // Show the functions and global variables.
+      IncludeTimeSeries := True;
+      UpdateTreeList;
+
+      // put the formula in the TfrmFormula.
+      Formula := NewValue;
+      // The user edits the formula.
+      ShowModal;
+      if ResultSet then
+      begin
+        try
+          CreateInitialHeadFormula(Formula, dso3D);
+        except on E: Exception do
+          begin
+            Beep;
+            MessageDlg(Format(StrErrorInInitialCon,
+              [E.Message]), mtError,[mbOK], 0);
+            Exit;
+          end;
+        end;
+      end;
+    finally
+      Initialize;
+    end;
+  end
+end;
+
 procedure TframeCustomGwtConcentrations.btnedInitialConcentrationChange(
   Sender: TObject);
 begin
@@ -197,11 +392,216 @@ begin
   FPestParameters := TStringList.Create;
 end;
 
+procedure TframeCustomGwtConcentrations.CreateInitialHeadFormula(
+  Formula: string; const Orientation: TDataSetOrientation);
+var
+  TempCompiler: TRbwParser;
+  CompiledFormula: TExpression;
+  ResultType: TRbwDataType;
+  PestParamAllowed: Boolean;
+  TimeSeriesAllowed: Boolean;
+  Mf6TimesSeries: TTimesSeriesCollections;
+  TimeSeries: TMf6TimeSeries;
+begin
+  PestParamAllowed := True;
+  if Formula = '' then
+  begin
+    Formula := '0';
+  end;
+
+  TimeSeries := nil;
+  TimeSeriesAllowed := False;
+  if TimeSeriesAllowed then
+  begin
+    Mf6TimesSeries := frmGoPhast.PhastModel.Mf6TimesSeries;
+    TimeSeries := Mf6TimesSeries.GetTimeSeriesByName(Formula);
+    if TimeSeries <> nil then
+    begin
+      Formula := '1';
+    end;
+  end;
+
+  // CreateBoundaryFormula creates an Expression for a boundary condition
+  // based on the text in DataGrid at ACol, ARow. Orientation, and EvaluatedAt
+  // are used to chose the TRbwParser.
+  TempCompiler := rparserThreeDFormulaElements;
+  try
+    TempCompiler.Compile(Formula);
+
+  except on E: ERbwParserError do
+    begin
+      Beep;
+      raise ERbwParserError.Create(Format(StrErrorInFormulaS,
+        [E.Message]));
+      Exit;
+    end
+  end;
+  CompiledFormula := TempCompiler.CurrentExpression;
+
+  ResultType := rdtDouble;
+
+  if PestParamAllowed then
+  begin
+    PestParamAllowed :=
+      frmGoPhast.PhastModel.GetPestParameterByName(
+      CompiledFormula.DecompileDisplay) <> nil;
+  end;
+
+  if (ResultType = CompiledFormula.ResultType) or
+    ((ResultType = rdtDouble) and (CompiledFormula.ResultType = rdtInteger))
+      then
+  begin
+    if TimeSeries <> nil then
+    begin
+      btnedInitialConcentration.Text := string(TimeSeries.SeriesName);
+    end
+    else
+    begin
+      btnedInitialConcentration.Text := CompiledFormula.DecompileDisplay;
+    end;
+  end
+  else if PestParamAllowed then
+  begin
+    if TimeSeries <> nil then
+    begin
+      btnedInitialConcentration.Text := string(TimeSeries.SeriesName);
+    end
+    else
+    begin
+      btnedInitialConcentration.Text := CompiledFormula.DecompileDisplay;
+    end;
+  end
+  else
+  begin
+    if TimeSeries <> nil then
+    begin
+      btnedInitialConcentration.Text := string(TimeSeries.SeriesName);
+    end
+    else
+    begin
+      Formula := AdjustFormula(Formula, CompiledFormula.ResultType, ResultType);
+      TempCompiler.Compile(Formula);
+      CompiledFormula := TempCompiler.CurrentExpression;
+      btnedInitialConcentration.Text := CompiledFormula.DecompileDisplay;
+    end;
+  end;
+  if Assigned(btnedInitialConcentration.OnChange) then
+  begin
+    btnedInitialConcentration.OnChange(btnedInitialConcentration);
+  end;
+end;
+
+
+procedure TframeCustomGwtConcentrations.CreateBoundaryFormula(
+  const DataGrid: TRbwDataGrid4; const ACol, ARow: integer; Formula: string;
+  const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
+var
+  TempCompiler: TRbwParser;
+  CompiledFormula: TExpression;
+  ResultType: TRbwDataType;
+  PestParamAllowed: Boolean;
+  TimeSeriesAllowed: Boolean;
+  Mf6TimesSeries: TTimesSeriesCollections;
+  TimeSeries: TMf6TimeSeries;
+begin
+  PestParamAllowed := True;
+  if Formula = '' then
+  begin
+    Formula := '0';
+  end;
+
+  TimeSeries := nil;
+  TimeSeriesAllowed := True;
+  if TimeSeriesAllowed then
+  begin
+    Mf6TimesSeries := frmGoPhast.PhastModel.Mf6TimesSeries;
+    TimeSeries := Mf6TimesSeries.GetTimeSeriesByName(Formula);
+    if TimeSeries <> nil then
+    begin
+      Formula := '1';
+    end;
+  end;
+
+  // CreateBoundaryFormula creates an Expression for a boundary condition
+  // based on the text in DataGrid at ACol, ARow. Orientation, and EvaluatedAt
+  // are used to chose the TRbwParser.
+  TempCompiler := rparserThreeDFormulaElements;
+  try
+    TempCompiler.Compile(Formula);
+
+  except on E: ERbwParserError do
+    begin
+      Beep;
+      raise ERbwParserError.Create(Format(StrErrorInFormulaS,
+        [E.Message]));
+      Exit;
+    end
+  end;
+  CompiledFormula := TempCompiler.CurrentExpression;
+
+  ResultType := rdtDouble;
+
+  if PestParamAllowed then
+  begin
+    PestParamAllowed :=
+      frmGoPhast.PhastModel.GetPestParameterByName(
+      CompiledFormula.DecompileDisplay) <> nil;
+  end;
+
+  if (ResultType = CompiledFormula.ResultType) or
+    ((ResultType = rdtDouble) and (CompiledFormula.ResultType = rdtInteger))
+      then
+  begin
+    if TimeSeries <> nil then
+    begin
+      DataGrid.Cells[ACol, ARow] := string(TimeSeries.SeriesName);
+    end
+    else
+    begin
+      DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+    end;
+  end
+  else if PestParamAllowed then
+  begin
+    if TimeSeries <> nil then
+    begin
+      DataGrid.Cells[ACol, ARow] := string(TimeSeries.SeriesName);
+    end
+    else
+    begin
+      DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+    end;
+  end
+  else
+  begin
+    if TimeSeries <> nil then
+    begin
+      DataGrid.Cells[ACol, ARow] := string(TimeSeries.SeriesName);
+    end
+    else
+    begin
+      Formula := AdjustFormula(Formula, CompiledFormula.ResultType, ResultType);
+      TempCompiler.Compile(Formula);
+      CompiledFormula := TempCompiler.CurrentExpression;
+      DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+    end;
+  end;
+  if Assigned(DataGrid.OnSetEditText) then
+  begin
+    DataGrid.OnSetEditText(DataGrid, ACol, ARow, DataGrid.Cells[ACol, ARow]);
+  end;
+end;
+
 destructor TframeCustomGwtConcentrations.Destroy;
 begin
   FPestBlockParametersAndDataSets.Free;
   FPestParameters.Free;
   inherited;
+end;
+
+function TframeCustomGwtConcentrations.EvaluateFormulasAtLocation: Boolean;
+begin
+  result := True;
 end;
 
 function TframeCustomGwtConcentrations.GetPestMethod(

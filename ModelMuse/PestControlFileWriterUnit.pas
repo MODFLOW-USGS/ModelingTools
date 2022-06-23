@@ -121,6 +121,10 @@ resourcestring
   StrInvalidPESTDelimit = 'Invalid PEST delimiter';
   StrUseOfAsADeli = 'Use of "@" as a delimiter will cause errors with SUTRA ' +
   'models. Fix this is the PEST Properties dialog box.';
+  StrObservationGroupTa = 'Observation group targets must be greater than ze' +
+  'ro.';
+  StrTheGroupTargetFor = 'The group target for the %s observation group is l' +
+  'ess than or equal to zero.';
 
 { TPestControlFileWriter }
 
@@ -1354,6 +1358,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrPredictionObservati);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTooManyParameters);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidPESTDelimit);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupTa);
 
   if not Model.PestUsed then
   begin
@@ -1589,6 +1594,11 @@ var
         if ObsGroup.UseGroupTarget then
         begin
           WriteFloat(ObsGroup.GroupTarget);
+          if ObsGroup.GroupTarget <= 0 then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrObservationGroupTa,
+              Format(StrTheGroupTargetFor, [ObsGroup.ObsGroupName]))
+          end;
         end;
       end;
       if ObsGroup.AbsoluteCorrelationFileName <> '' then

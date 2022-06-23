@@ -743,7 +743,8 @@ uses
   frmNewVideoUnit in 'frmNewVideoUnit.pas' {frmNewVideos},
   frameSutraRegionalPropertyUnit in 'frameSutraRegionalPropertyUnit.pas' {frameSutraRegionalProperty: TFrame},
   frameCustomGwtConcentrationsUnit in 'frameCustomGwtConcentrationsUnit.pas' {frameCustomGwtConcentrations: TFrame},
-  frameLakeGwtConcentrationsUnit in 'frameLakeGwtConcentrationsUnit.pas' {frameLakeGwtConcentrations: TFrame};
+  frameLakeGwtConcentrationsUnit in 'frameLakeGwtConcentrationsUnit.pas' {frameLakeGwtConcentrations: TFrame},
+  frameMawGwtConcentrationsUnit in 'frameMawGwtConcentrationsUnit.pas' {frameMawGwtConcentrations: TFrame};
 
 {$R *.res}
 

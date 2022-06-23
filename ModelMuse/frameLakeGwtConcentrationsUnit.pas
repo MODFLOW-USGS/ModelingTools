@@ -6,12 +6,11 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameCustomGwtConcentrationsUnit,
   Vcl.Grids, RbwDataGrid4, UndoItemsScreenObjects, ScreenObjectUnit,
-  Vcl.ExtCtrls, Vcl.StdCtrls, SsButtonEd, System.Generics.Collections;
+  Vcl.ExtCtrls, Vcl.StdCtrls, SsButtonEd, System.Generics.Collections, RbwParser;
 
 type
   TLakeConcColumns = (lccStart, lccEnd, lccStatus, lccSpecifiedConcentration,
     lccRainfall, lccEvaporation, lccRunoff, lccInflow);
-
 
   TframeLakeGwtConcentrations = class(TframeCustomGwtConcentrations)
   private
@@ -20,6 +19,7 @@ type
   protected
     procedure InitializeControls;
     function GetPestModifiers: TStringList; override;
+    function EvaluateFormulasAtLocation: Boolean; override;
   public
     procedure GetData(const List: TScreenObjectEditCollection;
       SpeciesIndex: Integer);
@@ -38,17 +38,28 @@ implementation
 uses
   ModflowLakMf6Unit, GoPhastTypes;
 
+resourcestring
+  StrSpecifiedConcentrat = 'Specified Concentration';
+  StrRainfallConcentrati = 'Rainfall Concentration';
+  StrEvaporationConcentr = 'Evaporation Concentration';
+  StrRunoffConcentration = 'Runoff Concentration';
+  StrInflowConcentration = 'Inflow Concentration';
+
 
 
 {$R *.dfm}
 
 { TframeLakeGwtConcentrations }
 
+function TframeLakeGwtConcentrations.EvaluateFormulasAtLocation: Boolean;
+begin
+  result := False;
+end;
+
 procedure TframeLakeGwtConcentrations.GetData(
   const List: TScreenObjectEditCollection; SpeciesIndex: Integer);
 var
   FoundFirst: Boolean;
-  FirstLake: TLakeMf6;
   LakeIndex: Integer;
   ALake: TLakeMf6;
   TimeIndex: Integer;
@@ -57,17 +68,15 @@ begin
   InitializeControls;
   FDataAssigned := False;
   FoundFirst := False;
-  FirstLake := nil;
   for LakeIndex := 0 to List.Count - 1 do
   begin
     FScreenObject := List[LakeIndex].ScreenObject;
     ALake := FScreenObject.ModflowLak6;
-    if ALake <> nil then
+    if (ALake <> nil) and ALake.Used then
     begin
       if not FoundFirst then
       begin
-        FirstLake := ALake;
-
+        FoundFirst := True;
         btnedInitialConcentration.Text := ALake.StartingConcentrations[SpeciesIndex].Value;
 
         rdgConcentrations.RowCount := ALake.Values.Count + PestRowOffset + 1;
@@ -175,9 +184,9 @@ begin
             InitializeControls;
             Exit;
           end;
-          if rdgConcentrations.ItemIndex[Ord(lccEnd), TimeIndex+1+PestRowOffset] <> Ord(ALakeItem.GwtStatus[SpeciesIndex].GwtBoundaryStatus) then
+          if rdgConcentrations.ItemIndex[Ord(lccStatus), TimeIndex+1+PestRowOffset] <> Ord(ALakeItem.GwtStatus[SpeciesIndex].GwtBoundaryStatus) then
           begin
-            rdgConcentrations.ItemIndex[Ord(lccEnd), TimeIndex+1+PestRowOffset] := -1;
+            rdgConcentrations.ItemIndex[Ord(lccStatus), TimeIndex+1+PestRowOffset] := -1;
             Exit;
           end;
           if rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), TimeIndex+1+PestRowOffset] <> ALakeItem.SpecifiedConcentrations[SpeciesIndex].Value then
@@ -217,11 +226,11 @@ begin
   rdgConcentrations.BeginUpdate;
   try
     inherited;
-    rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), 0] := 'Specified Concentration';
-    rdgConcentrations.Cells[Ord(lccRainfall), 0] := 'Rainfall Concentration';
-    rdgConcentrations.Cells[Ord(lccEvaporation), 0] := 'Evaporation Concentration';
-    rdgConcentrations.Cells[Ord(lccRunoff), 0] := 'Runoff Concentration';
-    rdgConcentrations.Cells[Ord(lccInflow), 0] := 'Inflow Concentration';
+    rdgConcentrations.Cells[Ord(lccSpecifiedConcentration), 0] := StrSpecifiedConcentrat;
+    rdgConcentrations.Cells[Ord(lccRainfall), 0] := StrRainfallConcentrati;
+    rdgConcentrations.Cells[Ord(lccEvaporation), 0] := StrEvaporationConcentr;
+    rdgConcentrations.Cells[Ord(lccRunoff), 0] := StrRunoffConcentration;
+    rdgConcentrations.Cells[Ord(lccInflow), 0] := StrInflowConcentration;
   finally
     rdgConcentrations.EndUpdate;
   end;
@@ -247,7 +256,7 @@ begin
       begin
         ALake.StartingConcentrations[SpeciesIndex].Value := btnedInitialConcentration.Text;
       end
-      else if not FDataAssigned then
+      else if ALake.StartingConcentrations[SpeciesIndex].Value = '' then
       begin
         ALake.StartingConcentrations[SpeciesIndex].Value := '0';
       end;

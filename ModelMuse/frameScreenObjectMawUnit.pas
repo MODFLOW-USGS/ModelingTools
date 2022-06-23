@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameScreenObjectUnit, Vcl.ComCtrls,
   Vcl.Grids, RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry, Vcl.Buttons, Vcl.Mask,
   JvExMask, JvSpin, Vcl.ExtCtrls, JvExStdCtrls, JvCombobox, JvListComb,
-  JvToolEdit, frameGridUnit, UndoItemsScreenObjects, GrayTabs;
+  JvToolEdit, frameGridUnit, UndoItemsScreenObjects, GrayTabs, JvExControls,
+  JvPageList, JvExComCtrls, JvPageListTreeView, frameMawGwtConcentrationsUnit;
 
 type
   TWellScreenColumn = (wscTop, wscBottom, wscSkinK, wscSkinRadius);
@@ -49,6 +50,10 @@ type
     comboRateLimitation: TJvImageComboBox;
     cbHeadLimit: TCheckBox;
     lblRateLimitation: TLabel;
+    tabGwt: TTabSheet;
+    splSplit: TSplitter;
+    tvGwt: TJvPageListTreeView;
+    jplGwt: TJvPageList;
     procedure rdgModflowBoundarySetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
     procedure frameWellScreensGridSetEditText(Sender: TObject; ACol,
@@ -83,6 +88,7 @@ type
     FWellScreensCleared: Boolean;
     FWellTimeDataCleared: Boolean;
     FOnCheckPestCell: TSelectCellEvent;
+    FGwtFrameList: TMawGwtObjectList;
     { Private declarations }
     procedure Edited;
     procedure CanSelectTimeCell(ARow: Integer; ACol: Integer; var CanSelect: Boolean);
@@ -95,6 +101,8 @@ type
   protected
     procedure LayoutMultiRowEditControls;
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     procedure GetData(ScreenObjectList: TScreenObjectEditCollection);
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
@@ -111,7 +119,7 @@ implementation
 
 uses
   ScreenObjectUnit, ModflowMawUnit, System.Math, GoPhastTypes, frmGoPhastUnit,
-  frmCustomGoPhastUnit;
+  frmCustomGoPhastUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrStatus = 'Status (status)';
@@ -153,6 +161,18 @@ procedure TframeScreenObjectMAW.comboStatusChange(Sender: TObject);
 begin
   inherited;
   ApplyComboTextToColumn(wfStatus, comboStatus.Text);
+end;
+
+constructor TframeScreenObjectMAW.Create(AOwner: TComponent);
+begin
+  inherited;
+  FGwtFrameList := TMawGwtObjectList.Create;
+end;
+
+destructor TframeScreenObjectMAW.Destroy;
+begin
+  FGwtFrameList.Free;
+  inherited;
 end;
 
 procedure TframeScreenObjectMAW.Edited;
@@ -207,6 +227,11 @@ var
   TimeIndex: Integer;
   MawItem: TMawItem;
   FirstMawBound: TMawBoundary;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+  APage: TJvStandardPage;
+  AGwtFrame: TframeMawGwtConcentrations;
+  ANode: TJvPageIndexNode;
 begin
   pgcMain.ActivePageIndex := 0;
   FGettingData := True;
@@ -453,6 +478,37 @@ begin
       rdgModflowBoundary.EndUpdate;
       frameWellScreens.Grid.EndUpdate;
     end;
+
+    tabGWT.TabVisible := frmGoPhast.PhastModel.GwtUsed;
+    if tabGWT.TabVisible then
+    begin
+      tvGwt.Items.Clear;
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex];
+        if SpeciesIndex >= jplGwt.PageCount then
+        begin
+          APage := TJvStandardPage.Create(self);
+          APage.PageList := jplGwt;
+          AGwtFrame := TframeMawGwtConcentrations.Create(nil);
+          FGwtFrameList.Add(AGwtFrame);
+          AGwtFrame.Parent := APage;
+          AGwtFrame.Align := alClient;
+        end
+        else
+        begin
+          AGwtFrame := FGwtFrameList[SpeciesIndex];
+        end;
+        ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
+        ANode.PageIndex := SpeciesIndex;
+        AGwtFrame.GetData(ScreenObjectList, SpeciesIndex);
+        if SpeciesIndex = 0 then
+        begin
+          ANode.Selected := True;
+        end;
+      end;
+    end;
+
   finally
     FGettingData := False;
   end;
@@ -655,6 +711,8 @@ var
   MawItem: TMawItem;
   ItemIndex: Integer;
   ItemBool: Boolean;
+  SpeciesIndex: Integer;
+  AGwtFrame: TframeMawGwtConcentrations;
   function NonBlank(const Formula: string): string;
   begin
     if Formula = '' then
@@ -844,6 +902,14 @@ begin
           MawItem.HeadLimit := NonBlank(rdgModflowBoundary.Cells[Ord(wtHeadLimit), TimeIndex+1 + PestRowOffset]);
         end;
       end;
+    end;
+  end;
+  if tabGWT.TabVisible then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      AGwtFrame := FGwtFrameList[SpeciesIndex];
+      AGwtFrame.setData(List, SpeciesIndex);
     end;
   end;
 end;

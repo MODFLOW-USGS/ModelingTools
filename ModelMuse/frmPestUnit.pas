@@ -462,6 +462,7 @@ type
     procedure SetObsGroups(ObsGroups: TPestObservationGroups;
       ObsGroupFrame: TframeGrid; EditedObsGroups: TPestObservationGroups);
     procedure CheckObsGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
+    procedure CheckObsGroupTarget(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
     procedure CheckPriorInfoGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
     procedure SetSearchDistanceColor;
     procedure AssignParetoObsReports(ParetoProperties: TParetoProperties);
@@ -1880,6 +1881,7 @@ procedure TfrmPEST.frameObservationGroupsGridBeforeDrawCell(Sender: TObject;
 begin
   inherited;
   CheckObsGroupName(frameObservationGroups.Grid, ARow, ACol);
+  CheckObsGroupTarget(frameObservationGroups.Grid, ARow, ACol);
 end;
 
 procedure TfrmPEST.frameObservationGroupsGridButtonClick(Sender: TObject; ACol,
@@ -1907,6 +1909,10 @@ procedure TfrmPEST.frameObservationGroupsGridStateChange(Sender: TObject; ACol,
   ARow: Integer; const Value: TCheckBoxState);
 begin
   inherited;
+  if (ACol = Ord(pogcRegularization)) and frameObservationGroups.Grid.Checked[ACol, ARow] then
+  begin
+    frameObservationGroups.Grid.Checked[Ord(pogcUseTarget), ARow] := False
+  end;
   frameObservationGroups.Grid.Invalidate;
 end;
 
@@ -3080,9 +3086,16 @@ end;
 procedure TfrmPEST.CanSelectObsGridCell(ObsGridFrame: TframeGrid;
   ARow, ACol: Integer; var CanSelect: Boolean);
 begin
-  if (ARow > 0) and (ACol = Ord(pogcTarget)) then
+  if (ARow > 0) then
   begin
-    CanSelect := ObsGridFrame.Grid.Checked[Ord(pogcUseTarget), ARow];
+    if (ACol = Ord(pogcTarget)) then
+    begin
+      CanSelect := ObsGridFrame.Grid.Checked[Ord(pogcUseTarget), ARow];
+    end;
+    if (ACol = Ord(pogcUseTarget)) then
+    begin
+      CanSelect := not ObsGridFrame.Grid.Checked[Ord(pogcRegularization), ARow];
+    end;
   end;
 end;
 
@@ -3291,6 +3304,21 @@ begin
       AllowableGroupNameLength - Length(strRegul)) then
     begin
       Grid.Canvas.Brush.Color := clRed;
+    end;
+  end;
+end;
+
+procedure TfrmPEST.CheckObsGroupTarget(Grid: TRbwDataGrid4; ARow,
+  ACol: Integer);
+begin
+  if (ARow > 0) and (ACol = Ord(pogcTarget)) then
+  begin
+    if Grid.Checked[Ord(pogcUseTarget), ARow] then
+    begin
+      if Grid.RealValueDefault[ACol, ARow, 0] <= 0 then
+      begin
+        Grid.Canvas.Brush.Color := clRed;
+      end;
     end;
   end;
 end;

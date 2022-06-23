@@ -27,7 +27,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     Top = 33
     Width = 549
     Height = 260
-    ActivePage = tabTransient
+    ActivePage = tabGwt
     Align = alClient
     TabOrder = 1
     object tabWell: TTabSheet
@@ -199,15 +199,15 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Left = 0
         Top = 0
         Width = 541
-        Height = 232
+        Height = 225
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 541
-        ExplicitHeight = 232
+        ExplicitHeight = 225
         inherited Panel: TPanel
-          Top = 191
+          Top = 184
           Width = 541
-          ExplicitTop = 191
+          ExplicitTop = 184
           ExplicitWidth = 541
           inherited lbNumber: TLabel
             Width = 155
@@ -226,10 +226,14 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             Left = 488
             ExplicitLeft = 344
           end
+          inherited seNumber: TJvSpinEdit
+            Height = 28
+            ExplicitHeight = 28
+          end
         end
         inherited Grid: TRbwDataGrid4
           Width = 541
-          Height = 191
+          Height = 184
           ColCount = 4
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
           OnSetEditText = frameWellScreensGridSetEditText
@@ -331,7 +335,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 541
-          ExplicitHeight = 191
+          ExplicitHeight = 184
         end
       end
     end
@@ -346,7 +350,6 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 186
         DesignSize = (
           541
           46)
@@ -361,7 +364,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           Left = 9
           Top = 5
           Width = 49
-          Height = 25
+          Height = 28
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 0
@@ -433,7 +436,6 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Height = 179
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 186
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
@@ -954,8 +956,6 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitLeft = 0
-          ExplicitHeight = 128
           ColWidths = (
             64
             64
@@ -974,6 +974,40 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             64
             64)
         end
+      end
+    end
+    object tabGwt: TTabSheet
+      Caption = 'GWT'
+      ImageIndex = 3
+      object splSplit: TSplitter
+        Left = 121
+        Top = 0
+        Width = 5
+        Height = 225
+        ExplicitLeft = 8
+      end
+      object tvGwt: TJvPageListTreeView
+        Left = 0
+        Top = 0
+        Width = 121
+        Height = 225
+        PageDefault = 0
+        PageList = jplGwt
+        Align = alLeft
+        Indent = 19
+        TabOrder = 0
+        Items.Links = {00000000}
+        ExplicitLeft = 8
+      end
+      object jplGwt: TJvPageList
+        Left = 126
+        Top = 0
+        Width = 415
+        Height = 225
+        PropagateEnable = False
+        Align = alClient
+        ExplicitWidth = 351
+        ExplicitHeight = 300
       end
     end
   end
