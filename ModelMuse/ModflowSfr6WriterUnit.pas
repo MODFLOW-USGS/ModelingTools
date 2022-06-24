@@ -589,7 +589,7 @@ begin
         Compiler.Compile(Formula);
       except  on E: ERbwParserError do
         begin
-          frmFormulaErrors.AddFormulaError('', PropertyName, TempFormula, E.Message);
+          frmFormulaErrors.AddFormulaError('', 'SFR ' + PropertyName, TempFormula, E.Message);
           Formula := '0';
           Compiler.Compile(Formula);
         end;
@@ -1913,9 +1913,21 @@ begin
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 
+  FPestParamUsed := False;
+  WritingTemplate := False;
+
   frmErrorsAndWarnings.BeginUpdate;
   try
     WriteGwtFileInternal;
+
+    if  Model.PestUsed and FPestParamUsed then
+    begin
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteGwtFileInternal;
+    end;
+
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;

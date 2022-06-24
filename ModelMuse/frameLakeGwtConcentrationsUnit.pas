@@ -13,6 +13,8 @@ type
     lccRainfall, lccEvaporation, lccRunoff, lccInflow);
 
   TframeLakeGwtConcentrations = class(TframeCustomGwtConcentrations)
+    procedure rdgConcentrationsSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     FScreenObject: TScreenObject;
     { Private declarations }
@@ -236,6 +238,31 @@ begin
   end;
 end;
 
+procedure TframeLakeGwtConcentrations.rdgConcentrationsSelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  AStatus: TGwtBoundaryStatus;
+begin
+  inherited;
+  if (ARow >= rdgConcentrations.FixedRows + PestRowOffset)
+    and (ACol > Ord(lccStatus)) then
+  begin
+    if rdgConcentrations.ItemIndex[Ord(lccStatus), ARow] >= 0 then
+    begin
+      AStatus :=
+        TGwtBoundaryStatus(rdgConcentrations.ItemIndex[Ord(lccStatus), ARow]);
+      if ACol = Ord(lccSpecifiedConcentration) then
+      begin
+        CanSelect := AStatus = gbsConstant;
+      end
+      else
+      begin
+        CanSelect := AStatus = gbsActive;
+      end;
+    end;
+  end;
+end;
+
 procedure TframeLakeGwtConcentrations.SetData(List: TScreenObjectEditCollection;
   SpeciesIndex: Integer);
 var
@@ -250,7 +277,7 @@ begin
   begin
     ScreenObject := List[Index].ScreenObject;
     ALake := ScreenObject.ModflowLak6;
-    if ALake <> nil then
+    if (ALake <> nil) and ALake.Used then
     begin
       if btnedInitialConcentration.Text <> '' then
       begin

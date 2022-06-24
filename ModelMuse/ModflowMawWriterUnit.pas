@@ -702,9 +702,21 @@ begin
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 
+  FPestParamUsed := False;
+  WritingTemplate := False;
+
   frmErrorsAndWarnings.BeginUpdate;
   try
     WriteGwtFileInternal;
+
+    if  Model.PestUsed and FPestParamUsed then
+    begin
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteGwtFileInternal;
+    end;
+
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;
@@ -1289,6 +1301,9 @@ begin
       NewLine
     end;
   end;
+
+  WriteGwtlAuxVariables;
+
 {
 [TS6 FILEIN <ts6_filename>]   not supported
 [MOVER]                       not supported
@@ -1380,6 +1395,8 @@ var
   MvrReceiver: TMvrReceiver;
   MvrSource: TMvrRegisterKey;
   AScreenObject: TScreenObject;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 begin
   if MvrWriter <> nil then
   begin
@@ -1520,6 +1537,20 @@ begin
         WriteValueOrFormula(ACell, MawScalingLengthPosition);
 //        WriteFloat(ACell.ScalingLength);
         NewLine;
+      end;
+
+      if Model.GwtUsed then
+      begin
+        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          WriteString('  ');
+          WriteInteger(ACell.WellNumber);
+          WriteString(' AUXILIARY ');
+          ASpecies := Model.MobileComponents[SpeciesIndex];
+          WriteString(' ' + ASpecies.Name);
+          WriteFloat(0);
+          NewLine;
+        end;
       end;
 
       if ACell.MvrUsed and (MvrWriter <> nil)

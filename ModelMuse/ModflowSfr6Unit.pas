@@ -603,6 +603,7 @@ type
     procedure InvalidatePestRainfallConcData(Sender: TObject);
     procedure InvalidatePestInflowConcData(Sender: TObject);
     procedure InvalidatePestRunoffConcData(Sender: TObject);
+    function GetStartingConcentrations: TStringConcCollection;
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -705,7 +706,7 @@ type
       write SetPestRoughnessMethod;
     // GWT
     property StartingConcentrations: TStringConcCollection
-      read FStartingConcentrations
+      read GetStartingConcentrations
       write SetStartingConcentrations
       {$IFNDEF GWT}
       stored False
@@ -4219,6 +4220,19 @@ begin
     CreateObserver('SFR6_ReachWidth_', FReachWidthObserver, nil);
   end;
   result := FReachWidthObserver;
+end;
+
+function TSfrMf6Boundary.GetStartingConcentrations: TStringConcCollection;
+var
+  LocalModel: TCustomModel;
+begin
+  LocalModel := FStartingConcentrations.Model as TCustomModel;
+  if (LocalModel <> nil)
+    and (FStartingConcentrations.Count < LocalModel.MobileComponents.Count) then
+  begin
+    FStartingConcentrations.Count := LocalModel.MobileComponents.Count;
+  end;
+  result := FStartingConcentrations;
 end;
 
 function TSfrMf6Boundary.GetStreambedThickness: string;

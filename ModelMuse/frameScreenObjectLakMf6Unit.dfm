@@ -17,10 +17,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
       Top = 8
       ExplicitTop = 8
     end
-    inherited seNumberOfTimes: TJvSpinEdit
-      Height = 28
-      ExplicitHeight = 28
-    end
     inherited btnDelete: TBitBtn
       Left = 385
       ExplicitLeft = 385
@@ -275,8 +271,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 1
-      ExplicitTop = 51
       ExplicitWidth = 483
       ExplicitHeight = 92
     end
@@ -747,12 +741,10 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         PageDefault = 0
         PageList = jplGwt
         Align = alLeft
+        HideSelection = False
         Indent = 19
         TabOrder = 0
         Items.Links = {00000000}
-        ExplicitLeft = 64
-        ExplicitTop = 152
-        ExplicitHeight = 97
       end
       object jplGwt: TJvPageList
         Left = 126
@@ -761,8 +753,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Height = 300
         PropagateEnable = False
         Align = alClient
-        ExplicitLeft = 150
-        ExplicitTop = 3
       end
     end
   end

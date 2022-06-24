@@ -1774,6 +1774,10 @@ begin
         if Grid.Cells[1, ARow] = '' then
         begin
           Grid.ItemIndex[1, ARow] := SelectIndex;
+          if Assigned(Grid.OnSetEditText) then
+          begin
+            Grid.OnSetEditText(Grid, 1, ARow, Grid.Cells[1, ARow]);
+          end;
         end;
       end
       else if (ACol = 1) then
@@ -1784,6 +1788,10 @@ begin
           if SelectIndex + 1 < Grid.Columns[0].PickList.Count then
           begin
             Grid.ItemIndex[0, ARow + 1] := SelectIndex + 1;
+            if Assigned(Grid.OnSetEditText) then
+            begin
+              Grid.OnSetEditText(Grid, 0, ARow + 1, Grid.Cells[0, ARow + 1]);
+            end;
           end;
         end;
       end;

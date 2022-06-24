@@ -222,7 +222,6 @@ type
     class function ObservationExtension: string; //override;
     procedure WriteLakeValueOrFormula(LakeSetting: TLakeSetting; Index: integer);
     procedure WriteFileInternal;
-    procedure WriteAdditionalAuxVariables;
     // SFT
     procedure WriteGwtOptions;
     procedure WriteGwtPackageData;
@@ -387,23 +386,6 @@ function TModflowLAKMf6Writer.Package: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.LakMf6Package;
 
-end;
-
-procedure TModflowLAKMf6Writer.WriteAdditionalAuxVariables;
-var
-  SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
-begin
-  if Model.GwtUsed and (Model.MobileComponents.Count > 0) then
-  begin
-    WriteString('  AUXILIARY');
-    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-    begin
-      ASpecies := Model.MobileComponents[SpeciesIndex];
-      WriteString(' ' + ASpecies.Name);
-    end;
-    NewLine;
-  end;
 end;
 
 procedure TModflowLAKMf6Writer.WriteConnectionData;
@@ -2429,7 +2411,7 @@ begin
     end;
   end;
 
-  WriteAdditionalAuxVariables;
+  WriteGwtlAuxVariables;
 
   WriteEndOptions
 end;

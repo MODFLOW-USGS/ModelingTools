@@ -57,6 +57,8 @@ type
     procedure cbEmbeddedClick(Sender: TObject);
     procedure cbHorizontalClick(Sender: TObject);
     procedure cbVerticalClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
   private
     FOtherLakes: TStringList;
     FPriorOutletCount: Integer;
@@ -111,6 +113,49 @@ const NonOutletTabs = 4;
 {$R *.dfm}
 
 { TframeScreenObjectLakMf6 }
+
+procedure TframeScreenObjectLakMf6.btnDeleteClick(Sender: TObject);
+var
+  SelectedRow: Integer;
+  PriorRowCount: Integer;
+  SpeciesIndex: Integer;
+begin
+  SelectedRow := rdgModflowBoundary.SelectedRow;
+  PriorRowCount := rdgModflowBoundary.RowCount;
+  if (PriorRowCount > 2 + PestRowOffset)
+    and (SelectedRow > 0 + PestRowOffset) then
+  begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.DeleteRow(SelectedRow);
+    end;
+  end;
+  inherited;
+end;
+
+procedure TframeScreenObjectLakMf6.btnInsertClick(Sender: TObject);
+var
+  SelectedRow: Integer;
+  PriorRowCount: Integer;
+  SpeciesIndex: Integer;
+begin
+  SelectedRow := rdgModflowBoundary.SelectedRow;
+  PriorRowCount := rdgModflowBoundary.RowCount;
+  if (SelectedRow <= 0 + PestRowOffset)
+    or (SelectedRow >= PriorRowCount) then
+  begin
+    inherited;
+    Exit;
+  end;
+  if (seNumberOfTimes.AsInteger > 0) then
+  begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.InsertRow(SelectedRow);
+    end;
+  end;
+  inherited;
+end;
 
 procedure TframeScreenObjectLakMf6.cbEmbeddedClick(Sender: TObject);
 begin
@@ -476,7 +521,6 @@ begin
         end
         else
         begin
-//          APage := jplGwt.Pages[SpeciesIndex];
           AGwtFrame := FGwtFrameList[SpeciesIndex];
         end;
         ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
@@ -574,14 +618,31 @@ end;
 
 procedure TframeScreenObjectLakMf6.rdgModflowBoundarySetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
+var
+  SpeciesIndex: Integer;
 begin
   inherited;
+  if (ARow >= rdgModflowBoundary.FixedRows + PestRowOffset)
+    and (ACol in [Ord(lcStart), Ord(lcEnd)]) then
+  begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.Cells[ACol, ARow]
+        := rdgModflowBoundary.Cells[ACol, ARow];
+    end;
+  end;
   Changed;
 end;
 
 procedure TframeScreenObjectLakMf6.seNumberOfTimesChange(Sender: TObject);
+var
+  SpeciesIndex: Integer;
 begin
   inherited;
+  for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+  begin
+    FGwtFrameList[SpeciesIndex].rdgConcentrations.RowCount := rdgModflowBoundary.RowCount;
+  end;
   Changed;
 end;
 

@@ -13,6 +13,8 @@ type
     mccInjection);
 
   TframeMawGwtConcentrations = class(TframeCustomGwtConcentrations)
+    procedure rdgConcentrationsSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     FScreenObject: TScreenObject;
     { Private declarations }
@@ -160,6 +162,31 @@ begin
   end;
 end;
 
+procedure TframeMawGwtConcentrations.rdgConcentrationsSelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  AStatus: TGwtBoundaryStatus;
+begin
+  inherited;
+  if (ARow >= rdgConcentrations.FixedRows + PestRowOffset)
+    and (ACol > Ord(mccStatus)) then
+  begin
+    if rdgConcentrations.ItemIndex[Ord(mccStatus), ARow] >= 0 then
+    begin
+      AStatus :=
+        TGwtBoundaryStatus(rdgConcentrations.ItemIndex[Ord(mccStatus), ARow]);
+      if ACol = Ord(mccSpecifiedConcentration) then
+      begin
+        CanSelect := AStatus = gbsConstant;
+      end
+      else
+      begin
+        CanSelect := AStatus = gbsActive;
+      end;
+    end;
+  end;
+end;
+
 procedure TframeMawGwtConcentrations.SetData(List: TScreenObjectEditCollection;
   SpeciesIndex: Integer);
 var
@@ -174,7 +201,7 @@ begin
   begin
     ScreenObject := List[Index].ScreenObject;
     MultAqWell := ScreenObject.ModflowMawBoundary;
-    if MultAqWell <> nil then
+    if (MultAqWell <> nil) and MultAqWell.Used then
     begin
       if btnedInitialConcentration.Text <> '' then
       begin

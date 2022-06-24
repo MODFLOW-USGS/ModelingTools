@@ -1,13 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-06-24T15:10:41.085-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Cross Sectional Model: Initial Grid</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sectional Model: Initial Grid</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Start ModelMuse and select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Create new MODFLOW model</text><text styleclass="Normal" translate="true"> and click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Next</text><text styleclass="Normal" translate="true"> button. Fill in a description of the model and specify "Not Applicable" for the projection. This model uses MODFLOW-style parameters so leave the other choices as they are. Then, click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Next</text><text styleclass="Normal" translate="true"> button again.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Initial Grid dialog box we will specify a model with 30 columns, 1 row, and 5 layers. The elevations for the layers don't really matter because we will change them all to variable elevations. The column and row widths will be 1000 m. Click the Finish button when you are done.</text></para>
-    <para styleclass="Normal" style="text-align:center;"><image src="CrossSection1.bmp" scale="-99.90%" styleclass="Image Caption"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Start ModelMuse and select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Create new MODFLOW model</text><text styleclass="Normal" translate="true"> and click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Next</text><text styleclass="Normal" translate="true"> button. Change the MODFLOW version to MODFLOW-2005. Fill in a description of the model and specify &quot;Not Applicable&quot; for the projection. This model uses MODFLOW-style parameters so leave the other choices as they are. Then, click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Next</text><text styleclass="Normal" translate="true"> button again.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Initial Grid dialog box we will specify a model with 30 columns, 1 row, and 5 layers. The elevations for the layers don&apos;t really matter because we will change them all to variable elevations. The column and row widths will be 1000 m. Click the Finish button when you are done.</text></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="CrossSection1.bmp" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"></image></para>
   </body>
 </topic>

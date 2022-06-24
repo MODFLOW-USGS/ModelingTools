@@ -7,7 +7,8 @@ uses System.UITypes,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameScreenObjectUnit, Vcl.Grids,
   RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry, Vcl.Buttons, Vcl.Mask, JvExMask,
   JvSpin, Vcl.ExtCtrls, ModflowBoundaryUnit, Vcl.ComCtrls, frameGridUnit,
-  UndoItemsScreenObjects, GrayTabs;
+  UndoItemsScreenObjects, GrayTabs, JvExControls, JvPageList, JvExComCtrls,
+  JvPageListTreeView, frameSfrGwtConcentrationsUnit;
 
 type
   TSfr6Columns = (s6cStartTime, s6cEndtime, s6cStatus, s6cStage, s6cInflow, s6cRainfall,
@@ -43,6 +44,10 @@ type
     lblSegmentNumber: TLabel;
     rdgFormulas: TRbwDataGrid4;
     rdeSegmentNumber: TRbwDataEntry;
+    tabGWT: TTabSheet;
+    splSplit: TSplitter;
+    tvGwt: TJvPageListTreeView;
+    jplGwt: TJvPageList;
     procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure seNumberOfTimesChange(Sender: TObject);
@@ -81,6 +86,7 @@ type
     FPriorRowCount: Integer;
     FValuesCleared: Boolean;
     FOnCheckPestCell: TSelectCellEvent;
+    FGwtFrameList: TSfrGwtObjectList;
     procedure LayoutMultiRowEditControls;
     function GetDeletedCells(ACol, ARow: integer): boolean;
     procedure SetDeletedCells(ACol, ARow: integer; const Value: boolean);
@@ -122,7 +128,8 @@ implementation
 {$R *.dfm}
 
 uses frmGoPhastUnit, GoPhastTypes, frmCustomGoPhastUnit, System.Math,
-  ScreenObjectUnit, ModflowSfr6Unit, PhastModelUnit, DataSetUnit;
+  ScreenObjectUnit, ModflowSfr6Unit, PhastModelUnit, DataSetUnit,
+  Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrDiversionSegmentI = 'Diversion Segment (iconr)';
@@ -190,11 +197,12 @@ constructor TframeScreenObjectSfr6.Create(AOwner: TComponent);
 begin
   inherited;
   ConductanceColumn := -1;
+  FGwtFrameList := TSfrGwtObjectList.Create;
 end;
 
 destructor TframeScreenObjectSfr6.Destroy;
 begin
-
+  FGwtFrameList.Free;
   inherited;
 end;
 
@@ -268,6 +276,11 @@ var
   DownstreamSegments: TIntegerCollection;
   Diversions: TDiversionCollection;
   FirstBoundary: TSfrMf6Boundary;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+  APage: TJvStandardPage;
+  AGwtFrame: TframeSfrGwtConcentrations;
+  ANode: TJvPageIndexNode;
 begin
   Changing := True;
   tabDownstreamSegments.TabVisible := True;
@@ -498,6 +511,36 @@ begin
       rdgModflowBoundary.EndUpdate;
       frmgrdDownstreamSegments.Grid.EndUpdate;
       rdgFormulas.EndUpdate;
+    end;
+
+    tabGWT.TabVisible := frmGoPhast.PhastModel.GwtUsed;
+    if tabGWT.TabVisible then
+    begin
+      tvGwt.Items.Clear;
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex];
+        if SpeciesIndex >= jplGwt.PageCount then
+        begin
+          APage := TJvStandardPage.Create(self);
+          APage.PageList := jplGwt;
+          AGwtFrame := TframeSfrGwtConcentrations.Create(nil);
+          FGwtFrameList.Add(AGwtFrame);
+          AGwtFrame.Parent := APage;
+          AGwtFrame.Align := alClient;
+        end
+        else
+        begin
+          AGwtFrame := FGwtFrameList[SpeciesIndex];
+        end;
+        ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
+        ANode.PageIndex := SpeciesIndex;
+        AGwtFrame.GetData(ScreenObjectList, SpeciesIndex);
+        if SpeciesIndex = 0 then
+        begin
+          ANode.Selected := True;
+        end;
+      end;
     end;
   finally
     Changing := False;
@@ -988,6 +1031,8 @@ var
   NewCount: Integer;
   SegmentIndex: Integer;
   ItemIndex: Integer;
+  SpeciesIndex: Integer;
+  AGwtFrame: TframeSfrGwtConcentrations;
 begin
   for Index := 0 to List.Count - 1 do
   begin
@@ -1202,11 +1247,17 @@ begin
           end
         end;
       end;
-
     end;
-
   end;
 
+  if tabGWT.TabVisible then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      AGwtFrame := FGwtFrameList[SpeciesIndex];
+      AGwtFrame.setData(List, SpeciesIndex);
+    end;
+  end;
 end;
 
 procedure TframeScreenObjectSfr6.SetDeletedCells(ACol, ARow: integer;

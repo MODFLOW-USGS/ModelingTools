@@ -120,6 +120,7 @@ uses frmGoPhastUnit, ScreenObjectUnit, GoPhastTypes, UndoItemsScreenObjects,
 
 resourcestring
   StrYourModelHasNoOb = 'Your model has no objects.';
+  StrYourModelHasNoVi = 'Your model has no visible objects.';
 
 {$R *.dfm}
 
@@ -184,7 +185,14 @@ begin
     tabSide.TabVisible := lvSide.Items.Count <> 0;
     if not (tabTop.TabVisible or tabFront.TabVisible or tabSide.TabVisible) then
     begin
-      MessageDlg(StrYourModelHasNoOb, mtInformation, [mbOK], 0);
+      if cbIncludeHiddenObjects.Checked then
+      begin
+        MessageDlg(StrYourModelHasNoOb, mtInformation, [mbOK], 0);
+      end
+      else
+      begin
+        MessageDlg(StrYourModelHasNoVi, mtInformation, [mbOK], 0);
+      end;
       Exit;
     end;
   finally

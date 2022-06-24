@@ -6,7 +6,7 @@ unit CustomModflowWriterUnit;
 
 interface
 
-uses Vcl.Forms, System.SysUtils, PestPropertiesUnit,
+uses Mt3dmsChemSpeciesUnit, Vcl.Forms, System.SysUtils, PestPropertiesUnit,
   Windows, Types,
   LayerStructureUnit,
   ModflowTimeUnit,
@@ -460,6 +460,7 @@ end;
     procedure WriteBoundNamesOption;
     procedure WriteTimeSeriesFiles(InputFileName: string);
     procedure PrintConcentrationOption;
+    procedure WriteGwtlAuxVariables;
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -1440,6 +1441,13 @@ begin
       Exit;
     end;
   end;
+  if (frmGoPhast.PhastModel.AppsMoved.IndexOf(NewFileName) >= 0)
+    and (frmGoPhast.PhastModel.AppsMoved.IndexOf(AppFullPath) >= 0) then
+  begin
+    Exit;
+  end;
+  frmGoPhast.PhastModel.AppsMoved.Add(NewFileName);
+  frmGoPhast.PhastModel.AppsMoved.Add(AppFullPath);
   TFile.Copy(AppFullPath, NewFileName, True);
 end;
 
@@ -10612,6 +10620,23 @@ begin
     Formula := Format(' %0:s                    %1:s%0:s ',
       [ExtendedTemplateCharacter, Formula]);
     WriteString(Formula);
+  end;
+end;
+
+procedure TCustomPackageWriter.WriteGwtlAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed and (Model.MobileComponents.Count > 0) then
+  begin
+    WriteString('  AUXILIARY');
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+    NewLine;
   end;
 end;
 

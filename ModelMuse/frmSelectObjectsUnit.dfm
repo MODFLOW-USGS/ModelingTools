@@ -7,9 +7,8 @@ inherited frmSelectObjects: TfrmSelectObjects
   Caption = 'Select Objects by Name'
   ClientHeight = 375
   ClientWidth = 345
-  ExplicitWidth = 361
-  ExplicitHeight = 414
-  PixelsPerInch = 96
+  ExplicitWidth = 363
+  ExplicitHeight = 422
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0

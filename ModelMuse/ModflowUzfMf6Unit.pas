@@ -531,6 +531,7 @@ type
       const Index: Integer): TObserver;
     function GetPestSpecifiedConcentrationObserver(
       const Index: Integer): TObserver;
+    function GetStartingConcentrations: TStringConcCollection;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -657,7 +658,7 @@ type
       write SetPestRootActivityMethod;
     // GWT
     property StartingConcentrations: TStringConcCollection
-      read FStartingConcentrations write SetStartingConcentrations
+      read GetStartingConcentrations write SetStartingConcentrations
       {$IFNDEF GWT}
       stored False
       {$ENDIF}
@@ -4515,6 +4516,19 @@ begin
     CreateObserver('UZF6_Saturated_Water_Content_', FSaturatedWaterContentObserver, DataArray);
   end;
   result := FSaturatedWaterContentObserver;
+end;
+
+function TUzfMf6Boundary.GetStartingConcentrations: TStringConcCollection;
+var
+  LocalModel: TCustomModel;
+begin
+  LocalModel := FStartingConcentrations.Model as TCustomModel;
+  if (LocalModel <> nil)
+    and (FStartingConcentrations.Count < LocalModel.MobileComponents.Count) then
+  begin
+    FStartingConcentrations.Count := LocalModel.MobileComponents.Count;
+  end;
+  result := FStartingConcentrations;
 end;
 
 function TUzfMf6Boundary.GetSurfaceDepressionDepth: string;

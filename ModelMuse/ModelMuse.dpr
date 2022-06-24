@@ -744,7 +744,8 @@ uses
   frameSutraRegionalPropertyUnit in 'frameSutraRegionalPropertyUnit.pas' {frameSutraRegionalProperty: TFrame},
   frameCustomGwtConcentrationsUnit in 'frameCustomGwtConcentrationsUnit.pas' {frameCustomGwtConcentrations: TFrame},
   frameLakeGwtConcentrationsUnit in 'frameLakeGwtConcentrationsUnit.pas' {frameLakeGwtConcentrations: TFrame},
-  frameMawGwtConcentrationsUnit in 'frameMawGwtConcentrationsUnit.pas' {frameMawGwtConcentrations: TFrame};
+  frameMawGwtConcentrationsUnit in 'frameMawGwtConcentrationsUnit.pas' {frameMawGwtConcentrations: TFrame},
+  frameSfrGwtConcentrationsUnit in 'frameSfrGwtConcentrationsUnit.pas' {frameSfrGwtConcentrations: TFrame};
 
 {$R *.res}
 

@@ -668,6 +668,8 @@ end;
 
 procedure TframeScreenObjectMAW.rdgModflowBoundarySetEditText(Sender: TObject;
   ACol, ARow: Integer; const Value: string);
+var
+  SpeciesIndex: Integer;
 begin
   inherited;
   UpdateNextTimeCell(rdgModflowBoundary, ACol, ARow);
@@ -679,6 +681,16 @@ begin
   begin
     rdgModflowBoundary.Invalidate;
   end;
+
+  if (ARow >= rdgModflowBoundary.FixedRows + PestRowOffset)
+    and (ACol in [Ord(wfStartTime), Ord(wfEndTime)]) then
+  begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.Cells[ACol, ARow]
+        := rdgModflowBoundary.Cells[ACol, ARow];
+    end;
+  end;
 end;
 
 procedure TframeScreenObjectMAW.rdgModflowBoundaryStateChange(Sender: TObject;
@@ -689,12 +701,18 @@ begin
 end;
 
 procedure TframeScreenObjectMAW.seNumberOfTimesChange(Sender: TObject);
+var
+  SpeciesIndex: Integer;
 begin
   inherited;
   rdgModflowBoundary.RowCount := Max(2, seNumberOfTimes.AsInteger + 1) + PestRowOffset;
   if seNumberOfTimes.AsInteger = 0 then
   begin
     ClearGrid(rdgModflowBoundary);
+  end;
+  for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+  begin
+    FGwtFrameList[SpeciesIndex].rdgConcentrations.RowCount := rdgModflowBoundary.RowCount;
   end;
 end;
 
@@ -931,19 +949,31 @@ procedure TframeScreenObjectMAW.UpdateNumTimes;
 begin
   if seNumberOfTimes <> nil then
   begin
-    seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount - 1;
+    seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount - 1 - PestRowOffset;
   end;
 end;
 
 procedure TframeScreenObjectMAW.ClearSelectedRow;
 var
   ColIndex: Integer;
+  SpeciesIndex: Integer;
+  Grid: TRbwDataGrid4;
 begin
   for ColIndex := 0 to rdgModflowBoundary.ColCount - 1 do
   begin
     rdgModflowBoundary.Cells[ColIndex, rdgModflowBoundary.SelectedRow] := '';
     rdgModflowBoundary.Checked[ColIndex, rdgModflowBoundary.SelectedRow] := False;
     rdgModflowBoundary.Objects[ColIndex, rdgModflowBoundary.SelectedRow] := nil;
+  end;
+  for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+  begin
+    Grid := FGwtFrameList[SpeciesIndex].rdgConcentrations;
+    for ColIndex := 0 to Grid.ColCount - 1 do
+    begin
+      Grid.Cells[ColIndex, rdgModflowBoundary.SelectedRow] := '';
+      Grid.Checked[ColIndex, rdgModflowBoundary.SelectedRow] := False;
+      Grid.Objects[ColIndex, rdgModflowBoundary.SelectedRow] := nil;
+    end;
   end;
 end;
 
@@ -1110,6 +1140,8 @@ begin
 end;
 
 procedure TframeScreenObjectMAW.btnDeleteClick(Sender: TObject);
+var
+  SpeciesIndex: Integer;
 begin
   inherited;
   if rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.FixedRows + PestRowOffset  then
@@ -1117,9 +1149,12 @@ begin
     if rdgModflowBoundary.RowCount > rdgModflowBoundary.FixedRows + 1 + PestRowOffset then
     begin
       ClearSelectedRow;
+      for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+      begin
+        FGwtFrameList[SpeciesIndex].rdgConcentrations.DeleteRow(rdgModflowBoundary.SelectedRow);
+      end;
       rdgModflowBoundary.DeleteRow(rdgModflowBoundary.SelectedRow);
       UpdateNumTimes;
-
     end
     else
     begin
@@ -1130,10 +1165,17 @@ begin
 end;
 
 procedure TframeScreenObjectMAW.btnInsertClick(Sender: TObject);
+var
+  SpeciesIndex: Integer;
 begin
   if rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.FixedRows + PestRowOffset  then
   begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.InsertRow(rdgModflowBoundary.SelectedRow);
+    end;
     rdgModflowBoundary.InsertRow(rdgModflowBoundary.SelectedRow);
+
     ClearSelectedRow;
     UpdateNumTimes;
   end;

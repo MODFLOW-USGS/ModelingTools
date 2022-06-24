@@ -2498,6 +2498,7 @@ that affects the model output should also have a comment. }
     function GetGwtUsed: Boolean;
     procedure FixSutraMeshEdge;
     function Sutra4SorptionUsed(Sender: TObject): boolean;
+    function GetAppsMoved: TStringList; virtual; abstract;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -3435,6 +3436,7 @@ that affects the model output should also have a comment. }
     Procedure UpdateGwtConc;
     function SutraUnsatRegionUsed(Sender: TObject): boolean;
     procedure ClearPestPriorInfoGroupData;
+    property AppsMoved: TStringList read GetAppsMoved;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -3885,6 +3887,7 @@ that affects the model output should also have a comment. }
     FSvdaPrepProperties: TSvdaPrepProperties;
     FSupCalcProperties: TSupCalcProperties;
     FTimesSeries: TTimesSeriesCollections;
+    FAppsMoved: TStringList;
     //     See @link(OwnsScreenObjects).
     function GetOwnsScreenObjects: boolean;
 //     See @link(ObjectList).
@@ -4201,6 +4204,7 @@ that affects the model output should also have a comment. }
     function GetPestProperties: TPestProperties; override;
     procedure SetPestProperties(const Value: TPestProperties); override;
     function GetFilesToDelete: TStrings; override;
+    function GetAppsMoved: TStringList; override;
   public
     function Mt3dMSUsed(Sender: TObject): boolean; override;
     procedure RefreshGlobalVariables(CompilerList: TList);
@@ -5141,6 +5145,7 @@ that affects the model output should also have a comment. }
     function GetFilesToDelete: TStrings; override;
     function GetMf6TimesSeries: TTimesSeriesCollections; override;
     procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections); override;
+    function GetAppsMoved: TStringList; override;
   public
     property CanUpdateGrid: Boolean read FCanUpdateGrid write SetCanUpdateGrid;
     function LayerGroupUsed(LayerGroup: TLayerGroup): boolean; override;
@@ -10582,6 +10587,9 @@ const
 //                evaluating the Ky and Kz data sets in MODFLOW 6 models when
 //                anisotropy was used.
 
+//               Bug fix: Fixed bug in changing the number of times specified
+//                for MAW wells.
+
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
@@ -11515,7 +11523,7 @@ begin
 
   FSvdaPrepProperties := TSvdaPrepProperties.Create(Invalidate);
   FSupCalcProperties := TSupCalcProperties.Create(Invalidate);
-
+  FAppsMoved := TStringList.Create;
 end;
 
 procedure TPhastModel.CreateArchive(const FileName: string;
@@ -11928,7 +11936,7 @@ var
 begin
   frmFileProgress:= TfrmProgressMM.Create(nil);
   try
-//    FUnitNumbers.Free;
+    FAppsMoved.Free;
     DataArrayManager.UnlinkDeletedDataSets;
     FClearing := True;
     try
@@ -16288,6 +16296,11 @@ begin
   finally
     QuadTree.Free;
   end;
+end;
+
+function TPhastModel.GetAppsMoved: TStringList;
+begin
+  result := FAppsMoved;
 end;
 
 function TPhastModel.GetArchiveName: string;
@@ -45965,6 +45978,11 @@ begin
   begin
     Discretization.SortAndDeleteExtraItems;
   end;
+end;
+
+function TChildModel.GetAppsMoved: TStringList;
+begin
+  result := ParentModel.GetAppsMoved;
 end;
 
 function TChildModel.GetChemistryOptions: TChemistryOptions;

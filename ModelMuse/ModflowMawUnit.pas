@@ -5811,11 +5811,11 @@ begin
         case GwtSource of
           MawGwtSpecifiedConcentrationPosition:
             begin
-              result := FValues.SpecifiedConcentrations.ValueTimeSeriesNames[SpeciesIndex]
+              result := FValues.SpecifiedConcentrations.ValuePestSeriesNames[SpeciesIndex]
             end;
           MawGwtInjectionConcentrationsPosition:
             begin
-              result := FValues.InjectionConcentrations.ValueTimeSeriesNames[SpeciesIndex]
+              result := FValues.InjectionConcentrations.ValuePestSeriesNames[SpeciesIndex]
             end;
           else
             Assert(False);

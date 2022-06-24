@@ -1,32 +1,34 @@
 inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
-  Width = 389
+  Width = 547
   Height = 272
   OnResize = FrameResize
-  ExplicitWidth = 389
+  ExplicitWidth = 547
   ExplicitHeight = 272
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 389
+    Width = 547
     Height = 25
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 389
     object pnlCaption: TPanel
       Left = 1
       Top = 1
-      Width = 387
+      Width = 545
       Height = 23
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitWidth = 387
     end
   end
   object pgcSfr6: TPageControl
     Left = 0
     Top = 25
-    Width = 389
+    Width = 547
     Height = 247
-    ActivePage = tabConfiguration
+    ActivePage = tabGWT
     Align = alClient
     TabOrder = 1
     object tabConfiguration: TTabSheet
@@ -35,16 +37,16 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       object lblSegmentNumber: TLabel
         Left = 134
         Top = 17
-        Width = 81
-        Height = 13
+        Width = 114
+        Height = 20
         Caption = 'Segment number'
       end
       object rdgFormulas: TRbwDataGrid4
         AlignWithMargins = True
         Left = 0
         Top = 50
-        Width = 381
-        Height = 169
+        Width = 539
+        Height = 162
         Margins.Left = 0
         Margins.Top = 50
         Margins.Right = 0
@@ -114,6 +116,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 381
         ColWidths = (
           64
           186)
@@ -138,14 +141,14 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       object pnlGrid: TPanel
         Left = 0
         Top = 0
-        Width = 381
-        Height = 173
+        Width = 539
+        Height = 166
         Align = alClient
         TabOrder = 0
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
-          Width = 379
+          Width = 537
           Height = 50
           Align = alTop
           BevelOuter = bvNone
@@ -153,8 +156,8 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           object lblFormula: TLabel
             Left = 136
             Top = 5
-            Width = 38
-            Height = 13
+            Width = 54
+            Height = 20
             Alignment = taCenter
             Caption = 'Formula'
           end
@@ -175,8 +178,8 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         object rdgModflowBoundary: TRbwDataGrid4
           Left = 1
           Top = 51
-          Width = 379
-          Height = 121
+          Width = 537
+          Height = 114
           Align = alClient
           ColCount = 3
           FixedCols = 0
@@ -277,34 +280,34 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       end
       object pnlBottom: TPanel
         Left = 0
-        Top = 173
-        Width = 381
+        Top = 166
+        Width = 539
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
         DesignSize = (
-          381
+          539
           46)
         object lblNumTimes: TLabel
           Left = 64
           Top = 15
-          Width = 78
-          Height = 13
+          Width = 112
+          Height = 20
           Caption = 'Number of times'
         end
         object seNumberOfTimes: TJvSpinEdit
           Left = 8
           Top = 6
           Width = 49
-          Height = 21
+          Height = 28
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 2
           OnChange = seNumberOfTimesChange
         end
         object btnDelete: TBitBtn
-          Left = 293
+          Left = 451
           Top = 6
           Width = 82
           Height = 33
@@ -342,7 +345,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           OnClick = btnDeleteClick
         end
         object btnInsert: TBitBtn
-          Left = 205
+          Left = 363
           Top = 5
           Width = 82
           Height = 33
@@ -369,36 +372,38 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       inline frmgrdDownstreamSegments: TframeGrid
         Left = 0
         Top = 0
-        Width = 381
-        Height = 219
+        Width = 539
+        Height = 212
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 381
-        ExplicitHeight = 219
+        ExplicitWidth = 539
+        ExplicitHeight = 212
         inherited Panel: TPanel
-          Top = 178
-          Width = 381
-          ExplicitTop = 178
-          ExplicitWidth = 381
+          Top = 171
+          Width = 539
+          ExplicitTop = 171
+          ExplicitWidth = 539
           inherited sbAdd: TSpeedButton
-            Left = 195
+            Left = 280
             ExplicitLeft = 195
           end
           inherited sbInsert: TSpeedButton
-            Left = 232
+            Left = 333
             ExplicitLeft = 232
           end
           inherited sbDelete: TSpeedButton
-            Left = 269
+            Left = 385
             ExplicitLeft = 269
           end
           inherited seNumber: TJvSpinEdit
+            Height = 28
             OnChange = frmgrdDownstreamSegmentsseNumberChange
+            ExplicitHeight = 28
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 381
-          Height = 178
+          Width = 539
+          Height = 171
           OnSetEditText = frmgrdDownstreamSegmentsGridSetEditText
           Columns = <
             item
@@ -425,8 +430,8 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 381
-          ExplicitHeight = 178
+          ExplicitWidth = 539
+          ExplicitHeight = 171
         end
       end
     end
@@ -436,36 +441,38 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       inline frmgrdDiversions: TframeGrid
         Left = 0
         Top = 0
-        Width = 381
-        Height = 219
+        Width = 539
+        Height = 212
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 381
-        ExplicitHeight = 219
+        ExplicitWidth = 539
+        ExplicitHeight = 212
         inherited Panel: TPanel
-          Top = 178
-          Width = 381
-          ExplicitTop = 178
-          ExplicitWidth = 381
+          Top = 171
+          Width = 539
+          ExplicitTop = 171
+          ExplicitWidth = 539
           inherited sbAdd: TSpeedButton
-            Left = 195
+            Left = 280
             ExplicitLeft = 195
           end
           inherited sbInsert: TSpeedButton
-            Left = 232
+            Left = 333
             ExplicitLeft = 232
           end
           inherited sbDelete: TSpeedButton
-            Left = 269
+            Left = 385
             ExplicitLeft = 269
           end
           inherited seNumber: TJvSpinEdit
+            Height = 28
             OnChange = frmgrdDiversionsseNumberChange
+            ExplicitHeight = 28
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 381
-          Height = 178
+          Width = 539
+          Height = 171
           ColCount = 2
           OnSetEditText = frmgrdDiversionsGridSetEditText
           Columns = <
@@ -522,12 +529,47 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 381
-          ExplicitHeight = 178
+          ExplicitWidth = 539
+          ExplicitHeight = 171
           ColWidths = (
             64
             79)
         end
+      end
+    end
+    object tabGWT: TTabSheet
+      Caption = 'GWT'
+      ImageIndex = 4
+      object splSplit: TSplitter
+        Left = 121
+        Top = 0
+        Width = 5
+        Height = 212
+        ExplicitLeft = 8
+      end
+      object tvGwt: TJvPageListTreeView
+        Left = 0
+        Top = 0
+        Width = 121
+        Height = 212
+        PageDefault = 0
+        PageList = jplGwt
+        Align = alLeft
+        HideSelection = False
+        Indent = 19
+        TabOrder = 0
+        Items.Links = {00000000}
+        ExplicitLeft = 8
+      end
+      object jplGwt: TJvPageList
+        Left = 126
+        Top = 0
+        Width = 413
+        Height = 212
+        PropagateEnable = False
+        Align = alClient
+        ExplicitWidth = 351
+        ExplicitHeight = 300
       end
     end
   end

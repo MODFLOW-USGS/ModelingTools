@@ -97,6 +97,7 @@ begin
   btnedInitialConcentration.Glyph := FxButton;
   btnedInitialConcentration.Text := '';
 
+  rdgConcentrations.FixedCols := 2;
   rdgConcentrations.BeginUpdate;
   try
     for RowIndex := 1 to rdgConcentrations.RowCount - 1 do
@@ -238,7 +239,10 @@ begin
         for Index := 0 to rparserThreeDFormulaElements.VariableCount - 1 do
         begin
           Variable := rparserThreeDFormulaElements.Variables[Index];
-          rbFormulaParser.RegisterVariable(Variable);
+          if rbFormulaParser.IndexOfVariable(Variable.Name) < 0 then
+          begin
+            rbFormulaParser.RegisterVariable(Variable);
+          end;
         end;
       end;
 

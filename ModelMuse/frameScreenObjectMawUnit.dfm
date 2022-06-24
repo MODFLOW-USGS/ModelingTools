@@ -27,7 +27,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     Top = 33
     Width = 549
     Height = 260
-    ActivePage = tabGwt
+    ActivePage = tabTransient
     Align = alClient
     TabOrder = 1
     object tabWell: TTabSheet
@@ -994,10 +994,11 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         PageDefault = 0
         PageList = jplGwt
         Align = alLeft
+        HideSelection = False
         Indent = 19
         TabOrder = 0
         Items.Links = {00000000}
-        ExplicitLeft = 8
+        ExplicitLeft = -1
       end
       object jplGwt: TJvPageList
         Left = 126
@@ -1006,8 +1007,6 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Height = 225
         PropagateEnable = False
         Align = alClient
-        ExplicitWidth = 351
-        ExplicitHeight = 300
       end
     end
   end
