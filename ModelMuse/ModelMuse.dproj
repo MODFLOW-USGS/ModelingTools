@@ -143,6 +143,8 @@
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_Define>LeakChecking;$(DCC_Define)</DCC_Define>
         <DCC_UseMSBuildExternally>false</DCC_UseMSBuildExternally>
+        <VerInfo_Build>18</VerInfo_Build>
+        <VerInfo_Keys>FileVersion=5.0.0.18;ProductVersion=5.0.0.18</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -1800,6 +1802,11 @@
         </DCCReference>
         <DCCReference Include="frameSfrGwtConcentrationsUnit.pas">
             <Form>frameSfrGwtConcentrations</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="frameUzfGwtConcentrationsUnit.pas">
+            <Form>frameUzfGwtConcentrations</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>

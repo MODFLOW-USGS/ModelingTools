@@ -4,9 +4,8 @@ inherited frmManageParameters: TfrmManageParameters
   Caption = 'Manage Parameters'
   ClientHeight = 561
   ClientWidth = 784
-  ExplicitWidth = 800
-  ExplicitHeight = 600
-  PixelsPerInch = 96
+  ExplicitWidth = 802
+  ExplicitHeight = 608
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -937,13 +936,13 @@ inherited frmManageParameters: TfrmManageParameters
         Height = 484
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 296
-        ExplicitHeight = 124
+        ExplicitWidth = 776
+        ExplicitHeight = 484
         inherited tvTree: TTreeView
           Width = 776
           Height = 484
-          ExplicitWidth = 296
-          ExplicitHeight = 124
+          ExplicitWidth = 776
+          ExplicitHeight = 484
         end
       end
     end

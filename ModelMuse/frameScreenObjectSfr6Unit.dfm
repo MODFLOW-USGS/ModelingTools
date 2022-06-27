@@ -11,7 +11,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
     Height = 25
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 389
     object pnlCaption: TPanel
       Left = 1
       Top = 1
@@ -20,7 +19,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitWidth = 387
     end
   end
   object pgcSfr6: TPageControl
@@ -28,7 +26,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
     Top = 25
     Width = 547
     Height = 247
-    ActivePage = tabGWT
+    ActivePage = tabRates
     Align = alClient
     TabOrder = 1
     object tabConfiguration: TTabSheet
@@ -116,7 +114,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 381
         ColWidths = (
           64
           186)
@@ -559,7 +556,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Indent = 19
         TabOrder = 0
         Items.Links = {00000000}
-        ExplicitLeft = 8
       end
       object jplGwt: TJvPageList
         Left = 126
@@ -568,8 +564,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Height = 212
         PropagateEnable = False
         Align = alClient
-        ExplicitWidth = 351
-        ExplicitHeight = 300
       end
     end
   end

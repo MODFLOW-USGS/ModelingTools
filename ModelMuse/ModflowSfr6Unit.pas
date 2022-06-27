@@ -2357,7 +2357,7 @@ begin
                 SpecifiedConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 SpecifiedConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              break;
+              Continue;
             end;
 
             FormulaIndex := FormulaIndex - SpeciesCount;
@@ -2372,7 +2372,7 @@ begin
                 RainfallConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 RainfallConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              break;
+              Continue;
             end;
 
             FormulaIndex := FormulaIndex - SpeciesCount;
@@ -2387,7 +2387,7 @@ begin
                 EvapConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 EvapConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              break;
+              Continue;
             end;
 
             FormulaIndex := FormulaIndex - SpeciesCount;
@@ -2402,7 +2402,7 @@ begin
                 RunoffConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 RunoffConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              break;
+              Continue;
             end;
 
             FormulaIndex := FormulaIndex - SpeciesCount;
@@ -2417,7 +2417,7 @@ begin
                 InflowConcentrations.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
                 InflowConcentrations.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
               end;
-              break;
+              Continue;
             end;
           end;
       end;

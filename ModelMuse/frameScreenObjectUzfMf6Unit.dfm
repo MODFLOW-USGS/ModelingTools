@@ -11,9 +11,13 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
     DesignSize = (
       454
       46)
+    inherited seNumberOfTimes: TJvSpinEdit
+      Height = 28
+      ExplicitHeight = 28
+    end
     inherited btnDelete: TBitBtn
-      Left = 366
-      ExplicitLeft = 366
+      Left = 370
+      ExplicitLeft = 370
     end
     inherited btnInsert: TBitBtn
       Left = 282
@@ -259,9 +263,20 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitTop = 53
+      ExplicitLeft = 1
+      ExplicitTop = 51
       ExplicitWidth = 452
       ExplicitHeight = 100
+      ColWidths = (
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64)
     end
   end
   object pcUzf: TPageControl
@@ -269,7 +284,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
     Top = 177
     Width = 454
     Height = 212
-    ActivePage = tabSteadyProperties
+    ActivePage = tabGWT
     Align = alClient
     TabOrder = 3
     object tabSteadyProperties: TTabSheet
@@ -277,50 +292,50 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
       object lblSurfaceDepressionDepth: TLabel
         Left = 184
         Top = 6
-        Width = 171
-        Height = 13
+        Width = 232
+        Height = 20
         Caption = 'Surface depression depth (surfdep)'
       end
       object lblVerticalSaturatedK: TLabel
         Left = 184
         Top = 33
-        Width = 89
-        Height = 13
+        Width = 118
+        Height = 20
         Caption = 'Saturated Kz (vks)'
       end
       object lblResidualWaterContent: TLabel
         Left = 184
         Top = 60
-        Width = 140
-        Height = 13
+        Width = 188
+        Height = 20
         Caption = 'Residual water content (thtr)'
       end
       object lblSaturatedWaterContent: TLabel
         Left = 184
         Top = 87
-        Width = 149
-        Height = 13
+        Width = 197
+        Height = 20
         Caption = 'Saturated water content (thts)'
       end
       object lblInitialWaterContent: TLabel
         Left = 184
         Top = 114
-        Width = 124
-        Height = 13
+        Width = 168
+        Height = 20
         Caption = 'Initial water content (thti)'
       end
       object lblBrooksCoreyEpsilon: TLabel
         Left = 184
         Top = 141
-        Width = 128
-        Height = 13
+        Width = 176
+        Height = 20
         Caption = 'Brooks Corey epsilon (eps)'
       end
       object edSurfaceDepressionDepth: TJvComboEdit
         Left = 3
         Top = 3
         Width = 168
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -350,7 +365,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 30
         Width = 168
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -380,7 +395,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 57
         Width = 168
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -410,7 +425,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 84
         Width = 168
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -440,7 +455,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 111
         Width = 168
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -470,7 +485,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 138
         Width = 168
-        Height = 21
+        Height = 28
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -500,6 +515,41 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
     object tabTime: TTabSheet
       Caption = 'Time varying properties'
       ImageIndex = 1
+    end
+    object tabGWT: TTabSheet
+      Caption = 'GWT'
+      ImageIndex = 2
+      object splSplit: TSplitter
+        Left = 121
+        Top = 0
+        Width = 5
+        Height = 177
+        ExplicitLeft = 8
+      end
+      object tvGwt: TJvPageListTreeView
+        Left = 0
+        Top = 0
+        Width = 121
+        Height = 177
+        PageDefault = 0
+        PageList = jplGwt
+        Align = alLeft
+        HideSelection = False
+        Indent = 19
+        TabOrder = 0
+        Items.Links = {00000000}
+        ExplicitLeft = 8
+      end
+      object jplGwt: TJvPageList
+        Left = 126
+        Top = 0
+        Width = 320
+        Height = 177
+        PropagateEnable = False
+        Align = alClient
+        ExplicitWidth = 413
+        ExplicitHeight = 212
+      end
     end
   end
 end

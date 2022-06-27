@@ -144,11 +144,17 @@ resourcestring
   StrActive = 'Active';
 
 procedure TframeScreenObjectSfr6.btnDeleteClick(Sender: TObject);
+var
+  SpeciesIndex: Integer;
 begin
   inherited;
   if (rdgModflowBoundary.RowCount > 2 + PestRowOffset)
     and (rdgModflowBoundary.Row> 0 + PestRowOffset) then
   begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.DeleteRow(rdgModflowBoundary.SelectedRow);
+    end;
     rdgModflowBoundary.DeleteRow(rdgModflowBoundary.Row);
   end;
   seNumberOfTimes.AsInteger := seNumberOfTimes.AsInteger -1;
@@ -156,6 +162,8 @@ begin
 end;
 
 procedure TframeScreenObjectSfr6.btnInsertClick(Sender: TObject);
+var
+  SpeciesIndex: Integer;
 begin
   inherited;
   if (rdgModflowBoundary.SelectedRow <= 0+ PestRowOffset)
@@ -167,6 +175,10 @@ begin
   end;
   if (seNumberOfTimes.AsInteger > 0) then
   begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.InsertRow(rdgModflowBoundary.SelectedRow);
+    end;
     rdgModflowBoundary.InsertRow(rdgModflowBoundary.SelectedRow);
     rdgModflowBoundary.ItemIndex[Ord(s6cStatus), rdgModflowBoundary.SelectedRow] := 1;
   end;
@@ -935,6 +947,8 @@ end;
 
 procedure TframeScreenObjectSfr6.rdgModflowBoundarySetEditText(Sender: TObject;
   ACol, ARow: Integer; const Value: string);
+var
+  SpeciesIndex: Integer;
 begin
   if FDeleting  then
   begin
@@ -955,6 +969,16 @@ begin
     FValuesCleared := False;
   end;
 
+  if (ARow >= rdgModflowBoundary.FixedRows + PestRowOffset)
+    and (ACol in [Ord(s6cStartTime), Ord(s6cEndtime)]) then
+  begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.Cells[ACol, ARow]
+        := rdgModflowBoundary.Cells[ACol, ARow];
+    end;
+  end;
+
   UpdateNextTimeCell(rdgModflowBoundary, ACol, ARow);
   DoChange;
 end;
@@ -969,6 +993,7 @@ end;
 procedure TframeScreenObjectSfr6.seNumberOfTimesChange(Sender: TObject);
 var
   RowIndex: Integer;
+  SpeciesIndex: Integer;
 begin
   FDeleting := True;
   try
@@ -987,6 +1012,10 @@ begin
           rdgModflowBoundary.ItemIndex[Ord(s6cStatus), RowIndex] := 1;
         end;
       end;
+    end;
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.RowCount := rdgModflowBoundary.RowCount;
     end;
     btnDelete.Enabled := seNumberOfTimes.AsInteger >= 1;
     rdgModflowBoundary.Invalidate;

@@ -1920,9 +1920,28 @@ begin
       if (rdgParameters.ItemIndex[Ord(pcPestTransform), ARow] = Ord(ptLog)) and
         (rdgParameters.ItemIndex[Ord(pcChangeLimitation), ARow] <> Ord(pclFactor)) then
       begin
-          rdgParameters.Canvas.Brush.Color := clRed;
+        rdgParameters.Canvas.Brush.Color := clRed;
       end;
     end;
+
+    if TParamColumn(ACol) = pcValue then
+    begin
+      if (rdgParameters.ItemIndex[Ord(pcChangeLimitation), ARow] in [Ord(pclRelative), Ord(pclAbsolute)])
+        and (rdgParameters.RealValueDefault[ACol, ARow, 1] = 0) then
+      begin
+        rdgParameters.Canvas.Brush.Color := clRed;
+      end;
+    end;
+
+    if TParamColumn(ACol) = pcAbsolute then
+    begin
+      if (rdgParameters.ItemIndex[Ord(pcChangeLimitation), ARow] = Ord(pclAbsolute))
+        and (rdgParameters.RealValueDefault[ACol, ARow, 1] <= 0) then
+      begin
+        rdgParameters.Canvas.Brush.Color := clRed;
+      end;
+    end;
+    //pcAbsolute
   end;
 end;
 

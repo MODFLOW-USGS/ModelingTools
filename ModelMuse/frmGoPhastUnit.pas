@@ -2159,7 +2159,7 @@ uses
   PlProcUnit, PestControlFileWriterUnit, SutraImportUnit, frmSvdaPrepInputUnit,
   frmSupCalcUnit, PestPropertiesUnit,
   frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit,
-  frmTimeSeriesUnit;
+  frmTimeSeriesUnit, System.StrUtils;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -2421,6 +2421,8 @@ resourcestring
   ' the of the PEST delimiters is set to "@" which is also used by SUTRA in ' +
   'a different way. You can change this on the Basic tab of the PEST Propert' +
   'ies dialog box. ' + sLineBreak +'Do you want to try running SUTRA anyway?';
+  StrSorryPESTDoesnt = 'Sorry. PEST doesn''t handle file names with ' +
+  'period characters in the file name root.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -13088,6 +13090,8 @@ var
   ZoneBudgetLocation: string;
   PlProcLocation: string;
   MPathPackage: TModpathSelection;
+  TempFileName: string;
+  DotPosition: Integer;
 begin
   inherited;
   if FExporting then
@@ -13134,6 +13138,17 @@ begin
     InitializeModflowInputDialog;
     if sdModflowInput.Execute then
     begin
+      if PhastModel.PestUsed then
+      begin
+        TempFileName := ChangeFileExt(sdModflowInput.FileName, '');
+        DotPosition := Pos('.', TempFileName);
+        if DotPosition > 0 then
+        begin
+          Beep;
+          MessageDlg(StrSorryPESTDoesnt, mtError, [mbOK], 0);
+          Exit;
+        end;
+      end;
       if PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
       begin
         if Length(ExtractFileName(sdModflowInput.FileName)) > 50 then
@@ -14694,6 +14709,8 @@ end;
 procedure TfrmGoPhast.acRunPestExecute(Sender: TObject);
 var
   FileName: string;
+  TempFileName: string;
+  DotPosition: Integer;
 begin
   inherited;
   if not PestVersionOK then
@@ -14714,6 +14731,15 @@ begin
       FileName := ChangeFileExt(PhastModel.ModelFileName,
         dlgSavePest.DefaultExt);
     end;
+  end;
+
+  TempFileName := ChangeFileExt(FileName, '');
+  DotPosition := Pos('.', TempFileName);
+  if DotPosition > 0 then
+  begin
+    Beep;
+    MessageDlg(StrSorryPESTDoesnt, mtError, [mbOK], 0);
+    Exit;
   end;
 
   dlgSavePest.FileName := PhastModel.FixFileName(FileName);

@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameScreenObjectNoParamUnit, Vcl.Grids,
   RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry, Vcl.Buttons, Vcl.Mask, JvExMask,
   JvSpin, Vcl.ExtCtrls, UndoItemsScreenObjects, Vcl.ComCtrls, JvToolEdit,
-  ModflowPackageSelectionUnit;
+  ModflowPackageSelectionUnit, JvExControls, JvPageList, JvExComCtrls,
+  JvPageListTreeView, frameUzfGwtConcentrationsUnit;
 
 type
   TUzfColumns = (ucStartTime, ucEndTime, ucInfiltration, ucPotentialEt,
@@ -30,21 +31,31 @@ type
     lblSaturatedWaterContent: TLabel;
     lblInitialWaterContent: TLabel;
     lblBrooksCoreyEpsilon: TLabel;
+    tabGWT: TTabSheet;
+    tvGwt: TJvPageListTreeView;
+    splSplit: TSplitter;
+    jplGwt: TJvPageList;
     procedure edSurfaceDepressionDepthChange(Sender: TObject);
     procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgModflowBoundarySetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure seNumberOfTimesChange(Sender: TObject);
   private
     FIntializedFrame: Boolean;
     FOnEdited: TNotifyEvent;
     FGettingData: Boolean;
     FGroundwaterET: TUzfGwEtChoice;
     FUnsatET: TUzfUnsatEtChoice;
+    FGwtFrameList: TUzfGwtObjectList;
     procedure InitializeFrame;
     procedure Edited;
     { Private declarations }
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     procedure GetData(List: TScreenObjectEditCollection);
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
@@ -59,7 +70,7 @@ implementation
 
 uses
   GoPhastTypes, ModflowUzfMf6Unit, frmGoPhastUnit, DataSetUnit,
-  ScreenObjectUnit, PhastModelUnit;
+  ScreenObjectUnit, PhastModelUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrInfiltration = 'Infiltration (finf)';
@@ -196,9 +207,72 @@ end;
 
 procedure TframeScreenObjectUzfMf6.rdgModflowBoundarySetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
+var
+  SpeciesIndex: Integer;
 begin
   inherited;
   Edited;
+  if (ARow >= rdgModflowBoundary.FixedRows + PestRowOffset)
+    and (ACol in [Ord(ucStartTime), Ord(ucEndtime)]) then
+  begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.Cells[ACol, ARow]
+        := rdgModflowBoundary.Cells[ACol, ARow];
+    end;
+  end;
+end;
+
+procedure TframeScreenObjectUzfMf6.seNumberOfTimesChange(Sender: TObject);
+var
+  SpeciesIndex: Integer;
+begin
+  inherited;
+  for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+  begin
+    FGwtFrameList[SpeciesIndex].rdgConcentrations.RowCount := rdgModflowBoundary.RowCount;
+  end;
+end;
+
+procedure TframeScreenObjectUzfMf6.btnDeleteClick(Sender: TObject);
+var
+  SpeciesIndex: Integer;
+begin
+  if (rdgModflowBoundary.RowCount > 2 + PestRowOffset)
+    and (rdgModflowBoundary.Row> 0 + PestRowOffset) then
+  begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.DeleteRow(rdgModflowBoundary.SelectedRow);
+    end;
+  end;
+  inherited;
+end;
+
+procedure TframeScreenObjectUzfMf6.btnInsertClick(Sender: TObject);
+var
+  SpeciesIndex: Integer;
+begin
+  if (seNumberOfTimes.AsInteger > 0) then
+  begin
+    for SpeciesIndex := 0 to FGwtFrameList.Count - 1 do
+    begin
+      FGwtFrameList[SpeciesIndex].rdgConcentrations.InsertRow(rdgModflowBoundary.SelectedRow);
+    end;
+  end;
+  inherited;
+end;
+
+constructor TframeScreenObjectUzfMf6.Create(AOwner: TComponent);
+begin
+  inherited;
+  FGwtFrameList := TUzfGwtObjectList.Create;
+end;
+
+destructor TframeScreenObjectUzfMf6.Destroy;
+begin
+  FGwtFrameList.Free;
+  inherited;
 end;
 
 procedure TframeScreenObjectUzfMf6.Edited;
@@ -225,6 +299,11 @@ var
   TimeDataIdentical: Boolean;
   FirstUzf: TUzfMf6Boundary;
   UzfMf6Package: TUzfMf6PackageSelection;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+  APage: TJvStandardPage;
+  AGwtFrame: TframeUzfGwtConcentrations;
+  ANode: TJvPageIndexNode;
 begin
   FGettingData := True;
 
@@ -464,6 +543,36 @@ begin
       end;
     end;
     rdgModflowBoundary.HideEditor;
+
+    tabGWT.TabVisible := frmGoPhast.PhastModel.GwtUsed;
+    if tabGWT.TabVisible then
+    begin
+      tvGwt.Items.Clear;
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex];
+        if SpeciesIndex >= jplGwt.PageCount then
+        begin
+          APage := TJvStandardPage.Create(self);
+          APage.PageList := jplGwt;
+          AGwtFrame := TframeUzfGwtConcentrations.Create(nil);
+          FGwtFrameList.Add(AGwtFrame);
+          AGwtFrame.Parent := APage;
+          AGwtFrame.Align := alClient;
+        end
+        else
+        begin
+          AGwtFrame := FGwtFrameList[SpeciesIndex];
+        end;
+        ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
+        ANode.PageIndex := SpeciesIndex;
+        AGwtFrame.GetData(List, SpeciesIndex);
+        if SpeciesIndex = 0 then
+        begin
+          ANode.Selected := True;
+        end;
+      end;
+    end
   finally
     FGettingData := False;
   end;
@@ -489,6 +598,8 @@ var
   Vertical_Saturated_K: TDataArray;
   AScreenObject: TScreenObject;
   DataSetIndex: Integer;
+  SpeciesIndex: Integer;
+  AGwtFrame: TframeUzfGwtConcentrations;
   function NonBlank(const Formula: string): string;
   begin
     if Formula = '' then
@@ -736,6 +847,15 @@ begin
     end;
   finally
     NewValues.Free;
+  end;
+
+  if tabGWT.TabVisible then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      AGwtFrame := FGwtFrameList[SpeciesIndex];
+      AGwtFrame.setData(List, SpeciesIndex);
+    end;
   end;
 end;
 

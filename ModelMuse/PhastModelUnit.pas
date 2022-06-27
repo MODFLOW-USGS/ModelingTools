@@ -10586,16 +10586,18 @@ const
 //    '5.0.0.17' Bug fix: Fixed bug that could cause access violations when
 //                evaluating the Ky and Kz data sets in MODFLOW 6 models when
 //                anisotropy was used.
-
-//               Bug fix: Fixed bug in changing the number of times specified
+//    '5.0.0.18' Bug fix: Fixed bug in changing the number of times specified
 //                for MAW wells.
+//               Change: ModelMuse now prevents the user from exporting a
+//                model with a period in the file name root if PEST is
+//                activated.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.17';
+  IIModelVersion = '5.0.0.18';
 
 function IModelVersion: string;
 begin

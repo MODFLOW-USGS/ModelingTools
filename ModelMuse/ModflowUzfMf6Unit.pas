@@ -1286,6 +1286,7 @@ begin
           Index := Index-UzfBoundaryGwtStart;
           if Index < 0 then
           begin
+            result := '0';
             Exit;
           end;
 //          Assert(Index >= 0);

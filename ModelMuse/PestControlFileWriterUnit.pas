@@ -5,7 +5,7 @@ interface
 uses
   CustomModflowWriterUnit, System.SysUtils, PestObsUnit, GoPhastTypes,
   PhastModelUnit, ObsInterfaceUnit, OrderedCollectionUnit, System.Classes,
-  RealListUnit;
+  RealListUnit, System.StrUtils;
 
 type
   TPestControlFileWriter = class(TCustomFileWriter)

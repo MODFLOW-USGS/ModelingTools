@@ -2063,23 +2063,12 @@ var
   ACell: TSfrMF6_Cell;
   ReachNumber: Integer;
   ReachCount: Integer;
-  MoverWriter: TModflowMvrWriter;
   MvrReceiver: TMvrReceiver;
   MvrSource: TMvrRegisterKey;
   GwtStatus: TGwtBoundaryStatus;
   DiversionCount: Integer;
   FormulaIndex: Integer;
 begin
-  if MvrWriter <> nil then
-  begin
-    MoverWriter := MvrWriter as TModflowMvrWriter;
-  end
-  else
-  begin
-    MoverWriter := nil;
-  end;
-  MvrReceiver.ReceiverKey.ReceiverPackage := rpcSfr;
-
   for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count -1 do
   begin
     frmProgressMM.AddMessage(Format(
@@ -2162,7 +2151,6 @@ begin
 
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
             + SfrGwtConcCount*FSpeciesIndex + SfrGwtSpecifiedConcentrationPosition;
-//            + SfrGwtConcCount*SfrGwtSpecifiedConcentrationPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
         end;
@@ -2173,7 +2161,6 @@ begin
           WriteString(' RAINFALL');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
             + SfrGwtConcCount*FSpeciesIndex + SfrGwtRainfallConcentrationsPosition;
-//            + SfrGwtConcCount*SfrGwtRainfallConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
 
@@ -2181,7 +2168,6 @@ begin
           WriteString(' EVAPORATION');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
             + SfrGwtConcCount*FSpeciesIndex + SfrGwtEvapConcentrationsPosition;
-//            + SfrGwtConcCount*SfrGwtEvapConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
 
@@ -2189,7 +2175,6 @@ begin
           WriteString(' RUNOFF');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
             + SfrGwtConcCount*FSpeciesIndex + SfrGwtRunoffConcentrationsPosition;
-//            + SfrGwtConcCount*SfrGwtRunoffConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
 
@@ -2197,29 +2182,14 @@ begin
           WriteString(' INFLOW');
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
             + SfrGwtConcCount*FSpeciesIndex + SfrGwtInflowConcentrationsPosition;
-//            + SfrGwtConcCount*SfrGwtInflowConcentrationsPosition + FSpeciesIndex;
           WriteValueOrFormula(ACell, FormulaIndex);
           NewLine;
-        end;
-
-        if ACell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then
-        begin
-          MvrSource.Index := ReachNumber;
-          MvrSource.SourceKey.MvrIndex := ACell.MvrIndex;
-          MvrSource.SourceKey.ScreenObject := ASegment.FScreenObject;
-          TModflowMvrWriter(MvrWriter).AddMvrSource(MvrSource);
+          NewLine;
         end;
       end;
-
-      if (MoverWriter <> nil) and not WritingTemplate then
-      begin
-        MoverWriter.AddMvrReceiver(MvrReceiver);
-      end;
-
     end;
     WriteEndPeriod;
     Assert(ReachCount <= FReachCount);
-
   end;
 end;
 
