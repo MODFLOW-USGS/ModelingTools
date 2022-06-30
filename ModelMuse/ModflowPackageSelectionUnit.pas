@@ -1387,6 +1387,33 @@ Type
     property StoredAtsOuterMaxFraction: TRealStorage read FStoredAtsOuterMaxFraction write SetStoredAtsOuterMaxFraction;
   end;
 
+  TImsCollectionItem = class(TPhastCollectionItem)
+  private
+    FGwtIms: TSmsPackageSelection;
+    procedure SetGwtIms(const Value: TSmsPackageSelection);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+  published
+    property GwtIms: TSmsPackageSelection read FGwtIms write SetGwtIms;
+  end;
+
+  TGwtImsCollection = class(TPhastCollection)
+  private
+    FModel: TBaseModel;
+    function GetCount: Integer;
+    procedure SetCount(const Value: Integer);
+    function GetItem(Index: Integer): TImsCollectionItem;
+    procedure SetItem(Index: Integer; const Value: TImsCollectionItem);
+  public
+    constructor Create(Model: TBaseModel);
+    property Count: Integer read GetCount write SetCount;
+    procedure InitializeVariables;
+    property Items[Index: Integer]: TImsCollectionItem read GetItem
+      write SetItem; default;
+  end;
+
   TLayerOption = (loTop, loSpecified, loTopActive);
 
   // @name is used for MODFLOW packages in which
@@ -22559,6 +22586,100 @@ end;
 
 procedure TSpeciesAssociatedValues.SetItem(Index: Integer;
   const Value: TSpeciesAssociatedValue);
+begin
+  inherited Items[Index] := Value;
+end;
+
+{ TImsCollectionItem }
+
+procedure TImsCollectionItem.Assign(Source: TPersistent);
+begin
+  if Source is TImsCollectionItem then
+  begin
+    GwtIms := TImsCollectionItem(Source).GwtIms;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TImsCollectionItem.Create(Collection: TCollection);
+var
+  ParentCollection: TGwtImsCollection;
+begin
+  inherited;
+  Assert(Collection <> nil);
+  ParentCollection := Collection as TGwtImsCollection;
+  FGwtIms := TSmsPackageSelection.Create(ParentCollection.FModel)
+end;
+
+destructor TImsCollectionItem.Destroy;
+begin
+  FGwtIms.Free;
+  inherited;
+end;
+
+procedure TImsCollectionItem.SetGwtIms(const Value: TSmsPackageSelection);
+begin
+  FGwtIms.Assign(Value);
+end;
+
+{ TGwtImsCollection }
+
+constructor TGwtImsCollection.Create(Model: TBaseModel);
+var
+  OnInvalidateModelEvent: TNotifyEvent;
+begin
+  FModel := Model;
+  if FModel = nil then
+  begin
+    OnInvalidateModelEvent := nil;
+  end
+  else
+  begin
+    OnInvalidateModelEvent := FModel.Invalidate;
+  end;
+  inherited Create(TImsCollectionItem, OnInvalidateModelEvent);
+end;
+
+function TGwtImsCollection.GetCount: Integer;
+var
+  LocalModel: TCustomModel;
+begin
+  if FModel <> nil then
+  begin
+    LocalModel := FModel as TCustomModel;
+    if LocalModel.GwtUsed and (inherited Count < LocalModel.MobileComponents.Count) then
+    begin
+      inherited Count := LocalModel.MobileComponents.Count;
+    end;
+  end;
+  result := inherited Count;
+end;
+
+function TGwtImsCollection.GetItem(Index: Integer): TImsCollectionItem;
+begin
+  result := inherited Items[Index] as TImsCollectionItem
+end;
+
+procedure TGwtImsCollection.InitializeVariables;
+var
+  SpeciesIndex: Integer;
+begin
+  for SpeciesIndex := 0 to inherited Count - 1 do
+  begin
+    Items[SpeciesIndex].GwtIms.InitializeVariables;
+  end;
+end;
+
+procedure TGwtImsCollection.SetCount(const Value: Integer);
+begin
+  inherited Count := Value;
+end;
+
+procedure TGwtImsCollection.SetItem(Index: Integer;
+  const Value: TImsCollectionItem);
 begin
   inherited Items[Index] := Value;
 end;

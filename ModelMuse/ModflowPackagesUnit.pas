@@ -76,6 +76,7 @@ type
     FMt3dSft: TMt3dSftPackageSelection;
     FMt3dCts: TMt3dCtsPackageSelection;
     FCsubPackage: TCSubPackageSelection;
+    FGwtIms: TGwtImsCollection;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -142,6 +143,7 @@ type
     procedure SetMt3dSft(const Value: TMt3dSftPackageSelection);
     procedure SetMt3dCts(const Value: TMt3dCtsPackageSelection);
     procedure SetCsubPackage(const Value: TCSubPackageSelection);
+    procedure SetGwtIms(const Value: TGwtImsCollection);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -267,7 +269,11 @@ type
     property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts;
     property CSubPackage: TCSubPackageSelection read FCsubPackage
       write SetCsubPackage;
-
+    property GwtIms: TGwtImsCollection read FGwtIms write SetGwtIms
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
     // SelectedModflowPackageCount must be updated if the new package is a
@@ -447,6 +453,7 @@ begin
     Mt3dSft := SourcePackages.Mt3dSft;
     Mt3dCts := SourcePackages.Mt3dCts;
     CsubPackage := SourcePackages.CsubPackage;
+    GwtIms := SourcePackages.GwtIms;
   end
   else
   begin
@@ -777,10 +784,13 @@ begin
   FCsubPackage.PackageIdentifier := StrCSUBSkeletalStora;
   FCsubPackage.Classification := StrSubsidence;
   FCsubPackage.SelectionType := stCheckBox;
+
+  FGwtIms := TGwtImsCollection.Create(Model)
 end;
 
 destructor TModflowPackages.Destroy;
 begin
+  FGwtIms.Free;
   FCsubPackage.Free;
   FUzfMf6Package.Free;
   FMvrPackage.Free;
@@ -923,9 +933,12 @@ begin
   Mt3dSft.InitializeVariables;
   Mt3dCts.InitializeVariables;
   CsubPackage.InitializeVariables;
+  FGwtIms.InitializeVariables;
 end;
 
 function TModflowPackages.SelectedModflowPackageCount: integer;
+var
+  LocalModel: TCustomModel;
 begin
   result := 0;
   if ChdBoundary.IsSelected then
@@ -1178,6 +1191,11 @@ begin
     Inc(Result);
   end;
 
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    Inc(Result, LocalModel.MobileComponents.Count);
+  end;
 
   // Don't count Modpath or ZoneBudget
   // because they are exported seperately from MODFLOW.
@@ -1276,6 +1294,11 @@ end;
 procedure TModflowPackages.SetGncPackage(const Value: TGncPackage);
 begin
   FGncPackage.Assign(Value)
+end;
+
+procedure TModflowPackages.SetGwtIms(const Value: TGwtImsCollection);
+begin
+  FGwtIms.Assign(Value);
 end;
 
 procedure TModflowPackages.SetHfbPackage(const Value: TModflowPackageSelection);

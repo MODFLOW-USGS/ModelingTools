@@ -2059,8 +2059,8 @@ that affects the model output should also have a comment. }
 //    FMeshFileName: string;
     FPilotPointDataArrays: TDataArrayList;
     FPestParamDictionay: TDictionary<string, TModflowSteadyParameter>;
-//    FPestBoundaryDataArrays: TDictionary<string, TDataArray>;
-
+    //  @name is implemented as a @link(TMf6GwtNameWriters).
+    FMf6GwtNameWriters: TObject;
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
     procedure SetSomeSegmentsUpToDate(const Value: boolean); virtual; abstract;
     // See @link(PhastGrid).
@@ -3437,6 +3437,7 @@ that affects the model output should also have a comment. }
     function SutraUnsatRegionUsed(Sender: TObject): boolean;
     procedure ClearPestPriorInfoGroupData;
     property AppsMoved: TStringList read GetAppsMoved;
+    property Mf6GwtNameWriters: TObject read FMf6GwtNameWriters;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -5444,6 +5445,7 @@ resourcestring
   StrStageMf6 = 'Stage';
   StrRoughnessMf6 = 'Roughness';
   StrPriorityCprior = 'Priority (cprior)';
+  StrSolutionGroupName = 'Groundwater';
 
 implementation
 
@@ -5496,7 +5498,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
   Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit,
   ModflowMnw2Unit, PestObsExtractorInputWriterUnit, Modflow6ObsUnit,
-  PestControlFileWriterUnit;
+  PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -6016,7 +6018,6 @@ resourcestring
   // Sutra 4 element data sets
   StrScaledSolidGrainThermalConductivity = KScaledSolidGrainThermalConductivity;
   StrScaledEffectiveAirThermalConductivity = KScaledEffectiveAirThermalConductivity;
-
 
   //  StrLakeMf6 = 'LakeMf6';
 
@@ -29580,6 +29581,10 @@ begin
 
   FPestObsCollection := TPestObsCollection.Create(self);
 //  FPestBoundaryDataArrays := TDictionary<string, TDataArray>.Create;
+
+  //  @name is implemented as a @link(TMf6GwtNameWriters).
+  FMf6GwtNameWriters := TMf6GwtNameWriters.Create;
+
 end;
 
 procedure TCustomModel.UpdateSutraTimeListNames;
@@ -30095,6 +30100,7 @@ end;
 
 destructor TCustomModel.Destroy;
 begin
+  FMf6GwtNameWriters.Free;
   FPestObsCollection.Free;
 //  FPestBoundaryDataArrays.Free;
   FPestParamDictionay.Free;
@@ -42602,7 +42608,7 @@ var
   NpfWriter: TNpfWriter;
   StoWriter: TStoPackageWriter;
   ModelData: TModelData;
-  SmsWriter: TImsWriter;
+  ImsWriter: TImsWriter;
   RipWriter: TModflowRipWriter;
   Sfr6Writer: TModflowSFR_MF6_Writer;
   MawWriter: TModflowMAW_Writer;
@@ -42617,8 +42623,22 @@ var
   ObsScriptWriter: TGlobalComparisonScriptWriter;
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
   SpeciesIndex: Integer;
+  GwtNameWriters: TMf6GwtNameWriters;
+  ASpeciesName: string;
+  GwtFileName: string;
+  GwtIcWriter: TGwtInitialConcWriter;
 //  PestDataArrayWriter: TPestDataArrayWriter;
 begin
+  GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
+  GwtNameWriters.Clear;
+  if GwtUsed then
+  begin
+    for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+    begin
+      GwtNameWriters.Add(TMf6GwtNameWriter.Create(self, FileName, SpeciesIndex, etExport));
+    end;
+  end;
+
   PilotPointData.Clear;
 
   frmErrorsAndWarnings.RemoveWarningGroup(self, StrTheFollowingObjectNoCells);
@@ -42706,7 +42726,7 @@ begin
           begin
             ModelData.ModelType := mtGroundWaterFlow;
             ModelData.ModelName := DisplayName;
-            ModelData.SolutionGroup := 'Groundwater';
+            ModelData.SolutionGroup := StrSolutionGroupName;
             ModelData.MaxIterations := ModflowPackages.SmsPackage.SolutionGroupMaxIteration;
             ModelData.ImsFile := TImsWriter.FileName(FileName);
             AddModelInputFile(ModelData.ImsFile);
@@ -42791,11 +42811,11 @@ begin
               Exit;
             end;
 
-            SmsWriter := TImsWriter.Create(self, etExport);
+            ImsWriter := TImsWriter.Create(self, etExport, -1);
             try
-              SmsWriter.WriteFile(FileName);
+              ImsWriter.WriteFile(FileName);
             finally
-              SmsWriter.Free;
+              ImsWriter.Free;
             end;
             Application.ProcessMessages;
             if not frmProgressMM.ShouldContinue then
@@ -43609,9 +43629,6 @@ begin
               end;
             end;
 
-
-
-
             ExportSfrPackage(FileName);
             Application.ProcessMessages;
             if not frmProgressMM.ShouldContinue then
@@ -43875,7 +43892,6 @@ begin
             ObsScriptWriter.Free;
           end;
 
-
           FinalizePvalAndTemplate(FileName);
 
           LocalNameWriter.SaveNameFile(FileName);
@@ -43892,13 +43908,6 @@ begin
         UpdateCurrentModel(SelectedModel);
       end;
 
-//      PestDataArrayWriter := TPestDataArrayWriter.Create(Self, etExport);
-//      try
-//        PestDataArrayWriter.WriteFile(FileName);
-//      finally
-//        PestDataArrayWriter.Free;
-//      end;
-
       PestObsExtractorInputWriter := TPestObsExtractorInputWriter.Create(Self);
       try
         PestObsExtractorInputWriter.WriteFile(FileName)
@@ -43909,6 +43918,30 @@ begin
       if self is TPhastModel then
       begin
         TPhastModel(self).ExportPestInput(FileName, pecNone);
+      end;
+
+      if GwtUsed then
+      begin
+        for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+        begin
+          GwtIcWriter := TGwtInitialConcWriter.Create(Self, etExport);
+          try
+            GwtIcWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            GwtIcWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+        end;
+      end;
+
+      for SpeciesIndex := 0 to GwtNameWriters.Count - 1 do
+      begin
+        GwtNameWriters[SpeciesIndex].WriteFile;
       end;
 
     except on E: EInvalidTime do

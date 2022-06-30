@@ -374,8 +374,8 @@ end;
       const Option: TFileOption; OutputSuppression: TOutputSuppression;
       AModel: TCustomModel;
       RelativeFileName: boolean = False; PackageName: String = ''); overload;
-    class procedure WriteToGwtNameFile(const Ftype: string; FileName: string;
-      SpeciesIndex: Integer);
+    procedure WriteToGwtNameFile(const Ftype: string; FileName: string;
+      SpeciesIndex: Integer; PackageName: string = '');
     class procedure WriteToMt3dMsNameFile(const Ftype: string;
       const UnitNumber: integer; FileName: string; FileOption: TFileOption;
       AModel: TCustomModel; RelativeFileName: boolean = False; Option: String = '');
@@ -1043,6 +1043,25 @@ end;
     procedure SaveNameFile(AFileName: string); override;
     class function Extension: string; override;
   end;
+
+  TMf6GwtNameWriter = class(TCustomModflowWriter)
+  private
+    FPackageLines: TStringList;
+    FFileName: string;
+    FSpeciesName: string;
+    FSpeciesIndex: Integer;
+    procedure WriteOptions;
+    procedure WritePackages;
+  public
+    Constructor Create(AModel: TCustomModel; const FileName: string; SpeciesIndex: Integer;
+      EvaluationType: TEvaluationType); reintroduce;
+    destructor Destroy; override;
+    procedure AddPackageFile(FileType: string; FileName: string;
+      PackageName: string = '');
+    procedure WriteFile;
+  end;
+
+  TMf6GwtNameWriters = TObjectList<TMf6GwtNameWriter>;
 
   TModelDataList = TList<TModelData>;
 
@@ -3842,22 +3861,19 @@ begin
 end;
 
 procedure TCustomFileWriter.WriteString(const Value: String);
-//var
-//  StringToWrite: AnsiString;
 begin
   WriteString(AnsiString(Value));
-//  StringToWrite := AnsiString(Value);
-//  if Length(StringToWrite) > 0 then
-//  begin
-//    FFileStream.Write(StringToWrite[1], Length(StringToWrite)*SizeOf(AnsiChar));
-////    UpdateExportTime;
-//  end;
 end;
 
-class procedure TCustomModflowWriter.WriteToGwtNameFile(const Ftype: string;
-  FileName: string; SpeciesIndex: Integer);
+procedure TCustomModflowWriter.WriteToGwtNameFile(const Ftype: string;
+  FileName: string; SpeciesIndex: Integer; PackageName: string = '');
+var
+  Mf6GwtNameWriters: TMf6GwtNameWriters;
+  Mf6GwtNameWriter: TMf6GwtNameWriter;
 begin
-
+  Mf6GwtNameWriters := Model.Mf6GwtNameWriters as TMf6GwtNameWriters;
+  Mf6GwtNameWriter := Mf6GwtNameWriters[SpeciesIndex];
+  Mf6GwtNameWriter.AddPackageFile(Ftype, FileName, PackageName);
 end;
 
 class procedure TCustomModflowWriter.WriteToMt3dMsNameFile(const Ftype: string;
@@ -10638,6 +10654,104 @@ begin
     end;
     NewLine;
   end;
+end;
+
+{ TMf6GwtNameWriter }
+
+procedure TMf6GwtNameWriter.AddPackageFile(FileType, FileName,
+  PackageName: string);
+begin
+  if PackageName = '' then
+  begin
+    FPackageLines.Add(Format('  %0:s %1:s', [FileType, ExtractFileName(FileName)]));
+  end
+  else
+  begin
+    FPackageLines.Add(Format('  %0:s %1:s %2:s',
+      [FileType, ExtractFileName(FileName),PackageName]));
+  end;
+  Model.AddModelInputFile(FileName)
+end;
+
+constructor TMf6GwtNameWriter.Create(AModel: TCustomModel;
+  const FileName: string; SpeciesIndex: Integer; EvaluationType: TEvaluationType);
+begin
+  inherited Create(AModel, EvaluationType);
+  FPackageLines := TStringList.Create;
+  FSpeciesIndex := SpeciesIndex;
+  FSpeciesName := AModel.MobileComponents[SpeciesIndex].Name;
+  FFileName := ChangeFileExt(FileName, '') + '.' + FSpeciesName + '.Gwt_nam';
+end;
+
+destructor TMf6GwtNameWriter.Destroy;
+begin
+  FPackageLines.Free;
+  inherited;
+end;
+
+procedure TMf6GwtNameWriter.WriteFile;
+var
+  SimNameWriter: IMf6_SimNameFileWriter;
+  ModelData: TModelData;
+begin
+
+  ModelData.ModelType := mtGroundWaterTransport;
+  ModelData.ModelName := FSpeciesName;
+  ModelData.SolutionGroup := StrSolutionGroupName;
+  ModelData.MaxIterations := Model.ModflowPackages.SmsPackage.SolutionGroupMaxIteration;
+  ModelData.ImsFile := ChangeFileExt(FFileName, '.ims');
+  Model.AddModelInputFile(ModelData.ImsFile);
+  ModelData.ModelNameFile := FFileName;
+
+  SimNameWriter := Model.SimNameWriter;
+  SimNameWriter.AddModel(ModelData);
+  // write GWT name file.
+
+  FNameOfFile := FFileName;
+  OpenFile(FNameOfFile);
+  try
+    WriteCommentLine(File_Comment('Transport name file for ' + FSpeciesName));
+    WriteOptions;
+    WritePackages;
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TMf6GwtNameWriter.WriteOptions;
+var
+  ListFileName: string;
+begin
+  WriteBeginOptions;
+
+  ListFileName := ChangeFileExt(FFileName, '.lst');
+  Model.AddModelOutputFile(ListFileName);
+  WriteString('  LIST ');
+  WriteString(ExtractFileName(ListFileName));
+  NewLine;
+
+  PrintListInputOption;
+//  WritePrintFlowsOption;
+  WriteSaveFlowsOption;
+
+  WriteEndOptions;
+end;
+
+procedure TMf6GwtNameWriter.WritePackages;
+var
+  PackageIndex: Integer;
+begin
+  WriteString('BEGIN PACKAGES');
+  NewLine;
+
+  for PackageIndex := 0 to FPackageLines.Count - 1 do
+  begin
+    WriteString(FPackageLines[PackageIndex]);
+    NewLine;
+  end;
+
+  WriteString('END PACKAGES');
+  NewLine;
 end;
 
 initialization

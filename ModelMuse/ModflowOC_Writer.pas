@@ -323,7 +323,7 @@ var
                 end;
               otTransport:
                 begin
-                  WriteToGwtNameFile(StrDATABINARY, DataLabel, FSpeciesIndex);
+//                  WriteToGwtNameFile(StrDATABINARY, DataLabel, FSpeciesIndex);
                 end;
               else
                 Assert(False);

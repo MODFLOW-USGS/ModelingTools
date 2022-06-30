@@ -44,7 +44,7 @@ implementation
 uses ModflowUnitNumbers, frmProgressUnit, Forms, ModelMuseUtilities,
   frmGoPhastUnit, ModflowOptionsUnit, GoPhastTypes, ModflowPackageSelectionUnit,
   frmErrorsAndWarningsUnit, FastGEO, DataSetUnit, ModflowIrregularMeshUnit,
-  MeshRenumberingTypes, ModflowTimeUnit, System.Math;
+  MeshRenumberingTypes, ModflowTimeUnit, System.Math, System.IOUtils;
 
 resourcestring
   StrWritingDiscretizati = 'Writing Discretization Package input.';
@@ -315,6 +315,8 @@ end;
 procedure TModflowDiscretizationWriter.WriteFile(const AFileName: string);
 var
   FTYPE: string;
+  SpeciesIndex: Integer;
+  AGwtFileName: string;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSelectionOf);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTooManyStressPeri);
@@ -470,6 +472,17 @@ begin
   end;
 
   CheckConnectivity;
+
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      AGwtFileName := GwtFileName(FNameOfFile, SpeciesIndex);
+      TFile.Copy(FNameOfFile, AGwtFileName, True);
+      WriteToGwtNameFile(FTYPE, AGwtFileName, SpeciesIndex);
+    end;
+  end;
+
 end;
 
 procedure TModflowDiscretizationWriter.WriteIDomain;
@@ -1047,6 +1060,8 @@ end;
 procedure TMf6DisvWriter.WriteFile(const AFileName: string);
 var
   FTYPE: string;
+  SpeciesIndex: Integer;
+  AGwtFileName: string;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrOverlappingLayers);
   FTYPE := 'DISV6';
@@ -1102,6 +1117,16 @@ begin
 
   finally
     CloseFile;
+  end;
+
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      AGwtFileName := GwtFileName(FNameOfFile, SpeciesIndex);
+      TFile.Copy(FNameOfFile, AGwtFileName, True);
+      WriteToGwtNameFile(FTYPE, AGwtFileName, SpeciesIndex);
+    end;
   end;
 end;
 

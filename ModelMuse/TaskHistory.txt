@@ -458,7 +458,7 @@ object TTaskHistory
     end
     item
       Name = 'Model Viewer SUTRA 4'
-      Display = False
+      Display = True
     end
     item
       Name = 'PEST Pilot Points'
@@ -29548,5 +29548,19 @@ object TTaskHistory
       Date = 44739.000000000000000000
       Categories.Strings = (
         'MF6 GWT')
+    end
+    item
+      Date = 44740.000000000000000000
+      Categories.Strings = (
+        'Model Viewer SUTRA 4')
+    end
+    item
+      Date = 44741.000000000000000000
+    end
+    item
+      Date = 44742.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT'
+        'Documentation')
     end>
 end

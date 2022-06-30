@@ -2,13 +2,16 @@ unit ModflowSmsWriterUnit;
 
 interface
 
-uses SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit;
+uses SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
+  PhastModelUnit;
 
 type
   TImsWriter = class(TCustomSolverWriter)
   private
 //    FNameOfFile: string;
     FDVClose: Double;
+    // A negative value means that this is for the flow model.
+    FSpeciesIndex: Integer;
     procedure WriteInnerMaximum;
     procedure WriteInnerHClose;
     procedure WritePreconditionerLevels;
@@ -25,12 +28,14 @@ type
     procedure WriteLinearBlock;
 //    procedure WriteXmdBlock;
   public
+    Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType;
+      SpeciesIndex: Integer); reintroduce;
     procedure WriteFile(const AFileName: string);
   end;
 
 implementation
 
-uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit, frmErrorsAndWarningsUnit;
+uses ModflowUnitNumbers, frmProgressUnit, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrIMSSolverProblem = 'IMS solver problem: INNER_DVCLOSE >= OUTER_DVCLOSE';
@@ -39,6 +44,13 @@ resourcestring
   'CLOSE is %1:g.';
 
 { TSmsWriter }
+
+constructor TImsWriter.Create(AModel: TCustomModel;
+  EvaluationType: TEvaluationType; SpeciesIndex: Integer);
+begin
+  inherited Create(AModel, EvaluationType);
+  FSpeciesIndex := SpeciesIndex;
+end;
 
 class function TImsWriter.Extension: string;
 begin
@@ -56,7 +68,14 @@ end;
 
 function TImsWriter.Package: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.SmsPackage;
+  if FSpeciesIndex < 0 then
+  begin
+    result := Model.ModflowPackages.SmsPackage;
+  end
+  else
+  begin
+    result := Model.ModflowPackages.GwtIms[FSpeciesIndex].GwtIms;
+  end;
 end;
 
 procedure TImsWriter.WriteFile(const AFileName: string);
