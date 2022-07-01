@@ -581,6 +581,7 @@ resourcestring
   rsResClassificaton = 'Reservoir';
   rsLakeClassificaton = 'Lake';
   StrMT3DMS_Classificaton = 'MT3DMS or MT3D-USGS';
+  StrGwtClassification = 'GWT: Groundwater Transport';
   StrSpecifiedPressure = 'SUTRA Specified Pressure';
   StrSutraSpecifiedHead = 'SUTRA Specified Head';
   StrAssocPresConc = 'SP Associated Conc.';
@@ -2320,6 +2321,11 @@ that affects the model output should also have a comment. }
     function GetMt3dmsTimes: TMt3dmsTimeCollection; virtual; abstract;
     procedure SetMt3dmsTimes(const Value: TMt3dmsTimeCollection); virtual; abstract;
     function LongitudinalDispersionUsed(Sender: TObject): boolean; virtual;
+    function HorizontalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
+    function VerticalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
+    function SeparatedLongitudinalDispersionUsed(Sender: TObject): boolean; virtual;
+    function SeparatedHorizontalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
+//    function
     procedure UpdateMt3dmsActive(Sender: TObject);
     function CountStepsInMt3dExport: Integer;
     procedure SetMt3dmsHeadMassFluxObservations(
@@ -2659,6 +2665,8 @@ that affects the model output should also have a comment. }
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
     function Mt3dMSUsed(Sender: TObject): boolean; virtual;
+    function Mt3dMS_StrictUsed(Sender: TObject): boolean; virtual;
+    function Mf6GwtUsed(Sender: TObject): boolean; virtual;
     procedure ClearPval;
     procedure FinalizePvalAndTemplate(FileName: string);
     function ParamNamesDataSetUsed(Sender: TObject): boolean; virtual;
@@ -4046,6 +4054,10 @@ that affects the model output should also have a comment. }
     function UztUsed(Sender: TObject): boolean; override;
     function GwtUztUsed(Sender: TObject): boolean; override;
     function LongitudinalDispersionUsed(Sender: TObject): boolean; override;
+    function HorizontalTransverseDispersionUsed(Sender: TObject): boolean; override;
+    function VerticalTransverseDispersionUsed(Sender: TObject): boolean; override;
+    function SeparatedLongitudinalDispersionUsed(Sender: TObject): boolean; override;
+    function SeparatedHorizontalTransverseDispersionUsed(Sender: TObject): boolean; override;
 //    function Xt3DUsed(Sender: TObject): boolean; override;
     function NpfUsed(Sender: TObject): boolean; override;
     function WettingActive: boolean; override;
@@ -4208,6 +4220,8 @@ that affects the model output should also have a comment. }
     function GetAppsMoved: TStringList; override;
   public
     function Mt3dMSUsed(Sender: TObject): boolean; override;
+    function Mt3dMS_StrictUsed(Sender: TObject): boolean; override;
+    function Mf6GwtUsed(Sender: TObject): boolean; override;
     procedure RefreshGlobalVariables(CompilerList: TList);
 //    procedure RefreshDataArraysVariables;
     procedure CreateGlobalVariables;
@@ -5773,9 +5787,11 @@ resourcestring
   StrMODFLOWNWTUPWSs = 'MODFLOW-NWT UPW: Ss';
   StrMODFLOW6STOSs = 'MODFLOW 6 STO: ss';
   StrPHASTMEDIAlongitu = 'PHAST: MEDIA-longitudinal_dispersivity; ' + sLineBreak +
-  'MT3DMS: Dispersion Package Data Sets C1: AL';
+  'MT3DMS: Dispersion Package Data Sets C1: AL' + sLineBreak +
+  'MODFLOW 6 Dispersion Package Data Set ALH';
   StrPHASTMEDIAhorizon = 'PHAST: MEDIA-horizontal_dispersivity';
-  StrPHASTMEDIAvertica = 'PHAST: MEDIA-vertical_dispersivity';
+  StrPHASTMEDIAvertica = 'PHAST: MEDIA-vertical_dispersivity;' + sLineBreak +
+  'MODFLOW 6, Dispersion Package Data Set ATV';
   StrPHASTHEADIChead = 'PHAST: HEAD_IC-head';
   StrSUTRAICSPVEC = 'SUTRA, ICS: PVEC';
   StrPHASTHEADICwater = 'PHAST: HEAD_IC-water_table';
@@ -17849,6 +17865,25 @@ begin
   end;
 end;
 
+function TPhastModel.VerticalTransverseDispersionUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.VerticalTransverseDispersionUsed(Sender);
+      end;
+    end;
+  end;
+end;
+
 function TPhastModel.WelIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -18582,6 +18617,25 @@ begin
     begin
       Range := ChildModel.ParentRowToChildRows(RowIndex);
       result := Max(result, Range.Last - Range.First + 1);
+    end;
+  end;
+end;
+
+function TPhastModel.Mf6GwtUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.Mf6GwtUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -20045,6 +20099,25 @@ begin
         begin
           Exit;
         end;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.Mt3dMS_StrictUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.Mt3dMS_StrictUsed(Sender);
       end;
     end;
   end;
@@ -22700,6 +22773,26 @@ begin
     begin
       result := result or
         ChildModels[ChildIndex].ChildModel.HorizontalAnisotropyUsed(Sender);
+    end;
+  end;
+end;
+
+function TPhastModel.HorizontalTransverseDispersionUsed(
+  Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.HorizontalTransverseDispersionUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -26600,10 +26693,45 @@ begin
   end;
 end;
 
-//function TCustomModel.IsUsedPestDataArray(ADataArray: TDataArray): Boolean;
-//begin
-//  result := FPestBoundaryDataArrays.ContainsKey(ADataArray.Name);
-//end;
+function TPhastModel.SeparatedHorizontalTransverseDispersionUsed(
+  Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.SeparatedHorizontalTransverseDispersionUsed(Sender);
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.SeparatedLongitudinalDispersionUsed(
+  Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.SeparatedLongitudinalDispersionUsed(Sender);
+      end;
+    end;
+  end;
+end;
 
 procedure TPhastModel.SetArchiveName(const Value: string);
 begin
@@ -30384,6 +30512,20 @@ begin
     FAlternateSolver := Value;
     Invalidate(self);
   end;
+end;
+
+function TCustomModel.SeparatedHorizontalTransverseDispersionUsed(
+  Sender: TObject): boolean;
+begin
+  result := Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+    and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtSeparate)
+end;
+
+function TCustomModel.SeparatedLongitudinalDispersionUsed(
+  Sender: TObject): boolean;
+begin
+  result := (Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+    and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtSeparate))
 end;
 
 procedure TCustomModel.SetAlternateFlowPackage(const Value: boolean);
@@ -34953,10 +35095,19 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
+  GWTDataSets = 4;
 {$IFDEF Sutra4}
+  {$IFDEF  GWT}
+  ArrayCount = 167 + GWTDataSets;
+  {$ELSE}
   ArrayCount = 167;
+  {$ENDIF}
 {$ELSE}
+  {$IFDEF  GWT}
+  ArrayCount = 157 + GWTDataSets;
+  {$ELSE}
   ArrayCount = 157;
+  {$ENDIF}
 {$ENDIF}
 var
   Index: integer;
@@ -35189,8 +35340,15 @@ begin
   FDataArrayCreationRecords[Index].Name := rsHorizontal_Transv_Dispersivity;
   FDataArrayCreationRecords[Index].DisplayName := rsHorizontal_Transv_DispersivityDisplayName;
   FDataArrayCreationRecords[Index].Formula := '1.';
-  FDataArrayCreationRecords[Index].Classification := StrHydrology;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.ChemistryUsed;
+  if (FCustomModel = nil) or (FCustomModel.ModelSelection = msPhast) then
+  begin
+    FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  end
+  else
+  begin
+    FDataArrayCreationRecords[Index].Classification := 'GWT';
+  end;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.HorizontalTransverseDispersionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -35207,7 +35365,7 @@ begin
   FDataArrayCreationRecords[Index].DisplayName := rsVertical_Transv_DispersivityDisplayName;
   FDataArrayCreationRecords[Index].Formula := '1.';
   FDataArrayCreationRecords[Index].Classification := StrHydrology;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.ChemistryUsed;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.VerticalTransverseDispersionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -36071,7 +36229,7 @@ begin
   FDataArrayCreationRecords[Index].DisplayName := STR_MT3DMS_Observation_LocationsDisplayName;
   FDataArrayCreationRecords[Index].Formula := 'False';
   FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMSUsed;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMS_StrictUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -36085,7 +36243,7 @@ begin
   FDataArrayCreationRecords[Index].DisplayName := StrMT3DMSActiveDisplayName;
   FDataArrayCreationRecords[Index].Formula := rsActive;
   FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMSUsed;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMS_StrictUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -36127,7 +36285,7 @@ begin
   FDataArrayCreationRecords[Index].DisplayName := rsMT3DMS_Layer_ThicknessDisplayName;
   FDataArrayCreationRecords[Index].Formula :=StrLayerHeight;
   FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMSUsed;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMS_StrictUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -37663,6 +37821,64 @@ begin
   Inc(Index);
   {$ENDIF}
 
+  {$IFDEF GWT}
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := 'Longitudinal_Dispersivity_Horizontal_Flow';
+  FDataArrayCreationRecords[Index].DisplayName := 'Longitudinal_Dispersivity_Horizontal_Flow';
+  FDataArrayCreationRecords[Index].Formula := '10';
+  FDataArrayCreationRecords[Index].Classification := 'GWT';
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SeparatedLongitudinalDispersionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW 6 Dispersion Package: ALH';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := 'Longitudinal_Dispersivity_Vertical_Flow';
+  FDataArrayCreationRecords[Index].DisplayName := 'Longitudinal_Dispersivity_Vertical_Flow';
+  FDataArrayCreationRecords[Index].Formula := '10';
+  FDataArrayCreationRecords[Index].Classification := 'GWT';
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SeparatedLongitudinalDispersionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW 6 Dispersion Package: ALV';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := 'Horizontal_Transverse_Dispersivity_Horizontal_Flow';
+  FDataArrayCreationRecords[Index].DisplayName := 'Horizontal_Transverse_Dispersivity_Horizontal_Flow';
+  FDataArrayCreationRecords[Index].Formula := '10';
+  FDataArrayCreationRecords[Index].Classification := 'GWT';;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SeparatedHorizontalTransverseDispersionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW 6 Dispersion Package: ATH1';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := 'Vertical_Transverse_Dispersivity_Horizontal_Flow';
+  FDataArrayCreationRecords[Index].DisplayName := 'Vertical_Transverse_Dispersivity_Horizontal_Flow';
+  FDataArrayCreationRecords[Index].Formula := '10';
+  FDataArrayCreationRecords[Index].Classification := 'GWT';;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SeparatedHorizontalTransverseDispersionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW 6 Dispersion Package: ATH2';
+  Inc(Index);
+  {$ENDIF}
+
   // See ArrayCount.
   Assert(Length(FDataArrayCreationRecords) = Index);
 end;
@@ -39187,6 +39403,14 @@ begin
   end;
 end;
 
+function TCustomModel.VerticalTransverseDispersionUsed(
+  Sender: TObject): boolean;
+begin
+  result := ChemistryUsed(Sender)
+    or (Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+    and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow)
+end;
+
 function TCustomModel.HorizAnisotropyMf6Used(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msModflow2015)
@@ -39209,6 +39433,14 @@ begin
         or ModflowPackages.UpwPackage.IsSelected);
     end;
   end;
+end;
+
+function TCustomModel.HorizontalTransverseDispersionUsed(
+  Sender: TObject): boolean;
+begin
+  result := ChemistryUsed(Sender)
+    or (Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+    and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtCombined))
 end;
 
 function TCustomModel.SpecificYieldUsed(Sender: TObject): boolean;
@@ -39575,7 +39807,9 @@ end;
 function TCustomModel.LongitudinalDispersionUsed(Sender: TObject): boolean;
 begin
   result := ChemistryUsed(Sender)
-    or (Mt3dMSUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected);
+    or (Mt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected)
+    or (Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+    and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtCombined))
 end;
 
 function TCustomModel.Mt3dIsSelected: Boolean;
@@ -39605,6 +39839,13 @@ function TCustomModel.Mt3dMSUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
     and ModflowPackages.Mt3dBasic.IsSelected;
+end;
+
+function TCustomModel.Mt3dMS_StrictUsed(Sender: TObject): boolean;
+begin
+  result := (ModelSelection in ModflowSelection)
+    and ModflowPackages.Mt3dBasic.IsSelected
+    and (ModflowPackages.Mt3dBasic.Mt3dVersion in [mvUSGS, mvMS]);
 end;
 
 function TCustomModel.Mt3d_LktIsSelected(Sender: TObject): Boolean;
@@ -40669,6 +40910,13 @@ begin
   begin
     result := 0;
   end;
+end;
+
+function TCustomModel.Mf6GwtUsed(Sender: TObject): boolean;
+begin
+  result := (ModelSelection = msModflow2015)
+    and ModflowPackages.Mt3dBasic.IsSelected
+    and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt);
 end;
 
 function TCustomModel.Mf6ObsIsSelected: Boolean;
@@ -42624,8 +42872,8 @@ var
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
   SpeciesIndex: Integer;
   GwtNameWriters: TMf6GwtNameWriters;
-  ASpeciesName: string;
-  GwtFileName: string;
+//  ASpeciesName: string;
+//  GwtFileName: string;
   GwtIcWriter: TGwtInitialConcWriter;
 //  PestDataArrayWriter: TPestDataArrayWriter;
 begin

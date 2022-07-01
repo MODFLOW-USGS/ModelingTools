@@ -50,7 +50,7 @@ uses System.UITypes,
   framePackageGNC_Unit, framePackageMf6ObsUnit, framePackageLakMf6Unit,
   framePackageMvrUnit, framePackageUzfMf6Unit, frameMt3dLktPkgUnit,
   frameMt3dSftUnit, frameMt3dCtsPkgUnit, framePackageCsubUnit,
-  PestParamGroupsUnit;
+  PestParamGroupsUnit, frameGwtDspPackageUnit;
 
 type
 
@@ -255,6 +255,8 @@ type
     frameMt3dCtsPkg: TframeMt3dCtsPkg;
     jvspCSUB: TJvStandardPage;
     framePackageCsub: TframePackageCsub;
+    jvspGwtDisp: TJvStandardPage;
+    frameGwtDsp: TframeGwtDspPackage;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -2319,6 +2321,10 @@ begin
     end;
 
     AddNode(StrPostProcessors, StrPostProcessors, PriorNode);
+    if frmGoPhast.ModelSelection = msModflow2015  then
+    begin
+      AddNode(StrGwtClassification, StrGwtClassification, PriorNode);
+    end;
     AddNode(StrMT3DMS_Classificaton, StrMT3DMS_Classificaton, PriorNode);
 
     NilNodes;
@@ -3726,8 +3732,6 @@ begin
     framePackageSfrMF6.NilNode;
   end;
 
-
-
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
     Packages.UzfMf6Package.Frame := framePackageUzfMf6;
@@ -3929,6 +3933,16 @@ begin
   else
   begin
     framePackageCsub.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    Packages.GwtDispersionPackage.Frame := frameGwtDsp;
+    FPackageList.Add(Packages.GwtDispersionPackage);
+  end
+  else
+  begin
+    frameGwtDsp.NilNode;
   end;
 
 end;

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-01-19T17:18:10.066-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-07-01T09:27:13.802-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">References Cited</title>
   <body>
     <header>
@@ -40,8 +40,10 @@
     <para styleclass="Reference"><text styleclass="Reference" translate="true">Hunt, R.J., White, J.T., Duncan, L., Haugh, C., and Doherty, J., 2021, Evaluating lower computational burden approaches for calibration of large environmental models. Groundwater https://doi.org/10.1111/gwat.13106.</text></para>
     <para styleclass="Reference"><text styleclass="Reference" translate="true">Kipp, K.L., 1987, HST3-D—A computer code for simulation of heat and solute transport in three-dimensional ground-water flow systems: U.S. Geological Survey Water-Resources Investigations Report 86–4095, 517 p.</text></para>
     <para styleclass="Reference"><text styleclass="Reference" translate="true">_____, 1997, Guide to the revised heat and solute transport simulator HST3-D—Version 2: U.S. Geological Survey Water-Resources Investigations Report 97–4157, 149 p.</text></para>
-    <para styleclass="Reference"><text styleclass="Reference" translate="true">Konikow, L.F., 1977, Modeling chloride movement in the alluvial aquifer at the Rocky Mountain Arsenal, Colorado: U.S. Geological Survey Water-Supply Paper 2044, 43 p.http://pubs.er.usgs.gov/publication/wsp2044</text></para>
+    <para styleclass="Reference"><text styleclass="Reference" translate="true">Konikow, L.F., 1977, Modeling chloride movement in the alluvial aquifer at the Rocky Mountain Arsenal, Colorado: U.S. Geological Survey Water-Supply Paper 2044, 43 p.http://pubs.er.usgs.gov/publication/wsp2044.</text></para>
+    <para styleclass="Reference"><text styleclass="Reference" translate="true">Konikow, L.F., 2010, The secret to successful solute-transport modeling: Ground Water, v. 49, no. 2, p. 144– 159, https://doi.org/10.1111/j.1745-6584.2010.00764.x.</text></para>
     <para styleclass="Reference"><text styleclass="Reference" translate="true">Langevin, C.D., Hughes, J.D., Banta, E.R., Niswonger, R.G., Panday, Sorab, and Provost, A.M., 2017, Documentation for the MODFLOW 6 Groundwater Flow Model: U.S. Geological Survey Techniques and Methods, book 6, chap. A55, 197 p., </text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Reference" translate="true">https://doi.org/10.3133/tm6A55</link><text styleclass="Reference" translate="true">.</text></para>
+    <para styleclass="Reference"><text styleclass="Reference" translate="true">Langevin, C.D., Provost, A.M., Panday, Sorab, and Hughes, J.D., 2022, Documentation for the MODFLOW 6 Groundwater Transport Model: U.S. Geological Survey Techniques and Methods, book 6, chap. A61, 56 p., https://doi.org/10.3133/tm6A61.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Leake, S.A., and Galloway, D.L., 2007, MODFLOW ground-water model—User guide to the Subsidence and Aquifer-System Compaction Package (SUB-WT) for water-table aquifers: U.S. Geological Survey, Techniques and Methods 6–A23, 42 p. </text></para>
     <para styleclass="Reference"><text styleclass="Reference" translate="true">Light, A., and P.J. Bartlein, 2004, The end of the rainbow? Color schemes for improved data graphics: Eos, v. 85, no. 40, 385-391.</text></para>
     <para styleclass="Reference"><text styleclass="Reference" translate="true">Light, A., and P.J. Bartlein, 2005, Reply: Eos, v.86, no. 20, p 196.</text></para>

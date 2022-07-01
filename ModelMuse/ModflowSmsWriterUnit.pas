@@ -74,7 +74,7 @@ begin
   end
   else
   begin
-    result := Model.ModflowPackages.GwtIms[FSpeciesIndex].GwtIms;
+    result := Model.ModflowPackages.GwtPackages[FSpeciesIndex].GwtIms;
   end;
 end;
 

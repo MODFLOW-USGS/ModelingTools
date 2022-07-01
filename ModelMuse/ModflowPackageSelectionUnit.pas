@@ -1387,33 +1387,6 @@ Type
     property StoredAtsOuterMaxFraction: TRealStorage read FStoredAtsOuterMaxFraction write SetStoredAtsOuterMaxFraction;
   end;
 
-  TImsCollectionItem = class(TPhastCollectionItem)
-  private
-    FGwtIms: TSmsPackageSelection;
-    procedure SetGwtIms(const Value: TSmsPackageSelection);
-  public
-    constructor Create(Collection: TCollection); override;
-    destructor Destroy; override;
-    procedure Assign(Source: TPersistent); override;
-  published
-    property GwtIms: TSmsPackageSelection read FGwtIms write SetGwtIms;
-  end;
-
-  TGwtImsCollection = class(TPhastCollection)
-  private
-    FModel: TBaseModel;
-    function GetCount: Integer;
-    procedure SetCount(const Value: Integer);
-    function GetItem(Index: Integer): TImsCollectionItem;
-    procedure SetItem(Index: Integer; const Value: TImsCollectionItem);
-  public
-    constructor Create(Model: TBaseModel);
-    property Count: Integer read GetCount write SetCount;
-    procedure InitializeVariables;
-    property Items[Index: Integer]: TImsCollectionItem read GetItem
-      write SetItem; default;
-  end;
-
   TLayerOption = (loTop, loSpecified, loTopActive);
 
   // @name is used for MODFLOW packages in which
@@ -5855,6 +5828,67 @@ Type
       write SetSaveBudgetFile Stored True;
   end;
 
+  TDispersivityTreatment = (dtCombined, dtSeparate);
+
+  TGwtDispersionPackage = class(TModflowPackageSelection)
+  private
+    FXt3dRightHandSide: Boolean;
+    FUseXt3d: Boolean;
+    FLongitudinalDispTreatement: TDispersivityTreatment;
+    FTransverseDispTreatement: TDispersivityTreatment;
+    FUseTransverseDispForVertFlow: Boolean;
+    procedure SetUseXt3d(const Value: Boolean);
+    procedure SetXt3dRightHandSide(const Value: Boolean);
+    procedure SetLongitudinalDispTreatement(
+      const Value: TDispersivityTreatment);
+    procedure SetTransverseDispTreatement(const Value: TDispersivityTreatment);
+    procedure SetUseTransverseDispForVertFlow(const Value: Boolean);
+  public
+    Constructor Create(Model: TBaseModel);
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables; override;
+  published
+    // Inverse of XT3D_OFF
+    property UseXt3d: Boolean read FUseXt3d write SetUseXt3d default True;
+    // XT3D_RHS
+    property Xt3dRightHandSide: Boolean read FXt3dRightHandSide
+      write SetXt3dRightHandSide;
+    property LongitudinalDispTreatement: TDispersivityTreatment
+      read FLongitudinalDispTreatement write SetLongitudinalDispTreatement;
+    property TransverseDispTreatement: TDispersivityTreatment
+      read FTransverseDispTreatement write SetTransverseDispTreatement;
+    property UseTransverseDispForVertFlow: Boolean
+      read FUseTransverseDispForVertFlow write SetUseTransverseDispForVertFlow;
+  end;
+
+  TGwtPackagesItem = class(TPhastCollectionItem)
+  private
+    FGwtIms: TSmsPackageSelection;
+    procedure SetGwtIms(const Value: TSmsPackageSelection);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+  published
+    property GwtIms: TSmsPackageSelection read FGwtIms write SetGwtIms;
+  end;
+
+  TGwtPackageCollection = class(TPhastCollection)
+  private
+    FModel: TBaseModel;
+    function GetCount: Integer;
+    procedure SetCount(const Value: Integer);
+    function GetItem(Index: Integer): TGwtPackagesItem;
+    procedure SetItem(Index: Integer; const Value: TGwtPackagesItem);
+  public
+    constructor Create(Model: TBaseModel);
+    property Count: Integer read GetCount write SetCount;
+    procedure InitializeVariables;
+    property Items[Index: Integer]: TGwtPackagesItem read GetItem
+      write SetItem; default;
+  end;
+
+
 const
   KMaxRainfallForStepAdjustment = 0.15;
   KMaxStageChangePerStep = 0.5;
@@ -5873,7 +5907,8 @@ resourcestring
   StrSFR6Roughness = 'SFR6 Roughness';
   StrSFR6StreamStatus = 'SFR6 Stream Status';
   StrSFR6ReachNumber = 'SFR6 Reach Number';
-  
+  StrSMSSparseMatrixS = 'IMS: Iterative Model Solution';
+
 implementation
 
 uses Math, Contnrs , PhastModelUnit, ModflowOptionsUnit,
@@ -22592,11 +22627,11 @@ end;
 
 { TImsCollectionItem }
 
-procedure TImsCollectionItem.Assign(Source: TPersistent);
+procedure TGwtPackagesItem.Assign(Source: TPersistent);
 begin
-  if Source is TImsCollectionItem then
+  if Source is TGwtPackagesItem then
   begin
-    GwtIms := TImsCollectionItem(Source).GwtIms;
+    GwtIms := TGwtPackagesItem(Source).GwtIms;
   end
   else
   begin
@@ -22604,30 +22639,33 @@ begin
   end;
 end;
 
-constructor TImsCollectionItem.Create(Collection: TCollection);
+constructor TGwtPackagesItem.Create(Collection: TCollection);
 var
-  ParentCollection: TGwtImsCollection;
+  ParentCollection: TGwtPackageCollection;
 begin
   inherited;
   Assert(Collection <> nil);
-  ParentCollection := Collection as TGwtImsCollection;
-  FGwtIms := TSmsPackageSelection.Create(ParentCollection.FModel)
+  ParentCollection := Collection as TGwtPackageCollection;
+  FGwtIms := TSmsPackageSelection.Create(ParentCollection.FModel);
+  FGwtIms.PackageIdentifier := StrSMSSparseMatrixS;
+  FGwtIms.Classification := StrSolver;
+  FGwtIms.SelectionType := stRadioButton;
 end;
 
-destructor TImsCollectionItem.Destroy;
+destructor TGwtPackagesItem.Destroy;
 begin
   FGwtIms.Free;
   inherited;
 end;
 
-procedure TImsCollectionItem.SetGwtIms(const Value: TSmsPackageSelection);
+procedure TGwtPackagesItem.SetGwtIms(const Value: TSmsPackageSelection);
 begin
   FGwtIms.Assign(Value);
 end;
 
 { TGwtImsCollection }
 
-constructor TGwtImsCollection.Create(Model: TBaseModel);
+constructor TGwtPackageCollection.Create(Model: TBaseModel);
 var
   OnInvalidateModelEvent: TNotifyEvent;
 begin
@@ -22640,10 +22678,10 @@ begin
   begin
     OnInvalidateModelEvent := FModel.Invalidate;
   end;
-  inherited Create(TImsCollectionItem, OnInvalidateModelEvent);
+  inherited Create(TGwtPackagesItem, OnInvalidateModelEvent);
 end;
 
-function TGwtImsCollection.GetCount: Integer;
+function TGwtPackageCollection.GetCount: Integer;
 var
   LocalModel: TCustomModel;
 begin
@@ -22658,12 +22696,12 @@ begin
   result := inherited Count;
 end;
 
-function TGwtImsCollection.GetItem(Index: Integer): TImsCollectionItem;
+function TGwtPackageCollection.GetItem(Index: Integer): TGwtPackagesItem;
 begin
-  result := inherited Items[Index] as TImsCollectionItem
+  result := inherited Items[Index] as TGwtPackagesItem
 end;
 
-procedure TGwtImsCollection.InitializeVariables;
+procedure TGwtPackageCollection.InitializeVariables;
 var
   SpeciesIndex: Integer;
 begin
@@ -22673,15 +22711,83 @@ begin
   end;
 end;
 
-procedure TGwtImsCollection.SetCount(const Value: Integer);
+procedure TGwtPackageCollection.SetCount(const Value: Integer);
 begin
   inherited Count := Value;
 end;
 
-procedure TGwtImsCollection.SetItem(Index: Integer;
-  const Value: TImsCollectionItem);
+procedure TGwtPackageCollection.SetItem(Index: Integer;
+  const Value: TGwtPackagesItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+{ TGwtDispersionPackage }
+
+procedure TGwtDispersionPackage.Assign(Source: TPersistent);
+var
+  DispSource: TGwtDispersionPackage;
+begin
+  if Source is TGwtDispersionPackage then
+  begin
+    DispSource := TGwtDispersionPackage(Source);
+    UseXt3d := DispSource.UseXt3d;
+    Xt3dRightHandSide := DispSource.Xt3dRightHandSide;
+    LongitudinalDispTreatement := DispSource.LongitudinalDispTreatement;
+    TransverseDispTreatement := DispSource.TransverseDispTreatement;
+    UseTransverseDispForVertFlow := DispSource.UseTransverseDispForVertFlow;
+  end;
+  inherited;
+end;
+
+constructor TGwtDispersionPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  InitializeVariables;
+end;
+
+procedure TGwtDispersionPackage.InitializeVariables;
+begin
+  inherited;
+  FUseXt3d := True;
+  FXt3dRightHandSide := False;
+  UseTransverseDispForVertFlow := False;
+end;
+
+procedure TGwtDispersionPackage.SetLongitudinalDispTreatement(
+  const Value: TDispersivityTreatment);
+begin
+  if FLongitudinalDispTreatement <> Value then
+  begin
+    FLongitudinalDispTreatement := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TGwtDispersionPackage.SetTransverseDispTreatement(
+  const Value: TDispersivityTreatment);
+begin
+  if FTransverseDispTreatement <> Value then
+  begin
+    FTransverseDispTreatement := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TGwtDispersionPackage.SetUseTransverseDispForVertFlow(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUseTransverseDispForVertFlow, Value);
+end;
+
+procedure TGwtDispersionPackage.SetUseXt3d(const Value: Boolean);
+begin
+  SetBooleanProperty(FUseXt3d, Value);
+end;
+
+procedure TGwtDispersionPackage.SetXt3dRightHandSide(const Value: Boolean);
+begin
+  SetBooleanProperty(FXt3dRightHandSide, Value);
 end;
 
 end.

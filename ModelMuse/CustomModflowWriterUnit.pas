@@ -1052,6 +1052,8 @@ end;
     FSpeciesIndex: Integer;
     procedure WriteOptions;
     procedure WritePackages;
+  protected
+    class function Extension: string; override;
   public
     Constructor Create(AModel: TCustomModel; const FileName: string; SpeciesIndex: Integer;
       EvaluationType: TEvaluationType); reintroduce;
@@ -10687,6 +10689,11 @@ destructor TMf6GwtNameWriter.Destroy;
 begin
   FPackageLines.Free;
   inherited;
+end;
+
+class function TMf6GwtNameWriter.Extension: string;
+begin
+  result := '.nam';
 end;
 
 procedure TMf6GwtNameWriter.WriteFile;

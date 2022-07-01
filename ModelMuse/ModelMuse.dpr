@@ -747,7 +747,8 @@ uses
   frameMawGwtConcentrationsUnit in 'frameMawGwtConcentrationsUnit.pas' {frameMawGwtConcentrations: TFrame},
   frameSfrGwtConcentrationsUnit in 'frameSfrGwtConcentrationsUnit.pas' {frameSfrGwtConcentrations: TFrame},
   frameUzfGwtConcentrationsUnit in 'frameUzfGwtConcentrationsUnit.pas' {frameUzfGwtConcentrations: TFrame},
-  ModflowInitialConcentrationWriterUnit in 'ModflowInitialConcentrationWriterUnit.pas';
+  ModflowInitialConcentrationWriterUnit in 'ModflowInitialConcentrationWriterUnit.pas',
+  frameGwtDspPackageUnit in 'frameGwtDspPackageUnit.pas' {frameGwtDspPackage: TFrame};
 
 {$R *.res}
 

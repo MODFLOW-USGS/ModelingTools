@@ -76,7 +76,8 @@ type
     FMt3dSft: TMt3dSftPackageSelection;
     FMt3dCts: TMt3dCtsPackageSelection;
     FCsubPackage: TCSubPackageSelection;
-    FGwtIms: TGwtImsCollection;
+    FGwtPackages: TGwtPackageCollection;
+    FGwtDispersionPackage: TGwtDispersionPackage;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -143,7 +144,8 @@ type
     procedure SetMt3dSft(const Value: TMt3dSftPackageSelection);
     procedure SetMt3dCts(const Value: TMt3dCtsPackageSelection);
     procedure SetCsubPackage(const Value: TCSubPackageSelection);
-    procedure SetGwtIms(const Value: TGwtImsCollection);
+    procedure SetGwtPackges(const Value: TGwtPackageCollection);
+    procedure SetGwtDispersionPackage(const Value: TGwtDispersionPackage);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -269,11 +271,19 @@ type
     property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts;
     property CSubPackage: TCSubPackageSelection read FCsubPackage
       write SetCsubPackage;
-    property GwtIms: TGwtImsCollection read FGwtIms write SetGwtIms
+    property GwtDispersionPackage: TGwtDispersionPackage
+      read FGwtDispersionPackage write SetGwtDispersionPackage
     {$IFNDEF GWT}
       stored False
     {$ENDIF}
     ;
+    property GwtPackages: TGwtPackageCollection read FGwtPackages
+      write SetGwtPackges
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
     // SelectedModflowPackageCount must be updated if the new package is a
@@ -363,7 +373,6 @@ resourcestring
   StrMNW1MultiNodeWel = 'MNW1: Multi-Node Well package';
   StrNPFNodePropertyF = 'NPF: Node Property Flow package';
   StrSTOStoragePackage = 'STO: Storage package';
-  StrSMSSparseMatrixS = 'IMS: Iterative Model Solution';
   StrRIPRiparianEvapot = 'RIP: Riparian Evapotranspiration Package';
   StrMawPackage = 'MAW: Multi-Aquifer Well package';
   StrSFRMODFLOW6Strea = 'SFR: MODFLOW-6 Stream Flow Routing package';
@@ -376,6 +385,8 @@ resourcestring
   StrCTSContaminantTre = 'CTS: Contaminant Treatment System Package';
   StrCSUBSkeletalStora = 'CSUB: Skeletal Storage, Compaction, and Subsidence' +
   ' Package';
+  StrGWTDispersionPacka = 'DSP: GWT Dispersion Package';
+//  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
 { TModflowPackages }
@@ -453,7 +464,8 @@ begin
     Mt3dSft := SourcePackages.Mt3dSft;
     Mt3dCts := SourcePackages.Mt3dCts;
     CsubPackage := SourcePackages.CsubPackage;
-    GwtIms := SourcePackages.GwtIms;
+    GwtDispersionPackage := SourcePackages.GwtDispersionPackage;
+    GwtPackages := SourcePackages.GwtPackages;
   end
   else
   begin
@@ -785,12 +797,18 @@ begin
   FCsubPackage.Classification := StrSubsidence;
   FCsubPackage.SelectionType := stCheckBox;
 
-  FGwtIms := TGwtImsCollection.Create(Model)
+  FGwtDispersionPackage := TGwtDispersionPackage.Create(Model);
+  FGwtDispersionPackage.PackageIdentifier := StrGWTDispersionPacka;
+  FGwtDispersionPackage.Classification := StrGwtClassification;
+  FGwtDispersionPackage.SelectionType := stCheckBox;
+
+  FGwtPackages := TGwtPackageCollection.Create(Model)
 end;
 
 destructor TModflowPackages.Destroy;
 begin
-  FGwtIms.Free;
+  FGwtPackages.Free;
+  FGwtDispersionPackage.Free;
   FCsubPackage.Free;
   FUzfMf6Package.Free;
   FMvrPackage.Free;
@@ -933,7 +951,8 @@ begin
   Mt3dSft.InitializeVariables;
   Mt3dCts.InitializeVariables;
   CsubPackage.InitializeVariables;
-  FGwtIms.InitializeVariables;
+  FGwtPackages.InitializeVariables;
+  FGwtDispersionPackage.InitializeVariables;
 end;
 
 function TModflowPackages.SelectedModflowPackageCount: integer;
@@ -1296,9 +1315,15 @@ begin
   FGncPackage.Assign(Value)
 end;
 
-procedure TModflowPackages.SetGwtIms(const Value: TGwtImsCollection);
+procedure TModflowPackages.SetGwtDispersionPackage(
+  const Value: TGwtDispersionPackage);
 begin
-  FGwtIms.Assign(Value);
+  FGwtDispersionPackage.Assign(Value);
+end;
+
+procedure TModflowPackages.SetGwtPackges(const Value: TGwtPackageCollection);
+begin
+  FGwtPackages.Assign(Value);
 end;
 
 procedure TModflowPackages.SetHfbPackage(const Value: TModflowPackageSelection);

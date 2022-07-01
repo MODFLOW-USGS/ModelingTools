@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4335</config-value>
+      <config-value name="autohelpstart">4337</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -915,6 +915,7 @@ document.write('</frameset>');
       <helpcontext-number href="Discretization_Tab#Vertical_discretization" value="3600"/>
       <helpcontext-number href="Discretization_with_Vertices_D" value="4004"/>
       <helpcontext-number href="Dispersion_Tab" value="3638"/>
+      <helpcontext-number href="Dispersion-Package" value="4337"/>
       <helpcontext-number href="Distance" value="700"/>
       <helpcontext-number href="DISV" value="4024"/>
       <helpcontext-number href="Diversion_Location" value="3804"/>
@@ -1060,6 +1061,7 @@ document.write('</frameset>');
       <helpcontext-number href="Grid2" value="1650"/>
       <helpcontext-number href="GridName" value="3606"/>
       <helpcontext-number href="GridNumber" value="3607"/>
+      <helpcontext-number href="Groundwater-Transport" value="4336"/>
       <helpcontext-number href="GW_Allocation_Tab" value="3939"/>
       <helpcontext-number href="Handling_Discretization_in_SUB" value="3562"/>
       <helpcontext-number href="Head_and_Drawdown_Panes" value="2520"/>
