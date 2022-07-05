@@ -1312,8 +1312,8 @@ var
   ValueCount: Integer;
   ScreenIndex: Integer;
   AnMF6TimeSeries: TMf6TimeSeries;
-  ModflowUzfMf6Boundary: TUzfMf6Boundary;
-  UzfFormulaIndex: Integer;
+//  ModflowUzfMf6Boundary: TUzfMf6Boundary;
+//  UzfFormulaIndex: Integer;
   procedure SetItemFormula(AnItem: TCustomBoundaryItem;
     FormulaIndex: Integer);
   begin

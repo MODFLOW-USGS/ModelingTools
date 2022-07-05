@@ -748,7 +748,11 @@ uses
   frameSfrGwtConcentrationsUnit in 'frameSfrGwtConcentrationsUnit.pas' {frameSfrGwtConcentrations: TFrame},
   frameUzfGwtConcentrationsUnit in 'frameUzfGwtConcentrationsUnit.pas' {frameUzfGwtConcentrations: TFrame},
   ModflowInitialConcentrationWriterUnit in 'ModflowInitialConcentrationWriterUnit.pas',
-  frameGwtDspPackageUnit in 'frameGwtDspPackageUnit.pas' {frameGwtDspPackage: TFrame};
+  frameGwtDspPackageUnit in 'frameGwtDspPackageUnit.pas' {frameGwtDspPackage: TFrame},
+  ModflowDspWriterUnit in 'ModflowDspWriterUnit.pas',
+  ModflowGwtAdvWriterUnit in 'ModflowGwtAdvWriterUnit.pas',
+  frameGwtAdvPackageUnit in 'frameGwtAdvPackageUnit.pas' {frameGwtAdvPackage: TFrame},
+  ModflowGwtSsmWriterUnit in 'ModflowGwtSsmWriterUnit.pas';
 
 {$R *.res}
 

@@ -556,7 +556,7 @@ var
   MoverWriter: TModflowMvrWriter;
   MvrReceiver: TMvrReceiver;
   MvrSource: TMvrRegisterKey;
-  AScreenObject: TScreenObject;
+//  AScreenObject: TScreenObject;
   GwtStatus: TGwtBoundaryStatus;
   FormulaIndex: Integer;
 begin
@@ -1825,6 +1825,10 @@ begin
             Species := Model.MobileComponents[SpeciesIndex];
             PropertyName := Format('StartingConcentration_%s', [Species.Name]);
             PropertyFormula := StartingConcentrations[SpeciesIndex].Value;
+            if PropertyFormula = '' then
+            begin
+              PropertyFormula := '0'; 
+            end;
 
             CompileFormula(PropertyFormula, PropertyName, Formula,
               PestParamName, Column, Row, Layer);

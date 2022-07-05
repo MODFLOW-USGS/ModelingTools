@@ -7,7 +7,6 @@ inherited frmModflowPackages: TfrmModflowPackages
   OnActivate = jvplPackagesChange
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitTop = -113
   ExplicitWidth = 800
   ExplicitHeight = 604
   TextHeight = 18
@@ -29,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspGwtDisp
+    ActivePage = jvspGwtSsm
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -11265,8 +11264,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspGwtDisp'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGwtDsp: TframeGwtDspPackage
         Left = 0
         Top = 0
@@ -11275,7 +11272,119 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 64
+        ExplicitWidth = 595
+        ExplicitHeight = 516
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 564
+          ExplicitWidth = 564
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGwtDsp.lblComments
+            end
+            item
+              Control = frameGwtDsp.memoComments
+            end
+            item
+              Control = frameGwtDsp.cbUseXT3D
+            end
+            item
+              Control = frameGwtDsp.rgLongDisp
+            end
+            item
+              Control = frameGwtDsp.rgTransDisp
+            end>
+        end
+      end
+    end
+    object jvspGwtAdv: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 595
+      Height = 516
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'jvspGwtAdv'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameGwtAdv: TframeGwtAdvPackage
+        Left = 0
+        Top = 0
+        Width = 595
+        Height = 516
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 56
+        ExplicitTop = 48
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 564
+        end
+        inherited rgScheme: TRadioGroup
+          Width = 564
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGwtAdv.lblComments
+            end
+            item
+              Control = frameGwtAdv.memoComments
+            end
+            item
+              Control = frameGwtAdv.rgScheme
+            end>
+        end
+      end
+    end
+    object jvspGwtSsm: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 595
+      Height = 516
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'jvspGwtSsm'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameGwtSSM: TframePackage
+        Left = 0
+        Top = 0
+        Width = 595
+        Height = 516
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 80
         ExplicitTop = 48
         inherited lblComments: TLabel
           Width = 76
@@ -11295,19 +11404,10 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited rcSelectionController: TRbwController
           ControlList = <
             item
-              Control = frameGwtDsp.lblComments
+              Control = frameGwtSSM.lblComments
             end
             item
-              Control = frameGwtDsp.memoComments
-            end
-            item
-              Control = frameGwtDsp.cbUseXT3D
-            end
-            item
-              Control = frameGwtDsp.rgLongDisp
-            end
-            item
-              Control = frameGwtDsp.rgTransDisp
+              Control = frameGwtSSM.memoComments
             end>
         end
       end

@@ -562,6 +562,10 @@ begin
     for FormulaIndex := 0 to PropertyFormulas.Count - 1 do
     begin
       Formula := PropertyFormulas[FormulaIndex];
+      if Formula = '' then
+      begin
+        Formula := '0';
+      end;
 
       Param := Model.GetPestParameterByName(Formula);
       if Param <> nil then

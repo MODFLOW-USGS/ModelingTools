@@ -285,6 +285,11 @@ const
   // Sutra 4 element data sets
   KScaledSolidGrainThermalConductivity = 'Scaled_Solid_Grain_Thermal_Conductivity';
   KScaledEffectiveAirThermalConductivity = 'Scaled_Effective_Air_Thermal_Conductivity';
+  KDiffusionCoefficien = 'Diffusion_Coefficient';
+  KVerticalTransverse = 'Vertical_Transverse_Dispersivity_Horizontal_Flow';
+  KHorizontalTransvers = 'Horizontal_Transverse_Dispersivity_Horizontal_Flow';
+  KLongitudinalDispersV = 'Longitudinal_Dispersivity_Vertical_Flow';
+  KLongitudinalDispersH = 'Longitudinal_Dispersivity_Horizontal_Flow';
 
   // @name is the name of the @link(TDataArray) that specifies
   // the hydraulic conductivity for the leaky boundary condition on the top
@@ -580,7 +585,7 @@ resourcestring
   StrNewDataSet = 'NewDataSet';
   rsResClassificaton = 'Reservoir';
   rsLakeClassificaton = 'Lake';
-  StrMT3DMS_Classificaton = 'MT3DMS or MT3D-USGS';
+  StrMT3DMS_Classificaton = 'MT3DMS, MT3D-USGS, or GWT';
   StrGwtClassification = 'GWT: Groundwater Transport';
   StrSpecifiedPressure = 'SUTRA Specified Pressure';
   StrSutraSpecifiedHead = 'SUTRA Specified Head';
@@ -1850,9 +1855,10 @@ that affects the model output should also have a comment. }
     // @name is used to store @link(TDataArray)s that have been deleted
     // so that they can be restored later.
     FDeletedDataSets: TList;
-    FDispersivityIndex: Integer;
+    FLongitudinalDispersivityIndex: Integer;
     FPorosityIndex: Integer;
     FDataSetNames: TStringList;
+    FTransverseDispersivityIndex: Integer;
     // See @link(DataSetCount).
     function GetDataSetCount: integer;
     // See @link(DataSets).
@@ -2320,6 +2326,7 @@ that affects the model output should also have a comment. }
     function GetMt3dmsOutputControl: TMt3dmsOutputControl; virtual; abstract;
     function GetMt3dmsTimes: TMt3dmsTimeCollection; virtual; abstract;
     procedure SetMt3dmsTimes(const Value: TMt3dmsTimeCollection); virtual; abstract;
+    function GwtDispUsed(Sender: TObject): boolean; virtual;
     function LongitudinalDispersionUsed(Sender: TObject): boolean; virtual;
     function HorizontalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
     function VerticalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
@@ -4053,6 +4060,7 @@ that affects the model output should also have a comment. }
     function SwtSpecifiedUsed(Sender: TObject): boolean; override;
     function UztUsed(Sender: TObject): boolean; override;
     function GwtUztUsed(Sender: TObject): boolean; override;
+    function GwtDispUsed(Sender: TObject): boolean; override;
     function LongitudinalDispersionUsed(Sender: TObject): boolean; override;
     function HorizontalTransverseDispersionUsed(Sender: TObject): boolean; override;
     function VerticalTransverseDispersionUsed(Sender: TObject): boolean; override;
@@ -5512,7 +5520,8 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
   Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit,
   ModflowMnw2Unit, PestObsExtractorInputWriterUnit, Modflow6ObsUnit,
-  PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit;
+  PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit,
+  ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -6034,6 +6043,12 @@ resourcestring
   // Sutra 4 element data sets
   StrScaledSolidGrainThermalConductivity = KScaledSolidGrainThermalConductivity;
   StrScaledEffectiveAirThermalConductivity = KScaledEffectiveAirThermalConductivity;
+  StrDiffusionCoefficien = KDiffusionCoefficien;
+  StrVerticalTransverse = KVerticalTransverse;
+  StrHorizontalTransvers = KHorizontalTransvers;
+  StrLongitudinalDispersV = KLongitudinalDispersV;
+  StrLongitudinalDispersH = KLongitudinalDispersH;
+//  StrGWTClassification = 'GWT';
 
   //  StrLakeMf6 = 'LakeMf6';
 
@@ -18535,6 +18550,25 @@ begin
   end;
 end;
 
+function TPhastModel.GwtDispUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.GwtDispUsed(nil);
+      end;
+    end;
+  end;
+end;
+
 function TPhastModel.GwtUztUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -30517,14 +30551,14 @@ end;
 function TCustomModel.SeparatedHorizontalTransverseDispersionUsed(
   Sender: TObject): boolean;
 begin
-  result := Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+  result := GwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtSeparate)
 end;
 
 function TCustomModel.SeparatedLongitudinalDispersionUsed(
   Sender: TObject): boolean;
 begin
-  result := (Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+  result := (GwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtSeparate))
 end;
 
@@ -34678,7 +34712,8 @@ begin
   FDataSets := TObjectList.Create;
   FBoundaryDataSets := TObjectList.Create;
   FDeletedDataSets := TObjectList.Create;
-  FDispersivityIndex := -1;
+  FLongitudinalDispersivityIndex := -1;
+  FTransverseDispersivityIndex := -1;
   FPorosityIndex := -1;
 end;
 
@@ -35095,7 +35130,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
-  GWTDataSets = 4;
+  GWTDataSets = 5;
 {$IFDEF Sutra4}
   {$IFDEF  GWT}
   ArrayCount = 167 + GWTDataSets;
@@ -35314,7 +35349,7 @@ begin
   FDataArrayCreationRecords[Index].Name := rsLong_Dispersivity;
   FDataArrayCreationRecords[Index].DisplayName := rsLong_DispersivityDisplayName;
   FDataArrayCreationRecords[Index].Formula := '10.';
-  FDispersivityIndex := Index;
+  FLongitudinalDispersivityIndex := Index;
   if (FCustomModel = nil) or (FCustomModel.ModelSelection = msPhast) then
   begin
     FDataArrayCreationRecords[Index].Classification := StrHydrology;
@@ -35340,6 +35375,7 @@ begin
   FDataArrayCreationRecords[Index].Name := rsHorizontal_Transv_Dispersivity;
   FDataArrayCreationRecords[Index].DisplayName := rsHorizontal_Transv_DispersivityDisplayName;
   FDataArrayCreationRecords[Index].Formula := '1.';
+  FTransverseDispersivityIndex := Index;
   if (FCustomModel = nil) or (FCustomModel.ModelSelection = msPhast) then
   begin
     FDataArrayCreationRecords[Index].Classification := StrHydrology;
@@ -35364,7 +35400,15 @@ begin
   FDataArrayCreationRecords[Index].Name := rsVertical_Transv_Dispersivity;
   FDataArrayCreationRecords[Index].DisplayName := rsVertical_Transv_DispersivityDisplayName;
   FDataArrayCreationRecords[Index].Formula := '1.';
-  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+
+  if (FCustomModel = nil) or (FCustomModel.ModelSelection = msPhast) then
+  begin
+    FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  end
+  else
+  begin
+    FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+  end;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.VerticalTransverseDispersionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -37825,10 +37869,24 @@ begin
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
-  FDataArrayCreationRecords[Index].Name := 'Longitudinal_Dispersivity_Horizontal_Flow';
-  FDataArrayCreationRecords[Index].DisplayName := 'Longitudinal_Dispersivity_Horizontal_Flow';
+  FDataArrayCreationRecords[Index].Name := KDiffusionCoefficien;
+  FDataArrayCreationRecords[Index].DisplayName := StrDiffusionCoefficien;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrGWTClassification;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.GwtDispUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW 6 Dispersion Package: DIFFC';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KLongitudinalDispersH;
+  FDataArrayCreationRecords[Index].DisplayName := StrLongitudinalDispersH;
   FDataArrayCreationRecords[Index].Formula := '10';
-  FDataArrayCreationRecords[Index].Classification := 'GWT';
+  FDataArrayCreationRecords[Index].Classification := StrGWTClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SeparatedLongitudinalDispersionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -37839,10 +37897,10 @@ begin
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
-  FDataArrayCreationRecords[Index].Name := 'Longitudinal_Dispersivity_Vertical_Flow';
-  FDataArrayCreationRecords[Index].DisplayName := 'Longitudinal_Dispersivity_Vertical_Flow';
-  FDataArrayCreationRecords[Index].Formula := '10';
-  FDataArrayCreationRecords[Index].Classification := 'GWT';
+  FDataArrayCreationRecords[Index].Name := KLongitudinalDispersV;
+  FDataArrayCreationRecords[Index].DisplayName := StrLongitudinalDispersV;
+  FDataArrayCreationRecords[Index].Formula := '1';
+  FDataArrayCreationRecords[Index].Classification := StrGWTClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SeparatedLongitudinalDispersionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -37853,10 +37911,10 @@ begin
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
-  FDataArrayCreationRecords[Index].Name := 'Horizontal_Transverse_Dispersivity_Horizontal_Flow';
-  FDataArrayCreationRecords[Index].DisplayName := 'Horizontal_Transverse_Dispersivity_Horizontal_Flow';
-  FDataArrayCreationRecords[Index].Formula := '10';
-  FDataArrayCreationRecords[Index].Classification := 'GWT';;
+  FDataArrayCreationRecords[Index].Name := KHorizontalTransvers;
+  FDataArrayCreationRecords[Index].DisplayName := StrHorizontalTransvers;
+  FDataArrayCreationRecords[Index].Formula := '1';
+  FDataArrayCreationRecords[Index].Classification := StrGWTClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SeparatedHorizontalTransverseDispersionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -37867,16 +37925,17 @@ begin
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
-  FDataArrayCreationRecords[Index].Name := 'Vertical_Transverse_Dispersivity_Horizontal_Flow';
-  FDataArrayCreationRecords[Index].DisplayName := 'Vertical_Transverse_Dispersivity_Horizontal_Flow';
-  FDataArrayCreationRecords[Index].Formula := '10';
-  FDataArrayCreationRecords[Index].Classification := 'GWT';;
+  FDataArrayCreationRecords[Index].Name := KVerticalTransverse;
+  FDataArrayCreationRecords[Index].DisplayName := StrVerticalTransverse;
+  FDataArrayCreationRecords[Index].Formula := '0.1';
+  FDataArrayCreationRecords[Index].Classification := StrGWTClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SeparatedHorizontalTransverseDispersionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW 6 Dispersion Package: ATH2';
   Inc(Index);
+
   {$ENDIF}
 
   // See ArrayCount.
@@ -38433,21 +38492,39 @@ var
   DataArray: TDataArray;
   Packages: TModflowPackages;
 begin
-  if FDispersivityIndex >= 0 then
+  if FLongitudinalDispersivityIndex >= 0 then
   begin
     if FCustomModel.ModelSelection = msPhast then
     begin
-      FDataArrayCreationRecords[FDispersivityIndex].Classification := StrHydrology;
+      FDataArrayCreationRecords[FLongitudinalDispersivityIndex].Classification := StrHydrology;
     end
     else
     begin
-      FDataArrayCreationRecords[FDispersivityIndex].Classification := StrMT3DMS_Classificaton;
+      FDataArrayCreationRecords[FLongitudinalDispersivityIndex].Classification := StrMT3DMS_Classificaton;
     end;
-    DataArray := GetDataSetByName(FDataArrayCreationRecords[FDispersivityIndex].Name);
+    DataArray := GetDataSetByName(FDataArrayCreationRecords[FLongitudinalDispersivityIndex].Name);
     if DataArray <> nil then
     begin
       DataArray.Classification :=
-        FDataArrayCreationRecords[FDispersivityIndex].Classification;
+        FDataArrayCreationRecords[FLongitudinalDispersivityIndex].Classification;
+    end;
+  end;
+
+  if FTransverseDispersivityIndex >= 0 then
+  begin
+    if FCustomModel.ModelSelection = msPhast then
+    begin
+      FDataArrayCreationRecords[FTransverseDispersivityIndex].Classification := StrHydrology;
+    end
+    else
+    begin
+      FDataArrayCreationRecords[FTransverseDispersivityIndex].Classification := StrGWTClassification;
+    end;
+    DataArray := GetDataSetByName(FDataArrayCreationRecords[FTransverseDispersivityIndex].Name);
+    if DataArray <> nil then
+    begin
+      DataArray.Classification :=
+        FDataArrayCreationRecords[FTransverseDispersivityIndex].Classification;
     end;
   end;
 
@@ -39407,7 +39484,7 @@ function TCustomModel.VerticalTransverseDispersionUsed(
   Sender: TObject): boolean;
 begin
   result := ChemistryUsed(Sender)
-    or (Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+    or (GwtDispUsed(Sender)
     and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow)
 end;
 
@@ -39439,7 +39516,7 @@ function TCustomModel.HorizontalTransverseDispersionUsed(
   Sender: TObject): boolean;
 begin
   result := ChemistryUsed(Sender)
-    or (Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+    or (GwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtCombined))
 end;
 
@@ -39808,7 +39885,7 @@ function TCustomModel.LongitudinalDispersionUsed(Sender: TObject): boolean;
 begin
   result := ChemistryUsed(Sender)
     or (Mt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected)
-    or (Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected
+    or (GwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtCombined))
 end;
 
@@ -42872,10 +42949,10 @@ var
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
   SpeciesIndex: Integer;
   GwtNameWriters: TMf6GwtNameWriters;
-//  ASpeciesName: string;
-//  GwtFileName: string;
   GwtIcWriter: TGwtInitialConcWriter;
-//  PestDataArrayWriter: TPestDataArrayWriter;
+  DspWriter: TModflowDspWriter;
+  AdvWriter: TModflowGwtAdvWriter;
+  GwtSsmWriter: TModflowGwtSsmWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -44170,8 +44247,29 @@ begin
 
       if GwtUsed then
       begin
+        AdvWriter := TModflowGwtAdvWriter.Create(Self, etExport);
+        try
+          AdvWriter.WriteFile(FileName);
+        finally
+          AdvWriter.Free;
+        end;
+
+        DspWriter := TModflowDspWriter.Create(Self, etExport);
+        try
+          DspWriter.WriteFile(FileName);
+        finally
+          DspWriter.Free;
+        end;
+
         for SpeciesIndex := 0 to MobileComponents.Count - 1 do
         begin
+          GwtSsmWriter := TModflowGwtSsmWriter.Create(Self, etExport);
+          try
+            GwtSsmWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            GwtSsmWriter.Free;
+          end;
+
           GwtIcWriter := TGwtInitialConcWriter.Create(Self, etExport);
           try
             GwtIcWriter.WriteFile(FileName, SpeciesIndex);
@@ -48599,6 +48697,11 @@ end;
 function TCustomModel.GroundSurfaceUsed(Sender: TObject): boolean;
 begin
   result := UzfPackageUsed(Sender) or FarmProcessUsed(Sender);
+end;
+
+function TCustomModel.GwtDispUsed(Sender: TObject): boolean;
+begin
+  result := Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected;
 end;
 
 function TCustomModel.GwtUztUsed(Sender: TObject): boolean;

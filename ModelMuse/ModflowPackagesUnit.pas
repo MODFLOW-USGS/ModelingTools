@@ -78,6 +78,8 @@ type
     FCsubPackage: TCSubPackageSelection;
     FGwtPackages: TGwtPackageCollection;
     FGwtDispersionPackage: TGwtDispersionPackage;
+    FGwtAdvectionPackage: TGwtAdvectionPackage;
+    FGwtSsmPackage: TGWtSsmPackage;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -146,6 +148,8 @@ type
     procedure SetCsubPackage(const Value: TCSubPackageSelection);
     procedure SetGwtPackges(const Value: TGwtPackageCollection);
     procedure SetGwtDispersionPackage(const Value: TGwtDispersionPackage);
+    procedure SetGwtAdvectionPackage(const Value: TGwtAdvectionPackage);
+    procedure SetGwtSsmPackage(const Value: TGWtSsmPackage);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -277,6 +281,18 @@ type
       stored False
     {$ENDIF}
     ;
+    property GwtAdvectionPackage: TGwtAdvectionPackage
+      read FGwtAdvectionPackage write SetGwtAdvectionPackage
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    property GwtSsmPackage: TGWtSsmPackage
+      read FGwtSsmPackage write SetGwtSsmPackage
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
     property GwtPackages: TGwtPackageCollection read FGwtPackages
       write SetGwtPackges
     {$IFNDEF GWT}
@@ -386,6 +402,7 @@ resourcestring
   StrCSUBSkeletalStora = 'CSUB: Skeletal Storage, Compaction, and Subsidence' +
   ' Package';
   StrGWTDispersionPacka = 'DSP: GWT Dispersion Package';
+  StrADVGWTAdvectionP = 'ADV: GWT Advection Package';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
@@ -465,6 +482,8 @@ begin
     Mt3dCts := SourcePackages.Mt3dCts;
     CsubPackage := SourcePackages.CsubPackage;
     GwtDispersionPackage := SourcePackages.GwtDispersionPackage;
+    GwtAdvectionPackage := SourcePackages.GwtAdvectionPackage;
+    GwtSsmPackage := SourcePackages.GwtSsmPackage;
     GwtPackages := SourcePackages.GwtPackages;
   end
   else
@@ -802,12 +821,24 @@ begin
   FGwtDispersionPackage.Classification := StrGwtClassification;
   FGwtDispersionPackage.SelectionType := stCheckBox;
 
+  FGwtAdvectionPackage := TGwtAdvectionPackage.Create(Model);
+  FGwtAdvectionPackage.PackageIdentifier := StrADVGWTAdvectionP;
+  FGwtAdvectionPackage.Classification := StrGwtClassification;
+  FGwtAdvectionPackage.SelectionType := stCheckBox;
+
+  FGwtSsmPackage := TGWtSsmPackage.Create(Model);
+  FGwtSsmPackage.PackageIdentifier := 'SSM: GWT Source and Sink Mixing Package';
+  FGwtSsmPackage.Classification := StrGwtClassification;
+  FGwtSsmPackage.SelectionType := stCheckBox;
+
   FGwtPackages := TGwtPackageCollection.Create(Model)
 end;
 
 destructor TModflowPackages.Destroy;
 begin
   FGwtPackages.Free;
+  FGwtSsmPackage.Free;
+  FGwtAdvectionPackage.Free;
   FGwtDispersionPackage.Free;
   FCsubPackage.Free;
   FUzfMf6Package.Free;
@@ -951,9 +982,12 @@ begin
   Mt3dSft.InitializeVariables;
   Mt3dCts.InitializeVariables;
   CsubPackage.InitializeVariables;
-  FGwtPackages.InitializeVariables;
-  FGwtDispersionPackage.InitializeVariables;
+  GwtPackages.InitializeVariables;
+  GwtDispersionPackage.InitializeVariables;
+  GwtSsmPackage.InitializeVariables;
+  GwtAdvectionPackage.InitializeVariables;
 end;
+
 
 function TModflowPackages.SelectedModflowPackageCount: integer;
 var
@@ -1315,6 +1349,12 @@ begin
   FGncPackage.Assign(Value)
 end;
 
+procedure TModflowPackages.SetGwtAdvectionPackage(
+  const Value: TGwtAdvectionPackage);
+begin
+  FGwtAdvectionPackage.Assign(Value);
+end;
+
 procedure TModflowPackages.SetGwtDispersionPackage(
   const Value: TGwtDispersionPackage);
 begin
@@ -1324,6 +1364,11 @@ end;
 procedure TModflowPackages.SetGwtPackges(const Value: TGwtPackageCollection);
 begin
   FGwtPackages.Assign(Value);
+end;
+
+procedure TModflowPackages.SetGwtSsmPackage(const Value: TGWtSsmPackage);
+begin
+  FGwtSsmPackage.Assign(Value);
 end;
 
 procedure TModflowPackages.SetHfbPackage(const Value: TModflowPackageSelection);

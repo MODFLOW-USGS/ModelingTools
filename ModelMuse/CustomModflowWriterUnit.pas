@@ -301,9 +301,6 @@ end;
     procedure WritePestFormulaOrValue(const PestName, PestSeriesName: string;
       PestMethod: TPestParamMethod; Value: double);
   public
-    // @name converts AFileName to use the correct extension for the file.
-//    class function FileName(const AFileName: string): string;
-
     // @name converts a real number represented as a string to always use
     property ArrayWritingFormat: TArrayWritingFormat read FArrayWritingFormat;
     {@name checks that the values stored in DataArray are valid.
@@ -9187,6 +9184,7 @@ var
   LayerIndex: integer;
   MF6_ArrayName: string;
 begin
+  Assert(DataArray <> nil);
   for LayerIndex := 0 to DataArray.LayerCount - 1 do
   begin
     if LayerIndex = 0 then

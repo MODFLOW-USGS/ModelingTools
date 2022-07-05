@@ -50,7 +50,7 @@ uses System.UITypes,
   framePackageGNC_Unit, framePackageMf6ObsUnit, framePackageLakMf6Unit,
   framePackageMvrUnit, framePackageUzfMf6Unit, frameMt3dLktPkgUnit,
   frameMt3dSftUnit, frameMt3dCtsPkgUnit, framePackageCsubUnit,
-  PestParamGroupsUnit, frameGwtDspPackageUnit;
+  PestParamGroupsUnit, frameGwtDspPackageUnit, frameGwtAdvPackageUnit;
 
 type
 
@@ -257,6 +257,10 @@ type
     framePackageCsub: TframePackageCsub;
     jvspGwtDisp: TJvStandardPage;
     frameGwtDsp: TframeGwtDspPackage;
+    jvspGwtAdv: TJvStandardPage;
+    frameGwtAdv: TframeGwtAdvPackage;
+    jvspGwtSsm: TJvStandardPage;
+    frameGwtSSM: TframePackage;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -3937,12 +3941,32 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    Packages.GwtAdvectionPackage.Frame := frameGwtAdv;
+    FPackageList.Add(Packages.GwtAdvectionPackage);
+  end
+  else
+  begin
+    frameGwtAdv.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
     Packages.GwtDispersionPackage.Frame := frameGwtDsp;
     FPackageList.Add(Packages.GwtDispersionPackage);
   end
   else
   begin
     frameGwtDsp.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    Packages.GwtSsmPackage.Frame := frameGwtSSM;
+    FPackageList.Add(Packages.GwtSsmPackage);
+  end
+  else
+  begin
+    frameGwtSSM.NilNode;
   end;
 
 end;

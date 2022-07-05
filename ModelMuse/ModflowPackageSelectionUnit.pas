@@ -5861,17 +5861,56 @@ Type
       read FUseTransverseDispForVertFlow write SetUseTransverseDispForVertFlow;
   end;
 
+  TGwtScheme = (gsUpstream, gsCentral, gsTVD);
+
+  TGwtAdvectionPackage = class(TModflowPackageSelection)
+  private
+    FScheme: TGwtScheme;
+    procedure SetScheme(const Value: TGwtScheme);
+  public
+    Constructor Create(Model: TBaseModel);
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables; override;
+  published
+    property Scheme: TGwtScheme read FScheme write SetScheme;
+  end;
+
+  TGwtSsmPackage = class(TModflowPackageSelection)
+  end;
+
+  TGwtMstPackage = class(TModflowPackageSelection)
+  private
+    FZeroOrderDecay: Boolean;
+    FFirstOrderDecay: Boolean;
+    FSorption: Boolean;
+    procedure SetFirstOrderDecay(const Value: Boolean);
+    procedure SetSorption(const Value: Boolean);
+    procedure SetZeroOrderDecay(const Value: Boolean);
+  public
+    Constructor Create(Model: TBaseModel);
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables; override;
+  published
+    property ZeroOrderDecay: Boolean read FZeroOrderDecay write SetZeroOrderDecay;
+    property FirstOrderDecay: Boolean read FFirstOrderDecay write SetFirstOrderDecay;
+    property Sorption: Boolean read FSorption write SetSorption;
+  end;
+
   TGwtPackagesItem = class(TPhastCollectionItem)
   private
     FGwtIms: TSmsPackageSelection;
+    FGwtMst: TGwtMstPackage;
     procedure SetGwtIms(const Value: TSmsPackageSelection);
+    procedure SetGwtMst(const Value: TGwtMstPackage);
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
   published
     property GwtIms: TSmsPackageSelection read FGwtIms write SetGwtIms;
+    property GwtMst: TGwtMstPackage read FGwtMst write SetGwtMst;
   end;
+
 
   TGwtPackageCollection = class(TPhastCollection)
   private
@@ -22628,10 +22667,14 @@ end;
 { TImsCollectionItem }
 
 procedure TGwtPackagesItem.Assign(Source: TPersistent);
+var
+  GwtSource: TGwtPackagesItem;
 begin
   if Source is TGwtPackagesItem then
   begin
-    GwtIms := TGwtPackagesItem(Source).GwtIms;
+    GwtSource := TGwtPackagesItem(Source);
+    GwtIms := GwtSource.GwtIms;
+    GwtMst := GwtSource.GwtMst;
   end
   else
   begin
@@ -22646,14 +22689,23 @@ begin
   inherited;
   Assert(Collection <> nil);
   ParentCollection := Collection as TGwtPackageCollection;
+
   FGwtIms := TSmsPackageSelection.Create(ParentCollection.FModel);
   FGwtIms.PackageIdentifier := StrSMSSparseMatrixS;
   FGwtIms.Classification := StrSolver;
   FGwtIms.SelectionType := stRadioButton;
+
+  FGwtMst := TGwtMstPackage.Create(ParentCollection.FModel);
+  FGwtMst.PackageIdentifier := 'MST: Mobile Storage and Transfer Package';
+  FGwtMst.Classification := StrGwtClassification;
+  FGwtMst.SelectionType := stCheckBox;
+
+//FGwtMst: TGwtMstPackage;
 end;
 
 destructor TGwtPackagesItem.Destroy;
 begin
+  FGwtMst.Free;
   FGwtIms.Free;
   inherited;
 end;
@@ -22661,6 +22713,11 @@ end;
 procedure TGwtPackagesItem.SetGwtIms(const Value: TSmsPackageSelection);
 begin
   FGwtIms.Assign(Value);
+end;
+
+procedure TGwtPackagesItem.SetGwtMst(const Value: TGwtMstPackage);
+begin
+  FGwtMst.Assign(Value);
 end;
 
 { TGwtImsCollection }
@@ -22708,6 +22765,7 @@ begin
   for SpeciesIndex := 0 to inherited Count - 1 do
   begin
     Items[SpeciesIndex].GwtIms.InitializeVariables;
+    Items[SpeciesIndex].GwtMst.InitializeVariables;
   end;
 end;
 
@@ -22788,6 +22846,83 @@ end;
 procedure TGwtDispersionPackage.SetXt3dRightHandSide(const Value: Boolean);
 begin
   SetBooleanProperty(FXt3dRightHandSide, Value);
+end;
+
+{ TGwtAdvectionPackage }
+
+procedure TGwtAdvectionPackage.Assign(Source: TPersistent);
+begin
+  if Source is TGwtAdvectionPackage then
+  begin
+    Scheme := TGwtAdvectionPackage(Source).Scheme;
+  end;
+  inherited;
+end;
+
+constructor TGwtAdvectionPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  InitializeVariables;
+end;
+
+procedure TGwtAdvectionPackage.InitializeVariables;
+begin
+  inherited;
+  FScheme := gsUpstream;
+end;
+
+procedure TGwtAdvectionPackage.SetScheme(const Value: TGwtScheme);
+begin
+  if FScheme <> Value then
+  begin
+    FScheme := Value;
+    InvalidateModel;
+  end;
+end;
+
+{ TGwtMstPackage }
+
+procedure TGwtMstPackage.Assign(Source: TPersistent);
+var
+  MstSource: TGwtMstPackage;
+begin
+  if Source is TGwtMstPackage then
+  begin
+    MstSource := TGwtMstPackage(Source);
+    ZeroOrderDecay := MstSource.ZeroOrderDecay;
+    FirstOrderDecay := MstSource.FirstOrderDecay;
+    Sorption := MstSource.Sorption;
+  end;
+  inherited;
+end;
+
+constructor TGwtMstPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  InitializeVariables;
+end;
+
+procedure TGwtMstPackage.InitializeVariables;
+begin
+  inherited;
+  FZeroOrderDecay := False;
+  FFirstOrderDecay := False;
+  FSorption := False;
+end;
+
+procedure TGwtMstPackage.SetFirstOrderDecay(const Value: Boolean);
+begin
+  SetBooleanProperty(FFirstOrderDecay, Value);
+end;
+
+procedure TGwtMstPackage.SetSorption(const Value: Boolean);
+begin
+  SetBooleanProperty(FSorption, Value);
+end;
+
+procedure TGwtMstPackage.SetZeroOrderDecay(const Value: Boolean);
+begin
+  SetBooleanProperty(FZeroOrderDecay, Value);
 end;
 
 end.
