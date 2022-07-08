@@ -233,6 +233,19 @@ begin
   result := -Sign(Value1 - Value2);
 end;
 
+function CompareAbsResiduals(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TPestObsResult;
+  Value1: Double;
+  Value2: Double;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  Value1 := Abs(P1.Residual);
+  Value2 := Abs(P2.Residual);
+  result := -Sign(Value1 - Value2);
+end;
+
 
 procedure TPestObsResult.Assign(Source: TPersistent);
 var
@@ -963,6 +976,7 @@ var
   ALine: string;
   CompItem: TGlobalObsComparisonItem;
   OtherObs: IObservationItem;
+  NameFound: Boolean;
 begin
   GetExistingObservations;
   result := False;
@@ -980,14 +994,27 @@ begin
       Clear;
       FileName := AFileName;
       ResidualsFile.LoadFromFile(FileName);
-      for LineIndex := 1 to ResidualsFile.Count - 1 do
+      NameFound := False;
+      for LineIndex := 0 to ResidualsFile.Count - 1 do
       begin
         ALine := ResidualsFile[LineIndex];
         ALine := ReplaceStr(ALine, 'Cov. Mat.', 'Covariance_Matrix');
         Splitter.DelimitedText := ResidualsFile[LineIndex];
         if Splitter.Count > 0 then
         begin
-          Assert(Splitter.Count >= 11);
+          if not NameFound then
+          begin
+            if (Splitter[0] = 'Name') then
+            begin
+              NameFound := True;
+            end;
+            Continue;
+          end;
+          Assert(Splitter.Count >= 6);
+          if Splitter.Count > 6 then
+          begin
+            Assert(Splitter.Count >= 11);
+          end;
           Item := Add;
           Item.Name := Splitter[0];
           Item.GroupName := Splitter[1];
@@ -1006,62 +1033,80 @@ begin
             Item.WeightText := Splitter[5];
           end;
 
-          if TryFortranStrToFloat(Splitter[6], AValue) then
+          if  (Splitter.Count > 6) then
           begin
-            Item.WeightedMeasured := AValue;
-            Item.WeightedMeasuredText := '';
+            if TryFortranStrToFloat(Splitter[6], AValue) then
+            begin
+              Item.WeightedMeasured := AValue;
+              Item.WeightedMeasuredText := '';
+            end
+            else
+            begin
+              Item.WeightedMeasured := 0;
+              Item.WeightedMeasuredText := Splitter[6];
+            end;
+
+            if TryFortranStrToFloat(Splitter[7], AValue) then
+            begin
+              Item.WeightedModeled := AValue;
+              Item.WeightedModeledText := '';
+            end
+            else
+            begin
+              Item.WeightedModeled := 0;
+              Item.WeightedModeledText := Splitter[7];
+            end;
+
+            if TryFortranStrToFloat(Splitter[8], AValue) then
+            begin
+              Item.WeightedResidual := AValue;
+              Item.WeightedResidualText := '';
+            end
+            else
+            begin
+              Item.WeightedResidual := 0;
+              Item.WeightedResidualText := Splitter[8];
+            end;
+
+            if TryFortranStrToFloat(Splitter[9], AValue) then
+            begin
+              Item.MeasurementStdDeviation := AValue;
+              Item.MeasurementStdDeviationText := '';
+            end
+            else
+            begin
+              Item.MeasurementStdDeviation := 0;
+              Item.MeasurementStdDeviationText := Splitter[9];
+            end;
+            if TryFortranStrToFloat(Splitter[10], AValue) then
+            begin
+              Item.NaturalWeight := AValue;
+              Item.NaturalWeightText := '';
+            end
+            else
+            begin
+              Item.NaturalWeight := 0;
+              Item.NaturalWeightText := Splitter[10];
+            end;
           end
           else
           begin
             Item.WeightedMeasured := 0;
-            Item.WeightedMeasuredText := Splitter[6];
-          end;
+            Item.WeightedMeasuredText := 'Not recorded';
 
-          if TryFortranStrToFloat(Splitter[7], AValue) then
-          begin
-            Item.WeightedModeled := AValue;
-            Item.WeightedModeledText := '';
-          end
-          else
-          begin
             Item.WeightedModeled := 0;
-            Item.WeightedModeledText := Splitter[7];
-          end;
+            Item.WeightedModeledText := 'Not recorded';
 
-          if TryFortranStrToFloat(Splitter[8], AValue) then
-          begin
-            Item.WeightedResidual := AValue;
-            Item.WeightedResidualText := '';
-          end
-          else
-          begin
             Item.WeightedResidual := 0;
-            Item.WeightedResidualText := Splitter[8];
-          end;
+            Item.WeightedResidualText := 'Not recorded';
 
-          if TryFortranStrToFloat(Splitter[9], AValue) then
-          begin
-            Item.MeasurementStdDeviation := AValue;
-            Item.MeasurementStdDeviationText := '';
-          end
-          else
-          begin
             Item.MeasurementStdDeviation := 0;
-            Item.MeasurementStdDeviationText := Splitter[9];
-          end;
-          if TryFortranStrToFloat(Splitter[10], AValue) then
-          begin
-            Item.NaturalWeight := AValue;
-            Item.NaturalWeightText := '';
-          end
-          else
-          begin
+            Item.MeasurementStdDeviationText := 'Not recorded';
+
             Item.NaturalWeight := 0;
-            Item.NaturalWeightText := Splitter[10];
+            Item.NaturalWeightText := 'Not recorded';
+
           end;
-//          Item.MeasurementStdDeviation := FortranStrToFloat(Splitter[9]);
-//          Item.NaturalWeight := FortranStrToFloat(Splitter[10]);
-//          Item.OriginalOrder := LineIndex-1;
 
           if FUsedObservations.TryGetValue(LowerCase(Item.Name), Obs) then
           begin
@@ -1109,7 +1154,14 @@ begin
         begin
           AList.Add(Items[Index]);
         end;
-        AList.Sort(CompareAbsWeightedResiduals);
+        if (Splitter.Count > 6) then
+        begin
+          AList.Sort(CompareAbsWeightedResiduals);
+        end
+        else
+        begin
+          AList.Sort(CompareAbsResiduals);
+        end;
         for Index := 0 to AList.Count - 1 do
         begin
           Item := AList[Index];

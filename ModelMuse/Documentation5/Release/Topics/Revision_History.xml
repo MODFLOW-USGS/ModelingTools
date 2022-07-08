@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-06-08T17:05:05.417-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">Current Version</title>
+<topic template="Default" modified="2022-07-07T12:33:35.569-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Version 5.1</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Current Version</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 5.1</text></para>
     </header>
     <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 5.1 June 8, 2022]]></caption></toggle></para>
     <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
@@ -29,6 +29,7 @@
               <td>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Made changes throughout ModelMuse to account for a change in TJvImageComboBox.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Changed the export of SUTRA template files for PEST.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now prevents the user from exporting a model with a period in the file name root if PEST is activated.</text></para>
               </td>
             </tr>
           </table></para>
@@ -50,7 +51,11 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now only exports the UNSAT_ETWC or UNSAT_ETAE options in the MODFLOW 6 UZF package if evapotranspiration is simulated. In addition, the ET rate in the MODFLOW 6 UZF package is automatically set to zero if evapotranspiration is not simulated.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of prior-information groups in PEST.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of PEST prior information equations and prior information groups that resulted in invalid PEST control files.</text></para>
-                <para styleclass="Normal"></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of PEST prior information equations and prior information groups that caused an access violation if the model input was exported more than once after opening the model in ModelMuse.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in specifying yields in the MT3D-USGS reaction package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations due to deleted parameters.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations when evaluating the Ky and Kz data sets in MODFLOW 6 models when anisotropy was used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in changing the number of times specified for MAW wells.</text></para>
               </td>
             </tr>
           </table></para>

@@ -14,15 +14,15 @@ object framePestObservationResults: TframePestObservationResults
     object lblRMS: TLabel
       Left = 8
       Top = 9
-      Width = 200
-      Height = 13
+      Width = 276
+      Height = 20
       Caption = 'Root Mean Square Weighted Residual = ?'
     end
     object comboModels: TComboBox
       Left = 8
       Top = 6
       Width = 180
-      Height = 21
+      Height = 28
       Style = csDropDownList
       TabOrder = 0
       Visible = False
@@ -33,7 +33,7 @@ object framePestObservationResults: TframePestObservationResults
     Top = 0
     Width = 555
     Height = 454
-    ActivePage = tabGraph
+    ActivePage = tabControls
     Align = alClient
     TabOrder = 1
     OnChange = pgcObservationsChange
@@ -42,36 +42,36 @@ object framePestObservationResults: TframePestObservationResults
       object lblNegativeColor: TLabel
         Left = 3
         Top = 279
-        Width = 132
-        Height = 26
+        Width = 182
+        Height = 40
         Caption = 'Color for negative residuals'#13#10'(Simulated head too high)'
       end
       object lblColorPositive: TLabel
         Left = 255
         Top = 279
-        Width = 127
-        Height = 26
+        Width = 177
+        Height = 40
         Caption = 'Color for positive residuals'#13#10'(Simulated head too low)'
       end
       object lblMaxSymbolSize: TLabel
         Left = 130
         Top = 357
-        Width = 139
-        Height = 13
+        Width = 199
+        Height = 20
         Caption = 'Maximum symbol size (pixels)'
       end
       object lblHeadObsResults: TLabel
         Left = 3
         Top = 3
-        Width = 45
-        Height = 13
+        Width = 64
+        Height = 20
         Caption = 'File name'
       end
       object flnmedHeadObsResults: TJvFilenameEdit
         Left = 3
         Top = 22
         Width = 505
-        Height = 21
+        Height = 28
         Filter = 'PEST Residuals file (*.res)|*.res'
         TabOrder = 0
         Text = ''
@@ -87,43 +87,43 @@ object framePestObservationResults: TframePestObservationResults
         object lblMaximumTime: TLabel
           Left = 252
           Top = 86
-          Width = 67
-          Height = 13
+          Width = 100
+          Height = 20
           Caption = 'Maximum time'
         end
         object lblMaxResidual: TLabel
           Left = 252
           Top = 24
-          Width = 84
-          Height = 13
+          Width = 122
+          Height = 20
           Caption = 'Maximum residual'
         end
         object lblMinimumTime: TLabel
           Left = 3
           Top = 86
-          Width = 63
-          Height = 13
+          Width = 97
+          Height = 20
           Caption = 'Minimum time'
         end
         object lblMinResidual: TLabel
           Left = 3
           Top = 24
-          Width = 80
-          Height = 13
+          Width = 119
+          Height = 20
           Caption = 'Minimum residual'
         end
         object lblMinWeightedResidual: TLabel
           Left = 3
           Top = 138
-          Width = 127
-          Height = 13
+          Width = 185
+          Height = 20
           Caption = 'Minimum weighted residual'
         end
         object lblMaxWeightedResidual: TLabel
           Left = 252
           Top = 138
-          Width = 131
-          Height = 13
+          Width = 188
+          Height = 20
           Caption = 'Maximum weighted residual'
         end
         inline framelmtMinimumTime: TframeDisplayLimit
@@ -141,7 +141,7 @@ object framePestObservationResults: TframePestObservationResults
             ExplicitHeight = 23
           end
           inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
+            ExplicitHeight = 28
           end
         end
         inline framelmtMaxResidual: TframeDisplayLimit
@@ -159,7 +159,7 @@ object framePestObservationResults: TframePestObservationResults
             ExplicitHeight = 23
           end
           inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
+            ExplicitHeight = 28
           end
         end
         inline framelmtMaximumTime: TframeDisplayLimit
@@ -177,7 +177,7 @@ object framePestObservationResults: TframePestObservationResults
             ExplicitHeight = 23
           end
           inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
+            ExplicitHeight = 28
           end
         end
         inline framelmtMinResidual: TframeDisplayLimit
@@ -195,7 +195,7 @@ object framePestObservationResults: TframePestObservationResults
             ExplicitHeight = 23
           end
           inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
+            ExplicitHeight = 28
           end
         end
         inline framelmtMinWeightedResidual: TframeDisplayLimit
@@ -213,7 +213,7 @@ object framePestObservationResults: TframePestObservationResults
             ExplicitTop = 3
           end
           inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
+            ExplicitHeight = 28
           end
         end
         inline framelmtMaxWeightedResidual: TframeDisplayLimit
@@ -229,7 +229,7 @@ object framePestObservationResults: TframePestObservationResults
             Enabled = True
           end
           inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
+            ExplicitHeight = 28
           end
         end
       end
@@ -257,7 +257,7 @@ object framePestObservationResults: TframePestObservationResults
         Left = 3
         Top = 354
         Width = 121
-        Height = 21
+        Height = 28
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
         Value = 20.000000000000000000
@@ -294,7 +294,7 @@ object framePestObservationResults: TframePestObservationResults
         Left = 0
         Top = 0
         Width = 547
-        Height = 361
+        Height = 354
         Align = alClient
         ColCount = 13
         FixedCols = 0
@@ -626,7 +626,7 @@ object framePestObservationResults: TframePestObservationResults
       end
       object pnlValueControls: TPanel
         Left = 0
-        Top = 361
+        Top = 354
         Width = 547
         Height = 65
         Align = alBottom
@@ -682,15 +682,15 @@ object framePestObservationResults: TframePestObservationResults
       object lblMax: TLabel
         Left = 56
         Top = 9
-        Width = 30
-        Height = 13
+        Width = 45
+        Height = 20
         Caption = 'lblMax'
       end
       object lblHalfMax: TLabel
         Left = 56
         Top = 41
-        Width = 49
-        Height = 13
+        Width = 73
+        Height = 20
         Caption = 'lblHalfMax'
       end
     end
@@ -701,7 +701,7 @@ object framePestObservationResults: TframePestObservationResults
         Left = 0
         Top = 0
         Width = 547
-        Height = 328
+        Height = 321
         Align = alClient
         OnMouseDown = pbObservationsMouseDown
         OnMouseMove = pbObservationsMouseMove
@@ -712,26 +712,24 @@ object framePestObservationResults: TframePestObservationResults
       end
       object pnlGraphControls: TPanel
         Left = 0
-        Top = 328
+        Top = 321
         Width = 547
         Height = 98
         Align = alBottom
         ParentBackground = False
         TabOrder = 0
-        ExplicitLeft = 3
-        ExplicitTop = 326
         object lblGraphInstructions: TLabel
           Left = 279
           Top = 6
-          Width = 250
-          Height = 13
+          Width = 200
+          Height = 20
           Caption = 'Click on a point to highlight it.'
         end
         object lblWhatToPlot: TLabel
           Left = 279
           Top = 30
-          Width = 105
-          Height = 18
+          Width = 84
+          Height = 20
           Caption = 'What to plot'
         end
         object rgGraphType: TRadioGroup
@@ -753,12 +751,12 @@ object framePestObservationResults: TframePestObservationResults
           Top = 48
           Width = 194
           Height = 40
-          OnClickCheck = clbWhatToPlotClickCheck
-          ItemHeight = 13
+          ItemHeight = 20
           Items.Strings = (
             'Observations'
             'Prior Information')
           TabOrder = 1
+          OnClickCheck = clbWhatToPlotClickCheck
         end
       end
     end

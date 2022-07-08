@@ -118,7 +118,7 @@ object TTaskHistory
     end
     item
       Name = 'Global variables'
-      Display = True
+      Display = False
     end
     item
       Name = 'LAK'
@@ -126,7 +126,7 @@ object TTaskHistory
     end
     item
       Name = 'OC'
-      Display = True
+      Display = False
     end
     item
       Name = 'SFR'
@@ -29583,5 +29583,14 @@ object TTaskHistory
       Categories.Strings = (
         'Documentation'
         'MF6 GWT')
+    end
+    item
+      Date = 44748.000000000000000000
+    end
+    item
+      Date = 44749.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'Installer')
     end>
 end
