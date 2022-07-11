@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-assigning-values-data-sets Topic="Working with DataSets" Year="2022" Month="2" Day="9" Updated="True">Assigning Values to Data Sets<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/DataSets/DataSets.html Topic="" Year="2011" Month="11" Day="7" Updated="False"/>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-assigning-values-data-sets Topic="Working with DataSets" Year="2022" Month="2" Day="9" Updated="True">Assigning Values to Data Sets<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/DataSets/DataSets.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-assigning-values-data-sets>
 <https://www.usgs.gov/mission-areas/water-resources/modelmuse-interpolation Topic="Working with DataSets" Year="2022" Month="2" Day="9" Updated="True">Interpolation in ModelMuse<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Interpolation/Interpolation.html Topic="" Year="2011" Month="11" Day="7" Updated="False"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-interpolation>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-editing-multiple-objects Topic="Working with Objects" Year="2022" Month="2" Day="9" Updated="True">Editing Multiple Objects<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/EditMultipleObjects/EditMultipleObjects.html Topic="" Year="2011" Month="11" Day="7" Updated="False"/>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-editing-multiple-objects Topic="Working with Objects" Year="2022" Month="2" Day="9" Updated="True">Editing Multiple Objects<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/EditMultipleObjects/EditMultipleObjects.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-editing-multiple-objects>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-aligning-object-vertices Topic="Working with Objects" Year="2022" Month="2" Day="9" Updated="True">Aligning Object Vertices<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SnapVertex/SnapVertex.html Topic="" Year="2011" Month="11" Day="7" Updated="False"/>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-aligning-object-vertices Topic="Working with Objects" Year="2022" Month="2" Day="9" Updated="True">Aligning Object Vertices<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SnapVertex/SnapVertex.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-aligning-object-vertices>
 <https://www.usgs.gov/mission-areas/water-resources/modelmuse-irregular-layers-modflow Topic="Understanding MODFLOW" Year="2022" Month="2" Day="9" Updated="True">Irregular Layers in MODFLOW<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/IrregularLayers/IrregularLayers.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-irregular-layers-modflow>
@@ -23,9 +23,9 @@
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-exporting-images>
 <https://www.usgs.gov/mission-areas/water-resources/modelmuse-displaying-head-observation-results Topic="Visualizing Data" Year="2022" Month="2" Day="9" Updated="True">Displaying Head Observation Results<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/HeadObservations/HeadObservations.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-displaying-head-observation-results>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-checking-stream-links Topic="Visualizing Data" Year="2022" Month="2" Day="9" Updated="True">Checking Stream Links<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/StreamLinks/StreamLinks.html Topic="" Year="2011" Month="11" Day="7" Updated="False"/>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-checking-stream-links Topic="Visualizing Data" Year="2022" Month="2" Day="9" Updated="True">Checking Stream Links<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/StreamLinks/StreamLinks.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-checking-stream-links>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-3d-view Topic="ModelMuse Features" Year="2022" Month="2" Day="9" Updated="True">3D View<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/3D_View/3D_View.html Topic="" Year="2011" Month="11" Day="7" Updated="False"/>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-3d-view Topic="ModelMuse Features" Year="2022" Month="2" Day="9" Updated="True">3D View<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/3D_View/3D_View.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-3d-view>
 <https://www.usgs.gov/mission-areas/water-resources/modelmuse-using-status-bar Topic="ModelMuse Features" Year="2022" Month="2" Day="9" Updated="True">Using the Status Bar<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/StatusBar/StatusBar.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-using-status-bar>
@@ -37,7 +37,7 @@
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-how-use-formula-editor>
 <https://www.usgs.gov/mission-areas/water-resources/modelmuse-z-formulas Year="2022" Month="3" Day="2" Topic="Working with Objects" Updated="True">Z-Formulas<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Z_Formulas/Z_Formulas.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-z-formulas>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-importing-data Year="2022" Month="3" Day="2" Topic="Importing Data" Updated="True">Importing Data<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ImportData/ImportData.html Topic="" Year="2010" Month="1" Day="17" Updated="False"/>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-importing-data Year="2022" Month="3" Day="2" Topic="Importing Data" Updated="True">Importing Data<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ImportImage/ImportImage.html Topic="" Year="2010" Month="1" Day="17"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-importing-data>
 <https://www.usgs.gov/mission-areas/water-resources/modelmuse-using-modpath Year="2022" Month="3" Day="2" Topic="Post-Processing" Updated="True">Using MODPATH<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/UsingModpath/UsingModpath.html Topic="" Year="2011" Month="11" Day="7"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-using-modpath>
@@ -65,11 +65,6 @@
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-edit-multiple-layer-groups>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/LearningModelMuse/LearningModelMuse.html Year="2009" Month="5" Day="1" Updated="False" Topic="Introduction"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Comments/Comments.html Topic="Working with DataSets" Year="2010" Month="4" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModflowLGR/ModflowLGR.html Topic="Understanding MODFLOW" Year="2011" Month="5" Day="5"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/MT3DMS/MT3DMS.html Topic="Understanding MODFLOW" Year="2012" Month="2" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/MODFLOW_CFP/MODFLOW_CFP.html Topic="Understanding MODFLOW" Year="2014" Month="5" Day="1"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWI_Concepts/SWI_Concepts.html Topic="Understanding MODFLOW" Year="2014" Month="6" Day="3"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWI_Example/SWI_Example.html Topic="Understanding MODFLOW" Year="2014" Month="6" Day="3"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWR_Overview/SWR_Overview.html Topic="Surface Water Routing Process" Year="2014" Month="10" Day="17"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWR_Reach_Numbers/SWR_Reach_Numbers.html Topic="Surface Water Routing Process" Year="2014" Month="10" Day="17"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWR_Reach_Connections/SWR_Reach_Connections.html Topic="Surface Water Routing Process" Year="2014" Month="10" Day="17"/>
@@ -81,34 +76,55 @@
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWR_Other_Spatial_Data/SWR_Other_Spatial_Data.html Topic="Surface Water Routing Process" Year="2014" Month="10" Day="17"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWR_Nonspatial_Data/SWR_Nonspatial_Data.html Topic="Surface Water Routing Process" Year="2014" Month="10" Day="17"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWR_Results/SWR_Results.html Topic="Surface Water Routing Process" Year="2014" Month="10" Day="17"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/FarmProcess/FarmProcess.html Topic="Understanding MODFLOW" Year="2015" Month="2" Day="27"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/RIP_Package/RIP_Package.html Topic="Understanding MODFLOW" Year="2016" Month="6" Day="27"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/HeadVersusTime/HeadVersusTime.html Topic="Understanding MODFLOW" Year="2017" Month="12" Day="15"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ImportImage/ImportImage.html Topic="Importing Data" Year="2009" Month="5" Day="1"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Animation/Animation.html Topic="Visualizing Data" Year="2010" Month="6" Day="23"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/TimeSeries/TimeSeries.html Topic="Visualizing Data" Year="2011" Month="11" Day="7"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/NavigationButtons/NavigationButtons.html Topic="ModelMuse Features" Year="2009" Month="5" Day="1"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Spreadsheet_Interaction/Spreadsheet_Interaction.html Topic="ModelMuse Features" Year="2009" Month="5" Day="1"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Rulers/Rulers.html Topic="ModelMuse Features" Year="2010" Month="4" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/NewSutraModel/NewSutraModel.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SutraMainWindowChanges/SutraMainWindowChanges.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/GenerateIrregularMesh/GenerateIrregularMesh.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/UsingGmsh/UsingGmsh.html Topic="SUTRA" Year="2014" Month="12" Day="10"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/NodesAndElements/NodesAndElements.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SutraTimeSchedules/SutraTimeSchedules.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/BoundariesAndObservations/BoundariesAndObservations.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/PermeabilityTensor/PermeabilityTensor.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Define3DMesh/Define3DMesh.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/RunSutraDisplayResults/RunSutraDisplayResults.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/WellFootprint/WellFootprint.html Topic="WellFootprint" Year="2018" Month="4" Day="26"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/GridLineDisplay/GridLineDisplay.html Topic="ModelMuse Features" Year="2010" Month="6" Day="23"/>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-array-parameters-modflow Year="2022" Month="4" Day="5" Topic="Understanding MODFLOW" Updated="True">Array Parameters in MODFLOW<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ArrayParametersInModflow/ArrayParametersInModflow.html Year="2009" Month="8" Day="31" Topic="Understanding MODFLOW" Updated="False"/>
-</https://www.usgs.gov/mission-areas/water-resources/modelmuse-array-parameters-modflow>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-specified-heads-and-ibound-array Year="2022" Month="4" Day="5" Topic="Understanding MODFLOW" Updated="True">Specified Heads and the IBOUND Array<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Ibound/Ibound.html Year="2009" Month="9" Day="18" Topic="Understanding MODFLOW"/>
-</https://www.usgs.gov/mission-areas/water-resources/modelmuse-specified-heads-and-ibound-array>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-controlling-name-file-and-batch-file Year="2022" Month="4" Day="5" Topic="Understanding MODFLOW" Updated="True">Controlling the Name File and the Batch File<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/NameFileAndBatchFiles/NameFileAndBatchFiles.html Year="2010" Month="4" Day="28" Topic="Understanding MODFLOW" Updated="False"/>
+<https://www.usgs.gov/media/videos/starting-new-sutra-model Year="2022" Month="7" Day="8" Topic="SUTRA" Updated="True">Starting a New SUTRA Model<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/NewSutraModel/NewSutraModel.html Year="2014" Month="2" Day="28" Topic="SUTRA" Updated="False"/>
+</https://www.usgs.gov/media/videos/starting-new-sutra-model>
+<https://www.usgs.gov/media/videos/main-changes-modelmuse-main-window-sutra Year="2022" Month="7" Day="8" Topic="SUTRA" Updated="True">Main Changes to the ModelMuse Main Window with SUTRA<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SutraMainWindowChanges/SutraMainWindowChanges.html Year="2014" Month="2" Day="28" Topic="SUTRA" Updated="False"/>
+</https://www.usgs.gov/media/videos/main-changes-modelmuse-main-window-sutra>
+<https://www.usgs.gov/media/videos/generating-mesh Year="2022" Month="7" Day="8" Topic="SUTRA" Updated="True">Generating a Mesh<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/GenerateIrregularMesh/GenerateIrregularMesh.html Year="2014" Month="2" Day="28" Topic="SUTRA" Updated="False"/>
+</https://www.usgs.gov/media/videos/generating-mesh>
+<https://www.usgs.gov/media/videos/using-gmsh-generate-mesh Year="2022" Month="7" Day="8" Topic="SUTRA" Updated="True">Using Gmsh to Generate a Mesh<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/UsingGmsh/UsingGmsh.html Year="2014" Month="12" Day="10" Topic="SUTRA" Updated="False"/>
+</https://www.usgs.gov/media/videos/using-gmsh-generate-mesh>
+<https://www.usgs.gov/media/videos/nodes-and-elements-sutra Year="2022" Month="7" Day="8" Topic="SUTRA" Updated="True">Nodes and Elements in SUTRA<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/NodesAndElements/NodesAndElements.html Year="2014" Month="2" Day="28" Topic="SUTRA" Updated="False"/>
+</https://www.usgs.gov/media/videos/nodes-and-elements-sutra>
+<https://www.usgs.gov/media/videos/sutra-time-schedules Year="2022" Month="7" Day="8" Topic="SUTRA" Updated="True">Time Schedules<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SutraTimeSchedules/SutraTimeSchedules.html Year="2014" Month="2" Day="28" Topic="SUTRA" Updated="False"/>
+</https://www.usgs.gov/media/videos/sutra-time-schedules>
+<https://www.usgs.gov/media/videos/modelmuse-grid-line-display-options Year="2022" Month="7" Day="8" Topic="ModelMuse Features" Updated="True">Grid Line Display Options<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/GridLineDisplay/GridLineDisplay.html Year="2010" Month="6" Day="23" Topic="ModelMuse Features" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-grid-line-display-options>
+<https://www.usgs.gov/media/videos/modelmuse-spreadsheet-interaction-and-editing-multiple-cells-tables Year="2022" Month="7" Day="8" Topic="ModelMuse Features" Updated="True">Spreadsheet Interaction and Editing Multiple Cells in Tables<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Spreadsheet_Interaction/Spreadsheet_Interaction.html Year="2009" Month="5" Day="1" Topic="ModelMuse Features" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-spreadsheet-interaction-and-editing-multiple-cells-tables>
+<https://www.usgs.gov/media/videos/modelmuse-riparian-evapotranspiration-package Year="2022" Month="7" Day="8" Topic="Understanding MODFLOW" Updated="True">Riparian Evapotranspiration Package<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/RIP_Package/RIP_Package.html Year="2016" Month="6" Day="27" Topic="Understanding MODFLOW" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-riparian-evapotranspiration-package>
+<https://www.usgs.gov/media/videos/modelmuse-farm-process Year="2022" Month="7" Day="8" Topic="Understanding MODFLOW" Updated="True">Farm Process<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/FarmProcess/FarmProcess.html Year="2015" Month="2" Day="27" Topic="Understanding MODFLOW" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-farm-process>
+<https://www.usgs.gov/media/videos/modelmuse-swi-example Year="2022" Month="7" Day="8" Topic="Understanding MODFLOW" Updated="True">Seawater Intrusion Package Example<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWI_Example/SWI_Example.html Year="2014" Month="6" Day="3" Topic="Understanding MODFLOW" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-swi-example>
+<https://www.usgs.gov/media/videos/modelmuse-swi-concepts Year="2022" Month="5" Day="23" Updated="True" Topic="Understanding MODFLOW">SWI Concepts<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/SWI_Concepts/SWI_Concepts.html Year="2014" Month="6" Day="3" Topic="Understanding MODFLOW" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-swi-concepts>
+<https://www.usgs.gov/media/videos/modelmuse-plotting-head-versus-time Year="2022" Month="5" Day="3" Topic="Understanding MODFLOW" Updated="True">Plotting Head versus Time<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/HeadVersusTime/HeadVersusTime.html Year="2017" Month="12" Day="15" Topic="Understanding MODFLOW" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-plotting-head-versus-time>
+<https://www.usgs.gov/media/videos/modelmuse-modflow-cfp Year="2022" Month="5" Day="3" Topic="Understanding MODFLOW" Updated="True">MODFLOW-CFP<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/MODFLOW_CFP/MODFLOW_CFP.html Year="2014" Month="5" Day="1" Topic="Understanding MODFLOW" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-modflow-cfp>
+<https://www.usgs.gov/media/videos/modelmuse-modflow-lgr Year="2022" Month="5" Day="3" Updated="True" Topic="Understanding MODFLOW">MODFLOW-LGR with ModelMuse<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModflowLGR/ModflowLGR.html Year="2011" Month="5" Day="5" Topic="Understanding MODFLOW" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-modflow-lgr>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-controlling-name-file-and-batch-file Year="2022" Month="5" Day="3" Topic="Understanding MODFLOW" Updated="True">Controlling the Name File and the Batch File<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/NameFileAndBatchFiles/NameFileAndBatchFiles.html Year="2010" Month="4" Day="28" Topic="Understanding MODFLOW" Updated="False"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-controlling-name-file-and-batch-file>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-lpf-options Year="2022" Month="4" Day="6" Topic="Understanding MODFLOW" Updated="True">LPF Options<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/LpfOptions/LpfOptions.html Year="2009" Month="5" Day="1" Topic="Understanding MODFLOW" Updated="False"/>
+<https://www.usgs.gov/media/videos/modelmuse-mt3d Year="2022" Month="5" Day="3" Updated="True" Topic="Understanding MODFLOW">MT3DMS<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/MT3DMS/MT3DMS.html Year="2012" Month="2" Day="28" Topic="Understanding MODFLOW" Updated="False"/>
+</https://www.usgs.gov/media/videos/modelmuse-mt3d>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-specified-heads-and-ibound-array Year="2022" Month="5" Day="3">Specified Heads and the IBOUND Array<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Ibound/Ibound.html Year="2009" Month="9" Day="18" Topic="Understanding MODFLOW" Updated="False"/>
+</https://www.usgs.gov/mission-areas/water-resources/modelmuse-specified-heads-and-ibound-array>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-array-parameters-modflow Year="2022" Month="5" Day="3" Topic="Understanding MODFLOW" Updated="True">Array Parameters in MODFLOW<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ArrayParametersInModflow/ArrayParametersInModflow.html Year="2009" Month="8" Day="31" Topic="Understanding MODFLOW"/>
+</https://www.usgs.gov/mission-areas/water-resources/modelmuse-array-parameters-modflow>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-lpf-options Year="2022" Month="5" Day="3" Updated="True" Topic="Understanding MODFLOW">LPF Options<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/LpfOptions/LpfOptions.html Year="2009" Month="5" Day="1" Topic="Understanding MODFLOW" Updated="False"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-lpf-options>
-<https://www.usgs.gov/mission-areas/water-resources/modelmuse-wetting-option Year="2022" Month="4" Day="6" Updated="True" Topic="Understanding MODFLOW">The Wetting Option<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/WettingOption/WettingOption.html Year="2009" Month="5" Day="1" Topic="Understanding MODFLOW" Updated="False"/>
+<https://www.usgs.gov/mission-areas/water-resources/modelmuse-wetting-option Year="2022" Month="5" Day="3" Updated="True" Topic="Understanding MODFLOW">The Wetting Option<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/WettingOption/WettingOption.html Year="2009" Month="5" Day="1" Topic="Understanding MODFLOW" Updated="False"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-wetting-option>
