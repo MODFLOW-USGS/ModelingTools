@@ -29592,5 +29592,19 @@ object TTaskHistory
       Categories.Strings = (
         'Import'
         'Installer')
+    end
+    item
+      Date = 44750.000000000000000000
+    end
+    item
+      Date = 44751.000000000000000000
+    end
+    item
+      Date = 44752.000000000000000000
+    end
+    item
+      Date = 44753.000000000000000000
+      Categories.Strings = (
+        'Video')
     end>
 end
