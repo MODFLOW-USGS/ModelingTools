@@ -51,6 +51,7 @@ Type
     FAlternateNode: pointer;
     FAlternativeClassification: string;
     FOnSelectionChange: TNotifyEvent;
+    FSpeciesIndex: Integer;
 //    FNewtonFormulation: TNewtonFormulation;
     procedure InvalidateModel;
     procedure SetComments(const Value: TStrings);
@@ -110,6 +111,7 @@ Type
     procedure InvalidateAllTimeLists; virtual;
     procedure InitializeVariables; virtual;
     property OnSelectionChange: TNotifyEvent read FOnSelectionChange write SetOnSelectionChange;
+    property SpeciesIndex: Integer read FSpeciesIndex write FSpeciesIndex;
   published
     property IsSelected: boolean read FIsSelected write SetIsSelected;
     property Comments: TStrings read FComments write SetComments;
@@ -5878,14 +5880,18 @@ Type
   TGwtSsmPackage = class(TModflowPackageSelection)
   end;
 
+  TGwtSorptionChoice = (gscNone, gscLinear, gscFreundlich, gscLangmuir);
+
   TGwtMstPackage = class(TModflowPackageSelection)
   private
     FZeroOrderDecay: Boolean;
     FFirstOrderDecay: Boolean;
-    FSorption: Boolean;
+    FSorption: TGwtSorptionChoice;
+    FSeparatePorosity: Boolean;
     procedure SetFirstOrderDecay(const Value: Boolean);
-    procedure SetSorption(const Value: Boolean);
+    procedure SetSorption(const Value: TGwtSorptionChoice);
     procedure SetZeroOrderDecay(const Value: Boolean);
+    procedure SetSeparatePorosity(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -5893,7 +5899,8 @@ Type
   published
     property ZeroOrderDecay: Boolean read FZeroOrderDecay write SetZeroOrderDecay;
     property FirstOrderDecay: Boolean read FFirstOrderDecay write SetFirstOrderDecay;
-    property Sorption: Boolean read FSorption write SetSorption;
+    property Sorption: TGwtSorptionChoice read FSorption write SetSorption;
+    property SeparatePorosity: Boolean read FSeparatePorosity write SetSeparatePorosity;
   end;
 
   TGwtPackagesItem = class(TPhastCollectionItem)
@@ -5915,13 +5922,13 @@ Type
   TGwtPackageCollection = class(TPhastCollection)
   private
     FModel: TBaseModel;
-    function GetCount: Integer;
-    procedure SetCount(const Value: Integer);
     function GetItem(Index: Integer): TGwtPackagesItem;
     procedure SetItem(Index: Integer; const Value: TGwtPackagesItem);
+  protected
+    function GetCount: Integer; override;
   public
     constructor Create(Model: TBaseModel);
-    property Count: Integer read GetCount write SetCount;
+//    property Count: Integer read GetCount write SetCount;
     procedure InitializeVariables;
     property Items[Index: Integer]: TGwtPackagesItem read GetItem
       write SetItem; default;
@@ -6136,6 +6143,7 @@ begin
   Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;
   FComments := TStringList.Create;
+  FSpeciesIndex := -1;
 //  FNewtonFormulation := nfOff;
 end;
 
@@ -22694,11 +22702,13 @@ begin
   FGwtIms.PackageIdentifier := StrSMSSparseMatrixS;
   FGwtIms.Classification := StrSolver;
   FGwtIms.SelectionType := stRadioButton;
+  FGwtIms.SpeciesIndex := Index;
 
   FGwtMst := TGwtMstPackage.Create(ParentCollection.FModel);
   FGwtMst.PackageIdentifier := 'MST: Mobile Storage and Transfer Package';
-  FGwtMst.Classification := StrGwtClassification;
+  FGwtMst.Classification := StrGwtMST;
   FGwtMst.SelectionType := stCheckBox;
+  FGwtMst.SpeciesIndex := Index;
 
 //FGwtMst: TGwtMstPackage;
 end;
@@ -22745,16 +22755,17 @@ begin
   if FModel <> nil then
   begin
     LocalModel := FModel as TCustomModel;
-    if LocalModel.GwtUsed and (inherited Count < LocalModel.MobileComponents.Count) then
+    if LocalModel.GwtUsed and (inherited GetCount < LocalModel.MobileComponents.Count) then
     begin
       inherited Count := LocalModel.MobileComponents.Count;
     end;
   end;
-  result := inherited Count;
+  result := inherited;
 end;
 
 function TGwtPackageCollection.GetItem(Index: Integer): TGwtPackagesItem;
 begin
+  GetCount;
   result := inherited Items[Index] as TGwtPackagesItem
 end;
 
@@ -22767,11 +22778,6 @@ begin
     Items[SpeciesIndex].GwtIms.InitializeVariables;
     Items[SpeciesIndex].GwtMst.InitializeVariables;
   end;
-end;
-
-procedure TGwtPackageCollection.SetCount(const Value: Integer);
-begin
-  inherited Count := Value;
 end;
 
 procedure TGwtPackageCollection.SetItem(Index: Integer;
@@ -22892,6 +22898,7 @@ begin
     ZeroOrderDecay := MstSource.ZeroOrderDecay;
     FirstOrderDecay := MstSource.FirstOrderDecay;
     Sorption := MstSource.Sorption;
+    SeparatePorosity := MstSource.SeparatePorosity;
   end;
   inherited;
 end;
@@ -22907,7 +22914,8 @@ begin
   inherited;
   FZeroOrderDecay := False;
   FFirstOrderDecay := False;
-  FSorption := False;
+  FSorption := gscNone;
+  FSeparatePorosity := False;
 end;
 
 procedure TGwtMstPackage.SetFirstOrderDecay(const Value: Boolean);
@@ -22915,9 +22923,18 @@ begin
   SetBooleanProperty(FFirstOrderDecay, Value);
 end;
 
-procedure TGwtMstPackage.SetSorption(const Value: Boolean);
+procedure TGwtMstPackage.SetSeparatePorosity(const Value: Boolean);
 begin
-  SetBooleanProperty(FSorption, Value);
+  SetBooleanProperty(FSeparatePorosity, Value);
+end;
+
+procedure TGwtMstPackage.SetSorption(const Value: TGwtSorptionChoice);
+begin
+  if FSorption <> Value then
+  begin
+    FSorption := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TGwtMstPackage.SetZeroOrderDecay(const Value: Boolean);

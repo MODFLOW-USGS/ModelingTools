@@ -752,7 +752,8 @@ uses
   ModflowDspWriterUnit in 'ModflowDspWriterUnit.pas',
   ModflowGwtAdvWriterUnit in 'ModflowGwtAdvWriterUnit.pas',
   frameGwtAdvPackageUnit in 'frameGwtAdvPackageUnit.pas' {frameGwtAdvPackage: TFrame},
-  ModflowGwtSsmWriterUnit in 'ModflowGwtSsmWriterUnit.pas';
+  ModflowGwtSsmWriterUnit in 'ModflowGwtSsmWriterUnit.pas',
+  framePackageMSTUnit in 'framePackageMSTUnit.pas' {framePackageMST: TFrame};
 
 {$R *.res}
 

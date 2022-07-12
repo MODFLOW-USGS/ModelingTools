@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspGwtSsm
+    ActivePage = jvspMt3dmsBasic
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -6106,31 +6106,33 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pcMt3d_Basic: TPageControl
           Width = 595
           Height = 396
-          ActivePage = framePkgMt3dBasic.tabMT3D_USGS_Options
+          ActivePage = framePkgMt3dBasic.tabSpecies
           ExplicitWidth = 595
           ExplicitHeight = 396
           inherited tabSpecies: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 279
+            ExplicitWidth = 587
+            ExplicitHeight = 363
             inherited pnlSpecies: TPanel
-              Height = 279
+              Width = 587
+              Height = 363
               ExplicitHeight = 279
               inherited Splitter1: TSplitter
                 Left = 300
-                Height = 277
+                Height = 361
                 ExplicitLeft = 300
                 ExplicitHeight = 321
               end
               inherited frameGridImmobile: TframeGrid
                 Left = 305
-                Width = 214
-                Height = 277
+                Width = 281
+                Height = 361
                 ExplicitLeft = 305
                 ExplicitWidth = 214
                 ExplicitHeight = 277
                 inherited Panel: TPanel
-                  Top = 236
-                  Width = 214
+                  Top = 320
+                  Width = 281
                   ExplicitTop = 236
                   ExplicitWidth = 214
                   inherited lbNumber: TLabel
@@ -6139,8 +6141,14 @@ inherited frmModflowPackages: TfrmModflowPackages
                     ExplicitWidth = 55
                     ExplicitHeight = 18
                   end
+                  inherited sbAdd: TSpeedButton
+                    Left = 196
+                  end
+                  inherited sbInsert: TSpeedButton
+                    Left = 233
+                  end
                   inherited sbDelete: TSpeedButton
-                    Left = 203
+                    Left = 270
                     ExplicitLeft = 203
                   end
                   inherited seNumber: TJvSpinEdit
@@ -6150,8 +6158,8 @@ inherited frmModflowPackages: TfrmModflowPackages
                   end
                 end
                 inherited Grid: TRbwDataGrid4
-                  Width = 214
-                  Height = 236
+                  Width = 281
+                  Height = 320
                   OnExit = frameGridImmobileGridExit
                   Columns = <
                     item
@@ -6232,11 +6240,11 @@ inherited frmModflowPackages: TfrmModflowPackages
               end
               inherited frameGridMobile: TframeGrid
                 Width = 299
-                Height = 277
+                Height = 361
                 ExplicitWidth = 299
                 ExplicitHeight = 277
                 inherited Panel: TPanel
-                  Top = 236
+                  Top = 320
                   Width = 299
                   ExplicitTop = 236
                   ExplicitWidth = 299
@@ -6254,7 +6262,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 inherited Grid: TRbwDataGrid4
                   Width = 299
-                  Height = 236
+                  Height = 320
                   OnExit = frameGridMobileGridExit
                   Columns = <
                     item
@@ -11320,8 +11328,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspGwtAdv'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGwtAdv: TframeGwtAdvPackage
         Left = 0
         Top = 0
@@ -11330,8 +11336,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 56
-        ExplicitTop = 48
+        ExplicitWidth = 595
+        ExplicitHeight = 516
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -11346,9 +11352,11 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
+          ExplicitWidth = 564
         end
         inherited rgScheme: TRadioGroup
           Width = 564
+          ExplicitWidth = 564
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -11374,8 +11382,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspGwtSsm'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGwtSSM: TframePackage
         Left = 0
         Top = 0
@@ -11384,8 +11390,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 80
-        ExplicitTop = 48
+        ExplicitWidth = 595
+        ExplicitHeight = 516
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -11400,6 +11406,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
+          ExplicitWidth = 564
         end
         inherited rcSelectionController: TRbwController
           ControlList = <

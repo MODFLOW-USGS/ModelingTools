@@ -34,6 +34,8 @@ type
     FImmobilePartioningCoefficientDisplayName: string;
     FUztInitialConcDataArrayName: string;
     FUztInitialConcDisplayName: string;
+    FPorosityDataArrayName: string;
+    FPorosityDataArrayDisplayName: string;
     procedure SetName(const Value: string); virtual;
     procedure SetInitialConcDataArrayName(const NewName: string);
     function Collection: TCustomChemSpeciesCollection;
@@ -51,6 +53,7 @@ type
     procedure SetHalfSaturationConstantDataArrayName(const NewName: string);
     procedure SetImmobilePartioningCoefficientDataArrayName(const NewName: string);
     procedure SetUztInitialConcDataArrayName(const NewName: string);
+    procedure SetPorosityDataArrayName(const NewName: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -97,6 +100,7 @@ type
       read FUseInitialConcentrationFile write SetUseInitialConcentrationFile;
     property InitialConcentrationFileName: string
       read FInitialConcentrationFileName write SetInitialConcentrationFileName;
+    property PorosityDataArrayName: string read FPorosityDataArrayName write SetPorosityDataArrayName;
   end;
 
   TCustomChemSpeciesCollection= class(TEnhancedOrderedCollection)
@@ -166,6 +170,7 @@ const
   kRC3Prefix = 'Half_Saturation_Constant_';
   kSP1IMPrefix = 'Immobile_Partioning_Coefficient_';
   kUztStartConct = 'UZT_Unsaturated_Initial_Conc_';
+  KPorosity = 'Porosity_';
 
 resourcestring
   StrInitConcPrefix = kInitConcPrefix;
@@ -179,6 +184,8 @@ resourcestring
   StrDiffCoefPrefix = kDiffCoefPrefix;
   StrSP1IMPrefix = kSP1IMPrefix;
   StrUztStartConct = kUztStartConct;
+  StrPorosity = kPorosity;
+
 
   { TChemSpeciesItem }
 
@@ -802,6 +809,17 @@ begin
       UztInitialConcDataArrayName := StringReplace(
         UztInitialConcDataArrayName,
         GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+
+      FPorosityDataArrayDisplayName := StringReplace(
+        FPorosityDataArrayDisplayName,
+        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+      PorosityDataArrayName := StringReplace(
+        PorosityDataArrayName,
+        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+
+        //    FPorosityDataArrayName: string;
+//    FPorosityDataArrayDisplayName: string;
+
     end
     else
     begin
@@ -861,10 +879,55 @@ begin
         GenerateNewRoot(StrUztStartConct + Value);
       UztInitialConcDataArrayName :=
         GenerateNewRoot(kUztStartConct + Value);
+
+      FPorosityDataArrayDisplayName :=
+        GenerateNewRoot(StrPorosity + Value);
+      PorosityDataArrayName :=
+        GenerateNewRoot(kPorosity + Value);
+
+        //    FPorosityDataArrayName: string;
+//    FPorosityDataArrayDisplayName: string;
+
     end;
     RenameDependents(Value);
     SetCaseSensitiveStringProperty(FName, Value);
   end;
+end;
+
+procedure TChemSpeciesItem.SetPorosityDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  GwtPackagesItem: TGwtPackagesItem;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtUsed then
+    begin
+      GwtPackagesItem :=  LocalModel.ModflowPackages.GwtPackages[Index];
+      MstPackage := GwtPackagesItem.GwtMst;
+      if MstPackage.IsSelected and MstPackage.SeparatePorosity then
+      begin
+        DataSetUsed := True;
+      end;
+    end;
+    UpdateDataArray(LocalModel.GwtSeparatePorosityUsed,
+      FPorosityDataArrayName, NewName,
+      FPorosityDataArrayDisplayName, '0.25', 'GWT MST Pakage: POROSITY',
+      DataSetUsed);
+
+{
+procedure TChemSpeciesItem.UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
+  const OldDataArrayName, NewName, NewDisplayName, NewFormula,
+  AssociatedDataSets: string; ShouldCreate: boolean);
+}
+  end;
+
+  SetCaseSensitiveStringProperty(FPorosityDataArrayName, NewName);
 end;
 
 procedure TChemSpeciesItem.SetReactionRateDisolvedDataArrayName(

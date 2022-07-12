@@ -587,6 +587,7 @@ resourcestring
   rsLakeClassificaton = 'Lake';
   StrMT3DMS_Classificaton = 'MT3DMS, MT3D-USGS, or GWT';
   StrGwtClassification = 'GWT: Groundwater Transport';
+  StrGwtMST = 'GWT MST: Mobile Storage and Transport';
   StrSpecifiedPressure = 'SUTRA Specified Pressure';
   StrSutraSpecifiedHead = 'SUTRA Specified Head';
   StrAssocPresConc = 'SP Associated Conc.';
@@ -4755,6 +4756,7 @@ that affects the model output should also have a comment. }
     function GetPestName: string;
     function Mf6UzfInitialConcentrationUsed(Sender: TObject): boolean;
     function AnyUzfInitialConcentrationUsed: Boolean;
+    function GwtSeparatePorosityUsed(Sender: TObject): boolean;
   published
     property Mf6TimesSeries;
 
@@ -13571,6 +13573,7 @@ procedure TPhastModel.SetMobileComponents(
   const Value: TMobileChemSpeciesCollection);
 begin
   FMobileComponents.Assign(Value);
+  ModflowPackages.GwtPackages.Count;
 end;
 
 procedure TPhastModel.SetModelMateProject(const Value: TProject);
@@ -18568,6 +18571,40 @@ begin
         result := result or ChildModel.GwtDispUsed(nil);
       end;
     end;
+  end;
+end;
+
+function TPhastModel.GwtSeparatePorosityUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.PorosityDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected and MstPackage.SeparatePorosity;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+//      or DataArrayUsed(ImmobileComponents);
   end;
 end;
 
