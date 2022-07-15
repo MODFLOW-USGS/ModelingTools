@@ -5,6 +5,7 @@ inherited framePackageMST: TframePackageMST
   ExplicitHeight = 434
   inherited memoComments: TMemo
     Width = 467
+    ExplicitWidth = 467
   end
   object rgPorosity: TRadioGroup [3]
     Left = 16
@@ -44,7 +45,7 @@ inherited framePackageMST: TframePackageMST
     Width = 467
     Height = 123
     Anchors = [akLeft, akTop, akRight]
-    Caption = 'rgSorption'
+    Caption = 'Sorption'
     Enabled = False
     ItemIndex = 0
     Items.Strings = (

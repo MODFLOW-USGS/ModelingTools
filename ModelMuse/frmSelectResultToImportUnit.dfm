@@ -4,9 +4,8 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   Caption = ' Select Model Results to Import'
   ClientHeight = 462
   ClientWidth = 647
-  ExplicitWidth = 663
-  ExplicitHeight = 501
-  PixelsPerInch = 96
+  ExplicitWidth = 665
+  ExplicitHeight = 509
   TextHeight = 18
   object lblColorGrid: TLabel
     Left = 8
@@ -250,12 +249,12 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
       Top = 130
       Width = 363
       Height = 140
-      OnClickCheck = clDataClickCheck
       Align = alClient
       DoubleBuffered = False
       ItemHeight = 18
       ParentDoubleBuffered = False
       TabOrder = 1
+      OnClickCheck = clDataClickCheck
     end
     object pnlMultiSelect: TPanel
       Left = 368

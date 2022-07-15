@@ -2672,7 +2672,7 @@ that affects the model output should also have a comment. }
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
-    function Mt3dMSUsed(Sender: TObject): boolean; virtual;
+//    function Mt3dMSUsed(Sender: TObject): boolean; virtual;
     function Mt3dMS_StrictUsed(Sender: TObject): boolean; virtual;
     function Mf6GwtUsed(Sender: TObject): boolean; virtual;
     procedure ClearPval;
@@ -4228,7 +4228,7 @@ that affects the model output should also have a comment. }
     function GetFilesToDelete: TStrings; override;
     function GetAppsMoved: TStringList; override;
   public
-    function Mt3dMSUsed(Sender: TObject): boolean; override;
+//    function Mt3dMSUsed(Sender: TObject): boolean; override;
     function Mt3dMS_StrictUsed(Sender: TObject): boolean; override;
     function Mf6GwtUsed(Sender: TObject): boolean; override;
     procedure RefreshGlobalVariables(CompilerList: TList);
@@ -4757,6 +4757,7 @@ that affects the model output should also have a comment. }
     function Mf6UzfInitialConcentrationUsed(Sender: TObject): boolean;
     function AnyUzfInitialConcentrationUsed: Boolean;
     function GwtSeparatePorosityUsed(Sender: TObject): boolean;
+    function GwtDecayUsed(Sender: TObject): boolean;
   published
     property Mf6TimesSeries;
 
@@ -6050,6 +6051,25 @@ resourcestring
   StrHorizontalTransvers = KHorizontalTransvers;
   StrLongitudinalDispersV = KLongitudinalDispersV;
   StrLongitudinalDispersH = KLongitudinalDispersH;
+  StrMODFLOW6MSTPackag = 'MODFLOW 6 MST Package: POROSITY';
+  StrMODFLOW6DSPPacka = 'MODFLOW 6, DSP Package: ALH';
+  StrMODFLOw6DSPPackaath1 = 'MODFLOw 6, DSP Package: ATH1';
+  StrMODFLOw6DSPPackaATV = 'MODFLOw 6, DSP Package: ATV';
+  StrSUTRADataSet14B = 'SUTRA Data Set 14B: COMPMA';
+  StrSUTRADataSet14B_CS = 'SUTRA Data Set 14B: CS';
+  StrSUTRADataSet14B_RHOS = 'SUTRA Data Set 14B: RHOS';
+  StrSUTRADataSet14B_PRODL0 = 'SUTRA Data Set 14B: PRODL0';
+  StrSUTRADataSet14B_PRODS0 = 'SUTRA Data Set 14B: PRODS0';
+  StrSUTRADataSet14B_PRODL1 = 'SUTRA Data Set 14B: PRODL1';
+  StrSUTRADataSet14B_PRODS1 = 'SUTRA Data Set 14B: PRODS1';
+  StrSUTRADataSet14B_PRODI0 = 'SUTRA Data Set 14B: PRODI0';
+  StrSUTRADataSet15B_SIGMAS = 'SUTRA Data Set 15B: SIGMAS';
+  StrSUTRADataSet15B_SIGMAA = 'SUTRA Data Set 15B: SIGMAA';
+  StrMODFLOW6Dispersion_DIFFC = 'MODFLOW 6 Dispersion Package: DIFFC';
+  StrMODFLOW6Dispersion_ALH = 'MODFLOW 6 Dispersion Package: ALH';
+  StrMODFLOW6Dispersion_ALV = 'MODFLOW 6 Dispersion Package: ALV';
+  StrMODFLOW6Dispersion_ATH1 = 'MODFLOW 6 Dispersion Package: ATH1';
+  StrMODFLOW6Dispersion_ATH2 = 'MODFLOW 6 Dispersion Package: ATH2';
 //  StrGWTClassification = 'GWT';
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -18555,6 +18575,40 @@ begin
   end;
 end;
 
+function TPhastModel.GwtDecayUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.MobileDecayRateDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected
+          and (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay);
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
 function TPhastModel.GwtDispUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -18604,7 +18658,6 @@ begin
   begin
     DataArray := Sender as TDataArray;
     result := DataArrayUsed(MobileComponents)
-//      or DataArrayUsed(ImmobileComponents);
   end;
 end;
 
@@ -19864,7 +19917,8 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited Mt3dMSUsed(Sender) and inherited Mt3dMSBulkDensityUsed(Sender);
+  result := inherited Mt3dMS_StrictUsed(Sender)
+    and inherited Mt3dMSBulkDensityUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -19919,7 +19973,8 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited Mt3dMSUsed(Sender) and inherited Mt3dMSImmobPorosityUsed(Sender);
+  result := inherited Mt3dMS_StrictUsed(Sender)
+    and inherited Mt3dMSImmobPorosityUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20154,28 +20209,28 @@ begin
   end;
 end;
 
-function TPhastModel.Mt3dMSUsed(Sender: TObject): boolean;
-var
-  ChildIndex: Integer;
-  ChildModel: TChildModel;
-begin
-  result := inherited;
-  if not result and LgrUsed then
-  begin
-    for ChildIndex := 0 to ChildModels.Count - 1 do
-    begin
-      ChildModel := ChildModels[ChildIndex].ChildModel;
-      if ChildModel <> nil then
-      begin
-        result := ChildModel.Mt3dMSUsed(Sender);
-        if result then
-        begin
-          Exit;
-        end;
-      end;
-    end;
-  end;
-end;
+//function TPhastModel.Mt3dMSUsed(Sender: TObject): boolean;
+//var
+//  ChildIndex: Integer;
+//  ChildModel: TChildModel;
+//begin
+//  result := inherited;
+//  if not result and LgrUsed then
+//  begin
+//    for ChildIndex := 0 to ChildModels.Count - 1 do
+//    begin
+//      ChildModel := ChildModels[ChildIndex].ChildModel;
+//      if ChildModel <> nil then
+//      begin
+//        result := ChildModel.Mt3dMSUsed(Sender);
+//        if result then
+//        begin
+//          Exit;
+//        end;
+//      end;
+//    end;
+//  end;
+//end;
 
 function TPhastModel.Mt3dMS_StrictUsed(Sender: TObject): boolean;
 var
@@ -22966,7 +23021,7 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited Mt3dMSUsed(Sender) and inherited SftUsed(Sender);
+  result := inherited Mt3dMS_StrictUsed(Sender) and inherited SftUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -35353,7 +35408,8 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrPHASTMEDIAporosit
     + sLineBreak + StrMODPATHBasicData
-    + sLineBreak + StrMT3DMSBTNPackage;
+    + sLineBreak + StrMT3DMSBTNPackage
+    + sLineBreak + StrMODFLOW6MSTPackag;
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
@@ -35402,7 +35458,8 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    StrPHASTMEDIAlongitu;
+    StrPHASTMEDIAlongitu
+    + sLineBreak + StrMODFLOW6DSPPacka;
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
@@ -35427,7 +35484,8 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    StrPHASTMEDIAhorizon;
+    StrPHASTMEDIAhorizon
+    + sLineBreak + StrMODFLOw6DSPPackaath1;
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
@@ -35452,7 +35510,8 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    StrPHASTMEDIAvertica;
+    StrPHASTMEDIAvertica
+    + sLineBreak + StrMODFLOw6DSPPackaATV;
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
@@ -36271,9 +36330,6 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrSWTSGSDataSet6;
   Inc(Index);
-
-
-
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -37774,7 +37830,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: COMPMA';
+    StrSUTRADataSet14B;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37788,7 +37844,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: CS';
+    StrSUTRADataSet14B_CS;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37802,7 +37858,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: RHOS';
+    StrSUTRADataSet14B_RHOS;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37816,7 +37872,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODLØ';
+    StrSUTRADataSet14B_PRODL0;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37830,7 +37886,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODSØ';
+    StrSUTRADataSet14B_PRODS0;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37844,7 +37900,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODL1';
+    StrSUTRADataSet14B_PRODL1;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37858,7 +37914,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODS1';
+    StrSUTRADataSet14B_PRODS1;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37872,7 +37928,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODIØ';
+    StrSUTRADataSet14B_PRODI0;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37886,7 +37942,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 15B: SIGMAS';
+    StrSUTRADataSet15B_SIGMAS;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37900,7 +37956,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 15B: SIGMAA';
+    StrSUTRADataSet15B_SIGMAA;
   Inc(Index);
   {$ENDIF}
 
@@ -37916,7 +37972,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: DIFFC';
+    StrMODFLOW6Dispersion_DIFFC;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37930,7 +37986,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: ALH';
+    StrMODFLOW6Dispersion_ALH;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37944,7 +38000,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: ALV';
+    StrMODFLOW6Dispersion_ALV;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37958,7 +38014,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: ATH1';
+    StrMODFLOW6Dispersion_ATH1;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37972,7 +38028,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: ATH2';
+    StrMODFLOW6Dispersion_ATH2;
   Inc(Index);
 
   {$ENDIF}
@@ -38893,11 +38949,34 @@ begin
 end;
 
 function TCustomModel.PorosityUsed(Sender: TObject): boolean;
+var
+  SpeciesIndex: Integer;
+  MstPackage: TGwtMstPackage;
 begin
-  result := (ModelSelection = msPhast)
-    or ((ModelSelection in ModflowSelection)
-    and (ModflowPackages.ModPath.IsSelected
-    or ModflowPackages.Mt3dBasic.IsSelected));
+  result := (ModelSelection = msPhast);
+  if not result then
+  begin
+    if (ModelSelection in ModflowSelection) then
+    begin
+      result := ModflowPackages.ModPath.IsSelected
+        or ModflowPackages.Mt3dBasic.SimulateWithMt3D;
+    end;
+    if not result and GwtUsed then
+    begin
+      for SpeciesIndex := 0 to ModflowPackages.GwtPackages.Count - 1 do
+      begin
+        MstPackage := ModflowPackages.GwtPackages[SpeciesIndex].GwtMst;
+        result := not MstPackage.SeparatePorosity;
+        if result then
+        begin
+          Exit;
+        end;
+      end;
+    end;
+  end;
+
+
+//    and (ModflowPackages.ModPath.IsSelected or ModflowPackages.Mt3dBasic.IsSelected));
 end;
 
 function TCustomModel.SpecificStorageUsed(Sender: TObject): boolean;
@@ -39231,7 +39310,7 @@ end;
 
 function TCustomModel.UztUsed(Sender: TObject): boolean;
 begin
-  result := Mt3dMSUsed(Sender) and ModflowPackages.UzfPackage.IsSelected
+  result := Mt3dMS_StrictUsed(Sender) and ModflowPackages.UzfPackage.IsSelected
     and ModflowPackages.Mt3dBasic.IsSelected
     and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS)
     and ModflowPackages.Mt3dUnsatTransport.IsSelected;
@@ -39936,7 +40015,7 @@ end;
 
 function TCustomModel.Mt3dMSBulkDensityUsed(Sender: TObject): boolean;
 begin
-  result := Mt3dMSUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
+  result := Mt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
     and ((ModflowPackages.Mt3dmsChemReact.SorptionChoice in [scLinear,
     scFreundlich, scLangmuir, scFirstOrderKinetic, scDualDomainWithSorption,
     scDualWithDifferingConstants])
@@ -39945,17 +40024,17 @@ end;
 
 function TCustomModel.Mt3dMSImmobPorosityUsed(Sender: TObject): boolean;
 begin
-  result := Mt3dMSUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
+  result := Mt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
     and (ModflowPackages.Mt3dmsChemReact.SorptionChoice in
     [scDualDomainNoSorption, scDualDomainWithSorption,
     scDualWithDifferingConstants]);
 end;
 
-function TCustomModel.Mt3dMSUsed(Sender: TObject): boolean;
-begin
-  result := (ModelSelection in ModflowSelection)
-    and ModflowPackages.Mt3dBasic.IsSelected;
-end;
+//function TCustomModel.Mt3dMSUsed(Sender: TObject): boolean;
+//begin
+//  result := (ModelSelection in ModflowSelection)
+//    and ModflowPackages.Mt3dBasic.IsSelected;
+//end;
 
 function TCustomModel.Mt3dMS_StrictUsed(Sender: TObject): boolean;
 begin
@@ -41234,7 +41313,7 @@ end;
 function TCustomModel.SftUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in [msModflowNWT])
-    and Mt3dMSUsed(Sender)
+    and Mt3dMS_StrictUsed(Sender)
     and ModflowPackages.Mt3dSft.IsSelected;
 end;
 

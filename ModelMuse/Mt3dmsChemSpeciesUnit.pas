@@ -36,6 +36,8 @@ type
     FUztInitialConcDisplayName: string;
     FPorosityDataArrayName: string;
     FPorosityDataArrayDisplayName: string;
+    FMobileDecayRateDataArrayName: string;
+    FMobileDecayRateDataArrayDisplayName: string;
     procedure SetName(const Value: string); virtual;
     procedure SetInitialConcDataArrayName(const NewName: string);
     function Collection: TCustomChemSpeciesCollection;
@@ -54,6 +56,8 @@ type
     procedure SetImmobilePartioningCoefficientDataArrayName(const NewName: string);
     procedure SetUztInitialConcDataArrayName(const NewName: string);
     procedure SetPorosityDataArrayName(const NewName: string);
+    procedure SetMobileDecayRateDataArrayName(const NewName: string);
+    procedure UpdateAllDataArrays;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -100,7 +104,18 @@ type
       read FUseInitialConcentrationFile write SetUseInitialConcentrationFile;
     property InitialConcentrationFileName: string
       read FInitialConcentrationFileName write SetInitialConcentrationFileName;
-    property PorosityDataArrayName: string read FPorosityDataArrayName write SetPorosityDataArrayName;
+    property PorosityDataArrayName: string read FPorosityDataArrayName
+      write SetPorosityDataArrayName
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    property MobileDecayRateDataArrayName: string read FMobileDecayRateDataArrayName
+      write SetMobileDecayRateDataArrayName
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
   end;
 
   TCustomChemSpeciesCollection= class(TEnhancedOrderedCollection)
@@ -148,6 +163,7 @@ type
       write SetItem; default;
     function Add: TMobileChemSpeciesItem;
     procedure UpdateDataArrays; override;
+    procedure UpdateAllDataArrays;
   end;
 
 implementation
@@ -171,6 +187,7 @@ const
   kSP1IMPrefix = 'Immobile_Partioning_Coefficient_';
   kUztStartConct = 'UZT_Unsaturated_Initial_Conc_';
   KPorosity = 'Porosity_';
+  KMobileDecayRate = 'Mobile_Decay_Rate_';
 
 resourcestring
   StrInitConcPrefix = kInitConcPrefix;
@@ -185,6 +202,7 @@ resourcestring
   StrSP1IMPrefix = kSP1IMPrefix;
   StrUztStartConct = kUztStartConct;
   StrPorosity = kPorosity;
+  StrMobileDecayRate = KMobileDecayRate;
 
 
   { TChemSpeciesItem }
@@ -254,8 +272,32 @@ begin
 
     UseInitialConcentrationFile := SourceChem.UseInitialConcentrationFile;
     InitialConcentrationFileName := SourceChem.InitialConcentrationFileName;
+
+    PorosityDataArrayName := '';
+    PorosityDataArrayName := SourceChem.PorosityDataArrayName;
+
+    MobileDecayRateDataArrayName := '';
+    MobileDecayRateDataArrayName := SourceChem.MobileDecayRateDataArrayName;
   end;
   inherited;
+end;
+
+procedure TChemSpeciesItem.UpdateAllDataArrays;
+begin
+  if Collection.Model <> nil then
+  begin
+    InitialConcDataArrayName := InitialConcDataArrayName;
+    SorbOrImmobInitialConcDataArrayName := SorbOrImmobInitialConcDataArrayName;
+    FirstSorbParamDataArrayName := FirstSorbParamDataArrayName;
+    SecondSorbParamDataArrayName := SecondSorbParamDataArrayName;
+    ReactionRateDisolvedDataArrayName := ReactionRateDisolvedDataArrayName;
+    ReactionRateSorbedDataArrayName := ReactionRateSorbedDataArrayName;
+    HalfSaturationConstantDataArrayName := HalfSaturationConstantDataArrayName;
+    ImmobilePartioningCoefficientDataArrayName := ImmobilePartioningCoefficientDataArrayName;
+    UztInitialConcDataArrayName := UztInitialConcDataArrayName;
+    PorosityDataArrayName := PorosityDataArrayName;
+    MobileDecayRateDataArrayName := MobileDecayRateDataArrayName;
+  end;
 end;
 
 procedure TChemSpeciesItem.UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
@@ -507,6 +549,8 @@ begin
       and (UztInitialConcDataArrayName = ChemItem.UztInitialConcDataArrayName)
       and (UseInitialConcentrationFile = ChemItem.UseInitialConcentrationFile)
       and (InitialConcentrationFileName = ChemItem.InitialConcentrationFileName)
+      and (PorosityDataArrayName = ChemItem.PorosityDataArrayName)
+      and (InitialConcentrationFileName = ChemItem.InitialConcentrationFileName)
   end;
 end;
 
@@ -739,6 +783,39 @@ begin
   end;
 end;
 
+procedure TChemSpeciesItem.SetMobileDecayRateDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  GwtPackagesItem: TGwtPackagesItem;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtUsed then
+    begin
+      GwtPackagesItem :=  LocalModel.ModflowPackages.GwtPackages[Index];
+      MstPackage := GwtPackagesItem.GwtMst;
+      if MstPackage.IsSelected then
+      begin
+        if MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay then
+        begin
+          DataSetUsed := True;
+        end;
+      end;
+    end;
+    UpdateDataArray(LocalModel.GwtDecayUsed,
+      FMobileDecayRateDataArrayName, NewName,
+      FMobileDecayRateDataArrayDisplayName, '0.001', 'GWT MST Pakage: DECAY',
+      DataSetUsed);
+  end;
+
+  SetCaseSensitiveStringProperty(FMobileDecayRateDataArrayName, NewName);
+end;
+
 procedure TChemSpeciesItem.SetName(const Value: string);
 var
   LocalModel: TPhastModel;
@@ -817,8 +894,12 @@ begin
         PorosityDataArrayName,
         GenerateNewRoot(FName),GenerateNewRoot(Value), []);
 
-        //    FPorosityDataArrayName: string;
-//    FPorosityDataArrayDisplayName: string;
+      FMobileDecayRateDataArrayDisplayName := StringReplace(
+        FMobileDecayRateDataArrayDisplayName,
+        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+      MobileDecayRateDataArrayName := StringReplace(
+        MobileDecayRateDataArrayName,
+        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
 
     end
     else
@@ -885,8 +966,10 @@ begin
       PorosityDataArrayName :=
         GenerateNewRoot(kPorosity + Value);
 
-        //    FPorosityDataArrayName: string;
-//    FPorosityDataArrayDisplayName: string;
+      FMobileDecayRateDataArrayDisplayName :=
+        GenerateNewRoot(StrMobileDecayRate + Value);
+      MobileDecayRateDataArrayName :=
+        GenerateNewRoot(KMobileDecayRate + Value);
 
     end;
     RenameDependents(Value);
@@ -919,12 +1002,6 @@ begin
       FPorosityDataArrayName, NewName,
       FPorosityDataArrayDisplayName, '0.25', 'GWT MST Pakage: POROSITY',
       DataSetUsed);
-
-{
-procedure TChemSpeciesItem.UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
-  const OldDataArrayName, NewName, NewDisplayName, NewFormula,
-  AssociatedDataSets: string; ShouldCreate: boolean);
-}
   end;
 
   SetCaseSensitiveStringProperty(FPorosityDataArrayName, NewName);
@@ -1170,6 +1247,16 @@ procedure TMobileChemSpeciesCollection.SetItem(Index: Integer;
   const Value: TMobileChemSpeciesItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+procedure TMobileChemSpeciesCollection.UpdateAllDataArrays;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    Items[Index].UpdateAllDataArrays;
+  end;
 end;
 
 procedure TMobileChemSpeciesCollection.UpdateDataArrays;

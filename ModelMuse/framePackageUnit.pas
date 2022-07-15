@@ -47,6 +47,7 @@ type
   published
     property OnSelectedChange: TNotifyEvent read FOnSelectedChange
       write FOnSelectedChange;
+//    property Node: TTreeNode read FNode write FNode;
     { Public declarations }
   end;
 
