@@ -36,10 +36,10 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp4
-regul_Grp5
-regul_Grp6
-regul_Grp7
+regul_Grp0
+regul_Grp1
+regul_Grp2
+regul_Grp3
 
 * observation data
 Head  0.000000000000E+000   1.000000000000E+000  Heads
@@ -53,8 +53,8 @@ ResTest.Reservoir_Bed_Thickness.script.tpl ResTest.Reservoir_Bed_Thickness.scrip
 ResTest.PestIns ResTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * ResStrt = 2       1     regul_Grp4
- eq_2          1.0 * ResEnd = 1       1     regul_Grp5
- eq_3          1.0 * ResArr = 1       1     regul_Grp6
- eq_4          1.0 * ResOffset = 0.1       1     regul_Grp7
+ eq_1          1.0 * ResStrt = 2       1     regul_Grp0
+ eq_2          1.0 * ResEnd = 1       1     regul_Grp1
+ eq_3          1.0 * ResArr = 1       1     regul_Grp2
+ eq_4          1.0 * ResOffset = 0.1       1     regul_Grp3
 
