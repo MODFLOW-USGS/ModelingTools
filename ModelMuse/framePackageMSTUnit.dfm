@@ -1,8 +1,8 @@
 inherited framePackageMST: TframePackageMST
   Width = 498
-  Height = 434
+  Height = 462
   ExplicitWidth = 498
-  ExplicitHeight = 434
+  ExplicitHeight = 462
   inherited memoComments: TMemo
     Width = 467
     ExplicitWidth = 467
@@ -21,27 +21,9 @@ inherited framePackageMST: TframePackageMST
       'Use separate porosity data set')
     TabOrder = 1
   end
-  object cbFirstOrderDecay: TCheckBox [4]
+  object rgSorption: TRadioGroup [4]
     Left = 16
-    Top = 256
-    Width = 449
-    Height = 17
-    Caption = 'Use first order decay (FIRST_ORDER_DECAY)'
-    Enabled = False
-    TabOrder = 2
-  end
-  object cbZeroOrderDecay: TCheckBox [5]
-    Left = 16
-    Top = 279
-    Width = 449
-    Height = 17
-    Caption = 'Use zero order decay (ZERO_ORDER_DECAY)'
-    Enabled = False
-    TabOrder = 3
-  end
-  object rgSorption: TRadioGroup [6]
-    Left = 16
-    Top = 302
+    Top = 334
     Width = 467
     Height = 123
     Anchors = [akLeft, akTop, akRight]
@@ -53,7 +35,21 @@ inherited framePackageMST: TframePackageMST
       'LINEAR'
       'FREUNDLICH'
       'LANGMUIR')
-    TabOrder = 4
+    TabOrder = 2
+  end
+  object rgDecay: TRadioGroup [5]
+    Left = 16
+    Top = 240
+    Width = 467
+    Height = 96
+    Caption = 'Decay'
+    Enabled = False
+    ItemIndex = 0
+    Items.Strings = (
+      'none'
+      'ZERO_ORDER_DECAY'
+      'FIRST_ORDER_DECAY')
+    TabOrder = 3
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -67,10 +63,7 @@ inherited framePackageMST: TframePackageMST
         Control = rgPorosity
       end
       item
-        Control = cbFirstOrderDecay
-      end
-      item
-        Control = cbZeroOrderDecay
+        Control = rgDecay
       end
       item
         Control = rgSorption

@@ -234,7 +234,7 @@ const
   KPorosity = 'Mobile_Porosity_';
   KMobileDecayRate = 'Mobile_Decay_Rate_';
   KMobileSorbedDecayRate = 'Mobile_Sorbed_Decay_Rate_';
-  KMobileDistCoef = 'Mobile_Distribution_Distribution_Coefficient_';
+  KMobileDistCoef = 'Mobile_Distribution_Coefficient_';
   KMobileBulkDensity = 'Mobile_Bulk_Density_';
   KFreundlichExponent = 'Mobile_Freundlich_Exponent_';
   KSorptionCapacity = 'Mobile_Sorption_Capacity_';
@@ -888,9 +888,9 @@ begin
         end;
       end;
     end;
-    UpdateDataArray(LocalModel.GwtDistibutionCoefUsed,
+    UpdateDataArray(LocalModel.GwtBulkDensityUsed,
       FMobileBulkDensityDataArrayName, NewName,
-      FMobileBulkDensityDataArrayDisplayName, '0.001', 'GWT MST Pakage: BULK_DENSITY',
+      FMobileBulkDensityDataArrayDisplayName, '1.7', 'GWT MST Pakage: BULK_DENSITY',
       DataSetUsed);
   end;
 
@@ -956,7 +956,7 @@ begin
     end;
     UpdateDataArray(LocalModel.GwtDistibutionCoefUsed,
       FMobileDistCoefDataArrayName, NewName,
-      FMobileDistCoefDataArrayDisplayName, '0.01', 'GWT MST Pakage: DISTCOEF',
+      FMobileDistCoefDataArrayDisplayName, '0.176', 'GWT MST Pakage: DISTCOEF',
       DataSetUsed);
   end;
 
@@ -990,7 +990,7 @@ begin
     end;
     UpdateDataArray(LocalModel.GwtFreundlichExponentUsed,
       FMobileFreundlichExponentDataArrayName, NewName,
-      FMobileFreundlichExponentDataArrayDisplayName, '0.001', 'GWT MST Pakage: SP2',
+      FMobileFreundlichExponentDataArrayDisplayName, '0.7', 'GWT MST Pakage: SP2',
       DataSetUsed);
   end;
 
@@ -1057,9 +1057,9 @@ begin
         end;
       end;
     end;
-    UpdateDataArray(LocalModel.GwtFreundlichExponentUsed,
+    UpdateDataArray(LocalModel.GwtSorptionCapacityUsed,
       FMobileSorptionCapacityDataArrayName, NewName,
-      FMobileSorptionCapacityDataArrayDisplayName, '0.001', 'GWT MST Pakage: SP2',
+      FMobileSorptionCapacityDataArrayDisplayName, '0.003', 'GWT MST Pakage: SP2',
       DataSetUsed);
   end;
 

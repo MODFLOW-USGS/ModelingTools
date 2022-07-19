@@ -11,9 +11,8 @@ uses
 type
   TframePackageMST = class(TframePackage)
     rgPorosity: TRadioGroup;
-    cbFirstOrderDecay: TCheckBox;
-    cbZeroOrderDecay: TCheckBox;
     rgSorption: TRadioGroup;
+    rgDecay: TRadioGroup;
   private
     { Private declarations }
   public
@@ -40,8 +39,19 @@ begin
   inherited;
   MstPackage := Package as TGwtMstPackage;
   rgPorosity.ItemIndex := Ord(MstPackage.SeparatePorosity);
-  cbFirstOrderDecay.Checked := MstPackage.FirstOrderDecay;
-  cbZeroOrderDecay.Checked := MstPackage.ZeroOrderDecay;
+  if MstPackage.ZeroOrderDecay then
+  begin
+    rgDecay.ItemIndex := 1;
+  end
+  else
+  if MstPackage.FirstOrderDecay then
+  begin
+    rgDecay.ItemIndex := 2;
+  end
+  else
+  begin
+    rgDecay.ItemIndex := 0;
+  end;
   rgSorption.ItemIndex := Ord(MstPackage.Sorption);
 end;
 
@@ -52,8 +62,8 @@ begin
   inherited;
   MstPackage := Package as TGwtMstPackage;
   MstPackage.SeparatePorosity := rgPorosity.ItemIndex = 1;
-  MstPackage.FirstOrderDecay := cbFirstOrderDecay.Checked;
-  MstPackage.ZeroOrderDecay := cbZeroOrderDecay.Checked;
+  MstPackage.FirstOrderDecay := rgDecay.ItemIndex = 2;
+  MstPackage.ZeroOrderDecay := rgDecay.ItemIndex = 1;
   MstPackage.Sorption := TGwtSorptionChoice(rgSorption.ItemIndex);
 end;
 

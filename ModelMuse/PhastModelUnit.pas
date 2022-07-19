@@ -4760,6 +4760,7 @@ that affects the model output should also have a comment. }
     function GwtDecayUsed(Sender: TObject): boolean;
     function GwtSorbedDecayUsed(Sender: TObject): boolean;
     function GwtDistibutionCoefUsed(Sender: TObject): boolean;
+    function GwtBulkDensityUsed(Sender: TObject): boolean;
     function GwtFreundlichExponentUsed(Sender: TObject): boolean;
     function GwtSorptionCapacityUsed(Sender: TObject): boolean;
   published
@@ -5528,7 +5529,8 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit,
   ModflowMnw2Unit, PestObsExtractorInputWriterUnit, Modflow6ObsUnit,
   PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit,
-  ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit;
+  ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit,
+  ModflowMstWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -18582,6 +18584,40 @@ begin
   end;
 end;
 
+function TPhastModel.GwtBulkDensityUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.MobileBulkDensityDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected
+          and (MstPackage.Sorption <> gscNone);
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
 function TPhastModel.GwtDecayUsed(Sender: TObject): boolean;
 var
   DataArray: TDataArray;
@@ -18649,7 +18685,7 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      result := AChemItem.MobileDecayRateDataArrayName = DataArray.Name;
+      result := AChemItem.MobileDistCoefDataArrayName = DataArray.Name;
       if result then
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
@@ -18683,7 +18719,7 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      result := AChemItem.MobileDecayRateDataArrayName = DataArray.Name;
+      result := AChemItem.MobileFreundlichExponentDataArrayName = DataArray.Name;
       if result then
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
@@ -18750,7 +18786,7 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      result := AChemItem.MobileDecayRateDataArrayName = DataArray.Name;
+      result := AChemItem.MobileSorbedDecayRateDataArrayName = DataArray.Name;
       if result then
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
@@ -18785,7 +18821,7 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      result := AChemItem.MobileDecayRateDataArrayName = DataArray.Name;
+      result := AChemItem.MobileSorptionCapacityDataArrayName = DataArray.Name;
       if result then
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
@@ -39110,7 +39146,7 @@ begin
       for SpeciesIndex := 0 to ModflowPackages.GwtPackages.Count - 1 do
       begin
         MstPackage := ModflowPackages.GwtPackages[SpeciesIndex].GwtMst;
-        result := not MstPackage.SeparatePorosity;
+        result := MstPackage.IsSelected and not MstPackage.SeparatePorosity;
         if result then
         begin
           Exit;
@@ -43215,6 +43251,7 @@ var
   DspWriter: TModflowDspWriter;
   AdvWriter: TModflowGwtAdvWriter;
   GwtSsmWriter: TModflowGwtSsmWriter;
+  MstWriter: TModflowGwtMstWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -44538,6 +44575,14 @@ begin
           finally
             GwtIcWriter.Free;
           end;
+
+          MstWriter := TModflowGwtMstWriter.Create(Self, etExport);
+          try
+            MstWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            MstWriter.Free;
+          end;
+
           FDataArrayManager.CacheDataArrays;
           Application.ProcessMessages;
           if not frmProgressMM.ShouldContinue then
