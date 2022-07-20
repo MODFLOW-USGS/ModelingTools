@@ -455,6 +455,7 @@ type
     procedure UpdateLayerGroupProperties(BcfPackage: TModflowPackageSelection);
     procedure RecreateMt3dTimeLists;
     procedure SetMt3dCaption;
+    procedure InvalidateActiveGrid;
   protected
     function Description: string; override;
   public
@@ -481,7 +482,7 @@ uses Contnrs, JvListComb, frmGoPhastUnit, ScreenObjectUnit,
   frmManageFluxObservationsUnit, ModflowSubsidenceDefUnit, Mt3dmsChemUnit,
   ModflowTimeUnit, ModflowDiscretizationWriterUnit, Mt3dUztRchUnit,
   Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, Mt3dSftUnit,
-  ModflowCsubUnit, ModflowCSubInterbed;
+  ModflowCsubUnit, ModflowCSubInterbed, System.Math, AbstractGridUnit;
 
 resourcestring
   StrLPFParameters = 'LPF or NWT Parameters';
@@ -4415,6 +4416,9 @@ begin
   PhastModel.MobileComponents.UpdateAllDataArrays;
 
   inherited;
+
+  InvalidateActiveGrid;
+
   frmGoPhast.EnableLinkStreams;
   frmGoPhast.EnableManageFlowObservations;
   frmGoPhast.EnableManageHeadObservations;
@@ -4429,6 +4433,57 @@ begin
   begin
     Beep;
     MessageDlg(StrInOrderToGenerate, mtInformation, [mbOK], 0);
+  end;
+end;
+
+procedure TUndoChangeLgrPackageSelection.InvalidateActiveGrid;
+var
+  PackageIndex: Integer;
+  OldPackages: TModflowPackages;
+  NewPackages: TModflowPackages;
+  ActiveChanged: Boolean;
+  DrawingChoice: TGridLineDrawingChoice;
+begin
+  DrawingChoice := gldcAll;
+  if frmGoPhast.PhastModel.ModflowGrid <> nil then
+  begin
+    DrawingChoice := frmGoPhast.PhastModel.ModflowGrid.GridLineDrawingChoice;
+  end
+  else if frmGoPhast.DisvUsed then
+  begin
+    DrawingChoice := frmGoPhast.PhastModel.DisvGrid.GridLineDrawingChoice;
+  end
+  else
+  begin
+    Exit;
+  end;
+
+  if DrawingChoice in [gldcActive, gldcActiveEdge] then
+  begin
+    ActiveChanged := False;
+    for PackageIndex := 0 to Min(FOldPackages.Count, FNewPackages.Count) - 1 do
+    begin
+      OldPackages := FOldPackages[PackageIndex].Packages;
+      NewPackages := FNewPackages[PackageIndex].Packages;
+      if (OldPackages.LakPackage.IsSelected <> NewPackages.LakPackage.IsSelected)
+        or (OldPackages.ChdBoundary.IsSelected <> NewPackages.ChdBoundary.IsSelected)
+        or (OldPackages.LakMf6Package.IsSelected <> NewPackages.LakMf6Package.IsSelected) then
+      begin
+        ActiveChanged := True;
+        break;
+      end;
+    end;
+    if ActiveChanged then
+    begin
+      if frmGoPhast.PhastModel.ModflowGrid <> nil then
+      begin
+        frmGoPhast.PhastModel.ModflowGrid.GridChanged;
+      end
+      else if frmGoPhast.PhastModel.DisvUsed then
+      begin
+        frmGoPhast.PhastModel.DisvGrid.MeshChanged;
+      end;
+    end;
   end;
 end;
 
@@ -4556,6 +4611,8 @@ begin
   PhastModel.MobileComponents.UpdateAllDataArrays;
 
   inherited;
+  InvalidateActiveGrid;
+
   frmGoPhast.PhastModel.HydrogeologicUnits.Assign(FOldHydroGeologicUnits);
   frmGoPhast.EnableLinkStreams;
   frmGoPhast.EnableHufMenuItems;

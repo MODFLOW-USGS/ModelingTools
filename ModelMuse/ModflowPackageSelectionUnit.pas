@@ -5949,8 +5949,12 @@ Type
   end;
 
   TIstPackageProperties = class(TOrderedCollection)
+  private
+    function GetItems(Index: Integer): TIstPackageItem;
+    procedure SetItems(Index: Integer; const Value: TIstPackageItem);
   public
     constructor Create(Model: TBaseModel);
+    property Items[Index: Integer]: TIstPackageItem read GetItems write SetItems; default;
   end;
 
   TGwtIstPackage = class(TModflowPackageSelection)
@@ -5962,7 +5966,6 @@ Type
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure InitializeVariables; override;
-
   published
     property IstPackageProperties: TIstPackageProperties
       read FIstPackageProperties write SetIstPackageProperties;
@@ -5980,6 +5983,7 @@ Type
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables;
   published
     property GwtIms: TSmsPackageSelection read FGwtIms write SetGwtIms;
     property GwtMst: TGwtMstPackage read FGwtMst write SetGwtMst;
@@ -5996,7 +6000,6 @@ Type
     function GetCount: Integer; override;
   public
     constructor Create(Model: TBaseModel);
-//    property Count: Integer read GetCount write SetCount;
     procedure InitializeVariables;
     property Items[Index: Integer]: TGwtPackagesItem read GetItem
       write SetItem; default;
@@ -6176,6 +6179,8 @@ resourcestring
   StrCHDS = 'CHD %s';
   StrRCHS = 'RCH %s';
   StrETSS = 'ETS %s';
+  StrMSTMobileStorage = 'MST: Mobile Storage and Transfer Package';
+  StrISTImmobileStorag = 'IST: Immobile Storage and Transfer Package';
 
 { TModflowPackageSelection }
 
@@ -22774,13 +22779,13 @@ begin
   FGwtIms.SpeciesIndex := Index;
 
   FGwtMst := TGwtMstPackage.Create(ParentCollection.FModel);
-  FGwtMst.PackageIdentifier := 'MST: Mobile Storage and Transfer Package';
+  FGwtMst.PackageIdentifier := StrMSTMobileStorage;
   FGwtMst.Classification := StrGwtMST;
   FGwtMst.SelectionType := stCheckBox;
   FGwtMst.SpeciesIndex := Index;
 
   FGwtIst := TGwtIstPackage.Create(ParentCollection.FModel);
-  FGwtIst.PackageIdentifier := 'IST: Immobile Storage and Transfer Package';
+  FGwtIst.PackageIdentifier := StrISTImmobileStorag;
   FGwtIst.Classification := StrGwtMST;
   FGwtIst.SelectionType := stCheckBox;
   FGwtIst.SpeciesIndex := Index;
@@ -22794,6 +22799,13 @@ begin
   FGwtMst.Free;
   FGwtIms.Free;
   inherited;
+end;
+
+procedure TGwtPackagesItem.InitializeVariables;
+begin
+  GwtIms.InitializeVariables;
+  GwtMst.InitializeVariables;
+  GwtIst.InitializeVariables;
 end;
 
 procedure TGwtPackagesItem.SetGwtIms(const Value: TSmsPackageSelection);
@@ -22856,8 +22868,7 @@ var
 begin
   for SpeciesIndex := 0 to inherited Count - 1 do
   begin
-    Items[SpeciesIndex].GwtIms.InitializeVariables;
-    Items[SpeciesIndex].GwtMst.InitializeVariables;
+    Items[SpeciesIndex].InitializeVariables;
   end;
 end;
 
@@ -23143,6 +23154,17 @@ end;
 constructor TIstPackageProperties.Create(Model: TBaseModel);
 begin
   inherited Create(TIstPackageItem, Model);
+end;
+
+function TIstPackageProperties.GetItems(Index: Integer): TIstPackageItem;
+begin
+  result := Inherited Items[Index] as TIstPackageItem;
+end;
+
+procedure TIstPackageProperties.SetItems(Index: Integer;
+  const Value: TIstPackageItem);
+begin
+  Inherited Items[Index] := Value;
 end;
 
 { TGwtIstPackage }

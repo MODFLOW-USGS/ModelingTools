@@ -544,6 +544,8 @@ type
     FAppEvents: TApplicationEvents;
     FUpdateCount: integer;
     FOnIsCaptionEvent: TOnIsCaptionEvent;
+    FOnEndUpdate: TNotifyEvent;
+    FSelectedCol: Integer;
     function CollectionItem(const ACol, ARow: Longint):
       TCustomRowOrColumn; virtual; abstract;
     function GetCellVisible(ACol, ARow: Integer): boolean;
@@ -759,6 +761,7 @@ type
     // @name is called when a column is moved.
     property OnColMoving: TCheckMoveEvent read FOnColMoving write FOnColMoving;
     property OnColSize: TColSizeEvent read FOnColSize write FOnColSize;
+    property OnEndUpdate: TNotifyEvent read FOnEndUpdate write FOnEndUpdate;
     // @name is called when a row is moved.
     property OnRowMoving: TCheckMoveEvent read FOnRowMoving write FOnRowMoving;
     property OnStateChange: TChangeCheckEvent read FOnStateChange
@@ -781,7 +784,6 @@ type
   private
     FColumns: TRbwDataGridColumns4;
     FWordWrapColTitles: boolean;
-    FOnEndUpdate: TNotifyEvent;
     FWordWrapRowCaptions: Boolean;
     FRequiredWidthCol: Integer;
     FRequiredWidth: integer;
@@ -830,7 +832,6 @@ type
     Property ColorSelectedRow : boolean read FColorSelectedColumnOrRow
       write SetColorSelectedColumnOrRow default True;
     property Columns : TRbwDataGridColumns4 read FColumns write SetColumns;
-    property OnEndUpdate: TNotifyEvent read FOnEndUpdate write FOnEndUpdate;
     property WordWrapRowCaptions: Boolean read FWordWrapRowCaptions
       write SetWordWrapRowCaptions;
     // @name is only for backwards compatibility.
@@ -974,6 +975,7 @@ type
     // Use @name to insert a row at position ARow.
     procedure InsertRow(ARow: Integer); override;
 //    Property Updating: boolean read GetUpdating;
+    Property SelectedCol : integer read FSelectedCol;
   published
     Property ColorSelectedColumn : boolean read FColorSelectedColumnOrRow
       write SetColorSelectedColumnOrRow;
@@ -3245,6 +3247,10 @@ begin
     begin
       AdjustRowHeights(Index);
     end;
+    if Assigned(FOnEndUpdate) then
+    begin
+      FOnEndUpdate(self);
+    end;
   end;
 end;
 
@@ -3444,6 +3450,7 @@ begin
     end;
   end;
   FdgColumn := Value;
+  FSelectedCol := Value;
 end;
 
 procedure TCustomRBWDataGrid.GetButtonCaption(Sender: TObject;
@@ -4534,9 +4541,10 @@ begin
 
   if result and not fMouseIsDown then
   begin
-    if FSelectedRow <> ARow then
+    if (FSelectedRow <> ARow) or  (FSelectedCol <> ACol) then
     begin
       FSelectedRow := ARow;
+      FSelectedCol := ACol;
       Invalidate;
     end;
 

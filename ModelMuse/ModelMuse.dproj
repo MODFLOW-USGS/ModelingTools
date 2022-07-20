@@ -1830,6 +1830,16 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="ModflowMstWriterUnit.pas"/>
+        <DCCReference Include="frameRowGridUnit.pas">
+            <Form>frameRowGrid</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="framePackageIstUnit.pas">
+            <Form>framePackageIst</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
