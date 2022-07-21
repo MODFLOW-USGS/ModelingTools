@@ -141,6 +141,10 @@ begin
   sbDelete.Enabled := seNumber.AsInteger > 0;
 end;
 
+type
+  TRbwRowDataGridCrack = class(TRbwRowDataGrid);
+
+
 procedure TframeRowGrid.SetEnabled(Value: boolean);
 begin
   inherited;
@@ -152,13 +156,13 @@ begin
   if Grid.Enabled then
   begin
     Grid.Color := clWindow;
-    Grid.ColorSelectedRow := True;
+    Grid.ColorSelectedColumn := True;
   end
   else
   begin
     Grid.Color := clBtnFace;
-    TRbwDataGrid4Crack(Grid).HideEditor;
-    Grid.ColorSelectedRow := False;
+    TRbwRowDataGridCrack(Grid).HideEditor;
+    Grid.ColorSelectedColumn := False;
   end;
 end;
 

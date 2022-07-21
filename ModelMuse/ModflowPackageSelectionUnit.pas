@@ -22774,9 +22774,10 @@ begin
 
   FGwtIms := TSmsPackageSelection.Create(ParentCollection.FModel);
   FGwtIms.PackageIdentifier := StrSMSSparseMatrixS;
-  FGwtIms.Classification := StrSolver;
-  FGwtIms.SelectionType := stRadioButton;
+  FGwtIms.Classification := StrGwtSolver;
+  FGwtIms.SelectionType := stCheckBox;
   FGwtIms.SpeciesIndex := Index;
+  FGwtIms.IsSelected := True;
 
   FGwtMst := TGwtMstPackage.Create(ParentCollection.FModel);
   FGwtMst.PackageIdentifier := StrMSTMobileStorage;
@@ -22786,7 +22787,7 @@ begin
 
   FGwtIst := TGwtIstPackage.Create(ParentCollection.FModel);
   FGwtIst.PackageIdentifier := StrISTImmobileStorag;
-  FGwtIst.Classification := StrGwtMST;
+  FGwtIst.Classification := StrGwtIST;
   FGwtIst.SelectionType := stCheckBox;
   FGwtIst.SpeciesIndex := Index;
 
@@ -23182,7 +23183,8 @@ end;
 constructor TGwtIstPackage.Create(Model: TBaseModel);
 begin
   inherited;
-  FIstPackageProperties := TIstPackageProperties.Create(Model)
+  FIstPackageProperties := TIstPackageProperties.Create(Model);
+  InitializeVariables;
 end;
 
 destructor TGwtIstPackage.Destroy;

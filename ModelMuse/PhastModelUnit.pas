@@ -588,6 +588,8 @@ resourcestring
   StrMT3DMS_Classificaton = 'MT3DMS, MT3D-USGS, or GWT';
   StrGwtClassification = 'GWT: Groundwater Transport';
   StrGwtMST = 'GWT MST: Mobile Storage and Transport';
+  StrGwtIST = 'GWT IST: Immobile Storage and Transport';
+  StrGwtSolver = 'GWT Solver: IMS';
   StrSpecifiedPressure = 'SUTRA Specified Pressure';
   StrSutraSpecifiedHead = 'SUTRA Specified Head';
   StrAssocPresConc = 'SP Associated Conc.';
@@ -10656,6 +10658,8 @@ const
 
 //               Bug fix: Fixed drawing objects when they are first being
 //                created.
+//               Bug fix: Fixed drawing grid when the active data set is
+//                changed.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
