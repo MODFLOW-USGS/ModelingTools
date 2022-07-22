@@ -142,9 +142,9 @@ begin
     end;
     PackageProp.SaveConcentrations := frameIst.Grid.Checked[ColIndex, Ord(irSaveConc)];
     PackageProp.SpecifyPrintFormat := frameIst.Grid.Checked[ColIndex, Ord(irPrintConc)];
-    PackageProp.Columns := frameIst.Grid.IntegerValue[ColIndex, Ord(IrPrintCols)];
-    PackageProp.Width := frameIst.Grid.IntegerValue[ColIndex, Ord(irWidth)];
-    PackageProp.Digits := frameIst.Grid.IntegerValue[ColIndex, Ord(IrDigits)];
+    PackageProp.Columns := frameIst.Grid.IntegerValueDefault[ColIndex, Ord(IrPrintCols), 10];
+    PackageProp.Width := frameIst.Grid.IntegerValueDefault[ColIndex, Ord(irWidth), 15];
+    PackageProp.Digits := frameIst.Grid.IntegerValueDefault[ColIndex, Ord(IrDigits), 20];
     PackageProp.PrintFormat := TPrintFormat(frameIst.Grid.ItemIndex[ColIndex, Ord(irFormat)]);
   end;
 end;

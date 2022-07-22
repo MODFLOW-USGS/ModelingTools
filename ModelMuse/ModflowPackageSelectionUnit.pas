@@ -5990,7 +5990,6 @@ Type
     property GwtIst: TGwtIstPackage read FGwtIst write SetGwtIst;
   end;
 
-
   TGwtPackageCollection = class(TPhastCollection)
   private
     FModel: TBaseModel;

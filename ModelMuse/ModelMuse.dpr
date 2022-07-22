@@ -756,7 +756,8 @@ uses
   framePackageMSTUnit in 'framePackageMSTUnit.pas' {framePackageMST: TFrame},
   ModflowMstWriterUnit in 'ModflowMstWriterUnit.pas',
   frameRowGridUnit in 'frameRowGridUnit.pas' {frameRowGrid: TFrame},
-  framePackageIstUnit in 'framePackageIstUnit.pas' {framePackageIst: TFrame};
+  framePackageIstUnit in 'framePackageIstUnit.pas' {framePackageIst: TFrame},
+  ModflowIstWriterUnit in 'ModflowIstWriterUnit.pas';
 
 {$R *.res}
 

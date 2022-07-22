@@ -5,7 +5,7 @@ interface
 uses
   CustomModflowWriterUnit, ModflowPackageSelectionUnit;
 
-  type
+type
   TModflowGwtMstWriter = class(TCustomPackageWriter)
   private
     FSpeciesIndex: Integer;

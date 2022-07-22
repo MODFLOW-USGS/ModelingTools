@@ -326,6 +326,9 @@ inherited framePackageIst: TframePackageIst
         end>
       ExplicitWidth = 422
       ExplicitHeight = 219
+      ColWidths = (
+        64
+        165)
     end
   end
   inherited rcSelectionController: TRbwController

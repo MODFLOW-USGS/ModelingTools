@@ -434,6 +434,7 @@ type
     function CreateMstFrame: TframePackageMST;
     function CreateIstFrame: TframePackageIst;
     function CreateImsGwtFram: TframePkgSms;
+    procedure ShowImsPage(Sender: TObject);
     { Private declarations }
   public
     constructor Create(AOwner: TComponent); override;
@@ -742,11 +743,13 @@ begin
   NewPage := TJvStandardPage.Create(self);
   NewPage.Name := '';
   NewPage.PageList := jvplPackages;
+  NewPage.OnShow := ShowImsPage;
   result.Parent := NewPage;
   MemoWidth := result.MemoComments.Width;
   result.Align := alClient;
   // If this isn't done, the memo may be invisible because its width
   // ends up less than zero.
+  // The page control is handled in ShowImsPage for the same reason.
   if result.Width <= 0 then
   begin
     result.MemoComments.Width := MemoWidth;
@@ -2256,6 +2259,24 @@ begin
     end;
   finally
     ExistingInstances.Free;
+  end;
+end;
+
+procedure TfrmModflowPackages.ShowImsPage(Sender: TObject);
+var
+  APage: TJvStandardPage;
+  ControlIndex: Integer;
+  AFrame: TframePkgSms;
+begin
+  APage := Sender as TJvStandardPage;
+  for ControlIndex := 0 to APage.ControlCount - 1 do
+  begin
+    if APage.Controls[ControlIndex] is TframePkgSms then
+    begin
+      AFrame := TframePkgSms(APage.Controls[ControlIndex]);
+      AFrame.pgcControls.Align := alNone;
+      AFrame.pgcControls.Align := alBottom;
+    end;
   end;
 end;
 
@@ -4707,7 +4728,6 @@ var
   ActiveChanged: Boolean;
   DrawingChoice: TGridLineDrawingChoice;
 begin
-  DrawingChoice := gldcAll;
   if frmGoPhast.PhastModel.ModflowGrid <> nil then
   begin
     DrawingChoice := frmGoPhast.PhastModel.ModflowGrid.GridLineDrawingChoice;

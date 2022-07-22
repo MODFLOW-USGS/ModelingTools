@@ -338,7 +338,7 @@ object TTaskHistory
     end
     item
       Name = 'MF-2015'
-      Display = True
+      Display = False
     end
     item
       Name = 'NPF'
@@ -390,7 +390,7 @@ object TTaskHistory
     end
     item
       Name = 'MAW'
-      Display = True
+      Display = False
     end
     item
       Name = 'DISV'
@@ -438,7 +438,7 @@ object TTaskHistory
     end
     item
       Name = 'CSUB'
-      Display = True
+      Display = False
     end
     item
       Name = 'GwMounding'
@@ -462,11 +462,11 @@ object TTaskHistory
     end
     item
       Name = 'PEST Pilot Points'
-      Display = True
+      Display = False
     end
     item
       Name = 'PEST Regularization'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS RCT'
@@ -474,11 +474,11 @@ object TTaskHistory
     end
     item
       Name = 'Adaptive Time Stepping'
-      Display = True
+      Display = False
     end
     item
       Name = 'MF6 Time Series'
-      Display = True
+      Display = False
     end
     item
       Name = 'MF6 GWT'
@@ -29658,6 +29658,12 @@ object TTaskHistory
       Date = 44763.000000000000000000
       Categories.Strings = (
         'Dialog boxes'
+        'MF6 GWT'
+        'Components')
+    end
+    item
+      Date = 44764.000000000000000000
+      Categories.Strings = (
         'MF6 GWT')
     end>
 end
