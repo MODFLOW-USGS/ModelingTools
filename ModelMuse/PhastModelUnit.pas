@@ -10667,6 +10667,11 @@ const
 //                created.
 //               Bug fix: Fixed drawing grid when the active data set is
 //                changed.
+//               Enhancement: It is not possible to undo importing or editing
+//                an image.
+//               Enhancement: When importing or editing an image, the user can
+//                now specify the coordinates and an ID for each point without
+//                first specifying the pixel location of the points.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.

@@ -40,6 +40,7 @@ type
     FX: double;
     // See @link(Y).
     FY: double;
+    FID: string;
     // @name invalidates the @link(TCompressedBitmapItem) that owns it.
     procedure InvalidateParentItem;
     // See @link(PixelX).
@@ -62,6 +63,7 @@ type
     property X: double read FX write SetX;
     // @name is the Y real-world coordinate.
     property Y: double read FY write SetY;
+    property ID: string read FID write FID;
   end;
 
   TCompressedBitmapItem = class;
@@ -379,16 +381,26 @@ begin
   FCanShow := True;
   FDisplayMessage := True;
   FVisible := True;
-  Name := 'Image' + IntToStr(Collection.Count);
-  FBitmap := TCompressedBitmap.Create;
-  FMeasurementPoints := TMeasurementPointCollection.Create(self);
-  if Collection.Count = 1 then
+  if Collection = nil then
   begin
-    frmGoPhast.miShowHideBitmaps.Caption := 'Show or Hide Image';
+    Name := 'Image';
   end
   else
   begin
-    frmGoPhast.miShowHideBitmaps.Caption := 'Show or Hide Images...';
+    Name := 'Image' + IntToStr(Collection.Count);
+  end;
+  FBitmap := TCompressedBitmap.Create;
+  FMeasurementPoints := TMeasurementPointCollection.Create(self);
+  if Collection <> nil then
+  begin
+    if Collection.Count = 1 then
+    begin
+      frmGoPhast.miShowHideBitmaps.Caption := 'Show or Hide Image';
+    end
+    else
+    begin
+      frmGoPhast.miShowHideBitmaps.Caption := 'Show or Hide Images...';
+    end;
   end;
 end;
 
@@ -744,6 +756,7 @@ begin
       self.PixelY := SourceItem.PixelY;
       self.X := SourceItem.X;
       self.Y := SourceItem.Y;
+      self.ID := SourceItem.ID;
     end;
   end
   else

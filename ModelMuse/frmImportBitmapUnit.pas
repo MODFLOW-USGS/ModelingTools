@@ -120,6 +120,7 @@ type
     // @name is used to store @link(FBitMap) in GoPhast.
     FBitmapItem: TCompressedBitmapItem;
     FImageFileName: String;
+    FEditing: Boolean;
     // @name enables or disables @link(btnOK) depending on whether or not
     // an image has been selected and
     // enough points have been specified.
@@ -156,12 +157,12 @@ var
 
 implementation
 
-uses frmPixelPointUnit, GoPhastTypes, frmGoPhastUnit, BigCanvasMethods, 
+uses frmPixelPointUnit, GoPhastTypes, frmGoPhastUnit, BigCanvasMethods,
   frmWorldFileTypeUnit, frmGoToUnit, jpeg,
   {$IFDEF Win32}
   GraphicEx, Pcx,
   {$ENDIF}
-  ModelMuseUtilities;
+  ModelMuseUtilities, UndoItems;
 
 resourcestring
   StrUnableToReadWorld = 'Unable to read world file. Check that the world fi' +
@@ -188,13 +189,40 @@ resourcestring
   'at. Please contact the software developer for help.';
   StrAnErrorOccurredWh = 'An error occurred while attempting to open %0:s. T' +
   'he error message was %1:s.';
+  StrID = 'ID';
 
 {$R *.dfm}
 
 type
   // @name identifies the columns in @link(TfrmImportBitmap.dgPoints
   // TfrmImportBitmap.dgPoints).
-  TPixelColumns = (pcNone, pcPixelX, pcPixelY, pcRealWorldX, pcRealWorldY);
+  TPixelColumns = (pcNone, pcPixelX, pcPixelY, pcRealWorldX, pcRealWorldY, pcID);
+
+  TUndoImportBitMap = class(TCustomUndo)
+  private
+    FNewBitmapItem: TCompressedBitmapItem;
+    FIndex: Integer;
+    procedure UpdateView;
+  protected
+    function Description: string; override;
+  public
+    procedure DoCommand; override;
+    // @name undoes the command.
+    procedure Undo; override;
+    constructor Create;
+  end;
+
+  TUndoEditBitMap = class(TUndoImportBitMap)
+  private
+    FOldBitmapItem: TCompressedBitmapItem;
+  protected
+    function Description: string; override;
+  public
+    procedure DoCommand; override;
+    // @name undoes the command.
+    procedure Undo; override;
+    constructor Create;
+  end;
 
 { TfrmImportBitmap }
 
@@ -235,6 +263,7 @@ begin
   else
     Assert(False);
   end;
+  dgPoints.Cells[Ord(pcID), 0] := StrID;
 end;
 
 procedure TfrmImportBitmap.FormCreate(Sender: TObject);
@@ -539,6 +568,7 @@ var
   Index: integer;
   MeasurementPoint: TMeasurementPointItem;
 begin
+  FEditing := True;
   Caption := StrEditBitMap;
   Assert(ABitmapItem <> nil);
   FBitmapItem := ABitmapItem;
@@ -562,6 +592,7 @@ begin
     dgPoints.Cells[Ord(pcPixelY), Index + 1] := IntToStr(MeasurementPoint.PixelY);
     dgPoints.Cells[Ord(pcRealWorldX), Index + 1] := FloatToStr(MeasurementPoint.X);
     dgPoints.Cells[Ord(pcRealWorldY), Index + 1] := FloatToStr(MeasurementPoint.Y);
+    dgPoints.Cells[Ord(pcID), Index + 1] := MeasurementPoint.ID;
   end;
   cbVisible.Checked := ABitmapItem.Visible;
   btnOK.Enabled := True;
@@ -574,16 +605,26 @@ var
   XPixel, YPixel: integer;
   X, Y: double;
   NewItem: boolean;
+  UndoEdit: TUndoImportBitMap;
+  ID: string;
 begin
   if FImageFileName <> '' then
   begin
     frmGoPhast.PhastModel.AddFileToArchive(FImageFileName);
   end;
-  NewItem := False;
+//  NewItem := False;
+  try
   if FBitmapItem = nil then
   begin
-    FBitmapItem := frmGoPhast.PhastModel.Bitmaps.Add as TCompressedBitmapItem;
-    NewItem := True;
+    UndoEdit := TUndoImportBitMap.Create;
+    FBitmapItem := UndoEdit.FNewBitmapItem;
+//    NewItem := True;
+  end
+  else
+  begin
+    UndoEdit := TUndoEditBitMap.Create;
+    TUndoEditBitMap(UndoEdit).FOldBitmapItem.Assign(FBitmapItem);
+    UndoEdit.FIndex := FBitmapItem.Index;
   end;
   FBitmapItem.ViewDirection := TViewDirection(rgViewDirection.ItemIndex);
   FBitmapItem.BitMap.Assign(FBitMap);
@@ -606,6 +647,7 @@ begin
     YPixel := 0;
     X := 0;
     Y := 0;
+    ID := dgPoints.Cells[Ord(pcID), Index];
 
     if not TryStrToInt(dgPoints.Cells[Ord(pcPixelX), Index], XPixel) then
     begin
@@ -631,6 +673,7 @@ begin
     MeasurementPoint.PixelY := YPixel;
     MeasurementPoint.X := X;
     MeasurementPoint.Y := Y;
+    MeasurementPoint.ID := ID;
   end;
   case FBitmapItem.ViewDirection of
     vdTop:
@@ -648,10 +691,23 @@ begin
   else
     Assert(False);
   end;
-  if NewItem then
+  if FEditing then
+  begin
+    UndoEdit.FNewBitmapItem.Assign(FBitmapItem);
+  end
+  else
   begin
     MoveToImage(FBitmapItem);
   end;
+  except on E: Exception do
+    begin
+      UndoEdit.Free;
+      Beep;
+      MessageDlg(E.message, mtError, [mbOK], 0);
+      Exit;
+    end;
+  end;
+  frmGoPhast.UndoStack.Submit(UndoEdit);
   //frmGoPhast.Invalidate;
 end;
 
@@ -697,23 +753,38 @@ procedure TfrmImportBitmap.ZoomBoxImage32MouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer; Layer: TCustomLayer);
 var
   frmPixelPoint: TfrmPixelPoint;
+  AValue: double;
 begin
   inherited;
-  frmImportBitmap := self;
-  try
-    Application.CreateForm(TfrmPixelPoint, frmPixelPoint);
+  if (dgPoints.SelectedRow > 0)
+    and (dgPoints.Cells[Ord(pcPixelX), dgPoints.SelectedRow] = '')
+    and (dgPoints.Cells[Ord(pcPixelY), dgPoints.SelectedRow] = '')
+    and TryStrToFloat(dgPoints.Cells[Ord(pcRealWorldX), dgPoints.SelectedRow], AValue)
+    and TryStrToFloat(dgPoints.Cells[Ord(pcRealWorldY), dgPoints.SelectedRow], AValue)
+    then
+  begin
+    dgPoints.Cells[Ord(pcPixelX), dgPoints.SelectedRow] := IntToStr(X);
+    dgPoints.Cells[Ord(pcPixelY), dgPoints.SelectedRow] := IntToStr(Y);
+    ZoomBox.InvalidateImage32;
+  end
+  else
+  begin
+    frmImportBitmap := self;
     try
-      frmPixelPoint.PopupParent := self;
-      frmPixelPoint.GetData(TViewDirection(rgViewDirection.ItemIndex), X, Y);
-      if frmPixelPoint.ShowModal = mrOK then
-      begin
-        ZoomBox.InvalidateImage32;
+      Application.CreateForm(TfrmPixelPoint, frmPixelPoint);
+      try
+        frmPixelPoint.PopupParent := self;
+        frmPixelPoint.GetData(TViewDirection(rgViewDirection.ItemIndex), X, Y);
+        if frmPixelPoint.ShowModal = mrOK then
+        begin
+          ZoomBox.InvalidateImage32;
+        end;
+      finally
+        frmPixelPoint.Free;
       end;
     finally
-      frmPixelPoint.Free;
+      frmImportBitmap := nil;
     end;
-  finally
-    frmImportBitmap := nil;
   end;
 end;
 
@@ -919,10 +990,11 @@ procedure TfrmImportBitmap.AddPoint(const PixelX, PixelY: integer;
 var
   Row: integer;
 begin
-  if (dgPoints.Cells[Ord(pcPixelX), 1] = '')
+  if (seNumRows.AsInteger <= 1) and
+    ((dgPoints.Cells[Ord(pcPixelX), 1] = '')
     or (dgPoints.Cells[Ord(pcPixelY), 1] = '')
     or (dgPoints.Cells[Ord(pcRealWorldX), 1] = '')
-    or (dgPoints.Cells[Ord(pcRealWorldY), 1] = '') then
+    or (dgPoints.Cells[Ord(pcRealWorldY), 1] = '')) then
   begin
     Row := 1;
   end
@@ -967,6 +1039,90 @@ begin
     end;
   finally
     Buffer.EndUpdate
+  end;
+end;
+
+{ TUndoEditBitMap }
+
+constructor TUndoEditBitMap.Create;
+begin
+  inherited;
+  FOldBitmapItem := TCompressedBitmapItem.Create(nil);
+end;
+
+function TUndoEditBitMap.Description: string;
+begin
+  result := 'edit bitmap';
+end;
+
+procedure TUndoEditBitMap.DoCommand;
+var
+  BitMapItem: TCollectionItem;
+begin
+//  inherited;
+  BitMapItem := frmGoPhast.PhastModel.Bitmaps.Items[FIndex];
+  BitMapItem.Assign(FNewBitmapItem);
+  UpdateView;
+end;
+
+procedure TUndoEditBitMap.Undo;
+var
+  BitMapItem: TCollectionItem;
+begin
+//  inherited;
+  BitMapItem := frmGoPhast.PhastModel.Bitmaps.Items[FIndex];
+  BitMapItem.Assign(FOldBitmapItem);
+  UpdateView;
+end;
+
+{ TUndoImportBitMap }
+
+constructor TUndoImportBitMap.Create;
+begin
+  FNewBitmapItem := TCompressedBitmapItem.Create(nil);
+end;
+
+function TUndoImportBitMap.Description: string;
+begin
+  result := 'import bitmap';
+end;
+
+procedure TUndoImportBitMap.DoCommand;
+var
+  NewBitmap: TCollectionItem;
+begin
+  NewBitmap := frmGoPhast.PhastModel.Bitmaps.Add;
+  FIndex := NewBitmap.Index;
+  NewBitmap.Assign(FNewBitmapItem);
+  UpdateView;
+end;
+
+procedure TUndoImportBitMap.Undo;
+begin
+  frmGoPhast.PhastModel.Bitmaps.Delete(FIndex);
+  UpdateView;
+end;
+
+procedure TUndoImportBitMap.UpdateView;
+begin
+  case FNewBitmapItem.ViewDirection of
+    vdTop:
+      begin
+        frmGoPhast.TopDiscretizationChanged := True;
+        frmGoPhast.frameTopView.ZoomBox.InvalidateImage32
+      end;
+    vdFront:
+      begin
+        frmGoPhast.FrontDiscretizationChanged := True;
+        frmGoPhast.frameFrontView.ZoomBox.InvalidateImage32
+      end;
+    vdSide:
+      begin
+        frmGoPhast.SideDiscretizationChanged := True;
+        frmGoPhast.frameSideView.ZoomBox.InvalidateImage32
+      end;
+    else
+      Assert(False);
   end;
 end;
 

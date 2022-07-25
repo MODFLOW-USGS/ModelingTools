@@ -7,9 +7,8 @@ inherited frmImportBitmap: TfrmImportBitmap
   Caption = 'Import Image'
   ClientHeight = 549
   ClientWidth = 782
-  ExplicitWidth = 798
-  ExplicitHeight = 588
-  PixelsPerInch = 96
+  ExplicitWidth = 800
+  ExplicitHeight = 596
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 369
@@ -286,10 +285,11 @@ inherited frmImportBitmap: TfrmImportBitmap
     Width = 369
     Height = 421
     Align = alLeft
+    ColCount = 6
     FixedColor = 14803425
     FixedCols = 1
     RowCount = 2
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs]
     TabOrder = 0
     OnExit = dgPointsExit
     OnSetEditText = dgPointsSetEditText
@@ -300,6 +300,7 @@ inherited frmImportBitmap: TfrmImportBitmap
     AutoIncreaseRowCount = True
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBtnFace
+    OnEndUpdate = dgPointsEndUpdate
     ColorRangeSelection = False
     Columns = <
       item
@@ -421,10 +422,34 @@ inherited frmImportBitmap: TfrmImportBitmap
         CaseSensitivePicklist = False
         CheckStyle = csCheck
         AutoAdjustColWidths = True
+      end
+      item
+        AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
+        ButtonCaption = '...'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -15
+        ButtonFont.Name = 'Segoe UI'
+        ButtonFont.Style = []
+        ButtonUsed = False
+        ButtonWidth = 20
+        CheckMax = False
+        CheckMin = False
+        ComboUsed = False
+        Format = rcf4String
+        LimitToList = False
+        MaxLength = 0
+        ParentButtonFont = False
+        WordWrapCaptions = False
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+        AutoAdjustColWidths = True
       end>
-    OnEndUpdate = dgPointsEndUpdate
     WordWrapRowCaptions = False
     ColWidths = (
+      64
       64
       64
       64
