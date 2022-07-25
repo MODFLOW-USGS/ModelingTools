@@ -612,7 +612,7 @@ begin
   begin
     frmGoPhast.PhastModel.AddFileToArchive(FImageFileName);
   end;
-//  NewItem := False;
+  UndoEdit := nil;
   try
   if FBitmapItem = nil then
   begin

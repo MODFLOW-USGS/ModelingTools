@@ -279,6 +279,7 @@ type
     function Add: TMobileChemSpeciesItem;
     procedure UpdateDataArrays; override;
     procedure UpdateAllDataArrays;
+    function GetItemByName(AName: string): TMobileChemSpeciesItem;
   end;
 
 implementation
@@ -2303,6 +2304,22 @@ function TMobileChemSpeciesCollection.GetItem(
   Index: Integer): TMobileChemSpeciesItem;
 begin
   result := inherited Items[Index] as TMobileChemSpeciesItem;
+end;
+
+function TMobileChemSpeciesCollection.GetItemByName(
+  AName: string): TMobileChemSpeciesItem;
+var
+  index: Integer;
+begin
+  result := nil;
+  for index := 0 to Count - 1 do
+  begin
+    if SameText(Items[index].Name, AName) then
+    begin
+      result := Items[index];
+      Break;
+    end;
+  end;
 end;
 
 procedure TMobileChemSpeciesCollection.SetItem(Index: Integer;

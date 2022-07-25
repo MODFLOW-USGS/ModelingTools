@@ -1841,6 +1841,7 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="ModflowIstWriterUnit.pas"/>
+        <DCCReference Include="ModflowGwtSpecifiedConcUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

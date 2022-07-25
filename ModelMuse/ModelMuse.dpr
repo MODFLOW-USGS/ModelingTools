@@ -757,7 +757,8 @@ uses
   ModflowMstWriterUnit in 'ModflowMstWriterUnit.pas',
   frameRowGridUnit in 'frameRowGridUnit.pas' {frameRowGrid: TFrame},
   framePackageIstUnit in 'framePackageIstUnit.pas' {framePackageIst: TFrame},
-  ModflowIstWriterUnit in 'ModflowIstWriterUnit.pas';
+  ModflowIstWriterUnit in 'ModflowIstWriterUnit.pas',
+  ModflowGwtSpecifiedConcUnit in 'ModflowGwtSpecifiedConcUnit.pas';
 
 {$R *.res}
 

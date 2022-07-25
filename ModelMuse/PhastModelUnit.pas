@@ -3227,6 +3227,8 @@ that affects the model output should also have a comment. }
 
     procedure InvalidateCSubStressOffset(Sender: TObject);
 
+    procedure InvalidateCncConcentration(Sender: TObject);
+
     property NameFileWriter: TObject read FNameFileWriter write SetNameFileWriter;
     property SimNameWriter: IMf6_SimNameFileWriter read FSimNameWriter write FSimNameWriter;
     function ModflowLayerCount: integer; virtual;
@@ -24932,6 +24934,12 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);
+begin
+  Assert(False);
+  { TODO -cGWT : Update this }
 end;
 
 procedure TCustomModel.InvalidateContours;

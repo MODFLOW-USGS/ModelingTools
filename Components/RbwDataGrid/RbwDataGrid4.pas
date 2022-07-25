@@ -545,7 +545,6 @@ type
     FUpdateCount: integer;
     FOnIsCaptionEvent: TOnIsCaptionEvent;
     FOnEndUpdate: TNotifyEvent;
-    FSelectedCol: Integer;
     function CollectionItem(const ACol, ARow: Longint):
       TCustomRowOrColumn; virtual; abstract;
     function GetCellVisible(ACol, ARow: Integer): boolean;
@@ -613,6 +612,7 @@ type
     FdgRow: integer;
     FFixedCols : integer;
     FSelectedRow: integer;
+    FSelectedCol: Integer;
     function CanEditShow: Boolean; override;
     function CheckColumnDrag(var Origin, Destination: Integer;
       const MousePt: TPoint): Boolean; override;

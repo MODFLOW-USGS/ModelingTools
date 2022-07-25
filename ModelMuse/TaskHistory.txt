@@ -29671,11 +29671,13 @@ object TTaskHistory
     end
     item
       Date = 44766.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'Documentation')
     end
     item
       Date = 44767.000000000000000000
       Categories.Strings = (
-        'Documentation'
-        'Import')
+        'MF6 GWT')
     end>
 end
