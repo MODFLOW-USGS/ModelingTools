@@ -5616,6 +5616,7 @@ begin
   plBoundary.ActivePage := jvspModflowHOB;
   comboHeadObservationNames.Items := FStringFieldNames;
   rdgBoundaryConditions.Enabled := True;
+  rdgBoundaryConditions.ColCount:= 4;
 
   AssignColFeatureProperties;
   rdgBoundaryConditions.Columns[0].ComboUsed := True;

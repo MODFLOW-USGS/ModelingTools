@@ -1842,6 +1842,7 @@
         </DCCReference>
         <DCCReference Include="ModflowIstWriterUnit.pas"/>
         <DCCReference Include="ModflowGwtSpecifiedConcUnit.pas"/>
+        <DCCReference Include="ModflowCncWriterUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

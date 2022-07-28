@@ -758,7 +758,8 @@ uses
   frameRowGridUnit in 'frameRowGridUnit.pas' {frameRowGrid: TFrame},
   framePackageIstUnit in 'framePackageIstUnit.pas' {framePackageIst: TFrame},
   ModflowIstWriterUnit in 'ModflowIstWriterUnit.pas',
-  ModflowGwtSpecifiedConcUnit in 'ModflowGwtSpecifiedConcUnit.pas';
+  ModflowGwtSpecifiedConcUnit in 'ModflowGwtSpecifiedConcUnit.pas',
+  ModflowCncWriterUnit in 'ModflowCncWriterUnit.pas';
 
 {$R *.res}
 

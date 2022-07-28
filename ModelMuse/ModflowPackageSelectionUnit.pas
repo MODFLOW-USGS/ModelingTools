@@ -5879,6 +5879,9 @@ Type
 
   TGwtSsmPackage = class(TModflowPackageSelection)
   end;
+  
+  TGwtCncPackage = class(TModflowPackageSelection)
+  end;
 
   TGwtSorptionChoice = (gscNone, gscLinear, gscFreundlich, gscLangmuir);
 
