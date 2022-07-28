@@ -4699,6 +4699,7 @@ that affects the model output should also have a comment. }
     function CSubIsSelected: Boolean;
     function GncIsSelected: Boolean;
     function Mf6ObsIsSelected: Boolean; override;
+    function GwtCncIsSelected: Boolean;
     function PackageIsSelected(APackage: TObject): Boolean;
     procedure ExportModflowLgrModel(const FileName: string;
       RunModel, ExportModpath, NewBudgetFileForModpath, ExportZoneBudget,
@@ -18670,6 +18671,12 @@ begin
   end;
 end;
 
+function TPhastModel.GwtCncIsSelected: Boolean;
+begin
+  result := (ModelSelection = msModflow2015) and (MobileComponents.Count > 0)
+    and ModflowPackages.GwtCncPackage.IsSelected;
+end;
+
 function TPhastModel.GwtDispUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -24938,7 +24945,7 @@ end;
 
 procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);
 begin
-  Assert(False);
+//  Assert(False);
   { TODO -cGWT : Update this }
 end;
 

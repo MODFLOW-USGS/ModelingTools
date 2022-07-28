@@ -5,6 +5,11 @@
 
 @author(Richard B. Winston <rbwinst@usgs.gov>)
 }
+
+{When adding new places where PEST can be used, EnablePestCells
+ and GetPestParameterAllowed need to be updated. EnablePestCells is assigned
+ in FormCreate
+ }
 unit frmScreenObjectPropertiesUnit;      
 
 interface
@@ -44,7 +49,8 @@ uses System.UITypes, Windows,
   frameScreenObjectMvrUnit, ModflowMvrUnit, frameScreenObjectUzfMf6Unit,
   frameScreenObjectLktUnit, frameScreenObjectMt3dSftUnit,
   frameScreenObjectTabbedUnit, frameScreenObjectCSubUnit, framePestObsUnit,
-  frameSubPestObsUnit, framePestObsCaptionedUnit, SutraPestObsUnit;
+  frameSubPestObsUnit, framePestObsCaptionedUnit, SutraPestObsUnit,
+  frameScreenObjectCncUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -394,6 +400,8 @@ type
     frameSutraGenFlowObs: TframeFluxObs;
     frameSutraGenTransObs: TframeFluxObs;
     frameSutraSpecUObs: TframeFluxObs;
+    jvspGwtCNC: TJvStandardPage;
+    frameGwtCnc: TframeScreenObjectCnc;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -729,6 +737,9 @@ type
     procedure jvspSutraSpecUObsShow(Sender: TObject);
     procedure jvspCSUBShow(Sender: TObject);
     procedure tabModflowBoundaryConditionsShow(Sender: TObject);
+    procedure frameGwtCncrdgModflowBoundarySetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameGwtCnccomboChemSpeciesChange(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -1715,6 +1726,7 @@ type
     FPestBlockParametersAndDataSets: TStringList;
     FPestNodeParametersAndDataSets: TStringList;
     FPestParameters: TStringList;
+    FGwtCnc_Node: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2087,6 +2099,7 @@ type
     procedure GetMnw1Boundary(const ScreenObjectList: TList);
     procedure Mnw1Changed(Sender: TObject);
     procedure CreateHydmodNode(AScreenObject: TScreenObject);
+    procedure CreateGwtCncNode;
     procedure GetHydmod(const ScreenObjectList: TList);
     procedure GetChildModels(const ScreenObjectList: TList);
     procedure UpdateNonParamCheckBox(Frame: TframeScreenObjectParam; ParamCol,
@@ -2150,7 +2163,7 @@ type
     procedure GetMf6Obs(const ScreenObjectList: TList);
     procedure GetFootprintWells;
     procedure CreateSwiObsNode(AScreenObject: TScreenObject);
-    procedure GetSwiObsBoundray(const ScreenObjectList: TList);
+    procedure GetSwiObsBoundary(const ScreenObjectList: TList);
     procedure CreateRipNode(AScreenObject: TScreenObject);
     procedure GetRip(const ScreenObjectList: TList);
     procedure RipChanged(Sender: TObject);
@@ -2194,6 +2207,7 @@ type
     procedure UpdateSfr6Node(Sender: TObject);
     procedure GetMawBoundary(const ScreenObjectList: TList);
     procedure GetCSubBoundary(const ScreenObjectList: TList);
+    procedure GetCncBoundary(const ScreenObjectList: TList);
     procedure MawChanged(Sender: TObject);
     procedure CSubChanged(Sender: TObject);
     procedure AssignTransientHfbFormulas(const Row, Col: Integer);
@@ -2514,7 +2528,8 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
   ModflowSubsidenceDefUnit, frmManageSutraBoundaryObservationsUnit,
   framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit, ModflowRivUnit,
-  ModflowResUnit, Modflow6TimeSeriesCollectionsUnit, Modflow6TimeSeriesUnit;
+  ModflowResUnit, Modflow6TimeSeriesCollectionsUnit, Modflow6TimeSeriesUnit,
+  ModflowGwtSpecifiedConcUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -2791,6 +2806,7 @@ begin
   end
   else if (Sender = frameFarmWell.rdgModflowBoundary)
     or (Sender = frameCSUB.rdgModflowBoundary)
+    or (Sender = frameGwtCnc.rdgModflowBoundary)
     then
   begin
     PestParameterColumns := [2];
@@ -3913,6 +3929,10 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FGwtCnc_Node then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4077,6 +4097,7 @@ begin
   CreateMt3d_UztUnsatNode;
   CreateSubPestObsNode(AScreenObject);
   CreateSwtPestObsNode(AScreenObject);
+  CreateGwtCncNode;
 
   CreateSutraFeatureNodes(AScreenObject);
 
@@ -5878,6 +5899,7 @@ begin
   frameSutraSpecTempConc.OnCheckPestCell := EnablePestCells;
   frameSutraGeneralizedFlowBoundary.OnCheckPestCell := EnablePestCells;
   frameSutraGeneralizeTransBoundary.OnCheckPestCell := EnablePestCells;
+  frameGwtCnc.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -7920,6 +7942,13 @@ begin
   end;
 
   frameScreenObjectFootprintWell.SetData(FNewProperties);
+
+  if (FGwtCnc_Node <> nil) then
+  begin
+    frameGwtCnc.SetData(FNewProperties,
+      (FGwtCnc_Node.StateIndex = 2),
+      (FGwtCnc_Node.StateIndex = 1) and frmGoPhast.PhastModel.GwtCncIsSelected);
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.UpdateVertices;
@@ -14226,6 +14255,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateGwtCncNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FGwtCnc_Node := nil;
+  if frmGoPhast.PhastModel.GwtCncIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
+      frmGoPhast.PhastModel.ModflowPackages.GwtCncPackage.PackageIdentifier)
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspGwtCNC.PageIndex;
+    frameGwtCNC.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FGwtCnc_Node := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateSutraObsNode;
 var
   Node: TJvPageIndexNode;
@@ -14627,7 +14673,7 @@ begin
 
 end;
 
-procedure TfrmScreenObjectProperties.GetSwiObsBoundray(const ScreenObjectList: TList);
+procedure TfrmScreenObjectProperties.GetSwiObsBoundary(const ScreenObjectList: TList);
 var
   State: TCheckBoxState;
   ScreenObjectIndex: Integer;
@@ -15083,6 +15129,32 @@ begin
   end;
 end;
 
+
+procedure TfrmScreenObjectProperties.GetCncBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  GwtCncBoundary: TCncBoundary;
+begin
+  if not frmGoPhast.PhastModel.GwtCncIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    GwtCncBoundary := AScreenObject.GwtCncBoundary;
+    UpdateBoundaryState(GwtCncBoundary, ScreenObjectIndex, State);
+  end;
+  if FGwtCnc_Node <> nil then
+  begin
+    FGwtCnc_Node.StateIndex := Ord(State)+1;
+  end;
+  frameGwtCnc.GetData(FNewProperties);
+end;
 
 procedure TfrmScreenObjectProperties.GetHydmod(const ScreenObjectList: TList);
 var
@@ -16922,6 +16994,7 @@ begin
     or (DataGrid = frameRivParam.rdgModflowBoundary)
     or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol < 9)) // all but upstream fraction and diversions.
     or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
+    or (DataGrid = frameGwtCnc.rdgModflowBoundary)
     )
   ;
   if (DataGrid = frameRchParam.rdgModflowBoundary)
@@ -17008,10 +17081,11 @@ begin
   GetSwrLatInflowBoundary(AScreenObjectList);
   GetSwrStageBoundary(AScreenObjectList);
   GetSwrDirectRunoffBoundary(AScreenObjectList);
-  GetSwiObsBoundray(AScreenObjectList);
+  GetSwiObsBoundary(AScreenObjectList);
   GetRip(AScreenObjectList);
   GetMawBoundary(AScreenObjectList);
   GetCSubBoundary(AScreenObjectList);
+  GetCncBoundary(AScreenObjectList);
 
   GetMf6Obs(AScreenObjectList);
   GetLakeMf6Boundary(AScreenObjectList);
@@ -26591,6 +26665,7 @@ begin
     or ((DataGrid = frameSutraSpecTempConc.rdgSutraFeature) and (ACol in [2]))
     or ((DataGrid = frameSutraGeneralizedFlowBoundary.rdgSutraFeature) and (ACol in [2..5, 8, 10]))
     or ((DataGrid = frameSutraGeneralizeTransBoundary.rdgSutraFeature) and (ACol in [2..5]))
+    or (DataGrid = frameGwtCnc.rdgModflowBoundary)
     ;
 end;
 
@@ -27193,6 +27268,21 @@ begin
   inherited;
   frameGhbParam.seNumberOfTimesChange(Sender);
   StoreGhbBoundary;
+end;
+
+procedure TfrmScreenObjectProperties.frameGwtCnccomboChemSpeciesChange(
+  Sender: TObject);
+begin
+  inherited;
+  UpdateNodeState(FGwtCnc_Node);
+end;
+
+procedure TfrmScreenObjectProperties.frameGwtCncrdgModflowBoundarySetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  frameGwtCnc.rdgModflowBoundarySetEditText(Sender, ACol, ARow, Value);
+  UpdateNodeState(FGwtCnc_Node);
 end;
 
 procedure TfrmScreenObjectProperties.frameHeadObservationsrdgHeadsSetEditText(

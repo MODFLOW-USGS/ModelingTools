@@ -1843,6 +1843,11 @@
         <DCCReference Include="ModflowIstWriterUnit.pas"/>
         <DCCReference Include="ModflowGwtSpecifiedConcUnit.pas"/>
         <DCCReference Include="ModflowCncWriterUnit.pas"/>
+        <DCCReference Include="frameScreenObjectCncUnit.pas">
+            <Form>frameScreenObjectCnc</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

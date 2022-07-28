@@ -161,6 +161,8 @@ var
         rdgModflowBoundary.Cells[ColIndex,RowIndex] := '';
       end;
     end;
+    rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+    rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
   end;
 begin
   Changing := True;

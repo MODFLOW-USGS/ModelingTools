@@ -6762,6 +6762,7 @@ begin
   ModflowCSub := AScreenObject.ModflowCSub;
   ModflowSubObservations := AScreenObject.ModflowSubObservations;
   ModflowSwtObservations := AScreenObject.ModflowSwtObservations;
+  GwtCncBoundary := AScreenObject.GwtCncBoundary;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -40511,6 +40512,7 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FGwtCncBoundary.Free;
   FModflowSwtObservations.Free;
   FModflowSubObservations.Free;
   FModflowCSub.Free;

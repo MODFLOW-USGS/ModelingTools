@@ -91,7 +91,7 @@ type
 
   // @name represents MODFLOW Well boundaries
   // for a series of time intervals.
-  TCnCCollection = class(TCustomMF_ListBoundColl)
+  TCncCollection = class(TCustomMF_ListBoundColl)
   private
     procedure InvalidateConcentrationData(Sender: TObject);
   protected
@@ -370,11 +370,11 @@ end;
 
 procedure TCncItem.AssignObserverEvents(Collection: TCollection);
 var
-  ParentCollection: TCnCCollection;
+  ParentCollection: TCncCollection;
   ConcentrationObserver: TObserver;
 //  ConcIndex: Integer;
 begin
-  ParentCollection := Collection as TCnCCollection;
+  ParentCollection := Collection as TCncCollection;
   ConcentrationObserver := FObserverList[CncConcentrationPosition];
   ConcentrationObserver.OnUpToDateSet := ParentCollection.InvalidateConcentrationData;
 end;
@@ -491,12 +491,12 @@ end;
 
 { TCnCCollection }
 
-procedure TCnCCollection.AddSpecificBoundary(AModel: TBaseModel);
+procedure TCncCollection.AddSpecificBoundary(AModel: TBaseModel);
 begin
   AddBoundary(TCncStorage.Create(AModel));
 end;
 
-function TCnCCollection.AdjustedFormula(FormulaIndex,
+function TCncCollection.AdjustedFormula(FormulaIndex,
   ItemIndex: integer): string;
 var
 //  Boundary: TCncBoundary;
@@ -507,7 +507,7 @@ begin
   result := Item.BoundaryFormula[FormulaIndex];
 end;
 
-procedure TCnCCollection.AssignCellList(Expression: TExpression;
+procedure TCncCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
   AModel: TBaseModel; AScreenObject: TObject; PestName, PestSeriesName: string;
@@ -611,7 +611,7 @@ begin
   end;
 end;
 
-procedure TCnCCollection.AssignListCellLocation(
+procedure TCncCollection.AssignListCellLocation(
   BoundaryStorage: TCustomBoundaryStorage; ACellList: TObject);
 var
   CncStorage: TCncStorage;
@@ -634,12 +634,12 @@ begin
   end;
 end;
 
-function TCnCCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+function TCncCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TCncTimeListLink;
 end;
 
-procedure TCnCCollection.InvalidateConcentrationData(Sender: TObject);
+procedure TCncCollection.InvalidateConcentrationData(Sender: TObject);
 var
   PhastModel: TPhastModel;
   Link: TCncTimeListLink;
@@ -664,7 +664,7 @@ begin
   end;
 end;
 
-procedure TCnCCollection.InvalidateModel;
+procedure TCncCollection.InvalidateModel;
 var
   PhastModel: TPhastModel;
 begin
@@ -678,12 +678,12 @@ begin
   end;
 end;
 
-class function TCnCCollection.ItemClass: TBoundaryItemClass;
+class function TCncCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TCncItem;
 end;
 
-procedure TCnCCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
+procedure TCncCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel);
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TCncStorage).FCncArray, BoundaryCount);
@@ -970,6 +970,7 @@ end;
 
 constructor TCncBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
+  inherited;
   CreateFormulaObjects;
   CreateBoundaryObserver;
   CreateObservers;

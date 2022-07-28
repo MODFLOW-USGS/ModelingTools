@@ -122,6 +122,7 @@ type
     // specified by Col.
     procedure GetEndTimes(Col: Integer);
     procedure SetButtonCaptions;
+    // @name is assigned in frmScreenObjectProperties.FormCreate;
     property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
       write FOnCheckPestCell;
     Property PestMethod[ACol: Integer]: TPestParamMethod

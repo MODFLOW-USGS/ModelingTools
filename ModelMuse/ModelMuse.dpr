@@ -759,7 +759,8 @@ uses
   framePackageIstUnit in 'framePackageIstUnit.pas' {framePackageIst: TFrame},
   ModflowIstWriterUnit in 'ModflowIstWriterUnit.pas',
   ModflowGwtSpecifiedConcUnit in 'ModflowGwtSpecifiedConcUnit.pas',
-  ModflowCncWriterUnit in 'ModflowCncWriterUnit.pas';
+  ModflowCncWriterUnit in 'ModflowCncWriterUnit.pas',
+  frameScreenObjectCncUnit in 'frameScreenObjectCncUnit.pas' {frameScreenObjectCnc: TFrame};
 
 {$R *.res}
 
