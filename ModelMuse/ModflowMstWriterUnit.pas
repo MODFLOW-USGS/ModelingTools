@@ -75,7 +75,7 @@ begin
     WriteFileInternal;
   end;
 
-  end;
+end;
 
 procedure TModflowGwtMstWriter.WriteFileInternal;
 begin

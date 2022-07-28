@@ -1020,15 +1020,8 @@ const
 var
   ValueIndex: Integer;
   BoundaryStorage: TCncStorage;
-//  ParamIndex: Integer;
-//  Param: TModflowParamItem;
-//  Times: TList;
-//  Position: integer;
-//  ParamName: string;
-//  LocalModel: TCustomModel;
 begin
   EvaluateListBoundaries(AModel);
-//  LocalModel := AModel as TCustomModel;
 
   for ValueIndex := 0 to Values.Count - 1 do
   begin

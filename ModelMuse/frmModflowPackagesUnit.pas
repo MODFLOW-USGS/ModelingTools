@@ -267,6 +267,8 @@ type
     frameGwtAdv: TframeGwtAdvPackage;
     jvspGwtSsm: TJvStandardPage;
     frameGwtSSM: TframePackage;
+    jvspGwtCNC: TJvStandardPage;
+    frameGwtCNC: TframePackage;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -4341,6 +4343,16 @@ begin
   else
   begin
     frameGwtSSM.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    Packages.GwtCncPackage.Frame := frameGwtCnc;
+    FPackageList.Add(Packages.GwtCncPackage);
+  end
+  else
+  begin
+    frameGwtCnc.NilNode;
   end;
 
   if (frmGoPhast.ModelSelection = msModflow2015)
