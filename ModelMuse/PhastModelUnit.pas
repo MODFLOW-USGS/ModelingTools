@@ -587,6 +587,9 @@ resourcestring
   rsLakeClassificaton = 'Lake';
   StrMT3DMS_Classificaton = 'MT3DMS, MT3D-USGS, or GWT';
   StrGwtClassification = 'GWT: Groundwater Transport';
+  StrGwtMST = 'GWT MST: Mobile Storage and Transport';
+  StrGwtIST = 'GWT IST: Immobile Storage and Transport';
+  StrGwtSolver = 'GWT Solver: IMS';
   StrSpecifiedPressure = 'SUTRA Specified Pressure';
   StrSutraSpecifiedHead = 'SUTRA Specified Head';
   StrAssocPresConc = 'SP Associated Conc.';
@@ -2671,7 +2674,7 @@ that affects the model output should also have a comment. }
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
-    function Mt3dMSUsed(Sender: TObject): boolean; virtual;
+//    function Mt3dMSUsed(Sender: TObject): boolean; virtual;
     function Mt3dMS_StrictUsed(Sender: TObject): boolean; virtual;
     function Mf6GwtUsed(Sender: TObject): boolean; virtual;
     procedure ClearPval;
@@ -3223,6 +3226,8 @@ that affects the model output should also have a comment. }
     procedure InvalidateMawScalingLength(Sender: TObject);
 
     procedure InvalidateCSubStressOffset(Sender: TObject);
+
+    procedure InvalidateCncConcentration(Sender: TObject);
 
     property NameFileWriter: TObject read FNameFileWriter write SetNameFileWriter;
     property SimNameWriter: IMf6_SimNameFileWriter read FSimNameWriter write FSimNameWriter;
@@ -4227,7 +4232,7 @@ that affects the model output should also have a comment. }
     function GetFilesToDelete: TStrings; override;
     function GetAppsMoved: TStringList; override;
   public
-    function Mt3dMSUsed(Sender: TObject): boolean; override;
+//    function Mt3dMSUsed(Sender: TObject): boolean; override;
     function Mt3dMS_StrictUsed(Sender: TObject): boolean; override;
     function Mf6GwtUsed(Sender: TObject): boolean; override;
     procedure RefreshGlobalVariables(CompilerList: TList);
@@ -4755,6 +4760,20 @@ that affects the model output should also have a comment. }
     function GetPestName: string;
     function Mf6UzfInitialConcentrationUsed(Sender: TObject): boolean;
     function AnyUzfInitialConcentrationUsed: Boolean;
+    function GwtMobileSeparatePorosityUsed(Sender: TObject): boolean;
+    function GwtMobileDecayUsed(Sender: TObject): boolean;
+    function GwtMobileSorbedDecayUsed(Sender: TObject): boolean;
+    function GwtMobileDistibutionCoefUsed(Sender: TObject): boolean;
+    function GwtMobileBulkDensityUsed(Sender: TObject): boolean;
+    function GwtMobileFreundlichExponentUsed(Sender: TObject): boolean;
+    function GwtMobileSorptionCapacityUsed(Sender: TObject): boolean;
+    function GwtImmobileCimUsed(Sender: TObject): boolean;
+    function GwtImmobileThetaimUsed(Sender: TObject): boolean;
+    function GwtImmobileZetaimUsed(Sender: TObject): boolean;
+    function GwtImmobileDecayUsed(Sender: TObject): boolean;
+    function GwtImmobileDecaySorbedUsed(Sender: TObject): boolean;
+    function GwtImmobileBulkDensityUsed(Sender: TObject): boolean;
+    function GwtImmobileDistCoefUsed(Sender: TObject): boolean;
   published
     property Mf6TimesSeries;
 
@@ -5521,7 +5540,8 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit,
   ModflowMnw2Unit, PestObsExtractorInputWriterUnit, Modflow6ObsUnit,
   PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit,
-  ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit;
+  ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit,
+  ModflowMstWriterUnit, ModflowIstWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -6048,6 +6068,25 @@ resourcestring
   StrHorizontalTransvers = KHorizontalTransvers;
   StrLongitudinalDispersV = KLongitudinalDispersV;
   StrLongitudinalDispersH = KLongitudinalDispersH;
+  StrMODFLOW6MSTPackag = 'MODFLOW 6 MST Package: POROSITY';
+  StrMODFLOW6DSPPacka = 'MODFLOW 6, DSP Package: ALH';
+  StrMODFLOw6DSPPackaath1 = 'MODFLOw 6, DSP Package: ATH1';
+  StrMODFLOw6DSPPackaATV = 'MODFLOw 6, DSP Package: ATV';
+  StrSUTRADataSet14B = 'SUTRA Data Set 14B: COMPMA';
+  StrSUTRADataSet14B_CS = 'SUTRA Data Set 14B: CS';
+  StrSUTRADataSet14B_RHOS = 'SUTRA Data Set 14B: RHOS';
+  StrSUTRADataSet14B_PRODL0 = 'SUTRA Data Set 14B: PRODL0';
+  StrSUTRADataSet14B_PRODS0 = 'SUTRA Data Set 14B: PRODS0';
+  StrSUTRADataSet14B_PRODL1 = 'SUTRA Data Set 14B: PRODL1';
+  StrSUTRADataSet14B_PRODS1 = 'SUTRA Data Set 14B: PRODS1';
+  StrSUTRADataSet14B_PRODI0 = 'SUTRA Data Set 14B: PRODI0';
+  StrSUTRADataSet15B_SIGMAS = 'SUTRA Data Set 15B: SIGMAS';
+  StrSUTRADataSet15B_SIGMAA = 'SUTRA Data Set 15B: SIGMAA';
+  StrMODFLOW6Dispersion_DIFFC = 'MODFLOW 6 Dispersion Package: DIFFC';
+  StrMODFLOW6Dispersion_ALH = 'MODFLOW 6 Dispersion Package: ALH';
+  StrMODFLOW6Dispersion_ALV = 'MODFLOW 6 Dispersion Package: ALV';
+  StrMODFLOW6Dispersion_ATH1 = 'MODFLOW 6 Dispersion Package: ATH1';
+  StrMODFLOW6Dispersion_ATH2 = 'MODFLOW 6 Dispersion Package: ATH2';
 //  StrGWTClassification = 'GWT';
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -10626,6 +10665,16 @@ const
 //    '5.0.0.19' Enhancement: ModelMuse can now import interim residual files
 //                generated by PEST.
 
+//               Bug fix: Fixed drawing objects when they are first being
+//                created.
+//               Bug fix: Fixed drawing grid when the active data set is
+//                changed.
+//               Enhancement: It is not possible to undo importing or editing
+//                an image.
+//               Enhancement: When importing or editing an image, the user can
+//                now specify the coordinates and an ID for each point without
+//                first specifying the pixel location of the points.
+
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
@@ -13571,6 +13620,7 @@ procedure TPhastModel.SetMobileComponents(
   const Value: TMobileChemSpeciesCollection);
 begin
   FMobileComponents.Assign(Value);
+  ModflowPackages.GwtPackages.Count;
 end;
 
 procedure TPhastModel.SetModelMateProject(const Value: TProject);
@@ -18552,6 +18602,74 @@ begin
   end;
 end;
 
+function TPhastModel.GwtMobileBulkDensityUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.MobileBulkDensityDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected
+          and (MstPackage.Sorption <> gscNone);
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtMobileDecayUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.MobileDecayRateDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected
+          and (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay);
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
 function TPhastModel.GwtDispUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -18568,6 +18686,461 @@ begin
         result := result or ChildModel.GwtDispUsed(nil);
       end;
     end;
+  end;
+end;
+
+function TPhastModel.GwtImmobileBulkDensityUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      begin
+        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
+          if result then
+          begin
+            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
+          end;
+        end;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtImmobileCimUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      begin
+        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
+//          if result then
+//          begin
+//            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
+//          end;
+        end;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtImmobileDecaySorbedUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+    IstProp: TIstPackageItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      begin
+        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
+          if result then
+          begin
+            IstProp := IstPackage.IstPackageProperties[DomainIndex];
+            result := IstProp.Sorption
+              and (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
+          end;
+        end;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtImmobileDecayUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+    IstProp: TIstPackageItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      begin
+        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
+          if result then
+          begin
+            IstProp := IstPackage.IstPackageProperties[DomainIndex];
+            result := (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
+          end;
+        end;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtImmobileDistCoefUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      begin
+        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
+          if result then
+          begin
+            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
+          end;
+        end;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtImmobileThetaimUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      begin
+        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
+//          if result then
+//          begin
+//            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
+//          end;
+        end;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtImmobileZetaimUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      begin
+        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
+//          if result then
+//          begin
+//            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
+//          end;
+        end;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtMobileDistibutionCoefUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.MobileDistCoefDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected
+          and (MstPackage.Sorption <> gscNone);
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtMobileFreundlichExponentUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.MobileFreundlichExponentDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected
+          and (MstPackage.Sorption = gscFreundlich);
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtMobileSeparatePorosityUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.PorosityDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected and MstPackage.SeparatePorosity;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtMobileSorbedDecayUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.MobileSorbedDecayRateDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected
+          and (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay)
+          and (MstPackage.Sorption <> gscNone);
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtMobileSorptionCapacityUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.MobileSorptionCapacityDataArrayName = DataArray.Name;
+      if result then
+      begin
+        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+        MstPackage := GwtPackagesItem.GwtMst;
+        result := MstPackage.IsSelected
+          and (MstPackage.Sorption = gscLangmuir);
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
   end;
 end;
 
@@ -19827,7 +20400,8 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited Mt3dMSUsed(Sender) and inherited Mt3dMSBulkDensityUsed(Sender);
+  result := inherited Mt3dMS_StrictUsed(Sender)
+    and inherited Mt3dMSBulkDensityUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -19882,7 +20456,8 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited Mt3dMSUsed(Sender) and inherited Mt3dMSImmobPorosityUsed(Sender);
+  result := inherited Mt3dMS_StrictUsed(Sender)
+    and inherited Mt3dMSImmobPorosityUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20117,28 +20692,28 @@ begin
   end;
 end;
 
-function TPhastModel.Mt3dMSUsed(Sender: TObject): boolean;
-var
-  ChildIndex: Integer;
-  ChildModel: TChildModel;
-begin
-  result := inherited;
-  if not result and LgrUsed then
-  begin
-    for ChildIndex := 0 to ChildModels.Count - 1 do
-    begin
-      ChildModel := ChildModels[ChildIndex].ChildModel;
-      if ChildModel <> nil then
-      begin
-        result := ChildModel.Mt3dMSUsed(Sender);
-        if result then
-        begin
-          Exit;
-        end;
-      end;
-    end;
-  end;
-end;
+//function TPhastModel.Mt3dMSUsed(Sender: TObject): boolean;
+//var
+//  ChildIndex: Integer;
+//  ChildModel: TChildModel;
+//begin
+//  result := inherited;
+//  if not result and LgrUsed then
+//  begin
+//    for ChildIndex := 0 to ChildModels.Count - 1 do
+//    begin
+//      ChildModel := ChildModels[ChildIndex].ChildModel;
+//      if ChildModel <> nil then
+//      begin
+//        result := ChildModel.Mt3dMSUsed(Sender);
+//        if result then
+//        begin
+//          Exit;
+//        end;
+//      end;
+//    end;
+//  end;
+//end;
 
 function TPhastModel.Mt3dMS_StrictUsed(Sender: TObject): boolean;
 var
@@ -22929,7 +23504,7 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited Mt3dMSUsed(Sender) and inherited SftUsed(Sender);
+  result := inherited Mt3dMS_StrictUsed(Sender) and inherited SftUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -24359,6 +24934,12 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);
+begin
+  Assert(False);
+  { TODO -cGWT : Update this }
 end;
 
 procedure TCustomModel.InvalidateContours;
@@ -35316,7 +35897,8 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrPHASTMEDIAporosit
     + sLineBreak + StrMODPATHBasicData
-    + sLineBreak + StrMT3DMSBTNPackage;
+    + sLineBreak + StrMT3DMSBTNPackage
+    + sLineBreak + StrMODFLOW6MSTPackag;
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
@@ -35365,7 +35947,8 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    StrPHASTMEDIAlongitu;
+    StrPHASTMEDIAlongitu
+    + sLineBreak + StrMODFLOW6DSPPacka;
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
@@ -35390,7 +35973,8 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    StrPHASTMEDIAhorizon;
+    StrPHASTMEDIAhorizon
+    + sLineBreak + StrMODFLOw6DSPPackaath1;
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
@@ -35415,7 +35999,8 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    StrPHASTMEDIAvertica;
+    StrPHASTMEDIAvertica
+    + sLineBreak + StrMODFLOw6DSPPackaATV;
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
@@ -36234,9 +36819,6 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrSWTSGSDataSet6;
   Inc(Index);
-
-
-
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -37737,7 +38319,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: COMPMA';
+    StrSUTRADataSet14B;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37751,7 +38333,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: CS';
+    StrSUTRADataSet14B_CS;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37765,7 +38347,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: RHOS';
+    StrSUTRADataSet14B_RHOS;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37779,7 +38361,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODLØ';
+    StrSUTRADataSet14B_PRODL0;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37793,7 +38375,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODSØ';
+    StrSUTRADataSet14B_PRODS0;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37807,7 +38389,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODL1';
+    StrSUTRADataSet14B_PRODL1;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37821,7 +38403,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODS1';
+    StrSUTRADataSet14B_PRODS1;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37835,7 +38417,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 14B: PRODIØ';
+    StrSUTRADataSet14B_PRODI0;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37849,7 +38431,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 15B: SIGMAS';
+    StrSUTRADataSet15B_SIGMAS;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37863,7 +38445,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'SUTRA Data Set 15B: SIGMAA';
+    StrSUTRADataSet15B_SIGMAA;
   Inc(Index);
   {$ENDIF}
 
@@ -37879,7 +38461,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: DIFFC';
+    StrMODFLOW6Dispersion_DIFFC;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37893,7 +38475,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: ALH';
+    StrMODFLOW6Dispersion_ALH;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37907,7 +38489,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: ALV';
+    StrMODFLOW6Dispersion_ALV;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37921,7 +38503,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: ATH1';
+    StrMODFLOW6Dispersion_ATH1;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -37935,7 +38517,7 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW 6 Dispersion Package: ATH2';
+    StrMODFLOW6Dispersion_ATH2;
   Inc(Index);
 
   {$ENDIF}
@@ -38856,11 +39438,34 @@ begin
 end;
 
 function TCustomModel.PorosityUsed(Sender: TObject): boolean;
+var
+  SpeciesIndex: Integer;
+  MstPackage: TGwtMstPackage;
 begin
-  result := (ModelSelection = msPhast)
-    or ((ModelSelection in ModflowSelection)
-    and (ModflowPackages.ModPath.IsSelected
-    or ModflowPackages.Mt3dBasic.IsSelected));
+  result := (ModelSelection = msPhast);
+  if not result then
+  begin
+    if (ModelSelection in ModflowSelection) then
+    begin
+      result := ModflowPackages.ModPath.IsSelected
+        or ModflowPackages.Mt3dBasic.SimulateWithMt3D;
+    end;
+    if not result and GwtUsed then
+    begin
+      for SpeciesIndex := 0 to ModflowPackages.GwtPackages.Count - 1 do
+      begin
+        MstPackage := ModflowPackages.GwtPackages[SpeciesIndex].GwtMst;
+        result := MstPackage.IsSelected and not MstPackage.SeparatePorosity;
+        if result then
+        begin
+          Exit;
+        end;
+      end;
+    end;
+  end;
+
+
+//    and (ModflowPackages.ModPath.IsSelected or ModflowPackages.Mt3dBasic.IsSelected));
 end;
 
 function TCustomModel.SpecificStorageUsed(Sender: TObject): boolean;
@@ -39194,7 +39799,7 @@ end;
 
 function TCustomModel.UztUsed(Sender: TObject): boolean;
 begin
-  result := Mt3dMSUsed(Sender) and ModflowPackages.UzfPackage.IsSelected
+  result := Mt3dMS_StrictUsed(Sender) and ModflowPackages.UzfPackage.IsSelected
     and ModflowPackages.Mt3dBasic.IsSelected
     and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS)
     and ModflowPackages.Mt3dUnsatTransport.IsSelected;
@@ -39899,7 +40504,7 @@ end;
 
 function TCustomModel.Mt3dMSBulkDensityUsed(Sender: TObject): boolean;
 begin
-  result := Mt3dMSUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
+  result := Mt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
     and ((ModflowPackages.Mt3dmsChemReact.SorptionChoice in [scLinear,
     scFreundlich, scLangmuir, scFirstOrderKinetic, scDualDomainWithSorption,
     scDualWithDifferingConstants])
@@ -39908,17 +40513,17 @@ end;
 
 function TCustomModel.Mt3dMSImmobPorosityUsed(Sender: TObject): boolean;
 begin
-  result := Mt3dMSUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
+  result := Mt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
     and (ModflowPackages.Mt3dmsChemReact.SorptionChoice in
     [scDualDomainNoSorption, scDualDomainWithSorption,
     scDualWithDifferingConstants]);
 end;
 
-function TCustomModel.Mt3dMSUsed(Sender: TObject): boolean;
-begin
-  result := (ModelSelection in ModflowSelection)
-    and ModflowPackages.Mt3dBasic.IsSelected;
-end;
+//function TCustomModel.Mt3dMSUsed(Sender: TObject): boolean;
+//begin
+//  result := (ModelSelection in ModflowSelection)
+//    and ModflowPackages.Mt3dBasic.IsSelected;
+//end;
 
 function TCustomModel.Mt3dMS_StrictUsed(Sender: TObject): boolean;
 begin
@@ -41197,7 +41802,7 @@ end;
 function TCustomModel.SftUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in [msModflowNWT])
-    and Mt3dMSUsed(Sender)
+    and Mt3dMS_StrictUsed(Sender)
     and ModflowPackages.Mt3dSft.IsSelected;
 end;
 
@@ -42955,6 +43560,8 @@ var
   DspWriter: TModflowDspWriter;
   AdvWriter: TModflowGwtAdvWriter;
   GwtSsmWriter: TModflowGwtSsmWriter;
+  MstWriter: TModflowGwtMstWriter;
+  IstWriter: TModflowGwtIstWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -44278,6 +44885,21 @@ begin
           finally
             GwtIcWriter.Free;
           end;
+
+          MstWriter := TModflowGwtMstWriter.Create(Self, etExport);
+          try
+            MstWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            MstWriter.Free;
+          end;
+
+          IstWriter := TModflowGwtIstWriter.Create(Self, etExport);
+          try
+            IstWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            IstWriter.Free;
+          end;
+
           FDataArrayManager.CacheDataArrays;
           Application.ProcessMessages;
           if not frmProgressMM.ShouldContinue then

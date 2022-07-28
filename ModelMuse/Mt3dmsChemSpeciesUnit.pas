@@ -34,23 +34,59 @@ type
     FImmobilePartioningCoefficientDisplayName: string;
     FUztInitialConcDataArrayName: string;
     FUztInitialConcDisplayName: string;
+    FPorosityDataArrayName: string;
+    FPorosityDataArrayDisplayName: string;
+    FMobileDecayRateDataArrayName: string;
+    FMobileDecayRateDataArrayDisplayName: string;
+    FMobileSorbedDecayRateDataArrayName: string;
+    FMobileSorbedDecayRateDataArrayDisplayName: string;
+    FMobileDistCoefDataArrayName: string;
+    FMobileDistCoefDataArrayDisplayName: string;
+    FMobileBulkDensityDataArrayName: string;
+    FMobileFreundlichExponentDataArrayName: string;
+    FMobileFreundlichExponentDataArrayDisplayName: string;
+    FMobileSorptionCapacityDataArrayName: string;
+    FMobileSorptionCapacityDataArrayDisplayName: string;
+    FMobileBulkDensityDataArrayDisplayName: string;
+    FImmobileDecaySorbed: TStringList;
+    FImmobileInitialConcentrations: TStringList;
+    FImmobileDistCoeficients: TStringList;
+    FImmobileDecay: TStringList;
+    FImmobileBulkDensities: TStringList;
+    FImmobilePorosities: TStringList;
+    FImmobileMassTransferRates: TStringList;
     procedure SetName(const Value: string); virtual;
-    procedure SetInitialConcDataArrayName(const NewName: string);
-    function Collection: TCustomChemSpeciesCollection;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
       const OldDataArrayName, NewName, NewDisplayName, NewFormula,
       AssociatedDataSets: string; ShouldCreate: boolean);
+    function Collection: TCustomChemSpeciesCollection;
+    procedure RenameDependents(NewName: string);
+    procedure UpdateAllDataArrays;
+    procedure SetInitialConcentrationFileName(const Value: string);
+    procedure SetUseInitialConcentrationFile(const Value: boolean);
+    procedure SetInitialConcDataArrayName(const NewName: string);
     procedure SetSorbOrImmobInitialConcDataArrayName(const NewName: string);
     procedure SetFirstSorbParamDataArrayName(const NewName: string);
     procedure SetSecondSorbParamDataArrayName(const NewName: string);
     procedure SetReactionRateDisolvedDataArrayName(const NewName: string);
     procedure SetReactionRateSorbedDataArrayName(const NewName: string);
-    procedure RenameDependents(NewName: string);
-    procedure SetInitialConcentrationFileName(const Value: string);
-    procedure SetUseInitialConcentrationFile(const Value: boolean);
     procedure SetHalfSaturationConstantDataArrayName(const NewName: string);
     procedure SetImmobilePartioningCoefficientDataArrayName(const NewName: string);
     procedure SetUztInitialConcDataArrayName(const NewName: string);
+    procedure SetPorosityDataArrayName(const NewName: string);
+    procedure SetMobileDecayRateDataArrayName(const NewName: string);
+    procedure SetMobileSorbedDecayRateDataArrayName(const NewName: string);
+    procedure SetMobileDistCoefDataArrayName(const NewName: string);
+    procedure SetMobileBulkDensityDataArrayName(const NewName: string);
+    procedure SetMobileFreundlichExponentDataArrayName(const NewName: string);
+    procedure SetMobileSorptionCapacityDataArrayName(const NewName: string);
+    procedure SetImmobileBulkDensities(const Value: TStringList);
+    procedure SetImmobileDecay(const Value: TStringList);
+    procedure SetImmobileDecaySorbed(const Value: TStringList);
+    procedure SetImmobileDistCoeficients(const Value: TStringList);
+    procedure SetImmobileInitialConcentrations(const Value: TStringList);
+    procedure SetImmobileMassTransferRates(const Value: TStringList);
+    procedure SetImmobilePorosities(const Value: TStringList);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -97,6 +133,104 @@ type
       read FUseInitialConcentrationFile write SetUseInitialConcentrationFile;
     property InitialConcentrationFileName: string
       read FInitialConcentrationFileName write SetInitialConcentrationFileName;
+    //MST package, POROSITY
+    property PorosityDataArrayName: string read FPorosityDataArrayName
+      write SetPorosityDataArrayName
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //MST package, DECAY
+    property MobileDecayRateDataArrayName: string read FMobileDecayRateDataArrayName
+      write SetMobileDecayRateDataArrayName
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //MST package, DECAY_SORBED
+    property MobileSorbedDecayRateDataArrayName: string read FMobileSorbedDecayRateDataArrayName
+      write SetMobileSorbedDecayRateDataArrayName
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //MST package, DISTCOEF
+    property MobileDistCoefDataArrayName: string read FMobileDistCoefDataArrayName
+      write SetMobileDistCoefDataArrayName
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //MST package, BULK_DENSITY
+    property MobileBulkDensityDataArrayName: string read FMobileBulkDensityDataArrayName
+      write SetMobileBulkDensityDataArrayName
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //MST package, SP2
+    property MobileFreundlichExponentDataArrayName: string read FMobileFreundlichExponentDataArrayName
+      write SetMobileFreundlichExponentDataArrayName
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //MST package, SP2
+    property MobileSorptionCapacityDataArrayName: string read FMobileSorptionCapacityDataArrayName
+      write SetMobileSorptionCapacityDataArrayName
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //IST package, CIM
+    property ImmobileInitialConcentrations: TStringList
+      read FImmobileInitialConcentrations write SetImmobileInitialConcentrations
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //IST package, THETAIM
+    property ImmobilePorosities: TStringList read FImmobilePorosities
+      write SetImmobilePorosities
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //IST package, ZETAIM
+    property ImmobileMassTransferRates: TStringList
+      read FImmobileMassTransferRates write SetImmobileMassTransferRates
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //IST package, DECAY
+    property ImmobileDecay: TStringList read FImmobileDecay
+      write SetImmobileDecay
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //IST package, DECAY_SORBED
+    property ImmobileDecaySorbed: TStringList read FImmobileDecaySorbed
+      write SetImmobileDecaySorbed
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //IST package, BULK_DENSITY
+    property ImmobileBulkDensities: TStringList read FImmobileBulkDensities
+      write SetImmobileBulkDensities
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    //IST package, DISTCOEF
+    property ImmobileDistCoeficients: TStringList read FImmobileDistCoeficients
+      write SetImmobileDistCoeficients
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
   end;
 
   TCustomChemSpeciesCollection= class(TEnhancedOrderedCollection)
@@ -144,6 +278,8 @@ type
       write SetItem; default;
     function Add: TMobileChemSpeciesItem;
     procedure UpdateDataArrays; override;
+    procedure UpdateAllDataArrays;
+    function GetItemByName(AName: string): TMobileChemSpeciesItem;
   end;
 
 implementation
@@ -152,7 +288,7 @@ uses
   PhastModelUnit, RbwParser, SysUtils, ModflowPackageSelectionUnit,
   frmGoPhastUnit, ScreenObjectUnit, Mt3dmsChemUnit, Mt3dmsTobUnit,
   Mt3dUztRchUnit, Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit,
-  frameMt3dLktPkgUnit, Mt3dLktUnit, Mt3dSftUnit;
+  frameMt3dLktPkgUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowPackagesUnit;
 
 const
   kInitConcPrefix = 'Initial_Concentration_';
@@ -166,6 +302,20 @@ const
   kRC3Prefix = 'Half_Saturation_Constant_';
   kSP1IMPrefix = 'Immobile_Partioning_Coefficient_';
   kUztStartConct = 'UZT_Unsaturated_Initial_Conc_';
+  KPorosity = 'Mobile_Porosity_';
+  KMobileDecayRate = 'Mobile_Decay_Rate_';
+  KMobileSorbedDecayRate = 'Mobile_Sorbed_Decay_Rate_';
+  KMobileDistCoef = 'Mobile_Distribution_Coefficient_';
+  KMobileBulkDensity = 'Mobile_Bulk_Density_';
+  KFreundlichExponent = 'Mobile_Freundlich_Exponent_';
+  KSorptionCapacity = 'Mobile_Sorption_Capacity_';
+  KImmobileBulkDensity = 'ImmobileBulkDensity_%0:s_%1:d';
+  KrImmobileInitialConce = 'ImmobileInitialConcentration_%0:s_%1:d';
+  KImmobilePorosity = 'ImmobilePorosity_%0:s_%1:d';
+  KImmobileMassTransfer = 'ImmobileMassTransferRate_%0:s_%1:d';
+  KImmobileDecay = 'ImmobileDecay_%0:s_%1:d';
+  KImmobileDecaySorbed = 'ImmobileDecaySorbed_%0:s_%1:d';
+  KImmobileDistCoeficie = 'ImmobileDistCoeficient_%0:s_%1:d';
 
 resourcestring
   StrInitConcPrefix = kInitConcPrefix;
@@ -179,6 +329,13 @@ resourcestring
   StrDiffCoefPrefix = kDiffCoefPrefix;
   StrSP1IMPrefix = kSP1IMPrefix;
   StrUztStartConct = kUztStartConct;
+  StrPorosity = kPorosity;
+  StrMobileDecayRate = KMobileDecayRate;
+  StrMobileSorbedDecayRate = KMobileSorbedDecayRate;
+  StrMobileDistCoef = KMobileDistCoef;
+  StrMobileBulkDensity = KMobileBulkDensity;
+  StrFreundlichExponent = KFreundlichExponent;
+  StrSorptionCapacity = KSorptionCapacity;
 
   { TChemSpeciesItem }
 
@@ -247,8 +404,125 @@ begin
 
     UseInitialConcentrationFile := SourceChem.UseInitialConcentrationFile;
     InitialConcentrationFileName := SourceChem.InitialConcentrationFileName;
+
+    PorosityDataArrayName := '';
+    PorosityDataArrayName := SourceChem.PorosityDataArrayName;
+
+    MobileDecayRateDataArrayName := '';
+    MobileDecayRateDataArrayName := SourceChem.MobileDecayRateDataArrayName;
+
+    MobileSorbedDecayRateDataArrayName := '';
+    MobileSorbedDecayRateDataArrayName := SourceChem.MobileSorbedDecayRateDataArrayName;
+
+    MobileDistCoefDataArrayName := '';
+    MobileDistCoefDataArrayName := SourceChem.MobileDistCoefDataArrayName;
+
+    MobileBulkDensityDataArrayName := '';
+    MobileBulkDensityDataArrayName := SourceChem.MobileBulkDensityDataArrayName;
+
+    MobileFreundlichExponentDataArrayName := '';
+    MobileFreundlichExponentDataArrayName := SourceChem.MobileFreundlichExponentDataArrayName;
+
+    MobileSorptionCapacityDataArrayName := '';
+    MobileSorptionCapacityDataArrayName := SourceChem.MobileSorptionCapacityDataArrayName;
+
+//    ImmobileInitialConcentrations.Clear;
+    ImmobileInitialConcentrations := SourceChem.ImmobileInitialConcentrations;
+//    ImmobilePorosities.Clear;
+    ImmobilePorosities := SourceChem.ImmobilePorosities;
+//    ImmobileMassTransferRates.Clear;
+    ImmobileMassTransferRates := SourceChem.ImmobileMassTransferRates;
+//    ImmobileDecay.Clear;
+    ImmobileDecay := SourceChem.ImmobileDecay;
+//    ImmobileDecaySorbed.Clear;
+    ImmobileDecaySorbed := SourceChem.ImmobileDecaySorbed;
+//    ImmobileBulkDensities.Clear;
+    ImmobileBulkDensities := SourceChem.ImmobileBulkDensities;
+//    ImmobileDistCoeficients.Clear;
+    ImmobileDistCoeficients := SourceChem.ImmobileDistCoeficients;
   end;
   inherited;
+end;
+
+procedure TChemSpeciesItem.UpdateAllDataArrays;
+var
+  TempNames: TStringList;
+  LocalModel: TPhastModel;
+  IstPackage: TGwtIstPackage;
+  DomainIndex: Integer;
+begin
+  if Collection.Model <> nil then
+  begin
+    InitialConcDataArrayName := InitialConcDataArrayName;
+    SorbOrImmobInitialConcDataArrayName := SorbOrImmobInitialConcDataArrayName;
+    FirstSorbParamDataArrayName := FirstSorbParamDataArrayName;
+    SecondSorbParamDataArrayName := SecondSorbParamDataArrayName;
+    ReactionRateDisolvedDataArrayName := ReactionRateDisolvedDataArrayName;
+    ReactionRateSorbedDataArrayName := ReactionRateSorbedDataArrayName;
+    HalfSaturationConstantDataArrayName := HalfSaturationConstantDataArrayName;
+    ImmobilePartioningCoefficientDataArrayName := ImmobilePartioningCoefficientDataArrayName;
+    UztInitialConcDataArrayName := UztInitialConcDataArrayName;
+    PorosityDataArrayName := PorosityDataArrayName;
+    MobileDecayRateDataArrayName := MobileDecayRateDataArrayName;
+    MobileSorbedDecayRateDataArrayName := MobileSorbedDecayRateDataArrayName;
+    MobileDistCoefDataArrayName := MobiledISTcOEFDataArrayName;
+    MobileBulkDensityDataArrayName := MobileBulkDensityDataArrayName;
+    MobileFreundlichExponentDataArrayName := MobileFreundlichExponentDataArrayName;
+    MobileSorptionCapacityDataArrayName := MobileSorptionCapacityDataArrayName;
+
+    TempNames := TStringList.Create;
+    try
+      LocalModel := Collection.Model as TPhastModel;
+      IstPackage := LocalModel.ModflowPackages.GwtPackages[Index].GwtIst;
+      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+      begin
+        TempNames.Add(Format(KrImmobileInitialConce, [Name, DomainIndex+1]))
+      end;
+      ImmobileInitialConcentrations := TempNames;
+
+      TempNames.Clear;
+      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+      begin
+        TempNames.Add(Format(KImmobilePorosity, [Name, DomainIndex+1]))
+      end;
+      ImmobilePorosities := TempNames;
+
+      TempNames.Clear;
+      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+      begin
+        TempNames.Add(Format(KImmobileMassTransfer, [Name, DomainIndex+1]))
+      end;
+      ImmobileMassTransferRates := TempNames;
+
+      TempNames.Clear;
+      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+      begin
+        TempNames.Add(Format(KImmobileDecay, [Name, DomainIndex+1]))
+      end;
+      ImmobileDecay := TempNames;
+
+      TempNames.Clear;
+      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+      begin
+        TempNames.Add(Format(KImmobileDecaySorbed, [Name, DomainIndex+1]))
+      end;
+      ImmobileDecaySorbed := TempNames;
+
+      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+      begin
+        TempNames.Add(Format(KImmobileBulkDensity, [Name, DomainIndex+1]))
+      end;
+      ImmobileBulkDensities := TempNames;
+
+      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+      begin
+        TempNames.Add(Format(KImmobileDistCoeficie, [Name, DomainIndex+1]))
+      end;
+      ImmobileDistCoeficients := TempNames;
+    finally
+      TempNames.Free;
+    end;
+  end;
 end;
 
 procedure TChemSpeciesItem.UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
@@ -321,6 +595,14 @@ var
 begin
   inherited;
   FName := 'default name';
+  FImmobileDecaySorbed := TStringList.Create;
+  FImmobileInitialConcentrations := TStringList.Create;
+  FImmobileDistCoeficients := TStringList.Create;
+  FImmobileDecay := TStringList.Create;
+  FImmobileBulkDensities := TStringList.Create;
+  FImmobilePorosities := TStringList.Create;
+  FImmobileMassTransferRates := TStringList.Create;
+
   if (Model <> nil) and not (csLoading in Model.ComponentState) then
   begin
     LocalModel := Model as TCustomModel;
@@ -377,8 +659,6 @@ begin
         Mt3dSftConcBoundary.InsertNewSpecies(SpeciesIndex, Name);
       end;
     end;
-
-
   end;
 end;
 
@@ -397,6 +677,14 @@ var
   Mt3dLktConcBoundary: TMt3dLktConcBoundary;
   Mt3dSftConcBoundary: TMt3dSftBoundary;
 begin
+  FImmobileDecaySorbed.Free;
+  FImmobileInitialConcentrations.Free;
+  FImmobileDistCoeficients.Free;
+  FImmobileDecay.Free;
+  FImmobileBulkDensities.Free;
+  FImmobilePorosities.Free;
+  FImmobileMassTransferRates.Free;
+
   if (Model <> nil) and not (csDestroying in Model.ComponentState)
     and not (Model as TCustomModel).Clearing then
   begin
@@ -463,26 +751,30 @@ begin
   end;
 
   inherited;
-
-//  if (Model <> nil) and not (csDestroying in Model.ComponentState) then
-//  begin
-//    LocalModel := Model as TCustomModel;
-//    for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
-//    begin
-//      ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
-//      ConcBoundary := ScreenObject.Mt3dmsConcBoundary;
-//      if ConcBoundary <> nil then
-//      begin
-//        ConcBoundary.CreateTimeLists;
-//      end;
-//    end;
-//  end;
-
 end;
 
 function TChemSpeciesItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
   ChemItem: TChemSpeciesItem;
+  function SameStrings(Old, New: TStringList): Boolean;
+  var
+    index: Integer;
+  begin
+    Assert(Old <> nil);
+    Assert(New <> nil);
+    result := Old.Count = New.Count;
+    if result then
+    begin
+      for index := 0 to Old.Count - 1 do
+      begin
+        result := Old[index] = New[index];
+        if not result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
 begin
   result := AnotherItem is TChemSpeciesItem;
   if result then
@@ -500,6 +792,20 @@ begin
       and (UztInitialConcDataArrayName = ChemItem.UztInitialConcDataArrayName)
       and (UseInitialConcentrationFile = ChemItem.UseInitialConcentrationFile)
       and (InitialConcentrationFileName = ChemItem.InitialConcentrationFileName)
+      and (PorosityDataArrayName = ChemItem.PorosityDataArrayName)
+      and (MobileDecayRateDataArrayName = ChemItem.MobileDecayRateDataArrayName)
+      and (MobileSorbedDecayRateDataArrayName = ChemItem.MobileSorbedDecayRateDataArrayName)
+      and (MobileDistCoefDataArrayName = ChemItem.MobileDistCoefDataArrayName)
+      and (MobileBulkDensityDataArrayName = ChemItem.MobileBulkDensityDataArrayName)
+      and (MobileFreundlichExponentDataArrayName = ChemItem.MobileFreundlichExponentDataArrayName)
+      and (MobileSorptionCapacityDataArrayName = ChemItem.MobileSorptionCapacityDataArrayName)
+      and SameStrings(ImmobileInitialConcentrations,  ChemItem.ImmobileInitialConcentrations)
+      and SameStrings(ImmobilePorosities,  ChemItem.ImmobilePorosities)
+      and SameStrings(ImmobileMassTransferRates,  ChemItem.ImmobileMassTransferRates)
+      and SameStrings(ImmobileDecay,  ChemItem.ImmobileDecay)
+      and SameStrings(ImmobileDecaySorbed,  ChemItem.ImmobileDecaySorbed)
+      and SameStrings(ImmobileBulkDensities,  ChemItem.ImmobileBulkDensities)
+      and SameStrings(ImmobileDistCoeficients,  ChemItem.ImmobileDistCoeficients)
   end;
 end;
 
@@ -609,6 +915,395 @@ begin
   SetCaseSensitiveStringProperty(FHalfSaturationConstantDataArrayName, NewName);
 end;
 
+procedure TChemSpeciesItem.SetImmobileBulkDensities(const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while FImmobileBulkDensities.Count < Value.Count do
+    begin
+      FImmobileBulkDensities.Add('');
+    end;
+    while FImmobileBulkDensities.Count > Value.Count do
+    begin
+      FImmobileBulkDensities.Delete(FImmobileBulkDensities.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := FImmobileBulkDensities[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '1.7';
+      AssociatedDataSets := 'GWT IST Pakage: BULK_DENSITY';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and IstProp.Sorption;
+      UpdateDataArray(LocalModel.GwtImmobileBulkDensityUsed, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+      FImmobileBulkDensities[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if FImmobileBulkDensities <> Value then
+    begin
+      FImmobileBulkDensities.Assign(Value);
+    end;
+  end;
+end;
+
+procedure TChemSpeciesItem.SetImmobileDecay(const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while FImmobileDecay.Count < Value.Count do
+    begin
+      FImmobileDecay.Add('');
+    end;
+    while FImmobileDecay.Count > Value.Count do
+    begin
+      FImmobileDecay.Delete(FImmobileDecay.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := FImmobileDecay[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '0.001';
+      AssociatedDataSets := 'GWT IST Pakage: DECAY';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected
+        and (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
+      UpdateDataArray(LocalModel.GwtImmobileDecayUsed, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+      FImmobileDecay[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if FImmobileDecay <> Value then
+    begin
+      FImmobileDecay.Assign(Value);
+    end;
+  end;
+end;
+
+procedure TChemSpeciesItem.SetImmobileDecaySorbed(const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while FImmobileDecaySorbed.Count < Value.Count do
+    begin
+      FImmobileDecaySorbed.Add('');
+    end;
+    while FImmobileDecaySorbed.Count > Value.Count do
+    begin
+      FImmobileDecaySorbed.Delete(FImmobileDecaySorbed.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := FImmobileDecaySorbed[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '0.001';
+      AssociatedDataSets := 'GWT IST Pakage: BULK_DECAY_SORBED';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and IstProp.Sorption
+        and (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
+      UpdateDataArray(LocalModel.GwtImmobileDecaySorbedUsed, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+      FImmobileDecaySorbed[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if FImmobileDecaySorbed <> Value then
+    begin
+      FImmobileDecaySorbed.Assign(Value);
+    end;
+  end;
+end;
+
+procedure TChemSpeciesItem.SetImmobileDistCoeficients(const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while FImmobileDistCoeficients.Count < Value.Count do
+    begin
+      FImmobileDistCoeficients.Add('');
+    end;
+    while FImmobileDistCoeficients.Count > Value.Count do
+    begin
+      FImmobileDistCoeficients.Delete(FImmobileDistCoeficients.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and GwtIst.IsSelected
+        and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := FImmobileDistCoeficients[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '0.176';
+      AssociatedDataSets := 'GWT IST Pakage: DISTCOEF';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and IstProp.Sorption;
+      UpdateDataArray(LocalModel.GwtImmobileDistCoefUsed, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+      FImmobileDistCoeficients[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if FImmobileDistCoeficients <> Value then
+    begin
+      FImmobileDistCoeficients.Assign(Value);
+    end;
+  end;
+end;
+
+procedure TChemSpeciesItem.SetImmobileInitialConcentrations(
+  const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while FImmobileInitialConcentrations.Count < Value.Count do
+    begin
+      FImmobileInitialConcentrations.Add('');
+    end;
+    while FImmobileInitialConcentrations.Count > Value.Count do
+    begin
+      FImmobileInitialConcentrations.Delete(FImmobileInitialConcentrations.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := FImmobileInitialConcentrations[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '0.';
+      AssociatedDataSets := 'GWT IST PaCkage: CIM';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected;
+      UpdateDataArray(LocalModel.GwtImmobileCimUsed, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+      FImmobileInitialConcentrations[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if FImmobileInitialConcentrations <> Value then
+    begin
+      FImmobileInitialConcentrations.Assign(Value);
+    end;
+  end;
+end;
+
+procedure TChemSpeciesItem.SetImmobileMassTransferRates(
+  const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while ImmobileMassTransferRates.Count < Value.Count do
+    begin
+      ImmobileMassTransferRates.Add('');
+    end;
+    while ImmobileMassTransferRates.Count > Value.Count do
+    begin
+      ImmobileMassTransferRates.Delete(ImmobileMassTransferRates.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := ImmobileMassTransferRates[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '0.01';
+      AssociatedDataSets := 'GWT IST Package: ZETAIM';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected;
+      UpdateDataArray(LocalModel.GwtImmobileZetaimUsed, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+      ImmobileMassTransferRates[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if ImmobileMassTransferRates <> Value then
+    begin
+      ImmobileMassTransferRates.Assign(Value);
+    end;
+  end;
+end;
+
 procedure TChemSpeciesItem.SetImmobilePartioningCoefficientDataArrayName(
   const NewName: string);
 var
@@ -623,6 +1318,70 @@ begin
       LocalModel.AnyMt3dUsgsDualSeparate);
   end;
   SetCaseSensitiveStringProperty(FImmobilePartioningCoefficientDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetImmobilePorosities(const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while FImmobilePorosities.Count < Value.Count do
+    begin
+      FImmobilePorosities.Add('');
+    end;
+    while FImmobilePorosities.Count > Value.Count do
+    begin
+      FImmobilePorosities.Delete(FImmobilePorosities.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := FImmobilePorosities[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '0.25';
+      AssociatedDataSets := 'GWT IST Pakage: THETAIM';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected;
+      UpdateDataArray(LocalModel.GwtImmobileThetaimUsed, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+      FImmobilePorosities[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if FImmobilePorosities <> Value then
+    begin
+      FImmobilePorosities.Assign(Value);
+    end;
+  end;
 end;
 
 procedure TChemSpeciesItem.SetIndex(Value: Integer);
@@ -732,76 +1491,387 @@ begin
   end;
 end;
 
+procedure TChemSpeciesItem.SetMobileBulkDensityDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  GwtPackagesItem: TGwtPackagesItem;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtUsed then
+    begin
+      GwtPackagesItem :=  LocalModel.ModflowPackages.GwtPackages[Index];
+      MstPackage := GwtPackagesItem.GwtMst;
+      if MstPackage.IsSelected then
+      begin
+        if  (MstPackage.Sorption <> gscNone) then
+        begin
+          DataSetUsed := True;
+        end;
+      end;
+    end;
+    UpdateDataArray(LocalModel.GwtMobileBulkDensityUsed,
+      FMobileBulkDensityDataArrayName, NewName,
+      FMobileBulkDensityDataArrayDisplayName, '1.7', 'GWT MST Pakage: BULK_DENSITY',
+      DataSetUsed);
+  end;
+
+  SetCaseSensitiveStringProperty(FMobileBulkDensityDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetMobileDecayRateDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  GwtPackagesItem: TGwtPackagesItem;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtUsed then
+    begin
+      GwtPackagesItem :=  LocalModel.ModflowPackages.GwtPackages[Index];
+      MstPackage := GwtPackagesItem.GwtMst;
+      if MstPackage.IsSelected then
+      begin
+        if MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay then
+        begin
+          DataSetUsed := True;
+        end;
+      end;
+    end;
+    UpdateDataArray(LocalModel.GwtMobileDecayUsed,
+      FMobileDecayRateDataArrayName, NewName,
+      FMobileDecayRateDataArrayDisplayName, '0.001', 'GWT MST Pakage: DECAY',
+      DataSetUsed);
+  end;
+
+  SetCaseSensitiveStringProperty(FMobileDecayRateDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetMobileDistCoefDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  GwtPackagesItem: TGwtPackagesItem;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtUsed then
+    begin
+      GwtPackagesItem :=  LocalModel.ModflowPackages.GwtPackages[Index];
+      MstPackage := GwtPackagesItem.GwtMst;
+      if MstPackage.IsSelected then
+      begin
+        if MstPackage.Sorption <> gscNone then
+        begin
+          DataSetUsed := True;
+        end;
+      end;
+    end;
+    UpdateDataArray(LocalModel.GwtMobileDistibutionCoefUsed,
+      FMobileDistCoefDataArrayName, NewName,
+      FMobileDistCoefDataArrayDisplayName, '0.176', 'GWT MST Pakage: DISTCOEF',
+      DataSetUsed);
+  end;
+
+  SetCaseSensitiveStringProperty(FMobileDistCoefDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetMobileFreundlichExponentDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  GwtPackagesItem: TGwtPackagesItem;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtUsed then
+    begin
+      GwtPackagesItem :=  LocalModel.ModflowPackages.GwtPackages[Index];
+      MstPackage := GwtPackagesItem.GwtMst;
+      if MstPackage.IsSelected then
+      begin
+        if MstPackage.Sorption = gscFreundlich then
+        begin
+          DataSetUsed := True;
+        end;
+      end;
+    end;
+    UpdateDataArray(LocalModel.GwtMobileFreundlichExponentUsed,
+      FMobileFreundlichExponentDataArrayName, NewName,
+      FMobileFreundlichExponentDataArrayDisplayName, '0.7', 'GWT MST Pakage: SP2',
+      DataSetUsed);
+  end;
+
+  SetCaseSensitiveStringProperty(FMobileFreundlichExponentDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetMobileSorbedDecayRateDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  GwtPackagesItem: TGwtPackagesItem;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtUsed then
+    begin
+      GwtPackagesItem :=  LocalModel.ModflowPackages.GwtPackages[Index];
+      MstPackage := GwtPackagesItem.GwtMst;
+      if MstPackage.IsSelected then
+      begin
+        if (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay)
+          and (MstPackage.Sorption > gscNone) then
+        begin
+          DataSetUsed := True;
+        end;
+      end;
+    end;
+    UpdateDataArray(LocalModel.GwtMobileSorbedDecayUsed,
+      FMobileSorbedDecayRateDataArrayName, NewName,
+      FMobileSorbedDecayRateDataArrayDisplayName, '0.001', 'GWT MST Pakage: DECAY_SORBED',
+      DataSetUsed);
+  end;
+
+  SetCaseSensitiveStringProperty(FMobileSorbedDecayRateDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetMobileSorptionCapacityDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  GwtPackagesItem: TGwtPackagesItem;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtUsed then
+    begin
+      GwtPackagesItem :=  LocalModel.ModflowPackages.GwtPackages[Index];
+      MstPackage := GwtPackagesItem.GwtMst;
+      if MstPackage.IsSelected then
+      begin
+        if MstPackage.Sorption = gscLangmuir then
+        begin
+          DataSetUsed := True;
+        end;
+      end;
+    end;
+    UpdateDataArray(LocalModel.GwtMobileSorptionCapacityUsed,
+      FMobileSorptionCapacityDataArrayName, NewName,
+      FMobileSorptionCapacityDataArrayDisplayName, '0.003', 'GWT MST Pakage: SP2',
+      DataSetUsed);
+  end;
+
+  SetCaseSensitiveStringProperty(FMobileSorptionCapacityDataArrayName, NewName);
+end;
+
 procedure TChemSpeciesItem.SetName(const Value: string);
 var
   LocalModel: TPhastModel;
+  DomainIndex: Integer;
+  OldDataSetName: string;
+  OldRoot: string;
+  NewRoot: string;
+  GwtIst: TGwtIstPackage;
+  NewImobileDataSetNames: TStringList;
+  NewDataSetName: string;
+  AName: string;
 begin
   Assert(Value <> '');
   // data array names may need to change even if the species name does not.
-//  if FName <> Value then
-  begin
+  NewImobileDataSetNames := TStringList.Create;
+  try
     if UpperCase(FName) = UpperCase(Value) then
     begin
+      OldRoot := GenerateNewRoot(FName);
+      NewRoot := GenerateNewRoot(Value);
       FInitialConcDisplayName := StringReplace(FInitialConcDisplayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
       InitialConcDataArrayName := StringReplace(InitialConcDataArrayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
 
       FSorbOrImmobInitialConcDisplayName := StringReplace(
         FSorbOrImmobInitialConcDisplayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
       SorbOrImmobInitialConcDataArrayName := StringReplace(
         SorbOrImmobInitialConcDataArrayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
 
       FFirstSorbParamDisplayName := StringReplace(
         FFirstSorbParamDisplayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
       FirstSorbParamDataArrayName := StringReplace(
         FirstSorbParamDataArrayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
 
       FSecondSorbParamDisplayName := StringReplace(
         FSecondSorbParamDisplayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
       SecondSorbParamDataArrayName := StringReplace(
         SecondSorbParamDataArrayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
 
       FReactionRateDisolvedDisplayName := StringReplace(
         FReactionRateDisolvedDisplayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
       ReactionRateDisolvedDataArrayName := StringReplace(
         ReactionRateDisolvedDataArrayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
 
       FReactionRateSorbedDisplayName := StringReplace(
         FReactionRateSorbedDisplayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
       ReactionRateSorbedDataArrayName := StringReplace(
         ReactionRateSorbedDataArrayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
 
       FHalfSaturationConstantDisplayName := StringReplace(
         FHalfSaturationConstantDisplayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
       HalfSaturationConstantDataArrayName := StringReplace(
         HalfSaturationConstantDataArrayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
 
       FImmobilePartioningCoefficientDisplayName := StringReplace(
         FImmobilePartioningCoefficientDisplayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
       ImmobilePartioningCoefficientDataArrayName := StringReplace(
         ImmobilePartioningCoefficientDataArrayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
 
       FUztInitialConcDisplayName := StringReplace(
         FUztInitialConcDisplayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
       UztInitialConcDataArrayName := StringReplace(
         UztInitialConcDataArrayName,
-        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+        OldRoot,NewRoot, []);
+
+      FPorosityDataArrayDisplayName := StringReplace(
+        FPorosityDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      PorosityDataArrayName := StringReplace(
+        PorosityDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FMobileDecayRateDataArrayDisplayName := StringReplace(
+        FMobileDecayRateDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      MobileDecayRateDataArrayName := StringReplace(
+        MobileDecayRateDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FMobileSorbedDecayRateDataArrayDisplayName := StringReplace(
+        FMobileSorbedDecayRateDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      MobileSorbedDecayRateDataArrayName := StringReplace(
+        MobileSorbedDecayRateDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FMobileDistCoefDataArrayDisplayName := StringReplace(
+        FMobileDistCoefDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      MobileDistCoefDataArrayName := StringReplace(
+        MobileDistCoefDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FMobileBulkDensityDataArrayDisplayName := StringReplace(
+        FMobileBulkDensityDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      MobileBulkDensityDataArrayName := StringReplace(
+        MobileBulkDensityDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FMobileFreundlichExponentDataArrayDisplayName := StringReplace(
+        FMobileFreundlichExponentDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      MobileFreundlichExponentDataArrayName := StringReplace(
+        MobileFreundlichExponentDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FMobileSorptionCapacityDataArrayDisplayName := StringReplace(
+        FMobileSorptionCapacityDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      MobileSorptionCapacityDataArrayName := StringReplace(
+        MobileSorptionCapacityDataArrayName,
+        OldRoot,NewRoot, []);
+
+      for DomainIndex := 0 to ImmobileInitialConcentrations.Count - 1 do
+      begin
+        OldDataSetName := ImmobileInitialConcentrations[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        ImmobileInitialConcentrations[DomainIndex] := NewDataSetName;
+      end;
+
+      for DomainIndex := 0 to ImmobilePorosities.Count - 1 do
+      begin
+        OldDataSetName := ImmobilePorosities[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        ImmobilePorosities[DomainIndex] := NewDataSetName;
+      end;
+
+      for DomainIndex := 0 to ImmobileMassTransferRates.Count - 1 do
+      begin
+        OldDataSetName := ImmobileMassTransferRates[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        ImmobileMassTransferRates[DomainIndex] := NewDataSetName;
+      end;
+
+      for DomainIndex := 0 to ImmobileDecay.Count - 1 do
+      begin
+        OldDataSetName := ImmobileDecay[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        ImmobileDecay[DomainIndex] := NewDataSetName;
+      end;
+
+      for DomainIndex := 0 to ImmobileDecaySorbed.Count - 1 do
+      begin
+        OldDataSetName := ImmobileDecaySorbed[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        ImmobileDecaySorbed[DomainIndex] := NewDataSetName;
+      end;
+
+      for DomainIndex := 0 to ImmobileBulkDensities.Count - 1 do
+      begin
+        OldDataSetName := ImmobileBulkDensities[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        ImmobileBulkDensities[DomainIndex] := NewDataSetName;
+      end;
+
+      for DomainIndex := 0 to ImmobileDistCoeficients.Count - 1 do
+      begin
+        OldDataSetName := ImmobileDistCoeficients[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        ImmobileDistCoeficients[DomainIndex] := NewDataSetName;
+      end;
     end
     else
     begin
@@ -861,10 +1931,143 @@ begin
         GenerateNewRoot(StrUztStartConct + Value);
       UztInitialConcDataArrayName :=
         GenerateNewRoot(kUztStartConct + Value);
+
+      FPorosityDataArrayDisplayName :=
+        GenerateNewRoot(StrPorosity + Value);
+      PorosityDataArrayName :=
+        GenerateNewRoot(kPorosity + Value);
+
+      FMobileDecayRateDataArrayDisplayName :=
+        GenerateNewRoot(StrMobileDecayRate + Value);
+      MobileDecayRateDataArrayName :=
+        GenerateNewRoot(KMobileDecayRate + Value);
+
+      FMobileSorbedDecayRateDataArrayDisplayName :=
+        GenerateNewRoot(StrMobileSorbedDecayRate + Value);
+      MobileSorbedDecayRateDataArrayName :=
+        GenerateNewRoot(KMobileSorbedDecayRate + Value);
+
+      FMobileDistCoefDataArrayDisplayName :=
+        GenerateNewRoot(StrMobileDistCoef + Value);
+      MobileDistCoefDataArrayName :=
+        GenerateNewRoot(KMobileDistCoef + Value);
+
+      FMobileBulkDensityDataArrayDisplayName :=
+        GenerateNewRoot(StrMobileBulkDensity + Value);
+      MobileBulkDensityDataArrayName :=
+        GenerateNewRoot(KMobileBulkDensity + Value);
+
+      FMobileFreundlichExponentDataArrayDisplayName :=
+        GenerateNewRoot(StrFreundlichExponent + Value);
+      MobileFreundlichExponentDataArrayName :=
+        GenerateNewRoot(KFreundlichExponent + Value);
+
+      FMobileSorptionCapacityDataArrayDisplayName :=
+        GenerateNewRoot(StrSorptionCapacity + Value);
+      MobileSorptionCapacityDataArrayName :=
+        GenerateNewRoot(KSorptionCapacity + Value);
+
+      if Index < LocalModel.ModflowPackages.GwtPackages.Count then
+      begin
+        GwtIst := LocalModel.ModflowPackages.GwtPackages[Index].GwtIst;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
+            KImmobileBulkDensity, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobileBulkDensities := NewImobileDataSetNames;
+
+        NewImobileDataSetNames.Clear;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
+            KrImmobileInitialConce, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobileInitialConcentrations := NewImobileDataSetNames;
+
+        NewImobileDataSetNames.Clear;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
+            KImmobilePorosity, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobilePorosities := NewImobileDataSetNames;
+
+        NewImobileDataSetNames.Clear;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
+            KImmobileMassTransfer, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobileMassTransferRates := NewImobileDataSetNames;
+
+        NewImobileDataSetNames.Clear;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
+            KImmobileDecay, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobileDecay := NewImobileDataSetNames;
+
+        NewImobileDataSetNames.Clear;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
+            KImmobileDecaySorbed, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobileDecaySorbed := NewImobileDataSetNames;
+
+        NewImobileDataSetNames.Clear;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
+            KImmobileDistCoeficie, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobileDistCoeficients := NewImobileDataSetNames;
+      end;
     end;
     RenameDependents(Value);
     SetCaseSensitiveStringProperty(FName, Value);
+  finally
+    NewImobileDataSetNames.Free;
   end;
+end;
+
+procedure TChemSpeciesItem.SetPorosityDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  GwtPackagesItem: TGwtPackagesItem;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtUsed then
+    begin
+      GwtPackagesItem :=  LocalModel.ModflowPackages.GwtPackages[Index];
+      MstPackage := GwtPackagesItem.GwtMst;
+      if MstPackage.IsSelected and MstPackage.SeparatePorosity then
+      begin
+        DataSetUsed := True;
+      end;
+    end;
+    UpdateDataArray(LocalModel.GwtMobileSeparatePorosityUsed,
+      FPorosityDataArrayName, NewName,
+      FPorosityDataArrayDisplayName, '0.25', 'GWT MST Pakage: POROSITY',
+      DataSetUsed);
+  end;
+
+  SetCaseSensitiveStringProperty(FPorosityDataArrayName, NewName);
 end;
 
 procedure TChemSpeciesItem.SetReactionRateDisolvedDataArrayName(
@@ -1103,10 +2306,36 @@ begin
   result := inherited Items[Index] as TMobileChemSpeciesItem;
 end;
 
+function TMobileChemSpeciesCollection.GetItemByName(
+  AName: string): TMobileChemSpeciesItem;
+var
+  index: Integer;
+begin
+  result := nil;
+  for index := 0 to Count - 1 do
+  begin
+    if SameText(Items[index].Name, AName) then
+    begin
+      result := Items[index];
+      Break;
+    end;
+  end;
+end;
+
 procedure TMobileChemSpeciesCollection.SetItem(Index: Integer;
   const Value: TMobileChemSpeciesItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+procedure TMobileChemSpeciesCollection.UpdateAllDataArrays;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    Items[Index].UpdateAllDataArrays;
+  end;
 end;
 
 procedure TMobileChemSpeciesCollection.UpdateDataArrays;

@@ -34,8 +34,8 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp2
-regul_Grp3
+regul_Grp0
+regul_Grp1
 
 * observation data
 head  1.000000000000E+000   1.000000000000E+000  Heads
@@ -48,6 +48,6 @@ HfbMf6Test2.ptf HfbMf6Test2.pval
 HfbMf6Test2.PestIns HfbMf6Test2.Mf6Values
 
 * prior information
- eq_1          1.0 * a = 1.1       1     regul_Grp2
- eq_2          1.0 * CHD_MF6 = 1       1     regul_Grp3
+ eq_1          1.0 * a = 1.1       1     regul_Grp0
+ eq_2          1.0 * CHD_MF6 = 1       1     regul_Grp1
 

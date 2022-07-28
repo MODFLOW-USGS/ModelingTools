@@ -3838,6 +3838,7 @@ begin
       end;
 
       SetDefaultElevationFormulas;
+      CurrentScreenObject.Selected := True;
 
       UndoCreateScreenObject := CurrentUndo as TUndoCreateScreenObject;
       try

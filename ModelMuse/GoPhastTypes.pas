@@ -470,8 +470,9 @@ type
   private
     function GetFirst: TCollectionItem;
     function GetLast: TCollectionItem;
-    function GetCount: Integer;
-    procedure SetCount(const Value: Integer);
+  protected
+    function GetCount: Integer; virtual;
+    procedure SetCount(const Value: Integer); virtual;
   public
     procedure Assign(Source: TPersistent); override;
     procedure InvalidateModel;

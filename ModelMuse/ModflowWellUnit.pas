@@ -154,7 +154,6 @@ type
     StressPeriod: integer;
     function GetPumpingRate: double;
     function GetPumpingRateAnnotation: string;
-//    function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
     function GetPumpingParameterName: string;
@@ -164,13 +163,6 @@ type
     function GetPumpingRatePestSeriesName: string;
     function GetPumpingRateTimeSeriesName: string;
     procedure SetPumpingRateTimeSeriesName(const Value: string);
-//    function GetConcentration(const Index: Integer): double;
-//    function GetConcentrationAnnotation(const Index: Integer): string;
-//    function GetConcentrationPestName(const Index: Integer): string;
-//    function GetConcentrationPestSeriesMethod(
-//      const Index: Integer): TPestParamMethod;
-//    function GetConcentrationPestSeriesName(const Index: Integer): string;
-//    function GetConcentrationTimeSeriesName(const Index: Integer): string;
     function GetGwtConcentrations: TGwtCellData;
   protected
     property Values: TWellRecord read FValues;
@@ -195,7 +187,6 @@ type
     procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property PumpingRate: double read GetPumpingRate;
-//    property TimeSeriesName: string read GetTimeSeriesName;
     property PumpingRateAnnotation: string read GetPumpingRateAnnotation;
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
@@ -212,19 +203,6 @@ type
       write SetPumpingRateTimeSeriesName;
     // GWT
     property GwtConcentrations: TGwtCellData read GetGwtConcentrations;
-//    property Concentrations[const Index: Integer]: double
-//      read GetConcentration;
-//    property ConcentrationAnnotations[const Index: Integer]: string
-//      read GetConcentrationAnnotation;
-//    property ConcentrationPestNames[const Index: Integer]: string
-//      read GetConcentrationPestName;
-//    property ConcentrationPestSeriesNames[const Index: Integer]: string
-//      read GetConcentrationPestSeriesName;
-//    property ConcentrationPestSeriesMethods[const Index: Integer]: TPestParamMethod
-//      read GetConcentrationPestSeriesMethod;
-//    property ConcentrationTimeSeriesNames[const Index: Integer]: string
-//      read GetConcentrationTimeSeriesName;
-
   end;
 
   // @name represents the MODFLOW Well boundaries associated with

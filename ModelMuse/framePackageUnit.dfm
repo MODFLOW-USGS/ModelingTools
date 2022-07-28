@@ -11,16 +11,16 @@ object framePackage: TframePackage
   object lblComments: TLabel
     Left = 16
     Top = 39
-    Width = 50
-    Height = 13
+    Width = 71
+    Height = 20
     Caption = 'Comments'
     Enabled = False
   end
   object lblPackage: TLabel
     Left = 16
     Top = 12
-    Width = 50
-    Height = 13
+    Width = 71
+    Height = 20
     Caption = 'lblPackage'
   end
   object memoComments: TMemo

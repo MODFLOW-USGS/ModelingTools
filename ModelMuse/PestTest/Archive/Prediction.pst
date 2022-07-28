@@ -37,7 +37,7 @@ RIV_Par1 fixed relative  2.000000000000E+000   0.000000000000E+000   1.000000000
 * observation groups
 grp1
 predict
-regul_Grp5
+regul_Grp0
 
 * observation data
 test1 -1.000000000000E+000   1.000000000000E+000  grp1
@@ -52,7 +52,7 @@ Prediction.ptf Prediction.pval
 Prediction.PestIns Prediction.Mf6Values
 
 * prior information
- eq_1          1.0 * Q_Par1 = 2       1     regul_Grp5
+ eq_1          1.0 * Q_Par1 = 2       1     regul_Grp0
 
 * predictive analysis
      1     0

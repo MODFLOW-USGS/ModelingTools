@@ -338,7 +338,7 @@ object TTaskHistory
     end
     item
       Name = 'MF-2015'
-      Display = True
+      Display = False
     end
     item
       Name = 'NPF'
@@ -390,7 +390,7 @@ object TTaskHistory
     end
     item
       Name = 'MAW'
-      Display = True
+      Display = False
     end
     item
       Name = 'DISV'
@@ -438,7 +438,7 @@ object TTaskHistory
     end
     item
       Name = 'CSUB'
-      Display = True
+      Display = False
     end
     item
       Name = 'GwMounding'
@@ -462,11 +462,11 @@ object TTaskHistory
     end
     item
       Name = 'PEST Pilot Points'
-      Display = True
+      Display = False
     end
     item
       Name = 'PEST Regularization'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS RCT'
@@ -474,11 +474,11 @@ object TTaskHistory
     end
     item
       Name = 'Adaptive Time Stepping'
-      Display = True
+      Display = False
     end
     item
       Name = 'MF6 Time Series'
-      Display = True
+      Display = False
     end
     item
       Name = 'MF6 GWT'
@@ -29592,5 +29592,98 @@ object TTaskHistory
       Categories.Strings = (
         'Import'
         'Installer')
+    end
+    item
+      Date = 44750.000000000000000000
+    end
+    item
+      Date = 44751.000000000000000000
+    end
+    item
+      Date = 44752.000000000000000000
+    end
+    item
+      Date = 44753.000000000000000000
+      Categories.Strings = (
+        'Video')
+    end
+    item
+      Date = 44754.000000000000000000
+      Categories.Strings = (
+        'Dialog boxes'
+        'MF6 GWT')
+    end
+    item
+      Date = 44755.000000000000000000
+    end
+    item
+      Date = 44756.000000000000000000
+      Categories.Strings = (
+        'Video')
+    end
+    item
+      Date = 44757.000000000000000000
+      Categories.Strings = (
+        'Dialog boxes'
+        'MF6 GWT'
+        'Documentation')
+    end
+    item
+      Date = 44758.000000000000000000
+    end
+    item
+      Date = 44759.000000000000000000
+    end
+    item
+      Date = 44760.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Testing'
+        'Graphics'
+        'MF6 GWT')
+    end
+    item
+      Date = 44761.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT')
+    end
+    item
+      Date = 44762.000000000000000000
+      Categories.Strings = (
+        'Components'
+        'MF6 GWT'
+        'Bug fix')
+    end
+    item
+      Date = 44763.000000000000000000
+      Categories.Strings = (
+        'Dialog boxes'
+        'MF6 GWT'
+        'Components')
+    end
+    item
+      Date = 44764.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT')
+    end
+    item
+      Date = 44765.000000000000000000
+    end
+    item
+      Date = 44766.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'Documentation')
+    end
+    item
+      Date = 44767.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT')
+    end
+    item
+      Date = 44768.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT'
+        'Bug fix')
     end>
 end

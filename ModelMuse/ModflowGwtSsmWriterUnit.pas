@@ -16,7 +16,6 @@ type
     class function Extension: string; override;
   public
     procedure WriteFile(AFileName: string; SpeciesIndex: Integer);
-
   end;
 
 

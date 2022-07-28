@@ -2374,7 +2374,7 @@ begin
       end;
       AScreenObject :=
         frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
-      if (AScreenObject <> CurrentScreenObject) then
+//      if (AScreenObject <> CurrentScreenObject) then
       begin
         AScreenObject.Draw(FBitmap32, ViewDirection);
       end;

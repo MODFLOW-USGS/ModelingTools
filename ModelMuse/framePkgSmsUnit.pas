@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, framePackageUnit, RbwController,
   Vcl.StdCtrls, JvExStdCtrls, JvCombobox, JvListComb, Vcl.Grids, RbwDataGrid4,
   ModflowPackageSelectionUnit, Vcl.Mask, JvExMask, JvSpin, Vcl.ComCtrls,
-  ArgusDataEntry;
+  ArgusDataEntry, System.Generics.Collections;
 
 type
   TSmsColumns = (scName, scOverride, scValue);
@@ -76,6 +76,8 @@ type
     function LineAccel: TSmsLinLinearAcceleration;
     { Public declarations }
   end;
+
+  TframePkgSmsObjectList = TObjectList<TframePkgSms>;
 
 var
   framePkgSms: TframePkgSms;

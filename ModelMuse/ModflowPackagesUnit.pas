@@ -80,6 +80,7 @@ type
     FGwtDispersionPackage: TGwtDispersionPackage;
     FGwtAdvectionPackage: TGwtAdvectionPackage;
     FGwtSsmPackage: TGWtSsmPackage;
+    FGwtCncPackage: TGwtCncPackage;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -150,6 +151,7 @@ type
     procedure SetGwtDispersionPackage(const Value: TGwtDispersionPackage);
     procedure SetGwtAdvectionPackage(const Value: TGwtAdvectionPackage);
     procedure SetGwtSsmPackage(const Value: TGWtSsmPackage);
+    procedure SetGwtCncPackage(const Value: TGwtCncPackage);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -287,8 +289,14 @@ type
       stored False
     {$ENDIF}
     ;
-    property GwtSsmPackage: TGWtSsmPackage
-      read FGwtSsmPackage write SetGwtSsmPackage
+    property GwtSsmPackage: TGWtSsmPackage read FGwtSsmPackage
+      write SetGwtSsmPackage
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
+    property GwtCncPackage: TGwtCncPackage read FGwtCncPackage
+      write SetGwtCncPackage
     {$IFNDEF GWT}
       stored False
     {$ENDIF}
@@ -403,6 +411,8 @@ resourcestring
   ' Package';
   StrGWTDispersionPacka = 'DSP: GWT Dispersion Package';
   StrADVGWTAdvectionP = 'ADV: GWT Advection Package';
+  StrSSMGWTSourceAnd = 'SSM: GWT Source and Sink Mixing Package';
+  StrCNCGWTConstantCo = 'CNC: GWT Constant Concentration Package';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
@@ -484,6 +494,7 @@ begin
     GwtDispersionPackage := SourcePackages.GwtDispersionPackage;
     GwtAdvectionPackage := SourcePackages.GwtAdvectionPackage;
     GwtSsmPackage := SourcePackages.GwtSsmPackage;
+    GwtCncPackage := SourcePackages.GwtCncPackage;
     GwtPackages := SourcePackages.GwtPackages;
   end
   else
@@ -827,9 +838,14 @@ begin
   FGwtAdvectionPackage.SelectionType := stCheckBox;
 
   FGwtSsmPackage := TGWtSsmPackage.Create(Model);
-  FGwtSsmPackage.PackageIdentifier := 'SSM: GWT Source and Sink Mixing Package';
+  FGwtSsmPackage.PackageIdentifier := StrSSMGWTSourceAnd;
   FGwtSsmPackage.Classification := StrGwtClassification;
   FGwtSsmPackage.SelectionType := stCheckBox;
+
+  FGwtCncPackage := TGwtCncPackage.Create(Model);
+  FGwtCncPackage.PackageIdentifier := StrCNCGWTConstantCo;
+  FGwtCncPackage.Classification := StrGwtClassification;
+  FGwtCncPackage.SelectionType := stCheckBox;
 
   FGwtPackages := TGwtPackageCollection.Create(Model)
 end;
@@ -837,6 +853,7 @@ end;
 destructor TModflowPackages.Destroy;
 begin
   FGwtPackages.Free;
+  FGwtCncPackage.Free;
   FGwtSsmPackage.Free;
   FGwtAdvectionPackage.Free;
   FGwtDispersionPackage.Free;
@@ -986,6 +1003,7 @@ begin
   GwtDispersionPackage.InitializeVariables;
   GwtSsmPackage.InitializeVariables;
   GwtAdvectionPackage.InitializeVariables;
+  GwtCncPackage.InitializeVariables;
 end;
 
 
@@ -1370,6 +1388,12 @@ procedure TModflowPackages.SetGwtSsmPackage(const Value: TGWtSsmPackage);
 begin
   FGwtSsmPackage.Assign(Value);
 end;
+
+procedure TModflowPackages.SetGwtCncPackage(const Value: TGwtCncPackage);
+begin
+  FGwtCncPackage.Assign(Value);
+end;
+
 
 procedure TModflowPackages.SetHfbPackage(const Value: TModflowPackageSelection);
 begin

@@ -84,7 +84,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Top = 0
     Width = 771
     Height = 555
-    ActivePage = tabCsv
+    ActivePage = tabFeatures
     Align = alClient
     TabOrder = 0
     OnChange = pcImportShapeChange
@@ -548,6 +548,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Width = 763
           Height = 481
           OnButtonClick = frameGrid1GridButtonClick
+          OnEndUpdate = frameCSVGridEndUpdate
           Columns = <
             item
               AutoAdjustRowHeights = False
@@ -573,7 +574,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = frameCSVGridEndUpdate
           ExplicitWidth = 763
           ExplicitHeight = 481
           ColWidths = (

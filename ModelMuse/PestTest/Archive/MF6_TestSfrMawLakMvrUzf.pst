@@ -53,6 +53,9 @@ regul_Grp0
 regul_Grp1
 regul_Grp2
 regul_Grp3
+regul_Grp4
+regul_Grp5
+regul_Grp6
 regul_Grp7
 regul_Grp8
 regul_Grp9
@@ -60,9 +63,6 @@ regul_Grp10
 regul_Grp11
 regul_Grp12
 regul_Grp13
-regul_Grp14
-regul_Grp15
-regul_Grp16
 
 * observation data
 MyCalib  0.000000000000E+000   1.000000000000E+000  CHOB_flows
@@ -81,14 +81,14 @@ MF6_TestSfrMawLakMvrUzf.PestIns MF6_TestSfrMawLakMvrUzf.Mf6Values
  eq_2          1.0 * UZF2 = 2       1     regul_Grp1
  eq_3          1.0 * UZF3 = 3       1     regul_Grp2
  eq_4          1.0 * UZF4 = 4       1     regul_Grp3
- eq_5          1.0 * Sfr1 = 1.1       1     regul_Grp7
- eq_6          1.0 * Sfr2 = 1.2       1     regul_Grp8
- eq_7          1.0 * SfrGrad = 0.001       1     regul_Grp9
- eq_8          1.0 * WelRadius = 1.1       1     regul_Grp10
- eq_9          1.0 * SkinRadius = 2.1       1     regul_Grp11
- eq_10          1.0 * LakeS = 0.1       1     regul_Grp12
- eq_11          1.0 * LakeBot = -1       1     regul_Grp13
- eq_12          1.0 * LakeRate = 1       1     regul_Grp14
- eq_13          1.0 * LakeInvert = 0.6       1     regul_Grp15
- eq_14          1.0 * SfrPWidth = 1.01       1     regul_Grp16
+ eq_5          1.0 * Sfr1 = 1.1       1     regul_Grp4
+ eq_6          1.0 * Sfr2 = 1.2       1     regul_Grp5
+ eq_7          1.0 * SfrGrad = 0.001       1     regul_Grp6
+ eq_8          1.0 * WelRadius = 1.1       1     regul_Grp7
+ eq_9          1.0 * SkinRadius = 2.1       1     regul_Grp8
+ eq_10          1.0 * LakeS = 0.1       1     regul_Grp9
+ eq_11          1.0 * LakeBot = -1       1     regul_Grp10
+ eq_12          1.0 * LakeRate = 1       1     regul_Grp11
+ eq_13          1.0 * LakeInvert = 0.6       1     regul_Grp12
+ eq_14          1.0 * SfrPWidth = 1.01       1     regul_Grp13
 

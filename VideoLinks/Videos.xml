@@ -81,10 +81,7 @@
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/TimeSeries/TimeSeries.html Topic="Visualizing Data" Year="2011" Month="11" Day="7"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/NavigationButtons/NavigationButtons.html Topic="ModelMuse Features" Year="2009" Month="5" Day="1"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Rulers/Rulers.html Topic="ModelMuse Features" Year="2010" Month="4" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/BoundariesAndObservations/BoundariesAndObservations.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/PermeabilityTensor/PermeabilityTensor.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Define3DMesh/Define3DMesh.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
-<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/RunSutraDisplayResults/RunSutraDisplayResults.html Topic="SUTRA" Year="2014" Month="2" Day="28"/>
 <https://water.usgs.gov/nrp/gwsoftware/ModelMuse/WellFootprint/WellFootprint.html Topic="WellFootprint" Year="2018" Month="4" Day="26"/>
 <https://www.usgs.gov/media/videos/starting-new-sutra-model Year="2022" Month="7" Day="8" Topic="SUTRA" Updated="True">Starting a New SUTRA Model<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/NewSutraModel/NewSutraModel.html Year="2014" Month="2" Day="28" Topic="SUTRA" Updated="False"/>
 </https://www.usgs.gov/media/videos/starting-new-sutra-model>
@@ -128,3 +125,9 @@
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-lpf-options>
 <https://www.usgs.gov/mission-areas/water-resources/modelmuse-wetting-option Year="2022" Month="5" Day="3" Updated="True" Topic="Understanding MODFLOW">The Wetting Option<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/WettingOption/WettingOption.html Year="2009" Month="5" Day="1" Topic="Understanding MODFLOW" Updated="False"/>
 </https://www.usgs.gov/mission-areas/water-resources/modelmuse-wetting-option>
+<https://www.usgs.gov/media/videos/sutra-boundary-conditions-and-observations Year="2022" Month="7" Day="11" Topic="SUTRA" Updated="True">Boundary conditions and observations<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/BoundariesAndObservations/BoundariesAndObservations.html Year="2014" Month="2" Day="28" Topic="SUTRA" Updated="False"/>
+</https://www.usgs.gov/media/videos/sutra-boundary-conditions-and-observations>
+<https://www.usgs.gov/media/videos/permeability-sutra Year="2022" Month="7" Day="11" Topic="SUTRA" Updated="True">Permeability in SUTRA<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/PermeabilityTensor/PermeabilityTensor.html Year="2014" Month="2" Day="28" Topic="SUTRA" Updated="False"/>
+</https://www.usgs.gov/media/videos/permeability-sutra>
+<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/RunSutraDisplayResults/RunSutraDisplayResults.html Year="2022" Month="2" Day="28" Topic="SUTRA" Updated="True">Running SUTRA and Displaying Model Results<https://water.usgs.gov/nrp/gwsoftware/ModelMuse/RunSutraDisplayResults/RunSutraDisplayResults.html Year="2014" Month="2" Day="28" Topic="SUTRA" Updated="False"/>
+</https://water.usgs.gov/nrp/gwsoftware/ModelMuse/RunSutraDisplayResults/RunSutraDisplayResults.html>

@@ -1824,6 +1824,25 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="ModflowGwtSsmWriterUnit.pas"/>
+        <DCCReference Include="framePackageMSTUnit.pas">
+            <Form>framePackageMST</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="ModflowMstWriterUnit.pas"/>
+        <DCCReference Include="frameRowGridUnit.pas">
+            <Form>frameRowGrid</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="framePackageIstUnit.pas">
+            <Form>framePackageIst</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="ModflowIstWriterUnit.pas"/>
+        <DCCReference Include="ModflowGwtSpecifiedConcUnit.pas"/>
+        <DCCReference Include="ModflowCncWriterUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
@@ -1905,12 +1924,6 @@
                 <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>ModelMuse.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Debug\Win64\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win64">
-                        <RemoteName>ModelMuse.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

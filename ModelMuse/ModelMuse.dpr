@@ -752,7 +752,14 @@ uses
   ModflowDspWriterUnit in 'ModflowDspWriterUnit.pas',
   ModflowGwtAdvWriterUnit in 'ModflowGwtAdvWriterUnit.pas',
   frameGwtAdvPackageUnit in 'frameGwtAdvPackageUnit.pas' {frameGwtAdvPackage: TFrame},
-  ModflowGwtSsmWriterUnit in 'ModflowGwtSsmWriterUnit.pas';
+  ModflowGwtSsmWriterUnit in 'ModflowGwtSsmWriterUnit.pas',
+  framePackageMSTUnit in 'framePackageMSTUnit.pas' {framePackageMST: TFrame},
+  ModflowMstWriterUnit in 'ModflowMstWriterUnit.pas',
+  frameRowGridUnit in 'frameRowGridUnit.pas' {frameRowGrid: TFrame},
+  framePackageIstUnit in 'framePackageIstUnit.pas' {framePackageIst: TFrame},
+  ModflowIstWriterUnit in 'ModflowIstWriterUnit.pas',
+  ModflowGwtSpecifiedConcUnit in 'ModflowGwtSpecifiedConcUnit.pas',
+  ModflowCncWriterUnit in 'ModflowCncWriterUnit.pas';
 
 {$R *.res}
 
@@ -768,6 +775,7 @@ begin
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
   Application.CreateForm(TfrmColors, frmColors);
+  Application.CreateForm(TframePackageIst, framePackageIst);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

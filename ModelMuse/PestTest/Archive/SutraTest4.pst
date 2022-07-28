@@ -30,10 +30,10 @@ conc2 none relative  1.000000000000E+000   0.000000000000E+000   1.000000000000E
 
 * observation groups
 sutra
+regul_Grp0
+regul_Grp1
+regul_Grp2
 regul_Grp3
-regul_Grp4
-regul_Grp5
-regul_Grp6
 
 * observation data
 test_U  1.000000000000E+000   1.000000000000E+000  sutra
@@ -46,8 +46,8 @@ SutraTest4.ptf SutraTest4.pval
 SutraTest4.PestIns SutraTest4.SutraValues
 
 * prior information
- eq_1          1.0 * a = 1       1     regul_Grp3
- eq_2          1.0 * b = 1       1     regul_Grp4
- eq_3          1.0 * conc1 = 1       1     regul_Grp5
- eq_4          1.0 * conc2 = 1       1     regul_Grp6
+ eq_1          1.0 * a = 1       1     regul_Grp0
+ eq_2          1.0 * b = 1       1     regul_Grp1
+ eq_3          1.0 * conc1 = 1       1     regul_Grp2
+ eq_4          1.0 * conc2 = 1       1     regul_Grp3
 

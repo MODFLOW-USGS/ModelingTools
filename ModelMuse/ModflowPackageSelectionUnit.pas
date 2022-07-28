@@ -51,6 +51,7 @@ Type
     FAlternateNode: pointer;
     FAlternativeClassification: string;
     FOnSelectionChange: TNotifyEvent;
+    FSpeciesIndex: Integer;
 //    FNewtonFormulation: TNewtonFormulation;
     procedure InvalidateModel;
     procedure SetComments(const Value: TStrings);
@@ -110,6 +111,7 @@ Type
     procedure InvalidateAllTimeLists; virtual;
     procedure InitializeVariables; virtual;
     property OnSelectionChange: TNotifyEvent read FOnSelectionChange write SetOnSelectionChange;
+    property SpeciesIndex: Integer read FSpeciesIndex write FSpeciesIndex;
   published
     property IsSelected: boolean read FIsSelected write SetIsSelected;
     property Comments: TStrings read FComments write SetComments;
@@ -5877,15 +5879,22 @@ Type
 
   TGwtSsmPackage = class(TModflowPackageSelection)
   end;
+  
+  TGwtCncPackage = class(TModflowPackageSelection)
+  end;
+
+  TGwtSorptionChoice = (gscNone, gscLinear, gscFreundlich, gscLangmuir);
 
   TGwtMstPackage = class(TModflowPackageSelection)
   private
     FZeroOrderDecay: Boolean;
     FFirstOrderDecay: Boolean;
-    FSorption: Boolean;
+    FSorption: TGwtSorptionChoice;
+    FSeparatePorosity: Boolean;
     procedure SetFirstOrderDecay(const Value: Boolean);
-    procedure SetSorption(const Value: Boolean);
+    procedure SetSorption(const Value: TGwtSorptionChoice);
     procedure SetZeroOrderDecay(const Value: Boolean);
+    procedure SetSeparatePorosity(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -5893,35 +5902,106 @@ Type
   published
     property ZeroOrderDecay: Boolean read FZeroOrderDecay write SetZeroOrderDecay;
     property FirstOrderDecay: Boolean read FFirstOrderDecay write SetFirstOrderDecay;
+    property Sorption: TGwtSorptionChoice read FSorption write SetSorption;
+    property SeparatePorosity: Boolean read FSeparatePorosity write SetSeparatePorosity;
+  end;
+
+  TPrintFormat = (pfExponential, pfFixed, pfGeneral, pfScientific);
+
+  TIstPackageItem = class(TOrderedItem)
+  private
+    FTextBudgetFileOut: Boolean;
+    FZeroOrderDecay: Boolean;
+    FFirstOrderDecay: Boolean;
+    FBinaryBudgetFileOut: Boolean;
+    FWidth: Integer;
+    FSpecifyPrintFormat: Boolean;
+    FSaveConcentrations: Boolean;
+    FColumns: Integer;
+    FDigits: Integer;
+    FSorption: Boolean;
+    FPrintFormat: TPrintFormat;
+    procedure SetBinaryBudgetFileOut(const Value: Boolean);
+    procedure SetColumns(const Value: Integer);
+    procedure SetDigits(const Value: Integer);
+    procedure SetFirstOrderDecay(const Value: Boolean);
+    procedure SetSaveConcentrations(const Value: Boolean);
+    procedure SetSorption(const Value: Boolean);
+    procedure SetSpecifyPrintFormat(const Value: Boolean);
+    procedure SetTextBudgetFileOut(const Value: Boolean);
+    procedure SetWidth(const Value: Integer);
+    procedure SetZeroOrderDecay(const Value: Boolean);
+    procedure SetPrintFormat(const Value: TPrintFormat);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+  public
+    procedure Assign(Source: TPersistent); override;
+    constructor Create(Collection: TCollection); override;
+  published
+    property BinaryBudgetFileOut: Boolean read FBinaryBudgetFileOut write SetBinaryBudgetFileOut;
+    property TextBudgetFileOut: Boolean read FTextBudgetFileOut write SetTextBudgetFileOut;
     property Sorption: Boolean read FSorption write SetSorption;
+    property FirstOrderDecay: Boolean read FFirstOrderDecay write SetFirstOrderDecay;
+    property ZeroOrderDecay: Boolean read FZeroOrderDecay write SetZeroOrderDecay;
+    property SaveConcentrations: Boolean read FSaveConcentrations write SetSaveConcentrations;
+    property SpecifyPrintFormat: Boolean read FSpecifyPrintFormat write SetSpecifyPrintFormat;
+    property Columns: Integer read FColumns write SetColumns;
+    property Width: Integer read FWidth write SetWidth;
+    property Digits: Integer read FDigits write SetDigits;
+    property PrintFormat: TPrintFormat read FPrintFormat write SetPrintFormat;
+  end;
+
+  TIstPackageProperties = class(TOrderedCollection)
+  private
+    function GetItems(Index: Integer): TIstPackageItem;
+    procedure SetItems(Index: Integer; const Value: TIstPackageItem);
+  public
+    constructor Create(Model: TBaseModel);
+    property Items[Index: Integer]: TIstPackageItem read GetItems write SetItems; default;
+  end;
+
+  TGwtIstPackage = class(TModflowPackageSelection)
+  private
+    FIstPackageProperties: TIstPackageProperties;
+    procedure SetIstPackageProperties(const Value: TIstPackageProperties);
+  public
+    Constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables; override;
+  published
+    property IstPackageProperties: TIstPackageProperties
+      read FIstPackageProperties write SetIstPackageProperties;
   end;
 
   TGwtPackagesItem = class(TPhastCollectionItem)
   private
     FGwtIms: TSmsPackageSelection;
     FGwtMst: TGwtMstPackage;
+    FGwtIst: TGwtIstPackage;
     procedure SetGwtIms(const Value: TSmsPackageSelection);
     procedure SetGwtMst(const Value: TGwtMstPackage);
+    procedure SetGwtIst(const Value: TGwtIstPackage);
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables;
   published
     property GwtIms: TSmsPackageSelection read FGwtIms write SetGwtIms;
     property GwtMst: TGwtMstPackage read FGwtMst write SetGwtMst;
+    property GwtIst: TGwtIstPackage read FGwtIst write SetGwtIst;
   end;
-
 
   TGwtPackageCollection = class(TPhastCollection)
   private
     FModel: TBaseModel;
-    function GetCount: Integer;
-    procedure SetCount(const Value: Integer);
     function GetItem(Index: Integer): TGwtPackagesItem;
     procedure SetItem(Index: Integer; const Value: TGwtPackagesItem);
+  protected
+    function GetCount: Integer; override;
   public
     constructor Create(Model: TBaseModel);
-    property Count: Integer read GetCount write SetCount;
     procedure InitializeVariables;
     property Items[Index: Integer]: TGwtPackagesItem read GetItem
       write SetItem; default;
@@ -6101,6 +6181,8 @@ resourcestring
   StrCHDS = 'CHD %s';
   StrRCHS = 'RCH %s';
   StrETSS = 'ETS %s';
+  StrMSTMobileStorage = 'MST: Mobile Storage and Transfer Package';
+  StrISTImmobileStorag = 'IST: Immobile Storage and Transfer Package';
 
 { TModflowPackageSelection }
 
@@ -6136,6 +6218,7 @@ begin
   Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;
   FComments := TStringList.Create;
+  FSpeciesIndex := -1;
 //  FNewtonFormulation := nfOff;
 end;
 
@@ -22675,6 +22758,7 @@ begin
     GwtSource := TGwtPackagesItem(Source);
     GwtIms := GwtSource.GwtIms;
     GwtMst := GwtSource.GwtMst;
+    GwtIst := GwtSource.GwtIst;
   end
   else
   begin
@@ -22692,27 +22776,49 @@ begin
 
   FGwtIms := TSmsPackageSelection.Create(ParentCollection.FModel);
   FGwtIms.PackageIdentifier := StrSMSSparseMatrixS;
-  FGwtIms.Classification := StrSolver;
-  FGwtIms.SelectionType := stRadioButton;
+  FGwtIms.Classification := StrGwtSolver;
+  FGwtIms.SelectionType := stCheckBox;
+  FGwtIms.SpeciesIndex := Index;
+  FGwtIms.IsSelected := True;
 
   FGwtMst := TGwtMstPackage.Create(ParentCollection.FModel);
-  FGwtMst.PackageIdentifier := 'MST: Mobile Storage and Transfer Package';
-  FGwtMst.Classification := StrGwtClassification;
+  FGwtMst.PackageIdentifier := StrMSTMobileStorage;
+  FGwtMst.Classification := StrGwtMST;
   FGwtMst.SelectionType := stCheckBox;
+  FGwtMst.SpeciesIndex := Index;
+
+  FGwtIst := TGwtIstPackage.Create(ParentCollection.FModel);
+  FGwtIst.PackageIdentifier := StrISTImmobileStorag;
+  FGwtIst.Classification := StrGwtIST;
+  FGwtIst.SelectionType := stCheckBox;
+  FGwtIst.SpeciesIndex := Index;
 
 //FGwtMst: TGwtMstPackage;
 end;
 
 destructor TGwtPackagesItem.Destroy;
 begin
+  FGwtIst.Free;
   FGwtMst.Free;
   FGwtIms.Free;
   inherited;
 end;
 
+procedure TGwtPackagesItem.InitializeVariables;
+begin
+  GwtIms.InitializeVariables;
+  GwtMst.InitializeVariables;
+  GwtIst.InitializeVariables;
+end;
+
 procedure TGwtPackagesItem.SetGwtIms(const Value: TSmsPackageSelection);
 begin
   FGwtIms.Assign(Value);
+end;
+
+procedure TGwtPackagesItem.SetGwtIst(const Value: TGwtIstPackage);
+begin
+  FGwtIst.Assign(Value);
 end;
 
 procedure TGwtPackagesItem.SetGwtMst(const Value: TGwtMstPackage);
@@ -22745,16 +22851,17 @@ begin
   if FModel <> nil then
   begin
     LocalModel := FModel as TCustomModel;
-    if LocalModel.GwtUsed and (inherited Count < LocalModel.MobileComponents.Count) then
+    if LocalModel.GwtUsed and (inherited GetCount < LocalModel.MobileComponents.Count) then
     begin
       inherited Count := LocalModel.MobileComponents.Count;
     end;
   end;
-  result := inherited Count;
+  result := inherited;
 end;
 
 function TGwtPackageCollection.GetItem(Index: Integer): TGwtPackagesItem;
 begin
+  GetCount;
   result := inherited Items[Index] as TGwtPackagesItem
 end;
 
@@ -22764,14 +22871,8 @@ var
 begin
   for SpeciesIndex := 0 to inherited Count - 1 do
   begin
-    Items[SpeciesIndex].GwtIms.InitializeVariables;
-    Items[SpeciesIndex].GwtMst.InitializeVariables;
+    Items[SpeciesIndex].InitializeVariables;
   end;
-end;
-
-procedure TGwtPackageCollection.SetCount(const Value: Integer);
-begin
-  inherited Count := Value;
 end;
 
 procedure TGwtPackageCollection.SetItem(Index: Integer;
@@ -22892,6 +22993,7 @@ begin
     ZeroOrderDecay := MstSource.ZeroOrderDecay;
     FirstOrderDecay := MstSource.FirstOrderDecay;
     Sorption := MstSource.Sorption;
+    SeparatePorosity := MstSource.SeparatePorosity;
   end;
   inherited;
 end;
@@ -22907,7 +23009,8 @@ begin
   inherited;
   FZeroOrderDecay := False;
   FFirstOrderDecay := False;
-  FSorption := False;
+  FSorption := gscNone;
+  FSeparatePorosity := False;
 end;
 
 procedure TGwtMstPackage.SetFirstOrderDecay(const Value: Boolean);
@@ -22915,14 +23018,194 @@ begin
   SetBooleanProperty(FFirstOrderDecay, Value);
 end;
 
-procedure TGwtMstPackage.SetSorption(const Value: Boolean);
+procedure TGwtMstPackage.SetSeparatePorosity(const Value: Boolean);
 begin
-  SetBooleanProperty(FSorption, Value);
+  SetBooleanProperty(FSeparatePorosity, Value);
+end;
+
+procedure TGwtMstPackage.SetSorption(const Value: TGwtSorptionChoice);
+begin
+  if FSorption <> Value then
+  begin
+    FSorption := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TGwtMstPackage.SetZeroOrderDecay(const Value: Boolean);
 begin
   SetBooleanProperty(FZeroOrderDecay, Value);
+end;
+
+{ TIstPackageItem }
+
+procedure TIstPackageItem.Assign(Source: TPersistent);
+var
+  IstSource: TIstPackageItem;
+begin
+  if Source is TIstPackageItem then
+  begin
+    IstSource := TIstPackageItem(Source);
+    BinaryBudgetFileOut := IstSource.BinaryBudgetFileOut;
+    TextBudgetFileOut := IstSource.TextBudgetFileOut;
+    Sorption := IstSource.Sorption;
+    FirstOrderDecay := IstSource.FirstOrderDecay;
+    ZeroOrderDecay := IstSource.ZeroOrderDecay;
+    SaveConcentrations := IstSource.SaveConcentrations;
+    SpecifyPrintFormat := IstSource.SpecifyPrintFormat;
+    Columns := IstSource.Columns;
+    Width := IstSource.Width;
+    Digits := IstSource.Digits;
+    PrintFormat := IstSource.PrintFormat;
+  end;
+  inherited;
+end;
+
+constructor TIstPackageItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FColumns := 10;
+  FWidth := 15;
+  FDigits := 10;
+  FPrintFormat := pfGeneral;
+end;
+
+function TIstPackageItem.IsSame(AnotherItem: TOrderedItem): boolean;
+var
+  SourceItem: TIstPackageItem;
+begin
+  result := AnotherItem is TIstPackageItem;
+  if result then
+  begin
+     SourceItem := TIstPackageItem(AnotherItem);
+     result := (BinaryBudgetFileOut = SourceItem.BinaryBudgetFileOut)
+      and (TextBudgetFileOut = SourceItem.TextBudgetFileOut)
+      and (Sorption = SourceItem.Sorption)
+      and (FirstOrderDecay = SourceItem.FirstOrderDecay)
+      and (ZeroOrderDecay = SourceItem.ZeroOrderDecay)
+      and (SaveConcentrations = SourceItem.SaveConcentrations)
+      and (SpecifyPrintFormat = SourceItem.SpecifyPrintFormat)
+      and (Columns = SourceItem.Columns)
+      and (Width = SourceItem.Width)
+      and (Digits = SourceItem.Digits)
+      and (PrintFormat = SourceItem.PrintFormat);
+  end;
+end;
+
+procedure TIstPackageItem.SetBinaryBudgetFileOut(const Value: Boolean);
+begin
+  SetBooleanProperty(FBinaryBudgetFileOut, Value);
+end;
+
+procedure TIstPackageItem.SetColumns(const Value: Integer);
+begin
+  SetIntegerProperty(FColumns, Value);
+end;
+
+procedure TIstPackageItem.SetDigits(const Value: Integer);
+begin
+  SetIntegerProperty(FDigits, Value);
+end;
+
+procedure TIstPackageItem.SetFirstOrderDecay(const Value: Boolean);
+begin
+  SetBooleanProperty(FFirstOrderDecay, Value);
+end;
+
+procedure TIstPackageItem.SetPrintFormat(const Value: TPrintFormat);
+begin
+  if FPrintFormat <> Value then
+  begin
+    FPrintFormat := Value;
+    InvalidateModel;
+  end;
+
+end;
+
+procedure TIstPackageItem.SetSaveConcentrations(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveConcentrations, Value);
+end;
+
+procedure TIstPackageItem.SetSorption(const Value: Boolean);
+begin
+  SetBooleanProperty(FSorption, Value);
+end;
+
+procedure TIstPackageItem.SetSpecifyPrintFormat(const Value: Boolean);
+begin
+  SetBooleanProperty(FSpecifyPrintFormat, Value);
+end;
+
+procedure TIstPackageItem.SetTextBudgetFileOut(const Value: Boolean);
+begin
+  SetBooleanProperty(FTextBudgetFileOut, Value);
+end;
+
+procedure TIstPackageItem.SetWidth(const Value: Integer);
+begin
+  SetIntegerProperty(FWidth, Value);
+end;
+
+procedure TIstPackageItem.SetZeroOrderDecay(const Value: Boolean);
+begin
+  SetBooleanProperty(FZeroOrderDecay, Value);
+end;
+
+{ TIstPackageProperties }
+
+constructor TIstPackageProperties.Create(Model: TBaseModel);
+begin
+  inherited Create(TIstPackageItem, Model);
+end;
+
+function TIstPackageProperties.GetItems(Index: Integer): TIstPackageItem;
+begin
+  result := Inherited Items[Index] as TIstPackageItem;
+end;
+
+procedure TIstPackageProperties.SetItems(Index: Integer;
+  const Value: TIstPackageItem);
+begin
+  Inherited Items[Index] := Value;
+end;
+
+{ TGwtIstPackage }
+
+procedure TGwtIstPackage.Assign(Source: TPersistent);
+begin
+  if Source is TGwtIstPackage then
+  begin
+    IstPackageProperties := TGwtIstPackage(Source).IstPackageProperties;
+  end;
+  inherited;
+
+end;
+
+constructor TGwtIstPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  FIstPackageProperties := TIstPackageProperties.Create(Model);
+  InitializeVariables;
+end;
+
+destructor TGwtIstPackage.Destroy;
+begin
+  FIstPackageProperties.Free;
+  inherited;
+end;
+
+procedure TGwtIstPackage.InitializeVariables;
+begin
+  inherited;
+  FIstPackageProperties.Clear;
+  FIstPackageProperties.Add;
+end;
+
+procedure TGwtIstPackage.SetIstPackageProperties(
+  const Value: TIstPackageProperties);
+begin
+  FIstPackageProperties.Assign(Value);
 end;
 
 end.

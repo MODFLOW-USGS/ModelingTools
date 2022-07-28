@@ -50,7 +50,8 @@ uses System.UITypes,
   framePackageGNC_Unit, framePackageMf6ObsUnit, framePackageLakMf6Unit,
   framePackageMvrUnit, framePackageUzfMf6Unit, frameMt3dLktPkgUnit,
   frameMt3dSftUnit, frameMt3dCtsPkgUnit, framePackageCsubUnit,
-  PestParamGroupsUnit, frameGwtDspPackageUnit, frameGwtAdvPackageUnit;
+  PestParamGroupsUnit, frameGwtDspPackageUnit, frameGwtAdvPackageUnit,
+  framePackageMSTUnit, framePackageIstUnit;
 
 type
 
@@ -75,10 +76,15 @@ type
   end;
 
   TFrameNodeLink = class(TObject)
+  private
+    FNode: TTreeNode;
+    FFrame: TframePackage;
+    procedure SetNode(const Value: TTreeNode);
+    procedure SetFrame(const Value: TframePackage);
   public
-    Frame: TframePackage;
-    Node: TTreeNode;
     AlternateNode: TTreeNode;
+    property Node: TTreeNode read FNode write SetNode;
+    property Frame: TframePackage read FFrame write SetFrame;
   end;
 
   TfrmModflowPackages = class(TfrmCustomGoPhast)
@@ -261,6 +267,8 @@ type
     frameGwtAdv: TframeGwtAdvPackage;
     jvspGwtSsm: TJvStandardPage;
     frameGwtSSM: TframePackage;
+    jvspGwtCNC: TJvStandardPage;
+    frameGwtCNC: TframePackage;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -335,6 +343,8 @@ type
     procedure jvspNPFShow(Sender: TObject);
     procedure tvPackagesMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure frameGridMobileGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -347,6 +357,13 @@ type
     FCurrentPackages: TModflowPackages;
     FFrameNodeLinks: TList;
     FSettingNumber: Boolean;
+    FGwtParentNode: TTreeNode;
+    FMstNode: TTreeNode;
+    FframePackageMSTObjectList: TframePackageMSTObjectList;
+    FIstNode: TTreeNode;
+    FframePackageIstObjectList: TframePackageIstObjectList;
+    FframePkgSmsObjectList: TframePkgSmsObjectList;
+    FGwtImsNode: TTreeNode;
     procedure AssignParameterToRow(ActiveGrid: TRbwDataGrid4; RowIndex: Integer;
       Parameter: TModflowParameter);
     procedure SetData;
@@ -415,9 +432,15 @@ type
     procedure EnableLakeTransport;
     procedure EnableStreamTransport;
     procedure EnableContaminantTreatmentSystem;
-
+    procedure UpdateGwtFrames;
+    function CreateMstFrame: TframePackageMST;
+    function CreateIstFrame: TframePackageIst;
+    function CreateImsGwtFram: TframePkgSms;
+    procedure ShowImsPage(Sender: TObject);
     { Private declarations }
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     procedure GetData;
     { Public declarations }
   end;
@@ -441,6 +464,7 @@ type
     procedure UpdateLayerGroupProperties(BcfPackage: TModflowPackageSelection);
     procedure RecreateMt3dTimeLists;
     procedure SetMt3dCaption;
+    procedure InvalidateActiveGrid;
   protected
     function Description: string; override;
   public
@@ -467,7 +491,7 @@ uses Contnrs, JvListComb, frmGoPhastUnit, ScreenObjectUnit,
   frmManageFluxObservationsUnit, ModflowSubsidenceDefUnit, Mt3dmsChemUnit,
   ModflowTimeUnit, ModflowDiscretizationWriterUnit, Mt3dUztRchUnit,
   Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, Mt3dSftUnit,
-  ModflowCsubUnit, ModflowCSubInterbed;
+  ModflowCsubUnit, ModflowCSubInterbed, System.Math, AbstractGridUnit;
 
 resourcestring
   StrLPFParameters = 'LPF or NWT Parameters';
@@ -557,6 +581,10 @@ resourcestring
   StrFirstorderChainRe = 'First-order chain reactions require at least two c' +
   'hemical species in the MT3D Basic package.';
   StrMT3DCanOnlyBeUse = 'MT3D can only be used with structured grids.';
+  StrMSTMobileStorage = 'MST: Mobile Storage and Transfer Packages';
+  StrISTImmobileStorag = 'IST: Immobile Storage and Transfer Packages';
+  StrImsGWT = 'IMS-GWT: Iterative Model Sovler Packages';
+  StrIMSIterativeModel = 'IMS: Iterative Model Solver Packages';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -696,6 +724,58 @@ begin
   begin
     CurrentPackages := comboModel.Items.Objects[
       comboModel.ItemIndex] as TModflowPackages;
+  end;
+end;
+
+constructor TfrmModflowPackages.Create(AOwner: TComponent);
+begin
+  inherited;
+  FframePackageMSTObjectList := TframePackageMSTObjectList.Create;
+  FframePackageIstObjectList := TframePackageIstObjectList.Create;
+  FframePkgSmsObjectList := TframePkgSmsObjectList.Create;
+end;
+
+function TfrmModflowPackages.CreateImsGwtFram: TframePkgSms;
+var
+  NewPage: TJvStandardPage;
+  MemoWidth: Integer;
+begin
+  result := TframePkgSms.Create(nil);
+  FframePkgSmsObjectList.Add(result);
+  NewPage := TJvStandardPage.Create(self);
+  NewPage.Name := '';
+  NewPage.PageList := jvplPackages;
+  NewPage.OnShow := ShowImsPage;
+  result.Parent := NewPage;
+  MemoWidth := result.MemoComments.Width;
+  result.Align := alClient;
+  // If this isn't done, the memo may be invisible because its width
+  // ends up less than zero.
+  // The page control is handled in ShowImsPage for the same reason.
+  if result.Width <= 0 then
+  begin
+    result.MemoComments.Width := MemoWidth;
+  end;
+end;
+
+function TfrmModflowPackages.CreateIstFrame: TframePackageIst;
+var
+  NewPage: TJvStandardPage;
+  MemoWidth: Integer;
+begin
+  result := TframePackageIst.Create(nil);
+  FframePackageISTObjectList.Add(result);
+  NewPage := TJvStandardPage.Create(self);
+  NewPage.Name := '';
+  NewPage.PageList := jvplPackages;
+  result.Parent := NewPage;
+  MemoWidth := result.MemoComments.Width;
+  result.Align := alClient;
+  // If this isn't done, the memo may be invisible because its width
+  // ends up less than zero.
+  if result.Width <= 0 then
+  begin
+    result.MemoComments.Width := MemoWidth;
   end;
 end;
 
@@ -1379,6 +1459,7 @@ begin
   inherited;
   EnableUnsatTransport;
   EnableLakeTransport;
+  UpdateGwtFrames;
 end;
 
 procedure TfrmModflowPackages.framePkgMt3dBasicrcSelectionControllerEnabledChange(
@@ -1437,6 +1518,14 @@ begin
   begin
     framePkgCHOB.Selected := False;
   end;
+end;
+
+destructor TfrmModflowPackages.Destroy;
+begin
+  FframePkgSmsObjectList.Free;
+  FframePackageIstObjectList.Free;
+  FframePackageMSTObjectList.Free;
+  inherited;
 end;
 
 procedure TfrmModflowPackages.DrnSelectedChange(Sender: TObject);
@@ -1890,11 +1979,19 @@ begin
   UpdateSpeciesNames;
 end;
 
+procedure TfrmModflowPackages.frameGridMobileGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateGwtFrames;
+end;
+
 procedure TfrmModflowPackages.frameGridMobileseNumberChange(Sender: TObject);
 begin
   inherited;
   framePkgMt3dBasic.frameGridMobile.seNumberChange(Sender);
   UpdateSpeciesNames;
+  UpdateGwtFrames;
 end;
 
 procedure TfrmModflowPackages.frameModpathrcSelectionControllerEnabledChange(
@@ -2167,6 +2264,24 @@ begin
   end;
 end;
 
+procedure TfrmModflowPackages.ShowImsPage(Sender: TObject);
+var
+  APage: TJvStandardPage;
+  ControlIndex: Integer;
+  AFrame: TframePkgSms;
+begin
+  APage := Sender as TJvStandardPage;
+  for ControlIndex := 0 to APage.ControlCount - 1 do
+  begin
+    if APage.Controls[ControlIndex] is TframePkgSms then
+    begin
+      AFrame := TframePkgSms(APage.Controls[ControlIndex]);
+      AFrame.pgcControls.Align := alNone;
+      AFrame.pgcControls.Align := alBottom;
+    end;
+  end;
+end;
+
 procedure TfrmModflowPackages.AdjustDroppedWidth(OwnerComponent: TComponent);
 var
   Combo: TJvImageComboBox;
@@ -2268,17 +2383,19 @@ var
   AltNodeIndex: Integer;
   AltParentNode: TTreeNode;
   AltChildNode: TTreeNode;
+//  MstIndex: Integer;
   procedure AddNode(const Key, Caption: string; var PriorNode: TTreeNode);
   begin
     PriorNode := tvPackages.Items.Add(PriorNode, Caption);
     FTreeNodeList.AddObject(Key, PriorNode);
   end;
-  procedure AddChildNode(const Key, Caption: string; ParentNode: TTreeNode);
+  function AddChildNode(const Key, Caption: string; ParentNode: TTreeNode): TTreeNode;
   var
     ChildNode: TTreeNode;
   begin
     ChildNode := tvPackages.Items.AddChild(ParentNode, Caption);
     FTreeNodeList.AddObject(Key, ChildNode);
+    result := ChildNode;
   end;
 begin
   frameSFRParameterDefinition.seNumberOfParameters.AsInteger := 0;
@@ -2328,6 +2445,21 @@ begin
     if frmGoPhast.ModelSelection = msModflow2015  then
     begin
       AddNode(StrGwtClassification, StrGwtClassification, PriorNode);
+      FGwtParentNode := PriorNode;
+
+      FMstNode := AddChildNode(StrGwtMST, StrMSTMobileStorage,
+        FGwtParentNode);
+      FIstNode := AddChildNode(StrGwtIST, StrISTImmobileStorag,
+        FGwtParentNode);
+      FGwtImsNode := AddChildNode(StrGwtSolver, StrIMSIterativeModel,
+        FGwtParentNode);
+    end
+    else
+    begin
+      FGwtParentNode := nil;
+      FMstNode := nil;
+      FIstNode := nil;
+      FGwtImsNode := nil;
     end;
     AddNode(StrMT3DMS_Classificaton, StrMT3DMS_Classificaton, PriorNode);
 
@@ -2342,7 +2474,15 @@ begin
       NodeIndex := FTreeNodeList.IndexOf(APackage.Classification);
       Assert(NodeIndex >= 0, Format(StrSWasNotFound, [APackage.Classification]));
       ParentNode := FTreeNodeList.Objects[NodeIndex] as TTreeNode;
-      ChildNode := tvPackages.Items.AddChild(ParentNode, APackage.PackageIdentifier);
+      if APackage.SpeciesIndex >= 0 then
+      begin
+        ChildNode := tvPackages.Items.AddChild(ParentNode,
+          framePkgMt3dBasic.frameGridMobile.Grid.Cells[0,APackage.SpeciesIndex+1]);
+      end
+      else
+      begin
+        ChildNode := tvPackages.Items.AddChild(ParentNode, APackage.PackageIdentifier);
+      end;
 
       if APackage.AlternativeClassification = '' then
       begin
@@ -2405,8 +2545,8 @@ begin
     FPackageList.Free;
     FPackageList := TList.Create;
 
-    AddPackagesToList(frmGoPhast.PhastModel.ModflowPackages);
-    NilNodes;
+//    AddPackagesToList(frmGoPhast.PhastModel.ModflowPackages);
+//    NilNodes;
 
     FSteadyParameters.Free;
     FSteadyParameters := TModflowSteadyParameters.Create(nil);
@@ -2434,6 +2574,9 @@ begin
     frameMt3dmsGcgPackage.OnSelectedChange := Mt3dmsGcgSelectedChange;
     frameMt3dmsAdvPkg.CanSelect := False;
     frameMt3dmsDispersionPkg.CanSelect := False;
+    FframePackageMSTObjectList.Clear;
+    FframePackageIstObjectList.Clear;
+    FframePkgSmsObjectList.Clear;
     ReadPackages;
     comboModel.ItemIndex := 0;
     comboModelChange(nil);
@@ -2484,6 +2627,29 @@ begin
     pnlModel.Visible := frmGoPhast.PhastModel.LgrUsed;
   finally
     IsLoaded := True;
+  end;
+end;
+
+function TfrmModflowPackages.CreateMstFrame: TframePackageMST;
+var
+  NewPage: TJvStandardPage;
+  MemoWidth: Integer;
+begin
+  result := TframePackageMST.Create(nil);
+  FframePackageMSTObjectList.Add(result);
+  NewPage := TJvStandardPage.Create(self);
+  NewPage.Name := '';
+  NewPage.PageList := jvplPackages;
+  result.Parent := NewPage;
+  MemoWidth := result.MemoComments.Width;
+  result.Align := alClient;
+  // If this isn't done, the memo may be invisible because its width
+  // ends up less than zero.
+  if result.Width <= 0 then
+  begin
+    result.MemoComments.Width := MemoWidth;
+    result.rgPorosity.Width := MemoWidth;
+    result.rgSorption.Width := MemoWidth;
   end;
 end;
 
@@ -2780,6 +2946,171 @@ begin
   end;
 end;
 
+procedure TfrmModflowPackages.UpdateGwtFrames;
+var
+  SpeciesIndex: Integer;
+  SpeciesName: string;
+  ChildNode: TTreeNode;
+//  AFrame: TframePackageMST;
+  Link: TFrameNodeLink;
+  MstPackage: TGwtMstPackage;
+  IstPackage: TGwtIstPackage;
+  AMstFrame: TframePackageMST;
+//  AFIstframe: TframePackageIst;
+  AnIstframe: TframePackageIst;
+  ImsPackage: TSmsPackageSelection;
+  AnImtframe: TframePkgSms;
+begin
+  if not IsLoaded then
+  begin
+    Exit;
+  end;
+  if framePkgMt3dBasic.Selected
+    and (framePkgMt3dBasic.comboVersion.ItemIndex = 2) then
+  begin
+    if FCurrentPackages.GwtPackages.Count <
+      framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger then
+    begin
+      FCurrentPackages.GwtPackages.Count :=
+        framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger
+    end;
+
+    // MST package
+    if FMstNode = nil then
+    begin
+      FMstNode := tvPackages.Items.AddChild(FGwtParentNode, StrMSTMobileStorage);
+    end;
+    ChildNode := FMstNode.GetFirstChild;
+    for SpeciesIndex := 0 to framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger -1 do
+    begin
+      SpeciesName := framePkgMt3dBasic.frameGridMobile.Grid.Cells[0, SpeciesIndex+1];
+
+      if ChildNode = nil then
+      begin
+        ChildNode := tvPackages.Items.AddChild(FMstNode, SpeciesName);
+      end
+      else
+      begin
+        ChildNode.Text := SpeciesName;
+      end;
+
+      MstPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtMst;
+//      ChildNode.Data := MstPackage
+                        ;
+      if SpeciesIndex < FframePackageMSTObjectList.Count then
+      begin
+        AMstFrame := FframePackageMSTObjectList[SpeciesIndex];
+      end
+      else
+      begin
+        AMstFrame := CreateMstFrame;
+
+        MstPackage.Node := ChildNode;
+        AMstFrame.GetData(MstPackage);
+
+        Link := TFrameNodeLink.Create;
+        Link.Frame := AMstFrame;
+        Link.Node := ChildNode;
+        Link.AlternateNode := ChildNode;
+        FFrameNodeLinks.Add(Link);
+      end;
+      ChildNode.Data := AMstFrame.Parent;
+
+      ChildNode := ChildNode.GetnextSibling;
+    end;
+
+    // IST Package
+    if FIstNode = nil then
+    begin
+      FIstNode := tvPackages.Items.AddChild(FGwtParentNode, StrISTImmobileStorag);
+    end;
+
+    ChildNode := FIstNode.GetFirstChild;
+    for SpeciesIndex := 0 to framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger -1 do
+    begin
+      SpeciesName := framePkgMt3dBasic.frameGridMobile.Grid.Cells[0, SpeciesIndex+1];
+
+      if ChildNode = nil then
+      begin
+        ChildNode := tvPackages.Items.AddChild(FIstNode, SpeciesName);
+      end
+      else
+      begin
+        ChildNode.Text := SpeciesName;
+      end;
+
+      IstPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtIst;
+//      ChildNode.Data := IstPackage
+                        ;
+      if SpeciesIndex < FframePackageISTObjectList.Count then
+      begin
+        AnIstframe := FframePackageISTObjectList[SpeciesIndex];
+      end
+      else
+      begin
+        AnIstframe := CreateIstFrame;
+
+        IstPackage.Node := ChildNode;
+        AnIstframe.GetData(IstPackage);
+
+        Link := TFrameNodeLink.Create;
+        Link.Frame := AnIstframe;
+        Link.Node := ChildNode;
+        Link.AlternateNode := ChildNode;
+        FFrameNodeLinks.Add(Link);
+      end;
+      ChildNode.Data := AnIstframe.Parent;
+
+      ChildNode := ChildNode.GetnextSibling;
+    end;
+
+    // IMS Packages
+    if FGwtImsNode = nil then
+    begin
+      FGwtImsNode := tvPackages.Items.AddChild(FGwtParentNode, StrIMSIterativeModel);
+    end;
+
+    ChildNode := FGwtImsNode.GetFirstChild;
+    for SpeciesIndex := 0 to framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger -1 do
+    begin
+      SpeciesName := framePkgMt3dBasic.frameGridMobile.Grid.Cells[0, SpeciesIndex+1];
+
+      if ChildNode = nil then
+      begin
+        ChildNode := tvPackages.Items.AddChild(FGwtImsNode, SpeciesName);
+      end
+      else
+      begin
+        ChildNode.Text := SpeciesName;
+      end;
+
+      ImsPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtIms;
+//      ChildNode.Data := ImsPackage
+                        ;
+      if SpeciesIndex < FframePkgSmsObjectList.Count then
+      begin
+        AnImtframe := FframePkgSmsObjectList[SpeciesIndex];
+      end
+      else
+      begin
+        AnImtframe := CreateImsGwtFram;
+
+        ImsPackage.Node := ChildNode;
+        AnImtframe.GetData(ImsPackage);
+
+        Link := TFrameNodeLink.Create;
+        Link.Frame := AnImtframe;
+        Link.Node := ChildNode;
+        Link.AlternateNode := ChildNode;
+        FFrameNodeLinks.Add(Link);
+      end;
+      ChildNode.Data := AnImtframe.Parent;
+
+      ChildNode := ChildNode.GetnextSibling;
+    end
+  end
+end;
+
 procedure TfrmModflowPackages.EnableRchModpathOption;
 begin
   frameModpath.comboRchSource.Enabled :=
@@ -3023,6 +3354,8 @@ begin
   EnableLakeTransport;
   EnableStreamTransport;
   EnableContaminantTreatmentSystem;
+
+  UpdateGwtFrames;
 end;
 
 function TfrmModflowPackages.NewParameterName: string;
@@ -3323,6 +3656,8 @@ var
   Index: Integer;
   Component: TComponent;
   Control: TControl;
+  MstIndex: Integer;
+  IstIndex: Integer;
 begin
   result := nil;
   Page := Node.Data;
@@ -3355,6 +3690,33 @@ begin
         end;
       end;
     end;
+  end;
+  for MstIndex := 0 to FframePackageMSTObjectList.Count - 1 do
+  begin
+    Frame := FframePackageMSTObjectList[MstIndex];
+    if (Frame.Parent = Page) then
+    begin
+      result := Frame;
+      Exit;
+    end
+  end;
+  for IstIndex := 0 to FframePackageIstObjectList.Count - 1 do
+  begin
+    Frame := FframePackageIstObjectList[IstIndex];
+    if (Frame.Parent = Page) then
+    begin
+      result := Frame;
+      Exit;
+    end
+  end;
+  for IstIndex := 0 to FframePkgSmsObjectList.Count - 1 do
+  begin
+    Frame := FframePkgSmsObjectList[IstIndex];
+    if (Frame.Parent = Page) then
+    begin
+      result := Frame;
+      Exit;
+    end
   end;
   Assert(result <> nil);
 end;
@@ -3516,6 +3878,20 @@ begin
 end;
 
 procedure TfrmModflowPackages.AddPackagesToList(Packages: TModflowPackages);
+var
+  MstIndex: Integer;
+  AFrame: TframePackageMST;
+  MstPackage: TGwtMstPackage;
+  MstChildNode: TTreeNode;
+  IstChildNode: TTreeNode;
+  IstIndex: Integer;
+  IstPackage: TGwtIstPackage;
+  AnIstFrame: TframePackageIst;
+  SpeciesName: string;
+  ImsChildNode: TTreeNode;
+  ImsIndex: Integer;
+  ImsPackage: TSmsPackageSelection;
+  AnImsFrame: TframePkgSms;
 begin
   FPackageList.Clear;
 
@@ -3969,6 +4345,139 @@ begin
     frameGwtSSM.NilNode;
   end;
 
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    Packages.GwtCncPackage.Frame := frameGwtCnc;
+    FPackageList.Add(Packages.GwtCncPackage);
+  end
+  else
+  begin
+    frameGwtCnc.NilNode;
+  end;
+
+  if (frmGoPhast.ModelSelection = msModflow2015)
+    and framePkgMt3dBasic.Selected
+    and (framePkgMt3dBasic.comboVersion.ItemIndex = 2) then
+  begin
+    if Packages.GwtPackages.Count < framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger then
+    begin
+      Packages.GwtPackages.Count := framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger
+    end;
+    // MST Package
+    MstChildNode := FMstNode.GetFirstChild;
+    for MstIndex := 0 to framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger - 1 do
+    begin
+      MstPackage := Packages.GwtPackages[MstIndex].GwtMst;
+      if MstIndex < FframePackageMSTObjectList.Count then
+      begin
+        AFrame := FframePackageMSTObjectList[MstIndex];
+      end
+      else
+      begin
+        AFrame := CreateMstFrame;
+      end;
+
+      SpeciesName := framePkgMt3dBasic.frameGridMobile.Grid.Cells[0, MstIndex+ 1];
+
+      if MstChildNode = nil then
+      begin
+        MstChildNode := tvPackages.Items.AddChild(FMstNode, SpeciesName);
+      end;
+
+      MstPackage.Frame := AFrame;
+      MstPackage.Node := MstChildNode;
+
+      FPackageList.Add(MstPackage);
+
+      MstChildNode := MstChildNode.GetNextSibling;
+    end;
+
+//    for MstIndex := frmGoPhast.PhastModel.MobileComponents.Count to
+//      FframePackageMSTObjectList.Count - 1 do
+//    begin
+//      FframePackageMSTObjectList[MstIndex].NilNode;
+//    end;
+
+    // IST Package
+    IstChildNode := FIstNode.GetFirstChild;
+    for IstIndex := 0 to framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger - 1 do
+    begin
+      IstPackage := Packages.GwtPackages[IstIndex].GwtIst;
+      if IstIndex < FframePackageIstObjectList.Count then
+      begin
+        AnIstFrame := FframePackageIstObjectList[IstIndex];
+      end
+      else
+      begin
+        AnIstFrame := CreateIstFrame;
+      end;
+
+      SpeciesName := framePkgMt3dBasic.frameGridMobile.Grid.Cells[0, IstIndex+ 1];
+
+      if IstChildNode = nil then
+      begin
+        IstChildNode := tvPackages.Items.AddChild(FIstNode, SpeciesName);
+      end;
+
+      IstPackage.Frame := AnIstFrame;
+      IstPackage.Node := IstChildNode;
+
+      FPackageList.Add(IstPackage);
+
+      IstChildNode := IstChildNode.GetNextSibling;
+    end;
+
+//    for IstIndex := frmGoPhast.PhastModel.MobileComponents.Count to
+//      FframePackageIstObjectList.Count - 1 do
+//    begin
+//      FframePackageIstObjectList[IstIndex].NilNode;
+//    end;
+
+    // IMS Package
+    ImsChildNode := FGwtImsNode.GetFirstChild;
+    for ImsIndex := 0 to framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger - 1 do
+    begin
+      ImsPackage := Packages.GwtPackages[ImsIndex].GwtIms;
+      if ImsIndex < FframePkgSmsObjectList.Count then
+      begin
+        AnImsFrame := FframePkgSmsObjectList[ImsIndex];
+      end
+      else
+      begin
+        AnImsFrame := CreateImsGwtFram;
+      end;
+
+      SpeciesName := framePkgMt3dBasic.frameGridMobile.Grid.Cells[0, ImsIndex+ 1];
+
+      if ImsChildNode = nil then
+      begin
+        ImsChildNode := tvPackages.Items.AddChild(FGwtImsNode, SpeciesName);
+      end;
+
+      ImsPackage.Frame := AnImsFrame;
+      ImsPackage.Node := ImsChildNode;
+
+      FPackageList.Add(ImsPackage);
+
+      ImsChildNode := ImsChildNode.GetNextSibling;
+    end;
+  end
+  else
+  begin
+    for MstIndex := 0 to FframePackageMSTObjectList.Count - 1 do
+    begin
+      FframePackageMSTObjectList[MstIndex].NilNode;
+    end;
+    for IstIndex := 0 to FframePackageIstObjectList.Count - 1 do
+    begin
+      FframePackageIstObjectList[IstIndex].NilNode;
+    end;
+    for IstIndex := 0 to FframePkgSmsObjectList.Count - 1 do
+    begin
+      FframePkgSmsObjectList[IstIndex].NilNode;
+    end;
+  end;
+
 end;
 
 procedure TfrmModflowPackages.tvHufParameterTypesChange(Sender: TObject;
@@ -4200,7 +4709,12 @@ begin
     PhastModel.UpdateGwtConc;
   end;
 
+  PhastModel.MobileComponents.UpdateAllDataArrays;
+
   inherited;
+
+  InvalidateActiveGrid;
+
   frmGoPhast.EnableLinkStreams;
   frmGoPhast.EnableManageFlowObservations;
   frmGoPhast.EnableManageHeadObservations;
@@ -4215,6 +4729,56 @@ begin
   begin
     Beep;
     MessageDlg(StrInOrderToGenerate, mtInformation, [mbOK], 0);
+  end;
+end;
+
+procedure TUndoChangeLgrPackageSelection.InvalidateActiveGrid;
+var
+  PackageIndex: Integer;
+  OldPackages: TModflowPackages;
+  NewPackages: TModflowPackages;
+  ActiveChanged: Boolean;
+  DrawingChoice: TGridLineDrawingChoice;
+begin
+  if frmGoPhast.PhastModel.ModflowGrid <> nil then
+  begin
+    DrawingChoice := frmGoPhast.PhastModel.ModflowGrid.GridLineDrawingChoice;
+  end
+  else if frmGoPhast.DisvUsed then
+  begin
+    DrawingChoice := frmGoPhast.PhastModel.DisvGrid.GridLineDrawingChoice;
+  end
+  else
+  begin
+    Exit;
+  end;
+
+  if DrawingChoice in [gldcActive, gldcActiveEdge] then
+  begin
+    ActiveChanged := False;
+    for PackageIndex := 0 to Min(FOldPackages.Count, FNewPackages.Count) - 1 do
+    begin
+      OldPackages := FOldPackages[PackageIndex].Packages;
+      NewPackages := FNewPackages[PackageIndex].Packages;
+      if (OldPackages.LakPackage.IsSelected <> NewPackages.LakPackage.IsSelected)
+        or (OldPackages.ChdBoundary.IsSelected <> NewPackages.ChdBoundary.IsSelected)
+        or (OldPackages.LakMf6Package.IsSelected <> NewPackages.LakMf6Package.IsSelected) then
+      begin
+        ActiveChanged := True;
+        break;
+      end;
+    end;
+    if ActiveChanged then
+    begin
+      if frmGoPhast.PhastModel.ModflowGrid <> nil then
+      begin
+        frmGoPhast.PhastModel.ModflowGrid.GridChanged;
+      end
+      else if frmGoPhast.PhastModel.DisvUsed then
+      begin
+        frmGoPhast.PhastModel.DisvGrid.MeshChanged;
+      end;
+    end;
   end;
 end;
 
@@ -4339,7 +4903,11 @@ begin
     frmGoPhast.PhastModel.UpdateGwtConc;
   end;
 
+  PhastModel.MobileComponents.UpdateAllDataArrays;
+
   inherited;
+  InvalidateActiveGrid;
+
   frmGoPhast.PhastModel.HydrogeologicUnits.Assign(FOldHydroGeologicUnits);
   frmGoPhast.EnableLinkStreams;
   frmGoPhast.EnableHufMenuItems;
@@ -4422,6 +4990,18 @@ procedure TUndoChangeLgrPackageSelection.UpdateMt3dmsChemSpecies;
 begin
   FNewMobileComponents.Assign(frmGoPhast.PhastModel.MobileComponents);
   FNewImmobileComponents.Assign(frmGoPhast.PhastModel.ImmobileComponents);
+end;
+
+{ TFrameNodeLink }
+
+procedure TFrameNodeLink.SetFrame(const Value: TframePackage);
+begin
+  FFrame := Value;
+end;
+
+procedure TFrameNodeLink.SetNode(const Value: TTreeNode);
+begin
+  FNode := Value;
 end;
 
 end.

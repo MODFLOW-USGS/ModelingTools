@@ -152,7 +152,6 @@ begin
   XmlText := TStringList.Create;
   try
     try
-//      {$IFNDEF DEBUG}
       ErrorUrl := True;
       if ReadInternetFile(VideoUpdateURL, XmlText, FAppName) then
       begin
@@ -165,10 +164,7 @@ begin
           ErrorUrl := False;
         end;
       end;
-//      {$ELSE}
-//      XmlText.LoadFromFile('D:\ModelingTools\VideoLinks\Videos.xml');
-//      ErrorUrl := False;
-//      {$ENDIF}
+
       if not ErrorUrl then
       begin
         MemStream := TMemoryStream.Create;
@@ -232,7 +228,7 @@ begin
       Synchronize(GetAppName);
       Synchronize(GetLastDates);
 
-      if {$IFDEF DEBUG} True {$ELSE} (Now - FLastCheckInternetDate) > 0.95 {$ENDIF} then
+      if (Now - FLastCheckInternetDate) > 0.95 then
       begin
         if ReadInternetFile(UpdateURL, FUpdateText, FAppName) then
         begin
@@ -257,7 +253,7 @@ begin
           end;
           if FShowVideos then
           begin
-            if {$IFDEF DEBUG} True {$ELSE} (Now - FLastTipDate) > 0.95 {$ENDIF} then
+            if (Now - FLastTipDate) > 0.95 then
             begin
               FCurrentURL := StrIntroVideoURL;
               Synchronize(CheckCurrentUrl);
@@ -289,9 +285,7 @@ begin
                       if not FCurrentUrlHasBeenDisplayed then
                       begin
                         LaunchURL(FBrowser, FCurrentURL);
-                        {$IFNDEF DEBUG}
                         Synchronize(UpdateIniFile);
-                        {$ENDIF}
                         break;
                       end;
                     end;
@@ -307,10 +301,7 @@ begin
 
         end;
 
-        { $IFNDEF DEBUG}
         Synchronize(UpdateIniFile);
-        { $ENDIF}
-
       end;
     except on E: EInternetConnectionError do
       begin
@@ -374,6 +365,8 @@ begin
   end;
   FIniFile.WriteDateTime(StrCustomization, StrTipDate, Now);
   FIniFile.WriteDateTime(StrCustomization, StrInternetCheckDate, Now);
+//  FIniFile.WriteSection(StrVideoDisplayed, FVideoURLs);
+
   BackupFilename := ChangeFileExt(FIniFile.FileName, BackupExtension);
   if TFile.Exists(FIniFile.FileName) then
   begin
