@@ -175,7 +175,63 @@ Add the following JCL directories to the Library path if they are not added
 automatically when installing the JCL.
 source\common
 source\windows
-JVCL Version 3.50 was used in compiling ModelMuse. 
+JVCL Version 2022.02 was used in compiling ModelMuse. 
+When installed from the GetIt Package Manager, both the JCL and JVCL create
+installer programs. The installer programs, when run will install the JCL 
+and JVCL in the account of the user from which the installer programs were 
+run. This might be different from the account that was used to run the GetIt 
+Package Manager.
+
+Installing GLScene
+http://glscene.sourceforge.net
+https://sourceforge.net/projects/glscene/files/GLScene/GLScene%20v1.8/
+For compiling with Delphi 10.4, use GLScene_v1.8.
+
+Graphics 32 support must be added by modifying GLScene.inc so make the 
+required change. This is done by changing 
+{.$DEFINE USE_GRAPHICS32}
+to
+{$DEFINE USE_GRAPHICS32}
+
+In the file GLScene.Pas, locate TGLLightSource.Create.
+In it, replace 
+  FListHandle := nil;
+with
+  FreeAndNil(FListHandle);
+
+This change fixes a memory leak.
+
+In GlContext.pas, locate the line 
+  FGL.Close;
+at the end of procedure TGLContext.DestroyContext. Change it to 
+  if FGL <> nil then
+  begin
+    FGL.Close;
+  end;
+ 
+
+Open and read the readme.txt file in the top level directory of GLScene. 
+It directs you to a pdf on installing GLScene. Follow those instructions. 
+The portions of the instructions related to C++ do not apply if GLScene 
+is only being installed in Delphi. If asked whether to add the 
+Graphics 32 to the project, select yes.
+
+[DELETE THESE INSTRUCTIONS]
+To compile the design-time package, you may need to edit the search path for 
+the design time Project (Project|Options|Delphi compiler|Search path) so that 
+it includes the dcp and/or bpl
+output directories. For example:
+C:\Users\Public\Documents\Embarcadero\Studio\22.0\DCP
+and 
+C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl
+Then edit the "requires" section of the GLScene Design-time package to 
+add a requirement for the Graphics32 design-time package. To add a 
+requirement, right-click on the "requires" section of the package in the 
+Projects window and select reference. Then navigate to the DCP directory
+and a the .dcp file for the Graphics32 design-time package.
+[END DELETE THESE INSTRUCTIONS]
+
+Build the runtime package first. Then install the design time package.  
 
 Installing Graphics32
 https://sourceforge.net/projects/graphics32/
@@ -231,61 +287,10 @@ if n > 0 then
 to
 if (n > 0) and (hyp <> 0) then
 
-Installing GLScene
-http://glscene.sourceforge.net
-https://sourceforge.net/projects/glscene/files/GLScene/GLScene%20v1.8/
-For compiling with Delphi 10.4, use GLScene_v1.8.
 
-Graphics 32 support must be added by modifying GLScene.inc so make the 
-required change. This is done by changing 
-{.$DEFINE USE_GRAPHICS32}
-to
-{$DEFINE USE_GRAPHICS32}
-
-In the file GLScene.Pas, locate TGLLightSource.Create.
-In it, replace 
-  FListHandle := nil;
-with
-  FreeAndNil(FListHandle);
-
-This change fixes a memory leak.
-
-In GlContext.pas, locate the line 
-  FGL.Close;
-at the end of procedure TGLContext.DestroyContext. Change it to 
-  if FGL <> nil then
-  begin
-    FGL.Close;
-  end;
- 
-
-Open and read the readme.txt file in the top level directory of GLScene. 
-It directs you to a pdf on installing GLScene. Follow those instructions. 
-The portions of the instructions related to C++ do not apply if GLScene 
-is only being installed in Delphi. If asked whether to add the 
-Graphics 32 to the project, select yes.
-
-[DELETE THESE INSTRUCTIONS]
-To compile the design-time package, you may need to edit the search path for 
-the design time Project (Project|Options|Delphi compiler|Search path) so that 
-it includes the dcp and/or bpl
-output directories. For example:
-C:\Users\Public\Documents\Embarcadero\Studio\22.0\DCP
-and 
-C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl
-Then edit the "requires" section of the GLScene Design-time package to 
-add a requirement for the Graphics32 design-time package. To add a 
-requirement, right-click on the "requires" section of the package in the 
-Projects window and select reference. Then navigate to the DCP directory
-and a the .dcp file for the Graphics32 design-time package.
-[END DELETE THESE INSTRUCTIONS]
-
-Build the runtime package first. Then install the design time package.  
-
-
-Get and install VirtualTreeView version 6.6 or later.
+Get and install VirtualTree version 2021.09 or later.
 http://www.jam-software.com/virtual-treeview/
-https://github.com/Virtual-TreeView/Virtual-TreeView-XE2
+https://github.com/TurboPack/VirtualTreeView
 It can also be installed via the Delphi Get It package manager (VirturalTree for VCL)
 
 MadExcept version 5.1.2 or later must be installed.  It can be obtained from 
@@ -294,7 +299,7 @@ http://www.madshi.net/
 Abbrevia
 http://sourceforge.net/projects/tpabbrevia/
 Deactivate UnzipZipxSupport in AbDefine.inc
-Abbervia is also available through the GetIt Package Manager in Delphi 10.2 and later.
+Abbervia is also available through the GetIt Package Manager in Delphi 11.1 and later.
 
 The Components directory has additional components that need to be installed. 
 They are in the following subdirectories of the Components directory.
