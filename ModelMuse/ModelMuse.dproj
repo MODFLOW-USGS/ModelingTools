@@ -1843,8 +1843,18 @@
         <DCCReference Include="ModflowIstWriterUnit.pas"/>
         <DCCReference Include="ModflowGwtSpecifiedConcUnit.pas"/>
         <DCCReference Include="ModflowCncWriterUnit.pas"/>
+        <DCCReference Include="frameCustomGwtBoundaryUnit.pas">
+            <Form>frameCustomGwtBoundary</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <DCCReference Include="frameScreenObjectCncUnit.pas">
             <Form>frameScreenObjectCnc</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="frameScreenObjectSrcUnit.pas">
+            <Form>frameScreenObjectSrc</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>

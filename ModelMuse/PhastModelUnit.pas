@@ -3228,6 +3228,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateCSubStressOffset(Sender: TObject);
 
     procedure InvalidateCncConcentration(Sender: TObject);
+    procedure InvalidateMassSrc(Sender: TObject);
 
     property NameFileWriter: TObject read FNameFileWriter write SetNameFileWriter;
     property SimNameWriter: IMf6_SimNameFileWriter read FSimNameWriter write FSimNameWriter;
@@ -4700,6 +4701,7 @@ that affects the model output should also have a comment. }
     function GncIsSelected: Boolean;
     function Mf6ObsIsSelected: Boolean; override;
     function GwtCncIsSelected: Boolean;
+    function GwtSrcIsSelected: Boolean;
     function PackageIsSelected(APackage: TObject): Boolean;
     procedure ExportModflowLgrModel(const FileName: string;
       RunModel, ExportModpath, NewBudgetFileForModpath, ExportZoneBudget,
@@ -5542,7 +5544,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMnw2Unit, PestObsExtractorInputWriterUnit, Modflow6ObsUnit,
   PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit,
   ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit,
-  ModflowMstWriterUnit, ModflowIstWriterUnit;
+  ModflowMstWriterUnit, ModflowIstWriterUnit, ModflowCncWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -18673,7 +18675,7 @@ end;
 
 function TPhastModel.GwtCncIsSelected: Boolean;
 begin
-  result := (ModelSelection = msModflow2015) and (MobileComponents.Count > 0)
+  result := GwtUsed and (MobileComponents.Count > 0)
     and ModflowPackages.GwtCncPackage.IsSelected;
 end;
 
@@ -19149,6 +19151,12 @@ begin
     DataArray := Sender as TDataArray;
     result := DataArrayUsed(MobileComponents)
   end;
+end;
+
+function TPhastModel.GwtSrcIsSelected: Boolean;
+begin
+  result := GwtUsed and (MobileComponents.Count > 0)
+    and ModflowPackages.GwtSrcPackage.IsSelected;
 end;
 
 function TPhastModel.GwtUztUsed(Sender: TObject): boolean;
@@ -24997,6 +25005,12 @@ begin
   SetLength(FColumnMapping, 0);
   SetLength(FRowMapping, 0);
   SetLength(FLayerMapping, 0);
+end;
+
+procedure TCustomModel.InvalidateMassSrc(Sender: TObject);
+begin
+//  Assert(False);
+  { TODO -cGWT : Update this }
 end;
 
 procedure TCustomModel.InvalidateMawFlowingWellConductance(Sender: TObject);
@@ -43569,6 +43583,7 @@ var
   GwtSsmWriter: TModflowGwtSsmWriter;
   MstWriter: TModflowGwtMstWriter;
   IstWriter: TModflowGwtIstWriter;
+  CncWriter: TModflowCncWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -44905,6 +44920,13 @@ begin
             IstWriter.WriteFile(FileName, SpeciesIndex);
           finally
             IstWriter.Free;
+          end;
+
+          CncWriter := TModflowCncWriter.Create(Self, etExport);
+          try
+            CncWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            CncWriter.Free;
           end;
 
           FDataArrayManager.CacheDataArrays;

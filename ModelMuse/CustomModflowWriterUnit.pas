@@ -729,12 +729,12 @@ end;
   TCustomListWriter = class(TCustomParameterTransientWriter)
   private
     FObjectNames: TStringList;
-    procedure WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
-      ErrorRoot: string; const TimeIndex: integer);
   strict protected
     FStressPeriod: Integer;
     FBoundaryIndex: Integer;
   protected
+    procedure WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
+      ErrorRoot: string; const TimeIndex: integer); virtual;
     // @name counts the maximum number of cells used in any stress period. This
     // value is returned in MaximumNumberOfCells.
     procedure CountCells(var MaximumNumberOfCells: Integer); override;

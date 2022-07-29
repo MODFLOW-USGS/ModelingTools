@@ -7,8 +7,8 @@ inherited framePackageLakMf6: TframePackageLakMf6
   object lblSurfaceDepressionDepth: TLabel [2]
     Left = 16
     Top = 441
-    Width = 171
-    Height = 13
+    Width = 232
+    Height = 20
     Caption = 'Surface depression depth (surfdep)'
   end
   inherited memoComments: TMemo
@@ -64,6 +64,7 @@ inherited framePackageLakMf6: TframePackageLakMf6
     Width = 455
     Height = 18
     Caption = 'Write package convergence (PACKAGE_CONVERGENCE)'
+    Enabled = False
     TabOrder = 5
   end
   inherited rcSelectionController: TRbwController
@@ -85,6 +86,9 @@ inherited framePackageLakMf6: TframePackageLakMf6
       end
       item
         Control = rdeSurfaceDepressionDepth
+      end
+      item
+        Control = cbPackageConvergence
       end>
   end
 end

@@ -11395,8 +11395,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspGwtCNC'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGwtCNC: TframePackage
         Left = 0
         Top = 0
@@ -11405,8 +11403,9 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 80
-        ExplicitTop = 72
+        ExplicitLeft = 6
+        ExplicitWidth = 595
+        ExplicitHeight = 516
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -11421,6 +11420,57 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
+          ExplicitWidth = 564
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGwtCNC.lblComments
+            end
+            item
+              Control = frameGwtCNC.memoComments
+            end>
+        end
+      end
+    end
+    object jvspGwtSRC: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 595
+      Height = 516
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'jvspGwtSRC'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameGwtSRC: TframePackage
+        Left = 0
+        Top = 0
+        Width = 595
+        Height = 516
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 6
+        ExplicitWidth = 595
+        ExplicitHeight = 516
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 564
+          ExplicitWidth = 564
         end
         inherited rcSelectionController: TRbwController
           ControlList = <

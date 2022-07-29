@@ -1456,6 +1456,7 @@ view. }
     FModflowSubObservations: TSubObservations;
     FModflowSwtObservations: TSwtObservations;
     FGwtCncBoundary: TCncBoundary;
+    FGwtSrcBoundary: TSrcBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1563,6 +1564,12 @@ view. }
       read FModflowSwtObservations write FModflowSwtObservations;
     property GwtCncBoundary: TCncBoundary read FGwtCncBoundary
       write FGwtCncBoundary
+    {$IFNDEF GWT}
+      Stored False
+    {$ENDIF}
+      ;
+    property GwtSrcBoundary: TSrcBoundary read FGwtSrcBoundary
+      write FGwtSrcBoundary
     {$IFNDEF GWT}
       Stored False
     {$ENDIF}
@@ -2780,6 +2787,9 @@ view. }
     function GetGwtCncBoundary: TCncBoundary;
     procedure SetGwtCncBoundary(const Value: TCncBoundary);
     function StoreGwtCncBoundary: Boolean;
+    function GetGwtSrcBoundary: TSrcBoundary;
+    procedure SetGwtSrcBoundary(const Value: TSrcBoundary);
+    function StoreGwtSrcBoundary: Boolean;
 //    procedure SetVerticesArePilotPoints(const Value: Boolean);
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -3385,6 +3395,7 @@ view. }
     procedure CreateSubObservations;
     procedure CreateSwtObservations;
     procedure CreateGwtCncBoundary;
+    procedure CreateGwtSrcBoundary;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     function ModflowDataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean;
@@ -4104,6 +4115,8 @@ view. }
 
     property GwtCncBoundary: TCncBoundary read GetGwtCncBoundary
       write SetGwtCncBoundary stored StoreGwtCncBoundary;
+    property GwtSrcBoundary: TSrcBoundary read GetGwtSrcBoundary
+      write SetGwtSrcBoundary stored StoreGwtSrcBoundary;
 
     { TODO :
 Consider making SectionStarts private and only exposing SectionStart,
@@ -6763,6 +6776,7 @@ begin
   ModflowSubObservations := AScreenObject.ModflowSubObservations;
   ModflowSwtObservations := AScreenObject.ModflowSwtObservations;
   GwtCncBoundary := AScreenObject.GwtCncBoundary;
+  GwtSrcBoundary := AScreenObject.GwtSrcBoundary;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -10017,6 +10031,23 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetGwtSrcBoundary(const Value: TSrcBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FGwtSrcBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FGwtSrcBoundary);
+  end
+  else
+  begin
+    CreateGwtSrcBoundary;
+    ModflowBoundaries.FGwtSrcBoundary.Assign(Value);
+  end;
+end;
+
 function TScreenObject.ScreenObjectLength: real;
 var
   Index: integer;
@@ -10455,6 +10486,23 @@ begin
   else
   begin
     result := ModflowBoundaries.FGwtCncBoundary;
+  end;
+end;
+
+function TScreenObject.GetGwtSrcBoundary: TSrcBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateGwtSrcBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FGwtSrcBoundary;
   end;
 end;
 
@@ -18867,6 +18915,14 @@ begin
   if (ModflowBoundaries.FGwtCncBoundary = nil) then
   begin
     ModflowBoundaries.FGwtCncBoundary := TCncBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateGwtSrcBoundary;
+begin
+  if (ModflowBoundaries.FGwtSrcBoundary = nil) then
+  begin
+    ModflowBoundaries.FGwtSrcBoundary := TSrcBoundary.Create(FModel, self);
   end;
 end;
 
@@ -31525,6 +31581,16 @@ begin
 {$ENDIF}
 end;
 
+function TScreenObject.StoreGwtSrcBoundary: Boolean;
+begin
+{$IFDEF GWT}
+  result := (FModflowBoundaries <> nil)
+    and (GwtSrcBoundary <> nil) and GwtSrcBoundary.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreImportedHigherSectionElevations: Boolean;
 begin
   result := ImportedHigherSectionElevations.Count > 0;
@@ -40494,6 +40560,19 @@ begin
     FGwtCncBoundary.Assign(Source.FGwtCncBoundary);
   end;
 
+  if Source.FGwtSrcBoundary = nil then
+  begin
+    FreeAndNil(FGwtSrcBoundary);
+  end
+  else
+  begin
+    if FGwtSrcBoundary = nil then
+    begin
+      FGwtSrcBoundary := TSrcBoundary.Create(Model, FScreenObject);
+    end;
+    FGwtSrcBoundary.Assign(Source.FGwtSrcBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -40512,6 +40591,7 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FGwtSrcBoundary.Free;
   FGwtCncBoundary.Free;
   FModflowSwtObservations.Free;
   FModflowSubObservations.Free;
@@ -40803,6 +40883,10 @@ begin
     FreeAndNil(FGwtCncBoundary);
   end;
 
+  if (FGwtSrcBoundary <> nil) and not FGwtSrcBoundary.Used then
+  begin
+    FreeAndNil(FGwtSrcBoundary);
+  end;
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -41077,6 +41161,10 @@ begin
     FGwtCncBoundary.Invalidate;
   end;
 
+  if FGwtSrcBoundary <> nil then
+  begin
+    FGwtSrcBoundary.Invalidate;
+  end;
 end;
 
 procedure TModflowBoundaries.Loaded;
@@ -41146,6 +41234,11 @@ begin
   if GwtCncBoundary <> nil then
   begin
     GwtCncBoundary.Loaded;
+  end;
+
+  if GwtSrcBoundary <> nil then
+  begin
+    GwtSrcBoundary.Loaded;
   end;
 end;
 
@@ -41380,6 +41473,10 @@ begin
     FGwtCncBoundary.RemoveModelLink(AModel);
   end;
 
+  if FGwtSrcBoundary <> nil then
+  begin
+    FGwtSrcBoundary.RemoveModelLink(AModel);
+  end;
   {
     FModflow6Obs: TModflow6Obs;
     FModflowLak6: TLakeMf6;
@@ -41697,6 +41794,11 @@ begin
     FGwtCncBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FGwtSrcBoundary <> nil then
+  begin
+    FGwtSrcBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -42010,6 +42112,11 @@ begin
   if GwtCncBoundary <> nil then
   begin
     FGwtCncBoundary.StopTalkingToAnyone;
+  end;
+
+  if GwtSrcBoundary <> nil then
+  begin
+    FGwtSrcBoundary.StopTalkingToAnyone;
   end;
 end;
 
@@ -42495,6 +42602,15 @@ begin
   if FGwtCncBoundary <> nil then
   begin
     Result := FGwtCncBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FGwtSrcBoundary <> nil then
+  begin
+    Result := FGwtSrcBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

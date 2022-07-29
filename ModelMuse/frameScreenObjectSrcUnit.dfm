@@ -1,0 +1,2 @@
+inherited frameScreenObjectSrc: TframeScreenObjectSrc
+end

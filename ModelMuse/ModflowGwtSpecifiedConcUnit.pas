@@ -21,8 +21,6 @@ type
     ConcentrationPest: string;
     ConcentrationPestSeriesName: string;
     ConcentrationPestSeriesMethod: TPestParamMethod;
-//    PumpingParameterName: string;
-//    PumpingParameterValue: double;
     ConcentrationTimeSeriesName: string;
     // GWT Concentrations
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
@@ -46,8 +44,9 @@ type
     property CncArray: TCncArray read GetCncArray;
   end;
 
-  // @name represents a MODFLOW well for one time interval.
-  // @name is stored by @link(TWellCollection).
+  // @name represents a MODFLOW specified concentration or mass flux
+  // for one time interval.
+  // @name is stored by @link(TCncCollection or TSrcCollection).
   TCncItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(Concentration).
@@ -80,16 +79,22 @@ type
 
   TCncTimeListLink = class(TTimeListsModelLink)
   private
-    // @name is used to compute the pumping rates for a series of
-    // Wells over a series of time intervals.
+    // @name is used to compute the specified concentration
+    // or mass flux for a series of
+    // boundaries over a series of time intervals.
     FConcentrationData: TModflowTimeList;
+    FInvalidateEvent: TNotifyEvent;
   protected
     procedure CreateTimeLists; override;
+    function Description: string; virtual;
+    procedure AssignInvalidateEvent; virtual;
+    property InvalidateEvent: TNotifyEvent read FInvalidateEvent write FInvalidateEvent;
   public
+    Constructor Create(AModel: TBaseModel; ABoundary: TCustomMF_BoundColl); override;
     Destructor Destroy; override;
   end;
 
-  // @name represents MODFLOW Well boundaries
+  // @name represents MODFLOW 6 specified concentration boundaries
   // for a series of time intervals.
   TCncCollection = class(TCustomMF_ListBoundColl)
   private
@@ -103,7 +108,7 @@ type
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
     // @name calls inherited @name and then sets the length of
-    // the @link(TWellStorage.WellArray) at ItemIndex in
+    // the @link(TCncStorage.CncArray) at ItemIndex in
     // @link(TCustomMF_BoundColl.Boundaries) to BoundaryCount.
     // @SeeAlso(TCustomMF_BoundColl.SetBoundaryStartAndEndTime
     // TCustomMF_BoundColl.SetBoundaryStartAndEndTime)
@@ -171,20 +176,16 @@ type
     FPestConcentrationFormula: TFormulaObject;
     FPestConcentrationObserver: TObserver;
     FUsedObserver: TObserver;
-//    FPestConcentrationMethods: TGwtPestMethodCollection;
-//    FConcentrationObservers: TObserverList;
     FChemSpecies: TChemSpeciesItem;
     FChemSpeciesName: string;
     function GetPestConcentrationFormula: string;
     procedure SetPestConcentrationFormula(const Value: string);
     procedure SetPestConcentrationMethod(const Value: TPestParamMethod);
     function GetPestConcentrationObserver: TObserver;
-    procedure InvalidateConcentrationData(Sender: TObject);
-//    procedure SetPestConcentrationMethods(const Value: TGwtPestMethodCollection);
-//    function GetConcentrationObserver(const Index: Integer): TObserver;
     function GetChemSpecies: string;
     procedure SetChemSpecies(const Value: string);
   protected
+    procedure InvalidateConcentrationData(Sender: TObject); virtual;
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
     // @link(TWell_Cell)s for that stress period.
@@ -210,21 +211,16 @@ type
     function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
+    function PestObsObserverPrefix: string; virtual;
+    function UserObserverPrefix: string; virtual;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent);override;
     // @name fills ValueTimeList via a call to AssignCells for each
-    // link  @link(TWellStorage) in
+    // link  @link(TCncStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
     // Those represent non-parameter boundary conditions.
-    // @name fills ParamList with the names of the
-    // MODFLOW Well parameters that are in use.
-    // The Objects property of ParamList has TObjectLists
-    // Each such TObjectList is filled via a call to AssignCells
-    // with each @link(TWellStorage) in @link(TCustomMF_BoundColl.Boundaries
-    // Param.Param.Boundaries)
-    // Those represent parameter boundary conditions.
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
@@ -239,6 +235,25 @@ type
     property ChemSpecies: string read GetChemSpecies write SetChemSpecies;
   end;
 
+  TSrcCollection = class(TCncCollection)
+  protected
+    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+  end;
+
+  TSrcTimeListLink = class(TCncTimeListLink)
+    function Description: string; override;
+    procedure AssignInvalidateEvent; override;
+  end;
+
+  TSrcBoundary = class(TCncBoundary)
+  protected
+    function BoundaryObserverPrefix: string; override;
+    function PestObsObserverPrefix: string; override;
+    function UserObserverPrefix: string; override;
+    procedure InvalidateConcentrationData(Sender: TObject); override;
+    class function BoundaryCollectionClass: TMF_BoundCollClass; override;
+  end;
+
 const
   CncConcentrationPosition = 0;
 
@@ -251,6 +266,7 @@ uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles,
 resourcestring
   StrCNCSpecifiedConcen = 'CNC Specified Concentration';
   StrConcentrationSetTo = 'Concentration set to zero because of a math error';
+  StrSRCMassSource = 'SRC: Mass Source';
 
 { TCncRecord }
 
@@ -420,13 +436,14 @@ var
   PhastModel: TPhastModel;
 begin
   inherited;
-  PhastModel := Model as TPhastModel;
-  if (PhastModel <> nil)
-    and not (csDestroying in PhastModel.ComponentState)
-    and not PhastModel.Clearing then
-  begin
-    PhastModel.InvalidateCncConcentration(self);
-  end;
+  (Collection as TCncCollection).InvalidateModel;
+//  PhastModel := Model as TPhastModel;
+//  if (PhastModel <> nil)
+//    and not (csDestroying in PhastModel.ComponentState)
+//    and not PhastModel.Clearing then
+//  begin
+//    PhastModel.InvalidateCncConcentration(self);
+//  end;
 end;
 
 function TCncItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -465,22 +482,34 @@ end;
 
 { TCncTimeListLink }
 
+procedure TCncTimeListLink.AssignInvalidateEvent;
+begin
+  InvalidateEvent := (Model as TCustomModel).InvalidateCncConcentration;
+end;
+
+constructor TCncTimeListLink.Create(AModel: TBaseModel;
+  ABoundary: TCustomMF_BoundColl);
+begin
+  AssignInvalidateEvent;
+  inherited;
+end;
+
 procedure TCncTimeListLink.CreateTimeLists;
-//var
-//  LocalModel: TCustomModel;
-//  PhastModel: TPhastModel;
-//  SpeciesIndex: Integer;
-//  ConcTimeList: TModflowTimeList;
 begin
   inherited;
   FConcentrationData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-  FConcentrationData.NonParamDescription := StrCNCSpecifiedConcen;
-  FConcentrationData.ParamDescription := StrCNCSpecifiedConcen;
+  FConcentrationData.NonParamDescription := Description;
+  FConcentrationData.ParamDescription := Description;
   if Model <> nil then
   begin
-    FConcentrationData.OnInvalidate := (Model as TCustomModel).InvalidateCncConcentration;
+    FConcentrationData.OnInvalidate := InvalidateEvent;
   end;
   AddTimeList(FConcentrationData);
+end;
+
+function TCncTimeListLink.Description: string;
+begin
+  result := StrCNCSpecifiedConcen;
 end;
 
 destructor TCncTimeListLink.Destroy;
@@ -488,6 +517,11 @@ begin
   FConcentrationData.Free;
   inherited;
 end;
+
+//function TCncTimeListLink.InvalidateEvent: TNotifyEvent;
+//begin
+//  result := (Model as TCustomModel).InvalidateCncConcentration;
+//end;
 
 { TCnCCollection }
 
@@ -499,9 +533,7 @@ end;
 function TCncCollection.AdjustedFormula(FormulaIndex,
   ItemIndex: integer): string;
 var
-//  Boundary: TCncBoundary;
   Item: TCncItem;
-//  ScreenObject: TScreenObject;
 begin
   Item := Items[ItemIndex] as TCncItem;
   result := Item.BoundaryFormula[FormulaIndex];
@@ -523,7 +555,6 @@ var
 begin
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   AllowedIndicies := [0];
-//  LocalModel := AModel as TCustomModel;
 
   Assert(BoundaryFunctionIndex in AllowedIndicies);
   Assert(Expression <> nil);
@@ -669,13 +700,14 @@ var
   PhastModel: TPhastModel;
 begin
   inherited;
-  PhastModel := Model as TPhastModel;
-  if (PhastModel <> nil)
-    and not (csDestroying in PhastModel.ComponentState)
-    and not PhastModel.Clearing then
-  begin
-    PhastModel.InvalidateCncConcentration(self);
-  end;
+  (BoundaryGroup as TCncBoundary).InvalidateModel
+//  PhastModel := Model as TPhastModel;
+//  if (PhastModel <> nil)
+//    and not (csDestroying in PhastModel.ComponentState)
+//    and not PhastModel.Clearing then
+//  begin
+//    PhastModel.InvalidateCncConcentration(self);
+//  end;
 end;
 
 class function TCncCollection.ItemClass: TBoundaryItemClass;
@@ -755,7 +787,7 @@ end;
 function TCnc_Cell.GetMf6TimeSeriesName(Index: Integer): string;
 begin
   case Index of
-    CncConcentrationPosition: result := Mf6TimeSeriesName[Index];
+    CncConcentrationPosition: result := ConcentrationTimeSeriesName;
     else
       Assert(False);
   end;
@@ -764,7 +796,7 @@ end;
 function TCnc_Cell.GetPestName(Index: Integer): string;
 begin
   case Index of
-    CncConcentrationPosition: result := PestName[Index];
+    CncConcentrationPosition: result := ConcentrationPest;
     else
       Assert(False);
   end;
@@ -773,7 +805,7 @@ end;
 function TCnc_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
 begin
   case Index of
-    CncConcentrationPosition: result := PestSeriesMethod[Index];
+    CncConcentrationPosition: result := ConcentrationPestSeriesMethod;
     else
       result := inherited;
       Assert(False);
@@ -783,7 +815,7 @@ end;
 function TCnc_Cell.GetPestSeriesName(Index: Integer): string;
 begin
   case Index of
-    CncConcentrationPosition: result := PestSeriesName[Index];
+    CncConcentrationPosition: result := ConcentrationPestSeries;
     else
       Assert(False);
   end;
@@ -1086,7 +1118,7 @@ function TCncBoundary.GetPestConcentrationObserver: TObserver;
 begin
   if FPestConcentrationObserver = nil then
   begin
-    CreateObserver('PestConcentration_', FPestConcentrationObserver, nil);
+    CreateObserver(PestObsObserverPrefix, FPestConcentrationObserver, nil);
     FPestConcentrationObserver.OnUpToDateSet := InvalidateConcentrationData;
   end;
   result := FPestConcentrationObserver;
@@ -1107,7 +1139,7 @@ function TCncBoundary.GetUsedObserver: TObserver;
 begin
   if FUsedObserver = nil then
   begin
-    CreateObserver('PestConc_Used_', FUsedObserver, nil);
+    CreateObserver(UserObserverPrefix, FUsedObserver, nil);
   end;
   result := FUsedObserver;
 end;
@@ -1123,42 +1155,41 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-//  if ParentModel = nil then
-//  begin
-//    Exit;
-//  end;
-//  if not (Sender as TObserver).UpToDate then
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
   begin
-    PhastModel := frmGoPhast.PhastModel;
-    if PhastModel.Clearing then
-    begin
-      Exit;
-    end;
-    PhastModel.InvalidateCncConcentration(self);
+    Exit;
+  end;
+  PhastModel.InvalidateCncConcentration(self);
 
-    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
-    begin
-      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateCncConcentration(self);
-    end;
+  for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+  begin
+    ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+    ChildModel.InvalidateCncConcentration(self);
   end;
 end;
 
 procedure TCncBoundary.InvalidateDisplay;
-var
-  Model: TPhastModel;
+//var
+//  Model: TPhastModel;
 begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
-    Model := ParentModel as TPhastModel;
-    Model.InvalidateCncConcentration(self);
+    InvalidateConcentrationData(self);
+//    Model := ParentModel as TPhastModel;
+//    Model.InvalidateCncConcentration(self);
   end;
 end;
 
 procedure TCncBoundary.Loaded;
 begin
   ChemSpecies := ChemSpecies;
+end;
+
+function TCncBoundary.PestObsObserverPrefix: string;
+begin
+  result := 'PestConcentration_';
 end;
 
 procedure TCncBoundary.SetChemSpecies(const Value: string);
@@ -1210,11 +1241,75 @@ begin
   SetPestParamMethod(FPestConcentrationMethod, Value);
 end;
 
-//procedure TCncBoundary.SetPestConcentrationMethods(
-//  const Value: TGwtPestMethodCollection);
+function TCncBoundary.UserObserverPrefix: string;
+begin
+  result := 'PestConc_Used_';
+end;
+
+{ TSrcTimeListLink }
+
+procedure TSrcTimeListLink.AssignInvalidateEvent;
+begin
+  InvalidateEvent := (Model as TCustomModel).InvalidateMassSrc;
+end;
+
+function TSrcTimeListLink.Description: string;
+begin
+  result := StrSRCMassSource;
+end;
+
+//function TSrcTimeListLink.InvalidateEvent: TNotifyEvent;
 //begin
-//
+//  result := (Model as TCustomModel).InvalidateMassSrc;
 //end;
 
+{ TSrcBoundary }
+
+class function TSrcBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
+begin
+  result := TSrcCollection;
+end;
+
+function TSrcBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestSrc_';
+end;
+
+procedure TSrcBoundary.InvalidateConcentrationData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateMassSrc(self);
+
+  for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+  begin
+    ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+    ChildModel.InvalidateMassSrc(self);
+  end;
+end;
+
+function TSrcBoundary.PestObsObserverPrefix: string;
+begin
+  result := 'PestMassSource_';
+end;
+
+function TSrcBoundary.UserObserverPrefix: string;
+begin
+  result := 'PestSrc_Used_';
+end;
+
+{ TsrcCollection }
+
+function TsrcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+begin
+  result := TSrcTimeListLink;
+end;
 
 end.

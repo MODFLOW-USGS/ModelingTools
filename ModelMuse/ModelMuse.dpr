@@ -760,7 +760,9 @@ uses
   ModflowIstWriterUnit in 'ModflowIstWriterUnit.pas',
   ModflowGwtSpecifiedConcUnit in 'ModflowGwtSpecifiedConcUnit.pas',
   ModflowCncWriterUnit in 'ModflowCncWriterUnit.pas',
-  frameScreenObjectCncUnit in 'frameScreenObjectCncUnit.pas' {frameScreenObjectCnc: TFrame};
+  frameCustomGwtBoundaryUnit in 'frameCustomGwtBoundaryUnit.pas' {frameCustomGwtBoundary: TFrame},
+  frameScreenObjectCncUnit in 'frameScreenObjectCncUnit.pas' {frameScreenObjectCnc: TFrame},
+  frameScreenObjectSrcUnit in 'frameScreenObjectSrcUnit.pas' {frameScreenObjectSrc: TFrame};
 
 {$R *.res}
 
@@ -776,7 +778,6 @@ begin
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
   Application.CreateForm(TfrmColors, frmColors);
-  Application.CreateForm(TframePackageIst, framePackageIst);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

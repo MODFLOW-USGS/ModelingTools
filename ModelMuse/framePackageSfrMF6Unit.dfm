@@ -9,16 +9,16 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   object lblMaxIterations: TLabel [2]
     Left = 167
     Top = 277
-    Width = 203
-    Height = 26
+    Width = 144
+    Height = 60
     Caption = 'Maximum number of streamflow iterations (maximum_iteration) '
     WordWrap = True
   end
   object lblMaxDepthChange: TLabel [3]
     Left = 167
     Top = 325
-    Width = 150
-    Height = 26
+    Width = 175
+    Height = 60
     Caption = 'Stream depth  closure criterion (maximum_depth_change)'
     WordWrap = True
   end
@@ -48,7 +48,7 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
     Left = 16
     Top = 282
     Width = 145
-    Height = 21
+    Height = 28
     MaxValue = 2147483647.000000000000000000
     MinValue = 1.000000000000000000
     Value = 1.000000000000000000
@@ -93,6 +93,7 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
     Width = 455
     Height = 18
     Caption = 'Write package convergence (PACKAGE_CONVERGENCE)'
+    Enabled = False
     TabOrder = 7
   end
   inherited rcSelectionController: TRbwController
@@ -120,6 +121,9 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
       end
       item
         Control = cbPrintFlows
+      end
+      item
+        Control = cbPackageConvergence
       end>
   end
 end
