@@ -2625,11 +2625,12 @@ begin
       frameSFRParameterDefinition.dgParameters, 0, 1,
       frameSFRParameterDefinition.dgParameters.Cells[0, 1]);
 
-
     pnlModel.Visible := frmGoPhast.PhastModel.LgrUsed;
   finally
     IsLoaded := True;
   end;
+
+  UpdateGwtFrames;
 end;
 
 function TfrmModflowPackages.CreateMstFrame: TframePackageMST;
@@ -2735,6 +2736,7 @@ var
   Link : TFrameNodeLink;
 begin
   AddPackagesToList(Packages);
+  UpdateGwtFrames;
   for Index := 0 to FPackageList.Count - 1 do
   begin
     APackage := FPackageList[Index];

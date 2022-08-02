@@ -8,7 +8,7 @@ interface
 uses
   SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
   Dialogs, StdCtrls, frmCustomGoPhastUnit, Buttons, 
-  GoPhastTypes, ArgusDataEntry;
+  GoPhastTypes, ArgusDataEntry, Vcl.Grids, RbwDataGrid4;
 
 type
   {@abstract(@name is used to allow the user to specify the real world
@@ -23,20 +23,10 @@ type
     // @name: TBitBtn;
     // See @link(btnOKClick).
     btnOK: TBitBtn;
-    // @name: TLabel;
-    // @name displays "X".
-    lblX: TLabel;
-    // @name: TLabel;
-    // @name displays "Y".
-    lblY: TLabel;
-    // @name: TRbwDataEntry;
-    // The user specifies the real-world X-coordinate of the pixel in @name
-    rdeX: TRbwDataEntry;
-    // @name: TRbwDataEntry;
-    // The user specifies the real-world Y-coordinate of the pixel in @name
-    rdeY: TRbwDataEntry;
+    rdgPoints: TRbwDataGrid4;
     // @name calls @link(SetData).
     procedure btnOKClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject); override;
   private
     // @name: integer;
     // @name is the X-pixel coordinate in an image.
@@ -65,6 +55,14 @@ resourcestring
 
 { TfrmPixelPoint }
 
+procedure TfrmPixelPoint.FormCreate(Sender: TObject);
+begin
+  inherited;
+  rdgPoints.Cells[0,0] := 'X';
+  rdgPoints.Cells[1,0] := 'Y';
+  rdgPoints.Cells[2,0] := 'ID (Optional)';
+end;
+
 procedure TfrmPixelPoint.GetData(const AViewDirection: TViewDirection; const X,
   Y: integer);
 begin
@@ -75,11 +73,11 @@ begin
       end;
     vdFront:
       begin
-        lblY.Caption := StrZ;
+        rdgPoints.Cells[1,0] := StrZ;
       end;
     vdSide:
       begin
-        lblX.Caption := StrZ;
+        rdgPoints.Cells[0,0] := StrZ;
       end;
   else
     Assert(False);
@@ -97,7 +95,7 @@ end;
 procedure TfrmPixelPoint.SetData;
 begin
   frmImportBitmap.AddPoint(FPixelX, FPixelY,
-    StrToFloat(rdeX.Text), StrToFloat(rdeY.Text));
+    StrToFloat(rdgPoints.Cells[0,1]), StrToFloat(rdgPoints.Cells[1,1]));
 end;
 
 end.

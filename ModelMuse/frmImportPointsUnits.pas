@@ -20,6 +20,8 @@ type
   THobColumns = (hcName, hcTime, hcHead, hcStatistic, hcStatFlag);
   TFootprintWellColumns = (fwcWithdrawal, fwcObjectName);
 
+  TObsUtilColumns = (oucName, oucObsType);
+
   {@abstract(@name is the command used to import
     points or reverse the import.)}
   TUndoImportPoints = class(TUndoImportShapefile)
@@ -181,6 +183,7 @@ type
     procedure UpdateRivColumns;
     procedure UpdateWelColumns;
     procedure UpdateHobColumns;
+    procedure UpdateObsUtilColumns;
     procedure SetBoundaryColumnFormats;
     procedure ImportDataArrayValues(var InvalidRow: Boolean;
       RowIndex: Integer;
@@ -206,7 +209,8 @@ uses Clipbrd, Contnrs, GoPhastTypes, frmGoPhastUnit, RbwParser,
   ModflowRivUnit, ModelMuseUtilities, ModflowDrnUnit, AbstractGridUnit,
   frameHeadObservationsUnit, IntListUnit, framePackageHobUnit, ModflowHobUnit,
   frameCustomCellObservationUnit, FootprintPropertiesUnit, FootprintBoundary,
-  System.Character, MeshRenumberingTypes, ModflowBoundaryDisplayUnit;
+  System.Character, MeshRenumberingTypes, ModflowBoundaryDisplayUnit,
+  Modflow6ObsUnit;
 
 {$R *.dfm}
 
@@ -350,6 +354,46 @@ begin
       hcStatFlag: dgData.Cells[ACol, 0] := StrStatFlag;
     end;
   end;
+end;
+
+procedure TfrmImportPoints.UpdateObsUtilColumns;
+const
+  RequiredColumns = Ord(High(TObsUtilColumns)) + 1;
+var
+  FirstColumn: Integer;
+  ColumnIndex: Integer;
+  AColumn: TRbwColumn4;
+begin
+   //TObsUtilColumns = (oucName, oucObsType);
+
+  FirstColumn := rgElevationCount.ItemIndex + 2;
+  dgData.ColCount := FirstColumn + RequiredColumns;
+  for ColumnIndex := FirstColumn to dgData.ColCount - 1 do
+  begin
+    AColumn := dgData.Columns[ColumnIndex];
+    AColumn.Format := rcf4String;
+    AColumn.AutoAdjustRowHeights := True;
+    AColumn.AutoAdjustColWidths := True;
+    AColumn.WordWrapCaptions := True;
+  end;
+  dgData.Cells[FirstColumn,0] := 'Name';
+  dgData.Cells[FirstColumn+1,0] := 'Observation type';
+
+  AColumn := dgData.Columns[dgData.ColCount - 1];
+  AColumn.PickList.Add('Head');
+  AColumn.PickList.Add('Drawdown');
+  AColumn.PickList.Add('CHD Flows');
+  AColumn.PickList.Add('CHD flows');
+  AColumn.PickList.Add('DRN flows');
+  AColumn.PickList.Add('EVT flows');
+  AColumn.PickList.Add('GHB flows');
+  AColumn.PickList.Add('RCH flows');
+  AColumn.PickList.Add('RIV flows');
+  AColumn.PickList.Add('WEL flows');
+  AColumn.PickList.Add('To MVR flows');
+  AColumn.ComboUsed := True;
+  AColumn.LimitToList := True;
+
 end;
 
 procedure TfrmImportPoints.UpdateDataSets;
@@ -1026,6 +1070,9 @@ var
   AValue: double;
   DataArray: TDataArray;
   DataArrayPosition: Integer;
+  Mf6Obs: TModflow6Obs;
+  ObsType: Integer;
+  ObGeneral: TObGeneral;
 begin
   InvalidRow := False;
   Values := TRealList.Create;
@@ -1052,6 +1099,21 @@ begin
         end
         else
         if (Package = Packages.HobPackage) and (ColIndex = FRequiredCols) then
+        begin
+          // skip the name column.
+          Values.Add(0);
+        end
+        else if (Package = Packages.Mf6ObservationUtility) and (ColIndex = dgData.ColCount - 1) then
+        begin
+          ObsType := dgData.ItemIndex[ColIndex, RowIndex];
+          if ObsType < 0 then
+          begin
+            InvalidRow := True;
+            Exit;
+          end;
+        end
+        else
+        if (Package = Packages.Mf6ObservationUtility) and (ColIndex = FRequiredCols) then
         begin
           // skip the name column.
           Values.Add(0);
@@ -1138,6 +1200,21 @@ begin
           NewObsName := 'Obs_' + NewObsName;
         end;
         AScreenObject.Name := TScreenObject.ValidName(NewObsName);
+      end
+      else if Package = Packages.Mf6ObservationUtility then
+      begin
+        AScreenObject.CreateMf6Obs;
+        Mf6Obs := AScreenObject.Modflow6Obs;
+        if Mf6Obs.Name = '' then
+        begin
+          Mf6Obs.Name :=  dgData.Cells[FRequiredCols,RowIndex];
+        end;
+        ObsType := dgData.ItemIndex[FRequiredCols +1, RowIndex];
+        if (ObsType >= 0) and (ObsType < Ord(ogUndefined)) then
+        begin
+          ObGeneral := TObGeneral(ObsType);
+          Mf6Obs.General := Mf6Obs.General + [ObGeneral];
+        end;
       end
       else
       begin
@@ -1229,6 +1306,10 @@ begin
         end;
         HobItem.StatFlag := TStatFlag(IntValue);
       end
+      else if Package = Packages.Mf6ObservationUtility then
+      begin
+        // do nothing
+      end
       else
       begin
         Assert(False);
@@ -1308,6 +1389,13 @@ begin
     begin
       comboBoundaryChoice.Items.AddObject(
         Packages.HobPackage.PackageIdentifier, Packages.HobPackage);
+    end;
+    if Packages.Mf6ObservationUtility.IsSelected
+      and (frmGoPhast.PhastModel.ModelSelection = msModflow2015) then
+    begin
+      comboBoundaryChoice.Items.AddObject(
+        Packages.Mf6ObservationUtility.PackageIdentifier,
+        Packages.Mf6ObservationUtility);
     end;
   end
   else if frmGoPhast.PhastModel.ModelSelection = msFootPrint then
@@ -2281,6 +2369,10 @@ begin
       else if Package = Packages.HobPackage then
       begin
         UpdateHobColumns;
+      end
+      else if Package = Packages.Mf6ObservationUtility then
+      begin
+        UpdateObsUtilColumns;
       end
       else
       begin

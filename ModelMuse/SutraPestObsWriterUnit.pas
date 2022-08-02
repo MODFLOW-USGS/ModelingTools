@@ -1391,6 +1391,9 @@ begin
       begin
         WriteString('  INSTRUCTION ');
         WriteString(QuoteFileName(ChangeFileExt(ExtractFileName(FFileName), StrPestIns)));
+        NewLine;
+        WriteString('  VALUES ');
+        WriteString(QuoteFileName(ChangeFileExt(ExtractFileName(FFileName), StrSutraValues)));
       end;
     etExtractedValues:
       begin

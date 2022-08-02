@@ -164,7 +164,7 @@ end;
 procedure TPestObsExtractorInputWriter.WriteFile(FileName: string);
 var
   Lines: TStringList;
-  LinePostion: Integer;
+  LinePosition: Integer;
   PestUsed: Boolean;
 begin
   PestUsed := FModel.PestUsed; 
@@ -191,7 +191,8 @@ begin
       begin      
         Lines.Add('BEGIN OPTIONS');
         Lines.Add('  LISTING ' + ExtractFileName(ChangeFileExt(FileName, '.Mf6ObsExtInsLst')));
-        LinePostion := Lines.Add('  INSTRUCTION ' + ExtractFileName(ChangeFileExt(FileName, StrPestIns)));
+        LinePosition := Lines.Add('  INSTRUCTION ' + ExtractFileName(ChangeFileExt(FileName, StrPestIns)));
+        Lines.Add('  VALUES ' + ExtractFileName(ChangeFileExt(FileName, StrMf6Values)));
         Lines.Add('END OPTIONS');
         Lines.Add('');
 
@@ -216,7 +217,7 @@ begin
         Lines.WriteBOM := False;
         Lines.SaveToFile(FileName);
 
-        Lines[LinePostion] := '  VALUES ' + ExtractFileName(ChangeFileExt(FileName, StrMf6Values));
+        Lines.Delete(LinePosition);
         FileName := ExtractFileName(ChangeFileExt(FileName, '.Mf6ExtractValues'));
         Lines.SaveToFile(FileName);
       end        
@@ -224,7 +225,8 @@ begin
       begin
         Lines.Add('BEGIN OUTPUT_FILES');
         Lines.Add('  LIST ' + ExtractFileName(ChangeFileExt(FileName, '.Mf2005ObsExtInsLst')));
-        LinePostion := Lines.Add('  INSTRUCTION_FILE ' + ExtractFileName(ChangeFileExt(FileName, StrPestIns)));
+        LinePosition := Lines.Add('  INSTRUCTION_FILE ' + ExtractFileName(ChangeFileExt(FileName, StrPestIns)));
+        Lines.Add('  OBSERVATIONS_FILE ' + ExtractFileName(ChangeFileExt(FileName, StrMf2005Values)));
         Lines.Add('END OUTPUT_FILES');
         Lines.Add('');
 
@@ -249,7 +251,8 @@ begin
         Lines.WriteBOM := False;
         Lines.SaveToFile(FileName);
 
-        Lines[LinePostion] := '  OBSERVATIONS_FILE ' + ExtractFileName(ChangeFileExt(FileName, StrMf2005Values));
+        Lines.Delete(LinePosition);
+//        Lines[LinePosition] := '  OBSERVATIONS_FILE ' + ExtractFileName(ChangeFileExt(FileName, StrMf2005Values));
         FileName := ExtractFileName(ChangeFileExt(FileName, '.Mf2005ExtractValues'));
         Lines.SaveToFile(FileName);
       end

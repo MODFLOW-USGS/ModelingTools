@@ -208,7 +208,8 @@ type
       var KPER, KSTP: Integer; var TOTIM: TModflowDouble;
       var Description: string; var A3DArray: T3DTModflowArray; var AuxArray: TAuxArrays;
       Precision: TModflowPrecision; HufFormat: boolean;
-      ShouldReadArray: boolean; AModel: TCustomModel);
+      ShouldReadArray: boolean; AModel: TCustomModel;
+      var ModelName1, ModelName2, PackageName1, PackageName2: string);
     procedure Assign3DValues(ScreenObject: TScreenObject; LayerData: TDataArray;
       AnArray: T3DTModflowArray; ModflowLayerIndex, DataSetLayerIndex: integer; CheckAllLayers: boolean;
       ValuesToIgnore: TOneDRealArray; AModel: TCustomModel);
@@ -246,7 +247,8 @@ type
     procedure AdjustSwiNames(var NewName: string);
     function WriteLabel(var Description: string; AModel: TCustomModel;
       ILAY, KPER, KSTP, NTRANS, SwrTimeStep: integer; TOTIM: TModflowDouble;
-      Precision: TModflowPrecision): string;
+      Precision: TModflowPrecision;
+      ModelName1, ModelName2, PackageName1, PackageName2: String): string;
     procedure CreateSwrStageScreenObject(AModel: TCustomModel;
       out ScreenObject: TScreenObject; Root: string; AFileName: string);
     procedure CreateSwrReachGroupFlowScreenObject(AModel: TCustomModel;
@@ -2580,8 +2582,16 @@ var
   Vectors: TVectorCollection;
   VectorItem: TVectorItem;
   UndoItem: TCustomUndo;
+  ModelName1: string;
+  ModelName2: string;
+  PackageName1: string;
+  PackageName2: string;
 begin
   inherited;
+  ModelName1 :='';
+  ModelName2 :='';
+  PackageName1 :='';
+  PackageName2 :='';
   ILAY := 0;
   NTRANS := 0;
   SwrTimeStep := 0;
@@ -2926,14 +2936,17 @@ begin
                       ILAY := 0;
                       NTRANS := 0;
                       Read3DArray(NLAY, EndReached, KPER, KSTP, TOTIM, Description,
-                        A3DArray, AuxArray, Precision, HufFormat, True, AModel);
+                        A3DArray, AuxArray, Precision, HufFormat, True, AModel,
+                        ModelName1, ModelName2, PackageName1, PackageName2);
                       if Description = 'FLOW-JA-FACE' then
                       begin
                         Read3DArray(NLAY, EndReached, KPER, KSTP, TOTIM, Description,
-                          A3DArray, AuxArray, Precision, HufFormat, True, AModel);
+                          A3DArray, AuxArray, Precision, HufFormat, True, AModel,
+                          ModelName1, ModelName2, PackageName1, PackageName2);
                       end;
                       ALabel := WriteLabel(Description, AModel, ILAY, KPER,
-                        KSTP, NTRANS, SwrTimeStep, TOTIM, Precision);
+                        KSTP, NTRANS, SwrTimeStep, TOTIM, Precision,
+                        ModelName1, ModelName2, PackageName1, PackageName2);
                       CheckIndex := clData.Items.IndexOf(ALabel);
                       Assert(CheckIndex >= 0);
                       if CheckIndex > LastItem then
@@ -3236,8 +3249,10 @@ begin
                       end;
                       if (Index = 0) or ((Index mod NLAY) = 0) then
                       begin
-                        Read3DArray(NLAY, EndReached, KPER, KSTP, TOTIM, Description,
-                          A3DArray, AuxArray, Precision, HufFormat, clData.Checked[Index], AModel);
+                        Read3DArray(NLAY, EndReached, KPER, KSTP, TOTIM,
+                          Description, A3DArray, AuxArray, Precision, HufFormat,
+                          clData.Checked[Index], AModel,
+                          ModelName1, ModelName2, PackageName1, PackageName2);
                       end;
 
                       if clData.Checked[Index] then
@@ -3793,7 +3808,8 @@ end;
 
 function TfrmSelectResultToImport.WriteLabel(var Description: string;
   AModel: TCustomModel; ILAY, KPER, KSTP, NTRANS, SwrTimeStep: integer;
-  TOTIM: TModflowDouble; Precision: TModflowPrecision): string;
+  TOTIM: TModflowDouble; Precision: TModflowPrecision;
+  ModelName1, ModelName2, PackageName1, PackageName2: String): string;
 var
   HGU: THydrogeologicUnit;
   HufName: string;
@@ -3822,6 +3838,25 @@ begin
     HufName := '';
   end;
 
+  if ModelName1 <> '' then
+  begin
+    Description := Format('%0:s_%1:s', [Description, Trim(ModelName1)]);
+  end;
+  if PackageName1 <> '' then
+  begin
+    Description := Format('%0:s_%1:s', [Description, Trim(PackageName1)]);
+  end;
+  if ModelName2 <> '' then
+  begin
+    Description := Format('%0:s_%1:s', [Description, Trim(ModelName2)]);
+  end;
+  if PackageName2 <> '' then
+  begin
+    Description := Format('%0:s_%1:s', [Description, Trim(PackageName2)]);
+  end;
+
+  Description := StringReplace(Description, '-', '_', [rfReplaceAll, rfIgnoreCase]);
+
   result := Format(Str0s1sPeriod2,
     [Description, HufName, KPER, KSTP]);
   if (FResultFormat = mfMt3dConc) and (Precision <> mpMf6Double) then
@@ -3836,6 +3871,24 @@ begin
   begin
     result := Format(Str0sTotalTime1, [result, TOTIM]);
   end;
+
+  //ModelName1, ModelName2, PackageName1, PackageName2
+//  if ModelName1 <> '' then
+//  begin
+//    result := Format('%0:s_%1:s', [result, Trim(ModelName1)]);
+//  end;
+//  if PackageName1 <> '' then
+//  begin
+//    result := Format('%0:s_%1:s', [result, Trim(PackageName1)]);
+//  end;
+//  if ModelName2 <> '' then
+//  begin
+//    result := Format('%0:s_%1:s', [result, Trim(ModelName2)]);
+//  end;
+//  if PackageName2 <> '' then
+//  begin
+//    result := Format('%0:s_%1:s', [result, Trim(PackageName2)]);
+//  end;
 end;
 
 
@@ -3873,7 +3926,9 @@ var
   PriorCount: Integer;
   AuxArray: TAuxArrays;
   Mf6Description: string;
-  procedure RecordItem(Description: String);
+  ModelName1, ModelName2, PackageName1, PackageName2: string;
+  procedure RecordItem(Description: String;
+    ModelName1, ModelName2, PackageName1, PackageName2: String);
   var
     TrimmedDescription: string;
     ItemIndex: Integer;
@@ -3889,7 +3944,8 @@ var
       TrimmedDescription := 'NET ' + Copy(TrimmedDescription,4, MAXINT);
     end;
     Item := WriteLabel(TrimmedDescription, AModel, ILAY, KPER, KSTP,
-      NTRANS, SWR_TimeStep, TOTIM, Precision);
+      NTRANS, SWR_TimeStep, TOTIM, Precision,
+      ModelName1, ModelName2, PackageName1, PackageName2);
     if clData.Items.IndexOf(Item) < 0 then
     begin
       FPeriods.Add(KPER);
@@ -4005,7 +4061,8 @@ begin
                   Exit;
                 end;
               end;
-              RecordItem(string(DESC));
+              RecordItem(string(DESC),
+                ModelName1, ModelName2, PackageName1, PackageName2);
               if (AModel.ModflowGrid.RowCount <> NROW)
                 or (AModel.ModflowGrid.ColumnCount <> NCOL) then
               begin
@@ -4049,7 +4106,8 @@ begin
                   Exit;
                 end;
               end;
-              RecordItem(string(DESC));
+              RecordItem(string(DESC),
+                ModelName1, ModelName2, PackageName1, PackageName2);
 
               if AModel.Grid <> nil then
               begin
@@ -4109,7 +4167,8 @@ begin
                 Exit;
               end;
             end;
-              RecordItem(string(DESC2));
+              RecordItem(string(DESC2),
+                ModelName1, ModelName2, PackageName1, PackageName2);
               if AModel.ModflowGrid.RowCount = 1 then
               begin
                 if ((AModel.ModflowLayerCount <> NROW)
@@ -4147,10 +4206,29 @@ begin
                     PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray, HufFormat,
                     False);
                 mpDouble:
-                  ReadModflowDoublePrecFluxArray(FFileStream, KSTP, KPER,
-                    PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray,
-                    AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
-                    HufFormat, False);
+                  begin
+                    ReadModflowDoublePrecFluxArray(FFileStream, KSTP, KPER,
+                      PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray,
+                      AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
+                      HufFormat,
+                      ModelName1, ModelName2, PackageName1, PackageName2, False);
+                    if Trim(ModelName1) = 'MODFLOW' then
+                    begin
+                      ModelName1 := '';
+                    end;
+                    if Trim(ModelName2) = 'MODFLOW' then
+                    begin
+                      ModelName2 := '';
+                    end;
+                    if Trim(PackageName1) = 'MODFLOW' then
+                    begin
+                      PackageName1 := '';
+                    end;
+                    if Trim(PackageName2) = 'MODFLOW' then
+                    begin
+                      PackageName2 := '';
+                    end;
+                  end;
                 else Assert(False);
               end;
               Mf6Description := Trim(string(DESC));
@@ -4158,7 +4236,8 @@ begin
               begin
                 Continue;
               end;
-              RecordItem(string(DESC));
+              RecordItem(string(DESC),
+              ModelName1, ModelName2, PackageName1, PackageName2);
               if (frmGoPhast.ModelSelection = msModflow2015) then
               begin
                 Mf6Description := Trim(string(DESC));
@@ -4224,7 +4303,7 @@ begin
                   Exit;
                 end;
               end;
-              RecordItem(string(DESC2));
+              RecordItem(string(DESC2), ModelName1, ModelName2, PackageName1, PackageName2);
               if (AModel.ModflowGrid.RowCount <> NROW)
                 or (AModel.ModflowGrid.ColumnCount <> NCOL) then
               begin
@@ -4249,7 +4328,8 @@ begin
                     PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, False);
                 else Assert(False);
               end;
-              RecordItem(string(DESC));
+              RecordItem(string(DESC),
+                ModelName1, ModelName2, PackageName1, PackageName2);
               if (AModel.ModflowGrid.RowCount <> NROW)
                 or (AModel.ModflowGrid.ColumnCount <> NCOL) then
               begin
@@ -4271,16 +4351,36 @@ begin
                     PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray, HufFormat,
                     False);
                 mpDouble:
-                  ReadModflowDoublePrecFluxArray(FFileStream, KSTP, KPER,
-                    PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray,
-                    AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
-                    HufFormat, False);
+                  begin
+                    ReadModflowDoublePrecFluxArray(FFileStream, KSTP, KPER,
+                      PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray,
+                      AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
+                      HufFormat,
+                      ModelName1, ModelName2, PackageName1, PackageName2, False);
+                    if Trim(ModelName1) = 'MODFLOW' then
+                    begin
+                      ModelName1 := '';
+                    end;
+                    if Trim(ModelName2) = 'MODFLOW' then
+                    begin
+                      ModelName2 := '';
+                    end;
+                    if Trim(PackageName1) = 'MODFLOW' then
+                    begin
+                      PackageName1 := '';
+                    end;
+                    if Trim(PackageName2) = 'MODFLOW' then
+                    begin
+                      PackageName2 := '';
+                    end;
+                  end;
                 else Assert(False);
               end;
               for LayerIndex := 0 to Abs(NLAY) - 1 do
               begin
                 ILAY := LayerIndex+1;
-                RecordItem(string(DESC));
+                RecordItem(string(DESC),
+                  ModelName1, ModelName2, PackageName1, PackageName2);
               end;
               if (AModel.ModflowGrid.RowCount <> NROW)
                 or (AModel.ModflowGrid.ColumnCount <> NCOL)
@@ -4310,7 +4410,8 @@ begin
                 else Assert(False);
               end;
               Description := SubsidenceDescription(string(DESC), ILAY);
-              RecordItem(Description);
+              RecordItem(Description,
+                ModelName1, ModelName2, PackageName1, PackageName2);
               if (AModel.ModflowGrid.RowCount <> NROW)
                 or (AModel.ModflowGrid.ColumnCount <> NCOL) then
               begin
@@ -4343,7 +4444,8 @@ begin
                 KSTP := SwrItem.ModflowTimeStep;
                 SWR_TimeStep := SwrItem.SwrTimeStep;
                 TOTIM := SwrItem.TotalTime;
-                RecordItem(StrSWRStage);
+                RecordItem(StrSWRStage,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
               end;
             finally
               SwrStages.Free;
@@ -4370,14 +4472,22 @@ begin
                 KSTP := AReachExchange.ModflowTimeStep;
                 SWR_TimeStep := AReachExchange.SwrTimeStep;
                 TOTIM := AReachExchange.TotalTime;
-                RecordItem(StrSWRBottomElevation);
-                RecordItem(StrSWRStage);
-                RecordItem(StrSWRDepth);
-                RecordItem(StrSWRGroundwaterHead);
-                RecordItem(StrSWRWettedPerimeter);
-                RecordItem(StrSWRConductance);
-                RecordItem(StrSWRCalculatedHead);
-                RecordItem(StrSWRAquiferReachFl);
+                RecordItem(StrSWRBottomElevation,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRStage,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRDepth,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRGroundwaterHead,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRWettedPerimeter,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRConductance,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRCalculatedHead,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRAquiferReachFl,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
               end;
             finally
               ReachExchanges.Free;
@@ -4406,20 +4516,34 @@ begin
                 SWR_TimeStep := ABudget.SwrTimeStep;
                 TOTIM := ABudget.TotalTime;
 
-                RecordItem(StrSWRReachGroupStag);
-                RecordItem(StrSWRReachGroupInfl);
-                RecordItem(StrSWRReachGroupLate);
-                RecordItem(StrSWRReachGroupUZF);
-                RecordItem(StrSWRReachGroupRain);
-                RecordItem(StrSWRReachGroupEvap);
-                RecordItem(StrSWRReachGroupAqui);
-                RecordItem(StrSWRReachGroupOutf);
-                RecordItem(StrSWRReachGroupExte);
-                RecordItem(StrSWRReachGroupStru);
-                RecordItem(StrSWRReachGroupCons);
-                RecordItem(StrSWRReachGroupVoluChange);
-                RecordItem(StrSWRReachGroupFlowDisc);
-                RecordItem(StrSWRReachGroupVolu);
+                RecordItem(StrSWRReachGroupStag,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupInfl,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupLate,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupUZF,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupRain,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupEvap,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupAqui,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupOutf,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupExte,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupStru,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupCons,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupVoluChange,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupFlowDisc,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
+                RecordItem(StrSWRReachGroupVolu,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
               end;
             finally
               ReachGroupWaterBudgets.Free;
@@ -4675,13 +4799,19 @@ procedure TfrmSelectResultToImport.Read3DArray(var NLAY: Integer;
    var EndReached: Boolean; var KPER, KSTP: Integer; var TOTIM: TModflowDouble;
    var Description: string; var A3DArray: T3DTModflowArray; var AuxArray: TAuxArrays;
    Precision: TModflowPrecision; HufFormat: boolean; ShouldReadArray: boolean;
-   AModel: TCustomModel);
+   AModel: TCustomModel;
+   var ModelName1, ModelName2, PackageName1, PackageName2: string
+   );
 var
   PERTIM: TModflowDouble;
   DESC: TModflowDesc;
   NCOL: Integer;
   NROW: Integer;
 begin
+  ModelName1 := '';
+  ModelName2 := '';
+  PackageName1 := '';
+  PackageName2 := '';
   if FFileStream.Position < FFileStream.Size then
   begin
     case Precision of
@@ -4689,10 +4819,29 @@ begin
         ReadModflowSinglePrecFluxArray(FFileStream, KSTP, KPER, PERTIM, TOTIM, DESC,
           NCOL, NROW, NLAY, A3DArray, AuxArray, HufFormat, ShouldReadArray);
       mpDouble:
+        begin
         ReadModflowDoublePrecFluxArray(FFileStream, KSTP, KPER, PERTIM, TOTIM, DESC,
           NCOL, NROW, NLAY, A3DArray, AuxArray,
           AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
-          HufFormat, ShouldReadArray);
+          HufFormat, ModelName1, ModelName2, PackageName1, PackageName2, ShouldReadArray);
+
+          if Trim(ModelName1) = 'MODFLOW' then
+          begin
+            ModelName1 := '';
+          end;
+          if Trim(ModelName2) = 'MODFLOW' then
+          begin
+            ModelName2 := '';
+          end;
+          if Trim(PackageName1) = 'MODFLOW' then
+          begin
+            PackageName1 := '';
+          end;
+          if Trim(PackageName2) = 'MODFLOW' then
+          begin
+            PackageName2 := '';
+          end;
+        end
       else Assert(False);
     end;
     Description := string(Trim(DESC));

@@ -15022,7 +15022,15 @@ begin
     end
     else
     begin
-      ShowAForm(TfrmShowHideBitmaps);
+      if frmShowHideBitmaps = nil then
+      begin
+        Application.CreateForm(TfrmShowHideBitmaps, frmShowHideBitmaps);
+      end
+      else
+      begin
+        frmShowHideBitmaps.GetData;
+      end;
+      frmShowHideBitmaps.Show;
     end;
   end
   else

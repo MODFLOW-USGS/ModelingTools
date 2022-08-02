@@ -4718,6 +4718,7 @@ var
   ScreenObjectArray:  array of array[TFlowDirection] of TScreenObject;
   DirIndex: TFlowDirection;
   LayerIndex: Integer;
+  ModelName1, ModelName2, PackageName1, PackageName2: string;
   procedure DefineBoundary;
   var
     LocationsToUse: TList;
@@ -4976,12 +4977,15 @@ begin
             mpSingle:
               begin
                 ReadModflowSinglePrecFluxArray(FFileStream,
-                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, AnArray, AuxArray, HufFormat);
+                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, AnArray,
+                  AuxArray, HufFormat);
               end;
             mpDouble:
               begin
                 ReadModflowDoublePrecFluxArray(FFileStream,
-                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, AnArray, AuxArray, -1, -1, -1, HufFormat);
+                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, AnArray,
+                  AuxArray, -1, -1, -1, HufFormat,
+                  ModelName1, ModelName2, PackageName1, PackageName2);
               end;
           end;
           DefineBoundary;

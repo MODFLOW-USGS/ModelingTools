@@ -12,7 +12,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitTop = -159
+  ExplicitTop = -90
   ExplicitWidth = 802
   ExplicitHeight = 602
   TextHeight = 19
@@ -2459,7 +2459,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspGwtSRC
+        ActivePage = jvspMf6Obs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -6040,7 +6040,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboMultiIprior: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                 end
@@ -8804,9 +8803,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               OnChange = frameMNW2pcMnw2Change
               ExplicitWidth = 581
               inherited tabBasic: TTabSheet
-                inherited comboLossType: TJvImageComboBox
-                  ItemIndex = -1
-                end
                 inherited edPartialPenetration: TJvComboEdit
                   Left = 227
                   OnButtonClick = frameScreenObjectSFRjceButtonClick
@@ -10978,7 +10974,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboRouteType: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                   inherited cbbObservationTypes: TJvCheckedComboBox
@@ -12297,7 +12292,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited comboConductEq: TJvImageComboBox
                   Height = 29
                   ItemHeight = 23
-                  ItemIndex = -1
                   ExplicitHeight = 29
                 end
               end
@@ -12452,11 +12446,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pgcMain: TPageControl
               Width = 581
               Height = 405
+              ActivePage = frameObsMf6.tabBasic
               ExplicitWidth = 581
               ExplicitHeight = 405
               inherited tabBasic: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 414
+                ExplicitWidth = 573
+                ExplicitHeight = 371
                 inherited lblTypesOfFlowObservation: TLabel
                   Width = 183
                   Height = 19
@@ -14137,8 +14133,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Margins.Right = 4
           Margins.Bottom = 4
           Caption = 'jvspGwtSRC'
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           inline frameGwtSRC: TframeScreenObjectSrc
             Left = 0
             Top = 0
@@ -14147,11 +14141,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 120
-            ExplicitTop = 88
+            ExplicitWidth = 581
+            ExplicitHeight = 476
             inherited pnlBottom: TPanel
               Top = 408
               Width = 581
+              ExplicitTop = 408
+              ExplicitWidth = 581
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -14170,9 +14166,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 493
+                ExplicitLeft = 493
               end
               inherited btnInsert: TBitBtn
                 Left = 409
+                ExplicitLeft = 409
               end
               inherited comboChemSpecies: TComboBox
                 Height = 27
@@ -14182,15 +14180,20 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlTop: TPanel
               Width = 581
+              ExplicitWidth = 581
               inherited pnlCaption: TPanel
                 Width = 579
+                ExplicitWidth = 579
               end
             end
             inherited pnlGrid: TPanel
               Width = 581
               Height = 383
+              ExplicitWidth = 581
+              ExplicitHeight = 383
               inherited pnlEditGrid: TPanel
                 Width = 579
+                ExplicitWidth = 579
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -14203,6 +14206,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 331
                 OnSetEditText = frameGwtSRCrdgModflowBoundarySetEditText
                 ExplicitTop = 51
+                ExplicitWidth = 579
+                ExplicitHeight = 331
               end
             end
           end

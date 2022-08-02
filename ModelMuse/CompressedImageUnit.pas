@@ -67,6 +67,7 @@ type
   end;
 
   TCompressedBitmapItem = class;
+  TTCompressedBitmapItemProperties = class;
 
   // @abstract(@name stores a series of
   // @link(TMeasurementPointItem)s that determine
@@ -75,34 +76,68 @@ type
   private
     // @name has the bitmap to which the @link(TMeasurementPointItem)s
     // in @classname refer.
-    FCompressedBitmapItem: TCompressedBitmapItem;
+    FCompressedBitmapItem: TTCompressedBitmapItemProperties;
   public
     // @name creates an instance of @classname.  Item is the
     // @link(TCompressedBitmapItem) to which the @link(TMeasurementPointItem)s
     // in @classname refer.
-    constructor Create(const Item: TCompressedBitmapItem);
+    constructor Create(const Item: TTCompressedBitmapItemProperties);
+  end;
+
+  TTCompressedBitmapItemProperties = class(TCollectionItem)
+  private
+    // @name is the name of the bitmap.
+    FName: string;
+    // See @link(MeasurementPoints).
+    FMeasurementPoints: TMeasurementPointCollection;
+    // See @link(ViewDirection).
+    FViewDirection: TViewDirection;
+    // See @link(Visible).
+    FVisible: boolean;
+    // See @link(MeasurementPoints).
+    procedure SetMeasurementPoints(const Value: TMeasurementPointCollection);
+    // See @link(ViewDirection).
+    procedure SetViewDirection(const Value: TViewDirection);
+    // See @link(Visible).
+    procedure SetVisible(const Value: boolean);
+  public
+    // @name copies the published properties from Source.
+    procedure Assign(Source: TPersistent); override;
+    // @name creates and initializes an instance of @classname.
+    constructor Create(Collection: TCollection); override;
+    // @name destroys the current instance of @classname.
+    // Do not call Destroy directly.  Call Free instead.
+    destructor Destroy; override;
+    // Invalidate causes @link(X), @link(Y), @link(ScaleX),
+    // and @link(ScaleY) to be recalculated the next time they are read.
+    procedure Invalidate; virtual;
+  published
+    // @name is the name used to refer to the bitmap by the user.
+    property Name: string read FName write FName;
+    // @name is the collection of @link(TMeasurementPointItem)s that
+    // determine how the pixels relate to real-world coordinates.
+    property MeasurementPoints: TMeasurementPointCollection
+      read FMeasurementPoints write SetMeasurementPoints;
+    // @name determines whether the bitmap should be viewed on the top,
+    // front, or side view of the model.
+    property ViewDirection: TViewDirection read FViewDirection
+      write SetViewDirection;
+    // @name determines whether or not the bitmap is visible.
+    property Visible: boolean read FVisible write SetVisible;
   end;
 
   // @abstract(@name holds a @link(TCompressedBitmap).)
   // @name is used to store bitmaps in GoPhast.
-  TCompressedBitmapItem = class(TCollectionItem)
+  TCompressedBitmapItem = class(TTCompressedBitmapItemProperties)
   private
     // See @link(Bitmap).
     FBitmap: TCompressedBitmap;
     // See @link(Calculate).
     FCalculatedValues: boolean;
-    // See @link(MeasurementPoints).
-    FMeasurementPoints: TMeasurementPointCollection;
-    // @name is the name of the bitmap.
-    FName: string;
     // See @link(ScaleX).
     FScaleX: double;
     // See @link(ScaleY).
     FScaleY: double;
-    // See @link(ViewDirection).
-    FViewDirection: TViewDirection;
-    // See @link(Visible).
-    FVisible: boolean;
     // See @link(X).
     FX: double;
     // See @link(Y).
@@ -128,12 +163,6 @@ type
     function GetY: double;
     // See @link(Bitmap).
     procedure SetBitmap(const Value: TCompressedBitmap);
-    // See @link(MeasurementPoints).
-    procedure SetMeasurementPoints(const Value: TMeasurementPointCollection);
-    // See @link(ViewDirection).
-    procedure SetViewDirection(const Value: TViewDirection);
-    // See @link(Visible).
-    procedure SetVisible(const Value: boolean);
     // @name returns the pixel X-coordinate corresponding to X.
     function XCoord(const X: double): double;
     // @name returns the pixel Y-coordinate corresponding to Y.
@@ -148,7 +177,7 @@ type
     destructor Destroy; override;
     // Invalidate causes @link(X), @link(Y), @link(ScaleX),
     // and @link(ScaleY) to be recalculated the next time they are read.
-    procedure Invalidate;
+    procedure Invalidate; override;
     // @name is the ratio of the real-world
     // scale to the pixel-scale in the
     // X direction.
@@ -172,18 +201,6 @@ type
   published
     // @name is the bitmap that will be drawn.
     property Bitmap: TCompressedBitmap read FBitmap write SetBitmap;
-    // @name is the name used to refer to the bitmap by the user.
-    property Name: string read FName write FName;
-    // @name is the collection of @link(TMeasurementPointItem)s that
-    // determine how the pixels relate to real-world coordinates.
-    property MeasurementPoints: TMeasurementPointCollection
-      read FMeasurementPoints write SetMeasurementPoints;
-    // @name determines whether the bitmap should be viewed on the top,
-    // front, or side view of the model.
-    property ViewDirection: TViewDirection read FViewDirection
-      write SetViewDirection;
-    // @name determines whether or not the bitmap is visible.
-    property Visible: boolean read FVisible write SetVisible;
   end;
 
   // @abstract(@name is a collection of @link(TCompressedBitmapItem)s.)
@@ -290,19 +307,11 @@ begin
   if Source is TCompressedBitmapItem then
   begin
     SourceItem := TCompressedBitmapItem(Source);
-//    with TCompressedBitmapItem(Source) do
     begin
       self.Bitmap := SourceItem.Bitmap;
-      self.Name := SourceItem.Name;
-      self.ViewDirection := SourceItem.ViewDirection;
-      self.MeasurementPoints := SourceItem.MeasurementPoints;
-      self.Visible := SourceItem.Visible;
     end;
-  end
-  else
-  begin
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TCompressedBitmapItem.Calculate;
@@ -377,20 +386,10 @@ end;
 
 constructor TCompressedBitmapItem.Create(Collection: TCollection);
 begin
+  FBitmap := TCompressedBitmap.Create;
   inherited;
   FCanShow := True;
   FDisplayMessage := True;
-  FVisible := True;
-  if Collection = nil then
-  begin
-    Name := 'Image';
-  end
-  else
-  begin
-    Name := 'Image' + IntToStr(Collection.Count);
-  end;
-  FBitmap := TCompressedBitmap.Create;
-  FMeasurementPoints := TMeasurementPointCollection.Create(self);
   if Collection <> nil then
   begin
     if Collection.Count = 1 then
@@ -407,7 +406,7 @@ end;
 destructor TCompressedBitmapItem.Destroy;
 begin
   FBitmap.Free;
-  FMeasurementPoints.Free;
+//  FMeasurementPoints.Free;
   inherited;
 end;
 
@@ -640,42 +639,6 @@ begin
   FBitmap.Assign(Value);
 end;
 
-procedure TCompressedBitmapItem.SetMeasurementPoints(
-  const Value: TMeasurementPointCollection);
-begin
-  FMeasurementPoints.Assign(Value);
-end;
-
-procedure TCompressedBitmapItem.SetViewDirection(
-  const Value: TViewDirection);
-begin
-  FViewDirection := Value;
-end;
-
-procedure TCompressedBitmapItem.SetVisible(const Value: boolean);
-begin
-  if FVisible <> Value then
-  begin
-    FVisible := Value;
-    case ViewDirection of
-      vdTop:
-        begin
-          frmGoPhast.frameTopView.ScreenObjectsHaveChanged := True;
-        end;
-      vdFront:
-        begin
-          frmGoPhast.frameFrontView.ScreenObjectsHaveChanged := True;
-        end;
-      vdSide:
-        begin
-          frmGoPhast.frameSideView.ScreenObjectsHaveChanged := True;
-        end;
-    else
-      Assert(False);
-    end;
-  end;
-end;
-
 function TCompressedBitmapItem.XCoord(const X: double): double;
 begin
   result := 0;
@@ -815,14 +778,100 @@ end;
 { TMeasurementPointCollection }
 
 constructor TMeasurementPointCollection.Create(const Item:
-  TCompressedBitmapItem);
+  TTCompressedBitmapItemProperties);
 begin
   inherited Create(TMeasurementPointItem);
   FCompressedBitmapItem := Item;
 end;
 
+procedure TTCompressedBitmapItemProperties.Assign(Source: TPersistent);
+var
+  SourceItem: TTCompressedBitmapItemProperties;
+begin
+  if Source is TTCompressedBitmapItemProperties then
+  begin
+    SourceItem := TTCompressedBitmapItemProperties(Source);
+//    with TTCompressedBitmapItemProperties(Source) do
+    begin
+//      self.Bitmap := SourceItem.Bitmap;
+      self.Name := SourceItem.Name;
+      self.ViewDirection := SourceItem.ViewDirection;
+      self.MeasurementPoints := SourceItem.MeasurementPoints;
+      self.Visible := SourceItem.Visible;
+    end;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TTCompressedBitmapItemProperties.Create(Collection: TCollection);
+begin
+//  FCanShow := True;
+//  FDisplayMessage := True;
+  FVisible := True;
+  if Collection = nil then
+  begin
+    Name := 'Image';
+  end
+  else
+  begin
+    Name := 'Image' + IntToStr(Collection.Count);
+  end;
+  FMeasurementPoints := TMeasurementPointCollection.Create(self);
+  inherited;
+end;
+
+destructor TTCompressedBitmapItemProperties.Destroy;
+begin
+  FMeasurementPoints.Free;
+  inherited;
+end;
+
+procedure TTCompressedBitmapItemProperties.Invalidate;
+begin
+  // do nothing.
+end;
+
+procedure TTCompressedBitmapItemProperties.SetMeasurementPoints
+  (const Value: TMeasurementPointCollection);
+begin
+  FMeasurementPoints.Assign(Value);
+end;
+
+procedure TTCompressedBitmapItemProperties.SetViewDirection
+  (const Value: TViewDirection);
+begin
+  FViewDirection := Value;
+end;
+
+procedure TTCompressedBitmapItemProperties.SetVisible(const Value: boolean);
+begin
+  if FVisible <> Value then
+  begin
+    FVisible := Value;
+    case ViewDirection of
+      vdTop:
+        begin
+          frmGoPhast.frameTopView.ScreenObjectsHaveChanged := True;
+        end;
+      vdFront:
+        begin
+          frmGoPhast.frameFrontView.ScreenObjectsHaveChanged := True;
+        end;
+      vdSide:
+        begin
+          frmGoPhast.frameSideView.ScreenObjectsHaveChanged := True;
+        end;
+    else
+      Assert(False);
+    end;
+  end;
+end;
+
 initialization
-  RegisterClass(TCompressedBitmap);
+
+RegisterClass(TCompressedBitmap);
 
 end.
-

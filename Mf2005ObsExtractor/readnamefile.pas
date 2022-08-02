@@ -30,11 +30,14 @@ type
 
   TNameFileReader = class(TObject)
   private
-    FGenerateInstructionFile: Boolean;
+    FGenInstructionFile: Boolean;
+    FGenValueFile: Boolean;
     FListFileName: string;
     FListingFile: TStringList;
-    FOutputFile: TStringList;
-    FOutputFileName: string;
+    FInstructionsOutputFile: TStringList;
+    FValuesOutputFile: TStringList;
+    FInstructionOutputFileName: string;
+    FValuesOutputFileName: string;
     FInputFileLinks: TInputFileLinks;
     FLineIndex: Integer;
     FNameFile: TStringList;
@@ -53,10 +56,12 @@ type
     property ListingFile: TStringList read FListingFile;
     // Ultimately @name will contain either the observed values or
     // an instruction file for reading the observed values.
-    property OutputFile: TStringList read FOutputFile;
+    property InstructionsOutputFile: TStringList read FInstructionsOutputFile;
+    property ValuesOutputFile: TStringList read FValuesOutputFile;
     property InputFileCount: Integer read GetInputFileCount;
     property InputFiles[Index: integer]: TInputFileLink read GetInputFile; default;
-    property GenerateInstructionFile: Boolean Read FGenerateInstructionFile;
+    property GenerateInstructionFile: Boolean Read FGenInstructionFile;
+    property GenerateValuesFile: Boolean Read FGenValueFile;
   end;
 
 const
@@ -120,19 +125,19 @@ begin
         end
         else if UpperCase(Splitter[0]) = 'OBSERVATIONS_FILE' then
         begin
-          Assert(FOutputFileName = '', Format(rsOnLine0DOf1S2Output, [
+          Assert(FValuesOutputFileName = '', Format(rsOnLine0DOf1S2Output, [
             FLineIndex, FNameFileName]));
-          FGenerateInstructionFile := False;
-          FOutputFileName := Splitter[1];
+          FGenValueFile := True;
+          FValuesOutputFileName := Splitter[1];
         end
         else if UpperCase(Splitter[0]) = 'INSTRUCTION_FILE' then
         begin
-          Assert(FOutputFileName = '', Format(rsOnLine0DOf1S2Output, [
+          Assert(FInstructionOutputFileName = '', Format(rsOnLine0DOf1S2Output, [
             FLineIndex, FNameFileName]));
-          FGenerateInstructionFile := True;
-          FOutputFileName := Splitter[1];
-          FOutputFile.Add('pif @');
-          FOutputFile.Add('l1');
+          FGenInstructionFile := True;
+          FInstructionOutputFileName := Splitter[1];
+          FInstructionsOutputFile.Add('pif @');
+          FInstructionsOutputFile.Add('l1');
         end
         else if (UpperCase(Splitter[0]) = 'END')
           and (UpperCase(Splitter[1]) = 'OUTPUT_FILES') then
@@ -140,13 +145,13 @@ begin
           FListingFile.Add('');
           FListingFile.Add(Format('Listing File = "%s"', [FListFileName]));
 
-          if FGenerateInstructionFile then
+          if FGenInstructionFile then
           begin
-            FListingFile.Add(Format('Instruction File = "%s"', [FOutputFileName]));
-          end
-          else
+            FListingFile.Add(Format('Instruction File = "%s"', [FInstructionOutputFileName]));
+          end;
+          if FGenValueFile then
           begin
-            FListingFile.Add(Format('Observations Output File = "%s"', [FOutputFileName]));
+            FListingFile.Add(Format('Observations Output File = "%s"', [FValuesOutputFileName]));
           end;
 
           Exit;
@@ -308,11 +313,14 @@ constructor TNameFileReader.Create;
 var
   Index: Integer;
 begin
+  FGenInstructionFile := False;
+  FGenValueFile := False;
   FOldDecimalSeparator := FormatSettings.DecimalSeparator;
   FormatSettings.DecimalSeparator := '.';
 
   FListingFile := TStringList.Create;
-  FOutputFile := TStringList.Create;
+  FInstructionsOutputFile := TStringList.Create;
+  FValuesOutputFile := TStringList.Create;
   FInputFileLinks := TInputFileLinks.Create;
 
   FListingFile.Add('MODFLOW Observation Extractor');
@@ -334,17 +342,41 @@ var
 begin
   try
     try
-      FOutputFile.SaveToFile(FOutputFileName);
+      if FInstructionOutputFileName <> '' then
+      begin
+        FInstructionsOutputFile.SaveToFile(FInstructionOutputFileName);
+      end;
     except on E: Exception do
       begin
         FListingFile.Add(E.Message);
-        if FOutputFileName = '' then
+        if FInstructionOutputFileName = '' then
         begin
           ErrorMessage := 'Error saving observations file because no file name specified.';
         end
         else
         begin
-          ErrorMessage := Format('Error saving observation file "%s".', [FOutputFileName])
+          ErrorMessage := Format('Error saving observation file "%s".', [FInstructionOutputFileName])
+        end;
+        WriteLn(ErrorMessage);
+        FListingFile.Add(ErrorMessage);
+        raise;
+      end;
+    end;
+    try
+      if FValuesOutputFileName <> '' then
+      begin
+        FValuesOutputFile.SaveToFile(FValuesOutputFileName);
+      end;
+    except on E: Exception do
+      begin
+        FListingFile.Add(E.Message);
+        if FValuesOutputFileName = '' then
+        begin
+          ErrorMessage := 'Error saving observations file because no file name specified.';
+        end
+        else
+        begin
+          ErrorMessage := Format('Error saving observation file "%s".', [FValuesOutputFileName])
         end;
         WriteLn(ErrorMessage);
         FListingFile.Add(ErrorMessage);
@@ -371,7 +403,8 @@ begin
   finally
     FObsDictionary.Free;
     FInputFileLinks.Free;
-    FOutputFile.Free;
+    FInstructionsOutputFile.Free;
+    FValuesOutputFile.Free;
     FListingFile.Free;
     FormatSettings.DecimalSeparator := FOldDecimalSeparator;
     inherited Destroy;
@@ -447,28 +480,87 @@ begin
   try
     ObsProcessorList.Capacity := FInputFileLinks.Count;
 
-    for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+    if FGenInstructionFile then
     begin
-      ObsProcessor := TObsProcessor.Create(FInputFileLinks[ItemIndex],
-        FGenerateInstructionFile);
-      ObsProcessorList.Add(ObsProcessor);
-      ObsProcessor.ListingFile := ListingFile;
-      ObsProcessor.ObservationsFile := OutputFile;
-      ObsProcessor.ObsDictionary := FObsDictionary;
+      for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+      begin
+        //if FGenInstructionFile then
+        //begin
+          ObsProcessor := TObsProcessor.Create(FInputFileLinks[ItemIndex],
+            FGenInstructionFile);
+          ObsProcessorList.Add(ObsProcessor);
+          ObsProcessor.ListingFile := ListingFile;
+          ObsProcessor.ObservationsFile := InstructionsOutputFile;
+          ObsProcessor.ObsDictionary := FObsDictionary;
+        //end;
+        //if FGenValueFile then
+        //begin
+        //  ObsProcessor := TObsProcessor.Create(FInputFileLinks[ItemIndex],
+        //    not FGenValueFile);
+        //  ObsProcessorList.Add(ObsProcessor);
+        //  ObsProcessor.ListingFile := ListingFile;
+        //  ObsProcessor.ObservationsFile := ValuesOutputFile;
+        //  ObsProcessor.ObsDictionary := FObsDictionary;
+        //end;
+      end;
+
+      for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+      begin
+        ObsProcessor := ObsProcessorList[ItemIndex];
+        ObsProcessor.ProcessInstructionFile;
+      end;
+
+      for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+      begin
+        ObsProcessor := ObsProcessorList[ItemIndex];
+        ObsProcessor.HandleDerivedObservations;
+        ObsProcessor.WriteFiles;
+      end;
+
+      ObsProcessorList.Clear;
+      FObsDictionary.Clear;
     end;
 
-    for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+    if FGenValueFile then
     begin
-      ObsProcessor := ObsProcessorList[ItemIndex];
-      ObsProcessor.ProcessInstructionFile;
+      for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+      begin
+        //if FGenInstructionFile then
+        //begin
+          //ObsProcessor := TObsProcessor.Create(FInputFileLinks[ItemIndex],
+          //  FGenInstructionFile);
+          //ObsProcessorList.Add(ObsProcessor);
+          //ObsProcessor.ListingFile := ListingFile;
+          //ObsProcessor.ObservationsFile := InstructionsOutputFile;
+          //ObsProcessor.ObsDictionary := FObsDictionary;
+        //end;
+        //if FGenValueFile then
+        //begin
+          ObsProcessor := TObsProcessor.Create(FInputFileLinks[ItemIndex],
+            not FGenValueFile);
+          ObsProcessorList.Add(ObsProcessor);
+          ObsProcessor.ListingFile := ListingFile;
+          ObsProcessor.ObservationsFile := ValuesOutputFile;
+          ObsProcessor.ObsDictionary := FObsDictionary;
+        //end;
+      end;
+
+      for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+      begin
+        ObsProcessor := ObsProcessorList[ItemIndex];
+        ObsProcessor.ProcessInstructionFile;
+      end;
+
+      for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+      begin
+        ObsProcessor := ObsProcessorList[ItemIndex];
+        ObsProcessor.HandleDerivedObservations;
+        ObsProcessor.WriteFiles;
+      end;
+
+      ObsProcessorList.Clear;
     end;
 
-    for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
-    begin
-      ObsProcessor := ObsProcessorList[ItemIndex];
-      ObsProcessor.HandleDerivedObservations;
-      ObsProcessor.WriteFiles;
-    end;
     Writeln('normal termination');
 
   finally

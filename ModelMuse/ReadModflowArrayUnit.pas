@@ -130,6 +130,7 @@ procedure ReadModflowDoublePrecFluxArray(AFile: TFileStream;
   var NCOL, NROW, NLAY: Integer; var AnArray: T3DTModflowArray;
   var AuxArray: TAuxArrays; const AltNLay, AltNRow, AltNCol: integer;
   HufFormat: boolean;
+  var ModelName1, ModelName2, PackageName1, PackageName2: string;
   ReadArray: Boolean = True
   );
 
@@ -2189,6 +2190,7 @@ procedure ReadModflowDoublePrecFluxArray(AFile: TFileStream;
   var NCOL, NROW, NLAY: Integer; var AnArray: T3DTModflowArray;
   var AuxArray: TAuxArrays; const AltNLay, AltNRow, AltNCol: integer;
   HufFormat: boolean;
+  var ModelName1, ModelName2, PackageName1, PackageName2: string;
   ReadArray: Boolean = True);
 var
   ITYPE: integer;
@@ -2207,10 +2209,10 @@ var
   ValIndex: Integer;
   NRC: Integer;
   AValue: TModflowDouble;
-  ModelName1: string;
-  ModelName2: string;
-  PackageName1: string;
-  PackageName2: string;
+//  ModelName1: string;
+//  ModelName2: string;
+//  PackageName1: string;
+//  PackageName2: string;
   AuxName: string;
   NumVariable: Integer;
   N1: integer;
@@ -2231,6 +2233,10 @@ var
     AName := string(NameArray);
   end;
 begin
+  ModelName1 := '';
+  ModelName2 := '';
+  PackageName1 := '';
+  PackageName2 := '';
   AFile.Read(KSTP, SizeOf(KSTP));
   AFile.Read(KPER, SizeOf(KPER));
   AFile.Read(DESC, SizeOf(DESC));

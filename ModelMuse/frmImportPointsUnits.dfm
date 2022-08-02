@@ -344,6 +344,7 @@ inherited frmImportPoints: TfrmImportPoints
         AutoIncreaseRowCount = True
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
+        OnEndUpdate = dgDataEndUpdate
         ColorRangeSelection = False
         OnDistributeTextProgress = dgDataDistributeTextProgress
         Columns = <
@@ -395,7 +396,6 @@ inherited frmImportPoints: TfrmImportPoints
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        OnEndUpdate = dgDataEndUpdate
         WordWrapRowCaptions = False
         ColWidths = (
           64

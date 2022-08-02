@@ -59,12 +59,15 @@ type
     // and sets the checked state of each line depending
     // on the @link(TCompressedBitmapItem.Visible) property of the
     // @link(TCompressedBitmapItem).
-    procedure GetData;
     procedure SetAllChecks(ShouldCheck: Boolean);
     { Private declarations }
   public
+    procedure GetData;
     { Public declarations }
   end;
+
+var
+  frmShowHideBitmaps: TfrmShowHideBitmaps;
 
 implementation
 

@@ -5,8 +5,7 @@ inherited frmShowHideBitmaps: TfrmShowHideBitmaps
   HelpKeyword = 'Show_or_Hide_Bitmaps_Dialog_Box'
   Caption = 'Show or Hide Images'
   ClientWidth = 467
-  ExplicitWidth = 483
-  PixelsPerInch = 96
+  ExplicitWidth = 485
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -93,6 +92,7 @@ inherited frmShowHideBitmaps: TfrmShowHideBitmaps
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -116,6 +116,7 @@ inherited frmShowHideBitmaps: TfrmShowHideBitmaps
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

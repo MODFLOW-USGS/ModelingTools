@@ -3,52 +3,13 @@ inherited frmPixelPoint: TfrmPixelPoint
   Top = 516
   HelpType = htKeyword
   HelpKeyword = 'Import_Shapefile_Dialog_Box'
-  ActiveControl = rdeX
   Caption = 'Coordinates'
   ClientHeight = 126
-  ClientWidth = 297
-  ExplicitWidth = 315
-  ExplicitHeight = 171
+  ClientWidth = 495
+  ExplicitWidth = 513
+  ExplicitHeight = 173
   PixelsPerInch = 120
   TextHeight = 18
-  object lblX: TLabel
-    Left = 8
-    Top = 8
-    Width = 11
-    Height = 18
-    Caption = 'X'
-  end
-  object lblY: TLabel
-    Left = 153
-    Top = 8
-    Width = 9
-    Height = 18
-    Caption = 'Y'
-  end
-  object rdeX: TRbwDataEntry
-    Left = 8
-    Top = 40
-    Width = 137
-    Height = 28
-    Cursor = crIBeam
-    TabOrder = 0
-    Text = '0'
-    DataType = dtReal
-    Max = 1.000000000000000000
-    ChangeDisabledColor = True
-  end
-  object rdeY: TRbwDataEntry
-    Left = 153
-    Top = 40
-    Width = 137
-    Height = 28
-    Cursor = crIBeam
-    TabOrder = 3
-    Text = '0'
-    DataType = dtReal
-    Max = 1.000000000000000000
-    ChangeDisabledColor = True
-  end
   object btnOK: TBitBtn
     Left = 104
     Top = 84
@@ -75,7 +36,7 @@ inherited frmPixelPoint: TfrmPixelPoint
       0000}
     ModalResult = 1
     NumGlyphs = 2
-    TabOrder = 1
+    TabOrder = 0
     OnClick = btnOKClick
   end
   object btnCancel: TBitBtn
@@ -85,7 +46,7 @@ inherited frmPixelPoint: TfrmPixelPoint
     Height = 33
     Kind = bkCancel
     NumGlyphs = 2
-    TabOrder = 2
+    TabOrder = 1
   end
   object btnHelp: TBitBtn
     Left = 8
@@ -94,7 +55,106 @@ inherited frmPixelPoint: TfrmPixelPoint
     Height = 33
     Kind = bkHelp
     NumGlyphs = 2
-    TabOrder = 4
+    TabOrder = 2
     OnClick = btnHelpClick
+  end
+  object rdgPoints: TRbwDataGrid4
+    Left = 9
+    Top = 9
+    Width = 477
+    Height = 68
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    ColCount = 3
+    DefaultColWidth = 140
+    DefaultRowHeight = 30
+    FixedCols = 0
+    RowCount = 2
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+    TabOrder = 3
+    ExtendedAutoDistributeText = False
+    AutoMultiEdit = False
+    AutoDistributeText = True
+    AutoIncreaseColCount = False
+    AutoIncreaseRowCount = False
+    SelectedRowOrColumnColor = clAqua
+    UnselectableColor = clBtnFace
+    ColorRangeSelection = False
+    Columns = <
+      item
+        AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
+        ButtonCaption = '...'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -15
+        ButtonFont.Name = 'Segoe UI'
+        ButtonFont.Style = []
+        ButtonUsed = False
+        ButtonWidth = 20
+        CheckMax = False
+        CheckMin = False
+        ComboUsed = False
+        Format = rcf4Real
+        LimitToList = False
+        MaxLength = 0
+        ParentButtonFont = False
+        WordWrapCaptions = False
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+        AutoAdjustColWidths = True
+      end
+      item
+        AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
+        ButtonCaption = '...'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -15
+        ButtonFont.Name = 'Segoe UI'
+        ButtonFont.Style = []
+        ButtonUsed = False
+        ButtonWidth = 20
+        CheckMax = False
+        CheckMin = False
+        ComboUsed = False
+        Format = rcf4Real
+        LimitToList = False
+        MaxLength = 0
+        ParentButtonFont = False
+        WordWrapCaptions = False
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+        AutoAdjustColWidths = True
+      end
+      item
+        AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
+        ButtonCaption = '...'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -15
+        ButtonFont.Name = 'Segoe UI'
+        ButtonFont.Style = []
+        ButtonUsed = False
+        ButtonWidth = 20
+        CheckMax = False
+        CheckMin = False
+        ComboUsed = False
+        Format = rcf4String
+        LimitToList = False
+        MaxLength = 0
+        ParentButtonFont = False
+        WordWrapCaptions = False
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+        AutoAdjustColWidths = True
+      end>
+    WordWrapRowCaptions = False
   end
 end

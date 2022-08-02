@@ -142,7 +142,7 @@ type
   public
     // @name adds a point to dgPoints.
     procedure AddPoint(const PixelX, PixelY: integer;
-      const RealX, RealY: double);
+      const RealX, RealY: double; ID: string = '');
     // @name is called when editing a bitmap to retrieve data from ABitmapItem.
     // @name is not called when importing a bitmap.
     procedure GetData(ABitmapItem: TCompressedBitmapItem);
@@ -210,11 +210,15 @@ type
     // @name undoes the command.
     procedure Undo; override;
     constructor Create;
+    destructor Destroy; override;
   end;
 
-  TUndoEditBitMap = class(TUndoImportBitMap)
+  TUndoEditBitMap = class(TCustomUndo)
   private
-    FOldBitmapItem: TCompressedBitmapItem;
+    FNewBitmapItem: TTCompressedBitmapItemProperties;
+    FOldBitmapItem: TTCompressedBitmapItemProperties;
+    FIndex: Integer;
+    procedure UpdateView;
   protected
     function Description: string; override;
   public
@@ -222,6 +226,7 @@ type
     // @name undoes the command.
     procedure Undo; override;
     constructor Create;
+    destructor Destroy; override;
   end;
 
 { TfrmImportBitmap }
@@ -604,8 +609,10 @@ var
   MeasurementPoint: TMeasurementPointItem;
   XPixel, YPixel: integer;
   X, Y: double;
-  NewItem: boolean;
-  UndoEdit: TUndoImportBitMap;
+//  NewItem: boolean;
+  UndoImport: TUndoImportBitMap;
+  UndoEdit: TUndoEditBitMap;
+  Undo: TCustomUndo;
   ID: string;
 begin
   if FImageFileName <> '' then
@@ -613,11 +620,14 @@ begin
     frmGoPhast.PhastModel.AddFileToArchive(FImageFileName);
   end;
   UndoEdit := nil;
+//  UndoImport := nil;
+  Undo := nil;
   try
   if FBitmapItem = nil then
   begin
-    UndoEdit := TUndoImportBitMap.Create;
-    FBitmapItem := UndoEdit.FNewBitmapItem;
+    UndoImport := TUndoImportBitMap.Create;
+    FBitmapItem := UndoImport.FNewBitmapItem;
+    Undo := UndoImport;
 //    NewItem := True;
   end
   else
@@ -625,6 +635,7 @@ begin
     UndoEdit := TUndoEditBitMap.Create;
     TUndoEditBitMap(UndoEdit).FOldBitmapItem.Assign(FBitmapItem);
     UndoEdit.FIndex := FBitmapItem.Index;
+    Undo := UndoEdit;
   end;
   FBitmapItem.ViewDirection := TViewDirection(rgViewDirection.ItemIndex);
   FBitmapItem.BitMap.Assign(FBitMap);
@@ -701,13 +712,13 @@ begin
   end;
   except on E: Exception do
     begin
-      UndoEdit.Free;
+      Undo.Free;
       Beep;
       MessageDlg(E.message, mtError, [mbOK], 0);
       Exit;
     end;
   end;
-  frmGoPhast.UndoStack.Submit(UndoEdit);
+  frmGoPhast.UndoStack.Submit(Undo);
   //frmGoPhast.Invalidate;
 end;
 
@@ -986,7 +997,7 @@ begin
 end;
 
 procedure TfrmImportBitmap.AddPoint(const PixelX, PixelY: integer;
-  const RealX, RealY: double);
+  const RealX, RealY: double; ID: string= '');
 var
   Row: integer;
 begin
@@ -1007,6 +1018,7 @@ begin
   dgPoints.Cells[Ord(pcPixelY), Row] := IntToStr(PixelY);
   dgPoints.Cells[Ord(pcRealWorldX), Row] := FloatToStr(RealX);
   dgPoints.Cells[Ord(pcRealWorldY), Row] := FloatToStr(RealY);
+  dgPoints.Cells[Ord(pcID), Row] := ID;
   NumberRows;
   EnableOKButton;
   ZoomBox.InvalidateImage32;
@@ -1047,12 +1059,20 @@ end;
 constructor TUndoEditBitMap.Create;
 begin
   inherited;
-  FOldBitmapItem := TCompressedBitmapItem.Create(nil);
+  FNewBitmapItem := TTCompressedBitmapItemProperties.Create(nil);
+  FOldBitmapItem := TTCompressedBitmapItemProperties.Create(nil);
 end;
 
 function TUndoEditBitMap.Description: string;
 begin
   result := 'edit bitmap';
+end;
+
+destructor TUndoEditBitMap.Destroy;
+begin
+  FNewBitmapItem.Free;
+  FOldBitmapItem.Free;
+  inherited;
 end;
 
 procedure TUndoEditBitMap.DoCommand;
@@ -1075,6 +1095,29 @@ begin
   UpdateView;
 end;
 
+procedure TUndoEditBitMap.UpdateView;
+begin
+  case FNewBitmapItem.ViewDirection of
+    vdTop:
+      begin
+        frmGoPhast.TopDiscretizationChanged := True;
+        frmGoPhast.frameTopView.ZoomBox.InvalidateImage32
+      end;
+    vdFront:
+      begin
+        frmGoPhast.FrontDiscretizationChanged := True;
+        frmGoPhast.frameFrontView.ZoomBox.InvalidateImage32
+      end;
+    vdSide:
+      begin
+        frmGoPhast.SideDiscretizationChanged := True;
+        frmGoPhast.frameSideView.ZoomBox.InvalidateImage32
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
 { TUndoImportBitMap }
 
 constructor TUndoImportBitMap.Create;
@@ -1085,6 +1128,12 @@ end;
 function TUndoImportBitMap.Description: string;
 begin
   result := 'import bitmap';
+end;
+
+destructor TUndoImportBitMap.Destroy;
+begin
+  FNewBitmapItem.Free;
+  inherited;
 end;
 
 procedure TUndoImportBitMap.DoCommand;
