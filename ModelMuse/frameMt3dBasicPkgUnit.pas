@@ -143,22 +143,22 @@ var
   RowIndex: Integer;
   Option: TMt3dUsgsOption;
 begin
-  {$IFDEF GWT}
-  if frmGoPhast.ModelSelection = msModflow2015 then
-  begin
-    if comboVersion.Items.Count = 2 then
-    begin
-      comboVersion.Items.Add('GWT');
-    end;
-  end
-  else
-  begin
-    if comboVersion.Items.Count = 3 then
-    begin
-      comboVersion.Items.Delete(2);
-    end;
-  end;
-  {$ENDIF}
+//  {$IFDEF GWT}
+//  if frmGoPhast.ModelSelection = msModflow2015 then
+//  begin
+//    if comboVersion.Items.Count = 2 then
+//    begin
+//      comboVersion.Items.Add('GWT');
+//    end;
+//  end
+//  else
+//  begin
+//    if comboVersion.Items.Count = 3 then
+//    begin
+//      comboVersion.Items.Delete(2);
+//    end;
+//  end;
+//  {$ENDIF}
   pcMt3d_Basic.ActivePageIndex := 0;
 {  for RowIndex := 1 to frameGridMobile.Grid.RowCount - 1 do
   begin

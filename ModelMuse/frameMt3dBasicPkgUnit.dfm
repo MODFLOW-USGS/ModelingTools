@@ -22,7 +22,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
     Margins.Top = 120
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = tabSpecies
+    ActivePage = tabMT3D_Options
     Align = alClient
     TabOrder = 1
     object tabSpecies: TTabSheet

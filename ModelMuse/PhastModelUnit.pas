@@ -4116,6 +4116,7 @@ that affects the model output should also have a comment. }
     procedure FixScreenObjectNames;
     procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections); override;
     function GetMf6TimesSeries: TTimesSeriesCollections; override;
+//    procedure FixGwtModel;
     //    function GetPilotPoint(Index: Integer): TPoint2D;
 //    function GetPilotPointSpacing: double;
   protected
@@ -21297,6 +21298,15 @@ begin
   FreeAndNil(FSortedObjectList);
 end;
 
+//procedure TPhastModel.FixGwtModel;
+//begin
+//  if ModflowPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt then
+//  begin
+//    ModflowPackages.GwtProcess.IsSelected := ModflowPackages.Mt3dBasic.IsSelected;
+//    ModflowPackages.Mt3dBasic.Mt3dVersion :=  mvUSGS
+//  end;
+//end;
+
 procedure TPhastModel.FixOldModel;
 var
   ModpathZone: TDataArray;
@@ -21340,6 +21350,7 @@ var
 //  StressPeriod: TModflowStressPeriod;
 //  Mt3dStressPeriod: TMt3dmsTimeItem;
 begin
+//  FixGwtModel;
   FixScreenObjectNames;
   RenameOldVerticalLeakance;
   FixSpecifyingGridByThreeDObjects;
@@ -41625,8 +41636,8 @@ end;
 function TCustomModel.Mf6GwtUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msModflow2015)
-    and ModflowPackages.Mt3dBasic.IsSelected
-    and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt);
+    and ModflowPackages.GwtProcess.IsSelected
+//    and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt);
 end;
 
 function TCustomModel.Mf6ObsIsSelected: Boolean;
@@ -49499,16 +49510,16 @@ begin
 end;
 
 function TCustomModel.GetGwtUsed: Boolean;
-  {$IFDEF GWT}
-var
-  Mt3dBasic: TMt3dBasic;
-  {$ENDIF}
+//  {$IFDEF GWT}
+//var
+//  Mt3dBasic: TMt3dBasic;
+//  {$ENDIF}
 begin
   {$IFDEF GWT}
   if ModelSelection = msModflow2015 then
   begin
-    Mt3dBasic := ModflowPackages.Mt3dBasic;
-    result := Mt3dBasic.IsSelected and (Mt3dBasic.Mt3dVersion = mvMf6Gwt);
+//    Mt3dBasic := ModflowPackages.Mt3dBasic;
+    result := ModflowPackages.GwtProcess.IsSelected {and (Mt3dBasic.Mt3dVersion = mvMf6Gwt)};
   end
   else
   begin

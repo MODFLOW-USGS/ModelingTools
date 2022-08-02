@@ -3920,7 +3920,7 @@ Type
       write SetSteadyStateInterpolation stored False;
   end;
 
-  TMt3dVersion = (mvUSGS, mvMS, mvMf6Gwt);
+  TMt3dVersion = (mvUSGS, mvMS {, mvMf6Gwt});
 
   TMt3dInitialChoice = (micSpecifyTimeStep, micUseFirst);
 

@@ -9504,12 +9504,12 @@ begin
         acRunMt3dms.Hint := StrRunMT3DMS;
         miRunMt3dmsPopup.Caption := StrExportMT3DMSInput;
       end;
-    mvMf6Gwt:
-      begin
-        acRunMt3dms.Caption := 'GWT Transport Files';
-        acRunMt3dms.Hint := 'Run GWT';
-        miRunMt3dmsPopup.Caption := 'Export GWT Input Files';
-      end;
+//    mvMf6Gwt:
+//      begin
+//        acRunMt3dms.Caption := 'GWT Transport Files';
+//        acRunMt3dms.Hint := 'Run GWT';
+//        miRunMt3dmsPopup.Caption := 'Export GWT Input Files';
+//      end;
   end;
 end;
 

@@ -4788,8 +4788,8 @@ begin
     NewPackages := FNewPackages[0].Packages;
 
     GwtChanged := (PhastModel.ModelSelection = msModflow2015)
-      and (PhastModel.GwtUsed = (NewPackages.Mt3dBasic.IsSelected
-      and (NewPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt)));
+      and (PhastModel.GwtUsed <> NewPackages.GwtProcess.IsSelected);
+//      and (NewPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt)));
 
     Mt3dmsNewlySelected := not OldPackages.Mt3dBasic.SimulateWithMt3D
       and NewPackages.Mt3dBasic.SimulateWithMt3D;
@@ -5014,8 +5014,8 @@ begin
 
     OldPackages := FOldPackages[0].Packages;
     GwtChanged := (PhastModel.ModelSelection = msModflow2015)
-      and (PhastModel.GwtUsed = (OldPackages.Mt3dBasic.IsSelected
-      and (OldPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt)));
+      and (PhastModel.GwtUsed <> OldPackages.GwtProcess.IsSelected);
+//      and (OldPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt)));
 
     frmGoPhast.PhastModel.ModflowPackages := FOldPackages[0].Packages;
     if frmGoPhast.PhastModel.LgrUsed then
