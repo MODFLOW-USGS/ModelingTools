@@ -1,6 +1,7 @@
 BEGIN OPTIONS
   LISTING SutraGenBoundLakeTest.soeOut
   INSTRUCTION SutraGenBoundLakeTest.PestIns
+  VALUES SutraGenBoundLakeTest.SutraValues
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

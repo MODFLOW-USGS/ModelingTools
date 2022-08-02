@@ -1,6 +1,7 @@
 BEGIN OPTIONS
   LISTING Rocky2D_IrregularS4NoInterpolate.soeOut
   INSTRUCTION Rocky2D_IrregularS4NoInterpolate.PestIns
+  VALUES Rocky2D_IrregularS4NoInterpolate.SutraValues
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

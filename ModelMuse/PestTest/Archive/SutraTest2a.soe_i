@@ -1,6 +1,7 @@
 BEGIN OPTIONS
   LISTING SutraTest2a.soeOut
   INSTRUCTION SutraTest2a.PestIns
+  VALUES SutraTest2a.SutraValues
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

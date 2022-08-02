@@ -1,6 +1,7 @@
 BEGIN OPTIONS
   LISTING FreezingWallPest.soeOut
   INSTRUCTION FreezingWallPest.PestIns
+  VALUES FreezingWallPest.SutraValues
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

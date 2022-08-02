@@ -1,6 +1,7 @@
 BEGIN OPTIONS
   LISTING CSubExampletest.Mf6ObsExtInsLst
   INSTRUCTION CSubExampletest.PestIns
+  VALUES CSubExampletest.Mf6Values
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

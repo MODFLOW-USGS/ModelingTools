@@ -1,6 +1,7 @@
 BEGIN OPTIONS
   LISTING RmaSutraNodeTest.soeOut
   INSTRUCTION RmaSutraNodeTest.PestIns
+  VALUES RmaSutraNodeTest.SutraValues
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

@@ -1,6 +1,7 @@
 BEGIN OPTIONS
   LISTING RmaSutraCompleted.soeOut
   INSTRUCTION RmaSutraCompleted.PestIns
+  VALUES RmaSutraCompleted.SutraValues
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

@@ -1,6 +1,7 @@
 BEGIN OPTIONS
   LISTING PestPilotPointTest.Mf6ObsExtInsLst
   INSTRUCTION PestPilotPointTest.PestIns
+  VALUES PestPilotPointTest.Mf6Values
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

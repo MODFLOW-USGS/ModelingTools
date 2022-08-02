@@ -1,6 +1,7 @@
 BEGIN OPTIONS
   LISTING Prediction.Mf6ObsExtInsLst
   INSTRUCTION Prediction.PestIns
+  VALUES Prediction.Mf6Values
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

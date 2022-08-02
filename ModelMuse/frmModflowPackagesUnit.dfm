@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspGwtSRC
+    ActivePage = jvspChemSpecies
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -6106,7 +6106,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pcMt3d_Basic: TPageControl
           Width = 595
           Height = 396
-          ActivePage = framePkgMt3dBasic.tabSpecies
           ExplicitWidth = 595
           ExplicitHeight = 396
           inherited tabSpecies: TTabSheet
@@ -6143,16 +6142,16 @@ inherited frmModflowPackages: TfrmModflowPackages
                     ExplicitHeight = 18
                   end
                   inherited sbAdd: TSpeedButton
-                    Left = 196
-                    ExplicitLeft = 196
+                    Left = 172
+                    ExplicitLeft = 172
                   end
                   inherited sbInsert: TSpeedButton
-                    Left = 233
-                    ExplicitLeft = 233
+                    Left = 209
+                    ExplicitLeft = 209
                   end
                   inherited sbDelete: TSpeedButton
-                    Left = 270
-                    ExplicitLeft = 203
+                    Left = 246
+                    ExplicitLeft = 246
                   end
                   inherited seNumber: TJvSpinEdit
                     Height = 26
@@ -6268,6 +6267,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                   Height = 320
                   OnExit = frameGridMobileGridExit
                   OnSetEditText = frameGridMobileGridSetEditText
+                  OnStateChange = frameGridMobileGridStateChange
                   Columns = <
                     item
                       AutoAdjustRowHeights = True
@@ -6341,6 +6341,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                       CheckStyle = csCheck
                       AutoAdjustColWidths = True
                     end>
+                  ExplicitLeft = -1
                   ExplicitWidth = 299
                   ExplicitHeight = 320
                 end
@@ -11511,6 +11512,169 @@ inherited frmModflowPackages: TfrmModflowPackages
             item
               Control = frameGwtSRC.memoComments
             end>
+        end
+      end
+    end
+    object jvspGwtProcess: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 595
+      Height = 516
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'jvspGwtProcess'
+      inline frameGwtProcess: TframePackage
+        Left = 0
+        Top = 0
+        Width = 595
+        Height = 516
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitWidth = 595
+        ExplicitHeight = 516
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 564
+          ExplicitWidth = 564
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGwtProcess.lblComments
+            end
+            item
+              Control = frameGwtProcess.memoComments
+            end>
+          OnEnabledChange = frameGwtProcessrcSelectionControllerEnabledChange
+        end
+      end
+    end
+    object jvspChemSpecies: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 595
+      Height = 516
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'jvspChemSpecies'
+      ExplicitLeft = -3
+      ExplicitTop = -1
+      inline frameChemSpecies: TframeChemSpecies
+        Left = 0
+        Top = 0
+        Width = 595
+        Height = 516
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = -45
+        ExplicitTop = 36
+        inherited spl1: TSplitter
+          Left = 281
+          Height = 516
+        end
+        inherited frameGridImmobile: TframeGrid
+          Left = 286
+          Width = 309
+          Height = 516
+          ExplicitLeft = 253
+          ExplicitTop = 0
+          ExplicitWidth = 387
+          ExplicitHeight = 480
+          inherited Panel: TPanel
+            Top = 475
+            Width = 309
+            ExplicitTop = 439
+            ExplicitWidth = 387
+            inherited lbNumber: TLabel
+              Width = 55
+              Height = 18
+              ExplicitWidth = 55
+              ExplicitHeight = 18
+            end
+            inherited sbAdd: TSpeedButton
+              Left = 157
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 186
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 216
+            end
+            inherited seNumber: TJvSpinEdit
+              Height = 26
+              ExplicitHeight = 26
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            Width = 309
+            Height = 475
+            OnExit = frameGridImmobileGridExit
+            OnSelectCell = frameGridImmobileGridSelectCell
+            OnButtonClick = frameGridMobileGridButtonClick
+            OnStateChange = frameGridMobileGridStateChange
+          end
+        end
+        inherited frameGridMobile: TframeGrid
+          Width = 281
+          Height = 516
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 281
+          ExplicitHeight = 516
+          inherited Panel: TPanel
+            Top = 475
+            Width = 281
+            ExplicitTop = 439
+            inherited lbNumber: TLabel
+              Width = 55
+              Height = 18
+              ExplicitWidth = 55
+              ExplicitHeight = 18
+            end
+            inherited sbAdd: TSpeedButton
+              Left = 141
+              ExplicitLeft = 123
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 168
+              ExplicitLeft = 147
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 195
+              ExplicitLeft = 171
+            end
+            inherited seNumber: TJvSpinEdit
+              Height = 26
+              OnChange = frameGridMobileseNumberChange
+              ExplicitHeight = 26
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            Width = 281
+            Height = 475
+            OnExit = frameGridMobileGridExit
+            OnSetEditText = frameGridMobileGridSetEditText
+            OnButtonClick = frameGridMobileGridButtonClick
+            OnStateChange = frameGridMobileGridStateChange
+            ExplicitWidth = 281
+            ExplicitHeight = 475
+          end
         end
       end
     end

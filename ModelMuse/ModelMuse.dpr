@@ -762,7 +762,8 @@ uses
   ModflowCncWriterUnit in 'ModflowCncWriterUnit.pas',
   frameCustomGwtBoundaryUnit in 'frameCustomGwtBoundaryUnit.pas' {frameCustomGwtBoundary: TFrame},
   frameScreenObjectCncUnit in 'frameScreenObjectCncUnit.pas' {frameScreenObjectCnc: TFrame},
-  frameScreenObjectSrcUnit in 'frameScreenObjectSrcUnit.pas' {frameScreenObjectSrc: TFrame};
+  frameScreenObjectSrcUnit in 'frameScreenObjectSrcUnit.pas' {frameScreenObjectSrc: TFrame},
+  frameChemSpeciesUnit in 'frameChemSpeciesUnit.pas' {frameChemSpecies: TFrame};
 
 {$R *.res}
 

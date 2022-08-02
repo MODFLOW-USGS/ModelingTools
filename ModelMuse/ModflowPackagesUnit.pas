@@ -82,6 +82,7 @@ type
     FGwtSsmPackage: TGWtSsmPackage;
     FGwtCncPackage: TGwtCncPackage;
     FGwtSrcPackage: TGwtSrcPackage;
+    FGwtProcess: TGwtProcess;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -154,6 +155,7 @@ type
     procedure SetGwtSsmPackage(const Value: TGWtSsmPackage);
     procedure SetGwtCncPackage(const Value: TGwtCncPackage);
     procedure SetGwtSrcPackage(const Value: TGwtSrcPackage);
+    procedure SetGwtProcess(const Value: TGwtProcess);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -279,6 +281,11 @@ type
     property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts;
     property CSubPackage: TCSubPackageSelection read FCsubPackage
       write SetCsubPackage;
+    property GwtProcess: TGwtProcess read FGwtProcess write SetGwtProcess
+    {$IFNDEF GWT}
+      stored False
+    {$ENDIF}
+    ;
     property GwtDispersionPackage: TGwtDispersionPackage
       read FGwtDispersionPackage write SetGwtDispersionPackage
     {$IFNDEF GWT}
@@ -422,6 +429,7 @@ resourcestring
   StrSSMGWTSourceAnd = 'SSM: GWT Source and Sink Mixing Package';
   StrCNCGWTConstantCo = 'CNC: GWT Constant Concentration Package';
   StrSRCGWTMassSource = 'SRC: GWT Mass Source Loading Package';
+  StrGWTGroundwaterTra = 'GWT: Groundwater Transport Process';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
@@ -500,6 +508,7 @@ begin
     Mt3dSft := SourcePackages.Mt3dSft;
     Mt3dCts := SourcePackages.Mt3dCts;
     CsubPackage := SourcePackages.CsubPackage;
+    GwtProcess := SourcePackages.GwtProcess;
     GwtDispersionPackage := SourcePackages.GwtDispersionPackage;
     GwtAdvectionPackage := SourcePackages.GwtAdvectionPackage;
     GwtSsmPackage := SourcePackages.GwtSsmPackage;
@@ -837,6 +846,11 @@ begin
   FCsubPackage.Classification := StrSubsidence;
   FCsubPackage.SelectionType := stCheckBox;
 
+  FGwtProcess := TGwtProcess.Create(Model);
+  FGwtProcess.PackageIdentifier := StrGWTGroundwaterTra;
+  FGwtProcess.Classification := StrGwtClassification;
+  FGwtProcess.SelectionType := stCheckBox;
+
   FGwtDispersionPackage := TGwtDispersionPackage.Create(Model);
   FGwtDispersionPackage.PackageIdentifier := StrGWTDispersionPacka;
   FGwtDispersionPackage.Classification := StrGwtClassification;
@@ -873,6 +887,7 @@ begin
   FGwtSsmPackage.Free;
   FGwtAdvectionPackage.Free;
   FGwtDispersionPackage.Free;
+  FGwtProcess.Free;
   FCsubPackage.Free;
   FUzfMf6Package.Free;
   FMvrPackage.Free;
@@ -1015,6 +1030,7 @@ begin
   Mt3dSft.InitializeVariables;
   Mt3dCts.InitializeVariables;
   CsubPackage.InitializeVariables;
+  GwtProcess.InitializeVariables;
   GwtPackages.InitializeVariables;
   GwtDispersionPackage.InitializeVariables;
   GwtSsmPackage.InitializeVariables;
@@ -1399,6 +1415,11 @@ end;
 procedure TModflowPackages.SetGwtPackges(const Value: TGwtPackageCollection);
 begin
   FGwtPackages.Assign(Value);
+end;
+
+procedure TModflowPackages.SetGwtProcess(const Value: TGwtProcess);
+begin
+  FGwtProcess.Assign(Value);
 end;
 
 procedure TModflowPackages.SetGwtSrcPackage(const Value: TGwtSrcPackage);

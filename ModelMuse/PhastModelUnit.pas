@@ -43589,6 +43589,7 @@ var
   MstWriter: TModflowGwtMstWriter;
   IstWriter: TModflowGwtIstWriter;
   CncWriter: TModflowCncWriter;
+  SrcWriter: TModflowSrcWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -44932,6 +44933,13 @@ begin
             CncWriter.WriteFile(FileName, SpeciesIndex);
           finally
             CncWriter.Free;
+          end;
+
+          SrcWriter := TModflowSrcWriter.Create(Self, etExport);
+          try
+            SrcWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            SrcWriter.Free;
           end;
 
           FDataArrayManager.CacheDataArrays;

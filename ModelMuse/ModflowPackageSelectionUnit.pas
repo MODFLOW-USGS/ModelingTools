@@ -5830,6 +5830,9 @@ Type
       write SetSaveBudgetFile Stored True;
   end;
 
+  TGwtProcess = class(TModflowPackageSelection)
+  end;
+
   TDispersivityTreatment = (dtCombined, dtSeparate);
 
   TGwtDispersionPackage = class(TModflowPackageSelection)

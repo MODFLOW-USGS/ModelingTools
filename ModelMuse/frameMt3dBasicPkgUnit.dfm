@@ -22,7 +22,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
     Margins.Top = 120
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = tabMT3D_Options
+    ActivePage = tabSpecies
     Align = alClient
     TabOrder = 1
     object tabSpecies: TTabSheet
@@ -32,14 +32,14 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Left = 0
         Top = 0
         Width = 520
-        Height = 284
+        Height = 277
         Align = alClient
         TabOrder = 0
         object Splitter1: TSplitter
           Left = 249
           Top = 1
           Width = 5
-          Height = 282
+          Height = 275
           ExplicitLeft = 145
           ExplicitHeight = 115
         end
@@ -47,18 +47,18 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
           Left = 254
           Top = 1
           Width = 265
-          Height = 282
+          Height = 275
           Align = alClient
           Enabled = False
           TabOrder = 0
           ExplicitLeft = 254
           ExplicitTop = 1
           ExplicitWidth = 265
-          ExplicitHeight = 282
+          ExplicitHeight = 275
           inherited Panel: TPanel
-            Top = 241
+            Top = 234
             Width = 265
-            ExplicitTop = 241
+            ExplicitTop = 234
             ExplicitWidth = 265
             inherited sbAdd: TSpeedButton
               Left = 147
@@ -72,10 +72,14 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
               Left = 204
               ExplicitLeft = 204
             end
+            inherited seNumber: TJvSpinEdit
+              Height = 28
+              ExplicitHeight = 28
+            end
           end
           inherited Grid: TRbwDataGrid4
             Width = 265
-            Height = 241
+            Height = 234
             ColCount = 3
             OnSelectCell = frameGridImmobileGridSelectCell
             OnButtonClick = frameGridSpeciesGridButtonClick
@@ -152,31 +156,36 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
+            ExplicitLeft = 1
             ExplicitWidth = 265
-            ExplicitHeight = 241
+            ExplicitHeight = 234
           end
         end
         inline frameGridMobile: TframeGrid
           Left = 1
           Top = 1
           Width = 248
-          Height = 282
+          Height = 275
           Align = alLeft
           Enabled = False
           TabOrder = 1
           ExplicitLeft = 1
           ExplicitTop = 1
           ExplicitWidth = 248
-          ExplicitHeight = 282
+          ExplicitHeight = 275
           inherited Panel: TPanel
-            Top = 241
+            Top = 234
             Width = 248
-            ExplicitTop = 241
+            ExplicitTop = 234
             ExplicitWidth = 248
+            inherited seNumber: TJvSpinEdit
+              Height = 28
+              ExplicitHeight = 28
+            end
           end
           inherited Grid: TRbwDataGrid4
             Width = 248
-            Height = 241
+            Height = 234
             ColCount = 3
             OnSelectCell = frameGridMobileGridSelectCell
             OnButtonClick = frameGridSpeciesGridButtonClick
@@ -255,7 +264,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
                 AutoAdjustColWidths = True
               end>
             ExplicitWidth = 248
-            ExplicitHeight = 241
+            ExplicitHeight = 234
           end
         end
       end
@@ -265,29 +274,29 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
       object lblInactiveConcentration: TLabel
         Left = 83
         Top = 81
-        Width = 193
-        Height = 13
+        Width = 263
+        Height = 20
         Caption = 'Concentration at inactive cells (CINACT)'
       end
       object lblInitialConcentrationChoice: TLabel
         Left = 273
         Top = 141
-        Width = 207
-        Height = 13
+        Width = 291
+        Height = 20
         Caption = 'Method for using initial concentration file(s)'
       end
       object lblMinimumSaturatedFraction: TLabel
         Left = 83
         Top = 109
-        Width = 179
-        Height = 13
+        Width = 254
+        Height = 20
         Caption = 'Minimum saturated fraction (THKMIN)'
       end
       object lblVersion: TLabel
         Left = 148
         Top = 20
-        Width = 65
-        Height = 13
+        Width = 92
+        Height = 20
         Caption = 'MT3D Version'
       end
       object grpInitialConcentrationTimes: TGroupBox
@@ -300,29 +309,29 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         object lblStressPeriod: TLabel
           Left = 16
           Top = 24
-          Width = 63
-          Height = 13
+          Width = 86
+          Height = 20
           Caption = 'Stress period'
         end
         object lblTimeStep: TLabel
           Left = 176
           Top = 24
-          Width = 46
-          Height = 13
+          Width = 65
+          Height = 20
           Caption = 'Time step'
         end
         object lblTransportStep: TLabel
           Left = 318
           Top = 24
-          Width = 71
-          Height = 13
+          Width = 94
+          Height = 20
           Caption = 'Transport step'
         end
         object seStressPeriod: TJvSpinEdit
           Left = 98
           Top = 22
           Width = 71
-          Height = 21
+          Height = 28
           MaxValue = 2147483647.000000000000000000
           MinValue = 1.000000000000000000
           Value = 1.000000000000000000
@@ -332,7 +341,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
           Left = 241
           Top = 21
           Width = 71
-          Height = 21
+          Height = 28
           MaxValue = 2147483647.000000000000000000
           MinValue = 1.000000000000000000
           Value = 1.000000000000000000
@@ -342,7 +351,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
           Left = 408
           Top = 21
           Width = 71
-          Height = 21
+          Height = 28
           MaxValue = 2147483647.000000000000000000
           MinValue = 1.000000000000000000
           Value = 1.000000000000000000
@@ -353,7 +362,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Left = 12
         Top = 138
         Width = 255
-        Height = 21
+        Height = 28
         Style = csDropDownList
         TabOrder = 1
         OnChange = comboInitialConcentrationChoiceChange
@@ -365,14 +374,15 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Left = 12
         Top = 51
         Width = 50
-        Height = 21
-        EditLabel.Width = 88
-        EditLabel.Height = 13
+        Height = 28
+        EditLabel.Width = 122
+        EditLabel.Height = 20
         EditLabel.Caption = 'Mass unit (MUNIT)'
         Enabled = False
         LabelPosition = lpRight
         MaxLength = 4
         TabOrder = 2
+        Text = ''
       end
       object rdeInactiveConcentration: TRbwDataEntry
         Left = 12
@@ -406,7 +416,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Left = 12
         Top = 17
         Width = 130
-        Height = 21
+        Height = 28
         Style = csDropDownList
         ItemIndex = 0
         TabOrder = 5
@@ -424,7 +434,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Left = 0
         Top = 0
         Width = 520
-        Height = 284
+        Height = 277
         Align = alClient
         Enabled = False
         Items.Strings = (
