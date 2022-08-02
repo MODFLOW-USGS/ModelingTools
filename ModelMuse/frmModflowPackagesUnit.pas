@@ -455,6 +455,7 @@ type
     function CreateIstFrame: TframePackageIst;
     function CreateImsGwtFram: TframePkgSms;
     procedure ShowImsPage(Sender: TObject);
+    procedure EnableGwtPackages;
     { Private declarations }
   public
     constructor Create(AOwner: TComponent); override;
@@ -603,6 +604,9 @@ resourcestring
   StrISTImmobileStorag = 'IST: Immobile Storage and Transfer Packages';
   StrImsGWT = 'IMS-GWT: Iterative Model Sovler Packages';
   StrIMSIterativeModel = 'IMS: Iterative Model Solver Packages';
+  StrGroundwaterTranspor = 'Groundwater Transport';
+  StrChemSpecies = 'Chem Species';
+  StrChemSpeciesMT3DA = 'Chem Species (MT3D and GWT)';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -693,13 +697,15 @@ begin
       Assert(Page.ControlCount= 1);
       Page.Handle;
       Frame := Page.Controls[0] as TframeSfrParamInstances;
-      ParameterName := frameSFRParameterDefinition.dgParameters.Cells[Ord(pcName), PageIndex+1];
+      ParameterName := frameSFRParameterDefinition.dgParameters.Cells[
+        Ord(pcName), PageIndex+1];
       if ParameterName <> '' then
       begin
         IsInvalid := True;
         for InstanceIndex := 1 to Frame.seInstanceCount.AsInteger do
         begin
-          InstanceName := Frame.rdgSfrParamInstances.Cells[Ord(sicInstanceName), InstanceIndex];
+          InstanceName := Frame.rdgSfrParamInstances.Cells[
+            Ord(sicInstanceName), InstanceIndex];
 
           if (InstanceName <> '')
             and TryStrToFloat(Frame.rdgSfrParamInstances.
@@ -718,7 +724,8 @@ begin
       end;
     end;
 
-    frmErrorsAndWarnings.RemoveWarningGroup(frmGoPhast.PhastModel, StrSFRParameters);
+    frmErrorsAndWarnings.RemoveWarningGroup(frmGoPhast.PhastModel,
+      StrSFRParameters);
     if InvalidParameterNames.Count > 0 then
     begin
       for ParamNameIndex := 0 to InvalidParameterNames.Count - 1 do
@@ -817,7 +824,11 @@ var
   SpecificStorageUsed: boolean;
   SpecificYieldUsed: boolean;
 begin
-  if not PackageUsed(StrLPF_Identifier) and not PackageUsed(StrUPW_Identifier) then Exit;
+  if not PackageUsed(StrLPF_Identifier)
+    and not PackageUsed(StrUPW_Identifier) then
+  begin
+    Exit;
+  end;
 
   VKCB_Defined := False;
   VK_Defined := False;
@@ -2041,7 +2052,8 @@ procedure TfrmModflowPackages.frameGwtProcessrcSelectionControllerEnabledChange(
   Sender: TObject);
 begin
   inherited;
-  EnableChemSpecies
+  EnableChemSpecies;
+  EnableGwtPackages;
 end;
 
 procedure TfrmModflowPackages.frameModpathrcSelectionControllerEnabledChange(
@@ -2502,9 +2514,9 @@ begin
 
     AddNode(StrPostProcessors, StrPostProcessors, PriorNode);
 
-    AddNode('Transport', 'Transport', FTransportNode);
+    AddNode(StrGroundwaterTranspor, StrGroundwaterTranspor, FTransportNode);
 
-    FChemNode := AddChildNode('Chem Species', 'Chem Species (MT3D and GWT)',
+    FChemNode := AddChildNode(StrChemSpecies, StrChemSpeciesMT3DA,
       FTransportNode);
     FChemNode.Data := jvspChemSpecies;
 
@@ -2775,6 +2787,77 @@ begin
   else
   begin
     framePkgFrm.frameRoutingInformationPrintFlag.rdgGrid.Color := clBtnFace;
+  end;
+end;
+
+procedure TfrmModflowPackages.EnableGwtPackages;
+var
+  CanSelect: Boolean;
+  index: Integer;
+  MstFrame: TframePackageMST;
+  IstFrame: TframePackageIst;
+  ImsFrame: TframePkgSms;
+begin
+  CanSelect := frameGwtProcess.rcSelectionController.Enabled;
+
+  frameGwtAdv.CanSelect := CanSelect;
+  if not frameGwtAdv.CanSelect then
+  begin
+    frameGwtAdv.Selected := False;
+  end;
+
+  frameGwtCNC.CanSelect := CanSelect;
+  if not frameGwtCNC.CanSelect then
+  begin
+    frameGwtCNC.Selected := False;
+  end;
+
+  frameGwtDsp.CanSelect := CanSelect;
+  if not frameGwtDsp.CanSelect then
+  begin
+    frameGwtDsp.Selected := False;
+  end;
+
+  frameGwtSRC.CanSelect := CanSelect;
+  if not frameGwtSRC.CanSelect then
+  begin
+    frameGwtSRC.Selected := False;
+  end;
+
+  frameGwtSSM.CanSelect := CanSelect;
+  if not frameGwtSSM.CanSelect then
+  begin
+    frameGwtSSM.Selected := False;
+  end;
+
+  for index := 0 to FframePackageMSTObjectList.Count - 1 do
+  begin
+    MstFrame := FframePackageMSTObjectList[index];
+    MstFrame.CanSelect := CanSelect;
+    if not MstFrame.CanSelect then
+    begin
+      MstFrame.Selected := False;
+    end;
+  end;
+
+  for index := 0 to FframePackageIstObjectList.Count - 1 do
+  begin
+    IstFrame := FframePackageIstObjectList[index];
+    IstFrame.CanSelect := CanSelect;
+    if not IstFrame.CanSelect then
+    begin
+      IstFrame.Selected := False;
+    end;
+  end;
+
+  for index := 0 to FframePkgSmsObjectList.Count - 1 do
+  begin
+    ImsFrame := FframePkgSmsObjectList[index];
+    ImsFrame.CanSelect := CanSelect;
+//    if not ImsFrame.CanSelect then
+//    begin
+//      ImsFrame.Selected := False;
+//    end;
   end;
 end;
 
@@ -3056,12 +3139,10 @@ var
   SpeciesIndex: Integer;
   SpeciesName: string;
   ChildNode: TTreeNode;
-//  AFrame: TframePackageMST;
   Link: TFrameNodeLink;
   MstPackage: TGwtMstPackage;
   IstPackage: TGwtIstPackage;
   AMstFrame: TframePackageMST;
-//  AFIstframe: TframePackageIst;
   AnIstframe: TframePackageIst;
   ImsPackage: TSmsPackageSelection;
   AnImtframe: TframePkgSms;
@@ -3070,8 +3151,8 @@ begin
   begin
     Exit;
   end;
-  if framePkgMt3dBasic.Selected
-    and (framePkgMt3dBasic.comboVersion.ItemIndex = 2) then
+  if frameGwtProcess.Selected
+    {and (framePkgMt3dBasic.comboVersion.ItemIndex = 2)} then
   begin
     if FCurrentPackages.GwtPackages.Count <
       frameChemSpecies.frameGridMobile.seNumber.AsInteger then
@@ -3213,7 +3294,8 @@ begin
 
       ChildNode := ChildNode.GetnextSibling;
     end
-  end
+  end;
+  EnableGwtPackages;
 end;
 
 procedure TfrmModflowPackages.EnableRchModpathOption;
@@ -4499,8 +4581,8 @@ begin
   end;
 
   if (frmGoPhast.ModelSelection = msModflow2015)
-    and framePkgMt3dBasic.Selected
-    and (framePkgMt3dBasic.comboVersion.ItemIndex = 2) then
+    and frameGwtProcess.Selected
+    {and (framePkgMt3dBasic.comboVersion.ItemIndex = 2)} then
   begin
     if Packages.GwtPackages.Count < frameChemSpecies.frameGridMobile.seNumber.AsInteger then
     begin

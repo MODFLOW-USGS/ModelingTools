@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-07-01T09:28:17.762-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">Dispersion Package</title>
+<topic template="Default" status="Under Construction" modified="2022-08-02T14:44:40.541-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">DSP: GWT Dispersion Package</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Dispersion Package</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">DSP: GWT Dispersion Package</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">When solutes are transported by groundwater, the speed &#160;and direction of transport of individual molecules can vary based on the speed and direction of the water flow in which they are dissolved. For example, one molecule may happen to follow a very convoluted flow path through small pores where the flow rate is slow. Another close-by molecule may happen to flow through large pores that are well aligned with the direction of flow resulting in a faster speed. These differences in flow rate can cause an initially sharp solute front to spread out as transport proceeds. The spreading occurs in both the direction of flow and perpendicular to the direction of flow. Molecular diffusion also contributes to the spreading of the solute.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This spreading or dispersion phenomenon is modeled as being analogous to molecular diffusion even thought the actual process is not primarily due to molecular diffusion. Two different types of dispersion are recognized: longitudinal dispersion and transverse dispersion. Longitudinal dispersion is dispersion in the direction of flow and transverse dispersion is perpendicular to the direction of flow.</text></para>

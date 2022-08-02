@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspChemSpecies
+    ActivePage = jvspGwtSsm
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -3404,7 +3404,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 296
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitLeft = 359
               ExplicitTop = 296
               ExplicitHeight = 28
@@ -3427,7 +3426,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 190
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 190
               ExplicitHeight = 28
             end
@@ -3441,13 +3439,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboEvtSink: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboRchSource: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
           end
@@ -3601,37 +3597,31 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboUzfIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboMnw2Iface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboResIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboSfrIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboEtsIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboLakIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               TabOrder = 12
               ExplicitHeight = 28
             end
@@ -3675,7 +3665,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboTimeMethod: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited rdeParticleInterval: TRbwDataEntry
@@ -4009,7 +3998,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 381
           Height = 28
           ItemHeight = 22
-          ItemIndex = -1
           ExplicitTop = 381
           ExplicitHeight = 28
         end
@@ -4489,7 +4477,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 114
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 114
               ExplicitHeight = 28
             end
@@ -4497,7 +4484,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 173
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 173
               ExplicitHeight = 28
             end
@@ -4505,7 +4491,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 236
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 236
               ExplicitHeight = 28
             end
@@ -5549,7 +5534,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 118
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 118
               ExplicitHeight = 28
             end
@@ -5566,7 +5550,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 119
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitLeft = 1
               ExplicitWidth = 119
               ExplicitHeight = 28
@@ -5773,7 +5756,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Height = 28
               DroppedWidth = 358
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitLeft = 2
               ExplicitTop = 63
               ExplicitWidth = 358
@@ -5897,7 +5879,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 230
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 230
               ExplicitHeight = 28
             end
@@ -5906,7 +5887,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Height = 28
               DroppedWidth = 230
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 230
               ExplicitHeight = 28
             end
@@ -6108,246 +6088,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           Height = 396
           ExplicitWidth = 595
           ExplicitHeight = 396
-          inherited tabSpecies: TTabSheet
-            ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 363
-            inherited pnlSpecies: TPanel
-              Width = 587
-              Height = 363
-              ExplicitWidth = 587
-              ExplicitHeight = 363
-              inherited Splitter1: TSplitter
-                Left = 300
-                Height = 361
-                ExplicitLeft = 300
-                ExplicitHeight = 321
-              end
-              inherited frameGridImmobile: TframeGrid
-                Left = 305
-                Width = 281
-                Height = 361
-                ExplicitLeft = 305
-                ExplicitWidth = 281
-                ExplicitHeight = 361
-                inherited Panel: TPanel
-                  Top = 320
-                  Width = 281
-                  ExplicitTop = 320
-                  ExplicitWidth = 281
-                  inherited lbNumber: TLabel
-                    Width = 55
-                    Height = 18
-                    ExplicitWidth = 55
-                    ExplicitHeight = 18
-                  end
-                  inherited sbAdd: TSpeedButton
-                    Left = 172
-                    ExplicitLeft = 172
-                  end
-                  inherited sbInsert: TSpeedButton
-                    Left = 209
-                    ExplicitLeft = 209
-                  end
-                  inherited sbDelete: TSpeedButton
-                    Left = 246
-                    ExplicitLeft = 246
-                  end
-                  inherited seNumber: TJvSpinEdit
-                    Height = 26
-                    OnChange = frameGridImmobileseNumberChange
-                    ExplicitHeight = 26
-                  end
-                end
-                inherited Grid: TRbwDataGrid4
-                  Width = 281
-                  Height = 320
-                  OnExit = frameGridImmobileGridExit
-                  Columns = <
-                    item
-                      AutoAdjustRowHeights = True
-                      AutoAdjustCaptionRowHeights = False
-                      ButtonCaption = '...'
-                      ButtonFont.Charset = DEFAULT_CHARSET
-                      ButtonFont.Color = clWindowText
-                      ButtonFont.Height = -11
-                      ButtonFont.Name = 'Tahoma'
-                      ButtonFont.Style = []
-                      ButtonUsed = False
-                      ButtonWidth = 20
-                      CheckMax = False
-                      CheckMin = False
-                      ComboUsed = False
-                      Format = rcf4String
-                      LimitToList = False
-                      MaxLength = 0
-                      ParentButtonFont = False
-                      WordWrapCaptions = True
-                      WordWrapCells = False
-                      CaseSensitivePicklist = False
-                      CheckStyle = csCheck
-                      AutoAdjustColWidths = True
-                    end
-                    item
-                      AutoAdjustRowHeights = True
-                      AutoAdjustCaptionRowHeights = False
-                      ButtonCaption = '...'
-                      ButtonFont.Charset = DEFAULT_CHARSET
-                      ButtonFont.Color = clWindowText
-                      ButtonFont.Height = -13
-                      ButtonFont.Name = 'Tahoma'
-                      ButtonFont.Style = []
-                      ButtonUsed = False
-                      ButtonWidth = 20
-                      CheckMax = False
-                      CheckMin = False
-                      ComboUsed = False
-                      Format = rcf4Boolean
-                      LimitToList = False
-                      MaxLength = 0
-                      ParentButtonFont = False
-                      WordWrapCaptions = True
-                      WordWrapCells = False
-                      CaseSensitivePicklist = False
-                      CheckStyle = csCheck
-                      AutoAdjustColWidths = True
-                    end
-                    item
-                      AutoAdjustRowHeights = False
-                      AutoAdjustCaptionRowHeights = False
-                      ButtonCaption = 'Select...'
-                      ButtonFont.Charset = DEFAULT_CHARSET
-                      ButtonFont.Color = clWindowText
-                      ButtonFont.Height = -13
-                      ButtonFont.Name = 'Tahoma'
-                      ButtonFont.Style = []
-                      ButtonUsed = True
-                      ButtonWidth = 80
-                      CheckMax = False
-                      CheckMin = False
-                      ComboUsed = False
-                      Format = rcf4String
-                      LimitToList = False
-                      MaxLength = 0
-                      ParentButtonFont = False
-                      WordWrapCaptions = False
-                      WordWrapCells = False
-                      CaseSensitivePicklist = False
-                      CheckStyle = csCheck
-                      AutoAdjustColWidths = True
-                    end>
-                  ExplicitWidth = 281
-                  ExplicitHeight = 320
-                end
-              end
-              inherited frameGridMobile: TframeGrid
-                Width = 299
-                Height = 361
-                ExplicitWidth = 299
-                ExplicitHeight = 361
-                inherited Panel: TPanel
-                  Top = 320
-                  Width = 299
-                  ExplicitTop = 320
-                  ExplicitWidth = 299
-                  inherited lbNumber: TLabel
-                    Width = 55
-                    Height = 18
-                    ExplicitWidth = 55
-                    ExplicitHeight = 18
-                  end
-                  inherited seNumber: TJvSpinEdit
-                    Height = 26
-                    OnChange = frameGridMobileseNumberChange
-                    ExplicitHeight = 26
-                  end
-                end
-                inherited Grid: TRbwDataGrid4
-                  Width = 299
-                  Height = 320
-                  OnExit = frameGridMobileGridExit
-                  OnSetEditText = frameGridMobileGridSetEditText
-                  OnStateChange = frameGridMobileGridStateChange
-                  Columns = <
-                    item
-                      AutoAdjustRowHeights = True
-                      AutoAdjustCaptionRowHeights = False
-                      ButtonCaption = '...'
-                      ButtonFont.Charset = DEFAULT_CHARSET
-                      ButtonFont.Color = clWindowText
-                      ButtonFont.Height = -11
-                      ButtonFont.Name = 'Tahoma'
-                      ButtonFont.Style = []
-                      ButtonUsed = False
-                      ButtonWidth = 20
-                      CheckMax = False
-                      CheckMin = False
-                      ComboUsed = False
-                      Format = rcf4String
-                      LimitToList = False
-                      MaxLength = 0
-                      ParentButtonFont = False
-                      WordWrapCaptions = True
-                      WordWrapCells = False
-                      CaseSensitivePicklist = False
-                      CheckStyle = csCheck
-                      AutoAdjustColWidths = True
-                    end
-                    item
-                      AutoAdjustRowHeights = True
-                      AutoAdjustCaptionRowHeights = False
-                      ButtonCaption = '...'
-                      ButtonFont.Charset = DEFAULT_CHARSET
-                      ButtonFont.Color = clWindowText
-                      ButtonFont.Height = -13
-                      ButtonFont.Name = 'Tahoma'
-                      ButtonFont.Style = []
-                      ButtonUsed = False
-                      ButtonWidth = 20
-                      CheckMax = False
-                      CheckMin = False
-                      ComboUsed = False
-                      Format = rcf4Boolean
-                      LimitToList = False
-                      MaxLength = 0
-                      ParentButtonFont = False
-                      WordWrapCaptions = True
-                      WordWrapCells = False
-                      CaseSensitivePicklist = False
-                      CheckStyle = csCheck
-                      AutoAdjustColWidths = True
-                    end
-                    item
-                      AutoAdjustRowHeights = False
-                      AutoAdjustCaptionRowHeights = False
-                      ButtonCaption = 'Select...'
-                      ButtonFont.Charset = DEFAULT_CHARSET
-                      ButtonFont.Color = clWindowText
-                      ButtonFont.Height = -13
-                      ButtonFont.Name = 'Tahoma'
-                      ButtonFont.Style = []
-                      ButtonUsed = True
-                      ButtonWidth = 80
-                      CheckMax = False
-                      CheckMin = False
-                      ComboUsed = False
-                      Format = rcf4String
-                      LimitToList = False
-                      MaxLength = 0
-                      ParentButtonFont = False
-                      WordWrapCaptions = False
-                      WordWrapCells = False
-                      CaseSensitivePicklist = False
-                      CheckStyle = csCheck
-                      AutoAdjustColWidths = True
-                    end>
-                  ExplicitLeft = -1
-                  ExplicitWidth = 299
-                  ExplicitHeight = 320
-                end
-              end
-            end
-          end
           inherited tabMT3D_Options: TTabSheet
             ExplicitTop = 29
             ExplicitWidth = 587
@@ -6474,12 +6214,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePkgMt3dBasic.rdeMinimumSaturatedFraction
-            end
-            item
-              Control = framePkgMt3dBasic.frameGridMobile
-            end
-            item
-              Control = framePkgMt3dBasic.frameGridImmobile
             end>
           OnEnabledChange = framePkgMt3dBasicrcSelectionControllerEnabledChange
         end
@@ -7220,7 +6954,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited comboSorptionChoice: TJvImageComboBox
               Height = 26
-              ItemIndex = -1
               ExplicitHeight = 26
             end
           end
@@ -7406,7 +7139,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited comboSaveConcType: TJvImageComboBox
             Height = 28
             ItemHeight = 22
-            ItemIndex = -1
             ExplicitHeight = 28
           end
           inherited cbLogTransform: TCheckBox
@@ -7436,7 +7168,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited comboSaveMassFluxType: TJvImageComboBox
             Height = 28
             ItemHeight = 22
-            ItemIndex = -1
             ExplicitHeight = 28
           end
         end
@@ -7647,13 +7378,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboDampingMode: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboAcnvg: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited seMcnvg: TJvSpinEdit
@@ -7668,7 +7397,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 280
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 280
               ExplicitHeight = 28
             end
@@ -8864,7 +8592,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Height = 28
               DroppedWidth = 346
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 346
               ExplicitHeight = 28
             end
@@ -9187,7 +8914,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 318
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 318
               ExplicitHeight = 28
             end
@@ -9202,7 +8928,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 420
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 420
               ExplicitHeight = 28
             end
@@ -9730,7 +9455,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 243
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 243
               ExplicitHeight = 28
             end
@@ -9846,7 +9570,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited comboLosstype: TJvImageComboBox
           Height = 28
           ItemHeight = 22
-          ItemIndex = -1
           ExplicitHeight = 28
         end
         inherited fedWellFileName: TJvFilenameEdit
@@ -10013,7 +9736,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited comboStorageChoice: TJvImageComboBox
           Height = 28
           ItemHeight = 22
-          ItemIndex = -1
           ExplicitHeight = 28
         end
         inherited rcSelectionController: TRbwController
@@ -10132,7 +9854,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboUsePTC: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited seMaxErrors: TJvSpinEdit
@@ -11191,13 +10912,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboInterbedThicknessMethod: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboCompressionMethod: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
           end
@@ -11573,8 +11292,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspChemSpecies'
-      ExplicitLeft = -3
-      ExplicitTop = -1
       inline frameChemSpecies: TframeChemSpecies
         Left = 0
         Top = 0
@@ -11582,25 +11299,27 @@ inherited frmModflowPackages: TfrmModflowPackages
         Height = 516
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = -45
-        ExplicitTop = 36
+        ExplicitWidth = 595
+        ExplicitHeight = 516
         inherited spl1: TSplitter
           Left = 281
           Height = 516
+          ExplicitLeft = 281
+          ExplicitHeight = 516
         end
         inherited frameGridImmobile: TframeGrid
           Left = 286
           Width = 309
           Height = 516
-          ExplicitLeft = 253
+          ExplicitLeft = 286
           ExplicitTop = 0
-          ExplicitWidth = 387
-          ExplicitHeight = 480
+          ExplicitWidth = 309
+          ExplicitHeight = 516
           inherited Panel: TPanel
             Top = 475
             Width = 309
-            ExplicitTop = 439
-            ExplicitWidth = 387
+            ExplicitTop = 475
+            ExplicitWidth = 309
             inherited lbNumber: TLabel
               Width = 55
               Height = 18
@@ -11609,12 +11328,15 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited sbAdd: TSpeedButton
               Left = 157
+              ExplicitLeft = 157
             end
             inherited sbInsert: TSpeedButton
               Left = 186
+              ExplicitLeft = 186
             end
             inherited sbDelete: TSpeedButton
               Left = 216
+              ExplicitLeft = 216
             end
             inherited seNumber: TJvSpinEdit
               Height = 26
@@ -11628,6 +11350,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             OnSelectCell = frameGridImmobileGridSelectCell
             OnButtonClick = frameGridMobileGridButtonClick
             OnStateChange = frameGridMobileGridStateChange
+            ExplicitWidth = 309
+            ExplicitHeight = 475
           end
         end
         inherited frameGridMobile: TframeGrid
@@ -11640,7 +11364,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited Panel: TPanel
             Top = 475
             Width = 281
-            ExplicitTop = 439
+            ExplicitTop = 475
+            ExplicitWidth = 281
             inherited lbNumber: TLabel
               Width = 55
               Height = 18
@@ -11649,15 +11374,12 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited sbAdd: TSpeedButton
               Left = 141
-              ExplicitLeft = 123
             end
             inherited sbInsert: TSpeedButton
               Left = 168
-              ExplicitLeft = 147
             end
             inherited sbDelete: TSpeedButton
               Left = 195
-              ExplicitLeft = 171
             end
             inherited seNumber: TJvSpinEdit
               Height = 26
@@ -11772,6 +11494,7 @@ inherited frmModflowPackages: TfrmModflowPackages
       OnExpanded = tvPackagesExpanded
       OnMouseDown = tvPackagesMouseDown
       OnMouseUp = tvPackagesMouseUp
+      ExplicitLeft = -4
     end
   end
   object rbwLpfParamCountController: TRbwController

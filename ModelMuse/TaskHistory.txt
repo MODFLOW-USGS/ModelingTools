@@ -29720,6 +29720,7 @@ object TTaskHistory
         'Refactoring'
         'MF6 GWT'
         'Testing'
-        'Dialog boxes')
+        'Dialog boxes'
+        'Documentation')
     end>
 end

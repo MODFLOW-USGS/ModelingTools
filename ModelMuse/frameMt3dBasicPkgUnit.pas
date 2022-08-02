@@ -17,10 +17,6 @@ type
     lblInactiveConcentration: TLabel;
     rdeMinimumSaturatedFraction: TRbwDataEntry;
     lblMinimumSaturatedFraction: TLabel;
-    pnlSpecies: TPanel;
-    Splitter1: TSplitter;
-    frameGridImmobile: TframeGrid;
-    frameGridMobile: TframeGrid;
     dlgOpenSelectFile: TOpenDialog;
     grpInitialConcentrationTimes: TGroupBox;
     lblStressPeriod: TLabel;
@@ -35,17 +31,10 @@ type
     lblInitialConcentrationChoice: TLabel;
     pcMt3d_Basic: TPageControl;
     tabMT3D_Options: TTabSheet;
-    tabSpecies: TTabSheet;
     tabMT3D_USGS_Options: TTabSheet;
     chklstOptions: TJvgCheckListBox;
-    procedure frameGridSpeciesGridButtonClick(Sender: TObject; ACol,
-      ARow: Integer);
-    procedure frameGridMobileGridSelectCell(Sender: TObject; ACol,
-      ARow: Integer; var CanSelect: Boolean);
-    procedure frameGridImmobileGridSelectCell(Sender: TObject; ACol,
-      ARow: Integer; var CanSelect: Boolean);
-    procedure frameSpeciesGridStateChange(Sender: TObject; ACol,
-      ARow: Integer; const Value: TCheckBoxState);
+//    procedure frameGridSpeciesGridButtonClick(Sender: TObject; ACol,
+//      ARow: Integer);
     procedure comboInitialConcentrationChoiceChange(Sender: TObject);
     procedure rcSelectionControllerEnabledChange(Sender: TObject);
     procedure comboVersionChange(Sender: TObject);
@@ -58,8 +47,7 @@ type
     procedure FixNames(Names: TStringList; AFrame: TframeGrid);
     procedure EnableTimeControls;
     procedure Enable_chklstOptions;
-//    function Mt3dTimeControlsShouldBeEnabled: Boolean;
-    procedure InitializeSpeciesGrids;
+//    procedure InitializeSpeciesGrids;
     { Private declarations }
   public
     procedure GetData(Package: TModflowPackageSelection); override;
@@ -67,9 +55,9 @@ type
     procedure GetMt3dmsChemSpecies(
       MobileComponents: TMobileChemSpeciesCollection;
       ImmobileComponents: TChemSpeciesCollection);
-    procedure SetMt3dmsChemSpecies(
-      MobileComponents: TMobileChemSpeciesCollection;
-      ImmobileComponents: TChemSpeciesCollection);
+//    procedure SetMt3dmsChemSpecies(
+//      MobileComponents: TMobileChemSpeciesCollection;
+//      ImmobileComponents: TChemSpeciesCollection);
     procedure SetTimeControlsEnabled(ShouldEnable: Boolean);
     property OnEnableTimeControls: TNotifyEvent read FOnEnableTimeControls
       write FOnEnableTimeControls;
@@ -94,48 +82,13 @@ resourcestring
 
 { TframeMt3dBasicPkg }
 
-procedure TframeMt3dBasicPkg.frameGridImmobileGridSelectCell(Sender: TObject;
-  ACol, ARow: Integer; var CanSelect: Boolean);
-begin
-  inherited;
-//  if (ACol = Ord(scFileName))
-//    and not frameGridImmobile.Grid.Checked[Ord(scUseFile), ARow] then
-//  begin
-//    CanSelect := False;
-//  end;
-end;
-
-procedure TframeMt3dBasicPkg.frameGridMobileGridSelectCell(Sender: TObject;
-  ACol, ARow: Integer; var CanSelect: Boolean);
-begin
-  inherited;
-//  if (ACol = Ord(scFileName))
-//    and not frameGridMobile.Grid.Checked[Ord(scUseFile), ARow] then
-//  begin
-//    CanSelect := False;
-//  end;
-end;
-
-procedure TframeMt3dBasicPkg.frameSpeciesGridStateChange(Sender: TObject;
-  ACol, ARow: Integer; const Value: TCheckBoxState);
-begin
-  inherited;
-//  EnableTimeControls;
-end;
-
-procedure TframeMt3dBasicPkg.frameGridSpeciesGridButtonClick(Sender: TObject;
-  ACol, ARow: Integer);
-var
-  Grid: TStringGrid;
-begin
-  inherited;
-//  Grid := Sender as TStringGrid;
-//  dlgOpenSelectFile.FileName := Grid.Cells[ACol, ARow];
-//  if dlgOpenSelectFile.Execute then
-//  begin
-//    Grid.Cells[ACol, ARow] := dlgOpenSelectFile.FileName;
-//  end;
-end;
+//procedure TframeMt3dBasicPkg.frameGridSpeciesGridButtonClick(Sender: TObject;
+//  ACol, ARow: Integer);
+//var
+//  Grid: TStringGrid;
+//begin
+//  inherited;
+//end;
 
 procedure TframeMt3dBasicPkg.GetData(Package: TModflowPackageSelection);
 var
@@ -143,32 +96,7 @@ var
   RowIndex: Integer;
   Option: TMt3dUsgsOption;
 begin
-//  {$IFDEF GWT}
-//  if frmGoPhast.ModelSelection = msModflow2015 then
-//  begin
-//    if comboVersion.Items.Count = 2 then
-//    begin
-//      comboVersion.Items.Add('GWT');
-//    end;
-//  end
-//  else
-//  begin
-//    if comboVersion.Items.Count = 3 then
-//    begin
-//      comboVersion.Items.Delete(2);
-//    end;
-//  end;
-//  {$ENDIF}
   pcMt3d_Basic.ActivePageIndex := 0;
-{  for RowIndex := 1 to frameGridMobile.Grid.RowCount - 1 do
-  begin
-    frameGridMobile.Grid.Objects[Ord(scName),RowIndex] := nil;
-  end;
-  for RowIndex := 1 to frameGridImmobile.Grid.RowCount - 1 do
-  begin
-    frameGridImmobile.Grid.Objects[Ord(scName),RowIndex] := nil;
-  end;
-  }
   inherited;
   BasicPackage := Package as TMt3dBasic;
   comboVersion.ItemIndex := Ord(BasicPackage.Mt3dVersion);
@@ -180,7 +108,7 @@ begin
   seTransportStep.AsInteger := BasicPackage.InitialConcentrationTransportStep;
   comboInitialConcentrationChoice.ItemIndex := Ord(BasicPackage.InitialChoice);
 
-  InitializeSpeciesGrids;
+//  InitializeSpeciesGrids;
 
   for Option := Low(TMt3dUsgsOption) to High(TMt3dUsgsOption) do
   begin
@@ -316,36 +244,17 @@ begin
   end;
 end;
 
-procedure TframeMt3dBasicPkg.SetMt3dmsChemSpecies(
-  MobileComponents: TMobileChemSpeciesCollection;
-  ImmobileComponents: TChemSpeciesCollection);
-var
-  Names: TStringList;
-begin
-//  Names := TStringList.Create;
-//  try
-//    Names.Sorted := True;
-//    Names.CaseSensitive := False;
-//    FixNames(Names, frameGridMobile);
-//    FixNames(Names, frameGridImmobile);
-//  finally
-//    Names.Free;
-//  end;
-//
-//  SetMt3dComponents(MobileComponents, frameGridMobile);
-//  SetMt3dComponents(ImmobileComponents, frameGridImmobile);
-end;
+//procedure TframeMt3dBasicPkg.SetMt3dmsChemSpecies(
+//  MobileComponents: TMobileChemSpeciesCollection;
+//  ImmobileComponents: TChemSpeciesCollection);
+//var
+//  Names: TStringList;
+//begin
+//end;
 
-procedure TframeMt3dBasicPkg.InitializeSpeciesGrids;
-begin
-//  frameGridMobile.Grid.Cells[Ord(scName), 0] := StrMobileSpecies;
-//  frameGridMobile.Grid.Cells[Ord(scUseFile), 0] := StrUseInitialConcentr;
-//  frameGridMobile.Grid.Cells[Ord(scFileName), 0] := StrFileName;
-//
-//  frameGridImmobile.Grid.Cells[Ord(scName), 0] := StrImmobileSpecies;
-//  frameGridImmobile.Grid.Cells[Ord(scUseFile), 0] := StrUseInitialConcentr;
-//  frameGridImmobile.Grid.Cells[Ord(scFileName), 0] := StrFileName;
-end;
+//procedure TframeMt3dBasicPkg.InitializeSpeciesGrids;
+//begin
+//end;
 
 procedure TframeMt3dBasicPkg.SetTimeControlsEnabled(ShouldEnable: Boolean);
 begin
@@ -357,32 +266,6 @@ begin
   seTimeStep.Enabled := ShouldEnable;
   seTransportStep.Enabled := ShouldEnable;
 end;
-
-//function TframeMt3dBasicPkg.Mt3dTimeControlsShouldBeEnabled: Boolean;
-//var
-//  RowIndex: Integer;
-//begin
-//  result := False;
-//  for RowIndex := 1 to frameGridMobile.Grid.RowCount - 1 do
-//  begin
-//    result := frameGridMobile.Grid.Checked[Ord(scUseFile), RowIndex];
-//    if result then
-//    begin
-//      break;
-//    end;
-//  end;
-//  if not result then
-//  begin
-//    for RowIndex := 1 to frameGridImmobile.Grid.RowCount - 1 do
-//    begin
-//      result := frameGridImmobile.Grid.Checked[Ord(scUseFile), RowIndex];
-//      if result then
-//      begin
-//        break;
-//      end;
-//    end;
-//  end;
-//end;
 
 procedure TframeMt3dBasicPkg.comboInitialConcentrationChoiceChange(
   Sender: TObject);
@@ -401,8 +284,6 @@ procedure TframeMt3dBasicPkg.EnableTimeControls;
 var
   ShouldEnable: Boolean;
 begin
-//  ShouldEnable := Mt3dTimeControlsShouldBeEnabled;
-//  SetTimeControlsEnabled(ShouldEnable);
   if Assigned(OnEnableTimeControls) then
   begin
     OnEnableTimeControls(Self);
@@ -455,9 +336,6 @@ procedure TframeMt3dBasicPkg.GetMt3dmsChemSpecies(
   MobileComponents: TMobileChemSpeciesCollection;
   ImmobileComponents: TChemSpeciesCollection);
 begin
-//  GetMt3dComponents(MobileComponents, frameGridMobile);
-//  GetMt3dComponents(ImmobileComponents, frameGridImmobile);
-//  EnableTimeControls;
 end;
 
 procedure TframeMt3dBasicPkg.rcSelectionControllerEnabledChange(
