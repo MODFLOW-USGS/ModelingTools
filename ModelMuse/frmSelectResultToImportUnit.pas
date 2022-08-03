@@ -177,6 +177,7 @@ type
     FItemTimes: TStringList;
 
 
+    FSPeciesName: string;
     function DefaultFileName(AModel: TCustomModel; Directory: string = ''): string;
     function OpenResultFile(AFileName: string;out Precision: TModflowPrecision;
       out HufFormat: boolean): boolean;
@@ -465,6 +466,7 @@ resourcestring
   StrImportedOnS = ' imported on %s';
   StrMT3DConcentrations = 'MT3D Concentrations can only be imported if MT3D ' +
   'is selected.';
+  StrGWTConcentrationFi = 'GWT concentration files';
 
 {$R *.dfm}
 
@@ -2780,10 +2782,11 @@ begin
                           NTRANS, KPER, KSTP, ILAY, TOTIM, Description, Precision,
                           clData.Checked[Index]);
                       end;
+                      Description := Description;
                       While (KPER = FPeriods[Index])
                         and (KSTP = FSteps[Index])
                         and (NTRANS = FTransportSteps[Index])
-                        and (Description = FDescriptions[Index])
+                        and (Description + FSpeciesName = FDescriptions[Index])
                         and not EndReached do
                       begin
                         if ILAY < 0 then
@@ -3539,6 +3542,9 @@ begin
     FilterDescriptions.Add(StrBinaryFlowFiles);
     FileExtensions.Add(StrCbcExt);
 
+    FilterDescriptions.Add(StrGWTConcentrationFi);
+    FileExtensions.Add(StrConc);
+
     FilterDescriptions.Add(StrFormattedHUFHeadF);
     FileExtensions.Add(StrHuffhd);
 
@@ -3943,6 +3949,7 @@ var
     begin
       TrimmedDescription := 'NET ' + Copy(TrimmedDescription,4, MAXINT);
     end;
+    TrimmedDescription := TrimmedDescription + FSpeciesName;
     Item := WriteLabel(TrimmedDescription, AModel, ILAY, KPER, KSTP,
       NTRANS, SWR_TimeStep, TOTIM, Precision,
       ModelName1, ModelName2, PackageName1, PackageName2);
@@ -5005,15 +5012,28 @@ var
   Extension: string;
   frmBudgetPrecisionQuery: TfrmBudgetPrecisionQuery;
   AFileStream: TFileStream;
+  function GetspeciesName: string;
+  begin
+    result := ExtractFileName(AFileName);
+    result := ChangeFileExt(result, '');
+    result := ExtractFileExt(result);
+    result := ' ' + Copy(result, 2, MAXINT);
+  end;
 begin
   result := True;
   Precision := mpSingle;
   Extension := ExtractFileExt(AFileName);
+  FSPeciesName := '';
   if (SameText(Extension, StrBdn))
     or (SameText(Extension, StrBhd))
+    or (SameText(Extension, StrConc))
     then
   begin
     FResultFormat := mrBinary;
+    if SameText(Extension, StrConc) then
+    begin
+      FSPeciesName := GetspeciesName;
+    end;
   end
   else if (SameText(Extension, StrFdn))
     or (SameText(Extension, StrFhd)) then

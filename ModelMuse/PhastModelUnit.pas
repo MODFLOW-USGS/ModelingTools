@@ -5545,7 +5545,8 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMnw2Unit, PestObsExtractorInputWriterUnit, Modflow6ObsUnit,
   PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit,
   ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit,
-  ModflowMstWriterUnit, ModflowIstWriterUnit, ModflowCncWriterUnit;
+  ModflowMstWriterUnit, ModflowIstWriterUnit, ModflowCncWriterUnit,
+  ModflowGwfGwtExchangeWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -43601,6 +43602,7 @@ var
   IstWriter: TModflowGwtIstWriter;
   CncWriter: TModflowCncWriter;
   SrcWriter: TModflowSrcWriter;
+  ExchangeWriter: TModflowGwfGwtExchangeWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -44952,6 +44954,26 @@ begin
           finally
             SrcWriter.Free;
           end;
+
+          ExchangeWriter := TModflowGwfGwtExchangeWriter.Create(Self, etExport);
+          try
+            ExchangeWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            ExchangeWriter.Free;
+          end;
+
+          ImsWriter := TImsWriter.Create(self, etExport, SpeciesIndex);
+          try
+            ImsWriter.WriteFile(FileName);
+          finally
+            ImsWriter.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+
 
           FDataArrayManager.CacheDataArrays;
           Application.ProcessMessages;

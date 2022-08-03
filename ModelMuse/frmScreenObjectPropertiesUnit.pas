@@ -2242,6 +2242,7 @@ type
     function GetPestModifierAssigned(Grid: TRbwDataGrid4;
       ACol: Integer): Boolean;
     function GwtColumnCount: integer;
+    function IsChdEndHeadColumn(ACol: Integer): Boolean;
 //    function GetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer): Boolean;
 //    procedure SetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer;
 //      const Value: Boolean);
@@ -4698,6 +4699,8 @@ const
 var
   Frame: TframeScreenObjectParam;
   Parameter: TParameterType;
+  ColIndex: Integer;
+  SpeciesIndex: Integer;
 begin
   if not frmGoPhast.PhastModel.ChdIsSelected then
   begin
@@ -4711,6 +4714,22 @@ begin
     TChdBoundary.DefaultBoundaryMethod(StartHeadPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+EndHeadPosition] :=
     TChdBoundary.DefaultBoundaryMethod(EndHeadPosition);
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      ColIndex := SpeciesIndex + ColumnOffset+EndHeadPosition+1;
+      PestMethod[Frame.rdgModflowBoundary, ColIndex] :=
+        TChdBoundary.DefaultBoundaryMethod(ColIndex- ColumnOffset);
+    end;
+    for ColIndex := ColumnOffset to Frame.rdgModflowBoundary.ColCount - 1 do
+    begin
+      if not Frame.PestMethodAssigned[ColIndex] then
+      begin
+        PestMethod[Frame.rdgModflowBoundary, ColIndex] := ppmMultiply;
+      end;
+    end;
+  end;
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
   Frame.rdgModflowBoundary.HideEditor;
 end;
@@ -18344,6 +18363,8 @@ const
 var
   Frame: TframeScreenObjectCondParam;
   Parameter: TParameterType;
+  ColIndex: Integer;
+  SpeciesIndex: Integer;
 begin
   if not frmGoPhast.PhastModel.GhbIsSelected then
   begin
@@ -18359,6 +18380,22 @@ begin
     TGhbBoundary.DefaultBoundaryMethod(HeadPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
     TGhbBoundary.DefaultBoundaryMethod(ConductancePosition);
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      ColIndex := SpeciesIndex + ColumnOffset+ConductancePosition+1;
+      PestMethod[Frame.rdgModflowBoundary, ColIndex] :=
+        TGhbBoundary.DefaultBoundaryMethod(ColIndex- ColumnOffset);
+    end;
+    for ColIndex := ColumnOffset to Frame.rdgModflowBoundary.ColCount - 1 do
+    begin
+      if not Frame.PestMethodAssigned[ColIndex] then
+      begin
+        PestMethod[Frame.rdgModflowBoundary, ColIndex] := ppmMultiply;
+      end;
+    end;
+  end;
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
 
   Frame.rdgModflowBoundary.HideEditor;
@@ -18375,6 +18412,8 @@ var
   AScreenObject: TScreenObject;
   Boundary: TMfWellBoundary;
   First: Boolean;
+  ColIndex: Integer;
+  SpeciesIndex: Integer;
 begin
   if not frmGoPhast.PhastModel.WelIsSelected then
   begin
@@ -18389,6 +18428,22 @@ begin
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+PumpingRatePosition] :=
     TMfWellBoundary.DefaultBoundaryMethod(PumpingRatePosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      ColIndex := SpeciesIndex + ColumnOffset+PumpingRatePosition+1;
+      PestMethod[Frame.rdgModflowBoundary, ColIndex] :=
+        TMfWellBoundary.DefaultBoundaryMethod(ColIndex- ColumnOffset);
+    end;
+    for ColIndex := ColumnOffset to Frame.rdgModflowBoundary.ColCount - 1 do
+    begin
+      if not Frame.PestMethodAssigned[ColIndex] then
+      begin
+        PestMethod[Frame.rdgModflowBoundary, ColIndex] := ppmMultiply;
+      end;
+    end;
+  end;
 
   Frame.rdgModflowBoundary.HideEditor;
   First := True;
@@ -18444,6 +18499,8 @@ const
 var
   Frame: TframeScreenObjectCondParam;
   Parameter: TParameterType;
+  ColIndex: Integer;
+  SpeciesIndex: Integer;
 begin
   if not frmGoPhast.PhastModel.RivIsSelected then
   begin
@@ -18461,6 +18518,22 @@ begin
     TRivBoundary.DefaultBoundaryMethod(ConductancePosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+BottomPosition] :=
     TRivBoundary.DefaultBoundaryMethod(BottomPosition);
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      ColIndex := SpeciesIndex + ColumnOffset+BottomPosition+1;
+      PestMethod[Frame.rdgModflowBoundary, ColIndex] :=
+        TRivBoundary.DefaultBoundaryMethod(ColIndex- ColumnOffset);
+    end;
+    for ColIndex := ColumnOffset to Frame.rdgModflowBoundary.ColCount - 1 do
+    begin
+      if not Frame.PestMethodAssigned[ColIndex] then
+      begin
+        PestMethod[Frame.rdgModflowBoundary, ColIndex] := ppmMultiply;
+      end;
+    end;
+  end;
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
 
   Frame.rdgModflowBoundary.HideEditor;
@@ -19064,7 +19137,7 @@ end;
 
 procedure TfrmScreenObjectProperties.GetRchBoundary(ScreenObjectList: TList);
 const
-  RechPostion = 0;
+  RechPosition = 0;
   ColOffset = 2;
 var
   Frame: TframeScreenObjectParam;
@@ -19072,6 +19145,8 @@ var
   TimeList: TParameterTimeList;
   ValuesFunction: TGetBoundaryCollectionEvent;
   ColumnOffset: integer;
+  SpeciesIndex: Integer;
+  ColIndex: Integer;
 begin
   if not frmGoPhast.PhastModel.RchIsSelected then
   begin
@@ -19082,6 +19157,7 @@ begin
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FRCH_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FRCH_Node);
 
+  ColumnOffset := 2;
   if frmGoPhast.PhastModel.RchTimeVaryingLayers then
   begin
     TimeList := TParameterTimeList.Create;
@@ -19097,8 +19173,24 @@ begin
     end;
   end;
 
-  PestMethod[Frame.rdgModflowBoundary, ColOffset+RechPostion] :=
-    TRchBoundary.DefaultBoundaryMethod(RechPostion);
+  PestMethod[Frame.rdgModflowBoundary, ColOffset+RechPosition] :=
+    TRchBoundary.DefaultBoundaryMethod(RechPosition);
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      ColIndex := SpeciesIndex + ColumnOffset+RechPosition+1;
+      PestMethod[Frame.rdgModflowBoundary, ColIndex] :=
+        TRchBoundary.DefaultBoundaryMethod(ColIndex- ColumnOffset);
+    end;
+    for ColIndex := ColumnOffset to Frame.rdgModflowBoundary.ColCount - 1 do
+    begin
+      if not Frame.PestMethodAssigned[ColIndex] then
+      begin
+        PestMethod[Frame.rdgModflowBoundary, ColIndex] := ppmMultiply;
+      end;
+    end;
+  end;
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
 
   Frame.rdgModflowBoundary.HideEditor;
@@ -19270,6 +19362,7 @@ var
   ValuesFunction: TGetBoundaryCollectionEvent;
   ColumnOffset: integer;
   NumberOfSpecies: Integer;
+  ColIndex: Integer;
   procedure GetEvtModifiers;
   var
     ValuesFunction: TGetBoundaryCollectionEvent;
@@ -19544,6 +19637,22 @@ begin
     TEtsBoundary.DefaultBoundaryMethod(DepthBoundaryPosition);
   GetEvtModifiers;
   GetSurfDepthModifiers;
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+//    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+//    begin
+//      ColIndex := SpeciesIndex + ColumnOffset+RechPostion+1;
+//      PestMethod[Frame.rdgModflowBoundary, ColIndex] :=
+//        TRchBoundary.DefaultBoundaryMethod(ColIndex- ColumnOffset);
+//    end;
+    for ColIndex := ColumnOffset to Frame.rdgModflowBoundary.ColCount - 1 do
+    begin
+      if not Frame.PestMethodAssigned[ColIndex] then
+      begin
+        PestMethod[Frame.rdgModflowBoundary, ColIndex] := ppmMultiply;
+      end;
+    end;
+  end;
 
   Frame.rdgModflowBoundary.HideEditor;
 end;
@@ -26624,8 +26733,7 @@ begin
       begin
         for ColIndex := 3 to Frame.rdgModflowBoundary.ColCount - 1 do
         begin
-          if Odd(ColIndex) {and
-            (Frame.rdgModflowBoundary.Cells[ColIndex,RowIndex] = '')} then
+          if IsChdEndHeadColumn(ColIndex) then
           begin
             Frame.rdgModflowBoundary.Cells[ColIndex,RowIndex] :=
               Frame.rdgModflowBoundary.Cells[ColIndex-1,RowIndex];
@@ -26945,14 +27053,35 @@ begin
   end;
 end;
 
+function TfrmScreenObjectProperties.IsChdEndHeadColumn(ACol: Integer): Boolean;
+var
+  DataColumnCount: Integer;
+  DC: Integer;
+begin
+  result := (ACol >= 3);
+  if result then
+  begin
+    DataColumnCount := 2;
+    if frmGoPhast.PhastModel.GwtUsed then
+    begin
+      Inc(DataColumnCount, frmGoPhast.PhastModel.MobileComponents.Count);
+    end;
+    DC := ACol-2;
+    result := ((DC mod DataColumnCount) = 1);
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.frameChdParamrdgModflowBoundarySelectCell(
   Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  DataColumnCount: Integer;
+  DC: Integer;
 begin
   inherited;
   frameChdParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
-  if (frmGoPhast.ModelSelection = msModflow2015) and (ACol >= 3) and Odd(ACol) then
+  if  CanSelect and (frmGoPhast.ModelSelection = msModflow2015) and (ACol >= 3) then
   begin
-    CanSelect := False;
+    CanSelect := not IsChdEndHeadColumn(ACol);
   end;
 end;
 

@@ -1068,6 +1068,7 @@ end;
   private
     FTDisFileName: string;
     FModelDataList: TModelDataList;
+    FExchanges: TStringList;
     procedure WriteOptions;
     procedure WriteTiming;
     procedure WriteModels;
@@ -1086,6 +1087,7 @@ end;
     destructor Destroy; override;
     property TDisFileName: string read GetTDisFileName write SetTDisFileName;
     procedure AddModel(ModelData: TModelData);
+    procedure AddExchange(FileName: string);
     procedure WriteFile(FileName: string);
   end;
 
@@ -9244,6 +9246,11 @@ end;
 
 { TMf6_SimNameFileWriter }
 
+procedure TMf6_SimNameFileWriter.AddExchange(FileName: string);
+begin
+  FExchanges.Add(FileName);
+end;
+
 procedure TMf6_SimNameFileWriter.AddModel(ModelData: TModelData);
 begin
   Assert(ModelData.ModelNameFile <> '');
@@ -9258,10 +9265,12 @@ constructor TMf6_SimNameFileWriter.Create(AModel: TCustomModel);
 begin
   inherited Create(AModel, etExport);
   FModelDataList := TModelDataList.Create;
+  FExchanges := TStringList.Create;
 end;
 
 destructor TMf6_SimNameFileWriter.Destroy;
 begin
+  FExchanges.Free;
   FModelDataList.Free;
   inherited;
 end;
@@ -9291,9 +9300,17 @@ begin
 end;
 
 procedure TMf6_SimNameFileWriter.WriteExchanges;
+var
+  index: Integer;
 begin
   WriteString('BEGIN EXCHANGES');
   NewLine;
+  for index := 0 to FExchanges.Count - 1 do
+  begin
+    WriteString('  ');
+    WriteString(FExchanges[index]);
+    NewLine;
+  end;
   WriteString('END EXCHANGES');
   NewLine;
   NewLine;

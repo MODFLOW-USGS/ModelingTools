@@ -763,7 +763,8 @@ uses
   frameCustomGwtBoundaryUnit in 'frameCustomGwtBoundaryUnit.pas' {frameCustomGwtBoundary: TFrame},
   frameScreenObjectCncUnit in 'frameScreenObjectCncUnit.pas' {frameScreenObjectCnc: TFrame},
   frameScreenObjectSrcUnit in 'frameScreenObjectSrcUnit.pas' {frameScreenObjectSrc: TFrame},
-  frameChemSpeciesUnit in 'frameChemSpeciesUnit.pas' {frameChemSpecies: TFrame};
+  frameChemSpeciesUnit in 'frameChemSpeciesUnit.pas' {frameChemSpecies: TFrame},
+  ModflowGwfGwtExchangeWriterUnit in 'ModflowGwfGwtExchangeWriterUnit.pas';
 
 {$R *.res}
 

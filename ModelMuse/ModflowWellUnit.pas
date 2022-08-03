@@ -1320,7 +1320,6 @@ begin
     else
       begin
         result := inherited;
-        Assert(False);
       end;
   end;
 end;

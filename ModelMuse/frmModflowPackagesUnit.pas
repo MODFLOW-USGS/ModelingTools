@@ -51,7 +51,8 @@ uses System.UITypes,
   framePackageMvrUnit, framePackageUzfMf6Unit, frameMt3dLktPkgUnit,
   frameMt3dSftUnit, frameMt3dCtsPkgUnit, framePackageCsubUnit,
   PestParamGroupsUnit, frameGwtDspPackageUnit, frameGwtAdvPackageUnit,
-  framePackageMSTUnit, framePackageIstUnit, frameChemSpeciesUnit;
+  framePackageMSTUnit, framePackageIstUnit, frameChemSpeciesUnit,
+  System.Generics.Collections;
 
 type
 
@@ -371,6 +372,7 @@ type
     FNewPackages: TTempPackageCollection;
     FCurrentPackages: TModflowPackages;
     FFrameNodeLinks: TList;
+    FLinkDictionary: TDictionary<TframePackage, TFrameNodeLink>;
     FSettingNumber: Boolean;
     FGwtParentNode: TTreeNode;
     FMstNode: TTreeNode;
@@ -1913,6 +1915,7 @@ end;
 procedure TfrmModflowPackages.FormCreate(Sender: TObject);
 begin
   inherited;
+  FLinkDictionary := TDictionary<TframePackage, TFrameNodeLink>.Create;
   FFrameNodeLinks := TObjectList.Create;
   framePkgGMG.pcGMG.ActivePageIndex := 0;
   frameMt3dmsAdvPkg.pcAdvection.ActivePageIndex := 0;
@@ -1928,6 +1931,7 @@ begin
   FSfrParameterInstances.Free;
   FNewPackages.Free;
   FFrameNodeLinks.Free;
+  FLinkDictionary.Free;
 end;
 
 procedure TfrmModflowPackages.FormResize(Sender: TObject);
@@ -2552,6 +2556,7 @@ begin
 
     FGwtSrcNode := nil;
     FFrameNodeLinks.Clear;
+    FLinkDictionary.Clear;
     for Index := 0 to FPackageList.Count - 1 do
     begin
       APackage := FPackageList[Index];
@@ -2600,6 +2605,7 @@ begin
       Link.Node := ChildNode;
       Link.AlternateNode := AltChildNode;
       FFrameNodeLinks.Add(Link);
+      FLinkDictionary.Add(Link.Frame, Link);
 
       AControl := Frame;
       Page := nil;
@@ -2919,13 +2925,17 @@ var
   Frame: TframePackage;
   Link : TFrameNodeLink;
 begin
-  AddPackagesToList(Packages);
   UpdateGwtFrames;
+  AddPackagesToList(Packages);
   for Index := 0 to FPackageList.Count - 1 do
   begin
     APackage := FPackageList[Index];
     Frame := APackage.Frame;
-    Link := FFrameNodeLinks[Index];
+    if not FLinkDictionary.TryGetValue(Frame, Link) then
+    begin
+      Assert(False);
+    end;
+//    Link := FFrameNodeLinks[Index];
     Assert(Frame = Link.Frame);
     APackage.Node := Link.Node;
     Frame.SetData(APackage);
@@ -2945,7 +2955,11 @@ begin
   begin
     APackage := FPackageList[Index];
     Frame := APackage.Frame;
-    Link := FFrameNodeLinks[Index];
+    if not FLinkDictionary.TryGetValue(Frame, Link) then
+    begin
+      Assert(False);
+    end;
+//    Link := FFrameNodeLinks[Index];
     Assert(Frame = Link.Frame);
     APackage.Node := Link.Node;
     APackage.AlternateNode := Link.AlternateNode;
@@ -3199,6 +3213,7 @@ begin
         Link.Node := ChildNode;
         Link.AlternateNode := ChildNode;
         FFrameNodeLinks.Add(Link);
+        FLinkDictionary.Add(Link.Frame, Link);
       end;
       ChildNode.Data := AMstFrame.Parent;
 
@@ -3244,6 +3259,8 @@ begin
         Link.Node := ChildNode;
         Link.AlternateNode := ChildNode;
         FFrameNodeLinks.Add(Link);
+        FLinkDictionary.Add(Link.Frame, Link);
+
       end;
       ChildNode.Data := AnIstframe.Parent;
 
@@ -3289,6 +3306,7 @@ begin
         Link.Node := ChildNode;
         Link.AlternateNode := ChildNode;
         FFrameNodeLinks.Add(Link);
+        FLinkDictionary.Add(Link.Frame, Link);
       end;
       ChildNode.Data := AnImtframe.Parent;
 

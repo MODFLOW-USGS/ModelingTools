@@ -348,6 +348,7 @@ type
     property TDisFileName: string read GetTDisFileName write SetTDisFileName;
     procedure AddModel(ModelData: TModelData);
     procedure WriteFile(Directory: string);
+    procedure AddExchange(FileName: string);
   end;
 
   TBoundaryNode = record

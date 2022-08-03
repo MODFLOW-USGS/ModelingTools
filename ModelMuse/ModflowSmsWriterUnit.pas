@@ -8,8 +8,8 @@ uses SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
 type
   TImsWriter = class(TCustomSolverWriter)
   private
-//    FNameOfFile: string;
     FDVClose: Double;
+    FSpeciesName: string;
     // A negative value means that this is for the flow model.
     FSpeciesIndex: Integer;
     procedure WriteInnerMaximum;
@@ -24,9 +24,7 @@ type
     class function Extension: string; override;
     procedure WriteOptions;
     procedure WriteNonLinearBlock;
-//    function LinearSolver: TSmsLinearSolver;
     procedure WriteLinearBlock;
-//    procedure WriteXmdBlock;
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType;
       SpeciesIndex: Integer); reintroduce;
@@ -57,15 +55,6 @@ begin
   result := '.ims';
 end;
 
-//function TImsWriter.LinearSolver: TSmsLinearSolver;
-//begin
-//  result := slsDefault;
-//  if soLinearSolver in FSmsPackage.SmsOverrides then
-//  begin
-//    result := FSmsPackage.LinearSolver;
-//  end;
-//end;
-
 function TImsWriter.Package: TModflowPackageSelection;
 begin
   if FSpeciesIndex < 0 then
@@ -89,23 +78,26 @@ begin
     Exit;
   end;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrIMSSolverProblem);
-  FNameOfFile := FileName(AFileName);
+  if FSpeciesIndex < 0 then
+  begin
+    FNameOfFile := FileName(AFileName);
+    FSpeciesName := '';
+  end
+  else
+  begin
+    FNameOfFile := GwtFileName(AFileName, FSpeciesIndex);
+    FSpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
+  end;
   // write to simulation name file
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage('Writing IMS Package input');
     WriteDataSet0;
-    FImsPackage := Model.ModflowPackages.SmsPackage;
+    FImsPackage := Package as TSmsPackageSelection;
     WriteOptions;
     WriteNonLinearBlock;
-//    case LinearSolver of
-//      slsDefault:
-        WriteLinearBlock;
-//      slsXMD:
-//        WriteXmdBlock;
-//      else Assert(False);
-//    end;
+    WriteLinearBlock;
   finally
     CloseFile;
   end;
@@ -210,18 +202,7 @@ begin
 end;
 
 procedure TImsWriter.WriteLinearBlock;
-//var
-//  UseNonLinear: Boolean;
 begin
-//  UseNonLinear := [soInnerMaxIterations, soInnerHclose, soInnerRclose,
-//    soLinLinearAcceleration, soRelaxationFactor, soPreconditionerLevel,
-//    soPreconditionerDropTolerance, soNumberOfOrthoganalizations,
-//    soScalingMethod, soReorderingMethod] * FSmsPackage.SmsOverrides <> [];
-//  if not UseNonLinear then
-//  begin
-//    Exit;
-//  end;
-
   WriteString('BEGIN LINEAR');
   NewLine;
 
@@ -299,27 +280,18 @@ begin
   if soOuterHclose in FImsPackage.SmsOverrides then
   begin
     FDVClose := FImsPackage.OuterHclose;
-//    WriteFloat(FImsPackage.OuterHclose);
   end
   else
   begin
     case FImsPackage.Complexity of
       scoSimple: FDVClose :=  0.001;
-      scoModerate: FDVClose := 0.01; 
+      scoModerate: FDVClose := 0.01;
       scoComplex: FDVClose := 0.1;
       else Assert(False);
     end;
   end;
   WriteFloat(FDVClose);
   NewLine;
-
-  // OUTER_RCLOSEBND is deprecated
-//  if soOuterRClose in FImsPackage.SmsOverrides then
-//  begin
-//    WriteString('  OUTER_RCLOSEBND ');
-//    WriteFloat(FImsPackage.OuterRClose);
-//    NewLine;
-//  end;
 
   WriteString('  OUTER_MAXIMUM ');
   if soOuterMaxIt in FImsPackage.SmsOverrides then
@@ -330,7 +302,7 @@ begin
   begin
     case FImsPackage.Complexity of
       scoSimple: WriteInteger(25);
-      scoModerate: WriteInteger(50); 
+      scoModerate: WriteInteger(50);
       scoComplex: WriteInteger(100);
       else Assert(False);
     end;
@@ -406,7 +378,7 @@ begin
   begin
     case FImsPackage.Complexity of
       scoSimple: BacktrackingNumber := 0;
-      scoModerate: BacktrackingNumber := 0; 
+      scoModerate: BacktrackingNumber := 0;
       scoComplex: BacktrackingNumber := 20;
       else Assert(False);
     end;
@@ -439,13 +411,6 @@ begin
     end;
   end;
 
-//  if (soLinearSolver in FSmsPackage.SmsOverrides)
-//    and (FSmsPackage.LinearSolver = slsXMD) then
-//  begin
-//    WriteString('  LINEAR_SOLVER XMD');
-//    NewLine;
-//  end;
-
   WriteString('END NONLINEAR');
   NewLine;
   NewLine;
@@ -471,7 +436,6 @@ begin
     scoSimple: WriteString('SIMPLE');
     scoModerate: WriteString('MODERATE');
     scoComplex: WriteString('COMPLEX');
-//    scoSpecified: WriteString('SPECIFIED');
     else Assert(False);
   end;
   NewLine;
@@ -480,7 +444,14 @@ begin
   if FImsPackage.CsvOutput <> sspNone then
   begin
     WriteString('  CSV_OUTER_OUTPUT FILEOUT ');
-    CsvFile := ChangeFileExt(BaseFile, '.OuterSolution.CSV');
+    if FSpeciesName = '' then
+    begin
+      CsvFile := ChangeFileExt(BaseFile, '.OuterSolution.CSV');
+    end
+    else
+    begin
+      CsvFile := ChangeFileExt(BaseFile, '.' + FSpeciesName + '.OuterSolution.CSV');
+    end;
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);
@@ -490,7 +461,14 @@ begin
   if FImsPackage.CsvOutput <> sspNone then
   begin
     WriteString('  CSV_INNER_OUTPUT FILEOUT ');
-    CsvFile := ChangeFileExt(BaseFile, '.InnerSolution.CSV');
+    if FSpeciesName = '' then
+    begin
+      CsvFile := ChangeFileExt(BaseFile, '.InnerSolution.CSV');
+    end
+    else
+    begin
+      CsvFile := ChangeFileExt(BaseFile, '.' + FSpeciesName + '.InnerSolution.CSV');
+    end;
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);
