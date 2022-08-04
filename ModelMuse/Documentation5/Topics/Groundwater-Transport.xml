@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" modified="2022-07-01T09:13:44.471-04:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>Groundwater Transport</title>
+<topic template="Default" status="Under Construction" modified="2022-08-04T08:17:55.851-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Groundwater Transport</title>
   <body>
-    <header><para styleclass="Heading1">Groundwater Transport</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Groundwater Transport</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Transport of solutes through the groundwater can be simulated with MT3DMS, MT3D-USGS, or the Groundwater Transport (GWT) Process of MODFLOW 6. The chemical species used for transport with all three programs are specified on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Chem-Species-(MT3D-and-GWT)" styleclass="Strong" translate="true">Chem Species (MT3D and GWT)</link><text styleclass="Normal" translate="true"> pane. Some data sets, such as porosity, are also shared between MT3D and GWT. Data for GWT are specified under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GWT-Groundwater-Transport" styleclass="Strong" translate="true">GWT: Groundwater Transport</link><text styleclass="Normal" translate="true"> and for MT3D under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Strong" translate="true">MT3DMS or MT3D-USGS</link><text styleclass="Normal" translate="true">.</text></para>
   </body>
 </topic>

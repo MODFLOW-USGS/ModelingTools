@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" modified="2022-08-02T15:12:59.217-04:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>SRC: GWT Mass Source Loading Package</title>
+<topic template="Default" status="Under Construction" modified="2022-08-04T08:12:00.214-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SRC: GWT Mass Source Loading Package Pane</title>
   <body>
-    <header><para styleclass="Heading1">SRC: GWT Mass Source Loading Package</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SRC: GWT Mass Source Loading Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Enter topic text here.</text></para>
   </body>
 </topic>

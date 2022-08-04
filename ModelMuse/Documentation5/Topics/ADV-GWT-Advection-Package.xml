@@ -1,9 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" modified="2022-08-02T15:12:49.975-04:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>ADV: GWT Advection Package</title>
+<topic template="Default" status="Under Construction" modified="2022-08-04T09:50:35.902-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ADV: GWT Advection Package Pane</title>
   <body>
-    <header><para styleclass="Heading1">ADV: GWT Advection Package</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ADV: GWT Advection Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Advection Package is used to simulate transport by advective flow. The </text><text styleclass="Strong" translate="true">ADV: GWT Advection Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Groundwater-Transport" styleclass="Strong" translate="true">Groundwater Transport|</link><text styleclass="Normal" translate="true"> | </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GWT-Groundwater-Transport" styleclass="Strong" translate="true">GWT: Groundwater Transport</link><text styleclass="Normal" translate="true">. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can choose among three options for advection: Upstream, Central, or Total Variation Diminishing (TVD).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The documentation for the advection package notes that &quot;central-in-space weighting is not often used because it can result in spurious oscillations in the simulated concentrations. It is included as an option in the ADV Package, however, because it may be useful for model testing and comparison purposes.&quot;</text></para>
   </body>
 </topic>

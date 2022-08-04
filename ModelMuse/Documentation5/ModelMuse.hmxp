@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4345</config-value>
+      <config-value name="autohelpstart">4346</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -761,6 +761,7 @@ document.write('</frameset>');
       <helpcontext-number href="CHD_Object_Pane" value="1950"/>
       <helpcontext-number href="CHD_Time_Variant_Specified_Head" value="2620"/>
       <helpcontext-number href="Chemistry_Options_Dialog_Box" value="2840"/>
+      <helpcontext-number href="Chem-Species-(MT3D-and-GWT)" value="4346"/>
       <helpcontext-number href="Chi_MD_Variables_Tab_Newton_So" value="3631"/>
       <helpcontext-number href="Child_Model_Dialog_Box" value="3598"/>
       <helpcontext-number href="Child_Model_Dialog_Box#IOUTLGR" value="3604"/>
@@ -1067,6 +1068,7 @@ document.write('</frameset>');
       <helpcontext-number href="Groundwater-Transport" value="4336"/>
       <helpcontext-number href="GW_Allocation_Tab" value="3939"/>
       <helpcontext-number href="GWT-Groundwater-Transport" value="4338"/>
+      <helpcontext-number href="GWTGroundwater-Transport-Proce" value="4345"/>
       <helpcontext-number href="Handling_Discretization_in_SUB" value="3562"/>
       <helpcontext-number href="Head_and_Drawdown_Panes" value="2520"/>
       <helpcontext-number href="Head_Dependant_Flux" value="2660"/>
