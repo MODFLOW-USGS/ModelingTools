@@ -119,6 +119,7 @@ begin
     NewLine;
   end;
 
+  // is this needed or not?
 //  if Model.ModflowPackages.DrnPackage.IsSelected then
 //  begin
 //    WriteString('  DRN-1 AUX ');
