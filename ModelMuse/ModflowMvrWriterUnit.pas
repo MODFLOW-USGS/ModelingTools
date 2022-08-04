@@ -67,12 +67,15 @@ type
     FSourceCellDictionaries: TObjectList<TMvrSourceCellDictionary>;
 //    FNameOfFile: String;
     FUsedPackages: TSourcePackageChoices;
+    FSpeciesIndex: Integer;
     function ShouldEvaluate: Boolean;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WritePackages;
     procedure WriteMvrStressPeriods;
     function GetMaxMvr: Integer;
+    procedure WriteGwtOptions;
+    procedure WriteGwtFileInternal;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -99,6 +102,7 @@ type
     procedure AddMvrReceiver(MvrReceiver: TMvrReceiver);
     procedure Evaluate; override;
     procedure WriteFile(const AFileName: string);
+    procedure WriteMvtFile(const AFileName: string; SpeciesIndex: Integer);
     property UsedPackages: TSourcePackageChoices read FUsedPackages;
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
@@ -108,7 +112,8 @@ implementation
 uses
   frmProgressUnit, System.SysUtils, frmErrorsAndWarningsUnit, Vcl.Forms,
   FastGEO, ModflowIrregularMeshUnit, AbstractGridUnit, System.Math,
-  ModflowLakMf6Unit, RbwParser, frmFormulaErrorsUnit;
+  ModflowLakMf6Unit, RbwParser, frmFormulaErrorsUnit, frmModflowPackagesUnit,
+  ModflowPackagesUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrWritingMVROptions = 'Writing MVR Options';
@@ -123,6 +128,12 @@ resourcestring
   'ject defines both the MVR boundary and the type of boundary specified in ' +
   'the source package for the MVR boundary.';
   StrThereWasAnErrorS = 'There was an error specifying the MVR source in %s.';
+  StrInvalidMVRSourceP = 'Invalid MVR source package';
+  StrThe0sPackageCan = 'The %0:s package can not be used as a source package' +
+  ' in %1:s for MVR because the %0:s package is not seleccted';
+  StrInvalidMVRReceiver = 'Invalid MVR receiver package';
+  StrThe0sPackageCanRec = 'The %0:s package can not be used as a receiver pa' +
+  'ckage in %1:s for MVR because the %0:s package is not seleccted';
 
 
 
@@ -245,12 +256,15 @@ var
   Compiler: TRbwParser;
   Expression: TExpression;
   AReceiver: TReceiverItem;
+  Packages: TModflowPackages;
 begin
   if not ShouldEvaluate then
   begin
     Exit
   end;
   inherited;
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidMVRSourceP);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidMVRReceiver);
 
   Compiler := Model.rpThreeDFormulaCompilerNodes;
 
@@ -367,6 +381,7 @@ begin
   end;
 
   FUsedPackages := [];
+  Packages := Model.ModflowPackages;
   for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
   begin
     AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
@@ -385,6 +400,93 @@ begin
       Continue;
     end;
 
+    case MvrBound.SourcePackageChoice of
+      spcWel:
+        begin
+          if not Packages.WelPackage.IsSelected then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRSourceP,
+              Format(StrThe0sPackageCan, ['Well', AScreenObject.Name]),
+              AScreenObject);
+            Continue;
+          end;
+        end;
+      spcDrn:
+        begin
+          if not Packages.DrnPackage.IsSelected then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRSourceP,
+              Format(StrThe0sPackageCan, ['Drain', AScreenObject.Name]),
+              AScreenObject);
+            Continue;
+          end;
+        end;
+      spcRiv:
+        begin
+          if not Packages.RivPackage.IsSelected then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRSourceP,
+              Format(StrThe0sPackageCan, ['River', AScreenObject.Name]),
+              AScreenObject);
+            Continue;
+          end;
+        end;
+      spcGhb:
+        begin
+          if not Packages.GhbBoundary.IsSelected then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRSourceP,
+              Format(StrThe0sPackageCan, ['GHB', AScreenObject.Name]),
+              AScreenObject);
+            Continue;
+          end;
+        end;
+      spcLak:
+        begin
+          if not Packages.LakMf6Package.IsSelected then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRSourceP,
+              Format(StrThe0sPackageCan, ['Lake', AScreenObject.Name]),
+              AScreenObject);
+            Continue;
+          end;
+        end;
+      spcMaw:
+        begin
+          if not Packages.MawPackage.IsSelected then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRSourceP,
+              Format(StrThe0sPackageCan, ['MAW', AScreenObject.Name]),
+              AScreenObject);
+            Continue;
+          end;
+        end;
+      spcSfr:
+        begin
+          if not Packages.SfrModflow6Package.IsSelected then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRSourceP,
+              Format(StrThe0sPackageCan, ['SFR', AScreenObject.Name]),
+              AScreenObject);
+            Continue;
+          end;
+        end;
+      spcUzf:
+        begin
+          if not Packages.UzfMf6Package.IsSelected then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRSourceP,
+              Format(StrThe0sPackageCan, ['UZF', AScreenObject.Name]),
+              AScreenObject);
+            Continue;
+          end;
+        end;
+      else
+        begin
+          Assert(False);
+        end;
+    end;
+
     Include(FUsedPackages, MvrBound.SourcePackageChoice);
 
 
@@ -394,18 +496,46 @@ begin
       case ReceiverItem.ReceiverPackage of
         rpcLak:
           begin
+            if not Packages.LakMf6Package.IsSelected then
+            begin
+              frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRReceiver,
+                Format(StrThe0sPackageCanRec, ['Lake', AScreenObject.Name]),
+                AScreenObject);
+              Continue;
+            end;
             Include(FUsedPackages, spcLak);
           end;
         rpcMaw:
           begin
+            if not Packages.MawPackage.IsSelected then
+            begin
+              frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRReceiver,
+                Format(StrThe0sPackageCanRec, ['MAW', AScreenObject.Name]),
+                AScreenObject);
+              Continue;
+            end;
             Include(FUsedPackages, spcMaw);
           end;
         rpcSfr:
           begin
+            if not Packages.SfrModflow6Package.IsSelected then
+            begin
+              frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRReceiver,
+                Format(StrThe0sPackageCanRec, ['SFR', AScreenObject.Name]),
+                AScreenObject);
+              Continue;
+            end;
             Include(FUsedPackages, spcSfr);
           end;
         rpcUzf:
           begin
+            if not Packages.UzfMf6Package.IsSelected then
+            begin
+              frmErrorsAndWarnings.AddWarning(Model, StrInvalidMVRReceiver,
+                Format(StrThe0sPackageCanRec, ['UZF', AScreenObject.Name]),
+                AScreenObject);
+              Continue;
+            end;
             Include(FUsedPackages, spcUzf);
           end;
         else
@@ -647,6 +777,95 @@ begin
   end;
 end;
 
+procedure TModflowMvrWriter.WriteGwtFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+//    WriteTemplateHeader;
+
+    WriteDataSet0;
+
+    WriteGwtOptions;
+//    WriteGwtPackageData;
+//    WriteGwtStressPeriods;
+
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TModflowMvrWriter.WriteGwtOptions;
+var
+  ASpecies: TMobileChemSpeciesItem;
+  budgetfile: string;
+  BaseFileName: string;
+  concentrationfile: string;
+  budgetCsvFile: string;
+  MvrPackage: TMvrPackage;
+//  MawPackage: TMawPackage;
+begin
+  WriteBeginOptions;
+  try
+//    WriteString('    FLOW_PACKAGE_NAME ');
+//    WriteString('MVR-1');
+//    NewLine;
+
+    Assert(FSpeciesIndex >= 0);
+    Assert(FSpeciesIndex < Model.MobileComponents.Count);
+//    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
+    ASpecies := Model.MobileComponents[FSpeciesIndex];
+//    WriteString(' ' + ASpecies.Name);
+//    NewLine;
+
+//    WriteString('    BOUNDNAMES');
+//    NewLine;
+
+    PrintListInputOption;
+//    PrintConcentrationOption;
+    PrintFlowsOption;
+    WriteSaveFlowsOption;
+
+    MvrPackage := Model.ModflowPackages.MvrPackage;
+    BaseFileName := ChangeFileExt(FNameOfFile, '');
+    BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
+
+//    if MvrPackage.SaveGwtConcentration then
+//    begin
+//      WriteString('    CONCENTRATION FILEOUT ');
+//      concentrationfile := BaseFileName + '.mvt_conc';
+//      Model.AddModelOutputFile(concentrationfile);
+//      concentrationfile := ExtractFileName(concentrationfile);
+//      WriteString(concentrationfile);
+//      NewLine;
+//    end;
+
+    if MvrPackage.SaveBudgetFile then
+    begin
+      WriteString('    BUDGET FILEOUT ');
+      budgetfile := BaseFileName + '.mvt_budget';
+      Model.AddModelOutputFile(budgetfile);
+      budgetfile := ExtractFileName(budgetfile);
+      WriteString(budgetfile);
+      NewLine;
+    end;
+
+    if MvrPackage.SaveCsvBudgetFile then
+    begin
+      WriteString('    BUDGETCSV FILEOUT ');
+      budgetCsvFile := BaseFileName + '.mvt_budget.csv';
+      Model.AddModelOutputFile(budgetCsvFile);
+      budgetCsvFile := ExtractFileName(budgetCsvFile);
+      WriteString(budgetCsvFile);
+      NewLine;
+    end;
+
+  //  [TS6 FILEIN <ts6_filename>]
+  //  [OBS6 FILEIN <obs6_filename>]
+  finally
+    WriteEndOptions
+  end;
+end;
+
 procedure TModflowMvrWriter.WriteMvrStressPeriods;
 var
   StressPeriodIndex: Integer;
@@ -872,11 +1091,63 @@ begin
   end;
 end;
 
+procedure TModflowMvrWriter.WriteMvtFile(const AFileName: string;
+  SpeciesIndex: Integer);
+var
+  SpeciesName: string;
+  Abbreviation: string;
+begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Abbreviation := 'MVT6';
+  end
+  else
+  begin
+    Exit;
+  end;
+  if Model.PackageGeneratedExternally(Abbreviation) then
+  begin
+    Exit;
+  end;
+  FPestParamUsed := False;
+  FSpeciesIndex :=  SpeciesIndex;
+  SpeciesName := Model.MobileComponents[SpeciesIndex].Name;
+  FNameOfFile := ChangeFileExt(AFileName, '') + '.' + SpeciesName + '.mvt';
+  FInputFileName := FNameOfFile;
+
+  WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+
+  FPestParamUsed := False;
+  WritingTemplate := False;
+
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    WriteGwtFileInternal;
+
+//    if  Model.PestUsed and FPestParamUsed then
+//    begin
+//      FNameOfFile := FNameOfFile + '.tpl';
+//      WritePestTemplateLine(FNameOfFile);
+//      WritingTemplate := True;
+//      WriteGwtFileInternal;
+//    end;
+
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+
+end;
+
 procedure TModflowMvrWriter.WriteOptions;
 var
   MvrPackage: TMvrPackage;
   budgetfile: string;
   BaseFile: string;
+  budgetCsvFile: string;
 begin
   WriteBeginOptions;
 
@@ -894,6 +1165,17 @@ begin
     WriteString(budgetfile);
     NewLine;
   end;
+
+  if MvrPackage.SaveCsvBudgetFile then
+  begin
+    WriteString('    BUDGETCSV FILEOUT ');
+    budgetCsvFile := ChangeFileExt(BaseFile, '.mvr_budget.csv');
+    Model.AddModelOutputFile(budgetCsvFile);
+    budgetCsvFile := ExtractFileName(budgetCsvFile);
+    WriteString(budgetCsvFile);
+    NewLine;
+  end;
+
 
   WriteEndOptions
 end;

@@ -449,7 +449,6 @@ var
   ASpecies: TMobileChemSpeciesItem;
   budgetfile: string;
   BaseFileName: string;
-//  SfrMf6Package: TSfrModflow6PackageSelection;
   concentrationfile: string;
   budgetCsvFile: string;
   MawPackage: TMawPackage;
@@ -462,10 +461,10 @@ begin
 
     Assert(FSpeciesIndex >= 0);
     Assert(FSpeciesIndex < Model.MobileComponents.Count);
-    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
+//    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
     ASpecies := Model.MobileComponents[FSpeciesIndex];
-    WriteString(' ' + ASpecies.Name);
-    NewLine;
+//    WriteString(' ' + ASpecies.Name);
+//    NewLine;
 
     WriteString('    BOUNDNAMES');
     NewLine;
@@ -482,7 +481,7 @@ begin
     if MawPackage.SaveGwtConcentration then
     begin
       WriteString('    CONCENTRATION FILEOUT ');
-      concentrationfile := BaseFileName + '.sft_conc';
+      concentrationfile := BaseFileName + '.mwt_conc';
       Model.AddModelOutputFile(concentrationfile);
       concentrationfile := ExtractFileName(concentrationfile);
       WriteString(concentrationfile);
@@ -492,7 +491,7 @@ begin
     if MawPackage.SaveGwtBudget then
     begin
       WriteString('    BUDGET FILEOUT ');
-      budgetfile := BaseFileName + '.sft_budget';
+      budgetfile := BaseFileName + '.mwt_budget';
       Model.AddModelOutputFile(budgetfile);
       budgetfile := ExtractFileName(budgetfile);
       WriteString(budgetfile);
@@ -502,7 +501,7 @@ begin
     if MawPackage.SaveGwtBudgetCsv then
     begin
       WriteString('    BUDGETCSV FILEOUT ');
-      budgetCsvFile := BaseFileName + '.sft_budget.csv';
+      budgetCsvFile := BaseFileName + '.mwt_budget.csv';
       Model.AddModelOutputFile(budgetCsvFile);
       budgetCsvFile := ExtractFileName(budgetCsvFile);
       WriteString(budgetCsvFile);
@@ -1293,16 +1292,19 @@ begin
     NewLine;
   end;
 
-  if (MvrWriter <> nil) then
+  if Model.ModflowPackages.MvrPackage.IsSelected then
   begin
-    if spcMaw in TModflowMvrWriter(MvrWriter).UsedPackages then
+    if (MvrWriter <> nil) then
     begin
-      WriteString('  MOVER');
-      NewLine
+      if spcMaw in TModflowMvrWriter(MvrWriter).UsedPackages then
+      begin
+        WriteString('  MOVER');
+        NewLine
+      end;
     end;
   end;
 
-  WriteGwtlAuxVariables;
+//  WriteGwtlAuxVariables;
 
 {
 [TS6 FILEIN <ts6_filename>]   not supported
@@ -1539,19 +1541,19 @@ begin
         NewLine;
       end;
 
-      if Model.GwtUsed then
-      begin
-        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-        begin
-          WriteString('  ');
-          WriteInteger(ACell.WellNumber);
-          WriteString(' AUXILIARY ');
-          ASpecies := Model.MobileComponents[SpeciesIndex];
-          WriteString(' ' + ASpecies.Name);
-          WriteFloat(0);
-          NewLine;
-        end;
-      end;
+//      if Model.GwtUsed then
+//      begin
+//        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+//        begin
+//          WriteString('  ');
+//          WriteInteger(ACell.WellNumber);
+//          WriteString(' AUXILIARY ');
+//          ASpecies := Model.MobileComponents[SpeciesIndex];
+//          WriteString(' ' + ASpecies.Name);
+//          WriteFloat(0);
+//          NewLine;
+//        end;
+//      end;
 
       if ACell.MvrUsed and (MvrWriter <> nil)
         and (ACell.MawStatus <> mwInactive) and not WritingTemplate then

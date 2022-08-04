@@ -1760,10 +1760,10 @@ begin
 
     Assert(FSpeciesIndex >= 0);
     Assert(FSpeciesIndex < Model.MobileComponents.Count);
-    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
+//    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
     ASpecies := Model.MobileComponents[FSpeciesIndex];
-    WriteString(' ' + ASpecies.Name);
-    NewLine;
+//    WriteString(' ' + ASpecies.Name);
+//    NewLine;
 
     WriteString('    BOUNDNAMES');
     NewLine;
@@ -1835,15 +1835,15 @@ begin
       ALake.FStartingConcentrations.Values[FSpeciesIndex], -1, -1, -1);
 //    WriteFloat(ALake.FStartingStage);
 
-    if Model.GwtUsed then
-    begin
-      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-      begin
-        WriteFloat(0);
-      end;
-    end;
-
     // aux
+//    if Model.GwtUsed then
+//    begin
+//      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+//      begin
+//        WriteFloat(0);
+//      end;
+//    end;
+
     BoundName := Copy(ALake.FScreenObject.Name, 1, MaxBoundNameLength);
     BoundName := ' ''' + BoundName + ''' ';
     WriteString(BoundName);
@@ -2411,7 +2411,7 @@ begin
     end;
   end;
 
-  WriteGwtlAuxVariables;
+//  WriteGwtlAuxVariables;
 
   WriteEndOptions
 end;
@@ -2559,15 +2559,15 @@ begin
 
     WriteInteger(ALake.FLakeCellList.Count);
 
-    if Model.GwtUsed then
-    begin
-      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-      begin
-        WriteFloat(0);
-      end;
-    end;
-
     // aux
+//    if Model.GwtUsed then
+//    begin
+//      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+//      begin
+//        WriteFloat(0);
+//      end;
+//    end;
+
     BoundName := Copy(ALake.FScreenObject.Name, 1, MaxBoundNameLength);
     BoundName := ' ''' + BoundName + ''' ';
     WriteString(BoundName);
@@ -2792,19 +2792,19 @@ begin
             WriteLakeValueOrFormula(ALakeSetting, Lak6WithdrawalPosition);
             NewLine;
 
-            if Model.GwtUsed then
-            begin
-              for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-              begin
-                WriteString('  ');
-                WriteInteger(LakeIndex+1);
-                WriteString(' AUXILIARY ');
-                ASpecies := Model.MobileComponents[SpeciesIndex];
-                WriteString(' ' + ASpecies.Name);
-                WriteFloat(0);
-                NewLine;
-              end;
-            end;
+//            if Model.GwtUsed then
+//            begin
+//              for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+//              begin
+//                WriteString('  ');
+//                WriteInteger(LakeIndex+1);
+//                WriteString(' AUXILIARY ');
+//                ASpecies := Model.MobileComponents[SpeciesIndex];
+//                WriteString(' ' + ASpecies.Name);
+//                WriteFloat(0);
+//                NewLine;
+//              end;
+//            end;
 
           end;
         end;

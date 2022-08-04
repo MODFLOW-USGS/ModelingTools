@@ -5813,9 +5813,11 @@ Type
   private
     FSaveBudgetFile: Boolean;
 	  FMfMvrValue: TModflowBoundaryDisplayTimeList;
+    FSaveCsvBudgetFile: Boolean;
     procedure SetSaveBudgetFile(const Value: Boolean);
     procedure GetMfMvrValueUseList(Sender: TObject; NewUseList: TStringList);
     procedure InitializeMfMvrValueDisplay(Sender: TObject);
+    procedure SetSaveCsvBudgetFile(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
@@ -5828,6 +5830,8 @@ Type
     // for GHB, RIV, DRN, etc.
     property SaveBudgetFile: Boolean read FSaveBudgetFile
       write SetSaveBudgetFile Stored True;
+    property SaveCsvBudgetFile: Boolean read FSaveCsvBudgetFile
+      write SetSaveCsvBudgetFile Stored True;
   end;
 
   TGwtProcess = class(TModflowPackageSelection)
@@ -21276,6 +21280,7 @@ begin
   begin
     SourceMvr := TMvrPackage(Source);
     SaveBudgetFile := SourceMvr.SaveBudgetFile;
+    SaveCsvBudgetFile := SourceMvr.SaveCsvBudgetFile
   end;
   inherited;
 end;
@@ -21362,11 +21367,17 @@ procedure TMvrPackage.InitializeVariables;
 begin
   inherited;
   FSaveBudgetFile := True;
+  FSaveCsvBudgetFile := True;
 end;
 
 procedure TMvrPackage.SetSaveBudgetFile(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveBudgetFile, Value);
+end;
+
+procedure TMvrPackage.SetSaveCsvBudgetFile(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveCsvBudgetFile, Value);
 end;
 
 { TUzfMf6PackageSelection }

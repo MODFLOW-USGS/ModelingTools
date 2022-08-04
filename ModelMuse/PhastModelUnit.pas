@@ -44853,6 +44853,13 @@ begin
           if ModflowMvrWriter <> nil then
           begin
             ModflowMvrWriter.WriteFile(FileName);
+            if GwtUsed then
+            begin
+              for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+              begin
+                ModflowMvrWriter.WriteMvtFile(FileName, SpeciesIndex);
+              end;
+            end;
           end;
           Application.ProcessMessages;
           if not frmProgressMM.ShouldContinue then

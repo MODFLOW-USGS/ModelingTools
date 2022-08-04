@@ -632,7 +632,7 @@ begin
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
     try
-    Expression.Evaluate;
+      Expression.Evaluate;
       with ChdStorage.ChdArray[Index] do
       begin
         case BoundaryFunctionIndex of

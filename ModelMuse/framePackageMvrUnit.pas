@@ -10,6 +10,7 @@ uses
 type
   TframePackageMvr = class(TframePackage)
     cbSaveBudget: TCheckBox;
+    chSaveCsv: TCheckBox;
   private
     { Private declarations }
   public
@@ -34,6 +35,7 @@ begin
   inherited;
   MvrPackage := Package as TMvrPackage;
   cbSaveBudget.Checked := MvrPackage.SaveBudgetFile;
+  chSaveCsv.Checked := MvrPackage.SaveCsvBudgetFile;
 end;
 
 procedure TframePackageMvr.SetData(Package: TModflowPackageSelection);
@@ -43,6 +45,7 @@ begin
   inherited;
   MvrPackage := Package as TMvrPackage;
   MvrPackage.SaveBudgetFile := cbSaveBudget.Checked;
+  MvrPackage.SaveCsvBudgetFile := chSaveCsv.Checked;
 end;
 
 end.

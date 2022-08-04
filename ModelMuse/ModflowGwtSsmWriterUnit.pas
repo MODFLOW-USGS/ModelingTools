@@ -119,12 +119,12 @@ begin
     NewLine;
   end;
 
-  if Model.ModflowPackages.DrnPackage.IsSelected then
-  begin
-    WriteString('  DRN-1 AUX ');
-    WriteString(SpeciesName);
-    NewLine;
-  end;
+//  if Model.ModflowPackages.DrnPackage.IsSelected then
+//  begin
+//    WriteString('  DRN-1 AUX ');
+//    WriteString(SpeciesName);
+//    NewLine;
+//  end;
 
   if Model.ModflowPackages.RchPackage.IsSelected then
   begin

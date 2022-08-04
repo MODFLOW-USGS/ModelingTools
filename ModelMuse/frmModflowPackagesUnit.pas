@@ -2518,7 +2518,8 @@ begin
 
     AddNode(StrPostProcessors, StrPostProcessors, PriorNode);
 
-    AddNode(StrGroundwaterTranspor, StrGroundwaterTranspor, FTransportNode);
+    AddNode(StrGroundwaterTranspor, StrGroundwaterTranspor, PriorNode);
+    FTransportNode := PriorNode;
 
     FChemNode := AddChildNode(StrChemSpecies, StrChemSpeciesMT3DA,
       FTransportNode);
@@ -3331,6 +3332,26 @@ begin
     or framePkgMt3dBasic.rcSelectionController.Enabled;
   frameChemSpecies.frameGridImmobile.Enabled :=
     framePkgMt3dBasic.rcSelectionController.Enabled;
+  if IsLoaded and frameChemSpecies.frameGridMobile.Enabled then
+  begin
+    if (frameChemSpecies.frameGridMobile.seNumber.AsInteger = 0) then
+    begin
+      frameChemSpecies.frameGridMobile.seNumber.AsInteger := 1;
+      if Assigned(frameChemSpecies.frameGridMobile.seNumber.OnChange) then
+      begin
+        frameChemSpecies.frameGridMobile.seNumber.OnChange(Self)
+      end;
+    end;
+    if (frameChemSpecies.frameGridMobile.Grid.Cells[0,1] = '') then
+    begin
+      frameChemSpecies.frameGridMobile.Grid.Cells[0,1] := 'Chem';
+      if Assigned(frameChemSpecies.frameGridMobile.Grid.OnSetEditText) then
+      begin
+        frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, 1,  'Chem');
+      end;
+    end;
+    UpdateGwtFrames;
+  end;
 end;
 
 procedure TfrmModflowPackages.EnableConduitRecharge;
