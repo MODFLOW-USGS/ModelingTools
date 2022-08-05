@@ -342,6 +342,8 @@ type
     function ModelLine: string;
   end;
 
+  // @link(TMf6_SimNameFileWriter) in @link(CustomModflowWriterUnit)
+  // implements @name
   IMf6_SimNameFileWriter = interface(IUnknown) ['{9C59A1EE-3BB2-4E39-A92A-DA09791188BD}']
     function GetTDisFileName: string;
     procedure SetTDisFileName(const Value: string);

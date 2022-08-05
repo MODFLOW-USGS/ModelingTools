@@ -19402,6 +19402,8 @@ begin
   FStoredAtsOuterMaxFraction := TRealStorage.Create;
   FStoredAtsOuterMaxFraction.OnChange := OnValueChanged;
 
+  SpeciesIndex := -1;
+
   InitializeVariables;
 end;
 
@@ -22797,6 +22799,7 @@ begin
   FGwtIms.SelectionType := stCheckBox;
   FGwtIms.SpeciesIndex := Index;
   FGwtIms.IsSelected := True;
+  FGwtIms.SpeciesIndex := Index;
 
   FGwtMst := TGwtMstPackage.Create(ParentCollection.FModel);
   FGwtMst.PackageIdentifier := StrMSTMobileStorage;

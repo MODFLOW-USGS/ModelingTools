@@ -387,7 +387,6 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 332
         ColWidths = (
           84
           64
@@ -494,7 +493,6 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 332
         ColWidths = (
           84
           64

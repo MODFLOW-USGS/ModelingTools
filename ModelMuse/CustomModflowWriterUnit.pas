@@ -236,7 +236,10 @@ end;
     procedure WriteHeader(const DataType: TRbwDataType;
       const Comment: string; const MF6_ArrayName: string); overload;
     function CheckArrayUniform(const LayerIndex: Integer;
-      const DataArray: TDataArray): boolean;
+      const DataArray: TDataArray): boolean;  overload;
+    function CheckArrayUniform(const LayerIndex: Integer;
+      const DataArray: TDataArray; var IntValue: Integer;
+      var BoolValue: Boolean; var RealValue: Double): boolean; overload;
     procedure WriteArrayValues(const LayerIndex: Integer;
       const DataArray: TDataArray);
   protected
@@ -2452,59 +2455,89 @@ end;
 function TCustomModflowWriter.CheckArrayUniform(const LayerIndex: Integer;
   const DataArray: TDataArray): boolean;
 var
-  ColIndex: Integer;
-  RowIndex: Integer;
+//  ColIndex: Integer;
+//  RowIndex: Integer;
   IntValue: Integer;
   BoolValue: Boolean;
   RealValue: Double;
+//  FirstValueFound: Boolean;
 begin
-  DataArray.Initialize;
-  RealValue := 0;
-  IntValue := 0;
-  BoolValue := False;
-  case DataArray.DataType of
-    rdtDouble:
-      begin
-        RealValue := DataArray.RealData[LayerIndex, 0, 0];
-      end;
-    rdtInteger:
-      begin
-        IntValue := DataArray.IntegerData[LayerIndex, 0, 0];
-      end;
-    rdtBoolean:
-      begin
-        BoolValue := DataArray.BooleanData[LayerIndex, 0, 0];
-      end;
-  else
-    Assert(False);
-  end;
-  result := True;
-  for RowIndex := 0 to DataArray.RowCount - 1 do
-  begin
-    for ColIndex := 0 to DataArray.ColumnCount - 1 do
-    begin
-      case DataArray.DataType of
-        rdtDouble:
-          begin
-            result := DataArray.RealData[LayerIndex, RowIndex, ColIndex] = RealValue;
-          end;
-        rdtInteger:
-          begin
-            result := DataArray.IntegerData[LayerIndex, RowIndex, ColIndex] = IntValue;
-          end;
-        rdtBoolean:
-          begin
-            result := DataArray.BooleanData[LayerIndex, RowIndex, ColIndex] = BoolValue;
-          end;
-      else
-        Assert(False);
-      end;
-      if not result then
-        break;
-    end;
-    if not result then
-      break;
-  end;
+  result := CheckArrayUniform(LayerIndex, DataArray, IntValue, BoolValue,
+    RealValue)
+//  DataArray.Initialize;
+//  RealValue := 0;
+//  IntValue := 0;
+//  BoolValue := False;
+//  case DataArray.DataType of
+//    rdtDouble:
+//      begin
+//        RealValue := DataArray.RealData[LayerIndex, 0, 0];
+//      end;
+//    rdtInteger:
+//      begin
+//        IntValue := DataArray.IntegerData[LayerIndex, 0, 0];
+//      end;
+//    rdtBoolean:
+//      begin
+//        BoolValue := DataArray.BooleanData[LayerIndex, 0, 0];
+//      end;
+//  else
+//    Assert(False);
+//  end;
+//  FirstValueFound := False;
+//  result := True;
+//  for RowIndex := 0 to DataArray.RowCount - 1 do
+//  begin
+//    for ColIndex := 0 to DataArray.ColumnCount - 1 do
+//    begin
+//      if DataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+//      begin
+//        if FirstValueFound then
+//        begin
+//          case DataArray.DataType of
+//            rdtDouble:
+//              begin
+//                result := DataArray.RealData[LayerIndex, RowIndex, ColIndex] = RealValue;
+//              end;
+//            rdtInteger:
+//              begin
+//                result := DataArray.IntegerData[LayerIndex, RowIndex, ColIndex] = IntValue;
+//              end;
+//            rdtBoolean:
+//              begin
+//                result := DataArray.BooleanData[LayerIndex, RowIndex, ColIndex] = BoolValue;
+//              end;
+//          else
+//            Assert(False);
+//          end;
+//        end
+//        else
+//        begin
+//          case DataArray.DataType of
+//            rdtDouble:
+//              begin
+//                RealValue := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+//              end;
+//            rdtInteger:
+//              begin
+//                IntValue := DataArray.IntegerData[LayerIndex, RowIndex, ColIndex];
+//              end;
+//            rdtBoolean:
+//              begin
+//                BoolValue := DataArray.BooleanData[LayerIndex, RowIndex, ColIndex]
+//              end;
+//          else
+//            Assert(False);
+//          end;
+//          FirstValueFound := True;
+//        end;
+//      end;
+//      if not result then
+//        break;
+//    end;
+//    if not result then
+//      break;
+//  end;
 end;
 
 function TCustomModflowWriter.ShouldCheckCell(LayerIndex, RowIndex,
@@ -2663,6 +2696,90 @@ begin
     end;
   end;
   Model.DataArrayManager.AddDataSetToCache(DataArray);
+end;
+
+function TCustomModflowWriter.CheckArrayUniform(const LayerIndex: Integer;
+  const DataArray: TDataArray; var IntValue: Integer; var BoolValue: Boolean;
+  var RealValue: Double): boolean;
+var
+  ColIndex: Integer;
+  RowIndex: Integer;
+  FirstValueFound: Boolean;
+begin
+  DataArray.Initialize;
+  RealValue := 0;
+  IntValue := 0;
+  BoolValue := False;
+//  case DataArray.DataType of
+//    rdtDouble:
+//      begin
+//        RealValue := DataArray.RealData[LayerIndex, 0, 0];
+//      end;
+//    rdtInteger:
+//      begin
+//        IntValue := DataArray.IntegerData[LayerIndex, 0, 0];
+//      end;
+//    rdtBoolean:
+//      begin
+//        BoolValue := DataArray.BooleanData[LayerIndex, 0, 0];
+//      end;
+//  else
+//    Assert(False);
+//  end;
+  FirstValueFound := False;
+  result := True;
+  for RowIndex := 0 to DataArray.RowCount - 1 do
+  begin
+    for ColIndex := 0 to DataArray.ColumnCount - 1 do
+    begin
+      if DataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+      begin
+        if FirstValueFound then
+        begin
+          case DataArray.DataType of
+            rdtDouble:
+              begin
+                result := DataArray.RealData[LayerIndex, RowIndex, ColIndex] = RealValue;
+              end;
+            rdtInteger:
+              begin
+                result := DataArray.IntegerData[LayerIndex, RowIndex, ColIndex] = IntValue;
+              end;
+            rdtBoolean:
+              begin
+                result := DataArray.BooleanData[LayerIndex, RowIndex, ColIndex] = BoolValue;
+              end;
+          else
+            Assert(False);
+          end;
+        end
+        else
+        begin
+          case DataArray.DataType of
+            rdtDouble:
+              begin
+                RealValue := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+              end;
+            rdtInteger:
+              begin
+                IntValue := DataArray.IntegerData[LayerIndex, RowIndex, ColIndex];
+              end;
+            rdtBoolean:
+              begin
+                BoolValue := DataArray.BooleanData[LayerIndex, RowIndex, ColIndex]
+              end;
+          else
+            Assert(False);
+          end;
+          FirstValueFound := True;
+        end;
+      end;
+      if not result then
+        break;
+    end;
+    if not result then
+      break;
+  end;
 end;
 
 procedure TCustomFileWriter.AddUsedPestDataArray(ADataArray: TDataArray);
@@ -3473,24 +3590,24 @@ begin
   end
   else
   begin
-    Uniform := CheckArrayUniform(LayerIndex, DataArray);
+    Uniform := CheckArrayUniform(LayerIndex, DataArray, IntValue, BoolValue, RealValue);
 
     if Uniform then
     begin
       case DataArray.DataType of
         rdtDouble:
           begin
-            RealValue := DataArray.RealData[LayerIndex, 0, 0];
+//            RealValue := DataArray.RealData[LayerIndex, 0, 0];
             WriteConstantU2DREL(Comment, RealValue, matStructured, MF6_Arrayname);
           end;
         rdtInteger:
           begin
-            IntValue := DataArray.IntegerData[LayerIndex, 0, 0];
+//            IntValue := DataArray.IntegerData[LayerIndex, 0, 0];
             WriteConstantU2DINT(Comment, IntValue, matStructured, MF6_Arrayname);
           end;
         rdtBoolean:
           begin
-            BoolValue := DataArray.BooleanData[LayerIndex, 0, 0];
+//            BoolValue := DataArray.BooleanData[LayerIndex, 0, 0];
             IntValue := Ord(BoolValue);
             WriteConstantU2DINT(Comment, IntValue, matStructured, MF6_Arrayname);
           end;
@@ -3505,11 +3622,14 @@ begin
         end;
         for ColIndex := 0 to DataArray.ColumnCount - 1 do
         begin
-          if DataArray.Annotation[LayerIndex, RowIndex, ColIndex]
-            <> NoValueAssignedAnnotation then
+          if DataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
           begin
-            UnassignedAnnotation := False;
-            Break;
+            if DataArray.Annotation[LayerIndex, RowIndex, ColIndex]
+              <> NoValueAssignedAnnotation then
+            begin
+              UnassignedAnnotation := False;
+              Break;
+            end;
           end;
         end;
       end;
@@ -9463,42 +9583,52 @@ var
   NewGroup: boolean;
   NewImsLine: Boolean;
 begin
-  FModelDataList.Sort(TComparer<TModelData>.Construct(
-    function (const Left, Right: TModelData): Integer
-    begin
-      result := AnsiCompareText(Left.SolutionGroup, Right.SolutionGroup);
-      if result = 0 then
-      begin
-        result := AnsiCompareText(Left.ImsFile, Right.ImsFile);
-      end;
-    end));
+  // If ModelMuse ever supports more than one solution group,
+  // the following commented out text might be a starting point..
+//  FModelDataList.Sort(TComparer<TModelData>.Construct(
+//    function (const Left, Right: TModelData): Integer
+//    begin
+//      result := AnsiCompareText(Left.SolutionGroup, Right.SolutionGroup);
+//      if result = 0 then
+//      begin
+//        result := AnsiCompareText(Left.ImsFile, Right.ImsFile);
+//      end;
+//    end));
+
+  WriteString('BEGIN SOLUTIONGROUP');
+//  WriteInteger(isg);
+  WriteInteger(1);
+  NewLine;
+
 
   isg := 0;
   for ModelIndex := 0 to FModelDataList.Count - 1 do
   begin
     ModelData := FModelDataList[ModelIndex];
-    NewGroup := False;
-    NewImsLine := False;
-    if (ModelIndex = 0) then
-    begin
-      NewGroup := True;
-    end
-    else if AnsiCompareText(ModelData.SolutionGroup,
-      PriorModelData.SolutionGroup) <> 0 then
-    begin
-      NewLine;
-      WriteString('END SOLUTIONGROUP');
-      NewLine;
-      NewLine;
-      NewGroup := True;
-    end;
-    if NewGroup then
-    begin
-      Inc(isg);
-      WriteString('BEGIN SOLUTIONGROUP');
-      WriteInteger(isg);
-      NewLine;
+//    NewGroup := False;
+//    NewImsLine := False;
+//    if (ModelIndex = 0) then
+//    begin
+//      NewGroup := True;
+//    end
+//    else if AnsiCompareText(ModelData.SolutionGroup,
+//      PriorModelData.SolutionGroup) <> 0 then
+//    begin
+//      NewLine;
+//      WriteString('END SOLUTIONGROUP');
+//      NewLine;
+//      NewLine;
+//      NewGroup := True;
+//    end;
+//    if NewGroup then
+//    begin
+//      Inc(isg);
+//      WriteString('BEGIN SOLUTIONGROUP');
+//      WriteInteger(isg);
+//      NewLine;
 
+    if ModelIndex = 0 then
+    begin
       WriteString('  MXITER');
       if FModelDataList.Count > 1 then
       begin
@@ -9508,28 +9638,41 @@ begin
       begin
         WriteInteger(1);
       end;
-      NewImsLine := True;
-    end;
-
-    if AnsiCompareText(ModelData.ImsFile,
-      PriorModelData.ImsFile) <> 0 then
-    begin
-      NewImsLine := True;
-    end;
-
-    if NewImsLine then
-    begin
       NewLine;
+    end;
+//      WriteString('  MXITER');
+//      if FModelDataList.Count > 1 then
+//      begin
+//        WriteInteger(ModelData.MaxIterations);
+//      end
+//      else
+//      begin
+//        WriteInteger(1);
+//      end;
+//      NewImsLine := True;
+//    end;
+
+//    if AnsiCompareText(ModelData.ImsFile,
+//      PriorModelData.ImsFile) <> 0 then
+//    begin
+//      NewImsLine := True;
+//    end;
+
+//    if NewImsLine then
+//    begin
+//      NewLine;
       WriteString('  IMS6 ');
       WriteString('''' +  ExtractFileName(ModelData.ImsFile) + ''' ');
-    end;
+//      NewLine;
+//    end;
     WriteString('''' +  ModelData.ModelName + ''' ');
+    NewLine;
 
-    PriorModelData := ModelData;
+//    PriorModelData := ModelData;
   end;
 
 
-  NewLine;
+//  NewLine;
   WriteString('END SOLUTIONGROUP');
   NewLine;
   NewLine;

@@ -189,6 +189,11 @@ begin
     end;
 
     SmsPackage := Package as TSmsPackageSelection;
+    cbContinue.Enabled := rcSelectionController.Enabled and
+      (SmsPackage.SpeciesIndex < 0);
+    seSolutionGroupMaxIter.Enabled := cbContinue.Enabled;
+    cbCheckInput.Enabled := cbContinue.Enabled;
+    comboMemoryPrint.Enabled := cbContinue.Enabled;
 
     seSolutionGroupMaxIter.AsInteger := SmsPackage.SolutionGroupMaxIteration;
     comboPrintOption.ItemIndex := Ord(SmsPackage.Print);

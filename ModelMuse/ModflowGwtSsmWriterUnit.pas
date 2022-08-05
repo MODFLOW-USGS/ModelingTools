@@ -134,12 +134,12 @@ begin
     NewLine;
   end;
 
-  if Model.ModflowPackages.EtsPackage.IsSelected then
-  begin
-    WriteString('  EVT-1 AUXMIXED ');
-    WriteString(SpeciesName);
-    NewLine;
-  end;
+//  if Model.ModflowPackages.EtsPackage.IsSelected then
+//  begin
+//    WriteString('  EVT-1 AUXMIXED ');
+//    WriteString(SpeciesName);
+//    NewLine;
+//  end;
 
   WriteString('END SOURCES');
   NewLine;
