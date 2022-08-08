@@ -10684,8 +10684,7 @@ const
 //                observations in the "Import Points" dialog box.
 //               Enhancement: ModelMuse can now import the flow data from models
 //                that have multiple packages of the same type.
-
-//               Bug fix: Fixed bug that caused unneeded pilot points to be
+//    '5.0.0.21' Bug fix: Fixed bug that caused unneeded pilot points to be
 //                defined in PEST.
 //               Enhancement: ModelMuse can now import simulated values
 //                directly from the Observation Extractor utility program
@@ -10696,7 +10695,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.20';
+  IIModelVersion = '5.0.0.21';
 
 function IModelVersion: string;
 begin

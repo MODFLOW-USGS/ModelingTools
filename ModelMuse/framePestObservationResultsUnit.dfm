@@ -74,8 +74,9 @@ object framePestObservationResults: TframePestObservationResults
         Height = 28
         Filter = 
           'PEST Residuals file (*.res)|*.res|PEST Intermim Residuals file (' +
-          '*.res)|*.rei; *.rei.*|Modflow 6 Results file (*.Mf6Values)|*.Mf6' +
-          'Values'
+          '*.rei,*.rei.*)|*.rei; *.rei.*|Results files (*.Mf6Values, *.Mf20' +
+          '05Values, *.SutraValues)|*.Mf6Values;*.Mf2005Values;*.SutraValue' +
+          's'
         TabOrder = 0
         Text = ''
         OnChange = flnmedHeadObsResultsChange

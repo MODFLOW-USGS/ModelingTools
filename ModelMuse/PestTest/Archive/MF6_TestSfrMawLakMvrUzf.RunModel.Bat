@@ -51,6 +51,7 @@ if exist "MF6_TestSfrMawLakMvrUzf.maw_head_ob.csv" del "MF6_TestSfrMawLakMvrUzf.
 if exist "MF6_TestSfrMawLakMvrUzf.maw_pump_rate_ob.csv" del "MF6_TestSfrMawLakMvrUzf.maw_pump_rate_ob.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.maw_pump_rate_to_mvr_ob.csv" del "MF6_TestSfrMawLakMvrUzf.maw_pump_rate_to_mvr_ob.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.mvr_budget" del "MF6_TestSfrMawLakMvrUzf.mvr_budget"
+if exist "MF6_TestSfrMawLakMvrUzf.mvr_budget.csv" del "MF6_TestSfrMawLakMvrUzf.mvr_budget.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.net-infiltration_ob.csv" del "MF6_TestSfrMawLakMvrUzf.net-infiltration_ob.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.ob_evt_out_evt.csv" del "MF6_TestSfrMawLakMvrUzf.ob_evt_out_evt.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.ob_gw_out_drawdown.csv" del "MF6_TestSfrMawLakMvrUzf.ob_gw_out_drawdown.csv"

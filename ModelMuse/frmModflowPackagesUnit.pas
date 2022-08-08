@@ -770,6 +770,7 @@ var
   MemoWidth: Integer;
 begin
   result := TframePkgSms.Create(nil);
+  result.Selected := True;
   FframePkgSmsObjectList.Add(result);
   NewPage := TJvStandardPage.Create(self);
   NewPage.Name := '';
@@ -797,6 +798,7 @@ begin
   NewPage := TJvStandardPage.Create(self);
   NewPage.Name := '';
   NewPage.PageList := jvplPackages;
+  NewPage.HelpKeyword := 'IST-Immobile-Storage-and-Trasf';
   result.Parent := NewPage;
   MemoWidth := result.MemoComments.Width;
   result.Align := alClient;
@@ -2751,10 +2753,12 @@ var
   MemoWidth: Integer;
 begin
   result := TframePackageMST.Create(nil);
+  result.Selected := True;
   FframePackageMSTObjectList.Add(result);
   NewPage := TJvStandardPage.Create(self);
   NewPage.Name := '';
   NewPage.PageList := jvplPackages;
+  NewPage.HelpKeyword := 'MST-Mobile-Storage-and-Transfe';
   result.Parent := NewPage;
   MemoWidth := result.MemoComments.Width;
   result.Align := alClient;

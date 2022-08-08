@@ -68,6 +68,8 @@ type
     function LinearRowToToSmsOrd(Row: Integer): TSmsOverride;
 
     { Private declarations }
+  protected
+    procedure SetSelected(const Value: boolean); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -1057,6 +1059,12 @@ begin
   SmsPackage.ScalingMethod := TSmsScalingMethod(FScalingMethodPickList.IndexOf(rdgLinearOptions.Cells[Ord(scValue), SmsOrdToRow(soScalingMethod)]));
 //  SmsPackage.XmdLinearAcceleration := TSmsXmdLinearAcceleration(FXmdLinearAccPickList.IndexOf(rdgOptions.Cells[Ord(scValue), Ord(soXmdLinearAcceleration)+1]));
 //  SmsPackage.RedBlackOrder := rdgOptions.Checked[Ord(scValue), Ord(soRedBlackOrder)+1];
+
+end;
+
+procedure TframePkgSms.SetSelected(const Value: boolean);
+begin
+  inherited SetSelected(True);
 
 end;
 

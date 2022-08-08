@@ -4099,6 +4099,8 @@ begin
   CreateSWR_LatInflow_Node(AScreenObject);
   CreateSWR_Stage_Node(AScreenObject);
   CreateSWR_DirectRunoff_Node(AScreenObject);
+  CreateGwtCncNode;
+  CreateGwtSrcNode;
   CreateModpathNode;
   CreateMt3d_LktNode;
   CreateMt3d_SftNode;
@@ -4111,8 +4113,6 @@ begin
   CreateMt3d_UztUnsatNode;
   CreateSubPestObsNode(AScreenObject);
   CreateSwtPestObsNode(AScreenObject);
-  CreateGwtCncNode;
-  CreateGwtSrcNode;
 
   CreateSutraFeatureNodes(AScreenObject);
 
@@ -27073,9 +27073,6 @@ end;
 
 procedure TfrmScreenObjectProperties.frameChdParamrdgModflowBoundarySelectCell(
   Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
-var
-  DataColumnCount: Integer;
-  DC: Integer;
 begin
   inherited;
   frameChdParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);

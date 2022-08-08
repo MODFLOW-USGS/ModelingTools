@@ -1001,7 +1001,7 @@ begin
       Exit;
     end;
     Extension := ExtractFileExt(AFileName);
-    if IsDigit(Extension[2]) then
+    if (Extension[2].IsDigit) then
     begin
       Extension :=ExtractFileExt(ChangeFileExt(AFileName, ''));
     end;

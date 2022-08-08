@@ -180,6 +180,8 @@ type
 
     FvstModflowUzfNode: PVirtualNode;
     FvstModflowUzfMf6Node: PVirtualNode;
+    FvstModflowGwtCncNode: PVirtualNode;
+    FvstModflowGwtSrcNode: PVirtualNode;
 
     FvstModflowRipNode: PVirtualNode;
 
@@ -291,6 +293,8 @@ type
     FChildModelList: TList;
     FUzfList: TList;
     FUzfMf6List: TList;
+    FGwtCncList: TList;
+    FGwtSrcList: TList;
     // @name holds the lists of @link(TScreenObject)s that set PHAST Leaky
     // boundary conditions.
     FLeakyList: TList;
@@ -755,6 +759,16 @@ begin
     else if Node = FvstModflowUzfMf6Node then
     begin
       Data.Caption := Packages.UzfMf6Package.PackageIdentifier;
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstModflowGwtCncNode then
+    begin
+      Data.Caption := Packages.GwtCncPackage.PackageIdentifier;
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstModflowGwtSrcNode then
+    begin
+      Data.Caption := Packages.GwtSrcPackage.PackageIdentifier;
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstModflowHobNode then
@@ -1603,6 +1617,18 @@ begin
       InitializeData(FvstModflowUzfMf6Node);
     end;
 
+    if (AScreenObject.GwtCncBoundary <> nil)
+      and AScreenObject.GwtCncBoundary.Used then
+    begin
+      InitializeData(FvstModflowGwtCncNode);
+    end;
+
+    if (AScreenObject.GwtSrcBoundary <> nil)
+      and AScreenObject.GwtSrcBoundary.Used then
+    begin
+      InitializeData(FvstModflowGwtSrcNode);
+    end;
+
     if (AScreenObject.ModflowHeadObservations <> nil)
       and AScreenObject.ModflowHeadObservations.Used then
     begin
@@ -1911,6 +1937,8 @@ begin
     vstCheckDeleteNode(FvstModflowGagNode);
     vstCheckDeleteNode(FvstModflowUzfNode);
     vstCheckDeleteNode(FvstModflowUzfMf6Node);
+    vstCheckDeleteNode(FvstModflowGwtCncNode);
+    vstCheckDeleteNode(FvstModflowGwtSrcNode);
     vstCheckDeleteNode(FvstModflowHobNode);
     vstCheckDeleteNode(FvstModflowHfbNode);
     vstCheckDeleteNode(FvstModflowMvrNode);
@@ -2363,6 +2391,8 @@ begin
     InitializeMF_BoundaryNode(FvstModflowUzfNode, PriorNode, FUzfList);
     InitializeMF_BoundaryNode(FvstModflowUzfMf6Node, PriorNode, FUzfMf6List);
 
+    InitializeMF_BoundaryNode(FvstModflowGwtCncNode, PriorNode, FGwtCncList);
+    InitializeMF_BoundaryNode(FvstModflowGwtSrcNode, PriorNode, FGwtSrcList);
 
     InitializeMF_BoundaryNode(FvstModflowWellNode, PriorNode, FMfWellList);
     InitializeMF_BoundaryNode(FvstModflowHobNode, PriorNode, FHobList);
@@ -2551,6 +2581,8 @@ begin
   FSfrMf6List.Free;
   FStrList.Free;
   FUzfMf6List.Free;
+  FGwtCncList.Free;
+  FGwtSrcList.Free;
   FUzfList.Free;
   FHobList.Free;
   FSwiObsList.Free;
@@ -2660,6 +2692,10 @@ begin
   FSfrGagList := TList.Create;
   FUzfList := TList.Create;
   FUzfMf6List := TList.Create;
+
+  FGwtCncList := TList.Create;
+  FGwtSrcList := TList.Create;
+
   FCSubList := TList.Create;
   FModflowSubObsList := TList.Create;
   FModflowSwtObsList := TList.Create;
@@ -2782,6 +2818,8 @@ begin
   FvstModflowStrNode := nil;
   FvstModflowUzfNode := nil;
   FvstModflowUzfMf6Node := nil;
+  FvstModflowGwtCncNode := nil;
+  FvstModflowGwtSrcNode := nil;
   FvstModflowHobNode := nil;
   FvstModflowHfbNode := nil;
   FvstModflowMvrNode := nil;
@@ -3024,6 +3062,10 @@ begin
   FSfrGagList.Sort(ScreenObjectCompare);
   FUzfList.Sort(ScreenObjectCompare);
   FUzfMf6List.Sort(ScreenObjectCompare);
+
+  FGwtCncList.Sort(ScreenObjectCompare);
+  FGwtSrcList.Sort(ScreenObjectCompare);
+
   FHobList.Sort(ScreenObjectCompare);
   FSwiObsList.Sort(ScreenObjectCompare);
   FHfbList.Sort(ScreenObjectCompare);

@@ -15,6 +15,8 @@ type
     rgDecay: TRadioGroup;
   private
     { Private declarations }
+  protected
+    procedure SetSelected(const Value: boolean); override;
   public
     procedure GetData(Package: TModflowPackageSelection); override;
     procedure SetData(Package: TModflowPackageSelection); override;
@@ -65,6 +67,12 @@ begin
   MstPackage.FirstOrderDecay := rgDecay.ItemIndex = 2;
   MstPackage.ZeroOrderDecay := rgDecay.ItemIndex = 1;
   MstPackage.Sorption := TGwtSorptionChoice(rgSorption.ItemIndex);
+end;
+
+procedure TframePackageMST.SetSelected(const Value: boolean);
+begin
+  inherited SetSelected(True);
+
 end;
 
 end.

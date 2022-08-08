@@ -23022,6 +23022,7 @@ constructor TGwtMstPackage.Create(Model: TBaseModel);
 begin
   inherited;
   InitializeVariables;
+  IsSelected := True;
 end;
 
 procedure TGwtMstPackage.InitializeVariables;

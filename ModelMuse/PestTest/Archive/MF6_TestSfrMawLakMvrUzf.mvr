@@ -1,7 +1,8 @@
-# MVR: Water Mover package file created on 7/7/2021 by ModelMuse version 4.3.0.56.
+# MVR: Water Mover package file created on 8/8/2022 by ModelMuse version 5.0.0.20.
 BEGIN OPTIONS
     PRINT_INPUT
     BUDGET FILEOUT MF6_TestSfrMawLakMvrUzf.mvr_budget
+    BUDGETCSV FILEOUT MF6_TestSfrMawLakMvrUzf.mvr_budget.csv
 END OPTIONS
 
 BEGIN DIMENSIONS

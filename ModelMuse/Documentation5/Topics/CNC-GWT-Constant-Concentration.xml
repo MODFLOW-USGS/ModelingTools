@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-08-04T08:11:53.775-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2022-08-08T14:52:33.247-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">CNC: GWT Constant Concentration Package Pane</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CNC: GWT Constant Concentration Package Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Enter topic text here.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The</text><text styleclass="Strong" translate="true"> CNC: GWT Constant Concentration Package</text><text styleclass="Normal" translate="true"> pane is used to activate the Constant Concentraton package. It is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Groundwater-Transport" styleclass="Strong" translate="true">Groundwater Transport|</link><text styleclass="Normal" translate="true"> | </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GWT-Groundwater-Transport" styleclass="Strong" translate="true">GWT: Groundwater Transport</link><text styleclass="Normal" translate="true">.</text></para>
   </body>
 </topic>

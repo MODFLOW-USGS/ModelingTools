@@ -240,7 +240,7 @@ begin
 
   if FIstProp.SpecifyPrintFormat then
   begin
-    WriteString('  [CIM PRINT_FORMAT COLUMNS');
+    WriteString('  CIM PRINT_FORMAT COLUMNS');
     WriteInteger(FIstProp.Columns);
     WriteString(' WIDTH');
     WriteInteger(FIstProp.Width);

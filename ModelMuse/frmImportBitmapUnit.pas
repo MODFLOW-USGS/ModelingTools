@@ -1029,6 +1029,7 @@ procedure TfrmImportBitmap.DrawPointsOnBitMap32(Sender: TObject;
 var
   Row: integer;
   X, Y: integer;
+  ID: string;
 begin
   Buffer.BeginUpdate;
   try
@@ -1042,6 +1043,11 @@ begin
           Y := StrToInt(dgPoints.Cells[Ord(pcPixelY), Row]);
           DrawBigRectangle32(Buffer, clBlack32, clBlack32, 0,
             X - 3, Y - 3, X + 3, Y + 3);
+          ID := dgPoints.Cells[Ord(pcID), Row];
+          if ID <> '' then
+          begin
+            DrawBigText(Buffer, Point(X+6,Y), ID, Font);
+          end;
         except on EConvertError do
           begin
             Continue;
