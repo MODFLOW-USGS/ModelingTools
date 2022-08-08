@@ -1993,9 +1993,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited flnmedHeadObsResults: TJvFilenameEdit
               Height = 26
-              Filter = 
-                'PEST Residuals file (*.res)|*.res|PEST Intermim Residuals file (' +
-                '*.res)|*.rei; *.rei.*'
+              OnChange = framePestObsflnmedHeadObsResultsChange
               ExplicitHeight = 26
             end
             inherited grpbxFilter: TGroupBox
@@ -2105,19 +2103,15 @@ inherited frmDisplayData: TfrmDisplayData
           end
           inherited tabGraph: TTabSheet
             ExplicitTop = 29
-            ExplicitWidth = 570
-            ExplicitHeight = 432
+            ExplicitHeight = 421
             inherited pbObservations: TPaintBox
-              Width = 570
-              Height = 334
+              Height = 323
               ExplicitWidth = 570
               ExplicitHeight = 351
             end
             inherited pnlGraphControls: TPanel
-              Top = 334
-              Width = 570
-              ExplicitTop = 334
-              ExplicitWidth = 570
+              Top = 323
+              ExplicitTop = 323
               inherited lblGraphInstructions: TLabel
                 Width = 201
                 Height = 18

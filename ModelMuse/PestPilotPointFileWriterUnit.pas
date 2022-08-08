@@ -277,7 +277,8 @@ begin
             begin
               APilotPoint := Model.PilotPoints[PilotPointIndex];
               ACell := Model.PointToCell(DataArray.EvaluatedAt, APilotPoint);
-              if (ACell.Col >= 0) and (ACell.Row >= 0) then
+              if (ACell.Col >= 0) and (ACell.Row >= 0)
+                and IsActive(LayerIndex, ACell.Row, ACell.Col) then
               begin
                 ParamName := UpperCase(ParamNameDataArray.StringData[
                   LayerIndex, ACell.Row, ACell.Col]);

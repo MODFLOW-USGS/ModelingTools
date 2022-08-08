@@ -95,7 +95,8 @@ end;
 procedure TfrmPixelPoint.SetData;
 begin
   frmImportBitmap.AddPoint(FPixelX, FPixelY,
-    StrToFloat(rdgPoints.Cells[0,1]), StrToFloat(rdgPoints.Cells[1,1]));
+    StrToFloat(rdgPoints.Cells[0,1]), StrToFloat(rdgPoints.Cells[1,1]),
+    rdgPoints.Cells[2,1]);
 end;
 
 end.

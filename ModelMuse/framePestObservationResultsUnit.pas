@@ -552,6 +552,17 @@ var
       result := True;
 //    end;
   end;
+  function OkItem(ObsItem: TPestObsResult): Boolean;
+  begin
+    result := True;
+    case rgGraphType.ItemIndex of
+      0: result := True;
+      1: result := ObsItem.ResidualText = '';
+      2: result := ObsItem.WeightedResidualText = '';
+      else
+        Assert(False);
+    end;
+  end;
   function GetPlotValue(ObsItem: TPestObsResult): double;
   begin
     result := 0;
@@ -578,6 +589,10 @@ begin
       for index := 0 to FObservations.Count - 1 do
       begin
         ObsItem := FObservations[index];
+        if not OkItem(ObsItem) then
+        begin
+          Continue;
+        end;
         if ObsItem.ScreenObject = nil then
         begin
           if not clbWhatToPlot.Checked[Ord(wtpPriorInformation)] then
@@ -592,6 +607,7 @@ begin
             Continue;
           end;
         end;
+
 
         if ObsItem.Measured < ObservedMin then
         begin
@@ -815,7 +831,14 @@ begin
           rdgPestObs.RealValue[Ord(pocTime), ItemIndex+1] := AnItem.Time;
           rdgPestObs.RealValue[Ord(pocMeasured), ItemIndex+1] := AnItem.Measured;
           rdgPestObs.RealValue[Ord(pocModeled), ItemIndex+1] := AnItem.Modeled;
-          rdgPestObs.RealValue[Ord(pocResidual), ItemIndex+1] := AnItem.Residual;
+          if AnItem.ResidualText = '' then
+          begin
+            rdgPestObs.RealValue[Ord(pocResidual), ItemIndex+1] := AnItem.Residual;
+          end
+          else
+          begin
+            rdgPestObs.Cells[Ord(pocResidual), ItemIndex+1] := AnItem.ResidualText;
+          end;
 
           if AnItem.WeightText = '' then
           begin

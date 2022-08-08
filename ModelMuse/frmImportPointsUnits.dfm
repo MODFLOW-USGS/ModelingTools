@@ -407,7 +407,9 @@ inherited frmImportPoints: TfrmImportPoints
     end
   end
   object OpenDialogImportFile: TOpenDialog
-    Filter = 'Text files (*.txt)|*.txt|All files (*.*)|*.*'
+    Filter = 
+      'Text files (*.txt)|*.txt|Comma-Separated Values (*.csv)|*.csv|Al' +
+      'l files (*.*)|*.*'
     FilterIndex = 0
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Title = 'Open tab-delimited file containing point data'

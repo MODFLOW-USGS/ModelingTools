@@ -38,6 +38,7 @@ type
     FWeightedModeledText: string;
     FWeightText: string;
     FWeightedMeasuredText: string;
+    FResidualText: string;
     procedure SetGroupName(const Value: string);
     procedure SetMeasured(const Value: double);
     procedure SetMeasurementStdDeviation(const Value: double);
@@ -82,6 +83,7 @@ type
     procedure SetWeightedModeledText(const Value: string);
     procedure SetWeightedResidualText(const Value: string);
     procedure SetWeightText(const Value: string);
+    procedure SetResidualText(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -114,6 +116,7 @@ type
     property OriginalOrder: Integer read FOriginalOrder write SetOriginalOrder;
     property ObjectName: string read GetObjectName write SetObjectName;
     property StoredTime: TRealStorage read FStoredTime write SetStoredTime;
+    property ResidualText: string read FResidualText write SetResidualText;
     property WeightText: string read FWeightText write SetWeightText;
     property WeightedMeasuredText: string read FWeightedMeasuredText write SetWeightedMeasuredText;
     property WeightedModeledText: string read FWeightedModeledText write SetWeightedModeledText;
@@ -212,11 +215,12 @@ implementation
 
 uses RbwParser, System.IOUtils, frmErrorsAndWarningsUnit, ModelMuseUtilities,
   PhastModelUnit, frmGoPhastUnit, BigCanvasMethods, System.Math,
-  System.StrUtils, ObservationComparisonsUnit;
+  System.StrUtils, ObservationComparisonsUnit, System.Character;
 
 resourcestring
   StrTheFileFromWhich = 'The file from which you are attempting to read ' +
   'residuals, %s, does not exist.';
+  StrNotRecorded = 'Not recorded';
 
 { TPestObsResult }
 
@@ -550,6 +554,11 @@ end;
 procedure TPestObsResult.SetResidual(const Value: double);
 begin
   StoredResidual.Value := Value;
+end;
+
+procedure TPestObsResult.SetResidualText(const Value: string);
+begin
+  FResidualText := Value;
 end;
 
 procedure TPestObsResult.SetStoredMeasured(const Value: TRealStorage);
@@ -977,6 +986,9 @@ var
   CompItem: TGlobalObsComparisonItem;
   OtherObs: IObservationItem;
   NameFound: Boolean;
+  IsResidFile: Boolean;
+  Extension: string;
+  Observed: IObservationItem;
 begin
   GetExistingObservations;
   result := False;
@@ -988,6 +1000,13 @@ begin
       MessageDlg(Format(StrTheFileFromWhich, [AFileName]), mtError, [mbOK], 0);
       Exit;
     end;
+    Extension := ExtractFileExt(AFileName);
+    if IsDigit(Extension[2]) then
+    begin
+      Extension :=ExtractFileExt(ChangeFileExt(AFileName, ''));
+    end;
+    IsResidFile := SameText('.res', Extension)
+      or SameText('.rei', Extension);
     ResidualsFile := TStringList.Create;
     Splitter := TStringList.Create;
     try
@@ -1002,7 +1021,7 @@ begin
         Splitter.DelimitedText := ResidualsFile[LineIndex];
         if Splitter.Count > 0 then
         begin
-          if not NameFound then
+          if IsResidFile and not NameFound then
           begin
             if (Splitter[0] = 'Name') then
             begin
@@ -1010,102 +1029,172 @@ begin
             end;
             Continue;
           end;
-          Assert(Splitter.Count >= 6);
-          if Splitter.Count > 6 then
+          if IsResidFile then
           begin
-            Assert(Splitter.Count >= 11);
-          end;
-          Item := Add;
-          Item.Name := Splitter[0];
-          Item.GroupName := Splitter[1];
-          Item.Measured := FortranStrToFloat(Splitter[2]);
-          Item.Modeled := FortranStrToFloat(Splitter[3]);
-          Item.Residual := FortranStrToFloat(Splitter[4]);
-
-          if TryFortranStrToFloat(Splitter[5], AValue) then
-          begin
-            Item.Weight := AValue;
-            Item.WeightText := '';
+            Assert(Splitter.Count >= 6);
           end
           else
           begin
-            Item.Weight := 0;
-            Item.WeightText := Splitter[5];
+            Assert(Splitter.Count >= 2);
           end;
 
-          if  (Splitter.Count > 6) then
+//          if Splitter.Count > 6 then
+//          begin
+//            Assert(Splitter.Count >= 9);
+//          end;
+          Item := Add;
+          Item.Name := Splitter[0];
+          if IsResidFile then
           begin
-            if TryFortranStrToFloat(Splitter[6], AValue) then
+            Item.GroupName := Splitter[1];
+            Item.Measured := FortranStrToFloat(Splitter[2]);
+            Item.Modeled := FortranStrToFloat(Splitter[3]);
+            Item.Residual := FortranStrToFloat(Splitter[4]);
+
+            if TryFortranStrToFloat(Splitter[5], AValue) then
             begin
-              Item.WeightedMeasured := AValue;
-              Item.WeightedMeasuredText := '';
+              Item.Weight := AValue;
+              Item.WeightText := '';
             end
             else
             begin
-              Item.WeightedMeasured := 0;
-              Item.WeightedMeasuredText := Splitter[6];
+              Item.Weight := 0;
+              Item.WeightText := Splitter[5];
             end;
 
-            if TryFortranStrToFloat(Splitter[7], AValue) then
+            if  (Splitter.Count > 6) then
             begin
-              Item.WeightedModeled := AValue;
-              Item.WeightedModeledText := '';
+              if TryFortranStrToFloat(Splitter[6], AValue) then
+              begin
+                Item.WeightedMeasured := AValue;
+                Item.WeightedMeasuredText := '';
+              end
+              else
+              begin
+                Item.WeightedMeasured := 0;
+                Item.WeightedMeasuredText := Splitter[6];
+              end;
             end
             else
             begin
-              Item.WeightedModeled := 0;
-              Item.WeightedModeledText := Splitter[7];
+                Item.WeightedMeasured := 0;
+                Item.WeightedMeasuredText := StrNotRecorded;
             end;
 
-            if TryFortranStrToFloat(Splitter[8], AValue) then
+            if  (Splitter.Count > 7) then
             begin
-              Item.WeightedResidual := AValue;
-              Item.WeightedResidualText := '';
+              if TryFortranStrToFloat(Splitter[7], AValue) then
+              begin
+                Item.WeightedModeled := AValue;
+                Item.WeightedModeledText := '';
+              end
+              else
+              begin
+                Item.WeightedModeled := 0;
+                Item.WeightedModeledText := Splitter[7];
+              end;
             end
             else
             begin
-              Item.WeightedResidual := 0;
-              Item.WeightedResidualText := Splitter[8];
+                Item.WeightedModeled := 0;
+                Item.WeightedModeledText := StrNotRecorded;
             end;
 
-            if TryFortranStrToFloat(Splitter[9], AValue) then
+            if  (Splitter.Count > 8) then
             begin
-              Item.MeasurementStdDeviation := AValue;
-              Item.MeasurementStdDeviationText := '';
+              if TryFortranStrToFloat(Splitter[8], AValue) then
+              begin
+                Item.WeightedResidual := AValue;
+                Item.WeightedResidualText := '';
+              end
+              else
+              begin
+                Item.WeightedResidual := 0;
+                Item.WeightedResidualText := Splitter[8];
+              end;
             end
             else
             begin
-              Item.MeasurementStdDeviation := 0;
-              Item.MeasurementStdDeviationText := Splitter[9];
+                Item.WeightedResidual := 0;
+                Item.WeightedResidualText := StrNotRecorded;
             end;
-            if TryFortranStrToFloat(Splitter[10], AValue) then
+
+            if Splitter.Count > 9 then
             begin
-              Item.NaturalWeight := AValue;
-              Item.NaturalWeightText := '';
+              if TryFortranStrToFloat(Splitter[9], AValue) then
+              begin
+                Item.MeasurementStdDeviation := AValue;
+                Item.MeasurementStdDeviationText := '';
+              end
+              else
+              begin
+                Item.MeasurementStdDeviation := 0;
+                Item.MeasurementStdDeviationText := Splitter[9];
+              end;
+            end
+            else
+            begin
+                Item.MeasurementStdDeviation := 0;
+                Item.MeasurementStdDeviationText := StrNotRecorded;
+            end;
+
+            if Splitter.Count > 10 then
+            begin
+              if TryFortranStrToFloat(Splitter[10], AValue) then
+              begin
+                Item.NaturalWeight := AValue;
+                Item.NaturalWeightText := '';
+              end
+              else
+              begin
+                Item.NaturalWeight := 0;
+                Item.NaturalWeightText := Splitter[10];
+              end;
             end
             else
             begin
               Item.NaturalWeight := 0;
-              Item.NaturalWeightText := Splitter[10];
+              Item.NaturalWeightText := StrNotRecorded;
             end;
           end
           else
           begin
+            Item.GroupName := StrNotRecorded;
+            Item.Modeled := FortranStrToFloat(Splitter[1]);
+            Item.Residual := 0;
+            Item.ResidualText := StrNotRecorded;
+            Item.Weight := 0;
+            Item.WeightText := StrNotRecorded;
             Item.WeightedMeasured := 0;
-            Item.WeightedMeasuredText := 'Not recorded';
+            Item.WeightedMeasuredText := StrNotRecorded;
 
             Item.WeightedModeled := 0;
-            Item.WeightedModeledText := 'Not recorded';
+            Item.WeightedModeledText := StrNotRecorded;
 
             Item.WeightedResidual := 0;
-            Item.WeightedResidualText := 'Not recorded';
+            Item.WeightedResidualText := StrNotRecorded;
+
+            if FUsedObservations.TryGetValue(LowerCase(Item.Name), Observed) then
+            begin
+              Item.Weight := Observed.Weight;
+              Item.WeightText := '';
+
+              Item.Measured := Observed.ObservedValue;
+              Item.Residual := Item.Measured - Item.Modeled;
+              Item.ResidualText := '';
+              Item.WeightedMeasured := Item.Weight * Item.Measured;
+              Item.WeightedMeasuredText := '';
+              Item.WeightedModeled := Item.Weight * Item.Modeled;
+              Item.WeightedModeledText := '';
+              Item.WeightedResidual := Item.Weight * Item.Residual;
+              Item.ResidualText := '';
+            end;
 
             Item.MeasurementStdDeviation := 0;
-            Item.MeasurementStdDeviationText := 'Not recorded';
+            Item.MeasurementStdDeviationText := StrNotRecorded;
 
             Item.NaturalWeight := 0;
-            Item.NaturalWeightText := 'Not recorded';
-
+            Item.NaturalWeightText := StrNotRecorded;
           end;
 
           if FUsedObservations.TryGetValue(LowerCase(Item.Name), Obs) then

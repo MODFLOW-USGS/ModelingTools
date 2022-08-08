@@ -2947,6 +2947,30 @@ begin
                           A3DArray, AuxArray, Precision, HufFormat, True, AModel,
                           ModelName1, ModelName2, PackageName1, PackageName2);
                       end;
+                      if Trim(ModelName1) = 'MODFLOW' then
+                      begin
+                        ModelName1 := '';
+                      end;
+                      if Trim(ModelName2) = 'MODFLOW' then
+                      begin
+                        ModelName2 := '';
+                      end;
+                      if Trim(PackageName1) = 'MODFLOW' then
+                      begin
+                        PackageName1 := '';
+                      end;
+                      if Trim(PackageName2) = 'MODFLOW' then
+                      begin
+                        PackageName2 := '';
+                      end;
+                      if ModelName1 = ModelName2 then
+                      begin
+                        ModelName2 :='';
+                      end;
+                      if PackageName1 = PackageName2 then
+                      begin
+                        PackageName2 :='';
+                      end;
                       ALabel := WriteLabel(Description, AModel, ILAY, KPER,
                         KSTP, NTRANS, SwrTimeStep, TOTIM, Precision,
                         ModelName1, ModelName2, PackageName1, PackageName2);
@@ -2958,7 +2982,8 @@ begin
                       end;
                       if clData.Checked[CheckIndex] and not EndReached then
                       begin
-                        if Lowercase(Description) = 'data-spdis' then
+                        if (Pos('data_spdis', Lowercase(Description)) = 1)
+                          or (Pos('data-spdis', Lowercase(Description)) = 1) then
                         begin
                           AuxLayerNumbersList.Clear;
                           AuxLayerDataSetsList.Clear;
@@ -2976,7 +3001,8 @@ begin
                         begin
                           ILAY := AModel.ModflowLayerToDataSetLayer(LayerIndex+1)+1;
 
-                          if Lowercase(Description) = 'data-spdis' then
+                          if (Pos('data_spdis', Lowercase(Description)) = 1)
+                            or (Pos('data-spdis', Lowercase(Description)) = 1) then
                           begin
                             for AuxIndex := 0 to Length(AuxArray) - 1 do
                             begin
@@ -3110,7 +3136,8 @@ begin
                         end;
                         Inc(Count);
                         ParentArray := nil;
-                        if Lowercase(Description) = 'data-spdis' then
+                        if (Pos('data_spdis', Lowercase(Description)) = 1)
+                          or (Pos('data-spdis', Lowercase(Description)) = 1) then
                         begin
                           if Length(AuxArray) > 0 then
                           begin
@@ -4235,6 +4262,14 @@ begin
                     begin
                       PackageName2 := '';
                     end;
+                    if ModelName1 = ModelName2 then
+                    begin
+                      ModelName2 :='';
+                    end;
+                    if PackageName1 = PackageName2 then
+                    begin
+                      PackageName2 :='';
+                    end;
                   end;
                 else Assert(False);
               end;
@@ -4244,7 +4279,7 @@ begin
                 Continue;
               end;
               RecordItem(string(DESC),
-              ModelName1, ModelName2, PackageName1, PackageName2);
+                ModelName1, ModelName2, PackageName1, PackageName2);
               if (frmGoPhast.ModelSelection = msModflow2015) then
               begin
                 Mf6Description := Trim(string(DESC));

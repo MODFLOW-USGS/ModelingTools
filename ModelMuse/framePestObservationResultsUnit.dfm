@@ -12,8 +12,8 @@ object framePestObservationResults: TframePestObservationResults
     Align = alBottom
     TabOrder = 0
     object lblRMS: TLabel
-      Left = 8
-      Top = 9
+      Left = 10
+      Top = 6
       Width = 276
       Height = 20
       Caption = 'Root Mean Square Weighted Residual = ?'
@@ -72,7 +72,10 @@ object framePestObservationResults: TframePestObservationResults
         Top = 22
         Width = 505
         Height = 28
-        Filter = 'PEST Residuals file (*.res)|*.res'
+        Filter = 
+          'PEST Residuals file (*.res)|*.res|PEST Intermim Residuals file (' +
+          '*.res)|*.rei; *.rei.*|Modflow 6 Results file (*.Mf6Values)|*.Mf6' +
+          'Values'
         TabOrder = 0
         Text = ''
         OnChange = flnmedHeadObsResultsChange

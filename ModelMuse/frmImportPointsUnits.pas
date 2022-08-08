@@ -2197,6 +2197,16 @@ begin
           end;
         end;
         seRows.Value := Lines.Count;
+
+        if OpenDialogImportFile.FilterIndex = 2 then
+        begin
+          for Index := 0 to Lines.Count - 1 do
+          begin
+            Lines[Index] := StringReplace(Lines[Index], ',', #9,
+              [rfReplaceAll, rfIgnoreCase])
+          end;
+        end;
+
         dgData.BeginUpdate;
         try
           StartTime := Now;

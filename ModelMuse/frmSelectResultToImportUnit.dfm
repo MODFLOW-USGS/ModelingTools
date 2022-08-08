@@ -4,8 +4,8 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   Caption = ' Select Model Results to Import'
   ClientHeight = 462
   ClientWidth = 647
-  ExplicitWidth = 663
-  ExplicitHeight = 501
+  ExplicitWidth = 665
+  ExplicitHeight = 509
   TextHeight = 18
   object lblColorGrid: TLabel
     Left = 8

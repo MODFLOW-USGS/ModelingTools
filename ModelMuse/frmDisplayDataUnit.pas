@@ -74,6 +74,7 @@ type
     procedure frameModpathDisplaybtnColorSchemesClick(Sender: TObject);
     procedure frameModpathTimeSeriesDisplaybtnColorSchemesClick(
       Sender: TObject);
+    procedure framePestObsflnmedHeadObsResultsChange(Sender: TObject);
   private
     FShouldUpdate: Boolean;
     procedure SetData;
@@ -260,6 +261,14 @@ procedure TfrmDisplayData.frameModpathTimeSeriesDisplaybtnColorSchemesClick(
 begin
   inherited;
   frameModpathTimeSeriesDisplay.btnColorSchemesClick(Sender);
+end;
+
+procedure TfrmDisplayData.framePestObsflnmedHeadObsResultsChange(
+  Sender: TObject);
+begin
+  inherited;
+  framePestObs.flnmedHeadObsResultsChange(Sender);
+
 end;
 
 procedure TfrmDisplayData.frameSwrReachConnectionsbtnReachColorClick(

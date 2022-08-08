@@ -10685,6 +10685,12 @@ const
 //               Enhancement: ModelMuse can now import the flow data from models
 //                that have multiple packages of the same type.
 
+//               Bug fix: Fixed bug that caused unneeded pilot points to be
+//                defined in PEST.
+//               Enhancement: ModelMuse can now import simulated values
+//                directly from the Observation Extractor utility program
+//                output files.
+
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
