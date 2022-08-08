@@ -453,8 +453,10 @@ end;
 function TArgusDataEntry.RealValueDefault(DefaultValue: double): double;
 begin
   Assert(DataType = dtReal);
-  // If this is changed, change GetRealValue too.
-  if (Text <> '') and (Text <> '+') and (Text <> '-') then
+  // If this is changed, change GetRealValue and TextChanged too.
+  if (Text <> '') and (Text <> '+') and (Text <> '-') 
+    and (Text[Length(Text)] <> 'E') and (Text[Length(Text)] <> 'e') 
+    and (Text[Length(Text)] <> '+') and (Text[Length(Text)] <> '-') then
   begin
     result := StrToFloat(Text)
   end
@@ -668,6 +670,11 @@ begin
 
       if Not ConversionOK and (Length(Result) > 0) then
       begin
+        ConversionOK := TextToFloat(PChar(Result + '0'), AFloat, fvExtended);
+      end;
+
+      if Not ConversionOK and (Length(Result) > 0) then
+      begin
         Result := Copy(Result,1,Length(Result)-1);
       end;
 
@@ -849,7 +856,10 @@ begin
     dtReal :
       begin
         FOutput := ChangeTextToReal;
-        if (text <> FOutput) and (text <> '-') and (Text <> '') then
+        // If this is changed, change RealValueDefault and GetRealValue too.
+        if (text <> FOutput) and (text <> '-') and (Text <> '')
+          and (text[Length(text)] <> 'E')and (text[Length(text)] <> 'e') 
+          and (Text[Length(Text)] <> '+') and (Text[Length(Text)] <> '-') then
         begin
           Text := FOutput;
           Beep;
@@ -1080,8 +1090,10 @@ end;
 function TArgusDataEntry.GetRealValue: Double;
 begin
   Assert(DataType = dtReal);
-  // If this is changed, change RealValueDefault too.
-  if (Text <> '') and (Text <> '+') and (Text <> '-') then
+  // If this is changed, change RealValueDefault and TextChanged too.
+  if (Text <> '') and (Text <> '+') and (Text <> '-')
+    and (Text[Length(Text)] <> 'E') and (Text[Length(Text)] <> 'e') 
+    and (Text[Length(Text)] <> '+') and (Text[Length(Text)] <> '-') then
   begin
     result := StrToFloat(Text)
   end
