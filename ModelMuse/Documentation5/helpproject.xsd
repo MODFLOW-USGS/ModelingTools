@@ -267,6 +267,8 @@
 																					<xs:enumeration value="RTF"/>
 																					<xs:enumeration value="EXE"/>
 																					<xs:enumeration value="EPUB"/>
+																					<xs:enumeration value="MOBI"/>
+																					<xs:enumeration value="MRKD"/>
 																				</xs:restriction>
 																			</xs:simpleType>
 																		</xs:attribute>
