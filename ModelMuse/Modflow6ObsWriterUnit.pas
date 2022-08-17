@@ -42,7 +42,7 @@ type
     property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
 //    procedure WritePestTemplateLine(AFileName: string);
   public
-    // @name creates and instance of @classname.
+    // @name creates an instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
   end;
 
