@@ -4618,7 +4618,6 @@ begin
     Initialize;
   end;
   result := FAnnotation[Layer, Row, Col];
-//  UpdateEvalTime;
 end;
 
 procedure TDataArray.SetAngleType(const Value: TAngleType);
@@ -6434,7 +6433,6 @@ function TCustomSparseDataSet.GetAnnotation(const Layer, Row,
   Col: integer): string;
 begin
   result := FAnnotation[Layer, Row, Col];
-//  UpdateEvalTime;
 end;
 
 procedure TCustomSparseDataSet.Initialize;

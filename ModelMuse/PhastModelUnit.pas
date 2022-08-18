@@ -10689,13 +10689,16 @@ const
 //               Enhancement: ModelMuse can now import simulated values
 //                directly from the Observation Extractor utility program
 //                output files.
+//    '5.0.0.22' Bug Fix: not in released version
+//                Fixed range error when activating MT3D and fixed used
+//                designation for some GWT data sets.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.21';
+  IIModelVersion = '5.0.0.22';
 
 function IModelVersion: string;
 begin
@@ -18764,9 +18767,9 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      for DomainIndex := 0 to AChemItem.ImmobileInitialConcentrations.Count - 1 do
       begin
-        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        result := AChemItem.ImmobileInitialConcentrations[DomainIndex] = DataArray.Name;
         if result then
         begin
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
@@ -18805,9 +18808,9 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      for DomainIndex := 0 to AChemItem.ImmobileDecaySorbed.Count - 1 do
       begin
-        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        result := AChemItem.ImmobileDecaySorbed[DomainIndex] = DataArray.Name;
         if result then
         begin
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
@@ -18848,9 +18851,9 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      for DomainIndex := 0 to AChemItem.ImmobileDecay.Count - 1 do
       begin
-        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        result := AChemItem.ImmobileDecay[DomainIndex] = DataArray.Name;
         if result then
         begin
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
@@ -18889,9 +18892,9 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      for DomainIndex := 0 to AChemItem.ImmobileDistCoeficients.Count - 1 do
       begin
-        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        result := AChemItem.ImmobileDistCoeficients[DomainIndex] = DataArray.Name;
         if result then
         begin
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
@@ -18929,9 +18932,9 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      for DomainIndex := 0 to AChemItem.ImmobilePorosities.Count - 1 do
       begin
-        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        result := AChemItem.ImmobilePorosities[DomainIndex] = DataArray.Name;
         if result then
         begin
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
@@ -18969,9 +18972,9 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      for DomainIndex := 0 to AChemItem.ImmobileBulkDensities.Count - 1 do
+      for DomainIndex := 0 to AChemItem.ImmobileMassTransferRates.Count - 1 do
       begin
-        result := AChemItem.ImmobileBulkDensities[DomainIndex] = DataArray.Name;
+        result := AChemItem.ImmobileMassTransferRates[DomainIndex] = DataArray.Name;
         if result then
         begin
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
@@ -20390,12 +20393,19 @@ var
   end;
 begin
   result := (ModelSelection in ModflowSelection)
-    and ModflowPackages.Mt3dBasic.IsSelected;
+    and (ModflowPackages.Mt3dBasic.IsSelected or  GwtUsed);
   if result then
   begin
     DataArray := Sender as TDataArray;
-    result := DataArrayUsed(MobileComponents)
-      or DataArrayUsed(ImmobileComponents);
+    if ModflowPackages.Mt3dBasic.IsSelected then
+    begin
+      result := DataArrayUsed(MobileComponents)
+        or DataArrayUsed(ImmobileComponents);
+    end
+    else if GwtUsed then
+    begin
+      result := DataArrayUsed(MobileComponents);
+    end;
   end;
 end;
 

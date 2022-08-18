@@ -17,6 +17,8 @@ inherited frmGoPhast: TfrmGoPhast
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
   OnResize = FormResize
+  ExplicitLeft = 3
+  ExplicitTop = 3
   ExplicitWidth = 800
   ExplicitHeight = 627
   PixelsPerInch = 120
@@ -94,7 +96,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 492
         Image32.Height = 196
         Image32.Align = alClient
-        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 492
         Image32.ExplicitHeight = 196
@@ -161,7 +162,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 178
         Image32.Height = 196
         Image32.Align = alClient
-        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
         Image32.ExplicitHeight = 196
@@ -253,7 +253,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 492
         Image32.Height = 77
         Image32.Align = alClient
-        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 492
         Image32.ExplicitHeight = 77

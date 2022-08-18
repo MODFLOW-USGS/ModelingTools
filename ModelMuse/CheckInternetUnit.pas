@@ -358,13 +358,24 @@ const
   BackupExtension = '.webinibak';
 var
   BackupFilename: string;
+  Index: Integer;
+  ANode: TXmlNode;
+  NewUrl: string;
 begin
+  for Index := 0 to FNewVideos.Count - 1 do
+  begin
+    ANode := FNewVideos[Index];
+    NewUrl := Trim(ANode.Name);
+    FIniFile.WriteBool(StrVideoDisplayed, NewUrl, False);
+  end;
+
   if FCurrentURL <> '' then
   begin
     FIniFile.WriteBool(StrVideoDisplayed, FCurrentURL, True);
   end;
   FIniFile.WriteDateTime(StrCustomization, StrTipDate, Now);
   FIniFile.WriteDateTime(StrCustomization, StrInternetCheckDate, Now);
+
 //  FIniFile.WriteSection(StrVideoDisplayed, FVideoURLs);
 
   BackupFilename := ChangeFileExt(FIniFile.FileName, BackupExtension);

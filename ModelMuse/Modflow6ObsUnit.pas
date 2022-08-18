@@ -26,7 +26,6 @@ type
     FMawOb: TMawOb;
     FLakOb: TLakOb;
     FObGeneral: TObGeneral;
-//    FWeightFormula: TFormulaObject;
     FInterpObsNames: TStringList;
     FMawConnectionNumber: Integer;
     procedure SetCSubOb(const Value: TCSubOb);
@@ -42,9 +41,6 @@ type
     function StoreObGeneral: Boolean;
     function StoreSfrOb: Boolean;
     function StoreUzfOb: Boolean;
-//    function CreateFormulaObject: TFormulaObject;
-//    procedure UpdateFormula(Value: string; Position: integer;
-//      var FormulaObject: TFormulaObject);
     procedure SetMawConnectionNumber(const Value: Integer);
   protected
     function GetObsTypeIndex: Integer; override;

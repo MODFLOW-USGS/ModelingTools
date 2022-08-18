@@ -473,52 +473,55 @@ begin
     TempNames := TStringList.Create;
     try
       LocalModel := Collection.Model as TPhastModel;
-      IstPackage := LocalModel.ModflowPackages.GwtPackages[Index].GwtIst;
-      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+      if LocalModel.GwtUsed then
       begin
-        TempNames.Add(Format(KrImmobileInitialConce, [Name, DomainIndex+1]))
-      end;
-      ImmobileInitialConcentrations := TempNames;
+        IstPackage := LocalModel.ModflowPackages.GwtPackages[Index].GwtIst;
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
+          TempNames.Add(Format(KrImmobileInitialConce, [Name, DomainIndex+1]))
+        end;
+        ImmobileInitialConcentrations := TempNames;
 
-      TempNames.Clear;
-      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
-      begin
-        TempNames.Add(Format(KImmobilePorosity, [Name, DomainIndex+1]))
-      end;
-      ImmobilePorosities := TempNames;
+        TempNames.Clear;
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
+          TempNames.Add(Format(KImmobilePorosity, [Name, DomainIndex+1]))
+        end;
+        ImmobilePorosities := TempNames;
 
-      TempNames.Clear;
-      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
-      begin
-        TempNames.Add(Format(KImmobileMassTransfer, [Name, DomainIndex+1]))
-      end;
-      ImmobileMassTransferRates := TempNames;
+        TempNames.Clear;
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
+          TempNames.Add(Format(KImmobileMassTransfer, [Name, DomainIndex+1]))
+        end;
+        ImmobileMassTransferRates := TempNames;
 
-      TempNames.Clear;
-      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
-      begin
-        TempNames.Add(Format(KImmobileDecay, [Name, DomainIndex+1]))
-      end;
-      ImmobileDecay := TempNames;
+        TempNames.Clear;
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
+          TempNames.Add(Format(KImmobileDecay, [Name, DomainIndex+1]))
+        end;
+        ImmobileDecay := TempNames;
 
-      TempNames.Clear;
-      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
-      begin
-        TempNames.Add(Format(KImmobileDecaySorbed, [Name, DomainIndex+1]))
-      end;
-      ImmobileDecaySorbed := TempNames;
+        TempNames.Clear;
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
+          TempNames.Add(Format(KImmobileDecaySorbed, [Name, DomainIndex+1]))
+        end;
+        ImmobileDecaySorbed := TempNames;
 
-      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
-      begin
-        TempNames.Add(Format(KImmobileBulkDensity, [Name, DomainIndex+1]))
-      end;
-      ImmobileBulkDensities := TempNames;
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
+          TempNames.Add(Format(KImmobileBulkDensity, [Name, DomainIndex+1]))
+        end;
+        ImmobileBulkDensities := TempNames;
 
-      for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
-      begin
-        TempNames.Add(Format(KImmobileDistCoeficie, [Name, DomainIndex+1]))
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
+          TempNames.Add(Format(KImmobileDistCoeficie, [Name, DomainIndex+1]))
+        end;
+        ImmobileDistCoeficients := TempNames;
       end;
-      ImmobileDistCoeficients := TempNames;
     finally
       TempNames.Free;
     end;
