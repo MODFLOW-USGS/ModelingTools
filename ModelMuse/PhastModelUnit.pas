@@ -10692,13 +10692,16 @@ const
 //    '5.0.0.22' Bug Fix: not in released version
 //                Fixed range error when activating MT3D and fixed used
 //                designation for some GWT data sets.
+//    '5.0.0.23' Enhancement: When importing Shapefiles, it is now possible
+//                to use the label of a CSV attribute to indicate the data
+//                represent real numbers, integers, Booleans, or text.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.22';
+  IIModelVersion = '5.0.0.23';
 
 function IModelVersion: string;
 begin

@@ -546,6 +546,7 @@ type
     comboHorizontal: TComboBox;
     comboVertical: TComboBox;
     lblVertical: TLabel;
+    comboFieldTypes: TComboBox;
     // @name edits the formula in @link(edImportCriterion).
     procedure btnImportCriterionClick(Sender: TObject);
     // @name sets all the checkboxes to checked
@@ -620,6 +621,8 @@ type
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure comboObjectNameMethodChange(Sender: TObject);
     procedure pcImportShapeChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure comboFieldTypesChange(Sender: TObject);
   private
     FGeometryFileName: string;
     FIndexFileName: string;
@@ -658,6 +661,9 @@ type
     FCsvFiles: TStringList;
     FShapeFileValidFieldCount: Integer;
     FShapeFileRealFieldCount: Integer;
+    FShapeFileIntegerFieldCount: Integer;
+    FShapeFileBooleanFieldCount: Integer;
+    FShapeFileStringFieldCount: Integer;
     FValidIndiciesCount: Integer;
     FRealFieldGlobalsAndDataSetsNamesCount: Integer;
     FDuplicateTreatment: TDupResponse;
@@ -800,10 +806,19 @@ type
     procedure ImportFootprintWell(AScreenObject: TScreenObject);
     procedure ImportModflowCFP_Pipe(AScreenObject: TScreenObject);
     procedure InitializeBoundaryControlsForCFP_Pipe;
-//    procedure ChangeConductInterp(Value: Integer);
     procedure ReadCsvAttributeNames;
     procedure AssignRealFieldNamesToControls;
-    function GetValueFromCsv(AttribName: string; var ShouldIgnore: Boolean): double;
+    function GetRealValueFromCsv(AttribName: string;
+      var ShouldIgnore: Boolean): double;
+    function GetIntegerValueFromCsv(AttribName: string;
+      var ShouldIgnore: Boolean): Integer;
+    function GetBooleanValueFromCsv(AttribName: string;
+      var ShouldIgnore: Boolean): Boolean;
+    function GetStringValueFromCsv(AttribName: string;
+      var ShouldIgnore: Boolean): string;
+    function GetTrimmedStringValueFromCsv(AttribName: string;
+      var ShouldIgnore: Boolean): string;
+    function GetAttributeType(AttribName: string): TRbwDataType;
     procedure AssignRealValueAttributesToControls;
     Procedure HowTreatDuplicateNames;
     procedure AssignFormulaInterpretationText(combo: TComboBox);
@@ -1319,36 +1334,24 @@ begin
   FCsvFiles.Free;
 end;
 
-function TfrmImportShapefile.GetValueFromCsv(AttribName: string; var ShouldIgnore: Boolean): double;
+procedure TfrmImportShapefile.FormShow(Sender: TObject);
+begin
+  inherited;
+  comboFieldTypes.Parent := frameCSV.Panel;
+end;
+
+function TfrmImportShapefile.GetRealValueFromCsv(AttribName: string;
+  var ShouldIgnore: Boolean): double;
 var
-  AnAttribute: TCsvAttribute;
-  FileIndex: Integer;
-  AttFile: TStringList;
-  Splitter: TStringList;
   Text: String;
   AValue: Extended;
 begin
   result := 0;
-  if FCsvDictionary.TryGetValue(AttribName, AnAttribute) then
+  Text := GetStringValueFromCsv(AttribName, ShouldIgnore);
+  if not ShouldIgnore then
   begin
-    FileIndex := FCsvFiles.IndexOf(AnAttribute.FileName);
-    if FileIndex >= 0 then
-    begin
-      AttFile := FCsvFiles.Objects[FileIndex] as TStringList;
-      Splitter := TStringList.Create;
-      try
-        Splitter.StrictDelimiter := True;
-        Splitter.DelimitedText := AttFile[FShapeIndex+1];
-        if Splitter.Count > AnAttribute.Position then
-        begin
-          Text := Splitter[AnAttribute.Position];
-          ShouldIgnore := not TryFortranStrToFloat(Text, AValue);
-          result := AValue;
-        end;
-      finally
-        Splitter.Free;
-      end;
-    end;
+    ShouldIgnore := not TryFortranStrToFloat(Text, AValue);
+    result := AValue;
   end;
 end;
 
@@ -1374,6 +1377,19 @@ var
     begin
       FRealFieldNames.Delete(FRealFieldNames.Count-1);
     end;
+    while FIntegerFieldNames.Count > FShapeFileIntegerFieldCount do
+    begin
+      FIntegerFieldNames.Delete(FIntegerFieldNames.Count-1);
+    end;
+    while FBooleanFieldNames.Count > FShapeFileBooleanFieldCount do
+    begin
+      FBooleanFieldNames.Delete(FBooleanFieldNames.Count-1);
+    end;
+    while FStringFieldNames.Count > FShapeFileStringFieldCount do
+    begin
+      FStringFieldNames.Delete(FStringFieldNames.Count-1);
+    end;
+
     while FRealFieldGlobalsAndDataSetsNames.Count > FRealFieldGlobalsAndDataSetsNamesCount do
     begin
       FRealFieldGlobalsAndDataSetsNames.Delete(FRealFieldGlobalsAndDataSetsNames.Count-1);
@@ -1449,8 +1465,25 @@ begin
               AnAttribute.AttributeName := AttributeName;
               AnAttribute.Position := AttribIndex;
               FCsvAttributes.Add(AnAttribute);
-              FRealFieldNames.Add(AnAttribute.AttributeName);
-              FRealFieldGlobalsAndDataSetsNames.Add(AnAttribute.AttributeName);
+              case GetAttributeType(AnAttribute.AttributeName) of
+                rdtDouble:
+                  begin
+                    FRealFieldNames.Add(AnAttribute.AttributeName);
+                    FRealFieldGlobalsAndDataSetsNames.Add(AnAttribute.AttributeName);
+                  end;
+                rdtInteger:
+                  begin
+                    FIntegerFieldNames.Add(AnAttribute.AttributeName);
+                  end;
+                rdtBoolean:
+                  begin
+                    FBooleanFieldNames.Add(AnAttribute.AttributeName);
+                  end;
+                rdtString:
+                  begin
+                    FStringFieldNames.Add(AnAttribute.AttributeName);
+                  end;
+              end;
               FCsvDictionary.Add(AnAttribute.AttributeName, AnAttribute);
             end;
           end;
@@ -1462,11 +1495,13 @@ begin
 
     for AttribIndex := 0 to FCsvAttributes.Count - 1 do
     begin
+      AnAttribute := FCsvAttributes[AttribIndex];
       dgFields.Cells[Ord(fgcAttributes), AttribIndex+FShapeFileValidFieldCount+1]
         := FCsvAttributes[AttribIndex].AttributeName;
       dgFields.Cells[Ord(fgcDataSet), AttribIndex+FShapeFileValidFieldCount + 1] := rsNewDataSet;
       dgFields.Cells[Ord(fgcInterpolator), AttribIndex+FShapeFileValidFieldCount + 1] := StrNone;
-      FFieldTypes[AttribIndex+FShapeFileValidFieldCount] := rdtDouble;
+      FFieldTypes[AttribIndex+FShapeFileValidFieldCount] :=
+        GetAttributeType(AnAttribute.AttributeName) ;
     end;
 
     AssignRealFieldNamesToControls;
@@ -1542,6 +1577,59 @@ begin
       end;
     finally
       frameCSV.Grid.EndUpdate;
+    end;
+  end;
+end;
+
+function TfrmImportShapefile.GetAttributeType(AttribName: string): TRbwDataType;
+var
+  AChar: Char;
+begin
+  result :=rdtDouble;
+  if (comboFieldTypes.ItemIndex = 1) and (AttribName <> '') then
+  begin
+    AChar := AttribName[1];
+    case AChar of
+      'R', 'D', 'r', 'd':
+        begin
+          result := rdtDouble;
+        end;
+      'I', 'i':
+         begin
+           result := rdtInteger;
+         end;
+      'B', 'b':
+         begin
+           result := rdtBoolean;
+         end;
+      'T', 't':
+         begin
+           result := rdtString;
+         end;
+    end;
+  end;
+end;
+
+function TfrmImportShapefile.GetBooleanValueFromCsv(AttribName: string;
+  var ShouldIgnore: Boolean): Boolean;
+var
+  Text: String;
+begin
+  result := False;
+  Text := GetStringValueFromCsv(AttribName, ShouldIgnore);
+  if not ShouldIgnore then
+  begin
+    if SameText(Text, 'True') then
+    begin
+      result := True;
+    end
+    else if SameText(Text, 'False') then
+    begin
+      result := False;
+    end
+    else
+    begin
+      ShouldIgnore := True;
     end;
   end;
 end;
@@ -1805,6 +1893,10 @@ begin
 
             FShapeFileValidFieldCount := ValidFields.Count;
             FShapeFileRealFieldCount := FRealFieldNames.Count;
+            FShapeFileIntegerFieldCount := FIntegerFieldNames.Count;
+            FShapeFileBooleanFieldCount := FBooleanFieldNames.Count;
+            FShapeFileStringFieldCount := FStringFieldNames.Count;
+
             dgFields.RowCount := ValidFields.Count + 1;
             for Index := 0 to ValidFields.Count - 1 do
             begin
@@ -1947,6 +2039,11 @@ begin
 
 
 end;
+
+//procedure TfrmImportShapefile.AssignStringFieldNamesToControls;
+//begin
+//  comboBoundaryChoiceChange(nil);
+//end;
 
 procedure TfrmImportShapefile.AssignRealFieldNamesToControls;
 begin
@@ -2267,6 +2364,28 @@ begin
   end;
 end;
 
+function TfrmImportShapefile.GetTrimmedStringValueFromCsv(AttribName: string;
+  var ShouldIgnore: Boolean): string;
+begin
+  result := GetStringValueFromCsv(AttribName, ShouldIgnore);
+  if not ShouldIgnore then
+  begin
+    result := Trim(result);
+    if Length(result) >= 2 then
+    begin
+      if (result[1] = '''') and (result[Length(result)] = '''') then
+      begin
+        result := Copy(result, 2, Length(result) -2);
+      end
+      else if (result[1] = '"') and (result[Length(result)] = '"') then
+      begin
+        result := Copy(result, 2, Length(result) -2);
+      end;
+    end;
+  end;
+
+end;
+
 procedure TfrmImportShapefile.AddModflowPackageToImportChoices(
   APackage: TModflowPackageSelection);
 begin
@@ -2360,6 +2479,11 @@ begin
     end;
   end;
 end;
+
+//procedure TfrmImportShapefile.AssignIntegerFieldNamesToControls;
+//begin
+//
+//end;
 
 procedure TfrmImportShapefile.AssignInterpolator(DataSet: TDataArray;
   Index: Integer; out NewProperties, OldProperties: TPhastDataSetStorage);
@@ -7898,14 +8022,19 @@ function TfrmImportShapefile.GetBooleanValueFromText(
 var
   Value: string;
   FieldNumber: Integer;
+  ShouldIgnore: Boolean;
 begin
   FieldNumber := GetFieldNumberFromName(FieldName);
   if FieldNumber = 0 then
   begin
     // not a field
-    Value := UpperCase(String(FieldName));
-    result := (Length(Value) > 0)
-      and ((Value[1] = 'T') or (Value[1] = 'Y'));
+    result := GetBooleanValueFromCsv(string(FieldName), ShouldIgnore);
+    if ShouldIgnore then
+    begin
+      Value := UpperCase(String(FieldName));
+      result := (Length(Value) > 0)
+        and ((Value[1] = 'T') or (Value[1] = 'Y'));
+    end;
   end
   else
   begin
@@ -7921,12 +8050,47 @@ begin
   end;
 end;
 
+function TfrmImportShapefile.GetStringValueFromCsv(AttribName: string;
+  var ShouldIgnore: Boolean): string;
+var
+  AnAttribute: TCsvAttribute;
+  FileIndex: Integer;
+  AttFile: TStringList;
+  Splitter: TStringList;
+  Text: String;
+begin
+  result := '';
+  ShouldIgnore := True;
+  if FCsvDictionary.TryGetValue(AttribName, AnAttribute) then
+  begin
+    FileIndex := FCsvFiles.IndexOf(AnAttribute.FileName);
+    if FileIndex >= 0 then
+    begin
+      AttFile := FCsvFiles.Objects[FileIndex] as TStringList;
+      Splitter := TStringList.Create;
+      try
+        Splitter.StrictDelimiter := True;
+        Splitter.DelimitedText := AttFile[FShapeIndex+1];
+        if Splitter.Count > AnAttribute.Position then
+        begin
+          Text := Splitter[AnAttribute.Position];
+          ShouldIgnore := False;
+          result := Text;
+        end;
+      finally
+        Splitter.Free;
+      end;
+    end;
+  end;
+end;
+
 function TfrmImportShapefile.GetStringValueFromText(
   const FieldName: AnsiString): string;
 var
   FieldNumber: Integer;
   CachedPosition: Integer;
   FieldStorage: TFieldNumStorage;
+  ShouldIgnore: Boolean;
 begin
   if FieldName = '' then
   begin
@@ -7948,20 +8112,24 @@ begin
   end;
   if FieldNumber = 0 then
   begin
-    if Trim(string(FieldName)) = '' then
+    result := GetTrimmedStringValueFromCsv(string(FieldName), ShouldIgnore);
+    if ShouldIgnore then
     begin
-      result := '""';
-    end
-    else
-    begin
-      result := Trim(string(FieldName));
-      if result[1] <> '"' then
+      if Trim(string(FieldName)) = '' then
       begin
-        result := '"' + result;
-      end;
-      if result[Length(result)] <> '"' then
+        result := '""';
+      end
+      else
       begin
-        result := result + '"';
+        result := Trim(string(FieldName));
+        if result[1] <> '"' then
+        begin
+          result := '"' + result;
+        end;
+        if result[Length(result)] <> '"' then
+        begin
+          result := result + '"';
+        end;
       end;
     end;
   end
@@ -8139,7 +8307,7 @@ begin
     // not a field
     if not TryStrToFloat(string(FieldName), result) then
     begin
-      result := GetValueFromCsv(string(FieldName), ShouldIgnore);
+      result := GetRealValueFromCsv(string(FieldName), ShouldIgnore);
     end;
   end
   else
@@ -8239,6 +8407,21 @@ begin
   result := GetIntegerFormulaFromText(AnsiString(text), DataSetsOK);
 end;
 
+function TfrmImportShapefile.GetIntegerValueFromCsv(AttribName: string;
+  var ShouldIgnore: Boolean): Integer;
+var
+  Text: String;
+  AValue: Integer;
+begin
+  result := 0;
+  Text := GetStringValueFromCsv(AttribName, ShouldIgnore);
+  if not ShouldIgnore then
+  begin
+    ShouldIgnore := not TryStrToInt(Text, AValue);
+    result := AValue;
+  end;
+end;
+
 function TfrmImportShapefile.GetIntegerValueFromText(
   const FieldName: String): integer;
 begin
@@ -8251,6 +8434,7 @@ var
   FieldNumber: Integer;
   CachedPosition: Integer;
   FieldStorage: TFieldNumStorage;
+  ShouldIgnore: Boolean;
 begin
   CachedPosition := FFieldNumbers.Indexof(string(FieldName));
   if CachedPosition >= 0 then
@@ -8268,7 +8452,8 @@ begin
   if FieldNumber = 0 then
   begin
     // not a field
-    if not TryStrToInt(string(FieldName), result) then
+    result := GetIntegerValueFromCsv(string(FieldName), ShouldIgnore);
+    if ShouldIgnore and not TryStrToInt(string(FieldName), result) then
     begin
       result := 0;
     end;
@@ -8901,6 +9086,8 @@ var
   ExistingObserver: TObserver;
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
+  FieldName: string;
+  AnAttribute: TCsvAttribute;
 begin
   InvalidNames := TStringList.Create;
   try
@@ -8919,8 +9106,8 @@ begin
 
           NewDataSetName := GenerateNewName(TestName, InvalidNames);
 
-          FieldIndex := GetFieldNumberFromName(AnsiString(
-            dgFields.Cells[Ord(fgcAttributes), Index]));
+          FieldName := dgFields.Cells[Ord(fgcAttributes), Index];
+          FieldIndex := GetFieldNumberFromName(AnsiString(FieldName));
 
           // a FieldIndex >= 1 indicates the field is in the Shapefile
           // data base.
@@ -8957,8 +9144,21 @@ begin
           end
           else
           begin
-            NewDataType := rdtDouble;
-            NewFormula := '0.';
+            if FCsvDictionary.TryGetValue(FieldName, AnAttribute) then
+            begin
+              NewDataType := GetAttributeType(FieldName);
+              case NewDataType of
+                rdtDouble: NewFormula := '0.';
+                rdtInteger: NewFormula := '0';
+                rdtBoolean: NewFormula := 'False';
+                rdtString: NewFormula := '""';
+              end;
+            end
+            else
+            begin
+              NewDataType := rdtDouble;
+              NewFormula := '0.';
+            end;
           end;
 
           if rgElevationCount.ItemIndex = 0 then
@@ -9109,6 +9309,7 @@ var
   ObjectNames: TStringList;
   AScreenObjectName: string;
   ErrorMessages: TStringList;
+  FieldIndex: Integer;
 begin
   CombinedPointIndex := -1;
   frmProgressMM.ShouldContinue := True;
@@ -9556,19 +9757,20 @@ begin
                           begin
                             ValueList := MultiValueList[DataSetIndex];
                           end;
+                          ARealFieldName := RealFieldNames[DataSetIndex];
+                          FieldIndex := GetFieldNumberFromName(AnsiString(ARealFieldName));
                           case Variable.ResultType of
                             rdtDouble:
                               begin
                                 RealVariable := Variables[DataSetIndex];
-                                ARealFieldName := RealFieldNames[DataSetIndex];
-                                if xbShapeDataBase.GetFieldNumberFromName(AnsiString(ARealFieldName)) >= 1 then
+                                if FieldIndex >= 1 then
                                 begin
                                   RealVariable.Value :=
                                    xbShapeDataBase.GetFieldNum(AnsiString(ARealFieldName));
                                 end
                                 else
                                 begin
-                                  RealVariable.Value := GetValueFromCsv(ARealFieldName, Dummy);
+                                  RealVariable.Value := GetRealValueFromCsv(ARealFieldName, Dummy);
                                 end;
                                 if DataSet <> nil then
                                 begin
@@ -9587,9 +9789,16 @@ begin
                             rdtInteger:
                               begin
                                 IntVariable := Variables[DataSetIndex];
+                                if FieldIndex >= 1 then
+                                begin
                                 IntVariable.Value :=
                                   xbShapeDataBase.GetFieldInt(AnsiString(
-                                  RealFieldNames[DataSetIndex]));
+                                  ARealFieldName));
+                                end
+                                else
+                                begin
+                                  IntVariable.Value := GetIntegerValueFromCsv(ARealFieldName, Dummy);
+                                end;
                                 if DataSet <> nil then
                                 begin
                                   if FCombinedObjects then
@@ -9615,41 +9824,44 @@ begin
                             rdtBoolean:
                               begin
                                 BooleanVariable := Variables[DataSetIndex];
-                                Value :=
-                                  xbShapeDataBase.GetFieldStr(AnsiString(
-                                  RealFieldNames[DataSetIndex]));
-                                if (Value = 'Y') or (Value = 'y')
-                                  or (Value = 'T') or (Value = 't') then
+                                if FieldIndex >= 1 then
                                 begin
-                                  BooleanVariable.Value := True;
-                                  if DataSet <> nil then
+                                  Value :=
+                                    xbShapeDataBase.GetFieldStr(AnsiString(
+                                    ARealFieldName));
+                                  if (Value = 'Y') or (Value = 'y')
+                                    or (Value = 'T') or (Value = 't') then
                                   begin
-                                    if FCombinedObjects then
-                                    begin
-                                      ValueList.BooleanValues[
-                                        Index-DeleteCount+AddCount] := True;
-                                    end
-                                    else
-                                    begin
-                                      AScreenObject.DataSetFormulas[
-                                        Position] := 'True';
-                                    end;
+                                    BooleanVariable.Value := True;
+                                  end
+                                  else
+                                  begin
+                                    BooleanVariable.Value := False;
                                   end;
                                 end
                                 else
                                 begin
-                                  BooleanVariable.Value := False;
-                                  if DataSet <> nil then
+                                  BooleanVariable.Value := GetBooleanValueFromCsv(
+                                    ARealFieldName, Dummy);
+                                end;
+                                if DataSet <> nil then
+                                begin
+                                  if FCombinedObjects then
                                   begin
-                                    if FCombinedObjects then
+                                    ValueList.BooleanValues[
+                                      Index-DeleteCount+AddCount] := BooleanVariable.Value;
+                                  end
+                                  else
+                                  begin
+                                    if BooleanVariable.Value then
                                     begin
-                                      ValueList.BooleanValues[
-                                        Index-DeleteCount+AddCount] := False;
+                                      AScreenObject.DataSetFormulas[
+                                        Position] := 'True';
                                     end
                                     else
                                     begin
-                                      AScreenObject.DataSetFormulas[Position]
-                                        := 'False';
+                                      AScreenObject.DataSetFormulas[
+                                        Position] := 'False';
                                     end;
                                   end;
                                 end;
@@ -9657,8 +9869,16 @@ begin
                             rdtString:
                               begin
                                 StringVariable := Variables[DataSetIndex];
-                                StringFormula := xbShapeDataBase.GetFieldStr(
-                                  AnsiString(RealFieldNames[DataSetIndex]));
+                                if FieldIndex >= 1  then
+                                begin
+                                  StringFormula := xbShapeDataBase.GetFieldStr(
+                                    AnsiString(RealFieldNames[DataSetIndex]));
+                                end
+                                else
+                                begin
+                                  StringFormula := GetTrimmedStringValueFromCsv(
+                                    ARealFieldName, Dummy);
+                                end;
                                 StringFormula := StringReplace(StringFormula,
                                   '"', '''', [rfReplaceAll]);
                                 StringVariable.Value := Trim(StringFormula);
@@ -11455,6 +11675,13 @@ begin
   end;
 end;
 
+procedure TfrmImportShapefile.comboFieldTypesChange(Sender: TObject);
+begin
+  inherited;
+  ReadCsvAttributeNames;
+  comboBoundaryChoiceChange(nil);
+end;
+
 procedure TfrmImportShapefile.comboFormulaInterpChange(Sender: TObject);
 begin
   inherited;
@@ -11533,6 +11760,8 @@ var
   AttrIndex: Integer;
   FieldName: AnsiString;
   FieldNumber: Integer;
+  AttributeName: string;
+  DataType: TRbwDataType;
 begin
   for RowIndex := 1 to FShapeFileValidFieldCount do
   begin
@@ -11578,7 +11807,8 @@ begin
 
   for AttrIndex := 0 to FCsvAttributes.Count - 1 do
   begin
-    VariableName := FieldToVarName(FCsvAttributes[AttrIndex].AttributeName);
+    AttributeName := FCsvAttributes[AttrIndex].AttributeName;
+    VariableName := FieldToVarName(AttributeName);
     if Parser.IndexOfVariable(VariableName) >= 0 then
     begin
       Beep;
@@ -11595,8 +11825,29 @@ begin
     end
     else
     begin
-      Parser.CreateVariable(VariableName, StrAttributes, 0.0, TValueReal,
-        VariableName);
+      DataType := GetAttributeType(AttributeName);
+      case DataType of
+        rdtDouble:
+          begin
+            Parser.CreateVariable(VariableName, StrAttributes, 0.0, TValueReal,
+              VariableName);
+          end;
+        rdtInteger:
+          begin
+            Parser.CreateVariable(VariableName, StrAttributes, 0, TValueInt,
+              VariableName);
+          end;
+        rdtBoolean:
+          begin
+            Parser.CreateVariable(VariableName, StrAttributes, False, TValueBool,
+              VariableName);
+          end;
+        rdtString:
+          begin
+            Parser.CreateVariable(VariableName, StrAttributes, '', TValueStr,
+              VariableName);
+          end;
+      end;
     end;
   end;
 
@@ -11722,6 +11973,11 @@ begin
     end;
   end;
 end;
+
+//procedure TfrmImportShapefile.AssignBooleanFieldNamesToControls;
+//begin
+//
+//end;
 
 procedure TfrmImportShapefile.AssignBoundary(AScreenObject: TScreenObject);
 var

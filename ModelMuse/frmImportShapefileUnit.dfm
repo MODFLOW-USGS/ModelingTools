@@ -7,6 +7,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
   Caption = 'Import Shapefile'
   ClientHeight = 596
   ClientWidth = 771
+  ExplicitLeft = 3
+  ExplicitTop = 3
   ExplicitWidth = 789
   ExplicitHeight = 643
   TextHeight = 18
@@ -84,7 +86,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Top = 0
     Width = 771
     Height = 555
-    ActivePage = tabFeatures
+    ActivePage = tabData
     Align = alClient
     TabOrder = 0
     OnChange = pcImportShapeChange
@@ -521,18 +523,18 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 403
+            Left = 500
             Hint = 
               'Add space for CSV file|Add space for CSV file after the last CSV' +
               ' file.'
-            ExplicitLeft = 408
+            ExplicitLeft = 500
           end
           inherited sbInsert: TSpeedButton
-            Left = 476
+            Left = 529
             Hint = 
               'Insert space for CSV file|Insert a space for a CSV file above th' +
               'e selected CSV file.'
-            ExplicitLeft = 482
+            ExplicitLeft = 529
           end
           inherited sbDelete: TSpeedButton
             Left = 558
@@ -582,6 +584,24 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             24
             24)
         end
+      end
+      object comboFieldTypes: TComboBox
+        Left = 245
+        Top = 6
+        Width = 204
+        Height = 26
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 1
+        Text = 'All real numbers'
+        OnChange = comboFieldTypesChange
+        Items.Strings = (
+          'All real numbers'
+          'Label indicates field type')
       end
     end
     object tabData: TTabSheet

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-08-18T15:24:24.312-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">LayerCenter</title>
   <keywords>
     <keyword translate="true">LayerCenter</keyword>
@@ -9,7 +9,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LayerCenter</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW and PHAST models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">LayerCenter</text><text styleclass="Normal" translate="true">({{Column, Row,}Layer}) returns the Z coordinate of the center of the cell (MODFLOW) or element (PHAST) specified by its arguments (if any). In SUTRA and MODFLOW 6 DISV models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">LayerCenter</text><text styleclass="Normal" translate="true"> returns the Z coordinate or the node or the center of the element or cell. The function has three optional arguments: Column, Row, and Layer. If these arguments are provided, they specify the element or cell for which the area should be calculated. If they are not provided, the function uses the column, row, and layer of the element or cell for which the formula is being calculated. If only one of the arguments is provided, it is treated as the layer. If any of the arguments has an invalid value, the function returns zero. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW and PHAST models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">LayerCenter</text><text styleclass="Normal" translate="true">({{Column, Row,}Layer}) returns the Z coordinate of the center of the cell (MODFLOW) or element (PHAST) specified by its arguments (if any). In SUTRA and MODFLOW 6 DISV models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">LayerCenter</text><text styleclass="Normal" translate="true"> returns the Z coordinate of the node or the center of the element or cell. The function has three optional arguments: Column, Row, and Layer. If these arguments are provided, they specify the element or cell for which the area should be calculated. If they are not provided, the function uses the column, row, and layer of the element or cell for which the formula is being calculated. If only one of the arguments is provided, it is treated as the layer. If any of the arguments has an invalid value, the function returns zero. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">For SUTRA and MODFLOW 6 DISV models, Row should always be 1 and Column represent the node, element, or cell number in the top view of the model.</text></para>
   </body>
 </topic>
