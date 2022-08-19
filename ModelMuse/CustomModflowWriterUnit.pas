@@ -9578,10 +9578,6 @@ procedure TMf6_SimNameFileWriter.WriteSolutionGroups;
 var
   ModelIndex: Integer;
   ModelData: TModelData;
-  PriorModelData: TModelData;
-  isg: Integer;
-  NewGroup: boolean;
-  NewImsLine: Boolean;
 begin
   // If ModelMuse ever supports more than one solution group,
   // the following commented out text might be a starting point..
@@ -9601,7 +9597,7 @@ begin
   NewLine;
 
 
-  isg := 0;
+//  isg := 0;
   for ModelIndex := 0 to FModelDataList.Count - 1 do
   begin
     ModelData := FModelDataList[ModelIndex];

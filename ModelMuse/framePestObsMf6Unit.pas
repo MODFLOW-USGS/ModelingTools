@@ -93,6 +93,7 @@ var
   ObLake: TLakOb;
   ObUzf: TUzfOb;
   ObCSub: TCSubOb;
+  ObGwt: TObGwt;
 begin
   inherited;
   if ARow > 0 then
@@ -154,6 +155,13 @@ begin
                 frameObservations.Grid.Canvas.Brush.Color:= clRed;
               end;
             end;
+          osGwt:
+            begin
+              if not TryGetGwtOb(ObTypeName, ObGwt) then
+              begin
+                frameObservations.Grid.Canvas.Brush.Color:= clRed;
+              end;
+            end;
           else
             begin
               Assert(False);
@@ -172,9 +180,6 @@ var
   PickList: TStrings;
   MawObsTypeName: string;
   MawOb: TMawOb;
-//  ObsTypeName: string;
-//  GenOb: TObGeneral;
-//  MawOb: TMawOb;
 begin
   inherited;
   if (ARow >= 0) then
@@ -221,56 +226,16 @@ begin
           begin
             FillCSubSeriesNames(PickList);
           end;
+        osGWT:
+          begin
+            FillObConcentrationSeriesNames(PickList);
+          end;
         else
           begin
             Assert(False);
           end;
       end;
     end;
-
-//    if ACol = Ord(pm6ObjectWeightFormula) then
-//    begin
-//      CanSelect := False;
-//      if TryGetObsSeries(ObsSeriesName, ObsSeries) then
-//      begin
-//        ObsTypeName := frameObservations.Grid.Cells[Ord(pm6Type), ARow];
-//        case ObsSeries of
-//          osGeneral:
-//            begin
-//              if TryGetGenOb(ObsTypeName, GenOb) then
-//              begin
-////                CanSelect := GenOb in [ogCHD, ogDrain, ogWell, ogGHB, ogRiv,
-////                  ogRch, ogEVT, ogMvr];
-//              end;
-//            end;
-//          osMaw:
-//            begin
-//              if TryGetMawOb(ObsTypeName, MawOb) then
-//              begin
-//
-//              end;
-//            end;
-//          osSfr:
-//            begin
-//
-//            end;
-//          osLak:
-//            begin
-//
-//            end;
-//          osUzf:
-//            begin
-//
-//            end;
-//          osCSub:
-//            begin
-//
-//            end;
-//          else
-//            Assert(False);
-//        end;
-//      end;
-//    end;
   end;
 end;
 

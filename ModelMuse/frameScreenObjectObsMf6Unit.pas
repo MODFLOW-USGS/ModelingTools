@@ -54,6 +54,9 @@ type
     splCSub: TSplitter;
     tabCalibration: TTabSheet;
     framePestObs: TframePestObsMf6;
+    cbConcentration: TCheckBox;
+    comboChemSpecies: TComboBox;
+    lblSpecies: TLabel;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -211,6 +214,9 @@ begin
             end;
           end;
 
+          comboChemSpecies.ItemIndex := Mf6Obs.GwtSpecies;
+          cbConcentration.Checked := ogwtConcentration in Mf6Obs.GwtObs;
+
           chklstBoundaryFlow.Checked[Ord(forCHD)] := ogCHD in Mf6Obs.General;
           chklstBoundaryFlow.Checked[Ord(forDRN)] := ogDrain in Mf6Obs.General;
           chklstBoundaryFlow.Checked[Ord(forEVT)] := ogEVT in Mf6Obs.General;
@@ -280,6 +286,16 @@ begin
             TCheckBoxState(Mf6Obs.GroundwaterFlowObs) then
           begin
             cbGroundwaterFlowObservation.State := cbGrayed;
+          end;
+
+          if cbConcentration.Checked <> (ogwtConcentration in Mf6Obs.GwtObs) then
+          begin
+            cbConcentration.State := cbGrayed;
+          end;
+
+          if comboChemSpecies.ItemIndex <> Mf6Obs.GwtSpecies then
+          begin
+            comboChemSpecies.ItemIndex := -1;
           end;
 
           for AnObsChoice := Low(TGwFlowOb) to High(TGwFlowOb)do
@@ -425,6 +441,7 @@ var
   UzfIndex: Integer;
   CSubIndex: Integer;
   IbIndex: Integer;
+  SpeciesIndex: Integer;
 begin
   pgcMain.ActivePageIndex := 0;
 
@@ -438,6 +455,18 @@ begin
     chklstFlowObs.State[Ord(GWChoice)] := cbUnchecked;
   end;
   chklstFlowObs.Checked[Ord(gfoNearestNeighbor)] := True;
+
+  comboChemSpecies.Items.Clear;
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      comboChemSpecies.Items.Add(
+        frmGoPhast.PhastModel.MobileComponents[SpeciesIndex].Name)
+    end;
+  end;
+  cbConcentration.Enabled := frmGoPhast.PhastModel.GwtUsed;
+  comboChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
 
   for MawIndex := 0 to chklstMAW.Items.Count - 1 do
   begin
@@ -511,6 +540,7 @@ var
   DelayIndex: Integer;
   Position: Integer;
   NewGeneral: TObGenerals;
+  NewObGwts: TObGwts;
 begin
   SetLength(DelayArray, chklstDelayBeds.Items.Count);
   for Index := 0 to List.Count - 1 do
@@ -533,7 +563,6 @@ begin
         Item.ScreenObject.CreateMf6Obs;
         Mf6Obs := Item.ScreenObject.Modflow6Obs;
       end;
-//      Mf6Obs.Used := True;
 
       if List.Count = 1 then
       begin
@@ -552,7 +581,6 @@ begin
         begin
           Exclude(NewGeneral, ogHead);
         end;
-//        Mf6Obs.HeadObs := cbHeadObservation.Checked;
       end;
       if cbDrawdownObservation.State <> cbGrayed then
       begin
@@ -564,8 +592,8 @@ begin
         begin
           Exclude(NewGeneral, ogDrawdown);
         end;
-//        Mf6Obs.DrawdownObs := cbDrawdownObservation.Checked;
       end;
+
       if cbGroundwaterFlowObservation.State <> cbGrayed then
       begin
         Mf6Obs.GroundwaterFlowObs := cbGroundwaterFlowObservation.Checked;
@@ -802,6 +830,24 @@ begin
 //        Mf6Obs.ToMvrFlowObs := chklstBoundaryFlow.Checked[Ord(forToMvr)];
       end;
       Mf6Obs.General := NewGeneral;
+
+      NewObGwts := Mf6Obs.GwtObs;
+      if cbConcentration.State <> cbGrayed then
+      begin
+        if cbConcentration.Checked then
+        begin
+          Include(NewObGwts, ogwtConcentration);
+        end
+        else
+        begin
+          Exclude(NewObGwts, ogwtConcentration);
+        end;
+      end;
+      Mf6Obs.GwtObs := NewObGwts;
+      if comboChemSpecies.ItemIndex >= 0 then
+      begin
+        Mf6Obs.GwtSpecies := comboChemSpecies.ItemIndex;
+      end;
 
       if rgStreamObsLocation.ItemIndex >= 0 then
       begin

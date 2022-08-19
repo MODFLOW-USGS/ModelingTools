@@ -3359,6 +3359,10 @@ begin
       begin
         Mf6ObsSeriesName.Add(ObsSeriesToString(osCSub));
       end;
+      if frameObsMf6.cbConcentration.Enabled then
+      begin
+        Mf6ObsSeriesName.Add(ObsSeriesToString(osGwt));
+      end;
       frameObsMf6.framePestObs.SpecifyGroupTypes(Mf6ObsSeriesName);
     finally
       Mf6ObsSeriesName.Free;

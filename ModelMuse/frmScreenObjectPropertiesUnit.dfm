@@ -12,6 +12,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
+  ExplicitLeft = 3
+  ExplicitTop = 3
   ExplicitWidth = 802
   ExplicitHeight = 602
   TextHeight = 19
@@ -2458,7 +2460,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspGwtSRC
+        ActivePage = jvspMf6Obs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -6039,7 +6041,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboMultiIprior: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                 end
@@ -8803,9 +8804,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               OnChange = frameMNW2pcMnw2Change
               ExplicitWidth = 581
               inherited tabBasic: TTabSheet
-                inherited comboLossType: TJvImageComboBox
-                  ItemIndex = -1
-                end
                 inherited edPartialPenetration: TJvComboEdit
                   Left = 227
                   OnButtonClick = frameScreenObjectSFRjceButtonClick
@@ -10977,7 +10975,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboRouteType: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                   inherited cbbObservationTypes: TJvCheckedComboBox
@@ -12296,7 +12293,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited comboConductEq: TJvImageComboBox
                   Height = 29
                   ItemHeight = 23
-                  ItemIndex = -1
                   ExplicitHeight = 29
                 end
               end
@@ -12477,9 +12473,14 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Columns = 2
                   ItemHeight = 19
                 end
+                inherited comboChemSpecies: TComboBox
+                  Height = 27
+                  ExplicitHeight = 27
+                end
               end
               inherited tabMAW: TTabSheet
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstMAW: TCheckListBox
                   Height = 270
@@ -12489,6 +12490,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabSFR: TTabSheet
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstSFR: TCheckListBox
                   Height = 278
@@ -12498,6 +12500,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabLAK: TTabSheet
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstLAK: TCheckListBox
                   Height = 366
@@ -12507,6 +12510,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabUZF: TTabSheet
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited lblDepthFraction: TLabel
                   Width = 430
@@ -12520,19 +12524,23 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabCSUB: TTabSheet
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited splCSub: TSplitter
                   Top = 309
-                  ExplicitTop = 315
-                  ExplicitWidth = 573
+                  Width = 482
+                  ExplicitTop = 309
+                  ExplicitWidth = 582
                 end
                 inherited chklstCSUB: TCheckListBox
+                  Width = 482
                   Height = 309
                   ItemHeight = 19
                   ExplicitHeight = 309
                 end
                 inherited pnlDelayBeds: TPanel
                   Top = 314
+                  Width = 482
                   ExplicitTop = 314
                   inherited lblDelayInterbedNumber: TLabel
                     Width = 357
@@ -12541,31 +12549,38 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     ExplicitHeight = 19
                   end
                   inherited chklstDelayBeds: TCheckListBox
+                    Width = 480
                     ItemHeight = 19
                   end
                 end
               end
               inherited tabCalibration: TTabSheet
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited framePestObs: TframePestObsMf6
+                  Width = 482
                   Height = 414
                   ExplicitHeight = 414
                   inherited splObservations: TSplitter
                     Top = 237
-                    ExplicitTop = 193
-                    ExplicitWidth = 573
+                    Width = 482
+                    ExplicitTop = 237
+                    ExplicitWidth = 582
                   end
                   inherited grpDirectObs: TGroupBox
+                    Width = 482
                     Height = 237
                     ExplicitHeight = 237
                     inherited frameObservations: TframeGrid
                       Top = 21
+                      Width = 478
                       Height = 214
                       ExplicitTop = 21
                       ExplicitHeight = 214
                       inherited Panel: TPanel
                         Top = 156
+                        Width = 478
                         ExplicitTop = 156
                         inherited lbNumber: TLabel
                           Width = 218
@@ -12591,6 +12606,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
+                        Width = 478
                         Height = 156
                         OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                         ExplicitHeight = 156
@@ -12599,14 +12615,17 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited grpObsComparisons: TGroupBox
                     Top = 242
+                    Width = 482
                     ExplicitTop = 242
                     inherited frameObsComparisons: TframeGrid
                       Top = 21
+                      Width = 478
                       Height = 149
                       ExplicitTop = 21
                       ExplicitHeight = 149
                       inherited Panel: TPanel
                         Top = 114
+                        Width = 478
                         ExplicitTop = 114
                         inherited lbNumber: TLabel
                           Width = 262
@@ -12632,6 +12651,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
+                        Width = 478
                         Height = 114
                         ExplicitHeight = 114
                       end
@@ -12642,7 +12662,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlName: TPanel
               Width = 581
-              ExplicitTop = 25
               ExplicitWidth = 581
               inherited edObsName: TLabeledEdit
                 Height = 27

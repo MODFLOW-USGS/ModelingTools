@@ -10696,6 +10696,9 @@ const
 //                to use the label of a CSV attribute to indicate the data
 //                represent real numbers, integers, Booleans, or text.
 
+//               Bug fix: Fixed bug in evaluating ActiveOnLayer function
+//                that could lead to circular dependencies.
+
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 

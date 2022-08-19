@@ -1,26 +1,28 @@
 object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
   Left = 0
   Top = 0
-  Width = 490
+  Width = 590
   Height = 519
   TabOrder = 0
   object pnlCaption: TPanel
     Left = 0
     Top = 0
-    Width = 490
+    Width = 590
     Height = 25
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 490
   end
   object pgcMain: TPageControl
     Left = 0
     Top = 71
-    Width = 490
+    Width = 590
     Height = 448
-    ActivePage = tabCalibration
+    ActivePage = tabBasic
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 490
     object tabBasic: TTabSheet
       Caption = 'Basic'
       object lblTypesOfFlowObservation: TLabel
@@ -36,6 +38,13 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Width = 184
         Height = 20
         Caption = 'Boundary flow observations'
+      end
+      object lblSpecies: TLabel
+        Left = 336
+        Top = 25
+        Width = 113
+        Height = 20
+        Caption = 'Chemical species'
       end
       object cbHeadObservation: TCheckBox
         Left = 3
@@ -96,6 +105,22 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           'To MVR flows')
         TabOrder = 4
         OnClickCheck = chklstBoundaryFlowClickCheck
+      end
+      object cbConcentration: TCheckBox
+        Left = 296
+        Top = 3
+        Width = 283
+        Height = 17
+        Caption = 'Concentration observation (conc)'
+        TabOrder = 5
+      end
+      object comboChemSpecies: TComboBox
+        Left = 336
+        Top = 46
+        Width = 201
+        Height = 28
+        Style = csDropDownList
+        TabOrder = 6
       end
     end
     object tabMAW: TTabSheet
@@ -255,16 +280,17 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       object splCSub: TSplitter
         Left = 0
         Top = 308
-        Width = 482
+        Width = 582
         Height = 5
         Cursor = crVSplit
         Align = alBottom
         ExplicitTop = 317
+        ExplicitWidth = 482
       end
       object chklstCSUB: TCheckListBox
         Left = 0
         Top = 0
-        Width = 482
+        Width = 582
         Height = 308
         Align = alClient
         ItemHeight = 20
@@ -318,15 +344,16 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             'econstress-cell)')
         TabOrder = 0
         OnClick = chklstCSUBClick
-        ExplicitHeight = 315
+        ExplicitWidth = 482
       end
       object pnlDelayBeds: TPanel
         Left = 0
         Top = 313
-        Width = 482
+        Width = 582
         Height = 100
         Align = alBottom
         TabOrder = 1
+        ExplicitWidth = 482
         object lblDelayInterbedNumber: TLabel
           Left = 8
           Top = 9
@@ -337,12 +364,13 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         object chklstDelayBeds: TCheckListBox
           Left = 1
           Top = 28
-          Width = 480
+          Width = 580
           Height = 71
           Align = alBottom
           Columns = 8
           ItemHeight = 20
           TabOrder = 0
+          ExplicitWidth = 480
         end
       end
     end
@@ -352,52 +380,77 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       inline framePestObs: TframePestObsMf6
         Left = 0
         Top = 0
-        Width = 482
+        Width = 582
         Height = 413
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 482
+        ExplicitHeight = 413
         inherited splObservations: TSplitter
           Top = 236
-          Width = 482
+          Width = 582
+          ExplicitTop = 236
           ExplicitWidth = 482
         end
         inherited grpDirectObs: TGroupBox
-          Width = 482
+          Width = 582
           Height = 236
           ExplicitWidth = 482
+          ExplicitHeight = 236
           inherited frameObservations: TframeGrid
-            Width = 478
+            Width = 578
             Height = 212
             ExplicitWidth = 478
+            ExplicitHeight = 212
             inherited Panel: TPanel
               Top = 154
-              Width = 478
+              Width = 578
+              ExplicitTop = 154
               ExplicitWidth = 478
+              inherited sbAdd: TSpeedButton
+                Left = 447
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 482
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 517
+              end
               inherited seNumber: TJvSpinEdit
                 OnChange = frameObservationsseNumberChange
               end
             end
             inherited Grid: TRbwDataGrid4
-              Width = 478
+              Width = 578
               Height = 154
-              ExplicitWidth = 478
+              ExplicitWidth = 578
+              ExplicitHeight = 154
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
           Top = 241
-          Width = 482
+          Width = 582
+          ExplicitTop = 241
           ExplicitWidth = 482
           inherited frameObsComparisons: TframeGrid
-            Width = 478
+            Width = 578
             ExplicitWidth = 478
             inherited Panel: TPanel
-              Width = 478
+              Width = 578
               ExplicitWidth = 478
+              inherited sbAdd: TSpeedButton
+                Left = 447
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 482
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 517
+              end
             end
             inherited Grid: TRbwDataGrid4
-              Width = 478
+              Width = 578
               ExplicitWidth = 478
             end
           end
@@ -408,17 +461,17 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
   object pnlName: TPanel
     Left = 0
     Top = 25
-    Width = 490
+    Width = 590
     Height = 46
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 31
+    ExplicitWidth = 490
     object edObsName: TLabeledEdit
       Left = 6
       Top = 19
       Width = 278
-      Height = 21
+      Height = 28
       EditLabel.Width = 246
       EditLabel.Height = 20
       EditLabel.Caption = 'Observation location name (obsnam)'

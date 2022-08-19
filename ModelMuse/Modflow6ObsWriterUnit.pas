@@ -18,6 +18,8 @@ type
 
   THeadDrawdownObservationLocationList = TList<THeadDrawdownObservationLocation>;
 
+  TConcentrationLists = TObjectList<THeadDrawdownObservationLocationList>;
+
   TFlowObservationLocation = record
     FCell: TCellLocation;
     FOtherCell: TCellLocation;
@@ -52,6 +54,7 @@ type
     FQuadTree: TRbwQuadTree;
     FNodeNumberQuadTree: TRbwQuadTree;
     FOldDecimalSeparator: Char;
+    FSpeciesIndex: Integer;
     function LocationQuadTree: TRbwQuadTree;
     function NodeNumberQuadTree: TRbwQuadTree;
     procedure HandleFlowObs(AScreenObject: TScreenObject; Obs: TModflow6Obs;
@@ -61,12 +64,14 @@ type
   protected
     FHeadObs: THeadDrawdownObservationLocationList;
     FDrawdownObs: THeadDrawdownObservationLocationList;
+    FConcentrations: TConcentrationLists;
     FFlowObs: TList<TFlowObservationLocation>;
     class function Extension: string; override;
     procedure Evaluate; override;
     // @name is the file extension used for the observation input file.
     class function ObservationExtension: string; override;
     // @name is the file extension used for the observation output file.
+    procedure WriteGwtFile(const AFileName: string; SpeciesIndex: Integer);
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -89,6 +94,7 @@ type
     FGeneralObsList: TBoundaryFlowObservationLocationList;
     FToMvrObsList: TBoundaryFlowObservationLocationList;
     FObGeneral: TObGeneral;
+    FSpeciesIndex: Integer;
 //    FScreenObjectsList3DArray: TScreenObjectsList3DArray;
     procedure WriteFlowObs(ObsType: string;
       List, ToMvrList: TBoundaryFlowObservationLocationList);
@@ -210,14 +216,14 @@ resourcestring
   StrErrorInDefiningHe = 'Error in defining head observation';
   StrSDoesNotDefineA = '%s does not define a head observation because it doe' +
   's not intersect any active cell.';
-  StrInvalidHeadOrDrawCalib = 'Invalid head or drawdown calibration observat' +
+  StrInvalidHeadOrDrawCalib = 'Invalid head, drawdown or concentration calibration observat' +
   'ion';
-  StrTheHeadOrDrawdownCalib = 'The head or drawdown calibration observation ' +
-  'defined by %s is invalid because it involves more than one cell. Head or ' +
-  'drawdown observations for calibration must be defined by point objects.';
-  StrMultilayerHeadOrD = 'Multilayer head or drawdown calibration observatio' +
+  StrTheHeadOrDrawdownCalib = 'The head, drawdown or concentration calibration observation ' +
+  'defined by %s is invalid because it involves more than one cell. Head, ' +
+  'drawdown,or concentration observations for calibration must be defined by point objects.';
+  StrMultilayerHeadOrD = 'Multilayer head, drawdown, or concentration calibration observatio' +
   'n';
-  StrTheHeadOrDrawdownML = 'The head or drawdown calibration observation def' +
+  StrTheHeadOrDrawdownML = 'The head, drawdown, or concentration calibration observation def' +
   'ined by %s will be treated as a multilayer observation because it involve' +
   's more than one cell but is defined by a point object.,'#13;
   StrHeadObservationObj = 'Head Observation object intersects multiple layer' +
@@ -249,6 +255,8 @@ resourcestring
 
 constructor TModflow6Obs_Writer.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
+var
+  SpeciesIndex: Integer;
 begin
   inherited;
   FOldDecimalSeparator := FormatSettings.DecimalSeparator;
@@ -257,10 +265,19 @@ begin
   FDrawdownObs := THeadDrawdownObservationLocationList.Create;
   FFlowObs := TList<TFlowObservationLocation>.Create;
   FHorizontalCells := TList<TCellAssignment>.Create;
+  FConcentrations := TConcentrationLists.Create;
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      FConcentrations.Add(THeadDrawdownObservationLocationList.Create);
+    end;
+  end;
 end;
 
 destructor TModflow6Obs_Writer.Destroy;
 begin
+  FConcentrations.Free;
   FHorizontalCells.Free;
   FQuadTree.Free;
   FNodeNumberQuadTree.Free;
@@ -415,6 +432,8 @@ var
   CellListStart: Integer;
   CellListEnd: Integer;
   LastTime: double;
+  GwtDefined: Boolean;
+  SpeciesIndex: Integer;
 //  SplitterIndex: Integer;
 //  FirstCell: Boolean;
   function GetLocation(ACell: TCellLocation): TPoint2D;
@@ -440,7 +459,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationTimeTo);
   if Model.PestUsed then
   begin
-    // These two properties need to be specified outside of TModflow6Obs_Writer;
+    // These three properties need to be specified outside of TModflow6Obs_Writer;
     Assert(DirectObsLines <> nil);
     Assert(CalculatedObsLines <> nil);
     Assert(FileNameLines <> nil);
@@ -485,14 +504,14 @@ begin
       end;
       if (Obs.MawObs <> []) or (Obs.SfrObs <> [])
         or (Obs.LakObs <> []) or (Obs.UzfObs <> [])
-        or (Obs.CSubObs.CSubObsSet <> []) then
+        or (Obs.CSubObs.CSubObsSet <> []) {or (Obs.GwtObs <> [])} then
       begin
         OtherObsDefined := True;
       end;
 
-
       if (Obs.General * [ogHead, ogDrawdown] <> [])
-        or (Obs.GroundwaterFlowObs and (Obs.GwFlowObsChoices <> [])) then
+        or (Obs.GroundwaterFlowObs and (Obs.GwFlowObsChoices <> [])
+        or (Obs.GwtObs <> [])) then
       begin
         MultiLayerHeadObs := False;
         MultiLayerFormulaList.Clear;
@@ -505,7 +524,7 @@ begin
           CellListStart := -1;
           CellListEnd := -1;
           if Model.PestUsed
-            and (Obs.General * [ogHead, ogDrawdown] <> [])
+            and ((Obs.General * [ogHead, ogDrawdown] <> []) or (Obs.GwtObs <> []))
             and (Obs.CalibrationObservations. Count > 0) then
           begin
             for CellIndex := 0 to CellList.Count - 1 do
@@ -581,8 +600,7 @@ begin
           end;
 
           if not Model.PestUsed or (CellList.Count = 1)
-            or (Obs.CalibrationObservations.Count = 0)
-            {or Obs.CalibrationObservations.MultiLayer} then
+            or (Obs.CalibrationObservations.Count = 0) then
           begin
             CellListStart := 0;
             CellListEnd := CellList.Count - 1;
@@ -609,7 +627,7 @@ begin
             begin
               if Model.PestUsed and (CellList.Count <> 1)
                 and FoundFirst and not ErrorAdded
-                and (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
+                and ((Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> []) or (Obs.GwtObs <> []))
                 and (Obs.CalibrationObservations. Count > 0)
                 then
               begin
@@ -632,7 +650,7 @@ begin
               FoundFirst := True;
               if Model.PestUsed
                 and ((CellList.Count = 1) or (AScreenObject.Count = 1))
-                and (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
+                and ((Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> []) or (Obs.GwtObs <> []))
                 then
               begin
                 // find neighbors
@@ -836,21 +854,58 @@ begin
                       end;
                       DirectObsLines.Add('');
                     end;
+                    if (ogwtConcentration in Obs.CalibrationObservations.GwtObs)
+                      and (Obs.GwtSpecies >= 0)  then
+                    begin
+                      HeadDrawdown.FName := Obs.Name + '_C' + IntToStr(ObsIndex);
+                      FConcentrations[Obs.GwtSpecies].Add(HeadDrawdown);
+                      DirectObsLines.Add(Format('  ID %0:s', ['conc_' + HeadDrawdown.FName]));
+                      DirectObsLines.Add(Format('  LOCATION %0:g %1:g', [APoint.x, APoint.y]));
+                      for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
+                      begin
+                        Observation := Obs.CalibrationObservations[ObservationIndex];
+                        if (Observation.ObSeries = osGWT)
+                          and (Observation.GwtOb = ogwtConcentration) then
+                        begin
+                          ObservationName := Format('%0:s_%1:d',
+                            [HeadDrawdown.FName, ObservationIndex+1]);
+                          DirectObsLines.Add(Format('  OBSNAME %0:s 1:g',
+                            ['conc_' + ObservationName, Observation.Time - StartTime]));
+                          Observation.InterpObsNames.Add(ObservationName);
+                          if LastTime < Observation.Time then
+                          begin
+                            frmErrorsAndWarnings.AddError(Model, StrObservationTimeTo,
+                              Format(StrAnObservationTime,
+                              [AScreenObject.Name]), AScreenObject)
+                          end;
+                        end;
+                      end;
+                      DirectObsLines.Add('');
+                    end;
                     Inc(ObsIndex);
                   end;
                   for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
                   begin
                     Observation := Obs.CalibrationObservations[ObservationIndex];
-                    if (Observation.ObSeries = osGeneral)
-                      and (Observation.ObGeneral in [ogHead, ogDrawdown]) then
+                    if ((Observation.ObSeries = osGeneral)
+                      and (Observation.ObGeneral in [ogHead, ogDrawdown]))
+                      or ((Observation.ObSeries = osGWT)
+                      and (Observation.GwtOb in [ogwtConcentration])) then
                     begin
-                      if Observation.ObGeneral = ogHead then
+                      if Observation.ObSeries = osGeneral then
                       begin
-                        Prefix := 'hd_';
+                        if Observation.ObGeneral = ogHead then
+                        begin
+                          Prefix := 'hd_';
+                        end
+                        else
+                        begin
+                          Prefix := 'ddn_';
+                        end;
                       end
                       else
                       begin
-                        Prefix := 'ddn_';
+                        Prefix := 'conc_';
                       end;
 
                       if (CellList.Count > 1) and Obs.CalibrationObservations.MultiLayer then
@@ -924,7 +979,7 @@ begin
                   NeighborCells.Free;
                 end;
               end
-              else if (Obs.General * [ogHead, ogDrawdown] <> []) then
+              else if (Obs.General * [ogHead, ogDrawdown] <> []) or (Obs.GwtObs <> []) then
               begin
                 HeadDrawdown.FCell := ACell.Cell;
                 HeadDrawdown.FName := Obs.Name;
@@ -940,6 +995,14 @@ begin
                 if ogDrawdown in Obs.General then
                 begin
                   FDrawdownObs.Add(HeadDrawdown);
+                end;
+                if ogwtConcentration in Obs.GwtObs  then
+                begin
+                  if Model.GwtUsed and (Obs.GwtSpecies >= 0)
+                    and (Obs.GwtSpecies < Model.MobileComponents.Count) then
+                  begin
+                    FConcentrations[Obs.GwtSpecies].Add(HeadDrawdown);
+                  end;
                 end;
               end;
               if Obs.GroundwaterFlowObs then
@@ -1015,8 +1078,21 @@ begin
   if (FHeadObs.Count = 0) and (FDrawdownObs.Count = 0) and (FFlowObs.Count = 0)
     and not OtherObsDefined then
   begin
-    frmErrorsAndWarnings.AddWarning(Model, StrNoHeadDrawdownO,
-      StrBecauseNoHeadDra);
+    GwtDefined := False;
+    for SpeciesIndex := 0 to FConcentrations.Count - 1 do
+    begin
+      if FConcentrations[SpeciesIndex].Count > 0 then
+      begin
+        GwtDefined := True;
+        break;
+      end;
+    end;
+
+    if not GwtDefined then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrNoHeadDrawdownO,
+        StrBecauseNoHeadDra);
+    end;
   end;
 end;
 
@@ -1334,7 +1410,8 @@ begin
 
       if Obs <> nil then
       begin
-        if ogHead in Obs.General then
+        if ((FSpeciesIndex < 0) and (ogHead in Obs.General))
+          or ((FSpeciesIndex >= 0) and (ogwtConcentration in Obs.GwtObs)) then
         begin
           CellList := TCellAssignmentList.Create;
           try
@@ -1380,6 +1457,9 @@ begin
 end;
 
 procedure TModflow6Obs_Writer.WriteFile(const AFileName: string);
+var
+  SpeciesIndex: Integer;
+  ShouldQuit: Boolean;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrErrorInDefiningHe);
@@ -1398,29 +1478,59 @@ begin
 
   frmProgressMM.AddMessage(StrEvaluatingHeadDra);
   Evaluate;
+
   if (FHeadObs.Count = 0) and (FDrawdownObs.Count = 0) and (FFlowObs.Count = 0) then
   begin
-    Exit;
+    if Model.GwtUsed then
+    begin
+      ShouldQuit := True;
+      for SpeciesIndex := 0 to FConcentrations.Count - 1 do
+      begin
+        if FConcentrations[SpeciesIndex].Count > 0 then
+        begin
+          ShouldQuit := False;
+          break;
+        end;
+      end;
+      if ShouldQuit then
+      begin
+        Exit;
+      end;
+    end
+    else
+    begin
+      Exit;
+    end;
   end;
 
-  FNameOfFile := FileName(AFileName);
-  WriteToNameFile(StrOBS6, -1, FNameOfFile, foInput, Model);
+  if (FHeadObs.Count > 0) or (FDrawdownObs.Count > 0) or (FFlowObs.Count > 0) then
+  begin
+    FNameOfFile := FileName(AFileName);
+    WriteToNameFile(StrOBS6, -1, FNameOfFile, foInput, Model);
 
-//  WritePestTemplateLine;
+    FInputFileName := FNameOfFile;
+    OpenFile(FNameOfFile);
+    try
+      frmProgressMM.AddMessage(StrWritingOBS6InputF);
+      WriteDataSet0;
+      WriteOptions;
+      WriteFileOut;
 
-  FInputFileName := FNameOfFile;
-  OpenFile(FNameOfFile);
-  try
-    frmProgressMM.AddMessage(StrWritingOBS6InputF);
-    WriteDataSet0;
-    WriteOptions;
-    WriteFileOut;
+    finally
+      CloseFile;
+    end;
 
-  finally
-    CloseFile;
+    WritePestFile;
   end;
 
-  WritePestFile;
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      WriteGwtFile(AFileName, SpeciesIndex);
+      WritePestFile;
+    end;
+  end;
 end;
 
 procedure TModflow6Obs_Writer.WriteFileOut;
@@ -1506,55 +1616,92 @@ var
   end;
 begin
   ObsPackage := Package as TMf6ObservationUtility;
-  WriteHeadDrawdownOutput('head', 'hd_', FHeadObs);
-  WriteHeadDrawdownOutput('drawdown', 'ddn_', FDrawdownObs);
-
-  if FFlowObs.count > 0 then
+  if FSpeciesIndex >= 0 then
   begin
-    ObsType := 'flow-ja-face';
-    WriteString('BEGIN CONTINUOUS FILEOUT ');
-    case ObsPackage.OutputFormat of
-      ofText:
-        begin
-          OutputExtension := ObservationOutputExtension + '_' + ObsType + '.csv';
-        end;
-      ofBinary:
-        begin
-          OutputExtension := ObservationOutputExtension + '_' + ObsType + '.bin';
-        end;
-      else
-        Assert(False);
-    end;
-    OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
-    Model.AddModelOutputFile(OutputFileName);
-    OutputFileName := ExtractFileName(OutputFileName);
-    WriteString(OutputFileName);
-    if ObsPackage.OutputFormat = ofBinary then
-    begin
-      WriteString(' BINARY');
-    end;
-    NewLine;
-
-    for ObsIndex := 0 to FFlowObs.Count - 1 do
-    begin
-      FlowObs := FFlowObs[ObsIndex];
-      obsnam := FlowObs.FName;
-      Assert(Length(obsnam) <= MaxBoundNameLength);
-      WriteString('  ''');
-      WriteString(obsnam);
-      WriteString(''' ');
-      WriteString(ObsType);
-      WriteCell(FlowObs.FCell);
-      WriteString('   ');
-      WriteCell(FlowObs.FOtherCell);
-      NewLine;
-    end;
-
-    WriteString('END CONTINUOUS');
-    NewLine;
+    WriteHeadDrawdownOutput('conc', 'conc_', FConcentrations[FSpeciesIndex]);
   end
+  else
+  begin
+    WriteHeadDrawdownOutput('head', 'hd_', FHeadObs);
+    WriteHeadDrawdownOutput('drawdown', 'ddn_', FDrawdownObs);
+
+    if FFlowObs.count > 0 then
+    begin
+      ObsType := 'flow-ja-face';
+      WriteString('BEGIN CONTINUOUS FILEOUT ');
+      case ObsPackage.OutputFormat of
+        ofText:
+          begin
+            OutputExtension := ObservationOutputExtension + '_' + ObsType + '.csv';
+          end;
+        ofBinary:
+          begin
+            OutputExtension := ObservationOutputExtension + '_' + ObsType + '.bin';
+          end;
+        else
+          Assert(False);
+      end;
+      OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
+      Model.AddModelOutputFile(OutputFileName);
+      OutputFileName := ExtractFileName(OutputFileName);
+      WriteString(OutputFileName);
+      if ObsPackage.OutputFormat = ofBinary then
+      begin
+        WriteString(' BINARY');
+      end;
+      NewLine;
+
+      for ObsIndex := 0 to FFlowObs.Count - 1 do
+      begin
+        FlowObs := FFlowObs[ObsIndex];
+        obsnam := FlowObs.FName;
+        Assert(Length(obsnam) <= MaxBoundNameLength);
+        WriteString('  ''');
+        WriteString(obsnam);
+        WriteString(''' ');
+        WriteString(ObsType);
+        WriteCell(FlowObs.FCell);
+        WriteString('   ');
+        WriteCell(FlowObs.FOtherCell);
+        NewLine;
+      end;
+
+      WriteString('END CONTINUOUS');
+      NewLine;
+    end
+  end;
 end;
 
+
+procedure TModflow6Obs_Writer.WriteGwtFile(const AFileName: string;
+  SpeciesIndex: Integer);
+const
+  Abbreviation = 'OBS6';
+var
+  SpeciesName: string;
+begin
+  if FConcentrations[SpeciesIndex].Count > 0 then
+  begin
+
+    FSpeciesIndex :=  SpeciesIndex;
+    SpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
+    FNameOfFile := ChangeFileExt(AFileName, '') + '.' + SpeciesName + '.obs';
+    FInputFileName := FNameOfFile;
+
+    WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+
+    OpenFile(FNameOfFile);
+    try
+      frmProgressMM.AddMessage(StrWritingOBS6InputF);
+      WriteDataSet0;
+      WriteOptions;
+      WriteFileOut;
+    finally
+      CloseFile;
+    end;
+
+  end;
+end;
 
 { TCustomMf6ObservationWriter }
 
@@ -1575,20 +1722,7 @@ begin
       end;
     ofBinary:
       begin
-//        WriteString('    PRECISION ');
-//        case ObsPackage.OutputPrecision of
-//          opSingle:
-//            begin
-//              WriteString('SINGLE');
-//            end;
-//          opDouble:
-//            begin
-//              WriteString('DOUBLE');
-//            end;
-//          else
-//            Assert(False);
-//        end;
-//        NewLine
+        // do nothing
       end;
     else
       Assert(False);
@@ -2091,6 +2225,7 @@ begin
   begin
     Exit;
   end;
+  FSpeciesIndex := -1;
   FNameOfFile := AFileName;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrObservationNameToo);
 

@@ -7635,6 +7635,11 @@ begin
         LayerGroup := SutraLayerStructure[LayerIndex];
         result.Add(LayerGroup.DataArrayName);
       end;
+
+      if SutraLayerStructure.NodeLayerCount > 1 then
+      begin
+        result.Add(KNodeActive);
+      end;
     end;
   end;
 end;
