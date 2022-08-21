@@ -1503,6 +1503,7 @@ begin
     end;
   end;
 
+  FSpeciesIndex := -1;
   if (FHeadObs.Count > 0) or (FDrawdownObs.Count > 0) or (FFlowObs.Count > 0) then
   begin
     FNameOfFile := FileName(AFileName);
@@ -1528,7 +1529,6 @@ begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
       WriteGwtFile(AFileName, SpeciesIndex);
-      WritePestFile;
     end;
   end;
 end;
@@ -1700,6 +1700,7 @@ begin
       CloseFile;
     end;
 
+    WritePestFile;
   end;
 end;
 

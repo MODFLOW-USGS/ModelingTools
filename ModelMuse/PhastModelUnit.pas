@@ -10695,16 +10695,20 @@ const
 //    '5.0.0.23' Enhancement: When importing Shapefiles, it is now possible
 //                to use the label of a CSV attribute to indicate the data
 //                represent real numbers, integers, Booleans, or text.
-
-//               Bug fix: Fixed bug in evaluating ActiveOnLayer function
+//    '5.0.0.24' Bug fix: Fixed bug in evaluating ActiveOnLayer function
 //                that could lead to circular dependencies.
+
+//               Bug fix: When extracting simulated values for observation
+//                times before the first simulated time, the value for the
+//                first simulated time is now used by Mf6ObsExtractor and
+//.               SutraObsExtractor.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.23';
+  IIModelVersion = '5.0.0.24';
 
 function IModelVersion: string;
 begin

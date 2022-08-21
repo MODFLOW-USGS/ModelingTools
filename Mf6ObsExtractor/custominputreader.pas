@@ -1156,9 +1156,16 @@ begin
         SecondValue := ObsFile.OutputFile.SecondValue[ObsFile.Position];
         FirstTime := ObsFile.OutputFile.FirstTime;
         SecondTime := ObsFile.OutputFile.SecondTime;
-        AnObs.Value := FirstValue + (SecondValue-FirstValue)
-          * (AnObs.Time - FirstTime)
-          / (SecondTime - FirstTime);
+        if AnObs.Time < FirstTime then
+        begin
+          AnObs.Value := FirstValue;
+        end
+        else
+        begin
+          AnObs.Value := FirstValue + (SecondValue-FirstValue)
+            * (AnObs.Time - FirstTime)
+            / (SecondTime - FirstTime);
+        end;
       end;
       AnObs.TimeAssigned := True;
       AddObsToDictionary(AnObs);
