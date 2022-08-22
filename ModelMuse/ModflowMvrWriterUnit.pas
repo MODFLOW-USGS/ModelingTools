@@ -799,7 +799,7 @@ var
   ASpecies: TMobileChemSpeciesItem;
   budgetfile: string;
   BaseFileName: string;
-  concentrationfile: string;
+//  concentrationfile: string;
   budgetCsvFile: string;
   MvrPackage: TMvrPackage;
 //  MawPackage: TMawPackage;

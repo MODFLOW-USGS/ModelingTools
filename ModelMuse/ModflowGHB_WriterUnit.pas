@@ -40,7 +40,6 @@ type
     function ObsNameWarningString: string; override;
     procedure CheckCell(ValueCell: TValueCell; const PackageName: string); override;
     procedure DoBeforeWriteCells; override;
-//    function ObsTypeMF6: string; override;
     procedure WriteListOptions(InputFileName: string); override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;

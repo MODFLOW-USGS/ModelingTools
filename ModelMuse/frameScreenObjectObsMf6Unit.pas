@@ -10,6 +10,7 @@ uses
 
 type
   TFlowObsRows = (forCHD, forDRN, forEVT, forGHB, forRCH, forRIV, forWEL, forToMvr);
+  TMassFlowObsRows = (mforCNC, mforSRC);
 
 //  Head
 //well flow rate (maw)
@@ -57,6 +58,8 @@ type
     cbConcentration: TCheckBox;
     comboChemSpecies: TComboBox;
     lblSpecies: TLabel;
+    chklstGWT: TCheckListBox;
+    lblGwtObs: TLabel;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -68,6 +71,9 @@ type
     procedure chklstUZFClick(Sender: TObject);
     procedure chklstCSUBClick(Sender: TObject);
     procedure frameObservationsseNumberChange(Sender: TObject);
+    procedure cbConcentrationClick(Sender: TObject);
+    procedure chklstGWTClickCheck(Sender: TObject);
+    procedure comboChemSpeciesChange(Sender: TObject);
   private
     FOnChangeProperties: TNotifyEvent;
     FInitializing: Boolean;
@@ -97,6 +103,11 @@ uses
 
 {$R *.dfm}
 
+procedure TframeScreenObjectObsMf6.cbConcentrationClick(Sender: TObject);
+begin
+  DoOnChangeProperties;
+end;
+
 procedure TframeScreenObjectObsMf6.cbGroundwaterFlowObservationClick(Sender: TObject);
 begin
   chklstFlowObs.Enabled := cbGroundwaterFlowObservation.Checked;
@@ -124,6 +135,11 @@ begin
   DoOnChangeProperties;
 end;
 
+procedure TframeScreenObjectObsMf6.chklstGWTClickCheck(Sender: TObject);
+begin
+  DoOnChangeProperties;
+end;
+
 procedure TframeScreenObjectObsMf6.chklstLAKClick(Sender: TObject);
 begin
   DoOnChangeProperties;
@@ -143,6 +159,11 @@ procedure TframeScreenObjectObsMf6.chklstUZFClick(Sender: TObject);
 begin
   DoOnChangeProperties;
   EnableDepthFraction;
+end;
+
+procedure TframeScreenObjectObsMf6.comboChemSpeciesChange(Sender: TObject);
+begin
+  DoOnChangeProperties;
 end;
 
 procedure TframeScreenObjectObsMf6.DoOnChangeProperties;
@@ -225,6 +246,9 @@ begin
           chklstBoundaryFlow.Checked[Ord(forRIV)] := ogRiv in Mf6Obs.General;
           chklstBoundaryFlow.Checked[Ord(forWEL)] := ogWell in Mf6Obs.General;
           chklstBoundaryFlow.Checked[Ord(forToMvr)] := ogMvr in Mf6Obs.General;
+
+          chklstGWT.Checked[Ord(mforCNC)] := ogwtCNC in Mf6Obs.GwtObs;
+          chklstGWT.Checked[Ord(mforSRC)] := ogwtSRC in Mf6Obs.GwtObs;
 
           for MawOb := Low(TMawOb) to High(TMawOb) do
           begin
@@ -411,6 +435,18 @@ begin
             TCheckBoxState(ogMvr in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forToMvr)] := cbGrayed;
+          end;
+
+          if chklstGWT.State[Ord(mforCNC)] <>
+            TCheckBoxState(ogwtCNC in Mf6Obs.GwtObs) then
+          begin
+            chklstGWT.State[Ord(mforCNC)] := cbGrayed;
+          end;
+
+          if chklstGWT.State[Ord(mforSRC)] <>
+            TCheckBoxState(ogwtSRC in Mf6Obs.GwtObs) then
+          begin
+            chklstGWT.State[Ord(mforSRC)] := cbGrayed;
           end;
 
           if rgStreamObsLocation.ItemIndex <> Ord(Mf6Obs.SfrObsLocation) then
@@ -736,7 +772,6 @@ begin
         begin
           Exclude(NewGeneral, ogCHD);
         end;
-//        Mf6Obs.ChdFlowObs := chklstBoundaryFlow.Checked[Ord(forCHD)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forDRN)] <> cbGrayed then
@@ -827,7 +862,6 @@ begin
         begin
           Exclude(NewGeneral, ogMvr);
         end;
-//        Mf6Obs.ToMvrFlowObs := chklstBoundaryFlow.Checked[Ord(forToMvr)];
       end;
       Mf6Obs.General := NewGeneral;
 
@@ -843,10 +877,39 @@ begin
           Exclude(NewObGwts, ogwtConcentration);
         end;
       end;
+
+      if chklstGWT.State[Ord(mforCNC)] <> cbGrayed then
+      begin
+        if chklstGWT.Checked[Ord(mforCNC)] then
+        begin
+          Include(NewObGwts, ogwtCNC);
+        end
+        else
+        begin
+          Exclude(NewObGwts, ogwtCNC);
+        end;
+      end;
+
+      if chklstGWT.State[Ord(mforSRC)] <> cbGrayed then
+      begin
+        if chklstGWT.Checked[Ord(mforSRC)] then
+        begin
+          Include(NewObGwts, ogwtSRC);
+        end
+        else
+        begin
+          Exclude(NewObGwts, ogwtSRC);
+        end;
+      end;
+
       Mf6Obs.GwtObs := NewObGwts;
       if comboChemSpecies.ItemIndex >= 0 then
       begin
         Mf6Obs.GwtSpecies := comboChemSpecies.ItemIndex;
+      end;
+      if (Mf6Obs.GwtObs <> []) and (Mf6Obs.GwtSpecies < 0) then
+      begin
+        Mf6Obs.GwtSpecies := 0;
       end;
 
       if rgStreamObsLocation.ItemIndex >= 0 then
@@ -891,12 +954,23 @@ var
   ItemIndex: Integer;
 begin
   ObsUsed := cbHeadObservation.Checked or cbDrawdownObservation.Checked
-    or cbGroundwaterFlowObservation.Checked;
+    or cbGroundwaterFlowObservation.Checked or cbConcentration.Checked;
   if not ObsUsed then
   begin
     for ItemIndex := 0 to chklstBoundaryFlow.Items.Count - 1 do
     begin
       if chklstBoundaryFlow.State[ItemIndex] <> cbUnchecked then
+      begin
+        ObsUsed := True;
+        break;
+      end;
+    end;
+  end;
+  if not ObsUsed then
+  begin
+    for ItemIndex := 0 to chklstGWT.Items.Count - 1 do
+    begin
+      if chklstGWT.State[ItemIndex] <> cbUnchecked then
       begin
         ObsUsed := True;
         break;

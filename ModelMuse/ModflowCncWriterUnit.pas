@@ -44,8 +44,14 @@ type
     function Package: TModflowPackageSelection; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
+    function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
+    function ObsType: string; override;
+    function Mf6ObservationsUsed: Boolean; override;
+    class function ObservationExtension: string; override;
+    Class function Mf6GwtObType: TObGwt; override;
   public
     procedure WriteFile(const AFileName: string; SpeciesIndex: Integer);
+    class function ObservationOutputExtension: string; override;
   end;
 
   TModflowSrcWriter = class(TCustomSimpleGwtBoundaryWriter)
@@ -59,8 +65,14 @@ type
     function Package: TModflowPackageSelection; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
+    function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
+    function ObsType: string; override;
+    function Mf6ObservationsUsed: Boolean; override;
+    class function ObservationExtension: string; override;
+    Class function Mf6GwtObType: TObGwt; override;
   public
     procedure WriteFile(const AFileName: string; SpeciesIndex: Integer);
+    class function ObservationOutputExtension: string; override;
   end;
 
 implementation
@@ -87,6 +99,39 @@ begin
       FBoundaryFound := True;
     end;
   end;
+end;
+
+function TModflowCncWriter.IsMf6Observation(
+  AScreenObject: TScreenObject): Boolean;
+begin
+  result := ((AScreenObject.Modflow6Obs <> nil)
+    and (ogwtCNC in AScreenObject.Modflow6Obs.GwtObs))
+end;
+
+class function TModflowCncWriter.Mf6GwtObType: TObGwt;
+begin
+  result := ogwtCNC;
+end;
+
+function TModflowCncWriter.Mf6ObservationsUsed: Boolean;
+begin
+  result := (Model.ModelSelection = msModflow2015)
+    and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
+end;
+
+class function TModflowCncWriter.ObservationExtension: string;
+begin
+  result := '.ob_cnc';
+end;
+
+class function TModflowCncWriter.ObservationOutputExtension: string;
+begin
+  result := '.ob_cnc_out';
+end;
+
+function TModflowCncWriter.ObsType: string;
+begin
+  result := 'cnc'
 end;
 
 function TModflowCncWriter.Package: TModflowPackageSelection;
@@ -139,6 +184,8 @@ begin
   WritingTemplate := False;
 
   WriteFileInternal;
+
+  WriteModflow6GwtFlowObs(NameOfFile, FEvaluationType, SpeciesIndex);
 
   if  Model.PestUsed and FPestParamUsed then
   begin
@@ -265,6 +312,39 @@ begin
   end;
 end;
 
+function TModflowSrcWriter.IsMf6Observation(
+  AScreenObject: TScreenObject): Boolean;
+begin
+  result := ((AScreenObject.Modflow6Obs <> nil)
+    and (ogwtSRC in AScreenObject.Modflow6Obs.GwtObs))
+end;
+
+class function TModflowSrcWriter.Mf6GwtObType: TObGwt;
+begin
+  result := ogwtSRC;
+end;
+
+function TModflowSrcWriter.Mf6ObservationsUsed: Boolean;
+begin
+  result := (Model.ModelSelection = msModflow2015)
+    and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
+end;
+
+class function TModflowSrcWriter.ObservationExtension: string;
+begin
+  result := '.ob_src';
+end;
+
+class function TModflowSrcWriter.ObservationOutputExtension: string;
+begin
+  result := '.ob_src_out';
+end;
+
+function TModflowSrcWriter.ObsType: string;
+begin
+  result := 'src'
+end;
+
 function TModflowSrcWriter.Package: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.GwtSrcPackage;
@@ -311,6 +391,8 @@ begin
   FNameOfFile := FGwtFile;
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+
+  WriteModflow6GwtFlowObs(NameOfFile, FEvaluationType, SpeciesIndex);
 
   FPestParamUsed := False;
   WritingTemplate := False;

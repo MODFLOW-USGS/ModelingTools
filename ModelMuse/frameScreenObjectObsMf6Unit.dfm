@@ -12,7 +12,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 490
   end
   object pgcMain: TPageControl
     Left = 0
@@ -22,7 +21,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     ActivePage = tabBasic
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 490
     object tabBasic: TTabSheet
       Caption = 'Basic'
       object lblTypesOfFlowObservation: TLabel
@@ -45,6 +43,13 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Width = 113
         Height = 20
         Caption = 'Chemical species'
+      end
+      object lblGwtObs: TLabel
+        Left = 287
+        Top = 74
+        Width = 201
+        Height = 20
+        Caption = 'Type of mass flow observation'
       end
       object cbHeadObservation: TCheckBox
         Left = 3
@@ -113,6 +118,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Height = 17
         Caption = 'Concentration observation (conc)'
         TabOrder = 5
+        OnClick = cbConcentrationClick
       end
       object comboChemSpecies: TComboBox
         Left = 336
@@ -121,6 +127,19 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Height = 28
         Style = csDropDownList
         TabOrder = 6
+        OnChange = comboChemSpeciesChange
+      end
+      object chklstGWT: TCheckListBox
+        Left = 287
+        Top = 93
+        Width = 282
+        Height = 97
+        ItemHeight = 20
+        Items.Strings = (
+          'CNC (Mass flow at spec. conc.)'
+          'SRC (Mass source loading rate)')
+        TabOrder = 7
+        OnClickCheck = chklstGWTClickCheck
       end
     end
     object tabMAW: TTabSheet
@@ -344,7 +363,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             'econstress-cell)')
         TabOrder = 0
         OnClick = chklstCSUBClick
-        ExplicitWidth = 482
       end
       object pnlDelayBeds: TPanel
         Left = 0
@@ -353,7 +371,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Height = 100
         Align = alBottom
         TabOrder = 1
-        ExplicitWidth = 482
         object lblDelayInterbedNumber: TLabel
           Left = 8
           Top = 9
@@ -370,7 +387,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Columns = 8
           ItemHeight = 20
           TabOrder = 0
-          ExplicitWidth = 480
         end
       end
     end
@@ -384,7 +400,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Height = 413
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 482
+        ExplicitWidth = 582
         ExplicitHeight = 413
         inherited splObservations: TSplitter
           Top = 236
@@ -395,26 +411,29 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         inherited grpDirectObs: TGroupBox
           Width = 582
           Height = 236
-          ExplicitWidth = 482
+          ExplicitWidth = 582
           ExplicitHeight = 236
           inherited frameObservations: TframeGrid
             Width = 578
             Height = 212
-            ExplicitWidth = 478
+            ExplicitWidth = 578
             ExplicitHeight = 212
             inherited Panel: TPanel
               Top = 154
               Width = 578
               ExplicitTop = 154
-              ExplicitWidth = 478
+              ExplicitWidth = 578
               inherited sbAdd: TSpeedButton
                 Left = 447
+                ExplicitLeft = 447
               end
               inherited sbInsert: TSpeedButton
                 Left = 482
+                ExplicitLeft = 482
               end
               inherited sbDelete: TSpeedButton
                 Left = 517
+                ExplicitLeft = 517
               end
               inherited seNumber: TJvSpinEdit
                 OnChange = frameObservationsseNumberChange
@@ -432,26 +451,29 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Top = 241
           Width = 582
           ExplicitTop = 241
-          ExplicitWidth = 482
+          ExplicitWidth = 582
           inherited frameObsComparisons: TframeGrid
             Width = 578
-            ExplicitWidth = 478
+            ExplicitWidth = 578
             inherited Panel: TPanel
               Width = 578
-              ExplicitWidth = 478
+              ExplicitWidth = 578
               inherited sbAdd: TSpeedButton
                 Left = 447
+                ExplicitLeft = 447
               end
               inherited sbInsert: TSpeedButton
                 Left = 482
+                ExplicitLeft = 482
               end
               inherited sbDelete: TSpeedButton
                 Left = 517
+                ExplicitLeft = 517
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 578
-              ExplicitWidth = 478
+              ExplicitWidth = 578
             end
           end
         end
@@ -466,7 +488,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 490
     object edObsName: TLabeledEdit
       Left = 6
       Top = 19

@@ -15,7 +15,7 @@ type
     ogRch, ogEVT, ogMvr, ogUndefined);
   TObGenerals = set of TObGeneral;
 
-  TObGwt = (ogwtConcentration, ogwtUndefined);
+  TObGwt = (ogwtConcentration, ogwtCNC, ogwtSRC, ogwtUndefined);
   TObGwts = set of TObGwt;
 
   TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub, osGWT);
@@ -268,7 +268,7 @@ uses
 const
   ObGenName: array[TObGeneral] of string = ('Head', 'Drawdown', 'CHD', 'Drain', 'Well', 'GHB', 'Riv',
     'Rch', 'EVT', 'Mvr', 'undefined');
-  ObConcName: array[TObGwt] of string = ('Concentration', 'undefined');
+  ObConcName: array[TObGwt] of string = ('Concentration', 'CNC', 'SRC', 'undefined');
 
   ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak', 'Uzf', 'CSub', 'GWT');
 
@@ -407,6 +407,7 @@ begin
     SfrObs := SourceObs.SfrObs + CalibrationObservations.SfrObs;
     LakObs := SourceObs.LakObs + CalibrationObservations.LakObs;
     UzfObs := SourceObs.UzfObs + CalibrationObservations.UzfObs;
+    GwtObs := SourceObs.GwtObs + CalibrationObservations.GwtObs;
     SourceObs.CSubObs.CSubObsSet
       := SourceObs.CSubObs.CSubObsSet + CalibrationObservations.SubObsSet;
     CSubObs := SourceObs.CSubObs;
@@ -556,11 +557,10 @@ end;
 
 function TModflow6Obs.GetUsed: Boolean;
 begin
-  result := (General <> []) or {HeadObs or DrawdownObs or} GroundwaterFlowObs {or ChdFlowObs
-    or DrnFlowObs or GhbFlowObs or RivFlowObs or WelFlowObs or RchFlowObs
-    or EvtFlowObs  or ToMvrFlowObs} or (MawObs <> []) or (SfrObs <> [])
+  result := (General <> []) or GroundwaterFlowObs
+    or (MawObs <> []) or (SfrObs <> [])
     or (LakObs <> []) or (UzfObs <> []) or (CSubObs.CSubObsSet <> [])
-    or (CalibrationObservations.Count > 0);
+    or (GwtObs <> []) or (CalibrationObservations.Count > 0);
 end;
 
 function TModflow6Obs.GetUzfObs: TUzfObs;

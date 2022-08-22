@@ -126,6 +126,14 @@ type
     FUzfObs6List: TList;
     FvstCsubObsMf6Node: PVirtualNode;
     FCsubObs6List: TList;
+
+    FvstGwtConcObsMf6Node: PVirtualNode;
+    FGwtConcObs6List: TList;
+    FvstGwtCncObsMf6Node: PVirtualNode;
+    FGwtCncObs6List: TList;
+    FvstGwtSrcObsMf6Node: PVirtualNode;
+    FGwtSrcObs6List: TList;
+
     procedure RecordExpandedNodes;
     procedure RestoreExpandedNodes;
 
@@ -1025,6 +1033,21 @@ begin
       Data.Caption := 'OBS6: CSUB Observations';
       Node.CheckType := ctTriStateCheckBox;
     end
+    else if Node = FvstGwtConcObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: GWT Concentration Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstGwtCncObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: GWT CNC Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstGwtSrcObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: GWT SRC Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
     ;
 
 
@@ -1702,6 +1725,21 @@ begin
       begin
         InitializeData(FvstCsubObsMf6Node);
       end;
+
+      if ogwtConcentration in AScreenObject.Modflow6Obs.GwtObs then
+      begin
+        InitializeData(FvstGwtConcObsMf6Node);
+      end;
+      if ogwtCNC in AScreenObject.Modflow6Obs.GwtObs then
+      begin
+      if ogwtSRC in AScreenObject.Modflow6Obs.GwtObs then
+      begin
+        InitializeData(FvstGwtSrcObsMf6Node);
+      end;
+
+        InitializeData(FvstGwtCncObsMf6Node);
+      end;
+
     end;
 
     if (AScreenObject.ModflowHfbBoundary <> nil)
@@ -2004,6 +2042,10 @@ begin
     vstCheckDeleteNode(FvstSfrObsMf6Node);
     vstCheckDeleteNode(FvstUzfObsMf6Node);
     vstCheckDeleteNode(FvstCsubObsMf6Node);
+
+    vstCheckDeleteNode(FvstGwtConcObsMf6Node);
+    vstCheckDeleteNode(FvstGwtCncObsMf6Node);
+    vstCheckDeleteNode(FvstGwtSrcObsMf6Node);
 
     vstCheckDeleteNode(FvstObsMf6Node);
     vstCheckDeleteNode(FvstCalibrationObsMf6Node);
@@ -2336,6 +2378,10 @@ begin
     InitializeMF_BoundaryNode(FvstUzfObsMf6Node, PriorNode, FUzfObs6List);
     InitializeMF_BoundaryNode(FvstCsubObsMf6Node, PriorNode, FCsubObs6List);
 
+    InitializeMF_BoundaryNode(FvstGwtConcObsMf6Node, PriorNode, FGwtConcObs6List);
+    InitializeMF_BoundaryNode(FvstGwtCncObsMf6Node, PriorNode, FGwtCncObs6List);
+    InitializeMF_BoundaryNode(FvstGwtSrcObsMf6Node, PriorNode, FGwtSrcObs6List);
+
     if FvstCalibrationObsMf6Node = nil then
     begin
       FvstCalibrationObsMf6Node := vstObjects.InsertNode(
@@ -2647,6 +2693,10 @@ begin
   FSfrObs6List.Free;
   FUzfObs6List.Free;
   FCsubObs6List.Free;
+
+  FGwtConcObs6List.Free;
+  FGwtCncObs6List.Free;
+  FGwtSrcObs6List.Free;
   inherited;
 end;
 
@@ -2760,6 +2810,9 @@ begin
   FUzfObs6List := TList.Create;
   FCsubObs6List  := TList.Create;
 
+  FGwtConcObs6List  := TList.Create;
+  FGwtCncObs6List  := TList.Create;
+  FGwtSrcObs6List  := TList.Create;
 
   FCanEdit := True;
 
@@ -2884,6 +2937,10 @@ begin
   FvstUzfObsMf6Node := nil;
   FvstUzfObsMf6Node := nil;
   FvstCsubObsMf6Node := nil;
+
+  FvstGwtConcObsMf6Node := nil;
+  FvstGwtCncObsMf6Node := nil;
+  FvstGwtSrcObsMf6Node := nil;
 
   FvstObsMf6Node := nil;
   FvstCalibrationObsMf6Node := nil;
@@ -3127,6 +3184,9 @@ begin
   FUzfObs6List.Sort(ScreenObjectCompare);
   FCsubObs6List.Sort(ScreenObjectCompare);
 
+  FGwtConcObs6List.Sort(ScreenObjectCompare);
+  FGwtCncObs6List.Sort(ScreenObjectCompare);
+  FGwtSrcObs6List.Sort(ScreenObjectCompare);
 
 
   for Index := 0 to FDataSetLists.Count - 1 do

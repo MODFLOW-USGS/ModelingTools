@@ -583,10 +583,13 @@ end;
     function ObservationFileName(AFileName: string): string;
     procedure WriteModflow6FlowObs(FileName: string;
       EvaluationType: TEvaluationType);
+    procedure WriteModflow6GwtFlowObs(FileName: string;
+      EvaluationType: TEvaluationType; SpeciesIndex: integer);
     function ObsType: string; virtual;
     procedure WriteMF6ObsOption(InputFileName: string);
     procedure WriteBoundName(ACell: TValueCell);
     Class function Mf6ObType: TObGeneral; virtual;
+    Class function Mf6GwtObType: TObGwt; virtual;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -5539,6 +5542,29 @@ begin
   end;
 end;
 
+procedure TCustomTransientWriter.WriteModflow6GwtFlowObs(FileName: string;
+  EvaluationType: TEvaluationType; SpeciesIndex: integer);
+var
+  FlowObsWriter: TModflow6GwtFlowObsWriter;
+begin
+  if ((FlowObsLocations <> nil) and (FlowObsLocations.Count > 0))
+    or ((ToMvrFlowObsLocations <> nil) and (ToMvrFlowObsLocations.Count > 0)) then
+  begin
+    FileName := ChangeFileExt(FileName, ObservationExtension);
+    FlowObsWriter := TModflow6GwtFlowObsWriter.Create(Model, EvaluationType,
+      FlowObsLocations, ObsType, ToMvrFlowObsLocations,
+      ObservationOutputExtension, Mf6GwtObType, SpeciesIndex);
+    try
+      FlowObsWriter.DirectObsLines := DirectObsLines;
+      FlowObsWriter.CalculatedObsLines := CalculatedObsLines;
+      FlowObsWriter.FileNameLines := FileNameLines;
+      FlowObsWriter.WriteFile(FileName);
+    finally
+      FlowObsWriter.Free;
+    end;
+  end;
+end;
+
 procedure TCustomListWriter.WriteParameterDefinitions(const DS3, DS3Instances,
   DS4A, DataSetIdentifier, VariableIdentifiers, ErrorRoot: string;
   AssignmentMethod: TUpdateMethod;
@@ -7481,6 +7507,11 @@ end;
 class function TCustomTransientWriter.Mf6ObType: TObGeneral;
 begin
   result := ogUndefined;
+end;
+
+class function TCustomTransientWriter.Mf6GwtObType: TObGwt;
+begin
+  result := ogwtUndefined;
 end;
 
 function TCustomTransientWriter.Mf6ObservationsUsed: Boolean;
