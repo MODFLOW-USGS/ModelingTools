@@ -18,7 +18,7 @@ type
   TObGwt = (ogwtConcentration, ogwtCNC, ogwtSRC, ogwtUndefined);
   TObGwts = set of TObGwt;
 
-  TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub, osGWT);
+  TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub, osGWT, osSft);
 
   TMf6CalibrationObs = class(TCustomTimeObservationItem)
   private
@@ -31,8 +31,8 @@ type
     FObGeneral: TObGeneral;
     FInterpObsNames: TStringList;
     FMawConnectionNumber: Integer;
-//    FGwtSpecies: Integer;
     FObGwt: TObGwt;
+    FSftOb: TSftOb;
     procedure SetCSubOb(const Value: TCSubOb);
     procedure SetLakOb(const Value: TLakOb);
     procedure SetMawOb(const Value: TMawOb);
@@ -48,8 +48,9 @@ type
     function StoreUzfOb: Boolean;
     procedure SetMawConnectionNumber(const Value: Integer);
     procedure SetObGwt(const Value: TObGwt);
-//    procedure SetGwtSpecies(const Value: Integer);
     function StoreObGwt: Boolean;
+    procedure SetSftOb(const Value: TSftOb);
+    function StoreSftOb: Boolean;
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(Value: Integer); override;
@@ -67,6 +68,7 @@ type
     property ObGeneral: TObGeneral read FObGeneral write SetObGeneral stored StoreObGeneral;
     property MawOb: TMawOb read FMawOb write SetMawOb stored StoreMawOb;
     property SfrOb: TSfrOb read FSfrOb write SetSfrOb stored StoreSfrOb;
+    property SftOb: TSftOb read FSftOb write SetSftOb stored StoreSftOb;
     property LakOb: TLakOb read FLakOb write SetLakOb stored StoreLakOb;
     property UzfOb: TUzfOb read FUzfOb write SetUzfOb stored StoreUzfOb;
     property CSubOb: TCSubOb read FCSubOb write SetCSubOb stored StoreCSubOb;
@@ -74,11 +76,6 @@ type
       write SetMawConnectionNumber;
     // GWT
     property GwtOb: TObGwt read FObGwt write SetObGwt stored StoreObGwt;
-//    property GwtSpecies: Integer read FGwtSpecies write SetGwtSpecies
-//      {$IFNDEF  GWT}
-//      stored False
-//      {$ENDIF}
-//      ;
   end;
 
   TCalibObList = TList<TMf6CalibrationObs>;
@@ -96,6 +93,7 @@ type
     procedure SetCalibItem(Index: Integer; const Value: TMf6CalibrationObs);
     procedure SetMultiLayer(const Value: Boolean);
     function GetGwtObs: TObGwts;
+    function GetSftObs: TSftObs;
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent;
       ScreenObject: TObject);
@@ -103,6 +101,7 @@ type
     property ObGenerals: TObGenerals read GetObGenerals;
     property MawObs: TMawObs read GetMawObs;
     property SfrObs: TSfrObs read GetSfrObs;
+    property SftObs: TSftObs read GetSftObs;
     property LakObs: TLakObs read GetLakObs;
     property UzfObs: TUzfObs read GetUzfObs;
     property SubObsSet: TSubObsSet read GetSubObsSet;
@@ -135,6 +134,7 @@ type
     FScreenObject: TObject;
     FGwtObs: TObGwts;
     FGwtSpecies: Integer;
+    FSftObs: TSftObs;
     procedure SetDrawdownObs(const Value: Boolean);
     procedure SetGroundwaterFlowObs(const Value: Boolean);
     procedure SetGwFlowObsChoices(const Value: TGwFlowObs);
@@ -184,6 +184,8 @@ type
     function GetGwtObs: TObGwts;
     procedure SetGwtObs(const Value: TObGwts);
     procedure SetGwtSpecies(const Value: Integer);
+    function GetSftObs: TSftObs;
+    procedure SetSftObs(const Value: TSftObs);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     destructor Destroy; override;
@@ -204,6 +206,7 @@ type
     property General: TObGenerals read GetGeneral write SetGeneral;
     property MawObs: TMawObs read GetMawObs write SetMawObs;
     property SfrObs: TSfrObs read GetSfrObs write SetSfrObs;
+    property SftObs: TSftObs read GetSftObs write SetSftObs;
     property LakObs: TLakObs read GetLakObs write SetLakObs;
     property SfrObsLocation: TSfrObsLocation read FSfrObsLocation write SetSfrObsLocation;
     property UzfObs: TUzfObs read GetUzfObs write SetUzfObs;
@@ -270,7 +273,7 @@ const
     'Rch', 'EVT', 'Mvr', 'undefined');
   ObConcName: array[TObGwt] of string = ('Concentration', 'CNC', 'SRC', 'undefined');
 
-  ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak', 'Uzf', 'CSub', 'GWT');
+  ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak', 'Uzf', 'CSub', 'GWT', 'Sft');
 
 var
   ObGenNames: TStringList;
@@ -408,6 +411,7 @@ begin
     LakObs := SourceObs.LakObs + CalibrationObservations.LakObs;
     UzfObs := SourceObs.UzfObs + CalibrationObservations.UzfObs;
     GwtObs := SourceObs.GwtObs + CalibrationObservations.GwtObs;
+    SftObs := SourceObs.SftObs + CalibrationObservations.SftObs;
     SourceObs.CSubObs.CSubObsSet
       := SourceObs.CSubObs.CSubObsSet + CalibrationObservations.SubObsSet;
     CSubObs := SourceObs.CSubObs;
@@ -421,6 +425,10 @@ begin
     CalibrationObservations := SourceObs.CalibrationObservations;
 
     GwtSpecies := SourceObs.GwtSpecies;
+    if (GwtSpecies < 0) and ((GwtObs <> []) or (SftObs <>[])) then
+    begin
+      GwtSpecies := 0;
+    end;
   end
   else
   begin
@@ -550,6 +558,11 @@ begin
   result := FSfrObs + CalibrationObservations.SfrObs;
 end;
 
+function TModflow6Obs.GetSftObs: TSftObs;
+begin
+  result := FSftObs + CalibrationObservations.SftObs;
+end;
+
 function TModflow6Obs.GetToMvrFlowObs: Boolean;
 begin
   result := ogMvr in General;
@@ -558,7 +571,7 @@ end;
 function TModflow6Obs.GetUsed: Boolean;
 begin
   result := (General <> []) or GroundwaterFlowObs
-    or (MawObs <> []) or (SfrObs <> [])
+    or (MawObs <> []) or (SfrObs <> []) or (SftObs <> [])
     or (LakObs <> []) or (UzfObs <> []) or (CSubObs.CSubObsSet <> [])
     or (GwtObs <> []) or (CalibrationObservations.Count > 0);
 end;
@@ -831,6 +844,15 @@ begin
   end;
 end;
 
+procedure TModflow6Obs.SetSftObs(const Value: TSftObs);
+begin
+  if FSftObs <> Value then
+  begin
+    FSftObs := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TModflow6Obs.SetStoredUzfObsDepthFraction(const Value: TRealStorage);
 begin
   FStoredUzfObsDepthFraction.Assign(Value);
@@ -912,6 +934,7 @@ begin
     CSubOb := ObsSource.CSubOb;
 
     GwtOb := ObsSource.GwtOb;
+    SftOb := ObsSource.SftOb;
 
     //    WeightFormula := ObsSource.WeightFormula;
     MawConnectionNumber := ObsSource.MawConnectionNumber;
@@ -1026,6 +1049,10 @@ begin
     osGwt:
       begin
         result := GwtObToString(GwtOb);
+      end;
+    osSft:
+      begin
+        result := SftObToString(SftOb);
       end;
     else
       begin
@@ -1181,6 +1208,7 @@ var
   ObUzf: TUzfOb;
   ObCSub: TCSubOb;
   ObGwt: TObGwt;
+  ObSft: TSftOb;
 begin
   case ObSeries of
     osGeneral:
@@ -1239,6 +1267,14 @@ begin
           Exit;
         end;
       end;
+    osSft:
+      begin
+        if TryGetSftOb(Value, ObSft) then
+        begin
+          SftOb := ObSft;
+          Exit;
+        end;
+      end;
     else
       begin
         Assert(False);
@@ -1280,6 +1316,11 @@ begin
     GwtOb := ObGwt;
     ObSeries := osGwt;
   end
+  else if TryGetSftOb(Value, ObSft) then
+  begin
+    SftOb := ObSft;
+    ObSeries := osSft;
+  end
   else
   begin
     Assert(False);
@@ -1295,10 +1336,14 @@ begin
   end;
 end;
 
-//procedure TMf6CalibrationObs.SetUsed(const Value: Boolean);
-//begin
-//
-//end;
+procedure TMf6CalibrationObs.SetSftOb(const Value: TSftOb);
+begin
+  if FSftOb <> Value then
+  begin
+    FSftOb := Value;
+    InvalidateModel;
+  end;
+end;
 
 procedure TMf6CalibrationObs.SetUzfOb(const Value: TUzfOb);
 begin
@@ -1308,11 +1353,6 @@ begin
     InvalidateModel;
   end;
 end;
-
-//procedure TMf6CalibrationObs.SetWeightFormula(const Value: string);
-//begin
-//  UpdateFormula(Value, 0, FWeightFormula);
-//end;
 
 function TMf6CalibrationObs.StoreCSubOb: Boolean;
 begin
@@ -1348,38 +1388,15 @@ begin
   result := ObSeries = osSfr;
 end;
 
+function TMf6CalibrationObs.StoreSftOb: Boolean;
+begin
+  result := ObSeries = osSft;
+end;
+
 function TMf6CalibrationObs.StoreUzfOb: Boolean;
 begin
   result := ObSeries = osUzf;
 end;
-
-//procedure TMf6CalibrationObs.UpdateFormula(Value: string; Position: integer;
-//  var FormulaObject: TFormulaObject);
-////var
-////  ParentModel: TPhastModel;
-////  Compiler: TRbwParser;
-////  LocalObserver: TObserver;
-//begin
-//  if FormulaObject.Formula <> Value then
-//  begin
-////    ParentModel := Model as TPhastModel;
-////    if ParentModel <> nil then
-////    begin
-////      Compiler := ParentModel.rpThreeDFormulaCompiler;
-////      LocalObserver := Observer[Position];
-////      UpdateFormulaDependencies(FormulaObject.Formula, Value, LocalObserver,
-////        Compiler);
-////    end;
-//    InvalidateModel;
-//    if not(csDestroying in frmGoPhast.PhastModel.ComponentState) and
-//      not frmGoPhast.PhastModel.Clearing then
-//    begin
-//      frmGoPhast.PhastModel.FormulaManager.ChangeFormula(FormulaObject, Value,
-//        frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
-//        GlobalRemoveMf6CalibrationObsSubscription, GlobalRestoreMf6CalibrationObsSubscription, self);
-//    end;
-//  end;
-//end;
 
 { TMf6CalibrationObservations }
 
@@ -1485,6 +1502,22 @@ begin
     if Item.ObSeries = osSfr then
     begin
       Include(result, Item.SfrOb);
+    end;
+  end;
+end;
+
+function TMf6CalibrationObservations.GetSftObs: TSftObs;
+var
+  Index: Integer;
+  Item: TMf6CalibrationObs;
+begin
+  result := [];
+  for Index := 0 to Count - 1 do
+  begin
+    Item := Items[Index];
+    if Item.ObSeries = osSft then
+    begin
+      Include(result, Item.SftOb);
     end;
   end;
 end;

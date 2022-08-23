@@ -12,10 +12,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitLeft = 3
-  ExplicitTop = 3
-  ExplicitWidth = 802
-  ExplicitHeight = 602
+  ExplicitWidth = 800
+  ExplicitHeight = 594
   TextHeight = 19
   object pageMain: TPageControl
     Left = 0
@@ -597,13 +595,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitHeight = 19
           end
           inherited cbPhastInterpolation: TJvCheckBox
-            Width = 241
+            Width = 238
+            Height = 19
             OnClick = framePhastInterpolationDatacbPhastInterpolationClick
             HotTrackFont.Charset = ANSI_CHARSET
             HotTrackFont.Height = 19
             HotTrackFont.Name = 'Arial'
             HotTrackFont.Pitch = fpVariable
-            ExplicitWidth = 241
+            ExplicitWidth = 238
+            ExplicitHeight = 19
           end
           inherited rdeDistance1: TRbwDataEntry
             Top = 68
@@ -2308,7 +2308,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited cbPhastInterpolation: TJvCheckBox
               Left = 16
               Top = 65
-              Width = 241
+              Width = 238
+              Height = 19
               TabOrder = 3
               Visible = False
               OnClick = framePhastInterpolationBoundariescbPhastInterpolationClick
@@ -2318,7 +2319,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               HotTrackFont.Pitch = fpVariable
               ExplicitLeft = 16
               ExplicitTop = 65
-              ExplicitWidth = 241
+              ExplicitWidth = 238
+              ExplicitHeight = 19
             end
             inherited rdeDistance1: TRbwDataEntry
               Left = 8
@@ -2589,7 +2591,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnSelectCell = frameChdParamrdgModflowBoundarySelectCell
                 OnSetEditText = frameChdParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameChdParamdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -2691,6 +2692,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
+                OnEndUpdate = frameChdParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 256
@@ -2834,7 +2836,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameGhbParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameGhbParamdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -2936,6 +2937,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
+                OnEndUpdate = frameGhbParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 211
@@ -3103,7 +3105,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameWellParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameWellParamdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -3180,6 +3181,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
+                OnEndUpdate = frameWellParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 184
@@ -3322,7 +3324,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameRivParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameRivParamdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -3449,6 +3450,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
+                OnEndUpdate = frameRivParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 219
@@ -3597,7 +3599,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameDrnParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameDrnParamdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -3699,6 +3700,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
+                OnEndUpdate = frameDrnParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 208
@@ -3829,7 +3831,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameDrtParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameDrtParamdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -3956,6 +3957,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
+                OnEndUpdate = frameDrtParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 169
@@ -4299,7 +4301,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameRchParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameRchParamdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -4401,6 +4402,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = False
                   end>
+                OnEndUpdate = frameRchParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 259
@@ -4520,7 +4522,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameEvtParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameEvtParamdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -4597,6 +4598,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
+                OnEndUpdate = frameEvtParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 286
@@ -4726,7 +4728,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameEtsParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameEtsParamdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -4803,6 +4804,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
+                OnEndUpdate = frameEtsParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 256
@@ -4894,7 +4896,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameResdgModflowBoundarySetEditText
                 OnButtonClick = frameResdgModflowBoundaryButtonClick
-                OnEndUpdate = frameResdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -4996,6 +4997,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = False
                   end>
+                OnEndUpdate = frameResdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitTop = 51
                 ExplicitWidth = 579
@@ -5139,7 +5141,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameLakdgModflowBoundarySetEditText
                 OnButtonClick = frameResdgModflowBoundaryButtonClick
-                OnEndUpdate = frameLakdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -5341,6 +5342,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = False
                   end>
+                OnEndUpdate = frameLakdgModflowBoundaryEndUpdate
                 ExplicitWidth = 579
                 ExplicitHeight = 141
                 RowHeights = (
@@ -6041,6 +6043,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboMultiIprior: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
+                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                 end
@@ -7493,7 +7496,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameScreenObjectUZFdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameScreenObjectUZFdgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -7645,6 +7647,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = True
                   end>
+                OnEndUpdate = frameScreenObjectUZFdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitTop = 51
                 ExplicitWidth = 579
@@ -8134,9 +8137,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitTop = 284
               end
               inherited lblMessage: TLabel
-                Height = 114
+                Height = 95
                 Visible = True
-                ExplicitHeight = 114
+                ExplicitHeight = 95
               end
               inherited rgChoice: TRadioGroup
                 OnClick = frameModpathParticlesrgChoiceClick
@@ -8804,6 +8807,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               OnChange = frameMNW2pcMnw2Change
               ExplicitWidth = 581
               inherited tabBasic: TTabSheet
+                inherited comboLossType: TJvImageComboBox
+                  ItemIndex = -1
+                end
                 inherited edPartialPenetration: TJvComboEdit
                   Left = 227
                   OnButtonClick = frameScreenObjectSFRjceButtonClick
@@ -9783,7 +9789,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ColCount = 5
                 OnSetEditText = frameFarmWelldgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                OnEndUpdate = frameFarmWelldgModflowBoundaryEndUpdate
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -9905,6 +9910,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     CheckStyle = csCheck
                     AutoAdjustColWidths = False
                   end>
+                OnEndUpdate = frameFarmWelldgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 251
@@ -10222,7 +10228,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 166
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 17
               EditLabel.ExplicitWidth = 166
               EditLabel.ExplicitHeight = 19
@@ -10234,7 +10239,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 186
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 66
               EditLabel.ExplicitWidth = 186
               EditLabel.ExplicitHeight = 19
@@ -10246,7 +10250,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 217
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 116
               EditLabel.ExplicitWidth = 217
               EditLabel.ExplicitHeight = 19
@@ -10258,7 +10261,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 500
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 166
               EditLabel.ExplicitWidth = 500
               EditLabel.ExplicitHeight = 19
@@ -10270,7 +10272,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 504
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 215
               EditLabel.ExplicitWidth = 504
               EditLabel.ExplicitHeight = 19
@@ -10287,7 +10288,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 337
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 265
               EditLabel.ExplicitWidth = 337
               EditLabel.ExplicitHeight = 19
@@ -10304,7 +10304,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 206
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 313
               EditLabel.ExplicitWidth = 206
               EditLabel.ExplicitHeight = 19
@@ -10360,7 +10359,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 80
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 17
               EditLabel.ExplicitWidth = 80
               EditLabel.ExplicitHeight = 19
@@ -10975,6 +10973,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboRouteType: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
+                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                   inherited cbbObservationTypes: TJvCheckedComboBox
@@ -12254,7 +12253,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitHeight = 19
                 end
                 inherited lblBottom: TLabel
+                  Width = 50
                   Height = 19
+                  ExplicitWidth = 50
                   ExplicitHeight = 19
                 end
                 inherited lblStartingHead: TLabel
@@ -12293,6 +12294,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited comboConductEq: TJvImageComboBox
                   Height = 29
                   ItemHeight = 23
+                  ItemIndex = -1
                   ExplicitHeight = 29
                 end
               end
@@ -12447,7 +12449,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pgcMain: TPageControl
               Width = 581
               Height = 405
-              ActivePage = frameObsMf6.tabBasic
+              ActivePage = frameObsMf6.tabSFR
               ExplicitWidth = 581
               ExplicitHeight = 405
               inherited tabBasic: TTabSheet
@@ -12466,6 +12468,18 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitWidth = 200
                   ExplicitHeight = 19
                 end
+                inherited lblSpecies: TLabel
+                  Width = 129
+                  Height = 19
+                  ExplicitWidth = 129
+                  ExplicitHeight = 19
+                end
+                inherited lblGwtObs: TLabel
+                  Width = 218
+                  Height = 19
+                  ExplicitWidth = 218
+                  ExplicitHeight = 19
+                end
                 inherited chklstFlowObs: TCheckListBox
                   ItemHeight = 19
                 end
@@ -12477,10 +12491,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Height = 27
                   ExplicitHeight = 27
                 end
+                inherited chklstGWT: TCheckListBox
+                  ItemHeight = 19
+                end
               end
               inherited tabMAW: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstMAW: TCheckListBox
                   Height = 270
@@ -12490,17 +12506,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabSFR: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 482
-                ExplicitHeight = 414
+                ExplicitWidth = 573
+                ExplicitHeight = 371
+                inherited lblSFR: TLabel
+                  Width = 32
+                  Height = 19
+                  ExplicitWidth = 32
+                  ExplicitHeight = 19
+                end
+                inherited lblSFT: TLabel
+                  Width = 30
+                  Height = 19
+                  ExplicitWidth = 30
+                  ExplicitHeight = 19
+                end
                 inherited chklstSFR: TCheckListBox
-                  Height = 278
                   ItemHeight = 19
-                  ExplicitHeight = 278
+                end
+                inherited chklstSFT: TCheckListBox
+                  ItemHeight = 19
                 end
               end
               inherited tabLAK: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstLAK: TCheckListBox
                   Height = 366
@@ -12510,7 +12538,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabUZF: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited lblDepthFraction: TLabel
                   Width = 430
@@ -12524,23 +12551,19 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabCSUB: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited splCSub: TSplitter
                   Top = 309
-                  Width = 482
                   ExplicitTop = 309
                   ExplicitWidth = 582
                 end
                 inherited chklstCSUB: TCheckListBox
-                  Width = 482
                   Height = 309
                   ItemHeight = 19
                   ExplicitHeight = 309
                 end
                 inherited pnlDelayBeds: TPanel
                   Top = 314
-                  Width = 482
                   ExplicitTop = 314
                   inherited lblDelayInterbedNumber: TLabel
                     Width = 357
@@ -12549,38 +12572,31 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     ExplicitHeight = 19
                   end
                   inherited chklstDelayBeds: TCheckListBox
-                    Width = 480
                     ItemHeight = 19
                   end
                 end
               end
               inherited tabCalibration: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited framePestObs: TframePestObsMf6
-                  Width = 482
                   Height = 414
                   ExplicitHeight = 414
                   inherited splObservations: TSplitter
                     Top = 237
-                    Width = 482
                     ExplicitTop = 237
                     ExplicitWidth = 582
                   end
                   inherited grpDirectObs: TGroupBox
-                    Width = 482
                     Height = 237
                     ExplicitHeight = 237
                     inherited frameObservations: TframeGrid
                       Top = 21
-                      Width = 478
                       Height = 214
                       ExplicitTop = 21
                       ExplicitHeight = 214
                       inherited Panel: TPanel
                         Top = 156
-                        Width = 478
                         ExplicitTop = 156
                         inherited lbNumber: TLabel
                           Width = 218
@@ -12589,15 +12605,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                           ExplicitHeight = 19
                         end
                         inherited sbAdd: TSpeedButton
-                          Left = 307
+                          Left = 374
                           ExplicitLeft = 307
                         end
                         inherited sbInsert: TSpeedButton
-                          Left = 332
+                          Left = 404
                           ExplicitLeft = 332
                         end
                         inherited sbDelete: TSpeedButton
-                          Left = 356
+                          Left = 433
                           ExplicitLeft = 356
                         end
                         inherited seNumber: TJvSpinEdit
@@ -12606,7 +12622,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
-                        Width = 478
                         Height = 156
                         OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                         ExplicitHeight = 156
@@ -12615,17 +12630,14 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited grpObsComparisons: TGroupBox
                     Top = 242
-                    Width = 482
                     ExplicitTop = 242
                     inherited frameObsComparisons: TframeGrid
                       Top = 21
-                      Width = 478
                       Height = 149
                       ExplicitTop = 21
                       ExplicitHeight = 149
                       inherited Panel: TPanel
                         Top = 114
-                        Width = 478
                         ExplicitTop = 114
                         inherited lbNumber: TLabel
                           Width = 262
@@ -12634,15 +12646,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                           ExplicitHeight = 19
                         end
                         inherited sbAdd: TSpeedButton
-                          Left = 307
+                          Left = 374
                           ExplicitLeft = 307
                         end
                         inherited sbInsert: TSpeedButton
-                          Left = 332
+                          Left = 404
                           ExplicitLeft = 332
                         end
                         inherited sbDelete: TSpeedButton
-                          Left = 356
+                          Left = 433
                           ExplicitLeft = 356
                         end
                         inherited seNumber: TJvSpinEdit
@@ -12651,7 +12663,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
-                        Width = 478
                         Height = 114
                         ExplicitHeight = 114
                       end
@@ -12667,7 +12678,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 27
                 EditLabel.Width = 266
                 EditLabel.Height = 19
-                EditLabel.ExplicitLeft = 6
                 EditLabel.ExplicitTop = -3
                 EditLabel.ExplicitWidth = 266
                 EditLabel.ExplicitHeight = 19
@@ -15526,7 +15536,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
         OnBeforeDrawCell = dgVerticiesBeforeDrawCell
-        OnEndUpdate = dgVerticiesEndUpdate
         OnStateChange = dgVerticiesStateChange
         ColorRangeSelection = False
         Columns = <
@@ -15654,6 +15663,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
+        OnEndUpdate = dgVerticiesEndUpdate
         WordWrapRowCaptions = False
         ColWidths = (
           25

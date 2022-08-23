@@ -171,6 +171,19 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
+  TSftObsWriter = class(TCustomMf6ObservationWriter)
+  private
+    FObsList: TSft6ObservationList;
+    procedure WriteSftObs;
+  protected
+    class function Extension: string; override;
+    procedure Evaluate; override;
+  public
+    Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
+      ObsList: TSft6ObservationList; SpeciesIndex: Integer); reintroduce;
+    procedure WriteFile(const AFileName: string);
+  end;
+
   TLakObsWriter = class(TCustomMf6ObservationWriter)
   private
     FObsList: TLakObservationList;
@@ -2206,8 +2219,6 @@ begin
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
 
-//  WritePestTemplateLine;
-
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
@@ -2276,7 +2287,6 @@ var
         DirectObsLines.Add('');
       end;
     end;
-
   end;
 begin
   ObTypes := [];
@@ -3990,6 +4000,366 @@ begin
       begin
         Assert(False)
       end;
+  end;
+end;
+
+{ TSftObsWriter }
+
+constructor TSftObsWriter.Create(Model: TCustomModel;
+  EvaluationType: TEvaluationType; ObsList: TSft6ObservationList;
+  SpeciesIndex: Integer);
+begin
+  inherited Create(Model, EvaluationType);
+  FObsList := ObsList;
+end;
+
+procedure TSftObsWriter.Evaluate;
+begin
+  // do nothing
+end;
+
+class function TSftObsWriter.Extension: string;
+begin
+  Result := '';
+  Assert(False);
+end;
+
+procedure TSftObsWriter.WriteFile(const AFileName: string);
+begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  FNameOfFile := AFileName;
+
+  frmProgressMM.AddMessage('Writing SFT observations');
+  Assert(FObsList.Count > 0);
+  Model.AddModelInputFile(FNameOfFile);
+
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
+  try
+    WriteDataSet0;
+    WriteOptions;
+    WriteSftObs;
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TSftObsWriter.WriteSftObs;
+var
+  ObTypes: TSftObs;
+  ObsIndex: Integer;
+  ObsPackage: TMf6ObservationUtility;
+  OutputTypeExtension: string;
+  AnObsType: TSftOb;
+  OutputExtension: string;
+  OutputFileName: string;
+  AnObs: TSft6Observation;
+  obsnam: string;
+  ObservationType: string;
+  boundname: string;
+  ReachIndex: Integer;
+  ReachNumber: Integer;
+  ReachNumberStr: string;
+  ObsNames: TStringList;
+  Root: string;
+  OutputFormat: string;
+  CalibObservations: TMf6CalibrationObservations;
+  StartTime: Double;
+  Prefix: string;
+  procedure CheckForDuplicateObsNames;
+  begin
+    if ObsNames.IndexOf(obsnam) >= 0 then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrNonuniqueSFRObser,
+        Format(StrTheFollowingSFROb, [obsnam]));
+    end
+    else
+    begin
+      ObsNames.Add(obsnam);
+    end;
+  end;
+  procedure WritePestObs;
+  var
+    CalibIndex: Integer;
+    CalibObs: TMf6CalibrationObs;
+  begin
+    if Model.PestUsed then
+    begin
+      if AnObsType in CalibObservations.SftObs then
+      begin
+        DirectObsLines.Add(Format('  ID %s', [obsnam]));
+        for CalibIndex := 0 to CalibObservations.Count - 1 do
+        begin
+          CalibObs := CalibObservations[CalibIndex];
+          if (CalibObs.ObSeries = osSft)
+            and (AnObsType = CalibObs.SftOb) then
+          begin
+            DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
+              [CalibObs.Name, CalibObs.Time - StartTime]));
+          end;
+        end;
+        DirectObsLines.Add('');
+      end;
+    end;
+  end;
+begin
+  ObTypes := [];
+  for ObsIndex := 0 to FObsList.Count - 1 do
+  begin
+    ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
+  end;
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
+  ObsPackage := Package as TMf6ObservationUtility;
+  case ObsPackage.OutputFormat of
+    ofText:
+      begin
+        OutputTypeExtension := '.csv';
+        OutputFormat := 'TEXT';
+      end;
+    ofBinary:
+      begin
+        OutputTypeExtension := '.bin';
+        OutputFormat := 'BINARY';
+      end;
+    else
+      Assert(False);
+  end;
+  ObsNames := TStringList.Create;
+  try
+    ObsNames.Sorted := True;
+    for AnObsType in ObTypes do
+    begin
+      case AnObsType of
+        stoConcentration:
+          begin
+            OutputExtension := '.sft_concentration_ob' + OutputTypeExtension;
+            ObservationType := 'concentration';
+            Prefix := 'stconc_';
+          end;
+        stoStorage:
+          begin
+            OutputExtension := '.sft_storage_ob' + OutputTypeExtension;
+            ObservationType := 'storage';
+            Prefix := 'sts_';
+          end;
+        stoConstant:
+          begin
+            OutputExtension := '.sft_constant_ob' + OutputTypeExtension;
+            ObservationType := 'constant';
+            Prefix := 'stconst_';
+          end;
+        stoFromMvr:
+          begin
+            OutputExtension := '.sft_from_mvr_ob' + OutputTypeExtension;
+            ObservationType := 'from-mvr';
+            Prefix := 'stfm_';
+          end;
+        stoToMvr:
+          begin
+            OutputExtension := '.sft_to_mvr_ob' + OutputTypeExtension;
+            ObservationType := 'to-mvr';
+            Prefix := 'st2m_';
+          end;
+        stoSFT:
+          begin
+            OutputExtension := '.sft_mass_flow_ob' + OutputTypeExtension;
+            ObservationType := 'sft';
+            Prefix := 'stmf_';
+          end;
+        stoRainfall:
+          begin
+            OutputExtension := '.sft_rainfall_ob' + OutputTypeExtension;
+            ObservationType := 'rainfall';
+            Prefix := 'stra_';
+          end;
+        stoEvaporation:
+          begin
+            OutputExtension := '.sft_evaporation_ob' + OutputTypeExtension;
+            ObservationType := 'evaporation';
+            Prefix := 'ste_';
+          end;
+        stoRunoff:
+          begin
+            OutputExtension := '.sft_runoff_ob' + OutputTypeExtension;
+            ObservationType := 'runoff';
+            Prefix := 'stru_';
+          end;
+        stoExtInflow:
+          begin
+            OutputExtension := '.sft_ext_inflow_ob' + OutputTypeExtension;
+            ObservationType := 'ext-inflow';
+            Prefix := 'stei_';
+          end;
+        stoExtOutflow:
+          begin
+            OutputExtension := '.sft_ext-outflow_ob' + OutputTypeExtension;
+            ObservationType := 'ext-outflow';
+            Prefix := 'steo_';
+          end;
+//        soUpstreamFlow:
+//          begin
+//            OutputExtension := '.sfr_upstream-flow_ob' + OutputTypeExtension;
+//            ObservationType := 'upstream-flow';
+//            Prefix := 'suf_';
+//          end;
+//        soDownstreamFlow:
+//          begin
+//            OutputExtension := '.sfr_downstream-flow_ob' + OutputTypeExtension;
+//            ObservationType := 'downstream-flow';
+//            Prefix := 'sdf_';
+//          end;
+        else
+          Assert(False);
+      end;
+      WriteString('BEGIN CONTINUOUS FILEOUT ');
+      OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
+      Model.AddModelOutputFile(OutputFileName);
+      if Model.PestUsed then
+      begin
+        Assert(FileNameLines <> nil);
+        FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+          [ExtractFileName(OutputFileName), OutputFormat]));
+      end;
+      OutputFileName := ExtractFileName(OutputFileName);
+      WriteString(OutputFileName);
+      if ObsPackage.OutputFormat = ofBinary then
+      begin
+        WriteString(' BINARY');
+      end;
+      NewLine;
+
+      for ObsIndex := 0 to FObsList.Count - 1 do
+      begin
+        AnObs := FObsList[ObsIndex];
+        if AnObsType in AnObs.FObsTypes then
+        begin
+          CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
+          Root := Prefix + AnObs.FName;
+          if Root = Prefix then
+          begin
+            Root := Format(Prefix + 'SftObs%d', [ObsIndex+1]);
+          end;
+          Assert(Length(Root) <= MaxBoundNameLength);
+          boundname := Trim(AnObs.FBoundName);
+          boundname := Copy(boundname, 1, MaxBoundNameLength);
+          boundname := ' ' + boundname + ' ';
+          case AnObs.FSfrObsLocation of
+            solAll:
+              begin
+                // Concentratin is only defined at individual reaches not for multiple
+                // combined reaches.
+                // If stage is to be used in calibration it must be
+                // for the first or last reach.
+                if AnObsType = stoConcentration then
+                begin
+                  ReachNumberStr := IntToStr(AnObs.FCount + AnObs.FReachStart);
+                  While Length(Root) + 1 + Length(ReachNumberStr) > MaxBoundNameLength do
+                  begin
+                    Root := Copy(Root, 1, Length(Root)-1);
+                  end;
+
+                  for ReachIndex := 1 to AnObs.FCount do
+                  begin
+                    ReachNumber := ReachIndex + AnObs.FReachStart;
+                    WriteString(' ''');
+                    obsnam := Root + '_' + IntToStr(ReachNumber);
+                    WriteString(obsnam);
+                    WriteString(''' ');
+                    WriteString(ObservationType);
+                    WriteInteger(ReachNumber);
+                    NewLine;
+                    CheckForDuplicateObsNames;
+                  end;
+                end
+                else
+                begin
+                  obsnam := Root;
+                  WriteString(' ''');
+                  WriteString(obsnam);
+                  WriteString(''' ');
+                  WriteString(ObservationType);
+                  WriteString(boundname);
+                  NewLine;
+                  CheckForDuplicateObsNames;
+                  WritePestObs;
+                end;
+              end;
+            solFirst:
+              begin
+                ReachNumber := 1 + AnObs.FReachStart;
+                ReachNumberStr := IntToStr(ReachNumber);
+                While Length(Root) + 1 + Length(ReachNumberStr) > MaxBoundNameLength do
+                begin
+                  Root := Copy(Root, 1, Length(Root)-1);
+                end;
+                obsnam := Root;
+                WriteString(' ''');
+                WriteString(obsnam);
+                WriteString(''' ');
+                WriteString(ObservationType);
+                WriteInteger(ReachNumber);
+                NewLine;
+                CheckForDuplicateObsNames;
+                WritePestObs;
+              end;
+            solLast:
+              begin
+                ReachNumber := AnObs.FCount + AnObs.FReachStart;
+                ReachNumberStr := IntToStr(ReachNumber);
+                While Length(Root) + 1 + Length(ReachNumberStr) > MaxBoundNameLength do
+                begin
+                  Root := Copy(Root, 1, Length(Root)-1);
+                end;
+                obsnam := Root;
+                WriteString(' ''');
+                WriteString(obsnam);
+                WriteString(''' ');
+                WriteString(ObservationType);
+                WriteInteger(ReachNumber);
+                NewLine;
+                CheckForDuplicateObsNames;
+                WritePestObs;
+              end;
+            solIndividual:
+              begin
+                // For calibration purposes, solIndividual can not be used.
+                ReachNumberStr := IntToStr(AnObs.FCount + AnObs.FReachStart);
+                While Length(Root) + 1 + Length(ReachNumberStr) > MaxBoundNameLength do
+                begin
+                  Root := Copy(Root, 1, Length(Root)-1);
+                end;
+                for ReachIndex := 1 to AnObs.FCount do
+                begin
+                  ReachNumber := ReachIndex + AnObs.FReachStart;
+                  WriteString(' ''');
+                  obsnam := Root + '_' + IntToStr(ReachNumber);
+                  WriteString(obsnam);
+                  WriteString(''' ');
+                  WriteString(ObservationType);
+                  WriteInteger(ReachNumber);
+                  NewLine;
+                end;
+                CheckForDuplicateObsNames;
+              end
+            else
+              Assert(False);
+          end;
+        end;
+      end;
+
+      WriteString('END CONTINUOUS');
+      NewLine;
+      NewLine;
+    end;
+  finally
+    ObsNames.Free;
   end;
 end;
 

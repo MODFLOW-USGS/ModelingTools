@@ -60,6 +60,9 @@ type
     lblSpecies: TLabel;
     chklstGWT: TCheckListBox;
     lblGwtObs: TLabel;
+    chklstSFT: TCheckListBox;
+    lblSFR: TLabel;
+    lblSFT: TLabel;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -74,6 +77,7 @@ type
     procedure cbConcentrationClick(Sender: TObject);
     procedure chklstGWTClickCheck(Sender: TObject);
     procedure comboChemSpeciesChange(Sender: TObject);
+    procedure chklstSFTClickCheck(Sender: TObject);
   private
     FOnChangeProperties: TNotifyEvent;
     FInitializing: Boolean;
@@ -155,6 +159,11 @@ begin
   DoOnChangeProperties;
 end;
 
+procedure TframeScreenObjectObsMf6.chklstSFTClickCheck(Sender: TObject);
+begin
+  DoOnChangeProperties;
+end;
+
 procedure TframeScreenObjectObsMf6.chklstUZFClick(Sender: TObject);
 begin
   DoOnChangeProperties;
@@ -191,6 +200,7 @@ var
   DelayArray: array of Boolean;
   DelayIndex: Integer;
   Position: Integer;
+  SftOb: TSftOb;
 begin
   FActiveObs := False;
   FInitializing := True;
@@ -261,6 +271,13 @@ begin
             chklstSFR.Checked[Ord(SfrOb)] :=
               SfrOb in Mf6Obs.SfrObs;
           end;
+
+          for SftOb := Low(TSftOb) to High(TSftOb) do
+          begin
+            chklstSFT.Checked[Ord(SftOb)] :=
+              SftOb in Mf6Obs.SftObs;
+          end;
+
           rgStreamObsLocation.ItemIndex := Ord(Mf6Obs.SfrObsLocation);
 
           for LakOb := Low(TLakOb) to High(TLakOb) do
@@ -346,6 +363,15 @@ begin
               TCheckBoxState(SfrOb in Mf6Obs.SfrObs) then
             begin
               chklstSFR.State[Ord(SfrOb)] := cbGrayed;
+            end;
+          end;
+
+          for SftOb := Low(TSftOb) to High(TSftOb) do
+          begin
+            if chklstSFT.State[Ord(SftOb)] <>
+              TCheckBoxState(SftOb in Mf6Obs.SftObs) then
+            begin
+              chklstSFT.State[Ord(SftOb)] := cbGrayed;
             end;
           end;
 
@@ -478,6 +504,7 @@ var
   CSubIndex: Integer;
   IbIndex: Integer;
   SpeciesIndex: Integer;
+  SftIndex: Integer;
 begin
   pgcMain.ActivePageIndex := 0;
 
@@ -512,6 +539,12 @@ begin
   for SfrIndex := 0 to chklstSFR.Items.Count - 1 do
   begin
     chklstSFR.State[SfrIndex] := cbUnchecked;
+  end;
+
+  chklstSFT.Enabled := frmGoPhast.PhastModel.GwtUsed;
+  for SftIndex := 0 to chklstSFT.Items.Count - 1 do
+  begin
+    chklstSFT.State[SftIndex] := cbUnchecked;
   end;
 
   for UzfIndex := 0 to chklstUZF.Items.Count - 1 do
@@ -577,6 +610,8 @@ var
   Position: Integer;
   NewGeneral: TObGenerals;
   NewObGwts: TObGwts;
+  NewSftObs: TSftObs;
+  SftOb: TSftOb;
 begin
   SetLength(DelayArray, chklstDelayBeds.Items.Count);
   for Index := 0 to List.Count - 1 do
@@ -684,6 +719,23 @@ begin
         end;
       end;
       Mf6Obs.SfrObs := NewSfrObs;
+
+      NewSftObs := Mf6Obs.SftObs;
+      for SftOb := Low(TSftOb) to High(TSftOb) do
+      begin
+        if chklstSFT.State[Ord(SftOb)] <> cbGrayed then
+        begin
+          if chklstSFT.Checked[Ord(SftOb)] then
+          begin
+            Include(NewSftObs, SftOb);
+          end
+          else
+          begin
+            Exclude(NewSftObs, SftOb);
+          end;
+        end;
+      end;
+      Mf6Obs.SftObs := NewSftObs;
 
       NewLakObs := Mf6Obs.LakObs;
       for LakOb := Low(TLakOb) to High(TLakOb) do
@@ -993,6 +1045,17 @@ begin
     for ItemIndex := 0 to chklstSFR.Items.Count - 1 do
     begin
       if chklstSFR.State[ItemIndex] <> cbUnchecked then
+      begin
+        ObsUsed := True;
+        break;
+      end;
+    end;
+  end;
+  if not ObsUsed then
+  begin
+    for ItemIndex := 0 to chklstSFT.Items.Count - 1 do
+    begin
+      if chklstSFT.State[ItemIndex] <> cbUnchecked then
       begin
         ObsUsed := True;
         break;

@@ -19,6 +19,18 @@ type
   end;
   TSfr6ObservationList = TList<TSfr6Observation>;
   
+  TSft6Observation = record
+    FName: string;
+    FBoundName: string;
+    FReachStart: Integer;
+    FCount: Integer;
+    FObsTypes: TSftObs;
+    FSfrObsLocation: TSfrObsLocation;
+    FModflow6Obs: TModflow6Obs;
+  end;
+  TSft6ObservationList = TList<TSft6Observation>;
+  TSft6ObservationLists = TObjectList<TSft6ObservationList>;
+
   TSfr6Segment = class(TObject)
   private
     FModel: TCustomModel;
@@ -54,6 +66,7 @@ type
     FReachCount: integer;
     FDiversionCount: Integer;
     FObsList: TSfr6ObservationList;
+    FSftObsLists: TSft6ObservationLists;
     FDirectObsLines: TStrings;
     FFileNameLines: TStrings;
     FCalculatedObsLines: TStrings;
@@ -81,6 +94,7 @@ type
   protected
     function Package: TModflowPackageSelection; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean;
+    function IsMf6GwtObservation(AScreenObject: TScreenObject): Boolean;
     function ObservationsUsed: Boolean;
     class function ObservationExtension: string;
   public
@@ -763,18 +777,29 @@ end;
 
 constructor TModflowSFR_MF6_Writer.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
+var
+  index: Integer;
 begin
   inherited;
   FValues := TObjectList.Create;
   FSegments := TSfr6SegmentList.Create;
   FObsList := TSfr6ObservationList.Create;
+  FSftObsLists:= TSft6ObservationLists.Create;
   DirectObsLines := Model.DirectObservationLines;
   CalculatedObsLines := Model.DerivedObservationLines;
   FileNameLines := Model.FileNameLines;
+  if Model.GwtUsed then
+  begin
+    for index := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      FSftObsLists.Add(TSft6ObservationList.Create);
+    end;
+  end;
 end;
 
 destructor TModflowSFR_MF6_Writer.Destroy;
 begin
+  FSftObsLists.Free;
   FObsList.Free;
   FSegments.Free;
   FValues.Free;
@@ -797,6 +822,7 @@ var
   CellTop: Real;
   MfObs: TModflow6Obs;
   Obs: TSfr6Observation;
+  SftObs: TSft6Observation;
   ReachStart: Integer;
   EndTime: Double;
   StartTime: Double;
@@ -954,6 +980,18 @@ begin
           Obs.FModflow6Obs := MfObs;
           FObsList.Add(Obs);
         end;
+        if ObservationsUsed and IsMf6GwtObservation(ScreenObject) then
+        begin
+          MfObs := ScreenObject.Modflow6Obs;
+          SftObs.FName := MfObs.Name;
+          SftObs.FBoundName := ScreenObject.Name;
+          SftObs.FObsTypes := MfObs.SftObs;
+          SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
+          SftObs.FReachStart := ReachStart;
+          SftObs.FCount := ASegment.ReachCount;
+          SftObs.FModflow6Obs := MfObs;
+          FSftObsLists[MfObs.GwtSpecies].Add(SftObs)
+        end;
         ReachStart := ReachStart + ASegment.ReachCount;
       end
       else
@@ -979,6 +1017,7 @@ var
   Boundary: TSfrMf6Boundary;
   ASegment: TSfr6Segment;
   Obs: TSfr6Observation;
+  SftObs: TSft6Observation;
   MfObs: TModflow6Obs;
   ReachStart: Integer;
 begin
@@ -1022,6 +1061,18 @@ begin
       Obs.FCount := ASegment.ReachCount;
       Obs.FModflow6Obs := MfObs;
       FObsList.Add(Obs);
+    end;
+    if ObservationsUsed and IsMf6GwtObservation(ScreenObject) then
+    begin
+      MfObs := ScreenObject.Modflow6Obs;
+      SftObs.FName := MfObs.Name;
+      SftObs.FBoundName := ScreenObject.Name;
+      SftObs.FObsTypes := MfObs.SftObs;
+      SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
+      SftObs.FReachStart := ReachStart;
+      SftObs.FCount := ASegment.ReachCount;
+      SftObs.FModflow6Obs := MfObs;
+      FSftObsLists[MfObs.GwtSpecies].Add(SftObs)
     end;
     ReachStart := ReachStart + ASegment.ReachCount;
   end;
@@ -1185,6 +1236,15 @@ begin
     ADisplayList.SetUpToDate(True);
   end;
 
+end;
+
+function TModflowSFR_MF6_Writer.IsMf6GwtObservation(
+  AScreenObject: TScreenObject): Boolean;
+var
+  MfObs: TModflow6Obs;
+begin
+  MfObs := AScreenObject.Modflow6Obs;
+  Result := (MfObs <> nil) and MfObs.Used and (MfObs.SftObs <> []);
 end;
 
 function TModflowSFR_MF6_Writer.IsMf6Observation(
@@ -1893,6 +1953,7 @@ procedure TModflowSFR_MF6_Writer.WriteSftFile(const AFileName: string;
 var
   SpeciesName: string;
   Abbreviation: string;
+  ObsWriter: TSftObsWriter;
 begin
   if not Package.IsSelected then
   begin
@@ -1924,6 +1985,16 @@ begin
   try
     WriteGwtFileInternal;
 
+    if FSftObsLists[SpeciesIndex].Count > 0 then
+    begin
+      ObsWriter := TSftObsWriter.Create(Model, etExport, FSftObsLists[SpeciesIndex], SpeciesIndex);
+      try
+        ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, ObservationExtension));
+      finally
+        ObsWriter.Free;
+      end;
+    end;
+
     if  Model.PestUsed and FPestParamUsed then
     begin
       FNameOfFile := FNameOfFile + '.tpl';
@@ -1946,6 +2017,7 @@ var
   SfrMf6Package: TSfrModflow6PackageSelection;
   concentrationfile: string;
   budgetCsvFile: string;
+  NameOfFile: string;
 begin
   WriteBeginOptions;
   try
@@ -2002,8 +2074,18 @@ begin
       NewLine;
     end;
 
+    if FSftObsLists[FSpeciesIndex].Count > 0 then
+    begin
+      WriteString('    OBS6 FILEIN ');
+      NameOfFile := BaseFileName + ObservationExtension;
+      Model.AddModelInputFile(NameOfFile);
+      NameOfFile := ExtractFileName(NameOfFile);
+      WriteString(NameOfFile);
+      NewLine;
+    end;
+
+
   //  [TS6 FILEIN <ts6_filename>]
-  //  [OBS6 FILEIN <obs6_filename>]
   finally
     WriteEndOptions
   end;

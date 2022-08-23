@@ -2406,8 +2406,10 @@ resourcestring
   StrSingularValueDecom = 'Singular value decomposition is deactivated. Do y' +
   'ou want to activate it?';
   StrPESTIsActiveButT = 'PEST is active but the PEST directory "%0:s" does n' +
-  'ot exist. Check the PEST directory in "Model|PEST Properties';
-  StrPLPROCWasNotFound = 'PLPROC was not found in %s.';
+  'ot exist. Check the PEST directory in "Model|PEST Properties. Do you want' +
+  'to continue anyway?';
+  StrPLPROCWasNotFound = 'PLPROC was not found in %s.  Do you want to ' +
+  'continue anyway?';
   StrErrorSavingModelMu = 'Error saving ModelMuse initialization file. The e' +
   'rror message was "%s". Check that there is sufficient disk space.';
   StrAMoreRecentVersionPest = 'A more recent version of PEST is available on' +
@@ -13276,17 +13278,25 @@ begin
         if not TDirectory.Exists(PhastModel.ProgramLocations.PestDirectory) then
         begin
           Beep;
-          MessageDlg(Format(StrPESTIsActiveButT,
-            [PhastModel.ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
-          Exit;
+          if not (MessageDlg(Format(StrPESTIsActiveButT,
+            [PhastModel.ProgramLocations.PestDirectory]), mtConfirmation,
+            [mbYes, mbNo], 0) = mrYes) then
+          begin
+            Exit;
+          end;
         end;
         PlProcLocation := GetPLPROC_Location(FileName, PhastModel);
         if not TFile.Exists(PlProcLocation) then
         begin
           Beep;
-          MessageDlg(Format(StrPLPROCWasNotFound,
-            [PhastModel.ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
-          Exit;
+          if not (MessageDlg(Format(StrPLPROCWasNotFound,
+            [PhastModel.ProgramLocations.PestDirectory]), mtConfirmation,
+            [mbYes, mbNo], 0) = mrYes) then
+          begin
+//          MessageDlg(Format(StrPLPROCWasNotFound,
+//            [PhastModel.ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
+            Exit;
+          end;
         end;
       end;
 

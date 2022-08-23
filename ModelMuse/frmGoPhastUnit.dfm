@@ -17,10 +17,8 @@ inherited frmGoPhast: TfrmGoPhast
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
   OnResize = FormResize
-  ExplicitLeft = 3
-  ExplicitTop = 3
-  ExplicitWidth = 800
-  ExplicitHeight = 627
+  ExplicitWidth = 798
+  ExplicitHeight = 614
   PixelsPerInch = 120
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
@@ -96,6 +94,7 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 492
         Image32.Height = 196
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 492
         Image32.ExplicitHeight = 196
@@ -162,6 +161,7 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 178
         Image32.Height = 196
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
         Image32.ExplicitHeight = 196
@@ -253,6 +253,7 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 492
         Image32.Height = 77
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 492
         Image32.ExplicitHeight = 77
@@ -672,7 +673,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 493
+      Left = 221
       Top = 66
       Width = 212
       Height = 28
@@ -774,7 +775,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 233
+      Left = 446
       Top = 66
       Width = 244
       Height = 28
@@ -889,7 +890,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView3D: TToolBar
-      Left = 76
+      Left = 67
       Top = 66
       Width = 141
       Height = 28
@@ -1090,7 +1091,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarShowGrid: TToolBar
-      Left = 30
+      Left = 24
       Top = 66
       Width = 30
       Height = 28
@@ -1114,7 +1115,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarPilotPoints: TToolBar
-      Left = 14
+      Left = 11
       Top = 66
       Width = 0
       Height = 28

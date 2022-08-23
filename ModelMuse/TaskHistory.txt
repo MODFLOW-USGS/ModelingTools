@@ -29813,5 +29813,10 @@ object TTaskHistory
         'MF6 GWT'
         'Dialog boxes'
         'Refactoring')
+    end
+    item
+      Date = 44796.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT')
     end>
 end

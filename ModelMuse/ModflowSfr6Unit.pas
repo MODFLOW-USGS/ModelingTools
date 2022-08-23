@@ -12,6 +12,10 @@ type
     soDownstreamFlow);
   TSfrObs = set of TSfrOb;
 
+  TSftOb = (stoConcentration, stoStorage, stoConstant, stoFromMvr, stoToMvr,
+    stoSFT, stoRainfall, stoEvaporation, stoRunoff, stoExtInflow, stoExtOutflow);
+  TSftObs = set of TSftOb;
+
   TSfrObsLocation = (solAll, solFirst, solLast, solIndividual);
 
   // ssInactive = Stream is inactive.
@@ -801,8 +805,11 @@ Const
   SfrGwtInflowConcentrationsPosition = 4;
 
 function TryGetSfrOb(const SfrObName: string; var SfrOb: TSfrOb): Boolean;
+function TryGetSftOb(const SftObName: string; var SftOb: TSftOb): Boolean;
 function SfrObToString(const SfrOb: TSfrOb): string;
+function SftObToString(const SftOb: TSftOb): string;
 Procedure FillSfrSeriesNames(AList: TStrings);
+Procedure FillSftSeriesNames(AList: TStrings);
 
 implementation
 
@@ -815,12 +822,27 @@ uses
 
 const
   SfrObName: array[TSfrOb] of string =
-    ('Stage', 'ExtInflow', 'Inflow', 'FromMvr', 'Rainfall', 'Runoff', 'Sfr',
-    'Evaporation', 'Outflow', 'ExternalOutflow', 'ToMvr', 'UpstreamFlow',
-    'DownstreamFlow');
+    ('Stage', 'Ext-Inflow', 'Inflow', 'From-Mvr', 'Rainfall', 'Runoff', 'Sfr',
+    'Evaporation', 'Outflow', 'External-Outflow', 'To-Mvr', 'Upstream Flow',
+    'Downstream Flow');
+  SftObName: array[TSftOb] of string =
+    (
+      'Concentration',
+      'Storage',
+      'Constant',
+      'From-MVR',
+      'To-MVR',
+      'SFT',
+      'Rainfall',
+      'Evaporation',
+      'Runoff',
+      'External inflow',
+      'External outflow'
+    );
 
 var
   SfrObNames: TStringList;
+  SftObNames: TStringList;
 
 procedure InitializeSfrObNames;
 var
@@ -831,6 +853,18 @@ begin
   for SfrOb := Low(TSfrOb) to High(TSfrOb) do
   begin
     SfrObNames.Add(SfrObName[SfrOb]);
+  end;
+end;
+
+procedure InitializeSftObNames;
+var
+  SftOb: TSftOb;
+begin
+  SftObNames:= TStringList.Create;
+  SftObNames.CaseSensitive := False;
+  for SftOb := Low(TSftOb) to High(TSftOb) do
+  begin
+    SftObNames.Add(SftObName[SftOb]);
   end;
 end;
 
@@ -846,14 +880,36 @@ begin
   end;
 end;
 
+function TryGetSftOb(const SftObName: string; var SftOb: TSftOb): Boolean;
+var
+  Index: Integer;
+begin
+  Index := SftObNames.IndexOf(SftObName);
+  result := Index >= 0;
+  if result then
+  begin
+    SftOb := TSftOb(Index);
+  end;
+end;
+
 Procedure FillSfrSeriesNames(AList: TStrings);
 begin
   AList.Assign(SfrObNames);
 end;
 
+Procedure FillSftSeriesNames(AList: TStrings);
+begin
+  AList.Assign(SftObNames);
+end;
+
 function SfrObToString(const SfrOb: TSfrOb): string;
 begin
   result := SfrObName[SfrOb]
+end;
+
+function SftObToString(const SftOb: TSftOb): string;
+begin
+  result := SftObName[SftOb]
 end;
 
 resourcestring
@@ -6077,9 +6133,11 @@ begin
 end;
 
 initialization
-  InitializeSfrObNames
+  InitializeSfrObNames;
+  InitializeSftObNames;
 
 finalization
   SfrObNames.Free;
+  SftObNames.Free;
 
 end.

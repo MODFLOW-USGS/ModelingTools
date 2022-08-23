@@ -94,6 +94,7 @@ var
   ObUzf: TUzfOb;
   ObCSub: TCSubOb;
   ObGwt: TObGwt;
+  ObSft: TSftOb;
 begin
   inherited;
   if ARow > 0 then
@@ -158,6 +159,13 @@ begin
           osGwt:
             begin
               if not TryGetGwtOb(ObTypeName, ObGwt) then
+              begin
+                frameObservations.Grid.Canvas.Brush.Color:= clRed;
+              end;
+            end;
+          osSft:
+            begin
+              if not TryGetSftOb(ObTypeName, ObSft) then
               begin
                 frameObservations.Grid.Canvas.Brush.Color:= clRed;
               end;
@@ -229,6 +237,10 @@ begin
         osGWT:
           begin
             FillObConcentrationSeriesNames(PickList);
+          end;
+        osSft:
+          begin
+            FillSftSeriesNames(PickList);
           end;
         else
           begin
@@ -320,6 +332,8 @@ var
   ObLake: TLakOb;
   ObUzf: TUzfOb;
   ObCSub: TCSubOb;
+  ObGwt: TObGwt;
+  ObSft: TSftOb;
 begin
   ObsCount := 0;
   for RowIndex := 1 to frameObservations.seNumber.AsInteger do
@@ -376,6 +390,14 @@ begin
           osCSub:
             begin
               RowOK := TryGetCSubOb(ObTypeName, ObCSub);
+            end;
+          osGwt:
+            begin
+              RowOK := TryGetGwtOb(ObTypeName, ObGwt);
+            end;
+          osSft:
+            begin
+              RowOK := TryGetSftOb(ObTypeName, ObSft);
             end;
         end;
       end;
