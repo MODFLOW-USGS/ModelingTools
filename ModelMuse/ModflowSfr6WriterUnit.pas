@@ -97,6 +97,7 @@ type
     function IsMf6GwtObservation(AScreenObject: TScreenObject): Boolean;
     function ObservationsUsed: Boolean;
     class function ObservationExtension: string;
+    class function GwtObservationExtension: string;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -1084,6 +1085,11 @@ begin
   result := '.sfr';
 end;
 
+class function TModflowSFR_MF6_Writer.GwtObservationExtension: string;
+begin
+  result := '.ob_sft';
+end;
+
 procedure TModflowSFR_MF6_Writer.InternalUpdateDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
@@ -1987,9 +1993,9 @@ begin
 
     if FSftObsLists[SpeciesIndex].Count > 0 then
     begin
-      ObsWriter := TSftObsWriter.Create(Model, etExport, FSftObsLists[SpeciesIndex], SpeciesIndex);
+      ObsWriter := TSftObsWriter.Create(Model, etExport, FSftObsLists[SpeciesIndex]);
       try
-        ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, ObservationExtension));
+        ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
       finally
         ObsWriter.Free;
       end;
@@ -2077,7 +2083,7 @@ begin
     if FSftObsLists[FSpeciesIndex].Count > 0 then
     begin
       WriteString('    OBS6 FILEIN ');
-      NameOfFile := BaseFileName + ObservationExtension;
+      NameOfFile := BaseFileName + GwtObservationExtension;
       Model.AddModelInputFile(NameOfFile);
       NameOfFile := ExtractFileName(NameOfFile);
       WriteString(NameOfFile);

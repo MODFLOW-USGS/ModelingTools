@@ -16,6 +16,15 @@ type
   end;
   TLakObservationList = TList<TLakObservation>;
 
+  TLktObservation = record
+    FName: string;
+    FBoundName: string;
+    FObsTypes: TLktObs;
+    FModflow6Obs: TModflow6Obs;
+  end;
+  TLktObservationList = TList<TLktObservation>;
+  TLktObservationLists = TObjectList<TLktObservationList>;
+
   TLakeType = (ltVert, ltHoriz, ltVertEmbed, ltHorizEmbed);
 
   TLakeCell = class(TObject)
@@ -197,6 +206,7 @@ type
     noutlets: Integer;
     ntables: Integer;
     FObservations: TLakObservationList;
+    FGwtObservations: TLktObservationLists;
     FDirectObsLines: TStrings;
     FFileNameLines: TStrings;
     FCalculatedObsLines: TStrings;
@@ -217,9 +227,11 @@ type
     procedure WriteLakeTableNames;
     procedure WriteOutlets;
     procedure WriteStressPeriods;
-    function IsMf6Observation(AScreenObject: TScreenObject): Boolean; //override;
+    function IsMf6Observation(AScreenObject: TScreenObject): Boolean;
+    function IsMf6GwtObservation(AScreenObject: TScreenObject): Boolean;
 //    function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean;
     class function ObservationExtension: string; //override;
+    class function GwtObservationExtension: string; //override;
     procedure WriteLakeValueOrFormula(LakeSetting: TLakeSetting; Index: integer);
     procedure WriteFileInternal;
     // SFT
@@ -338,18 +350,29 @@ const
 
 constructor TModflowLAKMf6Writer.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
+var
+  index: Integer;
 begin
   inherited;
   FLakeScreenObjects := TScreenObjectList.Create;
   FLakes := TLakeList.Create;
   FObservations := TLakObservationList.Create;
+  FGwtObservations := TLktObservationLists.Create;
   DirectObsLines := Model.DirectObservationLines;
   CalculatedObsLines := Model.DerivedObservationLines;
   FileNameLines := Model.FileNameLines;
+  if Model.GwtUsed then
+  begin
+    for index := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      FGwtObservations.Add(TLktObservationList.Create);
+    end;
+  end;
 end;
 
 destructor TModflowLAKMf6Writer.Destroy;
 begin
+  FGwtObservations.Free;
   FObservations.Free;
   FLakes.Free;
   FLakeScreenObjects.Free;
@@ -380,6 +403,11 @@ end;
 class function TModflowLAKMf6Writer.Extension: string;
 begin
   result := '.lak6';
+end;
+
+class function TModflowLAKMf6Writer.GwtObservationExtension: string;
+begin
+  result := '.ob_lkt';
 end;
 
 function TModflowLAKMf6Writer.Package: TModflowPackageSelection;
@@ -720,6 +748,7 @@ procedure TModflowLAKMf6Writer.WriteLktFile(const AFileName: string;
 var
   SpeciesName: string;
   Abbreviation: string;
+  ObsWriter: TLktObsWriter;
 begin
   if not Package.IsSelected then
   begin
@@ -750,6 +779,16 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     WriteGwtFileInternal;
+
+    if FGwtObservations[SpeciesIndex].Count > 0 then
+    begin
+      ObsWriter := TLKtObsWriter.Create(Model, etExport, FGwtObservations[SpeciesIndex]);
+      try
+        ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
+      finally
+        ObsWriter.Free;
+      end;
+    end;
 
     if  Model.PestUsed and FPestParamUsed then
     begin
@@ -1751,6 +1790,7 @@ var
   SfrMf6Package: TSfrModflow6PackageSelection;
   concentrationfile: string;
   budgetCsvFile: string;
+  NameOfLktObFile: string;
 begin
   WriteBeginOptions;
   try
@@ -1807,8 +1847,17 @@ begin
       NewLine;
     end;
 
+    if FGwtObservations[FSpeciesIndex].Count > 0 then
+    begin
+      WriteString('    OBS6 FILEIN ');
+      NameOfLktObFile := BaseFileName + GwtObservationExtension;
+      Model.AddModelInputFile(NameOfLktObFile);
+      NameOfLktObFile := ExtractFileName(NameOfLktObFile);
+      WriteString(NameOfLktObFile);
+      NewLine;
+    end;
+
   //  [TS6 FILEIN <ts6_filename>]
-  //  [OBS6 FILEIN <obs6_filename>]
   finally
     WriteEndOptions
   end;
@@ -2064,6 +2113,7 @@ var
   NeighborIndex: Integer;
   NeighborCell: TCellLocation;
   Obs: TLakObservation;
+  LktObs: TLktObservation;
   MfObs: TModflow6Obs;
   PestParameterName: string;
   Item: TStringConcValueItem;
@@ -2185,29 +2235,15 @@ begin
             end;
             if (lctVertical in LakeBoundary.LakeConnections) and (ACell.Layer + 1 < Model.LayerCount) then
             begin
-//              if lctHorizontal in LakeBoundary.LakeConnections then
-//              begin
-                if IDomainArray.IntegerData[ACell.Layer + 1, ACell.Row, ACell.Column] > 0 then
-                begin
-                  ALakeCell := TLakeCell.Create;
-                  ALake.FLakeCellList.Add(ALakeCell);
-                  ALakeCell.Cell := ACell.Cell;
-                  ALakeCell.Cell.Layer := ALakeCell.Cell.Layer + 1;
-                  ALakeCell.LakeType := ltVert;
-                  ALakeCell.LakeCell := ACell.Cell;
-                end;
-//              end
-//              else
-//              begin
-//                if IDomainArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
-//                begin
-//                  ALakeCell := TLakeCell.Create;
-//                  ALake.FLakeCellList.Add(ALakeCell);
-//                  ALakeCell.Cell := ACell.Cell;
-//                  ALakeCell.LakeType := ltVert;
-//                  ALakeCell.LakeCell := ACell.Cell;
-//                end;
-//              end;
+              if IDomainArray.IntegerData[ACell.Layer + 1, ACell.Row, ACell.Column] > 0 then
+              begin
+                ALakeCell := TLakeCell.Create;
+                ALake.FLakeCellList.Add(ALakeCell);
+                ALakeCell.Cell := ACell.Cell;
+                ALakeCell.Cell.Layer := ALakeCell.Cell.Layer + 1;
+                ALakeCell.LakeType := ltVert;
+                ALakeCell.LakeCell := ACell.Cell;
+              end;
             end;
           end;
         end;
@@ -2236,11 +2272,29 @@ begin
           end;
           FObservations.Add(Obs);
         end;
+        if IsMf6GwtObservation(ScreenObject) then
+        begin
+          MfObs := ScreenObject.Modflow6Obs;
+          LktObs.FName := MfObs.Name;
+          LktObs.FBoundName := ScreenObject.Name;
+          LktObs.FObsTypes := MfObs.LktObs;
+          LktObs.FModflow6Obs := MfObs;
+          FGwtObservations[MfObs.GwtSpecies].Add(LktObs);
+        end
       end;
     end;
   finally
     CellList.Free;
   end;
+end;
+
+function TModflowLAKMf6Writer.IsMf6GwtObservation(
+  AScreenObject: TScreenObject): Boolean;
+var
+  MfObs: TModflow6Obs;
+begin
+  MfObs := AScreenObject.Modflow6Obs;
+  Result := (MfObs <> nil) and MfObs.Used and (MfObs.LktObs <> []);
 end;
 
 function TModflowLAKMf6Writer.IsMf6Observation(

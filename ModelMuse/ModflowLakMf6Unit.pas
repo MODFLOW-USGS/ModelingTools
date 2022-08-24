@@ -17,6 +17,14 @@ type
     loConductance);
   TLakObs = set of TLakOb;
 
+  TLktOb = (ltoConcentration,
+//    ltoFlowJaFacc,
+    ltoStorage, ltoConstant, ltoFromMvr, ltoToMvr,
+    ltoLKT, ltoRainfall, ltoEvaporation, ltoRunoff, ltoExtInflow, ltoWithdrawal,
+    ltoExtOutflow);
+  TLktObs = set of TLktOb;
+
+
 //    loExternalOutflow, loOutlet,
 
   // related to bedleak
@@ -655,9 +663,12 @@ type
 //    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
   end;
 
-function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
+function TryGetLakOb(const LakObName: string; var LakOb: TLakOb): Boolean;
+function TryGetLktOb(const LktObName: string; var LktOb: TLktOb): Boolean;
 function LakObToString(const LakOb: TLakOb): string;
+function LktObToString(const LktOb: TLktOb): string;
 Procedure FillLakSeriesNames(AList: TStrings);
+Procedure FillLKtSeriesNames(AList: TStrings);
 
 const
   Lak6StagePosition = 0;
@@ -678,9 +689,26 @@ const
     'Runoff', 'FlowRate', 'Withdrawal', 'Evap', 'ExternalOutflow', 'ToMvr', 'Storage',
     'ConstantFlow', 'Outlet', 'Volume', 'SurfaceArea', 'WettedArea',
     'Conductance');
+  LktObName: array[TLktOb] of string =
+    (
+      'Concentration',
+//      'flow-ja-face',
+      'Storage',
+      'Constant',
+      'From-MVR',
+      'To-MVR',
+      'LKT',
+      'Rainfall',
+      'Evaporation',
+      'Runoff',
+      'External inflow',
+      'Withdrawal',
+      'External outflow'
+    );
 
 var
   LakeObNames: TStringList;
+  LktObNames: TStringList;
 
 procedure InitializeLakeObNames;
 var
@@ -694,16 +722,40 @@ begin
   end;
 end;
 
+procedure InitializeLktObNames;
+var
+  Index: TLktOb;
+begin
+  LktObNames := TStringList.Create;
+  LktObNames.CaseSensitive := False;
+  for Index := Low(TLktOb) to High(TLktOb) do
+  begin
+    LktObNames.Add(LktObName[Index]);
+  end;
+end;
 
-function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
+
+function TryGetLakOb(const LakObName: string; var LakOb: TLakOb): Boolean;
 var
   Index: Integer;
 begin
-  Index := LakeObNames.IndexOf(CSubObName);
+  Index := LakeObNames.IndexOf(LakObName);
   result := Index >= 0;
   if result then
   begin
     LakOb := TLakOb(Index);
+  end;
+end;
+
+function TryGetLktOb(const LktObName: string; var LktOb: TLktOb): Boolean;
+var
+  Index: Integer;
+begin
+  Index := LktObNames.IndexOf(LktObName);
+  result := Index >= 0;
+  if result then
+  begin
+    LktOb := TLktOb(Index);
   end;
 end;
 
@@ -712,9 +764,19 @@ begin
   AList.Assign(LakeObNames);
 end;
 
+Procedure FillLKtSeriesNames(AList: TStrings);
+begin
+  AList.Assign(LktObNames);
+end;
+
 function LakObToString(const LakOb: TLakOb): string;
 begin
   result := LakeObName[LakOb];
+end;
+
+function LktObToString(const LktOb: TLktOb): string;
+begin
+  result := LktObName[LktOb];
 end;
 
 { TLakeTimeItem }
@@ -3492,9 +3554,11 @@ begin
 end;
 
 initialization
-  InitializeLakeObNames
+  InitializeLakeObNames;
+  InitializeLktObNames;
   
 finalization 
-  LakeObNames.Free; 
+  LakeObNames.Free;
+  LktObNames.Free;
 
 end.

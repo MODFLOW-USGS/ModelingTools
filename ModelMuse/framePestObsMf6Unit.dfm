@@ -3,7 +3,7 @@ inherited framePestObsMf6: TframePestObsMf6
   inherited grpDirectObs: TGroupBox
     inherited frameObservations: TframeGrid
       inherited Panel: TPanel
-        Top = 166
+        Top = 161
         Height = 58
         ExplicitTop = 161
         ExplicitHeight = 58
@@ -21,7 +21,7 @@ inherited framePestObsMf6: TframePestObsMf6
         end
       end
       inherited Grid: TRbwDataGrid4
-        Height = 166
+        Height = 161
         ColCount = 9
         OnBeforeDrawCell = frameObservationsGridBeforeDrawCell
         Columns = <

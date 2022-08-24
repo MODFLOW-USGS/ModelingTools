@@ -180,7 +180,7 @@ type
     procedure Evaluate; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
-      ObsList: TSft6ObservationList; SpeciesIndex: Integer); reintroduce;
+      ObsList: TSft6ObservationList); reintroduce;
     procedure WriteFile(const AFileName: string);
   end;
 
@@ -194,6 +194,19 @@ type
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
       ObsList: TLakObservationList); reintroduce;
+    procedure WriteFile(const AFileName: string);
+  end;
+
+  TLktObsWriter = class(TCustomMf6ObservationWriter)
+  private
+    FObsList: TLktObservationList;
+    procedure WriteLktObs;
+  protected
+    class function Extension: string; override;
+    procedure Evaluate; override;
+  public
+    Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
+      ObsList: TLktObservationList); reintroduce;
     procedure WriteFile(const AFileName: string);
   end;
 
@@ -4006,8 +4019,7 @@ end;
 { TSftObsWriter }
 
 constructor TSftObsWriter.Create(Model: TCustomModel;
-  EvaluationType: TEvaluationType; ObsList: TSft6ObservationList;
-  SpeciesIndex: Integer);
+  EvaluationType: TEvaluationType; ObsList: TSft6ObservationList);
 begin
   inherited Create(Model, EvaluationType);
   FObsList := ObsList;
@@ -4360,6 +4372,249 @@ begin
     end;
   finally
     ObsNames.Free;
+  end;
+end;
+
+{ TLktObsWriter }
+
+constructor TLktObsWriter.Create(Model: TCustomModel;
+  EvaluationType: TEvaluationType; ObsList: TLktObservationList);
+begin
+  inherited Create(Model, EvaluationType);
+  FObsList := ObsList;
+end;
+
+procedure TLktObsWriter.Evaluate;
+begin
+  // do nothing
+end;
+
+class function TLktObsWriter.Extension: string;
+begin
+  Result := '';
+  Assert(False);
+end;
+
+procedure TLktObsWriter.WriteFile(const AFileName: string);
+begin
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNonuniqueLakeObse);
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  FNameOfFile := AFileName;
+
+  frmProgressMM.AddMessage(StrWritingLAKObservat);
+  Assert(FObsList.Count > 0);
+  Model.AddModelInputFile(FNameOfFile);
+
+//  WritePestTemplateLine;
+
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
+  try
+    WriteDataSet0;
+    WriteOptions;
+    WriteLktObs;
+  finally
+    CloseFile;
+  end;
+
+end;
+
+procedure TLktObsWriter.WriteLktObs;
+var
+  ObTypes: TLktObs;
+  ObsIndex: Integer;
+  ObsPackage: TMf6ObservationUtility;
+  OutputTypeExtension: string;
+  AnObsType: TLktOb;
+  OutputExtension: string;
+  OutputFileName: string;
+  AnObs: TLktObservation;
+  obsnam: string;
+  ObservationType: string;
+  boundname: string;
+  OutputFormat: string;
+  CalibObservations: TMf6CalibrationObservations;
+  CalibIndex: Integer;
+  CalibObs: TMf6CalibrationObs;
+  StartTime: Double;
+  Prefix: string;
+begin
+  ObTypes := [];
+  for ObsIndex := 0 to FObsList.Count - 1 do
+  begin
+    ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
+  end;
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
+  ObsPackage := Package as TMf6ObservationUtility;
+  case ObsPackage.OutputFormat of
+    ofText:
+      begin
+        OutputTypeExtension := '.csv';
+        OutputFormat := 'TEXT';
+      end;
+    ofBinary:
+      begin
+        OutputTypeExtension := '.bin';
+        OutputFormat := 'BINARY';
+      end;
+    else
+      Assert(False);
+  end;
+  for AnObsType in ObTypes do
+  begin
+    case AnObsType of
+      ltoConcentration:
+        begin
+          OutputExtension := '.lkt_concentration_ob' + OutputTypeExtension;
+          ObservationType := 'concentration';
+          Prefix := 'ltconc_';
+        end;
+//      ltoFlowJaFacc:
+//        begin
+//          OutputExtension := '.lkt_flow-ja-face_ob' + OutputTypeExtension;
+//          ObservationType := 'flow-ja-face';
+//          Prefix := 'ltfF_';
+//        end;
+      ltoStorage:
+        begin
+          OutputExtension := '.lkt_storage_ob' + OutputTypeExtension;
+          ObservationType := 'storage';
+          Prefix := 'lts_';
+        end;
+      ltoConstant:
+        begin
+          OutputExtension := '.lkt_constant_ob' + OutputTypeExtension;
+          ObservationType := 'constant';
+          Prefix := 'ltc_';
+        end;
+      ltoFromMvr:
+        begin
+          OutputExtension := '.lkt_from_MVR_ob' + OutputTypeExtension;
+          ObservationType := 'from-mvr';
+          Prefix := 'ltfm_';
+        end;
+      ltoToMvr:
+        begin
+          OutputExtension := '.lkt_to_mvr_ob' + OutputTypeExtension;
+          ObservationType := 'to-mvr';
+          Prefix := 'lt2m_';
+        end;
+      ltoLKT:
+        begin
+          OutputExtension := '.lkt_LKT_ob' + OutputTypeExtension;
+          ObservationType := 'lkt';
+          Prefix := 'lkt_';
+        end;
+      ltoRainfall:
+        begin
+          OutputExtension := '.lkt_rainfall_ob' + OutputTypeExtension;
+          ObservationType := 'rainfall';
+          Prefix := 'ltra_';
+        end;
+      ltoEvaporation:
+        begin
+          OutputExtension := '.lkt_evaporation_ob' + OutputTypeExtension;
+          ObservationType := 'evaporation';
+          Prefix := 'lte_';
+        end;
+      ltoRunoff:
+        begin
+          OutputExtension := '.lkt_runoff_ob' + OutputTypeExtension;
+          ObservationType := 'runoff';
+          Prefix := 'ltru_';
+        end;
+      ltoExtInflow:
+        begin
+          OutputExtension := '.lkt_ext-inflow_ob' + OutputTypeExtension;
+          ObservationType := 'ext-inflow';
+          Prefix := 'ltei_';
+        end;
+      ltoWithdrawal:
+        begin
+          OutputExtension := '.lkt_withdrawal_ob' + OutputTypeExtension;
+          ObservationType := 'withdrawal';
+          Prefix := 'ltw_';
+        end;
+      ltoExtOutflow:
+        begin
+          OutputExtension := '.lkt_ext-outflow_ob' + OutputTypeExtension;
+          ObservationType := 'ext-outflow';
+          Prefix := 'lteo_';
+        end;
+    end;
+
+    WriteString('BEGIN CONTINUOUS FILEOUT ');
+    OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
+    Model.AddModelOutputFile(OutputFileName);
+    if Model.PestUsed then
+    begin
+      Assert(FileNameLines <> nil);
+      FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+        [ExtractFileName(OutputFileName), OutputFormat]));
+    end;
+    OutputFileName := ExtractFileName(OutputFileName);
+    WriteString(OutputFileName);
+    if ObsPackage.OutputFormat = ofBinary then
+    begin
+      WriteString(' BINARY');
+    end;
+    NewLine;
+
+    for ObsIndex := 0 to FObsList.Count - 1 do
+    begin
+      AnObs := FObsList[ObsIndex];
+      if AnObsType in AnObs.FObsTypes then
+      begin
+        obsnam := Prefix + AnObs.FName;
+        if obsnam = Prefix then
+        begin
+          obsnam := Format(Prefix + 'Lkt%d', [ObsIndex+1]);
+        end;
+        Assert(Length(obsnam) <= MaxBoundNameLength);
+        boundname := Trim(AnObs.FBoundName);
+        boundname := Copy(boundname, 1, MaxBoundNameLength);
+        boundname := ' ' + boundname + ' ';
+//        obsnam := ' ''' + obsnam + ''' ';
+        WriteString(' ''');
+        WriteString(obsnam);
+        WriteString(''' ');
+        WriteString(ObservationType);
+        WriteString(boundname);
+        NewLine;
+
+        if Model.PestUsed then
+        begin
+          CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
+          if AnObsType in CalibObservations.LktObs then
+          begin
+            DirectObsLines.Add(Format('  ID %s', [obsnam]));
+            for CalibIndex := 0 to CalibObservations.Count - 1 do
+            begin
+              CalibObs := CalibObservations[CalibIndex];
+              if (CalibObs.ObSeries = osLkt)
+                and (AnObsType = CalibObs.LktOb) then
+              begin
+                DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
+                  [CalibObs.Name, CalibObs.Time - StartTime]));
+              end;
+            end;
+            DirectObsLines.Add('');
+          end;
+        end;
+
+      end;
+    end;
+
+    WriteString('END CONTINUOUS');
+    NewLine;
+    NewLine;
   end;
 end;
 

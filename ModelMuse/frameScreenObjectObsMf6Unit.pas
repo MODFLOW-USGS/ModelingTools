@@ -63,6 +63,7 @@ type
     chklstSFT: TCheckListBox;
     lblSFR: TLabel;
     lblSFT: TLabel;
+    chklstGwtOb: TCheckListBox;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -78,6 +79,7 @@ type
     procedure chklstGWTClickCheck(Sender: TObject);
     procedure comboChemSpeciesChange(Sender: TObject);
     procedure chklstSFTClickCheck(Sender: TObject);
+    procedure chklstGwtObClick(Sender: TObject);
   private
     FOnChangeProperties: TNotifyEvent;
     FInitializing: Boolean;
@@ -144,6 +146,11 @@ begin
   DoOnChangeProperties;
 end;
 
+procedure TframeScreenObjectObsMf6.chklstGwtObClick(Sender: TObject);
+begin
+  DoOnChangeProperties;
+end;
+
 procedure TframeScreenObjectObsMf6.chklstLAKClick(Sender: TObject);
 begin
   DoOnChangeProperties;
@@ -201,6 +208,7 @@ var
   DelayIndex: Integer;
   Position: Integer;
   SftOb: TSftOb;
+  LktOb: TLktOb;
 begin
   FActiveObs := False;
   FInitializing := True;
@@ -284,6 +292,12 @@ begin
           begin
             chklstLAK.Checked[Ord(LakOb)] :=
               LakOb in Mf6Obs.LakObs;
+          end;
+
+          for LktOb := Low(TLktOb) to High(TLktOb) do
+          begin
+            chklstGwtOb.Checked[Ord(LktOb)] :=
+              LktOb in Mf6Obs.LktObs;
           end;
 
           for UzfOb := Low(TUzfOb) to High(TUzfOb) do
@@ -381,6 +395,15 @@ begin
               TCheckBoxState(LakOb in Mf6Obs.LakObs) then
             begin
               chklstLAK.State[Ord(LakOb)] := cbGrayed;
+            end;
+          end;
+
+          for LktOb := Low(TLktOb) to High(TLktOb) do
+          begin
+            if chklstGwtOb.State[Ord(LktOb)] <>
+              TCheckBoxState(LktOb in Mf6Obs.LktObs) then
+            begin
+              chklstGwtOb.State[Ord(LktOb)] := cbGrayed;
             end;
           end;
 
@@ -612,6 +635,8 @@ var
   NewObGwts: TObGwts;
   NewSftObs: TSftObs;
   SftOb: TSftOb;
+  NewLktObs: TLktObs;
+  LktOb: TLktOb;
 begin
   SetLength(DelayArray, chklstDelayBeds.Items.Count);
   for Index := 0 to List.Count - 1 do
@@ -753,6 +778,23 @@ begin
         end;
       end;
       Mf6Obs.LakObs := NewLakObs;
+
+      NewLktObs := Mf6Obs.LktObs;
+      for LktOb := Low(TLktOb) to High(TLktOb) do
+      begin
+        if chklstGwtOb.State[Ord(LktOb)] <> cbGrayed then
+        begin
+          if chklstGwtOb.Checked[Ord(LktOb)] then
+          begin
+            Include(NewLktObs, LktOb);
+          end
+          else
+          begin
+            Exclude(NewLktObs, LktOb);
+          end;
+        end;
+      end;
+      Mf6Obs.LktObs := NewLktObs;
 
       NewUzfObs := Mf6Obs.UzfObs;
       for UzfOb := Low(TUzfOb) to High(TUzfOb) do
@@ -959,7 +1001,9 @@ begin
       begin
         Mf6Obs.GwtSpecies := comboChemSpecies.ItemIndex;
       end;
-      if (Mf6Obs.GwtObs <> []) and (Mf6Obs.GwtSpecies < 0) then
+      if (Mf6Obs.GwtSpecies < 0)
+        and ((Mf6Obs.GwtObs <> []) or (Mf6Obs.SftObs <> [])
+        or (Mf6Obs.LktObs <> [])) then
       begin
         Mf6Obs.GwtSpecies := 0;
       end;

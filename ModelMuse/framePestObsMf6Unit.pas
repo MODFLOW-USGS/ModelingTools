@@ -95,6 +95,7 @@ var
   ObCSub: TCSubOb;
   ObGwt: TObGwt;
   ObSft: TSftOb;
+  ObLkt: TLktOb;
 begin
   inherited;
   if ARow > 0 then
@@ -170,6 +171,13 @@ begin
                 frameObservations.Grid.Canvas.Brush.Color:= clRed;
               end;
             end;
+          osLkt:
+            begin
+              if not TryGetLktOb(ObTypeName, ObLkt) then
+              begin
+                frameObservations.Grid.Canvas.Brush.Color:= clRed;
+              end;
+            end;
           else
             begin
               Assert(False);
@@ -241,6 +249,10 @@ begin
         osSft:
           begin
             FillSftSeriesNames(PickList);
+          end;
+        osLkt:
+          begin
+            FillLktSeriesNames(PickList);
           end;
         else
           begin
@@ -334,6 +346,7 @@ var
   ObCSub: TCSubOb;
   ObGwt: TObGwt;
   ObSft: TSftOb;
+  ObLkt: TLktOb;
 begin
   ObsCount := 0;
   for RowIndex := 1 to frameObservations.seNumber.AsInteger do
@@ -398,6 +411,10 @@ begin
           osSft:
             begin
               RowOK := TryGetSftOb(ObTypeName, ObSft);
+            end;
+          osLkt:
+            begin
+              RowOK := TryGetLktOb(ObTypeName, ObLkt);
             end;
         end;
       end;

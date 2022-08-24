@@ -3368,6 +3368,11 @@ begin
       begin
         Mf6ObsSeriesName.Add(ObsSeriesToString(osSft));
       end;
+      if frameObsMf6.tabLAK.TabVisible
+        and frameObsMf6.cbConcentration.Enabled then
+      begin
+        Mf6ObsSeriesName.Add(ObsSeriesToString(osLkt));
+      end;
 
       frameObsMf6.framePestObs.SpecifyGroupTypes(Mf6ObsSeriesName);
     finally
