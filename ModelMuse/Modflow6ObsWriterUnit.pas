@@ -42,7 +42,6 @@ type
     property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
     property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
     property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
-//    procedure WritePestTemplateLine(AFileName: string);
   public
     // @name creates an instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -131,7 +130,6 @@ type
   private
     FObGwt: TObGwt;
     FCurrentGwts: TObGwts;
-//    FCurrentGwtSpecies: Integer;
     FCurrentGenus: TGenus;
   protected
     function GetPrefix: string; override;
@@ -311,7 +309,6 @@ resourcestring
   StrObservationTimeTo = 'Observation time to late.';
   StrAnObservationTime = 'An observation time defined by "%0:s is after the ' +
   'end of the simulation';
-
 
 { TModflow6Obs_Writer }
 
@@ -498,8 +495,8 @@ var
   SpeciesIndex: Integer;
   GenusObs: TGenus;
   Species: Integer;
-//  SplitterIndex: Integer;
-//  FirstCell: Boolean;
+  GwtObs: TObGwts;
+  ChemIndex: Integer;
   function GetLocation(ACell: TCellLocation): TPoint2D;
   begin
     if Model.DisvUsed then
@@ -542,7 +539,7 @@ begin
 
   StartTime := Model.ModflowStressPeriods.First.StartTime;
   OtherObsDefined := False;
-//  Splitter := TStringList.Create;
+
   MultiLayerFormulaList:= TObjectList<TStringBuilder>.Create;
   try
 
@@ -573,9 +570,25 @@ begin
         OtherObsDefined := True;
       end;
 
+      GwtObs := [];
+      if Model.GwtUsed then
+      begin
+        for ChemIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          if Model.PestUsed then
+          begin
+            GwtObs := GwtObs + Obs.CalibrationObservations.GwtObs[ChemIndex];
+          end;
+          if ChemIndex in Obs.Genus then
+          begin
+            GwtObs := GwtObs + Obs.GwtObs;
+          end;
+        end;
+      end;
+
       if (Obs.General * [ogHead, ogDrawdown] <> [])
         or (Obs.GroundwaterFlowObs and (Obs.GwFlowObsChoices <> [])
-        or (Obs.GwtObs <> [])) then
+        or (ogwtConcentration in GwtObs)) then
       begin
         MultiLayerHeadObs := False;
         MultiLayerFormulaList.Clear;
@@ -588,7 +601,7 @@ begin
           CellListStart := -1;
           CellListEnd := -1;
           if Model.PestUsed
-            and ((Obs.General * [ogHead, ogDrawdown] <> []) or (Obs.GwtObs <> []))
+            and ((Obs.General * [ogHead, ogDrawdown] <> []) or (ogwtConcentration in GwtObs))
             and (Obs.CalibrationObservations. Count > 0) then
           begin
             for CellIndex := 0 to CellList.Count - 1 do
@@ -692,7 +705,7 @@ begin
               if Model.PestUsed and (CellList.Count <> 1)
                 and FoundFirst and not ErrorAdded
                 and ((Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
-                  or (Obs.GwtObs <> []))
+                  or (ogwtConcentration in GwtObs))
                 and (Obs.CalibrationObservations. Count > 0)
                 then
               begin
@@ -716,7 +729,7 @@ begin
               if Model.PestUsed
                 and ((CellList.Count = 1) or (AScreenObject.Count = 1))
                 and ((Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
-                  or (Obs.GwtObs <> []))
+                  or (ogwtConcentration in GwtObs))
                 then
               begin
                 // find neighbors
@@ -935,11 +948,12 @@ begin
                         begin
                           Observation := Obs.CalibrationObservations[ObservationIndex];
                           if (Observation.ObSeries = osGWT)
-                            and (Observation.GwtOb = ogwtConcentration) then
+                            and (Observation.GwtOb = ogwtConcentration)
+                            and (Observation.SpeciesIndex = Species) then
                           begin
                             ObservationName := Format('%0:s_%1:d',
                               [HeadDrawdown.FName, ObservationIndex+1]);
-                            DirectObsLines.Add(Format('  OBSNAME %0:s 1:g',
+                            DirectObsLines.Add(Format('  OBSNAME %0:s %1:g',
                               ['conc_' + ObservationName, Observation.Time - StartTime]));
                             Observation.InterpObsNames.Add(ObservationName);
                             if LastTime < Observation.Time then
@@ -1050,7 +1064,7 @@ begin
                   NeighborCells.Free;
                 end;
               end
-              else if (Obs.General * [ogHead, ogDrawdown] <> []) or (Obs.GwtObs <> []) then
+              else if (Obs.General * [ogHead, ogDrawdown] <> []) then
               begin
                 HeadDrawdown.FCell := ACell.Cell;
                 HeadDrawdown.FName := Obs.Name;
@@ -1067,15 +1081,18 @@ begin
                 begin
                   FDrawdownObs.Add(HeadDrawdown);
                 end;
-                if ogwtConcentration in Obs.GwtObs  then
+              end;
+              if Model.GwtUsed and (ogwtConcentration in Obs.GwtObs) then
+              begin
+                HeadDrawdown.FCell := ACell.Cell;
+                for SpeciesIndex in Obs.Genus do
                 begin
-                  if Model.GwtUsed {and (Obs.GwtSpecies >= 0)
-                    and (Obs.GwtSpecies < Model.MobileComponents.Count)} then
+                  if not (ogwtConcentration in
+                    Obs.CalibrationObservations.GwtObs[SpeciesIndex]) then
                   begin
-                    for SpeciesIndex in Obs.Genus do
-                    begin
-                      FConcentrations[SpeciesIndex].Add(HeadDrawdown);
-                    end;
+                    HeadDrawdown.FName := Obs.Name + '_C'
+                      + IntToStr(ObsIndex) + '_' + IntToStr(SpeciesIndex);
+                    FConcentrations[SpeciesIndex].Add(HeadDrawdown);
                   end;
                 end;
               end;
@@ -1092,7 +1109,6 @@ begin
             CalculatedObsLines.Add(MultiLayerFormula.ToString);
             CalculatedObsLines.Add('')
           end;
-
 
           if FHorizontalCells.Count > 1 then
           begin
@@ -1146,7 +1162,6 @@ begin
     end;
   finally
     MultiLayerFormulaList.Free;
-//    Splitter.Free;
   end;
 
   if (FHeadObs.Count = 0) and (FDrawdownObs.Count = 0) and (FFlowObs.Count = 0)
@@ -1674,7 +1689,6 @@ var
             [HeadObs.FName, HeadObs.FCell.Layer+ 1, HeadObs.FCell.Row+ 1,
             HeadObs.FCell.Column+ 1]));
         end;
-//        Assert(Length(obsnam) <= MaxBoundNameLength);
         WriteString('  ''');
         WriteString(obsnam);
         WriteString(''' ');
@@ -2809,7 +2823,6 @@ begin
         boundname := Trim(AnObs.FBoundName);
         boundname := Copy(boundname, 1, MaxBoundNameLength);
         boundname := ' ' + boundname + ' ';
-//        obsnam := ' ''' + obsnam + ''' ';
         WriteString(' ''');
         WriteString(obsnam);
         WriteString(''' ');
@@ -2882,8 +2895,6 @@ begin
   frmProgressMM.AddMessage(StrWritingUZFObservat);
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
-
-//  WritePestTemplateLine;
 
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
@@ -3226,8 +3237,6 @@ begin
   frmProgressMM.AddMessage(StrWritingUZFObservat);
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
-
-//  WritePestTemplateLine;
 
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
@@ -3618,24 +3627,18 @@ begin
                 end
                 else
                 begin
-//                    for DelayBedIndex := 0 to Length(AnObs.FDelayCellNumbers) - 1 do
-//                    begin
-//                      idcellno := AnObs.FDelayCellNumbers[DelayBedIndex];
-                      for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
-                      begin
-                        icsubno := AnObs.FInterbedNumbers[IBIndex];
-//                        obsname := Format('%0:s_%1:d_%2:d', [Root, icsubno, idcellno]);
-                        obsname := Format('%0:s_%1:d_1', [Root, icsubno]);
-                        WriteString('  ''');
-                        WriteString(obsname);
-                        WriteString(''' ');
-                        WriteString(ObservationType);
-                        WriteInteger(icsubno);
-                        NewLine;
-                        CalibObsNames.Add(obsname);
-                      end;
-//                    end;
-//                  end;
+                  for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
+                  begin
+                    icsubno := AnObs.FInterbedNumbers[IBIndex];
+                    obsname := Format('%0:s_%1:d_1', [Root, icsubno]);
+                    WriteString('  ''');
+                    WriteString(obsname);
+                    WriteString(''' ');
+                    WriteString(ObservationType);
+                    WriteInteger(icsubno);
+                    NewLine;
+                    CalibObsNames.Add(obsname);
+                  end;
                   WritePestObsFormulas;
                 end;
               end;
@@ -3984,8 +3987,8 @@ procedure TModflow6GwtFlowObsWriter.AssignCurrentObs(
   FlowObs: TBoundaryFlowObservationLocation);
 begin
   FCurrentGwts := FlowObs.FMf6Obs.CalibrationObservations.GwtObs[FSpeciesIndex];
-//  FCurrentGwtSpecies := FlowObs.FMf6Obs.GwtSpecies;
-  FCurrentGenus := FlowObs.FMf6Obs.Genus + FlowObs.FMf6Obs.CalibrationObservations.Genus[osGeneral, FSpeciesIndex];
+  FCurrentGenus := FlowObs.FMf6Obs.Genus;
+  // + FlowObs.FMf6Obs.CalibrationObservations.Genus[osGeneral, FSpeciesIndex];
 end;
 
 constructor TModflow6GwtFlowObsWriter.Create(Model: TCustomModel;
@@ -4231,18 +4234,6 @@ begin
             ObservationType := 'ext-outflow';
             Prefix := 'steo_';
           end;
-//        soUpstreamFlow:
-//          begin
-//            OutputExtension := '.sfr_upstream-flow_ob' + OutputTypeExtension;
-//            ObservationType := 'upstream-flow';
-//            Prefix := 'suf_';
-//          end;
-//        soDownstreamFlow:
-//          begin
-//            OutputExtension := '.sfr_downstream-flow_ob' + OutputTypeExtension;
-//            ObservationType := 'downstream-flow';
-//            Prefix := 'sdf_';
-//          end;
         else
           Assert(False);
       end;
@@ -4441,7 +4432,6 @@ begin
   finally
     CloseFile;
   end;
-
 end;
 
 procedure TLktObsWriter.WriteLktObs;
@@ -4494,12 +4484,6 @@ begin
           ObservationType := 'concentration';
           Prefix := 'ltconc_';
         end;
-//      ltoFlowJaFacc:
-//        begin
-//          OutputExtension := '.lkt_flow-ja-face_ob' + OutputTypeExtension;
-//          ObservationType := 'flow-ja-face';
-//          Prefix := 'ltfF_';
-//        end;
       ltoStorage:
         begin
           OutputExtension := '.lkt_storage_ob' + OutputTypeExtension;

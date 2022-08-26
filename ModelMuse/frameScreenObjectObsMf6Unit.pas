@@ -45,7 +45,6 @@ type
     tabCalibration: TTabSheet;
     framePestObs: TframePestObsMf6;
     cbConcentration: TCheckBox;
-    comboChemSpecies: TComboBox;
     lblSpecies: TLabel;
     chklstGWT: TCheckListBox;
     lblGwtObs: TLabel;
@@ -555,17 +554,17 @@ begin
   end;
   chklstFlowObs.Checked[Ord(gfoNearestNeighbor)] := True;
 
-  comboChemSpecies.Items.Clear;
-  if frmGoPhast.PhastModel.GwtUsed then
-  begin
-    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
-    begin
-      comboChemSpecies.Items.Add(
-        frmGoPhast.PhastModel.MobileComponents[SpeciesIndex].Name)
-    end;
-  end;
+//  comboChemSpecies.Items.Clear;
+//  if frmGoPhast.PhastModel.GwtUsed then
+//  begin
+//    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+//    begin
+//      comboChemSpecies.Items.Add(
+//        frmGoPhast.PhastModel.MobileComponents[SpeciesIndex].Name)
+//    end;
+//  end;
   cbConcentration.Enabled := frmGoPhast.PhastModel.GwtUsed;
-  comboChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
+//  comboChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
   chklstChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
 
   for MawIndex := 0 to chklstMAW.Items.Count - 1 do

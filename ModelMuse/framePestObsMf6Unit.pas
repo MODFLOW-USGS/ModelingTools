@@ -61,6 +61,7 @@ var
   ShouldEnable: Boolean;
   ObTypeName: string;
   ObGen: TObGeneral;
+  ObGwt: TObGwt;
 begin
   ShouldEnable := False;
   for RowIndex := 0 to frameObservations.seNumber.AsInteger do
@@ -73,6 +74,18 @@ begin
         if TryGetGenOb(ObTypeName, ObGen) then
         begin
           if ObGen in [ogHead, ogDrawdown] then
+          begin
+            ShouldEnable := True;
+            break;
+          end;
+        end;
+      end;
+      if ObSeries = osGWT then
+      begin
+        ObTypeName := frameObservations.Grid.Cells[Ord(pm6Type), RowIndex];
+        if TryGetGwtOb(ObTypeName, ObGwt) then
+        begin
+          if ObGwt = ogwtConcentration then
           begin
             ShouldEnable := True;
             break;

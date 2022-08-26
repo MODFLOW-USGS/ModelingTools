@@ -10697,18 +10697,18 @@ const
 //                represent real numbers, integers, Booleans, or text.
 //    '5.0.0.24' Bug fix: Fixed bug in evaluating ActiveOnLayer function
 //                that could lead to circular dependencies.
-
-//               Bug fix: When extracting simulated values for observation
+//    '5.0.0.25' Bug fix: When extracting simulated values for observation
 //                times before the first simulated time, the value for the
 //                first simulated time is now used by Mf6ObsExtractor and
 //.               SutraObsExtractor.
+//               Bug fix: Fixed bug in editing SFT head water concentrations.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.24';
+  IIModelVersion = '5.0.0.25';
 
 function IModelVersion: string;
 begin

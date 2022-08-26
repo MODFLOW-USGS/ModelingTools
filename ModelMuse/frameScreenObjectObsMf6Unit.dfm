@@ -38,8 +38,8 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Caption = 'Boundary flow observations'
       end
       object lblSpecies: TLabel
-        Left = 336
-        Top = 25
+        Left = 296
+        Top = 74
         Width = 113
         Height = 20
         Caption = 'Chemical species'
@@ -120,15 +120,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         TabOrder = 5
         OnClick = cbConcentrationClick
       end
-      object comboChemSpecies: TComboBox
-        Left = 336
-        Top = 46
-        Width = 201
-        Height = 28
-        Style = csDropDownList
-        TabOrder = 6
-        OnChange = comboChemSpeciesChange
-      end
       object chklstGWT: TCheckListBox
         Left = 296
         Top = 221
@@ -138,7 +129,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Items.Strings = (
           'CNC (Mass flow at spec. conc.)'
           'SRC (Mass source loading rate)')
-        TabOrder = 7
+        TabOrder = 6
         OnClickCheck = chklstGWTClickCheck
       end
       object chklstChemSpecies: TCheckListBox
@@ -147,7 +138,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Width = 275
         Height = 97
         ItemHeight = 20
-        TabOrder = 8
+        TabOrder = 7
       end
     end
     object tabMAW: TTabSheet

@@ -8,7 +8,7 @@
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>19.4</ProjectVersion>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -121,6 +121,8 @@
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_DebugInformation>2</DCC_DebugInformation>
         <DCC_Define>LeakChecking;$(DCC_Define)</DCC_Define>
+        <VerInfo_Build>25</VerInfo_Build>
+        <VerInfo_Keys>FileVersion=5.0.0.25;ProductVersion=5.0.0.25</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
