@@ -228,7 +228,7 @@ type
     procedure WriteOutlets;
     procedure WriteStressPeriods;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean;
-    function IsMf6GwtObservation(AScreenObject: TScreenObject): Boolean;
+    function IsMf6GwtObservation(AScreenObject: TScreenObject; SpeciesIndex: Integer): Boolean;
 //    function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean;
     class function ObservationExtension: string; //override;
     class function GwtObservationExtension: string; //override;
@@ -782,7 +782,8 @@ begin
 
     if FGwtObservations[SpeciesIndex].Count > 0 then
     begin
-      ObsWriter := TLKtObsWriter.Create(Model, etExport, FGwtObservations[SpeciesIndex]);
+      ObsWriter := TLKtObsWriter.Create(Model, etExport,
+        FGwtObservations[SpeciesIndex], SpeciesIndex);
       try
         ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
       finally
@@ -2117,6 +2118,7 @@ var
   MfObs: TModflow6Obs;
   PestParameterName: string;
   Item: TStringConcValueItem;
+  SpeciesIndex: Integer;
 begin
   if Model.DisvUsed then
   begin
@@ -2272,14 +2274,25 @@ begin
           end;
           FObservations.Add(Obs);
         end;
-        if IsMf6GwtObservation(ScreenObject) then
+        for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
         begin
-          MfObs := ScreenObject.Modflow6Obs;
-          LktObs.FName := MfObs.Name;
-          LktObs.FBoundName := ScreenObject.Name;
-          LktObs.FObsTypes := MfObs.LktObs;
-          LktObs.FModflow6Obs := MfObs;
-          FGwtObservations[MfObs.GwtSpecies].Add(LktObs);
+          if IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
+          begin
+            MfObs := ScreenObject.Modflow6Obs;
+  //          LktObs.FName := MfObs.Name;
+            LktObs.FBoundName := ScreenObject.Name;
+
+            LktObs.FObsTypes := MfObs.CalibrationObservations.LktObs[SpeciesIndex];
+            if SpeciesIndex in MfObs.Genus then
+            begin
+              LktObs.FObsTypes := LktObs.FObsTypes + MfObs.LktObs;
+            end;
+
+            LktObs.FModflow6Obs := MfObs;
+            LktObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
+            FGwtObservations[SpeciesIndex].Add(LktObs)
+          end;
+//          FGwtObservations[MfObs.GwtSpecies].Add(LktObs);
         end
       end;
     end;
@@ -2289,12 +2302,13 @@ begin
 end;
 
 function TModflowLAKMf6Writer.IsMf6GwtObservation(
-  AScreenObject: TScreenObject): Boolean;
+  AScreenObject: TScreenObject; SpeciesIndex: Integer): Boolean;
 var
   MfObs: TModflow6Obs;
 begin
   MfObs := AScreenObject.Modflow6Obs;
-  Result := (MfObs <> nil) and MfObs.Used and (MfObs.LktObs <> []);
+  Result := (MfObs <> nil) and MfObs.Used and (((MfObs.LktObs <> [])
+    and (SpeciesIndex in MfObs.Genus)) or (MfObs.CalibrationObservations.LktObs[SpeciesIndex] <> []) );
 end;
 
 function TModflowLAKMf6Writer.IsMf6Observation(

@@ -131,7 +131,8 @@ type
   private
     FObGwt: TObGwt;
     FCurrentGwts: TObGwts;
-    FCurrentGwtSpecies: Integer;
+//    FCurrentGwtSpecies: Integer;
+    FCurrentGenus: TGenus;
   protected
     function GetPrefix: string; override;
     function GetObsPresent: boolean; override;
@@ -174,13 +175,14 @@ type
   TSftObsWriter = class(TCustomMf6ObservationWriter)
   private
     FObsList: TSft6ObservationList;
+    FSpeciesIndex: Integer;
     procedure WriteSftObs;
   protected
     class function Extension: string; override;
     procedure Evaluate; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
-      ObsList: TSft6ObservationList); reintroduce;
+      ObsList: TSft6ObservationList; SpeciesIndex: Integer); reintroduce;
     procedure WriteFile(const AFileName: string);
   end;
 
@@ -200,13 +202,14 @@ type
   TLktObsWriter = class(TCustomMf6ObservationWriter)
   private
     FObsList: TLktObservationList;
+    FSpeciesIndex: Integer;
     procedure WriteLktObs;
   protected
     class function Extension: string; override;
     procedure Evaluate; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
-      ObsList: TLktObservationList); reintroduce;
+      ObsList: TLktObservationList; SpeciesIndex: integer); reintroduce;
     procedure WriteFile(const AFileName: string);
   end;
 
@@ -493,6 +496,8 @@ var
   LastTime: double;
   GwtDefined: Boolean;
   SpeciesIndex: Integer;
+  GenusObs: TGenus;
+  Species: Integer;
 //  SplitterIndex: Integer;
 //  FirstCell: Boolean;
   function GetLocation(ACell: TCellLocation): TPoint2D;
@@ -915,33 +920,38 @@ begin
                       end;
                       DirectObsLines.Add('');
                     end;
-                    if (ogwtConcentration in Obs.CalibrationObservations.GwtObs)
-                      and (Obs.GwtSpecies >= 0)  then
+                    for Species := 0 to Model.MobileComponents.Count -1 do
                     begin
-                      HeadDrawdown.FName := Obs.Name + '_C' + IntToStr(ObsIndex);
-                      FConcentrations[Obs.GwtSpecies].Add(HeadDrawdown);
-                      DirectObsLines.Add(Format('  ID %0:s', ['conc_' + HeadDrawdown.FName]));
-                      DirectObsLines.Add(Format('  LOCATION %0:g %1:g', [APoint.x, APoint.y]));
-                      for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
+//                      GenusObs := Obs.CalibrationObservations.Genus[osGeneral];
+                      if (ogwtConcentration in Obs.CalibrationObservations.GwtObs[Species])
+                        {and (Obs.GwtSpecies >= 0)} {and (GenusObs <> [])}  then
                       begin
-                        Observation := Obs.CalibrationObservations[ObservationIndex];
-                        if (Observation.ObSeries = osGWT)
-                          and (Observation.GwtOb = ogwtConcentration) then
+                        HeadDrawdown.FName := Obs.Name + '_C'
+                          + IntToStr(ObsIndex) + '_' + IntToStr(Species);
+                        FConcentrations[Species].Add(HeadDrawdown);
+                        DirectObsLines.Add(Format('  ID %0:s', ['conc_' + HeadDrawdown.FName]));
+                        DirectObsLines.Add(Format('  LOCATION %0:g %1:g', [APoint.x, APoint.y]));
+                        for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
                         begin
-                          ObservationName := Format('%0:s_%1:d',
-                            [HeadDrawdown.FName, ObservationIndex+1]);
-                          DirectObsLines.Add(Format('  OBSNAME %0:s 1:g',
-                            ['conc_' + ObservationName, Observation.Time - StartTime]));
-                          Observation.InterpObsNames.Add(ObservationName);
-                          if LastTime < Observation.Time then
+                          Observation := Obs.CalibrationObservations[ObservationIndex];
+                          if (Observation.ObSeries = osGWT)
+                            and (Observation.GwtOb = ogwtConcentration) then
                           begin
-                            frmErrorsAndWarnings.AddError(Model, StrObservationTimeTo,
-                              Format(StrAnObservationTime,
-                              [AScreenObject.Name]), AScreenObject)
+                            ObservationName := Format('%0:s_%1:d',
+                              [HeadDrawdown.FName, ObservationIndex+1]);
+                            DirectObsLines.Add(Format('  OBSNAME %0:s 1:g',
+                              ['conc_' + ObservationName, Observation.Time - StartTime]));
+                            Observation.InterpObsNames.Add(ObservationName);
+                            if LastTime < Observation.Time then
+                            begin
+                              frmErrorsAndWarnings.AddError(Model, StrObservationTimeTo,
+                                Format(StrAnObservationTime,
+                                [AScreenObject.Name]), AScreenObject)
+                            end;
                           end;
                         end;
+                        DirectObsLines.Add('');
                       end;
-                      DirectObsLines.Add('');
                     end;
                     Inc(ObsIndex);
                   end;
@@ -1059,10 +1069,13 @@ begin
                 end;
                 if ogwtConcentration in Obs.GwtObs  then
                 begin
-                  if Model.GwtUsed and (Obs.GwtSpecies >= 0)
-                    and (Obs.GwtSpecies < Model.MobileComponents.Count) then
+                  if Model.GwtUsed {and (Obs.GwtSpecies >= 0)
+                    and (Obs.GwtSpecies < Model.MobileComponents.Count)} then
                   begin
-                    FConcentrations[Obs.GwtSpecies].Add(HeadDrawdown);
+                    for SpeciesIndex in Obs.Genus do
+                    begin
+                      FConcentrations[SpeciesIndex].Add(HeadDrawdown);
+                    end;
                   end;
                 end;
               end;
@@ -1679,7 +1692,7 @@ begin
   ObsPackage := Package as TMf6ObservationUtility;
   if FSpeciesIndex >= 0 then
   begin
-    WriteHeadDrawdownOutput('conc', 'conc_', FConcentrations[FSpeciesIndex]);
+    WriteHeadDrawdownOutput('concentration', 'conc_', FConcentrations[FSpeciesIndex]);
   end
   else
   begin
@@ -3970,8 +3983,9 @@ end;
 procedure TModflow6GwtFlowObsWriter.AssignCurrentObs(
   FlowObs: TBoundaryFlowObservationLocation);
 begin
-  FCurrentGwts := FlowObs.FMf6Obs.CalibrationObservations.GwtObs;
-  FCurrentGwtSpecies := FlowObs.FMf6Obs.GwtSpecies;
+  FCurrentGwts := FlowObs.FMf6Obs.CalibrationObservations.GwtObs[FSpeciesIndex];
+//  FCurrentGwtSpecies := FlowObs.FMf6Obs.GwtSpecies;
+  FCurrentGenus := FlowObs.FMf6Obs.Genus + FlowObs.FMf6Obs.CalibrationObservations.Genus[osGeneral, FSpeciesIndex];
 end;
 
 constructor TModflow6GwtFlowObsWriter.Create(Model: TCustomModel;
@@ -3994,7 +4008,7 @@ end;
 
 function TModflow6GwtFlowObsWriter.GetObsPresent: boolean;
 begin
-  result := (FObGwt in FCurrentGwts) and (FSpeciesIndex = FCurrentGwtSpecies);
+  result := (FObGwt in FCurrentGwts) and (FSpeciesIndex in  FCurrentGenus);
 end;
 
 function TModflow6GwtFlowObsWriter.GetPrefix: string;
@@ -4019,10 +4033,12 @@ end;
 { TSftObsWriter }
 
 constructor TSftObsWriter.Create(Model: TCustomModel;
-  EvaluationType: TEvaluationType; ObsList: TSft6ObservationList);
+  EvaluationType: TEvaluationType; ObsList: TSft6ObservationList;
+  SpeciesIndex: Integer);
 begin
   inherited Create(Model, EvaluationType);
   FObsList := ObsList;
+  FSpeciesIndex := SpeciesIndex;
 end;
 
 procedure TSftObsWriter.Evaluate;
@@ -4104,14 +4120,14 @@ var
   begin
     if Model.PestUsed then
     begin
-      if AnObsType in CalibObservations.SftObs then
+      if AnObsType in CalibObservations.SftObs[FSpeciesIndex] then
       begin
         DirectObsLines.Add(Format('  ID %s', [obsnam]));
         for CalibIndex := 0 to CalibObservations.Count - 1 do
         begin
           CalibObs := CalibObservations[CalibIndex];
           if (CalibObs.ObSeries = osSft)
-            and (AnObsType = CalibObs.SftOb) then
+            and (AnObsType = CalibObs.SftOb) and (CalibObs.SpeciesIndex = FSpeciesIndex) then
           begin
             DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
               [CalibObs.Name, CalibObs.Time - StartTime]));
@@ -4378,10 +4394,12 @@ end;
 { TLktObsWriter }
 
 constructor TLktObsWriter.Create(Model: TCustomModel;
-  EvaluationType: TEvaluationType; ObsList: TLktObservationList);
+  EvaluationType: TEvaluationType; ObsList: TLktObservationList;
+  SpeciesIndex: integer);
 begin
   inherited Create(Model, EvaluationType);
   FObsList := ObsList;
+  FSpeciesIndex := SpeciesIndex;
 end;
 
 procedure TLktObsWriter.Evaluate;
@@ -4592,14 +4610,15 @@ begin
         if Model.PestUsed then
         begin
           CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
-          if AnObsType in CalibObservations.LktObs then
+          if AnObsType in CalibObservations.LktObs[FSpeciesIndex] then
           begin
             DirectObsLines.Add(Format('  ID %s', [obsnam]));
             for CalibIndex := 0 to CalibObservations.Count - 1 do
             begin
               CalibObs := CalibObservations[CalibIndex];
               if (CalibObs.ObSeries = osLkt)
-                and (AnObsType = CalibObs.LktOb) then
+                and (AnObsType = CalibObs.LktOb)
+                and (CalibObs.SpeciesIndex = FSpeciesIndex) then
               begin
                 DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                   [CalibObs.Name, CalibObs.Time - StartTime]));

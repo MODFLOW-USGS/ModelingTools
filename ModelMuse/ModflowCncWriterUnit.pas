@@ -38,6 +38,7 @@ type
     FCncPackage: TGwtCncPackage;
     FSpeciesName: string;
     FBoundaryFound: Boolean;
+    FSpeciesIndex: Integer;
     procedure PrintStressPeriods; override;
   protected
     class function Extension: string; override;
@@ -59,6 +60,7 @@ type
     FSrcPackage: TGwtSrcPackage;
     FSpeciesName: string;
     FBoundaryFound: Boolean;
+    FSpeciesIndex: Integer;
     procedure PrintStressPeriods; override;
   protected
     class function Extension: string; override;
@@ -103,9 +105,14 @@ end;
 
 function TModflowCncWriter.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
+var
+  Mf6Obs: TModflow6Obs;
 begin
-  result := ((AScreenObject.Modflow6Obs <> nil)
-    and (ogwtCNC in AScreenObject.Modflow6Obs.GwtObs))
+//  AScreenObject.modflow
+  Mf6Obs := AScreenObject.Modflow6Obs;
+  result := (Mf6Obs <> nil) and (((FSpeciesIndex in Mf6Obs.Genus)
+    and (ogwtCNC in Mf6Obs.GwtObs))
+    or (ogwtCNC in Mf6Obs.CalibrationObservations.GwtObs[FSpeciesIndex]))
 end;
 
 class function TModflowCncWriter.Mf6GwtObType: TObGwt;
@@ -165,6 +172,7 @@ begin
   end;
   FCncPackage := Model.ModflowPackages.GwtCncPackage;
   FSpeciesName := Model.MobileComponents[SpeciesIndex].Name;
+  FSpeciesIndex := SpeciesIndex;
 
   Evaluate;
 
@@ -314,9 +322,15 @@ end;
 
 function TModflowSrcWriter.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
+var
+  Mf6Obs: TModflow6Obs;
 begin
-  result := ((AScreenObject.Modflow6Obs <> nil)
-    and (ogwtSRC in AScreenObject.Modflow6Obs.GwtObs))
+//  result := ((AScreenObject.Modflow6Obs <> nil)
+//    and (ogwtSRC in AScreenObject.Modflow6Obs.GwtObs))
+  Mf6Obs := AScreenObject.Modflow6Obs;
+  result := (Mf6Obs <> nil) and (((FSpeciesIndex in Mf6Obs.Genus)
+    and (ogwtSRC in Mf6Obs.GwtObs))
+    or (ogwtSRC in Mf6Obs.CalibrationObservations.GwtObs[FSpeciesIndex]))
 end;
 
 class function TModflowSrcWriter.Mf6GwtObType: TObGwt;
@@ -377,6 +391,7 @@ begin
   end;
   FSrcPackage := Model.ModflowPackages.GwtSrcPackage;
   FSpeciesName := Model.MobileComponents[SpeciesIndex].Name;
+  FSpeciesIndex := SpeciesIndex;
 
   Evaluate;
 

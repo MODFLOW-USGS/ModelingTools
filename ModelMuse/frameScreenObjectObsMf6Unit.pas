@@ -12,17 +12,6 @@ type
   TFlowObsRows = (forCHD, forDRN, forEVT, forGHB, forRCH, forRIV, forWEL, forToMvr);
   TMassFlowObsRows = (mforCNC, mforSRC);
 
-//  Head
-//well flow rate (maw)
-//well cell flow rates (maw + icon)
-//pumping rate
-//flowing well flow rate
-//storage flow rate
-//constant-flow rate
-//well conductance (conductance)
-//individual well cell conductances (conductance + icon
-//flowing well conductance
-
   TframeScreenObjectObsMf6 = class(TFrame)
     pnlCaption: TPanel;
     pgcMain: TPageControl;
@@ -64,6 +53,7 @@ type
     lblSFR: TLabel;
     lblSFT: TLabel;
     chklstGwtOb: TCheckListBox;
+    chklstChemSpecies: TCheckListBox;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -209,6 +199,8 @@ var
   Position: Integer;
   SftOb: TSftOb;
   LktOb: TLktOb;
+  ChemIndex: Integer;
+  Checked: Boolean;
 begin
   FActiveObs := False;
   FInitializing := True;
@@ -253,7 +245,11 @@ begin
             end;
           end;
 
-          comboChemSpecies.ItemIndex := Mf6Obs.GwtSpecies;
+          for ChemIndex := 0 to chklstChemSpecies.Items.Count - 1 do
+          begin
+            chklstChemSpecies.Checked[ChemIndex] := ChemIndex in Mf6Obs.Genus;
+          end;
+//          comboChemSpecies.ItemIndex := Mf6Obs.GwtSpecies;
           cbConcentration.Checked := ogwtConcentration in Mf6Obs.GwtObs;
 
           chklstBoundaryFlow.Checked[Ord(forCHD)] := ogCHD in Mf6Obs.General;
@@ -348,9 +344,19 @@ begin
             cbConcentration.State := cbGrayed;
           end;
 
-          if comboChemSpecies.ItemIndex <> Mf6Obs.GwtSpecies then
+//          if comboChemSpecies.ItemIndex <> Mf6Obs.GwtSpecies then
+//          begin
+//            comboChemSpecies.ItemIndex := -1;
+//          end;
+
+          for ChemIndex := 0 to chklstChemSpecies.Items.Count - 1 do
           begin
-            comboChemSpecies.ItemIndex := -1;
+            Checked := ChemIndex in Mf6Obs.Genus;
+            if Checked <> chklstChemSpecies.Checked[ChemIndex] then
+            begin
+              chklstChemSpecies.AllowGrayed := True;
+              chklstChemSpecies.State[ChemIndex] := cbGrayed
+            end;
           end;
 
           for AnObsChoice := Low(TGwFlowOb) to High(TGwFlowOb)do
@@ -528,7 +534,14 @@ var
   IbIndex: Integer;
   SpeciesIndex: Integer;
   SftIndex: Integer;
+  ChemIndex: Integer;
 begin
+  chklstChemSpecies.Items.Clear;
+  for ChemIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+  begin
+    chklstChemSpecies.Items.Add(frmGoPhast.PhastModel.MobileComponents[ChemIndex].Name)
+  end;
+
   pgcMain.ActivePageIndex := 0;
 
   edObsName.Enabled := True;
@@ -553,6 +566,7 @@ begin
   end;
   cbConcentration.Enabled := frmGoPhast.PhastModel.GwtUsed;
   comboChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
+  chklstChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
 
   for MawIndex := 0 to chklstMAW.Items.Count - 1 do
   begin
@@ -637,6 +651,8 @@ var
   SftOb: TSftOb;
   NewLktObs: TLktObs;
   LktOb: TLktOb;
+  Genus: TGenus;
+  SpeciesIndex: Integer;
 begin
   SetLength(DelayArray, chklstDelayBeds.Items.Count);
   for Index := 0 to List.Count - 1 do
@@ -997,16 +1013,38 @@ begin
       end;
 
       Mf6Obs.GwtObs := NewObGwts;
-      if comboChemSpecies.ItemIndex >= 0 then
+//      if comboChemSpecies.ItemIndex >= 0 then
+//      begin
+//        Mf6Obs.GwtSpecies := comboChemSpecies.ItemIndex;
+//      end;
+//      if (Mf6Obs.GwtSpecies < 0)
+//        and ((Mf6Obs.GwtObs <> []) or (Mf6Obs.SftObs <> [])
+//        or (Mf6Obs.LktObs <> [])) then
+//      begin
+//        Mf6Obs.GwtSpecies := 0;
+//      end;
+      Genus := Mf6Obs.Genus;
+      for SpeciesIndex := 0 to chklstChemSpecies.Count - 1 do
       begin
-        Mf6Obs.GwtSpecies := comboChemSpecies.ItemIndex;
+        if chklstChemSpecies.State[SpeciesIndex] <> cbGrayed then
+        begin
+          if chklstChemSpecies.Checked[SpeciesIndex] then
+          begin
+            Include(Genus, SpeciesIndex);
+          end
+          else
+          begin
+            Exclude(Genus, SpeciesIndex);
+          end;
+        end;
       end;
-      if (Mf6Obs.GwtSpecies < 0)
+      if (Genus = []) {and (chklstChemSpecies.Count > 0)}
         and ((Mf6Obs.GwtObs <> []) or (Mf6Obs.SftObs <> [])
         or (Mf6Obs.LktObs <> [])) then
       begin
-        Mf6Obs.GwtSpecies := 0;
+        Genus := [0];
       end;
+      Mf6Obs.Genus := Genus;
 
       if rgStreamObsLocation.ItemIndex >= 0 then
       begin

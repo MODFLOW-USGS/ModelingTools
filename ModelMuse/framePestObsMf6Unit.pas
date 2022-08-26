@@ -9,7 +9,8 @@ uses
 
 type
   TPestMf6ObsColumns = (pm6Name, mp6ObsSeries, pm6Type, pm6Group, pm6Time,
-    {pm6ObjectWeightFormula,} pm6Value, pm6Weight, pm6MawConnectionNumber, pm6Comment);
+    {pm6ObjectWeightFormula,} pm6Value, pm6Weight, pm6MawConnectionNumber,
+    pm6ChemSpecies, pm6Comment);
 
   TframePestObsMf6 = class(TframePestObs)
     cbMultilayer: TCheckBox;
@@ -47,6 +48,7 @@ resourcestring
   StrObservationSeriesType = 'Observation Series Type';
   StrObjectWeightFormul = 'Object Weight Formula';
   StrMAWConnectionNumbe = 'MAW Connection Number';
+  StrChemSpecies = 'Chem. Species';
 
 {$R *.dfm}
 
@@ -205,6 +207,10 @@ begin
     begin
       CanSelect := False;
     end;
+    if ACol = Ord(pm6ChemSpecies) then
+    begin
+      CanSelect := False;
+    end;
 
     if TryGetObsSeries(ObsSeriesName, ObsSeries) then
     begin
@@ -259,6 +265,10 @@ begin
             Assert(False);
           end;
       end;
+      if (ACol = Ord(pm6ChemSpecies)) and (ObsSeries in GwtSeries) then
+      begin
+        CanSelect := True;
+      end;
     end;
   end;
 end;
@@ -282,7 +292,9 @@ procedure TframePestObsMf6.GetDirectObs(
 var
   ItemIndex: Integer;
   Obs: TMf6CalibrationObs;
+  PickList: TStrings;
 begin
+  PickList := frameObservations.Grid.Columns[Ord(pm6ChemSpecies)].PickList;
   for ItemIndex := 0 to Observations.Count - 1 do
   begin
     Obs := Observations[ItemIndex] as TMf6CalibrationObs;
@@ -296,6 +308,14 @@ begin
     frameObservations.Grid.RealValue[Ord(pm6Value), ItemIndex + 1] := Obs.ObservedValue;
     frameObservations.Grid.RealValue[Ord(pm6Weight), ItemIndex + 1] := Obs.Weight;
     frameObservations.Grid.IntegerValue[Ord(pm6MawConnectionNumber), ItemIndex + 1] := Obs.MawConnectionNumber;
+    if Obs.SpeciesIndex < PickList.Count then
+    begin
+      frameObservations.Grid.ItemIndex[Ord(pm6ChemSpecies), ItemIndex + 1] := Obs.SpeciesIndex;
+    end
+    else
+    begin
+      frameObservations.Grid.ItemIndex[Ord(pm6ChemSpecies), ItemIndex + 1] := -1;
+    end;
     frameObservations.Grid.Cells[Ord(pm6Comment), ItemIndex + 1] := Obs.Comment;
   end;
   cbMultilayer.Checked := (Observations as TMf6CalibrationObservations).MultiLayer;
@@ -455,6 +475,11 @@ begin
       begin
         Obs.MawConnectionNumber := frameObservations.Grid.IntegerValue[Ord(pm6MawConnectionNumber), RowIndex];
       end;
+      Obs.SpeciesIndex := frameObservations.Grid.ItemIndex[Ord(pm6ChemSpecies), RowIndex];
+      if (ObSeries in GwtSeries) and (Obs.SpeciesIndex < 0) then
+      begin
+        Obs.SpeciesIndex := 0;
+      end;
       Obs.Comment := frameObservations.Grid.Cells[Ord(pm6Comment), RowIndex];
     end;
   end;
@@ -463,9 +488,21 @@ begin
 end;
 
 procedure TframePestObsMf6.SetObsColumnCaptions;
+var
+//  AColumn: TRbwColumn4;
+  ChemSpeciesIndex: Integer;
+  Picklist: TStrings;
 begin
   frameObservations.Grid.BeginUpdate;
   try
+    Picklist := frameObservations.Grid.Columns[Ord(pm6ChemSpecies)].Picklist;
+    Picklist.Clear;
+    for ChemSpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      Picklist.Add(frmGoPhast.PhastModel.
+        MobileComponents[ChemSpeciesIndex].Name);
+    end;
+
     frameObservations.Grid.Cells[Ord(pm6Name), 0] := StrObservationName;
     frameObservations.Grid.Cells[Ord(mp6ObsSeries), 0] := StrObservationSeriesType;;
     frameObservations.Grid.Cells[Ord(pm6Type), 0] := StrObservationType;
@@ -474,6 +511,7 @@ begin
     frameObservations.Grid.Cells[Ord(pm6Value), 0] := StrObservationValue;
     frameObservations.Grid.Cells[Ord(pm6Weight), 0] := StrObservationWeight;
     frameObservations.Grid.Cells[Ord(pm6MawConnectionNumber), 0] := StrMAWConnectionNumbe;
+    frameObservations.Grid.Cells[Ord(pm6ChemSpecies), 0] := StrChemSpecies;
     frameObservations.Grid.Cells[Ord(pm6Comment), 0] := StrComment;
   finally
     frameObservations.Grid.EndUpdate;

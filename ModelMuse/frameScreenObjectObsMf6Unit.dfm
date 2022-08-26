@@ -45,8 +45,8 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Caption = 'Chemical species'
       end
       object lblGwtObs: TLabel
-        Left = 287
-        Top = 74
+        Left = 296
+        Top = 195
         Width = 201
         Height = 20
         Caption = 'Type of mass flow observation'
@@ -130,8 +130,8 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         OnChange = comboChemSpeciesChange
       end
       object chklstGWT: TCheckListBox
-        Left = 287
-        Top = 95
+        Left = 296
+        Top = 221
         Width = 282
         Height = 97
         ItemHeight = 20
@@ -140,6 +140,14 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           'SRC (Mass source loading rate)')
         TabOrder = 7
         OnClickCheck = chklstGWTClickCheck
+      end
+      object chklstChemSpecies: TCheckListBox
+        Left = 296
+        Top = 93
+        Width = 275
+        Height = 97
+        ItemHeight = 20
+        TabOrder = 8
       end
     end
     object tabMAW: TTabSheet

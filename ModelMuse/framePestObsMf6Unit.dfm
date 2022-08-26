@@ -22,7 +22,7 @@ inherited framePestObsMf6: TframePestObsMf6
       end
       inherited Grid: TRbwDataGrid4
         Height = 161
-        ColCount = 9
+        ColCount = 10
         OnBeforeDrawCell = frameObservationsGridBeforeDrawCell
         Columns = <
           item
@@ -231,6 +231,30 @@ inherited framePestObsMf6: TframePestObsMf6
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
+            ButtonFont.Height = -15
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = True
+            Format = rcf4String
+            LimitToList = True
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
             ButtonFont.Height = -11
             ButtonFont.Name = 'Tahoma'
             ButtonFont.Style = []
@@ -253,6 +277,7 @@ inherited framePestObsMf6: TframePestObsMf6
         ColWidths = (
           64
           75
+          64
           64
           64
           64

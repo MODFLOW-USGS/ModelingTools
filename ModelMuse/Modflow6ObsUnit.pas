@@ -20,6 +20,13 @@ type
 
   TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub, osGWT, osSft, osLkt);
 
+const
+  GwtSeries = [osGWT, osSft, osLkt];
+
+type
+  TSpecies = Integer;
+  TGenus = TIntegerSet;
+
   TMf6CalibrationObs = class(TCustomTimeObservationItem)
   private
     FUzfOb: TUzfOb;
@@ -34,6 +41,7 @@ type
     FGwtOb: TObGwt;
     FSftOb: TSftOb;
     FLktOb: TLktOb;
+    FSpeciesIndex: TSpecies;
     procedure SetCSubOb(const Value: TCSubOb);
     procedure SetLakOb(const Value: TLakOb);
     procedure SetMawOb(const Value: TMawOb);
@@ -54,6 +62,7 @@ type
     function StoreSftOb: Boolean;
     procedure SetLktOb(const Value: TLktOb);
     function StoreLktOb: Boolean;
+    procedure SetSpeciesIndex(const Value: TSpecies);
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(Value: Integer); override;
@@ -77,6 +86,7 @@ type
     property MawConnectionNumber: Integer read FMawConnectionNumber
       write SetMawConnectionNumber;
     // GWT
+    property SpeciesIndex: TSpecies read FSpeciesIndex write SetSpeciesIndex;
     property GwtOb: TObGwt read FGwtOb write SetGwtOb stored StoreGwtOb;
     property SftOb: TSftOb read FSftOb write SetSftOb stored StoreSftOb;
     property LktOb: TLktOb read FLktOb write SetLktOb stored StoreLktOb;
@@ -96,9 +106,10 @@ type
     function GetCalibItem(Index: Integer): TMf6CalibrationObs;
     procedure SetCalibItem(Index: Integer; const Value: TMf6CalibrationObs);
     procedure SetMultiLayer(const Value: Boolean);
-    function GetGwtObs: TObGwts;
-    function GetSftObs: TSftObs;
-    function GetLktObs: TLktObs;
+    function GetGwtObs(Species: Integer): TObGwts;
+    function GetSftObs(Species: Integer): TSftObs;
+    function GetLktObs(Species: Integer): TLktObs;
+    function GetGenus(Series: TObSeries; Species: Integer): TGenus;
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent;
       ScreenObject: TObject);
@@ -110,9 +121,10 @@ type
     property UzfObs: TUzfObs read GetUzfObs;
     property SubObsSet: TSubObsSet read GetSubObsSet;
     // GWT
-    property GwtObs: TObGwts read GetGwtObs;
-    property SftObs: TSftObs read GetSftObs;
-    property LktObs: TLktObs read GetLktObs;
+    property GwtObs[Species: Integer]: TObGwts read GetGwtObs;
+    property SftObs[Species: Integer]: TSftObs read GetSftObs;
+    property LktObs[Species: Integer]: TLktObs read GetLktObs;
+    property Genus[Series: TObSeries; Species: Integer]: TGenus read GetGenus;
     property Items[Index: Integer]: TMf6CalibrationObs read GetCalibItem
       write SetCalibItem; default;
     function UsesMawConnectionNumber(ConnectionNumber: Integer;
@@ -143,6 +155,7 @@ type
     FGwtSpecies: Integer;
     FSftObs: TSftObs;
     FLktObs: TLktObs;
+    FGenus: TGenus;
     procedure SetDrawdownObs(const Value: Boolean);
     procedure SetGroundwaterFlowObs(const Value: Boolean);
     procedure SetGwFlowObsChoices(const Value: TGwFlowObs);
@@ -196,6 +209,7 @@ type
     procedure SetSftObs(const Value: TSftObs);
     function GetLktObs: TLktObs;
     procedure SetLttObs(const Value: TLktObs);
+    procedure SetGenus(const Value: TGenus);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     destructor Destroy; override;
@@ -228,11 +242,13 @@ type
     property CalibrationObservations: TMf6CalibrationObservations
       read FCalibrationObservations write SetCalibrationObservations
         stored StoreCalibObs;
-    property GwtSpecies: Integer read FGwtSpecies write SetGwtSpecies
+    property Genus: TGenus read FGenus write SetGenus
       {$IFNDEF  GWT}
       stored False
       {$ENDIF}
       ;
+    property GwtSpecies: Integer read FGwtSpecies write SetGwtSpecies
+      stored False;
     property SftObs: TSftObs read GetSftObs write SetSftObs
       {$IFNDEF  GWT}
       stored False
@@ -443,11 +459,12 @@ begin
 
     CalibrationObservations := SourceObs.CalibrationObservations;
 
-    GwtSpecies := SourceObs.GwtSpecies;
-    if (GwtSpecies < 0) and ((GwtObs <> []) or (SftObs <>[])) then
-    begin
-      GwtSpecies := 0;
-    end;
+    Genus := SourceObs.Genus;
+//    GwtSpecies := SourceObs.GwtSpecies;
+//    if (GwtSpecies < 0) and ((GwtObs <> []) or (SftObs <>[]) or (LktObs <>[])) then
+//    begin
+//      GwtSpecies := 0;
+//    end;
   end
   else
   begin
@@ -475,7 +492,7 @@ constructor TModflow6Obs.Create(InvalidateModelEvent: TNotifyEvent;
   ScreenObject: TObject);
 begin
   inherited Create(InvalidateModelEvent);
-  FGwtSpecies := -1;
+//  FGwtSpecies := -1;
   FScreenObject := ScreenObject;
   FGwFlowObsChoices := [gfoNearestNeighbor];
   FStoredUzfObsDepthFraction := TRealStorage.Create;
@@ -534,7 +551,7 @@ end;
 
 function TModflow6Obs.GetGwtObs: TObGwts;
 begin
-  result := FGwtObs + CalibrationObservations.GwtObs;
+  result := FGwtObs {+ CalibrationObservations.GwtObs};
 end;
 
 function TModflow6Obs.GetHeadObs: Boolean;
@@ -549,7 +566,7 @@ end;
 
 function TModflow6Obs.GetLktObs: TLktObs;
 begin
-  result := FLktObs + CalibrationObservations.LKtObs;
+  result := FLktObs {+ CalibrationObservations.LKtObs};
 end;
 
 function TModflow6Obs.GetMawObs: TMawObs;
@@ -586,7 +603,7 @@ end;
 
 function TModflow6Obs.GetSftObs: TSftObs;
 begin
-  result := FSftObs + CalibrationObservations.SftObs;
+  result := FSftObs {+ CalibrationObservations.SftObs};
 end;
 
 function TModflow6Obs.GetToMvrFlowObs: Boolean;
@@ -720,6 +737,14 @@ begin
   end;
 end;
 
+procedure TModflow6Obs.SetGenus(const Value: TGenus);
+begin
+  if FGenus <> Value then
+  begin
+    FGenus := Value;
+  end;
+end;
+
 procedure TModflow6Obs.SetGhbFlowObs(const Value: Boolean);
 begin
   if Value <> GhbFlowObs then
@@ -734,7 +759,6 @@ begin
     end;
     InvalidateModel;
   end;
-//  SetBooleanProperty(FGhbFlowObs, Value);
 end;
 
 procedure TModflow6Obs.SetGroundwaterFlowObs(const Value: Boolean);
@@ -762,7 +786,14 @@ end;
 
 procedure TModflow6Obs.SetGwtSpecies(const Value: Integer);
 begin
-  SetIntegerProperty(FGwtSpecies, Value);
+  if Value < 0 then
+  begin
+    Genus := [];
+  end
+  else
+  begin
+    Genus := [Value];
+  end;
 end;
 
 procedure TModflow6Obs.SetHeadObs(const Value: Boolean);
@@ -969,6 +1000,7 @@ begin
     UzfOb := ObsSource.UzfOb;
     CSubOb := ObsSource.CSubOb;
 
+    SpeciesIndex := ObsSource.SpeciesIndex;
     GwtOb := ObsSource.GwtOb;
     SftOb := ObsSource.SftOb;
     LktOb := ObsSource.LktOb;
@@ -1444,6 +1476,15 @@ begin
   end;
 end;
 
+procedure TMf6CalibrationObs.SetSpeciesIndex(const Value: TSpecies);
+begin
+  if FSpeciesIndex <> Value then
+  begin
+    FSpeciesIndex := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TMf6CalibrationObs.SetUzfOb(const Value: TUzfOb);
 begin
   if FUzfOb <> Value then
@@ -1530,7 +1571,26 @@ begin
   result := inherited Items[Index] as TMf6CalibrationObs;
 end;
 
-function TMf6CalibrationObservations.GetGwtObs: TObGwts;
+function TMf6CalibrationObservations.GetGenus(Series: TObSeries; Species: Integer): TGenus;
+var
+  Index: Integer;
+  Item: TMf6CalibrationObs;
+begin
+  result := [];
+  if (Series in GwtSeries) then
+  begin
+    for Index := 0 to Count - 1 do
+    begin
+      Item := Items[Index];
+      if (Item.ObSeries = Series) and (Item.SpeciesIndex = Species) then
+      begin
+        Include(result, Item.SpeciesIndex);
+      end;
+    end;
+  end;
+end;
+
+function TMf6CalibrationObservations.GetGwtObs(Species: Integer): TObGwts;
 var
   Index: Integer;
   Item: TMf6CalibrationObs;
@@ -1562,7 +1622,7 @@ begin
   end;
 end;
 
-function TMf6CalibrationObservations.GetLktObs: TLktObs;
+function TMf6CalibrationObservations.GetLktObs(Species: Integer): TLktObs;
 var
   Index: Integer;
   Item: TMf6CalibrationObs;
@@ -1571,7 +1631,7 @@ begin
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index];
-    if Item.ObSeries = osLkt then
+    if (Item.ObSeries = osLkt) and (Item.SpeciesIndex = Species) then
     begin
       Include(result, Item.LktOb);
     end;
@@ -1626,7 +1686,7 @@ begin
   end;
 end;
 
-function TMf6CalibrationObservations.GetSftObs: TSftObs;
+function TMf6CalibrationObservations.GetSftObs(Species: Integer): TSftObs;
 var
   Index: Integer;
   Item: TMf6CalibrationObs;
@@ -1635,7 +1695,7 @@ begin
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index];
-    if Item.ObSeries = osSft then
+    if (Item.ObSeries = osSft) and (Item.SpeciesIndex = Species) then
     begin
       Include(result, Item.SftOb);
     end;

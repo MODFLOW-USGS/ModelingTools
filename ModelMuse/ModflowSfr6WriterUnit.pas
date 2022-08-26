@@ -26,6 +26,7 @@ type
     FCount: Integer;
     FObsTypes: TSftObs;
     FSfrObsLocation: TSfrObsLocation;
+    FSpecies: Integer;
     FModflow6Obs: TModflow6Obs;
   end;
   TSft6ObservationList = TList<TSft6Observation>;
@@ -94,7 +95,7 @@ type
   protected
     function Package: TModflowPackageSelection; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean;
-    function IsMf6GwtObservation(AScreenObject: TScreenObject): Boolean;
+    function IsMf6GwtObservation(AScreenObject: TScreenObject; SpeciesIndex: Integer): Boolean;
     function ObservationsUsed: Boolean;
     class function ObservationExtension: string;
     class function GwtObservationExtension: string;
@@ -832,6 +833,7 @@ var
   ItemIndex: Integer;
   Item1: TSfrMf6Item;
   Item2: TSfrMf6Item;
+  SpeciesIndex: Integer;
 begin
   FReachCount := 0;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, NoSegmentsWarning);
@@ -981,17 +983,25 @@ begin
           Obs.FModflow6Obs := MfObs;
           FObsList.Add(Obs);
         end;
-        if ObservationsUsed and IsMf6GwtObservation(ScreenObject) then
+        for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
         begin
-          MfObs := ScreenObject.Modflow6Obs;
-          SftObs.FName := MfObs.Name;
-          SftObs.FBoundName := ScreenObject.Name;
-          SftObs.FObsTypes := MfObs.SftObs;
-          SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
-          SftObs.FReachStart := ReachStart;
-          SftObs.FCount := ASegment.ReachCount;
-          SftObs.FModflow6Obs := MfObs;
-          FSftObsLists[MfObs.GwtSpecies].Add(SftObs)
+          if ObservationsUsed and IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
+          begin
+            MfObs := ScreenObject.Modflow6Obs;
+  //          SftObs.FName := MfObs.Name;
+            SftObs.FBoundName := ScreenObject.Name;
+            SftObs.FObsTypes := MfObs.CalibrationObservations.SftObs[SpeciesIndex];
+            if SpeciesIndex in MfObs.Genus then
+            begin
+              SftObs.FObsTypes := SftObs.FObsTypes + MfObs.SftObs;
+            end;
+            SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
+            SftObs.FReachStart := ReachStart;
+            SftObs.FCount := ASegment.ReachCount;
+            SftObs.FModflow6Obs := MfObs;
+            SftObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
+            FSftObsLists[SpeciesIndex].Add(SftObs)
+          end;
         end;
         ReachStart := ReachStart + ASegment.ReachCount;
       end
@@ -1021,6 +1031,7 @@ var
   SftObs: TSft6Observation;
   MfObs: TModflow6Obs;
   ReachStart: Integer;
+  SpeciesIndex: Integer;
 begin
   ReachStart := 0;
   for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
@@ -1063,17 +1074,22 @@ begin
       Obs.FModflow6Obs := MfObs;
       FObsList.Add(Obs);
     end;
-    if ObservationsUsed and IsMf6GwtObservation(ScreenObject) then
+    for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
     begin
-      MfObs := ScreenObject.Modflow6Obs;
-      SftObs.FName := MfObs.Name;
-      SftObs.FBoundName := ScreenObject.Name;
-      SftObs.FObsTypes := MfObs.SftObs;
-      SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
-      SftObs.FReachStart := ReachStart;
-      SftObs.FCount := ASegment.ReachCount;
-      SftObs.FModflow6Obs := MfObs;
-      FSftObsLists[MfObs.GwtSpecies].Add(SftObs)
+      if ObservationsUsed and IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
+      begin
+        MfObs := ScreenObject.Modflow6Obs;
+  //      SftObs.FName := MfObs.Name;
+        SftObs.FBoundName := ScreenObject.Name;
+        SftObs.FObsTypes := MfObs.SftObs;
+        SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
+        SftObs.FReachStart := ReachStart;
+        SftObs.FCount := ASegment.ReachCount;
+        SftObs.FModflow6Obs := MfObs;
+        SftObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
+        FSftObsLists[SpeciesIndex].Add(SftObs)
+      end;
+//      FSftObsLists[MfObs.GwtSpecies].Add(SftObs)
     end;
     ReachStart := ReachStart + ASegment.ReachCount;
   end;
@@ -1245,12 +1261,13 @@ begin
 end;
 
 function TModflowSFR_MF6_Writer.IsMf6GwtObservation(
-  AScreenObject: TScreenObject): Boolean;
+  AScreenObject: TScreenObject; SpeciesIndex: Integer): Boolean;
 var
   MfObs: TModflow6Obs;
 begin
   MfObs := AScreenObject.Modflow6Obs;
-  Result := (MfObs <> nil) and MfObs.Used and (MfObs.SftObs <> []);
+  Result := (MfObs <> nil) and MfObs.Used and (((MfObs.SftObs <> [])
+    and (SpeciesIndex in MfObs.Genus)) or (MfObs.CalibrationObservations.SftObs[SpeciesIndex] <> []) );
 end;
 
 function TModflowSFR_MF6_Writer.IsMf6Observation(
@@ -1993,7 +2010,7 @@ begin
 
     if FSftObsLists[SpeciesIndex].Count > 0 then
     begin
-      ObsWriter := TSftObsWriter.Create(Model, etExport, FSftObsLists[SpeciesIndex]);
+      ObsWriter := TSftObsWriter.Create(Model, etExport, FSftObsLists[SpeciesIndex], SpeciesIndex);
       try
         ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
       finally
