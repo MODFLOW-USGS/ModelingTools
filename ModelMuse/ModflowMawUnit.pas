@@ -14,6 +14,10 @@ type
     moConductanceCells, moFlowingWellConductance);
   TMawObs = set of TMawOb;
 
+  TMwtOb = (mtoConcentration, mstoStorage, mtoConstant, mtoFromMvr, mtoMwt,
+    mtoMwtCells, mtoRate, mtoFwRate, mtoRateToMvr, mtoFwRateToMvr);
+  TMwtObs = set of TMwtOb;
+
   // mcmTheim is for backwards compatibility.
   TMawConductanceMethod = (mcmSpecified, mcmThiem, mcmSkin, mcmCumulative,
     mcmMean, mcmTheim);
@@ -929,8 +933,11 @@ Const
   MawGwtInjectionConcentrationsPosition = 1;
 
 function TryGetMawOb(const MawObName: string; var MawOb: TMawOb): Boolean;
+function TryGetMwtOb(const MwtObName: string; var MwtOb: TMwtOb): Boolean;
 function MawObToString(const MawOb: TMawOb): string;
+function MwtObToString(const MwtOb: TMwtOb): string;
 Procedure FillMawSeriesNames(AList: TStrings);
+Procedure FillMwtSeriesNames(AList: TStrings);
 
 implementation
 
@@ -945,8 +952,25 @@ const MawObName: array[TMawOb] of string = ('Head', 'FromMvr', 'FlowRate',
   'ConstantFlowRate', 'Conductance',
   'ConductanceCells', 'FlowingWellConductance');
 
+  {
+  TMwtOb = (mtoConcentration, mstoStorage, mtoConstant, mtoFromMvr, mtoMwt,
+    mtoMwtCells, mtoRate, mtoFwRate, mtoRateToMvr, mtoFwRateToMvr);
+  }
+const MwtObName: array[TMwtOb] of string = (
+  'Concentration',
+  'Storage',
+  'Constant',
+  'From-MVR',
+  'Mass Flow Rate (MWT)',
+  'Mass Flow Rate (Cells) (MWT + iconn)',
+  'Well Mass-Flow-Rate (rate)',
+  'Flowing Well Mass-Flow-Rate (fw-rate)',
+  'Mass Flow Rate to MVR (rate-to-mvr)',
+  'Flowing Well Mass Flow Rate to MVR (fw-rate-to-mvr)');
+
 var
   MawObNames: TStringList;
+  MwtObNames: TStringList;
 
 procedure InitializeMawObNames;
 var
@@ -960,6 +984,19 @@ begin
   end;
 end;
 
+procedure InitializeMwtObNames;
+var
+  Index: TMwtOb;
+begin
+  MwtObNames := TStringList.Create;
+  MwtObNames.CaseSensitive := False;
+  for Index := Low(TMwtOb) to High(TMwtOb) do
+  begin
+    MwtObNames.Add(MwtObName[Index]);
+  end;
+end;
+
+
 function TryGetMawOb(const MawObName: string; var MawOb: TMawOb): Boolean;
 var
   Index: Integer;
@@ -972,20 +1009,37 @@ begin
   end;
 end;
 
+function TryGetMwtOb(const MwtObName: string; var MwtOb: TMwtOb): Boolean;
+var
+  Index: Integer;
+begin
+  Index := MwtObNames.IndexOf(MwtObName);
+  result := Index >= 0;
+  if result then
+  begin
+    MwtOb := TMwtOb(Index);
+  end;
+end;
+
 function MawObToString(const MawOb: TMawOb): string;
 begin
   result := MawObName[MawOb];
+end;
+
+function MwtObToString(const MwtOb: TMwtOb): string;
+begin
+  result := MwtObName[MwtOb];
 end;
 
 Procedure FillMawSeriesNames(AList: TStrings);
 begin
   AList.Assign(MawObNames);
 end;
-  {
-  TMawOb = (moHead, moFromMvr, moFlowRate, moFlowRateCells, moPumpRate, moRateToMvr,
-    moFlowingWellFlowRate, moFlowWellToMvr, moStorageFlowRate, moConstantFlowRate, moConductance,
-    moConductanceCells, moFlowingWellConductance);
-  }
+
+Procedure FillMwtSeriesNames(AList: TStrings);
+begin
+  AList.Assign(MwtObNames);
+end;
 
 resourcestring
   StrScreenTop = 'Screen_Top';
@@ -4488,7 +4542,6 @@ end;
 function TMawItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
   SourceItem: TMawItem;
-  Index: Integer;
 begin
   result := inherited IsSame(AnotherItem) and (AnotherItem is TMawItem);
   if result then
@@ -6087,8 +6140,10 @@ end;
 
 initialization
   InitializeMawObNames;
+  InitializeMwtObNames;
 
 finalization
   MawObNames.Free;
+  MwtObNames.Free;
 
 end.

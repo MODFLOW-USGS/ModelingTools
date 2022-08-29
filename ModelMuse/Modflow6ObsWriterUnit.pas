@@ -157,6 +157,20 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
+  TMwtObsWriter = class(TCustomMf6ObservationWriter)
+  private
+    FObsList: TMwtObservationList;
+    FSpeciesIndex: Integer;
+    procedure WriteMwtObs;
+  protected
+    class function Extension: string; override;
+    procedure Evaluate; override;
+  public
+    Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
+      ObsList: TMwtObservationList; SpeciesIndex: Integer); reintroduce;
+    procedure WriteFile(const AFileName: string);
+  end;
+
   TSfrObsWriter = class(TCustomMf6ObservationWriter)
   private
     FObsList: TSfr6ObservationList;
@@ -4612,6 +4626,283 @@ begin
           end;
         end;
 
+      end;
+    end;
+
+    WriteString('END CONTINUOUS');
+    NewLine;
+    NewLine;
+  end;
+end;
+
+{ TMwtObsWriter }
+
+constructor TMwtObsWriter.Create(Model: TCustomModel;
+  EvaluationType: TEvaluationType; ObsList: TMwtObservationList;
+  SpeciesIndex: Integer);
+begin
+  inherited Create(Model, EvaluationType);
+  FObsList := ObsList;
+  FSpeciesIndex := SpeciesIndex;
+end;
+
+procedure TMwtObsWriter.Evaluate;
+begin
+  // do nothing
+
+end;
+
+class function TMwtObsWriter.Extension: string;
+begin
+  Result := '';
+  Assert(False);
+end;
+
+procedure TMwtObsWriter.WriteFile(const AFileName: string);
+begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  FNameOfFile := AFileName;
+
+  frmProgressMM.AddMessage('Writing MWT observations');
+  Assert(FObsList.Count > 0);
+  Model.AddModelInputFile(FNameOfFile);
+
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
+  try
+    WriteDataSet0;
+    WriteOptions;
+    WriteMwtObs;
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TMwtObsWriter.WriteMwtObs;
+var
+  ObTypes: TMwtObs;
+  ObsIndex: Integer;
+  ObsPackage: TMf6ObservationUtility;
+  OutputTypeExtension: string;
+  AnObsType: TMwtOb;
+  OutputExtension: string;
+  OutputFileName: string;
+  AnObs: TMwtObservation;
+  obsnam: string;
+  ObservationType: string;
+  boundname: string;
+  IconIndex: Integer;
+  OutputFormat: string;
+  CalibrationObservations: TMf6CalibrationObservations;
+  CalibIndex: Integer;
+  CalibObs: TMf6CalibrationObs;
+  StartTime: Double;
+  Prefix: string;
+begin
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
+  ObTypes := [];
+  for ObsIndex := 0 to FObsList.Count - 1 do
+  begin
+    ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
+  end;
+  ObsPackage := Package as TMf6ObservationUtility;
+  case ObsPackage.OutputFormat of
+    ofText:
+      begin
+        OutputTypeExtension := '.csv';
+        OutputFormat := 'TEXT';
+      end;
+    ofBinary:
+      begin
+        OutputTypeExtension := '.bin';
+        OutputFormat := 'BINARY';
+      end;
+    else
+      Assert(False);
+  end;
+  for AnObsType in ObTypes do
+  begin
+    case AnObsType of
+      mtoConcentration:
+        begin
+          OutputExtension := '.mwt_concentration_ob' + OutputTypeExtension;
+          ObservationType := 'concentration';
+          Prefix := 'mconc_';
+        end;
+      mstoStorage:
+        begin
+          OutputExtension := '.mwt_storage_ob' + OutputTypeExtension;
+          ObservationType := 'storage';
+          Prefix := 'mstor_';
+        end;
+      mtoConstant:
+        begin
+          OutputExtension := '.mwt_constant_ob' + OutputTypeExtension;
+          ObservationType := 'constant';
+          Prefix := 'mcnst_';
+        end;
+      mtoFromMvr:
+        begin
+          OutputExtension := '.mwt_from-mvr_ob' + OutputTypeExtension;
+          ObservationType := 'from-mvr';
+          Prefix := 'mtfmv_';
+        end;
+      mtoMwt:
+        begin
+          OutputExtension := '.mwt_mwt_ob' + OutputTypeExtension;
+          ObservationType := 'mwt';
+          Prefix := 'mmwt_';
+        end;
+      mtoMwtCells:
+        begin
+          OutputExtension := '.mwt_mwt_cells_ob' + OutputTypeExtension;
+          ObservationType := 'mwt';
+          Prefix := 'mmwtc_';
+        end;
+      mtoRate:
+        begin
+          OutputExtension := '.mwt_rate_ob' + OutputTypeExtension;
+          ObservationType := 'rate';
+          Prefix := 'mr_';
+        end;
+      mtoFwRate:
+        begin
+          OutputExtension := '.mwt_flowing_well_rate_ob' + OutputTypeExtension;
+          ObservationType := 'fw-rate';
+          Prefix := 'mfwr_';
+        end;
+      mtoRateToMvr:
+        begin
+          OutputExtension := '.mwt_rate-to-mvr_ob' + OutputTypeExtension;
+          ObservationType := 'rate-to-mvr';
+          Prefix := 'mr2mv_';
+        end;
+      mtoFwRateToMvr:
+        begin
+          OutputExtension := '.mwt_fw-rate-to-mvr_ob' + OutputTypeExtension;
+          ObservationType := 'fw-rate-to-mvr';
+          Prefix := 'mfwr2mv_';
+        end;
+      else
+        Assert(False);
+    end;
+    WriteString('BEGIN CONTINUOUS FILEOUT ');
+    OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
+    Model.AddModelOutputFile(OutputFileName);
+    if Model.PestUsed then
+    begin
+      Assert(FileNameLines <> nil);
+      FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+        [ExtractFileName(OutputFileName), OutputFormat]));
+    end;
+    OutputFileName := ExtractFileName(OutputFileName);
+    WriteString(OutputFileName);
+    if ObsPackage.OutputFormat = ofBinary then
+    begin
+      WriteString(' BINARY');
+    end;
+    NewLine;
+
+    for ObsIndex := 0 to FObsList.Count - 1 do
+    begin
+      AnObs := FObsList[ObsIndex];
+      if AnObsType in AnObs.FObsTypes then
+      begin
+        obsnam := Prefix + AnObs.FName;
+        if obsnam = Prefix then
+        begin
+          obsnam := Format(Prefix + 'MwtObs%d', [ObsIndex+1]);
+        end;
+
+        frmProgressMM.AddMessage(Format('  Exporting %s', [obsnam]));
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
+
+        Assert(Length(obsnam) <= MaxBoundNameLength);
+        boundname := Trim(AnObs.FBoundName);
+        boundname := Copy(boundname, 1, MaxBoundNameLength);
+        boundname := ' ' + boundname + ' ';
+        if AnObsType = mtoMwtCells then
+        begin
+          for IconIndex := 1 to AnObs.FCount do
+          begin
+            WriteString(' ''');
+            WriteString(obsnam);
+            WriteString('_');
+            WriteString(IntToStr(IconIndex));
+            WriteString(''' ');
+            WriteString(ObservationType);
+            WriteInteger(AnObs.FWellNumber);
+            WriteInteger(IconIndex);
+            NewLine;
+          end;
+        end
+        else
+        begin
+          WriteString(' ''');
+          WriteString(obsnam);
+          WriteString(''' ');
+          WriteString(ObservationType);
+          WriteString(' ');
+          WriteString(boundname);
+          NewLine;
+        end;
+
+        if Model.PestUsed then
+        begin
+          CalibrationObservations := AnObs.FModflow6Obs.CalibrationObservations;
+          if AnObsType in CalibrationObservations.MwtObs[FSpeciesIndex] then
+          begin
+            if AnObsType = mtoMwtCells then
+            begin
+              for IconIndex := 1 to AnObs.FCount do
+              begin
+                if CalibrationObservations.UsesMawConnectionNumber(IconIndex, AnObsType) then
+                begin
+                  DirectObsLines.Add(Format('  ID %s_%d', [obsnam, IconIndex]));
+                  for CalibIndex := 0 to CalibrationObservations.Count - 1 do
+                  begin
+                    CalibObs := CalibrationObservations[CalibIndex];
+                    if (CalibObs.ObSeries = osMwt)
+                      and (AnObsType = CalibObs.MwtOb)
+                      and (IconIndex = CalibObs.MawConnectionNumber)
+                      then
+                    begin
+                      DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
+                        [CalibObs.Name, CalibObs.Time - StartTime]));
+                    end;
+                  end;
+                  DirectObsLines.Add('');
+                end;
+              end;
+            end
+            else
+            begin
+              DirectObsLines.Add(Format('  ID %s', [obsnam]));
+              for CalibIndex := 0 to CalibrationObservations.Count - 1 do
+              begin
+                CalibObs := CalibrationObservations[CalibIndex];
+                if (CalibObs.ObSeries = osMwt)
+                  and (AnObsType = CalibObs.MwtOb) then
+                begin
+                  DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
+                    [CalibObs.Name, CalibObs.Time - StartTime]));
+                end;
+              end;
+              DirectObsLines.Add('');
+            end;
+          end;
+        end;
       end;
     end;
 

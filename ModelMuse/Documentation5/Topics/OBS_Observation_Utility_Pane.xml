@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-08-29T10:51:32.015-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">OBS: Observation Utility Pane</title>
   <body>
     <header>
@@ -23,9 +23,10 @@
     <para styleclass="Strong"><text styleclass="Strong" translate="true">Observation Time</text><text styleclass="Normal" translate="true"> is the time at which the observation was made.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Value (OBSVAL)</text><text styleclass="Normal" translate="true"> is the measured value to which the simulated value should be compared.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Weight (WEIGHT)</text><text styleclass="Normal" translate="true"> is the weight assigned to the observation.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">MAW Connection Number</text><text styleclass="Normal" translate="true"> is the connection number of a multiaquifer well to an individual cell (iconn). Iconn is 1 for the uppermost cell connected to a multiaquifer well and increase downward. This option is only available for certain observation types.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Comment</text><text styleclass="Normal" translate="true"> is an optional comment about the observation.</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Comparison Observations</text></para>
-    <para styleclass="Normal"><snippet src="ObsComparisons"/></para>
+    <para styleclass="Normal"><snippet src="ObsComparisons" inline="false"/></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OBS_Observation_Utility_Packag" styleclass="Normal" translate="true">OBS: Observation Utility Package Pane</link><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs dialog box</link><text styleclass="Normal" translate="true">. </text></para>
   </body>
 </topic>

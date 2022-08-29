@@ -745,6 +745,7 @@ type
     procedure frameGwtSRCrdgModflowBoundarySetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
     procedure frameGwtSRCcomboChemSpeciesChange(Sender: TObject);
+    procedure frameObsMf6pgcMainChange(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -2478,6 +2479,7 @@ type
     { Private declarations }
     Property PestModifierAssigned[Grid: TRbwDataGrid4; ACol: Integer]: Boolean
       read GetPestModifierAssigned;
+    procedure UpdateScrollWidth;
   public
     procedure Initialize;
     procedure ClearExpressionsAndVariables;
@@ -3372,6 +3374,11 @@ begin
         and frameObsMf6.cbConcentration.Enabled then
       begin
         Mf6ObsSeriesName.Add(ObsSeriesToString(osLkt));
+      end;
+      if frameObsMf6.tabMAW.TabVisible
+        and frameObsMf6.cbConcentration.Enabled then
+      begin
+        Mf6ObsSeriesName.Add(ObsSeriesToString(osMwt));
       end;
 
       frameObsMf6.framePestObs.SpecifyGroupTypes(Mf6ObsSeriesName);
@@ -11052,6 +11059,41 @@ begin
   finally
     DataArrayList.Free;
   end;
+end;
+
+procedure TfrmScreenObjectProperties.UpdateScrollWidth;
+const
+  AddChar = 'MMMM';
+var
+  MaxLen: Integer;
+  index: Integer;
+  Len: Integer;
+begin
+  Canvas.Font := frameObsMf6.chklstMAW.Font;
+
+  MaxLen := 0;
+  for index := 0 to frameObsMf6.chklstMAW.Items.Count - 1 do
+  begin
+    Len := Canvas.TextWidth(frameObsMf6.chklstMAW.Items[index] + AddChar);
+    if Len > MaxLen then
+    begin
+      MaxLen := Len;
+    end;
+  end;
+  frameObsMf6.chklstMAW.ScrollWidth := MaxLen;
+
+  MaxLen := 0;
+  for index := 0 to frameObsMf6.chklstMwt.Items.Count - 1 do
+  begin
+    Len := Canvas.TextWidth(frameObsMf6.chklstMwt.Items[index] + AddChar);
+    if Len > MaxLen then
+    begin
+      MaxLen := Len;
+    end;
+  end;
+  frameObsMf6.chklstMwt.ScrollWidth := MaxLen;
+
+  Canvas.Font := Font;
 end;
 
 procedure TfrmScreenObjectProperties.UpdateCurrentEdit;
@@ -28359,6 +28401,15 @@ begin
   inherited;
   frameMVR.seNumberOfTimesChange(Sender);
 
+end;
+
+procedure TfrmScreenObjectProperties.frameObsMf6pgcMainChange(Sender: TObject);
+begin
+  inherited;
+  if frameObsMf6.pgcMain.ActivePage = frameObsMf6.tabMAW then
+  begin
+    UpdateScrollWidth;
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.

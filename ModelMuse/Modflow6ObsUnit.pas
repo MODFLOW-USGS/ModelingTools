@@ -18,10 +18,11 @@ type
   TObGwt = (ogwtConcentration, ogwtCNC, ogwtSRC, ogwtUndefined);
   TObGwts = set of TObGwt;
 
-  TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub, osGWT, osSft, osLkt);
+  TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub, osGWT, osSft,
+    osLkt, osMwt);
 
 const
-  GwtSeries = [osGWT, osSft, osLkt];
+  GwtSeries = [osGWT, osSft, osLkt, osMwt];
 
 type
   TSpecies = Integer;
@@ -41,6 +42,7 @@ type
     FGwtOb: TObGwt;
     FSftOb: TSftOb;
     FLktOb: TLktOb;
+    FMwtOb: TMwtOb;
     FSpeciesIndex: TSpecies;
     procedure SetCSubOb(const Value: TCSubOb);
     procedure SetLakOb(const Value: TLakOb);
@@ -62,6 +64,8 @@ type
     function StoreSftOb: Boolean;
     procedure SetLktOb(const Value: TLktOb);
     function StoreLktOb: Boolean;
+    procedure SetMwtOb(const Value: TMwtOb);
+    function StoreMwtOb: Boolean;
     procedure SetSpeciesIndex(const Value: TSpecies);
   protected
     function GetObsTypeIndex: Integer; override;
@@ -91,6 +95,7 @@ type
     property GwtOb: TObGwt read FGwtOb write SetGwtOb stored StoreGwtOb;
     property SftOb: TSftOb read FSftOb write SetSftOb stored StoreSftOb;
     property LktOb: TLktOb read FLktOb write SetLktOb stored StoreLktOb;
+    property MwtOb: TMwtOb read FMwtOb write SetMwtOb stored StoreMwtOb;
   end;
 
   TCalibObList = TList<TMf6CalibrationObs>;
@@ -110,6 +115,7 @@ type
     function GetGwtObs(Species: Integer): TObGwts;
     function GetSftObs(Species: Integer): TSftObs;
     function GetLktObs(Species: Integer): TLktObs;
+    function GetMwtObs(Species: Integer): TMwtObs;
 //    function GetGenus(Series: TObSeries; Species: Integer): TGenus;
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent;
@@ -125,10 +131,13 @@ type
     property GwtObs[Species: Integer]: TObGwts read GetGwtObs;
     property SftObs[Species: Integer]: TSftObs read GetSftObs;
     property LktObs[Species: Integer]: TLktObs read GetLktObs;
+    property MwtObs[Species: Integer]: TMwtObs read GetMwtObs;
     property Items[Index: Integer]: TMf6CalibrationObs read GetCalibItem
       write SetCalibItem; default;
     function UsesMawConnectionNumber(ConnectionNumber: Integer;
-      AnObsType: TMawOb): Boolean;
+      AnObsType: TMawOb): Boolean; overload;
+    function UsesMawConnectionNumber(ConnectionNumber: Integer;
+      AnObsType: TMwtOb): Boolean; overload;
     function IndexOfTimeAndType(ATime: double; ObGeneralType: TObGeneral): integer;
     function Add: TMf6CalibrationObs;
   published
@@ -156,6 +165,7 @@ type
     FSftObs: TSftObs;
     FLktObs: TLktObs;
     FGenus: TGenus;
+    FMwtObs: TMwtObs;
     procedure SetDrawdownObs(const Value: Boolean);
     procedure SetGroundwaterFlowObs(const Value: Boolean);
     procedure SetGwFlowObsChoices(const Value: TGwFlowObs);
@@ -208,10 +218,12 @@ type
     function GetSftObs: TSftObs;
     procedure SetSftObs(const Value: TSftObs);
     function GetLktObs: TLktObs;
-    procedure SetLttObs(const Value: TLktObs);
+    procedure SetLktObs(const Value: TLktObs);
     procedure SetGenus(const Value: TGenus);
     function GetGenusColl: Integer;
     procedure SetGenusColl(const Value: Integer);
+    function GetMwtObs: TMwtObs;
+    procedure SetMwtObs(const Value: TMwtObs);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     destructor Destroy; override;
@@ -237,7 +249,13 @@ type
     property SfrObsLocation: TSfrObsLocation read FSfrObsLocation write SetSfrObsLocation;
     property UzfObs: TUzfObs read GetUzfObs write SetUzfObs;
     property CSubObs: TCSubObs read GetCSubObs write SetCSubObs;
-    property GwtObs: TObGwts read GetGwtObs write SetGwtObs;
+    property GwtObs: TObGwts read GetGwtObs write SetGwtObs
+      {$IFNDEF  GWT}
+      stored False
+      {$ELSE}
+      stored True
+      {$ENDIF}
+      ;
     property CSubDelayCells: TIntegerCollection read FCSubDelayCells
       write SetCSubDelayCells;
     property StoredUzfObsDepthFraction: TRealStorage
@@ -259,7 +277,12 @@ type
       stored False
       {$ENDIF}
       ;
-    property LktObs: TLktObs read GetLktObs write SetLttObs
+    property LktObs: TLktObs read GetLktObs write SetLktObs
+      {$IFNDEF  GWT}
+      stored False
+      {$ENDIF}
+      ;
+    property MwtObs: TMwtObs read GetMwtObs write SetMwtObs
       {$IFNDEF  GWT}
       stored False
       {$ENDIF}
@@ -313,7 +336,7 @@ const
     'Rch', 'EVT', 'Mvr', 'undefined');
   ObConcName: array[TObGwt] of string = ('Concentration', 'CNC', 'SRC', 'undefined');
 
-  ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak', 'Uzf', 'CSub', 'GWT', 'Sft', 'Lkt');
+  ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak', 'Uzf', 'CSub', 'GWT', 'Sft', 'Lkt', 'Mwt');
 
 var
   ObGenNames: TStringList;
@@ -453,6 +476,7 @@ begin
     GwtObs := SourceObs.GwtObs;
     SftObs := SourceObs.SftObs;
     LktObs := SourceObs.LktObs;
+    MwtObs := SourceObs.MwtObs;
 //    SourceObs.CSubObs.CSubObsSet := SourceObs.CSubObs.CSubObsSet;
     CSubObs := SourceObs.CSubObs;
 
@@ -483,6 +507,7 @@ begin
   GWTObs := [];
   SftObs := [];
   LktObs := [];
+  MwtObs := [];
   CSubObs.CSubObsSet := [];
   CalibrationObservations.Clear;
   Assert(not Used);
@@ -576,6 +601,11 @@ end;
 function TModflow6Obs.GetMawObs: TMawObs;
 begin
   result := FMawObs + CalibrationObservations.MawObs;
+end;
+
+function TModflow6Obs.GetMwtObs: TMwtObs;
+begin
+  result := FMwtObs;
 end;
 
 function TModflow6Obs.GetName: string;
@@ -826,7 +856,7 @@ begin
   end;
 end;
 
-procedure TModflow6Obs.SetLttObs(const Value: TLktObs);
+procedure TModflow6Obs.SetLktObs(const Value: TLktObs);
 begin
   if FLktObs <> Value then
   begin
@@ -840,6 +870,15 @@ begin
   if FMawObs <> Value then
   begin
     FMawObs := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TModflow6Obs.SetMwtObs(const Value: TMwtObs);
+begin
+  if FMwtObs <> Value then
+  begin
+    FMwtObs := Value;
     InvalidateModel;
   end;
 end;
@@ -1005,6 +1044,7 @@ begin
     GwtOb := ObsSource.GwtOb;
     SftOb := ObsSource.SftOb;
     LktOb := ObsSource.LktOb;
+    MwtOb := ObsSource.MwtOb;
 
     MawConnectionNumber := ObsSource.MawConnectionNumber;
   end;
@@ -1096,7 +1136,19 @@ begin
           + Ord(High(TUzfOb))
           + Ord(High(TObGwt))
           + Ord(High(TSftOb))
-          + Ord(LakOb) + 8;
+          + Ord(LktOb) + 8;
+      end;
+    osMwt:
+      begin
+        Result := Ord(High(TObGeneral))
+          + Ord(High(TMawOb))
+          + Ord(High(TSfrOb))
+          + Ord(High(TLakOb))
+          + Ord(High(TUzfOb))
+          + Ord(High(TObGwt))
+          + Ord(High(TSftOb))
+          + Ord(High(TLktOb))
+          + Ord(MwtOb) + 9;
       end;
     else
       Assert(False);
@@ -1142,6 +1194,10 @@ begin
     osLkt:
       begin
         result := LktObToString(LktOb);
+      end;
+    osMwt:
+      begin
+        result := MwtObToString(MwtOb);
       end;
     else
       begin
@@ -1192,6 +1248,15 @@ begin
   if FMawOb <> Value then
   begin
     FMawOb := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TMf6CalibrationObs.SetMwtOb(const Value: TMwtOb);
+begin
+  if FMwtOb <> Value then
+  begin
+    FMwtOb := Value;
     InvalidateModel;
   end;
 end;
@@ -1297,6 +1362,14 @@ begin
   end;
   Value := Value - Ord(High(TLktOb)) - 1;
 
+  if Value <= Ord(High(TMwtOb)) then
+  begin
+    ObSeries := osMwt;
+    MwtOb := TMwtOb(Value);
+    Exit;
+  end;
+  Value := Value - Ord(High(TMwtOb)) - 1;
+
   Assert(False);
 end;
 
@@ -1311,6 +1384,7 @@ var
   ObGwt: TObGwt;
   ObSft: TSftOb;
   ObLkt: TLktOb;
+  ObMwt: TMwtOb;
 begin
   case ObSeries of
     osGeneral:
@@ -1385,6 +1459,14 @@ begin
           Exit;
         end;
       end;
+    osMwt:
+      begin
+        if TryGetMwtOb(Value, ObMwt) then
+        begin
+          MwtOb := ObMwt;
+          Exit;
+        end;
+      end;
     else
       begin
         Assert(False);
@@ -1435,6 +1517,11 @@ begin
   begin
     LktOb := ObLkt;
     ObSeries := osLkt;
+  end
+  else if TryGetMwtOb(Value, ObMwt) then
+  begin
+    MwtOb := ObMwt;
+    ObSeries := osMwt;
   end
   else
   begin
@@ -1496,6 +1583,11 @@ end;
 function TMf6CalibrationObs.StoreMawOb: Boolean;
 begin
   result := ObSeries = osMaw;
+end;
+
+function TMf6CalibrationObs.StoreMwtOb: Boolean;
+begin
+  result := ObSeries = osMwt;
 end;
 
 function TMf6CalibrationObs.StoreObGeneral: Boolean;
@@ -1619,6 +1711,22 @@ begin
   end;
 end;
 
+function TMf6CalibrationObservations.GetMwtObs(Species: Integer): TMwtObs;
+var
+  Index: Integer;
+  Item: TMf6CalibrationObs;
+begin
+  result := [];
+  for Index := 0 to Count - 1 do
+  begin
+    Item := Items[Index];
+    if Item.ObSeries = osMwt then
+    begin
+      Include(result, Item.MwtOB);
+    end;
+  end;
+end;
+
 function TMf6CalibrationObservations.GetObGenerals: TObGenerals;
 var
   Index: Integer;
@@ -1730,6 +1838,25 @@ begin
   begin
     FMultiLayer := Value;
     InvalidateModel;
+  end;
+end;
+
+function TMf6CalibrationObservations.UsesMawConnectionNumber(
+  ConnectionNumber: Integer; AnObsType: TMwtOb): Boolean;
+var
+  ItemIndex: Integer;
+  AnItem: TMf6CalibrationObs;
+begin
+  result := False;
+  for ItemIndex := 0 to Count - 1 do
+  begin
+    AnItem := Items[ItemIndex];
+    if (AnItem.ObSeries = osMwt) and (AnItem.MwtOb = AnObsType)
+      and (ConnectionNumber = AnItem.MawConnectionNumber) then
+    begin
+      result := True;
+      break;
+    end;
   end;
 end;
 

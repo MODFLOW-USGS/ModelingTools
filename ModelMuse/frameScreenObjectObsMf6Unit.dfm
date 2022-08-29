@@ -144,10 +144,24 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabMAW: TTabSheet
       Caption = 'MAW'
       ImageIndex = 1
+      object lblMaw: TLabel
+        Left = 3
+        Top = 16
+        Width = 36
+        Height = 20
+        Caption = 'MAW'
+      end
+      object lblMwt: TLabel
+        Left = 295
+        Top = 16
+        Width = 35
+        Height = 20
+        Caption = 'MWT'
+      end
       object chklstMAW: TCheckListBox
         Left = 3
-        Top = 3
-        Width = 476
+        Top = 35
+        Width = 286
         Height = 230
         ItemHeight = 20
         Items.Strings = (
@@ -162,10 +176,29 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           'Storage flow rate'
           'Constant-flow rate'
           'Well conductance (conductance)'
-          'Individual well cell conductances (conductance + icon'
+          'Individual well cell conductances (conductance + icon)'
           'Flowing well conductance')
         TabOrder = 0
         OnClickCheck = chklstMAWClickCheck
+      end
+      object chklstMwt: TCheckListBox
+        Left = 295
+        Top = 35
+        Width = 284
+        Height = 230
+        ItemHeight = 20
+        Items.Strings = (
+          'Concentration'
+          'Storage'
+          'Constant'
+          'From-MVR'
+          'Mass Flow Rate (Aquifer) (MWT)'
+          'Mass Flow Rate (Cells) (MWT + iconn)'
+          'Well Mass-Flow-Rate (rate)'
+          'Flowing Well Mass-Flow-Rate (fw-rate)'
+          'Mass Flow Rate to MVR (rate-to-mvr)'
+          'Flowing Well Mass Flow Rate to MVR (fw-rate-to-mvr)')
+        TabOrder = 1
       end
     end
     object tabSFR: TTabSheet

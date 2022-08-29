@@ -1267,7 +1267,8 @@ var
 begin
   MfObs := AScreenObject.Modflow6Obs;
   Result := (MfObs <> nil) and MfObs.Used and (((MfObs.SftObs <> [])
-    and (SpeciesIndex in MfObs.Genus)) or (MfObs.CalibrationObservations.SftObs[SpeciesIndex] <> []) );
+    and (SpeciesIndex in MfObs.Genus))
+    or (MfObs.CalibrationObservations.SftObs[SpeciesIndex] <> []) );
 end;
 
 function TModflowSFR_MF6_Writer.IsMf6Observation(

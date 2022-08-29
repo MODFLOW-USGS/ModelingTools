@@ -53,6 +53,9 @@ type
     lblSFT: TLabel;
     chklstGwtOb: TCheckListBox;
     chklstChemSpecies: TCheckListBox;
+    chklstMwt: TCheckListBox;
+    lblMaw: TLabel;
+    lblMwt: TLabel;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -200,6 +203,7 @@ var
   LktOb: TLktOb;
   ChemIndex: Integer;
   Checked: Boolean;
+  MwtOb: TMwtOb;
 begin
   FActiveObs := False;
   FInitializing := True;
@@ -267,6 +271,12 @@ begin
           begin
             chklstMAW.Checked[Ord(MawOb)] :=
               MawOb in Mf6Obs.MawObs;
+          end;
+
+          for MwtOb := Low(TMwtOb) to High(TMwtOb) do
+          begin
+            chklstMWT.Checked[Ord(MwtOb)] :=
+              MwtOb in Mf6Obs.MwtObs;
           end;
 
           for SfrOb := Low(TSfrOb) to High(TSfrOb) do
@@ -373,6 +383,15 @@ begin
               TCheckBoxState(MawOb in Mf6Obs.MawObs) then
             begin
               chklstMAW.State[Ord(MawOb)] := cbGrayed;
+            end;
+          end;
+
+          for MwtOb := Low(TMwtOb) to High(TMwtOb) do
+          begin
+            if chklstMWT.State[Ord(MwtOb)] <>
+              TCheckBoxState(MwtOb in Mf6Obs.MwtObs) then
+            begin
+              chklstMWT.State[Ord(MwtOb)] := cbGrayed;
             end;
           end;
 
@@ -531,7 +550,7 @@ var
   UzfIndex: Integer;
   CSubIndex: Integer;
   IbIndex: Integer;
-  SpeciesIndex: Integer;
+//  SpeciesIndex: Integer;
   SftIndex: Integer;
   ChemIndex: Integer;
 begin
@@ -652,6 +671,8 @@ var
   LktOb: TLktOb;
   Genus: TGenus;
   SpeciesIndex: Integer;
+  NewMwtObs: TMwtObs;
+  MwtOb: TMwtOb;
 begin
   SetLength(DelayArray, chklstDelayBeds.Items.Count);
   for Index := 0 to List.Count - 1 do
@@ -742,6 +763,23 @@ begin
         end;
       end;
       Mf6Obs.MawObs := NewMawObs;
+
+      NewMwtObs := Mf6Obs.MwtObs;
+      for MwtOb := Low(TMwtOb) to High(TMwtOb) do
+      begin
+        if chklstMWT.State[Ord(MwtOb)] <> cbGrayed then
+        begin
+          if chklstMWT.Checked[Ord(MwtOb)] then
+          begin
+            Include(NewMwtObs, MwtOb);
+          end
+          else
+          begin
+            Exclude(NewMwtObs, MwtOb);
+          end;
+        end;
+      end;
+      Mf6Obs.MwtObs := NewMwtObs;
 
       NewSfrObs := Mf6Obs.SfrObs;
       for SfrOb := Low(TSfrOb) to High(TSfrOb) do
@@ -1038,8 +1076,11 @@ begin
         end;
       end;
       if (Genus = []) {and (chklstChemSpecies.Count > 0)}
-        and ((Mf6Obs.GwtObs <> []) or (Mf6Obs.SftObs <> [])
-        or (Mf6Obs.LktObs <> [])) then
+        and ((Mf6Obs.GwtObs <> [])
+        or (Mf6Obs.SftObs <> [])
+        or (Mf6Obs.LktObs <> [])
+        or (Mf6Obs.MwtObs <> [])
+        ) then
       begin
         Genus := [0];
       end;

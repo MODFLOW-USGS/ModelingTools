@@ -19,6 +19,19 @@ type
   end;
   TMawObservationList = TList<TMawObservation>;
 
+type
+  TMwtObservation = record
+    FName: string;
+    FWellNumber: Integer;
+    FBoundName: string;
+    FCount: Integer;
+    FObsTypes: TMwtObs;
+    FSpecies: Integer;
+    FModflow6Obs: TModflow6Obs;
+  end;
+  TMwtObservationList = TList<TMwtObservation>;
+  TMwtObservationLists = TObjectList<TMwtObservationList>;
+
   TModflowMAW_Writer = class(TCustomTransientWriter)
   private
     FMawObjects: TScreenObjectList;
@@ -28,6 +41,7 @@ type
     FMawPackage: TMawPackage;
     FFlowingWells: Boolean;
     FMawObservations: TMawObservationList;
+    FGwtObservations: TMwtObservationLists;
     FSpeciesIndex: Integer;
     procedure AssignWellScreensAndWellProperties;
     procedure WriteOptions;
@@ -48,8 +62,11 @@ type
     procedure Evaluate; override;
     // @name is the file extension used for the observation input file.
     class function ObservationExtension: string; override;
+    class function GwtObservationExtension: string;
     // @name is the file extension used for the observation output file.
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
+    function IsMf6GwtObservation(AScreenObject: TScreenObject;
+      SpeciesIndex: Integer): Boolean;
 //    function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;
     function Mf6ObservationsUsed: Boolean; override;
   public
@@ -150,17 +167,28 @@ const
 
 constructor TModflowMAW_Writer.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
+var
+  index: Integer;
 begin
   inherited;
   FMawObjects := TScreenObjectList.Create;
   FMawNames := TStringList.Create;
   FWellConnections := TList<TMawSteadyConnectionRecord>.Create;
   FMawObservations := TMawObservationList.Create;
-  FMawPackage := Package as TMawPackage
+  FMawPackage := Package as TMawPackage;
+  FGwtObservations := TMwtObservationLists.Create;
+  if Model.GwtUsed then
+  begin
+    for index := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      FGwtObservations.Add(TMwtObservationList.Create);
+    end;
+  end;
 end;
 
 destructor TModflowMAW_Writer.Destroy;
 begin
+  FGwtObservations.Free;
   FMawObservations.Free;
   FWellConnections.Free;
   FMawObjects.Free;
@@ -352,6 +380,11 @@ begin
   result := '.maw6';
 end;
 
+class function TModflowMAW_Writer.GwtObservationExtension: string;
+begin
+  result := '.ob_mwt';
+end;
+
 function TModflowMAW_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 var
@@ -359,6 +392,17 @@ var
 begin
   MfObs := AScreenObject.Modflow6Obs;
   Result := (MfObs <> nil) and MfObs.Used and (MfObs.MawObs <> []);
+end;
+
+function TModflowMAW_Writer.IsMf6GwtObservation(
+  AScreenObject: TScreenObject; SpeciesIndex: Integer): Boolean;
+var
+  MfObs: TModflow6Obs;
+begin
+  MfObs := AScreenObject.Modflow6Obs;
+  Result := (MfObs <> nil) and MfObs.Used and (((MfObs.MwtObs <> [])
+    and (SpeciesIndex in MfObs.Genus))
+    or (MfObs.CalibrationObservations.MwtObs[SpeciesIndex] <> []) );
 end;
 
 class function TModflowMAW_Writer.ObservationExtension: string;
@@ -452,6 +496,7 @@ var
   concentrationfile: string;
   budgetCsvFile: string;
   MawPackage: TMawPackage;
+  NameOfFile: string;
 begin
   WriteBeginOptions;
   try
@@ -505,6 +550,16 @@ begin
       Model.AddModelOutputFile(budgetCsvFile);
       budgetCsvFile := ExtractFileName(budgetCsvFile);
       WriteString(budgetCsvFile);
+      NewLine;
+    end;
+
+    if FGwtObservations[FSpeciesIndex].Count > 0 then
+    begin
+      WriteString('    OBS6 FILEIN ');
+      NameOfFile := BaseFileName + GwtObservationExtension;
+      Model.AddModelInputFile(NameOfFile);
+      NameOfFile := ExtractFileName(NameOfFile);
+      WriteString(NameOfFile);
       NewLine;
     end;
 
@@ -676,6 +731,7 @@ procedure TModflowMAW_Writer.WriteMwtFile(const AFileName: string;
 var
   SpeciesName: string;
   Abbreviation: string;
+  ObsWriter: TMwtObsWriter;
 begin
   if not Package.IsSelected then
   begin
@@ -707,6 +763,17 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     WriteGwtFileInternal;
+
+    if FGwtObservations[SpeciesIndex].Count > 0 then
+    begin
+      ObsWriter := TMwtObsWriter.Create(Model, etExport,
+        FGwtObservations[SpeciesIndex], SpeciesIndex);
+      try
+        ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
+      finally
+        ObsWriter.Free;
+      end;
+    end;
 
     if  Model.PestUsed and FPestParamUsed then
     begin
@@ -1397,8 +1464,6 @@ var
   MvrReceiver: TMvrReceiver;
   MvrSource: TMvrRegisterKey;
   AScreenObject: TScreenObject;
-  SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
 begin
   if MvrWriter <> nil then
   begin
@@ -1608,6 +1673,10 @@ var
   PropertyFormula: string;
   FormulaItem: TStringConcValueItem;
   PropertyName: string;
+  IsGwtObs: Boolean;
+  index: Integer;
+  IsMf6Obs: Boolean;
+  MwtObs: TMwtObservation;
   procedure CompileFormula(Formula: string; const FormulaName: string;
     var OutFormula: string; out PestParamName: string;
     out Column, Row, Layer: Integer; SpecifiedLayer: Integer = 0);
@@ -1969,25 +2038,72 @@ begin
     AWellSteady := FWellProperties[WellIndex];
     AScreenObject := Model.GetScreenObjectByName(AWellSteady.ScreenObjectName);
 
-    if IsMf6Observation(AScreenObject) then
+    IsGwtObs := False;
+    if Model.GwtUsed then
+    begin
+      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+      begin
+        if IsMf6GwtObservation(AScreenObject, SpeciesIndex) then
+        begin
+          IsGwtObs := True;
+          Break;
+        end;
+      end;
+    end;
+    IsMf6Obs := IsMf6Observation(AScreenObject);
+
+    if IsGwtObs or IsMf6Obs then
     begin
       Boundary := AScreenObject.ModflowMawBoundary;
       MfObs := AScreenObject.Modflow6Obs;
-      Obs.FName := MfObs.Name;
-      Obs.FBoundName := AScreenObject.Name;
-      Obs.FWellNumber := Boundary.WellNumber;
-      Obs.FObsTypes := MfObs.MawObs;
-      Obs.FModflow6Obs := MfObs;
-      if (moFlowRateCells in Obs.FObsTypes)
-        or (moConductanceCells in Obs.FObsTypes) then
+      if IsMf6Obs then
       begin
-        Obs.FCount := AWellSteady.CellCount;
-      end
-      else
-      begin
-        Obs.FCount := 0;
+        Obs.FName := MfObs.Name;
+        Obs.FBoundName := AScreenObject.Name;
+        Obs.FWellNumber := Boundary.WellNumber;
+        Obs.FObsTypes := MfObs.MawObs;
+        Obs.FModflow6Obs := MfObs;
+        if (moFlowRateCells in Obs.FObsTypes)
+          or (moConductanceCells in Obs.FObsTypes) then
+        begin
+          Obs.FCount := AWellSteady.CellCount;
+        end
+        else
+        begin
+          Obs.FCount := 0;
+        end;
+        FMawObservations.Add(Obs);
       end;
-      FMawObservations.Add(Obs);
+      if IsGwtObs then
+      begin
+        for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
+        begin
+          if Mf6ObservationsUsed
+            and IsMf6GwtObservation(AScreenObject, SpeciesIndex) then
+          begin
+            MfObs := AScreenObject.Modflow6Obs;
+            MwtObs.FBoundName := AScreenObject.Name;
+            MwtObs.FObsTypes :=
+              MfObs.CalibrationObservations.MwtObs[SpeciesIndex];
+            if SpeciesIndex in MfObs.Genus then
+            begin
+              MwtObs.FObsTypes := MwtObs.FObsTypes + MfObs.MwtObs;
+            end;
+            MwtObs.FWellNumber := Boundary.WellNumber;
+            if (mtoMwtCells in MwtObs.FObsTypes) then
+            begin
+              MwtObs.FCount := AWellSteady.CellCount;
+            end
+            else
+            begin
+              MwtObs.FCount := 0;
+            end;
+            MwtObs.FModflow6Obs := MfObs;
+            MwtObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
+            FGwtObservations[SpeciesIndex].Add(MwtObs)
+          end;
+        end
+      end;
     end;
   end;
 
