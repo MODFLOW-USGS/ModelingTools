@@ -26,29 +26,29 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       object lblTypesOfFlowObservation: TLabel
         Left = 3
         Top = 74
-        Width = 170
-        Height = 20
+        Width = 134
+        Height = 15
         Caption = 'Types of flow observation'
       end
       object lblBoundaryFlowObservations: TLabel
         Left = 3
         Top = 200
-        Width = 184
-        Height = 20
+        Width = 147
+        Height = 15
         Caption = 'Boundary flow observations'
       end
       object lblSpecies: TLabel
         Left = 296
         Top = 74
-        Width = 113
-        Height = 20
+        Width = 91
+        Height = 15
         Caption = 'Chemical species'
       end
       object lblGwtObs: TLabel
         Left = 296
         Top = 195
-        Width = 201
-        Height = 20
+        Width = 159
+        Height = 15
         Caption = 'Type of mass flow observation'
       end
       object cbHeadObservation: TCheckBox
@@ -84,7 +84,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Width = 278
         Height = 97
         Enabled = False
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'Nearest horizontal neighbor'
           'All horizontal neighbors'
@@ -98,7 +98,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 219
         Width = 278
         Height = 142
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'CHD flows'
           'DRN flows'
@@ -125,7 +125,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 221
         Width = 282
         Height = 97
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'CNC (Mass flow at spec. conc.)'
           'SRC (Mass source loading rate)')
@@ -137,7 +137,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 93
         Width = 275
         Height = 97
-        ItemHeight = 20
+        ItemHeight = 15
         TabOrder = 7
       end
     end
@@ -147,15 +147,15 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       object lblMaw: TLabel
         Left = 3
         Top = 16
-        Width = 36
-        Height = 20
+        Width = 29
+        Height = 15
         Caption = 'MAW'
       end
       object lblMwt: TLabel
         Left = 295
         Top = 16
-        Width = 35
-        Height = 20
+        Width = 28
+        Height = 15
         Caption = 'MWT'
       end
       object chklstMAW: TCheckListBox
@@ -163,7 +163,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 35
         Width = 286
         Height = 230
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'Head'
           'From MVR'
@@ -186,7 +186,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 35
         Width = 284
         Height = 230
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'Concentration'
           'Storage'
@@ -207,15 +207,15 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       object lblSFR: TLabel
         Left = 3
         Top = 88
-        Width = 24
-        Height = 20
+        Width = 19
+        Height = 15
         Caption = 'SFR'
       end
       object lblSFT: TLabel
         Left = 247
         Top = 88
-        Width = 23
-        Height = 20
+        Width = 18
+        Height = 15
         Caption = 'SFT'
       end
       object chklstSFR: TCheckListBox
@@ -223,7 +223,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 109
         Width = 239
         Height = 252
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'Stream stage'
           'External inflow'
@@ -260,7 +260,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 109
         Width = 232
         Height = 252
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'Concentration'
           'Storage'
@@ -285,7 +285,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 3
         Width = 270
         Height = 366
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'Stage'
           'Specified inflow'
@@ -314,7 +314,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 3
         Width = 300
         Height = 366
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'Concentration'
           'Storage'
@@ -338,8 +338,8 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       object lblDepthFraction: TLabel
         Left = 159
         Top = 299
-        Width = 396
-        Height = 20
+        Width = 316
+        Height = 15
         Caption = 'Fraction of cell height in water content observations (depth)'
       end
       object chklstUZF: TCheckListBox
@@ -347,7 +347,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 3
         Width = 476
         Height = 262
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'Recharge to the aquifer from UZF (uzf-gwrch)'
           'UZF Discharge to land surface (uzf-gwd)'
@@ -387,7 +387,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       ImageIndex = 5
       object splCSub: TSplitter
         Left = 0
-        Top = 308
+        Top = 313
         Width = 582
         Height = 5
         Cursor = crVSplit
@@ -399,9 +399,9 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Left = 0
         Top = 0
         Width = 582
-        Height = 308
+        Height = 313
         Align = alClient
-        ItemHeight = 20
+        ItemHeight = 15
         Items.Strings = (
           'Flow: groundwater (GW) and interbeds (IB) (csub)'
           'Flow: GW and IB from inelastic compaction (inelastic-csub)'
@@ -455,7 +455,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       end
       object pnlDelayBeds: TPanel
         Left = 0
-        Top = 313
+        Top = 318
         Width = 582
         Height = 100
         Align = alBottom
@@ -463,8 +463,8 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         object lblDelayInterbedNumber: TLabel
           Left = 8
           Top = 9
-          Width = 329
-          Height = 20
+          Width = 262
+          Height = 15
           Caption = 'Sub-layer number within delay interbed (idcellno)'
         end
         object chklstDelayBeds: TCheckListBox
@@ -474,7 +474,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Height = 71
           Align = alBottom
           Columns = 8
-          ItemHeight = 20
+          ItemHeight = 15
           TabOrder = 0
         end
       end
@@ -486,31 +486,32 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Left = 0
         Top = 0
         Width = 582
-        Height = 413
+        Height = 418
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 582
-        ExplicitHeight = 413
+        ExplicitHeight = 418
         inherited splObservations: TSplitter
-          Top = 236
+          Top = 241
           Width = 582
           ExplicitTop = 236
           ExplicitWidth = 482
         end
         inherited grpDirectObs: TGroupBox
           Width = 582
-          Height = 236
+          Height = 241
           ExplicitWidth = 582
-          ExplicitHeight = 236
+          ExplicitHeight = 241
           inherited frameObservations: TframeGrid
             Width = 578
-            Height = 212
+            Height = 222
+            ExplicitTop = 17
             ExplicitWidth = 578
-            ExplicitHeight = 212
+            ExplicitHeight = 222
             inherited Panel: TPanel
-              Top = 154
+              Top = 164
               Width = 578
-              ExplicitTop = 154
+              ExplicitTop = 164
               ExplicitWidth = 578
               inherited sbAdd: TSpeedButton
                 Left = 447
@@ -525,27 +526,32 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
                 ExplicitLeft = 517
               end
               inherited seNumber: TJvSpinEdit
+                Height = 23
                 OnChange = frameObservationsseNumberChange
+                ExplicitHeight = 23
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 578
-              Height = 154
+              Height = 164
               ExplicitWidth = 578
-              ExplicitHeight = 154
+              ExplicitHeight = 164
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
-          Top = 241
+          Top = 246
           Width = 582
-          ExplicitTop = 241
+          ExplicitTop = 246
           ExplicitWidth = 582
           inherited frameObsComparisons: TframeGrid
             Width = 578
+            ExplicitTop = 17
             ExplicitWidth = 578
+            ExplicitHeight = 153
             inherited Panel: TPanel
               Width = 578
+              ExplicitTop = 118
               ExplicitWidth = 578
               inherited sbAdd: TSpeedButton
                 Left = 447
@@ -559,10 +565,15 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
                 Left = 517
                 ExplicitLeft = 517
               end
+              inherited seNumber: TJvSpinEdit
+                Height = 23
+                ExplicitHeight = 23
+              end
             end
             inherited Grid: TRbwDataGrid4
               Width = 578
               ExplicitWidth = 578
+              ExplicitHeight = 118
             end
           end
         end
@@ -581,9 +592,9 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       Left = 6
       Top = 19
       Width = 278
-      Height = 28
-      EditLabel.Width = 246
-      EditLabel.Height = 20
+      Height = 23
+      EditLabel.Width = 197
+      EditLabel.Height = 15
       EditLabel.Caption = 'Observation location name (obsnam)'
       MaxLength = 40
       TabOrder = 0

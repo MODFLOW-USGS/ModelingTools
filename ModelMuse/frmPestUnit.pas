@@ -66,7 +66,6 @@ type
     tvPEST: TJvPageListTreeView;
     plMain: TJvPageList;
     jvspBasic: TJvStandardPage;
-    cbPEST: TCheckBox;
     pnlBottom: TPanel;
     btnHelp: TBitBtn;
     btnOK: TBitBtn;
@@ -321,6 +320,8 @@ type
     btnMakeAllRegul: TButton;
     btnWithinLayerPrior: TButton;
     btnBetweenLayerPrior: TButton;
+    comboPestStatus: TComboBox;
+    lblPestStatus: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -2087,7 +2088,8 @@ begin
   PestProperties := frmGoPhast.PhastModel.PestProperties;
 
   {$REGION 'PEST Basic'}
-  cbPEST.Checked := PestProperties.PestUsed;
+//  cbPEST.Checked := PestProperties.PestUsed;
+  comboPestStatus.ItemIndex := Ord(PestProperties.PestStatus);
   comboTemplateCharacter.ItemIndex :=
     comboTemplateCharacter.Items.IndexOf(PestProperties.TemplateCharacter);
 
@@ -2582,7 +2584,8 @@ begin
   try
 
     {$REGION 'PEST Basics'}
-    PestProperties.PestUsed := cbPEST.Checked;
+//    PestProperties.PestUsed := cbPEST.Checked;
+    PestProperties.PestStatus := TPestStatus(comboPestStatus.ItemIndex);
     if comboTemplateCharacter.Text <> '' then
     begin
       PestProperties.TemplateCharacter := comboTemplateCharacter.Text[1];

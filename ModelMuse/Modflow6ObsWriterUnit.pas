@@ -259,7 +259,7 @@ uses
   ModflowIrregularMeshUnit, ModflowUnitNumbers, frmErrorsAndWarningsUnit,
   ModflowMawUnit, ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
   ModflowUzfWriterUnit, PestHeadObsWeightsUnit, ModflowCsubUnit, System.Math,
-  FluxObservationUnit;
+  FluxObservationUnit, PestPropertiesUnit;
 
 resourcestring
   StrNoHeadDrawdownO = 'No head, drawdown, or groundwater flow observations ' +
@@ -532,7 +532,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
   frmErrorsAndWarnings.RemoveErrorGroup(Model,StrObservationNameToo);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationTimeTo);
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     // These three properties need to be specified outside of TModflow6Obs_Writer;
     Assert(DirectObsLines <> nil);
@@ -589,7 +589,7 @@ begin
       begin
         for ChemIndex := 0 to Model.MobileComponents.Count - 1 do
         begin
-          if Model.PestUsed then
+          if Model.PestStatus in [psObservations, psActive] then
           begin
             GwtObs := GwtObs + Obs.CalibrationObservations.GwtObs[ChemIndex];
           end;
@@ -614,7 +614,7 @@ begin
           MaxThick := -1.0;
           CellListStart := -1;
           CellListEnd := -1;
-          if Model.PestUsed
+          if (Model.PestStatus in [psObservations, psActive])
             and ((Obs.General * [ogHead, ogDrawdown] <> []) or (ogwtConcentration in GwtObs))
             and (Obs.CalibrationObservations. Count > 0) then
           begin
@@ -670,7 +670,7 @@ begin
             end;
           end;
 
-          if Model.PestUsed and (CellList.Count > 1)
+          if (Model.PestStatus in [psObservations, psActive]) and (CellList.Count > 1)
             and not Obs.CalibrationObservations.MultiLayer
             and (Obs.CalibrationObservations. Count > 0)
             then
@@ -690,7 +690,7 @@ begin
             end;
           end;
 
-          if not Model.PestUsed or (CellList.Count = 1)
+          if not (Model.PestStatus in [psObservations, psActive]) or (CellList.Count = 1)
             or (Obs.CalibrationObservations.Count = 0) then
           begin
             CellListStart := 0;
@@ -716,7 +716,7 @@ begin
 
             if IdomainDataArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
             begin
-              if Model.PestUsed and (CellList.Count <> 1)
+              if (Model.PestStatus in [psObservations, psActive]) and (CellList.Count <> 1)
                 and FoundFirst and not ErrorAdded
                 and ((Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
                   or (ogwtConcentration in GwtObs))
@@ -740,7 +740,7 @@ begin
                 end;
               end;
               FoundFirst := True;
-              if Model.PestUsed
+              if (Model.PestStatus in [psObservations, psActive])
                 and ((CellList.Count = 1) or (AScreenObject.Count = 1))
                 and ((Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
                   or (ogwtConcentration in GwtObs))
@@ -1486,7 +1486,7 @@ var
   index: Integer;
   AnotherDisvCell: TModflowIrregularCell2D;
 begin
-  if not Model.PestUsed then
+  if not (Model.PestStatus in [psObservations, psActive]) then
   begin
     Exit;
   end;
@@ -1672,7 +1672,7 @@ var
           Assert(False);
       end;
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
-      if Model.PestUsed then
+      if (Model.PestStatus in [psObservations, psActive]) then
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -2121,7 +2121,7 @@ begin
     WriteString('BEGIN CONTINUOUS FILEOUT ');
     OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
     Model.AddModelOutputFile(OutputFileName);
-    if Model.PestUsed then
+    if (Model.PestStatus in [psObservations, psActive]) then
     begin
       Assert(FileNameLines <> nil);
       FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -2183,7 +2183,7 @@ begin
           NewLine;
         end;
 
-        if Model.PestUsed then
+        if (Model.PestStatus in [psObservations, psActive]) then
         begin
           CalibrationObservations := AnObs.FModflow6Obs.CalibrationObservations;
           if AnObsType in CalibrationObservations.MawObs then
@@ -2323,7 +2323,7 @@ var
     CalibIndex: Integer;
     CalibObs: TMf6CalibrationObs;
   begin
-    if Model.PestUsed then
+    if (Model.PestStatus in [psObservations, psActive]) then
     begin
       if AnObsType in CalibObservations.SfrObs then
       begin
@@ -2454,7 +2454,7 @@ begin
       WriteString('BEGIN CONTINUOUS FILEOUT ');
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
       Model.AddModelOutputFile(OutputFileName);
-      if Model.PestUsed then
+      if (Model.PestStatus in [psObservations, psActive]) then
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -2809,7 +2809,7 @@ begin
     WriteString('BEGIN CONTINUOUS FILEOUT ');
     OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
     Model.AddModelOutputFile(OutputFileName);
-    if Model.PestUsed then
+    if (Model.PestStatus in [psObservations, psActive]) then
     begin
       Assert(FileNameLines <> nil);
       FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -2844,7 +2844,7 @@ begin
         WriteString(boundname);
         NewLine;
 
-        if Model.PestUsed then
+        if (Model.PestStatus in [psObservations, psActive]) then
         begin
           CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
           if AnObsType in CalibObservations.LakObs then
@@ -2963,7 +2963,7 @@ var
     CalibObs: TMf6CalibrationObs;
     CalibObList: TCalibObList;
   begin
-    if Model.PestUsed then
+    if (Model.PestStatus in [psObservations, psActive]) then
     begin
       if AnObsType in CalibObservations.UzfObs then
       begin
@@ -3091,7 +3091,7 @@ begin
       WriteString('BEGIN CONTINUOUS FILEOUT ');
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
       Model.AddModelOutputFile(OutputFileName);
-      if Model.PestUsed then
+      if (Model.PestStatus in [psObservations, psActive]) then
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -3156,7 +3156,7 @@ begin
               WriteString(boundname);
               NewLine;
             end;
-            if Model.PestUsed then
+            if (Model.PestStatus in [psObservations, psActive]) then
             begin
               if (AnObsType in CalibObservations.UzfObs)
                 and (AnObsType <> uoWaterContent) then
@@ -3313,7 +3313,7 @@ var
     CalibObs: TMf6CalibrationObs;
     CalibObList: TCalibObList;
   begin
-    if Model.PestUsed then
+    if (Model.PestStatus in [psObservations, psActive]) then
     begin
       if AnObsType in CalibObservations.SubObsSet then
       begin
@@ -3572,7 +3572,7 @@ begin
       WriteString('BEGIN CONTINUOUS FILEOUT ');
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
       Model.AddModelOutputFile(OutputFileName);
-      if Model.PestUsed then
+      if (Model.PestStatus in [psObservations, psActive]) then
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -3620,7 +3620,7 @@ begin
                   WriteString(boundname);
                   NewLine;
 
-                  if Model.PestUsed then
+                  if (Model.PestStatus in [psObservations, psActive]) then
                   begin
                     if AnObsType in CalibObservations.SubObsSet then
                     begin
@@ -3866,7 +3866,7 @@ begin
       end;
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
       Model.AddModelOutputFile(OutputFileName);
-      if Model.PestUsed then
+      if (Model.PestStatus in [psObservations, psActive]) then
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -4135,7 +4135,7 @@ var
     CalibIndex: Integer;
     CalibObs: TMf6CalibrationObs;
   begin
-    if Model.PestUsed then
+    if (Model.PestStatus in [psObservations, psActive]) then
     begin
       if AnObsType in CalibObservations.SftObs[FSpeciesIndex] then
       begin
@@ -4254,7 +4254,7 @@ begin
       WriteString('BEGIN CONTINUOUS FILEOUT ');
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
       Model.AddModelOutputFile(OutputFileName);
-      if Model.PestUsed then
+      if (Model.PestStatus in [psObservations, psActive]) then
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -4569,7 +4569,7 @@ begin
     WriteString('BEGIN CONTINUOUS FILEOUT ');
     OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
     Model.AddModelOutputFile(OutputFileName);
-    if Model.PestUsed then
+    if (Model.PestStatus in [psObservations, psActive]) then
     begin
       Assert(FileNameLines <> nil);
       FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -4605,7 +4605,7 @@ begin
         WriteString(boundname);
         NewLine;
 
-        if Model.PestUsed then
+        if (Model.PestStatus in [psObservations, psActive]) then
         begin
           CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
           if AnObsType in CalibObservations.LktObs[FSpeciesIndex] then
@@ -4796,7 +4796,7 @@ begin
     WriteString('BEGIN CONTINUOUS FILEOUT ');
     OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
     Model.AddModelOutputFile(OutputFileName);
-    if Model.PestUsed then
+    if (Model.PestStatus in [psObservations, psActive]) then
     begin
       Assert(FileNameLines <> nil);
       FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
@@ -4858,7 +4858,7 @@ begin
           NewLine;
         end;
 
-        if Model.PestUsed then
+        if (Model.PestStatus in [psObservations, psActive]) then
         begin
           CalibrationObservations := AnObs.FModflow6Obs.CalibrationObservations;
           if AnObsType in CalibrationObservations.MwtObs[FSpeciesIndex] then

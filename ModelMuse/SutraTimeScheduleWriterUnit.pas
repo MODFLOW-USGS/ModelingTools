@@ -89,7 +89,8 @@ uses
   frmErrorsAndWarningsUnit, SutraBoundariesUnit, SutraBoundaryWriterUnit,
   Math, frmGoPhastUnit, SutraOptionsUnit, SutraBoundaryUnit,
   SutraGeneralBoundaryUnit, SutraGeneralFlowWriterUnit,
-  SutraGeneralTransportWriterUnit, SutraGenTransBoundUnit, SutraPestObsUnit;
+  SutraGeneralTransportWriterUnit, SutraGenTransBoundUnit, SutraPestObsUnit,
+  PestPropertiesUnit;
 
 resourcestring
   StrTheFollowingTimeS = 'The following time schedule names are defined more' +
@@ -687,7 +688,8 @@ begin
       end;
     end;
 
-    if Model.PestUsed and Boundaries.SutraStateObs.Used then
+    if (Model.PestStatus in [psObservations, psActive])
+      and Boundaries.SutraStateObs.Used then
     begin
       SutraStateObs := Boundaries.SutraStateObs;
       if CustomSchedule = nil then

@@ -938,6 +938,17 @@ begin
     FObservations.Clear;
   end;
   FillTable;
+  if (flnmedHeadObsResults.FilterIndex = 3) then
+  begin
+    if rgDrawChoice.ItemIndex = 1 then
+    begin
+      rgDrawChoice.ItemIndex := 0
+    end;
+    if rgGraphType.ItemIndex = 2 then
+    begin
+      rgGraphType.ItemIndex := 1
+    end;
+  end;
 end;
 
 procedure TframePestObservationResults.GetData;

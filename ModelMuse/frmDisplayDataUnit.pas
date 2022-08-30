@@ -97,7 +97,8 @@ procedure UpdateFrmDisplayData(Force: boolean = false);
 implementation
 
 uses
-  frmGoPhastUnit, PhastModelUnit, GoPhastTypes, ModflowPackagesUnit;
+  frmGoPhastUnit, PhastModelUnit, GoPhastTypes, ModflowPackagesUnit,
+  PestPropertiesUnit;
 
 resourcestring
   StrColorGrid = 'Color Grid';
@@ -313,7 +314,7 @@ begin
   SwrSelected := ModflowSelected and LocalModel.SwrIsSelected;
   HeadObsSelected := ModflowSelected and LocalModel.HobIsSelected;
   SutraSelected := LocalModel.ModelSelection in SutraSelection;
-  PestSelected := LocalModel.PestUsed;
+  PestSelected := LocalModel.PestStatus in [psObservations, psActive];
 
   if Ord(High(TPostPages)) <> tvpglstMain.Items.Count-1 then
   begin

@@ -45,7 +45,7 @@ implementation
 
 uses ModflowUnitNumbers, ScreenObjectUnit, DataSetUnit,
   frmErrorsAndWarningsUnit, frmProgressUnit, Forms, ModflowTimeUnit,
-  ModflowBoundaryUnit;
+  ModflowBoundaryUnit, PestPropertiesUnit;
 
 resourcestring
   ObsNameWarning = 'The following Head observation names may be valid for MODFLOW but they are not valid for UCODE.';
@@ -449,7 +449,7 @@ begin
     begin
       FOutFileName := ChangeFileExt(NameOfFile, StrHobout);
       WriteToNameFile(StrDATA, IUHOBSV, FOutFileName, foOutput, Model);
-      if Model.PestUsed then
+      if Model.PestStatus in [psObservations, psActive] then
       begin
         Model.FileNameLines.Add('  HOB ' +  ExtractFileName(FOutFileName));
       end;
@@ -852,7 +852,7 @@ begin
     frmErrorsAndWarnings.AddError(Model,
       MissingObsNameError, ScreenObject.Name, ScreenObject);
   end;
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     if not PestObsNameOK(OBSNAM) then
     begin

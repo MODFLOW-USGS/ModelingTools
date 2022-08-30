@@ -4,8 +4,8 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 485
   ClientWidth = 764
-  ExplicitWidth = 782
-  ExplicitHeight = 532
+  ExplicitWidth = 780
+  ExplicitHeight = 524
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
@@ -36,7 +36,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspObservationGroups
+    ActivePage = jvspBasic
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -53,35 +53,35 @@ inherited frmPEST: TfrmPEST
         443)
       object lblTemplateCharacter: TLabel
         Left = 16
-        Top = 40
+        Top = 72
         Width = 138
         Height = 18
         Caption = 'Parameter delimiter'
       end
       object lblFormulaMarker: TLabel
         Left = 16
-        Top = 104
+        Top = 136
         Width = 121
         Height = 18
         Caption = 'Formula delimiter'
       end
       object lblPestDirectory: TLabel
         Left = 17
-        Top = 232
+        Top = 264
         Width = 109
         Height = 18
         Caption = 'PEST Directory'
       end
       object lblArrayMarker: TLabel
         Left = 17
-        Top = 168
+        Top = 200
         Width = 183
         Height = 18
         Caption = 'Array substitution delimiter'
       end
       object htlblZoneBudget6: TJvHTLabel
         Left = 17
-        Top = 255
+        Top = 287
         Width = 181
         Height = 19
         Caption = 
@@ -89,17 +89,35 @@ inherited frmPEST: TfrmPEST
           '>'
         SuperSubScriptRatio = 0.666666666666666600
       end
-      object cbPEST: TCheckBox
-        Left = 16
+      object lblPestStatus: TLabel
+        Left = 17
         Top = 16
-        Width = 97
-        Height = 17
-        Caption = 'Use PEST'
-        TabOrder = 0
+        Width = 90
+        Height = 18
+        Caption = 'PEST Status'
       end
       object comboTemplateCharacter: TComboBox
         Left = 16
-        Top = 64
+        Top = 96
+        Width = 65
+        Height = 26
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 0
+        Text = '~'
+        OnChange = MarkerChange
+        Items.Strings = (
+          '~'
+          '@'
+          '$'
+          '%'
+          ':'
+          ';'
+          '?')
+      end
+      object comboFormulaMarker: TComboBox
+        Left = 16
+        Top = 160
         Width = 65
         Height = 26
         Style = csDropDownList
@@ -116,43 +134,24 @@ inherited frmPEST: TfrmPEST
           ';'
           '?')
       end
-      object comboFormulaMarker: TComboBox
-        Left = 16
-        Top = 128
-        Width = 65
-        Height = 26
-        Style = csDropDownList
-        ItemIndex = 0
-        TabOrder = 2
-        Text = '~'
-        OnChange = MarkerChange
-        Items.Strings = (
-          '~'
-          '@'
-          '$'
-          '%'
-          ':'
-          ';'
-          '?')
-      end
       object diredPest: TJvDirectoryEdit
         Left = 17
-        Top = 280
+        Top = 312
         Width = 536
         Height = 26
         Anchors = [akLeft, akTop, akRight]
-        TabOrder = 3
+        TabOrder = 2
         Text = 'C:\PEST'
         OnChange = diredPestChange
       end
       object comboArrayMarker: TComboBox
         Left = 17
-        Top = 192
+        Top = 224
         Width = 65
         Height = 26
         Style = csDropDownList
         ItemIndex = 0
-        TabOrder = 4
+        TabOrder = 3
         Text = '~'
         OnChange = MarkerChange
         Items.Strings = (
@@ -163,6 +162,20 @@ inherited frmPEST: TfrmPEST
           ':'
           ';'
           '?')
+      end
+      object comboPestStatus: TComboBox
+        Left = 16
+        Top = 40
+        Width = 233
+        Height = 26
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 4
+        Text = 'Inactive'
+        Items.Strings = (
+          'Inactive'
+          'Only define observations'
+          'Active')
       end
     end
     object jvspControlDataMode: TJvStandardPage

@@ -83,7 +83,7 @@ uses
   ModflowUnitNumbers, SysUtils, frmProgressUnit,
   AbstractGridUnit, frmErrorsAndWarningsUnit, ScreenObjectUnit, System.Math,
   BasisFunctionUnit, FastGEO, InterpolatedObsResourceUnit, ArchiveNodeInterface,
-  PestParamRoots;
+  PestParamRoots, PestPropertiesUnit;
 
 resourcestring
   StrTheSWIObservations = 'The SWI observations at the following cells have ' +
@@ -777,7 +777,7 @@ begin
     CloseFile;
   end;
 
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     FDataToWrite := dtwObservedValues;
     WriteInterpolatedZetaFile(AFileName);
@@ -883,7 +883,7 @@ begin
   WriteString(StrBEGINFILEOPTIONS);
   NewLine;
 
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     WriteString('  INSTRUCTION_FILE_FORMAT PEST');
     NewLine;
@@ -975,7 +975,7 @@ var
 begin
   if FInterpolatedObs.Count > 0 then
   begin
-    if Model.PestUsed then
+    if Model.PestStatus in [psObservations, psActive] then
     begin
       case FDataToWrite of
         dtwObservedValues:
@@ -1035,7 +1035,8 @@ var
   ACell: TInterpolatedObsCell;
 //  Weight: double;
 begin
-  if Model.PestUsed and (FInterpolatedObs.Count > 0) then
+  if (Model.PestStatus in [psObservations, psActive])
+    and (FInterpolatedObs.Count > 0) then
   begin
     ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
     ActiveDataArray.Initialize;
@@ -1162,7 +1163,7 @@ begin
   if FInterpolatedObs.Count > 0 then
   begin
     BatchFileName := ExtractFileDir(AFileName);
-    if Model.PestUsed then
+    if Model.PestStatus in [psObservations, psActive] then
     begin
       case FDataToWrite of
         dtwObservedValues:
@@ -1208,7 +1209,7 @@ begin
       end;
 
       BatchFile.Add(SwiObsExtractor + ExtractFileName(FNameOfFile) {+ ' /wait'});
-      if Model.PestUsed then
+      if Model.PestStatus in [psObservations, psActive] then
       begin
         if FDataToWrite = dtwInstructions then
         begin

@@ -30,7 +30,7 @@ implementation
 uses
   GoPhastTypes, ScreenObjectUnit, Modflow6ObsUnit, ObservationComparisonsUnit,
   PestGlobalComparisonScriptWriterUnit, frmErrorsAndWarningsUnit,
-  ObsInterfaceUnit;
+  ObsInterfaceUnit, PestPropertiesUnit;
 
 { TPestObsExtractorInputWriter }
 
@@ -167,7 +167,7 @@ var
   LinePosition: Integer;
   PestUsed: Boolean;
 begin
-  PestUsed := FModel.PestUsed; 
+  PestUsed := (FModel.PestStatus in [psObservations, psActive]);
   if FModel.ModelSelection = msModflow2015 then
   begin                              
     PestUsed := PestUsed and (FModel.DirectObservationLines.Count > 0)

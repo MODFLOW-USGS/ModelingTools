@@ -61,7 +61,7 @@ uses
   frmErrorsAndWarningsUnit, SysUtils,
   Forms, GoPhastTypes, ScreenObjectUnit, ModflowTimeUnit, ModflowCellUnit,
   AbstractGridUnit, FastGEO, BasisFunctionUnit,
-  System.Math, PestObsUnit, PestParamRoots;
+  System.Math, PestObsUnit, PestParamRoots, PestPropertiesUnit;
 
 resourcestring
   StrNoSWTLayersDefine = 'No SWT layers defined';
@@ -1251,7 +1251,7 @@ begin
 
     RetrieveArrays;
 
-    if Model.PestUsed then
+    if Model.PestStatus in [psObservations, psActive] then
     begin
       EvaluatePestObs;
     end;
@@ -1440,7 +1440,7 @@ var
     end;
   end;
 begin
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     if FObsList.Count = 0 then
     begin

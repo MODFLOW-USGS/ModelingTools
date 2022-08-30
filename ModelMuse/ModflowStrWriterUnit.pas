@@ -153,7 +153,8 @@ implementation
 uses
   ModflowUnitNumbers, ModflowStrUnit, frmProgressUnit,
   frmErrorsAndWarningsUnit, GIS_Functions, ModflowTimeUnit, Math,
-  frmModflowOutputControlUnit, ModflowOutputControlUnit, DataSetUnit;
+  frmModflowOutputControlUnit, ModflowOutputControlUnit, DataSetUnit,
+  PestPropertiesUnit;
 
 resourcestring
   StrWritingSTRPackage = 'Writing STR Package input.';
@@ -561,7 +562,7 @@ end;
 
 function TStrWriter.ObsNameWarningString: string;
 begin
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     result := StrTheFollowingStreamPest;
   end
@@ -2248,7 +2249,7 @@ begin
       WriteToNameFile(StrDATA, IUSTOBSV, OutputName, foOutput, Model);
     end;
 
-    if Model.PestUsed then
+    if Model.PestStatus in [psObservations, psActive] then
     begin
       Model.FileNameLines.Add(Format(' STOB %s',
         [ExtractFileName(OutputName)]));

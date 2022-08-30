@@ -97,7 +97,8 @@ implementation
 
 uses
   Modflow6ObsUnit, ScreenObjectUnit, ModflowMawUnit, ModflowSfr6Unit,
-  ModflowLakMf6Unit, ModflowUzfMf6Unit, ModflowCsubUnit, frmGoPhastUnit;
+  ModflowLakMf6Unit, ModflowUzfMf6Unit, ModflowCsubUnit, frmGoPhastUnit,
+  PestPropertiesUnit;
 
 {$R *.dfm}
 
@@ -585,6 +586,7 @@ begin
   cbConcentration.Enabled := frmGoPhast.PhastModel.GwtUsed;
 //  comboChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
   chklstChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
+  chklstGWT.Enabled := frmGoPhast.PhastModel.GwtUsed;
 
   for MawIndex := 0 to chklstMAW.Items.Count - 1 do
   begin
@@ -621,7 +623,8 @@ begin
     end;
   end;
 
-  tabCalibration.tabVisible := frmGoPhast.PhastModel.PestUsed;
+  tabCalibration.tabVisible :=
+    frmGoPhast.PhastModel.PestStatus in [psObservations, psActive];
 
   framePestObs.InitializeControls;
   framePestObs.OnControlsChange := OnChangeProperties;

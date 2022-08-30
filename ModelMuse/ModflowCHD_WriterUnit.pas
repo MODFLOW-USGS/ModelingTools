@@ -64,7 +64,8 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  ModflowGridUnit, Forms, DataSetUnit, Mt3dmsChemSpeciesUnit;
+  ModflowGridUnit, Forms, DataSetUnit, Mt3dmsChemSpeciesUnit,
+  PestPropertiesUnit;
 
 resourcestring
   StrErrorInCHDPackage = 'Error in CHD package';
@@ -728,7 +729,7 @@ end;
 
 function TModflowCHD_Writer.ObsNameWarningString: string;
 begin
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     result := StrTheFollowingCHDObPest;
   end

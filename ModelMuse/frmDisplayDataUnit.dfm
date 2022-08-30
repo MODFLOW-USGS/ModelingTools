@@ -5,8 +5,8 @@ inherited frmDisplayData: TfrmDisplayData
   ClientHeight = 542
   ClientWidth = 784
   OnResize = FormResize
-  ExplicitWidth = 802
-  ExplicitHeight = 589
+  ExplicitWidth = 800
+  ExplicitHeight = 581
   TextHeight = 18
   object splSplit: TSplitter
     Left = 201
@@ -85,7 +85,9 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblMaxTime: TLabel
+              Width = 78
               Height = 18
+              ExplicitWidth = 78
               ExplicitHeight = 18
             end
             inherited lblModelSelection: TLabel
@@ -321,7 +323,9 @@ inherited frmDisplayData: TfrmDisplayData
                 ExplicitHeight = 18
               end
               inherited lblMinimumTime: TLabel
+                Width = 97
                 Height = 18
+                ExplicitWidth = 97
                 ExplicitHeight = 18
               end
               inherited lblMinResidual: TLabel
@@ -589,10 +593,6 @@ inherited frmDisplayData: TfrmDisplayData
               Height = 26
               ExplicitHeight = 26
             end
-            inherited udTimeToPlot: TJvUpDown
-              Width = 21
-              ExplicitWidth = 21
-            end
             inherited comboColorScheme: TComboBox
               Left = 2
               Top = 190
@@ -689,7 +689,6 @@ inherited frmDisplayData: TfrmDisplayData
           inherited tabBasic: TTabSheet
             ExplicitTop = 29
             ExplicitWidth = 570
-            ExplicitHeight = 468
             DesignSize = (
               570
               468)
@@ -842,7 +841,9 @@ inherited frmDisplayData: TfrmDisplayData
                 201
                 465)
               inherited lblMethod: TLabel
+                Width = 52
                 Height = 18
+                ExplicitWidth = 52
                 ExplicitHeight = 18
               end
               inherited lblColorLegendRows: TLabel
@@ -994,10 +995,8 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited udDataSets: TJvUpDown
               Left = 433
-              Width = 20
               Height = 26
               ExplicitLeft = 433
-              ExplicitWidth = 20
               ExplicitHeight = 26
             end
             inherited rgUpdateLimitChoice: TRadioGroup
@@ -1012,7 +1011,7 @@ inherited frmDisplayData: TfrmDisplayData
               Height = 26
               Tree.DefaultNodeHeight = 20
               ExplicitLeft = 7
-              ExplicitWidth = 446
+              ExplicitWidth = 442
               ExplicitHeight = 26
             end
             inherited reComment: TRichEdit
@@ -1033,11 +1032,9 @@ inherited frmDisplayData: TfrmDisplayData
             inherited udTime: TJvUpDown
               Left = 552
               Top = 26
-              Width = 21
               Height = 26
               ExplicitLeft = 552
               ExplicitTop = 26
-              ExplicitWidth = 21
               ExplicitHeight = 26
             end
             inherited comboTime3D: TJvComboBox
@@ -1057,7 +1054,9 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblUpperLimit: TLabel
+              Width = 75
               Height = 18
+              ExplicitWidth = 75
               ExplicitHeight = 18
             end
             inherited lblValuesToIgnore: TLabel
@@ -1141,7 +1140,9 @@ inherited frmDisplayData: TfrmDisplayData
               Height = 468
               ExplicitHeight = 468
               inherited lblMethod: TLabel
+                Width = 52
                 Height = 18
+                ExplicitWidth = 52
                 ExplicitHeight = 18
               end
               inherited lblColorLegendRows: TLabel
@@ -1245,8 +1246,10 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblAlgorithm: TLabel
+              Width = 52
               Height = 18
               Anchors = [akLeft, akBottom]
+              ExplicitWidth = 52
               ExplicitHeight = 18
             end
             inherited lblContourInterval: TLabel
@@ -1289,7 +1292,9 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited udDataSets: TJvUpDown
               Left = 312
+              Width = 17
               ExplicitLeft = 312
+              ExplicitWidth = 17
             end
             inherited virttreecomboDataSets: TRbwStringTreeCombo
               Height = 26
@@ -1352,7 +1357,9 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblUpperLimit: TLabel
+              Width = 75
               Height = 18
+              ExplicitWidth = 75
               ExplicitHeight = 18
             end
             inherited lblValuesToIgnore: TLabel
@@ -1444,9 +1451,11 @@ inherited frmDisplayData: TfrmDisplayData
                 468)
               inherited lblMethod: TLabel
                 Left = 2
+                Width = 52
                 Height = 18
                 Anchors = [akLeft, akBottom]
                 ExplicitLeft = 2
+                ExplicitWidth = 52
                 ExplicitHeight = 18
               end
               inherited lblColorLegendRows: TLabel
@@ -1537,11 +1546,15 @@ inherited frmDisplayData: TfrmDisplayData
           ExplicitHeight = 18
         end
         inherited lblMidColor: TLabel
+          Width = 85
           Height = 18
+          ExplicitWidth = 85
           ExplicitHeight = 18
         end
         inherited lblMinColor: TLabel
+          Width = 101
           Height = 18
+          ExplicitWidth = 101
           ExplicitHeight = 18
         end
         inherited lblVelocityColor: TLabel
@@ -1595,8 +1608,10 @@ inherited frmDisplayData: TfrmDisplayData
         end
         inherited udVectors: TJvUpDown
           Left = 546
+          Width = 16
           Height = 26
           ExplicitLeft = 546
+          ExplicitWidth = 16
           ExplicitHeight = 26
         end
         inherited seMinSpacing2D: TJvSpinEdit
@@ -1961,6 +1976,7 @@ inherited frmDisplayData: TfrmDisplayData
         inherited pgcObservations: TPageControl
           Width = 578
           Height = 465
+          ActivePage = framePestObs.tabControls
           ExplicitWidth = 578
           ExplicitHeight = 465
           inherited tabControls: TTabSheet
@@ -1992,8 +2008,12 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited flnmedHeadObsResults: TJvFilenameEdit
+              Left = 2
+              Top = 27
               Height = 26
               OnChange = framePestObsflnmedHeadObsResultsChange
+              ExplicitLeft = 2
+              ExplicitTop = 27
               ExplicitHeight = 26
             end
             inherited grpbxFilter: TGroupBox
@@ -2010,7 +2030,9 @@ inherited frmDisplayData: TfrmDisplayData
                 ExplicitHeight = 18
               end
               inherited lblMinimumTime: TLabel
+                Width = 97
                 Height = 18
+                ExplicitWidth = 97
                 ExplicitHeight = 18
               end
               inherited lblMinResidual: TLabel
@@ -2103,14 +2125,17 @@ inherited frmDisplayData: TfrmDisplayData
           end
           inherited tabGraph: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 421
+            ExplicitWidth = 570
+            ExplicitHeight = 432
             inherited pbObservations: TPaintBox
-              Height = 323
+              Width = 570
+              Height = 334
               ExplicitWidth = 570
               ExplicitHeight = 351
             end
             inherited pnlGraphControls: TPanel
-              Top = 323
+              Top = 334
+              Width = 570
               ExplicitTop = 323
               inherited lblGraphInstructions: TLabel
                 Width = 201

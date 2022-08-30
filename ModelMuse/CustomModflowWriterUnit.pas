@@ -1426,8 +1426,8 @@ begin
           TestedLocations.Add(result);
           if Model.PestUsed then
           begin
-          frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
-            Format(StrPLPROCWasNotFound, [TestedLocations.DelimitedText]));
+            frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
+              Format(StrPLPROCWasNotFound, [TestedLocations.DelimitedText]));
           end;
           result := StrPlprocexe;
         end;
@@ -1792,7 +1792,7 @@ begin
         end;
       end;
 
-      if Model.PestUsed then
+      if Model.PestStatus in [psObservations, psActive] then
       begin
         if Model.ModelSelection = msModflow2015 then
         begin
@@ -1807,7 +1807,7 @@ begin
             + ChangeFileExt(ExtractFileName(FileName), '.Mf2005ExtractValues'));
         end;
       end;
-      if Model.PestUsed then
+      if Model.PestStatus in [psObservations, psActive] then
       begin
         if (Model.ModelSelection <> msModflow2015) then
         begin
@@ -1878,7 +1878,7 @@ begin
       TFile.Copy(ParamEstBatFileName, BackupParamEstBatFileName, True);
       ArchiveBatchFile.SaveToFile(result + ArchiveExt);
       Model.AddModelInputFile(result + ArchiveExt);
-      if Model.PestUsed then
+      if Model.PestStatus in [psObservations, psActive] then
       begin
         WriteInstuctionsBatchFile.SaveToFile(WriteInstructionBatFileName);
       end;
@@ -7803,7 +7803,7 @@ begin
 
       TimeString := ObsTime.ObsNameTimeString;
       OBSNAM := ObservationGroup.ObservationName + '_' + TimeString;
-      if Model.PestUsed then
+      if Model.PestStatus in [psObservations, psActive] then
       begin
         if not PestObsNameOK(OBSNAM) then
         begin

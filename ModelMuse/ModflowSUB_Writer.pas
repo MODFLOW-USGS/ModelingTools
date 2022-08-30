@@ -131,7 +131,8 @@ uses
   GoPhastTypes, RbwParser, ModflowUnitNumbers, frmProgressUnit,
   frmErrorsAndWarningsUnit, Forms, JclMath, ScreenObjectUnit, System.Math,
   ModflowTimeUnit, System.Generics.Defaults, ModflowCellUnit, PestObsUnit,
-  AbstractGridUnit, FastGEO, BasisFunctionUnit, PestParamRoots;
+  AbstractGridUnit, FastGEO, BasisFunctionUnit, PestParamRoots,
+  PestPropertiesUnit;
 
 resourcestring
   StrSubsidenceNotSuppo = 'Subsidence not supported with MODFLOW-LGR';
@@ -276,7 +277,7 @@ begin
   RetrieveArrays;
   EvaluateMaterialZones;
 
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     EvaluatePestObs;
   end;
@@ -1733,7 +1734,7 @@ var
     end;
   end;
 begin
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     if FObsList.Count = 0 then
     begin

@@ -64,7 +64,7 @@ implementation
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
   DataSetUnit, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
-  Mt3dmsChemSpeciesUnit;
+  Mt3dmsChemSpeciesUnit, PestPropertiesUnit;
 
 resourcestring
   StrInTheFollowingRiv = 'In the following river cells, the stage is equal to or below t' +
@@ -327,7 +327,7 @@ end;
 
 function TModflowRIV_Writer.ObsNameWarningString: string;
 begin
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     result := StrTheFollowingRiverPest;
   end

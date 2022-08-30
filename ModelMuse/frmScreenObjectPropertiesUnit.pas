@@ -2540,7 +2540,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowSubsidenceDefUnit, frmManageSutraBoundaryObservationsUnit,
   framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit, ModflowRivUnit,
   ModflowResUnit, Modflow6TimeSeriesCollectionsUnit, Modflow6TimeSeriesUnit,
-  ModflowGwtSpecifiedConcUnit;
+  ModflowGwtSpecifiedConcUnit, PestPropertiesUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -8595,7 +8595,7 @@ procedure TfrmScreenObjectProperties.CreateFluxNode(
 begin
   NewNode := nil;
   if (frmGoPhast.ModelSelection in  SutraSelection)
-    and frmGoPhast.PhastModel.PestUsed
+    and (frmGoPhast.PhastModel.PestStatus in [psObservations, psActive])
     and (rgEvaluatedAt.ItemIndex = 1)
     and (FluxObservations.Count > 0) then
   begin

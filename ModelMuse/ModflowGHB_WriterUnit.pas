@@ -62,7 +62,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit, ModflowUnitNumbers,
   frmProgressUnit, Forms, DataSetUnit, FastGEO, ModflowMvrWriterUnit,
-  ModflowMvrUnit, Mt3dmsChemSpeciesUnit;
+  ModflowMvrUnit, Mt3dmsChemSpeciesUnit, PestPropertiesUnit;
 
 resourcestring
   StrTheFollowingGHBOb = 'The following GHB observation names may be valid f' +
@@ -271,7 +271,7 @@ end;
 
 function TModflowGHB_Writer.ObsNameWarningString: string;
 begin
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     result := StrTheFollowingGHBObPest;
   end

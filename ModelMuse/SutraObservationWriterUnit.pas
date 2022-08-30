@@ -78,7 +78,7 @@ implementation
 uses
   ScreenObjectUnit, SparseDataSets, OctTreeClass,
   SutraMeshUnit, SutraOutputControlUnit, SutraFileWriterUnit, SutraPestObsUnit,
-  SutraOptionsUnit;
+  SutraOptionsUnit, PestPropertiesUnit;
 
 { TSutraObservationWriter }
 
@@ -324,7 +324,7 @@ begin
         end;
       end;
 
-      if Model.PestUsed then
+      if Model.PestStatus in [psObservations, psActive] then
       begin
         SutraStateObs := ScreenObject.SutraBoundaries.SutraStateObs;
         if SutraStateObs.Used and SutraStateObs.HasNonLakeBoundary then

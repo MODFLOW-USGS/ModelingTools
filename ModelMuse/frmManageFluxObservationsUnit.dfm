@@ -11,8 +11,8 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
   Position = poScreenCenter
   OnActivate = ListClick
   OnResize = FormResize
-  ExplicitWidth = 810
-  ExplicitHeight = 438
+  ExplicitWidth = 808
+  ExplicitHeight = 430
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 121

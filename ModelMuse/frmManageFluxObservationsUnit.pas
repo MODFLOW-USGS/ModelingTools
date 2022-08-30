@@ -275,7 +275,7 @@ uses
   JvBoxProcs, frmGoPhastUnit, Math, GIS_Functions,
   GoPhastTypes, DataSetUnit, frmFormulaUnit, frmErrorsAndWarningsUnit,
   PhastModelUnit, Mt3dmsChemSpeciesUnit, UndoItemsScreenObjects, frmGoToUnit,
-  Modflow6ObsUnit;
+  Modflow6ObsUnit, PestPropertiesUnit;
 
 resourcestring
   StrName = 'Name';
@@ -2669,7 +2669,7 @@ begin
 
   FChobObservations.Assign(frmGoPhast.PhastModel.HeadFluxObservations);
   if (frmGoPhast.ModelSelection <> msModflow2015)
-    or frmGoPhast.PhastModel.PestUsed then
+    or (frmGoPhast.PhastModel.PestStatus in [psObservations, psActive]) then
   begin
     ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.ChobPackage,
       FChobObservations, FChobNode);
@@ -2677,7 +2677,7 @@ begin
 
   FDrobObservations.Assign(frmGoPhast.PhastModel.DrainObservations);
   if (frmGoPhast.ModelSelection <> msModflow2015)
-    or frmGoPhast.PhastModel.PestUsed then
+    or (frmGoPhast.PhastModel.PestStatus in [psObservations, psActive]) then
   begin
     ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.DrobPackage,
       FDrobObservations, FDrobNode);
@@ -2685,7 +2685,7 @@ begin
 
   FGbobObservations.Assign(frmGoPhast.PhastModel.GhbObservations);
   if (frmGoPhast.ModelSelection <> msModflow2015)
-    or frmGoPhast.PhastModel.PestUsed then
+    or (frmGoPhast.PhastModel.PestStatus in [psObservations, psActive]) then
   begin
     ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.GbobPackage,
       FGbobObservations, FGbobNode);
@@ -2693,7 +2693,7 @@ begin
 
   FRvobObservations.Assign(frmGoPhast.PhastModel.RiverObservations);
   if (frmGoPhast.ModelSelection <> msModflow2015)
-    or frmGoPhast.PhastModel.PestUsed then
+    or (frmGoPhast.PhastModel.PestStatus in [psObservations, psActive]) then
   begin
     ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.RvobPackage,
       FRvobObservations, FRvobNode);

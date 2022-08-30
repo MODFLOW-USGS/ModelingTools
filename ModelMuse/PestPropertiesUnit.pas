@@ -886,12 +886,13 @@ type
   end;
 
   TArrayPilotPointSelection = (appsNone, appsRectangular, appsTriangular);
+  TPestStatus = (psInactive, psObservations, psActive);
 
   TPestProperties = class(TGoPhastPersistent)
   private
     FTemplateCharacter: Char;
     FExtendedTemplateCharacter: Char;
-    FPestUsed: Boolean;
+//    FPestUsed: Boolean;
     FShowPilotPoints: Boolean;
     FStoredPilotPointSpacing: TRealStorage;
     FPestControlData: TPestControlData;
@@ -919,6 +920,7 @@ type
     FArrayTemplateCharacter: Char;
     FPredictionProperties: TPredictionProperties;
     FParetoProperties: TParetoProperties;
+    FPestStatus: TPestStatus;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -957,6 +959,8 @@ type
     procedure SetArrayTemplateCharacter(const Value: Char);
     procedure SetPredictionProperties(const Value: TPredictionProperties);
     procedure SetParetoProperties(const Value: TParetoProperties);
+    procedure SetPestStatus(const Value: TPestStatus);
+    function GetPestUsed: Boolean;
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -974,7 +978,8 @@ type
       write SetMinimumSeparation;
     property SeachDistance: double read GetSeachDistance write SetSeachDistance;
   Published
-    property PestUsed: Boolean read FPestUsed write SetPestUsed Stored True;
+    property PestUsed: Boolean read GetPestUsed write SetPestUsed Stored False;
+    property PestStatus: TPestStatus read FPestStatus write SetPestStatus Stored True;
     property TemplateCharacter: Char read FTemplateCharacter
       write SetTemplateCharacter;
     property ExtendedTemplateCharacter: Char read FExtendedTemplateCharacter
@@ -1045,7 +1050,8 @@ begin
   if Source is TPestProperties then
   begin
     PestSource := TPestProperties(Source);
-    PestUsed := PestSource.PestUsed;
+//    PestUsed := PestSource.PestUsed;
+    PestStatus := PestSource.PestStatus;
     ShowPilotPoints := PestSource.ShowPilotPoints;
     PilotPointSpacing := PestSource.PilotPointSpacing;
     PilotPointBuffer := PestSource.PilotPointBuffer;
@@ -1201,6 +1207,11 @@ begin
   result := StoredMinimumSeparation.Value;
 end;
 
+function TPestProperties.GetPestUsed: Boolean;
+begin
+  result := FPestStatus = psActive;
+end;
+
 function TPestProperties.GetPilotPoint(Index: Integer): TPoint2D;
 var
   RowIndex: Integer;
@@ -1340,7 +1351,8 @@ end;
 
 procedure TPestProperties.InitializeVariables;
 begin
-  FPestUsed := False;
+//  FPestUsed := False;
+  FPestStatus := psInactive;
   FShowPilotPoints := False;
   PilotPointSpacing := 0;
   FTemplateCharacter := '@';
@@ -1425,9 +1437,25 @@ begin
   FPestControlData.Assign(Value);
 end;
 
+procedure TPestProperties.SetPestStatus(const Value: TPestStatus);
+begin
+  if FPestStatus <> Value then
+  begin
+    FPestStatus := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TPestProperties.SetPestUsed(const Value: Boolean);
 begin
-  SetBooleanProperty(FPestUsed, Value);
+  if Value then
+  begin
+    PestStatus := psActive;
+  end
+  else
+  begin
+    PestStatus := psInActive;
+  end;
 end;
 
 procedure TPestProperties.SetPilotPointBuffer(const Value: double);

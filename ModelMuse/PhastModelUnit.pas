@@ -2515,6 +2515,7 @@ that affects the model output should also have a comment. }
     procedure FixSutraMeshEdge;
     function Sutra4SorptionUsed(Sender: TObject): boolean;
     function GetAppsMoved: TStringList; virtual; abstract;
+    function GetPestStatus: TPestStatus;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -3394,6 +3395,7 @@ that affects the model output should also have a comment. }
     procedure FillObsInterfaceItemList(List: TObservationInterfaceList;
       IncludeComparisons: Boolean = False);
     property PestUsed: Boolean read GetPestUsed;
+    property PestStatus: TPestStatus read GetPestStatus;
     property SutraLakesUsed: Boolean read GetSutraLakesUsed;
     property DirectObservationLines: TStringList read FDirectObservationLines;
     property DerivedObservationLines: TStringList read FDerivedObservationLines;
@@ -49303,6 +49305,11 @@ begin
   begin
     result := nil;
   end;
+end;
+
+function TCustomModel.GetPestStatus: TPestStatus;
+begin
+  result := PestProperties.PestStatus;
 end;
 
 function TCustomModel.GetPestUsed: Boolean;

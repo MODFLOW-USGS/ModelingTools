@@ -63,7 +63,7 @@ implementation
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
   RbwParser, DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
-  ModflowParameterUnit;
+  ModflowParameterUnit, PestPropertiesUnit;
 
 resourcestring
   StrTheFollowingDrain = 'The following Drain observation names may be valid' +
@@ -276,7 +276,7 @@ end;
 
 function TModflowDRN_Writer.ObsNameWarningString: string;
 begin
-  if Model.PestUsed then
+  if Model.PestStatus in [psObservations, psActive] then
   begin
     result := StrTheFollowingDrainPest;
   end

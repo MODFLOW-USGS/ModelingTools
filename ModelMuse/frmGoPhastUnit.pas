@@ -4309,7 +4309,7 @@ begin
         acGridDragRotate.Enabled := not DisvUsed;
         acGridAngle.Enabled := not DisvUsed;
         acEditObservationComparisons.Visible := True;
-        acEditObservationComparisons.Enabled := PhastModel.PestUsed;
+        acEditObservationComparisons.Enabled := (PhastModel.PestStatus in [psObservations, psActive]);
         acEditSutraFluxObs.Visible := False;
       end;
     msSutra22, msSutra30, msSutra40:
@@ -4338,7 +4338,7 @@ begin
         acGridDragRotate.Enabled := False;
         acGridAngle.Enabled := False;
         acEditObservationComparisons.Visible := True;
-        acEditObservationComparisons.Enabled := PhastModel.PestUsed;
+        acEditObservationComparisons.Enabled := (PhastModel.PestStatus in [psObservations, psActive]);
         acEditSutraFluxObs.Visible := True;
         acEditSutraFluxObs.Enabled := True;
       end;
@@ -10321,7 +10321,7 @@ begin
           BatchFile.Add('"' + SutraFileName + '"');
           ParamEstBatFile.Add('"' + SutraFileName + '"');
 
-          if PhastModel.PestUsed then
+          if (PhastModel.PestStatus in [psObservations, psActive]) then
           begin
             BatchFile.Add(TCustomFileWriter.
               PestUtilityProgramPath(StrSutraObsExtractorex, FileName) + ' '

@@ -242,7 +242,7 @@ implementation
 
 uses
   SysUtils, frmGoPhastUnit, ScreenObjectUnit, SutraBoundariesUnit, Math,
-  frmErrorsAndWarningsUnit;
+  frmErrorsAndWarningsUnit, PestPropertiesUnit;
 
 resourcestring
   StrASchedule = 'A_Schedule';
@@ -933,7 +933,8 @@ begin
       end;
     end;
 
-    if frmGoPhast.PhastModel.PestUsed and Boundaries.SutraStateObs.Used then
+    if (frmGoPhast.PhastModel.PestStatus in [psObservations, psActive])
+      and Boundaries.SutraStateObs.Used then
     begin
       for TimeIndex := 0 to Boundaries.SutraStateObs.Count - 1 do
       begin

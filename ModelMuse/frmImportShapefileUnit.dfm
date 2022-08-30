@@ -7,10 +7,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
   Caption = 'Import Shapefile'
   ClientHeight = 596
   ClientWidth = 771
-  ExplicitLeft = 3
-  ExplicitTop = 3
-  ExplicitWidth = 789
-  ExplicitHeight = 643
+  ExplicitWidth = 787
+  ExplicitHeight = 635
   TextHeight = 18
   object pnlButton: TPanel
     Left = 0
@@ -550,7 +548,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Width = 763
           Height = 481
           OnButtonClick = frameGrid1GridButtonClick
-          OnEndUpdate = frameCSVGridEndUpdate
           Columns = <
             item
               AutoAdjustRowHeights = False
@@ -576,6 +573,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          OnEndUpdate = frameCSVGridEndUpdate
           ExplicitWidth = 763
           ExplicitHeight = 481
           ColWidths = (

@@ -866,7 +866,7 @@ uses Math, Contnrs , frmGoPhastUnit, frmProgressUnit,
   System.IOUtils, SutraMeshUnit, SubscriptionUnit, FootPrintUtilities,
   ModflowSfr6Unit, ModflowMawUnit, Modflow6ObsUnit, frameScreenObjectSfr6Unit,
   ModflowBoundaryDisplayUnit, Mt3dUztRchUnit, Mt3dUztSatEtUnit,
-  Mt3dUztUnsatEtUnit, ModflowLakMf6Unit;
+  Mt3dUztUnsatEtUnit, ModflowLakMf6Unit, PestPropertiesUnit;
 
 resourcestring
   StrParameterName = 'Parameter name';
@@ -3544,7 +3544,7 @@ begin
   AScreenObject.Modflow6Obs.General := GeneralObs;
 
   CalibrationObservations := AScreenObject.Modflow6Obs.CalibrationObservations;
-  if frmGoPhast.PhastModel.PestUsed then
+  if frmGoPhast.PhastModel.PestStatus in [psObservations, psActive] then
   begin
     for RowIndex := 1 to seBoundaryTimeCount.AsInteger do
     begin
@@ -4942,7 +4942,7 @@ var
 begin
   plBoundary.ActivePage := jvspModflow6Obs;
   comboModflow6ObsName.Items := FStringFieldNames;
-  if frmGoPhast.PhastModel.PestUsed then
+  if frmGoPhast.PhastModel.PestStatus in [psObservations, psActive] then
   begin
     rdgBoundaryConditions.ColCount := 5;
     AssignColFeatureProperties;

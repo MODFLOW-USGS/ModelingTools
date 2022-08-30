@@ -61,7 +61,7 @@ uses
   SutraBoundariesUnit, FluxObservationUnit, RealListUnit, ModflowCellUnit,
   SutraGeneralBoundaryUnit, SutraBoundaryUnit,
   SutraGenTransBoundUnit, IntListUnit, ObsInterfaceUnit,
-  PestObsExtractorInputWriterUnit;
+  PestObsExtractorInputWriterUnit, PestPropertiesUnit;
 
 resourcestring
   StrTheObservationComp = 'The observation comparison item "%s" could not be' +
@@ -350,7 +350,7 @@ end;
 
 procedure TSutraPestObsWriterWriter.WriteFile(const AFileName: string);
 begin
-  if not Model.PestUsed then
+  if not (Model.PestStatus in [psObservations, psActive]) then
   begin
     Exit;
   end;
