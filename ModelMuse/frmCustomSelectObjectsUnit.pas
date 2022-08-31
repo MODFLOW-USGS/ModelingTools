@@ -129,6 +129,8 @@ type
     FSftObs6List: TList;
     FvstMwtObsMf6Node: PVirtualNode;
     FMwtObs6List: TList;
+    FvstUztObsMf6Node: PVirtualNode;
+    FUztObs6List: TList;
 
     FvstUzfObsMf6Node: PVirtualNode;
     FUzfObs6List: TList;
@@ -445,7 +447,7 @@ uses StrUtils, ModflowPackagesUnit, ModflowPackageSelectionUnit,
   ModpathParticleUnit, ModflowUzfUnit, ModflowHobUnit, ModflowRchUnit,
   ModflowEtsUnit, ModflowBoundaryUnit, ClassificationUnit, ModflowDrtUnit,
   SutraOptionsUnit, Modflow6ObsUnit, ModflowSfr6Unit, ModflowLakMf6Unit,
-  ModflowMawUnit;
+  ModflowMawUnit, ModflowUzfMf6Unit;
 
 resourcestring
   StrSUTRAFeatures = 'SUTRA Features';
@@ -1072,6 +1074,11 @@ begin
       Data.Caption := 'OBS6: GWT MWT Observations';
       Node.CheckType := ctTriStateCheckBox;
     end
+    else if Node = FvstUztObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: GWT UZT Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
     ;
 
 
@@ -1295,6 +1302,7 @@ var
   SftObs: TSftObs;
   LktObs: TLktObs;
   MwtObs: TMwtObs;
+  UztObs: TUztObs;
   SpeciesIndex: Integer;
   Procedure InitializeData(Node: PVirtualNode);
   var
@@ -1797,6 +1805,16 @@ begin
         InitializeData(FvstMwtObsMf6Node);
       end;
 
+      UztObs := AScreenObject.Modflow6Obs.UztObs;
+      for SpeciesIndex := 0 to frmGophast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        UztObs := UztObs + AScreenObject.Modflow6Obs.CalibrationObservations.UztObs[SpeciesIndex]
+      end;
+      if UztObs <> [] then
+      begin
+        InitializeData(FvstUztObsMf6Node);
+      end;
+
     end;
 
     if (AScreenObject.ModflowHfbBoundary <> nil)
@@ -2107,6 +2125,7 @@ begin
     vstCheckDeleteNode(FvstLktObsMf6Node);
     vstCheckDeleteNode(FvstSftObsMf6Node);
     vstCheckDeleteNode(FvstMwtObsMf6Node);
+    vstCheckDeleteNode(FvstUztObsMf6Node);
 
     vstCheckDeleteNode(FvstObsMf6Node);
     vstCheckDeleteNode(FvstCalibrationObsMf6Node);
@@ -2446,6 +2465,7 @@ begin
     InitializeMF_BoundaryNode(FvstSftObsMf6Node, PriorNode, FSftObs6List);
     InitializeMF_BoundaryNode(FvstLktObsMf6Node, PriorNode, FLktObs6List);
     InitializeMF_BoundaryNode(FvstMwtObsMf6Node, PriorNode, FMwtObs6List);
+    InitializeMF_BoundaryNode(FvstUztObsMf6Node, PriorNode, FUztObs6List);
 
     if FvstCalibrationObsMf6Node = nil then
     begin
@@ -2766,6 +2786,7 @@ begin
   FSftObs6List.Free;
   FLktObs6List.Free;
   FMwtObs6List.Free;
+  FUztObs6List.Free;
   inherited;
 end;
 
@@ -2886,6 +2907,7 @@ begin
   FSftObs6List  := TList.Create;
   FLktObs6List  := TList.Create;
   FMwtObs6List  := TList.Create;
+  FUztObs6List  := TList.Create;
 
   FCanEdit := True;
 
@@ -3018,6 +3040,7 @@ begin
   FvstSftObsMf6Node := nil;
   FvstLktObsMf6Node := nil;
   FvstMwtObsMf6Node := nil;
+  FvstUztObsMf6Node := nil;
 
   FvstObsMf6Node := nil;
   FvstCalibrationObsMf6Node := nil;
@@ -3268,6 +3291,7 @@ begin
   FSftObs6List.Sort(ScreenObjectCompare);
   FLktObs6List.Sort(ScreenObjectCompare);
   FMwtObs6List.Sort(ScreenObjectCompare);
+  FUztObs6List.Sort(ScreenObjectCompare);
 
   for Index := 0 to FDataSetLists.Count - 1 do
   begin

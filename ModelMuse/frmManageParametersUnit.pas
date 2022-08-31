@@ -1260,7 +1260,7 @@ begin
     ptHUF_LVDA: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected;
     ptSTR: result := not PestOnly and frmGoPhast.PhastModel.StrIsSelected;
     ptQMAX: result := frmGoPhast.PhastModel.FarmProcessIsSelected;
-    ptPEST: result := frmGoPhast.PhastModel.PestUsed;
+    ptPEST: result := frmGoPhast.PhastModel.PestStatus in [psObservations, psActive];
     else Assert(False);
   end;
 end;
@@ -1924,7 +1924,7 @@ begin
       end;
     end;
 
-    if TParamColumn(ACol) = pcValue then
+    if (TParamColumn(ACol) = pcValue) and frmGoPhast.PhastModel.PestUsed then
     begin
       if (rdgParameters.ItemIndex[Ord(pcChangeLimitation), ARow] in [Ord(pclRelative), Ord(pclAbsolute)])
         and (rdgParameters.RealValueDefault[ACol, ARow, 1] = 0) then

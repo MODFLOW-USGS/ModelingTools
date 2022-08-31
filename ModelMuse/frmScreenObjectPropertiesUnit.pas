@@ -2244,6 +2244,7 @@ type
       ACol: Integer): Boolean;
     function GwtColumnCount: integer;
     function IsChdEndHeadColumn(ACol: Integer): Boolean;
+    procedure UpdateUzfScrollWidth;
 //    function GetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer): Boolean;
 //    procedure SetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer;
 //      const Value: Boolean);
@@ -2479,7 +2480,7 @@ type
     { Private declarations }
     Property PestModifierAssigned[Grid: TRbwDataGrid4; ACol: Integer]: Boolean
       read GetPestModifierAssigned;
-    procedure UpdateScrollWidth;
+    procedure UpdateMawScrollWidth;
   public
     procedure Initialize;
     procedure ClearExpressionsAndVariables;
@@ -3379,6 +3380,11 @@ begin
         and frameObsMf6.cbConcentration.Enabled then
       begin
         Mf6ObsSeriesName.Add(ObsSeriesToString(osMwt));
+      end;
+      if frameObsMf6.tabUzf.TabVisible
+        and frameObsMf6.cbConcentration.Enabled then
+      begin
+        Mf6ObsSeriesName.Add(ObsSeriesToString(osUzt));
       end;
 
       frameObsMf6.framePestObs.SpecifyGroupTypes(Mf6ObsSeriesName);
@@ -11061,7 +11067,7 @@ begin
   end;
 end;
 
-procedure TfrmScreenObjectProperties.UpdateScrollWidth;
+procedure TfrmScreenObjectProperties.UpdateMawScrollWidth;
 const
   AddChar = 'MMMM';
 var
@@ -11092,6 +11098,30 @@ begin
     end;
   end;
   frameObsMf6.chklstMwt.ScrollWidth := MaxLen;
+
+  Canvas.Font := Font;
+end;
+
+procedure TfrmScreenObjectProperties.UpdateUzfScrollWidth;
+const
+  AddChar = 'MMMM';
+var
+  MaxLen: Integer;
+  index: Integer;
+  Len: Integer;
+begin
+  Canvas.Font := frameObsMf6.chklstUZF.Font;
+
+  MaxLen := 0;
+  for index := 0 to frameObsMf6.chklstUZF.Items.Count - 1 do
+  begin
+    Len := Canvas.TextWidth(frameObsMf6.chklstUZF.Items[index] + AddChar);
+    if Len > MaxLen then
+    begin
+      MaxLen := Len;
+    end;
+  end;
+  frameObsMf6.chklstUZF.ScrollWidth := MaxLen;
 
   Canvas.Font := Font;
 end;
@@ -28408,7 +28438,11 @@ begin
   inherited;
   if frameObsMf6.pgcMain.ActivePage = frameObsMf6.tabMAW then
   begin
-    UpdateScrollWidth;
+    UpdateMawScrollWidth;
+  end;
+  if frameObsMf6.pgcMain.ActivePage = frameObsMf6.tabUZF then
+  begin
+    UpdateUzfScrollWidth;
   end;
 end;
 

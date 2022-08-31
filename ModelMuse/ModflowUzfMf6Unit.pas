@@ -13,6 +13,10 @@ type
     uoUnsatZoneEvapotranspiration, uoStorage, uoNetInfiltration, uoWaterContent);
   TUzfObs = set of TUzfOb;
 
+  TUztOb = (utoConcentration, utoStorage, utoFromMvr, utoUZT, utoInfiltration,
+    utoRejInfiltration, utoUzEt, utoRejInflToMvr);
+  TUztObs = set of TUztOb;
+
   TUzfMf6Record = record
     Cell: TCellLocation;
     StartingTime: double;
@@ -723,6 +727,9 @@ const
 function TryGetUzfOb(const UzfObName: string; var UzfOb: TUzfOb): Boolean;
 function UzfObToString(const UzfOb: TUzfOb): string;
 Procedure FillUzfSeriesNames(AList: TStrings);
+function TryGetUztOb(const UztObName: string; var UztOb: TUztOb): Boolean;
+function UztObToString(const UztOb: TUztOb): string;
+Procedure FillUztSeriesNames(AList: TStrings);
 
 implementation
 
@@ -738,8 +745,24 @@ const
     'UZF_RejectInfiltration', 'UZF_RejectInfiltrationToMvr',
     'UZF_UnsatZoneEvapotranspiration', 'UZF_Storage', 'UZF_NetInfiltration', 'UZF_WaterContent');
 
+  UztObsNames: array[TUztOb] of string = (
+    'UZT_Concentration',
+    'UZT_Storage',
+    'UZT_FromMvr',
+    'UZT_Mass_Flow_Rate (UZT)',
+    'UZT_Infiltration',
+    'UZT_Rejected_Infiltration',
+    'UZT_ET',
+    'UZT_Rej_Infil_to_MVR');
+
+  {
+  TUztOb = (utoConcentration, utoStorage, utoFromMvr, utoUZT, utoInfiltration,
+    utoRejInfiltration, utoUzEt, utoRejInflToMvr);
+  }
+
 var
   UzfObsNameList: TStringList;
+  UztObsNameList: TStringList;
 
 procedure InitializeUzfObsNameList;
 var
@@ -750,6 +773,18 @@ begin
   for index := Low(TUzfOb) to High(TUzfOb) do
   begin
     UzfObsNameList.Add(UzfObsNames[index]);
+  end;
+end;
+
+procedure InitializeUztObsNameList;
+var
+  index: TUztOb;
+begin
+  UztObsNameList := TStringList.Create;
+  UztObsNameList.CaseSensitive := False;
+  for index := Low(TUztOb) to High(TUztOb) do
+  begin
+    UztObsNameList.Add(UztObsNames[index]);
   end;
 end;
 
@@ -765,21 +800,37 @@ begin
   end;
 end;
 
+function TryGetUztOb(const UztObName: string; var UztOb: TUztOb): Boolean;
+var
+  index: Integer;
+begin
+  index := UztObsNameList.IndexOf(UztObName);
+  result := index >= 0;
+  if result then
+  begin
+    UztOb := TUztOb(index);
+  end;
+end;
+
 Procedure FillUzfSeriesNames(AList: TStrings);
 begin
   AList.Assign(UzfObsNameList);
+end;
+
+Procedure FillUztSeriesNames(AList: TStrings);
+begin
+  AList.Assign(UztObsNameList);
 end;
 
 function UzfObToString(const UzfOb: TUzfOb): string;
 begin
   result := UzfObsNames[UzfOb];
 end;
-{
-  TUzfOb = (uoGW_Recharge, uoGW_Discharge, uoDischargeToMvr,
-    uoSatZoneEvapotranspiration, uoInfiltration, uoMvrInflow,
-    uoRejectInfiltration, uoRejectInfiltrationToMvr,
-    uoUnsatZoneEvapotranspiration, uoStorage, uoNetInfiltration, uoWaterContent);
-}
+
+function UztObToString(const UztOb: TUztOb): string;
+begin
+  result := UztObsNames[UztOb];
+end;
 
 resourcestring
   StrUZFInfiltrationDat = 'UZF infiltration';
@@ -5209,8 +5260,10 @@ end;
 
 initialization
   InitializeUzfObsNameList;
+  InitializeUztObsNameList;
 
 finalization
   UzfObsNameList.Free;
+  UztObsNameList.Free;
 
 end.

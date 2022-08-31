@@ -112,6 +112,7 @@ var
   ObSft: TSftOb;
   ObLkt: TLktOb;
   ObMwt: TMwtOb;
+  ObUzt: TUztOb;
 begin
   inherited;
   if ARow > 0 then
@@ -201,6 +202,13 @@ begin
                 frameObservations.Grid.Canvas.Brush.Color:= clRed;
               end;
             end;
+          osUzt:
+            begin
+              if not TryGetUztOb(ObTypeName, ObUzt) then
+              begin
+                frameObservations.Grid.Canvas.Brush.Color:= clRed;
+              end;
+            end;
           else
             begin
               Assert(False);
@@ -284,6 +292,10 @@ begin
         osMwt:
           begin
             FillMwtSeriesNames(PickList);
+          end;
+        osUzt:
+          begin
+            FillUztSeriesNames(PickList);
           end;
         else
           begin
@@ -393,6 +405,7 @@ var
   ObSft: TSftOb;
   ObLkt: TLktOb;
   ObMwt: TMwtOb;
+  ObUzt: TUztOb;
 begin
   ObsCount := 0;
   for RowIndex := 1 to frameObservations.seNumber.AsInteger do
@@ -465,6 +478,10 @@ begin
           osMwt:
             begin
               RowOK := TryGetMwtOb(ObTypeName, ObMwt);
+            end;
+          osUzt:
+            begin
+              RowOK := TryGetUztOb(ObTypeName, ObUzt);
             end;
         end;
       end;

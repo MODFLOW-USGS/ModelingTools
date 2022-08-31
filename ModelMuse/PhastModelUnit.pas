@@ -10705,6 +10705,10 @@ const
 //.               SutraObsExtractor.
 //               Bug fix: Fixed bug in editing SFT head water concentrations.
 
+//               Enhancement: Instead of activating or deactivating PEST, there
+//                is now a third option to allow users can now define
+//                calibration observations but without activating PEST.
+
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 

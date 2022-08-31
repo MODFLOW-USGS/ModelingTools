@@ -67,7 +67,7 @@ type
     FReachCount: integer;
     FDiversionCount: Integer;
     FObsList: TSfr6ObservationList;
-    FSftObsLists: TSft6ObservationLists;
+    FGwtObservations: TSft6ObservationLists;
     FDirectObsLines: TStrings;
     FFileNameLines: TStrings;
     FCalculatedObsLines: TStrings;
@@ -786,7 +786,7 @@ begin
   FValues := TObjectList.Create;
   FSegments := TSfr6SegmentList.Create;
   FObsList := TSfr6ObservationList.Create;
-  FSftObsLists:= TSft6ObservationLists.Create;
+  FGwtObservations:= TSft6ObservationLists.Create;
   DirectObsLines := Model.DirectObservationLines;
   CalculatedObsLines := Model.DerivedObservationLines;
   FileNameLines := Model.FileNameLines;
@@ -794,14 +794,14 @@ begin
   begin
     for index := 0 to Model.MobileComponents.Count - 1 do
     begin
-      FSftObsLists.Add(TSft6ObservationList.Create);
+      FGwtObservations.Add(TSft6ObservationList.Create);
     end;
   end;
 end;
 
 destructor TModflowSFR_MF6_Writer.Destroy;
 begin
-  FSftObsLists.Free;
+  FGwtObservations.Free;
   FObsList.Free;
   FSegments.Free;
   FValues.Free;
@@ -1000,7 +1000,7 @@ begin
             SftObs.FCount := ASegment.ReachCount;
             SftObs.FModflow6Obs := MfObs;
             SftObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
-            FSftObsLists[SpeciesIndex].Add(SftObs)
+            FGwtObservations[SpeciesIndex].Add(SftObs)
           end;
         end;
         ReachStart := ReachStart + ASegment.ReachCount;
@@ -1087,7 +1087,7 @@ begin
         SftObs.FCount := ASegment.ReachCount;
         SftObs.FModflow6Obs := MfObs;
         SftObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
-        FSftObsLists[SpeciesIndex].Add(SftObs)
+        FGwtObservations[SpeciesIndex].Add(SftObs)
       end;
 //      FSftObsLists[MfObs.GwtSpecies].Add(SftObs)
     end;
@@ -2009,9 +2009,9 @@ begin
   try
     WriteGwtFileInternal;
 
-    if FSftObsLists[SpeciesIndex].Count > 0 then
+    if FGwtObservations[SpeciesIndex].Count > 0 then
     begin
-      ObsWriter := TSftObsWriter.Create(Model, etExport, FSftObsLists[SpeciesIndex], SpeciesIndex);
+      ObsWriter := TSftObsWriter.Create(Model, etExport, FGwtObservations[SpeciesIndex], SpeciesIndex);
       try
         ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
       finally
@@ -2098,7 +2098,7 @@ begin
       NewLine;
     end;
 
-    if FSftObsLists[FSpeciesIndex].Count > 0 then
+    if FGwtObservations[FSpeciesIndex].Count > 0 then
     begin
       WriteString('    OBS6 FILEIN ');
       NameOfFile := BaseFileName + GwtObservationExtension;

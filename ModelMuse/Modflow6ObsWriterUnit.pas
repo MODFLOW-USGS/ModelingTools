@@ -238,6 +238,20 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
+  TUztObsWriter = class(TCustomMf6ObservationWriter)
+  private
+    FObsList: TUztObservationList;
+    FSpeciesIndex: Integer;
+    procedure WriteUztObs;
+  protected
+    class function Extension: string; override;
+    procedure Evaluate; override;
+  public
+    Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
+      ObsList: TUztObservationList; SpeciesIndex: integer); reintroduce;
+    procedure WriteFile(const AFileName: string);
+  end;
+
   TCSubObsWriter = class(TCustomMf6ObservationWriter)
   private
     FObsList: TCSubObservationList;
@@ -4909,6 +4923,299 @@ begin
     WriteString('END CONTINUOUS');
     NewLine;
     NewLine;
+  end;
+end;
+
+{ TUztObsWriter }
+
+constructor TUztObsWriter.Create(Model: TCustomModel;
+  EvaluationType: TEvaluationType; ObsList: TUztObservationList;
+  SpeciesIndex: integer);
+begin
+  inherited Create(Model, EvaluationType);
+  FObsList := ObsList;
+  FSpeciesIndex := SpeciesIndex;
+end;
+
+procedure TUztObsWriter.Evaluate;
+begin
+  // do nothing
+end;
+
+class function TUztObsWriter.Extension: string;
+begin
+  Result := '';
+  Assert(False);
+end;
+
+procedure TUztObsWriter.WriteFile(const AFileName: string);
+begin
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNonuniqueLakeObse);
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  FNameOfFile := AFileName;
+
+  frmProgressMM.AddMessage(StrWritingLAKObservat);
+  Assert(FObsList.Count > 0);
+  Model.AddModelInputFile(FNameOfFile);
+
+//  WritePestTemplateLine;
+
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
+  try
+    WriteDataSet0;
+    WriteOptions;
+    WriteUztObs;
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TUztObsWriter.WriteUztObs;
+var
+  ObTypes: TUztObs;
+  ObsIndex: Integer;
+  ObsPackage: TMf6ObservationUtility;
+  OutputTypeExtension: string;
+  AnObsType: TUztOb;
+  OutputExtension: string;
+  OutputFileName: string;
+  AnObs: TUztObservation;
+  ID: string;
+  ObservationType: string;
+  boundname: string;
+  ObsNames: TStringList;
+  Root: string;
+  CellIndex: Integer;
+  obsname: string;
+  OutputFormat: string;
+  CalibObservations: TMf6CalibrationObservations;
+  CalibObsNames: TStringList;
+  CalibIndex: Integer;
+  CalibObs: TMf6CalibrationObs;
+  StartTime: Double;
+  Prefix: string;
+  procedure CheckForDuplicateObsNames;
+  begin
+    if ObsNames.IndexOf(ID) >= 0 then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrNonuniqueUZFObser,
+        Format(StrTheFollowingUZFOb, [ID]));
+    end
+    else
+    begin
+      ObsNames.Add(ID);
+    end;
+  end;
+  procedure WritePestObsFormulas;
+  var
+    CalibIndex: Integer;
+    CalibObs: TMf6CalibrationObs;
+    CalibObList: TCalibObList;
+  begin
+    if (Model.PestStatus in [psObservations, psActive]) then
+    begin
+      if AnObsType in CalibObservations.UztObs[FSpeciesIndex] then
+      begin
+        CalibObList := TCalibObList.Create;
+        try
+          for CalibIndex := 0 to CalibObservations.Count - 1 do
+          begin
+            CalibObs := CalibObservations[CalibIndex];
+            if (CalibObs.ObSeries = osUzt)
+              and (AnObsType = CalibObs.UztOb) then
+            begin
+              CalibObList.Add(CalibObs);
+            end;
+          end;
+
+          WriteSumFormula(CalibObList, CalibObsNames);
+        finally
+          CalibObList.Free;
+        end;
+      end;
+    end;
+  end;
+begin
+  ObTypes := [];
+  for ObsIndex := 0 to FObsList.Count - 1 do
+  begin
+    ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
+  end;
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
+  ObsPackage := Package as TMf6ObservationUtility;
+  case ObsPackage.OutputFormat of
+    ofText:
+      begin
+        OutputTypeExtension := '.csv';
+        OutputFormat := 'TEXT';
+      end;
+    ofBinary:
+      begin
+        OutputTypeExtension := '.bin';
+        OutputFormat := 'BINARY';
+      end;
+    else
+      Assert(False);
+  end;
+  ObsNames := TStringList.Create;
+  try
+    ObsNames.Sorted := True;
+    for AnObsType in ObTypes do
+    begin
+      case AnObsType of
+        utoConcentration:
+          begin
+            OutputExtension := '.uzt-conc_ob' + OutputTypeExtension;
+            ObservationType := 'concentration';
+            Prefix := 'utc_';
+          end;
+        utoStorage:
+          begin
+            OutputExtension := '.uzt-storage_ob' + OutputTypeExtension;
+            ObservationType := 'storage';
+            Prefix := 'uts_';
+          end;
+        utoFromMvr:
+          begin
+            OutputExtension := '.uzt-from_mvr_ob' + OutputTypeExtension;
+            ObservationType := 'from-mvr';
+            Prefix := 'utfm_';
+          end;
+        utoUZT:
+          begin
+            OutputExtension := '.uzt-uzt_ob' + OutputTypeExtension;
+            ObservationType := 'uzt';
+            Prefix := 'utu_';
+          end;
+        utoInfiltration:
+          begin
+            OutputExtension := '.Uzt_infiltration_ob' + OutputTypeExtension;
+            ObservationType := 'infiltration';
+            Prefix := 'uti_';
+          end;
+        utoRejInfiltration:
+          begin
+            OutputExtension := '.uzt_rej_infiltration_ob' + OutputTypeExtension;
+            ObservationType := 'rej-inf';
+            Prefix := 'utri_';
+          end;
+        utoUzEt:
+          begin
+            OutputExtension := '.uzt_uzet_ob' + OutputTypeExtension;
+            ObservationType := 'uzet';
+            Prefix := 'ute_';
+          end;
+        utoRejInflToMvr:
+          begin
+            OutputExtension := '.uzt_rej_infil_to_mvr_ob' + OutputTypeExtension;
+            ObservationType := 'rej-inf-to-mvr';
+            Prefix := 'utri2m_';
+          end;
+        else
+          Assert(False);
+      end;
+
+      WriteString('BEGIN CONTINUOUS FILEOUT ');
+      OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
+      Model.AddModelOutputFile(OutputFileName);
+      if (Model.PestStatus in [psObservations, psActive]) then
+      begin
+        Assert(FileNameLines <> nil);
+        FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+          [ExtractFileName(OutputFileName), OutputFormat]));
+      end;
+      OutputFileName := ExtractFileName(OutputFileName);
+      WriteString(OutputFileName);
+      if ObsPackage.OutputFormat = ofBinary then
+      begin
+        WriteString(' BINARY');
+      end;
+      NewLine;
+
+      for ObsIndex := 0 to FObsList.Count - 1 do
+      begin
+        AnObs := FObsList[ObsIndex];
+        if AnObsType in AnObs.FObsTypes then
+        begin
+          CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
+          Root := Prefix + AnObs.FName;
+          if Root = Prefix then
+          begin
+            Root := Format(Prefix + 'UzfObs%d', [ObsIndex+1]);
+          end;
+          Assert(Length(Root) <= MaxBoundNameLength);
+          boundname := Trim(AnObs.FBoundName);
+          boundname := Copy(boundname, 1, MaxBoundNameLength);
+          boundname := ' ' + boundname + ' ';
+
+          if AnObs.FCells = nil then
+          begin
+            obsname := Root;
+            WriteString('  ');
+            WriteString(obsname);
+            WriteString(' ');
+            WriteString(ObservationType);
+            WriteString(boundname);
+            NewLine;
+
+            if (Model.PestStatus in [psObservations, psActive]) then
+            begin
+              if (AnObsType in CalibObservations.UztObs[FSpeciesIndex]) then
+              begin
+                DirectObsLines.Add(Format('  ID %s', [obsname]));
+                for CalibIndex := 0 to CalibObservations.Count - 1 do
+                begin
+                  CalibObs := CalibObservations[CalibIndex];
+                  if (CalibObs.ObSeries = osUzt)
+                    and (AnObsType = CalibObs.UztOb) then
+                  begin
+                    DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
+                      [CalibObs.Name, CalibObs.Time - StartTime]));
+                  end;
+                end;
+                DirectObsLines.Add('');
+              end;
+            end;
+          end
+          else
+          begin
+            CalibObsNames := TStringList.Create;
+            try
+              for CellIndex := 0 to Length(AnObs.FUzfBoundNumber) - 1 do
+              begin
+                obsname := Root
+                  + IntToStr(AnObs.FUzfBoundNumber[CellIndex]);
+                WriteString('  ');
+                WriteString(obsname);
+                WriteString(' ');
+                WriteString(ObservationType);
+                WriteInteger(AnObs.FUzfBoundNumber[CellIndex]);
+                NewLine;
+                CalibObsNames.Add(obsname);
+              end;
+
+              WritePestObsFormulas;
+            finally
+              CalibObsNames.Free;
+            end;
+          end;
+        end;
+      end;
+
+      WriteString('END CONTINUOUS');
+      NewLine;
+      NewLine;
+    end;
+  finally
+    ObsNames.Free;
   end;
 end;
 

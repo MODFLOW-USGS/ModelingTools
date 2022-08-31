@@ -22,6 +22,19 @@ type
   end;
   TUzfObservationList = TList<TUzfObservation>;
 
+  TUztObservation = record
+    FName: string;
+    FBoundName: string;
+    FObsTypes: TUztObs;
+//    FDepthFractions: TOneDRealArray;
+    FScreenObject: TScreenObject;
+    FUzfBoundNumber: TOneDIntegerArray;
+    FCells: array of TCellLocation;
+    FSpecies: Integer;
+    FModflow6Obs: TModflow6Obs;
+  end;
+  TUztObservationList = TList<TUztObservation>;
+  TUztObservationLists = TObjectList<TUztObservationList>;
 
   TModflowUzfMf6Writer = class(TCustomParameterTransientWriter)
   private
@@ -30,6 +43,7 @@ type
   	FUzflandflagLayers:  TTwoDIntegerArray;
     FUzfObjectArray: T3DSparsePointerArray;
     FObsList: TUzfObservationList;
+    FGwtObservations: TUztObservationLists;
     FSpeciesIndex: Integer;
     procedure WriteOptions;
     procedure WriteDimensions;
@@ -61,8 +75,10 @@ type
       MultiplierArrayNames: TTransientMultCollection;
       ZoneArrayNames: TTransientZoneCollection); override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; reintroduce;
+    function IsMf6GwtObservation(AScreenObject: TScreenObject; SpeciesIndex: Integer): Boolean;
     function ObservationsUsed: Boolean;  reintroduce;
     class function ObservationExtension: string;  override;
+    class function GwtObservationExtension: string;
 //    class function ObservationOutputExtension: string;  override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -122,15 +138,26 @@ end;
 
 constructor TModflowUzfMf6Writer.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
+var
+  Index: Integer;
 begin
   inherited;
   FUzfObjectArray := T3DSparsePointerArray.Create(GetQuantum(Model.LayerCount),
     GetQuantum(Model.RowCount), GetQuantum(Model.ColumnCount));
   FObsList := TUzfObservationList.Create;
+  FGwtObservations := TUztObservationLists.Create;
+  if Model.GwtUsed then
+  begin
+    for Index := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      FGwtObservations.Add(TUztObservationList.Create);
+    end;
+  end;
 end;
 
 destructor TModflowUzfMf6Writer.Destroy;
 begin
+  FGwtObservations.Free;
   FObsList.Free;
   FUzfObjectArray.Free;
   inherited;
@@ -146,7 +173,9 @@ var
   ACell: TCellAssignment;
 //  BoundName: string;
   Obs: TUzfObservation;
+  UztObs: TUztObservation;
   MfObs: TModflow6Obs;
+  SpeciesIndex: Integer;
 begin
   FUzfPackage := Package as TUzfMf6PackageSelection;
   inherited;
@@ -178,6 +207,25 @@ begin
           Obs.FModflow6Obs := MfObs;
           FObsList.Add(Obs);
         end;
+        if Model.GwtUsed then
+        begin
+          for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
+          begin
+            if ObservationsUsed and IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
+            begin
+              MfObs := ScreenObject.Modflow6Obs;
+              UztObs.FName := MfObs.Name;
+              UztObs.FBoundName := ScreenObject.Name;
+              UztObs.FObsTypes := MfObs.UztObs;
+              UztObs.FScreenObject := ScreenObject;
+              UztObs.FCells := nil;
+              UztObs.FModflow6Obs := MfObs;
+              UztObs.FSpecies := SpeciesIndex;
+              FGwtObservations[SpeciesIndex].Add(UztObs);
+            end;
+          end;
+        end;
+
         CellList.Clear;
         ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
         for CellIndex := 0 to CellList.Count - 1 do
@@ -186,25 +234,53 @@ begin
           FUzfObjectArray[ACell.Layer, ACell.Row, ACell.Column] := ScreenObject;
         end;
       end
-      else if ObservationsUsed and IsMf6Observation(ScreenObject)
-        and not WritingTemplate then
+      else if ObservationsUsed and not WritingTemplate then
       begin
-        MfObs := ScreenObject.Modflow6Obs;
-        Obs.FName := MfObs.Name;
-        Obs.FBoundName := ScreenObject.Name;
-        Obs.FObsTypes := MfObs.UzfObs;
-        Obs.FScreenObject := ScreenObject;
-        Obs.FModflow6Obs := MfObs;
-        CellList.Clear;
-        ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
-        SetLength(Obs.FCells, CellList.Count);
-        for CellIndex := 0 to CellList.Count - 1 do
+        if IsMf6Observation(ScreenObject) then
         begin
-          ACell := CellList[CellIndex];
-          Obs.FCells[CellIndex] := ACell.Cell;
-        end;
+          MfObs := ScreenObject.Modflow6Obs;
+          Obs.FName := MfObs.Name;
+          Obs.FBoundName := ScreenObject.Name;
+          Obs.FObsTypes := MfObs.UzfObs;
+          Obs.FScreenObject := ScreenObject;
+          Obs.FModflow6Obs := MfObs;
+          CellList.Clear;
+          ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+          SetLength(Obs.FCells, CellList.Count);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            Obs.FCells[CellIndex] := ACell.Cell;
+          end;
 
-        FObsList.Add(Obs);
+          FObsList.Add(Obs);
+        end;
+        if Model.GwtUsed then
+        begin
+          for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
+          begin
+            if ObservationsUsed and IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
+            begin
+              MfObs := ScreenObject.Modflow6Obs;
+              UztObs.FName := MfObs.Name;
+              UztObs.FBoundName := ScreenObject.Name;
+              UztObs.FObsTypes := MfObs.UztObs;
+              UztObs.FScreenObject := ScreenObject;
+              UztObs.FSpecies := SpeciesIndex;
+              UztObs.FModflow6Obs := MfObs;
+              CellList.Clear;
+              ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+              SetLength(UztObs.FCells, CellList.Count);
+              for CellIndex := 0 to CellList.Count - 1 do
+              begin
+                ACell := CellList[CellIndex];
+                UztObs.FCells[CellIndex] := ACell.Cell;
+              end;
+
+              FGwtObservations[SpeciesIndex].Add(UztObs);
+            end;
+          end;
+        end;
       end;
     end;
   finally
@@ -223,6 +299,11 @@ begin
   result := ScreenObject.ModflowUzfMf6Boundary;
 end;
 
+class function TModflowUzfMf6Writer.GwtObservationExtension: string;
+begin
+  result := '.ob_uzt';
+end;
+
 procedure TModflowUzfMf6Writer.IdentifyWaterContentObsLocations;
 var
   ObsIndex: Integer;
@@ -236,6 +317,9 @@ var
   Grid: TModflowGrid;
   ACellLocation: TCellLocation;
   DepthFractions: TList<double>;
+  GwtObsList: TUztObservationList;
+  UztObs: TUztObservation;
+  SpeciesIndex: Integer;
 begin
   if ObservationsUsed then
   begin
@@ -328,12 +412,63 @@ begin
           FObsList[ObsIndex] := UzfObs;
         end;
       end;
+      for SpeciesIndex := 0 to FGwtObservations.Count - 1 do
+      begin
+        GwtObsList := FGwtObservations[SpeciesIndex];
+        for ObsIndex := 0 to GwtObsList.Count - 1 do
+        begin
+          UztObs := GwtObsList[ObsIndex];
+          begin
+            CellList.Clear;
+            CellNumbers.Clear;
+//            DepthFractions.Clear;
+//            DepthFraction := UztObs.FScreenObject.Modflow6Obs.UzfObsDepthFraction;
+            for CellIndex := 0 to Length(UztObs.FCells) - 1 do
+            begin
+              ACellLocation := UztObs.FCells[CellIndex];
+              if (FUzfCellNumbers[ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column] > 0) then
+              begin
+                CellNumbers.Add(FUzfCellNumbers[ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column]);
+//                if Assigned(DisvGrid) then
+//                begin
+//                  DepthFractions.Add(DepthFraction
+//                    * DisvGrid.CellThickness(ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column));
+//                end
+//                else
+//                begin
+//                  DepthFractions.Add(DepthFraction
+//                    * Grid.LayerThickness(ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column));
+//                end;
+              end;
+            end;
+            SetLength(UztObs.FUzfBoundNumber, CellNumbers.Count);
+//            SetLength(UztObs.FDepthFractions, CellNumbers.Count);
+            for CellIndex := 0 to CellNumbers.Count - 1 do
+            begin
+              UztObs.FUzfBoundNumber[CellIndex] := CellNumbers[CellIndex];
+//              UztObs.FDepthFractions[CellIndex] := DepthFractions[CellIndex];
+            end;
+            GwtObsList[ObsIndex] := UztObs;
+          end;
+        end
+      end;
     finally
       CellList.Free;
       CellNumbers.Free;
       DepthFractions.Free;
     end;
   end;
+end;
+
+function TModflowUzfMf6Writer.IsMf6GwtObservation(AScreenObject: TScreenObject;
+  SpeciesIndex: Integer): Boolean;
+var
+  MfObs: TModflow6Obs;
+begin
+  MfObs := AScreenObject.Modflow6Obs;
+  Result := (MfObs <> nil) and MfObs.Used and (((MfObs.UztObs <> [])
+    and (SpeciesIndex in MfObs.Genus))
+    or (MfObs.CalibrationObservations.UztObs[SpeciesIndex] <> []) );
 end;
 
 function TModflowUzfMf6Writer.IsMf6Observation(
@@ -488,6 +623,7 @@ var
   LayerIndex: Integer;
   RowIndex: Integer;
   ColumnIndex: Integer;
+  ScreenObject: TScreenObject;
 begin
   InitConcDataArray := Model.DataArrayManager.GetDataSetByName(
     KUztInitialConcentration + IntToStr(FSpeciesIndex+1));
@@ -508,6 +644,13 @@ begin
           WriteString('  ');
           WriteInteger(FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex]);
           WriteFloat(InitConcDataArray.RealData[LayerIndex, RowIndex, ColumnIndex]);
+
+          ScreenObject := FUzfObjectArray[LayerIndex, RowIndex, ColumnIndex];
+          if ScreenObject <> nil then
+          begin
+            WriteString(' ');
+            WriteString(ScreenObject.Name);
+          end;
           NewLine;
         end;
       end;
@@ -718,6 +861,9 @@ procedure TModflowUzfMf6Writer.WriteFile(const AFileName: string);
 var
   ObsFileName: string;
   ObsWriter: TUzfObsWriter;
+  UztObsUsed: Boolean;
+  SpeciesIndex: Integer;
+//  UztObsWriter: TUztObsWriter;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoUZFBoundariesAr);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheUZFPackageResid);
@@ -752,9 +898,22 @@ begin
   WriteFileInternal;
 
 
-  if FObsList.Count > 0 then
+  UztObsUsed := False;
+  for SpeciesIndex := 0 to FGwtObservations.Count - 1 do
+  begin
+    UztObsUsed := FGwtObservations[SpeciesIndex].Count > 0;
+    if UztObsUsed then
+    begin
+      break;
+    end;
+  end;
+  if UztObsUsed or (FObsList.Count > 0) then
   begin
     IdentifyWaterContentObsLocations;
+  end;
+
+  if FObsList.Count > 0 then
+  begin
     ObsFileName := ChangeFileExt(FNameOfFile, ObservationExtension);
     ObsWriter := TUzfObsWriter.Create(Model, etExport, FObsList);
     try
@@ -1325,6 +1484,7 @@ procedure TModflowUzfMf6Writer.WriteUztFile(const AFileName: string;
 var
   Abbreviation: string;
   SpeciesName: string;
+  UztObsWriter: TUztObsWriter;
 begin
   if not Package.IsSelected then
   begin
@@ -1349,6 +1509,17 @@ begin
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 
+  if FGwtObservations[SpeciesIndex].Count > 0 then
+  begin
+    UztObsWriter := TUztObsWriter.Create(Model, etExport,
+      FGwtObservations[SpeciesIndex], SpeciesIndex);
+    try
+      UztObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
+    finally
+      UztObsWriter.Free;
+    end;
+  end;
+
   frmErrorsAndWarnings.BeginUpdate;
   try
     WriteGwtFileInternal;
@@ -1366,6 +1537,7 @@ var
   UzfMf6Package: TUzfMf6PackageSelection;
   concentrationfile: string;
   BaseFileName: string;
+  NameOfUztObFile: string;
 begin
   WriteBeginOptions;
 
@@ -1424,7 +1596,16 @@ begin
     NewLine;
   end;
 
-  { TODO -cGWT : The observation names need to be cleared before starting to write the GWT file. }
+  if FGwtObservations[FSpeciesIndex].Count > 0 then
+  begin
+    WriteString('    OBS6 FILEIN ');
+    NameOfUztObFile := BaseFileName + GwtObservationExtension;
+    Model.AddModelInputFile(NameOfUztObFile);
+    NameOfUztObFile := ExtractFileName(NameOfUztObFile);
+    WriteString(NameOfUztObFile);
+    NewLine;
+  end;
+
   WriteTimeSeriesFiles(FInputFileName);
 //  [OBS6 FILEIN <obs6_filename>]
 

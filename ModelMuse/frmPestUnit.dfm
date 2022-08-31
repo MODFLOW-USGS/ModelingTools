@@ -4,8 +4,8 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 485
   ClientWidth = 764
-  ExplicitWidth = 780
-  ExplicitHeight = 524
+  ExplicitWidth = 782
+  ExplicitHeight = 532
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
@@ -36,7 +36,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspBasic
+    ActivePage = jvspPilotPoints
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -1637,6 +1637,7 @@ inherited frmPEST: TfrmPEST
             Height = 22
             TabOrder = 1
             Text = '0'
+            OnChange = rdePilotPointSpacingChange
             DataType = dtReal
             Max = 1.000000000000000000
             CheckMin = True

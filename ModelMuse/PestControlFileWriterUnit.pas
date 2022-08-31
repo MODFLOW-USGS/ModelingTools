@@ -156,7 +156,7 @@ function TPestControlFileWriter.NumberOfObservationGroups: Integer;
 begin
   result := Model.PestProperties.ObservationGroups.Count
     + Model.PestProperties.PriorInfoObservationGroups.Count;
-  if result = 0 then
+  if (result = 0) and (Model.PestProperties.PestStatus = psActive) then
   begin
     frmErrorsAndWarnings.AddError(Model, StrNoObservationGroup,
       StrNoPESTObservation);
@@ -1661,7 +1661,7 @@ begin
     if ObsGroup = nil then
     begin
       WriteString(' ' + AnObs.ObservationGroup);
-      if AnObs.ObservationGroup = '' then
+      if (AnObs.ObservationGroup = '') and (Model.PestStatus = psActive) then
       begin
         frmErrorsAndWarnings.AddError(Model, StrObservationGroupUn,
           Format(StrNoObservationGroupAssigned, [AnObs.Name]));
@@ -1678,7 +1678,7 @@ begin
       begin
         Inc(PredictGroupCount);
       end;
-      if ObsGroup.ExportedGroupName = '' then
+      if (ObsGroup.ExportedGroupName = '') and (Model.PestStatus = psActive) then
       begin
         frmErrorsAndWarnings.AddError(Model, StrObservationGroupUn,
           Format(StrNoObservationGroupAssigned, [AnObs.Name]));

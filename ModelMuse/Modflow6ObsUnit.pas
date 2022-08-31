@@ -19,10 +19,10 @@ type
   TObGwts = set of TObGwt;
 
   TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub, osGWT, osSft,
-    osLkt, osMwt);
+    osLkt, osMwt, osUzt);
 
 const
-  GwtSeries = [osGWT, osSft, osLkt, osMwt];
+  GwtSeries = [osGWT, osSft, osLkt, osMwt, osUzt];
 
 type
   TSpecies = Integer;
@@ -44,6 +44,7 @@ type
     FLktOb: TLktOb;
     FMwtOb: TMwtOb;
     FSpeciesIndex: TSpecies;
+    FUztOb: TUztOb;
     procedure SetCSubOb(const Value: TCSubOb);
     procedure SetLakOb(const Value: TLakOb);
     procedure SetMawOb(const Value: TMawOb);
@@ -67,6 +68,8 @@ type
     procedure SetMwtOb(const Value: TMwtOb);
     function StoreMwtOb: Boolean;
     procedure SetSpeciesIndex(const Value: TSpecies);
+    procedure SetUztOb(const Value: TUztOb);
+    function StoreUztOb: Boolean;
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(Value: Integer); override;
@@ -96,6 +99,7 @@ type
     property SftOb: TSftOb read FSftOb write SetSftOb stored StoreSftOb;
     property LktOb: TLktOb read FLktOb write SetLktOb stored StoreLktOb;
     property MwtOb: TMwtOb read FMwtOb write SetMwtOb stored StoreMwtOb;
+    property UztOb: TUztOb read FUztOb write SetUztOb stored StoreUztOb;
   end;
 
   TCalibObList = TList<TMf6CalibrationObs>;
@@ -116,6 +120,7 @@ type
     function GetSftObs(Species: Integer): TSftObs;
     function GetLktObs(Species: Integer): TLktObs;
     function GetMwtObs(Species: Integer): TMwtObs;
+    function GetUztObs(Species: Integer): TUztObs;
 //    function GetGenus(Series: TObSeries; Species: Integer): TGenus;
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent;
@@ -132,6 +137,7 @@ type
     property SftObs[Species: Integer]: TSftObs read GetSftObs;
     property LktObs[Species: Integer]: TLktObs read GetLktObs;
     property MwtObs[Species: Integer]: TMwtObs read GetMwtObs;
+    property UztObs[Species: Integer]: TUztObs read GetUztObs;
     property Items[Index: Integer]: TMf6CalibrationObs read GetCalibItem
       write SetCalibItem; default;
     function UsesMawConnectionNumber(ConnectionNumber: Integer;
@@ -166,6 +172,7 @@ type
     FLktObs: TLktObs;
     FGenus: TGenus;
     FMwtObs: TMwtObs;
+    FUztObs: TUztObs;
     procedure SetDrawdownObs(const Value: Boolean);
     procedure SetGroundwaterFlowObs(const Value: Boolean);
     procedure SetGwFlowObsChoices(const Value: TGwFlowObs);
@@ -224,6 +231,8 @@ type
     procedure SetGenusColl(const Value: Integer);
     function GetMwtObs: TMwtObs;
     procedure SetMwtObs(const Value: TMwtObs);
+    function GetUztObs: TUztObs;
+    procedure SetUztObs(const Value: TUztObs);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     destructor Destroy; override;
@@ -287,6 +296,11 @@ type
       stored False
       {$ENDIF}
       ;
+    property UztObs: TUztObs read GetUztObs write SetUztObs
+      {$IFNDEF  GWT}
+      stored False
+      {$ENDIF}
+      ;
     // @name is retained for backwards compatibility.
     property Used: Boolean read GetUsed write SetUsed stored False;
     // @name is retained for backwards compatibility.
@@ -336,7 +350,8 @@ const
     'Rch', 'EVT', 'Mvr', 'undefined');
   ObConcName: array[TObGwt] of string = ('Concentration', 'CNC', 'SRC', 'undefined');
 
-  ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak', 'Uzf', 'CSub', 'GWT', 'Sft', 'Lkt', 'Mwt');
+  ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak',
+    'Uzf', 'CSub', 'GWT', 'Sft', 'Lkt', 'Mwt', 'Uzt');
 
 var
   ObGenNames: TStringList;
@@ -477,6 +492,7 @@ begin
     SftObs := SourceObs.SftObs;
     LktObs := SourceObs.LktObs;
     MwtObs := SourceObs.MwtObs;
+    UztObs := SourceObs.UztObs;
 //    SourceObs.CSubObs.CSubObsSet := SourceObs.CSubObs.CSubObsSet;
     CSubObs := SourceObs.CSubObs;
 
@@ -508,6 +524,7 @@ begin
   SftObs := [];
   LktObs := [];
   MwtObs := [];
+  UztObs := [];
   CSubObs.CSubObsSet := [];
   CalibrationObservations.Clear;
   Assert(not Used);
@@ -650,7 +667,8 @@ begin
   result := (General <> []) or GroundwaterFlowObs
     or (MawObs <> []) or (SfrObs <> [])
     or (LakObs <> []) or (UzfObs <> []) or (CSubObs.CSubObsSet <> [])
-    or (GwtObs <> []) or (SftObs <> []) or (LktObs <> [])
+    or (GwtObs <> []) or (SftObs <> []) or (LktObs <> []) or (MwtObs <> [])
+    or (UztObs <> [])
     or (CalibrationObservations.Count > 0);
 end;
 
@@ -662,6 +680,11 @@ end;
 function TModflow6Obs.GetUzfObsDepthFraction: double;
 begin
   result := FStoredUzfObsDepthFraction.Value;
+end;
+
+function TModflow6Obs.GetUztObs: TUztObs;
+begin
+  result := FUztObs;
 end;
 
 function TModflow6Obs.GetWelFlowObs: Boolean;
@@ -1002,6 +1025,15 @@ begin
   FStoredUzfObsDepthFraction.Value := Value;
 end;
 
+procedure TModflow6Obs.SetUztObs(const Value: TUztObs);
+begin
+  if FUztObs <> Value then
+  begin
+    FUztObs := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TModflow6Obs.SetWelFlowObs(const Value: Boolean);
 begin
   if Value <> WelFlowObs then
@@ -1045,6 +1077,7 @@ begin
     SftOb := ObsSource.SftOb;
     LktOb := ObsSource.LktOb;
     MwtOb := ObsSource.MwtOb;
+    UztOb := ObsSource.UztOb;
 
     MawConnectionNumber := ObsSource.MawConnectionNumber;
   end;
@@ -1150,6 +1183,19 @@ begin
           + Ord(High(TLktOb))
           + Ord(MwtOb) + 9;
       end;
+    osUzt:
+      begin
+        Result := Ord(High(TObGeneral))
+          + Ord(High(TMawOb))
+          + Ord(High(TSfrOb))
+          + Ord(High(TLakOb))
+          + Ord(High(TUzfOb))
+          + Ord(High(TObGwt))
+          + Ord(High(TSftOb))
+          + Ord(High(TLktOb))
+          + Ord(High(TMwtOb))
+          + Ord(UztOb) + 10;
+      end;
     else
       Assert(False);
   end;
@@ -1198,6 +1244,10 @@ begin
     osMwt:
       begin
         result := MwtObToString(MwtOb);
+      end;
+    osUzt:
+      begin
+        result := UztObToString(UztOb);
       end;
     else
       begin
@@ -1370,6 +1420,14 @@ begin
   end;
   Value := Value - Ord(High(TMwtOb)) - 1;
 
+  if Value <= Ord(High(TUztOb)) then
+  begin
+    ObSeries := osUzt;
+    UztOb := TUztOb(Value);
+    Exit;
+  end;
+  Value := Value - Ord(High(TMwtOb)) - 1;
+
   Assert(False);
 end;
 
@@ -1385,6 +1443,7 @@ var
   ObSft: TSftOb;
   ObLkt: TLktOb;
   ObMwt: TMwtOb;
+  ObUzt: TUztOb;
 begin
   case ObSeries of
     osGeneral:
@@ -1467,6 +1526,14 @@ begin
           Exit;
         end;
       end;
+    osUzt:
+      begin
+        if TryGetUztOb(Value, ObUzt) then
+        begin
+          UztOb := ObUzt;
+          Exit;
+        end;
+      end;
     else
       begin
         Assert(False);
@@ -1523,6 +1590,11 @@ begin
     MwtOb := ObMwt;
     ObSeries := osMwt;
   end
+  else if TryGetUztOb(Value, ObUzt) then
+  begin
+    UztOb := ObUzt;
+    ObSeries := osUzt;
+  end
   else
   begin
     Assert(False);
@@ -1561,6 +1633,15 @@ begin
   if FUzfOb <> Value then
   begin
     FUzfOb := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TMf6CalibrationObs.SetUztOb(const Value: TUztOb);
+begin
+  if FUztOb <> Value then
+  begin
+    FUztOb := Value;
     InvalidateModel;
   end;
 end;
@@ -1617,6 +1698,11 @@ end;
 function TMf6CalibrationObs.StoreUzfOb: Boolean;
 begin
   result := ObSeries = osUzf;
+end;
+
+function TMf6CalibrationObs.StoreUztOb: Boolean;
+begin
+  result := ObSeries = osUzt;
 end;
 
 { TMf6CalibrationObservations }
@@ -1803,6 +1889,22 @@ begin
     if Item.ObSeries = osUzf then
     begin
       Include(result, Item.UzfOb);
+    end;
+  end;
+end;
+
+function TMf6CalibrationObservations.GetUztObs(Species: Integer): TUztObs;
+var
+  Index: Integer;
+  Item: TMf6CalibrationObs;
+begin
+  result := [];
+  for Index := 0 to Count - 1 do
+  begin
+    Item := Items[Index];
+    if Item.ObSeries = osUzt then
+    begin
+      Include(result, Item.UztOb);
     end;
   end;
 end;

@@ -56,6 +56,9 @@ type
     chklstMwt: TCheckListBox;
     lblMaw: TLabel;
     lblMwt: TLabel;
+    chklstUZT: TCheckListBox;
+    lblUZF: TLabel;
+    lblUZT: TLabel;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -205,6 +208,7 @@ var
   ChemIndex: Integer;
   Checked: Boolean;
   MwtOb: TMwtOb;
+  UztOb: TUztOb;
 begin
   FActiveObs := False;
   FInitializing := True;
@@ -313,6 +317,12 @@ begin
           end;
           rdeDepthFraction.RealValue := Mf6Obs.UzfObsDepthFraction;
 
+          for UztOb := Low(TUztOb) to High(TUztOb) do
+          begin
+            chklstUZT.Checked[Ord(UztOb)] :=
+              UztOb in Mf6Obs.UzTObs;
+          end;
+
           for CSubOb := Low(TCSubOb) to High(TCSubOb) do
           begin
             chklstCSUB.Checked[Ord(CSubOb)] :=
@@ -353,11 +363,6 @@ begin
           begin
             cbConcentration.State := cbGrayed;
           end;
-
-//          if comboChemSpecies.ItemIndex <> Mf6Obs.GwtSpecies then
-//          begin
-//            comboChemSpecies.ItemIndex := -1;
-//          end;
 
           for ChemIndex := 0 to chklstChemSpecies.Items.Count - 1 do
           begin
@@ -438,6 +443,15 @@ begin
               TCheckBoxState(UzfOb in Mf6Obs.UzfObs) then
             begin
               chklstUZF.State[Ord(UzfOb)] := cbGrayed;
+            end;
+          end;
+
+          for UztOb := Low(TUztOb) to High(TUztOb) do
+          begin
+            if chklstUZT.State[Ord(UztOb)] <>
+              TCheckBoxState(UztOb in Mf6Obs.UztObs) then
+            begin
+              chklstUZT.State[Ord(UztOb)] := cbGrayed;
             end;
           end;
 
@@ -676,6 +690,8 @@ var
   SpeciesIndex: Integer;
   NewMwtObs: TMwtObs;
   MwtOb: TMwtOb;
+  NewUztObs: TUztObs;
+  UztOb: TUztOb;
 begin
   SetLength(DelayArray, chklstDelayBeds.Items.Count);
   for Index := 0 to List.Count - 1 do
@@ -868,6 +884,23 @@ begin
         end;
       end;
       Mf6Obs.UzfObs := NewUzfObs;
+
+      NewUztObs := Mf6Obs.UztObs;
+      for UztOb := Low(TUztOb) to High(TUztOb) do
+      begin
+        if chklstUzt.State[Ord(UztOb)] <> cbGrayed then
+        begin
+          if chklstUzt.Checked[Ord(UztOb)] then
+          begin
+            Include(NewUztObs, UztOb);
+          end
+          else
+          begin
+            Exclude(NewUztObs, UztOb);
+          end;
+        end;
+      end;
+      Mf6Obs.UztObs := NewUztObs;
 
       NewCSubObs := Mf6Obs.CSubObs.CSubObsSet;
       for CSubOb := Low(TCSubOb) to High(TCSubOb) do
@@ -1083,6 +1116,7 @@ begin
         or (Mf6Obs.SftObs <> [])
         or (Mf6Obs.LktObs <> [])
         or (Mf6Obs.MwtObs <> [])
+        or (Mf6Obs.UztObs <> [])
         ) then
       begin
         Genus := [0];

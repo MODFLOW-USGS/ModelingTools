@@ -413,6 +413,7 @@ type
     procedure btnMakeAllRegulClick(Sender: TObject);
     procedure btnWithinLayerPriorClick(Sender: TObject);
     procedure btnBetweenLayerPriorClick(Sender: TObject);
+    procedure rdePilotPointSpacingChange(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -1041,6 +1042,18 @@ begin
   else
   begin
     rdePhiReductionCriterion.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.rdePilotPointSpacingChange(Sender: TObject);
+var
+  AValue: Double;
+begin
+  inherited;
+  if TryStrToFloat(rdePilotPointSpacing.Text, AValue)
+    and (comboArrayPattern.ItemIndex = 0) then
+  begin
+    comboArrayPattern.ItemIndex := 1;
   end;
 end;
 
