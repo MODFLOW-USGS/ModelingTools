@@ -264,8 +264,10 @@ type
     FEvapConcList: TModflowTimeLists;
     FRunoffConcList: TModflowTimeLists;
     FInflowConcList: TModflowTimeLists;
+    procedure AddGwtTimeLists(SpeciesIndex: Integer);
   protected
     procedure CreateTimeLists; override;
+    procedure UpdateGwtTimeLists; override;
   public
     Destructor Destroy; override;
   end;
@@ -5960,7 +5962,6 @@ var
   LocalModel: TCustomModel;
   PhastModel: TPhastModel;
   SpeciesIndex: Integer;
-  ConcTimeList: TModflowTimeList;
 begin
   FInflow := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FInflow.NonParamDescription := StrSFR6Inflow;
@@ -6034,71 +6035,7 @@ begin
   begin
     for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
     begin
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Status';
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FGwtStatusList.Add(ConcTimeList);
-
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Specified Concentration';
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FSpecifiedConcList.Add(ConcTimeList);
-
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Rainfall Concentration';
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FRainfallConcList.Add(ConcTimeList);
-
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Evaporation Concentration';
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FEvapConcList.Add(ConcTimeList);
-
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Runoff Concentration';
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FRunoffConcList.Add(ConcTimeList);
-
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Inflow Concentration';
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FInflowConcList.Add(ConcTimeList);
+      AddGwtTimeLists(SpeciesIndex);
     end;
   end;
 end;
@@ -6122,6 +6059,89 @@ begin
   FRainfall.Free;
   FInflow.Free;
   inherited;
+end;
+
+procedure TSfrMf6TimeListLink.UpdateGwtTimeLists;
+var
+  LocalModel: TCustomModel;
+  SpeciesIndex: Integer;
+begin
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := FSpecifiedConcList.Count to
+      LocalModel.MobileComponents.Count - 1 do
+    begin
+      AddGwtTimeLists(SpeciesIndex);
+    end;
+  end;
+end;
+
+procedure TSfrMf6TimeListLink.AddGwtTimeLists(SpeciesIndex: Integer);
+var
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
+  PhastModel: TPhastModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Status';
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    // Specify ConcTimeList.OnInvalidate event handler here.
+  end;
+  AddTimeList(ConcTimeList);
+  FGwtStatusList.Add(ConcTimeList);
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Specified Concentration';
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+  end;
+  AddTimeList(ConcTimeList);
+  FSpecifiedConcList.Add(ConcTimeList);
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Rainfall Concentration';
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    // Specify ConcTimeList.OnInvalidate event handler here.
+  end;
+  AddTimeList(ConcTimeList);
+  FRainfallConcList.Add(ConcTimeList);
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Evaporation Concentration';
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+  end;
+  AddTimeList(ConcTimeList);
+  FEvapConcList.Add(ConcTimeList);
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Runoff Concentration';
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    // Specify ConcTimeList.OnInvalidate event handler here.
+  end;
+  AddTimeList(ConcTimeList);
+  FRunoffConcList.Add(ConcTimeList);
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' SFT Inflow Concentration';
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    // Specify ConcTimeList.OnInvalidate event handler here.
+  end;
+  AddTimeList(ConcTimeList);
+  FInflowConcList.Add(ConcTimeList);
 end;
 
 { TSftGwtConcCollection }

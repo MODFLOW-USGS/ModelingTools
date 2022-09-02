@@ -1130,10 +1130,19 @@ var
   ReachNumberComment: string;
   ACellList: TValueCellList;
   CurrentReachNumber: Integer;
-  procedure AssignReachValues;
+  GWT_Start: Integer;
+  SpecConcList: TModflowBoundListOfTimeLists;
+  RainfallConcList: TModflowBoundListOfTimeLists;
+  EvapConcList: TModflowBoundListOfTimeLists;
+  RunoffConcList: TModflowBoundListOfTimeLists;
+  InflowfConcList: TModflowBoundListOfTimeLists;
+
+  SpeciesIndex: Integer;procedure AssignReachValues;
   var
     TimeIndex: Integer;
     DataArray: TModflowBoundaryDisplayDataArray;
+    SpeciesIndex: Integer;
+    GwtCellData: TGwtCellData;
   begin
     Assert(Inflow.Count = 1);
     for TimeIndex := 0 to Inflow.Count - 1 do
@@ -1208,54 +1217,155 @@ var
         CurrentReachNumber,
         Reach.Column, Reach.Row, Reach.Layer);
     end;
+    for SpeciesIndex := 0 to SpecConcList.Count - 1 do
+    begin
+      ADisplayList := SpecConcList[SpeciesIndex];
+      for TimeIndex := 0 to ADisplayList.Count - 1 do
+      begin
+        DataArray := ADisplayList[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        GwtCellData := Reach.Values.SpecifiedConcentrations;
+        DataArray.AddDataValue(GwtCellData.ValueAnnotations[SpeciesIndex],
+          GwtCellData.Values[SpeciesIndex],
+          Reach.Column, Reach.Row, Reach.Layer);
+      end;
+    end;
+    for SpeciesIndex := 0 to RainfallConcList.Count - 1 do
+    begin
+      ADisplayList := RainfallConcList[SpeciesIndex];
+      for TimeIndex := 0 to ADisplayList.Count - 1 do
+      begin
+        DataArray := ADisplayList[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        GwtCellData := Reach.Values.RainfallConcentrations;
+        DataArray.AddDataValue(GwtCellData.ValueAnnotations[SpeciesIndex],
+          GwtCellData.Values[SpeciesIndex],
+          Reach.Column, Reach.Row, Reach.Layer);
+      end;
+    end;
+    for SpeciesIndex := 0 to EvapConcList.Count - 1 do
+    begin
+      ADisplayList := EvapConcList[SpeciesIndex];
+      for TimeIndex := 0 to ADisplayList.Count - 1 do
+      begin
+        DataArray := ADisplayList[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        GwtCellData := Reach.Values.EvapConcentrations;
+        DataArray.AddDataValue(GwtCellData.ValueAnnotations[SpeciesIndex],
+          GwtCellData.Values[SpeciesIndex],
+          Reach.Column, Reach.Row, Reach.Layer);
+      end;
+    end;
+    for SpeciesIndex := 0 to RunoffConcList.Count - 1 do
+    begin
+      ADisplayList := RunoffConcList[SpeciesIndex];
+      for TimeIndex := 0 to ADisplayList.Count - 1 do
+      begin
+        DataArray := ADisplayList[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        GwtCellData := Reach.Values.RunoffConcentrations;
+        DataArray.AddDataValue(GwtCellData.ValueAnnotations[SpeciesIndex],
+          GwtCellData.Values[SpeciesIndex],
+          Reach.Column, Reach.Row, Reach.Layer);
+      end;
+    end;
+    for SpeciesIndex := 0 to InflowfConcList.Count - 1 do
+    begin
+      ADisplayList := InflowfConcList[SpeciesIndex];
+      for TimeIndex := 0 to ADisplayList.Count - 1 do
+      begin
+        DataArray := ADisplayList[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        GwtCellData := Reach.Values.InflowConcentrations;
+        DataArray.AddDataValue(GwtCellData.ValueAnnotations[SpeciesIndex],
+          GwtCellData.Values[SpeciesIndex],
+          Reach.Column, Reach.Row, Reach.Layer);
+      end;
+    end;
   end;
 begin
-  Inflow := TimeLists[SfrMf6InflowPosition];
-  Rainfall := TimeLists[SfrMf6RainfallPosition];
-  Evaporation := TimeLists[SfrMf6EvaporationPosition];
-  Runoff := TimeLists[SfrMf6RunoffPosition];
-  UpstreamFraction := TimeLists[SfrMf6UpstreamFractionPosition];
-  Stage := TimeLists[SfrMf6StagePosition];
-  Roughness := TimeLists[SfrMf6RoughnessPosition];
-  StreamStatus := TimeLists[7];
-  ReachNumber := TimeLists[8];
-
-  // check that all the time lists contain the same number of times
-  // as the first one.
-  for Index := 1 to TimeLists.Count - 1 do
-  begin
-    ADisplayList := TimeLists[Index];
-    Assert(Inflow.Count = ADisplayList.Count);
-  end;
-
-  CurrentReachNumber := 1;
-  for SegmentIndex := 0 to FSegments.Count - 1 do
-  begin
-    Segment := FSegments[SegmentIndex];
-    StreamStatusComment := Format(StrStreamStatusIn, [Segment.FScreenObject.Name]);
-    ReachNumberComment := Format(StrReachNumberIn, [Segment.FScreenObject.Name]);
-
-    Assert(Segment.FReaches.Count = 1);
-    ACellList := Segment.FReaches[0];
-    for ReachIndex := 0 to ACellList.Count -1 do
+  SpecConcList := TModflowBoundListOfTimeLists.Create;
+  RainfallConcList := TModflowBoundListOfTimeLists.Create;
+  EvapConcList := TModflowBoundListOfTimeLists.Create;
+  RunoffConcList := TModflowBoundListOfTimeLists.Create;
+  InflowfConcList := TModflowBoundListOfTimeLists.Create;
+  try
+    Inflow := TimeLists[SfrMf6InflowPosition];
+    Rainfall := TimeLists[SfrMf6RainfallPosition];
+    Evaporation := TimeLists[SfrMf6EvaporationPosition];
+    Runoff := TimeLists[SfrMf6RunoffPosition];
+    UpstreamFraction := TimeLists[SfrMf6UpstreamFractionPosition];
+    Stage := TimeLists[SfrMf6StagePosition];
+    Roughness := TimeLists[SfrMf6RoughnessPosition];
+    StreamStatus := TimeLists[7];
+    ReachNumber := TimeLists[8];
+    GWT_Start:= 9;
+    if Model.GwtUsed and (TimeLists.Count > GWT_Start) then
     begin
-      Reach := ACellList[ReachIndex] as TSfrMf6_Cell;
-      AssignReachValues;
-      Inc(CurrentReachNumber);
-    end;
-  end;
+      SpecConcList.Capacity := Model.MobileComponents.Count;
+      RainfallConcList.Capacity := Model.MobileComponents.Count;
+      EvapConcList.Capacity := Model.MobileComponents.Count;
+      RunoffConcList.Capacity := Model.MobileComponents.Count;
+      InflowfConcList.Capacity := Model.MobileComponents.Count;
 
-  // Mark all the data arrays and time lists as up to date.
-  for Index := 0 to TimeLists.Count - 1 do
-  begin
-    ADisplayList := TimeLists[Index];
-    for TimeIndex := 0 to ADisplayList.Count - 1 do
-    begin
-      DataArray := ADisplayList[TimeIndex]
-        as TModflowBoundaryDisplayDataArray;
-      DataArray.UpToDate := True;
+      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+      begin
+        SpecConcList.Add(TimeLists[GWT_Start]);
+        Inc(GWT_Start);
+        RainfallConcList.Add(TimeLists[GWT_Start]);
+        Inc(GWT_Start);
+        EvapConcList.Add(TimeLists[GWT_Start]);
+        Inc(GWT_Start);
+        RunoffConcList.Add(TimeLists[GWT_Start]);
+        Inc(GWT_Start);
+        InflowfConcList.Add(TimeLists[GWT_Start]);
+        Inc(GWT_Start);
+      end;
     end;
-    ADisplayList.SetUpToDate(True);
+
+    // check that all the time lists contain the same number of times
+    // as the first one.
+    for Index := 1 to TimeLists.Count - 1 do
+    begin
+      ADisplayList := TimeLists[Index];
+      Assert(Inflow.Count = ADisplayList.Count);
+    end;
+
+    CurrentReachNumber := 1;
+    for SegmentIndex := 0 to FSegments.Count - 1 do
+    begin
+      Segment := FSegments[SegmentIndex];
+      StreamStatusComment := Format(StrStreamStatusIn, [Segment.FScreenObject.Name]);
+      ReachNumberComment := Format(StrReachNumberIn, [Segment.FScreenObject.Name]);
+
+      Assert(Segment.FReaches.Count = 1);
+      ACellList := Segment.FReaches[0];
+      for ReachIndex := 0 to ACellList.Count -1 do
+      begin
+        Reach := ACellList[ReachIndex] as TSfrMf6_Cell;
+        AssignReachValues;
+        Inc(CurrentReachNumber);
+      end;
+    end;
+
+    // Mark all the data arrays and time lists as up to date.
+    for Index := 0 to TimeLists.Count - 1 do
+    begin
+      ADisplayList := TimeLists[Index];
+      for TimeIndex := 0 to ADisplayList.Count - 1 do
+      begin
+        DataArray := ADisplayList[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        DataArray.UpToDate := True;
+      end;
+      ADisplayList.SetUpToDate(True);
+    end;
+  finally
+    SpecConcList.Free;
+    RainfallConcList.Free;
+    EvapConcList.Free;
+    RunoffConcList.Free;
+    InflowfConcList.Free;
   end;
 
 end;

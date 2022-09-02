@@ -5151,6 +5151,7 @@ begin
           begin
             Root := Format(Prefix + 'UzfObs%d', [ObsIndex+1]);
           end;
+          Root := Root + '_' + IntToStr(FSpeciesIndex);
           Assert(Length(Root) <= MaxBoundNameLength);
           boundname := Trim(AnObs.FBoundName);
           boundname := Copy(boundname, 1, MaxBoundNameLength);
@@ -5175,7 +5176,7 @@ begin
                 begin
                   CalibObs := CalibObservations[CalibIndex];
                   if (CalibObs.ObSeries = osUzt)
-                    and (AnObsType = CalibObs.UztOb) then
+                    and (AnObsType = CalibObs.UztOb) and (CalibObs.SpeciesIndex = FSpeciesIndex) then
                   begin
                     DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                       [CalibObs.Name, CalibObs.Time - StartTime]));

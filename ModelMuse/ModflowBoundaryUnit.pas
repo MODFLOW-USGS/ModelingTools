@@ -256,6 +256,7 @@ type
   protected
     procedure CreateTimeLists; virtual; abstract;
     procedure UpdateTimeLists; virtual;
+    procedure UpdateGwtTimeLists; virtual;
   public
     property Boundary: TCustomMF_BoundColl read FBoundary;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -3207,6 +3208,11 @@ begin
   TimeLists.Remove(List);
 end;
 
+procedure TTimeListsModelLink.UpdateGwtTimeLists;
+begin
+// do nothing;
+end;
+
 procedure TTimeListsModelLink.UpdateTimeLists;
 begin
   // do nothing
@@ -3236,6 +3242,7 @@ begin
   if (FCachedResult <> nil) and (FCachedResult.Model = AModel) then
   begin
     result := FCachedResult;
+    result.UpdateGwtTimeLists;
     Exit;
   end;
   for Index := 0 to FList.Count - 1 do
@@ -3244,6 +3251,7 @@ begin
     if ALink.Model = AModel then
     begin
       result := ALink;
+      result.UpdateGwtTimeLists;
       FCachedResult := result;
       Exit;
     end;

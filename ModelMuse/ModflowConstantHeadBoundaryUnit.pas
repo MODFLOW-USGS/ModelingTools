@@ -73,6 +73,9 @@ type
     FStartData: TModflowTimeList;
     FEndData: TModflowTimeList;
     FConcList: TModflowTimeLists;
+    procedure AddGwtTimeLists(SpeciesIndex: Integer);
+  protected
+    procedure UpdateGwtTimeLists; override;
   protected
     procedure CreateTimeLists; override;
   public
@@ -2008,7 +2011,6 @@ var
   LocalModel: TCustomModel;
   PhastModel: TPhastModel;
   SpeciesIndex: Integer;
-  ConcTimeList: TModflowTimeList;
 begin
   FConcList := TModflowTimeLists.Create;
 
@@ -2032,16 +2034,7 @@ begin
   begin
     for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
     begin
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfChdConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FConcList.Add(ConcTimeList);
+      AddGwtTimeLists(SpeciesIndex);
     end;
   end;
 end;
@@ -2052,6 +2045,41 @@ begin
   FStartData.Free;
   FEndData.Free;
   inherited;
+end;
+
+procedure TChdTimeListLink.UpdateGwtTimeLists;
+var
+  LocalModel: TCustomModel;
+  SpeciesIndex: Integer;
+begin
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := FConcList.Count to
+      LocalModel.MobileComponents.Count - 1 do
+    begin
+      AddGwtTimeLists(SpeciesIndex);
+    end;
+  end;
+end;
+
+procedure TChdTimeListLink.AddGwtTimeLists(SpeciesIndex: Integer);
+var
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
+  PhastModel: TPhastModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateMfChdConc;
+  end;
+  AddTimeList(ConcTimeList);
+  FConcList.Add(ConcTimeList);
 end;
 
 { TChdGwtConcCollection }

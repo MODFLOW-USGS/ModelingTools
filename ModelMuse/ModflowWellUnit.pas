@@ -104,8 +104,10 @@ type
     // Wells over a series of time intervals.
     FPumpingRateData: TModflowTimeList;
     FConcList: TModflowTimeLists;
+    procedure AddGwtTimeLists(SpeciesIndex: Integer);
   protected
     procedure CreateTimeLists; override;
+    procedure UpdateGwtTimeLists; override;
   public
     Destructor Destroy; override;
   end;
@@ -1846,10 +1848,8 @@ end;
 
 procedure TMfWelTimeListLink.CreateTimeLists;
 var
-  LocalModel: TCustomModel;
   PhastModel: TPhastModel;
   SpeciesIndex: Integer;
-  ConcTimeList: TModflowTimeList;
 begin
   inherited;
   FConcList := TModflowTimeLists.Create;
@@ -1868,16 +1868,7 @@ begin
   begin
     for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
     begin
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FConcList.Add(ConcTimeList);
+      AddGwtTimeLists(SpeciesIndex);
     end;
   end;
 
@@ -1888,6 +1879,41 @@ begin
   FConcList.Free;
   FPumpingRateData.Free;
   inherited;
+end;
+
+procedure TMfWelTimeListLink.UpdateGwtTimeLists;
+var
+  LocalModel: TCustomModel;
+  SpeciesIndex: Integer;
+begin
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := FConcList.Count to
+      LocalModel.MobileComponents.Count - 1 do
+    begin
+      AddGwtTimeLists(SpeciesIndex);
+    end;
+  end;
+end;
+
+procedure TMfWelTimeListLink.AddGwtTimeLists(SpeciesIndex: Integer);
+var
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
+  PhastModel: TPhastModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+  end;
+  AddTimeList(ConcTimeList);
+  FConcList.Add(ConcTimeList);
 end;
 
 { TWelGwtConcCollection }

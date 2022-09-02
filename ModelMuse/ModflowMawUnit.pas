@@ -258,6 +258,8 @@ type
   end;
 
   TMawTimeListLink = class(TTimeListsModelLink)
+  private
+    procedure AddGwtTimeLists(SpeciesIndex: Integer);
   protected
     FFlowingWellElevation: TModflowTimeList;
     FFlowingWellConductance: TModflowTimeList;
@@ -274,6 +276,7 @@ type
     FSpecifiedConcList: TModflowTimeLists;
     FInjectionConcList: TModflowTimeLists;
     procedure CreateTimeLists; override;
+    procedure UpdateGwtTimeLists; override;
   public
     Destructor Destroy; override;
   end;
@@ -4761,8 +4764,6 @@ procedure TMawTimeListLink.CreateTimeLists;
 var
   PhastModel: TPhastModel;
   SpeciesIndex: Integer;
-  ConcTimeList: TModflowTimeList;
-  LocalModel: TCustomModel;
 begin
   inherited;
   FFlowingWellElevation := TModflowTimeList.Create(Model, Boundary.ScreenObject);
@@ -4864,38 +4865,7 @@ begin
   begin
     for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
     begin
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' MAW Status';
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FGwtStatusList.Add(ConcTimeList);
-
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' MAW Specified Concentration';
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FSpecifiedConcList.Add(ConcTimeList);
-
-      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' MAW Injection Concentration';
-      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-      if Model <> nil then
-      begin
-        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-      end;
-      AddTimeList(ConcTimeList);
-      FInjectionConcList.Add(ConcTimeList);
+      AddGwtTimeLists(SpeciesIndex);
     end;
   end;
 
@@ -4919,6 +4889,61 @@ begin
   FFlowingWellReductionLength.Free;
 
   inherited;
+end;
+
+procedure TMawTimeListLink.UpdateGwtTimeLists;
+var
+  LocalModel: TCustomModel;
+  SpeciesIndex: Integer;
+begin
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := FSpecifiedConcList.Count to
+      LocalModel.MobileComponents.Count - 1 do
+    begin
+      AddGwtTimeLists(SpeciesIndex);
+    end;
+  end;
+end;
+
+procedure TMawTimeListLink.AddGwtTimeLists(SpeciesIndex: Integer);
+var
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
+  PhastModel: TPhastModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' MAW Status';
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    // Specify ConcTimeList.OnInvalidate event handler here.
+  end;
+  AddTimeList(ConcTimeList);
+  FGwtStatusList.Add(ConcTimeList);
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' MAW Specified Concentration';
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    // Specify ConcTimeList.OnInvalidate event handler here.
+  end;
+  AddTimeList(ConcTimeList);
+  FSpecifiedConcList.Add(ConcTimeList);
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' MAW Injection Concentration';
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    // Specify ConcTimeList.OnInvalidate event handler here.
+  end;
+  AddTimeList(ConcTimeList);
+  FInjectionConcList.Add(ConcTimeList);
 end;
 
 { TMawWellCollection }

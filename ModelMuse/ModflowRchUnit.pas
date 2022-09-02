@@ -163,6 +163,7 @@ type
   protected
     procedure CreateTimeLists; override;
     property RechargeRateData: TModflowTimeList read FRechargeRateData;
+    procedure UpdateGwtTimeLists; override;
   public
     Destructor Destroy; override;
     procedure CreateGwtTimeLists;
@@ -2670,6 +2671,11 @@ begin
   inherited;
 end;
 
+
+procedure TRchTimeListLink.UpdateGwtTimeLists;
+begin
+  CreateGwtTimeLists;
+end;
 
 { TRchGwtConcCollection }
 

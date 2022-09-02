@@ -1554,6 +1554,7 @@ begin
 //  WriteString(' ' + ASpecies.Name);
 //  NewLine;
 
+  WriteBoundNamesOption;
   //[BOUNDNAMES]
 
   PrintListInputOption;
