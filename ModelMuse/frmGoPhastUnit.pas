@@ -849,6 +849,7 @@ type
     procedure SetToolbarPositions;
     procedure CheckSvdaActivated;
     function PestVersionOK: Boolean;
+    function DataForMt3dUsgsSaved: Boolean;
   published
     // @name is the TAction for @link(miAddVerticalGridLine)
     // and @link(tbAddVerticalBoundary).
@@ -2425,6 +2426,9 @@ resourcestring
   'ies dialog box. ' + sLineBreak +'Do you want to try running SUTRA anyway?';
   StrSorryPESTDoesnt = 'Sorry. PEST doesn''t handle file names with ' +
   'period characters in the file name root.';
+  StrMT3DUSGSRequiresT = 'MT3D-USGS requires that the %s in MODFLOW be sav' +
+  'ed at every time step. Fix this in the "Model|MODFLOW Output Control" dia' +
+  'log box.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -4611,6 +4615,33 @@ begin
 
   acPEST.Enabled := ModelSelection in (ModflowSelection + SutraSelection);
 
+end;
+
+function TfrmGoPhast.DataForMt3dUsgsSaved: Boolean;
+var
+  Mt3dBasic: TMt3dBasic;
+  ModflowOutputControl: TModflowOutputControl;
+  HeadOC: THeadDrawdownOutputControl;
+begin
+  result := True;
+  Mt3dBasic := PhastModel.ModflowPackages.Mt3dBasic;
+  if Mt3dBasic.IsSelected and (Mt3dBasic.Mt3dVersion = mvUSGS) then
+  begin
+    ModflowOutputControl := PhastModel.ModflowOutputControl;
+    HeadOC := ModflowOutputControl.HeadOC;
+    if (HeadOC.Frequency <> 1) or (HeadOC.FrequencyChoice <> fcTimeSteps) then
+    begin
+      Beep;
+      MessageDlg(Format(StrMT3DUSGSRequiresT, ['head']), mtError, [mbOK], 0);
+      result := False;
+    end;
+    if (ModflowOutputControl.BudgetFrequency <> 1) or (ModflowOutputControl.BudgetFrequencyChoice <> fcTimeSteps) then
+    begin
+      Beep;
+      MessageDlg(Format(StrMT3DUSGSRequiresT, ['budget']), mtError, [mbOK], 0);
+      result := False;
+    end;
+  end;
 end;
 
 procedure TfrmGoPhast.ModelSelectionChange(Sender: TObject);
@@ -13124,6 +13155,12 @@ begin
         Exit;
       end;
     end;
+    if not DataForMt3dUsgsSaved then
+    begin
+      Exit;
+    end;
+
+//    ModflowOutputControl
 
     if (ModelSelection = msModflow2015) then
     begin
@@ -14616,6 +14653,11 @@ var
   Mt3dExtension: string;
 begin
   inherited;
+  if not DataForMt3dUsgsSaved then
+  begin
+    Exit;
+  end;
+
   if DisvUsed then
   begin
     Beep;

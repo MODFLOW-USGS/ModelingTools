@@ -18,7 +18,15 @@ implementation
 
 uses
   frmGoPhastUnit, PestPropertiesUnit, System.SysUtils, PhastModelUnit,
-  ModelMuseUtilities;
+  ModelMuseUtilities, System.IOUtils, frmErrorsAndWarningsUnit;
+
+resourcestring
+  StrRequiredPESTUtilit = 'Required PEST Utility Program missing';
+  Str0sIsMissingFrom = '%0:s is missing from %1:s.';
+  StrRemAfterThePrevio = 'rem After the previous line executes, sppcov_sva s' +
+  'hould show that a covariance file was written.';
+  StrRemCreateCovarianc = 'rem Create Covariance file.';
+  StrRemCreateVariogram = 'rem Create Variogram file.';
 
 { TPilotPointCovarinceFileWriter }
 
@@ -35,6 +43,8 @@ var
   PestDirectory: string;
   BatchFileName: string;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(frmGoPhast.PhastModel,
+    StrRequiredPESTUtilit);
   PestProp := frmGoPhast.PhastModel.PestProperties;
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   Lines := TStringList.Create;
@@ -43,9 +53,11 @@ begin
     Lines.Add(ExtractFileName(PilotPointFileObject.FileName));
     Lines.Add(IntToStr(PestProp.MaxPilotPointsInRange));
     Lines.Add('1');
-    VariogramFileName := ChangeFileExt(PilotPointFileObject.FileName, '.Variogram.txt');
+    VariogramFileName := ChangeFileExt(PilotPointFileObject.FileName,
+      '.Variogram.txt');
     Lines.Add(ExtractFileName(VariogramFileName));
-    MkppstatInputFileName := ChangeFileExt(PilotPointFileObject.FileName, '.Mkppstat_Input.txt');
+    MkppstatInputFileName := ChangeFileExt(PilotPointFileObject.FileName,
+      '.Mkppstat_Input.txt');
     Lines.WriteBOM := False;
     Lines.SaveToFile(MkppstatInputFileName);
 
@@ -58,27 +70,44 @@ begin
     CovarianceFileName := ChangeFileExt(PilotPointFileObject.FileName, StrCov);
     Lines.Add(ExtractFileName(CovarianceFileName));
     Lines.Add('');
-    Ppcov_svaFileName := ChangeFileExt(PilotPointFileObject.FileName, '.Ppcov_SVA_Input.txt');
+    Ppcov_svaFileName := ChangeFileExt(PilotPointFileObject.FileName,
+      '.Ppcov_SVA_Input.txt');
     Lines.WriteBOM := False;
     Lines.SaveToFile(Ppcov_svaFileName);
+
+    if not TFile.Exists(PestDirectory + 'mkppstat.exe') then
+    begin
+      frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
+        StrRequiredPESTUtilit, Format(Str0sIsMissingFrom,
+        ['mkppstat.exe', PestDirectory]), nil);
+    end;
+    if not TFile.Exists(PestDirectory + 'ppcov_sva.exe') then
+    begin
+      frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
+        StrRequiredPESTUtilit, Format(Str0sIsMissingFrom,
+        ['ppcov_sva.exe', PestDirectory]), nil);
+    end;
 
     // Batchfile
     Lines.Clear;
     PestDirectory := IncludeTrailingPathDelimiter(Locations.PestDirectory);
-    Lines.Add('rem Create Variogram file.');
+    Lines.Add(StrRemCreateVariogram);
     Lines.Add('');
-    Lines.Add(Format('%0:smkppstat.exe <%1:s', [PestDirectory, ExtractFileName(MkppstatInputFileName)]));
+    Lines.Add(Format('%0:smkppstat.exe <%1:s', [PestDirectory,
+      ExtractFileName(MkppstatInputFileName)]));
     Lines.Add('');
-    Lines.Add('rem Create Covariance file.');
+    Lines.Add(StrRemCreateCovarianc);
     Lines.Add('');
-    Lines.Add(Format('%0:sppcov_sva.exe <%1:s', [PestDirectory, ExtractFileName(Ppcov_svaFileName)]));
+    Lines.Add(Format('%0:sppcov_sva.exe <%1:s', [PestDirectory,
+      ExtractFileName(Ppcov_svaFileName)]));
     Lines.Add('');
-    Lines.Add('rem After the previous line executes, sppcov_sva should show that a covariance file was written.');
+    Lines.Add(StrRemAfterThePrevio);
 //    if not frmGoPhast.ExportingFromCommandLine then
 //    begin
 //      Lines.Add('pause');
 //    end;
-    BatchFileName := ChangeFileExt(PilotPointFileObject.FileName, '.CreateCov.Bat');
+    BatchFileName := ChangeFileExt(PilotPointFileObject.FileName,
+      '.CreateCov.Bat');
     Lines.WriteBOM := False;
     Lines.SaveToFile(BatchFileName);
   finally
