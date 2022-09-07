@@ -93,12 +93,12 @@ begin
     PestDirectory := IncludeTrailingPathDelimiter(Locations.PestDirectory);
     Lines.Add(StrRemCreateVariogram);
     Lines.Add('');
-    Lines.Add(Format('%0:smkppstat.exe <%1:s', [PestDirectory,
+    Lines.Add(Format('"%0:smkppstat.exe" <%1:s', [PestDirectory,
       ExtractFileName(MkppstatInputFileName)]));
     Lines.Add('');
     Lines.Add(StrRemCreateCovarianc);
     Lines.Add('');
-    Lines.Add(Format('%0:sppcov_sva.exe <%1:s', [PestDirectory,
+    Lines.Add(Format('"%0:sppcov_sva.exe" <%1:s', [PestDirectory,
       ExtractFileName(Ppcov_svaFileName)]));
     Lines.Add('');
     Lines.Add(StrRemAfterThePrevio);

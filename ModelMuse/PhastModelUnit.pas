@@ -10704,17 +10704,19 @@ const
 //                first simulated time is now used by Mf6ObsExtractor and
 //.               SutraObsExtractor.
 //               Bug fix: Fixed bug in editing SFT head water concentrations.
-
-//               Enhancement: Instead of activating or deactivating PEST, there
-//                is now a third option to allow users can now define
+//    '5.0.0.26' Enhancement: Instead of activating or deactivating PEST, there
+//                is now a third option to allow users to define
 //                calibration observations but without activating PEST.
+//               Bug fix: The batch files for creating covariance files for PEST
+//                now enclose the commands in quotation marks so that the
+//                programs will run even if the paths contain spaces.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.25';
+  IIModelVersion = '5.0.0.26';
 
 function IModelVersion: string;
 begin
