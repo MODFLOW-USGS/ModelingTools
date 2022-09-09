@@ -75,6 +75,7 @@ begin
     Lines.WriteBOM := False;
     Lines.SaveToFile(Ppcov_svaFileName);
 
+    PestDirectory := IncludeTrailingPathDelimiter(Locations.PestDirectory);
     if not TFile.Exists(PestDirectory + 'mkppstat.exe') then
     begin
       frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
@@ -90,7 +91,6 @@ begin
 
     // Batchfile
     Lines.Clear;
-    PestDirectory := IncludeTrailingPathDelimiter(Locations.PestDirectory);
     Lines.Add(StrRemCreateVariogram);
     Lines.Add('');
     Lines.Add(Format('"%0:smkppstat.exe" <%1:s', [PestDirectory,

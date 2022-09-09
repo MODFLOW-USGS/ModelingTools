@@ -10711,6 +10711,9 @@ const
 //                now enclose the commands in quotation marks so that the
 //                programs will run even if the paths contain spaces.
 
+//               Bug fix: fixed bug that could cause ModelMuse to encounter an
+//                and error when drawing contours.
+
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 

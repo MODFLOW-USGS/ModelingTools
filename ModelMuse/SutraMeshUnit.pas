@@ -3946,7 +3946,8 @@ var
   Contourer: TMultipleContourCreator;
 //  LocalModel: TCustomModel;
 begin
-  if (Nodes.Count > 0) and (TopContourDataSet <> nil) then
+  if (Nodes.Count > 0) and (TopContourDataSet <> nil)
+    and (TopContourDataSet.Orientation in [dsoTop, dso3D]) then
   begin
       Contourer := TMultipleContourCreator.Create;
       try
@@ -7664,7 +7665,8 @@ var
   Contourer: TMultipleContourCreator;
 //  LocalModel: TCustomModel;
 begin
-  if (Nodes.Count > 0) and (ThreeDContourDataSet <> nil) then
+  if (Nodes.Count > 0) and (ThreeDContourDataSet <> nil)
+    and (ThreeDContourDataSet.Orientation in [dsoFront, dso3d]) then
   begin
       Contourer := TMultipleContourCreator.Create;
       try

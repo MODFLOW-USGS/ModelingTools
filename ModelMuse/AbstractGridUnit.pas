@@ -8171,7 +8171,8 @@ begin
   end;
   if (ColumnCount >= 0) and (RowCount > 0) and (LayerCount > 0) then
   begin
-    if SideContourDataSet <> nil then
+    if (SideContourDataSet <> nil)
+      and (SideContourDataSet.Orientation in [dsoSide, dso3D]) then
     begin
       Contourer := TMultipleContourCreator.Create;
       try
@@ -8666,7 +8667,8 @@ begin
   end;
   if (ColumnCount >= 0) and (RowCount > 0) and (LayerCount > 0) then
   begin
-    if TopContourDataSet <> nil then
+    if (TopContourDataSet <> nil)
+      and (TopContourDataSet.Orientation in [dsoTop, dso3D]) then
     begin
       Contourer := TMultipleContourCreator.Create;
       try
@@ -8971,7 +8973,8 @@ begin
   end;
   if (ColumnCount >= 0) and (RowCount > 0) and (LayerCount > 0) then
   begin
-    if FrontContourDataSet <> nil then
+    if (FrontContourDataSet <> nil)
+      and (FrontContourDataSet.Orientation in [dsoFront, dso3d]) then
     begin
       Contourer := TMultipleContourCreator.Create;
       try

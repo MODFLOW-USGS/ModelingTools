@@ -2744,7 +2744,8 @@ var
   TopContourer: TMultipleContourCreator;
   LocalModel: TCustomModel;
 begin
-  if (NodeCount > 0) and (TopContourDataSet <> nil) then
+  if (NodeCount > 0) and (TopContourDataSet <> nil)
+    and (TopContourDataSet.Orientation in [dsoTop, dso3D]) then
   begin
       TopContourer := TMultipleContourCreator.Create;
       try
@@ -6535,7 +6536,9 @@ var
   LocalModel: TCustomModel;
 begin
 
-  if (LayerCount > 1) and (Mesh2DI.NodeCount > 0) and (ThreeDContourDataSet <> nil) then
+  if (LayerCount > 1) and (Mesh2DI.NodeCount > 0)
+    and (ThreeDContourDataSet <> nil)
+    and (ThreeDContourDataSet.Orientation in [dsoFront, dso3D]) then
   begin
       Contourer := TMultipleContourCreator.Create;
       try
