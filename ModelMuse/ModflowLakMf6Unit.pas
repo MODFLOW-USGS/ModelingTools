@@ -511,10 +511,6 @@ type
 
     procedure HandleChangedValue(Observer: TObserver); //override;
     function GetUsedObserver: TObserver; //override;
-//    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
-//    procedure CreateFormulaObjects; //override;
-//    function BoundaryObserverPrefix: string; override;
-//    procedure CreateObservers; //override;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
       const Value: string); override;
@@ -2819,6 +2815,10 @@ var
   LocalModel: TCustomModel;
 begin
   LocalModel := FStartingConcentrations.Model as TCustomModel;
+  if LocalModel = nil then
+  begin
+    LocalModel := frmGoPhast.PhastModel;
+  end;
   if (LocalModel <> nil)
     and (FStartingConcentrations.Count < LocalModel.MobileComponents.Count) then
   begin

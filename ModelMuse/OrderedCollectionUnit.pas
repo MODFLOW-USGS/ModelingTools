@@ -1954,7 +1954,19 @@ begin
 end;
 
 function TGwtPestMethodCollection.GetItems(const Index: Integer): TPestMethodItem;
+var
+  LocalModel: TCustomModel;
 begin
+  LocalModel := Model as TCustomModel;
+  if LocalModel = nil then
+  begin
+    LocalModel := frmGoPhast.PhastModel;
+  end;
+  if (LocalModel <> nil)
+    and (Count < LocalModel.MobileComponents.Count) then
+  begin
+    Count := LocalModel.MobileComponents.Count;
+  end;
   result := inherited Items[Index] as TPestMethodItem;
 end;
 

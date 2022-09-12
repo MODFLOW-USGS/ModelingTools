@@ -10710,16 +10710,15 @@ const
 //               Bug fix: The batch files for creating covariance files for PEST
 //                now enclose the commands in quotation marks so that the
 //                programs will run even if the paths contain spaces.
-
-//               Bug fix: fixed bug that could cause ModelMuse to encounter an
-//                and error when drawing contours.
+//    '5.0.0.27' Bug fix: fixed bug that could cause ModelMuse to encounter an
+//                an error when drawing contours.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.26';
+  IIModelVersion = '5.0.0.27';
 
 function IModelVersion: string;
 begin

@@ -4603,6 +4603,10 @@ var
   LocalModel: TCustomModel;
 begin
   LocalModel := FStartingConcentrations.Model as TCustomModel;
+  if LocalModel = nil then
+  begin
+    LocalModel := frmGoPhast.PhastModel;
+  end;
   if (LocalModel <> nil)
     and (FStartingConcentrations.Count < LocalModel.MobileComponents.Count) then
   begin
