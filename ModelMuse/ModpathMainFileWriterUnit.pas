@@ -418,7 +418,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidDefaultIFace);
   FMpathVersion := FOptions.MpathVersion;
 
-  if FMpathVersion = mp7 then
+  if (FMpathVersion = mp7) and (Model.ModelSelection = msModflow2015) then
   begin
     ModflowGrid := Model.ModflowGrid;
     UniformGrid := ModflowGrid.UniformColumns(MaxWidth, MinWidth);

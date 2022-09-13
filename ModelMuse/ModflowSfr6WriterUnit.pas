@@ -1136,8 +1136,8 @@ var
   EvapConcList: TModflowBoundListOfTimeLists;
   RunoffConcList: TModflowBoundListOfTimeLists;
   InflowfConcList: TModflowBoundListOfTimeLists;
-
-  SpeciesIndex: Integer;procedure AssignReachValues;
+  SpeciesIndex: Integer;
+  procedure AssignReachValues;
   var
     TimeIndex: Integer;
     DataArray: TModflowBoundaryDisplayDataArray;

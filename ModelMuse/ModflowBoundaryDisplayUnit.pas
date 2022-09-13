@@ -49,6 +49,7 @@ type
   end;
 
   TMfBoundDispObjectList = TObjectList<TModflowBoundaryDisplayTimeList>;
+  TMfBoundDispList = TList<TModflowBoundaryDisplayTimeList>;
 
   THobDisplayTimeList = class(TModflowBoundaryDisplayTimeList)
   protected

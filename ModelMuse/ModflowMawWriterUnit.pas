@@ -820,6 +820,7 @@ var
 //  Well: TMawCell;
 //  Boundary: TMawBoundary;
   WellList: TValueCellList;
+  SpeciesIndex: Integer;
 begin
   if not Package.IsSelected then
   begin
@@ -894,11 +895,24 @@ begin
           WellList := Values[WellIndex];// as TValueCellList;
 //          Boundary := Well.MawBoundary;
           UsedIndicies := [];
-          for DataTypeIndex := MawFlowingWellElevationPosition to MawFlowingWellReductionLengthPosition do
+          for DataTypeIndex := MawFlowingWellElevationPosition to
+            MawFlowingWellReductionLengthPosition do
           begin
 //            if Boundary.DataTypeUsed(DataTypeIndex) then
             begin
               Include(UsedIndicies, DataTypeIndex);
+            end;
+          end;
+
+          if Model.GwtUsed then
+          begin
+            DataTypeIndex := MawGwtStart;
+            for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+            begin
+              Include(UsedIndicies, DataTypeIndex);
+              Inc(DataTypeIndex);
+              Include(UsedIndicies, DataTypeIndex);
+              Inc(DataTypeIndex);
             end;
           end;
 

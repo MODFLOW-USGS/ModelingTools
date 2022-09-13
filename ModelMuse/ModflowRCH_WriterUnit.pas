@@ -201,6 +201,10 @@ var
   DefArrayList: TList;
   Index: Integer;
   ATimeList: TModflowBoundaryDisplayTimeList;
+  ConcLists: TMfBoundDispList;
+  ConcIndex: Integer;
+  AConcList: TModflowBoundaryDisplayTimeList;
+  ConcArray: TModflowBoundaryDisplayDataArray;
 const
   D7PNameIname = '';
   D7PName = '';
@@ -211,7 +215,8 @@ begin
     Exit;
   end;
 
-   try
+  try
+    ConcLists := TMfBoundDispList.Create;
     ParameterValues := TList.Create;
     try
       Evaluate;
@@ -229,6 +234,10 @@ begin
         NRCHOP := Ord(Model.ModflowPackages.RchPackage.LayerOption) + 1;
         RechRateTimes := TimeLists[0];
         RechLayerTimes := TimeLists[1];
+        for ConcIndex := 2 to TimeLists.Count - 1 do
+        begin
+          ConcLists.Add(TimeLists[ConcIndex])
+        end;
 
         Comment := '# Data Set 8: IRCH';
         if Values.Count = 0 then
@@ -288,6 +297,16 @@ begin
                 RechLayerArray);
               RechLayerArray.CacheData;
             end;
+
+            for ConcIndex := 0 to ConcLists.Count - 1 do
+            begin
+              AConcList := ConcLists[ConcIndex];
+              ConcArray := AConcList[TimeIndex]
+                as TModflowBoundaryDisplayDataArray;
+              AssignTransient2DArray(ConcArray, RchStartConcentration+ConcIndex,
+                List, 0, rdtDouble,
+                Model.ModflowPackages.RchPackage.AssignmentMethod);
+            end;
             List.Cache;
           finally
             ParametersUsed.Free;
@@ -305,6 +324,7 @@ begin
         ParamDefArrays.Free;
       end;
     finally
+      ConcLists.Free;
       ParameterValues.Free;
     end;
   except on E: EInvalidTime do

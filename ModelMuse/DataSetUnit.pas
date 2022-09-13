@@ -7849,6 +7849,7 @@ begin
     or (Name = StrSFR6Roughness)
     or (Name = StrSFR6StreamStatus)
     or (Name = StrSFR6ReachNumber)
+    or (Pos('SFR MF6', Name) = 1)
     then
   begin
     result := btSfr_MF6;
@@ -7863,6 +7864,7 @@ begin
     or (Name = StrMAWWellMaximumPum)
     or (Name = StrMAWPumpElevation)
     or (Name = StrMAWScalingLength)
+    or (Pos('MAW MF6', Name) = 1)
     then
   begin
     result := btMAW;

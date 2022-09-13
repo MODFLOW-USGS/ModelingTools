@@ -3144,7 +3144,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfEtsEvapLayer(Sender: TObject);
     procedure InvalidateEtsDepthFractions(Sender: TObject);
     procedure InvalidateEtsRateFractions(Sender: TObject);
-    procedure InvalidateEtsConc(Sender: TObject);
+//    procedure InvalidateEtsConc(Sender: TObject);
     procedure InvalidateMfUzfEtDemand(Sender: TObject);
     procedure InvalidateMfUzfExtinctionDepth(Sender: TObject);
     procedure InvalidateMfUzfWaterContent(Sender: TObject);
@@ -3214,6 +3214,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateSfr6Roughness(Sender: TObject);
     procedure InvalidateSfr6StreamStatus(Sender: TObject);
     procedure InvalidateSfr6ReachNumber(Sender: TObject);
+    procedure InvalidateSfr6GwtConc(Sender: TObject);
 
     procedure InvalidateMawFlowingWellElevation(Sender: TObject);
     procedure InvalidateMawFlowingWellConductance(Sender: TObject);
@@ -3225,6 +3226,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMawMaximumPumpRate(Sender: TObject);
     procedure InvalidateMawPumpElevation(Sender: TObject);
     procedure InvalidateMawScalingLength(Sender: TObject);
+    procedure InvalidateMaw6GwtConc(Sender: TObject);
 
     procedure InvalidateCSubStressOffset(Sender: TObject);
 
@@ -13658,7 +13660,10 @@ procedure TPhastModel.SetMobileComponents(
   const Value: TMobileChemSpeciesCollection);
 begin
   FMobileComponents.Assign(Value);
+  // The following statement causes ModflowPackages.GwtPackages.Count to
+  // be updated to be at least as large as MobileComponents.Count.
   ModflowPackages.GwtPackages.Count;
+  UpdateGwtConc;
 end;
 
 procedure TPhastModel.SetModelMateProject(const Value: TProject);
@@ -16836,7 +16841,9 @@ begin
   ModflowPackages.WelPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.RivPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.RchPackage.AddRemoveRenameGwtConcentrationTimeLists;
-  ModflowPackages.EtsPackage.AddRemoveRenameGwtConcentrationTimeLists;
+//  ModflowPackages.EtsPackage.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.SfrModflow6Package.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.MawPackage.AddRemoveRenameGwtConcentrationTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
@@ -18659,7 +18666,7 @@ var
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
         MstPackage := GwtPackagesItem.GwtMst;
-        result := MstPackage.IsSelected
+        result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.Sorption <> gscNone);
         Exit;
       end;
@@ -18693,7 +18700,7 @@ var
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
         MstPackage := GwtPackagesItem.GwtMst;
-        result := MstPackage.IsSelected
+        result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay);
         Exit;
       end;
@@ -19037,7 +19044,7 @@ var
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
         MstPackage := GwtPackagesItem.GwtMst;
-        result := MstPackage.IsSelected
+        result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.Sorption <> gscNone);
         Exit;
       end;
@@ -19071,7 +19078,7 @@ var
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
         MstPackage := GwtPackagesItem.GwtMst;
-        result := MstPackage.IsSelected
+        result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.Sorption = gscFreundlich);
         Exit;
       end;
@@ -19105,7 +19112,8 @@ var
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
         MstPackage := GwtPackagesItem.GwtMst;
-        result := MstPackage.IsSelected and MstPackage.SeparatePorosity;
+        result := (MstPackage <> nil) and MstPackage.IsSelected
+          and MstPackage.SeparatePorosity;
         Exit;
       end;
     end;
@@ -19138,7 +19146,7 @@ var
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
         MstPackage := GwtPackagesItem.GwtMst;
-        result := MstPackage.IsSelected
+        result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay)
           and (MstPackage.Sorption <> gscNone);
         Exit;
@@ -19173,7 +19181,7 @@ var
       begin
         GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
         MstPackage := GwtPackagesItem.GwtMst;
-        result := MstPackage.IsSelected
+        result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.Sorption = gscLangmuir);
         Exit;
       end;
@@ -25021,10 +25029,10 @@ begin
   ModflowPackages.CSubPackage.StressOffset.Invalidate;
 end;
 
-procedure TCustomModel.InvalidateEtsConc(Sender: TObject);
-begin
-  ModflowPackages.EtsPackage.InvalidateConcentrations;
-end;
+//procedure TCustomModel.InvalidateEtsConc(Sender: TObject);
+//begin
+//  ModflowPackages.EtsPackage.InvalidateConcentrations;
+//end;
 
 procedure TCustomModel.InvalidateEtsDepthFractions(Sender: TObject);
 begin
@@ -25063,6 +25071,11 @@ procedure TCustomModel.InvalidateMassSrc(Sender: TObject);
 begin
 //  Assert(False);
   { TODO -cGWT : Update this }
+end;
+
+procedure TCustomModel.InvalidateMaw6GwtConc(Sender: TObject);
+begin
+  ModflowPackages.MawPackage.InvalidateConcentrations;
 end;
 
 procedure TCustomModel.InvalidateMawFlowingWellConductance(Sender: TObject);
@@ -27143,6 +27156,11 @@ end;
 procedure TCustomModel.InvalidateSfr6Evaporation(Sender: TObject);
 begin
   ModflowPackages.SfrModflow6Package.Evaporation.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateSfr6GwtConc(Sender: TObject);
+begin
+  ModflowPackages.SfrModflow6Package.InvalidateConcentrations;
 end;
 
 procedure TCustomModel.InvalidateSfr6Inflow(Sender: TObject);
@@ -39528,7 +39546,8 @@ begin
       for SpeciesIndex := 0 to ModflowPackages.GwtPackages.Count - 1 do
       begin
         MstPackage := ModflowPackages.GwtPackages[SpeciesIndex].GwtMst;
-        result := MstPackage.IsSelected and not MstPackage.SeparatePorosity;
+        result := (MstPackage <> nil) and MstPackage.IsSelected
+           and not MstPackage.SeparatePorosity;
         if result then
         begin
           Exit;

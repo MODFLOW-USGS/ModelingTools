@@ -2839,6 +2839,7 @@ begin
   LocaModel.InvalidateMawMaximumPumpRate(self);
   LocaModel.InvalidateMawPumpElevation(self);
   LocaModel.InvalidateMawScalingLength(self);
+  LocaModel.InvalidateMaw6GwtConc(self);
 end;
 
 
@@ -4924,7 +4925,7 @@ begin
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
-    // Specify ConcTimeList.OnInvalidate event handler here.
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateMaw6GwtConc;
   end;
   AddTimeList(ConcTimeList);
   FGwtStatusList.Add(ConcTimeList);
@@ -4934,7 +4935,7 @@ begin
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
-    // Specify ConcTimeList.OnInvalidate event handler here.
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateMaw6GwtConc;
   end;
   AddTimeList(ConcTimeList);
   FSpecifiedConcList.Add(ConcTimeList);
@@ -4944,7 +4945,7 @@ begin
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
-    // Specify ConcTimeList.OnInvalidate event handler here.
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateMaw6GwtConc;
   end;
   AddTimeList(ConcTimeList);
   FInjectionConcList.Add(ConcTimeList);

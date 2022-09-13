@@ -52,7 +52,6 @@ Type
     FAlternativeClassification: string;
     FOnSelectionChange: TNotifyEvent;
     FSpeciesIndex: Integer;
-//    FNewtonFormulation: TNewtonFormulation;
     procedure InvalidateModel;
     procedure SetComments(const Value: TStrings);
     procedure SetOnSelectionChange(const Value: TNotifyEvent);
@@ -81,7 +80,6 @@ Type
     procedure UpdateConcentrationLists(List: TMfBoundDispObjectList;
       OnInitialize: TNotifyEvent; OnGetUseList: TOnGetConcUseList;
       const NameFormat: string);
-//    Function StoreNewtonRapheson: boolean;
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
@@ -1501,7 +1499,7 @@ Type
 
   TEtsPackageSelection = class(TCustomTransientLayerPackageSelection)
   private
-    FGwtConcentrationList: TMfBoundDispObjectList;
+//    FGwtConcentrationList: TMfBoundDispObjectList;
     FSegmentCount: integer;
     // @name is implemnted as a TObjectList.
     FEtsRateFractionLists: TList;
@@ -1523,7 +1521,7 @@ Type
       NewUseList: TStringList);
     procedure UpdateEtsUseList(NewUseList: TStringList;
       ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
-    procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
+//    procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -1544,8 +1542,8 @@ Type
     procedure InvalidateEtsRateFractions(Sender: TObject);
     procedure UpdateEtsSegmentCount;
     procedure InvalidateAllTimeLists; override;
-    procedure InvalidateConcentrations;
-    procedure AddRemoveRenameGwtConcentrationTimeLists;
+//    procedure InvalidateConcentrations;
+//    procedure AddRemoveRenameGwtConcentrationTimeLists;
   published
     property SegmentCount: integer read FSegmentCount
       write SetSegmentCount default 1;
@@ -2988,6 +2986,8 @@ Type
     FSaveGwtBudget: Boolean;
     FSaveGwtConcentration: Boolean;
     FSaveGwtBudgetCsv: Boolean;
+    FGwtSpecifiedConc: TMfBoundDispObjectList;
+    FGwtRate: TMfBoundDispObjectList;
     procedure SetIncludeWellStorage(const Value: Boolean);
     procedure SetPrintHead(const Value: Boolean);
     procedure SetSaveMnwFlows(const Value: Boolean);
@@ -3024,6 +3024,8 @@ Type
     procedure SetSaveGwtBudgetCsv(const Value: Boolean);
 
 
+    procedure GetGwtSpecConcUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetGwtRateUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMawUseList(DataIndex: integer; NewUseList: TStringList;
       const DisplayName: string);
   public
@@ -3059,6 +3061,8 @@ Type
       FPumpElevation;
     property ScalingLength: TModflowBoundaryDisplayTimeList read
       FScalingLength;
+    procedure InvalidateConcentrations;
+    procedure AddRemoveRenameGwtConcentrationTimeLists;
   published
     // PRINT_HEAD
     property PrintHead: Boolean read FPrintHead write SetPrintHead;
@@ -6207,11 +6211,11 @@ resourcestring
   StrETSS = 'ETS %s';
   StrMSTMobileStorage = 'MST: Mobile Storage and Transfer Package';
   StrISTImmobileStorag = 'IST: Immobile Storage and Transfer Package';
-  StrSFRSpecifiedConc = 'SFR Specified Conc %s';
-  StrSFRRainfallConcS = 'SFR Rainfall Conc %s';
-  StrSFREvaporationConc = 'SFR Evaporation Conc %s';
-  StrSFRRunoffConcS = 'SFR Runoff Conc %s';
-  StrSFRInflowConcS = 'SFR Inflow Conc %s';
+  StrSFRSpecifiedConc = 'SFR MF6 Specified Conc %s';
+  StrSFRRainfallConcS = 'SFR MF6 Rainfall Conc %s';
+  StrSFREvaporationConc = 'SFR MF6 Evaporation Conc %s';
+  StrSFRRunoffConcS = 'SFR MF6 Runoff Conc %s';
+  StrSFRInflowConcS = 'SFR MF6 Inflow Conc %s';
 
 { TModflowPackageSelection }
 
@@ -6929,11 +6933,11 @@ begin
 end;
 { TEtsPackageSelection }
 
-procedure TEtsPackageSelection.AddRemoveRenameGwtConcentrationTimeLists;
-begin
-  UpdateConcentrationLists(FGwtConcentrationList, InitializeEtsDisplay,
-    GetGwtConcUseList, StrETSS);
-end;
+//procedure TEtsPackageSelection.AddRemoveRenameGwtConcentrationTimeLists;
+//begin
+//  UpdateConcentrationLists(FGwtConcentrationList, InitializeEtsDisplay,
+//    GetGwtConcUseList, StrETSS);
+//end;
 
 procedure TEtsPackageSelection.Assign(Source: TPersistent);
 var
@@ -6992,13 +6996,13 @@ begin
 
     UpdateEtsSegmentCount;
 
-    FGwtConcentrationList := TMfBoundDispObjectList.Create;
+//    FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
 end;
 
 destructor TEtsPackageSelection.Destroy;
 begin
-  FGwtConcentrationList.Free;
+//  FGwtConcentrationList.Free;
   FEtsRateFractionLists.Free;
   FEtsDepthFractionLists.Free;
   FMfEtsEvapLayer.Free;
@@ -7008,18 +7012,18 @@ begin
   inherited;
 end;
 
-procedure TEtsPackageSelection.GetGwtConcUseList(Sender: TObject;
-  NewUseList: TStringList);
-var
-  Index: integer;
-  DataSetName: string;
-begin
-  Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
-  DataSetName := Format(StrETSS,
-     [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
-  Index := Index+1;
-  UpdatePkgUseList(NewUseList, ptEts, Index, DataSetName);
-end;
+//procedure TEtsPackageSelection.GetGwtConcUseList(Sender: TObject;
+//  NewUseList: TStringList);
+//var
+//  Index: integer;
+//  DataSetName: string;
+//begin
+//  Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+//  DataSetName := Format(StrETSS,
+//     [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
+//  Index := Index+1;
+//  UpdatePkgUseList(NewUseList, ptEts, Index, DataSetName);
+//end;
 
 procedure TEtsPackageSelection.GetMfEtsDepthFractionUseList(Sender: TObject;
   NewUseList: TStringList);
@@ -7165,12 +7169,12 @@ begin
       List.Add(TimeList);
     end;
 
-    for Index := 0 to FGwtConcentrationList.Count - 1 do
-    begin
-      TimeList := FGwtConcentrationList[Index];
-      TimeList.CreateDataSets;
-      List.Add(TimeList);
-    end;
+//    for Index := 0 to FGwtConcentrationList.Count - 1 do
+//    begin
+//      TimeList := FGwtConcentrationList[Index];
+//      TimeList.CreateDataSets;
+//      List.Add(TimeList);
+//    end;
 
 
     EtsWriter.UpdateDisplay(List);
@@ -7198,21 +7202,21 @@ begin
     MfEtsEvapSurface.Invalidate;
     InvalidateEtsDepthFractions(nil);
     InvalidateEtsRateFractions(nil);
-    InvalidateConcentrations;
+//    InvalidateConcentrations;
   end;
 end;
 
-procedure TEtsPackageSelection.InvalidateConcentrations;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-begin
-  for Index := 0 to FGwtConcentrationList.Count - 1 do
-  begin
-    TimeList := FGwtConcentrationList[Index];
-    TimeList.Invalidate;
-  end;
-end;
+//procedure TEtsPackageSelection.InvalidateConcentrations;
+//var
+//  Index: Integer;
+//  TimeList: TModflowBoundaryDisplayTimeList;
+//begin
+//  for Index := 0 to FGwtConcentrationList.Count - 1 do
+//  begin
+//    TimeList := FGwtConcentrationList[Index];
+//    TimeList.Invalidate;
+//  end;
+//end;
 
 procedure TEtsPackageSelection.InvalidateEtsDepthFractions(Sender: TObject);
 var
@@ -20591,6 +20595,8 @@ procedure TSfrModflow6PackageSelection.InitializeSfr6Display(Sender: TObject);
 var
   List: TModflowBoundListOfTimeLists;
   Sfr6Writer: TModflowSFR_MF6_Writer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  Index: Integer;
 begin
 //    property Inflow: TModflowBoundaryDisplayTimeList read FInflow;
 //    property Rainfall: TModflowBoundaryDisplayTimeList read FRainfall;
@@ -20613,6 +20619,37 @@ begin
   StreamStatus.CreateDataSets;
   ReachNumber.CreateDataSets;
 
+  for Index := 0 to FGwtSpecConcList.Count - 1 do
+  begin
+    TimeList := FGwtSpecConcList[Index];
+    TimeList.CreateDataSets;
+  end;
+  for Index := 0 to FGwtRainConcList.Count - 1 do
+  begin
+    TimeList := FGwtRainConcList[Index];
+    TimeList.CreateDataSets;
+  end;
+  for Index := 0 to FGwtEvapConcList.Count - 1 do
+  begin
+    TimeList := FGwtEvapConcList[Index];
+    TimeList.CreateDataSets;
+  end;
+  for Index := 0 to FGwtRunoffConcList.Count - 1 do
+  begin
+    TimeList := FGwtRunoffConcList[Index];
+    TimeList.CreateDataSets;
+  end;
+  for Index := 0 to FGwtInflowConcList.Count - 1 do
+  begin
+    TimeList := FGwtInflowConcList[Index];
+    TimeList.CreateDataSets;
+  end;
+
+  Assert(FGwtSpecConcList.Count = FGwtRainConcList.Count);
+  Assert(FGwtSpecConcList.Count = FGwtEvapConcList.Count);
+  Assert(FGwtSpecConcList.Count = FGwtRunoffConcList.Count);
+  Assert(FGwtSpecConcList.Count = FGwtInflowConcList.Count);
+
   List := TModflowBoundListOfTimeLists.Create;
   Sfr6Writer := TModflowSFR_MF6_Writer.Create(FModel as TCustomModel, etDisplay);
   try
@@ -20625,6 +20662,21 @@ begin
     List.Add(Roughness);
     List.Add(StreamStatus);
     List.Add(ReachNumber);
+
+    for Index := 0 to FGwtSpecConcList.Count - 1 do
+    begin
+      TimeList := FGwtSpecConcList[Index];
+      List.Add(TimeList);
+      TimeList := FGwtRainConcList[Index];
+      List.Add(TimeList);
+      TimeList := FGwtEvapConcList[Index];
+      List.Add(TimeList);
+      TimeList := FGwtRunoffConcList[Index];
+      List.Add(TimeList);
+      TimeList := FGwtInflowConcList[Index];
+      List.Add(TimeList);
+    end;
+
     Sfr6Writer.UpdateDisplay(List);
   finally
     Sfr6Writer.Free;
@@ -20767,6 +20819,14 @@ end;
 
 { TMawPackage }
 
+procedure TMawPackage.AddRemoveRenameGwtConcentrationTimeLists;
+begin
+  UpdateConcentrationLists(FGwtSpecifiedConc, InitializeMawDisplay,
+    GetGwtSpecConcUseList, 'MAW MF6 Specified Conc %s');
+  UpdateConcentrationLists(FGwtRate, InitializeMawDisplay,
+    GetGwtRateUseList, 'MAW MF6 Injection Conc %s');
+end;
+
 procedure TMawPackage.Assign(Source: TPersistent);
 var
   MawSource: TMawPackage;
@@ -20797,7 +20857,7 @@ begin
   FStoredShutDownKappa := TRealStorage.Create;
   FStoredShutDownKappa.OnChange := OnValueChanged;
 
-    if Model <> nil then
+  if Model <> nil then
   begin
     FFlowingWellElevation := TModflowBoundaryDisplayTimeList.Create(Model);
     FlowingWellElevation.OnInitialize := InitializeMawDisplay;
@@ -20869,13 +20929,20 @@ begin
     FlowingWellReductionLength.Name := StrMAWWellRedLength;
     AddTimeList(FlowingWellReductionLength);
 
+
+    FGwtSpecifiedConc := TMfBoundDispObjectList.Create;
+    FGwtRate := TMfBoundDispObjectList.Create;
   end;
+
+
 
   InitializeVariables;
 end;
 
 destructor TMawPackage.Destroy;
 begin
+  FGwtSpecifiedConc.Free;
+  FGwtRate.Free;
   FFlowingWellReductionLength.Free;
   FPumpElevation.Free;
   FScalingLength.Free;
@@ -20890,6 +20957,84 @@ begin
   FStoredShutDownTheta.Free;
   FStoredShutDownKappa.Free;
   inherited;
+end;
+
+procedure TMawPackage.GetGwtRateUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  GwtIndex: Integer;
+  DataIndex: Integer;
+  SpeciesIndex: Integer;
+  ABoundary: TMawBoundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.ModflowMawBoundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := MawGwtStart
+        + LocalModel.MobileComponents.Count;
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+        begin
+          DataIndex := GwtIndex + SpeciesIndex;
+          UpdateUseList(DataIndex, NewUseList, Item, 'Undefined');
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TMawPackage.GetGwtSpecConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  GwtIndex: Integer;
+  DataIndex: Integer;
+  SpeciesIndex: Integer;
+  ABoundary: TMawBoundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.ModflowMawBoundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := MawGwtStart
+        {+ LocalModel.MobileComponents.Count * 2};
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+        begin
+          DataIndex := GwtIndex + SpeciesIndex;
+          UpdateUseList(DataIndex, NewUseList, Item, 'Undefined');
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TMawPackage.GetMawUseList(DataIndex: integer;
@@ -20996,6 +21141,8 @@ procedure TMawPackage.InitializeMawDisplay(Sender: TObject);
 var
   List: TModflowBoundListOfTimeLists;
   MawWriter: TModflowMAW_Writer;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
 begin
   FlowingWellElevation.CreateDataSets;
   FlowingWellConductance.CreateDataSets;
@@ -21007,6 +21154,19 @@ begin
   MaximumPumpRate.CreateDataSets;
   PumpElevation.CreateDataSets;
   ScalingLength.CreateDataSets;
+
+  for Index := 0 to FGwtSpecifiedConc.Count - 1 do
+  begin
+    TimeList := FGwtSpecifiedConc[Index];
+    TimeList.CreateDataSets;
+  end;
+  for Index := 0 to FGwtRate.Count - 1 do
+  begin
+    TimeList := FGwtRate[Index];
+    TimeList.CreateDataSets;
+  end;
+
+  Assert(FGwtSpecifiedConc.Count = FGwtRate.Count);
 
   List := TModflowBoundListOfTimeLists.Create;
   { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
@@ -21022,6 +21182,14 @@ begin
     List.Add(PumpElevation);
     List.Add(ScalingLength);
     List.Add(FlowingWellReductionLength);
+
+    for Index := 0 to FGwtSpecifiedConc.Count - 1 do
+    begin
+      TimeList := FGwtSpecifiedConc[Index];
+      List.Add(TimeList);
+      TimeList := FGwtRate[Index];
+      List.Add(TimeList);
+    end;
 
     MawWriter.UpdateDisplay(List);
   finally
@@ -21054,6 +21222,23 @@ begin
   FSaveGwtBudgetCsv := True;
   FSaveGwtBudget := True;
   FSaveGwtConcentration := True;
+end;
+
+procedure TMawPackage.InvalidateConcentrations;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FGwtSpecifiedConc.Count - 1 do
+  begin
+    TimeList := FGwtSpecifiedConc[Index];
+    TimeList.Invalidate;
+  end;
+  for Index := 0 to FGwtRate.Count - 1 do
+  begin
+    TimeList := FGwtRate[Index];
+    TimeList.Invalidate;
+  end;
 end;
 
 procedure TMawPackage.SetIncludeWellStorage(const Value: Boolean);
@@ -22912,7 +23097,8 @@ begin
   if FModel <> nil then
   begin
     LocalModel := FModel as TCustomModel;
-    if LocalModel.GwtUsed and (inherited GetCount < LocalModel.MobileComponents.Count) then
+    if LocalModel.GwtUsed and (inherited GetCount
+      < LocalModel.MobileComponents.Count) then
     begin
       inherited Count := LocalModel.MobileComponents.Count;
     end;
