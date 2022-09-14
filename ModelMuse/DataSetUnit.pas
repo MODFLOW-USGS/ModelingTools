@@ -7876,6 +7876,7 @@ begin
     or (Name = StrUzfMf6AirEntryPotential)
     or (Name = StrUzfMf6RootPotential)
     or (Name = StrUzfMf6RootActivity)
+    or (Pos('UZF MF6', Name) = 1)
     then
   begin
     result := btUzfMf6;

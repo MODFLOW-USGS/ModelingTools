@@ -77,6 +77,7 @@ type
     procedure framePestObsflnmedHeadObsResultsChange(Sender: TObject);
   private
     FShouldUpdate: Boolean;
+    FUpdateCount: Integer;
     procedure SetData;
     { Private declarations }
   public
@@ -86,6 +87,8 @@ type
     procedure UpdateLabelsAndLegend;
     procedure UpdateColorSchemes;
     procedure NilDisplay;
+    procedure BeginUpdate;
+    procedure EndUpdate;
     { Public declarations }
   end;
 
@@ -117,6 +120,9 @@ resourcestring
 
 {$R *.dfm}
 
+var
+  FNeedsUpdate: Boolean;
+
 procedure UpdateFrmDisplayData(Force: boolean = false);
 begin
   if (frmDisplayData <> nil) and (Force or frmDisplayData.Visible)
@@ -124,8 +130,21 @@ begin
     and not (csDestroying in frmGoPhast.ComponentState)
     and not frmGoPhast.PhastModel.Clearing then
   begin
-    frmDisplayData.GetData;
-    frmDisplayData.UpdateLabelsAndLegend;
+    if frmDisplayData.FUpdateCount = 0 then
+    begin
+      frmDisplayData.BeginUpdate;
+      try
+        frmDisplayData.GetData;
+        frmDisplayData.UpdateLabelsAndLegend;
+        FNeedsUpdate := False;
+      finally
+        frmDisplayData.EndUpdate;
+      end;
+    end
+    else
+    begin
+      FNeedsUpdate := True;
+    end;
   end;
 end;
 
@@ -390,6 +409,20 @@ begin
   frameContourData.LegendDataSource := nil;
 end;
 
+procedure TfrmDisplayData.EndUpdate;
+begin
+  Dec(FUpdateCount);
+  if FNeedsUpdate and (FUpdateCount = 0) then
+  begin
+    UpdateFrmDisplayData(True)
+  end;
+end;
+
+procedure TfrmDisplayData.BeginUpdate;
+begin
+  Inc(FUpdateCount);
+end;
+
 procedure TfrmDisplayData.pglstMainChange(Sender: TObject);
 begin
   inherited;
@@ -524,5 +557,8 @@ begin
   frameModpathEndpointDisplay1.UpdateLabelsAndLegend;
   ShouldUpdate := False;
 end;
+
+Initialization
+  FNeedsUpdate := False;
 
 end.

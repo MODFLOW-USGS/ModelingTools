@@ -508,6 +508,25 @@ var
   InfiltrationArray: TModflowBoundaryDisplayDataArray;
   CellList: TValueCellList;
   TimeIndex: Integer;
+  SpecConcList: TModflowBoundListOfTimeLists;
+  ImfiltrationConcList: TModflowBoundListOfTimeLists;
+  ET_ConcList: TModflowBoundListOfTimeLists;
+  PotentialEt: TModflowBoundaryDisplayTimeList;
+  PotentialEtArray: TModflowBoundaryDisplayDataArray;
+  ExtinctionDepth: TModflowBoundaryDisplayTimeList;
+  ExtinctionDepthArray: TModflowBoundaryDisplayDataArray;
+  ExtinctionWaterContent: TModflowBoundaryDisplayTimeList;
+  ExtinctionWaterContentArray: TModflowBoundaryDisplayDataArray;
+  AirEntryPotential: TModflowBoundaryDisplayTimeList;
+  AirEntryPotentialArray: TModflowBoundaryDisplayDataArray;
+  RootPotential: TModflowBoundaryDisplayTimeList;
+  RootPotentialArray: TModflowBoundaryDisplayDataArray;
+  RootActivity: TModflowBoundaryDisplayTimeList;
+  RootActivityArray: TModflowBoundaryDisplayDataArray;
+  GWT_Start: Integer;
+  SpeciesIndex: Integer;
+  AList: TModflowBoundaryDisplayTimeList;
+  AnArray: TModflowBoundaryDisplayDataArray;
 begin
   if not Package.IsSelected then
   begin
@@ -525,26 +544,191 @@ begin
     Exit;
   end;
 
+  SpecConcList := TModflowBoundListOfTimeLists.Create;
+  ImfiltrationConcList := TModflowBoundListOfTimeLists.Create;
+  ET_ConcList := TModflowBoundListOfTimeLists.Create;
   try
-    Infiltration := TimeLists[0];
-    for TimeIndex := 0 to Values.Count - 1 do
+    try
+      Infiltration := TimeLists[0];
+      for TimeIndex := 0 to Values.Count - 1 do
+      begin
+        InfiltrationArray := Infiltration[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        CellList := Values[TimeIndex];
+        AssignTransient2DArray(InfiltrationArray, 0, CellList, 0,
+          rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+        Model.AdjustDataArray(InfiltrationArray);
+        CellList.Cache;
+      end;
+
+      PotentialEt := TimeLists[1];
+      if PotentialEt <> nil then
+      begin
+        for TimeIndex := 0 to Values.Count - 1 do
+        begin
+          PotentialEtArray := PotentialEt[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          CellList := Values[TimeIndex];
+          AssignTransient2DArray(PotentialEtArray, 1, CellList, 0,
+            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          Model.AdjustDataArray(PotentialEtArray);
+          CellList.Cache;
+        end;
+      end;
+
+      ExtinctionDepth := TimeLists[2];
+      if ExtinctionDepth <> nil then
+      begin
+        for TimeIndex := 0 to Values.Count - 1 do
+        begin
+          ExtinctionDepthArray := ExtinctionDepth[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          CellList := Values[TimeIndex];
+          AssignTransient2DArray(ExtinctionDepthArray, 2, CellList, 0,
+            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          Model.AdjustDataArray(ExtinctionDepthArray);
+          CellList.Cache;
+        end;
+      end;
+
+      ExtinctionWaterContent := TimeLists[3];
+      if ExtinctionWaterContent <> nil then
+      begin
+        for TimeIndex := 0 to Values.Count - 1 do
+        begin
+          ExtinctionWaterContentArray := ExtinctionWaterContent[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          CellList := Values[TimeIndex];
+          AssignTransient2DArray(ExtinctionWaterContentArray, 3, CellList, 0,
+            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          Model.AdjustDataArray(ExtinctionWaterContentArray);
+          CellList.Cache;
+        end;
+      end;
+
+      AirEntryPotential := TimeLists[4];
+      if AirEntryPotential <> nil then
+      begin
+        for TimeIndex := 0 to Values.Count - 1 do
+        begin
+          AirEntryPotentialArray := AirEntryPotential[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          CellList := Values[TimeIndex];
+          AssignTransient2DArray(AirEntryPotentialArray, 4, CellList, 0,
+            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          Model.AdjustDataArray(AirEntryPotentialArray);
+          CellList.Cache;
+        end;
+      end;
+
+      RootPotential := TimeLists[5];
+      if RootPotential <> nil then
+      begin
+        for TimeIndex := 0 to Values.Count - 1 do
+        begin
+          RootPotentialArray := RootPotential[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          CellList := Values[TimeIndex];
+          AssignTransient2DArray(RootPotentialArray, 5, CellList, 0,
+            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          Model.AdjustDataArray(RootPotentialArray);
+          CellList.Cache;
+        end;
+      end;
+
+      RootActivity := TimeLists[6];
+      if RootActivity <> nil then
+      begin
+        for TimeIndex := 0 to Values.Count - 1 do
+        begin
+          RootActivityArray := RootActivity[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          CellList := Values[TimeIndex];
+          AssignTransient2DArray(RootActivityArray, 6, CellList, 0,
+            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          Model.AdjustDataArray(RootActivityArray);
+          CellList.Cache;
+        end;
+      end;
+
+    GWT_Start:= 7;
+    if Model.GwtUsed and (TimeLists.Count > GWT_Start) then
     begin
-      InfiltrationArray := Infiltration[TimeIndex]
-        as TModflowBoundaryDisplayDataArray;
-      CellList := Values[TimeIndex];
-//      CellList.CheckRestore;
-      AssignTransient2DArray(InfiltrationArray, 0, CellList, 0,
-        rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
-      Model.AdjustDataArray(InfiltrationArray);
-      CellList.Cache;
+      SpecConcList.Capacity := Model.MobileComponents.Count;
+      ImfiltrationConcList.Capacity := Model.MobileComponents.Count;
+      ET_ConcList.Capacity := Model.MobileComponents.Count;
+
+      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+      begin
+        SpecConcList.Add(TimeLists[GWT_Start]);
+        Inc(GWT_Start);
+        ImfiltrationConcList.Add(TimeLists[GWT_Start]);
+        Inc(GWT_Start);
+        ET_ConcList.Add(TimeLists[GWT_Start]);
+        Inc(GWT_Start);
+      end;
+
+      GWT_Start := UzfBoundaryGwtStart;
+      for SpeciesIndex := 0 to SpecConcList.Count - 1 do
+      begin
+        AList := SpecConcList[SpeciesIndex];
+//        GWT_Start := UzfBoundaryGwtStart + SpeciesIndex;
+        for TimeIndex := 0 to Values.Count - 1 do
+        begin
+          AnArray := AList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          CellList := Values[TimeIndex];
+          AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
+            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          Model.AdjustDataArray(AnArray);
+          CellList.Cache;
+        end;
+        Inc(GWT_Start);
+
+        AList := ImfiltrationConcList[SpeciesIndex];
+//        GWT_Start := UzfBoundaryGwtStart + SpeciesIndex
+//          + Model.MobileComponents.Count;
+        for TimeIndex := 0 to Values.Count - 1 do
+        begin
+          AnArray := AList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          CellList := Values[TimeIndex];
+          AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
+            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          Model.AdjustDataArray(AnArray);
+          CellList.Cache;
+        end;
+        Inc(GWT_Start);
+
+        AList := ET_ConcList[SpeciesIndex];
+//        GWT_Start := UzfBoundaryGwtStart + SpeciesIndex
+//          + Model.MobileComponents.Count * 2;
+        for TimeIndex := 0 to Values.Count - 1 do
+        begin
+          AnArray := AList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          CellList := Values[TimeIndex];
+          AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
+            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          Model.AdjustDataArray(AnArray);
+          CellList.Cache;
+        end;
+        Inc(GWT_Start);
+      end;
+
     end;
 
 
-  except on E: EInvalidTime do
-    begin
-      Beep;
-      MessageDlg(E.Message, mtError, [mbOK], 0);
+    except on E: EInvalidTime do
+      begin
+        Beep;
+        MessageDlg(E.Message, mtError, [mbOK], 0);
+      end;
     end;
+  finally
+    SpecConcList.Free;
+    ImfiltrationConcList.Free;
+    ET_ConcList.Free;
   end;
 
 end;

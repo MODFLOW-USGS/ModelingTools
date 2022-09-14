@@ -3157,6 +3157,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateUzfMf6AirEntryPotential(Sender: TObject);
     procedure InvalidateUzfMf6RootPotential(Sender: TObject);
     procedure InvalidateUzfMf6RootActivity(Sender: TObject);
+    procedure InvalidateUzfGwtConc(Sender: TObject);
 
     procedure InvalidateMfStrConductance(Sender: TObject);
     procedure InvalidateMfStrStage(Sender: TObject);
@@ -3226,7 +3227,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMawMaximumPumpRate(Sender: TObject);
     procedure InvalidateMawPumpElevation(Sender: TObject);
     procedure InvalidateMawScalingLength(Sender: TObject);
-    procedure InvalidateMaw6GwtConc(Sender: TObject);
+    procedure InvalidateMawGwtConc(Sender: TObject);
 
     procedure InvalidateCSubStressOffset(Sender: TObject);
 
@@ -16844,6 +16845,7 @@ begin
 //  ModflowPackages.EtsPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.SfrModflow6Package.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.MawPackage.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.UzfMf6Package.AddRemoveRenameGwtConcentrationTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
@@ -25073,7 +25075,7 @@ begin
   { TODO -cGWT : Update this }
 end;
 
-procedure TCustomModel.InvalidateMaw6GwtConc(Sender: TObject);
+procedure TCustomModel.InvalidateMawGwtConc(Sender: TObject);
 begin
   ModflowPackages.MawPackage.InvalidateConcentrations;
 end;
@@ -27326,6 +27328,11 @@ end;
 procedure TCustomModel.InvalidateSwiObs(Sender: TObject);
 begin
   { TODO -cSWI Obs : This needs to be finished }
+end;
+
+procedure TCustomModel.InvalidateUzfGwtConc(Sender: TObject);
+begin
+  ModflowPackages.UzfMf6Package.InvalidateConcentrations;
 end;
 
 procedure TCustomModel.InvalidateUzfMf6AirEntryPotential(Sender: TObject);

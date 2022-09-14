@@ -2507,6 +2507,9 @@ Type
     FWriteConvergenceData: Boolean;
     FSaveBudgetCsvFile: Boolean;
     FSaveGwtConcentration: Boolean;
+    FGwtSpecConcList: TMfBoundDispObjectList;
+    FGwtInfiltrationConcList: TMfBoundDispObjectList;
+    FGwtET_ConcList: TMfBoundDispObjectList;
     procedure SetGroundwaterET(const Value: TUzfGwEtChoice);
     procedure SetSimulateGroundwaterSeepage(const Value: Boolean);
     procedure SetUnsatET(const Value: TUzfUnsatEtChoice);
@@ -2537,6 +2540,11 @@ Type
     procedure SetWriteConvergenceData(const Value: Boolean);
     procedure SetSaveBudgetCsvFile(const Value: Boolean);
     procedure SetSaveGwtConcentration(const Value: Boolean);
+
+    procedure GetGwtSpecConcUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetGwtInfilitrationConcUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetGwtEt_ConcUseList(Sender: TObject; NewUseList: TStringList);
+
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -2562,6 +2570,8 @@ Type
     property MfUzfMf6RootActivity: TModflowBoundaryDisplayTimeList
       read FMfUzfMf6RootActivity;
 
+    procedure InvalidateConcentrations;
+    procedure AddRemoveRenameGwtConcentrationTimeLists;
   published
   // nothing, SIMULATE_ET, LINEAR_GWET, or SQUARE_GWET.
     property GroundwaterET: TUzfGwEtChoice read FGroundwaterET write
@@ -20455,7 +20465,7 @@ begin
     if (ABoundary <> nil) and ABoundary.Used then
     begin
       GwtIndex := 9 + ABoundary.Diversions.Count
-        + LocalModel.MobileComponents.Count * 2;
+        + LocalModel.MobileComponents.Count * 4;
       for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
         Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
@@ -20471,14 +20481,80 @@ end;
 
 procedure TSfrModflow6PackageSelection.GetGwtRainConcUseList(Sender: TObject;
   NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  ABoundary: TSfrMf6Boundary;
+  GwtIndex: Integer;
+  DataIndex: Integer;
+  SpeciesIndex: Integer;
 begin
-
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.ModflowSfr6Boundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := 9 + ABoundary.Diversions.Count
+        + LocalModel.MobileComponents.Count;
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+        begin
+          DataIndex := GwtIndex + SpeciesIndex;
+          UpdateUseList(DataIndex, NewUseList, Item, 'Undefined');
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TSfrModflow6PackageSelection.GetGwtRunoffConcUseList(Sender: TObject;
   NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  ABoundary: TSfrMf6Boundary;
+  GwtIndex: Integer;
+  DataIndex: Integer;
+  SpeciesIndex: Integer;
 begin
-
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.ModflowSfr6Boundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := 9 + ABoundary.Diversions.Count
+        + LocalModel.MobileComponents.Count * 3;
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+        begin
+          DataIndex := GwtIndex + SpeciesIndex;
+          UpdateUseList(DataIndex, NewUseList, Item, 'Undefined');
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TSfrModflow6PackageSelection.GetGwtSpecConcUseList(Sender: TObject;
@@ -21610,6 +21686,16 @@ end;
 
 { TUzfMf6PackageSelection }
 
+procedure TUzfMf6PackageSelection.AddRemoveRenameGwtConcentrationTimeLists;
+begin
+  UpdateConcentrationLists(FGwtSpecConcList, InitializeUzfMf6Display,
+    GetGwtSpecConcUseList, 'UZF MF6 Specified Conc %s');
+  UpdateConcentrationLists(FGwtInfiltrationConcList, InitializeUzfMf6Display,
+    GetGwtInfilitrationConcUseList, 'UZF MF6 Infiltration Conc %s');
+  UpdateConcentrationLists(FGwtET_ConcList, InitializeUzfMf6Display,
+    GetGwtEt_ConcUseList, 'UZF MF6 ET Conc %s');
+end;
+
 procedure TUzfMf6PackageSelection.Assign(Source: TPersistent);
 var
   Uzf6Source: TUzfMf6PackageSelection;
@@ -21702,10 +21788,19 @@ begin
     FMfUzfMf6RootActivity.Name := StrUzfMf6RootActivity;
     AddTimeList(FMfUzfMf6RootActivity);
   end;
+
+  FGwtSpecConcList := TMfBoundDispObjectList.Create;
+  FGwtInfiltrationConcList := TMfBoundDispObjectList.Create;
+  FGwtET_ConcList := TMfBoundDispObjectList.Create;
+
 end;
 
 destructor TUzfMf6PackageSelection.Destroy;
 begin
+  FGwtSpecConcList.Free;
+  FGwtInfiltrationConcList.Free;
+  FGwtET_ConcList.Free;
+
   FMfUzfMf6RootActivity.Free;
   FMfUzfMf6RootPotential.Free;
   FMfUzfMf6AirEntryPotential.Free;
@@ -21714,6 +21809,123 @@ begin
   FMfUzfMf6PotentialEt.Free;
   FMfUzfMf6Infiltration.Free;
   inherited;
+end;
+
+procedure TUzfMf6PackageSelection.GetGwtEt_ConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  GwtIndex: Integer;
+  DataIndex: Integer;
+  SpeciesIndex: Integer;
+  ABoundary: TUzfMf6Boundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.ModflowUzfMf6Boundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := UzfBoundaryGwtStart
+        + LocalModel.MobileComponents.Count * 2;
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+        begin
+          DataIndex := GwtIndex + SpeciesIndex;
+          UpdateUseList(DataIndex, NewUseList, Item, 'Undefined');
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TUzfMf6PackageSelection.GetGwtInfilitrationConcUseList(
+  Sender: TObject; NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  GwtIndex: Integer;
+  DataIndex: Integer;
+  SpeciesIndex: Integer;
+  ABoundary: TUzfMf6Boundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.ModflowUzfMf6Boundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := UzfBoundaryGwtStart
+        + LocalModel.MobileComponents.Count;
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+        begin
+          DataIndex := GwtIndex + SpeciesIndex;
+          UpdateUseList(DataIndex, NewUseList, Item, 'Undefined');
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TUzfMf6PackageSelection.GetGwtSpecConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  GwtIndex: Integer;
+  DataIndex: Integer;
+  SpeciesIndex: Integer;
+  ABoundary: TUzfMf6Boundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.ModflowUzfMf6Boundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := UzfBoundaryGwtStart
+        {+ LocalModel.MobileComponents.Count * 2};
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+        begin
+          DataIndex := GwtIndex + SpeciesIndex;
+          UpdateUseList(DataIndex, NewUseList, Item, 'Undefined');
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TUzfMf6PackageSelection.GetMfUzfMf6AirEntryPotentialContentUseList(
@@ -21797,6 +22009,8 @@ procedure TUzfMf6PackageSelection.InitializeUzfMf6Display(Sender: TObject);
 var
   List: TModflowBoundListOfTimeLists;
   UzfMf6Writer: TModflowUzfMf6Writer;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
 begin
 
   MfUzfMf6Infiltration.CreateDataSets;
@@ -21830,6 +22044,26 @@ begin
     MfUzfMf6RootActivity.SetUpToDate(True);
   end;
 
+  for Index := 0 to FGwtSpecConcList.Count - 1 do
+  begin
+    TimeList := FGwtSpecConcList[Index];
+    TimeList.CreateDataSets;
+  end;
+  for Index := 0 to FGwtInfiltrationConcList.Count - 1 do
+  begin
+    TimeList := FGwtInfiltrationConcList[Index];
+    TimeList.CreateDataSets;
+  end;
+  for Index := 0 to FGwtET_ConcList.Count - 1 do
+  begin
+    TimeList := FGwtET_ConcList[Index];
+    TimeList.CreateDataSets;
+  end;
+
+  Assert(FGwtSpecConcList.Count = FGwtInfiltrationConcList.Count);
+  Assert(FGwtSpecConcList.Count = FGwtET_ConcList.Count);
+
+
   List := TModflowBoundListOfTimeLists.Create;
   UzfMf6Writer := TModflowUzfMf6Writer.Create(FModel as TCustomModel, etDisplay);
   try
@@ -21852,6 +22086,17 @@ begin
       List.Add(nil);
       List.Add(nil);
     end;
+
+    for Index := 0 to FGwtSpecConcList.Count - 1 do
+    begin
+      TimeList := FGwtSpecConcList[Index];
+      List.Add(TimeList);
+      TimeList := FGwtInfiltrationConcList[Index];
+      List.Add(TimeList);
+      TimeList := FGwtET_ConcList[Index];
+      List.Add(TimeList);
+    end;
+
     UzfMf6Writer.UpdateDisplay(List);
   finally
     UzfMf6Writer.Free;
@@ -21885,6 +22130,28 @@ begin
   FWriteConvergenceData := True;
   FSaveBudgetCsvFile := False;
   FSaveGwtConcentration := True;
+end;
+
+procedure TUzfMf6PackageSelection.InvalidateConcentrations;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FGwtSpecConcList.Count - 1 do
+  begin
+    TimeList := FGwtSpecConcList[Index];
+    TimeList.Invalidate;
+  end;
+  for Index := 0 to FGwtInfiltrationConcList.Count - 1 do
+  begin
+    TimeList := FGwtInfiltrationConcList[Index];
+    TimeList.Invalidate;
+  end;
+  for Index := 0 to FGwtET_ConcList.Count - 1 do
+  begin
+    TimeList := FGwtET_ConcList[Index];
+    TimeList.Invalidate;
+  end;
 end;
 
 function TUzfMf6PackageSelection.ModflowUzfMf6CapillaryPressureUsed(

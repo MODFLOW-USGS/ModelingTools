@@ -512,7 +512,8 @@ uses Contnrs, JvListComb, frmGoPhastUnit, ScreenObjectUnit,
   frmManageFluxObservationsUnit, ModflowSubsidenceDefUnit, Mt3dmsChemUnit,
   ModflowTimeUnit, ModflowDiscretizationWriterUnit, Mt3dUztRchUnit,
   Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, Mt3dSftUnit,
-  ModflowCsubUnit, ModflowCSubInterbed, System.Math, AbstractGridUnit;
+  ModflowCsubUnit, ModflowCSubInterbed, System.Math, AbstractGridUnit,
+  frmDisplayDataUnit;
 
 resourcestring
   StrLPFParameters = 'LPF or NWT Parameters';
@@ -4902,6 +4903,11 @@ var
   FirstStressPeriod: TModflowStressPeriod;
   GwtChanged: Boolean;
 begin
+  if (frmDisplayData <> nil) then
+  begin
+    frmDisplayData.BeginUpdate;
+  end;
+  try
   inherited;
   PhastModel := frmGoPhast.PhastModel;
   PhastModel.DataArrayManager.InvalidateHguFormulaDataSets;
@@ -4998,6 +5004,14 @@ begin
     Beep;
     MessageDlg(StrInOrderToGenerate, mtInformation, [mbOK], 0);
   end;
+
+  finally
+    if (frmDisplayData <> nil) then
+    begin
+      frmDisplayData.EndUpdate;
+    end;
+  end;
+
 end;
 
 procedure TUndoChangeLgrPackageSelection.InvalidateActiveGrid;
@@ -5124,6 +5138,11 @@ var
   OldPackages: TModflowPackages;
   GwtChanged: Boolean;
 begin
+  if (frmDisplayData <> nil) then
+  begin
+    frmDisplayData.BeginUpdate;
+  end;
+  try
   frmGoPhast.PhastModel.Mt3dmsTimes := FOldMt3dTimes;
   PhastModel := frmGoPhast.PhastModel;
   PhastModel.DataArrayManager.InvalidateHguFormulaDataSets;
@@ -5185,6 +5204,12 @@ begin
   frmGoPhast.EnableFarmMenuItems;
   frmGoPhast.EnableSwrActions;
   SetMt3dCaption;
+  finally
+    if (frmDisplayData <> nil) then
+    begin
+      frmDisplayData.EndUpdate;
+    end;
+  end;
 end;
 
 procedure TUndoChangeLgrPackageSelection.UpdateInterbedsInObjects;

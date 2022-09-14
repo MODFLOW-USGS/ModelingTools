@@ -2885,7 +2885,7 @@ begin
   begin
     LocalModel := Model as TCustomModel;
     // Specify ConcTimeList.OnInvalidate event handler here.
-//  ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateUzfGwtConc;
   end;
   AddTimeList(ConcTimeList);
   FGwtStatusList.Add(ConcTimeList);
@@ -2896,8 +2896,8 @@ begin
   begin
     LocalModel := Model as TCustomModel;
     // Specify ConcTimeList.OnInvalidate event handler here.
-//  ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
-  end;
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateUzfGwtConc;
+    end;
   AddTimeList(ConcTimeList);
   FSpecifiedConcList.Add(ConcTimeList);
   ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
@@ -2907,6 +2907,7 @@ begin
   begin
     LocalModel := Model as TCustomModel;
     // Specify ConcTimeList.OnInvalidate event handler here.
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateUzfGwtConc;
   end;
   AddTimeList(ConcTimeList);
   FInfiltrationConcList.Add(ConcTimeList);
@@ -2917,7 +2918,7 @@ begin
   begin
     LocalModel := Model as TCustomModel;
     // Specify ConcTimeList.OnInvalidate event handler here.
-//  ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateUzfGwtConc;
   end;
   AddTimeList(ConcTimeList);
   FEvapConcList.Add(ConcTimeList);
@@ -4732,6 +4733,7 @@ begin
     Model.InvalidateUzfMf6AirEntryPotential(self);
     Model.InvalidateUzfMf6RootPotential(self);
     Model.InvalidateUzfMf6RootActivity(self);
+    Model.InvalidateUzfGwtConc(self);
   end;
 end;
 

@@ -803,22 +803,16 @@ end;
 procedure TModflowMAW_Writer.UpdateDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
-//  WellRadiusTimes: TModflowBoundaryDisplayTimeList;
-//  List: TValueCellList;
-//  Well : TMultinodeWell;
   WellIndex: integer;
   DataSets: TList;
   UsedIndicies: TByteSet;
   TimeIndex: Integer;
-//  Boundary: TMnw2Boundary;
   DataTypeIndex: Integer;
   TimeListIndex: Integer;
   TimeList: TModflowBoundaryDisplayTimeList;
   DataArray: TModflowBoundaryDisplayDataArray;
   DataSetIndex: Integer;
   WellElevationTimeList: TModflowBoundaryDisplayTimeList;
-//  Well: TMawCell;
-//  Boundary: TMawBoundary;
   WellList: TValueCellList;
   SpeciesIndex: Integer;
 begin
@@ -843,40 +837,6 @@ begin
         Exit;
       end;
 
-//  TMawCell = class(TValueCell)
-//  private
-//    FValues: TMawTransientRecord;
-
-//    property WellNumber: Integer read GetWellNumber;
-//    property MawStatus: TMawStatus read GetMawStatus;
-//    property FlowingWell: TFlowingWell read GetFlowingWell;
-//    // ShutOff and RateScaling can not be used simultaneously.
-//    property ShutOff: Boolean read GetShutOff;
-//    property RateScaling: Boolean read GetRateScaling;
-//    property HeadLimitChoice: Boolean read GetHeadLimitChoice;
-//
-//    property FlowingWellElevation: double read GetFlowingWellElevation;
-//    property FlowingWellConductance: double read GetFlowingWellConductance;
-//    property Rate: double read GetRate;
-//    property WellHead: double read GetWellHead;
-//    property HeadLimit: double read GetHeadLimit;
-//    property MinRate: double read GetMinRate;
-//    property MaxRate: double read GetMaxRate;
-//    property PumpElevation: double read GetPumpElevation;
-//    property ScalingLength: double read GetScalingLength;
-//
-//    property FlowingWellElevationAnnotation: string read GetFlowingWellElevationAnnotation;
-//    property FlowingWellConductanceAnnotation: string read GetFlowingWellConductanceAnnotation;
-//    property RateAnnotation: string read GetRateAnnotation;
-//    property WellHeadAnnotation: string read GetWellHeadAnnotation;
-//    property HeadLimitAnnotation: string read GetHeadLimitAnnotation;
-//    property MinRateAnnotation: string read GetMinRateAnnotation;
-//    property MaxRateAnnotation: string read GetMaxRateAnnotation;
-//    property PumpElevationAnnotation: string read GetPumpElevationAnnotation;
-//    property ScalingLengthAnnotation: string read GetScalingLengthAnnotation;
-
-
-
       WellElevationTimeList := TimeLists[0];
       for TimeIndex := 0 to WellElevationTimeList.Count - 1 do
       begin
@@ -889,11 +849,10 @@ begin
             as TModflowBoundaryDisplayDataArray;
           DataSets.Add(DataArray);
         end;
-//
+
         for WellIndex := 0 to Values.Count - 1 do
         begin
           WellList := Values[WellIndex];// as TValueCellList;
-//          Boundary := Well.MawBoundary;
           UsedIndicies := [];
           for DataTypeIndex := MawFlowingWellElevationPosition to
             MawFlowingWellReductionLengthPosition do
@@ -916,14 +875,7 @@ begin
             end;
           end;
 
-//          if UsedIndicies <> [] then
-//          begin
-//            List := Well.FCells;
-//   //         List.CheckRestore;
-//
-            UpdateCellDisplay(WellList, DataSets, [], nil, UsedIndicies);
-//            List.Cache;
-//          end;
+          UpdateCellDisplay(WellList, DataSets, [], nil, UsedIndicies);
         end;
         for DataSetIndex := 0 to DataSets.Count - 1 do
         begin
