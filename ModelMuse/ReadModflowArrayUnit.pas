@@ -933,7 +933,26 @@ begin
       MF2005BudgetTerms.Add('             WEL');
       MF2005BudgetTerms.Add('          STO-SS');
       MF2005BudgetTerms.Add('          STO-SY');
+      MF2005BudgetTerms.Add('        DATA-SAT');
 
+
+      MF2005BudgetTerms.Add(' STORAGE-AQUEOUS');
+      MF2005BudgetTerms.Add('  STORAGE-SORBED');
+      MF2005BudgetTerms.Add('   DECAY-AQUEOUS');
+      MF2005BudgetTerms.Add('    DECAY-SORBED');
+      MF2005BudgetTerms.Add('   MOBILE-DOMAIN');
+      MF2005BudgetTerms.Add('      FLOW-ERROR');
+      MF2005BudgetTerms.Add(' FLOW-CORRECTION');
+      MF2005BudgetTerms.Add(' SOURCE-SINK MIX');
+      MF2005BudgetTerms.Add('             CNC');
+      MF2005BudgetTerms.Add('             LKT');
+      MF2005BudgetTerms.Add('        MVT-FLOW');
+      MF2005BudgetTerms.Add('             MWT');
+      MF2005BudgetTerms.Add('             SFT');
+      MF2005BudgetTerms.Add('             SRC');
+      MF2005BudgetTerms.Add(' SOURCE-SINK MIX');
+      MF2005BudgetTerms.Add('             UZT');
+      MF2005BudgetTerms.Add('STRESS PACK CONC');
     end
     else
     begin

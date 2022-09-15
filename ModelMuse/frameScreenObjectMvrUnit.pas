@@ -808,7 +808,7 @@ begin
         begin
           RowOk := False;
         end
-        else if (TReceiverPackageChoice(frameReceivers.Grid.ItemIndex[Ord(rcObject), RowIndex]) = rpcSfr)
+        else if (TReceiverPackageChoice(frameReceivers.Grid.ItemIndex[Ord(rcPackage), RowIndex]) = rpcSfr)
           and (frameReceivers.Grid.Cells[Ord(rcSfrChoice), RowIndex] = '') then
         begin
           RowOk := False;

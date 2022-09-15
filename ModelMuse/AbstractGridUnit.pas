@@ -6021,9 +6021,17 @@ begin
                           begin
                             Assert(RTemp > 0);
                             LogRTemp := Log10(RTemp);
-                            TopCellColors[ColIndex, RowIndex] :=
-                              GridFracToRainbow((MinMax.LogRMax - LogRTemp)
-                              / (MinMax.LogRMax - MinMax.LogRMin));
+                            if MinMax.LogRMax = MinMax.LogRMin then
+                            begin
+                              TopCellColors[ColIndex, RowIndex] :=
+                                GridFracToRainbow(0.5);
+                            end
+                            else
+                            begin
+                              TopCellColors[ColIndex, RowIndex] :=
+                                GridFracToRainbow((MinMax.LogRMax - LogRTemp)
+                                / (MinMax.LogRMax - MinMax.LogRMin));
+                            end;
                           end
                           else
                           begin
@@ -6238,8 +6246,16 @@ begin
                           begin
                             Assert(RTemp > 0);
                             LogRTemp := Log10(RTemp);
-                            FrontCellColors[ColIndex, LayerIndex] :=
-                              GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                            if MinMax.LogRMax = MinMax.LogRMin then
+                            begin
+                              FrontCellColors[ColIndex, LayerIndex] :=
+                                GridFracToRainbow(0.5);
+                            end
+                            else
+                            begin
+                              FrontCellColors[ColIndex, LayerIndex] :=
+                                GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                            end;
                           end
                           else
                           begin
@@ -6452,8 +6468,16 @@ begin
                           begin
                             Assert(RTemp > 0);
                             LogRTemp := Log10(RTemp);
-                            SideCellColors[RowIndex, LayerIndex]  :=
-                              GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                            if MinMax.LogRMax = MinMax.LogRMin then
+                            begin
+                              SideCellColors[RowIndex, LayerIndex]  :=
+                                GridFracToRainbow(0.5);
+                            end
+                            else
+                            begin
+                              SideCellColors[RowIndex, LayerIndex]  :=
+                                GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                            end;
                           end
                           else
                           begin
@@ -6902,8 +6926,16 @@ begin
                       begin
                         Assert(RTemp > 0);
                         LogRTemp := Log10(RTemp);
-                        CellColors[LayerIndex, RowIndex, ColIndex] :=
-                          GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                        if MinMax.LogRMax = MinMax.LogRMin then
+                        begin
+                          CellColors[LayerIndex, RowIndex, ColIndex] :=
+                            GridFracToRainbow(0.5);
+                        end
+                        else
+                        begin
+                          CellColors[LayerIndex, RowIndex, ColIndex] :=
+                            GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                        end;
                       end
                       else
                       begin
@@ -9054,6 +9086,10 @@ begin
       begin
         MinMax.RMin := DataSet.RealData[Layer, Row, Col];
         MinMax.RMax := MinMax.RMin;
+        if MinMax.RMin > 0 then
+        begin
+          MinMax.RMinPositive := MinMax.RMin;
+        end;
         if DataSet.Limits.LowerLimit.UseLimit then
         begin
           MinMax.RMin := DataSet.Limits.LowerLimit.RealLimitValue;

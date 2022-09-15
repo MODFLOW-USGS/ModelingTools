@@ -491,14 +491,15 @@ end;
 
 destructor TMvrItem.Destroy;
 begin
-  FItems.Free;
   inherited;
+  FItems.Free;
 end;
 
 function TMvrItem.GetBoundaryFormula(Index: integer): string;
 var
   Item: TIndividualMvrItem;
 begin
+  Assert(FItems <> nil);
   Item := FItems[Index];
   result := Item.Value;
   ResetItemObserver(Index);
@@ -508,6 +509,7 @@ procedure TMvrItem.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Position: Integer;
 begin
+  Assert(FItems <> nil);
   Position := FItems.IndexOfFormulaObject(
     Sender as TFormulaObject);
 
@@ -526,6 +528,7 @@ end;
 
 procedure TMvrItem.RemoveFormulaObjects;
 begin
+  Assert(FItems <> nil);
   FItems.Clear;
 end;
 
@@ -533,12 +536,14 @@ procedure TMvrItem.SetBoundaryFormula(Index: integer; const Value: string);
 var
   Item: TIndividualMvrItem;
 begin
+  Assert(FItems <> nil);
   Item := FItems[Index];
   Item.Value := Value;
 end;
 
 procedure TMvrItem.SetItems(const Value: TIndividualMvrItems);
 begin
+  Assert(FItems <> nil);
   FItems.Assign(Value);
 end;
 

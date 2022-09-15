@@ -9,9 +9,9 @@ uses
   ModflowPackageSelectionUnit;
 
 type
-  TNprOptions = (noHorizontalAnis, noVerticalAnis, noUseXT3D, noXt3dOnRightHandSide, noThickStrt, noVaryingVerticalConductance, noDewatered,
-    noPerched, {noNewton, noDampening,} 
-    noSaveSpecificDischarge);
+  TNprOptions = (noHorizontalAnis, noVerticalAnis, noUseXT3D,
+    noXt3dOnRightHandSide, noThickStrt, noVaryingVerticalConductance, noDewatered,
+    noPerched, noSaveSpecificDischarge, noSaveSaturation);
 
   TframePackageNpf = class(TframePackage)
     rdgOptions: TRbwDataGrid4;
@@ -66,6 +66,7 @@ resourcestring
   'VE_SPECIFIC_DISCHARGE)';
   StrUseHorizontalAniso = 'Use horizontal anisotropy (K22OVERK)';
   StrUseVerticalAnisotr = 'Use vertical anisotropy (K33OVERK)';
+  StrSaveSaturationSAV = 'Save Saturation (SAVE_SATURATION)';
 
 {$R *.dfm}
 
@@ -109,6 +110,7 @@ begin
   rdgOptions.Checked[0, Ord(noSaveSpecificDischarge)] := NpfPackage.SaveSpecificDischarge;
   rdgOptions.Checked[0, Ord(noHorizontalAnis)] := NpfPackage.UseHorizontalAnisotropy;
   rdgOptions.Checked[0, Ord(noVerticalAnis)] := NpfPackage.UseVerticalAnisotropy;
+  rdgOptions.Checked[0, Ord(noSaveSaturation)] := NpfPackage.SaveSaturation;
 end;
 
 procedure TframePackageNpf.Loaded;
@@ -130,7 +132,7 @@ begin
     rdgOptions.Cells[0, Ord(noSaveSpecificDischarge)] := StrSaveXYAndZCom;
     rdgOptions.Cells[0, Ord(noHorizontalAnis)] := StrUseHorizontalAniso;
     rdgOptions.Cells[0, Ord(noVerticalAnis)] := StrUseVerticalAnisotr;
-
+    rdgOptions.Cells[0, Ord(noSaveSaturation)] := StrSaveSaturationSAV;
   finally
     rdgOptions.EndUpdate;
 
@@ -223,6 +225,7 @@ begin
   NpfPackage.SaveSpecificDischarge := rdgOptions.Checked[0, Ord(noSaveSpecificDischarge)];
   NpfPackage.UseHorizontalAnisotropy := rdgOptions.Checked[0, Ord(noHorizontalAnis)];
   NpfPackage.UseVerticalAnisotropy := rdgOptions.Checked[0, Ord(noVerticalAnis)];
+  NpfPackage.SaveSaturation := rdgOptions.Checked[0, Ord(noSaveSaturation)];
 end;
 
 end.

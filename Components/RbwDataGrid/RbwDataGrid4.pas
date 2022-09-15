@@ -5084,7 +5084,13 @@ begin
     result := 0;
     Exit;
   end;
-  result := StrToFloat(LocalizeString(S));
+  try
+    result := StrToFloat(LocalizeString(S));
+  except on EConvertError do
+    begin
+      result := StrToFloat(LocalizeString(S + '0'));
+    end;
+  end;
 end;
 
 function TCustomRBWDataGrid.WidthNeededToFitText(

@@ -79,31 +79,17 @@ end;
 
 procedure TNpfWriter.WriteDataSet1;
 var
-//  HNOFlO: Real;
-//  HDRY: Real;
   NpfPackage: TNpfPackage;
   Wetting: TWettingOptions;
   WETFCT: Real;
   IWETIT: Integer;
   IHDWET: Integer;
   ModflowOptions: TModflowOptions;
-//  ModflowWettingOptions: TWettingOptions
 begin
   ModflowOptions := Model.ModflowOptions;
-//  ModflowWettingOptions := Model.ModflowWettingOptions;
   WriteBeginOptions;
 
   WriteSaveFlowsOption;
-
-//  HNOFlO := Model.ModflowOptions.HNoFlow;
-//  WriteString('  HNOFLO ');
-//  WriteFloat(HNOFlO);
-//  NewLine;
-//
-//  HDRY := Model.ModflowOptions.HDry;
-//  WriteString('  HDRY ');
-//  WriteFloat(HDRY);
-//  NewLine;
 
   NpfPackage := Model.ModflowPackages.NpfPackage;
 
@@ -152,20 +138,16 @@ begin
     WETFCT := Wetting.WettingFactor;
     WriteString('  WETFCT ');
     WriteFloat(WETFCT);
-//    NewLine;
 
     IWETIT := Wetting.WettingIterations;
     WriteString('  IWETIT ');
     WriteInteger(IWETIT);
-//    NewLine;
 
     IHDWET := Wetting.WettingEquation;
     WriteString('  IHDWET ');
     WriteInteger(IHDWET);
     NewLine;
   end;
-
-//  WriteNoNewtown;
 
   if NpfPackage.UseXT3D then
   begin
@@ -183,6 +165,12 @@ begin
     NewLine;
   end;
 
+  if NpfPackage.SaveSaturation then
+  begin
+    WriteString('  SAVE_SATURATION');
+    NewLine;
+  end;
+
   if FNpfPackage.UseHorizontalAnisotropy then
   begin
     WriteString('  K22OVERK');
@@ -194,17 +182,6 @@ begin
     WriteString('  K33OVERK');
     NewLine;
   end;
-  //  if not NpfPackage.UseNewtonRaphson then
-//  begin
-//    WriteString('  NO_NEWTON');
-//    NewLine;
-//  end;
-
-//  if NpfPackage.ApplyHeadDampening then
-//  begin
-//    WriteString('  NEWTON_HEAD_DAMPENING');
-//    NewLine;
-//  end;
 
   WriteEndOptions;
 end;

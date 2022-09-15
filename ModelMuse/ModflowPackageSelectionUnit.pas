@@ -396,6 +396,7 @@ Type
     FSaveSpecificDischarge: Boolean;
     FUseVerticalAnisotropy: Boolean;
     FUseHorizontalAnisotropy: Boolean;
+    FSaveSaturation: Boolean;
     procedure SetCellAveraging(const Value: TCellAveraging);
     procedure SetApplyHeadDampening(const Value: boolean);
     procedure SetDewatered(const Value: boolean);
@@ -408,6 +409,7 @@ Type
     procedure SetSaveSpecificDischarge(const Value: Boolean);
     procedure SetUseHorizontalAnisotropy(const Value: Boolean);
     procedure SetUseVerticalAnisotropy(const Value: Boolean);
+    procedure SetSaveSaturation(const Value: Boolean);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -448,6 +450,7 @@ Type
       write SetUseHorizontalAnisotropy;
     property UseVerticalAnisotropy: Boolean read FUseVerticalAnisotropy
       write SetUseVerticalAnisotropy;
+    property SaveSaturation: Boolean read FSaveSaturation write SetSaveSaturation;
   end;
 
   TStorageChoice = (scSpecificStorage, scStorageCoefficient);
@@ -19048,6 +19051,7 @@ begin
     SaveSpecificDischarge := SourceNfp.SaveSpecificDischarge;
     UseHorizontalAnisotropy := SourceNfp.UseHorizontalAnisotropy;
     UseVerticalAnisotropy := SourceNfp.UseVerticalAnisotropy;
+    SaveSaturation := SourceNfp.SaveSaturation;
   end;
   inherited;
 end;
@@ -19073,7 +19077,7 @@ begin
   FSaveSpecificDischarge := True;
   FUseHorizontalAnisotropy := False;
   FUseVerticalAnisotropy := False;
-
+  FSaveSaturation := True;
 end;
 
 procedure TNpfPackage.SetApplyHeadDampening(const Value: boolean);
@@ -19098,6 +19102,11 @@ end;
 procedure TNpfPackage.SetPerched(const Value: Boolean);
 begin
   SetBooleanProperty(FPerched, Value);
+end;
+
+procedure TNpfPackage.SetSaveSaturation(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveSaturation, Value);
 end;
 
 procedure TNpfPackage.SetSaveSpecificDischarge(const Value: Boolean);

@@ -10713,8 +10713,12 @@ const
 //               Bug fix: The batch files for creating covariance files for PEST
 //                now enclose the commands in quotation marks so that the
 //                programs will run even if the paths contain spaces.
-//    '5.0.0.27' Bug fix: fixed bug that could cause ModelMuse to encounter an
+//    '5.0.0.27' Bug fix: Fixed bug that could cause ModelMuse to encounter an
 //                an error when drawing contours.
+
+//               Bug fix: Fixed bug in specifing MVR receivers.
+//               Enhancement: Added support for the SAVE SATURATION option in
+//                the NPF package.:
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.

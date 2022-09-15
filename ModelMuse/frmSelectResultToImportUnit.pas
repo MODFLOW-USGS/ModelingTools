@@ -283,6 +283,8 @@ type
       OldComments: TStringList; Precision: TModflowPrecision);
     function GetClassificationGroup: string;
     function GetPrefix: string;
+    procedure UpdateModelAndPackageNames(var ModelName1, ModelName2,
+      PackageName1, PackageName2: string);
   public
     function ShowDataSets(AFileName: string): boolean;
     function SelectFiles: boolean;
@@ -2947,30 +2949,33 @@ begin
                           A3DArray, AuxArray, Precision, HufFormat, True, AModel,
                           ModelName1, ModelName2, PackageName1, PackageName2);
                       end;
-                      if Trim(ModelName1) = 'MODFLOW' then
-                      begin
-                        ModelName1 := '';
-                      end;
-                      if Trim(ModelName2) = 'MODFLOW' then
-                      begin
-                        ModelName2 := '';
-                      end;
-                      if Trim(PackageName1) = 'MODFLOW' then
-                      begin
-                        PackageName1 := '';
-                      end;
-                      if Trim(PackageName2) = 'MODFLOW' then
-                      begin
-                        PackageName2 := '';
-                      end;
-                      if ModelName1 = ModelName2 then
-                      begin
-                        ModelName2 :='';
-                      end;
-                      if PackageName1 = PackageName2 then
-                      begin
-                        PackageName2 :='';
-                      end;
+                      UpdateModelAndPackageNames(ModelName1, ModelName2,
+                        PackageName1, PackageName2);
+//                      if Trim(ModelName1) = 'MODFLOW' then
+//                      begin
+//                        ModelName1 := '';
+//                      end;
+//                      if Trim(ModelName2) = 'MODFLOW' then
+//                      begin
+//                        ModelName2 := '';
+//                      end;
+//                      if Trim(PackageName1) = 'MODFLOW' then
+//                      begin
+//                        PackageName1 := '';
+//                      end;
+//                      if Trim(PackageName2) = 'MODFLOW' then
+//                      begin
+//                        PackageName2 := '';
+//                      end;
+//                      if ModelName1 = ModelName2 then
+//                      begin
+//                        ModelName2 :='';
+//                      end;
+//                      if PackageName1 = PackageName2 then
+//                      begin
+//                        PackageName2 :='';
+//                      end;
+                      Description := Description + FSpeciesName;
                       ALabel := WriteLabel(Description, AModel, ILAY, KPER,
                         KSTP, NTRANS, SwrTimeStep, TOTIM, Precision,
                         ModelName1, ModelName2, PackageName1, PackageName2);
@@ -2983,7 +2988,9 @@ begin
                       if clData.Checked[CheckIndex] and not EndReached then
                       begin
                         if (Pos('data_spdis', Lowercase(Description)) = 1)
-                          or (Pos('data-spdis', Lowercase(Description)) = 1) then
+                          or (Pos('data-spdis', Lowercase(Description)) = 1)
+                          or (Pos('data_sat', Lowercase(Description)) = 1)
+                          or (Pos('data-sat', Lowercase(Description)) = 1) then
                         begin
                           AuxLayerNumbersList.Clear;
                           AuxLayerDataSetsList.Clear;
@@ -3002,7 +3009,9 @@ begin
                           ILAY := AModel.ModflowLayerToDataSetLayer(LayerIndex+1)+1;
 
                           if (Pos('data_spdis', Lowercase(Description)) = 1)
-                            or (Pos('data-spdis', Lowercase(Description)) = 1) then
+                            or (Pos('data-spdis', Lowercase(Description)) = 1)
+                            or (Pos('data_sat', Lowercase(Description)) = 1)
+                            or (Pos('data-sat', Lowercase(Description)) = 1) then
                           begin
                             for AuxIndex := 0 to Length(AuxArray) - 1 do
                             begin
@@ -3137,11 +3146,18 @@ begin
                         Inc(Count);
                         ParentArray := nil;
                         if (Pos('data_spdis', Lowercase(Description)) = 1)
-                          or (Pos('data-spdis', Lowercase(Description)) = 1) then
+                          or (Pos('data-spdis', Lowercase(Description)) = 1)
+                          or (Pos('data_sat', Lowercase(Description)) = 1)
+                          or (Pos('data-sat', Lowercase(Description)) = 1) then
                         begin
-                          if Length(AuxArray) > 0 then
+                          VectorItem := nil;
+                          if (Pos('data_spdis', Lowercase(Description)) = 1)
+                            or (Pos('data-spdis', Lowercase(Description)) = 1) then
                           begin
-                            VectorItem := Vectors.Add;
+                            if Length(AuxArray) > 0 then
+                            begin
+                              VectorItem := Vectors.Add;
+                            end;
                           end;
                           for AuxIndex := 0 to Length(AuxArray) - 1 do
                           begin
@@ -3154,24 +3170,27 @@ begin
                               AuxLayerNumbers, AuxLayerDataSets, New3DArray, OldComment, True,
                               NewDataSets, FileNames, AModel, Precision);
 
-                            if Pos('qx_', New3DArray.Name) > 0 then
+                            if VectorItem <> nil then
                             begin
-                              VectorItem.Description :=
-                                ReplaceText(New3DArray.Name, 'qx_', '')
-                                + Format(StrImportedOnS, [DateToStr(Now)]);
-                              VectorItem.Vectors.XVelocityName := New3DArray.Name;
-                            end
-                            else if Pos('qy_', New3DArray.Name) > 0 then
-                            begin
-                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qy_', '')
-                                + Format(StrImportedOnS, [DateToStr(Now)]);
-                              VectorItem.Vectors.YVelocityName := New3DArray.Name;
-                            end
-                            else if Pos('qz_', New3DArray.Name) > 0 then
-                            begin
-                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qz_', '')
-                                + Format(StrImportedOnS, [DateToStr(Now)]);
-                              VectorItem.Vectors.ZVelocityName := New3DArray.Name;
+                              if Pos('qx_', New3DArray.Name) > 0 then
+                              begin
+                                VectorItem.Description :=
+                                  ReplaceText(New3DArray.Name, 'qx_', '')
+                                  + Format(StrImportedOnS, [DateToStr(Now)]);
+                                VectorItem.Vectors.XVelocityName := New3DArray.Name;
+                              end
+                              else if Pos('qy_', New3DArray.Name) > 0 then
+                              begin
+                                VectorItem.Description := ReplaceText(New3DArray.Name, 'qy_', '')
+                                  + Format(StrImportedOnS, [DateToStr(Now)]);
+                                VectorItem.Vectors.YVelocityName := New3DArray.Name;
+                              end
+                              else if Pos('qz_', New3DArray.Name) > 0 then
+                              begin
+                                VectorItem.Description := ReplaceText(New3DArray.Name, 'qz_', '')
+                                  + Format(StrImportedOnS, [DateToStr(Now)]);
+                                VectorItem.Vectors.ZVelocityName := New3DArray.Name;
+                              end;
                             end;
 
                             UpdateOldComments(OldComments, New3DArray, OldComment);
@@ -3924,6 +3943,38 @@ begin
 //  end;
 end;
 
+procedure TfrmSelectResultToImport.UpdateModelAndPackageNames(var ModelName1,
+  ModelName2, PackageName1, PackageName2: string);
+begin
+  if (Trim(ModelName1) = 'MODFLOW')
+    or SameText(Trim(ModelName1), Trim(FSpeciesName)) then
+  begin
+    ModelName1 := '';
+  end;
+  if (Trim(ModelName2) = 'MODFLOW')
+    or SameText(Trim(ModelName2), Trim(FSpeciesName)) then
+  begin
+    ModelName2 := '';
+  end;
+  if (Trim(PackageName1) = 'MODFLOW')
+    or SameText(Trim(PackageName1), Trim(FSpeciesName)) then
+  begin
+    PackageName1 := '';
+  end;
+  if (Trim(PackageName2) = 'MODFLOW')
+    or SameText(Trim(PackageName2), Trim(FSpeciesName)) then
+  begin
+    PackageName2 := '';
+  end;
+  if ModelName1 = ModelName2 then
+  begin
+    ModelName2 :='';
+  end;
+  if PackageName1 = PackageName2 then
+  begin
+    PackageName2 :='';
+  end;
+end;
 
 function TfrmSelectResultToImport.ReadDataHeadings(AModel: TCustomModel;
   AFileName: string): boolean;
@@ -4246,30 +4297,36 @@ begin
                       AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
                       HufFormat,
                       ModelName1, ModelName2, PackageName1, PackageName2, False);
-                    if Trim(ModelName1) = 'MODFLOW' then
-                    begin
-                      ModelName1 := '';
-                    end;
-                    if Trim(ModelName2) = 'MODFLOW' then
-                    begin
-                      ModelName2 := '';
-                    end;
-                    if Trim(PackageName1) = 'MODFLOW' then
-                    begin
-                      PackageName1 := '';
-                    end;
-                    if Trim(PackageName2) = 'MODFLOW' then
-                    begin
-                      PackageName2 := '';
-                    end;
-                    if ModelName1 = ModelName2 then
-                    begin
-                      ModelName2 :='';
-                    end;
-                    if PackageName1 = PackageName2 then
-                    begin
-                      PackageName2 :='';
-                    end;
+                    UpdateModelAndPackageNames(ModelName1, ModelName2,
+                      PackageName1, PackageName2)
+//                    if (Trim(ModelName1) = 'MODFLOW')
+//                      or SameText(Trim(ModelName1), Trim(FSpeciesName)) then
+//                    begin
+//                      ModelName1 := '';
+//                    end;
+//                    if (Trim(ModelName2) = 'MODFLOW')
+//                      or SameText(Trim(ModelName2), Trim(FSpeciesName)) then
+//                    begin
+//                      ModelName2 := '';
+//                    end;
+//                    if (Trim(PackageName1) = 'MODFLOW')
+//                      or SameText(Trim(PackageName1), Trim(FSpeciesName)) then
+//                    begin
+//                      PackageName1 := '';
+//                    end;
+//                    if (Trim(PackageName2) = 'MODFLOW')
+//                      or SameText(Trim(PackageName2), Trim(FSpeciesName)) then
+//                    begin
+//                      PackageName2 := '';
+//                    end;
+//                    if ModelName1 = ModelName2 then
+//                    begin
+//                      ModelName2 :='';
+//                    end;
+//                    if PackageName1 = PackageName2 then
+//                    begin
+//                      PackageName2 :='';
+//                    end;
                   end;
                 else Assert(False);
               end;
@@ -4399,22 +4456,24 @@ begin
                       AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
                       HufFormat,
                       ModelName1, ModelName2, PackageName1, PackageName2, False);
-                    if Trim(ModelName1) = 'MODFLOW' then
-                    begin
-                      ModelName1 := '';
-                    end;
-                    if Trim(ModelName2) = 'MODFLOW' then
-                    begin
-                      ModelName2 := '';
-                    end;
-                    if Trim(PackageName1) = 'MODFLOW' then
-                    begin
-                      PackageName1 := '';
-                    end;
-                    if Trim(PackageName2) = 'MODFLOW' then
-                    begin
-                      PackageName2 := '';
-                    end;
+                    UpdateModelAndPackageNames(ModelName1, ModelName2,
+                      PackageName1, PackageName2)
+//                    if Trim(ModelName1) = 'MODFLOW' then
+//                    begin
+//                      ModelName1 := '';
+//                    end;
+//                    if Trim(ModelName2) = 'MODFLOW' then
+//                    begin
+//                      ModelName2 := '';
+//                    end;
+//                    if Trim(PackageName1) = 'MODFLOW' then
+//                    begin
+//                      PackageName1 := '';
+//                    end;
+//                    if Trim(PackageName2) = 'MODFLOW' then
+//                    begin
+//                      PackageName2 := '';
+//                    end;
                   end;
                 else Assert(False);
               end;
@@ -5082,6 +5141,10 @@ begin
     then
   begin
     FResultFormat := mrFlux;
+    if SameText(Extension, StrCbcExt) then
+    begin
+      FSPeciesName := GetspeciesName;
+    end;
   end
   else if (SameText(Extension, StrHuffhd)) then
   begin
