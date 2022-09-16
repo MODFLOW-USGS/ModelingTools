@@ -1216,6 +1216,8 @@ end;
 procedure TfrmStartUp.rdeModflowLayerCountChange(Sender: TObject);
 var
   Value: integer;
+  RowIndex: Integer;
+  Depth: double;
 begin
   inherited;
   if rdgInitialLayers = nil then Exit;
@@ -1231,6 +1233,18 @@ begin
   except on EConvertError do
     begin
       // ignore
+    end;
+  end;
+  for RowIndex := 2 to rdgInitialLayers.RowCount - 1 do
+  begin
+    if rdgInitialLayers.Cells[0,RowIndex] = '' then
+    begin
+      rdgInitialLayers.Cells[0,RowIndex] := Format('Layer%d', [RowIndex-1]);
+    end;
+    if (rdgInitialLayers.Cells[1,RowIndex] = '')
+      and TryStrToFloat(rdgInitialLayers.Cells[1,RowIndex-1], Depth) then
+    begin
+      rdgInitialLayers.Cells[1,RowIndex] := FloatToStr(Depth-10);
     end;
   end;
 end;

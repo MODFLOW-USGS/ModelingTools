@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-09-16T12:31:13.039-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SFR: MODFLOW 6 Streamflow Routing Package Pane</title>
   <body>
     <header>
@@ -8,11 +8,12 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Streamflow-Routing (SFR) package is used to simulate streams in a model. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Head_Dependant_Flux" styleclass="Normal" style="font-weight:bold;" translate="true">Head Dependant Flux</link><text styleclass="Normal" style="font-weight:bold;" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">There are six options that the user must specify the the SFR package in MODFLOW 6.</text></para>
-    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Strong"><text styleclass="Strong" translate="true">Print stage (PRINT_STAGE)</text><text styleclass="Normal" translate="true">: If this option is checked, the stream reach stages will be printed in the listing file when heads are printed.</text></li>
       <li styleclass="Strong"><text styleclass="Strong" translate="true">Print flows (PRINT_FLOWS)</text><text styleclass="Normal" translate="true">: If this option is checked, the stream reach flows will be printed in the listing file when budget is printed.</text></li>
       <li styleclass="Strong"><text styleclass="Strong" translate="true">Save stage (stagefile)</text><text styleclass="Normal" translate="true">: If this option is checked, the stream stages will be saved in in a binary file with the extension .&quot;stage.&quot;</text></li>
       <li styleclass="Strong"><text styleclass="Strong" translate="true">Save budget (budgetfile)</text><text styleclass="Normal" translate="true">: If this option is checked, the stream budget information will be saved in in a binary file with the extension .&quot;sfr_budget.&quot;</text></li>
+      <li styleclass="Strong"><text styleclass="Strong" translate="true">Maximum number of Picard iterations (maximum_picard_iteration)</text><text styleclass="Normal" translate="true">: This defines the maximum number of Streamflow Routing picard iterations allowed when solving for reach stages and flows as part of the GWF formulate step. Picard iterations are used to minimize differences in SFR package results between subsequent GWF picard (non-linear) iterations as a result of non-optimal reach numbering. If reaches are numbered in order, from upstream to downstream, MAXIMUM PICARD ITERATIONS can be set to 1 to reduce model run time. By default, MAXIMUM PICARD ITERATIONS is equal to 100.</text></li>
       <li styleclass="Strong"><text styleclass="Strong" translate="true">Maximum number of streamflow iterations (maximum_iteration)</text><text styleclass="Normal" translate="true">: This defines the maximum number of Streamflow Routing Newton-Raphson iterations allowed for a reach.</text></li>
       <li styleclass="Strong"><text styleclass="Strong" translate="true">Stream depth closure criterion (maximum_depth_change)</text><text styleclass="Normal" translate="true">: This defines the depth closure tolerance.</text></li>
     </list>

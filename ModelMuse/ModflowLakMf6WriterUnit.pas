@@ -307,9 +307,10 @@ resourcestring
   'tion than the top of the model at Row %1:d, Column %2:d';
   StrTheLakeDefinedByDisv = 'The lake defined by %0:s has a higher top eleva' +
   'tion than the top of the model at Cell %1:d';
-  StrDistanceBetweenCelRowCol = 'Distance between cells (%0:d, %1:d) and (%2' +
-  ':d, %3:d) [Row, Column]';
-  StrDistanceBetweenCelNum = 'Distance between cells %0:d and %1:d [Cell Num' +
+  StrDistanceBetweenCelRowCol = 'Distance from the center of the lake ' +
+  'connection cell at (%0:d, %1:d) to the lake edge in cell (%2:d,' +
+  ' %3:d) [Row, Column]';
+  StrDistanceBetweenCelNum = 'Half the distance between cells %0:d and %1:d [Cell Num' +
   'ber]';
   StrConnectionWidthIs = 'Connection width is only specified for horizontal ' +
   'lake connections';
@@ -845,6 +846,7 @@ var
   Param: TModflowSteadyParameter;
   PestParamName: string;
   DataArray: TDataArray;
+  ConnLength: double;
 begin
   Grid := Model.Grid;
   Disv := Model.DisvGrid;
@@ -1060,10 +1062,21 @@ begin
           begin
             if Grid <> nil then
             begin
-              LakeConnectionCenter := Grid.TwoDElementCenter(LakeCell.Cell.Column, LakeCell.Cell.Row);
-              LakeCenter := Grid.TwoDElementCenter(LakeCell.LakeCell.Column, LakeCell.LakeCell.Row);
+              LakeConnectionCenter := Grid.TwoDElementCenter(
+                LakeCell.Cell.Column, LakeCell.Cell.Row);
+              LakeCenter := Grid.TwoDElementCenter(
+                LakeCell.LakeCell.Column, LakeCell.LakeCell.Row);
               LakeDistanceAnnotation := Format(StrDistanceBetweenCelRowCol,
-                [LakeCell.Cell.Row+1, LakeCell.Cell.Column+1, LakeCell.LakeCell.Row+1, LakeCell.LakeCell.Column+1]);
+                [LakeCell.Cell.Row+1, LakeCell.Cell.Column+1,
+                 LakeCell.LakeCell.Row+1, LakeCell.LakeCell.Column+1]);
+              if LakeCell.Cell.Column = LakeCell.LakeCell.Column then
+              begin
+                ConnLength := Grid.RowWidth[LakeCell.Cell.Row]/2
+              end
+              else
+              begin
+                ConnLength := Grid.ColumnWidth[LakeCell.Cell.Column]/2
+              end;
             end
             else
             begin
@@ -1071,8 +1084,9 @@ begin
               LakeCenter := Disv.TwoDGrid.Cells[LakeCell.LakeCell.Column].Location;
               LakeDistanceAnnotation := Format(StrDistanceBetweenCelNum,
                 [LakeCell.Cell.Column+1, LakeCell.LakeCell.Column+1]);
+              ConnLength := Distance(LakeConnectionCenter,LakeCenter)/2;
             end;
-            ALake.FLakeCellList[CellIndex].ConnLength := Distance(LakeConnectionCenter,LakeCenter);
+            ALake.FLakeCellList[CellIndex].ConnLength := ConnLength;
             ALake.FLakeCellList[CellIndex].ConnLengthAnnotation := LakeDistanceAnnotation;
             ALake.FLakeCellList[CellIndex].ConnLengthPestName := '';
           end
@@ -1870,7 +1884,7 @@ var
   LakeIndex: Integer;
   ALake: TLake;
   BoundName: string;
-  SpeciesIndex: Integer;
+//  SpeciesIndex: Integer;
 begin
   WriteBeginPackageData;
   WriteString('# <lakeno> <strt> <boundname>');
@@ -2610,7 +2624,7 @@ var
   LakeIndex: Integer;
   ALake: TLake;
   BoundName: string;
-  SpeciesIndex: Integer;
+//  SpeciesIndex: Integer;
 begin
   WriteBeginPackageData;
   WriteString('# <lakeno> <strt> <nlakeconn> [<aux(naux)>] [<boundname>]');

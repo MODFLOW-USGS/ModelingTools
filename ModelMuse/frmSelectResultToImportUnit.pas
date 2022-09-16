@@ -2788,7 +2788,7 @@ begin
                       While (KPER = FPeriods[Index])
                         and (KSTP = FSteps[Index])
                         and (NTRANS = FTransportSteps[Index])
-                        and (Description + FSpeciesName = FDescriptions[Index])
+                        and (Trim(Description + FSpeciesName) = FDescriptions[Index])
                         and not EndReached do
                       begin
                         if ILAY < 0 then
@@ -5106,7 +5106,7 @@ var
   Extension: string;
   frmBudgetPrecisionQuery: TfrmBudgetPrecisionQuery;
   AFileStream: TFileStream;
-  function GetspeciesName: string;
+  function GetSpeciesName: string;
   begin
     result := ExtractFileName(AFileName);
     result := ChangeFileExt(result, '');
@@ -5126,7 +5126,7 @@ begin
     FResultFormat := mrBinary;
     if SameText(Extension, StrConc) then
     begin
-      FSPeciesName := GetspeciesName;
+      FSPeciesName := GetSpeciesName;
     end;
   end
   else if (SameText(Extension, StrFdn))
@@ -5143,7 +5143,7 @@ begin
     FResultFormat := mrFlux;
     if SameText(Extension, StrCbcExt) then
     begin
-      FSPeciesName := GetspeciesName;
+      FSPeciesName := GetSpeciesName;
     end;
   end
   else if (SameText(Extension, StrHuffhd)) then

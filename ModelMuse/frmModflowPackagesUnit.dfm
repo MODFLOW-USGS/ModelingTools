@@ -7,8 +7,8 @@ inherited frmModflowPackages: TfrmModflowPackages
   OnActivate = jvplPackagesChange
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitWidth = 800
-  ExplicitHeight = 604
+  ExplicitWidth = 798
+  ExplicitHeight = 596
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 177
@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspGwtSRC
+    ActivePage = jvspSfrMf6
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -9827,8 +9827,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 413
           inherited tabBasic: TTabSheet
             ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 380
+            ExplicitHeight = 381
             inherited lblPrintOption: TLabel
               Width = 79
               Height = 18
@@ -9903,11 +9902,14 @@ inherited frmModflowPackages: TfrmModflowPackages
           end
           inherited tabNonLinear: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 381
+            ExplicitWidth = 587
+            ExplicitHeight = 380
             inherited rdgNonlinearOptions: TRbwDataGrid4
-              Height = 381
+              Width = 587
+              Height = 380
               FixedCols = 0
-              ExplicitHeight = 381
+              ExplicitWidth = 587
+              ExplicitHeight = 380
             end
           end
           inherited tabLinear: TTabSheet
@@ -10127,6 +10129,12 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 401
           ExplicitHeight = 18
         end
+        inherited lblPicard: TLabel
+          Width = 258
+          Height = 36
+          ExplicitWidth = 258
+          ExplicitHeight = 36
+        end
         inherited memoComments: TMemo
           Width = 564
           ExplicitWidth = 564
@@ -10167,6 +10175,12 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePackageSfrMF6.cbPrintFlows
+            end
+            item
+              Control = framePackageSfrMF6.cbPackageConvergence
+            end
+            item
+              Control = framePackageSfrMF6.sePicard
             end>
           OnEnabledChange = framePackageSfrMF6rcSelectionControllerEnabledChange
         end

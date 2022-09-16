@@ -10719,6 +10719,8 @@ const
 //               Bug fix: Fixed bug in specifing MVR receivers.
 //               Enhancement: Added support for the SAVE SATURATION option in
 //                the NPF package.:
+//               Bug fix: Changed calculation of connlen in the MODFLOW 6 lake
+//                package.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.

@@ -8,8 +8,8 @@ inherited frmStartUp: TfrmStartUp
   ClientHeight = 406
   ClientWidth = 751
   OnClose = FormClose
-  ExplicitWidth = 769
-  ExplicitHeight = 453
+  ExplicitWidth = 767
+  ExplicitHeight = 445
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -81,7 +81,7 @@ inherited frmStartUp: TfrmStartUp
     Height = 359
     HelpType = htKeyword
     HelpKeyword = 'Initial_Grid_Dialog_Box'
-    ActivePage = tabGeoRef
+    ActivePage = tabInitialModflowGrid
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
@@ -404,7 +404,9 @@ inherited frmStartUp: TfrmStartUp
             ExplicitHeight = 18
           end
           inherited lblOriginZ: TLabel
+            Width = 9
             Height = 18
+            ExplicitWidth = 9
             ExplicitHeight = 18
           end
           inherited rdeExaggeration: TRbwDataEntry
