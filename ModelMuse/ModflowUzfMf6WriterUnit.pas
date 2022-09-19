@@ -956,13 +956,16 @@ begin
               WriteValueOrFormula(UzfCell, FormulaIndex);
               NewLine;
 
-              WriteInteger(CellNumber);
-              WriteString(' UZET');
-              FormulaIndex := UzfBoundaryGwtStart
-                + UztGwtConcCount*FSpeciesIndex + UzfGwtEvapConcentrationsPosition;
-//                + UztGwtConcCount*UzfGwtEvapConcentrationsPosition + FSpeciesIndex;
-              WriteValueOrFormula(UzfCell, FormulaIndex);
-              NewLine;
+              if FUzfPackage.SimulateET then
+              begin
+                WriteInteger(CellNumber);
+                WriteString(' UZET');
+                FormulaIndex := UzfBoundaryGwtStart
+                  + UztGwtConcCount*FSpeciesIndex + UzfGwtEvapConcentrationsPosition;
+  //                + UztGwtConcCount*UzfGwtEvapConcentrationsPosition + FSpeciesIndex;
+                WriteValueOrFormula(UzfCell, FormulaIndex);
+                NewLine;
+              end;
             end;
             NewLine;
 

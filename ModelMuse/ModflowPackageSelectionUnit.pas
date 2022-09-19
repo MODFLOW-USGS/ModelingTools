@@ -19628,7 +19628,7 @@ end;
 procedure TSmsPackageSelection.SetNewtonMF6(const Value: Boolean);
 begin
   FNewtonMF6 := Value;
-  if FModel <> nil then
+  if (FModel <> nil) and (SpeciesIndex < 0) then
   begin
     (FModel as TCustomModel).ModflowOptions.NewtonMF6 := Value;
   end;
@@ -19826,7 +19826,7 @@ end;
 procedure TSmsPackageSelection.SetUnderRelaxationMF6(const Value: Boolean);
 begin
   FUnderRelaxationMF6 := Value;
-  if FModel <> nil then
+  if (FModel <> nil) and (SpeciesIndex < 0) then
   begin
     (FModel as TCustomModel).ModflowOptions.UnderRelaxationMF6 := Value;
   end;

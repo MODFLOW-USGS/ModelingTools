@@ -10608,6 +10608,12 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePackageUzfMf6.rdeNumberOfWaveSets
+            end
+            item
+              Control = framePackageUzfMf6.cbPackageConvergence
+            end
+            item
+              Control = framePackageUzfMf6.cbBudgetCsv
             end>
           OnEnabledChange = framePackageUzfMf6rcSelectionControllerEnabledChange
         end

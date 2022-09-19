@@ -62,6 +62,7 @@ type
     FLinLinearAccPickList: TStringList;
     FReorderingPickList: TStringList;
     FScalingMethodPickList: TStringList;
+    FSpeciesIndex: Integer;
 //    FXmdLinearAccPickList: TStringList;
     procedure InitializeGrids;
     function SmsOrdToRow(SmsOrdinal: TSmsOverride): Integer;
@@ -191,11 +192,14 @@ begin
     end;
 
     SmsPackage := Package as TSmsPackageSelection;
+    FSpeciesIndex := SmsPackage.SpeciesIndex;
     cbContinue.Enabled := rcSelectionController.Enabled and
-      (SmsPackage.SpeciesIndex < 0);
+      (FSpeciesIndex < 0);
     seSolutionGroupMaxIter.Enabled := cbContinue.Enabled;
     cbCheckInput.Enabled := cbContinue.Enabled;
     comboMemoryPrint.Enabled := cbContinue.Enabled;
+    cbNewton.Enabled := cbContinue.Enabled;
+    cbUnderRelaxation.Enabled := cbContinue.Enabled and cbNewton.Checked;
 
     seSolutionGroupMaxIter.AsInteger := SmsPackage.SolutionGroupMaxIteration;
     comboPrintOption.ItemIndex := Ord(SmsPackage.Print);
@@ -425,7 +429,13 @@ end;
 procedure TframePkgSms.rcSelectionControllerEnabledChange(Sender: TObject);
 begin
   inherited;
-  cbUnderRelaxation.Enabled := rcSelectionController.Enabled and cbNewton.Checked;
+  cbContinue.Enabled := rcSelectionController.Enabled and
+    (FSpeciesIndex < 0);
+  seSolutionGroupMaxIter.Enabled := cbContinue.Enabled;
+  cbCheckInput.Enabled := cbContinue.Enabled;
+  comboMemoryPrint.Enabled := cbContinue.Enabled;
+  cbNewton.Enabled := cbContinue.Enabled;
+  cbUnderRelaxation.Enabled := cbContinue.Enabled and cbNewton.Checked;
 end;
 
 procedure TframePkgSms.rdgLinearOptionsSelectCell(Sender: TObject; ACol,

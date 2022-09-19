@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-09-19T13:49:16.997-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
   <title translate="true">UZF6: Unsaturated-Zone Flow Package for MODFLOW 6</title>
   <body>
     <header>
@@ -8,7 +8,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">UZF6: Unsaturated-Zone Flow Package for MODFLOW 6</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The pane has two tabs: one for properties that do not vary with time (</text><text styleclass="Strong" translate="true">Steady properties</text><text styleclass="Normal" translate="true">) and the other for properties that do vary with time (</text><text styleclass="Strong" translate="true">Time varying properties</text><text styleclass="Normal" translate="true">).</text></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Steady properties]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Steady properties]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -21,7 +21,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Time varying properties]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Time varying properties]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -33,6 +33,19 @@
           <para styleclass="Strong"><text styleclass="Strong" translate="true">Air entry potential (ha)</text><text styleclass="Normal" translate="true"> is the air entry potential (head) of the UZF cell. HA is always specified, but is only used if evapotranspiration is simulated and the  UNSAT_ETAE option is specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF6_Unsaturated_Zone_Flow_Pa2" styleclass="Normal" translate="true">UZF 6 OPTIONS</link><text styleclass="Normal" translate="true"> block.</text></para>
           <para styleclass="Strong"><text styleclass="Strong" translate="true">Root potential (hroot)</text><text styleclass="Normal" translate="true"> is the root potential (head) of the UZF cell. HROOT is always specified, but is only used if evapotranspiration is simulated and  theUNSAT_ETAE is specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF6_Unsaturated_Zone_Flow_Pa2" styleclass="Normal" translate="true">UZF 6 OPTIONS</link><text styleclass="Normal" translate="true"> block.</text></para>
           <para styleclass="Normal"><text styleclass="Strong" translate="true">Root activity (rootact)</text><text styleclass="Normal" translate="true"> is the root activity function of the UZF cell. ROOTACT is the length of roots in a given volume of soil divided by that volume. Values range from 0 to about 3 cm</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">-2</text><text styleclass="Normal" translate="true">, depending on the plant community and its stage of development. ROOTACT is always specified, but is only used if evapotranspiration is simulated and UNSAT_ETAE is specified in the OPTIONS block.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[GWT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The GWT tab is used for specifying data for the UZT package in groundwater transport. This tab is only visible if groundwater transport is active.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The left hand side has a list of the chemical species used in the model. For each chemical species, the user specifies the initial concentration and transient data for the species. </text></para>
+          <para styleclass="Normal"><text styleclass="Strong" translate="true">STATUS</text><text styleclass="Normal" translate="true"> can be ACTIVE, INACTIVE, or CONSTANT. By default, STATUS is ACTIVE, which means that concentration will be calculated for the UZF cell. If a UZF cell is inactive, then there will be no solute mass fluxes into or out of the UZF cell and the inactive value will be written for the UZF cell concentration. If a UZF cell is constant,then the concentration for the UZF cell will be fixed at the user specified value.</text></para>
+          <para styleclass="Normal"><text styleclass="Strong" translate="true">Specified Concentration</text><text styleclass="Normal" translate="true"> is the concentration for the unsaturated zone flow cell. The specified CONCENTRATION is only applied if the unsaturated zone flow cell is a constant concentration cell. </text></para>
+          <para styleclass="Normal"><text styleclass="Strong" translate="true">Infiltration Concentration</text><text styleclass="Normal" translate="true"> defines the infiltration solute concentration (ML</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">-3</text><text styleclass="Normal" translate="true">) for the UZF cell. </text></para>
+          <para styleclass="Normal"><text styleclass="Strong" translate="true">Evapotranspiration Concentration</text><text styleclass="Normal" translate="true"> defines the concentration of unsaturated zone evapotranspiration water (ML</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">-3</text><text styleclass="Normal" translate="true">) for the UZF cell. If this concentration value is larger than the simulated concentration in the UZF cell, then the unsaturated zone ET water will be removed at the same concentration as the UZF cell.</text></para>
         </td>
       </tr>
     </table></para>

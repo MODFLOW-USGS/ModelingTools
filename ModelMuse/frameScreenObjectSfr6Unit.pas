@@ -316,7 +316,6 @@ begin
     frmgrdDownstreamSegments.Grid.BeginUpdate;
     rdgModflowBoundary.BeginUpdate;
     try
-//    VerticalState := cbGrayed;
       FirstBoundary := nil;
       for Index := 0 to ScreenObjectList.Count - 1 do
       begin

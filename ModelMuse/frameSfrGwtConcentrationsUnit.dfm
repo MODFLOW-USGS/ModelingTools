@@ -1,6 +1,6 @@
 inherited frameSfrGwtConcentrations: TframeSfrGwtConcentrations
   inherited rdgConcentrations: TRbwDataGrid4
-    ColCount = 9
+    ColCount = 8
     FixedCols = 0
     Columns = <
       item
@@ -89,7 +89,7 @@ inherited frameSfrGwtConcentrations: TframeSfrGwtConcentrations
         ButtonFont.Name = 'Segoe UI'
         ButtonFont.Style = []
         ButtonUsed = True
-        ButtonWidth = 40
+        ButtonWidth = 35
         CheckMax = False
         CheckMin = False
         ComboUsed = False
@@ -113,7 +113,7 @@ inherited frameSfrGwtConcentrations: TframeSfrGwtConcentrations
         ButtonFont.Name = 'Segoe UI'
         ButtonFont.Style = []
         ButtonUsed = True
-        ButtonWidth = 40
+        ButtonWidth = 35
         CheckMax = False
         CheckMin = False
         ComboUsed = False
@@ -130,14 +130,14 @@ inherited frameSfrGwtConcentrations: TframeSfrGwtConcentrations
       item
         AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
+        ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
         ButtonFont.Height = -15
         ButtonFont.Name = 'Segoe UI'
         ButtonFont.Style = []
         ButtonUsed = True
-        ButtonWidth = 20
+        ButtonWidth = 35
         CheckMax = False
         CheckMin = False
         ComboUsed = False
@@ -154,14 +154,14 @@ inherited frameSfrGwtConcentrations: TframeSfrGwtConcentrations
       item
         AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
+        ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
         ButtonFont.Height = -15
         ButtonFont.Name = 'Segoe UI'
         ButtonFont.Style = []
         ButtonUsed = True
-        ButtonWidth = 20
+        ButtonWidth = 35
         CheckMax = False
         CheckMin = False
         ComboUsed = False
@@ -178,38 +178,14 @@ inherited frameSfrGwtConcentrations: TframeSfrGwtConcentrations
       item
         AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
+        ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
         ButtonFont.Height = -15
         ButtonFont.Name = 'Segoe UI'
         ButtonFont.Style = []
         ButtonUsed = True
-        ButtonWidth = 20
-        CheckMax = False
-        CheckMin = False
-        ComboUsed = False
-        Format = rcf4String
-        LimitToList = False
-        MaxLength = 0
-        ParentButtonFont = False
-        WordWrapCaptions = True
-        WordWrapCells = False
-        CaseSensitivePicklist = False
-        CheckStyle = csCheck
-        AutoAdjustColWidths = True
-      end
-      item
-        AutoAdjustRowHeights = True
-        AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
-        ButtonFont.Charset = DEFAULT_CHARSET
-        ButtonFont.Color = clWindowText
-        ButtonFont.Height = -15
-        ButtonFont.Name = 'Segoe UI'
-        ButtonFont.Style = []
-        ButtonUsed = True
-        ButtonWidth = 20
+        ButtonWidth = 35
         CheckMax = False
         CheckMin = False
         ComboUsed = False
@@ -227,7 +203,6 @@ inherited frameSfrGwtConcentrations: TframeSfrGwtConcentrations
       64
       64
       80
-      64
       64
       64
       64

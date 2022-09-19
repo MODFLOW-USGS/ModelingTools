@@ -167,7 +167,7 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
     TabOrder = 1
     object lblInitialConcentration: TLabel
       Left = 256
-      Top = 16
+      Top = 10
       Width = 132
       Height = 20
       Caption = 'Initial concentration'

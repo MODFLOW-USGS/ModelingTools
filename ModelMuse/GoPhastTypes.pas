@@ -2482,6 +2482,8 @@ initialization
   LFormatSettings := TFormatSettings.Create('en-US'); // do not localize
   LFormatSettings.DecimalSeparator := AnsiChar('.');
   FxButton := TBitMap.Create;
+  FxButton.Canvas.Font.Name := 'Arial';
+  FxButton.Canvas.Font.Size := -14;
   FxButton.Width := 22;
   FxButton.Height := 22;
   FxButton.Canvas.TextOut(0,0, 'F()');

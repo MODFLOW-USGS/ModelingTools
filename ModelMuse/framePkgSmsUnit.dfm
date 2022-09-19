@@ -21,7 +21,7 @@ inherited framePkgSms: TframePkgSms
     Top = 103
     Width = 495
     Height = 414
-    ActivePage = tabNonLinear
+    ActivePage = tabBasic
     Align = alBottom
     TabOrder = 1
     OnChange = pgcControlsChange
