@@ -5866,6 +5866,20 @@ Type
   end;
 
   TGwtProcess = class(TModflowPackageSelection)
+  private
+    FFLOW_IMBALANCE_CORRECTION: Boolean;
+    FSeparateGwt: Boolean;
+    procedure SetFLOW_IMBALANCE_CORRECTION(const Value: Boolean);
+    procedure SetSeparateGwt(const Value: Boolean);
+  public
+    Constructor Create(Model: TBaseModel);
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables; override;
+  published
+    property SeparateGwt: Boolean read FSeparateGwt write SetSeparateGwt;
+    // @name is an option in the Flow Model Interface package
+    property FLOW_IMBALANCE_CORRECTION: Boolean read FFLOW_IMBALANCE_CORRECTION
+      write SetFLOW_IMBALANCE_CORRECTION;
   end;
 
   TDispersivityTreatment = (dtCombined, dtSeparate);
@@ -23730,6 +23744,44 @@ procedure TGwtIstPackage.SetIstPackageProperties(
   const Value: TIstPackageProperties);
 begin
   FIstPackageProperties.Assign(Value);
+end;
+
+{ TGwtProcess }
+
+procedure TGwtProcess.Assign(Source: TPersistent);
+var
+  GwtSource: TGwtProcess;
+begin
+  if Source is TGwtProcess then
+  begin
+    GwtSource := TGwtProcess(Source);
+    SeparateGwt := GwtSource.SeparateGwt;
+    FLOW_IMBALANCE_CORRECTION := GwtSource.FLOW_IMBALANCE_CORRECTION;
+  end;
+  inherited;
+end;
+
+constructor TGwtProcess.Create(Model: TBaseModel);
+begin
+  inherited;
+  InitializeVariables
+end;
+
+procedure TGwtProcess.InitializeVariables;
+begin
+  inherited;
+  FSeparateGwt := False;
+  FFLOW_IMBALANCE_CORRECTION := True;
+end;
+
+procedure TGwtProcess.SetFLOW_IMBALANCE_CORRECTION(const Value: Boolean);
+begin
+  SetBooleanProperty(FFLOW_IMBALANCE_CORRECTION, Value);
+end;
+
+procedure TGwtProcess.SetSeparateGwt(const Value: Boolean);
+begin
+  SetBooleanProperty(FSeparateGwt, Value);
 end;
 
 end.

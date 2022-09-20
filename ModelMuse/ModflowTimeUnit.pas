@@ -15,6 +15,39 @@ type
     EndTime: double;
   end;
 
+  TGwtStressPeriod = class(TPhastCollectionItem)
+  private
+    FStoredTimeStepMultiplier: TRealStorage;
+    FNumberOfSteps: Integer;
+    function GetTimeStepMultiplier: double;
+    procedure SetNumberOfSteps(const Value: Integer);
+    procedure SetStoredTimeStepMultiplier(const Value: TRealStorage);
+    procedure SetTimeStepMultiplier(const Value: double);
+  public
+    procedure Assign(Source: TPersistent); override;
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    property TimeStepMultiplier: double read GetTimeStepMultiplier
+      write SetTimeStepMultiplier;
+  published
+    property NumberOfSteps: Integer read FNumberOfSteps write SetNumberOfSteps;
+    property StoredTimeStepMultiplier: TRealStorage
+      read FStoredTimeStepMultiplier write SetStoredTimeStepMultiplier;
+  end;
+
+  TGwtStressPeriods = class(TPhastCollection)
+  private
+    function GetItems(Index: Integer): TGwtStressPeriod;
+    procedure SetItems(Index: Integer; const Value: TGwtStressPeriod);
+  public
+    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    // @name is used to access a @link(TModflowStressPeriod)
+    // stored in @classname.
+    property Items[Index: Integer]: TGwtStressPeriod
+      read GetItems write SetItems; default;
+    property Count: Integer read GetCount write SetCount;
+  end;
+
   // @name represents a single stress period in MODFLOW.
   TModflowStressPeriod = class(TCollectionItem)
   private
@@ -37,6 +70,7 @@ type
     FStoredAtsMinimumStepSize: TRealStorage;
     FStoredAtsAdjustmentFactor: TRealStorage;
     FStoredAtsFailureFactor: TRealStorage;
+    FGwtStressPeriods: TGwtStressPeriods;
     // @name calls @link(TBaseModel.Invalidate) indirectly.
     procedure InvalidateModel;
     procedure InvalModel(Sender: TObject);
@@ -69,6 +103,12 @@ type
     procedure SetAtsInitialStepSize(const Value: double);
     procedure SetAtsMaximumStepSize(const Value: double);
     procedure SetAtsMinimumStepSize(const Value: double);
+    procedure SetGwtStressPeriods(const Value: TGwtStressPeriods);
+    function GetGwtMultiplier(SpeciesIndex: Integer): double;
+    function GetGwtNumSteps(SpeciesIndex: Integer): Integer;
+    procedure EnsureGwtSpeciesCount(SpeciesIndex: Integer);
+    procedure SetGwtMultiplier(SpeciesIndex: Integer; const Value: double);
+    procedure SetGwtNumSteps(SpeciesIndex: Integer; const Value: Integer);
   public
     // @name copies Source to the current @classname.
     procedure Assign(Source: TPersistent); override;
@@ -86,6 +126,10 @@ type
     property AtsMaximumStepSize: double read GetAtsMaximumStepSize write SetAtsMaximumStepSize;
     property AtsAdjustmentFactor: double read GetAtsAdjustmentFactor write SetAtsAdjustmentFactor;
     property AtsFailureFactor: double read GetAtsFailureFactor write SetAtsFailureFactor;
+    property GwtNumSteps[SpeciesIndex: Integer]: Integer read GetGwtNumSteps
+      write SetGwtNumSteps;
+    property GwtMultiplier[SpeciesIndex: Integer]: double read GetGwtMultiplier
+      write SetGwtMultiplier;
   published
     // If @name is true, the head at the end of this stress period
     // will be used as a reference head for computing drawdown.
@@ -123,6 +167,8 @@ type
       read FStoredAtsAdjustmentFactor write SetStoredAtsAdjustmentFactor;
     property StoredAtsFailureFactor: TRealStorage
       read FStoredAtsFailureFactor write SetStoredAtsFailureFactor;
+    property GwtStressPeriods: TGwtStressPeriods read FGwtStressPeriods
+      write SetGwtStressPeriods;
   end;
 
   // @name is a collection of the data defining all the stress periods
@@ -185,7 +231,8 @@ implementation
 
 uses RTLConsts, Math, ModflowDiscretizationWriterUnit,
   frmErrorsAndWarningsUnit, Mt3dmsBtnWriterUnit, Mt3dmsTimesUnit,
-  ModflowPackageSelectionUnit, PhastModelUnit, ModelMuseUtilities;
+  ModflowPackageSelectionUnit, PhastModelUnit, ModelMuseUtilities,
+  frmGoPhastUnit;
 
 resourcestring
   StrUnusualUseOfDrawd = 'Unusual use of Drawdown reference option';
@@ -264,6 +311,8 @@ begin
     AtsMaximumStepSize := Min(SourceMFStressPeriod.AtsMaximumStepSize, PeriodLength);
     AtsAdjustmentFactor := SourceMFStressPeriod.AtsAdjustmentFactor;
     AtsFailureFactor := SourceMFStressPeriod.AtsFailureFactor;
+
+    GwtStressPeriods := SourceMFStressPeriod.GwtStressPeriods;
   end
   else
   begin
@@ -286,6 +335,7 @@ begin
   FStoredAtsMinimumStepSize := TRealStorage.Create(InvalModel);
   FStoredAtsAdjustmentFactor := TRealStorage.Create(InvalModel);
   FStoredAtsFailureFactor := TRealStorage.Create(InvalModel);
+  FGwtStressPeriods := TGwtStressPeriods.Create(InvalModel);;
 
   FStoredAtsInitialStepSize.Value := 0;
   FStoredAtsMaximumStepSize.Value := 1;
@@ -298,6 +348,7 @@ end;
 
 destructor TModflowStressPeriod.Destroy;
 begin
+  FGwtStressPeriods.Free;
   FStoredAtsInitialStepSize.Free;
   FStoredAtsMaximumStepSize.Free;
   FStoredAtsMinimumStepSize.Free;
@@ -331,6 +382,22 @@ end;
 function TModflowStressPeriod.GetAtsMinimumStepSize: double;
 begin
   result := StoredAtsMinimumStepSize.Value;
+end;
+
+function TModflowStressPeriod.GetGwtMultiplier(SpeciesIndex: Integer): double;
+begin
+  EnsureGwtSpeciesCount(SpeciesIndex);
+  result := GwtStressPeriods[SpeciesIndex].TimeStepMultiplier;
+  if result = 0 then
+  begin
+    result := TimeStepMultiplier;
+  end;
+end;
+
+function TModflowStressPeriod.GetGwtNumSteps(SpeciesIndex: Integer): Integer;
+begin
+  EnsureGwtSpeciesCount(SpeciesIndex);
+  result := Max(GwtStressPeriods[SpeciesIndex].NumberOfSteps, NumberOfSteps);
 end;
 
 function TModflowStressPeriod.GetTimeStep(Step: Integer): TTimeStep;
@@ -378,6 +445,17 @@ begin
   if result.EndTime > EndTime then
   begin
     result.EndTime := EndTime;
+  end;
+end;
+
+procedure TModflowStressPeriod.EnsureGwtSpeciesCount(SpeciesIndex: Integer);
+var
+  LocalModel: TPhastModel;
+begin
+  LocalModel := frmGoPhast.PhastModel;
+  if LocalModel.GwtUsed and (SpeciesIndex >= GwtStressPeriods.Count) then
+  begin
+    GwtStressPeriods.Count := LocalModel.MobileComponents.Count;
   end;
 end;
 
@@ -501,6 +579,26 @@ begin
     FEndTime := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TModflowStressPeriod.SetGwtMultiplier(SpeciesIndex: Integer;
+  const Value: double);
+begin
+  EnsureGwtSpeciesCount(SpeciesIndex);
+  GwtStressPeriods[SpeciesIndex].TimeStepMultiplier := Value;
+end;
+
+procedure TModflowStressPeriod.SetGwtNumSteps(SpeciesIndex: Integer;
+  const Value: Integer);
+begin
+  EnsureGwtSpeciesCount(SpeciesIndex);
+  GwtStressPeriods[SpeciesIndex].NumberOfSteps := Value;
+end;
+
+procedure TModflowStressPeriod.SetGwtStressPeriods(
+  const Value: TGwtStressPeriods);
+begin
+  FGwtStressPeriods.Assign(Value);
 end;
 
 procedure TModflowStressPeriod.SetPeriodLength(const Value: double);
@@ -1004,6 +1102,76 @@ begin
         Format(StrInStressPeriodD, [Index+1]));
     end;
   end;
+end;
+
+{ TGwtStressPeriod }
+
+procedure TGwtStressPeriod.Assign(Source: TPersistent);
+var
+  GwtStressPeriod: TGwtStressPeriod;
+begin
+  if Source is TGwtStressPeriod then
+  begin
+    GwtStressPeriod := TGwtStressPeriod(Source);
+    TimeStepMultiplier := GwtStressPeriod.TimeStepMultiplier;
+    NumberOfSteps := GwtStressPeriod.NumberOfSteps;
+  end
+  else
+  begin
+    inherited;
+  end;
+
+end;
+
+constructor TGwtStressPeriod.Create(Collection: TCollection);
+begin
+  inherited;
+  FStoredTimeStepMultiplier := TRealStorage.Create(OnInvalidateModel)
+end;
+
+destructor TGwtStressPeriod.Destroy;
+begin
+  FStoredTimeStepMultiplier.Free;
+  inherited;
+end;
+
+function TGwtStressPeriod.GetTimeStepMultiplier: double;
+begin
+  result := FStoredTimeStepMultiplier.Value;
+end;
+
+procedure TGwtStressPeriod.SetNumberOfSteps(const Value: Integer);
+begin
+  FNumberOfSteps := Value;
+end;
+
+procedure TGwtStressPeriod.SetStoredTimeStepMultiplier(
+  const Value: TRealStorage);
+begin
+  FStoredTimeStepMultiplier.Assign(Value);
+end;
+
+procedure TGwtStressPeriod.SetTimeStepMultiplier(const Value: double);
+begin
+  FStoredTimeStepMultiplier.Value := Value;
+end;
+
+{ TGwtStressPeriods }
+
+constructor TGwtStressPeriods.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited Create(TGwtStressPeriod, InvalidateModelEvent);
+end;
+
+function TGwtStressPeriods.GetItems(Index: Integer): TGwtStressPeriod;
+begin
+  result := inherited Items[Index] as TGwtStressPeriod
+end;
+
+procedure TGwtStressPeriods.SetItems(Index: Integer;
+  const Value: TGwtStressPeriod);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

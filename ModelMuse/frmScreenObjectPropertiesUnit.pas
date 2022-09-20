@@ -2481,6 +2481,8 @@ type
     Property PestModifierAssigned[Grid: TRbwDataGrid4; ACol: Integer]: Boolean
       read GetPestModifierAssigned;
     procedure UpdateMawScrollWidth;
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   public
     procedure Initialize;
     procedure ClearExpressionsAndVariables;
@@ -13618,6 +13620,13 @@ begin
     Node.ImageIndex := 1;
     FMvr_Node := Node;
   end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.ExStyle := Params.ExStyle or WS_EX_APPWINDOW;
+  Params.WndParent := 0;
 end;
 
 procedure TfrmScreenObjectProperties.CreateLakMf6Node(AScreenObject: TScreenObject);

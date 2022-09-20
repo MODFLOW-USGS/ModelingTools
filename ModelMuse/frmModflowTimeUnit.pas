@@ -46,6 +46,8 @@ type
     pnlAts: TPanel;
     cbUseAts: TCheckBox;
     rdeAts: TRbwDataEntry;
+    tabGWT: TTabSheet;
+    rdgGWT: TRbwDataGrid4;
     procedure FormCreate(Sender: TObject); override;
     procedure dgTimeSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
@@ -85,6 +87,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure frameGridGridSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
+    procedure dgTimeExit(Sender: TObject);
   private
     FModflowStressPeriods: TModflowStressPeriods;
     FDeleting: Boolean;
@@ -98,6 +101,7 @@ type
     procedure SetDeleteButtonEnabled;
     procedure UpdateNumberOfTimeSteps(const ARow: integer);
     procedure LayoutMultiRowAtsEditControls;
+    procedure UpdateGwtNumSteps(RowIndex: Integer);
   { Private declarations }
   public
     { Public declarations }
@@ -200,6 +204,10 @@ resourcestring
   StrMaximumTimeStepLe = 'Maximum Time Step Length (dtmax)';
   StrAtsTimeStepMultiplier = 'Time Step Multiplier Factor (dtadj)';
   StrTimeStepDivisorOn = 'Time Step Divisor on Failure (dtfailadj)';
+  StrNumberOfStepsGwt = ': Number of steps';
+
+const
+  GwtReservedColumns = 3;
 
 var
   MaxSteps: integer = 100;
@@ -456,6 +464,17 @@ begin
   LayoutMultiRowEditControls;
 end;
 
+procedure TfrmModflowTime.dgTimeExit(Sender: TObject);
+var
+  RowIndex: Integer;
+begin
+  inherited;
+  for RowIndex := 1 to dgTime.RowCount - 1 do
+  begin
+    UpdateGwtNumSteps(RowIndex);
+  end;
+end;
+
 procedure TfrmModflowTime.dgTimeHorizontalScroll(Sender: TObject);
 begin
   inherited;
@@ -612,6 +631,8 @@ var
   StartTime: Double;
   EndTime: Double;
   PeriodLength: double;
+  SpeciesIndex: Integer;
+  ColIndex: Integer;
 begin
   for RowIndex := 1 to dgTime.RowCount - 1 do
   begin
@@ -619,6 +640,7 @@ begin
     begin
       dgTime.Cells[Ord(tcStressPeriod), RowIndex] := IntToStr(RowIndex);
       rdgAts.Cells[Ord(tcStressPeriod), RowIndex] := IntToStr(RowIndex);
+      rdgGWT.Cells[Ord(tcStressPeriod), RowIndex] := IntToStr(RowIndex);
     end;
 
     if dgTime.Cells[Ord(tcStartTime), RowIndex] = '' then
@@ -632,7 +654,8 @@ begin
         dgTime.Cells[Ord(tcStartTime), RowIndex] :=
           dgTime.Cells[Ord(tcEndTime), RowIndex-1];
       end;
-
+      rdgGWT.Cells[Ord(tcStartTime), RowIndex] :=
+        dgTime.Cells[Ord(tcStartTime), RowIndex]
     end;
 
     if dgTime.Cells[Ord(tcEndTime), RowIndex] = '' then
@@ -652,7 +675,8 @@ begin
       begin
         dgTime.Cells[Ord(tcEndTime), RowIndex] := '1';
       end;
-
+      rdgGWT.Cells[Ord(tcEndTime), RowIndex] :=
+        dgTime.Cells[Ord(tcEndTime), RowIndex]
     end;
 
     if dgTime.Cells[Ord(tcLength), RowIndex] = '' then
@@ -693,6 +717,16 @@ begin
       begin
         dgTime.Cells[Ord(tcMultiplier), RowIndex] := '1';
       end;
+
+      if tabGWT.TabVisible then
+      begin
+        for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+        begin
+          ColIndex := SpeciesIndex*2 + GwtReservedColumns + 1;
+          rdgGWT.Cells[ColIndex, RowIndex] :=
+            dgTime.Cells[Ord(tcMultiplier), RowIndex]
+        end;
+      end;
     end;
 
     if dgTime.Cells[Ord(tcSteady), RowIndex] = '' then
@@ -710,6 +744,8 @@ begin
     end;
 
     UpdateNumberOfTimeSteps(RowIndex);
+    UpdateGwtNumSteps(RowIndex);
+
   end;
 end;
 
@@ -734,6 +770,35 @@ begin
   LayoutControls(rdgAts, cbUseAts, nil, Ord(atsUse));
   LayoutControls(rdgAts, rdeAts, nil, Min(Ord(atsInitial),
     Max(rdgAts.LeftCol,Ord(atsInitial))));
+end;
+
+procedure TfrmModflowTime.UpdateGwtNumSteps(RowIndex: Integer);
+var
+  NumSteps: Integer;
+  GwtNumSteps: Integer;
+  SpeciesIndex: Integer;
+  ColIndex: Integer;
+begin
+  if tabGWT.TabVisible then
+  begin
+    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+    begin
+      ColIndex := SpeciesIndex * 2 + GwtReservedColumns;
+      if rdgGWT.Cells[ColIndex, RowIndex] = '' then
+      begin
+        rdgGWT.Cells[ColIndex, RowIndex] := dgTime.Cells[Ord(tcSteps), RowIndex];
+      end
+      else
+      begin
+        NumSteps := dgTime.IntegerValue[Ord(tcSteps), RowIndex];
+        GwtNumSteps := rdgGWT.IntegerValue[ColIndex, RowIndex];
+        if GwtNumSteps < NumSteps then
+        begin
+          rdgGWT.Cells[ColIndex, RowIndex] := dgTime.Cells[Ord(tcSteps), RowIndex];
+        end;
+      end;
+    end;
+  end;
 end;
 
 type TGridCrack = class(TRbwDataGrid4);
@@ -781,6 +846,7 @@ begin
 
     dgTime.RowCount := seNumPeriods.AsInteger + 1;
     rdgAts.RowCount := seNumPeriods.AsInteger + 1;
+    rdgGWT.RowCount := seNumPeriods.AsInteger + 1;
     FillEmptyCells;
     SetDeleteButtonEnabled;
   finally
@@ -796,9 +862,55 @@ var
   Mt3dmsTimes: TMt3dmsTimeCollection;
   Index: Integer;
   TimeItem: TMt3dmsTimeItem;
+  GwtProcess: TGwtProcess;
+  SpeciesIndex: Integer;
+  ColIndex: Integer;
+  ASpecies: string;
+  AColum: TRbwColumn4;
+  Multiplier: Double;
 begin
   FGettingData := True;
   try
+    GwtProcess := frmGoPhast.PhastModel.ModflowPackages.GwtProcess;
+    tabGWT.TabVisible := GwtProcess.IsSelected and GwtProcess.SeparateGwt;
+    if tabGWT.TabVisible then
+    begin
+      rdgGWT.ColCount := GwtReservedColumns + frmGoPhast.PhastModel.MobileComponents.Count*2;
+
+      for ColIndex := 0 to GwtReservedColumns - 1 do
+      begin
+        AColum := rdgGWT.Columns[ColIndex];
+        AColum.AutoAdjustColWidths := True;
+        AColum.AutoAdjustCaptionRowHeights := True;
+        AColum.WordWrapCaptions := True;
+      end;
+      for ColIndex := GwtReservedColumns to rdgGWT.ColCount - 1 do
+      begin
+        AColum := rdgGWT.Columns[ColIndex];
+        AColum.AutoAdjustColWidths := True;
+        AColum.AutoAdjustCaptionRowHeights := True;
+        AColum.Min := 1;
+        AColum.CheckMin := true;
+        AColum.WordWrapCaptions := True;
+        if Odd(ColIndex) then
+        begin
+          AColum.Format := rcf4Integer;
+        end
+        else
+        begin
+          AColum.Format := rcf4Real;
+        end;
+      end;
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex].Name;
+        ColIndex := SpeciesIndex*2 + GwtReservedColumns;
+        rdgGWT.Cells[ColIndex, 0] := ASpecies + StrNumberOfStepsGwt;
+        Inc(ColIndex);
+        rdgGWT.Cells[ColIndex, 0] := ASpecies + ': ' + StrMultiplier;
+      end;
+    end;
+
     tabATS.TabVisible := frmGoPhast.ModelSelection = msModflow2015;
     comboTimeUnit.ItemIndex := frmGoPhast.PhastModel.ModflowOptions.TimeUnit;
     seNumPeriods.AsInteger := frmGoPhast.PhastModel.ModflowStressPeriods.Count;
@@ -825,6 +937,26 @@ begin
         dgTime.Checked[ord(tcDrawDownReference), RowIndex]
           := StressPeriod.DrawDownReference;
         UpdateNumberOfTimeSteps(RowIndex);
+
+        if tabGWT.TabVisible then
+        begin
+          rdgGWT.Cells[Ord(mtStressPeriod), RowIndex] := IntToStr(RowIndex);
+
+          rdgGWT.Cells[ord(tcStartTime), RowIndex]
+            := FloatToStr(StressPeriod.StartTime);
+          rdgGWT.Cells[ord(tcEndTime), RowIndex]
+            := FloatToStr(StressPeriod.EndTime);
+          for SpeciesIndex := 0 to
+            frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+          begin
+            ColIndex := SpeciesIndex*2 + GwtReservedColumns;
+            rdgGWT.IntegerValue[ColIndex, RowIndex] :=
+              StressPeriod.GwtNumSteps[SpeciesIndex];
+            Inc(ColIndex);
+            rdgGWT.RealValue[ColIndex, RowIndex] :=
+              StressPeriod.GwtMultiplier[SpeciesIndex];
+          end;
+        end;
 
         rdgAts.Cells[Ord(atsStressPeriod), RowIndex] := IntToStr(RowIndex);
         rdgAts.Checked[Ord(atsUse), RowIndex] := StressPeriod.AtsUsed;
@@ -885,6 +1017,8 @@ var
   StartTime, EndTime, StepSize, Multiplier, MaxStepSize: double;
   MaxSteps: integer;
   TimeItem: TMt3dmsTimeItem;
+  SpeciesIndex: Integer;
+  ColIndex: Integer;
 begin
   FModflowStressPeriods.Clear;
 
@@ -966,6 +1100,20 @@ begin
     StressPeriod.AtsFailureFactor :=
       rdgAts.RealValueDefault[Ord(atsFailAdjust), Index,
       StressPeriod.AtsFailureFactor];
+
+    if tabGWT.TabVisible then
+    begin
+      for SpeciesIndex := 0 to
+        frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        ColIndex := SpeciesIndex*2 + GwtReservedColumns;
+        StressPeriod.GwtNumSteps[SpeciesIndex] :=
+          rdgGWT.IntegerValueDefault[ColIndex, Index, StressPeriod.NumberOfSteps];
+        Inc(ColIndex);
+        StressPeriod.GwtMultiplier[SpeciesIndex] :=
+          rdgGWT.RealValueDefault[ColIndex, Index, StressPeriod.TimeStepMultiplier];
+      end;
+    end
   end;
 
   Mt3dmsTimes := TMt3dmsTimeCollection.Create(nil);
@@ -1100,6 +1248,10 @@ begin
       UpdatePeriodLength(ARow+1);
     end;
   end;
+  if TTimeColumn(ACol) in [tcStartTime, tcEndTime] then
+  begin
+    rdgGWT.Cells[ACol, ARow] := Value;
+  end;
   if Ord(tcLength) = ACol then
   begin
     if not TryStrToFloat(dgTime.Cells[Ord(tcStartTime), ARow], StartTime) then
@@ -1149,6 +1301,10 @@ begin
   rdgAts.Cells[Ord(atsMax), 0] := StrMaximumTimeStepLe;
   rdgAts.Cells[Ord(atsAdjust), 0] := StrAtsTimeStepMultiplier;
   rdgAts.Cells[Ord(atsFailAdjust), 0] := StrTimeStepDivisorOn;
+
+  rdgGWT.Cells[Ord(tcStressPeriod), 0] := StrStressPeriod;
+  rdgGWT.Cells[Ord(tcStartTime), 0] := StrStartingTime;
+  rdgGWT.Cells[Ord(tcEndTime), 0] := StrEndingTime;
 
   lblPeriodLength.Caption := StrLength;
   lblMaxFirstTimeStepLength.Caption := StrMaxFirstTimeStep;

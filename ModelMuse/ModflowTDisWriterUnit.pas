@@ -9,11 +9,13 @@ type
   private
     FAtsCount: Integer;
     FAtsFileName: string;
+    FSpeciesIndex: Integer;
     procedure WriteDataSet0;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WriteStressPeriods;
     procedure WriteAtsFile;
+    procedure WriteFileInternal;
   public
     class function Extension: string; override; // abstract;
     procedure WriteFile(const AFileName: string);
@@ -108,6 +110,8 @@ procedure TTemporalDiscretizationWriter.WriteFile(const AFileName: string);
 var
   FTYPE: string;
   NameOfFile: string;
+  SpeciesIndex: Integer;
+  ASpecies: string;
 begin
   if Model.ModelSelection <> msModflow2015 then
   begin
@@ -119,11 +123,36 @@ begin
   begin
     Exit;
   end;
+  FSpeciesIndex := -1;
   NameOfFile := FileName(AFileName);
   FInputFileName := NameOfFile;
-  Model.SimNameWriter.TDisFileName := NameOfFile;
-  Model.AddModelInputFile(NameOfFile);
-  OpenFile(NameOfFile);
+  FNameOfFile := NameOfFile;
+
+  Model.SimNameWriter.TDisFileName := FNameOfFile;
+  WriteFileInternal;
+
+  if FAtsCount > 0 then
+  begin
+    WriteAtsFile;
+  end;
+
+  if Model.GwtUsed and Model.ModflowPackages.GwtProcess.SeparateGwt then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      FSpeciesIndex := SpeciesIndex;
+      ASpecies := '.' + Model.MobileComponents[SpeciesIndex].Name;
+      FNameOfFile := ChangeFileExt(AFileName, ASpecies) + Extension;
+      Model.SimNameWriter.GwtTDisFileNames[SpeciesIndex] := FNameOfFile;
+      WriteFileInternal;
+    end;
+  end;
+end;
+
+procedure TTemporalDiscretizationWriter.WriteFileInternal;
+begin
+  Model.AddModelInputFile(FNameOfFile);
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingTemporalDis);
     frmProgressMM.AddMessage(StrWritingDataSet0);
@@ -134,11 +163,6 @@ begin
     WriteStressPeriods;
   finally
     CloseFile;
-  end;
-
-  if FAtsCount > 0 then
-  begin
-    WriteAtsFile;
   end;
 end;
 
@@ -200,8 +224,16 @@ begin
     AStressPeriod := StressPeriods[StressPeriodIndex];
     WriteString('  ');
     WriteFloat(AStressPeriod.PeriodLength);
-    WriteInteger(AStressPeriod.NumberOfSteps);
-    WriteFloat(AStressPeriod.TimeStepMultiplier);
+    if FSpeciesIndex <0 then
+    begin
+      WriteInteger(AStressPeriod.NumberOfSteps);
+      WriteFloat(AStressPeriod.TimeStepMultiplier);
+    end
+    else
+    begin
+      WriteInteger(AStressPeriod.GwtNumSteps[FSpeciesIndex]);
+      WriteFloat(AStressPeriod.GwtMultiplier[FSpeciesIndex]);
+    end;
     WriteString(' # perlen nstp tsmult, Stress period ');
     WriteInteger(StressPeriodIndex+1);
     NewLine;

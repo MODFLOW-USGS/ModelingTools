@@ -88,6 +88,11 @@ type
     class function Extension: string; override;
     procedure WriteUztFile(const AFileName: string; SpeciesIndex: Integer);
   end;
+
+const
+  KUZF1 = 'UZF-1';
+  StrUzfbudget = '.uzf_budget';
+
 implementation
 
 uses
@@ -121,9 +126,6 @@ resourcestring
   StrAtLayerRowColuInitSat = 'At (Layer, Row, Column) (%0:d, %1:d, %2:d), in' +
   'itial water content is set to %3:g by "%4:s" and saturated water content ' +
   'is set to %5:g by "%6:s".';
-
-const
-  KUZF1 = 'UZF-1';
 
 type
   TUzfCellList = TList<TMvrReceiver>;
@@ -1141,10 +1143,10 @@ begin
   WriteSaveFlowsOption;
 
   BaseName := ChangeFileExt(FNameOfFile, '');
-  if FUzfPackage.SaveBudgetFile then
+  if FUzfPackage.SaveBudgetFile or Model.SeparateGwtUsed then
   begin
     WriteString('  BUDGET FILEOUT ');
-    budgetfile := ChangeFileExt(BaseName, '.uzf_budget');
+    budgetfile := ChangeFileExt(BaseName, StrUzfbudget);
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);

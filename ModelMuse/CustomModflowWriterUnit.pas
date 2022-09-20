@@ -152,6 +152,7 @@ type
     // If Layer < 0, only parameters will be used, not data sets.
     procedure WriteFormulaOrValueBasedOnAPestName(const PestName: string;
       Value: double; Layer, Row, Column: Integer);
+    procedure WriteBeginPackageData;
   public
     function GwtFileName(const AFileName: string; SpeciesIndex: Integer): string;
     // @name converts AFileName to use the correct extension for the file.
@@ -303,6 +304,7 @@ end;
 
     procedure WritePestFormulaOrValue(const PestName, PestSeriesName: string;
       PestMethod: TPestParamMethod; Value: double);
+    procedure WriteEndPackageData;
   public
     // @name converts a real number represented as a string to always use
     property ArrayWritingFormat: TArrayWritingFormat read FArrayWritingFormat;
@@ -453,8 +455,6 @@ end;
     // PRINT_INPUT, PRINT_FLOWS, and SAVE_FLOWS
     procedure PrintOutputOptions;
     procedure PrintFlowsOption;
-    procedure WriteBeginPackageData;
-    procedure WriteEndPackageData;
     procedure WriteBeginConnectionData;
     procedure WriteEndConnectionData;
     procedure WriteBoundNamesOption;
@@ -1075,6 +1075,7 @@ end;
     FTDisFileName: string;
     FModelDataList: TModelDataList;
     FExchanges: TStringList;
+    FGwtTDisFileNames: TStringList;
     procedure WriteOptions;
     procedure WriteTiming;
     procedure WriteModels;
@@ -1082,6 +1083,8 @@ end;
     procedure WriteSolutionGroups;
     function GetTDisFileName: string;
     procedure SetTDisFileName(const Value: string);
+    function GetGwtTDisFileNames(SpeciesIndex: Integer): string;
+    procedure SetGwtTDisFileNames(SpeciesIndex: Integer; const Value: string);
   protected
     FRefCount: Integer;
     class function Extension: string; override;
@@ -1095,6 +1098,8 @@ end;
     procedure AddModel(ModelData: TModelData);
     procedure AddExchange(FileName: string);
     procedure WriteFile(FileName: string);
+    property GwtTDisFileNames[SpeciesIndex: Integer]: string
+      read GetGwtTDisFileNames write SetGwtTDisFileNames;
   end;
 
 procedure MoveAppToDirectory(const AppFullPath, Directory: string);
@@ -9417,10 +9422,12 @@ begin
   inherited Create(AModel, etExport);
   FModelDataList := TModelDataList.Create;
   FExchanges := TStringList.Create;
+  FGwtTDisFileNames := TStringList.Create;
 end;
 
 destructor TMf6_SimNameFileWriter.Destroy;
 begin
+  FGwtTDisFileNames.Free;
   FExchanges.Free;
   FModelDataList.Free;
   inherited;
@@ -9429,6 +9436,12 @@ end;
 class function TMf6_SimNameFileWriter.Extension: string;
 begin
   Assert(False);
+end;
+
+function TMf6_SimNameFileWriter.GetGwtTDisFileNames(
+  SpeciesIndex: Integer): string;
+begin
+  result := FGwtTDisFileNames[SpeciesIndex];
 end;
 
 function TMf6_SimNameFileWriter.GetTDisFileName: string;
@@ -9443,6 +9456,17 @@ begin
     Result := 0
   else
     Result := E_NOINTERFACE;
+end;
+
+procedure TMf6_SimNameFileWriter.SetGwtTDisFileNames(SpeciesIndex: Integer;
+  const Value: string);
+begin
+  Assert(SpeciesIndex >= 0);
+  while SpeciesIndex >= FGwtTDisFileNames.Count do
+  begin
+    FGwtTDisFileNames.Add('');
+  end;
+  FGwtTDisFileNames[SpeciesIndex] := Value;
 end;
 
 procedure TMf6_SimNameFileWriter.SetTDisFileName(const Value: string);
@@ -9951,19 +9975,6 @@ begin
 //    WriteString('  SAVE_FLOWS');
 //    NewLine;
 //  end;
-end;
-
-procedure TCustomPackageWriter.WriteBeginPackageData;
-begin
-  WriteString('BEGIN PACKAGEDATA');
-  NewLine;
-end;
-
-procedure TCustomPackageWriter.WriteEndPackageData;
-begin
-  WriteString('END PACKAGEDATA');
-  NewLine;
-  NewLine;
 end;
 
 procedure TCustomPackageWriter.WriteBeginConnectionData;
@@ -10943,6 +10954,19 @@ begin
   end;
 
   WriteString('END PACKAGES');
+  NewLine;
+end;
+
+procedure TCustomFileWriter.WriteBeginPackageData;
+begin
+  WriteString('BEGIN PACKAGEDATA');
+  NewLine;
+end;
+
+procedure TCustomModflowWriter.WriteEndPackageData;
+begin
+  WriteString('END PACKAGEDATA');
+  NewLine;
   NewLine;
 end;
 

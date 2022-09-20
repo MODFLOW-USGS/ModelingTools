@@ -107,6 +107,9 @@ type
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
+const
+  StrMvrbudget = '.mvr_budget';
+
 implementation
 
 uses
@@ -1156,10 +1159,10 @@ begin
 
   BaseFile := ChangeFileExt(FNameOfFile, '');
   MvrPackage := Model.ModflowPackages.MvrPackage;
-  if MvrPackage.SaveBudgetFile then
+  if MvrPackage.SaveBudgetFile or Model.SeparateGwtUsed then
   begin
     WriteString('    BUDGET FILEOUT ');
-    budgetfile := ChangeFileExt(BaseFile, '.mvr_budget');
+    budgetfile := ChangeFileExt(BaseFile, StrMvrbudget);
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);

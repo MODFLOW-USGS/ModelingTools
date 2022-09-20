@@ -351,6 +351,10 @@ type
     procedure AddModel(ModelData: TModelData);
     procedure WriteFile(Directory: string);
     procedure AddExchange(FileName: string);
+    function GetGwtTDisFileNames(SpeciesIndex: Integer): string;
+    procedure SetGwtTDisFileNames(SpeciesIndex: Integer; const Value: string);
+    property GwtTDisFileNames[SpeciesIndex: Integer]: string
+      read GetGwtTDisFileNames write SetGwtTDisFileNames;
   end;
 
   TBoundaryNode = record

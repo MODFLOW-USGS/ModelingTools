@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-09-20T09:37:42.632-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Auxiliary Variables</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Auxiliary Variables</text></para>
+    </header>
+    <para styleclass="Heading1"><text styleclass="Strong" translate="true">Auxiliary Variables </text><text styleclass="Normal" translate="true">If the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GWT-Groundwater-Transport" styleclass="Normal" translate="true">Groundwater Transport</link><text styleclass="Normal" translate="true"> process in MODFLOW 6 is active, auxiliary variables will be included. They represent the concentration of flow into the groundwater from the boundary. Flow out of the groundwater will be at the concentration in the cell containing the boundary.</text></para>
+  </body>
+</topic>

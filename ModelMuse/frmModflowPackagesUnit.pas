@@ -52,7 +52,7 @@ uses System.UITypes,
   frameMt3dSftUnit, frameMt3dCtsPkgUnit, framePackageCsubUnit,
   PestParamGroupsUnit, frameGwtDspPackageUnit, frameGwtAdvPackageUnit,
   framePackageMSTUnit, framePackageIstUnit, frameChemSpeciesUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, framePackageFmiUnit;
 
 type
 
@@ -273,7 +273,7 @@ type
     jvspGwtSRC: TJvStandardPage;
     frameGwtSRC: TframePackage;
     jvspGwtProcess: TJvStandardPage;
-    frameGwtProcess: TframePackage;
+    frameGwtProcess: TframePackageFmi;
     jvspChemSpecies: TJvStandardPage;
     frameChemSpecies: TframeChemSpecies;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
@@ -459,6 +459,8 @@ type
     procedure ShowImsPage(Sender: TObject);
     procedure EnableGwtPackages;
     { Private declarations }
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -2059,6 +2061,7 @@ procedure TfrmModflowPackages.frameGwtProcessrcSelectionControllerEnabledChange(
   Sender: TObject);
 begin
   inherited;
+  frameGwtProcess.rcSelectionControllerEnabledChange(Sender);
   EnableChemSpecies;
   EnableGwtPackages;
 end;
@@ -2771,6 +2774,13 @@ begin
     result.rgPorosity.Width := MemoWidth;
     result.rgSorption.Width := MemoWidth;
   end;
+end;
+
+procedure TfrmModflowPackages.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.ExStyle := Params.ExStyle or WS_EX_APPWINDOW;
+  Params.WndParent := 0;
 end;
 
 procedure TfrmModflowPackages.NilNodes;

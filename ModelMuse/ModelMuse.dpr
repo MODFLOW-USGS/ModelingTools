@@ -764,7 +764,9 @@ uses
   frameScreenObjectCncUnit in 'frameScreenObjectCncUnit.pas' {frameScreenObjectCnc: TFrame},
   frameScreenObjectSrcUnit in 'frameScreenObjectSrcUnit.pas' {frameScreenObjectSrc: TFrame},
   frameChemSpeciesUnit in 'frameChemSpeciesUnit.pas' {frameChemSpecies: TFrame},
-  ModflowGwfGwtExchangeWriterUnit in 'ModflowGwfGwtExchangeWriterUnit.pas';
+  ModflowGwfGwtExchangeWriterUnit in 'ModflowGwfGwtExchangeWriterUnit.pas',
+  ModflowFMI_WriterUnit in 'ModflowFMI_WriterUnit.pas',
+  framePackageFmiUnit in 'framePackageFmiUnit.pas' {framePackageFmi: TFrame};
 
 {$R *.res}
 

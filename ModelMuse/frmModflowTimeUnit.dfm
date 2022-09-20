@@ -65,7 +65,7 @@ inherited frmModflowTime: TfrmModflowTime
     Top = 0
     Width = 754
     Height = 292
-    ActivePage = tabMt3dms
+    ActivePage = tabModflow
     Align = alClient
     TabOrder = 0
     OnChange = pgcMainChange
@@ -197,6 +197,7 @@ inherited frmModflowTime: TfrmModflowTime
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
         TabOrder = 1
+        OnExit = dgTimeExit
         OnMouseUp = dgTimeMouseUp
         OnSelectCell = dgTimeSelectCell
         OnSetEditText = dgTimeSetEditText
@@ -1024,6 +1025,138 @@ inherited frmModflowTime: TfrmModflowTime
           CheckMin = True
           ChangeDisabledColor = True
         end
+      end
+    end
+    object tabGWT: TTabSheet
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'GWT'
+      ImageIndex = 3
+      object rdgGWT: TRbwDataGrid4
+        Left = 0
+        Top = 0
+        Width = 746
+        Height = 259
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Align = alClient
+        ColCount = 4
+        DefaultColWidth = 80
+        DefaultRowHeight = 30
+        FixedCols = 0
+        RowCount = 2
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+        TabOrder = 0
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
+        AutoDistributeText = False
+        AutoIncreaseColCount = False
+        AutoIncreaseRowCount = False
+        SelectedRowOrColumnColor = clAqua
+        UnselectableColor = clBtnFace
+        ColorRangeSelection = False
+        Columns = <
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -15
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = False
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -15
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = False
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -15
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = False
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -15
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = False
+          end>
+        WordWrapRowCaptions = False
       end
     end
   end

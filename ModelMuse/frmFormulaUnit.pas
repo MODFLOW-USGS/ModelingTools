@@ -241,6 +241,8 @@ many will be displayed at one time. }
     procedure SetIncludeTimeSeries(const Value: Boolean);
     procedure CreateNodesForTimeSeries;
     { Private declarations }
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   public
     procedure Initialize;
     procedure IncludeGIS_Functions(EvalAt: TEvaluatedAt);
@@ -1298,6 +1300,13 @@ begin
       SutraLayerList.Free;
     end;
   end;
+end;
+
+procedure TfrmFormula.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.ExStyle := Params.ExStyle or WS_EX_APPWINDOW;
+  Params.WndParent := 0;
 end;
 
 procedure TfrmFormula.btnOKClick(Sender: TObject);

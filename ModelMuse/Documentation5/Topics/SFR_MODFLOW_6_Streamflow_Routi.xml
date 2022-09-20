@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-09-19T14:23:19.558-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2022-09-20T08:36:14.362-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SFR: MODFLOW 6 Streamflow Routing Package Pane</title>
   <body>
     <header>
@@ -9,7 +9,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Streamflow Routing package in MODFLOW-2005 organizes stream reaches into stream segments. Connections between reaches in the same segment are identified automatically whereas the modeler must specify connections among stream segments. In MODFLOW 6, only reaches are defined and the modeler must specify all connections among reaches. In ModelMuse, the connections among stream reaches specified by the same object are identified automatically. The modeler must assign a segment number to each object and these are used to identify connections among stream reaches specified using different objects. This segment number is not part of the input to MODFLOW 6 but instead is used as a way of simplifying the input for the user.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Segments must be defined with point or polyline objects. The first vertex in the object defining the stream is at the upstream end of the stream. You can reverse the order of the vertices in an object using &quot;Object|Edit|</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object2" anchor="ReverseSelectedObjects" styleclass="Normal" translate="true">Reverse Selected Objects</link><text styleclass="Normal" translate="true">.&quot;</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">There are four tabs on this pane</text></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Configuration]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Configuration]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -25,7 +25,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Rates]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Rates]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -44,7 +44,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Downstream Segments]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Downstream Segments]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -52,7 +52,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Strong" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Diversions]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Diversions]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -71,7 +71,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[GWT]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[GWT]]></caption></toggle></para>
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>

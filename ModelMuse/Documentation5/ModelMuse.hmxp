@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4348</config-value>
+      <config-value name="autohelpstart">4349</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -709,6 +709,7 @@ document.write('</frameset>');
       <helpcontext-number href="Assigning_Values_to_Data_Sets" value="70"/>
       <helpcontext-number href="Assigning_Values_to_Data_Sets_in_MODFLOW" value="3478"/>
       <helpcontext-number href="Assigning_Values_to_Data_Sets_in_PHAST" value="3477"/>
+      <helpcontext-number href="Auxiliary-Variables" value="4349"/>
       <helpcontext-number href="Basic_Concepts" value="20"/>
       <helpcontext-number href="Basic_Options_Tab_Newton_Solver" value="3628"/>
       <helpcontext-number href="Basic_Options_Tab_Newton_Solver#Continue" value="3961"/>
@@ -1949,6 +1950,7 @@ document.write('</frameset>');
       <file-mod href="Pilot_Point_Explanation.xml"/>
       <file-mod href="Visualize_Residuals.xml"/>
       <file-mod href="Time_Series_Dialog_Box.xml" build="TIMESERIES"/>
+      <file-mod href="Auxiliary-Variables.xml"/>
     </file>
     <file href="Topics/Invisible/*.xml" build="ALL" filetype="topic"/>
     <file href="Baggage/*.*" build="ALL" filetype="baggage"/>

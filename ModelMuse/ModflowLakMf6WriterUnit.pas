@@ -253,6 +253,9 @@ type
     class function Extension: string; override;
   end;
 
+const
+  StrLakeFlowPackageName = 'LAK-1';
+  StrLkbud = '.lk_bud';
 
 implementation
 
@@ -343,9 +346,6 @@ resourcestring
   StrInTheLakeDefinedProperties = 'In the lake defined by the object %0:s, n' +
   'o outlet properties are defined for outlet %1:d.';
   StrLakeChemSpeciesD = 'Lake Chem Species %d';
-
-const
-  StrLakeFlowPackageName = 'LAK-1';
 
 { TModflowLAKMf6Writer }
 
@@ -2382,9 +2382,9 @@ begin
   end;
 
 //  [BUDGET FILEOUT <budgetfile>]
-  if FLakMf6Package.SaveBudget then
+  if FLakMf6Package.SaveBudget or Model.SeparateGwtUsed then
   begin
-    BudgetFileName := ChangeFileExt(FFileName, '.lk_bud');
+    BudgetFileName := ChangeFileExt(FFileName, StrLkbud);
     Model.AddModelOutputFile(BudgetFileName);
     BudgetFileName := ExtractFileName(BudgetFileName);
     WriteString('  BUDGET FILEOUT ');

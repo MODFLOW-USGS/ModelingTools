@@ -113,6 +113,10 @@ type
     class function Extension: string; override;
   end;
 
+const
+  StrSfrFlowPackageName = 'SFR-1';
+  StrSfrbudget = '.sfr_budget';
+
 implementation
 
 uses
@@ -198,9 +202,6 @@ resourcestring
   StrTheSFRSegmentDefi = 'The SFR segment defined by %s doesn''t appear to i' +
   'ntersect any active cells.';
   StrStartingConcentratio = 'StartingConcentration_%s';
-
-const
-  StrSfrFlowPackageName = 'SFR-1';
 
 { TModflowSFR_MF6_Writer }
 
@@ -1903,10 +1904,10 @@ begin
     NewLine;
   end;
 
-  if SfrMf6Package.SaveBudgetFile then
+  if SfrMf6Package.SaveBudgetFile or Model.SeparateGwtUsed then
   begin
     WriteString('    BUDGET FILEOUT ');
-    budgetfile := ChangeFileExt(BaseFileName, '.sfr_budget');
+    budgetfile := ChangeFileExt(BaseFileName, StrSfrbudget);
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);

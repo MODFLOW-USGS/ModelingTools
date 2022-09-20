@@ -2516,6 +2516,7 @@ that affects the model output should also have a comment. }
     function Sutra4SorptionUsed(Sender: TObject): boolean;
     function GetAppsMoved: TStringList; virtual; abstract;
     function GetPestStatus: TPestStatus;
+    function GetSeparateGwtUsed: Boolean;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -3459,6 +3460,7 @@ that affects the model output should also have a comment. }
       {$ENDIF}
       ;
     property GwtUsed: Boolean read GetGwtUsed;
+    property SeparateGwtUsed: Boolean read GetSeparateGwtUsed;
     Procedure UpdateGwtConc;
     function SutraUnsatRegionUsed(Sender: TObject): boolean;
     procedure ClearPestPriorInfoGroupData;
@@ -33803,6 +33805,11 @@ begin
   end;
 end;
 
+function TCustomModel.GetSeparateGwtUsed: Boolean;
+begin
+    result := GwtUsed and ModflowPackages.GwtProcess.SeparateGwt;
+end;
+
 function TCustomModel.GetShortestHorizontalBlockEdge(Layer, Row,
   Column: Integer): double;
 begin
@@ -49611,16 +49618,11 @@ begin
 end;
 
 function TCustomModel.GetGwtUsed: Boolean;
-//  {$IFDEF GWT}
-//var
-//  Mt3dBasic: TMt3dBasic;
-//  {$ENDIF}
 begin
   {$IFDEF GWT}
   if ModelSelection = msModflow2015 then
   begin
-//    Mt3dBasic := ModflowPackages.Mt3dBasic;
-    result := ModflowPackages.GwtProcess.IsSelected {and (Mt3dBasic.Mt3dVersion = mvMf6Gwt)};
+    result := ModflowPackages.GwtProcess.IsSelected;
   end
   else
   begin

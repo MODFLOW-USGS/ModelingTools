@@ -80,6 +80,9 @@ type
     class function Extension: string; override;
   end;
 
+const
+  StrMAW1 = 'MAW-1';
+  StrMawbud = '.maw_bud';
 
 implementation
 
@@ -159,9 +162,6 @@ resourcestring
   StrInactiveMAWPeriod = 'Inactive MAW period added';
   StrIn0sThereWasA = 'In %0:s, there was a gap in time from %1:g to %2:g. An' +
   ' inactive period has been inserted to fill that time.';
-
-const
-  StrMAW1 = 'MAW-1';
 
 { TModflowMAW_Writer }
 
@@ -1253,7 +1253,6 @@ end;
 procedure TModflowMAW_Writer.WriteOptions;
 var
   AFileName: string;
-//  ObsName: string;
   NameOfFile: string;
   BaseName: string;
 begin
@@ -1285,10 +1284,10 @@ begin
   PrintFlowsOption;
   WriteSaveFlowsOption;
 
-  if  FMawPackage.SaveMnwFlows then
+  if  FMawPackage.SaveMnwFlows or Model.SeparateGwtUsed then
   begin
     WriteString('  BUDGET FILEOUT ');
-    AFileName := ChangeFileExt(BaseName, '.maw_bud');
+    AFileName := ChangeFileExt(BaseName, StrMawbud);
     Model.AddModelOutputFile(AFileName);
     AFileName := ExtractFileName(AFileName);
     WriteString(AFileName);
