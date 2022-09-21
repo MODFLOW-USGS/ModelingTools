@@ -585,7 +585,8 @@ resourcestring
   StrNewDataSet = 'NewDataSet';
   rsResClassificaton = 'Reservoir';
   rsLakeClassificaton = 'Lake';
-  StrMT3DMS_Classificaton = 'MT3DMS, MT3D-USGS, or GWT';
+  StrMT3DMS_GWT_Classificaton = 'MT3DMS, MT3D-USGS, or GWT';
+  StrMt3dClassification = 'MT3DMS or MT3D-USGS';
   StrGwtClassification = 'GWT: Groundwater Transport';
   StrGwtMST = 'GWT MST: Mobile Storage and Transport';
   StrGwtIST = 'GWT IST: Immobile Storage and Transport';
@@ -36051,7 +36052,7 @@ begin
   end
   else
   begin
-    FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+    FDataArrayCreationRecords[Index].Classification := StrMT3DMS_GWT_Classificaton;
   end;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.LongitudinalDispersionUsed;
 
@@ -36104,7 +36105,7 @@ begin
   end
   else
   begin
-    FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+    FDataArrayCreationRecords[Index].Classification := StrMT3DMS_GWT_Classificaton;
   end;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.VerticalTransverseDispersionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
@@ -36967,7 +36968,7 @@ begin
   FDataArrayCreationRecords[Index].Name := STR_MT3DMS_Observation_Locations;
   FDataArrayCreationRecords[Index].DisplayName := STR_MT3DMS_Observation_LocationsDisplayName;
   FDataArrayCreationRecords[Index].Formula := 'False';
-  FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+  FDataArrayCreationRecords[Index].Classification := StrMt3dClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMS_StrictUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -36981,7 +36982,7 @@ begin
   FDataArrayCreationRecords[Index].Name := StrMT3DMSActive;
   FDataArrayCreationRecords[Index].DisplayName := StrMT3DMSActiveDisplayName;
   FDataArrayCreationRecords[Index].Formula := rsActive;
-  FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+  FDataArrayCreationRecords[Index].Classification := StrMt3dClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMS_StrictUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -36995,7 +36996,7 @@ begin
   FDataArrayCreationRecords[Index].Name := rsBulkDensity;
   FDataArrayCreationRecords[Index].DisplayName := rsBulkDensityDisplayName;
   FDataArrayCreationRecords[Index].Formula := '2000000';
-  FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+  FDataArrayCreationRecords[Index].Classification := StrMt3dClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMSBulkDensityUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -37009,7 +37010,7 @@ begin
   FDataArrayCreationRecords[Index].Name := rsImmobPorosity;
   FDataArrayCreationRecords[Index].DisplayName := rsImmobPorosityDisplayName;
   FDataArrayCreationRecords[Index].Formula := '0.2';
-  FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+  FDataArrayCreationRecords[Index].Classification := StrMt3dClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMSImmobPorosityUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -37023,7 +37024,7 @@ begin
   FDataArrayCreationRecords[Index].Name := rsMT3DMS_Layer_Thickness;
   FDataArrayCreationRecords[Index].DisplayName := rsMT3DMS_Layer_ThicknessDisplayName;
   FDataArrayCreationRecords[Index].Formula :=StrLayerHeight;
-  FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+  FDataArrayCreationRecords[Index].Classification := StrMt3dClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3dMS_StrictUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -38394,7 +38395,7 @@ begin
   FDataArrayCreationRecords[Index].Name := KLakeTransportConce;
   FDataArrayCreationRecords[Index].DisplayName := StrLakeTransportConce;
   FDataArrayCreationRecords[Index].Formula := '0';
-  FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+  FDataArrayCreationRecords[Index].Classification := StrMt3dClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3d_LktIsSelected;
   FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
@@ -39195,7 +39196,7 @@ begin
     end
     else
     begin
-      FDataArrayCreationRecords[FLongitudinalDispersivityIndex].Classification := StrMT3DMS_Classificaton;
+      FDataArrayCreationRecords[FLongitudinalDispersivityIndex].Classification := StrMT3DMS_GWT_Classificaton;
     end;
     DataArray := GetDataSetByName(FDataArrayCreationRecords[FLongitudinalDispersivityIndex].Name);
     if DataArray <> nil then
@@ -39232,13 +39233,13 @@ begin
     else
     begin
       Packages := FCustomModel.ModflowPackages;
-      if Packages.Mt3dBasic.IsSelected and Packages.ModPath.IsSelected then
+      if (Packages.Mt3dBasic.IsSelected or FCustomModel.GwtUsed) and Packages.ModPath.IsSelected then
       begin
-        FDataArrayCreationRecords[FPorosityIndex].Classification := StrModpath + ' \ ' + StrMT3DMS_Classificaton;
+        FDataArrayCreationRecords[FPorosityIndex].Classification := StrModpath + ' \ ' + StrMT3DMS_GWT_Classificaton;
       end
-      else if Packages.Mt3dBasic.IsSelected then
+      else if Packages.Mt3dBasic.IsSelected or FCustomModel.GwtUsed then
       begin
-        FDataArrayCreationRecords[FPorosityIndex].Classification := StrMT3DMS_Classificaton;
+        FDataArrayCreationRecords[FPorosityIndex].Classification := StrMT3DMS_GWT_Classificaton;
       end
       else if Packages.ModPath.IsSelected then
       begin

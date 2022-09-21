@@ -2554,10 +2554,10 @@ begin
       FGwtImsNode := nil;
     end;
 
-    AddChildNode(StrMT3DMS_Classificaton,
-      StrMT3DMS_Classificaton, FTransportNode);
+    AddChildNode(StrMt3dClassification,
+      StrMt3dClassification, FTransportNode);
 
-//    AddNode(StrMT3DMS_Classificaton, StrMT3DMS_Classificaton, PriorNode);
+//    AddNode(StrMT3DMS_GWT_Classificaton, StrMT3DMS_GWT_Classificaton, PriorNode);
 
     NilNodes;
 

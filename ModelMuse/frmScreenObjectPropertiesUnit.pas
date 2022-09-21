@@ -17154,7 +17154,7 @@ begin
   ;
   if (DataGrid = frameRchParam.rdgModflowBoundary)
     and frmGoPhast.PhastModel.RchTimeVaryingLayers
-    and (ACol = 3) then
+    and (ACol = 3 + GwtColumnCount) then
   begin
     // We are setting the formula for  the layer
     // to which the recharge will be applied.
@@ -17587,12 +17587,12 @@ begin
     if frmGoPhast.PhastModel.RchTimeVaryingLayers then
     begin
 //      frameRchParam.rdgModflowBoundary.Columns[3].WordWrapCaptions := True;
-      frameRchParam.rdgModflowBoundary.Columns[3].AutoAdjustColWidths := True;
+      frameRchParam.rdgModflowBoundary.Columns[3 + GwtColumnCount].AutoAdjustColWidths := True;
       TimeList := AScreenObject.ModflowRchBoundary.RechargeLayers.TimeLists[0, frmGoPhast.PhastModel];
-      frameRchParam.rdgModflowBoundary.Cells[3, 0] := TimeList.NonParamDescription;
-      frameRchParam.rdgModflowBoundary.Columns[3].AutoAdjustColWidths := False;
-      frameRchParam.rdgModflowBoundary.ColWidths[3] :=
-        frameRchParam.rdgModflowBoundary.WidthNeededToFitText(3,0);
+      frameRchParam.rdgModflowBoundary.Cells[3 + GwtColumnCount, 0] := TimeList.NonParamDescription;
+      frameRchParam.rdgModflowBoundary.Columns[3 + GwtColumnCount].AutoAdjustColWidths := False;
+      frameRchParam.rdgModflowBoundary.ColWidths[3 + GwtColumnCount] :=
+        frameRchParam.rdgModflowBoundary.WidthNeededToFitText(3 + GwtColumnCount,0);
     end;
     if (AScreenObject.ModflowRchBoundary <> nil)
       and not AScreenObject.ModflowRchBoundary.Used then
@@ -19263,7 +19263,7 @@ begin
       ValuesFunction := GetRechargeLayers;
 
       GetModflowBoundaryCollection(Frame.rdgModflowBoundary, ValuesFunction,
-        ColumnOffset, ScreenObjectList, Parameter, TimeList);
+        ColumnOffset + GwtColumnCount, ScreenObjectList, Parameter, TimeList);
     finally
       TimeList.Free;
     end;
@@ -20852,7 +20852,7 @@ begin
     ResultType := rdtDouble;
     if (DataGrid = frameRchParam.rdgModflowBoundary)
       and frmGoPhast.PhastModel.RchTimeVaryingLayers
-      and (ACol = 3) then
+      and (ACol = 3 + GwtColumnCount) then
     begin
       // We are setting the formula for  the layer
       // to which the recharge will be applied.
@@ -25919,7 +25919,7 @@ begin
         Item := FNewProperties[Index];
         Item.ScreenObject.CreateRchBoundary;
         Boundary := Item.ScreenObject.ModflowRchBoundary;
-        ColumnOffset := 3;
+        ColumnOffset := 3 + GwtColumnCount;
         BoundaryLayers := Boundary.RechargeLayers;
         if ShouldStoreBoundary(FRCH_Node, Boundary) then
         begin

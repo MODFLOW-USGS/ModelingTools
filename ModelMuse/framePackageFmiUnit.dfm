@@ -25,7 +25,7 @@ inherited framePackageFmi: TframePackageFmi
     Top = 208
     Width = 417
     Height = 17
-    Caption = 'Print flow imbalance (FLOW_IMBALANCE_CORRECTION)'
+    Caption = 'Use flow imbalance correction (FLOW_IMBALANCE_CORRECTION)'
     Enabled = False
     TabOrder = 2
   end

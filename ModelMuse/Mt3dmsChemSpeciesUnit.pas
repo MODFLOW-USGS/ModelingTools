@@ -58,7 +58,8 @@ type
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
       const OldDataArrayName, NewName, NewDisplayName, NewFormula,
-      AssociatedDataSets: string; ShouldCreate: boolean);
+      AssociatedDataSets: string; ShouldCreate: boolean;
+      const Classification: string);
     function Collection: TCustomChemSpeciesCollection;
     procedure RenameDependents(NewName: string);
     procedure UpdateAllDataArrays;
@@ -530,7 +531,8 @@ end;
 
 procedure TChemSpeciesItem.UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
   const OldDataArrayName, NewName, NewDisplayName, NewFormula,
-  AssociatedDataSets: string; ShouldCreate: boolean);
+  AssociatedDataSets: string; ShouldCreate: boolean;
+  const Classification: string);
 var
   DataArray: TDataArray;
   LocalModel: TPhastModel;
@@ -561,7 +563,7 @@ begin
           DataArray := LocalModel.DataArrayManager.CreateNewDataArray(
             TDataArray, NewName, NewFormula, NewDisplayName,
             [dcName, dcType, dcOrientation, dcEvaluatedAt],
-            rdtDouble, eaBlocks, dso3D, StrMT3DMS_Classificaton);
+            rdtDouble, eaBlocks, dso3D, Classification);
         end;
       end;
       if DataArray <> nil then
@@ -571,7 +573,7 @@ begin
           LocalModel.RowCount, LocalModel.ColumnCount);
         DataArray.OnDataSetUsed := OnDataSetUsed;
         DataArray.AssociatedDataSets := AssociatedDataSets;
-        DataArray.Classification := StrMT3DMS_Classificaton;
+        DataArray.Classification := Classification;
       end;
     end;
   end;
@@ -897,7 +899,7 @@ begin
     UpdateDataArray(LocalModel.Mt3dMsFirstSorbParamUsed,
       FFirstSorbParamDataArrayName, NewName,
       FFirstSorbParamDisplayName, '1.', 'MT3DMS or MT3D-USGS RCT package, SP1',
-      LocalModel.AnyMt3dSorbParameter);
+      LocalModel.AnyMt3dSorbParameter, StrMt3dClassification);
   end;
   SetCaseSensitiveStringProperty(FFirstSorbParamDataArrayName, NewName);
 end;
@@ -913,7 +915,7 @@ begin
     UpdateDataArray(LocalModel.Mt3dUsgsMonodUsed,
       FHalfSaturationConstantDataArrayName, NewName,
       FHalfSaturationConstantDisplayName, '1.', 'MT3D-USGS RCT package, RC3',
-      LocalModel.AnyMt3dUsgsMonod);
+      LocalModel.AnyMt3dUsgsMonod, StrMt3dClassification);
   end;
   SetCaseSensitiveStringProperty(FHalfSaturationConstantDataArrayName, NewName);
 end;
@@ -969,7 +971,7 @@ begin
       AssociatedDataSets := 'GWT IST Pakage: BULK_DENSITY';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and IstProp.Sorption;
       UpdateDataArray(LocalModel.GwtImmobileBulkDensityUsed, OldName, NewName,
-        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
       FImmobileBulkDensities[DomainIndex] := NewName;
     end;
   end
@@ -1034,7 +1036,7 @@ begin
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected
         and (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
       UpdateDataArray(LocalModel.GwtImmobileDecayUsed, OldName, NewName,
-        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
       FImmobileDecay[DomainIndex] := NewName;
     end;
   end
@@ -1099,7 +1101,7 @@ begin
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and IstProp.Sorption
         and (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
       UpdateDataArray(LocalModel.GwtImmobileDecaySorbedUsed, OldName, NewName,
-        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
       FImmobileDecaySorbed[DomainIndex] := NewName;
     end;
   end
@@ -1164,7 +1166,7 @@ begin
       AssociatedDataSets := 'GWT IST Pakage: DISTCOEF';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and IstProp.Sorption;
       UpdateDataArray(LocalModel.GwtImmobileDistCoefUsed, OldName, NewName,
-        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
       FImmobileDistCoeficients[DomainIndex] := NewName;
     end;
   end
@@ -1229,7 +1231,7 @@ begin
       AssociatedDataSets := 'GWT IST PaCkage: CIM';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected;
       UpdateDataArray(LocalModel.GwtImmobileCimUsed, OldName, NewName,
-        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
       FImmobileInitialConcentrations[DomainIndex] := NewName;
     end;
   end
@@ -1294,7 +1296,7 @@ begin
       AssociatedDataSets := 'GWT IST Package: ZETAIM';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected;
       UpdateDataArray(LocalModel.GwtImmobileZetaimUsed, OldName, NewName,
-        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
       ImmobileMassTransferRates[DomainIndex] := NewName;
     end;
   end
@@ -1318,7 +1320,7 @@ begin
     UpdateDataArray(LocalModel.Mt3dUsgsDualSeparateUsed,
       FImmobilePartioningCoefficientDataArrayName, NewName,
       FImmobilePartioningCoefficientDisplayName, '1.', 'MT3D-USGS RCT package, SP1IM',
-      LocalModel.AnyMt3dUsgsDualSeparate);
+      LocalModel.AnyMt3dUsgsDualSeparate, StrMt3dClassification);
   end;
   SetCaseSensitiveStringProperty(FImmobilePartioningCoefficientDataArrayName, NewName);
 end;
@@ -1374,7 +1376,7 @@ begin
       AssociatedDataSets := 'GWT IST Pakage: THETAIM';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected;
       UpdateDataArray(LocalModel.GwtImmobileThetaimUsed, OldName, NewName,
-        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate);
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
       FImmobilePorosities[DomainIndex] := NewName;
     end;
   end
@@ -1476,7 +1478,7 @@ begin
     UpdateDataArray(LocalModel.Mt3dMsInitialConcUsed,
       FInitialConcDataArrayName, NewName,
       FInitialConcDisplayName, '0', 'MT3DMS or MT3D-USGS BTN package, SCONC',
-      True);
+      True, StrMt3dClassification);
   end;
 
   SetCaseSensitiveStringProperty(FInitialConcDataArrayName, NewName);
@@ -1522,7 +1524,7 @@ begin
     UpdateDataArray(LocalModel.GwtMobileBulkDensityUsed,
       FMobileBulkDensityDataArrayName, NewName,
       FMobileBulkDensityDataArrayDisplayName, '1.7', 'GWT MST Pakage: BULK_DENSITY',
-      DataSetUsed);
+      DataSetUsed, StrGwtClassification);
   end;
 
   SetCaseSensitiveStringProperty(FMobileBulkDensityDataArrayName, NewName);
@@ -1555,7 +1557,7 @@ begin
     UpdateDataArray(LocalModel.GwtMobileDecayUsed,
       FMobileDecayRateDataArrayName, NewName,
       FMobileDecayRateDataArrayDisplayName, '0.001', 'GWT MST Pakage: DECAY',
-      DataSetUsed);
+      DataSetUsed, StrGwtClassification);
   end;
 
   SetCaseSensitiveStringProperty(FMobileDecayRateDataArrayName, NewName);
@@ -1588,7 +1590,7 @@ begin
     UpdateDataArray(LocalModel.GwtMobileDistibutionCoefUsed,
       FMobileDistCoefDataArrayName, NewName,
       FMobileDistCoefDataArrayDisplayName, '0.176', 'GWT MST Pakage: DISTCOEF',
-      DataSetUsed);
+      DataSetUsed, StrGwtClassification);
   end;
 
   SetCaseSensitiveStringProperty(FMobileDistCoefDataArrayName, NewName);
@@ -1622,7 +1624,7 @@ begin
     UpdateDataArray(LocalModel.GwtMobileFreundlichExponentUsed,
       FMobileFreundlichExponentDataArrayName, NewName,
       FMobileFreundlichExponentDataArrayDisplayName, '0.7', 'GWT MST Pakage: SP2',
-      DataSetUsed);
+      DataSetUsed, StrGwtClassification);
   end;
 
   SetCaseSensitiveStringProperty(FMobileFreundlichExponentDataArrayName, NewName);
@@ -1657,7 +1659,7 @@ begin
     UpdateDataArray(LocalModel.GwtMobileSorbedDecayUsed,
       FMobileSorbedDecayRateDataArrayName, NewName,
       FMobileSorbedDecayRateDataArrayDisplayName, '0.001', 'GWT MST Pakage: DECAY_SORBED',
-      DataSetUsed);
+      DataSetUsed, StrGwtClassification);
   end;
 
   SetCaseSensitiveStringProperty(FMobileSorbedDecayRateDataArrayName, NewName);
@@ -1691,7 +1693,7 @@ begin
     UpdateDataArray(LocalModel.GwtMobileSorptionCapacityUsed,
       FMobileSorptionCapacityDataArrayName, NewName,
       FMobileSorptionCapacityDataArrayDisplayName, '0.003', 'GWT MST Pakage: SP2',
-      DataSetUsed);
+      DataSetUsed, StrGwtClassification);
   end;
 
   SetCaseSensitiveStringProperty(FMobileSorptionCapacityDataArrayName, NewName);
@@ -2067,7 +2069,7 @@ begin
     UpdateDataArray(LocalModel.GwtMobileSeparatePorosityUsed,
       FPorosityDataArrayName, NewName,
       FPorosityDataArrayDisplayName, '0.25', 'GWT MST Pakage: POROSITY',
-      DataSetUsed);
+      DataSetUsed, StrGwtClassification);
   end;
 
   SetCaseSensitiveStringProperty(FPorosityDataArrayName, NewName);
@@ -2085,7 +2087,7 @@ begin
     UpdateDataArray(LocalModel.Mt3dmsReactionRateDisolvedUsed,
       FReactionRateDisolvedDataArrayName, NewName,
       FReactionRateDisolvedDisplayName, '1E-6', 'MT3DMS or MT3D-USGS RCT package, RC1',
-      LocalModel.AnyMt3dReactions);
+      LocalModel.AnyMt3dReactions, StrMt3dClassification);
   end;
 
   SetCaseSensitiveStringProperty(FReactionRateDisolvedDataArrayName, NewName);
@@ -2103,7 +2105,7 @@ begin
     UpdateDataArray(LocalModel.Mt3dmsReactionRateSorbedUsed,
       FReactionRateSorbedDataArrayName, NewName,
       FReactionRateSorbedDisplayName, '1E-6', 'MT3DMS or MT3D-USGS RCT package, RC2',
-      LocalModel.AnyMt3dReactions);
+      LocalModel.AnyMt3dReactions, StrMt3dClassification);
   end;
 
   SetCaseSensitiveStringProperty(FReactionRateSorbedDataArrayName, NewName);
@@ -2120,7 +2122,7 @@ begin
     UpdateDataArray(LocalModel.Mt3dMsSecondSorbParamUsed,
       FSecondSorbParamDataArrayName, NewName,
       FSecondSorbParamDisplayName, '1.', 'MT3DMS or MT3D-USGS RCT package, SP2',
-      LocalModel.AnyMt3dSorbParameter);
+      LocalModel.AnyMt3dSorbParameter, StrMt3dClassification);
   end;
 
   SetCaseSensitiveStringProperty(FSecondSorbParamDataArrayName, NewName);
@@ -2137,7 +2139,7 @@ begin
     UpdateDataArray(LocalModel.Mt3dMsSorbImmobInitialConcUsed,
       FSorbOrImmobInitialConcDataArrayName, NewName,
       FSorbOrImmobInitialConcDisplayName, '0', 'MT3DMS or MT3D-USGS RCT package, SRCONC',
-      LocalModel.AnyMt3dSorbImmobConc);
+      LocalModel.AnyMt3dSorbImmobConc, StrMt3dClassification);
   end;
   SetCaseSensitiveStringProperty(FSorbOrImmobInitialConcDataArrayName, NewName);
 end;
@@ -2157,7 +2159,7 @@ begin
     UpdateDataArray(LocalModel.Mf6UzfInitialConcentrationUsed,
       FUztInitialConcDataArrayName, NewName,
       FUztInitialConcDisplayName, '0.', 'MODFLOW 6 UZT package, strt',
-      LocalModel.AnyUzfInitialConcentrationUsed);
+      LocalModel.AnyUzfInitialConcentrationUsed, StrGwtClassification);
   end;
   SetCaseSensitiveStringProperty(FUztInitialConcDataArrayName, NewName);
 end;
@@ -2263,7 +2265,7 @@ begin
     UpdateDataArray(LocalModel.ModDispDataArrayUsed,
       FDiffusionCoefDataArrayName, NewName,
       FDiffusionCoefDisplayName, '0', 'MT3DMS or MT3D-USGS DSP Package, DMCOEF',
-      LocalModel.AnyDispersionMultiDiffusion);
+      LocalModel.AnyDispersionMultiDiffusion, StrMt3dClassification);
   end;
 
   SetCaseSensitiveStringProperty(FDiffusionCoefDataArrayName, NewName);
