@@ -3230,7 +3230,7 @@ var
       SeriesParam.IsUsedInTemplate := True;
 	    SeriesValue := SeriesParam.Value;
       Model.WritePValAndTemplate(SeriesParam.ParameterName, SeriesParam.Value,
-        SeriesParam);
+        SeriesParam, True);
 
       SeriesReplacement := Format(' %0:s                    %1:s%0:s',
         [TemplateCharacter, PestSeriesValue])
@@ -3329,7 +3329,7 @@ var
     begin
       Param.IsUsedInTemplate := True;
 	    ModifierValue := Param.Value;
-      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param, True);
       CellValueReplacement := Format(' %0:s                    %1:s%0:s',
         [TemplateCharacter, PestParValue]);
     end
@@ -10032,7 +10032,7 @@ begin
         if Param <> nil then
         begin
           Param.IsUsedInTemplate := True;
-          Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+          Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param, True);
           FPestParamUsed := True;
         end
         else if Layer >= 0 then
@@ -10359,7 +10359,7 @@ var
       Param.IsUsedInTemplate := True;
 	    ModifierValue := Param.Value;
       //WriteTemplateReplace(PestParValue);
-      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param, True);
       CellValueReplacement := Format(' %0:s                    %1:s%0:s',
         [TemplateCharacter, PestParValue])
     end

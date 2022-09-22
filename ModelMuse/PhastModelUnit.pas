@@ -2905,7 +2905,8 @@ that affects the model output should also have a comment. }
 
     function PackageGeneratedExternally(const PackageName: string): boolean;
     procedure WritePValAndTemplate(const ParameterName: string;
-      const Value: double; Parameter: TModflowParameter);
+      const Value: double; Parameter: TModflowParameter;
+      DirectAddRequired: Boolean = False);
 
     property HfbDisplayer: THfbDisplayer read FHfbDisplayer;
 
@@ -10719,18 +10720,20 @@ const
 //    '5.0.0.27' Bug fix: Fixed bug that could cause ModelMuse to encounter an
 //                an error when drawing contours.
 
-//               Bug fix: Fixed bug in specifing MVR receivers.
+//    '5.0.0.28' Bug fix: Fixed bug in specifing MVR receivers.
 //               Enhancement: Added support for the SAVE SATURATION option in
 //                the NPF package.:
 //               Bug fix: Changed calculation of connlen in the MODFLOW 6 lake
 //                package.
+//               Bug fix: Fixed bug that could cause some PEST parameters to
+//                not be written to the PVAL file when needed.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.27';
+  IIModelVersion = '5.0.0.28';
 
 function IModelVersion: string;
 begin
@@ -42054,7 +42057,8 @@ begin
 end;
 
 procedure TCustomModel.WritePValAndTemplate(const ParameterName: string;
-      const Value: double; Parameter: TModflowParameter);
+  const Value: double; Parameter: TModflowParameter;
+  DirectAddRequired: Boolean = false);
 var
   NewLine: string;
   TemplateLine: string;
@@ -42068,9 +42072,10 @@ begin
     begin
       Exit;
     end;
-    Parameter.AddedToPval := True;
-    if not (Parameter as TModflowSteadyParameter).UsePilotPoints then
+    if (not (Parameter as TModflowSteadyParameter).UsePilotPoints)
+      or DirectAddRequired then
     begin
+      Parameter.AddedToPval := True;
       NewLine := '#-- ' + NewLine;
       TemplateLine := '#-- ' + TemplateLine;
       if FPestPValFile.IndexOf(NewLine) < 0 then

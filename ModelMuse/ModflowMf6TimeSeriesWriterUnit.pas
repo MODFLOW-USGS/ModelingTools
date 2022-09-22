@@ -119,7 +119,7 @@ begin
           Assert(False);
       end;
       FPestParamUsed := True;
-      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param, True);
     end;
 
     WritePestTemplateFormulaOrValue(ScaleFactor, '',
