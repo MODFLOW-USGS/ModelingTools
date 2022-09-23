@@ -1076,6 +1076,9 @@ end;
     FModelDataList: TModelDataList;
     FExchanges: TStringList;
     FGwtTDisFileNames: TStringList;
+    FSpeciesIndex: Integer;
+    FGwtSimulationChoice: TGwtSimulationChoice;
+    FSimFileNames: TStringList;
     procedure WriteOptions;
     procedure WriteTiming;
     procedure WriteModels;
@@ -1085,6 +1088,11 @@ end;
     procedure SetTDisFileName(const Value: string);
     function GetGwtTDisFileNames(SpeciesIndex: Integer): string;
     procedure SetGwtTDisFileNames(SpeciesIndex: Integer; const Value: string);
+    procedure WriteFileInternal(FileName: string; BackupFileName: WideString);
+    function GetShouldWriteLine(GwtUsed: Boolean; SeparateGwtUsed: Boolean;
+      ModelIndex: Integer): Boolean;
+    function GetSimFileName(Index: Integer): string;
+    function GetSimFileNameCount: Integer;
   protected
     FRefCount: Integer;
     class function Extension: string; override;
@@ -1096,10 +1104,12 @@ end;
     destructor Destroy; override;
     property TDisFileName: string read GetTDisFileName write SetTDisFileName;
     procedure AddModel(ModelData: TModelData);
-    procedure AddExchange(FileName: string);
+    procedure AddExchange(ExchangeLine: string);
     procedure WriteFile(FileName: string);
     property GwtTDisFileNames[SpeciesIndex: Integer]: string
       read GetGwtTDisFileNames write SetGwtTDisFileNames;
+    property SimFileNameCount: Integer read GetSimFileNameCount;
+    property SimFileNames[Index: Integer]: string read GetSimFileName;
   end;
 
 procedure MoveAppToDirectory(const AppFullPath, Directory: string);
@@ -1517,6 +1527,8 @@ var
   FileRoot: string;
   BackupParamEstBatFileName: string;
   BackupRunModflow: string;
+  SimIndex: Integer;
+  SimFileName: string;
 begin
 
   ADirectory:= GetCurrentDir;
@@ -1634,27 +1646,34 @@ begin
       end
       else
       begin
-        if FileExists(ProgramLocations.ModelMonitorLocation) then
+        MfsimName := ExtractFileDir(FileName);
+        MfsimName := IncludeTrailingPathDelimiter(MfsimName) + 'mfsim.nam';
+        for SimIndex := 0 to
+          frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount -1 do
         begin
+          SimFileName := frmGoPhast.PhastModel.SimNameWriter.SimFileNames[SimIndex];
+          BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [SimFileName, MfsimName]));
 
-          MfsimName := ExtractFileDir(FileName);
-          MfsimName := IncludeTrailingPathDelimiter(MfsimName) + 'mfsim.nam';
-          BatchFile.Add('call '
-            + QuoteFileName(ExpandFileName(ProgramLocations.ModelMonitorLocation))
-            + ' -m ' + QuoteFileName(ExpandFileName(ModflowLocation))
-            + ' -n ' + QuoteFileName(ExtractFileName(MfsimName))
-            + ' -mv 6');
-        end
-        else
-        begin
-          AFileName :=  QuoteFileName(ExpandFileName(ModflowLocation));
-          if (Model.ModelSelection = msModflow2015) then
+          if FileExists(ProgramLocations.ModelMonitorLocation) then
           begin
-            BatchFile.Add(AFileName {+ ' /wait'});
+
+            BatchFile.Add('call '
+              + QuoteFileName(ExpandFileName(ProgramLocations.ModelMonitorLocation))
+              + ' -m ' + QuoteFileName(ExpandFileName(ModflowLocation))
+              + ' -n ' + QuoteFileName(ExtractFileName(MfsimName))
+              + ' -mv 6');
           end
           else
           begin
-            BatchFile.Add(AFileName + ' ' + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
+            AFileName :=  QuoteFileName(ExpandFileName(ModflowLocation));
+            if (Model.ModelSelection = msModflow2015) then
+            begin
+              BatchFile.Add(AFileName {+ ' /wait'});
+            end
+            else
+            begin
+              BatchFile.Add(AFileName + ' ' + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
+            end;
           end;
         end;
       end;
@@ -9402,9 +9421,9 @@ end;
 
 { TMf6_SimNameFileWriter }
 
-procedure TMf6_SimNameFileWriter.AddExchange(FileName: string);
+procedure TMf6_SimNameFileWriter.AddExchange(ExchangeLine: string);
 begin
-  FExchanges.Add(FileName);
+  FExchanges.Add(ExchangeLine);
 end;
 
 procedure TMf6_SimNameFileWriter.AddModel(ModelData: TModelData);
@@ -9423,10 +9442,12 @@ begin
   FModelDataList := TModelDataList.Create;
   FExchanges := TStringList.Create;
   FGwtTDisFileNames := TStringList.Create;
+  FSimFileNames := TStringList.Create;
 end;
 
 destructor TMf6_SimNameFileWriter.Destroy;
 begin
+  FSimFileNames.Free;
   FGwtTDisFileNames.Free;
   FExchanges.Free;
   FModelDataList.Free;
@@ -9480,11 +9501,14 @@ var
 begin
   WriteString('BEGIN EXCHANGES');
   NewLine;
-  for index := 0 to FExchanges.Count - 1 do
+  if Model.GwtUsed and not Model.SeparateGwtUsed then
   begin
-    WriteString('  ');
-    WriteString(FExchanges[index]);
-    NewLine;
+    for index := 0 to FExchanges.Count - 1 do
+    begin
+      WriteString('  ');
+      WriteString(FExchanges[index]);
+      NewLine;
+    end;
   end;
   WriteString('END EXCHANGES');
   NewLine;
@@ -9495,6 +9519,10 @@ procedure TMf6_SimNameFileWriter.WriteFile(FileName: string);
 var
   FileRoot: WideString;
   BackupFileName: WideString;
+  Limit: Integer;
+  Index: Integer;
+  SpeciesIndex: Integer;
+  SpeciesName: string;
 begin
   if Model.ModelSelection <> msModflow2015 then
   begin
@@ -9503,9 +9531,78 @@ begin
   FileRoot := ChangeFileExt(ExtractFileName(FileName), '.');
   BackupFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
     + FileRoot + 'mfsim.nam';
-  FileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName)) + 'mfsim.nam';
+  FileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+    + 'mfsim.nam';
   FInputFileName := FileName;
-  OpenFile(FileName);
+  FSpeciesIndex := -1;
+  WriteFileInternal(FileName, BackupFileName);
+  TFile.Copy(BackupFileName, FileName, True);
+
+  if Model.GwtUsed and Model.SeparateGwtUsed then
+  begin
+    FGwtSimulationChoice := Model.ModflowPackages.GwtProcess.GwtSimulationChoice;
+    if FGwtSimulationChoice = gscTransportTogether then
+    begin
+      Limit := 1
+    end
+    else
+    begin
+      Limit := Model.MobileComponents.Count;
+    end;
+
+    for SpeciesIndex := 0 to Limit - 1 do
+    begin
+      FSpeciesIndex := SpeciesIndex;
+      SpeciesName := Model.MobileComponents[SpeciesIndex].Name + '.';
+      BackupFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+        + FileRoot + SpeciesName + 'mfsim.nam';
+      WriteFileInternal(FileName, BackupFileName);
+    end;
+  end;
+
+end;
+
+function TMf6_SimNameFileWriter.GetShouldWriteLine(GwtUsed: Boolean;
+  SeparateGwtUsed: Boolean; ModelIndex: Integer): Boolean;
+begin
+  result := True;
+  if not GwtUsed then
+  begin
+    result := True;
+  end
+  else if FSpeciesIndex < 0 then
+  begin
+    result := True;
+  end
+  else if SeparateGwtUsed then
+  begin
+    if FGwtSimulationChoice = gscTransportTogether then
+    begin
+      result := ModelIndex > 0;
+    end
+    else
+    begin
+      result := ModelIndex - 1 = FSpeciesIndex;
+    end;
+  end;
+end;
+
+function TMf6_SimNameFileWriter.GetSimFileName(Index: Integer): string;
+begin
+  result := FSimFileNames[Index];
+end;
+
+function TMf6_SimNameFileWriter.GetSimFileNameCount: Integer;
+begin
+  result := FSimFileNames.Count
+end;
+
+procedure TMf6_SimNameFileWriter.WriteFileInternal(FileName: string; BackupFileName: WideString);
+var
+  Limit: Integer;
+begin
+  FSimFileNames.Add(BackupFileName);
+  OpenFile(BackupFileName);
   try
     WriteOptions;
     Application.ProcessMessages;
@@ -9529,19 +9626,15 @@ begin
     end;
 
     WriteExchanges;
-
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
     begin
       Exit;
     end;
-
     WriteSolutionGroups;
-
   finally
     CloseFile;
   end;
-  TFile.Copy(FileName, BackupFileName, True);
   Model.AddModelInputFile(FileName);
   Model.AddModelOutputFile(ChangeFileExt(FileName, '.lst'));
 end;
@@ -9549,15 +9642,25 @@ end;
 procedure TMf6_SimNameFileWriter.WriteModels;
 var
   ModelIndex: Integer;
+  ShouldWriteLine: Boolean;
+  GwtUsed: Boolean;
+  SeparateGwtUsed: Boolean;
 begin
   Assert(FModelDataList.Count > 0);
   WriteString('BEGIN MODELS');
   NewLine;
 
+  GwtUsed := Model.GwtUsed;
+  SeparateGwtUsed := Model.SeparateGwtUsed;
+
   for ModelIndex := 0 to FModelDataList.Count - 1 do
   begin
-    WriteString(FModelDataList[ModelIndex].ModelLine);
-    NewLine;
+    ShouldWriteLine := GetShouldWriteLine(GwtUsed, SeparateGwtUsed, ModelIndex);
+    if ShouldWriteLine then
+    begin
+      WriteString(FModelDataList[ModelIndex].ModelLine);
+      NewLine;
+    end;
   end;
 
   WriteString('END MODELS');
@@ -9633,7 +9736,15 @@ procedure TMf6_SimNameFileWriter.WriteSolutionGroups;
 var
   ModelIndex: Integer;
   ModelData: TModelData;
+  GwtUsed: Boolean;
+  SeparateGwtUsed: Boolean;
+  ShouldWriteLine: Boolean;
 begin
+
+  GwtUsed := Model.GwtUsed;
+  SeparateGwtUsed := Model.SeparateGwtUsed;
+
+
   // If ModelMuse ever supports more than one solution group,
   // the following commented out text might be a starting point..
 //  FModelDataList.Sort(TComparer<TModelData>.Construct(
@@ -9647,7 +9758,6 @@ begin
 //    end));
 
   WriteString('BEGIN SOLUTIONGROUP');
-//  WriteInteger(isg);
   WriteInteger(1);
   NewLine;
 
@@ -9712,12 +9822,16 @@ begin
 //    if NewImsLine then
 //    begin
 //      NewLine;
+    ShouldWriteLine := GetShouldWriteLine(GwtUsed, SeparateGwtUsed, ModelIndex);
+    if ShouldWriteLine then
+    begin
       WriteString('  IMS6 ');
       WriteString('''' +  ExtractFileName(ModelData.ImsFile) + ''' ');
-//      NewLine;
-//    end;
-    WriteString('''' +  ModelData.ModelName + ''' ');
-    NewLine;
+  //      NewLine;
+  //    end;
+      WriteString('''' +  ModelData.ModelName + ''' ');
+      NewLine;
+    end;
 
 //    PriorModelData := ModelData;
   end;
@@ -9730,14 +9844,40 @@ begin
 end;
 
 procedure TMf6_SimNameFileWriter.WriteTiming;
+var
+  Limit: Integer;
+  TimingIndex: Integer;
 begin
   Assert(TDisFileName <> '');
   WriteString('BEGIN TIMING');
   NewLine;
 
-  WriteString('  TDIS6 ');
-  WriteString('''' + ExtractFileName(TDisFileName) + '''');
-  NewLine;
+  if FSpeciesIndex = -1 then
+  begin
+    WriteString('  TDIS6 ');
+    WriteString('''' + ExtractFileName(TDisFileName) + '''');
+    NewLine;
+  end;
+
+  Limit := 0;
+  if Model.GwtUsed and Model.SeparateGwtUsed and (FSpeciesIndex <> -1) then
+  begin
+    if FGwtSimulationChoice = gscTransportTogether then
+    begin
+      Limit := 1
+    end
+    else
+    begin
+      Limit := Model.MobileComponents.Count;
+    end;
+  end;
+
+  for TimingIndex := 0 to Limit - 1 do
+  begin
+    WriteString('  TDIS6 ');
+    WriteString('''' + ExtractFileName(GwtTDisFileNames[TimingIndex]) + '''');
+    NewLine;
+  end;
 
   WriteString('END TIMING');
   NewLine;

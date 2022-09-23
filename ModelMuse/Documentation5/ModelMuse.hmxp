@@ -1329,6 +1329,7 @@ document.write('</frameset>');
       <helpcontext-number href="MODFLOW_Time_Dialog_Box" value="2490"/>
       <helpcontext-number href="MODFLOW_Time_Dialog_Box#ATS" value="4292"/>
       <helpcontext-number href="MODFLOW_Time_Dialog_Box#dtadj" value="4291"/>
+      <helpcontext-number href="MODFLOW_Time_Dialog_Box#GWT" value="4350"/>
       <helpcontext-number href="MODFLOW_Time_Dialog_Box#MT3DMS" value="3647"/>
       <helpcontext-number href="MODFLOW_Time_Dialog_Box#TTSMULT" value="3661"/>
       <helpcontext-number href="MODFLOW-LGR" value="3605"/>

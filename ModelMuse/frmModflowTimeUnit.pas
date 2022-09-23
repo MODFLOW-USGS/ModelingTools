@@ -868,14 +868,25 @@ var
   ASpecies: string;
   AColum: TRbwColumn4;
   Multiplier: Double;
+  Limit: Integer;
 begin
   FGettingData := True;
   try
     GwtProcess := frmGoPhast.PhastModel.ModflowPackages.GwtProcess;
-    tabGWT.TabVisible := GwtProcess.IsSelected and GwtProcess.SeparateGwt;
+    tabGWT.TabVisible := GwtProcess.IsSelected and
+      (GwtProcess.GwtSimulationChoice in
+      [gscTransportTogether, gscEachSpeciesSeparate]);
     if tabGWT.TabVisible then
     begin
-      rdgGWT.ColCount := GwtReservedColumns + frmGoPhast.PhastModel.MobileComponents.Count*2;
+      if GwtProcess.GwtSimulationChoice = gscEachSpeciesSeparate then
+      begin
+        Limit := frmGoPhast.PhastModel.MobileComponents.Count;
+      end
+      else
+      begin
+        Limit := 1;
+      end;
+      rdgGWT.ColCount := GwtReservedColumns + Limit*2;
 
       for ColIndex := 0 to GwtReservedColumns - 1 do
       begin
@@ -901,7 +912,7 @@ begin
           AColum.Format := rcf4Real;
         end;
       end;
-      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      for SpeciesIndex := 0 to Limit - 1 do
       begin
         ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex].Name;
         ColIndex := SpeciesIndex*2 + GwtReservedColumns;
@@ -946,8 +957,7 @@ begin
             := FloatToStr(StressPeriod.StartTime);
           rdgGWT.Cells[ord(tcEndTime), RowIndex]
             := FloatToStr(StressPeriod.EndTime);
-          for SpeciesIndex := 0 to
-            frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+          for SpeciesIndex := 0 to Limit - 1 do
           begin
             ColIndex := SpeciesIndex*2 + GwtReservedColumns;
             rdgGWT.IntegerValue[ColIndex, RowIndex] :=
@@ -1019,6 +1029,8 @@ var
   TimeItem: TMt3dmsTimeItem;
   SpeciesIndex: Integer;
   ColIndex: Integer;
+  GwtProcess: TGwtProcess;
+  Limit: Integer;
 begin
   FModflowStressPeriods.Clear;
 
@@ -1103,8 +1115,16 @@ begin
 
     if tabGWT.TabVisible then
     begin
-      for SpeciesIndex := 0 to
-        frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      GwtProcess := frmGoPhast.PhastModel.ModflowPackages.GwtProcess;
+      if GwtProcess.GwtSimulationChoice = gscEachSpeciesSeparate then
+      begin
+        Limit := frmGoPhast.PhastModel.MobileComponents.Count;
+      end
+      else
+      begin
+        Limit := 1;
+      end;
+      for SpeciesIndex := 0 to Limit - 1 do
       begin
         ColIndex := SpeciesIndex*2 + GwtReservedColumns;
         StressPeriod.GwtNumSteps[SpeciesIndex] :=

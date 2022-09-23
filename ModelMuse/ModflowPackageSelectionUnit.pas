@@ -5865,18 +5865,27 @@ Type
       write SetSaveCsvBudgetFile Stored True;
   end;
 
+  TGwtSimulationChoice = (gscAllTogether, gscTransportTogether,
+    gscEachSpeciesSeparate);
+
   TGwtProcess = class(TModflowPackageSelection)
   private
     FFLOW_IMBALANCE_CORRECTION: Boolean;
     FSeparateGwt: Boolean;
+    FGwtSimulationChoice: TGwtSimulationChoice;
     procedure SetFLOW_IMBALANCE_CORRECTION(const Value: Boolean);
     procedure SetSeparateGwt(const Value: Boolean);
+    procedure SetGwtSimulationChoice(const Value: TGwtSimulationChoice);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
     procedure InitializeVariables; override;
   published
-    property SeparateGwt: Boolean read FSeparateGwt write SetSeparateGwt;
+  // retained temporarily for backwards compatiblity.
+    property SeparateGwt: Boolean read FSeparateGwt write SetSeparateGwt
+      stored False;
+    property GwtSimulationChoice: TGwtSimulationChoice read FGwtSimulationChoice
+      write SetGwtSimulationChoice;
     // @name is an option in the Flow Model Interface package
     property FLOW_IMBALANCE_CORRECTION: Boolean read FFLOW_IMBALANCE_CORRECTION
       write SetFLOW_IMBALANCE_CORRECTION;
@@ -23756,6 +23765,7 @@ begin
   begin
     GwtSource := TGwtProcess(Source);
     SeparateGwt := GwtSource.SeparateGwt;
+    GwtSimulationChoice := GwtSource.GwtSimulationChoice;
     FLOW_IMBALANCE_CORRECTION := GwtSource.FLOW_IMBALANCE_CORRECTION;
   end;
   inherited;
@@ -23772,6 +23782,7 @@ begin
   inherited;
   FSeparateGwt := False;
   FFLOW_IMBALANCE_CORRECTION := True;
+  FGwtSimulationChoice := gscAllTogether;
 end;
 
 procedure TGwtProcess.SetFLOW_IMBALANCE_CORRECTION(const Value: Boolean);
@@ -23779,9 +23790,25 @@ begin
   SetBooleanProperty(FFLOW_IMBALANCE_CORRECTION, Value);
 end;
 
+procedure TGwtProcess.SetGwtSimulationChoice(const Value: TGwtSimulationChoice);
+begin
+  if FGwtSimulationChoice <> Value then
+  begin
+    FGwtSimulationChoice := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TGwtProcess.SetSeparateGwt(const Value: Boolean);
 begin
-  SetBooleanProperty(FSeparateGwt, Value);
+  if Value then
+  begin
+    GwtSimulationChoice := gscEachSpeciesSeparate;
+  end
+  else
+  begin
+    GwtSimulationChoice := gscAllTogether;
+  end;
 end;
 
 end.

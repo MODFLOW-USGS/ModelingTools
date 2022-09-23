@@ -16,6 +16,7 @@ type
     procedure WriteStressPeriods;
     procedure WriteAtsFile;
     procedure WriteFileInternal;
+    procedure WriteGwtFilesInternal(const AFileName: string);
   public
     class function Extension: string; override; // abstract;
     procedure WriteFile(const AFileName: string);
@@ -24,7 +25,8 @@ type
 implementation
 
 uses
-  frmProgressUnit, GoPhastTypes, ModflowTimeUnit, Vcl.Forms;
+  frmProgressUnit, GoPhastTypes, ModflowTimeUnit, Vcl.Forms,
+  ModflowPackageSelectionUnit;
 
 resourcestring
   StrWritingTemporalDis = 'Writing Temporal Discretization (TDIS) Package in' +
@@ -110,8 +112,6 @@ procedure TTemporalDiscretizationWriter.WriteFile(const AFileName: string);
 var
   FTYPE: string;
   NameOfFile: string;
-  SpeciesIndex: Integer;
-  ASpecies: string;
 begin
   if Model.ModelSelection <> msModflow2015 then
   begin
@@ -135,10 +135,28 @@ begin
   begin
     WriteAtsFile;
   end;
+  WriteGwtFilesInternal(AFileName);
+end;
 
-  if Model.GwtUsed and Model.ModflowPackages.GwtProcess.SeparateGwt then
+procedure TTemporalDiscretizationWriter.WriteGwtFilesInternal(const AFileName: string);
+var
+  GwtSimulationChoice: TGwtSimulationChoice;
+  Limit: Integer;
+  SpeciesIndex: Integer;
+  ASpecies: string;
+begin
+  GwtSimulationChoice := Model.ModflowPackages.GwtProcess.GwtSimulationChoice;
+  if Model.GwtUsed and (GwtSimulationChoice in [gscTransportTogether, gscEachSpeciesSeparate]) then
   begin
-    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    if GwtSimulationChoice = gscTransportTogether then
+    begin
+      Limit := 1;
+    end
+    else
+    begin
+      Limit := Model.MobileComponents.Count;
+    end;
+    for SpeciesIndex := 0 to Limit - 1 do
     begin
       FSpeciesIndex := SpeciesIndex;
       ASpecies := '.' + Model.MobileComponents[SpeciesIndex].Name;

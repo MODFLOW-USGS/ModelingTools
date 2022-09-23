@@ -5,14 +5,13 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, framePackageUnit, RbwController,
-  Vcl.StdCtrls, ModflowPackageSelectionUnit;
+  Vcl.StdCtrls, ModflowPackageSelectionUnit, Vcl.ExtCtrls;
 
 type
   TframePackageFmi = class(TframePackage)
-    cbSeparate: TCheckBox;
     cbFlowImbalance: TCheckBox;
+    rgSimulationChoice: TRadioGroup;
     procedure rcSelectionControllerEnabledChange(Sender: TObject);
-    procedure cbSeparateClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -28,27 +27,22 @@ implementation
 
 {$R *.dfm}
 
-procedure TframePackageFmi.cbSeparateClick(Sender: TObject);
-begin
-  inherited;
-  rcSelectionControllerEnabledChange(Sender);
-end;
-
 procedure TframePackageFmi.GetData(Package: TModflowPackageSelection);
 var
   GwtProcess: TGwtProcess;
 begin
   inherited;
   GwtProcess := Package as TGwtProcess;
-  cbSeparate.Checked := GwtProcess.SeparateGwt;
+//  cbSeparate.Checked := GwtProcess.SeparateGwt;
   cbFlowImbalance.Checked := GwtProcess.FLOW_IMBALANCE_CORRECTION;
+  rgSimulationChoice.ItemIndex := Ord(GwtProcess.GwtSimulationChoice);
 end;
 
 procedure TframePackageFmi.rcSelectionControllerEnabledChange(Sender: TObject);
 begin
   inherited;
   cbFlowImbalance.Enabled := rcSelectionController.Enabled
-    and cbSeparate.Checked;
+    and (rgSimulationChoice.ItemIndex > 0);
 end;
 
 procedure TframePackageFmi.SetData(Package: TModflowPackageSelection);
@@ -57,8 +51,9 @@ var
 begin
   inherited;
   GwtProcess := Package as TGwtProcess;
-  GwtProcess.SeparateGwt := cbSeparate.Checked;
+//  GwtProcess.SeparateGwt := cbSeparate.Checked;
   GwtProcess.FLOW_IMBALANCE_CORRECTION := cbFlowImbalance.Checked;
+  GwtProcess.GwtSimulationChoice := TGwtSimulationChoice(rgSimulationChoice.ItemIndex);
 end;
 
 end.

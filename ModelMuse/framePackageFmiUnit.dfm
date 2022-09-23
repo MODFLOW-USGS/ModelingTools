@@ -1,33 +1,42 @@
 inherited framePackageFmi: TframePackageFmi
   Width = 476
-  Height = 279
+  Height = 386
   ExplicitWidth = 476
-  ExplicitHeight = 279
+  ExplicitHeight = 386
   DesignSize = (
     476
-    279)
+    386)
   inherited memoComments: TMemo
     Width = 445
     ExplicitWidth = 445
   end
-  object cbSeparate: TCheckBox [3]
+  object cbFlowImbalance: TCheckBox [3]
     Left = 16
-    Top = 168
-    Width = 305
-    Height = 17
-    Caption = 'Use separate time discretization (FMI6)'
-    Enabled = False
-    TabOrder = 1
-    OnClick = cbSeparateClick
-  end
-  object cbFlowImbalance: TCheckBox [4]
-    Left = 16
-    Top = 208
-    Width = 417
+    Top = 160
+    Width = 445
     Height = 17
     Caption = 'Use flow imbalance correction (FLOW_IMBALANCE_CORRECTION)'
     Enabled = False
+    TabOrder = 1
+  end
+  object rgSimulationChoice: TRadioGroup [4]
+    Left = 16
+    Top = 192
+    Width = 445
+    Height = 153
+    Caption = 'Simulation choice (FMI6)'
+    Enabled = False
+    Items.Strings = (
+      'Flow and solute transport in the same simulation'
+      
+        'Flow simulation and a single transport simulation including all ' +
+        'chemical species'
+      
+        'Separate flow simulation and separate simulations for each chemi' +
+        'cal species')
     TabOrder = 2
+    WordWrap = True
+    OnClick = rcSelectionControllerEnabledChange
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -38,7 +47,7 @@ inherited framePackageFmi: TframePackageFmi
         Control = memoComments
       end
       item
-        Control = cbSeparate
+        Control = rgSimulationChoice
       end>
     OnEnabledChange = rcSelectionControllerEnabledChange
   end

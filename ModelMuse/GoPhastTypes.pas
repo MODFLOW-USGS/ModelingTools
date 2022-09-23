@@ -350,11 +350,15 @@ type
     property TDisFileName: string read GetTDisFileName write SetTDisFileName;
     procedure AddModel(ModelData: TModelData);
     procedure WriteFile(Directory: string);
-    procedure AddExchange(FileName: string);
+    procedure AddExchange(ExchangeLine: string);
     function GetGwtTDisFileNames(SpeciesIndex: Integer): string;
     procedure SetGwtTDisFileNames(SpeciesIndex: Integer; const Value: string);
     property GwtTDisFileNames[SpeciesIndex: Integer]: string
       read GetGwtTDisFileNames write SetGwtTDisFileNames;
+    function GetSimFileName(Index: Integer): string;
+    function GetSimFileNameCount: Integer;
+    property SimFileNameCount: Integer read GetSimFileNameCount;
+    property SimFileNames[Index: Integer]: string read GetSimFileName;
   end;
 
   TBoundaryNode = record

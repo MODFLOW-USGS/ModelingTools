@@ -5,8 +5,8 @@ inherited frmModflowTime: TfrmModflowTime
   ClientHeight = 327
   ClientWidth = 754
   OnResize = FormResize
-  ExplicitWidth = 772
-  ExplicitHeight = 374
+  ExplicitWidth = 770
+  ExplicitHeight = 366
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -65,7 +65,7 @@ inherited frmModflowTime: TfrmModflowTime
     Top = 0
     Width = 754
     Height = 292
-    ActivePage = tabModflow
+    ActivePage = tabGWT
     Align = alClient
     TabOrder = 0
     OnChange = pgcMainChange
@@ -1047,7 +1047,7 @@ inherited frmModflowTime: TfrmModflowTime
         ColCount = 4
         DefaultColWidth = 80
         DefaultRowHeight = 30
-        FixedCols = 0
+        FixedCols = 3
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
@@ -1157,6 +1157,7 @@ inherited frmModflowTime: TfrmModflowTime
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitTop = -1
       end
     end
   end

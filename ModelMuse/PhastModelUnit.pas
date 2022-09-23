@@ -33811,7 +33811,8 @@ end;
 
 function TCustomModel.GetSeparateGwtUsed: Boolean;
 begin
-    result := GwtUsed and ModflowPackages.GwtProcess.SeparateGwt;
+  result := GwtUsed and (ModflowPackages.GwtProcess.GwtSimulationChoice in
+    [gscTransportTogether, gscEachSpeciesSeparate]);
 end;
 
 function TCustomModel.GetShortestHorizontalBlockEdge(Layer, Row,

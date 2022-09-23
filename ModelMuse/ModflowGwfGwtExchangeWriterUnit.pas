@@ -32,12 +32,12 @@ end;
 procedure TModflowGwfGwtExchangeWriter.WriteFile(
   const AFileName: string; SpeciesIndex: Integer);
 var
-  Abbreviation: string;
+//  Abbreviation: string;
   SpeciesName: string;
   GwtFile: string;
   Exchange: string;
 begin
-  Abbreviation := 'GWF6-GWT6';
+//  Abbreviation := 'GWF6-GWT6';
   SpeciesName := Model.MobileComponents[SpeciesIndex].Name;
   GwtFile := GwtFileName(AFileName, SpeciesIndex);
   FNameOfFile := GwtFile;
