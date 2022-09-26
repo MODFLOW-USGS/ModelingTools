@@ -1079,6 +1079,7 @@ end;
     FSpeciesIndex: Integer;
     FGwtSimulationChoice: TGwtSimulationChoice;
     FSimFileNames: TStringList;
+    FWritingFlowModel: Boolean;
     procedure WriteOptions;
     procedure WriteTiming;
     procedure WriteModels;
@@ -1529,6 +1530,8 @@ var
   BackupRunModflow: string;
   SimIndex: Integer;
   SimFileName: string;
+  ListFileName: string;
+  MfListName: string;
 begin
 
   ADirectory:= GetCurrentDir;
@@ -1646,12 +1649,14 @@ begin
       end
       else
       begin
-        MfsimName := ExtractFileDir(FileName);
-        MfsimName := IncludeTrailingPathDelimiter(MfsimName) + 'mfsim.nam';
+//        MfsimName := ExtractFileDir(FileName);
+        MfsimName := {IncludeTrailingPathDelimiter(MfsimName) +} 'mfsim.nam';
+        MfListName := 'mfsim.lst';
         for SimIndex := 0 to
           frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount -1 do
         begin
-          SimFileName := frmGoPhast.PhastModel.SimNameWriter.SimFileNames[SimIndex];
+          SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.SimFileNames[SimIndex]);
+          ListFileName := ChangeFileExt(SimFileName, '.lst');
           BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [SimFileName, MfsimName]));
 
           if FileExists(ProgramLocations.ModelMonitorLocation) then
@@ -1675,13 +1680,22 @@ begin
               BatchFile.Add(AFileName + ' ' + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
             end;
           end;
+          BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [MfListName, ListFileName]));
         end;
       end;
 
       AFileName := '..\..\bin\'+ ExtractFileName(ModflowLocation);
       if (Model.ModelSelection = msModflow2015) then
       begin
-        ArchiveBatchFile.Add(AFileName);
+        for SimIndex := 0 to
+          frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount -1 do
+        begin
+          SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.SimFileNames[SimIndex]);
+          ListFileName := ChangeFileExt(SimFileName, '.lst');
+          ArchiveBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [SimFileName, MfsimName]));
+          ArchiveBatchFile.Add(AFileName);
+          ArchiveBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [MfListName, ListFileName]));
+        end;
       end
       else
       begin
@@ -1707,7 +1721,15 @@ begin
       end
       else
       begin
-        ParamEstBatchFile.Add(AFileName {+ ' /wait'});
+        for SimIndex := 0 to
+          frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount -1 do
+        begin
+          SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.SimFileNames[SimIndex]);
+          ListFileName := ChangeFileExt(SimFileName, '.lst');
+          ParamEstBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [SimFileName, MfsimName]));
+          ParamEstBatchFile.Add(AFileName {+ ' /wait'});
+          ParamEstBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [MfListName, ListFileName]));
+        end;
         WriteInstuctionsBatchFile.Add(AFileName {+ ' /wait'});
         InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));
         WriteInstuctionsBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
@@ -9535,9 +9557,11 @@ begin
     + 'mfsim.nam';
   FInputFileName := FileName;
   FSpeciesIndex := -1;
+  FWritingFlowModel := True;
   WriteFileInternal(FileName, BackupFileName);
   TFile.Copy(BackupFileName, FileName, True);
 
+  FWritingFlowModel := False;
   if Model.GwtUsed and Model.SeparateGwtUsed then
   begin
     FGwtSimulationChoice := Model.ModflowPackages.GwtProcess.GwtSimulationChoice;
@@ -9570,7 +9594,7 @@ begin
   begin
     result := True;
   end
-  else if FSpeciesIndex < 0 then
+  else if FWritingFlowModel and (ModelIndex = 0) then
   begin
     result := True;
   end
@@ -9578,11 +9602,11 @@ begin
   begin
     if FGwtSimulationChoice = gscTransportTogether then
     begin
-      result := ModelIndex > 0;
+      result := (ModelIndex > 0);
     end
     else
     begin
-      result := ModelIndex - 1 = FSpeciesIndex;
+      result := (ModelIndex - 1 = FSpeciesIndex) and (ModelIndex > 0);
     end;
   end;
 end;

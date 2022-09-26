@@ -34,6 +34,11 @@ var
   NameOfFile: string;
   SpeciesIndex: Integer;
 begin
+  if not Model.SeparateGwtUsed then
+  begin
+    Exit;
+  end;
+
   NameOfFile := FileName(AFileName);
   FInputFileName := NameOfFile;
   FNameOfFile := NameOfFile;

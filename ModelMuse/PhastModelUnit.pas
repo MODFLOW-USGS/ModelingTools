@@ -5555,7 +5555,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit,
   ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit,
   ModflowMstWriterUnit, ModflowIstWriterUnit, ModflowCncWriterUnit,
-  ModflowGwfGwtExchangeWriterUnit;
+  ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -43684,6 +43684,7 @@ var
   CncWriter: TModflowCncWriter;
   SrcWriter: TModflowSrcWriter;
   ExchangeWriter: TModflowGwfGwtExchangeWriter;
+  FmiWriter: TModflowFmiWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -44420,7 +44421,6 @@ begin
             frmProgressMM.StepIt;
           end;
 
-
           Mnw1Writer := TModflowMNW1_Writer.Create(self, etExport);
           try
             Mnw1Writer.WriteFile(FileName);
@@ -44597,6 +44597,14 @@ begin
           begin
             frmProgressMM.StepIt;
           end;
+
+          FmiWriter := TModflowFmiWriter.Create(self, etExport);
+          try
+            FmiWriter.WriteFile(FileName);
+          finally
+            FmiWriter.Free;
+          end;
+
 
           if Self is TPhastModel then
           begin

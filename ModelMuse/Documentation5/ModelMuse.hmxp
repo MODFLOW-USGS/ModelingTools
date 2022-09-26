@@ -1461,6 +1461,8 @@ document.write('</frameset>');
       <helpcontext-number href="PEST_Properties_Prior_Informat" value="4149"/>
       <helpcontext-number href="PEST_Properties_Regularizatio2" value="4156"/>
       <helpcontext-number href="PEST_Properties_Regularization" value="4155"/>
+      <helpcontext-number href="PEST_Properties_Regularization#PHIMACCEPT" value="4352"/>
+      <helpcontext-number href="PEST_Properties_Regularization#PHIMLIM" value="4351"/>
       <helpcontext-number href="Pest_Properties_Singular_Value" value="4145"/>
       <helpcontext-number href="PEST_Properties_Within_Layer_C" value="4151"/>
       <helpcontext-number href="PestDirectAndComparisonObserva" value="4182"/>
