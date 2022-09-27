@@ -5940,8 +5940,17 @@ Type
 
   TGwtSsmPackage = class(TModflowPackageSelection)
   end;
-  
+
   TGwtCncPackage = class(TModflowPackageSelection)
+  private
+    FCncConc: TMfBoundDispObjectList;
+    procedure InitializeCncDisplay(Sender: TObject);
+    procedure GetCncConcUseList(Sender: TObject; NewUseList: TStringList);
+  public
+    constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
+    procedure InvalidateConcentrations;
+    procedure AddRemoveRenameGwtConcentrationTimeLists;
   end;
 
   TGwtSrcPackage = class(TModflowPackageSelection)
@@ -6118,7 +6127,7 @@ uses Math, Contnrs , PhastModelUnit, ModflowOptionsUnit,
   ModflowSfr6Unit, ModflowMawWriterUnit, ModflowMawUnit, ModflowUzfMf6WriterUnit,
   ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftWriterUnit, ModflowCsubUnit,
   ModflowCSubWriterUnit,
-  ModflowGhbUnit;
+  ModflowGhbUnit, ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -23808,6 +23817,111 @@ begin
   else
   begin
     GwtSimulationChoice := gscAllTogether;
+  end;
+end;
+
+{ TGwtCncPackage }
+
+procedure TGwtCncPackage.AddRemoveRenameGwtConcentrationTimeLists;
+begin
+  UpdateConcentrationLists(FCncConc, InitializeCnCDisplay,
+    GetCncConcUseList, 'CNC Conc %s');
+end;
+
+constructor TGwtCncPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  FCncConc := TMfBoundDispObjectList.Create;
+end;
+
+destructor TGwtCncPackage.Destroy;
+begin
+  inherited;
+  FCncConc.Free;
+end;
+
+procedure TGwtCncPackage.GetCncConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  GwtIndex: Integer;
+  DataIndex: Integer;
+  SpeciesIndex: Integer;
+  ABoundary: TCncBoundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.GwtCncBoundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := 0
+        {+ LocalModel.MobileComponents.Count * 2};
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(GwtIndex, NewUseList, Item, 'Undefined');
+    end;
+  end;
+end;
+
+procedure TGwtCncPackage.InitializeCncDisplay(Sender: TObject);
+var
+  List: TModflowBoundListOfTimeLists;
+  CnCWriter: TModflowCncWriter;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FCncConc.Count - 1 do
+  begin
+    TimeList := FCncConc[Index];
+    TimeList.CreateDataSets;
+  end;
+
+  List := TModflowBoundListOfTimeLists.Create;
+  { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
+
+  try
+
+    for Index := 0 to FCncConc.Count - 1 do
+    begin
+      TimeList := FCncConc[Index];
+      List.Add(TimeList);
+    end;
+
+    for Index := 0 to FCncConc.Count - 1 do
+    begin
+      CnCWriter := TModflowCncWriter.Create(FModel as TCustomModel, etDisplay);
+      try
+        CnCWriter.UpdateDisplay(List, Index);
+      finally
+        CnCWriter.Free;
+      end;
+    end;
+  finally
+
+    List.Free;
+  end;
+end;
+
+procedure TGwtCncPackage.InvalidateConcentrations;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FCncConc.Count - 1 do
+  begin
+    TimeList := FCncConc[Index];
+    TimeList.Invalidate;
   end;
 end;
 

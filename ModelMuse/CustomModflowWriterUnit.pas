@@ -395,6 +395,7 @@ end;
     procedure SetMvrWriter(const Value: TObject);
   protected
     FTimeSeriesFileNames: TStringList;
+    procedure SetTimeListUpToDate(List: TModflowBoundaryDisplayTimeList);
     procedure SetTimeListsUpToDate(TimeLists: TModflowBoundListOfTimeLists); overload;
     procedure SetTimeListsUpToDate(TimeLists: TList<TModflowBoundListOfTimeLists>); overload;
     // @name identifies the package that is being exported.
@@ -7393,23 +7394,13 @@ end;
 
 procedure TCustomPackageWriter.SetTimeListsUpToDate(TimeLists: TModflowBoundListOfTimeLists);
 var
-  DataArray: TDataArray;
-  TimeIndex: Integer;
   List: TModflowBoundaryDisplayTimeList;
   ListIndex: Integer;
 begin
   for ListIndex := 0 to TimeLists.Count - 1 do
   begin
     List := TimeLists[ListIndex];
-    if List <> nil then
-    begin
-      for TimeIndex := 0 to List.Count - 1 do
-      begin
-        DataArray := List[TimeIndex];
-        DataArray.UpToDate := True;
-      end;
-      List.SetUpToDate(True);
-    end;
+    SetTimeListUpToDate(List);
   end;
 end;
 
@@ -7418,6 +7409,23 @@ begin
   DSiTrimWorkingSet;
   FTimeSeriesFileNames.Free;
   inherited;
+end;
+
+procedure TCustomPackageWriter.SetTimeListUpToDate(
+  List: TModflowBoundaryDisplayTimeList);
+var
+  TimeIndex: Integer;
+  DataArray: TDataArray;
+begin
+  if List <> nil then
+  begin
+    for TimeIndex := 0 to List.Count - 1 do
+    begin
+      DataArray := List[TimeIndex];
+      DataArray.UpToDate := True;
+    end;
+    List.SetUpToDate(True);
+  end;
 end;
 
 function TCustomPackageWriter.ExpandString(Source: string;

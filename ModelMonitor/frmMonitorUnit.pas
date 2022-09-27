@@ -62,6 +62,23 @@ type
 
   TProblemType = (ptWarning, ptError);
 
+  TLineSeriesOwner = class(TObject)
+  private
+    FCumulativeSeries: TLineSeries;
+    FPackageName: string;
+    FTimeStepSeries: TLineSeries;
+  public
+    property PackageName: string read FPackageName write FPackageName;
+    property CumulativeSeries: TLineSeries read FCumulativeSeries
+      write FCumulativeSeries;
+    property TimeStepSeries: TLineSeries read FTimeStepSeries
+      write FTimeStepSeries;
+  end;
+
+  TLineSeriesOwnerDict = class(TObjectDictionary<string,TLineSeriesOwner>)
+    constructor Create;
+  end;
+
   TListFileHandler = class(TObject)
   private
     FFileStream: TStringFileStream;
@@ -93,10 +110,14 @@ type
     FIterationBoundaryCount: Integer;
     FInnerIterationLineSplitter: TStringList;
     FInnerIterations: TList<TInnerIterationData>;
+    FPackageBudgets: TLineSeriesOwnerDict;
+    FLineSeriesOwner: TLineSeriesOwner;
     procedure CreateNewTabSheet(out ATabSheet: TjvStandardPage;
       NewCaption: string; out NewNode: TTreeNode);
     procedure CreateLineSeries(AColor: TColor; ATitle: string;
-      var ASeries: TLineSeries);
+      var ASeries: TLineSeries); overload;
+    procedure CreateLineSeries(AColor: TAlphaColor; ATitle: string;
+      var ASeries: TLineSeries); overload;
     procedure FindStart(PositionInLine: integer; out SelStart: integer);
     procedure GetColor(StatusChangeIndicator: TStatusChange; Value: Double;
       var AColor: TColor);
@@ -108,8 +129,6 @@ type
     procedure IndentifyProblem(ALine: string;
       var IsError, IsWarning: Boolean; var PositionInLine, KeyLength: Integer); //overload;
     procedure HandleListFileLine(ALine: string);
-//    procedure HandleProblem(IsError: Boolean; AColor: TColor;
-//      Positions: TIntegerDynArray; EV: TAnsiStringList); overload;
     procedure HandleProblem(IsProblem: Boolean; AColor: TColor;
       PositionInLine: integer; KeyLength: integer); //overload;
     function GetPageStatus(APage: TjvStandardPage): TStatusChange;
@@ -119,6 +138,8 @@ type
     property PageStatus[APage: TjvStandardPage]: TStatusChange
       read GetPageStatus write SetPageStatus;
     function GetConnectedNode(APage: TJvStandardPage): TTreeNode;
+    function GetPackageBudget(const PackageName: string): TLineSeriesOwner;
+    procedure GetRates(Position: Integer; ALine: string; var Cum, Rate: Double);
   public
     property OnStatusChanged: TOnStatusChanged read FOnStatusChanged
       write FOnStatusChanged;
@@ -228,7 +249,8 @@ var
 implementation
 
 uses {ShellApi,} JvVersionInfo, contnrs, System.Math,
-  IniFileUtilities, System.IniFiles, System.IOUtils, DisclaimerTextUnit;
+  IniFileUtilities, System.IniFiles, System.IOUtils, DisclaimerTextUnit,
+  System.UIConsts, System.StrUtils;
 
 const
   StrPERCENTDISCREPANCY = 'PERCENT DISCREPANCY =';
@@ -273,6 +295,9 @@ const
 
 const
   WarningColor = clYellow;
+
+var
+  ColorList: TList<TAlphaColor>;
 
 {$R *.dfm}
 
@@ -942,7 +967,7 @@ begin
           mtype := UpperCase(LineSplitter[0]);
           mfname := LineSplitter[1];
           mname := LineSplitter[2];
-          if mtype = 'GWF6' then
+          if (mtype = 'GWF6') or (mtype = 'GWT6') then
           begin
             GetAMf6ListFileName(mfname, ListFiles);
           end;
@@ -1411,6 +1436,7 @@ constructor TListFileHandler.Create(AFileName: string;
 var
   index: Integer;
 begin
+  FPackageBudgets := TLineSeriesOwnerDict.Create;
   FInnerIterationLineSplitter := TStringList.Create;
   FInnerIterationLineSplitter.Delimiter := ' ';
   FInnerIterations := TList<TInnerIterationData>.Create;
@@ -1520,12 +1546,31 @@ begin
   FSearcher.Free;
   FInnerIterationLineSplitter.Free;
   FInnerIterations.Free;
+  FPackageBudgets.Free;
   inherited;
 end;
 
 function TListFileHandler.Done: boolean;
 begin
   result := FFileStream.EOF;
+end;
+
+procedure TListFileHandler.GetRates(Position: Integer; ALine: string;
+  var Cum, Rate: Double);
+var
+  TestLine: string;
+  Num1: string;
+  Num2: string;
+begin
+  TestLine := Trim(Copy(ALine,
+    Position + Length(StrPERCENTDISCREPANCY), MAXINT));
+  Position := Pos(StrPERCENTDISCREPANCY, TestLine);
+  Assert(Position > 0);
+  Num1 := Trim(Copy(TestLine, 1, Position - 1));
+  Num2 := Trim(Copy(TestLine,
+    Position + Length(StrPERCENTDISCREPANCY), MAXINT));
+  Cum := StrToFloatDef(Num1, 200);
+  Rate := StrToFloatDef(Num2, 200);
 end;
 
 procedure TListFileHandler.FindStart(PositionInLine: integer;
@@ -1558,6 +1603,30 @@ begin
       PageStatus[FResultsTabSheet] := StatusChangeIndicator;
     end;
     FBudgetChart.LeftAxis.Automatic := True;
+  end;
+end;
+
+function TListFileHandler.GetPackageBudget(
+  const PackageName: string): TLineSeriesOwner;
+var
+  ColorIndex: Integer;
+begin
+  Assert(PackageName <> '');
+  if not FPackageBudgets.TryGetValue(PackageName, result) then
+  begin
+    result := TLineSeriesOwner.Create;
+    ColorIndex := FPackageBudgets.Count *2 mod (ColorList.Count);
+    CreateLineSeries(ColorList[ColorIndex],
+      Format('%s Cumulative', [PackageName]), result.FCumulativeSeries);
+
+    Inc(ColorIndex);
+    if ColorIndex >= ColorList.Count then
+    begin
+      ColorIndex := 0;
+    end;
+    CreateLineSeries(ColorList[ColorIndex],
+      Format('%s Time Step', [PackageName]), result.FTimeStepSeries);
+    FPackageBudgets.Add(PackageName, result);
   end;
 end;
 
@@ -1923,11 +1992,10 @@ end;
 procedure TListFileHandler.StorePercentDiscrepancy(ALine: string);
 var
   Position: Integer;
-  TestLine: string;
-  Num1: string;
-  Num2: string;
   Cum: Double;
   Rate: Double;
+  BudgPosition: Integer;
+  Package: string;
 begin
   Position := Max(Pos('UNSATURATED ZONE PACKAGE VOLUMETRIC BUDGET', ALine),
     Pos('VOLUMETRIC SWI', ALine));
@@ -1944,6 +2012,18 @@ begin
     if Position > 0 then
     begin
       FVolBudget := True;
+      FLineSeriesOwner := nil;
+    end;
+  end;
+
+  BudgPosition := Pos('BUDGET FOR ENTIRE MODEL' , ALine);
+  if BudgPosition > 0 then
+  begin
+    Package := Trim(Copy(ALine, 1, BudgPosition-1));
+    if Package <> 'VOLUME' then
+    begin
+      FLineSeriesOwner := GetPackageBudget(Package);
+      FVolBudget := False;
     end;
   end;
 
@@ -1952,17 +2032,26 @@ begin
     Position := Pos(StrPERCENTDISCREPANCY, ALine);
     if Position > 0 then
     begin
-      TestLine := Trim(Copy(ALine, Position + Length(StrPERCENTDISCREPANCY), MAXINT));
-      Position := Pos(StrPERCENTDISCREPANCY, TestLine);
-      Assert(Position > 0);
-      Num1 := Trim(Copy(TestLine, 1, Position - 1));
-      Num2 := Trim(Copy(TestLine, Position + Length(StrPERCENTDISCREPANCY), MAXINT));
-      Cum := StrToFloatDef(Num1, 200);
-      Rate := StrToFloatDef(Num2, 200);
+      GetRates(Position, ALine, Cum, Rate);
 
       FPercentRate.Add(Rate);
       FPercentCumulative.Add(Cum);
       FVolBudget := False;
+    end;
+  end;
+
+  if FLineSeriesOwner <> nil then
+  begin
+    Position := Pos(StrPERCENTDISCREPANCY, ALine);
+    if Position > 0 then
+    begin
+      GetRates(Position, ALine, Cum, Rate);
+
+      FLineSeriesOwner.TimeStepSeries.AddXY(
+        FLineSeriesOwner.TimeStepSeries.Count+1, Rate);
+      FLineSeriesOwner.CumulativeSeries.AddXY(
+        FLineSeriesOwner.CumulativeSeries.Count+1, Cum);
+      FLineSeriesOwner := nil;
     end;
   end;
 end;
@@ -1976,6 +2065,12 @@ begin
   ASeries.Title := ATitle;
   ASeries.Pointer.Style := psRectangle;
   ASeries.Pointer.Visible := True;
+end;
+
+procedure TListFileHandler.CreateLineSeries(AColor: TAlphaColor; ATitle: string;
+  var ASeries: TLineSeries);
+begin
+  CreateLineSeries(AlphaColorToColor(AColor), ATitle, ASeries);
 end;
 
 procedure TListFileHandler.CreateNewTabSheet(out ATabSheet: TjvStandardPage;
@@ -1993,5 +2088,130 @@ begin
   NewNode.Data := ATabSheet;
   NewNode.StateIndex := 1;
 end;
+
+{ TLineSeriesOwnerDict }
+
+constructor TLineSeriesOwnerDict.Create;
+begin
+  inherited Create([doOwnsValues]);
+end;
+
+Initialization
+
+  ColorList := TList<TAlphaColor>.Create;
+  ColorList.Add(claAqua);
+  ColorList.Add(claAquamarine);
+  ColorList.Add(claBlueviolet);
+  ColorList.Add(claBrown);
+  ColorList.Add(claBurlywood);
+  ColorList.Add(claCadetblue);
+  ColorList.Add(claChartreuse);
+  ColorList.Add(claChocolate);
+  ColorList.Add(claCoral);
+  ColorList.Add(claCornflowerblue);
+  ColorList.Add(claCrimson);
+  ColorList.Add(claCyan);
+  ColorList.Add(claDarkblue);
+  ColorList.Add(claDarkcyan);
+  ColorList.Add(claDarkgoldenrod);
+  ColorList.Add(claDarkgreen);
+  ColorList.Add(claDarkkhaki);
+  ColorList.Add(claDarkmagenta);
+  ColorList.Add(claDarkolivegreen);
+  ColorList.Add(claDarkorange);
+  ColorList.Add(claDarkorchid);
+  ColorList.Add(claDarkred);
+  ColorList.Add(claDarksalmon);
+  ColorList.Add(claDarkseagreen);
+  ColorList.Add(claDarkslateblue);
+  ColorList.Add(claDarkturquoise);
+  ColorList.Add(claDarkviolet);
+  ColorList.Add(claDeeppink);
+  ColorList.Add(claDeepskyblue);
+  ColorList.Add(claDodgerblue);
+  ColorList.Add(claFirebrick);
+  ColorList.Add(claForestgreen);
+  ColorList.Add(claFuchsia);
+  ColorList.Add(claGold);
+  ColorList.Add(claGoldenrod);
+  ColorList.Add(claGray);
+  ColorList.Add(claGreen);
+  ColorList.Add(claGreenyellow);
+  ColorList.Add(claGrey);
+  ColorList.Add(claHotpink);
+  ColorList.Add(claIndianred);
+  ColorList.Add(claIndigo);
+  ColorList.Add(claKhaki);
+  ColorList.Add(claLawngreen);
+  ColorList.Add(claLightblue);
+  ColorList.Add(claLightcoral);
+  ColorList.Add(claLightcyan);
+  ColorList.Add(claLightgray);
+  ColorList.Add(claLightgreen);
+  ColorList.Add(claLightpink);
+  ColorList.Add(claLightsalmon);
+  ColorList.Add(claLightseagreen);
+  ColorList.Add(claLightskyblue);
+  ColorList.Add(claLightslategray);
+  ColorList.Add(claLightsteelblue);
+  ColorList.Add(claLime);
+  ColorList.Add(claLimegreen);
+  ColorList.Add(claMagenta);
+  ColorList.Add(claMaroon);
+  ColorList.Add(claMediumaquamarine);
+  ColorList.Add(claMediumblue);
+  ColorList.Add(claMediumorchid);
+  ColorList.Add(claMediumpurple);
+  ColorList.Add(claMediumseagreen);
+  ColorList.Add(claMediumslateblue);
+  ColorList.Add(claMediumspringgreen);
+  ColorList.Add(claMediumturquoise);
+  ColorList.Add(claMediumvioletred);
+  ColorList.Add(claMidnightblue);
+  ColorList.Add(claMoccasin);
+  ColorList.Add(claNavajowhite);
+  ColorList.Add(claNavy);
+  ColorList.Add(claNull);
+  ColorList.Add(claOlive);
+  ColorList.Add(claOlivedrab);
+  ColorList.Add(claOrange);
+  ColorList.Add(claOrangered);
+  ColorList.Add(claOrchid);
+  ColorList.Add(claPalegoldenrod);
+  ColorList.Add(claPalegreen);
+  ColorList.Add(claPaleturquoise);
+  ColorList.Add(claPalevioletred);
+  ColorList.Add(claPeachpuff);
+  ColorList.Add(claPeru);
+  ColorList.Add(claPink);
+  ColorList.Add(claPlum);
+  ColorList.Add(claPowderblue);
+  ColorList.Add(claPurple);
+  ColorList.Add(claRosybrown);
+  ColorList.Add(claRoyalblue);
+  ColorList.Add(claSaddlebrown);
+  ColorList.Add(claSalmon);
+  ColorList.Add(claSandybrown);
+  ColorList.Add(claSeagreen);
+  ColorList.Add(claSienna);
+  ColorList.Add(claSilver);
+  ColorList.Add(claSkyblue);
+  ColorList.Add(claSlateblue);
+  ColorList.Add(claSlategray);
+  ColorList.Add(claSlategrey);
+  ColorList.Add(claSpringgreen);
+  ColorList.Add(claSteelblue);
+  ColorList.Add(claTan);
+  ColorList.Add(claTeal);
+  ColorList.Add(claThistle);
+  ColorList.Add(claTomato);
+  ColorList.Add(claTurquoise);
+  ColorList.Add(claViolet);
+  ColorList.Add(claWheat);
+  ColorList.Add(claYellowgreen);
+
+finalization
+
+  ColorList.Free;
 
 end.

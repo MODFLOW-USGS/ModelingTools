@@ -84,11 +84,15 @@ type
     // boundaries over a series of time intervals.
     FConcentrationData: TModflowTimeList;
     FInvalidateEvent: TNotifyEvent;
+    FConcList: TModflowTimeLists;
+
   protected
     procedure CreateTimeLists; override;
     function Description: string; virtual;
     procedure AssignInvalidateEvent; virtual;
     property InvalidateEvent: TNotifyEvent read FInvalidateEvent write FInvalidateEvent;
+    procedure UpdateGwtTimeLists; override;
+    procedure AddGwtTimeLists(SpeciesIndex: Integer);
   public
     Constructor Create(AModel: TBaseModel; ABoundary: TCustomMF_BoundColl); override;
     Destructor Destroy; override;
@@ -98,7 +102,7 @@ type
   // for a series of time intervals.
   TCncCollection = class(TCustomMF_ListBoundColl)
   private
-    procedure InvalidateConcentrationData(Sender: TObject);
+    procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
@@ -392,7 +396,7 @@ var
 begin
   ParentCollection := Collection as TCncCollection;
   ConcentrationObserver := FObserverList[CncConcentrationPosition];
-  ConcentrationObserver.OnUpToDateSet := ParentCollection.InvalidateConcentrationData;
+  ConcentrationObserver.OnUpToDateSet := ParentCollection.InvalidateGwtConcentrations;
 end;
 
 function TCncItem.BoundaryFormulaCount: integer;
@@ -482,6 +486,25 @@ end;
 
 { TCncTimeListLink }
 
+procedure TCncTimeListLink.AddGwtTimeLists(SpeciesIndex: Integer);
+var
+  ConcTimeList: TModflowTimeList;
+  LocalModel: TCustomModel;
+  PhastModel: TPhastModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    ConcTimeList.OnInvalidate := LocalModel.InvalidateCncConcentration;
+  end;
+  AddTimeList(ConcTimeList);
+  FConcList.Add(ConcTimeList);
+end;
+
 procedure TCncTimeListLink.AssignInvalidateEvent;
 begin
   InvalidateEvent := (Model as TCustomModel).InvalidateCncConcentration;
@@ -490,11 +513,15 @@ end;
 constructor TCncTimeListLink.Create(AModel: TBaseModel;
   ABoundary: TCustomMF_BoundColl);
 begin
+  FConcList := TModflowTimeLists.Create;
   AssignInvalidateEvent;
   inherited;
 end;
 
 procedure TCncTimeListLink.CreateTimeLists;
+var
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
 begin
   inherited;
   FConcentrationData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
@@ -504,7 +531,14 @@ begin
   begin
     FConcentrationData.OnInvalidate := InvalidateEvent;
   end;
-  AddTimeList(FConcentrationData);
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
+    begin
+      AddGwtTimeLists(SpeciesIndex);
+    end;
+  end;
 end;
 
 function TCncTimeListLink.Description: string;
@@ -515,7 +549,25 @@ end;
 destructor TCncTimeListLink.Destroy;
 begin
   FConcentrationData.Free;
+  FConcList.Free;
   inherited;
+end;
+
+procedure TCncTimeListLink.UpdateGwtTimeLists;
+var
+  LocalModel: TCustomModel;
+  SpeciesIndex: Integer;
+begin
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := FConcList.Count to
+      LocalModel.MobileComponents.Count - 1 do
+    begin
+      AddGwtTimeLists(SpeciesIndex);
+
+    end;
+  end;
 end;
 
 //function TCncTimeListLink.InvalidateEvent: TNotifyEvent;
@@ -670,12 +722,14 @@ begin
   result := TCncTimeListLink;
 end;
 
-procedure TCncCollection.InvalidateConcentrationData(Sender: TObject);
+procedure TCncCollection.InvalidateGwtConcentrations(Sender: TObject);
 var
   PhastModel: TPhastModel;
   Link: TCncTimeListLink;
   ChildIndex: Integer;
   ChildModel: TChildModel;
+  Index: Integer;
+  TimeList: TModflowTimeList;
 begin
   if not (Sender as TObserver).UpToDate then
   begin
@@ -685,12 +739,20 @@ begin
       Exit;
     end;
     Link := TimeListLink.GetLink(PhastModel) as TCncTimeListLink;
-    Link.FConcentrationData.Invalidate;
+    for Index := 0 to Link.FConcList.Count - 1 do
+    begin
+      TimeList := Link.FConcList[Index];
+      TimeList.Invalidate;
+    end;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
       Link := TimeListLink.GetLink(ChildModel) as TCncTimeListLink;
-      Link.FConcentrationData.Invalidate;
+      for Index := 0 to Link.FConcList.Count - 1 do
+      begin
+        TimeList := Link.FConcList[Index];
+        TimeList.Invalidate;
+      end;
     end;
   end;
 end;

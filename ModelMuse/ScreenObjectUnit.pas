@@ -9556,6 +9556,17 @@ begin
     begin
       ModflowCSub.InvalidateDisplay;
     end;
+
+    if GwtCncBoundary <> nil then
+    begin
+      GwtCncBoundary.InvalidateDisplay;
+    end;
+
+    if GwtSrcBoundary <> nil then
+    begin
+      GwtSrcBoundary.InvalidateDisplay;
+    end;
+
 //    if Mt3dmsTransObservations <> nil then
 //    begin
 //      Mt3dmsTransObservations.InvalidateDisplay;

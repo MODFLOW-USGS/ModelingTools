@@ -162,7 +162,7 @@ object TTaskHistory
     end
     item
       Name = 'Running MODFLOW ModelMonitor'
-      Display = False
+      Display = True
     end
     item
       Name = 'HFB'
@@ -29987,6 +29987,13 @@ object TTaskHistory
       Date = 44830.000000000000000000
       Categories.Strings = (
         'Documentation'
-        'MF6 GWT')
+        'MF6 GWT'
+        'Running MODFLOW ModelMonitor')
+    end
+    item
+      Date = 44831.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT'
+        'Running MODFLOW ModelMonitor')
     end>
 end

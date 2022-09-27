@@ -211,13 +211,21 @@ var
     result := Abs(A - B) / (Abs(A) + Abs(B)) < Epsilon;
   end;
 begin
+  result := 0;
   Series := GetValuesByName(SeriesName);
-  Assert(Series <> nil);
+  if Series = nil then
+  begin
+    Exit;
+  end;
 
   UsedTime := Time -StartTimeOffset;
 
   LocalModel := Model as TCustomModel;
   LocalModel.ModflowStressPeriods.TimeToPeriodAndStep(Time, Period, Step);
+  if (Period < 0) or (Step < 0) then
+  begin
+    Exit;
+  end;
   StressPeriod := LocalModel.ModflowStressPeriods[Period];
   TimeStep := StressPeriod.GetTimeStep(Step);
 

@@ -876,6 +876,7 @@ begin
     tabGWT.TabVisible := GwtProcess.IsSelected and
       (GwtProcess.GwtSimulationChoice in
       [gscTransportTogether, gscEachSpeciesSeparate]);
+    Limit := 0;
     if tabGWT.TabVisible then
     begin
       if GwtProcess.GwtSimulationChoice = gscEachSpeciesSeparate then

@@ -16858,6 +16858,7 @@ begin
   ModflowPackages.SfrModflow6Package.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.MawPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.UzfMf6Package.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.GwtCncPackage.AddRemoveRenameGwtConcentrationTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
@@ -25027,7 +25028,7 @@ end;
 
 procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);
 begin
-//  Assert(False);
+  ModflowPackages.GwtCncPackage.InvalidateConcentrations;
   { TODO -cGWT : Update this }
 end;
 
