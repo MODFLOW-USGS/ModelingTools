@@ -511,6 +511,10 @@ begin
   result := 1;
   if GwtConcentrations <> nil then
   begin
+    if Model <> nil then
+    begin
+      GwtConcentrations.Count := (Model as TCustomModel).MobileComponents.Count;
+    end;
     result := result + GwtConcentrations.Count;
   end;
 end;

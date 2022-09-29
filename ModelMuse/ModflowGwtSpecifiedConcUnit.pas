@@ -93,6 +93,7 @@ type
     property InvalidateEvent: TNotifyEvent read FInvalidateEvent write FInvalidateEvent;
     procedure UpdateGwtTimeLists; override;
     procedure AddGwtTimeLists(SpeciesIndex: Integer);
+    procedure RemoveGwtTimeLists(SpeciesIndex: Integer);
   public
     Constructor Create(AModel: TBaseModel; ABoundary: TCustomMF_BoundColl); override;
     Destructor Destroy; override;
@@ -245,6 +246,7 @@ type
   end;
 
   TSrcTimeListLink = class(TCncTimeListLink)
+  public
     function Description: string; override;
     procedure AssignInvalidateEvent; override;
   end;
@@ -441,13 +443,20 @@ var
 begin
   inherited;
   (Collection as TCncCollection).InvalidateModel;
-//  PhastModel := Model as TPhastModel;
-//  if (PhastModel <> nil)
-//    and not (csDestroying in PhastModel.ComponentState)
-//    and not PhastModel.Clearing then
-//  begin
-//    PhastModel.InvalidateCncConcentration(self);
-//  end;
+  PhastModel := Model as TPhastModel;
+  if (PhastModel <> nil)
+    and not (csDestroying in PhastModel.ComponentState)
+    and not PhastModel.Clearing then
+  begin
+    if Collection is TSrcCollection then
+    begin
+      PhastModel.InvalidateMassSrc(self);
+    end
+    else
+    begin
+      PhastModel.InvalidateCncConcentration(self);
+    end;
+  end;
 end;
 
 function TCncItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -499,7 +508,14 @@ begin
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
-    ConcTimeList.OnInvalidate := LocalModel.InvalidateCncConcentration;
+    if self is TSrcTimeListLink then
+    begin
+      ConcTimeList.OnInvalidate := LocalModel.InvalidateMassSrc;
+    end
+    else
+    begin
+      ConcTimeList.OnInvalidate := LocalModel.InvalidateCncConcentration;
+    end;
   end;
   AddTimeList(ConcTimeList);
   FConcList.Add(ConcTimeList);
@@ -553,6 +569,15 @@ begin
   inherited;
 end;
 
+procedure TCncTimeListLink.RemoveGwtTimeLists(SpeciesIndex: Integer);
+var
+  ConcTimeList: TModflowTimeList;
+begin
+  ConcTimeList := FConcList[SpeciesIndex];
+  RemoveTimeList(ConcTimeList);
+  FConcList.Delete(SpeciesIndex);
+end;
+
 procedure TCncTimeListLink.UpdateGwtTimeLists;
 var
   LocalModel: TCustomModel;
@@ -565,15 +590,14 @@ begin
       LocalModel.MobileComponents.Count - 1 do
     begin
       AddGwtTimeLists(SpeciesIndex);
-
+    end;
+    for SpeciesIndex := LocalModel.MobileComponents.Count to
+      FConcList.Count - 1 do
+    begin
+      RemoveGwtTimeLists(SpeciesIndex);
     end;
   end;
 end;
-
-//function TCncTimeListLink.InvalidateEvent: TNotifyEvent;
-//begin
-//  result := (Model as TCustomModel).InvalidateCncConcentration;
-//end;
 
 { TCnCCollection }
 
@@ -762,14 +786,21 @@ var
   PhastModel: TPhastModel;
 begin
   inherited;
-  (BoundaryGroup as TCncBoundary).InvalidateModel
-//  PhastModel := Model as TPhastModel;
-//  if (PhastModel <> nil)
-//    and not (csDestroying in PhastModel.ComponentState)
-//    and not PhastModel.Clearing then
-//  begin
-//    PhastModel.InvalidateCncConcentration(self);
-//  end;
+  (BoundaryGroup as TCncBoundary).InvalidateModel;
+  PhastModel := Model as TPhastModel;
+  if (PhastModel <> nil)
+    and not (csDestroying in PhastModel.ComponentState)
+    and not PhastModel.Clearing then
+  begin
+    if Self is TSrcCollection then
+    begin
+      PhastModel.InvalidateMassSrc(self);
+    end
+    else
+    begin
+      PhastModel.InvalidateCncConcentration(self);
+    end;
+  end;
 end;
 
 class function TCncCollection.ItemClass: TBoundaryItemClass;
@@ -1232,15 +1263,11 @@ begin
 end;
 
 procedure TCncBoundary.InvalidateDisplay;
-//var
-//  Model: TPhastModel;
 begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
     InvalidateConcentrationData(self);
-//    Model := ParentModel as TPhastModel;
-//    Model.InvalidateCncConcentration(self);
   end;
 end;
 
@@ -1319,11 +1346,6 @@ function TSrcTimeListLink.Description: string;
 begin
   result := StrSRCMassSource;
 end;
-
-//function TSrcTimeListLink.InvalidateEvent: TNotifyEvent;
-//begin
-//  result := (Model as TCustomModel).InvalidateMassSrc;
-//end;
 
 { TSrcBoundary }
 

@@ -289,7 +289,8 @@ uses
   PhastModelUnit, RbwParser, SysUtils, ModflowPackageSelectionUnit,
   frmGoPhastUnit, ScreenObjectUnit, Mt3dmsChemUnit, Mt3dmsTobUnit,
   Mt3dUztRchUnit, Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit,
-  frameMt3dLktPkgUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowPackagesUnit;
+  frameMt3dLktPkgUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowPackagesUnit,
+  ModflowGwtSpecifiedConcUnit;
 
 const
   kInitConcPrefix = 'Initial_Concentration_';
@@ -681,6 +682,8 @@ var
   Mt3dUzSsmSinkConcBoundary: TMt3dUzSsmSinkConcBoundary;
   Mt3dLktConcBoundary: TMt3dLktConcBoundary;
   Mt3dSftConcBoundary: TMt3dSftBoundary;
+  GwtCncBoundary: TCncBoundary;
+  GwtSrcBoundary: TSrcBoundary;
 begin
   FImmobileDecaySorbed.Free;
   FImmobileInitialConcentrations.Free;
@@ -751,6 +754,24 @@ begin
       if Mt3dSftConcBoundary <> nil then
       begin
         Mt3dSftConcBoundary.DeleteSpecies(SpeciesIndex);
+      end;
+
+      GwtCncBoundary := ScreenObject.GwtCncBoundary;
+      if GwtCncBoundary <> nil then
+      begin
+        if GwtCncBoundary.ChemSpecies = Name then
+        begin
+          GwtCncBoundary.ChemSpecies := ''
+        end;
+      end;
+
+      GwtSrcBoundary := ScreenObject.GwtSrcBoundary;
+      if GwtSrcBoundary <> nil then
+      begin
+        if GwtSrcBoundary.ChemSpecies = Name then
+        begin
+          GwtSrcBoundary.ChemSpecies := ''
+        end;
       end;
     end;
   end;

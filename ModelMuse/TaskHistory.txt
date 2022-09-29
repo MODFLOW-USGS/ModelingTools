@@ -29995,5 +29995,13 @@ object TTaskHistory
       Categories.Strings = (
         'MF6 GWT'
         'Running MODFLOW ModelMonitor')
+    end
+    item
+      Date = 44832.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT'
+        'Documentation'
+        'Graphics'
+        'Refactoring')
     end>
 end

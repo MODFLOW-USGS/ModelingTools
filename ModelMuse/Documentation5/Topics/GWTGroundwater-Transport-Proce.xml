@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-09-23T14:57:45.582-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2022-09-28T20:05:50.883-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">GWT:Groundwater Transport Process Pane</title>
   <body>
     <header>
@@ -13,8 +13,7 @@
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Simulation choice</text><text styleclass="Normal" translate="true"> provides options for how the groundwater transport simulations will be managed.</text></para>
     <list id="0" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">With the first choice, there will be only a single simulation that includes both flow and solute transport.</text></li>
-      <li styleclass="Normal"><text styleclass="Normal" translate="true">With the second choice, there will be two simulations. First there will be a flow simulation and after that, there will be a transport simulation that includes all the chemical species.</text></li>
-      <li styleclass="Normal"><text styleclass="Normal" translate="true">With the third choice, there will be a flow simulation and then a separate transport simulation for each solute. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">With the second choice, there will be a flow simulation and then a separate transport simulation for each solute. </text></li>
     </list>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If your time steps are short enough, a single, combined flow and transport simulation should suffice. However, the transport simulation often requires shorter time steps than the flow simulation. With separate flow and transport simulation, you can achieve this by specifying shorter time steps for the transport simulations on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" anchor="GWT" styleclass="Strong" translate="true">GWT</link><text styleclass="Normal" translate="true"> tab </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Time</link><text styleclass="Normal" translate="true"> dialog box. If you think you need different time discretizations for different species, the third option can be helpful.</text></para>
     <para styleclass="Normal"></para>

@@ -35,7 +35,7 @@ begin
   GwtProcess := Package as TGwtProcess;
 //  cbSeparate.Checked := GwtProcess.SeparateGwt;
   cbFlowImbalance.Checked := GwtProcess.FLOW_IMBALANCE_CORRECTION;
-  rgSimulationChoice.ItemIndex := Ord(GwtProcess.GwtSimulationChoice);
+  rgSimulationChoice.ItemIndex := Ord(GwtProcess.SeparateGwt);
 end;
 
 procedure TframePackageFmi.rcSelectionControllerEnabledChange(Sender: TObject);
@@ -53,7 +53,7 @@ begin
   GwtProcess := Package as TGwtProcess;
 //  GwtProcess.SeparateGwt := cbSeparate.Checked;
   GwtProcess.FLOW_IMBALANCE_CORRECTION := cbFlowImbalance.Checked;
-  GwtProcess.GwtSimulationChoice := TGwtSimulationChoice(rgSimulationChoice.ItemIndex);
+  GwtProcess.SeparateGwt := rgSimulationChoice.ItemIndex = 1;
 end;
 
 end.

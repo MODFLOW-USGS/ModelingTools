@@ -23,17 +23,14 @@ inherited framePackageFmi: TframePackageFmi
     Left = 16
     Top = 192
     Width = 445
-    Height = 153
+    Height = 121
     Caption = 'Simulation choice (FMI6)'
     Enabled = False
     Items.Strings = (
-      'Flow and solute transport in the same simulation'
+      '(1) Flow and solute transport in the same simulation'
       
-        'Flow simulation and a single transport simulation including all ' +
-        'chemical species'
-      
-        'Separate flow simulation and separate simulations for each chemi' +
-        'cal species')
+        '(2) Separate flow simulation and separate simulations for each c' +
+        'hemical species')
     TabOrder = 2
     WordWrap = True
     OnClick = rcSelectionControllerEnabledChange

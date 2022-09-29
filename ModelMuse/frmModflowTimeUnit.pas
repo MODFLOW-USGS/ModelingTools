@@ -873,20 +873,11 @@ begin
   FGettingData := True;
   try
     GwtProcess := frmGoPhast.PhastModel.ModflowPackages.GwtProcess;
-    tabGWT.TabVisible := GwtProcess.IsSelected and
-      (GwtProcess.GwtSimulationChoice in
-      [gscTransportTogether, gscEachSpeciesSeparate]);
+    tabGWT.TabVisible := GwtProcess.IsSelected and GwtProcess.SeparateGwt;
     Limit := 0;
     if tabGWT.TabVisible then
     begin
-      if GwtProcess.GwtSimulationChoice = gscEachSpeciesSeparate then
-      begin
-        Limit := frmGoPhast.PhastModel.MobileComponents.Count;
-      end
-      else
-      begin
-        Limit := 1;
-      end;
+      Limit := frmGoPhast.PhastModel.MobileComponents.Count;
       rdgGWT.ColCount := GwtReservedColumns + Limit*2;
 
       for ColIndex := 0 to GwtReservedColumns - 1 do
@@ -1117,14 +1108,7 @@ begin
     if tabGWT.TabVisible then
     begin
       GwtProcess := frmGoPhast.PhastModel.ModflowPackages.GwtProcess;
-      if GwtProcess.GwtSimulationChoice = gscEachSpeciesSeparate then
-      begin
-        Limit := frmGoPhast.PhastModel.MobileComponents.Count;
-      end
-      else
-      begin
-        Limit := 1;
-      end;
+      Limit := frmGoPhast.PhastModel.MobileComponents.Count;
       for SpeciesIndex := 0 to Limit - 1 do
       begin
         ColIndex := SpeciesIndex*2 + GwtReservedColumns;

@@ -260,6 +260,7 @@ type
   TMawTimeListLink = class(TTimeListsModelLink)
   private
     procedure AddGwtTimeLists(SpeciesIndex: Integer);
+    procedure RemoveGwtTimeLists(SpeciesIndex: Integer);
   protected
     FFlowingWellElevation: TModflowTimeList;
     FFlowingWellConductance: TModflowTimeList;
@@ -4896,6 +4897,23 @@ begin
   inherited;
 end;
 
+procedure TMawTimeListLink.RemoveGwtTimeLists(SpeciesIndex: Integer);
+var
+  ConcTimeList: TModflowTimeList;
+begin
+  ConcTimeList := FGwtStatusList[SpeciesIndex];
+  RemoveTimeList(ConcTimeList);
+  FGwtStatusList.Delete(SpeciesIndex);
+
+  ConcTimeList := FSpecifiedConcList[SpeciesIndex];
+  RemoveTimeList(ConcTimeList);
+  FSpecifiedConcList.Delete(SpeciesIndex);
+
+  ConcTimeList := FInjectionConcList[SpeciesIndex];
+  RemoveTimeList(ConcTimeList);
+  FInjectionConcList.Delete(SpeciesIndex);
+end;
+
 procedure TMawTimeListLink.UpdateGwtTimeLists;
 var
   LocalModel: TCustomModel;
@@ -4908,6 +4926,11 @@ begin
       LocalModel.MobileComponents.Count - 1 do
     begin
       AddGwtTimeLists(SpeciesIndex);
+    end;
+    for SpeciesIndex := LocalModel.MobileComponents.Count to
+      FSpecifiedConcList.Count - 1 do
+    begin
+      RemoveGwtTimeLists(SpeciesIndex);
     end;
   end;
 end;

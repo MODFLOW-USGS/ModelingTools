@@ -16859,6 +16859,7 @@ begin
   ModflowPackages.MawPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.UzfMf6Package.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.GwtCncPackage.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.GwtSrcPackage.AddRemoveRenameGwtConcentrationTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
@@ -25029,7 +25030,6 @@ end;
 procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);
 begin
   ModflowPackages.GwtCncPackage.InvalidateConcentrations;
-  { TODO -cGWT : Update this }
 end;
 
 procedure TCustomModel.InvalidateContours;
@@ -25084,8 +25084,7 @@ end;
 
 procedure TCustomModel.InvalidateMassSrc(Sender: TObject);
 begin
-//  Assert(False);
-  { TODO -cGWT : Update this }
+  ModflowPackages.GwtSrcPackage.InvalidateConcentrations;
 end;
 
 procedure TCustomModel.InvalidateMawGwtConc(Sender: TObject);
@@ -33812,8 +33811,7 @@ end;
 
 function TCustomModel.GetSeparateGwtUsed: Boolean;
 begin
-  result := GwtUsed and (ModflowPackages.GwtProcess.GwtSimulationChoice in
-    [gscTransportTogether, gscEachSpeciesSeparate]);
+  result := GwtUsed and ModflowPackages.GwtProcess.SeparateGwt;
 end;
 
 function TCustomModel.GetShortestHorizontalBlockEdge(Layer, Row,

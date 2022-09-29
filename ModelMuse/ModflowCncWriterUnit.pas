@@ -2,7 +2,10 @@ unit ModflowCncWriterUnit;
 
 interface
 
-uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowGwtSpecifiedConcUnit,
+uses System.SysUtils, SubscriptionUnit, System.Classes, Mt3dmsChemSpeciesUnit,
+  Contnrs,
+  CustomModflowWriterUnit,
+  ModflowGwtSpecifiedConcUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, OrderedCollectionUnit, FluxObservationUnit,
   GoPhastTypes, Modflow6ObsUnit, ModflowBoundaryDisplayUnit, Vcl.Dialogs;
@@ -11,6 +14,8 @@ type
   TCustomSimpleGwtBoundaryWriter = class abstract(TCustomListWriter)
   protected
     FGwtFile: string;
+    FSpeciesIndex: Integer;
+    FSpeciesName: string;
     procedure PrintOptions;
     procedure PrintDimensions;
     procedure PrintStressPeriods; virtual; abstract;
@@ -31,14 +36,15 @@ type
       ZoneArrayNames: TTransientZoneCollection); override;
     procedure WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
       ErrorRoot: string; const TimeIndex: Integer); override;
+  public
+    procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists;
+      Species: Integer);
   end;
 
   TModflowCncWriter = class(TCustomSimpleGwtBoundaryWriter)
   protected
     FCncPackage: TGwtCncPackage;
-    FSpeciesName: string;
     FBoundaryFound: Boolean;
-    FSpeciesIndex: Integer;
     procedure PrintStressPeriods; override;
   protected
     class function Extension: string; override;
@@ -52,16 +58,13 @@ type
     Class function Mf6GwtObType: TObGwt; override;
   public
     procedure WriteFile(const AFileName: string; SpeciesIndex: Integer);
-    procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists; Species: Integer);
     class function ObservationOutputExtension: string; override;
   end;
 
   TModflowSrcWriter = class(TCustomSimpleGwtBoundaryWriter)
   protected
     FSrcPackage: TGwtSrcPackage;
-    FSpeciesName: string;
     FBoundaryFound: Boolean;
-    FSpeciesIndex: Integer;
     procedure PrintStressPeriods; override;
   protected
     class function Extension: string; override;
@@ -160,84 +163,6 @@ const
 begin
   WriteStressPeriods(VariableIdentifiers, DataSetIdentifier, DS5,
     D7PNameIname, D7PName);
-end;
-
-procedure TModflowCncWriter.UpdateDisplay(
-  TimeLists: TModflowBoundListOfTimeLists; Species: Integer);
-var
-  Index: integer;
-  DataSets: TList;
-  UsedIndicies: TByteSet;
-  TimeIndex: Integer;
-  DataTypeIndex: Integer;
-  TimeListIndex: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  DataArray: TModflowBoundaryDisplayDataArray;
-  DataSetIndex: Integer;
-  FirstTimeList: TModflowBoundaryDisplayTimeList;
-  CellList: TValueCellList;
-  SpeciesIndex: Integer;
-begin
-  if not Package.IsSelected then
-  begin
-    UpdateNotUsedDisplay(TimeLists);
-    Exit;
-  end;
-  FSpeciesIndex := Species;
-  FSpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
-
-  try
-    DataSets := TList.Create;
-    try
-      Evaluate;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      if Values.Count = 0 then
-      begin
-        SetTimeListUpToDate(TimeLists[Species]);
-        Exit;
-      end;
-
-      FirstTimeList := TimeLists[0];
-      for TimeIndex := 0 to FirstTimeList.Count - 1 do
-      begin
-        DataSets.Clear;
-
-        DataArray := TimeList[TimeIndex]
-          as TModflowBoundaryDisplayDataArray;
-        DataSets.Add(DataArray);
-
-        for Index := 0 to Values.Count - 1 do
-        begin
-          CellList := Values[Index];// as TValueCellList;
-          UsedIndicies := [];
-          if Model.GwtUsed then
-          begin
-            DataTypeIndex := 0;
-            Inc(DataTypeIndex);
-
-          UpdateCellDisplay(CellList, DataSets, [], nil, UsedIndicies);
-        end;
-        for DataSetIndex := 0 to DataSets.Count - 1 do
-        begin
-          DataArray := DataSets[DataSetIndex];
-          DataArray.UpToDate := True;
-          DataArray.CacheData;
-        end;
-        SetTimeListsUpToDate(TimeLists);
-      end;
-    finally
-      DataSets.Free;
-    end;
-  except on E: EInvalidTime do
-    begin
-      Beep;
-      MessageDlg(E.Message, mtError, [mbOK], 0);
-    end;
-  end;
 end;
 
 procedure TModflowCncWriter.WriteFile(const AFileName: string; SpeciesIndex: Integer);
@@ -503,7 +428,79 @@ begin
     WritingTemplate := True;
     WriteFileInternal;
   end;
+end;
 
+procedure TCustomSimpleGwtBoundaryWriter.UpdateDisplay
+  (TimeLists: TModflowBoundListOfTimeLists; Species: Integer);
+var
+  Index: Integer;
+  DataSets: TList;
+  UsedIndicies: TByteSet;
+  TimeIndex: Integer;
+  DataTypeIndex: Integer;
+//  TimeListIndex: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  DataArray: TModflowBoundaryDisplayDataArray;
+  DataSetIndex: Integer;
+  FirstTimeList: TModflowBoundaryDisplayTimeList;
+  CellList: TValueCellList;
+//  SpeciesIndex: Integer;
+begin
+  if not Package.IsSelected then
+  begin
+    UpdateNotUsedDisplay(TimeLists);
+    Exit;
+  end;
+  FSpeciesIndex := Species;
+  FSpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
+  try
+    DataSets := TList.Create;
+    try
+      Evaluate;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+      if Values.Count = 0 then
+      begin
+        SetTimeListUpToDate(TimeLists[Species]);
+        Exit;
+      end;
+      FirstTimeList := TimeLists[0];
+      for TimeIndex := 0 to FirstTimeList.Count - 1 do
+      begin
+        DataSets.Clear;
+        DataArray := FirstTimeList[TimeIndex] as TModflowBoundaryDisplayDataArray;
+        DataSets.Add(DataArray);
+        for Index := 0 to Values.Count - 1 do
+        begin
+          CellList := Values[Index]; // as TValueCellList;
+          UsedIndicies := [];
+//          if Model.GwtUsed then
+//          begin
+////            DataTypeIndex := 0;
+////            Inc(DataTypeIndex);
+//          end;
+          UpdateCellDisplay(CellList, DataSets, [], nil, UsedIndicies);
+        end;
+        for DataSetIndex := 0 to DataSets.Count - 1 do
+        begin
+          DataArray := DataSets[DataSetIndex];
+          DataArray.UpToDate := True;
+          DataArray.CacheData;
+        end;
+        SetTimeListUpToDate(TimeLists[Species]);
+      end;
+    finally
+      DataSets.Free;
+    end;
+  except
+    on E: EInvalidTime do
+    begin
+      Beep;
+      MessageDlg(E.Message, mtError, [mbOK], 0);
+    end;
+  end;
 end;
 
 end.

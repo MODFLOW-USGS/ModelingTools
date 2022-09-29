@@ -8,6 +8,7 @@ uses
 type
   TModflowFmiWriter = class(TCustomModflowWriter)
   private
+    FFlowFile: string;
     procedure WriteOptions;
     procedure WritePackageData;
   protected
@@ -33,27 +34,33 @@ procedure TModflowFmiWriter.WriteFile(const AFileName: string);
 var
   NameOfFile: string;
   SpeciesIndex: Integer;
+  SpeciesName: string;
 begin
   if not Model.SeparateGwtUsed then
   begin
     Exit;
   end;
 
-  NameOfFile := FileName(AFileName);
+//  NameOfFile := FileName(AFileName);
+  FFlowFile := FileName(AFileName);
   FInputFileName := NameOfFile;
   FNameOfFile := NameOfFile;
   for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
   begin
+    SpeciesName := '.' + Model.MobileComponents[SpeciesIndex].Name + Extension;
+    NameOfFile := ChangeFileExt(AFileName, SpeciesName);
+    FInputFileName := NameOfFile;
+    FNameOfFile := NameOfFile;
     WriteToGwtNameFile('FMI6', FNameOfFile, SpeciesIndex);
-  end;
 
-  OpenFile(FNameOfFile);
-  try
-    WriteCommentLine(File_Comment('FMI6'));
-    WriteOptions;
-    WritePackageData;
-  finally
-    CloseFile;
+    OpenFile(FNameOfFile);
+    try
+      WriteCommentLine(File_Comment('FMI6'));
+      WriteOptions;
+      WritePackageData;
+    finally
+      CloseFile;
+    end;
   end;
 
 end;
@@ -84,13 +91,13 @@ begin
   try
     WriteString('  GWFBUDGET');
     WriteString(' FILEIN ');
-    GWFlowFileName := ExtractFileName(ChangeFileExt(FNameOfFile, '.cbc'));
+    GWFlowFileName := ExtractFileName(ChangeFileExt(FFlowFile, '.cbc'));
     WriteString(GWFlowFileName);
     NewLine;
 
     WriteString('  GWFHEAD');
     WriteString(' FILEIN ');
-    GWFlowFileName := ExtractFileName(ChangeFileExt(FNameOfFile, '.bhd'));
+    GWFlowFileName := ExtractFileName(ChangeFileExt(FFlowFile, '.bhd'));
     WriteString(GWFlowFileName);
     NewLine;
 
@@ -98,7 +105,7 @@ begin
     begin
       WriteString('  GWFMOVER');
       WriteString(' FILEIN ');
-      GWFlowFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrMvrbudget));
+      GWFlowFileName := ExtractFileName(ChangeFileExt(FFlowFile, StrMvrbudget));
       WriteString(GWFlowFileName);
       NewLine;
     end;
@@ -108,7 +115,7 @@ begin
       WriteString('  ');
       WriteString(StrLakeFlowPackageName);
       WriteString(' FILEIN ');
-      GWFlowFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrLkbud));
+      GWFlowFileName := ExtractFileName(ChangeFileExt(FFlowFile, StrLkbud));
       WriteString(GWFlowFileName);
       NewLine;
     end;
@@ -118,7 +125,7 @@ begin
       WriteString('  ');
       WriteString(StrSfrFlowPackageName);
       WriteString(' FILEIN ');
-      GWFlowFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSfrbudget));
+      GWFlowFileName := ExtractFileName(ChangeFileExt(FFlowFile, StrSfrbudget));
       WriteString(GWFlowFileName);
       NewLine;
     end;
@@ -128,7 +135,7 @@ begin
       WriteString('  ');
       WriteString(StrMAW1);
       WriteString(' FILEIN ');
-      GWFlowFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrMawbud));
+      GWFlowFileName := ExtractFileName(ChangeFileExt(FFlowFile, StrMawbud));
       WriteString(GWFlowFileName);
       NewLine;
     end;
@@ -138,7 +145,7 @@ begin
       WriteString('  ');
       WriteString(KUZF1);
       WriteString(' FILEIN ');
-      GWFlowFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrUzfbudget));
+      GWFlowFileName := ExtractFileName(ChangeFileExt(FFlowFile, StrUzfbudget));
       WriteString(GWFlowFileName);
       NewLine;
     end;

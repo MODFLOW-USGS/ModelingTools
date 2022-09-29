@@ -157,6 +157,7 @@ type
     FConductanceData: TModflowTimeList;
     FConcList: TModflowTimeLists;
     procedure AddGwtTimeLists(SpeciesIndex: Integer);
+    procedure RemoveGwtTimeLists(SpeciesIndex: Integer);
   protected
     procedure CreateTimeLists; override;
     procedure UpdateGwtTimeLists; override;
@@ -522,6 +523,10 @@ begin
   result := 3;
   if GwtConcentrations <> nil then
   begin
+    if Model <> nil then
+    begin
+      GwtConcentrations.Count := (Model as TCustomModel).MobileComponents.Count;
+    end;
     result := result + GwtConcentrations.Count;
   end;
 end;
@@ -2642,6 +2647,15 @@ begin
   inherited;
 end;
 
+procedure TRivTimeListLink.RemoveGwtTimeLists(SpeciesIndex: Integer);
+var
+  ConcTimeList: TModflowTimeList;
+begin
+  ConcTimeList := FConcList[SpeciesIndex];
+  RemoveTimeList(ConcTimeList);
+  FConcList.Delete(SpeciesIndex);
+end;
+
 procedure TRivTimeListLink.UpdateGwtTimeLists;
 var
   LocalModel: TCustomModel;
@@ -2654,6 +2668,11 @@ begin
       LocalModel.MobileComponents.Count - 1 do
     begin
       AddGwtTimeLists(SpeciesIndex);
+    end;
+    for SpeciesIndex := LocalModel.MobileComponents.Count to
+      FConcList.Count - 1 do
+    begin
+      RemoveGwtTimeLists(SpeciesIndex);
     end;
   end;
 end;

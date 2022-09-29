@@ -219,6 +219,7 @@ type
     FEvapConcList: TModflowTimeLists;
      // SpeciesIndex starts at 0.
     procedure AddGwtTimeLists(SpeciesIndex: Integer);
+    procedure RemoveGwtTimeLists(SpeciesIndex: Integer);
   protected
     procedure CreateTimeLists; override;
     procedure UpdateGwtTimeLists; override;
@@ -1247,7 +1248,9 @@ begin
   result := 7;
   if frmGoPhast.PhastModel.GwtUsed then
   begin
-    result := result + frmGoPhast.PhastModel.MobileComponents.Count * UztGwtConcCount + OffSet;
+    result := result
+      + frmGoPhast.PhastModel.MobileComponents.Count * UztGwtConcCount
+      + OffSet;
   end;
 end;
 
@@ -2854,6 +2857,28 @@ begin
   inherited;
 end;
 
+procedure TUzfMf6TimeListLink.RemoveGwtTimeLists(SpeciesIndex: Integer);
+var
+  ConcTimeList: TModflowTimeList;
+begin
+     // SpeciesIndex starts at 0.
+  ConcTimeList := FGwtStatusList[SpeciesIndex];
+  RemoveTimeList(ConcTimeList);
+  FGwtStatusList.Delete(SpeciesIndex);
+
+  ConcTimeList := FSpecifiedConcList[SpeciesIndex];
+  RemoveTimeList(ConcTimeList);
+  FSpecifiedConcList.Delete(SpeciesIndex);
+
+  ConcTimeList := FInfiltrationConcList[SpeciesIndex];
+  RemoveTimeList(ConcTimeList);
+  FInfiltrationConcList.Delete(SpeciesIndex);
+
+  ConcTimeList := FEvapConcList[SpeciesIndex];
+  RemoveTimeList(ConcTimeList);
+  FEvapConcList.Delete(SpeciesIndex);
+end;
+
 procedure TUzfMf6TimeListLink.UpdateGwtTimeLists;
 var
   LocalModel: TCustomModel;
@@ -2866,6 +2891,11 @@ begin
       LocalModel.MobileComponents.Count - 1 do
     begin
       AddGwtTimeLists(SpeciesIndex);
+    end;
+    for SpeciesIndex := LocalModel.MobileComponents.Count to
+      FSpecifiedConcList.Count - 1 do
+    begin
+      RemoveGwtTimeLists(SpeciesIndex);
     end;
   end;
 end;

@@ -140,22 +140,15 @@ end;
 
 procedure TTemporalDiscretizationWriter.WriteGwtFilesInternal(const AFileName: string);
 var
-  GwtSimulationChoice: TGwtSimulationChoice;
+  SeparateGwt: Boolean;
   Limit: Integer;
   SpeciesIndex: Integer;
   ASpecies: string;
 begin
-  GwtSimulationChoice := Model.ModflowPackages.GwtProcess.GwtSimulationChoice;
-  if Model.GwtUsed and (GwtSimulationChoice in [gscTransportTogether, gscEachSpeciesSeparate]) then
+  SeparateGwt := Model.ModflowPackages.GwtProcess.SeparateGwt;
+  if Model.GwtUsed and SeparateGwt then
   begin
-    if GwtSimulationChoice = gscTransportTogether then
-    begin
-      Limit := 1;
-    end
-    else
-    begin
-      Limit := Model.MobileComponents.Count;
-    end;
+    Limit := Model.MobileComponents.Count;
     for SpeciesIndex := 0 to Limit - 1 do
     begin
       FSpeciesIndex := SpeciesIndex;

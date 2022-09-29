@@ -7,8 +7,8 @@ inherited frmModflowPackages: TfrmModflowPackages
   OnActivate = jvplPackagesChange
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitWidth = 798
-  ExplicitHeight = 596
+  ExplicitWidth = 800
+  ExplicitHeight = 604
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 177
@@ -11316,14 +11316,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited rgSimulationChoice: TRadioGroup
           Width = 564
-          Items.Strings = (
-            '(1) Flow and solute transport in the same simulation'
-            
-              '(2) Flow simulation and a single transport simulation including ' +
-              'all chemical species'
-            
-              '(3) Separate flow simulation and separate simulations for each c' +
-              'hemical species')
           ExplicitWidth = 564
         end
         inherited rcSelectionController: TRbwController

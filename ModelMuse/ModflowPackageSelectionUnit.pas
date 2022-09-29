@@ -5876,16 +5876,16 @@ Type
     procedure SetFLOW_IMBALANCE_CORRECTION(const Value: Boolean);
     procedure SetSeparateGwt(const Value: Boolean);
     procedure SetGwtSimulationChoice(const Value: TGwtSimulationChoice);
+    function GetGwtSimulationChoice: TGwtSimulationChoice;
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
     procedure InitializeVariables; override;
   published
+    property SeparateGwt: Boolean read FSeparateGwt write SetSeparateGwt;
   // retained temporarily for backwards compatiblity.
-    property SeparateGwt: Boolean read FSeparateGwt write SetSeparateGwt
-      stored False;
-    property GwtSimulationChoice: TGwtSimulationChoice read FGwtSimulationChoice
-      write SetGwtSimulationChoice;
+    property GwtSimulationChoice: TGwtSimulationChoice read GetGwtSimulationChoice
+      write SetGwtSimulationChoice stored False;
     // @name is an option in the Flow Model Interface package
     property FLOW_IMBALANCE_CORRECTION: Boolean read FFLOW_IMBALANCE_CORRECTION
       write SetFLOW_IMBALANCE_CORRECTION;
@@ -5954,6 +5954,15 @@ Type
   end;
 
   TGwtSrcPackage = class(TModflowPackageSelection)
+  private
+    FSrcConc: TMfBoundDispObjectList;
+    procedure InitializeSrcDisplay(Sender: TObject);
+    procedure GetSrcConcUseList(Sender: TObject; NewUseList: TStringList);
+  public
+    constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
+    procedure InvalidateConcentrations;
+    procedure AddRemoveRenameGwtConcentrationTimeLists;
   end;
 
   TGwtSorptionChoice = (gscNone, gscLinear, gscFreundlich, gscLangmuir);
@@ -23774,7 +23783,6 @@ begin
   begin
     GwtSource := TGwtProcess(Source);
     SeparateGwt := GwtSource.SeparateGwt;
-    GwtSimulationChoice := GwtSource.GwtSimulationChoice;
     FLOW_IMBALANCE_CORRECTION := GwtSource.FLOW_IMBALANCE_CORRECTION;
   end;
   inherited;
@@ -23784,6 +23792,18 @@ constructor TGwtProcess.Create(Model: TBaseModel);
 begin
   inherited;
   InitializeVariables
+end;
+
+function TGwtProcess.GetGwtSimulationChoice: TGwtSimulationChoice;
+begin
+  if SeparateGwt then
+  begin
+    result := gscEachSpeciesSeparate;
+  end
+  else
+  begin
+    result := gscAllTogether;
+  end;
 end;
 
 procedure TGwtProcess.InitializeVariables;
@@ -23801,23 +23821,17 @@ end;
 
 procedure TGwtProcess.SetGwtSimulationChoice(const Value: TGwtSimulationChoice);
 begin
-  if FGwtSimulationChoice <> Value then
-  begin
-    FGwtSimulationChoice := Value;
-    InvalidateModel;
-  end;
+  SeparateGwt := Value <> gscAllTogether;
+//  if FGwtSimulationChoice <> Value then
+//  begin
+//    FGwtSimulationChoice := Value;
+//    InvalidateModel;
+//  end;
 end;
 
 procedure TGwtProcess.SetSeparateGwt(const Value: Boolean);
 begin
-  if Value then
-  begin
-    GwtSimulationChoice := gscEachSpeciesSeparate;
-  end
-  else
-  begin
-    GwtSimulationChoice := gscAllTogether;
-  end;
+  SetBooleanProperty(FSeparateGwt, Value);
 end;
 
 { TGwtCncPackage }
@@ -23849,8 +23863,8 @@ var
   ValueIndex: Integer;
   LocalModel: TCustomModel;
   GwtIndex: Integer;
-  DataIndex: Integer;
-  SpeciesIndex: Integer;
+//  DataIndex: Integer;
+//  SpeciesIndex: Integer;
   ABoundary: TCncBoundary;
 begin
   LocalModel := FModel as TCustomModel;
@@ -23870,6 +23884,7 @@ begin
       begin
         Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
         UpdateUseList(GwtIndex, NewUseList, Item, 'Undefined');
+      end;
     end;
   end;
 end;
@@ -23921,6 +23936,111 @@ begin
   for Index := 0 to FCncConc.Count - 1 do
   begin
     TimeList := FCncConc[Index];
+    TimeList.Invalidate;
+  end;
+end;
+
+{ TGwtSrcPackage }
+
+procedure TGwtSrcPackage.AddRemoveRenameGwtConcentrationTimeLists;
+begin
+  UpdateConcentrationLists(FSrcConc, InitializeSrcDisplay,
+    GetSrcConcUseList, 'SRC Conc %s');
+end;
+
+constructor TGwtSrcPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  FSrcConc := TMfBoundDispObjectList.Create;
+end;
+
+destructor TGwtSrcPackage.Destroy;
+begin
+  inherited;
+  FSrcConc.Free;
+end;
+
+procedure TGwtSrcPackage.GetSrcConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  GwtIndex: Integer;
+//  DataIndex: Integer;
+//  SpeciesIndex: Integer;
+  ABoundary: TSrcBoundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.GwtSrcBoundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := 0
+        {+ LocalModel.MobileComponents.Count * 2};
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(GwtIndex, NewUseList, Item, 'Undefined');
+      end;
+    end;
+  end;
+end;
+
+procedure TGwtSrcPackage.InitializeSrcDisplay(Sender: TObject);
+var
+  List: TModflowBoundListOfTimeLists;
+  SrcWriter: TModflowSrcWriter;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FSrcConc.Count - 1 do
+  begin
+    TimeList := FSrcConc[Index];
+    TimeList.CreateDataSets;
+  end;
+
+  List := TModflowBoundListOfTimeLists.Create;
+  { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
+
+  try
+
+    for Index := 0 to FSrcConc.Count - 1 do
+    begin
+      TimeList := FSrcConc[Index];
+      List.Add(TimeList);
+    end;
+
+    for Index := 0 to FSrcConc.Count - 1 do
+    begin
+      SrcWriter := TModflowSrcWriter.Create(FModel as TCustomModel, etDisplay);
+      try
+        SrcWriter.UpdateDisplay(List, Index);
+      finally
+        SrcWriter.Free;
+      end;
+    end;
+  finally
+    List.Free;
+  end;
+end;
+
+procedure TGwtSrcPackage.InvalidateConcentrations;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FSrcConc.Count - 1 do
+  begin
+    TimeList := FSrcConc[Index];
     TimeList.Invalidate;
   end;
 end;

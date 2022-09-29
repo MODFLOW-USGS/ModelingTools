@@ -401,7 +401,6 @@ end;
 
 procedure TModflowCHD_Writer.WriteFile(const AFileName: string);
 var
-//  NameOfFile: string;
   ShouldWriteObservationFile: Boolean;
 begin
   FrmErrorsAndWarnings.RemoveWarningGroup(Model, StrCHDPackageIncompat);

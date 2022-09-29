@@ -44,7 +44,7 @@ type
     btSutraSpecConcTemp, btSutraFluidFlux, btMassEnergyFlux, btSutraGeneralFlow,
     btSutraGenTransp, btMfFhb, btCFP, btMfFarm, btSWR, btMnw1, btMtmsObs, btRIP,
     btMt3dRchConc, mt3dUnsatConc, mt3dSatConc, btSfr_MF6, btMAW, btUzfMf6,
-    btSft, btCSub, btMvr);
+    btSft, btCSub, btMvr, btCnc, btSrc);
 
   TBoundaryTypes = set of TBoundaryType;
 
@@ -1777,6 +1777,8 @@ resourcestring
   'ircular reference error.';
   StrErrorAssigningValu = 'Error assigning values to Data set "%0:s" using t' +
   'he interpolation algorithm "%1:s." The error message was %2:s"';
+  StrMODFLOW6CNC = 'MODFLOW 6 CNC';
+  StrMODFLOW6SRC = 'MODFLOW 6 SRC';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 //function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -7893,8 +7895,14 @@ begin
   begin
     result := btMvr;
   end
-
-
+  else if Pos('CNC', Name) = 1 then
+  begin
+    result := btCNC;
+  end
+  else if Pos('SRC', Name) = 1 then
+  begin
+    result := btSRC;
+  end
 
   else
   begin
@@ -8083,6 +8091,14 @@ begin
       btMvr:
         begin
           result := StrMODFLOW6MVR;
+        end;
+      btCnc:
+        begin
+          result := StrMODFLOW6CNC;
+        end;
+      btSrc:
+        begin
+          result := StrMODFLOW6SRC;
         end;
 
       else

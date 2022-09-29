@@ -1078,7 +1078,7 @@ end;
     FExchanges: TStringList;
     FGwtTDisFileNames: TStringList;
     FSpeciesIndex: Integer;
-    FGwtSimulationChoice: TGwtSimulationChoice;
+    FGwtSimulationChoice: Boolean;
     FSimFileNames: TStringList;
     FWritingFlowModel: Boolean;
     procedure WriteOptions;
@@ -9572,15 +9572,8 @@ begin
   FWritingFlowModel := False;
   if Model.GwtUsed and Model.SeparateGwtUsed then
   begin
-    FGwtSimulationChoice := Model.ModflowPackages.GwtProcess.GwtSimulationChoice;
-    if FGwtSimulationChoice = gscTransportTogether then
-    begin
-      Limit := 1
-    end
-    else
-    begin
-      Limit := Model.MobileComponents.Count;
-    end;
+    FGwtSimulationChoice := Model.ModflowPackages.GwtProcess.SeparateGwt;
+    Limit := Model.MobileComponents.Count;
 
     for SpeciesIndex := 0 to Limit - 1 do
     begin
@@ -9608,14 +9601,7 @@ begin
   end
   else if SeparateGwtUsed then
   begin
-    if FGwtSimulationChoice = gscTransportTogether then
-    begin
-      result := (ModelIndex > 0);
-    end
-    else
-    begin
-      result := (ModelIndex - 1 = FSpeciesIndex) and (ModelIndex > 0);
-    end;
+    result := (ModelIndex - 1 = FSpeciesIndex) and (ModelIndex > 0);
   end;
 end;
 
@@ -9894,14 +9880,7 @@ begin
   Limit := 0;
   if Model.GwtUsed and Model.SeparateGwtUsed and (FSpeciesIndex <> -1) then
   begin
-    if FGwtSimulationChoice = gscTransportTogether then
-    begin
-      Limit := 1
-    end
-    else
-    begin
-      Limit := Model.MobileComponents.Count;
-    end;
+    Limit := Model.MobileComponents.Count;
   end;
 
   for TimingIndex := 0 to Limit - 1 do
