@@ -1078,7 +1078,7 @@ end;
     FExchanges: TStringList;
     FGwtTDisFileNames: TStringList;
     FSpeciesIndex: Integer;
-    FGwtSimulationChoice: Boolean;
+    FSeparateGwt: Boolean;
     FSimFileNames: TStringList;
     FWritingFlowModel: Boolean;
     procedure WriteOptions;
@@ -9550,7 +9550,7 @@ var
   FileRoot: WideString;
   BackupFileName: WideString;
   Limit: Integer;
-  Index: Integer;
+//  Index: Integer;
   SpeciesIndex: Integer;
   SpeciesName: string;
 begin
@@ -9572,7 +9572,7 @@ begin
   FWritingFlowModel := False;
   if Model.GwtUsed and Model.SeparateGwtUsed then
   begin
-    FGwtSimulationChoice := Model.ModflowPackages.GwtProcess.SeparateGwt;
+    FSeparateGwt := Model.ModflowPackages.GwtProcess.SeparateGwt;
     Limit := Model.MobileComponents.Count;
 
     for SpeciesIndex := 0 to Limit - 1 do
@@ -9616,8 +9616,6 @@ begin
 end;
 
 procedure TMf6_SimNameFileWriter.WriteFileInternal(FileName: string; BackupFileName: WideString);
-var
-  Limit: Integer;
 begin
   FSimFileNames.Add(BackupFileName);
   OpenFile(BackupFileName);
@@ -9863,12 +9861,17 @@ end;
 
 procedure TMf6_SimNameFileWriter.WriteTiming;
 var
-  Limit: Integer;
-  TimingIndex: Integer;
+  GwtUsed: Boolean;
+  SeparateGwtUsed: Boolean;
+  ShouldWriteLine: Boolean;
+  ModelIndex: Integer;
 begin
   Assert(TDisFileName <> '');
   WriteString('BEGIN TIMING');
   NewLine;
+
+  GwtUsed := Model.GwtUsed;
+  SeparateGwtUsed := Model.SeparateGwtUsed;
 
   if FSpeciesIndex = -1 then
   begin
@@ -9877,17 +9880,15 @@ begin
     NewLine;
   end;
 
-  Limit := 0;
-  if Model.GwtUsed and Model.SeparateGwtUsed and (FSpeciesIndex <> -1) then
+  for ModelIndex := 1 to FModelDataList.Count - 1 do
   begin
-    Limit := Model.MobileComponents.Count;
-  end;
-
-  for TimingIndex := 0 to Limit - 1 do
-  begin
-    WriteString('  TDIS6 ');
-    WriteString('''' + ExtractFileName(GwtTDisFileNames[TimingIndex]) + '''');
-    NewLine;
+    ShouldWriteLine := GetShouldWriteLine(GwtUsed, SeparateGwtUsed, ModelIndex);
+    if ShouldWriteLine then
+    begin
+      WriteString('  TDIS6 ');
+      WriteString('''' + ExtractFileName(GwtTDisFileNames[ModelIndex-1]) + '''');
+      NewLine;
+    end;
   end;
 
   WriteString('END TIMING');
