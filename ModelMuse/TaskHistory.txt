@@ -478,7 +478,7 @@ object TTaskHistory
     end
     item
       Name = 'MF6 Time Series'
-      Display = False
+      Display = True
     end
     item
       Name = 'MF6 GWT'
@@ -30003,5 +30003,15 @@ object TTaskHistory
         'Documentation'
         'Graphics'
         'Refactoring')
+    end
+    item
+      Date = 44833.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT'
+        'MF6 Time Series'
+        'Testing'
+        'Documentation'
+        'Dialog boxes'
+        'core code')
     end>
 end

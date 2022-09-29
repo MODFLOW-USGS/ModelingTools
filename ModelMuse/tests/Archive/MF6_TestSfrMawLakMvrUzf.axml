@@ -87,6 +87,7 @@
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.maw_pump_rate_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.maw_pump_rate_to_mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.mvr_budget</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.mvr_budget.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.net-infiltration_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.ob_evt_out_evt.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.ob_gw_out_drawdown.csv</FileName>

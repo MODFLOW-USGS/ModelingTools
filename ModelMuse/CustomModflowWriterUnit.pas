@@ -1261,6 +1261,8 @@ resourcestring
   ':s[%5:d,%6:d,%7:d]%1:s %4:s %3:g%0:s ';
   StrExtendedTemplateFormat = ' %0:s                    %1:s%0:s ';
   StrErrorHandlingTheF = 'Error handling the following name file lines';
+  StrMODFLOWTimeSeries = 'MODFLOW time series Interpolated value in series %' +
+  '0:s at time %1:g.';
 
 const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
@@ -7318,6 +7320,7 @@ var
   DataArrayIndex: Integer;
   DataArray: TModflowBoundaryDisplayDataArray;
   PriorAnnotation: string;
+  TimeSeriesName: string;
 begin
   // Data set 4b
   for DataArrayIndex := 0 to DataArrayList.Count - 1 do
@@ -7333,7 +7336,15 @@ begin
     for CellIndex := 0 to CellList.Count - 1 do
     begin
       Cell := CellList[CellIndex] as TValueCell;
-      if (Model.ModelSelection = msModflow2015) or
+      TimeSeriesName := Cell.Mf6TimeSeriesName[DataArrayIndex];
+      if TimeSeriesName <> '' then
+      begin
+        Value := Model.Mf6TimesSeries.GetInterpolatedValue(Model,
+          Model.ThreeDDisplayTime, TimeSeriesName);
+        Annotation := Format(StrMODFLOWTimeSeries,
+          [TimeSeriesName, Model.ThreeDDisplayTime]);
+      end
+      else if (Model.ModelSelection = msModflow2015) or
         ((Param = nil) or not (DataArrayIndex in ParameterIndicies)) then
       begin
         Value := Cell.RealValue[DataArrayIndex, Model];

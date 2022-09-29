@@ -2512,7 +2512,7 @@ that affects the model output should also have a comment. }
     function GetMf6TimesSeries: TTimesSeriesCollections; virtual; abstract;
     procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections);
       virtual; abstract;
-    function GetGwtUsed: Boolean;
+    function GetGwtUsed: Boolean; override;
     procedure FixSutraMeshEdge;
     function Sutra4SorptionUsed(Sender: TObject): boolean;
     function GetAppsMoved: TStringList; virtual; abstract;
@@ -3461,7 +3461,6 @@ that affects the model output should also have a comment. }
       Stored False
       {$ENDIF}
       ;
-    property GwtUsed: Boolean read GetGwtUsed;
     property SeparateGwtUsed: Boolean read GetSeparateGwtUsed;
     Procedure UpdateGwtConc;
     function SutraUnsatRegionUsed(Sender: TObject): boolean;

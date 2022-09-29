@@ -463,7 +463,7 @@ begin
       end;
       if Values.Count = 0 then
       begin
-        SetTimeListUpToDate(TimeLists[Species]);
+        SetTimeListsUpToDate(TimeLists);
         Exit;
       end;
       FirstTimeList := TimeLists[0];
@@ -474,13 +474,8 @@ begin
         DataSets.Add(DataArray);
         for Index := 0 to Values.Count - 1 do
         begin
-          CellList := Values[Index]; // as TValueCellList;
+          CellList := Values[Index];
           UsedIndicies := [];
-//          if Model.GwtUsed then
-//          begin
-////            DataTypeIndex := 0;
-////            Inc(DataTypeIndex);
-//          end;
           UpdateCellDisplay(CellList, DataSets, [], nil, UsedIndicies);
         end;
         for DataSetIndex := 0 to DataSets.Count - 1 do
@@ -489,7 +484,7 @@ begin
           DataArray.UpToDate := True;
           DataArray.CacheData;
         end;
-        SetTimeListUpToDate(TimeLists[Species]);
+        SetTimeListsUpToDate(TimeLists);
       end;
     finally
       DataSets.Free;

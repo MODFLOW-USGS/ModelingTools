@@ -5,9 +5,21 @@ interface
 uses
   System.AnsiStrings, System.SysUtils, System.Classes, GoPhastTypes,
   OrderedCollectionUnit, Modflow6TimeSeriesUnit, Generics.Collections,
-  System.IOUtils, System.Character;
+  System.IOUtils, System.Character, RealListUnit;
 
 type
+  TCacheDictionary<K,V> = class(TDictionary<K, V>)
+  private
+    FUseCachedValue: Boolean;
+    FCachedKey: K;
+    FCachedValue: V;
+    FCachedResult: Boolean;
+  public
+    constructor Create;
+    procedure Clear;
+    function TryGetValue(const Key: K; var Value: V): Boolean;
+  end;
+
   TTimeSeriesItem = class(TOrderedItem)
   private
     FTimeSeries: TMf6TimeSeries;
@@ -27,8 +39,9 @@ type
     FTimes: TRealCollection;
     FGroupName: AnsiString;
     FInputFile: TStreamReader;
-    FTimeSeriesDictionary: TDictionary<string, TMf6TimeSeries>;
+    FTimeSeriesDictionary: TCacheDictionary<string, TMf6TimeSeries>;
     FDeleted: Boolean;
+    FSortedTimes: TRealList;
     function GetItem(Index: Integer): TTimeSeriesItem;
     function GetTimeCount: Integer;
     procedure SetItem(Index: Integer; const Value: TTimeSeriesItem);
@@ -37,6 +50,7 @@ type
     procedure SetGroupName(Value: AnsiString);
     procedure ReadAttributes;
     procedure ReadTimeSeries;
+    procedure OnTimesChanged(Sender: TObject);
   public
     Constructor Create(Model: TBaseModel);
     Destructor Destroy; override;
@@ -75,8 +89,8 @@ type
 
   TTimesSeriesCollections = class(TOrderedCollection)
   private
-    FTimeSeriesGroupsDictionary: TDictionary<string, TTimesSeriesCollection>;
-    FTimeSeriesDictionary: TDictionary<string, TMf6TimeSeries>;
+    FTimeSeriesGroupsDictionary: TCacheDictionary<string, TTimesSeriesCollection>;
+    FTimeSeriesDictionary: TCacheDictionary<string, TMf6TimeSeries>;
     FTimeSeriesNames: TStringList;
     function GetItem(Index: Integer): TimeSeriesCollectionItem;
     procedure SetItem(Index: Integer; const Value: TimeSeriesCollectionItem);
@@ -94,6 +108,8 @@ type
       const ASeriesName: string): TTimesSeriesCollection;
     property TimeSeriesNames: TStringList read GetTimeSeriesNames;
     procedure Loaded;
+    function GetInterpolatedValue(Model: TBaseModel; Time: double; const
+      SeriesName: string; StartTimeOffset: double = 0): double;
   end;
 
 implementation
@@ -170,15 +186,18 @@ begin
   end
   else
   begin
+    FSortedTimes := TRealList.Create;
     FTimes := TRealCollection.Create(Model.Invalidate);
+    FTimes.OnChange := OnTimesChanged;
   end;
-  FTimeSeriesDictionary := TDictionary<string, TMf6TimeSeries>.Create;
+  FTimeSeriesDictionary := TCacheDictionary<string, TMf6TimeSeries>.Create;
 end;
 
 destructor TTimesSeriesCollection.Destroy;
 begin
   FTimeSeriesDictionary.Free;
   FTimes.Free;
+  FSortedTimes.Free;
   inherited;
 end;
 
@@ -206,6 +225,8 @@ var
   StressPeriod: TModflowStressPeriod;
   Param: TModflowSteadyParameter;
   ScaleFactor: Double;
+  StartSearch: Integer;
+  EndSearch: Integer;
   function NearlyTheSame(A, B: double): Boolean;
   begin
     result := Abs(A - B) / (Abs(A) + Abs(B)) < Epsilon;
@@ -232,8 +253,36 @@ begin
   TimeStep.StartTime := TimeStep.StartTime-StartTimeOffset;
   TimeStep.EndTime := TimeStep.EndTime-StartTimeOffset;
 
+  if FSortedTimes.Count = 0 then
+  begin
+    for TimeIndex := 0 to TimeCount - 1 do
+    begin
+      FSortedTimes.Add(Times[TimeIndex].Value);
+    end;
+    FSortedTimes.Sorted := True;
+  end;
+
+  StartSearch := FSortedTimes.IndexOfClosest(TimeStep.StartTime);
+  if StartSearch < 0 then
+  begin
+    StartSearch := 0;
+  end
+  else if StartSearch > 0 then
+  begin
+    Dec(StartSearch);
+  end;
+  EndSearch := FSortedTimes.IndexOfClosest(TimeStep.StartTime);
+  if EndSearch < 0 then
+  begin
+    EndSearch := -1;
+  end
+  else if EndSearch < FSortedTimes.Count -1 then
+  begin
+    Inc(EndSearch);
+  end;
+
   StartTimeIndex := 0;
-  for TimeIndex := 0 to TimeCount - 1 do
+  for TimeIndex := StartSearch to EndSearch do
   begin
     if (Times[TimeIndex].Value <= TimeStep.StartTime)
       and not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
@@ -246,7 +295,7 @@ begin
     end;
   end;
   EndTimeIndex := StartTimeIndex;
-  for TimeIndex := StartTimeIndex to TimeCount - 1 do
+  for TimeIndex := StartTimeIndex to EndSearch do
   begin
     if (Times[TimeIndex].Value >= TimeStep.EndTime)
       and not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
@@ -415,7 +464,7 @@ function TTimesSeriesCollection.GetValuesByName(
   const AName: string): TMf6TimeSeries;
 var
   ItemIndex: Integer;
-  AnItem: TTimeSeriesItem;
+//  AnItem: TTimeSeriesItem;
   TimeSeries: TMf6TimeSeries;
 begin
   result := nil;
@@ -462,6 +511,14 @@ begin
     begin
       Items[SeriesIndex].Free;
     end;
+  end;
+end;
+
+procedure TTimesSeriesCollection.OnTimesChanged(Sender: TObject);
+begin
+  if FSortedTimes <> nil then
+  begin
+    FSortedTimes.Clear;
   end;
 end;
 
@@ -713,8 +770,8 @@ end;
 constructor TTimesSeriesCollections.Create(Model: TBaseModel);
 begin
   inherited Create(TimeSeriesCollectionItem, Model);
-  FTimeSeriesGroupsDictionary := TDictionary<string, TTimesSeriesCollection>.Create;
-  FTimeSeriesDictionary := TDictionary<string, TMf6TimeSeries>.Create;
+  FTimeSeriesGroupsDictionary := TCacheDictionary<string, TTimesSeriesCollection>.Create;
+  FTimeSeriesDictionary := TCacheDictionary<string, TMf6TimeSeries>.Create;
 end;
 
 destructor TTimesSeriesCollections.Destroy;
@@ -723,6 +780,23 @@ begin
   FTimeSeriesDictionary.Free;
   FTimeSeriesGroupsDictionary.Free;
   inherited;
+end;
+
+function TTimesSeriesCollections.GetInterpolatedValue(Model: TBaseModel;
+  Time: double; const SeriesName: string; StartTimeOffset: double): double;
+var
+  TimeSeriesCollection: TTimesSeriesCollection;
+begin
+  TimeSeriesCollection := GetTimesSeriesCollectionBySeriesName(SeriesName);
+  if TimeSeriesCollection <> nil then
+  begin
+    result := TimeSeriesCollection.GetInterpolatedValue(Model, Time, SeriesName,
+      StartTimeOffset);
+  end
+  else
+  begin
+    result := 0;
+  end;
 end;
 
 function TTimesSeriesCollections.GetItem(
@@ -927,5 +1001,38 @@ begin
   inherited Items[Index] := Value;
 end;
 
+
+{ TCacheDictionary }
+
+procedure TCacheDictionary<K,V>.Clear;
+begin
+  FUseCachedValue := False;
+  FCachedResult := False;
+  inherited Clear;
+end;
+
+constructor TCacheDictionary<K, V>.Create;
+begin
+  inherited;
+  FUseCachedValue := False;
+  FCachedResult := False;
+end;
+
+function TCacheDictionary<K,V>.TryGetValue(const Key: K; var Value: V): Boolean;
+begin
+  if FUseCachedValue and (Comparer.Equals(Key, FCachedKey)) then
+  begin
+    Value := FCachedValue;
+    result := FCachedResult;
+  end
+  else
+  begin
+    result := inherited TryGetValue(Key, Value);
+    FCachedKey := Key;
+    FCachedValue := Value;
+    FUseCachedValue := True;
+    FCachedResult := result;
+  end;
+end;
 
 end.

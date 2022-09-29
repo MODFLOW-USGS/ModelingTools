@@ -42,6 +42,7 @@ type
     procedure btnOKClick(Sender: TObject);
     function GroupNamesOK: Boolean;
     function SeriesNamesOK: Boolean;
+    function TimesOK: Boolean;
   private
     FTimesSeries: TTimesSeriesCollections;
     FPestNames: TStringList;
@@ -62,7 +63,7 @@ implementation
 
 uses
   System.Math, frmGoPhastUnit, ModflowParameterUnit, OrderedCollectionUnit,
-  System.UITypes;
+  System.UITypes, ModflowTimeUnit;
 
 resourcestring
   StrTimeSeriesGroupNa = 'Time series group names must be unique. The follow' +
@@ -74,6 +75,9 @@ resourcestring
   'ates.';
   StrTimeSeriesNamesMuPest = 'Time series names must be different from the n' +
   'ames of any PEST parameters. The following names are duplicates.';
+  StrTheTimesInSDoN = 'The times in %s do not encompass all the times in the' +
+  ' model. This can cause an error if one of its time series is use for a ti' +
+  'me step in which its times are not defined. Do you want to fix this?';
 
 {$R *.dfm}
 
@@ -147,6 +151,11 @@ begin
     Exit;
   end;
   if not SeriesNamesOK then
+  begin
+    ModalResult := mrNone;
+    Exit;
+  end;
+  if not TimesOK then
   begin
     ModalResult := mrNone;
     Exit;
@@ -359,6 +368,36 @@ end;
 procedure TfrmTimeSeries.SetData;
 begin
   frmGoPhast.UndoStack.Submit(TUndoChangeTimeSeries.Create(FTimesSeries));
+end;
+
+function TfrmTimeSeries.TimesOK: Boolean;
+var
+  GroupIndex: Integer;
+  AGroup: TTimesSeriesCollection;
+  StressPeriods: TModflowStressPeriods;
+  StartTime: Double;
+  EndTime: Double;
+begin
+  result := True;
+  StressPeriods := frmGoPhast.PhastModel.ModflowStressPeriods;
+  StartTime := StressPeriods.First.StartTime;
+  EndTime := StressPeriods.Last.EndTime;
+
+  for GroupIndex := 0 to FTimesSeries. Count - 1 do
+  begin
+    AGroup := FTimesSeries.Items[GroupIndex].TimesSeriesCollection;
+    result := (AGroup.Times.First.Value <= StartTime)
+      and (AGroup.Times.Last.Value >= EndTime);
+    if not result then
+    begin
+      if (MessageDlg(Format(StrTheTimesInSDoN, [AGroup.GroupName]), mtWarning,
+       [mbYes, mbNo, mbCancel], 0) = mrNo) then
+      begin
+        result := True;
+      end;
+    end;
+  end;
+
 end;
 
 function TfrmTimeSeries.AddNewFrame(NewName: string): TframeModflow6TimeSeries;

@@ -6481,10 +6481,16 @@ var
   VariableIndex: Integer;
   ScreenObject: TScreenObject;
   Parser: TRbwParser;
+  LocalModel: TCustomModel;
 begin
   { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
-  Parser := (FModel as TCustomModel).rpThreeDFormulaCompiler;
+  LocalModel := FModel as TCustomModel;
+  Parser := LocalModel.rpThreeDFormulaCompiler;
   Formula := Item.BoundaryFormula[DataIndex];
+  if (LocalModel.Mf6TimesSeries.GetTimeSeriesByName(Formula) <> nil) then
+  begin
+    Formula := '0';
+  end;
   try
     Parser.Compile(Formula);
   except on E: ErbwParserError do
@@ -23893,34 +23899,26 @@ procedure TGwtCncPackage.InitializeCncDisplay(Sender: TObject);
 var
   List: TModflowBoundListOfTimeLists;
   CnCWriter: TModflowCncWriter;
-  Index: Integer;
   TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
 begin
-  for Index := 0 to FCncConc.Count - 1 do
-  begin
-    TimeList := FCncConc[Index];
-    TimeList.CreateDataSets;
-  end;
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FCncConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+
+  TimeList.CreateDataSets;
 
   List := TModflowBoundListOfTimeLists.Create;
   { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
 
   try
+    List.Add(TimeList);
 
-    for Index := 0 to FCncConc.Count - 1 do
-    begin
-      TimeList := FCncConc[Index];
-      List.Add(TimeList);
-    end;
-
-    for Index := 0 to FCncConc.Count - 1 do
-    begin
-      CnCWriter := TModflowCncWriter.Create(FModel as TCustomModel, etDisplay);
-      try
-        CnCWriter.UpdateDisplay(List, Index);
-      finally
-        CnCWriter.Free;
-      end;
+    CnCWriter := TModflowCncWriter.Create(FModel as TCustomModel, etDisplay);
+    try
+      CnCWriter.UpdateDisplay(List, TimeListIndex);
+    finally
+      CnCWriter.Free;
     end;
   finally
 
@@ -23999,34 +23997,25 @@ procedure TGwtSrcPackage.InitializeSrcDisplay(Sender: TObject);
 var
   List: TModflowBoundListOfTimeLists;
   SrcWriter: TModflowSrcWriter;
-  Index: Integer;
   TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
 begin
-  for Index := 0 to FSrcConc.Count - 1 do
-  begin
-    TimeList := FSrcConc[Index];
-    TimeList.CreateDataSets;
-  end;
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FSrcConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+
 
   List := TModflowBoundListOfTimeLists.Create;
   { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
 
   try
+    List.Add(TimeList);
 
-    for Index := 0 to FSrcConc.Count - 1 do
-    begin
-      TimeList := FSrcConc[Index];
-      List.Add(TimeList);
-    end;
-
-    for Index := 0 to FSrcConc.Count - 1 do
-    begin
-      SrcWriter := TModflowSrcWriter.Create(FModel as TCustomModel, etDisplay);
-      try
-        SrcWriter.UpdateDisplay(List, Index);
-      finally
-        SrcWriter.Free;
-      end;
+    SrcWriter := TModflowSrcWriter.Create(FModel as TCustomModel, etDisplay);
+    try
+      SrcWriter.UpdateDisplay(List, TimeListIndex);
+    finally
+      SrcWriter.Free;
     end;
   finally
     List.Free;

@@ -20,5 +20,7 @@ if exist "Pareto.OuterSolution.CSV" del "Pareto.OuterSolution.CSV"
 "EnhancedTemplateProcessor.exe" Pareto.drn.tpl Pareto.pval
 "EnhancedTemplateProcessor.exe" Pareto.rch.tpl Pareto.pval
 "EnhancedTemplateProcessor.exe" Pareto.evt.tpl Pareto.pval
+Copy /Y /A "Pareto.mfsim.nam" "mfsim.nam"
 mf6.exe
+Copy /Y /A "mfsim.lst" "Pareto.mfsim.lst"
 "Mf6ObsExtractor.exe" Pareto.Mf6ExtractValues

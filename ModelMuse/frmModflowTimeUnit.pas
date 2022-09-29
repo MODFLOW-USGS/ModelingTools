@@ -88,6 +88,7 @@ type
     procedure frameGridGridSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
     procedure dgTimeExit(Sender: TObject);
+    procedure rdgGWTBeforeDrawCell(Sender: TObject; ACol, ARow: Integer);
   private
     FModflowStressPeriods: TModflowStressPeriods;
     FDeleting: Boolean;
@@ -622,6 +623,43 @@ begin
   if (ARow >= 1) and (ACol >= Ord(atsInitial)) then
   begin
     CanSelect := rdgAts.Checked[Ord(atsUse), ARow];
+  end;
+end;
+
+procedure TfrmModflowTime.rdgGWTBeforeDrawCell(Sender: TObject; ACol,
+  ARow: Integer);
+var
+  StepCount: Integer;
+  GwtStepCount: Integer;
+  Multiplier: double;
+  GwtMultiplier: double;
+begin
+  inherited;
+  if (ARow >= 1) and (ACol >= 3) then
+  begin
+    StepCount := dgTime.IntegerValueDefault[Ord(tcSteps), ARow, 1];
+    if StepCount <> 1 then
+    begin
+      if Odd(ACol) then
+      begin
+        // number of steps
+        GwtStepCount := rdgGWT.IntegerValueDefault[ACol, ARow, StepCount];
+        if StepCount <> GwtStepCount then
+        begin
+          rdgGWT.Canvas.Brush.Color := clRed;
+        end;
+      end
+      else
+      begin
+        // multiplier;
+        Multiplier := dgTime.RealValueDefault[Ord(tcMultiplier), ARow, 1];
+        GwtMultiplier := rdgGWT.RealValueDefault[ACol, ARow, 1];
+        if Multiplier <> GwtMultiplier then
+        begin
+          rdgGWT.Canvas.Brush.Color := clRed;
+        end;
+      end;
+    end;
   end;
 end;
 

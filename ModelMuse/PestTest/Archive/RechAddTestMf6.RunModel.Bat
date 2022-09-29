@@ -10,5 +10,7 @@ if exist "RechAddTestMf6.ob_gw_out_head.csv" del "RechAddTestMf6.ob_gw_out_head.
 if exist "RechAddTestMf6.OuterSolution.CSV" del "RechAddTestMf6.OuterSolution.CSV"
 "EnhancedTemplateProcessor.exe" RechAddTestMf6.chd.tpl RechAddTestMf6.pval
 "EnhancedTemplateProcessor.exe" RechAddTestMf6.rch.tpl RechAddTestMf6.pval
+Copy /Y /A "RechAddTestMf6.mfsim.nam" "mfsim.nam"
 mf6.exe
+Copy /Y /A "mfsim.lst" "RechAddTestMf6.mfsim.lst"
 "Mf6ObsExtractor.exe" RechAddTestMf6.Mf6ExtractValues

@@ -1058,6 +1058,7 @@ inherited frmModflowTime: TfrmModflowTime
         AutoIncreaseRowCount = False
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
+        OnBeforeDrawCell = rdgGWTBeforeDrawCell
         ColorRangeSelection = False
         Columns = <
           item
@@ -1157,7 +1158,6 @@ inherited frmModflowTime: TfrmModflowTime
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = -1
       end
     end
   end

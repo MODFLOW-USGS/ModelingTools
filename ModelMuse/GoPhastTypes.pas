@@ -7,7 +7,7 @@ interface
 uses
   GR32, // defines TColor32.
   SysUtils, Types, Classes, FastGEO, Graphics, Generics.Collections, Character,
-  System.ZLib;
+  System.ZLib, System.Generics.Defaults;
 
 type
   PReal = ^Real;
@@ -479,8 +479,10 @@ type
   strict private
     FOnInvalidateModel: TNotifyEvent;
   private
+    FOnChange: TNotifyEvent;
     function GetFirst: TCollectionItem;
     function GetLast: TCollectionItem;
+    procedure DoOnChange;
   protected
     function GetCount: Integer; virtual;
     procedure SetCount(const Value: Integer); virtual;
@@ -495,6 +497,12 @@ type
     property Last: TCollectionItem read GetLast;
     property Count: Integer read GetCount write SetCount;
     property OnInvalidateModel: TNotifyEvent read FOnInvalidateModel;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+    function Add: TCollectionItem;
+    procedure Clear;
+    procedure Delete(Index: Integer);
+    function Insert(Index: Integer): TCollectionItem;
+    procedure Sort(const AComparer: IComparer<TCollectionItem>);
   end;
 
   TPhastCollectionItem = class(TCollectionItem)
@@ -688,6 +696,7 @@ type
     function GetDisplayName: string; virtual; abstract;
     function GetModelSelection: TModelSelection; virtual; abstract;
     procedure SetModelSelection(const Value: TModelSelection); virtual; abstract;
+    function GetGwtUsed: Boolean; virtual; abstract;
   public
     // Call @name to indicate that the model has changed in some important
     // respect.  The user will be prompted to save the model when closing.
@@ -697,6 +706,7 @@ type
     // See @link(Invalidate).
     property UpToDate: boolean read FUpToDate write SetUpToDate;
     property DisplayName: string read GetDisplayName;
+    property GwtUsed: Boolean read GetGwtUsed;
   published
     property ModelSelection: TModelSelection read GetModelSelection
       write SetModelSelection;
@@ -1080,6 +1090,12 @@ end;
 
 { TPhastCollection }
 
+function TPhastCollection.Add: TCollectionItem;
+begin
+  result := inherited;
+  DoOnChange;
+end;
+
 procedure TPhastCollection.Assign(Source: TPersistent);
 begin
   if Source is TPhastCollection then
@@ -1087,6 +1103,13 @@ begin
     Capacity := Max(Count, TPhastCollection(Source).Count);
   end;
   inherited;
+  DoOnChange;
+end;
+
+procedure TPhastCollection.Clear;
+begin
+  inherited;
+  DoOnChange;
 end;
 
 constructor TPhastCollection.Create(ItemClass: TCollectionItemClass;
@@ -1094,6 +1117,20 @@ constructor TPhastCollection.Create(ItemClass: TCollectionItemClass;
 begin
   FOnInvalidateModel := InvalidateModelEvent;
   inherited Create(ItemClass);
+end;
+
+procedure TPhastCollection.Delete(Index: Integer);
+begin
+  inherited;
+  DoOnChange;
+end;
+
+procedure TPhastCollection.DoOnChange;
+begin
+  if Assigned (FOnChange) then
+  begin
+    FOnChange(self);
+  end;
 end;
 
 function TPhastCollection.GetCount: Integer;
@@ -1109,6 +1146,12 @@ end;
 function TPhastCollection.GetLast: TCollectionItem;
 begin
   Result := Items[Count-1];
+end;
+
+function TPhastCollection.Insert(Index: Integer): TCollectionItem;
+begin
+  result := inherited;
+  DoOnChange;
 end;
 
 procedure TPhastCollection.InvalidateModel;
@@ -1134,16 +1177,26 @@ var
 begin
   Assert(Value >= 0);
   ExistingCount := inherited Count;
-  while ExistingCount < Value do
+  if ExistingCount <> Value then
   begin
-    Add;
-    Inc(ExistingCount);
+    while ExistingCount < Value do
+    begin
+      Add;
+      Inc(ExistingCount);
+    end;
+    while ExistingCount > Value do
+    begin
+      Last.Free;
+      Dec(ExistingCount);
+    end;
+    DoOnChange;
   end;
-  while ExistingCount > Value do
-  begin
-    Last.Free;
-    Dec(ExistingCount);
-  end;
+end;
+
+procedure TPhastCollection.Sort(const AComparer: IComparer<TCollectionItem>);
+begin
+  inherited;
+  DoOnChange;
 end;
 
 { TRealStorage }

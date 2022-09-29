@@ -2,9 +2,8 @@ inherited frmTimeSeries: TfrmTimeSeries
   Caption = 'Time Series'
   ClientHeight = 561
   ClientWidth = 628
-  ExplicitWidth = 644
-  ExplicitHeight = 600
-  PixelsPerInch = 96
+  ExplicitWidth = 646
+  ExplicitHeight = 608
   TextHeight = 18
   object tvTimeSeries: TJvPageListTreeView
     Left = 0

@@ -63,6 +63,7 @@
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_pump_rate_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_pump_rate_to_mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.mvr_budget</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.mvr_budget.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_evt_out_evt.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_gw_out_drawdown.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_gw_out_flow-ja-face.csv</FileName>

@@ -456,7 +456,7 @@ begin
   result := 2;
   if GwtConcentrations <> nil then
   begin
-    if Model <> nil then
+    if (Model <> nil) and Model.GwtUsed then
     begin
       GwtConcentrations.Count := (Model as TCustomModel).MobileComponents.Count;
     end;
@@ -2055,7 +2055,7 @@ end;
 procedure TChdTimeListLink.RemoveGwtTimeLists(SpeciesIndex: Integer);
 var
   ConcTimeList: TModflowTimeList;
-  LocalModel: TCustomModel;
+//  LocalModel: TCustomModel;
 begin
   ConcTimeList := FConcList[SpeciesIndex];
   RemoveTimeList(ConcTimeList);

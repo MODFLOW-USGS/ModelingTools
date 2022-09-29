@@ -29,5 +29,7 @@ if exist "CSubExampletest.wcomp-csub-cell_ob.csv" del "CSubExampletest.wcomp-csu
 if exist "mfsim.lst" del "mfsim.lst"
 "plproc.exe" CSubExampletest.Confining_Bed_InitialPorosity.script
 "EnhancedTemplateProcessor.exe" CSubExampletest.csub.tpl CSubExampletest.pval
+Copy /Y /A "CSubExampletest.mfsim.nam" "mfsim.nam"
 mf6.exe
+Copy /Y /A "mfsim.lst" "CSubExampletest.mfsim.lst"
 "Mf6ObsExtractor.exe" CSubExampletest.Mf6ExtractValues

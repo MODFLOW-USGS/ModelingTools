@@ -17,5 +17,7 @@ if exist "PestPilotPointTest.OuterSolution.CSV" del "PestPilotPointTest.OuterSol
 "plproc.exe" PestPilotPointTest.Kx.script
 "plproc.exe" PestPilotPointTest.Ky.script
 "EnhancedTemplateProcessor.exe" PestPilotPointTest.drn.tpl PestPilotPointTest.pval
+Copy /Y /A "PestPilotPointTest.mfsim.nam" "mfsim.nam"
 mf6.exe
+Copy /Y /A "mfsim.lst" "PestPilotPointTest.mfsim.lst"
 "Mf6ObsExtractor.exe" PestPilotPointTest.Mf6ExtractValues
