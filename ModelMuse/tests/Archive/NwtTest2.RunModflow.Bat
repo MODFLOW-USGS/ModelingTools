@@ -1,3 +1,3 @@
 call "C:\Program Files\USGS\ModelMuse5\bin\ModelMonitor.exe" -m C:\WRDAPP\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT.exe -n NwtTest2.nam
-C:\ModelingTools\ModelMonitor\Release\Win64\ListingAnalyst.exe NwtTest2.lst
+Start C:\ModelingTools\ModelMonitor\Release\Win64\ListingAnalyst.exe NwtTest2.lst
 pause

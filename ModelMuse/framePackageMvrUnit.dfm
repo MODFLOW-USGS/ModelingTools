@@ -32,6 +32,9 @@ inherited framePackageMvr: TframePackageMvr
       end
       item
         Control = cbSaveBudget
+      end
+      item
+        Control = chSaveCsv
       end>
   end
 end

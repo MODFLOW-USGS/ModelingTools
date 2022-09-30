@@ -10,7 +10,5 @@ if exist "HfbMf6Test2.OuterSolution.CSV" del "HfbMf6Test2.OuterSolution.CSV"
 if exist "mfsim.lst" del "mfsim.lst"
 "EnhancedTemplateProcessor.exe" HfbMf6Test2.chd.tpl HfbMf6Test2.pval
 "EnhancedTemplateProcessor.exe" HfbMf6Test2.hfb.tpl HfbMf6Test2.pval
-Copy /Y /A "HfbMf6Test2.mfsim.nam" "mfsim.nam"
 mf6.exe
-Copy /Y /A "mfsim.lst" "HfbMf6Test2.mfsim.lst"
 "Mf6ObsExtractor.exe" HfbMf6Test2.Mf6ExtractValues

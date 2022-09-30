@@ -362,7 +362,7 @@ begin
           begin
             AReach := ASegment.Last;
             OtherReach := OtherSegment.First;
-            if OtherReach.StreambedTop < AReach.StreambedTop then
+            if OtherReach.StreambedTop > AReach.StreambedTop then
             begin
               if Model.DisvUsed then
               begin
@@ -949,17 +949,20 @@ begin
 
             CellBottom := Model.DiscretiztionElevation[ACell.Column, ACell.Row, ACell.Layer+1];
             CellTop := Model.DiscretiztionElevation[ACell.Column, ACell.Row, ACell.Layer];
-            if ACell.Values.Stage > CellTop then
+            if ACell.Values.Status = ssSimple then
             begin
-              frmErrorsAndWarnings.AddWarning(Model, StrAboveTop,
-                Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
-                ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
-            end;
-            if ACell.Values.Stage < CellBottom then
-            begin
-              frmErrorsAndWarnings.AddWarning(Model, StrBelowBottom,
-                Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
-                ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
+              if ACell.Values.Stage > CellTop then
+              begin
+                frmErrorsAndWarnings.AddWarning(Model, StrAboveTop,
+                  Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
+                  ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
+              end;
+              if ACell.Values.Stage < CellBottom then
+              begin
+                frmErrorsAndWarnings.AddWarning(Model, StrBelowBottom,
+                  Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
+                  ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
+              end;
             end;
 
             if ACell.Values.Roughness <= 0 then

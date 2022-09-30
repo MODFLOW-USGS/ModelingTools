@@ -10727,6 +10727,11 @@ const
 //               Bug fix: Fixed bug that could cause some PEST parameters to
 //                not be written to the PVAL file when needed.
 
+//               Enhancement: ModelMonitor now displays budgets for MODFLOW 6
+//                advanced packages.
+//               Enhancement: After running a MODFLOW 6 file, the mfsim.lst file
+//                is displayed in addition to the model .lst file.
+
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 

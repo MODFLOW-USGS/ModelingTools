@@ -1,3 +1,3 @@
 call "C:\Program Files\USGS\ModelMuse5\bin\ModelMonitor.exe" -m C:\WRDAPP\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT.exe -n LakeNWT.nam
-C:\ModelingTools\ModelMonitor\Release\Win64\ListingAnalyst.exe LakeNWT.lst
+Start C:\ModelingTools\ModelMonitor\Release\Win64\ListingAnalyst.exe LakeNWT.lst
 pause

@@ -75,6 +75,7 @@ type
     FFileStream: TFileStream;
     FPestDataArrays: TDictionary<string, TDataArray>;
     // @name is the name of the file being created.
+    // It is different from @link(FInputFileName)
     FNameOfFile: string;
     FFileStreamList: TList<TFileStream>;
   private
@@ -1296,13 +1297,13 @@ end;
 procedure AddOpenListFileLine(ListFile: string; OpenListFile: Boolean;
   BatchFile: TStringList; ProgramLocations: TProgramLocations);
 var
-  IsNotePad: Boolean;
+//  IsNotePad: Boolean;
   TextEditor: string;
 begin
   if OpenListFile then
   begin
     TextEditor := ProgramLocations.TextEditorLocation;
-    IsNotePad := CompareText(StrNotepadexe, ExtractFileName(TextEditor)) = 0;
+//    IsNotePad := CompareText(StrNotepadexe, ExtractFileName(TextEditor)) = 0;
     if TextEditor <> StrNotepadexe then
     begin
       if not FileExists(TextEditor) then
@@ -1316,14 +1317,14 @@ begin
     end;
     TextEditor := QuoteFileName(TextEditor);
     ListFile := QuoteFileName(ExtractFileName(ListFile));
-    if IsNotePad then
-    begin
+//    if IsNotePad then
+//    begin
       BatchFile.Add('Start ' + TextEditor + ' ' + ListFile);
-    end
-    else
-    begin
-      BatchFile.Add(TextEditor + ' ' + ListFile);
-    end;
+//    end
+//    else
+//    begin
+//      BatchFile.Add(TextEditor + ' ' + ListFile);
+//    end;
   end;
 end;
 
@@ -1535,6 +1536,7 @@ var
   SimFileName: string;
   ListFileName: string;
   MfListName: string;
+  SimCount: Integer;
 begin
 
   ADirectory:= GetCurrentDir;
@@ -1637,11 +1639,7 @@ begin
       BatchFile.AddStrings(Before);
       ArchiveBatchFile.AddStrings(Before);
       ParamEstBatchFile.AddStrings(Before);
-//      if frmGoPhast.PhastModel.ModelSelection = msModflow2015 then
-//      begin
-//        FileName := ChangeFileExt(FileName, '.snam');
-//        Model.AddModelInputFile(FileName);
-//      end;
+
       if (Model.ModelSelection <> msModflow2015) and
         FileExists(ProgramLocations.ModelMonitorLocation) then
       begin
@@ -1652,15 +1650,19 @@ begin
       end
       else
       begin
-//        MfsimName := ExtractFileDir(FileName);
-        MfsimName := {IncludeTrailingPathDelimiter(MfsimName) +} 'mfsim.nam';
+        MfsimName := 'mfsim.nam';
         MfListName := 'mfsim.lst';
-        for SimIndex := 0 to
-          frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount -1 do
+        SimCount := frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount;
+        for SimIndex := 0 to SimCount -1 do
         begin
-          SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.SimFileNames[SimIndex]);
+          SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.
+            SimFileNames[SimIndex]);
           ListFileName := ChangeFileExt(SimFileName, '.lst');
-          BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [SimFileName, MfsimName]));
+          if SimCount > 1 then
+          begin
+            BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"',
+              [SimFileName, MfsimName]));
+          end;
 
           if FileExists(ProgramLocations.ModelMonitorLocation) then
           begin
@@ -1680,36 +1682,62 @@ begin
             end
             else
             begin
-              BatchFile.Add(AFileName + ' ' + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
+              BatchFile.Add(AFileName + ' '
+                + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
             end;
           end;
-          BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [MfListName, ListFileName]));
+          if SimCount > 1 then
+          begin
+            BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"',
+              [MfListName, ListFileName]));
+            ListFiles.Add(ListFileName);
+            if SimIndex > 0 then
+            begin
+              ListFileName := ChangeFileExt(ListFileName, '');
+              ListFileName := ChangeFileExt(ListFileName, '.lst');
+              ListFiles.Add(ListFileName);
+            end;
+          end
+          else
+          begin
+            ListFiles.Add(MfListName);
+          end;
         end;
       end;
 
       AFileName := '..\..\bin\'+ ExtractFileName(ModflowLocation);
       if (Model.ModelSelection = msModflow2015) then
       begin
-        for SimIndex := 0 to
-          frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount -1 do
+        SimCount := frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount;
+        for SimIndex := 0 to SimCount -1 do
         begin
-          SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.SimFileNames[SimIndex]);
+          SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.
+            SimFileNames[SimIndex]);
           ListFileName := ChangeFileExt(SimFileName, '.lst');
-          ArchiveBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [SimFileName, MfsimName]));
+          if SimCount > 1 then
+          begin
+            ArchiveBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"',
+              [SimFileName, MfsimName]));
+          end;
           ArchiveBatchFile.Add(AFileName);
-          ArchiveBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [MfListName, ListFileName]));
+          if SimCount > 1 then
+          begin
+            ArchiveBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"',
+              [MfListName, ListFileName]));
+          end;
         end;
       end
       else
       begin
-        ArchiveBatchFile.Add(AFileName + ' ' + ArchiveQuoteFileName(ExtractFileName(FileName)) + ' /wait');
+        ArchiveBatchFile.Add(AFileName + ' ' +
+          ArchiveQuoteFileName(ExtractFileName(FileName)) + ' /wait');
       end;
 
       AFileName :=  QuoteFileName(ExpandFileName(ModflowLocation));
       if Model.PestUsed then
       begin
         MoveAppToDirectory(ExpandFileName(ModflowLocation), ModelDirectory);
-        AFileName := ExtractFileName(AFileName);
+        AFileName := ExtractFileName(ModflowLocation);
       end;
 
       if (Model.ModelSelection <> msModflow2015) then
@@ -1724,14 +1752,20 @@ begin
       end
       else
       begin
-        for SimIndex := 0 to
-          frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount -1 do
+        SimCount := frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount;
+        for SimIndex := 0 to SimCount -1 do
         begin
           SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.SimFileNames[SimIndex]);
           ListFileName := ChangeFileExt(SimFileName, '.lst');
-          ParamEstBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [SimFileName, MfsimName]));
+          if SimCount > 1 then
+          begin
+            ParamEstBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [SimFileName, MfsimName]));
+          end;
           ParamEstBatchFile.Add(AFileName {+ ' /wait'});
-          ParamEstBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [MfListName, ListFileName]));
+          if SimCount > 1 then
+          begin
+            ParamEstBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [MfListName, ListFileName]));
+          end;
         end;
         WriteInstuctionsBatchFile.Add(AFileName {+ ' /wait'});
         InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));

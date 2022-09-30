@@ -96,7 +96,5 @@ if exist "mfsim.lst" del "mfsim.lst"
 "EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.lak6.tpl MF6_TestSfrMawLakMvrUzf.pval
 "EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.3.laktab.tpl MF6_TestSfrMawLakMvrUzf.pval
 "EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.uzf.tpl MF6_TestSfrMawLakMvrUzf.pval
-Copy /Y /A "MF6_TestSfrMawLakMvrUzf.mfsim.nam" "mfsim.nam"
 mf6.exe
-Copy /Y /A "mfsim.lst" "MF6_TestSfrMawLakMvrUzf.mfsim.lst"
 "Mf6ObsExtractor.exe" MF6_TestSfrMawLakMvrUzf.Mf6ExtractValues

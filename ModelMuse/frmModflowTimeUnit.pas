@@ -905,7 +905,7 @@ var
   ColIndex: Integer;
   ASpecies: string;
   AColum: TRbwColumn4;
-  Multiplier: Double;
+//  Multiplier: Double;
   Limit: Integer;
 begin
   FGettingData := True;
@@ -1145,7 +1145,7 @@ begin
 
     if tabGWT.TabVisible then
     begin
-      GwtProcess := frmGoPhast.PhastModel.ModflowPackages.GwtProcess;
+//      GwtProcess := frmGoPhast.PhastModel.ModflowPackages.GwtProcess;
       Limit := frmGoPhast.PhastModel.MobileComponents.Count;
       for SpeciesIndex := 0 to Limit - 1 do
       begin

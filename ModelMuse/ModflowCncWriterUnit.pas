@@ -192,6 +192,7 @@ begin
 
   FGwtFile := GwtFileName(AFileName, SpeciesIndex);
   FNameOfFile := FGwtFile;
+  FInputFileName := FGwtFile;
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 
@@ -411,6 +412,7 @@ begin
 
   FGwtFile := GwtFileName(AFileName, SpeciesIndex);
   FNameOfFile := FGwtFile;
+  FInputFileName := FGwtFile;
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 
@@ -437,9 +439,9 @@ var
   DataSets: TList;
   UsedIndicies: TByteSet;
   TimeIndex: Integer;
-  DataTypeIndex: Integer;
+//  DataTypeIndex: Integer;
 //  TimeListIndex: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
+//  TimeList: TModflowBoundaryDisplayTimeList;
   DataArray: TModflowBoundaryDisplayDataArray;
   DataSetIndex: Integer;
   FirstTimeList: TModflowBoundaryDisplayTimeList;

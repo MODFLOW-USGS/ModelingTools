@@ -7,6 +7,7 @@ inherited frmModflowPackages: TfrmModflowPackages
   OnActivate = jvplPackagesChange
   OnClose = FormClose
   OnResize = FormResize
+  ExplicitTop = -11
   ExplicitWidth = 800
   ExplicitHeight = 604
   TextHeight = 18
@@ -28,7 +29,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspGwtProcess
+    ActivePage = jvspMVR
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -10443,6 +10444,9 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePackageLakMf6.rdeSurfaceDepressionDepth
+            end
+            item
+              Control = framePackageLakMf6.cbPackageConvergence
             end>
           OnEnabledChange = framePackageLakMf6rcSelectionControllerEnabledChange
         end
@@ -10504,6 +10508,9 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePkgMVR.cbSaveBudget
+            end
+            item
+              Control = framePkgMVR.chSaveCsv
             end>
         end
       end

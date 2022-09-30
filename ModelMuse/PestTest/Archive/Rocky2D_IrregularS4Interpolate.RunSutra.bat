@@ -5,5 +5,5 @@
 "plproc.exe" 'Rocky2D_IrregularS4Interpolate.Maximum_Permeability.krig_factors_script'
 "sutra_4_0.exe"
 "SutraObsExtractor.exe" Rocky2D_IrregularS4Interpolate.soe_i
-C:\ModelingTools\ModelMonitor\Release\Win64\ListingAnalyst.exe Rocky2D_IrregularS4Interpolate.lst
+Start C:\ModelingTools\ModelMonitor\Release\Win64\ListingAnalyst.exe Rocky2D_IrregularS4Interpolate.lst
 pause

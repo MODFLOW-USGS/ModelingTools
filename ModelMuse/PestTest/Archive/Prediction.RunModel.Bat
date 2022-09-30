@@ -20,7 +20,5 @@ if exist "Prediction.OuterSolution.CSV" del "Prediction.OuterSolution.CSV"
 "EnhancedTemplateProcessor.exe" Prediction.drn.tpl Prediction.pval
 "EnhancedTemplateProcessor.exe" Prediction.rch.tpl Prediction.pval
 "EnhancedTemplateProcessor.exe" Prediction.evt.tpl Prediction.pval
-Copy /Y /A "Prediction.mfsim.nam" "mfsim.nam"
 mf6.exe
-Copy /Y /A "mfsim.lst" "Prediction.mfsim.lst"
 "Mf6ObsExtractor.exe" Prediction.Mf6ExtractValues

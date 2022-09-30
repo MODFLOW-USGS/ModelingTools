@@ -20,7 +20,5 @@ if exist "ParamMf6Test.OuterSolution.CSV" del "ParamMf6Test.OuterSolution.CSV"
 "EnhancedTemplateProcessor.exe" ParamMf6Test.drn.tpl ParamMf6Test.pval
 "EnhancedTemplateProcessor.exe" ParamMf6Test.rch.tpl ParamMf6Test.pval
 "EnhancedTemplateProcessor.exe" ParamMf6Test.evt.tpl ParamMf6Test.pval
-Copy /Y /A "ParamMf6Test.mfsim.nam" "mfsim.nam"
 mf6.exe
-Copy /Y /A "mfsim.lst" "ParamMf6Test.mfsim.lst"
 "Mf6ObsExtractor.exe" ParamMf6Test.Mf6ExtractValues
