@@ -217,6 +217,9 @@ type
       HasSeparateStorageTerm: Boolean);
     procedure ReadModflow6File;
     function GetMF6TimeUnit: string;
+    procedure ReadMf6Budget(TimeUnitsString: string; LineIndex: Integer;
+      SearchTerm: string; const FirstSearchTerm, CumBudgetName,
+      RateBudgetName: string; HasSeparateStorageTerm: Boolean);
     { Private declarations }
   public
     FFileName: string;
@@ -3373,6 +3376,7 @@ var
   SearchTerm: string;
   TimeStrings : TStringList;
   CurrentLine: string;
+  PriorLineIndex: Integer;
 begin
   StartLine := LineIndex + 4;
   SearchTerm := 'IN:';
@@ -3500,6 +3504,7 @@ begin
   if StopLine > -1 then
   begin
     SearchTerm := 'TOTAL TIME';
+    PriorLineIndex := LineIndex;
     LineIndex := GetNextLine(SearchTerm, StopLine);
     if LineIndex > -1 then
     begin
@@ -3533,6 +3538,7 @@ begin
       finally
         TimeStrings.Free;
       end;
+      LineIndex := PriorLineIndex;
     end;
   end;
 //  if StopLine > -1 then
@@ -3581,6 +3587,50 @@ begin
   end;
 end;
 
+procedure TfrmZoneBdgtReader.ReadMf6Budget(
+  TimeUnitsString: string; LineIndex: Integer; SearchTerm: string;
+  const FirstSearchTerm, CumBudgetName, RateBudgetName: string;
+  HasSeparateStorageTerm: Boolean);
+var
+  CurrentLine: string;
+  TimeStepString: string;
+  StressPeriodString: string;
+  CumBudget: TBudget;
+  RateBudget: TBudget;
+  BudgetPos: Integer;
+  PackageName: string;
+begin
+  while LineIndex > -1 do
+  begin
+    CurrentLine := ZBLStringList.Strings[LineIndex];
+    BudgetPos := Pos(FirstSearchTerm, CurrentLine);
+    PackageName := Trim(Copy(CurrentLine, 1, BudgetPos-1)) + ' ';
+    TimeStepString := GetStringBetween(CurrentLine, SearchTerm, ',');
+    StressPeriodString := GetStringBetween(CurrentLine, 'STRESS PERIOD', '');
+    CumBudget := TBudget.Create;
+    FBudgetList.Add(CumBudget);
+    CumBudget.Zone := PackageName + CumBudgetName;
+    CumBudget.InMinusOut := '0';
+    CumBudget.Discrepancy := '0';
+    CumBudget.StressPeriod := StressPeriodString;
+    CumBudget.TimeStep := TimeStepString;
+    RateBudget := TBudget.Create;
+    FBudgetList.Add(RateBudget);
+    RateBudget.Zone := PackageName + RateBudgetName;
+    RateBudget.InMinusOut := '0';
+    RateBudget.Discrepancy := '0';
+    RateBudget.StressPeriod := StressPeriodString;
+    RateBudget.TimeStep := TimeStepString;
+
+    ReadABudget(CumBudget, RateBudget, LineIndex, TimeUnitsString, HasSeparateStorageTerm);
+
+
+    SearchTerm := FirstSearchTerm;
+    LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+  end;
+end;
+
+
 procedure TfrmZoneBdgtReader.ReadModflowOrSeawatFile(
   const BudgetStartLine: string; const AltBudgetStartLines: TStringArray = nil);
 var
@@ -3625,13 +3675,14 @@ const
   AgBudgetTerm = 'VOLUMETRIC BUDGET FOR AGRICULTURAL FIELDS AT TIME STEP';
   StreamStartSearchTerm =
         'LAYER      ROW     COLUMN     STREAM    REACH      FLOW INTO    FLOW INTO      FLOW OUT OF';
-  SfrMf6BudTerm = 'SFR-1 BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
-  LakMf6BudTerm = 'LAK-1 BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
-  MvfMf6BudTerm = 'WATER MOVER BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
-  MawMf6BudTerm = 'MAW-NT_WELL BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
-  UzfMf6BudTerm = 'UZF-1 BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
+//  SfrMf6BudTerm = 'SFR-1 BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
+//  LakMf6BudTerm = 'LAK-1 BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
+//  MvfMf6BudTerm = 'WATER MOVER BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
+//  MawMf6BudTerm = 'MAW-NT_WELL BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
+//  UzfMf6BudTerm = 'UZF-1 BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
   SwrBudTerm = 'VOLUMETRIC SURFACE WATER BUDGET FOR ENTIRE MODEL';
-  ISTBudTerm = 'MASS BUDGET FOR IST AT END OF TIME STEP';   
+  ISTBudTerm = 'MASS BUDGET FOR IST AT END OF TIME STEP';
+  Mf6BudTerm = 'BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
 begin
   TempList:= TStringList.Create;
   try
@@ -3646,17 +3697,19 @@ begin
       while not EOF(F) do
       begin
         Readln(F, S);
-        if (Pos(StartSearchTerm, S) > 0) or (Pos(UnsatBudTerm, S) > 0)
+        if (Pos(StartSearchTerm, S) > 0)
+          or (Pos(UnsatBudTerm, S) > 0)
           or (Pos(StreamUnsatBudTerm, S) > 0)
           or (Pos(StreamStartSearchTerm, S) > 0)
           or (Pos(SWI_BudgetTerm, S) > 0)
           or (Pos(AgBudgetTerm, S) > 0)
           or (Pos(SeawatComponent, S) > 0)
-          or (Pos(SfrMf6BudTerm, S) > 0)
-          or (Pos(LakMf6BudTerm, S) > 0)
-          or (Pos(MvfMf6BudTerm, S) > 0)
-          or (Pos(MawMf6BudTerm, S) > 0)
-          or (Pos(UzfMf6BudTerm, S) > 0)
+          or (Pos(Mf6BudTerm, S) > 0)
+//          or (Pos(SfrMf6BudTerm, S) > 0)
+//          or (Pos(LakMf6BudTerm, S) > 0)
+//          or (Pos(MvfMf6BudTerm, S) > 0)
+//          or (Pos(MawMf6BudTerm, S) > 0)
+//          or (Pos(UzfMf6BudTerm, S) > 0)
           or (Pos(SwrBudTerm, S) > 0)
           or (Pos(ISTBudTerm, S) > 0)
 //          or ((AltBudgetStartLine <> '') and (Pos(AltBudgetStartLine, S) > 0))
@@ -4107,34 +4160,34 @@ begin
     AgBudgetTerm, 'AG Cumulative Budget', 'AG Budget Rates', False);
 
   LineIndex := 0;
-  SearchTerm := SfrMf6BudTerm;
+  SearchTerm := Mf6BudTerm;
   LineIndex := GetNextLine(SearchTerm, LineIndex);
-  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
-    SfrMf6BudTerm, 'SFR Cumulative Budget', 'SFR Budget Rates', False);
+  ReadMf6Budget(TimeUnitsString, LineIndex, SearchTerm,
+    Mf6BudTerm, 'Cumulative Budget', 'Budget Rates', False);
 
-  LineIndex := 0;
-  SearchTerm := LakMf6BudTerm;
-  LineIndex := GetNextLine(SearchTerm, LineIndex);
-  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
-    LakMf6BudTerm, 'Lake Cumulative Budget', 'Lake Budget Rates', False);
-
-  LineIndex := 0;
-  SearchTerm := MvfMf6BudTerm;
-  LineIndex := GetNextLine(SearchTerm, LineIndex);
-  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
-    MvfMf6BudTerm, 'MVR Cumulative Budget', 'MVR Budget Rates', False);
-
-  LineIndex := 0;
-  SearchTerm := MawMf6BudTerm;
-  LineIndex := GetNextLine(SearchTerm, LineIndex);
-  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
-    MawMf6BudTerm, 'MAW Cumulative Budget', 'MAW Budget Rates', False);
-
-  LineIndex := 0;
-  SearchTerm := UzfMf6BudTerm;
-  LineIndex := GetNextLine(SearchTerm, LineIndex);
-  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
-    UzfMf6BudTerm, 'UZF Cumulative Budget', 'UZF Budget Rates', True);
+//  LineIndex := 0;
+//  SearchTerm := LakMf6BudTerm;
+//  LineIndex := GetNextLine(SearchTerm, LineIndex);
+//  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
+//    LakMf6BudTerm, 'Lake Cumulative Budget', 'Lake Budget Rates', False);
+//
+//  LineIndex := 0;
+//  SearchTerm := MvfMf6BudTerm;
+//  LineIndex := GetNextLine(SearchTerm, LineIndex);
+//  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
+//    MvfMf6BudTerm, 'MVR Cumulative Budget', 'MVR Budget Rates', False);
+//
+//  LineIndex := 0;
+//  SearchTerm := MawMf6BudTerm;
+//  LineIndex := GetNextLine(SearchTerm, LineIndex);
+//  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
+//    MawMf6BudTerm, 'MAW Cumulative Budget', 'MAW Budget Rates', False);
+//
+//  LineIndex := 0;
+//  SearchTerm := UzfMf6BudTerm;
+//  LineIndex := GetNextLine(SearchTerm, LineIndex);
+//  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
+//    UzfMf6BudTerm, 'UZF Cumulative Budget', 'UZF Budget Rates', True);
 
   LineIndex := 0;
   SearchTerm := SwrBudTerm;
