@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="gwt-uzt-2d-a" FileType="bin">
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="bin">..\..\..\WRDAPP\mf6.3.0\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="gwt-uzt-2d-a" FileType="ancillary">
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="ancillary">gwt-uzt-2d-a.gpt</FileName>
+  </ancillary>
+  <model Model_Name="gwt-uzt-2d-a" FileType="Model Input">
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.chd</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.Chem.adv</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.Chem.dis</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.Chem.dsp</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.Chem.ic</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.Chem.ims</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.Chem.mst</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.Chem.oc</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.Chem.ssm</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.Chem.uzt</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.dis</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.gsf</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.ic</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.ims</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.nam.archive</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.npf</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.oc</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.sto</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.tdis</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">gwt-uzt-2d-a.uzf</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Input">usgs.gwt-uzt-2d-a.reference</FileName>
+  </model>
+  <output Model_Name="gwt-uzt-2d-a" FileType="Model Output">
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.bhd</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.cbc</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.Chem.cbc</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.Chem.lst</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.Chem.uzt_budget</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.Chem.uzt_conc</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.dis.grb</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.InnerSolution.CSV</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.lst</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.OuterSolution.CSV</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.uzf_budget</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.UzfConvergence.CSV</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

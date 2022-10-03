@@ -9925,14 +9925,17 @@ begin
     NewLine;
   end;
 
-  for ModelIndex := 1 to FModelDataList.Count - 1 do
+  if SeparateGwtUsed then
   begin
-    ShouldWriteLine := GetShouldWriteLine(GwtUsed, SeparateGwtUsed, ModelIndex);
-    if ShouldWriteLine then
+    for ModelIndex := 1 to FModelDataList.Count - 1 do
     begin
-      WriteString('  TDIS6 ');
-      WriteString('''' + ExtractFileName(GwtTDisFileNames[ModelIndex-1]) + '''');
-      NewLine;
+      ShouldWriteLine := GetShouldWriteLine(GwtUsed, SeparateGwtUsed, ModelIndex);
+      if ShouldWriteLine then
+      begin
+        WriteString('  TDIS6 ');
+        WriteString('''' + ExtractFileName(GwtTDisFileNames[ModelIndex-1]) + '''');
+        NewLine;
+      end;
     end;
   end;
 
@@ -10015,6 +10018,7 @@ begin
       WriteString(ExtractFileName(FTimeSeriesFileNames[FileIndex]));
       NewLine;
     end;
+    FTimeSeriesFileNames.Clear;
   end;
 end;
 

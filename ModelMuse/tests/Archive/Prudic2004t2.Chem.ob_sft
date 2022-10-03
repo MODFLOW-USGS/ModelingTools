@@ -1,0 +1,47 @@
+# OBS: Observation Utility file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Prudic2004t2.Chem.sft_concentration_ob.csv
+ 'stconc_reach1leakage_0_1' concentration     1
+ 'stconc_reach1leakage_0_2' concentration     2
+ 'stconc_reach1leakage_0_3' concentration     3
+ 'stconc_reach1leakage_0_4' concentration     4
+ 'stconc_reach1leakage_0_5' concentration     5
+ 'stconc_reach1leakage_0_6' concentration     6
+ 'stconc_reach2leakage_0_7' concentration     7
+ 'stconc_reach2leakage_0_8' concentration     8
+ 'stconc_reach2leakage_0_9' concentration     9
+ 'stconc_reach2leakage_0_10' concentration    10
+ 'stconc_reach2leakage_0_11' concentration    11
+ 'stconc_reach2leakage_0_12' concentration    12
+ 'stconc_reach2leakage_0_13' concentration    13
+ 'stconc_reach2leakage_0_14' concentration    14
+ 'stconc_reach2leakage_0_15' concentration    15
+ 'stconc_reach2leakage_0_16' concentration    16
+ 'stconc_reach2leakage_0_17' concentration    17
+ 'stconc_reach2leakage_0_18' concentration    18
+ 'stconc_reach3leakage_0_19' concentration    19
+ 'stconc_reach3leakage_0_20' concentration    20
+ 'stconc_reach3leakage_0_21' concentration    21
+ 'stconc_reach3leakage_0_22' concentration    22
+ 'stconc_reach3leakage_0_23' concentration    23
+ 'stconc_reach3leakage_0_24' concentration    24
+ 'stconc_reach3leakage_0_25' concentration    25
+ 'stconc_reach3leakage_0_26' concentration    26
+ 'stconc_reach3leakage_0_27' concentration    27
+ 'stconc_reach3leakage_0_28' concentration    28
+ 'stconc_reach3leakage_0_29' concentration    29
+ 'stconc_reach3leakage_0_30' concentration    30
+ 'stconc_reach3leakage_0_31' concentration    31
+ 'stconc_reach4leakage_0_32' concentration    32
+ 'stconc_reach4leakage_0_33' concentration    33
+ 'stconc_reach4leakage_0_34' concentration    34
+ 'stconc_reach4leakage_0_35' concentration    35
+ 'stconc_reach4leakage_0_36' concentration    36
+ 'stconc_reach4leakage_0_37' concentration    37
+ 'stconc_reach4leakage_0_38' concentration    38
+END CONTINUOUS
+

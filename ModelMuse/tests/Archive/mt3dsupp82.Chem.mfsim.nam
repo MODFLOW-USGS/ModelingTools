@@ -1,0 +1,16 @@
+BEGIN TIMING
+  TDIS6 'mt3dsupp82.Chem.tdis'
+END TIMING
+
+BEGIN MODELS
+  GWT6 'mt3dsupp82.Chem.Gwt_nam' 'Chem'
+END MODELS
+
+BEGIN EXCHANGES
+END EXCHANGES
+
+BEGIN SOLUTIONGROUP     1
+  MXITER     1
+  IMS6 'mt3dsupp82.Chem.ims' 'Chem' 
+END SOLUTIONGROUP
+

@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SftTimeSeries" FileType="bin">
+    <FileName Model_Name="SftTimeSeries" FileType="bin">..\..\..\WRDAPP\mf6.3.0\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SftTimeSeries" FileType="ancillary">
+    <FileName Model_Name="SftTimeSeries" FileType="ancillary">SftTimeSeries.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SftTimeSeries" FileType="Model Input">
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.chd</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.adv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.cnc</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.dis</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.dsp</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.fmi</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.ic</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.ims</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.lkt</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.lkt.MyGroup.ts</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.mst</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.mvt</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.ob_lkt</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.ob_sft</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.oc</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.sft</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.sft.MyGroup.ts</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.ssm</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.Chem.tdis</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.dis</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.gsf</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.ic</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.ims</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.lak6</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.lak6.MyGroup.ts</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.mvr</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.nam.archive</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.npf</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.ob_sfr</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.oc</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.rch</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.sfr</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.sfr.MyGroup.ts</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">SftTimeSeries.tdis</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Input">usgs.SftTimeSeries.reference</FileName>
+  </model>
+  <output Model_Name="SftTimeSeries" FileType="Model Output">
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.bhd</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.cbc</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.cbc</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.lkt_budget</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.lkt_budget.csv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.lkt_conc</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.lkt_concentration_ob.csv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.lkt_from_MVR_ob.csv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.lkt_to_mvr_ob.csv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.lst</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.mvt_budget</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.mvt_budget.csv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.sft_budget</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.sft_budget.csv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.sft_conc</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.Chem.sft_concentration_ob.csv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.dis.grb</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.InnerSolution.CSV</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.LakConvergence.CSV</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.lk_bud</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.lst</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.mvr_budget</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.mvr_budget.csv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.OuterSolution.CSV</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.sfr_budget</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.sfr_gw_exchange_ob.csv</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.stage</FileName>
+  </output>
+</Model_Archive_List>

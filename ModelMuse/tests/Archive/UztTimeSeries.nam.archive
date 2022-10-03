@@ -1,0 +1,17 @@
+# Name File for MODFLOW created on 10/3/2022 by ModelMuse Version 5.0.0.28
+BEGIN OPTIONS
+  LIST ..\..\output\output.UztTimeSeries\UztTimeSeries.lst
+  NEWTON
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.UztTimeSeries\UztTimeSeries.dis  DIS
+  IC6          ..\..\model\model.UztTimeSeries\UztTimeSeries.ic  IC
+  NPF6         ..\..\model\model.UztTimeSeries\UztTimeSeries.npf  NPF
+  STO6         ..\..\model\model.UztTimeSeries\UztTimeSeries.sto  STO
+  OC6          ..\..\model\model.UztTimeSeries\UztTimeSeries.oc  OC
+  CHD6         ..\..\model\model.UztTimeSeries\UztTimeSeries.chd  CHD-1
+  UZF6         ..\..\model\model.UztTimeSeries\UztTimeSeries.uzf  UZF-1
+END PACKAGES

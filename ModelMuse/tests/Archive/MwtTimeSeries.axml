@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="MwtTimeSeries" FileType="bin">
+    <FileName Model_Name="MwtTimeSeries" FileType="bin">..\..\..\WRDAPP\mf6.3.0\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="MwtTimeSeries" FileType="ancillary">
+    <FileName Model_Name="MwtTimeSeries" FileType="ancillary">MwtTimeSeries.gpt</FileName>
+  </ancillary>
+  <model Model_Name="MwtTimeSeries" FileType="Model Input">
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.chd</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.adv</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.cnc</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.dis</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.dsp</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.fmi</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.ic</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.ims</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.mst</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.mvt</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.mwt</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.mwt.MyGroup.ts</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.oc</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.ssm</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.Chem.tdis</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.dis</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.gsf</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.ic</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.ims</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.maw6</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.maw6.MyGroup.ts</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.mvr</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.nam.archive</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.npf</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.oc</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.sto</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">MwtTimeSeries.tdis</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Input">usgs.MwtTimeSeries.reference</FileName>
+  </model>
+  <output Model_Name="MwtTimeSeries" FileType="Model Output">
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.bhd</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.cbc</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.Chem.cbc</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.Chem.lst</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.Chem.mvt_budget</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.Chem.mvt_budget.csv</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.Chem.mwt_budget</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.Chem.mwt_budget.csv</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.Chem.mwt_conc</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.dis.grb</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.InnerSolution.CSV</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.lst</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.maw_bud</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.maw_head</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.mvr_budget</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.mvr_budget.csv</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.OuterSolution.CSV</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,12 @@
+# Output Control file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+BEGIN OPTIONS
+  BUDGET FILEOUT 'SftTimeSeries.Chem.cbc'
+  CONCENTRATION FILEOUT 'SftTimeSeries.Chem.conc'
+END OPTIONS
+
+BEGIN PERIOD      1
+  SAVE CONCENTRATION ALL
+  PRINT BUDGET ALL
+  SAVE BUDGET ALL
+END PERIOD 
+

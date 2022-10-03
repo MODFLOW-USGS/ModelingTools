@@ -1,0 +1,17 @@
+# Name File for MODFLOW created on 10/3/2022 by ModelMuse Version 5.0.0.28
+BEGIN OPTIONS
+  LIST mt3dsupp82.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         mt3dsupp82.dis  DIS
+  IC6          mt3dsupp82.ic  IC
+  NPF6         mt3dsupp82.npf  NPF
+  STO6         mt3dsupp82.sto  STO
+  OC6          mt3dsupp82.oc  OC
+  CHD6         mt3dsupp82.chd  CHD-1
+  MAW6         mt3dsupp82.maw6  MAW-1
+  MVR6         mt3dsupp82.mvr  MVR-1
+END PACKAGES

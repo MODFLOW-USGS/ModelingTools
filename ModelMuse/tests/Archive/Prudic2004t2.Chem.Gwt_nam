@@ -1,0 +1,21 @@
+# Transport name file for Chem file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+BEGIN OPTIONS
+  LIST Prudic2004t2.Chem.lst
+    PRINT_INPUT
+    SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6 Prudic2004t2.Chem.dis
+  OC6 Prudic2004t2.Chem.oc
+  SFT6 Prudic2004t2.Chem.sft
+  LKT6 Prudic2004t2.Chem.lkt
+  FMI6 Prudic2004t2.Chem.fmi
+  MVT6 Prudic2004t2.Chem.mvt
+  ADV6 Prudic2004t2.Chem.adv
+  DSP6 Prudic2004t2.Chem.dsp
+  SSM6 Prudic2004t2.Chem.ssm
+  IC6 Prudic2004t2.Chem.ic
+  MST6 Prudic2004t2.Chem.mst
+  CNC6 Prudic2004t2.Chem.cnc
+END PACKAGES

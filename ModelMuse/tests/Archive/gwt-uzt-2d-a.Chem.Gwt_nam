@@ -1,0 +1,17 @@
+# Transport name file for Chem file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+BEGIN OPTIONS
+  LIST gwt-uzt-2d-a.Chem.lst
+    PRINT_INPUT
+    SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6 gwt-uzt-2d-a.Chem.dis
+  OC6 gwt-uzt-2d-a.Chem.oc
+  UZT6 gwt-uzt-2d-a.Chem.uzt
+  ADV6 gwt-uzt-2d-a.Chem.adv
+  DSP6 gwt-uzt-2d-a.Chem.dsp
+  SSM6 gwt-uzt-2d-a.Chem.ssm
+  IC6 gwt-uzt-2d-a.Chem.ic
+  MST6 gwt-uzt-2d-a.Chem.mst
+END PACKAGES

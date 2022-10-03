@@ -135,10 +135,18 @@ constructor TTimeSeriesItem.Create(Collection: TCollection);
 begin
   inherited;
   FTimeSeries := TMf6TimeSeries.Create(OnInvalidateModelEvent);
+  if Collection <> nil then
+  begin
+    (Collection as TTimesSeriesCollection).OnTimesChanged(self)
+  end;
 end;
 
 destructor TTimeSeriesItem.Destroy;
 begin
+  if Collection <> nil then
+  begin
+    (Collection as TTimesSeriesCollection).OnTimesChanged(self)
+  end;
   FTimeSeries.Free;
   inherited;
 end;
@@ -512,6 +520,7 @@ begin
       Items[SeriesIndex].Free;
     end;
   end;
+  FTimeSeriesDictionary.Clear;
 end;
 
 procedure TTimesSeriesCollection.OnTimesChanged(Sender: TObject);
@@ -519,6 +528,10 @@ begin
   if FSortedTimes <> nil then
   begin
     FSortedTimes.Clear;
+  end;
+  if FTimeSeriesDictionary <> nil then
+  begin
+    FTimeSeriesDictionary.Clear;
   end;
 end;
 
@@ -993,6 +1006,8 @@ begin
       Items[Index].TimesSeriesCollection.Loaded;
     end;
   end;
+  FTimeSeriesDictionary.Clear;
+  FTimeSeriesGroupsDictionary.Clear;
 end;
 
 procedure TTimesSeriesCollections.SetItem(Index: Integer;

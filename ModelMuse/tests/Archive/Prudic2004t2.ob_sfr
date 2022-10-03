@@ -1,0 +1,13 @@
+# OBS: Observation Utility file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Prudic2004t2.sfr_gw_exchange_ob.csv
+ 'sge_reach1leakage' sfr Seg1 
+ 'sge_reach2leakage' sfr Seg2 
+ 'sge_reach3leakage' sfr Seg3 
+ 'sge_reach4leakage' sfr Seg4 
+END CONTINUOUS
+

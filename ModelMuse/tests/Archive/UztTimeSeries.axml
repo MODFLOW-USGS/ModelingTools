@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="UztTimeSeries" FileType="bin">
+    <FileName Model_Name="UztTimeSeries" FileType="bin">..\..\..\WRDAPP\mf6.3.0\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="UztTimeSeries" FileType="ancillary">
+    <FileName Model_Name="UztTimeSeries" FileType="ancillary">UztTimeSeries.gpt</FileName>
+  </ancillary>
+  <model Model_Name="UztTimeSeries" FileType="Model Input">
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">usgs.UztTimeSeries.reference</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.chd</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.adv</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.dis</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.dsp</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.ic</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.ims</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.mst</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.oc</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.ssm</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.uzt</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.Chem.uzt.MyGroup.ts</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.dis</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.gsf</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.ic</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.ims</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.nam.archive</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.npf</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.oc</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.sto</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.tdis</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.uzf</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Input">UztTimeSeries.uzf.MyGroup.ts</FileName>
+  </model>
+  <output Model_Name="UztTimeSeries" FileType="Model Output">
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.bhd</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.cbc</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.Chem.cbc</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.Chem.lst</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.Chem.uzt_budget</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.Chem.uzt_conc</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.dis.grb</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.InnerSolution.CSV</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.lst</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.OuterSolution.CSV</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.uzf_budget</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.UzfConvergence.CSV</FileName>
+  </output>
+</Model_Archive_List>

@@ -1823,6 +1823,8 @@ begin
     WriteString('    BOUNDNAMES');
     NewLine;
 
+    WriteTimeSeriesFiles(FInputFileName);
+
     PrintListInputOption;
     PrintConcentrationOption;
     PrintFlowsOption;

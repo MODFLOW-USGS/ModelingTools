@@ -1746,6 +1746,8 @@ begin
   WriteBoundNamesOption;
   //[BOUNDNAMES]
 
+  WriteTimeSeriesFiles(FInputFileName);
+
   PrintListInputOption;
   PrintConcentrationOption;
   PrintFlowsOption;
@@ -1796,7 +1798,7 @@ begin
     NewLine;
   end;
 
-  WriteTimeSeriesFiles(FInputFileName);
+//  WriteTimeSeriesFiles(FInputFileName);
 //  [OBS6 FILEIN <obs6_filename>]
 
   WriteEndOptions;

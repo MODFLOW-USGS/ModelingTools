@@ -1,0 +1,32 @@
+# MAW: Multi-Aquifer Well package file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+BEGIN OPTIONS
+    FLOW_PACKAGE_NAME MAW-1
+    BOUNDNAMES
+    TS6 FILEIN MwtTimeSeries.Chem.mwt.MyGroup.ts
+    PRINT_INPUT
+    SAVE_FLOWS
+    CONCENTRATION FILEOUT MwtTimeSeries.Chem.mwt_conc
+    BUDGET FILEOUT MwtTimeSeries.Chem.mwt_budget
+    BUDGETCSV FILEOUT MwtTimeSeries.Chem.mwt_budget.csv
+END OPTIONS
+
+BEGIN PACKAGEDATA
+# <mawno> <strt> [<boundname>]
+     1  0.000000000000E+000  'Maw1' 
+     2  0.000000000000E+000  'Maw2' 
+     3  0.000000000000E+000  'Maw3' 
+     4  0.000000000000E+000  'Maw4' 
+END PACKAGEDATA
+
+BEGIN PERIOD      1
+# <wellno> <<mwtsetting>>
+     1 STATUS ACTIVE
+     1 RATE MWT1
+     2 STATUS ACTIVE
+     2 RATE  0.000000000000E+000 
+     3 STATUS ACTIVE
+     3 RATE  0.000000000000E+000 
+     4 STATUS ACTIVE
+     4 RATE  0.000000000000E+000 
+END PERIOD 
+

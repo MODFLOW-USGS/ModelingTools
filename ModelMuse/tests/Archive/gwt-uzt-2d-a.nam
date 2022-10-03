@@ -1,0 +1,17 @@
+# Name File for MODFLOW created on 10/3/2022 by ModelMuse Version 5.0.0.28
+BEGIN OPTIONS
+  LIST gwt-uzt-2d-a.lst
+  NEWTON
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         gwt-uzt-2d-a.dis  DIS
+  IC6          gwt-uzt-2d-a.ic  IC
+  NPF6         gwt-uzt-2d-a.npf  NPF
+  STO6         gwt-uzt-2d-a.sto  STO
+  OC6          gwt-uzt-2d-a.oc  OC
+  CHD6         gwt-uzt-2d-a.chd  CHD-1
+  UZF6         gwt-uzt-2d-a.uzf  UZF-1
+END PACKAGES

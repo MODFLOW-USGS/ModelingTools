@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="mt3dsupp82" FileType="bin">
+    <FileName Model_Name="mt3dsupp82" FileType="bin">..\..\..\WRDAPP\mf6.3.0\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="mt3dsupp82" FileType="ancillary">
+    <FileName Model_Name="mt3dsupp82" FileType="ancillary">mt3dsupp82.gpt</FileName>
+  </ancillary>
+  <model Model_Name="mt3dsupp82" FileType="Model Input">
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.chd</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.adv</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.cnc</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.dis</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.dsp</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.fmi</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.ic</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.ims</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.mst</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.mvt</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.mwt</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.oc</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.ssm</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.Chem.tdis</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.dis</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.gsf</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.ic</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.ims</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.maw6</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.mvr</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.nam.archive</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.npf</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.oc</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.sto</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">mt3dsupp82.tdis</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Input">usgs.mt3dsupp82.reference</FileName>
+  </model>
+  <output Model_Name="mt3dsupp82" FileType="Model Output">
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.bhd</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.cbc</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.Chem.cbc</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.Chem.lst</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.Chem.mvt_budget</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.Chem.mvt_budget.csv</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.Chem.mwt_budget</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.Chem.mwt_budget.csv</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.Chem.mwt_conc</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.dis.grb</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.InnerSolution.CSV</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.lst</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.maw_bud</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.maw_head</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.mvr_budget</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.mvr_budget.csv</FileName>
+    <FileName Model_Name="mt3dsupp82" FileType="Model Output">mt3dsupp82.OuterSolution.CSV</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,20 @@
+# OBS: Observation Utility file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT SftTimeSeries.Chem.lkt_concentration_ob.csv
+ 'ltconc_Lak1_0' concentration Lake1 
+ 'ltconc_Lak2_0' concentration Lake2 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT SftTimeSeries.Chem.lkt_from_MVR_ob.csv
+ 'ltfm_Lak1_0' from-mvr Lake1 
+ 'ltfm_Lak2_0' from-mvr Lake2 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT SftTimeSeries.Chem.lkt_to_mvr_ob.csv
+ 'lt2m_Lak1_0' to-mvr Lake1 
+END CONTINUOUS
+

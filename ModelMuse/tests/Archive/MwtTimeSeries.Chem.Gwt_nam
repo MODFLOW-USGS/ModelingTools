@@ -1,0 +1,20 @@
+# Transport name file for Chem file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+BEGIN OPTIONS
+  LIST MwtTimeSeries.Chem.lst
+    PRINT_INPUT
+    SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6 MwtTimeSeries.Chem.dis
+  OC6 MwtTimeSeries.Chem.oc
+  MWT6 MwtTimeSeries.Chem.mwt
+  FMI6 MwtTimeSeries.Chem.fmi
+  MVT6 MwtTimeSeries.Chem.mvt
+  ADV6 MwtTimeSeries.Chem.adv
+  DSP6 MwtTimeSeries.Chem.dsp
+  SSM6 MwtTimeSeries.Chem.ssm
+  IC6 MwtTimeSeries.Chem.ic
+  MST6 MwtTimeSeries.Chem.mst
+  CNC6 MwtTimeSeries.Chem.cnc
+END PACKAGES

@@ -1,0 +1,11 @@
+# MST: Mobile Storage and Transfer Package file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+BEGIN OPTIONS
+    SAVE_FLOWS
+END OPTIONS
+
+BEGIN GRIDDATA
+  POROSITY LAYERED IPRN    12
+    CONSTANT   3.000000000000E-001  # POROSITY 1
+
+END GRIDDATA
+

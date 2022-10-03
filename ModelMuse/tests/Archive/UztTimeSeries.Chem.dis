@@ -1,0 +1,147 @@
+# Discretization File created on 10/3/2022 by ModelMuse version 5.0.0.28.
+# Upper left corner: (0, 0)
+# Lower left corner: (0, -0.25)
+# Upper right corner: (10, 0)
+# Lower right corner: (10, -0.25)
+# Grid angle (in degrees counterclockwise): 0
+# Number of active cells = 774.
+BEGIN OPTIONS
+  LENGTH_UNITS METERS
+  XORIGIN  0.000000000000E+000 
+  YORIGIN -2.500000000000E-001 
+  ANGROT  0.000000000000E+000 
+END OPTIONS
+
+BEGIN DIMENSIONS
+  NLAY     20
+  NROW      1
+  NCOL     40
+END DIMENSIONS
+
+
+BEGIN GRIDDATA
+  DELR IPRN    12
+    CONSTANT   2.500000000000E-001  # DELR
+
+  DELC IPRN    12
+    CONSTANT   2.500000000000E-001  # DELC
+
+  TOP LAYERED IPRN    12
+    CONSTANT   5.000000000000E+000  # TOP
+
+  BOTM LAYERED IPRN    12
+    CONSTANT   4.750000000000E+000  # BOTM, Layer1
+
+    CONSTANT   4.500000000000E+000  # BOTM, Layer2
+
+    CONSTANT   4.250000000000E+000  # BOTM, Layer3
+
+    CONSTANT   4.000000000000E+000  # BOTM, Layer4
+
+    CONSTANT   3.750000000000E+000  # BOTM, Layer5
+
+    CONSTANT   3.500000000000E+000  # BOTM, Layer6
+
+    CONSTANT   3.250000000000E+000  # BOTM, Layer7
+
+    CONSTANT   3.000000000000E+000  # BOTM, Layer8
+
+    CONSTANT   2.750000000000E+000  # BOTM, Layer9
+
+    CONSTANT   2.500000000000E+000  # BOTM, Layer10
+
+    CONSTANT   2.250000000000E+000  # BOTM, Layer11
+
+    CONSTANT   2.000000000000E+000  # BOTM, Layer12
+
+    CONSTANT   1.750000000000E+000  # BOTM, Layer13
+
+    CONSTANT   1.500000000000E+000  # BOTM, Layer14
+
+    CONSTANT   1.250000000000E+000  # BOTM, Layer15
+
+    CONSTANT   1.000000000000E+000  # BOTM, Layer16
+
+    CONSTANT   7.500000000000E-001  # BOTM, Layer17
+
+    CONSTANT   5.000000000000E-001  # BOTM, Layer18
+
+    CONSTANT   2.500000000000E-001  # BOTM, Layer19
+
+    CONSTANT   0.000000000000E+000  # BOTM, Layer20
+
+  IDOMAIN LAYERED
+    INTERNAL IPRN      5 # IDOMAIN 1
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 2
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 3
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 4
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 5
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 6
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 7
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 8
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 9
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 10
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 11
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 12
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    INTERNAL IPRN      5 # IDOMAIN 13
+           0     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     0
+    CONSTANT      1 # IDOMAIN 14
+    CONSTANT      1 # IDOMAIN 15
+    CONSTANT      1 # IDOMAIN 16
+    CONSTANT      1 # IDOMAIN 17
+    CONSTANT      1 # IDOMAIN 18
+    CONSTANT      1 # IDOMAIN 19
+    CONSTANT      1 # IDOMAIN 20
+END GRIDDATA
+

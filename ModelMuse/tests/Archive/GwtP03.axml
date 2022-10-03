@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="GwtP03" FileType="bin">
+    <FileName Model_Name="GwtP03" FileType="bin">..\..\..\WRDAPP\mf6.3.0\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="GwtP03" FileType="ancillary">
+    <FileName Model_Name="GwtP03" FileType="ancillary">GwtP03.gpt</FileName>
+  </ancillary>
+  <model Model_Name="GwtP03" FileType="Model Input">
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.chd</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.Chem.adv</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.Chem.cnc</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.Chem.dis</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.Chem.dsp</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.Chem.ic</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.Chem.ims</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.Chem.mst</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.Chem.oc</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.Chem.ssm</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.dis</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.gsf</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.ic</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.ims</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.nam.archive</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.npf</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.oc</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.sto</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.tdis</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">GwtP03.wel</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Input">usgs.GwtP03.reference</FileName>
+  </model>
+  <output Model_Name="GwtP03" FileType="Model Output">
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.bhd</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.cbc</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.Chem.cbc</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.Chem.lst</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.dis.grb</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.InnerSolution.CSV</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.lst</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">GwtP03.OuterSolution.CSV</FileName>
+    <FileName Model_Name="GwtP03" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

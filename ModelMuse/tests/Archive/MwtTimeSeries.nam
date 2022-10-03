@@ -1,0 +1,17 @@
+# Name File for MODFLOW created on 10/3/2022 by ModelMuse Version 5.0.0.28
+BEGIN OPTIONS
+  LIST MwtTimeSeries.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         MwtTimeSeries.dis  DIS
+  IC6          MwtTimeSeries.ic  IC
+  NPF6         MwtTimeSeries.npf  NPF
+  STO6         MwtTimeSeries.sto  STO
+  OC6          MwtTimeSeries.oc  OC
+  CHD6         MwtTimeSeries.chd  CHD-1
+  MAW6         MwtTimeSeries.maw6  MAW-1
+  MVR6         MwtTimeSeries.mvr  MVR-1
+END PACKAGES

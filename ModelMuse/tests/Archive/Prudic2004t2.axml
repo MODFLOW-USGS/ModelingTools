@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Prudic2004t2" FileType="bin">
+    <FileName Model_Name="Prudic2004t2" FileType="bin">..\..\..\WRDAPP\mf6.3.0\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Prudic2004t2" FileType="ancillary">
+    <FileName Model_Name="Prudic2004t2" FileType="ancillary">Prudic2004t2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Prudic2004t2" FileType="Model Input">
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.chd</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.adv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.cnc</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.dis</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.dsp</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.fmi</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.ic</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.ims</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.lkt</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.mst</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.mvt</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.ob_lkt</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.ob_sft</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.oc</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.sft</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.ssm</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.Chem.tdis</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.dis</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.gsf</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.ic</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.ims</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.lak6</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.mvr</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.nam.archive</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.npf</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.ob_sfr</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.oc</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.rch</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.sfr</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">Prudic2004t2.tdis</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Input">usgs.Prudic2004t2.reference</FileName>
+  </model>
+  <output Model_Name="Prudic2004t2" FileType="Model Output">
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.bhd</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.cbc</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.cbc</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.lkt_budget</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.lkt_budget.csv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.lkt_conc</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.lkt_concentration_ob.csv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.lkt_from_MVR_ob.csv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.lkt_to_mvr_ob.csv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.lst</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.mvt_budget</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.mvt_budget.csv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.sft_budget</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.sft_budget.csv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.sft_conc</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.Chem.sft_concentration_ob.csv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.dis.grb</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.InnerSolution.CSV</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.LakConvergence.CSV</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.lk_bud</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.lst</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.mvr_budget</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.mvr_budget.csv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.OuterSolution.CSV</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.sfr_budget</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.sfr_gw_exchange_ob.csv</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.stage</FileName>
+  </output>
+</Model_Archive_List>

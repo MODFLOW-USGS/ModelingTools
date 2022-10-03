@@ -1,0 +1,16 @@
+# Name File for MODFLOW created on 10/3/2022 by ModelMuse Version 5.0.0.28
+BEGIN OPTIONS
+  LIST GwtP03.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         GwtP03.dis  DIS
+  IC6          GwtP03.ic  IC
+  NPF6         GwtP03.npf  NPF
+  STO6         GwtP03.sto  STO
+  OC6          GwtP03.oc  OC
+  CHD6         GwtP03.chd  CHD-1
+  WEL6         GwtP03.wel  WEL-1
+END PACKAGES

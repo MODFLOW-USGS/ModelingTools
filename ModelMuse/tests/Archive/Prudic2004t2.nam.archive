@@ -1,0 +1,18 @@
+# Name File for MODFLOW created on 10/3/2022 by ModelMuse Version 5.0.0.28
+BEGIN OPTIONS
+  LIST ..\..\output\output.Prudic2004t2\Prudic2004t2.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.Prudic2004t2\Prudic2004t2.dis  DIS
+  IC6          ..\..\model\model.Prudic2004t2\Prudic2004t2.ic  IC
+  NPF6         ..\..\model\model.Prudic2004t2\Prudic2004t2.npf  NPF
+  OC6          ..\..\model\model.Prudic2004t2\Prudic2004t2.oc  OC
+  CHD6         ..\..\model\model.Prudic2004t2\Prudic2004t2.chd  CHD-1
+  SFR6         ..\..\model\model.Prudic2004t2\Prudic2004t2.sfr  SFR-1
+  RCH6         ..\..\model\model.Prudic2004t2\Prudic2004t2.rch  RCH-1
+  LAK6         ..\..\model\model.Prudic2004t2\Prudic2004t2.lak6  LAK-1
+  MVR6         ..\..\model\model.Prudic2004t2\Prudic2004t2.mvr  MVR-1
+END PACKAGES

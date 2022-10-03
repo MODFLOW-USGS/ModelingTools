@@ -1,0 +1,18 @@
+# Name File for MODFLOW created on 10/3/2022 by ModelMuse Version 5.0.0.28
+BEGIN OPTIONS
+  LIST ..\..\output\output.SftTimeSeries\SftTimeSeries.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.SftTimeSeries\SftTimeSeries.dis  DIS
+  IC6          ..\..\model\model.SftTimeSeries\SftTimeSeries.ic  IC
+  NPF6         ..\..\model\model.SftTimeSeries\SftTimeSeries.npf  NPF
+  OC6          ..\..\model\model.SftTimeSeries\SftTimeSeries.oc  OC
+  CHD6         ..\..\model\model.SftTimeSeries\SftTimeSeries.chd  CHD-1
+  SFR6         ..\..\model\model.SftTimeSeries\SftTimeSeries.sfr  SFR-1
+  RCH6         ..\..\model\model.SftTimeSeries\SftTimeSeries.rch  RCH-1
+  LAK6         ..\..\model\model.SftTimeSeries\SftTimeSeries.lak6  LAK-1
+  MVR6         ..\..\model\model.SftTimeSeries\SftTimeSeries.mvr  MVR-1
+END PACKAGES

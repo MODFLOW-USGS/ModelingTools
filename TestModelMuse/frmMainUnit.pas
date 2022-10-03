@@ -506,6 +506,7 @@ begin
     ParentNode := tvModflow.Items.GetFirstNode;
     while ParentNode <> nil do
     begin
+      ModelFileName := ParentNode.Text;
       StatusBar1.SimpleText := 'testing ' + ModelFileName;
 
       ChildNode := ParentNode.getFirstChild;
@@ -521,12 +522,33 @@ begin
 //      ActivApp1.ExePath := '"' + GoPhastExeName + '" "' + ModelFileName + '" -E -C';
 //      ActivApp1.ExecuteApp(Success);
       pbFiles.StepIt;
-      if not Success then
+//      if not Success then
+//      begin
+//        result := false;
+//        ErrorMessage := 'Failed to execute "' + ModelFileName + '".';
+//        Exit;
+//      end;
+
+      OutPutFiles.Clear;
+      ChildNode := ParentNode.getFirstChild;
+      while ChildNode <> nil do
       begin
-        result := false;
-        ErrorMessage := 'Failed to execute "' + ModelFileName + '".';
-        Exit;
+        OutputFileName := ChildNode.Text;
+        InArrays := Pos('\arrays\',OutputFileName) > 0;
+        OutputFileName := ExtractFileName(OutputFileName);
+        if InArrays then
+        begin
+          OutputFileName := ModelDirectory + '\arrays\' + OutputFileName;
+        end
+        else
+        begin
+          OutputFileName := ModelDirectory + '\' + OutputFileName;
+        end;
+        OutPutFiles.Add(OutputFileName);
+
+        ChildNode := ChildNode.getNextSibling;
       end;
+
 
       Index := 0;
       ChildNode := ParentNode.getFirstChild;
@@ -535,8 +557,12 @@ begin
         if FAbort then Exit;
         ChildNode.Selected := True;
         ArchiveFileName := ChildNode.Text;
+
+
         OutputFileName := OutPutFiles[Index];
         StatusBar1.SimpleText := 'testing ' + OutputFileName;
+
+
 
         Application.ProcessMessages;
         FileDate := 0;
