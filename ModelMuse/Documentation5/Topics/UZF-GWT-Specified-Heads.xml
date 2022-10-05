@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-05T15:20:12.955-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">UZF GWT: Specified Heads</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Specified Heads</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are specified head boundaries in the first and last column of the bottom layer of 1.625 meter. Use point objects to specify them.</text></para>
+    <para styleclass="Normal"><image src="UzfGwtChd.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box in which the CHD boundary is specified.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box in which the CHD boundary is specified.]]></caption></image></para>
+  </body>
+</topic>

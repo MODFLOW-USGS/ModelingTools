@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-05T15:13:22.446-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">UZF GWT: Activate Flow Model Packages</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Activate Flow Model Packages</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are two boundary conditions in the flow model: specified heads of 1.625 m in the bottom layer in the first and last columns and infiltration of 0.1 m/day in the UZF package in the top layer of the model. Activate the CHD and UZF packages in the &quot;Model|MODFLOW Packages and Programs&quot; dialog box. In the UZF package, set the number of trailing waves to 15.</text></para>
+    <para styleclass="Normal"><image src="UzfGwtFlowPackages.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Packages and Programs&quot; dialog box with the CHD and UZF packages activated and the number of trailing waves set to 15.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Packages and Programs" dialog box with the CHD and UZF packages activated and the number of trailing waves set to 15.]]></caption></image></para>
+  </body>
+</topic>

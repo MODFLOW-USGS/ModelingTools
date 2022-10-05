@@ -2512,13 +2512,13 @@ that affects the model output should also have a comment. }
     function GetMf6TimesSeries: TTimesSeriesCollections; virtual; abstract;
     procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections);
       virtual; abstract;
-    function GetGwtUsed: Boolean; override;
     procedure FixSutraMeshEdge;
     function Sutra4SorptionUsed(Sender: TObject): boolean;
     function GetAppsMoved: TStringList; virtual; abstract;
     function GetPestStatus: TPestStatus;
     function GetSeparateGwtUsed: Boolean;
   protected
+    function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
     procedure SetTopDataSet(const Value: TDataArray); virtual;
@@ -10726,18 +10726,19 @@ const
 //                package.
 //               Bug fix: Fixed bug that could cause some PEST parameters to
 //                not be written to the PVAL file when needed.
-
-//               Enhancement: ModelMonitor now displays budgets for MODFLOW 6
+//    '5.0.0.29' Enhancement: ModelMonitor now displays budgets for MODFLOW 6
 //                advanced packages.
 //               Enhancement: After running a MODFLOW 6 file, the mfsim.lst file
 //                is displayed in addition to the model .lst file.
+//               Bug fix: Fixed bug in assigning PEST Concentration methods
+//                when MT3D but not GWT is selected.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.28';
+  IIModelVersion = '5.0.0.29';
 
 function IModelVersion: string;
 begin

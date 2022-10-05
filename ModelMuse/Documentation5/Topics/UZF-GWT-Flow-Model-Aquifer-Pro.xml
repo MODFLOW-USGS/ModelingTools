@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-05T15:31:25.732-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">UZF GWT: Flow Model Aquifer Properties</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Flow Model Aquifer Properties</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the &quot;Data|Edit Data Sets&quot; dialog box, set the following default formulas.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Cell_Type = 1</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Kx = 2.5</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Kz = 0.5</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW_Initial_Head = 1.625</text></para>
+    <para styleclass="Normal"><image src="UzfGwtAquiferProperties.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen Capture of the Data Sets dialog box showing the specification of the cell type.</title><caption translate="true"><![CDATA[Screen Capture of the Data Sets dialog box showing the specification of the cell type.]]></caption></image></para>
+  </body>
+</topic>

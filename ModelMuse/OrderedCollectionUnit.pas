@@ -1942,7 +1942,7 @@ function TGwtPestMethodCollection.GetCount: Integer;
 var
   LocalModel: TCustomModel;
 begin
-  if (Model <> nil)  then
+  if (Model <> nil) and Model.GwtUsed  then
   begin
     LocalModel := Model as TCustomModel;
     if inherited GetCount < LocalModel.MobileComponents.Count then

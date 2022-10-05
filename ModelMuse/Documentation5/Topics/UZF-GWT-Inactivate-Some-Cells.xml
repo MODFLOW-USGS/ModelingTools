@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-05T15:07:27.852-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">UZF GWT: Inactivate Some Cells</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Inactivate Some Cells</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The cells in the first and last columns of the Top_Layer and Unsaturated_Layers layer groups are inactive. Use objects to inactivate those cells by setting the Active data set to false in them.</text></para>
+  </body>
+</topic>

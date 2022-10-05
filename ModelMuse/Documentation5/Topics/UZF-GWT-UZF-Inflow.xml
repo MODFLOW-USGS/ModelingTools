@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-05T16:06:31.159-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">UZF GWT: UZF Inflow</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: UZF Inflow</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The infiltration rate in the top layer of the model is 0.1 m/d. However, in columns 15 to 25, there will be solute associated with the infiltration so use a separate object to specify it.We will edit the object layer to add the solute. There must also be a separate object covering the remainder of the grid to specify the steady UZF properties but with an infiltration rate of 0.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You will set the following steady UZF properties for all the objects.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">surfdep = 0.1</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">vks = 0.5</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">thtr = 0.1</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">thts = 0.45</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">thti = 0.105</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">eps = 4</text></para>
+    <para styleclass="Normal"><image src="UzfGwtSteadyUZFProperties.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box showing the specification of the steady UZF properties.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box showing the specification of the steady UZF properties.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For the objects in the top layer specify a flow rate of 0.1</text></para>
+    <para styleclass="Normal"><image src="UzfGwtInfiltration.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box showing the specification of the infiltration rate.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box showing the specification of the infiltration rate.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Try coloring the grid with the UZF infiltration rate and ensure that the infiltration rate is set correctly. If the infiltration rate for the top of the grid is not 0.1, try sending the object that specifies the UZF properties for the other layers of the grid to the back of the list of objects by selecting it, right-clicking, and selecting &quot;To Back&quot; from the popup menu.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>
