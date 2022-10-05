@@ -9,6 +9,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
   ClientWidth = 771
   ExplicitWidth = 787
   ExplicitHeight = 635
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlButton: TPanel
     Left = 0
@@ -84,7 +85,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Top = 0
     Width = 771
     Height = 555
-    ActivePage = tabData
+    ActivePage = tabFeatures
     Align = alClient
     TabOrder = 0
     OnChange = pcImportShapeChange
@@ -1013,7 +1014,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Top = 256
           Width = 761
           Height = 265
-          ActivePage = jvspLakMf6
+          ActivePage = jvspModflowHOB
           PropagateEnable = False
           Align = alBottom
           object jvspNone: TJvStandardPage
@@ -1926,9 +1927,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object lblHeadObservationNames: TLabel
               Left = 13
               Top = 9
-              Width = 127
+              Width = 194
               Height = 18
-              Caption = 'Observation name'
+              Caption = 'Observation locaation name'
             end
             object lblHeadObsType: TLabel
               Left = 13
@@ -1953,14 +1954,14 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               WordWrap = True
             end
             object comboHeadObservationNames: TComboBox
-              Left = 175
+              Left = 213
               Top = 6
               Width = 145
               Height = 26
               TabOrder = 0
             end
             object comboHeadObsType: TComboBox
-              Left = 175
+              Left = 213
               Top = 70
               Width = 145
               Height = 26
@@ -1973,7 +1974,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 'Inactive')
             end
             object rdeIgnoreValues: TRbwDataEntry
-              Left = 175
+              Left = 213
               Top = 102
               Width = 145
               Height = 22
@@ -1984,7 +1985,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               ChangeDisabledColor = True
             end
             object comboITT: TComboBox
-              Left = 175
+              Left = 213
               Top = 38
               Width = 338
               Height = 26
