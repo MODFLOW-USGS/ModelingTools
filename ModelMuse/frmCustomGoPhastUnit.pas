@@ -93,10 +93,14 @@ type
      var CallHelp: Boolean): Boolean;
 {$IFEND}
     procedure FormDestroy(Sender: TObject); virtual;
+    procedure FormHide(Sender: TObject);
   private
     FCallingHelp: Boolean;
     FCreateNewDataSet: Boolean;
     FAskedUser: Boolean;
+    FLeft: Integer;
+    FTop: Integer;
+    FMonitorNumber: Integer;
     function CallHelpRouter: boolean;
     procedure DestroyGLSceneViewers(ParentComponent: TComponent);
     procedure EnsureFormVisible;
@@ -373,6 +377,7 @@ end;
 procedure TfrmCustomGoPhast.FormCreate(Sender: TObject);
 begin
   DoubleBuffered := True;
+  FMonitorNumber := -1;
 //  HelpKeyWord := 'files\' + HelpKeyWord + '.htm';
 end;
 
@@ -466,6 +471,13 @@ begin
     end;
 //    result := True;
   end;
+end;
+
+procedure TfrmCustomGoPhast.FormHide(Sender: TObject);
+begin
+  FLeft := Monitor.Left;
+  FTop  := Monitor.Top;
+  FMonitorNumber := Monitor.MonitorNum;
 end;
 
 procedure TfrmCustomGoPhast.btnHelpClick(Sender: TObject);
@@ -761,6 +773,7 @@ var
   FrameWidth: Integer;
   WorkAreaRect: TRect;
   FrameHeight: Integer;
+  AMonitor: TMonitor;
 begin
   {$IFDEF LINUX}
   //if not QWidget_isVisible(Widget) then Exit;
@@ -770,7 +783,18 @@ begin
   // Because the CLX Screen.Height doesn't take the taskbar into account,
   // use the VCL Screen object instead under windows to determine the available
   // space on the screen.
-  WorkAreaRect := Forms.Screen.WorkAreaRect;
+  if (FMonitorNumber >= 0) and (FMonitorNumber < Screen.MonitorCount) then
+  begin
+    AMonitor := Screen.Monitors[FMonitorNumber];
+    WorkAreaRect.Left := AMonitor.Left;
+    WorkAreaRect.Top := AMonitor.Top;
+    WorkAreaRect.Right := WorkAreaRect.Left + AMonitor.Width;
+    WorkAreaRect.Bottom := WorkAreaRect.Top + AMonitor.Height;
+  end
+  else
+  begin
+    WorkAreaRect := Forms.Screen.WorkAreaRect;
+  end;
   {$ELSE}
 
 {$IFDEF LINUX}
@@ -951,6 +975,11 @@ end;
 procedure TfrmCustomGoPhast.FormShow(Sender: TObject);
 begin
   GetFormatSettings;
+  if FMonitorNumber >= 0 then
+  begin
+    Left := FLeft + Left;
+    Top := FTop + Top;
+  end;
   EnsureFormVisible;
   FixGridEditorPosition(Self);
 end;

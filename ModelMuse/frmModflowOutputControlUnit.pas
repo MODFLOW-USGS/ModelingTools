@@ -53,6 +53,8 @@ type
     comboOutputSuppression: TJvImageComboBox;
     lblOutputSuppression: TLabel;
     cbSaveBudgetSummary: TCheckBox;
+    jvspGwt: TJvStandardPage;
+    frameGWT: TframeOutputControl;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure jvPagesChange(Sender: TObject);
@@ -164,6 +166,7 @@ begin
   cbCompact.Checked := OutputControl.Compact;
   frameHead.GetData(OutputControl.HeadOC);
   frameDrawdown.GetData(OutputControl.DrawdownOC);
+  frameGWT.GetData(OutputControl.ConcentrationOC);
   MemoComments.Lines.Assign(OutputControl.Comments);
   cbSaveBudgetSummary.Checked := OutputControl.SaveBudgetSummary;
   cbSaveBudgetSummary.Enabled := frmGoPhast.ModelSelection = msModflowFmp;
@@ -231,6 +234,7 @@ begin
   FOutputControl.Compact := cbCompact.Checked;
   frameHead.SetData(FOutputControl.HeadOC);
   frameDrawdown.SetData(FOutputControl.DrawdownOC);
+  frameGWT.SetData(FOutputControl.ConcentrationOC);
   FOutputControl.Comments.Assign(MemoComments.Lines);
   FOutputControl.BudgetFrequencyChoice :=
     TFrequencyChoice(comboFrequency.ItemIndex);

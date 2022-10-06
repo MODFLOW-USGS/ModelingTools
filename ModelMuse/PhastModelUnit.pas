@@ -38789,6 +38789,7 @@ begin
   begin
     DataSets[DataArrayIndex].Loaded;
   end;
+  UpdateClassifications;
 end;
 
 function TDataArrayManager.LocalCount: integer;

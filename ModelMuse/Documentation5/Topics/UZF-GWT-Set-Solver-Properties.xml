@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-10-05T16:22:25.873-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2022-10-06T12:50:01.025-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">UZF GWT: Set Solver Properties</title>
   <body>
     <header>
@@ -9,7 +9,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">You will need to modify some of the solver properties. </text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Basic Properties</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Complexity = Complex</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Pseudo-transient continuation = Use PTC</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Pseudo-transient continuation = Don&apos;t use PTC for any stress period.</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Nonlinear</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Outer DVClose = 0.0001</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Outer maximum iteration = 2000</text></para>
@@ -17,8 +17,10 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Under-relaxation theta = 0.7</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Under-relaxation kappa = 0.08</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Under-relaxation gamma = 0.05</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Under-relaxation momentum = 0</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Backtracking number = 20</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Backtracking tolerance = 2</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Backtracking reduction factor = 0.2</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Backtracking residual limit = 0.0005</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Linear</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Inner maximum iteration = 100</text></para>

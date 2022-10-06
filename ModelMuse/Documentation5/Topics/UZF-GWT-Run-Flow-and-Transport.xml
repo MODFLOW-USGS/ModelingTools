@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-06T13:20:56.277-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">UZF GWT: Run Flow and Transport Models</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Run Flow and Transport Models</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Now run MODFLOW again. The flow and transport models will run in the same simulation in this case. </text></para>
+  </body>
+</topic>

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-10-05T16:31:38.727-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2022-10-06T12:52:26.063-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">UZF GWT: Run Flow Model</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Run Flow Model</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">At this point you can run the flow model to make sure it runs correctly. If it doesn&apos;t check to make sure you specified everything correctly.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">At this point you can run the flow model to make sure it runs correctly. There will be warnings about the initial head being below the bottom of the cells in layers 1 through 13. Those warnings can be ignored. If the model doesn&apos;t run correctly, check to make sure you specified everything correctly.</text></para>
   </body>
 </topic>

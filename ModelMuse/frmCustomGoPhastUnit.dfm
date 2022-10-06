@@ -16,6 +16,7 @@ object frmCustomGoPhast: TfrmCustomGoPhast
   Scaled = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnHide = FormHide
   OnHelp = FormHelp
   OnShow = FormShow
   TextHeight = 18

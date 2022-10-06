@@ -97,7 +97,7 @@ type
     procedure Assign(Source: TPersistent); override;
   published
     property Name: string read FName write SetName;
-    // BTN package, SCONC
+    // BTN package, SCONC, GWT IC package, STRT
     property InitialConcDataArrayName: string read FInitialConcDataArrayName
       write SetInitialConcDataArrayName;
     // RCT package, SRCONC
@@ -1498,8 +1498,9 @@ begin
   begin
     UpdateDataArray(LocalModel.Mt3dMsInitialConcUsed,
       FInitialConcDataArrayName, NewName,
-      FInitialConcDisplayName, '0', 'MT3DMS or MT3D-USGS BTN package, SCONC',
-      True, StrMt3dClassification);
+      FInitialConcDisplayName, '0', 'MT3DMS or MT3D-USGS BTN package, SCONC'
+        + sLineBreak + 'MODFLOW 6 GWT IC package, STRT',
+      True, StrMT3DMS_GWT_Classificaton);
   end;
 
   SetCaseSensitiveStringProperty(FInitialConcDataArrayName, NewName);

@@ -1537,6 +1537,8 @@ var
   ListFileName: string;
   MfListName: string;
   SimCount: Integer;
+  ChemIndex: Integer;
+  ChemExt: string;
 begin
 
   ADirectory:= GetCurrentDir;
@@ -1701,6 +1703,18 @@ begin
           else
           begin
             ListFiles.Add(MfListName);
+          end;
+        end;
+        if (SimCount = 1) and Model.GwtUsed then
+        begin
+          SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.
+            SimFileNames[0]);
+          SimFileName := ChangeFileExt(SimFileName, '');
+          for ChemIndex := 0 to Model.MobileComponents.Count - 1 do
+          begin
+            ChemExt := '.' + Model.MobileComponents[ChemIndex].Name + '.lst';
+            ListFileName := ChangeFileExt(SimFileName, ChemExt);
+            ListFiles.Add(ListFileName);
           end;
         end;
       end;

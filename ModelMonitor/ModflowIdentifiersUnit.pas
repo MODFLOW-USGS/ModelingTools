@@ -676,8 +676,8 @@ begin
   BoundaryIdentifiers.Add('LAK PACKAGE (');
   BoundaryIdentifiers.Add('CSUB PACKAGE CALCULATED INITIAL INTERBED STRESSES');
   BoundaryIdentifiers.Add('MAW PACKAGE');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
+  BoundaryIdentifiers.Add('FLOW RATES');
+  BoundaryIdentifiers.Add('SUMMARY OF FLOWS FOR EACH CONTROL VOLUME');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 end;

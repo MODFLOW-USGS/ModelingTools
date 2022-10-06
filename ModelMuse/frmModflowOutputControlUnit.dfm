@@ -6,7 +6,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
   ClientWidth = 604
   ExplicitWidth = 620
   ExplicitHeight = 442
-  PixelsPerInch = 96
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 121
@@ -79,24 +78,23 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
     TabOrder = 0
     OnCustomDrawItem = pltrPageNavigatorCustomDrawItem
     Items.NodeData = {
-      03050000002C0000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF000000
+      03060000002C0000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF000000
       00000000000107470065006E006500720061006C002600000000000000000000
       00FFFFFFFFFFFFFFFFFFFFFFFF0100000000000000010448006500610064002E
       0000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF020000000000000001
       08440072006100770064006F0077006E002A0000000000000000000000FFFFFF
       FFFFFFFFFFFFFFFFFF0300000000000000010642007500640067006500740026
       0000000000000000000000FFFFFFFFFFFFFFFF00000000040000000000000001
-      044D00540033004400}
-    Items.Links = {050000000000000001000000020000000300000004000000}
-    ExplicitLeft = 4
-    ExplicitTop = -6
+      044D00540033004400240000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
+      FF00000000000000000103470057005400}
+    Items.Links = {06000000000000000100000002000000030000000400000000000000}
   end
   object jvPages: TJvPageList
     Left = 131
     Top = 0
     Width = 473
     Height = 362
-    ActivePage = jvspDrawdown
+    ActivePage = jvspGwt
     PropagateEnable = False
     Align = alClient
     OnChange = jvPagesChange
@@ -254,12 +252,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
           Caption = 'Listing file format (IHEDFM)'
           ExplicitWidth = 192
         end
-        inherited comboP: TJvImageComboBox
-          ItemIndex = -1
-        end
-        inherited comboREdit: TJvImageComboBox
-          ItemIndex = -1
-        end
         inherited comboFrequency: TJvImageComboBox
           Left = 22
           Width = 448
@@ -278,15 +270,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
             end>
           ExplicitLeft = 22
           ExplicitWidth = 448
-        end
-        inherited comboPrintStyle: TJvImageComboBox
-          ItemIndex = -1
-        end
-        inherited comboPrintFormat: TJvImageComboBox
-          ItemIndex = -1
-        end
-        inherited comboSaveType: TJvImageComboBox
-          ItemIndex = -1
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <
@@ -363,12 +346,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
           Caption = 'Listing file format (IDDNFM)'
           ExplicitWidth = 193
         end
-        inherited comboP: TJvImageComboBox
-          ItemIndex = -1
-        end
-        inherited comboREdit: TJvImageComboBox
-          ItemIndex = -1
-        end
         inherited comboFrequency: TJvImageComboBox
           Width = 448
           Anchors = [akLeft, akTop, akRight]
@@ -385,15 +362,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
               Text = 'Last time step of each N'#39'th stress period'
             end>
           ExplicitWidth = 448
-        end
-        inherited comboPrintStyle: TJvImageComboBox
-          ItemIndex = -1
-        end
-        inherited comboPrintFormat: TJvImageComboBox
-          ItemIndex = -1
-        end
-        inherited comboSaveType: TJvImageComboBox
-          ItemIndex = -1
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <
@@ -679,6 +647,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -702,6 +671,71 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
             end>
           ExplicitWidth = 473
           ExplicitHeight = 121
+        end
+      end
+    end
+    object jvspGwt: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 473
+      Height = 362
+      HelpType = htKeyword
+      HelpKeyword = 'Head_and_Drawdown_Panes'
+      Caption = 'jvspGwt'
+      inline frameGWT: TframeOutputControl
+        Left = 0
+        Top = 0
+        Width = 473
+        Height = 362
+        Align = alClient
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        TabStop = True
+        ExplicitWidth = 473
+        ExplicitHeight = 362
+        inherited lblOutputType: TLabel
+          Width = 158
+          Caption = 'Groundwater Transport'
+          ExplicitWidth = 158
+        end
+        inherited lblDot: TLabel
+          Font.Pitch = fpVariable
+        end
+        inherited rcExternalFormat: TRbwController
+          ControlList = <
+            item
+              Control = frameGWT.adeD
+            end
+            item
+              Control = frameGWT.adeW
+            end
+            item
+              Control = frameGWT.comboP
+            end
+            item
+              Control = frameGWT.comboREdit
+            end
+            item
+              Control = frameGWT.lblResult
+            end
+            item
+              Control = frameGWT.lblDot
+            end>
+        end
+        inherited rcListingFormat: TRbwController
+          ControlList = <
+            item
+              Control = frameGWT.comboPrintFormat
+            end
+            item
+              Control = frameGWT.comboPrintStyle
+            end>
         end
       end
     end
