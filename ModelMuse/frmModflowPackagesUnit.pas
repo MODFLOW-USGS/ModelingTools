@@ -2533,6 +2533,7 @@ begin
 
     if frmGoPhast.ModelSelection = msModflow2015  then
     begin
+    {$IFDEF GWT}
       FGwtParentNode := AddChildNode(StrGwtClassification,
         StrGwtClassification, FTransportNode);
 
@@ -2545,6 +2546,12 @@ begin
         FGwtParentNode);
       FGwtImsNode := AddChildNode(StrGwtSolver, StrIMSIterativeModel,
         FGwtParentNode);
+    {$ELSE}
+      FGwtParentNode := nil;
+      FMstNode := nil;
+      FIstNode := nil;
+      FGwtImsNode := nil;
+    {$ENDIF}
     end
     else
     begin
@@ -3181,6 +3188,7 @@ begin
   begin
     Exit;
   end;
+  {$IFDEF GWT}
   if frameGwtProcess.Selected
     {and (framePkgMt3dBasic.comboVersion.ItemIndex = 2)} then
   begin
@@ -3330,6 +3338,7 @@ begin
     end
   end;
   EnableGwtPackages;
+  {$ENDIF}
 end;
 
 procedure TfrmModflowPackages.EnableRchModpathOption;
@@ -4576,8 +4585,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    {$IFDEF GWT}
     Packages.GwtProcess.Frame := frameGwtProcess;
     FPackageList.Add(Packages.GwtProcess);
+    {$ELSE}
+    frameGwtProcess.NilNode;
+    {$ENDIF}
   end
   else
   begin
@@ -4586,8 +4599,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    {$IFDEF GWT}
     Packages.GwtAdvectionPackage.Frame := frameGwtAdv;
     FPackageList.Add(Packages.GwtAdvectionPackage);
+    {$ELSE}
+    frameGwtAdv.NilNode;
+    {$ENDIF}
   end
   else
   begin
@@ -4596,8 +4613,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    {$IFDEF GWT}
     Packages.GwtDispersionPackage.Frame := frameGwtDsp;
     FPackageList.Add(Packages.GwtDispersionPackage);
+    {$ELSE}
+    frameGwtDsp.NilNode;
+    {$ENDIF}
   end
   else
   begin
@@ -4606,8 +4627,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    {$IFDEF GWT}
     Packages.GwtSsmPackage.Frame := frameGwtSSM;
     FPackageList.Add(Packages.GwtSsmPackage);
+    {$ELSE}
+    frameGwtSSM.NilNode;
+    {$ENDIF}
   end
   else
   begin
@@ -4616,8 +4641,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    {$IFDEF GWT}
     Packages.GwtCncPackage.Frame := frameGwtCnc;
     FPackageList.Add(Packages.GwtCncPackage);
+    {$ELSE}
+    frameGwtCnc.NilNode;
+    {$ENDIF}
   end
   else
   begin
@@ -4626,8 +4655,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    {$IFDEF GWT}
     Packages.GwtSrcPackage.Frame := frameGwtSrc;
     FPackageList.Add(Packages.GwtSrcPackage);
+    {$ELSE}
+    frameGwtSrc.NilNode;
+    {$ENDIF}
   end
   else
   begin
@@ -4638,6 +4671,7 @@ begin
     and frameGwtProcess.Selected
     {and (framePkgMt3dBasic.comboVersion.ItemIndex = 2)} then
   begin
+    {$IFDEF GWT}
     if Packages.GwtPackages.Count < frameChemSpecies.frameGridMobile.seNumber.AsInteger then
     begin
       Packages.GwtPackages.Count := frameChemSpecies.frameGridMobile.seNumber.AsInteger
@@ -4740,6 +4774,20 @@ begin
 
       ImsChildNode := ImsChildNode.GetNextSibling;
     end;
+    {$ELSE}
+    for MstIndex := 0 to FframePackageMSTObjectList.Count - 1 do
+    begin
+      FframePackageMSTObjectList[MstIndex].NilNode;
+    end;
+    for IstIndex := 0 to FframePackageIstObjectList.Count - 1 do
+    begin
+      FframePackageIstObjectList[IstIndex].NilNode;
+    end;
+    for IstIndex := 0 to FframePkgSmsObjectList.Count - 1 do
+    begin
+      FframePkgSmsObjectList[IstIndex].NilNode;
+    end;
+    {$ENDIF}
   end
   else
   begin

@@ -7,9 +7,9 @@ inherited frmModflowPackages: TfrmModflowPackages
   OnActivate = jvplPackagesChange
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitTop = -11
-  ExplicitWidth = 800
-  ExplicitHeight = 604
+  ExplicitWidth = 798
+  ExplicitHeight = 596
+  PixelsPerInch = 96
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 177
@@ -6178,7 +6178,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               EditLabel.Width = 127
               EditLabel.Height = 18
               EditLabel.ExplicitLeft = 80
-              EditLabel.ExplicitTop = 54
+              EditLabel.ExplicitTop = 55
               EditLabel.ExplicitWidth = 127
               EditLabel.ExplicitHeight = 18
               ExplicitWidth = 65

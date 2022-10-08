@@ -10732,13 +10732,15 @@ const
 //                is displayed in addition to the model .lst file.
 //               Bug fix: Fixed bug in assigning PEST Concentration methods
 //                when MT3D but not GWT is selected.
+//    '5.0.0.30' Bug fix: ModelMuse no longer exports head observations that
+//                are outside the grid to ModelMate.
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.29';
+  IIModelVersion = '5.0.0.30';
 
 function IModelVersion: string;
 begin
@@ -23214,6 +23216,7 @@ var
   WarningMessage: string;
   SwiObservations: TSwiObsBoundary;
   ModelMuseSwiObs: TSwiObsItem;
+  CellList: TCellAssignmentList;
 begin
   // flux observations
   ObservationList.CaseSensitive := False;
@@ -23296,40 +23299,49 @@ begin
     if (Observations <> nil) and Observations.Used
       and (Observations.Purpose = ObservationPurpose) then
     begin
-      Method := Observations.MultiObsMethod;
-      if Observations.Values.Count = 1 then
-      begin
-        ModelMuseHeadObs := Observations.Values.HobItems[0];
-        OBSNAM := Observations.ObservationName;
-        UpdateModelMateHeadObservation(ObservationList, OBSNAM,
-          ModelMuseHeadObs, Project, Operation, momAllHeads);
-      end
-      else
-      begin
-        for ValueIndex := 0 to Observations.Values.Count - 1 do
+      CellList := TCellAssignmentList.Create;
+      try
+        ScreenObject.GetCellsToAssign( '0', nil, nil, CellList, alAll, self);
+        if CellList.Count > 0 then
         begin
-          ModelMuseHeadObs := Observations.Values.HobItems[ValueIndex];
-          OBSNAM := Observations.ObservationName + '_' + IntToStr(ValueIndex + 1);
-          if Length(OBSNAM) > MaxString12 then
+          Method := Observations.MultiObsMethod;
+          if Observations.Values.Count = 1 then
           begin
-            OBSNAM := Observations.ObservationName + IntToStr(ValueIndex + 1);
-          end;
-          if Length(OBSNAM) > MaxString12 then
-          begin
-            // The GUI is designed to prevent this from ever being required.
-            SetLength(OBSNAM, MaxString12);
-          end;
-          if ValueIndex = 0 then
-          begin
+            ModelMuseHeadObs := Observations.Values.HobItems[0];
+            OBSNAM := Observations.ObservationName;
             UpdateModelMateHeadObservation(ObservationList, OBSNAM,
               ModelMuseHeadObs, Project, Operation, momAllHeads);
           end
           else
           begin
-            UpdateModelMateHeadObservation(ObservationList, OBSNAM,
-              ModelMuseHeadObs, Project, Operation, Method);
+            for ValueIndex := 0 to Observations.Values.Count - 1 do
+            begin
+              ModelMuseHeadObs := Observations.Values.HobItems[ValueIndex];
+              OBSNAM := Observations.ObservationName + '_' + IntToStr(ValueIndex + 1);
+              if Length(OBSNAM) > MaxString12 then
+              begin
+                OBSNAM := Observations.ObservationName + IntToStr(ValueIndex + 1);
+              end;
+              if Length(OBSNAM) > MaxString12 then
+              begin
+                // The GUI is designed to prevent this from ever being required.
+                SetLength(OBSNAM, MaxString12);
+              end;
+              if ValueIndex = 0 then
+              begin
+                UpdateModelMateHeadObservation(ObservationList, OBSNAM,
+                  ModelMuseHeadObs, Project, Operation, momAllHeads);
+              end
+              else
+              begin
+                UpdateModelMateHeadObservation(ObservationList, OBSNAM,
+                  ModelMuseHeadObs, Project, Operation, Method);
+              end;
+            end;
           end;
         end;
+      finally
+        CellList.Free;
       end;
     end;
   end;

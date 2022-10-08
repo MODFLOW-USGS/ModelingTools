@@ -22,6 +22,17 @@
               <task-config-value name="make3status">*</task-config-value>
             </task-config-group>
           </export-task>
+          <export-task name="Publish as PDF" format="PDF">
+            <task-config-group name="settings">
+              <task-config-value name="outputfile">Release.pdf</task-config-value>
+              <task-config-value name="template">$(HMSYS)Templates\pdf\Standard_manual.mnl</task-config-value>
+              <task-config-value name="highlighthotspots">0</task-config-value>
+              <task-config-value name="exportcomments">0</task-config-value>
+              <task-config-value name="exportcommentsdate">36526</task-config-value>
+              <task-config-value name="make4include">PDF</task-config-value>
+              <task-config-value name="make4status">*</task-config-value>
+            </task-config-group>
+          </export-task>
         </export-tasks>
       </export-task-group>
     </export-task-groups>
@@ -109,7 +120,7 @@
     <config-group name="project">
       <config-value name="title" translate="true">ModelMuse Release History</config-value>
       <config-value name="author" translate="true">U.S. Geological Survey</config-value>
-      <config-value name="copyright" translate="true">© &lt;%YEAR%&gt; &lt;%AUTHOR%&gt;</config-value>
+      <config-value name="copyright" translate="true">Public Domain &lt;%YEAR%&gt; &lt;%AUTHOR%&gt;</config-value>
       <config-value name="versionmajor">5</config-value>
       <config-value name="versionminor">0</config-value>
       <config-value name="versionbuild">0</config-value>
@@ -131,6 +142,8 @@
       <config-value name="make3status">*</config-value>
       <config-value name="make0include">CHM</config-value>
       <config-value name="make0status">*</config-value>
+      <config-value name="make4include">PDF</config-value>
+      <config-value name="make4status">*</config-value>
     </config-group>
     <config-group name="user">
       <config-group name="rbwinst-pr">
@@ -141,6 +154,11 @@
       <config-group name="rbwinst">
         <config-group name="project">
           <config-value name="lastexport">0</config-value>
+        </config-group>
+      </config-group>
+      <config-group name="richard">
+        <config-group name="project">
+          <config-value name="lastexport">4</config-value>
         </config-group>
       </config-group>
     </config-group>
@@ -241,6 +259,13 @@ document.write('</frameset>');
       <config-value name="outputfile">Release.chm</config-value>
       <config-value name="deletetemp">1</config-value>
       <config-value name="skin">..\CHM_LightBlue.hmskin</config-value>
+    </config-group>
+    <config-group name="pdf">
+      <config-value name="outputfile">Release.pdf</config-value>
+      <config-value name="template">$(HMSYS)Templates\pdf\Standard_manual.mnl</config-value>
+      <config-value name="highlighthotspots">0</config-value>
+      <config-value name="exportcomments">0</config-value>
+      <config-value name="exportcommentsdate">36526</config-value>
     </config-group>
     <variables/>
     <helpcontext-numbers/>

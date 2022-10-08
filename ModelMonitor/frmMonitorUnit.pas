@@ -2099,7 +2099,7 @@ end;
 Initialization
 
   ColorList := TList<TAlphaColor>.Create;
-  ColorList.Add(claAqua);
+//  ColorList.Add(claAqua);
   ColorList.Add(claAquamarine);
   ColorList.Add(claBlueviolet);
   ColorList.Add(claBrown);
