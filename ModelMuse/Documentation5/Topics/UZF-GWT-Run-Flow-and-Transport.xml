@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-10-06T13:20:56.277-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+<topic template="Default" status="Under Construction" modified="2022-10-11T11:28:45.169-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">UZF GWT: Run Flow and Transport Models</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Run Flow and Transport Models</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Now run MODFLOW again. The flow and transport models will run in the same simulation in this case. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Now run MODFLOW again. The flow and transport models will run in the same simulation in this case. Budgets for both the flow and transport models will be displayed in ModelMonitor and the listing files for the flow model, the transport model, and the simulation will open in a text editor. None of those should display any warning or error messages. If they do, check that you have entered the data correctly.</text></para>
   </body>
 </topic>

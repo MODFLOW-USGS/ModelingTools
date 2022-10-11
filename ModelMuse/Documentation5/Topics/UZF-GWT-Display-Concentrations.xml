@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-11T13:19:55.123-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">UZF GWT: Display Concentrations</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Display Concentrations</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW will save the concentrations in a file with the extension .conc. You can import the concentrations in the same way you import heads by selecting the .conc file when you import model results.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;File|Import|Model Results&quot; and select the .conc file and import the data for any time steps that you would like to display.</text></para>
+    <para styleclass="Normal"><image src="UzfGwtImportConcentrations.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture showing the &quot;File|Import|Model Results&quot; dialog box with the concentrations for the last time step selected.</title><caption translate="true"><![CDATA[Screen capture showing the "File|Import|Model Results" dialog box with the concentrations for the last time step selected.]]></caption></image></para>
+    <para styleclass="Normal"><image src="UzfGwtConcentrations.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the ModelMuse main window displaying the concentration data for the final time step of the model.</title><caption translate="true"><![CDATA[Screen capture of the ModelMuse main window displaying the concentration data for the final time step of the model.]]></caption></image></para>
+  </body>
+</topic>

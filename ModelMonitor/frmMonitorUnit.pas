@@ -1996,6 +1996,7 @@ var
   Rate: Double;
   BudgPosition: Integer;
   Package: string;
+  PointColor: TColor;
 begin
   Position := Max(Pos('UNSATURATED ZONE PACKAGE VOLUMETRIC BUDGET', ALine),
     Pos('VOLUMETRIC SWI', ALine));
@@ -2047,10 +2048,15 @@ begin
     begin
       GetRates(Position, ALine, Cum, Rate);
 
+      PointColor := FLineSeriesOwner.TimeStepSeries.Color;
+      GetColor(scError, Rate, PointColor);
       FLineSeriesOwner.TimeStepSeries.AddXY(
-        FLineSeriesOwner.TimeStepSeries.Count+1, Rate);
+        FLineSeriesOwner.TimeStepSeries.Count+1, Rate, '', PointColor);
+
+      PointColor := FLineSeriesOwner.CumulativeSeries.Color;
+      GetColor(scError, Rate, PointColor);
       FLineSeriesOwner.CumulativeSeries.AddXY(
-        FLineSeriesOwner.CumulativeSeries.Count+1, Cum);
+        FLineSeriesOwner.CumulativeSeries.Count+1, Cum, '', PointColor);
       FLineSeriesOwner := nil;
     end;
   end;
@@ -2102,7 +2108,7 @@ Initialization
 //  ColorList.Add(claAqua);
   ColorList.Add(claAquamarine);
   ColorList.Add(claBlueviolet);
-  ColorList.Add(claBrown);
+//  ColorList.Add(claBrown);
   ColorList.Add(claBurlywood);
   ColorList.Add(claCadetblue);
   ColorList.Add(claChartreuse);

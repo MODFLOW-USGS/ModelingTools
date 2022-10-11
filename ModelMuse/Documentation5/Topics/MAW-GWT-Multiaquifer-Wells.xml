@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-11T15:15:36.339-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">MAW GWT: Multiaquifer Wells</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MAW GWT: Multiaquifer Wells</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The first injection well is in row 16, column 16. Create a point object in that cell and set its number of Z formulas to zero. Then use it to specify a Multiaquifer well. Assign the following properties.</text></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Injection Well]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Well Definition</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Radius = 0.01</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Bottom = 0</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Starting Head = 0</text></para>
+          <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Conductance equation = Thiem</text></para>
+          <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Well Screens</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Number of well screens = 1</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Screen top = Model_Top</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Screen bottom = Aquifer_Bottom (or another name if the name of the layer group is not &quot;Aquifer&quot;)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Skin K = 10</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Skin radius = 0.1</text></para>
+          <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Transient</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Status = Active</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Flow Rate = 1</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Extraction Well</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The extraction well is in row 21, column 16. It&apos;s properties are the same as the injection well except that the flow rate is -1.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Receiver Wells</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are two wells that will receive the flow from the Extraction well. They are in row 5, column 16, and row 27, column 16. Their properties are the same as the injection well except that their flow rates are 0.</text></para>
+  </body>
+</topic>

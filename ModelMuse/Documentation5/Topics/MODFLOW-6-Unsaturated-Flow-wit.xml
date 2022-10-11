@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-10-06T12:15:37.806-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+<topic template="Default" status="Under Construction" modified="2022-10-11T13:10:45.338-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MODFLOW 6 Unsaturated Flow with Solute Transport</title>
   <body>
     <header>
@@ -8,5 +8,6 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This exercise reproduces ex-gwt-mt3dsupp632a from the MODFLOW 6 examples. It is described in mf6examples.pdf distributed with MODFLOW6 as &quot;49 Two-Dimensional Test of Unsaturated-Saturated Transport.&quot; It is a two dimensional profile model.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has 20 layers. Infiltration is at the top of the model and passes through 13 unsaturated layers before reaching the saturated zone. In some places, the infiltration water carries a solute along with it. The solute passes through the unsaturated vertically and then starts to spread out as it reaches the saturated zone. The UZF package only simulates vertical flow so there isn&apos;t any capability of simulating lateral spread of the infiltration plume in the unsaturated zone.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">A completed version of this model is distributed with ModelMuse. It is named UZF_GWT.gpt.</text></para>
   </body>
 </topic>

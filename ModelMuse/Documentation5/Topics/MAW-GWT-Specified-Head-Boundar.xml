@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-11T15:35:47.053-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MAW GWT: Specified Head Boundaries</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MAW GWT: Specified Head Boundaries</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are specified head boundaries in the West and East columns. The head in West column is 1000 whereas the head in the East column is 995.5. Use objects to specify these boundaries.</text></para>
+  </body>
+</topic>

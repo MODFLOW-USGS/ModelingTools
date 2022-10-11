@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-11T14:33:12.447-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">MAW GWT: Activate Flow Model Packages</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MAW GWT: Activate Flow Model Packages</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are three boundary condition packages in this model: the CHD, MAW, and MVR packages. The CHD package is used to generate a uniform flow field from west to east. The MAW package is used to specify three injection wells and one withdrawal well. The MVR package is used to transfer the flow from the withdrawal well to two of the injection wells.</text></para>
+    <para styleclass="Normal"><image src="MawGwtPackages.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Packages and Programs&quot; dialog box with the CHD, MAW and MVR packages activated.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Packages and Programs" dialog box with the CHD, MAW and MVR packages activated.]]></caption></image></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-11T15:26:49.568-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">MAW GWT: Water Mover</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MAW GWT: Water Mover</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The water extracted from the extraction well will be transferred to the two receiver wells using the MVR package.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Open the Extraction well in the Object Properties dialog box and activate the MVR package. On the Connections tab of the MVR pane, set the source package to the MAW package. Set the number of receivers to 2 and set the two receiver packages to MAW. Choose the two receiver wells as the receiver objects.</text></para>
+    <para styleclass="Normal"><image src="MawGwtMvrConnections.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box showing the specification of the MVR connections.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box showing the specification of the MVR connections.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the Time tab, set the values for both receivers to 0.5 and the Mover type to Factor.</text></para>
+    <para styleclass="Normal"><image src="MawGwtMvrRates.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box showing the specification of the MVR flow rates.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box showing the specification of the MVR flow rates.]]></caption></image></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

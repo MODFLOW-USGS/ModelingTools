@@ -21,7 +21,7 @@ inherited framePkgSms: TframePkgSms
     Top = 103
     Width = 495
     Height = 414
-    ActivePage = tabBasic
+    ActivePage = tabLinear
     Align = alBottom
     TabOrder = 1
     OnChange = pgcControlsChange
@@ -30,29 +30,29 @@ inherited framePkgSms: TframePkgSms
       object lblPrintOption: TLabel
         Left = 16
         Top = 4
-        Width = 78
-        Height = 20
+        Width = 63
+        Height = 15
         Caption = 'Print option'
       end
       object lblComplexity: TLabel
         Left = 152
         Top = 4
-        Width = 75
-        Height = 20
+        Width = 61
+        Height = 15
         Caption = 'Complexity'
       end
       object lblSolutionGroupMaxIter: TLabel
         Left = 264
         Top = 3
-        Width = 197
-        Height = 20
+        Width = 157
+        Height = 15
         Caption = 'Solution group max iterations'
       end
       object lblUsePTC: TLabel
         Left = 16
         Top = 124
-        Width = 534
-        Height = 20
+        Width = 430
+        Height = 15
         Caption = 
           'Use pseudo-transient continuation (PTC)  (Inverse of  NO_PTC and' +
           ' no_ptc_option)'
@@ -60,8 +60,8 @@ inherited framePkgSms: TframePkgSms
       object lblMaxErrors: TLabel
         Left = 16
         Top = 175
-        Width = 498
-        Height = 20
+        Width = 397
+        Height = 15
         Caption = 
           'Maximum number of allowed error messages (-1 for no limit) (MAXE' +
           'RROR)'
@@ -69,15 +69,15 @@ inherited framePkgSms: TframePkgSms
       object lblMemoryPrint: TLabel
         Left = 16
         Top = 244
-        Width = 357
-        Height = 20
+        Width = 290
+        Height = 15
         Caption = 'Print contents of memory ([MEMORY_PRINT_OPTION) '
       end
       object lblAtsMaxFrac: TLabel
         Left = 144
         Top = 342
-        Width = 253
-        Height = 40
+        Width = 201
+        Height = 30
         Caption = 
           'max outer iterations fraction with ATS (ATS_OUTER_MAXIMUM_FRACTI' +
           'ON)'
@@ -87,13 +87,13 @@ inherited framePkgSms: TframePkgSms
         Left = 16
         Top = 27
         Width = 113
-        Height = 30
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 24
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 0
         Items = <
@@ -117,13 +117,13 @@ inherited framePkgSms: TframePkgSms
         Left = 152
         Top = 27
         Width = 97
-        Height = 30
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 24
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 1
         Items = <
@@ -163,7 +163,7 @@ inherited framePkgSms: TframePkgSms
         Left = 264
         Top = 29
         Width = 121
-        Height = 28
+        Height = 23
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
@@ -173,13 +173,13 @@ inherited framePkgSms: TframePkgSms
         Left = 16
         Top = 143
         Width = 297
-        Height = 30
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 297
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 24
+        ItemHeight = 19
         ItemIndex = 2
         TabOrder = 5
         Items = <
@@ -203,7 +203,7 @@ inherited framePkgSms: TframePkgSms
         Left = 16
         Top = 194
         Width = 121
-        Height = 28
+        Height = 23
         MaxValue = 2147483647.000000000000000000
         MinValue = -1.000000000000000000
         Value = 1.000000000000000000
@@ -221,13 +221,13 @@ inherited framePkgSms: TframePkgSms
         Left = 16
         Top = 268
         Width = 121
-        Height = 30
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 297
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 24
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 8
         Items = <
@@ -257,7 +257,7 @@ inherited framePkgSms: TframePkgSms
         OnClick = cbNewtonClick
       end
       object cbUnderRelaxation: TCheckBox
-        Left = 16
+        Left = 15
         Top = 320
         Width = 406
         Height = 18
@@ -294,7 +294,7 @@ inherited framePkgSms: TframePkgSms
         Left = 0
         Top = 0
         Width = 487
-        Height = 379
+        Height = 384
         Align = alClient
         ColCount = 3
         FixedCols = 1
@@ -400,7 +400,7 @@ inherited framePkgSms: TframePkgSms
         Left = 0
         Top = 0
         Width = 487
-        Height = 379
+        Height = 384
         Align = alClient
         ColCount = 3
         FixedCols = 1

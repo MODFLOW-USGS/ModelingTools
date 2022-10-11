@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-10-06T12:50:01.025-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2022-10-11T10:13:23.771-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">UZF GWT: Set Solver Properties</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Set Solver Properties</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">You will need to modify some of the solver properties. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You will need to override some of the default solver properties. </text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Basic Properties</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Complexity = Complex</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Pseudo-transient continuation = Don&apos;t use PTC for any stress period.</text></para>
@@ -24,7 +24,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Backtracking residual limit = 0.0005</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Linear</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Inner maximum iteration = 100</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Innder DVClose = 0.00001</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Inner DVClose = 0.00001</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Inner RClose = 0.0001</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Rclose option = Relative</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Linear acceleration = BICGSTAB</text></para>

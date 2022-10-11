@@ -77,6 +77,7 @@ type
     procedure GetData(Package: TModflowPackageSelection); override;
     procedure SetData(Package: TModflowPackageSelection); override;
     function LineAccel: TSmsLinLinearAcceleration;
+    procedure AssignFrame(Frame: TframePkgSms);
     { Public declarations }
   end;
 
@@ -118,6 +119,40 @@ resourcestring
   StrOuterRCloseBND = 'Outer RClose BND';
 
 { TframePkgSms }
+
+procedure TframePkgSms.AssignFrame(Frame: TframePkgSms);
+var
+  RowIndex: Integer;
+begin
+  memoComments.Lines := Frame.memoComments.Lines;
+  comboPrintOption.ItemIndex := Frame.comboPrintOption.ItemIndex;
+  comboComplexity.ItemIndex := Frame.comboComplexity.ItemIndex;
+  seSolutionGroupMaxIter.AsInteger := Frame.seSolutionGroupMaxIter.AsInteger;
+  cbContinue.Checked := Frame.cbContinue.Checked;
+  cbCsvOutput.Checked := Frame.cbCsvOutput.Checked;
+  cbCsvInnerOutput.Checked := Frame.cbCsvInnerOutput.Checked;
+  comboUsePTC.ItemIndex := Frame.comboUsePTC.ItemIndex;
+  seMaxErrors.AsInteger := Frame.seMaxErrors.AsInteger;
+  cbCheckInput.Checked := Frame.cbCheckInput.Checked;
+  comboMemoryPrint.ItemIndex := Frame.comboMemoryPrint.ItemIndex;
+  cbNewton.Checked := Frame.cbNewton.Checked;
+  cbUnderRelaxation.Checked := Frame.cbUnderRelaxation.Checked;
+  rdeAtsMaxFrac.Text := Frame.rdeAtsMaxFrac.Text;
+  for RowIndex := 1 to rdgNonlinearOptions.RowCount - 1 do
+  begin
+    rdgNonlinearOptions.Checked[Ord(scOverride), RowIndex] :=
+      Frame.rdgNonlinearOptions.Checked[Ord(scOverride), RowIndex];
+    rdgNonlinearOptions.Cells[Ord(scValue), RowIndex] :=
+      Frame.rdgNonlinearOptions.Cells[Ord(scValue), RowIndex];
+  end;
+  for RowIndex := 1 to rdgLinearOptions.RowCount - 1 do
+  begin
+    rdgLinearOptions.Checked[Ord(scOverride), RowIndex] :=
+      Frame.rdgLinearOptions.Checked[Ord(scOverride), RowIndex];
+    rdgLinearOptions.Cells[Ord(scValue), RowIndex] :=
+      Frame.rdgLinearOptions.Cells[Ord(scValue), RowIndex];
+  end;
+end;
 
 procedure TframePkgSms.cbNewtonClick(Sender: TObject);
 begin

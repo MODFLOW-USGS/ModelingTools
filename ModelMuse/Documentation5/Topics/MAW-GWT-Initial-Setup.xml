@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-11T13:47:05.997-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MAW GWT: Initial Setup</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MAW GWT: Initial Setup</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Start a new MODFLOW model and select &quot;Days&quot; as the time unit.</text></para>
+    <para styleclass="Normal"><image src="MawGwtInitialSetup.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Startup dialog box showing selection of &quot;Days&quot; as the model time units.</title><caption translate="true"><![CDATA[Screen capture of the Startup dialog box showing selection of "Days" as the model time units.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has 46 columns, 31 rows, and 1 layer. The top of the model has an elevation of 10 and the bottom elevation is zero. The grid cell size is 10.</text></para>
+    <para styleclass="Normal"><image src="MawGwtInitialGrid.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the initial grid dialog box illustrating the initial grid setup.</title><caption translate="true"><![CDATA[Screen capture of the initial grid dialog box illustrating the initial grid setup.]]></caption></image></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

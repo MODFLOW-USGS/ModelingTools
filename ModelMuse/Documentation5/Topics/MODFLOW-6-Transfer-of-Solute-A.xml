@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-11T16:22:46.311-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW 6 Transfer of Solute Among Multiaquifer Wells</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Transfer of Solute Among Multiaquifer Wells</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This exercise reproduces ex-gwt-mt3dsupp82 from the MODFLOW 6 examples. It is described in mf6examples.pdf distributed with MODFLOW6 as &quot;47 MT3DMS Supplemental Guide Problem 8.2&quot; It is a one-layer model.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has specified heads at the west and east edges with flow from west to east. The model has four wells simulated with the Multiaquifer Well (MAW) package. Solute is injected into the flow field at one well. A second well downgradient from the first extracts water from the solute plume and redistributes it to two other injection wells using the Water Mover (MVR) package.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">A completed version of this model is distributed with ModelMuse. It is named MawMvrGWT.gpt.</text></para>
+  </body>
+</topic>

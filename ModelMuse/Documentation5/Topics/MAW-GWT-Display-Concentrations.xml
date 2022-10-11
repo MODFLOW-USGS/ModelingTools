@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-11T16:21:28.411-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">MAW GWT: Display Concentrations</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MAW GWT: Display Concentrations</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW will save the concentrations in a file with the extension .conc. You can import the concentrations in the same way you import heads by selecting the .conc file when you import model results.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;File|Import|Model Results&quot; and select the .conc file and import the data for any time steps that you would like to display.</text></para>
+    <para styleclass="Normal"><image src="MawGwtConcentrations.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of ModelMuse showing the grid both colored and contoured with the final concentrations. The lower limit for both was set to 0.01.</title><caption translate="true"><![CDATA[Screen capture of ModelMuse showing the grid both colored and contoured with the final concentrations. The lower limit for both was set to 0.01.]]></caption></image></para>
+  </body>
+</topic>

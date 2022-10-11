@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-11T14:04:26.946-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">MAW GWT: Stress Periods</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MAW GWT: Stress Periods</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has a single transient stress periods with a duration of 365 days and 1 time step. Specify that in the &quot;Model|MODFLOW Time&quot; dialog box.</text></para>
+    <para styleclass="Normal"><image src="MawGwtFlowStressPeriod.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Time dialog box illustrating the specification of a single transient stress period.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Time dialog box illustrating the specification of a single transient stress period.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Because the storage package is required for transient models, it will be activated when you close the dialog box.</text></para>
+  </body>
+</topic>

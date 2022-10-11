@@ -773,6 +773,7 @@ var
   MemoWidth: Integer;
 begin
   result := TframePkgSms.Create(nil);
+  result.AssignFrame(framePkgIMS);
   result.Selected := True;
   FframePkgSmsObjectList.Add(result);
   NewPage := TJvStandardPage.Create(self);
