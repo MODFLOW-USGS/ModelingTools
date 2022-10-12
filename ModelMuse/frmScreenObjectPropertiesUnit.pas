@@ -2481,6 +2481,7 @@ type
     Property PestModifierAssigned[Grid: TRbwDataGrid4; ACol: Integer]: Boolean
       read GetPestModifierAssigned;
     procedure UpdateMawScrollWidth;
+    function CheckMf6LakeOutlet: Boolean;
   protected
     procedure CreateParams(var Params: TCreateParams); override;
   public
@@ -4782,6 +4783,11 @@ var
   ANode: TJvPageIndexNode;
 begin
   inherited;
+  if not CheckMf6LakeOutlet then
+  begin
+    ModalResult := mrNone;
+    Exit;
+  end;
   frmGoPhast.BeginSuppressDrawing;
   try
     ShowError := False;
@@ -11256,6 +11262,30 @@ begin
   except
     on ERbwParserError do
     begin
+    end;
+  end;
+end;
+
+function TfrmScreenObjectProperties.CheckMf6LakeOutlet: Boolean;
+var
+  ProblemOutlet: Integer;
+begin
+  result := True;
+  ProblemOutlet := -1;
+  if (frmGoPhast.ModelSelection = msModflow2015) then
+  begin
+    if (FLAKMf6_Node <> nil) and (FLAKMf6_Node.StateIndex in [2,3]) then
+    begin
+      if not frameLakMf6.LakeOutletsDefined(ProblemOutlet)
+        and ((FMVR_Node = nil) or not (FMVR_Node.StateIndex in [2,3])) then
+      begin
+        Beep;
+        if (MessageDlg(Format(StrNoOutletLakeIsSp + ' Do you want to fix this now?', [ProblemOutlet]),
+          mtWarning, [mbYes, mbNo], 0) = mrYes) then
+        begin
+          Result := False;
+        end;
+      end;
     end;
   end;
 end;

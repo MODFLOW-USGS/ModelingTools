@@ -458,6 +458,9 @@ type
     function CreateImsGwtFram: TframePkgSms;
     procedure ShowImsPage(Sender: TObject);
     procedure EnableGwtPackages;
+    function CheckMt3dSaturation: Boolean;
+    function CheckGwtSaturation: Boolean;
+//    function CheckMf6LakeOutlet: Boolean;
     { Private declarations }
   protected
     procedure CreateParams(var Params: TCreateParams); override;
@@ -612,6 +615,11 @@ resourcestring
   StrGroundwaterTranspor = 'Groundwater Transport';
   StrChemSpecies = 'Chem Species';
   StrChemSpeciesMT3DA = 'Chem Species (MT3D and GWT)';
+  StrTheSaveSaturation = 'The Save Saturation option in the NPF package is i' +
+  'ncompatible with MT3D. Do you want to fix this?';
+  StrTheSaveSaturationGwt = 'The Save Saturation option in the NPF package i' +
+  's required with GWT when the transport simulation is separate from the fl' +
+  'ow simulation. Do you want to fix this?';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -969,6 +977,25 @@ begin
 
 end;
 
+//function TfrmModflowPackages.CheckMf6LakeOutlet: Boolean;
+//var
+//  ProblemOutlet: Integer;
+//begin
+//  result := True;
+//  ProblemOutlet := -1;
+//  if (frmGoPhast.ModelSelection = msModflow2015)
+//    and framePackageLakMf6.Selected
+//    and not framePackageLakMf6.LakeOutletsDefined(ProblemOutlet)
+//    and not framePkgMVR.Selected then
+//  begin
+//    if (MessageDlg(Format(StrNoOutletLakeIsSp, [ProblemOutlet]), mtWarning, [mbYes, mbNo], 0)
+//      in [mrNo, mrNone]) then
+//    begin
+//      Result := False;
+//    end;
+//  end;
+//end;
+//
 procedure TfrmModflowPackages.CheckMt3dChemSpeciesDefined;
 var
   Model: TPhastModel;
@@ -982,6 +1009,20 @@ begin
     begin
       frmErrorsAndWarnings.AddWarning(Model,
         StrNoChemicalSpecies, StrMT3DMSIsActiveBut);
+    end;
+  end;
+end;
+
+function TfrmModflowPackages.CheckMt3dSaturation: Boolean;
+begin
+  result := True;
+  if (frmGoPhast.ModelSelection = msModflow2015) and framePkgMt3dBasic.Selected
+    and framePkgNpf.SaturationSelected then
+  begin
+    if MessageDlg(StrTheSaveSaturation, mtWarning, [mbYes, mbNo], 0)
+      = mrYes then
+    begin
+      Result := False;
     end;
   end;
 end;
@@ -1065,6 +1106,21 @@ begin
       in [mrYes, mrNone]) then
     begin
       result := False;
+    end;
+  end;
+end;
+
+function TfrmModflowPackages.CheckGwtSaturation: Boolean;
+begin
+  result := True;
+  if (frmGoPhast.ModelSelection = msModflow2015) and frameGwtProcess.Selected
+    and frameGwtProcess.SeparateSimulations
+    and not framePkgNpf.SaturationSelected then
+  begin
+    if (MessageDlg(StrTheSaveSaturationGwt, mtWarning, [mbYes, mbNo], 0)
+      in [mrNo, mrNone]) then
+    begin
+      Result := False;
     end;
   end;
 end;
@@ -1182,6 +1238,19 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
+
+  if not CheckMt3dSaturation then
+  begin
+    ModalResult := mrNone;
+    Exit;
+  end;
+
+  if not CheckGwtSaturation then
+  begin
+    ModalResult := mrNone;
+    Exit;
+  end;
+
 
   ModflowPackages := frmGoPhast.PhastModel.ModflowPackages;
   NeedToDefineFluxObservations := False;
@@ -3173,6 +3242,7 @@ begin
 end;
 
 procedure TfrmModflowPackages.UpdateGwtFrames;
+{$IFDEF GWT}
 var
   SpeciesIndex: Integer;
   SpeciesName: string;
@@ -3184,6 +3254,7 @@ var
   AnIstframe: TframePackageIst;
   ImsPackage: TSmsPackageSelection;
   AnImtframe: TframePkgSms;
+{$ENDIF}
 begin
   if not IsLoaded then
   begin

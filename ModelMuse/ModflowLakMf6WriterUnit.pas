@@ -2523,9 +2523,12 @@ begin
         AnOutlet := ALake.FLakeOutlets[OutletIndex];
         if AnOutlet.LakeOutNumber < 0 then
         begin
-          frmErrorsAndWarnings.AddWarning(Model, StrNoOutletLakeDefin,
-            Format(StrInTheLakeDefined,
-            [ALake.FScreenObject.Name, OutletIndex+1]), ALake.FScreenObject);
+          if ALake.FScreenObject.ModflowMvr = nil then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrNoOutletLakeDefin,
+              Format(StrInTheLakeDefined,
+              [ALake.FScreenObject.Name, OutletIndex+1]), ALake.FScreenObject);
+          end;
         end;
 
         Inc(OutletNumber);

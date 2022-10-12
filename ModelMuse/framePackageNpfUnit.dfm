@@ -10,8 +10,8 @@ inherited framePackageNpf: TframePackageNpf
   object lblInterblockMethod: TLabel [2]
     Left = 16
     Top = 119
-    Width = 439
-    Height = 20
+    Width = 353
+    Height = 15
     Caption = 'Method of calculating interblock transmissivity (CELL_AVERAGING)'
   end
   inherited memoComments: TMemo
@@ -77,7 +77,7 @@ inherited framePackageNpf: TframePackageNpf
     Left = 16
     Top = 138
     Width = 400
-    Height = 30
+    Height = 25
     Style = csOwnerDrawVariable
     Anchors = [akLeft, akTop, akRight]
     ButtonStyle = fsLighter
@@ -86,7 +86,7 @@ inherited framePackageNpf: TframePackageNpf
     Enabled = False
     ImageHeight = 0
     ImageWidth = 0
-    ItemHeight = 24
+    ItemHeight = 19
     ItemIndex = -1
     TabOrder = 1
     Items = <

@@ -39,11 +39,17 @@ type
     property GridButtonEvent: TGridButtonEvent read FGridButtonEvent
       write FGridButtonEvent;
     property FrameLoaded: boolean read FFrameLoaded write SetFrameLoaded;
+    function LakeOutletDefined: Boolean;
     { Public declarations }
   end;
 
 var
   frameLakeOutlet: TframeLakeOutlet;
+
+resourcestring
+  StrNoOutletLakeIsSp = 'No outlet lake is specified for outlet %d meaning ' +
+    'that flow from the outlet will either leave the model entirely or be ' +
+    'transferred to another boundary via the MVR package.';
 
 implementation
 
@@ -56,9 +62,6 @@ resourcestring
   StrWidth = 'Width';
   StrSlope = 'Slope';
   StrRoughness = 'Roughness';
-  StrNoOutletLakeIsSp = 'No outlet lake is specified for outlet %d meaning ' +
-    'that flow from the outlet will either leave the model entirely or be ' +
-    'transferred to another boundary via the MVR package.';
   StrOutletValuesWereN = 'Outlet values were not supplied for outlet %d.';
 
 {$R *.dfm}
@@ -169,6 +172,21 @@ begin
 
 end;
 
+function TframeLakeOutlet.LakeOutletDefined: Boolean;
+var
+  AnObject: TObject;
+begin
+  if comboOutlet.ItemIndex >= 0 then
+  begin
+    AnObject := comboOutlet.Items.Objects[comboOutlet.ItemIndex];
+  end
+  else
+  begin
+    AnObject := nil;
+  end;
+  result := (AnObject <> nil);
+end;
+
 procedure TframeLakeOutlet.rdeOutletChange(Sender: TObject);
 begin
   inherited;
@@ -191,11 +209,11 @@ begin
   begin
     LakeOutlet.OutletObject := nil;
   end;
-  if LakeOutlet.OutletObject = nil then
-  begin
-    Beep;
-    MessageDlg(Format(StrNoOutletLakeIsSp, [LakeOutlet.OutletIndex]), mtWarning, [mbOK], 0);
-  end;
+//  if LakeOutlet.OutletObject = nil then
+//  begin
+//    Beep;
+//    MessageDlg(Format(StrNoOutletLakeIsSp, [LakeOutlet.OutletIndex]), mtWarning, [mbOK], 0);
+//  end;
   LakeOutlet.OutletType := TLakeOutletType(comboOutletType.ItemIndex);
 
   ItemIndex := 0;

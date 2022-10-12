@@ -82,6 +82,7 @@ type
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
     property OnChange: TNotifyEvent read FOnChange write SetOnChange;
+    function LakeOutletsDefined(out ProblemOutlet: Integer): Boolean;
     { Public declarations }
   end;
 
@@ -554,6 +555,23 @@ begin
   frameLakeTable.Grid.Cells[Ord(ltcVolume), 0] := StrVolume;
   frameLakeTable.Grid.Cells[Ord(ltcSurfaceArea), 0] := StrSurfaceArea;
   frameLakeTable.Grid.Cells[Ord(ltcExchangeArea), 0] := StrExchangeArea;
+end;
+
+function TframeScreenObjectLakMf6.LakeOutletsDefined(out ProblemOutlet: Integer): Boolean;
+var
+  Index: Integer;
+begin
+  ProblemOutlet := -1;
+  result := True;
+  for Index := 0 to FFrameList.Count - 1 do
+  begin
+    result := FFrameList[Index].LakeOutletDefined;
+    if not result then
+    begin
+      ProblemOutlet := Index;
+      Exit;
+    end;
+  end;
 end;
 
 procedure TframeScreenObjectLakMf6.LayoutMultiRowEditControls;

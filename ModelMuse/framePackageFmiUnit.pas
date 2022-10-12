@@ -17,6 +17,7 @@ type
   public
     procedure GetData(Package: TModflowPackageSelection); override;
     procedure SetData(Package: TModflowPackageSelection); override;
+    function SeparateSimulations: Boolean;
     { Public declarations }
   end;
 
@@ -43,6 +44,11 @@ begin
   inherited;
   cbFlowImbalance.Enabled := rcSelectionController.Enabled
     and (rgSimulationChoice.ItemIndex > 0);
+end;
+
+function TframePackageFmi.SeparateSimulations: Boolean;
+begin
+  result := rgSimulationChoice.ItemIndex = 1;
 end;
 
 procedure TframePackageFmi.SetData(Package: TModflowPackageSelection);

@@ -30,6 +30,7 @@ type
   public
     procedure GetData(Package: TModflowPackageSelection); override;
     procedure SetData(Package: TModflowPackageSelection); override;
+    function SaturationSelected: Boolean;
     { Public declarations }
   end;
 
@@ -205,6 +206,11 @@ begin
   inherited;
   // this ensures that the cells are redrawn properly.
   rdgOptions.EditorMode := False;
+end;
+
+function TframePackageNpf.SaturationSelected: Boolean;
+begin
+  result := rdgOptions.Checked[0, Ord(noSaveSaturation)];
 end;
 
 procedure TframePackageNpf.SetData(Package: TModflowPackageSelection);

@@ -30074,5 +30074,12 @@ object TTaskHistory
       Categories.Strings = (
         'Documentation'
         'Running MODFLOW ModelMonitor')
+    end
+    item
+      Date = 44846.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Running MODFLOW ModelMonitor'
+        'Error checking')
     end>
 end

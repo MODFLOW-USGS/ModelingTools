@@ -52,16 +52,16 @@ inherited framePkgFarm: TframePkgFarm
       object lblCropIrrigationRequirement: TLabel
         Left = 6
         Top = 318
-        Width = 219
-        Height = 13
+        Width = 245
+        Height = 15
         Anchors = [akLeft, akBottom]
         Caption = 'Crop irrigation requirement (AUX NOCIRNOQ)'
       end
       object lblRecomputeFlows: TLabel
         Left = 6
         Top = 379
-        Width = 283
-        Height = 13
+        Width = 311
+        Height = 15
         Anchors = [akLeft, akBottom]
         Caption = 'Recompute farm flows for each time step (RECOMP_Q_BD)'
       end
@@ -83,7 +83,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 6
         Top = 340
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Anchors = [akLeft, akBottom]
         Enabled = False
@@ -96,7 +96,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 6
         Top = 401
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Anchors = [akLeft, akBottom]
         Enabled = False
@@ -136,36 +136,36 @@ inherited framePkgFarm: TframePkgFarm
       object lblRootingDepth: TLabel
         Left = 16
         Top = 14
-        Width = 107
-        Height = 13
+        Width = 114
+        Height = 15
         Caption = 'Rooting depth (IRTFL)'
       end
       object lblConsumptiveUse: TLabel
         Left = 16
         Top = 75
-        Width = 122
-        Height = 13
+        Width = 134
+        Height = 15
         Caption = 'Consumptive use (ICUFL)'
       end
       object lblPrecipitation: TLabel
         Left = 16
         Top = 134
-        Width = 91
-        Height = 13
+        Width = 100
+        Height = 15
         Caption = 'Precipitation (IPFL)'
       end
       object lblInefficiencyLosses: TLabel
         Left = 16
         Top = 195
-        Width = 193
-        Height = 13
+        Width = 207
+        Height = 15
         Caption = 'Fraction of inefficiency losses (IIESWFL)'
       end
       object comboRootingDepth: TComboBox
         Left = 16
         Top = 36
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 0
@@ -177,7 +177,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 16
         Top = 97
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 1
@@ -191,7 +191,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 16
         Top = 217
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 3
@@ -203,7 +203,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 16
         Top = 156
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 2
@@ -223,15 +223,15 @@ inherited framePkgFarm: TframePkgFarm
       object lblDeficiency: TLabel
         Left = 6
         Top = 287
-        Width = 124
-        Height = 13
+        Width = 136
+        Height = 15
         Caption = 'Deficiency policy (IDEFFL)'
       end
       object comboDeficiency: TComboBox
         Left = 6
         Top = 309
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 1
@@ -261,15 +261,16 @@ inherited framePkgFarm: TframePkgFarm
           ExplicitHeight = 278
           inherited lblTop: TLabel
             Left = 56
-            Width = 153
+            Width = 170
             Caption = 'Efficiency groundwater function'
             ExplicitLeft = 56
-            ExplicitWidth = 153
+            ExplicitWidth = 170
           end
           inherited lblLeft: TMMJLabel
             Left = 3
             Top = 62
             Width = 52
+            Height = 13
             AutoSize = False
             Caption = 'Efficiency reset'
             ButtonWidth = 52
@@ -281,9 +282,9 @@ inherited framePkgFarm: TframePkgFarm
           end
           inherited rdgGrid: TRbwDataGrid4
             Left = 32
-            Top = 55
+            Top = 57
             Width = 360
-            Height = 218
+            Height = 216
             Margins.Left = 30
             Margins.Top = 40
             ColCount = 3
@@ -292,6 +293,7 @@ inherited framePkgFarm: TframePkgFarm
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -316,6 +318,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -339,6 +342,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -412,14 +416,15 @@ inherited framePkgFarm: TframePkgFarm
           ExplicitWidth = 397
           ExplicitHeight = 459
           inherited lblTop: TLabel
-            Width = 127
+            Width = 144
             Caption = 'Crop consumptive concept'
-            ExplicitWidth = 127
+            ExplicitWidth = 144
           end
           inherited lblLeft: TMMJLabel
             Left = 3
             Top = 96
             Width = 52
+            Height = 13
             AutoSize = False
             Caption = 'Crop consumptive linkage  '
             ButtonWidth = 52
@@ -432,13 +437,14 @@ inherited framePkgFarm: TframePkgFarm
           inherited rdgGrid: TRbwDataGrid4
             Left = 32
             Width = 360
-            Height = 419
+            Height = 417
             Margins.Left = 30
             ColCount = 3
             RowCount = 3
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -462,6 +468,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -485,6 +492,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -524,36 +532,36 @@ inherited framePkgFarm: TframePkgFarm
       object lblRoutedDelivery: TLabel
         Left = 16
         Top = 14
-        Width = 187
-        Height = 13
+        Width = 198
+        Height = 15
         Caption = 'Routed surface-water delivery (IRDFL)'
       end
       object lblRoutedReturnFlow: TLabel
         Left = 16
         Top = 75
-        Width = 232
-        Height = 13
+        Width = 247
+        Height = 15
         Caption = 'Routed surface-water runoff returnflow (IRRFL)'
       end
       object lblAllotment: TLabel
         Left = 16
         Top = 134
-        Width = 177
-        Height = 13
+        Width = 190
+        Height = 15
         Caption = 'Surface water allotment (IALLOTSW)'
       end
       object lblDiversionCriterion: TLabel
         Left = 16
         Top = 195
-        Width = 172
-        Height = 13
+        Width = 190
+        Height = 15
         Caption = 'Diversion closure criterion (PCLOSE)'
       end
       object comboRoutedDelivery: TComboBox
         Left = 16
         Top = 36
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 0
@@ -566,7 +574,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 16
         Top = 97
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 1
@@ -578,7 +586,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 16
         Top = 156
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 2
@@ -613,29 +621,29 @@ inherited framePkgFarm: TframePkgFarm
       object lblSaveWellFlowRates: TLabel
         Left = 16
         Top = 14
-        Width = 170
-        Height = 13
+        Width = 182
+        Height = 15
         Caption = 'Save farm well flow rates (IFWLCB)'
       end
       object lblSaveRecharge: TLabel
         Left = 16
         Top = 75
-        Width = 137
-        Height = 13
+        Width = 144
+        Height = 15
         Caption = 'Save net recharge (IFNRCB)'
       end
       object lblSupplyAndDemand: TLabel
         Left = 16
         Top = 134
-        Width = 139
-        Height = 13
+        Width = 153
+        Height = 15
         Caption = 'Supply and demand (ISDPFL)'
       end
       object comboSaveWellFlowRates: TComboBox
         Left = 16
         Top = 36
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 0
@@ -647,7 +655,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 16
         Top = 97
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 1
@@ -661,7 +669,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 16
         Top = 156
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Enabled = False
         TabOrder = 2
@@ -683,8 +691,8 @@ inherited framePkgFarm: TframePkgFarm
       object lblDiversionBudgetLocation: TLabel
         Left = 16
         Top = 151
-        Width = 166
-        Height = 13
+        Width = 183
+        Height = 15
         Caption = 'Diversion budget location (IPAPFL)'
       end
       inline frameAcreageOptimizationPrintSettings: TframeRadioGrid
@@ -704,15 +712,15 @@ inherited framePkgFarm: TframePkgFarm
           ExplicitWidth = 397
           ExplicitHeight = 203
           inherited lblTop: TLabel
-            Width = 62
+            Width = 71
             Caption = 'Print location'
-            ExplicitWidth = 62
+            ExplicitWidth = 71
           end
           inherited lblLeft: TMMJLabel
             Left = 13
             Top = 80
-            Width = 13
-            Height = 58
+            Width = 52
+            Height = 13
             AutoSize = False
             Caption = 'Print choice '
             ButtonWidth = 52
@@ -724,12 +732,13 @@ inherited framePkgFarm: TframePkgFarm
           end
           inherited rdgGrid: TRbwDataGrid4
             Width = 344
-            Height = 163
+            Height = 161
             ColCount = 3
             RowCount = 6
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -753,6 +762,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -776,6 +786,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -811,7 +822,7 @@ inherited framePkgFarm: TframePkgFarm
         Left = 16
         Top = 173
         Width = 369
-        Height = 21
+        Height = 23
         Style = csDropDownList
         TabOrder = 1
         Items.Strings = (
@@ -835,30 +846,29 @@ inherited framePkgFarm: TframePkgFarm
           ExplicitHeight = 142
           inherited lblTop: TLabel
             Left = 200
-            Width = 40
+            Width = 46
             Caption = 'Location'
             ExplicitLeft = 200
-            ExplicitWidth = 40
+            ExplicitWidth = 46
           end
           inherited lblLeft: TMMJLabel
             Left = 13
             Top = 36
-            Width = 13
-            Height = 54
+            Width = 58
             Caption = 'Frequency '
             ExplicitLeft = 13
             ExplicitTop = 36
-            ExplicitWidth = 13
-            ExplicitHeight = 54
+            ExplicitWidth = 58
           end
           inherited rdgGrid: TRbwDataGrid4
             Width = 344
-            Height = 102
+            Height = 100
             ColCount = 4
             RowCount = 3
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -882,6 +892,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -905,6 +916,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -928,6 +940,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -979,28 +992,29 @@ inherited framePkgFarm: TframePkgFarm
           ExplicitWidth = 397
           ExplicitHeight = 208
           inherited lblTop: TLabel
-            Width = 64
+            Width = 70
             Caption = 'What to print'
-            ExplicitWidth = 64
+            ExplicitWidth = 70
           end
           inherited lblLeft: TMMJLabel
             Left = 13
             Top = 62
-            Width = 65
+            Width = 74
             Caption = 'Print location '
             ExplicitLeft = 13
             ExplicitTop = 62
-            ExplicitWidth = 65
+            ExplicitWidth = 74
           end
           inherited rdgGrid: TRbwDataGrid4
             Width = 344
-            Height = 168
+            Height = 166
             ColCount = 6
             RowCount = 3
             OnSelectCell = frameET_PrintFlagrdgGridSelectCell
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1024,6 +1038,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1047,6 +1062,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1070,6 +1086,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1093,6 +1110,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1116,6 +1134,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1160,14 +1179,15 @@ inherited framePkgFarm: TframePkgFarm
           ExplicitWidth = 397
           ExplicitHeight = 203
           inherited lblTop: TLabel
-            Width = 47
+            Width = 51
             Caption = 'Print type'
-            ExplicitWidth = 47
+            ExplicitWidth = 51
           end
           inherited lblLeft: TMMJLabel
             Left = 3
             Top = 38
             Width = 52
+            Height = 13
             AutoSize = False
             Caption = 'Compact or detailed '
             ButtonWidth = 52
@@ -1179,12 +1199,13 @@ inherited framePkgFarm: TframePkgFarm
           end
           inherited rdgGrid: TRbwDataGrid4
             Width = 344
-            Height = 163
+            Height = 161
             DefaultColWidth = 60
             RowCount = 3
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1208,6 +1229,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1231,6 +1253,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1254,6 +1277,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1277,6 +1301,7 @@ inherited framePkgFarm: TframePkgFarm
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1316,8 +1341,8 @@ inherited framePkgFarm: TframePkgFarm
       object lblMnwExplanation: TLabel
         Left = 16
         Top = 12
-        Width = 311
-        Height = 26
+        Width = 305
+        Height = 30
         Caption = 
           'These options apply to the interation with the MNW1 and MNW2 pac' +
           'kages'
@@ -1334,8 +1359,8 @@ inherited framePkgFarm: TframePkgFarm
         object lblRPCT: TLabel
           Left = 74
           Top = 237
-          Width = 274
-          Height = 26
+          Width = 257
+          Height = 30
           Caption = 
             'Fraction of reduction of residual-change closure criterion if QC' +
             'LOSE was not met (RPCT)'
@@ -1344,8 +1369,8 @@ inherited framePkgFarm: TframePkgFarm
         object lblHPCT: TLabel
           Left = 74
           Top = 175
-          Width = 313
-          Height = 26
+          Width = 299
+          Height = 30
           Caption = 
             'Fraction of reduction of head-change closure criterion if QCLOSE' +
             ' was not met (HPCT)'
@@ -1354,8 +1379,8 @@ inherited framePkgFarm: TframePkgFarm
         object lblQClose: TLabel
           Left = 74
           Top = 114
-          Width = 284
-          Height = 26
+          Width = 277
+          Height = 30
           Caption = 
             'Criterion for actual MNW pumping rate to converge to FMP pumping' +
             ' requirement (QCLOSE) '
@@ -1432,8 +1457,8 @@ inherited framePkgFarm: TframePkgFarm
         object lblPSIRAMPF: TLabel
           Left = 74
           Top = 26
-          Width = 270
-          Height = 26
+          Width = 261
+          Height = 30
           Caption = 
             'Minimum fraction of model cell thickness before pumping reductio' +
             'n is initiated (PSIRAMPF)'
@@ -1442,8 +1467,8 @@ inherited framePkgFarm: TframePkgFarm
         object lblSATTHK: TLabel
           Left = 74
           Top = 82
-          Width = 280
-          Height = 26
+          Width = 269
+          Height = 30
           Caption = 
             'Minimum saturated thickness of model cell before pumping reducti' +
             'on is initiated. (SATTHK)'

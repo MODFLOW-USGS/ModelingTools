@@ -2114,11 +2114,11 @@ Initialization
   ColorList.Add(claChartreuse);
   ColorList.Add(claChocolate);
   ColorList.Add(claCoral);
-  ColorList.Add(claCornflowerblue);
-  ColorList.Add(claCrimson);
-  ColorList.Add(claCyan);
-  ColorList.Add(claDarkblue);
-  ColorList.Add(claDarkcyan);
+//  ColorList.Add(claCornflowerblue);
+//  ColorList.Add(claCrimson);
+//  ColorList.Add(claCyan);
+//  ColorList.Add(claDarkblue);
+//  ColorList.Add(claDarkcyan);
   ColorList.Add(claDarkgoldenrod);
   ColorList.Add(claDarkgreen);
   ColorList.Add(claDarkkhaki);

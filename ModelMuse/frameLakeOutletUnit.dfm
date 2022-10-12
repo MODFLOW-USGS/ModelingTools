@@ -11,9 +11,9 @@ inherited frameLakeOutlet: TframeLakeOutlet
     ExplicitWidth = 424
     ExplicitHeight = 85
     inherited lbNumber: TLabel
-      Width = 78
+      Width = 90
       Caption = 'Number of times'
-      ExplicitWidth = 78
+      ExplicitWidth = 90
     end
     inherited sbAdd: TSpeedButton
       Left = 275
@@ -33,28 +33,28 @@ inherited frameLakeOutlet: TframeLakeOutlet
     object lblOutletLake: TLabel [4]
       Left = 8
       Top = 37
-      Width = 52
-      Height = 13
+      Width = 57
+      Height = 15
       Caption = 'Outlet lake'
     end
     object lblOutletType: TLabel [5]
       Left = 264
       Top = 36
-      Width = 55
-      Height = 13
+      Width = 59
+      Height = 15
       Caption = 'Outlet type'
     end
     object comboOutletType: TJvImageComboBox
       Left = 264
       Top = 56
       Width = 145
-      Height = 23
+      Height = 25
       Style = csOwnerDrawVariable
       ButtonStyle = fsLighter
       DroppedWidth = 145
       ImageHeight = 0
       ImageWidth = 0
-      ItemHeight = 17
+      ItemHeight = 19
       ItemIndex = 1
       TabOrder = 1
       OnChange = comboOutletTypeChange

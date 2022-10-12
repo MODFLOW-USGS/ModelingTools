@@ -12,8 +12,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitWidth = 802
-  ExplicitHeight = 602
+  ExplicitWidth = 800
+  ExplicitHeight = 594
   TextHeight = 19
   object pageMain: TPageControl
     Left = 0
@@ -595,13 +595,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitHeight = 19
           end
           inherited cbPhastInterpolation: TJvCheckBox
-            Width = 241
+            Width = 238
+            Height = 19
             OnClick = framePhastInterpolationDatacbPhastInterpolationClick
             HotTrackFont.Charset = ANSI_CHARSET
             HotTrackFont.Height = 19
             HotTrackFont.Name = 'Arial'
             HotTrackFont.Pitch = fpVariable
-            ExplicitWidth = 241
+            ExplicitWidth = 238
+            ExplicitHeight = 19
           end
           inherited rdeDistance1: TRbwDataEntry
             Top = 68
@@ -2306,7 +2308,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited cbPhastInterpolation: TJvCheckBox
               Left = 16
               Top = 65
-              Width = 241
+              Width = 238
+              Height = 19
               TabOrder = 3
               Visible = False
               OnClick = framePhastInterpolationBoundariescbPhastInterpolationClick
@@ -2316,7 +2319,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               HotTrackFont.Pitch = fpVariable
               ExplicitLeft = 16
               ExplicitTop = 65
-              ExplicitWidth = 241
+              ExplicitWidth = 238
+              ExplicitHeight = 19
             end
             inherited rdeDistance1: TRbwDataEntry
               Left = 8
@@ -8133,9 +8137,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitTop = 284
               end
               inherited lblMessage: TLabel
-                Height = 114
+                Height = 95
                 Visible = True
-                ExplicitHeight = 114
+                ExplicitHeight = 95
               end
               inherited rgChoice: TRadioGroup
                 OnClick = frameModpathParticlesrgChoiceClick
@@ -10224,7 +10228,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 166
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 17
               EditLabel.ExplicitWidth = 166
               EditLabel.ExplicitHeight = 19
@@ -10236,7 +10239,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 186
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 66
               EditLabel.ExplicitWidth = 186
               EditLabel.ExplicitHeight = 19
@@ -10248,7 +10250,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 217
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 116
               EditLabel.ExplicitWidth = 217
               EditLabel.ExplicitHeight = 19
@@ -10260,7 +10261,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 500
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 166
               EditLabel.ExplicitWidth = 500
               EditLabel.ExplicitHeight = 19
@@ -10272,7 +10272,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 504
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 215
               EditLabel.ExplicitWidth = 504
               EditLabel.ExplicitHeight = 19
@@ -10289,7 +10288,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 337
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 265
               EditLabel.ExplicitWidth = 337
               EditLabel.ExplicitHeight = 19
@@ -10306,7 +10304,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 206
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 313
               EditLabel.ExplicitWidth = 206
               EditLabel.ExplicitHeight = 19
@@ -10362,7 +10359,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 27
               EditLabel.Width = 80
               EditLabel.Height = 19
-              EditLabel.ExplicitLeft = 3
               EditLabel.ExplicitTop = 17
               EditLabel.ExplicitWidth = 80
               EditLabel.ExplicitHeight = 19
@@ -12251,7 +12247,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitHeight = 19
                 end
                 inherited lblBottom: TLabel
+                  Width = 50
                   Height = 19
+                  ExplicitWidth = 50
                   ExplicitHeight = 19
                 end
                 inherited lblStartingHead: TLabel
@@ -12722,7 +12720,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 27
                 EditLabel.Width = 266
                 EditLabel.Height = 19
-                EditLabel.ExplicitLeft = 6
                 EditLabel.ExplicitTop = -3
                 EditLabel.ExplicitWidth = 266
                 EditLabel.ExplicitHeight = 19
@@ -12909,7 +12906,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 259
               inherited tabLakeProperties: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 301
+                ExplicitWidth = 573
+                ExplicitHeight = 225
                 inherited lblOutletCount: TLabel
                   Width = 127
                   Height = 19
@@ -13065,28 +13063,27 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabGWT: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 225
+                ExplicitHeight = 301
                 inherited splSplit: TSplitter
                   Left = 115
-                  Height = 225
+                  Height = 301
                   ExplicitLeft = 115
                   ExplicitHeight = 225
                 end
                 inherited tvGwt: TJvPageListTreeView
                   Width = 115
-                  Height = 225
+                  Height = 301
                   Items.Links = {00000000}
                   ExplicitWidth = 115
-                  ExplicitHeight = 225
+                  ExplicitHeight = 301
                 end
                 inherited jplGwt: TJvPageList
                   Left = 120
-                  Width = 453
-                  Height = 225
+                  Width = 357
+                  Height = 301
                   ExplicitLeft = 120
-                  ExplicitWidth = 453
-                  ExplicitHeight = 225
+                  ExplicitWidth = 357
+                  ExplicitHeight = 301
                 end
               end
             end
