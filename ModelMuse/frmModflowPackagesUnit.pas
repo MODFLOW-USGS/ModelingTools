@@ -455,7 +455,7 @@ type
     procedure UpdateGwtFrames;
     function CreateMstFrame: TframePackageMST;
     function CreateIstFrame: TframePackageIst;
-    function CreateImsGwtFram: TframePkgSms;
+    function CreateImsGwtFrame: TframePkgSms;
     procedure ShowImsPage(Sender: TObject);
     procedure EnableGwtPackages;
     function CheckMt3dSaturation: Boolean;
@@ -775,13 +775,12 @@ begin
   FframePkgSmsObjectList := TframePkgSmsObjectList.Create;
 end;
 
-function TfrmModflowPackages.CreateImsGwtFram: TframePkgSms;
+function TfrmModflowPackages.CreateImsGwtFrame: TframePkgSms;
 var
   NewPage: TJvStandardPage;
   MemoWidth: Integer;
 begin
   result := TframePkgSms.Create(nil);
-  result.AssignFrame(framePkgIMS);
   result.Selected := True;
   FframePkgSmsObjectList.Add(result);
   NewPage := TJvStandardPage.Create(self);
@@ -3253,7 +3252,7 @@ var
   AMstFrame: TframePackageMST;
   AnIstframe: TframePackageIst;
   ImsPackage: TSmsPackageSelection;
-  AnImtframe: TframePkgSms;
+  AnImsframe: TframePkgSms;
 {$ENDIF}
 begin
   if not IsLoaded then
@@ -3385,26 +3384,29 @@ begin
 
       ImsPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtIms;
 //      ChildNode.Data := ImsPackage
-                        ;
+
       if SpeciesIndex < FframePkgSmsObjectList.Count then
       begin
-        AnImtframe := FframePkgSmsObjectList[SpeciesIndex];
+        AnImsframe := FframePkgSmsObjectList[SpeciesIndex];
       end
       else
       begin
-        AnImtframe := CreateImsGwtFram;
+        AnImsframe := CreateImsGwtFrame;
 
         ImsPackage.Node := ChildNode;
-        AnImtframe.GetData(ImsPackage);
+        // New frames get their value from the flow model
+        // IMS frame.
+        AnImsframe.GetData(ImsPackage);
+        AnImsframe.AssignFrame(framePkgIMS);
 
         Link := TFrameNodeLink.Create;
-        Link.Frame := AnImtframe;
+        Link.Frame := AnImsframe;
         Link.Node := ChildNode;
         Link.AlternateNode := ChildNode;
         FFrameNodeLinks.Add(Link);
         FLinkDictionary.Add(Link.Frame, Link);
       end;
-      ChildNode.Data := AnImtframe.Parent;
+      ChildNode.Data := AnImsframe.Parent;
 
       ChildNode := ChildNode.GetnextSibling;
     end
@@ -4829,7 +4831,7 @@ begin
       end
       else
       begin
-        AnImsFrame := CreateImsGwtFram;
+        AnImsFrame := CreateImsGwtFrame;
       end;
 
       SpeciesName := frameChemSpecies.frameGridMobile.Grid.Cells[0, ImsIndex+ 1];

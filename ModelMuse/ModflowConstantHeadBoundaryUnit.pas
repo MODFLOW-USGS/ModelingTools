@@ -1691,6 +1691,10 @@ begin
   begin
     result := HeadTimeSeriesName;
   end
+  else if Index = ChdEndHeadPosition then
+  begin
+    result := HeadTimeSeriesName;
+  end
   else
     begin
       ConcIndex := Index - ChdStartConcentration;

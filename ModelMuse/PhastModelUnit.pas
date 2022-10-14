@@ -10734,13 +10734,14 @@ const
 //                when MT3D but not GWT is selected.
 //    '5.0.0.30' Bug fix: ModelMuse no longer exports head observations that
 //                are outside the grid to ModelMate.
+//    '5.0.0.31' --
 
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.30';
+  IIModelVersion = '5.0.0.31';
 
 function IModelVersion: string;
 begin

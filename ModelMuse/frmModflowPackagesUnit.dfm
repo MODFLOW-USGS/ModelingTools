@@ -9827,8 +9827,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 413
           inherited tabBasic: TTabSheet
             ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 380
+            ExplicitHeight = 381
             inherited lblPrintOption: TLabel
               Width = 79
               Height = 18
@@ -9903,13 +9902,11 @@ inherited frmModflowPackages: TfrmModflowPackages
           end
           inherited tabNonLinear: TTabSheet
             ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 380
+            ExplicitHeight = 381
             inherited rdgNonlinearOptions: TRbwDataGrid4
-              Width = 587
-              Height = 380
+              Height = 381
               FixedCols = 0
-              ExplicitHeight = 380
+              ExplicitHeight = 381
             end
           end
           inherited tabLinear: TTabSheet
@@ -9920,6 +9917,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 587
               Height = 380
               FixedCols = 0
+              ExplicitWidth = 587
               ExplicitHeight = 380
             end
           end

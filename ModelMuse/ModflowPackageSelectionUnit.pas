@@ -20520,7 +20520,7 @@ begin
     ABoundary := ScreenObject.ModflowSfr6Boundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
-      GwtIndex := 9 + ABoundary.Diversions.Count
+      GwtIndex := SfrMf6DiversionStartPosition + ABoundary.Diversions.Count
         + LocalModel.MobileComponents.Count * 4;
       for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
@@ -20559,7 +20559,7 @@ begin
     ABoundary := ScreenObject.ModflowSfr6Boundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
-      GwtIndex := 9 + ABoundary.Diversions.Count
+      GwtIndex := SfrMf6DiversionStartPosition + ABoundary.Diversions.Count
         + LocalModel.MobileComponents.Count;
       for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
@@ -20598,7 +20598,7 @@ begin
     ABoundary := ScreenObject.ModflowSfr6Boundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
-      GwtIndex := 9 + ABoundary.Diversions.Count
+      GwtIndex := SfrMf6DiversionStartPosition + ABoundary.Diversions.Count
         + LocalModel.MobileComponents.Count * 3;
       for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
@@ -20637,7 +20637,7 @@ begin
     ABoundary := ScreenObject.ModflowSfr6Boundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
-      GwtIndex := 9 + ABoundary.Diversions.Count
+      GwtIndex := SfrMf6DiversionStartPosition + ABoundary.Diversions.Count
         {+ LocalModel.MobileComponents.Count * 2};
       for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
