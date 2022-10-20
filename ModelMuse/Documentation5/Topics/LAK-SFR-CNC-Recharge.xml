@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-20T17:54:31.111-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">LAK SFR CNC: Recharge</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Recharge</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Create an object on the top view of the model covering the entire model area. Use it to set a recharge rate of 0.00479.</text></para>
+  </body>
+</topic>

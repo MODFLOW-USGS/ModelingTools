@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4392</config-value>
+      <config-value name="autohelpstart">4397</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1164,12 +1164,17 @@ document.write('</frameset>');
       <helpcontext-number href="Lake_Example" value="4060"/>
       <helpcontext-number href="Lakes_Pane" value="4061"/>
       <helpcontext-number href="LAK-SFR-CNC-Activate-Boundary-" value="4388"/>
+      <helpcontext-number href="LAK-SFR-CNC-Flow-Connections" value="4395"/>
       <helpcontext-number href="LAK-SFR-CNC-Flow-Model-Aquifer" value="4387"/>
       <helpcontext-number href="LAK-SFR-CNC-Generating-the-Gri" value="4385"/>
       <helpcontext-number href="LAK-SFR-CNC-Initial-Setup" value="4384"/>
+      <helpcontext-number href="LAK-SFR-CNC-Lakes" value="4393"/>
+      <helpcontext-number href="LAK-SFR-CNC-Recharge" value="4394"/>
+      <helpcontext-number href="LAK-SFR-CNC-Run-Flow-Model" value="4397"/>
       <helpcontext-number href="LAK-SFR-CNC-Solver-Parameters" value="4389"/>
       <helpcontext-number href="LAK-SFR-CNC-Specified-Heads" value="4390"/>
       <helpcontext-number href="LAK-SFR-CNC-Specifying-the-Lay" value="4386"/>
+      <helpcontext-number href="LAK-SFR-CNC-Streamflow-Observa" value="4396"/>
       <helpcontext-number href="LAK-SFR-CNC-Streams" value="4392"/>
       <helpcontext-number href="LAK-SFR-CNC-Stress-Period" value="4391"/>
       <helpcontext-number href="LastVertexValue" value="3970"/>

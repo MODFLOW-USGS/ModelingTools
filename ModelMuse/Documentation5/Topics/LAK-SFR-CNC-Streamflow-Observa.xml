@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-20T18:31:57.737-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LAK SFR CNC: Streamflow Observations.</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Streamflow Observations.</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Go back to the MODFLOW Packages and Programs dialog box and activate the Observations Utility. Then for edit each stream segment in the Object Propeties dialog box, and define an observation of the groundwater exchange for all the reaches in the segment.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncSfrObs.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of teh Object Properties dialog box illustrating the specification of an observation in a stream segment.</title><caption translate="true"><![CDATA[Screen capture of teh Object Properties dialog box illustrating the specification of an observation in a stream segment.]]></caption></image></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

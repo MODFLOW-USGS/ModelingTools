@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-20T18:20:14.817-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LAK SFR CNC: Flow Connections</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Flow Connections</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Connections between one stream reach and another are specified by the the &quot;downstream segment.&quot; However, flow between streams and lakes must be specified by the Water Mover (MVR) package. In this model, there will be flow from Seg1 to Lake1 and from Lake1 to Seg2. These will be specified using the MVR package.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Edit Seg1 in the Object Properties dialog box. Activate the MVR package and make SFR the source and the Lake1 the receiver.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncMvrToLake1.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box illustrating the specification of the MVR package from a stream to a lake.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box illustrating the specification of the MVR package from a stream to a lake.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the Time tab, set the receiver 1 value to 1 and Mover type to factor.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncMvrToLake2.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box illustrating the specification of the rate of flow from a stream to a lake.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box illustrating the specification of the rate of flow from a stream to a lake.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat this with Lake 1 except make the first reach of Seg2 the receiver. The source lake outlet can be set to 1.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncMvrToStream.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box illustrating the specification of the MVR package from a lake to a stream.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box illustrating the specification of the MVR package from a lake to a stream.]]></caption></image></para>
+  </body>
+</topic>
