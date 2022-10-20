@@ -4,8 +4,9 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 485
   ClientWidth = 764
-  ExplicitWidth = 782
-  ExplicitHeight = 532
+  ExplicitWidth = 780
+  ExplicitHeight = 524
+  PixelsPerInch = 96
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
@@ -1260,6 +1261,8 @@ inherited frmPEST: TfrmPEST
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Observation_G2'
       Caption = 'jvspObsGroupAssignments'
+      ExplicitWidth = 106
+      ExplicitHeight = 159
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
@@ -1267,8 +1270,8 @@ inherited frmPEST: TfrmPEST
         Height = 443
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 566
-        ExplicitHeight = 443
+        ExplicitWidth = 106
+        ExplicitHeight = 159
         inherited tvTree: TTreeView
           Width = 566
           Height = 443

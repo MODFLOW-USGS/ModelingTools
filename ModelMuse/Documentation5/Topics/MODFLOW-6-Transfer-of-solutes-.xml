@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-19T09:32:33.678-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW 6 Transfer of solutes between streams and lakes</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Transfer of solutes between streams and lakes</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This exercise reproduces the general features of ex-gwt-prudic2004t2 from the MODFLOW 6 examples. It is described in mf6examples.pdf distributed with MODFLOW6 as &quot;48 SFR1 Manual Problem 2.&quot; It is not an exact reproduction of the model. Among other changes, the row and column widths are set to 403.717 and 405.665 respectively.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

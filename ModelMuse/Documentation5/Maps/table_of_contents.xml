@@ -2962,6 +2962,9 @@
           <caption translate="true">MAW GWT: Display Concentrations</caption>
         </topicref>
       </topicref>
+      <topicref type="topic" id="448531878515319" build="ALL" modified="2022-10-19T09:20:50.008Z" icon="0" href="MODFLOW-6-Transfer-of-solutes-">
+        <caption translate="true">MODFLOW 6 Transfer of solutes between streams and lakes</caption>
+      </topicref>
     </topicref>
     <topicref type="topic" id="415135178584954" build="ALL" modified="2013-08-27T07:52:07.196Z" icon="0" href="SUTRA_Examples">
       <caption translate="true">SUTRA Examples</caption>

@@ -2017,7 +2017,8 @@ var
 
     if (PilotParamName <> '') and (ParameterIndex = 1) then
     begin
-      WriteString(' # Parameters in the ');
+      NewLine;
+      WriteString('# Parameters in the ');
       WriteString(PilotPointItem.ParamFamily);
       WriteString(' family are pilot point parameters related to ');
       WriteString(AParam.ParameterName);

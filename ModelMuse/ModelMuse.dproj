@@ -131,8 +131,6 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_4)'!=''">
         <DCC_Define>GWT;Mf6TimeSeries;$(DCC_Define)</DCC_Define>
-        <DCC_ExeOutput>.\$(Config)\$(Platform)\Beta</DCC_ExeOutput>
-        <DCC_DcuOutput>.\$(Config)\$(Platform)\Beta</DCC_DcuOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>

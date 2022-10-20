@@ -3467,6 +3467,7 @@ that affects the model output should also have a comment. }
     procedure ClearPestPriorInfoGroupData;
     property AppsMoved: TStringList read GetAppsMoved;
     property Mf6GwtNameWriters: TObject read FMf6GwtNameWriters;
+    procedure InvalidateParamNamesDataSets;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -25304,6 +25305,27 @@ end;
 procedure TCustomModel.InvalidateMt3dTobConcs(Sender: TObject);
 begin
   Mt3dTobCond.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateParamNamesDataSets;
+var
+  DataSetIndex: Integer;
+  ADataArray: TDataArray;
+  NameDataArray: TDataArray;
+begin
+  for DataSetIndex := 0 to DataArrayManager.DataSetCount - 1 do
+  begin
+    ADataArray := DataArrayManager[DataSetIndex];
+    if ADataArray.PestParametersUsed then
+    begin
+      NameDataArray := DataArrayManager.GetDataSetByName(
+        ADataArray.ParamDataSetName);
+      if NameDataArray <> nil then
+      begin
+        NameDataArray.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 procedure TCustomModel.InvalidateMfChdConc(Sender: TObject);

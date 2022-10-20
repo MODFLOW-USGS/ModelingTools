@@ -42,6 +42,7 @@ type
     procedure AssignParameters(SteadyParameters: TModflowSteadyParameters;
       HufParameters: THufModflowParameters;
       TransientListParameters: TModflowTransientListParameters);
+    procedure InvalidateParamNamesDataSets;
   protected
     function Description: string; override;
     procedure UpdateProperties(PestProperties: TPestProperties;
@@ -3950,7 +3951,16 @@ begin
   Locations.PestDirectory := NewPestLocation;
   frmGoPhast.PhastModel.SetMf2005ObsGroupNames;
   frmGoPhast.EnableManageParameters;
+  InvalidateParamNamesDataSets;
   frmGoPhast.UpdateControlsEnabledOrVisible;
+end;
+
+procedure TUndoPestOptions.InvalidateParamNamesDataSets;
+begin
+  if FOldPestProperties.PestStatus <> FNewPestProperties.PestStatus then
+  begin
+    frmGoPhast.PhastModel.InvalidateParamNamesDataSets;
+  end;
 end;
 
 procedure TUndoPestOptions.Undo;
@@ -3964,6 +3974,7 @@ begin
   Locations.PestDirectory := OldPestLocation;
   frmGoPhast.PhastModel.SetMf2005ObsGroupNames;
   frmGoPhast.EnableManageParameters;
+  InvalidateParamNamesDataSets;
   frmGoPhast.UpdateControlsEnabledOrVisible;
 end;
 
