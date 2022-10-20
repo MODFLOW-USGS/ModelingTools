@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-20T14:41:15.188-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LAK SFR CNC: Specifying the Layer Elevations</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Specifying the Layer Elevations</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to import the elevation of the bottom of layer 1. Select &quot;File|Import Shapefile&quot; and select Layer1Bottom.shp. Check the &quot;Set values of intersected cells&quot; on the Basic tab. On the Data tab, check the checkbox for LAYER1_BO and select Layer1_Bottom as the data set. </text></para>
+    <para styleclass="Normal"><image src="LakSfrCncLayer1Bottom.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Import Shapefile dialog box with the LAYER1_BO attribute being used to specify the Layer1_Bottom data set.</title><caption translate="true"><![CDATA[Screen capture of the Import Shapefile dialog box with the LAYER1_BO attribute being used to specify the Layer1_Bottom data set.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each of the layers below layer 1 is 15 feet thick. These can be specified using default formulas in the &quot;Data|Edit Data Sets&quot; dialog box.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncOtherLayerBottoms.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Data Sets dialog box showing the specification of the default formula for the bottom of layer 8.</title><caption translate="true"><![CDATA[Screen capture of the Data Sets dialog box showing the specification of the default formula for the bottom of layer 8.]]></caption></image></para>
+  </body>
+</topic>

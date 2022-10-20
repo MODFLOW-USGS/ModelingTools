@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-20T15:09:42.735-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">LAK SFR CNC: Stress Period</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Stress Period</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has a single, steady-state stress period. The starting and ending times are 0 and 9131 days. The stress period has a single time step.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncStressPeriod.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Time dialog box showing the specification of the single stress period.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Time dialog box showing the specification of the single stress period.]]></caption></image></para>
+  </body>
+</topic>

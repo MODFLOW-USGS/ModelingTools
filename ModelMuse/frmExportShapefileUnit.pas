@@ -520,7 +520,7 @@ begin
     Exit;
   end;
 
-  FShapeFileName := jfeNodes.FileName;
+  FShapeFileName := ChangeFileExt(jfeNodes.FileName, '.shp');
   if ExpandFileName(FShapeFileName) <> FShapeFileName then
   begin
     Beep;
@@ -604,7 +604,7 @@ begin
     Exit;
   end;
 
-  FShapeFileName := jfeElements.FileName;
+  FShapeFileName := ChangeFileExt(jfeElements.FileName, '.shp');
 
   if ExpandFileName(FShapeFileName) <> FShapeFileName then
   begin
@@ -709,7 +709,7 @@ begin
     Exit;
   end;
 
-  ShapeFileName := jfeHorizontalFlowBarrier.FileName;
+  ShapeFileName := ChangeFileExt(jfeHorizontalFlowBarrier.FileName, '.shp');;
 
   if ExpandFileName(ShapeFileName) <> ShapeFileName then
   begin

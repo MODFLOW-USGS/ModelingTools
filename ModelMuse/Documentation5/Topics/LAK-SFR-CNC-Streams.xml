@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-20T17:13:16.816-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LAK SFR CNC: Streams</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Streams</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The streams will be imported from Streams.shp. Some of their properties will be edited after the streams are imported. All the streams are on the top layer. You can use the OBJECTNAME attribute to assign the names of the imported objects.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncSfr2.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Import Shapefile dialog box showing the OBJECTNAME attribute being used to specify the names of the imported objects.</title><caption translate="true"><![CDATA[Screen capture of the Import Shapefile dialog box showing the OBJECTNAME attribute being used to specify the names of the imported objects.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> When assigning the stream attributes, the status should be set to Active, and the INFLOW attribute can be used to specify the flow rate of water into the stream segments. The roughness should be set to 0.03, and the Upstream fraction should be set to 1. The default formula for the reach length can be used. The attributes WIDTH, THICK, and K can ge used to specify the reach width, streambed thickness, and hydraulic conductivity respectively.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncSfr.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Import Shapefile dialog box being used to import stream segments.</title><caption translate="true"><![CDATA[Screen capture of the Import Shapefile dialog box being used to import stream segments.]]></caption></image></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Gradient</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">After importing the four stream segments, open each of them in the Object Properties dialog box. Set the gradients for the segments as follows.</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="5" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Object Name</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Gradient</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Seg1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">0.0018</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Seg2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">0.0022</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Seg3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">0.0017</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Swg4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">0.0024</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Downstream Segment</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Set the downstream segments of both Seg2 and Seg3 to Seg4.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Streambed Top Elevations</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">We will use the function InterpolatedVertexValue to specify the elevations of the streambed top. Add vertex values to the upstream and downstream ends of each segment. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Normal" translate="true">Vertex Values Dialog Box</link><text styleclass="Normal" translate="true"> for instructions on how to add vertex values. Use &quot;Elevation&quot; as the key for both the upstream and downstream elevations. Then edit each object in the Object Properties dialog box and set the formula for the stream top to InterpolatedVertexValue(&quot;Elevation&quot;).</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="5" colcount="3" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Object Name</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Upstream Elevation</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Downstream Elevation</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Seg1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">49</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">45</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="height:30px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Seg2</text></para>
+        </td>
+        <td style="height:30px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">44.5</text></para>
+        </td>
+        <td style="height:30px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">34</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Seg3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">41.5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">34</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Swg4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">34</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">27.2</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

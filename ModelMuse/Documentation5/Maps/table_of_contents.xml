@@ -2964,6 +2964,33 @@
       </topicref>
       <topicref type="topic" id="448531878515319" build="ALL" modified="2022-10-19T09:20:50.008Z" icon="0" href="MODFLOW-6-Transfer-of-solutes-">
         <caption translate="true">MODFLOW 6 Transfer of solutes between streams and lakes</caption>
+        <topicref type="topic" id="448542996375898" build="ALL" modified="2022-10-20T11:45:42.425Z" icon="0" href="LAK-SFR-CNC-Initial-Setup">
+          <caption translate="true">LAK SFR CNC: Initial Setup</caption>
+        </topicref>
+        <topicref type="topic" id="44853970568969" build="ALL" modified="2022-10-20T12:03:47.981Z" icon="0" href="LAK-SFR-CNC-Generating-the-Gri">
+          <caption translate="true">LAK SFR CNC: Generating the Grid</caption>
+        </topicref>
+        <topicref type="topic" id="448544458047625" build="ALL" modified="2022-10-20T12:26:08.986Z" icon="0" href="LAK-SFR-CNC-Specifying-the-Lay">
+          <caption translate="true">LAK SFR CNC: Specifying the Layer Elevations</caption>
+        </topicref>
+        <topicref type="topic" id="448547455667405" build="ALL" modified="2022-10-20T14:18:30.869Z" icon="0" href="LAK-SFR-CNC-Flow-Model-Aquifer">
+          <caption translate="true">LAK SFR CNC: Flow Model Aquifer Properties</caption>
+        </topicref>
+        <topicref type="topic" id="448547504106019" build="ALL" modified="2022-10-20T14:27:46.572Z" icon="0" href="LAK-SFR-CNC-Activate-Boundary-">
+          <caption translate="true">LAK SFR CNC: Activate Boundary Condition Packages</caption>
+        </topicref>
+        <topicref type="topic" id="448545582227635" build="ALL" modified="2022-10-20T14:44:09.933Z" icon="0" href="LAK-SFR-CNC-Solver-Parameters">
+          <caption translate="true">LAK SFR CNC: Solver Parameters</caption>
+        </topicref>
+        <topicref type="topic" id="448544574293905" build="ALL" modified="2022-10-20T15:06:01.415Z" icon="0" href="LAK-SFR-CNC-Stress-Period">
+          <caption translate="true">LAK SFR CNC: Stress Period</caption>
+        </topicref>
+        <topicref type="topic" id="44855161191834" build="ALL" modified="2022-10-20T15:02:32.057Z" icon="0" href="LAK-SFR-CNC-Specified-Heads">
+          <caption translate="true">LAK SFR CNC: Specified Heads</caption>
+        </topicref>
+        <topicref type="topic" id="448547301056518" build="ALL" modified="2022-10-20T15:31:33.770Z" icon="0" href="LAK-SFR-CNC-Streams">
+          <caption translate="true">LAK SFR CNC: Streams</caption>
+        </topicref>
       </topicref>
     </topicref>
     <topicref type="topic" id="415135178584954" build="ALL" modified="2013-08-27T07:52:07.196Z" icon="0" href="SUTRA_Examples">

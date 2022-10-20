@@ -2290,26 +2290,29 @@ begin
           end;
           FObservations.Add(Obs);
         end;
-        for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
+        if Model.GwtUsed then
         begin
-          if IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
+          for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
           begin
-            MfObs := ScreenObject.Modflow6Obs;
-  //          LktObs.FName := MfObs.Name;
-            LktObs.FBoundName := ScreenObject.Name;
-
-            LktObs.FObsTypes := MfObs.CalibrationObservations.LktObs[SpeciesIndex];
-            if SpeciesIndex in MfObs.Genus then
+            if IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
             begin
-              LktObs.FObsTypes := LktObs.FObsTypes + MfObs.LktObs;
-            end;
+              MfObs := ScreenObject.Modflow6Obs;
+    //          LktObs.FName := MfObs.Name;
+              LktObs.FBoundName := ScreenObject.Name;
 
-            LktObs.FModflow6Obs := MfObs;
-            LktObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
-            FGwtObservations[SpeciesIndex].Add(LktObs)
-          end;
-//          FGwtObservations[MfObs.GwtSpecies].Add(LktObs);
-        end
+              LktObs.FObsTypes := MfObs.CalibrationObservations.LktObs[SpeciesIndex];
+              if SpeciesIndex in MfObs.Genus then
+              begin
+                LktObs.FObsTypes := LktObs.FObsTypes + MfObs.LktObs;
+              end;
+
+              LktObs.FModflow6Obs := MfObs;
+              LktObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
+              FGwtObservations[SpeciesIndex].Add(LktObs)
+            end;
+  //          FGwtObservations[MfObs.GwtSpecies].Add(LktObs);
+          end
+        end;
       end;
     end;
   finally

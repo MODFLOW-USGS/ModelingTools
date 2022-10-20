@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-20T14:54:39.830-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LAK SFR CNC: Flow Model Aquifer Properties</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Flow Model Aquifer Properties</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to set some properties of the flow model. The top two layers are convertible; the horizontal hydraulic conductivity is 250 ft/day; and the vertical hydraulic conductivity is 125 ft/day. The initial head is 50 ft. The hydraulic conductivities, and initial head can be specified in the &quot;Data|Edit Data Sets&quot; dialog box. To set the top two layers as convertible, either use a formula that will set the Cell_Type data set to 1 in the top two layers and to 0 in the other layers or use an object that encloses the top two layers to set the Cell_Type data set to 1.</text></para>
+  </body>
+</topic>

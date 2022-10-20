@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-20T12:25:19.085-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">LAK SFR CNC: Generating the Grid</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Generating the Grid</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">We will import several Shapefiles while creating this model. The Shapefiles are installed in C:\Users\Public\Documents\ModelMuse Examples\data\LakSfrCnc. To begin, we will import the model outline and use it to generate the grid.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;File|Import|Shapefile&quot; and select the GridOutline shapefile. Check the &quot;Set values of enclosed cells&quot; checkbox and then click OK.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncImportGridOutline.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Import Shapefile dialog box with the &quot;Set values of enclosed cells&quot; checkbox checked.</title><caption translate="true"><![CDATA[Screen capture of the Import Shapefile dialog box with the "Set values of enclosed cells" checkbox checked.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">One object will be imported. Edit it in the Object Properties dialog box. You can edit it by double-clicking it either in the top view of the model or in the &quot;Object|Show or Hide Objects&quot; dialog box.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncSetCellSize.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box with the &quot;Use to set grid cell size&quot; checked and the cell size set to 400.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box with the "Use to set grid cell size" checked and the cell size set to 400.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">After clicking OK to close the Object Properties dialog box, select &quot;Grid|Generate Grid.&quot; In the Generate Grid dialog box, click OK to generate the grid.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

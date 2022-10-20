@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-10-11T13:41:27.345-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2022-10-20T15:00:45.016-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">UZF GWT: Initial Setup</title>
   <body>
     <header>
@@ -9,7 +9,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Start a new MODFLOW model and select &quot;Days&quot; as the time unit.</text></para>
     <para styleclass="Normal"><image src="UzfGwtStartup1.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Startup dialog box showing selection of &quot;Days&quot; as the model time units.</title><caption translate="true"><![CDATA[Screen capture of the Startup dialog box showing selection of "Days" as the model time units.]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The final grid will have 20 layers. However, we will treat many of the layers as subdivisions of layer groups. There will be two layer groups defined in the initial grid dialog box as shown in the table below. The model will be a MODFLOW 6 model with 40 columns and 1 row. The cell size in both the column and row direction will be 0.25.</text></para>
-    <para styleclass="Normal"><table styleclass="Default" rowcount="4" colcount="3" style="cell-padding:2px; cell-spacing:2px; border-width:0px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+    <para styleclass="Normal"><table styleclass="Default" rowcount="4" colcount="3" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
       <tr style="vertical-align:middle">
         <td>
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Name</text></para>

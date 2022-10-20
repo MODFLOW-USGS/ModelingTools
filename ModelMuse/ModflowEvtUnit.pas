@@ -722,7 +722,10 @@ begin
     begin
       GwtConcentrations.Count := (Model as TCustomModel).MobileComponents.Count;
     end;
-    result := result + GwtConcentrations.Count;
+    if frmGoPhast.PhastModel.GwtUsed then
+    begin
+      result := result + GwtConcentrations.Count;
+    end;
   end;
 end;
 
