@@ -2437,6 +2437,7 @@ that affects the model output should also have a comment. }
     procedure UpdateSftSteadyData(Sender: TObject);
     procedure UpdateMawSteadyData(Sender: TObject);
     function FootprintSelected(Sender: TObject): Boolean;
+    procedure UpdateSpecifiedHeadArray(Sender: TObject);
 
     function GetModelInputFiles: TStrings;
     function GetFilesToArchive: TStrings;
@@ -17189,6 +17190,11 @@ begin
   LakeMf6Array := FDataArrayManager.GetDataSetByName(KLakeMf6);
   IdomainArray := FDataArrayManager.GetDataSetByName(K_IDOMAIN);
 
+  if SpecifiedHeadArray <> nil then
+  begin
+    SpecifiedHeadArray.OnPostInitialize := UpdateSpecifiedHeadArray;
+  end;
+
   if SwrReachArray <> nil then
   begin
     SwrReachArray.OnPostInitialize := UpdateSwrReachNumber;
@@ -17562,6 +17568,91 @@ begin
   else
   begin
     FSideTimeList := nil;
+  end;
+end;
+
+procedure TCustomModel.UpdateSpecifiedHeadArray(Sender: TObject);
+var
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  SpecifiedHeadArray: TDataArray;
+  GetCells: Boolean;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellLocation;
+  ChdAnnotation: string;
+  FhbAnnotation: string;
+  Annotation: string;
+  ChdSelected: Boolean;
+  FhbSelected: Boolean;
+begin
+  SpecifiedHeadArray := DataArrayManager.GetDataSetByName(rsModflowSpecifiedHead);
+  if SpecifiedHeadArray = nil then
+  begin
+    Exit;
+  end;
+  ChdSelected := ModflowPackages.ChdBoundary.IsSelected;
+  FhbSelected := (ModelSelection <> msModflow2015)
+    and ModflowPackages.FhbPackage.IsSelected;
+  if not (ChdSelected or FhbSelected) then
+  begin
+    Exit;
+  end;
+  ChdAnnotation := 'Set to true because it is in a CHD boundary';
+  FhbAnnotation := 'Set to true because it is in a FHB Head boundary';
+  Annotation := '';
+  if ModelSelection in ModflowSelection then
+  begin
+    for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+    begin
+      AScreenObject := ScreenObjects[ScreenObjectIndex];
+      if AScreenObject.Deleted then
+      begin
+        Continue;
+      end;
+      if not AScreenObject.UsedModels.UsesModel(self) then
+      begin
+        Continue;
+      end;
+
+      GetCells := False;
+
+      if ChdSelected then
+      begin
+        if (AScreenObject.ModflowChdBoundary <> nil)
+          and AScreenObject.ModflowChdBoundary.Used then
+        begin
+          GetCells := True;
+          Annotation := ChdAnnotation;
+        end;
+      end;
+
+      if FhbSelected then
+      begin
+        if (AScreenObject.ModflowFhbHeadBoundary <> nil)
+          and AScreenObject.ModflowFhbHeadBoundary.Used then
+        begin
+          GetCells := True;
+          Annotation := FhbAnnotation;
+        end;
+      end;
+
+      if GetCells then
+      begin
+        CellList := TCellAssignmentList.Create;
+        try
+          AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, self);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex].Cell;
+            SpecifiedHeadArray.BooleanData[ACell.Layer, ACell.Row, ACell.Column] := True;
+            SpecifiedHeadArray.Annotation[ACell.Layer, ACell.Row, ACell.Column] := Annotation;
+          end;
+        finally
+          CellList.Free;
+        end;
+      end;
+    end;
   end;
 end;
 

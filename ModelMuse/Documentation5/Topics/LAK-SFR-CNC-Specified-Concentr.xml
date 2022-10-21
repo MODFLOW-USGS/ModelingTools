@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-10-21T11:40:42.930-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">LAK SFR CNC: Specified Concentration Boundary</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Specified Concentration Boundary</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has a specified concentration boundary in the top two layers of row 1, columns 12 to 15. The concentration in the boundary is 500. You can use a line object to create the boundary. The Z coordinates can be used to ensure that the object applies to both layers 1 and 2.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncGwtSpecifiedConc1.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box illustrating the use of Z coordinate formulas to ensure that the CNC boundary applies to layers 1 and 2.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box illustrating the use of Z coordinate formulas to ensure that the CNC boundary applies to layers 1 and 2.]]></caption></image></para>
+    <para styleclass="Normal"><image src="LakSfrCncGwtSpecifiedConc2.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box illustrating the specification of a constant concentration boundary.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box illustrating the specification of a constant concentration boundary.]]></caption></image></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

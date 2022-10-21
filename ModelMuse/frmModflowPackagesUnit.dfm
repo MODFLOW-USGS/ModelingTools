@@ -9,6 +9,7 @@ inherited frmModflowPackages: TfrmModflowPackages
   OnResize = FormResize
   ExplicitWidth = 798
   ExplicitHeight = 596
+  PixelsPerInch = 96
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 177
@@ -28,7 +29,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspMVR
+    ActivePage = jvspGwtProcess
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -6197,7 +6198,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               EditLabel.Width = 127
               EditLabel.Height = 18
               EditLabel.ExplicitLeft = 80
-              EditLabel.ExplicitTop = 54
+              EditLabel.ExplicitTop = 55
               EditLabel.ExplicitWidth = 127
               EditLabel.ExplicitHeight = 18
               ExplicitWidth = 65
@@ -12038,5 +12039,11 @@ inherited frmModflowPackages: TfrmModflowPackages
       end>
     Left = 48
     Top = 256
+  end
+  object TimerBringToFront: TTimer
+    Interval = 100
+    OnTimer = TimerBringToFrontTimer
+    Left = 379
+    Top = 328
   end
 end

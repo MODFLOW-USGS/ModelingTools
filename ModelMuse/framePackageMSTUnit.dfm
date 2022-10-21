@@ -12,7 +12,6 @@ inherited framePackageMST: TframePackageMST
     Top = 160
     Width = 467
     Height = 81
-    Anchors = [akLeft, akTop, akRight]
     Caption = 'Porosity'
     Enabled = False
     ItemIndex = 0
@@ -26,7 +25,6 @@ inherited framePackageMST: TframePackageMST
     Top = 334
     Width = 467
     Height = 123
-    Anchors = [akLeft, akTop, akRight]
     Caption = 'Sorption'
     Enabled = False
     ItemIndex = 0

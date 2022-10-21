@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2022-10-21T14:52:25.495-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LAK SFR CNC: Run Flow and Transport models</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Run Flow and Transport models</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Next run the model. The input for both the flow and transport models will be exported at the same time. The flow and transport models will run in different simulations so ModelMonitor will run twice, once for the flow model and again for the transport model.</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncRunFlowModel.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of ModelMonitor running the flow model.</title><caption translate="true"><![CDATA[Screen capture of ModelMonitor running the flow model.]]></caption></image></para>
+    <para styleclass="Normal"><image src="LakSfrCncRunTransportModel.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of ModelMonitor running the transport model.</title><caption translate="true"><![CDATA[Screen capture of ModelMonitor running the transport model.]]></caption></image></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

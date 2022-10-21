@@ -7825,7 +7825,16 @@ var
   ConcItem: TMt3dmsConcItem;
   StartingConcIndex: integer;
   Dummy: Boolean;
+  SpecifiedHeadArray: TDataArray;
+  FormulaPosition: Integer;
 begin
+  SpecifiedHeadArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(rsModflowSpecifiedHead);
+  if SpecifiedHeadArray <> nil then
+  begin
+    FormulaPosition := AScreenObject.AddDataSet(SpecifiedHeadArray);
+    AScreenObject.DataSetFormulas[FormulaPosition] := 'True';
+  end;
+
   AScreenObject.CreateChdBoundary;
   Boundary := AScreenObject.ModflowChdBoundary;
 

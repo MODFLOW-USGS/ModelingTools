@@ -9,8 +9,9 @@ inherited frmImportPoints: TfrmImportPoints
   ClientWidth = 585
   KeyPreview = True
   OnKeyUp = FormKeyUp
-  ExplicitWidth = 603
-  ExplicitHeight = 565
+  ExplicitWidth = 601
+  ExplicitHeight = 557
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -344,7 +345,6 @@ inherited frmImportPoints: TfrmImportPoints
         AutoIncreaseRowCount = True
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
-        OnEndUpdate = dgDataEndUpdate
         ColorRangeSelection = False
         OnDistributeTextProgress = dgDataDistributeTextProgress
         Columns = <
@@ -396,6 +396,7 @@ inherited frmImportPoints: TfrmImportPoints
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
+        OnEndUpdate = dgDataEndUpdate
         WordWrapRowCaptions = False
         ColWidths = (
           64

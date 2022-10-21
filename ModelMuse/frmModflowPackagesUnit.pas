@@ -276,6 +276,7 @@ type
     frameGwtProcess: TframePackageFmi;
     jvspChemSpecies: TJvStandardPage;
     frameChemSpecies: TframeChemSpecies;
+    TimerBringToFront: TTimer;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -361,6 +362,7 @@ type
       ARow: Integer);
     procedure frameGridImmobileGridSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure TimerBringToFrontTimer(Sender: TObject);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -1672,6 +1674,13 @@ begin
   end;
 end;
 
+procedure TfrmModflowPackages.TimerBringToFrontTimer(Sender: TObject);
+begin
+  inherited;
+  BringToFront;
+  TimerBringToFront.Enabled := False;
+end;
+
 procedure TfrmModflowPackages.NwtSelectedChange(Sender: TObject);
 begin
   if framePkgNwt.Selected then
@@ -2019,6 +2028,8 @@ begin
   inherited;
   EnableLpfParameterControls;
   jvplPackagesChange(nil);
+  BringToFront;
+  TimerBringToFront.Enabled := True;
 end;
 
 procedure TfrmModflowPackages.frameCropConsumptiveUserdgGridSelectCell(
@@ -2840,16 +2851,19 @@ begin
   NewPage.PageList := jvplPackages;
   NewPage.HelpKeyword := 'MST-Mobile-Storage-and-Transfe';
   result.Parent := NewPage;
-  MemoWidth := result.MemoComments.Width;
+  MemoWidth := Max(result.MemoComments.Width, 467);
   result.Align := alClient;
   // If this isn't done, the memo may be invisible because its width
   // ends up less than zero.
-  if result.Width <= 0 then
+  if result.Width > 0 then
   begin
-    result.MemoComments.Width := MemoWidth;
-    result.rgPorosity.Width := MemoWidth;
-    result.rgSorption.Width := MemoWidth;
+    MemoWidth := Max(result.Width - 21, 467);;
   end;
+  result.MemoComments.Width := MemoWidth;
+  result.MemoComments.Height := 89;
+  result.rgPorosity.Width := MemoWidth;
+  result.rgSorption.Width := MemoWidth;
+  result.rgDecay.Width := MemoWidth;
 end;
 
 procedure TfrmModflowPackages.CreateParams(var Params: TCreateParams);
@@ -3253,6 +3267,7 @@ var
   AnIstframe: TframePackageIst;
   ImsPackage: TSmsPackageSelection;
   AnImsframe: TframePkgSms;
+  MemoWidth: Integer;
 {$ENDIF}
 begin
   if not IsLoaded then
@@ -3301,7 +3316,9 @@ begin
         AMstFrame := CreateMstFrame;
 
         MstPackage.Node := ChildNode;
+        MemoWidth := AMstFrame.MemoComments.Width;
         AMstFrame.GetData(MstPackage);
+        AMstFrame.MemoComments.Width := MemoWidth;
 
         Link := TFrameNodeLink.Create;
         Link.Frame := AMstFrame;

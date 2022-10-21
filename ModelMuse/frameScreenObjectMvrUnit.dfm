@@ -13,8 +13,8 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
       object lblMvrType: TLabel [1]
         Left = 199
         Top = 5
-        Width = 75
-        Height = 20
+        Width = 55
+        Height = 13
         Alignment = taCenter
         Caption = 'Mover type'
       end
@@ -22,7 +22,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         Left = 199
         Top = 24
         Width = 89
-        Height = 28
+        Height = 21
         Style = csDropDownList
         Enabled = False
         TabOrder = 1
@@ -161,15 +161,15 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
       object lblSourcePackage: TLabel
         Left = 3
         Top = 3
-        Width = 105
-        Height = 20
+        Width = 76
+        Height = 13
         Caption = 'Source package'
       end
       object comboSourcePackage: TComboBox
         Left = 3
         Top = 22
         Width = 306
-        Height = 28
+        Height = 21
         Style = csDropDownList
         TabOrder = 0
         OnChange = comboSourcePackageChange
@@ -189,7 +189,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         Left = 0
         Top = 64
         Width = 312
-        Height = 140
+        Height = 147
         Margins.Left = 0
         Margins.Top = 64
         Margins.Right = 0
@@ -200,14 +200,14 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         ExplicitWidth = 312
         ExplicitHeight = 140
         inherited Panel: TPanel
-          Top = 99
+          Top = 106
           Width = 312
           ExplicitTop = 99
           ExplicitWidth = 312
           inherited lbNumber: TLabel
-            Width = 134
+            Width = 97
             Caption = 'Number of receivers'
-            ExplicitWidth = 134
+            ExplicitWidth = 97
           end
           inherited sbAdd: TSpeedButton
             Left = 158
@@ -231,7 +231,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         end
         inherited Grid: TRbwDataGrid4
           Width = 312
-          Height = 99
+          Height = 106
           ColCount = 4
           OnSelectCell = frameReceiversGridSelectCell
           OnSetEditText = frameReceiversGridSetEditText

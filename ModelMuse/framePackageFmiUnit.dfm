@@ -12,7 +12,7 @@ inherited framePackageFmi: TframePackageFmi
   end
   object cbFlowImbalance: TCheckBox [3]
     Left = 16
-    Top = 160
+    Top = 284
     Width = 445
     Height = 17
     Caption = 'Use flow imbalance correction (FLOW_IMBALANCE_CORRECTION)'
@@ -21,7 +21,7 @@ inherited framePackageFmi: TframePackageFmi
   end
   object rgSimulationChoice: TRadioGroup [4]
     Left = 16
-    Top = 192
+    Top = 157
     Width = 445
     Height = 121
     Caption = 'Simulation choice (FMI6)'

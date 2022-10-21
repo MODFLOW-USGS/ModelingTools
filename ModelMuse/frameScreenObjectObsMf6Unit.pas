@@ -59,6 +59,8 @@ type
     chklstUZT: TCheckListBox;
     lblUZF: TLabel;
     lblUZT: TLabel;
+    lblLAK: TLabel;
+    lblLKT: TLabel;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);

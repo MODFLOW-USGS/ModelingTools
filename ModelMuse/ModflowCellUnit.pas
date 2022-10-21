@@ -12,6 +12,8 @@ type
   //    Layer: integer;
   //    Row: integer;
   //    Column: integer;
+  //    class operator Equal(ACell: TCellLocation; BCell: TCellLocation): boolean;
+  //    class operator NotEqual(ACell: TCellLocation; BCell: TCellLocation): boolean;
   //  end;
   //  )
   // @member(Layer Layer is the layer in the grid to for this boundary (Zero based).)

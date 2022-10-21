@@ -1073,6 +1073,8 @@ var
   Mf6Obs: TModflow6Obs;
   ObsType: Integer;
   ObGeneral: TObGeneral;
+  SpecifiedHeadArray: TDataArray;
+  FormulaPosition: Integer;
 begin
   InvalidRow := False;
   Values := TRealList.Create;
@@ -1137,6 +1139,14 @@ begin
       begin
         AScreenObject.CreateChdBoundary;
         ABoundary := AScreenObject.ModflowBoundaries.ModflowChdBoundary;
+
+        SpecifiedHeadArray := frmGoPhast.PhastModel.DataArrayManager.
+          GetDataSetByName(rsModflowSpecifiedHead);
+        if SpecifiedHeadArray <> nil then
+        begin
+          FormulaPosition := AScreenObject.AddDataSet(SpecifiedHeadArray);
+          AScreenObject.DataSetFormulas[FormulaPosition] := 'True';
+        end;
       end
       else if Package = Packages.GhbBoundary then
       begin
@@ -1757,7 +1767,7 @@ begin
             TScreenObject.CreateWithViewDirection(frmGoPhast.PhastModel,
             TViewDirection(rgViewDirection.ItemIndex),
             UndoCreateScreenObject, False);
-                      AScreenObject.Comment := 'Imported on ' + DateTimeToStr(Now);
+          AScreenObject.Comment := 'Imported on ' + DateTimeToStr(Now);
           Inc(ExistingObjectCount);
           NewName := '';
           

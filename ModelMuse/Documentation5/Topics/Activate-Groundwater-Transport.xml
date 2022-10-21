@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-10-11T10:53:40.947-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2022-10-21T09:22:07.520-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">UZF GWT: Activate Groundwater Transport</title>
   <body>
     <header>
@@ -10,7 +10,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;Model|MODFLOW Packages and Programs&quot; and check the check box for the GWT Process and then check the check boxes for the Advection, Dispersion, and Source and Sink Mixing Packages. The Mobile Storage and Transfer and Iterative Model Solution packages will be selected automatically because they are required with groundwater transport. In addition one solute named &quot;Chem&quot; will be automatically added. (If you wish, you can change the solute&apos;s name on the Chem Species pane.)</text></para>
     <para styleclass="Normal"><image src="UzfGwtActivateGwt.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Packages and Programs dialog box showing the activation of the GWT and other related packages.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Packages and Programs dialog box showing the activation of the GWT and other related packages.]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Advection package, select Total Variation Diminishing advection scheme.</text></para>
-    <para styleclass="Normal"><image src="UzfGwtActivateGwt.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Packages and Programs dialog box showing the specification of the Total Variation Diminishing advection scheme.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Packages and Programs dialog box showing the specification of the Total Variation Diminishing advection scheme.]]></caption></image></para>
+    <para styleclass="Normal"><image src="UzfGwtTvd.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Packages and Programs dialog box showing the specification of the Total Variation Diminishing advection scheme.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Packages and Programs dialog box showing the specification of the Total Variation Diminishing advection scheme.]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Set the solver parameters to be the same as they were for the flow model.</text></para>
     <para styleclass="Normal"><snippet src="UZF-GWT-Set-Solver-Properties" inline="false"/></para>
   </body>

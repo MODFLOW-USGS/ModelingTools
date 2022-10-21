@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-10-11T16:11:56.030-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+<topic template="Default" status="Under Construction" modified="2022-10-21T11:07:38.001-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MAW GWT: Transport Model Aquifer Properties</title>
   <body>
     <header>
@@ -9,6 +9,6 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the &quot;Data|Edit Data Sets&quot; dialog box, set the following aquifer properties.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Horizontal_Transverse_Dispersivity = 3</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Longitudinal_Dispersivity = 10</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Proosity = 0.3</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Porosity = 0.3</text></para>
   </body>
 </topic>
