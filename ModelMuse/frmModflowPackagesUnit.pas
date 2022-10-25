@@ -363,6 +363,8 @@ type
     procedure frameGridImmobileGridSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
     procedure TimerBringToFrontTimer(Sender: TObject);
+    procedure frameGridMobileGridSelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -2112,6 +2114,18 @@ procedure TfrmModflowPackages.frameGridMobileGridExit(Sender: TObject);
 begin
   inherited;
   UpdateSpeciesNames;
+end;
+
+procedure TfrmModflowPackages.frameGridMobileGridSelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  frameChemSpecies.frameGridMobileGridSelectCell(Sender, ACol, ARow,
+    CanSelect);
+  if (ACol in [1,2]) and not framePkgMt3dBasic.Selected then
+  begin
+    CanSelect := False
+  end;
 end;
 
 procedure TfrmModflowPackages.frameGridMobileGridSetEditText(Sender: TObject;

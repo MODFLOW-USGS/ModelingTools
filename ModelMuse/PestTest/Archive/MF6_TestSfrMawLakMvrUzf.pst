@@ -49,7 +49,6 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp0
 regul_Grp1
 regul_Grp2
 regul_Grp3
@@ -63,6 +62,7 @@ regul_Grp10
 regul_Grp11
 regul_Grp12
 regul_Grp13
+regul_Grp14
 
 * observation data
 MyCalib  0.000000000000E+000   1.000000000000E+000  CHOB_flows
@@ -77,18 +77,32 @@ MF6_TestSfrMawLakMvrUzf.SfrWidth.script.tpl MF6_TestSfrMawLakMvrUzf.SfrWidth.scr
 MF6_TestSfrMawLakMvrUzf.PestIns MF6_TestSfrMawLakMvrUzf.Mf6Values
 
 * prior information
- eq_1          1.0 * UZF1 = 1       1     regul_Grp0
- eq_2          1.0 * UZF2 = 2       1     regul_Grp1
- eq_3          1.0 * UZF3 = 3       1     regul_Grp2
- eq_4          1.0 * UZF4 = 4       1     regul_Grp3
- eq_5          1.0 * Sfr1 = 1.1       1     regul_Grp4
- eq_6          1.0 * Sfr2 = 1.2       1     regul_Grp5
- eq_7          1.0 * SfrGrad = 0.001       1     regul_Grp6
- eq_8          1.0 * WelRadius = 1.1       1     regul_Grp7
- eq_9          1.0 * SkinRadius = 2.1       1     regul_Grp8
- eq_10          1.0 * LakeS = 0.1       1     regul_Grp9
- eq_11          1.0 * LakeBot = -1       1     regul_Grp10
- eq_12          1.0 * LakeRate = 1       1     regul_Grp11
- eq_13          1.0 * LakeInvert = 0.6       1     regul_Grp12
- eq_14          1.0 * SfrPWidth = 1.01       1     regul_Grp13
+# Equation for initial value for parameter UZF1.
+ eq_1          1.0 * UZF1 = 1       1     regul_Grp1
+# Equation for initial value for parameter UZF2.
+ eq_2          1.0 * UZF2 = 2       1     regul_Grp2
+# Equation for initial value for parameter UZF3.
+ eq_3          1.0 * UZF3 = 3       1     regul_Grp3
+# Equation for initial value for parameter UZF4.
+ eq_4          1.0 * UZF4 = 4       1     regul_Grp4
+# Equation for initial value for parameter Sfr1.
+ eq_5          1.0 * Sfr1 = 1.1       1     regul_Grp5
+# Equation for initial value for parameter Sfr2.
+ eq_6          1.0 * Sfr2 = 1.2       1     regul_Grp6
+# Equation for initial value for parameter SfrGrad.
+ eq_7          1.0 * SfrGrad = 0.001       1     regul_Grp7
+# Equation for initial value for parameter WelRadius.
+ eq_8          1.0 * WelRadius = 1.1       1     regul_Grp8
+# Equation for initial value for parameter SkinRadius.
+ eq_9          1.0 * SkinRadius = 2.1       1     regul_Grp9
+# Equation for initial value for parameter LakeS.
+ eq_10          1.0 * LakeS = 0.1       1     regul_Grp10
+# Equation for initial value for parameter LakeBot.
+ eq_11          1.0 * LakeBot = -1       1     regul_Grp11
+# Equation for initial value for parameter LakeRate.
+ eq_12          1.0 * LakeRate = 1       1     regul_Grp12
+# Equation for initial value for parameter LakeInvert.
+ eq_13          1.0 * LakeInvert = 0.6       1     regul_Grp13
+# Equation for initial value for parameter SfrPWidth.
+ eq_14          1.0 * SfrPWidth = 1.01       1     regul_Grp14
 

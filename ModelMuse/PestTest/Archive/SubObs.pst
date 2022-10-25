@@ -27,7 +27,7 @@ Sub none relative  1.000000000000E+000   1.000000000000E-004   1.000000000000E+0
 
 * observation groups
 Sub
-regul_Grp0
+regul_Grp1
 
 * observation data
 Sub_1SubObs0  1.000000000000E-002   1.000000000000E+000  Sub
@@ -44,5 +44,6 @@ SubObs.Layer1_D_Delay_Interbed_Equivalent_Thickness.script.tpl SubObs.Layer1_D_D
 SubObs.PestIns SubObs.Mf2005Values
 
 * prior information
- eq_1          1.0 * Sub = 1       1     regul_Grp0
+# Equation for initial value for parameter Sub.
+ eq_1          1.0 * Sub = 1       1     regul_Grp1
 

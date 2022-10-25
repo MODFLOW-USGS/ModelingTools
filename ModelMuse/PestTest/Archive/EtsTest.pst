@@ -35,9 +35,9 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp0
 regul_Grp1
 regul_Grp2
+regul_Grp3
 
 * observation data
 bcd  5.000000000000E-001   1.000000000000E+000  Heads
@@ -51,7 +51,10 @@ EtsTest.Kx.script.tpl EtsTest.Kx.script
 EtsTest.PestIns EtsTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * Par1 = 4       1     regul_Grp0
- eq_2          1.0 * Param1 = 2       1     regul_Grp1
- eq_3          1.0 * Param2 = 3       1     regul_Grp2
+# Equation for initial value for parameter Par1.
+ eq_1          1.0 * Par1 = 4       1     regul_Grp1
+# Equation for initial value for parameter Param1.
+ eq_2          1.0 * Param1 = 2       1     regul_Grp2
+# Equation for initial value for parameter Param2.
+ eq_3          1.0 * Param2 = 3       1     regul_Grp3
 

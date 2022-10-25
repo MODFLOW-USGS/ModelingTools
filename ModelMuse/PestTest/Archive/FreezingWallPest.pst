@@ -25,7 +25,7 @@ restart regularisation # RSTFLE PESTMODE
 MinWater none relative  1.000000000000E-001   0.000000000000E+000   1.000000000000E+000  none  1.000000000000E+000   0.000000000000E+000 
 
 * observation groups
-regul_Grp0
+regul_Grp1
 
 * observation data
 
@@ -37,7 +37,8 @@ FreezingWallPest.ptf FreezingWallPest.pval
 FreezingWallPest.PestIns FreezingWallPest.SutraValues
 
 * prior information
- eq_1          1.0 * MinWater = 0.1       1     regul_Grp0
+# Equation for initial value for parameter MinWater.
+ eq_1          1.0 * MinWater = 0.1       1     regul_Grp1
 
 * regularisation
   1.000000000000E-010   1.050000000000E-010   1.000000000000E-001  nomemsave

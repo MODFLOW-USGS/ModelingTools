@@ -29,7 +29,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspGwtProcess
+    ActivePage = jvspMt3dmsBasic
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -11492,6 +11492,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             Width = 281
             Height = 475
             OnExit = frameGridMobileGridExit
+            OnSelectCell = frameGridMobileGridSelectCell
             OnSetEditText = frameGridMobileGridSetEditText
             OnButtonClick = frameGridMobileGridButtonClick
             OnStateChange = frameGridMobileGridStateChange

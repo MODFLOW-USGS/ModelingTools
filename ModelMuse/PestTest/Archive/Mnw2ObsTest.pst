@@ -27,7 +27,7 @@ HK log factor  1.000000000000E+000   1.000000000000E-004   1.000000000000E+003  
 
 * observation groups
 MnwObs
-regul_Grp0
+regul_Grp1
 
 * observation data
 Mnw2_1MnwObs  1.000000000000E+000   1.000000000000E+000  MnwObs
@@ -41,5 +41,6 @@ Mnw2ObsTest.Kx.script.tpl Mnw2ObsTest.Kx.script
 Mnw2ObsTest.PestIns Mnw2ObsTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * log(HK) = 0       1     regul_Grp0
+# Equation for initial value for parameter HK.
+ eq_1          1.0 * log(HK) = 0       1     regul_Grp1
 

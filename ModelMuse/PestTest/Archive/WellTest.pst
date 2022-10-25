@@ -33,7 +33,7 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp0
+regul_Grp1
 
 * observation data
 Chob1_1  1.000000000000E+000   1.000000000000E+000  CHOB_flows
@@ -47,5 +47,6 @@ WellTest.Horizontal_Anisotropy.script.tpl WellTest.Horizontal_Anisotropy.script
 WellTest.PestIns WellTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * abc = 1.1       1     regul_Grp0
+# Equation for initial value for parameter abc.
+ eq_1          1.0 * abc = 1.1       1     regul_Grp1
 

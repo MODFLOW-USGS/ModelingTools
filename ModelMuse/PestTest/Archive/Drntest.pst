@@ -33,7 +33,7 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp0
+regul_Grp1
 
 * observation data
 test -1.000000000000E+000   1.000000000000E+000  Heads
@@ -48,5 +48,6 @@ Drntest.test.script.tpl Drntest.test.script
 Drntest.PestIns Drntest.Mf2005Values
 
 * prior information
- eq_1          1.0 * DrCon2 = 0.001       1     regul_Grp0
+# Equation for initial value for parameter DrCon2.
+ eq_1          1.0 * DrCon2 = 0.001       1     regul_Grp1
 

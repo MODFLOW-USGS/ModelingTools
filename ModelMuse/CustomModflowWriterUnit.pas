@@ -1956,7 +1956,7 @@ begin
       ArchiveBatchFile.Add('pause');
 
       try
-      BatchFile.SaveToFile(result);
+        BatchFile.SaveToFile(result);
       except
         begin
           Sleep(1000);

@@ -34,8 +34,8 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp0
 regul_Grp1
+regul_Grp2
 
 * observation data
 head  0.000000000000E+000   1.000000000000E+000  Heads
@@ -49,6 +49,8 @@ Mnw1Test.ptf Mnw1Test.pval
 Mnw1Test.PestIns Mnw1Test.Mf2005Values
 
 * prior information
- eq_1          1.0 * Pump = 1.1       1     regul_Grp0
- eq_2          1.0 * RefElev = 0.1       1     regul_Grp1
+# Equation for initial value for parameter Pump.
+ eq_1          1.0 * Pump = 1.1       1     regul_Grp1
+# Equation for initial value for parameter RefElev.
+ eq_2          1.0 * RefElev = 0.1       1     regul_Grp2
 

@@ -126,7 +126,7 @@ resourcestring
   StrTheGroupTargetFor = 'The group target for the %s observation group is l' +
   'ess than or equal to zero.';
   StrEquationsForVert = '# Equations for vertical continuity between layers ' +
-  '%0:d and %1:d for parameter %2:s.';
+  '%0:d and %1:d for parameter %2:s in data set %3:s.';
   StrEquationsForHori = '# Equations for horizontal continuity in layers %0:' +
   'd for parameter %1:s.';
   StrEquationForIniti = '# Equation for initial value for parameter %0:s.';
@@ -336,7 +336,7 @@ var
     Equation: string;
   begin
     FPriorInfomationEquations.Add(Format(StrEquationsForVert,
-      [PPItem1.Layer + 1, PPItem2.Layer +1, AParam.ParameterName]));
+      [PPItem1.Layer + 1, PPItem2.Layer +1, AParam.ParameterName, PPItem1.DataArrayName]));
     Inc(CommentCount);
     ObsGroupName := '';
     LocationQuadTree.Clear;
@@ -558,7 +558,7 @@ var
     if IsPilotPoint then
     begin
       GroupName := Param.PilotPointObsGrpCollection.
-        GetGroupNameByLayer(PilotPointItem.Layer);
+        GetGroupNameByLayerAndFamily(PilotPointItem.Layer, PilotPointItem.ParamFamily);
       if GroupName = '' then
       begin
         GroupName := NewGroupName;
@@ -569,7 +569,7 @@ var
     begin
       if Param.RegularizationGroup = '' then
       begin
-        Param.RegularizationGroup := 'Grp' + IntToStr(ObservationGroups.Count);
+        Param.RegularizationGroup := NewGroupName;
       end;
       ObsGroupIndex := ObservationGroupNames.IndexOf(Param.RegularizationGroup);
     end;
@@ -582,7 +582,7 @@ var
         ObsGroup.RelativCorrelationFileName :=
           ChangeFileExt(PilotPointItem.FileName, StrCov);
         Param.PilotPointObsGrpCollection.
-          SetGroupNameByLayer(PilotPointItem.Layer, GroupName);
+          SetGroupNameByLayerAndFamily(PilotPointItem.Layer, PilotPointItem.ParamFamily, GroupName);
       end
       else
       begin
@@ -729,7 +729,6 @@ begin
             TComparer<TStoredPilotParamDataItem>.Construct(
               function(const Left, Right: TStoredPilotParamDataItem): Integer
               begin
-  //          BaseParamName
                 Result := CompareStr( Left.BaseParamName, Right.BaseParamName);
                 if Result = 0 then
                 begin
@@ -792,7 +791,6 @@ begin
           if AParam.UseInitialValuePriorInfo
             and (AParam.Transform in [ptNoTransform, ptLog]) then
           begin
-         { TODO -cBug : Why is the wrong regularization group assigned. }
             WriteInitialValueEquation(AParam, AParam.Value, '', nil);
           end;
         end;

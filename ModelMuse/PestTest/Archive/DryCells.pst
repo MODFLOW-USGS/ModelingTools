@@ -29,7 +29,7 @@ HK log factor  1.000000000000E+000   1.000000000000E-005   1.000000000000E+003  
 Drain
 Heads
 sfrgrp
-regul_Grp0
+regul_Grp1
 
 * observation data
 SFR_1sfr  0.000000000000E+000   1.000000000000E+000  sfrgrp
@@ -45,5 +45,6 @@ DryCells.Kx.script.tpl DryCells.Kx.script
 DryCells.PestIns DryCells.Mf2005Values
 
 * prior information
- eq_1          1.0 * log(HK) = 0       1     regul_Grp0
+# Equation for initial value for parameter HK.
+ eq_1          1.0 * log(HK) = 0       1     regul_Grp1
 

@@ -36,9 +36,9 @@ RIV_flows
 STR_flows
 regul_Heads
 Head_Changes
-regul_Grp0
 regul_Grp1
 regul_Grp2
+regul_Grp3
 
 * observation data
 Head  1.000000000000E+000   1.000000000000E+000  regul_Heads
@@ -51,7 +51,10 @@ RechAddTestMf6.ptf RechAddTestMf6.pval
 RechAddTestMf6.PestIns RechAddTestMf6.Mf6Values
 
 * prior information
- eq_1          1.0 * a = 1       1     regul_Grp0
- eq_2          1.0 * b = 2       1     regul_Grp1
- eq_3          1.0 * CHD_MF6 = 1       1     regul_Grp2
+# Equation for initial value for parameter a.
+ eq_1          1.0 * a = 1       1     regul_Grp1
+# Equation for initial value for parameter b.
+ eq_2          1.0 * b = 2       1     regul_Grp2
+# Equation for initial value for parameter CHD_MF6.
+ eq_3          1.0 * CHD_MF6 = 1       1     regul_Grp3
 

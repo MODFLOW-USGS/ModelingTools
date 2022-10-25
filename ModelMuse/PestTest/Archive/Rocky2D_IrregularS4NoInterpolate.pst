@@ -26,7 +26,7 @@ D relative  1.000000000000E-002   0.000000000000E+000  switch  1.500000000000E+0
 Density none relative  1.100000000000E+000   0.000000000000E+000   1.800000000000E+001  D  1.000000000000E+000   0.000000000000E+000 
 
 * observation groups
-regul_Grp0
+regul_Grp1
 
 * observation data
 
@@ -46,7 +46,8 @@ Rocky2D_IrregularS4NoInterpolate.Scaled_Effective_Air_Thermal_Conductivity.scrip
 Rocky2D_IrregularS4NoInterpolate.PestIns Rocky2D_IrregularS4NoInterpolate.SutraValues
 
 * prior information
- eq_1          1.0 * Density = 1.1       1     regul_Grp0
+# Equation for initial value for parameter Density.
+ eq_1          1.0 * Density = 1.1       1     regul_Grp1
 
 * regularisation
   1.000000000000E-010   1.050000000000E-010   1.000000000000E-001  nomemsave

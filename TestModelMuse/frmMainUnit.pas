@@ -4,13 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, ActivApp, Menus, Spin, ComCtrls, Buttons, ImgList,
+  Dialogs, StdCtrls, ExtCtrls, Menus, Spin, ComCtrls, Buttons, ImgList,
   Mask, JvExMask, JvToolEdit, IniFiles, JvComponentBase, JvCreateProcess,
   System.ImageList;
 
 type
   TfrmMain = class(TForm)
-    ActivApp1: TActivApp;
     Panel1: TPanel;
     odSelectGoPhast: TOpenDialog;
     odSelectFiles: TOpenDialog;
@@ -461,7 +460,6 @@ begin
   GoPhastExeName := edGoPhast.Text;
   OutPutFiles := TStringList.Create;
   try
-
     pbFiles.Max := tvModflow.Items.Count;
     pbFiles.Position := 0;
     ChildNode := nil;
@@ -507,27 +505,16 @@ begin
     while ParentNode <> nil do
     begin
       ModelFileName := ParentNode.Text;
+      ModelDirectory := ExtractFileDir(ModelFileName);
       StatusBar1.SimpleText := 'testing ' + ModelFileName;
 
       ChildNode := ParentNode.getFirstChild;
-//      CommandLine := EncloseQuotes(GoPhastExeName)
-//        + ' ' + EncloseQuotes(ModelFileName) + ' ' + EncloseQuotes(ChildNode.Text);
-//      ShowMessage(CommandLine);
-//      jvcrtprcsRunModelMuse.CommandLine := CommandLine;
       jvcrtprcsRunModelMuse.CommandLine := EncloseQuotes(GoPhastExeName)
         + ' ' + EncloseQuotes(ModelFileName)
         + ' -E -C';
       jvcrtprcsRunModelMuse.Run;
 
-//      ActivApp1.ExePath := '"' + GoPhastExeName + '" "' + ModelFileName + '" -E -C';
-//      ActivApp1.ExecuteApp(Success);
       pbFiles.StepIt;
-//      if not Success then
-//      begin
-//        result := false;
-//        ErrorMessage := 'Failed to execute "' + ModelFileName + '".';
-//        Exit;
-//      end;
 
       OutPutFiles.Clear;
       ChildNode := ParentNode.getFirstChild;
@@ -561,8 +548,6 @@ begin
 
         OutputFileName := OutPutFiles[Index];
         StatusBar1.SimpleText := 'testing ' + OutputFileName;
-
-
 
         Application.ProcessMessages;
         FileDate := 0;
@@ -643,7 +628,6 @@ begin
             begin
               ParentNode.StateIndex := ChildNode.StateIndex
             end;
-//            Exit;
           end;
         end;
         pbFiles.StepIt;

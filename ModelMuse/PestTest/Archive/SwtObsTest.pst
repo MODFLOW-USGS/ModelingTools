@@ -27,7 +27,7 @@ SpGrav none relative  1.000000000000E+000   0.000000000000E+000   2.000000000000
 
 * observation groups
 SWT
-regul_Grp0
+regul_Grp1
 
 * observation data
 Swt_1SwtObs  1.000000000000E+000   1.000000000000E+000  SWT
@@ -41,5 +41,6 @@ SwtObsTest.Specific_Gravity_Saturated.script.tpl SwtObsTest.Specific_Gravity_Sat
 SwtObsTest.PestIns SwtObsTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * SpGrav = 1       1     regul_Grp0
+# Equation for initial value for parameter SpGrav.
+ eq_1          1.0 * SpGrav = 1       1     regul_Grp1
 

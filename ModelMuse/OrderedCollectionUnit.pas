@@ -330,16 +330,20 @@ type
     FObsGroupName: string;
     FLayer: Integer;
     FObsGroup: TObject;
+    FParamFamily: string;
     procedure SetLayer(const Value: Integer);
     procedure SetObsGroupName(const Value: string);
     function GetObsGroupName: string;
+    procedure SetParamFamily(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     function IsSame(OtherItem: TPilotPointObsGrp): Boolean;
+    // @name is a @link(PestObsGroupUnit.TPestObservationGroup).
     property ObsGroup: TObject read FObsGroup write FObsGroup;
   published
     Property ObsGroupName: string read GetObsGroupName write SetObsGroupName;
     property Layer: Integer read FLayer write SetLayer;
+    property ParamFamily: string read FParamFamily write SetParamFamily;
   end;
 
   TPPObsGrpCollection = class(TPhastCollection)
@@ -353,8 +357,8 @@ type
     function IsSame(OtherCollection: TPPObsGrpCollection): Boolean;
     property Items[Index: Integer]: TPilotPointObsGrp read GetItem
       write SetItem; default;
-    function GetGroupNameByLayer(Layer: integer): string;
-    procedure SetGroupNameByLayer(Layer: integer; const GroupName: string);
+    function GetGroupNameByLayerAndFamily(Layer: integer; const ParamFamily: string): string;
+    procedure SetGroupNameByLayerAndFamily(Layer: integer; const ParamFamily: string; const GroupName: string);
   end;
 
   // @name represents a MODFLOW parameter
@@ -1986,6 +1990,7 @@ begin
   begin
     SrcGrp := TPilotPointObsGrp(Source);
     Layer := SrcGrp.Layer;
+    ParamFamily := SrcGrp.ParamFamily;
     ObsGroupName := SrcGrp.ObsGroupName;
   end
   else
@@ -2005,8 +2010,9 @@ end;
 
 function TPilotPointObsGrp.IsSame(OtherItem: TPilotPointObsGrp): Boolean;
 begin
-  result := (Layer = OtherItem.Layer) and
-    (ObsGroupName = OtherItem.ObsGroupName);
+  result := (Layer = OtherItem.Layer)
+    and (ParamFamily = OtherItem.ParamFamily)
+    and (ObsGroupName = OtherItem.ObsGroupName);
 end;
 
 procedure TPilotPointObsGrp.SetLayer(const Value: Integer);
@@ -2033,6 +2039,11 @@ begin
 
 end;
 
+procedure TPilotPointObsGrp.SetParamFamily(const Value: string);
+begin
+  FParamFamily := Value;
+end;
+
 { TPPObsGrpCollection }
 
 function TPPObsGrpCollection.Add: TPilotPointObsGrp;
@@ -2050,14 +2061,14 @@ begin
   inherited Create(TPilotPointObsGrp, InvalidateEvent);
 end;
 
-function TPPObsGrpCollection.GetGroupNameByLayer(Layer: integer): string;
+function TPPObsGrpCollection.GetGroupNameByLayerAndFamily(Layer: integer; const ParamFamily: string): string;
 var
   Index: Integer;
 begin
   result := '';
   for Index := 0 to Count - 1 do
   begin
-    if Items[Index].Layer = Layer then
+    if (Items[Index].Layer = Layer) and (Items[Index].ParamFamily = ParamFamily) then
     begin
       result := Items[Index].ObsGroupName;
       break;
@@ -2089,15 +2100,15 @@ begin
   end;
 end;
 
-procedure TPPObsGrpCollection.SetGroupNameByLayer(Layer: integer;
-  const GroupName: string);
+procedure TPPObsGrpCollection.SetGroupNameByLayerAndFamily(Layer: integer;
+  const ParamFamily: string; const GroupName: string);
 var
   Item: TPilotPointObsGrp;
   Index: Integer;
 begin
   for Index := 0 to Count - 1 do
   begin
-    if Items[Index].Layer = Layer then
+    if (Items[Index].Layer = Layer) and (Items[Index].ParamFamily = ParamFamily) then
     begin
       if GroupName = '' then
       begin
@@ -2114,6 +2125,7 @@ begin
   begin
     Item := Add;
     Item.Layer := Layer;
+    Item.ParamFamily := ParamFamily;
     Item.ObsGroupName := GroupName;
   end;
 end;

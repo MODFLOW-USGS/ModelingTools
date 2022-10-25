@@ -27,7 +27,7 @@ K log factor  1.000000000000E+000   1.000000000000E-010   1.000000000000E+001  a
 
 * observation groups
 SPFlow
-regul_Grp0
+regul_Grp1
 
 * observation data
 PFlow1  1.000000000000E+000   1.000000000000E+000  SPFlow
@@ -44,5 +44,6 @@ SutraTest5.Middle_Permeability.script.tpl SutraTest5.Middle_Permeability.script
 SutraTest5.PestIns SutraTest5.SutraValues
 
 * prior information
- eq_1          1.0 * log(K) = 0       1     regul_Grp0
+# Equation for initial value for parameter K.
+ eq_1          1.0 * log(K) = 0       1     regul_Grp1
 

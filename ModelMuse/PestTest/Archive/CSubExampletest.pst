@@ -34,7 +34,7 @@ STR_flows
 Heads
 Head_Changes
 CSUB
-regul_Grp0
+regul_Grp1
 
 * observation data
 Wq  1.000000000000E+000   1.000000000000E+000  CSUB
@@ -49,5 +49,6 @@ CSubExampletest.Confining_Bed_InitialPorosity.script.tpl CSubExampletest.Confini
 CSubExampletest.PestIns CSubExampletest.Mf6Values
 
 * prior information
- eq_1          1.0 * a = 1       1     regul_Grp0
+# Equation for initial value for parameter a.
+ eq_1          1.0 * a = 1       1     regul_Grp1
 

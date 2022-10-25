@@ -34,8 +34,8 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp0
 regul_Grp1
+regul_Grp2
 
 * observation data
 Gbob1_1  1.000000000000E+000   1.000000000000E+000  GHB_flows
@@ -48,6 +48,8 @@ FarmTest1.ptf FarmTest1.pval
 FarmTest1.PestIns FarmTest1.Mf2005Values
 
 * prior information
- eq_1          1.0 * frm = 1000       1     regul_Grp0
- eq_2          1.0 * WELLS1 = 1000       1     regul_Grp1
+# Equation for initial value for parameter frm.
+ eq_1          1.0 * frm = 1000       1     regul_Grp1
+# Equation for initial value for parameter WELLS1.
+ eq_2          1.0 * WELLS1 = 1000       1     regul_Grp2
 

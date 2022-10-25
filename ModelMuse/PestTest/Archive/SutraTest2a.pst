@@ -31,11 +31,11 @@ Flux2 none relative  1.100000000000E+000   0.000000000000E+000   2.000000000000E
 
 * observation groups
 sut
-regul_Grp0
 regul_Grp1
 regul_Grp2
 regul_Grp3
 regul_Grp4
+regul_Grp5
 
 * observation data
 test_U  1.000000000000E+000   1.000000000000E+000  sut
@@ -48,9 +48,14 @@ SutraTest2a.ptf SutraTest2a.pval
 SutraTest2a.PestIns SutraTest2a.SutraValues
 
 * prior information
- eq_1          1.0 * a = 1.1       1     regul_Grp0
- eq_2          1.0 * conc1 = 0.1       1     regul_Grp1
- eq_3          1.0 * conc2 = 0.1       1     regul_Grp2
- eq_4          1.0 * Flux1 = 1.1       1     regul_Grp3
- eq_5          1.0 * Flux2 = 1.1       1     regul_Grp4
+# Equation for initial value for parameter a.
+ eq_1          1.0 * a = 1.1       1     regul_Grp1
+# Equation for initial value for parameter conc1.
+ eq_2          1.0 * conc1 = 0.1       1     regul_Grp2
+# Equation for initial value for parameter conc2.
+ eq_3          1.0 * conc2 = 0.1       1     regul_Grp3
+# Equation for initial value for parameter Flux1.
+ eq_4          1.0 * Flux1 = 1.1       1     regul_Grp4
+# Equation for initial value for parameter Flux2.
+ eq_5          1.0 * Flux2 = 1.1       1     regul_Grp5
 

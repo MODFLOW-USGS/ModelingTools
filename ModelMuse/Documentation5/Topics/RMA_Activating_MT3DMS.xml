@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-04-26T16:54:14.196-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-10-25T13:08:25.457-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
   <title translate="true">RMA: Activating MT3DMS or MT3D-USGS</title>
   <body>
     <header>
@@ -8,7 +8,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">MT3DMS and MT3D-USGS can be used to simulate solute transport. Either can be used in the example. In this case, we will use one of them to simulate transport of solute from the disposal pond.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">To activate MT3DMS or MT3D-USGS, select </text><text styleclass="Strong" translate="true">Model|MODFLOW Packages and Programs...</text><text styleclass="Normal" translate="true"> and then expand </text><text styleclass="Strong" translate="true">MT3DMS or MT3D-USGS</text><text styleclass="Normal" translate="true">. Check the check box for the MT3DMS Basic Transport package (BTN). The GCG Generalized Conjugate Gradient Solver will also be activated; it is required with MT3DMS and MT3D-USGS. On the MT3D options tab, you can choose to use either MT3DMS OR MT3D-USGS. You should also activate the Advection, Dispersion, and Sink and Source Mixing packages for MT3DMS.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">You must define at least one mobile species. In this case, we will use chloride.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You must define at least one mobile species. In this case, we will use chloride. Define it on the Chem Species pane.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">On the </text><text styleclass="Strong" translate="true">MT3D Options</text><text styleclass="Normal" translate="true"> tab, select MT3DMS.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Click OK to close the dialog box. You will get a message telling you that you will need to run MODFLOW again before you can run MT3DMS.</text></para>
     <para styleclass="Normal"><image src="Mt3dmsRma1.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">MT3DMS BTN package page with Cl as the solute</title></image></para>

@@ -36,7 +36,6 @@ RIV_Par1 none relative  2.000000000000E+000   0.000000000000E+000   1.0000000000
 
 * observation groups
 grp1
-regul_Grp0
 regul_Grp1
 regul_Grp2
 regul_Grp3
@@ -46,6 +45,7 @@ regul_Grp6
 regul_Grp7
 regul_Grp8
 regul_Grp9
+regul_Grp10
 
 * observation data
 test1  1.000000000000E+000   1.000000000000E+000  grp1
@@ -58,14 +58,24 @@ ParamMf6Test.ptf ParamMf6Test.pval
 ParamMf6Test.PestIns ParamMf6Test.Mf6Values
 
 * prior information
- eq_1          1.0 * Pparam = 2       1     regul_Grp0
- eq_2          1.0 * CHD_Par1 = 2       1     regul_Grp1
- eq_3          1.0 * ETS_Par1 = 2E-009       1     regul_Grp2
- eq_4          1.0 * ETS_Par2 = 3E-009       1     regul_Grp3
- eq_5          1.0 * RCH_Par1 = 2E-009       1     regul_Grp4
- eq_6          1.0 * Q_Par1 = 2       1     regul_Grp5
- eq_7          1.0 * DRN_Par1 = 2       1     regul_Grp6
- eq_8          1.0 * DRN_Par2 = 3       1     regul_Grp7
- eq_9          1.0 * GHB_Par1 = 2       1     regul_Grp8
- eq_10          1.0 * RIV_Par1 = 2       1     regul_Grp9
+# Equation for initial value for parameter Pparam.
+ eq_1          1.0 * Pparam = 2       1     regul_Grp1
+# Equation for initial value for parameter CHD_Par1.
+ eq_2          1.0 * CHD_Par1 = 2       1     regul_Grp2
+# Equation for initial value for parameter ETS_Par1.
+ eq_3          1.0 * ETS_Par1 = 2E-009       1     regul_Grp3
+# Equation for initial value for parameter ETS_Par2.
+ eq_4          1.0 * ETS_Par2 = 3E-009       1     regul_Grp4
+# Equation for initial value for parameter RCH_Par1.
+ eq_5          1.0 * RCH_Par1 = 2E-009       1     regul_Grp5
+# Equation for initial value for parameter Q_Par1.
+ eq_6          1.0 * Q_Par1 = 2       1     regul_Grp6
+# Equation for initial value for parameter DRN_Par1.
+ eq_7          1.0 * DRN_Par1 = 2       1     regul_Grp7
+# Equation for initial value for parameter DRN_Par2.
+ eq_8          1.0 * DRN_Par2 = 3       1     regul_Grp8
+# Equation for initial value for parameter GHB_Par1.
+ eq_9          1.0 * GHB_Par1 = 2       1     regul_Grp9
+# Equation for initial value for parameter RIV_Par1.
+ eq_10          1.0 * RIV_Par1 = 2       1     regul_Grp10
 

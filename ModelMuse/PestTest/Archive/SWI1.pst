@@ -34,7 +34,7 @@ STR_flows
 Heads
 Head_Changes
 SWI
-regul_Grp0
+regul_Grp1
 
 * observation data
 SwiObs  2.000000000000E+001   1.000000000000E+002  SWI
@@ -48,5 +48,6 @@ SWI1.Kx.script.tpl SWI1.Kx.script
 SWI1.PestIns SWI1.Mf2005Values
 
 * prior information
- eq_1          1.0 * log(HK) = 0       1     regul_Grp0
+# Equation for initial value for parameter HK.
+ eq_1          1.0 * log(HK) = 0       1     regul_Grp1
 

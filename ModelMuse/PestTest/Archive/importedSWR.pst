@@ -38,12 +38,12 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp0
 regul_Grp1
 regul_Grp2
 regul_Grp3
 regul_Grp4
 regul_Grp5
+regul_Grp6
 
 * observation data
 a  5.000000000000E-001   1.000000000000E+000  Heads
@@ -57,10 +57,16 @@ importedSWR.MyVertOffset.script.tpl importedSWR.MyVertOffset.script
 importedSWR.PestIns importedSWR.Mf2005Values
 
 * prior information
- eq_1          1.0 * Swr1 = 0.1       1     regul_Grp0
- eq_2          1.0 * Swr2 = 0.1       1     regul_Grp1
- eq_3          1.0 * SwrRain = 1.1       1     regul_Grp2
- eq_4          1.0 * SwrEvap = 1.1       1     regul_Grp3
- eq_5          1.0 * SwrLat = 1.1       1     regul_Grp4
- eq_6          1.0 * SwrStage = 1.537       1     regul_Grp5
+# Equation for initial value for parameter Swr1.
+ eq_1          1.0 * Swr1 = 0.1       1     regul_Grp1
+# Equation for initial value for parameter Swr2.
+ eq_2          1.0 * Swr2 = 0.1       1     regul_Grp2
+# Equation for initial value for parameter SwrRain.
+ eq_3          1.0 * SwrRain = 1.1       1     regul_Grp3
+# Equation for initial value for parameter SwrEvap.
+ eq_4          1.0 * SwrEvap = 1.1       1     regul_Grp4
+# Equation for initial value for parameter SwrLat.
+ eq_5          1.0 * SwrLat = 1.1       1     regul_Grp5
+# Equation for initial value for parameter SwrStage.
+ eq_6          1.0 * SwrStage = 1.537       1     regul_Grp6
 

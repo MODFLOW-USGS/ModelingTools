@@ -29,9 +29,9 @@ conc2 none relative  1.000000000000E-001   0.000000000000E+000   1.000000000000E
 
 * observation groups
 test
-regul_Grp0
 regul_Grp1
 regul_Grp2
+regul_Grp3
 
 * observation data
 c1_P  1.000000000000E+000   1.000000000000E+000  test
@@ -44,7 +44,10 @@ SutraTest2.ptf SutraTest2.pval
 SutraTest2.PestIns SutraTest2.SutraValues
 
 * prior information
- eq_1          1.0 * a = 1.1       1     regul_Grp0
- eq_2          1.0 * conc1 = 0.1       1     regul_Grp1
- eq_3          1.0 * conc2 = 0.1       1     regul_Grp2
+# Equation for initial value for parameter a.
+ eq_1          1.0 * a = 1.1       1     regul_Grp1
+# Equation for initial value for parameter conc1.
+ eq_2          1.0 * conc1 = 0.1       1     regul_Grp2
+# Equation for initial value for parameter conc2.
+ eq_3          1.0 * conc2 = 0.1       1     regul_Grp3
 

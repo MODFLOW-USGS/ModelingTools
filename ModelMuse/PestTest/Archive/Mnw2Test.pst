@@ -36,10 +36,10 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp0
 regul_Grp1
 regul_Grp2
 regul_Grp3
+regul_Grp4
 
 * observation data
 head  0.000000000000E+000   1.000000000000E+000  Heads
@@ -52,8 +52,12 @@ Mnw2Test.ptf Mnw2Test.pval
 Mnw2Test.PestIns Mnw2Test.Mf2005Values
 
 * prior information
- eq_1          1.0 * MnPump = 1.1       1     regul_Grp0
- eq_2          1.0 * MnPump2 = -4E-005       1     regul_Grp1
- eq_3          1.0 * MnRw = 0.51       1     regul_Grp2
- eq_4          1.0 * MnwPP = 0.81       1     regul_Grp3
+# Equation for initial value for parameter MnPump.
+ eq_1          1.0 * MnPump = 1.1       1     regul_Grp1
+# Equation for initial value for parameter MnPump2.
+ eq_2          1.0 * MnPump2 = -4E-005       1     regul_Grp2
+# Equation for initial value for parameter MnRw.
+ eq_3          1.0 * MnRw = 0.51       1     regul_Grp3
+# Equation for initial value for parameter MnwPP.
+ eq_4          1.0 * MnwPP = 0.81       1     regul_Grp4
 

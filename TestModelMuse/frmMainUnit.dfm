@@ -11,8 +11,10 @@ object frmMain: TfrmMain
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Menu = MainMenu1
+  OldCreateOrder = True
   OnClose = FormClose
   OnCreate = FormCreate
+  PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
@@ -200,12 +202,6 @@ object frmMain: TfrmMain
     ScrollBars = ssBoth
     TabOrder = 1
   end
-  object ActivApp1: TActivApp
-    MainFormTitle = 'MyOtherApp'
-    ExePath = 'C:\Program Files\Borland\Delphi7\Bin\'
-    Left = 16
-    Top = 24
-  end
   object odSelectGoPhast: TOpenDialog
     Filter = '*.exe|*.exe'
     Left = 48
@@ -367,10 +363,12 @@ object frmMain: TfrmMain
     end
   end
   object jvcrtprcs1: TJvCreateProcess
+    WaitForTerminate = False
     Left = 344
     Top = 216
   end
   object jvcrtprcsRunModelMuse: TJvCreateProcess
+    WaitForTerminate = False
     Left = 648
     Top = 272
   end

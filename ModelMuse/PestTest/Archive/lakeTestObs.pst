@@ -32,11 +32,11 @@ Leak log factor  1.000000000000E+000   1.000000000000E-003   1.000000000000E+003
 * observation groups
 Heads
 Lake
-regul_Grp0
 regul_Grp1
 regul_Grp2
 regul_Grp3
 regul_Grp4
+regul_Grp5
 
 * observation data
 Lak_2Lake  1.000000000000E+000   1.000000000000E+000  Lake
@@ -51,9 +51,14 @@ lakeTestObs.Lakebed_Leakance.script.tpl lakeTestObs.Lakebed_Leakance.script
 lakeTestObs.PestIns lakeTestObs.Mf2005Values
 
 * prior information
- eq_1          1.0 * PPrecip = 1.1       1     regul_Grp0
- eq_2          1.0 * PRain = 1.01       1     regul_Grp1
- eq_3          1.0 * PSeries = 1.03       1     regul_Grp2
- eq_4          1.0 * PRunoff = 1.04       1     regul_Grp3
- eq_5          1.0 * log(Leak) = 0       1     regul_Grp4
+# Equation for initial value for parameter PPrecip.
+ eq_1          1.0 * PPrecip = 1.1       1     regul_Grp1
+# Equation for initial value for parameter PRain.
+ eq_2          1.0 * PRain = 1.01       1     regul_Grp2
+# Equation for initial value for parameter PSeries.
+ eq_3          1.0 * PSeries = 1.03       1     regul_Grp3
+# Equation for initial value for parameter PRunoff.
+ eq_4          1.0 * PRunoff = 1.04       1     regul_Grp4
+# Equation for initial value for parameter Leak.
+ eq_5          1.0 * log(Leak) = 0       1     regul_Grp5
 

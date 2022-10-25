@@ -38,12 +38,12 @@ RIV_flows
 STR_flows
 regul_Heads
 Head_Changes
-regul_Grp0
 regul_Grp1
 regul_Grp2
 regul_Grp3
 regul_Grp4
 regul_Grp5
+regul_Grp6
 
 * observation data
 Rvob1_1  1.000000000000E+000   1.000000000000E+000  RIV_flows
@@ -56,10 +56,16 @@ EvtTest.ptf EvtTest.pval
 EvtTest.PestIns EvtTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * EvtRate = 1.1       1     regul_Grp0
- eq_2          1.0 * EvtDepth = 1.2       1     regul_Grp1
- eq_3          1.0 * EvtSurface = -1.3       1     regul_Grp2
- eq_4          1.0 * ModifierRa = 1.4       1     regul_Grp3
- eq_5          1.0 * ModDep = 1.5       1     regul_Grp4
- eq_6          1.0 * ModSurf = 1.6       1     regul_Grp5
+# Equation for initial value for parameter EvtRate.
+ eq_1          1.0 * EvtRate = 1.1       1     regul_Grp1
+# Equation for initial value for parameter EvtDepth.
+ eq_2          1.0 * EvtDepth = 1.2       1     regul_Grp2
+# Equation for initial value for parameter EvtSurface.
+ eq_3          1.0 * EvtSurface = -1.3       1     regul_Grp3
+# Equation for initial value for parameter ModifierRa.
+ eq_4          1.0 * ModifierRa = 1.4       1     regul_Grp4
+# Equation for initial value for parameter ModDep.
+ eq_5          1.0 * ModDep = 1.5       1     regul_Grp5
+# Equation for initial value for parameter ModSurf.
+ eq_6          1.0 * ModSurf = 1.6       1     regul_Grp6
 

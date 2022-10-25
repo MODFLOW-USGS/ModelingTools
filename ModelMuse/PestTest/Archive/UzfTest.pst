@@ -36,10 +36,10 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
-regul_Grp0
 regul_Grp1
 regul_Grp2
 regul_Grp3
+regul_Grp4
 
 * observation data
 Chob1_1  1.000000000000E+000   1.000000000000E+000  CHOB_flows
@@ -52,8 +52,12 @@ UzfTest.ptf UzfTest.pval
 UzfTest.PestIns UzfTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * uzf1 = 1       1     regul_Grp0
- eq_2          1.0 * uzf2 = 2       1     regul_Grp1
- eq_3          1.0 * uzf3 = 3       1     regul_Grp2
- eq_4          1.0 * uzf4 = 4       1     regul_Grp3
+# Equation for initial value for parameter uzf1.
+ eq_1          1.0 * uzf1 = 1       1     regul_Grp1
+# Equation for initial value for parameter uzf2.
+ eq_2          1.0 * uzf2 = 2       1     regul_Grp2
+# Equation for initial value for parameter uzf3.
+ eq_3          1.0 * uzf3 = 3       1     regul_Grp3
+# Equation for initial value for parameter uzf4.
+ eq_4          1.0 * uzf4 = 4       1     regul_Grp4
 

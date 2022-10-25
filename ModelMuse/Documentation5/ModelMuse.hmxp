@@ -644,6 +644,11 @@ document.write('</frameset>');
           <config-value name="lastexport">0</config-value>
         </config-group>
       </config-group>
+      <config-group name="richard">
+        <config-group name="project">
+          <config-value name="lastexport">0</config-value>
+        </config-group>
+      </config-group>
     </config-group>
     <config-group name="print">
       <config-value name="include">CLASS2022</config-value>
