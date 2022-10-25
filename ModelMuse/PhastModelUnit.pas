@@ -10738,6 +10738,8 @@ const
 //                are outside the grid to ModelMate.
 //    '5.0.0.31' --
 
+//               Bug fix: Fixed bug in writing PEST prior information equations.
+
 //               Enhancement: Added suport for SUTRA 4.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 
@@ -17598,11 +17600,13 @@ begin
   begin
     Exit;
   end;
-  ChdAnnotation := 'Set to true because it is in a CHD boundary';
-  FhbAnnotation := 'Set to true because it is in a FHB Head boundary';
-  Annotation := '';
   if ModelSelection in ModflowSelection then
   begin
+    SpecifiedHeadArray.UpdateDimensions(LayerCount, RowCount, ColumnCount, True);
+    ChdAnnotation := 'Set to true because it is in a CHD boundary';
+    FhbAnnotation := 'Set to true because it is in a FHB Head boundary';
+    Annotation := '';
+
     for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
     begin
       AScreenObject := ScreenObjects[ScreenObjectIndex];

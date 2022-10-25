@@ -125,6 +125,11 @@ resourcestring
   'ro.';
   StrTheGroupTargetFor = 'The group target for the %s observation group is l' +
   'ess than or equal to zero.';
+  StrEquationsForVert = '# Equations for vertical continuity between layers ' +
+  '%0:d and %1:d for parameter %2:s.';
+  StrEquationsForHori = '# Equations for horizontal continuity in layers %0:' +
+  'd for parameter %1:s.';
+  StrEquationForIniti = '# Equation for initial value for parameter %0:s.';
 
 { TPestControlFileWriter }
 
@@ -305,6 +310,7 @@ var
   ItemIndex: Integer;
   PilotPointItem1: TStoredPilotParamDataItem;
   PilotPointItem2: TStoredPilotParamDataItem;
+  CommentCount: Integer;
   function NewGroupName: string;
   var
     Index: Integer;
@@ -322,17 +328,16 @@ var
   var
     PPIndex: Integer;
     PilotPoint: TPointItem;
-//    X: Double;
-//    Y: Double;
     OtherPP: TPointItem;
     EquationName: string;
     ObsGroupName: string;
     ParameterName1: string;
     ParameterName2: string;
     Equation: string;
-//    Value1: Double;
-//    Value2: Double;
   begin
+    FPriorInfomationEquations.Add(Format(StrEquationsForVert,
+      [PPItem1.Layer + 1, PPItem2.Layer +1, AParam.ParameterName]));
+    Inc(CommentCount);
     ObsGroupName := '';
     LocationQuadTree.Clear;
     for PPIndex := 0 to PPItem1.Points.Count - 1 do
@@ -424,6 +429,9 @@ var
     ParameterName2: string;
 //    X: TPoint3D;
   begin
+    FPriorInfomationEquations.Add(Format(StrEquationsForHori,
+      [PPItem.Layer + 1, Param.ParameterName]));
+    Inc(CommentCount);
     LinkQuadQuadTree.Clear;
     LocationQuadTree.Clear;
     Neighbors := TList<TPointItem>.Create;
@@ -525,7 +533,7 @@ var
     end;
   end;
   procedure WriteInitialValueEquation(Param: TModflowParameter; InitialValue: double;
-    ParameterName: string = ''; PilotPointItem: TStoredPilotParamDataItem = nil);
+    ParameterName: string; PilotPointItem: TStoredPilotParamDataItem);
   var
     EquationName: string;
     ObsGroupName: string;
@@ -541,6 +549,9 @@ var
     begin
       ParameterName := Param.ParameterName;
     end;
+    FPriorInfomationEquations.Add(Format(StrEquationForIniti,
+      [ParameterName]));
+    Inc(CommentCount);
     IsPilotPoint := PilotPointItem <> nil;
     Inc(EquationCount);
     EquationName := EquationRoot + IntToStr(EquationCount);
@@ -605,6 +616,7 @@ var
       [EquationName, Equation, Param.InitialValuePriorInfoWeight, ObsGroupName]));
   end;
 begin
+  CommentCount := 0;
   FPriorInfomationEquations.Clear;
   if not Model.PestProperties.UseInitialValuePriorInfo
     and not Model.PestProperties.UseHorizontalSpatialContinuityPriorInfo
@@ -658,7 +670,7 @@ begin
           begin
             if ASteadyParam.UseInitialValuePriorInfo then
             begin
-              WriteInitialValueEquation(ASteadyParam, ASteadyParam.Value);
+              WriteInitialValueEquation(ASteadyParam, ASteadyParam.Value, '', nil);
             end;
             if (ASteadyParam is TModflowSteadyParameter)
               and TModflowSteadyParameter(ASteadyParam).UsePilotPoints then
@@ -744,7 +756,7 @@ begin
                 then
               begin
                 ParamIndex := PilotPointParameters.IndexOf(
-                  PilotPointItem.BaseParamName);
+                  PilotPointItem1.BaseParamName);
                 if ParamIndex >= 0 then
                 begin
                   ASteadyParam := PilotPointParameters.Objects[ParamIndex]
@@ -780,7 +792,8 @@ begin
           if AParam.UseInitialValuePriorInfo
             and (AParam.Transform in [ptNoTransform, ptLog]) then
           begin
-            WriteInitialValueEquation(AParam, AParam.Value);
+         { TODO -cBug : Why is the wrong regularization group assigned. }
+            WriteInitialValueEquation(AParam, AParam.Value, '', nil);
           end;
         end;
       end;
@@ -793,7 +806,7 @@ begin
           if AParam.UseInitialValuePriorInfo
             and (AParam.Transform in [ptNoTransform, ptLog]) then
           begin
-            WriteInitialValueEquation(AParam, AParam.Value);
+            WriteInitialValueEquation(AParam, AParam.Value, '', nil);
           end;
         end;
       end;
@@ -806,7 +819,7 @@ begin
   end;
   // prior information will be added by the running ADDREG1 or a program in the
   // Groundwater Utility suite,
-  result := FPriorInfomationEquations.Count;
+  result := FPriorInfomationEquations.Count - CommentCount;
 
 end;
 
@@ -1868,6 +1881,19 @@ var
     PARUBND: Double;
     BoundFactor: double;
   begin
+    if (PilotParamName <> '') and (ParameterIndex = 1) then
+    begin
+      WriteString('# Parameters in the ');
+      WriteString(PilotPointItem.ParamFamily);
+      WriteString(' family are pilot point parameters related to ');
+      WriteString(AParam.ParameterName);
+      WriteString(' in layer ');
+      WriteInteger(PilotPointItem.Layer+1);
+      WriteString(' in data set ');
+      WriteString(PilotPointItem.DataArrayName);
+      NewLine;
+    end;
+
     PilotPointParam := False;
     //PARNME
     if ParameterName <> '' then
@@ -2013,21 +2039,6 @@ var
     //DERCOM
     // write only in NUMCOM is written in line 4 of the control data section
 //    WriteInteger(1);
-
-
-    if (PilotParamName <> '') and (ParameterIndex = 1) then
-    begin
-      NewLine;
-      WriteString('# Parameters in the ');
-      WriteString(PilotPointItem.ParamFamily);
-      WriteString(' family are pilot point parameters related to ');
-      WriteString(AParam.ParameterName);
-      WriteString(' in layer ');
-      WriteInteger(PilotPointItem.Layer+1);
-      WriteString(' in data set ');
-      WriteString(PilotPointItem.DataArrayName);
-    end;
-
 
     NewLine;
   end;
