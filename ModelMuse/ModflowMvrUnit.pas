@@ -11,7 +11,8 @@ type
   TMvrType = (mtFactor, mtExcess, mtThreshold, mtUpTo);
   TMvrTypeArray = array of TMvrType;
 
-  TSfrReceiverChoice = (srcFirst, srcNearest);
+  TSfrReceiverChoice = (srcFirst, srcNearest, srcNearestEnclosed,
+    srcNearestAnySegment);
 
   TSourcePackageChoice = (spcWel, spcDrn, spcRiv, spcGhb, spcLak, spcMaw,
     spcSfr, spcUzf);

@@ -365,7 +365,7 @@ var
   RelPerm: TRelativePermeabilityParameters;
   LiqWat: TLiquidWaterSaturationParameters;
   Freeze: TFreezingTempAndLatentHeat;
-  AValue: double;
+//  AValue: double;
   procedure SetFunctionParameters(AFrame: TframeGrid;
     FunctionParameters: TRealCollection);
   var

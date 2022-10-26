@@ -2429,6 +2429,10 @@ resourcestring
   StrMT3DUSGSRequiresT = 'MT3D-USGS requires that the %s in MODFLOW be sav' +
   'ed at every time step. Fix this in the "Model|MODFLOW Output Control" dia' +
   'log box.';
+  StrToFunctionProperly = 'To function properly, you will need the developme' +
+  'nt build version of MODFLOW 6 in models that use GWT until the next offic' +
+  'ial release of MODFLOW 6. See https://github.com/MODFLOW-USGS/modflow6-ni' +
+  'ghtly-build' + sLineBreak + ' Do you want to continue?';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -2450,6 +2454,7 @@ var
   MfOwhmDate: TDateTime;
   MfCfpDate: TDateTime;
   Mf6Date: TDateTime;
+  Mf6WithGwtDate: TDateTime;
   Mt3dUsgsDate: TDateTime;
   ZoneBudMf6Date: TDateTime;
   FootprintDate: TDateTime;
@@ -10750,12 +10755,25 @@ function TfrmGoPhast.Mf6UpToDate: boolean;
 var
   WarningMessage: string;
 begin
-  result := ModelUpToDate(PhastModel.ProgramLocations.Modflow6Location, Mf6Date);
-  if not result then
+  if PhastModel.GwtUsed then
   begin
-    Beep;
-    WarningMessage := Format(StrTheCurrentVersion, [StrMODFLOW6]);
-    result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
+    result := ModelUpToDate(PhastModel.ProgramLocations.Modflow6Location, Mf6WithGwtDate);
+    if not result then
+    begin
+      Beep;
+      WarningMessage := StrToFunctionProperly;
+      result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
+    end;
+  end
+  else
+  begin
+    result := ModelUpToDate(PhastModel.ProgramLocations.Modflow6Location, Mf6Date);
+    if not result then
+    begin
+      Beep;
+      WarningMessage := Format(StrTheCurrentVersion, [StrMODFLOW6]);
+      result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
+    end;
   end;
 end;
 
@@ -15564,10 +15582,11 @@ initialization
   MfCfpDate := EncodeDate(2011, 2, 23);
   ModelMateDate := EncodeDate(2013, 11, 19);
   Mf6Date := EncodeDate(2022, 3, 4);
+  Mf6WithGwtDate := EncodeDate(2022, 10, 26);
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);
-  PestDate := EncodeDate(2021,6,29);
+  PestDate := EncodeDate(2022,10,25);
 
   {$IFDEF Win64}
   RegisterExpectedMemoryLeak(GR32_Blend.AlphaTable);

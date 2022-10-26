@@ -19,7 +19,7 @@ inherited frmGoPhast: TfrmGoPhast
   OnResize = FormResize
   ExplicitWidth = 798
   ExplicitHeight = 614
-  PixelsPerInch = 96
+  PixelsPerInch = 120
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
     Left = 0
@@ -673,7 +673,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 527
+      Left = 221
       Top = 130
       Width = 212
       Height = 28
@@ -775,7 +775,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 270
+      Left = 446
       Top = 130
       Width = 244
       Height = 28
@@ -890,7 +890,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView3D: TToolBar
-      Left = 116
+      Left = 67
       Top = 130
       Width = 141
       Height = 28
@@ -1091,7 +1091,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarShowGrid: TToolBar
-      Left = 73
+      Left = 24
       Top = 130
       Width = 30
       Height = 28
@@ -1117,7 +1117,7 @@ inherited frmGoPhast: TfrmGoPhast
     object tbarPilotPoints: TToolBar
       Left = 11
       Top = 130
-      Width = 49
+      Width = 0
       Height = 28
       ButtonHeight = 23
       Caption = 'tbarPilotPoints'

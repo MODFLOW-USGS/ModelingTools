@@ -1149,7 +1149,7 @@ end;
 function TLakeTimeItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
   LakeItem: TLakeTimeItem;
-  Index: Integer;
+//  Index: Integer;
 begin
   Result := inherited IsSame(AnotherItem) and (AnotherItem is TLakeTimeItem);
   if result then
@@ -2333,7 +2333,7 @@ end;
 
 function TLakeMf6.GetPestBoundaryFormula(FormulaIndex: integer): string;
 var
-  Item: TStringConcValueItem;
+//  Item: TStringConcValueItem;
   ChemSpeciesCount: Integer;
 begin
   case FormulaIndex of

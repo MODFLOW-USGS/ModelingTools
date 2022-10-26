@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-10-07T13:40:18.052-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-10-26T10:16:53.710-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Version 5.1</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 5.1</text></para>
     </header>
-    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 5.1 October 15, 2022]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 5.1 October 31, 2022]]></caption></toggle></para>
     <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -14,7 +14,7 @@
           <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added suport for GWT in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for the groundwater transport (GWT) process in MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for MODFLOW 6 Time Series files.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The Edit Data Sets and Show/Hide Objects dialog boxes retain their positions, size, and the expanded status of their nodes after closing and reopening.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Changing the MT3D times in the MODFLOW Time dialog box causes those times to also be change in the MT3D boundaries.</text></para>
@@ -81,6 +81,9 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Changed calculation of connlen in the MODFLOW 6 lake package.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause some PEST parameters to not be written to the PVAL file when needed.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in assigning PEST Concentration methods when MT3D but not GWT is selected.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse no longer exports head observations that are outside the grid to ModelMate.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in writing PEST prior information equations.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in editing objects specifying MVR boundaries.</text></para>
               </td>
             </tr>
           </table></para>

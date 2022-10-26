@@ -842,7 +842,6 @@ begin
     //    ScreenObject := Item.ScreenObject;
         Boundary := Item.ScreenObject.ModflowMvr;
         BoundaryUsed := (Boundary <> nil) and Boundary.Used;
-        { TODO -cBUG : If multiple items are edited simultaneously, all of them may have MVR boundaries defined even if some should not. }
         if ClearAll then
         begin
           if BoundaryUsed then
@@ -859,7 +858,7 @@ begin
           end;
         end;
 
-        if (Boundary = nil) then
+        if (Boundary = nil) or not Boundary.Used then
         begin
           Continue;
         end;

@@ -2962,8 +2962,8 @@
           <caption translate="true">MAW GWT: Display Concentrations</caption>
         </topicref>
       </topicref>
-      <topicref type="topic" id="448531878515319" build="ALL" modified="2022-10-19T09:20:50.008Z" icon="0" href="MODFLOW-6-Transfer-of-solutes-">
-        <caption translate="true">MODFLOW 6 Transfer of solutes between streams and lakes</caption>
+      <topicref type="topic" id="448531878515319" build="ALL" modified="2022-10-26T10:06:26.312Z" icon="0" href="MODFLOW-6-Transfer-of-solutes-">
+        <caption translate="true">MODFLOW 6 Transfer of Solutes Between Streams and Lakes</caption>
         <topicref type="topic" id="448542996375898" build="ALL" modified="2022-10-20T11:45:42.425Z" icon="0" href="LAK-SFR-CNC-Initial-Setup">
           <caption translate="true">LAK SFR CNC: Initial Setup</caption>
         </topicref>

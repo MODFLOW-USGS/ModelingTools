@@ -406,7 +406,7 @@ object TTaskHistory
     end
     item
       Name = 'MVR'
-      Display = False
+      Display = True
     end
     item
       Name = 'MT3D-USGS LKT'
@@ -30143,5 +30143,12 @@ object TTaskHistory
         'Documentation'
         'Bug fix'
         'Testing')
+    end
+    item
+      Date = 44860.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Installer'
+        'MVR')
     end>
 end

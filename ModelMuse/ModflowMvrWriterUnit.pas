@@ -36,6 +36,8 @@ type
     Index: Integer;
     // @name is only used for streams.
     StreamCells: TCellLocationArray;
+    // @name is only used for streams.
+    StreamReachNumbers: TOneDIntegerArray;
     // @name is only used for UZF boundaries.
     UzfCells: TOneDIntegerArray;
   end;
@@ -44,6 +46,9 @@ type
     ReceiverValues: TMvrReceiverValues;
     ReceiverKey: TMvrReceiverKey;
   end;
+
+  TMvrReceiverList = TList<TMvrReceiver>;
+  TMvrReceiverLists = TObjectList<TMvrReceiverList>;
 
   TMvrSourceKeyComparer = class(TEqualityComparer<TMvrSourceKey>)
     function Equals(const Left, Right: TMvrSourceKey): Boolean; override;
@@ -65,6 +70,7 @@ type
     FReceiverDictionary: TDictionary<TMvrReceiverKey, TMvrReceiverValues>;
     FSourceLists: TObjectList<TMvrSources>;
     FSourceCellDictionaries: TObjectList<TMvrSourceCellDictionary>;
+    FSfrReceivers: TMvrReceiverLists;
 //    FNameOfFile: String;
     FUsedPackages: TSourcePackageChoices;
     FSpeciesIndex: Integer;
@@ -151,6 +157,11 @@ begin
   if not FReceiverDictionary.ContainsKey(MvrReceiver.ReceiverKey) then
   begin
     FReceiverDictionary.Add(MvrReceiver.ReceiverKey, MvrReceiver.ReceiverValues);
+
+    if MvrReceiver.ReceiverKey.ReceiverPackage = rpcSfr then
+    begin
+      FSfrReceivers[MvrReceiver.ReceiverKey.StressPeriod].Add(MvrReceiver);
+    end;
   end;
 end;
 
@@ -212,6 +223,7 @@ begin
 
   FReceiverDictionary := TDictionary<TMvrReceiverKey, TMvrReceiverValues>.
     Create(ReceiverComparer);
+  FSfrReceivers := TMvrReceiverLists.Create;
 
   FSourceLists := TObjectList<TMvrSources>.Create;
   FSourceLists.Capacity := AModel.ModflowFullStressPeriods.Count;
@@ -222,11 +234,13 @@ begin
   begin
     FSourceLists.Add(TMvrSources.Create);
     FSourceCellDictionaries.Add(TMvrSourceCellDictionary.Create(SourceComparer));
+    FSfrReceivers.Add(TMvrReceiverList.Create);
   end;
 end;
 
 destructor TModflowMvrWriter.Destroy;
 begin
+  FSfrReceivers.Free;
   FReceiverDictionary.Free;
   FSourceLists.Free;
   FSourceCellDictionaries.Free;
@@ -894,6 +908,14 @@ var
   SourceScreenObject: TScreenObject;
   InnerReceiverIndex: Integer;
   ReceiverCount: Integer;
+  PotentialReceivers: TMvrReceiverList;
+  SfrReciverIndex: Integer;
+  AReceiver: TMvrReceiver;
+  NearestFound: Boolean;
+  AStreamCell: TCellLocation;
+  CheckDistance: Boolean;
+  DummyValue: Integer;
+  ClosestReceiver: TMvrReceiver;
   function GetLocation(ACol, ARow: Integer): TPoint2D;
   begin
     if Grid <> nil then
@@ -1033,6 +1055,9 @@ begin
               SourceLocation := GetLocation(AColumn, ARow);
 
               Assert(Length(ReceiverValues.StreamCells) > 0);
+              Assert(Length(ReceiverValues.StreamReachNumbers)
+                = Length(ReceiverValues.StreamCells));
+
               ReceiverLocation := GetLocation(
                 ReceiverValues.StreamCells[0].Column,
                 ReceiverValues.StreamCells[0].Row);
@@ -1051,7 +1076,71 @@ begin
                   MinIndex := SfrCellIndex;
                 end;
               end;
-              WriteInteger(ReceiverValues.Index + MinIndex);
+//              WriteInteger(ReceiverValues.Index + MinIndex);
+              WriteInteger(ReceiverValues.StreamReachNumbers[MinIndex]);
+            end
+            else if (ReceiverItem.ReceiverPackage = rpcSfr)
+              and (ReceiverItem.SfrReceiverChoice in
+                [srcNearestEnclosed, srcNearestAnySegment]) then
+            begin
+              AColumn := MrvCell.Column;
+              ARow := MrvCell.Row;
+              SourceLocation := GetLocation(AColumn, ARow);
+
+              SourceScreenObject := ASource.Key.SourceKey.ScreenObject as TScreenObject;
+              PotentialReceivers := FSfrReceivers[StressPeriodIndex];
+              MinDistance := 0;
+              MinIndex := -1;
+              NearestFound := False;
+              for SfrReciverIndex := 0 to PotentialReceivers.Count - 1 do
+              begin
+                AReceiver := PotentialReceivers[SfrReciverIndex];
+                for SfrCellIndex := 0 to Length(
+                  AReceiver.ReceiverValues.StreamCells) - 1 do
+                begin
+                  AStreamCell := AReceiver.ReceiverValues.
+                    StreamCells[SfrCellIndex];
+                  ReceiverLocation := GetLocation( AStreamCell.Column,
+                    AStreamCell.Row);
+                  if ReceiverItem.SfrReceiverChoice = srcNearestEnclosed then
+                  begin
+                    CheckDistance := SourceScreenObject.IsPointInside(
+                      ReceiverLocation, DummyValue);
+                  end
+                  else
+                  begin
+                    CheckDistance := True;
+                  end;
+                  if CheckDistance then
+                  begin
+                    TestDistance := Distance(SourceLocation, ReceiverLocation);
+                    if NearestFound then
+                    begin
+                      if TestDistance < MinDistance then
+                      begin
+                        MinDistance := TestDistance;
+                        MinIndex := SfrCellIndex;
+                        ClosestReceiver := AReceiver;
+                      end;
+                    end
+                    else
+                    begin
+                      NearestFound := True;
+                      ClosestReceiver := AReceiver;
+                      MinDistance := TestDistance;
+                      MinIndex := SfrCellIndex;
+                    end;
+                  end;
+                end;
+              end;
+              if NearestFound then
+              begin
+                WriteInteger(ClosestReceiver.ReceiverValues.StreamReachNumbers[MinIndex]);
+              end
+              else
+              begin
+                WriteInteger(-1);
+              end;
             end
             else if ReceiverItem.ReceiverPackage = rpcUzf then
             begin

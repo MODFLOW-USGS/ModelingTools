@@ -1059,7 +1059,7 @@ var
   TimeItem: TMt3dmsTimeItem;
   SpeciesIndex: Integer;
   ColIndex: Integer;
-  GwtProcess: TGwtProcess;
+//  GwtProcess: TGwtProcess;
   Limit: Integer;
 begin
   FModflowStressPeriods.Clear;

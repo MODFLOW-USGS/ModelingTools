@@ -521,7 +521,7 @@ var
   LastTime: double;
   GwtDefined: Boolean;
   SpeciesIndex: Integer;
-  GenusObs: TGenus;
+//  GenusObs: TGenus;
   Species: Integer;
   GwtObs: TObGwts;
   ChemIndex: Integer;

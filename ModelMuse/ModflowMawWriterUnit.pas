@@ -626,6 +626,7 @@ begin
   end;
   MvrReceiver.ReceiverKey.ReceiverPackage := rpcMaw;
   MvrReceiver.ReceiverValues.StreamCells := nil;
+  MvrReceiver.ReceiverValues.StreamReachNumbers := nil;
 
   for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count -1 do
   begin
@@ -1442,6 +1443,7 @@ begin
   end;
   MvrReceiver.ReceiverKey.ReceiverPackage := rpcMaw;
   MvrReceiver.ReceiverValues.StreamCells := nil;
+  MvrReceiver.ReceiverValues.StreamReachNumbers := nil;
 
   for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count -1 do
   begin
@@ -1641,7 +1643,7 @@ var
   FormulaItem: TStringConcValueItem;
   PropertyName: string;
   IsGwtObs: Boolean;
-  index: Integer;
+//  index: Integer;
   IsMf6Obs: Boolean;
   MwtObs: TMwtObservation;
   procedure CompileFormula(Formula: string; const FormulaName: string;

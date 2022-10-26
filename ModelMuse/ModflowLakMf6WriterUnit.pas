@@ -2689,8 +2689,8 @@ var
   MvrUsed: Boolean;
   UsedOutlets: TList<Integer>;
   ReceiverItem: TReceiverItem;
-  SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
+//  SpeciesIndex: Integer;
+//  ASpecies: TMobileChemSpeciesItem;
 begin
 
   if MvrWriter <> nil then
@@ -2703,6 +2703,7 @@ begin
   end;
   MvrReceiver.ReceiverKey.ReceiverPackage := rpcLak;
   MvrReceiver.ReceiverValues.StreamCells := nil;
+  MvrReceiver.ReceiverValues.StreamReachNumbers := nil;
 
   FirstTime := Model.ModflowFullStressPeriods.First.StartTime;
   LastTime := Model.ModflowFullStressPeriods.Last.EndTime;

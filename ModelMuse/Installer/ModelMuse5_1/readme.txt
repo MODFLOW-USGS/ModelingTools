@@ -18,6 +18,13 @@ files for personal computers are provided as well as the source code. Although
 not a supported operating system, some users have reported success on using 
 ModelMuse on MacIntosh computers under WINE.
 
+When ModelMuse 5.1 is used with the groundwater transport process in MODFLOW 6, 
+version 6.3 of MODFLOW 6 should not be used. Instead use the development build
+of MODFLOW 6. After version 6.4 of MODFLOW 6 is released, the latest released 
+version of MODFLOW 6 should be used. The development version of MODFLOW 6 is 
+available from the following URL.
+https://github.com/MODFLOW-USGS/modflow6-nightly-build
+
 Instructions for installation, execution, and compiling are provided below.
 
                             TABLE OF CONTENTS

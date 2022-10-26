@@ -4,8 +4,8 @@ inherited frmImportTprogs: TfrmImportTprogs
   Caption = 'Import T-PROGS File'
   ClientHeight = 429
   ClientWidth = 579
-  ExplicitWidth = 597
-  ExplicitHeight = 476
+  ExplicitWidth = 595
+  ExplicitHeight = 468
   TextHeight = 18
   object lblTprogs: TLabel
     Left = 8

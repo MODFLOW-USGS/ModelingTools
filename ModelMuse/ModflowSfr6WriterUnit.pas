@@ -2324,6 +2324,8 @@ begin
 
       ACellList := ASegment.FReaches[StressPeriodIndex];
       SetLength(MvrReceiver.ReceiverValues.StreamCells, ACellList.Count);
+      SetLength(MvrReceiver.ReceiverValues.StreamReachNumbers, ACellList.Count);
+
       MvrReceiver.ReceiverValues.Index := ReachCount+1;
       for CellIndex := 0 to ACellList.Count - 1 do
       begin
@@ -2332,6 +2334,7 @@ begin
         ACell := ACellList[CellIndex] as TSfrMF6_Cell;
         MvrReceiver.ReceiverValues.StreamCells[CellIndex] := ACell.Values.Cell;
         Inc(ReachNumber);
+        MvrReceiver.ReceiverValues.StreamReachNumbers[CellIndex] := ReachNumber;
 
         WriteInteger(ReachNumber);
         case ACell.Values.Status of
@@ -2493,6 +2496,8 @@ begin
 
       ACellList := ASegment.FReaches[StressPeriodIndex];
       SetLength(MvrReceiver.ReceiverValues.StreamCells, ACellList.Count);
+      SetLength(MvrReceiver.ReceiverValues.StreamReachNumbers, ACellList.Count);
+
       MvrReceiver.ReceiverValues.Index := ReachCount+1;
       for CellIndex := 0 to ACellList.Count - 1 do
       begin
@@ -2501,6 +2506,7 @@ begin
         ACell := ACellList[CellIndex] as TSfrMF6_Cell;
         MvrReceiver.ReceiverValues.StreamCells[CellIndex] := ACell.Values.Cell;
         Inc(ReachNumber);
+        MvrReceiver.ReceiverValues.StreamReachNumbers[CellIndex] := ReachNumber;
 
         AssociatedScreenObjects[ReachNumber-1] := ASegment.ScreenObject;
         if ACell.Values.Status <> ssInactive then

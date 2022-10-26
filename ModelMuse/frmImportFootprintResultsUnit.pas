@@ -162,7 +162,7 @@ var
   DataArray: TDataArray;
   DataSetName: string;
   ItemIndex: Integer;
-  CreateNewDataSet: Boolean;
+//  CreateNewDataSet: Boolean;
 begin
   if (not chklstDataToImport.Checked[Ord(fpdtWithdrawals)])
     and (not chklstDataToImport.Checked[Ord(fpdtCode)]) then

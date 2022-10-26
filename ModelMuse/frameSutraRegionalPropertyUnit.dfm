@@ -28,15 +28,15 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
         object lblFirstDistributionCoefficient: TLabel
           Left = 133
           Top = 135
-          Width = 227
-          Height = 20
+          Width = 182
+          Height = 15
           Caption = 'First distribution coefficient (CHI1)'
         end
         object lblSecondDistributionCoefficient: TLabel
           Left = 133
           Top = 168
-          Width = 249
-          Height = 20
+          Width = 199
+          Height = 15
           Caption = 'Second distribution coefficient (CHI2)'
         end
         object rgSorptionModel: TRadioGroup
@@ -142,43 +142,43 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             object lblResidWatSat: TLabel
               Left = 164
               Top = 10
-              Width = 263
-              Height = 20
+              Width = 206
+              Height = 15
               Caption = 'Residual total water saturation (SWRES)'
             end
             object lblVgenAlpha: TLabel
               Left = 164
               Top = 41
-              Width = 300
-              Height = 20
+              Width = 242
+              Height = 15
               Caption = 'van Genuchten function parameter '#945'_VG (AA)'
             end
             object lblVgenEta: TLabel
               Left = 164
               Top = 70
-              Width = 299
-              Height = 20
+              Width = 242
+              Height = 15
               Caption = 'van Genuchten function parameter n_VG (VN)'
             end
             object lblAirEntryPressure: TLabel
               Left = 164
               Top = 99
-              Width = 166
-              Height = 20
+              Width = 133
+              Height = 15
               Caption = 'Air-entry pressure (PENT)'
             end
             object lblPoreDistIndex: TLabel
               Left = 164
               Top = 128
-              Width = 240
-              Height = 20
+              Width = 192
+              Height = 15
               Caption = 'Pore size distribution index (RLAMB)'
             end
             object lblPresAtResid: TLabel
               Left = 164
               Top = 157
-              Width = 482
-              Height = 20
+              Width = 385
+              Height = 15
               Caption = 
                 'Pressure at which the saturation reaches the residual saturation' +
                 ' (PSWRES)'
@@ -278,9 +278,9 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                 ExplicitTop = 200
                 ExplicitWidth = 667
                 inherited lbNumber: TLabel
-                  Width = 149
+                  Width = 120
                   Caption = 'Number of Parameters'
-                  ExplicitWidth = 149
+                  ExplicitWidth = 120
                 end
                 inherited sbAdd: TSpeedButton
                   Left = 350
@@ -387,29 +387,29 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             object lblMinRelPerm: TLabel
               Left = 164
               Top = 11
-              Width = 264
-              Height = 20
+              Width = 211
+              Height = 15
               Caption = 'Minimum relative permeability (RKMIN)'
             end
             object lblRelPermEta: TLabel
               Left = 164
               Top = 45
-              Width = 299
-              Height = 20
+              Width = 242
+              Height = 15
               Caption = 'van Genuchten function parameter n_VG (VN)'
             end
             object lblRelPermPoreDistIndex: TLabel
               Left = 164
               Top = 79
-              Width = 240
-              Height = 20
+              Width = 192
+              Height = 15
               Caption = 'Pore size distribution index (RLAMB)'
             end
             object lblSatAtMinPerm: TLabel
               Left = 164
               Top = 113
-              Width = 456
-              Height = 40
+              Width = 418
+              Height = 30
               Caption = 
                 'Liquid-water saturation at which the relative permeability reach' +
                 'es its minimum (SLRKMIN)'
@@ -485,9 +485,9 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                 ExplicitTop = 200
                 ExplicitWidth = 667
                 inherited lbNumber: TLabel
-                  Width = 149
+                  Width = 120
                   Caption = 'Number of Parameters'
-                  ExplicitWidth = 149
+                  ExplicitWidth = 120
                 end
                 inherited sbAdd: TSpeedButton
                   Left = 350
@@ -592,36 +592,36 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             object lblResidLiqWatSat: TLabel
               Left = 164
               Top = 11
-              Width = 292
-              Height = 20
+              Width = 229
+              Height = 15
               Caption = 'Residual liquid water saturation  (SLSATRES)'
             end
             object lblExpParamW: TLabel
               Left = 164
               Top = 40
-              Width = 225
-              Height = 20
+              Width = 178
+              Height = 15
               Caption = 'Exponential parameter w_EXP (W)'
             end
             object lblPowerAlpha: TLabel
               Left = 164
               Top = 69
-              Width = 369
-              Height = 20
+              Width = 293
+              Height = 15
               Caption = 'Modified power law model parameter, '#945'_POW (ALPHA)'
             end
             object lblPowerBeta: TLabel
               Left = 164
               Top = 98
-              Width = 352
-              Height = 20
+              Width = 278
+              Height = 15
               Caption = 'Modified power law model parameter, '#946'_POW(BETA)'
             end
             object lblLiqWatRelTemSatMin: TLabel
               Left = 164
               Top = 127
-              Width = 418
-              Height = 40
+              Width = 409
+              Height = 30
               Caption = 
                 'Relative temperature at which the liquid saturation reaches the ' +
                 'residual liquid saturation (TLRES)'
@@ -709,9 +709,9 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                 ExplicitTop = 200
                 ExplicitWidth = 667
                 inherited lbNumber: TLabel
-                  Width = 149
+                  Width = 120
                   Caption = 'Number of Parameters'
-                  ExplicitWidth = 149
+                  ExplicitWidth = 120
                 end
                 inherited sbAdd: TSpeedButton
                   Left = 350
@@ -781,15 +781,15 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
         object lblMaxFreezeTemp: TLabel
           Left = 164
           Top = 27
-          Width = 367
-          Height = 20
+          Width = 290
+          Height = 15
           Caption = 'Maximum freezing temperature of pore water (TFREEZ)'
         end
         object lblLatentHeat: TLabel
           Left = 164
           Top = 61
-          Width = 193
-          Height = 20
+          Width = 154
+          Height = 15
           Caption = 'Latent heat of fusion (HTLAT)'
         end
         object btnedMaxFreezeTemp: TssButtonEdit

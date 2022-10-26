@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-10-20T12:00:58.342-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">MODFLOW 6 Transfer of solutes between streams and lakes</title>
+<topic template="Default" status="Under Construction" modified="2022-10-26T10:06:29.841-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW 6 Transfer of Solutes Between Streams and Lakes</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Transfer of solutes between streams and lakes</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Transfer of Solutes Between Streams and Lakes</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This exercise reproduces the general features of ex-gwt-prudic2004t2 from the MODFLOW 6 examples. It is described in mf6examples.pdf distributed with MODFLOW6 as &quot;48 SFR1 Manual Problem 2.&quot; It is not an exact reproduction of the model. Among other changes, the row and column widths are set to 403.717 and 405.665 respectively.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has four stream segments and two lakes. There are specified head boundaries at the North and South ends of the model and flow is downgradient from North to South. Solute is introduced into the model through specified concentration boundaries in the center of the North end of the model. Some solute flows into the lakes and streams and is transported downstream through them.</text></para>

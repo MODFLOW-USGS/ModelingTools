@@ -4,7 +4,6 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
   Caption = 'Import WellFootprint Results'
   ClientHeight = 230
   ExplicitHeight = 269
-  PixelsPerInch = 96
   TextHeight = 18
   object lblColorMesh: TLabel
     Left = 8
@@ -25,12 +24,12 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     Top = 32
     Width = 401
     Height = 52
-    OnClickCheck = chklstDataToImportClickCheck
     ItemHeight = 18
     Items.Strings = (
       'Distributed withdrawals'
       'Footprint code')
     TabOrder = 0
+    OnClickCheck = chklstDataToImportClickCheck
   end
   object rgDisplayChoice: TRadioGroup
     Left = 8

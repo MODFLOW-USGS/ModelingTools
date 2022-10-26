@@ -10738,14 +10738,19 @@ const
 //                are outside the grid to ModelMate.
 //    '5.0.0.31' --
 
-//               Bug fix: Fixed bug in writing PEST prior information equations.
+//     '5.1.0.0' Bug fix: Fixed bug in writing PEST prior information equations.
+//               Bug fix: Fixed bug in editing objects specifying MVR
+//                boundaries.
+
+//               Enhancement: Added support for the Groundwater Transport
+//                Process in MODFLOW 6.
+//               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 //               Enhancement: Added suport for SUTRA 4.
-//               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.31';
+  IIModelVersion = '5.1.0.0';
 
 function IModelVersion: string;
 begin

@@ -249,7 +249,7 @@ var
   SinAngle: Double;
   SizeToRead: integer;
   AnInt: Integer;
-  AByte: Byte;
+//  AByte: Byte;
   ByteArray: array of Byte;
   BytePosition: Integer;
 begin
