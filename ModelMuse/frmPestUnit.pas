@@ -409,7 +409,6 @@ type
     procedure rdeFactorOriginalChange(Sender: TObject);
     procedure rdePhiReductionCriterionChange(Sender: TObject);
     procedure rdeSmallParameterReductionChange(Sender: TObject);
-    procedure rdeAbandonChange(Sender: TObject);
     procedure btnCheckAllInitialValueClick(Sender: TObject);
     procedure btnMakeAllRegulClick(Sender: TObject);
     procedure btnWithinLayerPriorClick(Sender: TObject);
@@ -894,19 +893,6 @@ procedure TfrmPEST.rgRegOptionClick(Sender: TObject);
 begin
   inherited;
   rdeIREGADJ.IntegerValue := IREGADJ;
-end;
-
-procedure TfrmPEST.rdeAbandonChange(Sender: TObject);
-begin
-  inherited;
-  if rdeAbandon.RealValue = 0 then
-  begin
-    rdeAbandon.Color := clRed;
-  end
-  else
-  begin
-    rdeAbandon.Color := clWindow;
-  end;
 end;
 
 procedure TfrmPEST.rdeAcceptedObjectiveFunctionChange(Sender: TObject);

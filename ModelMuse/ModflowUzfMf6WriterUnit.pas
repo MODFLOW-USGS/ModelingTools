@@ -1613,16 +1613,18 @@ begin
                 MvrReceiver.ReceiverKey.ScreenObject := UzfCell.ScreenObject;
 
                 Inc(BoundaryIndex);
-                MvrReceiver.ReceiverValues.Index := BoundaryIndex;
+//                MvrReceiver.ReceiverValues.Index := BoundaryIndex;
+                MvrReceiver.ReceiverValues.Index := FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex];
 
                 if UzfCell.MvrUsed and (MoverWriter <> nil)
                   and not WritingTemplate then
                 begin
                   MvrKey.StressPeriod := StressPeriodIndex;
-                  MvrKey.Index := BoundaryIndex;
+                  MvrKey.Index := FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex];
                   MvrKey.SourceKey.MvrIndex := UzfCell.MvrIndex;
                   MvrKey.SourceKey.ScreenObject := UzfCell.ScreenObject;
                   MoverWriter.AddMvrSource(MvrKey);
+                  MoverWriter.UzfCellNumbers := FUzfCellNumbers;
                 end;
 
                 if MoverWriter <> nil then

@@ -37,7 +37,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspPilotPoints
+    ActivePage = jvspIterationControls
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -754,7 +754,6 @@ inherited frmPEST: TfrmPEST
         Text = '1'
         DataType = dtReal
         Max = 1.000000000000000000
-        Min = 1.000000000000000000
         CheckMin = True
         ChangeDisabledColor = True
       end
@@ -776,7 +775,6 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 8
         Text = '0'
-        OnChange = rdeAbandonChange
         DataType = dtReal
         Max = 1.000000000000000000
         CheckMin = True
@@ -1261,8 +1259,6 @@ inherited frmPEST: TfrmPEST
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Observation_G2'
       Caption = 'jvspObsGroupAssignments'
-      ExplicitWidth = 106
-      ExplicitHeight = 159
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
@@ -1270,8 +1266,8 @@ inherited frmPEST: TfrmPEST
         Height = 443
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 106
-        ExplicitHeight = 159
+        ExplicitWidth = 566
+        ExplicitHeight = 443
         inherited tvTree: TTreeView
           Width = 566
           Height = 443

@@ -1402,6 +1402,9 @@ procedure TModpathSimFileWriter.WriteDataSet3;
 const
   ReferenceTimeOption = 1;
   ParticleGenerationOption = 2;
+  // TimeSeriesOutputOption has not yet been implemented in the released
+  // version of MODPATH. When it is, this should be changed.
+  TimeSeriesOutputOption = 0;
 var
   SimulationType: integer;
   TrackingDirection: Integer;
@@ -1540,6 +1543,7 @@ begin
   if FMpathVersion = mp7 then
   begin
     WriteInteger(TraceMode);
+    WriteInteger(TimeSeriesOutputOption);
   end;
   if FMpathVersion <> mp7 then
   begin
@@ -1552,7 +1556,7 @@ begin
   begin
     WriteString(' # Data Set 3: SimulationType, TrackingDirection, '
       + 'WeakSinkOption, WeakSouceOption, BudgetOutputOption, '
-      + 'TraceMode');
+      + 'TraceMode, TimeSeriesOutputOption');
   end;
   NewLine;
 end;

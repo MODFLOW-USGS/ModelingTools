@@ -30150,5 +30150,14 @@ object TTaskHistory
         'Bug fix'
         'Installer'
         'MVR')
+    end
+    item
+      Date = 44861.000000000000000000
+    end
+    item
+      Date = 44862.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Testing')
     end>
 end

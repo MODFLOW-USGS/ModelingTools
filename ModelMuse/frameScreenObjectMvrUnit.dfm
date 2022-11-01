@@ -13,8 +13,8 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
       object lblMvrType: TLabel [1]
         Left = 199
         Top = 5
-        Width = 60
-        Height = 15
+        Width = 55
+        Height = 13
         Alignment = taCenter
         Caption = 'Mover type'
       end
@@ -22,7 +22,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         Left = 199
         Top = 24
         Width = 89
-        Height = 23
+        Height = 21
         Style = csDropDownList
         Enabled = False
         TabOrder = 1
@@ -139,6 +139,8 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
+      ExplicitLeft = 1
+      ExplicitTop = 51
       ExplicitHeight = 83
       ColWidths = (
         64
@@ -161,15 +163,15 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
       object lblSourcePackage: TLabel
         Left = 3
         Top = 3
-        Width = 83
-        Height = 15
+        Width = 76
+        Height = 13
         Caption = 'Source package'
       end
       object comboSourcePackage: TComboBox
         Left = 3
         Top = 22
         Width = 306
-        Height = 23
+        Height = 21
         Style = csDropDownList
         TabOrder = 0
         OnChange = comboSourcePackageChange
@@ -189,7 +191,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         Left = 0
         Top = 64
         Width = 312
-        Height = 145
+        Height = 147
         Margins.Left = 0
         Margins.Top = 64
         Margins.Right = 0
@@ -198,16 +200,16 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         TabOrder = 1
         ExplicitTop = 64
         ExplicitWidth = 312
-        ExplicitHeight = 145
+        ExplicitHeight = 147
         inherited Panel: TPanel
-          Top = 104
+          Top = 106
           Width = 312
-          ExplicitTop = 104
+          ExplicitTop = 106
           ExplicitWidth = 312
           inherited lbNumber: TLabel
-            Width = 107
+            Width = 97
             Caption = 'Number of receivers'
-            ExplicitWidth = 107
+            ExplicitWidth = 97
           end
           inherited sbAdd: TSpeedButton
             Left = 158
@@ -224,14 +226,12 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
             ExplicitLeft = 218
           end
           inherited seNumber: TJvSpinEdit
-            Height = 23
             OnChange = frameReceiversseNumberChange
-            ExplicitHeight = 23
           end
         end
         inherited Grid: TRbwDataGrid4
           Width = 312
-          Height = 104
+          Height = 106
           ColCount = 4
           OnSelectCell = frameReceiversGridSelectCell
           OnSetEditText = frameReceiversGridSetEditText
@@ -286,7 +286,9 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
               ParentButtonFont = False
               PickList.Strings = (
                 'First'
-                'Nearest')
+                'Nearest'
+                'Nearest enclosed reach of any segment'
+                'Nearest reach of any segment')
               WordWrapCaptions = True
               WordWrapCells = False
               CaseSensitivePicklist = False
@@ -344,7 +346,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 312
-          ExplicitHeight = 104
+          ExplicitHeight = 106
         end
       end
     end
@@ -361,5 +363,9 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     DesignSize = (
       320
       40)
+    inherited seNumberOfTimes: TJvSpinEdit
+      Height = 21
+      ExplicitHeight = 21
+    end
   end
 end
