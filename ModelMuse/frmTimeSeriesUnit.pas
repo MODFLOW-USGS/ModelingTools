@@ -76,7 +76,7 @@ resourcestring
   StrTimeSeriesNamesMuPest = 'Time series names must be different from the n' +
   'ames of any PEST parameters. The following names are duplicates.';
   StrTheTimesInSDoN = 'The times in %s do not encompass all the times in the' +
-  ' model. This can cause an error if one of its time series is use for a ti' +
+  ' model. This can cause an error if one of its time series is used for a ti' +
   'me step in which its times are not defined. Do you want to fix this?';
 
 {$R *.dfm}

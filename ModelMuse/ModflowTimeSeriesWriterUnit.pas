@@ -1,5 +1,7 @@
 unit ModflowTimeSeriesWriterUnit;
 
+{See also @link(ModflowMf6TimeSeriesWriterUnit)}
+
 interface
 
 uses
