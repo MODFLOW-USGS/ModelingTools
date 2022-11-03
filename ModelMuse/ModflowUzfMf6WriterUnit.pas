@@ -40,6 +40,7 @@ type
   private
     FUzfPackage: TUzfMf6PackageSelection;
     FUzfCellNumbers: TThreeDIntegerArray;
+    FMvrIndicies: TThreeDIntegerArray;
   	FUzflandflagLayers:  TTwoDIntegerArray;
     FUzfObjectArray: T3DSparsePointerArray;
     FObsList: TUzfObservationList;
@@ -179,6 +180,8 @@ var
   MfObs: TModflow6Obs;
   SpeciesIndex: Integer;
 begin
+  SetLength(FMvrIndicies, Model.LayerCount,
+    Model.RowCount, Model.ColumnCount);
   FUzfPackage := Package as TUzfMf6PackageSelection;
   inherited;
   CellList := TCellAssignmentList.Create;
@@ -234,6 +237,7 @@ begin
         begin
           ACell := CellList[CellIndex];
           FUzfObjectArray[ACell.Layer, ACell.Row, ACell.Column] := ScreenObject;
+          FMvrIndicies[ACell.Layer, ACell.Row, ACell.Column] := CellIndex;
         end;
       end
       else if ObservationsUsed and not WritingTemplate then
@@ -1289,6 +1293,8 @@ begin
   CellNumber := 0;
   SetLength(FUzfCellNumbers, IDOMAINDataArray.LayerCount,
     IDOMAINDataArray.RowCount, IDOMAINDataArray.ColumnCount);
+//  SetLength(FMvrIndicies, IDOMAINDataArray.LayerCount,
+//    IDOMAINDataArray.RowCount, IDOMAINDataArray.ColumnCount);
   SetLength(FUzflandflagLayers, IDOMAINDataArray.RowCount, IDOMAINDataArray.ColumnCount);
   for LayerIndex := 0 to IDOMAINDataArray.LayerCount - 1 do
   begin
@@ -1621,7 +1627,8 @@ begin
                 begin
                   MvrKey.StressPeriod := StressPeriodIndex;
                   MvrKey.Index := FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex];
-                  MvrKey.SourceKey.MvrIndex := UzfCell.MvrIndex;
+                  MvrKey.SourceKey.MvrIndex := //UzfCell.MvrIndex;
+                    FMvrIndicies[LayerIndex, RowIndex, ColumnIndex];
                   MvrKey.SourceKey.ScreenObject := UzfCell.ScreenObject;
                   MoverWriter.AddMvrSource(MvrKey);
                   MoverWriter.UzfCellNumbers := FUzfCellNumbers;

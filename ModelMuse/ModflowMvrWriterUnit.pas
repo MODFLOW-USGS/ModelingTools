@@ -1067,9 +1067,9 @@ begin
               else Assert(False);
             end;
 
-            if ASource.SourcePackage = spcUzf then
-            begin
-              WriteInteger(UzfCellNumbers[ASource.Cell.Layer, ASource.Cell.Row, ASource.Cell.Column]);
+//            if ASource.SourcePackage = spcUzf then
+//            begin
+//              WriteInteger(UzfCellNumbers[ASource.Cell.Layer, ASource.Cell.Row, ASource.Cell.Column]);
 //              ShowMessage(Format('%0:d %1:d', [UzfCellNumbers[ASource.Cell.Layer, ASource.Cell.Row, ASource.Cell.Column], ASource.Key.Index]));
 {
   TMvrSource = record
@@ -1099,11 +1099,12 @@ begin
   end;
 
 }
-            end
-            else
-            begin
+//            end
+//            else
+//            begin
+              Assert(UzfCellNumbers[ASource.Cell.Layer, ASource.Cell.Row, ASource.Cell.Column] = ASource.Key.Index);
               WriteInteger(ASource.Key.Index);
-            end;
+//            end;
 
             case ReceiverItem.ReceiverPackage of
               rpcLak:
