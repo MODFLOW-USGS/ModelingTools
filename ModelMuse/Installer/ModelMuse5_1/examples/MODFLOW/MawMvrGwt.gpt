@@ -602,7 +602,6 @@ object PhastModel: TPhastModel
   ModflowPackages.NpfPackage.SaveSpecificDischarge = True
   ModflowPackages.NpfPackage.UseHorizontalAnisotropy = False
   ModflowPackages.NpfPackage.UseVerticalAnisotropy = False
-  ModflowPackages.NpfPackage.SaveSaturation = True
   ModflowPackages.StoPackage.IsSelected = True
   ModflowPackages.StoPackage.StorageChoice = scSpecificStorage
   ModflowPackages.SmsPackage.IsSelected = True

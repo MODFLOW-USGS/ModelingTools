@@ -211,7 +211,7 @@ begin
     ErrorValues.Add('BETWEEN 1 AND NPER (OF THE DISCRETIZATION INPUT FILE');
     ErrorValues.Add('STREAMFLOW PACKAGE OF GWF IS NOT OPEN');
     ErrorValues.Add('Package has not been defined');
-    ErrorValues.Add('MATRIX IS SEVERELY NON-DIAGONALLY DOMINANT');
+//    ErrorValues.Add('MATRIX IS SEVERELY NON-DIAGONALLY DOMINANT');
     ErrorValues.Add('CONJUGATE-GRADIENT METHOD FAILED');
     ErrorValues.Add('DIVIDE BY 0 IN SIP AT LAYER');
 
@@ -1107,6 +1107,7 @@ begin
     WarningValues.Add('WAS DEPRECATED IN VERSION');
     WarningValues.Add('WARNING REPORT');
     WarningValues.Add('MOVER PACKAGE REQUIRES AT LEAST TWO OUTER ITERATIONS');
+    WarningValues.Add('MATRIX IS SEVERELY NON-DIAGONALLY DOMINANT');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');

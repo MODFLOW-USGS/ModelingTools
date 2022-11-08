@@ -858,7 +858,7 @@ begin
           end;
         end;
 
-        if (Boundary = nil) or not Boundary.Used then
+        if ((Boundary = nil) or not Boundary.Used) and (not SetAll) then
         begin
           Continue;
         end;

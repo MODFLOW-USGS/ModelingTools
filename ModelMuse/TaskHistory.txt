@@ -30177,5 +30177,27 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'Video')
+    end
+    item
+      Date = 44868.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'MVR')
+    end
+    item
+      Date = 44869.000000000000000000
+      Categories.Strings = (
+        'MVR')
+    end
+    item
+      Date = 44870.000000000000000000
+    end
+    item
+      Date = 44871.000000000000000000
+    end
+    item
+      Date = 44872.000000000000000000
+      Categories.Strings = (
+        'Video')
     end>
 end

@@ -1631,7 +1631,7 @@ begin
                     FMvrIndicies[LayerIndex, RowIndex, ColumnIndex];
                   MvrKey.SourceKey.ScreenObject := UzfCell.ScreenObject;
                   MoverWriter.AddMvrSource(MvrKey);
-                  MoverWriter.UzfCellNumbers := FUzfCellNumbers;
+//                  MoverWriter.UzfCellNumbers := FUzfCellNumbers;
                 end;
 
                 if MoverWriter <> nil then

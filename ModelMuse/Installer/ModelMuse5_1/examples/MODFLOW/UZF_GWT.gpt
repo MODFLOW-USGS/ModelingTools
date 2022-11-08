@@ -743,7 +743,9 @@ object PhastModel: TPhastModel
         end>
     end>
   FilesToArchive.Strings = (
-    'C:\ModelingTools\ModelMuse\PracticeModels\UZT\UztExample2.gpt')
+    
+      'D:\ModelingTools\ModelMuse\Installer\ModelMuse5_1\examples\MODFL' +
+      'OW\UZF_GWT.gpt')
   ModelInputFiles.Strings = (
     'C:\ModelingTools\ModelMuse\PracticeModels\UZT\mfsim.nam'
     
@@ -829,7 +831,9 @@ object PhastModel: TPhastModel
     
       'C:\ModelingTools\ModelMuse\PracticeModels\UZT\UztExample2.UzfCon' +
       'vergence.CSV')
-  ModelFileName = 'C:\ModelingTools\ModelMuse\PracticeModels\UZT\UztExample2.gpt'
+  ModelFileName = 
+    'D:\ModelingTools\ModelMuse\Installer\ModelMuse5_1\examples\MODFL' +
+    'OW\UZF_GWT.gpt'
   ModflowOptions.Description.Strings = (
     
       'Reproduction of example ex-gwt-mt3dsupp632a described in mf6exam' +
@@ -948,10 +952,6 @@ object PhastModel: TPhastModel
   SutraOptions.StoredFluidDensityCoefficientTemperature.Value = -0.37500000000000000
   SutraOptions.StoredViscosity.Value = 0.00100000000000000
   SutraOptions.StoredScaleFactor.Value = 1.00000000000000000
-  SutraOptions.StoredIceCompressibility.Value = 0.00000000000000000
-  SutraOptions.StoredIceSpecificHeat.Value = 2108.00000000000000000
-  SutraOptions.StoredIceThermalConductivity.Value = 2.14000000000000000
-  SutraOptions.StoredIceDensity.Value = 920.00000000000000000
   SutraOptions.StoredMatrixCompressibility.Value = 0.00000001000000000
   SutraOptions.StoredSolidGrainSpecificHeat.Value = 840.00000000000000000
   SutraOptions.StoredSolidGrainDiffusivity.Value = 3.50000000000000000
@@ -987,7 +987,6 @@ object PhastModel: TPhastModel
   SutraOptions.PestAnisotropyOptions.UseAlmaxAlminAnisotropy = True
   SutraOptions.PestAnisotropyOptions.UseAtmaxAtmidAnisotropy = True
   SutraOptions.PestAnisotropyOptions.UseAtmaxAtminAnisotropy = True
-  SutraOptions.RegionalProperties = <>
   SutraOptions.ProductionUsed = False
   SutraOutputControl.ListingPrintFrequency = 9999
   SutraOutputControl.ListingOptions = [sloNPrint, sloCPandS, sloCVel, sloCCorT, sloCBudg, sloCScrn]
@@ -1149,7 +1148,7 @@ object PhastModel: TPhastModel
   Units.DefaultWellFlowTimeUnits = tuSeconds
   Units.DefaultWellFlowVolumnUnits = vuMeters3
   Bitmaps = <>
-  Exaggeration = 0.40000000596046440
+  Exaggeration = 1.00000000000000000
   RipPlantGroups.MaxID = 0
   RipPlantGroups = <>
   ObjectList = <
@@ -1462,7 +1461,6 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
       ScreenObject.ViewDirection = vdTop
-      ScreenObject.Visible = False
       ScreenObject.InterpValues = <
         item
           Values.InterpolationDirection = pidX
@@ -1770,23 +1768,23 @@ object PhastModel: TPhastModel
       MixtureFormulas.Strings = (
         '')
     end>
-  Version = '5.0.0.30'
-  GuiSettings.FrontHeight = 195
+  Version = '5.0.0.32'
+  GuiSettings.FrontHeight = 298
   GuiSettings.Height = 600
-  GuiSettings.FrontX = -1.77918434855639200
-  GuiSettings.FrontY = -3.47749648382560500
-  GuiSettings.Left = 2028
-  GuiSettings.MagnificationFront = 35.54999947026373000
-  GuiSettings.MagnificationSide = 35.54999947026373000
-  GuiSettings.MagnificationTop = 35.54999947026373000
+  GuiSettings.FrontX = -4.81897387708857200
+  GuiSettings.FrontY = -1.68175225340949300
+  GuiSettings.Left = 305
+  GuiSettings.MagnificationFront = 28.50129267874592000
+  GuiSettings.MagnificationSide = 28.50129267874592000
+  GuiSettings.MagnificationTop = 28.50129267874592000
   GuiSettings.SideWidth = 229
-  GuiSettings.SideX = -4.84880450070324200
-  GuiSettings.SideY = -3.47239808082242400
-  GuiSettings.Top = 270
-  GuiSettings.TopViewHeight = 240
+  GuiSettings.SideX = -0.55899616088098940
+  GuiSettings.SideY = -2.09738482741871300
+  GuiSettings.Top = 220
+  GuiSettings.TopViewHeight = 137
   GuiSettings.TopViewWidth = 543
-  GuiSettings.TopX = -1.77918434855639200
-  GuiSettings.TopY = -3.47239808082242400
+  GuiSettings.TopX = -4.81897387708857200
+  GuiSettings.TopY = -2.09738482741871300
   GuiSettings.Width = 798
   GuiSettings.WindowState = wsNormal
   GuiSettings.TopHorizontalDigits = 0

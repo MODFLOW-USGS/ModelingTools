@@ -74,7 +74,7 @@ type
 //    FNameOfFile: String;
     FUsedPackages: TSourcePackageChoices;
     FSpeciesIndex: Integer;
-    FUzfCellNumbers: TThreeDIntegerArray;
+//    FUzfCellNumbers: TThreeDIntegerArray;
     function ShouldEvaluate: Boolean;
     procedure WriteOptions;
     procedure WriteDimensions;
@@ -112,7 +112,7 @@ type
     procedure WriteMvtFile(const AFileName: string; SpeciesIndex: Integer);
     property UsedPackages: TSourcePackageChoices read FUsedPackages;
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
-    property UzfCellNumbers: TThreeDIntegerArray read FUzfCellNumbers write FUzfCellNumbers;
+//    property UzfCellNumbers: TThreeDIntegerArray read FUzfCellNumbers write FUzfCellNumbers;
   end;
 
 const
@@ -124,7 +124,7 @@ uses
   frmProgressUnit, System.SysUtils, frmErrorsAndWarningsUnit, Vcl.Forms,
   FastGEO, ModflowIrregularMeshUnit, AbstractGridUnit, System.Math,
   ModflowLakMf6Unit, RbwParser, frmFormulaErrorsUnit, frmModflowPackagesUnit,
-  ModflowPackagesUnit, Mt3dmsChemSpeciesUnit;
+  ModflowPackagesUnit, Mt3dmsChemSpeciesUnit, QuadTreeClass;
 
 resourcestring
   StrWritingMVROptions = 'Writing MVR Options';
@@ -904,21 +904,22 @@ var
   MinIndex: Integer;
   SourceLocation: TPoint2D;
   ReceiverLocation: TPoint2D;
-  MinDistance: double;
   SfrCellIndex: Integer;
-  TestDistance: TFloat;
   SourceScreenObject: TScreenObject;
   InnerReceiverIndex: Integer;
   ReceiverCount: Integer;
   PotentialReceivers: TMvrReceiverList;
   SfrReciverIndex: Integer;
   AReceiver: TMvrReceiver;
-  NearestFound: Boolean;
   AStreamCell: TCellLocation;
-  CheckDistance: Boolean;
   DummyValue: Integer;
-  ClosestReceiver: TMvrReceiver;
   UseSfrNearestMultipleSegment: Boolean;
+  AllStreamReaches: TRbwQuadTree;
+  EnclosedReaches: TRbwQuadTree;
+  CurrentObjectReaches: TRbwQuadTree;
+  GridLimit: TGridLimit;
+  PriorSourceObject: TObject;
+  PriorReceiverObject: TObject;
   function GetLocation(ACol, ARow: Integer): TPoint2D;
   begin
     if Grid <> nil then
@@ -931,6 +932,13 @@ var
       result := DisvGrid.TwoDGrid.Cells[ACol].Location;
     end;
   end;
+  procedure AssignGridLimits(QuadTree: TRbwQuadTree);
+  begin
+    QuadTree.XMax := GridLimit.MaxX;
+    QuadTree.XMin := GridLimit.MinX;
+    QuadTree.YMax := GridLimit.MaxY;
+    QuadTree.YMin := GridLimit.MinY;
+  end;
 begin
   if Model.DisvUsed then
   begin
@@ -942,234 +950,118 @@ begin
     Grid := Model.Grid;
     DisvGrid := nil;
   end;
-  for StressPeriodIndex := 0 to FSourceLists.Count - 1 do
-  begin
-    frmProgressMM.AddMessage(Format('    Writing MVR stress period %d', [StressPeriodIndex+1]));
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
+
+  AllStreamReaches := TRbwQuadTree.Create(nil);
+  EnclosedReaches := TRbwQuadTree.Create(nil);
+  CurrentObjectReaches := TRbwQuadTree.Create(nil);
+  try
+    if Model.ModflowPackages.SfrModflow6Package.IsSelected then
     begin
-      Exit;
+      AllStreamReaches.MaxPoints := 5;
+      EnclosedReaches.MaxPoints := 5;
+      CurrentObjectReaches.MaxPoints := 5;
+      GridLimit := Model.DiscretizationLimits(vdTop);
+      AssignGridLimits(AllStreamReaches);
+      AssignGridLimits(EnclosedReaches);
+      AssignGridLimits(CurrentObjectReaches);
     end;
-    SourceList := FSourceLists[StressPeriodIndex];
-    if SourceList.Count > 0 then
+    for StressPeriodIndex := 0 to FSourceLists.Count - 1 do
     begin
-      MvrSourceDictionary := FSourceCellDictionaries[StressPeriodIndex];
-
-      ReceiverKey.StressPeriod := StressPeriodIndex;
-      WriteBeginPeriod(StressPeriodIndex);
-
-      for SourceIndex := 0 to SourceList.Count - 1 do
+      frmProgressMM.AddMessage(Format('    Writing MVR stress period %d', [StressPeriodIndex+1]));
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
       begin
-        ASource := SourceList[SourceIndex];
-//        ShowMessage(Format('Source Col %0:d, Index: %1:d, MvrIndex: %2:d',
-//          [ASource.Cell.Column, ASource.Key.Index, ASource.Key.SourceKey.MvrIndex]));
-{
-  TMvrSource = record
-    Key: TMvrRegisterKey;
-    SourcePackage: TSourcePackageChoice;
-    Receivers: TReceiverCollection;
-    MvrTypes: TMvrTypeArray;
-    MvrRates: TOneDRealArray;
-    // @name is only used when the receiver is a stream and
-    // @link(TSfrReceiverChoice) is @link(TSfrReceiverChoice.srcNearest).
-    Cell: TCellLocation;
-  end;
+        Exit;
+      end;
+      SourceList := FSourceLists[StressPeriodIndex];
+      if SourceList.Count > 0 then
+      begin
+        AllStreamReaches.Clear;
+        PriorSourceObject := nil;
+        PriorReceiverObject := nil;
+        MvrSourceDictionary := FSourceCellDictionaries[StressPeriodIndex];
 
-  TMvrRegisterKey = record
-    SourceKey: TMvrSourceKey;
-    // @name is the number of the source in its respective package and stress
-    // period starting with 1.
-    Index: Integer;
-    StressPeriod: Integer;
-  end;
+        ReceiverKey.StressPeriod := StressPeriodIndex;
+        WriteBeginPeriod(StressPeriodIndex);
 
-  TMvrSourceKey = record
-    // @name is the order in which the cell appears in the boundaries generated
-    // from @link(TScreenObject ScreenObject);
-    MvrIndex: Integer;
-    ScreenObject: TObject;
-  end;
-
-}
-        MrvCell := MvrSourceDictionary[ASource.Key.SourceKey];
-
-        for ReceiverIndex := 0 to ASource.Receivers.Count - 1 do
+        for SourceIndex := 0 to SourceList.Count - 1 do
         begin
-          ReceiverItem := ASource.Receivers[ReceiverIndex];
-          ReceiverKey.ReceiverPackage := ReceiverItem.ReceiverPackage;
-          ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject;
-
-          UseSfrNearestMultipleSegment :=
-            (ReceiverItem.ReceiverPackage = rpcSfr)
-            and (ReceiverItem.SfrReceiverChoice in
-            [srcNearestEnclosed, srcNearestAnySegment]);
-
-          if not UseSfrNearestMultipleSegment then
+          ASource := SourceList[SourceIndex];
+          if PriorSourceObject <> ASource.Key.SourceKey.ScreenObject then
           begin
-            if FReceiverDictionary.ContainsKey(ReceiverKey) then
+            PriorSourceObject := ASource.Key.SourceKey.ScreenObject;
+            EnclosedReaches.Clear;
+            CurrentObjectReaches.Clear;
+          end;
+          MrvCell := MvrSourceDictionary[ASource.Key.SourceKey];
+
+          for ReceiverIndex := 0 to ASource.Receivers.Count - 1 do
+          begin
+            ReceiverItem := ASource.Receivers[ReceiverIndex];
+            ReceiverKey.ReceiverPackage := ReceiverItem.ReceiverPackage;
+            ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject;
+
+            UseSfrNearestMultipleSegment :=
+              (ReceiverItem.ReceiverPackage = rpcSfr)
+              and (ReceiverItem.SfrReceiverChoice in
+              [srcNearestEnclosed, srcNearestAnySegment]);
+
+            if not UseSfrNearestMultipleSegment then
             begin
-              ReceiverValues := FReceiverDictionary[ReceiverKey];
+              if FReceiverDictionary.ContainsKey(ReceiverKey) then
+              begin
+                ReceiverValues := FReceiverDictionary[ReceiverKey];
+              end
+              else
+              begin
+                SourceScreenObject := ASource.Key.SourceKey.ScreenObject as TScreenObject;
+                frmErrorsAndWarnings.AddError(Model, StrReceiverNotFound,
+                 Format(StrSourceObject0s, [SourceScreenObject.Name]),
+                 SourceScreenObject);
+                Continue;
+              end;
+            end;
+
+            if ReceiverItem.ReceiverPackage = rpcUzf then
+            begin
+              ReceiverCount := Length(ReceiverValues.UzfCells);
             end
             else
             begin
-              SourceScreenObject := ASource.Key.SourceKey.ScreenObject as TScreenObject;
-              frmErrorsAndWarnings.AddError(Model, StrReceiverNotFound,
-               Format(StrSourceObject0s, [SourceScreenObject.Name]),
-               SourceScreenObject);
-              Continue;
-            end;
-          end;
-
-          if ReceiverItem.ReceiverPackage = rpcUzf then
-          begin
-            ReceiverCount := Length(ReceiverValues.UzfCells);
-          end
-          else
-          begin
-            ReceiverCount := 1;
-          end;
-
-          for InnerReceiverIndex := 0 to ReceiverCount-1 do
-          begin
-            case ASource.SourcePackage of
-              spcWel:
-                begin
-                  WriteString('  WEL-1');
-                end;
-              spcDrn:
-                begin
-                  WriteString('  DRN-1');
-                end;
-              spcRiv:
-                begin
-                  WriteString('  RIV-1');
-                end;
-              spcGhb:
-                begin
-                  WriteString('  GHB-1');
-                end;
-              spcLak:
-                begin
-                  WriteString('  LAK-1');
-                end;
-              spcMaw:
-                begin
-                  WriteString('  MAW-1');
-                end;
-              spcSfr:
-                begin
-                  WriteString('  SFR-1');
-                end;
-              spcUzf:
-                begin
-                  WriteString('  UZF-1');
-                end;
-              else Assert(False);
+              ReceiverCount := 1;
             end;
 
-//            if ASource.SourcePackage = spcUzf then
-//            begin
-//              WriteInteger(UzfCellNumbers[ASource.Cell.Layer, ASource.Cell.Row, ASource.Cell.Column]);
-//              ShowMessage(Format('%0:d %1:d', [UzfCellNumbers[ASource.Cell.Layer, ASource.Cell.Row, ASource.Cell.Column], ASource.Key.Index]));
-{
-  TMvrSource = record
-    Key: TMvrRegisterKey;
-    SourcePackage: TSourcePackageChoice;
-    Receivers: TReceiverCollection;
-    MvrTypes: TMvrTypeArray;
-    MvrRates: TOneDRealArray;
-    // @name is only used when the receiver is a stream and
-    // @link(TSfrReceiverChoice) is @link(TSfrReceiverChoice.srcNearest).
-    Cell: TCellLocation;
-  end;
-
-  TMvrRegisterKey = record
-    SourceKey: TMvrSourceKey;
-    // @name is the number of the source in its respective package and stress
-    // period starting with 1.
-    Index: Integer;
-    StressPeriod: Integer;
-  end;
-
-  TMvrSourceKey = record
-    // @name is the order in which the cell appears in the boundaries generated
-    // from @link(TScreenObject ScreenObject);
-    MvrIndex: Integer;
-    ScreenObject: TObject;
-  end;
-
-}
-//            end
-//            else
-//            begin
-              Assert(UzfCellNumbers[ASource.Cell.Layer, ASource.Cell.Row, ASource.Cell.Column] = ASource.Key.Index);
-              WriteInteger(ASource.Key.Index);
-//            end;
-
-            case ReceiverItem.ReceiverPackage of
-              rpcLak:
-                begin
-                  WriteString(' LAK-1');
-                end;
-              rpcMaw:
-                begin
-                  WriteString(' MAW-1');
-                end;
-              rpcSfr:
-                begin
-                  WriteString(' SFR-1');
-                end;
-              rpcUZF:
-                begin
-                  WriteString(' UZF-1');
-                end;
+            if (ReceiverKey.ScreenObject <> PriorReceiverObject)
+              and (ReceiverItem.ReceiverPackage = rpcSfr) then
+            begin
+              case ReceiverItem.SfrReceiverChoice of
+                srcNearest:
+                  begin
+                    for SfrCellIndex := 1 to Length(ReceiverValues.StreamCells) - 1 do
+                    begin
+                      ReceiverLocation := GetLocation(
+                        ReceiverValues.StreamCells[SfrCellIndex].Column,
+                        ReceiverValues.StreamCells[SfrCellIndex].Row);
+                      CurrentObjectReaches.AddPoint(ReceiverLocation.x,
+                        ReceiverLocation.y,
+                        Addr(ReceiverValues.StreamReachNumbers[SfrCellIndex]))
+                    end;
+                  end;
+                srcNearestEnclosed:
+                  begin
+                  end;
+                srcNearestAnySegment:
+                  begin
+                  end;
+              end;
+              PriorReceiverObject := ReceiverKey.ScreenObject;
             end;
 
             if (ReceiverItem.ReceiverPackage = rpcSfr)
-              and (ReceiverItem.SfrReceiverChoice = srcNearest) then
+              and (ReceiverItem.SfrReceiverChoice = srcNearestAnySegment)
+              and (AllStreamReaches.Count = 0) then
             begin
-              AColumn := MrvCell.Column;
-              ARow := MrvCell.Row;
-              SourceLocation := GetLocation(AColumn, ARow);
-
-              Assert(Length(ReceiverValues.StreamCells) > 0);
-              Assert(Length(ReceiverValues.StreamReachNumbers)
-                = Length(ReceiverValues.StreamCells));
-
-              ReceiverLocation := GetLocation(
-                ReceiverValues.StreamCells[0].Column,
-                ReceiverValues.StreamCells[0].Row);
-              MinIndex := 0;
-              MinDistance := Distance(SourceLocation, ReceiverLocation);
-
-              for SfrCellIndex := 1 to Length(ReceiverValues.StreamCells) - 1 do
-              begin
-                ReceiverLocation := GetLocation(
-                  ReceiverValues.StreamCells[SfrCellIndex].Column,
-                  ReceiverValues.StreamCells[SfrCellIndex].Row);
-                TestDistance := Distance(SourceLocation, ReceiverLocation);
-                if TestDistance < MinDistance then
-                begin
-                  MinDistance := TestDistance;
-                  MinIndex := SfrCellIndex;
-                end;
-              end;
-//              WriteInteger(ReceiverValues.Index + MinIndex);
-              WriteInteger(ReceiverValues.StreamReachNumbers[MinIndex]);
-            end
-            else if UseSfrNearestMultipleSegment then
-            begin
-              AColumn := MrvCell.Column;
-              ARow := MrvCell.Row;
-              SourceLocation := GetLocation(AColumn, ARow);
-//              ShowMessage(Format('SourceLocation, Col %0:d Row %1:d, X %2:g, Y %3:g',
-//                [AColumn, ARow, SourceLocation.X, SourceLocation.y]));
-
-              SourceScreenObject := ASource.Key.SourceKey.ScreenObject as TScreenObject;
               PotentialReceivers := FSfrReceivers[StressPeriodIndex];
-              MinDistance := 0;
-              MinIndex := -1;
-              NearestFound := False;
               for SfrReciverIndex := 0 to PotentialReceivers.Count - 1 do
               begin
                 AReceiver := PotentialReceivers[SfrReciverIndex];
@@ -1180,90 +1072,197 @@ begin
                     StreamCells[SfrCellIndex];
                   ReceiverLocation := GetLocation( AStreamCell.Column,
                     AStreamCell.Row);
-                  if ReceiverItem.SfrReceiverChoice = srcNearestEnclosed then
+                  AllStreamReaches.AddPoint(ReceiverLocation.x,
+                    ReceiverLocation.y,
+                    Addr(AReceiver.ReceiverValues.StreamReachNumbers[SfrCellIndex]));
+                end;
+              end
+            end;
+
+            if (ReceiverItem.ReceiverPackage = rpcSfr)
+              and (ReceiverItem.SfrReceiverChoice = srcNearestEnclosed)
+              and (EnclosedReaches.Count = 0) then
+            begin
+              PotentialReceivers := FSfrReceivers[StressPeriodIndex];
+              SourceScreenObject := ASource.Key.SourceKey.ScreenObject as TScreenObject;
+              for SfrReciverIndex := 0 to PotentialReceivers.Count - 1 do
+              begin
+                AReceiver := PotentialReceivers[SfrReciverIndex];
+                for SfrCellIndex := 0 to Length(
+                  AReceiver.ReceiverValues.StreamCells) - 1 do
+                begin
+                  AStreamCell := AReceiver.ReceiverValues.
+                    StreamCells[SfrCellIndex];
+                  ReceiverLocation := GetLocation( AStreamCell.Column,
+                    AStreamCell.Row);
+                  if SourceScreenObject.IsPointInside(ReceiverLocation, DummyValue) then
                   begin
-                    CheckDistance := SourceScreenObject.IsPointInside(
-                      ReceiverLocation, DummyValue);
-                  end
-                  else
-                  begin
-                    CheckDistance := True;
-                  end;
-                  if CheckDistance then
-                  begin
-                    TestDistance := Distance(SourceLocation, ReceiverLocation);
-                    if NearestFound then
-                    begin
-                      if TestDistance < MinDistance then
-                      begin
-                        MinDistance := TestDistance;
-                        MinIndex := SfrCellIndex;
-                        ClosestReceiver := AReceiver;
-//                        ShowMessage(Format('ReceiverLocation, Col %0:d Row %1:d, X %2:g, Y %3:g Distance: %4:g',
-//                          [AStreamCell.Column, AStreamCell.Row, ReceiverLocation.X, ReceiverLocation.y, MinDistance]));
-                      end;
-                    end
-                    else
-                    begin
-                      NearestFound := True;
-                      ClosestReceiver := AReceiver;
-                      MinDistance := TestDistance;
-                      MinIndex := SfrCellIndex;
-//                      ShowMessage(Format('ReceiverLocation, Col %0:d Row %1:d, X %2:g, Y %3:g Distance: %4:g',
-//                        [AStreamCell.Column, AStreamCell.Row, ReceiverLocation.X, ReceiverLocation.y, MinDistance]));
-                    end;
+                    EnclosedReaches.AddPoint(ReceiverLocation.x,
+                      ReceiverLocation.y,
+                      Addr(AReceiver.ReceiverValues.StreamReachNumbers[SfrCellIndex]));
                   end;
                 end;
+              end
+            end;
+
+            for InnerReceiverIndex := 0 to ReceiverCount-1 do
+            begin
+              case ASource.SourcePackage of
+                spcWel:
+                  begin
+                    WriteString('  WEL-1');
+                  end;
+                spcDrn:
+                  begin
+                    WriteString('  DRN-1');
+                  end;
+                spcRiv:
+                  begin
+                    WriteString('  RIV-1');
+                  end;
+                spcGhb:
+                  begin
+                    WriteString('  GHB-1');
+                  end;
+                spcLak:
+                  begin
+                    WriteString('  LAK-1');
+                  end;
+                spcMaw:
+                  begin
+                    WriteString('  MAW-1');
+                  end;
+                spcSfr:
+                  begin
+                    WriteString('  SFR-1');
+                  end;
+                spcUzf:
+                  begin
+                    WriteString('  UZF-1');
+                  end;
+                else Assert(False);
               end;
-              if NearestFound then
+
+              WriteInteger(ASource.Key.Index);
+
+              case ReceiverItem.ReceiverPackage of
+                rpcLak:
+                  begin
+                    WriteString(' LAK-1');
+                  end;
+                rpcMaw:
+                  begin
+                    WriteString(' MAW-1');
+                  end;
+                rpcSfr:
+                  begin
+                    WriteString(' SFR-1');
+                  end;
+                rpcUZF:
+                  begin
+                    WriteString(' UZF-1');
+                  end;
+              end;
+
+              if (ReceiverItem.ReceiverPackage = rpcSfr)
+                and (ReceiverItem.SfrReceiverChoice = srcNearest) then
               begin
-//                ShowMessage(Format(' Reach number %0:d %1:d',
-//                  [ClosestReceiver.ReceiverValues.Index + MinIndex, ClosestReceiver.ReceiverValues.StreamReachNumbers[MinIndex]]));
-                WriteInteger(ClosestReceiver.ReceiverValues.StreamReachNumbers[MinIndex]);
+                AColumn := MrvCell.Column;
+                ARow := MrvCell.Row;
+                SourceLocation := GetLocation(AColumn, ARow);
+
+                Assert(Length(ReceiverValues.StreamCells) > 0);
+                Assert(Length(ReceiverValues.StreamReachNumbers)
+                  = Length(ReceiverValues.StreamCells));
+
+                if CurrentObjectReaches.Count = 0 then
+                begin
+                  MinIndex := -1;
+                end
+                else
+                begin
+                  MinIndex := PInteger(CurrentObjectReaches.NearestPointsFirstData(
+                    SourceLocation.x, SourceLocation.y))^;
+                end;
+                WriteInteger(MinIndex);
+              end
+              else if (ReceiverItem.SfrReceiverChoice = srcNearestAnySegment) then
+              begin
+                AColumn := MrvCell.Column;
+                ARow := MrvCell.Row;
+                SourceLocation := GetLocation(AColumn, ARow);
+
+                if AllStreamReaches.Count = 0 then
+                begin
+                  MinIndex := -1;
+                end
+                else
+                begin
+                  MinIndex := PInteger(AllStreamReaches.NearestPointsFirstData(
+                    SourceLocation.x, SourceLocation.y))^;
+                end;
+                WriteInteger(MinIndex);
+              end
+              else if (ReceiverItem.SfrReceiverChoice = srcNearestEnclosed) then
+              begin
+                AColumn := MrvCell.Column;
+                ARow := MrvCell.Row;
+                SourceLocation := GetLocation(AColumn, ARow);
+
+                if EnclosedReaches.Count = 0 then
+                begin
+                  MinIndex := -1;
+                end
+                else
+                begin
+                  MinIndex := PInteger(EnclosedReaches.NearestPointsFirstData(
+                    SourceLocation.x, SourceLocation.y))^;
+                end;
+                WriteInteger(MinIndex);
+              end
+              else if ReceiverItem.ReceiverPackage = rpcUzf then
+              begin
+                WriteInteger(ReceiverValues.UzfCells[InnerReceiverIndex]);
               end
               else
               begin
-                WriteInteger(-1);
+                WriteInteger(ReceiverValues.Index);
               end;
-            end
-            else if ReceiverItem.ReceiverPackage = rpcUzf then
-            begin
-              WriteInteger(ReceiverValues.UzfCells[InnerReceiverIndex]);
-            end
-            else
-            begin
-              WriteInteger(ReceiverValues.Index);
+
+              case MrvCell.MvrTypes[ReceiverIndex] of
+                mtFactor:
+                  begin
+                    WriteString(' FACTOR   ');
+                  end;
+                mtExcess:
+                  begin
+                    WriteString(' EXCESS   ');
+                  end;
+                mtThreshold:
+                  begin
+                    WriteString(' THRESHOLD');
+                  end;
+                mtUpTo:
+                  begin
+                    WriteString(' UPTO     ');
+                  end;
+                else Assert(False);
+              end;
+
+              WriteFloat(MrvCell.MvrValues[ReceiverIndex]);
+
+              NewLine;
             end;
-
-            case MrvCell.MvrTypes[ReceiverIndex] of
-              mtFactor:
-                begin
-                  WriteString(' FACTOR   ');
-                end;
-              mtExcess:
-                begin
-                  WriteString(' EXCESS   ');
-                end;
-              mtThreshold:
-                begin
-                  WriteString(' THRESHOLD');
-                end;
-              mtUpTo:
-                begin
-                  WriteString(' UPTO     ');
-                end;
-              else Assert(False);
-            end;
-
-            WriteFloat(MrvCell.MvrValues[ReceiverIndex]);
-
-            NewLine;
           end;
         end;
-      end;
 
-      WriteEndPeriod;
+        WriteEndPeriod;
+      end;
     end;
+  finally
+    AllStreamReaches.Free;
+    EnclosedReaches.Free;
+    CurrentObjectReaches.Free;
   end;
 end;
 
