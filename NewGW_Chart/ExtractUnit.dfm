@@ -115,21 +115,21 @@ object frmExtract: TfrmExtract
         OnClick = sbImageClick
       end
       object lblLegend: TLabel
-        Left = 636
-        Top = 125
+        Left = 653
+        Top = 128
         Width = 60
         Height = 13
         Caption = 'Legend Text'
       end
       object Label1: TLabel
-        Left = 702
+        Left = 726
         Top = 46
         Width = 79
         Height = 13
         Caption = 'Density of Water'
       end
       object Label2: TLabel
-        Left = 702
+        Left = 726
         Top = 66
         Width = 33
         Height = 13
@@ -191,12 +191,12 @@ object frmExtract: TfrmExtract
       object rgProgramChoice: TRadioGroup
         Left = 261
         Top = 8
-        Width = 260
+        Width = 282
         Height = 137
         Caption = 'Data'
         ItemIndex = 0
         Items.Strings = (
-          'MODFLOW head or drawdown file'
+          'MODFLOW head, drawdown, or concentration file'
           'MT3DMS Observations'
           'MT3DMS Concentrations'
           'GWT and MOC3D Observations'
@@ -209,8 +209,8 @@ object frmExtract: TfrmExtract
         OnClick = rgProgramChoiceClick
       end
       object rgMOC3D: TRadioGroup
-        Left = 650
-        Top = 5
+        Left = 670
+        Top = 8
         Width = 135
         Height = 39
         Caption = 'MOC3D Data'
@@ -223,7 +223,7 @@ object frmExtract: TfrmExtract
         OnClick = rgMOC3DClick
       end
       object rgSutra: TRadioGroup
-        Left = 525
+        Left = 549
         Top = 5
         Width = 119
         Height = 114
@@ -274,8 +274,8 @@ object frmExtract: TfrmExtract
           'year')
       end
       object edExplanation: TEdit
-        Left = 532
-        Top = 122
+        Left = 549
+        Top = 125
         Width = 98
         Height = 21
         TabOrder = 14
@@ -283,7 +283,7 @@ object frmExtract: TfrmExtract
         OnChange = edExplanationChange
       end
       object adeDensity: TArgusDataEntry
-        Left = 650
+        Left = 674
         Top = 44
         Width = 46
         Height = 18
@@ -298,7 +298,7 @@ object frmExtract: TfrmExtract
         ChangeDisabledColor = True
       end
       object adeG: TArgusDataEntry
-        Left = 650
+        Left = 674
         Top = 63
         Width = 46
         Height = 18
@@ -465,12 +465,12 @@ object frmExtract: TfrmExtract
     Filter = 
       'formatted head files (*.fhd)|*.fhd|formatted drawdown files (*.f' +
       'dn)|*.fdn|formatted HUF head files (*.hhd)|*.hhd|All Files|*.*'
-    Left = 384
-    Top = 24
+    Left = 376
+    Top = 48
   end
   object MainMenu1: TMainMenu
     Left = 416
-    Top = 32
+    Top = 40
     object File1: TMenuItem
       Caption = '&File'
       object ReadCellLocations1: TMenuItem
@@ -478,7 +478,7 @@ object frmExtract: TfrmExtract
         OnClick = ReadCellLocations1Click
       end
       object ReadHeadsorDrawdown1: TMenuItem
-        Caption = 'R&ead Heads or Drawdown'
+        Caption = 'R&ead Heads, Drawdown, or Concentration'
         GroupIndex = 2
         OnClick = btnReadClick
       end
@@ -488,7 +488,7 @@ object frmExtract: TfrmExtract
         OnClick = SaveCellLocations1Click
       end
       object SaveHeadsorDrawdown1: TMenuItem
-        Caption = 'S&ave Heads or Drawdown'
+        Caption = 'S&ave Heads, Drawdown, or Concentratin'
         GroupIndex = 2
         OnClick = btnSaveClick
       end
@@ -533,7 +533,7 @@ object frmExtract: TfrmExtract
   object OpenDialog2: TOpenDialog
     Filter = 'cell locations file (*.hge)|*.hge|All Files|*.*'
     Left = 352
-    Top = 32
+    Top = 40
   end
   object ChartEditor1: TChartEditor
     Chart = ChartHydExtractor

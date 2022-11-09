@@ -329,7 +329,7 @@ begin
 
         end;
 
-        if OpenDialog1.FilterIndex in [1,2,3,6] then
+        if OpenDialog1.FilterIndex in [1,2,3,7] then
         begin
           // Formatted file.
           
@@ -1347,6 +1347,7 @@ begin
           + 'formatted HUF head files (*.hhd)|*.hhd|'
           + 'binary head files (*.bhd, *.hds)|*.bhd;*.hds|'
           + 'binary drawdown files (*.bdn)|*.bdn|'
+          + 'binary MF6 Concentration files (*.conc)|*.conc|'
           + 'Any formatted file (*.*)|*.*|'
           + 'Any binary file (*.*)|*.*';
 

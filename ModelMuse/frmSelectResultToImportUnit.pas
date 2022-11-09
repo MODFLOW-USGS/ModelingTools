@@ -2670,7 +2670,6 @@ begin
           AuxMinValuesList:= TObjectList<TRealList>.Create;
           AuxMaxValuesList := TObjectList<TRealList>.Create;
           try
-
             AModel := rdgModels.Objects[Ord(mcModelName), RowIndex] as TCustomModel;
             Vectors := AModel.VelocityVectors;
             if AModel.DisvUsed then
@@ -2788,7 +2787,7 @@ begin
                       While (KPER = FPeriods[Index])
                         and (KSTP = FSteps[Index])
                         and (NTRANS = FTransportSteps[Index])
-                        and (Trim(Description + FSpeciesName) = FDescriptions[Index])
+                        and SameText(Trim(Description + FSpeciesName), FDescriptions[Index])
                         and not EndReached do
                       begin
                         if ILAY < 0 then

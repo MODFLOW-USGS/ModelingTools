@@ -125,6 +125,10 @@ resourcestring
   'piration Segments package for the following Stress periods.';
   StrEvapotranspirationI = 'Evapotranspiration in the ETS package has not be' +
   'en defined in one or more stress periods';
+  StrETSurfaceAndDepth = 'ET Surface and depth undefined.';
+  StrForOneOrMoreStre = 'For one or more stress periods, the evapotranspirat' +
+  'ion surface and depth have not been specified. The stress period data for' +
+  ' the ETS package can not be exported.' ;
 
 function TModflowETS_Writer.CellType: TValueCellType;
 begin
@@ -1070,6 +1074,7 @@ begin
   ErrorMessage := Format(StrOneOrMoreSParam, [' ETS']);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParametersHaveB);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, ErrorMessage);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrETSurfaceAndDepth);
   ParameterValues := TList.Create;
   try
     Comment := 'Data Set 9: IETS';
@@ -1077,6 +1082,12 @@ begin
     begin
       frmErrorsAndWarnings.AddError(Model, StrNoEvapotranspiratio,
         StrTheEvapotranspirati);
+    end;
+    if FDepthSurface.Count < Values.Count then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrETSurfaceAndDepth,
+        StrForOneOrMoreStre);
+      Exit;
     end;
     for TimeIndex := 0 to Values.Count - 1 do
     begin

@@ -14213,7 +14213,7 @@ var
 begin
   FMt3dmsTobFlux_Node := nil;
   if frmGoPhast.PhastModel.Mt3dmsTobIsSelected
-    and (frmGoPhast.ModelSelection <> msModflow2015) then
+    {and (frmGoPhast.ModelSelection <> msModflow2015)} then
   begin
     Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
       StrFluxObserv +
@@ -14234,7 +14234,7 @@ begin
   if frmGoPhast.PhastModel.Mt3dmsTobIsSelected
     and (AScreenObject.ViewDirection = vdTop)
     and (AScreenObject.Count = 1)
-    and (frmGoPhast.ModelSelection <> msModflow2015) then
+    {and (frmGoPhast.ModelSelection <> msModflow2015)} then
   begin
     Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
       StrConcentrationObserv +

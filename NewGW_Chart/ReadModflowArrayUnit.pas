@@ -127,6 +127,7 @@ begin
     or (Description = '  CSUB-INTERBED ')
     or (Description = '    CSUB-COARSE ')
     or (Description = ' CSUB-ZDISPLACE ')
+    or (Description = 'CONCENTRATION   ')
     ;
 end;
 
