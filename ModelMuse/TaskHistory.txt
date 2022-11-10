@@ -302,7 +302,7 @@ object TTaskHistory
     end
     item
       Name = 'FMP'
-      Display = False
+      Display = True
     end
     item
       Name = 'CFP'
@@ -30210,5 +30210,10 @@ object TTaskHistory
         'GW_Chart'
         'MF6 GWT'
         'Error checking')
+    end
+    item
+      Date = 44875.000000000000000000
+      Categories.Strings = (
+        'FMP')
     end>
 end
