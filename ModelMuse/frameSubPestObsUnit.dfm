@@ -1,23 +1,24 @@
 inherited frameSubPestObs: TframeSubPestObs
   inherited grpDirectObs: TGroupBox
     Top = 24
-    Height = 218
+    Height = 219
     ExplicitTop = 24
     ExplicitHeight = 218
     inherited frameObservations: TframeGrid
-      Height = 201
+      Height = 202
       ExplicitHeight = 201
       inherited Panel: TPanel
-        Top = 160
+        Top = 170
         ExplicitTop = 160
       end
       inherited Grid: TRbwDataGrid4
-        Height = 160
+        Height = 170
         ColCount = 8
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -41,6 +42,7 @@ inherited frameSubPestObs: TframeSubPestObs
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -70,6 +72,7 @@ inherited frameSubPestObs: TframeSubPestObs
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -93,6 +96,7 @@ inherited frameSubPestObs: TframeSubPestObs
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -116,6 +120,7 @@ inherited frameSubPestObs: TframeSubPestObs
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -139,6 +144,7 @@ inherited frameSubPestObs: TframeSubPestObs
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -162,6 +168,7 @@ inherited frameSubPestObs: TframeSubPestObs
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -185,6 +192,7 @@ inherited frameSubPestObs: TframeSubPestObs
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

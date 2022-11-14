@@ -137,11 +137,7 @@ type
     // or the conductance multiplier of this boundary.
     property Conductance: string read GetConductance write SetConductance;
     property GwtConcentrations: TRivGwtConcCollection read FGwtConcentrations
-      write SetGwtConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetGwtConcentrations;
   end;
 
   TRivTimeListLink = class(TTimeListsModelLink)
@@ -444,17 +440,9 @@ type
     property PestConductanceMethod: TPestParamMethod
       read FPestConductanceMethod write SetPestConductanceMethod;
     property PestConcentrationFormulas: TRivGwtConcCollection
-      read FPestConcentrationFormulas write SetPestConcentrationFormulas
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas;
     property PestConcentrationMethods: TGwtPestMethodCollection
-      read FPestConcentrationMethods write SetPestConcentrationMethods
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationMethods write SetPestConcentrationMethods;
   end;
 
 const

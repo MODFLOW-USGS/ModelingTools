@@ -23,26 +23,26 @@ object framePestObs: TframePestObs
     TabOrder = 0
     inline frameObservations: TframeGrid
       Left = 2
-      Top = 22
+      Top = 15
       Width = 596
-      Height = 219
+      Height = 226
       Align = alClient
       TabOrder = 0
       ExplicitLeft = 2
-      ExplicitTop = 22
+      ExplicitTop = 15
       ExplicitWidth = 596
-      ExplicitHeight = 219
+      ExplicitHeight = 226
       inherited Panel: TPanel
-        Top = 187
+        Top = 194
         Width = 596
         Height = 32
-        ExplicitTop = 187
+        ExplicitTop = 194
         ExplicitWidth = 596
         ExplicitHeight = 32
         inherited lbNumber: TLabel
-          Width = 202
+          Width = 145
           Caption = 'Number of direct observations'
-          ExplicitWidth = 202
+          ExplicitWidth = 145
         end
         inherited sbAdd: TSpeedButton
           Left = 368
@@ -60,14 +60,12 @@ object framePestObs: TframePestObs
           ExplicitLeft = 426
         end
         inherited seNumber: TJvSpinEdit
-          Height = 28
           OnChange = frameObservationsseNumberChange
-          ExplicitHeight = 28
         end
       end
       inherited Grid: TRbwDataGrid4
         Width = 596
-        Height = 187
+        Height = 194
         ColCount = 7
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
         OnSelectCell = frameObservationsGridSelectCell
@@ -248,7 +246,7 @@ object framePestObs: TframePestObs
             AutoAdjustColWidths = True
           end>
         ExplicitWidth = 596
-        ExplicitHeight = 187
+        ExplicitHeight = 194
         ColWidths = (
           64
           75
@@ -270,26 +268,26 @@ object framePestObs: TframePestObs
     TabOrder = 1
     inline frameObsComparisons: TframeGrid
       Left = 2
-      Top = 22
+      Top = 15
       Width = 596
-      Height = 148
+      Height = 155
       Align = alClient
       TabOrder = 0
       ExplicitLeft = 2
-      ExplicitTop = 22
+      ExplicitTop = 15
       ExplicitWidth = 596
-      ExplicitHeight = 148
+      ExplicitHeight = 155
       inherited Panel: TPanel
-        Top = 113
+        Top = 120
         Width = 596
         Height = 35
-        ExplicitTop = 113
+        ExplicitTop = 120
         ExplicitWidth = 596
         ExplicitHeight = 35
         inherited lbNumber: TLabel
-          Width = 242
+          Width = 172
           Caption = 'Number of comparison observations'
-          ExplicitWidth = 242
+          ExplicitWidth = 172
         end
         inherited sbAdd: TSpeedButton
           Left = 368
@@ -304,14 +302,12 @@ object framePestObs: TframePestObs
           ExplicitLeft = 426
         end
         inherited seNumber: TJvSpinEdit
-          Height = 28
           OnChange = frameObsComparisonsseNumberChange
-          ExplicitHeight = 28
         end
       end
       inherited Grid: TRbwDataGrid4
         Width = 596
-        Height = 113
+        Height = 120
         ColCount = 7
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
         OnEnter = frameObsComparisonsGridEnter
@@ -486,7 +482,7 @@ object framePestObs: TframePestObs
             AutoAdjustColWidths = True
           end>
         ExplicitWidth = 596
-        ExplicitHeight = 113
+        ExplicitHeight = 120
         ColWidths = (
           64
           64

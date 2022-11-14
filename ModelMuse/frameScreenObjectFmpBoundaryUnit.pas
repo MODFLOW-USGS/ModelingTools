@@ -63,7 +63,7 @@ begin
   Items := ABoundary.Values;
   seNumberOfTimes.AsInteger := Items.Count;
   seNumberOfTimes.OnChange(nil);
-  Assert(rdgModflowBoundary.RowCount -1 = Items.Count);
+  Assert(rdgModflowBoundary.RowCount -1 - PestRowOffset = Items.Count);
 
   for ItemIndex := 0 to Items.Count - 1 do
   begin

@@ -1667,26 +1667,14 @@ Type
       write SetWriteConvergenceData Stored True;
     // BUDGET FILEOUT budgetfile
     property SaveGwtBudget: Boolean read FSaveGwtBudget write SetSaveGwtBudget
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
     // [CONCENTRATION FILEOUT <concfile>]
     property SaveGwtConcentration: Boolean read FSaveGwtConcentration
       write SetSaveGwtConcentration
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
     // [BUDGETCSV FILEOUT <budgetcsvfile>]
     property SaveGwtBudgetCsv: Boolean read FSaveGwtBudgetCsv write SetSaveGwtBudgetCsv
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
   end;
 
 
@@ -2237,26 +2225,14 @@ Type
 
     // [BUDGETCSV FILEOUT <budgetcsvfile>]
     property SaveGwtBudgetCsv: Boolean read FSaveGwtBudgetCsv write SetSaveGwtBudgetCsv
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
     // BUDGET FILEOUT budgetfile
     property SaveGwtBudget: Boolean read FSaveGwtBudget write SetSaveGwtBudget
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
     // [CONCENTRATION FILEOUT <concfile>]
     property SaveGwtConcentration: Boolean read FSaveGwtConcentration
       write SetSaveGwtConcentration
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
   end;
 
   TSftSolverPrintChoice = (sftNone, sftSummary, sftDetailed);
@@ -2601,11 +2577,7 @@ Type
     // [CONCENTRATION FILEOUT <concfile>]
     property SaveGwtConcentration: Boolean read FSaveGwtConcentration
       write SetSaveGwtConcentration
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
   end;
 
   THobPackageSelection = class(TModflowPackageSelection)
@@ -3090,26 +3062,14 @@ Type
     // [SHUTDOWN_KAPPA <shutdown_kappa>]
     property StoredShutDownKappa: TRealStorage read FStoredShutDownKappa write SetStoredShutDownKappa;
     property SaveGwtBudget: Boolean read FSaveGwtBudget write SetSaveGwtBudget
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
     // [CONCENTRATION FILEOUT <concfile>]
     property SaveGwtConcentration: Boolean read FSaveGwtConcentration
       write SetSaveGwtConcentration
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
     // [BUDGETCSV FILEOUT <budgetcsvfile>]
     property SaveGwtBudgetCsv: Boolean read FSaveGwtBudgetCsv write SetSaveGwtBudgetCsv
-    {$IFDEF GWT}
       stored True;
-    {$else}
-      stored False;
-    {$ENDIF}
   end;
 
   TCustomPrintItem = class(TOrderedItem)

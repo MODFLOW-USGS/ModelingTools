@@ -196,9 +196,9 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
       object htlblGmsh: TJvHTLabel
         Left = 127
         Top = 6
-        Width = 108
+        Width = 116
         Height = 19
-        Caption = '<a href="http://gmsh.info/">http://gmsh.info/</a>'
+        Caption = '<a href="https://gmsh.info/">https://gmsh.info/</a>'
         SuperSubScriptRatio = 0.666666666666666600
       end
       object lblGmsh: TLabel
@@ -209,8 +209,8 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
         Caption = 'Gmsh location '
       end
       object fedGmsh: TJvFilenameEdit
-        Left = 6
-        Top = 31
+        Left = 9
+        Top = 30
         Width = 403
         Height = 26
         Filter = 

@@ -27,7 +27,8 @@ type
   protected
     procedure SetObsColumnCaptions; override;
     procedure GetDirectObs(Observations: TCustomComparisonCollection); override;
-    procedure SetDirectObs(Observations: TCustomComparisonCollection); override;
+    procedure SetDirectObs(Observations: TCustomComparisonCollection;
+      const LocationName: string); override;
     procedure GetObservationGroups; override;
   public
     procedure SpecifyObservationTypes(ObsTypes: TStrings);
@@ -384,7 +385,7 @@ begin
 end;
 
 procedure TframePestObsMf6.SetDirectObs(
-  Observations: TCustomComparisonCollection);
+  Observations: TCustomComparisonCollection; const LocationName: string);
 var
   ObsCount: Integer;
   RowIndex: Integer;
@@ -406,132 +407,146 @@ var
   ObLkt: TLktOb;
   ObMwt: TMwtOb;
   ObUzt: TUztOb;
+  ObsNames: TStringList;
 begin
   ObsCount := 0;
-  for RowIndex := 1 to frameObservations.seNumber.AsInteger do
-  begin
-    RowOK := True;
-    for ColIndex := 0 to Ord(pm6Weight) do
+  ObsNames := TStringList.Create;
+  try
+    ObsNames.Assign(frameObservations.Grid.Columns[Ord(pm6Name)]);
+    ObsNames[0] := '';
+    for RowIndex := 1 to frameObservations.seNumber.AsInteger do
     begin
-      if ColIndex = Ord(pm6Group) then
+      RowOK := True;
+      for ColIndex := 0 to Ord(pm6Weight) do
       begin
-        Continue;
+        if ColIndex in [Ord(pm6Group), Ord(pm6Name)] then
+        begin
+          Continue;
+        end;
+        if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
+        begin
+          RowOK := False;
+          Break;
+        end;
       end;
-      if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
+      if ObsNames.IndexOf(frameObservations.Grid.Cells[Ord(pm6Name),RowIndex])
+        < RowIndex then
       begin
-        RowOK := False;
-        Break;
+        frameObservations.Grid.Cells[Ord(pm6Name),RowIndex] := LocationName
+          + '_' + IntToStr(RowIndex);
       end;
-    end;
-    if RowOK then
-    begin
-      RowOK := TryGetObsSeries(frameObservations.Grid.Cells[
-        Ord(mp6ObsSeries),RowIndex], ObSeries);
       if RowOK then
       begin
-        ObTypeName := frameObservations.Grid.Cells[Ord(pm6Type), RowIndex];
-        case ObSeries of
-          osGeneral:
-            begin
-              RowOK := TryGetGenOb(ObTypeName, ObGen);
-            end;
-          osMaw:
-            begin
-              RowOK := TryGetMawOb(ObTypeName, ObMaw);
-              if RowOk then
+        RowOK := TryGetObsSeries(frameObservations.Grid.Cells[
+          Ord(mp6ObsSeries),RowIndex], ObSeries);
+        if RowOK then
+        begin
+          ObTypeName := frameObservations.Grid.Cells[Ord(pm6Type), RowIndex];
+          case ObSeries of
+            osGeneral:
               begin
-                if ObMaw in [moFlowRateCells, moConductanceCells] then
+                RowOK := TryGetGenOb(ObTypeName, ObGen);
+              end;
+            osMaw:
+              begin
+                RowOK := TryGetMawOb(ObTypeName, ObMaw);
+                if RowOk then
                 begin
-                  RowOK := frameObservations.Grid.Cells[
-                    Ord(pm6MawConnectionNumber),RowIndex] <> '';
+                  if ObMaw in [moFlowRateCells, moConductanceCells] then
+                  begin
+                    RowOK := frameObservations.Grid.Cells[
+                      Ord(pm6MawConnectionNumber),RowIndex] <> '';
+                  end;
                 end;
               end;
-            end;
-          osSfr:
-            begin
-              RowOK := TryGetSfrOb(ObTypeName, ObSfr);
-            end;
-          osLak:
-            begin
-              RowOK := TryGetLakOb(ObTypeName, ObLake);
-            end;
-          osUzf:
-            begin
-              RowOK := TryGetUzfOb(ObTypeName, ObUzf);
-            end;
-          osCSub:
-            begin
-              RowOK := TryGetCSubOb(ObTypeName, ObCSub);
-            end;
-          osGwt:
-            begin
-              RowOK := TryGetGwtOb(ObTypeName, ObGwt);
-            end;
-          osSft:
-            begin
-              RowOK := TryGetSftOb(ObTypeName, ObSft);
-            end;
-          osLkt:
-            begin
-              RowOK := TryGetLktOb(ObTypeName, ObLkt);
-            end;
-          osMwt:
-            begin
-              RowOK := TryGetMwtOb(ObTypeName, ObMwt);
-            end;
-          osUzt:
-            begin
-              RowOK := TryGetUztOb(ObTypeName, ObUzt);
-            end;
+            osSfr:
+              begin
+                RowOK := TryGetSfrOb(ObTypeName, ObSfr);
+              end;
+            osLak:
+              begin
+                RowOK := TryGetLakOb(ObTypeName, ObLake);
+              end;
+            osUzf:
+              begin
+                RowOK := TryGetUzfOb(ObTypeName, ObUzf);
+              end;
+            osCSub:
+              begin
+                RowOK := TryGetCSubOb(ObTypeName, ObCSub);
+              end;
+            osGwt:
+              begin
+                RowOK := TryGetGwtOb(ObTypeName, ObGwt);
+              end;
+            osSft:
+              begin
+                RowOK := TryGetSftOb(ObTypeName, ObSft);
+              end;
+            osLkt:
+              begin
+                RowOK := TryGetLktOb(ObTypeName, ObLkt);
+              end;
+            osMwt:
+              begin
+                RowOK := TryGetMwtOb(ObTypeName, ObMwt);
+              end;
+            osUzt:
+              begin
+                RowOK := TryGetUztOb(ObTypeName, ObUzt);
+              end;
+          end;
         end;
       end;
-    end;
-    if RowOK then
-    begin
-      if ObsCount < Observations.Count then
+      if RowOK then
       begin
-        Obs := Observations[ObsCount] as TMf6CalibrationObs
-      end
-      else
-      begin
-        Obs := Observations.Add as TMf6CalibrationObs;
-      end;
-      Inc(ObsCount);
-      Obs.Name := frameObservations.Grid.Cells[Ord(pm6Name), RowIndex];
-      if frameObservations.Grid.Objects[Ord(pm6Name), RowIndex] <> nil then
-      begin
-        OtherObs := frameObservations.Grid.Objects[Ord(pm6Name), RowIndex] as TMf6CalibrationObs;
-        Obs.GUID  := OtherObs.GUID;
-      end
-      else
-      begin
-        if CreateGUID(MyGuid) = 0 then
+        if ObsCount < Observations.Count then
         begin
-          Obs.GUID := GUIDToString(MyGuid);
+          Obs := Observations[ObsCount] as TMf6CalibrationObs
+        end
+        else
+        begin
+          Obs := Observations.Add as TMf6CalibrationObs;
         end;
+        Inc(ObsCount);
+        Obs.Name := frameObservations.Grid.Cells[Ord(pm6Name), RowIndex];
+        if frameObservations.Grid.Objects[Ord(pm6Name), RowIndex] <> nil then
+        begin
+          OtherObs := frameObservations.Grid.Objects[Ord(pm6Name), RowIndex] as TMf6CalibrationObs;
+          Obs.GUID  := OtherObs.GUID;
+        end
+        else
+        begin
+          if CreateGUID(MyGuid) = 0 then
+          begin
+            Obs.GUID := GUIDToString(MyGuid);
+          end;
+        end;
+        Assert(TryGetObsSeries(frameObservations.Grid.Cells[Ord(mp6ObsSeries),RowIndex], ObSeries));
+        Obs.ObSeries := ObSeries;
+        Obs.ObsTypeString := frameObservations.Grid.Cells[Ord(pm6Type), RowIndex];
+        Obs.ObservationGroup := frameObservations.Grid.Cells[Ord(pm6Group), RowIndex];
+        Obs.Time := frameObservations.Grid.RealValue[Ord(pm6Time), RowIndex];
+        Obs.ObservedValue := frameObservations.Grid.RealValue[Ord(pm6Value), RowIndex];
+        Obs.Weight := frameObservations.Grid.RealValue[Ord(pm6Weight), RowIndex];
+        if (ObSeries = osMaw)
+          and (Obs.MawOb in [moFlowRateCells, moConductanceCells]) then
+        begin
+          Obs.MawConnectionNumber := frameObservations.Grid.IntegerValue[Ord(pm6MawConnectionNumber), RowIndex];
+        end;
+        Obs.SpeciesIndex := frameObservations.Grid.ItemIndex[Ord(pm6ChemSpecies), RowIndex];
+        if (ObSeries in GwtSeries) and (Obs.SpeciesIndex < 0) then
+        begin
+          Obs.SpeciesIndex := 0;
+        end;
+        Obs.Comment := frameObservations.Grid.Cells[Ord(pm6Comment), RowIndex];
       end;
-      Assert(TryGetObsSeries(frameObservations.Grid.Cells[Ord(mp6ObsSeries),RowIndex], ObSeries));
-      Obs.ObSeries := ObSeries;
-      Obs.ObsTypeString := frameObservations.Grid.Cells[Ord(pm6Type), RowIndex];
-      Obs.ObservationGroup := frameObservations.Grid.Cells[Ord(pm6Group), RowIndex];
-      Obs.Time := frameObservations.Grid.RealValue[Ord(pm6Time), RowIndex];
-      Obs.ObservedValue := frameObservations.Grid.RealValue[Ord(pm6Value), RowIndex];
-      Obs.Weight := frameObservations.Grid.RealValue[Ord(pm6Weight), RowIndex];
-      if (ObSeries = osMaw)
-        and (Obs.MawOb in [moFlowRateCells, moConductanceCells]) then
-      begin
-        Obs.MawConnectionNumber := frameObservations.Grid.IntegerValue[Ord(pm6MawConnectionNumber), RowIndex];
-      end;
-      Obs.SpeciesIndex := frameObservations.Grid.ItemIndex[Ord(pm6ChemSpecies), RowIndex];
-      if (ObSeries in GwtSeries) and (Obs.SpeciesIndex < 0) then
-      begin
-        Obs.SpeciesIndex := 0;
-      end;
-      Obs.Comment := frameObservations.Grid.Cells[Ord(pm6Comment), RowIndex];
     end;
+    Observations.Count := ObsCount;
+    (Observations as TMf6CalibrationObservations).MultiLayer := cbMultilayer.Checked;
+  finally
+    ObsNames.Free;
   end;
-  Observations.Count := ObsCount;
-  (Observations as TMf6CalibrationObservations).MultiLayer := cbMultilayer.Checked;
 end;
 
 procedure TframePestObsMf6.SetObsColumnCaptions;

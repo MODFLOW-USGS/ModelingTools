@@ -3457,11 +3457,7 @@ that affects the model output should also have a comment. }
       read GetShortestHorizontalBlockEdge;
     procedure ClearPestArrayFileNames;
     property Mf6TimesSeries: TTimesSeriesCollections read GetMf6TimesSeries
-      write SetMf6TimesSeries
-      {$IFNDEF Mf6TimeSeries}
-      Stored False
-      {$ENDIF}
-      ;
+      write SetMf6TimesSeries;
     property SeparateGwtUsed: Boolean read GetSeparateGwtUsed;
     Procedure UpdateGwtConc;
     function SutraUnsatRegionUsed(Sender: TObject): boolean;
@@ -5584,11 +5580,7 @@ resourcestring
   StrPestDefaultDir = 'C:\Pest17\';
 
   // See also GMshDate in frmMeshGenerationControlVariablesUnit.pas
-{ $IFDEF WIN64}
-  StrDefaultGmshPath = 'C:\gmsh-4.9.5-Windows64\gmsh.exe';
-{ $ELSE}
-//  StrDefaultGmshPath = 'C:\gmsh-4.9.5-Windows32\gmsh.exe';
-{ $ENDIF}
+  StrDefaultGmshPath = 'C:\gmsh-4.11.0-Windows64\gmsh.exe';
 
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
@@ -6102,12 +6094,6 @@ resourcestring
   StrMODFLOW6Dispersion_ALV = 'MODFLOW 6 Dispersion Package: ALV';
   StrMODFLOW6Dispersion_ATH1 = 'MODFLOW 6 Dispersion Package: ATH1';
   StrMODFLOW6Dispersion_ATH2 = 'MODFLOW 6 Dispersion Package: ATH2';
-//  StrGWTClassification = 'GWT';
-
-  //  StrLakeMf6 = 'LakeMf6';
-
-//  StrRoughnessSFR6 = KRoughnessSFR6;
-
 
 const
   StatFlagStrings : array[Low(TStatFlag)..High(TStatFlag)] of string
@@ -10752,7 +10738,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.0.0.33';
+  IIModelVersion = '5.1.0.0';
 
 function IModelVersion: string;
 begin
@@ -35972,17 +35958,9 @@ procedure TDataArrayManager.DefinePackageDataArrays;
 const
   GWTDataSets = 5;
 {$IFDEF Sutra4}
-  {$IFDEF  GWT}
   ArrayCount = 167 + GWTDataSets;
-  {$ELSE}
-  ArrayCount = 167;
-  {$ENDIF}
 {$ELSE}
-  {$IFDEF  GWT}
   ArrayCount = 157 + GWTDataSets;
-  {$ELSE}
-  ArrayCount = 157;
-  {$ENDIF}
 {$ENDIF}
 var
   Index: integer;
@@ -38706,7 +38684,6 @@ begin
   Inc(Index);
   {$ENDIF}
 
-  {$IFDEF GWT}
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
@@ -38776,8 +38753,6 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrMODFLOW6Dispersion_ATH2;
   Inc(Index);
-
-  {$ENDIF}
 
   // See ArrayCount.
   Assert(Length(FDataArrayCreationRecords) = Index);
@@ -49776,7 +49751,6 @@ end;
 
 function TCustomModel.GetGwtUsed: Boolean;
 begin
-  {$IFDEF GWT}
   if ModelSelection = msModflow2015 then
   begin
     result := ModflowPackages.GwtProcess.IsSelected;
@@ -49785,9 +49759,6 @@ begin
   begin
     result := False;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 procedure TCustomModel.SetEndPoints(const Value: TEndPointReader);

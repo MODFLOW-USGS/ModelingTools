@@ -136,102 +136,46 @@ type
       read FInitialConcentrationFileName write SetInitialConcentrationFileName;
     //MST package, POROSITY
     property PorosityDataArrayName: string read FPorosityDataArrayName
-      write SetPorosityDataArrayName
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetPorosityDataArrayName;
     //MST package, DECAY
     property MobileDecayRateDataArrayName: string read FMobileDecayRateDataArrayName
-      write SetMobileDecayRateDataArrayName
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetMobileDecayRateDataArrayName;
     //MST package, DECAY_SORBED
     property MobileSorbedDecayRateDataArrayName: string read FMobileSorbedDecayRateDataArrayName
-      write SetMobileSorbedDecayRateDataArrayName
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetMobileSorbedDecayRateDataArrayName;
     //MST package, DISTCOEF
     property MobileDistCoefDataArrayName: string read FMobileDistCoefDataArrayName
-      write SetMobileDistCoefDataArrayName
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetMobileDistCoefDataArrayName;
     //MST package, BULK_DENSITY
     property MobileBulkDensityDataArrayName: string read FMobileBulkDensityDataArrayName
-      write SetMobileBulkDensityDataArrayName
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetMobileBulkDensityDataArrayName;
     //MST package, SP2
     property MobileFreundlichExponentDataArrayName: string read FMobileFreundlichExponentDataArrayName
-      write SetMobileFreundlichExponentDataArrayName
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetMobileFreundlichExponentDataArrayName;
     //MST package, SP2
     property MobileSorptionCapacityDataArrayName: string read FMobileSorptionCapacityDataArrayName
-      write SetMobileSorptionCapacityDataArrayName
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetMobileSorptionCapacityDataArrayName;
     //IST package, CIM
     property ImmobileInitialConcentrations: TStringList
-      read FImmobileInitialConcentrations write SetImmobileInitialConcentrations
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      read FImmobileInitialConcentrations write SetImmobileInitialConcentrations;
     //IST package, THETAIM
     property ImmobilePorosities: TStringList read FImmobilePorosities
-      write SetImmobilePorosities
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetImmobilePorosities;
     //IST package, ZETAIM
     property ImmobileMassTransferRates: TStringList
-      read FImmobileMassTransferRates write SetImmobileMassTransferRates
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      read FImmobileMassTransferRates write SetImmobileMassTransferRates;
     //IST package, DECAY
     property ImmobileDecay: TStringList read FImmobileDecay
-      write SetImmobileDecay
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetImmobileDecay;
     //IST package, DECAY_SORBED
     property ImmobileDecaySorbed: TStringList read FImmobileDecaySorbed
-      write SetImmobileDecaySorbed
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetImmobileDecaySorbed;
     //IST package, BULK_DENSITY
     property ImmobileBulkDensities: TStringList read FImmobileBulkDensities
-      write SetImmobileBulkDensities
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetImmobileBulkDensities;
     //IST package, DISTCOEF
     property ImmobileDistCoeficients: TStringList read FImmobileDistCoeficients
-      write SetImmobileDistCoeficients
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetImmobileDistCoeficients;
   end;
 
   TCustomChemSpeciesCollection= class(TEnhancedOrderedCollection)

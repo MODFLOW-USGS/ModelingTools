@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-10-26T10:16:53.710-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-14T11:44:45.021-05:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Version 5.1</title>
   <body>
     <header>
@@ -33,6 +33,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for the SAVE SATURATION option in the NPF package.:</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMonitor now displays budgets for MODFLOW 6 advanced packages.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">After running a MODFLOW 6 file, the mfsim.lst file is displayed in addition to the model .lst file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added two new methods of distributing sources to SFR reaches.</text></para>
               </td>
             </tr>
           </table></para>

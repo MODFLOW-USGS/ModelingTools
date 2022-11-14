@@ -209,41 +209,17 @@ type
     // @link(DiversionFormulas) instead of @name.
     property Diversions: TStrings read GetDiversions write SetDiversions;
     // GWT
-    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
     property SpecifiedConcentrations: TSftGwtConcCollection read FSpecifiedConcentrations
-      write SetSpecifiedConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetSpecifiedConcentrations;
     property RainfallConcentrations: TSftGwtConcCollection read FRainfallConcentrations
-      write SetRainfallConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetRainfallConcentrations;
     property EvapConcentrations: TSftGwtConcCollection read FEvapConcentrations
-      write SetEvapConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetEvapConcentrations;
     property RunoffConcentrations: TSftGwtConcCollection read FRunoffConcentrations
-      write SetRunoffConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetRunoffConcentrations;
     property InflowConcentrations: TSftGwtConcCollection read FInflowConcentrations
-      write SetInflowConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetInflowConcentrations;
   end;
 
   TSfrMf6TimeListLink = class(TTimeListsModelLink)
@@ -713,71 +689,27 @@ type
     // GWT
     property StartingConcentrations: TStringConcCollection
       read GetStartingConcentrations
-      write SetStartingConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetStartingConcentrations;
       property PestSpecifiedConcentrations: TSftGwtConcCollection
-        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations;
     property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
-      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
       property PestRainfallConcentrations: TSftGwtConcCollection
-        read FPestRainfallConcentrations write SetPestRainfallConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestRainfallConcentrations write SetPestRainfallConcentrations;
     property PestRainfallConcentrationMethods: TGwtPestMethodCollection
-      read FPestRainfallConcentrationMethods write SetPestRainfallConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestRainfallConcentrationMethods write SetPestRainfallConcentrationMethods;
       property PestEvaporationConcentrations: TSftGwtConcCollection
-        read FPestEvaporationConcentrations write SetPestEvaporationConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestEvaporationConcentrations write SetPestEvaporationConcentrations;
     property PestEvaporationConcentrationMethods: TGwtPestMethodCollection
-      read FPestEvaporationConcentrationMethods write SetPestEvaporationConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestEvaporationConcentrationMethods write SetPestEvaporationConcentrationMethods;
       property PestRunoffConcentrations: TSftGwtConcCollection
-        read FPestRunoffConcentrations write SetPestRunoffConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestRunoffConcentrations write SetPestRunoffConcentrations;
     property PestRunoffConcentrationMethods: TGwtPestMethodCollection
-      read FPestRunoffConcentrationMethods write SetPestRunoffConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestRunoffConcentrationMethods write SetPestRunoffConcentrationMethods;
       property PestInflowConcentrations: TSftGwtConcCollection
-        read FPestInflowConcentrations write SetPestInflowConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestInflowConcentrations write SetPestInflowConcentrations;
     property PestInflowConcentrationMethods: TGwtPestMethodCollection
-      read FPestInflowConcentrationMethods write SetPestInflowConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestInflowConcentrationMethods write SetPestInflowConcentrationMethods;
 end;
 
 const

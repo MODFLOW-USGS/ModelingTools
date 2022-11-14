@@ -258,13 +258,7 @@ type
     property SfrObsLocation: TSfrObsLocation read FSfrObsLocation write SetSfrObsLocation;
     property UzfObs: TUzfObs read GetUzfObs write SetUzfObs;
     property CSubObs: TCSubObs read GetCSubObs write SetCSubObs;
-    property GwtObs: TObGwts read GetGwtObs write SetGwtObs
-      {$IFNDEF  GWT}
-      stored False
-      {$ELSE}
-      stored True
-      {$ENDIF}
-      ;
+    property GwtObs: TObGwts read GetGwtObs write SetGwtObs;
     property CSubDelayCells: TIntegerCollection read FCSubDelayCells
       write SetCSubDelayCells;
     property StoredUzfObsDepthFraction: TRealStorage
@@ -272,35 +266,13 @@ type
     property CalibrationObservations: TMf6CalibrationObservations
       read FCalibrationObservations write SetCalibrationObservations
         stored StoreCalibObs;
-    property GenusColl: Integer read GetGenusColl write SetGenusColl
-      {$IFNDEF  GWT}
-      stored False
-      {$ELSE}
-      stored True
-      {$ENDIF}
-      ;
+    property GenusColl: Integer read GetGenusColl write SetGenusColl stored True;
     property GwtSpecies: Integer read FGwtSpecies write SetGwtSpecies
       stored False;
-    property SftObs: TSftObs read GetSftObs write SetSftObs
-      {$IFNDEF  GWT}
-      stored False
-      {$ENDIF}
-      ;
-    property LktObs: TLktObs read GetLktObs write SetLktObs
-      {$IFNDEF  GWT}
-      stored False
-      {$ENDIF}
-      ;
-    property MwtObs: TMwtObs read GetMwtObs write SetMwtObs
-      {$IFNDEF  GWT}
-      stored False
-      {$ENDIF}
-      ;
-    property UztObs: TUztObs read GetUztObs write SetUztObs
-      {$IFNDEF  GWT}
-      stored False
-      {$ENDIF}
-      ;
+    property SftObs: TSftObs read GetSftObs write SetSftObs;
+    property LktObs: TLktObs read GetLktObs write SetLktObs;
+    property MwtObs: TMwtObs read GetMwtObs write SetMwtObs;
+    property UztObs: TUztObs read GetUztObs write SetUztObs;
     // @name is retained for backwards compatibility.
     property Used: Boolean read GetUsed write SetUsed stored False;
     // @name is retained for backwards compatibility.
@@ -1678,11 +1650,7 @@ end;
 
 function TMf6CalibrationObs.StoreGwtOb: Boolean;
 begin
-{$IFDEF GWT}
   result := ObSeries = osGWT;
-{$ELSE}
-  result := False
-{$ENDIF}
 end;
 
 function TMf6CalibrationObs.StoreSfrOb: Boolean;

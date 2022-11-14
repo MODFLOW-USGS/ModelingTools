@@ -1117,7 +1117,7 @@ begin
   if Value <> nil then
   begin
     Value.ObservationName := edObservationName.Text;
-    frameSutraFluxObs.SetData(Value);
+    frameSutraFluxObs.SetData(Value, edObservationName.Text);
   end;
 end;
 

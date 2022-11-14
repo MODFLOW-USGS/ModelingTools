@@ -163,11 +163,7 @@ type
     property EvapotranspirationRate: string read GetEvapotranspirationRate
       write SetEvapotranspirationRate;
     property GwtConcentrations: TEvtGwtConcCollection read FGwtConcentrations
-      write SetGwtConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetGwtConcentrations;
   end;
 
   // @name represents a MODFLOW ET layer for one time interval.

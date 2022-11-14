@@ -664,7 +664,6 @@ begin
       end;
     except on ERbwParserError do
       begin
-        {$IFDEF Mf6TimeSeries}
         if frmGoPhast.PhastModel.ModelSelection = msModflow2015 then
         begin
           FTimeSeries :=
@@ -674,9 +673,6 @@ begin
         begin
           FTimeSeries := nil;
         end;
-        {$ELSE}
-        FTimeSeries := nil;
-        {$ENDIF}
         if FTimeSeries <> nil then
         begin
           FTimeSeries.NotifierComponent.FreeNotification(self);
@@ -763,7 +759,6 @@ begin
 
     FormulaObject.Parser := Parser;
 
-    {$IFDEF Mf6TimeSeries}
     if FModel.ModelSelection = msModflow2015 then
     begin
       FormulaObject.FTimeSeries :=
@@ -773,9 +768,6 @@ begin
     begin
       FormulaObject.FTimeSeries := nil;
     end;
-    {$ELSE}
-    FormulaObject.FTimeSeries := nil;
-    {$ENDIF}
     if FormulaObject.FTimeSeries <> nil then
     begin
       FormulaObject.FTimeSeries.NotifierComponent.FreeNotification(FormulaObject);

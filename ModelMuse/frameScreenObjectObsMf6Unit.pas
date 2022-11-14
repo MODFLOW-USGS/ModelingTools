@@ -720,7 +720,7 @@ begin
       if List.Count = 1 then
       begin
         Mf6Obs.Name := edObsName.Text;
-        framePestObs.SetData(Mf6Obs.CalibrationObservations);
+        framePestObs.SetData(Mf6Obs.CalibrationObservations, edObsName.Name);
       end;
 
       NewGeneral := Mf6Obs.General;

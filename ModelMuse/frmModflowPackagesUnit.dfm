@@ -29,7 +29,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspMt3dmsBasic
+    ActivePage = jvspFMP
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -8194,7 +8194,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           end
           inherited jvspMnwNwtOptions: TJvStandardPage
             Width = 457
-            Height = 360
+            Height = 362
             ExplicitWidth = 457
             ExplicitHeight = 360
             inherited lblMnwExplanation: TLabel
@@ -8239,6 +8239,10 @@ inherited frmModflowPackages: TfrmModflowPackages
                 Height = 54
                 ExplicitWidth = 265
                 ExplicitHeight = 54
+              end
+              inherited rdePSIRAMPF: TRbwDataEntry
+                Top = 29
+                ExplicitTop = 29
               end
             end
           end

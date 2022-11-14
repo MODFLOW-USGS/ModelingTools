@@ -24,7 +24,8 @@ type
   protected
     procedure SetObsColumnCaptions; override;
     procedure GetDirectObs(Observations: TCustomComparisonCollection); override;
-    procedure SetDirectObs(Observations: TCustomComparisonCollection); override;
+    procedure SetDirectObs(Observations: TCustomComparisonCollection;
+      const LocationName: string); override;
     procedure GetObservationGroups; override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -186,7 +187,7 @@ begin
 end;
 
 procedure TframeSubPestObs.SetDirectObs(
-  Observations: TCustomComparisonCollection);
+  Observations: TCustomComparisonCollection; const LocationName: string);
 var
   ObsCount: Integer;
   RowIndex: Integer;
@@ -195,73 +196,87 @@ var
   Obs: TCustomSubObsItem;
   OtherObs: TCustomSubObsItem;
   MyGuid: TGUID;
+  ObsNames: TStringList;
 begin
   ObsCount := 0;
-  for RowIndex := 1 to frameObservations.seNumber.AsInteger do
-  begin
-    RowOK := True;
-    for ColIndex := 0 to Ord(socWeight) do
+  ObsNames := TStringList.Create;
+  try
+    ObsNames.Assign(frameObservations.Grid.Columns[Ord(pocName)]);
+    ObsNames[0] := '';
+    for RowIndex := 1 to frameObservations.seNumber.AsInteger do
     begin
-      if ColIndex = Ord(socGroup) then
+      RowOK := True;
+      for ColIndex := 0 to Ord(socWeight) do
       begin
-        Continue;
-      end;
-      if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
-      begin
-        RowOK := False;
-        Break;
-      end;
-    end;
-    if RowOK then
-    begin
-      if (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsNDSYSCOMPACT)
-        or (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsDSYSCOMPACTI) then
-      begin
-        if frameObservations.Grid.Cells[Ord(socInterbedSystem),RowIndex] = '' then
+        if ColIndex in [Ord(socGroup), Ord(socName)] then
+        begin
+          Continue;
+        end;
+        if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
         begin
           RowOK := False;
+          Break;
         end;
       end;
-    end;
-    if RowOK then
-    begin
-      if ObsCount < Observations.Count then
+      if ObsNames.IndexOf(frameObservations.Grid.Cells[Ord(socName),RowIndex])
+        < RowIndex then
       begin
-        Obs := Observations[ObsCount] as TCustomSubObsItem;
-      end
-      else
-      begin
-        Obs := Observations.Add as TCustomSubObsItem;
+        frameObservations.Grid.Cells[Ord(socName),RowIndex] := LocationName
+          + '_' + IntToStr(RowIndex);
       end;
-      Inc(ObsCount);
-      Obs.Name := frameObservations.Grid.Cells[Ord(pocName), RowIndex];
-      if frameObservations.Grid.Objects[Ord(pocName), RowIndex] <> nil then
+      if RowOK then
       begin
-        OtherObs := frameObservations.Grid.Objects[Ord(pocName), RowIndex] as TCustomSubObsItem;
-        Obs.GUID  := OtherObs.GUID;
-      end
-      else
-      begin
-        if CreateGUID(MyGuid) = 0 then
+        if (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsNDSYSCOMPACT)
+          or (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsDSYSCOMPACTI) then
         begin
-          Obs.GUID := GUIDToString(MyGuid);
+          if frameObservations.Grid.Cells[Ord(socInterbedSystem),RowIndex] = '' then
+          begin
+            RowOK := False;
+          end;
         end;
       end;
-      Obs.ObsTypeString := frameObservations.Grid.Cells[Ord(socType), RowIndex];
-      Obs.ObservationGroup := frameObservations.Grid.Cells[Ord(socGroup), RowIndex];
-      Obs.Time := frameObservations.Grid.RealValue[Ord(socTime), RowIndex];
-      Obs.ObservedValue := frameObservations.Grid.RealValue[Ord(socValue), RowIndex];
-      Obs.Weight := frameObservations.Grid.RealValue[Ord(socWeight), RowIndex];
-      Obs.InterbedSystem := frameObservations.Grid.Cells[Ord(socInterbedSystem), RowIndex];
-      if frameObservations.Grid.Objects[Ord(socInterbedSystem), RowIndex] <> nil then
+      if RowOK then
       begin
-        Obs.Interbed := frameObservations.Grid.Objects
-          [Ord(socInterbedSystem), RowIndex] as TCustomSubLayerItem
+        if ObsCount < Observations.Count then
+        begin
+          Obs := Observations[ObsCount] as TCustomSubObsItem;
+        end
+        else
+        begin
+          Obs := Observations.Add as TCustomSubObsItem;
+        end;
+        Inc(ObsCount);
+        Obs.Name := frameObservations.Grid.Cells[Ord(pocName), RowIndex];
+        if frameObservations.Grid.Objects[Ord(pocName), RowIndex] <> nil then
+        begin
+          OtherObs := frameObservations.Grid.Objects[Ord(pocName), RowIndex] as TCustomSubObsItem;
+          Obs.GUID  := OtherObs.GUID;
+        end
+        else
+        begin
+          if CreateGUID(MyGuid) = 0 then
+          begin
+            Obs.GUID := GUIDToString(MyGuid);
+          end;
+        end;
+        Obs.ObsTypeString := frameObservations.Grid.Cells[Ord(socType), RowIndex];
+        Obs.ObservationGroup := frameObservations.Grid.Cells[Ord(socGroup), RowIndex];
+        Obs.Time := frameObservations.Grid.RealValue[Ord(socTime), RowIndex];
+        Obs.ObservedValue := frameObservations.Grid.RealValue[Ord(socValue), RowIndex];
+        Obs.Weight := frameObservations.Grid.RealValue[Ord(socWeight), RowIndex];
+        Obs.InterbedSystem := frameObservations.Grid.Cells[Ord(socInterbedSystem), RowIndex];
+        if frameObservations.Grid.Objects[Ord(socInterbedSystem), RowIndex] <> nil then
+        begin
+          Obs.Interbed := frameObservations.Grid.Objects
+            [Ord(socInterbedSystem), RowIndex] as TCustomSubLayerItem
+        end;
+        Obs.Comment := frameObservations.Grid.Cells[Ord(socComment), RowIndex];
       end;
-      Obs.Comment := frameObservations.Grid.Cells[Ord(socComment), RowIndex];
     end;
+    Observations.Count := ObsCount;
+  finally
+    ObsNames.Free;
   end;
-  Observations.Count := ObsCount;
 end;
 
 procedure TframeSubPestObs.SetObsColumnCaptions;

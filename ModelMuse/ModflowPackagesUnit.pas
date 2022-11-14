@@ -281,47 +281,19 @@ type
     property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts;
     property CSubPackage: TCSubPackageSelection read FCsubPackage
       write SetCsubPackage;
-    property GwtProcess: TGwtProcess read FGwtProcess write SetGwtProcess
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+    property GwtProcess: TGwtProcess read FGwtProcess write SetGwtProcess;
     property GwtDispersionPackage: TGwtDispersionPackage
-      read FGwtDispersionPackage write SetGwtDispersionPackage
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      read FGwtDispersionPackage write SetGwtDispersionPackage;
     property GwtAdvectionPackage: TGwtAdvectionPackage
-      read FGwtAdvectionPackage write SetGwtAdvectionPackage
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      read FGwtAdvectionPackage write SetGwtAdvectionPackage;
     property GwtSsmPackage: TGWtSsmPackage read FGwtSsmPackage
-      write SetGwtSsmPackage
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetGwtSsmPackage;
     property GwtCncPackage: TGwtCncPackage read FGwtCncPackage
-      write SetGwtCncPackage
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetGwtCncPackage;
     property GwtSrcPackage: TGwtSrcPackage read FGwtSrcPackage
-      write SetGwtSrcPackage
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetGwtSrcPackage;
     property GwtPackages: TGwtPackageCollection read FGwtPackages
-      write SetGwtPackges
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-    ;
+      write SetGwtPackges;
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.

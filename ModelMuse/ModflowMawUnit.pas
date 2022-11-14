@@ -238,23 +238,11 @@ type
     property HeadLimitChoice: Boolean read FHeadLimitChoice write SetHeadLimitChoice;
     // head_limit
     property HeadLimit: string read GetHeadLimit write SetHeadLimit;
-    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
     property SpecifiedConcentrations: TMawGwtConcCollection read FSpecifiedConcentrations
-      write SetSpecifiedConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetSpecifiedConcentrations;
     property InjectionConcentrations: TMawGwtConcCollection read FInjectionConcentrations
-      write SetInjectionConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetInjectionConcentrations;
   end;
 
   TMawTimeListLink = class(TTimeListsModelLink)
@@ -882,35 +870,15 @@ type
     // GWT
     property StartingConcentrations: TStringConcCollection
       read GetStartingConcentrations
-      write SetStartingConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetStartingConcentrations;
       property PestInjectionConcentrations: TMawGwtConcCollection
-        read FPestInjectionConcentrations write SetPestInjectionConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestInjectionConcentrations write SetPestInjectionConcentrations;
       property PestSpecifiedConcentrations: TMawGwtConcCollection
-        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations;
     property PestInjectionConcentrationMethods: TGwtPestMethodCollection
-      read FPestInjectionConcentrationMethods write SetPestInjectionConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestInjectionConcentrationMethods write SetPestInjectionConcentrationMethods;
     property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
-      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
   end;
 
 const

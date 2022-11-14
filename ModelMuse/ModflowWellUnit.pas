@@ -91,11 +91,7 @@ type
     // or the pumping rate multiplier of this boundary.
     property PumpingRate: string read GetPumpingRate write SetPumpingRate;
     property GwtConcentrations: TWelGwtConcCollection read FGwtConcentrations
-      write SetGwtConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetGwtConcentrations;
   end;
 
   TMfWelTimeListLink = class(TTimeListsModelLink)
@@ -309,17 +305,9 @@ type
     property PestPumpingRateMethod: TPestParamMethod read FPestPumpingRateMethod
       write SetPestPumpingRateMethod;
     property PestConcentrationFormulas: TWelGwtConcCollection
-      read FPestConcentrationFormulas write SetPestConcentrationFormulas
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas;
     property PestConcentrationMethods: TGwtPestMethodCollection
-      read FPestConcentrationMethods write SetPestConcentrationMethods
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationMethods write SetPestConcentrationMethods;
   end;
 
 resourcestring

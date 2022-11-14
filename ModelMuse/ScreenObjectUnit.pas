@@ -1563,17 +1563,9 @@ view. }
     property ModflowSwtObservations: TSwtObservations
       read FModflowSwtObservations write FModflowSwtObservations;
     property GwtCncBoundary: TCncBoundary read FGwtCncBoundary
-      write FGwtCncBoundary
-    {$IFNDEF GWT}
-      Stored False
-    {$ENDIF}
-      ;
+      write FGwtCncBoundary;
     property GwtSrcBoundary: TSrcBoundary read FGwtSrcBoundary
-      write FGwtSrcBoundary
-    {$IFNDEF GWT}
-      Stored False
-    {$ENDIF}
-      ;
+      write FGwtSrcBoundary;
 
     // Be sure to update Invalidate, FreeUnusedBoundaries,
     // StopTalkingToAnyone, UsesATime, ReplaceATime, Destroy,
@@ -31584,22 +31576,14 @@ end;
 
 function TScreenObject.StoreGwtCncBoundary: Boolean;
 begin
-{$IFDEF GWT}
   result := (FModflowBoundaries <> nil)
     and (GwtCncBoundary <> nil) and GwtCncBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreGwtSrcBoundary: Boolean;
 begin
-{$IFDEF GWT}
   result := (FModflowBoundaries <> nil)
     and (GwtSrcBoundary <> nil) and GwtSrcBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreImportedHigherSectionElevations: Boolean;

@@ -170,11 +170,7 @@ type
     property SaveBudgetSummary: boolean read FSaveBudgetSummary
       write SetSaveBudgetSummary default True;
     property ConcentrationOC: THeadDrawdownOutputControl read FConcentrationOC
-      write SetConcentrationOC
-    {$IFNDEF GWT}
-      stored False
-    {$ENDIF}
-      ;
+      write SetConcentrationOC;
   end;
 
   TMt3dmsOutputFreq = (mofSpecifiedTimes, mofEndOfSimulation, mofPeriodic);

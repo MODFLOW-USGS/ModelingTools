@@ -1634,7 +1634,7 @@ begin
       if List.Count = 1 then
       begin
         // Observations
-        framePestObsMnw2.SetData(Boundary.Observations);
+        framePestObsMnw2.SetData(Boundary.Observations, Item.ScreenObject.Name);
       end;
 
       if Trim(edWellId.Text) <> '' then

@@ -116,11 +116,7 @@ type
     // or the recharge rate multiplier of this boundary.
     property RechargeRate: string read GetRechargeRate write SetRechargeRate;
     property GwtConcentrations: TRchGwtConcCollection read FGwtConcentrations
-      write SetGwtConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetGwtConcentrations;
   end;
 
   // @name represents a MODFLOW recharge layer for one time interval.
@@ -439,17 +435,9 @@ type
     property PestRechargeMethod: TPestParamMethod read FPestRechargeMethod
       write SetPestRechargeMethod;
     property PestConcentrationFormulas: TRchGwtConcCollection
-      read FPestConcentrationFormulas write SetPestConcentrationFormulas
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas;
     property PestConcentrationMethods: TGwtPestMethodCollection
-      read FPestConcentrationMethods write SetPestConcentrationMethods
-      {$IFNDEF GWT}
-      Stored False
-      {$ENDIF}
-      ;
+      read FPestConcentrationMethods write SetPestConcentrationMethods;
   end;
 
 const

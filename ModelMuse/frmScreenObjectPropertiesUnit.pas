@@ -7995,20 +7995,22 @@ begin
   if FSubPestObs_Node <> nil then
   begin
     ScreenObject := FNewProperties[0].ScreenObject;
-    framePestObsSub.SetData(ScreenObject.ModflowSubObservations);
+    framePestObsSub.SetData(ScreenObject.ModflowSubObservations,
+      ScreenObject.Name);
   end;
 
   if FSwtPestObs_Node <> nil then
   begin
     ScreenObject := FNewProperties[0].ScreenObject;
-    framePestObsSwt.SetData(ScreenObject.ModflowSwtObservations);
+    framePestObsSwt.SetData(ScreenObject.ModflowSwtObservations,
+      ScreenObject.Name);
   end;
 
   if FSutraStateObsNode <> nil then
   begin
     ScreenObject := FNewProperties[0].ScreenObject;
     frameSutraPestObsState.SetData(
-      ScreenObject.SutraBoundaries.SutraStateObs);
+      ScreenObject.SutraBoundaries.SutraStateObs, ScreenObject.Name);
   end;
 
   frameScreenObjectFootprintWell.SetData(FNewProperties);
@@ -8387,7 +8389,7 @@ begin
         ScreenObject.CreateGagBoundary;
         Gage := ScreenObject.ModflowStreamGage;
       end;
-      frameGagePestObs.SetData(Gage.Observations);
+      frameGagePestObs.SetData(Gage.Observations, ScreenObject.Name);
     end;
   end;
 
@@ -25711,7 +25713,8 @@ begin
         end;
         if FNewProperties.Count = 1 then
         begin
-          frameLak.framePestObsLak.SetData(Boundary.Observations);
+          frameLak.framePestObsLak.SetData(Boundary.Observations,
+            Item.ScreenObject.Name);
         end;
       end
       else if  FLAK_Node.StateIndex = 1 then

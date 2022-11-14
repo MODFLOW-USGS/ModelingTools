@@ -176,29 +176,13 @@ type
     property RootPotential: string read GetRootPotential write SetRootPotential;
     // rootact (Use only if SIMULATE_ET and UNSAT_ETAE have been specified.)
     property RootActivity: string read GetRootActivity write SetRootActivity;
-    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
     property SpecifiedConcentrations: TUztGwtConcCollection read FSpecifiedConcentrations
-      write SetSpecifiedConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetSpecifiedConcentrations;
     property InfiltrationConcentrations: TUztGwtConcCollection read FInfiltrationConcentrations
-      write SetInfiltrationConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetInfiltrationConcentrations;
     property EvapConcentrations: TUztGwtConcCollection read FEvapConcentrations
-      write SetEvapConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetEvapConcentrations;
   end;
 
   TUzfMf6TimeListLink = class(TTimeListsModelLink)
@@ -666,47 +650,19 @@ type
       write SetPestRootActivityMethod;
     // GWT
     property StartingConcentrations: TStringConcCollection
-      read GetStartingConcentrations write SetStartingConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read GetStartingConcentrations write SetStartingConcentrations;
       property PestSpecifiedConcentrations: TUztGwtConcCollection
-        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations;
     property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
-      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
       property PestInfiltrationConcentrations: TUztGwtConcCollection
-        read FPestInfiltrationConcentrations write SetPestInfiltrationConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestInfiltrationConcentrations write SetPestInfiltrationConcentrations;
     property PestInfiltrationConcentrationMethods: TGwtPestMethodCollection
-      read FPestInfiltrationConcentrationMethods write SetPestInfiltrationConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestInfiltrationConcentrationMethods write SetPestInfiltrationConcentrationMethods;
       property PestEvaporationConcentrations: TUztGwtConcCollection
-        read FPestEvaporationConcentrations write SetPestEvaporationConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+        read FPestEvaporationConcentrations write SetPestEvaporationConcentrations;
     property PestEvaporationConcentrationMethods: TGwtPestMethodCollection
-      read FPestEvaporationConcentrationMethods write SetPestEvaporationConcentrationMethods
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      read FPestEvaporationConcentrationMethods write SetPestEvaporationConcentrationMethods;
   end;
 
 const

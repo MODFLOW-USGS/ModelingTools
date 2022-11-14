@@ -3791,7 +3791,7 @@ begin
 
       if List.Count = 1 then
       begin
-        frameSfrPestObs.SetData(Boundary.Observations);
+        frameSfrPestObs.SetData(Boundary.Observations, Item.ScreenObject.Name);
       end;
     end;
   end;

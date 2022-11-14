@@ -3482,9 +3482,6 @@ begin
   FDataSetsPosition.Create(Point(0,0));
   FObjectsPosition.Create(Point(0,0));
   FDefaultCreateArchive := dcaUnknown;
-  {$IFNDEF Mf6TimeSeries}
-  acTimeSeries.Visible := False;
-  {$ENDIF}
   {$IFNDEF SUTRA4}
   acSutra40Active.Visible := False;
   {$ENDIF}
@@ -4248,12 +4245,8 @@ begin
   acImportMf6FeatureFromPest.Visible := PhastModel.ModelSelection = msModflow2015;
   acImportSutraFeaturesFromPest.Visible := PhastModel.ModelSelection in SutraSelection;
 
-  {$IFDEF Mf6TimeSeries}
-    acTimeSeries.Visible := PhastModel.ModelSelection in ModflowSelection;
-    acTimeSeries.Enabled := PhastModel.ModelSelection = msModflow2015;
-  {$ELSE}
-    acTimeSeries.Visible := False;
-  {$ENDIF}
+  acTimeSeries.Visible := PhastModel.ModelSelection in ModflowSelection;
+  acTimeSeries.Enabled := PhastModel.ModelSelection = msModflow2015;
 
   case PhastModel.ModelSelection of
     msUndefined: ; // ignore
@@ -9542,12 +9535,6 @@ begin
         acRunMt3dms.Hint := StrRunMT3DMS;
         miRunMt3dmsPopup.Caption := StrExportMT3DMSInput;
       end;
-//    mvMf6Gwt:
-//      begin
-//        acRunMt3dms.Caption := 'GWT Transport Files';
-//        acRunMt3dms.Hint := 'Run GWT';
-//        miRunMt3dmsPopup.Caption := 'Export GWT Input Files';
-//      end;
   end;
 end;
 
@@ -15586,7 +15573,7 @@ initialization
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);
-  PestDate := EncodeDate(2022,10,25);
+  PestDate := EncodeDate(2022,11,4);
 
   {$IFDEF Win64}
   RegisterExpectedMemoryLeak(GR32_Blend.AlphaTable);

@@ -103,11 +103,7 @@ type
     // or the conductance multiplier of this boundary.
     property Conductance: string read GetConductance write SetConductance;
     property GwtConcentrations: TGhbGwtConcCollection read FGwtConcentrations
-      write SetGwtConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetGwtConcentrations;
   end;
 
   TGhbTimeListLink = class(TTimeListsModelLink)

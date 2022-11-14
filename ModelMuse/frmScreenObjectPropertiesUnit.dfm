@@ -6244,12 +6244,16 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabSegment: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 472
+                ExplicitWidth = 573
+                ExplicitHeight = 442
                 inherited Splitter1: TSplitter
+                  Width = 573
                   ExplicitWidth = 573
                 end
                 inherited pnlSegmentUpstream: TPanel
+                  Width = 573
                   inherited dgUp: TRbwDataGrid4
+                    Width = 571
                     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goAlwaysShowEditor]
                     OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                     Columns = <
@@ -6438,6 +6442,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       50)
                   end
                   inherited pnlUpstream: TPanel
+                    Width = 571
+                    ExplicitWidth = 571
                     inherited lblUpstreamFormula: TLabel
                       Width = 59
                       Height = 19
@@ -6447,10 +6453,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                 end
                 inherited pnlSegmentDownstream: TPanel
-                  Height = 255
+                  Width = 573
+                  Height = 225
                   ExplicitHeight = 255
                   inherited dgDown: TRbwDataGrid4
-                    Height = 201
+                    Width = 571
+                    Height = 171
                     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goAlwaysShowEditor]
                     OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                     Columns = <
@@ -6640,6 +6648,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       50)
                   end
                   inherited pnlDownstream: TPanel
+                    Width = 571
+                    ExplicitWidth = 571
                     inherited lblDownstreamFormula: TLabel
                       Width = 59
                       Height = 19
@@ -6810,7 +6820,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited zbChannel: TQRbwZoomBox2
                   Top = 363
-                  Image32.Top = 0
                   ExplicitTop = 363
                 end
               end
@@ -7088,12 +7097,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       Row = 0
                     end>
                   ExplicitTop = 315
-                  inherited zbFlowDepthTable: TQRbwZoomBox2
-                    Image32.Top = 0
-                  end
-                  inherited zbFlowWidthTable: TQRbwZoomBox2
-                    Image32.Top = 0
-                  end
                 end
                 inherited frameFlowTable1: TframeFlowTable
                   Height = 315
@@ -7331,8 +7334,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 HelpType = htKeyword
                 HelpKeyword = 'Calibration_tabSfr'
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 442
+                ExplicitHeight = 472
                 inherited frameSfrPestObs: TframePestObs
                   Width = 573
                   Height = 442
@@ -8846,6 +8848,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited comboLocationChoice: TJvImageComboBox
                     Font.Pitch = fpVariable
+                    ItemIndex = -1
                   end
                 end
               end
@@ -12252,7 +12255,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited tvGwt: TJvPageListTreeView
                   Height = 417
                   Items.Links = {00000000}
-                  ExplicitHeight = 417
+                  ExplicitHeight = 63
                 end
                 inherited jplGwt: TJvPageList
                   Width = 447
@@ -12486,6 +12489,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           HelpType = htKeyword
           HelpKeyword = 'OBS_Observation_Utility_Pane'
           Caption = 'jvspMf6Obs'
+          ExplicitWidth = 101
+          ExplicitHeight = 122
           inline frameObsMf6: TframeScreenObjectObsMf6
             Left = 0
             Top = 0
@@ -12493,8 +12498,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Height = 476
             Align = alClient
             TabOrder = 0
-            ExplicitWidth = 581
-            ExplicitHeight = 476
+            ExplicitWidth = 101
+            ExplicitHeight = 122
             inherited pnlCaption: TPanel
               Width = 581
               ExplicitWidth = 581
@@ -12503,8 +12508,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Width = 581
               Height = 405
               OnChange = frameObsMf6pgcMainChange
-              ExplicitWidth = 581
-              ExplicitHeight = 405
+              ExplicitWidth = 101
+              ExplicitHeight = 51
               inherited tabBasic: TTabSheet
                 ExplicitTop = 30
                 ExplicitHeight = 414
@@ -12594,8 +12599,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabLAK: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 371
+                ExplicitHeight = 414
                 inherited lblLAK: TLabel
                   Width = 31
                   Height = 19
@@ -12676,7 +12680,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabCalibration: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 414
+                ExplicitWidth = 573
+                ExplicitHeight = 371
                 inherited framePestObs: TframePestObsMf6
                   Width = 573
                   Height = 371
@@ -14409,6 +14414,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
+        ExplicitWidth = 125
+        ExplicitHeight = 122
         object jvspSutraObservations: TJvStandardPage
           Left = 0
           Top = 0

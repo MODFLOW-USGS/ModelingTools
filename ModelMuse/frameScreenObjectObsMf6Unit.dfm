@@ -18,7 +18,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Top = 71
     Width = 590
     Height = 448
-    ActivePage = tabLAK
+    ActivePage = tabCalibration
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -545,12 +545,9 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           ExplicitWidth = 582
           inherited frameObservations: TframeGrid
             Width = 578
-            ExplicitTop = 15
             ExplicitWidth = 578
-            ExplicitHeight = 226
             inherited Panel: TPanel
               Width = 578
-              ExplicitTop = 168
               ExplicitWidth = 578
               inherited sbAdd: TSpeedButton
                 Left = 447
@@ -565,15 +562,12 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
                 ExplicitLeft = 517
               end
               inherited seNumber: TJvSpinEdit
-                Height = 21
                 OnChange = frameObservationsseNumberChange
-                ExplicitHeight = 21
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 578
               ExplicitWidth = 578
-              ExplicitHeight = 168
             end
           end
         end
@@ -582,12 +576,9 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           ExplicitWidth = 582
           inherited frameObsComparisons: TframeGrid
             Width = 578
-            ExplicitTop = 15
             ExplicitWidth = 578
-            ExplicitHeight = 155
             inherited Panel: TPanel
               Width = 578
-              ExplicitTop = 120
               ExplicitWidth = 578
               inherited sbAdd: TSpeedButton
                 Left = 447
@@ -601,15 +592,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
                 Left = 517
                 ExplicitLeft = 517
               end
-              inherited seNumber: TJvSpinEdit
-                Height = 21
-                ExplicitHeight = 21
-              end
             end
             inherited Grid: TRbwDataGrid4
               Width = 578
               ExplicitWidth = 578
-              ExplicitHeight = 120
             end
           end
         end

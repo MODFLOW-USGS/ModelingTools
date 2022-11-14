@@ -175,11 +175,7 @@ type
     // or the starting head multiplier of this boundary.
     property StartHead: string read GetStartHead write SetStartHead;
     property GwtConcentrations: TChdGwtConcCollection read FGwtConcentrations
-      write SetGwtConcentrations
-      {$IFNDEF GWT}
-      stored False
-      {$ENDIF}
-      ;
+      write SetGwtConcentrations;
   end;
 
   TCHD_Cell = class(TValueCell)
