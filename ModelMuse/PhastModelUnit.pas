@@ -10731,8 +10731,8 @@ const
 //               Enhancement: Added support for the Groundwater Transport
 //                Process in MODFLOW 6.
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
-//    '5.0.0.33' --
-
+//    '5.0.0.33' Bug fix: Fixed writing tied parameter data in PEST control
+//                file.
 
 //               Enhancement: Added suport for SUTRA 4.
 

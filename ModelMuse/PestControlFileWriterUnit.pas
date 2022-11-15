@@ -2040,6 +2040,7 @@ var
 
     NewLine;
   end;
+
   procedure WriteTiedParameter(AParam: TModflowParameter);
   begin
     if AParam.Transform = ptTied then
@@ -2100,29 +2101,74 @@ begin
           Format(StrPilotPointsWereDe, [PilotPointItem.BaseParamName]));
       end;
     end;
+
+    for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+    begin
+      AParam := Model.ModflowTransientParameters[ParamIndex];
+      if AParam.ParameterType in UsedTypes then
+      begin
+        WriteParameter(AParam);
+        FUsePval := True;
+      end;
+    end;
+
+    for ParamIndex := 0 to Model.HufParameters.Count - 1 do
+    begin
+      AParam := Model.HufParameters[ParamIndex];
+      if AParam.ParameterType in UsedTypes then
+      begin
+        WriteParameter(AParam);
+        FUsePval := True;
+      end;
+    end;
+
+    // tied parameters.
+    for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+    begin
+      AParam := Model.ModflowSteadyParameters[ParamIndex];
+      WriteTiedParameter(AParam);
+    end;
+    for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+    begin
+      AParam := Model.ModflowTransientParameters[ParamIndex];
+      WriteTiedParameter(AParam);
+    end;
+    for ParamIndex := 0 to Model.HufParameters.Count - 1 do
+    begin
+      AParam := Model.HufParameters[ParamIndex];
+      WriteTiedParameter(AParam);
+    end;
+
+    for index := 0 to Model.PilotPointData.Count - 1 do
+    begin
+      PilotPointItem := Model.PilotPointData[index];
+      ParamIndex := PilotPointParameters.IndexOf(PilotPointItem.BaseParamName);
+      if ParamIndex >= 0 then
+      begin
+        AParam := PilotPointParameters.Objects[ParamIndex] as TModflowParameter;
+        if AParam.Transform = ptTied then
+        begin
+          for ParameterIndex := 1 to PilotPointItem.Count do
+          begin
+            PilotParamName := PilotPointItem.ParameterName(ParameterIndex);
+            // PARNME
+            WriteString(PilotParamName);
+
+            // PARTIED
+            WriteString(' ' + AParam.TiedParameterName);
+            NewLine;
+          end;
+        end;
+
+      end;
+    end;
+
+
+
   finally
     PilotPointParameters.Free;
   end;
 
-  for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
-  begin
-    AParam := Model.ModflowTransientParameters[ParamIndex];
-    if AParam.ParameterType in UsedTypes then
-    begin
-      WriteParameter(AParam);
-      FUsePval := True;
-    end;
-  end;
-
-  for ParamIndex := 0 to Model.HufParameters.Count - 1 do
-  begin
-    AParam := Model.HufParameters[ParamIndex];
-    if AParam.ParameterType in UsedTypes then
-    begin
-      WriteParameter(AParam);
-      FUsePval := True;
-    end;
-  end;
 
   NewLine;
 end;

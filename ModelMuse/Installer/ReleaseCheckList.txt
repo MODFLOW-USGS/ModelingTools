@@ -12,7 +12,8 @@
 5. Build help - chm and html
 5a. Check that help works for new things.
 6. Insert google analytics code for help and revision history.
-6. Create and fill folders for release - ModelMuse, ModelMonitor, ModflowImporter, Help, and Release.chm
+6a. Replace http:\\ with https:\\ in help and revision history.
+6b. Create and fill folders for release - ModelMuse, ModelMonitor, ModflowImporter, utility programs, Help, and Release.chm
 7. Check that correct files are in folder for release
 8. check version numbers for ModelMuse in release folder
 8a. Check executables including .chm on www.virustotal.com. 
@@ -26,6 +27,8 @@
 15. Update ModflowImporter source in folder for source code.
 16. Create zip file for source.
 16a. Update IPDS biblio data
+16b. Update credentials in Network Identity Monitor.
+16c. Transfer files to \\AFS\.usgs.gov\www_RW\water\htdocs\water-resources\software\ModelMuse
 17. Update draft web page.
 17a. Update Videos web page.
 17b. Update Download web page.
