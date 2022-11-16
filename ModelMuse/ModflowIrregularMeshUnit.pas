@@ -91,6 +91,9 @@ type
     function GetElementI(Index: integer): IElement2D;
     function GetTriangNumber: integer;
     procedure SetTriangNumber(const Value: Integer);
+    function GetBypassUpdate: Boolean;
+    procedure SetBypassUpdate(const Value: Boolean);
+    property BypassUpdate: Boolean read GetBypassUpdate write SetBypassUpdate;
   protected
     property ElementsI[Index: Integer]: IElement2D read GetElementI;
   public
@@ -173,6 +176,9 @@ type
     function IndexOfNode(Node: INode2D): Integer;
     function GetTriangNumber: integer;
     procedure SetTriangNumber(const Value: Integer);
+    function GetBypassUpdate: Boolean;
+    procedure SetBypassUpdate(const Value: Boolean);
+    property BypassUpdate: Boolean read GetBypassUpdate write SetBypassUpdate;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -439,6 +445,9 @@ type
     procedure SetElementNumber(Value: integer);
     property DisplayNumber: Integer read GetDisplayNumber;
     function ElementNumber2D: Integer;
+    function GetBypassUpdate: Boolean;
+    procedure SetBypassUpdate(const Value: Boolean);
+    property BypassUpdate: Boolean read GetBypassUpdate write SetBypassUpdate;
   public
     procedure Assign(Source: TPersistent); override;
     property Top: Double read FTop write SetTop;
@@ -966,6 +975,11 @@ begin
   result := FCells.Count;
 end;
 
+function TModflowNode.GetBypassUpdate: Boolean;
+begin
+  result := False;
+end;
+
 function TModflowNode.GetCell(Index: Integer): TModflowIrregularCell2D;
 begin
   result := FCells[Index];
@@ -1121,6 +1135,11 @@ procedure TLocationItem.SetLocation(const Value: TPoint2D);
 begin
   X := Value.X;
   Y := Value.Y;
+end;
+
+procedure TModflowNode.SetBypassUpdate(const Value: Boolean);
+begin
+  // do nothing
 end;
 
 procedure TModflowNode.SetNodeNumber(Value: integer);
@@ -1339,6 +1358,11 @@ end;
 function TModflowIrregularCell2D.GetActiveNodeCount: integer;
 begin
   result := FElementCorners.Count;
+end;
+
+function TModflowIrregularCell2D.GetBypassUpdate: Boolean;
+begin
+  result := False;
 end;
 
 function TModflowIrregularCell2D.GetCountTri: Integer;
@@ -1741,6 +1765,11 @@ begin
       result := Max(result, Distance(Node1.Location, Node2.Location));
     end;
   end;
+end;
+
+procedure TModflowIrregularCell2D.SetBypassUpdate(const Value: Boolean);
+begin
+  // do nothing
 end;
 
 procedure TModflowIrregularCell2D.SetElementCorners(
@@ -4643,6 +4672,11 @@ begin
   result := Cell2D.NodeCount*2;
 end;
 
+function TModflowDisVCell.GetBypassUpdate: Boolean;
+begin
+  result := False;
+end;
+
 function TModflowDisVCell.GetDisplayNumber: Integer;
 begin
   result := GetElementNumber + 1;
@@ -4712,6 +4746,11 @@ end;
 procedure TModflowDisVCell.SetBottom(const Value: Double);
 begin
   SetRealProperty(FBottom, Value);
+end;
+
+procedure TModflowDisVCell.SetBypassUpdate(const Value: Boolean);
+begin
+  // do nothing
 end;
 
 procedure TModflowDisVCell.SetCell2D(const Value: TModflowIrregularCell2D);

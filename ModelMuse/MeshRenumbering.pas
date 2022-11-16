@@ -317,7 +317,9 @@ begin
       Node := Mesh.Nodes[NodeIndex];
       NodeHandler := TNodeHandler.Create(Node);
       NodeHandlers.Add(NodeHandler);
+      Node.BypassUpdate := True;
       Node.NodeNumber := NodeIndex;
+      Node.BypassUpdate := False;
     end;
 
     // Get the list of nodes adjacent to each node.
@@ -374,7 +376,9 @@ begin
         SetAllNodesInactive(NodeHandlers);
 
         StartingNode := StartingNodes[StartingNodeIndex];
+        StartingNode.FNode.BypassUpdate := True;
         StartingNode.FNode.NodeNumber := 0;
+        StartingNode.FNode.BypassUpdate := False;
         StartingNode.FAssigned := True;
         StartingNode.FActive := True;
         AssignedNodes.Clear;
@@ -400,8 +404,10 @@ begin
         while NextNodeIndex >= 0 do
         begin
           NextNodeHandler := ActiveNodes[NextNodeIndex];
+          NextNodeHandler.FNode.BypassUpdate := True;
           NextNodeHandler.FNode.NodeNumber :=
             AssignedNodes.Add(NextNodeHandler);
+          NextNodeHandler.FNode.BypassUpdate := False;
           ActiveNodes.Delete(NextNodeIndex);
           NextNodeHandler.FAssigned := True;
           AddNewActiveNodes(NextNodeHandler, ActiveNodes);
@@ -440,7 +446,9 @@ begin
       SetAllNodesInactive(NodeHandlers);
 
       StartingNode := StartingNodes[0];
+      StartingNode.FNode.BypassUpdate := True;
       StartingNode.FNode.NodeNumber := 0;
+      StartingNode.FNode.BypassUpdate := False;
       StartingNode.FAssigned := True;
       StartingNode.FActive := True;
       AssignedNodes.Clear;
@@ -451,7 +459,9 @@ begin
       while NextNodeIndex >= 0 do
       begin
         NextNodeHandler := ActiveNodes[NextNodeIndex];
+        NextNodeHandler.FNode.BypassUpdate := True;
         NextNodeHandler.FNode.NodeNumber := AssignedNodes.Add(NextNodeHandler);
+        NextNodeHandler.FNode.BypassUpdate := False;
         ActiveNodes.Delete(NextNodeIndex);
         NextNodeHandler.FAssigned := True;
         AddNewActiveNodes(NextNodeHandler, ActiveNodes);
@@ -493,7 +503,9 @@ begin
     for ElementIndex := 0 to ElementList.Count - 1 do
     begin
       ElementHandler := ElementList[ElementIndex];
+      ElementHandler.FElement.BypassUpdate := True;
       ElementHandler.FElement.ElementNumber := ElementIndex;
+      ElementHandler.FElement.BypassUpdate := False;
     end;
   finally
     ElementList.Free;

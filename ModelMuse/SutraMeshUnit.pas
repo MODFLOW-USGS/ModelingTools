@@ -22,9 +22,14 @@ Type
   TMeshGenerationMethod = (mgmFishnet, mgmIrregular, mgmGmsh, mgmGeompack, mgmUnknown);
 
   TCustomSutraItem = class(TInterfacedPhastCollectionItem)
+  private
+    FBypassUpdate: Boolean;
+    function GetBypassUpdate: Boolean;
+    procedure SetBypassUpdate(const Value: Boolean);
   protected
     procedure BeginUpdate; override;
     procedure EndUpdate; override;
+    property BypassUpdate: Boolean read GetBypassUpdate write SetBypassUpdate;
   end;
 
   TCustomSutraNode = class(TCustomSutraItem)
@@ -2371,7 +2376,14 @@ end;
 
 procedure TCustomSutraNode.SetNumber(const Value: Integer);
 begin
-  SetIntegerProperty(FNumber, Value);
+  if BypassUpdate then
+  begin
+    FNumber := Value;
+  end
+  else
+  begin
+    SetIntegerProperty(FNumber, Value);
+  end;
 end;
 
 { TSutraNodeNumberItem }
@@ -2763,7 +2775,14 @@ end;
 
 procedure TCustomSutraElement.SetElementNumber(Value: integer);
 begin
-  SetIntegerProperty(FElementNumber, Value);
+  if BypassUpdate then
+  begin
+    FElementNumber := Value;
+  end
+  else
+  begin
+    SetIntegerProperty(FElementNumber, Value);
+  end;
 end;
 
 { TSutraElement2D }
@@ -9431,6 +9450,7 @@ var
   ANode: TSutraNode3D;
   AnElement: TSutraElement3D;
 begin
+  CheckUpdateElevations;
   if MeshType = mt3D then
   begin
     Count := 0;
@@ -9665,6 +9685,16 @@ procedure TCustomSutraItem.EndUpdate;
 begin
   Collection.EndUpdate;
   inherited;
+end;
+
+function TCustomSutraItem.GetBypassUpdate: Boolean;
+begin
+  result := FBypassUpdate;
+end;
+
+procedure TCustomSutraItem.SetBypassUpdate(const Value: Boolean);
+begin
+  FBypassUpdate := Value;
 end;
 
 { TCustomSutraCollection }

@@ -114,6 +114,7 @@ Type
     // Move the node to the centroid of the elements
     // of which the node is a part.
     FConstraintNeighbors: TNodeList;
+    FBypassUpdate: Boolean;
     procedure AdjustPositionLagrange;
     // Move the node using the algorithm described in Giuliani, 1982
     // or by Sarrate and Huerta, 2001.)
@@ -190,6 +191,10 @@ Type
     // @name fills NeighborNodes with a list of @link(TNode)s connected to the
     // central node.
     procedure GetNeighborNodes(FoundNodes: TNodeList);
+  protected
+    function GetBypassUpdate: Boolean;
+    procedure SetBypassUpdate(const Value: Boolean);
+    property BypassUpdate: Boolean read GetBypassUpdate write SetBypassUpdate;
   public
     { @name creates a @classname.
       @definitionlist(
@@ -533,6 +538,7 @@ Type
     // @name keeps track of how many references there are to this @classname.
     // This @classname will free itself if @name reaches zero.
     FRefCount: Integer;
+    FBypassUpdate: Boolean;
     // @name makes sure that the @link(TSegment)s in @link(FSegments)
     // are correct.
     procedure FixSegments;
@@ -652,6 +658,9 @@ Type
 {$ENDIF}
     // @name is the area of a @classname.
     function Area: double;
+    function GetBypassUpdate: Boolean;
+    procedure SetBypassUpdate(const Value: Boolean);
+    property BypassUpdate: Boolean read GetBypassUpdate write SetBypassUpdate;
   public
     // @name destroys an instance of @classname. Don't call @name.
     // Call Free instead.
@@ -2225,6 +2234,11 @@ begin
   end;
 end;
 
+procedure TBoundary.SetBypassUpdate(const Value: Boolean);
+begin
+  FBypassUpdate := Value;
+end;
+
 procedure TBoundary.SetCounterClockwiseOrientation;
 var
   SegIndex: Integer;
@@ -2717,6 +2731,11 @@ end;
 function TBoundary.GetActiveNodeCount: Integer;
 begin
   result := Count - 1;
+end;
+
+function TBoundary.GetBypassUpdate: Boolean;
+begin
+  result := FBypassUpdate;
 end;
 
 function TBoundary.GetDisplayNumber: Integer;
@@ -12382,6 +12401,11 @@ begin
   result := FElements.Count;
 end;
 
+function TNode.GetBypassUpdate: Boolean;
+begin
+  result := FBypassUpdate;
+end;
+
 function TNode.GetLocation: TPoint2D;
 begin
   result := FLocation;
@@ -12853,6 +12877,11 @@ begin
       Exit;
     end;
   end;
+end;
+
+procedure TNode.SetBypassUpdate(const Value: Boolean);
+begin
+  FBypassUpdate := Value;
 end;
 
 procedure TNode.SetLocation(const Value: TPoint2D);

@@ -179,13 +179,17 @@ begin
     for ElementIndex := 0 to Mesh.ElementCount - 1 do
     begin
       AnElement := Mesh.Elements[ElementIndex];
+      AnElement.BypassUpdate := True;
       AnElement.ElementNumber := -1;
+      AnElement.BypassUpdate := False;
     end;
 
     for NodeIndex := 0 to Mesh.NodeCount - 1 do
     begin
       ANode := Mesh.Nodes[NodeIndex];
+      ANode.BypassUpdate := True;
       ANode.NodeNumber := NodeIndex;
+      ANode.BypassUpdate := False;
       Assert(ANode.ActiveElementCount > 0);
     end;
 
@@ -216,7 +220,9 @@ begin
       for NodeIndex := 0 to Mesh.NodeCount - 1 do
       begin
         ANode := Mesh.Nodes[NodeIndex];
+        ANode.BypassUpdate := True;
         ANode.NodeNumber := LevStr[NodeIndex].NewLabel;
+        ANode.BypassUpdate := False;
         NodeList.Add(ANode);
       end;
 
@@ -234,7 +240,9 @@ begin
           AnElement := ANode.ActiveElements[ElIndex];
           if AnElement.ElementNumber < 0 then
           begin
+            AnElement.BypassUpdate := True;
             AnElement.ElementNumber := ElementIndex;
+            AnElement.BypassUpdate := False;
             Inc(ElementIndex);
           end;
         end;

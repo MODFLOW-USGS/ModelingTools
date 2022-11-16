@@ -15232,6 +15232,7 @@ begin
                     raNone: ;
                     CuthillMcKee:
                       begin
+                        Mesh.CheckUpdateElevations;
                         CuthillMcKeeRenumbering.RenumberMesh(Mesh.Mesh2D);
 //                        if Mesh.MeshType = mt3D then
                         begin
@@ -15240,6 +15241,7 @@ begin
                       end;
                     raSloanRandolph:
                       begin
+                        Mesh.CheckUpdateElevations;
                         MeshRenumbering.RenumberMesh(Mesh.Mesh2D);
 //                        if Mesh.MeshType = mt3D then
                         begin
@@ -15256,11 +15258,13 @@ begin
                     raNone: ;
                     CuthillMcKee:
                       begin
+                        Mesh.CheckUpdateElevations;
                         CuthillMcKeeRenumbering.RenumberMesh(Mesh);
                         Mesh.SimpleRenumber;
                       end;
                     raSloanRandolph:
                       begin
+                        Mesh.CheckUpdateElevations;
                         MeshRenumbering.RenumberMesh(Mesh);
                         Mesh.SimpleRenumber;
                       end

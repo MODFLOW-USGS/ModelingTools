@@ -39,8 +39,11 @@ type
     property NodeNumber: integer read GetNodeNumber write SetNodeNumber;
     property Location: TPoint2D read GetLocation write SetLocation;
     property NodeType: TNodeType read GetNodeType;
+    function GetBypassUpdate: Boolean;
+    procedure SetBypassUpdate(const Value: Boolean);
+    property BypassUpdate: Boolean read GetBypassUpdate write SetBypassUpdate;
   end;
-  
+
   ITriangulatable = interface ['{FDDDC4DE-9C35-48A4-B2A1-E8D0956AADB2}']
     function GetLocation: TPoint2D;
     function GetCountTri: Integer;
@@ -87,6 +90,9 @@ type
     property ElementNumber: integer read GetElementNumber
       write SetElementNumber;
     property DisplayNumber: Integer read GetDisplayNumber;
+    function GetBypassUpdate: Boolean;
+    procedure SetBypassUpdate(const Value: Boolean);
+    property BypassUpdate: Boolean read GetBypassUpdate write SetBypassUpdate;
   end;
 
 //  IElement2D = interface;
