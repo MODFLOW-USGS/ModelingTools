@@ -201,7 +201,7 @@ begin
   ObsCount := 0;
   ObsNames := TStringList.Create;
   try
-    ObsNames.Assign(frameObservations.Grid.Columns[Ord(pocName)]);
+    ObsNames.Assign(frameObservations.Grid.Cols[Ord(pocName)]);
     ObsNames[0] := '';
     for RowIndex := 1 to frameObservations.seNumber.AsInteger do
     begin

@@ -10733,12 +10733,15 @@ const
 //               Enhancement: Added support for MODFLOW 6 Time Series files.
 //    '5.0.0.33' Bug fix: Fixed writing tied parameter data in PEST control
 //                file.
+//    '5.1.0.0'  --
+//    '5.1.0.1'  Bug fix: Fixed bug that caused a conversion error when closing
+//                the Object Properties dialog box.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.0.0';
+  IIModelVersion = '5.1.0.1';
 
 function IModelVersion: string;
 begin

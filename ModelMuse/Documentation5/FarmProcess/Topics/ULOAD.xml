@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-11-17T17:44:51.855-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title>ULOAD</title>
+  <body>
+    <header>
+      <para styleclass="Heading1">ULOAD</para>
+    </header>
+    <para styleclass="Normal">Universal loader, loads either a scalar, a vector, or array.</para>
+    <para styleclass="Normal">ULOAD uses <link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Input">GENERIC_INPUT</link> to specify the location of the input date</para>
+    <para styleclass="Normal">The input that is loaded is designated with the following shorthand:</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">INT &#160; &#160;=&gt; Integer; 1 ,2, -1, -2</para>
+    <para styleclass="Normal">FLOAT &#160;=&gt; Floating Point Number; 1., 1.0, 1.1, -1.5, 1E0, 1D0</para>
+    <para styleclass="Normal">CHAR &#160; =&gt; Character string/text/predefined words</para>
+    <para styleclass="Normal">DTIM &#160; =&gt; One-Water DateTime Objects ( any accepted date format, such as mm/dd/yyyy or mm/dd/yyyyThh:ss:mm or yyyy-mm-dd )</para>
+    <para styleclass="Normal">TSF &#160; &#160;=&gt; Time Series Files (either a single file or set of files) as described in Appendix 2, Time Series Files (TSF)</para>
+    <para styleclass="Normal">LU_TAB =&gt; LookUp Table, follows the input structure for a LookUp Table as described in Appendix 6, Lookup-Table Input Structure</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">ULOAD may optional load an INT record identifier (ID) before reading one row of input</para>
+    <para styleclass="Normal">(This is called List-Style Input).</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">ULOAD Input Examples =&gt; Data is loaded with ULOAD using the List-Style or Array-Style input.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;Note that the keywords &quot;TRANSIENT&quot;, &quot;STATIC&quot;, &quot;ARRAY&quot;, and &quot;LIST&quot; are discussed later under &quot;LAI =&gt; List-Array Input Style&quot;</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160;List-Style reads a set of records of the structure (record ID, property).</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; List-Style supports reading in more than one property per ID, such that (record ID, property1, property2, etc)</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; Typically the number of records is the same for each block.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; For example the WATER_BALANCE_SUBREGION Block reads NWBS records when using List-Style.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; The number of records MUST be well ordered, starting with 1 and sequentially increasing to the number or records.</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160;Array-Style reads in a NROW by NCOL array.</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; The following is an example ULOAD with NROW = 3, &#160;NCOL = 5, NWBS = 4, and NIRRIGATE = 2</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; The first example loads a single property used by the keyword &quot;DEFICIENCY_SCENARIO STATIC LIST&quot; ULOAD</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; (Note that the words &quot;STATIC&quot; and &quot;LIST&quot; are discussed later.)</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; DEFICIENCY_SCENARIO STATIC LIST ULOAD could have ULOAD as:</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;DEFICIENCY_SCENARIO STATIC LIST &#160; OPEN/CLOSE Input.txt</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;where Input.txt is: &#160;_________________________</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;| RecID &#160;DeficiencyFlag &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;| &#160; &#160;1 &#160; &#160; 1 &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;| &#160; &#160;2 &#160; &#160; 1 &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;| &#160; &#160;3 &#160; &#160; 1 &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;| &#160; &#160;4 &#160; &#160; 1 &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;---------------------------</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; or</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; DEFICIENCY_SCENARIO STATIC LIST &#160; INTERNAL</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;RecID &#160;DeficiencyFlag</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 1 &#160; &#160; 1</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 2 &#160; &#160; 1</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 3 &#160; &#160; 1</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 4 &#160; &#160; 1</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; If no GENERIC_INPUT keyword is detected and List-Style only load a single property,</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;then it will assume an ImpliedInternal Load (note the record ID is not read and is implied by the order of the input).</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; For example:</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; DEFICIENCY_SCENARIO STATIC LIST &#160;1 &#160;1 &#160;1 &#160;1</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; or more simply just:</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; DEFICIENCY_SCENARIO STATIC LIST &#160;CONSTANT 1</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; An example of List-Style with 2 properties loaded (e.g. EFFICIENCY keyword).</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; Record ID is the the WBS number, and represents where the properties are applied,</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; and after the RecID is the EFFICIENCY for each irrigation type for that WBS.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; EFFICIENCY STATIC LIST &#160;INTERNAL</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;RecID &#160;IRR1 &#160;IRR2</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 1 &#160; &#160;0.6 &#160; 0.8</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 2 &#160; &#160;0.6 &#160; 0.8</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 3 &#160; &#160;0.6 &#160; 0.8</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 4 &#160; &#160;0.6 &#160; 0.8</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; Array-Style reads NROW by NCOL values</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; to apply properties spatially rather then through the record ID</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; The keyword EFFICIENCY supports both List-Style and Array-Style.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; The following is Array-Style:</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; EFFICIENCY STATIC ARRAY &#160;INTERNAL</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0.6 &#160;0.6 &#160;0.6 &#160;0.8 &#160;0.8</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0.6 &#160;0.6 &#160;0.6 &#160;0.8 &#160;0.8</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0.6 &#160;0.6 &#160;0.6 &#160;0.8 &#160;0.8</para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

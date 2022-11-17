@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-11-17T17:39:16.194-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title>Input Options</title>
+  <body>
+    <header>
+      <para styleclass="Heading1">Input Options</para>
+    </header>
+    <para styleclass="Normal">The following is a brief description of the shorthand notation and input structures</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">This is a full listing of all keywords, however some are optional and use default values when not specified.</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">[ ] are used to nest optional arguments and keywords used in the input</para>
+    <para styleclass="Normal">{ } are used to nest arguments, where one must be chosen</para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

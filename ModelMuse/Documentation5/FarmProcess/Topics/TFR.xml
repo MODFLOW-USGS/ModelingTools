@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-11-17T17:46:25.290-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title>TFR</title>
+  <body>
+    <header>
+      <para styleclass="Heading1">TFR</para>
+    </header>
+    <para styleclass="Normal">Transient File Reader &#160; -- Read when the keyword &quot;TRANSIENT&quot; is present</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">TFR is a file that contains on each uncommented row a ULOAD that specifies the stress period (SP) input.</para>
+    <para styleclass="Normal">The TFR file is opened with GENERIC_INPUT, which supports all its keywords except INTERNAL.</para>
+    <para styleclass="Normal"> &#160; &#160;--Note that that is the TFR cannot be loaded with INTERNAL, but within the TFR a ULOAD may use INTERNAL.</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160;For example a TFR could be opened with: OPEN/CLOSE &#160;TFR.txt</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160;The general structure of a TFR is: _____________________</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;ULOAD &#160; # SP 1 &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;ULOAD &#160; # SP 2 &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; Blank lines are ignored and skipped</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;ULOAD &#160; # SP 3 &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;ULOAD &#160; # SP 4 &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;# Comment &#160; &#160; &#160; &#160;| &#160; Line is ignored cause its commented</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;ULOAD &#160; # SP 5 &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;ULOAD &#160; # SP 6 &#160; | &#160;==&gt; and so forth for each stress period</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; ---------------------</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160;If a TFR file is opened with DATAFILE or DATAUNIT, then it is assumed that the input data directly resides in the file.</para>
+    <para styleclass="Normal"> &#160; &#160; This file is called a Direct Data File (DDF), which bypasses the need to specify for each stress period the location of the input.</para>
+    <para styleclass="Normal"> &#160; &#160; The closest equivalent would be as if a TFR was specified with all its ULOADS with INTERNAL, but the lines that contained INTERNAL are deleted.</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160;Within the TFR each ULOAD supports the following keywords:</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;[SFAC] &#160; &#160; &#160;=&gt; Optional keyword to indicate that advanced scale factors are applied to the keyword on the next line (that is the next stress periods input)</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;SKIP &#160; &#160; &#160; &#160;=&gt; Input is skipped and automatically set to zero (NULL works as well)</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;CONSTANT &#160; &#160;=&gt; Input is set to a single value that is read after the word CONSTANT ==&gt; CONSTANT 5.5</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;INTERNAL &#160; &#160;=&gt; Input is on subsequent lines</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;OPEN/CLOSE &#160;=&gt; Input within the file name specified after OPEN/CLOSE.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;File is opened in memory, input loaded from start of file and then is closed once loaded. If file is reopened with OPEN/CLOSE then it loads from the first line.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;DATAFILE &#160; &#160;=&gt; Input within the file name specified after DATAFILE.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;First call of DATAFILE opens in memory, input loaded from start of file, and position within file remains until file is loaded again and the file remains open until simulation ends.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;Subsequent calls to the same DATAFILE will continue loading from where the last load ended.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;EXTERNAL &#160; &#160;=&gt; Input within the unit number specified after EXTERNAL, which is specified in the name file as &quot;DATA unit&quot; or &quot;DATA(BINARY) unit&quot;. This is equivalent to DATAFILE except the file is declared in the NAME file and referenced by unit number.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;DATAUNIT &#160; &#160;=&gt; Same as EXTERNAL</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;REPEAT &#160; &#160; &#160;=&gt; Reuse previously loaded input, any previously applied scale factors are not carried forward</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;RELOAD &#160; &#160; &#160;=&gt; Move previously used file to first line and load input from the start. Previous file must have been opened with DATAFILE, DATAUNIT, OR EXTERNAL</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160;LOAD_NEXT &#160; =&gt; Load previously used file to at its current location with the file. &#160; &#160;Previous file must have been opened with DATAFILE, DATAUNIT, OR EXTERNAL</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">The following is an example TFR file that is read for the keyword CROP_COEFFICIENT with NCROP = 2:</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; CROP_COEFFICIENT &#160;TRANSIENT LIST &#160;OPEN/CLOSE &#160; TFR.txt</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; where TFR.txt is: &#160;____________________________________________________</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;INTERNAL &#160; # SP 1 &#160;- ULOAD using INTERNAL keyword |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;1 &#160; &#160; &#160;0.9 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;2 &#160; &#160; &#160;0.6 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;INTERNAL &#160; # SP 2 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;1 &#160; &#160; &#160;1.1 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;2 &#160; &#160; &#160;0.7 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;INTERNAL &#160; # SP 3 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;1 &#160; &#160; &#160;1.2 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;2 &#160; &#160; &#160;0.8 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; ------------------------------------------------------</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; If the TFR is opened with DATAFILE or DATAUNIT then it is a Direct Data File (DDF)</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; CROP_COEFFICIENT TRANSIENT LIST &#160;DATAFILE &#160; DDF.txt</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; where DDF.txt is: &#160;______________________________________________________________________________________</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;1 &#160; &#160; &#160;0.9 &#160;# SP 1 &#160;- Note the data is just directly in file and no ULOAD keywords |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;2 &#160; &#160; &#160;0.6 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;1 &#160; &#160; &#160;1.1 &#160;# SP 2 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;2 &#160; &#160; &#160;0.7 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;1 &#160; &#160; &#160;1.2 &#160;# SP 3 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;2 &#160; &#160; &#160;0.8 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; ---------------------------------------------------------------------------------------</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; ***Note that a Direct Data File (DDF) has the input contents concatenated into one contiguous file.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; This option mimics the original FMP1-3 input style that was often used</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; by specifying EXTERNAL Unit for each stress period input.</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">The power behind the TFR keywords is they serve as directives on how to load the input data.</para>
+    <para styleclass="Normal">The following example uses DDF.txt, but how the data is interpreted is defined by a TFR</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; CROP_COEFFICIENT &#160;TRANSIENT LIST &#160;OPEN/CLOSE &#160; TFR2.txt</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; where TFR2.txt is: _________________________________________________________________________________________</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;DATAFILE ./DDF.txt &#160; # SP 1 &#160;- Open DDF.txt, load NCROP records (2 lines) &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # &#160; &#160; &#160; &#160; and keep file open in memory. &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # &#160; &#160; &#160; &#160; The current read point is just before the SP2 input. &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;DATAFILE ./DDF.txt &#160; # SP 2 &#160;- DDF.txt is open and in memory, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # &#160; &#160; &#160; &#160; so read from current read point, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # &#160; &#160; &#160; &#160; which is the SP 2 input &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;LOAD_NEXT &#160; &#160; &#160; &#160; &#160; &#160;# SP 3 &#160;- Same effect as DATAFILE ./DDF.txt &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # &#160; &#160; &#160; &#160; Tells TFR to look at previously opened document &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # &#160; &#160; &#160; &#160; and continue with read, which is the SP 3 input &#160; &#160; &#160; &#160;|</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;RELOAD &#160; &#160; &#160; &#160; &#160; &#160; &#160; # SP 4 &#160;- Move to first line of previously opened file (DDF.txt) |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # &#160; &#160; &#160; &#160; then load the SP4 input (defined as SP 1 in DDF.txt) &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; -----------------------------------------------------------------------------------------|</para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

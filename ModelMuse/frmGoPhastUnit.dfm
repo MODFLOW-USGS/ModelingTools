@@ -19,7 +19,7 @@ inherited frmGoPhast: TfrmGoPhast
   OnResize = FormResize
   ExplicitWidth = 798
   ExplicitHeight = 614
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
     Left = 0
@@ -673,7 +673,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 208
+      Left = 465
       Top = 130
       Width = 212
       Height = 28
@@ -775,7 +775,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 433
+      Left = 208
       Top = 130
       Width = 244
       Height = 28
@@ -952,7 +952,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tlbMesh: TToolBar
-      Left = 183
+      Left = 121
       Top = 162
       Width = 138
       Height = 28
@@ -1023,7 +1023,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tlb3dViewMesh: TToolBar
-      Left = 121
+      Left = 272
       Top = 162
       Width = 49
       Height = 28

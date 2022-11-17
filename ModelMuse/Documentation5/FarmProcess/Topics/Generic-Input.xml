@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-11-17T17:40:36.888-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title>Generic Input</title>
+  <body>
+    <header>
+      <para styleclass="Heading1">Generic Input</para>
+    </header>
+    <para styleclass="Normal">Specify name of input &#160;file, primary keywords supported are</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; CONSTANT &#160; &#160;Value ==&gt; If allowed, then indicates that Value is read and used as input</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; INTERNAL &#160; &#160; &#160; &#160; &#160;==&gt; Read input on subsequent lines</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; OPEN/CLOSE &#160;file &#160;==&gt; Open &quot;file&quot;, load input, then close the file.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; DATAFILE &#160; &#160;file &#160;==&gt; Open &quot;file&quot;, load input, keep current read position in memory and file remains open until simulation ends. If file is a Transient File Reader (TFR) then the DATAFILE indicates input is directly loaded rather than looking for TFR directives.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; EXTERNAL &#160; &#160;unit &#160;==&gt; Load input on unit number &quot;unit&quot;</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; DATAUNIT &#160; &#160;unit &#160;==&gt; Load input on unit number &quot;unit&quot;, for TFR has same effect as a DATAFILE, but uses the unit number.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; SKIP or NULL &#160; &#160; ==&gt; Ignores file I/O</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; implied_internal &#160;==&gt; Not a keyword ==&gt; Special case when no keyword is found, then input is assumed to be on current line.</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">GENERIC_INPUT has a set of post-keywords that are read after the primary keyword.</para>
+    <para styleclass="Normal">The post-keywords are:</para>
+    <para styleclass="Normal"> &#160; &#160; &#160;SF Scale &#160; &#160;==&gt; &#160;Reads in the number Scale and multiplies it to the input within the GENERIC_INPUT file.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; The post-keyword &quot;SF&quot; is optional and if only a number is found, then it is treated as SCALE</para>
+    <para styleclass="Normal"> &#160; &#160; &#160;BUFFER BUF &#160;==&gt; &#160;Preload input file into BUF kilobytes of RAM. If not specified, then default value is 32 KB. BUF should not be larger than 1024 KB.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160;REWIND &#160; &#160; &#160;==&gt; &#160;If file is already opened from EXTERNAL, DATAFILE, or DATAUNIT, then rewind file to the first line. Otherwise, do nothing.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160;DIM &#160; &#160;N &#160; &#160;==&gt; &#160;If input supports a DIMENSION specification, then N overrides the default DIM. For example, if GENERIC_INPUT is opening a TFR, then DIM N will override the buffer line length used for identifying keywords and loading ImpliedInternal input (note the TFR default is 700 characters).</para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>
