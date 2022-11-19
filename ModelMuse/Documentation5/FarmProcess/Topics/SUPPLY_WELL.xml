@@ -1,9 +1,273 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="" lasteditedby="Richard" modified="2022-11-17T17:28:30.022-05:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T12:08:06.975-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SUPPLY_WELL</title>
   <body>
-    <header><para styleclass="Heading1">SUPPLY_WELL</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1">SUPPLY_WELL</para>
+    </header>
+    <para styleclass="Normal">Optional block, but if specified then only</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;{TIME FRAME, LINEFEED WBS, LINEFEED CAPACITY} is required, which specifies the Supply Wells</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;The rest of the keywords provide output files, or modify the defined Supply Wells</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">OUTPUT OPTIONS (optional)</para>
+    <para styleclass="Normal"> &#160; The following keywords result in an output file that contains information about the SUPPLY_WELLs</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT BYWELL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summary Supply Well output for each active well</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT ByWBS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summary Supply Well output by WBS</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT ByMNW]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summary Supply Well output for or MNW2-Linked Wells</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT LIST]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">Echo supply well results to LIST file (not recommended)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT INPUT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Echo supply well input to LIST file</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT SMOOTHING]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">If smoothing is enabled, then output smooth effect to file</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">Global Keywords (optional)</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NO_QMAXRESET]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">NO_QMAXRESET &#160;(disables QMAXRESET)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[QMAXRESET]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[ByWBS <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link>]</para>
+          <para styleclass="Normal">QMAXRESET &#160;(default, even when not specified)</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;Indicates that MNW2 linked wells should have their</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;max capacities reset every time step instead of every stress period</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; --Note that MNW2 updates the maximum capacity every solver iteration</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; to represent the potential production of the well</para>
+          <para styleclass="Normal"> &#160; &#160; Keyword can be specified by WBS, where a 1 indicates it is enabled for WBS, and 0 is disabled.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NOCIRNOQ]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[ByWBS <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link>]</para>
+          <para styleclass="Normal">NOCIRNOQ</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;Indicates wells will only provide groundwater</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;if the above surface demand is greater than zero</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;That is: Zero demand for surface model cell above</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; =&gt; Zero Pumping for wells beneath surface cell</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; --This is best for virtual wells that only supply water to the land surface they are underneath</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SMOOTH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{ByFRACTION,ByTHICK} {ByWBS,ByLayer} <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal">SMOOTHING allows reduction of NON-MWN2 linked wells when the water table approaches the bottom of the model cell</para>
+          <para styleclass="Normal"> &#160; ByThick &#160; &#160;specifies minimum thickness in model units &#160; before smoothing occurs</para>
+          <para styleclass="Normal"> &#160; ByFraction specifies minimum fraction of cell thickness before smoothing occurs</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;ByThick = &#160;ByFrac*(Top_Cell - Bot_Cell)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; ByWBS &#160;indicates that <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> Float numbers read read by <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal"> &#160; ByLayer indicates that NLAY &#160;Float numbers read read by <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRORATE_DEMAND]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{ByAverage,ByCapacity} &#160;[ByWBS <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link>]</para>
+          <para styleclass="Normal">When the demanded water is less than total supply (QMAX) PROTATE specifies how much each well pumps</para>
+          <para styleclass="Normal"> &#160; ByCapacity uses the ratio of the demand to the total well capacity &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; --more Q for large &#160; capacity wells</para>
+          <para styleclass="Normal"> &#160; ByAverage &#160;uses the average demanded rate per well to determine each wells capacity--more Q for smaller capacity wells</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">If not specified then ByCapacity is the default</para>
+          <para styleclass="Normal"> &#160; ***Similar input as QMAXRESET</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[MNW_AUTOMATIC_ON or MNW_AUTOMATIC_OFF]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[ByWBS <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link>]</para>
+          <para styleclass="Normal">MNW2 Modification Keywords</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">MNW_AUTOMATIC allows for FMP to check if the MNW2 if the MNW2-FMP linked well is enabled in MNW2.</para>
+          <para styleclass="Normal"> &#160;When a SUPPLY_WELL is enabled in the FMP input and linked to MNW2, it should also be enabled in MNW2 with a Qdes = 0.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;The keyword MNW_AUTOMATIC_ON tells FMP that it can enable any linked wells in MNW2 when they are enabled in FMP.</para>
+          <para styleclass="Normal"> &#160; &#160; The MNW2 wells remain active with a Qdes = 0 until the simulation ends.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;The keyword MNW_AUTOMATIC_OFF tells FMP that it can disable any linked wells in MNW2 when they are removed in FMP (no longer provide supply).</para>
+          <para styleclass="Normal"> &#160; &#160; If a MNW2 well is active, but FMP no longer has it as a supply well, then this will disable it from MNW2 as (no intraborehole flow calculation)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;Ideally it is recommend to have MNW2 activate its linked wells and have them remain active with the drill and destroy dates of the well.</para>
+          <para styleclass="Normal"> &#160; &#160;FMP would then only be linked to the well when they provide groundwater supply.</para>
+          <para styleclass="Normal"> &#160; &#160;These options provide a convenient method to simplify input when the drill and destroy dates are coincident with the FMP supply dates.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[MNW_PUMP_SPREAD]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{BY_COND, BY_COUNT, BY_TOP, ByWBS <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link>}</para>
+          <para styleclass="Normal">MNW_PUMP_SPREAD applies to only FMP-MNW2 Linked wells.</para>
+          <para styleclass="Normal"> &#160;It determines what MNW nodes to assign desired (demanded) pumpage too.</para>
+          <para styleclass="Normal"> &#160;It should have no effect on the final/converged solution,</para>
+          <para styleclass="Normal"> &#160; &#160; but it may improve convergence speed and thus reduce simulation time.</para>
+          <para styleclass="Normal"> &#160;The following are the three methods that the pumpage can initially be spread:</para>
+          <para styleclass="Normal"> &#160; &#160; 0 BY_COND &#160; &#160; &#160;-- spreads pumpage based on each nodes conductance (Default when not specified)</para>
+          <para styleclass="Normal"> &#160; &#160; 1 BY_COUNT &#160; &#160; -- spreads pumpage based on the node count (average rate per node)</para>
+          <para styleclass="Normal"> &#160; &#160; 2 BY_TOP &#160; &#160; &#160; -- assigns the total pumpage to the upper most node (original FMP3 method)</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; ByWBS ULOAD &#160;-- uses ULOAD to read <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> INT, which must be 0, 1, or 2.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; --Based on the value will cause the associated farm to follow one of the</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; previously mentioned keywords (note the number to the left of each keyword)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[INPUT_OPTION XY and/or INPUT_OPTION {ELEVATION,DEPTH}]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">Input Modification Keywords (optional)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">By default input uses Row, Column, and Layer to identify location</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">This can be overwritten with:</para>
+          <para styleclass="Normal">INPUT_OPTION XY =&gt; Row is loaded as an x-coordinate and Column is loaded as an x-coordinate</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">INPUT_OPTION ELEVATION =&gt; Layer is loaded as an elevation located within a model cell</para>
+          <para styleclass="Normal">INPUT_OPTION DEPTH &#160; &#160; =&gt; Layer is loaded as a depth below the ground surface elevation</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SFAC]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[ByWBS] <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal">Optional Qcapacity Scale FACTOR</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Scale factor to apply to to well capacities</para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link> is a Float, that can be an implied internal, or LIST input with keyword.</para>
+          <para styleclass="Normal"> &#160; &#160;Expects to read one scale factor, but if ByWBS is used, then <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> scale factors are read</para>
+          <para styleclass="Normal"> &#160; &#160;and applied by farm association.</para>
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">REQUIRED INPUT</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[{TIME FRAME, LINEFEED WBS, LINEFEED CAPACITY}]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">Must chose: TIME FRAME, WBS LineFeed, Capacity LineFeed</para>
+          <para styleclass="Normal">Then follow the keyword with appropriate WELL_INPUT</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> All well input a minimum contains:</para>
+          <para styleclass="Normal"> &#160; Well_Name =&gt; &#160;Is a character string to identify the well (20 character max)</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;If supply well is linked to MNW2, then the name must be the</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;same as the MNW2 WELLID it is linked to</para>
+          <para styleclass="Normal"> &#160; WBS_ID &#160; &#160;=&gt; &#160;The WBS that the well provides supply to</para>
+          <para styleclass="Normal"> &#160; LAY &#160; &#160; &#160; =&gt; &#160;Is the layer that the supply well pumps from.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;If set to 0 or &quot;MNW&quot;, then Well_Name points to</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;the MNW2 WELLID that does the actual pumping</para>
+          <para styleclass="Normal"> &#160; ROW &#160; &#160; &#160; =&gt; &#160;Row &#160; &#160;location of supply well (not used if LAY = MNW)</para>
+          <para styleclass="Normal"> &#160; COL &#160; &#160; &#160; =&gt; &#160;Column location of supply well (not used if LAY = MNW)</para>
+          <para styleclass="Normal"> &#160; QCap &#160; &#160; &#160;=&gt; &#160;Maximum capacity of the supply well (L^3/T). Well cannot pump more than this amount</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> For all cases if LAY = 0 or &quot;MNW&quot; then FMP-MWN2 link occurs</para>
+          <para styleclass="Normal"> &#160; &#160;Well_Name must equal to a WELLID defined in the MWN2 package</para>
+          <para styleclass="Normal"> &#160; &#160;The pumpage from Well_Name is then handled by MNW2</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[WELL_INPUT =>]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">WELL_INPUT =&gt;</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">TIME FRAME (recommended option):</para>
+          <para styleclass="Normal"> Either specify input on subsequent lines as:</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; Well_Name WBS_ID LAY ROW COL QCapacity Date_Start Date_End</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; --Date_Start/Date_End can either be a stress period number or calendar data:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; mm/dd/yyyy, yyyy-mm-dd, or mm/yyyy</para>
+          <para styleclass="Normal"> or</para>
+          <para styleclass="Normal"> &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Input">GENERIC_INPUT</link>, one per line, of file that contain on each row:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; Well_Name WBS_ID LAY ROW COL QCapacity Date_Start Date_End</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">LINEFEED WBS:</para>
+          <para styleclass="Normal"> On subsequent lines specify as many <link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Input">GENERIC_INPUT_OptKey</link> FeedFiles</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> Each FeedFile static information specifies:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; Well_Name LAY ROW COL QCapacity</para>
+          <para styleclass="Normal"> and Temporal Input is the WBS/FARM ID as an INT.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0 or NaN indicates well is not in use for Stress Period</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">LINEFEED CAPACITY:</para>
+          <para styleclass="Normal"> On subsequent lines specify a WBS/FARM ID followed by a GENERIC_INPUT_OptKey FeedFile</para>
+          <para styleclass="Normal"> The WBS ID indicates what WBS the FeedFile provides wells to</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> Each FeedFile static information specifies:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; Well_Name LAY ROW COL</para>
+          <para styleclass="Normal"> and Temporal Input is the QCapacity as an Float.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; NaN indicates well is not in use for Stress Period</para>
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
   </body>
 </topic>

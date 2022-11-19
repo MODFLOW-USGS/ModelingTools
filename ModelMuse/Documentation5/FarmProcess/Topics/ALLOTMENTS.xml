@@ -1,9 +1,37 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="" lasteditedby="Richard" modified="2022-11-17T17:28:30.180-05:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T11:48:50.012-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>ALLOTMENTS</title>
   <body>
-    <header><para styleclass="Heading1">ALLOTMENTS</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1">ALLOTMENTS</para>
+    </header>
+    <para styleclass="Normal">Optional Block</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">Define WBS supply limits</para>
+    <para styleclass="Normal"> All are optional and LIST is loaded with WBS as record ID</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> &#160;Secondary keyword indicates how input units:</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;RATE (L^3/T) volumetric rate limit</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;VOLUME (L^3) per stress period</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;HEIGHT (L) &#160; per stress period - multiplied by WBS irrigated area to get volume per stress period</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SURFACE_WATER]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{HEIGHT,VOLUME,RATE} &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">Surface water allotments to limit total surface water supply</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[GROUNDWATER]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{HEIGHT,VOLUME,RATE} &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">Groundwater allotments for limiting total groundwater pumpage</para>
+        </td>
+      </tr>
+    </table></para>
   </body>
 </topic>

@@ -242,7 +242,8 @@ begin
   OK := False;
   for index := 0 to chklstDataToImport.Items.Count - 1 do
   begin
-    OK := chklstDataToImport.Checked[index];
+    OK := chklstDataToImport.Checked[index]
+      and chklstDataToImport.ItemEnabled[index];
     if OK then
     begin
       break;
@@ -613,7 +614,8 @@ begin
     DataSetIndex := 0;
     for ItemIndex := 0 to chklstDataToImport.Items.Count - 1 do
     begin
-      if chklstDataToImport.Checked[ItemIndex] then
+      if chklstDataToImport.Checked[ItemIndex]
+        and chklstDataToImport.ItemEnabled[ItemIndex] then
       begin
         ADataArray := NewDataSets[DataSetIndex];
         Inc(DataSetIndex);
@@ -1330,7 +1332,8 @@ begin
   ShouldEnable := False;
   for index := 0 to chklstDataToImport.Items.Count - 1 do
   begin
-    ShouldEnable := chklstDataToImport.Checked[index];
+    ShouldEnable := chklstDataToImport.Checked[index]
+      and chklstDataToImport.ItemEnabled[index];
     if ShouldEnable then
     begin
       Break;
@@ -1357,11 +1360,10 @@ var
   MeshType: TMeshType;
   Vectors: TVectorCollection;
   VelocityDataSets: TList;
-  procedure AssignCommonProperties(Prefix: string);
+  procedure AssignCommonProperties(Prefix: string; Out VItem: TVectorItem);
   var
     PriorItem: TVectorItem;
     DataSet: TDataArray;
-    VItem: TVectorItem;
   begin
     VItem := Vectors.Add as TVectorItem;
     DataSet := VelocityDataSets[0];
@@ -1394,7 +1396,8 @@ var
   begin
     for index := StartIndex to EndIndex do
     begin
-      if chklstDataToImport.Checked[Ord(index)] then
+      if chklstDataToImport.Checked[Ord(index)]
+        and chklstDataToImport.ItemEnabled[Ord(index)] then
       begin
         case index of
           iiXVel:
@@ -1494,14 +1497,14 @@ var
         begin
           if VelocityDataSets.Count = 2 then
           begin
-            AssignCommonProperties(Prefix);
+            AssignCommonProperties(Prefix, VItem);
           end;
         end;
       mt3D:
         begin
           if VelocityDataSets.Count = 3 then
           begin
-            AssignCommonProperties(Prefix);
+            AssignCommonProperties(Prefix, VItem);
             DataSet := VelocityDataSets[2];
             VItem.Vectors.ZVelocityName := DataSet.Name;
           end;
@@ -1516,7 +1519,6 @@ begin
   try
     MeshType := frmGoPhast.PhastModel.SutraMesh.MeshType;
     Vectors := frmGoPhast.PhastModel.VelocityVectors;
-
     AssignVelocityItems(FirstVelocityElementItem, LastVelocityElementItem,'');
 
     VelocityDataSets.Clear;
@@ -1701,7 +1703,8 @@ var
 begin
   for index := iiPressure to iiU do
   begin
-    if chklstDataToImport.Checked[Ord(index)] then
+    if chklstDataToImport.Checked[Ord(index)]
+      and chklstDataToImport.ItemEnabled[Ord(index)] then
     begin
       case index of
         iiPressure:
@@ -1765,7 +1768,8 @@ var
 begin
   for index := FirstNodeItem to LastNodeItem do
   begin
-    if chklstDataToImport.Checked[Ord(index)] then
+    if chklstDataToImport.Checked[Ord(index)]
+      and chklstDataToImport.ItemEnabled[Ord(index)] then
     begin
       case index of
         iiPressure:
@@ -1879,7 +1883,8 @@ var
 begin
   for ItemIndex := 0 to chklstDataToImport.Items.Count - 1 do
   begin
-    if chklstDataToImport.Checked[ItemIndex] then
+    if chklstDataToImport.Checked[ItemIndex]
+      and chklstDataToImport.ItemEnabled[ItemIndex] then
     begin
 
       NewName := GenerateNewName(chklstDataToImport.Items[ItemIndex] + '_'
@@ -1977,7 +1982,8 @@ begin
   DSIndex := 0;
   for ItemIndex := FirstVelocityElementItem to LastDarcyVelocityElementItem do
   begin
-    if chklstDataToImport.Checked[Ord(ItemIndex)] then
+    if chklstDataToImport.Checked[Ord(ItemIndex)]
+      and chklstDataToImport.ItemEnabled[Ord(ItemIndex)] then
     begin
       DataArray := nil;
       case ItemIndex of
@@ -2096,7 +2102,8 @@ begin
   begin
     DataArray := nil;
     ValueArray := nil;
-    if chklstDataToImport.Checked[Ord(ItemIndex)] then
+    if chklstDataToImport.Checked[Ord(ItemIndex)]
+      and chklstDataToImport.ItemEnabled[Ord(ItemIndex)] then
     begin
       case ItemIndex of
         iiPressure:
@@ -2146,7 +2153,8 @@ begin
   DSIndex := 0;
   for ItemIndex := FirstNodeItem to LastNodeItem do
   begin
-    if chklstDataToImport.Checked[Ord(ItemIndex)] then
+    if chklstDataToImport.Checked[Ord(ItemIndex)]
+      and chklstDataToImport.ItemEnabled[Ord(ItemIndex)] then
     begin
       DataArray := nil;
       case ItemIndex of
@@ -2265,8 +2273,10 @@ begin
     if chklstDataToImport.Checked[Ord(iiPressure)]
       or chklstDataToImport.Checked[Ord(iiU)]
       or chklstDataToImport.Checked[Ord(iiSaturation)]
-      or chklstDataToImport.Checked[Ord(iiLiquidSaturation)]
-      or chklstDataToImport.Checked[Ord(iiIceSaturation)]
+      or (chklstDataToImport.Checked[Ord(iiLiquidSaturation)]
+        and chklstDataToImport.ItemEnabled[Ord(iiLiquidSaturation)])
+      or (chklstDataToImport.Checked[Ord(iiIceSaturation)]
+        and chklstDataToImport.ItemEnabled[Ord(iiIceSaturation)])
       then
     begin
       for index := 0 to FNodeReader.StoredResults.Count - 1 do
@@ -2314,9 +2324,12 @@ begin
     if chklstDataToImport.Checked[Ord(iiXVel)]
       or chklstDataToImport.Checked[Ord(iiYVel)]
       or chklstDataToImport.Checked[Ord(iiZVel)]
-      or chklstDataToImport.Checked[Ord(iiXDarcyVelocity)]
-      or chklstDataToImport.Checked[Ord(iiYDarcyVelocity)]
-      or chklstDataToImport.Checked[Ord(iiZDarcyVelocity)]
+      or (chklstDataToImport.Checked[Ord(iiXDarcyVelocity)]
+        and chklstDataToImport.ItemEnabled[Ord(iiXDarcyVelocity)])
+      or (chklstDataToImport.Checked[Ord(iiYDarcyVelocity)]
+        and chklstDataToImport.ItemEnabled[Ord(iiYDarcyVelocity)])
+      or (chklstDataToImport.Checked[Ord(iiZDarcyVelocity)]
+        and chklstDataToImport.ItemEnabled[Ord(iiZDarcyVelocity)])
       then
     begin
       StepList.Clear;
@@ -2786,7 +2799,8 @@ begin
           ImportItems := [];
           for Index := 0 to chklstDataToImport.Count - 1 do
           begin
-            if chklstDataToImport.Checked[Index] then
+            if chklstDataToImport.Checked[Index]
+              and chklstDataToImport.ItemEnabled[Index] then
             begin
               Include(ImportItems, TImportItem(Index));
             end;
@@ -2874,7 +2888,8 @@ begin
           BoundaryImportItems := [];
           for ByteIndex := 0 to chklstDataToImport.Count - 1 do
           begin
-            if chklstDataToImport.Checked[ByteIndex] then
+            if chklstDataToImport.Checked[ByteIndex]
+              and chklstDataToImport.ItemEnabled[ByteIndex] then
             begin
               Include(BoundaryImportItems, ByteIndex);
             end;
@@ -2890,7 +2905,8 @@ begin
               TimeStep := FResultList[Index].TimeStep;
               for ByteIndex := 0 to chklstDataToImport.Count - 1 do
               begin
-                if chklstDataToImport.Checked[ByteIndex] then
+                if chklstDataToImport.Checked[ByteIndex]
+                  and chklstDataToImport.ItemEnabled[ByteIndex] then
                 begin
                   CCItem := TColorContourItem.Create;
                   FColorContourList.Add(CCItem);
@@ -2931,7 +2947,8 @@ begin
     begin
       for index := 0 to chklstDataToImport.Items.Count - 1 do
       begin
-        if chklstDataToImport.Checked[index] then
+        if chklstDataToImport.Checked[index]
+          and chklstDataToImport.ItemEnabled[index] then
         begin
           comboColorMesh.Items.Add(chklstDataToImport.Items[index]);
         end;

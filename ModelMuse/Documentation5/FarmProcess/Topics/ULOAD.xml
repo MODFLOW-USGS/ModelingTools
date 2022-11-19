@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-17T17:44:51.855-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T12:06:40.394-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>ULOAD</title>
   <body>
     <header>
@@ -15,7 +15,7 @@
     <para styleclass="Normal">CHAR &#160; =&gt; Character string/text/predefined words</para>
     <para styleclass="Normal">DTIM &#160; =&gt; One-Water DateTime Objects ( any accepted date format, such as mm/dd/yyyy or mm/dd/yyyyThh:ss:mm or yyyy-mm-dd )</para>
     <para styleclass="Normal">TSF &#160; &#160;=&gt; Time Series Files (either a single file or set of files) as described in Appendix 2, Time Series Files (TSF)</para>
-    <para styleclass="Normal">LU_TAB =&gt; LookUp Table, follows the input structure for a LookUp Table as described in Appendix 6, Lookup-Table Input Structure</para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LookUp-Table-Input-(LU_TAB)">LU_TAB</link> =&gt; LookUp Table, follows the input structure for a LookUp Table as described in Appendix 6, Lookup-Table Input Structure</para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal">ULOAD may optional load an INT record identifier (ID) before reading one row of input</para>
     <para styleclass="Normal">(This is called List-Style Input).</para>
@@ -26,12 +26,12 @@
     <para styleclass="Normal"> &#160; &#160; &#160;List-Style reads a set of records of the structure (record ID, property).</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; List-Style supports reading in more than one property per ID, such that (record ID, property1, property2, etc)</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; Typically the number of records is the same for each block.</para>
-    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; For example the WATER_BALANCE_SUBREGION Block reads NWBS records when using List-Style.</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; For example the WATER_BALANCE_SUBREGION Block reads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> records when using List-Style.</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; The number of records MUST be well ordered, starting with 1 and sequentially increasing to the number or records.</para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal"> &#160; &#160; &#160;Array-Style reads in a NROW by NCOL array.</para>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal"> &#160; &#160; &#160; &#160; The following is an example ULOAD with NROW = 3, &#160;NCOL = 5, NWBS = 4, and NIRRIGATE = 2</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; The following is an example ULOAD with NROW = 3, &#160;NCOL = 5, <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> = 4, and <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link> = 2</para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; The first example loads a single property used by the keyword &quot;DEFICIENCY_SCENARIO STATIC LIST&quot; ULOAD</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; (Note that the words &quot;STATIC&quot; and &quot;LIST&quot; are discussed later.)</para>

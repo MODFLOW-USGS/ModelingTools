@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2022-11-18T12:00:50.616-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title>Generic Output</title>
+  <body>
+    <header>
+      <para styleclass="Heading1">Generic Output</para>
+    </header>
+    <para styleclass="Normal">GENERIC_OUTPUT -- Specify name of output file, same keywords as <link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Input">GENERIC_INPUT</link>, but represent file to write too. INTERNAL will write to LIST, but is not recommended.</para>
+    <para styleclass="Normal">-- GENERIC_OUTPUT has a set of post-keywords that are read after the primary keyword.</para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
+      <li styleclass="Normal">BUFFER BUF &#160;==&gt; &#160;Write output file to RAM until it uses BUF kilobytes of memory and then write to file. If not specified, then default value is 32 KB. BUF should not be larger than 1024 KB. Note that output is written in BUF chunks to the hard drive.</li>
+      <li styleclass="Normal">SPLIT &#160;SPT &#160;==&gt; &#160;When file size exceeds SPT megabytes, start a new file with a sequential number appended to the file name. This results in large output files being broken into smaller pieces.</li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

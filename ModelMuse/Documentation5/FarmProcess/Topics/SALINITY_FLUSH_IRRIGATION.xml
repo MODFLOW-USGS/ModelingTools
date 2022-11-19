@@ -1,9 +1,221 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="" lasteditedby="Richard" modified="2022-11-17T17:28:30.530-05:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T12:17:21.163-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SALINITY_FLUSH_IRRIGATION</title>
   <body>
-    <header><para styleclass="Heading1">SALINITY_FLUSH_IRRIGATION</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1">SALINITY_FLUSH_IRRIGATION</para>
+    </header>
+    <para styleclass="Normal"> Optional block that specifies additional irrigation to flush salinity buildup</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">Keywords that begin with CROP read <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records for List-Style</para>
+    <para styleclass="Normal">Keywords that begin with WBS &#160;read <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> &#160;records for List-Style</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">OUTPUT OPTIONS --All Optional</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT BYFARM]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT BYFARM_BYCROP]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT ALL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT INPUT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[EXPRESSION_LINE_LENGTH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">INT</para>
+          <para styleclass="Normal">Salinity Demand reads in custom functions and keywords.</para>
+          <para styleclass="Normal">The EXPRESSION_LINE_LENGTH specifies an INT that represents the maximum</para>
+          <para styleclass="Normal">line length in characters that any expression or keyword uses</para>
+          <para styleclass="Normal">If not specified it defaults to 20 characters.</para>
+          <para styleclass="Normal">If you are unsure, then it is best to just set it to 100</para>
+          <para styleclass="Normal"> &#160; and an error will be raised if it is not large enough</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[EXPRESSION_VARIABLE_NEARZERO]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">FLOAT</para>
+          <para styleclass="Normal">To prevent any divide by zero errors a</para>
+          <para styleclass="Normal">minimum expression variable value may be set.</para>
+          <para styleclass="Normal">If the absolute value of this variable is less than this value, it is set to it.</para>
+          <para styleclass="Normal">If not specified then it is set to 0.0, which makes it have no effect</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[WBS_SUPPLY_SALT_CONCENTRATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-4]</para>
+          <para styleclass="Normal">WBS_SUPPLY_SALT_CONCENTRATION and WBS_IRRIGATION_UNIFORMITY</para>
+          <para styleclass="Normal"> &#160;read LIST input with <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> records (i.e. WBS ID)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Specify the source water supply salt concentration in PPM (mg/L) ***NOT MODEL UNITS!!!</para>
+          <para styleclass="Normal">The input is read as WBS ID, Non-Routed Delivery (NRD), Surface Water Delivery (SW), Groundwater Pumpage (GW), External Source.</para>
+          <para styleclass="Normal"> &#160;The External Source is only value for WBS Block DEFICIENCY_SCENARIO set to 0,</para>
+          <para styleclass="Normal"> &#160;which indicates external water is brought in to meet deficit demands</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[WBS_SUPPLY_SALT_CONCENTRATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-4]</para>
+          <para styleclass="Normal">WBS_SUPPLY_SALT_CONCENTRATION and WBS_IRRIGATION_UNIFORMITY</para>
+          <para styleclass="Normal"> &#160;read LIST input with <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> records (i.e. WBS ID)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Specify the source water supply salt concentration in PPM (mg/L) ***NOT MODEL UNITS!!!</para>
+          <para styleclass="Normal">The input is read as WBS ID, Non-Routed Delivery (NRD), Surface Water Delivery (SW), Groundwater Pumpage (GW), External Source.</para>
+          <para styleclass="Normal"> &#160;The External Source is only value for WBS Block DEFICIENCY_SCENARIO set to 0,</para>
+          <para styleclass="Normal"> &#160;which indicates external water is brought in to meet deficit demands</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[WBS_IRRIGATION_UNIFORMITY]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>]</para>
+          <para styleclass="Normal">The irrigation uniformity represents how evenly the</para>
+          <para styleclass="Normal"> &#160;irrigation method is spread across the root zone.</para>
+          <para styleclass="Normal"> &#160;It is specified from 0.0 to 1.0, with 1 being perfect, uniform spread</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROP_HAS_SALINITY_DEMAND]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">The following LAI inputs read LIST input with <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records (i.e. CROP ID)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">HAS_CROP_SALINITY_DEMAND is similar to IBOUND, which is an INT and</para>
+          <para styleclass="Normal">indicates if crop has a salinity irrigation demand calculated</para>
+          <para styleclass="Normal">If specified as a zero (0), then it does not have it, if it is non-zero then it does.</para>
+          <para styleclass="Normal"> &#160;ARRAY input is supported as NROW by NCOL, but if CROP Block LAND_USE_AREA_FRACTION MULTI is used, then it is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW by NCOL (multiple crops per model cell--one array per crop)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROP_SALINITY_TOLERANCE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">Specify each Crops salinity tolerance (ECe) in Electrical Conductivity (EC)</para>
+          <para styleclass="Normal">in units of deciSiemens per meter (dS/m) ***NOT MODEL UNITS!!!</para>
+          <para styleclass="Normal"> &#160; &#160; Note 1 dS/m = 640 ppm = 640 mg/L</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROP_MAX_LEACHING_REQUIREMENT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">The maximum leaching requirement is 1.0,</para>
+          <para styleclass="Normal">but this could result in a division by zero (RHOADES equation)</para>
+          <para styleclass="Normal">It may be any value between 0.0 and 0.9999</para>
+          <para styleclass="Normal">This allows the user to specify a maximum allowed leaching requirement.</para>
+          <para styleclass="Normal">If not specified then it is set to 0.99</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROP_LEACHING_REQUIREMENT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">CROP_LEACHING_REQUIREMENT and CROP_SALINITY_APPLIED_WATER read a <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> LIST that may be one of the following input:</para>
+          <para styleclass="Normal"> &#160; 1) FLOAT &#160; &#160; ==&gt; Specify its exact value</para>
+          <para styleclass="Normal"> &#160; 2) RHOADES &#160; ==&gt; Indicates that Rhoades equation is used</para>
+          <para styleclass="Normal"> &#160; 3) None &#160; &#160; &#160;==&gt; Indicates that evaluation is skipped (set to zero)</para>
+          <para styleclass="Normal"> &#160; 4) Custom Expression</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; Specify any equation that has a set of Predefined Variables (See bottom of this file)</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; Equation supports keywords and in-line IF as described in Appendix H</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; Any scale factors that are loaded are applied to the result of the equation</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;Example Custom Expressions:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;ECw/(5*ECe - ECw) &#160; &#160; &#160; &#160; # &lt;= RHOADS equation</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;(ETi/DU)/(1-LR) - ETi &#160; &#160; # &lt;= RHOADS equation</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;IF[ ETc &gt; ETr, (ECe/ECw)*LOG(CIR) + CIR, 0.1*CIR ]</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> CROP_LEACHING_REQUIREMENT is calculated first to specify a</para>
+          <para styleclass="Normal"> &#160; Crop&apos;s leaching requirement that is between 0.0 and MAX_LEACHING_REQUIREMENT</para>
+          <para styleclass="Normal"> &#160; RHOADES Equation ==&gt; ECw/(5*ECe - ECw)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROP_SALINITY_APPLIED_WATER]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">CROP_SALINITY_APPLIED_WATER is the extra water that must be applied to the crop in units of L^3/T (model units)</para>
+          <para styleclass="Normal"> &#160;Its result is added to the crops &quot;ADDED_DEMAND&quot; to include its irrigation as a salt flush.</para>
+          <para styleclass="Normal"> &#160;To force all the water into the ground, you must specify the WBS Block ADDED_DEMAND_RUNOFF_SPLIT close to Zero</para>
+          <para styleclass="Normal"> &#160;RHOADES Equation ==&gt; (ETi/DU)/(1-LR) - ETi</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal">Predefined Variables For Custom Equations for</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; CROP_LEACHING_REQUIREMENT &#160; and</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; CROP_SALINITY_APPLIED_WATER</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">Variable &#160;Description</para>
+    <para styleclass="Normal"> &#160;LR &#160; &#160; &#160;Leach requirement (-) ==&gt; Set by CROP_LEACHING_REQUIREMENT</para>
+    <para styleclass="Normal"> &#160;ECw &#160; &#160; Electrical conductivity of irrigation water (dS/m)</para>
+    <para styleclass="Normal"> &#160;ECe &#160; &#160; Crop Electrical conductivity tolerance (dS/m)</para>
+    <para styleclass="Normal"> &#160;CU &#160; &#160; &#160;Potential consumptive use of crop (total potential consumption of water) (L3/T)</para>
+    <para styleclass="Normal"> &#160;ETr &#160; &#160; Reference EvapoTranspiration</para>
+    <para styleclass="Normal"> &#160;ETc &#160; &#160; Crop evapotranspiration from precipitation and irrigation (L3/T) --if irrigation is fully met</para>
+    <para styleclass="Normal"> &#160;ETp &#160; &#160; Crop evapotranspiration from precipitation (L3/T)</para>
+    <para styleclass="Normal"> &#160;ETi &#160; &#160; Crop evapotranspiration from irrigation (L3/T)</para>
+    <para styleclass="Normal"> &#160;CIR &#160; &#160; Crop irrigation requirement = ETi (water required to meet consumptive use - under perfect efficiency &#160;--EFF=1)(L3/T)</para>
+    <para styleclass="Normal"> &#160;DMD &#160; &#160; Crop irrigation demand &#160; &#160; &#160; &#160; &#160; &#160;(water required to meet consumptive use - includes efficiency of irrigation)(L3/T)</para>
+    <para styleclass="Normal"> &#160;P &#160; &#160; &#160; Precipitation that falls on crop (L3/T)</para>
+    <para styleclass="Normal"> &#160;AREA &#160; &#160;Crop area</para>
+    <para styleclass="Normal"> &#160;Tgw &#160; &#160; Transpiration from groundwater-root uptake</para>
+    <para styleclass="Normal"> &#160;Tp &#160; &#160; &#160;Transpiration from precipitation</para>
+    <para styleclass="Normal"> &#160;Ti &#160; &#160; &#160;Transpiration from irrigation</para>
+    <para styleclass="Normal"> &#160;EFF &#160; &#160; Irrigation efficiency</para>
+    <para styleclass="Normal"> &#160;ROOT &#160; &#160;Crop root depth</para>
+    <para styleclass="Normal"> &#160;CapF &#160; &#160;Capillary Fringe Depth/Length</para>
+    <para styleclass="Normal"> &#160;DP_p &#160; &#160;Deep percolation from precipitation</para>
+    <para styleclass="Normal"> &#160;DP_i &#160; &#160;Deep percolation from irrigation if irrigated demand is fully met (includes added demands, but not deep percolation from salinity irrigation).</para>
+    <para styleclass="Normal"> &#160;DP &#160; &#160; &#160;Total potential deep percolation from precipitation and irrigation</para>
+    <para styleclass="Normal"> &#160;ADRS &#160; &#160;Crop Added Demand Runoff Split (ADDED_DEMAND_RUNOFF_SPLIT)</para>
+    <para styleclass="Normal"> &#160;ADMD &#160; &#160;Sum of other Added Demands for the crop</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
   </body>
 </topic>

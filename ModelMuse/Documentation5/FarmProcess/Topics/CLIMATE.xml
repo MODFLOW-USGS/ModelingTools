@@ -1,9 +1,100 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="" lasteditedby="Richard" modified="2022-11-17T17:28:29.713-05:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T11:42:31.829-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>CLIMATE</title>
   <body>
-    <header><para styleclass="Heading1">CLIMATE</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1">CLIMATE</para>
+    </header>
+    <para styleclass="Normal">Optional Block</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">All keywords in block are optional and specified by NROW by NCOL</para>
+    <para styleclass="Normal"> If they are not specified then they are set to 0.0</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRECIPITATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal">Precipitation that falls on model domain (L/T)</para>
+          <para styleclass="Normal"> &#160;***Only the precip that falls land defined with a nonzero WBS (FARM) ID is simulated,</para>
+          <para styleclass="Normal"> &#160; &#160; any zero WBS ID cells have precip set to zero</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[REFERENCE_ET]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal">Reference ET (L/T)</para>
+          <para styleclass="Normal"> &#160; &#160; If not specified, then REFERENCE_ET is set to 0.0</para>
+          <para styleclass="Normal"> &#160;***This is required there are fallow/bare soil cells,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; Crop Coefficients (Kc) specified, or</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; Crops specified as FRACTIONS (multiple crops per model cell)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[POTENTIAL_EVAPORATION_BARE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal">Optional keywords that define how Bare Soil Potential Evaporation is determined</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Potential evaporation rate of groundwater under Fallow and Bare Soil</para>
+          <para styleclass="Normal"> &#160;***If not specified then REFERENCE_ET is used in its place. If REFERENCE_ET is not specified then set to 0.0</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[REFERENCE_ET_TO_BARE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">FLOAT</para>
+          <para styleclass="Normal">If POTENTIAL_EVAPORATION_BARE is not specified, then Fallow/Bare soil automatically use</para>
+          <para styleclass="Normal">0.5*ETref to obtain a potential evaporation rate for bare soil.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">The following keyword overrides the default value of 0.5 with the value read at FLOAT</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[DIRECT_RECHARGE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{FLUX, RATE} &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal">Specify recharge that is sent directly to the bottom of the root zone.</para>
+          <para styleclass="Normal"> The recharge is not consumed by crops and is treated as deep percolation</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> The deep percolation is then passed to either UZF or the water table</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> The keyword LENGTH or FLUX indicates that the input is in model units of length (L/T)</para>
+          <para styleclass="Normal"> The keyword RATE indicates that the input is in volumetric rate &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; (L^3/T)</para>
+          <para styleclass="Normal"> &#160; &#160;--This feature mimics both the RCH package Infiltration and UZF Recharge.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRECIPITATION_POTENTIAL_CONSUMPTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{BY_LENGTH, BY_FRACTION} <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal">Optional keyword that specifies by the model grid potential consumption of precipitation</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">This limits how much precipitation can be consumed as evaporation and transpiration</para>
+          <para styleclass="Normal"> &#160; based on the quantity of rainfall and is analogous to specifying an</para>
+          <para styleclass="Normal"> &#160; effective precipitation, which represents the quantity of rainfall that is not runoff nor deep percolation</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">This is a spatial based input equivalent to the SOIL block&apos;s keyword EFFECTIVE_PRECIPITATION_TABLE</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160;BY_LENGTH &#160; &#160;indicates the array specifies the effective precipitation (L/T) as an upper limit of consumption.</para>
+          <para styleclass="Normal"> &#160; &#160;BY_FRACTION &#160;indicates the array is a 0 to 1 fraction of the precipitation that is available for consumption.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;That is the the fraction times precipitation is the effective precipitation.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Precipitation that is not available for consumption becomes either runoff or deep percolation</para>
+          <para styleclass="Normal">Precipitation that is &#160; &#160; available for consumption, but is not consumed as ET becomes either runoff or deep percolation</para>
+        </td>
+      </tr>
+    </table></para>
   </body>
 </topic>

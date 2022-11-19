@@ -1,9 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="" lasteditedby="Richard" modified="2022-11-17T17:28:30.687-05:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T11:56:32.978-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SURFACE_WATER_OPERATIONS</title>
   <body>
-    <header><para styleclass="Heading1">SURFACE_WATER_OPERATIONS</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1">SURFACE_WATER_OPERATIONS</para>
+    </header>
+    <para styleclass="Normal">Due to the length of the Surface Water Operations input file,</para>
+    <para styleclass="Normal">it is recommended to build the input data set in a separate file and use BLOCK_INCLUDE</para>
+    <para styleclass="Normal">to insert the text into the FMP </para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="BLOCK_INCLUDE">BLOCK_INCLUDE</link> &#160;SWO_Template.swo</para>
   </body>
 </topic>

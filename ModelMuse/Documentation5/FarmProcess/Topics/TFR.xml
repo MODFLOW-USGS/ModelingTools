@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-17T17:46:25.290-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T12:10:40.926-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>TFR</title>
   <body>
     <header>
@@ -9,8 +9,8 @@
     <para styleclass="Normal">Transient File Reader &#160; -- Read when the keyword &quot;TRANSIENT&quot; is present</para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal">TFR is a file that contains on each uncommented row a ULOAD that specifies the stress period (SP) input.</para>
-    <para styleclass="Normal">The TFR file is opened with GENERIC_INPUT, which supports all its keywords except INTERNAL.</para>
-    <para styleclass="Normal"> &#160; &#160;--Note that that is the TFR cannot be loaded with INTERNAL, but within the TFR a ULOAD may use INTERNAL.</para>
+    <para styleclass="Normal">The TFR file is opened with <link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Input">GENERIC_INPUT</link>, which supports all its keywords except INTERNAL.</para>
+    <para styleclass="Normal"> &#160; &#160;--Note that that is the TFR cannot be loaded with INTERNAL, but within the TFR a <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link> may use INTERNAL.</para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal"> &#160;For example a TFR could be opened with: OPEN/CLOSE &#160;TFR.txt</para>
     <para styleclass="Normal"></para>
@@ -45,7 +45,7 @@
     <para styleclass="Normal"> &#160; &#160; &#160; &#160;RELOAD &#160; &#160; &#160;=&gt; Move previously used file to first line and load input from the start. Previous file must have been opened with DATAFILE, DATAUNIT, OR EXTERNAL</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160;LOAD_NEXT &#160; =&gt; Load previously used file to at its current location with the file. &#160; &#160;Previous file must have been opened with DATAFILE, DATAUNIT, OR EXTERNAL</para>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal">The following is an example TFR file that is read for the keyword CROP_COEFFICIENT with NCROP = 2:</para>
+    <para styleclass="Normal">The following is an example TFR file that is read for the keyword CROP_COEFFICIENT with <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> = 2:</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; CROP_COEFFICIENT &#160;TRANSIENT LIST &#160;OPEN/CLOSE &#160; TFR.txt</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; where TFR.txt is: &#160;____________________________________________________</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;INTERNAL &#160; # SP 1 &#160;- ULOAD using INTERNAL keyword |</para>
@@ -79,7 +79,7 @@
     <para styleclass="Normal">The following example uses DDF.txt, but how the data is interpreted is defined by a TFR</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; CROP_COEFFICIENT &#160;TRANSIENT LIST &#160;OPEN/CLOSE &#160; TFR2.txt</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; where TFR2.txt is: _________________________________________________________________________________________</para>
-    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;DATAFILE ./DDF.txt &#160; # SP 1 &#160;- Open DDF.txt, load NCROP records (2 lines) &#160; &#160; &#160; &#160; &#160; &#160; |</para>
+    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;DATAFILE ./DDF.txt &#160; # SP 1 &#160;- Open DDF.txt, load <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records (2 lines) &#160; &#160; &#160; &#160; &#160; &#160; |</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # &#160; &#160; &#160; &#160; and keep file open in memory. &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # &#160; &#160; &#160; &#160; The current read point is just before the SP2 input. &#160; | &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;|</para>
     <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; | &#160;DATAFILE ./DDF.txt &#160; # SP 2 &#160;- DDF.txt is open and in memory, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; |</para>

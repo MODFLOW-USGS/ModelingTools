@@ -4,10 +4,9 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
   Caption = 'Import SUTRA Model Results'
   ClientHeight = 491
   ClientWidth = 417
-  ExplicitLeft = 3
-  ExplicitTop = 3
-  ExplicitWidth = 435
-  ExplicitHeight = 538
+  ExplicitWidth = 433
+  ExplicitHeight = 530
+  PixelsPerInch = 96
   TextHeight = 18
   object lblTimeStepsToImport: TLabel
     Left = 223
@@ -32,7 +31,6 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     ItemHeight = 18
     TabOrder = 1
     OnClick = chklstTimeStepsToImportClick
-    ExplicitHeight = 240
   end
   object chklstDataToImport: TCheckListBox
     Left = 8
@@ -55,7 +53,6 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
       'Z Darcy velocity')
     TabOrder = 0
     OnClick = chklstDataToImportClick
-    ExplicitHeight = 137
   end
   object pnlBottom: TPanel
     Left = 0
@@ -65,7 +62,6 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 6
-    ExplicitTop = 276
     DesignSize = (
       417
       141)
@@ -143,7 +139,6 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     TabOrder = 2
     WordWrap = True
     OnClick = btnSelectAllClick
-    ExplicitTop = 172
   end
   object btnSelectNone: TButton
     Left = 8
@@ -155,7 +150,6 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     TabOrder = 4
     WordWrap = True
     OnClick = btnSelectNoneClick
-    ExplicitTop = 223
   end
   object btnSelectAllTimes: TButton
     Left = 113
@@ -167,7 +161,6 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     TabOrder = 3
     WordWrap = True
     OnClick = btnSelectAllTimesClick
-    ExplicitTop = 172
   end
   object btnDeselectAllTimes: TButton
     Left = 113
@@ -179,7 +172,6 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     TabOrder = 5
     WordWrap = True
     OnClick = btnDeselectAllTimesClick
-    ExplicitTop = 223
   end
   object dlgOpenSutraFile: TJvOpenDialog
     DefaultExt = '.nod'

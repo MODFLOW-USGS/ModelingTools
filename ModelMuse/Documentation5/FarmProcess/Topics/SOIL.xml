@@ -1,9 +1,106 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="" lasteditedby="Richard" modified="2022-11-17T17:28:29.555-05:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T14:56:20.111-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SOIL</title>
   <body>
-    <header><para styleclass="Heading1">SOIL</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1">SOIL</para>
+    </header>
+    <para styleclass="Normal">Required Block if <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSOIL">NSOIL</link> &gt; 0</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">All List-Style input expects <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSOIL">NSOIL</link> records.</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">If block is not specified, then CAPILLARY_FRINGE and COEFFICIENT are set to zero.</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CAPILLARY_FRINGE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,A,L]</para>
+          <para styleclass="Normal">Specify soil capillary fringe depth. If specified with LIST,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160;then record ID is the location in SOIL_ID that the capillary fringe is applied too.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;If specified as ARRAY, then the (ROW,COL) location defines the models capillary fringe and SOIL_ID is not used.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SOIL_ID]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal">SOIL_ID is required when <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSOIL">NSOIL</link> &gt; 1 to specify the location of the NSOILs.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">SOIL_ID is a NROW by NCOL INT array of Soil ID locations</para>
+          <para styleclass="Normal"> &#160;The location of each ID are used for the remaining properties if they use LIST input (that is if CAPILLARY_FRINGE is specified by .</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[COEFFICIENT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal">COEFFICIENT is only required if you specify &quot;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE" anchor="ROOT_PRESSURE">ROOT_PRESSURE</link>&quot; in the <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">LAND_USE</link> Block</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">It is used to determine the water pressure on a crop root and</para>
+          <para styleclass="Normal">the root pressures determine its groundwater uptake and soil stress</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">If not specified then the groundwater uptake and anoxia follows a linear model as described in Appendix 4 and 5</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">ULOAD List-Style input reads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSOIL">NSOIL</link> records that either are a keyword or set of soil coefficients (A, B, C, D, and E)</para>
+          <para styleclass="Normal"> &#160;Accepted soil COEFFICIENT keywords are:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; SILTYCLAY</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; SILT</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; SANDYLOAM</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; SAND</para>
+          <para styleclass="Normal"> &#160;if a keyword is not detected then input expects five FLOAT soil coefficients, which are:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; A B C D E</para>
+          <para styleclass="Normal"> &#160;For example if <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSOIL">NSOIL</link> = 3, then the input could be:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; COEFFICIENT &#160;INTERNAL</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 1 &#160;SILTYCLAY</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 2 &#160;0.320149668 &#160; -0.328586793 &#160; 2.851921250 &#160; 1.3027 &#160; -2.0416 &#160;# Read &quot;A, B, C, D, and E&quot;, which these values happen to be equivalent to the keyword &quot;SILT&quot;</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 3 &#160;SANDYLOAM</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,A,L]</para>
+          <para styleclass="Normal">Optional keyword that allows specifying a maximum infiltration (soil leakage) rate (L/T).</para>
+          <para styleclass="Normal"> &#160;SURF_VK is specified by soil type (LIST) or as a NROW by NCOL array (ARRAY).</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">SURF_VK limits how much deep percolation can pass through the soil zone.</para>
+          <para styleclass="Normal"> &#160;If deep percolation (DPERC) exceeds SURF_VK, then DPERC - SURF_VK becomes rejected infiltration and becomes runoff.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[EFFECTIVE_PRECIPITATION_TABLE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{BY_LENGTH, BY_FRACTION} &#160;ULOAD</para>
+          <para styleclass="Normal">Optional keyword that allows tying soil type to potential consumption of precipitation</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">This limits how much precipitation can be consumed as evaporation and transpiration</para>
+          <para styleclass="Normal"> &#160; based on the quantity of rainfall and is analogous to specifying an</para>
+          <para styleclass="Normal"> &#160; effective precipitation, which represents the quantity of rainfall that is not runoff nor deep percolation</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">ULOAD List-Style input reads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSOIL">NSOIL</link>&#32;<link displaytype="text" defaultstyle="true" type="topiclink" href="LookUp-Table-Input-(LU_TAB)">LookUp Tables</link></para>
+          <para styleclass="Normal"> &#160;For a full description of LookUp Table input with ULOAD see Appendix 6</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Each LookUp table specifies in the first column a precipitation rate (L/T) and the second column depends on BY_LENGTH or BY_FRACTION </para>
+          <para styleclass="Normal"> &#160; &#160;BY_LENGTH &#160; &#160;indicates the second column represents a L/T upper limit of consumption.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;That is the effective precipitation for the given precipitation</para>
+          <para styleclass="Normal"> &#160; &#160;BY_FRACTION &#160;indicates the second column represents a fraction</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;from 0 to 1 of the precipitation that is available for consumption.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;That is the the fraction times precipitation is the effective precipitation.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Precipitation that is not available for consumption becomes either runoff or deep percolation</para>
+          <para styleclass="Normal">Precipitation that is &#160; &#160; available for consumption, but is not consumed as ET becomes either runoff or deep percolation</para>
+        </td>
+      </tr>
+    </table></para>
   </body>
 </topic>

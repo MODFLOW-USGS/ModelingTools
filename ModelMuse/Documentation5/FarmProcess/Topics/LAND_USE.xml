@@ -1,9 +1,520 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="" lasteditedby="Richard" modified="2022-11-17T17:28:30.372-05:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T14:34:43.430-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
-    <header><para styleclass="Heading1">LAND_USE</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1">LAND_USE</para>
+    </header>
+    <para styleclass="Normal">Optional Block</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal">The land use block specifies the properties of each land use</para>
+    <para styleclass="Normal"> and location in the model grid</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"> The input may either expect at most one land use per surface model cell</para>
+    <para styleclass="Normal"> &#160; or allow for multiple land use types per surface model cell.</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[{SINGLE_LAND_USE_PER_CELL, or MULTIPLE_LAND_USE_PER_CELL}]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"> The keywords</para>
+          <para styleclass="Normal"> &#160; &#160;SINGLE_LAND_USE_PER_CELL &#160; is the default option if not specified,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; allowing for at most one land use per model cell</para>
+          <para styleclass="Normal"> &#160; &#160;MULTIPLE_LAND_USE_PER_CELL is used to indicate that simulation should</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; allow for multiple land use types per model cell</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">The Land_Use block has all LIST style read <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records</para>
+          <para styleclass="Normal">If SINGLE_LAND_USE_PER_CELL &#160; is specified then then all ARRAY style input is &#160; &#160; &#160; NROW by NCOL</para>
+          <para styleclass="Normal">If MULTIPLE_LAND_USE_PER_CELL is specified then then all ARRAY style input is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW by NCOL</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; (each NROW by NCOL specifies the spatial input for each crop)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[LOCATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal">If SINGLE_LAND_USE_PER_CELL then it is required to specify LOCATION</para>
+          <para styleclass="Normal"> which indicates where each crop ID is located.</para>
+          <para styleclass="Normal"> NROW by NCOL INT array, 0 is bare land, &gt;0 and &lt;= <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> is the crop grown there</para>
+          <para styleclass="Normal"> CANNOT specify LOCATION with MULTIPLE_LAND_USE_PER_CELL</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[LAND_USE_AREA_FRACTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">If MULTIPLE_LAND_USE_PER_CELL then it is required to specify LAND_USE_AREA_FRACTION</para>
+          <para styleclass="Normal"> which indicates the portion of each model cell that each crop uses/its area.</para>
+          <para styleclass="Normal"> If SINGLE_LAND_USE_PER_CELL is specified then LAND_USE_AREA_FRACTION is optional an specifies</para>
+          <para styleclass="Normal"> &#160; the area that the land use covers for that specific surface cell and the rest is considered bare/fallow land</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> MULTIPLE_LAND_USE_PER_CELL =&gt; <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW by NCOL Float array with numbers from 0.0 to 1.0,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;sum from all crops for a specific Row/Column</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;can be at most 1.0, if less then 1.0 the remaining portion is assumed bare/fallowed land</para>
+          <para styleclass="Normal"> SINGLE_LAND_USE_PER_CELL &#160; =&gt; &#160; &#160; &#160; NROW by NCOL Float array with numbers from 0.0 to 1.0,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;if fraction is less then 1.0 then the remaining portion is assumed bare/fallowed land</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">OUTPUT OPTIONS --All Optional</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT BYWBS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summarize output by each WBS/Farm</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT BYWBS_BYCROP]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summarize output by each WBS for each crop in WBS/Farm</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT BYCROP]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summarize output by each crop across entire model</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT BARE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summarize output by any bare soil/fallow crops in model</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT ALL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summarize output of of every crop by model cell --includes additional info, such as head and root elevation</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT ALL_VERBOSE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summarize output by of every crop by model cell --includes enormous amount of crop information from head to root pressures to crop fractions</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT INPUT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Echo input loaded to file</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT ET_BYWBS_BYCROP]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">ETref, ETpot, and ETact by each WBS for each crop in WBS/Farm. Note that ETpot &lt;-&gt; CU_INI and ETact &lt;-&gt; CU</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT ROW_COLUMN]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Same as PRINT ALL, except (INT, INT) is the model grid (ROW, COL) to print all crop information. This reduces the file size significantly.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SPECIFY_PRINT_ALL_CROPS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">Due to the large file size produced by PRINT ALL and PRINT ALL_VERBOSE</para>
+          <para styleclass="Normal">The SPECIFY_PRINT_ALL_CROPS allows for only declaring which crops are printed in them</para>
+          <para styleclass="Normal">The input is a LIST that is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> long with a zero for crops not to print and 1 for crops to print</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROP_NAME]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal">Specify the names of each crop</para>
+          <para styleclass="Normal"> &#160; If not specified then names are auto-generated as CROP_ID, with &quot;ID&quot; being the Crop ID</para>
+          <para styleclass="Normal"> &#160; ULOAD reads LIST input with CHAR names to the right of the record ID (ID, CHAR).</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROP_COEFFICIENT or CONSUMPTIVE_USE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">CROP_COEFFICIENT (Kc) is multiplied by the ETref to get CU -- input requires that REFERENCE_ET (ETref) to be specified</para>
+          <para styleclass="Normal">CONSUMPTIVE_USE &#160;(CF) specifies directly the CU</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Potential Consumptive Use CU = CF + Kc*ETref</para>
+          <para styleclass="Normal"> &#160; If not specified then set to zero.</para>
+          <para styleclass="Normal"> &#160; If CU = 0.0, then land is assumed to be bare/fallow,</para>
+          <para styleclass="Normal"> &#160; so all precipitation either becomes runoff or deep percolation</para>
+          <para styleclass="Normal"> &#160; and groundwater evaporation is determined from (in order of priority):</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; 1) If POTENTIAL_EVAPORATION_BARE is provided, it is used as the potential evaporation of groundwater underneath the bare soil</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; 2) If REFERENCE_ET &#160; &#160; &#160; &#160; &#160; &#160; &#160; is provided, it is used as the potential evaporation of groundwater underneath the bare soil</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; 3) There is no groundwater evaporation</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[IRRIGATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">IRRIGATION Flag (0 to <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; Determines if crop receives applied water (irrigation) to meet CU</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;and the irrigation efficiency (OFE)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; =0 Indicates that it is not irrigated</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &gt;0 Indicates crop is irrigated and the number is the irrigation type</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; The INT specified is the column in EFFICIENCY (WBS Block)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ROOT_DEPTH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">Crop root depth below land surface.</para>
+          <para styleclass="Normal"> &#160;Must be &gt;0.0; NOT required or maybe zero if GROUNDWATER_ROOT_INTERACTION = 0 or 1</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="ROOT_PRESSURE"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ROOT_PRESSURE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-4]</para>
+          <para styleclass="Normal">Groundwater Root Interaction Flag, Specify as 0, 1 , 2, 3, 4, 5 (default is 5)</para>
+          <para styleclass="Normal"> &#160; &#160;This determines if there is groundwater uptake to meet crop demand and</para>
+          <para styleclass="Normal"> &#160; &#160;if the Potential Consumptive Use is reduced due to anoxia and soil stresses</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">0 = No Transpiration &#160; &#160; &#160; &#160; &#160; &#160;==&gt; Zeros out any T requirement</para>
+          <para styleclass="Normal">1 = No Groundwater Interaction &#160;==&gt; No Root-Groundwater Uptake, No &#160;Anoxia or Stress Reduction, Full CU must be met through surface sources (Precip or Irrigation)</para>
+          <para styleclass="Normal">2 = Has Anoxia/Soil Stress Loss, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;NO Root-Groundwater Uptake ==&gt; CU Reduced from any anoxia and soil stress, but CU may only be satisfied with surface sources</para>
+          <para styleclass="Normal">3 = Has Root-Groundwater Uptake, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;NO Anoxia/Soil Stress Loss ==&gt; Anoxia and Soil Stress losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</para>
+          <para styleclass="Normal">4 = Has Root-Groundwater Uptake and Soil Stress Loss, NO Anoxia Loss &#160; &#160; &#160; &#160; &#160; &#160; ==&gt; Anoxia &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</para>
+          <para styleclass="Normal">5 = Full Interaction &#160;==&gt; HAS Anoxia/Soil Stress Reduction, HAS Root-Groundwater Uptake &#160;(DEFAULT)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[TRANSPIRATION_FRACTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">TRANSPIRATION_FRACTION (FTR):</para>
+          <para styleclass="Normal"> &#160; &#160;Fraction of consumptive use that is the potential transpiration of the crop</para>
+          <para styleclass="Normal"> &#160; &#160;Formally defined as FTR = Kcb/Kc = Basal Crop Coefficient / Crop Coefficient</para>
+          <para styleclass="Normal"> &#160; &#160;Can be viewed as the fraction of a unit cropped area covered by leaf matter, i.e. crop cover.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160;If set to zero, then crop is assumed to be fallowed or its area is bare soil</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[EVAPORATION_IRRIGATION_FRACTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[{BY_CROP, BY_IRRIGATE}] &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">EVAPORATION_IRRIGATION_FRACTION (FEI):</para>
+          <para styleclass="Normal"> &#160; &#160;Fraction of a cropped area that is irrigated but is not covered by a crop.</para>
+          <para styleclass="Normal"> &#160; &#160;It should be less than or equal to 1 - FTR &#160;(That is FEI + FTR &lt;= 1), but this is not required.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160;Can be viewed as the area that irrigated water is exposed to the sun and evaporates.</para>
+          <para styleclass="Normal"> &#160; &#160;For example(for example on top of bare soil space between row crops.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160;If FEI + FTR &gt; 1, then the final consumptive use can be larger</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;than the input specified due to evaporation.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;It can viewed as the water that evaporates before it</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;reaches the crop or evaporates while sitting atop of the leaves.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; By including the keyword EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; forces FMP to correct FEI + FTR &gt; 1 by setting FEI = 1 - FTR (Not Recommended)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; Optionally, BY_CROP or BY_IRRIGATE may be specified after EVAPORATION_IRRIGATION_FRACTION</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; EVAPORATION_IRRIGATION_FRACTION BY_CROP indicates that</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;List-Style input expects <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records and applies them by crop type</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; EVAPORATION_IRRIGATION_FRACTION BY_IRRIGATE indicates that</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;List-Style input expects <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link> records and applies them</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;by each crop&apos;s irrigation type defined with the IRRIGATION keyword</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; If BY_CROP or BY_IRRIGATE is not specified then the input assumes List-Style</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records (same as specifying BY_CROP)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160;If FEI = -1, then it is recalculated as FEI = 1 - FTR</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SURFACEWATER_LOSS_FRACTION_PRECIPITATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">Any precipitation not consumed by the crop either becomes an inefficient loss.</para>
+          <para styleclass="Normal"> &#160; &#160;The inefficient loss becomes either runoff or deep percolation.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">SURFACEWATER_LOSS_FRACTION_PRECIPITATION indicates</para>
+          <para styleclass="Normal"> &#160; &#160;the fraction of inefficient losses from precipitation that</para>
+          <para styleclass="Normal"> &#160; &#160;goes to surface water compared to deep percolation.</para>
+          <para styleclass="Normal"> &#160; &#160;(e.g. 0.75 indicates 75% of unconsumed precip becomes surface runoff)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SURFACEWATER_LOSS_FRACTION_IRRIGATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">Any precipitation not consumed by the crop either becomes an inefficient loss.</para>
+          <para styleclass="Normal"> &#160; &#160;The inefficient loss becomes either runoff or deep percolation.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">SURFACEWATER_LOSS_FRACTION_PRECIPITATION indicates</para>
+          <para styleclass="Normal"> &#160; &#160;the fraction of inefficient losses from precipitation that</para>
+          <para styleclass="Normal"> &#160; &#160;goes to surface water compared to deep percolation.</para>
+          <para styleclass="Normal"> &#160; &#160;(e.g. 0.75 indicates 75% of unconsumed precip becomes surface runoff)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SURFACEWATER_LOSS_FRACTION_IRRIGATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[{BY_CROP, BY_IRRIGATE}] &#160; <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">Inefficient losses from irrigation is the extra water required to meet an irrigation requirement</para>
+          <para styleclass="Normal">They are a result of the EFFICIENCY being less than 1</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">SURFACEWATER_LOSS_FRACTION_IRRIGATION: indicates</para>
+          <para styleclass="Normal"> &#160; &#160;the fraction of inefficient losses from irrigation that go</para>
+          <para styleclass="Normal"> &#160; &#160;to surface water compared to deep percolation.</para>
+          <para styleclass="Normal"> &#160; &#160;(e.g. 0.75 indicates 75% of extra irrigation becomes surface runoff)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; Optionally, BY_CROP or BY_IRRIGATE may be specified after SURFACEWATER_LOSS_FRACTION_IRRIGATION</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; If the keyword is SURFACEWATER_LOSS_FRACTION_IRRIGATION BY_CROP,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;then List-Style input expects <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records and applies them by crop type</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; If the keyword is SURFACEWATER_LOSS_FRACTION_IRRIGATION BY_IRRIGATE,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;then List-Style input expects <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link> records and</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;applies them by each crops irrigation type defined with the IRRIGATION keyword</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; If BY_CROP or BY_IRRIGATE is not specified then the input assumes List-Style</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records (same as specifying BY_CROP)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[POND_DEPTH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">If CONCEPT TWO, linear uptake, linear anoxia model is used, then</para>
+          <para styleclass="Normal">the ponding depth is a height of water above the land surface that the crop</para>
+          <para styleclass="Normal">can tolerate.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> CONCEPT TWO occurs when either ROOT_PRESSURE is not specified</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; or for crops that have all four ROOT_PRESSUREs set to 0</para>
+          <para styleclass="Normal"> &#160;If not set, then automatically set to zero</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ADDED_DEMAND]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{LENGTH,RATE} &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link>]</para>
+          <para styleclass="Normal">Specify any additional demands to include with the crop demand.</para>
+          <para styleclass="Normal">This only applies to irrigated crops and the additional</para>
+          <para styleclass="Normal">demanded water only becomes surface runoff or deep percolation</para>
+          <para styleclass="Normal">based on the fraction specified in the WBS Block &quot;ADDED_DEMAND_RUNOFF_SPLIT&quot;</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">IT may only be specified as a Length per time (LENGTH) or Volume per time (VOLUME).</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">The added demand is summed with other added demands (e.g. WBS Block ADDED_CROP_DEMAND)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[ <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L] ]</para>
+          <para styleclass="Normal"> &#160; Given that:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160;CF &#160; &#160;= CONSUMPTIVE_USE</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160;Kc &#160; &#160;= CROP_COEFFICIENT</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160;ETref = REFERENCE_ET</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">If the Potential Consumptive Use is CU = CF + Kc*ETref = 0,</para>
+          <para styleclass="Normal"> &#160;then the crop is assumed to be scraped clean earth with no evapotranspiration (CU = 0).</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">This occurs when CF and Kc are set to zero indicating there is no potential consumption.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">If it is desired to convert CU = 0 to Fallow/Bare soil, then</para>
+          <para styleclass="Normal"> &#160;it is necessary to specify the keyword ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;With this keyword, if CF and Kc are set to zero, then CU = 0.5*ETref</para>
+          <para styleclass="Normal"> &#160;and only evaporation is allowed (FTR = 0). That is it is turned to fallow soil evaporation.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L] is optional. If LAI[S,T,L] is not specified,</para>
+          <para styleclass="Normal"> &#160; &#160;then all Crops become bare soil when CU = 0</para>
+          <para styleclass="Normal"> &#160; &#160;if <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L] is included then specify <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records that have either</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; a &#160;1 to convert CU = 0 crops to bare soil calculation</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; or 0 to not use feature</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[MIN_BARE_FRACTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">FLOAT</para>
+          <para styleclass="Normal">If LAND_USE_AREA_FRACTION is selected then the sum of all crops within a single model cell may be less than 1.</para>
+          <para styleclass="Normal"> &#160; &#160;When this occurs, the remaining area is treated as bare soil/fallowed land.</para>
+          <para styleclass="Normal"> &#160; &#160;A minimum allowed bare fraction of a cell can be specified (MIN_BARE_FRACTION)</para>
+          <para styleclass="Normal"> &#160; &#160;If the Bare Fraction is less then MIN_BARE_FRACTION, it is set to Zero.</para>
+          <para styleclass="Normal"> &#160; &#160;If MIN_BARE_FRACTION is set to 1 or greater, then Bare Soil Calculations are disabled (Even for Crop ID &lt; 1 and Fallowed Crops).</para>
+          <para styleclass="Normal"> &#160; &#160;If not specified it defaults to 0.000001</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">Check if FEI needs to be corrected so FEI + FTR = 1 when FEI + FTR &gt; 1</para>
+          <para styleclass="Normal"> &#160; &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L] is optional. If LAI[S,T,L] is not specified,</para>
+          <para styleclass="Normal"> &#160; &#160;then all Crops have correction.</para>
+          <para styleclass="Normal"> &#160; &#160;If included then specify <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records that have either</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; a &#160;1 to enable FEI = 1 - FTR correction if FEI + FTR &gt; 1</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; or 0 to not use feature</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> If not specified, the default is not to check nor correct FEI + FTR &gt; 1</para>
+          <para styleclass="Normal"> &#160; which is ok since it is possible to have highly evaporative irrigation (like sprinklers)</para>
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[ <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L] ]</para>
+          <para styleclass="Normal">Check if FEI needs to be corrected so FEI + FTR = 1 when FEI + FTR &gt; 1</para>
+          <para styleclass="Normal"> &#160; &#160;LAI[S,T,L] is optional. If LAI[S,T,L] is not specified,</para>
+          <para styleclass="Normal"> &#160; &#160;then all Crops have correction.</para>
+          <para styleclass="Normal"> &#160; &#160;If included then specify <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records that have either</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; a &#160;1 to enable FEI = 1 - FTR correction if FEI + FTR &gt; 1</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; or 0 to not use feature</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> If not specified, the default is not to check nor correct FEI + FTR &gt; 1</para>
+          <para styleclass="Normal"> &#160; which is ok since it is possible to have highly evaporative irrigation (like sprinklers)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[RELAXATION_FACTOR_HEAD_CHANGE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">FLOAT</para>
+          <para styleclass="Normal">The groundwater head&apos;s relation to the crop properties determines the amount of groundwater uptake (Tgw)</para>
+          <para styleclass="Normal">and evaporation of groundwater (Egw)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">To improve convergence and mass balance error a relaxation factor may be applied to the</para>
+          <para styleclass="Normal"> &#160;head that is used for determining the evaporation of groundwater and groundwater-root uptake</para>
+          <para styleclass="Normal"> &#160;at each non-linear solver interaction. This is only improves convergence when the water table is close</para>
+          <para styleclass="Normal"> &#160;to either the root zone or land surface.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;The relaxed head is only used for determining if evaporation and transpiration from groundwater occurs.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Relax is specified as a single floating point number (similar to the solver RELAX variables) and is applied as follows:</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> Hfmp = HOLD + RELAX*(HNEW-HOLD)</para>
+          <para styleclass="Normal"> &#160; where</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; Hfmp &#160; &#160; &#160; is the head used for determining the groundwater root uptake and evaporation of groundwater</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; HOLD &#160; &#160; &#160; is the head from previous non-linear solver interaction</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; HNEW &#160; &#160; &#160; is the head from the current iteration</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; RELAX &#160; &#160; &#160;is the relaxation factor, 0.0 &lt; RELAX &lt;= 1.0</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160;Recommended values are from 0.1 to 1.0, if not specified than it is set to 1.0</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; ***Note that some relax values may not help convergence or not converge at all,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;while others may improve both speed and for highly nonlinear models with high water tables.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;Smaller relaxation values do not necessarily equate to better convergence.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;In some instances, larger values (0.8) may provide better convergence than smaller (0.1)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; ***Note that Hfmp is only used for determining which set of evaporation and transpiration equations are used (viz. if crop is under wilting or anoxia conditions).</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;and HNEW is what is used for determining the actual uptake.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; ***Note that RELAX is automatically increased to 1.0 as convergence is met,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;this makes it so that at convergence RELAX is always equal to 1.0 (No Relaxation)</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">The remaining variables are optional and allow adjustment of the crop&apos;s surface elevation.</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">This is useful in case the crop resides in a raised/lowered region of the model cell and it</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">requires a more accurate surface elevation measurement.</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">To use these options you must specify in the GLOBAL DIMENSION block the variable NCROP_SPECIFIED_ELEVATIONS</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- LIST input loads NCROP_SPECIFIED_ELEVATIONS records, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- ARRAY input with LAND_USE_AREA_FRACTION MULTI option reads NCROP_SPECIFIED_ELEVATIONS*NROW rows, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> &#160; Crops that do not have their elevation changed use the <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="SURFACE_ELEVATION">SURFACE_ELEVATION</link> defined in the GLOBAL DIMENSION block.</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROPS_THAT_SPECIFY_SURFACE_ELEVATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,L]</para>
+          <para styleclass="Normal">INT LIST that identifies which crops have elevations specified. 0=BARE Soil, &gt;0 is the crop ID</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROP_SURFACE_ELEVATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,L]</para>
+          <para styleclass="Normal">Is a 2D array, FLOAT, of surface elevations to apply to the CROPS_THAT_SPECIFY_SURFACE_ELEVATION crops</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROP_SURFACE_ELEVATION_OFFSET]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,L]</para>
+          <para styleclass="Normal">Is an offset, FLOAT, that is added to the surface elevation (either from GLOBAL <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="SURFACE_ELEVATION">SURFACE_ELEVATION</link> or CROP_SURFACE_ELEVATION), positive indicates upward movement.</para>
+        </td>
+      </tr>
+    </table></para>
   </body>
 </topic>

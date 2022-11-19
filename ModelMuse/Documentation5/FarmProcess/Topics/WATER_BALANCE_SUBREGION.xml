@@ -1,9 +1,195 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="" lasteditedby="Richard" modified="2022-11-17T17:28:29.397-05:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T13:17:31.158-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>WATER_BALANCE_SUBREGION</title>
   <body>
-    <header><para styleclass="Heading1">WATER_BALANCE_SUBREGION</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1">WATER_BALANCE_SUBREGION</para>
+    </header>
+    <para styleclass="Normal">Required Block</para>
+    <para styleclass="Normal"> &#160; &#160;All LIST inputs read with WBS/NFARM as the record ID</para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[WBS_NAME]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal">Optional Keywords that allow specifying names for WBS (Farm), Unit, District, and Project.</para>
+          <para styleclass="Normal">Only used for output. If not specified than auto-set WBS_NAME to &quot;WBS_1&quot;, &quot;WBS_2&quot;, etc.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link> uses List-Style to load: Record ID and CHAR =&gt; WBS NAME</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[LOCATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal"> Only REQUIRED keyword in block,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;the rest will be set to default values if not specified. Note that EFFICIENCY is required when <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link> &gt; 0</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">READ 2D Array of INT that are from 0 to <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> to indicate the spatial area and location of each WBS</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[EFFICIENCY]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>]</para>
+          <para styleclass="Normal">EFFICIENCY is REQUIRED if <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link> &gt; 0</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Irrigation Efficiency (OFE) is between 0-1 and represents OFE=CIR/DEMAND,</para>
+          <para styleclass="Normal"> &#160; where CIR is the crop irrigation requirement under perfect efficiency</para>
+          <para styleclass="Normal"> &#160; and Demand is the necessary water demand to meet the CIR</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">List-Style Loads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> x <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link> and Array-Style Loads NROW x NCOL</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">OFE is tied to the IRRIGATION type, GLOBAL DIMENSION keyword <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>.</para>
+          <para styleclass="Normal"> &#160;If a crop is irrigated then it&apos;s IRRIGATION flag is &gt;0 and set equal to the irrigation type (1 to <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>).</para>
+          <para styleclass="Normal"> &#160;If EFFICIENCY input is set to ARRAY, then the (ROW, COL) that the crop is located in determines its OFE when irrigated.</para>
+          <para styleclass="Normal"> &#160;If EFFICIENCY input is set to LIST, &#160;then the WBS located at the crop&apos;s (ROW, COL) determines the EFFICIENCY row and the crop&apos;s IRRIGATION flag determines the EFFICIENCY column.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">***Note that the old OFE input was <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NFARM</link> by <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>, to mimic this behavior just set <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>=<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> and define each crop that is irrigated with an IRRIGATION flag equal to the CROP ID.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[EFFICIENCY_IMPROVEMENT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>]</para>
+          <para styleclass="Normal">When water supply does not meet demand the EFFICIENCY (OFE) can improve to 1.0 or remain the same.</para>
+          <para styleclass="Normal">EFFICIENCY_IMPROVEMENT is a 0 or 1 flag to indicate if efficiency improvement is allowed.</para>
+          <para styleclass="Normal"> &#160;0 - Efficiency remains the same, crop transpiration reduced due to supply shortfall</para>
+          <para styleclass="Normal"> &#160;1 - Efficiency improves until it reaches 1.0, then crop transpiration reduced</para>
+          <para styleclass="Normal"> &#160;If not specified then automatically set to 0, so OFE is held constant based on user input. That is &quot;EFFICIENCY_IMPROVEMENT CONSTANT 0&quot;</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[DEFICIENCY_SCENARIO]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">WBS (FARM) Deficiency Scenario Options</para>
+          <para styleclass="Normal"> &#160;0 - Irrigated Crop CU always satisfied, if shortfall, bring in external from the simulation water &#160;--External Water</para>
+          <para styleclass="Normal"> &#160;1 - Irrigated Crop CU reduced to water supply, if water supply shortfall. &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;--Deficit Irrigation</para>
+          <para styleclass="Normal"> &#160;If not specified then automatically set to 1, Deficit Irrigation</para>
+          <para styleclass="Normal"> &#160; &#160; That is the default is &quot;DEFICIENCY_SCENARIO CONSTANT 1&quot;</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRORATE_DEFICIENCY]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">{ByDEMAND,ByAVERAGE}</para>
+          <para styleclass="Normal">If a WBS does not have enough supply to meet its demand,</para>
+          <para styleclass="Normal"> &#160; PRORATE_DEFICIENCY specifies how the available water supply is distributed</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">ByDEMAND &#160;- Prorate by ratio of each crops demand by total demand (recommended)</para>
+          <para styleclass="Normal">ByAVERAGE - Prorate by crops being ABOVE or BELOW average demand flux.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160;BELOW is always met, ABOVE is evenly distributed. (original FMP concept)</para>
+          <para styleclass="Normal">If not specified then automatically set to &quot;PRORATE_DEFICIENCY ByDEMAND&quot;</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[WATERSOURCE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-3]</para>
+          <para styleclass="Normal">Overrides other irrigation input by declaring potential sources of irrigated water supply.</para>
+          <para styleclass="Normal">For example if a WBS has SUPPY_WELLS this can disable its access to it.</para>
+          <para styleclass="Normal"> &#160; &#160; -- useful for improving simulation time since input should be set up for a WBS that does not have SUPPLY_WELLs to not have it assigned any.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">List-Style input expects:</para>
+          <para styleclass="Normal"> &#160; &#160;Record ID, GW, SW, NRD, which are set to 1 if has access to supply, 0 to restrict access</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">For example <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link>=3:</para>
+          <para styleclass="Normal"> &#160;1 &#160;0 &#160;1 &#160;0 &#160; =&gt; WBS 1 can get irrigated water from Surface Water Sources, but NOT from Groundwater Wells or Non-Routed Deliveries even if other input sections says it has it</para>
+          <para styleclass="Normal"> &#160;2 &#160;1 &#160;1 &#160;0 &#160; =&gt; WBS 2 can get irrigated water from Groundwater Wells and Surface Water Sources, but NOT from Non-Routed Deliveries even if other input sections says it has it</para>
+          <para styleclass="Normal"> &#160;3 &#160;0 &#160;0 &#160;0 &#160; =&gt; WBS 3 has no access to any irrigated water irrelevant of other input options</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">If not specified then automatically set to 1 for all sources, that is &quot;WATERSOURCE CONSTANT 1&quot;</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[BARE_RUNOFF_FRACTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal">If there are cells declared as FALLOW/BARE then this determines the</para>
+          <para styleclass="Normal">fraction of runoff to infiltration for precipitation that falls on bare soil/fallow land.</para>
+          <para styleclass="Normal"> &#160; BARE cells result for model cells not defined by a land use/crop ID (CID &lt; 1) or if the sum of crop fractions for a cell do not sum to 1.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">The fraction is set by WBS or by (ROW,COL).</para>
+          <para styleclass="Normal"> &#160;For example, if WBS 1 is set to 0.75; this indicates that 75% of precip that falls on bare soil in WBS 1 becomes surface runoff</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">If not specified then automatically set to 1.0 to disable any infiltration from precip over bare soil. That is &quot;BARE_RUNOFF_FRACTION CONSTANT 1.0&quot;</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[BARE_PRECIPITATION_CONSUMPTION_FRACTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal">If there is over-consumption through evaporation of precipitation over bare soil, this imposes a limit on that consumption.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">This is defined as a fraction of precipitation that falls on bare surface that is available for consumption (evaporation).</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Must be specified between 0 and 1, with a default value of 1 when not specified.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Precipitation that is not available for consumption becomes either runoff or deep percolation</para>
+          <para styleclass="Normal">Precipitation that is &#160; &#160; available for consumption, but does not evaporate becomes either runoff or deep percolation</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">This can be tied to SCS estimates of the fraction of consumption or user estimated.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">**If not specified then defaults to 1.0, for full potential consumption. That is &quot;BARE_PRECIPITATION_CONSUMPTION_FRACTION CONSTANT 1.0&quot;</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ADDED_DEMAND_RUNOFF_SPLIT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>]</para>
+          <para styleclass="Normal">Array dimensions are <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> x <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link></para>
+          <para styleclass="Normal">If a WBS has specified an added irrigation demand, then defines the</para>
+          <para styleclass="Normal"> &#160; split between becoming surface runoff or deep percolation.</para>
+          <para styleclass="Normal"> &#160; This fraction is only is a split for the additional demanded water.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; It does not apply to losses that originate from irrigation required to meet a land use ET</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; which is defined in the Land_Use Block with the SURFACEWATER_LOSS_FRACTION_IRRIGATION keyword</para>
+          <para styleclass="Normal"> &#160; It must be between 0.0 and 1.0; If not specified then it defaults to 0.1, that is &quot;ADDED_DEMAND_RUNOFF_SPLIT CONSTANT 0.1&quot;</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">At this time additional demand (Added Demand) is defined with the keyword ADDED_CROP_DEMAND and LAND_USE block keyword ADDED_DEMAND</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ADDED_CROP_DEMAND FLUX or ADDED_CROP_DEMAND RATE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>]</para>
+          <para styleclass="Normal">Specify an additional demand for each WBS that is applied to each crop.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; --Additional demand is demand added to the land use in addition</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; to its consumptive use value (additional irrigation requirement).</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; --The crop must have an IRRIGATION flag &gt;0 or the added demand cannot be applied.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;This only applies to irrigated crops and the additional</para>
+          <para styleclass="Normal"> &#160;demanded water only becomes surface runoff or deep percolation</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;In can be specified as a length per time (LENGTH or FLUX) or volume per time (RATE). --Both maybe used at once.</para>
+          <para styleclass="Normal"> &#160;The added demand is summed with other crop related added demands (e.g. CROP Block ADDED_DEMAND)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;You may specify both FLUX and RATE versions</para>
+        </td>
+      </tr>
+    </table></para>
   </body>
 </topic>

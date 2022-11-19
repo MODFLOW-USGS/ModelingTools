@@ -10,6 +10,9 @@
       <topicref type="topic" id="448826737145089" build="ALL" modified="2022-11-17T17:28:27.659Z" icon="0" href="Generic-Input">
         <caption translate="true">Generic Input</caption>
       </topicref>
+      <topicref type="topic" id="448834486266184" build="ALL" modified="2022-11-18T11:11:34.062Z" icon="0" href="Generic-Output">
+        <caption translate="true">Generic Output</caption>
+      </topicref>
       <topicref type="topic" id="448827695359930" build="ALL" modified="2022-11-17T17:28:27.817Z" icon="0" href="ULOAD">
         <caption translate="true">ULOAD</caption>
       </topicref>

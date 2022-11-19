@@ -1,9 +1,280 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="" lasteditedby="Richard" modified="2022-11-17T17:28:29.868-05:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-18T12:28:45.374-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SURFACE_WATER</title>
   <body>
-    <header><para styleclass="Heading1">SURFACE_WATER</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1">SURFACE_WATER</para>
+    </header>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">ALL KEYWORDS ARE OPTIONAL</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NON_ROUTED_DELIVERY]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[{RATE, VOLUME}] <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-(3*<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NRD_TYPES">NRD_TYPES</link>)]</para>
+          <para styleclass="Normal">NON_ROUTED_DELIVERY (NRD) is quantity of water that is available to a WBS.</para>
+          <para styleclass="Normal"> &#160;The number NRD&apos;s are defined in the GLOBAL DIMENSION Block with the keyword <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NRD_TYPES">NRD_TYPES</link></para>
+          <para styleclass="Normal">The input is specified as [WBS_ID, <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NRD_TYPES">NRD_TYPES</link>*(NRDV NRDR NRDU)]; &#160; (NRDV NRDR NRDU) = (Volume Rank UseType)</para>
+          <para styleclass="Normal"> &#160; NRDV = Quantity of Water available (as a volume per stress period, L^3, or as a rate L^3/T)</para>
+          <para styleclass="Normal"> &#160; NRDR = Rank of NRD = order that NRDs provide supply for irrigation.</para>
+          <para styleclass="Normal"> &#160; NRDU = What to do with unused NRD water - water available exceeds demand</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160;= 0 indicates only the water necessary is obtained, excess is not delivered</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160;= 1 indicates that unused delivered water is evenly discharged to SFR Delivery locations defined with SEMI_ROUTED_DELIVERY. If SEMI_ROUTED_DELIVERY is not defined, then functions the same as NRDU = 0</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160;= 2 indicates that unused delivered water is evenly injected to a WBS associated supply wells</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &gt;=10 indicates that unused delivered water is evenly infiltrated as deep percolation to the locations within NRD_INFILTRATION_LOCATION that have the same integer</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">It may be specified as VOLUME of water per stress period.</para>
+          <para styleclass="Normal">The keywords RATE and VOLUME are optional and if not specified, then VOLUME is the default.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Or as a RATE of water available in model units L^3/T</para>
+          <para styleclass="Normal">Model has non-routed deliveries (NRD); &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NRD_TYPES">NRD_TYPES</link> = NUMBER OF NRDs;</para>
+          <para styleclass="Normal"> &#160; specified as [WBS_ID, <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NRD_TYPES">NRD_TYPES</link>*(NRDV NRDR NRDU)]; &#160; (NRDV NRDR NRDU) = (Volume Rank UseType)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; *** NON_ROUTED_DELIVERY is only allowed if in the GLOBAL DIMENSION Block has <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NRD_TYPES">NRD_TYPES</link>&gt;0 ***</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NRD_INFILTRATION_LOCATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">OUTPUT OPTIONS (optional)</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> &#160; The following keywords result in an output file that contains information about</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> &#160; either the semi-routed delivery amounts or runoff that returns to SFR</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT SFR_DELIVERY]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Budgets pertaining to water delivered via SFR; specified by <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_DELIV">NSFR_DELIV</link></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT SFR_DELIVERY_BY_WBS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Budgets pertaining to water delivered via SFR; specified by WBS</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT SFR_RETURN]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Runoff budget for all SFR segment/reaches that receive FMP runoff</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT SFR_SRR_ONLY]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Runoff budget for the <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_RETURN">NSFR_RETURN</link> SFR segment/reaches that receive FMP runoff</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT NRD]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">NON_ROUTED_DELIVERY output by WBS that specifies WBS water DEMAND, the NRD available water SUPPLY, and amount of NRD water CONSUMED</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT NRD_BY_WBS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">NON_ROUTED_DELIVERY output by NRD that specifies WBS water DEMAND, the NRD available water SUPPLY, and amount of NRD water CONSUMED</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SEMI_ROUTED_DELIVERY]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-3]</para>
+          <para styleclass="Normal">Delivery points are where a WBS can remove water from SFR to meet irrigation demand</para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_DELIV">NSFR_DELIV</link> in the GLOBAL BLOCK defines the number of List-Style Loads records loaded.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Each record reads: ISRD, WBS_ID, SEGMENT, REACH, [FRAC]</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;Where ISRD is the SRD record ID, WBS_ID is the WBS that has access to the delivery,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160;and SEGMENT, REACH are location in SFR that the WBS can remove water</para>
+          <para styleclass="Normal"> &#160;A name defined in <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="SFR_NAMES">SFR_NAMES</link> may be used in the place of SEGMENT, REACH</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; **IF WBS_ID is set to zero, then the ISRD is ignored and SEGMENT and REACH are not read.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160;This is how you can specify less delivery points then <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_DELIV">NSFR_DELIV</link></para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;FRAC is optional and if specified indicates an initial fraction</para>
+          <para styleclass="Normal"> &#160; &#160;of the irrigation demand that is suppled by the SRD.</para>
+          <para styleclass="Normal"> &#160; &#160;If the SRD can not supply that amount of water, then the</para>
+          <para styleclass="Normal"> &#160; &#160;deficit demand is shifted to other defined SRD&apos;s.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; ***If FRAC is NOT specified (or specified as -1),</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;then water is removed from the SRD in the order they are specified.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160;For Example with <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_DELIV">NSFR_DELIV</link> = 5, the following defines the delivery location for WBS 5 and 6:</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;ISRD, WBS_ID, SEGMENT, REACH, [FRAC]</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 1 &#160; &#160; 5 &#160; &#160; 3 &#160; &#160; &#160; &#160; 2 &#160; &#160; 0.7 &#160; # WBS 5 attempts to meet 70% of demand from SEG 3, &#160;RCH 2 -- If not enough flow, then deficit is shifted to other SRD&apos;s that WBS 5 is associated with.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 2 &#160; &#160; 5 &#160; &#160; 14 &#160; &#160; &#160; &#160;2 &#160; &#160; 0.3 &#160; # WBS 5 attempts to meet 30% of demand from SEG 14, RCH 2 -- If not enough flow, then deficit is shifted to other SRD&apos;s that WBS 5 is associated with.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 3 &#160; &#160; 6 &#160; &#160; 10 &#160; &#160; &#160; &#160;2 &#160; &#160; &#160; &#160; &#160; # No FRAC indicates WBS 6 demand is first satisfied with SEG 10, RCH 2 because it is defined first</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 4 &#160; &#160; 6 &#160; &#160; 18 &#160; &#160; &#160; &#160;2 &#160; &#160; &#160; &#160; &#160; # No FRAC indicates WBS 6 demand is satisfied with SEG 18, RCH 2 if SEG 10, RCH 2 does not satisfy demand</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 5 &#160; &#160; 0 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # ISRD is ignored and not applied to any WBS</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160;Where WBS 5 has approximately 70% of its demand supplied by Segment 3, Reach 2 and 30% from Segment 14, Reach 2</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160;If either SRD can not meet the requested demand then the deficit is shifted to the other.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SEMI_ROUTED_DELIVERY_LOWER_LIMIT and SEMI_ROUTED_DELIVERY_UPPER_LIMIT]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
+          <para styleclass="Normal">By default the SEMI_ROUTED_DELIVERY removes all the water available from the specified SFR Segment/Reach.</para>
+          <para styleclass="Normal">Both a Lower and Upper limit can be imposed for each delivery location.</para>
+          <para styleclass="Normal">The lower limit, SEMI_ROUTED_DELIVERY_LOWER_LIMIT, is similar to a flood-control type of diversion in SFR (IPRIOR = -3).</para>
+          <para styleclass="Normal"> Only flow that is greater then the lower limit is available to the WBS.</para>
+          <para styleclass="Normal">The upper limit, SEMI_ROUTED_DELIVERY_UPPER_LIMIT, is the maximum flow that a WBS can remove.</para>
+          <para styleclass="Normal"> Only flow that is beneath this limit is available to the WBS.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">If both the lower and upper limits are applied then the available water is their difference.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">For Example, note all numbers have units L^3/T,</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> A Lower Limit of 10 and upper limit of 50 would allow not allow a WBS more then 40 because 50 - 10 = 40</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; If the flow in SFR is &lt;10, then no water is available to the WBS</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; If the flow in SFR is between 10 and 50, then the water is available to the WBS is the FLOW - 10</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; --For example the flow is 30, then the available flow is 20 because 30 - 10 = 20</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; If the flow in SFR is &gt;50, then the water is available to the WBS is 40 because 50 - 10 = 40</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; *** Note that the ALLOTMENT block imposes an additional limit on the total surface water supply to each WBS.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;Both the Lower and Upper Limits use List-Style that read <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_DELIV">NSFR_DELIV</link> records.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; *** If SEMI_ROUTED_DELIVERY_LOWER_LIMIT is NOT specified, it is set to 0.0 &#160; &#160;--No lower limit</para>
+          <para styleclass="Normal"> &#160; *** If SEMI_ROUTED_DELIVERY_UPPER_LIMIT is NOT specified, it is set to 1E100 &#160;--No upper limit</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">FLOAT</para>
+          <para styleclass="Normal">SEMI_ROUTED_DELIVERY&apos;s are updated every solver iteration based on the available water in SFR.</para>
+          <para styleclass="Normal">The keyword SEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE defines a tolerance for how much a delivery rate</para>
+          <para styleclass="Normal">can change between solver iterations before convergence is allowed.</para>
+          <para styleclass="Normal">If not specified, then the default tolerance is 0.02 L^3/T change in delivery.</para>
+          <para styleclass="Normal"> &#160;This indicates that--in addition to the solver criteria--convergence is only allowed</para>
+          <para styleclass="Normal"> &#160;if the the change in SEMI_ROUTED_DELIVERY from the previous iteration is less then 0.02 L^3/T</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NO_RETURN_FLOW]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">[ <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L] ]</para>
+          <para styleclass="Normal">Defining How Runoff is Handled</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">WBS Runoff has four options for how is it is applied. (Note they are listed in order of priority)</para>
+          <para styleclass="Normal"> &#160;1) Require all runoff to re-infiltrate as deep percolation. (NORETURNFLOW)</para>
+          <para styleclass="Normal"> &#160;2) Specify the SFR segments/reaches that receive runoff, or define runoff to leave model (SEMI_ROUTED_RETURN)</para>
+          <para styleclass="Normal"> &#160;3) Prorate runoff across all SFR reaches within a WBS. If no SFR reaches are found then</para>
+          <para styleclass="Normal"> &#160;4) If a WBS does not have anywhere to apply runoff then it leaves the model domain and a warning is raised.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">If WBS is defined with multiple runoff options, then the previous order determines which one is selected.</para>
+          <para styleclass="Normal"> &#160;For example NORETURN flow is chosen over SEMI_ROUTED_RETURN if both are specified.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">1) NO_RETURN_FLOW indicates that surface runoff re-infiltrates as deep percolation.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160;LAI[S,T,L] is optional. If not specified then all WBS have NO_RETURN_FLOW.</para>
+          <para styleclass="Normal"> &#160; &#160;if included then specify <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> records that have either</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; a &#160;1 to indicate the WBS has NO_RETURN_FLOW/No runoff</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; or 0 to indicate that it does have return flow and Options 2, 3, and 4 decide the runoff location</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SEMI_ROUTED_RETURN]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-3]</para>
+          <para styleclass="Normal">2) SEMI_ROUTED_RETURN points to the specific SFR segments and reaches that receive runoff</para>
+          <para styleclass="Normal"> &#160; <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_RETURN">NSFR_RETURN</link> in the GLOBAL BLOCK defines the number of List-Style Loads records loaded.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; Each record reads: ISRR, WBS_ID, SEGMENT, REACH, [FRAC]</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; Where ISRR is the SRR record ID, WBS_ID is the WBS,</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; and SEGMENT, REACH are location in SFR that the WBS runoff flows to</para>
+          <para styleclass="Normal"> &#160; A name defined in <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="SFR_NAMES">SFR_NAMES</link> may be used in the place of SEGMENT, REACH</para>
+          <para styleclass="Normal"> &#160; **IF WBS_ID is greater then zero and SEGMENT is set to zero, then</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160;that WBS has its runoff removed from the model domain--same as Option 4, but without the warning.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; **IF WBS_ID &#160;is set to zero, then the ISRR is ignored and SEGMENT and REACH are not read.</para>
+          <para styleclass="Normal"> &#160; **If SEGMENT is set to zero, then runoff for that WBS removed from model (flows out of simulation domain)</para>
+          <para styleclass="Normal"> &#160; **IF REACH &#160; is set to zero, then the specified SEGMENT has runoff applied to all of its reaches.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160;FRAC is optional and if specified is the fraction of surface runoff that is applied the ISRR for a WBS.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; ***If FRAC is specified for a WBS, then all ISRR&apos;s that include that WBS must include a fraction and the the FRACtions should sum to 1.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160; &#160; ***If FRAC is NOT specified (or specified as -1), then the fraction of runoff automatically determined</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;as the ratio of ISRR&apos;s length to the total length of all return flow points for the WBS --note if there is a mixture of FRAC defined and not defined for a WBS, then it defaults to length prorating.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; &#160;For Example with <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_RETURN">NSFR_RETURN</link> = 6, the following allows WBS 4 and 5&apos;s return flow locations</para>
+          <para styleclass="Normal"> &#160; &#160; &#160;ISRR, WBS_ID, SEGMENT, REACH, [FRAC]</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 1 &#160; &#160; 4 &#160; &#160; 3 &#160; &#160; &#160; &#160; 2 &#160; &#160;0.6 &#160; # 60% of WBS 4&apos;s runoff is applied to Seg 3, RCH 4</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 2 &#160; &#160; 4 &#160; &#160; 14 &#160; &#160; &#160; &#160;0 &#160; &#160;0.4 &#160; # 40% of WBS 4&apos;s runoff is applied to all reaches in Seg 14. The runoff is length prorated for each of the SEG 14&apos;s reaches.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 3 &#160; &#160; 5 &#160; &#160; 14 &#160; &#160; &#160; &#160;0 &#160; &#160;1.0 &#160; # Return flow locations may be repeated (Same SEG/RCH as WBS 4). FRAC = 1.0 is optional since WBS 5 only has one return flow point (length prorating would always be 1.0)</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 4 &#160; &#160; 0 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;# ISRR is disabled and ignored</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 5 &#160; &#160; 6 &#160; &#160; 16 &#160; &#160; &#160; &#160;2 &#160; &#160; &#160; &#160; &#160;# No FRAC indicates that WBS 6 will length prorate all its return flow locations</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 6 &#160; &#160; 6 &#160; &#160; 17 &#160; &#160; &#160; &#160;0 &#160; &#160; &#160; &#160; &#160;# WBS 6 includes all reaches from SEG 15, length prorates along with SEG 16, RCH 2</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ROUTED_RETURN_ANY_NON_DIVERSION_REACH or ROUTED_RETURN_ANY_REACH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">3) FULLY ROUTED RETURN indicates that a WBS will search for any SFR reaches</para>
+          <para styleclass="Normal"> &#160; that are within the WBS. It will then length prorate the runoff to those reaches</para>
+          <para styleclass="Normal"> &#160; If one of the following keywords is present then FMP will initiate the search for SFR segments/reaches</para>
+          <para styleclass="Normal"> &#160; for any WBS that does not have a 1 for NO_RETURN_FLOW or defined with a SEMI_ROUTED_RETURN</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; ***Note only one of two keywords may be present. They differ in telling FMP</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;if diversion segments should be included in the search.</para>
+          <para styleclass="Normal">ROUTED_RETURN_ANY_NON_DIVERSION_REACH &#160;WBS return flow (runoff) goes to all <text style="font-style:italic;">non-diversion</text> SEGMENT/REACH located in WBS</para>
+          <para styleclass="Normal">ROUTED_RETURN_ANY_REACH &#160;WBS return flow (runoff) goes to all SEGMENT/REACH located in WBS</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[REBUILD_FULLY_ROUTED_RETURN]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">By default the FULLY ROUTED RETURN network is determined only when the FMP WBS IDs change spatial location.</para>
+          <para styleclass="Normal"> &#160;This saves computation time, since the fully routed network return locations should not change.</para>
+          <para styleclass="Normal">If SFR is configured such that the SFR network is changing by stress period, then there is a chance</para>
+          <para styleclass="Normal"> &#160;that the fully routed network can be incorrect (for example a segment appears in a WBS that was not originally there)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">The keyword REBUILD_FULLY_ROUTED_RETURN forces FMP to rebuild the FULLY ROUTED RETURN network at the start of every stress period.</para>
+          <para styleclass="Normal"> &#160;This slows the simulation runtime down and should only be enabled when SFR has segment/reaches moving (not inflow but its physical location)</para>
+        </td>
+      </tr>
+    </table></para>
   </body>
 </topic>
