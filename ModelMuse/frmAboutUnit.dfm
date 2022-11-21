@@ -5,10 +5,8 @@ inherited frmAbout: TfrmAbout
   ClientHeight = 527
   ClientWidth = 732
   FormStyle = fsStayOnTop
-  OnHide = FormHide
   ExplicitWidth = 748
   ExplicitHeight = 566
-  PixelsPerInch = 96
   TextHeight = 18
   object pnlTop: TPanel
     Left = 0
@@ -3147,7 +3145,6 @@ inherited frmAbout: TfrmAbout
           ScrollBars = ssVertical
           TabOrder = 0
           WordWrap = False
-          Zoom = 100
         end
       end
       object ctgrypnl1: TCategoryPanel

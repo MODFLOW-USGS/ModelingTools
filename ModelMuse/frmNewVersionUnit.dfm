@@ -4,7 +4,6 @@ inherited frmNewVersion: TfrmNewVersion
   ClientWidth = 354
   ExplicitWidth = 370
   ExplicitHeight = 210
-  PixelsPerInch = 96
   TextHeight = 18
   object Image1: TImage
     Left = 8

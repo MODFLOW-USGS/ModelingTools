@@ -10736,15 +10736,14 @@ const
 //    '5.1.0.0'  --
 //    '5.1.0.1'  Bug fix: Fixed bug that caused a conversion error when closing
 //                the Object Properties dialog box.
-
-//               Bug fix: Fixed bug that caused importing SUTRA model results
+//    '5.1.1.0'  Bug fix: Fixed bug that caused importing SUTRA model results
 //                to fail when importing X, Y, and Z velocities.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.0.1';
+  IIModelVersion = '5.1.1.0';
 
 function IModelVersion: string;
 begin
