@@ -435,7 +435,11 @@ begin
       begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel)
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp:
+    msModflowLGR, msModflowLGR2, msModflowFmp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+    :
       begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel);
         for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do

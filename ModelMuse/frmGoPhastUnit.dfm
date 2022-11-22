@@ -952,7 +952,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tlbMesh: TToolBar
-      Left = 121
+      Left = 183
       Top = 162
       Width = 138
       Height = 28
@@ -1023,7 +1023,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tlb3dViewMesh: TToolBar
-      Left = 272
+      Left = 121
       Top = 162
       Width = 49
       Height = 28
@@ -3722,6 +3722,18 @@ inherited frmGoPhast: TfrmGoPhast
       HelpKeyword = 'Model'
       Hint = 'Make SUTRA 4.0 the selected model type'
       OnExecute = acSutra40ActiveExecute
+    end
+    object acModflowOwhmV2: TAction
+      Category = 'ModelSelection'
+      Caption = 'acModflowOwhmV2'
+      OnExecute = acModflowOwhmV2Execute
+    end
+    object acRunModflowOWHM_V2: TAction
+      Category = 'File'
+      Caption = 'Run MODFLOW-OWHM V2'
+      Hint = 'Run MODFLOW-OWHM version 2'
+      ImageIndex = 72
+      OnExecute = acRunModflowOWHM_V2Execute
     end
   end
   object ilDisabledImageList: TImageList

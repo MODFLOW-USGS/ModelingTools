@@ -430,7 +430,11 @@ begin
           end;
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015:
+        msModflowFmp, msModflowCfp, msModflow2015
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+        :
         begin
           for Index := 0 to
             frmGoPhast.PhastModel.ModflowStressPeriods.Count - 1 do
@@ -1963,7 +1967,11 @@ begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel);
         comboModel.Visible := False;
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp:
+    msModflowLGR, msModflowLGR2, msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+    :
       begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel);
         for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
@@ -2513,7 +2521,11 @@ begin
         Caption := StrExportGridDataTo;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+      :
       begin
         lblElements.Caption := StrCellShapefileName;
         lblNodes.Caption := StrCellCornerShapefi;

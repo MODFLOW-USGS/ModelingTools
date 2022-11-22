@@ -673,9 +673,18 @@ begin
       end;
     end;
   end;
+          {$IFDEF OWHMV2}
+          // fix this
+          Assert(False);
+          {$ENDIF}
+
   WriteInteger(ModflowOptions.TimeUnit);
   WriteInteger(ModflowOptions.LengthUnit);
-  if (Model.ModelSelection = msModflowFmp) then
+  if (Model.ModelSelection in [msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+  ]) then
   begin
     APoint := Model.Grid.TwoDElementCorner(0,0);
     WriteFloat(APoint.x);
@@ -690,7 +699,11 @@ begin
   end;
 
   WriteString(' # NLAY, NROW, NCOL, NPER, ITMUNI, LENUNI');
-  if (Model.ModelSelection = msModflowFmp) then
+  if (Model.ModelSelection in [msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+  ]) then
   begin
     WriteString(' XFIRSTCORD YFIRSTCORD GRIDROTATION COORD_OPTIONS');
   end;

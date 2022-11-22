@@ -4,8 +4,9 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
   Caption = 'Edit Feature Formula'
   ClientHeight = 499
   ClientWidth = 601
-  ExplicitWidth = 619
-  ExplicitHeight = 546
+  ExplicitWidth = 617
+  ExplicitHeight = 538
+  PixelsPerInch = 96
   TextHeight = 18
   object spl1: TSplitter
     Left = 256

@@ -2364,7 +2364,11 @@ begin
         result := StrClickOnGridLineA;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         case ViewDirection of
           vdTop: result := StrClickOnGridLineA;
@@ -2723,7 +2727,11 @@ begin
         result := StrClickOnGridBounda;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         case ViewDirection of
           vdTop: result := StrClickOnGridBounda;
@@ -3410,7 +3418,11 @@ begin
           SelectColor32, 0, Polygon, P, MultiplePolygons, True);
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015:
+      msModflowFmp, msModflowCfp, msModflow2015
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         FrontPoints := frmGoPhast.PhastModel.SelectedModel.ModflowGrid.FrontCellPoints(
           frmGoPhast.PhastModel.SelectedModel.ModflowGrid.SelectedRow);
@@ -3558,7 +3570,11 @@ begin
           SelectColor32, 0, Polygon, P, MultiplePolygons, True);
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015:
+      msModflowFmp, msModflowCfp, msModflow2015
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         SidePoints := frmGoPhast.PhastModel.SelectedModel.ModflowGrid.SideCellPoints(
           frmGoPhast.PhastModel.SelectedModel.ModflowGrid.SelectedColumn);

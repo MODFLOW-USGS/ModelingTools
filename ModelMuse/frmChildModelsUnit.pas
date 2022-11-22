@@ -323,7 +323,11 @@ begin
         begin
           seCellCount.Increment := 2;
         end;
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
         begin
           seCellCount.Increment := 1;
         end;
@@ -502,7 +506,11 @@ begin
             seCellCount.AsInteger := 3;
           end;
         end;
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
         begin
           if seCellCount.AsInteger <= 1 then
           begin

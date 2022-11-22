@@ -457,7 +457,11 @@ begin
       socPrintElastCompML, socPrintInelastCompML, socPrintElastCompIB,
       socPrintInelastCompIB];
   end;
-  if frmGoPhast.ModelSelection <> msModflowFmp then
+  if not (frmGoPhast.ModelSelection in [msModflowFmp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+  ]) then
   begin
     if ACol >= Ord(socPrintElastCompML) then
     begin
@@ -695,7 +699,11 @@ end;
 procedure TframePackageSub.EnableLinkSubsidence;
 begin
   cbLinkSubsidence.Enabled := rcSelectionController.Enabled
-    and (frmGoPhast.ModelSelection = msModflowFmp);
+    and (frmGoPhast.ModelSelection in [msModflowFmp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+    ]);
 end;
 
 end.

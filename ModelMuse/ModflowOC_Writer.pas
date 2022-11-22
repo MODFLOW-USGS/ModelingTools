@@ -397,7 +397,11 @@ begin
     WriteSaveFile(FOutputControl.DrawdownOC, StrDRAWDOWN, StrFdn, StrBdn);
   end;
 
-  if (Model.ModelSelection = msModflowFmp)
+  if (Model.ModelSelection in [msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+  ])
     and FOutputControl.SaveBudgetSummary then
   begin
     NameOfFile := ChangeFileExt(FNameOfFile, '.wbgt');
@@ -714,7 +718,11 @@ begin
             WriteString('     PRINT BUDGET');
             NewLine;
 
-            if (Model.ModelSelection = msModflowFmp)
+            if (Model.ModelSelection in [msModflowFmp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+            ])
               and FOutputControl.SaveBudgetSummary then
             begin
               WriteString('     SAVE WBGT ');

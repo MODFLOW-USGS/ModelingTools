@@ -123,7 +123,7 @@ inherited frmProgramLocations: TfrmProgramLocations
       object JvHTLabel1: TJvHTLabel
         Left = 15
         Top = 25
-        Width = 586
+        Width = 382
         Height = 19
         Caption = 
           '<a href="https://water.usgs.gov/water-resources/legacy-software/' +

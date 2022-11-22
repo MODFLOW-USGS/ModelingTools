@@ -12452,7 +12452,11 @@ begin
   case ModelSelection of
     msUndefined, msPhast, msFootPrint: Exit;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015:
+      msModflowFmp, msModflowCfp, msModflow2015
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         DataArray := Sender as TDataArray;
         for Index := 0 to LayerStructure.Count - 1 do
@@ -13728,7 +13732,11 @@ begin
     msUndefined: ;
     msPhast: ;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015:
+      msModflowFmp, msModflowCfp, msModflow2015
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if not (csLoading in ComponentState) then
         begin
@@ -13781,7 +13789,11 @@ begin
     msUndefined: ; // do nothing
     msPhast: ;  // do nothing
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         ModflowGrid.NotifyGridChanged(Sender);
       end;
@@ -13866,7 +13878,11 @@ begin
           PhastGrid.ThreeDGridObserver := nil;
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015:
+        msModflowFmp, msModflowCfp, msModflow2015
+        {$IFDEF OWHMV2}
+        , msModflowOwhm2
+        {$ENDIF}
+        :
         begin
           ModflowGrid.TopGridObserver := nil;
           ModflowGrid.ThreeDGridObserver := nil;
@@ -13899,7 +13915,11 @@ begin
           FGrid := PhastGrid;
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp:
+        msModflowFmp, msModflowCfp
+        {$IFDEF OWHMV2}
+        , msModflowOwhm2
+        {$ENDIF}
+        :
         begin
           FGrid := ModflowGrid;
 //          ThreeDGridObserver.OnUpToDateSet := ModflowGrid.NotifyGridChanged;
@@ -13937,7 +13957,11 @@ begin
       else Assert(False);
     end;
     if (FModelSelection in [msModflow, msModflowLgr, msModflowLGR2,
-      msModflowFmp, msModflowCfp]) then
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      ]) then
     begin
       if ModflowPackages.UpwPackage.IsSelected then
       begin
@@ -15063,7 +15087,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Grid.ThreeDContourDataSet := Value;
       end;
@@ -15096,7 +15124,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Grid.ThreeDDataSet := Value;
       end;
@@ -15768,6 +15800,12 @@ begin
       ModelFile := ProgramLocations.FootprintLocation;
     msModflow2015:
       ModelFile := ProgramLocations.Modflow6Location;
+    {$IFDEF OWHMV2}
+    msModflowOwhm2:
+    // fix this.
+      Assert(False);
+    {$ENDIF}
+
   else
     Assert(False);
   end;
@@ -16542,7 +16580,11 @@ begin
         begin
           result := 'MODFLOW';
         end;
-    msModflowLGR, msModflowLGR2, msModflowFmp: result := 'Parent model';
+    msModflowLGR, msModflowLGR2, msModflowFmp
+    {$IFDEF OWHMV2}
+    , msModflowOwhm2
+    {$ENDIF}
+    : result := 'Parent model';
     msSutra22, msSutra30, msSutra40: result := 'SUTRA';
     msFootprint: Result := 'WellFootprint';
     else Assert(False);
@@ -16558,7 +16600,11 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if Grid <> nil then
         begin
@@ -16623,7 +16669,11 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         result := Grid.ThreeDDataSet;
       end;
@@ -18539,7 +18589,11 @@ begin
       begin
         result := ModflowGrid.ColumnCount;
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp:
+    msModflowLGR, msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+    :
       begin
         result := 0;
         for ColIndex := 0 to ModflowGrid.ColumnCount - 1 do
@@ -18652,7 +18706,11 @@ begin
       begin
         result := ModflowGrid.RowCount;
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp:
+    msModflowLGR, msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+    :
       begin
         result := 0;
         for RowIndex := 0 to ModflowGrid.RowCount - 1 do
@@ -18703,7 +18761,11 @@ begin
           result := ModflowGrid.LayerCount;
         end;
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp:
+    msModflowLGR, msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+    :
       begin
         result := 0;
         for LayerIndex := 0 to ModflowGrid.LayerCount - 1 do
@@ -19789,7 +19851,11 @@ begin
         Result := PhastGrid.LayerCount;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015:
+      msModflowFmp, msModflowCfp, msModflow2015
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         result := LayerStructure.LayerCount;
       end;
@@ -19926,7 +19992,11 @@ end;
 
 function TPhastModel.LgrUsed: boolean;
 begin
-  result := (ModelSelection in [msModflowLGR, msModflowLGR2, msModflowFmp])
+  result := (ModelSelection in [msModflowLGR, msModflowLGR2, msModflowFmp
+  {$IFDEF OWHMV2}
+  , msModflowOwhm2
+  {$ENDIF}
+  ])
     and (ChildModels.Count > 0);
 end;
 
@@ -21182,7 +21252,11 @@ begin
           result := True;
           Exit;
         end;
-        if ModelSelection = msModflowFmp then
+        if ModelSelection in [msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+          ] then
         begin
           if (NoDelayItem.InitialElasticCompactionDataArrayName = DataArray.Name)
             or (NoDelayItem.InitialInelasticCompactionDataArrayName = DataArray.Name)
@@ -21223,7 +21297,11 @@ begin
           result := ModflowPackages.SubPackage.ReadDelayRestartFileName = '';
           Exit;
         end;
-        if ModelSelection = msModflowFmp then
+        if ModelSelection in [msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+          ] then
         begin
           if (DelayItem.InterbedStartingElasticCompactionDataArrayName = DataArray.Name)
             or (DelayItem.InterbedStartingInelasticCompactionDataArrayName = DataArray.Name)
@@ -23027,7 +23105,11 @@ function TPhastModel.FarmProcessIsSelected: Boolean;
 var
   ChildIndex: Integer;
 begin
-  result := (ModelSelection = msModflowFmp)
+  result := (ModelSelection in [msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+          ])
     and ModflowPackages.FarmProcess.IsSelected;
   if not result and LgrUsed then
   begin
@@ -25585,7 +25667,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+      :
       begin
         Grid.GridChanged;
       end;
@@ -25712,7 +25798,11 @@ begin
               end;
             end;
           msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msModflow2015:
+            msModflowFmp, msModflowCfp, msModflow2015
+            {$IFDEF OWHMV2}
+            , msModflowOwhm2
+            {$ENDIF}
+            :
             begin
               if DisvUsed then
               begin
@@ -25826,7 +25916,11 @@ begin
         case ModelSelection of
           msUndefined: Assert(False);
           msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msModflow2015:
+            msModflowFmp, msModflowCfp, msModflow2015
+            {$IFDEF OWHMV2}
+            , msModflowOwhm2
+            {$ENDIF}
+            :
             begin
               if DisvUsed then
               begin
@@ -25934,7 +26028,11 @@ begin
   case ModelSelection of
     msUndefined, msPhast: Assert(False);
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015:
+      msModflowFmp, msModflowCfp, msModflow2015
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+      :
       begin
         if DisVUsed then
         begin
@@ -26029,7 +26127,11 @@ begin
               end;
             end;
           msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msModflow2015:
+            msModflowFmp, msModflowCfp, msModflow2015
+            {$IFDEF OWHMV2}
+            , msModflowOwhm2
+            {$ENDIF}
+            :
             begin
               if DisvUsed then
               begin
@@ -26131,7 +26233,11 @@ begin
         case ModelSelection of
           msUndefined: Assert(False);
           msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msFootprint, msModflow2015:
+            msModflowFmp, msModflowCfp, msFootprint, msModflow2015
+            {$IFDEF OWHMV2}
+            , msModflowOwhm2
+            {$ENDIF}
+            :
             begin
               if DisvUsed then
               begin
@@ -26254,7 +26360,11 @@ begin
               end;
             end;
           msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msModflow2015:
+            msModflowFmp, msModflowCfp, msModflow2015
+            {$IFDEF OWHMV2}
+            , msModflowOwhm2
+            {$ENDIF}
+            :
             begin
               if DisvUsed then
               begin
@@ -26356,7 +26466,11 @@ begin
         case ModelSelection of
           msUndefined: Assert(False);
           msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
+            msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
+            {$IFDEF OWHMV2}
+            , msModflowOwhm2
+            {$ENDIF}
+            :
             begin
               if DisvUsed then
               begin
@@ -31341,6 +31455,11 @@ end;
 
 procedure TCustomModel.SetModflowLocation(const Value: string);
 begin
+            {$IFDEF OWHMV2}
+  // fix this
+            Assert(False);
+            {$ENDIF}
+
   case ModelSelection of
     msModflow:
       ProgramLocations.ModflowLocation := Value;
@@ -31563,7 +31682,11 @@ procedure TCustomModel.SetSelectedColumn(const Value: integer);
 begin
   case ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015, msFootPrint:
+      msModflowFmp, msModflowCfp, msModflow2015, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if not DisvUsed then
         begin
@@ -31619,7 +31742,11 @@ procedure TCustomModel.SetSelectedRow(const Value: integer);
 begin
   case ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015, msFootPrint:
+      msModflowFmp, msModflowCfp, msModflow2015, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if not DisvUsed then
         begin
@@ -31643,7 +31770,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Grid.SideContourDataSet := Value;
       end;
@@ -31672,7 +31803,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Grid.SideDataSet := Value;
       end;
@@ -31738,7 +31873,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Grid.TopContourDataSet := Value;
       end;
@@ -31771,7 +31910,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Grid.TopDataSet := Value;
       end;
@@ -31852,7 +31995,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Grid.FrontContourDataSet := Value;
       end;
@@ -31882,7 +32029,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Grid.FrontDataSet := Value;
       end;
@@ -33912,22 +34063,6 @@ begin
   begin
     result := DrawMesh.SelectedLayer;
   end;
-  {case ModelSelection of
-    msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
-      begin
-        result := Grid.SelectedLayer;
-      end;
-    msSutra22, msSutra30:
-      begin
-        if Mesh <> nil then
-        begin
-          result := SutraMesh.SelectedLayer;
-        end;
-      end
-  else
-    Assert(False);
-  end;}
 end;
 
 function TCustomModel.GetSelectedRow: integer;
@@ -33969,7 +34104,11 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if Grid <> nil then
         begin
@@ -34009,7 +34148,11 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         result := Grid.SideDataSet;
       end;
@@ -34657,7 +34800,11 @@ begin
       Exit;
     end;
     FirstLine := IntToStr(FPValFile.Count);
-    if (ModelSelection = msModflowFmp)
+    if (ModelSelection in [msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+    ])
       and ModflowOutputControl.PrintInputArrays then
     begin
       FirstLine := FirstLine + ' PROPPRINT';
@@ -39533,7 +39680,12 @@ begin
   case ModelSelection of
     msUndefined: result := false;
     msPhast: result := True;
-    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp:
+    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
+      msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         result := ModflowPackages.LpfPackage.IsSelected
           or ModflowPackages.UpwPackage.IsSelected;
@@ -39564,7 +39716,11 @@ begin
     msUndefined: result := False;
     msPhast: result := True;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if ModflowPackages.HufPackage.IsSelected then
         begin
@@ -39640,7 +39796,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2,
-    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint:
+    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+    :
       begin
         result := Grid.TopContainingCell(APoint, EvalAt, False);
       end;
@@ -39714,7 +39874,11 @@ begin
     msUndefined: result := False;
     msPhast: result := True;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if ModflowPackages.LpfPackage.IsSelected
           or ModflowPackages.BcfPackage.IsSelected
@@ -39988,7 +40152,11 @@ begin
   begin
       result := ModflowPackages.UzfPackage.SpecifyResidualWaterContent
         and (ModelSelection in [msModflow, msModflowLGR2,  msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015]);
+        msModflowFmp, msModflowCfp, msModflow2015
+        {$IFDEF OWHMV2}
+        , msModflowOwhm2
+        {$ENDIF}
+        ]);
   end;
 end;
 
@@ -40079,7 +40247,11 @@ begin
       result := ModflowStressPeriods.CompletelyTransient or
         (ModflowPackages.UzfPackage.SpecifyInitialWaterContent
         and (ModelSelection in [msModflow, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015]));
+        msModflowFmp, msModflowCfp, msModflow2015
+        {$IFDEF OWHMV2}
+        , msModflowOwhm2
+        {$ENDIF}
+        ]));
   end;
 end;
 
@@ -40537,7 +40709,11 @@ end;
 function TCustomModel.WetDryUsed(Sender: TObject): boolean;
 begin
   result := ModflowWettingOptions.WettingActive;
-  if result and (ModelSelection in [msModflowNWT, msModflowFmp]) then
+  if result and (ModelSelection in [msModflowNWT, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+  ]) then
   begin
     result := not ModflowPackages.UpwPackage.IsSelected;
   end;
@@ -40621,7 +40797,11 @@ begin
     msUndefined: result := False;
     msPhast, msSutra22, msSutra30, msSutra40, msFootPrint: result := False;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if ModflowPackages.BcfPackage.IsSelected then
         begin
@@ -41383,6 +41563,12 @@ begin
       UpdateFarmsFullStressPeriods(TimeList);
     end;
 
+      {$IFDEF OWHMV2}
+      // Fix this
+      Assert(False);
+      {$ENDIF}
+
+
     OutOfStartRangeScreenObjects := TStringList.Create;
     OutOfEndRangeScreenObjects := TStringList.Create;
     try
@@ -41972,6 +42158,10 @@ begin
     msModflowFmp: result := ProgramLocations.ModflowOwhmLocation;
     msModflowCfp: result := ProgramLocations.ModflowCfpLocation;
     msModflow2015: result := ProgramLocations.Modflow6Location;
+      {$IFDEF OWHMV2}
+      // fix this.
+      msModflowOwhm2: Assert(False)
+      {$ENDIF}
     else result := ProgramLocations.ModflowLocation;
   end;
 end;
@@ -42332,7 +42522,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         result := Grid;
       end;
@@ -42432,7 +42626,11 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2,
-    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint:
+    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint
+    {$IFDEF OWHMV2}
+    , msModflowOwhm2
+    {$ENDIF}
+    :
       begin
         result := Grid.ItemTopLocation[EvalAt, Column, Row];
       end;
@@ -43697,6 +43895,10 @@ begin
   begin
     frmProgressMM.StepIt;
   end;
+      {$IFDEF OWHMV2
+      // fix this}
+      Assert(False);
+      {$ENDIF}
 end;
 
 procedure TCustomModel.ExportSfrPackage(const FileName: string);
@@ -44645,7 +44847,11 @@ begin
             Exit;
           end;
           if ModflowPackages.RipPackage.IsSelected
-            and (ModelSelection in [msModflowFmp]) then
+            and (ModelSelection in [msModflowFmp
+            {$IFDEF OWHMV2}
+            , msModflowOwhm2
+            {$ENDIF}
+            ]) then
           begin
             frmProgressMM.StepIt;
           end;
@@ -45722,7 +45928,11 @@ begin
                 begin
                   ANameFileWriter.WriteToNameFile('BFH', IUPBHSV, HeadFile, foInputAlreadyExists, self);
                 end;
-              msModflowLGR2, msModflowFmp:
+              msModflowLGR2, msModflowFmp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+              :
                 begin
                   ANameFileWriter.WriteToNameFile('BFH2', IUPBHSV, HeadFile, foInputAlreadyExists, self);
                 end;
@@ -45739,7 +45949,11 @@ begin
                 begin
                   ANameFileWriter.WriteToNameFile('BFH', IUPBFSV, FlowFile, foInputAlreadyExists, self);
                 end;
-              msModflowLGR2, msModflowFmp:
+              msModflowLGR2, msModflowFmp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+              :
                 begin
                   ANameFileWriter.WriteToNameFile('BFH2', IUPBFSV, FlowFile, foInputAlreadyExists, self);
                 end;
@@ -46181,7 +46395,11 @@ var
   Row: Integer;
   Layer: Integer;
 begin
-  if ModelSelection in [msModflowLgr2, msModflowFmp] then
+  if ModelSelection in [msModflowLgr2, msModflowFmp
+  {$IFDEF OWHMV2}
+  , msModflowOwhm2
+  {$ENDIF}
+  ] then
   begin
     Exit;
   end;
@@ -46236,7 +46454,11 @@ end;
 
 procedure TChildModel.AdjustCellPosition(var Column, Row, Layer: integer);
 begin
-  if ModelSelection in [msModflowLgr2, msModflowFmp] then
+  if ModelSelection in [msModflowLgr2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+  ] then
   begin
     Exit;
   end;
@@ -46925,7 +47147,11 @@ begin
       msModflowLGR:
         result := ((ACol + (ChildCellsPerParentCell div 2))
            div ChildCellsPerParentCell) + FFirstCol;
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
         result := (ACol div ChildCellsPerParentCell) + FFirstCol;
       else
         Assert(False);
@@ -47006,7 +47232,11 @@ begin
       msModflowLGR:
         result := ((ARow + (ChildCellsPerParentCell div 2))
            div ChildCellsPerParentCell) + FFirstRow;
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
         result := (ARow div ChildCellsPerParentCell) + FFirstRow;
       else
         Assert(False);
@@ -47543,7 +47773,11 @@ begin
   case ModelSelection of
     msModflowLGR:
       NewLength := (EndPosition - StartPosition)*ChildCellsPerParentCell + 2;
-    msModflowLGR2, msModflowFmp:
+    msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+    :
       NewLength := (EndPosition - StartPosition + 1)*ChildCellsPerParentCell+1;
     else
       begin
@@ -47583,7 +47817,11 @@ begin
         StartParentIndex := StartPosition+1;
         EndParentIndex := EndPosition-1;
       end;
-    msModflowLGR2, msModflowFmp:
+    msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+    :
       begin
         StartParentIndex := StartPosition;
         EndParentIndex := EndPosition;
@@ -47620,7 +47858,11 @@ begin
           (Start + ParentPositions[EndPosition+1])/2;
         Inc(PositionIndex);
       end;
-    msModflowLGR2, msModflowFmp:
+    msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+    :
       begin
         ChildPostions[PositionIndex] := ParentPositions[EndPosition+1];
         Inc(PositionIndex);
@@ -48341,7 +48583,11 @@ begin
     Exit;
   end;
   if not (FParentModel.ModelSelection in
-    [msModflowLGR, msModflowLGR2, msModflowFMP]) then
+    [msModflowLGR, msModflowLGR2, msModflowFMP
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+    ]) then
   begin
     Exit;
   end;
@@ -48799,7 +49045,11 @@ begin
     case ModelSelection of
       msModflowLGR:
         result.Last := (ChildCellsPerParentCell div 2);
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
         result.Last := (ChildCellsPerParentCell - 1);
       else
         result.Last := (ChildCellsPerParentCell div 2);
@@ -48811,7 +49061,11 @@ begin
     case ModelSelection of
       msModflowLGR:
         result.First := result.Last - (ChildCellsPerParentCell div 2);
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
         result.First := result.Last - (ChildCellsPerParentCell - 1);
       else
         result.First := result.Last - (ChildCellsPerParentCell div 2);
@@ -48823,7 +49077,11 @@ begin
       msModflowLGR:
         result.Last := (ACol-FFirstCol+1)*ChildCellsPerParentCell
           - (ChildCellsPerParentCell div 2) - 1;
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
         result.Last := (ACol-FFirstCol+1)*ChildCellsPerParentCell - 1;
       else
         result.Last := (ACol-FFirstCol+1)*ChildCellsPerParentCell
@@ -48910,7 +49168,11 @@ begin
     case ModelSelection of
       msModflowLGR:
         result.Last := (ChildCellsPerParentCell div 2);
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
         result.Last := (ChildCellsPerParentCell -1);
       else
         result.Last := (ChildCellsPerParentCell div 2);
@@ -48922,7 +49184,11 @@ begin
     case ModelSelection of
       msModflowLGR:
         result.First := result.Last - (ChildCellsPerParentCell div 2);
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
         result.First := result.Last - (ChildCellsPerParentCell - 1);
       else
         result.First := result.Last - (ChildCellsPerParentCell div 2);
@@ -48934,7 +49200,11 @@ begin
       msModflowLGR:
         result.Last := (ARow-FFirstRow+1)*ChildCellsPerParentCell
           - (ChildCellsPerParentCell div 2) - 1;
-      msModflowLGR2, msModflowFmp:
+      msModflowLGR2, msModflowFmp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
         result.Last := (ARow-FFirstRow+1)*ChildCellsPerParentCell - 1;
       else
         result.Last := (ARow-FFirstRow+1)*ChildCellsPerParentCell
@@ -49538,7 +49808,11 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if Grid <> nil then
         begin
@@ -49581,7 +49855,11 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if Grid <> nil then
         begin
@@ -49668,7 +49946,11 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         if Grid <> nil then
         begin
@@ -49712,7 +49994,11 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         result := Grid.FrontDataSet;
       end;

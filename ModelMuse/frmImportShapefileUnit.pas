@@ -7944,7 +7944,11 @@ begin
           ShouldEnable := (rgEvaluatedAt.ItemIndex = 1);
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015:
+        msModflowFmp, msModflowCfp, msModflow2015
+        {$IFDEF OWHMV2}
+        , msModflowOwhm2
+        {$ENDIF}
+        :
         begin
           ShouldEnable := (rgEvaluatedAt.ItemIndex = 0);
         end;
@@ -8638,7 +8642,11 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp:
+      msModflowFmp, msModflowCfp
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Packages := Model.ModflowPackages;
         AddModflowPackageToImportChoices(Packages.ChdBoundary);
@@ -11462,7 +11470,11 @@ begin
           end;
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015:
+        msModflowFmp, msModflowCfp, msModflow2015
+        {$IFDEF OWHMV2}
+        , msModflowOwhm2
+        {$ENDIF}
+        :
         begin
           Packages := Model.ModflowPackages;
           APackage := comboBoundaryChoice.Items.Objects[
@@ -12035,7 +12047,11 @@ begin
           end;
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015:
+        msModflowFmp, msModflowCfp, msModflow2015
+        {$IFDEF OWHMV2}
+        , msModflowOwhm2
+        {$ENDIF}
+        :
         begin
           Model := frmGoPhast.PhastModel;
           Packages := Model.ModflowPackages;

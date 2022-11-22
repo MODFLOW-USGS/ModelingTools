@@ -980,7 +980,12 @@ begin
     or (FarmProcess.CropConsumptiveConcept <> cccConcept1) then
   begin
     Exit;
-  end; 
+  end;
+          {$IFDEF OWHMV2}
+          // fix this
+          Assert(False);
+          {$ENDIF}
+
   FoundFirst := False;
   ShortStepLength := 0;
   for Index := 0 to Count - 1 do

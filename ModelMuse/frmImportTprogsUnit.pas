@@ -161,7 +161,11 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015:
+      msModflowFmp, msModflowCfp, msModflow2015
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
         rgEvaluatedAt.Enabled := False;
         if frmGoPhast.Grid <> nil then

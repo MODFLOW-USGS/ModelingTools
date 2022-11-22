@@ -216,7 +216,11 @@ begin
   Mesh := nil;
   case LocalModel.ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
 //        Grid := LocalModel.Grid;
       end;
@@ -514,7 +518,11 @@ begin
   Mesh := nil;
   case LocalModel.ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
         Grid := LocalModel.Grid;
         if (Grid.ColumnCount = 0)

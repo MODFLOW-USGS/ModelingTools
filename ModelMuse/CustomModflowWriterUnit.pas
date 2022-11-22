@@ -1587,7 +1587,16 @@ begin
       msModflow2015:
         begin
           ModflowLocation := ProgramLocations.Modflow6Location;
-        end
+        end;
+      {$IFDEF OWHMV2}
+      msModflowOwhm2:
+        begin
+      // fix this
+          ModflowLocation := ProgramLocations.ModflowOwhmLocation;
+          Assert(False);
+        end;
+      {$ENDIF}
+
       else Assert(False);
     end;
 
@@ -4617,7 +4626,11 @@ begin
   AddNameFileComment(Format(StrNameFileForMODFLO,
     [DateToStr(Now), Model.ProgramName + ' Version ' + IModelVersion]));
   OutputListFileName := ChangeFileExt(FileName, '.lst');
-  if Model.ModelSelection = msModflowFmp then
+  if Model.ModelSelection in [msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+  ] then
   begin
     WriteToNameFile(StrLIST, Model.UnitNumbers.UnitNumber(StrLIST),
       OutputListFileName, foOutput,
@@ -7068,7 +7081,11 @@ var
     end;
   end;
 begin
-  if Model.ModelSelection in [msModflowLGR2, msModflowFmp] then
+  if Model.ModelSelection in [msModflowLGR2, msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+  ] then
   begin
     AdjustForLGR := False;
   end;

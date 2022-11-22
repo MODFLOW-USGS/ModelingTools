@@ -11,7 +11,7 @@ inherited frmGridSpacing: TfrmGridSpacing
   Position = poOwnerFormCenter
   OnKeyPress = FormKeyPress
   ExplicitWidth = 477
-  ExplicitHeight = 491
+  ExplicitHeight = 492
   PixelsPerInch = 96
   TextHeight = 18
   object pcSubdivide: TPageControl
@@ -24,10 +24,6 @@ inherited frmGridSpacing: TfrmGridSpacing
     TabOrder = 1
     object tabColumns: TTabSheet
       Caption = 'Columns (X'#39')'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlColumns: TPanel
         Left = 0
         Top = 169
@@ -106,6 +102,7 @@ inherited frmGridSpacing: TfrmGridSpacing
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -129,6 +126,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -162,10 +160,6 @@ inherited frmGridSpacing: TfrmGridSpacing
     object tabRows: TTabSheet
       Caption = 'Rows (Y'#39')'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlRows: TPanel
         Left = 0
         Top = 169
@@ -244,6 +238,7 @@ inherited frmGridSpacing: TfrmGridSpacing
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -267,6 +262,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -300,10 +296,6 @@ inherited frmGridSpacing: TfrmGridSpacing
     object tabLayers: TTabSheet
       Caption = 'Layers (Z)'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlLayers: TPanel
         Left = 0
         Top = 169
@@ -382,6 +374,7 @@ inherited frmGridSpacing: TfrmGridSpacing
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -405,6 +398,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

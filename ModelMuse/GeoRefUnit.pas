@@ -333,7 +333,11 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-      msModflowCfp, msModflow2015:
+      msModflowCfp, msModflow2015
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
         case ModflowLengthUnits of
           0:
@@ -367,6 +371,10 @@ end;
 
 function TGeoRef.ModelProgramName: string;
 begin
+              {$IFDEF OWHMV2}
+              // fix this
+              Assert(False);
+              {$ENDIF}
   case Modeltype of
     msPhast: result := 'PHAST';
     msModflow: Result := 'MODFLOW-2005';
@@ -473,7 +481,11 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-      msModflowCfp, msModflow2015:
+      msModflowCfp, msModflow2015
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
         case ModflowTimeUnits of
           0:

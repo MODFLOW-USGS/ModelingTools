@@ -6,6 +6,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
   ClientWidth = 604
   ExplicitWidth = 620
   ExplicitHeight = 442
+  PixelsPerInch = 96
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 121
@@ -682,6 +683,8 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       HelpType = htKeyword
       HelpKeyword = 'Head_and_Drawdown_Panes'
       Caption = 'jvspGwt'
+      ExplicitWidth = 173
+      ExplicitHeight = 160
       inline frameGWT: TframeOutputControl
         Left = 0
         Top = 0
@@ -697,8 +700,8 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         ParentFont = False
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 473
-        ExplicitHeight = 362
+        ExplicitWidth = 173
+        ExplicitHeight = 160
         inherited lblOutputType: TLabel
           Width = 158
           Caption = 'Groundwater Transport'

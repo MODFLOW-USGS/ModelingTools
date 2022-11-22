@@ -530,7 +530,11 @@ begin
     IUZFOPT := 1;
   end;
   if Model.ModelSelection in [msModflowNWT, msModflowLGR2, msModflow,
-    msModflowFmp {, msModflowCfp}] then
+    msModflowFmp {, msModflowCfp}
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+    ] then
   begin
     UzfPackage := Model.ModflowPackages.UzfPackage;
     NwtFormat := Model.NWT_Format;
@@ -736,7 +740,11 @@ begin
   WriteInteger(NUZGAG);
   WriteFloat(SURFDEP);
   if Model.ModelSelection in [msModflowNWT, msModflowLGR2, msModflow,
-    msModflowFmp {, msModflowCfp}] then
+    msModflowFmp {, msModflowCfp}
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+    ] then
   begin
     WriteString(' # Data Set 1b: NUZTOP IUZFOPT IRUNFLG IETFLG IUZFCB1 IUZFCB2');
   end
@@ -898,7 +906,11 @@ var
 begin
   THTS := Model.DataArrayManager.GetDataSetByName(StrUzfSaturatedWaterContent);
   if Model.ModelSelection in [msModflowNWT, msModflowLGR2, msModflow,
-    msModflowFmp {, msModflowCfp}] then
+    msModflowFmp {, msModflowCfp}
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+    ] then
   begin
     WriteArray(THTS, 0, 'Data Set 6a: THTS', StrNoValueAssigned, 'THTS');
   end
@@ -914,7 +926,11 @@ var
   THTR: TDataArray;
 begin
   if (Model.ModelSelection in [msModflowNWT, msModflowLGR2, msModflow,
-    msModflowFmp {, msModflowCfp} ] )
+    msModflowFmp {, msModflowCfp}
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+    ] )
     and Model.ModflowPackages.UzfPackage.SpecifyResidualWaterContent then
   begin
     THTR := Model.DataArrayManager.GetDataSetByName(StrUzfReisidualWaterContent);
@@ -929,7 +945,11 @@ var
 begin
   if Model.ModflowStressPeriods.CompletelyTransient
     or ((Model.ModelSelection in [msModflowNWT, msModflowLGR2, msModflow,
-      msModflowFmp {, msModflowCfp}])
+      msModflowFmp {, msModflowCfp}
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+      ])
       and Model.ModflowPackages.UzfPackage.SpecifyInitialWaterContent) then
   begin
     THTI := Model.DataArrayManager.GetDataSetByName(StrUzfInitialUnsaturatedWaterContent);

@@ -30268,6 +30268,12 @@ object TTaskHistory
     item
       Date = 44886.000000000000000000
       Categories.Strings = (
-        'Installer')
+        'Installer'
+        'FMP')
+    end
+    item
+      Date = 44887.000000000000000000
+      Categories.Strings = (
+        'FMP')
     end>
 end

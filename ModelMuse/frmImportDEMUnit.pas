@@ -205,7 +205,11 @@ begin
         end;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint:
+      msModflowFmp, msModflowCfp, msFootPrint
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
         Grid := frmGoPhast.PhastModel.Grid;
         result := (Grid <> nil) and (Grid.ColumnCount > 0)
@@ -309,7 +313,11 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
         NodeElemString := StrCell;
         CenterString := StrCellCenter

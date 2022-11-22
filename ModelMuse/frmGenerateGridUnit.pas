@@ -119,7 +119,11 @@ begin
         cbSmoothGrid.Checked := False;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         Count := 0;
         for Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do

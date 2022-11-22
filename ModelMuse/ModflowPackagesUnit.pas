@@ -1180,17 +1180,30 @@ begin
 //    Inc(Result);
 //  end;
 
+          {$IFDEF OWHMV2}
+          // fix this
+          Assert(False);
+          {$ENDIF}
+
   if FarmProcess.IsSelected and (Model.ModelSelection = msModflowFmp) then
   begin
     Inc(Result);
   end;
 
-  if RipPackage.IsSelected and (Model.ModelSelection = msModflowFmp) then
+  if RipPackage.IsSelected and (Model.ModelSelection in [msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+  ]) then
   begin
     Inc(Result);
   end;
 
-  if ConduitFlowProcess.IsSelected and (Model.ModelSelection = msModflowCfp) then
+  if ConduitFlowProcess.IsSelected and (Model.ModelSelection in [msModflowCfp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+  ]) then
   begin
     Inc(Result);
   end;
@@ -1202,7 +1215,11 @@ begin
   end;
 
   if SwrPackage.IsSelected
-    and (Model.ModelSelection in [msModflow, msModflowNWT, msModflowFmp]) then
+    and (Model.ModelSelection in [msModflow, msModflowNWT, msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+    ]) then
   begin
     Inc(Result);
   end;

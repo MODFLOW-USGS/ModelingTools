@@ -8065,7 +8065,11 @@ begin
           Draw1ElevPhast(Direction, Bitmap32, DrawAsSelected);
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp:
+        msModflowFmp, msModflowCfp
+        {$IFDEF OWHMV2}
+        , msModflowOwhm2
+        {$ENDIF}
+        :
         begin
           Draw1ElevModflow(Direction, Bitmap32, DrawAsSelected,
             (Model as TPhastModel).SelectedModel);
@@ -12407,7 +12411,11 @@ var
             end;
           end;
         msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-          msModflowFmp, msModflowCfp, msModflow2015:
+          msModflowFmp, msModflowCfp, msModflow2015
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+          :
           begin
             Assert(EvaluatedAt = eaBlocks);
             BlockTop := LocalModel.ModflowGrid.
@@ -14731,7 +14739,11 @@ begin
           Draw2ElevPhast(Direction, Bitmap32);
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp:
+        msModflowFmp, msModflowCfp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+        :
         begin
           Draw2ElevModflow(Direction, Bitmap32, (Model as TPhastModel).SelectedModel);
         end;
@@ -23811,6 +23823,12 @@ begin
           begin
             Item.DelegateClass := TModflow6Delegate.ClassName;
           end;
+          {$IFDEF OWHMV2}
+          msModflowOwhm2:
+          // fix this
+            Assert(False);
+          {$ENDIF}
+
         else
           begin
             Assert(False);

@@ -974,6 +974,10 @@ end;
 
 procedure TfrmStartUp.SetModflowChoice;
 begin
+          {$IFDEF OWHMV2}
+          // fix this
+          Assert(False);
+          {$ENDIF}
   if rgChoice.ItemIndex = Ord(scNewModflow) then
   begin
     case comboModflowSelection.ItemIndex of

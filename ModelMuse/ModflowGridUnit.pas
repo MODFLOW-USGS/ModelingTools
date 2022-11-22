@@ -1804,7 +1804,11 @@ begin
   begin
     LocalModel := TPhastModel(Model);
     if LocalModel.ModelSelection in [msModflowLGR , msModflowLGR2,
-       msModflowFmp] then
+       msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+       ] then
     begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
@@ -1975,7 +1979,11 @@ begin
   begin
     LocalModel := TPhastModel(Model);
     if LocalModel.ModelSelection in [msModflowLGR, msModflowLGR2,
-       msModflowFmp] then
+       msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+       ] then
     begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
@@ -2002,7 +2010,11 @@ begin
   begin
     LocalModel := TPhastModel(Model);
     if LocalModel.ModelSelection in [msModflowLGR, msModflowLGR2,
-      msModflowFmp] then
+      msModflowFmp
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+      ] then
     begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin

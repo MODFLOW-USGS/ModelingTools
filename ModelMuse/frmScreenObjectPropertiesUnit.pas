@@ -20632,7 +20632,11 @@ begin
   end;
   rdeDrtLay.Text := '1';
   rdeDrtLay.Min := 1;
-  if frmGoPhast.ModelSelection = msModflowFmp then
+  if frmGoPhast.ModelSelection in [msModflowFmp
+    {$IFDEF OWHMV2}
+    , msModflowOwhm2
+    {$ENDIF}
+    ] then
   begin
     if frmGoPhast.PhastModel.ModflowPackages.FarmProcess.IsSelected then
     begin
@@ -23184,7 +23188,11 @@ begin
         lblGridCellSize.Caption := StrGridElementSize;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      :
       begin
         cbSetGridCellSize.Caption := StrUseToSetGridCell;
         lblGridCellSize.Caption := StrGridCellSize;

@@ -6252,6 +6252,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited pnlSegmentUpstream: TPanel
                   Width = 573
+                  ExplicitWidth = 573
                   inherited dgUp: TRbwDataGrid4
                     Width = 571
                     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goAlwaysShowEditor]
@@ -6432,6 +6433,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         CheckStyle = csCheck
                         AutoAdjustColWidths = True
                       end>
+                    ExplicitWidth = 571
                     ColWidths = (
                       50
                       50
@@ -6455,6 +6457,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited pnlSegmentDownstream: TPanel
                   Width = 573
                   Height = 225
+                  ExplicitWidth = 573
                   ExplicitHeight = 255
                   inherited dgDown: TRbwDataGrid4
                     Width = 571
@@ -6637,6 +6640,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         CheckStyle = csCheck
                         AutoAdjustColWidths = True
                       end>
+                    ExplicitWidth = 571
                     ExplicitHeight = 201
                     ColWidths = (
                       50

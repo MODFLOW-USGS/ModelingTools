@@ -802,7 +802,12 @@ begin
       begin
         Assert(False);
       end;
-    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp:
+    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
+      msModflowCfp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
         WriteString('#Read MODFLOW-2005 grid information file');
         NewLine;

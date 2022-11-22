@@ -175,7 +175,11 @@ begin
         rrdgGeoRef.Rows[Ord(grrTimeUnit)].LimitToList := True;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-      msModflowCfp, msModflow2015:
+      msModflowCfp, msModflow2015
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
         rrdgGeoRef.Rows[Ord(grrLengthUnit)].LimitToList := True;
         rrdgGeoRef.Rows[Ord(grrTimeUnit)].LimitToList := True;
@@ -228,7 +232,11 @@ begin
   begin
     GeoRefRow := TGeoRefRow(ARow);
     if (FGeoRef.Modeltype in [msPhast, msModflow, msModflowLGR, msModflowLGR2,
-      msModflowNWT, msModflowFmp, msModflowCfp, msModflow2015])
+      msModflowNWT, msModflowFmp, msModflowCfp, msModflow2015
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      ])
       and (GeoRefRow in [grrLengthUnit, grrTimeUnit]) then
     begin
       CanSelect := False;
@@ -253,7 +261,11 @@ begin
       begin
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-      msModflowCfp, msModflow2015:
+      msModflowCfp, msModflow2015
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
       end;
     msSutra22, msSutra30, msSutra40, msFootPrint:

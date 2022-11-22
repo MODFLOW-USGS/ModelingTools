@@ -3,8 +3,9 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
   Caption = 'Import Surfer Grid File'
   ClientHeight = 473
   ClientWidth = 594
-  ExplicitWidth = 612
-  ExplicitHeight = 520
+  ExplicitWidth = 610
+  ExplicitHeight = 512
+  PixelsPerInch = 96
   TextHeight = 18
   inherited lblDataSet: TLabel
     Top = 156

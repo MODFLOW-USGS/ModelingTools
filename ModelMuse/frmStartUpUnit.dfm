@@ -10,6 +10,7 @@ inherited frmStartUp: TfrmStartUp
   OnClose = FormClose
   ExplicitWidth = 767
   ExplicitHeight = 445
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -176,7 +177,6 @@ inherited frmStartUp: TfrmStartUp
           EditLabel.Height = 18
           EditLabel.Caption = 'Projection'
           TabOrder = 4
-          Text = ''
         end
         object rgProjectionType: TRadioGroup
           Left = 203
@@ -240,6 +240,8 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
+        ExplicitWidth = 296
+        ExplicitHeight = 121
         object lblZDist: TLabel
           Left = 520
           Top = 110

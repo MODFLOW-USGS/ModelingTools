@@ -390,6 +390,11 @@ begin
   ModflowNwtOK := CheckControl(fedModflowNWT)
     or (frmGoPhast.PhastModel.ModelSelection  <> msModflowNWT);
 
+          {$IFDEF OWHMV2}
+//          Fix this
+          Assert(False);
+          {$ENDIF}
+
   jvrltModflowFmp.Collapsed :=
     (frmGoPhast.PhastModel.ModelSelection  <> msModflowFMP);
   ModflowFmpOK := CheckControl(fedModflowFmp)

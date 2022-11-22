@@ -5,8 +5,8 @@ inherited frmChildModels: TfrmChildModels
   ClientHeight = 547
   ClientWidth = 471
   ExplicitWidth = 487
-  ExplicitHeight = 585
-  PixelsPerInch = 120
+  ExplicitHeight = 586
+  PixelsPerInch = 96
   TextHeight = 18
   object Panel1: TPanel
     Left = 0
@@ -107,10 +107,6 @@ inherited frmChildModels: TfrmChildModels
     TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         350
         423)
@@ -204,10 +200,6 @@ inherited frmChildModels: TfrmChildModels
     object tabDiscretization: TTabSheet
       Caption = 'Discretization'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgDiscretization: TRbwDataGrid4
         Left = 0
         Top = 27
@@ -235,6 +227,7 @@ inherited frmChildModels: TfrmChildModels
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -258,6 +251,7 @@ inherited frmChildModels: TfrmChildModels
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -281,6 +275,7 @@ inherited frmChildModels: TfrmChildModels
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -339,10 +334,6 @@ inherited frmChildModels: TfrmChildModels
     object tabSolution: TTabSheet
       Caption = 'Solution'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         350
         423)

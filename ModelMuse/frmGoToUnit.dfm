@@ -7,8 +7,9 @@ inherited frmGoTo: TfrmGoTo
   Caption = 'Go To'
   ClientHeight = 320
   ClientWidth = 297
-  ExplicitWidth = 315
-  ExplicitHeight = 367
+  ExplicitWidth = 313
+  ExplicitHeight = 359
+  PixelsPerInch = 96
   TextHeight = 18
   object pcMain: TPageControl
     Left = 0

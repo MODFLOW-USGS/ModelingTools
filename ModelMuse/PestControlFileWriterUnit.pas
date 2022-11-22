@@ -989,7 +989,12 @@ begin
   case Model.MOdelSelection of
     msUndefined, msPhast, msFootPrint:
       Assert(False);
-    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp:
+    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
+      msModflowCfp
+              {$IFDEF OWHMV2}
+              , msModflowOwhm2
+              {$ENDIF}
+      :
       begin
         NINSFLE := 1;
       end;
