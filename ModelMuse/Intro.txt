@@ -1,7 +1,7 @@
 @title(Introduction to ModelMuse)
 @shorttitle(Introduction)
 
-This programmer’s guide provides an introduction to the programming in ModelMuse and describes tools that can be used to obtain a more complete description or to use for testing.  ModelMuse is written in Object Pascal and can be compiled using Embarcadero Delphi XE.  Among the introductions to Object Pascal are @link(Shemitz2002 Shemitz (2002)), @link(Cantu2003 Cantù (2003)), and @link(CalvertAndOthers2002 Calvert and others (2002)).  The website http://www.marcocantu.com/ contains useful guides that can be downloaded.  Other useful resources include @link(Thorpe1997 Thorpe (1997)), and @link(Konopka1997 Konopka (1997)).
+This programmer’s guide provides an introduction to the programming in ModelMuse and describes tools that can be used to obtain a more complete description or to use for testing.  ModelMuse is written in Object Pascal and can be compiled using Embarcadero Delphi 11.1.  Among the introductions to Object Pascal are @link(Shemitz2002 Shemitz (2002)), @link(Cantu2003 Cantù (2003)), and @link(CalvertAndOthers2002 Calvert and others (2002)).  The website http://www.marcocantu.com/ contains useful guides that can be downloaded.  Other useful resources include @link(Thorpe1997 Thorpe (1997)), and @link(Konopka1997 Konopka (1997)).
 
 @html(
 <ul>
