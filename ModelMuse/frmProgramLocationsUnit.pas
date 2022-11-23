@@ -74,6 +74,9 @@ type
     jvrltZonebudget6: TJvRollOut;
     htlblZoneBudget6: TJvHTLabel;
     fedZonebudget6: TJvFilenameEdit;
+    jvrltModflowOwhmV2: TJvRollOut;
+    htlblModflowOwhmV2: TJvHTLabel;
+    fedModflowOwhm2: TJvFilenameEdit;
     procedure fedModflowChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure jvrltExpand(Sender: TObject);
@@ -254,6 +257,15 @@ begin
     fedModflow6.FileName := '';
   end;
 
+  {$IFDEF OWHMV2}
+  try
+    fedModflowOwhm2.FileName := Locations.ModflowOwhmV2Location;
+  except on EComboEditError do
+    fedModflowOwhm2.FileName := '';
+  end;
+  {$ELSE}
+  fedModflowOwhm2.Enabled := False;
+  {$ENDIF}
 
   HighlightControls;
 end;
@@ -292,6 +304,9 @@ begin
     Locations.Mt3dmsLocation := fedMt3dms.FileName;
     Locations.Mt3dUsgsLocation := fedMt3dUsgs.FileName;
     Locations.Modflow6Location := fedModflow6.FileName;
+    {$IFDEF OWHMV2}
+    Locations.ModflowOwhmV2Location := fedModflowOwhm2.FileName;
+    {$ENDIF}
     Undo := TUndoChangeProgramLocations.Create(Locations);
     frmGoPhast.UndoStack.Submit(Undo);
   finally
@@ -312,6 +327,7 @@ var
   ModflowCfpOK: Boolean;
   Modflow6OK: Boolean;
   ZoneBudget6OK: Boolean;
+  ModflowOwhmV2OK: Boolean;
   function CheckControl(Edit: TJvFilenameEdit): boolean;
   var
     LocalFileName: string;
@@ -380,20 +396,18 @@ begin
     (frmGoPhast.PhastModel.ModelSelection  <> msModflowLGR2);
   ModflowLgr2OK := CheckControl(fedModflowLgr2)
     or (frmGoPhast.PhastModel.ModelSelection  <> msModflowLGR2);
-//  {$ELSE}
-//  ModflowLgr2OK := True;
-//  jvrltModflowLgr2.Visible := False;
-//  {$ENDIF}
 
   jvrltModflowNWT.Collapsed :=
     (frmGoPhast.PhastModel.ModelSelection  <> msModflowNWT);
   ModflowNwtOK := CheckControl(fedModflowNWT)
     or (frmGoPhast.PhastModel.ModelSelection  <> msModflowNWT);
 
-          {$IFDEF OWHMV2}
-//          Fix this
-          Assert(False);
-          {$ENDIF}
+  {$ifdef OWHMV2}
+  jvrltModflowOwhmV2.Collapsed :=
+    (frmGoPhast.PhastModel.ModelSelection  <> msModflowOwhm2);
+  ModflowOwhmV2OK := CheckControl(fedModflowOwhm2)
+    or (frmGoPhast.PhastModel.ModelSelection  <> msModflowOwhm2);
+  {$ENDIF}
 
   jvrltModflowFmp.Collapsed :=
     (frmGoPhast.PhastModel.ModelSelection  <> msModflowFMP);
@@ -409,8 +423,6 @@ begin
     (frmGoPhast.PhastModel.ModelSelection  <> msModflow2015);
   Modflow6OK := CheckControl(fedModflow6)
     or (frmGoPhast.PhastModel.ModelSelection  <> msModflow2015);
-
-
 
   jvrltModpath.Collapsed := not frmGoPhast.PhastModel.ModPathIsSelected;
   ModpathOK := CheckControl(fedModpath)
@@ -446,10 +458,9 @@ begin
   FileEditorOK := CheckControl(fedTextEditor);
 
   btnOK.Enabled := ModflowOK and ModflowLgrOK and ModflowLgr2OK
-    and ModflowNwtOK and ModflowFmpOK
-    and ModflowCfpOK and ModpathOK and ZoneBudgetOK and ZoneBudget6OK and FileEditorOK
-    and Modflow6OK;
-
+    and ModflowNwtOK and ModflowFmpOK and ModflowOwhmV2OK
+    and ModflowCfpOK and ModpathOK and ZoneBudgetOK and ZoneBudget6OK
+    and FileEditorOK and Modflow6OK;
 end;
 
 procedure TfrmProgramLocations.jvrltExpand(Sender: TObject);

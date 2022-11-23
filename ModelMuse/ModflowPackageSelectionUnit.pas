@@ -4897,6 +4897,154 @@ Type
       read GetWaterCostCoefficients write SetWaterCostCoefficients stored False;
   end;
 
+  TFarmOption = (foNotUsed, foStatic, foTransient);
+  TProrateDeficiencyOption = (pdoByDemand, pdoAverage);
+  TDemandChoice = (dcFlux, dcRate);
+  TRoutedReturnChoice = (rrcDefault, rrcNoReturn, rrcAnyNonDiversion, rrcAnny);
+
+  TFarmProcess4 = class(TModflowPackageSelection)
+  private
+    FDemandChoice: TDemandChoice;
+    FStaticEfficiency: Boolean;
+    FFarm_Net_Recharge_List: Boolean;
+    FFarm_Well_Summary: Boolean;
+    FPrint_Sfr_Delivery_By_Wbs: Boolean;
+    FBare_Precipitation_Consumption_Fraction: TFarmOption;
+    FReferenceET: TFarmOption;
+    FPrint_Sfr_Delivery: Boolean;
+    FPrint_Nrd_By_Wbs: Boolean;
+    FEvapotranspiration_SummarySeparate: Boolean;
+    FRebuild_Fully_Routed_Return: Boolean;
+    FBare_Runoff_Fraction: TFarmOption;
+    FNrd_Infiltration_Location: TFarmOption;
+    FPrint_Sfr_Srr_Only: Boolean;
+    FPrint_Nrd: Boolean;
+    FPrint_Sfr_Return: Boolean;
+    FPotential_Evaporation_Bare: TFarmOption;
+    FWatersource: TFarmOption;
+    FFarm_Budget: Boolean;
+    FWbs_Water_Use: Boolean;
+    FPrecipitation: TFarmOption;
+    FStaticFarms: Boolean;
+    FEvapotranspiration_SummarySum: Boolean;
+    FSemi_Routed_Delivery_Limits: TFarmOption;
+    FEfficiencyImprovement: TFarmOption;
+    FDeficiencyScenario: TFarmOption;
+    FDeep_Percolation: Boolean;
+    FLandscape_Runoff: Boolean;
+    FNon_Routed_Delivery: TFarmOption;
+    FFarm_Net_Recharge_Array: Boolean;
+    FSemi_Routed_Delivery: TFarmOption;
+    FPrecipitation_Potential_Consumption: TFarmOption;
+    FEt_List: Boolean;
+    FRouting_Information: Boolean;
+    FAdded_Demand_Runoff_Split: TFarmOption;
+    FProrateDeficiency: TProrateDeficiencyOption;
+    FFarm_Budget_Compact: Boolean;
+    FFarm_Demand_Supply_Summary: Boolean;
+    FAdded_Crop_Demand: TFarmOption;
+    FStoredReference_Et_To_Bare: TRealStorage;
+    FStoredSemi_Routed_Delivery_Closure_Tolerance: TRealStorage;
+    FDirect_Recharge: TFarmOption;
+    FReturnChoice: TFarmOption;
+    procedure SetAdded_Crop_Demand(const Value: TFarmOption);
+    procedure SetAdded_Demand_Runoff_Split(const Value: TFarmOption);
+    procedure SetBare_Precipitation_Consumption_Fraction(
+      const Value: TFarmOption);
+    procedure SetBare_Runoff_Fraction(const Value: TFarmOption);
+    procedure SetDeep_Percolation(const Value: Boolean);
+    procedure SetDeficiencyScenario(const Value: TFarmOption);
+    procedure SetDemandChoice(const Value: TDemandChoice);
+    procedure SetEfficiencyImprovement(const Value: TFarmOption);
+    procedure SetEt_List(const Value: Boolean);
+    procedure SetEvapotranspiration_SummarySeparate(const Value: Boolean);
+    procedure SetEvapotranspiration_SummarySum(const Value: Boolean);
+    procedure SetFarm_Budget(const Value: Boolean);
+    procedure SetFarm_Budget_Compact(const Value: Boolean);
+    procedure SetFarm_Demand_Supply_Summary(const Value: Boolean);
+    procedure SetFarm_Net_Recharge_Array(const Value: Boolean);
+    procedure SetFarm_Net_Recharge_List(const Value: Boolean);
+    procedure SetFarm_Well_Summary(const Value: Boolean);
+    procedure SetLandscape_Runoff(const Value: Boolean);
+    procedure SetNon_Routed_Delivery(const Value: TFarmOption);
+    procedure SetNrd_Infiltration_Location(const Value: TFarmOption);
+    procedure SetPotential_Evaporation_Bare(const Value: TFarmOption);
+    procedure SetPrecipitation(const Value: TFarmOption);
+    procedure SetPrecipitation_Potential_Consumption(const Value: TFarmOption);
+    procedure SetPrint_Nrd(const Value: Boolean);
+    procedure SetPrint_Nrd_By_Wbs(const Value: Boolean);
+    procedure SetPrint_Sfr_Delivery(const Value: Boolean);
+    procedure SetPrint_Sfr_Delivery_By_Wbs(const Value: Boolean);
+    procedure SetPrint_Sfr_Return(const Value: Boolean);
+    procedure SetPrint_Sfr_Srr_Only(const Value: Boolean);
+    procedure SetProrateDeficiency(const Value: TProrateDeficiencyOption);
+    procedure SetRebuild_Fully_Routed_Return(const Value: Boolean);
+    procedure SetReferenceET(const Value: TFarmOption);
+    procedure SetRouting_Information(const Value: Boolean);
+    procedure SetSemi_Routed_Delivery(const Value: TFarmOption);
+    procedure SetSemi_Routed_Delivery_Limits(const Value: TFarmOption);
+    procedure SetStaticEfficiency(const Value: Boolean);
+    procedure SetStaticFarms(const Value: Boolean);
+    procedure SetWatersource(const Value: TFarmOption);
+    procedure SetWbs_Water_Use(const Value: Boolean);
+    procedure SetStoredReference_Et_To_Bare(const Value: TRealStorage);
+    procedure SetStoredSemi_Routed_Delivery_Closure_Tolerance(
+      const Value: TRealStorage);
+    procedure SetDirect_Recharge(const Value: TFarmOption);
+    procedure SetReturnChoice(const Value: TFarmOption);
+  published
+    // OUTPUT
+    property Wbs_Water_Use: Boolean read FWbs_Water_Use write SetWbs_Water_Use;
+    property Farm_Demand_Supply_Summary: Boolean read FFarm_Demand_Supply_Summary write SetFarm_Demand_Supply_Summary;
+    property Farm_Budget: Boolean read FFarm_Budget write SetFarm_Budget;
+    property Farm_Budget_Compact: Boolean read FFarm_Budget_Compact write SetFarm_Budget_Compact;
+    property Farm_Net_Recharge_Array: Boolean read FFarm_Net_Recharge_Array write SetFarm_Net_Recharge_Array;
+    property Farm_Net_Recharge_List: Boolean read FFarm_Net_Recharge_List write SetFarm_Net_Recharge_List;
+    property Evapotranspiration_SummarySum: Boolean read FEvapotranspiration_SummarySum write SetEvapotranspiration_SummarySum;
+    property Evapotranspiration_SummarySeparate: Boolean read FEvapotranspiration_SummarySeparate write SetEvapotranspiration_SummarySeparate;
+    property Et_List: Boolean read FEt_List write SetEt_List;
+    property Farm_Well_Summary: Boolean read FFarm_Well_Summary write SetFarm_Well_Summary;
+    property Landscape_Runoff: Boolean read FLandscape_Runoff write SetLandscape_Runoff;
+    property Deep_Percolation: Boolean read FDeep_Percolation write SetDeep_Percolation;
+    property Routing_Information: Boolean read FRouting_Information write SetRouting_Information;
+    // Farms/WBS
+    property StaticFarms: Boolean read FStaticFarms write SetStaticFarms;
+    property StaticEfficiency: Boolean read FStaticEfficiency write SetStaticEfficiency;
+    property EfficiencyImprovement: TFarmOption read FEfficiencyImprovement write SetEfficiencyImprovement;
+    property DeficiencyScenario: TFarmOption read FDeficiencyScenario write SetDeficiencyScenario;
+    property ProrateDeficiency: TProrateDeficiencyOption read FProrateDeficiency write SetProrateDeficiency;
+    property Watersource: TFarmOption read FWatersource write SetWatersource;
+    property Bare_Runoff_Fraction: TFarmOption read FBare_Runoff_Fraction write SetBare_Runoff_Fraction;
+    property Bare_Precipitation_Consumption_Fraction: TFarmOption read FBare_Precipitation_Consumption_Fraction write SetBare_Precipitation_Consumption_Fraction;
+    property Added_Demand_Runoff_Split: TFarmOption read FAdded_Demand_Runoff_Split write SetAdded_Demand_Runoff_Split;
+    property Added_Crop_Demand: TFarmOption read FAdded_Crop_Demand write SetAdded_Crop_Demand;
+    property DemandChoice: TDemandChoice read FDemandChoice write SetDemandChoice;
+    // Climate
+    property Precipitation: TFarmOption read FPrecipitation write SetPrecipitation;
+    property ReferenceET: TFarmOption read FReferenceET write SetReferenceET;
+    property Potential_Evaporation_Bare: TFarmOption read FPotential_Evaporation_Bare write SetPotential_Evaporation_Bare;
+    property StoredReference_Et_To_Bare: TRealStorage read FStoredReference_Et_To_Bare write SetStoredReference_Et_To_Bare;
+    property Direct_Recharge: TFarmOption read FDirect_Recharge write SetDirect_Recharge;
+    property Precipitation_Potential_Consumption: TFarmOption read FPrecipitation_Potential_Consumption write SetPrecipitation_Potential_Consumption;
+    // Surface Water
+    property Non_Routed_Delivery: TFarmOption read FNon_Routed_Delivery write SetNon_Routed_Delivery;
+    property Nrd_Infiltration_Location: TFarmOption read FNrd_Infiltration_Location write SetNrd_Infiltration_Location;
+    property Print_Sfr_Delivery: Boolean read FPrint_Sfr_Delivery write SetPrint_Sfr_Delivery;
+    property Print_Sfr_Delivery_By_Wbs: Boolean read FPrint_Sfr_Delivery_By_Wbs write SetPrint_Sfr_Delivery_By_Wbs;
+    property Print_Sfr_Return: Boolean read FPrint_Sfr_Return write SetPrint_Sfr_Return;
+    property Print_Sfr_Srr_Only: Boolean read FPrint_Sfr_Srr_Only write SetPrint_Sfr_Srr_Only;
+    property Print_Nrd: Boolean read FPrint_Nrd write SetPrint_Nrd;
+    property Print_Nrd_By_Wbs: Boolean read FPrint_Nrd_By_Wbs write SetPrint_Nrd_By_Wbs;
+    property Semi_Routed_Delivery: TFarmOption read FSemi_Routed_Delivery write SetSemi_Routed_Delivery;
+    property Semi_Routed_Delivery_Limits: TFarmOption read FSemi_Routed_Delivery_Limits write SetSemi_Routed_Delivery_Limits;
+    property StoredSemi_Routed_Delivery_Closure_Tolerance: TRealStorage read FStoredSemi_Routed_Delivery_Closure_Tolerance write SetStoredSemi_Routed_Delivery_Closure_Tolerance;
+    // NO_RETURN_FLOW, SEMI_ROUTED_RETURN,
+    // ROUTED_RETURN_ANY_NON_DIVERSION_REACH or ROUTED_RETURN_ANY_REACH
+    property ReturnChoice: TFarmOption read FReturnChoice write SetReturnChoice;
+    property Rebuild_Fully_Routed_Return: Boolean read FRebuild_Fully_Routed_Return write SetRebuild_Fully_Routed_Return;
+    // Supply Well
+  end;
+
   TCfpElevationChoice = (cecIndividual, cecGroup);
   TCfpExchange = (ceNodeConductance, ceWallPermeability);
   TCfpPrintIterations = (cpiNoPrint, cpiPrint);
@@ -23992,6 +24140,230 @@ begin
     TimeList := FSrcConc[Index];
     TimeList.Invalidate;
   end;
+end;
+
+{ TFarmProcess4 }
+
+procedure TFarmProcess4.SetAdded_Crop_Demand(const Value: TFarmOption);
+begin
+  FAdded_Crop_Demand := Value;
+end;
+
+procedure TFarmProcess4.SetAdded_Demand_Runoff_Split(const Value: TFarmOption);
+begin
+  FAdded_Demand_Runoff_Split := Value;
+end;
+
+procedure TFarmProcess4.SetBare_Precipitation_Consumption_Fraction(
+  const Value: TFarmOption);
+begin
+  FBare_Precipitation_Consumption_Fraction := Value;
+end;
+
+procedure TFarmProcess4.SetBare_Runoff_Fraction(const Value: TFarmOption);
+begin
+  FBare_Runoff_Fraction := Value;
+end;
+
+procedure TFarmProcess4.SetDeep_Percolation(const Value: Boolean);
+begin
+  FDeep_Percolation := Value;
+end;
+
+procedure TFarmProcess4.SetDeficiencyScenario(const Value: TFarmOption);
+begin
+  FDeficiencyScenario := Value;
+end;
+
+procedure TFarmProcess4.SetDemandChoice(const Value: TDemandChoice);
+begin
+  FDemandChoice := Value;
+end;
+
+procedure TFarmProcess4.SetDirect_Recharge(const Value: TFarmOption);
+begin
+  FDirect_Recharge := Value;
+end;
+
+procedure TFarmProcess4.SetEfficiencyImprovement(const Value: TFarmOption);
+begin
+  FEfficiencyImprovement := Value;
+end;
+
+procedure TFarmProcess4.SetEt_List(const Value: Boolean);
+begin
+  FEt_List := Value;
+end;
+
+procedure TFarmProcess4.SetEvapotranspiration_SummarySeparate(
+  const Value: Boolean);
+begin
+  FEvapotranspiration_SummarySeparate := Value;
+end;
+
+procedure TFarmProcess4.SetEvapotranspiration_SummarySum(const Value: Boolean);
+begin
+  FEvapotranspiration_SummarySum := Value;
+end;
+
+procedure TFarmProcess4.SetFarm_Budget(const Value: Boolean);
+begin
+  FFarm_Budget := Value;
+end;
+
+procedure TFarmProcess4.SetFarm_Budget_Compact(const Value: Boolean);
+begin
+  FFarm_Budget_Compact := Value;
+end;
+
+procedure TFarmProcess4.SetFarm_Demand_Supply_Summary(const Value: Boolean);
+begin
+  FFarm_Demand_Supply_Summary := Value;
+end;
+
+procedure TFarmProcess4.SetFarm_Net_Recharge_Array(const Value: Boolean);
+begin
+  FFarm_Net_Recharge_Array := Value;
+end;
+
+procedure TFarmProcess4.SetFarm_Net_Recharge_List(const Value: Boolean);
+begin
+  FFarm_Net_Recharge_List := Value;
+end;
+
+procedure TFarmProcess4.SetFarm_Well_Summary(const Value: Boolean);
+begin
+  FFarm_Well_Summary := Value;
+end;
+
+procedure TFarmProcess4.SetLandscape_Runoff(const Value: Boolean);
+begin
+  FLandscape_Runoff := Value;
+end;
+
+procedure TFarmProcess4.SetNon_Routed_Delivery(const Value: TFarmOption);
+begin
+  FNon_Routed_Delivery := Value;
+end;
+
+procedure TFarmProcess4.SetNrd_Infiltration_Location(const Value: TFarmOption);
+begin
+  FNrd_Infiltration_Location := Value;
+end;
+
+procedure TFarmProcess4.SetPotential_Evaporation_Bare(const Value: TFarmOption);
+begin
+  FPotential_Evaporation_Bare := Value;
+end;
+
+procedure TFarmProcess4.SetPrecipitation(const Value: TFarmOption);
+begin
+  FPrecipitation := Value;
+end;
+
+procedure TFarmProcess4.SetPrecipitation_Potential_Consumption(
+  const Value: TFarmOption);
+begin
+  FPrecipitation_Potential_Consumption := Value;
+end;
+
+procedure TFarmProcess4.SetPrint_Nrd(const Value: Boolean);
+begin
+  FPrint_Nrd := Value;
+end;
+
+procedure TFarmProcess4.SetPrint_Nrd_By_Wbs(const Value: Boolean);
+begin
+  FPrint_Nrd_By_Wbs := Value;
+end;
+
+procedure TFarmProcess4.SetPrint_Sfr_Delivery(const Value: Boolean);
+begin
+  FPrint_Sfr_Delivery := Value;
+end;
+
+procedure TFarmProcess4.SetPrint_Sfr_Delivery_By_Wbs(const Value: Boolean);
+begin
+  FPrint_Sfr_Delivery_By_Wbs := Value;
+end;
+
+procedure TFarmProcess4.SetPrint_Sfr_Return(const Value: Boolean);
+begin
+  FPrint_Sfr_Return := Value;
+end;
+
+procedure TFarmProcess4.SetPrint_Sfr_Srr_Only(const Value: Boolean);
+begin
+  FPrint_Sfr_Srr_Only := Value;
+end;
+
+procedure TFarmProcess4.SetProrateDeficiency(
+  const Value: TProrateDeficiencyOption);
+begin
+  FProrateDeficiency := Value;
+end;
+
+procedure TFarmProcess4.SetRebuild_Fully_Routed_Return(const Value: Boolean);
+begin
+  FRebuild_Fully_Routed_Return := Value;
+end;
+
+procedure TFarmProcess4.SetReferenceET(const Value: TFarmOption);
+begin
+  FReferenceET := Value;
+end;
+
+procedure TFarmProcess4.SetReturnChoice(const Value: TFarmOption);
+begin
+  FReturnChoice := Value;
+end;
+
+procedure TFarmProcess4.SetRouting_Information(const Value: Boolean);
+begin
+  FRouting_Information := Value;
+end;
+
+procedure TFarmProcess4.SetSemi_Routed_Delivery(const Value: TFarmOption);
+begin
+  FSemi_Routed_Delivery := Value;
+end;
+
+procedure TFarmProcess4.SetSemi_Routed_Delivery_Limits(
+  const Value: TFarmOption);
+begin
+  FSemi_Routed_Delivery_Limits := Value;
+end;
+
+procedure TFarmProcess4.SetStaticEfficiency(const Value: Boolean);
+begin
+  FStaticEfficiency := Value;
+end;
+
+procedure TFarmProcess4.SetStaticFarms(const Value: Boolean);
+begin
+  FStaticFarms := Value;
+end;
+
+procedure TFarmProcess4.SetStoredReference_Et_To_Bare(
+  const Value: TRealStorage);
+begin
+  FStoredReference_Et_To_Bare.Assign(Value);
+end;
+
+procedure TFarmProcess4.SetStoredSemi_Routed_Delivery_Closure_Tolerance(
+  const Value: TRealStorage);
+begin
+  FStoredSemi_Routed_Delivery_Closure_Tolerance.Assign(Value);
+end;
+
+procedure TFarmProcess4.SetWatersource(const Value: TFarmOption);
+begin
+  FWatersource := Value;
+end;
+
+procedure TFarmProcess4.SetWbs_Water_Use(const Value: Boolean);
+begin
+  FWbs_Water_Use := Value;
 end;
 
 end.

@@ -10984,9 +10984,9 @@ end;
 
 function TfrmGoPhast.MfOwhmV2UpToDate: boolean;
 begin
+  // fix this
   result := False;
   Assert(False);
-  // update this.
 end;
 
 procedure TfrmGoPhast.miMakeSelectedVerticesASeparateObjectClick(
@@ -13689,8 +13689,8 @@ begin
         msModflowCfp: ModflowLocation :=
           PhastModel.ProgramLocations.ModflowCfpLocation;
         {$IFDEF OWHMV2}
-        // Fix this
-        msModflowOwhm2: Assert(False);
+        msModflowOwhm2: ModflowLocation :=
+          PhastModel.ProgramLocations.ModflowOwhmV2Location;
         {$ENDIF}
         else
           Assert(False);
@@ -14606,8 +14606,10 @@ begin
               ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmLocation);
             end;
           {$IFDEF OWHMV2}
-          // Fix this
-          msModflowOwhm2: Assert(False);
+          msModflowOwhm2:
+            begin
+              ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmV2Location);
+            end;
           {$ENDIF}
           else
             Assert(False);
@@ -14635,8 +14637,10 @@ begin
                 ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmLocation);
               end;
             {$IFDEF OWHMV2}
-            // Fix this
-            msModflowOwhm2: Assert(False);
+            msModflowOwhm2:
+              begin
+                ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmV2Location);
+              end;
             {$ENDIF}
             else
               Assert(False);
@@ -14667,8 +14671,13 @@ begin
               end;
             end;
           {$IFDEF OWHMV2}
-          // Fix this
-          msModflowOwhm2: Assert(False);
+          msModflowOwhm2:
+            begin
+              if not MfOwhmV2UpToDate then
+              begin
+                Exit;
+              end;
+            end;
           {$ENDIF}
           else
             Assert(False);
@@ -14702,8 +14711,7 @@ begin
         {$IFDEF OWHMV2}
           msModflowOwhm2:
             begin
-            // fix this
-              Assert(False)
+              ModelFile := PhastModel.ProgramLocations.ModflowOwhmV2Location;
             end
         {$ENDIF}
           else

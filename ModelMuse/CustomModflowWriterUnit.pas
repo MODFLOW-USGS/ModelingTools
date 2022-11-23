@@ -1591,9 +1591,7 @@ begin
       {$IFDEF OWHMV2}
       msModflowOwhm2:
         begin
-      // fix this
-          ModflowLocation := ProgramLocations.ModflowOwhmLocation;
-          Assert(False);
+          ModflowLocation := ProgramLocations.ModflowOwhmV2Location;
         end;
       {$ENDIF}
 

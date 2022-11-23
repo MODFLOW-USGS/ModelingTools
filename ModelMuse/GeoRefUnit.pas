@@ -371,23 +371,22 @@ end;
 
 function TGeoRef.ModelProgramName: string;
 begin
-              {$IFDEF OWHMV2}
-              // fix this
-              Assert(False);
-              {$ENDIF}
   case Modeltype of
     msPhast: result := 'PHAST';
     msModflow: Result := 'MODFLOW-2005';
     msModflowLGR: Result := 'MODFLOW-LGR version 1';
     msModflowLGR2: Result := 'MODFLOW-LGR version 2';
     msModflowNWT: Result := 'MODFLOW-NWT';
-    msModflowFmp: Result := 'MODFLOW-OWM';
+    msModflowFmp: Result := 'MODFLOW-OWM version 1';
     msModflowCfp: Result := 'MODFLOW-CFP';
     msSutra22: Result := 'SUTRA 2.2';
     msSutra30: Result := 'SUTRA 3.0';
     msSutra40: Result := 'SUTRA 4.0';
     msFootPrint: Result := 'WellFootprint';
     msModflow2015: Result := 'MODFLOW 6';
+              {$IFDEF OWHMV2}
+    msModflowOwhm2: Result := 'MODFLOW-OWM version 2';
+              {$ENDIF}
     else
       Assert(False);
   end;

@@ -893,6 +893,7 @@ type
     FSutra30Location: string;
     FPestDirectory: string;
     FSutra40Location: string;
+    FModflowOwhmV2Location: string;
     function GetTextEditorLocation: string;
     procedure SetModflowLocation(const Value: string);
     function RemoveQuotes(const Value: string): string;
@@ -919,6 +920,7 @@ type
     procedure SetSutra30Location(const Value: string);
     procedure SetPestDirectory(const Value: string);
     procedure SetSutra40Location(const Value: string);
+    procedure SetModflowOwhmV2Location(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create;
@@ -975,6 +977,12 @@ type
     property Modflow6Location: string read FModflow6Location
       write SetModflow6Location;
     property PestDirectory: string read FPestDirectory write SetPestDirectory;
+    property ModflowOwhmV2Location: string read FModflowOwhmV2Location
+      write SetModflowOwhmV2Location
+    {$IFNDEF OWHMV2}
+      stored False;
+    {$ENDIF}
+      ;
   end;
 
   {
@@ -5585,6 +5593,7 @@ resourcestring
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
   StrDefaultModflow6Path = 'C:\WRDAPP\mf6.3.0\bin\mf6.exe';
+  StrDefaultOwhmV2Path = 'C:\WRDAPP\mf-owhm-release\bin\mf-owhm.exe';
 
   StrProgramLocations = 'Program Locations';
   StrMODFLOW2005 = 'MODFLOW-2005';
@@ -5605,6 +5614,7 @@ resourcestring
   strModflowCFP = 'MODFLOW-CFP';
   StrModflow6 = 'MODFLOW 6';
   StrPestDir = 'PEST';
+  strModflowOWHM_V2 = 'MODFLOW-OWHM_V2';
   StrAtLeastOneConvert = 'At least one layer must be convertible.';
   StrAtLeastOneUnconfConvert = 'At least one layer must be unconfined or ful' +
   'ly convertible.';
@@ -15802,8 +15812,7 @@ begin
       ModelFile := ProgramLocations.Modflow6Location;
     {$IFDEF OWHMV2}
     msModflowOwhm2:
-    // fix this.
-      Assert(False);
+      ModelFile := ProgramLocations.ModflowOwhmV2Location;
     {$ENDIF}
 
   else
@@ -29694,6 +29703,9 @@ begin
     Sutra30Location := SourceLocations.Sutra30Location;
     Sutra40Location := SourceLocations.Sutra40Location;
     PestDirectory := SourceLocations.PestDirectory;
+    {$IFDEF OWHMV2}
+    ModflowOwhmV2Location := SourceLocations.ModflowOwhmV2Location;
+    {$ENDIF}
   end
   else
   begin
@@ -29726,6 +29738,9 @@ begin
   GeompackLocation := StrDefaultGeompackPath;
   Modflow6Location := StrDefaultModflow6Path;
   PestDirectory := StrPestDefaultDir;
+  {$IFDEF OWHMV2}
+  ModflowOwhmV2Location := StrDefaultOwhmV2Path;
+  {$ENDIF}
   ADirectory := GetCurrentDir;
   try
     SetCurrentDir(ExtractFileDir(ParamStr(0)));
@@ -30073,6 +30088,23 @@ begin
     end;
   end;
 
+  {$IFDEF OWHMV2}
+  ModflowOwhmV2Location := IniFile.ReadString(StrProgramLocations, strModflowOWHM_V2,
+    StrDefaultOwhmV2Path);
+  if (ModflowOwhmV2Location = '') or not FileExists(ModflowOwhmV2Location) then
+  begin
+    if FileExists(StrDefaultOwhmV2Path) then
+    begin
+      ModflowOwhmV2Location := StrDefaultOwhmV2Path;
+    end
+    else if FileExists(AlternatePath(StrDefaultOwhmV2Path)) then
+    begin
+      ModflowOwhmV2Location := AlternatePath(StrDefaultOwhmV2Path);
+    end;
+  end;
+  {$ENDIF}
+
+
   PestDirectory := IniFile.ReadString(StrProgramLocations, StrPestDir,
     StrPestDefaultDir);
   if (PestDirectory = '') or not DirectoryExists(PestDirectory) then
@@ -30200,6 +30232,11 @@ begin
   FModflowNwtLocation := RemoveQuotes(Value);
 end;
 
+procedure TProgramLocations.SetModflowOwhmV2Location(const Value: string);
+begin
+  FModflowOwhmV2Location := RemoveQuotes(Value);
+end;
+
 procedure TProgramLocations.SetModPathLocation(const Value: string);
 begin
   FModPathLocation := RemoveQuotes(Value);
@@ -30289,6 +30326,9 @@ begin
   IniFile.WriteString(StrProgramLocations, StrFootprint, FootprintLocation);
   IniFile.WriteString(StrProgramLocations, StrModflow6, Modflow6Location);
   IniFile.WriteString(StrProgramLocations, StrPestDir, PestDirectory);
+  {$IFDEF OWHMV2}
+  IniFile.WriteString(StrProgramLocations, strModflowOWHM_V2, ModflowOwhmV2Location);
+  {$ENDIF}
 end;
 
 { TDataSetClassification }
@@ -31455,11 +31495,6 @@ end;
 
 procedure TCustomModel.SetModflowLocation(const Value: string);
 begin
-            {$IFDEF OWHMV2}
-  // fix this
-            Assert(False);
-            {$ENDIF}
-
   case ModelSelection of
     msModflow:
       ProgramLocations.ModflowLocation := Value;
@@ -31475,6 +31510,8 @@ begin
       ProgramLocations.ModflowCfpLocation := Value;
     msModflow2015:
       ProgramLocations.Modflow6Location := Value;
+   msModflowOwhm2:
+      ProgramLocations.ModflowOwhmV2Location := Value;
     else Assert(False);
   end;
 end;
@@ -42159,8 +42196,7 @@ begin
     msModflowCfp: result := ProgramLocations.ModflowCfpLocation;
     msModflow2015: result := ProgramLocations.Modflow6Location;
       {$IFDEF OWHMV2}
-      // fix this.
-      msModflowOwhm2: Assert(False)
+    msModflowOwhm2: result := ProgramLocations.ModflowOwhmV2Location;
       {$ENDIF}
     else result := ProgramLocations.ModflowLocation;
   end;
