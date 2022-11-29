@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-21T16:29:59.161-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-29T14:58:10.441-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -235,7 +235,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">TRANSPIRATION_FRACTION (FTR):</para>
+          <para styleclass="Normal">TRANSPIRATION_FRACTION (FTR): LAI[S,T,A,L]</para>
           <para styleclass="Normal"> &#160; &#160;Fraction of consumptive use that is the potential transpiration of the crop</para>
           <para styleclass="Normal"> &#160; &#160;Formally defined as FTR = Kcb/Kc = Basal Crop Coefficient / Crop Coefficient</para>
           <para styleclass="Normal"> &#160; &#160;Can be viewed as the fraction of a unit cropped area covered by leaf matter, i.e. crop cover.</para>
@@ -460,9 +460,9 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">This is useful in case the crop resides in a raised/lowered region of the model cell and it</para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">requires a more accurate surface elevation measurement.</para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">To use these options you must specify in the GLOBAL DIMENSION block the variable NCROP_SPECIFIED_ELEVATIONS</para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- LIST input loads NCROP_SPECIFIED_ELEVATIONS records, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- ARRAY input with LAND_USE_AREA_FRACTION MULTI option reads NCROP_SPECIFIED_ELEVATIONS*NROW rows, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">To use these options you must specify in the GLOBAL DIMENSION block the variable <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP_SPECIFIED_ELEVATIONS">NCROP_SPECIFIED_ELEVATIONS</link></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- LIST input loads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP_SPECIFIED_ELEVATIONS">NCROP_SPECIFIED_ELEVATIONS</link> records, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- ARRAY input with LAND_USE_AREA_FRACTION MULTI option reads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP_SPECIFIED_ELEVATIONS">NCROP_SPECIFIED_ELEVATIONS</link>*NROW rows, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW</para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> &#160; Crops that do not have their elevation changed use the <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="SURFACE_ELEVATION">SURFACE_ELEVATION</link> defined in the GLOBAL DIMENSION block.</para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROPS_THAT_SPECIFY_SURFACE_ELEVATION]]></caption></toggle></para>

@@ -4898,44 +4898,50 @@ Type
   end;
 
   TFarmOption = (foNotUsed, foStatic, foTransient);
+  TArrayList = (alArray, alList);
   TProrateDeficiencyOption = (pdoByDemand, pdoAverage);
   TDemandChoice = (dcFlux, dcRate);
-  TRoutedReturnChoice = (rrcDefault, rrcNoReturn, rrcAnyNonDiversion, rrcAnny);
+  TRoutedReturnChoice = (rrcDefault, rrcNoReturn, rrcAnyNonDiversion, rrcAny);
+  TPumpSpreadChoice = (pscConductance, pscByNodeCount, pscTopNode);
+  TPumpLayerChoice = (plcLayer, plcElevation, plcDepth);
+  TWellFormat = (wfTimeFrame, wfFarm, wfCapacity);
+  TLandUseOption = (luoSingle, luoMultiple);
+  TCropCoefOrUse = (ccouCoefficient, ccouConsumptiveUse);
+  TAddedDemandType = (adtLength, adtRate);
 
-  TFarmProcess4 = class(TModflowPackageSelection)
+  TCustomFarm4 = class(TModflowPackageSelection)
+  protected
+    procedure SetFarmOptionProperty(var Field: TFarmOption;
+      const Value: TFarmOption);
+    procedure SetArrayListProperty(var Field: TArrayList;
+      const Value: TArrayList);
+  end;
+
+  TFarmProcess4 = class(TCustomFarm4)
   private
     FDemandChoice: TDemandChoice;
     FStaticEfficiency: Boolean;
+    FStoredMnwQClose: TRealStorage;
     FFarm_Net_Recharge_List: Boolean;
     FFarm_Well_Summary: Boolean;
-    FPrint_Sfr_Delivery_By_Wbs: Boolean;
+    FStoredMnwHPercent: TRealStorage;
     FBare_Precipitation_Consumption_Fraction: TFarmOption;
-    FReferenceET: TFarmOption;
-    FPrint_Sfr_Delivery: Boolean;
-    FPrint_Nrd_By_Wbs: Boolean;
     FEvapotranspiration_SummarySeparate: Boolean;
-    FRebuild_Fully_Routed_Return: Boolean;
     FBare_Runoff_Fraction: TFarmOption;
-    FNrd_Infiltration_Location: TFarmOption;
-    FPrint_Sfr_Srr_Only: Boolean;
-    FPrint_Nrd: Boolean;
-    FPrint_Sfr_Return: Boolean;
-    FPotential_Evaporation_Bare: TFarmOption;
     FWatersource: TFarmOption;
     FFarm_Budget: Boolean;
     FWbs_Water_Use: Boolean;
-    FPrecipitation: TFarmOption;
     FStaticFarms: Boolean;
+    FUseWells: Boolean;
     FEvapotranspiration_SummarySum: Boolean;
-    FSemi_Routed_Delivery_Limits: TFarmOption;
+    FPrint: Boolean;
     FEfficiencyImprovement: TFarmOption;
     FDeficiencyScenario: TFarmOption;
     FDeep_Percolation: Boolean;
     FLandscape_Runoff: Boolean;
-    FNon_Routed_Delivery: TFarmOption;
+    FRecompute: Boolean;
     FFarm_Net_Recharge_Array: Boolean;
-    FSemi_Routed_Delivery: TFarmOption;
-    FPrecipitation_Potential_Consumption: TFarmOption;
+    FStoredMnwRPercent: TRealStorage;
     FEt_List: Boolean;
     FRouting_Information: Boolean;
     FAdded_Demand_Runoff_Split: TFarmOption;
@@ -4943,10 +4949,10 @@ Type
     FFarm_Budget_Compact: Boolean;
     FFarm_Demand_Supply_Summary: Boolean;
     FAdded_Crop_Demand: TFarmOption;
-    FStoredReference_Et_To_Bare: TRealStorage;
-    FStoredSemi_Routed_Delivery_Closure_Tolerance: TRealStorage;
-    FDirect_Recharge: TFarmOption;
-    FReturnChoice: TFarmOption;
+    FEfficiencyImprovementArrayList: TArrayList;
+    FEfficiencyArrayList: TArrayList;
+    FAdded_Demand_Runoff_SplitArrayList: TArrayList;
+    FBare_Runoff_FractionArrayList: TArrayList;
     procedure SetAdded_Crop_Demand(const Value: TFarmOption);
     procedure SetAdded_Demand_Runoff_Split(const Value: TFarmOption);
     procedure SetBare_Precipitation_Consumption_Fraction(
@@ -4966,83 +4972,625 @@ Type
     procedure SetFarm_Net_Recharge_List(const Value: Boolean);
     procedure SetFarm_Well_Summary(const Value: Boolean);
     procedure SetLandscape_Runoff(const Value: Boolean);
-    procedure SetNon_Routed_Delivery(const Value: TFarmOption);
-    procedure SetNrd_Infiltration_Location(const Value: TFarmOption);
+    procedure SetPrint(const Value: Boolean);
+    procedure SetProrateDeficiency(const Value: TProrateDeficiencyOption);
+    procedure SetRecompute(const Value: Boolean);
+    procedure SetRouting_Information(const Value: Boolean);
+    procedure SetStaticEfficiency(const Value: Boolean);
+    procedure SetStaticFarms(const Value: Boolean);
+    procedure SetStoredMnwHPercent(const Value: TRealStorage);
+    procedure SetStoredMnwQClose(const Value: TRealStorage);
+    procedure SetStoredMnwRPercent(const Value: TRealStorage);
+    procedure SetUseWells(const Value: Boolean);
+    procedure SetWatersource(const Value: TFarmOption);
+    procedure SetWbs_Water_Use(const Value: Boolean);
+    procedure SetAdded_Demand_Runoff_SplitArrayList(const Value: TArrayList);
+    procedure SetBare_Runoff_FractionArrayList(const Value: TArrayList);
+    procedure SetEfficiencyArrayList(const Value: TArrayList);
+    procedure SetEfficiencyImprovementArrayList(const Value: TArrayList);
+    function GetMnwHPercent: double;
+    function GetMnwQClose: double;
+    function GetMnwRPercent: double;
+    procedure SetMnwHPercent(const Value: double);
+    procedure SetMnwQClose(const Value: double);
+    procedure SetMnwRPercent(const Value: double);
+  public
+    procedure Assign(Source: TPersistent); override;
+    { TODO -cRefactor : Consider replacing Model with an interface. }
+    //
+    Constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
+    procedure InitializeVariables; override;
+    property MnwQClose: double read GetMnwQClose
+      write SetMnwQClose;
+    // MNWCLOSE  HPCT
+    property MnwHPercent: double read GetMnwHPercent
+      write SetMnwHPercent;
+    // MNWCLOSE  RPCT
+    property MnwRPercent: double read GetMnwRPercent
+      write SetMnwRPercent;
+  published
+    // OUTPUT
+    // WBS_WATER_USE
+    property Wbs_Water_Use: Boolean read FWbs_Water_Use write SetWbs_Water_Use;
+    // FARM_DEMAND_SUPPLY_SUMMARY
+    property Farm_Demand_Supply_Summary: Boolean
+      read FFarm_Demand_Supply_Summary write SetFarm_Demand_Supply_Summary;
+    // FARM_BUDGET
+    property Farm_Budget: Boolean read FFarm_Budget write SetFarm_Budget;
+    // FARM_BUDGET_COMPACT
+    property Farm_Budget_Compact: Boolean read FFarm_Budget_Compact
+      write SetFarm_Budget_Compact;
+    // FARM_NET_RECHARGE_ARRAY
+    property Farm_Net_Recharge_Array: Boolean read FFarm_Net_Recharge_Array
+      write SetFarm_Net_Recharge_Array;
+    // FARM_NET_RECHARGE_LIST
+    property Farm_Net_Recharge_List: Boolean read FFarm_Net_Recharge_List
+      write SetFarm_Net_Recharge_List;
+    // EVAPOTRANSPIRATION_SUMMARY SUM
+    property Evapotranspiration_SummarySum: Boolean
+      read FEvapotranspiration_SummarySum
+      write SetEvapotranspiration_SummarySum;
+    // EVAPOTRANSPIRATION_SUMMARY SEPARATE
+    property Evapotranspiration_SummarySeparate: Boolean
+      read FEvapotranspiration_SummarySeparate
+      write SetEvapotranspiration_SummarySeparate;
+    // ET_LIST
+    property Et_List: Boolean read FEt_List write SetEt_List;
+    // FARM_WELL_SUMMARY
+    property Farm_Well_Summary: Boolean read FFarm_Well_Summary
+      write SetFarm_Well_Summary;
+    // LANDSCAPE_RUNOFF    [COMPACT]
+    property Landscape_Runoff: Boolean read FLandscape_Runoff
+      write SetLandscape_Runoff;
+    // DEEP_PERCOLATION    [COMPACT]
+    property Deep_Percolation: Boolean read FDeep_Percolation
+      write SetDeep_Percolation;
+    // ROUTING_INFORMATION {STATIC,TRANSIENT}
+    property Routing_Information: Boolean read FRouting_Information
+      write SetRouting_Information;
+
+    // OPTIONS
+    // Inverse of NOPRINT. Default to True.
+    property Print: Boolean read FPrint write SetPrint;
+    // WELLFIELD
+    property UseWells: Boolean read FUseWells write SetUseWells;
+    // RECOMP_Q_BD. Check OWHM V2 documentation for default.
+    property Recompute: Boolean read FRecompute write SetRecompute;
+    // MNWCLOSE  QCLOSE
+    property StoredMnwQClose: TRealStorage read FStoredMnwQClose
+      write SetStoredMnwQClose;
+    // MNWCLOSE  HPCT
+    property StoredMnwHPercent: TRealStorage read FStoredMnwHPercent
+      write SetStoredMnwHPercent;
+    // MNWCLOSE  RPCT
+    property StoredMnwRPercent: TRealStorage read FStoredMnwRPercent
+      write SetStoredMnwRPercent;
+
+    // Farms/WBS
+    // LOCATION
+    property StaticFarms: Boolean read FStaticFarms write SetStaticFarms;
+    // EFFICIENCY
+    property StaticEfficiency: Boolean read FStaticEfficiency
+      write SetStaticEfficiency;
+    property EfficiencyArrayList: TArrayList read FEfficiencyArrayList
+      write SetEfficiencyArrayList;
+    // EFFICIENCY_IMPROVEMENT
+    property EfficiencyImprovement: TFarmOption read FEfficiencyImprovement
+      write SetEfficiencyImprovement;
+    property EfficiencyImprovementArrayList: TArrayList
+      read FEfficiencyImprovementArrayList
+      write SetEfficiencyImprovementArrayList;
+    // DEFICIENCY_SCENARIO
+    property DeficiencyScenario: TFarmOption read FDeficiencyScenario
+      write SetDeficiencyScenario;
+    // PRORATE_DEFICIENCY
+    property ProrateDeficiency: TProrateDeficiencyOption read FProrateDeficiency
+      write SetProrateDeficiency;
+    // WATERSOURCE
+    property Watersource: TFarmOption read FWatersource write SetWatersource;
+    // BARE_RUNOFF_FRACTION
+    property Bare_Runoff_Fraction: TFarmOption read FBare_Runoff_Fraction
+      write SetBare_Runoff_Fraction;
+    property Bare_Runoff_FractionArrayList: TArrayList
+      read FBare_Runoff_FractionArrayList
+      write SetBare_Runoff_FractionArrayList;
+    // BARE_PRECIPITATION_CONSUMPTION_FRACTION
+    property Bare_Precipitation_Consumption_Fraction: TFarmOption
+      read FBare_Precipitation_Consumption_Fraction
+      write SetBare_Precipitation_Consumption_Fraction;
+    // ADDED_DEMAND_RUNOFF_SPLIT
+    property Added_Demand_Runoff_Split: TFarmOption
+      read FAdded_Demand_Runoff_Split write SetAdded_Demand_Runoff_Split;
+    property Added_Demand_Runoff_SplitArrayList: TArrayList
+      read FAdded_Demand_Runoff_SplitArrayList
+      write SetAdded_Demand_Runoff_SplitArrayList;
+    // ADDED_CROP_DEMAND FLUX or ADDED_CROP_DEMAND RATE
+    property Added_Crop_Demand: TFarmOption read FAdded_Crop_Demand
+      write SetAdded_Crop_Demand;
+    // ADDED_CROP_DEMAND FLUX or ADDED_CROP_DEMAND RATE
+    property DemandChoice: TDemandChoice read FDemandChoice
+      write SetDemandChoice;
+  end;
+
+  TFarmProcess4Soil = class(TCustomFarm4)
+  private
+    FSurfVertKArrayList: TArrayList;
+    FCapFringeArrayList: TArrayList;
+    procedure SetCapFringeArrayList(const Value: TArrayList);
+    procedure SetSurfVertKArrayList(const Value: TArrayList);
+  published
+    // CAPILLARY_FRINGE
+    property CapFringeArrayList: TArrayList read FCapFringeArrayList
+      write SetCapFringeArrayList;
+    // SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY
+    property SurfVertKArrayList: TArrayList read FSurfVertKArrayList
+      write SetSurfVertKArrayList;
+  end;
+
+  TFarmProcess4Climate = class(TCustomFarm4)
+  private
+    FStoredReference_Et_To_Bare: TRealStorage;
+    FReferenceET: TFarmOption;
+    FPotential_Evaporation_Bare: TFarmOption;
+    FPrecipitation: TFarmOption;
+    FDirect_Recharge: TFarmOption;
+    FPrecipitation_Potential_Consumption: TFarmOption;
+    procedure SetDirect_Recharge(const Value: TFarmOption);
     procedure SetPotential_Evaporation_Bare(const Value: TFarmOption);
     procedure SetPrecipitation(const Value: TFarmOption);
     procedure SetPrecipitation_Potential_Consumption(const Value: TFarmOption);
+    procedure SetReferenceET(const Value: TFarmOption);
+    procedure SetStoredReference_Et_To_Bare(const Value: TRealStorage);
+    function GetReference_Et_To_Bare: double;
+    procedure SetReference_Et_To_Bare(const Value: double);
+  public
+    property Reference_Et_To_Bare: double read GetReference_Et_To_Bare
+      write SetReference_Et_To_Bare;
+  published
+    // Climate
+    // PRECIPITATION
+    property Precipitation: TFarmOption read FPrecipitation
+      write SetPrecipitation;
+    // REFERENCE_ET
+    property ReferenceET: TFarmOption read FReferenceET write SetReferenceET;
+    // POTENTIAL_EVAPORATION_BARE
+    property Potential_Evaporation_Bare: TFarmOption
+      read FPotential_Evaporation_Bare write SetPotential_Evaporation_Bare;
+    // REFERENCE_ET_TO_BARE
+    property StoredReference_Et_To_Bare: TRealStorage
+      read FStoredReference_Et_To_Bare write SetStoredReference_Et_To_Bare;
+    // DIRECT_RECHARGE
+    property Direct_Recharge: TFarmOption read FDirect_Recharge
+      write SetDirect_Recharge;
+    //PRECIPITATION_POTENTIAL_CONSUMPTION
+    property Precipitation_Potential_Consumption: TFarmOption
+      read FPrecipitation_Potential_Consumption
+      write SetPrecipitation_Potential_Consumption;
+  end;
+
+  TFarmProcess4SurfaceWater = class(TCustomFarm4)
+  private
+    FPrint_Sfr_Delivery_By_Wbs: Boolean;
+    FStoredSemi_Routed_Delivery_Closure_Tolerance: TRealStorage;
+    FPrint_Sfr_Delivery: Boolean;
+    FPrint_Nrd_By_Wbs: Boolean;
+    FRebuild_Fully_Routed_Return: Boolean;
+    FNrd_Infiltration_Location: TFarmOption;
+    FPrint_Sfr_Srr_Only: Boolean;
+    FPrint_Nrd: Boolean;
+    FPrint_Sfr_Return: Boolean;
+    FSemi_Routed_Delivery_Limits: TFarmOption;
+    FNon_Routed_Delivery: TFarmOption;
+    FSemi_Routed_Delivery: TFarmOption;
+    FReturnChoice: TFarmOption;
+    procedure SetNon_Routed_Delivery(const Value: TFarmOption);
+    procedure SetNrd_Infiltration_Location(const Value: TFarmOption);
     procedure SetPrint_Nrd(const Value: Boolean);
     procedure SetPrint_Nrd_By_Wbs(const Value: Boolean);
     procedure SetPrint_Sfr_Delivery(const Value: Boolean);
     procedure SetPrint_Sfr_Delivery_By_Wbs(const Value: Boolean);
     procedure SetPrint_Sfr_Return(const Value: Boolean);
     procedure SetPrint_Sfr_Srr_Only(const Value: Boolean);
-    procedure SetProrateDeficiency(const Value: TProrateDeficiencyOption);
     procedure SetRebuild_Fully_Routed_Return(const Value: Boolean);
-    procedure SetReferenceET(const Value: TFarmOption);
-    procedure SetRouting_Information(const Value: Boolean);
+    procedure SetReturnChoice(const Value: TFarmOption);
     procedure SetSemi_Routed_Delivery(const Value: TFarmOption);
     procedure SetSemi_Routed_Delivery_Limits(const Value: TFarmOption);
-    procedure SetStaticEfficiency(const Value: Boolean);
-    procedure SetStaticFarms(const Value: Boolean);
-    procedure SetWatersource(const Value: TFarmOption);
-    procedure SetWbs_Water_Use(const Value: Boolean);
-    procedure SetStoredReference_Et_To_Bare(const Value: TRealStorage);
     procedure SetStoredSemi_Routed_Delivery_Closure_Tolerance(
       const Value: TRealStorage);
-    procedure SetDirect_Recharge(const Value: TFarmOption);
-    procedure SetReturnChoice(const Value: TFarmOption);
+    function GetSemi_Routed_Delivery_Closure_Tolerance: double;
+    procedure SetSemi_Routed_Delivery_Closure_Tolerance(const Value: double);
+  public
+    property Semi_Routed_Delivery_Closure_Tolerance: double
+      read GetSemi_Routed_Delivery_Closure_Tolerance
+      write SetSemi_Routed_Delivery_Closure_Tolerance;
   published
-    // OUTPUT
-    property Wbs_Water_Use: Boolean read FWbs_Water_Use write SetWbs_Water_Use;
-    property Farm_Demand_Supply_Summary: Boolean read FFarm_Demand_Supply_Summary write SetFarm_Demand_Supply_Summary;
-    property Farm_Budget: Boolean read FFarm_Budget write SetFarm_Budget;
-    property Farm_Budget_Compact: Boolean read FFarm_Budget_Compact write SetFarm_Budget_Compact;
-    property Farm_Net_Recharge_Array: Boolean read FFarm_Net_Recharge_Array write SetFarm_Net_Recharge_Array;
-    property Farm_Net_Recharge_List: Boolean read FFarm_Net_Recharge_List write SetFarm_Net_Recharge_List;
-    property Evapotranspiration_SummarySum: Boolean read FEvapotranspiration_SummarySum write SetEvapotranspiration_SummarySum;
-    property Evapotranspiration_SummarySeparate: Boolean read FEvapotranspiration_SummarySeparate write SetEvapotranspiration_SummarySeparate;
-    property Et_List: Boolean read FEt_List write SetEt_List;
-    property Farm_Well_Summary: Boolean read FFarm_Well_Summary write SetFarm_Well_Summary;
-    property Landscape_Runoff: Boolean read FLandscape_Runoff write SetLandscape_Runoff;
-    property Deep_Percolation: Boolean read FDeep_Percolation write SetDeep_Percolation;
-    property Routing_Information: Boolean read FRouting_Information write SetRouting_Information;
-    // Farms/WBS
-    property StaticFarms: Boolean read FStaticFarms write SetStaticFarms;
-    property StaticEfficiency: Boolean read FStaticEfficiency write SetStaticEfficiency;
-    property EfficiencyImprovement: TFarmOption read FEfficiencyImprovement write SetEfficiencyImprovement;
-    property DeficiencyScenario: TFarmOption read FDeficiencyScenario write SetDeficiencyScenario;
-    property ProrateDeficiency: TProrateDeficiencyOption read FProrateDeficiency write SetProrateDeficiency;
-    property Watersource: TFarmOption read FWatersource write SetWatersource;
-    property Bare_Runoff_Fraction: TFarmOption read FBare_Runoff_Fraction write SetBare_Runoff_Fraction;
-    property Bare_Precipitation_Consumption_Fraction: TFarmOption read FBare_Precipitation_Consumption_Fraction write SetBare_Precipitation_Consumption_Fraction;
-    property Added_Demand_Runoff_Split: TFarmOption read FAdded_Demand_Runoff_Split write SetAdded_Demand_Runoff_Split;
-    property Added_Crop_Demand: TFarmOption read FAdded_Crop_Demand write SetAdded_Crop_Demand;
-    property DemandChoice: TDemandChoice read FDemandChoice write SetDemandChoice;
-    // Climate
-    property Precipitation: TFarmOption read FPrecipitation write SetPrecipitation;
-    property ReferenceET: TFarmOption read FReferenceET write SetReferenceET;
-    property Potential_Evaporation_Bare: TFarmOption read FPotential_Evaporation_Bare write SetPotential_Evaporation_Bare;
-    property StoredReference_Et_To_Bare: TRealStorage read FStoredReference_Et_To_Bare write SetStoredReference_Et_To_Bare;
-    property Direct_Recharge: TFarmOption read FDirect_Recharge write SetDirect_Recharge;
-    property Precipitation_Potential_Consumption: TFarmOption read FPrecipitation_Potential_Consumption write SetPrecipitation_Potential_Consumption;
     // Surface Water
-    property Non_Routed_Delivery: TFarmOption read FNon_Routed_Delivery write SetNon_Routed_Delivery;
-    property Nrd_Infiltration_Location: TFarmOption read FNrd_Infiltration_Location write SetNrd_Infiltration_Location;
-    property Print_Sfr_Delivery: Boolean read FPrint_Sfr_Delivery write SetPrint_Sfr_Delivery;
-    property Print_Sfr_Delivery_By_Wbs: Boolean read FPrint_Sfr_Delivery_By_Wbs write SetPrint_Sfr_Delivery_By_Wbs;
-    property Print_Sfr_Return: Boolean read FPrint_Sfr_Return write SetPrint_Sfr_Return;
-    property Print_Sfr_Srr_Only: Boolean read FPrint_Sfr_Srr_Only write SetPrint_Sfr_Srr_Only;
+    // NON_ROUTED_DELIVERY
+    property Non_Routed_Delivery: TFarmOption read FNon_Routed_Delivery
+      write SetNon_Routed_Delivery;
+    // NRD_INFILTRATION_LOCATION
+    property Nrd_Infiltration_Location: TFarmOption
+      read FNrd_Infiltration_Location write SetNrd_Infiltration_Location;
+    // PRINT SFR_DELIVERY
+    property Print_Sfr_Delivery: Boolean read FPrint_Sfr_Delivery
+      write SetPrint_Sfr_Delivery;
+    // PRINT SFR_DELIVERY_BY_WBS
+    property Print_Sfr_Delivery_By_Wbs: Boolean read FPrint_Sfr_Delivery_By_Wbs
+      write SetPrint_Sfr_Delivery_By_Wbs;
+    // PRINT SFR_RETURN
+    property Print_Sfr_Return: Boolean read FPrint_Sfr_Return
+      write SetPrint_Sfr_Return;
+    // PRINT SFR_SRR_ONLY
+    property Print_Sfr_Srr_Only: Boolean read FPrint_Sfr_Srr_Only
+      write SetPrint_Sfr_Srr_Only;
+    // PRINT NRD
     property Print_Nrd: Boolean read FPrint_Nrd write SetPrint_Nrd;
-    property Print_Nrd_By_Wbs: Boolean read FPrint_Nrd_By_Wbs write SetPrint_Nrd_By_Wbs;
-    property Semi_Routed_Delivery: TFarmOption read FSemi_Routed_Delivery write SetSemi_Routed_Delivery;
-    property Semi_Routed_Delivery_Limits: TFarmOption read FSemi_Routed_Delivery_Limits write SetSemi_Routed_Delivery_Limits;
-    property StoredSemi_Routed_Delivery_Closure_Tolerance: TRealStorage read FStoredSemi_Routed_Delivery_Closure_Tolerance write SetStoredSemi_Routed_Delivery_Closure_Tolerance;
+    // PRINT NRD_BY_WBS
+    property Print_Nrd_By_Wbs: Boolean read FPrint_Nrd_By_Wbs
+      write SetPrint_Nrd_By_Wbs;
+    // SEMI_ROUTED_DELIVERY_LOWER_LIMIT and SEMI_ROUTED_DELIVERY_UPPER_LIMIT
+    property Semi_Routed_Delivery: TFarmOption read FSemi_Routed_Delivery
+      write SetSemi_Routed_Delivery;
+    // SEMI_ROUTED_DELIVERY_LOWER_LIMIT and SEMI_ROUTED_DELIVERY_UPPER_LIMIT
+    property Semi_Routed_Delivery_Limits: TFarmOption
+      read FSemi_Routed_Delivery_Limits write SetSemi_Routed_Delivery_Limits;
+    // SEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE
+    property StoredSemi_Routed_Delivery_Closure_Tolerance: TRealStorage
+      read FStoredSemi_Routed_Delivery_Closure_Tolerance
+      write SetStoredSemi_Routed_Delivery_Closure_Tolerance;
     // NO_RETURN_FLOW, SEMI_ROUTED_RETURN,
     // ROUTED_RETURN_ANY_NON_DIVERSION_REACH or ROUTED_RETURN_ANY_REACH
     property ReturnChoice: TFarmOption read FReturnChoice write SetReturnChoice;
-    property Rebuild_Fully_Routed_Return: Boolean read FRebuild_Fully_Routed_Return write SetRebuild_Fully_Routed_Return;
+    // REBUILD_FULLY_ROUTED_RETURN
+    property Rebuild_Fully_Routed_Return: Boolean
+      read FRebuild_Fully_Routed_Return write SetRebuild_Fully_Routed_Return;
+  end;
+
+  TFarmProcess4Wells = class(TCustomFarm4)
+  private
+    FGroundWaterChoice: TFarmOption;
+    FPrint_List: Boolean;
+    FQMaxReset: Boolean;
+    FPrint_ByMNW: Boolean;
+    FSurfaceWaterChoice: TFarmOption;
+    FWellFormat: TWellFormat;
+    FMnwPumpSpread: TPumpSpreadChoice;
+    FMnwAutoOff: Boolean;
+    FPrint_ByWell: Boolean;
+    FMnwAutoOn: Boolean;
+    FWellXY: Boolean;
+    FPrint_ByWbs: Boolean;
+    FProrateDemand: Boolean;
+    FPrint_Smoothing: Boolean;
+    FWellLayerChoice: TPumpLayerChoice;
+    FPrint_Input: Boolean;
+    procedure SetGroundWaterChoice(const Value: TFarmOption);
+    procedure SetMnwAutoOff(const Value: Boolean);
+    procedure SetMnwAutoOn(const Value: Boolean);
+    procedure SetMnwPumpSpread(const Value: TPumpSpreadChoice);
+    procedure SetPrint_ByMNW(const Value: Boolean);
+    procedure SetPrint_ByWbs(const Value: Boolean);
+    procedure SetPrint_ByWell(const Value: Boolean);
+    procedure SetPrint_Input(const Value: Boolean);
+    procedure SetPrint_List(const Value: Boolean);
+    procedure SetPrint_Smoothing(const Value: Boolean);
+    procedure SetProrateDemand(const Value: Boolean);
+    procedure SetQMaxReset(const Value: Boolean);
+    procedure SetSurfaceWaterChoice(const Value: TFarmOption);
+    procedure SetWellFormat(const Value: TWellFormat);
+    procedure SetWellLayerChoice(const Value: TPumpLayerChoice);
+    procedure SetWellXY(const Value: Boolean);
+  published
     // Supply Well
+    // PRINT BYWELL
+    property Print_ByWell: Boolean read FPrint_ByWell write SetPrint_ByWell;
+    // PRINT ByWBS
+    property Print_ByWbs: Boolean read FPrint_ByWbs write SetPrint_ByWbs;
+    // PRINT ByMNW
+    property Print_ByMNW: Boolean read FPrint_ByMNW write SetPrint_ByMNW;
+    // PRINT LIST
+    property Print_List: Boolean read FPrint_List write SetPrint_List;
+    // PRINT INPUT
+    property Print_Input: Boolean read FPrint_Input write SetPrint_Input;
+    // PRINT SMOOTHING
+    property Print_Smoothing: Boolean read FPrint_Smoothing
+      write SetPrint_Smoothing;
+    // Inverse of NO_QMAXRESET, Default = True.
+    property QMaxReset: Boolean read FQMaxReset write SetQMaxReset;
+    // NOCIRNOQ. Check OWHM V2 for default
+    property NoCripIrrigationNoQ: Boolean read FQMaxReset write SetQMaxReset;
+    // PRORATE_DEMAND
+    property ProrateDemand: Boolean read FProrateDemand write SetProrateDemand;
+    // MNW_AUTOMATIC_ON and/or MNW_AUTOMATIC_OFF. Beth default to False;
+    property MnwAutoOn: Boolean read FMnwAutoOn write SetMnwAutoOn;
+    property MnwAutoOff: Boolean read FMnwAutoOff write SetMnwAutoOff;
+    // MNW_PUMP_SPREAD
+    property MnwPumpSpread: TPumpSpreadChoice read FMnwPumpSpread
+      write SetMnwPumpSpread;
+    // INPUT_OPTION XY
+    property WellXY: Boolean read FWellXY write SetWellXY;
+    // INPUT_OPTION {ELEVATION,DEPTH}
+    property WellLayerChoice: TPumpLayerChoice read FWellLayerChoice
+      write SetWellLayerChoice;
+    // {TIME FRAME (default), LINEFEED WBS, LINEFEED CAPACITY}}
+    property WellFormat: TWellFormat read FWellFormat write SetWellFormat;
+    // ALLOTMENTS
+    // SURFACE_WATER
+    property SurfaceWaterChoice: TFarmOption read FSurfaceWaterChoice
+      write SetSurfaceWaterChoice;
+    // GROUNDWATER
+    property GroundWaterChoice: TFarmOption read FGroundWaterChoice
+      write SetGroundWaterChoice;
+  end;
+
+  TFarmLandUse = class(TCustomFarm4)
+  private
+    FCropCoefOrUse: TCropCoefOrUse;
+    FLandUseFractionChoice: TFarmOption;
+    FPondDepthChoice: TFarmOption;
+    FLandUseOption: TLandUseOption;
+    FPrintByCrop: Boolean;
+    FPrintBare: Boolean;
+    FSoilLocationChoice: TFarmOption;
+    FFractionOfPrecipToSurfaceWater: TFarmOption;
+    FPrintByCell: Boolean;
+    FET_IrrigFracCorrectionChoice: TFarmOption;
+    FSpecifyCropsToPrint: TFarmOption;
+    FAddedDemandType: TAddedDemandType;
+    FTranspirationFractionChoice: TFarmOption;
+    FCropCoeffOrUseChoice: TFarmOption;
+    FPrintET_ByFarmByCrop: Boolean;
+    FStoredMinimumBareFraction: TRealStorage;
+    FRootPressureChoice: TFarmOption;
+    FPrintByFarmByCrop: Boolean;
+    FRootDepthChoice: TFarmOption;
+    FIrrigationChoice: TFarmOption;
+    FFractionOfIrrigationToSurfaceWater: TFarmOption;
+    FEvapIrrigationFractionChoice: TFarmOption;
+    FPrintRowCol: Boolean;
+    FPrintByCellVerbose: Boolean;
+    FPrintByFarm: Boolean;
+    FNoCropUseMeansBareSoilChoice: TFarmOption;
+    FAddedDemandChoice: TFarmOption;
+    FEvapIrrigationFractionArrayList: TArrayList;
+    FTranspirationFractionArrayList: TArrayList;
+    FFractionOfIrrigationToSurfaceWaterArrayList: TArrayList;
+    FAddedDemandArrayList: TArrayList;
+    FLandUseFractionArrayList: TArrayList;
+    FCropCoefOrUseArrayList: TArrayList;
+    FFractionOfPrecipToSurfaceWaterArrayList: TArrayList;
+    FRootDepthArrayList: TArrayList;
+    FIrrigationArrayList: TArrayList;
+    FStoredRelaxFracHeadChange: TRealStorage;
+    procedure SetAddedDemandChoice(const Value: TFarmOption);
+    procedure SetAddedDemandType(const Value: TAddedDemandType);
+    procedure SetCropCoeffOrUseChoice(const Value: TFarmOption);
+    procedure SetCropCoefOrUse(const Value: TCropCoefOrUse);
+    procedure SetET_IrrigFracCorrectionChoice(const Value: TFarmOption);
+    procedure SetEvapIrrigationFractionChoice(const Value: TFarmOption);
+    procedure SetFractionOfIrrigationToSurfaceWater(const Value: TFarmOption);
+    procedure SetFractionOfPrecipToSurfaceWater(const Value: TFarmOption);
+    procedure SetIrrigationChoice(const Value: TFarmOption);
+    procedure SetLandUseFractionChoice(const Value: TFarmOption);
+    procedure SetLandUseOption(const Value: TLandUseOption);
+    procedure SetNoCropUseMeansBareSoilChoice(const Value: TFarmOption);
+    procedure SetPondDepthChoice(const Value: TFarmOption);
+    procedure SetPrintBare(const Value: Boolean);
+    procedure SetPrintByCell(const Value: Boolean);
+    procedure SetPrintByCellVerbose(const Value: Boolean);
+    procedure SetPrintByCrop(const Value: Boolean);
+    procedure SetPrintByFarm(const Value: Boolean);
+    procedure SetPrintByFarmByCrop(const Value: Boolean);
+    procedure SetPrintET_ByFarmByCrop(const Value: Boolean);
+    procedure SetPrintRowCol(const Value: Boolean);
+    procedure SetRelaxFracHeadChange(const Value: double);
+    procedure SetRootDepthChoice(const Value: TFarmOption);
+    procedure SetRootPressureChoice(const Value: TFarmOption);
+    procedure SetSoilLocationChoice(const Value: TFarmOption);
+    procedure SetSpecifyCropsToPrint(const Value: TFarmOption);
+    procedure SetStoredMinimumBareFraction(const Value: TRealStorage);
+    procedure SetTranspirationFractionChoice(const Value: TFarmOption);
+    procedure SetAddedDemandArrayList(const Value: TArrayList);
+    procedure SetCropCoefOrUseArrayList(const Value: TArrayList);
+    procedure SetEvapIrrigationFractionArrayList(const Value: TArrayList);
+    procedure SetFractionOfIrrigationToSurfaceWaterArrayList(
+      const Value: TArrayList);
+    procedure SetFractionOfPrecipToSurfaceWaterArrayList(
+      const Value: TArrayList);
+    procedure SetIrrigationArrayList(const Value: TArrayList);
+    procedure SetLandUseFractionArrayList(const Value: TArrayList);
+    procedure SetRootDepthArrayList(const Value: TArrayList);
+    procedure SetTranspirationFractionArrayList(const Value: TArrayList);
+    function GetMinimumBareFraction: double;
+    function GetRelaxFracHeadChange: double;
+    procedure SetMinimumBareFraction(const Value: double);
+    procedure SetStoredRelaxFracHeadChange(const Value: TRealStorage);
+  public
+    // MIN_BARE_FRACTION
+    property MinimumBareFraction: double
+      read GetMinimumBareFraction write SetMinimumBareFraction;
+    // RELAXATION_FACTOR_HEAD_CHANGE
+    property RelaxFracHeadChange: double read GetRelaxFracHeadChange
+      write SetRelaxFracHeadChange;
+  published
+    // LAND_USE
+    // {SINGLE_LAND_USE_PER_CELL, or MULTIPLE_LAND_USE_PER_CELL}
+    property LandUseOption: TLandUseOption read FLandUseOption
+      write SetLandUseOption;
+    // LOCATION
+    property SoilLocationChoice: TFarmOption read FSoilLocationChoice
+      write SetSoilLocationChoice;
+    // LAND_USE_AREA_FRACTION
+    property LandUseFractionChoice: TFarmOption read FLandUseFractionChoice
+      write SetLandUseFractionChoice;
+    property LandUseFractionArrayList: TArrayList read FLandUseFractionArrayList
+      write SetLandUseFractionArrayList;
+    //PRINT BYWBS
+    property PrintByFarm: Boolean read FPrintByFarm write SetPrintByFarm;
+    //PRINT BYWBS_BYCROP
+    property PrintByFarmByCrop: Boolean read FPrintByFarmByCrop
+      write SetPrintByFarmByCrop;
+    //PRINT BYCROP
+    property PrintByCrop: Boolean read FPrintByCrop write SetPrintByCrop;
+    //PRINT BARE
+    property PrintBare: Boolean read FPrintBare write SetPrintBare;
+    //PRINT ALL
+    property PrintByCell: Boolean read FPrintByCell write SetPrintByCell;
+    //PRINT ALL_VERBOSE
+    property PrintByCellVerbose: Boolean read FPrintByCellVerbose
+      write SetPrintByCellVerbose;
+    //PRINT INPUT (use default for model)
+    //PRINT ET_BYWBS_BYCROP
+    property PrintET_ByFarmByCrop: Boolean read FPrintET_ByFarmByCrop
+      write SetPrintET_ByFarmByCrop;
+    //PRINT ROW_COLUMN
+    property PrintRowCol: Boolean read FPrintRowCol write SetPrintRowCol;
+    // SPECIFY_PRINT_ALL_CROPS
+    property SpecifyCropsToPrint: TFarmOption read FSpecifyCropsToPrint
+      write SetSpecifyCropsToPrint;
+    // CROP_COEFFICIENT or CONSUMPTIVE_USE
+    property CropCoeffOrUseChoice: TFarmOption read FCropCoeffOrUseChoice
+      write SetCropCoeffOrUseChoice;
+    // CROP_COEFFICIENT or CONSUMPTIVE_USE
+    property CropCoefOrUse: TCropCoefOrUse read FCropCoefOrUse
+      write SetCropCoefOrUse;
+    property CropCoefOrUseArrayList: TArrayList read FCropCoefOrUseArrayList
+      write SetCropCoefOrUseArrayList;
+    // IRRIGATION
+    property IrrigationChoice: TFarmOption read FIrrigationChoice
+      write SetIrrigationChoice;
+    property IrrigationArrayList: TArrayList read FIrrigationArrayList
+      write SetIrrigationArrayList;
+    // ROOT_DEPTH
+    property RootDepthChoice: TFarmOption read FRootDepthChoice
+      write SetRootDepthChoice;
+    property RootDepthArrayList: TArrayList read FRootDepthArrayList
+      write SetRootDepthArrayList;
+    // ROOT_PRESSURE
+    property RootPressureChoice: TFarmOption read FRootPressureChoice
+      write SetRootPressureChoice;
+    // TRANSPIRATION_FRACTION
+    property TranspirationFractionChoice: TFarmOption
+      read FTranspirationFractionChoice write SetTranspirationFractionChoice;
+    property TranspirationFractionArrayList: TArrayList
+      read FTranspirationFractionArrayList
+      write SetTranspirationFractionArrayList;
+    // EVAPORATION_IRRIGATION_FRACTION
+    property EvapIrrigationFractionChoice: TFarmOption
+      read FEvapIrrigationFractionChoice write SetEvapIrrigationFractionChoice;
+    property EvapIrrigationFractionArrayList: TArrayList
+      read FEvapIrrigationFractionArrayList
+      write SetEvapIrrigationFractionArrayList;
+    // SURFACEWATER_LOSS_FRACTION_PRECIPITATION
+    property FractionOfPrecipToSurfaceWater: TFarmOption
+      read FFractionOfPrecipToSurfaceWater
+      write SetFractionOfPrecipToSurfaceWater;
+    property FractionOfPrecipToSurfaceWaterArrayList: TArrayList
+      read FFractionOfPrecipToSurfaceWaterArrayList
+      write SetFractionOfPrecipToSurfaceWaterArrayList;
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION
+    property FractionOfIrrigationToSurfaceWater: TFarmOption
+      read FFractionOfIrrigationToSurfaceWater
+      write SetFractionOfIrrigationToSurfaceWater;
+    property FractionOfIrrigationToSurfaceWaterArrayList: TArrayList
+      read FFractionOfIrrigationToSurfaceWaterArrayList
+      write SetFractionOfIrrigationToSurfaceWaterArrayList;
+    // POND_DEPTH;
+    property PondDepthChoice: TFarmOption read FPondDepthChoice
+      write SetPondDepthChoice;
+    // ADDED_DEMAND
+    property AddedDemandChoice: TFarmOption read FAddedDemandChoice
+      write SetAddedDemandChoice;
+    property AddedDemandArrayList: TArrayList read FAddedDemandArrayList
+      write SetAddedDemandArrayList;
+    // ADDED_DEMAND (length or rate).
+    property AddedDemandType: TAddedDemandType read FAddedDemandType
+      write SetAddedDemandType;
+    // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
+    property NoCropUseMeansBareSoilChoice: TFarmOption
+      read FNoCropUseMeansBareSoilChoice write SetNoCropUseMeansBareSoilChoice;
+    // MIN_BARE_FRACTION
+    property StoredMinimumBareFraction: TRealStorage
+      read FStoredMinimumBareFraction write SetStoredMinimumBareFraction;
+    // EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION
+    property ET_IrrigFracCorrectionChoice: TFarmOption
+      read FET_IrrigFracCorrectionChoice write SetET_IrrigFracCorrectionChoice;
+    // RELAXATION_FACTOR_HEAD_CHANGE
+    property StoredRelaxFracHeadChange: TRealStorage
+      read FStoredRelaxFracHeadChange write SetStoredRelaxFracHeadChange;
+  end;
+
+  TFarmSalinityFlush = class(TCustomFarm4)
+  private
+    FFarmIrrigationUniformityChoice: TFarmOption;
+    FCropExtraWaterChoice: TFarmOption;
+    FPrintAll: Boolean;
+    FCropMaxLeachChoice: TFarmOption;
+    FCropSalinityToleranceChoice: TFarmOption;
+    FPrintByFarmByCrop: Boolean;
+    FExpressionLength: Integer;
+    FCropSalinityDemandChoice: TFarmOption;
+    FPrintByFarm: Boolean;
+    FCropLeachRequirementChoice: TFarmOption;
+    FFarmSaltConcentrationsChoice: TFarmOption;
+    FCropSalinityDemandArrayList: TArrayList;
+    FStoredExpressionMin: TRealStorage;
+    procedure SetCropExtraWaterChoice(const Value: TFarmOption);
+    procedure SetCropLeachRequirementChoice(const Value: TFarmOption);
+    procedure SetCropMaxLeachChoice(const Value: TFarmOption);
+    procedure SetCropSalinityDemandChoice(const Value: TFarmOption);
+    procedure SetCropSalinityToleranceChoice(const Value: TFarmOption);
+    procedure SetExpressionLength(const Value: Integer);
+    procedure SetExpressionMin(const Value: double);
+    procedure SetFarmIrrigationUniformityChoice(const Value: TFarmOption);
+    procedure SetFarmSaltConcentrationsChoice(const Value: TFarmOption);
+    procedure SetPrintAll(const Value: Boolean);
+    procedure SetPrintByFarm(const Value: Boolean);
+    procedure SetPrintByFarmByCrop(const Value: Boolean);
+    procedure SetCropSalinityDemandArrayList(const Value: TArrayList);
+    function GetExpressionMin: double;
+    procedure SetStoredExpressionMin(const Value: TRealStorage);
+  public
+    property ExpressionMin: double read GetExpressionMin write SetExpressionMin;
+  published
+    //  PRINT BYFARM
+    property PrintByFarm: Boolean read FPrintByFarm write SetPrintByFarm;
+    //  PRINT BYFARM_BYCROP
+    property PrintByFarmByCrop: Boolean read FPrintByFarmByCrop
+      write SetPrintByFarmByCrop;
+    //  PRINT ALL
+    property PrintAll: Boolean read FPrintAll write SetPrintAll;
+    //  PRINT INPUT (use default rom model).
+    // EXPRESSION_LINE_LENGTH default to 100.
+    property ExpressionLength: Integer read FExpressionLength
+      write SetExpressionLength;
+    // EXPRESSION_VARIABLE_NEARZERO
+    property StoredExpressionMin: TRealStorage read FStoredExpressionMin
+      write SetStoredExpressionMin;
+    // WBS_SUPPLY_SALT_CONCENTRATION
+    property FarmSaltConcentrationsChoice: TFarmOption
+      read FFarmSaltConcentrationsChoice write SetFarmSaltConcentrationsChoice;
+    // WBS_IRRIGATION_UNIFORMITY
+    property FarmIrrigationUniformityChoice: TFarmOption
+      read FFarmIrrigationUniformityChoice write SetFarmIrrigationUniformityChoice;
+    // CROP_HAS_SALINITY_DEMAND
+    property CropSalinityDemandChoice: TFarmOption
+      read FCropSalinityDemandChoice write SetCropSalinityDemandChoice;
+    property CropSalinityDemandArrayList: TArrayList
+      read FCropSalinityDemandArrayList write SetCropSalinityDemandArrayList;
+    // CROP_SALINITY_TOLERANCE
+    property CropSalinityToleranceChoice: TFarmOption
+      read FCropSalinityToleranceChoice write SetCropSalinityToleranceChoice;
+    // CROP_MAX_LEACHING_REQUIREMENT
+    property CropMaxLeachChoice: TFarmOption read FCropMaxLeachChoice
+      write SetCropMaxLeachChoice;
+    // CROP_LEACHING_REQUIREMENT
+    property CropLeachRequirementChoice: TFarmOption
+      read FCropLeachRequirementChoice write SetCropLeachRequirementChoice;
+    // CROP_SALINITY_APPLIED_WATER
+    property CropExtraWaterChoice: TFarmOption read FCropExtraWaterChoice
+      write SetCropExtraWaterChoice;
   end;
 
   TCfpElevationChoice = (cecIndividual, cecGroup);
@@ -24144,226 +24692,853 @@ end;
 
 { TFarmProcess4 }
 
+procedure TFarmProcess4.Assign(Source: TPersistent);
+var
+  FarmSource: TFarmProcess4;
+begin
+  if Source is TFarmProcess4 then
+  begin
+    FarmSource := TFarmProcess4(Source);
+    MnwQClose := FarmSource.MnwQClose;
+    MnwHPercent := FarmSource.MnwHPercent;
+    MnwRPercent := FarmSource.MnwRPercent;
+    Wbs_Water_Use := FarmSource.Wbs_Water_Use;
+    Farm_Demand_Supply_Summary := FarmSource.Farm_Demand_Supply_Summary;
+    Farm_Budget := FarmSource.Farm_Budget;
+    Farm_Budget_Compact := FarmSource.Farm_Budget_Compact;
+    Farm_Net_Recharge_Array := FarmSource.Farm_Net_Recharge_Array;
+    Farm_Net_Recharge_List := FarmSource.Farm_Net_Recharge_List;
+    Evapotranspiration_SummarySum := FarmSource.Evapotranspiration_SummarySum;
+    Evapotranspiration_SummarySeparate :=
+      FarmSource.Evapotranspiration_SummarySeparate;
+    Et_List := FarmSource.Et_List;
+    Farm_Well_Summary := FarmSource.Farm_Well_Summary;
+    Landscape_Runoff := FarmSource.Landscape_Runoff;
+    Deep_Percolation := FarmSource.Deep_Percolation;
+    Routing_Information := FarmSource.Routing_Information;
+    Print := FarmSource.Print;
+    UseWells := FarmSource.UseWells;
+    Recompute := FarmSource.Recompute;
+    StaticFarms := FarmSource.StaticFarms;
+    StaticEfficiency := FarmSource.StaticEfficiency;
+    EfficiencyArrayList := FarmSource.EfficiencyArrayList;
+    EfficiencyImprovement := FarmSource.EfficiencyImprovement;
+    EfficiencyImprovementArrayList := FarmSource.EfficiencyImprovementArrayList;
+    DeficiencyScenario := FarmSource.DeficiencyScenario;
+    ProrateDeficiency := FarmSource.ProrateDeficiency;
+    Watersource := FarmSource.Watersource;
+    Bare_Runoff_Fraction := FarmSource.Bare_Runoff_Fraction;
+    Bare_Runoff_FractionArrayList := FarmSource.Bare_Runoff_FractionArrayList;
+    Bare_Precipitation_Consumption_Fraction :=
+      FarmSource.Bare_Precipitation_Consumption_Fraction;
+    Added_Demand_Runoff_Split := FarmSource.Added_Demand_Runoff_Split;
+    Added_Demand_Runoff_SplitArrayList :=
+      FarmSource.Added_Demand_Runoff_SplitArrayList;
+    Added_Crop_Demand := FarmSource.Added_Crop_Demand;
+    DemandChoice := FarmSource.DemandChoice;
+  end;
+  inherited;
+
+end;
+
+constructor TFarmProcess4.Create(Model: TBaseModel);
+begin
+
+end;
+
+destructor TFarmProcess4.Destroy;
+begin
+
+  inherited;
+end;
+
+function TFarmProcess4.GetMnwHPercent: double;
+begin
+  result := StoredMnwHPercent.Value;
+end;
+
+function TFarmProcess4.GetMnwQClose: double;
+begin
+  result := StoredMnwQClose.Value;
+end;
+
+function TFarmProcess4.GetMnwRPercent: double;
+begin
+  result := StoredMnwRPercent.Value;
+end;
+
+procedure TFarmProcess4.InitializeVariables;
+begin
+  inherited;
+
+end;
+
 procedure TFarmProcess4.SetAdded_Crop_Demand(const Value: TFarmOption);
 begin
-  FAdded_Crop_Demand := Value;
+  SetFarmOptionProperty(FAdded_Crop_Demand, Value);
 end;
 
 procedure TFarmProcess4.SetAdded_Demand_Runoff_Split(const Value: TFarmOption);
 begin
-  FAdded_Demand_Runoff_Split := Value;
+  SetFarmOptionProperty(FAdded_Demand_Runoff_Split, Value);
+end;
+
+procedure TFarmProcess4.SetAdded_Demand_Runoff_SplitArrayList(
+  const Value: TArrayList);
+begin
+  SetArrayListProperty(FAdded_Demand_Runoff_SplitArrayList, Value);
 end;
 
 procedure TFarmProcess4.SetBare_Precipitation_Consumption_Fraction(
   const Value: TFarmOption);
 begin
-  FBare_Precipitation_Consumption_Fraction := Value;
+  SetFarmOptionProperty(FBare_Precipitation_Consumption_Fraction, Value);
 end;
 
 procedure TFarmProcess4.SetBare_Runoff_Fraction(const Value: TFarmOption);
 begin
-  FBare_Runoff_Fraction := Value;
+  SetFarmOptionProperty(FBare_Runoff_Fraction, Value);
+end;
+
+procedure TFarmProcess4.SetBare_Runoff_FractionArrayList(
+  const Value: TArrayList);
+begin
+  SetArrayListProperty(FBare_Runoff_FractionArrayList, Value);
 end;
 
 procedure TFarmProcess4.SetDeep_Percolation(const Value: Boolean);
 begin
-  FDeep_Percolation := Value;
+  SetBooleanProperty(FDeep_Percolation, Value);
 end;
 
 procedure TFarmProcess4.SetDeficiencyScenario(const Value: TFarmOption);
 begin
-  FDeficiencyScenario := Value;
+  SetFarmOptionProperty(FDeficiencyScenario, Value);
 end;
 
 procedure TFarmProcess4.SetDemandChoice(const Value: TDemandChoice);
 begin
-  FDemandChoice := Value;
+  if FDemandChoice <> Value then
+  begin
+    FDemandChoice := Value;
+    InvalidateModel;
+  end;
 end;
 
-procedure TFarmProcess4.SetDirect_Recharge(const Value: TFarmOption);
+procedure TFarmProcess4.SetEfficiencyArrayList(const Value: TArrayList);
 begin
-  FDirect_Recharge := Value;
+  SetArrayListProperty(FEfficiencyArrayList, Value);
 end;
 
 procedure TFarmProcess4.SetEfficiencyImprovement(const Value: TFarmOption);
 begin
-  FEfficiencyImprovement := Value;
+  SetFarmOptionProperty(FEfficiencyImprovement, Value);
+end;
+
+procedure TFarmProcess4.SetEfficiencyImprovementArrayList(
+  const Value: TArrayList);
+begin
+  SetArrayListProperty(FEfficiencyImprovementArrayList, Value);
 end;
 
 procedure TFarmProcess4.SetEt_List(const Value: Boolean);
 begin
-  FEt_List := Value;
+  SetBooleanProperty(FEt_List, Value);
 end;
 
 procedure TFarmProcess4.SetEvapotranspiration_SummarySeparate(
   const Value: Boolean);
 begin
-  FEvapotranspiration_SummarySeparate := Value;
+  SetBooleanProperty(FEvapotranspiration_SummarySeparate, Value);
 end;
 
 procedure TFarmProcess4.SetEvapotranspiration_SummarySum(const Value: Boolean);
 begin
-  FEvapotranspiration_SummarySum := Value;
+  SetBooleanProperty(FEvapotranspiration_SummarySum, Value);
 end;
 
 procedure TFarmProcess4.SetFarm_Budget(const Value: Boolean);
 begin
-  FFarm_Budget := Value;
+  SetBooleanProperty(FFarm_Budget, Value);
 end;
 
 procedure TFarmProcess4.SetFarm_Budget_Compact(const Value: Boolean);
 begin
-  FFarm_Budget_Compact := Value;
+  SetBooleanProperty(FFarm_Budget_Compact, Value);
 end;
 
 procedure TFarmProcess4.SetFarm_Demand_Supply_Summary(const Value: Boolean);
 begin
-  FFarm_Demand_Supply_Summary := Value;
+  SetBooleanProperty(FFarm_Demand_Supply_Summary, Value);
 end;
 
 procedure TFarmProcess4.SetFarm_Net_Recharge_Array(const Value: Boolean);
 begin
-  FFarm_Net_Recharge_Array := Value;
+  SetBooleanProperty(FFarm_Net_Recharge_Array, Value);
 end;
 
 procedure TFarmProcess4.SetFarm_Net_Recharge_List(const Value: Boolean);
 begin
-  FFarm_Net_Recharge_List := Value;
+  SetBooleanProperty(FFarm_Net_Recharge_List, Value);
 end;
 
 procedure TFarmProcess4.SetFarm_Well_Summary(const Value: Boolean);
 begin
-  FFarm_Well_Summary := Value;
+  SetBooleanProperty(FFarm_Well_Summary, Value);
 end;
 
 procedure TFarmProcess4.SetLandscape_Runoff(const Value: Boolean);
 begin
-  FLandscape_Runoff := Value;
+  SetBooleanProperty(FLandscape_Runoff, Value);
 end;
 
-procedure TFarmProcess4.SetNon_Routed_Delivery(const Value: TFarmOption);
+procedure TFarmProcess4.SetMnwHPercent(const Value: double);
 begin
-  FNon_Routed_Delivery := Value;
+  StoredMnwHPercent.Value := Value;
 end;
 
-procedure TFarmProcess4.SetNrd_Infiltration_Location(const Value: TFarmOption);
+procedure TFarmProcess4.SetMnwQClose(const Value: double);
 begin
-  FNrd_Infiltration_Location := Value;
+  StoredMnwQClose.Value := Value;
 end;
 
-procedure TFarmProcess4.SetPotential_Evaporation_Bare(const Value: TFarmOption);
+procedure TFarmProcess4.SetMnwRPercent(const Value: double);
 begin
-  FPotential_Evaporation_Bare := Value;
+  StoredMnwRPercent.Value := Value;
 end;
 
-procedure TFarmProcess4.SetPrecipitation(const Value: TFarmOption);
+procedure TFarmProcess4.SetPrint(const Value: Boolean);
 begin
-  FPrecipitation := Value;
-end;
-
-procedure TFarmProcess4.SetPrecipitation_Potential_Consumption(
-  const Value: TFarmOption);
-begin
-  FPrecipitation_Potential_Consumption := Value;
-end;
-
-procedure TFarmProcess4.SetPrint_Nrd(const Value: Boolean);
-begin
-  FPrint_Nrd := Value;
-end;
-
-procedure TFarmProcess4.SetPrint_Nrd_By_Wbs(const Value: Boolean);
-begin
-  FPrint_Nrd_By_Wbs := Value;
-end;
-
-procedure TFarmProcess4.SetPrint_Sfr_Delivery(const Value: Boolean);
-begin
-  FPrint_Sfr_Delivery := Value;
-end;
-
-procedure TFarmProcess4.SetPrint_Sfr_Delivery_By_Wbs(const Value: Boolean);
-begin
-  FPrint_Sfr_Delivery_By_Wbs := Value;
-end;
-
-procedure TFarmProcess4.SetPrint_Sfr_Return(const Value: Boolean);
-begin
-  FPrint_Sfr_Return := Value;
-end;
-
-procedure TFarmProcess4.SetPrint_Sfr_Srr_Only(const Value: Boolean);
-begin
-  FPrint_Sfr_Srr_Only := Value;
+  SetBooleanProperty(FPrint, Value);
 end;
 
 procedure TFarmProcess4.SetProrateDeficiency(
   const Value: TProrateDeficiencyOption);
 begin
-  FProrateDeficiency := Value;
+  if FProrateDeficiency <> Value then
+  begin
+    FProrateDeficiency := Value;
+    InvalidateModel;
+  end;
 end;
 
-procedure TFarmProcess4.SetRebuild_Fully_Routed_Return(const Value: Boolean);
+procedure TFarmProcess4.SetRecompute(const Value: Boolean);
 begin
-  FRebuild_Fully_Routed_Return := Value;
-end;
-
-procedure TFarmProcess4.SetReferenceET(const Value: TFarmOption);
-begin
-  FReferenceET := Value;
-end;
-
-procedure TFarmProcess4.SetReturnChoice(const Value: TFarmOption);
-begin
-  FReturnChoice := Value;
+  SetBooleanProperty(FRecompute, Value);
 end;
 
 procedure TFarmProcess4.SetRouting_Information(const Value: Boolean);
 begin
-  FRouting_Information := Value;
-end;
-
-procedure TFarmProcess4.SetSemi_Routed_Delivery(const Value: TFarmOption);
-begin
-  FSemi_Routed_Delivery := Value;
-end;
-
-procedure TFarmProcess4.SetSemi_Routed_Delivery_Limits(
-  const Value: TFarmOption);
-begin
-  FSemi_Routed_Delivery_Limits := Value;
+  SetBooleanProperty(FRouting_Information, Value);
 end;
 
 procedure TFarmProcess4.SetStaticEfficiency(const Value: Boolean);
 begin
-  FStaticEfficiency := Value;
+  SetBooleanProperty(FStaticEfficiency, Value);
 end;
 
 procedure TFarmProcess4.SetStaticFarms(const Value: Boolean);
 begin
-  FStaticFarms := Value;
+  SetBooleanProperty(FStaticFarms, Value);
 end;
 
-procedure TFarmProcess4.SetStoredReference_Et_To_Bare(
+procedure TFarmProcess4.SetStoredMnwHPercent(const Value: TRealStorage);
+begin
+  FStoredMnwHPercent.Assign(Value);
+end;
+
+procedure TFarmProcess4.SetStoredMnwQClose(const Value: TRealStorage);
+begin
+  FStoredMnwQClose.Assign(Value);
+end;
+
+procedure TFarmProcess4.SetStoredMnwRPercent(const Value: TRealStorage);
+begin
+  FStoredMnwRPercent.Assign(Value);
+end;
+
+procedure TFarmProcess4.SetUseWells(const Value: Boolean);
+begin
+  SetBooleanProperty(FUseWells, Value);
+end;
+
+procedure TFarmProcess4.SetWatersource(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FWatersource, Value);
+end;
+
+procedure TFarmProcess4.SetWbs_Water_Use(const Value: Boolean);
+begin
+  SetBooleanProperty(FWbs_Water_Use, Value);
+end;
+
+{ TFarmProcess4Climate }
+
+function TFarmProcess4Climate.GetReference_Et_To_Bare: double;
+begin
+  result := StoredReference_Et_To_Bare.Value;
+end;
+
+procedure TFarmProcess4Climate.SetDirect_Recharge(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FDirect_Recharge, Value);
+end;
+
+procedure TFarmProcess4Climate.SetPotential_Evaporation_Bare(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FPotential_Evaporation_Bare, Value);
+end;
+
+procedure TFarmProcess4Climate.SetPrecipitation(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FPrecipitation, Value);
+end;
+
+procedure TFarmProcess4Climate.SetPrecipitation_Potential_Consumption(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FPrecipitation_Potential_Consumption, Value);
+end;
+
+procedure TFarmProcess4Climate.SetReferenceET(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FReferenceET, Value);
+end;
+
+procedure TFarmProcess4Climate.SetReference_Et_To_Bare(const Value: double);
+begin
+  StoredReference_Et_To_Bare.Value := Value;
+end;
+
+procedure TFarmProcess4Climate.SetStoredReference_Et_To_Bare(
   const Value: TRealStorage);
 begin
   FStoredReference_Et_To_Bare.Assign(Value);
 end;
 
-procedure TFarmProcess4.SetStoredSemi_Routed_Delivery_Closure_Tolerance(
+{ TFarmProcess4SurfaceWater }
+
+function TFarmProcess4SurfaceWater.GetSemi_Routed_Delivery_Closure_Tolerance: double;
+begin
+  result := StoredSemi_Routed_Delivery_Closure_Tolerance.Value;
+end;
+
+procedure TFarmProcess4SurfaceWater.SetNon_Routed_Delivery(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FNon_Routed_Delivery, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetNrd_Infiltration_Location(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FNrd_Infiltration_Location, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetPrint_Nrd(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_Nrd, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetPrint_Nrd_By_Wbs(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_Nrd_By_Wbs, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetPrint_Sfr_Delivery(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_Sfr_Delivery, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetPrint_Sfr_Delivery_By_Wbs(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_Sfr_Delivery_By_Wbs, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetPrint_Sfr_Return(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_Sfr_Return, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetPrint_Sfr_Srr_Only(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_Sfr_Srr_Only, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetRebuild_Fully_Routed_Return(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FRebuild_Fully_Routed_Return, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetReturnChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FReturnChoice, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetSemi_Routed_Delivery(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FSemi_Routed_Delivery, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetSemi_Routed_Delivery_Closure_Tolerance(
+  const Value: double);
+begin
+  StoredSemi_Routed_Delivery_Closure_Tolerance.Value := Value;
+end;
+
+procedure TFarmProcess4SurfaceWater.SetSemi_Routed_Delivery_Limits(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FSemi_Routed_Delivery_Limits, Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetStoredSemi_Routed_Delivery_Closure_Tolerance(
   const Value: TRealStorage);
 begin
   FStoredSemi_Routed_Delivery_Closure_Tolerance.Assign(Value);
 end;
 
-procedure TFarmProcess4.SetWatersource(const Value: TFarmOption);
+{ TFarmProcess4Wells }
+
+procedure TFarmProcess4Wells.SetGroundWaterChoice(const Value: TFarmOption);
 begin
-  FWatersource := Value;
+  SetFarmOptionProperty(FGroundWaterChoice, Value);
 end;
 
-procedure TFarmProcess4.SetWbs_Water_Use(const Value: Boolean);
+procedure TFarmProcess4Wells.SetMnwAutoOff(const Value: Boolean);
 begin
-  FWbs_Water_Use := Value;
+  SetBooleanProperty(FMnwAutoOff, Value);
+end;
+
+procedure TFarmProcess4Wells.SetMnwAutoOn(const Value: Boolean);
+begin
+  SetBooleanProperty(FMnwAutoOn, Value);
+end;
+
+procedure TFarmProcess4Wells.SetMnwPumpSpread(const Value: TPumpSpreadChoice);
+begin
+  if FMnwPumpSpread <> Value then
+  begin
+    FMnwPumpSpread := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TFarmProcess4Wells.SetPrint_ByMNW(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_ByMNW, Value);
+end;
+
+procedure TFarmProcess4Wells.SetPrint_ByWbs(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_ByWbs, Value);
+end;
+
+procedure TFarmProcess4Wells.SetPrint_ByWell(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_ByWell, Value);
+end;
+
+procedure TFarmProcess4Wells.SetPrint_Input(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_Input, Value);
+end;
+
+procedure TFarmProcess4Wells.SetPrint_List(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_List, Value);
+end;
+
+procedure TFarmProcess4Wells.SetPrint_Smoothing(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint_Smoothing, Value);
+end;
+
+procedure TFarmProcess4Wells.SetProrateDemand(const Value: Boolean);
+begin
+  SetBooleanProperty(FProrateDemand, Value);
+end;
+
+procedure TFarmProcess4Wells.SetQMaxReset(const Value: Boolean);
+begin
+  SetBooleanProperty(FQMaxReset, Value);
+end;
+
+procedure TFarmProcess4Wells.SetSurfaceWaterChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FSurfaceWaterChoice, Value);
+end;
+
+procedure TFarmProcess4Wells.SetWellFormat(const Value: TWellFormat);
+begin
+  if FWellFormat <> Value then
+  begin
+    FWellFormat := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TFarmProcess4Wells.SetWellLayerChoice(const Value: TPumpLayerChoice);
+begin
+  if FWellLayerChoice <> Value then
+  begin
+    FWellLayerChoice := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TFarmProcess4Wells.SetWellXY(const Value: Boolean);
+begin
+  SetBooleanProperty(FWellXY, Value);
+end;
+
+{ TFarmLandUse }
+
+function TFarmLandUse.GetMinimumBareFraction: double;
+begin
+  result := StoredMinimumBareFraction.Value;
+end;
+
+function TFarmLandUse.GetRelaxFracHeadChange: double;
+begin
+  result := StoredRelaxFracHeadChange.Value;
+end;
+
+procedure TFarmLandUse.SetAddedDemandArrayList(const Value: TArrayList);
+begin
+  SetArrayListProperty(FAddedDemandArrayList, Value);
+end;
+
+procedure TFarmLandUse.SetAddedDemandChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FAddedDemandChoice, Value);
+end;
+
+procedure TFarmLandUse.SetAddedDemandType(const Value: TAddedDemandType);
+begin
+  if FAddedDemandType <> Value then
+  begin
+    FAddedDemandType := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TFarmLandUse.SetCropCoeffOrUseChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FCropCoeffOrUseChoice, Value);
+end;
+
+procedure TFarmLandUse.SetCropCoefOrUse(const Value: TCropCoefOrUse);
+begin
+  if FCropCoefOrUse <> Value then
+  begin
+    FCropCoefOrUse := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TFarmLandUse.SetCropCoefOrUseArrayList(const Value: TArrayList);
+begin
+  SetArrayListProperty(FCropCoefOrUseArrayList, Value);
+end;
+
+procedure TFarmLandUse.SetET_IrrigFracCorrectionChoice(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FET_IrrigFracCorrectionChoice, Value);
+end;
+
+procedure TFarmLandUse.SetEvapIrrigationFractionArrayList(
+  const Value: TArrayList);
+begin
+  SetArrayListProperty(FEvapIrrigationFractionArrayList, Value);
+end;
+
+procedure TFarmLandUse.SetEvapIrrigationFractionChoice(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FEvapIrrigationFractionChoice, Value);
+end;
+
+procedure TFarmLandUse.SetFractionOfIrrigationToSurfaceWater(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FFractionOfIrrigationToSurfaceWater, Value);
+end;
+
+procedure TFarmLandUse.SetFractionOfIrrigationToSurfaceWaterArrayList(
+  const Value: TArrayList);
+begin
+  SetArrayListProperty(FFractionOfIrrigationToSurfaceWaterArrayList, Value);
+end;
+
+procedure TFarmLandUse.SetFractionOfPrecipToSurfaceWater(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FFractionOfPrecipToSurfaceWater, Value);
+end;
+
+procedure TFarmLandUse.SetFractionOfPrecipToSurfaceWaterArrayList(
+  const Value: TArrayList);
+begin
+  SetArrayListProperty(FFractionOfPrecipToSurfaceWaterArrayList, Value);
+end;
+
+procedure TFarmLandUse.SetIrrigationArrayList(const Value: TArrayList);
+begin
+  SetArrayListProperty(FIrrigationArrayList, Value);
+end;
+
+procedure TFarmLandUse.SetIrrigationChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FIrrigationChoice, Value);
+end;
+
+procedure TFarmLandUse.SetLandUseFractionArrayList(const Value: TArrayList);
+begin
+  SetArrayListProperty(FLandUseFractionArrayList, Value);
+end;
+
+procedure TFarmLandUse.SetLandUseFractionChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FLandUseFractionChoice, Value);
+end;
+
+procedure TFarmLandUse.SetLandUseOption(const Value: TLandUseOption);
+begin
+  if FLandUseOption <> Value then
+  begin
+    FLandUseOption := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TFarmLandUse.SetMinimumBareFraction(const Value: double);
+begin
+  StoredMinimumBareFraction.Value := Value;
+end;
+
+procedure TFarmLandUse.SetNoCropUseMeansBareSoilChoice(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FNoCropUseMeansBareSoilChoice, Value);
+end;
+
+procedure TFarmLandUse.SetPondDepthChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FPondDepthChoice, Value);
+end;
+
+procedure TFarmLandUse.SetPrintBare(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintBare, Value);
+end;
+
+procedure TFarmLandUse.SetPrintByCell(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintByCell, Value);
+end;
+
+procedure TFarmLandUse.SetPrintByCellVerbose(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintByCellVerbose, Value);
+end;
+
+procedure TFarmLandUse.SetPrintByCrop(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintByCrop, Value);
+end;
+
+procedure TFarmLandUse.SetPrintByFarm(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintByFarm, Value);
+end;
+
+procedure TFarmLandUse.SetPrintByFarmByCrop(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintByFarmByCrop, Value);
+end;
+
+procedure TFarmLandUse.SetPrintET_ByFarmByCrop(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintET_ByFarmByCrop, Value);
+end;
+
+procedure TFarmLandUse.SetPrintRowCol(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintRowCol, Value);
+end;
+
+procedure TFarmLandUse.SetRelaxFracHeadChange(const Value: double);
+begin
+  StoredRelaxFracHeadChange.Value := Value;
+end;
+
+procedure TFarmLandUse.SetRootDepthArrayList(const Value: TArrayList);
+begin
+  SetArrayListProperty(FRootDepthArrayList, Value);
+end;
+
+procedure TFarmLandUse.SetRootDepthChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FRootDepthChoice, Value);
+end;
+
+procedure TFarmLandUse.SetRootPressureChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FRootPressureChoice, Value);
+end;
+
+procedure TFarmLandUse.SetSoilLocationChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FSoilLocationChoice, Value);
+end;
+
+procedure TFarmLandUse.SetSpecifyCropsToPrint(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FSpecifyCropsToPrint, Value);
+end;
+
+procedure TFarmLandUse.SetStoredMinimumBareFraction(const Value: TRealStorage);
+begin
+  FStoredMinimumBareFraction.Assign(Value);
+end;
+
+procedure TFarmLandUse.SetStoredRelaxFracHeadChange(const Value: TRealStorage);
+begin
+  FStoredRelaxFracHeadChange.Assign(Value);
+end;
+
+procedure TFarmLandUse.SetTranspirationFractionArrayList(
+  const Value: TArrayList);
+begin
+  SetArrayListProperty(FTranspirationFractionArrayList, Value);
+end;
+
+procedure TFarmLandUse.SetTranspirationFractionChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FTranspirationFractionChoice, Value);
+end;
+
+{ TFarmSalinityFlush }
+
+function TFarmSalinityFlush.GetExpressionMin: double;
+begin
+  result := StoredExpressionMin.Value;
+end;
+
+procedure TFarmSalinityFlush.SetCropExtraWaterChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FCropExtraWaterChoice, Value);
+end;
+
+procedure TFarmSalinityFlush.SetCropLeachRequirementChoice(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FCropLeachRequirementChoice, Value);
+end;
+
+procedure TFarmSalinityFlush.SetCropMaxLeachChoice(const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FCropMaxLeachChoice, Value);
+end;
+
+procedure TFarmSalinityFlush.SetCropSalinityDemandArrayList(
+  const Value: TArrayList);
+begin
+  SetArrayListProperty(FCropSalinityDemandArrayList, Value);
+end;
+
+procedure TFarmSalinityFlush.SetCropSalinityDemandChoice(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FCropSalinityDemandChoice, Value);
+end;
+
+procedure TFarmSalinityFlush.SetCropSalinityToleranceChoice(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FCropSalinityToleranceChoice, Value);
+end;
+
+procedure TFarmSalinityFlush.SetExpressionLength(const Value: Integer);
+begin
+  SetIntegerProperty(FExpressionLength, Value);
+end;
+
+procedure TFarmSalinityFlush.SetExpressionMin(const Value: double);
+begin
+  StoredExpressionMin.Value := Value;
+end;
+
+procedure TFarmSalinityFlush.SetFarmIrrigationUniformityChoice(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FFarmIrrigationUniformityChoice, Value);
+end;
+
+procedure TFarmSalinityFlush.SetFarmSaltConcentrationsChoice(
+  const Value: TFarmOption);
+begin
+  SetFarmOptionProperty(FFarmSaltConcentrationsChoice, Value);
+end;
+
+procedure TFarmSalinityFlush.SetPrintAll(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintAll, Value);
+end;
+
+procedure TFarmSalinityFlush.SetPrintByFarm(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintByFarm, Value);
+end;
+
+procedure TFarmSalinityFlush.SetPrintByFarmByCrop(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrintByFarmByCrop, Value);
+end;
+
+procedure TFarmSalinityFlush.SetStoredExpressionMin(const Value: TRealStorage);
+begin
+  FStoredExpressionMin.Assign(Value);
+end;
+
+{ TFarmProcess4Soil }
+
+procedure TFarmProcess4Soil.SetCapFringeArrayList(const Value: TArrayList);
+begin
+  SetArrayListProperty(FCapFringeArrayList, Value);
+end;
+
+procedure TFarmProcess4Soil.SetSurfVertKArrayList(const Value: TArrayList);
+begin
+  SetArrayListProperty(FSurfVertKArrayList, Value);
+end;
+
+{ TCustomFarm4 }
+
+procedure TCustomFarm4.SetArrayListProperty(var Field: TArrayList;
+  const Value: TArrayList);
+begin
+  if Field <> Value then
+  begin
+    Field := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TCustomFarm4.SetFarmOptionProperty(var Field: TFarmOption;
+  const Value: TFarmOption);
+begin
+  if Field <> Value then
+  begin
+    Field := Value;
+    InvalidateModel;
+  end;
 end;
 
 end.
