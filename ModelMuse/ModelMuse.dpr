@@ -766,7 +766,8 @@ uses
   frameChemSpeciesUnit in 'frameChemSpeciesUnit.pas' {frameChemSpecies: TFrame},
   ModflowGwfGwtExchangeWriterUnit in 'ModflowGwfGwtExchangeWriterUnit.pas',
   ModflowFMI_WriterUnit in 'ModflowFMI_WriterUnit.pas',
-  framePackageFmiUnit in 'framePackageFmiUnit.pas' {framePackageFmi: TFrame};
+  framePackageFmiUnit in 'framePackageFmiUnit.pas' {framePackageFmi: TFrame},
+  ModflowFmp4WriterUnit in 'ModflowFmp4WriterUnit.pas';
 
 {$R *.res}
 

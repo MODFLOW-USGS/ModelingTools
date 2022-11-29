@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T12:29:27.322-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-21T14:21:29.049-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>GLOBAL DIMENSION</title>
   <body>
     <header>
@@ -10,93 +10,102 @@
     <para styleclass="Normal"></para>
     <para styleclass="Normal">Define maximum dimensions for (defines LIST-Style record count that are read and the range of available IDs)</para>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NWBS"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NWBS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NWBS]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"> INT &#160;# or NFARM</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NWBS"></anchor> INT &#160;# or NFARM</para>
           <para styleclass="Normal"> No. of Water Balance Subregions</para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="WATER_BALANCE_SUBREGION">WATER_BALANCE_SUBREGION</link>, <link displaytype="text" defaultstyle="true" type="topiclink" href="SURFACE_WATER">SURFACE_WATER</link>, <link displaytype="text" defaultstyle="true" type="topiclink" href="SUPPLY_WELL">SUPPLY_WELL</link>, <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">LAND_USE</link>, and <link displaytype="text" defaultstyle="true" type="topiclink" href="SALINITY_FLUSH_IRRIGATION">SALINITY_FLUSH_IRRIGATION</link></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NCROP"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NCROP]]></caption><title>No. of Land Use Types (CROPS)</title></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NCROP]]></caption><title>No. of Land Use Types (CROPS)</title></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">INT</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NCROP"></anchor>INT</para>
           <para styleclass="Normal">No. of Land Use Types (CROPS)</para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">LAND_USE</link>, <link displaytype="text" defaultstyle="true" type="topiclink" href="WATER_BALANCE_SUBREGION">WATER_BALANCE_SUBREGION</link>, and <link displaytype="text" defaultstyle="true" type="topiclink" href="SALINITY_FLUSH_IRRIGATION">SALINITY_FLUSH_IRRIGATION</link></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NSOIL"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NSOIL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NSOIL]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">INT</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NSOIL"></anchor>INT</para>
           <para styleclass="Normal">No. of Soil Types</para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="SOIL">SOIL</link></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NIRRIGATE"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NIRRIGATE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NIRRIGATE]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">INT</para>
-          <para styleclass="Normal">No. of Irrigation Types (# of columns in EFFICIENCY) -- Set to zero if not specified</para>
-          <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="WATER_BALANCE_SUBREGION">WATER_BALANCE_SUBREGION</link>, <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">LAND_USE</link>, <link displaytype="text" defaultstyle="true" type="topiclink" href="SALINITY_FLUSH_IRRIGATION">SALINITY_FLUSH_IRRIGATION</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NIRRIGATE"></anchor>INT</para>
+          <para styleclass="Normal">No. of Irrigation Types (# of columns in <link displaytype="text" defaultstyle="true" type="topiclink" href="WATER_BALANCE_SUBREGION" anchor="EFFICIENCY">EFFICIENCY</link>) -- Set to zero if not specified</para>
+          <para styleclass="Normal">See </para>
+          <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="WATER_BALANCE_SUBREGION" anchor="EFFICIENCY">EFFICIENCY</link>, </li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="WATER_BALANCE_SUBREGION" anchor="EFFICIENCY_IMPROVEMENT">EFFICIENCY_IMPROVEMENT</link>, </li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="WATER_BALANCE_SUBREGION" anchor="ADDED_DEMAND_RUNOFF_SPLIT">ADDED_DEMAND_RUNOFF_SPLIT</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE" anchor="IRRIGATION">IRRIGATION</link>, </li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">EVAPORATION_IRRIGATION_FRACTION</link>, </li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE" anchor="SURFACEWATER_LOSS_FRACTION_IRRIGATION">SURFACEWATER_LOSS_FRACTION_IRRIGATION</link>, </li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SALINITY_FLUSH_IRRIGATION" anchor="WBS_IRRIGATION_UNIFORMITY">WBS_IRRIGATION_UNIFORMITY</link></li>
+          </list>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NRD_TYPES"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NRD_TYPES]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NRD_TYPES]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">INT</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NRD_TYPES"></anchor>INT</para>
           <para styleclass="Normal">No. of Non-Routed Deliveries (NRD) Types, this is the number of NRD triplets specified</para>
           <para styleclass="Normal">(NRD List Load is: NRD_TYPES*3 Columns) -- Set to zero if not specified</para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="SURFACE_WATER">SURFACE_WATER</link></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NSFR_DELIV"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NSFR_DELIV]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NSFR_DELIV]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">INT</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NSFR_DELIV"></anchor>INT</para>
           <para styleclass="Normal">No. of SFR semi-routed delivery &#160; &#160;(SRD) points that are defined.</para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="SURFACE_WATER">SURFACE_WATER</link></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NSFR_RETURN"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NSFR_RETURN]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[NSFR_RETURN]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">INT</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NSFR_RETURN"></anchor>INT</para>
           <para styleclass="Normal">No. of SFR semi-routed return flow (SRR) points that are defined.</para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="SURFACE_WATER">SURFACE_WATER</link></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="SURFACE_ELEVATION"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SURFACE_ELEVATION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SURFACE_ELEVATION]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="SURFACE_ELEVATION"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
           <para styleclass="Normal">SURFACE_ELEVATION is a 2D FLOAT ARRAY of land surface elevations</para>
           <para styleclass="Normal"> &#160; --Note you do not have to specify this, if it is specified DIS package keyword as &quot;SURFACE_ELEVATION ULOAD&quot;. Where the keyword &quot;SURFACE_ELEVATION&quot; IS ON THE LINE BEFORE SPECIFYING TOP.</para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">LAND_USE</link></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="SFR_NAMES"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SFR_NAMES]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SFR_NAMES]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="SFR_NAMES"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
           <para styleclass="Normal">OPTIONAL Naming of SFR Segment and Reaches</para>
           <para styleclass="Normal"> &#160;This allows for FMP to use the SFR Name</para>
           <para styleclass="Normal"> &#160;rather than the specifying the SEG/RCH</para>
