@@ -127,7 +127,7 @@ begin
   PackageIdentifiers.Add('AG -- AG PACKAGE FOR NWT VERSION');
   PackageIdentifiers.Add('PROCESSING TIME SERIES');
   PackageIdentifiers.Add('Stream Gages:');
-//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+  PackageIdentifiers.Add('MEMORY MANAGER TOTAL STORAGE');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');

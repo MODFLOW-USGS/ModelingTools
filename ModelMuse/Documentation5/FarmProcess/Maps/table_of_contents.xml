@@ -70,6 +70,9 @@
     </topicref>
     <topicref type="topic" id="44882118422547" build="ALL" modified="2022-11-17T17:28:30.533Z" icon="0" href="SALINITY_FLUSH_IRRIGATION">
       <caption translate="true">SALINITY_FLUSH_IRRIGATION</caption>
+      <topicref type="topic" id="448944234862222" modified="2022-11-29T14:28:10.829Z" icon="0" href="PredefinedVariables">
+        <caption translate="true">PredefinedVariables</caption>
+      </topicref>
     </topicref>
     <topicref type="topic" id="448826837865653" build="ALL" modified="2022-11-17T17:28:30.690Z" icon="0" href="SURFACE_WATER_OPERATIONS">
       <caption translate="true">SURFACE_WATER_OPERATIONS</caption>
