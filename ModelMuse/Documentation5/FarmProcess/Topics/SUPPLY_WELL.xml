@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T12:08:06.975-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T14:02:54.324-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SUPPLY_WELL</title>
   <body>
     <header>
@@ -18,6 +18,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Summary Supply Well output for each active well</para>
+          <para styleclass="Normal">Writes to a file at every time step a summary of well information for each well in use.</para>
         </td>
       </tr>
     </table></para>
@@ -27,6 +28,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Summary Supply Well output by WBS</para>
+          <para styleclass="Normal">Writes to a file at every time step a summary of well information for each WBS.</para>
         </td>
       </tr>
     </table></para>
@@ -36,6 +38,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Summary Supply Well output for or MNW2-Linked Wells</para>
+          <para styleclass="Normal">Writes to a file at every time step a summary of well information for each supply well that is linked to MNW2.</para>
         </td>
       </tr>
     </table></para>
@@ -44,6 +47,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal">Echo supply well results to LIST file (not recommended)</para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Write to the LI</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">ST file a </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">tr</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">anscript of the supply wells that ar</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">e </text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">in us </text></para>
         </td>
       </tr>
     </table></para>
@@ -53,6 +57,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Echo supply well input to LIST file</para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">Write a transcript of the well input t</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">o </text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">a separate file.</text></para>
         </td>
       </tr>
     </table></para>
@@ -62,6 +67,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">If smoothing is enabled, then output smooth effect to file</para>
+          <para styleclass="Normal">If SMOOTH is enabled, then writes any non-MNW2 linked wells that had their capacity reduced because of smoothing. If not enabled, then file will be empty.</para>
         </td>
       </tr>
     </table></para>
@@ -72,6 +78,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal">NO_QMAXRESET &#160;(disables QMAXRESET)</para>
+          <para styleclass="Normal">Disables QMAXRESET for all MNW2 linked supply wells so their QCAP is only reset at the start of each stress period rather than each time step. This may improve speed of the simulation but at the potential expense of under-estimating pumpage. </para>
         </td>
       </tr>
     </table></para>
@@ -86,6 +93,7 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; --Note that MNW2 updates the maximum capacity every solver iteration</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; to represent the potential production of the well</para>
           <para styleclass="Normal"> &#160; &#160; Keyword can be specified by WBS, where a 1 indicates it is enabled for WBS, and 0 is disabled.</para>
+          <para styleclass="Normal">MNW2 linked supply wells use the FMP QCAP as an initial estimate of the well capacity. This capacity is then reduced by MNW2 for the given aquifer conditions and then reset to the original QCAP at the start of the next stress period. This keyword tells FMP that QCAP should be reset every time step. If followed by the keyword ByWBS, then a list of NWBS 0s or 1s are read with ULOAD to indicate which WBS should use (1) QMAXRESET or not (0). By default, this setting is True (1), so specifying it is unnecessary unless a user desires to disable the feature for specific WBS’s. </para>
         </td>
       </tr>
     </table></para>
@@ -100,6 +108,7 @@
           <para styleclass="Normal"> &#160; &#160; &#160;That is: Zero demand for surface model cell above</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; =&gt; Zero Pumping for wells beneath surface cell</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; --This is best for virtual wells that only supply water to the land surface they are underneath</para>
+          <para styleclass="Normal">Specifies that supply wells will only provide supply if there is irrigation demand within the row and column where the well is located. That is, if there is zero irrigation demand for a specific row and column, then all wells that have the same row and column will not provide any supply to the WBS. This works best for wells that only supply water to the land surface they are underneath. If followed by the keyword ByWBS, then NWBS 0 or 1s are read with ULOAD to indicate which WBS should use (1) NOCIRNOQ or not (0).</para>
         </td>
       </tr>
     </table></para>
@@ -116,6 +125,9 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; ByWBS &#160;indicates that <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> Float numbers read read by <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
           <para styleclass="Normal"> &#160; ByLayer indicates that NLAY &#160;Float numbers read read by <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
+          <para styleclass="Normal">FLOAT, Smoothing allows reduction of pumping from non-MWN2 linked wells when the water table approaches the bottom of the model cell. </para>
+          <para styleclass="Normal">Modifier ByTHICK specifies a minimum thickness in model units before smoothing occurs, </para>
+          <para styleclass="Normal">while ByFRACTION specifies a minimum fraction of cell thickness before smoothing occurs.</para>
         </td>
       </tr>
     </table></para>
@@ -123,13 +135,16 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">{ByAverage,ByCapacity} &#160;[ByWBS <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link>]</para>
+          <para styleclass="Normal">{ByCAPACITY,ByAVERAGE} &#160;[ByWBS <link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link>]</para>
           <para styleclass="Normal">When the demanded water is less than total supply (QMAX) PROTATE specifies how much each well pumps</para>
           <para styleclass="Normal"> &#160; ByCapacity uses the ratio of the demand to the total well capacity &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; --more Q for large &#160; capacity wells</para>
           <para styleclass="Normal"> &#160; ByAverage &#160;uses the average demanded rate per well to determine each wells capacity--more Q for smaller capacity wells</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">If not specified then ByCapacity is the default</para>
           <para styleclass="Normal"> &#160; ***Similar input as QMAXRESET</para>
+          <para styleclass="Normal">When the demanded water for a WBS is less than its total pumpage capacity (QMAX) the assigned pumpage is prorated across all the supply wells. </para>
+          <para styleclass="Normal">ByCAPACITY is the default, indicates that the total demand for pumpage is spread across supply wells based on the ratio of each well’s capacity, QCAP, to the total capacity of the WBS, QMAX. This has the effect of having higher capacity wells supply more pumpage than lower capacity wells. </para>
+          <para styleclass="Normal">ByAverage calculates an average demand per well and then wells with capacity below this average are set to their QCAP and wells with capacity above the average have an even split of the remaining demand. This has the effect of having lower capacity wells use their full capacity before the larger capacity wells. This was the method used by FMP3. </para>
         </td>
       </tr>
     </table></para>
@@ -152,6 +167,8 @@
           <para styleclass="Normal"> &#160;Ideally it is recommend to have MNW2 activate its linked wells and have them remain active with the drill and destroy dates of the well.</para>
           <para styleclass="Normal"> &#160; &#160;FMP would then only be linked to the well when they provide groundwater supply.</para>
           <para styleclass="Normal"> &#160; &#160;These options provide a convenient method to simplify input when the drill and destroy dates are coincident with the FMP supply dates.</para>
+          <para styleclass="Normal">MNW_AUTOMATIC_ON Automatically enables, makes “active”, a MNW2 well that is linked to an FMP supply well. The MNW2 well is made active when the corresponding FMP well is first available to provide supply. If the supply well is no longer available, then the MNW2 well remains “active” with a desired pumping rate of zero until the simulation ends. This serves as a short cut to double specifying the MNW2 well name in its stress period input to mimic the time periods of use by the FMP. </para>
+          <para styleclass="Normal">MNW_AUTOMATIC_OFF Automatically disables, removes from simulation, a MNW2 well that is linked to an FMP supply well. The MNW2 well is removed when the corresponding FMP well is defined to no longer provide supply. This feature should be used when the FMP supply well is considered “destroyed” rather than no longer providing supply to a WBS.</para>
         </td>
       </tr>
     </table></para>
@@ -171,6 +188,10 @@
           <para styleclass="Normal"> &#160; &#160; &#160; ByWBS ULOAD &#160;-- uses ULOAD to read <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> INT, which must be 0, 1, or 2.</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; --Based on the value will cause the associated farm to follow one of the</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; previously mentioned keywords (note the number to the left of each keyword)</para>
+          <para styleclass="Normal">This option may improve convergence speed and will not affect the final pumping rate. Wells linked to MNW2 that contain more than one node must assign the desired pumping to all of the well’s nodes. MNW2 will then allocate the desired pumpage among the nodes to meet the total desired pumping rate. This option offers different methods for initially applying the desired pumping rate to MNW2 when there is more than one node. </para>
+          <para styleclass="Normal">BY_COND is the default and applies the desired pumpage based on each node’s conductance relative to the total. </para>
+          <para styleclass="Normal">BY_COUNT divides the desired pumpage by the total node count and applies that rate to all nodes. </para>
+          <para styleclass="Normal">BY_TOP applies the desired pumpage to the uppermost, top node. This was how FMP3 originally assigned MNW2 linked pumpage.</para>
         </td>
       </tr>
     </table></para>
@@ -187,6 +208,8 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal">INPUT_OPTION ELEVATION =&gt; Layer is loaded as an elevation located within a model cell</para>
           <para styleclass="Normal">INPUT_OPTION DEPTH &#160; &#160; =&gt; Layer is loaded as a depth below the ground surface elevation</para>
+          <para styleclass="Normal">INPUT_OPTION XY Indicates that all supply-well input will use the X- and Y-coordinate in the place of the row and column input. The coordinates must be a location within the Cartesian coordinate system defined by the DIS package. The row and column are determined based on what model cell contains the given X- and Y-coordinate. </para>
+          <para styleclass="Normal">INPUT_OPTION {ELEVATION,DEPTH} Indicates that all supply-well input will use either the ELEVATION or DEPTH from land surface in the place of the Layer input. If ELEVATION is specified, then the layer number is determined based on the DIS TOP and BOTM input for the supply-well’s location. If DEPTH is specified, then it is converted to an elevation by subtracting the depth from the GLOBAL DIMENSION block’s SURFACE_ELEVATION for the supply-well’s location. </para>
         </td>
       </tr>
     </table></para>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T11:21:37.903-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T12:45:48.185-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>OUTPUT</title>
   <body>
     <header>
@@ -42,6 +42,7 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE FDS.out</para>
+          <para styleclass="Normal">Supply and Demand Summary on a WBS basis. Optional to specify file name and location with Generic_Output_OptKey, otherwise the default name is FDS.out</para>
         </td>
       </tr>
     </table></para>
@@ -51,6 +52,7 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE FB_DETAILS.out</para>
+          <para styleclass="Normal">Landscape budget;all flows are relative to the landscape—IN to the landscape or OUT of the landscape. Optional to specify file name and location with Generic_Output_OptKey, otherwise the default name is“FB.DETAILS.OUT”</para>
         </td>
       </tr>
     </table></para>
@@ -60,6 +62,7 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE FB_COMPACT.out</para>
+          <para styleclass="Normal">Same as FARM_BUDGET, but aggregates water by common type [L<text style="font-size:7pt; vertical-align:super;">3</text>/T].</para>
         </td>
       </tr>
     </table></para>
@@ -69,6 +72,7 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE FNRCH_ARRAY.out</para>
+          <para styleclass="Normal">Write cell-by-cell WBS (Farm) net recharge (FNR) as an array to a text file [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]. FNR is the difference between deep percolation and evaporation from groundwater. FARM_NET_RECHARGE_LIST</para>
         </td>
       </tr>
     </table></para>
@@ -78,6 +82,7 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE FNRCH_LIST.out</para>
+          <para styleclass="Normal">Write WBS (Farm) net recharge (FNR) for each WBS to a text file [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]. FNR is the difference between deep percolation and evaporation from groundwater. </para>
         </td>
       </tr>
     </table></para>
@@ -87,6 +92,7 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE ET_ARRAY.out &#160; &#160; --KEY MAY BE &quot;ET_ARRAY SUM&quot;</para>
+          <para styleclass="Normal">Write cell-by-cell evapotranspiration as an array to a text file [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]. </para>
         </td>
       </tr>
     </table></para>
@@ -96,15 +102,17 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal"> WRITE E_n_T_ARRAY.out &#160;--KEY MAY BE &quot;ET_ARRAY SEPARATE&quot;</para>
+          <para styleclass="Normal">Write cell-by-cell evaporation and transpiration as two separate arrays in a text file [L<text style="font-size:7pt; vertical-align:super;">3</text>/T].</para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ET_LIST]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ET_LIST (or EVAPOTRANSPIRATION_LIST?)]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE ET_LIST.out</para>
+          <para styleclass="Normal">Write to a text file the evaporation, transpiration, and evapotranspiration for each WBS [L3/T].</para>
         </td>
       </tr>
     </table></para>
@@ -114,6 +122,7 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE FWELLS.out</para>
+          <para styleclass="Normal">Print out layer, row, column, and final rate for all WBS (Farm) wells [L<text style="font-size:7pt; vertical-align:super;">3</text>/T].</para>
         </td>
       </tr>
     </table></para>
@@ -125,6 +134,7 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE RUNOFF.OUT</para>
+          <para styleclass="Normal">Write the cell-by-cell surface runoff [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]. An optional keyword, COMPACT, can be placed after the keyword to indicate that output should only write model cells whose runoff is greater than zero as a compact list of row, column, runoff. If not specified, then output is a NROW by NCOL array. </para>
         </td>
       </tr>
     </table></para>
@@ -134,6 +144,7 @@
         <td>
           <para styleclass="Normal">[<link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link>]</para>
           <para styleclass="Normal">WRITE DPERC.OUT --WATER THAT IS SENT TO GROUNDWATER OR UZF</para>
+          <para styleclass="Normal">Write the cell-by-cell deep percolation [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]. An optional keyword, COMPACT, can be placed after the keyword to indicate that output should only write model cells whose runoff is greater than zero as a compact list of row, column, runoff. If not specified, then output is a NROW by NCOL array.</para>
         </td>
       </tr>
     </table></para>

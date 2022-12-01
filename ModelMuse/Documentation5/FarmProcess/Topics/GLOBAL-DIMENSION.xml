@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T12:29:27.322-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T11:42:43.357-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>GLOBAL DIMENSION</title>
   <body>
     <header>
@@ -16,6 +16,8 @@
         <td>
           <para styleclass="Normal"> INT &#160;# or NFARM</para>
           <para styleclass="Normal"> No. of Water Balance Subregions</para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Number of Water Balance Subregions. Alter</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">na􀆟</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">ve keyword—</text><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">NFARM</text></para>
+          <para styleclass="Normal"></para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="WATER_BALANCE_SUBREGION">WATER_BALANCE_SUBREGION</link>, <link displaytype="text" defaultstyle="true" type="topiclink" href="SURFACE_WATER">SURFACE_WATER</link>, <link displaytype="text" defaultstyle="true" type="topiclink" href="SUPPLY_WELL">SUPPLY_WELL</link>, <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">LAND_USE</link>, and <link displaytype="text" defaultstyle="true" type="topiclink" href="SALINITY_FLUSH_IRRIGATION">SALINITY_FLUSH_IRRIGATION</link></para>
         </td>
       </tr>
@@ -56,7 +58,8 @@
         <td>
           <para styleclass="Normal">INT</para>
           <para styleclass="Normal">No. of Non-Routed Deliveries (NRD) Types, this is the number of NRD triplets specified</para>
-          <para styleclass="Normal">(NRD List Load is: NRD_TYPES*3 Columns) -- Set to zero if not specified</para>
+          <para styleclass="Normal">(NRD List Load is: NRD_TYPES*3 Columns) -- Set to zero if not specified.</para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Number of non-routed deliveries. Only used in </text><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">SURFACE_WATER </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">block</text></para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="SURFACE_WATER">SURFACE_WATER</link></para>
         </td>
       </tr>
@@ -67,6 +70,7 @@
         <td>
           <para styleclass="Normal">INT</para>
           <para styleclass="Normal">No. of SFR semi-routed delivery &#160; &#160;(SRD) points that are defined.</para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Maximum number of SFR surface-water delivery po</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">ints that are defin</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">ed. Only used in </text><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">SURFACE_WATER </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">block </text></para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="SURFACE_WATER">SURFACE_WATER</link></para>
         </td>
       </tr>
@@ -77,6 +81,7 @@
         <td>
           <para styleclass="Normal">INT</para>
           <para styleclass="Normal">No. of SFR semi-routed return flow (SRR) points that are defined.</para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Maximum number of SFR surface water return-</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">flow </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">points that are </text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">defi</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">ned. Note—return-</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">flow </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">point</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">s can be automa􀆟</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">cally </text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">defin</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">ed with fully routed retur</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">n flow. </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Only used in </text><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">SURFACE_WATER </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">block </text></para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="SURFACE_WATER">SURFACE_WATER</link></para>
         </td>
       </tr>
@@ -88,6 +93,7 @@
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
           <para styleclass="Normal">SURFACE_ELEVATION is a 2D FLOAT ARRAY of land surface elevations</para>
           <para styleclass="Normal"> &#160; --Note you do not have to specify this, if it is specified DIS package keyword as &quot;SURFACE_ELEVATION ULOAD&quot;. Where the keyword &quot;SURFACE_ELEVATION&quot; IS ON THE LINE BEFORE SPECIFYING TOP.</para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Land-surface ele</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">va􀆟</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">on of the model. Required if not speci</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">fi</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">ed in DIS. Loaded as </text><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">FLOAT </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Array [L]. </text></para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">LAND_USE</link></para>
         </td>
       </tr>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T14:34:43.430-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T15:23:17.258-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -27,6 +27,7 @@
           <para styleclass="Normal">If SINGLE_LAND_USE_PER_CELL &#160; is specified then then all ARRAY style input is &#160; &#160; &#160; NROW by NCOL</para>
           <para styleclass="Normal">If MULTIPLE_LAND_USE_PER_CELL is specified then then all ARRAY style input is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW by NCOL</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; (each NROW by NCOL specifies the spatial input for each crop)</para>
+          <para styleclass="Normal">One of these two keywords must be present within the Land_Use block. The keywords indicate if the FMP should simulate a single-land use per model cell or allow for more than one (multiple) land-use type per model cell.</para>
         </td>
       </tr>
     </table></para>
@@ -39,6 +40,7 @@
           <para styleclass="Normal"> which indicates where each crop ID is located.</para>
           <para styleclass="Normal"> NROW by NCOL INT array, 0 is bare land, &gt;0 and &lt;= <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> is the crop grown there</para>
           <para styleclass="Normal"> CANNOT specify LOCATION with MULTIPLE_LAND_USE_PER_CELL</para>
+          <para styleclass="Normal">Required if SINGLE_LAND_USE_PER_CELL is specified. INT array that specifies the spatial location of the land-use types (Crops). Within the array an INT between 1 and NCROP indicates the crop that is grown there; otherwise, it is assumed to be bare-soil area.</para>
         </td>
       </tr>
     </table></para>
@@ -57,6 +59,12 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;can be at most 1.0, if less then 1.0 the remaining portion is assumed bare/fallowed land</para>
           <para styleclass="Normal"> SINGLE_LAND_USE_PER_CELL &#160; =&gt; &#160; &#160; &#160; NROW by NCOL Float array with numbers from 0.0 to 1.0,</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;if fraction is less then 1.0 then the remaining portion is assumed bare/fallowed land</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">FLOAT array that specifies the fraction of the model cell’s surface area that the land use occupies. </para>
+          <para styleclass="Normal">Optional, if SINGLE_LAND_USE_PER_CELL is specified and has a default value of 1.0 for all model cells. Array Style expects an array of fractions from 0.0 to 1.0 structured as NROW x NCOL. The portion of the cell that is not specified by a crop is simulated as bare-soil area. </para>
+          <para styleclass="Normal">Required, if MULTIPLE_LAND_USE_PER_CELL is specified. Array Style expects an array of fractions from 0.0 to 1.0 structured as NCROP*NROW x NCOL. This structure can be thought of as NCROP arrays that are stacked one after the next with the dimension of NROW x NCOL. The crop’s spatial location is signified by where the fraction is greater than 0. </para>
+          <para styleclass="Normal">That is, crop 1 is located anywhere the fraction is greater than 0.0 in the first NROW x NCOL array, and crop 2 is located anywhere the fraction is greater than 0.0 in the second NROW x NCOL array. </para>
+          <para styleclass="Normal">If the fractions do not sum to 1, then the remaining area is assumed to be bare soil.</para>
         </td>
       </tr>
     </table></para>
@@ -67,6 +75,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Summarize output by each WBS/Farm</para>
+          <para styleclass="Normal">Summarize crop output information by the WBS. All crops in the WBS are summed to report a total quantity. Bare-soil evaporation by WBS also is included in the output.</para>
         </td>
       </tr>
     </table></para>
@@ -76,6 +85,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Summarize output by each WBS for each crop in WBS/Farm</para>
+          <para styleclass="Normal">Summarize crop output information by WBS and by crop. Each crop within the WBS is summarized separately. Bare-soil evaporation by WBS also is included in the output (Recommended output option).</para>
         </td>
       </tr>
     </table></para>
@@ -85,6 +95,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Summarize output by each crop across entire model</para>
+          <para styleclass="Normal">Summarize crop output information by crop type across the entire simulation domain.</para>
         </td>
       </tr>
     </table></para>
@@ -94,6 +105,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Summarize output by any bare soil/fallow crops in model</para>
+          <para styleclass="Normal">Summarize bare-soil calculation and simulation output for cells that contain bare soil. Output only includes model cells that had bare-soil calculations.</para>
         </td>
       </tr>
     </table></para>
@@ -103,6 +115,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Summarize output of of every crop by model cell --includes additional info, such as head and root elevation</para>
+          <para styleclass="Normal">Write simulated results for each crop for every model cell that contains the crop.</para>
         </td>
       </tr>
     </table></para>
@@ -112,6 +125,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Summarize output by of every crop by model cell --includes enormous amount of crop information from head to root pressures to crop fractions</para>
+          <para styleclass="Normal">Write input and simulated results for each crop for every model cell that contains the crop.</para>
         </td>
       </tr>
     </table></para>
@@ -121,6 +135,7 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">Echo input loaded to file</para>
+          <para styleclass="Normal">Write the land-use block input that is loaded.</para>
         </td>
       </tr>
     </table></para>
@@ -150,6 +165,7 @@
           <para styleclass="Normal">Due to the large file size produced by PRINT ALL and PRINT ALL_VERBOSE</para>
           <para styleclass="Normal">The SPECIFY_PRINT_ALL_CROPS allows for only declaring which crops are printed in them</para>
           <para styleclass="Normal">The input is a LIST that is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> long with a zero for crops not to print and 1 for crops to print</para>
+          <para styleclass="Normal">Does not specify an output file, but instead defines which crops should be included in output written for the keywords PRINT ALL and PRINT ALL_VERBOSE. List Style input; FMP reads NCROP records that have a 1, if the crop is to be included, or 0 if it is not. This helps prevent the PRINT ALL files from becoming too large.</para>
         </td>
       </tr>
     </table></para>
@@ -161,6 +177,7 @@
           <para styleclass="Normal">Specify the names of each crop</para>
           <para styleclass="Normal"> &#160; If not specified then names are auto-generated as CROP_ID, with &quot;ID&quot; being the Crop ID</para>
           <para styleclass="Normal"> &#160; ULOAD reads LIST input with CHAR names to the right of the record ID (ID, CHAR).</para>
+          <para styleclass="Normal">Optional, CHAR input that assigns a name of each crop for output files (max size of 20 characters). If not specified, then the crop names default to “CROP_XX”, where the XX is the crop number.</para>
         </td>
       </tr>
     </table></para>
@@ -180,6 +197,11 @@
           <para styleclass="Normal"> &#160; &#160; &#160; 1) If POTENTIAL_EVAPORATION_BARE is provided, it is used as the potential evaporation of groundwater underneath the bare soil</para>
           <para styleclass="Normal"> &#160; &#160; &#160; 2) If REFERENCE_ET &#160; &#160; &#160; &#160; &#160; &#160; &#160; is provided, it is used as the potential evaporation of groundwater underneath the bare soil</para>
           <para styleclass="Normal"> &#160; &#160; &#160; 3) There is no groundwater evaporation</para>
+          <para styleclass="Normal"></para>
+          <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
+            <li styleclass="Normal">CONSUMPTIVE_USE FLOAT input that defines the potential consumptive use rate of the crop [L/T]. This value is multiplied by the crop area to get a volumetric rate [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]. Either CONSUMPTIVE_USE or CROP_COEFFICIENT must be specified if NCROP &gt; 0. If both are specified, then their sum is the potential volumetric consumptive-use rate. If the sum is 0, then zero evapotranspiration occurs.</li>
+            <li styleclass="Normal">CROP_COEFFICIENT FLOAT input that defines crop coefficients (Kc) that are multiplied by reference evapotranspiration (ETref) to determine the potential consumptive use rate [L/T]. If specified, then it is required to specify in the CLIMATE block REFERENCE_ET. This value is multiplied by the crop area to get a volumetric rate [L3/T]. Either CONSUMPTIVE_USE or CROP_COEFFICIENT must be specified if NCROP &gt; 0. If both are specified, then their sum is the potential volumetric consumptive-use rate. If the sum is 0, then zero evapotranspiration occurs.</li>
+          </list>
         </td>
       </tr>
     </table></para>
@@ -196,6 +218,7 @@
           <para styleclass="Normal"> &#160; &#160; &#160; =0 Indicates that it is not irrigated</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &gt;0 Indicates crop is irrigated and the number is the irrigation type</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; The INT specified is the column in EFFICIENCY (WBS Block)</para>
+          <para styleclass="Normal">INT input that defines whether a crop has irrigation water applied, and the irrigation type. Only specified if NIRRIGATE &gt; 0. If IRRIGATION is set to 0, then the crop does not have irrigation water; otherwise, input must be specified between 1 and NIRRIGATE to indicate that the crop is irrigated with and irrigation efficiency defined by the corresponding column in the EFFICIENCY table (OFE). For example, if set to 3, then the crop is irrigated and uses the efficiency defined in the third column in the EFFICIENCY table. If not specified, then IRRIGATION = 0 for all crops.</para>
         </td>
       </tr>
     </table></para>
@@ -206,6 +229,7 @@
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
           <para styleclass="Normal">Crop root depth below land surface.</para>
           <para styleclass="Normal"> &#160;Must be &gt;0.0; NOT required or maybe zero if GROUNDWATER_ROOT_INTERACTION = 0 or 1</para>
+          <para styleclass="Normal">FLOAT input (&gt; 0) that defines the root depth below land surface for each crop. If the root depth is less than 1E-30, then it is changed to 1E-30.</para>
         </td>
       </tr>
     </table></para>
@@ -224,6 +248,115 @@
           <para styleclass="Normal">3 = Has Root-Groundwater Uptake, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;NO Anoxia/Soil Stress Loss ==&gt; Anoxia and Soil Stress losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</para>
           <para styleclass="Normal">4 = Has Root-Groundwater Uptake and Soil Stress Loss, NO Anoxia Loss &#160; &#160; &#160; &#160; &#160; &#160; ==&gt; Anoxia &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</para>
           <para styleclass="Normal">5 = Full Interaction &#160;==&gt; HAS Anoxia/Soil Stress Reduction, HAS Root-Groundwater Uptake &#160;(DEFAULT)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">FLOAT input that defines crop stress-response pressures [L] for the analytical root response option (appendixes 4 and 5). If keyword is specified, then the SOIL block must specify the COEFFICIENT keyword. Input expects four root pressures, . (PSI), that are species in units of hydraulic head [L]. The four root pressures specify the extent to which the crop is under (1) anoxia conditions, (2 and 3) optimally consumes groundwater, or (4) undergoes wilting. For any crop that has all four root pressures set to zero, or if the keyword is not specified, then FMP uses the linear root response concept.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[GROUNDWATER_ROOT_INTERACTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">LAI[S,A,L]</para>
+          <para styleclass="Normal">Groundwater Root Interaction Flag, Specify as 0, 1 , 2, 3, 4, 5 (default is 5)</para>
+          <para styleclass="Normal"> &#160; &#160;This determines if there is groundwater uptake to meet crop demand and</para>
+          <para styleclass="Normal"> &#160; &#160;if the Potential Consumptive Use is reduced due to anoxia and soil stresses</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">0 = No Transpiration &#160; &#160; &#160; &#160; &#160; &#160;==&gt; Zeros out any T requirement</para>
+          <para styleclass="Normal">1 = No Groundwater Interaction &#160;==&gt; No Root-Groundwater Uptake, No &#160;Anoxia or Stress Reduction, Full CU must be met through surface sources (Precip or Irrigation)</para>
+          <para styleclass="Normal">2 = Has Anoxia/Soil Stress Loss, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;NO Root-Groundwater Uptake ==&gt; CU Reduced from any anoxia and soil stress, but CU may only be satisfied with surface sources</para>
+          <para styleclass="Normal">3 = Has Root-Groundwater Uptake, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;NO Anoxia/Soil Stress Loss ==&gt; Anoxia and Soil Stress losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</para>
+          <para styleclass="Normal">4 = Has Root-Groundwater Uptake and Soil Stress Loss, NO Anoxia Loss &#160; &#160; &#160; &#160; &#160; &#160; ==&gt; Anoxia &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</para>
+          <para styleclass="Normal">5 = Full Interaction &#160;==&gt; HAS Anoxia/Soil Stress Reduction, HAS Root-Groundwater Uptake &#160;(DEFAULT)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">INT, optional flag that specifies the crop root processes that are simulated, which are a function of the water table elevation and capillary fringe. The first process is the ability to consume groundwater directly called root-groundwater uptake (RGU). No RGU indicates that the crop’s potential transpiration can only be satisfied from surface sources (precipitation and irrigation). The other processes reduce in potential transpiration due to anoxia or soil-stress. The flag must be set to one of the following levels: </para>
+          <para styleclass="Normal"><table styleclass="Default" rowcount="6" colcount="4">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal">Level</para>
+              </td>
+              <td>
+                <para styleclass="Normal">RGU</para>
+              </td>
+              <td>
+                <para styleclass="Normal">Anoxia</para>
+              </td>
+              <td>
+                <para styleclass="Normal">Soil-Stress</para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal">1</para>
+              </td>
+              <td>
+                <para styleclass="Normal">no</para>
+              </td>
+              <td>
+                <para styleclass="Normal">no</para>
+              </td>
+              <td>
+                <para styleclass="Normal">no</para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal">2</para>
+              </td>
+              <td>
+                <para styleclass="Normal">no</para>
+              </td>
+              <td>
+                <para styleclass="Normal">yes</para>
+              </td>
+              <td>
+                <para styleclass="Normal">yes</para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal">3</para>
+              </td>
+              <td>
+                <para styleclass="Normal">yes</para>
+              </td>
+              <td>
+                <para styleclass="Normal">no</para>
+              </td>
+              <td>
+                <para styleclass="Normal">no</para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal">4</para>
+              </td>
+              <td>
+                <para styleclass="Normal">yes</para>
+              </td>
+              <td>
+                <para styleclass="Normal">no</para>
+              </td>
+              <td>
+                <para styleclass="Normal">yes</para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal">5</para>
+              </td>
+              <td>
+                <para styleclass="Normal">yes</para>
+              </td>
+              <td>
+                <para styleclass="Normal">yes</para>
+              </td>
+              <td>
+                <para styleclass="Normal">yes</para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal">It is recommended to only use option 1, 3, or 5. If keyword is not specified, the default value is 5.</para>
         </td>
       </tr>
     </table></para>
@@ -237,6 +370,7 @@
           <para styleclass="Normal"> &#160; &#160;Can be viewed as the fraction of a unit cropped area covered by leaf matter, i.e. crop cover.</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; &#160;If set to zero, then crop is assumed to be fallowed or its area is bare soil</para>
+          <para styleclass="Normal">FLOAT input that defines fraction of consumptive use (FTR) that corresponds to the potential transpiration of the crop. It is formally defined as the ratio of the Basal Crop Coefficient (Kcb) divided by the CROP_COEFFICIENT, that is FTR = Kcb / Kc. It can be viewed as the fraction of a unit-cropped area that is covered by crop foliage.</para>
         </td>
       </tr>
     </table></para>
@@ -273,6 +407,7 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records (same as specifying BY_CROP)</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; &#160; &#160;If FEI = -1, then it is recalculated as FEI = 1 - FTR</para>
+          <para styleclass="Normal">FLOAT input that defines the fraction of the unit-cropped area that is irrigated but is only exposed to sunlight and evaporates (FEI). This portion of the unit-cropped area has negligible transpiration. This fraction should be between 0 and less than one minus the TRANSPIRATION_FRACTION (1-FTR). If keyword is not specified or input specifies FEI &lt; 0, then FEI = 1-FTR. FEI can be viewed as the portion of irrigation that is not available for consumption as transpiration (such as the space between row crops) and includes any water that evaporates before reaching the crop or evaporates from atop the crop’s leaves. If FTR + FEI &gt; 1, then the final consumptive use will be greater than what is specified in the input due to evaporation of irrigation water. The optional secondary keywords BY_CROP and BY_IRRIGATE indicate the number of records that List Style input reads and applies the input. BY_CROP expects NCROP records and applies the fractions by crop. BY_IRRIGATE expects NIRRIGATE records and applies the fractions by irrigation type. If neither of the BY_ keywords are specified, then the default is BY_CROP.</para>
         </td>
       </tr>
     </table></para>
@@ -288,6 +423,7 @@
           <para styleclass="Normal"> &#160; &#160;the fraction of inefficient losses from precipitation that</para>
           <para styleclass="Normal"> &#160; &#160;goes to surface water compared to deep percolation.</para>
           <para styleclass="Normal"> &#160; &#160;(e.g. 0.75 indicates 75% of unconsumed precip becomes surface runoff)</para>
+          <para styleclass="Normal">FLOAT input is a runoff coefficient for water that originated as precipitation (FIESWP). It is a fraction of precipitation that is not consumed by the crop that becomes surface runoff; one minus this fraction is the portion that becomes deep percolation. For example, a FIESWP value of 0.8 indicates that 80 percent of unconsumed (excess) precipitation becomes runoff and 20 percent infiltrates as deep percolation. If keyword is not specified, then the FIESWP is set to 0.8 if SFR is in use; otherwise, is set to zero.</para>
         </td>
       </tr>
     </table></para>
@@ -330,6 +466,7 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; &#160; &#160; If BY_CROP or BY_IRRIGATE is not specified then the input assumes List-Style</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records (same as specifying BY_CROP)</para>
+          <para styleclass="Normal">FLOAT input is a runoff coefficient for excess irrigation water (FIESWI). The excess irrigation is determined from the quantity of irrigation water and the irrigation type’s EFFICIENCY. FIESWI specifies the portion of excess irrigation that becomes surface runoff. If keyword is not specified, then FIESWI is set to 0. For example, a FIESWI value of 0.8 indicates that 80 percent of excess irrigation becomes runoff and 20 percent infiltrates as deep percolation. The optional secondary keywords BY_CROP and BY_IRRIGATE indicate the number of records that List Style input reads and applies the input. BY_CROP expects NCROP records and applies the fractions by crop. BY_IRRIGATE expects NIRRIGATE records and applies the fractions by irrigation type. If neither of the BY_ keywords are specified, then the default is BY_CROP.</para>
         </td>
       </tr>
     </table></para>
@@ -345,6 +482,7 @@
           <para styleclass="Normal"> CONCEPT TWO occurs when either ROOT_PRESSURE is not specified</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; or for crops that have all four ROOT_PRESSUREs set to 0</para>
           <para styleclass="Normal"> &#160;If not set, then automatically set to zero</para>
+          <para styleclass="Normal">FLOAT input that defines a depth of water above land surface [L] that a crop can tolerate before death occurs (no transpiration). This only applies to linear root response concept crops. That is, ROOT_PRESSURE is not specified or all four ROOT_PRESSURE’s set to zero. If not specified, the ponding depth tolerance is zero.</para>
         </td>
       </tr>
     </table></para>
@@ -361,6 +499,7 @@
           <para styleclass="Normal">IT may only be specified as a Length per time (LENGTH) or Volume per time (VOLUME).</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">The added demand is summed with other added demands (e.g. WBS Block ADDED_CROP_DEMAND)</para>
+          <para styleclass="Normal">FLOAT input that defines additional irrigation demand for a crop, specified by each WBS. This is identical to the WATER_BALANCE_SUBREGION block keyword, ADDED_CROP_DEMAND, except here it is specified with NCROP records or Array-Style. FLUX indicates that input is specified as [L/T] and multiplied by the crop area to get [L3/T]. RATE indicates that input is specified as [L3/T].</para>
         </td>
       </tr>
     </table></para>
@@ -390,6 +529,8 @@
           <para styleclass="Normal"> &#160; &#160;if <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L] is included then specify <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records that have either</para>
           <para styleclass="Normal"> &#160; &#160; &#160; a &#160;1 to convert CU = 0 crops to bare soil calculation</para>
           <para styleclass="Normal"> &#160; &#160; &#160; or 0 to not use feature</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Keyword indicates that when a land use has a consumptive use equal to zero, then it should be treated as bare-soil area. This only allows for evaporation with a potential rate equal to half of reference evapotranspiration or the potential evaporation rate. If LAI[S, T, L] is specified, then List Style input reads NCROP INT flags to indicate which crops use this option. The flag must be set to: 0 to not use option for crop. 1 to use the option for crop. If keyword is not specified, then when the consumptive use is set to zero there is no evaporation nor transpiration possible because the potential is zero.</para>
         </td>
       </tr>
     </table></para>
@@ -404,6 +545,7 @@
           <para styleclass="Normal"> &#160; &#160;If the Bare Fraction is less then MIN_BARE_FRACTION, it is set to Zero.</para>
           <para styleclass="Normal"> &#160; &#160;If MIN_BARE_FRACTION is set to 1 or greater, then Bare Soil Calculations are disabled (Even for Crop ID &lt; 1 and Fallowed Crops).</para>
           <para styleclass="Normal"> &#160; &#160;If not specified it defaults to 0.000001</para>
+          <para styleclass="Normal">FLOAT input that specifies a minimum required fraction of cell area to simulate bare soil. This only pertains to model cells that are not defined with a land use (Crop). For example, if a model cell has two crops that fractionally compose 0.66 and 0.33 of the model-cell area, then the bare-soil area is 0.01 of model-cell area. If the minimum fraction of area is set to 0.02, then FMP ignores the bare-soil portion of this example model cell. If keyword is not specified, then the default minimum fraction is 1E-12.</para>
         </td>
       </tr>
     </table></para>
@@ -420,6 +562,7 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> If not specified, the default is not to check nor correct FEI + FTR &gt; 1</para>
           <para styleclass="Normal"> &#160; which is ok since it is possible to have highly evaporative irrigation (like sprinklers)</para>
+          <para styleclass="Normal"></para>
           <para styleclass="Normal"></para>
         </td>
       </tr>
@@ -438,6 +581,8 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> If not specified, the default is not to check nor correct FEI + FTR &gt; 1</para>
           <para styleclass="Normal"> &#160; which is ok since it is possible to have highly evaporative irrigation (like sprinklers)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Keyword indicates that when the sum of TRANSPIRATION_FRACTION (FTR) with EVAPORATION_IRRIGATION_FRACTION (FEI) is greater than 1, then FEI should be reduced to make the sum equal 1. That is, if FTR + FEI &gt; 1, then FEI = 1 - FTR If FTR + FEI &gt; 1, then actual consumptive use can be larger than the specified potential consumptive use due to irrigation evaporation. If LAI[S, T, L] is specified, then the List Style reads NCROP INT flags to indicate which crops use this option. The flag must be set to: 0 to not use option for crop. 1 to use the option for crop. If keyword is not specified, then input allows for FTR + FEI &gt; 1.</para>
         </td>
       </tr>
     </table></para>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T13:17:31.158-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T11:59:15.856-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>WATER_BALANCE_SUBREGION</title>
   <body>
     <header>
@@ -18,6 +18,8 @@
           <para styleclass="Normal">Only used for output. If not specified than auto-set WBS_NAME to &quot;WBS_1&quot;, &quot;WBS_2&quot;, etc.</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link> uses List-Style to load: Record ID and CHAR =&gt; WBS NAME</para>
+          <para styleclass="Normal">Specify a name for each WBS. Input expects NWBS records. Max size is 20 characters.</para>
+          <para styleclass="Normal"></para>
         </td>
       </tr>
     </table></para>
@@ -30,6 +32,8 @@
           <para styleclass="Normal"> &#160; &#160; &#160;the rest will be set to default values if not specified. Note that EFFICIENCY is required when <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link> &gt; 0</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">READ 2D Array of INT that are from 0 to <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> to indicate the spatial area and location of each WBS</para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">INT </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">array th</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">at specifi</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">es t</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">he spa􀆟</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">al </text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">loca􀆟on </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">of the WBS (always required)</text></para>
+          <para styleclass="Normal"></para>
         </td>
       </tr>
     </table></para>
@@ -52,6 +56,7 @@
           <para styleclass="Normal"> &#160;If EFFICIENCY input is set to LIST, &#160;then the WBS located at the crop&apos;s (ROW, COL) determines the EFFICIENCY row and the crop&apos;s IRRIGATION flag determines the EFFICIENCY column.</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">***Note that the old OFE input was <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NFARM</link> by <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>, to mimic this behavior just set <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>=<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> and define each crop that is irrigated with an IRRIGATION flag equal to the CROP ID.</para>
+          <para styleclass="Normal"></para>
         </td>
       </tr>
     </table></para>
@@ -65,6 +70,7 @@
           <para styleclass="Normal"> &#160;0 - Efficiency remains the same, crop transpiration reduced due to supply shortfall</para>
           <para styleclass="Normal"> &#160;1 - Efficiency improves until it reaches 1.0, then crop transpiration reduced</para>
           <para styleclass="Normal"> &#160;If not specified then automatically set to 0, so OFE is held constant based on user input. That is &quot;EFFICIENCY_IMPROVEMENT CONSTANT 0&quot;</para>
+          <para styleclass="Normal">INT, If Deficit Irrigation occurs allows irrigation efficiency (OFE) to improve in response to supply shortfall. Set to 0 to hold OFE constant and 1 to indicate OFE improves under deficit irrigation. If not specified, the default is 0.</para>
         </td>
       </tr>
     </table></para>
@@ -78,6 +84,7 @@
           <para styleclass="Normal"> &#160;1 - Irrigated Crop CU reduced to water supply, if water supply shortfall. &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;--Deficit Irrigation</para>
           <para styleclass="Normal"> &#160;If not specified then automatically set to 1, Deficit Irrigation</para>
           <para styleclass="Normal"> &#160; &#160; That is the default is &quot;DEFICIENCY_SCENARIO CONSTANT 1&quot;</para>
+          <para styleclass="Normal">DEFICIENCY_SCENARIO LAI[S, T, L] INT. Defines whether a WBS has Deficit Irrigation or has access to external water sources to meet a supply shortfall. If not specified, then Deficit Irrigation is the default option. </para>
         </td>
       </tr>
     </table></para>
@@ -93,6 +100,8 @@
           <para styleclass="Normal">ByAVERAGE - Prorate by crops being ABOVE or BELOW average demand flux.</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160;BELOW is always met, ABOVE is evenly distributed. (original FMP concept)</para>
           <para styleclass="Normal">If not specified then automatically set to &quot;PRORATE_DEFICIENCY ByDEMAND&quot;</para>
+          <para styleclass="Normal">Defines how applied water is spread among different demands when total supply does not meet total demand. If not specified, then the default is ByDEMAND. </para>
+          <para styleclass="Normal"></para>
         </td>
       </tr>
     </table></para>
@@ -114,6 +123,7 @@
           <para styleclass="Normal"> &#160;3 &#160;0 &#160;0 &#160;0 &#160; =&gt; WBS 3 has no access to any irrigated water irrelevant of other input options</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">If not specified then automatically set to 1 for all sources, that is &quot;WATERSOURCE CONSTANT 1&quot;</para>
+          <para styleclass="Normal">INT. Specifies sources of water, 0 to indicate it is not available/disabled and 1 to indicate it is available. The sources are groundwater pumping, surface water deliveries, and non-routed deliveries. If a source is disabled, then it automatically disables the source, overriding any contrary indication specified in another input. If enabled, then the sources of water are defined by their respective input sections. If not specified, then it is automatically set to a default value, 1, for all sources—all sources are available.</para>
         </td>
       </tr>
     </table></para>
@@ -130,6 +140,7 @@
           <para styleclass="Normal"> &#160;For example, if WBS 1 is set to 0.75; this indicates that 75% of precip that falls on bare soil in WBS 1 becomes surface runoff</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">If not specified then automatically set to 1.0 to disable any infiltration from precip over bare soil. That is &quot;BARE_RUNOFF_FRACTION CONSTANT 1.0&quot;</para>
+          <para styleclass="Normal">FLOAT. Defines the fraction of precipitation that becomes runoff when it falls on “bare soil”, for surface area that is not defined with a Land Use (Crop). Bare soil is any model cell that is associated with a WBS LOCATION between 1 and NWBS and has either: a Crop LOCATION number not between 1 and NCROP or the remaining area in a model cell if LAND_USE_AREA_FRACTION is specified and does not sum to 1. If not specified, then the default fraction is set to 0.75</para>
         </td>
       </tr>
     </table></para>
@@ -168,6 +179,7 @@
           <para styleclass="Normal"> &#160; It must be between 0.0 and 1.0; If not specified then it defaults to 0.1, that is &quot;ADDED_DEMAND_RUNOFF_SPLIT CONSTANT 0.1&quot;</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">At this time additional demand (Added Demand) is defined with the keyword ADDED_CROP_DEMAND and LAND_USE block keyword ADDED_DEMAND</para>
+          <para styleclass="Normal">FLOAT, Fraction of any specified additional demand that becomes runoff as opposed to deep percolation. If not specified, the default is 0.1</para>
         </td>
       </tr>
     </table></para>
@@ -188,6 +200,9 @@
           <para styleclass="Normal"> &#160;The added demand is summed with other crop related added demands (e.g. CROP Block ADDED_DEMAND)</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160;You may specify both FLUX and RATE versions</para>
+          <para styleclass="Normal">FLUX FLOAT, Additional demand added to a land use (CROP). Input specified as length [L/T] or flux [L<text style="font-size:7pt; vertical-align:super;">3</text>/L<text style="font-size:7pt; vertical-align:super;">2</text>-T] </para>
+          <para styleclass="Normal">RATE FLOAT, Additional demand added to a land use (CROP). Input specified as volumetric rate [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]</para>
+          <para styleclass="Normal"></para>
         </td>
       </tr>
     </table></para>

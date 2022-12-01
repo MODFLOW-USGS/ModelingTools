@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T11:48:50.012-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T14:25:19.222-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>ALLOTMENTS</title>
   <body>
     <header>
@@ -21,6 +21,13 @@
         <td>
           <para styleclass="Normal">{HEIGHT,VOLUME,RATE} &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
           <para styleclass="Normal">Surface water allotments to limit total surface water supply</para>
+          <para styleclass="Normal">List Style reads NWBS records that specify, for each WBS, a total delivery limit from the WBS’s SEMI_ROUTED_DELIVERY. If the WBS has multiple SEMI_ROUTED_DELIVERY’s, then their sum cannot exceed the limit. </para>
+          <para styleclass="Normal">The second keyword is required and specifies the model units of the surface water allotment. Only one second keyword may be in use during a simulation. </para>
+          <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
+            <li styleclass="Normal">RATE allotment is a volumetric rate [L3/T] </li>
+            <li styleclass="Normal">VOLUME allotment is a volume per stress period [L3] </li>
+            <li styleclass="Normal">HEIGHT allotment is a length per stress period [L] that is multiplied by the WBS’s irrigated area to obtain a volume per stress period.</li>
+          </list>
         </td>
       </tr>
     </table></para>
@@ -30,6 +37,13 @@
         <td>
           <para styleclass="Normal">{HEIGHT,VOLUME,RATE} &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L]</para>
           <para styleclass="Normal">Groundwater allotments for limiting total groundwater pumpage</para>
+          <para styleclass="Normal">List Style reads NWBS records that specify, for each WBS, a total pumpage limit from the WBS’s SUPPLY_WELLS (that is, a global limit on a WBS groundwater pumping). </para>
+          <para styleclass="Normal">The second keyword is required and specifies the model units of the groundwater allotment. Only one second keyword may be in use during a simulation. </para>
+          <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
+            <li styleclass="Normal">RATE allotment is a volumetric rate [L3/T] </li>
+            <li styleclass="Normal">VOLUME allotment is a volume per stress period [L3] </li>
+            <li styleclass="Normal">HEIGHT allotment is a length per stress period [L] that is multiplied by the WBS’s irrigated area to obtain a volume per stress period.</li>
+          </list>
         </td>
       </tr>
     </table></para>

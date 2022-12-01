@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T12:17:21.163-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T15:42:04.841-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SALINITY_FLUSH_IRRIGATION</title>
   <body>
     <header>
@@ -17,6 +17,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Writes salinity irrigation flush output that is summarized for each WBS.</para>
         </td>
       </tr>
     </table></para>
@@ -25,6 +26,17 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">PRINT ByWBS_ByCROP Generic_Output_OptKey</para>
+          <para styleclass="Normal">Writes salinity irrigation flush output that is summarized for each crop within each WBS.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT ByCROP]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal">Generic_Output_OptKey</para>
+          <para styleclass="Normal">Writes salinity irrigation flush output that is summarized for each crop across the entire model domain.</para>
         </td>
       </tr>
     </table></para>
@@ -33,6 +45,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Writes salinity irrigation flush output and simulated results for each crop for every model cell that contains the crop with salinity flush irrigation.</para>
         </td>
       </tr>
     </table></para>
@@ -41,6 +54,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Writes the input that is loaded.</para>
         </td>
       </tr>
     </table></para>
@@ -56,6 +70,8 @@
           <para styleclass="Normal">If not specified it defaults to 20 characters.</para>
           <para styleclass="Normal">If you are unsure, then it is best to just set it to 100</para>
           <para styleclass="Normal"> &#160; and an error will be raised if it is not large enough</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Optional INT input that specifies the maximum length of a custom expression that may be read by CROP_LEACHING_REQUIREMENT and CROP_SALINITY_APPLIED_WATER. If not specified, then the default is 20 characters long. That is the largest expression can be &quot;1234567890 1234567890&quot;, which includes white spaces.</para>
         </td>
       </tr>
     </table></para>
@@ -68,6 +84,8 @@
           <para styleclass="Normal">minimum expression variable value may be set.</para>
           <para styleclass="Normal">If the absolute value of this variable is less than this value, it is set to it.</para>
           <para styleclass="Normal">If not specified then it is set to 0.0, which makes it have no effect</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Optional FLOAT input that specifies the tolerance for converting a custom expression variable to zero. For example, if the tolerance is set to 0.1 and P is a variable in the expression, then its value is set to zero if –0.1 = P = 0.1. If keyword is not specified, then the default tolerance is 0.0.</para>
         </td>
       </tr>
     </table></para>
@@ -98,6 +116,8 @@
           <para styleclass="Normal">The input is read as WBS ID, Non-Routed Delivery (NRD), Surface Water Delivery (SW), Groundwater Pumpage (GW), External Source.</para>
           <para styleclass="Normal"> &#160;The External Source is only value for WBS Block DEFICIENCY_SCENARIO set to 0,</para>
           <para styleclass="Normal"> &#160;which indicates external water is brought in to meet deficit demands</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Required input that specifies the source water supply’s salt concentration in PPM (milligram/liter). This is not in model units. List Style reads NWBS records that specify the salt concertation as a FLOAT from four sources of water: Non-Routed Delivery (NRD), Semi-routed Delivery (SRD), Groundwater Pumping, and External Sources (FMP Zero-Scenario water). Supports use of SFAC DIMKEY with BySource option, which reads four scale that are applied to each of the water sources.</para>
         </td>
       </tr>
     </table></para>
@@ -109,6 +129,8 @@
           <para styleclass="Normal">The irrigation uniformity represents how evenly the</para>
           <para styleclass="Normal"> &#160;irrigation method is spread across the root zone.</para>
           <para styleclass="Normal"> &#160;It is specified from 0.0 to 1.0, with 1 being perfect, uniform spread</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Optional input that specifies for each WBS the vertical, across the root zone, irrigation uniformity (DU). The fraction is specified in the range 0 &lt; DU = 1. A value of 1 indicates that the irrigation is perfectly uniform and a value of 0.5 indicates that the irrigation is half uniform. DU may not be set to 0. List Style input expects NWBS records that read the DU for each irrigation type (NIRRIGATE) as a FLOAT. If not specified, then DU is set to 1.0 for all irrigation types.</para>
         </td>
       </tr>
     </table></para>
@@ -123,6 +145,8 @@
           <para styleclass="Normal">indicates if crop has a salinity irrigation demand calculated</para>
           <para styleclass="Normal">If specified as a zero (0), then it does not have it, if it is non-zero then it does.</para>
           <para styleclass="Normal"> &#160;ARRAY input is supported as NROW by NCOL, but if CROP Block LAND_USE_AREA_FRACTION MULTI is used, then it is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW by NCOL (multiple crops per model cell--one array per crop)</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Optional input that specifies which crops should have additional irrigation for salinity flushing. List Style reads NCROP INT flags to indicate if the crop includes additional irrigation for salinity flushing: 0 to not have salinity flush irrigation 1 to have salinity flush irrigation If not specified, then all irrigated crops ( IRRIGATION &gt; 0 ) will have additional irrigation for salinity flushing.</para>
         </td>
       </tr>
     </table></para>
@@ -134,6 +158,7 @@
           <para styleclass="Normal">Specify each Crops salinity tolerance (ECe) in Electrical Conductivity (EC)</para>
           <para styleclass="Normal">in units of deciSiemens per meter (dS/m) ***NOT MODEL UNITS!!!</para>
           <para styleclass="Normal"> &#160; &#160; Note 1 dS/m = 640 ppm = 640 mg/L</para>
+          <para styleclass="Normal">Required input that specifies each Crop’s salinity tolerance () as an Electrical Conductivity () for the desired yield of the crop. List Style input expects NCROP records that read the EC<text style="font-size:7pt; vertical-align:sub;">e</text> as a FLOAT. Input must be in deciSiemens per meter (dS/m).</para>
         </td>
       </tr>
     </table></para>
@@ -147,6 +172,9 @@
           <para styleclass="Normal">It may be any value between 0.0 and 0.9999</para>
           <para styleclass="Normal">This allows the user to specify a maximum allowed leaching requirement.</para>
           <para styleclass="Normal">If not specified then it is set to 0.99</para>
+          <para styleclass="Normal">Required input that specifies each Crop’s leaching requirement (LR) as either a FLOAT, Rhoades equation, or a custom expression. List Style input expects NCROP records that specify for each crop either: the LR as a fraction (FLOAT) between 0 to 1, or the word RHOADES to use the Rhoades equation, or a custom expression whose result is the LR, or the word SKIP to set LR to 0.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Optional input that specifies each crop’s max allowed leaching requirement (LRMax). The leaching requirement (LR) is specified or calculated with the keyword CROP_LEACHING_REQUIREMENT and must be less than 1. If LR &gt; LRMax, then LR = LRMax. List Style input expects NCROP records that read LRMax as a FLOAT between 0 and 0.9999. If keyword is not specified, then the the default is LRMax=0.99for all crops.</para>
         </td>
       </tr>
     </table></para>
@@ -215,7 +243,10 @@
     <para styleclass="Normal"> &#160;ADRS &#160; &#160;Crop Added Demand Runoff Split (ADDED_DEMAND_RUNOFF_SPLIT)</para>
     <para styleclass="Normal"> &#160;ADMD &#160; &#160;Sum of other Added Demands for the crop</para>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal"></para>
-    <para styleclass="Normal"></para>
+    <para styleclass="Normal">Required input that defines for each Crop the additional irrigation (AW) for salinity flushing [L3/T]. </para>
+    <para styleclass="Normal">This is the amount of water added in addition to the irrigation requirement to ensure salinity flushing. </para>
+    <para styleclass="Normal">AW may be specified as FLOAT value, calculated with Rhoades equation, which is a function of LR, or determined by a user-specified custom expression. </para>
+    <para styleclass="Normal">List Style input expects NCROP records that specify for each crop either: the AW directly, or the word RHOADES to use the Rhoades equation, or a custom expression whose result is the AW, or the word SKIP to set LR to 0. </para>
+    <para styleclass="Normal">Note that Rhoades equation is dependent on the leaching ratio (LR) calculated by the CROP_LEACHING_REQUIREMENT keyword</para>
   </body>
 </topic>

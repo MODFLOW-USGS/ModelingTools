@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-17T21:26:34.180-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T12:03:28.753-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>OPTIONS</title>
   <body>
     <header>
@@ -13,6 +13,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal">Suppress some farm well printing</para>
+          <para styleclass="Normal">Suppress some of the farm well output information from being printed to the LIST file.</para>
         </td>
       </tr>
     </table></para>
@@ -21,6 +22,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal">NRD has well field option for ASR operation</para>
+          <para styleclass="Normal">Allows non-routed deliveries (NRD) to have the well field option, which simulates aquifer storage and recovery.</para>
         </td>
       </tr>
     </table></para>
@@ -29,6 +31,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal">Calls FMP FM routine before budget calculation</para>
+          <para styleclass="Normal">Allows non-routed deliveries (NRD) to have the well field option, which simulates aquifer storage and recovery. RECOMP_Q_BD Forces the FMP to re-run its land-use calculations after model time step has completed. This keyword use is not recommended.</para>
         </td>
       </tr>
     </table></para>
@@ -37,6 +40,13 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal">Additional MNW2 closure criteria</para>
+          <para styleclass="Normal">Additional multi-node well package (MNW2) closure criteria (3 × FLOAT). </para>
+          <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
+            <li styleclass="Normal">QCLOSE is pumping criterion [L<text style="font-size:7pt; vertical-align:super;">3</text>/T] </li>
+            <li styleclass="Normal">HPCT is head criterion [L] </li>
+            <li styleclass="Normal">RPCT is residual criterion [L<text style="font-size:7pt; vertical-align:super;">3</text>/T] </li>
+          </list>
+          <para styleclass="Normal">Use of this keyword is not recommended; the FMP automatically handles this.</para>
         </td>
       </tr>
     </table></para>

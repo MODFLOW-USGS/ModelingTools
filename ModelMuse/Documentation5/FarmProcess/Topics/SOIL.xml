@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T14:56:20.111-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T12:57:31.817-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SOIL</title>
   <body>
     <header>
@@ -20,6 +20,7 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160;then record ID is the location in SOIL_ID that the capillary fringe is applied too.</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160;If specified as ARRAY, then the (ROW,COL) location defines the models capillary fringe and SOIL_ID is not used.</para>
+          <para styleclass="Normal">FLOAT Array or List (length = NSOIL) that specifies the capillary fringe length above the water table [L]. The capillary fringe in the FMP is the length above saturated groundwater in which water is held by surface tension and can evaporate if near the land surface or be transpired if near a crop’s roots. For groundwater evaporation to occur, the groundwater head must be greater than the land-surface elevation minus the capillary length. For groundwater transpiration—direct uptake of groundwater by a crop— to occur, the groundwater head must be greater than the land-surface elevation minus the crop’s root length minus the capillary length. Array Style specifies each model cell&apos;s capillary fringe and List Style uses the SOIL_ID array to assign the NSOIL capillary fringes.</para>
         </td>
       </tr>
     </table></para>
@@ -32,6 +33,7 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal">SOIL_ID is a NROW by NCOL INT array of Soil ID locations</para>
           <para styleclass="Normal"> &#160;The location of each ID are used for the remaining properties if they use LIST input (that is if CAPILLARY_FRINGE is specified by .</para>
+          <para styleclass="Normal">INT Array whose value is between 0 and NSOIL to indicate the location of each soil type. A Soil ID of 0 is ignored. If NSOIL=1, then SOIL_ID is optional; if not specified, then the entire model grid is automatically set to a SOIL_ID of 1. </para>
         </td>
       </tr>
     </table></para>
@@ -60,6 +62,10 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; 1 &#160;SILTYCLAY</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; 2 &#160;0.320149668 &#160; -0.328586793 &#160; 2.851921250 &#160; 1.3027 &#160; -2.0416 &#160;# Read &quot;A, B, C, D, and E&quot;, which these values happen to be equivalent to the keyword &quot;SILT&quot;</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; 3 &#160;SANDYLOAM</para>
+          <para styleclass="Normal">oil coefficients used in the analytical, pseudo steady-state soil-moisture, soil-stress concept (analytical root response) land-use calculation. Required if LAND_USE block specifies ROOT_PRESSURE.</para>
+          <para styleclass="Normal">List Style reads for each record one of the following secondary keywords: </para>
+          <para styleclass="Normal">SILT, SILTYCLAY, SANDYLOAM, and SAND </para>
+          <para styleclass="Normal">or five FLOAT numbers that represent the coefficients A, B, C, D, and E defined in appendix 6. </para>
         </td>
       </tr>
     </table></para>
@@ -99,6 +105,14 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal">Precipitation that is not available for consumption becomes either runoff or deep percolation</para>
           <para styleclass="Normal">Precipitation that is &#160; &#160; available for consumption, but is not consumed as ET becomes either runoff or deep percolation</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Reads NSOIL Lookup Tables that specify the relationship between PRECIPITATION and effective precipitation. </para>
+          <para styleclass="Normal">This is applied as a limitation on the potential consumption of precipitation by the landscape to satisfy evaporation and transpiration. Precipitation that is beyond limit becomes runoff or deep percolation. </para>
+          <para styleclass="Normal">If not specified, then there is no limit and actual evapotranspiration can potentially consume all the precipitation. </para>
+          <para styleclass="Normal">Each table is loaded with Lookup-Style Input. The “lookup values” are precipitation rates in [L/T]. </para>
+          <para styleclass="Normal">Effective precipitation is the “return value” of the table. </para>
+          <para styleclass="Normal">The BY_LENGTH keyword indicates that the return value is [L/T] and any precipitation in excess of this is not available for consumption. </para>
+          <para styleclass="Normal">The BY_FRACTION keyword indicates that the return value is a fraction between 0 and 1 and is the fraction of the precipitation that is effective.</para>
         </td>
       </tr>
     </table></para>

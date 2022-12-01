@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-18T12:28:45.374-05:00" lasteditedby="Richard" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T14:21:43.695-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SURFACE_WATER</title>
   <body>
     <header>
@@ -31,6 +31,7 @@
           <para styleclass="Normal"> &#160; specified as [WBS_ID, <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NRD_TYPES">NRD_TYPES</link>*(NRDV NRDR NRDU)]; &#160; (NRDV NRDR NRDU) = (Volume Rank UseType)</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; *** NON_ROUTED_DELIVERY is only allowed if in the GLOBAL DIMENSION Block has <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NRD_TYPES">NRD_TYPES</link>&gt;0 ***</para>
+          <para styleclass="Normal">Non-Routed Delivery (NRD) is water supply that is delivered to a WBS for a stress period. Use of the secondary “input” keyword (RATE or VOLUME) is optional, but only one may be specified per simulation. if no “input” keyword is present or specified as VOLUME, then the input for NRD volume (NRD_VOL) is a volume [L3]. The VOLUME [L3] is divided by the stress period length to obtain a rate of water that is available during the stress period. If RATE is specified, then NRD_VOL is specified as a volumetric rate [L3/T]. List Style reads NWBS records with each record containing an NRD_TYPES set of three values, called a “NRD Triplet”. The NRD Triplet is: (NRD_VOL, NRD_RANK, NRD_USE) ( FLOAT, INT, INT) where NRD_VOL is the quantity of water delivered to the WBS NRD_RANK is the order that water is consumed by the WBS demand. NRD_USE is what to do when delivered water exceeds demand. Accepted values are: 0 indicates only water necessary to meet demand is delivered. 1 indicates excess water is discharged to the WBS semi-routed delivery location. 2 indicates excess water is injected to the WBS supply wells. =10 indicates excess water is infiltrated as deep percolation wherever the integer, NRD_USE, is in the array defined in NRD_INFILTRATION_LOCATION.</para>
         </td>
       </tr>
     </table></para>
@@ -39,6 +40,9 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal">Identifies location to infiltrate excess water from a NON_ROUTED_DELIVERY (NRD). </para>
+          <para styleclass="Normal">Input is an INT array that specifies infiltration locations as either 0 (not used location) or =10. </para>
+          <para styleclass="Normal">An NRD with NRD_USE =10 has its unused delivered (excess) water infiltrated at the corresponding =10 location in array.</para>
         </td>
       </tr>
     </table></para>
@@ -134,6 +138,15 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; &#160; &#160;Where WBS 5 has approximately 70% of its demand supplied by Segment 3, Reach 2 and 30% from Segment 14, Reach 2</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160;If either SRD can not meet the requested demand then the deficit is shifted to the other.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Reads NSFR_DELIV records that each define where a specific WBS has access to SFR surface water deliveries—where a WBS can remove water from SFR to satisfy demand. </para>
+          <para styleclass="Normal">Input expects for each record: </para>
+          <para styleclass="Normal">ISRD, WBS, SEG, RCH, [FRAC] </para>
+          <para styleclass="Normal">that is read as </para>
+          <para styleclass="Normal">INT, INT, INT, INT, [FLOAT] </para>
+          <para styleclass="Normal">where ISRD is the record ID, WBS is either 0 to indicate the delivery is not used or the WBS that can use the delivery point, SEG and RCH are the SFR segment and reach that water is removed from, and FRAC is optional and is the fraction of the WBS demand that the delivery point attempts to satisfy. </para>
+          <para styleclass="Normal">If FRAC is not specified, then delivery points attempt to satisfy the demand in the order they are specified. </para>
+          <para styleclass="Normal">If WBS set to 0, then SEG, RCH, [FRAC] are not read.</para>
         </td>
       </tr>
     </table></para>
@@ -168,6 +181,11 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; *** If SEMI_ROUTED_DELIVERY_LOWER_LIMIT is NOT specified, it is set to 0.0 &#160; &#160;--No lower limit</para>
           <para styleclass="Normal"> &#160; *** If SEMI_ROUTED_DELIVERY_UPPER_LIMIT is NOT specified, it is set to 1E100 &#160;--No upper limit</para>
+          <para styleclass="Normal"></para>
+          <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
+            <li styleclass="Normal">SEMI_ROUTED_DELIVERY_LOWER_LIMIT Optional, reads NSFR_DELIV records that define the lower limit for each SEMI_ROUTED_DELIVERY in [L3/T]. Only flow greater than the lower limit is available for delivery. Analogous to an SFR flood-control type diversion (IPRIOR = –3). If this keyword is not specified, then the default value is a lower limit of 0.0—that is any flow present is available for delivery.</li>
+            <li styleclass="Normal">SEMI_ROUTED_DELIVERY_UPPER_LIMIT Optional, reads NSFR_DELIV records that define the upper limit for each SEMI_ROUTED_DELIVERY in [L3/T]. The delivery only has access to water flow up to this upper limit. Analogous to an SFR specified-diversion flow (IPRIOR = 0). If this keyword is not specified, then the default value is an upper limit of 1E100.</li>
+          </list>
         </td>
       </tr>
     </table></para>
@@ -181,7 +199,8 @@
           <para styleclass="Normal">can change between solver iterations before convergence is allowed.</para>
           <para styleclass="Normal">If not specified, then the default tolerance is 0.02 L^3/T change in delivery.</para>
           <para styleclass="Normal"> &#160;This indicates that--in addition to the solver criteria--convergence is only allowed</para>
-          <para styleclass="Normal"> &#160;if the the change in SEMI_ROUTED_DELIVERY from the previous iteration is less then 0.02 L^3/T</para>
+          <para styleclass="Normal"> &#160;if the the change in SEMI_ROUTED_DELIVERY from the previous iteration is less then 0.02 L<text style="font-size:7pt; vertical-align:super;">3</text>/T</para>
+          <para styleclass="Normal">Optional, and specifies a tolerance for delivery rate changes between solver iterations before convergence is allowed. If not specified it has a default value of 0.02 [L3/T].</para>
         </td>
       </tr>
     </table></para>
@@ -207,6 +226,7 @@
           <para styleclass="Normal"> &#160; &#160;if included then specify <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> records that have either</para>
           <para styleclass="Normal"> &#160; &#160; &#160; a &#160;1 to indicate the WBS has NO_RETURN_FLOW/No runoff</para>
           <para styleclass="Normal"> &#160; &#160; &#160; or 0 to indicate that it does have return flow and Options 2, 3, and 4 decide the runoff location</para>
+          <para styleclass="Normal">Keyword indicates all surface runoff re-infiltrates as deep percolation. Optionally, the flag can be specified by the WBS with LAI[S, T, L]input reads either a value of 1 —to indicate no return flow— or 0 —to allow return flow.</para>
         </td>
       </tr>
     </table></para>
@@ -244,6 +264,19 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; 4 &#160; &#160; 0 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;# ISRR is disabled and ignored</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; 5 &#160; &#160; 6 &#160; &#160; 16 &#160; &#160; &#160; &#160;2 &#160; &#160; &#160; &#160; &#160;# No FRAC indicates that WBS 6 will length prorate all its return flow locations</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; 6 &#160; &#160; 6 &#160; &#160; 17 &#160; &#160; &#160; &#160;0 &#160; &#160; &#160; &#160; &#160;# WBS 6 includes all reaches from SEG 15, length prorates along with SEG 16, RCH 2</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Reads NSFR_RETURN records that specify the location in SFR that a WBS’s return flow (aggregated surface runoff) flows into. </para>
+          <para styleclass="Normal">Input expects for each record: </para>
+          <para styleclass="Normal">ISRR, WBS, SEG, RCH, [FRAC] </para>
+          <para styleclass="Normal">that is read as </para>
+          <para styleclass="Normal">INT, INT, INT, INT, [FLOAT] </para>
+          <para styleclass="Normal">where ISRR is the record ID, WBS is either 0 to indicate the return flow point is skipped or the WBS that the return flow is coming from, SEG and RCH are the SFR segment and reach that return flow is sent to, and FRAC is the fraction of the WBS return flow that is applied to SEG and RCH. </para>
+          <para styleclass="Normal">If FRAC is not specified, the return flow is prorated across all specified SEG and RCH based on their length compared to the total length. </para>
+          <para styleclass="Normal">If the same WBS is defined multiple times, then the return flow is either length prorated or applied based on the specified FRAC. </para>
+          <para styleclass="Normal">If a WBS has SEG set to 0, then the WBS return flow is removed from the model domain. </para>
+          <para styleclass="Normal">If RCH is set to 0, then all reaches in SEG receive the return flow. </para>
+          <para styleclass="Normal">SEG and RCH maybe be specified with a name defined from SFR_NAMES in the GLOBAL DIMENSION block. </para>
+          <para styleclass="Normal">If WBS set to 0, then SEG, RCH, [FRAC] are not read.</para>
         </td>
       </tr>
     </table></para>
@@ -259,6 +292,9 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;if diversion segments should be included in the search.</para>
           <para styleclass="Normal">ROUTED_RETURN_ANY_NON_DIVERSION_REACH &#160;WBS return flow (runoff) goes to all <text style="font-style:italic;">non-diversion</text> SEGMENT/REACH located in WBS</para>
           <para styleclass="Normal">ROUTED_RETURN_ANY_REACH &#160;WBS return flow (runoff) goes to all SEGMENT/REACH located in WBS</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">ROUTED_RETURN_ANY_NON_DIVERSION_REACH Fully routed return flow is enabled for all WBSs not defined with a SEMI_ROUTED_RETURN location. A WBS surface runoff is prorated by the length of all “non-diversion” SFR reaches within the WBS. This keyword is recommended whenever a simulation includes SFR.</para>
+          <para styleclass="Normal">ROUTED_RETURN_ANY_REACH Fully routed return flow is enabled for all WBSs not defined with a SEMI_ROUTED_RETURN location. A WBS surface runoff is prorated by the length of all SFR reaches within the WBS.</para>
         </td>
       </tr>
     </table></para>
