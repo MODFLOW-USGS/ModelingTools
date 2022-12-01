@@ -122,9 +122,9 @@
       <config-value name="lcid">en-us</config-value>
       <config-value name="charset">ANSI_CHARSET</config-value>
       <config-value name="deffont">font-family:Tahoma; font-size:10pt; color:#000000;</config-value>
-      <config-value name="autohelpstart">0</config-value>
-      <config-value name="autohelpincrement">1</config-value>
-      <config-value name="autohelpanchor">0</config-value>
+      <config-value name="autohelpstart">60</config-value>
+      <config-value name="autohelpincrement">10</config-value>
+      <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\</config-value>
       <config-value name="imageshortcuts_includebaggage">1</config-value>
       <config-value name="openchildreadonly">1</config-value>
@@ -259,13 +259,28 @@
           <config-value name="lastexport">0</config-value>
         </config-group>
       </config-group>
+      <config-group name="rbwinst">
+        <config-group name="project">
+          <config-value name="lastexport">0</config-value>
+        </config-group>
+      </config-group>
     </config-group>
     <variables/>
-    <helpcontext-numbers/>
+    <helpcontext-numbers>
+      <helpcontext-number href="GLOBAL-DIMENSION#NCROP_SPECIFIED_ELEVATIONS" value="70"/>
+      <helpcontext-number href="GLOBAL-DIMENSION#NWBS" value="10"/>
+      <helpcontext-number href="LAND_USE#MULTIPLE_LAND_USE_PER_CELL" value="50"/>
+      <helpcontext-number href="LAND_USE#SINGLE_LAND_USE_PER_CELL" value="20"/>
+      <helpcontext-number href="PredefinedVariables" value="60"/>
+      <helpcontext-number href="WATER_BALANCE_SUBREGION#ADDED_DEMAND_RUNOFF_SPLIT" value="30"/>
+      <helpcontext-number href="WATER_BALANCE_SUBREGION#EFFICIENCY" value="40"/>
+    </helpcontext-numbers>
   </config>
   <xi:include parse="xml" href="Maps/table_of_contents.xml"/>
   <project-files>
-    <file href="Topics/*.xml" build="ALL" filetype="topic"/>
+    <file href="Topics/*.xml" build="ALL" filetype="topic">
+      <file-mod href="PredefinedVariables.xml"/>
+    </file>
     <file href="Baggage/*.*" build="ALL" filetype="baggage"/>
   </project-files>
 </helpproject>

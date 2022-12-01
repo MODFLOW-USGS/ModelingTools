@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T15:23:17.258-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-01T17:01:35.873-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -18,9 +18,9 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"> The keywords</para>
-          <para styleclass="Normal"> &#160; &#160;SINGLE_LAND_USE_PER_CELL &#160; is the default option if not specified,</para>
+          <para styleclass="Normal"><anchor id="SINGLE_LAND_USE_PER_CELL"></anchor> &#160; &#160;SINGLE_LAND_USE_PER_CELL &#160; is the default option if not specified,</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; allowing for at most one land use per model cell</para>
-          <para styleclass="Normal"> &#160; &#160;MULTIPLE_LAND_USE_PER_CELL is used to indicate that simulation should</para>
+          <para styleclass="Normal"><anchor id="MULTIPLE_LAND_USE_PER_CELL"></anchor> &#160; &#160;MULTIPLE_LAND_USE_PER_CELL is used to indicate that simulation should</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; allow for multiple land use types per model cell</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">The Land_Use block has all LIST style read <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records</para>
@@ -202,6 +202,7 @@
             <li styleclass="Normal">CONSUMPTIVE_USE FLOAT input that defines the potential consumptive use rate of the crop [L/T]. This value is multiplied by the crop area to get a volumetric rate [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]. Either CONSUMPTIVE_USE or CROP_COEFFICIENT must be specified if NCROP &gt; 0. If both are specified, then their sum is the potential volumetric consumptive-use rate. If the sum is 0, then zero evapotranspiration occurs.</li>
             <li styleclass="Normal">CROP_COEFFICIENT FLOAT input that defines crop coefficients (Kc) that are multiplied by reference evapotranspiration (ETref) to determine the potential consumptive use rate [L/T]. If specified, then it is required to specify in the CLIMATE block REFERENCE_ET. This value is multiplied by the crop area to get a volumetric rate [L3/T]. Either CONSUMPTIVE_USE or CROP_COEFFICIENT must be specified if NCROP &gt; 0. If both are specified, then their sum is the potential volumetric consumptive-use rate. If the sum is 0, then zero evapotranspiration occurs.</li>
           </list>
+          <para styleclass="Normal">Array dimensions dimensions depend on <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="SINGLE_LAND_USE_PER_CELL">SINGLE_LAND_USE_PER_CELL</link> or <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="MULTIPLE_LAND_USE_PER_CELL">MULTIPLE_LAND_USE_PER_CELL</link>.</para>
         </td>
       </tr>
     </table></para>
@@ -209,7 +210,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="IRRIGATION"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
           <para styleclass="Normal">IRRIGATION Flag (0 to <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>)</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; Determines if crop receives applied water (irrigation) to meet CU</para>
@@ -219,6 +220,8 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &gt;0 Indicates crop is irrigated and the number is the irrigation type</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; The INT specified is the column in EFFICIENCY (WBS Block)</para>
           <para styleclass="Normal">INT input that defines whether a crop has irrigation water applied, and the irrigation type. Only specified if NIRRIGATE &gt; 0. If IRRIGATION is set to 0, then the crop does not have irrigation water; otherwise, input must be specified between 1 and NIRRIGATE to indicate that the crop is irrigated with and irrigation efficiency defined by the corresponding column in the EFFICIENCY table (OFE). For example, if set to 3, then the crop is irrigated and uses the efficiency defined in the third column in the EFFICIENCY table. If not specified, then IRRIGATION = 0 for all crops.</para>
+          <para styleclass="Normal"></para>
+          <para styleclass="Normal">Array dimensions dimensions depend on <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="SINGLE_LAND_USE_PER_CELL">SINGLE_LAND_USE_PER_CELL</link> or <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="MULTIPLE_LAND_USE_PER_CELL">MULTIPLE_LAND_USE_PER_CELL</link>.</para>
         </td>
       </tr>
     </table></para>
@@ -230,14 +233,15 @@
           <para styleclass="Normal">Crop root depth below land surface.</para>
           <para styleclass="Normal"> &#160;Must be &gt;0.0; NOT required or maybe zero if GROUNDWATER_ROOT_INTERACTION = 0 or 1</para>
           <para styleclass="Normal">FLOAT input (&gt; 0) that defines the root depth below land surface for each crop. If the root depth is less than 1E-30, then it is changed to 1E-30.</para>
+          <para styleclass="Normal">Array dimensions dimensions depend on <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="SINGLE_LAND_USE_PER_CELL">SINGLE_LAND_USE_PER_CELL</link> or <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="MULTIPLE_LAND_USE_PER_CELL">MULTIPLE_LAND_USE_PER_CELL</link>.</para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="ROOT_PRESSURE"></anchor><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ROOT_PRESSURE]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[ROOT_PRESSURE]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-4]</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="ROOT_PRESSURE"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-4]</para>
           <para styleclass="Normal">Groundwater Root Interaction Flag, Specify as 0, 1 , 2, 3, 4, 5 (default is 5)</para>
           <para styleclass="Normal"> &#160; &#160;This determines if there is groundwater uptake to meet crop demand and</para>
           <para styleclass="Normal"> &#160; &#160;if the Potential Consumptive Use is reduced due to anoxia and soil stresses</para>
@@ -364,7 +368,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">TRANSPIRATION_FRACTION (FTR):</para>
+          <para styleclass="Normal">TRANSPIRATION_FRACTION (FTR): LAI[S,T,A,L]</para>
           <para styleclass="Normal"> &#160; &#160;Fraction of consumptive use that is the potential transpiration of the crop</para>
           <para styleclass="Normal"> &#160; &#160;Formally defined as FTR = Kcb/Kc = Basal Crop Coefficient / Crop Coefficient</para>
           <para styleclass="Normal"> &#160; &#160;Can be viewed as the fraction of a unit cropped area covered by leaf matter, i.e. crop cover.</para>
@@ -378,7 +382,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">[{BY_CROP, BY_IRRIGATE}] &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="EVAPORATION_IRRIGATION_FRACTION"></anchor>[{BY_CROP, BY_IRRIGATE}] &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
           <para styleclass="Normal">EVAPORATION_IRRIGATION_FRACTION (FEI):</para>
           <para styleclass="Normal"> &#160; &#160;Fraction of a cropped area that is irrigated but is not covered by a crop.</para>
           <para styleclass="Normal"> &#160; &#160;It should be less than or equal to 1 - FTR &#160;(That is FEI + FTR &lt;= 1), but this is not required.</para>
@@ -408,6 +412,7 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; &#160; &#160;If FEI = -1, then it is recalculated as FEI = 1 - FTR</para>
           <para styleclass="Normal">FLOAT input that defines the fraction of the unit-cropped area that is irrigated but is only exposed to sunlight and evaporates (FEI). This portion of the unit-cropped area has negligible transpiration. This fraction should be between 0 and less than one minus the TRANSPIRATION_FRACTION (1-FTR). If keyword is not specified or input specifies FEI &lt; 0, then FEI = 1-FTR. FEI can be viewed as the portion of irrigation that is not available for consumption as transpiration (such as the space between row crops) and includes any water that evaporates before reaching the crop or evaporates from atop the crop’s leaves. If FTR + FEI &gt; 1, then the final consumptive use will be greater than what is specified in the input due to evaporation of irrigation water. The optional secondary keywords BY_CROP and BY_IRRIGATE indicate the number of records that List Style input reads and applies the input. BY_CROP expects NCROP records and applies the fractions by crop. BY_IRRIGATE expects NIRRIGATE records and applies the fractions by irrigation type. If neither of the BY_ keywords are specified, then the default is BY_CROP.</para>
+          <para styleclass="Normal">Array dimensions dimensions depend on <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="SINGLE_LAND_USE_PER_CELL">SINGLE_LAND_USE_PER_CELL</link> or <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="MULTIPLE_LAND_USE_PER_CELL">MULTIPLE_LAND_USE_PER_CELL</link>.</para>
         </td>
       </tr>
     </table></para>
@@ -415,7 +420,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="SURFACEWATER_LOSS_FRACTION_PRECIPITATION"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
           <para styleclass="Normal">Any precipitation not consumed by the crop either becomes an inefficient loss.</para>
           <para styleclass="Normal"> &#160; &#160;The inefficient loss becomes either runoff or deep percolation.</para>
           <para styleclass="Normal"></para>
@@ -424,6 +429,7 @@
           <para styleclass="Normal"> &#160; &#160;goes to surface water compared to deep percolation.</para>
           <para styleclass="Normal"> &#160; &#160;(e.g. 0.75 indicates 75% of unconsumed precip becomes surface runoff)</para>
           <para styleclass="Normal">FLOAT input is a runoff coefficient for water that originated as precipitation (FIESWP). It is a fraction of precipitation that is not consumed by the crop that becomes surface runoff; one minus this fraction is the portion that becomes deep percolation. For example, a FIESWP value of 0.8 indicates that 80 percent of unconsumed (excess) precipitation becomes runoff and 20 percent infiltrates as deep percolation. If keyword is not specified, then the FIESWP is set to 0.8 if SFR is in use; otherwise, is set to zero.</para>
+          <para styleclass="Normal">Array dimensions dimensions depend on <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="SINGLE_LAND_USE_PER_CELL">SINGLE_LAND_USE_PER_CELL</link> or <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="MULTIPLE_LAND_USE_PER_CELL">MULTIPLE_LAND_USE_PER_CELL</link>.</para>
         </td>
       </tr>
     </table></para>
@@ -431,22 +437,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
-          <para styleclass="Normal">Any precipitation not consumed by the crop either becomes an inefficient loss.</para>
-          <para styleclass="Normal"> &#160; &#160;The inefficient loss becomes either runoff or deep percolation.</para>
-          <para styleclass="Normal"></para>
-          <para styleclass="Normal">SURFACEWATER_LOSS_FRACTION_PRECIPITATION indicates</para>
-          <para styleclass="Normal"> &#160; &#160;the fraction of inefficient losses from precipitation that</para>
-          <para styleclass="Normal"> &#160; &#160;goes to surface water compared to deep percolation.</para>
-          <para styleclass="Normal"> &#160; &#160;(e.g. 0.75 indicates 75% of unconsumed precip becomes surface runoff)</para>
-        </td>
-      </tr>
-    </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SURFACEWATER_LOSS_FRACTION_IRRIGATION]]></caption></toggle></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
-      <tr style="vertical-align:top">
-        <td>
-          <para styleclass="Normal">[{BY_CROP, BY_IRRIGATE}] &#160; <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="SURFACEWATER_LOSS_FRACTION_IRRIGATION"></anchor>[{BY_CROP, BY_IRRIGATE}] &#160; <link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
           <para styleclass="Normal">Inefficient losses from irrigation is the extra water required to meet an irrigation requirement</para>
           <para styleclass="Normal">They are a result of the EFFICIENCY being less than 1</para>
           <para styleclass="Normal"></para>
@@ -490,7 +481,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">{LENGTH,RATE} &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link>]</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="ADDED_DEMAND"></anchor>{LENGTH,RATE} &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link>]</para>
           <para styleclass="Normal">Specify any additional demands to include with the crop demand.</para>
           <para styleclass="Normal">This only applies to irrigated crops and the additional</para>
           <para styleclass="Normal">demanded water only becomes surface runoff or deep percolation</para>
@@ -500,6 +491,7 @@
           <para styleclass="Normal"></para>
           <para styleclass="Normal">The added demand is summed with other added demands (e.g. WBS Block ADDED_CROP_DEMAND)</para>
           <para styleclass="Normal">FLOAT input that defines additional irrigation demand for a crop, specified by each WBS. This is identical to the WATER_BALANCE_SUBREGION block keyword, ADDED_CROP_DEMAND, except here it is specified with NCROP records or Array-Style. FLUX indicates that input is specified as [L/T] and multiplied by the crop area to get [L3/T]. RATE indicates that input is specified as [L3/T].</para>
+          <para styleclass="Normal">Array dimensions dimensions depend on <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="SINGLE_LAND_USE_PER_CELL">SINGLE_LAND_USE_PER_CELL</link> or <link displaytype="text" defaultstyle="true" type="topiclink" href="" anchor="MULTIPLE_LAND_USE_PER_CELL">MULTIPLE_LAND_USE_PER_CELL</link>.</para>
         </td>
       </tr>
     </table></para>
@@ -629,9 +621,9 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">This is useful in case the crop resides in a raised/lowered region of the model cell and it</para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">requires a more accurate surface elevation measurement.</para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">To use these options you must specify in the GLOBAL DIMENSION block the variable NCROP_SPECIFIED_ELEVATIONS</para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- LIST input loads NCROP_SPECIFIED_ELEVATIONS records, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- ARRAY input with LAND_USE_AREA_FRACTION MULTI option reads NCROP_SPECIFIED_ELEVATIONS*NROW rows, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW</para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;">To use these options you must specify in the GLOBAL DIMENSION block the variable <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP_SPECIFIED_ELEVATIONS">NCROP_SPECIFIED_ELEVATIONS</link></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- LIST input loads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP_SPECIFIED_ELEVATIONS">NCROP_SPECIFIED_ELEVATIONS</link> records, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> -- ARRAY input with LAND_USE_AREA_FRACTION MULTI option reads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP_SPECIFIED_ELEVATIONS">NCROP_SPECIFIED_ELEVATIONS</link>*NROW rows, and NOT <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW</para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"> &#160; Crops that do not have their elevation changed use the <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="SURFACE_ELEVATION">SURFACE_ELEVATION</link> defined in the GLOBAL DIMENSION block.</para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[CROPS_THAT_SPECIFY_SURFACE_ELEVATION]]></caption></toggle></para>

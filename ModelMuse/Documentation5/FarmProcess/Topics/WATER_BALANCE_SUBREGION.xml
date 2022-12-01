@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T11:59:15.856-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-11-21T14:30:22.667-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>WATER_BALANCE_SUBREGION</title>
   <body>
     <header>
@@ -41,7 +41,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>]</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="EFFICIENCY"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>]</para>
           <para styleclass="Normal">EFFICIENCY is REQUIRED if <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link> &gt; 0</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">Irrigation Efficiency (OFE) is between 0-1 and represents OFE=CIR/DEMAND,</para>
@@ -53,7 +53,7 @@
           <para styleclass="Normal">OFE is tied to the IRRIGATION type, GLOBAL DIMENSION keyword <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>.</para>
           <para styleclass="Normal"> &#160;If a crop is irrigated then it&apos;s IRRIGATION flag is &gt;0 and set equal to the irrigation type (1 to <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>).</para>
           <para styleclass="Normal"> &#160;If EFFICIENCY input is set to ARRAY, then the (ROW, COL) that the crop is located in determines its OFE when irrigated.</para>
-          <para styleclass="Normal"> &#160;If EFFICIENCY input is set to LIST, &#160;then the WBS located at the crop&apos;s (ROW, COL) determines the EFFICIENCY row and the crop&apos;s IRRIGATION flag determines the EFFICIENCY column.</para>
+          <para styleclass="Normal"> &#160;If EFFICIENCY input is set to LIST, &#160;then the WBS located at the crop&apos;s (ROW, COL) determines the EFFICIENCY row and the crop&apos;s <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE" anchor="IRRIGATION">IRRIGATION</link> flag determines the EFFICIENCY column.</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">***Note that the old OFE input was <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NFARM</link> by <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>, to mimic this behavior just set <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>=<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> and define each crop that is irrigated with an IRRIGATION flag equal to the CROP ID.</para>
           <para styleclass="Normal"></para>
@@ -64,7 +64,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>]</para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="EFFICIENCY_IMPROVEMENT"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>]</para>
           <para styleclass="Normal">When water supply does not meet demand the EFFICIENCY (OFE) can improve to 1.0 or remain the same.</para>
           <para styleclass="Normal">EFFICIENCY_IMPROVEMENT is a 0 or 1 flag to indicate if efficiency improvement is allowed.</para>
           <para styleclass="Normal"> &#160;0 - Efficiency remains the same, crop transpiration reduced due to supply shortfall</para>
@@ -168,17 +168,18 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link>]</para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L-<link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link><anchor id="ADDED_DEMAND_RUNOFF_SPLIT"></anchor>]</para>
           <para styleclass="Normal">Array dimensions are <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> x <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link></para>
           <para styleclass="Normal">If a WBS has specified an added irrigation demand, then defines the</para>
           <para styleclass="Normal"> &#160; split between becoming surface runoff or deep percolation.</para>
           <para styleclass="Normal"> &#160; This fraction is only is a split for the additional demanded water.</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; It does not apply to losses that originate from irrigation required to meet a land use ET</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; which is defined in the Land_Use Block with the SURFACEWATER_LOSS_FRACTION_IRRIGATION keyword</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; which is defined in the Land_Use Block with the <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE" anchor="SURFACEWATER_LOSS_FRACTION_IRRIGATION">SURFACEWATER_LOSS_FRACTION_IRRIGATION</link> keyword</para>
           <para styleclass="Normal"> &#160; It must be between 0.0 and 1.0; If not specified then it defaults to 0.1, that is &quot;ADDED_DEMAND_RUNOFF_SPLIT CONSTANT 0.1&quot;</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">At this time additional demand (Added Demand) is defined with the keyword ADDED_CROP_DEMAND and LAND_USE block keyword ADDED_DEMAND</para>
+          <para styleclass="Normal">At this time additional demand (Added Demand) is defined with the keyword ADDED_CROP_DEMAND and LAND_USE block keyword <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">ADDED_DEMAND</link></para>
           <para styleclass="Normal">FLOAT, Fraction of any specified additional demand that becomes runoff as opposed to deep percolation. If not specified, the default is 0.1</para>
         </td>
       </tr>
@@ -191,7 +192,7 @@
           <para styleclass="Normal">Specify an additional demand for each WBS that is applied to each crop.</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; --Additional demand is demand added to the land use in addition</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; to its consumptive use value (additional irrigation requirement).</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; &#160; --The crop must have an IRRIGATION flag &gt;0 or the added demand cannot be applied.</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; &#160; --The crop must have an <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE" anchor="IRRIGATION">IRRIGATION</link> flag &gt;0 or the added demand cannot be applied.</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160;This only applies to irrigated crops and the additional</para>
           <para styleclass="Normal"> &#160;demanded water only becomes surface runoff or deep percolation</para>
