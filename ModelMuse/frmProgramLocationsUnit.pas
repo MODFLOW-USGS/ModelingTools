@@ -407,6 +407,8 @@ begin
     (frmGoPhast.PhastModel.ModelSelection  <> msModflowOwhm2);
   ModflowOwhmV2OK := CheckControl(fedModflowOwhm2)
     or (frmGoPhast.PhastModel.ModelSelection  <> msModflowOwhm2);
+  {$else}
+  ModflowOwhmV2OK := True;
   {$ENDIF}
 
   jvrltModflowFmp.Collapsed :=

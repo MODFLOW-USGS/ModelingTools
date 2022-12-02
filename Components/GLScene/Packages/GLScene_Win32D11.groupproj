@@ -3,10 +3,10 @@
         <ProjectGuid>{123CBCAE-CC52-4C17-8A81-AC17BBE87A57}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Win32\GLScene_DT_D11.dproj">
+        <Projects Include="Win32\GLScene_RT_D11.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Win32\GLScene_RT_D11.dproj">
+        <Projects Include="Win32\GLScene_DT_D11.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="Win32\GLScene_Sounds_RT.dproj">
@@ -41,15 +41,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="GLScene_DT_D11">
-        <MSBuild Projects="Win32\GLScene_DT_D11.dproj"/>
-    </Target>
-    <Target Name="GLScene_DT_D11:Clean">
-        <MSBuild Projects="Win32\GLScene_DT_D11.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="GLScene_DT_D11:Make">
-        <MSBuild Projects="Win32\GLScene_DT_D11.dproj" Targets="Make"/>
-    </Target>
     <Target Name="GLScene_RT_D11">
         <MSBuild Projects="Win32\GLScene_RT_D11.dproj"/>
     </Target>
@@ -58,6 +49,15 @@
     </Target>
     <Target Name="GLScene_RT_D11:Make">
         <MSBuild Projects="Win32\GLScene_RT_D11.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="GLScene_DT_D11">
+        <MSBuild Projects="Win32\GLScene_DT_D11.dproj"/>
+    </Target>
+    <Target Name="GLScene_DT_D11:Clean">
+        <MSBuild Projects="Win32\GLScene_DT_D11.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GLScene_DT_D11:Make">
+        <MSBuild Projects="Win32\GLScene_DT_D11.dproj" Targets="Make"/>
     </Target>
     <Target Name="GLScene_Sounds_RT">
         <MSBuild Projects="Win32\GLScene_Sounds_RT.dproj"/>
@@ -132,13 +132,13 @@
         <MSBuild Projects="Win32\GLScene_Cg_DT.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="GLScene_DT_D11;GLScene_RT_D11;GLScene_Sounds_RT;GLScene_Sounds_DT;GLScene_Physics_RT;GLScene_Physics_DT;GLScene_Parallel_RT;GLScene_Parallel_DT;GLScene_Cg_RT;GLScene_Cg_DT"/>
+        <CallTarget Targets="GLScene_RT_D11;GLScene_DT_D11;GLScene_Sounds_RT;GLScene_Sounds_DT;GLScene_Physics_RT;GLScene_Physics_DT;GLScene_Parallel_RT;GLScene_Parallel_DT;GLScene_Cg_RT;GLScene_Cg_DT"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="GLScene_DT_D11:Clean;GLScene_RT_D11:Clean;GLScene_Sounds_RT:Clean;GLScene_Sounds_DT:Clean;GLScene_Physics_RT:Clean;GLScene_Physics_DT:Clean;GLScene_Parallel_RT:Clean;GLScene_Parallel_DT:Clean;GLScene_Cg_RT:Clean;GLScene_Cg_DT:Clean"/>
+        <CallTarget Targets="GLScene_RT_D11:Clean;GLScene_DT_D11:Clean;GLScene_Sounds_RT:Clean;GLScene_Sounds_DT:Clean;GLScene_Physics_RT:Clean;GLScene_Physics_DT:Clean;GLScene_Parallel_RT:Clean;GLScene_Parallel_DT:Clean;GLScene_Cg_RT:Clean;GLScene_Cg_DT:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="GLScene_DT_D11:Make;GLScene_RT_D11:Make;GLScene_Sounds_RT:Make;GLScene_Sounds_DT:Make;GLScene_Physics_RT:Make;GLScene_Physics_DT:Make;GLScene_Parallel_RT:Make;GLScene_Parallel_DT:Make;GLScene_Cg_RT:Make;GLScene_Cg_DT:Make"/>
+        <CallTarget Targets="GLScene_RT_D11:Make;GLScene_DT_D11:Make;GLScene_Sounds_RT:Make;GLScene_Sounds_DT:Make;GLScene_Physics_RT:Make;GLScene_Physics_DT:Make;GLScene_Parallel_RT:Make;GLScene_Parallel_DT:Make;GLScene_Cg_RT:Make;GLScene_Cg_DT:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

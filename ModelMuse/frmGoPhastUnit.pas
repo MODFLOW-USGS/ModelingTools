@@ -2460,7 +2460,7 @@ var
   MfOwhmDate: TDateTime;
   MfCfpDate: TDateTime;
   Mf6Date: TDateTime;
-  Mf6WithGwtDate: TDateTime;
+//  Mf6WithGwtDate: TDateTime;
   Mt3dUsgsDate: TDateTime;
   ZoneBudMf6Date: TDateTime;
   FootprintDate: TDateTime;
@@ -3492,7 +3492,7 @@ begin
   acSutra40Active.Visible := False;
   {$ENDIF}
   {$ifndef OWHMV2}
-  acModflowOwhmV2Execute.Visible := False;
+  acModflowOwhmV2.Visible := False;
   acRunModflowOWHM_V2.Visible := False;
   {$ENDIF}
   tbarEditScreenObjects.Width := 227;
@@ -10857,18 +10857,18 @@ function TfrmGoPhast.Mf6UpToDate: boolean;
 var
   WarningMessage: string;
 begin
-  if PhastModel.GwtUsed then
-  begin
-    result := ModelUpToDate(PhastModel.ProgramLocations.Modflow6Location, Mf6WithGwtDate);
-    if not result then
-    begin
-      Beep;
-      WarningMessage := StrToFunctionProperly;
-      result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
-    end;
-  end
-  else
-  begin
+//  if PhastModel.GwtUsed then
+//  begin
+//    result := ModelUpToDate(PhastModel.ProgramLocations.Modflow6Location, Mf6WithGwtDate);
+//    if not result then
+//    begin
+//      Beep;
+//      WarningMessage := StrToFunctionProperly;
+//      result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
+//    end;
+//  end
+//  else
+//  begin
     result := ModelUpToDate(PhastModel.ProgramLocations.Modflow6Location, Mf6Date);
     if not result then
     begin
@@ -10876,7 +10876,7 @@ begin
       WarningMessage := Format(StrTheCurrentVersion, [StrMODFLOW6]);
       result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
     end;
-  end;
+//  end;
 end;
 
 function TfrmGoPhast.FootprintUpToDate: boolean;
@@ -15745,8 +15745,8 @@ initialization
   MfOwhmDate := EncodeDate(2016, 6, 15);
   MfCfpDate := EncodeDate(2011, 2, 23);
   ModelMateDate := EncodeDate(2013, 11, 19);
-  Mf6Date := EncodeDate(2022, 3, 4);
-  Mf6WithGwtDate := EncodeDate(2022, 10, 26);
+  Mf6Date := EncodeDate(2022, 11, 29);
+//  Mf6WithGwtDate := EncodeDate(2022, 10, 26);
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);

@@ -980,7 +980,7 @@ type
     property ModflowOwhmV2Location: string read FModflowOwhmV2Location
       write SetModflowOwhmV2Location
     {$IFNDEF OWHMV2}
-      stored False;
+      stored False
     {$ENDIF}
       ;
   end;
@@ -5592,7 +5592,7 @@ resourcestring
 
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
-  StrDefaultModflow6Path = 'C:\WRDAPP\mf6.3.0\bin\mf6.exe';
+  StrDefaultModflow6Path = 'C:\WRDAPP\mf6.4.0\bin\mf6.exe';
   StrDefaultOwhmV2Path = 'C:\WRDAPP\mf-owhm-release\bin\mf-owhm.exe';
 
   StrProgramLocations = 'Program Locations';
@@ -31510,8 +31510,10 @@ begin
       ProgramLocations.ModflowCfpLocation := Value;
     msModflow2015:
       ProgramLocations.Modflow6Location := Value;
+{$IFDEF OWHMV2}
    msModflowOwhm2:
       ProgramLocations.ModflowOwhmV2Location := Value;
+{$ENDIF}
     else Assert(False);
   end;
 end;

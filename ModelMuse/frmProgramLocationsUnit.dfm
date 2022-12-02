@@ -6,7 +6,6 @@ inherited frmProgramLocations: TfrmProgramLocations
   ClientWidth = 933
   ExplicitWidth = 949
   ExplicitHeight = 600
-  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -15,7 +14,6 @@ inherited frmProgramLocations: TfrmProgramLocations
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 545
     DesignSize = (
       933
       41)
@@ -59,7 +57,6 @@ inherited frmProgramLocations: TfrmProgramLocations
     Height = 520
     Align = alClient
     TabOrder = 0
-    ExplicitHeight = 545
     object jvrltModflow2005: TJvRollOut
       Left = 1
       Top = 85
@@ -242,7 +239,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 7
       OnExpand = jvrltExpand
-      ExplicitTop = 275
       DesignSize = (
         931
         22)
@@ -285,7 +281,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 8
       OnExpand = jvrltExpand
-      ExplicitTop = 297
       DesignSize = (
         931
         84)
@@ -330,7 +325,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 9
       OnExpand = jvrltExpand
-      ExplicitTop = 403
       DesignSize = (
         931
         22)
@@ -371,7 +365,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 11
       OnExpand = jvrltExpand
-      ExplicitTop = 447
       DesignSize = (
         931
         22)
@@ -412,7 +405,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 12
       OnExpand = jvrltExpand
-      ExplicitTop = 469
       DesignSize = (
         931
         22)
@@ -445,7 +437,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 13
       OnExpand = jvrltExpand
-      ExplicitTop = 491
       DesignSize = (
         931
         22)
@@ -477,7 +468,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       Collapsed = True
       ImageOptions.Images = ilShowHide
       TabOrder = 6
-      ExplicitTop = 253
       DesignSize = (
         931
         22)
@@ -530,7 +520,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       Collapsed = True
       ImageOptions.Images = ilShowHide
       TabOrder = 5
-      ExplicitTop = 231
       DesignSize = (
         931
         22)
@@ -616,7 +605,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       Collapsed = True
       ImageOptions.Images = ilShowHide
       TabOrder = 10
-      ExplicitTop = 425
       DesignSize = (
         931
         22)
@@ -658,7 +646,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 14
       OnExpand = jvrltExpand
-      ExplicitTop = 381
       DesignSize = (
         931
         22)
@@ -701,7 +688,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       Collapsed = True
       ImageOptions.Images = ilShowHide
       TabOrder = 15
-      ExplicitTop = 275
       DesignSize = (
         931
         22)
