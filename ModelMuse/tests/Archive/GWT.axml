@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="GWT" FileType="bin">
-    <FileName Model_Name="GWT" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT.exe</FileName>
+    <FileName Model_Name="GWT" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT_1.3.0\bin\MODFLOW-NWT.exe</FileName>
     <FileName Model_Name="GWT" FileType="bin">..\..\..\WRDAPP\mt3dusgs1.1.0\bin\mt3d-usgs_1.1.0_32.exe</FileName>
   </bin>
   <ancillary Model_Name="GWT" FileType="ancillary">

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="importedSWR" FileType="bin">
-    <FileName Model_Name="importedSWR" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT\bin\MODFLOW-NWT.exe</FileName>
+    <FileName Model_Name="importedSWR" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT_1.3.0\bin\MODFLOW-NWT.exe</FileName>
   </bin>
   <ancillary Model_Name="importedSWR" FileType="ancillary">
     <FileName Model_Name="importedSWR" FileType="ancillary">importedSWR.gpt</FileName>

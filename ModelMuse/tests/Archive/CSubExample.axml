@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="CSubExample" FileType="bin">
-    <FileName Model_Name="CSubExample" FileType="bin">..\..\..\WRDAPP\mf6.3.0\bin\mf6.exe</FileName>
+    <FileName Model_Name="CSubExample" FileType="bin">..\..\..\WRDAPP\mf6.4.0\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="CSubExample" FileType="ancillary">
     <FileName Model_Name="CSubExample" FileType="ancillary">..\Installer\ModelMuse4_3\data\CSub Example\Csub_ActiveCells.dbf</FileName>

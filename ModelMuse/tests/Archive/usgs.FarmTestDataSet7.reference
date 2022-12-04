@@ -5,5 +5,5 @@ length_units meters
 time_units days
 start_date 12/30/1899
 start_time 0:0:0
-model MODFLOW-OWM
+model MODFLOW-OWM version 1
 epsg 
