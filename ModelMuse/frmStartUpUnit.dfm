@@ -10,7 +10,6 @@ inherited frmStartUp: TfrmStartUp
   OnClose = FormClose
   ExplicitWidth = 767
   ExplicitHeight = 445
-  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -177,6 +176,7 @@ inherited frmStartUp: TfrmStartUp
           EditLabel.Height = 18
           EditLabel.Caption = 'Projection'
           TabOrder = 4
+          Text = ''
         end
         object rgProjectionType: TRadioGroup
           Left = 203
@@ -240,8 +240,6 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
-        ExplicitWidth = 296
-        ExplicitHeight = 121
         object lblZDist: TLabel
           Left = 520
           Top = 110
@@ -557,6 +555,7 @@ inherited frmStartUp: TfrmStartUp
           AutoIncreaseRowCount = True
           SelectedRowOrColumnColor = clAqua
           UnselectableColor = clBtnFace
+          OnEndUpdate = rdgInitialLayersEndUpdate
           ColorRangeSelection = False
           Columns = <
             item
@@ -607,7 +606,6 @@ inherited frmStartUp: TfrmStartUp
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = rdgInitialLayersEndUpdate
           WordWrapRowCaptions = False
           ColWidths = (
             64
@@ -756,6 +754,7 @@ inherited frmStartUp: TfrmStartUp
           ColCount = 2
           RowCount = 5
           OnSelectCell = frameModelLayersGridSelectCell
+          OnEndUpdate = frameModelLayersGridEndUpdate
           Columns = <
             item
               AutoAdjustRowHeights = False
@@ -805,7 +804,6 @@ inherited frmStartUp: TfrmStartUp
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = frameModelLayersGridEndUpdate
           ExplicitWidth = 269
           ExplicitHeight = 229
           ColWidths = (

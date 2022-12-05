@@ -46,8 +46,6 @@ inherited frmGoPhast: TfrmGoPhast
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitWidth = 782
-    ExplicitHeight = 188
     object splitVertTop: TJvNetscapeSplitter
       Left = 545
       Top = 0
@@ -71,8 +69,8 @@ inherited frmGoPhast: TfrmGoPhast
       Align = alClient
       TabOrder = 0
       TabStop = True
-      ExplicitWidth = 543
-      ExplicitHeight = 188
+      ExplicitWidth = 545
+      ExplicitHeight = 201
       inherited rulVertical: TRbwRuler
         Height = 147
         ExplicitTop = 39
@@ -80,7 +78,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
       inherited pnlTop: TPanel
         Width = 545
-        ExplicitWidth = 543
+        ExplicitWidth = 545
         inherited rulHorizontal: TRbwRuler
           Width = 496
           ExplicitLeft = 49
@@ -96,11 +94,12 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 494
         Image32.Height = 145
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 494
         Image32.ExplicitHeight = 145
-        ExplicitWidth = 494
-        ExplicitHeight = 134
+        ExplicitWidth = 496
+        ExplicitHeight = 147
       end
       inherited OrderMenu: TPopupMenu
         Left = 80
@@ -115,9 +114,9 @@ inherited frmGoPhast: TfrmGoPhast
       Align = alRight
       TabOrder = 1
       TabStop = True
-      ExplicitLeft = 553
+      ExplicitLeft = 555
       ExplicitWidth = 229
-      ExplicitHeight = 188
+      ExplicitHeight = 201
       inherited rulVertical: TRbwRuler
         Left = 180
         Height = 147
@@ -162,12 +161,13 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 178
         Image32.Height = 145
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
         Image32.ExplicitHeight = 145
         ExplicitLeft = 0
         ExplicitWidth = 180
-        ExplicitHeight = 134
+        ExplicitHeight = 147
       end
       inherited OrderMenu: TPopupMenu
         Left = 48
@@ -188,8 +188,6 @@ inherited frmGoPhast: TfrmGoPhast
     ParentDoubleBuffered = False
     TabOrder = 2
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitTop = 394
-    ExplicitWidth = 782
     object splitVertBottom: TJvNetscapeSplitter
       Left = 545
       Top = 0
@@ -212,7 +210,7 @@ inherited frmGoPhast: TfrmGoPhast
       Align = alClient
       TabOrder = 0
       TabStop = True
-      ExplicitWidth = 543
+      ExplicitWidth = 545
       ExplicitHeight = 133
       inherited rulVertical: TRbwRuler
         Top = 0
@@ -226,7 +224,7 @@ inherited frmGoPhast: TfrmGoPhast
         Align = alBottom
         TabOrder = 1
         ExplicitTop = 79
-        ExplicitWidth = 543
+        ExplicitWidth = 545
         inherited ModelCube: TRbwModelCube
           Hint = 
             'Click to change row|Click to change the selected row forward or ' +
@@ -255,11 +253,12 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 494
         Image32.Height = 77
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 494
         Image32.ExplicitHeight = 77
         ExplicitTop = 0
-        ExplicitWidth = 494
+        ExplicitWidth = 496
         ExplicitHeight = 79
       end
     end
@@ -274,7 +273,7 @@ inherited frmGoPhast: TfrmGoPhast
       ParentDoubleBuffered = False
       TabOrder = 1
       TabStop = True
-      ExplicitLeft = 553
+      ExplicitLeft = 555
       ExplicitWidth = 229
       ExplicitHeight = 133
       inherited glWidModelView: TGLWidget
@@ -310,8 +309,6 @@ inherited frmGoPhast: TfrmGoPhast
     OnMouseMove = sbMainMouseMove
     OnMouseUp = sbMainMouseUp
     OnDrawPanel = sbMainDrawPanel
-    ExplicitTop = 527
-    ExplicitWidth = 782
   end
   object cbControlBar: TControlBar
     Left = 0
@@ -325,7 +322,6 @@ inherited frmGoPhast: TfrmGoPhast
     ShowHint = True
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitWidth = 782
     object tbarEdit: TToolBar
       Left = 152
       Top = 34
@@ -677,7 +673,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 477
+      Left = 208
       Top = 130
       Width = 212
       Height = 28
@@ -779,7 +775,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 217
+      Left = 433
       Top = 130
       Width = 244
       Height = 28
@@ -894,7 +890,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView3D: TToolBar
-      Left = 60
+      Left = 54
       Top = 130
       Width = 141
       Height = 28
@@ -1095,7 +1091,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarShowGrid: TToolBar
-      Left = 14
+      Left = 11
       Top = 130
       Width = 30
       Height = 28
@@ -2347,6 +2343,11 @@ inherited frmGoPhast: TfrmGoPhast
         GroupIndex = 1
         RadioItem = True
       end
+      object MODFLOWOWHMV21: TMenuItem
+        Action = acModflowOwhmV2
+        GroupIndex = 1
+        RadioItem = True
+      end
       object miPhast: TMenuItem
         Action = acPhastActive
         GroupIndex = 1
@@ -3250,11 +3251,11 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acModflowFmpActive: TAction
       Category = 'ModelSelection'
-      Caption = 'MODFLOW-OWHM'
+      Caption = 'MODFLOW-OWHM V1'
       GroupIndex = 1
       HelpContext = 2390
       HelpKeyword = 'Model'
-      Hint = 'Make MODFLOW-OWHM the selected model type'
+      Hint = 'Make MODFLOW-OWHM version 1 the selected model type'
       OnExecute = acModflowFmpActiveExecute
     end
     object acSutra22Active: TAction
@@ -3729,7 +3730,11 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acModflowOwhmV2: TAction
       Category = 'ModelSelection'
-      Caption = 'acModflowOwhmV2'
+      Caption = 'MODFLOW-OWHM V2'
+      GroupIndex = 1
+      HelpContext = 2390
+      HelpKeyword = 'Model'
+      Hint = 'Make MODFLOW-OWHM version 2 the selected model type'
       OnExecute = acModflowOwhmV2Execute
     end
     object acRunModflowOWHM_V2: TAction

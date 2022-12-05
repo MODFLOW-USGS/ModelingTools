@@ -323,7 +323,7 @@ begin
         Assert(UpperCase(Splitter[0]) = StrSWIOBSERVATION,
           Format('"%s" is only valid for SWI observations.', [StrSWIOBSERVATION]));
         SwiNumber := StrToInt(Splitter[1]);
-        SwiFraction := StrToFloat(Splitter[2]);
+        SwiFraction := FortranStrToFloat(Splitter[2]);
         SwiNanme := Splitter[3];
         //if not FGenerateInstructionFile then
         begin
@@ -346,7 +346,7 @@ begin
         ACellID.Layer := StrToInt(Splitter[1]);
         ACellID.Row := StrToInt(Splitter[2]);
         ACellID.Column := StrToInt(Splitter[3]);
-        ACellID.Fraction := StrToFloat(Splitter[4]);
+        ACellID.Fraction := FortranStrToFloat(Splitter[4]);
         SubObs.AddCellID(ACellID);
       end
       else if Splitter.Count in [6,7] then
@@ -360,9 +360,9 @@ begin
         ObsTypeName := UpperCase(Splitter[2]);
         ObsTypeIndex := ObsTypes.IndexOf(ObsTypeName);
         Assert(ObsTypeIndex >= 0);
-        ObsTime := StrToFloat(Splitter[3]);
-        ObservedValue := StrToFloat(Splitter[4]);
-        Weight := StrToFloat(Splitter[5]);
+        ObsTime := FortranStrToFloat(Splitter[3]);
+        ObservedValue := FortranStrToFloat(Splitter[4]);
+        Weight := FortranStrToFloat(Splitter[5]);
         case FFileLink.FileType of
           iftMNW2:
             begin
@@ -551,8 +551,8 @@ begin
         Obs.SimulatedValue := MissingValue;
         FirstName := Splitter[2];
         SecondName := Splitter[3];
-        Obs.ObservedValue := StrToFloat(Splitter[4]);
-        Obs.Weight := StrToFloat(Splitter[5]);
+        Obs.ObservedValue := FortranStrToFloat(Splitter[4]);
+        Obs.Weight := FortranStrToFloat(Splitter[5]);
         if Obs.Print then
         begin
         FListingFile.Add(Format('%0:s, %1:s - %2:s, %3:g, %4:g, PRINT',
@@ -618,8 +618,8 @@ begin
         LastNumber := LastNumber -2;
         FObsList.Add(Obs);
         Obs.SimulatedValue := MissingValue;
-        Obs.ObservedValue := StrToFloat(Splitter[LastNumber+1]);
-        Obs.Weight := StrToFloat(Splitter[LastNumber+2]);
+        Obs.ObservedValue := FortranStrToFloat(Splitter[LastNumber+1]);
+        Obs.Weight := FortranStrToFloat(Splitter[LastNumber+2]);
 
         ListingLine := Format('%0:s, ', [Obs.ObsName]);
 
@@ -793,7 +793,7 @@ begin
             Assert(Splitter.Count = 3, Format('Error reading %0:d in "%1:s".',
               [LineIndex+1, InstructionFileName]));
             ObsName := Splitter[2];
-            SimulatedValue := StrToFloat(Splitter[0]);
+            SimulatedValue := FortranStrToFloat(Splitter[0]);
             Obs := TCustomWeightedObsValue.Create;
             FObsList.Add(Obs);
             Obs.ObsName := ObsName;

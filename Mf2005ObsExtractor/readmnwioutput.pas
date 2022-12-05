@@ -58,7 +58,7 @@ begin
     if Pos('(Well is inactive)', AMnwiOutLine) >= 1 then
     begin
       SetLength(result.Additional, 0);
-      result.TOTIM := StrToFloat(Splitter[0]);
+      result.TOTIM := FortranStrToFloat(Splitter[0]);
       result.Qin := MissingValue;
       result.Qout := MissingValue;
       result.Qnet := MissingValue;
@@ -70,16 +70,16 @@ begin
       Assert(Splitter.Count >= MinNumValues);
       AddValuesCount := Splitter.Count-MinNumValues;
       SetLength(result.Additional, AddValuesCount);
-      result.TOTIM := StrToFloat(Splitter[0]);
-      result.Qin := StrToFloat(Splitter[1]);
-      result.Qout := StrToFloat(Splitter[2]);
-      result.Qnet := StrToFloat(Splitter[3]);
-      result.QCumu := StrToFloat(Splitter[4]);
-      result.hwell := StrToFloat(Splitter[5]);
+      result.TOTIM := FortranStrToFloat(Splitter[0]);
+      result.Qin := FortranStrToFloat(Splitter[1]);
+      result.Qout := FortranStrToFloat(Splitter[2]);
+      result.Qnet := FortranStrToFloat(Splitter[3]);
+      result.QCumu := FortranStrToFloat(Splitter[4]);
+      result.hwell := FortranStrToFloat(Splitter[5]);
       for AddValueIndex := 0 to Pred(AddValuesCount) do
       begin
         result.Additional[AddValueIndex] :=
-          StrToFloat(Splitter[MinNumValues + AddValueIndex]);
+          FortranStrToFloat(Splitter[MinNumValues + AddValueIndex]);
       end;
     end;
 

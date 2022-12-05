@@ -974,10 +974,6 @@ end;
 
 procedure TfrmStartUp.SetModflowChoice;
 begin
-          {$IFDEF OWHMV2}
-          // fix this
-          Assert(False);
-          {$ENDIF}
   if rgChoice.ItemIndex = Ord(scNewModflow) then
   begin
     case comboModflowSelection.ItemIndex of
@@ -999,7 +995,11 @@ begin
       3:
         begin
           //MODFLOW-OWHM
+        {$IFDEF OWHMV2}
+          frmGoPhast.ModelSelection := msModflowOwhm2;
+        {$ELSE}
           frmGoPhast.ModelSelection := msModflowFmp;
+        {$ENDIF}
         end;
       4:
         begin

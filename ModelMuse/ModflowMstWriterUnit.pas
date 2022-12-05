@@ -81,6 +81,7 @@ procedure TModflowGwtMstWriter.WriteFileInternal;
 begin
   OpenFile(FNameOfFile);
   try
+    WriteTemplateHeader;
     WriteDataSet0;
     WriteOptions;
     writeGridData;

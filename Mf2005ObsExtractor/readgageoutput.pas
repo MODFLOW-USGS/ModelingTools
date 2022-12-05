@@ -102,11 +102,11 @@ begin
     begin
       Splitter.DelimitedText := ObsLines[LineIndex];
       SetLength(FObsRecords[LineIndex-2].Values, Splitter.Count-1);
-      FObsRecords[LineIndex-2].Time := StrToFloat(Splitter[0]);
+      FObsRecords[LineIndex-2].Time := FortranStrToFloat(Splitter[0]);
       for ValueIndex := 1 to Pred(Splitter.Count) do
       begin
         FObsRecords[LineIndex-2].Values[ValueIndex-1] :=
-          StrToFloat(Splitter[ValueIndex]);
+          FortranStrToFloat(Splitter[ValueIndex]);
       end;
       FTimes.Add(FObsRecords[LineIndex-2].Time);
     end;

@@ -5560,7 +5560,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit,
   ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit,
   ModflowMstWriterUnit, ModflowIstWriterUnit, ModflowCncWriterUnit,
-  ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit;
+  ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit, ModflowFmp4WriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -10749,11 +10749,17 @@ const
 //    '5.1.1.0'  Bug fix: Fixed bug that caused importing SUTRA model results
 //                to fail when importing X, Y, and Z velocities.
 
+//    '5.1.1.1'  Bug fix: Fixed bugs in Observation extractor programs that
+//                could sometimes prevent them from being able to read the
+//                output files correctly.
+//               Bug fix: Fixed bug that prevent PEST from working correctly
+//                with GWT in MODFLOW 6.
+
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.0';
+  IIModelVersion = '5.1.1.1';
 
 function IModelVersion: string;
 begin
@@ -45329,7 +45335,7 @@ begin
             ObsScriptWriter.Free;
           end;
 
-          FinalizePvalAndTemplate(FileName);
+//          FinalizePvalAndTemplate(FileName);
 
           LocalNameWriter.SaveNameFile(FileName);
           Application.ProcessMessages;
@@ -45445,6 +45451,8 @@ begin
           end;
         end;
       end;
+
+      FinalizePvalAndTemplate(FileName);
 
       for SpeciesIndex := 0 to GwtNameWriters.Count - 1 do
       begin

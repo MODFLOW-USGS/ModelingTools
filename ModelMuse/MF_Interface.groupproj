@@ -15,7 +15,7 @@
         <Projects Include="..\EnhancedTemplateProcessor\EnhancedTemplateProcessor.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\Mf6ObsExtractor\Mf6ObsExtractor .dproj">
+        <Projects Include="..\Mf6ObsExtractor\Mf6ObsExtractor.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="..\Mf2005ObsExtractor\Mf2005ObsExtractor.dproj">
@@ -68,14 +68,14 @@
     <Target Name="EnhancedTemplateProcessor:Make">
         <MSBuild Projects="..\EnhancedTemplateProcessor\EnhancedTemplateProcessor.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Mf6ObsExtractor ">
-        <MSBuild Projects="..\Mf6ObsExtractor\Mf6ObsExtractor .dproj"/>
+    <Target Name="Mf6ObsExtractor">
+        <MSBuild Projects="..\Mf6ObsExtractor\Mf6ObsExtractor.dproj"/>
     </Target>
-    <Target Name="Mf6ObsExtractor :Clean">
-        <MSBuild Projects="..\Mf6ObsExtractor\Mf6ObsExtractor .dproj" Targets="Clean"/>
+    <Target Name="Mf6ObsExtractor:Clean">
+        <MSBuild Projects="..\Mf6ObsExtractor\Mf6ObsExtractor.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="Mf6ObsExtractor :Make">
-        <MSBuild Projects="..\Mf6ObsExtractor\Mf6ObsExtractor .dproj" Targets="Make"/>
+    <Target Name="Mf6ObsExtractor:Make">
+        <MSBuild Projects="..\Mf6ObsExtractor\Mf6ObsExtractor.dproj" Targets="Make"/>
     </Target>
     <Target Name="Mf2005ObsExtractor">
         <MSBuild Projects="..\Mf2005ObsExtractor\Mf2005ObsExtractor.dproj"/>
@@ -96,13 +96,13 @@
         <MSBuild Projects="..\SutraObsExtractor\SutraObsExtractor.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor;EnhancedTemplateProcessor;Mf6ObsExtractor ;Mf2005ObsExtractor;SutraObsExtractor"/>
+        <CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor;EnhancedTemplateProcessor;Mf6ObsExtractor;Mf2005ObsExtractor;SutraObsExtractor"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean;EnhancedTemplateProcessor:Clean;Mf6ObsExtractor :Clean;Mf2005ObsExtractor:Clean;SutraObsExtractor:Clean"/>
+        <CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean;EnhancedTemplateProcessor:Clean;Mf6ObsExtractor:Clean;Mf2005ObsExtractor:Clean;SutraObsExtractor:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make;EnhancedTemplateProcessor:Make;Mf6ObsExtractor :Make;Mf2005ObsExtractor:Make;SutraObsExtractor:Make"/>
+        <CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make;EnhancedTemplateProcessor:Make;Mf6ObsExtractor:Make;Mf2005ObsExtractor:Make;SutraObsExtractor:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

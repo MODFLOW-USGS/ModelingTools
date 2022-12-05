@@ -25,11 +25,39 @@ type
 
 implementation
 
+uses
+  System.Math, System.StrUtils;
+
 resourcestring
   rsTheIdentifie = 'The identifier %0:s in %1:s duplicates another identifier '
     +'in %2:s';
 
 { TOutputFile }
+
+function FortranStrToFloat(AString: string): Extended;
+var
+  OldDecimalSeparator: Char;
+  SignPos: Integer;
+begin
+  AString := Trim(AString);
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  try
+    FormatSettings.DecimalSeparator := '.';
+    AString := StringReplace(AString, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+    AString := StringReplace(AString, 'd', 'e', [rfReplaceAll, rfIgnoreCase]);
+    SignPos := Max(PosEx('+', AString, 2), PosEx('-', AString, 2));
+    if SignPos > 0 then
+    begin
+      if not CharInSet(AString[SignPos-1], ['e', 'E']) then
+      begin
+        Insert('E', AString, SignPos);
+      end;
+    end;
+    result := StrToFloat(AString);
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+  end;
+end;
 
 procedure TOutputFile.ReadHeader;
 var
@@ -154,10 +182,10 @@ begin
         Assert(FNOBS = Splitter.Count - 1,
           Format('In the line "%0:s" of "%1:s", the number of observation values is %2:d instead of %3:d',
           [ALine, FileName, FObservationDictionary.Count - 1, FNOBS]));
-        ATime := StrToFloat(Splitter[0]);
+        ATime := FortranStrToFloat(Splitter[0]);
         for Index := 1 to Splitter.Count -1 do
         begin
-          Values[Index-1] := StrToFloat(Splitter[Index]);
+          Values[Index-1] := FortranStrToFloat(Splitter[Index]);
         end;
       finally
         Splitter.Free;

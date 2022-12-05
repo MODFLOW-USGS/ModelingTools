@@ -106,9 +106,38 @@ type
 
 implementation
 
+uses
+  System.Math, System.StrUtils;
+
 resourcestring
   rsTheIdentifie = 'The identifier %0:s in %1:s duplicates another identifier '
     +'in %2:s';
+
+function FortranStrToFloat(AString: string): Extended;
+var
+  OldDecimalSeparator: Char;
+  SignPos: Integer;
+begin
+  AString := Trim(AString);
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  try
+    FormatSettings.DecimalSeparator := '.';
+    AString := StringReplace(AString, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+    AString := StringReplace(AString, 'd', 'e', [rfReplaceAll, rfIgnoreCase]);
+    SignPos := Max(PosEx('+', AString, 2), PosEx('-', AString, 2));
+    if SignPos > 0 then
+    begin
+      if not CharInSet(AString[SignPos-1], ['e', 'E']) then
+      begin
+        Insert('E', AString, SignPos);
+      end;
+    end;
+    result := StrToFloat(AString);
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+  end;
+end;
+
 
 { TSutraGeneralizedTransportOutputFile }
 
@@ -139,7 +168,7 @@ function TSutraGeneralizedTransportOutputFile.GetObsValue(ObsTypeIndex: integer
   ): double;
 begin
   Assert(ObsTypeIndex in [0..1]);
-  result := StrToFloat(FSplitter[ObsTypeIndex]);
+  result := FortranStrToFloat(FSplitter[ObsTypeIndex]);
   //if FSplitter[1] = 'INP' then
   //begin
   //  case ObsTypeIndex of
@@ -205,7 +234,7 @@ function TSutraGeneralizedFlowOutputFile.GetObsValue(ObsTypeIndex: integer
   ): double;
 begin
   Assert(ObsTypeIndex in [0..2]);
-  result := StrToFloat(FSplitter[ObsTypeIndex]);
+  result := FortranStrToFloat(FSplitter[ObsTypeIndex]);
   //if FSplitter[1] = 'INP' then
   //begin
   //  case ObsTypeIndex of
@@ -265,7 +294,7 @@ function TSutraSpecifiedConcentrationOutputFile.GetObsValue(
   ObsTypeIndex: integer): double;
 begin
   Assert(ObsTypeIndex = 0);
-  result := StrToFloat(FSplitter[0]);
+  result := FortranStrToFloat(FSplitter[0]);
 end;
 
 { TSutraFluidSourceSinkOutputFile }
@@ -300,7 +329,7 @@ function TSutraFluidSourceSinkOutputFile.GetObsValue(ObsTypeIndex: integer
   ): double;
 begin
   Assert(ObsTypeIndex in [0..2]);
-  result := StrToFloat(FSplitter[ObsTypeIndex]);
+  result := FortranStrToFloat(FSplitter[ObsTypeIndex]);
 end;
 
 { TCustomNodeOutputFile }
@@ -393,7 +422,7 @@ begin
     if Pos('## TIME STEP', ALine) = 1 then
     begin
       FSplitter.DelimitedText := ALine;
-      ATime := StrToFloat(FSplitter[FSplitter.Count-2]);
+      ATime := FortranStrToFloat(FSplitter[FSplitter.Count-2]);
     end
     else if LineIsStartOfData(ALine) then
     begin
@@ -477,7 +506,7 @@ function TSutraSpecifiedPressureOutputFile.GetObsValue(ObsTypeIndex: integer
   ): double;
 begin
   Assert(ObsTypeIndex in [0..2]);
-  result := StrToFloat(FSplitter[ObsTypeIndex]);
+  result := FortranStrToFloat(FSplitter[ObsTypeIndex]);
   //if FSplitter[1] <> 'BCS' then
   //begin
   //  case ObsTypeIndex of
@@ -540,7 +569,7 @@ end;
 function TSutraLakeStageOutputFile.GetObsValue(ObsTypeIndex: integer): double;
 begin
   Assert(ObsTypeIndex = 0);
-  result := StrToFloat(FSplitter[1]);
+  result := FortranStrToFloat(FSplitter[1]);
 end;
 
 procedure TSutraLakeStageOutputFile.ExtractValues(ALine: string);
@@ -636,7 +665,7 @@ begin
     if Pos('## TIME STEP', ALine) = 1 then
     begin
       FSplitter.DelimitedText := ALine;
-      ATime := StrToFloat(FSplitter[FSplitter.Count-2]);
+      ATime := FortranStrToFloat(FSplitter[FSplitter.Count-2]);
     end
     else if Pos('##                                  Name', ALine) = 1 then
     begin
@@ -690,34 +719,34 @@ begin
           FSplitter.DelimitedText := CurrentLines[LineIndex];
           ObsNameRoot := UpperCase(FSplitter[NamePos]);
 
-          LocationID.APoint.X := StrToFloat(FSplitter[XPos]);
-          LocationID.APoint.Y := StrToFloat(FSplitter[YPos]);
+          LocationID.APoint.X := FortranStrToFloat(FSplitter[XPos]);
+          LocationID.APoint.Y := FortranStrToFloat(FSplitter[YPos]);
 
           ObsName := ObsNameRoot + '_P';
           AddKey;
-          Values[ObsIndex] := StrToFloat(FSplitter[PressurePos]);
+          Values[ObsIndex] := FortranStrToFloat(FSplitter[PressurePos]);
           Inc(ObsIndex);
 
           ObsName := ObsNameRoot + '_U';
           AddKey;
-          Values[ObsIndex] := StrToFloat(FSplitter[ConcTempPos]);
+          Values[ObsIndex] := FortranStrToFloat(FSplitter[ConcTempPos]);
           Inc(ObsIndex);
 
           ObsName := ObsNameRoot + '_S';
           AddKey;
-          Values[ObsIndex] := StrToFloat(FSplitter[SatPos]);
+          Values[ObsIndex] := FortranStrToFloat(FSplitter[SatPos]);
           Inc(ObsIndex);
 
           if FItemCount = 5 then
           begin
             ObsName := ObsNameRoot + '_LS';
             AddKey;
-            Values[ObsIndex] := StrToFloat(FSplitter[LiqSatPos]);
+            Values[ObsIndex] := FortranStrToFloat(FSplitter[LiqSatPos]);
             Inc(ObsIndex);
 
             ObsName := ObsNameRoot + '_IS';
             AddKey;
-            Values[ObsIndex] := StrToFloat(FSplitter[IceSatPos]);
+            Values[ObsIndex] := FortranStrToFloat(FSplitter[IceSatPos]);
             Inc(ObsIndex);
           end;
         end;

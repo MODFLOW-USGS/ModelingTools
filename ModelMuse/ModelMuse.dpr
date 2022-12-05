@@ -767,7 +767,8 @@ uses
   ModflowGwfGwtExchangeWriterUnit in 'ModflowGwfGwtExchangeWriterUnit.pas',
   ModflowFMI_WriterUnit in 'ModflowFMI_WriterUnit.pas',
   framePackageFmiUnit in 'framePackageFmiUnit.pas' {framePackageFmi: TFrame},
-  ModflowFmp4WriterUnit in 'ModflowFmp4WriterUnit.pas';
+  ModflowFmp4WriterUnit in 'ModflowFmp4WriterUnit.pas',
+  framePackageFmp4Unit in 'framePackageFmp4Unit.pas' {framePackageFmp4: TFrame};
 
 {$R *.res}
 

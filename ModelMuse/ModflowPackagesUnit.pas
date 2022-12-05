@@ -83,6 +83,14 @@ type
     FGwtCncPackage: TGwtCncPackage;
     FGwtSrcPackage: TGwtSrcPackage;
     FGwtProcess: TGwtProcess;
+    FFarmProcess4: TFarmProcess4;
+    FFarmSurfaceWater4: TFarmProcess4SurfaceWater;
+    FFarmSoil4: TFarmProcess4Soil;
+    FFarmAllotments: TFarmProcess4Allotments;
+    FFarmLandUse: TFarmLandUse;
+    FFarmSalinityFlush: TFarmSalinityFlush;
+    FFarmClimate4: TFarmProcess4Climate;
+    FFarmWells4: TFarmProcess4Wells;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -156,6 +164,14 @@ type
     procedure SetGwtCncPackage(const Value: TGwtCncPackage);
     procedure SetGwtSrcPackage(const Value: TGwtSrcPackage);
     procedure SetGwtProcess(const Value: TGwtProcess);
+    procedure SetFarmProcess4(const Value: TFarmProcess4);
+    procedure SetFarmAllotments(const Value: TFarmProcess4Allotments);
+    procedure SetFarmClimate4(const Value: TFarmProcess4Climate);
+    procedure SetFarmLandUse(const Value: TFarmLandUse);
+    procedure SetFarmSalinityFlush(const Value: TFarmSalinityFlush);
+    procedure SetFarmSoil4(const Value: TFarmProcess4Soil);
+    procedure SetFarmSurfaceWater4(const Value: TFarmProcess4SurfaceWater);
+    procedure SetFarmWells4(const Value: TFarmProcess4Wells);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -294,12 +310,61 @@ type
       write SetGwtSrcPackage;
     property GwtPackages: TGwtPackageCollection read FGwtPackages
       write SetGwtPackges;
+    property FarmProcess4: TFarmProcess4 read FFarmProcess4
+      write SetFarmProcess4
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property FarmSoil4: TFarmProcess4Soil read FFarmSoil4 write SetFarmSoil4
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property FarmClimate4: TFarmProcess4Climate read FFarmClimate4
+      write SetFarmClimate4
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property FarmSurfaceWater4: TFarmProcess4SurfaceWater
+      read FFarmSurfaceWater4 write SetFarmSurfaceWater4
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property FarmWells4: TFarmProcess4Wells read FFarmWells4
+      write SetFarmWells4
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property FarmAllotments: TFarmProcess4Allotments read FFarmAllotments
+      write SetFarmAllotments
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property FarmLandUse: TFarmLandUse read FFarmLandUse write SetFarmLandUse
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property FarmSalinityFlush: TFarmSalinityFlush read FFarmSalinityFlush
+      write SetFarmSalinityFlush
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
     // SelectedModflowPackageCount must be updated if the new package is a
     // MODFLOW package.
     // Sometimes Loaded must be updated too.
+    // New items normally have "stored False" enclosed within IFNDEFs until
+    // the new feature is ready for release.
   end;
 
 resourcestring
@@ -375,7 +440,7 @@ resourcestring
   'th Improved Nonlinear Control';
   StrSTRStreamPackage = 'STR: Stream package';
   StrSTOBStreamObserva = 'STOB: Stream Observation package';
-  StrFarmProcess = 'FMP: Farm Process';
+  StrFarmProcess = 'FMP: Farm Process V3';
   StrFarmProcessClassification = 'Farm process';
   StrCFPConduitFlowPr = 'CFP: Conduit Flow process';
   StrConduitFlowProcess = 'Conduit Flow process';
@@ -402,6 +467,16 @@ resourcestring
   StrCNCGWTConstantCo = 'CNC: GWT Constant Concentration Package';
   StrSRCGWTMassSource = 'SRC: GWT Mass Source Loading Package';
   StrGWTGroundwaterTra = 'GWT: Groundwater Transport Process';
+  StrFMPFarmProcessV4 = 'FMP: Farm Process V4';
+  StrSOILFarmProcessV = 'SOIL: Farm Process V4 Soil Options';
+  StrCLIMATEFarmProces = 'CLIMATE: Farm Process V4 Climate Options';
+  StrSURFACEWATERFarm = 'SURFACE_WATER: Farm Process V4 Surface Water Option' +
+  's';
+  StrSUPPLYWELLFarmPr = 'SUPPLY_WELL: Farm Process V4 Supply Well Options';
+  StrALLOTMENTSFarmPro = 'ALLOTMENTS: Farm Process V4 Allotment Options';
+  StrLANDUSEFarmProce = 'LAND_USE: Farm Process V4 Land Use Options';
+  StrSALINITYFLUSHIRRIG = 'SALINITY_FLUSH_IRRIGATION: Farm Process V4 Salini' +
+  'ty Flush Irrigation Options';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
@@ -487,6 +562,15 @@ begin
     GwtCncPackage := SourcePackages.GwtCncPackage;
     GwtSrcPackage := SourcePackages.GwtSrcPackage;
     GwtPackages := SourcePackages.GwtPackages;
+
+    FarmProcess4 := SourcePackages.FarmProcess4;
+    FarmSoil4 := SourcePackages.FarmSoil4;
+    FarmClimate4 := SourcePackages.FarmClimate4;
+    FarmSurfaceWater4 := SourcePackages.FarmSurfaceWater4;
+    FarmWells4 := SourcePackages.FarmWells4;
+    FarmAllotments := SourcePackages.FarmAllotments;
+    FarmLandUse := SourcePackages.FarmLandUse;
+    FarmSalinityFlush := SourcePackages.FarmSalinityFlush;
   end
   else
   begin
@@ -848,11 +932,61 @@ begin
   FGwtSrcPackage.Classification := StrGwtClassification;
   FGwtSrcPackage.SelectionType := stCheckBox;
 
-  FGwtPackages := TGwtPackageCollection.Create(Model)
+  FGwtPackages := TGwtPackageCollection.Create(Model);
+
+  FFarmProcess4 := TFarmProcess4.Create(Model);
+  FFarmProcess4.PackageIdentifier := StrFMPFarmProcessV4;
+  FFarmProcess4.Classification := StrFarmProcessClassification;
+  FFarmProcess4.SelectionType := stCheckBox;
+
+  FFarmSoil4 := TFarmProcess4Soil.Create(Model);
+  FFarmSoil4.PackageIdentifier := StrSOILFarmProcessV;
+  FFarmSoil4.Classification := StrFarmProcessClassification;
+  FFarmSoil4.SelectionType := stCheckBox;
+
+  FFarmClimate4 := TFarmProcess4Climate.Create(Model);
+  FFarmClimate4.PackageIdentifier := StrCLIMATEFarmProces;
+  FFarmClimate4.Classification := StrFarmProcessClassification;
+  FFarmClimate4.SelectionType := stCheckBox;
+
+  FFarmSurfaceWater4 := TFarmProcess4SurfaceWater.Create(Model);
+  FFarmSurfaceWater4.PackageIdentifier := StrSURFACEWATERFarm;
+  FFarmSurfaceWater4.Classification := StrFarmProcessClassification;
+  FFarmSurfaceWater4.SelectionType := stCheckBox;
+
+  FFarmWells4 := TFarmProcess4Wells.Create(Model);
+  FFarmWells4.PackageIdentifier := StrSUPPLYWELLFarmPr;
+  FFarmWells4.Classification := StrFarmProcessClassification;
+  FFarmWells4.SelectionType := stCheckBox;
+
+  FFarmAllotments := TFarmProcess4Allotments.Create(Model);
+  FFarmAllotments.PackageIdentifier := StrALLOTMENTSFarmPro;
+  FFarmAllotments.Classification := StrFarmProcessClassification;
+  FFarmAllotments.SelectionType := stCheckBox;
+
+  FFarmLandUse := TFarmLandUse.Create(Model);
+  FFarmLandUse.PackageIdentifier := StrLANDUSEFarmProce;
+  FFarmLandUse.Classification := StrFarmProcessClassification;
+  FFarmLandUse.SelectionType := stCheckBox;
+
+  FFarmSalinityFlush := TFarmSalinityFlush.Create(Model);
+  FFarmSalinityFlush.PackageIdentifier := StrSALINITYFLUSHIRRIG;
+  FFarmSalinityFlush.Classification := StrFarmProcessClassification;
+  FFarmSalinityFlush.SelectionType := stCheckBox;
+
 end;
 
 destructor TModflowPackages.Destroy;
 begin
+  FFarmSalinityFlush.Free;
+  FFarmLandUse.Free;
+  FFarmAllotments.Free;
+  FFarmWells4.Free;
+  FFarmSurfaceWater4.Free;
+  FFarmClimate4.Free;
+  FFarmSoil4.Free;
+  FFarmProcess4.Free;
+
   FGwtPackages.Free;
   FGwtSrcPackage.Free;
   FGwtCncPackage.Free;
@@ -1009,6 +1143,16 @@ begin
   GwtAdvectionPackage.InitializeVariables;
   GwtCncPackage.InitializeVariables;
   GwtSrcPackage.InitializeVariables;
+
+  FarmProcess4.InitializeVariables;
+  FarmSoil4.InitializeVariables;
+  FarmClimate4.InitializeVariables;
+  FarmSurfaceWater4.InitializeVariables;
+  FarmWells4.InitializeVariables;
+  FarmAllotments.InitializeVariables;
+  FarmLandUse.InitializeVariables;
+  FarmSalinityFlush.InitializeVariables;
+
 end;
 
 
@@ -1180,15 +1324,17 @@ begin
 //    Inc(Result);
 //  end;
 
-          {$IFDEF OWHMV2}
-          // fix this
-          Assert(False);
-          {$ENDIF}
-
   if FarmProcess.IsSelected and (Model.ModelSelection = msModflowFmp) then
   begin
     Inc(Result);
   end;
+
+  {$IFDEF OWHMV2}
+  if FarmProcess4.IsSelected and (Model.ModelSelection = msModflowOwhm2) then
+  begin
+    Inc(Result);
+  end;
+  {$ENDIF}
 
   if RipPackage.IsSelected and (Model.ModelSelection in [msModflowFmp
           {$IFDEF OWHMV2}
@@ -1357,9 +1503,52 @@ begin
   FEvtPackage.Assign(Value);
 end;
 
+procedure TModflowPackages.SetFarmAllotments(
+  const Value: TFarmProcess4Allotments);
+begin
+  FFarmAllotments.Assign(Value);
+end;
+
+procedure TModflowPackages.SetFarmClimate4(const Value: TFarmProcess4Climate);
+begin
+  FFarmClimate4.Assign(Value);
+end;
+
+procedure TModflowPackages.SetFarmLandUse(const Value: TFarmLandUse);
+begin
+  FFarmLandUse.Assign(Value);
+end;
+
 procedure TModflowPackages.SetFarmProcess(const Value: TFarmProcess);
 begin
   FFarmProcess.Assign(Value);
+end;
+
+procedure TModflowPackages.SetFarmProcess4(const Value: TFarmProcess4);
+begin
+  FFarmProcess4.Assign(Value);
+end;
+
+procedure TModflowPackages.SetFarmSalinityFlush(
+  const Value: TFarmSalinityFlush);
+begin
+  FFarmSalinityFlush.Assign(Value);
+end;
+
+procedure TModflowPackages.SetFarmSoil4(const Value: TFarmProcess4Soil);
+begin
+  FFarmSoil4.Assign(Value);
+end;
+
+procedure TModflowPackages.SetFarmSurfaceWater4(
+  const Value: TFarmProcess4SurfaceWater);
+begin
+  FFarmSurfaceWater4.Assign(Value);
+end;
+
+procedure TModflowPackages.SetFarmWells4(const Value: TFarmProcess4Wells);
+begin
+  FFarmWells4.Assign(Value);
 end;
 
 procedure TModflowPackages.SetFhbPackage(const Value: TFhbPackageSelection);

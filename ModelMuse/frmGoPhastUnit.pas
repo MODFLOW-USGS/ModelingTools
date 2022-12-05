@@ -551,6 +551,7 @@ type
     miSutra40Active: TMenuItem;
     acModflowOwhmV2: TAction;
     acRunModflowOWHM_V2: TAction;
+    MODFLOWOWHMV21: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);

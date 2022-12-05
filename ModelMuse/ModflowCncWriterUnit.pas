@@ -227,6 +227,7 @@ procedure TCustomSimpleGwtBoundaryWriter.WriteFileInternal;
 begin
   OpenFile(FNameOfFile);
   try
+    WriteTemplateHeader;
     WriteDataSet0;
     PrintOptions;
     PrintDimensions;

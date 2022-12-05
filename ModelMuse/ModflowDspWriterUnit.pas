@@ -87,6 +87,7 @@ procedure TModflowDspWriter.WriteFileInternal;
 begin
   OpenFile(FNameOfFile);
   try
+    WriteTemplateHeader;
     WriteDataSet0;
     WriteOptions;
     WriteGridData;
