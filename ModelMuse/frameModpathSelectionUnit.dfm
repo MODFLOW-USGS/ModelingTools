@@ -26,65 +26,65 @@ inherited frameModpathSelection: TframeModpathSelection
       object lblTrackingDirection: TLabel
         Left = 387
         Top = 249
-        Width = 177
-        Height = 13
+        Width = 197
+        Height = 15
         Caption = 'Tracking direction (TrackingDirection)'
       end
       object lblWeakSinkTreatment: TLabel
         Left = 3
         Top = 249
-        Width = 206
-        Height = 13
+        Width = 225
+        Height = 15
         Caption = 'Treatment of weak sinks (WeakSinkOption)'
       end
       object lblWeakSinkThreshold: TLabel
         Left = 89
         Top = 314
-        Width = 144
-        Height = 13
+        Width = 159
+        Height = 15
         Caption = 'Weak sink fractional threshold'
       end
       object lblStopZone: TLabel
         Left = 105
         Top = 166
-        Width = 202
-        Height = 13
+        Width = 224
+        Height = 15
         Caption = 'Zone in which to stop particles (StopZone)'
       end
       object lblWhichEndpoints: TLabel
         Left = 3
         Top = 191
-        Width = 179
-        Height = 13
+        Width = 200
+        Height = 15
         Caption = 'Which endpoints should be recorded?'
       end
       object lblReferenceTime: TLabel
         Left = 387
         Top = 174
-        Width = 93
-        Height = 39
+        Width = 86
+        Height = 45
         Caption = 'Reference time for simulation (ReferenceTime)'
         WordWrap = True
       end
       object lblEvtSink: TLabel
         Left = 154
         Top = 56
-        Width = 202
-        Height = 13
+        Width = 215
+        Height = 15
         Caption = 'Treatment of evapotranspiration (IEVTTP)'
       end
       object lblRchSource: TLabel
         Left = 154
         Top = 94
-        Width = 157
-        Height = 13
+        Width = 167
+        Height = 15
         Caption = 'Treatment of recharge (IRCHTP)'
       end
       object comboTrackingDirection: TJvImageComboBox
         Left = 387
         Top = 272
         Width = 160
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -92,7 +92,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 9
         OnChange = comboTrackingDirectionChange
@@ -112,7 +112,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 3
         Top = 272
         Width = 350
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -120,7 +120,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 8
         OnChange = comboWeakSinkTreatmentChange
@@ -181,7 +181,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 3
         Top = 215
         Width = 350
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -189,7 +189,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 6
         Items = <
@@ -255,7 +255,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 3
         Top = 52
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -263,7 +263,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 2
         Items = <
@@ -282,7 +282,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 3
         Top = 90
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -290,7 +290,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 3
         Items = <
@@ -309,29 +309,25 @@ inherited frameModpathSelection: TframeModpathSelection
     object tabVersion5Options: TTabSheet
       Caption = 'Version 5 options'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblBeginningTime: TLabel
         Left = 154
         Top = 159
-        Width = 190
-        Height = 13
+        Width = 215
+        Height = 15
         Caption = 'Beginning time (BeginPeriod  BeginStep)'
       end
       object lblEndingTime: TLabel
         Left = 154
         Top = 193
-        Width = 160
-        Height = 13
+        Width = 178
+        Height = 15
         Caption = 'Ending time (EndPeriod  EndStep)'
       end
       object lblMaxSize: TLabel
         Left = 154
         Top = 231
-        Width = 132
-        Height = 65
+        Width = 129
+        Height = 90
         Caption = 
           'Maximum size of composite budget file (MAXSIZ)'#13#10'(0 = use default' +
           ' value in MODPATH = 15,000,000 bytes)'
@@ -340,22 +336,22 @@ inherited frameModpathSelection: TframeModpathSelection
       object lblErrorTolerance: TLabel
         Left = 323
         Top = 3
-        Width = 72
-        Height = 13
+        Width = 77
+        Height = 15
         Caption = 'Error tolerance'
       end
       object lblMaxTime: TLabel
         Left = 323
         Top = 108
-        Width = 108
-        Height = 13
+        Width = 128
+        Height = 15
         Caption = 'Maximum tracking time'
       end
       object lblReleaseTime: TLabel
         Left = 323
         Top = 56
-        Width = 164
-        Height = 13
+        Width = 179
+        Height = 15
         Caption = 'Release time (backwards tracking)'
       end
       object cbCompact: TCheckBox
@@ -499,100 +495,96 @@ inherited frameModpathSelection: TframeModpathSelection
     object tsVersion6Options: TTabSheet
       Caption = 'Version 6 && 7 options'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblWeakSource: TLabel
         Left = 3
         Top = 7
-        Width = 234
-        Height = 13
+        Width = 253
+        Height = 15
         Caption = 'Treatment of weak sources (WeakSourceOption)'
       end
       object lblStopOption: TLabel
         Left = 3
         Top = 63
-        Width = 218
-        Height = 13
+        Width = 243
+        Height = 15
         Caption = 'How partcle tracking terminated (StopOption)'
       end
       object lblStopTime: TLabel
         Left = 89
         Top = 122
-        Width = 163
-        Height = 13
+        Width = 189
+        Height = 15
         Caption = 'Maximum tracking time (StopTime)'
       end
       object lblBudget: TLabel
         Left = 3
         Top = 147
-        Width = 189
-        Height = 13
+        Width = 213
+        Height = 15
         Caption = 'Budget checking (BudgetOutputOption)'
       end
       object lblTraceID: TLabel
         Left = 89
         Top = 206
-        Width = 124
-        Height = 13
+        Width = 131
+        Height = 15
         Caption = 'Particle to track (TraceID)'
       end
       object lblAdvObs: TLabel
         Left = 0
         Top = 254
-        Width = 152
-        Height = 26
+        Width = 166
+        Height = 30
         Caption = 'Advection observations (AdvectiveObservationsOption)'
         WordWrap = True
       end
       object lblUzfIface: TLabel
         Left = 379
         Top = 63
-        Width = 113
-        Height = 13
+        Width = 122
+        Height = 15
         Caption = 'Treatment of UZF flows'
       end
       object lblMnw2Iface: TLabel
         Left = 379
         Top = 111
-        Width = 125
-        Height = 13
+        Width = 138
+        Height = 15
         Caption = 'Treatment of MNW2 flows'
       end
       object lblResIface: TLabel
         Left = 379
         Top = 167
-        Width = 140
-        Height = 13
+        Width = 149
+        Height = 15
         Caption = 'Treatment of Reservoir flows'
       end
       object lblSfrIface: TLabel
         Left = 379
         Top = 223
-        Width = 113
-        Height = 13
+        Width = 120
+        Height = 15
         Caption = 'Treatment of SFR flows'
       end
       object lblEtsIface: TLabel
         Left = 379
         Top = 7
-        Width = 112
-        Height = 13
+        Width = 119
+        Height = 15
         Caption = 'Treatment of ETS flows'
       end
       object lblLakIface: TLabel
         Left = 379
         Top = 276
-        Width = 116
-        Height = 13
+        Width = 125
+        Height = 15
         Caption = 'Treatment of Lake flows'
       end
       object comboWeakSource: TJvImageComboBox
         Left = 3
         Top = 29
         Width = 148
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -600,7 +592,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 0
         Items = <
@@ -619,7 +611,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 3
         Top = 82
         Width = 350
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -627,7 +619,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 2
         OnChange = comboStopOptionChange
@@ -666,7 +658,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 3
         Top = 166
         Width = 350
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -674,7 +666,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 6
         OnChange = comboBudgetChange
@@ -728,7 +720,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 3
         Top = 302
         Width = 353
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -736,7 +728,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 12
         OnChange = comboStopOptionChange
@@ -761,7 +753,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 379
         Top = 82
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -769,7 +761,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 3
         Items = <
@@ -788,7 +780,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 379
         Top = 131
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -796,7 +788,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 5
         Items = <
@@ -815,7 +807,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 379
         Top = 186
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -823,7 +815,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 7
         Items = <
@@ -842,7 +834,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 379
         Top = 243
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -850,7 +842,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 10
         Items = <
@@ -869,7 +861,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 379
         Top = 29
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -877,7 +869,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 1
         Items = <
@@ -896,7 +888,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 379
         Top = 295
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -904,7 +896,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 11
         Items = <
@@ -923,29 +915,25 @@ inherited frameModpathSelection: TframeModpathSelection
     object tabOutputTimes: TTabSheet
       Caption = 'Output times'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblTimeMethod: TLabel
         Left = 3
         Top = 14
-        Width = 217
-        Height = 13
+        Width = 247
+        Height = 15
         Caption = 'Method of specifying times (TimePointOption)'
       end
       object lblParticleInterval: TLabel
         Left = 3
         Top = 70
-        Width = 233
-        Height = 13
+        Width = 255
+        Height = 15
         Caption = 'Time interval for output (ReleaseTimeIncrement)'
       end
       object lblMaxTimes: TLabel
         Left = 3
         Top = 122
-        Width = 99
-        Height = 39
+        Width = 95
+        Height = 60
         Caption = 'Maximum number of times allowed (TimePointCount)'
         WordWrap = True
       end
@@ -959,8 +947,8 @@ inherited frameModpathSelection: TframeModpathSelection
         object lblTimeCount: TLabel
           Left = 66
           Top = 179
-          Width = 83
-          Height = 26
+          Width = 95
+          Height = 30
           Caption = 'Number of times (TimePointCount)'
           WordWrap = True
         end
@@ -1059,10 +1047,12 @@ inherited frameModpathSelection: TframeModpathSelection
           SelectedRowOrColumnColor = clAqua
           UnselectableColor = clBtnFace
           OnBeforeDrawCell = rdgTimesBeforeDrawCell
+          OnEndUpdate = rdgTimesEndUpdate
           ColorRangeSelection = True
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1086,6 +1076,7 @@ inherited frameModpathSelection: TframeModpathSelection
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1107,7 +1098,6 @@ inherited frameModpathSelection: TframeModpathSelection
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = rdgTimesEndUpdate
           WordWrapRowCaptions = False
           RowHeights = (
             24
@@ -1129,7 +1119,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Left = 3
         Top = 32
         Width = 200
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -1137,7 +1127,7 @@ inherited frameModpathSelection: TframeModpathSelection
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 1
         OnChange = comboTimeMethodChange

@@ -39,6 +39,7 @@ inherited framePackageLpf: TframePackageLpf
     Columns = <
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

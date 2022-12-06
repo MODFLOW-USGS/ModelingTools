@@ -22,8 +22,8 @@ object frameModpathParticles: TframeModpathParticles
     object lblTimeCount: TLabel
       Left = 468
       Top = 245
-      Width = 29
-      Height = 13
+      Width = 33
+      Height = 15
       Caption = 'Count'
     end
     object sbAddTime: TSpeedButton
@@ -107,8 +107,8 @@ object frameModpathParticles: TframeModpathParticles
     object lblMessage: TLabel
       Left = 16
       Top = 136
-      Width = 108
-      Height = 52
+      Width = 105
+      Height = 60
       Caption = 
         'Image hidden because your computer may not be able to display it' +
         '.'
@@ -157,7 +157,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 64
           Top = 101
           Width = 47
-          Height = 52
+          Height = 60
           Caption = 'Number of rows in X direction'
           WordWrap = True
         end
@@ -165,7 +165,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 64
           Top = 136
           Width = 47
-          Height = 52
+          Height = 60
           Caption = 'Number of rows in Y direction'
           WordWrap = True
         end
@@ -173,7 +173,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 64
           Top = 171
           Width = 47
-          Height = 52
+          Height = 60
           Caption = 'Number of rows in Z direction'
           WordWrap = True
         end
@@ -278,24 +278,24 @@ object frameModpathParticles: TframeModpathParticles
         object lblCylParticleCount: TLabel
           Left = 72
           Top = 90
-          Width = 96
-          Height = 26
+          Width = 88
+          Height = 45
           Caption = 'Number of particles around cylinder'
           WordWrap = True
         end
         object lblClylLayerCount: TLabel
           Left = 72
           Top = 125
-          Width = 98
-          Height = 26
+          Width = 94
+          Height = 30
           Caption = 'Number of layers of particles'
           WordWrap = True
         end
         object lblCylRadius: TLabel
           Left = 72
           Top = 160
-          Width = 71
-          Height = 13
+          Width = 79
+          Height = 15
           Caption = 'Cylinder radius'
         end
         object rgCylinderOrientation: TRadioGroup
@@ -355,24 +355,24 @@ object frameModpathParticles: TframeModpathParticles
         object lblSpherParticleCount: TLabel
           Left = 72
           Top = 90
-          Width = 96
-          Height = 26
+          Width = 88
+          Height = 45
           Caption = 'Number of particles around sphere '
           WordWrap = True
         end
         object lblSpherelLayerCount: TLabel
           Left = 72
           Top = 125
-          Width = 98
-          Height = 26
+          Width = 94
+          Height = 30
           Caption = 'Number of layers of particles'
           WordWrap = True
         end
         object lblSphereRadius: TLabel
           Left = 72
           Top = 160
-          Width = 66
-          Height = 13
+          Width = 71
+          Height = 15
           Caption = 'Sphere radius'
         end
         object rgSphereOrientation: TRadioGroup
@@ -451,10 +451,12 @@ object frameModpathParticles: TframeModpathParticles
           AutoIncreaseRowCount = True
           SelectedRowOrColumnColor = clAqua
           UnselectableColor = clBtnFace
+          OnEndUpdate = rdgSpecificEndUpdate
           ColorRangeSelection = False
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -478,6 +480,7 @@ object frameModpathParticles: TframeModpathParticles
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -502,6 +505,7 @@ object frameModpathParticles: TframeModpathParticles
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -526,6 +530,7 @@ object frameModpathParticles: TframeModpathParticles
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -548,7 +553,6 @@ object frameModpathParticles: TframeModpathParticles
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = rdgSpecificEndUpdate
           WordWrapRowCaptions = False
         end
         object pnlBottom: TPanel
@@ -564,8 +568,8 @@ object frameModpathParticles: TframeModpathParticles
           object lblCount: TLabel
             Left = 71
             Top = 14
-            Width = 29
-            Height = 13
+            Width = 33
+            Height = 15
             Caption = 'Count'
           end
           object sbDeleteRow: TSpeedButton
@@ -694,10 +698,12 @@ object frameModpathParticles: TframeModpathParticles
       AutoIncreaseRowCount = True
       SelectedRowOrColumnColor = clAqua
       UnselectableColor = clBtnFace
+      OnEndUpdate = rdgReleaseTimesEndUpdate
       ColorRangeSelection = False
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -721,6 +727,7 @@ object frameModpathParticles: TframeModpathParticles
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -742,7 +749,6 @@ object frameModpathParticles: TframeModpathParticles
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      OnEndUpdate = rdgReleaseTimesEndUpdate
       WordWrapRowCaptions = False
     end
   end

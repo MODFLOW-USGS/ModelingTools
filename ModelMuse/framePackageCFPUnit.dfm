@@ -19,67 +19,63 @@ inherited framePackageCFP: TframePackageCFP
     Height = 379
     ActivePage = tabCFP
     Align = alBottom
-    TabOrder = 2
+    TabOrder = 1
     object tabCFP: TTabSheet
       Caption = 'CFP'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblLayerTemperature: TLabel
         Left = 163
         Top = 320
-        Width = 235
-        Height = 13
+        Width = 252
+        Height = 15
         Caption = 'Temperature of water in layers (Celsius) (LTEMP)'
       end
       object lblRelaxationParameter: TLabel
         Left = 163
         Top = 269
-        Width = 146
-        Height = 13
+        Width = 157
+        Height = 15
         Caption = 'Relaxation parameter (RELAX)'
       end
       object lblMaxIterations: TLabel
         Left = 163
         Top = 242
-        Width = 185
-        Height = 13
+        Width = 208
+        Height = 15
         Caption = 'Maximum number of iterations (NITER)'
       end
       object lblEpsilon: TLabel
         Left = 163
         Top = 214
-        Width = 180
-        Height = 13
+        Width = 198
+        Height = 15
         Caption = 'Pipe convergence criterion (EPSILON)'
       end
       object lblPipeExchange: TLabel
         Left = 12
         Top = 163
-        Width = 268
-        Height = 13
+        Width = 295
+        Height = 15
         Caption = 'Method used to specify pipe exchange (SA_EXCHANGE)'
       end
       object lblPipeElevationOffset: TLabel
         Left = 163
         Top = 133
-        Width = 173
-        Height = 13
+        Width = 188
+        Height = 15
         Caption = 'Node elevation offset (GEOHEIGHT)'
       end
       object lblElevationChoice: TLabel
         Left = 12
         Top = 82
-        Width = 251
-        Height = 13
+        Width = 276
+        Height = 15
         Caption = 'Method used to specify pipe elevation (GEOHEIGHT)'
       end
       object lblConduitTemperature: TLabel
         Left = 163
         Top = 52
-        Width = 272
-        Height = 13
+        Width = 292
+        Height = 15
         Caption = 'Temperature of water in pipes (Celsius) (TEMPERATURE)'
       end
       object cbPipes: TCheckBox
@@ -159,7 +155,7 @@ inherited framePackageCFP: TframePackageCFP
         Left = 12
         Top = 182
         Width = 361
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -167,7 +163,7 @@ inherited framePackageCFP: TframePackageCFP
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 5
         OnChange = comboElevationChoiceChange
@@ -200,7 +196,7 @@ inherited framePackageCFP: TframePackageCFP
         Left = 12
         Top = 101
         Width = 361
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -208,7 +204,7 @@ inherited framePackageCFP: TframePackageCFP
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 3
         OnChange = comboElevationChoiceChange
@@ -253,15 +249,11 @@ inherited framePackageCFP: TframePackageCFP
     object tabCRCH_COC: TTabSheet
       Caption = 'CRCH, COC'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblOutputInterval: TLabel
         Left = 12
         Top = 34
-        Width = 267
-        Height = 13
+        Width = 289
+        Height = 15
         Caption = 'Output interval for nodes and conduits (N_NTS, T_NTS)'
       end
       object cbConduitRecharge: TCheckBox

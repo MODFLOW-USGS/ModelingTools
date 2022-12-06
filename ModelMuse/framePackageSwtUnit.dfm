@@ -24,29 +24,28 @@ inherited framePackageSwt: TframePackageSwt
     TabOrder = 1
     object tabControls: TTabSheet
       Caption = 'Controls'
-      ExplicitLeft = 8
       DesignSize = (
         587
-        375)
+        373)
       object lblIvoid: TLabel
         Left = 12
         Top = 103
-        Width = 151
-        Height = 13
+        Width = 161
+        Height = 15
         Caption = 'Treatment of void ratio (IVOID)'
       end
       object lblIstpcs: TLabel
         Left = 12
         Top = 162
-        Width = 259
-        Height = 13
+        Width = 284
+        Height = 15
         Caption = 'Method of specifying preconsolidation stress (ISTPCS)'
       end
       object lblIcrcc: TLabel
         Left = 12
         Top = 221
-        Width = 333
-        Height = 13
+        Width = 373
+        Height = 15
         Caption = 
           'Method of specifying recompression and compression indices (ICRC' +
           'C)'
@@ -54,8 +53,8 @@ inherited framePackageSwt: TframePackageSwt
       object lblOutputChoice: TLabel
         Left = 12
         Top = 284
-        Width = 98
-        Height = 13
+        Width = 110
+        Height = 15
         Caption = 'Binary output choice'
       end
       object gbIthk: TGroupBox
@@ -97,7 +96,7 @@ inherited framePackageSwt: TframePackageSwt
         Left = 12
         Top = 308
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -105,7 +104,7 @@ inherited framePackageSwt: TframePackageSwt
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 4
         Items = <
@@ -124,7 +123,7 @@ inherited framePackageSwt: TframePackageSwt
         Left = 12
         Top = 122
         Width = 561
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -132,7 +131,7 @@ inherited framePackageSwt: TframePackageSwt
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 1
         Items = <
@@ -151,7 +150,7 @@ inherited framePackageSwt: TframePackageSwt
         Left = 12
         Top = 184
         Width = 561
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -159,7 +158,7 @@ inherited framePackageSwt: TframePackageSwt
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 2
         Items = <
@@ -178,7 +177,7 @@ inherited framePackageSwt: TframePackageSwt
         Left = 12
         Top = 247
         Width = 561
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -186,7 +185,7 @@ inherited framePackageSwt: TframePackageSwt
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 3
         Items = <
@@ -209,7 +208,7 @@ inherited framePackageSwt: TframePackageSwt
       ImageIndex = 1
       DesignSize = (
         587
-        375)
+        373)
       object sbAdd: TSpeedButton
         Left = 495
         Top = 335
@@ -296,8 +295,8 @@ inherited framePackageSwt: TframePackageSwt
       object lblNumExportPeriods: TLabel
         Left = 75
         Top = 338
-        Width = 123
-        Height = 13
+        Width = 137
+        Height = 15
         Anchors = [akLeft, akBottom]
         Caption = 'Number of export periods'
       end
@@ -324,6 +323,7 @@ inherited framePackageSwt: TframePackageSwt
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -348,6 +348,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -371,6 +372,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -429,11 +431,13 @@ inherited framePackageSwt: TframePackageSwt
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
         OnColSize = rdgOutputColSize
+        OnEndUpdate = rdgOutputEndUpdate
         ColorRangeSelection = False
         OnHorizontalScroll = rdgOutputHorizontalScroll
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -457,6 +461,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -480,6 +485,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -516,6 +522,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -539,6 +546,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -562,6 +570,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -585,6 +594,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -608,6 +618,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -631,6 +642,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -654,6 +666,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -677,6 +690,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -700,6 +714,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -723,6 +738,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -746,6 +762,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -769,6 +786,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -792,6 +810,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -815,6 +834,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -838,6 +858,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -861,6 +882,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -884,6 +906,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -907,6 +930,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -930,6 +954,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -953,6 +978,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -976,6 +1002,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -999,6 +1026,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1022,6 +1050,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1045,6 +1074,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1068,6 +1098,7 @@ inherited framePackageSwt: TframePackageSwt
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1089,7 +1120,6 @@ inherited framePackageSwt: TframePackageSwt
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        OnEndUpdate = rdgOutputEndUpdate
         WordWrapRowCaptions = False
       end
       object seNumExportPeriods: TJvSpinEdit
@@ -1108,7 +1138,7 @@ inherited framePackageSwt: TframePackageSwt
         Left = 3
         Top = 170
         Width = 89
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -1116,7 +1146,7 @@ inherited framePackageSwt: TframePackageSwt
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 1
         OnChange = comboMultiFomatChange

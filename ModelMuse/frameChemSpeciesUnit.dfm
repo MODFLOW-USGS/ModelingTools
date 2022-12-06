@@ -128,7 +128,6 @@ object frameChemSpecies: TframeChemSpecies
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 1
       ExplicitWidth = 387
       ExplicitHeight = 439
     end
@@ -152,12 +151,15 @@ object frameChemSpecies: TframeChemSpecies
       ExplicitWidth = 248
       inherited sbAdd: TSpeedButton
         Left = 123
+        ExplicitLeft = 123
       end
       inherited sbInsert: TSpeedButton
         Left = 147
+        ExplicitLeft = 147
       end
       inherited sbDelete: TSpeedButton
         Left = 171
+        ExplicitLeft = 171
       end
       inherited seNumber: TJvSpinEdit
         Height = 28
@@ -245,8 +247,6 @@ object frameChemSpecies: TframeChemSpecies
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = -1
-      ExplicitTop = 3
       ExplicitWidth = 248
       ExplicitHeight = 439
     end

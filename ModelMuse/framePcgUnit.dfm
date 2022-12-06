@@ -16,8 +16,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 138
-    Width = 245
-    Height = 16
+    Width = 222
+    Height = 15
     Margins.Top = 6
     Anchors = [akLeft, akBottom]
     Caption = 'Max. number of outer iterations (MXITER):'
@@ -26,8 +26,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 166
-    Width = 233
-    Height = 16
+    Width = 209
+    Height = 15
     Margins.Top = 6
     Anchors = [akLeft, akBottom]
     Caption = 'Max. number of inner iterations (ITER1):'
@@ -36,8 +36,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 194
-    Width = 240
-    Height = 16
+    Width = 231
+    Height = 15
     Margins.Top = 7
     Anchors = [akLeft, akBottom]
     Caption = 'Matrix preconditioning method (NPCOND):'
@@ -46,8 +46,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 314
-    Width = 211
-    Height = 16
+    Width = 192
+    Height = 15
     Margins.Top = 6
     Anchors = [akLeft, akBottom]
     Caption = 'Max. abs. change in head (HCLOSE):'
@@ -56,8 +56,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 342
-    Width = 169
-    Height = 16
+    Width = 150
+    Height = 15
     Margins.Top = 6
     Anchors = [akLeft, akBottom]
     Caption = 'Max. abs. residual (RCLOSE):'
@@ -66,8 +66,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 370
-    Width = 179
-    Height = 16
+    Width = 160
+    Height = 15
     Margins.Top = 6
     Anchors = [akLeft, akBottom]
     Caption = 'Relaxation parameter (RELAX):'
@@ -76,8 +76,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 398
-    Width = 263
-    Height = 16
+    Width = 245
+    Height = 15
     Margins.Top = 7
     Anchors = [akLeft, akBottom]
     Caption = 'Upper bound of the max. eigenvalue (NBPOL):'
@@ -86,8 +86,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 425
-    Width = 151
-    Height = 16
+    Width = 139
+    Height = 15
     Margins.Top = 6
     Anchors = [akLeft, akBottom]
     Caption = 'Printout interval (IPRPCG):'
@@ -96,8 +96,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 453
-    Width = 154
-    Height = 16
+    Width = 145
+    Height = 15
     Margins.Top = 7
     Anchors = [akLeft, akBottom]
     Caption = 'Printing control (MUTPCG):'
@@ -106,8 +106,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 480
-    Width = 162
-    Height = 16
+    Width = 154
+    Height = 15
     Margins.Top = 6
     Anchors = [akLeft, akBottom]
     Caption = 'Damping factor (DAMPPCG):'
@@ -116,8 +116,8 @@ inherited framePCG: TframePCG
     AlignWithMargins = True
     Left = 13
     Top = 508
-    Width = 227
-    Height = 16
+    Width = 209
+    Height = 15
     Margins.Top = 6
     Anchors = [akLeft, akBottom]
     Caption = 'Transient damping factor (DAMPPCGT):'
@@ -179,7 +179,7 @@ inherited framePCG: TframePCG
     Left = 343
     Top = 191
     Width = 254
-    Height = 24
+    Height = 23
     Hint = 
       'NPCOND = 2 is rarely used because it is generally slower than NP' +
       'COND = 1.'
@@ -280,7 +280,7 @@ inherited framePCG: TframePCG
     Left = 343
     Top = 395
     Width = 254
-    Height = 24
+    Height = 23
     Hint = 
       'In many cases you can speed up execution time slightly by settin' +
       'g NBPOL=2.  The estimated value is usually close to 2 and the nu' +
@@ -335,7 +335,7 @@ inherited framePCG: TframePCG
     Left = 343
     Top = 450
     Width = 254
-    Height = 24
+    Height = 23
     Hint = 'MUTPCG controls the information that is to be printed.'
     HelpContext = 990
     Style = csDropDownList

@@ -36,6 +36,7 @@ inherited frameSutraObservations: TframeSutraObservations
       Height = 40
       ColCount = 1
       OnSetEditText = rdgSutraFeatureSetEditText
+      OnEndUpdate = rdgSutraFeatureEndUpdate
       Columns = <
         item
           AutoAdjustRowHeights = True
@@ -61,9 +62,6 @@ inherited frameSutraObservations: TframeSutraObservations
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      OnEndUpdate = rdgSutraFeatureEndUpdate
-      ExplicitLeft = 0
-      ExplicitTop = 2
       ExplicitWidth = 345
       ExplicitHeight = 40
       ColWidths = (
@@ -80,22 +78,22 @@ inherited frameSutraObservations: TframeSutraObservations
       347
       193)
     inherited lblSchedule: TLabel
-      Width = 94
+      Width = 104
       Caption = 'Schedule (OBSSCH)'
-      ExplicitWidth = 94
+      ExplicitWidth = 104
     end
     object lblObservationFormat: TLabel [1]
       Left = 5
       Top = 131
-      Width = 145
-      Height = 13
+      Width = 159
+      Height = 15
       Caption = 'Observation format (OBSFMT)'
     end
     object lblName: TLabel [2]
       Left = 5
       Top = 30
-      Width = 80
-      Height = 13
+      Width = 93
+      Height = 15
       Caption = 'Name (OBSNAM)'
     end
     inherited pnlCaption: TPanel
@@ -111,7 +109,7 @@ inherited frameSutraObservations: TframeSutraObservations
       Left = 5
       Top = 151
       Width = 333
-      Height = 21
+      Height = 23
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 3

@@ -10,15 +10,15 @@ inherited frameScreenObjectFhbFlow: TframeScreenObjectFhbFlow
     object lblConductanceInterpretation: TLabel [1]
       Left = 8
       Top = 51
-      Width = 114
-      Height = 13
+      Width = 123
+      Height = 15
       Caption = 'Flow rate interpretation'
     end
     object comboFormulaInterp: TComboBox
       Left = 174
       Top = 48
       Width = 145
-      Height = 21
+      Height = 23
       Style = csDropDownList
       TabOrder = 3
       OnChange = comboFormulaInterpChange

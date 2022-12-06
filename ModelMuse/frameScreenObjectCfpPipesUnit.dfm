@@ -57,8 +57,8 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 147
-    EditLabel.Height = 20
+    EditLabel.Width = 114
+    EditLabel.Height = 15
     EditLabel.Caption = 'Diameter (DIAMETER)'
     TabOrder = 2
     Text = ''
@@ -70,8 +70,8 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 162
-    EditLabel.Height = 20
+    EditLabel.Width = 128
+    EditLabel.Height = 15
     EditLabel.Caption = 'Tortuosity (TORTUOSITY)'
     TabOrder = 4
     Text = ''
@@ -83,8 +83,8 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 192
-    EditLabel.Height = 20
+    EditLabel.Width = 154
+    EditLabel.Height = 15
     EditLabel.Caption = 'Roughness height (RHEIGHT)'
     TabOrder = 6
     Text = ''
@@ -96,8 +96,8 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 442
-    EditLabel.Height = 20
+    EditLabel.Width = 356
+    EditLabel.Height = 15
     EditLabel.Caption = 
       'Lower critical Reynolds number (turbulent to laminar) (LCRITREY_' +
       'P)'
@@ -111,8 +111,8 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 448
-    EditLabel.Height = 20
+    EditLabel.Width = 359
+    EditLabel.Height = 15
     EditLabel.Caption = 
       'Higher critical Reynolds number (laminar to turbulent) (TCRITREY' +
       '_P)'
@@ -135,8 +135,8 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 297
-    EditLabel.Height = 20
+    EditLabel.Width = 238
+    EditLabel.Height = 15
     EditLabel.Caption = 'Conductance or permeability (K_EXCHANGE)'
     TabOrder = 12
     Text = ''
@@ -157,8 +157,8 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Width = 300
     Height = 24
     Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 182
-    EditLabel.Height = 20
+    EditLabel.Width = 143
+    EditLabel.Height = 15
     EditLabel.Caption = 'Pipe elevation (ELEVATION)'
     TabOrder = 14
     Text = ''

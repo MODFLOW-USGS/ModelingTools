@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T12:03:28.753-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-06T08:26:07.006-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>OPTIONS</title>
   <body>
     <header>
@@ -31,7 +31,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal">Calls FMP FM routine before budget calculation</para>
-          <para styleclass="Normal">Allows non-routed deliveries (NRD) to have the well field option, which simulates aquifer storage and recovery. RECOMP_Q_BD Forces the FMP to re-run its land-use calculations after model time step has completed. This keyword use is not recommended.</para>
+          <para styleclass="Normal">Forces the FMP to re-run its land-use calculations after model time step has completed. This keyword use is not recommended.</para>
         </td>
       </tr>
     </table></para>

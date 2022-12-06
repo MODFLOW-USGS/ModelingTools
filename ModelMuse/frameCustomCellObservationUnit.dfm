@@ -36,16 +36,17 @@ object frameCustomCellObservation: TframeCustomCellObservation
       end
       object Panel2: TPanel
         Left = 0
-        Top = 165
+        Top = 163
         Width = 560
         Height = 76
         Align = alBottom
         TabOrder = 2
+        ExplicitTop = 165
         object lblNumberOfTimes: TLabel
           Left = 63
           Top = 9
-          Width = 78
-          Height = 13
+          Width = 90
+          Height = 15
           Caption = 'Number of times'
         end
         object seTimes: TJvSpinEdit
@@ -81,7 +82,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
         Left = 0
         Top = 35
         Width = 560
-        Height = 130
+        Height = 128
         Align = alClient
         FixedCols = 0
         RowCount = 2
@@ -103,6 +104,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -126,6 +128,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -149,6 +152,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -172,6 +176,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -201,6 +206,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -236,16 +242,17 @@ object frameCustomCellObservation: TframeCustomCellObservation
       ImageIndex = 1
       object Panel4: TPanel
         Left = 0
-        Top = 165
+        Top = 163
         Width = 560
         Height = 76
         Align = alBottom
         TabOrder = 2
+        ExplicitTop = 165
         object lblNumberOfLayers: TLabel
           Left = 64
           Top = 9
-          Width = 82
-          Height = 13
+          Width = 91
+          Height = 15
           Caption = 'Number of layers'
         end
         object seLayers: TJvSpinEdit
@@ -301,7 +308,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
         Left = 0
         Top = 35
         Width = 560
-        Height = 130
+        Height = 128
         Align = alClient
         ColCount = 2
         FixedCols = 0
@@ -322,6 +329,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -347,6 +355,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -369,6 +378,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 130
       end
     end
   end
@@ -391,8 +401,8 @@ object frameCustomCellObservation: TframeCustomCellObservation
     object lblTreatment: TLabel
       Left = 200
       Top = 6
-      Width = 84
-      Height = 13
+      Width = 90
+      Height = 15
       Caption = 'Observation type'
     end
     object edObsName: TLabeledEdit
@@ -400,12 +410,13 @@ object frameCustomCellObservation: TframeCustomCellObservation
       Top = 22
       Width = 137
       Height = 21
-      EditLabel.Width = 88
-      EditLabel.Height = 13
+      EditLabel.Width = 97
+      EditLabel.Height = 15
       EditLabel.Caption = 'Observation name'
       MaxLength = 12
       OEMConvert = True
       TabOrder = 0
+      Text = ''
       OnChange = edObsNameChange
       OnExit = edObsNameExit
     end
@@ -413,7 +424,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
       Left = 200
       Top = 22
       Width = 145
-      Height = 21
+      Height = 23
       Style = csDropDownList
       ItemIndex = 0
       TabOrder = 1

@@ -12,9 +12,6 @@ inherited frameFormulaGrid: TframeFormulaGrid
     inherited sbInsert: TSpeedButton
       Hint = 'Insert row|Insert a row above the selected row.'
     end
-    inherited sbDelete: TSpeedButton
-      Hint = 'Delete row|Delete the selected row.'
-    end
   end
   inherited Grid: TRbwDataGrid4
     Top = 57
@@ -40,11 +37,12 @@ inherited frameFormulaGrid: TframeFormulaGrid
       Top = 30
       Width = 121
       Height = 21
-      EditLabel.Width = 47
-      EditLabel.Height = 16
+      EditLabel.Width = 44
+      EditLabel.Height = 15
       EditLabel.Caption = 'Formula'
       Enabled = False
       TabOrder = 0
+      Text = ''
       OnChange = edFormulaChange
     end
     object cbMultiCheck: TCheckBox

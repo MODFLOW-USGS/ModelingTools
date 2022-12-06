@@ -7,22 +7,22 @@ inherited frameMt3dCtsPkg: TframeMt3dCtsPkg
   object lblForce: TLabel [2]
     Left = 16
     Top = 165
-    Width = 391
-    Height = 13
+    Width = 341
+    Height = 15
     Caption = 'Force injection concentrations to meet treatment levels (IFORCE)'
   end
   object lblWellPackageChoice: TLabel [3]
     Left = 16
     Top = 221
-    Width = 391
-    Height = 13
+    Width = 163
+    Height = 15
     Caption = 'Well package choice (ICTSPKG)'
   end
   object comboForce: TComboBox [5]
     Left = 16
     Top = 184
     Width = 391
-    Height = 21
+    Height = 23
     Style = csDropDownList
     Enabled = False
     ItemIndex = 0
@@ -40,7 +40,7 @@ inherited frameMt3dCtsPkg: TframeMt3dCtsPkg
     Left = 16
     Top = 240
     Width = 391
-    Height = 21
+    Height = 23
     Style = csDropDownList
     Enabled = False
     ItemIndex = 0

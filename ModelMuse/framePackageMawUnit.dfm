@@ -9,16 +9,16 @@ inherited framePackageMaw: TframePackageMaw
   object lblShutDownTheta: TLabel [2]
     Left = 176
     Top = 255
-    Width = 77
-    Height = 13
+    Width = 84
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Shutdown theta'
   end
   object lblShutDownKappa: TLabel [3]
     Left = 176
     Top = 283
-    Width = 80
-    Height = 13
+    Width = 89
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Shutdown kappa'
   end

@@ -26,47 +26,47 @@ inherited frameGMG: TframeGMG
       Caption = 'Control and Print'
       DesignSize = (
         617
-        230)
+        228)
       object lblGmgRclose: TLabel
         Left = 16
         Top = 11
-        Width = 197
-        Height = 13
+        Width = 215
+        Height = 15
         Caption = 'Residual convergence criterion (RCLOSE)'
       end
       object lblGmgIiter: TLabel
         Left = 16
         Top = 43
-        Width = 209
-        Height = 13
+        Width = 232
+        Height = 15
         Caption = 'Maximum number of inner iterations (IITER)'
       end
       object lblGmgHclose: TLabel
         Left = 16
         Top = 75
-        Width = 220
-        Height = 13
+        Width = 243
+        Height = 15
         Caption = 'Head change convergence criterion (HCLOSE)'
       end
       object lblGmgMxiter: TLabel
         Left = 16
         Top = 107
-        Width = 221
-        Height = 13
+        Width = 248
+        Height = 15
         Caption = 'Maximum number of outer iterations (MXITER)'
       end
       object lblGmgIoutgmg: TLabel
         Left = 16
         Top = 170
-        Width = 117
-        Height = 13
+        Width = 131
+        Height = 15
         Caption = 'GMG Output (IOUTGMG)'
       end
       object lblGmgIsm: TLabel
         Left = 16
         Top = 141
-        Width = 189
-        Height = 13
+        Width = 215
+        Height = 15
         Caption = 'Multigrid preconditioner smoother (ISM)'
       end
       object rdeGmgRclose: TRbwDataEntry
@@ -153,7 +153,7 @@ inherited frameGMG: TframeGMG
         Left = 296
         Top = 167
         Width = 297
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
         ButtonStyle = fsLighter
@@ -162,7 +162,7 @@ inherited frameGMG: TframeGMG
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 4
         Items = <
@@ -205,7 +205,7 @@ inherited frameGMG: TframeGMG
         Left = 296
         Top = 138
         Width = 297
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
         ButtonStyle = fsLighter
@@ -214,7 +214,7 @@ inherited frameGMG: TframeGMG
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 6
         Items = <
@@ -235,54 +235,54 @@ inherited frameGMG: TframeGMG
       ImageIndex = 1
       DesignSize = (
         617
-        230)
+        228)
       object lblGmgDup: TLabel
         Left = 16
         Top = 75
-        Width = 147
-        Height = 13
+        Width = 171
+        Height = 15
         Caption = 'Maximum damping value (DUP)'
       end
       object lblGmgDlow: TLabel
         Left = 16
         Top = 107
-        Width = 153
-        Height = 13
+        Width = 180
+        Height = 15
         Caption = 'Minimum damping value (DLOW)'
       end
       object lblGmgChglimit: TLabel
         Left = 16
         Top = 138
-        Width = 207
-        Height = 13
+        Width = 235
+        Height = 15
         Caption = 'Maximum allowed head change (CHGLIMIT)'
       end
       object lblGmgRelax: TLabel
         Left = 16
         Top = 202
-        Width = 146
-        Height = 13
+        Width = 157
+        Height = 15
         Caption = 'Relaxation parameter (RELAX)'
       end
       object lblGmgIadamp: TLabel
         Left = 16
         Top = 43
-        Width = 175
-        Height = 13
+        Width = 199
+        Height = 15
         Caption = 'Adaptive damping method (IADAMP)'
       end
       object lblGmgIsc: TLabel
         Left = 16
         Top = 170
-        Width = 138
-        Height = 13
+        Width = 153
+        Height = 15
         Caption = 'Semicoarsening control (ISC)'
       end
       object lblGmgDamp: TLabel
         Left = 16
         Top = 11
-        Width = 133
-        Height = 13
+        Width = 151
+        Height = 15
         Caption = 'Damping parameter (DAMP)'
       end
       object rdeGmgDup: TRbwDataEntry
@@ -371,7 +371,7 @@ inherited frameGMG: TframeGMG
         Left = 296
         Top = 40
         Width = 297
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
         ButtonStyle = fsLighter
@@ -380,7 +380,7 @@ inherited frameGMG: TframeGMG
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 4
         OnChange = comboGmgIadampChange
@@ -405,7 +405,7 @@ inherited frameGMG: TframeGMG
         Left = 296
         Top = 167
         Width = 297
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
         ButtonStyle = fsLighter
@@ -414,7 +414,7 @@ inherited frameGMG: TframeGMG
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 5
         OnChange = comboGmgIscChange

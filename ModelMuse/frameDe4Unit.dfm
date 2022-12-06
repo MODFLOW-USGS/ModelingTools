@@ -9,72 +9,72 @@ inherited frameDE4: TframeDE4
   object lblDe4Itmx: TLabel [2]
     Left = 16
     Top = 168
-    Width = 179
-    Height = 13
+    Width = 204
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Maximum number of iterations (ITMX)'
   end
   object lblDe4Mxup: TLabel [3]
     Left = 16
     Top = 200
-    Width = 249
-    Height = 13
+    Width = 284
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Maximum number of equations in upper part (MXUP)'
   end
   object lblDe4Mxlow: TLabel [4]
     Left = 16
     Top = 228
-    Width = 257
-    Height = 13
+    Width = 293
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Maximum number of equations in lower part (MXLOW)'
   end
   object lblDe4Mxbw: TLabel [5]
     Left = 16
     Top = 260
-    Width = 141
-    Height = 13
+    Width = 165
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Maximum band width (MXBW)'
   end
   object lblDe4Ifreq: TLabel [6]
     Left = 16
     Top = 288
-    Width = 232
-    Height = 13
+    Width = 251
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Frequency at which coefficients change (IFREQ)'
   end
   object lblDe4Mutd4: TLabel [7]
     Left = 16
     Top = 320
-    Width = 103
-    Height = 13
+    Width = 116
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Print control (MUTD4)'
   end
   object lblDe4Accl: TLabel [8]
     Left = 16
     Top = 348
-    Width = 149
-    Height = 13
+    Width = 164
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Acceleration parameter (ACCL)'
   end
   object lblDe4Hclose: TLabel [9]
     Left = 16
     Top = 380
-    Width = 192
-    Height = 13
+    Width = 213
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Head change closure criterion (HCLOSE)'
   end
   object lblRdeIprd4: TLabel [10]
     Left = 16
     Top = 408
-    Width = 118
-    Height = 13
+    Width = 127
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Printout interval (IPRD4)'
   end
@@ -91,7 +91,6 @@ inherited frameDE4: TframeDE4
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 1
     Text = '5'
     DataType = dtInteger
@@ -108,7 +107,6 @@ inherited frameDE4: TframeDE4
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 2
     Text = '0'
     DataType = dtInteger
@@ -124,7 +122,6 @@ inherited frameDE4: TframeDE4
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 3
     Text = '0'
     DataType = dtInteger
@@ -140,7 +137,6 @@ inherited frameDE4: TframeDE4
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 4
     Text = '0'
     DataType = dtInteger
@@ -152,7 +148,7 @@ inherited frameDE4: TframeDE4
     Left = 272
     Top = 285
     Width = 231
-    Height = 23
+    Height = 25
     Style = csOwnerDrawVariable
     Anchors = [akLeft, akBottom]
     ButtonStyle = fsLighter
@@ -161,7 +157,7 @@ inherited frameDE4: TframeDE4
     Enabled = False
     ImageHeight = 0
     ImageWidth = 0
-    ItemHeight = 17
+    ItemHeight = 19
     ItemIndex = -1
     TabOrder = 5
     Items = <
@@ -185,7 +181,7 @@ inherited frameDE4: TframeDE4
     Left = 272
     Top = 317
     Width = 231
-    Height = 23
+    Height = 25
     Style = csOwnerDrawVariable
     Anchors = [akLeft, akBottom]
     ButtonStyle = fsLighter
@@ -194,7 +190,7 @@ inherited frameDE4: TframeDE4
     Enabled = False
     ImageHeight = 0
     ImageWidth = 0
-    ItemHeight = 17
+    ItemHeight = 19
     ItemIndex = -1
     TabOrder = 6
     Items = <
@@ -222,7 +218,6 @@ inherited frameDE4: TframeDE4
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 7
     Text = '0'
     DataType = dtReal
@@ -238,7 +233,6 @@ inherited frameDE4: TframeDE4
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 8
     Text = '0'
     DataType = dtReal
@@ -254,7 +248,6 @@ inherited frameDE4: TframeDE4
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 9
     Text = '0'
     DataType = dtInteger

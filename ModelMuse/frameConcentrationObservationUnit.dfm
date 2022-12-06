@@ -6,7 +6,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
     ExplicitTop = 99
     ExplicitHeight = 251
     inherited tabTimes: TTabSheet
-      ExplicitHeight = 223
+      ExplicitHeight = 221
       inherited Panel5: TPanel
         inherited rdeMultiValueEdit: TRbwDataEntry
           Left = 120
@@ -22,14 +22,14 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
           Left = 8
           Top = 6
           Width = 89
-          Height = 21
+          Height = 23
           Style = csDropDownList
           TabOrder = 0
           OnChange = comboSpeciesNamesChange
         end
       end
       inherited Panel2: TPanel
-        Top = 147
+        Top = 145
         ExplicitTop = 147
         inherited lblNumberOfTimes: TLabel
           Left = 95
@@ -41,12 +41,13 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
         end
       end
       inherited rdgObservations: TRbwDataGrid4
-        Height = 112
+        Height = 110
         ColCount = 6
         DefaultColWidth = 40
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -73,6 +74,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -96,6 +98,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -119,6 +122,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -142,6 +146,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -171,6 +176,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -192,7 +198,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
             CheckStyle = csCheck
             AutoAdjustColWidths = False
           end>
-        ExplicitHeight = 112
+        ExplicitHeight = 110
         ColWidths = (
           40
           40
@@ -203,14 +209,14 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
       end
     end
     inherited tabLayers: TTabSheet
-      ExplicitHeight = 223
+      ExplicitHeight = 221
       inherited Panel4: TPanel
-        Top = 147
+        Top = 145
         ExplicitTop = 147
       end
       inherited rdgLayers: TRbwDataGrid4
-        Height = 112
-        ExplicitHeight = 112
+        Height = 110
+        ExplicitHeight = 110
       end
     end
   end
@@ -228,6 +234,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
       Top = 27
       EditLabel.ExplicitLeft = 11
       EditLabel.ExplicitTop = 11
+      EditLabel.ExplicitWidth = 66
       ExplicitLeft = 11
       ExplicitTop = 27
     end
@@ -236,6 +243,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
       Top = 27
       ExplicitLeft = 150
       ExplicitTop = 27
+      ExplicitHeight = 23
     end
   end
 end

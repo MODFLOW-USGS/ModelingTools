@@ -52,7 +52,8 @@ uses System.UITypes,
   frameMt3dSftUnit, frameMt3dCtsPkgUnit, framePackageCsubUnit,
   PestParamGroupsUnit, frameGwtDspPackageUnit, frameGwtAdvPackageUnit,
   framePackageMSTUnit, framePackageIstUnit, frameChemSpeciesUnit,
-  System.Generics.Collections, framePackageFmiUnit;
+  System.Generics.Collections, framePackageFmiUnit, framePackageFmp4Unit,
+  framePackageFmpSoilsUnit, framePackageFmp4ClimateUnit;
 
 type
 
@@ -277,6 +278,12 @@ type
     jvspChemSpecies: TJvStandardPage;
     frameChemSpecies: TframeChemSpecies;
     TimerBringToFront: TTimer;
+    jvspFMP4: TJvStandardPage;
+    framePkgFMP4: TframePackageFmp4;
+    jvspFmp4Soil: TJvStandardPage;
+    framePkgFmp4Soils: TframePackageFmpSoils;
+    jvspFmp4Climate: TJvStandardPage;
+    framePkgFmp4Climate: TframePackageFmp4Climate;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -427,6 +434,7 @@ type
     procedure NwtSelectedChange(Sender: TObject);
     procedure UpwSelectedChange(Sender: TObject);
     procedure Mt3dmsGcgSelectedChange(Sender: TObject);
+    procedure Fmp4SelectedChange(Sender: TObject);
     procedure StrSelectedChange(Sender: TObject);
     function DuplicateParameterNames: boolean;
     function NodeToFrame(Node: TTreeNode): TFramePackage;
@@ -2623,15 +2631,14 @@ begin
       AddNode(StrConduitFlowProcess, StrConduitFlowProcess, PriorNode);
     end;
 
-    if frmGoPhast.ModelSelection = msModflowFMP then
+    if frmGoPhast.ModelSelection in [msModflowFMP
+    {$IFDEF OWHMV2}
+    , msModflowOwhm2
+    {$ENDIF}
+    ] then
     begin
       AddNode(StrFarmProcess, StrFarmProcess, PriorNode);
     end;
-
-          {$IFDEF OWHMV2}
-          // fix this
-          Assert(False);
-          {$ENDIF}
 
     AddNode(StrPostProcessors, StrPostProcessors, PriorNode);
 
@@ -2784,13 +2791,14 @@ begin
     FTransientListParameters := TModflowTransientListParameters.Create(nil);
     pcSFR.ActivePageIndex := 0;
     framePkgLPF.OnSelectedChange := framePkgLPFSelectedChange;
-    framePkgCHD.OnSelectedChange :=  ChdSelectedChange;
-    framePkgDRN.OnSelectedChange :=  DrnSelectedChange;
-    framePkgGHB.OnSelectedChange :=  GhbSelectedChange;
-    framePkgRIV.OnSelectedChange :=  RivSelectedChange;
-    framePkgStr.OnSelectedChange :=  StrSelectedChange;
-    framePkgNwt.OnSelectedChange :=  NwtSelectedChange;
-    framePkgUpw.OnSelectedChange :=  UpwSelectedChange;
+    framePkgCHD.OnSelectedChange := ChdSelectedChange;
+    framePkgDRN.OnSelectedChange := DrnSelectedChange;
+    framePkgGHB.OnSelectedChange := GhbSelectedChange;
+    framePkgRIV.OnSelectedChange := RivSelectedChange;
+    framePkgStr.OnSelectedChange := StrSelectedChange;
+    framePkgNwt.OnSelectedChange := NwtSelectedChange;
+    framePkgUpw.OnSelectedChange := UpwSelectedChange;
+    framePkgFMP4.OnSelectedChange := Fmp4SelectedChange;
     framePkgCHOB.CanSelect := False;
     framePkgDROB.CanSelect := False;
     framePkgGBOB.CanSelect := False;
@@ -4253,6 +4261,25 @@ begin
   end;
 end;
 
+procedure TfrmModflowPackages.Fmp4SelectedChange(Sender: TObject);
+begin
+  if not framePkgFMP4.Selected then
+  begin
+    framePkgFmp4Soils.Selected := False;
+    framePkgFmp4Soils.CanSelect := False;
+
+    framePkgFmp4Climate.Selected := False;
+    framePkgFmp4Climate.CanSelect := False;
+
+  end
+  else
+  begin
+    framePkgFmp4Soils.CanSelect := True;
+    framePkgFmp4Climate.CanSelect := True;
+  end;
+
+end;
+
 procedure TfrmModflowPackages.AddPackagesToList(Packages: TModflowPackages);
 var
   MstIndex: Integer;
@@ -4664,8 +4691,23 @@ begin
   end;
 
           {$IFDEF OWHMV2}
-          // fix this
-          Assert(False);
+  if frmGoPhast.ModelSelection = msModflowOwhm2 then
+  begin
+    Packages.FarmProcess4.Frame := framePkgFMP4;
+    FPackageList.Add(Packages.FarmProcess4);
+
+    Packages.FarmSoil4.Frame := framePkgFmp4Soils;
+    FPackageList.Add(Packages.FarmSoil4);
+
+    Packages.FarmClimate4.Frame := framePkgFmp4Climate;
+    FPackageList.Add(Packages.FarmClimate4);
+  end
+  else
+  begin
+    framePkgFMP4.NilNode;
+    framePkgFmp4Soils.NilNode;
+    framePkgFmp4Climate.NilNode;
+  end;
           {$ENDIF}
 
   if frmGoPhast.ModelSelection = msModflowCFP then

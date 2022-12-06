@@ -14,6 +14,9 @@ inherited framePackageRCH: TframePackageRCH
     Height = 100
     ExplicitTop = 128
     ExplicitHeight = 100
+    DesignSize = (
+      477
+      100)
     object rgAssignmentMethod: TRadioGroup
       Left = 16
       Top = 30

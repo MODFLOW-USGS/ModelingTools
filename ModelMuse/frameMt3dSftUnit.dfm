@@ -7,36 +7,36 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
   object lblTimeWeightingFactor: TLabel [2]
     Left = 167
     Top = 211
-    Width = 209
-    Height = 13
+    Width = 231
+    Height = 15
     Caption = 'Stream solver time weighting factor (WIMP)'
   end
   object lblSpaceWeightingFactor: TLabel [3]
     Left = 167
     Top = 239
-    Width = 218
-    Height = 13
+    Width = 237
+    Height = 15
     Caption = 'Stream solver space weighting factor (WUPS)'
   end
   object lblClosureCriterion: TLabel [4]
     Left = 167
     Top = 267
-    Width = 140
-    Height = 13
+    Width = 153
+    Height = 15
     Caption = 'Closure criterion (CCLOSESF)'
   end
   object lblMaxIterations: TLabel [5]
     Left = 167
     Top = 295
-    Width = 204
-    Height = 13
+    Width = 229
+    Height = 15
     Caption = 'Maximum number of iterations (MXITERSF)'
   end
   object lblSolverPrintChoice: TLabel [6]
     Left = 167
     Top = 322
-    Width = 150
-    Height = 13
+    Width = 169
+    Height = 15
     Caption = 'Solution information (IPRTXMD)'
   end
   object cbEvaporateMass: TCheckBox [8]
@@ -108,7 +108,7 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
     Left = 16
     Top = 319
     Width = 145
-    Height = 23
+    Height = 25
     Style = csOwnerDrawVariable
     ButtonStyle = fsLighter
     Color = clBtnFace
@@ -116,7 +116,7 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
     Enabled = False
     ImageHeight = 0
     ImageWidth = 0
-    ItemHeight = 17
+    ItemHeight = 19
     ItemIndex = -1
     TabOrder = 6
     Items = <

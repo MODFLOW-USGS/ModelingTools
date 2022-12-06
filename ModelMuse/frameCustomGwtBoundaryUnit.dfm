@@ -14,8 +14,8 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
     object lblChemSpecies: TLabel [1]
       Left = 165
       Top = 39
-      Width = 113
-      Height = 20
+      Width = 91
+      Height = 15
       Caption = 'Chemical species'
     end
     inherited btnDelete: TBitBtn
@@ -30,7 +30,7 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
       Left = 14
       Top = 36
       Width = 145
-      Height = 28
+      Height = 23
       Style = csDropDownList
       TabOrder = 3
     end
@@ -129,7 +129,6 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 1
       ExplicitWidth = 375
       ExplicitHeight = 171
     end

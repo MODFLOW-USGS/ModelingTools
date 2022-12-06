@@ -5,14 +5,14 @@ inherited frameSubPestObs: TframeSubPestObs
     ExplicitTop = 24
     ExplicitHeight = 218
     inherited frameObservations: TframeGrid
-      Height = 202
+      Height = 200
       ExplicitHeight = 201
       inherited Panel: TPanel
-        Top = 170
+        Top = 168
         ExplicitTop = 160
       end
       inherited Grid: TRbwDataGrid4
-        Height = 170
+        Height = 168
         ColCount = 8
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
         Columns = <
@@ -214,7 +214,7 @@ inherited frameSubPestObs: TframeSubPestObs
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        ExplicitHeight = 160
+        ExplicitHeight = 168
         ColWidths = (
           64
           75

@@ -146,7 +146,7 @@
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
-        <DCC_Define>DEBUG;SUTRA4;$(DCC_Define)</DCC_Define>
+        <DCC_Define>DEBUG;SUTRA4;OWHMV2;$(DCC_Define)</DCC_Define>
         <DCC_Optimize>false</DCC_Optimize>
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
         <DCC_UseMSBuildExternally>false</DCC_UseMSBuildExternally>
@@ -1890,6 +1890,16 @@
         <DCCReference Include="ModflowFmp4WriterUnit.pas"/>
         <DCCReference Include="framePackageFmp4Unit.pas">
             <Form>framePackageFmp4</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="framePackageFmpSoilsUnit.pas">
+            <Form>framePackageFmpSoils</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="framePackageFmp4ClimateUnit.pas">
+            <Form>framePackageFmp4Climate</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>

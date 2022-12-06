@@ -8,6 +8,7 @@ inherited frameGwtDspPackage: TframeGwtDspPackage
     434)
   inherited memoComments: TMemo
     Width = 494
+    ExplicitWidth = 494
   end
   object cbUseXT3D: TCheckBox [3]
     Left = 16

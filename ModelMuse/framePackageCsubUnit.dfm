@@ -25,7 +25,6 @@ inherited framePackageCsub: TframePackageCsub
     object tabInterbeds: TTabSheet
       Caption = 'Interbeds'
       ImageIndex = 2
-      ExplicitHeight = 341
       inline frameInterbeds: TframeGrid
         Left = 0
         Top = 0
@@ -42,9 +41,9 @@ inherited framePackageCsub: TframePackageCsub
           ExplicitTop = 300
           ExplicitWidth = 581
           inherited lbNumber: TLabel
-            Width = 135
+            Width = 150
             Caption = 'Number of interbed systems'
-            ExplicitWidth = 135
+            ExplicitWidth = 150
           end
           inherited sbAdd: TSpeedButton
             Left = 334
@@ -69,6 +68,7 @@ inherited framePackageCsub: TframePackageCsub
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -92,6 +92,7 @@ inherited framePackageCsub: TframePackageCsub
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -123,41 +124,40 @@ inherited framePackageCsub: TframePackageCsub
     end
     object tabOptions: TTabSheet
       Caption = 'Options'
-      ExplicitLeft = 8
       object lblGamma: TLabel
         Left = 155
         Top = 6
-        Width = 151
-        Height = 13
+        Width = 168
+        Height = 15
         Caption = 'Unit weight of water (gammaw)'
       end
       object lblBeta: TLabel
         Left = 155
         Top = 34
-        Width = 148
-        Height = 13
+        Width = 162
+        Height = 15
         Caption = 'Compressibility of water (beta)'
       end
       object lblInterbedThicknessMethod: TLabel
         Left = 106
         Top = 210
-        Width = 304
-        Height = 18
+        Width = 238
+        Height = 30
         Caption = 'Method for specifying thickness of interbeds (CELL_FRACTION)'
         WordWrap = True
       end
       object lblseNDelayCells: TLabel
         Left = 82
         Top = 111
-        Width = 324
-        Height = 13
+        Width = 356
+        Height = 15
         Caption = 'Number of nodes used to discretize delay interbeds (NDELAYCELLS)'
       end
       object lblCompressionMethod: TLabel
         Left = 227
         Top = 146
-        Width = 231
-        Height = 18
+        Width = 255
+        Height = 15
         Caption = 'Compression method (COMPRESSION_INDICES)'
       end
       object rdeGamma: TRbwDataEntry
@@ -231,7 +231,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 3
         Top = 207
         Width = 97
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -239,7 +239,7 @@ inherited framePackageCsub: TframePackageCsub
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 6
         Items = <
@@ -292,7 +292,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 3
         Top = 143
         Width = 218
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -300,7 +300,7 @@ inherited framePackageCsub: TframePackageCsub
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 10
         Items = <
@@ -327,15 +327,14 @@ inherited framePackageCsub: TframePackageCsub
     object tabOutputTypes: TTabSheet
       Caption = 'Output types'
       ImageIndex = 1
-      ExplicitHeight = 341
       object chklstOutput: TCheckListBox
         Left = 0
         Top = 0
         Width = 581
-        Height = 359
+        Height = 357
         Align = alClient
         Enabled = False
-        ItemHeight = 13
+        ItemHeight = 15
         Items.Strings = (
           'Interbed strain (comma-separated values)'
           'Coarse strain (comma-separated values)'

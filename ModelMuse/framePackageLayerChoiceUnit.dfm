@@ -25,8 +25,8 @@ inherited framePackageLayerChoice: TframePackageLayerChoice
     object lblLayerOption: TLabel
       Left = 16
       Top = 6
-      Width = 75
-      Height = 13
+      Width = 86
+      Height = 15
       Caption = 'Location Option'
       Enabled = False
     end
@@ -34,10 +34,9 @@ inherited framePackageLayerChoice: TframePackageLayerChoice
       Left = 207
       Top = 3
       Width = 145
-      Height = 21
+      Height = 23
       Style = csDropDownList
       Enabled = False
-      ItemHeight = 13
       ItemIndex = 0
       TabOrder = 0
       Text = 'Top layer'

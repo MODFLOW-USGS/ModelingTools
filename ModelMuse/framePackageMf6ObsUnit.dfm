@@ -7,22 +7,22 @@ inherited framePackageMf6Obs: TframePackageMf6Obs
   object lblOutputFormat: TLabel [2]
     Left = 16
     Top = 160
-    Width = 69
-    Height = 13
+    Width = 77
+    Height = 15
     Caption = 'Output format'
   end
   object lblNumberOfDigits: TLabel [3]
     Left = 16
     Top = 216
-    Width = 102
-    Height = 13
+    Width = 112
+    Height = 15
     Caption = 'Text number of digits'
   end
   object comboOutputFormat: TComboBox [5]
     Left = 16
     Top = 179
     Width = 145
-    Height = 21
+    Height = 23
     Style = csDropDownList
     Enabled = False
     ItemIndex = 0

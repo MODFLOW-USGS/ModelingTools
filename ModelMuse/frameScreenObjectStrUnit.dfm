@@ -14,6 +14,7 @@ inherited frameScreenObjectStr: TframeScreenObjectStr
       OnChange = comboFormulaInterpChange
       ExplicitLeft = 206
       ExplicitTop = 45
+      ExplicitHeight = 23
     end
   end
   inherited pnlTop: TPanel
@@ -39,8 +40,8 @@ inherited frameScreenObjectStr: TframeScreenObjectStr
       object lblSegmentNumber: TLabel
         Left = 134
         Top = 17
-        Width = 110
-        Height = 13
+        Width = 122
+        Height = 15
         Caption = 'Segment number (Seg)'
       end
       object seSegmentNumber: TJvSpinEdit

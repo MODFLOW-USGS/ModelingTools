@@ -2440,6 +2440,10 @@ resourcestring
   'nt build version of MODFLOW 6 in models that use GWT until the next offic' +
   'ial release of MODFLOW 6. See https://github.com/MODFLOW-USGS/modflow6-ni' +
   'ghtly-build' + sLineBreak + ' Do you want to continue?';
+  StrMkppstatexeWasNot = 'mkppstat.exe was not found in %s.  Do you want to ' +
+  'continue anyway?';
+  StrPpcovsvaexeWasNo = 'ppcov_sva.exe was not found in %s.  Do you want to ' +
+  'continue anyway?';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -13256,6 +13260,10 @@ var
   MPathPackage: TModpathSelection;
   TempFileName: string;
   DotPosition: Integer;
+  ParamIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  PilotPointsUsed: Boolean;
+  PestDirectory: string;
 begin
   inherited;
   if FExporting then
@@ -13467,6 +13475,36 @@ begin
 //          MessageDlg(Format(StrPLPROCWasNotFound,
 //            [PhastModel.ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
             Exit;
+          end;
+        end;
+        PilotPointsUsed := False;
+        for ParamIndex := 0 to PhastModel.ModflowSteadyParameters.Count - 1 do
+        begin
+          AParam := PhastModel.ModflowSteadyParameters[ParamIndex];
+          PilotPointsUsed := (AParam.ParameterType = ptPEST) and AParam.UsePilotPoints;
+          if PilotPointsUsed then
+          begin
+            PestDirectory := IncludeTrailingPathDelimiter(PhastModel.ProgramLocations.PestDirectory);
+            if not TFile.Exists(PestDirectory + 'mkppstat.exe') then
+            begin
+              if not (MessageDlg(Format(StrMkppstatexeWasNot,
+                [PhastModel.ProgramLocations.PestDirectory]), mtConfirmation,
+                [mbYes, mbNo], 0) = mrYes) then
+              begin
+                Exit;
+              end;
+            end;
+            if not TFile.Exists(PestDirectory + 'ppcov_sva.exe') then
+            begin
+              if not (MessageDlg(Format(StrPpcovsvaexeWasNo,
+                [PhastModel.ProgramLocations.PestDirectory]), mtConfirmation,
+                [mbYes, mbNo], 0) = mrYes) then
+              begin
+                Exit;
+              end;
+            end;
+
+            Break;
           end;
         end;
       end;

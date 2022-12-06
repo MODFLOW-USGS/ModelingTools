@@ -12,9 +12,15 @@ inherited frameScreenObjectWel: TframeScreenObjectWel
     object lblTabfile: TLabel [2]
       Left = 255
       Top = 83
-      Width = 39
-      Height = 16
+      Width = 34
+      Height = 15
       Caption = 'Tabfile'
+    end
+    inherited comboTimeSeriesInterpolation: TComboBox
+      TabOrder = 5
+    end
+    inherited comboFormulaInterp: TComboBox
+      ExplicitHeight = 23
     end
     object fedTabfile: TJvFilenameEdit
       Left = 8
@@ -23,6 +29,7 @@ inherited frameScreenObjectWel: TframeScreenObjectWel
       Height = 24
       Filter = 'Text files (*.txt)|*.txt|All files (*.*)|*.*'
       TabOrder = 4
+      Text = ''
       OnChange = fedTabfileChange
     end
   end

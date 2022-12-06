@@ -10,9 +10,4 @@ inherited frameScreenObjectCnc: TframeScreenObjectCnc
       ExplicitHeight = 21
     end
   end
-  inherited pnlGrid: TPanel
-    inherited rdgModflowBoundary: TRbwDataGrid4
-      ExplicitTop = 51
-    end
-  end
 end

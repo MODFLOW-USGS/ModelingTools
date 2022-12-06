@@ -30,29 +30,29 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
       object lblInactiveConcentration: TLabel
         Left = 83
         Top = 81
-        Width = 263
-        Height = 20
+        Width = 212
+        Height = 15
         Caption = 'Concentration at inactive cells (CINACT)'
       end
       object lblInitialConcentrationChoice: TLabel
         Left = 273
         Top = 141
-        Width = 291
-        Height = 20
+        Width = 233
+        Height = 15
         Caption = 'Method for using initial concentration file(s)'
       end
       object lblMinimumSaturatedFraction: TLabel
         Left = 83
         Top = 109
-        Width = 254
-        Height = 20
+        Width = 205
+        Height = 15
         Caption = 'Minimum saturated fraction (THKMIN)'
       end
       object lblVersion: TLabel
         Left = 148
         Top = 20
-        Width = 92
-        Height = 20
+        Width = 72
+        Height = 15
         Caption = 'MT3D Version'
       end
       object grpInitialConcentrationTimes: TGroupBox
@@ -65,22 +65,22 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         object lblStressPeriod: TLabel
           Left = 16
           Top = 24
-          Width = 86
-          Height = 20
+          Width = 67
+          Height = 15
           Caption = 'Stress period'
         end
         object lblTimeStep: TLabel
           Left = 176
           Top = 24
-          Width = 65
-          Height = 20
+          Width = 51
+          Height = 15
           Caption = 'Time step'
         end
         object lblTransportStep: TLabel
           Left = 318
           Top = 24
-          Width = 94
-          Height = 20
+          Width = 74
+          Height = 15
           Caption = 'Transport step'
         end
         object seStressPeriod: TJvSpinEdit
@@ -118,7 +118,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Left = 12
         Top = 138
         Width = 255
-        Height = 28
+        Height = 23
         Style = csDropDownList
         TabOrder = 1
         OnChange = comboInitialConcentrationChoiceChange
@@ -131,8 +131,8 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Top = 51
         Width = 50
         Height = 28
-        EditLabel.Width = 122
-        EditLabel.Height = 20
+        EditLabel.Width = 99
+        EditLabel.Height = 15
         EditLabel.Caption = 'Mass unit (MUNIT)'
         Enabled = False
         LabelPosition = lpRight
@@ -172,7 +172,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Left = 12
         Top = 17
         Width = 130
-        Height = 28
+        Height = 23
         Style = csDropDownList
         ItemIndex = 0
         TabOrder = 5
@@ -190,7 +190,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Left = 0
         Top = 0
         Width = 520
-        Height = 277
+        Height = 282
         Align = alClient
         Enabled = False
         Items.Strings = (
@@ -238,6 +238,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Options = [fboExcludeGlyphs, fboHotTrack, fboWordWrap]
         ChangeGlyphColor.FromColor = clBlack
         ChangeGlyphColor.ToColor = clWhite
+        ExplicitHeight = 277
       end
     end
   end

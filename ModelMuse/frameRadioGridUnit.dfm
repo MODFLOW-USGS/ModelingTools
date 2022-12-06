@@ -18,16 +18,16 @@ object frameRadioGrid: TframeRadioGrid
     object lblTop: TLabel
       Left = 160
       Top = 16
-      Width = 28
-      Height = 13
+      Width = 32
+      Height = 15
       Alignment = taCenter
       Caption = 'lblTop'
     end
     object lblLeft: TMMJLabel
       Left = 16
       Top = 102
-      Width = 29
-      Height = 13
+      Width = 33
+      Height = 15
       Caption = 'lblLeft'
       Enabled = True
       BorderStyle = bsBump
@@ -46,9 +46,9 @@ object frameRadioGrid: TframeRadioGrid
     object rdgGrid: TRbwDataGrid4
       AlignWithMargins = True
       Left = 48
-      Top = 35
+      Top = 37
       Width = 264
-      Height = 197
+      Height = 195
       Margins.Left = 46
       Margins.Top = 20
       Align = alClient
@@ -68,6 +68,7 @@ object frameRadioGrid: TframeRadioGrid
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -91,6 +92,7 @@ object frameRadioGrid: TframeRadioGrid
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -114,6 +116,7 @@ object frameRadioGrid: TframeRadioGrid
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -137,6 +140,7 @@ object frameRadioGrid: TframeRadioGrid
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -160,6 +164,7 @@ object frameRadioGrid: TframeRadioGrid
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText

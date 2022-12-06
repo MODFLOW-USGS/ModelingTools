@@ -23,15 +23,15 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
     object lblGeneralizedFlowPresent: TLabel [1]
       Left = 6
       Top = 19
-      Width = 150
-      Height = 13
+      Width = 157
+      Height = 15
       Caption = 'If lake water present or absent'
     end
     object lblLakeGeneralizedFlowType: TLabel [2]
       Left = 320
       Top = 19
-      Width = 78
-      Height = 13
+      Width = 83
+      Height = 15
       Caption = 'Interaction type'
     end
     inherited seNumberOfTimes: TJvSpinEdit
@@ -59,7 +59,7 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       Left = 6
       Top = 43
       Width = 286
-      Height = 21
+      Height = 23
       Style = csDropDownList
       TabOrder = 3
       Items.Strings = (
@@ -72,7 +72,7 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       Left = 320
       Top = 43
       Width = 262
-      Height = 21
+      Height = 23
       Style = csDropDownList
       ItemIndex = 2
       TabOrder = 4
@@ -416,8 +416,8 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
     object lblFormula: TLabel
       Left = 136
       Top = 5
-      Width = 38
-      Height = 13
+      Width = 44
+      Height = 15
       Alignment = taCenter
       Caption = 'Formula'
     end
@@ -438,13 +438,13 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       Left = 264
       Top = 18
       Width = 73
-      Height = 23
+      Height = 25
       Style = csOwnerDrawVariable
       ButtonStyle = fsLighter
       DroppedWidth = 145
       ImageHeight = 0
       ImageWidth = 0
-      ItemHeight = 17
+      ItemHeight = 19
       ItemIndex = -1
       TabOrder = 0
       OnChange = comboLimitChange
@@ -469,13 +469,13 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       Left = 370
       Top = 18
       Width = 73
-      Height = 23
+      Height = 25
       Style = csOwnerDrawVariable
       ButtonStyle = fsLighter
       DroppedWidth = 73
       ImageHeight = 0
       ImageWidth = 0
-      ItemHeight = 17
+      ItemHeight = 19
       ItemIndex = -1
       TabOrder = 1
       OnChange = comboExitChange

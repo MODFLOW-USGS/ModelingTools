@@ -63,7 +63,6 @@ object frameLocationMethod: TframeLocationMethod
         Top = 32
         Width = 54
         Height = 27
-        ItemHeight = 19
         TabOrder = 0
         Text = '1'
         OnChange = ControlChange
@@ -81,7 +80,6 @@ object frameLocationMethod: TframeLocationMethod
         Top = 32
         Width = 54
         Height = 27
-        ItemHeight = 19
         TabOrder = 1
         Text = '1'
         OnChange = ControlChange
@@ -99,7 +97,6 @@ object frameLocationMethod: TframeLocationMethod
         Top = 32
         Width = 54
         Height = 27
-        ItemHeight = 19
         TabOrder = 2
         Text = '1'
         OnChange = ControlChange
@@ -143,7 +140,6 @@ object frameLocationMethod: TframeLocationMethod
         Top = 32
         Width = 54
         Height = 27
-        ItemHeight = 19
         TabOrder = 0
         Text = '0'
         OnChange = ControlChange
@@ -159,7 +155,6 @@ object frameLocationMethod: TframeLocationMethod
         Top = 32
         Width = 54
         Height = 27
-        ItemHeight = 19
         TabOrder = 1
         Text = '0'
         OnChange = ControlChange
@@ -175,7 +170,6 @@ object frameLocationMethod: TframeLocationMethod
         Top = 32
         Width = 54
         Height = 27
-        ItemHeight = 19
         TabOrder = 2
         Text = '0'
         OnChange = ControlChange
@@ -201,7 +195,6 @@ object frameLocationMethod: TframeLocationMethod
         Height = 27
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
-        ItemHeight = 19
         TabOrder = 0
         OnChange = ControlChange
       end

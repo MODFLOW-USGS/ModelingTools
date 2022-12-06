@@ -12,16 +12,16 @@ inherited framePackageRes: TframePackageRes
     ExplicitHeight = 76
     inherited lblLayerOption: TLabel
       Top = 9
-      Width = 119
+      Width = 132
       Caption = 'Reservoir location option'
       ExplicitTop = 9
-      ExplicitWidth = 119
+      ExplicitWidth = 132
     end
     object lblTableSize: TLabel [1]
       Left = 72
       Top = 51
-      Width = 329
-      Height = 13
+      Width = 358
+      Height = 15
       Caption = 
         'Number of values in printed table of stage, volume, and area (NP' +
         'TS)'

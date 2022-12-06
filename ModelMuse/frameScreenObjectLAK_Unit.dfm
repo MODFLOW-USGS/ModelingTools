@@ -16,29 +16,29 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
     object lblInitialStage: TLabel [1]
       Left = 79
       Top = 80
-      Width = 56
-      Height = 13
+      Width = 60
+      Height = 15
       Caption = 'Initial stage'
     end
     object lblCenterLake: TLabel [2]
       Left = 362
       Top = 48
-      Width = 55
-      Height = 13
+      Width = 59
+      Height = 15
       Caption = 'Center lake'
     end
     object lblSill: TLabel [3]
       Left = 362
       Top = 80
-      Width = 12
-      Height = 13
+      Width = 15
+      Height = 15
       Caption = 'Sill'
     end
     object lblLakeID: TLabel [4]
       Left = 79
       Top = 48
-      Width = 36
-      Height = 13
+      Width = 38
+      Height = 15
       Caption = 'Lake ID'
     end
     inherited btnDelete: TBitBtn
@@ -315,8 +315,6 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitLeft = 1
-      ExplicitTop = 51
       ExplicitWidth = 461
       ExplicitHeight = 44
       ColWidths = (
@@ -346,7 +344,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
       ImageIndex = 3
       DesignSize = (
         455
-        299)
+        297)
       object gbGage: TGroupBox
         Left = 3
         Top = 17
@@ -415,7 +413,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         Left = 0
         Top = 105
         Width = 455
-        Height = 194
+        Height = 192
         Align = alClient
         ColCount = 3
         FixedCols = 0
@@ -547,45 +545,45 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         Left = 0
         Top = 0
         Width = 455
-        Height = 299
+        Height = 297
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 455
-        ExplicitHeight = 299
+        ExplicitHeight = 297
         inherited splObservations: TSplitter
-          Top = 122
+          Top = 120
           Width = 455
           ExplicitTop = -17
           ExplicitWidth = 455
         end
         inherited grpDirectObs: TGroupBox
           Width = 455
-          Height = 122
+          Height = 120
           ExplicitWidth = 455
-          ExplicitHeight = 122
+          ExplicitHeight = 120
           inherited frameObservations: TframeGrid
             Width = 451
-            Height = 105
+            Height = 101
             ExplicitWidth = 451
-            ExplicitHeight = 105
+            ExplicitHeight = 101
             inherited Panel: TPanel
-              Top = 73
+              Top = 69
               Width = 451
               ExplicitTop = 73
               ExplicitWidth = 451
             end
             inherited Grid: TRbwDataGrid4
               Width = 451
-              Height = 73
+              Height = 69
               ExplicitWidth = 451
-              ExplicitHeight = 73
+              ExplicitHeight = 69
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
-          Top = 127
+          Top = 125
           Width = 455
-          ExplicitTop = 127
+          ExplicitTop = 125
           ExplicitWidth = 455
           inherited frameObsComparisons: TframeGrid
             Width = 451

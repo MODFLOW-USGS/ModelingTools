@@ -23,30 +23,30 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
         object lblGroupNumber: TLabel
           Left = 183
           Top = 101
-          Width = 119
-          Height = 13
+          Width = 135
+          Height = 15
           Caption = 'Group number (IRGNUM)'
         end
         object lblReachLength: TLabel
           Left = 8
           Top = 66
-          Width = 99
-          Height = 13
+          Width = 108
+          Height = 15
           Margins.Left = 8
           Caption = 'Reach length (RLEN)'
         end
         object lblRouteType: TLabel
           Left = 8
           Top = 12
-          Width = 147
-          Height = 13
+          Width = 156
+          Height = 15
           Caption = 'Type of routing (IROUTETYPE)'
         end
         object lblObservationType: TLabel
           Left = 10
           Top = 148
-          Width = 89
-          Height = 13
+          Width = 95
+          Height = 15
           Caption = 'Observation types'
         end
         object rdeGroupNumber: TRbwDataEntry
@@ -99,13 +99,13 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
           Left = 8
           Top = 31
           Width = 345
-          Height = 23
+          Height = 25
           Style = csOwnerDrawVariable
           ButtonStyle = fsLighter
           DroppedWidth = 474
           ImageHeight = 0
           ImageWidth = 0
-          ItemHeight = 17
+          ItemHeight = 19
           ItemIndex = 2
           TabOrder = 0
           Items = <
@@ -134,7 +134,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
           Left = 183
           Top = 150
           Width = 370
-          Height = 21
+          Height = 23
           Items.Strings = (
             'Stage'
             'Depth'
@@ -152,29 +152,30 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
         Left = 0
         Top = 177
         Width = 567
-        Height = 177
+        Height = 175
         Align = alClient
         Caption = 'Connections'
         TabOrder = 1
+        ExplicitHeight = 177
         object lblDescription: TLabel
           AlignWithMargins = True
           Left = 5
-          Top = 18
+          Top = 20
           Width = 557
-          Height = 26
+          Height = 30
           Align = alTop
           Caption = 
             'If multiple reaches are defined by the same object, connections ' +
             'between them are defined automatically. Use this page to define ' +
             'connections with other objects.'
           WordWrap = True
-          ExplicitWidth = 549
+          ExplicitWidth = 555
         end
         inline frameConnections: TframeGrid
           Left = 2
-          Top = 47
+          Top = 53
           Width = 563
-          Height = 128
+          Height = 120
           Align = alClient
           TabOrder = 0
           ExplicitLeft = 2
@@ -182,7 +183,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
           ExplicitWidth = 563
           ExplicitHeight = 128
           inherited Panel: TPanel
-            Top = 87
+            Top = 79
             Width = 563
             ExplicitTop = 87
             ExplicitWidth = 563
@@ -201,7 +202,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
           end
           inherited Grid: TRbwDataGrid4
             Width = 563
-            Height = 87
+            Height = 79
             ColCount = 3
             OnSelectCell = frameConnectionsGridSelectCell
             OnSetEditText = frameConnectionsGridSetEditText
@@ -284,7 +285,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
                 AutoAdjustColWidths = True
               end>
             ExplicitWidth = 563
-            ExplicitHeight = 87
+            ExplicitHeight = 79
           end
         end
       end
@@ -296,14 +297,14 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
         Left = 0
         Top = 0
         Width = 567
-        Height = 354
+        Height = 352
         Align = alClient
         TabOrder = 0
         TabStop = True
         ExplicitWidth = 567
         ExplicitHeight = 354
         inherited pnlBottom: TPanel
-          Top = 308
+          Top = 306
           Width = 567
           ExplicitTop = 308
           ExplicitWidth = 567
@@ -326,7 +327,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
         end
         inherited pnlGrid: TPanel
           Width = 567
-          Height = 283
+          Height = 281
           ExplicitWidth = 567
           ExplicitHeight = 283
           inherited pnlEditGrid: TPanel
@@ -335,7 +336,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
           end
           inherited rdgModflowBoundary: TRbwDataGrid4
             Width = 565
-            Height = 231
+            Height = 229
             ColCount = 6
             OnSelectCell = frameSwrdgModflowBoundarySelectCell
             OnSetEditText = frameSwrdgModflowBoundarySetEditText
@@ -488,10 +489,8 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
-            ExplicitLeft = 1
-            ExplicitTop = 51
             ExplicitWidth = 565
-            ExplicitHeight = 231
+            ExplicitHeight = 229
           end
         end
       end

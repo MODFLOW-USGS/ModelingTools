@@ -21,7 +21,7 @@ inherited framePackageSwr: TframePackageSwr
   inherited memoComments: TMemo
     Width = 564
     Anchors = [akLeft, akTop, akRight, akBottom]
-    TabOrder = 3
+    TabOrder = 1
     ExplicitWidth = 564
   end
   object jvplSwr: TJvPageList [4]
@@ -52,22 +52,22 @@ inherited framePackageSwr: TframePackageSwr
       object lblScaling: TLabel
         Left = 6
         Top = 272
-        Width = 33
-        Height = 13
+        Width = 38
+        Height = 15
         Caption = 'Scaling'
       end
       object lblReordering: TLabel
         Left = 6
         Top = 320
-        Width = 53
-        Height = 13
+        Width = 58
+        Height = 15
         Caption = 'Reordering'
       end
       object lblNewton: TLabel
         Left = 6
         Top = 374
-        Width = 91
-        Height = 13
+        Width = 103
+        Height = 15
         Caption = 'Newton-Correction'
       end
       object cbSwrOnly: TCheckBox
@@ -139,13 +139,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 294
         Width = 411
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 411
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 7
         Items = <
@@ -169,13 +169,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 339
         Width = 411
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 411
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 8
         Items = <
@@ -199,13 +199,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 396
         Width = 411
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 411
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 2
         TabOrder = 9
         Items = <
@@ -237,36 +237,36 @@ inherited framePackageSwr: TframePackageSwr
       object lblInitialTimeStepLength: TLabel
         Left = 157
         Top = 6
-        Width = 145
-        Height = 13
+        Width = 156
+        Height = 15
         Caption = 'Initial time step length (RTINI)'
       end
       object lblMinTimeStepLength: TLabel
         Left = 157
         Top = 34
-        Width = 163
-        Height = 13
+        Width = 188
+        Height = 15
         Caption = 'Minimum time step length (RTMIN)'
       end
       object lblMaxTimeStepLength: TLabel
         Left = 157
         Top = 62
-        Width = 169
-        Height = 13
+        Width = 193
+        Height = 15
         Caption = 'Maximum time step length (RTMAX)'
       end
       object lblTimeStepMultiplier: TLabel
         Left = 157
         Top = 90
-        Width = 141
-        Height = 13
+        Width = 158
+        Height = 15
         Caption = 'Time step multiplier (RTMULT)'
       end
       object lblTimeStepIncreaseFrequency: TLabel
         Left = 133
         Top = 118
-        Width = 127
-        Height = 26
+        Width = 119
+        Height = 45
         Caption = 'Frequency with which time step increases (NTMULT)'
         WordWrap = True
       end
@@ -274,38 +274,38 @@ inherited framePackageSwr: TframePackageSwr
         Left = 157
         Top = 157
         Width = 103
-        Height = 39
+        Height = 45
         Caption = 'Minimum gradient for diffusive flow (DMINGRAD)'
         WordWrap = True
       end
       object lblMinDepthForOutflow: TLabel
         Left = 157
         Top = 196
-        Width = 190
-        Height = 13
+        Width = 221
+        Height = 15
         Caption = 'Minimum depth for outflow (DMINDPTH)'
       end
       object lblMaxRainfallForStepAdjustment: TLabel
         Left = 157
         Top = 224
-        Width = 99
-        Height = 39
+        Width = 97
+        Height = 60
         Caption = 'Maximum rainfall for step adjustment (DMAXRAI)'
         WordWrap = True
       end
       object lblMaxStageChangePerStep: TLabel
         Left = 157
         Top = 268
-        Width = 158
-        Height = 26
+        Width = 151
+        Height = 30
         Caption = 'Maximum stage change per step (DMAXSTG)'
         WordWrap = True
       end
       object lblMaxInflowChange: TLabel
         Left = 157
         Top = 312
-        Width = 135
-        Height = 26
+        Width = 133
+        Height = 30
         Caption = 'Maximum inflow change per step (DMAXINF)'
         WordWrap = True
       end
@@ -585,87 +585,87 @@ inherited framePackageSwr: TframePackageSwr
       object lblPrintInflowsAndOutflows: TLabel
         Left = 157
         Top = 12
-        Width = 246
-        Height = 26
+        Width = 227
+        Height = 30
         Caption = 'Save stage, inflows, and outflows for reach groups (ISWRPRGF)'
         WordWrap = True
       end
       object lblPrintStage: TLabel
         Left = 157
         Top = 44
-        Width = 117
-        Height = 13
+        Width = 119
+        Height = 15
         Caption = 'Save stage (ISWRPSTG)'
       end
       object lblPrintReachExchangeAndProperties: TLabel
         Left = 157
         Top = 76
-        Width = 155
-        Height = 13
+        Width = 163
+        Height = 15
         Caption = 'Save reach values (ISWRPQAQ)'
       end
       object lblPrintReachLateralFlow: TLabel
         Left = 157
         Top = 108
-        Width = 170
-        Height = 13
+        Width = 182
+        Height = 15
         Caption = 'Save reach lateral flow (ISWRPQM)'
       end
       object lblPrintStructureFlow: TLabel
         Left = 157
         Top = 140
-        Width = 157
-        Height = 13
+        Width = 164
+        Height = 15
         Caption = 'Save structure flow (ISWRPSTR)'
       end
       object lblSaveSwrTimeStepLength: TLabel
         Left = 157
         Top = 218
-        Width = 108
-        Height = 26
+        Width = 106
+        Height = 45
         Caption = 'Save SWR time step length (SAVE_SWRDT)'
         WordWrap = True
       end
       object lblSaveRiver: TLabel
         Left = 6
         Top = 328
-        Width = 95
-        Height = 13
+        Width = 100
+        Height = 15
         Caption = 'Save River package'
       end
       object lblSaveObs: TLabel
         Left = 6
         Top = 382
-        Width = 89
-        Height = 13
+        Width = 94
+        Height = 15
         Caption = 'Save observations'
       end
       object lblSaveFrequency: TLabel
         Left = 157
         Top = 482
-        Width = 108
-        Height = 26
+        Width = 105
+        Height = 45
         Caption = 'Frequency with which data is saved (RTPRN)'
         WordWrap = True
       end
       object lblObsFormat: TLabel
         Left = 157
         Top = 439
-        Width = 153
-        Height = 13
+        Width = 165
+        Height = 15
         Caption = 'Observation format (IOPTUNIT)'
       end
       object comboPrintInflowsAndOutflows: TJvImageComboBox
         Left = 6
         Top = 9
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 0
         Items = <
@@ -689,13 +689,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 41
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 1
         Items = <
@@ -719,13 +719,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 73
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 2
         Items = <
@@ -749,13 +749,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 105
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 3
         Items = <
@@ -779,13 +779,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 137
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 4
         Items = <
@@ -825,13 +825,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 215
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 7
         Items = <
@@ -864,13 +864,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 353
         Width = 419
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 419
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 10
         Items = <
@@ -894,13 +894,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 407
         Width = 419
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 419
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 11
         OnChange = comboSaveObsChange
@@ -946,13 +946,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 436
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 145
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 12
         Items = <
@@ -979,108 +979,108 @@ inherited framePackageSwr: TframePackageSwr
       object lblSolver: TLabel
         Left = 183
         Top = 6
-        Width = 83
-        Height = 13
+        Width = 86
+        Height = 15
         Caption = 'Solver (ISOLVER)'
       end
       object lblMaxOuterIterations: TLabel
         Left = 133
         Top = 39
-        Width = 128
-        Height = 26
+        Width = 117
+        Height = 45
         Caption = 'Maximum number of outer iterations (NOUTER)'
         WordWrap = True
       end
       object lblMaxInnerIterations: TLabel
         Left = 133
         Top = 77
-        Width = 126
-        Height = 26
+        Width = 117
+        Height = 45
         Caption = 'Maximum number of inner iterations (NINNER)'
         WordWrap = True
       end
       object lblMaxLineSearchIterations: TLabel
         Left = 133
         Top = 123
-        Width = 118
-        Height = 26
+        Width = 117
+        Height = 45
         Caption = 'Maximum number of line search iterations (IBT)'
         WordWrap = True
       end
       object lblStageTolerance: TLabel
         Left = 159
         Top = 168
-        Width = 112
-        Height = 13
+        Width = 118
+        Height = 15
         Caption = 'Stage tolerance (TOLS)'
       end
       object lblFlowToleranceOption: TLabel
         Left = 239
         Top = 197
-        Width = 103
-        Height = 13
+        Width = 115
+        Height = 15
         Caption = 'Flow tolerance option'
       end
       object lblFlowTolerance: TLabel
         Left = 157
         Top = 229
-        Width = 107
-        Height = 13
+        Width = 115
+        Height = 15
         Caption = 'Flow tolerance (TOLR)'
       end
       object lblExchangeToleranceOption: TLabel
         Left = 239
         Top = 257
-        Width = 128
-        Height = 13
+        Width = 141
+        Height = 15
         Caption = 'Exchange tolerance option'
       end
       object lblExchangeTolerance: TLabel
         Left = 157
         Top = 289
-        Width = 132
-        Height = 13
+        Width = 142
+        Height = 15
         Caption = 'Exchange tolerance (TOLA)'
       end
       object lblSteadyStateDampingFactor: TLabel
         Left = 157
         Top = 317
-        Width = 188
-        Height = 13
+        Width = 205
+        Height = 15
         Caption = 'Steady state damping factor (DAMPSS)'
       end
       object lblTransientDampingFactor: TLabel
         Left = 157
         Top = 345
-        Width = 172
-        Height = 13
+        Width = 190
+        Height = 15
         Caption = 'Transient damping factor (DAMPTR)'
       end
       object lblConvergencePrintoutInterval: TLabel
         Left = 133
         Top = 374
-        Width = 195
-        Height = 13
+        Width = 210
+        Height = 15
         Caption = 'Convergence printout interval (IPRSWR)'
       end
       object lblPrintConvergence: TLabel
         Left = 6
         Top = 403
-        Width = 142
-        Height = 13
+        Width = 156
+        Height = 15
         Caption = 'Print convergence (MUTSWR)'
       end
       object comboSolver: TJvImageComboBox
         Left = 6
         Top = 3
         Width = 171
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 171
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 0
         OnChange = comboSolverChange
@@ -1148,13 +1148,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 194
         Width = 227
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 227
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 5
         OnChange = comboFlowToleranceOptionChange
@@ -1191,13 +1191,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 254
         Width = 227
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 227
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 2
         TabOrder = 7
         Items = <
@@ -1266,13 +1266,13 @@ inherited framePackageSwr: TframePackageSwr
         Left = 6
         Top = 422
         Width = 299
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 299
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 12
         Items = <
@@ -1309,50 +1309,50 @@ inherited framePackageSwr: TframePackageSwr
       object lblPreconditioner: TLabel
         Left = 231
         Top = 6
-        Width = 97
-        Height = 13
+        Width = 107
+        Height = 15
         Caption = 'Preconditioner (IPC)'
       end
       object lblMaxLevels: TLabel
         Left = 133
         Top = 39
-        Width = 178
-        Height = 13
+        Width = 203
+        Height = 15
         Caption = 'Maximum number of levels (NLEVELS)'
       end
       object lblDropThreshold: TLabel
         Left = 159
         Top = 68
-        Width = 129
-        Height = 13
+        Width = 141
+        Height = 15
         Caption = 'Drop threshold (DROPTOL)'
       end
       object lblPrintLineSearchInterval: TLabel
         Left = 133
         Top = 97
-        Width = 151
-        Height = 26
+        Width = 145
+        Height = 30
         Caption = 'Interval for printing line search information (IBTPRT)'
         WordWrap = True
       end
       object lblAlternativeFlowTolerance: TLabel
         Left = 159
         Top = 150
-        Width = 167
-        Height = 13
+        Width = 180
+        Height = 15
         Caption = 'Alternative flow tolerance (PTOLR)'
       end
       object comboPreconditioner: TJvImageComboBox
         Left = 6
         Top = 3
         Width = 219
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 253
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 3
         TabOrder = 0
         OnChange = comboPreconditionerChange

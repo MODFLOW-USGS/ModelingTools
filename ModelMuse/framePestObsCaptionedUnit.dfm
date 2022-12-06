@@ -1,16 +1,19 @@
 inherited framePestObsCaptioned: TframePestObsCaptioned
   inherited grpDirectObs: TGroupBox
     Top = 41
-    Height = 201
+    Height = 202
     ExplicitTop = 40
     ExplicitHeight = 202
     inherited frameObservations: TframeGrid
-      Height = 184
+      Height = 183
+      ExplicitHeight = 184
       inherited Panel: TPanel
-        Top = 143
+        Top = 151
+        ExplicitTop = 143
       end
       inherited Grid: TRbwDataGrid4
-        Height = 143
+        Height = 151
+        ExplicitHeight = 151
       end
     end
   end

@@ -29,15 +29,15 @@ inherited frameMt3dmsTransObsPkg: TframeMt3dmsTransObsPkg
     object lblConcScaleFactor: TLabel
       Left = 3
       Top = 21
-      Width = 170
-      Height = 13
+      Width = 185
+      Height = 15
       Caption = 'Concentration scale factor (CScale)'
     end
     object lblSaveType: TLabel
       Left = 3
       Top = 65
-      Width = 262
-      Height = 13
+      Width = 284
+      Height = 15
       Caption = 'Concentration observations results to save (iOutCobs)'
     end
     object rdeConcScaleFactor: TRbwDataEntry
@@ -58,7 +58,7 @@ inherited frameMt3dmsTransObsPkg: TframeMt3dmsTransObsPkg
       Left = 3
       Top = 91
       Width = 262
-      Height = 23
+      Height = 25
       Style = csOwnerDrawVariable
       ButtonStyle = fsLighter
       Color = clBtnFace
@@ -66,7 +66,7 @@ inherited frameMt3dmsTransObsPkg: TframeMt3dmsTransObsPkg
       Enabled = False
       ImageHeight = 0
       ImageWidth = 0
-      ItemHeight = 17
+      ItemHeight = 19
       ItemIndex = 1
       TabOrder = 1
       Items = <
@@ -110,15 +110,15 @@ inherited frameMt3dmsTransObsPkg: TframeMt3dmsTransObsPkg
     object lblMassFluxScaleFactor: TLabel
       Left = 3
       Top = 19
-      Width = 146
-      Height = 13
+      Width = 157
+      Height = 15
       Caption = 'Mass flux scale factor (FScale)'
     end
     object lblSaveMassFluxType: TLabel
       Left = 3
       Top = 68
-      Width = 235
-      Height = 13
+      Width = 253
+      Height = 15
       Caption = 'Mass flux observations results to save (iOutFlux)'
     end
     object rdeMassFluxScaleFactor: TRbwDataEntry
@@ -139,7 +139,7 @@ inherited frameMt3dmsTransObsPkg: TframeMt3dmsTransObsPkg
       Left = 3
       Top = 89
       Width = 235
-      Height = 23
+      Height = 25
       Style = csOwnerDrawVariable
       ButtonStyle = fsLighter
       Color = clBtnFace
@@ -147,7 +147,7 @@ inherited frameMt3dmsTransObsPkg: TframeMt3dmsTransObsPkg
       Enabled = False
       ImageHeight = 0
       ImageWidth = 0
-      ItemHeight = 17
+      ItemHeight = 19
       ItemIndex = 0
       TabOrder = 1
       Items = <

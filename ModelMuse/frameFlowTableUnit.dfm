@@ -28,6 +28,7 @@ object frameFlowTable: TframeFlowTable
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -51,6 +52,7 @@ object frameFlowTable: TframeFlowTable
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -74,6 +76,7 @@ object frameFlowTable: TframeFlowTable
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -109,8 +112,8 @@ object frameFlowTable: TframeFlowTable
     object lblNumberOfPoints: TLabel
       Left = 74
       Top = 9
-      Width = 82
-      Height = 13
+      Width = 94
+      Height = 15
       Caption = 'Number of points'
     end
     object btnDeleteFlowTableRow: TBitBtn

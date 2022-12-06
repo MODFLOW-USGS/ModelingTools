@@ -28,6 +28,7 @@ object frameCrossSection: TframeCrossSection
     Columns = <
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -51,6 +52,7 @@ object frameCrossSection: TframeCrossSection
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

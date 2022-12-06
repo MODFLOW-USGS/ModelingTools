@@ -13,7 +13,6 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
     ExplicitHeight = 142
     inherited rdgModflowBoundary: TRbwDataGrid4
       Height = 90
-      ExplicitLeft = 1
       ExplicitHeight = 90
     end
   end
@@ -30,8 +29,8 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
       object lblInitialConcentration: TLabel
         Left = 4
         Top = 3
-        Width = 152
-        Height = 13
+        Width = 167
+        Height = 15
         Caption = 'Initial concentration (CINITLAK)'
       end
       object rdgInitialConcentration: TRbwDataGrid4
@@ -39,7 +38,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
         Left = 3
         Top = 30
         Width = 306
-        Height = 90
+        Height = 88
         Margins.Top = 30
         Align = alClient
         ColCount = 2
@@ -115,20 +114,21 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
       ImageIndex = 2
       object pnlButtonsRunoff: TPanel
         Left = 0
-        Top = 77
+        Top = 75
         Width = 312
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitTop = 77
         DesignSize = (
           312
           46)
         object lbl1: TLabel
           Left = 64
           Top = 15
-          Width = 78
-          Height = 13
+          Width = 90
+          Height = 15
           Caption = 'Number of times'
         end
         object seRunoffTimes: TJvSpinEdit
@@ -204,9 +204,10 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
         Left = 0
         Top = 0
         Width = 312
-        Height = 77
+        Height = 75
         Align = alClient
         TabOrder = 1
+        ExplicitHeight = 77
         object pnl3: TPanel
           Left = 1
           Top = 1
@@ -218,8 +219,8 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
           object lblRunoffFormula: TLabel
             Left = 136
             Top = 5
-            Width = 38
-            Height = 13
+            Width = 44
+            Height = 15
             Alignment = taCenter
             Caption = 'Formula'
           end
@@ -240,7 +241,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
           Left = 1
           Top = 51
           Width = 310
-          Height = 25
+          Height = 23
           Align = alClient
           ColCount = 3
           FixedCols = 0

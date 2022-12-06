@@ -9,8 +9,8 @@ inherited framePackageMnw2: TframePackageMnw2
   object lblPrintOption: TLabel [2]
     Left = 16
     Top = 157
-    Width = 117
-    Height = 13
+    Width = 134
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Print option (MNWPRNT)'
     Enabled = False
@@ -24,7 +24,7 @@ inherited framePackageMnw2: TframePackageMnw2
     Left = 16
     Top = 180
     Width = 145
-    Height = 23
+    Height = 25
     Style = csOwnerDrawVariable
     Anchors = [akLeft, akBottom]
     ButtonStyle = fsLighter
@@ -33,7 +33,7 @@ inherited framePackageMnw2: TframePackageMnw2
     Enabled = False
     ImageHeight = 0
     ImageWidth = 0
-    ItemHeight = 17
+    ItemHeight = 19
     ItemIndex = 2
     TabOrder = 1
     Items = <

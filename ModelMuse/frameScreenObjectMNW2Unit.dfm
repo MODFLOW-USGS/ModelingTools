@@ -223,6 +223,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         end
         inherited comboLocationChoice: TJvImageComboBox
           Left = 173
+          ItemIndex = -1
           OnChange = framePumpLocationMethodcomboLocationChoiceChange
           ExplicitLeft = 173
         end
@@ -660,6 +661,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         AutoIncreaseRowCount = True
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
+        OnEndUpdate = rdgLiftTableEndUpdate
         ColorRangeSelection = False
         Columns = <
           item
@@ -710,7 +712,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        OnEndUpdate = rdgLiftTableEndUpdate
         WordWrapRowCaptions = False
       end
       object seLiftTableRows: TJvSpinEdit
@@ -771,6 +772,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
         OnColSize = rdgTimeTableColSize
+        OnEndUpdate = rdgTimeTableEndUpdate
         ColorRangeSelection = False
         OnHorizontalScroll = rdgTimeTableHorizontalScroll
         Columns = <
@@ -970,7 +972,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        OnEndUpdate = rdgTimeTableEndUpdate
         WordWrapRowCaptions = False
         ColWidths = (
           64
@@ -1154,6 +1155,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
         OnColSize = rdgVerticalScreensColSize
+        OnEndUpdate = rdgVerticalScreensEndUpdate
         ColorRangeSelection = False
         OnHorizontalScroll = rdgVerticalScreensHorizontalScroll
         Columns = <
@@ -1373,7 +1375,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        OnEndUpdate = rdgVerticalScreensEndUpdate
         WordWrapRowCaptions = False
       end
       object Panel4: TPanel

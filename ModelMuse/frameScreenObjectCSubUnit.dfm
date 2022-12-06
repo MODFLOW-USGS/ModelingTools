@@ -9,7 +9,7 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
         Left = 0
         Top = 56
         Width = 388
-        Height = 207
+        Height = 205
         Align = alClient
         ColCount = 10
         FixedCols = 1
@@ -283,8 +283,8 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
         object lblFormulaPkgProp: TLabel
           Left = 232
           Top = 5
-          Width = 38
-          Height = 13
+          Width = 44
+          Height = 15
           Alignment = taCenter
           Caption = 'Formula'
         end
@@ -309,13 +309,6 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
           Caption = 'Used'
           TabOrder = 1
           OnClick = cbUsedPkgPropClick
-        end
-      end
-    end
-    inherited tabTransient: TTabSheet
-      inherited pnlGrid: TPanel
-        inherited rdgModflowBoundary: TRbwDataGrid4
-          ExplicitLeft = 1
         end
       end
     end

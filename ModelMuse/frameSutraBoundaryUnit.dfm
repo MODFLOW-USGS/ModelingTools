@@ -18,8 +18,8 @@ inherited frameSutraBoundary: TframeSutraBoundary
     object lblFluidSourceInLakesPresent: TLabel [1]
       Left = 10
       Top = 5
-      Width = 150
-      Height = 13
+      Width = 157
+      Height = 15
       Caption = 'If lake water present or absent'
     end
     inherited seNumberOfTimes: TJvSpinEdit
@@ -47,7 +47,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
       Left = 10
       Top = 29
       Width = 286
-      Height = 21
+      Height = 23
       Style = csDropDownList
       ItemIndex = 3
       TabOrder = 3
@@ -82,6 +82,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
       OnSetEditText = rdgSutraFeatureSetEditText
       OnBeforeDrawCell = rdgSutraFeatureBeforeDrawCell
       OnColSize = rdgSutraFeatureColSize
+      OnEndUpdate = rdgSutraFeatureEndUpdate
       OnHorizontalScroll = rdgSutraFeatureHorizontalScroll
       Columns = <
         item
@@ -180,7 +181,6 @@ inherited frameSutraBoundary: TframeSutraBoundary
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      OnEndUpdate = rdgSutraFeatureEndUpdate
       ExplicitTop = 51
       ExplicitHeight = 91
     end
@@ -195,8 +195,8 @@ inherited frameSutraBoundary: TframeSutraBoundary
       object lblFormula: TLabel
         Left = 136
         Top = 5
-        Width = 38
-        Height = 13
+        Width = 44
+        Height = 15
         Alignment = taCenter
         Caption = 'Formula'
       end

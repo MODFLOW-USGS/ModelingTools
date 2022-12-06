@@ -28,47 +28,47 @@ inherited framePackageSub: TframePackageSub
       Caption = 'Controls'
       DesignSize = (
         587
-        367)
+        365)
       object lblNumberOfNodes: TLabel
         Left = 65
         Top = 7
-        Width = 201
-        Height = 13
+        Width = 223
+        Height = 15
         Caption = 'Number of nodes for delay interbeds (NN)'
       end
       object lblAccel1: TLabel
         Left = 88
         Top = 35
-        Width = 164
-        Height = 13
+        Width = 176
+        Height = 15
         Caption = 'First acceleration parameter (AC!)'
       end
       object lblAccel2: TLabel
         Left = 88
         Top = 63
-        Width = 180
-        Height = 13
+        Width = 196
+        Height = 15
         Caption = 'Second acceleration parameter (AC2)'
       end
       object lblMinIterations: TLabel
         Left = 88
         Top = 91
-        Width = 248
-        Height = 13
+        Width = 278
+        Height = 15
         Caption = 'Minimum number of iterations for SIP solver (ITMIN)'
       end
       object lbReadRestart: TLabel
         Left = 8
         Top = 142
-        Width = 264
-        Height = 13
+        Width = 285
+        Height = 15
         Caption = 'File from which the restart record will be read (IDREST)'
       end
       object lblOutputChoice: TLabel
         Left = 8
         Top = 192
-        Width = 98
-        Height = 13
+        Width = 110
+        Height = 15
         Caption = 'Binary output choice'
         Enabled = False
       end
@@ -152,7 +152,7 @@ inherited framePackageSub: TframePackageSub
         Left = 8
         Top = 208
         Width = 145
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -160,7 +160,7 @@ inherited framePackageSub: TframePackageSub
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 6
         Items = <
@@ -189,12 +189,12 @@ inherited framePackageSub: TframePackageSub
       ImageIndex = 2
       DesignSize = (
         587
-        367)
+        365)
       object lblNumExportPeriods: TLabel
         Left = 75
         Top = 331
-        Width = 123
-        Height = 13
+        Width = 137
+        Height = 15
         Anchors = [akLeft, akBottom]
         Caption = 'Number of export periods'
       end
@@ -312,6 +312,7 @@ inherited framePackageSub: TframePackageSub
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
         OnColSize = rdgOutputColSize
+        OnEndUpdate = rdgOutputEndUpdate
         ColorRangeSelection = False
         OnHorizontalScroll = rdgOutputHorizontalScroll
         Columns = <
@@ -880,7 +881,6 @@ inherited framePackageSub: TframePackageSub
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        OnEndUpdate = rdgOutputEndUpdate
         WordWrapRowCaptions = False
       end
       object seNumExportPeriods: TJvSpinEdit
@@ -899,7 +899,7 @@ inherited framePackageSub: TframePackageSub
         Left = 32
         Top = 3
         Width = 89
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -907,7 +907,7 @@ inherited framePackageSub: TframePackageSub
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 0
         OnChange = comboMultiFomatChange

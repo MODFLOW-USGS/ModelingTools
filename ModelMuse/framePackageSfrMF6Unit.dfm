@@ -9,8 +9,8 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   object lblMaxIterations: TLabel [2]
     Left = 167
     Top = 309
-    Width = 257
-    Height = 45
+    Width = 231
+    Height = 30
     Caption = 'Maximum number of streamflow iterations (maximum_iteration) '
     WordWrap = True
   end

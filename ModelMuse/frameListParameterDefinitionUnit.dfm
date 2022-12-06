@@ -19,8 +19,8 @@ object frameListParameterDefinition: TframeListParameterDefinition
     object lblNumParameters: TLabel
       Left = 63
       Top = 9
-      Width = 108
-      Height = 13
+      Width = 120
+      Height = 15
       Caption = 'Number of parameters'
     end
     object btnDelete: TBitBtn
@@ -98,11 +98,13 @@ object frameListParameterDefinition: TframeListParameterDefinition
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBtnFace
     OnBeforeDrawCell = dgParametersBeforeDrawCell
+    OnEndUpdate = dgParametersEndUpdate
     OnStateChange = dgParametersStateChange
     ColorRangeSelection = False
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -126,6 +128,7 @@ object frameListParameterDefinition: TframeListParameterDefinition
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -147,7 +150,6 @@ object frameListParameterDefinition: TframeListParameterDefinition
         CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
-    OnEndUpdate = dgParametersEndUpdate
     WordWrapRowCaptions = False
   end
 end

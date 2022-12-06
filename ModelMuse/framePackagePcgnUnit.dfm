@@ -18,53 +18,49 @@ inherited framePackagePcgn: TframePackagePcgn
     ActivePage = tabNonLinear
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
-    TabOrder = 2
+    TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblIter_mo: TLabel
         Left = 79
         Top = 19
-        Width = 269
-        Height = 13
+        Width = 299
+        Height = 15
         Caption = 'Maximum number of Picard (outer) iterations (ITER_MO)'
       end
       object lblIter_mi: TLabel
         Left = 79
         Top = 46
-        Width = 254
-        Height = 13
+        Width = 282
+        Height = 15
         Caption = 'Maximum number of PCG (inner) iterations (ITER_MI)'
       end
       object lblCLOSE_R: TLabel
         Left = 79
         Top = 73
-        Width = 293
-        Height = 13
+        Width = 319
+        Height = 15
         Caption = 'The residual-based stopping criterion for iteration (CLOSE_R)'
       end
       object lblClose_H: TLabel
         Left = 79
         Top = 101
-        Width = 280
-        Height = 13
+        Width = 306
+        Height = 15
         Caption = 'The head-based stopping criterion for iteration (CLOSE_H)'
       end
       object lblRelax: TLabel
         Left = 79
         Top = 129
-        Width = 146
-        Height = 13
+        Width = 157
+        Height = 15
         Caption = 'Relaxation parameter (RELAX)'
       end
       object lblIfill: TLabel
         Left = 79
         Top = 157
-        Width = 198
-        Height = 13
+        Width = 217
+        Height = 15
         Caption = 'Fill level of the MIC preconditioner (IFILL)'
       end
       object seIter_mo: TJvSpinEdit
@@ -164,85 +160,81 @@ inherited framePackagePcgn: TframePackagePcgn
     object tabNonLinear: TTabSheet
       Caption = 'Non-Linear'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblDampingMode: TLabel
         Left = 143
         Top = 6
-        Width = 116
-        Height = 13
+        Width = 136
+        Height = 15
         Caption = 'Damping mode (ADAMP)'
       end
       object lblDamp: TLabel
         Left = 143
         Top = 32
-        Width = 169
-        Height = 13
+        Width = 192
+        Height = 15
         Caption = 'Damping parameter control (DAMP)'
       end
       object lblDamp_Lb: TLabel
         Left = 143
         Top = 63
-        Width = 154
-        Height = 13
+        Width = 177
+        Height = 15
         Caption = 'Lower limit for DAMP (DAMP_LB)'
       end
       object lblDamp_D: TLabel
         Left = 143
         Top = 95
-        Width = 221
-        Height = 13
+        Width = 237
+        Height = 15
         Caption = 'Rate parameter for adjusting DAMP (RATE_D)'
       end
       object lblChglimit: TLabel
         Left = 143
         Top = 123
-        Width = 168
-        Height = 13
+        Width = 191
+        Height = 15
         Caption = 'Maximum head change (CHGLIMIT)'
       end
       object lblAcnvg: TLabel
         Left = 143
         Top = 151
-        Width = 138
-        Height = 13
+        Width = 155
+        Height = 15
         Caption = 'Convergence mode (ACNVG)'
       end
       object lblChvg_Lb: TLabel
         Left = 143
         Top = 180
-        Width = 245
-        Height = 13
+        Width = 275
+        Height = 15
         Caption = 'Minimum value for relative convergence (CNVG_LB)'
       end
       object lblMcnvg: TLabel
         Left = 143
         Top = 208
-        Width = 300
-        Height = 13
+        Width = 332
+        Height = 15
         Caption = 'Power factor for increasing PCG convergence criteria (MCNVG)'
       end
       object lblRate_C: TLabel
         Left = 143
         Top = 235
-        Width = 218
-        Height = 13
+        Width = 237
+        Height = 15
         Caption = 'Convergence enhancement control (RATE_C)'
       end
       object lblIpunit: TLabel
         Left = 143
         Top = 263
-        Width = 245
-        Height = 13
+        Width = 265
+        Height = 15
         Caption = 'Progress reporting for the Picard iteration (IPUNIT)'
       end
       object comboDampingMode: TJvImageComboBox
         Left = 3
         Top = 3
         Width = 134
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -250,7 +242,7 @@ inherited framePackagePcgn: TframePackagePcgn
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 0
         Items = <
@@ -333,7 +325,7 @@ inherited framePackagePcgn: TframePackagePcgn
         Left = 3
         Top = 148
         Width = 134
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -341,7 +333,7 @@ inherited framePackagePcgn: TframePackagePcgn
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 0
         TabOrder = 5
         OnChange = comboAcnvgChange
@@ -406,7 +398,7 @@ inherited framePackagePcgn: TframePackagePcgn
         Left = 3
         Top = 260
         Width = 134
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         Color = clBtnFace
@@ -414,7 +406,7 @@ inherited framePackagePcgn: TframePackagePcgn
         Enabled = False
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = 1
         TabOrder = 9
         Items = <

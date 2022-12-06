@@ -768,7 +768,9 @@ uses
   ModflowFMI_WriterUnit in 'ModflowFMI_WriterUnit.pas',
   framePackageFmiUnit in 'framePackageFmiUnit.pas' {framePackageFmi: TFrame},
   ModflowFmp4WriterUnit in 'ModflowFmp4WriterUnit.pas',
-  framePackageFmp4Unit in 'framePackageFmp4Unit.pas' {framePackageFmp4: TFrame};
+  framePackageFmp4Unit in 'framePackageFmp4Unit.pas' {framePackageFmp4: TFrame},
+  framePackageFmpSoilsUnit in 'framePackageFmpSoilsUnit.pas' {framePackageFmpSoils: TFrame},
+  framePackageFmp4ClimateUnit in 'framePackageFmp4ClimateUnit.pas' {framePackageFmp4Climate: TFrame};
 
 {$R *.res}
 

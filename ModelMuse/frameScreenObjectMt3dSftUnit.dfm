@@ -47,8 +47,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       Width = 480
       Height = 83
       RowCount = 4
-      ExplicitLeft = 1
-      ExplicitTop = 51
       ExplicitWidth = 480
       ExplicitHeight = 83
     end
@@ -66,8 +64,8 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       object lblObsLocation: TLabel
         Left = 176
         Top = 6
-        Width = 210
-        Height = 20
+        Width = 167
+        Height = 15
         Caption = 'Observation location (ISFNOBS)'
       end
       object rdgSftInitConcAndDisp: TRbwDataGrid4
@@ -75,7 +73,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Left = 0
         Top = 35
         Width = 474
-        Height = 123
+        Height = 128
         Margins.Left = 0
         Margins.Top = 35
         Margins.Right = 0
@@ -172,7 +170,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Left = 16
         Top = 3
         Width = 145
-        Height = 28
+        Height = 23
         Style = csDropDownList
         ItemIndex = 0
         TabOrder = 1
@@ -193,20 +191,21 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       ImageIndex = 2
       object pnlBottomPrecip: TPanel
         Left = 0
-        Top = 112
+        Top = 117
         Width = 474
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitTop = 112
         DesignSize = (
           474
           46)
         object lblNumberOfTimesPrecip: TLabel
           Left = 64
           Top = 15
-          Width = 112
-          Height = 20
+          Width = 90
+          Height = 15
           Caption = 'Number of times'
         end
         object seNumberOfTimesPrecip: TJvSpinEdit
@@ -282,9 +281,10 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Left = 0
         Top = 0
         Width = 474
-        Height = 112
+        Height = 117
         Align = alClient
         TabOrder = 1
+        ExplicitHeight = 112
         object pnlPrecipFormula: TPanel
           Left = 1
           Top = 1
@@ -296,8 +296,8 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           object lblPrecipFormula: TLabel
             Left = 136
             Top = 5
-            Width = 54
-            Height = 20
+            Width = 44
+            Height = 15
             Alignment = taCenter
             Caption = 'Formula'
           end
@@ -319,7 +319,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           Left = 1
           Top = 51
           Width = 472
-          Height = 60
+          Height = 65
           Align = alClient
           ColCount = 3
           FixedCols = 0
@@ -422,20 +422,21 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       ImageIndex = 3
       object pnlBottomRunoff: TPanel
         Left = 0
-        Top = 112
+        Top = 117
         Width = 474
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitTop = 112
         DesignSize = (
           474
           46)
         object lblNumberOfTimesRunoff: TLabel
           Left = 64
           Top = 15
-          Width = 112
-          Height = 20
+          Width = 90
+          Height = 15
           Caption = 'Number of times'
         end
         object seNumberOfTimesRunoff: TJvSpinEdit
@@ -511,9 +512,10 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Left = 0
         Top = 0
         Width = 474
-        Height = 112
+        Height = 117
         Align = alClient
         TabOrder = 1
+        ExplicitHeight = 112
         object pnlFormulaRunoff: TPanel
           Left = 1
           Top = 1
@@ -525,8 +527,8 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           object lblFormulaRunoff: TLabel
             Left = 136
             Top = 5
-            Width = 54
-            Height = 20
+            Width = 44
+            Height = 15
             Alignment = taCenter
             Caption = 'Formula'
           end
@@ -548,7 +550,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           Left = 1
           Top = 51
           Width = 472
-          Height = 60
+          Height = 65
           Align = alClient
           ColCount = 3
           FixedCols = 0
@@ -651,20 +653,21 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       ImageIndex = 4
       object pnlBottomConstConc: TPanel
         Left = 0
-        Top = 112
+        Top = 117
         Width = 474
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitTop = 112
         DesignSize = (
           474
           46)
         object lblNumberOfTimesConstConc: TLabel
           Left = 64
           Top = 16
-          Width = 112
-          Height = 20
+          Width = 90
+          Height = 15
           Caption = 'Number of times'
         end
         object seNumberOfTimesConstConc: TJvSpinEdit
@@ -740,9 +743,10 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Left = 0
         Top = 0
         Width = 474
-        Height = 112
+        Height = 117
         Align = alClient
         TabOrder = 1
+        ExplicitHeight = 112
         object pnlFormulaConstConc: TPanel
           Left = 1
           Top = 1
@@ -754,8 +758,8 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           object lblFormulaConstConc: TLabel
             Left = 136
             Top = 5
-            Width = 54
-            Height = 20
+            Width = 44
+            Height = 15
             Alignment = taCenter
             Caption = 'Formula'
           end
@@ -777,7 +781,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           Left = 1
           Top = 51
           Width = 472
-          Height = 60
+          Height = 65
           Align = alClient
           ColCount = 3
           FixedCols = 0

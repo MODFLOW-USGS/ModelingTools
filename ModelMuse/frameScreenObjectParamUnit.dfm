@@ -14,8 +14,8 @@ inherited frameScreenObjectParam: TframeScreenObjectParam
     object lblTimeSeriesInterpolation: TLabel [1]
       Left = 88
       Top = 8
-      Width = 117
-      Height = 13
+      Width = 131
+      Height = 15
       Caption = 'Time-series interpolation'
       Visible = False
     end
@@ -23,7 +23,7 @@ inherited frameScreenObjectParam: TframeScreenObjectParam
       Left = 64
       Top = 16
       Width = 145
-      Height = 21
+      Height = 23
       Style = csDropDownList
       ItemIndex = 0
       TabOrder = 3
@@ -52,7 +52,7 @@ inherited frameScreenObjectParam: TframeScreenObjectParam
       Align = alClient
       AutoScroll = False
       Columns = 4
-      ItemHeight = 13
+      ItemHeight = 15
       TabOrder = 1
       OnStateChange = clbParametersStateChange
       OnClickCheck = clbParametersClickCheck
@@ -145,8 +145,6 @@ inherited frameScreenObjectParam: TframeScreenObjectParam
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 0
-      ExplicitTop = 51
       ExplicitHeight = 126
     end
   end

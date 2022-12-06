@@ -9,22 +9,22 @@ inherited frameZoneBudget: TframeZoneBudget
     490
     360)
   inherited lblComments: TLabel
-    Width = 143
+    Width = 160
     Caption = 'Title (first line) and Comments'
-    ExplicitWidth = 143
+    ExplicitWidth = 160
   end
   object lblCompositeZones: TLabel [2]
     Left = 16
     Top = 181
-    Width = 81
-    Height = 13
+    Width = 91
+    Height = 15
     Caption = 'Composite zones'
   end
   object lblNumberOfZones: TLabel [3]
     Left = 87
     Top = 325
-    Width = 81
-    Height = 13
+    Width = 91
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Number of zones'
   end
@@ -53,10 +53,12 @@ inherited frameZoneBudget: TframeZoneBudget
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBtnFace
     OnBeforeDrawCell = rdgCompositeZonesBeforeDrawCell
+    OnEndUpdate = rdgCompositeZonesEndUpdate
     ColorRangeSelection = False
     Columns = <
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -80,6 +82,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -104,6 +107,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -128,6 +132,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -152,6 +157,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -176,6 +182,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -200,6 +207,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -224,6 +232,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -248,6 +257,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -272,6 +282,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -296,6 +307,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -320,6 +332,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -344,6 +357,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -368,6 +382,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -392,6 +407,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -416,6 +432,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -440,6 +457,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -464,6 +482,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -488,6 +507,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -512,6 +532,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -536,6 +557,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -560,6 +582,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -584,6 +607,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -608,6 +632,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -632,6 +657,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -656,6 +682,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -680,6 +707,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -704,6 +732,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -728,6 +757,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -752,6 +782,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -776,6 +807,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -800,6 +832,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -824,6 +857,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -848,6 +882,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -872,6 +907,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -896,6 +932,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -920,6 +957,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -944,6 +982,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -968,6 +1007,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -992,6 +1032,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1016,6 +1057,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1040,6 +1082,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1064,6 +1107,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1088,6 +1132,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1112,6 +1157,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1136,6 +1182,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1160,6 +1207,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1184,6 +1232,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1208,6 +1257,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1232,6 +1282,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1256,6 +1307,7 @@ inherited frameZoneBudget: TframeZoneBudget
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -1278,7 +1330,6 @@ inherited frameZoneBudget: TframeZoneBudget
         CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
-    OnEndUpdate = rdgCompositeZonesEndUpdate
     WordWrapRowCaptions = False
   end
   object seNumberOfZones: TJvSpinEdit [6]

@@ -21,40 +21,40 @@ inherited framePackageUZF: TframePackageUZF
     ExplicitHeight = 370
     inherited lblLayerOption: TLabel
       Top = 5
-      Width = 240
+      Width = 266
       Caption = 'Recharge and discharge location option (NUZTOP)'
       ExplicitTop = 5
-      ExplicitWidth = 240
+      ExplicitWidth = 266
     end
     object lblVerticalKSource: TLabel [1]
       Left = 16
       Top = 45
-      Width = 231
-      Height = 13
+      Width = 254
+      Height = 15
       Caption = 'Vertical hydraulic conductivity source (IUZFOPT)'
       Enabled = False
     end
     object lblNumberOfTrailingWaves: TLabel [2]
       Left = 16
       Top = 96
-      Width = 172
-      Height = 13
+      Width = 189
+      Height = 15
       Caption = 'Number of trailing waves (NTRAIL2)'
       Enabled = False
     end
     object lblNumberOfWaveSets: TLabel [3]
       Left = 16
       Top = 143
-      Width = 150
-      Height = 13
+      Width = 161
+      Height = 15
       Caption = 'Number of wave sets (NSETS2)'
       Enabled = False
     end
     object lblSURFDEP: TLabel [4]
       Left = 16
       Top = 286
-      Width = 221
-      Height = 26
+      Width = 216
+      Height = 30
       Caption = 
         'The average height of undulations in the land surface altitude (' +
         'SURFDEP) '
@@ -64,8 +64,8 @@ inherited framePackageUZF: TframePackageUZF
     object lblET_SmoothingFactor: TLabel [5]
       Left = 288
       Top = 318
-      Width = 168
-      Height = 13
+      Width = 187
+      Height = 15
       Caption = 'ET smoothing interval (smoothfact)'
     end
     inherited comboLayerOption: TComboBox
@@ -79,12 +79,13 @@ inherited framePackageUZF: TframePackageUZF
         'Top active cell (3)')
       ExplicitLeft = 16
       ExplicitTop = 24
+      ExplicitHeight = 23
     end
     object comboVerticalKSource: TComboBox
       Left = 16
       Top = 69
       Width = 255
-      Height = 21
+      Height = 23
       Style = csDropDownList
       Enabled = False
       TabOrder = 1
@@ -141,9 +142,8 @@ inherited framePackageUZF: TframePackageUZF
       Top = 190
       Width = 517
       Height = 67
-      OnClickCheck = chklstOptionsClickCheck
       Enabled = False
-      ItemHeight = 13
+      ItemHeight = 15
       Items.Strings = (
         ' Route discharge to streams, lakes, or SWR reaches (IRUNFLG)'
         'Simulate evapotranspiration (IETFLG)'
@@ -160,6 +160,7 @@ inherited framePackageUZF: TframePackageUZF
         'Calculate ET using smoothing interval (ETSQUARE)'
         'Write discharge and recharge (NETFLUX)')
       TabOrder = 5
+      OnClickCheck = chklstOptionsClickCheck
     end
     object rgAssignmentMethod: TRadioGroup
       Left = 240

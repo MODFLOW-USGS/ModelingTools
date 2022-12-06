@@ -23,9 +23,9 @@ object framePestObs: TframePestObs
     TabOrder = 0
     inline frameObservations: TframeGrid
       Left = 2
-      Top = 15
+      Top = 17
       Width = 596
-      Height = 226
+      Height = 224
       Align = alClient
       TabOrder = 0
       ExplicitLeft = 2
@@ -33,16 +33,16 @@ object framePestObs: TframePestObs
       ExplicitWidth = 596
       ExplicitHeight = 226
       inherited Panel: TPanel
-        Top = 194
+        Top = 192
         Width = 596
         Height = 32
         ExplicitTop = 194
         ExplicitWidth = 596
         ExplicitHeight = 32
         inherited lbNumber: TLabel
-          Width = 145
+          Width = 161
           Caption = 'Number of direct observations'
-          ExplicitWidth = 145
+          ExplicitWidth = 161
         end
         inherited sbAdd: TSpeedButton
           Left = 368
@@ -65,7 +65,7 @@ object framePestObs: TframePestObs
       end
       inherited Grid: TRbwDataGrid4
         Width = 596
-        Height = 194
+        Height = 192
         ColCount = 7
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
         OnSelectCell = frameObservationsGridSelectCell
@@ -246,7 +246,7 @@ object framePestObs: TframePestObs
             AutoAdjustColWidths = True
           end>
         ExplicitWidth = 596
-        ExplicitHeight = 194
+        ExplicitHeight = 192
         ColWidths = (
           64
           75
@@ -268,9 +268,9 @@ object framePestObs: TframePestObs
     TabOrder = 1
     inline frameObsComparisons: TframeGrid
       Left = 2
-      Top = 15
+      Top = 17
       Width = 596
-      Height = 155
+      Height = 153
       Align = alClient
       TabOrder = 0
       ExplicitLeft = 2
@@ -278,16 +278,16 @@ object framePestObs: TframePestObs
       ExplicitWidth = 596
       ExplicitHeight = 155
       inherited Panel: TPanel
-        Top = 120
+        Top = 118
         Width = 596
         Height = 35
         ExplicitTop = 120
         ExplicitWidth = 596
         ExplicitHeight = 35
         inherited lbNumber: TLabel
-          Width = 172
+          Width = 194
           Caption = 'Number of comparison observations'
-          ExplicitWidth = 172
+          ExplicitWidth = 194
         end
         inherited sbAdd: TSpeedButton
           Left = 368
@@ -307,7 +307,7 @@ object framePestObs: TframePestObs
       end
       inherited Grid: TRbwDataGrid4
         Width = 596
-        Height = 120
+        Height = 118
         ColCount = 7
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
         OnEnter = frameObsComparisonsGridEnter
@@ -482,7 +482,7 @@ object framePestObs: TframePestObs
             AutoAdjustColWidths = True
           end>
         ExplicitWidth = 596
-        ExplicitHeight = 120
+        ExplicitHeight = 118
         ColWidths = (
           64
           64

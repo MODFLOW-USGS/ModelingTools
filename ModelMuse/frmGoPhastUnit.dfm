@@ -94,7 +94,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 494
         Image32.Height = 145
         Image32.Align = alClient
-        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 494
         Image32.ExplicitHeight = 145
@@ -161,7 +160,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 178
         Image32.Height = 145
         Image32.Align = alClient
-        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
         Image32.ExplicitHeight = 145
@@ -253,7 +251,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 494
         Image32.Height = 77
         Image32.Align = alClient
-        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 494
         Image32.ExplicitHeight = 77
@@ -673,7 +670,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 208
+      Left = 477
       Top = 130
       Width = 212
       Height = 28
@@ -775,7 +772,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 433
+      Left = 217
       Top = 130
       Width = 244
       Height = 28
@@ -890,7 +887,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView3D: TToolBar
-      Left = 54
+      Left = 60
       Top = 130
       Width = 141
       Height = 28
@@ -1091,7 +1088,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarShowGrid: TToolBar
-      Left = 11
+      Left = 14
       Top = 130
       Width = 30
       Height = 28

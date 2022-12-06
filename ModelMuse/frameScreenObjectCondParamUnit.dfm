@@ -10,19 +10,23 @@ inherited frameScreenObjectCondParam: TframeScreenObjectCondParam
     object lblConductanceInterpretation: TLabel [1]
       Left = 8
       Top = 51
-      Width = 132
-      Height = 13
+      Width = 146
+      Height = 15
       Caption = 'Conductance interpretation'
     end
     inherited seNumberOfTimes: TJvSpinEdit
       Height = 21
       ExplicitHeight = 21
     end
+    inherited comboTimeSeriesInterpolation: TComboBox
+      TabOrder = 4
+      ExplicitHeight = 23
+    end
     object comboFormulaInterp: TComboBox
       Left = 174
       Top = 48
       Width = 145
-      Height = 21
+      Height = 23
       Style = csDropDownList
       TabOrder = 3
       Items.Strings = (

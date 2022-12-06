@@ -22,15 +22,15 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
     object lblGeneralizedTransportPresent: TLabel [1]
       Left = 8
       Top = 6
-      Width = 150
-      Height = 13
+      Width = 157
+      Height = 15
       Caption = 'If lake water present or absent'
     end
     object lbl1: TLabel [2]
       Left = 317
       Top = 6
-      Width = 78
-      Height = 13
+      Width = 83
+      Height = 15
       Caption = 'Interaction type'
     end
     inherited seNumberOfTimes: TJvSpinEdit
@@ -53,7 +53,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
       Left = 8
       Top = 29
       Width = 286
-      Height = 21
+      Height = 23
       Style = csDropDownList
       ItemIndex = 3
       TabOrder = 3
@@ -68,7 +68,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
       Left = 317
       Top = 29
       Width = 262
-      Height = 21
+      Height = 23
       Style = csDropDownList
       ItemIndex = 2
       TabOrder = 4
@@ -291,8 +291,8 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
     object lblFormula: TLabel
       Left = 136
       Top = 5
-      Width = 38
-      Height = 13
+      Width = 44
+      Height = 15
       Alignment = taCenter
       Caption = 'Formula'
     end

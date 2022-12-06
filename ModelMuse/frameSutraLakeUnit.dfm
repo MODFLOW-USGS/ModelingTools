@@ -10,8 +10,8 @@ inherited frameSutraLake: TframeSutraLake
     AlignWithMargins = True
     Left = 8
     Top = 30
-    Width = 90
-    Height = 13
+    Width = 93
+    Height = 15
     Margins.Left = 8
     Caption = 'Initial stage (STGI)'
   end
@@ -19,8 +19,8 @@ inherited frameSutraLake: TframeSutraLake
     AlignWithMargins = True
     Left = 8
     Top = 99
-    Width = 203
-    Height = 13
+    Width = 221
+    Height = 15
     Margins.Left = 8
     Caption = 'Initial concentration or temperature (UWI)'
   end
@@ -28,8 +28,8 @@ inherited frameSutraLake: TframeSutraLake
     AlignWithMargins = True
     Left = 8
     Top = 168
-    Width = 180
-    Height = 13
+    Width = 192
+    Height = 15
     Margins.Left = 8
     Caption = 'Fraction of recharge diverted (FRRO)'
   end
@@ -37,8 +37,8 @@ inherited frameSutraLake: TframeSutraLake
     AlignWithMargins = True
     Left = 8
     Top = 237
-    Width = 183
-    Height = 13
+    Width = 198
+    Height = 15
     Margins.Left = 8
     Caption = 'Fraction of discharge diverted (FDRO)'
   end

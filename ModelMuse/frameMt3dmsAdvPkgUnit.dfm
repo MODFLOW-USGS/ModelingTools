@@ -17,32 +17,28 @@ inherited frameMt3dmsAdvPkg: TframeMt3dmsAdvPkg
     Height = 336
     ActivePage = tabAdvection1
     Align = alBottom
-    TabOrder = 2
+    TabOrder = 1
     object tabAdvection1: TTabSheet
       Caption = 'Advection 1'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lbllMethod: TLabel
         Left = 3
         Top = 3
-        Width = 175
-        Height = 13
+        Width = 199
+        Height = 15
         Caption = 'Advection solution scheme (MIXELM)'
       end
       object lblParticleTracking: TLabel
         Left = 3
         Top = 33
-        Width = 171
-        Height = 13
+        Width = 190
+        Height = 15
         Caption = 'Particle tracking algorithm (ITRACK)'
       end
       object lbNumCellsParticle: TLabel
         Left = 3
         Top = 90
-        Width = 398
-        Height = 13
+        Width = 433
+        Height = 15
         Caption = 
           'Number of cells a particle can move in one time step, generally ' +
           '0.5 to 1.0 (PERCEL)'
@@ -50,29 +46,29 @@ inherited frameMt3dmsAdvPkg: TframeMt3dmsAdvPkg
       object lblMaxParticlesCount: TLabel
         Left = 3
         Top = 112
-        Width = 252
-        Height = 13
+        Width = 287
+        Height = 15
         Caption = 'Maximum number of total moving particles (MXPART)'
       end
       object lblConcWeight: TLabel
         Left = 3
         Top = 146
-        Width = 228
-        Height = 13
+        Width = 247
+        Height = 15
         Caption = 'Concentration Weighting factor (0.5 to 1) (WD)'
       end
       object lblNegConcGrad: TLabel
         Left = 3
         Top = 170
-        Width = 234
-        Height = 13
+        Width = 259
+        Height = 15
         Caption = 'Size of negligible concentration gradient (DCEPS)'
       end
       object lblInitParticlesSmall: TLabel
         Left = 3
         Top = 202
-        Width = 326
-        Height = 13
+        Width = 358
+        Height = 15
         Caption = 
           'Initial particles per cell where concentration gradient < DCEPS ' +
           '(NPL)'
@@ -80,8 +76,8 @@ inherited frameMt3dmsAdvPkg: TframeMt3dmsAdvPkg
       object lblInitParticlesLarge: TLabel
         Left = 3
         Top = 226
-        Width = 328
-        Height = 13
+        Width = 361
+        Height = 15
         Caption = 
           'Initial particles per cell where concentration gradient > DCEPS ' +
           '(NPH)'
@@ -89,15 +85,15 @@ inherited frameMt3dmsAdvPkg: TframeMt3dmsAdvPkg
       object Label12: TLabel
         Left = 3
         Top = 60
-        Width = 138
-        Height = 13
+        Width = 156
+        Height = 15
         Caption = 'Weighting scheme (NADVFD)'
       end
       object comboAdvSolScheme: TComboBox
         Left = 285
         Top = 3
         Width = 305
-        Height = 21
+        Height = 23
         Hint = 'Check the MT3DMS user manual for a comparison of these methods.'
         HelpContext = 3220
         Style = csDropDownList
@@ -117,7 +113,7 @@ inherited frameMt3dmsAdvPkg: TframeMt3dmsAdvPkg
         Left = 285
         Top = 30
         Width = 305
-        Height = 21
+        Height = 23
         Hint = 
           'The first order Euler particle tracking algorithm is faster but ' +
           'less accurate than the Runge-Kutta method especially in areas of' +
@@ -192,7 +188,7 @@ inherited frameMt3dmsAdvPkg: TframeMt3dmsAdvPkg
         Left = 405
         Top = 57
         Width = 185
-        Height = 21
+        Height = 23
         Hint = 
           'NADVFD determines which weighting schem should be used (central-' +
           'in-space, or upstream weighting) when the implicit finite differ' +
@@ -242,71 +238,67 @@ inherited frameMt3dmsAdvPkg: TframeMt3dmsAdvPkg
     object tabAdvection2: TTabSheet
       Caption = 'Advection 2'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblInitParticlePlacement: TLabel
         Left = 3
         Top = 3
-        Width = 220
-        Height = 13
+        Width = 249
+        Height = 15
         Caption = 'Initial placement of moving particles (NPLANE)'
       end
       object lblInitParticlePlanes: TLabel
         Left = 3
         Top = 36
-        Width = 244
-        Height = 13
+        Width = 274
+        Height = 15
         Caption = 'Number of planes of particles in each cell (NPLANE)'
       end
       object lblMinParticles: TLabel
         Left = 3
         Top = 55
-        Width = 275
-        Height = 13
+        Width = 315
+        Height = 15
         Caption = 'Minimum moving particles per cell (usually 0 to 4) (NPMIN)'
       end
       object lblMaxParticles: TLabel
         Left = 3
         Top = 89
-        Width = 206
-        Height = 13
+        Width = 240
+        Height = 15
         Caption = 'Maximum moving particles per cell (NPMAX)'
       end
       object lblSinkParticlePlacement: TLabel
         Left = 3
         Top = 108
-        Width = 217
-        Height = 13
+        Width = 242
+        Height = 15
         Caption = 'Initial placement of particles in sinks (NLSINK)'
       end
       object lblSinkParticlePlanes: TLabel
         Left = 3
         Top = 144
-        Width = 262
-        Height = 13
+        Width = 293
+        Height = 15
         Caption = 'Number of planes of particles in each sink cell (NLSINK)'
       end
       object lblSinkParticleN: TLabel
         Left = 3
         Top = 168
-        Width = 274
-        Height = 13
+        Width = 306
+        Height = 15
         Caption = 'Number of particles used to apprimate sink cells (NPSINK)'
       end
       object lblCritConcGrad: TLabel
         Left = 3
         Top = 192
-        Width = 238
-        Height = 13
+        Width = 266
+        Height = 15
         Caption = 'Critical relative concentration gradient (DCHMOC)'
       end
       object comboInitPartPlace: TComboBox
         Left = 408
         Top = 0
         Width = 89
-        Height = 21
+        Height = 23
         Hint = 
           'The initial placement of moving particles can be either random o' +
           'r fixed. '
@@ -325,7 +317,7 @@ inherited frameMt3dmsAdvPkg: TframeMt3dmsAdvPkg
         Left = 408
         Top = 108
         Width = 89
-        Height = 21
+        Height = 23
         Hint = 
           'The initial placement of moving particles in sink cells can be e' +
           'ither random or fixed.'

@@ -3,64 +3,57 @@ object framePhastInterpolation: TframePhastInterpolation
   Top = 0
   Width = 589
   Height = 114
-  HorzScrollBar.Range = 0
-  VertScrollBar.Range = 0
   TabOrder = 0
   TabStop = True
   object lblDistance1: TLabel
     Left = 8
     Top = 60
-    Width = 59
-    Height = 16
+    Width = 54
+    Height = 15
     Caption = 'Distance 1'
     Enabled = False
   end
   object lblDistance2: TLabel
     Left = 8
     Top = 92
-    Width = 59
-    Height = 16
+    Width = 54
+    Height = 15
     Caption = 'Distance 2'
     Enabled = False
   end
   object lblValue1: TLabel
     Left = 216
     Top = 60
-    Width = 43
-    Height = 16
+    Width = 37
+    Height = 15
     Caption = 'Value 1'
     Enabled = False
   end
   object lblValue2: TLabel
     Left = 216
     Top = 92
-    Width = 43
-    Height = 16
+    Width = 37
+    Height = 15
     Caption = 'Value 2'
     Enabled = False
   end
   object lblMixtureFormula: TLabel
     Left = 392
     Top = 64
-    Width = 90
-    Height = 16
+    Width = 86
+    Height = 15
     Caption = 'Mixture formula'
   end
   object cbPhastInterpolation: TJvCheckBox
     Left = 8
     Top = 16
-    Width = 194
-    Height = 20
+    Width = 179
+    Height = 17
     Caption = 'Use PHAST-style interpolation'
     Enabled = False
     TabOrder = 1
     OnClick = cbPhastInterpolationClick
     LinkedControls = <>
-    HotTrackFont.Charset = DEFAULT_CHARSET
-    HotTrackFont.Color = clWindowText
-    HotTrackFont.Height = -11
-    HotTrackFont.Name = 'Tahoma'
-    HotTrackFont.Style = []
   end
   object rdeDistance1: TRbwDataEntry
     Left = 96

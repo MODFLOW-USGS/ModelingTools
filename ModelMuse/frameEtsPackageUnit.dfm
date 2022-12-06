@@ -12,8 +12,8 @@ inherited frameEtsPackage: TframeEtsPackage
     object lblSegments: TLabel [1]
       Left = 64
       Top = 28
-      Width = 99
-      Height = 13
+      Width = 112
+      Height = 15
       Caption = 'Number of segments'
       Enabled = False
     end

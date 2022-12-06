@@ -9,16 +9,16 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   object lblNumberOfTrailingWaves: TLabel [2]
     Left = 16
     Top = 127
-    Width = 255
-    Height = 20
+    Width = 203
+    Height = 15
     Caption = 'Number of trailing waves (ntrailwaves)'
     Enabled = False
   end
   object lblNumberOfWaveSets: TLabel [3]
     Left = 16
     Top = 174
-    Width = 220
-    Height = 20
+    Width = 176
+    Height = 15
     Caption = 'Number of wave sets (nwavesets)'
     Enabled = False
   end

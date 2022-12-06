@@ -263,8 +263,6 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 1
-      ExplicitTop = 51
       ExplicitWidth = 452
       ExplicitHeight = 100
       ColWidths = (
@@ -292,50 +290,50 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
       object lblSurfaceDepressionDepth: TLabel
         Left = 184
         Top = 6
-        Width = 232
-        Height = 20
+        Width = 184
+        Height = 15
         Caption = 'Surface depression depth (surfdep)'
       end
       object lblVerticalSaturatedK: TLabel
         Left = 184
         Top = 33
-        Width = 118
-        Height = 20
+        Width = 93
+        Height = 15
         Caption = 'Saturated Kz (vks)'
       end
       object lblResidualWaterContent: TLabel
         Left = 184
         Top = 60
-        Width = 188
-        Height = 20
+        Width = 150
+        Height = 15
         Caption = 'Residual water content (thtr)'
       end
       object lblSaturatedWaterContent: TLabel
         Left = 184
         Top = 87
-        Width = 197
-        Height = 20
+        Width = 157
+        Height = 15
         Caption = 'Saturated water content (thts)'
       end
       object lblInitialWaterContent: TLabel
         Left = 184
         Top = 114
-        Width = 168
-        Height = 20
+        Width = 134
+        Height = 15
         Caption = 'Initial water content (thti)'
       end
       object lblBrooksCoreyEpsilon: TLabel
         Left = 184
         Top = 141
-        Width = 176
-        Height = 20
+        Width = 140
+        Height = 15
         Caption = 'Brooks Corey epsilon (eps)'
       end
       object edSurfaceDepressionDepth: TJvComboEdit
         Left = 3
         Top = 3
         Width = 168
-        Height = 28
+        Height = 23
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -365,7 +363,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 30
         Width = 168
-        Height = 28
+        Height = 23
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -395,7 +393,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 57
         Width = 168
-        Height = 28
+        Height = 23
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -425,7 +423,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 84
         Width = 168
-        Height = 28
+        Height = 23
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -455,7 +453,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 111
         Width = 168
-        Height = 28
+        Height = 23
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -485,7 +483,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 3
         Top = 138
         Width = 168
-        Height = 28
+        Height = 23
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -523,14 +521,15 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Left = 121
         Top = 0
         Width = 5
-        Height = 177
+        Height = 182
         ExplicitLeft = 8
+        ExplicitHeight = 177
       end
       object tvGwt: TJvPageListTreeView
         Left = 0
         Top = 0
         Width = 121
-        Height = 177
+        Height = 182
         PageDefault = 0
         PageList = jplGwt
         Align = alLeft
@@ -539,12 +538,13 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         TabOrder = 0
         Items.Links = {00000000}
         ExplicitLeft = 8
+        ExplicitHeight = 177
       end
       object jplGwt: TJvPageList
         Left = 126
         Top = 0
         Width = 320
-        Height = 177
+        Height = 182
         PropagateEnable = False
         Align = alClient
         ExplicitWidth = 413

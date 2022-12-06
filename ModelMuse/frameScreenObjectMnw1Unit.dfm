@@ -14,8 +14,8 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
     object lblSite: TLabel [1]
       Left = 144
       Top = 19
-      Width = 148
-      Height = 13
+      Width = 165
+      Height = 15
       Caption = 'Site label (Optional) (MNWSite)'
     end
     inherited seNumberOfTimes: TJvSpinEdit
@@ -51,13 +51,13 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         Left = 199
         Top = 24
         Width = 81
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 81
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 1
         OnChange = comboConductanceChange
@@ -67,13 +67,13 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         Left = 215
         Top = 24
         Width = 81
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 81
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 2
         OnChange = comboWaterLevelLimitChange
@@ -83,13 +83,13 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         Left = 231
         Top = 24
         Width = 81
-        Height = 23
+        Height = 25
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 81
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 17
+        ItemHeight = 19
         ItemIndex = -1
         TabOrder = 3
         OnChange = comboPumpingLevelLimitChange
@@ -99,6 +99,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
     inherited rdgModflowBoundary: TRbwDataGrid4
       Height = 155
       ColCount = 16
+      OnEndUpdate = rdgModflowBoundaryEndUpdate
       Columns = <
         item
           AutoAdjustRowHeights = False
@@ -484,8 +485,6 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      OnEndUpdate = rdgModflowBoundaryEndUpdate
-      ExplicitTop = 53
       ExplicitHeight = 155
     end
   end

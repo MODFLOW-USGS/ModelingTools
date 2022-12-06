@@ -35,8 +35,8 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       object lblSegmentNumber: TLabel
         Left = 134
         Top = 17
-        Width = 114
-        Height = 20
+        Width = 92
+        Height = 15
         Caption = 'Segment number'
       end
       object rdgFormulas: TRbwDataGrid4
@@ -44,7 +44,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 0
         Top = 50
         Width = 539
-        Height = 162
+        Height = 167
         Margins.Left = 0
         Margins.Top = 50
         Margins.Right = 0
@@ -114,6 +114,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 162
         ColWidths = (
           64
           186)
@@ -139,9 +140,10 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 0
         Top = 0
         Width = 539
-        Height = 166
+        Height = 171
         Align = alClient
         TabOrder = 0
+        ExplicitHeight = 166
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
@@ -153,8 +155,8 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           object lblFormula: TLabel
             Left = 136
             Top = 5
-            Width = 54
-            Height = 20
+            Width = 44
+            Height = 15
             Alignment = taCenter
             Caption = 'Formula'
           end
@@ -176,7 +178,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           Left = 1
           Top = 51
           Width = 537
-          Height = 114
+          Height = 119
           Align = alClient
           ColCount = 3
           FixedCols = 0
@@ -277,20 +279,21 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       end
       object pnlBottom: TPanel
         Left = 0
-        Top = 166
+        Top = 171
         Width = 539
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
+        ExplicitTop = 166
         DesignSize = (
           539
           46)
         object lblNumTimes: TLabel
           Left = 64
           Top = 15
-          Width = 112
-          Height = 20
+          Width = 90
+          Height = 15
           Caption = 'Number of times'
         end
         object seNumberOfTimes: TJvSpinEdit
@@ -370,13 +373,13 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 0
         Top = 0
         Width = 539
-        Height = 212
+        Height = 217
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 539
         ExplicitHeight = 212
         inherited Panel: TPanel
-          Top = 171
+          Top = 176
           Width = 539
           ExplicitTop = 171
           ExplicitWidth = 539
@@ -400,7 +403,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         end
         inherited Grid: TRbwDataGrid4
           Width = 539
-          Height = 171
+          Height = 176
           OnSetEditText = frmgrdDownstreamSegmentsGridSetEditText
           Columns = <
             item
@@ -428,7 +431,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 539
-          ExplicitHeight = 171
+          ExplicitHeight = 176
         end
       end
     end
@@ -439,13 +442,13 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 0
         Top = 0
         Width = 539
-        Height = 212
+        Height = 217
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 539
         ExplicitHeight = 212
         inherited Panel: TPanel
-          Top = 171
+          Top = 176
           Width = 539
           ExplicitTop = 171
           ExplicitWidth = 539
@@ -469,7 +472,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         end
         inherited Grid: TRbwDataGrid4
           Width = 539
-          Height = 171
+          Height = 176
           ColCount = 2
           OnSetEditText = frmgrdDiversionsGridSetEditText
           Columns = <
@@ -527,7 +530,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 539
-          ExplicitHeight = 171
+          ExplicitHeight = 176
           ColWidths = (
             64
             79)
@@ -541,14 +544,15 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 121
         Top = 0
         Width = 5
-        Height = 212
+        Height = 217
         ExplicitLeft = 8
+        ExplicitHeight = 212
       end
       object tvGwt: TJvPageListTreeView
         Left = 0
         Top = 0
         Width = 121
-        Height = 212
+        Height = 217
         PageDefault = 0
         PageList = jplGwt
         Align = alLeft
@@ -556,14 +560,16 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Indent = 19
         TabOrder = 0
         Items.Links = {00000000}
+        ExplicitHeight = 212
       end
       object jplGwt: TJvPageList
         Left = 126
         Top = 0
         Width = 413
-        Height = 212
+        Height = 217
         PropagateEnable = False
         Align = alClient
+        ExplicitHeight = 212
       end
     end
   end

@@ -7,8 +7,8 @@ inherited framePackageLakMf6: TframePackageLakMf6
   object lblSurfaceDepressionDepth: TLabel [2]
     Left = 16
     Top = 441
-    Width = 232
-    Height = 20
+    Width = 184
+    Height = 15
     Caption = 'Surface depression depth (surfdep)'
   end
   inherited memoComments: TMemo

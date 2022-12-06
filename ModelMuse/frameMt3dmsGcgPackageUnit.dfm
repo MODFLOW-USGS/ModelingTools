@@ -9,50 +9,50 @@ inherited frameMt3dmsGcgPackage: TframeMt3dmsGcgPackage
   object lblMaxOuter: TLabel [2]
     Left = 92
     Top = 160
-    Width = 213
-    Height = 13
+    Width = 240
+    Height = 15
     Caption = 'Maximum number of outer iterations MXITER'
   end
   object lblMaxInner: TLabel [3]
     Left = 92
     Top = 187
-    Width = 203
-    Height = 13
+    Width = 227
+    Height = 15
     Caption = 'Maximum number of inner iterations ITER1'
   end
   object lblPreconditioner: TLabel [4]
     Left = 16
     Top = 214
-    Width = 115
-    Height = 13
+    Width = 125
+    Height = 15
     Caption = 'Preconditioner (ISOLVE)'
   end
   object lblDispersion: TLabel [5]
     Left = 16
     Top = 259
-    Width = 172
-    Height = 13
+    Width = 187
+    Height = 15
     Caption = 'Dispersion tensor treatment (NCRS)'
   end
   object lblRelaxationFactor: TLabel [6]
     Left = 92
     Top = 308
-    Width = 120
-    Height = 13
+    Width = 130
+    Height = 15
     Caption = 'Relaxation factor (ACCL)'
   end
   object lblConvergence: TLabel [7]
     Left = 92
     Top = 336
-    Width = 156
-    Height = 13
+    Width = 171
+    Height = 15
     Caption = 'Convergence criterion (CCLOSE)'
   end
   object lblPrintoutInterval: TLabel [8]
     Left = 92
     Top = 364
-    Width = 126
-    Height = 13
+    Width = 137
+    Height = 15
     Caption = 'Printout interval (IPRGCG)'
   end
   inherited memoComments: TMemo
@@ -85,7 +85,7 @@ inherited frameMt3dmsGcgPackage: TframeMt3dmsGcgPackage
     Left = 14
     Top = 233
     Width = 198
-    Height = 21
+    Height = 23
     Style = csDropDownList
     Enabled = False
     ItemIndex = 2
@@ -101,7 +101,7 @@ inherited frameMt3dmsGcgPackage: TframeMt3dmsGcgPackage
     Left = 16
     Top = 278
     Width = 302
-    Height = 21
+    Height = 23
     Style = csDropDownList
     Enabled = False
     ItemIndex = 0

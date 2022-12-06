@@ -10,8 +10,8 @@ inherited framePkgSto: TframePkgSto
   object lblConfinedStorageMethod: TLabel [2]
     Left = 16
     Top = 162
-    Width = 247
-    Height = 13
+    Width = 266
+    Height = 15
     Caption = 'Confined storage method (STORAGECOEFFICIENT)'
   end
   inherited memoComments: TMemo
@@ -22,13 +22,13 @@ inherited framePkgSto: TframePkgSto
     Left = 16
     Top = 181
     Width = 225
-    Height = 23
+    Height = 25
     Style = csOwnerDrawVariable
     ButtonStyle = fsLighter
     DroppedWidth = 225
     ImageHeight = 0
     ImageWidth = 0
-    ItemHeight = 17
+    ItemHeight = 19
     ItemIndex = 1
     TabOrder = 1
     Items = <

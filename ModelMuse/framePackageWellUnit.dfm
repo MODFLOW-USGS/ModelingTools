@@ -13,8 +13,8 @@ inherited framePackageWell: TframePackageWell
   object lblPhiRamp: TLabel [2]
     Left = 104
     Top = 34
-    Width = 259
-    Height = 13
+    Width = 292
+    Height = 15
     Caption = 'Cell adjustment fraction (PHIRAMP - MODFLOW-NWT)'
   end
   inherited memoComments: TMemo

@@ -9,71 +9,71 @@ inherited framePackageSFR: TframePackageSFR
   object lblPrintStreams: TLabel [2]
     Left = 176
     Top = 144
-    Width = 109
-    Height = 13
+    Width = 115
+    Height = 15
     Caption = 'Print streams (ISTCB2)'
   end
   object lblStreamTolerance: TLabel [3]
     AlignWithMargins = True
     Left = 122
     Top = 246
-    Width = 129
-    Height = 13
+    Width = 138
+    Height = 15
     Caption = 'Tolerance (L^3/T) (DLEAK)'
   end
   object lblSfrTrailingWaveIncrements: TLabel [4]
     AlignWithMargins = True
     Left = 122
     Top = 270
-    Width = 222
-    Height = 13
+    Width = 246
+    Height = 15
     Caption = 'Number of trailing wave increments (NSTRAIL)'
   end
   object lblSfrMaxTrailingWaves: TLabel [5]
     AlignWithMargins = True
     Left = 122
     Top = 293
-    Width = 226
-    Height = 13
+    Width = 252
+    Height = 15
     Caption = 'Maximum number of trailing waves (NSFRSETS)'
   end
   object lblSfrMaxUnsatCells: TLabel [6]
     AlignWithMargins = True
     Left = 122
     Top = 316
-    Width = 297
-    Height = 13
+    Width = 331
+    Height = 15
     Caption = 'Maximum number of cells to define unsaturated zone (ISUZN) '
   end
   object lblNUMTIM: TLabel [7]
     AlignWithMargins = True
     Left = 122
     Top = 354
-    Width = 311
-    Height = 13
+    Width = 349
+    Height = 15
     Caption = 'Number of divisions per time step for kinematic waves (NUMTIM) '
   end
   object lblWeight: TLabel [8]
     AlignWithMargins = True
     Left = 122
     Top = 376
-    Width = 309
-    Height = 13
+    Width = 342
+    Height = 15
     Caption = 'Time weighting factor for the kinematic wave solution (WEIGHT) '
   end
   object lblFLWTOL: TLabel [9]
     AlignWithMargins = True
     Left = 122
     Top = 398
-    Width = 284
-    Height = 13
+    Width = 312
+    Height = 15
     Caption = 'Closure criterion for the kinematic wave solution (FLWTOL) '
   end
   object lblLossAdjustmentFactor: TLabel [10]
     Left = 399
     Top = 26
-    Width = 129
-    Height = 13
+    Width = 140
+    Height = 15
     Caption = 'Adjustment factor (Factor)'
   end
   inherited memoComments: TMemo
@@ -141,7 +141,7 @@ inherited framePackageSFR: TframePackageSFR
     Left = 16
     Top = 143
     Width = 145
-    Height = 21
+    Height = 23
     Style = csDropDownList
     Enabled = False
     TabOrder = 5

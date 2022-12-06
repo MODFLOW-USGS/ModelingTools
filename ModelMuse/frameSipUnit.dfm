@@ -9,56 +9,56 @@ inherited frameSIP: TframeSIP
   object lblSipMxiter: TLabel [2]
     Left = 16
     Top = 160
-    Width = 172
-    Height = 13
+    Width = 188
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Max. number of iterations (MXITER)'
   end
   object lblSipNparm: TLabel [3]
     Left = 16
     Top = 192
-    Width = 185
-    Height = 13
+    Width = 206
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Number of iteration variables (NPARM)'
   end
   object lblSipAccl: TLabel [4]
     Left = 16
     Top = 224
-    Width = 137
-    Height = 13
+    Width = 151
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Acceleration variable (ACCL)'
   end
   object lblSipHclose: TLabel [5]
     Left = 16
     Top = 256
-    Width = 155
-    Height = 13
+    Width = 172
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Head change criterion (HCLOSE)'
   end
   object lblSipIpcalc: TLabel [6]
     Left = 16
     Top = 288
-    Width = 106
-    Height = 13
+    Width = 114
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Seed source (IPCALC)'
   end
   object lblSipWseed: TLabel [7]
     Left = 16
     Top = 320
-    Width = 272
-    Height = 13
+    Width = 293
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Seed for seed for calculating iteration variables (WSEED)'
   end
   object lblSipIprsip: TLabel [8]
     Left = 16
     Top = 352
-    Width = 121
-    Height = 13
+    Width = 129
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Printout interval (IPRSIP)'
   end
@@ -81,7 +81,6 @@ inherited frameSIP: TframeSIP
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 1
     Text = '20'
     DataType = dtInteger
@@ -103,7 +102,6 @@ inherited frameSIP: TframeSIP
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 2
     Text = '20'
     DataType = dtInteger
@@ -126,7 +124,6 @@ inherited frameSIP: TframeSIP
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 3
     Text = '20'
     DataType = dtReal
@@ -148,7 +145,6 @@ inherited frameSIP: TframeSIP
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 4
     Text = '20'
     DataType = dtReal
@@ -160,7 +156,7 @@ inherited frameSIP: TframeSIP
     Left = 342
     Top = 277
     Width = 250
-    Height = 23
+    Height = 25
     Style = csOwnerDrawVariable
     Anchors = [akLeft, akBottom]
     ButtonStyle = fsLighter
@@ -169,7 +165,7 @@ inherited frameSIP: TframeSIP
     Enabled = False
     ImageHeight = 0
     ImageWidth = 0
-    ItemHeight = 17
+    ItemHeight = 19
     ItemIndex = -1
     TabOrder = 5
     OnChange = comboSipIpcalcChange
@@ -199,7 +195,6 @@ inherited frameSIP: TframeSIP
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 6
     Text = '20'
     DataType = dtReal
@@ -221,7 +216,6 @@ inherited frameSIP: TframeSIP
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
-    ItemHeight = 13
     TabOrder = 7
     Text = '20'
     DataType = dtInteger

@@ -7,8 +7,8 @@ inherited framePkgHydmod: TframePkgHydmod
   object lblHYDNOH: TLabel [2]
     Left = 16
     Top = 157
-    Width = 274
-    Height = 13
+    Width = 307
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Value printed when no value can be computed (HYDNOH)'
     Enabled = False

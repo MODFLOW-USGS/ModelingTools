@@ -7,8 +7,8 @@ object frameScreenObjectFootprintWell: TframeScreenObjectFootprintWell
   object lblPumpingRate: TLabel
     Left = 8
     Top = 63
-    Width = 141
-    Height = 16
+    Width = 125
+    Height = 15
     Margins.Left = 8
     Caption = 'Withdrawal rate (L^3/T)'
     Enabled = False

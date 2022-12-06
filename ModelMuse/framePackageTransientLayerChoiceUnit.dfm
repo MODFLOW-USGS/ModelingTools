@@ -1,12 +1,13 @@
 inherited framePackageTransientLayerChoice: TframePackageTransientLayerChoice
   inherited pnLayerOption: TPanel
     inherited lblLayerOption: TLabel
-      Width = 73
+      Width = 84
       Caption = 'Location option'
-      ExplicitWidth = 73
+      ExplicitWidth = 84
     end
     inherited comboLayerOption: TComboBox
       OnChange = comboLayerOptionChange
+      ExplicitHeight = 23
     end
     object cbTimeVaryingLayers: TCheckBox
       Left = 358

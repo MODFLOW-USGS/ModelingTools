@@ -17,8 +17,8 @@ object frameGrid: TframeGrid
     object lbNumber: TLabel
       Left = 79
       Top = 9
-      Width = 37
-      Height = 13
+      Width = 44
+      Height = 15
       Caption = 'Number'
     end
     object sbAdd: TSpeedButton
@@ -129,10 +129,12 @@ object frameGrid: TframeGrid
     AutoIncreaseRowCount = True
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBtnFace
+    OnEndUpdate = GridEndUpdate
     ColorRangeSelection = False
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -154,7 +156,6 @@ object frameGrid: TframeGrid
         CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
-    OnEndUpdate = GridEndUpdate
     WordWrapRowCaptions = False
   end
 end

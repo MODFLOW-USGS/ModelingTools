@@ -11,8 +11,8 @@ object CustomframeFluxObs: TCustomframeFluxObs
   object lblFluxObservations: TLabel
     Left = 8
     Top = 8
-    Width = 85
-    Height = 13
+    Width = 92
+    Height = 15
     Caption = 'Flux observations'
   end
   object rdgObservationGroups: TRbwDataGrid4
@@ -39,6 +39,7 @@ object CustomframeFluxObs: TCustomframeFluxObs
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -62,6 +63,7 @@ object CustomframeFluxObs: TCustomframeFluxObs
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -85,6 +87,7 @@ object CustomframeFluxObs: TCustomframeFluxObs
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

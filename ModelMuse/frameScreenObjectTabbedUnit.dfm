@@ -16,20 +16,21 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
       ImageIndex = 1
       object pnlBottom: TPanel
         Left = 0
-        Top = 217
+        Top = 215
         Width = 388
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
+        ExplicitTop = 217
         DesignSize = (
           388
           46)
         object lblNumTimes: TLabel
           Left = 64
           Top = 15
-          Width = 78
-          Height = 13
+          Width = 90
+          Height = 15
           Caption = 'Number of times'
         end
         object seNumberOfTimes: TJvSpinEdit
@@ -105,9 +106,10 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
         Left = 0
         Top = 0
         Width = 388
-        Height = 217
+        Height = 215
         Align = alClient
         TabOrder = 0
+        ExplicitHeight = 217
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
@@ -119,8 +121,8 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
           object lblFormula: TLabel
             Left = 232
             Top = 5
-            Width = 38
-            Height = 13
+            Width = 44
+            Height = 15
             Alignment = taCenter
             Caption = 'Formula'
           end
@@ -142,7 +144,7 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
           Left = 1
           Top = 57
           Width = 386
-          Height = 159
+          Height = 157
           Align = alClient
           ColCount = 3
           FixedCols = 0
@@ -240,7 +242,6 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitLeft = 0
           ColWidths = (
             64
             64

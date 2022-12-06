@@ -14,8 +14,8 @@ inherited frameScreenObjectSwr: TframeScreenObjectSwr
     object lblConductanceInterpretation: TLabel [1]
       Left = 8
       Top = 51
-      Width = 154
-      Height = 16
+      Width = 146
+      Height = 15
       Caption = 'Conductance interpretation'
     end
     inherited btnDelete: TBitBtn
@@ -30,7 +30,7 @@ inherited frameScreenObjectSwr: TframeScreenObjectSwr
       Left = 262
       Top = 48
       Width = 145
-      Height = 24
+      Height = 23
       Style = csDropDownList
       TabOrder = 3
       Items.Strings = (
