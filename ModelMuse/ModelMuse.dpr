@@ -770,7 +770,11 @@ uses
   ModflowFmp4WriterUnit in 'ModflowFmp4WriterUnit.pas',
   framePackageFmp4Unit in 'framePackageFmp4Unit.pas' {framePackageFmp4: TFrame},
   framePackageFmpSoilsUnit in 'framePackageFmpSoilsUnit.pas' {framePackageFmpSoils: TFrame},
-  framePackageFmp4ClimateUnit in 'framePackageFmp4ClimateUnit.pas' {framePackageFmp4Climate: TFrame};
+  framePackageFmp4ClimateUnit in 'framePackageFmp4ClimateUnit.pas' {framePackageFmp4Climate: TFrame},
+  framePackageFmp4SurfaceWaterUnit in 'framePackageFmp4SurfaceWaterUnit.pas' {framePackageFmp4SurfaceWater: TFrame},
+  framePackageFmp4WellsUnit in 'framePackageFmp4WellsUnit.pas' {framePackageFmp4Wells: TFrame},
+  framePackageFmp4AllotmentsUnit in 'framePackageFmp4AllotmentsUnit.pas' {framePackageFmp4Allotments: TFrame},
+  framePackageFmp4LandUseUnit in 'framePackageFmp4LandUseUnit.pas' {framePackageFmp4LandUse: TFrame};
 
 {$R *.res}
 

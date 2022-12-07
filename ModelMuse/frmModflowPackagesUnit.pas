@@ -53,7 +53,9 @@ uses System.UITypes,
   PestParamGroupsUnit, frameGwtDspPackageUnit, frameGwtAdvPackageUnit,
   framePackageMSTUnit, framePackageIstUnit, frameChemSpeciesUnit,
   System.Generics.Collections, framePackageFmiUnit, framePackageFmp4Unit,
-  framePackageFmpSoilsUnit, framePackageFmp4ClimateUnit;
+  framePackageFmpSoilsUnit, framePackageFmp4ClimateUnit,
+  framePackageFmp4SurfaceWaterUnit, framePackageFmp4WellsUnit,
+  framePackageFmp4AllotmentsUnit, framePackageFmp4LandUseUnit;
 
 type
 
@@ -284,6 +286,14 @@ type
     framePkgFmp4Soils: TframePackageFmpSoils;
     jvspFmp4Climate: TJvStandardPage;
     framePkgFmp4Climate: TframePackageFmp4Climate;
+    jvspFmp4SurfaceWater: TJvStandardPage;
+    framePkgFmp4SurfaceWater: TframePackageFmp4SurfaceWater;
+    jvspFmp4SupplyWells: TJvStandardPage;
+    framePkgFmp4Wells: TframePackageFmp4Wells;
+    jvspFmp4Allotments: TJvStandardPage;
+    framePkgFmp4Allotments: TframePackageFmp4Allotments;
+    jvspFmp4LandUse: TJvStandardPage;
+    framePkgFmp4LandUse: TframePackageFmp4LandUse;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -4271,11 +4281,26 @@ begin
     framePkgFmp4Climate.Selected := False;
     framePkgFmp4Climate.CanSelect := False;
 
+    framePkgFmp4SurfaceWater.Selected := False;
+    framePkgFmp4SurfaceWater.CanSelect := False;
+
+    framePkgFmp4Wells.Selected := False;
+    framePkgFmp4Wells.CanSelect := False;
+
+    framePkgFmp4Allotments.Selected := False;
+    framePkgFmp4Allotments.CanSelect := False;
+
+    framePkgFmp4LandUse.Selected := False;
+    framePkgFmp4LandUse.CanSelect := False;
   end
   else
   begin
     framePkgFmp4Soils.CanSelect := True;
     framePkgFmp4Climate.CanSelect := True;
+    framePkgFmp4SurfaceWater.CanSelect := True;
+    framePkgFmp4Wells.CanSelect := True;
+    framePkgFmp4Allotments.CanSelect := True;
+    framePkgFmp4LandUse.CanSelect := True;
   end;
 
 end;
@@ -4701,12 +4726,28 @@ begin
 
     Packages.FarmClimate4.Frame := framePkgFmp4Climate;
     FPackageList.Add(Packages.FarmClimate4);
+
+    Packages.FarmSurfaceWater4.Frame := framePkgFmp4SurfaceWater;
+    FPackageList.Add(Packages.FarmSurfaceWater4);
+
+    Packages.FarmWells4.Frame := framePkgFmp4Wells;
+    FPackageList.Add(Packages.FarmWells4);
+
+    Packages.FarmAllotments.Frame := framePkgFmp4Allotments;
+    FPackageList.Add(Packages.FarmAllotments);
+
+    Packages.FarmLandUse.Frame := framePkgFmp4LandUse;
+    FPackageList.Add(Packages.FarmLandUse);
   end
   else
   begin
     framePkgFMP4.NilNode;
     framePkgFmp4Soils.NilNode;
     framePkgFmp4Climate.NilNode;
+    framePkgFmp4SurfaceWater.NilNode;
+    framePkgFmp4Wells.NilNode;
+    framePkgFmp4Allotments.NilNode;
+    framePkgFmp4LandUse.NilNode
   end;
           {$ENDIF}
 

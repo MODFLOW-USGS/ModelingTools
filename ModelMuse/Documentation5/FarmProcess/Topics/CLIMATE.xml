@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T12:52:07.384-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-07T14:34:30.134-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>CLIMATE</title>
   <body>
     <header>
@@ -26,7 +26,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
+          <para styleclass="Normal"><anchor id="REFERENCE_ET"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
           <para styleclass="Normal">Reference ET (L/T)</para>
           <para styleclass="Normal"> &#160; &#160; If not specified, then REFERENCE_ET is set to 0.0</para>
           <para styleclass="Normal"> &#160;***This is required there are fallow/bare soil cells,</para>

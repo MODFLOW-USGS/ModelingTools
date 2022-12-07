@@ -1903,6 +1903,26 @@
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="framePackageFmp4SurfaceWaterUnit.pas">
+            <Form>framePackageFmp4SurfaceWater</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="framePackageFmp4WellsUnit.pas">
+            <Form>framePackageFmp4Wells</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="framePackageFmp4AllotmentsUnit.pas">
+            <Form>framePackageFmp4Allotments</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="framePackageFmp4LandUseUnit.pas">
+            <Form>framePackageFmp4LandUse</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

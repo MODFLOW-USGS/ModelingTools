@@ -79,7 +79,6 @@ inherited framePackageUZF: TframePackageUZF
         'Top active cell (3)')
       ExplicitLeft = 16
       ExplicitTop = 24
-      ExplicitHeight = 23
     end
     object comboVerticalKSource: TComboBox
       Left = 16

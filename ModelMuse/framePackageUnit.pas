@@ -3,7 +3,8 @@ unit framePackageUnit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms,
   Dialogs, StdCtrls, ComCtrls, JvExStdCtrls, JvCheckBox, JvPageList,
   ModflowPackageSelectionUnit, RbwController, Grids, RbwDataGrid4;
 
@@ -29,7 +30,9 @@ type
 
     procedure EnableMultiEditControl(Control: TControl;
       DataGrid: TRbwDataGrid4);
-//    procedure EnableNwt;
+    procedure GetFarmOption(combo: TComboBox; Option: TFarmOption);
+    function SetFarmOption(combo: TComboBox): TFarmOption;
+    //    procedure EnableNwt;
   public
     // @name moves the control on @classname to the first
     // tab of ParentPageControl.
@@ -51,6 +54,10 @@ type
     { Public declarations }
   end;
 
+var
+  StaticTransient: TStringlist;
+  DontUseStaticTransient: TStringlist;
+
 implementation
 
 uses
@@ -59,7 +66,6 @@ uses
 {$R *.dfm}
 
 { TframePackage }
-
 
 constructor TframePackage.Create(AOwner: TComponent);
 begin
@@ -278,10 +284,28 @@ begin
   Control.Enabled := ShouldEnable;
 end;
 
-//procedure TframePackage.EnableNwt;
-//begin
-//  cbNwt.Enabled := rcSelectionController.Enabled
-//    and (frmGoPhast.ModelSelection = msModflow2015);
-//end;
+procedure TframePackage.GetFarmOption(combo: TComboBox; Option: TFarmOption);
+begin
+  combo.ItemIndex := Ord(Option);
+end;
+
+function TframePackage.SetFarmOption(combo: TComboBox): TFarmOption;
+begin
+  result := TFarmOption(combo.ItemIndex);
+end;
+
+initialization
+  StaticTransient := TStringlist.Create;
+  StaticTransient.Add('Static');
+  StaticTransient.Add('Transient');
+
+  DontUseStaticTransient := TStringlist.Create;
+  DontUseStaticTransient.Add('don''t use');
+  DontUseStaticTransient.Add('Static');
+  DontUseStaticTransient.Add('Transient');
+
+finalization
+  StaticTransient.Free;
+  DontUseStaticTransient.Free;
 
 end.

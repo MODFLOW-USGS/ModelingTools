@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T17:01:35.873-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-07T14:34:55.082-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -186,7 +186,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
-          <para styleclass="Normal">CROP_COEFFICIENT (Kc) is multiplied by the ETref to get CU -- input requires that REFERENCE_ET (ETref) to be specified</para>
+          <para styleclass="Normal">CROP_COEFFICIENT (Kc) is multiplied by the ETref to get CU -- input requires that <link displaytype="text" defaultstyle="true" type="topiclink" href="CLIMATE" anchor="REFERENCE_ET">REFERENCE_ET</link> (ETref) to be specified</para>
           <para styleclass="Normal">CONSUMPTIVE_USE &#160;(CF) specifies directly the CU</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">Potential Consumptive Use CU = CF + Kc*ETref</para>

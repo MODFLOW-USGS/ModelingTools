@@ -7,7 +7,6 @@ inherited framePackageTransientLayerChoice: TframePackageTransientLayerChoice
     end
     inherited comboLayerOption: TComboBox
       OnChange = comboLayerOptionChange
-      ExplicitHeight = 23
     end
     object cbTimeVaryingLayers: TCheckBox
       Left = 358

@@ -4901,13 +4901,12 @@ Type
   TArrayList = (alArray, alList);
   TProrateDeficiencyOption = (pdoByDemand, pdoAverage);
   TRoutedReturnChoice = (rrcDefault, rrcNoReturn, rrcAnyNonDiversion, rrcAny);
-  TPumpSpreadChoice = (pscConductance, pscByNodeCount, pscTopNode);
+  TPumpSpreadChoice = (pscConductance, pscByNodeCount, pscTopNode, pscByWbs);
   TPumpLayerChoice = (plcLayer, plcElevation, plcDepth);
   TWellFormat = (wfTimeFrame, wfFarm, wfCapacity);
   TLandUseOption = (luoSingle, luoMultiple);
   TCropCoefOrUse = (ccouCoefficient, ccouConsumptiveUse);
-  TAddedDemandType = (adtLength, adtRate);
-  TRequiredSteadyTransient = (rstSteady, rstTransient);
+  TRequiredSteadyTransient = (rstStatic, rstTransient);
 
               {WBS_WATER_USE,    FARM_DEMAND_SUPPLY_SUMMARY,   FARM_BUDGET}
   TFarmPrint = (fpWbs_Water_Use, fpFarm_Demand_Supply_Summary, fpFarm_Budget,
@@ -5178,7 +5177,6 @@ Type
     // NRD_INFILTRATION_LOCATION
     property Nrd_Infiltration_Location: TFarmOption
       read FNrd_Infiltration_Location write SetNrd_Infiltration_Location;
-    // PRINT SFR_DELIVERY
     {PRINT SFR_DELIVERY, PRINT SFR_DELIVERY_BY_WBS, PRINT SFR_RETURN,
      PRINT SFR_SRR_ONLY, PRINT NRD, PRINT NRD_BY_WBS}
     property SurfaceWaterPrints: TSurfaceWaterPrints read FSurfaceWaterPrints
@@ -5206,29 +5204,21 @@ Type
     {PRINT LIST,   PRINT SMOOTHING}
     fwpPrint_List, fwpPrint_Smoothing);
   TFarmWellPrints = set of TFarmWellPrint;
+  TXYChoice = (xyCells, xyCoordinates);
 
   TFarmProcess4Wells = class(TCustomFarm4)
   private
-    FQMaxReset: Boolean;
     FWellFormat: TWellFormat;
     FMnwPumpSpread: TPumpSpreadChoice;
-    FMnwAutoOff: Boolean;
-    FMnwAutoOn: Boolean;
-    FWellXY: Boolean;
-    FProrateDemand: Boolean;
+    FWellXY: TXYChoice;
     FWellLayerChoice: TPumpLayerChoice;
     FFarmWellPrints: TFarmWellPrints;
     FNoCropIrrigationNoQ: Boolean;
-    procedure SetMnwAutoOff(const Value: Boolean);
-    procedure SetMnwAutoOn(const Value: Boolean);
     procedure SetMnwPumpSpread(const Value: TPumpSpreadChoice);
-    procedure SetProrateDemand(const Value: Boolean);
-    procedure SetQMaxReset(const Value: Boolean);
     procedure SetWellFormat(const Value: TWellFormat);
     procedure SetWellLayerChoice(const Value: TPumpLayerChoice);
-    procedure SetWellXY(const Value: Boolean);
+    procedure SetWellXY(const Value: TXYChoice);
     procedure SetFarmWellPrints(const Value: TFarmWellPrints);
-    procedure SetNoCropIrrigationNoQ(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5240,21 +5230,11 @@ Type
     {PRINT BYWELL,   PRINT ByWBS,    PRINT ByMNW, PRINT LIST,   PRINT SMOOTHING}
     property FarmWellPrints: TFarmWellPrints read FFarmWellPrints
       write SetFarmWellPrints;
-    // Inverse of NO_QMAXRESET, Default = True.
-    property QMaxReset: Boolean read FQMaxReset write SetQMaxReset;
-    // NOCIRNOQ. Check OWHM V2 for default
-    property NoCropIrrigationNoQ: Boolean read FNoCropIrrigationNoQ
-      write SetNoCropIrrigationNoQ;
-    // PRORATE_DEMAND
-    property ProrateDemand: Boolean read FProrateDemand write SetProrateDemand;
-    // MNW_AUTOMATIC_ON and/or MNW_AUTOMATIC_OFF. Beth default to False;
-    property MnwAutoOn: Boolean read FMnwAutoOn write SetMnwAutoOn;
-    property MnwAutoOff: Boolean read FMnwAutoOff write SetMnwAutoOff;
     // MNW_PUMP_SPREAD
     property MnwPumpSpread: TPumpSpreadChoice read FMnwPumpSpread
       write SetMnwPumpSpread;
     // INPUT_OPTION XY
-    property WellXY: Boolean read FWellXY write SetWellXY;
+    property WellXY: TXYChoice read FWellXY write SetWellXY;
     // INPUT_OPTION {ELEVATION,DEPTH}
     property WellLayerChoice: TPumpLayerChoice read FWellLayerChoice
       write SetWellLayerChoice;
@@ -5303,7 +5283,6 @@ Type
     FFractionOfPrecipToSurfaceWater: TFarmOption;
     FET_IrrigFracCorrectionChoice: TFarmOption;
     FSpecifyCropsToPrint: TFarmOption;
-    FAddedDemandType: TAddedDemandType;
     FTranspirationFractionChoice: TFarmOption;
     FCropCoeffOrUseChoice: TFarmOption;
     FStoredMinimumBareFraction: TRealStorage;
@@ -5326,7 +5305,6 @@ Type
     FStoredRelaxFracHeadChange: TRealStorage;
     FLandUsePrints: TLandUsePrints;
     procedure SetAddedDemandChoice(const Value: TFarmOption);
-    procedure SetAddedDemandType(const Value: TAddedDemandType);
     procedure SetCropCoeffOrUseChoice(const Value: TFarmOption);
     procedure SetCropCoefOrUse(const Value: TCropCoefOrUse);
     procedure SetET_IrrigFracCorrectionChoice(const Value: TFarmOption);
@@ -5457,9 +5435,6 @@ Type
       write SetAddedDemandChoice;
     property AddedDemandArrayList: TArrayList read FAddedDemandArrayList
       write SetAddedDemandArrayList;
-    // ADDED_DEMAND (length or rate).
-    property AddedDemandType: TAddedDemandType read FAddedDemandType
-      write SetAddedDemandType;
     // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
     property NoCropUseMeansBareSoilChoice: TFarmOption
       read FNoCropUseMeansBareSoilChoice write SetNoCropUseMeansBareSoilChoice;
@@ -25029,37 +25004,6 @@ begin
   SetFarmOptionProperty(FNrd_Infiltration_Location, Value);
 end;
 
-//procedure TFarmProcess4SurfaceWater.SetPrint_Nrd(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrint_Nrd, Value);
-//end;
-//
-//procedure TFarmProcess4SurfaceWater.SetPrint_Nrd_By_Wbs(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrint_Nrd_By_Wbs, Value);
-//end;
-//
-//procedure TFarmProcess4SurfaceWater.SetPrint_Sfr_Delivery(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrint_Sfr_Delivery, Value);
-//end;
-//
-//procedure TFarmProcess4SurfaceWater.SetPrint_Sfr_Delivery_By_Wbs(
-//  const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrint_Sfr_Delivery_By_Wbs, Value);
-//end;
-//
-//procedure TFarmProcess4SurfaceWater.SetPrint_Sfr_Return(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrint_Sfr_Return, Value);
-//end;
-//
-//procedure TFarmProcess4SurfaceWater.SetPrint_Sfr_Srr_Only(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrint_Sfr_Srr_Only, Value);
-//end;
-
 procedure TFarmProcess4SurfaceWater.SetRebuild_Fully_Routed_Return(
   const Value: Boolean);
 begin
@@ -25115,11 +25059,6 @@ begin
   begin
     WellsSource := TFarmProcess4Wells(Source);
     FarmWellPrints := WellsSource.FarmWellPrints;
-    QMaxReset := WellsSource.QMaxReset;
-    NoCropIrrigationNoQ := WellsSource.NoCropIrrigationNoQ;
-    ProrateDemand := WellsSource.ProrateDemand;
-    MnwAutoOn := WellsSource.MnwAutoOn;
-    MnwAutoOff := WellsSource.MnwAutoOff;
     MnwPumpSpread := WellsSource.MnwPumpSpread;
     WellXY := WellsSource.WellXY;
     WellLayerChoice := WellsSource.WellLayerChoice;
@@ -25138,13 +25077,8 @@ procedure TFarmProcess4Wells.InitializeVariables;
 begin
   inherited;
   FFarmWellPrints := [];
-  FQMaxReset := True;
-  FNoCropIrrigationNoQ := False;
-  FProrateDemand := False;
-  FMnwAutoOn := False;
-  FMnwAutoOff := False;
   FMnwPumpSpread := pscConductance;
-  FWellXY := False;
+  FWellXY := xyCells;
   FWellLayerChoice := plcLayer;
   WellFormat := wfTimeFrame;
 end;
@@ -25158,16 +25092,6 @@ begin
   end;
 end;
 
-procedure TFarmProcess4Wells.SetMnwAutoOff(const Value: Boolean);
-begin
-  SetBooleanProperty(FMnwAutoOff, Value);
-end;
-
-procedure TFarmProcess4Wells.SetMnwAutoOn(const Value: Boolean);
-begin
-  SetBooleanProperty(FMnwAutoOn, Value);
-end;
-
 procedure TFarmProcess4Wells.SetMnwPumpSpread(const Value: TPumpSpreadChoice);
 begin
   if FMnwPumpSpread <> Value then
@@ -25175,21 +25099,6 @@ begin
     FMnwPumpSpread := Value;
     InvalidateModel;
   end;
-end;
-
-procedure TFarmProcess4Wells.SetNoCropIrrigationNoQ(const Value: Boolean);
-begin
-  SetBooleanProperty(FNoCropIrrigationNoQ, Value);
-end;
-
-procedure TFarmProcess4Wells.SetProrateDemand(const Value: Boolean);
-begin
-  SetBooleanProperty(FProrateDemand, Value);
-end;
-
-procedure TFarmProcess4Wells.SetQMaxReset(const Value: Boolean);
-begin
-  SetBooleanProperty(FQMaxReset, Value);
 end;
 
 procedure TFarmProcess4Wells.SetWellFormat(const Value: TWellFormat);
@@ -25210,9 +25119,13 @@ begin
   end;
 end;
 
-procedure TFarmProcess4Wells.SetWellXY(const Value: Boolean);
+procedure TFarmProcess4Wells.SetWellXY(const Value: TXYChoice);
 begin
-  SetBooleanProperty(FWellXY, Value);
+  if FWellXY <> Value then
+  begin
+    FWellXY := Value;
+    InvalidateModel;
+  end;
 end;
 
 { TFarmLandUse }
@@ -25226,34 +25139,34 @@ begin
     LandUse := TFarmLandUse(Source);
     MinimumBareFraction := LandUse.MinimumBareFraction;
     RelaxFracHeadChange := LandUse.RelaxFracHeadChange;
-    FLandUseOption := LandUse.FLandUseOption;
-    FSoilLocationChoice := LandUse.FSoilLocationChoice;
-    FLandUseFractionChoice := LandUse.FLandUseFractionChoice;
-    FLandUseFractionArrayList := LandUse.FLandUseFractionArrayList;
-    FLandUsePrints := LandUse.FLandUsePrints;
-    FSpecifyCropsToPrint := LandUse.FSpecifyCropsToPrint;
-    FCropCoeffOrUseChoice := LandUse.FCropCoeffOrUseChoice;
-    FCropCoefOrUse := LandUse.FCropCoefOrUse;
-    FCropCoefOrUseArrayList := LandUse.FCropCoefOrUseArrayList;
-    FIrrigationChoice := LandUse.FIrrigationChoice;
-    FIrrigationArrayList := LandUse.FIrrigationArrayList;
-    FRootDepthChoice := LandUse.FRootDepthChoice;
-    FRootDepthArrayList := LandUse.FRootDepthArrayList;
-    FRootPressureChoice := LandUse.FRootPressureChoice;
-    FTranspirationFractionChoice := LandUse.FTranspirationFractionChoice;
-    FTranspirationFractionArrayList := LandUse.FTranspirationFractionArrayList;
-    FEvapIrrigationFractionChoice := LandUse.FEvapIrrigationFractionChoice;
-    FEvapIrrigationFractionArrayList := LandUse.FEvapIrrigationFractionArrayList;
-    FFractionOfPrecipToSurfaceWater := LandUse.FFractionOfPrecipToSurfaceWater;
-    FFractionOfPrecipToSurfaceWaterArrayList := LandUse.FFractionOfPrecipToSurfaceWaterArrayList;
-    FFractionOfIrrigationToSurfaceWater := LandUse.FFractionOfIrrigationToSurfaceWater;
-    FFractionOfIrrigationToSurfaceWaterArrayList := LandUse.FFractionOfIrrigationToSurfaceWaterArrayList;
-    FPondDepthChoice := LandUse.FPondDepthChoice;
-    FAddedDemandChoice := LandUse.FAddedDemandChoice;
-    FAddedDemandArrayList := LandUse.FAddedDemandArrayList;
-    FAddedDemandType := LandUse.FAddedDemandType;
-    FNoCropUseMeansBareSoilChoice := LandUse.FNoCropUseMeansBareSoilChoice;
-    FET_IrrigFracCorrectionChoice := LandUse.FET_IrrigFracCorrectionChoice;
+    LandUseOption := LandUse.LandUseOption;
+    SoilLocationChoice := LandUse.SoilLocationChoice;
+    LandUseFractionChoice := LandUse.LandUseFractionChoice;
+    LandUseFractionArrayList := LandUse.LandUseFractionArrayList;
+    LandUsePrints := LandUse.LandUsePrints;
+    SpecifyCropsToPrint := LandUse.SpecifyCropsToPrint;
+    CropCoeffOrUseChoice := LandUse.CropCoeffOrUseChoice;
+    CropCoefOrUse := LandUse.CropCoefOrUse;
+    CropCoefOrUseArrayList := LandUse.CropCoefOrUseArrayList;
+    IrrigationChoice := LandUse.IrrigationChoice;
+    IrrigationArrayList := LandUse.IrrigationArrayList;
+    RootDepthChoice := LandUse.RootDepthChoice;
+    RootDepthArrayList := LandUse.RootDepthArrayList;
+    RootPressureChoice := LandUse.RootPressureChoice;
+    TranspirationFractionChoice := LandUse.TranspirationFractionChoice;
+    TranspirationFractionArrayList := LandUse.TranspirationFractionArrayList;
+    EvapIrrigationFractionChoice := LandUse.EvapIrrigationFractionChoice;
+    EvapIrrigationFractionArrayList := LandUse.EvapIrrigationFractionArrayList;
+    FractionOfPrecipToSurfaceWater := LandUse.FractionOfPrecipToSurfaceWater;
+    FractionOfPrecipToSurfaceWaterArrayList := LandUse.FractionOfPrecipToSurfaceWaterArrayList;
+    FractionOfIrrigationToSurfaceWater := LandUse.FractionOfIrrigationToSurfaceWater;
+    FractionOfIrrigationToSurfaceWaterArrayList := LandUse.FractionOfIrrigationToSurfaceWaterArrayList;
+    PondDepthChoice := LandUse.PondDepthChoice;
+    AddedDemandChoice := LandUse.AddedDemandChoice;
+    AddedDemandArrayList := LandUse.AddedDemandArrayList;
+//    FAddedDemandType := LandUse.FAddedDemandType;
+    NoCropUseMeansBareSoilChoice := LandUse.NoCropUseMeansBareSoilChoice;
+    ET_IrrigFracCorrectionChoice := LandUse.ET_IrrigFracCorrectionChoice;
   end;
   inherited;
 end;
@@ -25291,7 +25204,7 @@ begin
   MinimumBareFraction :=  0.000001;
   RelaxFracHeadChange := 1;
   FLandUseOption := luoSingle;
-  FSoilLocationChoice := rstSteady;
+  FSoilLocationChoice := rstStatic;
   FLandUseFractionChoice := foNotUsed;
   FLandUseFractionArrayList := alArray;
   FLandUsePrints := [];
@@ -25315,7 +25228,6 @@ begin
   FPondDepthChoice := foNotUsed;
   FAddedDemandChoice := foNotUsed;
   FAddedDemandArrayList := alArray;
-  FAddedDemandType := adtLength;
   FNoCropUseMeansBareSoilChoice := foNotUsed;
   FET_IrrigFracCorrectionChoice := foNotUsed;
   inherited;
@@ -25329,15 +25241,6 @@ end;
 procedure TFarmLandUse.SetAddedDemandChoice(const Value: TFarmOption);
 begin
   SetFarmOptionProperty(FAddedDemandChoice, Value);
-end;
-
-procedure TFarmLandUse.SetAddedDemandType(const Value: TAddedDemandType);
-begin
-  if FAddedDemandType <> Value then
-  begin
-    FAddedDemandType := Value;
-    InvalidateModel;
-  end;
 end;
 
 procedure TFarmLandUse.SetCropCoeffOrUseChoice(const Value: TFarmOption);
@@ -25455,46 +25358,6 @@ begin
   SetFarmOptionProperty(FPondDepthChoice, Value);
 end;
 
-//procedure TFarmLandUse.SetPrintBare(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintBare, Value);
-//end;
-//
-//procedure TFarmLandUse.SetPrintByCell(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintByCell, Value);
-//end;
-//
-//procedure TFarmLandUse.SetPrintByCellVerbose(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintByCellVerbose, Value);
-//end;
-//
-//procedure TFarmLandUse.SetPrintByCrop(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintByCrop, Value);
-//end;
-//
-//procedure TFarmLandUse.SetPrintByFarm(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintByFarm, Value);
-//end;
-//
-//procedure TFarmLandUse.SetPrintByFarmByCrop(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintByFarmByCrop, Value);
-//end;
-//
-//procedure TFarmLandUse.SetPrintET_ByFarmByCrop(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintET_ByFarmByCrop, Value);
-//end;
-//
-//procedure TFarmLandUse.SetPrintRowCol(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintRowCol, Value);
-//end;
-
 procedure TFarmLandUse.SetRelaxFracHeadChange(const Value: double);
 begin
   StoredRelaxFracHeadChange.Value := Value;
@@ -25514,11 +25377,6 @@ procedure TFarmLandUse.SetRootPressureChoice(const Value: TFarmOption);
 begin
   SetFarmOptionProperty(FRootPressureChoice, Value);
 end;
-
-//procedure TFarmLandUse.SetSoilLocationChoice(const Value: TFarmOption);
-//begin
-//  SetFarmOptionProperty(FSoilLocationChoice, Value);
-//end;
 
 procedure TFarmLandUse.SetSoilLocationChoice(
   const Value: TRequiredSteadyTransient);

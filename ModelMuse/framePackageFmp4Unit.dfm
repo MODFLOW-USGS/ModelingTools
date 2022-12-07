@@ -6,13 +6,9 @@ inherited framePackageFmp4: TframePackageFmp4
   DesignSize = (
     575
     500)
-  inherited lblComments: TLabel
-    Enabled = True
-  end
   inherited memoComments: TMemo
     Width = 544
     Height = 52
-    Enabled = True
     ExplicitWidth = 544
     ExplicitHeight = 52
   end
@@ -23,6 +19,7 @@ inherited framePackageFmp4: TframePackageFmp4
     Height = 380
     VertScrollBar.Tracking = True
     Align = alBottom
+    Anchors = [akLeft, akTop, akRight, akBottom]
     HeaderFont.Charset = DEFAULT_CHARSET
     HeaderFont.Color = clWindowText
     HeaderFont.Height = -12
@@ -34,14 +31,14 @@ inherited framePackageFmp4: TframePackageFmp4
       Height = 400
       Caption = 'Water Balance Subregion Options (Farm Options)'
       TabOrder = 0
-      ExplicitWidth = 550
       object rdgFarms: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 552
+        Width = 569
         Height = 374
         Align = alClient
         ColCount = 4
+        Enabled = False
         FixedCols = 1
         RowCount = 11
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -159,8 +156,7 @@ inherited framePackageFmp4: TframePackageFmp4
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 553
-        ExplicitHeight = 284
+        ExplicitTop = 7
       end
     end
     object cpnlOptions: TCategoryPanel
@@ -168,13 +164,13 @@ inherited framePackageFmp4: TframePackageFmp4
       Height = 124
       Caption = 'Options'
       TabOrder = 1
-      ExplicitWidth = 550
       object cbAllowPrinting: TCheckBox
         Left = 8
         Top = 8
         Width = 308
         Height = 17
         Caption = 'Allow printing to listing file (inverse of NOPRINT)'
+        Enabled = False
         TabOrder = 0
       end
       object cbWellField: TCheckBox
@@ -185,6 +181,7 @@ inherited framePackageFmp4: TframePackageFmp4
         Caption = 
           'Allow for aquifer storage and recovery for non-routed deliveries' +
           ' (WELLFIELD)'
+        Enabled = False
         TabOrder = 1
         WordWrap = True
       end
@@ -194,6 +191,7 @@ inherited framePackageFmp4: TframePackageFmp4
         Width = 449
         Height = 17
         Caption = 'Calls FMP FM routine before budget calculation (RECOMP_Q_BD)'
+        Enabled = False
         TabOrder = 2
       end
     end
@@ -202,12 +200,11 @@ inherited framePackageFmp4: TframePackageFmp4
       Height = 243
       Caption = 'MNW2 Closure Criteria'
       TabOrder = 2
-      ExplicitWidth = 550
       object lblQClose: TLabel
         Left = 74
         Top = 66
-        Width = 383
-        Height = 45
+        Width = 370
+        Height = 30
         Caption = 
           'Criterion for actual MNW pumping rate to converge to FMP pumping' +
           ' requirement (QCLOSE) '
@@ -216,7 +213,7 @@ inherited framePackageFmp4: TframePackageFmp4
       object lblHPCT: TLabel
         Left = 74
         Top = 111
-        Width = 367
+        Width = 366
         Height = 30
         Caption = 
           'Fraction of reduction of head-change closure criterion if QCLOSE' +
@@ -226,8 +223,8 @@ inherited framePackageFmp4: TframePackageFmp4
       object lblRPCT: TLabel
         Left = 74
         Top = 159
-        Width = 351
-        Height = 45
+        Width = 314
+        Height = 30
         Caption = 
           'Fraction of reduction of residual-change closure criterion if QC' +
           'LOSE was not met (RPCT)'
@@ -242,6 +239,7 @@ inherited framePackageFmp4: TframePackageFmp4
           'Adjust solver closure criteria to allow convergence of the FMP p' +
           'umping requirement to pumping simulated by the linked MNW2 packa' +
           'ge (MNWCLOSE option)'
+        Enabled = False
         TabOrder = 0
         WordWrap = True
       end
@@ -250,6 +248,8 @@ inherited framePackageFmp4: TframePackageFmp4
         Top = 63
         Width = 65
         Height = 22
+        Color = clBtnFace
+        Enabled = False
         TabOrder = 1
         Text = '0'
         DataType = dtReal
@@ -262,6 +262,8 @@ inherited framePackageFmp4: TframePackageFmp4
         Top = 111
         Width = 65
         Height = 22
+        Color = clBtnFace
+        Enabled = False
         TabOrder = 2
         Text = '0'
         DataType = dtReal
@@ -275,6 +277,8 @@ inherited framePackageFmp4: TframePackageFmp4
         Top = 157
         Width = 65
         Height = 22
+        Color = clBtnFace
+        Enabled = False
         TabOrder = 3
         Text = '0'
         DataType = dtReal
@@ -289,13 +293,13 @@ inherited framePackageFmp4: TframePackageFmp4
       Height = 294
       Caption = 'Print'
       TabOrder = 3
-      ExplicitWidth = 550
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
         Width = 552
         Height = 228
         Align = alClient
+        Enabled = False
         ItemHeight = 15
         Items.Strings = (
           'WBS_WATER_USE'
@@ -311,8 +315,6 @@ inherited framePackageFmp4: TframePackageFmp4
           'LANDSCAPE_RUNOFF [COMPACT]'
           'DEEP_PERCOLATION    [COMPACT]')
         TabOrder = 0
-        ExplicitWidth = 553
-        ExplicitHeight = 234
       end
       object Panel1: TPanel
         Left = 0
@@ -321,8 +323,6 @@ inherited framePackageFmp4: TframePackageFmp4
         Height = 40
         Align = alBottom
         TabOrder = 1
-        ExplicitTop = 234
-        ExplicitWidth = 553
         object lblPrintRouting: TLabel
           Left = 168
           Top = 8
@@ -331,11 +331,12 @@ inherited framePackageFmp4: TframePackageFmp4
           Caption = 'Print routing'
         end
         object comboPrintRouting: TComboBox
-          Left = 13
+          Left = 17
           Top = 6
           Width = 145
           Height = 23
           Style = csDropDownList
+          Enabled = False
           ItemIndex = 0
           TabOrder = 0
           Text = 'Don'#39't use'
@@ -385,6 +386,5 @@ inherited framePackageFmp4: TframePackageFmp4
       item
         Control = rdgFarms
       end>
-    Enabled = True
   end
 end

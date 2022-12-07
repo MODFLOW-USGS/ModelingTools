@@ -267,6 +267,7 @@
     </config-group>
     <variables/>
     <helpcontext-numbers>
+      <helpcontext-number href="CLIMATE#REFERENCE_ET" value="80"/>
       <helpcontext-number href="GLOBAL-DIMENSION#NCROP_SPECIFIED_ELEVATIONS" value="70"/>
       <helpcontext-number href="GLOBAL-DIMENSION#NWBS" value="10"/>
       <helpcontext-number href="LAND_USE#MULTIPLE_LAND_USE_PER_CELL" value="50"/>

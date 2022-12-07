@@ -51,11 +51,11 @@ type
 var
   framePackageFmp4: TframePackageFmp4;
 
-var
-  StaticTransient: TStringlist;
-  DontUseStaticTransient: TStringlist;
-
 implementation
+
+resourcestring
+  StrFrequency = 'Frequency';
+  StrArrayOrList = 'Array or list';
 
 {$R *.dfm}
 
@@ -76,7 +76,7 @@ begin
 
   for PrintIndex := Low(TFarmPrint) to High(TFarmPrint) do
   begin
-    clbPrint.Checked[Ord(PrintIndex)] := PrintIndex in FarmProcess4.FarmPrints
+    clbPrint.Checked[Ord(PrintIndex)] := PrintIndex in FarmProcess4.FarmPrints;
   end;
 
   cbMnwClose.Checked := FarmProcess4.UseMnwCriteria;
@@ -124,8 +124,8 @@ procedure TframePackageFmp4.InitializeGrid;
 begin
   rdgFarms.BeginUpdate;
   try
-    rdgFarms.Cells[Ord(fcTransient), Ord(frName)] := 'Frequency';
-    rdgFarms.Cells[Ord(fcArray), Ord(frName)] := 'Array or list';
+    rdgFarms.Cells[Ord(fcTransient), Ord(frName)] := StrFrequency;
+    rdgFarms.Cells[Ord(fcArray), Ord(frName)] := StrArrayOrList;
     rdgFarms.Cells[Ord(fcOther), Ord(frName)] := 'Prorate Deficiency';
 
     rdgFarms.Cells[Ord(fcName), Ord(frLocation)] := 'Location';
@@ -245,23 +245,5 @@ begin
 
   FarmProcess4.Added_Crop_Demand_Rate := RowToFarmOption(frAddedDemandRate);
 end;
-
-initialization
-  StaticTransient := TStringlist.Create;
-  StaticTransient.Add('Static');
-  StaticTransient.Add('Transient');
-
-  DontUseStaticTransient := TStringlist.Create;
-  DontUseStaticTransient.Add('don''t use');
-  DontUseStaticTransient.Add('Static');
-  DontUseStaticTransient.Add('Transient');
-
-//  ProrateOption := TStringlist.Create;
-//  ProrateOption.Add('by demand);
-//  ProrateOption.Add('by average');
-
-finalization
-  StaticTransient.Free;
-  DontUseStaticTransient.Free;
 
 end.
