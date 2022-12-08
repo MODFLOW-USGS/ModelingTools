@@ -25529,21 +25529,6 @@ begin
   SetFarmOptionProperty(FFarmSaltConcentrationsChoice, Value);
 end;
 
-//procedure TFarmSalinityFlush.SetPrintAll(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintAll, Value);
-//end;
-//
-//procedure TFarmSalinityFlush.SetPrintByFarm(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintByFarm, Value);
-//end;
-//
-//procedure TFarmSalinityFlush.SetPrintByFarmByCrop(const Value: Boolean);
-//begin
-//  SetBooleanProperty(FPrintByFarmByCrop, Value);
-//end;
-
 procedure TFarmSalinityFlush.SetSalinityFlushPrints(
   const Value: TSalinityFlushPrints);
 begin

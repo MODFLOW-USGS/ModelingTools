@@ -45,10 +45,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
           'PRINT ET_BYWBS_BYCROP'
           'PRINT ROW_COLUMN')
         TabOrder = 0
-        ExplicitLeft = 40
-        ExplicitTop = 24
-        ExplicitWidth = 121
-        ExplicitHeight = 97
       end
       object pnl2: TPanel
         Left = 0
@@ -57,9 +53,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
         Height = 41
         Align = alBottom
         TabOrder = 1
-        ExplicitLeft = 168
-        ExplicitTop = 88
-        ExplicitWidth = 185
         object lblSpecifyCrops: TLabel
           Left = 164
           Top = 8
@@ -89,8 +82,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       Height = 371
       Caption = 'Land Use Options'
       TabOrder = 1
-      ExplicitTop = 30
-      ExplicitWidth = 418
       object rdgSoils: TRbwDataGrid4
         Left = 0
         Top = 89
@@ -225,7 +216,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
         Height = 89
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 416
         object lblLandUsePerCell: TLabel
           Left = 168
           Top = 11

@@ -55,7 +55,8 @@ uses System.UITypes,
   System.Generics.Collections, framePackageFmiUnit, framePackageFmp4Unit,
   framePackageFmpSoilsUnit, framePackageFmp4ClimateUnit,
   framePackageFmp4SurfaceWaterUnit, framePackageFmp4WellsUnit,
-  framePackageFmp4AllotmentsUnit, framePackageFmp4LandUseUnit;
+  framePackageFmp4AllotmentsUnit, framePackageFmp4LandUseUnit,
+  framePackageFmp4SalinityFlushUnit;
 
 type
 
@@ -294,6 +295,8 @@ type
     framePkgFmp4Allotments: TframePackageFmp4Allotments;
     jvspFmp4LandUse: TJvStandardPage;
     framePkgFmp4LandUse: TframePackageFmp4LandUse;
+    jvspFmp4SalinityFlush: TJvStandardPage;
+    framePkgFmp4SalinityFlush: TframePackageFmp4SalinityFlush;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -4292,6 +4295,9 @@ begin
 
     framePkgFmp4LandUse.Selected := False;
     framePkgFmp4LandUse.CanSelect := False;
+
+    framePkgFmp4SalinityFlush.Selected := False;
+    framePkgFmp4SalinityFlush.CanSelect := False;
   end
   else
   begin
@@ -4301,6 +4307,7 @@ begin
     framePkgFmp4Wells.CanSelect := True;
     framePkgFmp4Allotments.CanSelect := True;
     framePkgFmp4LandUse.CanSelect := True;
+    framePkgFmp4SalinityFlush.CanSelect := True;
   end;
 
 end;
@@ -4738,6 +4745,9 @@ begin
 
     Packages.FarmLandUse.Frame := framePkgFmp4LandUse;
     FPackageList.Add(Packages.FarmLandUse);
+
+    Packages.FarmSalinityFlush.Frame := framePkgFmp4SalinityFlush;
+    FPackageList.Add(Packages.FarmSalinityFlush);
   end
   else
   begin
@@ -4747,7 +4757,8 @@ begin
     framePkgFmp4SurfaceWater.NilNode;
     framePkgFmp4Wells.NilNode;
     framePkgFmp4Allotments.NilNode;
-    framePkgFmp4LandUse.NilNode
+    framePkgFmp4LandUse.NilNode;
+    framePkgFmp4SalinityFlush.NilNode;
   end;
           {$ENDIF}
 

@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspFMP4
+    ActivePage = jvspFmp4SalinityFlush
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -3404,7 +3404,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 296
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitLeft = 359
               ExplicitTop = 296
               ExplicitHeight = 28
@@ -3427,7 +3426,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 190
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 190
               ExplicitHeight = 28
             end
@@ -3441,13 +3439,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboEvtSink: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboRchSource: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
           end
@@ -3601,37 +3597,31 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboUzfIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboMnw2Iface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboResIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboSfrIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboEtsIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboLakIface: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               TabOrder = 12
               ExplicitHeight = 28
             end
@@ -3675,7 +3665,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboTimeMethod: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited rdeParticleInterval: TRbwDataEntry
@@ -4009,7 +3998,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 381
           Height = 28
           ItemHeight = 22
-          ItemIndex = -1
           ExplicitTop = 381
           ExplicitHeight = 28
         end
@@ -4489,7 +4477,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 114
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 114
               ExplicitHeight = 28
             end
@@ -4497,7 +4484,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 173
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 173
               ExplicitHeight = 28
             end
@@ -4505,7 +4491,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 236
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 236
               ExplicitHeight = 28
             end
@@ -5549,7 +5534,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 118
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 118
               ExplicitHeight = 28
             end
@@ -5566,7 +5550,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 119
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitLeft = 1
               ExplicitWidth = 119
               ExplicitHeight = 28
@@ -5773,7 +5756,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Height = 28
               DroppedWidth = 358
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitLeft = 2
               ExplicitTop = 63
               ExplicitWidth = 358
@@ -5897,7 +5879,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 230
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 230
               ExplicitHeight = 28
             end
@@ -5906,7 +5887,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Height = 28
               DroppedWidth = 230
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 230
               ExplicitHeight = 28
             end
@@ -6974,7 +6954,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited comboSorptionChoice: TJvImageComboBox
               Height = 26
-              ItemIndex = -1
               ExplicitHeight = 26
             end
           end
@@ -7160,7 +7139,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited comboSaveConcType: TJvImageComboBox
             Height = 28
             ItemHeight = 22
-            ItemIndex = -1
             ExplicitHeight = 28
           end
           inherited cbLogTransform: TCheckBox
@@ -7190,7 +7168,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited comboSaveMassFluxType: TJvImageComboBox
             Height = 28
             ItemHeight = 22
-            ItemIndex = -1
             ExplicitHeight = 28
           end
         end
@@ -7401,13 +7378,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboDampingMode: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboAcnvg: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited seMcnvg: TJvSpinEdit
@@ -7422,7 +7397,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 280
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 280
               ExplicitHeight = 28
             end
@@ -8624,7 +8598,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Height = 28
               DroppedWidth = 346
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 346
               ExplicitHeight = 28
             end
@@ -8947,7 +8920,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 318
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 318
               ExplicitHeight = 28
             end
@@ -8962,7 +8934,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Top = 420
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitTop = 420
               ExplicitHeight = 28
             end
@@ -9490,7 +9461,6 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 243
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitWidth = 243
               ExplicitHeight = 28
             end
@@ -9606,7 +9576,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited comboLosstype: TJvImageComboBox
           Height = 28
           ItemHeight = 22
-          ItemIndex = -1
           ExplicitHeight = 28
         end
         inherited fedWellFileName: TJvFilenameEdit
@@ -9773,7 +9742,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited comboStorageChoice: TJvImageComboBox
           Height = 28
           ItemHeight = 22
-          ItemIndex = -1
           ExplicitHeight = 28
         end
         inherited rcSelectionController: TRbwController
@@ -9891,7 +9859,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboUsePTC: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited seMaxErrors: TJvSpinEdit
@@ -10985,13 +10952,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboInterbedThicknessMethod: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
             inherited comboCompressionMethod: TJvImageComboBox
               Height = 28
               ItemHeight = 22
-              ItemIndex = -1
               ExplicitHeight = 28
             end
           end
@@ -11825,8 +11790,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4SurfaceWater'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline framePkgFmp4SurfaceWater: TframePackageFmp4SurfaceWater
         Left = 0
         Top = 0
@@ -11835,8 +11798,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 24
-        ExplicitTop = 32
+        ExplicitWidth = 595
+        ExplicitHeight = 516
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -11851,6 +11814,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
+          ExplicitWidth = 564
         end
         inherited CategoryPanelGroup1: TCategoryPanelGroup
           Width = 595
@@ -11864,12 +11828,14 @@ inherited frmModflowPackages: TfrmModflowPackages
               ItemHeight = 18
               ExplicitLeft = 0
               ExplicitTop = 0
-              ExplicitWidth = 399
-              ExplicitHeight = 174
+              ExplicitWidth = 572
+              ExplicitHeight = 127
             end
           end
           inherited cpnlOptions: TCategoryPanel
             Enabled = True
+            ExplicitTop = 153
+            ExplicitWidth = 574
             inherited lblNon_Routed_Delivery: TLabel
               Width = 134
               Height = 18
@@ -11969,8 +11935,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4SupplyWells'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline framePkgFmp4Wells: TframePackageFmp4Wells
         Left = 0
         Top = 0
@@ -11979,7 +11943,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitTop = 2
+        ExplicitHeight = 516
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -12015,9 +11979,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           Height = 18
           ExplicitWidth = 119
           ExplicitHeight = 18
-        end
-        inherited memoComments: TMemo
-          ExplicitWidth = 564
         end
         inherited clbPrint: TCheckListBox
           ItemHeight = 18
@@ -12070,8 +12031,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4Allotments'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline framePkgFmp4Allotments: TframePackageFmp4Allotments
         Left = 0
         Top = 0
@@ -12080,8 +12039,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 64
-        ExplicitTop = 104
+        ExplicitWidth = 595
+        ExplicitHeight = 516
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -12108,6 +12067,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
+          ExplicitWidth = 564
         end
         inherited comboSURFACE_WATER: TComboBox
           Height = 26
@@ -12140,8 +12100,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4LandUse'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline framePkgFmp4LandUse: TframePackageFmp4LandUse
         Left = 0
         Top = 0
@@ -12150,7 +12108,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 40
+        ExplicitWidth = 595
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -12165,27 +12123,21 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
+          ExplicitWidth = 564
         end
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 595
-          VertScrollBar.Position = 169
+          ExplicitWidth = 595
           inherited cpnlPrint: TCategoryPanel
-            Top = -169
-            ExplicitTop = -169
             ExplicitWidth = 574
             inherited clbPrint: TCheckListBox
               Width = 572
               ItemHeight = 18
-              ExplicitLeft = 0
-              ExplicitTop = 0
-              ExplicitWidth = 399
-              ExplicitHeight = 132
+              ExplicitWidth = 572
             end
             inherited pnl2: TPanel
               Width = 572
-              ExplicitLeft = 0
-              ExplicitTop = 132
-              ExplicitWidth = 399
+              ExplicitWidth = 572
               inherited lblSpecifyCrops: TLabel
                 Width = 146
                 Height = 18
@@ -12199,16 +12151,16 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlOptions: TCategoryPanel
-            Top = 30
             ExplicitWidth = 574
             inherited rdgSoils: TRbwDataGrid4
               Width = 572
               FixedCols = 0
               ExplicitTop = 89
+              ExplicitWidth = 572
             end
             inherited pnl1: TPanel
               Width = 572
-              ExplicitWidth = 399
+              ExplicitWidth = 572
               inherited lblLandUsePerCell: TLabel
                 Width = 118
                 Height = 18
@@ -12259,6 +12211,107 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePkgFmp4LandUse.rdgSoils
+            end>
+        end
+      end
+    end
+    object jvspFmp4SalinityFlush: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 595
+      Height = 516
+      Caption = 'jvspFmp4SalinityFlush'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline framePkgFmp4SalinityFlush: TframePackageFmp4SalinityFlush
+        Left = 0
+        Top = 0
+        Width = 595
+        Height = 516
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 48
+        ExplicitTop = 9
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 564
+        end
+        inherited cpnlgrp1: TCategoryPanelGroup
+          Width = 595
+          Height = 359
+          inherited cpnlPrint: TCategoryPanel
+            ExplicitWidth = 418
+            ExpandedHeight = 89
+            inherited clbPrint: TCheckListBox
+              Width = 589
+              Height = 0
+              ItemHeight = 18
+              ExplicitLeft = 0
+              ExplicitTop = 0
+              ExplicitWidth = 416
+              ExplicitHeight = 0
+            end
+          end
+          inherited cpnlOptions: TCategoryPanel
+            inherited pnl1: TPanel
+              Width = 589
+              ExplicitWidth = 416
+              inherited lblExpressionLength: TLabel
+                Width = 123
+                Height = 18
+                ExplicitWidth = 123
+                ExplicitHeight = 18
+              end
+              inherited lblExpressionMin: TLabel
+                Width = 285
+                Height = 18
+                ExplicitWidth = 285
+                ExplicitHeight = 18
+              end
+              inherited seExpressionLength: TJvSpinEdit
+                Height = 26
+                ExplicitHeight = 26
+              end
+            end
+            inherited rdgSalinityFlush: TRbwDataGrid4
+              Width = 589
+              ExplicitTop = 65
+              ExplicitWidth = 416
+              ExplicitHeight = 222
+            end
+          end
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = framePkgFmp4SalinityFlush.lblComments
+            end
+            item
+              Control = framePkgFmp4SalinityFlush.memoComments
+            end
+            item
+              Control = framePkgFmp4SalinityFlush.clbPrint
+            end
+            item
+              Control = framePkgFmp4SalinityFlush.seExpressionLength
+            end
+            item
+              Control = framePkgFmp4SalinityFlush.rdeExpressionMin
+            end
+            item
+              Control = framePkgFmp4SalinityFlush.rdgSalinityFlush
             end>
         end
       end
