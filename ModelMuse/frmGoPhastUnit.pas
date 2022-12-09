@@ -2463,6 +2463,7 @@ var
   Modpath7Date: TDateTime;
   MfLgr2Date: TDateTime;
   MfOwhmDate: TDateTime;
+  MfOwhmV2Date: TDateTime;
   MfCfpDate: TDateTime;
   Mf6Date: TDateTime;
 //  Mf6WithGwtDate: TDateTime;
@@ -10988,10 +10989,16 @@ begin
 end;
 
 function TfrmGoPhast.MfOwhmV2UpToDate: boolean;
+var
+  WarningMessage: string;
 begin
-  // fix this
-  result := False;
-  Assert(False);
+  result := ModelUpToDate(PhastModel.ProgramLocations.ModflowOwhmV2Location, MfOwhmV2Date);
+  if not result then
+  begin
+    Beep;
+    WarningMessage := Format(StrTheCurrentVersion, [StrMODFLOWOWHMV2]);
+    result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
+  end;
 end;
 
 procedure TfrmGoPhast.miMakeSelectedVerticesASeparateObjectClick(
@@ -14859,7 +14866,7 @@ end;
 procedure TfrmGoPhast.acRunModflowOWHM_V2Execute(Sender: TObject);
 begin
   inherited;
-  //
+  miExportModflowClick(Sender);
 end;
 
 procedure TfrmGoPhast.acRunMt3dmsExecute(Sender: TObject);
@@ -15790,6 +15797,7 @@ initialization
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);
   PestDate := EncodeDate(2022,11,4);
+  MfOwhmV2Date := EncodeDate(2022,2,14);
 
   {$IFDEF Win64}
   RegisterExpectedMemoryLeak(GR32_Blend.AlphaTable);

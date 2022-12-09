@@ -8,7 +8,7 @@
           <export-task name="Publish as CHM" format="CHM">
             <task-config-group name="settings">
               <task-config-value name="outputfile">FarmProcess.chm</task-config-value>
-              <task-config-value name="skin">$(HMSYS)Templates\HTML Skins\CHM Skin, Black Header, Feature Images.hmskin</task-config-value>
+              <task-config-value name="skin">..\CHM_LightBlue.hmskin</task-config-value>
               <task-config-value name="deletetemp">1</task-config-value>
               <task-config-value name="make0include">CHM</task-config-value>
               <task-config-value name="make0status">*</task-config-value>
@@ -249,7 +249,7 @@
       <config-value name="imageconversion">1</config-value>
       <config-value name="jpgquality">90</config-value>
       <config-value name="htmlpopup">3</config-value>
-      <config-value name="skin">$(HMSYS)Templates\HTML Skins\CHM Skin, Black Header, Feature Images.hmskin</config-value>
+      <config-value name="skin">..\CHM_LightBlue.hmskin</config-value>
       <config-value name="outputfile">FarmProcess.chm</config-value>
       <config-value name="deletetemp">1</config-value>
     </config-group>

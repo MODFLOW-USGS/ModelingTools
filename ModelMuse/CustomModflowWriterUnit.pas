@@ -215,7 +215,8 @@ type
     }
     procedure WriteArray(const DataArray: TDataArray; const LayerIndex: integer;
       const Comment: string;  NoValueAssignedAnnotation: string;
-      const MF6_Arrayname: string; CacheArray: boolean = True); virtual;
+      const MF6_Arrayname: string; CacheArray: boolean = True;
+      ShouldWriteHeader: Boolean = True); virtual;
     {
     @name returns whether or not PEST parameters are used with DataArray in the
     layer designated by LayerIndex.
@@ -278,7 +279,7 @@ end;
       DataTypeIndex: Integer; DataType: TRbwDataType; DefaultValue: Double;
       List: TList; AssignmentMethod: TUpdateMethod; AdjustForLGR: boolean;
       var TransientArray: TDataArray; const MF6_ArrayName: string;
-      FreeArray: boolean = True);
+      FreeArray: boolean = True; ShouldWriteHeader: Boolean = True);
     procedure WriteMf6_DataSet(DataArray: TDataArray; const ID: string);
     // SAVE_FLOWS
     procedure WriteSaveFlowsOption;
@@ -335,7 +336,7 @@ end;
     }
     procedure WriteArray(const DataArray: TDataArray; const LayerIndex: integer;
       const Comment: string;  NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
-      CacheArray: Boolean = True); override;
+      CacheArray: Boolean = True; ShouldWriteHeader: Boolean = True); override;
     // @name writes value to the output file using the U2DINT format in MODFLOW
     // or the IARRAY array reader in MT3DMS depending on the value of
     // @link(FArrayWritingFormat)
@@ -3613,7 +3614,7 @@ end;
 procedure TCustomModflowWriter.WriteArray(const DataArray: TDataArray;
   const LayerIndex: integer; const Comment: string;
   NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
-  CacheArray: Boolean = True);
+  CacheArray: Boolean = True; ShouldWriteHeader: Boolean = True);
 var
   RealValue: double;
   IntValue: integer;
@@ -3756,7 +3757,10 @@ begin
     end
     else
     begin
-      WriteHeader(DataArray, Comment, MF6_Arrayname);
+      if ShouldWriteHeader then
+      begin
+        WriteHeader(DataArray, Comment, MF6_Arrayname);
+      end;
       WriteArrayValues(LayerIndex, DataArray);
     end;
   end;
@@ -3769,7 +3773,7 @@ end;
 procedure TCustomFileWriter.WriteArray(const DataArray: TDataArray;
   const LayerIndex: integer; const Comment: string;
   NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
-  CacheArray: Boolean);
+  CacheArray: Boolean = True; ShouldWriteHeader: Boolean = True);
 var
   LayerArrayWriter: TLayerArrayWriter;
   ArrayFileName: string;
@@ -6915,7 +6919,7 @@ procedure TCustomModflowWriter.WriteTransient2DArray(const Comment: string;
   DataTypeIndex: Integer; DataType: TRbwDataType; DefaultValue: Double;
   List: TList; AssignmentMethod: TUpdateMethod; AdjustForLGR: boolean;
   var TransientArray: TDataArray; const MF6_ArrayName: string;
-  FreeArray: boolean = True);
+  FreeArray: boolean = True; ShouldWriteHeader: Boolean = True);
 var
   ColIndex: Integer;
   RowIndex: Integer;
@@ -7191,7 +7195,10 @@ begin
     if WritingTemplate and FormulasUsed then
     begin
       ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-      WriteHeader(rdtDouble, Comment, MF6_ArrayName);
+      if ShouldWriteHeader then
+      begin
+        WriteHeader(rdtDouble, Comment, MF6_ArrayName);
+      end;
       for RowIndex := 0 to RowCount - 1 do
       begin
         for ColIndex := 0 to ColumnCount - 1 do
@@ -7211,7 +7218,7 @@ begin
     end
     else
     begin
-      WriteArray(ExportArray, 0, Comment, DummyAnnotation, MF6_ArrayName, False);
+      WriteArray(ExportArray, 0, Comment, DummyAnnotation, MF6_ArrayName, False, ShouldWriteHeader);
     end;
   finally
     if FreeArray then

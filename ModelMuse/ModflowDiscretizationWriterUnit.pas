@@ -673,10 +673,8 @@ begin
       end;
     end;
   end;
-          {$IFDEF OWHMV2}
-          // fix this
-          Assert(False);
-          {$ENDIF}
+
+  { TODO -cOWHMV2 : Does OWHM V2 require daily time units for calculated rooting depth or consumptive use? }
 
   WriteInteger(ModflowOptions.TimeUnit);
   WriteInteger(ModflowOptions.LengthUnit);

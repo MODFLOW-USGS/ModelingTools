@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspFMP4
+    ActivePage = jvspFmp4SurfaceWater
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -11502,11 +11502,15 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 564
         end
         inherited cpnlgrp1: TCategoryPanelGroup
-          Top = 187
+          Top = 120
           Width = 595
-          ExplicitTop = 187
+          Height = 396
+          VertScrollBar.Position = 6
           ExplicitWidth = 595
+          ExplicitHeight = 396
           inherited cpnlWaterBalanceRegions: TCategoryPanel
+            Top = 655
+            ExplicitTop = 655
             ExplicitWidth = 574
             inherited rdgFarms: TRbwDataGrid4
               Width = 572
@@ -11515,6 +11519,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlOptions: TCategoryPanel
+            Top = 531
+            ExplicitTop = 531
             ExplicitWidth = 574
             inherited cbWellField: TCheckBox
               Height = 37
@@ -11522,6 +11528,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlMnw2: TCategoryPanel
+            Top = 288
+            ExplicitTop = 288
             ExplicitWidth = 574
             inherited lblQClose: TLabel
               Height = 36
@@ -11537,6 +11545,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlOutput: TCategoryPanel
+            Top = -6
+            ExplicitTop = -6
             ExplicitWidth = 574
             inherited clbPrint: TCheckListBox
               Width = 572

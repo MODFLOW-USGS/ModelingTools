@@ -202,6 +202,15 @@ type
     procedure Evaluate; override;
   end;
 
+resourcestring
+  StrInvalidFarmID = 'Invalid Farm ID in Farm Process';
+  StrInvalidFarmProcess = 'Invalid Farm Process activation';
+  StrIfTheFarmProcess = 'If the Farm Process is active in a child model, it ' +
+  'must also be active in the parent model.';
+  StrFMPFarmsNotDefine = 'FMP Farms not defined in one or more stress period' +
+  's';
+  StrRow0dColumn = 'Row: %0:d; Column: %1:d';
+
 implementation
 
 uses
@@ -299,18 +308,18 @@ resourcestring
   StrInFarmDTheFar = 'In farm #%d, the farm allotment has not been defined.';
   StrTheCropspecificWa = 'The crop-specific water-production function is und' +
   'efined in the following crops';
-  StrIfTheFarmProcess = 'If the Farm Process is active in a child model, it ' +
-  'must also be active in the parent model.';
-  StrInvalidFarmProcess = 'Invalid Farm Process activation';
-  StrInvalidFarmID = 'Invalid Farm ID in Farm Process';
-  StrRow0dColumn = 'Row: %0:d; Column: %1:d';
+//  StrIfTheFarmProcess = 'If the Farm Process is active in a child model, it ' +
+//  'must also be active in the parent model.';
+//  StrInvalidFarmProcess = 'Invalid Farm Process activation';
+//  StrInvalidFarmID = 'Invalid Farm ID in Farm Process';
+//  StrRow0dColumn = 'Row: %0:d; Column: %1:d';
   StrInvalidSoilIDInF = 'Invalid Soil ID in Farm Process';
   StrInvalidCropIDInF = 'Invalid Crop ID in Farm Process.';
   StrTheFormulaShouldR = 'The formula should result in a Boolean';
   StrTheFormulaShouldInt = 'The formula should result in an integer';
   StrTheFormulaShouldReal = 'The formula should result in a real number';
-  StrFMPFarmsNotDefine = 'FMP Farms not defined in one or more stress period' +
-  's';
+//  StrFMPFarmsNotDefine = 'FMP Farms not defined in one or more stress period' +
+//  's';
   StrUndefinedFMPRefere = 'Undefined FMP Reference Evapotranspiration in one' +
   ' or nore stress periods';
   StrFMPCropIDsNotDef = 'FMP Crop IDs not defined in one or more stress peri' +
@@ -1804,7 +1813,6 @@ var
   DataTypeIndex: Integer;
   DataType: TRbwDataType;
   DefaultValue: Double;
-//  Dummy: TDataArray;
   AFileName: string;
   FarmIdArray: TDataArray;
   BaseName: string;
@@ -3418,11 +3426,11 @@ begin
     Exit;
   end;
 
-  Application.ProcessMessages;
-  if not frmProgressMM.ShouldContinue then
-  begin
-    Exit;
-  end;
+//  Application.ProcessMessages;
+//  if not frmProgressMM.ShouldContinue then
+//  begin
+//    Exit;
+//  end;
   FPestParamUsed := False;
 
   WriteFileInternal;
@@ -4026,12 +4034,7 @@ begin
     begin
       if FACtiveSurfaceCells[RowIndex, ColIndex] then
       begin
-        if {not} IntegerArray.IsValue[0, RowIndex, ColIndex] then
-//        begin
-//          frmErrorsAndWarnings.AddError(Model, ErrorMessage,
-//            Format(StrRow0dColumn, [RowIndex + 1, ColIndex + 1]));
-//        end
-//        else
+        if IntegerArray.IsValue[0, RowIndex, ColIndex] then
         begin
           if IntegerArray.DataType = rdtInteger then
           begin

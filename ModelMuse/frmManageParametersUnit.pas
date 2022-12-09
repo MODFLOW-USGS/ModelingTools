@@ -1259,7 +1259,7 @@ begin
     ptHUF_KDEP: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected;
     ptHUF_LVDA: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected;
     ptSTR: result := not PestOnly and frmGoPhast.PhastModel.StrIsSelected;
-    ptQMAX: result := frmGoPhast.PhastModel.FarmProcessIsSelected;
+    ptQMAX: result := frmGoPhast.PhastModel.FarmProcess3IsSelected;
     ptPEST: result := frmGoPhast.PhastModel.PestStatus in [psObservations, psActive];
     else Assert(False);
   end;

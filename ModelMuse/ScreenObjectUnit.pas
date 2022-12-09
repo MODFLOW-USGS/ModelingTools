@@ -4906,6 +4906,12 @@ SectionStarts.}
     constructor Create(ScreenObject: TScreenObject); override;
   end;
 
+{$IFDEF OWHMV2}
+  TModflowFmp4Delegate = class(TModflowDelegate)
+    constructor Create(ScreenObject: TScreenObject); override;
+  end;
+{$ENDIF}
+
   TCustomMeshDelegate = class(TCustomScreenObjectDelegate)
   private
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -23824,11 +23830,14 @@ begin
             Item.DelegateClass := TModflow6Delegate.ClassName;
           end;
           {$IFDEF OWHMV2}
-          msModflowOwhm2:
-          // fix this
-            Assert(False);
+        msModflowOwhm2:
+          begin
+            Item.DelegateClass := TModflowFmp4Delegate.ClassName;
+          end;
           {$ENDIF}
-
+          // For selecting Item.DelegateClass, the delegate class must
+          // be registered. This can be done in the initialization
+          // section of this unit at the end of the unit.
         else
           begin
             Assert(False);
@@ -33714,7 +33723,7 @@ begin
     ModflowStrBoundary.UpdateTimes(ModflowTimes,
       StartTestTime, EndTestTime, StartRangeExtended,EndRangeExtended, Model);
   end;
-  if PhastModel.FarmProcessIsSelected
+  if PhastModel.FarmProcess3IsSelected
     and (Model.ModelSelection <> msModflow2015)
     then
   begin
@@ -46563,6 +46572,16 @@ begin
   FModelSelection := msSutra40;
 end;
 
+{ TModflowFmp4Delegate }
+
+{$IFDEF OWHMV2}
+constructor TModflowFmp4Delegate.Create(ScreenObject: TScreenObject);
+begin
+  inherited;
+  FModelSelection := msModflowOwhm2;
+end;
+{$ENDIF}
+
 initialization
   RegisterClass(TScreenObject);
   RegisterClass(TPhastDelegate);
@@ -46579,6 +46598,8 @@ initialization
   RegisterClass(TMultiValueScreenObject);
   RegisterClass(TScreenObjectClipboard);
   RegisterClass(TModflow6Delegate);
+  RegisterClass(TModflowFmp4Delegate);
+
 
 end.
 

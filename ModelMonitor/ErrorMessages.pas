@@ -906,7 +906,8 @@ begin
     ErrorValues.Add('Stopping due to error(s)');
     ErrorValues.Add('Simulation convergence failure');
     ErrorValues.Add('ERROR REPORT');
-//    ErrorValues.Add('aaa');
+    // MODFLOW-OWHM v2
+    ErrorValues.Add('THE FOLLOWING COMMENTS WERE PASSED TO THE ERROR ROUTINE');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');

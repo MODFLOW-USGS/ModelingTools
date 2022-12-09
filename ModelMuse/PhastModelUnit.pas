@@ -2570,7 +2570,8 @@ that affects the model output should also have a comment. }
   var
     LakWriter: TObject;
     SfrWriter: TObject;
-    FarmWriter: TObject;
+    FarmWriter3: TObject;
+    FarmWriter4: TObject;
     FTransientMultiplierArrays: TList;
     FCachedMultiplierArrayIndex: Integer;
     FTransientZoneArrays: TList;
@@ -4707,7 +4708,9 @@ that affects the model output should also have a comment. }
     function UzfMf6IsSelected: Boolean;
     function WelIsSelected: Boolean;
     function ZoneBudgetIsSelected: Boolean;
-    function FarmProcessIsSelected: Boolean;
+    function FarmProcess3IsSelected: Boolean;
+    function FarmProcess4IsSelected: Boolean;
+    function FarmProcess4TransientFarmIsSelected: Boolean;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -23116,15 +23119,59 @@ begin
   end;
 end;
 
-function TPhastModel.FarmProcessIsSelected: Boolean;
+function TPhastModel.FarmProcess4IsSelected: Boolean;
 var
   ChildIndex: Integer;
 begin
-  result := (ModelSelection in [msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-          ])
+  {$IFDEF OWHMV2}
+  result := (ModelSelection =  msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      result := result or
+        ChildModels[ChildIndex].ChildModel.ModflowPackages.FarmProcess4.IsSelected;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientFarmIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  LocalModflowPackages: TModflowPackages;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection =  msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmProcess4.TransientFarms;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      LocalModflowPackages := ChildModels[ChildIndex].ChildModel.ModflowPackages;
+      result :=
+        LocalModflowPackages.FarmProcess4.IsSelected
+        and LocalModflowPackages.FarmProcess4.TransientFarms;
+      if result then
+      begin
+        break;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess3IsSelected: Boolean;
+var
+  ChildIndex: Integer;
+begin
+  result := (ModelSelection = msModflowFmp)
     and ModflowPackages.FarmProcess.IsSelected;
   if not result and LgrUsed then
   begin
@@ -35527,7 +35574,8 @@ procedure TCustomModel.FreeSfrWriter;
 begin
   FreeAndNil(SfrWriter);
   FreeAndNil(LakWriter);
-  FreeAndNil(FarmWriter);
+  FreeAndNil(FarmWriter3);
+  FreeAndNil(FarmWriter4);
 end;
 
 procedure TCustomModel.FreeGridNotifiers;
@@ -41600,19 +41648,17 @@ begin
         StrInvalidTimesForMT, StrTheStressPeriodsD);
     end;
 
-    if (ModelSelection = msModflowFmp) and
-      ModflowPackages.FarmProcess.IsSelected then
+    if ((ModelSelection = msModflowFmp) and
+      ModflowPackages.FarmProcess.IsSelected)
+      or ((ModelSelection = msModflowOwhm2) and
+      ModflowPackages.FarmProcess4.IsSelected)
+      then
     begin
+      { TODO -cOWHMV2 : The following may need to be updated for MODFLOW OWHM version 2. }
       UpdateCropFullStressPeriods(TimeList);
       UpdateAllotmentFullStressPeriods(TimeList);
       UpdateFarmsFullStressPeriods(TimeList);
     end;
-
-      {$IFDEF OWHMV2}
-      // Fix this
-      Assert(False);
-      {$ENDIF}
-
 
     OutOfStartRangeScreenObjects := TStringList.Create;
     OutOfEndRangeScreenObjects := TStringList.Create;
@@ -42010,10 +42056,12 @@ procedure TCustomModel.InitializeSfrWriter(EvaluationType: TEvaluationType);
 begin
   FreeAndNil(SfrWriter);
   FreeAndNil(LakWriter);
-  FreeAndNil(FarmWriter);
+  FreeAndNil(FarmWriter3);
+  FreeAndNil(FarmWriter4);
   SfrWriter := TModflowSFR_Writer.Create(self, EvaluationType);
   LakWriter := TModflowLAK_Writer.Create(self, EvaluationType);
-  FarmWriter := TModflowFmpWriter.Create(self, EvaluationType);
+  FarmWriter3 := TModflowFmpWriter.Create(self, EvaluationType);
+  FarmWriter4 := TModflowFmp4Writer.Create(self, EvaluationType);
 end;
 
 function TCustomModel.MawScreenObjects: TStringList;
@@ -43926,8 +43974,10 @@ begin
   LocalNameWriter := NameFileWriter as TNameFileWriter;
   Assert(LocalNameWriter <> nil);
   SetCurrentNameFileWriter(LocalNameWriter);
-  Assert(FarmWriter <> nil);
-  (FarmWriter as TModflowFmpWriter).WriteFile(FileName);
+  Assert(FarmWriter3 <> nil);
+  Assert(FarmWriter4 <> nil);
+  (FarmWriter3 as TModflowFmpWriter).WriteFile(FileName);
+  (FarmWriter4 as TModflowFmp4Writer).WriteFile(FileName);
   FDataArrayManager.CacheDataArrays;
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then
@@ -43938,11 +43988,15 @@ begin
     and (ModelSelection = msModflowFmp) then
   begin
     frmProgressMM.StepIt;
-  end;
-      {$IFDEF OWHMV2
-      // fix this}
-      Assert(False);
-      {$ENDIF}
+  end
+  {$IFDEF OWHMV2}
+  else if ModflowPackages.FarmProcess4.IsSelected
+    and (ModelSelection = msModflowOwhm2) then
+  begin
+    frmProgressMM.StepIt;
+  end
+  {$ENDIF}
+  ;
 end;
 
 procedure TCustomModel.ExportSfrPackage(const FileName: string);
