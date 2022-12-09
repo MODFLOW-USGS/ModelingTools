@@ -4,7 +4,7 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
   DesignSize = (
     422
     450)
-  object CategoryPanelGroup1: TCategoryPanelGroup [3]
+  object cpnlgrp1: TCategoryPanelGroup [3]
     Left = 0
     Top = 157
     Width = 422

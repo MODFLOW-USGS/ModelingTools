@@ -12,11 +12,12 @@ inherited framePackageFmp4: TframePackageFmp4
     ExplicitWidth = 544
     ExplicitHeight = 52
   end
-  object CategoryPanelGroup1: TCategoryPanelGroup [3]
+  object cpnlgrp1: TCategoryPanelGroup [3]
     Left = 0
-    Top = 120
+    Top = 171
     Width = 575
-    Height = 380
+    Height = 329
+    VertScrollBar.Position = 656
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -26,16 +27,17 @@ inherited framePackageFmp4: TframePackageFmp4
     HeaderFont.Name = 'Segoe UI'
     HeaderFont.Style = []
     TabOrder = 1
+    ExplicitTop = 120
     object cpnlWaterBalanceRegions: TCategoryPanel
-      Top = 661
-      Height = 400
+      Top = 5
+      Height = 320
       Caption = 'Water Balance Subregion Options (Farm Options)'
       TabOrder = 0
       object rdgFarms: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 569
-        Height = 374
+        Width = 552
+        Height = 294
         Align = alClient
         ColCount = 4
         Enabled = False
@@ -156,11 +158,11 @@ inherited framePackageFmp4: TframePackageFmp4
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 7
+        ExplicitHeight = 374
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 537
+      Top = -119
       Height = 124
       Caption = 'Options'
       TabOrder = 1
@@ -196,15 +198,15 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlMnw2: TCategoryPanel
-      Top = 294
+      Top = -362
       Height = 243
       Caption = 'MNW2 Closure Criteria'
       TabOrder = 2
       object lblQClose: TLabel
         Left = 74
-        Top = 66
-        Width = 370
-        Height = 30
+        Top = 82
+        Width = 479
+        Height = 47
         Caption = 
           'Criterion for actual MNW pumping rate to converge to FMP pumping' +
           ' requirement (QCLOSE) '
@@ -212,8 +214,8 @@ inherited framePackageFmp4: TframePackageFmp4
       end
       object lblHPCT: TLabel
         Left = 74
-        Top = 111
-        Width = 366
+        Top = 127
+        Width = 463
         Height = 30
         Caption = 
           'Fraction of reduction of head-change closure criterion if QCLOSE' +
@@ -222,8 +224,8 @@ inherited framePackageFmp4: TframePackageFmp4
       end
       object lblRPCT: TLabel
         Left = 74
-        Top = 159
-        Width = 314
+        Top = 175
+        Width = 447
         Height = 30
         Caption = 
           'Fraction of reduction of residual-change closure criterion if QC' +
@@ -233,8 +235,8 @@ inherited framePackageFmp4: TframePackageFmp4
       object cbMnwClose: TCheckBox
         Left = 3
         Top = -3
-        Width = 394
-        Height = 75
+        Width = 534
+        Height = 76
         Caption = 
           'Adjust solver closure criteria to allow convergence of the FMP p' +
           'umping requirement to pumping simulated by the linked MNW2 packa' +
@@ -245,7 +247,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
       object rdeQClose: TRbwDataEntry
         Left = 3
-        Top = 63
+        Top = 79
         Width = 65
         Height = 22
         Color = clBtnFace
@@ -259,7 +261,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
       object rdeHPCT: TRbwDataEntry
         Left = 3
-        Top = 111
+        Top = 127
         Width = 65
         Height = 22
         Color = clBtnFace
@@ -274,7 +276,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
       object rdeRPCT: TRbwDataEntry
         Left = 3
-        Top = 157
+        Top = 173
         Width = 65
         Height = 22
         Color = clBtnFace
@@ -289,7 +291,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlOutput: TCategoryPanel
-      Top = 0
+      Top = -656
       Height = 294
       Caption = 'Print'
       TabOrder = 3

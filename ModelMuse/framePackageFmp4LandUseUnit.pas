@@ -70,6 +70,11 @@ var
   end;
 begin
   cpnlPrint.Collapse;
+  if cpnlgrp1.VertScrollBar.Visible then
+  begin
+    cpnlgrp1.VertScrollBar.Position := 0;
+  end;
+
   inherited;
   LandUsePackage := Package as TFarmLandUse;
 
@@ -128,6 +133,8 @@ procedure TframePackageFmp4LandUse.InitializeGrid;
 begin
   rdgSoils.BeginUpdate;
   try
+    rdgSoils.FixedCols := 1;
+
     rdgSoils.Cells[Ord(socTransient), Ord(sorName)] := 'Frequency';
     rdgSoils.Cells[Ord(socArray), Ord(sorName)] := 'Array or list';
     rdgSoils.Cells[Ord(socOther), Ord(sorName)] := 'Method';

@@ -1,6 +1,9 @@
 inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
   Height = 507
   ExplicitHeight = 507
+  DesignSize = (
+    422
+    507)
   object cpnlgrp1: TCategoryPanelGroup [3]
     Left = 0
     Top = 157
@@ -20,13 +23,12 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
       Caption = 'Print'
       Collapsed = True
       TabOrder = 0
-      ExplicitWidth = 401
       ExpandedHeight = 89
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
         Width = 416
-        Height = 174
+        Height = 0
         Align = alClient
         Enabled = False
         ItemHeight = 15
@@ -35,10 +37,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
           'PRINT BYFARM_BYCROP'
           'PRINT ALL')
         TabOrder = 0
-        ExplicitLeft = 40
-        ExplicitTop = 24
-        ExplicitWidth = 121
-        ExplicitHeight = 97
       end
     end
     object cpnlOptions: TCategoryPanel
@@ -53,7 +51,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Height = 65
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 399
         object lblExpressionLength: TLabel
           Left = 140
           Top = 11
@@ -195,9 +192,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 89
-        ExplicitWidth = 399
-        ExplicitHeight = 256
       end
     end
   end

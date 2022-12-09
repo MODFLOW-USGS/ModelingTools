@@ -329,7 +329,11 @@ const
     ];
   SutraSelection = [msSutra22, msSutra30, msSutra40];
   ModelsWithGrid  = [msPhast, msModflow, msModflowLGR, msModflowLGR2,
-    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint, msModflow2015];
+    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
+    {$IFDEF OWHMV2}
+    , msModflowOwhm2
+    {$ENDIF}
+    ];
   HighGradient = 0.01;
 
 type

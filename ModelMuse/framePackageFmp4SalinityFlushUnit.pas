@@ -63,6 +63,10 @@ var
   PrintIndex: TSalinityFlushPrint;
 begin
   cpnlPrint.Collapse;
+  if cpnlgrp1.VertScrollBar.Visible then
+  begin
+    cpnlgrp1.VertScrollBar.Position := 0;
+  end;
   inherited;
   SalinityFlush := Package as TFarmSalinityFlush;
 
@@ -92,6 +96,8 @@ procedure TframePackageFmp4SalinityFlush.InitilizeGrid;
 begin
   rdgSalinityFlush.BeginUpdate;
   try
+    rdgSalinityFlush.FixedCols := 1;
+
     rdgSalinityFlush.Cells[Ord(sfcTransient), Ord(sfrName)] := 'Frequency';
     rdgSalinityFlush.Cells[Ord(sfcArray), Ord(sfrName)] := 'Array or list';
 
@@ -101,7 +107,7 @@ begin
     rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropSalinityTolerance)] := 'Crop salinity tolerance';
     rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropMaxLeach)] := 'Crop max leach';
     rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropLeachRequirement)] := 'Crop Leach requirement';
-    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropExtraWaterChoice)] := 'Crop extra water choice';
+    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropExtraWaterChoice)] := 'Crop extra water';
   finally
   rdgSalinityFlush.EndUpdate;
   end;

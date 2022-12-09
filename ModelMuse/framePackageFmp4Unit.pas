@@ -15,7 +15,7 @@ type
     frAddedDemandSplit, frAddedDemandFlux, frAddedDemandRate);
 
   TframePackageFmp4 = class(TframePackage)
-    CategoryPanelGroup1: TCategoryPanelGroup;
+    cpnlgrp1: TCategoryPanelGroup;
     cpnlOutput: TCategoryPanel;
     clbPrint: TCheckListBox;
     Panel1: TPanel;
@@ -69,7 +69,11 @@ begin
   cpnlMnw2.Collapse;
   cpnlOptions.Collapse;
   cpnlOutput.Collapse;
-//  cpnlWaterBalanceRegions.Collapsed := False;
+
+  if cpnlgrp1.VertScrollBar.Visible then
+  begin
+    cpnlgrp1.VertScrollBar.Position := 0;
+  end;
 
   inherited;
   FarmProcess4 := Package as TFarmProcess4;
@@ -124,6 +128,8 @@ procedure TframePackageFmp4.InitializeGrid;
 begin
   rdgFarms.BeginUpdate;
   try
+    rdgFarms.FixedCols := 1;
+
     rdgFarms.Cells[Ord(fcTransient), Ord(frName)] := StrFrequency;
     rdgFarms.Cells[Ord(fcArray), Ord(frName)] := StrArrayOrList;
     rdgFarms.Cells[Ord(fcOther), Ord(frName)] := 'Prorate Deficiency';

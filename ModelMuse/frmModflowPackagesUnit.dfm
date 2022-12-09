@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspFmp4SalinityFlush
+    ActivePage = jvspFMP4
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -11501,17 +11501,16 @@ inherited frmModflowPackages: TfrmModflowPackages
           Width = 564
           ExplicitWidth = 564
         end
-        inherited CategoryPanelGroup1: TCategoryPanelGroup
-          Top = 136
+        inherited cpnlgrp1: TCategoryPanelGroup
+          Top = 187
           Width = 595
-          ExplicitTop = 136
+          ExplicitTop = 187
           ExplicitWidth = 595
           inherited cpnlWaterBalanceRegions: TCategoryPanel
             ExplicitWidth = 574
             inherited rdgFarms: TRbwDataGrid4
               Width = 572
               FixedCols = 0
-              ExplicitTop = 0
               ExplicitWidth = 572
             end
           end
@@ -11525,21 +11524,15 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited cpnlMnw2: TCategoryPanel
             ExplicitWidth = 574
             inherited lblQClose: TLabel
-              Width = 367
               Height = 36
-              ExplicitWidth = 367
               ExplicitHeight = 36
             end
             inherited lblHPCT: TLabel
-              Width = 312
               Height = 36
-              ExplicitWidth = 312
               ExplicitHeight = 36
             end
             inherited lblRPCT: TLabel
-              Width = 284
               Height = 54
-              ExplicitWidth = 284
               ExplicitHeight = 54
             end
           end
@@ -11816,12 +11809,15 @@ inherited frmModflowPackages: TfrmModflowPackages
           Width = 564
           ExplicitWidth = 564
         end
-        inherited CategoryPanelGroup1: TCategoryPanelGroup
+        inherited cpnlgrp1: TCategoryPanelGroup
           Width = 595
           Height = 359
+          VertScrollBar.Position = 26
           ExplicitWidth = 595
           ExplicitHeight = 359
           inherited cpnlPrint: TCategoryPanel
+            Top = -26
+            ExplicitTop = -26
             ExplicitWidth = 574
             inherited clbPrint: TCheckListBox
               Width = 572
@@ -11833,8 +11829,9 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlOptions: TCategoryPanel
+            Top = 127
             Enabled = True
-            ExplicitTop = 153
+            ExplicitTop = 127
             ExplicitWidth = 574
             inherited lblNon_Routed_Delivery: TLabel
               Width = 134
@@ -11979,6 +11976,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           Height = 18
           ExplicitWidth = 119
           ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          ExplicitWidth = 564
         end
         inherited clbPrint: TCheckListBox
           ItemHeight = 18
@@ -12155,7 +12155,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited rdgSoils: TRbwDataGrid4
               Width = 572
               FixedCols = 0
-              ExplicitTop = 89
               ExplicitWidth = 572
             end
             inherited pnl1: TPanel
@@ -12221,8 +12220,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4SalinityFlush'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline framePkgFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Left = 0
         Top = 0
@@ -12231,8 +12228,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 48
-        ExplicitTop = 9
+        ExplicitWidth = 595
+        ExplicitHeight = 516
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -12247,27 +12244,27 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
+          ExplicitWidth = 564
         end
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 595
           Height = 359
+          ExplicitWidth = 595
+          ExplicitHeight = 359
           inherited cpnlPrint: TCategoryPanel
-            ExplicitWidth = 418
+            ExplicitWidth = 591
             ExpandedHeight = 89
             inherited clbPrint: TCheckListBox
               Width = 589
-              Height = 0
               ItemHeight = 18
-              ExplicitLeft = 0
-              ExplicitTop = 0
-              ExplicitWidth = 416
-              ExplicitHeight = 0
+              ExplicitWidth = 589
             end
           end
           inherited cpnlOptions: TCategoryPanel
+            ExplicitWidth = 591
             inherited pnl1: TPanel
               Width = 589
-              ExplicitWidth = 416
+              ExplicitWidth = 589
               inherited lblExpressionLength: TLabel
                 Width = 123
                 Height = 18
@@ -12287,9 +12284,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited rdgSalinityFlush: TRbwDataGrid4
               Width = 589
-              ExplicitTop = 65
-              ExplicitWidth = 416
-              ExplicitHeight = 222
+              ExplicitWidth = 589
             end
           end
         end

@@ -24,14 +24,14 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     TabOrder = 1
     object cpnlPrint: TCategoryPanel
       Top = 0
-      Height = 199
+      Height = 229
       Caption = 'Print'
       TabOrder = 0
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
         Width = 399
-        Height = 132
+        Height = 162
         Align = alClient
         Enabled = False
         ItemHeight = 15
@@ -45,14 +45,16 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
           'PRINT ET_BYWBS_BYCROP'
           'PRINT ROW_COLUMN')
         TabOrder = 0
+        ExplicitHeight = 132
       end
       object pnl2: TPanel
         Left = 0
-        Top = 132
+        Top = 162
         Width = 399
         Height = 41
         Align = alBottom
         TabOrder = 1
+        ExplicitTop = 132
         object lblSpecifyCrops: TLabel
           Left = 164
           Top = 8
@@ -78,10 +80,11 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 199
+      Top = 229
       Height = 371
       Caption = 'Land Use Options'
       TabOrder = 1
+      ExplicitTop = 199
       object rdgSoils: TRbwDataGrid4
         Left = 0
         Top = 89
@@ -207,7 +210,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 88
       end
       object pnl1: TPanel
         Left = 0

@@ -10,7 +10,7 @@ uses
 
 type
   TframePackageFmp4SurfaceWater = class(TframePackage)
-    CategoryPanelGroup1: TCategoryPanelGroup;
+    cpnlgrp1: TCategoryPanelGroup;
     cpnlPrint: TCategoryPanel;
     clbPrint: TCheckListBox;
     cpnlOptions: TCategoryPanel;
@@ -50,6 +50,10 @@ var
   PrintIndex: TSurfaceWaterPrint;
 begin
   cpnlPrint.Collapse;
+  if cpnlgrp1.VertScrollBar.Visible then
+  begin
+    cpnlgrp1.VertScrollBar.Position := 0;
+  end;
   inherited;
   SurfWatPackage := Package as TFarmProcess4SurfaceWater;
 
