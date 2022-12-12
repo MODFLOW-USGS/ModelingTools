@@ -559,6 +559,7 @@ const
   KMoistSpecificGravi = 'Moist_Specific_Gravity';
   KSaturatedSpecificG = 'Saturated_Specific_Gravity';
   KInitialElasticSpec = 'Initial_Elastic_Specific_Storage';
+  KFarmID = 'Farm_ID';
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -1839,7 +1840,7 @@ type
 Make comments a pervasive feature of the model.  The project as whole
 should show the project name, author, date, and coordinate system.
 There should also be a general comment field for the project.  Each
-DataArray and  ScreenObject should have a contour and there should
+DataArray and  ScreenObject should have a comment and there should
 also be comments for each DataArray or boundary condition specified
 by a ScreenObject.  Any special dialog box that has a preserved state
 that affects the model output should also have a comment. }
@@ -2882,6 +2883,10 @@ that affects the model output should also have a comment. }
     function UzfPackageUsed(Sender: TObject): boolean; virtual;
     function UzfMf6PackageUsed(Sender: TObject): boolean; virtual;
     function FarmProcessUsed(Sender: TObject): boolean; virtual;
+    function Farm4ProcessUsed(Sender: TObject): boolean; virtual;
+    function FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean; virtual;
+    function FarmProcess4TransientFarmsUsed(Sender: TObject): boolean; virtual;
+
     function GroundSurfaceUsed(Sender: TObject): boolean; virtual;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; virtual;
     function UzfInitialInfiltrationUsed(Sender: TObject): boolean; virtual;
@@ -4268,6 +4273,9 @@ that affects the model output should also have a comment. }
     function UzfPackageUsed(Sender: TObject): boolean; override;
     function UzfMf6PackageUsed(Sender: TObject): boolean; override;
     function FarmProcessUsed(Sender: TObject): boolean; override;
+    function Farm4ProcessUsed(Sender: TObject): boolean; override;
+    function FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean; override;
+    function FarmProcess4TransientFarmsUsed(Sender: TObject): boolean; override;
 //    function GroundSurfaceUsed(Sender: TObject): boolean; override;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; override;
     function UzfInitialInfiltrationUsed(Sender: TObject): boolean; override;
@@ -6107,6 +6115,7 @@ resourcestring
   StrMODFLOW6Dispersion_ALV = 'MODFLOW 6 Dispersion Package: ALV';
   StrMODFLOW6Dispersion_ATH1 = 'MODFLOW 6 Dispersion Package: ATH1';
   StrMODFLOW6Dispersion_ATH2 = 'MODFLOW 6 Dispersion Package: ATH2';
+  StrFarmID = KFarmID;
 
 const
   StatFlagStrings : array[Low(TStatFlag)..High(TStatFlag)] of string
@@ -23139,6 +23148,29 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      result := ChildModels[ChildIndex].ChildModel.
+        FarmProcess4SteadyFarmsUsed(Sender);
+      if result then
+      begin
+        break;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientFarmIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -23165,6 +23197,26 @@ begin
   {$ELSE}
   result := False;
   {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientFarmsUsed(Sender: TObject): boolean;
+begin
+  result := FarmProcess4TransientFarmIsSelected;
+end;
+
+function TPhastModel.Farm4ProcessUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+begin
+  result := ModflowPackages.FarmProcess4.IsSelected;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      result := result or
+        ChildModels[ChildIndex].ChildModel.ModflowPackages.FarmProcess4.IsSelected;
+    end;
+  end;
 end;
 
 function TPhastModel.FarmProcess3IsSelected: Boolean;
@@ -34321,6 +34373,38 @@ begin
   rpThreeDFormulaCompilerNodes.ClearVariables;
 end;
 
+function TCustomModel.Farm4ProcessUsed(Sender: TObject): boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and not ModflowPackages.FarmProcess4.TransientFarms;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientFarmsUsed(Sender: TObject): boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmProcess4.TransientFarms;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcessUsed(Sender: TObject): boolean;
 begin
   result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
@@ -36201,11 +36285,16 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
+  {$IFDEF OWHMV2}
+  OWHM4DataSets  = 1;
+  {$ELSE}
+  OWHM4DataSets  = 0;
+  {$ENDIF}
   GWTDataSets = 5;
 {$IFDEF Sutra4}
-  ArrayCount = 167 + GWTDataSets;
+  ArrayCount = 167 + GWTDataSets + OWHM4DataSets;
 {$ELSE}
-  ArrayCount = 157 + GWTDataSets;
+  ArrayCount = 157 + GWTDataSets + OWHM4DataSets;
 {$ENDIF}
 var
   Index: integer;
@@ -38998,6 +39087,23 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrMODFLOW6Dispersion_ATH2;
   Inc(Index);
+
+  {$IFDEF OWHMV2}
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtInteger;
+  FDataArrayCreationRecords[Index].Name := KFarmID;
+  FDataArrayCreationRecords[Index].DisplayName := StrFarmID;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadyFarmsUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, WBS Location';
+  Inc(Index);
+
+  {$ENDIF}
 
   // See ArrayCount.
   Assert(Length(FDataArrayCreationRecords) = Index);

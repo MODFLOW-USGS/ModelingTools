@@ -4954,6 +4954,10 @@ Type
     FFarmPrints: TFarmPrints;
     FUseMnwCriteria: Boolean;
     FWELLFIELD: Boolean;
+    FMfFmp4FarmID: TModflowBoundaryDisplayTimeList;
+    procedure InitializeFarmIdDisplay(Sender: TObject);
+    procedure GetMfFmpFarmIDUseList(Sender: TObject; NewUseList: TStringList);
+
     procedure SetAdded_Crop_Demand_Flux(const Value: TFarmOption);
     procedure SetAdded_Demand_Runoff_Split(const Value: TFarmOption);
     procedure SetBare_Precipitation_Consumption_Fraction(
@@ -5000,6 +5004,8 @@ Type
     // MNWCLOSE  RPCT
     property MnwRPercent: double read GetMnwRPercent
       write SetMnwRPercent;
+    property MfFmp4FarmID: TModflowBoundaryDisplayTimeList read FMfFmp4FarmID;
+    function FarmIdUsed (Sender: TObject): boolean;
   published
     // OUTPUT
     property FarmPrints: TFarmPrints read FFarmPrints write SetFarmPrints;
@@ -6725,7 +6731,7 @@ uses Math, Contnrs , PhastModelUnit, ModflowOptionsUnit,
   ModflowSfr6Unit, ModflowMawWriterUnit, ModflowMawUnit, ModflowUzfMf6WriterUnit,
   ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftWriterUnit, ModflowCsubUnit,
   ModflowCSubWriterUnit,
-  ModflowGhbUnit, ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit;
+  ModflowGhbUnit, ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit, ModflowFmp4WriterUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -24674,14 +24680,65 @@ begin
   FStoredMnwRPercent.OnChange := OnValueChanged;
 
   InitializeVariables;
+
+  if Model <> nil then
+  begin
+    FMfFmp4FarmID := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4FarmID.OnInitialize := InitializeFarmIdDisplay;
+    FMfFmp4FarmID.OnGetUseList := GetMfFmpFarmIDUseList;
+    FMfFmp4FarmID.OnTimeListUsed := FarmIdUsed;
+    FMfFmp4FarmID.Name := StrFarmID2;
+    FMfFmp4FarmID.DataType := rdtInteger;
+    FMfFmp4FarmID.AddMethod := vamReplace;
+    FMfFmp4FarmID.Orientation := dsoTop;
+    AddTimeList(FMfFmp4FarmID);
+  end;
+
 end;
 
 destructor TFarmProcess4.Destroy;
 begin
+  FMfFmp4FarmID.Free;
   FStoredMnwQClose.Free;
   FStoredMnwHPercent.Free;
   FStoredMnwRPercent.Free;
   inherited;
+end;
+
+function TFarmProcess4.FarmIdUsed(Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and frmGoPhast.PhastModel.FarmProcess4TransientFarmsUsed(Sender);
+end;
+
+procedure TFarmProcess4.GetMfFmpFarmIDUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  PhastModel: TCustomModel;
+  Boundary: TFmpFarmIDBoundary;
+begin
+  PhastModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    Boundary := ScreenObject.ModflowFmpFarmID;
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      for ValueIndex := 0 to Boundary.Values.Count -1 do
+      begin
+        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(0, NewUseList, Item, StrFMPFarmID);
+      end;
+    end;
+  end;
 end;
 
 function TFarmProcess4.GetMnwHPercent: double;
@@ -24697,6 +24754,37 @@ end;
 function TFarmProcess4.GetMnwRPercent: double;
 begin
   result := StoredMnwRPercent.Value;
+end;
+
+procedure TFarmProcess4.InitializeFarmIdDisplay(Sender: TObject);
+var
+  List: TModflowBoundListOfTimeLists;
+  FarmWriter: TModflowFmp4Writer;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  List := TModflowBoundListOfTimeLists.Create;
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    List.Add(MfFmp4FarmID);
+
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.CreateDataSets;
+    end;
+
+    FarmWriter.UpdateFarmIDDisplay(List);
+
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.ComputeAverage;
+    end;
+  finally
+    FarmWriter.Free;
+    List.Free;
+  end;
 end;
 
 procedure TFarmProcess4.InitializeVariables;

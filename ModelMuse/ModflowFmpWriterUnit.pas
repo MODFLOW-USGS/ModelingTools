@@ -694,7 +694,6 @@ var
   DataSetIndex: integer;
 begin
   EvaluateActiveCells;
-  { TODO -cFMP : This needs to be finished }
   frmErrorsAndWarnings.BeginUpdate;
   try
     RemoveErrorAndWarningMessages;

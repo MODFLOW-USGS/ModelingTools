@@ -7,7 +7,7 @@ uses
   System.Classes, System.Contnrs, Vcl.Forms, System.SysUtils,
   CustomModflowWriterUnit, PhastModelUnit, ModflowFmpWellUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, ScreenObjectUnit, ModflowBoundaryUnit, RbwParser,
-  DataSetUnit;
+  DataSetUnit, OrderedCollectionUnit, GoPhastTypes, ModflowBoundaryDisplayUnit;
 
 type
   TWriteLocation = (wlMain, wlOpenClose, wlOFE, wlCID, wlFID, wlRoot, wlCropUse, wlETR,
@@ -40,31 +40,41 @@ type
     procedure FreeFileStreams;
     procedure WriteFarmLocation;
     procedure WriteDataSet26(TimeIndex: Integer);
-    procedure WriteConstantU2DINT(const Comment: string;
-      const Value: integer; ArrayType: TModflowArrayType;
-      const MF6_ArrayName: string); override;
     procedure CheckIntegerDataSet(IntegerArray: TDataArray;
       const ErrorMessage: string);
     procedure EvaluateActiveCells;
+    procedure RemoveErrorAndWarningMessages;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
     function CellType: TValueCellType; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
+    procedure WriteCell(Cell: TValueCell;
+      const DataSetIdentifier, VariableIdentifiers: string); override;
+    function ParameterType: TParameterType; override;
+    procedure WriteParameterCells(CellList: TValueCellList; NLST: Integer;
+      const VariableIdentifiers, DataSetIdentifier: string;
+      AssignmentMethod: TUpdateMethod;
+      MultiplierArrayNames: TTransientMultCollection;
+      ZoneArrayNames: TTransientZoneCollection); override;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
     procedure WriteString(const Value: AnsiString); overload; override;
+    procedure WriteConstantU2DINT(const Comment: string;
+      const Value: integer; ArrayType: TModflowArrayType;
+      const MF6_ArrayName: string); override;
+    procedure UpdateFarmIDDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 
 implementation
 
 uses
-  GoPhastTypes, frmErrorsAndWarningsUnit, ModflowFmpWriterUnit,
+  frmErrorsAndWarningsUnit, ModflowFmpWriterUnit,
   ModflowFmpFarmIdUnit, ModflowUnitNumbers, frmProgressUnit;
 
 { TModflowFmp4Writer }
@@ -214,9 +224,93 @@ begin
   result := Model.ModflowPackages.FarmProcess4;
 end;
 
+function TModflowFmp4Writer.ParameterType: TParameterType;
+begin
+  result := ptUndefined;
+  Assert(False);
+end;
+
+procedure TModflowFmp4Writer.RemoveErrorAndWarningMessages;
+begin
+
+end;
+
+procedure TModflowFmp4Writer.UpdateFarmIDDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  DataSets: TList;
+  FarmID: TModflowBoundaryDisplayTimeList;
+  TimeIndex: integer;
+  TimeListIndex: integer;
+  List: TValueCellList;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  DataArray: TDataArray;
+  FarmIDIndex: integer;
+  DataSetIndex: integer;
+begin
+  EvaluateActiveCells;
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    RemoveErrorAndWarningMessages;
+    if not (Package as TFarmProcess4).FarmIdUsed(self) then
+    begin
+      UpdateNotUsedDisplay(TimeLists);
+      Exit;
+    end;
+    DataSets := TList.Create;
+    try
+      EvaluateFarmID;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      FarmID := TimeLists[0];
+      for TimeIndex := 0 to FarmID.Count - 1 do
+      begin
+        DataSets.Clear;
+
+        for TimeListIndex := 0 to TimeLists.Count - 1 do
+        begin
+          TimeList := TimeLists[TimeListIndex];
+          DataArray := TimeList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          DataSets.Add(DataArray);
+        end;
+
+        for FarmIDIndex := 0 to FFarmIDs.Count - 1 do
+        begin
+          List := FFarmIDs[FarmIDIndex];
+          UpdateCellDisplay(List, DataSets, [], nil, [0]);
+          List.Cache;
+        end;
+        for DataSetIndex := 0 to DataSets.Count - 1 do
+        begin
+          DataArray := DataSets[DataSetIndex];
+          DataArray.UpToDate := True;
+          CheckIntegerDataSet(DataArray, StrInvalidFarmID);
+          DataArray.CacheData;
+        end;
+      end;
+
+      SetTimeListsUpToDate(TimeLists);
+    finally
+      DataSets.Free;
+    end;
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteAllotments;
 begin
 
+end;
+
+procedure TModflowFmp4Writer.WriteCell(Cell: TValueCell;
+  const DataSetIdentifier, VariableIdentifiers: string);
+begin
+  Assert(False);
 end;
 
 procedure TModflowFmp4Writer.WriteClimate;
@@ -254,9 +348,9 @@ var
   DataTypeIndex: Integer;
   DataType: TRbwDataType;
   DefaultValue: Double;
-  AFileName: string;
+//  AFileName: string;
   FarmIdArray: TDataArray;
-  BaseName: string;
+//  BaseName: string;
 begin
   if FFarmIDs.Count <= TimeIndex then
   begin
@@ -269,24 +363,10 @@ begin
   DataTypeIndex := 0;
   Comment := 'Data Set 26: FID';
 
-//  BaseName := ChangeFileExt(FNameOfFile, '');
-//  if FFID_FileStream = nil then
-//  begin
-//    AFileName := ChangeFileExt(BaseName, '.FID');
-//    if not WritingTemplate then
-//    begin
-//      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpFID),
-//            AFileName, foInput, Model);
-//    end;
-//    FFID_FileStream := TFileStream.Create(AFileName,
-//      fmCreate or fmShareDenyWrite);
-//  end;
-//
-//  WriteString(AFileName);
-
   FarmIdArray := nil;
   FWriteLocation := wlFID;
   try
+    WriteCommentLine(Format('Stress Period %d', [TimeIndex+1]));
     WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
       FarmIDList, umAssign, False, FarmIdArray, 'FID', False, False);
     CheckIntegerDataSet(FarmIdArray, StrInvalidFarmID);
@@ -301,39 +381,47 @@ var
   StressPeriodIndex: Integer;
   BaseName: string;
   AFileName: string;
+  DataArray: TDataArray;
 begin
+  BaseName := ChangeFileExt(FNameOfFile, '');
+  AFileName := ChangeFileExt(BaseName, '.FID');
+  if FFID_FileStream = nil then
+  begin
+//    if not WritingTemplate then
+//    begin
+////        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpFID),
+////              AFileName, foInput, Model);
+//    end;
+    FFID_FileStream := TFileStream.Create(AFileName,
+      fmCreate or fmShareDenyWrite);
+  end;
+
   WriteString('LOCATION ');
+
   if FFarmProcess4.TransientFarms then
   begin
     WriteString('TRANSIENT ARRAY DATAFILE ');
-
-    BaseName := ChangeFileExt(FNameOfFile, '');
-    AFileName := ChangeFileExt(BaseName, '.FID');
-    if FFID_FileStream = nil then
-    begin
-      if not WritingTemplate then
-      begin
-//        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpFID),
-//              AFileName, foInput, Model);
-      end;
-      FFID_FileStream := TFileStream.Create(AFileName,
-        fmCreate or fmShareDenyWrite);
-    end;
-
     WriteString(ExtractFileName(AFileName));
     NewLine;
 
     for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
     begin
-      WriteCommentLine(Format('Stress Period %d', [StressPeriodIndex+1]));
       WriteDataSet26(StressPeriodIndex);
       NewLine;
     end;
   end
   else
   begin
-    WriteString('STATIC ARRAY INTERNAL');
+    WriteString('STATIC ARRAY DATAFILE ');
+    WriteString(ExtractFileName(AFileName));
     NewLine;
+    FWriteLocation := wlFID;
+    try
+      DataArray := Model.DataArrayManager.GetDataSetByName(KFarmID);
+      WriteArray(DataArray, 0, 'WBS: LOCATION', '', 'LOCATION', False, False);
+    finally
+      FWriteLocation := wlMain;
+    end;
   end;
 end;
 
@@ -455,6 +543,16 @@ end;
 
 procedure TModflowFmp4Writer.WriteOutput;
 begin
+
+end;
+
+procedure TModflowFmp4Writer.WriteParameterCells(CellList: TValueCellList;
+  NLST: Integer; const VariableIdentifiers, DataSetIdentifier: string;
+  AssignmentMethod: TUpdateMethod;
+  MultiplierArrayNames: TTransientMultCollection;
+  ZoneArrayNames: TTransientZoneCollection);
+begin
+  Assert(False);
 
 end;
 

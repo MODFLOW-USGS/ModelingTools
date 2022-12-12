@@ -258,6 +258,7 @@ const
 resourcestring
   StrMFOuttxt = 'MF_Out.txt';
   StrNormalTermination = 'normal termination of simulation';
+  StrOneWaterSimulation = 'OneWater Simulation Now Complete';
   StrFailureToConverge = 'Failure to converge';
   StrStopMonitoringMode = 'Stop monitoring model';
   StrStartModel = 'Restart model';
@@ -647,7 +648,14 @@ begin
     begin
       NormalTermination := True;
       break;
-    end;
+    end
+    else if Pos(StrOneWaterSimulation,
+      reMonitor.Lines[Index]) > 0 then
+    begin
+      NormalTermination := True;
+      break;
+    end
+
   end;
 
   if not FShouldAbort and not NormalTermination then
@@ -1077,6 +1085,7 @@ var
   SelStart: Integer;
   ErrorIndex: Integer;
   AnErrorMessage: string;
+  OwhmPosition: Integer;
   procedure SetTextColor(const AText: string;
     AStatus: TStatusChange);
   var
@@ -1121,11 +1130,20 @@ begin
     Exit;
   end;
   Position := Pos(StrNormalTermination, LowerCase(ALine));
+  OwhmPosition := Pos(StrOneWaterSimulation, ALine);
   if Position > 0 then
   begin
     FindStart(reMonitor, Position, SelStart);
     reMonitor.SelStart := SelStart;
     reMonitor.SelLength := Length(StrNormalTermination);
+    reMonitor.SelAttributes.Color := clGreen;
+    reMonitor.SelLength := 0;
+  end
+  else if OwhmPosition > 0 then
+  begin
+    FindStart(reMonitor, OwhmPosition, SelStart);
+    reMonitor.SelStart := SelStart;
+    reMonitor.SelLength := Length(StrOneWaterSimulation);
     reMonitor.SelAttributes.Color := clGreen;
     reMonitor.SelLength := 0;
   end
@@ -1367,18 +1385,26 @@ end;
 
 function TStringFileStream.ReadLn: AnsiString;
 var
-  EndPos: integer;
+  EndPos1: integer;
+  EndPos2: Integer;
 begin
   if Position < Size -1 then
   begin
     FEOF := False;
   end;
-  EndPos := Pos(sLineBreak, TempLine);
-  if EndPos > 0 then
+  EndPos1 := Pos(sLineBreak, TempLine);
+  EndPos2 := Pos(#$A, TempLine);
+  if EndPos1 > 0 then
   begin
     FEOF := False;
-    result := Copy(TempLine, 1,EndPos-1);
-    TempLine := Copy(TempLine,EndPos+2, MAXINT);
+    result := Copy(TempLine, 1,EndPos1-1);
+    TempLine := Copy(TempLine,EndPos1+2, MAXINT);
+  end
+  else if EndPos2 > 0 then
+  begin
+    FEOF := False;
+    result := Copy(TempLine, 1,EndPos2-1);
+    TempLine := Copy(TempLine,EndPos2+1, MAXINT);
   end
   else if not FEOF then
   begin

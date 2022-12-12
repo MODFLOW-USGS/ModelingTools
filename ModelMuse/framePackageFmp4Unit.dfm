@@ -8,16 +8,15 @@ inherited framePackageFmp4: TframePackageFmp4
     500)
   inherited memoComments: TMemo
     Width = 544
-    Height = 52
+    Height = 35
     ExplicitWidth = 544
-    ExplicitHeight = 52
+    ExplicitHeight = 35
   end
   object cpnlgrp1: TCategoryPanelGroup [3]
     Left = 0
-    Top = 171
+    Top = 103
     Width = 575
-    Height = 329
-    VertScrollBar.Position = 656
+    Height = 397
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -27,9 +26,8 @@ inherited framePackageFmp4: TframePackageFmp4
     HeaderFont.Name = 'Segoe UI'
     HeaderFont.Style = []
     TabOrder = 1
-    ExplicitTop = 120
     object cpnlWaterBalanceRegions: TCategoryPanel
-      Top = 5
+      Top = 661
       Height = 320
       Caption = 'Water Balance Subregion Options (Farm Options)'
       TabOrder = 0
@@ -158,11 +156,10 @@ inherited framePackageFmp4: TframePackageFmp4
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 374
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = -119
+      Top = 537
       Height = 124
       Caption = 'Options'
       TabOrder = 1
@@ -198,15 +195,15 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlMnw2: TCategoryPanel
-      Top = -362
+      Top = 294
       Height = 243
       Caption = 'MNW2 Closure Criteria'
       TabOrder = 2
       object lblQClose: TLabel
         Left = 74
         Top = 82
-        Width = 479
-        Height = 47
+        Width = 438
+        Height = 30
         Caption = 
           'Criterion for actual MNW pumping rate to converge to FMP pumping' +
           ' requirement (QCLOSE) '
@@ -215,8 +212,8 @@ inherited framePackageFmp4: TframePackageFmp4
       object lblHPCT: TLabel
         Left = 74
         Top = 127
-        Width = 463
-        Height = 30
+        Width = 452
+        Height = 15
         Caption = 
           'Fraction of reduction of head-change closure criterion if QCLOSE' +
           ' was not met (HPCT)'
@@ -225,7 +222,7 @@ inherited framePackageFmp4: TframePackageFmp4
       object lblRPCT: TLabel
         Left = 74
         Top = 175
-        Width = 447
+        Width = 429
         Height = 30
         Caption = 
           'Fraction of reduction of residual-change closure criterion if QC' +
@@ -291,7 +288,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlOutput: TCategoryPanel
-      Top = -656
+      Top = 0
       Height = 294
       Caption = 'Print'
       TabOrder = 3

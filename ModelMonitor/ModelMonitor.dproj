@@ -133,6 +133,8 @@
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <BT_BuildType>Debug</BT_BuildType>
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
+        <Debugger_RunParams>-m C:\WRDAPP\MFOWHM2_3\mf-owhm-debug.exe -n FMP4Test.nam</Debugger_RunParams>
+        <Debugger_CWD>C:\ModelingTools\ModelMuse\PracticeModels</Debugger_CWD>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
