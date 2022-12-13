@@ -9,7 +9,8 @@ uses
   RbwDataGrid4, ModflowPackageSelectionUnit;
 
 type
-  TFarm4Columns = (fcName, fcTransient, fcArray, fcOther);
+  TFarm4Columns = (fcName, fcTransient, fcArray, fcOther, fcSFac, fcExternal,
+    fcExternalSFac);
   TFarm4Rows = (frName, frLocation, frEfficiency, frEfficiencyImprove,
     frDeficiency, frWaterSource, frBareRunnoffFraction, frBarePrecip,
     frAddedDemandSplit, frAddedDemandFlux, frAddedDemandRate);
@@ -65,6 +66,45 @@ procedure TframePackageFmp4.GetData(Package: TModflowPackageSelection);
 var
   FarmProcess4: TFarmProcess4;
   PrintIndex: TFarmPrint;
+  procedure GetFarmProperty(FarmProperty: TFarmProperty; ARow: Integer);
+  var
+    CanSelect: Boolean;
+  begin
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcTransient), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgFarms.Cells[Ord(fcArray), ARow] := DontUseStaticTransient[Ord(FarmProperty.FarmOption)];
+    end;
+
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcArray), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgFarms.ItemIndex[Ord(fcArray), ARow] := Ord(FarmProperty.ArrayList);
+    end;
+
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcSFac), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgFarms.Cells[Ord(fcSFac), ARow] := FarmProperty.UnitConversionScaleFactor;
+    end;
+
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcExternal), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgFarms.Cells[Ord(fcExternal), ARow] := FarmProperty.ExternalFileName;
+    end;
+
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcExternalSFac), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgFarms.Cells[Ord(fcExternalSFac), ARow] := FarmProperty.ExternalScaleFileName;
+    end;
+  end;
 begin
   cpnlMnw2.Collapse;
   cpnlOptions.Collapse;
@@ -94,7 +134,9 @@ begin
 
   rdgFarms.BeginUpdate;
   try
-    rdgFarms.Cells[Ord(fcTransient), Ord(frLocation)] := StaticTransient[Ord(FarmProcess4.TransientFarms)];
+    GetFarmProperty(FarmProcess4.Farms, Ord(frLocation));
+    rdgFarms.Cells[Ord(fcTransient), Ord(frLocation)] :=
+      StaticTransient[Ord(FarmProcess4.Farms.FarmOption)-1];
 
     rdgFarms.Cells[Ord(fcTransient), Ord(frEfficiency)] := DontUseStaticTransient[Ord(FarmProcess4.EfficiencyOption)];
     rdgFarms.ItemIndex[Ord(fcArray), Ord(frEfficiency)] := Ord(FarmProcess4.EfficiencyArrayList);
@@ -133,6 +175,9 @@ begin
     rdgFarms.Cells[Ord(fcTransient), Ord(frName)] := StrFrequency;
     rdgFarms.Cells[Ord(fcArray), Ord(frName)] := StrArrayOrList;
     rdgFarms.Cells[Ord(fcOther), Ord(frName)] := 'Prorate Deficiency';
+    rdgFarms.Cells[Ord(fcSFac), Ord(frName)] := 'Unit conversion scale factor (optional)';
+    rdgFarms.Cells[Ord(fcExternal), Ord(frName)] := 'Externally generated file (optional)';
+    rdgFarms.Cells[Ord(fcExternalSFac), Ord(frName)] := 'Externally generated SFAC file (optional)';
 
     rdgFarms.Cells[Ord(fcName), Ord(frLocation)] := 'Location';
     rdgFarms.Cells[Ord(fcName), Ord(frEfficiency)] := 'Efficiency';
@@ -160,32 +205,48 @@ procedure TframePackageFmp4.rdgFarmsSelectCell(Sender: TObject; ACol,
 var
   Column: TRbwColumn4;
   FarmRow: TFarm4Rows;
+  FarmColumn: TFarm4Columns;
 begin
   inherited;
-  if (ACol = Ord(fcTransient)) and not rdgFarms.Drawing then
+  if (ACol >= rdgFarms.FixedCols) and (ACol < rdgFarms.ColCount) then
   begin
-    Column := rdgFarms.Columns[Ord(fcTransient)];
-    if (ARow = Ord(frLocation)) then
-    begin
-      Column.PickList := StaticTransient;
-    end
-    else
-    begin
-      Column.PickList := DontUseStaticTransient;
+    FarmColumn := TFarm4Columns(ACol);
+    case FarmColumn of
+      fcName, fcExternal: ; // do nothing
+      fcTransient:
+        begin
+          if not rdgFarms.Drawing then
+          begin
+            Column := rdgFarms.Columns[Ord(fcTransient)];
+            if (ARow = Ord(frLocation)) then
+            begin
+              Column.PickList := StaticTransient;
+            end
+            else
+            begin
+              Column.PickList := DontUseStaticTransient;
+            end;
+          end;
+        end;
+      fcArray:
+        begin
+          FarmRow := TFarm4Rows(ARow);
+          CanSelect := FarmRow in [frEfficiency, frEfficiencyImprove,
+            frBareRunnoffFraction, frAddedDemandSplit];
+        end;
+      fcOther:
+        begin
+          FarmRow := TFarm4Rows(ARow);
+          CanSelect := FarmRow = frDeficiency;
+        end;
+      fcSFac, fcExternalSFac:
+        begin
+          FarmRow := TFarm4Rows(ARow);
+          CanSelect := FarmRow in [frEfficiency, frBareRunnoffFraction,
+            frBarePrecip, frAddedDemandSplit, frAddedDemandFlux,
+            frAddedDemandRate];
+        end;
     end;
-  end;
-
-  if (ACol = Ord(fcArray)) then
-  begin
-    FarmRow := TFarm4Rows(ARow);
-    CanSelect := FarmRow in [frEfficiency, frEfficiencyImprove,
-      frBareRunnoffFraction, frAddedDemandSplit];
-  end;
-
-  if (ACol = Ord(fcOther)) then
-  begin
-    FarmRow := TFarm4Rows(ARow);
-    CanSelect := FarmRow = frDeficiency;
   end;
 end;
 
@@ -196,13 +257,55 @@ var
   PrintIndex: TFarmPrint;
   function RowToFarmOption(ARow: TFarm4Rows): TFarmOption;
   begin
-    result := TFarmOption(DontUseStaticTransient.IndexOf(rdgFarms.Cells[Ord(fcTransient), Ord(ARow)]));
+    result := TFarmOption(DontUseStaticTransient.IndexOf(
+      rdgFarms.Cells[Ord(fcTransient), Ord(ARow)]));
   end;
   function RowToArrayList(ARow: TFarm4Rows): TArrayList;
   begin
     result := TArrayList(rdgFarms.ItemIndex[Ord(fcArray), Ord(ARow)]);
   end;
+  procedure SetFarmProperty(FarmProperty: TFarmProperty; ARow: TFarm4Rows);
+  var
+    CanSelect: Boolean;
+  begin
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcTransient), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.FarmOption := RowToFarmOption(ARow);
+    end;
 
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcArray), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.ArrayList := RowToArrayList(ARow);
+    end;
+
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcSFac), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.UnitConversionScaleFactor :=
+        rdgFarms.Cells[Ord(fcSFac), Ord(ARow)];
+    end;
+
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcExternal), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.ExternalFileName :=
+        rdgFarms.Cells[Ord(fcExternal), Ord(ARow)];
+    end;
+
+    CanSelect := True;
+    rdgFarmsSelectCell(rdgFarms, Ord(fcExternalSFac), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.ExternalScaleFileName :=
+        rdgFarms.Cells[Ord(fcExternalSFac), Ord(ARow)];
+    end;
+  end;
 begin
   inherited;
   FarmProcess4 := Package as TFarmProcess4;
@@ -226,7 +329,9 @@ begin
   FarmProcess4.WELLFIELD := cbWellField.Checked;
   FarmProcess4.Recompute := cbRecompute.Checked;
 
-  FarmProcess4.TransientFarms := Boolean(StaticTransient.IndexOf(rdgFarms.Cells[Ord(fcTransient), Ord(frLocation)]));
+  SetFarmProperty(FarmProcess4.Farms, frLocation);
+  FarmProcess4.Farms.FarmOption := TFarmOption(1+StaticTransient.IndexOf(
+    rdgFarms.Cells[Ord(fcTransient), Ord(frLocation)]));
 
   FarmProcess4.EfficiencyOption := RowToFarmOption(frEfficiency);
   FarmProcess4.EfficiencyArrayList := RowToArrayList(frEfficiency);

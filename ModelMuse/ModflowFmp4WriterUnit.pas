@@ -398,7 +398,7 @@ begin
 
   WriteString('LOCATION ');
 
-  if FFarmProcess4.TransientFarms then
+  if FFarmProcess4.Farms.FarmOption = foTransient then
   begin
     WriteString('TRANSIENT ARRAY DATAFILE ');
     WriteString(ExtractFileName(AFileName));
@@ -680,6 +680,26 @@ begin
   NewLine;
 
   WriteFarmLocation;
+
+  if (FFarmProcess4.DeficiencyScenario <> foNotUsed) then
+  begin
+    WriteString('  PRORATE_DEFICIENCY ');
+    case FFarmProcess4.ProrateDeficiency of
+      pdoByDemand:
+        begin
+          WriteString('ByDEMAND')
+        end;
+      pdoAverage:
+        begin
+          WriteString('ByAVERAGE')
+        end;
+      else
+        begin
+          Assert(False);
+        end;
+    end;
+    NewLine;
+  end;
 
   WriteString('END WATER_BALANCE_SUBREGION');
   NewLine;

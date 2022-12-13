@@ -23179,7 +23179,7 @@ begin
   {$IFDEF OWHMV2}
   result := (ModelSelection =  msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
-    and ModflowPackages.FarmProcess4.TransientFarms;
+    and (ModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -23187,7 +23187,7 @@ begin
       LocalModflowPackages := ChildModels[ChildIndex].ChildModel.ModflowPackages;
       result :=
         LocalModflowPackages.FarmProcess4.IsSelected
-        and LocalModflowPackages.FarmProcess4.TransientFarms;
+        and (LocalModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
       if result then
       begin
         break;
@@ -34388,7 +34388,7 @@ begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
-    and not ModflowPackages.FarmProcess4.TransientFarms;
+    and not (ModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
   {$ELSE}
   result := False;
   {$ENDIF}
@@ -34399,7 +34399,7 @@ begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
-    and ModflowPackages.FarmProcess4.TransientFarms;
+    and (ModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
   {$ELSE}
   result := False;
   {$ENDIF}

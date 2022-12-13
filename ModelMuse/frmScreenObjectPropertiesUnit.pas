@@ -14381,6 +14381,7 @@ begin
     if frmGoPhast.PhastModel.FarmProcess3IsSelected or
       frmGoPhast.PhastModel.FarmProcess4TransientFarmIsSelected then
     begin
+      Node := nil;
       if frmGoPhast.PhastModel.FarmProcess3IsSelected then
       begin
         Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format(StrFarmIDInS,

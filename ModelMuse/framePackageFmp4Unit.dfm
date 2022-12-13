@@ -17,6 +17,7 @@ inherited framePackageFmp4: TframePackageFmp4
     Top = 103
     Width = 575
     Height = 397
+    VertScrollBar.Position = 588
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -27,7 +28,7 @@ inherited framePackageFmp4: TframePackageFmp4
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlWaterBalanceRegions: TCategoryPanel
-      Top = 661
+      Top = 73
       Height = 320
       Caption = 'Water Balance Subregion Options (Farm Options)'
       TabOrder = 0
@@ -37,7 +38,7 @@ inherited framePackageFmp4: TframePackageFmp4
         Width = 552
         Height = 294
         Align = alClient
-        ColCount = 4
+        ColCount = 7
         Enabled = False
         FixedCols = 1
         RowCount = 11
@@ -154,12 +155,84 @@ inherited framePackageFmp4: TframePackageFmp4
             CaseSensitivePicklist = False
             CheckStyle = csCheck
             AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 537
+      Top = -51
       Height = 124
       Caption = 'Options'
       TabOrder = 1
@@ -195,7 +268,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlMnw2: TCategoryPanel
-      Top = 294
+      Top = -294
       Height = 243
       Caption = 'MNW2 Closure Criteria'
       TabOrder = 2
@@ -288,7 +361,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlOutput: TCategoryPanel
-      Top = 0
+      Top = -588
       Height = 294
       Caption = 'Print'
       TabOrder = 3

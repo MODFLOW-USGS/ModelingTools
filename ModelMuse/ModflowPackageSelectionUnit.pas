@@ -4920,6 +4920,37 @@ Type
   fpDeep_Percolation);
   TFarmPrints = set of TFarmPrint;
 
+  TFarmProperty = class(TGoPhastPersistent)
+  private
+    FUnitConversionScaleFactor: string;
+    FArrayList: TArrayList;
+    FExternalScaleFileName: string;
+    FExternalFileName: string;
+    FFarmOption: TFarmOption;
+    FOnChangeArrayList: TNotifyEvent;
+    FOnChangeFarmOption: TNotifyEvent;
+    procedure SetArrayList(const Value: TArrayList);
+    procedure SetExternalFileName(const Value: string);
+    procedure SetExternalScaleFileName(const Value: string);
+    procedure SetFarmOption(const Value: TFarmOption);
+    procedure SetUnitConversionScaleFactor(const Value: string);
+    procedure DoOnChangeArrayList;
+    procedure DoOnChangeFarmOption;
+  public
+    procedure Assign(Source: TPersistent); override;
+    property OnChangeArrayList: TNotifyEvent read FOnChangeArrayList write FOnChangeArrayList;
+    property OnChangeFarmOption: TNotifyEvent read FOnChangeFarmOption write FOnChangeFarmOption;
+  published
+    property FarmOption: TFarmOption read FFarmOption write SetFarmOption;
+    Property ArrayList: TArrayList read FArrayList write SetArrayList;
+    property UnitConversionScaleFactor: string read FUnitConversionScaleFactor write SetUnitConversionScaleFactor;
+    // @name is a path relative to the name file.
+    property ExternalFileName: string read FExternalFileName write SetExternalFileName;
+    // @name is a path relative to the name file.
+    property ExternalScaleFileName: string read FExternalScaleFileName write SetExternalScaleFileName;
+
+  end;
+
   TCustomFarm4 = class(TModflowPackageSelection)
   protected
     procedure SetFarmOptionProperty(var Field: TFarmOption;
@@ -4937,7 +4968,7 @@ Type
     FBare_Precipitation_Consumption_Fraction: TFarmOption;
     FBare_Runoff_Fraction: TFarmOption;
     FWatersource: TFarmOption;
-    FTransientFarms: Boolean;
+    FFarms: TFarmProperty;
     FPrint: Boolean;
     FEfficiencyImprovement: TFarmOption;
     FDeficiencyScenario: TFarmOption;
@@ -4971,7 +5002,7 @@ Type
     procedure SetRecompute(const Value: Boolean);
     procedure SetRouting_Information(const Value: TFarmOption);
     procedure SetEfficiencyOption(const Value: TFarmOption);
-    procedure SetTransientFarms(const Value: Boolean);
+    procedure SetFarms(const Value: TFarmProperty);
     procedure SetStoredMnwHPercent(const Value: TRealStorage);
     procedure SetStoredMnwQClose(const Value: TRealStorage);
     procedure SetStoredMnwRPercent(const Value: TRealStorage);
@@ -5035,7 +5066,7 @@ Type
 
     // Farms/WBS
     // LOCATION
-    property TransientFarms: Boolean read FTransientFarms write SetTransientFarms;
+    property Farms: TFarmProperty read FFarms write SetFarms;
     // EFFICIENCY
     property EfficiencyOption: TFarmOption read FEfficiencyOption
       write SetEfficiencyOption;
@@ -24648,7 +24679,7 @@ begin
     Print := FarmSource.Print;
     WELLFIELD := FarmSource.WELLFIELD;
     Recompute := FarmSource.Recompute;
-    TransientFarms := FarmSource.TransientFarms;
+    Farms := FarmSource.Farms;
     EfficiencyOption := FarmSource.EfficiencyOption;
     EfficiencyArrayList := FarmSource.EfficiencyArrayList;
     EfficiencyImprovement := FarmSource.EfficiencyImprovement;
@@ -24671,6 +24702,8 @@ begin
 end;
 
 constructor TFarmProcess4.Create(Model: TBaseModel);
+var
+  InvalidateEvent: TNotifyEvent;
 begin
   inherited;
   FStoredMnwQClose := TRealStorage.Create;
@@ -24679,6 +24712,17 @@ begin
   FStoredMnwHPercent.OnChange := OnValueChanged;
   FStoredMnwRPercent := TRealStorage.Create;
   FStoredMnwRPercent.OnChange := OnValueChanged;
+
+  if Model = nil then
+  begin
+    InvalidateEvent := nil;
+  end
+  else
+  begin
+    InvalidateEvent := Model.Invalidate;
+  end;
+
+  FFarms := TFarmProperty.Create(InvalidateEvent);
 
   InitializeVariables;
 
@@ -24692,7 +24736,7 @@ begin
     FMfFmp4FarmID.DataType := rdtInteger;
     FMfFmp4FarmID.AddMethod := vamReplace;
     FMfFmp4FarmID.Orientation := dsoTop;
-    if TransientFarms then
+    if Farms.FarmOption = foTransient then
     begin
       AddTimeList(FMfFmp4FarmID);
     end;
@@ -24702,6 +24746,8 @@ end;
 
 destructor TFarmProcess4.Destroy;
 begin
+  FFarms.Free;
+
   FMfFmp4FarmID.Free;
   FStoredMnwQClose.Free;
   FStoredMnwHPercent.Free;
@@ -24803,7 +24849,7 @@ begin
   MnwQClose := 1E-6;
   MnwHPercent := 0.1;
   MnwRPercent := 0.1;
-  FTransientFarms := False;
+  FFarms.FarmOption := foStatic;
   FEfficiencyOption := foNotUsed;
   FEfficiencyArrayList := alArray;
   FEfficiencyImprovement := foNotUsed;
@@ -24824,7 +24870,7 @@ procedure TFarmProcess4.InvalidateTransientFarm;
 begin
   if FModel <> nil  then
   begin
-    if TransientFarms then
+    if Farms.FarmOption = foTransient then
     begin
       AddTimeList(FMfFmp4FarmID);
     end
@@ -24950,14 +24996,9 @@ begin
   SetFarmOptionProperty(FEfficiencyOption, Value);
 end;
 
-procedure TFarmProcess4.SetTransientFarms(const Value: Boolean);
+procedure TFarmProcess4.SetFarms(const Value: TFarmProperty);
 begin
-  if FTransientFarms <> Value then
-  begin
-    FTransientFarms := Value;
-    InvalidateTransientFarm;
-  end;
-//  SetBooleanProperty(FTransientFarms, Value);
+  FFarms.Assign(Value);
 end;
 
 procedure TFarmProcess4.SetStoredMnwHPercent(const Value: TRealStorage);
@@ -25755,6 +25796,79 @@ procedure TFarmProcess4Allotments.SetSurfaceWaterChoice(
   const Value: TFarmOption);
 begin
   SetFarmOptionProperty(FSurfaceWaterChoice, Value);
+end;
+
+{ TFarmProperty }
+
+procedure TFarmProperty.Assign(Source: TPersistent);
+var
+  FarmSource: TFarmProperty;
+begin
+  if Source is TFarmProperty then
+  begin
+    FarmSource := TFarmProperty(Source);
+    FarmOption := FarmSource.FarmOption;
+    ArrayList := FarmSource.ArrayList;
+    UnitConversionScaleFactor := FarmSource.UnitConversionScaleFactor;
+    ExternalFileName := FarmSource.ExternalFileName;
+    ExternalScaleFileName := FarmSource.ExternalScaleFileName;
+  end
+  else
+  begin
+    inherited;
+  end;
+
+end;
+
+procedure TFarmProperty.DoOnChangeArrayList;
+begin
+  if Assigned(OnChangeArrayList) then
+  begin
+    OnChangeArrayList(self);
+  end;
+  InvalidateModel;
+end;
+
+procedure TFarmProperty.DoOnChangeFarmOption;
+begin
+  if Assigned(OnChangeFarmOption) then
+  begin
+    OnChangeFarmOption(self);
+  end;
+  InvalidateModel;
+end;
+
+procedure TFarmProperty.SetArrayList(const Value: TArrayList);
+begin
+  if FArrayList <> Value then
+  begin
+    FArrayList := Value;
+    DoOnChangeArrayList;
+  end;
+end;
+
+procedure TFarmProperty.SetExternalFileName(const Value: string);
+begin
+  SetStringProperty(FExternalFileName, Value);
+end;
+
+procedure TFarmProperty.SetExternalScaleFileName(const Value: string);
+begin
+  SetStringProperty(FExternalScaleFileName, Value);
+end;
+
+procedure TFarmProperty.SetFarmOption(const Value: TFarmOption);
+begin
+  if FFarmOption <> Value then
+  begin
+    FFarmOption := Value;
+    DoOnChangeFarmOption;
+  end;
+end;
+
+procedure TFarmProperty.SetUnitConversionScaleFactor(const Value: string);
+begin
+  SetStringProperty(FUnitConversionScaleFactor, Value);
 end;
 
 end.

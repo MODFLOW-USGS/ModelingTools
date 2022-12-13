@@ -1290,16 +1290,6 @@ end;
 constructor TGoPhastPersistent.Create(InvalidateModelEvent: TNotifyEvent);
 begin
   inherited Create;
-//  Assert((Model = nil) or (Model is TCustomModel));
-//  FModel := Model;
-//  if FModel = nil then
-//  begin
-//    FOnInvalidateModel := nil;
-//  end
-//  else
-//  begin
-//    FOnInvalidateModel := FModel.Invalidate;
-//  end;
   FOnInvalidateModel := InvalidateModelEvent;
 end;
 
