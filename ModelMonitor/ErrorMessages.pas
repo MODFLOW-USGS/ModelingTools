@@ -829,7 +829,7 @@ begin
     ErrorValues.Add('ERROR: INFORMATION SPECIFIED');
     ErrorValues.Add('ERROR: NDELAYCELLS');
     ErrorValues.Add('*ERROR');
-    ErrorValues.Add('ERROR.');
+//    ErrorValues.Add('ERROR.');
     ErrorValues.Add('ERROR:  ninterbeds WAS NOT SPECIFIED OR WAS SPECIFIED INCORRECTLY');
     ErrorValues.Add('ERROR:  Only the first and last');
     ErrorValues.Add('ERROR:');
