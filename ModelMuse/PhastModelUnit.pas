@@ -41997,6 +41997,30 @@ end;
 procedure TCustomModel.RemoveTimeList(TimeList: TCustomTimeList);
 begin
   FTimeLists.Remove(TimeList);
+  if TimeList = ThreeDTimeList then
+  begin
+    ThreeDTimeList := nil;
+    ThreeDDataSet := nil;
+    TopDataSet := nil;
+    FrontDataSet := nil;
+    SideDataSet := nil;
+
+  end;
+  if TimeList = TopTimeList then
+  begin
+    TopTimeList := nil;
+    TopDataSet := nil;
+  end;
+  if TimeList = FrontTimeList then
+  begin
+    FrontTimeList := nil;
+    FrontDataSet := nil;
+  end;
+  if TimeList = SideTimeList then
+  begin
+    SideTimeList := nil;
+    SideDataSet := nil;
+  end;
 end;
 
 procedure TCustomModel.RemoveVariables(const DataSetName: String;

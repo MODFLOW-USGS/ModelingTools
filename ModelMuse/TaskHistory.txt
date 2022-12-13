@@ -30372,6 +30372,7 @@ object TTaskHistory
       Date = 44907.000000000000000000
       Categories.Strings = (
         'Running MODFLOW ModelMonitor'
-        'FMP')
+        'FMP'
+        'core code')
     end>
 end

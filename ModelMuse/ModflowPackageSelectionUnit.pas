@@ -4989,6 +4989,7 @@ Type
     procedure SetFarmPrints(const Value: TFarmPrints);
     procedure SetUseMnwCriteria(const Value: Boolean);
     procedure SetWELLFIELD(const Value: Boolean);
+    procedure InvalidateTransientFarm;
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -24691,7 +24692,10 @@ begin
     FMfFmp4FarmID.DataType := rdtInteger;
     FMfFmp4FarmID.AddMethod := vamReplace;
     FMfFmp4FarmID.Orientation := dsoTop;
-    AddTimeList(FMfFmp4FarmID);
+    if TransientFarms then
+    begin
+      AddTimeList(FMfFmp4FarmID);
+    end;
   end;
 
 end;
@@ -24816,6 +24820,22 @@ begin
   FAdded_Crop_Demand_Rate := foNotUsed;
 end;
 
+procedure TFarmProcess4.InvalidateTransientFarm;
+begin
+  if FModel <> nil  then
+  begin
+    if TransientFarms then
+    begin
+      AddTimeList(FMfFmp4FarmID);
+    end
+    else
+    begin
+      RemoveTimeList(FMfFmp4FarmID);
+    end;
+  end;
+  InvalidateModel;
+end;
+
 procedure TFarmProcess4.SetAdded_Crop_Demand_Flux(const Value: TFarmOption);
 begin
   SetFarmOptionProperty(FAdded_Crop_Demand_Flux, Value);
@@ -24932,7 +24952,12 @@ end;
 
 procedure TFarmProcess4.SetTransientFarms(const Value: Boolean);
 begin
-  SetBooleanProperty(FTransientFarms, Value);
+  if FTransientFarms <> Value then
+  begin
+    FTransientFarms := Value;
+    InvalidateTransientFarm;
+  end;
+//  SetBooleanProperty(FTransientFarms, Value);
 end;
 
 procedure TFarmProcess4.SetStoredMnwHPercent(const Value: TRealStorage);
