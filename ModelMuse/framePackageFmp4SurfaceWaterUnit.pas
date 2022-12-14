@@ -68,13 +68,6 @@ var
       rdgSalinityFlush.ItemIndex[Ord(sfcFrequency), ARow] := Ord(FarmProperty.FarmOption);
     end;
 
-//    CanSelect := True;
-//    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcSfac), ARow, CanSelect);
-//    if CanSelect then
-//    begin
-//      rdgSalinityFlush.ItemIndex[Ord(sfcSfac), ARow] := Ord(FarmProperty.ArrayList);
-//    end;
-
     CanSelect := True;
     rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcSfac), ARow, CanSelect);
     if CanSelect then
@@ -95,10 +88,6 @@ var
     begin
       rdgSalinityFlush.Cells[Ord(sfcSfacFile), ARow] := FarmProperty.ExternalScaleFileName;
     end;
-//  TSalinityFlushColumns = (sfcName, sfcFrequency, sfcOption, sfcSfac, sfcFile,
-//    sfcSfacFile);
-//  TSalinityFlushRows = (sfrName, sfrNonRoutDel, sfrNrdInfil, sfrSrd,
-//    sfrSemiLower, sfrSemiUpper, sfrReturnChoic);
   end;
 begin
   cpnlPrint.Collapse;
@@ -127,18 +116,8 @@ begin
     rdgSalinityFlush.EndUpdate;
   end;
 
-//  GetFarmOption(comboNon_Routed_Delivery, SurfWatPackage.Non_Routed_Delivery);
-//  GetFarmOption(comboNrdInfilLocation, SurfWatPackage.Nrd_Infiltration_Location);
-//  GetFarmOption(comboSemi_Routed_Delivery, SurfWatPackage.Semi_Routed_Delivery);
-//  GetFarmOption(comboSemi_Routed_DeliveryLimits, SurfWatPackage.SemiRoutedDeliveryLowerLimit);
   rdeSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE.RealValue := SurfWatPackage.Semi_Routed_Delivery_Closure_Tolerance;
-//  GetFarmOption(comboReturnFlow, SurfWatPackage.ReturnChoice);
   cbRebuild_Fully_Routed_Return.Checked := SurfWatPackage.Rebuild_Fully_Routed_Return;
-
-//  TSalinityFlushColumns = (sfcName, sfcFrequency, sfcOption, sfcSfac, sfcFile,
-//    sfcSfacFile);
-//  TSalinityFlushRows = (sfrName, sfrNonRoutDel, sfrNrdInfil, sfrSrd,
-//    sfrSemiLower, sfrSemiUpper, sfrReturnChoic);
 end;
 
 procedure TframePackageFmp4SurfaceWater.InitializeGrid;
@@ -163,10 +142,6 @@ begin
   finally
     rdgSalinityFlush.EndUpdate;
   end;
-//  TSalinityFlushColumns = (sfcName, sfcFrequency, sfcOption, sfcSfac, sfcFile,
-//    sfcSfacFile);
-//  TSalinityFlushRows = (sfrName, sfrNonRoutDel, sfrNrdInfil, sfrSrd,
-//    sfrSemiLower, sfrSemiUpper, sfrReturnChoic);
 end;
 
 procedure TframePackageFmp4SurfaceWater.Loaded;
@@ -185,7 +160,6 @@ begin
   begin
     CanSelect := ARow = Ord(sfrNonRoutDel);
   end;
-//
 end;
 
 procedure TframePackageFmp4SurfaceWater.SetData(
@@ -210,13 +184,6 @@ var
       FarmProperty.FarmOption := RowToFarmOption(ARow);
     end;
 
-//    CanSelect := True;
-//    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(fcArray), Ord(ARow), CanSelect);
-//    if CanSelect then
-//    begin
-//      FarmProperty.ArrayList := RowToArrayList(ARow);
-//    end;
-
     CanSelect := True;
     rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcSfac), Ord(ARow), CanSelect);
     if CanSelect then
@@ -240,10 +207,6 @@ var
       FarmProperty.ExternalScaleFileName :=
         rdgSalinityFlush.Cells[Ord(sfcSfacFile), Ord(ARow)];
     end;
-//  TSalinityFlushColumns = (sfcName, sfcFrequency, sfcOption, sfcSfac, sfcFile,
-//    sfcSfacFile);
-//  TSalinityFlushRows = (sfrName, sfrNonRoutDel, sfrNrdInfil, sfrSrd,
-//    sfrSemiLower, sfrSemiUpper, sfrReturnChoic);
   end;
 begin
   inherited;
@@ -268,14 +231,8 @@ begin
   SetFarmProperty(SurfWatPackage.SemiRoutedDeliveryUpperLimit, sfrSemiUpper);
   SetFarmProperty(SurfWatPackage.ReturnChoice, sfrReturnChoic);
 
-//  SurfWatPackage.Non_Routed_Delivery := SetFarmOption(comboNon_Routed_Delivery);
-//  SurfWatPackage.Nrd_Infiltration_Location := SetFarmOption(comboNrdInfilLocation);
-//  SurfWatPackage.Semi_Routed_Delivery := SetFarmOption(comboSemi_Routed_Delivery);
-//  SurfWatPackage.SemiRoutedDeliveryLowerLimit := SetFarmOption(comboSemi_Routed_DeliveryLimits);
   SurfWatPackage.Semi_Routed_Delivery_Closure_Tolerance := rdeSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE.RealValue;
-//  SurfWatPackage.ReturnChoice := SetFarmOption(comboReturnFlow);
   cbRebuild_Fully_Routed_Return.Checked := SurfWatPackage.Rebuild_Fully_Routed_Return;
-
 end;
 
 initialization

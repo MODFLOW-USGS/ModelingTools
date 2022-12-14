@@ -25219,13 +25219,7 @@ begin
   FReturnChoice.Initialize;
 
   Semi_Routed_Delivery_Closure_Tolerance := 0.02;
-//  FNon_Routed_Delivery := foNotUsed;
-//  FNrd_Infiltration_Location := foNotUsed;
   FSurfaceWaterPrints := [];
-//  FSemi_Routed_Delivery := foNotUsed;
-//  FSemiRoutedDeliveryLowerLimit := foNotUsed;
-//  FSemiRoutedDeliveryUpperLimit := foNotUsed;
-//  FReturnChoice := foNotUsed;
   FRebuild_Fully_Routed_Return := False;
   FNRDOption := nrdoRate;
 end;
@@ -25249,7 +25243,6 @@ procedure TFarmProcess4SurfaceWater.SetNrd_Infiltration_Location(
   const Value: TFarmProperty);
 begin
   FNrd_Infiltration_Location.Assign(Value);
-//  SetFarmOptionProperty(FNrd_Infiltration_Location, Value);
 end;
 
 procedure TFarmProcess4SurfaceWater.SetRebuild_Fully_Routed_Return(
@@ -25261,14 +25254,12 @@ end;
 procedure TFarmProcess4SurfaceWater.SetReturnChoice(const Value: TFarmProperty);
 begin
   FReturnChoice.Assign(Value);
-//  SetFarmOptionProperty(FReturnChoice, Value);
 end;
 
 procedure TFarmProcess4SurfaceWater.SetSemi_Routed_Delivery(
   const Value: TFarmProperty);
 begin
   FSemi_Routed_Delivery.Assign(Value);
-//  SetFarmOptionProperty(FSemi_Routed_Delivery, Value);
 end;
 
 procedure TFarmProcess4SurfaceWater.SetSemi_Routed_Delivery_Closure_Tolerance(
@@ -25281,14 +25272,12 @@ procedure TFarmProcess4SurfaceWater.SetSemiRoutedDeliveryLowerLimit(
   const Value: TFarmProperty);
 begin
   FSemiRoutedDeliveryLowerLimit.Assign(Value);
-//  SetFarmOptionProperty(FSemiRoutedDeliveryLowerLimit, Value);
 end;
 
 procedure TFarmProcess4SurfaceWater.SetSemiRoutedDeliveryUpperLimit(
   const Value: TFarmProperty);
 begin
   FSemiRoutedDeliveryUpperLimit.Assign(Value);
-//  FSemiRoutedDeliveryUpperLimit := Value;
 end;
 
 procedure TFarmProcess4SurfaceWater.SetStoredSemi_Routed_Delivery_Closure_Tolerance(
