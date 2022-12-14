@@ -3,8 +3,6 @@ object frameDisplayLimit: TframeDisplayLimit
   Top = 0
   Width = 243
   Height = 35
-  HorzScrollBar.Range = 0
-  VertScrollBar.Range = 0
   TabOrder = 0
   TabStop = True
   object cbCheck: TCheckBox
@@ -36,7 +34,7 @@ object frameDisplayLimit: TframeDisplayLimit
     Left = 88
     Top = 0
     Width = 89
-    Height = 24
+    Height = 23
     Style = csDropDownList
     Enabled = False
     ItemIndex = 0

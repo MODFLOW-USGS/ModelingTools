@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspFMP4
+    ActivePage = jvspFmp4SalinityFlush
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -11504,22 +11504,23 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 595
           Height = 413
-          VertScrollBar.Position = 572
+          VertScrollBar.Position = 0
           ExplicitWidth = 595
           ExplicitHeight = 413
           inherited cpnlWaterBalanceRegions: TCategoryPanel
-            Top = 89
-            ExplicitTop = 89
+            Top = 657
+            ExplicitTop = 657
             ExplicitWidth = 574
             inherited rdgFarms: TRbwDataGrid4
               Width = 572
               FixedCols = 0
               ExplicitWidth = 572
+              ExplicitHeight = 293
             end
           end
           inherited cpnlOptions: TCategoryPanel
-            Top = -35
-            ExplicitTop = -35
+            Top = 534
+            ExplicitTop = 534
             ExplicitWidth = 574
             inherited cbWellField: TCheckBox
               Height = 37
@@ -11527,8 +11528,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlMnw2: TCategoryPanel
-            Top = -278
-            ExplicitTop = -278
+            Top = 292
+            ExplicitTop = 292
             ExplicitWidth = 574
             inherited lblQClose: TLabel
               Width = 409
@@ -11550,8 +11551,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlOutput: TCategoryPanel
-            Top = -572
-            ExplicitTop = -572
+            Top = 0
+            ExplicitTop = 0
             ExplicitWidth = 574
             inherited clbPrint: TCheckListBox
               Width = 572
@@ -11621,7 +11622,7 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4Soil'
-      inline framePkgFmp4Soils: TframePackageFmpSoils
+      inline framePkgFmp4Soils: TframePackageFmp4Soils
         Left = 0
         Top = 0
         Width = 595
@@ -11629,6 +11630,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
+        ExplicitLeft = 6
         ExplicitWidth = 595
         ExplicitHeight = 516
         inherited lblComments: TLabel
@@ -11643,29 +11645,16 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 78
           ExplicitHeight = 18
         end
-        inherited lblCapillaryFringe: TLabel
-          Width = 104
-          Height = 18
-          ExplicitWidth = 104
-          ExplicitHeight = 18
-        end
-        inherited lblSufaceVK: TLabel
-          Width = 256
-          Height = 18
-          ExplicitWidth = 256
-          ExplicitHeight = 18
-        end
         inherited memoComments: TMemo
           Width = 564
           ExplicitWidth = 564
         end
-        inherited comboCapillaryFringe: TComboBox
-          Height = 26
-          ExplicitHeight = 26
-        end
-        inherited comboSufaceVK: TComboBox
-          Height = 26
-          ExplicitHeight = 26
+        inherited rdgSoils: TRbwDataGrid4
+          Width = 595
+          Height = 359
+          FixedCols = 0
+          ExplicitWidth = 595
+          ExplicitHeight = 359
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -11676,10 +11665,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               Control = framePkgFmp4Soils.memoComments
             end
             item
-              Control = framePkgFmp4Soils.comboCapillaryFringe
-            end
-            item
-              Control = framePkgFmp4Soils.comboSufaceVK
+              Control = framePkgFmp4Soils.rdgSoils
             end>
         end
       end
@@ -11712,59 +11698,16 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 78
           ExplicitHeight = 18
         end
-        inherited lblPrecipitation: TLabel
-          Width = 88
-          Height = 18
-          ExplicitWidth = 88
-          ExplicitHeight = 18
-        end
-        inherited lblReferenceET: TLabel
-          Width = 351
-          Height = 18
-          ExplicitWidth = 351
-          ExplicitHeight = 18
-        end
-        inherited lblPotET_Bare: TLabel
-          Width = 269
-          Height = 36
-          ExplicitWidth = 269
-          ExplicitHeight = 36
-        end
-        inherited lblDirectRecharge: TLabel
-          Width = 207
-          Height = 18
-          ExplicitWidth = 207
-          ExplicitHeight = 18
-        end
-        inherited lblPrecipitationPotConsup: TLabel
-          Width = 243
-          Height = 18
-          ExplicitWidth = 243
-          ExplicitHeight = 18
-        end
         inherited memoComments: TMemo
           Width = 564
           ExplicitWidth = 564
         end
-        inherited comboPrecipitation: TComboBox
-          Height = 26
-          ExplicitHeight = 26
-        end
-        inherited comboReferenceET: TComboBox
-          Height = 26
-          ExplicitHeight = 26
-        end
-        inherited comboPotET_Bare: TComboBox
-          Height = 26
-          ExplicitHeight = 26
-        end
-        inherited comboDirectRecharge: TComboBox
-          Height = 26
-          ExplicitHeight = 26
-        end
-        inherited comboPrecipitationPotConsup: TComboBox
-          Height = 26
-          ExplicitHeight = 26
+        inherited rdgClimate: TRbwDataGrid4
+          Width = 595
+          Height = 359
+          FixedCols = 0
+          ExplicitWidth = 595
+          ExplicitHeight = 359
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -11775,19 +11718,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               Control = framePkgFmp4Climate.memoComments
             end
             item
-              Control = framePkgFmp4Climate.comboPrecipitation
-            end
-            item
-              Control = framePkgFmp4Climate.comboReferenceET
-            end
-            item
-              Control = framePkgFmp4Climate.comboPotET_Bare
-            end
-            item
-              Control = framePkgFmp4Climate.comboDirectRecharge
-            end
-            item
-              Control = framePkgFmp4Climate.comboPrecipitationPotConsup
+              Control = framePkgFmp4Climate.rdgClimate
             end>
         end
       end
@@ -11829,76 +11760,29 @@ inherited frmModflowPackages: TfrmModflowPackages
           Height = 359
           ExplicitWidth = 595
           ExplicitHeight = 359
-          inherited cpnlPrint: TCategoryPanel
-            ExplicitWidth = 574
-            inherited clbPrint: TCheckListBox
-              Width = 572
-              ItemHeight = 18
-              ExplicitLeft = 0
-              ExplicitTop = 0
-              ExplicitWidth = 572
-              ExplicitHeight = 127
+          inherited cpnlSalinityFlush: TCategoryPanel
+            ExplicitWidth = 591
+            inherited rdgSalinityFlush: TRbwDataGrid4
+              Width = 589
+              FixedCols = 0
             end
           end
           inherited cpnlOptions: TCategoryPanel
             Enabled = True
-            ExplicitTop = 153
-            ExplicitWidth = 574
-            inherited lblNon_Routed_Delivery: TLabel
-              Width = 134
-              Height = 18
-              ExplicitWidth = 134
-              ExplicitHeight = 18
-            end
-            inherited lblNrdInfilLocation: TLabel
-              Width = 262
-              Height = 18
-              ExplicitWidth = 262
-              ExplicitHeight = 18
-            end
-            inherited lblSemi_Routed_Delivery: TLabel
-              Width = 143
-              Height = 18
-              ExplicitWidth = 143
-              ExplicitHeight = 18
-            end
-            inherited lblSemi_Routed_DeliveryLimits: TLabel
-              Width = 183
-              Height = 18
-              ExplicitWidth = 183
-              ExplicitHeight = 18
-            end
+            ExplicitWidth = 591
             inherited lblSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE: TLabel
               Width = 265
               Height = 18
               ExplicitWidth = 265
               ExplicitHeight = 18
             end
-            inherited lblReturnFlow: TLabel
-              Width = 168
-              Height = 18
-              ExplicitWidth = 168
-              ExplicitHeight = 18
-            end
-            inherited comboNon_Routed_Delivery: TComboBox
-              Height = 26
-              ExplicitHeight = 26
-            end
-            inherited comboNrdInfilLocation: TComboBox
-              Height = 26
-              ExplicitHeight = 26
-            end
-            inherited comboSemi_Routed_Delivery: TComboBox
-              Height = 26
-              ExplicitHeight = 26
-            end
-            inherited comboSemi_Routed_DeliveryLimits: TComboBox
-              Height = 26
-              ExplicitHeight = 26
-            end
-            inherited comboReturnFlow: TComboBox
-              Height = 26
-              ExplicitHeight = 26
+          end
+          inherited cpnlPrint: TCategoryPanel
+            ExplicitWidth = 591
+            inherited clbPrint: TCheckListBox
+              Width = 589
+              ItemHeight = 18
+              ExplicitWidth = 572
             end
           end
         end
@@ -11914,25 +11798,13 @@ inherited frmModflowPackages: TfrmModflowPackages
               Control = framePkgFmp4SurfaceWater.clbPrint
             end
             item
-              Control = framePkgFmp4SurfaceWater.comboNon_Routed_Delivery
-            end
-            item
-              Control = framePkgFmp4SurfaceWater.comboNrdInfilLocation
-            end
-            item
-              Control = framePkgFmp4SurfaceWater.comboSemi_Routed_Delivery
-            end
-            item
-              Control = framePkgFmp4SurfaceWater.comboSemi_Routed_DeliveryLimits
-            end
-            item
               Control = framePkgFmp4SurfaceWater.rdeSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE
             end
             item
-              Control = framePkgFmp4SurfaceWater.comboReturnFlow
+              Control = framePkgFmp4SurfaceWater.cbRebuild_Fully_Routed_Return
             end
             item
-              Control = framePkgFmp4SurfaceWater.cbRebuild_Fully_Routed_Return
+              Control = framePkgFmp4SurfaceWater.rdgSalinityFlush
             end>
         end
       end

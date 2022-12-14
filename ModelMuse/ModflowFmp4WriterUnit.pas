@@ -396,7 +396,7 @@ begin
       fmCreate or fmShareDenyWrite);
   end;
 
-  WriteString('LOCATION ');
+  WriteString('  LOCATION ');
 
   if FFarmProcess4.Farms.FarmOption = foTransient then
   begin
@@ -681,7 +681,7 @@ begin
 
   WriteFarmLocation;
 
-  if (FFarmProcess4.DeficiencyScenario <> foNotUsed) then
+  if (FFarmProcess4.DeficiencyScenario.FarmOption <> foNotUsed) then
   begin
     WriteString('  PRORATE_DEFICIENCY ');
     case FFarmProcess4.ProrateDeficiency of

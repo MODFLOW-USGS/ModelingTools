@@ -82,7 +82,6 @@ inherited frameHeadObservations: TframeHeadObservations
     Height = 109
     ExplicitHeight = 109
     inherited edObsName: TLabeledEdit
-      EditLabel.ExplicitLeft = 0
       EditLabel.ExplicitTop = -23
       EditLabel.ExplicitWidth = 83
     end

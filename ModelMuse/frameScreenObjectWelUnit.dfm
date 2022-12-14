@@ -19,9 +19,6 @@ inherited frameScreenObjectWel: TframeScreenObjectWel
     inherited comboTimeSeriesInterpolation: TComboBox
       TabOrder = 5
     end
-    inherited comboFormulaInterp: TComboBox
-      ExplicitHeight = 23
-    end
     object fedTabfile: TJvFilenameEdit
       Left = 8
       Top = 80

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T14:21:43.695-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-14T14:31:46.821-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SURFACE_WATER</title>
   <body>
     <header>
@@ -21,7 +21,7 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160;= 0 indicates only the water necessary is obtained, excess is not delivered</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160;= 1 indicates that unused delivered water is evenly discharged to SFR Delivery locations defined with SEMI_ROUTED_DELIVERY. If SEMI_ROUTED_DELIVERY is not defined, then functions the same as NRDU = 0</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160;= 2 indicates that unused delivered water is evenly injected to a WBS associated supply wells</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; &gt;=10 indicates that unused delivered water is evenly infiltrated as deep percolation to the locations within NRD_INFILTRATION_LOCATION that have the same integer</para>
+          <para styleclass="Normal"> &#160; &#160; &#160; ≥10 indicates that unused delivered water is evenly infiltrated as deep percolation to the locations within NRD_INFILTRATION_LOCATION that have the same integer</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">It may be specified as VOLUME of water per stress period.</para>
           <para styleclass="Normal">The keywords RATE and VOLUME are optional and if not specified, then VOLUME is the default.</para>
@@ -41,8 +41,8 @@
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A]</para>
           <para styleclass="Normal">Identifies location to infiltrate excess water from a NON_ROUTED_DELIVERY (NRD). </para>
-          <para styleclass="Normal">Input is an INT array that specifies infiltration locations as either 0 (not used location) or =10. </para>
-          <para styleclass="Normal">An NRD with NRD_USE =10 has its unused delivered (excess) water infiltrated at the corresponding =10 location in array.</para>
+          <para styleclass="Normal">Input is an INT array that specifies infiltration locations as either 0 (not used location) or ≥10. </para>
+          <para styleclass="Normal">An NRD with NRD_USE ≥10 has its unused delivered (excess) water infiltrated at the corresponding ≥10 location in array.</para>
         </td>
       </tr>
     </table></para>

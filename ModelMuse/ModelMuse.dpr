@@ -769,7 +769,7 @@ uses
   framePackageFmiUnit in 'framePackageFmiUnit.pas' {framePackageFmi: TFrame},
   ModflowFmp4WriterUnit in 'ModflowFmp4WriterUnit.pas',
   framePackageFmp4Unit in 'framePackageFmp4Unit.pas' {framePackageFmp4: TFrame},
-  framePackageFmpSoilsUnit in 'framePackageFmpSoilsUnit.pas' {framePackageFmpSoils: TFrame},
+  framePackageFmp4SoilsUnit in 'framePackageFmp4SoilsUnit.pas' {framePackageFmp4Soils: TFrame},
   framePackageFmp4ClimateUnit in 'framePackageFmp4ClimateUnit.pas' {framePackageFmp4Climate: TFrame},
   framePackageFmp4SurfaceWaterUnit in 'framePackageFmp4SurfaceWaterUnit.pas' {framePackageFmp4SurfaceWater: TFrame},
   framePackageFmp4WellsUnit in 'framePackageFmp4WellsUnit.pas' {framePackageFmp4Wells: TFrame},

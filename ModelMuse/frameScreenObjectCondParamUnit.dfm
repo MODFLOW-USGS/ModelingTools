@@ -20,7 +20,6 @@ inherited frameScreenObjectCondParam: TframeScreenObjectCondParam
     end
     inherited comboTimeSeriesInterpolation: TComboBox
       TabOrder = 4
-      ExplicitHeight = 23
     end
     object comboFormulaInterp: TComboBox
       Left = 174

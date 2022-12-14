@@ -1,28 +1,23 @@
-inherited framePackageFmp4Climate: TframePackageFmp4Climate
-  Width = 435
-  Height = 432
-  ExplicitWidth = 435
-  ExplicitHeight = 432
+inherited framePackageFmp4Soils: TframePackageFmp4Soils
+  Height = 323
+  ExplicitHeight = 323
   DesignSize = (
-    435
-    432)
-  inherited memoComments: TMemo
-    Width = 404
-    ExplicitWidth = 404
-  end
-  object rdgClimate: TRbwDataGrid4 [3]
+    422
+    323)
+  object rdgSoils: TRbwDataGrid4 [3]
     Left = 0
     Top = 157
-    Width = 435
-    Height = 275
+    Width = 422
+    Height = 166
     Align = alBottom
-    ColCount = 7
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    ColCount = 6
     Enabled = False
     FixedCols = 1
-    RowCount = 6
+    RowCount = 3
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
     TabOrder = 1
-    OnSelectCell = rdgClimateSelectCell
+    OnSelectCell = rdgSoilsSelectCell
     ExtendedAutoDistributeText = False
     AutoMultiEdit = False
     AutoDistributeText = False
@@ -54,7 +49,7 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = True
+        AutoAdjustColWidths = False
       end
       item
         AutoAdjustRowHeights = True
@@ -104,30 +99,6 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
         PickList.Strings = (
           'Array'
           'List')
-        WordWrapCaptions = True
-        WordWrapCells = False
-        CaseSensitivePicklist = False
-        CheckStyle = csCheck
-        AutoAdjustColWidths = True
-      end
-      item
-        AutoAdjustRowHeights = True
-        AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
-        ButtonFont.Charset = DEFAULT_CHARSET
-        ButtonFont.Color = clWindowText
-        ButtonFont.Height = -12
-        ButtonFont.Name = 'Segoe UI'
-        ButtonFont.Style = []
-        ButtonUsed = False
-        ButtonWidth = 20
-        CheckMax = False
-        CheckMin = False
-        ComboUsed = True
-        Format = rcf4String
-        LimitToList = True
-        MaxLength = 0
-        ParentButtonFont = False
         WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
@@ -207,6 +178,13 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+    ColWidths = (
+      64
+      72
+      64
+      64
+      64
+      64)
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -217,7 +195,7 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
         Control = memoComments
       end
       item
-        Control = rdgClimate
+        Control = rdgSoils
       end>
   end
 end

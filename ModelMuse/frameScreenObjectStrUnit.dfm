@@ -14,7 +14,6 @@ inherited frameScreenObjectStr: TframeScreenObjectStr
       OnChange = comboFormulaInterpChange
       ExplicitLeft = 206
       ExplicitTop = 45
-      ExplicitHeight = 23
     end
   end
   inherited pnlTop: TPanel

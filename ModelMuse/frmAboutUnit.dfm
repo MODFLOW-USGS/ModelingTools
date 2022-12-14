@@ -3378,5 +3378,7 @@ inherited frmAbout: TfrmAbout
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+    ExplicitWidth = 730
+    ExplicitHeight = 165
   end
 end

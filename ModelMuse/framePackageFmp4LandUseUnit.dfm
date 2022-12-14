@@ -27,6 +27,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       Height = 229
       Caption = 'Print'
       TabOrder = 0
+      ExplicitWidth = 185
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
@@ -85,6 +86,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       Caption = 'Land Use Options'
       TabOrder = 1
       ExplicitTop = 199
+      ExplicitWidth = 185
       object rdgSoils: TRbwDataGrid4
         Left = 0
         Top = 89
@@ -210,6 +212,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 395
       end
       object pnl1: TPanel
         Left = 0

@@ -2960,6 +2960,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           inherited frameObservations: TframeGrid
             Width = 549
             Height = 280
+            ExplicitTop = 17
             ExplicitWidth = 549
             ExplicitHeight = 280
             inherited Panel: TPanel
@@ -2983,7 +2984,9 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           ExplicitWidth = 553
           inherited frameObsComparisons: TframeGrid
             Width = 549
+            ExplicitTop = 17
             ExplicitWidth = 549
+            ExplicitHeight = 153
             inherited Panel: TPanel
               Width = 549
               ExplicitWidth = 549

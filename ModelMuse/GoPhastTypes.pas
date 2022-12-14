@@ -967,6 +967,11 @@ resourcestring
   StrMultiply = 'Multiply';
   StrAdd = 'Add';
   StrModelFeatures = '|Model Features';
+  StrFrequency = 'Frequency';
+  StrArrayOrList = 'Array or list';
+  StrUnitConversionScal = 'Unit conversion scale factor (optional)';
+  StrExternallyGenerated = 'Externally generated file (optional)';
+  StrExternallyGeneratedSfac = 'Externally generated SFAC file (optional)';
 
 
 

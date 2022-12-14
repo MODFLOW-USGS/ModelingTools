@@ -3197,12 +3197,15 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmpMaxPumpingRate(Sender: TObject);
     // relates to the NOCIRNOQ option in farm wells.
     procedure InvalidateMfFmpPumpOnlyIfCropRequiresWater(Sender: TObject);
-    // relates to Farm ID in farm wells.
+    // relates to Farm ID in farm wells in FMP3.
     procedure InvalidateMfFmpWellFarmID(Sender: TObject);
     procedure InvalidateMfFmpPrecip(Sender: TObject);
     procedure InvalidateMfFmpEvap(Sender: TObject);
     procedure InvalidateMfFmpCropID(Sender: TObject);
     procedure InvalidateMfFmpFarmID(Sender: TObject);
+
+    // relates to Farm ID in FMP4.
+    procedure InvalidateMfFmp4FarmID(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -25538,6 +25541,11 @@ end;
 procedure TCustomModel.InvalidateMfFhbHeads(Sender: TObject);
 begin
   ModflowPackages.FhbPackage.MfFhbHeads.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4FarmID(Sender: TObject);
+begin
+  ModflowPackages.FarmProcess4.MfFmp4FarmID.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmpCropID(Sender: TObject);

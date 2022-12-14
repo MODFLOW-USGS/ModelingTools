@@ -718,7 +718,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
           ExplicitWidth = 477
           inherited edFormula: TLabeledEdit
             Height = 23
-            EditLabel.ExplicitLeft = 0
             EditLabel.ExplicitTop = -16
             EditLabel.ExplicitWidth = 50
             ExplicitHeight = 23

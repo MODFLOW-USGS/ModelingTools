@@ -9,8 +9,8 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
   object lblPumpSpread: TLabel [2]
     Left = 223
     Top = 275
-    Width = 357
-    Height = 45
+    Width = 347
+    Height = 30
     Caption = 
       'Specify how pumping demand should be allocated among MNW well no' +
       'des (MNW_PUMP_SPREAD)'
@@ -19,16 +19,16 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
   object lblWellLayer: TLabel [3]
     Left = 223
     Top = 379
-    Width = 351
-    Height = 30
+    Width = 233
+    Height = 15
     Caption = 'Method for specifying well vertical locations'
     WordWrap = True
   end
   object lblXY: TLabel [4]
     Left = 223
     Top = 329
-    Width = 351
-    Height = 30
+    Width = 248
+    Height = 15
     Caption = 'Method for specifying well horizontal locations'
     WordWrap = True
   end
@@ -43,6 +43,7 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
     Top = 70
     Width = 564
     ExplicitTop = 70
+    ExplicitWidth = 564
   end
   object clbPrint: TCheckListBox [7]
     Left = 16

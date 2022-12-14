@@ -738,7 +738,17 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-    Model.InvalidateMfFmpFarmID(self);
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      Model.InvalidateMfFmpFarmID(self);
+    end
+  {$IFDEF OWHMV2}
+    else if Model.ModelSelection = msModflowOwhm2 then
+    begin
+      Model.InvalidateMfFmp4FarmID(self);
+    end
+  {$ENDIF}
+    ;
   end;
 end;
 

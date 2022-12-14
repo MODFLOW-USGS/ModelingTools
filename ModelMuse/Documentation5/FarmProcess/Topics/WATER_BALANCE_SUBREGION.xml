@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-06T08:36:28.862-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-14T09:19:39.412-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>WATER_BALANCE_SUBREGION</title>
   <body>
     <header>
@@ -32,7 +32,7 @@
           <para styleclass="Normal"> &#160; &#160; &#160;the rest will be set to default values if not specified. Note that EFFICIENCY is required when <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NIRRIGATE">NIRRIGATE</link> &gt; 0</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">READ 2D Array of INT that are from 0 to <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NWBS">NWBS</link> to indicate the spatial area and location of each WBS</para>
-          <para styleclass="Normal"><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">INT </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">array th</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">at specifi</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">es t</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">he spa􀆟</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">al </text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">loca􀆟on </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">of the WBS (always required)</text></para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">INT </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">array th</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">at specifi</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">es t</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">he spati</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">al </text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">location </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">of the WBS (always required)</text></para>
           <para styleclass="Normal"></para>
         </td>
       </tr>

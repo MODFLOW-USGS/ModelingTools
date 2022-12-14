@@ -53,7 +53,7 @@ uses System.UITypes,
   PestParamGroupsUnit, frameGwtDspPackageUnit, frameGwtAdvPackageUnit,
   framePackageMSTUnit, framePackageIstUnit, frameChemSpeciesUnit,
   System.Generics.Collections, framePackageFmiUnit, framePackageFmp4Unit,
-  framePackageFmpSoilsUnit, framePackageFmp4ClimateUnit,
+  framePackageFmp4SoilsUnit, framePackageFmp4ClimateUnit,
   framePackageFmp4SurfaceWaterUnit, framePackageFmp4WellsUnit,
   framePackageFmp4AllotmentsUnit, framePackageFmp4LandUseUnit,
   framePackageFmp4SalinityFlushUnit;
@@ -284,7 +284,7 @@ type
     jvspFMP4: TJvStandardPage;
     framePkgFMP4: TframePackageFmp4;
     jvspFmp4Soil: TJvStandardPage;
-    framePkgFmp4Soils: TframePackageFmpSoils;
+    framePkgFmp4Soils: TframePackageFmp4Soils;
     jvspFmp4Climate: TJvStandardPage;
     framePkgFmp4Climate: TframePackageFmp4Climate;
     jvspFmp4SurfaceWater: TJvStandardPage;

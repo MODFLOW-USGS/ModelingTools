@@ -535,6 +535,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 582
+        ExplicitHeight = 418
         inherited splObservations: TSplitter
           Top = 241
           Width = 582
@@ -545,13 +546,16 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Width = 582
           Height = 241
           ExplicitWidth = 582
+          ExplicitHeight = 241
           inherited frameObservations: TframeGrid
             Width = 578
             Height = 222
             ExplicitWidth = 578
+            ExplicitHeight = 222
             inherited Panel: TPanel
               Top = 164
               Width = 578
+              ExplicitTop = 164
               ExplicitWidth = 578
               inherited sbAdd: TSpeedButton
                 Left = 447
@@ -580,6 +584,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         inherited grpObsComparisons: TGroupBox
           Top = 246
           Width = 582
+          ExplicitTop = 246
           ExplicitWidth = 582
           inherited frameObsComparisons: TframeGrid
             Width = 578
