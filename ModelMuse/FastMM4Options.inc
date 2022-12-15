@@ -166,6 +166,9 @@ Set the default options for FastMM here.
      install itself. No effect unless FullDebugMode and LoadDebugDLLDynamically
      are also defined.}
 
+    {.$define RestrictDebugDLLLoadPath}
+    {Allow to load debug dll only from host module directory.}
+
   {FastMM usually allocates large blocks from the topmost available address and
    medium and small blocks from the lowest available address (This reduces
    fragmentation somewhat). With this option set all blocks are always
@@ -233,6 +236,13 @@ Set the default options for FastMM here.
   {Set this option to disable the display of the hint below the memory leak
    message.}
   {.$define HideMemoryLeakHintMessage}
+
+  {Set this option to use QualifiedClassName equivalent instead of ClassName
+   equivalent during memory leak reporting.
+   This is useful for duplicate class names (like EConversionError, which is in
+   units Data.DBXJSONReflect, REST.JsonReflect and System.ConvUtils,
+   or TClipboard being in Vcl.Clibprd and WinAPI.ApplicationModel.DataTransfer }
+  {$define EnableMemoryLeakReportingUsesQualifiedClassName}
 
 {--------------------------Instruction Set Options----------------------------}
 

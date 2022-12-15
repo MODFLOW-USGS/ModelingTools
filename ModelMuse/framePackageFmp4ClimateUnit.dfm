@@ -16,7 +16,7 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
     Width = 435
     Height = 275
     Align = alBottom
-    ColCount = 7
+    ColCount = 6
     Enabled = False
     FixedCols = 1
     RowCount = 6
@@ -76,34 +76,8 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
         ParentButtonFont = False
         PickList.Strings = (
           'Don'#39't use'
-          'Use')
-        WordWrapCaptions = True
-        WordWrapCells = False
-        CaseSensitivePicklist = False
-        CheckStyle = csCheck
-        AutoAdjustColWidths = True
-      end
-      item
-        AutoAdjustRowHeights = True
-        AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
-        ButtonFont.Charset = DEFAULT_CHARSET
-        ButtonFont.Color = clWindowText
-        ButtonFont.Height = -12
-        ButtonFont.Name = 'Segoe UI'
-        ButtonFont.Style = []
-        ButtonUsed = False
-        ButtonWidth = 20
-        CheckMax = False
-        CheckMin = False
-        ComboUsed = True
-        Format = rcf4String
-        LimitToList = True
-        MaxLength = 0
-        ParentButtonFont = False
-        PickList.Strings = (
-          'Array'
-          'List')
+          'Static'
+          'Transient')
         WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False

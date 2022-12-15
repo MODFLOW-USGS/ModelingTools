@@ -9,9 +9,10 @@ uses
   ModflowPackageSelectionUnit, ArgusDataEntry;
 
 type
-  TSoilOptionColumns = (socName, socTransient, socArray, socOther);
+  TSoilOptionColumns = (socName, socTransient, socArray, {socOther,} socSFAC,
+    socFile, socSfacFile);
   TSoilOptionRows = (sorName, sorSoilLocation, sorLandUseFraction,
-    sorCropCoeffOrUse, sorIrrigation, sorRootDepth, sorRootPressure,
+    sorCropCoeff, sorConsumptiveUse, sorIrrigation, sorRootDepth, sorRootPressure,
     sorTranspirationFraction, sorEvapIrrigationFraction,
     sorFractionOfPrecipToSurfaceWater, sorFractionOfIrrigationToSurfaceWater,
     sorPondDepth, sorAddedDemand, sorNoCropUseMeansBareSoil,
@@ -22,8 +23,7 @@ type
     cpnlPrint: TCategoryPanel;
     clbPrint: TCheckListBox;
     cpnlOptions: TCategoryPanel;
-    rdgSoils: TRbwDataGrid4;
-    pnl1: TPanel;
+    rdgLandUse: TRbwDataGrid4;
     comboLandUsePerCell: TComboBox;
     lblLandUsePerCell: TLabel;
     rdeMinimumBareFraction: TRbwDataEntry;
@@ -33,7 +33,8 @@ type
     pnl2: TPanel;
     comboSpecifyCrops: TComboBox;
     lblSpecifyCrops: TLabel;
-    procedure rdgSoilsSelectCell(Sender: TObject; ACol, ARow: Integer;
+    cpnlDataSets: TCategoryPanel;
+    procedure rdgLandUseSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
   private
     procedure InitializeGrid;
@@ -51,22 +52,64 @@ var
 
 implementation
 
+uses
+  GoPhastTypes;
+
 {$R *.dfm}
 
 { TframePackageFmp4LandUse }
 
 procedure TframePackageFmp4LandUse.GetData(Package: TModflowPackageSelection);
 var
-  LandUsePackage: TFarmLandUse;
+  LandUsePackage: TFarmProcess4LandUse;
   PrintIndex: TLandUsePrint;
   procedure GetFarmOptionGrid(Row: TSoilOptionRows; Option: TFarmOption);
   begin
-    rdgSoils.Cells[Ord(socTransient), Ord(Row)] :=
+    rdgLandUse.Cells[Ord(socTransient), Ord(Row)] :=
       DontUseStaticTransient[Ord(Option)];
   end;
   procedure GetArrayListGrid(Row: TSoilOptionRows; ArrayList: TArrayList);
   begin
-    rdgSoils.ItemIndex[Ord(socArray), Ord(Row)] := Ord(ArrayList);
+    rdgLandUse.ItemIndex[Ord(socArray), Ord(Row)] := Ord(ArrayList);
+  end;
+  procedure GetFarmProperty(FarmProperty: TFarmProperty; ARow: Integer);
+  var
+    CanSelect: Boolean;
+  begin
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socTransient), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgLandUse.ItemIndex[Ord(socTransient), ARow] := Ord(FarmProperty.FarmOption);
+    end;
+
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socArray), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgLandUse.ItemIndex[Ord(socArray), ARow] := Ord(FarmProperty.ArrayList);
+    end;
+
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socSFAC), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgLandUse.Cells[Ord(socSFAC), ARow] := FarmProperty.UnitConversionScaleFactor;
+    end;
+
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socFile), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgLandUse.Cells[Ord(socFile), ARow] := FarmProperty.ExternalFileName;
+    end;
+
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socSfacFile), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgLandUse.Cells[Ord(socSfacFile), ARow] := FarmProperty.ExternalScaleFileName;
+    end;
   end;
 begin
   cpnlPrint.Collapse;
@@ -76,7 +119,7 @@ begin
   end;
 
   inherited;
-  LandUsePackage := Package as TFarmLandUse;
+  LandUsePackage := Package as TFarmProcess4LandUse;
 
   for PrintIndex := Low(TLandUsePrint) to High(TLandUsePrint) do
   begin
@@ -87,104 +130,81 @@ begin
   rdeMinimumBareFraction.RealValue := LandUsePackage.MinimumBareFraction;
   rdeRelaxFracHeadChange.RealValue := LandUsePackage.RelaxFracHeadChange;
 
-  rdgSoils.Cells[Ord(socTransient), Ord(sorSoilLocation)] := StaticTransient[Ord(LandUsePackage.SoilLocationChoice)];
+  rdgLandUse.BeginUpdate;
+  try
+    rdgLandUse.Cells[Ord(socTransient), Ord(sorSoilLocation)] := StaticTransient[Ord(LandUsePackage.SoilLocation)];
 
-  GetFarmOptionGrid(sorLandUseFraction, LandUsePackage.LandUseFractionChoice);
-  GetArrayListGrid(sorLandUseFraction, LandUsePackage.LandUseFractionArrayList);
-
-  GetFarmOption(comboSpecifyCrops, LandUsePackage.SpecifyCropsToPrint);
-
-  GetFarmOptionGrid(sorCropCoeffOrUse, LandUsePackage.CropCoeffOrUseChoice);
-  GetArrayListGrid(sorCropCoeffOrUse, LandUsePackage.CropCoefOrUseArrayList);
-  rdgSoils.ItemIndex[Ord(socOther), Ord(sorCropCoeffOrUse)] := Ord(LandUsePackage.CropCoefOrUse);
-
-  GetFarmOptionGrid(sorIrrigation, LandUsePackage.IrrigationChoice);
-  GetArrayListGrid(sorIrrigation, LandUsePackage.IrrigationArrayList);
-
-  GetFarmOptionGrid(sorRootDepth, LandUsePackage.RootDepthChoice);
-  GetArrayListGrid(sorRootDepth, LandUsePackage.RootDepthArrayList);
-
-  GetFarmOptionGrid(sorRootPressure, LandUsePackage.RootPressureChoice);
-
-  GetFarmOptionGrid(sorTranspirationFraction, LandUsePackage.TranspirationFractionChoice);
-  GetArrayListGrid(sorTranspirationFraction, LandUsePackage.TranspirationFractionArrayList);
-
-  GetFarmOptionGrid(sorEvapIrrigationFraction, LandUsePackage.EvapIrrigationFractionChoice);
-  GetArrayListGrid(sorEvapIrrigationFraction, LandUsePackage.EvapIrrigationFractionArrayList);
-
-  GetFarmOptionGrid(sorFractionOfPrecipToSurfaceWater, LandUsePackage.FractionOfPrecipToSurfaceWater);
-  GetArrayListGrid(sorFractionOfPrecipToSurfaceWater, LandUsePackage.FractionOfPrecipToSurfaceWaterArrayList);
-
-  GetFarmOptionGrid(sorFractionOfIrrigationToSurfaceWater, LandUsePackage.FractionOfIrrigationToSurfaceWater);
-  GetArrayListGrid(sorFractionOfIrrigationToSurfaceWater, LandUsePackage.FractionOfIrrigationToSurfaceWaterArrayList);
-
-  GetFarmOptionGrid(sorPondDepth, LandUsePackage.PondDepthChoice);
-
-  GetFarmOptionGrid(sorAddedDemand, LandUsePackage.AddedDemandChoice);
-  GetArrayListGrid(sorAddedDemand, LandUsePackage.AddedDemandArrayList);
-
-  GetFarmOptionGrid(sorNoCropUseMeansBareSoil, LandUsePackage.NoCropUseMeansBareSoilChoice);
-
-  GetFarmOptionGrid(sorET_IrrigFracCorrection, LandUsePackage.ET_IrrigFracCorrectionChoice);
-
+    GetFarmProperty(LandUsePackage.LandUseFraction, Ord(sorLandUseFraction));
+    GetFarmOption(comboSpecifyCrops, LandUsePackage.SpecifyCropsToPrint);
+    GetFarmProperty(LandUsePackage.CropCoeff, Ord(sorCropCoeff));
+    GetFarmProperty(LandUsePackage.ConsumptiveUse, Ord(sorConsumptiveUse));
+    GetFarmProperty(LandUsePackage.Irrigation, Ord(sorIrrigation));
+    GetFarmProperty(LandUsePackage.RootDepth, Ord(sorRootDepth));
+    GetFarmProperty(LandUsePackage.RootPressure, Ord(sorRootPressure));
+    GetFarmProperty(LandUsePackage.TranspirationFraction, Ord(sorTranspirationFraction));
+    GetFarmProperty(LandUsePackage.EvapIrrigationFraction, Ord(sorEvapIrrigationFraction));
+    GetFarmProperty(LandUsePackage.FractionOfPrecipToSurfaceWater, Ord(sorFractionOfPrecipToSurfaceWater));
+    GetFarmProperty(LandUsePackage.FractionOfIrrigationToSurfaceWater, Ord(sorFractionOfIrrigationToSurfaceWater));
+    GetFarmProperty(LandUsePackage.PondDepth, Ord(sorPondDepth));
+    GetFarmProperty(LandUsePackage.AddedDemand, Ord(sorAddedDemand));
+    GetFarmProperty(LandUsePackage.NoCropUseMeansBareSoil, Ord(sorNoCropUseMeansBareSoil));
+    GetFarmProperty(LandUsePackage.ET_IrrigFracCorrection, Ord(sorET_IrrigFracCorrection));
+  finally
+    rdgLandUse.EndUpdate;
+  end;
 end;
 
 procedure TframePackageFmp4LandUse.InitializeGrid;
 begin
-  rdgSoils.BeginUpdate;
+  rdgLandUse.BeginUpdate;
   try
-    rdgSoils.FixedCols := 1;
+    rdgLandUse.FixedCols := 1;
 
-    rdgSoils.Cells[Ord(socTransient), Ord(sorName)] := 'Frequency';
-    rdgSoils.Cells[Ord(socArray), Ord(sorName)] := 'Array or list';
-    rdgSoils.Cells[Ord(socOther), Ord(sorName)] := 'Method';
+    rdgLandUse.Cells[Ord(socTransient), Ord(sorName)] := StrFrequency;
+    rdgLandUse.Cells[Ord(socArray), Ord(sorName)] := StrArrayOrList;
+    rdgLandUse.Cells[Ord(socSFAC), Ord(sorName)] := StrUnitConversionScal;
+    rdgLandUse.Cells[Ord(socFile), Ord(sorName)] := StrExternallyGenerated;
+    rdgLandUse.Cells[Ord(socSfacFile), Ord(sorName)] := StrExternallyGeneratedSfac;
 
-    rdgSoils.Cells[Ord(socName), Ord(sorSoilLocation)] := 'Soil location';
-    rdgSoils.Cells[Ord(socName), Ord(sorLandUseFraction)] := 'Land use fraction';
-    rdgSoils.Cells[Ord(socName), Ord(sorCropCoeffOrUse)] := 'Crop coeff. or use';
-    rdgSoils.Cells[Ord(socName), Ord(sorIrrigation)] := 'Irrigation';
-    rdgSoils.Cells[Ord(socName), Ord(sorRootDepth)] := 'Root depth';
-    rdgSoils.Cells[Ord(socName), Ord(sorRootPressure)] := 'Root pressure';
-    rdgSoils.Cells[Ord(socName), Ord(sorTranspirationFraction)] := 'Transpiration fraction';
-    rdgSoils.Cells[Ord(socName), Ord(sorEvapIrrigationFraction)] := 'Evap irrig. fraction';
-    rdgSoils.Cells[Ord(socName), Ord(sorFractionOfPrecipToSurfaceWater)] := 'Fraction of precip. to surface water';
-    rdgSoils.Cells[Ord(socName), Ord(sorFractionOfIrrigationToSurfaceWater)] := 'Fraction of irrig. to surface water';
-    rdgSoils.Cells[Ord(socName), Ord(sorPondDepth)] := 'Pond depth';
-    rdgSoils.Cells[Ord(socName), Ord(sorAddedDemand)] := 'Added demand';
-    rdgSoils.Cells[Ord(socName), Ord(sorNoCropUseMeansBareSoil)] := 'No crop means bare soil';
-    rdgSoils.Cells[Ord(socName), Ord(sorET_IrrigFracCorrection)] := 'ET irrig. frac. correction';
+    rdgLandUse.Cells[Ord(socName), Ord(sorSoilLocation)] := 'Soil location';
+    rdgLandUse.Cells[Ord(socName), Ord(sorLandUseFraction)] := 'Land use fraction';
+    rdgLandUse.Cells[Ord(socName), Ord(sorCropCoeff)] := 'Crop coeff.';
+    rdgLandUse.Cells[Ord(socName), Ord(sorConsumptiveUse)] := 'Consumptive use';
+    rdgLandUse.Cells[Ord(socName), Ord(sorIrrigation)] := 'Irrigation';
+    rdgLandUse.Cells[Ord(socName), Ord(sorRootDepth)] := 'Root depth';
+    rdgLandUse.Cells[Ord(socName), Ord(sorRootPressure)] := 'Root pressure';
+    rdgLandUse.Cells[Ord(socName), Ord(sorTranspirationFraction)] := 'Transpiration fraction';
+    rdgLandUse.Cells[Ord(socName), Ord(sorEvapIrrigationFraction)] := 'Evap irrig. fraction';
+    rdgLandUse.Cells[Ord(socName), Ord(sorFractionOfPrecipToSurfaceWater)] := 'Fraction of precip. to surface water';
+    rdgLandUse.Cells[Ord(socName), Ord(sorFractionOfIrrigationToSurfaceWater)] := 'Fraction of irrig. to surface water';
+    rdgLandUse.Cells[Ord(socName), Ord(sorPondDepth)] := 'Pond depth';
+    rdgLandUse.Cells[Ord(socName), Ord(sorAddedDemand)] := 'Added demand';
+    rdgLandUse.Cells[Ord(socName), Ord(sorNoCropUseMeansBareSoil)] := 'No crop means bare soil';
+    rdgLandUse.Cells[Ord(socName), Ord(sorET_IrrigFracCorrection)] := 'ET irrig. frac. correction';
   finally
-    rdgSoils.EndUpdate;
+    rdgLandUse.EndUpdate;
   end;
 end;
-
-{
-  TSoilOptionColumns = (socName, socTransient, socArray, socOther);
-
-  TSoilOptionRows = (sorName, sorSoilLocation, sorLandUseFraction,
-    sorCropCoeffOrUse, sorIrrigation, sorRootDepth, sorRootPressure,
-    sorTranspirationFraction, sorEvapIrrigationFraction,
-    sorFractionOfPrecipToSurfaceWater, sorFractionOfIrrigationToSurfaceWater,
-    sorPondDepth, sorAddedDemand, sorNoCropUseMeansBareSoil,
-    sorET_IrrigFracCorrection);
-}
 
 procedure TframePackageFmp4LandUse.Loaded;
 begin
   inherited;
+  cpnlPrint.Collapse;
+  cpnlOptions.Collapse;
   InitializeGrid;
 end;
 
-procedure TframePackageFmp4LandUse.rdgSoilsSelectCell(Sender: TObject; ACol,
+procedure TframePackageFmp4LandUse.rdgLandUseSelectCell(Sender: TObject; ACol,
   ARow: Integer; var CanSelect: Boolean);
 var
   Column: TRbwColumn4;
   SoilRow: TSoilOptionRows;
+  SoilColumns: TSoilOptionColumns;
 begin
   inherited;
-  if (ACol = Ord(socTransient)) and not rdgSoils.Drawing then
+  if (ACol = Ord(socTransient)) and not rdgLandUse.Drawing then
   begin
-    Column := rdgSoils.Columns[Ord(socTransient)];
+    Column := rdgLandUse.Columns[Ord(socTransient)];
     if (ARow = Ord(sorSoilLocation)) then
     begin
       Column.PickList := StaticTransient;
@@ -195,40 +215,86 @@ begin
     end;
   end;
 
-  if (ACol = Ord(socArray)) then
-  begin
-    SoilRow := TSoilOptionRows(ARow);
-    CanSelect := SoilRow in [sorLandUseFraction, sorCropCoeffOrUse,
-      sorIrrigation, sorRootDepth, sorTranspirationFraction,
-      sorEvapIrrigationFraction, sorFractionOfPrecipToSurfaceWater,
-      sorFractionOfIrrigationToSurfaceWater, sorAddedDemand];
+  SoilColumns := TSoilOptionColumns(ACol);
+  SoilRow := TSoilOptionRows(ARow);
+  case SoilColumns of
+    socTransient: ;
+    socArray:
+      begin
+        CanSelect := SoilRow in [sorLandUseFraction, sorCropCoeff,
+          sorIrrigation, sorRootDepth, sorTranspirationFraction,
+          sorEvapIrrigationFraction, sorFractionOfPrecipToSurfaceWater,
+          sorFractionOfIrrigationToSurfaceWater, sorAddedDemand];
+      end;
+    socSFAC, socSfacFile:
+      begin
+        CanSelect := SoilRow in [sorLandUseFraction, sorCropCoeff,
+          sorConsumptiveUse, sorRootDepth, sorTranspirationFraction,
+          sorEvapIrrigationFraction, sorFractionOfPrecipToSurfaceWater,
+          sorFractionOfIrrigationToSurfaceWater, sorPondDepth, sorAddedDemand]
+      end;
   end;
-
-  if (ACol = Ord(socOther)) then
-  begin
-    SoilRow := TSoilOptionRows(ARow);
-    CanSelect := SoilRow = sorCropCoeffOrUse;
-  end;
-
 end;
 
 procedure TframePackageFmp4LandUse.SetData(Package: TModflowPackageSelection);
   function SetFarmOptionGrid(Row: TSoilOptionRows): TFarmOption;
   begin
-    Result := TFarmOption(DontUseStaticTransient.IndexOf(rdgSoils.Cells[Ord(socTransient), Ord(Row)]));
+    Result := TFarmOption(DontUseStaticTransient.IndexOf(rdgLandUse.Cells[Ord(socTransient), Ord(Row)]));
   end;
   function SetArrayListGrid(Row: TSoilOptionRows): TArrayList;
   begin
-    result := TArrayList(rdgSoils.ItemIndex[Ord(socArray), Ord(Row)]);
+    result := TArrayList(rdgLandUse.ItemIndex[Ord(socArray), Ord(Row)]);
+  end;
+  procedure SetFarmProperty(FarmProperty: TFarmProperty; ARow: TSoilOptionRows);
+  var
+    CanSelect: Boolean;
+  begin
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socTransient), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.FarmOption := SetFarmOptionGrid(ARow);
+    end;
+
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socArray), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.ArrayList := SetArrayListGrid(ARow);
+    end;
+
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socSFAC), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.UnitConversionScaleFactor :=
+        rdgLandUse.Cells[Ord(socSFAC), Ord(ARow)];
+    end;
+
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socFile), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.ExternalFileName :=
+        rdgLandUse.Cells[Ord(socFile), Ord(ARow)];
+    end;
+
+    CanSelect := True;
+    rdgLandUseSelectCell(rdgLandUse, Ord(socSfacFile), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.ExternalScaleFileName :=
+        rdgLandUse.Cells[Ord(socSfacFile), Ord(ARow)];
+    end;
   end;
 var
-  LandUsePackage: TFarmLandUse;
+  LandUsePackage: TFarmProcess4LandUse;
   PrintIndex: TLandUsePrint;
   PrintChoices: TLandUsePrints;
 begin
   inherited;
 
-  LandUsePackage := Package as TFarmLandUse;
+  LandUsePackage := Package as TFarmProcess4LandUse;
 
   PrintChoices := [];
   for PrintIndex := Low(TLandUsePrint) to High(TLandUsePrint) do
@@ -244,56 +310,23 @@ begin
   LandUsePackage.MinimumBareFraction := rdeMinimumBareFraction.RealValue;
   LandUsePackage.RelaxFracHeadChange := rdeRelaxFracHeadChange.RealValue;
 
-  LandUsePackage.SoilLocationChoice := TRequiredSteadyTransient(
-    StaticTransient.IndexOf(rdgSoils.Cells[Ord(socTransient), Ord(sorSoilLocation)]));
+  LandUsePackage.SoilLocation := TRequiredSteadyTransient(
+    StaticTransient.IndexOf(rdgLandUse.Cells[Ord(socTransient), Ord(sorSoilLocation)]));
 
-  LandUsePackage.LandUseFractionChoice := SetFarmOptionGrid(sorLandUseFraction);
-  LandUsePackage.LandUseFractionArrayList := SetArrayListGrid(sorLandUseFraction);
-
+  SetFarmProperty(LandUsePackage.LandUseFraction, sorLandUseFraction);
   LandUsePackage.SpecifyCropsToPrint := SetFarmOption(comboSpecifyCrops);
-
-  LandUsePackage.CropCoeffOrUseChoice := SetFarmOptionGrid(sorCropCoeffOrUse);
-  LandUsePackage.CropCoefOrUseArrayList := SetArrayListGrid(sorCropCoeffOrUse);
-  LandUsePackage.CropCoefOrUse :=
-    TCropCoefOrUse(rdgSoils.ItemIndex[Ord(socOther), Ord(sorCropCoeffOrUse)]);
-
-  LandUsePackage.IrrigationChoice := SetFarmOptionGrid(sorIrrigation);
-  LandUsePackage.IrrigationArrayList := SetArrayListGrid(sorIrrigation);
-
-  LandUsePackage.RootDepthChoice := SetFarmOptionGrid(sorRootDepth);
-  LandUsePackage.RootDepthArrayList := SetArrayListGrid(sorRootDepth);
-
-  LandUsePackage.RootPressureChoice := SetFarmOptionGrid(sorRootPressure);
-
-  LandUsePackage.TranspirationFractionChoice := SetFarmOptionGrid(sorTranspirationFraction);
-  LandUsePackage.TranspirationFractionArrayList := SetArrayListGrid(sorTranspirationFraction);
-
-  LandUsePackage.EvapIrrigationFractionChoice := SetFarmOptionGrid(sorEvapIrrigationFraction);
-  LandUsePackage.EvapIrrigationFractionArrayList := SetArrayListGrid(sorEvapIrrigationFraction);
-
-  LandUsePackage.FractionOfPrecipToSurfaceWater := SetFarmOptionGrid(sorFractionOfPrecipToSurfaceWater);
-  LandUsePackage.FractionOfPrecipToSurfaceWaterArrayList := SetArrayListGrid(sorFractionOfPrecipToSurfaceWater);
-
-  LandUsePackage.FractionOfIrrigationToSurfaceWater := SetFarmOptionGrid(sorFractionOfIrrigationToSurfaceWater);
-  LandUsePackage.FractionOfIrrigationToSurfaceWaterArrayList := SetArrayListGrid(sorFractionOfIrrigationToSurfaceWater);
-
-  LandUsePackage.PondDepthChoice := SetFarmOptionGrid(sorPondDepth);
-
-  LandUsePackage.AddedDemandChoice := SetFarmOptionGrid(sorAddedDemand);
-  LandUsePackage.AddedDemandArrayList := SetArrayListGrid(sorAddedDemand);
-
-  LandUsePackage.NoCropUseMeansBareSoilChoice := SetFarmOptionGrid(sorNoCropUseMeansBareSoil);
-
-  LandUsePackage.ET_IrrigFracCorrectionChoice := SetFarmOptionGrid(sorET_IrrigFracCorrection);
-
+  SetFarmProperty(LandUsePackage.CropCoeff, sorCropCoeff);
+  SetFarmProperty(LandUsePackage.Irrigation, sorIrrigation);
+  SetFarmProperty(LandUsePackage.RootDepth, sorRootDepth);
+  SetFarmProperty(LandUsePackage.RootPressure, sorRootPressure);
+  SetFarmProperty(LandUsePackage.TranspirationFraction, sorTranspirationFraction);
+  SetFarmProperty(LandUsePackage.EvapIrrigationFraction, sorEvapIrrigationFraction);
+  SetFarmProperty(LandUsePackage.FractionOfPrecipToSurfaceWater, sorFractionOfPrecipToSurfaceWater);
+  SetFarmProperty(LandUsePackage.FractionOfIrrigationToSurfaceWater, sorFractionOfIrrigationToSurfaceWater);
+  SetFarmProperty(LandUsePackage.PondDepth, sorPondDepth);
+  SetFarmProperty(LandUsePackage.AddedDemand, sorAddedDemand);
+  SetFarmProperty(LandUsePackage.NoCropUseMeansBareSoil, sorNoCropUseMeansBareSoil);
+  SetFarmProperty(LandUsePackage.ET_IrrigFracCorrection, sorET_IrrigFracCorrection);
 end;
-
-//initialization
-//  CropCoOrUseChoices := TStringList.Create;
-//  CropCoOrUseChoices.Add('Crop Coefficient');
-//  CropCoOrUseChoices.Add('Consumptive Use');
-//
-//finalization
-//  CropCoOrUseChoices.Free;
 
 end.

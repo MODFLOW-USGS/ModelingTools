@@ -8,7 +8,7 @@ uses
   Vcl.StdCtrls, ModflowPackageSelectionUnit, Vcl.Grids, RbwDataGrid4;
 
 type
-  TClimateColumns = (ccName, ccFrequency, ccArrayList, ccOther, ccScaleFactor,
+  TClimateColumns = (ccName, ccFrequency, ccOther, ccScaleFactor,
     ccExternalFile, ccScaleExternal);
   TClimateRows =  (crName, crPrecip, crRefEt, crPotEtBare, crDirRech,
     crPrecipPotCons);
@@ -69,13 +69,6 @@ var
     end;
 
     CanSelect := True;
-    rdgClimateSelectCell(rdgClimate, Ord(ccArrayList), ARow, CanSelect);
-    if CanSelect then
-    begin
-      rdgClimate.ItemIndex[Ord(ccArrayList), ARow] := Ord(FarmProperty.ArrayList);
-    end;
-
-    CanSelect := True;
     rdgClimateSelectCell(rdgClimate, Ord(ccScaleFactor), ARow, CanSelect);
     if CanSelect then
     begin
@@ -116,7 +109,6 @@ begin
 
     rdgClimate.FixedCols := 1;
     rdgClimate.Cells[Ord(ccFrequency), Ord(crName)] := StrUse;
-    rdgClimate.Cells[Ord(ccArrayList), Ord(crName)] := StrArrayOrList;
     rdgClimate.Cells[Ord(ccOther), Ord(crName)] := StrOption;
     rdgClimate.Cells[Ord(ccScaleFactor), Ord(crName)] := StrUnitConversionScal;
     rdgClimate.Cells[Ord(ccExternalFile), Ord(crName)] := StrExternallyGenerated;
@@ -172,10 +164,6 @@ var
   begin
     result := TFarmOption(rdgClimate.ItemIndex[Ord(ccFrequency), Ord(ARow)]);
   end;
-  function RowToArrayList(ARow: TClimateRows): TArrayList;
-  begin
-    result := TArrayList(rdgClimate.ItemIndex[Ord(ccArrayList), Ord(ARow)]);
-  end;
   procedure SetFarmProperty(FarmProperty: TFarmProperty; ARow: TClimateRows);
   var
     CanSelect: Boolean;
@@ -185,13 +173,6 @@ var
     if CanSelect then
     begin
       FarmProperty.FarmOption := RowToFarmOption(ARow);
-    end;
-
-    CanSelect := True;
-    rdgClimateSelectCell(rdgClimate, Ord(ccArrayList), Ord(ARow), CanSelect);
-    if CanSelect then
-    begin
-      FarmProperty.ArrayList := RowToArrayList(ARow);
     end;
 
     CanSelect := True;

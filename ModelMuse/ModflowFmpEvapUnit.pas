@@ -745,8 +745,14 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-//    Assert(False);
-    Model.InvalidateMfFmpEvap(self);
+    if Model.ModelSelection = msModflowFmp then
+    begin
+      Model.InvalidateMfFmpEvap(self);
+    end
+    else
+    begin
+      Model.InvalidateMfFmp4Evap(self);
+    end;
   end;
 end;
 
@@ -889,7 +895,17 @@ begin
   AddTimeList(FRefEvapRateData);
   if Model <> nil then
   begin
-    FRefEvapRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmpEvap;
+    if Model.ModelSelection = msModflowFmp then
+    begin
+      FRefEvapRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmpEvap;
+    end
+    {$IFDEF OWHMV2}
+    else if Model.ModelSelection = msModflowOwhm2 then
+    begin
+      FRefEvapRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmp4Evap;
+    end
+    {$ENDIF}
+    ;
   end;
 end;
 

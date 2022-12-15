@@ -49,7 +49,7 @@ inherited framePackageFmp4Soils: TframePackageFmp4Soils
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end
       item
         AutoAdjustRowHeights = True

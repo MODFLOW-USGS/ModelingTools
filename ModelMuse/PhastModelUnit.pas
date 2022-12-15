@@ -560,6 +560,8 @@ const
   KSaturatedSpecificG = 'Saturated_Specific_Gravity';
   KInitialElasticSpec = 'Initial_Elastic_Specific_Storage';
   KFarmID = 'Farm_ID';
+  KRefET = 'Reference_ET';
+  KPrecipitation = 'Precipitation';
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -2886,6 +2888,8 @@ that affects the model output should also have a comment. }
     function Farm4ProcessUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4TransientFarmsUsed(Sender: TObject): boolean; virtual;
+    function FarmProcess4SteadyPrecipUsed(Sender: TObject): boolean; virtual;
+    function FarmProcess4SteadyRefETUsed(Sender: TObject): boolean; virtual;
 
     function GroundSurfaceUsed(Sender: TObject): boolean; virtual;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; virtual;
@@ -3206,6 +3210,8 @@ that affects the model output should also have a comment. }
 
     // relates to Farm ID in FMP4.
     procedure InvalidateMfFmp4FarmID(Sender: TObject);
+    procedure InvalidateMfFmp4Precip(Sender: TObject);
+    procedure InvalidateMfFmp4Evap(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4722,6 +4728,8 @@ that affects the model output should also have a comment. }
     function FarmProcess3IsSelected: Boolean;
     function FarmProcess4IsSelected: Boolean;
     function FarmProcess4TransientFarmIsSelected: Boolean;
+    function FarmProcess4TransientRefEtIsSelected: Boolean;
+    function FarmProcess4TransientPrecipIsSelected: Boolean;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -6119,6 +6127,8 @@ resourcestring
   StrMODFLOW6Dispersion_ATH1 = 'MODFLOW 6 Dispersion Package: ATH1';
   StrMODFLOW6Dispersion_ATH2 = 'MODFLOW 6 Dispersion Package: ATH2';
   StrFarmID = KFarmID;
+  StrRefET = KRefET;
+  StrPrecipitation = KPrecipitation;
 
 const
   StatFlagStrings : array[Low(TStatFlag)..High(TStatFlag)] of string
@@ -23207,6 +23217,62 @@ begin
   result := FarmProcess4TransientFarmIsSelected;
 end;
 
+function TPhastModel.FarmProcess4TransientPrecipIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  LocalModflowPackages: TModflowPackages;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection =  msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmClimate4.TransientPrecipUsed(nil);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      LocalModflowPackages := ChildModels[ChildIndex].ChildModel.ModflowPackages;
+      result :=
+        LocalModflowPackages.FarmProcess4.IsSelected
+        and LocalModflowPackages.FarmClimate4.TransientPrecipUsed(nil);
+      if result then
+      begin
+        break;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientRefEtIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  LocalModflowPackages: TModflowPackages;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection =  msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmClimate4.TransientEvapUsed(nil);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      LocalModflowPackages := ChildModels[ChildIndex].ChildModel.ModflowPackages;
+      result :=
+        LocalModflowPackages.FarmProcess4.IsSelected
+        and LocalModflowPackages.FarmClimate4.TransientEvapUsed(nil);
+      if result then
+      begin
+        break;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.Farm4ProcessUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -25543,9 +25609,19 @@ begin
   ModflowPackages.FhbPackage.MfFhbHeads.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfFmp4Evap(Sender: TObject);
+begin
+  ModflowPackages.FarmClimate4.MfFmp4EvapRate.Invalidate;
+end;
+
 procedure TCustomModel.InvalidateMfFmp4FarmID(Sender: TObject);
 begin
   ModflowPackages.FarmProcess4.MfFmp4FarmID.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4Precip(Sender: TObject);
+begin
+  ModflowPackages.FarmClimate4.MfFmp4Precip.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmpCropID(Sender: TObject);
@@ -34402,6 +34478,28 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4SteadyPrecipUsed(Sender: TObject): boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and (ModflowPackages.FarmClimate4.StaticPrecipUsed(Sender));
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4SteadyRefETUsed(Sender: TObject): boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and (ModflowPackages.FarmClimate4.StaticEvapUsed(Sender));
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4TransientFarmsUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
@@ -36294,7 +36392,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 1;
+  OWHM4DataSets  = 3;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -39109,6 +39207,34 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, WBS Location';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KRefET;
+  FDataArrayCreationRecords[Index].DisplayName := StrRefET;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadyRefETUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, CLIMATE: REFERENCE_ET';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KPrecipitation;
+  FDataArrayCreationRecords[Index].DisplayName := StrPrecipitation;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadyPrecipUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, CLIMATE: PRECIPITATION';
   Inc(Index);
 
   {$ENDIF}

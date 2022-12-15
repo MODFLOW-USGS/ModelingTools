@@ -23,7 +23,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
       Caption = 'Print'
       Collapsed = True
       TabOrder = 0
-      ExplicitWidth = 185
       ExpandedHeight = 89
       object clbPrint: TCheckListBox
         Left = 0
@@ -32,7 +31,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Height = 0
         Align = alClient
         Enabled = False
-        ItemHeight = 15
         Items.Strings = (
           'PRINT BYFARM'
           'PRINT BYFARM_BYCROP'
@@ -45,7 +43,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
       Height = 313
       Caption = 'Options'
       TabOrder = 1
-      ExplicitWidth = 185
       object pnl1: TPanel
         Left = 0
         Top = 0
@@ -98,7 +95,7 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Width = 416
         Height = 222
         Align = alClient
-        ColCount = 3
+        ColCount = 6
         Enabled = False
         FixedCols = 1
         RowCount = 8
@@ -187,6 +184,78 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
             PickList.Strings = (
               'Array'
               'List')
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
             WordWrapCaptions = True
             WordWrapCells = False
             CaseSensitivePicklist = False

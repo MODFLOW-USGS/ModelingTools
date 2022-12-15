@@ -1,6 +1,6 @@
 (*
 
-Fast Memory Manager 4.992
+Fast Memory Manager 4.993
 
 Description:
  A fast replacement memory manager for Embarcadero Delphi Win32 applications
@@ -9,7 +9,8 @@ Description:
  files.
 
 Homepage:
- https://github.com/pleriche/FastMM4
+ Version 4: https://github.com/pleriche/FastMM4
+ Version 5: https://github.com/pleriche/FastMM5
 
 Advantages:
  - Fast
@@ -58,33 +59,20 @@ License:
  License 2.1 (LGPL 2.1, available from
  http://www.opensource.org/licenses/lgpl-license.php). If you find FastMM useful
  or you would like to support further development, a donation would be much
- appreciated. My banking details are:
-   Country: South Africa
-   Bank: ABSA Bank Ltd
-   Branch: Somerset West
-   Branch Code: 334-712
-   Account Name: PSD (Distribution)
-   Account No.: 4041827693
-   Swift Code: ABSAZAJJ
+ appreciated.
  My PayPal account is:
-   bof@psd.co.za
+   paypal@leriche.org
 
 Contact Details:
  My contact details are shown below if you would like to get in touch with me.
  If you use this memory manager I would like to hear from you: please e-mail me
  your comments - good and bad.
- Snailmail:
-   PO Box 2514
-   Somerset West
-   7129
-   South Africa
  E-mail:
-   plr@psd.co.za
+   fastmm@leriche.org
 
 Support:
  If you have trouble using FastMM, you are welcome to drop me an e-mail at the
- address above, or you may post your questions in the BASM newsgroup on the
- Embarcadero news server (which is where I hang out quite frequently).
+ address above.
 
 Disclaimer:
  FastMM has been tested extensively with both single and multithreaded
@@ -849,6 +837,24 @@ Change log:
     immediately during a FreeMem call the block will added to a list of blocks
     that will be freed later, either in the background cleanup thread or during
     the next call to FreeMem.
+  Version 4.993 (10 August 2021)
+  - Added some "address space slack" under FullDebugMode. This reserves a
+    block of address space on startup (currently 5MB) that is released just
+    before the first time an EOutOfMemory exception is raised, allowing some
+    GetMem calls following the initial EOutOfMemory to succeed. This allows
+    the application to perform any error logging and other shutdown operations
+    successfully that would have failed it the address space was actually
+    completely exhausted. (Under FullDebugMode address space is never released
+    back to the operating system so once the address space has been exhausted
+    there is very little room to manoeuvre.)
+  - Added the RestrictDebugDLLLoadPath option to only load the debug DLL from
+    the host module directory.
+  - Performance and other enhancements to the call stack generation. (Thanks to
+    Andreas Hausladen.)
+  - Added FastMM artwork. (Thanks to Jim McKeeth.)
+  - Added the FastMM_GetInstallationState function:  Allows determination of
+    whether FastMM is installed or not, and if not whether the default memory
+    manager is in use or a different third party memory manager.
 
 *)
 
@@ -1102,9 +1108,6 @@ interface
 
 {Instruct GExperts to back up the messages file as well.}
 {#BACKUP FastMM4Messages.pas}
-{#BACKUP FastMM_OSXUtil.pas}
-{#BACKUP FastMM4DataCollector.pas}
-{#BACKUP FastMM4LockFreeStack.pas}
 
 {Should debug info be disabled?}
 {$ifdef NoDebugInfo}
@@ -1133,7 +1136,7 @@ interface
 {-------------------------Public constants-----------------------------}
 const
   {The current version of FastMM}
-  FastMMVersion = '4.991';
+  FastMMVersion = '4.993';
   {The number of small block types}
 {$ifdef Align16Bytes}
   NumSmallBlockTypes = 46;
@@ -1172,6 +1175,9 @@ type
   PNativeUInt = ^Cardinal;
   IntPtr = Integer;
   UIntPtr = Cardinal;
+  {$else}
+  NativeUInt = PtrUInt;
+  PNativeUInt = ^PtrUInt;
   {$endif}
 {$endif}
 
@@ -1237,6 +1243,16 @@ type
 
   {The callback procedure for WalkAllocatedBlocks.}
   TWalkAllocatedBlocksCallback = procedure(APBlock: Pointer; ABlockSize: NativeInt; AUserData: Pointer);
+
+  TFastMM_MemoryManagerInstallationState = (
+    {The default memory manager is currently in use.}
+    mmisDefaultMemoryManagerInUse,
+    {Another third party memory manager has been installed.}
+    mmisOtherThirdPartyMemoryManagerInstalled,
+    {A shared memory manager is being used.}
+    mmisUsingSharedMemoryManager,
+    {This memory manager has been installed.}
+    mmisInstalled);
 
 {--------------------------Public variables----------------------------}
 var
@@ -1379,12 +1395,14 @@ function FastGetHeapStatus: THeapStatus;
 {Returns statistics about the current state of the memory manager}
 procedure GetMemoryManagerState(var AMemoryManagerState: TMemoryManagerState);
 {Returns a summary of the information returned by GetMemoryManagerState}
-procedure GetMemoryManagerUsageSummary(
-  var AMemoryManagerUsageSummary: TMemoryManagerUsageSummary);
+function GetMemoryManagerUsageSummary: TMemoryManagerUsageSummary; overload;
+procedure GetMemoryManagerUsageSummary(var AMemoryManagerUsageSummary: TMemoryManagerUsageSummary); overload;
 {$ifndef POSIX}
 {Gets the state of every 64K block in the 4GB address space}
 procedure GetMemoryMap(var AMemoryMap: TMemoryMap);
 {$endif}
+{Returns the current installation state of the memory manager.}
+function FastMM_GetInstallationState: TFastMM_MemoryManagerInstallationState;
 
 {$ifdef EnableMemoryLeakReporting}
 {Registers expected memory leaks. Returns true on success. The list of leaked
@@ -1453,14 +1471,19 @@ const
   {The pattern used to fill unused memory}
   DebugFillByte = $80;
 {$ifdef 32Bit}
-  DebugFillPattern = $01010101 * Cardinal(DebugFillByte);
+  DebugFillPattern = $01010101 * Cardinal(DebugFillByte); // Default value $80808080
   {The address that is reserved so that accesses to the address of the fill
    pattern will result in an A/V. (Not used under 64-bit, since the upper half
    of the address space is always reserved by the OS.)}
-  DebugReservedAddress = $01010000 * Cardinal(DebugFillByte);
+  DebugReservedAddress = $01010000 * Cardinal(DebugFillByte); // Default value $80800000
 {$else}
   DebugFillPattern = $8080808080808080;
 {$endif}
+  {The number of bytes of address space that cannot be allocated under FullDebugMode.  This block is reserved on
+  startup and freed the first time the system runs out of address space.  This allows some subsequent memory allocation
+  requests to succeed in order to allow the application to allocate some memory for error handling, etc. in response to
+  the first EOutOfMemory exception.}
+  FullDebugModeAddressSpaceSlack = 5 * 1024 * 1024;
 
 {-------------------------FullDebugMode structures--------------------}
 type
@@ -1573,6 +1596,9 @@ uses
   FastMM4Messages;
 
 {$ifdef fpc}
+const
+  clib = 'c';
+
 function valloc(__size:size_t):pointer;cdecl;external clib name 'valloc';
 procedure free(__ptr:pointer);cdecl;external clib name 'free';
 function usleep(__useconds:dword):longint;cdecl;external clib name 'usleep';
@@ -2125,6 +2151,10 @@ var
   {The 64K block of reserved memory used to trap invalid memory accesses using
    fields in a freed object.}
   ReservedBlock: Pointer;
+  {Points to a block of size FullDebugModeAddressSpaceSlack that is freed the first time the system runs out of memory.
+  Memory is never release under FullDebugMode, so this allows the application to continue to function for a short while
+  after the first EOutOfMemory exception.}
+  AddressSpaceSlackPtr: Pointer;
   {The virtual method index count - used to get the virtual method index for a
    virtual method call on a freed object.}
   VMIndex: Integer;
@@ -2306,7 +2336,7 @@ end;
 {Compare [AAddress], CompareVal:
  If Equal: [AAddress] := NewVal and result = CompareVal
  If Unequal: Result := [AAddress]}
-function LockCmpxchg(CompareVal, NewVal: Byte; AAddress: PByte): Byte; {$ifdef fpc64bit}nostackframe;{$endif}
+function LockCmpxchg(CompareVal, NewVal: Byte; AAddress: PByte): Byte; {$ifdef fpc64bit}assembler; nostackframe;{$endif}
 asm
 {$ifdef 32Bit}
   {On entry:
@@ -2337,7 +2367,7 @@ end;
 
 {$ifndef ASMVersion}
 {Gets the first set bit in the 32-bit number, returning the bit index}
-function FindFirstSetBit(ACardinal: Cardinal): Cardinal; {$ifdef fpc64bit} nostackframe; {$endif}
+function FindFirstSetBit(ACardinal: Cardinal): Cardinal; {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 64Bit}
   {$ifndef unix}
@@ -2495,7 +2525,7 @@ end;
 {Fixed size move operations ignore the size parameter. All moves are assumed to
  be non-overlapping.}
 
-procedure Move4(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move4(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   mov eax, [eax]
@@ -2513,7 +2543,7 @@ asm
 end;
 
 {$ifdef 64Bit}
-procedure Move8(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move8(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifndef unix}
 .noframe
@@ -2526,7 +2556,7 @@ asm
 end;
 {$endif}
 
-procedure Move12(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move12(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   mov ecx, [eax]
@@ -2551,7 +2581,7 @@ asm
 {$endif}
 end;
 
-procedure Move20(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move20(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   mov ecx, [eax]
@@ -2581,7 +2611,7 @@ asm
 end;
 
 {$ifdef 64Bit}
-procedure Move24(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move24(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
   {$ifndef unix}
 .noframe
@@ -2598,7 +2628,7 @@ asm
 end;
 {$endif}
 
-procedure Move28(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move28(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   mov ecx, [eax]
@@ -2635,7 +2665,7 @@ asm
 {$endif}
 end;
 
-procedure Move36(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move36(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   fild qword ptr [eax]
@@ -2669,7 +2699,7 @@ asm
 end;
 
 {$ifdef 64Bit}
-procedure Move40(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move40(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
   {$ifndef unix}
 .noframe
@@ -2690,7 +2720,7 @@ asm
 end;
 {$endif}
 
-procedure Move44(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move44(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   fild qword ptr [eax]
@@ -2729,7 +2759,7 @@ asm
 {$endif}
 end;
 
-procedure Move52(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move52(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   fild qword ptr [eax]
@@ -2771,7 +2801,7 @@ asm
 end;
 
 {$ifdef 64Bit}
-procedure Move56(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move56(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
   {$ifndef unix}
 .noframe
@@ -2796,7 +2826,7 @@ asm
 end;
 {$endif}
 
-procedure Move60(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move60(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   fild qword ptr [eax]
@@ -2843,7 +2873,7 @@ asm
 {$endif}
 end;
 
-procedure Move68(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure Move68(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   fild qword ptr [eax]
@@ -2896,7 +2926,7 @@ end;
  SizeOf(Pointer). Important note: Always moves at least 16 - SizeOf(Pointer)
  bytes (the minimum small block size with 16 byte alignment), irrespective of
  ACount.}
-procedure MoveX16LP(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure MoveX16LP(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   {Make the counter negative based: The last 12 bytes are moved separately}
@@ -3022,7 +3052,7 @@ end;
  SizeOf(Pointer). Important note: Always moves at least 8 - SizeOf(Pointer)
  bytes (the minimum small block size with 8 byte alignment), irrespective of
  ACount.}
-procedure MoveX8LP(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure MoveX8LP(const ASource; var ADest; ACount: NativeInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   {Make the counter negative based: The last 4 bytes are moved separately}
@@ -3196,7 +3226,7 @@ end;
 
 {Fills a block of memory with the given dword (32-bit) or qword (64-bit).
  Always fills a multiple of SizeOf(Pointer) bytes}
-procedure DebugFillMem(var AAddress; AByteCount: NativeInt; AFillValue: NativeUInt); {$ifdef fpc64bit} nostackframe; {$endif}
+procedure DebugFillMem(var AAddress; AByteCount: NativeInt; AFillValue: NativeUInt); {$ifdef fpc64bit} assembler; nostackframe; {$endif}
 asm
 {$ifdef 32Bit}
   {On Entry:
@@ -3564,18 +3594,53 @@ begin
   Result := Pointer(PByte(ADestination) + ACount);
 end;
 
+{$ifdef EnableMemoryLeakReportingUsesQualifiedClassName}
+type
+  PClassData = ^TClassData;
+  TClassData = record
+    ClassType: TClass;
+    ParentInfo: Pointer;
+    PropCount: SmallInt;
+    UnitName: ShortString;
+  end;
+{$endif EnableMemoryLeakReportingUsesQualifiedClassName}
+
 {Appends the name of the class to the destination buffer and returns the new
  destination position}
 function AppendClassNameToBuffer(AClass: TClass; ADestination: PAnsiChar): PAnsiChar;
 var
+{$ifdef EnableMemoryLeakReportingUsesQualifiedClassName}
+  FirstUnitNameChar: PAnsiChar;
+  LClassInfo: Pointer;
+  LPUnitName: PShortString;
+{$endif EnableMemoryLeakReportingUsesQualifiedClassName}
   LPClassName: PShortString;
 begin
   {Get a pointer to the class name}
   if AClass <> nil then
   begin
+    Result := ADestination;
+{$ifdef EnableMemoryLeakReportingUsesQualifiedClassName}
+    // based on TObject.UnitScope
+    LClassInfo := AClass.ClassInfo;
+    if LClassInfo <> nil then // prepend the UnitName
+    begin
+      LPUnitName := @(PClassData(IntPtr(LClassInfo) + 2 + IntPtr(PByte(IntPtr(LClassInfo) + 1)^))^.UnitName);
+      FirstUnitNameChar := @LPUnitName^[1];
+      if FirstUnitNameChar^ <> '@' then
+        Result := AppendStringToBuffer(FirstUnitNameChar, Result, Length(LPUnitName^))
+      else // Pos does no memory allocations, so it is safe to use
+      begin // Skip the '@', then copy until the ':' - never seen this happen in Delphi, but might be a C++ thing
+        Result := AppendStringToBuffer(@LPUnitName^[2], Result, Pos(ShortString(':'), LPUnitName^) - 2)
+        ;
+      end;
+      // dot between unit name and class name:
+      Result := AppendStringToBuffer('.', Result, Length('.'));
+    end;
+{$endif EnableMemoryLeakReportingUsesQualifiedClassName}
     LPClassName := PShortString(PPointer(PByte(AClass) + vmtClassName)^);
     {Append the class name}
-    Result := AppendStringToBuffer(@LPClassName^[1], ADestination, Length(LPClassName^));
+    Result := AppendStringToBuffer(@LPClassName^[1], Result, Length(LPClassName^));
   end
   else
   begin
@@ -5041,6 +5106,15 @@ begin
 {$endif}
           {Done}
           MediumBlocksLocked := False;
+{$ifdef LogLockContention}
+{$ifndef FullDebugMode}
+          if Assigned(ACollector) then
+          begin
+            GetStackTrace(@LStackTrace, StackTraceDepth, 1);
+            ACollector.Add(@LStackTrace[0], StackTraceDepth);
+          end;
+{$endif}
+{$endif}
           Exit;
 {$ifndef FullDebugMode}
         end;
@@ -5122,7 +5196,7 @@ begin
     else
     begin
       {Allocate a Large block}
-      if ASize > 0 then 
+      if ASize > 0 then
       begin
         Result := AllocateLargeBlock(ASize {$ifdef LogLockContention}, LDidSleep{$endif});
 {$ifdef LogLockContention}
@@ -5136,10 +5210,10 @@ begin
   end;
 {$ifdef LogLockContention}
 {$ifndef FullDebugMode}
-  if Assigned(ACollector) then 
+  if Assigned(ACollector) then
   begin
     GetStackTrace(@LStackTrace, StackTraceDepth, 1);
-    MediumBlockCollector.Add(@LStackTrace[0], StackTraceDepth);
+    ACollector.Add(@LStackTrace[0], StackTraceDepth);
   end;
 {$endif}
 {$endif}
@@ -8695,7 +8769,8 @@ const
   {Declared here, because it is not declared in the SHFolder.pas unit of some older Delphi versions.}
   SHGFP_TYPE_CURRENT = 0;
 var
-  LFileHandle, LBytesWritten: Cardinal;
+  LFileHandle: THandle;
+  LBytesWritten: Cardinal;
   LEventHeader: array[0..1023] of AnsiChar;
   LAlternateLogFileName: array[0..2047] of AnsiChar;
   LPathLen, LNameLength: Integer;
@@ -9632,13 +9707,23 @@ begin
       else
       begin
 {$ifdef LogLockContention}
-        if assigned(LCollector) then 
+        if assigned(LCollector) then
         begin
           GetStackTrace(@LStackTrace, StackTraceDepth, 1);
           LCollector.Add(@LStackTrace[0], StackTraceDepth);
         end;
 {$endif LogLockContention}
         Result := nil;
+      end;
+    end
+    else
+    begin
+      {The process ran out of address space:  Release the address space slack so that some subsequent GetMem calls will
+      succeed in order for any error logging, etc. to complete successfully.}
+      if AddressSpaceSlackPtr <> nil then
+      begin
+        VirtualFree(AddressSpaceSlackPtr, 0, MEM_RELEASE);
+        AddressSpaceSlackPtr := nil;
       end;
     end;
   finally
@@ -11729,8 +11814,7 @@ begin
 end;
 
 {Returns a summary of the information returned by GetMemoryManagerState}
-procedure GetMemoryManagerUsageSummary(
-  var AMemoryManagerUsageSummary: TMemoryManagerUsageSummary);
+function GetMemoryManagerUsageSummary: TMemoryManagerUsageSummary;
 var
   LMMS: TMemoryManagerState;
   LAllocatedBytes, LReservedBytes: NativeUInt;
@@ -11739,10 +11823,8 @@ begin
   {Get the memory manager state}
   GetMemoryManagerState(LMMS);
   {Add up the totals}
-  LAllocatedBytes := LMMS.TotalAllocatedMediumBlockSize
-    + LMMS.TotalAllocatedLargeBlockSize;
-  LReservedBytes := LMMS.ReservedMediumBlockAddressSpace
-    + LMMS.ReservedLargeBlockAddressSpace;
+  LAllocatedBytes := LMMS.TotalAllocatedMediumBlockSize + LMMS.TotalAllocatedLargeBlockSize;
+  LReservedBytes := LMMS.ReservedMediumBlockAddressSpace + LMMS.ReservedLargeBlockAddressSpace;
   for LSBTIndex := 0 to NumSmallBlockTypes - 1 do
   begin
     Inc(LAllocatedBytes, LMMS.SmallBlockTypeStates[LSBTIndex].UseableBlockSize
@@ -11750,15 +11832,17 @@ begin
     Inc(LReservedBytes, LMMS.SmallBlockTypeStates[LSBTIndex].ReservedAddressSpace);
   end;
   {Set the structure values}
-  AMemoryManagerUsageSummary.AllocatedBytes := LAllocatedBytes;
-  AMemoryManagerUsageSummary.OverheadBytes := LReservedBytes - LAllocatedBytes;
+  Result.AllocatedBytes := LAllocatedBytes;
+  Result.OverheadBytes := LReservedBytes - LAllocatedBytes;
   if LReservedBytes > 0 then
-  begin
-    AMemoryManagerUsageSummary.EfficiencyPercentage :=
-      LAllocatedBytes / LReservedBytes * 100;
-  end
+    Result.EfficiencyPercentage := LAllocatedBytes / LReservedBytes * 100
   else
-    AMemoryManagerUsageSummary.EfficiencyPercentage := 100;
+    Result.EfficiencyPercentage := 100;
+end;
+
+procedure GetMemoryManagerUsageSummary(var AMemoryManagerUsageSummary: TMemoryManagerUsageSummary);
+begin
+  AMemoryManagerUsageSummary := GetMemoryManagerUsageSummary;
 end;
 
 {$ifndef POSIX}
@@ -12024,6 +12108,25 @@ begin
   LargeBlocksCircularList.NextLargeBlockHeader := @LargeBlocksCircularList;
 end;
 
+{Returns the current installation state of the memory manager.}
+function FastMM_GetInstallationState: TFastMM_MemoryManagerInstallationState;
+begin
+  if IsMemoryManagerSet then
+  begin
+    if FastMMIsInstalled then
+    begin
+      if IsMemoryManagerOwner then
+        Result := mmisInstalled
+      else
+        Result := mmisUsingSharedMemoryManager;
+    end
+    else
+      Result := mmisOtherThirdPartyMemoryManagerInstalled
+  end
+  else
+    Result := mmisDefaultMemoryManagerInUse;
+end;
+
 {$ifdef LogLockContention}
 procedure ReportLockContention;
 var
@@ -12039,13 +12142,13 @@ begin
   LargeBlockCollector.GetData(mergedData, mergedCount);
   MediumBlockCollector.GetData(data, count);
   LargeBlockCollector.Merge(mergedData, mergedCount, data, count);
-  for i := 0 to High(SmallBlockTypes) do 
+  for i := 0 to High(SmallBlockTypes) do
   begin
     SmallBlockTypes[i].BlockCollector.GetData(data, count);
     LargeBlockCollector.Merge(mergedData, mergedCount, data, count);
   end;
 
-  if mergedCount > 0 then 
+  if mergedCount > 0 then
   begin
     FillChar(LErrorMessage, SizeOf(LErrorMessage), 0);
     FillChar(LMessageTitleBuffer, SizeOf(LMessageTitleBuffer), 0);
@@ -12069,8 +12172,10 @@ begin
       LMsgPtr := AppendStringToBuffer(CRLF, LMsgPtr, Length(CRLF));
     end;
     AppendStringToModuleName(LockingReportTitle, LMessageTitleBuffer);
+{$ifndef NoMessageBoxes}
     ShowMessageBox(LErrorMessage, LMessageTitleBuffer);
-    for i := 4 to 10 do 
+{$endif}
+    for i := 4 to 10 do
     begin
       if i > mergedCount then
         break; //for i
@@ -12371,6 +12476,14 @@ var
   LInd, LSizeInd, LMinimumPoolSize, LOptimalPoolSize, LGroupNumber,
     LBlocksPerPool, LPreviousBlockSize: Cardinal;
   LPMediumFreeBlock: PMediumFreeBlock;
+{$ifdef FullDebugMode}
+  {$ifdef LoadDebugDLLDynamically}
+    {$ifdef RestrictDebugDLLLoadPath}
+    LModuleHandle: HModule;
+    LFullFileName: array[0..2047] of Char;
+    {$endif}
+  {$endif}
+{$endif}
 {$ifdef UseReleaseStack}
   LSlot: Integer;
 {$endif}
@@ -12378,7 +12491,35 @@ begin
 {$ifdef FullDebugMode}
   {$ifdef LoadDebugDLLDynamically}
   {Attempt to load the FullDebugMode DLL dynamically.}
+
+{$ifdef RestrictDebugDLLLoadPath}
+  FullDebugModeDLL := 0;
+  LModuleHandle := 0;
+{$ifndef borlndmmdll}
+  if IsLibrary then
+    LModuleHandle := HInstance;
+{$endif}
+
+  LSizeInd := GetModuleFileName(LModuleHandle, LFullFileName, Sizeof(LFullFileName) div SizeOf(Char));
+  while LSizeInd > 0 do
+  begin
+    Dec(LSizeInd);
+    if LFullFileName[LSizeInd] = '\' then
+      Break;
+  end;
+  if (LSizeInd > 0) and (LSizeInd + Cardinal(Length(FullDebugModeLibraryName)) + 1 < Sizeof(LFullFileName) div SizeOf(Char)) then
+  begin
+    LInd := 1;
+    repeat
+      LFullFileName[LSizeInd + LInd] := FullDebugModeLibraryName[LInd];
+      Inc(LInd);
+    until LInd > Cardinal(Length(FullDebugModeLibraryName));
+    LFullFileName[LSizeInd + LInd] := #0;
+    FullDebugModeDLL := LoadLibrary(LFullFileName);
+  end;
+{$else}
   FullDebugModeDLL := LoadLibrary(FullDebugModeLibraryName);
+{$endif}
   if FullDebugModeDLL <> 0 then
   begin
     GetStackTrace := GetProcAddress(FullDebugModeDLL,
@@ -12551,8 +12692,10 @@ begin
   begin
 {$ifdef FullDebugMode}
   {$ifdef 32Bit}
-    {Try to reserve the 64K block covering address $80808080}
+    {Try to reserve the 64K block covering address $80808080 so pointers with DebugFillPattern will A/V}
     ReservedBlock := VirtualAlloc(Pointer(DebugReservedAddress), 65536, MEM_RESERVE, PAGE_NOACCESS);
+    {Allocate the address space slack.}
+    AddressSpaceSlackPtr := VirtualAlloc(nil, FullDebugModeAddressSpaceSlack, MEM_RESERVE or MEM_TOP_DOWN, PAGE_NOACCESS);
   {$endif}
 {$endif}
 {$ifdef MMSharingEnabled}
@@ -12755,6 +12898,12 @@ begin
       VirtualFree(ReservedBlock, 0, MEM_RELEASE);
       ReservedBlock := nil;
     end;
+    {Release the address space slack}
+    if AddressSpaceSlackPtr <> nil then
+    begin
+      VirtualFree(AddressSpaceSlackPtr, 0, MEM_RELEASE);
+      AddressSpaceSlackPtr := nil;
+    end;
 {$endif}
   end;
 {$ifndef DetectMMOperationsAfterUninstall}
@@ -12906,11 +13055,13 @@ begin
         and DelphiIsRunning
     {$endif}
     {$ifdef RequireDebuggerPresenceForLeakReporting}
+        {$ifndef fpc}
         and ((DebugHook <> 0)
         {$ifdef PatchBCBTerminate}
         or (Assigned(pCppDebugHook) and (pCppDebugHook^ <> 0))
         {$endif PatchBCBTerminate}
         )
+        {$endif}
     {$endif}
     {$ifdef ManualLeakReportingControl}
         and ReportMemoryLeaksOnShutdown

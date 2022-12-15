@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspFmp4SalinityFlush
+    ActivePage = jvspFmp4Allotments
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -11758,17 +11758,22 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 595
           Height = 359
+          VertScrollBar.Position = 0
           ExplicitWidth = 595
           ExplicitHeight = 359
           inherited cpnlSalinityFlush: TCategoryPanel
-            ExplicitWidth = 591
+            Top = 244
+            ExplicitTop = 244
+            ExplicitWidth = 574
             inherited rdgSalinityFlush: TRbwDataGrid4
-              Width = 589
+              Width = 572
               FixedCols = 0
             end
           end
           inherited cpnlOptions: TCategoryPanel
+            Top = 153
             Enabled = True
+            ExplicitTop = 30
             ExplicitWidth = 591
             inherited lblSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE: TLabel
               Width = 265
@@ -11778,9 +11783,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlPrint: TCategoryPanel
+            Top = 0
+            ExplicitTop = 0
             ExplicitWidth = 591
             inherited clbPrint: TCheckListBox
-              Width = 589
+              Width = 572
               ItemHeight = 18
               ExplicitWidth = 572
             end
@@ -11933,29 +11940,16 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 78
           ExplicitHeight = 18
         end
-        inherited lblSURFACE_WATER: TLabel
-          Width = 96
-          Height = 18
-          ExplicitWidth = 96
-          ExplicitHeight = 18
-        end
-        inherited lblGROUNDWATER: TLabel
-          Width = 89
-          Height = 18
-          ExplicitWidth = 89
-          ExplicitHeight = 18
-        end
         inherited memoComments: TMemo
           Width = 564
           ExplicitWidth = 564
         end
-        inherited comboSURFACE_WATER: TComboBox
-          Height = 26
-          ExplicitHeight = 26
-        end
-        inherited comboGROUNDWATER: TComboBox
-          Height = 26
-          ExplicitHeight = 26
+        inherited rdgAllotments: TRbwDataGrid4
+          Width = 595
+          Height = 359
+          FixedCols = 0
+          ExplicitWidth = 595
+          ExplicitHeight = 359
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -11966,10 +11960,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               Control = framePkgFmp4Allotments.memoComments
             end
             item
-              Control = framePkgFmp4Allotments.comboSURFACE_WATER
-            end
-            item
-              Control = framePkgFmp4Allotments.comboGROUNDWATER
+              Control = framePkgFmp4Allotments.rdgAllotments
             end>
         end
       end
@@ -12008,17 +11999,49 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 595
           ExplicitWidth = 595
+          inherited cpnlDataSets: TCategoryPanel
+            ExplicitWidth = 591
+            inherited rdgLandUse: TRbwDataGrid4
+              Width = 589
+              FixedCols = 0
+            end
+          end
+          inherited cpnlOptions: TCategoryPanel
+            ExplicitWidth = 574
+            ExpandedHeight = 30
+            inherited lblLandUsePerCell: TLabel
+              Width = 118
+              Height = 18
+              ExplicitWidth = 118
+              ExplicitHeight = 18
+            end
+            inherited lblMinimumBareFraction: TLabel
+              Width = 154
+              Height = 18
+              ExplicitWidth = 154
+              ExplicitHeight = 18
+            end
+            inherited lblRelaxFracHeadChange: TLabel
+              Width = 232
+              Height = 18
+              ExplicitWidth = 232
+              ExplicitHeight = 18
+            end
+            inherited comboLandUsePerCell: TComboBox
+              Height = 26
+            end
+          end
           inherited cpnlPrint: TCategoryPanel
             ExplicitWidth = 574
+            ExpandedHeight = 229
             inherited clbPrint: TCheckListBox
               Width = 572
               ItemHeight = 18
               ExplicitWidth = 572
-              ExplicitHeight = 162
             end
             inherited pnl2: TPanel
+              Top = -37
               Width = 572
-              ExplicitTop = 162
               ExplicitWidth = 572
               inherited lblSpecifyCrops: TLabel
                 Width = 146
@@ -12027,41 +12050,6 @@ inherited frmModflowPackages: TfrmModflowPackages
                 ExplicitHeight = 18
               end
               inherited comboSpecifyCrops: TComboBox
-                Height = 26
-                ExplicitHeight = 26
-              end
-            end
-          end
-          inherited cpnlOptions: TCategoryPanel
-            ExplicitTop = 229
-            ExplicitWidth = 574
-            inherited rdgSoils: TRbwDataGrid4
-              Width = 572
-              FixedCols = 0
-              ExplicitWidth = 572
-            end
-            inherited pnl1: TPanel
-              Width = 572
-              ExplicitWidth = 572
-              inherited lblLandUsePerCell: TLabel
-                Width = 118
-                Height = 18
-                ExplicitWidth = 118
-                ExplicitHeight = 18
-              end
-              inherited lblMinimumBareFraction: TLabel
-                Width = 154
-                Height = 18
-                ExplicitWidth = 154
-                ExplicitHeight = 18
-              end
-              inherited lblRelaxFracHeadChange: TLabel
-                Width = 232
-                Height = 18
-                ExplicitWidth = 232
-                ExplicitHeight = 18
-              end
-              inherited comboLandUsePerCell: TComboBox
                 Height = 26
                 ExplicitHeight = 26
               end
@@ -12092,7 +12080,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               Control = framePkgFmp4LandUse.rdeRelaxFracHeadChange
             end
             item
-              Control = framePkgFmp4LandUse.rdgSoils
+              Control = framePkgFmp4LandUse.rdgLandUse
             end>
         end
       end

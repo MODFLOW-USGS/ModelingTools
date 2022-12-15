@@ -87,8 +87,8 @@ type
     FFarmSurfaceWater4: TFarmProcess4SurfaceWater;
     FFarmSoil4: TFarmProcess4Soil;
     FFarmAllotments: TFarmProcess4Allotments;
-    FFarmLandUse: TFarmLandUse;
-    FFarmSalinityFlush: TFarmSalinityFlush;
+    FFarmLandUse: TFarmProcess4LandUse;
+    FFarmSalinityFlush: TFarmProcess4SalinityFlush;
     FFarmClimate4: TFarmProcess4Climate;
     FFarmWells4: TFarmProcess4Wells;
     procedure SetChdBoundary(const Value: TChdPackage);
@@ -167,8 +167,8 @@ type
     procedure SetFarmProcess4(const Value: TFarmProcess4);
     procedure SetFarmAllotments(const Value: TFarmProcess4Allotments);
     procedure SetFarmClimate4(const Value: TFarmProcess4Climate);
-    procedure SetFarmLandUse(const Value: TFarmLandUse);
-    procedure SetFarmSalinityFlush(const Value: TFarmSalinityFlush);
+    procedure SetFarmLandUse(const Value: TFarmProcess4LandUse);
+    procedure SetFarmSalinityFlush(const Value: TFarmProcess4SalinityFlush);
     procedure SetFarmSoil4(const Value: TFarmProcess4Soil);
     procedure SetFarmSurfaceWater4(const Value: TFarmProcess4SurfaceWater);
     procedure SetFarmWells4(const Value: TFarmProcess4Wells);
@@ -345,12 +345,12 @@ type
       stored False
     {$ENDIF}
       ;
-    property FarmLandUse: TFarmLandUse read FFarmLandUse write SetFarmLandUse
+    property FarmLandUse: TFarmProcess4LandUse read FFarmLandUse write SetFarmLandUse
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
       ;
-    property FarmSalinityFlush: TFarmSalinityFlush read FFarmSalinityFlush
+    property FarmSalinityFlush: TFarmProcess4SalinityFlush read FFarmSalinityFlush
       write SetFarmSalinityFlush
     {$IFNDEF OWHMV2}
       stored False
@@ -964,12 +964,12 @@ begin
   FFarmAllotments.Classification := StrFarmProcessClassification;
   FFarmAllotments.SelectionType := stCheckBox;
 
-  FFarmLandUse := TFarmLandUse.Create(Model);
+  FFarmLandUse := TFarmProcess4LandUse.Create(Model);
   FFarmLandUse.PackageIdentifier := StrLANDUSEFarmProce;
   FFarmLandUse.Classification := StrFarmProcessClassification;
   FFarmLandUse.SelectionType := stCheckBox;
 
-  FFarmSalinityFlush := TFarmSalinityFlush.Create(Model);
+  FFarmSalinityFlush := TFarmProcess4SalinityFlush.Create(Model);
   FFarmSalinityFlush.PackageIdentifier := StrSALINITYFLUSHIRRIG;
   FFarmSalinityFlush.Classification := StrFarmProcessClassification;
   FFarmSalinityFlush.SelectionType := stCheckBox;
@@ -1514,7 +1514,7 @@ begin
   FFarmClimate4.Assign(Value);
 end;
 
-procedure TModflowPackages.SetFarmLandUse(const Value: TFarmLandUse);
+procedure TModflowPackages.SetFarmLandUse(const Value: TFarmProcess4LandUse);
 begin
   FFarmLandUse.Assign(Value);
 end;
@@ -1530,7 +1530,7 @@ begin
 end;
 
 procedure TModflowPackages.SetFarmSalinityFlush(
-  const Value: TFarmSalinityFlush);
+  const Value: TFarmProcess4SalinityFlush);
 begin
   FFarmSalinityFlush.Assign(Value);
 end;

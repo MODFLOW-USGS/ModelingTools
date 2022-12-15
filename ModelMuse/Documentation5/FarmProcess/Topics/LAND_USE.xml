@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-07T14:34:55.082-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2022-12-15T10:27:25.070-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -538,24 +538,6 @@
           <para styleclass="Normal"> &#160; &#160;If MIN_BARE_FRACTION is set to 1 or greater, then Bare Soil Calculations are disabled (Even for Crop ID &lt; 1 and Fallowed Crops).</para>
           <para styleclass="Normal"> &#160; &#160;If not specified it defaults to 0.000001</para>
           <para styleclass="Normal">FLOAT input that specifies a minimum required fraction of cell area to simulate bare soil. This only pertains to model cells that are not defined with a land use (Crop). For example, if a model cell has two crops that fractionally compose 0.66 and 0.33 of the model-cell area, then the bare-soil area is 0.01 of model-cell area. If the minimum fraction of area is set to 0.02, then FMP ignores the bare-soil portion of this example model cell. If keyword is not specified, then the default minimum fraction is 1E-12.</para>
-        </td>
-      </tr>
-    </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION]]></caption></toggle></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
-      <tr style="vertical-align:top">
-        <td>
-          <para styleclass="Normal">Check if FEI needs to be corrected so FEI + FTR = 1 when FEI + FTR &gt; 1</para>
-          <para styleclass="Normal"> &#160; &#160;<link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L] is optional. If LAI[S,T,L] is not specified,</para>
-          <para styleclass="Normal"> &#160; &#160;then all Crops have correction.</para>
-          <para styleclass="Normal"> &#160; &#160;If included then specify <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link> records that have either</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; a &#160;1 to enable FEI = 1 - FTR correction if FEI + FTR &gt; 1</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; or 0 to not use feature</para>
-          <para styleclass="Normal"></para>
-          <para styleclass="Normal"> If not specified, the default is not to check nor correct FEI + FTR &gt; 1</para>
-          <para styleclass="Normal"> &#160; which is ok since it is possible to have highly evaporative irrigation (like sprinklers)</para>
-          <para styleclass="Normal"></para>
-          <para styleclass="Normal"></para>
         </td>
       </tr>
     </table></para>

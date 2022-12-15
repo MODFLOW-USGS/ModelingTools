@@ -1571,7 +1571,7 @@ type
 //    FFmpFarm_Node: TJvPageIndexNode;
     FFarmWell_Node: TJvPageIndexNode;
     FFarmPrecip_Node: TJvPageIndexNode;
-    FFarmRevEvap_Node: TJvPageIndexNode;
+    FFarmRefEvap_Node: TJvPageIndexNode;
     FFarmCropID_Node: TJvPageIndexNode;
     FFarmID_Node: TJvPageIndexNode;
     FCfpPipe_Node: TJvPageIndexNode;
@@ -3873,7 +3873,7 @@ begin
     begin
       // do nothing
     end
-    else if jvtlModflowBoundaryNavigator.Selected = FFarmRevEvap_Node then
+    else if jvtlModflowBoundaryNavigator.Selected = FFarmRefEvap_Node then
     begin
       // do nothing
     end
@@ -4929,7 +4929,7 @@ begin
         BoundaryNodeList.Add(FFarmID_Node);
         BoundaryNodeList.Add(FFarmWell_Node);
         BoundaryNodeList.Add(FFarmPrecip_Node);
-        BoundaryNodeList.Add(FFarmRevEvap_Node);
+        BoundaryNodeList.Add(FFarmRefEvap_Node);
         BoundaryNodeList.Add(FFarmCropID_Node);
         BoundaryNodeList.Add(FCfpPipe_Node);
         BoundaryNodeList.Add(FCfpFixedHead_Node);
@@ -5419,9 +5419,9 @@ end;
 
 procedure TfrmScreenObjectProperties.FarmRefEvapChanged(Sender: TObject);
 begin
-  if (FFarmRevEvap_Node <> nil) and (FFarmRevEvap_Node.StateIndex <> 3) then
+  if (FFarmRefEvap_Node <> nil) and (FFarmRefEvap_Node.StateIndex <> 3) then
   begin
-    FFarmRevEvap_Node.StateIndex := 2;
+    FFarmRefEvap_Node.StateIndex := 2;
   end;
 end;
 
@@ -7777,29 +7777,34 @@ begin
   begin
     frameFarmPrecip.SetData(FNewProperties,
       (FFarmPrecip_Node.StateIndex = 2),
-      (FFarmPrecip_Node.StateIndex = 1) and frmGoPhast.PhastModel.FarmProcess3IsSelected);
+      (FFarmPrecip_Node.StateIndex = 1)
+      and (frmGoPhast.PhastModel.FarmProcess3IsSelected
+      or frmGoPhast.PhastModel.FarmProcess4TransientPrecipIsSelected));
   end;
 
-  if (FFarmRevEvap_Node <> nil) then
+  if (FFarmRefEvap_Node <> nil) then
   begin
     frameFarmRefEvap.SetData(FNewProperties,
-      (FFarmRevEvap_Node.StateIndex = 2),
-      (FFarmRevEvap_Node.StateIndex = 1) and frmGoPhast.PhastModel.FarmProcess3IsSelected);
+      (FFarmRefEvap_Node.StateIndex = 2),
+      (FFarmRefEvap_Node.StateIndex = 1)
+      and (frmGoPhast.PhastModel.FarmProcess3IsSelected
+      or frmGoPhast.PhastModel.FarmProcess4TransientRefEtIsSelected));
   end;
 
   if (FFarmCropID_Node <> nil) then
   begin
     frameFarmCropID.SetData(FNewProperties,
       (FFarmCropID_Node.StateIndex = 2),
-      (FFarmCropID_Node.StateIndex = 1) and frmGoPhast.PhastModel.FarmProcess3IsSelected);
+      (FFarmCropID_Node.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess3IsSelected);
   end;
 
   if (FFarmID_Node <> nil) then
   begin
     frameFarmID.SetData(FNewProperties,
       (FFarmID_Node.StateIndex = 2),
-      (FFarmID_Node.StateIndex = 1) and
-      (frmGoPhast.PhastModel.FarmProcess3IsSelected
+      (FFarmID_Node.StateIndex = 1)
+      and (frmGoPhast.PhastModel.FarmProcess3IsSelected
       or frmGoPhast.PhastModel.FarmProcess4TransientFarmIsSelected));
   end;
 
@@ -14314,15 +14319,29 @@ end;
 procedure TfrmScreenObjectProperties.CreateFarmPrecipNode(AScreenObject: TScreenObject);
 var
   Node: TJvPageIndexNode;
+  Fmp3used: Boolean;
+  Farm4Used: Boolean;
+  PackageName: string;
 begin
   FFarmPrecip_Node := nil;
-  if frmGoPhast.PhastModel.FarmProcess3IsSelected
+  Fmp3used := frmGoPhast.PhastModel.FarmProcess3IsSelected
     and (frmGoPhast.PhastModel.ModflowPackages.
-    FarmProcess.Precipitation = pSpatiallyDistributed)
+    FarmProcess.Precipitation = pSpatiallyDistributed);
+  Farm4Used := frmGoPhast.PhastModel.FarmProcess4TransientPrecipIsSelected;
+  if (Fmp3used or Farm4Used)
     and (AScreenObject.ViewDirection = vdTop) then
   begin
+    if Fmp3used then
+    begin
+      PackageName := frmGoPhast.PhastModel.ModflowPackages.FarmProcess.PackageIdentifier;
+    end
+    else
+    begin
+      Assert(Farm4Used);
+      PackageName := frmGoPhast.PhastModel.ModflowPackages.FarmClimate4.PackageIdentifier;
+    end;
     Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format(StrFarmPrecipInS,
-      [frmGoPhast.PhastModel.ModflowPackages.FarmProcess.PackageIdentifier]))
+      [PackageName]))
       as TJvPageIndexNode;
     Node.PageIndex := jvspFarmPrecip.PageIndex;
     frameFarmPrecip.pnlCaption.Caption := Node.Text;
@@ -14334,21 +14353,35 @@ end;
 procedure TfrmScreenObjectProperties.CreateFarmRefEvapNode(AScreenObject: TScreenObject);
 var
   Node: TJvPageIndexNode;
+  Farm3Used: Boolean;
+  Farm4Used: Boolean;
+  PackageName: string;
 begin
-  FFarmRevEvap_Node := nil;
-  if frmGoPhast.PhastModel.FarmProcess3IsSelected
+  FFarmRefEvap_Node := nil;
+  Farm3Used := frmGoPhast.PhastModel.FarmProcess3IsSelected
     and (frmGoPhast.PhastModel.ModflowPackages.
     FarmProcess.ConsumptiveUse in
-    [cuPotentialAndReferenceET, cuCropCoefficient])
+    [cuPotentialAndReferenceET, cuCropCoefficient]);
+  Farm4Used := frmGoPhast.PhastModel.FarmProcess4TransientRefEtIsSelected;
+  if (Farm3Used or Farm4Used)
     and (AScreenObject.ViewDirection = vdTop) then
   begin
+    if Farm3Used then
+    begin
+      PackageName := frmGoPhast.PhastModel.ModflowPackages.FarmProcess.PackageIdentifier;
+    end
+    else
+    begin
+      Assert(Farm4Used);
+      PackageName := frmGoPhast.PhastModel.ModflowPackages.FarmClimate4.PackageIdentifier;
+    end;
     Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format(StrFarmRefEvapIn,
-      [frmGoPhast.PhastModel.ModflowPackages.FarmProcess.PackageIdentifier]))
+      [PackageName]))
       as TJvPageIndexNode;
     Node.PageIndex := jvspFarmRefEvap.PageIndex;
     frameFarmRefEvap.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
-    FFarmRevEvap_Node := Node;
+    FFarmRefEvap_Node := Node;
   end;
 end;
 
@@ -15091,7 +15124,9 @@ var
   Boundary: TFmpRefEvapBoundary;
 begin
   if not frmGoPhast.PhastModel.FarmProcess3IsSelected
-    and not frmGoPhast.PhastModel.FarmProcess4TransientFarmIsSelected then
+    and not frmGoPhast.PhastModel.FarmProcess4TransientRefEtIsSelected
+//    and not frmGoPhast.PhastModel.FarmProcess4TransientFarmIsSelected
+    then
   begin
     Exit;
   end;
@@ -15103,9 +15138,9 @@ begin
     UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
   end;
 
-  if FFarmRevEvap_Node <> nil then
+  if FFarmRefEvap_Node <> nil then
   begin
-    FFarmRevEvap_Node.StateIndex := Ord(State)+1;
+    FFarmRefEvap_Node.StateIndex := Ord(State)+1;
   end;
   frameFarmRefEvap.GetData(FNewProperties);
 
@@ -15115,11 +15150,14 @@ begin
   end;
   frameFarmCropID.GetData(FNewProperties);
 
-  if FFarmID_Node <> nil then
+  if frmGoPhast.PhastModel.FarmProcess3IsSelected then
   begin
-    FFarmID_Node.StateIndex := Ord(State)+1;
+    if FFarmID_Node <> nil then
+    begin
+      FFarmID_Node.StateIndex := Ord(State)+1;
+    end;
+    frameFarmID.GetData(FNewProperties);
   end;
-  frameFarmID.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetCfpPipes

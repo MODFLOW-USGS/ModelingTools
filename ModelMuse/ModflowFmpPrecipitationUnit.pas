@@ -757,8 +757,14 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-//    Assert(False);
-    Model.InvalidateMfFmpPrecip(self);
+    if Model.ModelSelection = msModflowFmp then
+    begin
+      Model.InvalidateMfFmpPrecip(self);
+    end
+    else
+    begin
+      Model.InvalidateMfFmp4Precip(self);
+    end;
   end;
 end;
 
@@ -900,10 +906,17 @@ begin
   FPrecipRateData.NonParamDescription := StrPrecipitationRate;
   FPrecipRateData.ParamDescription := ' ' + LowerCase(StrPrecipitationRate);
   AddTimeList(FPrecipRateData);
-  if Model <> nil then
+  if Model.ModelSelection = msModflowFmp then
   begin
     FPrecipRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmpPrecip;
-  end;
+  end
+  {$IFDEF OWHMV2}
+  else if Model.ModelSelection = msModflowOwhm2 then
+  begin
+    FPrecipRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmp4Precip;
+  end
+  {$ENDIF}
+  ;
 end;
 
 destructor TFmpPrecipTimeListLink.Destroy;

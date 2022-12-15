@@ -9,7 +9,7 @@ uses
   ModflowPackageSelectionUnit, Vcl.Mask, JvExMask, JvSpin, ArgusDataEntry;
 
 type
-  TSalinityFlushColumns = (sfcName, sfcTransient, sfcArray);
+  TSalinityFlushColumns = (sfcName, sfcTransient, sfcArray, sfcSFAC, sfcFile, sfcSfacFile);
   TSalinityFlushRows = (sfrName, sfrFarmSaltConcentrations,
     sfrFarmIrrigationUniformity, sfrCropSalinityDemand, sfrCropSalinityTolerance,
     sfrCropMaxLeach, sfrCropLeachRequirement, sfrCropExtraWaterChoice);
@@ -43,6 +43,9 @@ var
 
 implementation
 
+uses
+  GoPhastTypes;
+
 {$R *.dfm}
 
 { TframePackageFmp4SalinityFlush }
@@ -58,8 +61,48 @@ procedure TframePackageFmp4SalinityFlush.GetData(
   begin
     rdgSalinityFlush.ItemIndex[Ord(sfcArray), Ord(Row)] := Ord(ArrayList);
   end;
+  procedure GetFarmProperty(FarmProperty: TFarmProperty; ARow: Integer);
+  var
+    CanSelect: Boolean;
+  begin
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcTransient), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgSalinityFlush.ItemIndex[Ord(sfcTransient), ARow] := Ord(FarmProperty.FarmOption);
+    end;
+
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcArray), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgSalinityFlush.ItemIndex[Ord(sfcArray), ARow] := Ord(FarmProperty.ArrayList);
+    end;
+
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcSFAC), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgSalinityFlush.Cells[Ord(sfcSFAC), ARow] := FarmProperty.UnitConversionScaleFactor;
+    end;
+
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcFile), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgSalinityFlush.Cells[Ord(sfcFile), ARow] := FarmProperty.ExternalFileName;
+    end;
+
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcSfacFile), ARow, CanSelect);
+    if CanSelect then
+    begin
+      rdgSalinityFlush.Cells[Ord(sfcSfacFile), ARow] := FarmProperty.ExternalScaleFileName;
+    end;
+//  TSalinityFlushColumns = (sfcName, sfcTransient, sfcArray, sfcSFAC, sfcFile, sfcSfacFile);
+  end;
 var
-  SalinityFlush: TFarmSalinityFlush;
+  SalinityFlush: TFarmProcess4SalinityFlush;
   PrintIndex: TSalinityFlushPrint;
 begin
   cpnlPrint.Collapse;
@@ -68,7 +111,7 @@ begin
     cpnlgrp1.VertScrollBar.Position := 0;
   end;
   inherited;
-  SalinityFlush := Package as TFarmSalinityFlush;
+  SalinityFlush := Package as TFarmProcess4SalinityFlush;
 
   for PrintIndex := Low(TSalinityFlushPrint) to High(TSalinityFlushPrint) do
   begin
@@ -78,18 +121,13 @@ begin
   seExpressionLength.AsInteger := SalinityFlush.ExpressionLength;
   rdeExpressionMin.RealValue := SalinityFlush.ExpressionMin;
 
-  GetFarmOptionGrid(sfrFarmSaltConcentrations, SalinityFlush.FarmSaltConcentrationsChoice);
-  GetFarmOptionGrid(sfrFarmIrrigationUniformity, SalinityFlush.FarmIrrigationUniformityChoice);
-  GetFarmOptionGrid(sfrCropSalinityDemand, SalinityFlush.CropSalinityDemandChoice);
-  GetArrayListGrid(sfrCropSalinityDemand, SalinityFlush.CropSalinityDemandArrayList);
-  GetFarmOptionGrid(sfrCropSalinityTolerance, SalinityFlush.CropSalinityToleranceChoice);
-  GetFarmOptionGrid(sfrCropMaxLeach, SalinityFlush.CropMaxLeachChoice);
-  GetFarmOptionGrid(sfrCropLeachRequirement, SalinityFlush.CropLeachRequirementChoice);
-  GetFarmOptionGrid(sfrCropExtraWaterChoice, SalinityFlush.CropExtraWaterChoice);
-//  TSalinityFlushRows = (sfrName, sfrFarmSaltConcentrations,
-//    sfrFarmIrrigationUniformity, sfrCropSalinityDemand, sfrCropSalinityTolerance,
-//    sfrCropMaxLeach, sfrCropLeachRequirement, sfrCropExtraWaterChoice);
-
+  GetFarmProperty(SalinityFlush.FarmSaltConcentrationsChoice, Ord(sfrFarmSaltConcentrations));
+  GetFarmProperty(SalinityFlush.FarmIrrigationUniformityChoice, Ord(sfrFarmIrrigationUniformity));
+  GetFarmProperty(SalinityFlush.CropSalinityDemandChoice, Ord(sfrCropSalinityDemand));
+  GetFarmProperty(SalinityFlush.CropSalinityToleranceChoice, Ord(sfrCropSalinityTolerance));
+  GetFarmProperty(SalinityFlush.CropMaxLeachChoice, Ord(sfrCropMaxLeach));
+  GetFarmProperty(SalinityFlush.CropLeachRequirementChoice, Ord(sfrCropLeachRequirement));
+  GetFarmProperty(SalinityFlush.CropExtraWaterChoice, Ord(sfrCropExtraWaterChoice));
 end;
 
 procedure TframePackageFmp4SalinityFlush.InitilizeGrid;
@@ -98,8 +136,11 @@ begin
   try
     rdgSalinityFlush.FixedCols := 1;
 
-    rdgSalinityFlush.Cells[Ord(sfcTransient), Ord(sfrName)] := 'Frequency';
-    rdgSalinityFlush.Cells[Ord(sfcArray), Ord(sfrName)] := 'Array or list';
+    rdgSalinityFlush.Cells[Ord(sfcTransient), Ord(sfrName)] := StrFrequency;
+    rdgSalinityFlush.Cells[Ord(sfcArray), Ord(sfrName)] := StrArrayOrList;
+    rdgSalinityFlush.Cells[Ord(sfcSFAC), Ord(sfrName)] := StrUnitConversionScal;
+    rdgSalinityFlush.Cells[Ord(sfcFile), Ord(sfrName)] := StrExternallyGenerated;
+    rdgSalinityFlush.Cells[Ord(sfcSfacFile), Ord(sfrName)] := StrExternallyGeneratedSfac;
 
     rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrFarmSaltConcentrations)] := 'Farm salt concentration';
     rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrFarmIrrigationUniformity)] := 'Farm irrigation uniformity';
@@ -143,13 +184,55 @@ procedure TframePackageFmp4SalinityFlush.SetData(
   begin
     result := TArrayList(rdgSalinityFlush.ItemIndex[Ord(sfcArray), Ord(Row)]);
   end;
+  procedure SetFarmProperty(FarmProperty: TFarmProperty; ARow: TSalinityFlushRows);
+  var
+    CanSelect: Boolean;
+  begin
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcTransient), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.FarmOption := SetFarmOptionGrid(ARow);
+    end;
+
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcArray), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.ArrayList := SetArrayListGrid(ARow);
+    end;
+
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcSFAC), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.UnitConversionScaleFactor :=
+        rdgSalinityFlush.Cells[Ord(sfcSFAC), Ord(ARow)];
+    end;
+
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcFile), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.ExternalFileName :=
+        rdgSalinityFlush.Cells[Ord(sfcFile), Ord(ARow)];
+    end;
+
+    CanSelect := True;
+    rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcSfacFile), Ord(ARow), CanSelect);
+    if CanSelect then
+    begin
+      FarmProperty.ExternalScaleFileName :=
+        rdgSalinityFlush.Cells[Ord(sfcSfacFile), Ord(ARow)];
+    end;
+  end;
 var
-  SalinityFlush: TFarmSalinityFlush;
+  SalinityFlush: TFarmProcess4SalinityFlush;
   PrintOptions: TSalinityFlushPrints;
   PrintIndex: TSalinityFlushPrint;
 begin
   inherited;
-  SalinityFlush := Package as TFarmSalinityFlush;
+  SalinityFlush := Package as TFarmProcess4SalinityFlush;
 
   PrintOptions := [];
   for PrintIndex := Low(TSalinityFlushPrint) to High(TSalinityFlushPrint) do
@@ -164,14 +247,13 @@ begin
   seExpressionLength.AsInteger := SalinityFlush.ExpressionLength;
   rdeExpressionMin.RealValue := SalinityFlush.ExpressionMin;
 
-  SalinityFlush.FarmSaltConcentrationsChoice := SetFarmOptionGrid(sfrFarmSaltConcentrations);
-  SalinityFlush.FarmIrrigationUniformityChoice := SetFarmOptionGrid(sfrFarmIrrigationUniformity);
-  SalinityFlush.CropSalinityDemandChoice := SetFarmOptionGrid(sfrCropSalinityDemand);
-  SalinityFlush.CropSalinityDemandArrayList := SetArrayListGrid(sfrCropSalinityDemand);
-  SalinityFlush.CropSalinityToleranceChoice := SetFarmOptionGrid(sfrCropSalinityTolerance);
-  SalinityFlush.CropMaxLeachChoice := SetFarmOptionGrid(sfrCropMaxLeach);
-  SalinityFlush.CropLeachRequirementChoice := SetFarmOptionGrid(sfrCropLeachRequirement);
-  SalinityFlush.CropExtraWaterChoice := SetFarmOptionGrid(sfrCropExtraWaterChoice);
+  SetFarmProperty(SalinityFlush.FarmSaltConcentrationsChoice, sfrFarmSaltConcentrations);
+  SetFarmProperty(SalinityFlush.FarmIrrigationUniformityChoice, sfrFarmIrrigationUniformity);
+  SetFarmProperty(SalinityFlush.CropSalinityDemandChoice, sfrCropSalinityDemand);
+  SetFarmProperty(SalinityFlush.CropSalinityToleranceChoice, sfrCropSalinityTolerance);
+  SetFarmProperty(SalinityFlush.CropMaxLeachChoice, sfrCropMaxLeach);
+  SetFarmProperty(SalinityFlush.CropLeachRequirementChoice, sfrCropLeachRequirement);
+  SetFarmProperty(SalinityFlush.CropExtraWaterChoice, sfrCropExtraWaterChoice);
 end;
 
 end.
