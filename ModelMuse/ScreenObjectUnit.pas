@@ -46598,7 +46598,9 @@ initialization
   RegisterClass(TMultiValueScreenObject);
   RegisterClass(TScreenObjectClipboard);
   RegisterClass(TModflow6Delegate);
+  {$IFDEF OWHMV2}
   RegisterClass(TModflowFmp4Delegate);
+  {$ENDIF}
 
 
 end.

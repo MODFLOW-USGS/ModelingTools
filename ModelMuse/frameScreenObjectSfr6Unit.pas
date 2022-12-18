@@ -1261,7 +1261,7 @@ begin
               Sfr6Item.DiversionCount := frmgrdDiversions.seNumber.AsInteger;
               for DiverIndex := 0 to frmgrdDiversions.seNumber.AsInteger - 1 do
               begin
-                RateFormula := rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + DiverIndex, TimeIndex+1];
+                RateFormula := rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + DiverIndex, TimeIndex+1+PestRowOffset];
                 if RateFormula <> '' then
                 begin
                   Sfr6Item.DiversionFormulas[DiverIndex] := RateFormula;

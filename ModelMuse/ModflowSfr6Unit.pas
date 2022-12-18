@@ -2337,7 +2337,7 @@ begin
                 DiversionTimeSeriesName[FormulaIndex]
                   := TimeSeriesName;
               end;
-              Exit;
+              Continue;
             end;
             // GWT
             SpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
@@ -3712,6 +3712,12 @@ begin
     else
       begin
         FormulaIndex := FormulaIndex-SfrMf6DiversionStartPosition;
+        if FormulaIndex < Diversions.Count then
+        begin
+          result := inherited;
+          Exit;
+        end;
+        FormulaIndex := FormulaIndex - Diversions.Count;
         ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
 
         while PestSpecifiedConcentrations.Count < ChemSpeciesCount do
@@ -3811,6 +3817,12 @@ begin
     else
       begin
         FormulaIndex := FormulaIndex-SfrMf6DiversionStartPosition;
+        if FormulaIndex < Diversions.Count then
+        begin
+          result := inherited;
+          Exit;
+        end;
+        FormulaIndex := FormulaIndex - Diversions.Count;
         ChemSpeciesCount := frmGoPhast.PhastModel.MobileComponents.Count;
 
         while PestSpecifiedConcentrationMethods.Count < ChemSpeciesCount do
@@ -5126,7 +5138,13 @@ begin
     SfrMf6RoughnessPosition: result := FValues.RoughnessPest;
     else
       begin
-        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
+        Index := Index - SfrMf6DiversionStartPosition;
+        if Index < Length(FValues.Diversions) then
+        begin
+          result := '';
+          Exit;
+        end;
+        GwtPosition := Index - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition mod SfrGwtConcCount;
         SpeciesIndex := GwtPosition div SfrGwtConcCount;
@@ -5175,7 +5193,13 @@ begin
     SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesMethod;
     else
       begin
-        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
+        Index := Index - SfrMf6DiversionStartPosition;
+        if Index < Length(FValues.Diversions) then
+        begin
+          result := inherited;
+          Exit;
+        end;
+        GwtPosition := Index - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition mod SfrGwtConcCount;
         SpeciesIndex := GwtPosition div SfrGwtConcCount;
@@ -5227,7 +5251,13 @@ begin
     SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesName;
     else
       begin
-        GwtPosition := Index - SfrMf6DiversionStartPosition - Length(FValues.Diversions) - 1;
+        Index := Index - SfrMf6DiversionStartPosition;
+        if Index < Length(FValues.Diversions) then
+        begin
+          result := '';
+          Exit;
+        end;
+        GwtPosition := Index - Length(FValues.Diversions) - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition mod SfrGwtConcCount;
         SpeciesIndex := GwtPosition div SfrGwtConcCount;

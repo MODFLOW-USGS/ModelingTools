@@ -10779,12 +10779,15 @@ const
 //                output files correctly.
 //               Bug fix: Fixed bug that prevent PEST from working correctly
 //                with GWT in MODFLOW 6.
+//    '5.1.1.2'  Bug fix: Fixed bug that would cause ModelMuse to fail in
+//                creating the SFR input files for MODFLOW 6 models with
+//                diversions in the SFR packages.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.1';
+  IIModelVersion = '5.1.1.2';
 
 function IModelVersion: string;
 begin
@@ -41890,8 +41893,10 @@ begin
 
     if ((ModelSelection = msModflowFmp) and
       ModflowPackages.FarmProcess.IsSelected)
+      {$IFDEF OWHMV2}
       or ((ModelSelection = msModflowOwhm2) and
       ModflowPackages.FarmProcess4.IsSelected)
+      {$ENDIF}
       then
     begin
       { TODO -cOWHMV2 : The following may need to be updated for MODFLOW OWHM version 2. }
