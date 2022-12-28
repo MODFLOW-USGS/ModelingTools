@@ -14,6 +14,26 @@ type
     wlEtFrac, wlSwLosses, wlPFLX, wlCropFunc, wlWaterCost, wlDeliveries,
     wlSemiRouteDeliv, wlSemiRouteReturn, wlCall);
 
+  TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
+
+  TCheckDataSet = procedure (IntegerArray: TDataArray;
+    const ErrorMessage: string) of object;
+
+
+  TRequiredValues = record
+    WriteLocation: TWriteLocation;
+    Comment: string;
+    DataTypeIndex: Integer;
+    DataType: TRbwDataType;
+    DefaultValue: Double;
+    ErrorID: string;
+    ID: string;
+    StaticDataName: string;
+    WriteTransientData: Boolean;
+    CheckProcedure: TCheckDataSet;
+    CheckError: string;
+  end;
+
   TModflowFmp4Writer = class(TCustomListWriter)
   private
     FFarmProcess4: TFarmProcess4;
@@ -46,7 +66,7 @@ type
     procedure FreeFileStreams;
     procedure WriteFarmLocation;
     // wbs location
-    procedure WriteDataSet26(TimeIndex: Integer);
+//    procedure WriteDataSet26(TimeIndex: Integer);
     procedure CheckIntegerDataSet(IntegerArray: TDataArray;
       const ErrorMessage: string);
     procedure EvaluateActiveCells;
@@ -55,10 +75,13 @@ type
     procedure EvaluatePrecip;
     procedure WritePrecipitation;
     procedure WriteRefET;
-    // climate precipitation
-    procedure WriteDataSet33(TimeIndex: Integer);
-    // climate ref ET
-    procedure WriteDataSet30b(TimeIndex: Integer);
+    procedure WriteTransientFmpArrayData(RequiredValues: TRequiredValues);
+    function GetTransientList(WriteLocation: TWriteLocation): TList;
+    function GetFileStreamName(WriteLocation: TWriteLocation): string;
+    function GetFmpBoundary(ScreenObject: TScreenObject;
+      WriteLocation: TWriteLocation): TModflowBoundary;
+    procedure EvaluateTransientArrayData(WriteLocation: TWriteLocation);
+    procedure WriteFmpArrayData(AFileName: string; RequiredValues: TRequiredValues);
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -96,11 +119,7 @@ uses
   ModflowFmpPrecipitationUnit;
 
 resourcestring
-  StrFMPPrecipitationNo = 'FMP Precipitation not defined in one or more stre' +
-  'ss periods';
-  StrUndefinedFMPRefere = 'Undefined FMP Reference Evapotranspiration in one' +
-  ' or nore stress periods';
-
+  StrUndefinedError = 'Undefined %s in one or more stress periods';
 
 { TModflowFmp4Writer }
 
@@ -203,104 +222,28 @@ begin
 end;
 
 procedure TModflowFmp4Writer.EvaluateFarmID;
-var
-  EmptyParamList: TStringList;
-  ScreenObject: TScreenObject;
-  ScreenObjectIndex: Integer;
-  Boundary: TFmpFarmIDBoundary;
 begin
-  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFarmID);
-  frmErrorsAndWarnings.BeginUpdate;
-  EmptyParamList := TStringList.Create;
-  try
-    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
-    begin
-      ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-      if ScreenObject.Deleted then
-      begin
-        Continue;
-      end;
-      if not ScreenObject.UsedModels.UsesModel(Model) then
-      begin
-        Continue;
-      end;
-      Boundary := ScreenObject.ModflowFmpFarmID;
-      if Boundary <> nil then
-      begin
-        Boundary.GetCellValues(FFarmIDs, EmptyParamList, Model, self);
-      end;
-    end;
-  finally
-    EmptyParamList.Free;
-    frmErrorsAndWarnings.EndUpdate;
+  if FFarmProcess4.Farms.FarmOption = foTransient then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFarmID);
+    EvaluateTransientArrayData(wlFID);
   end;
 end;
 
 procedure TModflowFmp4Writer.EvaluatePrecip;
-var
-  EmptyParamList: TStringList;
-  ScreenObject: TScreenObject;
-  ScreenObjectIndex: Integer;
-  Boundary: TFmpPrecipBoundary;
-//  Boundary: TFmpRefEvapBoundary;
 begin
-  frmErrorsAndWarnings.BeginUpdate;
-  EmptyParamList := TStringList.Create;
-  try
-    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
-    begin
-      ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-      if ScreenObject.Deleted then
-      begin
-        Continue;
-      end;
-      if not ScreenObject.UsedModels.UsesModel(Model) then
-      begin
-        Continue;
-      end;
-      Boundary := ScreenObject.ModflowFmpPrecip;
-      if Boundary <> nil then
-      begin
-        Boundary.GetCellValues(FPrecip, EmptyParamList, Model, self);
-      end;
-    end;
-  finally
-    EmptyParamList.Free;
-    frmErrorsAndWarnings.EndUpdate;
-  end
+  if FClimatePackage.TransientPrecipUsed(Self) then
+  begin
+    EvaluateTransientArrayData(wlPFLX);
+  end;
 end;
 
 procedure TModflowFmp4Writer.EvaluateReferenceET;
-var
-  EmptyParamList: TStringList;
-  ScreenObject: TScreenObject;
-  ScreenObjectIndex: Integer;
-  Boundary: TFmpRefEvapBoundary;
 begin
-  frmErrorsAndWarnings.BeginUpdate;
-  EmptyParamList := TStringList.Create;
-  try
-    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
-    begin
-      ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-      if ScreenObject.Deleted then
-      begin
-        Continue;
-      end;
-      if not ScreenObject.UsedModels.UsesModel(Model) then
-      begin
-        Continue;
-      end;
-      Boundary := ScreenObject.ModflowFmpRefEvap;
-      if Boundary <> nil then
-      begin
-        Boundary.GetCellValues(FRefEts, EmptyParamList, Model, self);
-      end;
-    end;
-  finally
-    EmptyParamList.Free;
-    frmErrorsAndWarnings.EndUpdate;
-  end
+  if FClimatePackage.TransientPrecipUsed(Self) then
+  begin
+    EvaluateTransientArrayData(wlETR);
+  end;
 end;
 
 class function TModflowFmp4Writer.Extension: string;
@@ -319,6 +262,131 @@ function TModflowFmp4Writer.GetBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
   result := ScreenObject.ModflowFmpWellBoundary;
+end;
+
+function TModflowFmp4Writer.GetFileStreamName(WriteLocation: TWriteLocation): string;
+begin
+  case WriteLocation of
+    wlMain:
+      begin
+      end;
+    wlOpenClose:
+      begin
+      end;
+    wlOFE:
+      begin
+      end;
+    wlCID:
+      begin
+      end;
+    wlFID:
+      begin
+        RESULT := ChangeFileExt(FBaseName, '.FID');
+        if FFID_FileStream = nil then
+        begin
+          FFID_FileStream := TFileStream.Create(RESULT,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlRoot:
+      begin
+      end;
+    wlCropUse:
+      begin
+      end;
+    wlETR:
+      begin
+        result := ChangeFileExt(FBaseName, '.ETR');
+        if FETR_FileStream = nil then
+        begin
+          FETR_FileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlEtFrac:
+      begin
+      end;
+    wlSwLosses:
+      begin
+      end;
+    wlPFLX:
+      begin
+        result := ChangeFileExt(FBaseName, '.PFLX');
+        if FPFLX_FileStream = nil then
+        begin
+          FPFLX_FileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlCropFunc:
+      begin
+      end;
+    wlWaterCost:
+      begin
+      end;
+    wlDeliveries:
+      begin
+      end;
+    wlSemiRouteDeliv:
+      begin
+      end;
+    wlSemiRouteReturn:
+      begin
+      end;
+    wlCall:
+      begin
+      end;
+  end;
+end;
+
+function TModflowFmp4Writer.GetFmpBoundary(ScreenObject: TScreenObject;
+  WriteLocation: TWriteLocation): TModflowBoundary;
+begin
+  result := nil;
+  case WriteLocation of
+    wlMain: ;
+    wlOpenClose: ;
+    wlOFE: ;
+    wlCID: ;
+    wlFID: result := ScreenObject.ModflowFmpFarmID;
+    wlRoot: ;
+    wlCropUse: ;
+    wlETR: result := ScreenObject.ModflowFmpRefEvap;
+    wlEtFrac: ;
+    wlSwLosses: ;
+    wlPFLX: result := ScreenObject.ModflowFmpPrecip;
+    wlCropFunc: ;
+    wlWaterCost: ;
+    wlDeliveries: ;
+    wlSemiRouteDeliv: ;
+    wlSemiRouteReturn: ;
+    wlCall: ;
+  end;
+end;
+
+function TModflowFmp4Writer.GetTransientList(
+  WriteLocation: TWriteLocation): TList;
+begin
+  result := nil;
+  case WriteLocation of
+    wlMain: ;
+    wlOpenClose: ;
+    wlOFE: ;
+    wlCID: ;
+    wlFID: result := FFarmIDs;
+    wlRoot: ;
+    wlCropUse: ;
+    wlETR: result := FRefEts;
+    wlEtFrac: ;
+    wlSwLosses: ;
+    wlPFLX: result := FPrecip;
+    wlCropFunc: ;
+    wlWaterCost: ;
+    wlDeliveries: ;
+    wlSemiRouteDeliv: ;
+    wlSemiRouteReturn: ;
+    wlCall: ;
+  end;
 end;
 
 function TModflowFmp4Writer.Package: TModflowPackageSelection;
@@ -469,6 +537,70 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteFmpArrayData(AFileName: string; RequiredValues: TRequiredValues);
+var
+  DataArray: TDataArray;
+begin
+  WriteString('  ');
+  WriteString(RequiredValues.ID);
+  WriteString(' ');
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT ARRAY DATAFILE ');
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    WriteTransientFmpArrayData(RequiredValues);
+  end
+  else
+  begin
+    WriteString('STATIC ARRAY DATAFILE ');
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
+      WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
+end;
+
+procedure TModflowFmp4Writer.EvaluateTransientArrayData(WriteLocation: TWriteLocation);
+var
+  TransList: TList;
+  EmptyParamList: TStringList;
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Boundary: TModflowBoundary;
+begin
+  TransList := GetTransientList(WriteLocation);
+  frmErrorsAndWarnings.BeginUpdate;
+  EmptyParamList := TStringList.Create;
+  try
+    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+    begin
+      ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+      if ScreenObject.Deleted then
+      begin
+        Continue;
+      end;
+      if not ScreenObject.UsedModels.UsesModel(Model) then
+      begin
+        Continue;
+      end;
+      Boundary := GetFmpBoundary(ScreenObject, WriteLocation);
+      if Boundary <> nil then
+      begin
+        Boundary.GetCellValues(TransList, EmptyParamList, Model, self);
+      end;
+    end;
+  finally
+    EmptyParamList.Free;
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+end;
+
 procedure TModflowFmp4Writer.UpdateRefEtDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
@@ -557,6 +689,7 @@ begin
 
     WriteString('END CLIMATE');
     NewLine;
+    NewLine;
   end;
 end;
 
@@ -583,114 +716,77 @@ begin
   end;
 end;
 
-procedure TModflowFmp4Writer.WriteDataSet26(TimeIndex: Integer);
-var
-  FarmIDList: TValueCellList;
-  Comment: string;
-  DataTypeIndex: Integer;
-  DataType: TRbwDataType;
-  DefaultValue: Double;
-//  AFileName: string;
-  FarmIdArray: TDataArray;
-//  BaseName: string;
-begin
-  if FFarmIDs.Count <= TimeIndex then
-  begin
-    frmErrorsAndWarnings.AddError(Model, StrFMPFarmsNotDefine, IntToStr(TimeIndex+1));
-    Exit;
-  end;
-  FarmIDList := FFarmIDs[TimeIndex];
-  DefaultValue := 0;
-  DataType := rdtInteger;
-  DataTypeIndex := 0;
-  Comment := 'Data Set 26: FID';
+//procedure TModflowFmp4Writer.WriteDataSet26(TimeIndex: Integer);
+//var
+//  FarmIDList: TValueCellList;
+//  Comment: string;
+//  DataTypeIndex: Integer;
+//  DataType: TRbwDataType;
+//  DefaultValue: Double;
+//  FarmIdArray: TDataArray;
+//begin
+//  if FFarmIDs.Count <= TimeIndex then
+//  begin
+//    frmErrorsAndWarnings.AddError(Model, StrFMPFarmsNotDefine, IntToStr(TimeIndex+1));
+//    Exit;
+//  end;
+//  FarmIDList := FFarmIDs[TimeIndex];
+//  DefaultValue := 0;
+//  DataType := rdtInteger;
+//  DataTypeIndex := 0;
+//  Comment := 'Data Set 26: FID';
+//
+//  FarmIdArray := nil;
+//  FWriteLocation := wlFID;
+//  try
+//    WriteCommentLine(Format('Stress Period %d', [TimeIndex+1]));
+//    WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
+//      FarmIDList, umAssign, False, FarmIdArray, 'FID', False, False);
+//    CheckIntegerDataSet(FarmIdArray, StrInvalidFarmID);
+//  finally
+//    FWriteLocation := wlMain;
+//    FarmIdArray.Free;
+//  end;
+//end;
 
-  FarmIdArray := nil;
-  FWriteLocation := wlFID;
-  try
-    WriteCommentLine(Format('Stress Period %d', [TimeIndex+1]));
-    WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-      FarmIDList, umAssign, False, FarmIdArray, 'FID', True, False);
-    CheckIntegerDataSet(FarmIdArray, StrInvalidFarmID);
-  finally
-    FWriteLocation := wlMain;
-    FarmIdArray.Free;
-  end;
-end;
-
-procedure TModflowFmp4Writer.WriteDataSet30b(TimeIndex: Integer);
+procedure TModflowFmp4Writer.WriteTransientFmpArrayData(RequiredValues: TRequiredValues);
 var
-  RefEtList: TValueCellList;
-  Comment: string;
-  DataTypeIndex: Integer;
-  DataType: TRbwDataType;
-  DefaultValue: Double;
+  ValueCellList: TValueCellList;
   Dummy: TDataArray;
-  AFileName: string;
-  BaseName: string;
+  TransList: TList;
+  StressPeriodIndex: Integer;
+  CheckAssigned: Boolean;
 begin
-  if FRefEts.Count <= TimeIndex then
-  begin
-    frmErrorsAndWarnings.AddError(Model, StrUndefinedFMPRefere, IntToStr(TimeIndex+1));
-    Exit;
-  end;
-  RefEtList := FRefEts[TimeIndex];
-  DefaultValue := 0;
-  DataType := rdtDouble;
-  DataTypeIndex := 0;
-  Comment := 'Data Set 30b: ETR';
+  TransList := GetTransientList(RequiredValues.WriteLocation);
 
-  BaseName := ChangeFileExt(FNameOfFile, '');
-  if FETR_FileStream = nil then
-  begin
-    AFileName := ChangeFileExt(BaseName, '.ETR');
-    FETR_FileStream := TFileStream.Create(AFileName,
-      fmCreate or fmShareDenyWrite);
-  end;
-
-  FWriteLocation := wlETR;
+  FWriteLocation := RequiredValues.WriteLocation;
   try
-    WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-      RefEtList, umAssign, False, Dummy, 'ETR', True, False);
-  finally
-    FWriteLocation := wlMain;
-  end;
-end;
-
-procedure TModflowFmp4Writer.WriteDataSet33(TimeIndex: Integer);
-var
-  PrecipList: TValueCellList;
-  Comment: string;
-  DataTypeIndex: Integer;
-  DataType: TRbwDataType;
-  DefaultValue: Double;
-  Dummy: TDataArray;
-  AFileName: string;
-  BaseName: string;
-begin
-  if FPrecip.Count <= TimeIndex then
-  begin
-    frmErrorsAndWarnings.AddError(Model, StrFMPPrecipitationNo, IntToStr(TimeIndex+1));
-    Exit;
-  end;
-  PrecipList := FPrecip[TimeIndex];
-  DefaultValue := 0;
-  DataType := rdtDouble;
-  DataTypeIndex := 0;
-  Comment := 'Data Set 33: PFLX';
-
-  BaseName := ChangeFileExt(FNameOfFile, '');
-  if FPFLX_FileStream = nil then
-  begin
-    AFileName := ChangeFileExt(BaseName, '.PFLX');
-    FPFLX_FileStream := TFileStream.Create(AFileName,
-      fmCreate or fmShareDenyWrite);
-  end;
-
-  FWriteLocation := wlPFLX;
-  try
-    WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-      PrecipList, umAssign, False, Dummy, 'PFLX', True, False);
+    for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+    begin
+      if TransList.Count <= StressPeriodIndex then
+      begin
+        frmErrorsAndWarnings.AddError(Model,
+          Format(StrUndefinedError, [RequiredValues.ErrorID]),
+          IntToStr(StressPeriodIndex+1));
+        Exit;
+      end;
+      ValueCellList := TransList[StressPeriodIndex];
+      CheckAssigned := Assigned(RequiredValues.CheckProcedure);
+      Dummy := nil;
+      try
+        WriteCommentLine(Format('Stress Period %d', [StressPeriodIndex+1]));
+        WriteTransient2DArray(RequiredValues.Comment, RequiredValues.DataTypeIndex,
+          RequiredValues.DataType, RequiredValues.DefaultValue,
+          ValueCellList, umAssign, False, Dummy, RequiredValues.ID,
+          (not CheckAssigned), False);
+        if CheckAssigned then
+        begin
+          RequiredValues.CheckProcedure(Dummy, RequiredValues.CheckError);
+        end;
+      finally
+        Dummy.Free;
+      end;
+    end;
   finally
     FWriteLocation := wlMain;
   end;
@@ -698,44 +794,54 @@ end;
 
 procedure TModflowFmp4Writer.WriteFarmLocation;
 var
-  StressPeriodIndex: Integer;
+//  StressPeriodIndex: Integer;
   AFileName: string;
-  DataArray: TDataArray;
+//  DataArray: TDataArray;
+  RequiredValues: TRequiredValues;
 begin
-  AFileName := ChangeFileExt(FBaseName, '.FID');
-  if FFID_FileStream = nil then
-  begin
-    FFID_FileStream := TFileStream.Create(AFileName,
-      fmCreate or fmShareDenyWrite);
-  end;
+  AFileName := GetFileStreamName(wlFID);
 
-  WriteString('  LOCATION ');
+  RequiredValues.WriteLocation := wlFID;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: Location';
+  RequiredValues.ErrorID := 'FMP WBS: Location';
+  RequiredValues.ID := 'LOCATION';
+  RequiredValues.StaticDataName := KFarmID;
+  RequiredValues.WriteTransientData := FFarmProcess4.Farms.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := CheckIntegerDataSet;
+  RequiredValues.CheckError := StrInvalidFarmID;
 
-  if FFarmProcess4.Farms.FarmOption = foTransient then
-  begin
-    WriteString('TRANSIENT ARRAY DATAFILE ');
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
+  WriteFmpArrayData(AFileName, RequiredValues);
 
-    for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-    begin
-      WriteDataSet26(StressPeriodIndex);
-      NewLine;
-    end;
-  end
-  else
-  begin
-    WriteString('STATIC ARRAY DATAFILE ');
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
-    FWriteLocation := wlFID;
-    try
-      DataArray := Model.DataArrayManager.GetDataSetByName(KFarmID);
-      WriteArray(DataArray, 0, 'WBS: LOCATION', '', 'LOCATION', False, False);
-    finally
-      FWriteLocation := wlMain;
-    end;
-  end;
+//  WriteString('  LOCATION ');
+//
+//  if FFarmProcess4.Farms.FarmOption = foTransient then
+//  begin
+//    WriteString('TRANSIENT ARRAY DATAFILE ');
+//    WriteString(ExtractFileName(AFileName));
+//    NewLine;
+//
+//    for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+//    begin
+//      WriteDataSet26(StressPeriodIndex);
+//      NewLine;
+//    end;
+//  end
+//  else
+//  begin
+//    WriteString('STATIC ARRAY DATAFILE ');
+//    WriteString(ExtractFileName(AFileName));
+//    NewLine;
+//    FWriteLocation := wlFID;
+//    try
+//      DataArray := Model.DataArrayManager.GetDataSetByName(KFarmID);
+//      WriteArray(DataArray, 0, 'WBS: LOCATION', '', 'LOCATION', False, False);
+//    finally
+//      FWriteLocation := wlMain;
+//    end;
+//  end;
 end;
 
 procedure TModflowFmp4Writer.WriteFile(const AFileName: string);
@@ -793,8 +899,6 @@ begin
       frmErrorsAndWarnings.EndUpdate;
     end;
   end;
-
-
 end;
 
 procedure TModflowFmp4Writer.WriteFileInternal;
@@ -835,6 +939,10 @@ begin
   WriteInteger(1);
   NewLine;
 
+  WriteString('  NCROP');
+  WriteInteger(0);
+  NewLine;
+
   WriteString('  NSOIL');
   if Model.ModflowPackages.FarmSoil4.IsSelected then
   begin
@@ -853,12 +961,39 @@ end;
 
 procedure TModflowFmp4Writer.WriteLandUse;
 begin
+  WriteString('BEGIN LAND_USE');
+  NewLine;
 
+  WriteString('  SINGLE_LAND_USE_PER_CELL');
+  NewLine;
+
+  WriteString('  LOCATION STATIC CONSTANT 1');
+  NewLine;
+
+  WriteString('  ROOT_DEPTH STATIC CONSTANT 0.00001');
+  NewLine;
+
+  WriteString('END LAND_USE');
+  NewLine;
+  NewLine;
 end;
 
 procedure TModflowFmp4Writer.WriteOutput;
 begin
+  WriteString('BEGIN OUTPUT');
+  NewLine;
 
+
+  if fpWbs_Water_Use in FFarmProcess4.FarmPrints then
+  begin
+    WriteString('  WBS_WATER_USE ');
+    WriteString(ExtractFileName(ChangeFileExt(FBaseName, '.WBS_WATER_USE')));
+    NewLine;
+  end;
+
+  WriteString('END OUTPUT');
+  NewLine;
+  NewLine;
 end;
 
 procedure TModflowFmp4Writer.WriteParameterCells(CellList: TValueCellList;
@@ -873,96 +1008,83 @@ end;
 
 procedure TModflowFmp4Writer.WritePrecipitation;
 var
-  StressPeriodIndex: Integer;
   AFileName: string;
-  DataArray: TDataArray;
+//  DataArray: TDataArray;
+  RequiredValues: TRequiredValues;
 begin
   if FClimatePackage.Precipitation.FarmOption = foNotUsed then
   begin
     Exit;
   end;
 
-  AFileName := ChangeFileExt(FBaseName, '.PFLX');
-  if FPFLX_FileStream = nil then
-  begin
-    FPFLX_FileStream := TFileStream.Create(AFileName,
-      fmCreate or fmShareDenyWrite);
-  end;
+  AFileName := GetFileStreamName(wlPFLX);
 
-  WriteString('  PRECIPITATION ');
+  RequiredValues.WriteLocation := wlPFLX;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.Comment := 'Data Set 33: PFLX';
+  RequiredValues.ErrorID := 'FMP CLIMATE: PRECIPITATION';
+  RequiredValues.ID := 'PRECIPITATION';
+  RequiredValues.StaticDataName := KPrecipitation;
+  RequiredValues.WriteTransientData := FClimatePackage.TransientPrecipUsed(Self);
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
 
-  if FClimatePackage.TransientPrecipUsed(Self) then
-  begin
-    WriteString('TRANSIENT ARRAY DATAFILE ');
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
+  WriteFmpArrayData(AFileName, RequiredValues);
 
-    for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-    begin
-      WriteDataSet33(StressPeriodIndex);
-      NewLine;
-    end;
-  end
-  else
-  begin
-    WriteString('STATIC ARRAY DATAFILE ');
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
-    FWriteLocation := wlPFLX;
-    try
-      DataArray := Model.DataArrayManager.GetDataSetByName(KPrecipitation);
-      WriteArray(DataArray, 0, 'CLIMATE: PRECIPITATION', '', 'PRECIPITATION', False, False);
-    finally
-      FWriteLocation := wlMain;
-    end;
-  end;
+//  WriteString('  ');
+//  WriteString(RequiredValues.ID);
+//  WriteString(' ');
+//
+//  if RequiredValues.WriteTransientData then
+//  begin
+//    WriteString('TRANSIENT ARRAY DATAFILE ');
+//    WriteString(ExtractFileName(AFileName));
+//    NewLine;
+//
+//    WriteTransientFmpArrayData(RequiredValues);
+//  end
+//  else
+//  begin
+//    WriteString('STATIC ARRAY DATAFILE ');
+//    WriteString(ExtractFileName(AFileName));
+//    NewLine;
+//    FWriteLocation := RequiredValues.WriteLocation;
+//    try
+//      DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
+//      WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
+//    finally
+//      FWriteLocation := wlMain;
+//    end;
+//  end;
 end;
 
 procedure TModflowFmp4Writer.WriteRefET;
 var
-  StressPeriodIndex: Integer;
   AFileName: string;
-  DataArray: TDataArray;
+  RequiredValues: TRequiredValues;
 begin
   if FClimatePackage.ReferenceET.FarmOption = foNotUsed then
   begin
     Exit;
   end;
 
-  AFileName := ChangeFileExt(FBaseName, '.ETR');
-  if FETR_FileStream = nil then
-  begin
-    FETR_FileStream := TFileStream.Create(AFileName,
-      fmCreate or fmShareDenyWrite);
-  end;
+  AFileName := GetFileStreamName(wlETR);
 
-  WriteString('  REFERENCE_ET ');
+  RequiredValues.WriteLocation := wlETR;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.Comment := 'Data Set 30b: ETR';
+  RequiredValues.ErrorID := 'FMP CLIMATE: REFERENCE_ET';
+  RequiredValues.ID := 'REFERENCE_ET';
+  RequiredValues.StaticDataName := KRefET;
+  RequiredValues.WriteTransientData := FClimatePackage.TransientEvapUsed(Self);
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
 
-  if FClimatePackage.TransientEvapUsed(Self) then
-  begin
-    WriteString('TRANSIENT ARRAY DATAFILE ');
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
-
-    for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-    begin
-      WriteDataSet30b(StressPeriodIndex);
-      NewLine;
-    end;
-  end
-  else
-  begin
-    WriteString('STATIC ARRAY DATAFILE ');
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
-    FWriteLocation := wlETR;
-    try
-      DataArray := Model.DataArrayManager.GetDataSetByName(KRefET);
-      WriteArray(DataArray, 0, 'CLIMATE: REFERENCE_ET', '', 'REFERENCE_ET', False, False);
-    finally
-      FWriteLocation := wlMain;
-    end;
-  end;
+  WriteFmpArrayData(AFileName, RequiredValues);
 end;
 
 procedure TModflowFmp4Writer.WriteSalinityFlush;
@@ -972,7 +1094,12 @@ end;
 
 procedure TModflowFmp4Writer.WriteSoil;
 begin
+  WriteString('BEGIN SOIL');
+  NewLine;
 
+  WriteString('END SOIL');
+  NewLine;
+  NewLine;
 end;
 
 procedure TModflowFmp4Writer.WriteString(const Value: AnsiString);
@@ -988,11 +1115,13 @@ begin
         end;
       wlOFE:
         begin
+          Assert(False);
 //          Assert(FOFE_FileStream <> nil);
 //          FOFE_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlCID:
         begin
+          Assert(False);
 //          Assert(FCID_FileStream <> nil);
 //          FCID_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
@@ -1003,11 +1132,13 @@ begin
         end;
       wlRoot:
         begin
+          Assert(False);
 //          Assert(FRoot_FileStream <> nil);
 //          FRoot_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlCropUse:
         begin
+          Assert(False);
 //          Assert(FCropUse_FileStream <> nil);
 //          FCropUse_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
@@ -1018,11 +1149,13 @@ begin
         end;
       wlEtFrac:
         begin
+          Assert(False);
 //          Assert(FET_Frac_FileStream <> nil);
 //          FET_Frac_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlSwLosses:
         begin
+          Assert(False);
 //          Assert(FSW_Losses_FileStream <> nil);
 //          FSW_Losses_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
@@ -1033,31 +1166,37 @@ begin
         end;
       wlCropFunc:
         begin
+          Assert(False);
 //          Assert(FCropFunc_FileStream <> nil);
 //          FCropFunc_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlWaterCost:
         begin
+          Assert(False);
 //          Assert(FWaterCost_FileStream <> nil);
 //          FWaterCost_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlDeliveries:
         begin
+          Assert(False);
 //          Assert(FDeliveries_FileStream <> nil);
 //          FDeliveries_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlSemiRouteDeliv:
         begin
+          Assert(False);
 //          Assert(FSemiDeliveries_FileStream <> nil);
 //          FSemiDeliveries_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlSemiRouteReturn:
         begin
+          Assert(False);
 //          Assert(FSemiReturn_FileStream <> nil);
 //          FSemiReturn_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlCall:
         begin
+          Assert(False);
 //          Assert(FCall_FileStream <> nil);
 //          FCall_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
@@ -1111,6 +1250,7 @@ begin
   end;
 
   WriteString('END WATER_BALANCE_SUBREGION');
+  NewLine;
   NewLine;
 end;
 

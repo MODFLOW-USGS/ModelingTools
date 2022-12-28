@@ -7006,35 +7006,6 @@ begin
       AllowChange := True;
     end
 
-    {else if (FFmpFarm_Node <> nil) and (FFmpFarm_Node.StateIndex <> 1) then
-    begin
-      AllowChange := True;
-    end
-    else if (FFarmWell_Node <> nil) and (FFarmWell_Node.StateIndex <> 1) then
-    begin
-      AllowChange := True;
-    end
-    else if (FFarmPrecip_Node <> nil) and (FFarmPrecip_Node.StateIndex <> 1) then
-    begin
-      AllowChange := True;
-    end
-    else if (FFarmRevEvap_Node <> nil) and (FFarmRevEvap_Node.StateIndex <> 1) then
-    begin
-      AllowChange := True;
-    end
-    else if (FFarmCropID_Node <> nil) and (FFarmCropID_Node.StateIndex <> 1) then
-    begin
-      AllowChange := True;
-    end
-    else if (FCfpPipe_Node <> nil) and (FCfpPipe_Node.StateIndex <> 1)
-      and (rgElevationCount.ItemIndex = 1) then
-    begin
-      AllowChange := True;
-    end
-    else if (FCfpFixedHead_Node <> nil) and (FCfpFixedHead_Node.StateIndex <> 1) then
-    begin
-      AllowChange := True;
-    end  }
 
   end
   else if (Node = FCfpPipe_Node) then
@@ -15096,7 +15067,9 @@ var
   AScreenObject: TScreenObject;
   Boundary: TFmpPrecipBoundary;
 begin
-  if not frmGoPhast.PhastModel.FarmProcess3IsSelected then
+  if not frmGoPhast.PhastModel.FarmProcess3IsSelected
+    and not frmGoPhast.PhastModel.FarmProcess4TransientPrecipIsSelected
+    then
   begin
     Exit;
   end;
