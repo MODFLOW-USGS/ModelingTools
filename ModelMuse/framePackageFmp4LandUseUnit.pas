@@ -55,6 +55,23 @@ implementation
 uses
   GoPhastTypes;
 
+resourcestring
+  StrCropLocation = 'Crop location';
+  StrLandUseFraction = 'Land use fraction';
+  StrCropCoeff = 'Crop coeff.';
+  StrConsumptiveUse = 'Consumptive use';
+  StrIrrigation = 'Irrigation';
+  StrRootDepth = 'Root depth';
+  StrRootPressure = 'Root pressure';
+  StrTranspirationFracti = 'Transpiration fraction';
+  StrEvapIrrigFraction = 'Evap irrig. fraction';
+  StrFractionOfPrecip = 'Fraction of precip. to surface water';
+  StrFractionOfIrrigT = 'Fraction of irrig. to surface water';
+  StrPondDepth = 'Pond depth';
+  StrAddedDemand = 'Added demand';
+  StrNoCropMeansBareS = 'No crop means bare soil';
+  StrETIrrigFracCorr = 'ET irrig. frac. correction';
+
 {$R *.dfm}
 
 { TframePackageFmp4LandUse }
@@ -132,7 +149,7 @@ begin
 
   rdgLandUse.BeginUpdate;
   try
-    rdgLandUse.Cells[Ord(socTransient), Ord(sorSoilLocation)] := StaticTransient[Ord(LandUsePackage.SoilLocation)];
+    rdgLandUse.Cells[Ord(socTransient), Ord(sorSoilLocation)] := StaticTransient[Ord(LandUsePackage.CropLocation)];
 
     GetFarmProperty(LandUsePackage.LandUseFraction, Ord(sorLandUseFraction));
     GetFarmOption(comboSpecifyCrops, LandUsePackage.SpecifyCropsToPrint);
@@ -166,21 +183,21 @@ begin
     rdgLandUse.Cells[Ord(socFile), Ord(sorName)] := StrExternallyGenerated;
     rdgLandUse.Cells[Ord(socSfacFile), Ord(sorName)] := StrExternallyGeneratedSfac;
 
-    rdgLandUse.Cells[Ord(socName), Ord(sorSoilLocation)] := 'Soil location';
-    rdgLandUse.Cells[Ord(socName), Ord(sorLandUseFraction)] := 'Land use fraction';
-    rdgLandUse.Cells[Ord(socName), Ord(sorCropCoeff)] := 'Crop coeff.';
-    rdgLandUse.Cells[Ord(socName), Ord(sorConsumptiveUse)] := 'Consumptive use';
-    rdgLandUse.Cells[Ord(socName), Ord(sorIrrigation)] := 'Irrigation';
-    rdgLandUse.Cells[Ord(socName), Ord(sorRootDepth)] := 'Root depth';
-    rdgLandUse.Cells[Ord(socName), Ord(sorRootPressure)] := 'Root pressure';
-    rdgLandUse.Cells[Ord(socName), Ord(sorTranspirationFraction)] := 'Transpiration fraction';
-    rdgLandUse.Cells[Ord(socName), Ord(sorEvapIrrigationFraction)] := 'Evap irrig. fraction';
-    rdgLandUse.Cells[Ord(socName), Ord(sorFractionOfPrecipToSurfaceWater)] := 'Fraction of precip. to surface water';
-    rdgLandUse.Cells[Ord(socName), Ord(sorFractionOfIrrigationToSurfaceWater)] := 'Fraction of irrig. to surface water';
-    rdgLandUse.Cells[Ord(socName), Ord(sorPondDepth)] := 'Pond depth';
-    rdgLandUse.Cells[Ord(socName), Ord(sorAddedDemand)] := 'Added demand';
-    rdgLandUse.Cells[Ord(socName), Ord(sorNoCropUseMeansBareSoil)] := 'No crop means bare soil';
-    rdgLandUse.Cells[Ord(socName), Ord(sorET_IrrigFracCorrection)] := 'ET irrig. frac. correction';
+    rdgLandUse.Cells[Ord(socName), Ord(sorSoilLocation)] := StrCropLocation;
+    rdgLandUse.Cells[Ord(socName), Ord(sorLandUseFraction)] := StrLandUseFraction;
+    rdgLandUse.Cells[Ord(socName), Ord(sorCropCoeff)] := StrCropCoeff;
+    rdgLandUse.Cells[Ord(socName), Ord(sorConsumptiveUse)] := StrConsumptiveUse;
+    rdgLandUse.Cells[Ord(socName), Ord(sorIrrigation)] := StrIrrigation;
+    rdgLandUse.Cells[Ord(socName), Ord(sorRootDepth)] := StrRootDepth;
+    rdgLandUse.Cells[Ord(socName), Ord(sorRootPressure)] := StrRootPressure;
+    rdgLandUse.Cells[Ord(socName), Ord(sorTranspirationFraction)] := StrTranspirationFracti;
+    rdgLandUse.Cells[Ord(socName), Ord(sorEvapIrrigationFraction)] := StrEvapIrrigFraction;
+    rdgLandUse.Cells[Ord(socName), Ord(sorFractionOfPrecipToSurfaceWater)] := StrFractionOfPrecip;
+    rdgLandUse.Cells[Ord(socName), Ord(sorFractionOfIrrigationToSurfaceWater)] := StrFractionOfIrrigT;
+    rdgLandUse.Cells[Ord(socName), Ord(sorPondDepth)] := StrPondDepth;
+    rdgLandUse.Cells[Ord(socName), Ord(sorAddedDemand)] := StrAddedDemand;
+    rdgLandUse.Cells[Ord(socName), Ord(sorNoCropUseMeansBareSoil)] := StrNoCropMeansBareS;
+    rdgLandUse.Cells[Ord(socName), Ord(sorET_IrrigFracCorrection)] := StrETIrrigFracCorr;
   finally
     rdgLandUse.EndUpdate;
   end;
@@ -310,7 +327,7 @@ begin
   LandUsePackage.MinimumBareFraction := rdeMinimumBareFraction.RealValue;
   LandUsePackage.RelaxFracHeadChange := rdeRelaxFracHeadChange.RealValue;
 
-  LandUsePackage.SoilLocation := TRequiredSteadyTransient(
+  LandUsePackage.CropLocation := TRequiredSteadyTransient(
     StaticTransient.IndexOf(rdgLandUse.Cells[Ord(socTransient), Ord(sorSoilLocation)]));
 
   SetFarmProperty(LandUsePackage.LandUseFraction, sorLandUseFraction);

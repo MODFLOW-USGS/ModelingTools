@@ -1568,7 +1568,6 @@ type
     FMt3d_SFT_Node: TJvPageIndexNode;
     FMt3dmsTobConc_Node: TJvPageIndexNode;
     FMt3dmsTobFlux_Node: TJvPageIndexNode;
-//    FFmpFarm_Node: TJvPageIndexNode;
     FFarmWell_Node: TJvPageIndexNode;
     FFarmPrecip_Node: TJvPageIndexNode;
     FFarmRefEvap_Node: TJvPageIndexNode;
@@ -2688,6 +2687,7 @@ resourcestring
   StrGeneralizedFlowObs = 'Observations at Generalized Flow';
   StrGeneralizedTranspor = 'Observations at Generalized Transport';
   StrSpecifiedFlowObser = 'Observations at Specified Flows';
+  StrLandUseIDInS = 'Land Use ID in %s';
 
 {$R *.dfm}
 
@@ -7767,7 +7767,8 @@ begin
     frameFarmCropID.SetData(FNewProperties,
       (FFarmCropID_Node.StateIndex = 2),
       (FFarmCropID_Node.StateIndex = 1)
-      and frmGoPhast.PhastModel.FarmProcess3IsSelected);
+      and (frmGoPhast.PhastModel.FarmProcess3IsSelected
+      or frmGoPhast.PhastModel.FarmProcess4TransientCropsUsed(nil)));
   end;
 
   if (FFarmID_Node <> nil) then
@@ -14359,13 +14360,24 @@ end;
 procedure TfrmScreenObjectProperties.CreateFarmCropIDNode(AScreenObject: TScreenObject);
 var
   Node: TJvPageIndexNode;
+  NodeText: string;
 begin
   FFarmCropID_Node := nil;
-  if frmGoPhast.PhastModel.FarmProcess3IsSelected
+  if (frmGoPhast.PhastModel.FarmProcess3IsSelected
+    or frmGoPhast.PhastModel.FarmProcess4TransientCropsUsed(nil))
     and (AScreenObject.ViewDirection = vdTop) then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format(StrCropIDInS,
-      [frmGoPhast.PhastModel.ModflowPackages.FarmProcess.PackageIdentifier]))
+    if frmGoPhast.PhastModel.FarmProcess3IsSelected then
+    begin
+      NodeText := Format(StrCropIDInS,
+        [frmGoPhast.PhastModel.ModflowPackages.FarmProcess.PackageIdentifier]);
+    end
+    else
+    begin
+      NodeText := Format(StrLandUseIDInS,
+        [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]);
+    end;
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, NodeText)
       as TJvPageIndexNode;
     Node.PageIndex := jvspFarmCropID.PageIndex;
     frameFarmCropID.pnlCaption.Caption := Node.Text;
@@ -15117,11 +15129,11 @@ begin
   end;
   frameFarmRefEvap.GetData(FNewProperties);
 
-  if FFarmCropID_Node <> nil then
-  begin
-    FFarmCropID_Node.StateIndex := Ord(State)+1;
-  end;
-  frameFarmCropID.GetData(FNewProperties);
+//  if FFarmCropID_Node <> nil then
+//  begin
+//    FFarmCropID_Node.StateIndex := Ord(State)+1;
+//  end;
+//  frameFarmCropID.GetData(FNewProperties);
 
   if frmGoPhast.PhastModel.FarmProcess3IsSelected then
   begin
@@ -15222,7 +15234,8 @@ var
   AScreenObject: TScreenObject;
   Boundary: TFmpCropIDBoundary;
 begin
-  if not frmGoPhast.PhastModel.FarmProcess3IsSelected then
+  if (not frmGoPhast.PhastModel.FarmProcess3IsSelected)
+   and (not frmGoPhast.PhastModel.FarmProcess4TransientCropsUsed(nil)) then
   begin
     Exit;
   end;

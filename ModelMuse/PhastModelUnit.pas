@@ -562,6 +562,7 @@ const
   KFarmID = 'Farm_ID';
   KRefET = 'Reference_ET';
   KPrecipitation = 'Precipitation';
+  KLand_Use_ID = 'Land_Use_ID';
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -2890,6 +2891,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientFarmsUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4SteadyPrecipUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4SteadyRefETUsed(Sender: TObject): boolean; virtual;
+    function FarmProcess4SteadyCropsUsed(Sender: TObject): boolean; virtual;
+    function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; virtual;
 
     function GroundSurfaceUsed(Sender: TObject): boolean; virtual;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; virtual;
@@ -3212,6 +3215,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4FarmID(Sender: TObject);
     procedure InvalidateMfFmp4Precip(Sender: TObject);
     procedure InvalidateMfFmp4Evap(Sender: TObject);
+    procedure InvalidateMfFmp4CropID(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4285,6 +4289,8 @@ that affects the model output should also have a comment. }
     function Farm4ProcessUsed(Sender: TObject): boolean; override;
     function FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean; override;
     function FarmProcess4TransientFarmsUsed(Sender: TObject): boolean; override;
+    function FarmProcess4SteadyCropsUsed(Sender: TObject): boolean; override;
+    function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; override;
 //    function GroundSurfaceUsed(Sender: TObject): boolean; override;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; override;
     function UzfInitialInfiltrationUsed(Sender: TObject): boolean; override;
@@ -6129,6 +6135,7 @@ resourcestring
   StrFarmID = KFarmID;
   StrRefET = KRefET;
   StrPrecipitation = KPrecipitation;
+  StrLand_Use_ID = KLand_Use_ID;
 
 const
   StatFlagStrings : array[Low(TStatFlag)..High(TStatFlag)] of string
@@ -18694,13 +18701,7 @@ begin
     for SubDisIndex := 0 to MaxSubDiscretization - 1 do
     begin
       ChildCombinedIndex := CombinedIndex + SubDisIndex;
-//      try
-        AMapping[ChildCombinedIndex].ParentPostion := ParentDisIndex;
-//      except
-//        ShowMessage(Format('ChildCombinedIndex = %d; SubDisIndex = %d; ParentDisIndex = %d',
-//          [ChildCombinedIndex, SubDisIndex, ParentDisIndex]));
-//        raise
-//      end;
+      AMapping[ChildCombinedIndex].ParentPostion := ParentDisIndex;
     end;
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
@@ -23164,6 +23165,29 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4SteadyCropsUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      result := ChildModels[ChildIndex].ChildModel.
+        FarmProcess4SteadyCropsUsed(Sender);
+      if result then
+      begin
+        break;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -23176,6 +23200,29 @@ begin
     begin
       result := ChildModels[ChildIndex].ChildModel.
         FarmProcess4SteadyFarmsUsed(Sender);
+      if result then
+      begin
+        break;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientCropsUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      result := ChildModels[ChildIndex].ChildModel.
+        FarmProcess4TransientCropsUsed(Sender);
       if result then
       begin
         break;
@@ -25610,6 +25657,11 @@ end;
 procedure TCustomModel.InvalidateMfFhbHeads(Sender: TObject);
 begin
   ModflowPackages.FhbPackage.MfFhbHeads.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4CropID(Sender: TObject);
+begin
+  ModflowPackages.FarmLandUse.MfFmp4CropID.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4Evap(Sender: TObject);
@@ -34470,6 +34522,18 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4SteadyCropsUsed(Sender: TObject): boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.IsSelected
+    and (ModflowPackages.FarmLandUse.CropLocation = rstStatic);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
@@ -34498,6 +34562,18 @@ begin
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmClimate4.StaticEvapUsed(Sender));
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientCropsUsed(Sender: TObject): boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.IsSelected
+    and (ModflowPackages.FarmLandUse.CropLocation = rstTransient);
   {$ELSE}
   result := False;
   {$ENDIF}
@@ -36395,7 +36471,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 3;
+  OWHM4DataSets  = 4;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -39210,6 +39286,20 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, WBS Location';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtInteger;
+  FDataArrayCreationRecords[Index].Name := KLand_Use_ID;
+  FDataArrayCreationRecords[Index].DisplayName := StrLand_Use_ID;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadyCropsUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE Location';
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;

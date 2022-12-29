@@ -37638,7 +37638,6 @@ begin
       CellList, AssignmentLocation, AModel);
     for AssignmentIndex := 0 to CellList.Count - 1 do
     begin
-//      try
       CellAssignment := CellList[AssignmentIndex];
       UpdateCurrentSegment(CellAssignment.Segment);
       UpdateCurrentSection(CellAssignment.Section);
@@ -37646,10 +37645,6 @@ begin
       AssignCellValue(UsedVariables, DataSet, CellAssignment.Layer,
         CellAssignment.Row, CellAssignment.Column, Compiler,
         CellAssignment.Annotation, Expression, OtherData);
-//      except
-//        ShowMessage(IntToStr(AssignmentIndex));
-//
-//      end;
     end;
   finally
     CellList.Free;

@@ -906,17 +906,20 @@ begin
   FPrecipRateData.NonParamDescription := StrPrecipitationRate;
   FPrecipRateData.ParamDescription := ' ' + LowerCase(StrPrecipitationRate);
   AddTimeList(FPrecipRateData);
-  if Model.ModelSelection = msModflowFmp then
+  if Model <> nil then
   begin
-    FPrecipRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmpPrecip;
-  end
-  {$IFDEF OWHMV2}
-  else if Model.ModelSelection = msModflowOwhm2 then
-  begin
-    FPrecipRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmp4Precip;
-  end
-  {$ENDIF}
-  ;
+    if Model.ModelSelection = msModflowFmp then
+    begin
+      FPrecipRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmpPrecip;
+    end
+    {$IFDEF OWHMV2}
+    else if Model.ModelSelection = msModflowOwhm2 then
+    begin
+      FPrecipRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmp4Precip;
+    end
+    {$ENDIF}
+    ;
+  end;
 end;
 
 destructor TFmpPrecipTimeListLink.Destroy;

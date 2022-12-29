@@ -5342,7 +5342,7 @@ Type
     FLandUseFraction: TFarmProperty;
     FPondDepth: TFarmProperty;
     FLandUseOption: TLandUseOption;
-    FSoilLocation: TRequiredSteadyTransient;
+    FCropLocation: TRequiredSteadyTransient;
     FFractionOfPrecipToSurfaceWater: TFarmProperty;
     FET_IrrigFracCorrection: TFarmProperty;
     FSpecifyCropsToPrint: TFarmOption;
@@ -5359,6 +5359,7 @@ Type
     FStoredRelaxFracHeadChange: TRealStorage;
     FLandUsePrints: TLandUsePrints;
     FConsumptiveUse: TFarmProperty;
+    FMfFmp4CropID: TModflowBoundaryDisplayTimeList;
     procedure SetAddedDemand(const Value: TFarmProperty);
     procedure SetCropCoeff(const Value: TFarmProperty);
     procedure SetET_IrrigFracCorrection(const Value: TFarmProperty);
@@ -5381,8 +5382,11 @@ Type
     procedure SetMinimumBareFraction(const Value: double);
     procedure SetStoredRelaxFracHeadChange(const Value: TRealStorage);
     procedure SetLandUsePrints(const Value: TLandUsePrints);
-    procedure SetSoilLocation(const Value: TRequiredSteadyTransient);
+    procedure SetCropLocation(const Value: TRequiredSteadyTransient);
     procedure SetConsumptiveUse(const Value: TFarmProperty);
+    procedure InitializeFmp4CropIDDisplay(Sender: TObject);
+    procedure GetMfFmp4CropIDUseList(Sender: TObject; NewUseList: TStringList);
+    function TransientCropIDUsed(Sender: TObject): boolean;
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5396,14 +5400,18 @@ Type
     // RELAXATION_FACTOR_HEAD_CHANGE
     property RelaxFracHeadChange: double read GetRelaxFracHeadChange
       write SetRelaxFracHeadChange;
+    property MfFmp4CropID: TModflowBoundaryDisplayTimeList read FMfFmp4CropID;
   published
     // LAND_USE
     // {SINGLE_LAND_USE_PER_CELL, or MULTIPLE_LAND_USE_PER_CELL}
     property LandUseOption: TLandUseOption read FLandUseOption
       write SetLandUseOption;
     // LOCATION
-    property SoilLocation: TRequiredSteadyTransient read FSoilLocation
-      write SetSoilLocation;
+    property CropLocation: TRequiredSteadyTransient read FCropLocation
+      write SetCropLocation;
+      // for backwards compatiblity
+    property SoilLocation: TRequiredSteadyTransient read FCropLocation
+      write SetCropLocation Stored False;
     // LAND_USE_AREA_FRACTION
     property LandUseFraction: TFarmProperty read FLandUseFraction
       write SetLandUseFraction;
@@ -25566,7 +25574,7 @@ begin
     MinimumBareFraction := LandUse.MinimumBareFraction;
     RelaxFracHeadChange := LandUse.RelaxFracHeadChange;
     LandUseOption := LandUse.LandUseOption;
-    SoilLocation := LandUse.SoilLocation;
+    CropLocation := LandUse.CropLocation;
     LandUseFraction := LandUse.LandUseFraction;
     LandUsePrints := LandUse.LandUsePrints;
     SpecifyCropsToPrint := LandUse.SpecifyCropsToPrint;
@@ -25622,10 +25630,25 @@ begin
   FConsumptiveUse := TFarmProperty.Create(InvalidateEvent);
 
   InitializeVariables;
+
+  if Model <> nil then
+  begin
+    FMfFmp4CropID := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4CropID.OnInitialize := InitializeFmp4CropIDDisplay;
+    FMfFmp4CropID.OnGetUseList := GetMfFmp4CropIDUseList;
+    FMfFmp4CropID.OnTimeListUsed := TransientCropIDUsed;
+    FMfFmp4CropID.Name := 'Land Use ID';
+    if CropLocation = rstTransient then
+    begin
+      AddTimeList(FMfFmp4CropID);
+    end;
+  end;
 end;
 
 destructor TFarmProcess4LandUse.Destroy;
 begin
+  FMfFmp4CropID.Free;
+
   FLandUseFraction.Free;
   FPondDepth.Free;
   FFractionOfPrecipToSurfaceWater.Free;
@@ -25646,6 +25669,36 @@ begin
   inherited;
 end;
 
+procedure TFarmProcess4LandUse.GetMfFmp4CropIDUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  PhastModel: TCustomModel;
+  Boundary: TFmpCropIDBoundary;
+begin
+  PhastModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    Boundary := ScreenObject.ModflowFmpCropID;
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      for ValueIndex := 0 to Boundary.Values.Count -1 do
+      begin
+        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(0, NewUseList, Item, StrFMPCripID);
+      end;
+    end;
+  end;
+end;
+
 function TFarmProcess4LandUse.GetMinimumBareFraction: double;
 begin
   result := StoredMinimumBareFraction.Value;
@@ -25656,12 +25709,43 @@ begin
   result := StoredRelaxFracHeadChange.Value;
 end;
 
+procedure TFarmProcess4LandUse.InitializeFmp4CropIDDisplay(Sender: TObject);
+var
+  List: TModflowBoundListOfTimeLists;
+  FarmWriter: TModflowFmp4Writer;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  List := TModflowBoundListOfTimeLists.Create;
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    List.Add(MfFmp4CropID);
+
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.CreateDataSets;
+    end;
+
+    FarmWriter.UpdateCropIDDisplay(List);
+
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.ComputeAverage;
+    end;
+  finally
+    FarmWriter.Free;
+    List.Free;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InitializeVariables;
 begin
   MinimumBareFraction :=  0.000001;
   RelaxFracHeadChange := 1;
   FLandUseOption := luoSingle;
-  FSoilLocation := rstStatic;
+  FCropLocation := rstStatic;
   FLandUseFraction.Initialize;
   FLandUsePrints := [];
   FSpecifyCropsToPrint := foNotUsed;
@@ -25779,12 +25863,23 @@ begin
   FRootPressure.Assign(Value);
 end;
 
-procedure TFarmProcess4LandUse.SetSoilLocation(
+procedure TFarmProcess4LandUse.SetCropLocation(
   const Value: TRequiredSteadyTransient);
 begin
-  if FSoilLocation <> Value then
+  if FCropLocation <> Value then
   begin
-    FSoilLocation := Value;
+    FCropLocation := Value;
+    if FModel <> nil then
+    begin
+      if FCropLocation = rstTransient then
+      begin
+        AddTimeList(MfFmp4CropID);
+      end
+      else
+      begin
+        RemoveTimeList(MfFmp4CropID);
+      end;
+    end;
     InvalidateModel;
   end;
 end;
@@ -25807,6 +25902,12 @@ end;
 procedure TFarmProcess4LandUse.SetTranspirationFraction(const Value: TFarmProperty);
 begin
   FTranspirationFraction.Assign(Value);
+end;
+
+function TFarmProcess4LandUse.TransientCropIDUsed(Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (CropLocation = rstTransient);
 end;
 
 { TFarmSalinityFlush }

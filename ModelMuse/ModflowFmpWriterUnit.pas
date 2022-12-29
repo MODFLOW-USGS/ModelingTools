@@ -210,6 +210,7 @@ resourcestring
   StrFMPFarmsNotDefine = 'FMP Farms not defined in one or more stress period' +
   's';
   StrRow0dColumn = 'Row: %0:d; Column: %1:d';
+  StrInvalidCropIDInF = 'Invalid Crop ID in Farm Process.';
 
 implementation
 
@@ -314,7 +315,6 @@ resourcestring
 //  StrInvalidFarmID = 'Invalid Farm ID in Farm Process';
 //  StrRow0dColumn = 'Row: %0:d; Column: %1:d';
   StrInvalidSoilIDInF = 'Invalid Soil ID in Farm Process';
-  StrInvalidCropIDInF = 'Invalid Crop ID in Farm Process.';
   StrTheFormulaShouldR = 'The formula should result in a Boolean';
   StrTheFormulaShouldInt = 'The formula should result in an integer';
   StrTheFormulaShouldReal = 'The formula should result in a real number';

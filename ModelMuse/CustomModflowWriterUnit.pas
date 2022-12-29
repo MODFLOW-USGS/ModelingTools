@@ -3699,7 +3699,6 @@ begin
   else
   begin
     Uniform := CheckArrayUniform(LayerIndex, DataArray, IntValue, BoolValue, RealValue);
-
     if Uniform then
     begin
       case DataArray.DataType of

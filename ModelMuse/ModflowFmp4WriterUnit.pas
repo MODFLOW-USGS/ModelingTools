@@ -37,18 +37,21 @@ type
   TModflowFmp4Writer = class(TCustomListWriter)
   private
     FFarmProcess4: TFarmProcess4;
+    FClimatePackage: TFarmProcess4Climate;
+    FLandUse: TFarmProcess4LandUse;
     FWriteLocation: TWriteLocation;
     FFarmIDs: TList;
     FRefEts: TList;
     FPrecip: TList;
+    FCropIDs: TList;
     FFID_FileStream: TFileStream;
     FACtiveSurfaceCells: array of array of boolean;
     FFarmWellID: Integer;
     FOpenCloseFileStream: TFileStream;
-    FClimatePackage: TFarmProcess4Climate;
     FBaseName: string;
     FPFLX_FileStream: TFileStream;
     FETR_FileStream: TFileStream;
+    FCID_FileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -62,19 +65,21 @@ type
     procedure WriteSurfaceWaterIrrigation;
     procedure WriteFileInternal;
     procedure EvaluateFarmID;
+    procedure EvaluateCropID;
     procedure EvaluateAll;
     procedure FreeFileStreams;
-    procedure WriteFarmLocation;
     // wbs location
 //    procedure WriteDataSet26(TimeIndex: Integer);
-    procedure CheckIntegerDataSet(IntegerArray: TDataArray;
+    procedure CheckDataSetZeroOrPositive(IntegerArray: TDataArray;
       const ErrorMessage: string);
     procedure EvaluateActiveCells;
     procedure RemoveErrorAndWarningMessages;
     procedure EvaluateReferenceET;
     procedure EvaluatePrecip;
+    procedure WriteFarmLocation;
     procedure WritePrecipitation;
     procedure WriteRefET;
+    procedure WriteLandUseLocation;
     procedure WriteTransientFmpArrayData(RequiredValues: TRequiredValues);
     function GetTransientList(WriteLocation: TWriteLocation): TList;
     function GetFileStreamName(WriteLocation: TWriteLocation): string;
@@ -105,9 +110,13 @@ type
     procedure WriteConstantU2DINT(const Comment: string;
       const Value: integer; ArrayType: TModflowArrayType;
       const MF6_ArrayName: string); override;
+    procedure WriteConstantU2DREL(const Comment: string;
+      const Value: double; ArrayType: TModflowArrayType;
+      const MF6_ArrayName: string); override;
     procedure UpdateFarmIDDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateRefEtDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdatePrecipDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateCropIDDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 
@@ -128,7 +137,7 @@ begin
   result := TFmpWell_Cell;
 end;
 
-procedure TModflowFmp4Writer.CheckIntegerDataSet(IntegerArray: TDataArray;
+procedure TModflowFmp4Writer.CheckDataSetZeroOrPositive(IntegerArray: TDataArray;
   const ErrorMessage: string);
 var
   ColIndex: Integer;
@@ -172,14 +181,17 @@ begin
   FFarmIDs := TObjectList.Create;
   FRefEts := TObjectList.Create;
   FPrecip := TObjectList.Create;
+  FCropIDs := TObjectList.Create;
 
+  FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
-
+  FLandUse := Model.ModflowPackages.FarmLandUse;
 end;
 
 destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
+  FCropIDs.Free;
   FPrecip.Free;
   FRefEts.Free;
   FFarmIDs.Free;
@@ -219,6 +231,16 @@ begin
   EvaluateFarmID;
   EvaluateReferenceET;
   EvaluatePrecip;
+  EvaluateCropID;
+end;
+
+procedure TModflowFmp4Writer.EvaluateCropID;
+begin
+  if FLandUse.CropLocation = rstTransient then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidCropIDInF);
+    EvaluateTransientArrayData(wlCID);
+  end;
 end;
 
 procedure TModflowFmp4Writer.EvaluateFarmID;
@@ -256,6 +278,8 @@ begin
   FreeAndNil(FFID_FileStream);
   FreeAndNil(FPFLX_FileStream);
   FreeAndNil(FETR_FileStream);
+  FreeAndNil(FCID_FileStream);
+
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -278,6 +302,12 @@ begin
       end;
     wlCID:
       begin
+        RESULT := ChangeFileExt(FBaseName, '.CID');
+        if FCID_FileStream = nil then
+        begin
+          FCID_FileStream := TFileStream.Create(RESULT,
+            fmCreate or fmShareDenyWrite);
+        end;
       end;
     wlFID:
       begin
@@ -347,7 +377,7 @@ begin
     wlMain: ;
     wlOpenClose: ;
     wlOFE: ;
-    wlCID: ;
+    wlCID: result := ScreenObject.ModflowFmpCropID;
     wlFID: result := ScreenObject.ModflowFmpFarmID;
     wlRoot: ;
     wlCropUse: ;
@@ -372,7 +402,7 @@ begin
     wlMain: ;
     wlOpenClose: ;
     wlOFE: ;
-    wlCID: ;
+    wlCID: result := FCropIDs;
     wlFID: result := FFarmIDs;
     wlRoot: ;
     wlCropUse: ;
@@ -403,6 +433,73 @@ end;
 procedure TModflowFmp4Writer.RemoveErrorAndWarningMessages;
 begin
 
+end;
+
+procedure TModflowFmp4Writer.UpdateCropIDDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  DataSets: TList;
+  CropID: TModflowBoundaryDisplayTimeList;
+  TimeIndex: integer;
+  TimeListIndex: integer;
+  List: TValueCellList;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  DataArray: TDataArray;
+  CropIDIndex: integer;
+  DataSetIndex: integer;
+begin
+  EvaluateActiveCells;
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    RemoveErrorAndWarningMessages;
+    if FLandUse.CropLocation <> rstTransient then
+    begin
+      UpdateNotUsedDisplay(TimeLists);
+      Exit;
+    end;
+    DataSets := TList.Create;
+    try
+      EvaluateCropID;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      CropID := TimeLists[0];
+      for TimeIndex := 0 to CropID.Count - 1 do
+      begin
+        DataSets.Clear;
+
+        for TimeListIndex := 0 to TimeLists.Count - 1 do
+        begin
+          TimeList := TimeLists[TimeListIndex];
+          DataArray := TimeList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          DataSets.Add(DataArray);
+        end;
+
+        for CropIDIndex := 0 to FCropIDs.Count - 1 do
+        begin
+          List := FCropIDs[CropIDIndex];
+          UpdateCellDisplay(List, DataSets, [], nil, [0]);
+          List.Cache;
+        end;
+        for DataSetIndex := 0 to DataSets.Count - 1 do
+        begin
+          DataArray := DataSets[DataSetIndex];
+          DataArray.UpToDate := True;
+          CheckDataSetZeroOrPositive(DataArray, StrInvalidCropIDInF);
+          DataArray.CacheData;
+        end;
+      end;
+
+      SetTimeListsUpToDate(TimeLists);
+    finally
+      DataSets.Free;
+    end;
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
 end;
 
 procedure TModflowFmp4Writer.UpdateFarmIDDisplay(
@@ -458,7 +555,7 @@ begin
         begin
           DataArray := DataSets[DataSetIndex];
           DataArray.UpToDate := True;
-          CheckIntegerDataSet(DataArray, StrInvalidFarmID);
+          CheckDataSetZeroOrPositive(DataArray, StrInvalidFarmID);
           DataArray.CacheData;
         end;
       end;
@@ -560,6 +657,10 @@ begin
     try
       DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
       WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
+      if Assigned(RequiredValues.CheckProcedure) then
+      begin
+        RequiredValues.CheckProcedure(DataArray, RequiredValues.CheckError);
+      end;
     finally
       FWriteLocation := wlMain;
     end;
@@ -701,7 +802,7 @@ var
 begin
   case FWriteLocation of
     wlMain: inherited;
-    wlOpenClose, wlCID, wlFID:
+    wlOpenClose:
       begin
         OldLocation := FWriteLocation;
         FWriteLocation := wlMain;
@@ -710,44 +811,45 @@ begin
         finally
           FWriteLocation := OldLocation
         end;
+      end;
+    wlCID, wlFID:
+      begin
+        inherited;
       end
     else
       Assert(False);
   end;
 end;
 
-//procedure TModflowFmp4Writer.WriteDataSet26(TimeIndex: Integer);
-//var
-//  FarmIDList: TValueCellList;
-//  Comment: string;
-//  DataTypeIndex: Integer;
-//  DataType: TRbwDataType;
-//  DefaultValue: Double;
-//  FarmIdArray: TDataArray;
-//begin
-//  if FFarmIDs.Count <= TimeIndex then
-//  begin
-//    frmErrorsAndWarnings.AddError(Model, StrFMPFarmsNotDefine, IntToStr(TimeIndex+1));
-//    Exit;
-//  end;
-//  FarmIDList := FFarmIDs[TimeIndex];
-//  DefaultValue := 0;
-//  DataType := rdtInteger;
-//  DataTypeIndex := 0;
-//  Comment := 'Data Set 26: FID';
-//
-//  FarmIdArray := nil;
-//  FWriteLocation := wlFID;
-//  try
-//    WriteCommentLine(Format('Stress Period %d', [TimeIndex+1]));
-//    WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-//      FarmIDList, umAssign, False, FarmIdArray, 'FID', False, False);
-//    CheckIntegerDataSet(FarmIdArray, StrInvalidFarmID);
-//  finally
-//    FWriteLocation := wlMain;
-//    FarmIdArray.Free;
-//  end;
-//end;
+procedure TModflowFmp4Writer.WriteConstantU2DREL(const Comment: string;
+  const Value: double; ArrayType: TModflowArrayType;
+  const MF6_ArrayName: string);
+begin
+  inherited;
+
+end;
+
+procedure TModflowFmp4Writer.WriteLandUseLocation;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  AFileName := GetFileStreamName(wlCID);
+
+  RequiredValues.WriteLocation := wlCID;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: Location';
+  RequiredValues.ErrorID := 'FMP LAND_USE: Location';
+  RequiredValues.ID := 'LOCATION';
+  RequiredValues.StaticDataName := KLand_Use_ID;
+  RequiredValues.WriteTransientData := FLandUse.CropLocation = rstTransient;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := StrInvalidCropIDInF;
+
+  WriteFmpArrayData(AFileName, RequiredValues);
+end;
 
 procedure TModflowFmp4Writer.WriteTransientFmpArrayData(RequiredValues: TRequiredValues);
 var
@@ -794,9 +896,7 @@ end;
 
 procedure TModflowFmp4Writer.WriteFarmLocation;
 var
-//  StressPeriodIndex: Integer;
   AFileName: string;
-//  DataArray: TDataArray;
   RequiredValues: TRequiredValues;
 begin
   AFileName := GetFileStreamName(wlFID);
@@ -810,43 +910,14 @@ begin
   RequiredValues.ID := 'LOCATION';
   RequiredValues.StaticDataName := KFarmID;
   RequiredValues.WriteTransientData := FFarmProcess4.Farms.FarmOption = foTransient;
-  RequiredValues.CheckProcedure := CheckIntegerDataSet;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.CheckError := StrInvalidFarmID;
 
   WriteFmpArrayData(AFileName, RequiredValues);
-
-//  WriteString('  LOCATION ');
-//
-//  if FFarmProcess4.Farms.FarmOption = foTransient then
-//  begin
-//    WriteString('TRANSIENT ARRAY DATAFILE ');
-//    WriteString(ExtractFileName(AFileName));
-//    NewLine;
-//
-//    for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-//    begin
-//      WriteDataSet26(StressPeriodIndex);
-//      NewLine;
-//    end;
-//  end
-//  else
-//  begin
-//    WriteString('STATIC ARRAY DATAFILE ');
-//    WriteString(ExtractFileName(AFileName));
-//    NewLine;
-//    FWriteLocation := wlFID;
-//    try
-//      DataArray := Model.DataArrayManager.GetDataSetByName(KFarmID);
-//      WriteArray(DataArray, 0, 'WBS: LOCATION', '', 'LOCATION', False, False);
-//    finally
-//      FWriteLocation := wlMain;
-//    end;
-//  end;
 end;
 
 procedure TModflowFmp4Writer.WriteFile(const AFileName: string);
 begin
-  FFarmProcess4 := Package as TFarmProcess4;
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFarmProcess);
   if (not FFarmProcess4.IsSelected)
 {$IFDEF OWHMV2}
@@ -961,21 +1032,25 @@ end;
 
 procedure TModflowFmp4Writer.WriteLandUse;
 begin
-  WriteString('BEGIN LAND_USE');
-  NewLine;
+  if FLandUse.IsSelected then
+  begin
+    WriteString('BEGIN LAND_USE');
+    NewLine;
 
-  WriteString('  SINGLE_LAND_USE_PER_CELL');
-  NewLine;
+    // remove this.
+    WriteString('  SINGLE_LAND_USE_PER_CELL');
+    NewLine;
 
-  WriteString('  LOCATION STATIC CONSTANT 1');
-  NewLine;
+    WriteLandUseLocation;
 
-  WriteString('  ROOT_DEPTH STATIC CONSTANT 0.00001');
-  NewLine;
+    // remove this.
+    WriteString('  ROOT_DEPTH STATIC CONSTANT 0.00001');
+    NewLine;
 
-  WriteString('END LAND_USE');
-  NewLine;
-  NewLine;
+    WriteString('END LAND_USE');
+    NewLine;
+    NewLine;
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteOutput;
@@ -1032,32 +1107,6 @@ begin
   RequiredValues.CheckError := '';
 
   WriteFmpArrayData(AFileName, RequiredValues);
-
-//  WriteString('  ');
-//  WriteString(RequiredValues.ID);
-//  WriteString(' ');
-//
-//  if RequiredValues.WriteTransientData then
-//  begin
-//    WriteString('TRANSIENT ARRAY DATAFILE ');
-//    WriteString(ExtractFileName(AFileName));
-//    NewLine;
-//
-//    WriteTransientFmpArrayData(RequiredValues);
-//  end
-//  else
-//  begin
-//    WriteString('STATIC ARRAY DATAFILE ');
-//    WriteString(ExtractFileName(AFileName));
-//    NewLine;
-//    FWriteLocation := RequiredValues.WriteLocation;
-//    try
-//      DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
-//      WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
-//    finally
-//      FWriteLocation := wlMain;
-//    end;
-//  end;
 end;
 
 procedure TModflowFmp4Writer.WriteRefET;
@@ -1121,9 +1170,8 @@ begin
         end;
       wlCID:
         begin
-          Assert(False);
-//          Assert(FCID_FileStream <> nil);
-//          FCID_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+          Assert(FCID_FileStream <> nil);
+          FCID_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlFID:
         begin
@@ -1224,7 +1272,6 @@ end;
 procedure TModflowFmp4Writer.WriteWaterBalanceSubregion;
 begin
   WriteString('BEGIN WATER_BALANCE_SUBREGION');
-  NewLine;
   NewLine;
 
   WriteFarmLocation;

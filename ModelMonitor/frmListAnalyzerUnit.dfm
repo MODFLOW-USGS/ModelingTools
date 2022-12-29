@@ -11,11 +11,13 @@ object frmMain: TfrmMain
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
+  OldCreateOrder = True
   Scaled = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
+  PixelsPerInch = 96
   TextHeight = 19
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 273
@@ -34,7 +36,7 @@ object frmMain: TfrmMain
     Top = 79
     Width = 273
     Height = 393
-    ActivePage = tabIndex
+    ActivePage = tabErrors
     Align = alLeft
     Images = ilTabFaces
     MultiLine = True

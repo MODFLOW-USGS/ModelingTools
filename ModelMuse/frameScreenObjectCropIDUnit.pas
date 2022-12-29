@@ -27,10 +27,11 @@ var
 implementation
 
 uses
-  ModflowFmpCropSpatialUnit;
+  ModflowFmpCropSpatialUnit, frmGoPhastUnit, GoPhastTypes;
 
 resourcestring
   StrCropID_ICID = 'Crop ID (ICID)';
+  StrLandUseID = 'Land Use ID';
 
 {$R *.dfm}
 
@@ -56,7 +57,14 @@ end;
 procedure TframeScreenObjectCropID.InitializeControls;
 begin
   inherited;
-  rdgModflowBoundary.Cells[Ord(pcValue), 0] := StrCropID_ICID;
+  if frmGoPhast.ModelSelection = msModflowFmp then
+  begin
+    rdgModflowBoundary.Cells[Ord(pcValue), 0] := StrCropID_ICID;
+  end
+  else
+  begin
+    rdgModflowBoundary.Cells[Ord(pcValue), 0] := StrLandUseID;
+  end;
 end;
 
 end.

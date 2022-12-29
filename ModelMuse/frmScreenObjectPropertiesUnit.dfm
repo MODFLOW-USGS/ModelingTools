@@ -2466,7 +2466,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspFarmPrecip
+        ActivePage = jvspFarmCropID
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange

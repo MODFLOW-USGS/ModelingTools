@@ -742,7 +742,14 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-    Model.InvalidateMfFmpCropID(self);
+    if Model.ModelSelection = msModflowFmp then
+    begin
+      Model.InvalidateMfFmpCropID(self);
+    end
+    else
+    begin
+      Model.InvalidateMfFmp4CropID(self);
+    end;
   end;
 end;
 
@@ -886,8 +893,17 @@ begin
   AddTimeList(FCropIDData);
   if Model <> nil then
   begin
-    FCropIDData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmpCropID;
-  end;
+    if Model.ModelSelection = msModflowFmp then
+    begin
+      FCropIDData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmpCropID;
+    end
+    {$IFDEF OWHMV2}
+    else if Model.ModelSelection = msModflowOwhm2 then
+    begin
+      FCropIDData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmp4CropID;
+    end
+    {$ENDIF}
+  end
 end;
 
 destructor TFmpCropIDTimeListLink.Destroy;
