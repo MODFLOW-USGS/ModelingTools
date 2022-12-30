@@ -775,7 +775,9 @@ uses
   framePackageFmp4WellsUnit in 'framePackageFmp4WellsUnit.pas' {framePackageFmp4Wells: TFrame},
   framePackageFmp4AllotmentsUnit in 'framePackageFmp4AllotmentsUnit.pas' {framePackageFmp4Allotments: TFrame},
   framePackageFmp4LandUseUnit in 'framePackageFmp4LandUseUnit.pas' {framePackageFmp4LandUse: TFrame},
-  framePackageFmp4SalinityFlushUnit in 'framePackageFmp4SalinityFlushUnit.pas' {framePackageFmp4SalinityFlush: TFrame};
+  framePackageFmp4SalinityFlushUnit in 'framePackageFmp4SalinityFlushUnit.pas' {framePackageFmp4SalinityFlush: TFrame},
+  ModflowFmp4BoundaryUnit in 'ModflowFmp4BoundaryUnit.pas',
+  ModflowFmp4EfficiencyUnit in 'ModflowFmp4EfficiencyUnit.pas';
 
 {$R *.res}
 
