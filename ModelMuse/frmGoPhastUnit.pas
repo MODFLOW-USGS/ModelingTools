@@ -2444,6 +2444,12 @@ resourcestring
   'continue anyway?';
   StrPpcovsvaexeWasNo = 'ppcov_sva.exe was not found in %s.  Do you want to ' +
   'continue anyway?';
+  StrMODFLOWNWTCanNot = 'MODFLOW-NWT can not be used with MT3DMS if the LAK,' +
+  ' SFR, or UZF packages are selected. Use MT3D-USGS instead.';
+  StrTheSaveSaturation = 'The "Save Saturation" option in the Node Property ' +
+  'Flow package can not be used with MT3D-USGS. You must fix this in the "Mo' +
+  'del|MODFLOW Packages and Programs" dialog box and rerun MODFLOW before ru' +
+  'nning MT3D-USGS.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -8102,18 +8108,20 @@ begin
     and (PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS)
     and (PhastModel.SfrIsSelected or PhastModel.LakIsSelected or PhastModel.UzfIsSelected) then
   begin
-//    ModelProgramName := PhastModel.ModflowLocation;
-    //if FileExists(ModelProgramName)
-//      and (CompareText(ExtractFileName(ModelProgramName),
-      //'mf2005dbl.exe') = 0) then
-//    begin
-      Beep;
-      MessageDlg('MODFLOW-NWT can not be used with MT3DMS if the LAK, SFR, or UZF packages are selected. Use MT3D-USGS instead.', mtError, [mbOK],
-        0);
-//      begin
-        result := false;
-//      end;
-//    end;
+    Beep;
+    MessageDlg(StrMODFLOWNWTCanNot, mtError, [mbOK],
+      0);
+    result := false;
+  end;
+  if (PhastModel.ModelSelection = msModflow2015)
+    and (PhastModel.Mt3dmsIsSelected)
+    and (PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS)
+    and PhastModel.ModflowPackages.NpfPackage.SaveSaturation
+    then
+  begin
+    Beep;
+    MessageDlg(StrTheSaveSaturation, mtError, [mbOK], 0);
+    result := False;
   end;
 end;
 

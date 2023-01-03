@@ -30,7 +30,7 @@ begin
 
 end;
 
-function TFmp4EfficiencyTimeListLink.GetDescription: string;
+class function TFmp4EfficiencyTimeListLink.GetDescription: string;
 begin
   result := 'Fmp4 Efficiency';
 end;

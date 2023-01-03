@@ -10789,12 +10789,16 @@ const
 //    '5.1.1.2'  Bug fix: Fixed bug that would cause ModelMuse to fail in
 //                creating the SFR input files for MODFLOW 6 models with
 //                diversions in the SFR packages.
+//    '5.1.1.3'  Bug fix: Fixed bug that would cause the batch file for running
+//                a model to be created incorrectly in some cases.
+//               Bug fix: Added a test for ensuring that MODFLOW 6 did not use
+//                the Save Saturation option when used with MT3D-USGS.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.2';
+  IIModelVersion = '5.1.1.3';
 
 function IModelVersion: string;
 begin

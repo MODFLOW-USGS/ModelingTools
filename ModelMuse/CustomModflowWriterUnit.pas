@@ -1298,13 +1298,11 @@ end;
 procedure AddOpenListFileLine(ListFile: string; OpenListFile: Boolean;
   BatchFile: TStringList; ProgramLocations: TProgramLocations);
 var
-//  IsNotePad: Boolean;
   TextEditor: string;
 begin
   if OpenListFile then
   begin
     TextEditor := ProgramLocations.TextEditorLocation;
-//    IsNotePad := CompareText(StrNotepadexe, ExtractFileName(TextEditor)) = 0;
     if TextEditor <> StrNotepadexe then
     begin
       if not FileExists(TextEditor) then
@@ -1318,14 +1316,7 @@ begin
     end;
     TextEditor := QuoteFileName(TextEditor);
     ListFile := QuoteFileName(ExtractFileName(ListFile));
-//    if IsNotePad then
-//    begin
-      BatchFile.Add('Start ' + TextEditor + ' ' + ListFile);
-//    end
-//    else
-//    begin
-//      BatchFile.Add(TextEditor + ' ' + ListFile);
-//    end;
+    BatchFile.Add('Start ' + TextEditor + ' ' + ListFile);
   end;
 end;
 
@@ -1650,13 +1641,21 @@ begin
       ArchiveBatchFile.AddStrings(Before);
       ParamEstBatchFile.AddStrings(Before);
 
-      if (Model.ModelSelection <> msModflow2015) and
-        FileExists(ProgramLocations.ModelMonitorLocation) then
+      if (Model.ModelSelection <> msModflow2015) then
       begin
-        BatchFile.Add('call '
-          + QuoteFileName(ExpandFileName(ProgramLocations.ModelMonitorLocation))
-          + ' -m ' + QuoteFileName(ExpandFileName(ModflowLocation))
-          + ' -n ' + QuoteFileName(ExtractFileName(FileName)));
+        if FileExists(ProgramLocations.ModelMonitorLocation) then
+        begin
+          BatchFile.Add('call '
+            + QuoteFileName(ExpandFileName(ProgramLocations.ModelMonitorLocation))
+            + ' -m ' + QuoteFileName(ExpandFileName(ModflowLocation))
+            + ' -n ' + QuoteFileName(ExtractFileName(FileName)));
+        end
+        else
+        begin
+          AFileName :=  QuoteFileName(ExpandFileName(ModflowLocation));
+          BatchFile.Add(AFileName + ' '
+            + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
+        end;
       end
       else
       begin
