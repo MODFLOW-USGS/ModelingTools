@@ -777,7 +777,8 @@ uses
   framePackageFmp4LandUseUnit in 'framePackageFmp4LandUseUnit.pas' {framePackageFmp4LandUse: TFrame},
   framePackageFmp4SalinityFlushUnit in 'framePackageFmp4SalinityFlushUnit.pas' {framePackageFmp4SalinityFlush: TFrame},
   ModflowFmp4BoundaryUnit in 'ModflowFmp4BoundaryUnit.pas',
-  ModflowFmp4EfficiencyUnit in 'ModflowFmp4EfficiencyUnit.pas';
+  ModflowFmp4EfficiencyUnit in 'ModflowFmp4EfficiencyUnit.pas',
+  frameScreenObjectCustomFmp4BoundaryUnit in 'frameScreenObjectCustomFmp4BoundaryUnit.pas' {frameScreenObjectCustomFmp4Boundary: TFrame};
 
 {$R *.res}
 

@@ -114,7 +114,7 @@ type
     procedure InvalidateStartHeadData(Sender: TObject);
     procedure InvalidateEndHeadData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -397,7 +397,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TResCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TResCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TResTimeListLink;
 end;

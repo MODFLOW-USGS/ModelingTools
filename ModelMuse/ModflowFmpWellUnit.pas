@@ -106,7 +106,7 @@ type
     procedure InvalidateFarmIdData(Sender: TObject);
   protected
     function OkListDataTypes(BoundaryIndex: Integer): TRbwDataTypes; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
@@ -811,7 +811,7 @@ begin
   end;
 end;
 
-function TFmpWellCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TFmpWellCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMfFmpWelTimeListLink;
 end;

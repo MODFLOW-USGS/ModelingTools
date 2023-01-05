@@ -326,7 +326,6 @@ type
       PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
-//    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     function CanInvalidate: boolean;
     procedure Changed; override;
@@ -401,7 +400,7 @@ type
     procedure PQChangeHandler(Sender: TObject); override;
     procedure UChangeHandler(Sender: TObject); override;
     procedure UsedChangeHandler(Sender: TObject); override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: TBaseModel; ScreenObject: TObject); override;
@@ -439,7 +438,7 @@ type
     class function ItemClass: TBoundaryItemClass; override;
     procedure UChangeHandler(Sender: TObject); override;
     procedure UsedChangeHandler(Sender: TObject); override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: TBaseModel; ScreenObject: TObject); override;
@@ -478,7 +477,7 @@ type
     procedure PQChangeHandler(Sender: TObject); override;
     procedure UChangeHandler(Sender: TObject); override;
     procedure UsedChangeHandler(Sender: TObject); override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: TBaseModel; ScreenObject: TObject); override;
@@ -516,7 +515,7 @@ type
     class function ItemClass: TBoundaryItemClass; override;
     procedure UChangeHandler(Sender: TObject); override;
     procedure UsedChangeHandler(Sender: TObject); override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: TBaseModel; ScreenObject: TObject); override;
@@ -590,30 +589,6 @@ begin
   UsedChangeHandler(Self);
 
 end;
-
-//function TCustomSutraBoundaryCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
-//begin
-//  result := nil;
-//  // this needs to be changed.
-//  Assert(False);
-//end;
-
-//procedure TCustomSutraBoundaryCollection.SetBoundaryName(Value: AnsiString);
-//const
-//  MaxLength = 40;
-//begin
-//  if Length(Value) > MaxLength then
-//  begin
-//    SetLength(Value, MaxLength);
-//  end;
-//  if FBoundaryName <> Value then
-//  begin
-//    FBoundaryName := Value;
-//
-//    InvalidateModel;
-//  end;
-//end;
-
 
 procedure TCustomSutraBoundaryCollection.AddSpecificBoundary(
   AModel: TBaseModel);
@@ -1105,7 +1080,7 @@ begin
 
 end;
 
-function TSutraFluidBoundaryCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSutraFluidBoundaryCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSutraFluidTimeLink;
 end;
@@ -1148,7 +1123,7 @@ begin
   inherited;
 end;
 
-function TSutraMassEnergySourceSinkCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSutraMassEnergySourceSinkCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSutraMassEnergyTimeLink;
 end;
@@ -1183,7 +1158,7 @@ begin
 
 end;
 
-function TSutraSpecifiedPressureCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSutraSpecifiedPressureCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSutraSpecifiedPressureTimeLink;
 end;
@@ -1227,7 +1202,7 @@ begin
 
 end;
 
-function TSutraSpecifiedConcTempCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSutraSpecifiedConcTempCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSutraSpecifiedConcTempTimeLink;
 end;

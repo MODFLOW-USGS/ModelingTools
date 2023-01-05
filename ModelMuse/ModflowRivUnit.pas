@@ -170,7 +170,7 @@ type
     procedure InvalidateRiverBottomData(Sender: TObject);
     procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
@@ -705,7 +705,7 @@ end;
 
 { TRivCollection }
 
-function TRivCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TRivCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TRivTimeListLink;
 end;

@@ -30,7 +30,7 @@ type
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
     procedure InvalidateModel; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function ConcName: string; override;
   end;
 
@@ -146,7 +146,7 @@ begin
   result := StrUzfSeepageConcentration;
 end;
 
-function TMt3dUzfSinkConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMt3dUzfSinkConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMt3dUzfSinkConcTimeListLink;
 end;

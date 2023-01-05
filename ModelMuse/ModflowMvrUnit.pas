@@ -175,7 +175,7 @@ type
     procedure UpdateObservers;
   protected
     class function ItemClass: TBoundaryItemClass; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer;
@@ -872,7 +872,7 @@ begin
   result := inherited Items[Index] as TMvrItem
 end;
 
-function TMvrItems.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMvrItems.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMvrTimeListLink;
 end;

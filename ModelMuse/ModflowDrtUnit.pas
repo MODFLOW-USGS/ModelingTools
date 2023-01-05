@@ -108,7 +108,7 @@ type
     procedure InvalidateConductanceData(Sender: TObject);
     procedure InvalidateReturnData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
@@ -547,7 +547,7 @@ end;
 
 { TDrtCollection }
 
-function TDrtCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TDrtCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TDrtTimeListLink;
 end;

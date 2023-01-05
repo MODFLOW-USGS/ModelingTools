@@ -132,7 +132,7 @@ type
     procedure InvalidateConductanceData(Sender: TObject);
     procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -621,7 +621,7 @@ end;
 
 { TGhbCollection }
 
-function TGhbCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TGhbCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TGhbTimeListLink;
 end;

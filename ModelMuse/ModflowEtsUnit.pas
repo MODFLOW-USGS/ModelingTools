@@ -141,7 +141,7 @@ type
     procedure InvalidateEtSurface(Sender: TObject);
     procedure InvalidateEtDepth(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     function GetTimeList(Index: integer; AModel: TBaseModel): TModflowTimeList; override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
@@ -179,7 +179,7 @@ type
 
   TEtsLayerCollection = class(TEvtLayerCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
   TEtsSurfDepth_Cell = class(TValueCell)
@@ -266,7 +266,7 @@ type
 
   TEtsCollection = class(TEvtCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignConcentrationArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
       PestItemNames, TimeSeriesNames: TStringListObjectList); override;
@@ -547,7 +547,10 @@ var
   TimeIndex: Integer;
   Cells: TValueCellList;
   LocalBoundaryStorage: TEtsSurfDepthStorage;
+  Active: TDataArray;
+  LayerIndex: Integer;
 begin
+  Active := (AModel as TCustomModel).DataArrayManager.GetDataSetByName(rsActive);
   LocalBoundaryStorage := BoundaryStorage;
   for TimeIndex := 0 to
     (ParentModel as TPhastModel).ModflowFullStressPeriods.Count - 1 do
@@ -578,9 +581,16 @@ begin
         Cell.Values.Assign(BoundaryValues);
         if BoundaryValues.EvapotranspirationDepth <= 0 then
         begin
-          frmErrorsAndWarnings.AddError(AModel, StrEvapotranspirationD_ETS,
-            Format(StrSP_Lay_Row_Col,
-            [TimeIndex+1, Cell.Layer+1, Cell.Row+1, Cell.Column + 1]));
+          for LayerIndex := 0 to Active.LayerCount - 1 do
+          begin
+            if Active.BooleanData[LayerIndex, Cell.Row, Cell.Column] then
+            begin
+              frmErrorsAndWarnings.AddError(AModel, StrEvapotranspirationD_ETS,
+                Format(StrSP_Lay_Row_Col,
+                [TimeIndex+1, Cell.Layer+1, Cell.Row+1, Cell.Column + 1]));
+              break;
+            end;
+          end;
         end;
       end;
       Cells.Cache;
@@ -1911,7 +1921,7 @@ begin
   result := Inherited GetTimeList(index, AModel);
 end;
 
-function TEtsSurfDepthCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TEtsSurfDepthCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TEtsSurfDepthTimeListLink;
 end;
@@ -2789,7 +2799,7 @@ end;
 
 { TEtsLayerCollection }
 
-function TEtsLayerCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TEtsLayerCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TEtsLayerTimeListLink;
 end;
@@ -2800,85 +2810,11 @@ procedure TEtsCollection.AssignConcentrationArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
   PestMethods: TPestMethodList; PestItemNames,
   TimeSeriesNames: TStringListObjectList);
-//var
-//  LocalModel: TCustomModel;
-//  Boundary: TEvtStorage;
-//  BoundaryIndex: Integer;
-//  SpeciesIndex: Integer;
-//  ConcentrationArray: TDataArray;
-//  LocalConcentrationPestSeries: string;
-//  LocalConcentrationPestMethod: TPestParamMethod;
-//  ConcentrationPestItems: TStringList;
-//  LocalConcentrationPest: string;
-//  ConcentrationTimeItems: TStringList;
-//  LocalConcentrationTimeSeries: string;
-//  LayerMin: Integer;
-//  RowMin: Integer;
-//  ColMin: Integer;
-//  LayerMax: Integer;
-//  RowMax: Integer;
-//  ColMax: Integer;
-//  LayerIndex: Integer;
-//  RowIndex: Integer;
-//  ColIndex: Integer;
 begin
   inherited;
-//  LocalModel := AModel as TCustomModel;
-//  Boundary := Boundaries[ItemIndex, AModel] as TEvtStorage;
-
-//  if LocalModel.GwtUsed then
-//  begin
-//    for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
-//    begin
-//      ConcentrationArray := DataSets[EvtStartConcentration+SpeciesIndex];
-//      ConcentrationArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
-//        LayerMax, RowMax, ColMax);
-//
-//      LocalConcentrationPestSeries := PestSeries[EvtStartConcentration+SpeciesIndex];
-//      LocalConcentrationPestMethod := PestMethods[EvtStartConcentration+SpeciesIndex];
-//      ConcentrationPestItems := PestItemNames[EvtStartConcentration+SpeciesIndex];
-//      LocalConcentrationPest := ConcentrationPestItems[ItemIndex];
-//      ConcentrationTimeItems := TimeSeriesNames[EvtStartConcentration+SpeciesIndex];
-//      LocalConcentrationTimeSeries := ConcentrationTimeItems[ItemIndex];
-//
-//      BoundaryIndex := 0;
-//      if LayerMin >= 0 then
-//      begin
-//        for LayerIndex := LayerMin to LayerMax do
-//        begin
-//          if LocalModel.IsLayerSimulated(LayerIndex) then
-//          begin
-//            for RowIndex := RowMin to RowMax do
-//            begin
-//              for ColIndex := ColMin to ColMax do
-//              begin
-//                if ConcentrationArray.IsValue[LayerIndex, RowIndex, ColIndex] then
-//                begin
-//                  with Boundary.EvtArray[BoundaryIndex] do
-//                  begin
-//                    GwtConcentrations.Values[SpeciesIndex] := ConcentrationArray.
-//                      RealData[LayerIndex, RowIndex, ColIndex];
-//                    GwtConcentrations.ValueAnnotations[SpeciesIndex] := ConcentrationArray.
-//                      Annotation[LayerIndex, RowIndex, ColIndex];
-//                    GwtConcentrations.ValuePestNames[SpeciesIndex] := LocalConcentrationPest;
-//                    GwtConcentrations.ValuePestSeriesNames[SpeciesIndex] := LocalConcentrationPestSeries;
-//                    GwtConcentrations.ValuePestSeriesMethods[SpeciesIndex] := LocalConcentrationPestMethod;
-//                    GwtConcentrations.ValueTimeSeriesNames[SpeciesIndex] := LocalConcentrationTimeSeries;
-//                  end;
-//                  Inc(BoundaryIndex);
-//                end;
-//              end;
-//            end;
-//          end;
-//        end;
-//      end;
-//      ConcentrationArray.CacheData;
-//    end;
-//  end;
-
 end;
 
-function TEtsCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TEtsCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TEtsTimeListLink;
 end;
@@ -2886,91 +2822,8 @@ end;
 procedure TEtsCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
   PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
-//var
-//  BoundaryValues: TBoundaryValueArray;
-//  ScreenObject: TScreenObject;
-//  SpeciesCount: Integer;
-//  SpeciesIndex: Integer;
-//  ConcentrationSeriesName: string;
-//  ConcentrationMethod: TPestParamMethod;
-//  ConcentrationItems: TStringList;
-//  ConcentrationTimeSeriesItems: TStringList;
-//  ConcPestItemList: TList<TStringList>;
-//  ConcTimeSeriesItemList: TList<TStringList>;
-//  ConcentrationData: TModflowTimeList;
-//  LocalModel: TCustomModel;
-//  Index: Integer;
-//  Item: TEvtItem;
-//  ItemFormula: string;
-//  ALink: TEtsTimeListLink;
 begin
   inherited;
-//  LocalModel := AModel as TCustomModel;
-//  if LocalModel.GwtUsed then
-//  begin
-//    ALink := TimeListLink.GetLink(AModel) as TEtsTimeListLink;
-//
-//    ConcPestItemList := TList<TStringList>.Create;
-//    ConcTimeSeriesItemList := TList<TStringList>.Create;
-//    try
-//      ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
-//      SetLength(BoundaryValues, Count);
-//      SpeciesCount := LocalModel.MobileComponents.Count;
-//
-//      for SpeciesIndex := 0 to SpeciesCount - 1 do
-//      begin
-//        ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[
-//          EtsStartConcentration + SpeciesIndex];
-//        PestSeries.Add(ConcentrationSeriesName);
-//        ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[
-//          EtsStartConcentration + SpeciesIndex];
-//        PestMethods.Add(ConcentrationMethod);
-//
-//        ConcentrationItems := TStringList.Create;
-//        PestItemNames.Add(ConcentrationItems);
-//        ConcPestItemList.Add(ConcentrationItems);
-//
-//        ConcentrationTimeSeriesItems := TStringList.Create;
-//        TimeSeriesNames.Add(ConcentrationTimeSeriesItems);
-//        ConcTimeSeriesItemList.Add(ConcentrationTimeSeriesItems);
-//      end;
-
-//      for SpeciesIndex := 0 to SpeciesCount - 1 do
-//      begin
-//        for Index := 0 to Count - 1 do
-//        begin
-//          Item := Items[Index] as TEvtItem;
-//          BoundaryValues[Index].Time := Item.StartTime;
-//
-//          ConcentrationSeriesName := BoundaryGroup.PestBoundaryFormula[
-//            EtsStartConcentration + SpeciesIndex];
-//          ConcentrationMethod := BoundaryGroup.PestBoundaryMethod[
-//            EtsStartConcentration + SpeciesIndex];
-//          ConcentrationItems := ConcPestItemList[SpeciesIndex];
-//          ConcentrationTimeSeriesItems := ConcTimeSeriesItemList[SpeciesIndex];
-//          ItemFormula := Item.GwtConcentrations[SpeciesIndex].Value;
-//          AssignBoundaryFormula(AModel, ConcentrationSeriesName, ConcentrationMethod,
-//            ConcentrationItems, ConcentrationTimeSeriesItems, ItemFormula,
-//            Writer, BoundaryValues[Index]);
-//        end;
-
-//        ALink.UpdateGwtTimeLists;
-//        ConcentrationData := ALink.FConcList[SpeciesIndex];
-//        ConcentrationData.Initialize(BoundaryValues, ScreenObject, lctUse);
-//        Assert(ConcentrationData.Count = Count);
-//      end;
-
-//      for SpeciesIndex := 0 to SpeciesCount - 1 do
-//      begin
-//        ConcentrationData := ALink.FConcList[SpeciesIndex];
-//        ListOfTimeLists.Add(ConcentrationData);
-//      end;
-
-//    finally
-//      ConcTimeSeriesItemList.Free;
-//      ConcPestItemList.Free;
-//    end;
-//  end;
 end;
 
 procedure TEtsCollection.InvalidateGwtConcentrations(Sender: TObject);

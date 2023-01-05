@@ -173,7 +173,7 @@ type
     procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -212,7 +212,7 @@ type
   private
     procedure InvalidateRechLayerData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -797,7 +797,7 @@ begin
   Link.CreateGwtTimeLists;
 end;
 
-function TRchCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TRchCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TRchTimeListLink;
 end;
@@ -2181,7 +2181,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TRchLayerCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TRchLayerCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TRchLayerTimeListLink;
 end;

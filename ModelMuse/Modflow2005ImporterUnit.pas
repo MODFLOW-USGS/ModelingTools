@@ -13707,86 +13707,11 @@ begin
 end;
 
 procedure TCustomETImporter.CreateEtSurfaceDataSet(StressPeriodIndex: Integer);
-//var
-//  DataSet: TDataArray;
-//  ScreenObject: TScreenObject;
-//  ValueList: TRealList;
-//  Values: T2DDoubleArray;
-//  MaxCount: Integer;
-//  RowIndex: Integer;
-//  ColIndex: Integer;
-//  Value: Double;
-//  Root: string;
 begin
   CreateTransientRealDataArray(StressPeriodIndex, FReuseEtSurface,
     ImportedEtSurfaceName, FConstantEtSurface, FVariableEtSurface,
     ImportedEtSurfaceSP);
 
-
-//  ScreenObject := nil;
-//  if not FReuseEtSurface[StressPeriodIndex] then
-//  begin
-//    CreateDataSet(StressPeriodIndex, ImportedEtSurfaceName,
-//      rdtDouble, DataSet);
-//    if (FConstantEtSurface <> nil)
-//      and FConstantEtSurface[StressPeriodIndex].IsConstant then
-//    begin
-//      DataSet.Formula :=
-//        FortranFloatToStr(FConstantEtSurface[StressPeriodIndex].RealValue);
-//    end
-//    else
-//    begin
-//      DataSet.Formula := '0';
-//      Assert(FVariableEtSurface <> nil);
-//      Assert(FVariableEtSurface[StressPeriodIndex] <> nil);
-//
-//      ValueList := TRealList.Create;
-//      try
-//        ValueList.Sorted := True;
-//        Values := FVariableEtSurface[StressPeriodIndex];
-//        MaxCount := Min((Length(Values) * Length(Values[0])) div 10, 100);
-//        for RowIndex := 0 to Length(Values) - 1 do
-//        begin
-//          for ColIndex := 0 to Length(Values[0]) - 1 do
-//          begin
-//            Value := Values[RowIndex,ColIndex];
-//            ValueList.AddUnique(Value);
-//            if ValueList.Count >= MaxCount then
-//            begin
-//              break;
-//            end;
-//          end;
-//          if ValueList.Count >= MaxCount then
-//          begin
-//            break;
-//          end;
-//        end;
-//        if ValueList.Count >= MaxCount then
-//        begin
-//          if ScreenObject = nil then
-//          begin
-//            CreateOrRetrieveCellCenterScreenObject(ScreenObject);
-//          end;
-//          AssignRealValuesToCellCenters(DataSet, ScreenObject,
-//            FVariableEtSurface[StressPeriodIndex]);
-//        end
-//        else if ValueList.Count = 1 then
-//        begin
-//          DataSet.Formula :=
-//            FortranFloatToStr(ValueList[0]);
-//        end
-//        else
-//        begin
-//          Root := ImportedEtSurfaceSP
-//            + GetStressPeriodString(StressPeriodIndex) + '_Obj_';
-//          CreateScreenObjectsAroundValues(Values, Root,
-//            DataSet, ValueList);
-//        end;
-//      finally
-//        ValueList.Free;
-//      end;
-//    end;
-//  end;
 end;
 
 class function TEvtImporter.EtExtinctionDepth_Name: string;
@@ -13807,86 +13732,11 @@ end;
 
 procedure TCustomETImporter.CreateEtExtinctionDepthDataSet(
   StressPeriodIndex: Integer);
-//var
-//  DataSet: TDataArray;
-//  ScreenObject: TScreenObject;
-//  ValueList: TRealList;
-//  Values: T2DDoubleArray;
-//  MaxCount: Integer;
-//  RowIndex: Integer;
-//  ColIndex: Integer;
-//  Value: Double;
-//  Root: string;
 begin
   CreateTransientRealDataArray(StressPeriodIndex, FReuseEtExtinctionDepth,
     EtExtinctionDepth_Name, FConstantExtinctionDepth, FVariableExtinctionDepth,
     EtExtinctionDepth_SP);
 
-
-//  ScreenObject := nil;
-//  if not FReuseEtExtinctionDepth[StressPeriodIndex] then
-//  begin
-//    CreateDataSet(StressPeriodIndex, EtExtinctionDepth_Name,
-//      rdtDouble, DataSet);
-//    if (FConstantExtinctionDepth <> nil)
-//      and FConstantExtinctionDepth[StressPeriodIndex].IsConstant then
-//    begin
-//      DataSet.Formula :=
-//        FortranFloatToStr(FConstantExtinctionDepth[StressPeriodIndex].RealValue);
-//    end
-//    else
-//    begin
-//      DataSet.Formula := '0';
-//      Assert(FVariableExtinctionDepth <> nil);
-//      Assert(FVariableExtinctionDepth[StressPeriodIndex] <> nil);
-//
-//      ValueList := TRealList.Create;
-//      try
-//        ValueList.Sorted := True;
-//        Values := FVariableExtinctionDepth[StressPeriodIndex];
-//        MaxCount := Min((Length(Values) * Length(Values[0])) div 10, 100);
-//        for RowIndex := 0 to Length(Values) - 1 do
-//        begin
-//          for ColIndex := 0 to Length(Values[0]) - 1 do
-//          begin
-//            Value := Values[RowIndex,ColIndex];
-//            ValueList.AddUnique(Value);
-//            if ValueList.Count >= MaxCount then
-//            begin
-//              break;
-//            end;
-//          end;
-//          if ValueList.Count >= MaxCount then
-//          begin
-//            break;
-//          end;
-//        end;
-//        if ValueList.Count >= MaxCount then
-//        begin
-//          if ScreenObject = nil then
-//          begin
-//            CreateOrRetrieveCellCenterScreenObject(ScreenObject);
-//          end;
-//          AssignRealValuesToCellCenters(DataSet, ScreenObject,
-//            FVariableExtinctionDepth[StressPeriodIndex]);
-//        end
-//        else if ValueList.Count = 1 then
-//        begin
-//          DataSet.Formula :=
-//            FortranFloatToStr(ValueList[0]);
-//        end
-//        else
-//        begin
-//          Root := EtExtinctionDepth_SP
-//            + GetStressPeriodString(StressPeriodIndex) + '_Obj_';
-//          CreateScreenObjectsAroundValues(Values, Root,
-//            DataSet, ValueList);
-//        end;
-//      finally
-//        ValueList.Free;
-//      end;
-//    end;
-//  end;
 end;
 
 class function TEvtImporter.ImportedEtRateName: string;
@@ -18595,18 +18445,30 @@ var
   SegString: string;
   SegIndex: Integer;
   DepthProportionName: string;
+  StressPeriodString: string;
+  SPIndex: Integer;
 begin
+  StressPeriodString := '';
+  for SPIndex := StressPeriodIndex downto 0 do
+  begin
+    if not FReuseSegmentDefinition[SPIndex] then
+    begin
+      StressPeriodString := GetStressPeriodString(SPIndex);
+      break;
+    end;
+  end;
+  Assert(StressPeriodString <> '');
   LayerItem.EtFractions.Capacity := NETSEG - 1;
   LayerItem.DepthFractions.Capacity := NETSEG - 1;
   for SegIndex := 1 to NETSEG - 1 do
   begin
     SegString := SegIndexToStr(SegIndex);
     EtFProportionName := StrImportedETSFractionalRate + SegString
-      + '_' + GetStressPeriodString(StressPeriodIndex);
+      + '_' + StressPeriodString;
     Item := LayerItem.EtFractions.Add as TEtsStringValueItem;
     Item.Value := EtFProportionName;
     DepthProportionName := 'Imported_ETS_FractionalDepth_' + SegString
-      + '_' + GetStressPeriodString(StressPeriodIndex);
+      + '_' + StressPeriodString;
     Item := LayerItem.DepthFractions.Add as TEtsStringValueItem;
     Item.Value := DepthProportionName;
   end;
@@ -18881,18 +18743,6 @@ begin
         // TScreenObjects and assign the formulas for those
         // stress periods using the appropriate multiplier arrays.
 
-//        if FEtsPackage[0] then
-//        begin
-//          Beep;
-//          MessageDlg(Format(StrErrorInSPackage, [StrRecharge]), mtError, [mbOK], 0);
-//          Exit;
-//        end;
-//        if FRchPackage.TimeVaryingLayers and FReuseLayerIndicator[0] then
-//        begin
-//          Beep;
-//          MessageDlg(Format(StrErrorInSPackage, [StrRecharge]), mtError, [mbOK], 0);
-//          Exit;
-//        end;
         // Loop over stress periods
         for StressPeriodIndex := 0 to FStressPeriods.ArrayLength - 1 do
         begin

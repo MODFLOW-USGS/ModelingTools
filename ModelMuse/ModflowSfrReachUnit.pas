@@ -169,7 +169,7 @@ type
     procedure InvalidateBrooksCoreyExponentData(Sender: TObject);
     procedure InvalidateVerticalKData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     procedure CountArrayBoundaryCells(var BoundaryCount: Integer;
       DataArray1: TDataArray; DataSets: TList; AModel: TBaseModel); override;
@@ -1212,7 +1212,7 @@ begin
   end;  }
 end;
 
-function TSfrCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSfrCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSfrTimeListLink;
 end;

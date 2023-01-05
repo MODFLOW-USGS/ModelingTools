@@ -257,7 +257,7 @@ type
     procedure InvalidateCellToWellConductance;
     procedure InvalidatePartialPenetration;
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
       PestItemNames, TimeSeriesNames: TStringListObjectList); override;
@@ -2184,7 +2184,7 @@ begin
   end;
 end;
 
-function TMnw2SpatialCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMnw2SpatialCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMnw2TimeListLink;
 end;

@@ -281,7 +281,7 @@ type
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
     procedure InvalidateModel; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
   // Each @name stores a @link(TMt3dmsConcCollection).
@@ -781,7 +781,7 @@ begin
   end;
 end;
 
-function TMt3dmsConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMt3dmsConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMt3dmsConcTimeListLink;
 end;

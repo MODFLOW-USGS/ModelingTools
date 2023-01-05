@@ -138,7 +138,7 @@ type
     procedure InvalidateStreamWidthData(Sender: TObject);
     procedure InvalidateStreamDepthData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -826,7 +826,7 @@ begin
   end;
 end;
 
-function TSfrSegmentCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSfrSegmentCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSfrSegmentTimeListLink;
 end;

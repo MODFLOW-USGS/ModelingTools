@@ -189,7 +189,7 @@ type
     procedure InvalidateRoughnessData(Sender: TObject);
     procedure FixItems;
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
@@ -1498,7 +1498,7 @@ begin
   end;
 end;
 
-function TStrCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TStrCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TStrTimeListLink;
 end;

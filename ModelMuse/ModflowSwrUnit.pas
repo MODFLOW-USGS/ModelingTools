@@ -207,7 +207,7 @@ type
     procedure HandleError(E: EMathError; ValueStorage: TSwrStorage;
      ACell: TObject; Index: Integer; AModel: TBaseModel); override;
   strict protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure InvalidateModel; override;
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -241,7 +241,7 @@ type
     procedure HandleError(E: EMathError; ValueStorage: TSwrStorage;
      ACell: TObject; Index: Integer; AModel: TBaseModel); override;
   strict protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure InvalidateModel; override;
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -275,7 +275,7 @@ type
     procedure HandleError(E: EMathError; ValueStorage: TSwrStorage;
      ACell: TObject; Index: Integer; AModel: TBaseModel); override;
   strict protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure InvalidateModel; override;
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -309,7 +309,7 @@ type
     procedure HandleError(E: EMathError; ValueStorage: TSwrStorage;
      ACell: TObject; Index: Integer; AModel: TBaseModel); override;
   strict protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure InvalidateModel; override;
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -693,7 +693,7 @@ begin
     LocalScreenObject);
 end;
 
-function TSwrRainListCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSwrRainListCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMfSwrRainTimeListLink;
 end;
@@ -1483,7 +1483,7 @@ end;
 
 { TSwrEvapListCollection }
 
-function TSwrEvapListCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSwrEvapListCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMfSwrEvapTimeListLink;
 end;
@@ -1606,7 +1606,7 @@ end;
 
 { TSwrLatInflowListCollection }
 
-function TSwrLatInflowListCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSwrLatInflowListCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMfSwrLatInflowTimeListLink
 end;
@@ -1729,7 +1729,7 @@ end;
 
 { TSwrStageListCollection }
 
-function TSwrStageListCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSwrStageListCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMfSwrStageTimeListLink;
 end;

@@ -94,7 +94,7 @@ type
   // for a series of time intervals.
   TChdCollection = class(TCustomMF_ListBoundColl)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure InvalidateStartData(Sender: TObject);
     procedure InvalidateEndData(Sender: TObject);
     procedure InvalidateGwtConcentrations(Sender: TObject);
@@ -594,7 +594,7 @@ end;
 
 { TChdCollection }
 
-function TChdCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TChdCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TChdTimeListLink;
 end;

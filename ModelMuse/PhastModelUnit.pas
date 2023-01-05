@@ -10793,12 +10793,14 @@ const
 //                a model to be created incorrectly in some cases.
 //               Bug fix: Added a test for ensuring that MODFLOW 6 did not use
 //                the Save Saturation option when used with MT3D-USGS.
+//    '5.1.1.4'  Bug fix: Fixed bug that would cause the ETS package to be
+//                imported incorrectly if the evaporation segments were reused.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.3';
+  IIModelVersion = '5.1.1.4';
 
 function IModelVersion: string;
 begin

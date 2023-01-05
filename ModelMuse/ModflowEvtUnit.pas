@@ -252,7 +252,7 @@ type
   // for a series of time intervals.
   TEvtCollection = class(TCustomMF_ArrayBoundColl)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -297,7 +297,7 @@ type
 
   TEvtLayerCollection = class(TCustomMF_ArrayBoundColl)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -342,7 +342,7 @@ type
     procedure InvalidateSurfaceData(Sender: TObject);
     procedure InvalidateDepthData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -950,7 +950,7 @@ begin
 // do nothing
 end;
 
-function TEvtCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TEvtCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TEvtTimeListLink;
 end;
@@ -2284,7 +2284,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TEvtLayerCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TEvtLayerCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TEvtLayerTimeListLink;
 end;
@@ -2688,7 +2688,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TEvtSurfDepthCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TEvtSurfDepthCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TEvtSurfDepthListLink;
 end;

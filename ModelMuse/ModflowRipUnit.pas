@@ -109,7 +109,7 @@ type
     function GetItems(Index: Integer): TRipItem;
     procedure SetItems(Index: Integer; const Value: TRipItem);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
@@ -907,7 +907,7 @@ begin
   result := inherited Items[Index] as TRipItem;
 end;
 
-function TRipCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TRipCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TRipTimeListLink;
 end;

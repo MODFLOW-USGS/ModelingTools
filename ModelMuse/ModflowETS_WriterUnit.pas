@@ -638,7 +638,9 @@ begin
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, EtsSurfaceError);
     frmErrorsAndWarnings.RemoveErrorGroup(Model, EtsDepthError);
-    frmErrorsAndWarnings.RemoveWarningGroup(Model, StrEvapotranspirationI);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheETSRate);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheETSDepth);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoEvapotranspiratio);
     if not Package.IsSelected then
     begin
       Exit

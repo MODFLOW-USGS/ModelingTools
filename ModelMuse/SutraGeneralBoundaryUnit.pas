@@ -139,7 +139,7 @@ type
       PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     function CanInvalidate: boolean;
     class function ItemClass: TBoundaryItemClass; override;
@@ -692,7 +692,7 @@ begin
 
 end;
 
-function TSutraGeneralFlowCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSutraGeneralFlowCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSutraGeneralFlowTimeLink;
 end;

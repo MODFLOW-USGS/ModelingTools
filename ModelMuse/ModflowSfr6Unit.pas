@@ -270,7 +270,7 @@ type
     procedure InvalidateInflowConcentrations(Sender: TObject);
   protected
     class function ItemClass: TBoundaryItemClass; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure Loaded;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
@@ -2504,7 +2504,7 @@ begin
   SectionDuplicatesAllowed := True;
 end;
 
-function TSfrMf6Collection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSfrMf6Collection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSfrMf6TimeListLink;
 end;
@@ -4589,10 +4589,6 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FRoughnessFormula,
     GlobalRemoveMFBoundarySubscription,
     GlobalRestoreMFBoundarySubscription, self);
-
-
-
-
 end;
 
 procedure TSfrMf6Boundary.SetDiversions(const Value: TDiversionCollection);

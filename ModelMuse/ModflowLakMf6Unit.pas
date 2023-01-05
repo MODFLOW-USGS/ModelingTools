@@ -318,7 +318,7 @@ type
     procedure InvalidateInflowConcentrations(Sender: TObject);
   protected
     class function ItemClass: TBoundaryItemClass; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
   end;
 
@@ -1761,7 +1761,7 @@ begin
 
 end;
 
-function TLakTimeCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TLakTimeCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := nil;
   Assert(False);

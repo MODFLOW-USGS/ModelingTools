@@ -105,7 +105,7 @@ type
   private
     procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
@@ -242,7 +242,7 @@ type
 
   TSrcCollection = class(TCncCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
   TSrcTimeListLink = class(TCncTimeListLink)
@@ -741,7 +741,7 @@ begin
   end;
 end;
 
-function TCncCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TCncCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TCncTimeListLink;
 end;
@@ -1391,7 +1391,7 @@ end;
 
 { TsrcCollection }
 
-function TsrcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TsrcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSrcTimeListLink;
 end;

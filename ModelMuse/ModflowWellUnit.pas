@@ -116,7 +116,7 @@ type
     procedure InvalidatePumpingRateData(Sender: TObject);
     procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
@@ -695,7 +695,7 @@ begin
   end;
 end;
 
-function TWellCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TWellCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMfWelTimeListLink;
 end;

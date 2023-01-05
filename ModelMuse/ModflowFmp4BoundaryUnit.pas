@@ -9,18 +9,6 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
 
 type
   {
-    @longcode(
-  TFmp4Record = record
-    Cell: TCellLocation;
-    FmpValue: double;
-    StartingTime: double;
-    EndingTime: double;
-    FmpValueAnnotation: string;
-    procedure Cache(Comp: TCompressionStream; Strings: TStringList);
-    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
-    procedure RecordStrings(Strings: TStringList);
-  end;
-    )
     @name stores the location, time and reference evapotranspiration rate for a cell.
   }
   TFmp4Record = record
@@ -100,6 +88,8 @@ type
     Destructor Destroy; override;
   end;
 
+  TFmp4TimeListLinkClass = class of TFmp4TimeListLink;
+
   // @name represents MODFLOW Farm Process reference evapotranspiration boundaries
   // for a series of time intervals.
   TFmp4Collection = class(TCustomMF_ArrayBoundColl)
@@ -132,6 +122,8 @@ type
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel); override;
   end;
+
+  TFmp4CollectionClass = class of TFmp4Collection;
 
   // Each @name stores a @link(TFmp4Collection).
   // @classname is stored by @link(TModflowParameters).
@@ -171,7 +163,15 @@ type
   //
   // @seealso(TFmp4Collection)
   TFmp4Boundary = class(TModflowBoundary)
+  private
+    FPestValueMethod: TPestParamMethod;
+    FPestValueFormula: TFormulaObject;
+    function GetPestValueFormula: string;
+    procedure SetPestValueFormula(const Value: string);
+    procedure SetPestValueMethod(const Value: TPestParamMethod);
+    procedure RemoveFormulaObjects;
   protected
+    function GetPestValueObserver: TObserver; virtual; abstract;
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
     // @link(TFmp4_Cell)s for that stress period.
@@ -182,7 +182,22 @@ type
     { TODO -cFMP4 : override BoundaryCollectionClass }
     // override this
 //    class function BoundaryCollectionClass: TMF_BoundCollClass; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; virtual; abstract;
+    procedure CreateFormulaObjects; //override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestValueObserver: TObserver read GetPestValueObserver;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Destructor Destroy; override;
+    Procedure Assign(Source: TPersistent); override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TFmp4Storage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -192,8 +207,16 @@ type
       AModel: TBaseModel; Writer: TObject); override;
     function Used: boolean; override;
     function NonParameterColumns: integer; override;
-    // besure to overide this
+    function ValueDescription: string; virtual; abstract;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
+    // be sure to overide this
 //    procedure InvalidateDisplay; override;
+  published
+    property PestValueFormula: string read GetPestValueFormula
+      write SetPestValueFormula;
+    property PestValueMethod: TPestParamMethod read FPestValueMethod
+      write SetPestValueMethod;
   end;
 
 implementation
@@ -201,9 +224,6 @@ implementation
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
   AbstractGridUnit;
-
-//resourcestring
-//  StrRefEvapRate = 'Reference evapotranspiration rate';
 
 const
   Fmp4Position = 0;
@@ -581,6 +601,20 @@ end;
 
 { TFmp4Boundary }
 
+procedure TFmp4Boundary.Assign(Source: TPersistent);
+var
+  FmpSource: TFmp4Boundary;
+begin
+  if Source is TFmp4Boundary then
+  begin
+    FmpSource := TFmp4Boundary(Source);
+    PestValueFormula := FmpSource.PestValueFormula;
+    PestValueMethod := FmpSource.PestValueMethod;
+  end;
+  inherited;
+
+end;
+
 procedure TFmp4Boundary.AssignCells(BoundaryStorage: TCustomBoundaryStorage;
   ValueTimeList: TList; AModel: TBaseModel);
 var
@@ -632,10 +666,44 @@ begin
   LocalBoundaryStorage.CacheData;
 end;
 
-//class function TFmp4Boundary.BoundaryCollectionClass: TMF_BoundCollClass;
-//begin
-//  result := TFmp4Collection;
-//end;
+constructor TFmp4Boundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestValueFormula := '';
+  PestValueMethod := DefaultBoundaryMethod(0);
+
+end;
+
+procedure TFmp4Boundary.CreateFormulaObjects;
+begin
+  FPestValueFormula := CreateFormulaObjectBlocks(dsoTop);
+end;
+
+procedure TFmp4Boundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestValueObserver);
+  end;
+end;
+
+class function TFmp4Boundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  result := inherited;
+end;
+
+destructor TFmp4Boundary.Destroy;
+begin
+  PestValueFormula := '';
+  RemoveFormulaObjects;
+
+  inherited;
+end;
 
 procedure TFmp4Boundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
@@ -655,28 +723,101 @@ begin
   ClearBoundaries(AModel);
 end;
 
-//procedure TFmp4Boundary.InvalidateDisplay;
-//var
-//  Model: TCustomModel;
-//begin
-//  inherited;
-//  if Used and (ParentModel <> nil) then
-//  begin
-//    Model := ParentModel as TCustomModel;
-//    if Model.ModelSelection = msModflowFmp then
-//    begin
-//      Model.InvalidateMfFmpEvap(self);
-//    end
-//    else
-//    begin
-//      Model.InvalidateMfFmp4Evap(self);
-//    end;
-//  end;
-//end;
+function TFmp4Boundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    Fmp4Position:
+      begin
+        result := PestValueFormula;
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
+end;
+
+function TFmp4Boundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    Fmp4Position:
+      begin
+        result := FPestValueMethod;
+      end;
+    else
+      begin
+        result := DefaultBoundaryMethod(FormulaIndex);
+        Assert(False);
+      end;
+  end;
+end;
+
+function TFmp4Boundary.GetPestValueFormula: string;
+begin
+  Result := FPestValueFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Fmp4Position);
+  end;
+end;
+
+procedure TFmp4Boundary.HandleChangedValue(Observer: TObserver);
+begin
+  InvalidateDisplay;
+end;
 
 function TFmp4Boundary.NonParameterColumns: integer;
 begin
   result := inherited NonParameterColumns;
+end;
+
+procedure TFmp4Boundary.RemoveFormulaObjects;
+begin
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestValueFormula,
+    GlobalRemoveMFBoundarySubscription,
+    GlobalRestoreMFBoundarySubscription, self);
+end;
+
+procedure TFmp4Boundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    Fmp4Position:
+      begin
+        PestValueFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TFmp4Boundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    Fmp4Position:
+      begin
+        FPestValueMethod := Value;
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TFmp4Boundary.SetPestValueFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Fmp4Position, FPestValueFormula);
+end;
+
+procedure TFmp4Boundary.SetPestValueMethod(const Value: TPestParamMethod);
+begin
+  FPestValueMethod := Value;
 end;
 
 function TFmp4Boundary.Used: boolean;

@@ -96,7 +96,7 @@ type
     function GetItem(Index: Integer): TFhbItem;
     procedure SetItem(Index: Integer; const Value: TFhbItem);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
@@ -125,7 +125,7 @@ type
 
   TFhbFlowCollection = class(TFhbHeadCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
   TFhb_Cell = class(TValueCell)
@@ -626,7 +626,7 @@ begin
   result := inherited Items[Index] as TFhbItem;
 end;
 
-function TFhbHeadCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TFhbHeadCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TFhbHeadTimeListLink;
 end;
@@ -1452,7 +1452,7 @@ end;
 
 { TFhbFlowCollection }
 
-function TFhbFlowCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TFhbFlowCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TFhbFlowTimeListLink;
 end;

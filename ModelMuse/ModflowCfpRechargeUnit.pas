@@ -79,7 +79,7 @@ type
     procedure InvalidateRechargeData(Sender: TObject);
   protected
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -446,7 +446,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TCfpRchFractionCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TCfpRchFractionCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TCfpRchFractionTimeListLink;
 end;

@@ -250,7 +250,7 @@ type
     procedure InvalidateMinimumPumpingRate(Sender: TObject);
     procedure InvalidateMaximumPumpingRate(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
@@ -1578,7 +1578,7 @@ begin
   end;
 end;
 
-function TMnw1WellCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMnw1WellCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMnw1TimeListLink;
 end;

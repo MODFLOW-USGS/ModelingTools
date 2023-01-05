@@ -102,7 +102,7 @@ type
     procedure InvalidateCropIDData(Sender: TObject);
   protected
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -371,7 +371,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TFmpCropIDCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TFmpCropIDCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TFmpCropIDTimeListLink;
 end;

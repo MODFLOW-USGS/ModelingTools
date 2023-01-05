@@ -155,7 +155,7 @@ type
   private
     procedure InvalidateUzfExtinctDepthData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -196,7 +196,7 @@ type
   private
     procedure InvalidateUzfWaterContentData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -227,7 +227,7 @@ type
 
   TUzfInfiltrationRateCollection = class(TRchCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; override;
   end;
 
@@ -238,7 +238,7 @@ type
 
   TUzfEvapotranspirationDemandCollection = class(TEvtCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
   TUzfExtinctionDepthCell = class(TValueCell)
@@ -1345,7 +1345,7 @@ end;
 
 { TUzfEvapotranspirationDemandCollection }
 
-function TUzfEvapotranspirationDemandCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TUzfEvapotranspirationDemandCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TUzfEvtTimeListLink;
 end;
@@ -1608,7 +1608,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TUzfExtinctionDepthCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TUzfExtinctionDepthCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TUzfExtinctionDepthTimeListLink;
 end;
@@ -1788,7 +1788,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TUzfWaterContentCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TUzfWaterContentCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TUzfWaterContentTimeListLink;
 end;
@@ -2457,7 +2457,7 @@ begin
   end;
 end;
 
-function TUzfInfiltrationRateCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TUzfInfiltrationRateCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TUzfInfiltrationRateTimeListLink;
 end;

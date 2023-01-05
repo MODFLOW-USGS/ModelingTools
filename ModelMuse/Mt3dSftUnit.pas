@@ -61,7 +61,7 @@ type
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
 //    procedure InvalidateModel; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
   TMt3dSftDispItem = class(TCustomSftItem)
@@ -83,7 +83,7 @@ type
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
 //    procedure InvalidateModel; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
   TSftBoundaryType = (sbtHeadwater, sbtPrecipitation, sbtRunoff, sbtConstConc);
@@ -149,7 +149,7 @@ type
 
   THeadWaterMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: TBaseModel; ScreenObject: TObject); override;
@@ -157,7 +157,7 @@ type
 
   TPrecipitationMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: TBaseModel; ScreenObject: TObject); override;
@@ -165,7 +165,7 @@ type
 
   TRunoffMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: TBaseModel; ScreenObject: TObject); override;
@@ -173,7 +173,7 @@ type
 
   TConstConcMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: TBaseModel; ScreenObject: TObject); override;
@@ -716,7 +716,7 @@ begin
   FBoundaryType := sbtHeadwater;
 end;
 
-function THeadWaterMt3dSftReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function THeadWaterMt3dSftReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := THeadWaterSftReachTimeListLink;
 end;
@@ -731,7 +731,7 @@ begin
   FBoundaryType := sbtPrecipitation;
 end;
 
-function TPrecipitationMt3dSftReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TPrecipitationMt3dSftReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TPrecipitationSftReachTimeListLink;
 end;
@@ -746,7 +746,7 @@ begin
   FBoundaryType := sbtRunoff;
 end;
 
-function TRunoffMt3dSftReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TRunoffMt3dSftReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TRunoffSftReachTimeListLink;
 end;
@@ -761,7 +761,7 @@ begin
   FBoundaryType := sbtConstConc;
 end;
 
-function TConstConcMt3dSftReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TConstConcMt3dSftReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TConstConcSftReachTimeListLink;
 end;
@@ -1619,7 +1619,7 @@ end;
 
 { TMt3dSftInitConcCollection }
 
-function TMt3dSftInitConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMt3dSftInitConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMt3dSftInitConcTimeListLink;
 end;
@@ -1767,7 +1767,7 @@ end;
 
 { TMt3dSftDispCollection }
 
-function TMt3dSftDispCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMt3dSftDispCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMt3dSftDispTimeListLink;
 end;

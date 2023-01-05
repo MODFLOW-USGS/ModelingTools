@@ -27,7 +27,7 @@ type
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
 //    procedure InvalidateModel; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
 //    function ConcName: string; override;
   end;
 
@@ -104,7 +104,7 @@ type
     function GetItem(Index: Integer): TLktInitConcItem;
     procedure SetItem(Index: Integer; const Value: TLktInitConcItem);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
@@ -188,7 +188,7 @@ const
 
 { TMt3dLktConcCollection }
 
-function TMt3dLktConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMt3dLktConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMt3dLktConcTimeListLink;
 end;
@@ -698,7 +698,7 @@ begin
   result := inherited Items[Index] as TLktInitConcItem
 end;
 
-function TLktInitConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TLktInitConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TLktIntConcTimeListLink;
 end;

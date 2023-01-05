@@ -102,7 +102,7 @@ type
     procedure InvalidateRefEvapData(Sender: TObject);
   protected
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -372,7 +372,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TFmpRefEvapCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TFmpRefEvapCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TFmpRefEvapTimeListLink;
 end;

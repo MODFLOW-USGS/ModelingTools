@@ -226,7 +226,7 @@ type
     procedure InvalidateInfiltrationConcentrations(Sender: TObject);
     procedure InvalidateEvapConcentrations(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -2075,7 +2075,7 @@ begin
   end;
 end;
 
-function TUzfMf6Collection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TUzfMf6Collection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   Result := TUzfMf6TimeListLink;
 end;

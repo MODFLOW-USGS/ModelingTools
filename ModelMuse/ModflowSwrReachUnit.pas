@@ -147,7 +147,7 @@ type
       PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     class function ItemClass: TBoundaryItemClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer;
@@ -726,7 +726,7 @@ begin
   SectionDuplicatesAllowed := True;
 end;
 
-function TSwrReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSwrReachCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSwrReachListLink;
 end;

@@ -116,7 +116,7 @@ type
     function GetItems(Index: Integer): THfbItem;
     procedure SetItems(Index: Integer; const Value: THfbItem);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
@@ -1208,7 +1208,7 @@ begin
   result := inherited Items[Index] as THfbItem;
 end;
 
-function THfbCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function THfbCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := THfbTimeListLink;
 end;

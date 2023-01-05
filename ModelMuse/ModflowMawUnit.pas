@@ -287,7 +287,7 @@ type
     procedure InvalidateSpecifiedConcentrations(Sender: TObject);
     procedure InvalidateInjectionConcentrations(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
@@ -573,7 +573,7 @@ type
     function GetItems(Index: Integer): TMawWellScreenItem;
     procedure SetItems(Index: Integer; const Value: TMawWellScreenItem);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
@@ -1536,7 +1536,7 @@ begin
   result := inherited Items[Index] as TMawWellScreenItem;
 end;
 
-function TMawWellScreenCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMawWellScreenCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMawWellScreenTimeListLink;
 end;
@@ -5192,7 +5192,7 @@ begin
   end;
 end;
 
-function TMawWellCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMawWellCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMawTimeListLink;
 end;

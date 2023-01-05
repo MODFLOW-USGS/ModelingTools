@@ -212,7 +212,7 @@ type
     function GetItem(Index: Integer): TCSubItem;
     procedure SetItem(Index: Integer; const Value: TCSubItem);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
@@ -1296,7 +1296,7 @@ begin
   result := inherited Items[Index] as TCSubItem;
 end;
 
-function TCSubCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TCSubCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TCSubTimeListLink;
 end;

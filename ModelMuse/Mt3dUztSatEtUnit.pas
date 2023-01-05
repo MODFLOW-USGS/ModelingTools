@@ -30,7 +30,7 @@ type
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
     procedure InvalidateModel; override;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function ConcName: string; override;
   end;
 
@@ -146,7 +146,7 @@ begin
   result := StrSatEtConcentration;
 end;
 
-function TMt3dUztSatEtConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TMt3dUztSatEtConcCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMt3dUztSatEtConcTimeListLink;
 end;

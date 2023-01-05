@@ -124,7 +124,7 @@ type
     procedure InvalidateBrooksCoreyExponentData(Sender: TObject);
     procedure InvalidateVerticalSaturatedKData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -686,7 +686,7 @@ begin
   end;
 end;
 
-function TSfrUnsatSegmentCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TSfrUnsatSegmentCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSfrUnsatSegmentTimeListLink;
 end;

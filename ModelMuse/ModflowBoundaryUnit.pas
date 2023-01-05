@@ -368,7 +368,7 @@ type
     function GetBoundaryList(AModel: TBaseModel): TList;
   protected
     property TimeListLink: TTimeListModelLinkList read FTimeListLink;
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; virtual; abstract;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; virtual; abstract;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean); virtual;

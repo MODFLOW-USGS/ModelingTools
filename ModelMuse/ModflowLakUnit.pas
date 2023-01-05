@@ -194,7 +194,7 @@ type
     procedure InvalidateRunoffData(Sender: TObject);
     procedure InvalidateWithdrawalData(Sender: TObject);
   protected
-    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
+    class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
@@ -1429,7 +1429,7 @@ begin
   Boundary.CacheData;
 end;
 
-function TLakCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TLakCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TLakTimeListLink;
 end;
