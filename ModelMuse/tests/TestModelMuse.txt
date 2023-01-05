@@ -1,4 +1,4 @@
-..\Debug\Win32\ModelMuse.exe
+..\Release\Win32\ModelMuse.exe
 4965
 WellTest.gpt
 	Archive\WellTest.axml

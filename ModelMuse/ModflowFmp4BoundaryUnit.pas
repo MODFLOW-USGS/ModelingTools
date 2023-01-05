@@ -80,9 +80,9 @@ type
   protected
     procedure CreateTimeLists; override;
     property Fmp4ValueData: TModflowTimeList read FFmp4ValueData;
-    { TODO -cFMP4 : override GetDescription }
+    { TODO -cFMP4 : override GetDescription  in each descendent}
     class function GetDescription: string; virtual; abstract;
-    { TODO -cFMP4 : override AssignInvalidateEvent }
+    { TODO -cFMP4 : override AssignInvalidateEvent  in each descendent}
     procedure AssignInvalidateEvent; virtual; abstract;
   public
     Destructor Destroy; override;
@@ -97,7 +97,7 @@ type
     procedure InvalidateFmp4Data(Sender: TObject);
   protected
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual;
-    { TODO -cFMP4 : override GetTimeListLinkClass }
+    { TODO -cFMP4 : override GetTimeListLinkClass  in each descendent}
     // override this
 //    function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -166,12 +166,15 @@ type
   private
     FPestValueMethod: TPestParamMethod;
     FPestValueFormula: TFormulaObject;
+    FPestValueObserver: TObserver;
+    FUsedObserver: TObserver;
     function GetPestValueFormula: string;
     procedure SetPestValueFormula(const Value: string);
     procedure SetPestValueMethod(const Value: TPestParamMethod);
     procedure RemoveFormulaObjects;
   protected
-    function GetPestValueObserver: TObserver; virtual; abstract;
+    { TODO -cFMP4 : override GetPestValueObserver in each descendent}
+    function GetPestValueObserver: TObserver;
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
     // @link(TFmp4_Cell)s for that stress period.
@@ -179,12 +182,13 @@ type
       ValueTimeList: TList; AModel: TBaseModel); override;
     // See @link(TModflowBoundary.BoundaryCollectionClass
     // TModflowBoundary.BoundaryCollectionClass).
-    { TODO -cFMP4 : override BoundaryCollectionClass }
+    { TODO -cFMP4 : override BoundaryCollectionClass in each descendent}
     // override this
 //    class function BoundaryCollectionClass: TMF_BoundCollClass; override;
 
     procedure HandleChangedValue(Observer: TObserver); //override;
-    function GetUsedObserver: TObserver; virtual; abstract;
+    { TODO -cFMP4 : override GetUsedObserver in each descendent}
+    function GetUsedObserver: TObserver;
     procedure CreateFormulaObjects; //override;
     procedure CreateObservers; //override;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
@@ -194,6 +198,8 @@ type
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
     property PestValueObserver: TObserver read GetPestValueObserver;
+    function BoundaryObserverPrefix: string; override;
+    procedure InvalidateData(Sender: TObject); virtual; abstract;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -207,9 +213,11 @@ type
       AModel: TBaseModel; Writer: TObject); override;
     function Used: boolean; override;
     function NonParameterColumns: integer; override;
+    { TODO -cFMP4 : override ValueDescription in each descendent}
     function ValueDescription: string; virtual; abstract;
     class function DefaultBoundaryMethod(
       FormulaIndex: integer): TPestParamMethod; override;
+    { TODO -cFMP4 : override InvalidateDisplay in each descendent}
     // be sure to overide this
 //    procedure InvalidateDisplay; override;
   published
@@ -666,6 +674,11 @@ begin
   LocalBoundaryStorage.CacheData;
 end;
 
+function TFmp4Boundary.BoundaryObserverPrefix: string;
+begin
+  result := ValueDescription + '_';
+end;
+
 constructor TFmp4Boundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
@@ -760,6 +773,25 @@ begin
   begin
     ResetBoundaryObserver(Fmp4Position);
   end;
+end;
+
+function TFmp4Boundary.GetPestValueObserver: TObserver;
+begin
+  if FPestValueObserver = nil then
+  begin
+    CreateObserver(ValueDescription + '_Pest_', FPestValueObserver, nil);
+    FPestValueObserver.OnUpToDateSet := InvalidateData;
+  end;
+  result := FPestValueObserver;
+end;
+
+function TFmp4Boundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver(ValueDescription + '_Used_', FUsedObserver, nil);
+  end;
+  result := FUsedObserver;
 end;
 
 procedure TFmp4Boundary.HandleChangedValue(Observer: TObserver);

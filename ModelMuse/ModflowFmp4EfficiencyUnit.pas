@@ -18,14 +18,9 @@ type
 
   TFmp4EfficiencyBoundary = class(TFmp4Boundary)
   private
-    FUsedObserver: TObserver;
-    FPestValueObserver: TObserver;
-    procedure InvalidateEfficiency(Sender: TObject);
   protected
-    function GetUsedObserver: TObserver; override;
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
-    function BoundaryObserverPrefix: string; override;
-    function GetPestValueObserver: TObserver; override;
+    procedure InvalidateData(Sender: TObject); override;
   public
     function ValueDescription: string; override;
   end;
@@ -33,7 +28,7 @@ type
 implementation
 
 resourcestring
-  StrFmp4Efficiency = 'Fmp4 Efficiency';
+  StrFmp4Efficiency = 'Fmp4_Efficiency';
 
 { TFmp4EfficiencyTimeListLink }
 
@@ -62,31 +57,7 @@ begin
   result := TFmp4EfficiencyCollection;
 end;
 
-function TFmp4EfficiencyBoundary.BoundaryObserverPrefix: string;
-begin
-  result := 'PestFmp4Efficiency_';
-end;
-
-function TFmp4EfficiencyBoundary.GetPestValueObserver: TObserver;
-begin
-//  if FPestValueObserver = nil then
-  begin
-    CreateObserver('PestEfficiency_', FPestValueObserver, nil);
-    FPestValueObserver.OnUpToDateSet := InvalidateEfficiency;
-  end;
-  result := FPestValueObserver;
-end;
-
-function TFmp4EfficiencyBoundary.GetUsedObserver: TObserver;
-begin
-  if FUsedObserver = nil then
-  begin
-    CreateObserver('PestFmpEfficieny_Used_', FUsedObserver, nil);
-  end;
-  result := FUsedObserver;
-end;
-
-procedure TFmp4EfficiencyBoundary.InvalidateEfficiency(Sender: TObject);
+procedure TFmp4EfficiencyBoundary.InvalidateData(Sender: TObject);
 begin
 
 end;

@@ -3432,7 +3432,7 @@ begin
           end;
         end;
       end;
-
+      Inc(Count);
     end;
   end;
 end;

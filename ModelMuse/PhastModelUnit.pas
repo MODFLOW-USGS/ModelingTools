@@ -10795,6 +10795,7 @@ const
 //                the Save Saturation option when used with MT3D-USGS.
 //    '5.1.1.4'  Bug fix: Fixed bug that would cause the ETS package to be
 //                imported incorrectly if the evaporation segments were reused.
+//               Bug fix: Fixed importing UZF data from a Shapefile.
 
 //               Enhancement: Added suport for SUTRA 4.
 
@@ -44503,24 +44504,25 @@ begin
     try
       ModflowMvrWriter := nil;
       try
-        CheckWetting;
-
-        SetCurrentDir(ExtractFileDir(FileName));
-        TransientMultiplierArrays.Clear;
-        TransientZoneArrays.Clear;
-        ModflowSteadyParameters.ClearArrayNames;
-
-        UsedMultiplierArrayNames.Clear;
-        UsedZoneArrayNames.Clear;
-        UsedMultiplierArrayNames.Sorted := True;
-        UsedZoneArrayNames.Sorted := True;
-
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
         try
+          CheckWetting;
+
+          SetCurrentDir(ExtractFileDir(FileName));
+          TransientMultiplierArrays.Clear;
+          TransientZoneArrays.Clear;
+          ModflowSteadyParameters.ClearArrayNames;
+
+          UsedMultiplierArrayNames.Clear;
+          UsedZoneArrayNames.Clear;
+          UsedMultiplierArrayNames.Sorted := True;
+          UsedZoneArrayNames.Sorted := True;
+
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+  //        try
           Assert(LocalNameWriter <> nil);
           SetCurrentNameFileWriter(LocalNameWriter);
           if DisvUsed then
@@ -45756,19 +45758,19 @@ begin
 
 //          FinalizePvalAndTemplate(FileName);
 
-          LocalNameWriter.SaveNameFile(FileName);
+//          LocalNameWriter.SaveNameFile(FileName);
           Application.ProcessMessages;
           if not frmProgressMM.ShouldContinue then
           begin
             Exit;
           end;
+//        finally
+//          SetCurrentNameFileWriter(nil);
+//        end;
         finally
-          SetCurrentNameFileWriter(nil);
+          ModflowMvrWriter.Free;
+          UpdateCurrentModel(SelectedModel);
         end;
-      finally
-        ModflowMvrWriter.Free;
-        UpdateCurrentModel(SelectedModel);
-      end;
 
       PestObsExtractorInputWriter := TPestObsExtractorInputWriter.Create(Self);
       try
@@ -45872,6 +45874,10 @@ begin
       end;
 
       FinalizePvalAndTemplate(FileName);
+      LocalNameWriter.SaveNameFile(FileName);
+      finally
+        SetCurrentNameFileWriter(nil);
+      end;
 
       for SpeciesIndex := 0 to GwtNameWriters.Count - 1 do
       begin
