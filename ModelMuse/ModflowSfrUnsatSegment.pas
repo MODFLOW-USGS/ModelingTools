@@ -924,8 +924,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrUnsatSegmentTimeListLink;
-      Link.FBrooksCoreyExponentData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrUnsatSegmentTimeListLink;
+        Link.FBrooksCoreyExponentData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -950,8 +953,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrUnsatSegmentTimeListLink;
-      Link.FInitialWaterContentData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrUnsatSegmentTimeListLink;
+        Link.FInitialWaterContentData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -976,8 +982,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrUnsatSegmentTimeListLink;
-      Link.FSaturatedWaterContentData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrUnsatSegmentTimeListLink;
+        Link.FSaturatedWaterContentData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1002,8 +1011,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrUnsatSegmentTimeListLink;
-      Link.FVerticalSaturatedKData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrUnsatSegmentTimeListLink;
+        Link.FVerticalSaturatedKData.Invalidate;
+      end;
     end;
   end;
 end;

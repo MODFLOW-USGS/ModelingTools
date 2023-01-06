@@ -651,8 +651,11 @@ begin
       for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-        Link := TimeListLink.GetLink(ChildModel) as TSwrDirectRunoffListLink;
-        Link.FReachData.Invalidate;
+        if ChildModel <> nil then
+        begin
+          Link := TimeListLink.GetLink(ChildModel) as TSwrDirectRunoffListLink;
+          Link.FReachData.Invalidate;
+        end;
       end;
     end;
   end;
@@ -683,8 +686,11 @@ begin
         for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
         begin
           ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-          Link := TimeListLink.GetLink(ChildModel) as TSwrDirectRunoffListLink;
-          Link.FRunoffData.Invalidate;
+          if ChildModel <> nil then
+          begin
+            Link := TimeListLink.GetLink(ChildModel) as TSwrDirectRunoffListLink;
+            Link.FRunoffData.Invalidate;
+          end;
         end;
       end;
     end;
@@ -1089,7 +1095,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSwrDirectRunoffValue(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSwrDirectRunoffValue(self);
+      end;
     end;
   end;
 end;

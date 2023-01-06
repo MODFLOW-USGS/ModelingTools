@@ -1001,11 +1001,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TRchTimeListLink;
-      for Index := 0 to Link.FConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TRchTimeListLink;
+        for Index := 0 to Link.FConcList.Count - 1 do
+        begin
+          TimeList := Link.FConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -1030,8 +1033,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TRchTimeListLink;
-      Link.FRechargeRateData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TRchTimeListLink;
+        Link.FRechargeRateData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1898,7 +1904,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfRchRate(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfRchRate(self);
+      end;
     end;
   end;
 end;
@@ -2240,8 +2249,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TRchLayerTimeListLink;
-      Link.FRechargeLayerData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TRchLayerTimeListLink;
+        Link.FRechargeLayerData.Invalidate;
+      end;
     end;
   end;
 end;

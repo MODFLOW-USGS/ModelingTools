@@ -359,11 +359,14 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      comboModelSelection.Items.AddObject(ChildModel.DisplayName, ChildModel);
-      LocalPathLines := TPathLineReader.Create(ChildModel);
-      FPathLines.Add(LocalPathLines);
-      PathLines := ChildModel.PathLines;
-      LocalPathLines.Assign(PathLines);
+      if ChildModel <> nil then
+      begin
+        comboModelSelection.Items.AddObject(ChildModel.DisplayName, ChildModel);
+        LocalPathLines := TPathLineReader.Create(ChildModel);
+        FPathLines.Add(LocalPathLines);
+        PathLines := ChildModel.PathLines;
+        LocalPathLines.Assign(PathLines);
+      end;
     end;
   end
   else

@@ -859,7 +859,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenTransQU2(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenTransQU2(self);
+      end;
     end;
   end;
 end;
@@ -886,7 +889,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenTransU2(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenTransU2(self);
+      end;
     end;
   end;
 end;
@@ -914,7 +920,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenTransQU1(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenTransQU1(self);
+      end;
     end;
   end;
 end;
@@ -1060,7 +1069,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenTransU1(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenTransU1(self);
+      end;
     end;
   end;
 end;

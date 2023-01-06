@@ -1007,10 +1007,13 @@ var
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-      if ReachInModel(AReach, ChildModel) then
+      if ChildModel <> nil then
       begin
-        result := ChildModel;
-        Exit;
+        if ReachInModel(AReach, ChildModel) then
+        begin
+          result := ChildModel;
+          Exit;
+        end;
       end;
     end;
   end;
@@ -1640,18 +1643,21 @@ begin
           begin
             ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
 
-            ChildSfrWriter := TModflowSFR_Writer.Create(ChildModel, etDisplay);
-            WriterObjectList.Add(ChildSfrWriter);
-            WriterList.Add(ChildSfrWriter);
-            DisplayLists := TModflowBoundListOfTimeLists.Create;
-            ChildTimeLists.Add(DisplayLists);
-            ChildModel.ModflowPackages.SfrPackage.GetDisplayLists(DisplayLists);
-            ChildSfrWriter.Evaluate;
-            if not frmProgressMM.ShouldContinue then
+            if ChildModel <> nil then
             begin
-              Exit;
+              ChildSfrWriter := TModflowSFR_Writer.Create(ChildModel, etDisplay);
+              WriterObjectList.Add(ChildSfrWriter);
+              WriterList.Add(ChildSfrWriter);
+              DisplayLists := TModflowBoundListOfTimeLists.Create;
+              ChildTimeLists.Add(DisplayLists);
+              ChildModel.ModflowPackages.SfrPackage.GetDisplayLists(DisplayLists);
+              ChildSfrWriter.Evaluate;
+              if not frmProgressMM.ShouldContinue then
+              begin
+                Exit;
+              end;
             end;
-          end;
+            end;
 
           AssociateLgrSubSegments(WriterList);
           InternalUpdateDisplay(TimeLists);
@@ -1671,7 +1677,10 @@ begin
               Exit;
             end;
             ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-            ChildModel.ModflowPackages.SfrPackage.ComputeAverages(DisplayLists);
+            if ChildModel <> nil then
+            begin
+              ChildModel.ModflowPackages.SfrPackage.ComputeAverages(DisplayLists);
+            end;
           end;
 
         finally
@@ -6457,6 +6466,7 @@ var
   ExtendedTemplateCharacter: Char;
   Formula: string;
   Fraction: Extended;
+  ChildModel: TChildModel;
 begin
   ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
 //  IsChildModel := Model is TChildModel;
@@ -6795,10 +6805,14 @@ begin
           LGRGRID := 0;
           for ChildModelIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
           begin
-            if LocalPhastModel.ChildModels[ChildModelIndex].ChildModel = PriorSubSeg.FModel then
+            ChildModel := LocalPhastModel.ChildModels[ChildModelIndex].ChildModel;
+            if ChildModel <> nil then
             begin
-              LGRGRID := ChildModelIndex+2;
-              Break;
+              if ChildModel = PriorSubSeg.FModel then
+              begin
+                LGRGRID := ChildModelIndex+2;
+                Break;
+              end;
             end;
           end;
           if PriorSubSeg.FAssociatedLgrSubSeg <> nil then

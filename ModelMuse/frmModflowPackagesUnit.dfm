@@ -79,8 +79,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         TabStop = True
         ExplicitLeft = 131
         ExplicitTop = 291
-        ExplicitWidth = 464
-        ExplicitHeight = 225
+        ExplicitWidth = 306
+        ExplicitHeight = 109
         inherited pnlParameterCount: TPanel
           Top = 177
           Width = 464
@@ -215,7 +215,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited pnlTop: TPanel
           Width = 464
-          ExplicitWidth = 464
+          ExplicitWidth = 306
           inherited lblParamValue: TLabel
             Width = 101
             Height = 18
@@ -634,6 +634,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'PCG_Preconditioned_Conjugate_Gradiant'
       Caption = 'PCG (Preconditioned Conjugate-Gradient)'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePCG: TframePCG
         Left = 0
         Top = 0
@@ -643,8 +645,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Anchors = [akLeft, akTop, akBottom]
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         DesignSize = (
           595
           516)
@@ -883,6 +885,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'WEL_Well_Package_Pane'
       Caption = 'jvspWEL'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgWEL: TframePackageWell
         Left = 0
         Top = 0
@@ -891,7 +895,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alTop
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
+        ExplicitWidth = 437
         ExplicitHeight = 241
         DesignSize = (
           595
@@ -1259,6 +1263,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'RCH_Recharge_Package_Pane'
       Caption = 'jvspRCH'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgRCH: TframePackageRCH
         Left = 0
         Top = 0
@@ -1267,7 +1273,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alTop
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
+        ExplicitWidth = 437
         ExplicitHeight = 249
         inherited lblComments: TLabel
           Width = 76
@@ -1291,7 +1297,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 149
           Width = 595
           ExplicitTop = 149
-          ExplicitWidth = 595
+          ExplicitWidth = 437
           inherited lblLayerOption: TLabel
             Width = 173
             Height = 18
@@ -1387,6 +1393,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'EVT_Evapotranspiration_Package'
       Caption = 'jvspEVT'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgEVT: TframePackageTransientLayerChoice
         Left = 0
         Top = 0
@@ -1395,7 +1403,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alTop
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
+        ExplicitWidth = 437
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -1414,7 +1422,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited pnLayerOption: TPanel
           Width = 595
-          ExplicitWidth = 595
+          ExplicitWidth = 437
           inherited lblLayerOption: TLabel
             Width = 136
             Height = 18
@@ -1503,6 +1511,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'ETS_Evapotranspiration_Segments_Package'
       Caption = 'jvspETS'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgETS: TframeEtsPackage
         Left = 0
         Top = 0
@@ -1511,7 +1521,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alTop
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
+        ExplicitWidth = 437
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -1530,7 +1540,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited pnLayerOption: TPanel
           Width = 595
-          ExplicitWidth = 595
+          ExplicitWidth = 437
           inherited lblLayerOption: TLabel
             Width = 136
             Height = 18
@@ -1634,6 +1644,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'RES_Reservoir_Package_Pane'
       Caption = 'jvspRES'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgRES: TframePackageRes
         Left = 0
         Top = 0
@@ -1642,8 +1654,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -1665,8 +1677,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pnLayerOption: TPanel
           Top = 440
           Width = 595
-          ExplicitTop = 440
-          ExplicitWidth = 595
+          ExplicitTop = 324
+          ExplicitWidth = 437
           inherited lblLayerOption: TLabel
             Top = 5
             Width = 172
@@ -1737,6 +1749,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'LAK_Lake_Package_Pane'
       Caption = 'jvspLAK'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgLAK: TframePackageLAK
         Left = 0
         Top = 0
@@ -1745,8 +1759,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -1910,8 +1924,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitWidth = 595
-            ExplicitHeight = 491
+            ExplicitWidth = 437
+            ExplicitHeight = 375
             inherited lblComments: TLabel
               Left = 6
               Top = 38
@@ -2270,6 +2284,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'UZF_Unsaturated_Zone_Flow_Package'
       Caption = 'jvspUZF'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgUZF: TframePackageUZF
         Left = 0
         Top = 0
@@ -2278,8 +2294,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         DesignSize = (
           595
           516)
@@ -2308,8 +2324,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 139
           Width = 595
           Height = 377
-          ExplicitTop = 139
-          ExplicitWidth = 595
+          ExplicitTop = 23
+          ExplicitWidth = 437
           ExplicitHeight = 377
           inherited lblLayerOption: TLabel
             Width = 357
@@ -2457,6 +2473,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpKeyword = 'GMG_Geometric_Multigrid_Package'
       Caption = 'jvspGMG'
       OnShow = jvspGMGShow
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgGMG: TframeGMG
         Left = 0
         Top = 0
@@ -2465,8 +2483,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         DesignSize = (
           595
           516)
@@ -2492,8 +2510,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 214
           Width = 595
           Height = 302
-          ExplicitTop = 214
-          ExplicitWidth = 595
+          ExplicitTop = 98
+          ExplicitWidth = 437
           ExplicitHeight = 302
           inherited tabControlAndPrint: TTabSheet
             ExplicitTop = 29
@@ -2751,6 +2769,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'SIP_Strongly_Implicit_Procedure_Package'
       Caption = 'jvspSIP'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgSIP: TframeSIP
         Left = 0
         Top = 0
@@ -2759,8 +2779,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         DesignSize = (
           595
           516)
@@ -3150,6 +3170,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'HOB_Head_Observation_Package'
       Caption = 'jvspHOB'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgHOB: TframePackageHob
         Left = 0
         Top = 0
@@ -3158,8 +3180,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -3301,6 +3323,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'MODPATH'
       Caption = 'jvspModpath'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline frameModpath: TframeModpathSelection
         Left = 0
         Top = 0
@@ -3309,8 +3333,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -3958,6 +3982,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'MNW2_Multi_Node_Well_Package'
       Caption = 'jvspMNW2'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgMnw2: TframePackageMnw2
         Left = 0
         Top = 0
@@ -3966,8 +3992,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -4093,6 +4119,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpKeyword = 'SUB_Subsidence_and_Aquifer_Sys'
       Caption = 'jvspSUB'
       OnShow = jvspSUBShow
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgSUB: TframePackageSub
         Left = 0
         Top = 0
@@ -4101,7 +4129,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Left = 8
           Width = 76
@@ -4126,7 +4155,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited pcSub: TPageControl
           Height = 397
-          ExplicitWidth = 595
+          ExplicitTop = 3
+          ExplicitWidth = 437
           ExplicitHeight = 397
           inherited tabControls: TTabSheet
             ExplicitTop = 29
@@ -5284,6 +5314,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'HYD_HYDMOD_Package'
       Caption = 'jvspHydmod'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgHydmod: TframePkgHydmod
         Left = 0
         Top = 0
@@ -5292,8 +5324,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -6056,6 +6088,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'BTN_Basic_Transport_Package'
       Caption = 'jvspMt3dmsBasic'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgMt3dBasic: TframeMt3dBasicPkg
         Left = 0
         Top = 0
@@ -6064,8 +6098,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 294
           Height = 18
@@ -6086,8 +6120,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pcMt3d_Basic: TPageControl
           Width = 595
           Height = 396
-          ExplicitWidth = 595
-          ExplicitHeight = 396
+          ExplicitWidth = 437
+          ExplicitHeight = 280
           inherited tabMT3D_Options: TTabSheet
             ExplicitTop = 29
             ExplicitWidth = 587
@@ -6227,6 +6261,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'GCG_Generalized_Conjugate_Grad'
       Caption = 'jvspMt3dmsGCG'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline frameMt3dmsGcgPackage: TframeMt3dmsGcgPackage
         Left = 0
         Top = 0
@@ -6235,8 +6271,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -6356,6 +6392,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'ADV_Advection_Package_Pane'
       Caption = 'jvspMt3dmsAdv'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline frameMt3dmsAdvPkg: TframeMt3dmsAdvPkg
         Left = 0
         Top = 0
@@ -6364,8 +6402,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         DesignSize = (
           595
           516)
@@ -6389,8 +6427,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 148
           Width = 595
           Height = 368
-          ExplicitTop = 148
-          ExplicitWidth = 595
+          ExplicitTop = 32
+          ExplicitWidth = 437
           ExplicitHeight = 368
           inherited tabAdvection1: TTabSheet
             ExplicitTop = 29
@@ -6847,6 +6885,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'RCT_Chemical_Reactions_Package'
       Caption = 'jvspMt3dmsRctPkg'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgMt3dmsRct: TframeMt3dmsChemReactionPkg
         Left = 0
         Top = 0
@@ -6855,8 +6895,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         DesignSize = (
           595
           516)
@@ -6880,8 +6920,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 157
           Width = 595
           Height = 359
-          ExplicitTop = 157
-          ExplicitWidth = 595
+          ExplicitTop = 41
+          ExplicitWidth = 437
           ExplicitHeight = 359
           inherited tabMain: TTabSheet
             ExplicitTop = 29
@@ -7088,6 +7128,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'TOB_Transport_Observation_Pack'
       Caption = 'jvspMt3dmsTOB'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgMt3dmsTob: TframeMt3dmsTransObsPkg
         Left = 0
         Top = 0
@@ -7096,8 +7138,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         DesignSize = (
           595
           516)
@@ -7211,6 +7253,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'PCGN_Preconditioned_Conjugate_'
       Caption = 'jvspPCGN'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePackagePcgn: TframePackagePcgn
         Left = 0
         Top = 0
@@ -7219,8 +7263,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Top = 56
           Width = 76
@@ -7248,7 +7292,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pcControls: TPageControl
           Width = 595
           Height = 359
-          ExplicitWidth = 595
+          ExplicitTop = 41
+          ExplicitWidth = 437
           ExplicitHeight = 359
           inherited tabBasic: TTabSheet
             ExplicitTop = 29
@@ -7658,6 +7703,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'FMP_Farm_Process'
       Caption = 'jvspFMP'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline frameFmpParameterDefinition: TframeListParameterDefinition
         Left = 0
         Top = 362
@@ -7706,8 +7753,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 1
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 362
+        ExplicitWidth = 437
+        ExplicitHeight = 246
         inherited lblPackage: TLabel
           Width = 78
           Height = 18
@@ -7738,8 +7785,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           Height = 362
           OnChange = framePkgFrmjvplFarmChange
           ExplicitLeft = 138
-          ExplicitWidth = 457
-          ExplicitHeight = 362
+          ExplicitWidth = 299
+          ExplicitHeight = 246
           inherited jvspOptions: TJvStandardPage
             Width = 457
             Height = 362
@@ -8168,8 +8215,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited jvspMnwNwtOptions: TJvStandardPage
             Width = 457
             Height = 362
-            ExplicitWidth = 457
-            ExplicitHeight = 362
+            ExplicitWidth = 299
+            ExplicitHeight = 246
             inherited lblMnwExplanation: TLabel
               Width = 309
               Height = 36
@@ -8178,7 +8225,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited grpMNWOptions: TGroupBox
               Width = 457
-              ExplicitWidth = 457
+              ExplicitWidth = 299
               inherited lblRPCT: TLabel
                 Width = 280
                 Height = 54
@@ -8200,7 +8247,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited grpNwtOptions: TGroupBox
               Width = 457
-              ExplicitWidth = 457
+              ExplicitWidth = 299
               inherited lblPSIRAMPF: TLabel
                 Width = 282
                 Height = 54
@@ -8225,7 +8272,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           Height = 362
           Items.Links = {00000000}
           ExplicitWidth = 128
-          ExplicitHeight = 362
+          ExplicitHeight = 246
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -8319,6 +8366,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'CFP_Conduit_Flow_Process'
       Caption = 'jvspCFP'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgCFP: TframePackageCFP
         Left = 0
         Top = 0
@@ -8327,8 +8376,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -8348,8 +8397,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pgcConduits: TPageControl
           Top = 137
           Width = 595
-          ExplicitTop = 137
-          ExplicitWidth = 595
+          ExplicitTop = 21
+          ExplicitWidth = 437
           inherited tabCFP: TTabSheet
             ExplicitTop = 29
             ExplicitWidth = 587
@@ -9479,7 +9528,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           Height = 516
           Items.Links = {00000000}
           ExplicitWidth = 140
-          ExplicitHeight = 516
+          ExplicitHeight = 400
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -9500,6 +9549,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'MNW1_Multi_Node_Well_Package_V'
       Caption = 'jvspMNW1'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgMnw1: TframePackageMnw1
         Left = 0
         Top = 0
@@ -9508,7 +9559,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -9706,6 +9758,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'STO_Storage_Package_Pane'
       Caption = 'jvspSTO'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgSto: TframePkgSto
         Left = 0
         Top = 0
@@ -9715,8 +9769,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Enabled = False
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -9766,6 +9820,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'SMS_Sparse_Matrix_Solution_Pac'
       Caption = 'jvspIMS'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgIMS: TframePkgSms
         Left = 0
         Top = 0
@@ -9774,8 +9830,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -9795,7 +9851,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pgcControls: TPageControl
           Width = 595
           Height = 413
-          ExplicitWidth = 595
+          ExplicitTop = -13
+          ExplicitWidth = 437
           ExplicitHeight = 413
           inherited tabBasic: TTabSheet
             ExplicitTop = 29
@@ -10169,6 +10226,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'MAW_MultiAquifer_Well_Package'
       Caption = 'jvspMAW'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgMAW: TframePackageMaw
         Left = 0
         Top = 0
@@ -10177,8 +10236,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -10330,6 +10389,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'OBS_Observation_Utility_Packag'
       Caption = 'jvspMf6Obs'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePackageMf6Obs: TframePackageMf6Obs
         Left = 0
         Top = 0
@@ -10338,8 +10399,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -10398,6 +10459,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'LAK_Lake_package_for_MODFLOW_6'
       Caption = 'jvspLakMf6'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePackageLakMf6: TframePackageLakMf6
         Left = 0
         Top = 0
@@ -10406,8 +10469,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -10528,6 +10591,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'UZF6_Unsaturated_Zone_Flow_Pa2'
       Caption = 'jvspUzfMf6'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePackageUzfMf6: TframePackageUzfMf6
         Left = 0
         Top = 0
@@ -10536,7 +10601,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -10663,6 +10729,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'SFT_Stream_Flow_Transport_Pack'
       Caption = 'jvspMt3dSft'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline frameMt3dSftPkg: TframeMt3dSftPkg
         Left = 0
         Top = 0
@@ -10671,8 +10739,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -10770,6 +10838,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'CTS_Contaminant_Treatment_Syst'
       Caption = 'jvspMt3dCts'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline frameMt3dCtsPkg: TframeMt3dCtsPkg
         Left = 0
         Top = 0
@@ -10778,8 +10848,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -10845,6 +10915,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       HelpType = htKeyword
       HelpKeyword = 'CSUB_Skeletal_Storage__Compact'
       Caption = 'jvspCSUB'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePackageCsub: TframePackageCsub
         Left = 0
         Top = 0
@@ -10853,8 +10925,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -10874,8 +10946,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pcCsub: TPageControl
           Top = 129
           Width = 595
-          ExplicitTop = 129
-          ExplicitWidth = 595
+          ExplicitTop = 13
+          ExplicitWidth = 437
           inherited tabInterbeds: TTabSheet
             ExplicitTop = 29
             ExplicitHeight = 354
@@ -11475,6 +11547,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFMP4'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgFMP4: TframePackageFmp4
         Left = 0
         Top = 0
@@ -11483,8 +11557,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -11504,13 +11578,10 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 595
           Height = 413
-          VertScrollBar.Position = 0
           ExplicitWidth = 595
           ExplicitHeight = 413
           inherited cpnlWaterBalanceRegions: TCategoryPanel
-            Top = 657
-            ExplicitTop = 657
-            ExplicitWidth = 574
+            ExplicitWidth = 591
             inherited rdgFarms: TRbwDataGrid4
               Width = 572
               FixedCols = 0
@@ -11519,18 +11590,14 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlOptions: TCategoryPanel
-            Top = 534
-            ExplicitTop = 534
-            ExplicitWidth = 574
+            ExplicitWidth = 591
             inherited cbWellField: TCheckBox
               Height = 37
               ExplicitHeight = 37
             end
           end
           inherited cpnlMnw2: TCategoryPanel
-            Top = 292
-            ExplicitTop = 292
-            ExplicitWidth = 574
+            ExplicitWidth = 433
             inherited lblQClose: TLabel
               Width = 409
               Height = 36
@@ -11551,17 +11618,15 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlOutput: TCategoryPanel
-            Top = 0
-            ExplicitTop = 0
-            ExplicitWidth = 574
+            ExplicitWidth = 433
             inherited clbPrint: TCheckListBox
               Width = 572
               ItemHeight = 18
-              ExplicitWidth = 572
+              ExplicitWidth = 431
             end
             inherited Panel1: TPanel
               Width = 572
-              ExplicitWidth = 572
+              ExplicitWidth = 431
               inherited lblPrintRouting: TLabel
                 Width = 83
                 Height = 18
@@ -11630,7 +11695,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 6
         ExplicitWidth = 595
         ExplicitHeight = 516
         inherited lblComments: TLabel
@@ -11729,6 +11793,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4SurfaceWater'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgFmp4SurfaceWater: TframePackageFmp4SurfaceWater
         Left = 0
         Top = 0
@@ -11737,8 +11803,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -11758,23 +11824,19 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 595
           Height = 359
-          VertScrollBar.Position = 0
           ExplicitWidth = 595
           ExplicitHeight = 359
           inherited cpnlSalinityFlush: TCategoryPanel
-            Top = 244
-            ExplicitTop = 244
-            ExplicitWidth = 574
+            ExplicitWidth = 591
             inherited rdgSalinityFlush: TRbwDataGrid4
               Width = 572
               FixedCols = 0
+              ExplicitWidth = 572
             end
           end
           inherited cpnlOptions: TCategoryPanel
-            Top = 153
             Enabled = True
-            ExplicitTop = 30
-            ExplicitWidth = 591
+            ExplicitWidth = 433
             inherited lblSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE: TLabel
               Width = 265
               Height = 18
@@ -11783,13 +11845,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlPrint: TCategoryPanel
-            Top = 0
-            ExplicitTop = 0
-            ExplicitWidth = 591
+            ExplicitWidth = 433
             inherited clbPrint: TCheckListBox
               Width = 572
               ItemHeight = 18
-              ExplicitWidth = 572
+              ExplicitWidth = 431
             end
           end
         end
@@ -11822,6 +11882,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4SupplyWells'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgFmp4Wells: TframePackageFmp4Wells
         Left = 0
         Top = 0
@@ -11830,7 +11892,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -11971,6 +12034,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4LandUse'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgFmp4LandUse: TframePackageFmp4LandUse
         Left = 0
         Top = 0
@@ -11979,7 +12044,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -12004,11 +12070,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited rdgLandUse: TRbwDataGrid4
               Width = 589
               FixedCols = 0
+              ExplicitWidth = 589
             end
           end
           inherited cpnlOptions: TCategoryPanel
-            ExplicitWidth = 574
-            ExpandedHeight = 30
+            ExplicitWidth = 433
             inherited lblLandUsePerCell: TLabel
               Width = 118
               Height = 18
@@ -12029,20 +12095,19 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited comboLandUsePerCell: TComboBox
               Height = 26
+              ExplicitHeight = 26
             end
           end
           inherited cpnlPrint: TCategoryPanel
-            ExplicitWidth = 574
-            ExpandedHeight = 229
+            ExplicitWidth = 433
             inherited clbPrint: TCheckListBox
               Width = 572
               ItemHeight = 18
-              ExplicitWidth = 572
+              ExplicitWidth = 431
             end
             inherited pnl2: TPanel
-              Top = -37
               Width = 572
-              ExplicitWidth = 572
+              ExplicitWidth = 431
               inherited lblSpecifyCrops: TLabel
                 Width = 146
                 Height = 18
@@ -12091,6 +12156,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspFmp4SalinityFlush'
+      ExplicitWidth = 437
+      ExplicitHeight = 400
       inline framePkgFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Left = 0
         Top = 0
@@ -12099,8 +12166,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 595
-        ExplicitHeight = 516
+        ExplicitWidth = 437
+        ExplicitHeight = 400
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -12120,22 +12187,23 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 595
           Height = 359
-          ExplicitWidth = 595
+          ExplicitTop = 41
+          ExplicitWidth = 437
           ExplicitHeight = 359
           inherited cpnlPrint: TCategoryPanel
-            ExplicitWidth = 591
+            ExplicitWidth = 433
             ExpandedHeight = 89
             inherited clbPrint: TCheckListBox
               Width = 589
               ItemHeight = 18
-              ExplicitWidth = 589
+              ExplicitWidth = 431
             end
           end
           inherited cpnlOptions: TCategoryPanel
-            ExplicitWidth = 591
+            ExplicitWidth = 433
             inherited pnl1: TPanel
               Width = 589
-              ExplicitWidth = 589
+              ExplicitWidth = 431
               inherited lblExpressionLength: TLabel
                 Width = 123
                 Height = 18

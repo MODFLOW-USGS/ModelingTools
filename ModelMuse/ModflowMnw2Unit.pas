@@ -1511,7 +1511,10 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowPackages.Mnw2Package.MfMnwPartialPenetration.Invalidate;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowPackages.Mnw2Package.MfMnwPartialPenetration.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1533,7 +1536,10 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowPackages.Mnw2Package.MfMnwCellToWellConductance.Invalidate;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowPackages.Mnw2Package.MfMnwCellToWellConductance.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1555,7 +1561,10 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowPackages.Mnw2Package.MfMnwP.Invalidate;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowPackages.Mnw2Package.MfMnwP.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1577,7 +1586,10 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowPackages.Mnw2Package.MfMnwC.Invalidate;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowPackages.Mnw2Package.MfMnwC.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1920,7 +1932,10 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowPackages.Mnw2Package.MfMnwB.Invalidate;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowPackages.Mnw2Package.MfMnwB.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1942,7 +1957,10 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowPackages.Mnw2Package.MfMnwSkinK.Invalidate;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowPackages.Mnw2Package.MfMnwSkinK.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1964,7 +1982,10 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowPackages.Mnw2Package.MfMnwSkinRadius.Invalidate;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowPackages.Mnw2Package.MfMnwSkinRadius.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1986,7 +2007,10 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowPackages.Mnw2Package.MfMnwWellRadius.Invalidate;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowPackages.Mnw2Package.MfMnwWellRadius.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2010,8 +2034,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
-      Link.FBData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
+        Link.FBData.Invalidate;
+      end;
     end;
     InvalidateB;
   end;
@@ -2036,8 +2063,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
-      Link.FCData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
+        Link.FCData.Invalidate;
+      end;
     end;
     InvalidateC;
   end;
@@ -2062,8 +2092,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
-      Link.FCellToWellConductanceData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
+        Link.FCellToWellConductanceData.Invalidate;
+      end;
     end;
     InvalidateCellToWellConductance;
   end;
@@ -2084,8 +2117,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
-      Link.FPartialPenetrationData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
+        Link.FPartialPenetrationData.Invalidate;
+      end;
     end;
     InvalidatePartialPenetration;
   end;
@@ -2110,8 +2146,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
-      Link.FPData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
+        Link.FPData.Invalidate;
+      end;
     end;
     InvalidateP;
   end;
@@ -2136,8 +2175,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
-      Link.FSkinKData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
+        Link.FSkinKData.Invalidate;
+      end;
     end;
     InvalidateSkinK
   end;
@@ -2162,8 +2204,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
-      Link.FSkinRadiusData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
+        Link.FSkinRadiusData.Invalidate;
+      end;
     end;
     InvalidateSkinRadius
   end;
@@ -2208,8 +2253,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
-      Link.FWellRadiusData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMnw2TimeListLink;
+        Link.FWellRadiusData.Invalidate;
+      end;
     end;
     InvalidateWellRadius;
   end;

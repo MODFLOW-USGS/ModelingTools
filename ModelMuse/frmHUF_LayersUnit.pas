@@ -1066,7 +1066,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      AssignOldHufUnits(ChildModel);
+      if ChildModel <> nil then
+      begin
+        AssignOldHufUnits(ChildModel);
+      end;
     end;
   end;
 end;
@@ -1088,7 +1091,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      AssignNewHufUnits(ChildModel);
+      if ChildModel <> nil then
+      begin
+        AssignNewHufUnits(ChildModel);
+      end;
     end;
   end;
 end;

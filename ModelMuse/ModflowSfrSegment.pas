@@ -1144,8 +1144,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
-      Link.FHydraulicConductivityData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
+        Link.FHydraulicConductivityData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1170,8 +1173,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
-      Link.FStreamBedElevationData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
+        Link.FStreamBedElevationData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1196,8 +1202,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
-      Link.FStreamBedThicknessData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
+        Link.FStreamBedThicknessData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1221,8 +1230,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
-      Link.FStreamDepthData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
+        Link.FStreamDepthData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1246,8 +1258,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
-      Link.FStreamWidthData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrSegmentTimeListLink;
+        Link.FStreamWidthData.Invalidate;
+      end;
     end;
   end;
 end;

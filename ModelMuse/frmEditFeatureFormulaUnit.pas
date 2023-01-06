@@ -357,7 +357,10 @@ begin
           for ModelIndex := 0 to Model.ChildModels.Count - 1 do
           begin
             AModel := Model.ChildModels[ModelIndex].ChildModel;
-            PackageList.Add(AModel.ModflowPackages);
+            if AModel <> nil then
+            begin
+              PackageList.Add(AModel.ModflowPackages);
+            end;
           end;
           FMfFeatureTypes := [];
           for PackgeIndex := 0 to PackageList.Count - 1 do

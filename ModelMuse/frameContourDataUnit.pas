@@ -250,10 +250,13 @@ begin
       for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-        ChildModel.Grid.TopContourDataSet := nil;
-        ChildModel.Grid.FrontContourDataSet := nil;
-        ChildModel.Grid.SideContourDataSet := nil;
-        ChildModel.Grid.ThreeDContourDataSet := nil;
+        if ChildModel <> nil then
+        begin
+          ChildModel.Grid.TopContourDataSet := nil;
+          ChildModel.Grid.FrontContourDataSet := nil;
+          ChildModel.Grid.SideContourDataSet := nil;
+          ChildModel.Grid.ThreeDContourDataSet := nil;
+        end;
       end;
     end
     else
@@ -292,10 +295,13 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(DataSet.Name);
-      ChildDataArray.ContourAlg := DataSet.ContourAlg;
-      ChildDataArray.ContourInterval.Value := DataSet.ContourInterval.Value;
-      ChildDataArray.Contours := DataSet.Contours;
+      if ChildModel <> nil then
+      begin
+        ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(DataSet.Name);
+        ChildDataArray.ContourAlg := DataSet.ContourAlg;
+        ChildDataArray.ContourInterval.Value := DataSet.ContourInterval.Value;
+        ChildDataArray.Contours := DataSet.Contours;
+      end;
     end;
 
     if (frmGoPhast.PhastModel.TopContourDataSet = DataSet)
@@ -456,10 +462,13 @@ begin
       for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-        clbxModel.Items.AddObject(ChildModel.ModelName, ChildModel);
-        Inc(ItemIndex);
-        clbxModel.Checked[ItemIndex] := ChildModel.CanDrawContours;
-        AllCanDrawContours := AllCanDrawContours and ChildModel.CanDrawContours
+        if ChildModel <> nil then
+        begin
+          clbxModel.Items.AddObject(ChildModel.ModelName, ChildModel);
+          Inc(ItemIndex);
+          clbxModel.Checked[ItemIndex] := ChildModel.CanDrawContours;
+          AllCanDrawContours := AllCanDrawContours and ChildModel.CanDrawContours
+        end;
       end;
       clbxModel.Checked[0] := AllCanDrawContours;
     end

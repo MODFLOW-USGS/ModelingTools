@@ -1575,8 +1575,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawWellScreenTimeListLink;
-      Link.FScreenBottomData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawWellScreenTimeListLink;
+        Link.FScreenBottomData.Invalidate;
+      end;
     end;
 
     ScreenBottomDataArray := PhastModel.DataArrayManager.GetDataSetByName(KMAWScreenBottom);
@@ -1607,8 +1610,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawWellScreenTimeListLink;
-      Link.FScreenTopData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawWellScreenTimeListLink;
+        Link.FScreenTopData.Invalidate;
+      end;
     end;
 
     ScreenTopDataArray := PhastModel.DataArrayManager.GetDataSetByName(KMAWScreenTop);
@@ -1639,8 +1645,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawWellScreenTimeListLink;
-      Link.FSkinKData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawWellScreenTimeListLink;
+        Link.FSkinKData.Invalidate;
+      end;
     end;
 
     SkinKDataArray := PhastModel.DataArrayManager.GetDataSetByName(KMAWSkinK);
@@ -1671,8 +1680,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawWellScreenTimeListLink;
-      Link.FSkinRadiusData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawWellScreenTimeListLink;
+        Link.FSkinRadiusData.Invalidate;
+      end;
     end;
 
     SkinRadiusDataArray := PhastModel.DataArrayManager.GetDataSetByName(KMAWSkinRadius);
@@ -2834,7 +2846,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawFlowingWellConductance(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawFlowingWellConductance(self);
+      end;
     end;
   end;
 end;
@@ -2861,7 +2876,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawFlowingWellElevation(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawFlowingWellElevation(self);
+      end;
     end;
   end;
 end;
@@ -2889,7 +2907,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawFlowingWellReductionLength(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawFlowingWellReductionLength(self);
+      end;
     end;
   end;
 end;
@@ -2916,7 +2937,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawWell_Limit(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawWell_Limit(self);
+      end;
     end;
   end;
 end;
@@ -2943,7 +2967,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawMaximumPumpRate(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawMaximumPumpRate(self);
+      end;
     end;
   end;
 end;
@@ -2970,7 +2997,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawMinimumPumpRate(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawMinimumPumpRate(self);
+      end;
     end;
   end;
 end;
@@ -3009,7 +3039,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawPumpElevation(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawPumpElevation(self);
+      end;
     end;
   end;
 end;
@@ -3036,7 +3069,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawWell_Rate(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawWell_Rate(self);
+      end;
     end;
   end;
 end;
@@ -3063,7 +3099,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawScalingLength(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawScalingLength(self);
+      end;
     end;
   end;
 end;
@@ -3090,7 +3129,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMawWell_Head(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMawWell_Head(self);
+      end;
     end;
   end;
 end;
@@ -5217,8 +5259,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FFlowingWellConductance.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FFlowingWellConductance.Invalidate;
+      end;
     end;
   end;
 end;
@@ -5243,8 +5288,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FFlowingWellElevation.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FFlowingWellElevation.Invalidate;
+      end;
     end;
   end;
 end;
@@ -5269,8 +5317,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FFlowingWellReductionLength.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FFlowingWellReductionLength.Invalidate;
+      end;
     end;
   end;
 end;
@@ -5299,8 +5350,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FHeadLimit.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FHeadLimit.Invalidate;
+      end;
     end;
   end;
 end;
@@ -5330,11 +5384,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      for Index := 0 to Link.FInjectionConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FInjectionConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        for Index := 0 to Link.FInjectionConcList.Count - 1 do
+        begin
+          TimeList := Link.FInjectionConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -5359,8 +5416,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FMaxRate.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FMaxRate.Invalidate;
+      end;
     end;
   end;
 end;
@@ -5384,8 +5444,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FMinRate.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FMinRate.Invalidate;
+      end;
     end;
   end;
 end;
@@ -5432,8 +5495,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FPumpElevation.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FPumpElevation.Invalidate;
+      end;
     end;
   end;
 end;
@@ -5457,8 +5523,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FRate.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FRate.Invalidate;
+      end;
     end;
   end;
 end;
@@ -5482,8 +5551,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FScalingLength.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FScalingLength.Invalidate;
+      end;
     end;
   end;
 end;
@@ -5513,11 +5585,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FSpecifiedConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+        begin
+          TimeList := Link.FSpecifiedConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -5542,8 +5617,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
-      Link.FWellHead.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FWellHead.Invalidate;
+      end;
     end;
   end;
 end;

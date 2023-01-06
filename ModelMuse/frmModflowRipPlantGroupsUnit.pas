@@ -769,8 +769,11 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    RipPackage := ChildModel.ModflowPackages.RipPackage;
-    RipPackage.UpdateCoverageTimeLists;
+    if ChildModel <> nil then
+    begin
+      RipPackage := ChildModel.ModflowPackages.RipPackage;
+      RipPackage.UpdateCoverageTimeLists;
+    end;
   end;
 end;
 

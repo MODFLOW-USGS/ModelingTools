@@ -718,6 +718,7 @@ procedure THfbBoundary.HandleChangedValue(Observer: TObserver);
 var
   Model: TPhastModel;
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   Model := ParentModel as TPhastModel;
   if not (csDestroying in Model.ComponentState)
@@ -728,7 +729,11 @@ begin
     Model.HfbDisplayer.Invalidate;
     for ChildIndex := 0 to Model.ChildModels.Count - 1 do
     begin
-      Model.ChildModels[ChildIndex].ChildModel.HfbDisplayer.Invalidate;
+      ChildModel := Model.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.HfbDisplayer.Invalidate;
+      end;
     end;
     Observer.UpToDate := True;
   end;

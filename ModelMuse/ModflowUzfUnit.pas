@@ -1094,7 +1094,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfUzfEtDemand(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfUzfEtDemand(self);
+      end;
     end;
   end;
 end;
@@ -1121,7 +1124,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfUzfExtinctionDepth(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfUzfExtinctionDepth(self);
+      end;
     end;
   end;
 end;
@@ -1148,7 +1154,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfUzfInfiltration(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfUzfInfiltration(self);
+      end;
     end;
   end;
 end;
@@ -1175,7 +1184,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfUzfWaterContent(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfUzfWaterContent(self);
+      end;
     end;
   end;
 end;
@@ -1690,8 +1702,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfExtinctionDepthTimeListLink;
-      Link.FExtinctionDepthData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfExtinctionDepthTimeListLink;
+        Link.FExtinctionDepthData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1868,8 +1883,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfWaterContentTimeListLink;
-      Link.FWaterContentData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfWaterContentTimeListLink;
+        Link.FWaterContentData.Invalidate;
+      end;
     end;
   end;
 end;

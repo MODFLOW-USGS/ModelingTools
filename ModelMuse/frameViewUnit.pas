@@ -1400,14 +1400,18 @@ end;
 procedure TframeView.DrawCrossSection;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   frmGoPhast.PhastModel.CrossSection.Draw(FBitMap32, ViewDirection);
   if frmGoPhast.PhastModel.LgrUsed then
   begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
-      frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel.
-        CrossSection.Draw(FBitMap32, ViewDirection);
+      ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel. CrossSection.Draw(FBitMap32, ViewDirection);
+      end;
     end;
   end;
 
@@ -2288,7 +2292,7 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      if (ChildModel.Pathlines.HasData)then
+      if (ChildModel <> nil) and (ChildModel.Pathlines.HasData)then
       begin
         ChildModel.Pathlines.Draw(Orientation, FBitmap32);
       end;
@@ -2318,7 +2322,7 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      if ChildModel.EndPoints.HasData then
+      if (ChildModel <> nil) and ChildModel.EndPoints.HasData then
       begin
         ChildModel.EndPoints.Draw(Orientation, FBitmap32);
       end;
@@ -2348,7 +2352,7 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      if (ChildModel.TimeSeries.HasData) then
+      if (ChildModel <> nil) and (ChildModel.TimeSeries.HasData) then
       begin
         ChildModel.TimeSeries.Draw(Orientation, FBitmap32);
       end;

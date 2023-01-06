@@ -1117,23 +1117,22 @@ begin
         for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
         begin
           ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-          AFileName := DefaultFileName(ChildModel, ADir);
-          if AFileName <> '' then
+          if ChildModel <> nil then
           begin
-            AFileName := ChangeFileExt(AFileName, Extension);
-          end;
-          AddModelRow(ChildModel, ChildIndex + 2,  AFileName);
-          if FileExists(AFileName) then
-          begin
-            result := ReadDataHeadings(ChildModel, {ChildIndex + 2,}  AFileName);
-            if not result then
+            AFileName := DefaultFileName(ChildModel, ADir);
+            if AFileName <> '' then
             begin
-              Exit;
+              AFileName := ChangeFileExt(AFileName, Extension);
             end;
-          end
-          else
-          begin
-
+            AddModelRow(ChildModel, ChildIndex + 2,  AFileName);
+            if FileExists(AFileName) then
+            begin
+              result := ReadDataHeadings(ChildModel, {ChildIndex + 2,}  AFileName);
+              if not result then
+              begin
+                Exit;
+              end;
+            end;
           end;
         end;
       end;
@@ -5781,14 +5780,17 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ModelPosition := FModels.IndexOf(ChildModel);
-      if ModelPosition >= 0 then
+      if ChildModel <> nil then
       begin
-        FinalFormula := FinalFormula + ', ' + FFormulas[ModelPosition];
-      end
-      else
-      begin
-        FinalFormula := FinalFormula + ', 0'
+        ModelPosition := FModels.IndexOf(ChildModel);
+        if ModelPosition >= 0 then
+        begin
+          FinalFormula := FinalFormula + ', ' + FFormulas[ModelPosition];
+        end
+        else
+        begin
+          FinalFormula := FinalFormula + ', 0'
+        end;
       end;
     end;
     FinalFormula := FinalFormula + '0), 0)';

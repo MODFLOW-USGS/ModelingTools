@@ -1276,7 +1276,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraFluidFlux(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraFluidFlux(self);
+      end;
     end;
   end;
 end;
@@ -1303,7 +1306,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraFluidFluxU(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraFluidFluxU(self);
+      end;
     end;
   end;
 end;
@@ -1362,7 +1368,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraUFlux(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraUFlux(self);
+      end;
     end;
   end;
 end;
@@ -1416,7 +1425,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraSpecPressure(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraSpecPressure(self);
+      end;
     end;
   end;
 end;
@@ -1443,7 +1455,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraSpecPressureU(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraSpecPressureU(self);
+      end;
     end;
   end;
 end;
@@ -1501,7 +1516,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraSpecifiedU(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraSpecifiedU(self);
+      end;
     end;
   end;
 end;

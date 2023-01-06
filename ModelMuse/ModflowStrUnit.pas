@@ -1522,8 +1522,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
-      Link.FBedBottomData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
+        Link.FBedBottomData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1547,8 +1550,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
-      Link.FBedTopData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
+        Link.FBedTopData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1572,8 +1578,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
-      Link.FConductanceData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
+        Link.FConductanceData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1597,8 +1606,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
-      Link.FFlowData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
+        Link.FFlowData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1622,8 +1634,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
-      Link.FRoughnessData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
+        Link.FRoughnessData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1647,8 +1662,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
-      Link.FSlopeData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
+        Link.FSlopeData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1672,8 +1690,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
-      Link.FStageData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
+        Link.FStageData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1697,8 +1718,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
-      Link.FWidthData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TStrTimeListLink;
+        Link.FWidthData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2801,7 +2825,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfStrBedBottom(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfStrBedBottom(self);
+      end;
     end;
   end;
 end;
@@ -2828,7 +2855,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfStrBedTop(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfStrBedTop(self);
+      end;
     end;
   end;
 end;
@@ -2855,7 +2885,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfStrConductance(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfStrConductance(self);
+      end;
     end;
   end;
 end;
@@ -2905,7 +2938,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfStrFlow(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfStrFlow(self);
+      end;
     end;
   end;
 end;
@@ -2932,7 +2968,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfStrRoughness(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfStrRoughness(self);
+      end;
     end;
   end;
 end;
@@ -2959,7 +2998,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfStrSlope(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfStrSlope(self);
+      end;
     end;
   end;
 end;
@@ -2986,7 +3028,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfStrStage(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfStrStage(self);
+      end;
     end;
   end;
 end;
@@ -3013,7 +3058,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfStrWidth(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfStrWidth(self);
+      end;
     end;
   end;
 end;

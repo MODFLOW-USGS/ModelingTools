@@ -1067,8 +1067,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
-      Link.FConductanceData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
+        Link.FConductanceData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1098,11 +1101,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
-      for Index := 0 to Link.FConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
+        for Index := 0 to Link.FConcList.Count - 1 do
+        begin
+          TimeList := Link.FConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -1144,8 +1150,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
-      Link.FRiverBottomData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
+        Link.FRiverBottomData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1169,8 +1178,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
-      Link.FRiverStageData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
+        Link.FRiverStageData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2101,7 +2113,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfRivConductance(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfRivConductance(self);
+      end;
     end;
   end;
 end;
@@ -2143,7 +2158,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfRivBottom(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfRivBottom(self);
+      end;
     end;
   end;
 end;
@@ -2170,7 +2188,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfRivStage(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfRivStage(self);
+      end;
     end;
   end;
 end;

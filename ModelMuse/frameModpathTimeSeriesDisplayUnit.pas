@@ -383,11 +383,14 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      comboModelSelection.Items.AddObject(ChildModel.DisplayName, ChildModel);
-      LocalTimeSeries := TTimeSeriesReader.Create(ChildModel);
-      FTimeSeriesList.Add(LocalTimeSeries);
-      TimeSeries := ChildModel.TimeSeries;
-      LocalTimeSeries.Assign(TimeSeries);
+      if ChildModel <> nil then
+      begin
+        comboModelSelection.Items.AddObject(ChildModel.DisplayName, ChildModel);
+        LocalTimeSeries := TTimeSeriesReader.Create(ChildModel);
+        FTimeSeriesList.Add(LocalTimeSeries);
+        TimeSeries := ChildModel.TimeSeries;
+        LocalTimeSeries.Assign(TimeSeries);
+      end;
     end;
   end
   else

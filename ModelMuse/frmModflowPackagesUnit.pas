@@ -5104,8 +5104,11 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      TempParentPackages := FOldPackages.Add;
-      TempParentPackages.Packages.Assign(ChildModel.ModflowPackages);
+      if ChildModel <> nil then
+      begin
+        TempParentPackages := FOldPackages.Add;
+        TempParentPackages.Packages.Assign(ChildModel.ModflowPackages);
+      end;
     end;
   end;
 
@@ -5177,14 +5180,17 @@ begin
       for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-        OldPackages := ChildModel.ModflowPackages;
-        NewPackages := FNewPackages[ChildIndex+1].Packages;
-        if not OldPackages.Mt3dBasic.SimulateWithMt3D
-          and NewPackages.Mt3dBasic.SimulateWithMt3D then
+        if ChildModel <> nil then
         begin
-          Mt3dmsNewlySelected := True;
+          OldPackages := ChildModel.ModflowPackages;
+          NewPackages := FNewPackages[ChildIndex+1].Packages;
+          if not OldPackages.Mt3dBasic.SimulateWithMt3D
+            and NewPackages.Mt3dBasic.SimulateWithMt3D then
+          begin
+            Mt3dmsNewlySelected := True;
+          end;
+          ChildModel.ModflowPackages := FNewPackages[ChildIndex+1].Packages;
         end;
-        ChildModel.ModflowPackages := FNewPackages[ChildIndex+1].Packages;
       end;
     end;
   finally
@@ -5414,7 +5420,10 @@ begin
       for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-        ChildModel.ModflowPackages := FOldPackages[ChildIndex+1].Packages;
+        if ChildModel <> nil then
+        begin
+          ChildModel.ModflowPackages := FOldPackages[ChildIndex+1].Packages;
+        end;
       end;
     end;
   finally

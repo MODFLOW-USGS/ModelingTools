@@ -1239,7 +1239,10 @@ begin
           for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
           begin
             ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-            ChildModel.Grid.DrawColoredGridLines := cbShowColoredGridLines.Checked;
+            if ChildModel <> nil then
+            begin
+              ChildModel.Grid.DrawColoredGridLines := cbShowColoredGridLines.Checked;
+            end;
           end;
         end;
         try
@@ -1251,7 +1254,10 @@ begin
             for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
             begin
               ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-              ChildModel.Grid.DrawColoredGridLines := True;
+              if ChildModel <> nil then
+              begin
+                ChildModel.Grid.DrawColoredGridLines := True;
+              end;
             end;
           end;
         end;
@@ -1292,12 +1298,15 @@ begin
           for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
           begin
             ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-            ChildModel.DrawHeadObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
-            ChildModel.DrawPestPointObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
-            ChildModel.DrawSfrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
-            ChildModel.DrawStrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
-            ChildModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
-            ChildModel.DrawSwrReachConnections(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+            if ChildModel <> nil then
+            begin
+              ChildModel.DrawHeadObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+              ChildModel.DrawPestPointObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+              ChildModel.DrawSfrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+              ChildModel.DrawStrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+              ChildModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+              ChildModel.DrawSwrReachConnections(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+            end;
           end;
         end;
       end
@@ -1317,9 +1326,12 @@ begin
           for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
           begin
             ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-            ChildModel.Pathlines.Draw(Orientation, FModelImage);
-            ChildModel.EndPoints.Draw(Orientation, FModelImage);
-            ChildModel.TimeSeries.Draw(Orientation, FModelImage);
+            if ChildModel <> nil then
+            begin
+              ChildModel.Pathlines.Draw(Orientation, FModelImage);
+              ChildModel.EndPoints.Draw(Orientation, FModelImage);
+              ChildModel.TimeSeries.Draw(Orientation, FModelImage);
+            end;
           end;
         end;
       end;
@@ -1346,7 +1358,10 @@ begin
           for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
           begin
             ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-            ChildModel.CrossSection.Draw(FModelImage, ViewDirection);
+            if ChildModel <> nil then
+            begin
+              ChildModel.CrossSection.Draw(FModelImage, ViewDirection);
+            end;
           end;
         end;
       end;
@@ -1423,7 +1438,10 @@ begin
               for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
               begin
                 ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-                ChildModel.Grid.DrawColoredGridLines := cbShowColoredGridLines.Checked;
+                if ChildModel <> nil then
+                begin
+                  ChildModel.Grid.DrawColoredGridLines := cbShowColoredGridLines.Checked;
+                end;
               end;
             end;
             try
@@ -1435,7 +1453,10 @@ begin
                 for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
                 begin
                   ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-                  ChildModel.Grid.DrawColoredGridLines := True;
+                  if ChildModel <> nil then
+                  begin
+                    ChildModel.Grid.DrawColoredGridLines := True;
+                  end;
                 end;
               end;
             end;
@@ -1470,12 +1491,15 @@ begin
               for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
               begin
                 ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-                ChildModel.DrawHeadObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
-                ChildModel.DrawPestPointObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
-                ChildModel.DrawSfrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
-                ChildModel.DrawStrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
-                ChildModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
-                ChildModel.DrawSwrReachConnections(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+                if ChildModel <> nil then
+                begin
+                  ChildModel.DrawHeadObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+                  ChildModel.DrawPestPointObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+                  ChildModel.DrawSfrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+                  ChildModel.DrawStrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+                  ChildModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+                  ChildModel.DrawSwrReachConnections(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+                end;
               end;
             end;
           end
@@ -1494,9 +1518,12 @@ begin
               for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
               begin
                 ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-                ChildModel.Pathlines.Draw(Orientation, ModelMetaFileCanvas);
-                ChildModel.EndPoints.Draw(Orientation, ModelMetaFileCanvas);
-                ChildModel.TimeSeries.Draw(Orientation, ModelMetaFileCanvas);
+                if ChildModel <> nil then
+                begin
+                  ChildModel.Pathlines.Draw(Orientation, ModelMetaFileCanvas);
+                  ChildModel.EndPoints.Draw(Orientation, ModelMetaFileCanvas);
+                  ChildModel.TimeSeries.Draw(Orientation, ModelMetaFileCanvas);
+                end;
               end;
             end;
           end;
@@ -1523,7 +1550,10 @@ begin
               for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
               begin
                 ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-                ChildModel.CrossSection.Draw(ModelMetaFileCanvas, ViewDirection);
+                if ChildModel <> nil then
+                begin
+                  ChildModel.CrossSection.Draw(ModelMetaFileCanvas, ViewDirection);
+                end;
               end;
             end;
           end;
@@ -2980,13 +3010,16 @@ begin
       for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
       begin
         AChild := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-        ObsImported := ObsImported or (AChild.HeadObsResults.Count > 0);
-        AChild.HeadObsResults.CalculateMaxResidual(AChild);
-        if MaxResid < AChild.HeadObsResults.MaxResidual then
+        if AChild <> nil then
         begin
-          MaxResid := AChild.HeadObsResults.MaxResidual;
+          ObsImported := ObsImported or (AChild.HeadObsResults.Count > 0);
+          AChild.HeadObsResults.CalculateMaxResidual(AChild);
+          if MaxResid < AChild.HeadObsResults.MaxResidual then
+          begin
+            MaxResid := AChild.HeadObsResults.MaxResidual;
+          end;
         end;
-      end;
+        end;
     end;
 
     if not ObsImported then
@@ -3950,6 +3983,7 @@ var
   DrawItem: TDrawItem;
   Index: Integer;
   SelectedVelocityDescription: string;
+  ChildModel: TChildModel;
 begin
   comboView.ItemIndex := Ord(ASetting.ViewToDisplay);
   PhastModel.PestProperties.ShowPilotPoints := ASetting.ShowPilotPoints;
@@ -4082,7 +4116,11 @@ begin
   begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
-      ApplyCrossSectionSettings(PhastModel.ChildModels[ChildIndex].ChildModel, ASetting);
+      ChildModel :=PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ApplyCrossSectionSettings(ChildModel, ASetting);
+      end;
     end;
   end;
   ApplyContourDisplaySettings(ASetting.ContourDisplaySettings);

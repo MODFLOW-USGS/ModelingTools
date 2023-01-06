@@ -8,7 +8,6 @@ inherited frmExportImage: TfrmExportImage
   OnClose = FormClose
   ExplicitWidth = 737
   ExplicitHeight = 594
-  PixelsPerInch = 96
   TextHeight = 18
   object JvNetscapeSplitter2: TJvNetscapeSplitter
     Left = 249
@@ -247,6 +246,8 @@ inherited frmExportImage: TfrmExportImage
             OnGetText = vstDataSetsGetText
             OnGetNodeDataSize = vstDataSetsGetNodeDataSize
             OnInitNode = vstDataSetsInitNode
+            Touch.InteractiveGestures = [igPan, igPressAndTap]
+            Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
             Columns = <>
           end
         end
@@ -396,6 +397,7 @@ inherited frmExportImage: TfrmExportImage
         Caption = '&View'
         TabOrder = 2
         OnExpand = cpViewExpand
+        ExplicitWidth = 185
         object Panel3: TPanel
           Left = 0
           Top = 0

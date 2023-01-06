@@ -4,8 +4,8 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
   Caption = 'Batch File Additions'
   ClientHeight = 459
   ClientWidth = 328
-  ExplicitWidth = 346
-  ExplicitHeight = 504
+  ExplicitWidth = 344
+  ExplicitHeight = 498
   PixelsPerInch = 120
   TextHeight = 18
   object Panel1: TPanel

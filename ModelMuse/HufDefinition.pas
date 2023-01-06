@@ -308,7 +308,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      RenameDataArrays(NewRoot, ChildModel);
+      if ChildModel <> nil then
+      begin
+        RenameDataArrays(NewRoot, ChildModel);
+      end;
     end;
   end;
 end;
@@ -382,7 +385,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      CreateOrUpdataDataArray(LayerName, DataType, UseDataArray, ChildModel);
+      if ChildModel <> nil then
+      begin
+        CreateOrUpdataDataArray(LayerName, DataType, UseDataArray, ChildModel);
+      end;
     end;
   end;
 end;
@@ -762,7 +768,10 @@ begin
       for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-        UnlockDataArrays(ChildModel);
+        if ChildModel <> nil then
+        begin
+          UnlockDataArrays(ChildModel);
+        end;
       end;
     end;
   end;
@@ -828,8 +837,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      CreateOrRenameDataArray(LayerName, Extension, DisplayExtension,
-        NewHufName, ChildModel);
+      if ChildModel <> nil then
+      begin
+        CreateOrRenameDataArray(LayerName, Extension, DisplayExtension,
+          NewHufName, ChildModel);
+      end;
     end;
   end;
 end;

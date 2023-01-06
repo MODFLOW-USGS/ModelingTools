@@ -1936,9 +1936,12 @@ begin
   for Index := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     ChildModel := frmGoPhast.PhastModel.ChildModels[Index].ChildModel;
-    NewDis := TChildDiscretizationCollection.Create(nil);
-    NewDis.Assign(ChildModel.Discretization);
-    FChildDiscretizations.Add(NewDis);
+    if ChildModel <> nil then
+    begin
+      NewDis := TChildDiscretizationCollection.Create(nil);
+      NewDis.Assign(ChildModel.Discretization);
+      FChildDiscretizations.Add(NewDis);
+    end;
   end;
   FNewDataSets := TList.Create;
 
@@ -2001,7 +2004,10 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.UpdateGrid;
+      if ChildModel <> nil then
+      begin
+        ChildModel.UpdateGrid;
+      end;
     end;
     frmGoPhast.PhastModel.ModflowGrid.NotifyGridChanged(nil);
     if frmGoPhast.DisvUsed then
@@ -2012,7 +2018,10 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.DataArrayManager.InvalidateAllDataSets;
+      if ChildModel <> nil then
+      begin
+        ChildModel.DataArrayManager.InvalidateAllDataSets;
+      end;
     end;
     frmGoPhast.UpdateModelCubeBreaks;
   finally
@@ -2043,9 +2052,12 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      NewDis := FChildDiscretizations[ChildIndex];
-      ChildModel.Discretization.Assign(NewDis);
-      ChildModel.UpdateGrid;
+      if ChildModel <> nil then
+      begin
+        NewDis := FChildDiscretizations[ChildIndex];
+        ChildModel.Discretization.Assign(NewDis);
+        ChildModel.UpdateGrid;
+      end;
     end;
     frmGoPhast.PhastModel.ModflowGrid.NotifyGridChanged(nil);
     if frmGoPhast.DisvUsed then
@@ -2056,7 +2068,10 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.DataArrayManager.InvalidateAllDataSets;
+      if ChildModel <> nil then
+      begin
+        ChildModel.DataArrayManager.InvalidateAllDataSets;
+      end;
     end;
     frmGoPhast.UpdateModelCubeBreaks;
   finally

@@ -145,8 +145,11 @@ begin
     for Index := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[Index].ChildModel;
-      Assoc := FAssociations.Assoc[ChildModel];
-      comboModel.AddItem(ChildModel.ModelName, Assoc);
+      if ChildModel <> nil then
+      begin
+        Assoc := FAssociations.Assoc[ChildModel];
+        comboModel.AddItem(ChildModel.ModelName, Assoc);
+      end;
     end;
   end
   else
@@ -320,7 +323,10 @@ begin
     for Index := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[Index].ChildModel;
-      FOldAssoc.Assoc[ChildModel];
+      if ChildModel <> nil then
+      begin
+        FOldAssoc.Assoc[ChildModel];
+      end;
     end;
   end;
 end;
@@ -363,9 +369,12 @@ begin
     for Index := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[Index].ChildModel;
-      Assoc := Associations.Assoc[ChildModel];
-      ChildModel.BatchFileAdditionsBeforeModel := Assoc.BeforeLines;
-      ChildModel.BatchFileAdditionsAfterModel := Assoc.AfterLines;
+      if ChildModel <> nil then
+      begin
+        Assoc := Associations.Assoc[ChildModel];
+        ChildModel.BatchFileAdditionsBeforeModel := Assoc.BeforeLines;
+        ChildModel.BatchFileAdditionsAfterModel := Assoc.AfterLines;
+      end;
     end;
   end;
 end;

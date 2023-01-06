@@ -1627,8 +1627,11 @@ begin
         for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
         begin
           AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-          ChildModelName := AChildModel.ModelNameForDos;
-          ArchiveBatchFile.Add(Format('if not exist "..\..\output\%0:s_%1:s\NUL" mkdir "..\..\output\%0:s_%1:s"', ['output.' + ModelName, ChildModelName]));
+          if AChildModel <> nil then
+          begin
+            ChildModelName := AChildModel.ModelNameForDos;
+            ArchiveBatchFile.Add(Format('if not exist "..\..\output\%0:s_%1:s\NUL" mkdir "..\..\output\%0:s_%1:s"', ['output.' + ModelName, ChildModelName]));
+          end;
         end;
       end;
 
@@ -1832,13 +1835,16 @@ begin
             for ChildIndex := 0 to TPhastModel(Model).ChildModels.Count - 1 do
             begin
               ChildModel := TPhastModel(Model).ChildModels[ChildIndex].ChildModel;
-              if ChildModel.ModflowPackages.ModPath.IsSelected then
+              if ChildModel <> nil then
               begin
-                ALine := 'call '+
-                  ChildModel.ModelNameForDos + '_'
-                  + 'RunModpath.bat';
-                BatchFile.Add(ALine);
-                ParamEstBatchFile.Add(ALine);
+                if ChildModel.ModflowPackages.ModPath.IsSelected then
+                begin
+                  ALine := 'call '+
+                    ChildModel.ModelNameForDos + '_'
+                    + 'RunModpath.bat';
+                  BatchFile.Add(ALine);
+                  ParamEstBatchFile.Add(ALine);
+                end;
               end;
             end;
           end;
@@ -1871,13 +1877,16 @@ begin
             for ChildIndex := 0 to TPhastModel(Model).ChildModels.Count - 1 do
             begin
               ChildModel := TPhastModel(Model).ChildModels[ChildIndex].ChildModel;
-              if ChildModel.ModflowPackages.ZoneBudget.IsSelected then
+              if ChildModel <> nil then
               begin
-                ALine := 'call '+
-                  ChildModel.ModelNameForDos + '_'
-                  + 'RunZoneBudget.bat';
-                BatchFile.Add(ALine);
-                ParamEstBatchFile.Add(ALine);
+                if ChildModel.ModflowPackages.ZoneBudget.IsSelected then
+                begin
+                  ALine := 'call '+
+                    ChildModel.ModelNameForDos + '_'
+                    + 'RunZoneBudget.bat';
+                  BatchFile.Add(ALine);
+                  ParamEstBatchFile.Add(ALine);
+                end;
               end;
             end;
           end;

@@ -1145,7 +1145,11 @@ begin
     ModelList.Add(frmGoPhast.PhastModel);
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
-      ModelList.Add(frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel);
+      ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ModelList.Add(ChildModel);
+      end;
     end;
     for Index := comboModels.Items.Count - 1 downto 0 do
     begin
@@ -1173,10 +1177,13 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-      if comboModels.Items.IndexOfObject(ChildModel) < 0 then
+      if ChildModel <> nil then
       begin
-        comboModels.Items.InsertObject(ChildIndex + 1, ChildModel.DisplayName,
-          ChildModel);
+        if comboModels.Items.IndexOfObject(ChildModel) < 0 then
+        begin
+          comboModels.Items.InsertObject(ChildIndex + 1, ChildModel.DisplayName,
+            ChildModel);
+        end;
       end;
     end;
   end

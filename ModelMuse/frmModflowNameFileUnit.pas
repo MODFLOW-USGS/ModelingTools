@@ -251,11 +251,14 @@ begin
     for Index := 0 to Model.ChildModels.Count - 1 do
     begin
       ChildModel := Model.ChildModels[Index].ChildModel;
-      Item := Add;
-      Item.FModel := ChildModel;
-      Item.Lines := ChildModel.ModflowNameFileLines;
-      Item.AlternateSolver := ChildModel.AlternateSolver;
-      Item.AlternateFlowPackage := ChildModel.AlternateFlowPackage;
+      if ChildModel <> nil then
+      begin
+        Item := Add;
+        Item.FModel := ChildModel;
+        Item.Lines := ChildModel.ModflowNameFileLines;
+        Item.AlternateSolver := ChildModel.AlternateSolver;
+        Item.AlternateFlowPackage := ChildModel.AlternateFlowPackage;
+      end;
     end;
   end;
 end;

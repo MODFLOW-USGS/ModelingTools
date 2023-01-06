@@ -6,7 +6,6 @@ inherited frmExportCSV: TfrmExportCSV
   ClientWidth = 578
   ExplicitWidth = 594
   ExplicitHeight = 491
-  PixelsPerInch = 96
   TextHeight = 18
   object Panel1: TPanel
     Left = 0

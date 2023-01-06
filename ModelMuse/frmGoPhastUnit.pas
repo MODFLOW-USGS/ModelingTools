@@ -3356,12 +3356,15 @@ begin
       for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-        if ChildModel.ModflowPackages.ZoneBudget.IsSelected then
+        if ChildModel <> nil then
         begin
-          ChildFileName := ChangeFileExt(FileName, '');
-          ChildFileName := ChildFileName + '_' + ChildModel.ModelNameForDos;
-          ChildFileName := ChangeFileExt(ChildFileName, StrZbzones);
-          ChildModel.ExportZoneBudgetModel(ChildFileName, FRunZoneBudget, False);
+          if ChildModel.ModflowPackages.ZoneBudget.IsSelected then
+          begin
+            ChildFileName := ChangeFileExt(FileName, '');
+            ChildFileName := ChildFileName + '_' + ChildModel.ModelNameForDos;
+            ChildFileName := ChangeFileExt(ChildFileName, StrZbzones);
+            ChildModel.ExportZoneBudgetModel(ChildFileName, FRunZoneBudget, False);
+          end;
         end;
       end;
     finally
@@ -6692,6 +6695,7 @@ var
   ShouldEnable: Boolean;
   ChildIndex: Integer;
   SwrPackage: TSwrPackage;
+  ChildModel: TChildModel;
 begin
   ShouldEnable := acSWR_Tabfiles.Enabled;
   if ShouldEnable then
@@ -6703,12 +6707,16 @@ begin
     begin
       for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
-        SwrPackage := PhastModel.ChildModels[ChildIndex].ChildModel.ModflowPackages.SwrPackage;
-        ShouldEnable := SwrPackage.IsSelected
-          and (SwrPackage.SaveObs in [ssoSaveObs, ssoSaveObsAll]);
-        if ShouldEnable then
+        ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
         begin
-          break;
+          SwrPackage := ChildModel.ModflowPackages.SwrPackage;
+          ShouldEnable := SwrPackage.IsSelected
+            and (SwrPackage.SaveObs in [ssoSaveObs, ssoSaveObsAll]);
+          if ShouldEnable then
+          begin
+            break;
+          end;
         end;
       end;
     end;
@@ -7095,10 +7103,13 @@ begin
             for Index := 0 to PhastModel.ChildModels.Count - 1 do
             begin
               ChildModel := PhastModel.ChildModels[Index].ChildModel;
-              ChildModelNameFile := ChildModel.Child_NameFile_Name(FileName);
-              NameWriter := TNameFileWriter.Create(
-                ChildModel, ChildModelNameFile, etExport);
-              ChildModel.NameFileWriter := NameWriter;
+              if ChildModel <> nil then
+              begin
+                ChildModelNameFile := ChildModel.Child_NameFile_Name(FileName);
+                NameWriter := TNameFileWriter.Create(
+                  ChildModel, ChildModelNameFile, etExport);
+                ChildModel.NameFileWriter := NameWriter;
+              end;
             end;
             PhastModel.ExportModflowLgrModel(NewFileName, False, False, False, False, False);
           finally
@@ -7107,8 +7118,11 @@ begin
             for Index := 0 to PhastModel.ChildModels.Count - 1 do
             begin
               ChildModel := PhastModel.ChildModels[Index].ChildModel;
-              ChildModel.NameFileWriter.Free;
-              ChildModel.NameFileWriter := nil;
+              if ChildModel <> nil then
+              begin
+                ChildModel.NameFileWriter.Free;
+                ChildModel.NameFileWriter := nil;
+              end;
             end;
           end;
           if PhastModel.ModflowPackages.ModPath.IsSelected then
@@ -7138,20 +7152,23 @@ begin
             for Index := 0 to PhastModel.ChildModels.Count - 1 do
             begin
               ChildModel := PhastModel.ChildModels[Index].ChildModel;
-              if ChildModel.ModflowPackages.Mt3dBasic.IsSelected then
+              if ChildModel <> nil then
               begin
-                Mt3dExtension := ExtractFileExt(NewFileName);
-                Mt3dFileName := ChildModel.Child_NameFile_Name(NewFileName);
-                Mt3dFileName := ChangeFileExt(Mt3dFileName, Mt3dExtension);
+                if ChildModel.ModflowPackages.Mt3dBasic.IsSelected then
+                begin
+                  Mt3dExtension := ExtractFileExt(NewFileName);
+                  Mt3dFileName := ChildModel.Child_NameFile_Name(NewFileName);
+                  Mt3dFileName := ChangeFileExt(Mt3dFileName, Mt3dExtension);
 
-                NameWriter := TMt3dmsNameWriter.Create(
-                  ChildModel, Mt3dFileName, etExport);
-                try
-                  ChildModel.NameFileWriter := NameWriter;
-                  ChildModel.ExportMt3dmsModel(Mt3dFileName, False, False);
-                finally
-                  NameWriter.Free;
-                  ChildModel.NameFileWriter := nil;
+                  NameWriter := TMt3dmsNameWriter.Create(
+                    ChildModel, Mt3dFileName, etExport);
+                  try
+                    ChildModel.NameFileWriter := NameWriter;
+                    ChildModel.ExportMt3dmsModel(Mt3dFileName, False, False);
+                  finally
+                    NameWriter.Free;
+                    ChildModel.NameFileWriter := nil;
+                  end;
                 end;
               end;
             end;
@@ -7503,8 +7520,11 @@ begin
     begin
       AModel := PhastModel;
     end;
-    AModel.EndPoints.
-      ExportShapefileAtEndingLocations(sdShapefile.FileName);
+    if AModel <> nil then
+    begin
+      AModel.EndPoints.
+        ExportShapefileAtEndingLocations(sdShapefile.FileName);
+    end;
   end;
 end;
 
@@ -7537,8 +7557,11 @@ begin
     begin
       AModel := PhastModel;
     end;
-    AModel.EndPoints.
-      ExportShapefileAtStartingLocations(sdShapefile.FileName);
+    if AModel <> nil then
+    begin
+      AModel.EndPoints.
+        ExportShapefileAtStartingLocations(sdShapefile.FileName);
+    end;
   end;
 end;
 
@@ -7932,8 +7955,11 @@ begin
       for ModelIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
         AChild := PhastModel.ChildModels[ModelIndex].ChildModel;
-        FileName := FileRoot + AChild.ModelName + '.shp';
-        AChild.ExportHeadObservationsToShapeFile(FileName);
+        if AChild <> nil then
+        begin
+          FileName := FileRoot + AChild.ModelName + '.shp';
+          AChild.ExportHeadObservationsToShapeFile(FileName);
+        end;
       end;
     end;
   end;
@@ -7948,17 +7974,22 @@ procedure TfrmGoPhast.EnableExportHeadObs(Sender: TObject);
 var
   ActionEnabled: boolean;
   ChildIndex: integer;
+  ChildModel: TChildModel;
 begin
   ActionEnabled :=  PhastModel.HeadObsResults.Count > 0;
   if not ActionEnabled and PhastModel.LgrUsed then
   begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
-      ActionEnabled := PhastModel.ChildModels[
-        ChildIndex].ChildModel.HeadObsResults.Count > 0;
-      if ActionEnabled then
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
       begin
-        break;
+        ActionEnabled := PhastModel.ChildModels[
+          ChildIndex].ChildModel.HeadObsResults.Count > 0;
+        if ActionEnabled then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -7990,10 +8021,13 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      miPathlinestoShapefile.Enabled := ChildModel.PathLines.HasData;
-      if miPathlinestoShapefile.Enabled then
+      if ChildModel <> nil then
       begin
-        break;
+        miPathlinestoShapefile.Enabled := ChildModel.PathLines.HasData;
+        if miPathlinestoShapefile.Enabled then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -8006,11 +8040,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      miEndpointsatStartingLocationstoShapefile.Enabled :=
-        ChildModel.EndPoints.HasData;
-      if miEndpointsatStartingLocationstoShapefile.Enabled then
+      if ChildModel <> nil then
       begin
-        break;
+        miEndpointsatStartingLocationstoShapefile.Enabled :=
+          ChildModel.EndPoints.HasData;
+        if miEndpointsatStartingLocationstoShapefile.Enabled then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -8025,11 +8062,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      miTimeSeriestoShapefile.Enabled :=
-        ChildModel.TimeSeries.HasData;
-      if miTimeSeriestoShapefile.Enabled then
+      if ChildModel <> nil then
       begin
-        break;
+        miTimeSeriestoShapefile.Enabled :=
+          ChildModel.TimeSeries.HasData;
+        if miTimeSeriestoShapefile.Enabled then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -8630,19 +8670,25 @@ begin
       if FExportModpathShapeFileModelChoice > 0 then
       begin
         LocalModel := PhastModel.ChildModels[FExportModpathShapeFileModelChoice-1].ChildModel;
-        ContourDataSet := LocalModel.Grid.TopContourDataSet;
+        if LocalModel <> nil then
+        begin
+          ContourDataSet := LocalModel.Grid.TopContourDataSet;
+        end;
       end
       else
       begin
         LocalModel := PhastModel;
       end;
 
-      ContourExporter := TContourExtractor.Create(LocalModel);
-      try
-        ContourExporter.CreateShapes(LocalModel.ContourLegend.Values,
-          ContourDataSet, sdShapefile.FileName, LocalModel.ContourLabelSpacing);
-      finally
-        ContourExporter.Free;
+      if LocalModel <> nil then
+      begin
+        ContourExporter := TContourExtractor.Create(LocalModel);
+        try
+          ContourExporter.CreateShapes(LocalModel.ContourLegend.Values,
+            ContourDataSet, sdShapefile.FileName, LocalModel.ContourLabelSpacing);
+        finally
+          ContourExporter.Free;
+        end;
       end;
     end;
   end;
@@ -8748,7 +8794,10 @@ begin
     begin
       AModel := PhastModel;
     end;
-    AModel.TimeSeries.ExportShapefile(sdShapefile.FileName);
+    if AModel <>  nil then
+    begin
+      AModel.TimeSeries.ExportShapefile(sdShapefile.FileName);
+    end;
   end;
 end;
 
@@ -10670,11 +10719,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      if ChildModel.ModflowPackages.Mt3dBasic.IsSelected then
+      if ChildModel <> nil then
       begin
-      FRunMt3dmsForm.comboMt3dModelSelection.Items.AddObject(
-        ChildModel.DisplayName, ChildModel);
-       end;
+        if ChildModel.ModflowPackages.Mt3dBasic.IsSelected then
+        begin
+          FRunMt3dmsForm.comboMt3dModelSelection.Items.AddObject(
+            ChildModel.DisplayName, ChildModel);
+        end;
+      end;
     end;
   Assert(FRunMt3dmsForm.comboMt3dModelSelection.Items.Count > 0);
   FRunMt3dmsForm.comboMt3dModelSelection.ItemIndex := 0;
@@ -11999,7 +12051,11 @@ begin
 
           for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
           begin
-            PhastModel.ChildModels[ChildIndex].ChildModel.SwrTabFiles.Loaded;
+            ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+            if ChildModel <> nil then
+            begin
+              ChildModel.SwrTabFiles.Loaded;
+            end;
           end;
           PhastModel.LayerStructure.Loaded;
           PhastModel.SutraLayerStructure.Loaded;
@@ -12203,7 +12259,10 @@ begin
         for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
         begin
           ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-          ChildModel.ModflowGrid.UpdateCellElevations;
+          if ChildModel <> nil then
+          begin
+            ChildModel.ModflowGrid.UpdateCellElevations;
+          end;
         end;
       end;
 
@@ -12901,8 +12960,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      FRunModflowForm.comboModelSelection.Items.AddObject(
-        ChildModel.DisplayName, ChildModel);
+      if ChildModel <> nil then
+      begin
+        FRunModflowForm.comboModelSelection.Items.AddObject(
+          ChildModel.DisplayName, ChildModel);
+      end;
     end;
     FRunModflowForm.comboModelSelection.ItemIndex := FRunModelSelection;
   end
@@ -12945,8 +13007,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      FRunModpathForm.comboModelSelection.Items.AddObject(
-        ChildModel.DisplayName, ChildModel);
+      if ChildModel <> nil then
+      begin
+        FRunModpathForm.comboModelSelection.Items.AddObject(
+          ChildModel.DisplayName, ChildModel);
+      end;
     end;
     FRunModpathForm.comboModelSelection.ItemIndex := FRunModpathModelSelection;
   end
@@ -13165,8 +13230,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      FExportModpathShapefileForm.comboModelSelection.Items.AddObject(
-        ChildModel.DisplayName, ChildModel);
+      if ChildModel <> nil then
+      begin
+        FExportModpathShapefileForm.comboModelSelection.Items.AddObject(
+          ChildModel.DisplayName, ChildModel);
+      end;
     end;
     FExportModpathShapefileForm.comboModelSelection.ItemIndex :=
       FExportModpathShapeFileModelChoice;
@@ -13811,25 +13879,32 @@ begin
   begin
     FileName := sdModpathInput.FileName;
 
+    UsedModel := nil;
     if PhastModel.LgrUsed and (FRunModpathModelSelection > 0) then
     begin
       ChildModel := PhastModel.ChildModels[FRunModpathModelSelection-1].ChildModel;
-      FileName := ChangeFileExt(FileName, '');
-      FileName := FileName + '_' + ChildModel.ModelName;
-      FileName := ChangeFileExt(FileName, sdModpathInput.DefaultExt);
-      UsedModel := ChildModel;
+      if ChildModel <> nil then
+      begin
+        FileName := ChangeFileExt(FileName, '');
+        FileName := FileName + '_' + ChildModel.ModelName;
+        FileName := ChangeFileExt(FileName, sdModpathInput.DefaultExt);
+        UsedModel := ChildModel;
+      end;
     end
     else
     begin
       UsedModel := PhastModel;
     end;
 
-    if (UsedModel.ModflowPackages.ModPath.MpathVersion = mp7)
-      and (UsedModel.ModflowOutputControl.HeadOC.OutputFileType <> oftBinary) then
+    if UsedModel <> nil then
     begin
-      Beep;
-      MessageDlg(StrMODPATH7RequiresA, mtError, [mbOK], 0);
-      Exit;
+      if (UsedModel.ModflowPackages.ModPath.MpathVersion = mp7)
+        and (UsedModel.ModflowOutputControl.HeadOC.OutputFileType <> oftBinary) then
+      begin
+        Beep;
+        MessageDlg(StrMODPATH7RequiresA, mtError, [mbOK], 0);
+        Exit;
+      end;
     end;
 
     if sdModpathInput.FileName <> string(AnsiString(sdModpathInput.FileName)) then
@@ -13838,18 +13913,24 @@ begin
       MessageDlg(StrSorryTheFileName, mtError, [mbOK], 0);
       Exit;
     end;
-    if not TestModpathLocationOK(UsedModel) or not UsedModel.TestModpathOK(UsedModel)
-      or not ModpathUpToDate(UsedModel) then
+    if UsedModel <> nil then
     begin
-      Exit;
+      if not TestModpathLocationOK(UsedModel) or not UsedModel.TestModpathOK(UsedModel)
+        or not ModpathUpToDate(UsedModel) then
+      begin
+        Exit;
+      end;
     end;
 
 
     PhastModel.ClearModpathFiles;
     frmFormulaErrors.sgErrors.BeginUpdate;
     try
-      UsedModel.ExportModpathModel(FileName, FRunModpath,
-        FCreateNewCompositeBudgetFile);
+      if UsedModel <> nil then
+      begin
+        UsedModel.ExportModpathModel(FileName, FRunModpath,
+          FCreateNewCompositeBudgetFile);
+      end;
     finally
       frmFormulaErrors.sgErrors.EndUpdate;
     end;
@@ -14563,13 +14644,17 @@ begin
     end;
     for Index := 0 to PhastModel.ChildModels.Count - 1 do
     begin
-      AGrid := PhastModel.ChildModels[Index].ChildModel.Grid;
-      if (AGrid = nil) or (AGrid.ColumnCount <= 0)
-        or (AGrid.RowCount <= 0) or (AGrid.LayerCount <= 0) then
+      ChildModel := PhastModel.ChildModels[Index].ChildModel;
+      if ChildModel <> nil then
       begin
-        Beep;
-        MessageDlg(StrYouMustDefineThe4, mtError, [mbOK], 0);
-        Exit;
+        AGrid := ChildModel.Grid;
+        if (AGrid = nil) or (AGrid.ColumnCount <= 0)
+          or (AGrid.RowCount <= 0) or (AGrid.LayerCount <= 0) then
+        begin
+          Beep;
+          MessageDlg(StrYouMustDefineThe4, mtError, [mbOK], 0);
+          Exit;
+        end;
       end;
     end;
     InitializeModflowLgrInputDialog;
@@ -15582,7 +15667,10 @@ begin
     begin
       AModel := PhastModel;
     end;
-    AModel.PathLines.ExportShapefile(sdShapefile.FileName);
+    if AModel <> nil then
+    begin
+      AModel.PathLines.ExportShapefile(sdShapefile.FileName);
+    end;
   end;
 end;
 

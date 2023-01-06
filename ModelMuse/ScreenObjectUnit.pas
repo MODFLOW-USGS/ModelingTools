@@ -34088,10 +34088,13 @@ begin
         for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
         begin
           Item := frmGoPhast.PhastModel.ChildModels[ChildIndex];
-          if (Item.ChildModel as TChildModel).ModelName = FChildModelName then
+          if Item.ChildModel <> nil then
           begin
-            FChildModel := Item.ChildModel;
-            break;
+            if (Item.ChildModel as TChildModel).ModelName = FChildModelName then
+            begin
+              FChildModel := Item.ChildModel;
+              break;
+            end;
           end;
         end;
       end;
@@ -43994,10 +43997,13 @@ begin
       for Index := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := frmGoPhast.PhastModel.ChildModels[Index].ChildModel;
-        if ChildModel.ModelName = FModelName then
+        if ChildModel <> nil then
         begin
-          result := ChildModel;
-          break;
+          if ChildModel.ModelName = FModelName then
+          begin
+            result := ChildModel;
+            break;
+          end;
         end;
       end;
     end;
@@ -44046,10 +44052,13 @@ begin
         for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
         begin
           ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-          if FModelName = ChildModel.ModelName then
+          if ChildModel <> nil then
           begin
-            FUsedModel := ChildModel;
-            Exit;
+            if FModelName = ChildModel.ModelName then
+            begin
+              FUsedModel := ChildModel;
+              Exit;
+            end;
           end;
         end;
         if not (csReading in LocalModel.ComponentState) then

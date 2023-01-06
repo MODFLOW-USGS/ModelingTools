@@ -1227,7 +1227,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfEtsEvapDepth(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfEtsEvapDepth(self);
+      end;
     end;
   end;
 end;
@@ -1272,7 +1275,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfEtsEvapRate(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfEtsEvapRate(self);
+      end;
     end;
   end;
 end;
@@ -1299,7 +1305,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfEtsEvapSurface(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfEtsEvapSurface(self);
+      end;
     end;
   end;
 end;
@@ -2121,11 +2130,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TEtsSurfDepthTimeListLink;
-      for Index := 0 to Link.FListOfDepthFractionLists.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FListOfDepthFractionLists[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TEtsSurfDepthTimeListLink;
+        for Index := 0 to Link.FListOfDepthFractionLists.Count - 1 do
+        begin
+          TimeList := Link.FListOfDepthFractionLists[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2150,8 +2162,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TEtsSurfDepthTimeListLink;
-      Link.FEvapotranspirationDepthData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TEtsSurfDepthTimeListLink;
+        Link.FEvapotranspirationDepthData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2181,11 +2196,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TEtsSurfDepthTimeListLink;
-      for Index := 0 to Link.FListOfEtFractionLists.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FListOfEtFractionLists[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TEtsSurfDepthTimeListLink;
+        for Index := 0 to Link.FListOfEtFractionLists.Count - 1 do
+        begin
+          TimeList := Link.FListOfEtFractionLists[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2210,8 +2228,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TEtsSurfDepthTimeListLink;
-      Link.FEvapotranspirationSurfaceData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TEtsSurfDepthTimeListLink;
+        Link.FEvapotranspirationSurfaceData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2851,13 +2872,16 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TEtsTimeListLink;
-      for Index := 0 to Link.FConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TEtsTimeListLink;
+        for Index := 0 to Link.FConcList.Count - 1 do
+        begin
+          TimeList := Link.FConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
-    end;
+      end;
   end;
 end;
 

@@ -6,7 +6,6 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   ClientWidth = 346
   ExplicitWidth = 362
   ExplicitHeight = 325
-  PixelsPerInch = 96
   TextHeight = 18
   object lblModel: TLabel
     Left = 8

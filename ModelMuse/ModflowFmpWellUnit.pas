@@ -850,8 +850,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMfFmpWelTimeListLink;
-      Link.FWellIdData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMfFmpWelTimeListLink;
+        Link.FWellIdData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -875,8 +878,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMfFmpWelTimeListLink;
-      Link.FMaxPumpingRateData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMfFmpWelTimeListLink;
+        Link.FMaxPumpingRateData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -901,8 +907,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMfFmpWelTimeListLink;
-      Link.FPumpOnlyIfCropRequiresWaterData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMfFmpWelTimeListLink;
+        Link.FPumpOnlyIfCropRequiresWaterData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1528,7 +1537,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfFmpMaxPumpingRate(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfFmpMaxPumpingRate(self);
+      end;
     end;
   end;
 end;

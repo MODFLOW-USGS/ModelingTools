@@ -16,19 +16,19 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
       Caption = 'Basic'
       DesignSize = (
         468
-        470)
+        468)
       object lblModpathFile: TLabel
         Left = 8
         Top = 8
-        Width = 111
-        Height = 13
+        Width = 126
+        Height = 15
         Caption = 'MODPATH endpoint file'
       end
       object lblColorScheme: TLabel
         Left = 8
         Top = 108
-        Width = 64
-        Height = 13
+        Width = 73
+        Height = 15
         Caption = 'Color scheme'
       end
       object pbColorScheme: TPaintBox
@@ -43,30 +43,30 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
       object lblColorAdjustment: TLabel
         Left = 8
         Top = 211
-        Width = 82
-        Height = 13
+        Width = 92
+        Height = 15
         Caption = 'Color adjustment'
       end
       object lblCycles: TLabel
         Left = 364
         Top = 211
-        Width = 31
-        Height = 13
+        Width = 34
+        Height = 15
         Anchors = [akTop, akRight]
         Caption = 'Cycles'
       end
       object lblModelSelection: TLabel
         Left = 8
         Top = 273
-        Width = 73
-        Height = 13
+        Width = 84
+        Height = 15
         Caption = 'Model selection'
       end
       object lblEndPointSize: TLabel
         Left = 344
         Top = 273
-        Width = 101
-        Height = 13
+        Width = 111
+        Height = 15
         Anchors = [akTop, akRight]
         Caption = 'Endpoint size (pixels)'
       end
@@ -105,7 +105,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
         Left = 8
         Top = 128
         Width = 354
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
         DropDownCount = 12
@@ -203,7 +203,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
       ImageIndex = 1
       DesignSize = (
         468
-        470)
+        468)
       object rgShow2D: TRadioGroup
         Left = 9
         Top = 0
@@ -363,7 +363,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
         Left = 206
         Top = 0
         Width = 262
-        Height = 470
+        Height = 468
         Align = alClient
         ExplicitLeft = 224
         ExplicitTop = -2
@@ -374,7 +374,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
         Left = 201
         Top = 0
         Width = 5
-        Height = 470
+        Height = 468
         ExplicitLeft = 218
         ExplicitHeight = 400
       end
@@ -382,26 +382,27 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
         Left = 0
         Top = 0
         Width = 201
-        Height = 470
+        Height = 468
         Align = alLeft
         BevelInner = bvRaised
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitHeight = 470
         DesignSize = (
           201
-          470)
+          468)
         object lblMethod: TLabel
           Left = 8
           Top = 6
-          Width = 36
-          Height = 13
+          Width = 42
+          Height = 15
           Caption = 'Method'
         end
         object lblColorLegendRows: TLabel
           Left = 8
           Top = 386
-          Width = 76
-          Height = 13
+          Width = 86
+          Height = 15
           Anchors = [akLeft, akBottom]
           Caption = 'Number of rows'
         end
@@ -409,7 +410,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
           Left = 8
           Top = 27
           Width = 145
-          Height = 21
+          Height = 23
           Style = csDropDownList
           ItemIndex = 0
           TabOrder = 0
@@ -453,6 +454,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
           AutoIncreaseRowCount = True
           SelectedRowOrColumnColor = clAqua
           UnselectableColor = clBtnFace
+          OnEndUpdate = rdgLegendEndUpdate
           OnStateChange = rdgLegendStateChange
           ColorRangeSelection = False
           Columns = <
@@ -480,7 +482,6 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = rdgLegendEndUpdate
           WordWrapRowCaptions = False
         end
         object btnFont: TButton

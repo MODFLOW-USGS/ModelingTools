@@ -457,8 +457,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TResTimeListLink;
-      Link.FEndHeadData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TResTimeListLink;
+        Link.FEndHeadData.Invalidate;
+      end;
     end;
   end;
 //  if not (Sender as TObserver).UpToDate then

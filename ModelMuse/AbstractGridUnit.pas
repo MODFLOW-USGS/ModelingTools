@@ -3344,6 +3344,7 @@ procedure TCustomModelGrid.SetGridLineDrawingChoice(const Value: TGridLineDrawin
 var
   LocalModel: TPhastModel;
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   FGridLineDrawingChoice := Value;
   if Model is TPhastModel then
@@ -3351,10 +3352,11 @@ begin
     LocalModel := TPhastModel(Model);
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
-//      LocalModel.ChildModels[ChildIndex].ChildModel.
-//        PhastGrid.GridLineDrawingChoice := Value;
-      LocalModel.ChildModels[ChildIndex].ChildModel.
-        ModflowGrid.GridLineDrawingChoice := Value;
+      ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel. ModflowGrid.GridLineDrawingChoice := Value;
+      end;
     end;
   end;
 end;
@@ -3548,7 +3550,10 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildModel.Grid.ResetTopCellColors;
+        if ChildModel <> nil then
+        begin
+          ChildModel.Grid.ResetTopCellColors;
+        end;
       end;
     end;
   end;
@@ -4216,7 +4221,10 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowGrid.OnSelectedColumnChange := Value;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowGrid.OnSelectedColumnChange := Value;
+      end;
     end;
   end;
 end;
@@ -4234,7 +4242,10 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowGrid.OnSelectedLayerChange := Value;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowGrid.OnSelectedLayerChange := Value;
+      end;
     end;
   end;
 end;
@@ -4252,7 +4263,10 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.ModflowGrid.OnSelectedRowChange := Value;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ModflowGrid.OnSelectedRowChange := Value;
+      end;
     end;
   end;
 end;
@@ -4709,19 +4723,22 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      if ChildModel.ThreeDTimeList <> nil then
+      if ChildModel <> nil then
       begin
-        ChildModel.ThreeDTimeList.Initialize;
-      end;
-      LocalDataArray := ChildModel.Grid.ThreeDDataSet;
-      if LocalDataArray <> nil then
-      begin
-        LocalDataArray.Initialize;
-        ChildModel.Grid.GetCounts(LocalDataArray, LayerCount, RowCount, ColCount);
-        if (LayerCount > 0) and (RowCount > 0) and (ColCount > 0) then
+        if ChildModel.ThreeDTimeList <> nil then
         begin
-          ChildModel.Grid.SetMinMax(LocalDataArray, MinMaxInitialized,
-            MinMax, StringValues, LayerCount, RowCount, ColCount);
+          ChildModel.ThreeDTimeList.Initialize;
+        end;
+        LocalDataArray := ChildModel.Grid.ThreeDDataSet;
+        if LocalDataArray <> nil then
+        begin
+          LocalDataArray.Initialize;
+          ChildModel.Grid.GetCounts(LocalDataArray, LayerCount, RowCount, ColCount);
+          if (LayerCount > 0) and (RowCount > 0) and (ColCount > 0) then
+          begin
+            ChildModel.Grid.SetMinMax(LocalDataArray, MinMaxInitialized,
+              MinMax, StringValues, LayerCount, RowCount, ColCount);
+          end;
         end;
       end;
     end;
@@ -5267,7 +5284,10 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildModel.Grid.ResetFrontCellColors;
+        if ChildModel <> nil then
+        begin
+          ChildModel.Grid.ResetFrontCellColors;
+        end;
       end;
     end;
   end;
@@ -5342,7 +5362,10 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildModel.Grid.ResetSideCellColors;
+        if ChildModel <> nil then
+        begin
+          ChildModel.Grid.ResetSideCellColors;
+        end;
       end;
     end;
   end;
@@ -6654,7 +6677,10 @@ begin
       for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-        ChildModel.Grid.UpdateCellColors(ViewDirection);
+        if ChildModel <> nil then
+        begin
+          ChildModel.Grid.UpdateCellColors(ViewDirection);
+        end;
       end;
     end;
   end;

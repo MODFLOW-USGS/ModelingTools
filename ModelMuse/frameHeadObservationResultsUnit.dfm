@@ -17,29 +17,29 @@ object frameHeadObservationResults: TframeHeadObservationResults
       object lblNegativeColor: TLabel
         Left = 3
         Top = 279
-        Width = 132
-        Height = 26
+        Width = 144
+        Height = 30
         Caption = 'Color for negative residuals'#13#10'(Simulated head too high)'
       end
       object lblColorPositive: TLabel
         Left = 255
         Top = 279
-        Width = 127
-        Height = 26
+        Width = 140
+        Height = 30
         Caption = 'Color for positive residuals'#13#10'(Simulated head too low)'
       end
       object lblMaxSymbolSize: TLabel
         Left = 130
         Top = 341
-        Width = 139
-        Height = 13
+        Width = 160
+        Height = 15
         Caption = 'Maximum symbol size (pixels)'
       end
       object lblHeadObsResults: TLabel
         Left = 3
         Top = 3
-        Width = 45
-        Height = 13
+        Width = 51
+        Height = 15
         Caption = 'File name'
       end
       object flnmedHeadObsResults: TJvFilenameEdit
@@ -62,43 +62,43 @@ object frameHeadObservationResults: TframeHeadObservationResults
         object lblMaximumTime: TLabel
           Left = 252
           Top = 86
-          Width = 67
-          Height = 13
+          Width = 82
+          Height = 15
           Caption = 'Maximum time'
         end
         object lblMaxResidual: TLabel
           Left = 252
           Top = 24
-          Width = 84
-          Height = 13
+          Width = 99
+          Height = 15
           Caption = 'Maximum residual'
         end
         object lblMinimumTime: TLabel
           Left = 3
           Top = 86
-          Width = 63
-          Height = 13
+          Width = 80
+          Height = 15
           Caption = 'Minimum time'
         end
         object lblMinResidual: TLabel
           Left = 3
           Top = 24
-          Width = 80
-          Height = 13
+          Width = 97
+          Height = 15
           Caption = 'Minimum residual'
         end
         object lblMinLayer: TLabel
           Left = 3
           Top = 138
-          Width = 67
-          Height = 13
+          Width = 81
+          Height = 15
           Caption = 'Minimum layer'
         end
         object lblMaxLayer: TLabel
           Left = 252
           Top = 138
-          Width = 71
-          Height = 13
+          Width = 83
+          Height = 15
           Caption = 'Maximum layer'
         end
         inline framelmtMinimumTime: TframeDisplayLimit
@@ -114,9 +114,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
             Height = 23
             ExplicitHeight = 23
           end
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
-          end
         end
         inline framelmtMaxResidual: TframeDisplayLimit
           Left = 252
@@ -130,9 +127,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
           inherited cbCheck: TCheckBox
             Height = 23
             ExplicitHeight = 23
-          end
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
           end
         end
         inline framelmtMaximumTime: TframeDisplayLimit
@@ -148,9 +142,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
             Height = 23
             ExplicitHeight = 23
           end
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
-          end
         end
         inline framelmtMinResidual: TframeDisplayLimit
           Left = 3
@@ -165,9 +156,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
             Height = 23
             ExplicitHeight = 23
           end
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
-          end
         end
         inline framelmtMinLayer: TframeDisplayLimit
           Left = 3
@@ -178,9 +166,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
           TabStop = True
           ExplicitLeft = 3
           ExplicitTop = 160
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
-          end
         end
         inline framelmtMaxLayer: TframeDisplayLimit
           Left = 252
@@ -191,9 +176,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
           TabStop = True
           ExplicitLeft = 252
           ExplicitTop = 160
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 21
-          end
         end
       end
       object clrbtnNegative: TJvColorButton
@@ -241,7 +223,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
         Left = 0
         Top = 0
         Width = 520
-        Height = 339
+        Height = 337
         Align = alClient
         ColCount = 8
         FixedCols = 0
@@ -450,15 +432,17 @@ object frameHeadObservationResults: TframeHeadObservationResults
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 339
       end
       object pnlValueControls: TPanel
         Left = 0
-        Top = 339
+        Top = 337
         Width = 520
         Height = 65
         Align = alBottom
         ParentBackground = False
         TabOrder = 1
+        ExplicitTop = 339
         object btnCopy: TButton
           Left = 111
           Top = 32
@@ -509,15 +493,15 @@ object frameHeadObservationResults: TframeHeadObservationResults
       object lblMax: TLabel
         Left = 56
         Top = 9
-        Width = 30
-        Height = 13
+        Width = 36
+        Height = 15
         Caption = 'lblMax'
       end
       object lblHalfMax: TLabel
         Left = 56
         Top = 41
-        Width = 49
-        Height = 13
+        Width = 58
+        Height = 15
         Caption = 'lblHalfMax'
       end
     end
@@ -548,7 +532,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
           Left = 255
           Top = 6
           Width = 48
-          Height = 52
+          Height = 75
           Caption = 'Click on a point to highlight it.'
           WordWrap = True
         end
@@ -578,8 +562,8 @@ object frameHeadObservationResults: TframeHeadObservationResults
     object lblRMS: TLabel
       Left = 194
       Top = 9
-      Width = 151
-      Height = 13
+      Width = 163
+      Height = 15
       Caption = 'Root Mean Square Residual = ?'
     end
     object comboModels: TComboBox

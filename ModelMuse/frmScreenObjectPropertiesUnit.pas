@@ -7162,9 +7162,12 @@ begin
     for ChildModelIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       Item := frmGoPhast.PhastModel.ChildModels[ChildModelIndex];
-      clbChildModels.Items.AddObject(Item.ChildModel.ModelName, Item.ChildModel);
-      FChildModels.Add(Item.ChildModel);
-      FChildModelsScreenObjects.Add(Item.ChildModel.HorizontalPositionScreenObject);
+      if Item.ChildModel <> nil then
+      begin
+        clbChildModels.Items.AddObject(Item.ChildModel.ModelName, Item.ChildModel);
+        FChildModels.Add(Item.ChildModel);
+        FChildModelsScreenObjects.Add(Item.ChildModel.HorizontalPositionScreenObject);
+      end;
     end;
     clbChildModels.CheckedIndex := 0;
   finally
@@ -7248,10 +7251,13 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      if clbLgrUsedModels.Checked[ChildIndex+1] <> AScreenObject.UsedModels.UsesModel(ChildModel) then
+      if ChildModel <> nil then
       begin
-        clbLgrUsedModels.AllowGrayed := True;
-        clbLgrUsedModels.State[ChildIndex + 1] := cbGrayed;
+        if clbLgrUsedModels.Checked[ChildIndex+1] <> AScreenObject.UsedModels.UsesModel(ChildModel) then
+        begin
+          clbLgrUsedModels.AllowGrayed := True;
+          clbLgrUsedModels.State[ChildIndex + 1] := cbGrayed;
+        end;
       end;
     end;
   end;
@@ -7268,7 +7274,10 @@ begin
   for ChildModelIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     ChildModel := frmGoPhast.PhastModel.ChildModels[ChildModelIndex].ChildModel;
-    clbLgrUsedModels.Checked[ChildModelIndex + 1] := AScreenObject.UsedModels.UsesModel(ChildModel);
+    if ChildModel <> nil then
+    begin
+      clbLgrUsedModels.Checked[ChildModelIndex + 1] := AScreenObject.UsedModels.UsesModel(ChildModel);
+    end;
   end;
   clbLgrUsedModels.AllowGrayed := False;
   
@@ -7433,8 +7442,11 @@ begin
     for ChildModelIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       Item := frmGoPhast.PhastModel.ChildModels[ChildModelIndex];
-      clbLgrUsedModels.Items.AddObject(
-        Item.ChildModel.ModelName, Item.ChildModel);
+      if Item.ChildModel <> nil then
+      begin
+        clbLgrUsedModels.Items.AddObject(
+          Item.ChildModel.ModelName, Item.ChildModel);
+      end;
     end;
   finally
     clbLgrUsedModels.Items.EndUpdate;

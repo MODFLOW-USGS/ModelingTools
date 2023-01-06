@@ -869,11 +869,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(DataArray.Name);
-      Assert(ChildDataArray <> nil);
-      ChildModel.RemoveVariables(ChildDataArray);
-      ChildModel.DataArrayManager.ExtractDataSet(ChildDataArray);
-      ChildDataArray.Free;
+      if ChildModel <> nil then
+      begin
+        ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(DataArray.Name);
+        Assert(ChildDataArray <> nil);
+        ChildModel.RemoveVariables(ChildDataArray);
+        ChildModel.DataArrayManager.ExtractDataSet(ChildDataArray);
+        ChildDataArray.Free;
+      end;
     end;
     end;
     LocalModel.RemoveVariables(DataArray);

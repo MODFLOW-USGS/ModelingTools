@@ -10,10 +10,10 @@ inherited frameColorGrid: TframeColorGrid
     ExplicitHeight = 501
     inherited tabSelection: TTabSheet
       ExplicitWidth = 563
-      ExplicitHeight = 473
+      ExplicitHeight = 471
       DesignSize = (
         563
-        473)
+        471)
       inherited lblColorScheme: TLabel
         Left = 10
         Top = 291
@@ -43,8 +43,8 @@ inherited frameColorGrid: TframeColorGrid
       object lblTime: TLabel [6]
         Left = 420
         Top = 4
-        Width = 22
-        Height = 13
+        Width = 26
+        Height = 15
         Anchors = [akTop, akRight]
         Caption = 'Time'
       end
@@ -56,6 +56,7 @@ inherited frameColorGrid: TframeColorGrid
         ExplicitLeft = 10
         ExplicitTop = 315
         ExplicitWidth = 309
+        ExplicitHeight = 23
       end
       inherited seCycles: TJvSpinEdit
         Left = 457
@@ -146,10 +147,10 @@ inherited frameColorGrid: TframeColorGrid
     end
     inherited tabFilters: TTabSheet
       ExplicitWidth = 563
-      ExplicitHeight = 473
+      ExplicitHeight = 471
       DesignSize = (
         563
-        473)
+        471)
       inherited lblNumberOfValuesToIgnore: TLabel
         Top = 443
         ExplicitTop = 443
@@ -165,26 +166,29 @@ inherited frameColorGrid: TframeColorGrid
     end
     inherited tabLegend: TTabSheet
       ExplicitWidth = 563
-      ExplicitHeight = 473
+      ExplicitHeight = 471
       inherited imLegend: TImage
         Width = 357
-        Height = 473
+        Height = 471
         ExplicitWidth = 395
         ExplicitHeight = 470
       end
       inherited splColor: TSplitter
-        Height = 473
+        Height = 471
         ExplicitHeight = 470
       end
       inherited pnlLegend: TPanel
-        Height = 473
+        Height = 471
         ExplicitHeight = 473
         DesignSize = (
           201
-          473)
+          471)
         inherited lblColorLegendRows: TLabel
           Top = 376
           ExplicitTop = 376
+        end
+        inherited comboMethod: TComboBox
+          ExplicitHeight = 23
         end
         inherited seLegendRows: TJvSpinEdit
           Top = 395

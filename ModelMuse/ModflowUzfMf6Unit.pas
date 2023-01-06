@@ -2425,11 +2425,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      for Index := 0 to Link.FEvapConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FEvapConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        for Index := 0 to Link.FEvapConcList.Count - 1 do
+        begin
+          TimeList := Link.FEvapConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2466,11 +2469,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      for Index := 0 to Link.FInfiltrationConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FInfiltrationConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        for Index := 0 to Link.FInfiltrationConcList.Count - 1 do
+        begin
+          TimeList := Link.FInfiltrationConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2501,11 +2507,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FSpecifiedConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+        begin
+          TimeList := Link.FSpecifiedConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2530,8 +2539,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      Link.FAirEntryPotentialData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        Link.FAirEntryPotentialData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2555,8 +2567,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      Link.FExtinctionDepthData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        Link.FExtinctionDepthData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2581,8 +2596,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      Link.FExtinctionWaterContentData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        Link.FExtinctionWaterContentData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2606,8 +2624,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      Link.FInfiltrationData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        Link.FInfiltrationData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2631,8 +2652,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      Link.FPotentialETData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        Link.FPotentialETData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2656,8 +2680,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      Link.FRootActivityData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        Link.FRootActivityData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2681,9 +2708,12 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
-      Link.FRootPotentialData.Invalidate;
-    end;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        Link.FRootPotentialData.Invalidate;
+      end;
+      end;
   end;
 end;
 
@@ -4699,7 +4729,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateUzfMf6AirEntryPotential(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateUzfMf6AirEntryPotential(self);
+      end;
     end;
   end;
 end;
@@ -4745,8 +4778,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateUzfMf6ExtinctionDepth(self);
-    end;
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateUzfMf6ExtinctionDepth(self);
+      end;
+      end;
   end;
 end;
 
@@ -4772,7 +4808,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateUzfMf6ExtinctionWaterContent(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateUzfMf6ExtinctionWaterContent(self);
+      end;
     end;
   end;
 end;
@@ -4799,7 +4838,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateUzfMf6Infiltration(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateUzfMf6Infiltration(self);
+      end;
     end;
   end;
 end;
@@ -4841,7 +4883,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateUzfMf6PotentialET(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateUzfMf6PotentialET(self);
+      end;
     end;
   end;
 end;
@@ -4868,7 +4913,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateUzfMf6RootActivity(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateUzfMf6RootActivity(self);
+      end;
     end;
   end;
 end;
@@ -4895,7 +4943,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateUzfMf6RootPotential(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateUzfMf6RootPotential(self);
+      end;
     end;
   end;
 end;

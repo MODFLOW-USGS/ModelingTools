@@ -5,8 +5,8 @@ inherited frmLayers: TfrmLayers
   ClientHeight = 481
   ClientWidth = 583
   OnResize = FormResize
-  ExplicitWidth = 601
-  ExplicitHeight = 528
+  ExplicitWidth = 599
+  ExplicitHeight = 520
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 137
@@ -225,7 +225,8 @@ inherited frmLayers: TfrmLayers
         Height = 407
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 407
+        ExplicitWidth = 474
+        ExplicitHeight = 367
         inherited lbl1: TLabel
           Width = 148
           Height = 18
@@ -256,8 +257,8 @@ inherited frmLayers: TfrmLayers
           end
           inherited pnl1: TPanel
             inherited lbl3: TLabel
-              Width = 185
-              Height = 41
+              Width = 179
+              Height = 36
               ExplicitWidth = 179
               ExplicitHeight = 36
             end

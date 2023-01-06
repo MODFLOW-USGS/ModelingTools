@@ -2685,7 +2685,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrDownstreamElevation(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrDownstreamElevation(self);
+      end;
     end;
   end;
 end;
@@ -2712,7 +2715,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrDownstreamThickness(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrDownstreamThickness(self);
+      end;
     end;
   end;
 end;
@@ -2767,7 +2773,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrDownstreamDepth(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrDownstreamDepth(self);
+      end;
     end;
   end;
 end;
@@ -2822,7 +2831,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrDownstreamHydraulicConductivity(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrDownstreamHydraulicConductivity(self);
+      end;
     end;
   end;
 end;
@@ -2905,7 +2917,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrDownstreamWidth(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrDownstreamWidth(self);
+      end;
     end;
   end;
 end;
@@ -2932,7 +2947,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrEvapotranspiration(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrEvapotranspiration(self);
+      end;
     end;
   end;
 end;
@@ -2959,7 +2977,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrFlow(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrFlow(self);
+      end;
     end;
   end;
 end;
@@ -2986,7 +3007,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrPrecipitation(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrPrecipitation(self);
+      end;
     end;
   end;
 end;
@@ -3013,7 +3037,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrRunoff(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrRunoff(self);
+      end;
     end;
   end;
 end;
@@ -3050,7 +3077,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrUpstreamElevation(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrUpstreamElevation(self);
+      end;
     end;
   end;
 end;
@@ -3077,7 +3107,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrUpstreamThickness(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrUpstreamThickness(self);
+      end;
     end;
   end;
 end;
@@ -3132,7 +3165,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrUpstreamDepth(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrUpstreamDepth(self);
+      end;
     end;
   end;
 end;
@@ -3187,7 +3223,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrUpstreamHydraulicConductivity(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrUpstreamHydraulicConductivity(self);
+      end;
     end;
   end;
 end;
@@ -3270,7 +3309,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSfrUpstreamWidth(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSfrUpstreamWidth(self);
+      end;
     end;
   end;
 end;

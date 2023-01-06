@@ -1037,8 +1037,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TEvtTimeListLink;
-      Link.FEvapotranspirationRateData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TEvtTimeListLink;
+        Link.FEvapotranspirationRateData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1916,7 +1919,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfEvtEvapDepth(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfEvtEvapDepth(self);
+      end;
     end;
   end;
 end;
@@ -1953,7 +1959,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfEvtEvapRate(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfEvtEvapRate(self);
+      end;
     end;
   end;
 end;
@@ -1975,7 +1984,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfEvtEvapSurface(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfEvtEvapSurface(self);
+      end;
     end;
   end;
 end;
@@ -2341,8 +2353,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TEvtLayerTimeListLink;
-      Link.FEvapotranspirationLayerData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TEvtLayerTimeListLink;
+        Link.FEvapotranspirationLayerData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2794,8 +2809,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TEvtSurfDepthListLink;
-      Link.FEvapotranspirationDepthData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TEvtSurfDepthListLink;
+        Link.FEvapotranspirationDepthData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2819,8 +2837,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TEvtSurfDepthListLink;
-      Link.FEvapotranspirationSurfaceData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TEvtSurfDepthListLink;
+        Link.FEvapotranspirationSurfaceData.Invalidate;
+      end;
     end;
   end;
 end;

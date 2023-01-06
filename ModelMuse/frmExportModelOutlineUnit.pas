@@ -106,7 +106,10 @@ begin
     for ChildIndex := 0 to Model.ChildModels.Count - 1 do
     begin
       AModel := Model.ChildModels[ChildIndex].ChildModel;
-      comboModelSelection.Items.AddObject(AModel.ModelName, AModel);
+      if AModel <> nil then
+      begin
+        comboModelSelection.Items.AddObject(AModel.ModelName, AModel);
+      end;
     end;
     comboModelSelection.Enabled := True;
   end

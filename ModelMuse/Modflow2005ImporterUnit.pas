@@ -5324,8 +5324,11 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    ChildModel.DataArrayManager.CreateInitialDataSets;
-    ChildModel.UpdateOnPostInitialize;
+    if ChildModel <> nil then
+    begin
+      ChildModel.DataArrayManager.CreateInitialDataSets;
+      ChildModel.UpdateOnPostInitialize;
+    end;
   end;
   frmGoPhast.RestoreDefault2DView1Click(nil);
   frmGoPhast.Grid.RowDirection := rdNorthToSouth;

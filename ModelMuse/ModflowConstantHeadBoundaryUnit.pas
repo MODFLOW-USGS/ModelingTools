@@ -843,8 +843,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TChdTimeListLink;
-      Link.FEndData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TChdTimeListLink;
+        Link.FEndData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -874,11 +877,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TChdTimeListLink;
-      for Index := 0 to Link.FConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TChdTimeListLink;
+        for Index := 0 to Link.FConcList.Count - 1 do
+        begin
+          TimeList := Link.FConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -919,8 +925,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TChdTimeListLink;
-      Link.FStartData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TChdTimeListLink;
+        Link.FStartData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1445,7 +1454,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfChdEndingHead(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfChdEndingHead(self);
+      end;
     end;
   end;
 end;
@@ -1472,7 +1484,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfChdStartingHead(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfChdStartingHead(self);
+      end;
     end;
   end;
 end;

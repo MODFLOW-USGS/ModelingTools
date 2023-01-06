@@ -16,26 +16,26 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
       Caption = 'Basic'
       DesignSize = (
         457
-        459)
+        457)
       object lblModpathFile: TLabel
         Left = 3
         Top = 8
-        Width = 120
-        Height = 13
+        Width = 134
+        Height = 15
         Caption = 'MODPATH time series file'
       end
       object lblTimeToPlot: TLabel
         Left = 3
         Top = 64
-        Width = 56
-        Height = 13
+        Width = 64
+        Height = 15
         Caption = 'Time to plot'
       end
       object lblColorScheme: TLabel
         Left = 3
         Top = 166
-        Width = 64
-        Height = 13
+        Width = 73
+        Height = 15
         Caption = 'Color scheme'
       end
       object pbColorScheme: TPaintBox
@@ -50,30 +50,30 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
       object lblColorAdjustment: TLabel
         Left = 3
         Top = 264
-        Width = 82
-        Height = 13
+        Width = 92
+        Height = 15
         Caption = 'Color adjustment'
       end
       object lblCycles: TLabel
         Left = 351
         Top = 264
-        Width = 31
-        Height = 13
+        Width = 34
+        Height = 15
         Anchors = [akTop, akRight]
         Caption = 'Cycles'
       end
       object lblModelSelection: TLabel
         Left = 3
         Top = 327
-        Width = 73
-        Height = 13
+        Width = 84
+        Height = 15
         Caption = 'Model selection'
       end
       object lbltimeSeriesSize: TLabel
         Left = 287
         Top = 327
-        Width = 112
-        Height = 13
+        Width = 121
+        Height = 15
         Anchors = [akTop, akRight]
         Caption = 'Time series size (pixels)'
       end
@@ -130,7 +130,7 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
         Left = 3
         Top = 186
         Width = 341
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
         DropDownCount = 12
@@ -226,13 +226,9 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
     object tabOptions: TTabSheet
       Caption = 'Options'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         457
-        459)
+        457)
       object rgShow2D: TRadioGroup
         Left = 2
         Top = 3
@@ -296,6 +292,7 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -319,6 +316,7 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -344,6 +342,7 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

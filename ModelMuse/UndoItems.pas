@@ -2647,14 +2647,17 @@ begin
       for Index := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[Index].ChildModel;
-        ChildDataArray := ChildModel.DataArrayManager.
-          GetDataSetByName(FDataSet.Name);
-        if ChildDataArray <> nil then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.Formula := Formula;
-          if ChildDataArray is TCustomPhastDataSet then
+          ChildDataArray := ChildModel.DataArrayManager.
+            GetDataSetByName(FDataSet.Name);
+          if ChildDataArray <> nil then
           begin
-            ChildDataArray.Assign(PhastInterpolationValues);
+            ChildDataArray.Formula := Formula;
+            if ChildDataArray is TCustomPhastDataSet then
+            begin
+              ChildDataArray.Assign(PhastInterpolationValues);
+            end;
           end;
         end;
       end;
@@ -2691,19 +2694,18 @@ begin
       for Index := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[Index].ChildModel;
-        ChildDataArray := ChildModel.DataArrayManager.
-          GetDataSetByName(FDataSet.Name);
-//        Assert(ChildDataArray <> nil);
-        if (ChildDataArray <> nil) and not (dcName in ChildDataArray.Lock) then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.Name := Name;
-          ChildDataArray.DisplayName := Name;
-          ChildDataArray.UpdateWithoutNotification(Orientation, EvaluatedAt,
-            DataType, FNeedToInvalidate);
+          ChildDataArray := ChildModel.DataArrayManager.
+            GetDataSetByName(FDataSet.Name);
+          if (ChildDataArray <> nil) and not (dcName in ChildDataArray.Lock) then
+          begin
+            ChildDataArray.Name := Name;
+            ChildDataArray.DisplayName := Name;
+            ChildDataArray.UpdateWithoutNotification(Orientation, EvaluatedAt,
+              DataType, FNeedToInvalidate);
+          end;
         end;
-  //      ChildDataArray.Orientation := Orientation;
-  //      ChildDataArray.EvaluatedAt := EvaluatedAt;
-  //      ChildDataArray.DataType := DataType;
       end;
     end;
   end;
@@ -2734,24 +2736,27 @@ begin
       for Index := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[Index].ChildModel;
-        ChildDataArray := ChildModel.DataArrayManager.
-          GetDataSetByName(FDataSet.Name);
-        if ChildDataArray <> nil then
+        if ChildModel <> nil then
         begin
-          if not (dcName in ChildDataArray.Lock) then
+          ChildDataArray := ChildModel.DataArrayManager.
+            GetDataSetByName(FDataSet.Name);
+          if ChildDataArray <> nil then
           begin
-            ChildDataArray.Name := Name;
-            ChildDataArray.DisplayName := Name;
+            if not (dcName in ChildDataArray.Lock) then
+            begin
+              ChildDataArray.Name := Name;
+              ChildDataArray.DisplayName := Name;
+            end;
+            ChildDataArray.Orientation := Orientation;
+            ChildDataArray.EvaluatedAt := EvaluatedAt;
+            ChildDataArray.DataType := DataType;
+            ChildDataArray.Units := Units;
+            ChildDataArray.AngleType := AngleType;
+            ChildDataArray.TwoDInterpolator := TwoDInterpolator;
+            ChildDataArray.Comment := Comment;
+            ChildDataArray.Classification := Classification;
+            ChildDataArray.PestParametersUsed := PestParametersUsed;
           end;
-          ChildDataArray.Orientation := Orientation;
-          ChildDataArray.EvaluatedAt := EvaluatedAt;
-          ChildDataArray.DataType := DataType;
-          ChildDataArray.Units := Units;
-          ChildDataArray.AngleType := AngleType;
-          ChildDataArray.TwoDInterpolator := TwoDInterpolator;
-          ChildDataArray.Comment := Comment;
-          ChildDataArray.Classification := Classification;
-          ChildDataArray.PestParametersUsed := PestParametersUsed;
         end;
       end;
     end;
@@ -2869,10 +2874,13 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count -1 do
   begin
     ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    ChildDataSet :=  ChildModel.DataArrayManager.GetDataSetByName(DataSet.Name);
-    if ChildDataSet <> nil then
+    if ChildModel <> nil then
     begin
-      ChildDataSet.Invalidate;
+      ChildDataSet :=  ChildModel.DataArrayManager.GetDataSetByName(DataSet.Name);
+      if ChildDataSet <> nil then
+      begin
+        ChildDataSet.Invalidate;
+      end;
     end;
   end;
 end;

@@ -1083,7 +1083,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenFlowRate2(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenFlowRate2(self);
+      end;
     end;
   end;
 end;
@@ -1111,7 +1114,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenFlowPress2(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenFlowPress2(self);
+      end;
     end;
   end;
 end;
@@ -1155,7 +1161,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenFlowRate1(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenFlowRate1(self);
+      end;
     end;
   end;
 end;
@@ -1182,7 +1191,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenFlowPress1(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenFlowPress1(self);
+      end;
     end;
   end;
 end;
@@ -1342,7 +1354,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenFlowU1(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenFlowU1(self);
+      end;
     end;
   end;
 end;
@@ -1369,7 +1384,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateSutraGenFlowU2(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateSutraGenFlowU2(self);
+      end;
     end;
   end;
 end;

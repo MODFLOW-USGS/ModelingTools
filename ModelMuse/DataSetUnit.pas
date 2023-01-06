@@ -3703,10 +3703,14 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildItem := LocalModel.ChildModels[ChildIndex];
-      ChildDataArray := ChildItem.ChildModel.DataArrayManager.GetDataSetByName(Name);
-      if ChildDataArray <> nil then
+      if ChildItem.ChildModel <> nil then
       begin
-        ChildDataArray.Formula := Formula;
+        ChildDataArray := ChildItem.ChildModel.DataArrayManager.
+          GetDataSetByName(Name);
+        if ChildDataArray <> nil then
+        begin
+          ChildDataArray.Formula := Formula;
+        end;
       end;
     end;
   end;
@@ -4113,11 +4117,14 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildItem := LocalModel.ChildModels[ChildIndex];
-      ChildDataArray := ChildItem.ChildModel.DataArrayManager.
-        GetDataSetByName(Name);
-      if ChildDataArray <> nil then
+      if ChildItem.ChildModel <> nil then
       begin
-        ChildDataArray.UpdateWithName(AName);
+        ChildDataArray := ChildItem.ChildModel.DataArrayManager.
+          GetDataSetByName(Name);
+        if ChildDataArray <> nil then
+        begin
+          ChildDataArray.UpdateWithName(AName);
+        end;
       end;
     end;
   end;
@@ -8411,9 +8418,12 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildItem := LocalModel.ChildModels[ChildIndex];
-      ChildDataArray := ChildItem.ChildModel.DataArrayManager.
-        GetDataSetByName(Source.Name);
-      ChildDataArray.AssignProperties(Source);
+      if ChildItem.ChildModel <> nil then
+      begin
+        ChildDataArray := ChildItem.ChildModel.DataArrayManager.
+          GetDataSetByName(Source.Name);
+        ChildDataArray.AssignProperties(Source);
+      end;
     end;
   end;
 end;

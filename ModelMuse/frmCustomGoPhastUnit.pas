@@ -1557,7 +1557,10 @@ begin
     for Index := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[Index].ChildModel;
-      Combo.AddItem(ChildModel.ModelName, ChildModel);
+      if ChildModel <> nil then
+      begin
+        Combo.AddItem(ChildModel.ModelName, ChildModel);
+      end;
     end;
   end;
   Combo.ItemIndex := 0;
@@ -1746,7 +1749,10 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ACombo.AddItem(ChildModel.ModelName, ChildModel);
+      if ChildModel <> nil then
+      begin
+        ACombo.AddItem(ChildModel.ModelName, ChildModel);
+      end;
     end;
   end
   else

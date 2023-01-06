@@ -215,7 +215,10 @@ begin
       for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
       begin
         AModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-        LayerCount := Max(LayerCount, AModel.LayerCount);
+        if AModel <> nil then
+        begin
+          LayerCount := Max(LayerCount, AModel.LayerCount);
+        end;
       end;
     end;
     for LayerIndex := 1 to LayerCount do

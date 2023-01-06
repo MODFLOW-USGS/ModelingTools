@@ -2555,11 +2555,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      for Index := 0 to Link.FEvapConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FEvapConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        for Index := 0 to Link.FEvapConcList.Count - 1 do
+        begin
+          TimeList := Link.FEvapConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2584,8 +2587,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      Link.FEvaporation.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        Link.FEvaporation.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2620,11 +2626,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      for Index := 0 to Link.FInflowConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FInflowConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        for Index := 0 to Link.FInflowConcList.Count - 1 do
+        begin
+          TimeList := Link.FInflowConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2649,8 +2658,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      Link.FInflow.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        Link.FInflow.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2680,11 +2692,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      for Index := 0 to Link.FRainfallConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FRainfallConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        for Index := 0 to Link.FRainfallConcList.Count - 1 do
+        begin
+          TimeList := Link.FRainfallConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2709,8 +2724,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      Link.FRainfall.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        Link.FRainfall.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2734,8 +2752,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      Link.FRoughness.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        Link.FRoughness.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2765,11 +2786,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      for Index := 0 to Link.FRunoffConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FRunoffConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        for Index := 0 to Link.FRunoffConcList.Count - 1 do
+        begin
+          TimeList := Link.FRunoffConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2794,8 +2818,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      Link.FRunoff.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        Link.FRunoff.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2825,11 +2852,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FSpecifiedConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        for Index := 0 to Link.FSpecifiedConcList.Count - 1 do
+        begin
+          TimeList := Link.FSpecifiedConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -2854,8 +2884,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      Link.FStage.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        Link.FStage.Invalidate;
+      end;
     end;
   end;
 end;
@@ -2879,8 +2912,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
-      Link.FUpstreamFraction.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        Link.FUpstreamFraction.Invalidate;
+      end;
     end;
   end;
 end;

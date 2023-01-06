@@ -211,8 +211,11 @@ begin
       for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-        ChildDataSet := ChildModel.DataArrayManager.GetDataSetByName(DataSet.Name);
-        ChildModel.UpdateDataArrayDimensions(ChildDataSet);
+        if ChildModel <> nil then
+        begin
+          ChildDataSet := ChildModel.DataArrayManager.GetDataSetByName(DataSet.Name);
+          ChildModel.UpdateDataArrayDimensions(ChildDataSet);
+        end;
       end;
     end;
 //    DataSet.UpdateDimensions(frmGoPhast.Grid.LayerCount,

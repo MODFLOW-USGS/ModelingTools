@@ -262,9 +262,12 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.PathLines.Draw3D;
-      ChildModel.TimeSeries.Draw3D;
-      ChildModel.EndPoints.Draw3D;
+      if ChildModel <> nil then
+      begin
+        ChildModel.PathLines.Draw3D;
+        ChildModel.TimeSeries.Draw3D;
+        ChildModel.EndPoints.Draw3D;
+      end;
     end;
   end;
   if frmGoPhast.tb3DObjects.Down then

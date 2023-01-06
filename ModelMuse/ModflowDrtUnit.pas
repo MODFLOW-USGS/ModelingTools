@@ -735,8 +735,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TDrtTimeListLink;
-      Link.FConductanceData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TDrtTimeListLink;
+        Link.FConductanceData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -760,8 +763,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TDrtTimeListLink;
-      Link.FElevationData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TDrtTimeListLink;
+        Link.FElevationData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -785,8 +791,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TDrtTimeListLink;
-      Link.FReturnFractionData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TDrtTimeListLink;
+        Link.FReturnFractionData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1308,7 +1317,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfDrtConductance(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfDrtConductance(self);
+      end;
     end;
   end;
 end;
@@ -1349,7 +1361,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfDrtElevation(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfDrtElevation(self);
+      end;
     end;
   end;
 end;
@@ -1376,7 +1391,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfDrtReturnFraction(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfDrtReturnFraction(self);
+      end;
     end;
   end;
 end;

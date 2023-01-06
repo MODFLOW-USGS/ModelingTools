@@ -4,15 +4,15 @@ inherited frmFilesToArchive: TfrmFilesToArchive
   Caption = ' Files To Archive'
   ClientWidth = 631
   ExplicitWidth = 647
-  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 153
+    Top = 161
     Width = 631
     Height = 73
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 153
     DesignSize = (
       631
       73)
@@ -90,7 +90,7 @@ inherited frmFilesToArchive: TfrmFilesToArchive
     Left = 0
     Top = 0
     Width = 631
-    Height = 153
+    Height = 161
     Align = alClient
     DragMode = dmAutomatic
     Indent = 19
@@ -101,6 +101,7 @@ inherited frmFilesToArchive: TfrmFilesToArchive
     OnCustomDrawItem = tvArchiveCustomDrawItem
     OnDragDrop = tvArchiveDragDrop
     OnDragOver = tvArchiveDragOver
+    ExplicitHeight = 153
   end
   object sdArchive: TSaveDialog
     DefaultExt = '.zip'

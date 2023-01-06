@@ -479,6 +479,7 @@ var
   Discretization: TChildDiscretizationCollection;
   DisIndex: Integer;
   DisItem: TChildDiscretization;
+  ChildModel: TChildModel;
 begin
   FConduitLayers.Free;
   FWaterTableLayers.Free;
@@ -496,30 +497,34 @@ begin
       end;
       for ChildIndex := 0 to Model.ChildModels.Count - 1 do
       begin
-        Discretization := Model.ChildModels[ChildIndex].ChildModel.Discretization;
-        if Discretization.BottomLayerGroup = self then
+        ChildModel := Model.ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
         begin
-          if Index > 1 then
+          Discretization := ChildModel.Discretization;
+          if Discretization.BottomLayerGroup = self then
           begin
-            OtherGroup := Collection.Items[Index-1] as TLayerGroup;
-            Discretization.BottomLayerInUnit := OtherGroup.LayerCount-1;
-          end
-          else if Collection.Count > Index+1 then
-          begin
-            OtherGroup := Collection.Items[Index+1] as TLayerGroup;
-            Discretization.BottomLayerInUnit := 0;
-          end
-          else
-          begin
-            OtherGroup := nil;
-          end;
-          Discretization.BottomLayerGroup := OtherGroup;
-          for DisIndex := Discretization.Count - 1 downto 0 do
-          begin
-            DisItem := Discretization[DisIndex];
-            if DisItem.LayerGroup = self then
+            if Index > 1 then
             begin
-              Discretization.Delete(DisIndex);
+              OtherGroup := Collection.Items[Index-1] as TLayerGroup;
+              Discretization.BottomLayerInUnit := OtherGroup.LayerCount-1;
+            end
+            else if Collection.Count > Index+1 then
+            begin
+              OtherGroup := Collection.Items[Index+1] as TLayerGroup;
+              Discretization.BottomLayerInUnit := 0;
+            end
+            else
+            begin
+              OtherGroup := nil;
+            end;
+            Discretization.BottomLayerGroup := OtherGroup;
+            for DisIndex := Discretization.Count - 1 downto 0 do
+            begin
+              DisItem := Discretization[DisIndex];
+              if DisItem.LayerGroup = self then
+              begin
+                Discretization.Delete(DisIndex);
+              end;
             end;
           end;
         end;
@@ -810,25 +815,28 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildItem := PhastModel.ChildModels[ChildIndex];
-      Discretization := ChildItem.ChildModel.Discretization;
-      if (Discretization.BottomLayerGroup = self) then
+      if ChildItem.ChildModel <> nil then
       begin
-        if not RunTimeSimulated then
+        Discretization := ChildItem.ChildModel.Discretization;
+        if (Discretization.BottomLayerGroup = self) then
         begin
-          PriorGroup := Collection.Items[Index - 1] as TLayerGroup;
-          Discretization.BottomLayerGroup := PriorGroup;
-          Discretization.BottomLayerInUnit := PriorGroup.LayerCount - 1;
-        end
-        else if (Discretization.BottomLayerInUnit = PriorCount) then
-        begin
-          Discretization.BottomLayerInUnit := LayerCount - 1;
-        end
-        else if Discretization.BottomLayerInUnit > LayerCount - 1 then
-        begin
-          Discretization.BottomLayerInUnit := LayerCount - 1;
+          if not RunTimeSimulated then
+          begin
+            PriorGroup := Collection.Items[Index - 1] as TLayerGroup;
+            Discretization.BottomLayerGroup := PriorGroup;
+            Discretization.BottomLayerInUnit := PriorGroup.LayerCount - 1;
+          end
+          else if (Discretization.BottomLayerInUnit = PriorCount) then
+          begin
+            Discretization.BottomLayerInUnit := LayerCount - 1;
+          end
+          else if Discretization.BottomLayerInUnit > LayerCount - 1 then
+          begin
+            Discretization.BottomLayerInUnit := LayerCount - 1;
+          end;
         end;
+        Discretization.SortAndDeleteExtraItems;
       end;
-      Discretization.SortAndDeleteExtraItems;
     end;
   end;
 end;
@@ -881,7 +889,10 @@ begin
     for Index := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       Child := PhastModel.ChildModels[Index];
-      Child.ChildModel.UpdateLayerCount;
+      if Child.ChildModel <> nil then
+      begin
+        Child.ChildModel.UpdateLayerCount;
+      end;
     end;
     PhastModel.InvalidateMfEtsEvapLayer(self);
     PhastModel.InvalidateMfEvtEvapLayer(self);

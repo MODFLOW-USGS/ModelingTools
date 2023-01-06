@@ -953,8 +953,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TGhbTimeListLink;
-      Link.FConductanceData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TGhbTimeListLink;
+        Link.FConductanceData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -984,11 +987,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TGhbTimeListLink;
-      for Index := 0 to Link.FConcList.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FConcList[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TGhbTimeListLink;
+        for Index := 0 to Link.FConcList.Count - 1 do
+        begin
+          TimeList := Link.FConcList[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -1013,8 +1019,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TGhbTimeListLink;
-      Link.FBoundaryHeadData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TGhbTimeListLink;
+        Link.FBoundaryHeadData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1901,7 +1910,10 @@ begin
   for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
   begin
     ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-    ChildModel.InvalidateMfGhbConductance(self);
+    if ChildModel <> nil then
+    begin
+      ChildModel.InvalidateMfGhbConductance(self);
+    end;
   end;
 end;
 
@@ -1935,7 +1947,10 @@ begin
   for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
   begin
     ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-    ChildModel.InvalidateMfGhbBoundaryHead(self);
+    if ChildModel <> nil then
+    begin
+      ChildModel.InvalidateMfGhbBoundaryHead(self);
+    end;
   end;
 end;
 

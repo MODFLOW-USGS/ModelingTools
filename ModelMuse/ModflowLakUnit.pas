@@ -1653,8 +1653,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
-      Link.FEvaporationData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
+        Link.FEvaporationData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1678,8 +1681,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
-      Link.FMaximumStageData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
+        Link.FMaximumStageData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1703,8 +1709,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
-      Link.FMinimumStageData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
+        Link.FMinimumStageData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1728,8 +1737,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
-      Link.FPrecipitationData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
+        Link.FPrecipitationData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1753,8 +1765,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
-      Link.FOverlandRunoffData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
+        Link.FOverlandRunoffData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1778,8 +1793,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
-      Link.FWithdrawalData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TLakTimeListLink;
+        Link.FWithdrawalData.Invalidate;
+      end;
     end;
   end;
 end;

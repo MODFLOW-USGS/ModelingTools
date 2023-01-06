@@ -1490,8 +1490,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
-      Link.FStreamBedThicknessData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
+        Link.FStreamBedThicknessData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1515,8 +1518,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
-      Link.FBrooksCoreyExponent.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
+        Link.FBrooksCoreyExponent.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1540,8 +1546,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
-      Link.FHydraulicConductivityData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
+        Link.FHydraulicConductivityData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1565,8 +1574,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
-      Link.FInitialWaterContent.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
+        Link.FInitialWaterContent.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1590,8 +1602,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
-      Link.FReachLength.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
+        Link.FReachLength.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1615,8 +1630,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
-      Link.FSaturatedWaterContent.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
+        Link.FSaturatedWaterContent.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1640,9 +1658,12 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
-      Link.FStreamBedElevationData.Invalidate;
-    end;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
+        Link.FStreamBedElevationData.Invalidate;
+      end;
+      end;
   end;
 end;
 
@@ -1665,8 +1686,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
-      Link.FStreamSlopeData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
+        Link.FStreamSlopeData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1690,8 +1714,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
-      Link.FVerticalK.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrTimeListLink;
+        Link.FVerticalK.Invalidate;
+      end;
     end;
   end;
 end;

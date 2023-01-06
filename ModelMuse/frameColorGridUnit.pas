@@ -129,15 +129,18 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.TopDataSet := nil;
-      ChildModel.TopTimeList := nil;
-      ChildModel.FrontDataSet := nil;
-      ChildModel.FrontTimeList := nil;
-      ChildModel.SideDataSet := nil;
-      ChildModel.SideTimeList := nil;
-      ChildModel.ThreeDDataSet := nil;
-      ChildModel.ThreeDTimeList := nil;
-      ChildModel.EdgeDisplay := nil;
+      if ChildModel <> nil then
+      begin
+        ChildModel.TopDataSet := nil;
+        ChildModel.TopTimeList := nil;
+        ChildModel.FrontDataSet := nil;
+        ChildModel.FrontTimeList := nil;
+        ChildModel.SideDataSet := nil;
+        ChildModel.SideTimeList := nil;
+        ChildModel.ThreeDDataSet := nil;
+        ChildModel.ThreeDTimeList := nil;
+        ChildModel.EdgeDisplay := nil;
+      end;
     end;
   end
   else if (AnObject is TDataArray) then
@@ -146,7 +149,10 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.EdgeDisplay := nil;
+      if ChildModel <> nil then
+      begin
+        ChildModel.EdgeDisplay := nil;
+      end;
     end;
     DataSet := TDataArray(AnObject);
     AssignLimits(DataSet.DataType, DataSet.Limits);
@@ -202,9 +208,12 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildTimeList := ChildModel.GetTimeListByName(TimeList.Name);
-      AssignLimits(ChildTimeList.DataType, ChildTimeList.Limits);
-      ChildModel.EdgeDisplay := nil;
+      if ChildModel <> nil then
+      begin
+        ChildTimeList := ChildModel.GetTimeListByName(TimeList.Name);
+        AssignLimits(ChildTimeList.DataType, ChildTimeList.Limits);
+        ChildModel.EdgeDisplay := nil;
+      end;
     end;
 
     Time := FortranStrToFloat(comboTime3D.Text);
@@ -232,13 +241,16 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildTimeList := ChildModel.GetTimeListByName(TimeList.Name);
-      if ChildTimeList.UpToDate then
+      if ChildModel <> nil then
       begin
-        for TimeIndex := 0 to ChildTimeList.Count - 1 do
+        ChildTimeList := ChildModel.GetTimeListByName(TimeList.Name);
+        if ChildTimeList.UpToDate then
         begin
-          ADataArray := ChildTimeList[TimeIndex];
-          AssignLimits(ADataArray.DataType, ADataArray.Limits);
+          for TimeIndex := 0 to ChildTimeList.Count - 1 do
+          begin
+            ADataArray := ChildTimeList[TimeIndex];
+            AssignLimits(ADataArray.DataType, ADataArray.Limits);
+          end;
         end;
       end;
     end;
@@ -319,22 +331,25 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.TopDataSet := nil;
-      ChildModel.TopTimeList := nil;
-      ChildModel.FrontDataSet := nil;
-      ChildModel.FrontTimeList := nil;
-      ChildModel.SideDataSet := nil;
-      ChildModel.SideTimeList := nil;
-      ChildModel.ThreeDDataSet := nil;
-      ChildModel.ThreeDTimeList := nil;
-      if frmGoPhast.PhastModel.EdgeDisplay = frmGoPhast.PhastModel.HfbDisplayer then
+      if ChildModel <> nil then
       begin
-        ChildModel.HfbDisplayer.DataToPlot := EdgeEdit.DataIndex;
-        ChildModel.EdgeDisplay := ChildModel.HfbDisplayer;
-      end
-      else
-      begin
-        Assert(False);
+        ChildModel.TopDataSet := nil;
+        ChildModel.TopTimeList := nil;
+        ChildModel.FrontDataSet := nil;
+        ChildModel.FrontTimeList := nil;
+        ChildModel.SideDataSet := nil;
+        ChildModel.SideTimeList := nil;
+        ChildModel.ThreeDDataSet := nil;
+        ChildModel.ThreeDTimeList := nil;
+        if frmGoPhast.PhastModel.EdgeDisplay = frmGoPhast.PhastModel.HfbDisplayer then
+        begin
+          ChildModel.HfbDisplayer.DataToPlot := EdgeEdit.DataIndex;
+          ChildModel.EdgeDisplay := ChildModel.HfbDisplayer;
+        end
+        else
+        begin
+          Assert(False);
+        end;
       end;
     end;
 

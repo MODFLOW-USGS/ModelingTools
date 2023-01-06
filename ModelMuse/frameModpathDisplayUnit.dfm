@@ -16,19 +16,19 @@ object frameModpathDisplay: TframeModpathDisplay
       Caption = 'Basic'
       DesignSize = (
         457
-        458)
+        456)
       object lblModpathFile: TLabel
         Left = 8
         Top = 8
-        Width = 107
-        Height = 13
+        Width = 121
+        Height = 15
         Caption = 'MODPATH pathline file'
       end
       object lblColorScheme: TLabel
         Left = 8
         Top = 108
-        Width = 64
-        Height = 13
+        Width = 73
+        Height = 15
         Caption = 'Color scheme'
       end
       object pbColorScheme: TPaintBox
@@ -43,30 +43,30 @@ object frameModpathDisplay: TframeModpathDisplay
       object lblColorAdjustment: TLabel
         Left = 8
         Top = 211
-        Width = 82
-        Height = 13
+        Width = 92
+        Height = 15
         Caption = 'Color adjustment'
       end
       object lblCycles: TLabel
         Left = 345
         Top = 211
-        Width = 31
-        Height = 13
+        Width = 34
+        Height = 15
         Anchors = [akTop, akRight]
         Caption = 'Cycles'
       end
       object lblMaxTime: TLabel
         Left = 192
         Top = 8
-        Width = 52
-        Height = 13
+        Width = 62
+        Height = 15
         Caption = 'lblMaxTime'
       end
       object lblModelSelection: TLabel
         Left = 8
         Top = 273
-        Width = 73
-        Height = 13
+        Width = 84
+        Height = 15
         Caption = 'Model selection'
       end
       object fedModpathFile: TJvFilenameEdit
@@ -104,7 +104,7 @@ object frameModpathDisplay: TframeModpathDisplay
         Left = 8
         Top = 128
         Width = 335
-        Height = 21
+        Height = 23
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
         DropDownCount = 12
@@ -190,7 +190,7 @@ object frameModpathDisplay: TframeModpathDisplay
       ImageIndex = 1
       DesignSize = (
         457
-        458)
+        456)
       object rgShow2D: TRadioGroup
         Left = 3
         Top = 3

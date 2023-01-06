@@ -11,10 +11,10 @@ inherited frameContourData: TframeContourData
     ExplicitHeight = 501
     inherited tabSelection: TTabSheet
       ExplicitWidth = 570
-      ExplicitHeight = 473
+      ExplicitHeight = 471
       DesignSize = (
         570
-        473)
+        471)
       inherited lblColorScheme: TLabel
         Left = 9
         Top = 327
@@ -44,22 +44,22 @@ inherited frameContourData: TframeContourData
       object lblAlgorithm: TLabel [6]
         Left = 8
         Top = 191
-        Width = 36
-        Height = 13
+        Width = 42
+        Height = 15
         Caption = 'Method'
       end
       object lblContourInterval: TLabel [7]
         Left = 444
         Top = 60
-        Width = 80
-        Height = 13
+        Width = 86
+        Height = 15
         Caption = 'Contour Interval'
       end
       object lblSpacing: TLabel [8]
         Left = 347
         Top = 245
-        Width = 102
-        Height = 13
+        Width = 113
+        Height = 15
         Anchors = [akLeft, akRight, akBottom]
         Caption = 'Label spacing (pixels)'
       end
@@ -69,6 +69,7 @@ inherited frameContourData: TframeContourData
         TabOrder = 12
         ExplicitTop = 344
         ExplicitWidth = 471
+        ExplicitHeight = 23
       end
       inherited seCycles: TJvSpinEdit
         Left = 482
@@ -182,7 +183,7 @@ inherited frameContourData: TframeContourData
         Left = 3
         Top = 210
         Width = 145
-        Height = 21
+        Height = 23
         Style = csDropDownList
         ItemIndex = 0
         TabOrder = 7
@@ -218,10 +219,10 @@ inherited frameContourData: TframeContourData
     end
     inherited tabFilters: TTabSheet
       ExplicitWidth = 570
-      ExplicitHeight = 473
+      ExplicitHeight = 471
       DesignSize = (
         570
-        473)
+        471)
       inherited lblNumberOfValuesToIgnore: TLabel
         Top = 449
         ExplicitTop = 441
@@ -229,8 +230,8 @@ inherited frameContourData: TframeContourData
       object lblModel: TLabel [5]
         Left = 203
         Top = 152
-        Width = 86
-        Height = 13
+        Width = 98
+        Height = 15
         Caption = 'Models to contour'
       end
       inherited rdgValuesToIgnore: TRbwDataGrid4
@@ -246,35 +247,38 @@ inherited frameContourData: TframeContourData
         Top = 171
         Width = 121
         Height = 150
-        OnClickCheck = clbxModelClickCheck
         DoubleBuffered = False
         ItemHeight = 13
         ParentDoubleBuffered = False
         TabOrder = 6
+        OnClickCheck = clbxModelClickCheck
       end
     end
     inherited tabLegend: TTabSheet
       ExplicitWidth = 570
-      ExplicitHeight = 473
+      ExplicitHeight = 471
       inherited imLegend: TImage
         Width = 364
-        Height = 473
+        Height = 471
         ExplicitWidth = 364
         ExplicitHeight = 471
       end
       inherited splColor: TSplitter
-        Height = 473
+        Height = 471
         ExplicitHeight = 368
       end
       inherited pnlLegend: TPanel
-        Height = 473
+        Height = 471
         ExplicitHeight = 473
         DesignSize = (
           201
-          473)
+          471)
         inherited lblColorLegendRows: TLabel
           Top = 412
           ExplicitTop = 410
+        end
+        inherited comboMethod: TComboBox
+          ExplicitHeight = 23
         end
         inherited seLegendRows: TJvSpinEdit
           Top = 433

@@ -6,7 +6,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
   ClientWidth = 617
   ExplicitWidth = 633
   ExplicitHeight = 454
-  PixelsPerInch = 96
   TextHeight = 18
   object splMain: TSplitter
     Left = 177
@@ -259,6 +258,7 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
         EditLabel.Caption = 'Name (RIPNM)'
         MaxLength = 24
         TabOrder = 0
+        Text = ''
       end
       object cedSatExtDepth: TJvComboEdit
         Left = 16
@@ -436,6 +436,7 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
           ColCount = 3
           FixedCols = 1
           OnBeforeDrawCell = frameTranspirationCurveGridBeforeDrawCell
+          OnEndUpdate = frameTranspirationCurveGridEndUpdate
           Columns = <
             item
               AutoAdjustRowHeights = False
@@ -512,7 +513,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = frameTranspirationCurveGridEndUpdate
           ExplicitWidth = 275
           ExplicitHeight = 304
           ColWidths = (

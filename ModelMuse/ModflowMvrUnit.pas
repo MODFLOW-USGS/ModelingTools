@@ -902,11 +902,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMvrTimeListLink;
-      for Index := 0 to Link.FListOfTimeLists.Count - 1 do
+      if ChildModel <> nil then
       begin
-        TimeList := Link.FListOfTimeLists[Index];
-        TimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TMvrTimeListLink;
+        for Index := 0 to Link.FListOfTimeLists.Count - 1 do
+        begin
+          TimeList := Link.FListOfTimeLists[Index];
+          TimeList.Invalidate;
+        end;
       end;
     end;
   end;

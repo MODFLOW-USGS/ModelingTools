@@ -935,7 +935,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TRipTimeListLink;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TRipTimeListLink;
+      end;
     for CoverageIndex := 0 to Link.FCoverages.Count - 1 do
     begin
       Link.FCoverages[CoverageIndex].Invalidate;
@@ -963,8 +966,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TRipTimeListLink;
-      Link.FLandElevation.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TRipTimeListLink;
+        Link.FLandElevation.Invalidate;
+      end;
     end;
   end;
 end;

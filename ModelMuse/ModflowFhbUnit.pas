@@ -650,8 +650,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TFhbHeadTimeListLink;
-      Link.FBoundaryValueData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TFhbHeadTimeListLink;
+        Link.FBoundaryValueData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1323,7 +1326,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfFhbHeads(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfFhbHeads(self);
+      end;
     end;
   end;
 end;
@@ -1421,7 +1427,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfFhbFlows(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfFhbFlows(self);
+      end;
     end;
   end;
 end;

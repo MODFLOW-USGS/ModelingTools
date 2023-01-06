@@ -190,11 +190,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMt3dUztSatEtConcTimeListLink;
-      for index := 0 to Link.TimeLists.Count - 1 do
+      if ChildModel <> nil then
       begin
-        ATimeList := Link.TimeLists[index];
-        ATimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TMt3dUztSatEtConcTimeListLink;
+        for index := 0 to Link.TimeLists.Count - 1 do
+        begin
+          ATimeList := Link.TimeLists[index];
+          ATimeList.Invalidate;
+        end;
       end;
     end;
   end;

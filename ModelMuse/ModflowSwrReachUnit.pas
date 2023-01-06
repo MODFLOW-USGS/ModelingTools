@@ -754,8 +754,11 @@ begin
       for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-        Link := TimeListLink.GetLink(ChildModel) as TSwrReachListLink;
-        Link.FStage.Invalidate;
+        if ChildModel <> nil then
+        begin
+          Link := TimeListLink.GetLink(ChildModel) as TSwrReachListLink;
+          Link.FStage.Invalidate;
+        end;
       end;
     end;
   end;
@@ -784,8 +787,11 @@ begin
       for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-        Link := TimeListLink.GetLink(ChildModel) as TSwrReachListLink;
-        Link.FVerticalOffset.Invalidate;
+        if ChildModel <> nil then
+        begin
+          Link := TimeListLink.GetLink(ChildModel) as TSwrReachListLink;
+          Link.FVerticalOffset.Invalidate;
+        end;
       end;
     end;
   end;
@@ -1579,7 +1585,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSwrStage(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSwrStage(self);
+      end;
     end;
   end;
 end;
@@ -1606,7 +1615,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSwrVerticalOffset(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSwrVerticalOffset(self);
+      end;
     end;
   end;
 end;

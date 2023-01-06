@@ -268,7 +268,10 @@ begin
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
       AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      InputFiles.AddStrings(AChildModel.FilesToArchive);
+      if AChildModel <> nil then
+      begin
+        InputFiles.AddStrings(AChildModel.FilesToArchive);
+      end;
     end;
     AddFilesToTree(InputFiles, StrAncillary, FAncillaryNode);
 
@@ -293,18 +296,21 @@ begin
     begin
       InputFiles.Clear;
       AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      InputFiles.AddStrings(AChildModel.ModelInputFiles);
-      for ProgramIndex := 0 to ProgramFiles.Count - 1 do
+      if AChildModel <> nil then
       begin
-        PosIndex := InputFiles.IndexOf(ProgramFiles[ProgramIndex]);
-        if PosIndex >= 0 then
+        InputFiles.AddStrings(AChildModel.ModelInputFiles);
+        for ProgramIndex := 0 to ProgramFiles.Count - 1 do
         begin
-          InputFiles.Delete(PosIndex);
+          PosIndex := InputFiles.IndexOf(ProgramFiles[ProgramIndex]);
+          if PosIndex >= 0 then
+          begin
+            InputFiles.Delete(PosIndex);
+          end;
         end;
+        AddFilesToTree(InputFiles, AChildModel.ModelName + ' - ' + StrModelInputFiles,
+          ChildNode);
+        FChildInputFileNodes.Add(ChildNode);
       end;
-      AddFilesToTree(InputFiles, AChildModel.ModelName + ' - ' + StrModelInputFiles,
-        ChildNode);
-      FChildInputFileNodes.Add(ChildNode);
     end;
 
 
@@ -322,9 +328,12 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
       AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      AddFilesToTree(AChildModel.ModelOutputFiles,
-        AChildModel.ModelName + ' - ' + StrModelOutputFiles, ChildNode);
-      FChildOutputFileNodes.Add(ChildNode);
+      if AChildModel <> nil then
+      begin
+        AddFilesToTree(AChildModel.ModelOutputFiles,
+          AChildModel.ModelName + ' - ' + StrModelOutputFiles, ChildNode);
+        FChildOutputFileNodes.Add(ChildNode);
+      end;
   end;
 
   AddFilesToTree(frmGoPhast.PhastModel.ModpathInputFiles, StrModpathInputFiles,
@@ -332,9 +341,12 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
       AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      AddFilesToTree(AChildModel.ModpathInputFiles,
-        AChildModel.ModelName + ' - ' + StrModpathInputFiles, ChildNode);
-      FChildModpathInputFileNodes.Add(ChildNode);
+      if AChildModel <> nil then
+      begin
+        AddFilesToTree(AChildModel.ModpathInputFiles,
+          AChildModel.ModelName + ' - ' + StrModpathInputFiles, ChildNode);
+        FChildModpathInputFileNodes.Add(ChildNode);
+      end;
   end;
 
   AddFilesToTree(frmGoPhast.PhastModel.ModpathOutputFiles, StrModpathOutputFiles,
@@ -342,9 +354,12 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    AddFilesToTree(AChildModel.ModpathOutputFiles,
-      AChildModel.ModelName + ' - ' + StrModpathOutputFiles, ChildNode);
-    FChildModpathOutputFileNodes.Add(ChildNode);
+    if AChildModel <> nil then
+    begin
+      AddFilesToTree(AChildModel.ModpathOutputFiles,
+        AChildModel.ModelName + ' - ' + StrModpathOutputFiles, ChildNode);
+      FChildModpathOutputFileNodes.Add(ChildNode);
+    end;
   end;
 
   AddFilesToTree(frmGoPhast.PhastModel.ZonebudgetInputFiles, StrZonebudgetInputFil,
@@ -352,9 +367,12 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    AddFilesToTree(AChildModel.ZonebudgetInputFiles,
-      AChildModel.ModelName + ' - ' + StrZonebudgetInputFil, ChildNode);
-    FChildZoneBudgetInputFileNodes.Add(ChildNode);
+    if AChildModel <> nil then
+    begin
+      AddFilesToTree(AChildModel.ZonebudgetInputFiles,
+        AChildModel.ModelName + ' - ' + StrZonebudgetInputFil, ChildNode);
+      FChildZoneBudgetInputFileNodes.Add(ChildNode);
+    end;
   end;
 
   AddFilesToTree(frmGoPhast.PhastModel.ZonebudgetOutputFiles, StrZonebudgetOutputFi,
@@ -362,9 +380,12 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    AddFilesToTree(AChildModel.ZonebudgetOutputFiles,
-      AChildModel.ModelName + ' - ' + StrZonebudgetOutputFi, ChildNode);
-    FChildZoneBudgetOutputFileNodes.Add(ChildNode);
+    if AChildModel <> nil then
+    begin
+      AddFilesToTree(AChildModel.ZonebudgetOutputFiles,
+        AChildModel.ModelName + ' - ' + StrZonebudgetOutputFi, ChildNode);
+      FChildZoneBudgetOutputFileNodes.Add(ChildNode);
+    end;
   end;
 
   AddFilesToTree(frmGoPhast.PhastModel.SwiObsExtractorInputFiles, StrSWIObservationExtr,
@@ -372,9 +393,12 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    AddFilesToTree(AChildModel.SwiObsExtractorInputFiles,
-      AChildModel.ModelName + ' - ' + StrSWIObservationExtr, ChildNode);
-    FChildZoneBudgetInputFileNodes.Add(ChildNode);
+    if AChildModel <> nil then
+    begin
+      AddFilesToTree(AChildModel.SwiObsExtractorInputFiles,
+        AChildModel.ModelName + ' - ' + StrSWIObservationExtr, ChildNode);
+      FChildZoneBudgetInputFileNodes.Add(ChildNode);
+    end;
   end;
 
   AddFilesToTree(frmGoPhast.PhastModel.SwiObsExtractorOutputFiles, StrSWIObservationExtrOut,
@@ -382,9 +406,12 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    AddFilesToTree(AChildModel.SwiObsExtractorOutputFiles,
-      AChildModel.ModelName + ' - ' + StrSWIObservationExtrOut, ChildNode);
-    FChildSwiObsExtractorInputFileNodes.Add(ChildNode);
+    if AChildModel <> nil then
+    begin
+      AddFilesToTree(AChildModel.SwiObsExtractorOutputFiles,
+        AChildModel.ModelName + ' - ' + StrSWIObservationExtrOut, ChildNode);
+      FChildSwiObsExtractorInputFileNodes.Add(ChildNode);
+    end;
   end;
 
   AddFilesToTree(frmGoPhast.PhastModel.Mt3dmsInputFiles, StrMT3DMSInput,
@@ -392,9 +419,12 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    AddFilesToTree(AChildModel.Mt3dmsInputFiles,
-      AChildModel.ModelName + ' - ' + StrMT3DMSInput, ChildNode);
-    FChildMt3dmsInputFileNodes.Add(ChildNode);
+    if AChildModel <> nil then
+    begin
+      AddFilesToTree(AChildModel.Mt3dmsInputFiles,
+        AChildModel.ModelName + ' - ' + StrMT3DMSInput, ChildNode);
+      FChildMt3dmsInputFileNodes.Add(ChildNode);
+    end;
   end;
 
   AddFilesToTree(frmGoPhast.PhastModel.Mt3dmsOutputFiles, StrMT3DMSOutput,
@@ -402,9 +432,12 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    AddFilesToTree(AChildModel.Mt3dmsOutputFiles,
-      AChildModel.ModelName + ' - ' + StrMT3DMSOutput, ChildNode);
-    FChildMt3dmsOutputFileNodes.Add(ChildNode);
+    if AChildModel <> nil then
+    begin
+      AddFilesToTree(AChildModel.Mt3dmsOutputFiles,
+        AChildModel.ModelName + ' - ' + StrMT3DMSOutput, ChildNode);
+      FChildMt3dmsOutputFileNodes.Add(ChildNode);
+    end;
   end;
 end;
 
@@ -498,6 +531,7 @@ var
   Undo2: TUndoFilesToArchive;
   AList: TFileLists;
   ChildIndex: Integer;
+  AChildModel: TChildModel;
 //  AChildModel: TChildModel;
   procedure AddNodeTextToStrings(RootNode: TTreeNode; FileNames: TStringList);
   var
@@ -534,19 +568,22 @@ begin
 
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
-//      AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-      AList := TFileLists.Create;
-      NewFiles.Add(AList);
-      AddNodeTextToStrings(FChildInputFileNodes[ChildIndex], AList.FModelInputFiles);
-      AddNodeTextToStrings(FChildOutputFileNodes[ChildIndex], AList.FModelOutputFiles);
-      AddNodeTextToStrings(FChildModpathInputFileNodes[ChildIndex], AList.FModpathInputFiles);
-      AddNodeTextToStrings(FChildModpathOutputFileNodes[ChildIndex], AList.FModpathOutputFiles);
-      AddNodeTextToStrings(FChildZoneBudgetInputFileNodes[ChildIndex], AList.FZonebudgetInputFiles);
-      AddNodeTextToStrings(FChildZoneBudgetOutputFileNodes[ChildIndex], AList.FZonebudgetOutputFiles);
-      AddNodeTextToStrings(FChildSwiObsExtractorInputFileNodes[ChildIndex], AList.FSwiObsExtInputFiles);
-      AddNodeTextToStrings(FChildSwiObsExtractorOutputFileNodes[ChildIndex], AList.FZonebudgetOutputFiles);
-      AddNodeTextToStrings(FChildMt3dmsInputFileNodes[ChildIndex], AList.FMt3dmsInputFiles);
-      AddNodeTextToStrings(FChildMt3dmsOutputFileNodes[ChildIndex], AList.FMt3dmsOutputFiles);
+      AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
+      if AChildModel <> nil then
+      begin
+        AList := TFileLists.Create;
+        NewFiles.Add(AList);
+        AddNodeTextToStrings(FChildInputFileNodes[ChildIndex], AList.FModelInputFiles);
+        AddNodeTextToStrings(FChildOutputFileNodes[ChildIndex], AList.FModelOutputFiles);
+        AddNodeTextToStrings(FChildModpathInputFileNodes[ChildIndex], AList.FModpathInputFiles);
+        AddNodeTextToStrings(FChildModpathOutputFileNodes[ChildIndex], AList.FModpathOutputFiles);
+        AddNodeTextToStrings(FChildZoneBudgetInputFileNodes[ChildIndex], AList.FZonebudgetInputFiles);
+        AddNodeTextToStrings(FChildZoneBudgetOutputFileNodes[ChildIndex], AList.FZonebudgetOutputFiles);
+        AddNodeTextToStrings(FChildSwiObsExtractorInputFileNodes[ChildIndex], AList.FSwiObsExtInputFiles);
+        AddNodeTextToStrings(FChildSwiObsExtractorOutputFileNodes[ChildIndex], AList.FZonebudgetOutputFiles);
+        AddNodeTextToStrings(FChildMt3dmsInputFileNodes[ChildIndex], AList.FMt3dmsInputFiles);
+        AddNodeTextToStrings(FChildMt3dmsOutputFileNodes[ChildIndex], AList.FMt3dmsOutputFiles);
+      end;
    end;
 
     Undo2 := TUndoFilesToArchive.Create(NewFiles);
@@ -730,17 +767,20 @@ begin
   begin
     AList := Files[ChildIndex+1];
     AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    AChildModel.FilesToArchive := AList.FAuxilliaryFiles;
-    AChildModel.ModelInputFiles := AList.FModelInputFiles;
-    AChildModel.ModelOutputFiles := AList.FModelOutputFiles;
-    AChildModel.ModpathInputFiles := AList.FModpathInputFiles;
-    AChildModel.ModpathOutputFiles := AList.FModpathOutputFiles;
-    AChildModel.ZonebudgetInputFiles := AList.FZonebudgetInputFiles;
-    AChildModel.ZonebudgetOutputFiles := AList.FZonebudgetOutputFiles;
-    AChildModel.SwiObsExtractorInputFiles := AList.FSwiObsExtInputFiles;
-    AChildModel.SwiObsExtractorOutputFiles := AList.FSwiObsExtOutputFiles;
-    AChildModel.Mt3dmsInputFiles := AList.FMt3dmsInputFiles;
-    AChildModel.Mt3dmsOutputFiles := AList.FMt3dmsOutputFiles;
+    if AChildModel <> nil then
+    begin
+      AChildModel.FilesToArchive := AList.FAuxilliaryFiles;
+      AChildModel.ModelInputFiles := AList.FModelInputFiles;
+      AChildModel.ModelOutputFiles := AList.FModelOutputFiles;
+      AChildModel.ModpathInputFiles := AList.FModpathInputFiles;
+      AChildModel.ModpathOutputFiles := AList.FModpathOutputFiles;
+      AChildModel.ZonebudgetInputFiles := AList.FZonebudgetInputFiles;
+      AChildModel.ZonebudgetOutputFiles := AList.FZonebudgetOutputFiles;
+      AChildModel.SwiObsExtractorInputFiles := AList.FSwiObsExtInputFiles;
+      AChildModel.SwiObsExtractorOutputFiles := AList.FSwiObsExtOutputFiles;
+      AChildModel.Mt3dmsInputFiles := AList.FMt3dmsInputFiles;
+      AChildModel.Mt3dmsOutputFiles := AList.FMt3dmsOutputFiles;
+    end;
   end;
 
 end;
@@ -774,19 +814,22 @@ begin
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-    AList := TFileLists.Create;
-    FOriginalFiles.Add(AList);
-    AList.FAuxilliaryFiles.AddStrings(AChildModel.FilesToArchive);
-    AList.FModelInputFiles.AddStrings(AChildModel.ModelInputFiles);
-    AList.FModelOutputFiles.AddStrings(AChildModel.ModelOutputFiles);
-    AList.FModpathInputFiles.AddStrings(AChildModel.ModpathInputFiles);
-    AList.FModpathOutputFiles.AddStrings(AChildModel.ModpathOutputFiles);
-    AList.FZonebudgetInputFiles.AddStrings(AChildModel.ZonebudgetInputFiles);
-    AList.FZonebudgetOutputFiles.AddStrings(AChildModel.ZonebudgetOutputFiles);
-    AList.FSwiObsExtInputFiles.AddStrings(AChildModel.SwiObsExtractorInputFiles);
-    AList.FSwiObsExtOutputFiles.AddStrings(AChildModel.SwiObsExtractorOutputFiles);
-    AList.FMt3dmsInputFiles.AddStrings(AChildModel.Mt3dmsInputFiles);
-    AList.FMt3dmsOutputFiles.AddStrings(AChildModel.Mt3dmsOutputFiles);
+    if AChildModel <> nil then
+    begin
+      AList := TFileLists.Create;
+      FOriginalFiles.Add(AList);
+      AList.FAuxilliaryFiles.AddStrings(AChildModel.FilesToArchive);
+      AList.FModelInputFiles.AddStrings(AChildModel.ModelInputFiles);
+      AList.FModelOutputFiles.AddStrings(AChildModel.ModelOutputFiles);
+      AList.FModpathInputFiles.AddStrings(AChildModel.ModpathInputFiles);
+      AList.FModpathOutputFiles.AddStrings(AChildModel.ModpathOutputFiles);
+      AList.FZonebudgetInputFiles.AddStrings(AChildModel.ZonebudgetInputFiles);
+      AList.FZonebudgetOutputFiles.AddStrings(AChildModel.ZonebudgetOutputFiles);
+      AList.FSwiObsExtInputFiles.AddStrings(AChildModel.SwiObsExtractorInputFiles);
+      AList.FSwiObsExtOutputFiles.AddStrings(AChildModel.SwiObsExtractorOutputFiles);
+      AList.FMt3dmsInputFiles.AddStrings(AChildModel.Mt3dmsInputFiles);
+      AList.FMt3dmsOutputFiles.AddStrings(AChildModel.Mt3dmsOutputFiles);
+    end;
   end;
 
   FNewFiles := NewFiles;

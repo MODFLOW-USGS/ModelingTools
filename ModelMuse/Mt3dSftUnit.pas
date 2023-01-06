@@ -646,11 +646,14 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TCustomSftReachTimeListLink;
-      for index := 0 to Link.TimeLists.Count - 1 do
+      if ChildModel <> nil then
       begin
-        ATimeList := Link.TimeLists[index];
-        ATimeList.Invalidate;
+        Link := TimeListLink.GetLink(ChildModel) as TCustomSftReachTimeListLink;
+        for index := 0 to Link.TimeLists.Count - 1 do
+        begin
+          ATimeList := Link.TimeLists[index];
+          ATimeList.Invalidate;
+        end;
       end;
     end;
   end;
@@ -1655,11 +1658,14 @@ begin
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
 
-      for CompIndex := 1 to NCOMP do
+      if ChildModel <> nil then
       begin
-        DataSetName := KSFTInitialConcentra + IntToStr(CompIndex);
-        DataArray := ChildModel.DataArrayManager.GetDataSetByName(DataSetName);
-        DataArray.Invalidate
+        for CompIndex := 1 to NCOMP do
+        begin
+          DataSetName := KSFTInitialConcentra + IntToStr(CompIndex);
+          DataArray := ChildModel.DataArrayManager.GetDataSetByName(DataSetName);
+          DataArray.Invalidate
+        end;
       end;
     end;
 
@@ -1803,11 +1809,14 @@ begin
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
 
-      for CompIndex := 1 to NCOMP do
+      if ChildModel <> nil then
       begin
-        DataSetName := KSFTDispersion + IntToStr(CompIndex);
-        DataArray := ChildModel.DataArrayManager.GetDataSetByName(DataSetName);
-        DataArray.Invalidate
+        for CompIndex := 1 to NCOMP do
+        begin
+          DataSetName := KSFTDispersion + IntToStr(CompIndex);
+          DataArray := ChildModel.DataArrayManager.GetDataSetByName(DataSetName);
+          DataArray.Invalidate
+        end;
       end;
     end;
 

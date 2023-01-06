@@ -1813,10 +1813,13 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        if (SelectedRow >= ChildModel.FirstRow)
-          and (SelectedRow <= ChildModel.LastRow) then
+        if ChildModel <> nil then
         begin
-          ChildModel.ModflowGrid.DrawFront(BitMap, ZoomBox);
+          if (SelectedRow >= ChildModel.FirstRow)
+            and (SelectedRow <= ChildModel.LastRow) then
+          begin
+            ChildModel.ModflowGrid.DrawFront(BitMap, ZoomBox);
+          end;
         end;
       end;
     end;
@@ -1988,10 +1991,13 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        if (SelectedColumn >= ChildModel.FirstCol)
-          and (SelectedColumn <= ChildModel.LastCol) then
+        if ChildModel <> nil then
         begin
-          ChildModel.ModflowGrid.DrawSide(BitMap, ZoomBox);
+          if (SelectedColumn >= ChildModel.FirstCol)
+            and (SelectedColumn <= ChildModel.LastCol) then
+          begin
+            ChildModel.ModflowGrid.DrawSide(BitMap, ZoomBox);
+          end;
         end;
       end;
     end;
@@ -2019,7 +2025,10 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModelItem := LocalModel.ChildModels[ChildIndex];
-        ChildModelItem.ChildModel.ModflowGrid.DrawTop(BitMap, ZoomBox);
+        if ChildModelItem.ChildModel <> nil then
+        begin
+          ChildModelItem.ChildModel.ModflowGrid.DrawTop(BitMap, ZoomBox);
+        end;
       end;
     end;
   end;
@@ -3185,13 +3194,16 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildDataArray := GetChildDataArray(Value, ChildModel);
-        if (Value <> nil) and (ChildDataArray <> nil) then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.ContourLimits := Value.ContourLimits;
-          ChildDataArray.Contours := Value.Contours;
+          ChildDataArray := GetChildDataArray(Value, ChildModel);
+          if (Value <> nil) and (ChildDataArray <> nil) then
+          begin
+            ChildDataArray.ContourLimits := Value.ContourLimits;
+            ChildDataArray.Contours := Value.Contours;
+          end;
+          ChildModel.Grid.FrontContourDataSet := ChildDataArray;
         end;
-        ChildModel.Grid.FrontContourDataSet := ChildDataArray;
       end;
     end;
   end;
@@ -3217,12 +3229,15 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildDataArray := GetChildDataArray(Value, ChildModel);
-        if (Value <> nil) and (ChildDataArray <> nil) then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.Limits := Value.Limits;
+          ChildDataArray := GetChildDataArray(Value, ChildModel);
+          if (Value <> nil) and (ChildDataArray <> nil) then
+          begin
+            ChildDataArray.Limits := Value.Limits;
+          end;
+          ChildModel.Grid.FrontDataSet := ChildDataArray;
         end;
-        ChildModel.Grid.FrontDataSet := ChildDataArray;
       end;
     end;
   end;
@@ -3430,13 +3445,16 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildDataArray := GetChildDataArray(Value, ChildModel);
-        if (Value <> nil) and (ChildDataArray <> nil) then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.ContourLimits := Value.ContourLimits;
-          ChildDataArray.Contours := Value.Contours;
+          ChildDataArray := GetChildDataArray(Value, ChildModel);
+          if (Value <> nil) and (ChildDataArray <> nil) then
+          begin
+            ChildDataArray.ContourLimits := Value.ContourLimits;
+            ChildDataArray.Contours := Value.Contours;
+          end;
+          ChildModel.Grid.SideContourDataSet := ChildDataArray;
         end;
-        ChildModel.Grid.SideContourDataSet := ChildDataArray;
       end;
     end;
   end;
@@ -3462,12 +3480,15 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildDataArray := GetChildDataArray(Value, ChildModel);
-        if (Value <> nil) and (ChildDataArray <> nil) then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.Limits := Value.Limits;
+          ChildDataArray := GetChildDataArray(Value, ChildModel);
+          if (Value <> nil) and (ChildDataArray <> nil) then
+          begin
+            ChildDataArray.Limits := Value.Limits;
+          end;
+          ChildModel.Grid.SideDataSet := ChildDataArray;
         end;
-        ChildModel.Grid.SideDataSet := ChildDataArray;
       end;
     end;
   end;
@@ -3493,13 +3514,16 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildDataArray := GetChildDataArray(Value, ChildModel);
-        if (Value <> nil) and (ChildDataArray <> nil) then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.ContourLimits := Value.ContourLimits;
-          ChildDataArray.Contours := Value.Contours;
+          ChildDataArray := GetChildDataArray(Value, ChildModel);
+          if (Value <> nil) and (ChildDataArray <> nil) then
+          begin
+            ChildDataArray.ContourLimits := Value.ContourLimits;
+            ChildDataArray.Contours := Value.Contours;
+          end;
+          ChildModel.Grid.ThreeDContourDataSet := ChildDataArray;
         end;
-        ChildModel.Grid.ThreeDContourDataSet := ChildDataArray;
       end;
     end;
   end;
@@ -3525,12 +3549,15 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildDataArray := GetChildDataArray(Value, ChildModel);
-        if (Value <> nil) and (ChildDataArray <> nil) then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.Limits := Value.Limits;
+          ChildDataArray := GetChildDataArray(Value, ChildModel);
+          if (Value <> nil) and (ChildDataArray <> nil) then
+          begin
+            ChildDataArray.Limits := Value.Limits;
+          end;
+          ChildModel.Grid.ThreeDDataSet := ChildDataArray;
         end;
-        ChildModel.Grid.ThreeDDataSet := ChildDataArray;
       end;
     end;
   end;
@@ -3556,13 +3583,16 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildDataArray := GetChildDataArray(Value, ChildModel);
-        if (Value <> nil) and (ChildDataArray <> nil) then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.ContourLimits := Value.ContourLimits;
-          ChildDataArray.Contours := Value.Contours;
+          ChildDataArray := GetChildDataArray(Value, ChildModel);
+          if (Value <> nil) and (ChildDataArray <> nil) then
+          begin
+            ChildDataArray.ContourLimits := Value.ContourLimits;
+            ChildDataArray.Contours := Value.Contours;
+          end;
+          ChildModel.Grid.TopContourDataSet := ChildDataArray;
         end;
-        ChildModel.Grid.TopContourDataSet := ChildDataArray;
       end;
     end;
   end;
@@ -3588,12 +3618,15 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        ChildDataArray := GetChildDataArray(Value, ChildModel);
-        if (Value <> nil) and (ChildDataArray <> nil) then
+        if ChildModel <> nil then
         begin
-          ChildDataArray.Limits := Value.Limits;
+          ChildDataArray := GetChildDataArray(Value, ChildModel);
+          if (Value <> nil) and (ChildDataArray <> nil) then
+          begin
+            ChildDataArray.Limits := Value.Limits;
+          end;
+          ChildModel.Grid.TopDataSet := ChildDataArray;
         end;
-        ChildModel.Grid.TopDataSet := ChildDataArray;
       end;
     end;
   end;

@@ -6,7 +6,6 @@ inherited frmHUF_Layers: TfrmHUF_Layers
   ClientWidth = 525
   ExplicitWidth = 541
   ExplicitHeight = 392
-  PixelsPerInch = 96
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 137
@@ -444,7 +443,6 @@ inherited frmHUF_Layers: TfrmHUF_Layers
         Top = 35
         Width = 375
         Height = 244
-        OnClickCheck = clbItemsToPrintClickCheck
         Align = alBottom
         Anchors = [akLeft, akTop, akRight, akBottom]
         ItemHeight = 18
@@ -455,6 +453,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
           'Specific storage (SS)'
           'Specific yield (SY)')
         TabOrder = 1
+        OnClickCheck = clbItemsToPrintClickCheck
       end
       object comboPrintFormat: TJvImageComboBox
         Left = 2

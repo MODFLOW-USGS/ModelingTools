@@ -803,8 +803,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TCustomSwrTimeListLink;
-      Link.FSwrData.Invalidate;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TCustomSwrTimeListLink;
+        Link.FSwrData.Invalidate;
+      end;
     end;
   end;
 end;
@@ -1444,7 +1447,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSwrRainfall(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSwrRainfall(self);
+      end;
     end;
   end;
 end;
@@ -1578,7 +1584,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSwrEvaporation(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSwrEvaporation(self);
+      end;
     end;
   end;
 end;
@@ -1701,7 +1710,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSwrLateralInflow(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSwrLateralInflow(self);
+      end;
     end;
   end;
 end;
@@ -1824,7 +1836,10 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateMfSwrStage(self);
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfSwrStage(self);
+      end;
     end;
   end;
 end;

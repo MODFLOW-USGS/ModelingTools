@@ -316,7 +316,10 @@ begin
       for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
       begin
         ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-        NewChildModelCreated(ChildModel);
+        if ChildModel <> nil then
+        begin
+          NewChildModelCreated(ChildModel);
+        end;
       end;
     end;
   end;
@@ -538,10 +541,13 @@ begin
       for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
       begin
         AChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-        if AChildModel.ModelName = FChildModelName then
+        if AChildModel <> nil then
         begin
-          FChildModel := AChildModel;
-          break;
+          if AChildModel.ModelName = FChildModelName then
+          begin
+            FChildModel := AChildModel;
+            break;
+          end;
         end;
       end;
     end;

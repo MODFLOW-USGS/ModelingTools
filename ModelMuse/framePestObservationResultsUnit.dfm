@@ -144,9 +144,6 @@ object framePestObservationResults: TframePestObservationResults
             Enabled = True
             ExplicitHeight = 23
           end
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 23
-          end
         end
         inline framelmtMaxResidual: TframeDisplayLimit
           Left = 252
@@ -160,9 +157,6 @@ object framePestObservationResults: TframePestObservationResults
           inherited cbCheck: TCheckBox
             Height = 23
             Enabled = True
-            ExplicitHeight = 23
-          end
-          inherited comboBoolLimit: TComboBox
             ExplicitHeight = 23
           end
         end
@@ -180,9 +174,6 @@ object framePestObservationResults: TframePestObservationResults
             Enabled = True
             ExplicitHeight = 23
           end
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 23
-          end
         end
         inline framelmtMinResidual: TframeDisplayLimit
           Left = 3
@@ -196,9 +187,6 @@ object framePestObservationResults: TframePestObservationResults
           inherited cbCheck: TCheckBox
             Height = 23
             Enabled = True
-            ExplicitHeight = 23
-          end
-          inherited comboBoolLimit: TComboBox
             ExplicitHeight = 23
           end
         end
@@ -216,9 +204,6 @@ object framePestObservationResults: TframePestObservationResults
             Enabled = True
             ExplicitTop = 3
           end
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 23
-          end
         end
         inline framelmtMaxWeightedResidual: TframeDisplayLimit
           Left = 252
@@ -231,9 +216,6 @@ object framePestObservationResults: TframePestObservationResults
           ExplicitTop = 160
           inherited cbCheck: TCheckBox
             Enabled = True
-          end
-          inherited comboBoolLimit: TComboBox
-            ExplicitHeight = 23
           end
         end
       end

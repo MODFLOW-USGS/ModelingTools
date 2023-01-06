@@ -489,11 +489,14 @@ begin
       for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
       begin
         ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-        comboModelSelection.Items.AddObject(ChildModel.DisplayName, ChildModel);
-        LocalEndPoints := TEndPointReader.Create(ChildModel);
-        FEndPointsList.Add(LocalEndPoints);
-        EndPoints := ChildModel.EndPoints;
-        LocalEndPoints.Assign(EndPoints);
+        if ChildModel <> nil then
+        begin
+          comboModelSelection.Items.AddObject(ChildModel.DisplayName, ChildModel);
+          LocalEndPoints := TEndPointReader.Create(ChildModel);
+          FEndPointsList.Add(LocalEndPoints);
+          EndPoints := ChildModel.EndPoints;
+          LocalEndPoints.Assign(EndPoints);
+        end;
       end;
     end
     else

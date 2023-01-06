@@ -6,7 +6,6 @@ inherited frmExportShapefile: TfrmExportShapefile
   ClientWidth = 449
   ExplicitWidth = 465
   ExplicitHeight = 594
-  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -333,8 +332,8 @@ inherited frmExportShapefile: TfrmExportShapefile
       Height = 26
       Tree.Left = 0
       Tree.Top = 0
-      Tree.Width = 304
-      Tree.Height = 201
+      Tree.Width = 624
+      Tree.Height = 441
       Tree.Align = alClient
       Tree.Colors.BorderColor = 15987699
       Tree.Colors.DisabledColor = clGray

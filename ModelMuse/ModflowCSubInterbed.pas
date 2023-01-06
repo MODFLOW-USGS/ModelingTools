@@ -378,8 +378,11 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      CreateOrRenameDataArray(InterbedName, rdtDouble, Extension, DisplayExtension,
-        NewInterbedName, ChildModel);
+      if ChildModel <> nil then
+      begin
+        CreateOrRenameDataArray(InterbedName, rdtDouble, Extension, DisplayExtension,
+          NewInterbedName, ChildModel);
+      end;
     end;
   end;
 end;

@@ -445,7 +445,10 @@ begin
         for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
         begin
           ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
-          comboModel.Items.AddObject(ChildModel.ModelName, ChildModel);
+          if ChildModel <> nil then
+          begin
+            comboModel.Items.AddObject(ChildModel.ModelName, ChildModel);
+          end;
         end;
       end;
     else

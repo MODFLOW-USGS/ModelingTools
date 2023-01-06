@@ -10796,12 +10796,14 @@ const
 //    '5.1.1.4'  Bug fix: Fixed bug that would cause the ETS package to be
 //                imported incorrectly if the evaporation segments were reused.
 //               Bug fix: Fixed importing UZF data from a Shapefile.
+//    '5.1.1.5'  Bug fix: Fixed a bug that could cause an access violation
+//                when activating MODFLOW-LGR.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.4';
+  IIModelVersion = '5.1.1.5';
 
 function IModelVersion: string;
 begin
@@ -10991,11 +10993,14 @@ begin
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
     ChildItem := ChildModels[ChildIndex];
-    ChildDataArray := TDataArrayType(DataSet.ClassType).Create(ChildItem.ChildModel);
-    ChildDataArray.AssignProperties(DataSet);
-    ChildItem.ChildModel.DataArrayManager.AddDataSet(ChildDataArray);
-    ChildDataArray.Formula := DataSet.Formula;
-    DataSet.TalksTo(ChildDataArray);
+    if ChildItem.ChildModel <> nil then
+    begin
+      ChildDataArray := TDataArrayType(DataSet.ClassType).Create(ChildItem.ChildModel);
+      ChildDataArray.AssignProperties(DataSet);
+      ChildItem.ChildModel.DataArrayManager.AddDataSet(ChildDataArray);
+      ChildDataArray.Formula := DataSet.Formula;
+      DataSet.TalksTo(ChildDataArray);
+    end;
   end;
 end;
 
@@ -11032,7 +11037,8 @@ begin
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
         ChildModel := ChildModels[ChildIndex].ChildModel;
-        if (ChildModel.FirstRow >= 0) and (ChildModel.LastRow >= 0)
+        if (ChildModel <> nil) and (ChildModel.FirstRow >= 0)
+          and (ChildModel.LastRow >= 0)
           and (ChildModel.FirstCol >= 0) and (ChildModel.LastCol >= 0) then
         begin
           for LayerIndex := 0 to ADataArray.LayerCount - 1 do
@@ -11225,11 +11231,14 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := not ChildModel.ModflowPackages.Mt3dmsDispersion.IsSelected
-        or ChildModel.ModflowPackages.Mt3dmsDispersion.MultiDifussion;
-      if not result then
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := not ChildModel.ModflowPackages.Mt3dmsDispersion.IsSelected
+          or ChildModel.ModflowPackages.Mt3dmsDispersion.MultiDifussion;
+        if not result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -11246,7 +11255,10 @@ begin
     for Index := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[Index].ChildModel;
-      ChildModel.CanUpdateGrid := True;
+      if ChildModel <> nil then
+      begin
+        ChildModel.CanUpdateGrid := True;
+      end;
     end;
   end;
 end;
@@ -11263,11 +11275,14 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := ChildModel.ModflowPackages.Mt3dmsDispersion.IsSelected
-        and ChildModel.ModflowPackages.Mt3dmsDispersion.MultiDifussion;
-      if result then
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := ChildModel.ModflowPackages.Mt3dmsDispersion.IsSelected
+          and ChildModel.ModflowPackages.Mt3dmsDispersion.MultiDifussion;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -11285,11 +11300,14 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
-        and (ChildModel.ModflowPackages.Mt3dmsChemReact.KineticChoice <> kcNone);
-      if result then
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
+          and (ChildModel.ModflowPackages.Mt3dmsChemReact.KineticChoice <> kcNone);
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -11307,11 +11325,14 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
-        and (ChildModel.ModflowPackages.Mt3dmsChemReact.OtherInitialConcChoice = oicUse);
-      if result then
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
+          and (ChildModel.ModflowPackages.Mt3dmsChemReact.OtherInitialConcChoice = oicUse);
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -11329,11 +11350,14 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
-        and (ChildModel.ModflowPackages.Mt3dmsChemReact.SorptionChoice <> scNone);
-      if result then
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
+          and (ChildModel.ModflowPackages.Mt3dmsChemReact.SorptionChoice <> scNone);
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -11351,13 +11375,16 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
-        and (ChildModel.ModflowPackages.Mt3dmsChemReact.SorptionChoice = scDualWithDifferingConstants);
-      if result then
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
+          and (ChildModel.ModflowPackages.Mt3dmsChemReact.SorptionChoice = scDualWithDifferingConstants);
+        if result then
+        begin
+          Exit;
+        end;
       end;
-    end;
+      end;
   end;
 end;
 
@@ -11373,11 +11400,14 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
-        and (ChildModel.ModflowPackages.Mt3dmsChemReact.KineticChoice = kcMonod);
-      if result then
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
+          and (ChildModel.ModflowPackages.Mt3dmsChemReact.KineticChoice = kcMonod);
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -11395,11 +11425,14 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := ChildModel.ModflowPackages.UzfMf6Package.IsSelected
-        and ChildModel.GWTUsed;
-      if result then
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := ChildModel.ModflowPackages.UzfMf6Package.IsSelected
+          and ChildModel.GWTUsed;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -11408,14 +11441,18 @@ end;
 function TPhastModel.AquiferPropertiesUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited AquiferPropertiesUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.AquiferPropertiesUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.AquiferPropertiesUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -11510,14 +11547,18 @@ end;
 function TPhastModel.BcfUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited BcfUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.BcfUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.BcfUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -11747,6 +11788,7 @@ var
   ModelRootName: string;
   Mt3dVersion: TMt3dVersion;
   Mt3dPrefix: string;
+  ChildModel: TChildModel;
   procedure RemoveProgramFilesFromList;
   var
     ProgramIndex: Integer;
@@ -11892,7 +11934,11 @@ begin
       FileNames.Add(FilesToArchive);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        FileNames.Add(ChildModels[ChildIndex].ChildModel.FilesToArchive);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          FileNames.Add(ChildModel.FilesToArchive);
+        end;
       end;
       RemoveProgramFilesFromList;
       AddFiles(StrAncillary, StrAncillary, FileNames);
@@ -11901,7 +11947,11 @@ begin
       FileNames.Add(ModelInputFiles);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        FileNames.Add(ChildModels[ChildIndex].ChildModel.ModelInputFiles);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          FileNames.Add(ChildModel.ModelInputFiles);
+        end;
       end;
       RemoveProgramFilesFromList;
       AddFiles(StrModelInputFiles, ModelRootName, FileNames);
@@ -11910,7 +11960,11 @@ begin
       FileNames.Add(ModelOutputFiles);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        FileNames.Add(ChildModels[ChildIndex].ChildModel.ModelOutputFiles);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          FileNames.Add(ChildModel.ModelOutputFiles);
+        end;
       end;
       AddFiles(StrModelOutputFiles, ModelRootName, FileNames);
 
@@ -11918,7 +11972,11 @@ begin
       FileNames.Add(ModpathInputFiles);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        FileNames.Add(ChildModels[ChildIndex].ChildModel.ModpathInputFiles);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          FileNames.Add(ChildModel.ModpathInputFiles);
+        end;
       end;
       RemoveProgramFilesFromList;
       AddFiles(StrModelInputFiles, ModelRootName + '_MODPATH', FileNames);
@@ -11928,7 +11986,11 @@ begin
       FileNames.Add(ModpathOutputFiles);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        FileNames.Add(ChildModels[ChildIndex].ChildModel.ModpathOutputFiles);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          FileNames.Add(ChildModel.ModpathOutputFiles);
+        end;
       end;
       AddFiles(StrModelOutputFiles, ModelRootName + '_MODPATH', FileNames);
 //      AddFiles('Modpath_Output_Files', FileNames);
@@ -11937,7 +11999,11 @@ begin
       FileNames.Add(ZoneBudgetInputFiles);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        FileNames.Add(ChildModels[ChildIndex].ChildModel.ZoneBudgetInputFiles);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          FileNames.Add(ChildModel.ZoneBudgetInputFiles);
+        end;
       end;
       RemoveProgramFilesFromList;
       AddFiles(StrModelInputFiles,ModelRootName + '_ZoneBudget', FileNames);
@@ -11947,7 +12013,11 @@ begin
       FileNames.Add(ZoneBudgetOutputFiles);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        FileNames.Add(ChildModels[ChildIndex].ChildModel.ZoneBudgetOutputFiles);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          FileNames.Add(ChildModel.ZoneBudgetOutputFiles);
+        end;
       end;
       AddFiles(StrModelOutputFiles, ModelRootName + '_ZoneBudget', FileNames);
 //      AddFiles('ZoneBudget_Output_Files', FileNames);
@@ -11961,9 +12031,11 @@ begin
       begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
-          if ChildModels[ChildIndex].ChildModel.ModflowPackages.Mt3dBasic.IsSelected  then
+          ChildModel := ChildModels[ChildIndex].ChildModel;
+          if (ChildModel <> nil)
+            and ChildModel.ModflowPackages.Mt3dBasic.IsSelected then
           begin
-            Mt3dVersion := ChildModels[ChildIndex].ChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion;
+            Mt3dVersion := ChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion;
             break;
           end;
         end;
@@ -11984,7 +12056,11 @@ begin
       FileNames.Add(Mt3dmsInputFiles);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        FileNames.Add(ChildModels[ChildIndex].ChildModel.Mt3dmsInputFiles);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          FileNames.Add(ChildModel.Mt3dmsInputFiles);
+        end;
       end;
       RemoveProgramFilesFromList;
       AddFiles(StrModelInputFiles, ModelRootName + Mt3dPrefix, FileNames);
@@ -11994,7 +12070,11 @@ begin
       FileNames.Add(Mt3dmsOutputFiles);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        FileNames.Add(ChildModels[ChildIndex].ChildModel.Mt3dmsOutputFiles);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          FileNames.Add(ChildModel.Mt3dmsOutputFiles);
+        end;
       end;
       AddFiles(StrModelOutputFiles, ModelRootName + Mt3dPrefix, FileNames);
 //      AddFiles('Mt3dms_Output_Files', FileNames);
@@ -12127,8 +12207,11 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildList := ChildModel.GetTimeListByName(TimeList.Name);
-      ChildModel.UpdateSideTimeDataSet(ChildList, Time);
+      if ChildModel <> nil then
+      begin
+        ChildList := ChildModel.GetTimeListByName(TimeList.Name);
+        ChildModel.UpdateSideTimeDataSet(ChildList, Time);
+      end;
     end;
   end;
 end;
@@ -12469,14 +12552,19 @@ end;
 function TPhastModel.HufReferenceSurfaceNeeded(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited HufReferenceSurfaceNeeded(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.HufReferenceSurfaceNeeded(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.HufReferenceSurfaceNeeded(Sender);
+      end;
     end;
   end;
 end;
@@ -12690,14 +12778,19 @@ end;
 function TPhastModel.LongitudinalDispersionUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited LongitudinalDispersionUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.LongitudinalDispersionUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.LongitudinalDispersionUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -12963,7 +13056,10 @@ begin
 
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
-    ChildModels[ChildIndex].ChildModel.Clear;
+    if ChildModels[ChildIndex].ChildModel <> nil then
+    begin
+      ChildModels[ChildIndex].ChildModel.Clear;
+    end;
   end;
   ChildModels.Clear;
   ModelSelection := msUndefined;
@@ -13068,14 +13164,19 @@ end;
 function TPhastModel.ExchangeUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ExchangeUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ExchangeUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ExchangeUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -13211,14 +13312,19 @@ end;
 function TPhastModel.ChemistryUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ChemistryUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ChemistryUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ChemistryUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -13265,8 +13371,11 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildModel.FSwiObsExtractorInputFiles.Clear;
-      ChildModel.FSwiObsExtractorOutputFiles.Clear;
+      if ChildModel <> nil then
+      begin
+        ChildModel.FSwiObsExtractorInputFiles.Clear;
+        ChildModel.FSwiObsExtractorOutputFiles.Clear;
+      end;
     end;
   end;
 end;
@@ -13292,7 +13401,10 @@ begin
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
         ChildModel := ChildModels[ChildIndex].ChildModel;
-        ChildModel.RenameOldVerticalLeakance
+        if ChildModel <> nil then
+        begin
+          ChildModel.RenameOldVerticalLeakance
+        end;
       end;
       for Index := 0 to FDataArrayManager.DataSetCount - 1 do
       begin
@@ -13300,12 +13412,15 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           ChildModel := ChildModels[ChildIndex].ChildModel;
-          ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(ADataSet.Name);
-          Assert(ChildDataArray <> nil);
-          ChildDataArray.AssignProperties(ADataSet);
-          ChildDataArray.Formula := ADataSet.Formula;
-          ChildDataArray.Limits := ADataSet.Limits;
-          ChildDataArray.ContourLimits := ADataSet.ContourLimits;
+          if ChildModel <> nil then
+          begin
+            ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(ADataSet.Name);
+            Assert(ChildDataArray <> nil);
+            ChildDataArray.AssignProperties(ADataSet);
+            ChildDataArray.Formula := ADataSet.Formula;
+            ChildDataArray.Limits := ADataSet.Limits;
+            ChildDataArray.ContourLimits := ADataSet.ContourLimits;
+          end;
         end;
       end;
     end;
@@ -13479,15 +13594,18 @@ begin
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
     ChildModel := ChildModels[ChildIndex].ChildModel;
-    if Value = nil then
+    if ChildModel <> nil then
     begin
-      ChildTimeList := nil;
-    end
-    else
-    begin
-      ChildTimeList := ChildModel.GetTimeListByName(Value.Name)
+      if Value = nil then
+      begin
+        ChildTimeList := nil;
+      end
+      else
+      begin
+        ChildTimeList := ChildModel.GetTimeListByName(Value.Name)
+      end;
+      ChildModel.TopTimeList := ChildTimeList;
     end;
-    ChildModel.TopTimeList := ChildTimeList;
   end;
 end;
 
@@ -13507,14 +13625,19 @@ end;
 function TPhastModel.PorosityUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited PorosityUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.PorosityUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.PorosityUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -14391,15 +14514,18 @@ begin
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
     ChildModel := ChildModels[ChildIndex].ChildModel;
-    if Value = nil then
+    if ChildModel <> nil then
     begin
-      ChildTimeList := nil;
-    end
-    else
-    begin
-      ChildTimeList := ChildModel.GetTimeListByName(Value.Name)
+      if Value = nil then
+      begin
+        ChildTimeList := nil;
+      end
+      else
+      begin
+        ChildTimeList := ChildModel.GetTimeListByName(Value.Name)
+      end;
+      ChildModel.FrontTimeList := ChildTimeList;
     end;
-    ChildModel.FrontTimeList := ChildTimeList;
   end;
 end;
 
@@ -14632,7 +14758,11 @@ begin
     end;
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      ChildModels[ChildIndex].ChildModel.UpdateGrid;
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.UpdateGrid;
+      end;
     end;
   end;
 end;
@@ -14663,10 +14793,13 @@ begin
       ModelIndex := -1;
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        if ChildModels[ChildIndex].ChildModel = SelectedModel then
+        if ChildModels[ChildIndex].ChildModel <> nil then
         begin
-          ModelIndex := ChildIndex;
-          break;
+          if ChildModels[ChildIndex].ChildModel = SelectedModel then
+          begin
+            ModelIndex := ChildIndex;
+            break;
+          end;
         end;
       end;
       Assert(ModelIndex >= 0);
@@ -14710,10 +14843,13 @@ begin
       ModelIndex := -1;
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        if ChildModels[ChildIndex].ChildModel = SelectedModel then
+        if ChildModels[ChildIndex].ChildModel <> nil then
         begin
-          ModelIndex := ChildIndex;
-          break;
+          if ChildModels[ChildIndex].ChildModel = SelectedModel then
+          begin
+            ModelIndex := ChildIndex;
+            break;
+          end;
         end;
       end;
       Assert(ModelIndex >= 0);
@@ -14757,10 +14893,13 @@ begin
       ModelIndex := -1;
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        if ChildModels[ChildIndex].ChildModel = SelectedModel then
+        if ChildModels[ChildIndex].ChildModel <> nil then
         begin
-          ModelIndex := ChildIndex;
-          break;
+          if ChildModels[ChildIndex].ChildModel = SelectedModel then
+          begin
+            ModelIndex := ChildIndex;
+            break;
+          end;
         end;
       end;
       Assert(ModelIndex >= 0);
@@ -14955,12 +15094,15 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(ADataSet.Name);
-      Assert(ChildDataArray <> nil);
-      ChildDataArray.AssignProperties(ADataSet);
-      ChildDataArray.Formula := ADataSet.Formula;
-      ChildDataArray.Limits := ADataSet.Limits;
-      ChildDataArray.ContourLimits := ADataSet.ContourLimits;
+      if ChildModel <> nil then
+      begin
+        ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(ADataSet.Name);
+        Assert(ChildDataArray <> nil);
+        ChildDataArray.AssignProperties(ADataSet);
+        ChildDataArray.Formula := ADataSet.Formula;
+        ChildDataArray.Limits := ADataSet.Limits;
+        ChildDataArray.ContourLimits := ADataSet.ContourLimits;
+      end;
     end;
   end;
 
@@ -14995,7 +15137,10 @@ begin
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
     ChildModel := ChildModels[ChildIndex].ChildModel;
-    ChildModel.UpdateDataArrayParameterUsed;
+    if ChildModel <> nil then
+    begin
+      ChildModel.UpdateDataArrayParameterUsed;
+    end;
   end;
 end;
 
@@ -15007,14 +15152,17 @@ begin
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
     ChildModel := ChildModels[ChildIndex].ChildModel;
-    ChildModel.UpdateDataSetConnections;
-    TopGridObserver.TalksTo(ChildModel.TopGridObserver);
-    ThreeDGridObserver.TalksTo(ChildModel.ThreeDGridObserver);
-    HufKxNotifier.TalksTo(ChildModel.HufKxNotifier);
-    HufKyNotifier.TalksTo(ChildModel.HufKyNotifier);
-    HufKzNotifier.TalksTo(ChildModel.HufKzNotifier);
-    HufSsNotifier.TalksTo(ChildModel.HufSsNotifier);
-    HufSyNotifier.TalksTo(ChildModel.HufSyNotifier);
+    if ChildModel <> nil then
+    begin
+      ChildModel.UpdateDataSetConnections;
+      TopGridObserver.TalksTo(ChildModel.TopGridObserver);
+      ThreeDGridObserver.TalksTo(ChildModel.ThreeDGridObserver);
+      HufKxNotifier.TalksTo(ChildModel.HufKxNotifier);
+      HufKyNotifier.TalksTo(ChildModel.HufKyNotifier);
+      HufKzNotifier.TalksTo(ChildModel.HufKzNotifier);
+      HufSsNotifier.TalksTo(ChildModel.HufSsNotifier);
+      HufSyNotifier.TalksTo(ChildModel.HufSyNotifier);
+    end;
   end;
 end;
 
@@ -15424,10 +15572,13 @@ var
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          OtherIndex := AChildModel.FFilesToArchive.IndexOf(OtherFiles[index]);
-          if OtherIndex >= 0 then
+          if AChildModel <> nil then
           begin
-            AChildModel.FFilesToArchive.Delete(OtherIndex);
+            OtherIndex := AChildModel.FFilesToArchive.IndexOf(OtherFiles[index]);
+            if OtherIndex >= 0 then
+            begin
+              AChildModel.FFilesToArchive.Delete(OtherIndex);
+            end;
           end;
         end;
       end;
@@ -15454,17 +15605,20 @@ begin
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
         AChildModel := ChildModels[ChildIndex].ChildModel;
-        SLList.Add(AChildModel.ModelInputFiles);
-        SLList.Add(AChildModel.ExternalFiles);
-        SLList.Add(AChildModel.ModelOutputFiles);
-        SLList.Add(AChildModel.ModpathInputFiles);
-        SLList.Add(AChildModel.ModpathInputFiles);
-        SLList.Add(AChildModel.ZonebudgetInputFiles);
-        SLList.Add(AChildModel.ZonebudgetInputFiles);
-        SLList.Add(AChildModel.SwiObsExtractorInputFiles);
-        SLList.Add(AChildModel.SwiObsExtractorOutputFiles);
-        SLList.Add(AChildModel.Mt3dmsInputFiles);
-        SLList.Add(AChildModel.Mt3dmsInputFiles);
+        if AChildModel <> nil then
+        begin
+          SLList.Add(AChildModel.ModelInputFiles);
+          SLList.Add(AChildModel.ExternalFiles);
+          SLList.Add(AChildModel.ModelOutputFiles);
+          SLList.Add(AChildModel.ModpathInputFiles);
+          SLList.Add(AChildModel.ModpathInputFiles);
+          SLList.Add(AChildModel.ZonebudgetInputFiles);
+          SLList.Add(AChildModel.ZonebudgetInputFiles);
+          SLList.Add(AChildModel.SwiObsExtractorInputFiles);
+          SLList.Add(AChildModel.SwiObsExtractorOutputFiles);
+          SLList.Add(AChildModel.Mt3dmsInputFiles);
+          SLList.Add(AChildModel.Mt3dmsInputFiles);
+        end;
       end;
     end;
     for SLIndex := 0 to SLList.Count - 1 do
@@ -15502,7 +15656,10 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          BinaryFiles.AddStrings(AChildModel.FBinaryFiles);
+          if AChildModel <> nil then
+          begin
+            BinaryFiles.AddStrings(AChildModel.FBinaryFiles);
+          end;
         end;
       end;
       AddModelProgramsToList(BinaryFiles);
@@ -15518,16 +15675,19 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.FilesToArchive);
-          RemoveBinaryFiles(FileNames);
-
-          FileIndex := FileNames.IndexOf(ModelFileName);
-          if FileIndex >= 0 then
+          if AChildModel <> nil then
           begin
-            FileNames.Delete(FileIndex);
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.FilesToArchive);
+            RemoveBinaryFiles(FileNames);
+
+            FileIndex := FileNames.IndexOf(ModelFileName);
+            if FileIndex >= 0 then
+            begin
+              FileNames.Delete(FileIndex);
+            end;
+            TestArchiveFiles(StrAncillary, FileNames, atAncillary, AChildModel.ModelName);
           end;
-          TestArchiveFiles(StrAncillary, FileNames, atAncillary, AChildModel.ModelName);
         end;
       end;
 
@@ -15541,10 +15701,13 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.ModelInputFiles);
-          RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(StrModelInputFiles, FileNames, atModelInput, AChildModel.ModelName);
+          if AChildModel <> nil then
+          begin
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.ModelInputFiles);
+            RemoveBinaryFiles(FileNames);
+            TestArchiveFiles(StrModelInputFiles, FileNames, atModelInput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -15558,10 +15721,13 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.ExternalFiles);
-          RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(StrModelInputFiles, FileNames, atExternal, AChildModel.ModelName);
+          if AChildModel <> nil then
+          begin
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.ExternalFiles);
+            RemoveBinaryFiles(FileNames);
+            TestArchiveFiles(StrModelInputFiles, FileNames, atExternal, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -15575,10 +15741,13 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.ModelOutputFiles);
-          RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(StrModelOutputFiles, FileNames, atModelOutput, AChildModel.ModelName);
+          if AChildModel <> nil then
+          begin
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.ModelOutputFiles);
+            RemoveBinaryFiles(FileNames);
+            TestArchiveFiles(StrModelOutputFiles, FileNames, atModelOutput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -15592,10 +15761,13 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.ModpathInputFiles);
-          RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Modpath_Input_Files', FileNames, atModpathInput, AChildModel.ModelName);
+          if AChildModel <> nil then
+          begin
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.ModpathInputFiles);
+            RemoveBinaryFiles(FileNames);
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Modpath_Input_Files', FileNames, atModpathInput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -15609,10 +15781,13 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.ModpathOutputFiles);
-          RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Modpath_Output_Files', FileNames, atModpathOutput, AChildModel.ModelName);
+          if AChildModel <> nil then
+          begin
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.ModpathOutputFiles);
+            RemoveBinaryFiles(FileNames);
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Modpath_Output_Files', FileNames, atModpathOutput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -15626,10 +15801,13 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.ZonebudgetInputFiles);
-          RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Zonebudget_Input_Files', FileNames, atZonebugetInput, AChildModel.ModelName);
+          if AChildModel <> nil then
+          begin
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.ZonebudgetInputFiles);
+            RemoveBinaryFiles(FileNames);
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Zonebudget_Input_Files', FileNames, atZonebugetInput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -15643,10 +15821,13 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.ZonebudgetOutputFiles);
-          RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Zonebudget_Output_Files', FileNames, atZonebugetOutput, AChildModel.ModelName);
+          if AChildModel <> nil then
+          begin
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.ZonebudgetOutputFiles);
+            RemoveBinaryFiles(FileNames);
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Zonebudget_Output_Files', FileNames, atZonebugetOutput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -15660,10 +15841,13 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.SwiObsExtractorInputFiles);
-          RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'SWI_Observation_Extractor_Input_Files', FileNames, atSwiObsExtInput, AChildModel.ModelName);
+          if AChildModel <> nil then
+          begin
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.SwiObsExtractorInputFiles);
+            RemoveBinaryFiles(FileNames);
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'SWI_Observation_Extractor_Input_Files', FileNames, atSwiObsExtInput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -15677,10 +15861,13 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.SwiObsExtractorOutputFiles);
-          RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'SWI_Observation_Extractor_Output_Files', FileNames, atSwiObsExtOutput, AChildModel.ModelName);
+          if AChildModel <> nil then
+          begin
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.SwiObsExtractorOutputFiles);
+            RemoveBinaryFiles(FileNames);
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'SWI_Observation_Extractor_Output_Files', FileNames, atSwiObsExtOutput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -15703,18 +15890,21 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.Mt3dmsInputFiles);
-          RemoveBinaryFiles(FileNames);
-          if AChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+          if AChildModel <> nil then
           begin
-            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3d-USGS_Input_Files',
-              FileNames, atMt3dInput, AChildModel.ModelName);
-          end
-          else
-          begin
-            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3dms_Input_Files',
-              FileNames, atMt3dInput, AChildModel.ModelName);
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.Mt3dmsInputFiles);
+            RemoveBinaryFiles(FileNames);
+            if AChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+            begin
+              TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3d-USGS_Input_Files',
+                FileNames, atMt3dInput, AChildModel.ModelName);
+            end
+            else
+            begin
+              TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3dms_Input_Files',
+                FileNames, atMt3dInput, AChildModel.ModelName);
+            end;
           end;
         end;
       end;
@@ -15736,18 +15926,21 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           AChildModel := ChildModels[ChildIndex].ChildModel;
-          FileNames.Clear;
-          FileNames.AddStrings(AChildModel.Mt3dmsOutputFiles);
-          RemoveBinaryFiles(FileNames);
-          if AChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+          if AChildModel <> nil then
           begin
-            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3d-USGS_Output_Files',
-              FileNames, atMt3dOutput, AChildModel.ModelName);
-          end
-          else
-          begin
-            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3dms_Output_Files',
-              FileNames, atMt3dOutput, AChildModel.ModelName);
+            FileNames.Clear;
+            FileNames.AddStrings(AChildModel.Mt3dmsOutputFiles);
+            RemoveBinaryFiles(FileNames);
+            if AChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+            begin
+              TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3d-USGS_Output_Files',
+                FileNames, atMt3dOutput, AChildModel.ModelName);
+            end
+            else
+            begin
+              TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3dms_Output_Files',
+                FileNames, atMt3dOutput, AChildModel.ModelName);
+            end;
           end;
         end;
       end;
@@ -15790,8 +15983,11 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildModel.FModpathInputFiles.Clear;
-      ChildModel.FModpathOutputFiles.Clear;
+      if ChildModel <> nil then
+      begin
+        ChildModel.FModpathInputFiles.Clear;
+        ChildModel.FModpathOutputFiles.Clear;
+      end;
     end;
   end;
 end;
@@ -15808,8 +16004,11 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildModel.FZonebudgetInputFiles.Clear;
-      ChildModel.FZonebudgetOutputFiles.Clear;
+      if ChildModel <> nil then
+      begin
+        ChildModel.FZonebudgetInputFiles.Clear;
+        ChildModel.FZonebudgetOutputFiles.Clear;
+      end;
     end;
   end;
 end;
@@ -15940,8 +16139,11 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildModel.FMt3dmsInputFiles.Clear;
-      ChildModel.FMt3dmsOutputFiles.Clear;
+      if ChildModel <> nil then
+      begin
+        ChildModel.FMt3dmsInputFiles.Clear;
+        ChildModel.FMt3dmsOutputFiles.Clear;
+      end;
     end;
   end;
 end;
@@ -15953,7 +16155,10 @@ begin
   inherited;
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
-    ChildModels[ChildIndex].ChildModel.ClearBinaryFiles;
+    if ChildModels[ChildIndex].ChildModel <> nil then
+    begin
+      ChildModels[ChildIndex].ChildModel.ClearBinaryFiles;
+    end;
   end;
 end;
 
@@ -16001,8 +16206,11 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildModel.FModelInputFiles.Clear;
-      ChildModel.FModelOutputFiles.Clear;
+      if ChildModel <> nil then
+      begin
+        ChildModel.FModelInputFiles.Clear;
+        ChildModel.FModelOutputFiles.Clear;
+      end;
     end;
   end;
   ClearModpathFiles;
@@ -16117,15 +16325,18 @@ begin
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
     ChildModel := ChildModels[ChildIndex].ChildModel;
-    if Value = nil then
+    if ChildModel <> nil then
     begin
-      ChildTimeList := nil;
-    end
-    else
-    begin
-      ChildTimeList := ChildModel.GetTimeListByName(Value.Name)
+      if Value = nil then
+      begin
+        ChildTimeList := nil;
+      end
+      else
+      begin
+        ChildTimeList := ChildModel.GetTimeListByName(Value.Name)
+      end;
+      ChildModel.SideTimeList := ChildTimeList;
     end;
-    ChildModel.SideTimeList := ChildTimeList;
   end;
 end;
 
@@ -16146,8 +16357,11 @@ begin
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.GasPhaseUsed(Sender);
+      if ChildModels[ChildIndex].ChildModel <> nil then
+      begin
+        result := result or
+          ChildModels[ChildIndex].ChildModel.GasPhaseUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -16895,8 +17109,11 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildList := ChildModel.GetTimeListByName(TimeList.Name);
-      ChildModel.UpdateFrontTimeDataSet(ChildList, Time);
+      if ChildModel <> nil then
+      begin
+        ChildList := ChildModel.GetTimeListByName(TimeList.Name);
+        ChildModel.UpdateFrontTimeDataSet(ChildList, Time);
+      end;
     end;
   end;
 end;
@@ -17278,6 +17495,7 @@ var
   Index: Integer;
   DataSetName: string;
   DataArray: TDataArray;
+  ChildModel: TChildModel;
 begin
   if ModelSelection in SutraSelection then
   begin
@@ -17566,7 +17784,11 @@ begin
     PhastModel := TPhastModel(self);
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
-      PhastModel.ChildModels[ChildIndex].ChildModel.UpdateOnPostInitialize
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.UpdateOnPostInitialize
+      end;
     end;
   end;
 end;
@@ -18029,14 +18251,19 @@ end;
 function TPhastModel.UzfInitialInfiltrationUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited UzfInitialInfiltrationUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.UzfInitialInfiltrationUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.UzfInitialInfiltrationUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18082,14 +18309,19 @@ end;
 function TPhastModel.UzfMf6PackageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited UzfMf6PackageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.UzfMf6PackageUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.UzfMf6PackageUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18097,14 +18329,19 @@ end;
 function TPhastModel.UzfPackageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited UzfPackageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.UzfPackageUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.UzfPackageUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18112,14 +18349,19 @@ end;
 function TPhastModel.UzfResidualWaterContentUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited UzfResidualWaterContentUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.UzfResidualWaterContentUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.UzfResidualWaterContentUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18127,16 +18369,21 @@ end;
 function TPhastModel.UzfSeepageUsed: boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited;
   if (not result) and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := ChildModels[ChildIndex].ChildModel.UzfSeepageUsed;
-      if Result then
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := ChildModel.UzfSeepageUsed;
+        if Result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -18145,14 +18392,19 @@ end;
 function TPhastModel.UzfSurfKUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited UzfSurfKUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.UzfSurfKUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.UzfSurfKUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18160,14 +18412,19 @@ end;
 function TPhastModel.UzfUnsatVertKUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited UzfUnsatVertKUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.UzfUnsatVertKUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.UzfUnsatVertKUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18175,14 +18432,19 @@ end;
 function TPhastModel.UztUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited UztUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.UztUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.UztUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18190,14 +18452,19 @@ end;
 function TPhastModel.VerticalAnisotropyUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited VerticalAnisotropyUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.VerticalAnisotropyUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.VerticalAnisotropyUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18243,14 +18510,19 @@ end;
 function TPhastModel.WetDryUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited WetDryUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.WetDryUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.WetDryUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18258,14 +18530,19 @@ end;
 function TPhastModel.WettingActive: boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited WettingActive;
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.WettingActive;
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.WettingActive;
+      end;
     end;
   end;
 end;
@@ -18311,14 +18588,19 @@ end;
 function TPhastModel.ZoneBudgetSelected(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ZoneBudgetSelected(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ZoneBudgetSelected(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ZoneBudgetSelected(Sender);
+      end;
     end;
   end;
 end;
@@ -18338,14 +18620,19 @@ end;
 function TPhastModel.ReservoirLayerUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ReservoirLayerUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ReservoirLayerUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ReservoirLayerUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18353,14 +18640,19 @@ end;
 function TPhastModel.ReservoirPackageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ReservoirPackageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ReservoirPackageUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ReservoirPackageUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -18500,14 +18792,19 @@ end;
 function TPhastModel.RouteUzfDischarge(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited RouteUzfDischarge(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.RouteUzfDischarge(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.RouteUzfDischarge(Sender);
+      end;
     end;
   end;
 end;
@@ -18534,6 +18831,7 @@ end;
 procedure TPhastModel.ClearViewedItems;
 var
   Index: Integer;
+  ChildModel: TChildModel;
 begin
   inherited;
   PhastGrid.TopDataSet := nil;
@@ -18557,7 +18855,11 @@ begin
   FootPrintGrid.ThreeDContourDataSet := nil;
   for Index := 0 to ChildModels.Count - 1 do
   begin
-    ChildModels[Index].ChildModel.ClearViewedItems;
+    ChildModel := ChildModels[Index].ChildModel;
+    if ChildModel <> nil then
+    begin
+      ChildModel.ClearViewedItems;
+    end;
   end;
 end;
 
@@ -18587,7 +18889,10 @@ begin
   for Index := 0 to ChildModels.Count - 1 do
   begin
     ChildModel := ChildModels[Index].ChildModel;
-    ChildModel.CanUpdateGrid := False;
+    if ChildModel <> nil then
+    begin
+      ChildModel.CanUpdateGrid := False;
+    end;
   end;
 end;
 
@@ -18602,10 +18907,13 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := ChildModel.ModflowPackages.Mt3dmsDispersion.IsSelected;
-      if result then
+      if ChildModel <> nil then
       begin
-        Exit;
+        result := ChildModel.ModflowPackages.Mt3dmsDispersion.IsSelected;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -18713,31 +19021,34 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      MaximumPosition := ChildModel.MaxPosition(ViewDirection);
-      ARange := ChildModel.ParentPositionToChildPositions(ViewDirection,
-        ParentDisIndex);
-      SubDisCount := ARange.Last - ARange.First + 1;
-      for SubDisIndex := 0 to MaxSubDiscretization - 1 do
+      if ChildModel <> nil then
       begin
-        ChildCombinedIndex := CombinedIndex + SubDisIndex;
-        if (ARange.First < 0) then
+        MaximumPosition := ChildModel.MaxPosition(ViewDirection);
+        ARange := ChildModel.ParentPositionToChildPositions(ViewDirection,
+          ParentDisIndex);
+        SubDisCount := ARange.Last - ARange.First + 1;
+        for SubDisIndex := 0 to MaxSubDiscretization - 1 do
         begin
-          AMapping[ChildCombinedIndex].ChildPositions[ChildIndex] := -1;
-        end
-        else if ARange.First >= MaximumPosition then
-        begin
-          AMapping[ChildCombinedIndex].ChildPositions[ChildIndex] :=
-            MaximumPosition;
-        end
-        else if (SubDisIndex >= SubDisCount) then
-        begin
-          AMapping[ChildCombinedIndex].ChildPositions[ChildIndex]
-            := AMapping[ChildCombinedIndex-1].ChildPositions[ChildIndex]
-        end
-        else
-        begin
-          AMapping[ChildCombinedIndex].ChildPositions[ChildIndex] :=
-            ARange.First + SubDisIndex;
+          ChildCombinedIndex := CombinedIndex + SubDisIndex;
+          if (ARange.First < 0) then
+          begin
+            AMapping[ChildCombinedIndex].ChildPositions[ChildIndex] := -1;
+          end
+          else if ARange.First >= MaximumPosition then
+          begin
+            AMapping[ChildCombinedIndex].ChildPositions[ChildIndex] :=
+              MaximumPosition;
+          end
+          else if (SubDisIndex >= SubDisCount) then
+          begin
+            AMapping[ChildCombinedIndex].ChildPositions[ChildIndex]
+              := AMapping[ChildCombinedIndex-1].ChildPositions[ChildIndex]
+          end
+          else
+          begin
+            AMapping[ChildCombinedIndex].ChildPositions[ChildIndex] :=
+              ARange.First + SubDisIndex;
+          end;
         end;
       end;
     end;
@@ -19678,14 +19989,19 @@ end;
 function TPhastModel.ConfinedStorageCoefUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ConfinedStorageCoefUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ConfinedStorageCoefUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ConfinedStorageCoefUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -19693,14 +20009,19 @@ end;
 function TPhastModel.ConfiningBedKzUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ConfiningBedKzUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ConfiningBedKzUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ConfiningBedKzUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -19767,14 +20088,19 @@ end;
 function TPhastModel.InitialWaterTableUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited InitialWaterTableUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.InitialWaterTableUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.InitialWaterTableUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -19809,7 +20135,10 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := result or ChildModel.ModflowPackages.RchPackage.TimeVaryingLayers;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.ModflowPackages.RchPackage.TimeVaryingLayers;
+      end;
     end;
   end;
 end;
@@ -19829,14 +20158,19 @@ end;
 function TPhastModel.InitialHeadUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited InitialHeadUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.InitialHeadUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.InitialHeadUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -19844,11 +20178,16 @@ end;
 procedure TPhastModel.InitializeGages;
 var
   ChildIndex: integer;
+  ChildModel: TChildModel;
 begin
   inherited;
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
-    ChildModels[ChildIndex].ChildModel.InitializeGages
+    ChildModel := ChildModels[ChildIndex].ChildModel;
+    if ChildModel <> nil then
+    begin
+      ChildModel.InitializeGages
+    end;
   end;
 end;
 
@@ -19876,11 +20215,16 @@ end;
 procedure TPhastModel.InitializeSfrWriter(EvaluationType: TEvaluationType);
 var
   ChildIndex: integer;
+  ChildModel: TChildModel;
 begin
   inherited;
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
-    ChildModels[ChildIndex].ChildModel.InitializeSfrWriter(EvaluationType);
+    ChildModel := ChildModels[ChildIndex].ChildModel;
+    if ChildModel <> nil then
+    begin
+      ChildModel.InitializeSfrWriter(EvaluationType);
+    end;
   end;
 end;
 
@@ -19970,14 +20314,19 @@ end;
 function TPhastModel.LakePackageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited LakePackageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.LakePackageUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.LakePackageUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -20145,17 +20494,20 @@ begin
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
         ChildModel := ChildModels[ChildIndex].ChildModel;
-        LastLayer := ChildModel.Discretization.BottomLayerIndex;
-        if (Layer = LastLayer)
-          and (LastLayer <> ModflowGrid.LayerCount - 1)
-          and (Col >= ChildModel.FirstCol)
-          and (Col <= ChildModel.LastCol)
-          and (Row >= ChildModel.FirstRow)
-          and (Row <= ChildModel.LastRow) then
+        if ChildModel <> nil then
         begin
-          result := True;
-          CModel := ChildModel;
-          break;
+          LastLayer := ChildModel.Discretization.BottomLayerIndex;
+          if (Layer = LastLayer)
+            and (LastLayer <> ModflowGrid.LayerCount - 1)
+            and (Col >= ChildModel.FirstCol)
+            and (Col <= ChildModel.LastCol)
+            and (Row >= ChildModel.FirstRow)
+            and (Row <= ChildModel.LastRow) then
+          begin
+            result := True;
+            CModel := ChildModel;
+            break;
+          end;
         end;
       end;
     end;
@@ -20225,14 +20577,19 @@ end;
 function TPhastModel.KineticsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited KineticsUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.KineticsUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.KineticsUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -20240,14 +20597,19 @@ end;
 function TPhastModel.KyUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited KyUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.KyUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.KyUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -20255,14 +20617,19 @@ end;
 function TPhastModel.KzUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited KzUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.KzUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.KzUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -20378,13 +20745,17 @@ end;
 procedure TPhastModel.SetMf2005ObsGroupNames;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   inherited;
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
-    ChildModels[ChildIndex].ChildModel.SetMf2005ObsGroupNames;
+    ChildModel := ChildModels[ChildIndex].ChildModel;
+    if ChildModel <> nil then
+    begin
+      ChildModel.SetMf2005ObsGroupNames;
+    end;
   end;
-
 end;
 
 procedure TPhastModel.SetDiffusivity(const Value: double);
@@ -20411,14 +20782,19 @@ end;
 function TPhastModel.ModflowInitialHeadUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ModflowInitialHeadUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ModflowInitialHeadUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModels[ChildIndex].ChildModel.ModflowInitialHeadUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -20426,14 +20802,19 @@ end;
 function TPhastModel.ModflowUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ModflowUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ModflowUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ModflowUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -20582,14 +20963,19 @@ end;
 function TPhastModel.ModpathUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ModpathUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ModpathUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ModpathUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -20597,14 +20983,19 @@ end;
 function TPhastModel.ModpathZonesNeeded(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited ModpathZonesNeeded(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ModpathZonesNeeded(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ModpathZonesNeeded(Sender);
+      end;
     end;
   end;
 end;
@@ -21416,14 +21807,19 @@ end;
 function TPhastModel.SurfacesUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited SurfacesUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.SurfacesUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.SurfacesUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -21469,14 +21865,19 @@ end;
 function TPhastModel.SwtOffsetsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited SwtOffsetsUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.SwtOffsetsUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.SwtOffsetsUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -21484,14 +21885,19 @@ end;
 function TPhastModel.SwtSelected(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited SwtSelected(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.SwtSelected(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.SwtSelected(Sender);
+      end;
     end;
   end;
 end;
@@ -21499,14 +21905,19 @@ end;
 function TPhastModel.SwtSpecifiedUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited SwtSpecifiedUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.SwtSpecifiedUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.SwtSpecifiedUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -21823,10 +22234,13 @@ begin
     for ModelIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ModelIndex].ChildModel;
-      if not ChildModel.ModflowPackages.SwiPackage.IsSelected then
+      if ChildModel <> nil then
       begin
-        ChildModel.ModflowPackages.SwiPackage.TipSlope.Value := 0.04;
-        ChildModel.ModflowPackages.SwiPackage.ToeSlope.Value := 0.04;
+        if not ChildModel.ModflowPackages.SwiPackage.IsSelected then
+        begin
+          ChildModel.ModflowPackages.SwiPackage.TipSlope.Value := 0.04;
+          ChildModel.ModflowPackages.SwiPackage.ToeSlope.Value := 0.04;
+        end;
       end;
     end;
 
@@ -21850,7 +22264,10 @@ begin
     for ModelIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ModelIndex].ChildModel;
-      ChildModel.EndPoints.UpdateMinMax;
+      if ChildModel <> nil then
+      begin
+        ChildModel.EndPoints.UpdateMinMax;
+      end;
     end;
   end;
   if FileVersionEqualOrEarlier('3.6.3.28') then
@@ -21859,7 +22276,10 @@ begin
     for ModelIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ModelIndex].ChildModel;
-      ChildModel.PathLines.UpdateMinMax;
+      if ChildModel <> nil then
+      begin
+        ChildModel.PathLines.UpdateMinMax;
+      end;
     end;
   end;
   if FileVersionEqualOrEarlier('3.7.1.15') then
@@ -21872,10 +22292,13 @@ begin
     for ModelIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ModelIndex].ChildModel;
-      SwrReachDataArray := ChildModel.DataArrayManager.GetDataSetByName(KSwrReach);
-      if SwrReachDataArray <> nil then
+      if ChildModel <> nil then
       begin
-        SwrReachDataArray.Orientation := dsoTop;
+        SwrReachDataArray := ChildModel.DataArrayManager.GetDataSetByName(KSwrReach);
+        if SwrReachDataArray <> nil then
+        begin
+          SwrReachDataArray.Orientation := dsoTop;
+        end;
       end;
     end;
     SwrReachDataArray := DataArrayManager.GetDataSetByName(KSwrReach);
@@ -21906,7 +22329,11 @@ begin
       try
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
-          ChildModels[ChildIndex].ChildModel.FillCompilerList(CompilerList);
+          ChildModel := ChildModels[ChildIndex].ChildModel;
+          if ChildModel <> nil then
+          begin
+            ChildModels[ChildIndex].ChildModel.FillCompilerList(CompilerList);
+          end;
         end;
         for GlobalVariableIndex := 0 to GlobalVariables.Count - 1 do
         begin
@@ -21973,10 +22400,13 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      case ChildModel.ModflowPackages.NwtPackage.OrderingMethod of
-        nomOriginal: ; // do nothing;
-        nomRCM: ChildModel.ModflowPackages.NwtPackage.OrderingMethod := nomOriginal;
-        nomMinimumOrdering: ChildModel.ModflowPackages.NwtPackage.OrderingMethod := nomRCM;
+      if ChildModel <> nil then
+      begin
+        case ChildModel.ModflowPackages.NwtPackage.OrderingMethod of
+          nomOriginal: ; // do nothing;
+          nomRCM: ChildModel.ModflowPackages.NwtPackage.OrderingMethod := nomOriginal;
+          nomMinimumOrdering: ChildModel.ModflowPackages.NwtPackage.OrderingMethod := nomRCM;
+        end;
       end;
     end;
   end;
@@ -21990,9 +22420,12 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      if ChildModel.ModflowPackages.Mt3dBasic.IsSelected then
+      if ChildModel <> nil then
       begin
-        ChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion := mvMS;
+        if ChildModel.ModflowPackages.Mt3dBasic.IsSelected then
+        begin
+          ChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion := mvMS;
+        end;
       end;
     end;
   end;
@@ -22393,11 +22826,16 @@ end;
 procedure TPhastModel.FreeSfrWriter;
 var
   ChildIndex: integer;
+  ChildModel: TChildModel;
 begin
   inherited;
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
-    ChildModels[ChildIndex].ChildModel.FreeSfrWriter;
+    ChildModel := ChildModels[ChildIndex].ChildModel;
+    if ChildModel <> nil then
+    begin
+      ChildModel.FreeSfrWriter;
+    end;
   end;
 end;
 
@@ -23155,6 +23593,7 @@ end;
 function TPhastModel.FarmProcess4IsSelected: Boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection =  msModflowOwhm2)
@@ -23163,8 +23602,12 @@ begin
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ModflowPackages.FarmProcess4.IsSelected;
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ModflowPackages.FarmProcess4.IsSelected;
+      end;
     end;
   end;
   {$ELSE}
@@ -23175,6 +23618,7 @@ end;
 function TPhastModel.FarmProcess4SteadyCropsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   {$IFDEF OWHMV2}
   result := inherited;
@@ -23182,11 +23626,15 @@ begin
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := ChildModels[ChildIndex].ChildModel.
-        FarmProcess4SteadyCropsUsed(Sender);
-      if result then
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
       begin
-        break;
+        result := ChildModel.
+          FarmProcess4SteadyCropsUsed(Sender);
+        if result then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -23198,6 +23646,7 @@ end;
 function TPhastModel.FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   {$IFDEF OWHMV2}
   result := inherited;
@@ -23205,11 +23654,15 @@ begin
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := ChildModels[ChildIndex].ChildModel.
-        FarmProcess4SteadyFarmsUsed(Sender);
-      if result then
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
       begin
-        break;
+        result := ChildModel.
+          FarmProcess4SteadyFarmsUsed(Sender);
+        if result then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -23221,6 +23674,7 @@ end;
 function TPhastModel.FarmProcess4TransientCropsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   {$IFDEF OWHMV2}
   result := inherited;
@@ -23228,11 +23682,15 @@ begin
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := ChildModels[ChildIndex].ChildModel.
-        FarmProcess4TransientCropsUsed(Sender);
-      if result then
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
       begin
-        break;
+        result := ChildModel.
+          FarmProcess4TransientCropsUsed(Sender);
+        if result then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -23245,6 +23703,7 @@ function TPhastModel.FarmProcess4TransientFarmIsSelected: Boolean;
 var
   ChildIndex: Integer;
   LocalModflowPackages: TModflowPackages;
+  ChildModel: TChildModel;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection =  msModflowOwhm2)
@@ -23254,13 +23713,17 @@ begin
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      LocalModflowPackages := ChildModels[ChildIndex].ChildModel.ModflowPackages;
-      result :=
-        LocalModflowPackages.FarmProcess4.IsSelected
-        and (LocalModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
-      if result then
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
       begin
-        break;
+        LocalModflowPackages := ChildModel.ModflowPackages;
+        result :=
+          LocalModflowPackages.FarmProcess4.IsSelected
+          and (LocalModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
+        if result then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -23278,6 +23741,7 @@ function TPhastModel.FarmProcess4TransientPrecipIsSelected: Boolean;
 var
   ChildIndex: Integer;
   LocalModflowPackages: TModflowPackages;
+  ChildModel: TChildModel;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection =  msModflowOwhm2)
@@ -23287,13 +23751,17 @@ begin
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      LocalModflowPackages := ChildModels[ChildIndex].ChildModel.ModflowPackages;
-      result :=
-        LocalModflowPackages.FarmProcess4.IsSelected
-        and LocalModflowPackages.FarmClimate4.TransientPrecipUsed(nil);
-      if result then
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
       begin
-        break;
+        LocalModflowPackages := ChildModel.ModflowPackages;
+        result :=
+          LocalModflowPackages.FarmProcess4.IsSelected
+          and LocalModflowPackages.FarmClimate4.TransientPrecipUsed(nil);
+        if result then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -23306,6 +23774,7 @@ function TPhastModel.FarmProcess4TransientRefEtIsSelected: Boolean;
 var
   ChildIndex: Integer;
   LocalModflowPackages: TModflowPackages;
+  ChildModel: TChildModel;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection =  msModflowOwhm2)
@@ -23315,13 +23784,17 @@ begin
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      LocalModflowPackages := ChildModels[ChildIndex].ChildModel.ModflowPackages;
-      result :=
-        LocalModflowPackages.FarmProcess4.IsSelected
-        and LocalModflowPackages.FarmClimate4.TransientEvapUsed(nil);
-      if result then
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
       begin
-        break;
+        LocalModflowPackages := ChildModel.ModflowPackages;
+        result :=
+          LocalModflowPackages.FarmProcess4.IsSelected
+          and LocalModflowPackages.FarmClimate4.TransientEvapUsed(nil);
+        if result then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -23333,14 +23806,19 @@ end;
 function TPhastModel.Farm4ProcessUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := ModflowPackages.FarmProcess4.IsSelected;
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ModflowPackages.FarmProcess4.IsSelected;
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ModflowPackages.FarmProcess4.IsSelected;
+      end;
     end;
   end;
 end;
@@ -23348,6 +23826,7 @@ end;
 function TPhastModel.FarmProcess3IsSelected: Boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := (ModelSelection = msModflowFmp)
     and ModflowPackages.FarmProcess.IsSelected;
@@ -23355,8 +23834,12 @@ begin
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.ModflowPackages.FarmProcess.IsSelected;
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.ModflowPackages.FarmProcess.IsSelected;
+      end;
     end;
   end;
 end;
@@ -23364,14 +23847,19 @@ end;
 function TPhastModel.FarmProcessUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited FarmProcessUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.FarmProcessUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.FarmProcessUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -23531,14 +24019,19 @@ end;
 function TPhastModel.EquilibriumPhasesUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited EquilibriumPhasesUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.EquilibriumPhasesUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.EquilibriumPhasesUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -23573,7 +24066,10 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := result or ChildModel.ModflowPackages.EtsPackage.TimeVaryingLayers;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.ModflowPackages.EtsPackage.TimeVaryingLayers;
+      end;
     end;
   end;
 end;
@@ -23608,7 +24104,10 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      result := result or ChildModel.ModflowPackages.EvtPackage.TimeVaryingLayers;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.ModflowPackages.EvtPackage.TimeVaryingLayers;
+      end;
     end;
   end;
 end;
@@ -23901,14 +24400,19 @@ end;
 function TPhastModel.HorizontalAnisotropyUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited HorizontalAnisotropyUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.HorizontalAnisotropyUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.HorizontalAnisotropyUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -24135,14 +24639,19 @@ end;
 function TPhastModel.SolidSolutionUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited SolidSolutionUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.SolidSolutionUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.SolidSolutionUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -24150,14 +24659,19 @@ end;
 function TPhastModel.SpecificStorageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited SpecificStorageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.SpecificStorageUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.SpecificStorageUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -24165,14 +24679,19 @@ end;
 function TPhastModel.SpecificYieldUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   result := inherited SpecificYieldUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      result := result or
-        ChildModels[ChildIndex].ChildModel.SpecificYieldUsed(Sender);
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.SpecificYieldUsed(Sender);
+      end;
     end;
   end;
 end;
@@ -24316,8 +24835,11 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildList := ChildModel.GetTimeListByName(TimeList.Name);
-      ChildModel.UpdateThreeDTimeDataSet(ChildList, Time);
+      if ChildModel <> nil then
+      begin
+        ChildList := ChildModel.GetTimeListByName(TimeList.Name);
+        ChildModel.UpdateThreeDTimeDataSet(ChildList, Time);
+      end;
     end;
   end;
 end;
@@ -24351,8 +24873,11 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildList := ChildModel.GetTimeListByName(TimeList.Name);
-      ChildModel.UpdateTopTimeDataSet(ChildList, Time);
+      if ChildModel <> nil then
+      begin
+        ChildList := ChildModel.GetTimeListByName(TimeList.Name);
+        ChildModel.UpdateTopTimeDataSet(ChildList, Time);
+      end;
     end;
   end;
 end;
@@ -24493,12 +25018,15 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      if ChildModel.StoreHeadObsResults and ChildModel.HeadObsResults.Visible then
+      if ChildModel <> nil then
       begin
-        ChildModel.HeadObsResults.CalculateMaxResidual(ChildModel);
-        if MaxResid < ChildModel.HeadObsResults.MaxResidual then
+        if ChildModel.StoreHeadObsResults and ChildModel.HeadObsResults.Visible then
         begin
-          MaxResid := ChildModel.HeadObsResults.MaxResidual;
+          ChildModel.HeadObsResults.CalculateMaxResidual(ChildModel);
+          if MaxResid < ChildModel.HeadObsResults.MaxResidual then
+          begin
+            MaxResid := ChildModel.HeadObsResults.MaxResidual;
+          end;
         end;
       end;
     end;
@@ -24509,9 +25037,12 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      if ChildModel.StoreHeadObsResults and ChildModel.HeadObsResults.Visible then
+      if ChildModel <> nil then
       begin
-        ChildModel.HeadObsResults.MaxResidual := MaxResid;
+        if ChildModel.StoreHeadObsResults and ChildModel.HeadObsResults.Visible then
+        begin
+          ChildModel.HeadObsResults.MaxResidual := MaxResid;
+        end;
       end;
     end;
   end;
@@ -24519,7 +25050,10 @@ begin
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
     ChildModel := ChildModels[ChildIndex].ChildModel;
-    ChildModel.DrawHeadObservations(BitMap, ZoomBox);
+    if ChildModel <> nil then
+    begin
+      ChildModel.DrawHeadObservations(BitMap, ZoomBox);
+    end;
   end;
 end;
 
@@ -25504,7 +26038,10 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildModel.InvalidateContours;
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateContours;
+      end;
     end;
   end;
 end;
@@ -28035,17 +28572,20 @@ begin
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
         ChildModel := ChildModels[ChildIndex].ChildModel;
-        if FCombinedDisplayColumn < LocalCombinedCount then
+        if ChildModel <> nil then
         begin
-          NewPosition := FColumnMapping[FCombinedDisplayColumn].
-            ChildPositions[ChildIndex];
-        end
-        else
-        begin
-          NewPosition := FColumnMapping[FCombinedDisplayColumn-1].
-            ChildPositions[ChildIndex]+1;
+          if FCombinedDisplayColumn < LocalCombinedCount then
+          begin
+            NewPosition := FColumnMapping[FCombinedDisplayColumn].
+              ChildPositions[ChildIndex];
+          end
+          else
+          begin
+            NewPosition := FColumnMapping[FCombinedDisplayColumn-1].
+              ChildPositions[ChildIndex]+1;
+          end;
+          ChildModel.ModflowGrid.DisplayColumn := NewPosition;
         end;
-        ChildModel.ModflowGrid.DisplayColumn := NewPosition;
       end;
     end;
   end;
@@ -28219,17 +28759,20 @@ begin
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
         ChildModel := ChildModels[ChildIndex].ChildModel;
-        if FCombinedDisplayLayer < LocalCombinedCount then
+        if ChildModel <> nil then
         begin
-          NewPosition := FLayerMapping[FCombinedDisplayLayer].
-            ChildPositions[ChildIndex];
-        end
-        else
-        begin
-          NewPosition := FLayerMapping[FCombinedDisplayLayer-1].
-            ChildPositions[ChildIndex]+1;
+          if FCombinedDisplayLayer < LocalCombinedCount then
+          begin
+            NewPosition := FLayerMapping[FCombinedDisplayLayer].
+              ChildPositions[ChildIndex];
+          end
+          else
+          begin
+            NewPosition := FLayerMapping[FCombinedDisplayLayer-1].
+              ChildPositions[ChildIndex]+1;
+          end;
+          ChildModel.ModflowGrid.DisplayLayer := NewPosition;
         end;
-        ChildModel.ModflowGrid.DisplayLayer := NewPosition;
       end;
     end;
   end;
@@ -28289,17 +28832,20 @@ begin
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
         ChildModel := ChildModels[ChildIndex].ChildModel;
-        if FCombinedDisplayRow < LocalCombinedCount then
+        if ChildModel <> nil then
         begin
-          NewPosition := FRowMapping[FCombinedDisplayRow].
-            ChildPositions[ChildIndex];
-        end
-        else
-        begin
-          NewPosition := FRowMapping[FCombinedDisplayRow-1].
-            ChildPositions[ChildIndex]+1;
+          if FCombinedDisplayRow < LocalCombinedCount then
+          begin
+            NewPosition := FRowMapping[FCombinedDisplayRow].
+              ChildPositions[ChildIndex];
+          end
+          else
+          begin
+            NewPosition := FRowMapping[FCombinedDisplayRow-1].
+              ChildPositions[ChildIndex]+1;
+          end;
+          ChildModel.ModflowGrid.DisplayRow := NewPosition;
         end;
-        ChildModel.ModflowGrid.DisplayRow := NewPosition;
       end;
     end;
   end;
@@ -35236,6 +35782,7 @@ var
   Index: integer;
   NewIndex: integer;
   ChildIndex: integer;
+  ChildModel: TChildModel;
   procedure RemoveVariable(Variable: TGlobalVariable);
   var
     Index: Integer;
@@ -35363,7 +35910,11 @@ begin
       FillCompilerList(CompilerList);
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        ChildModels[ChildIndex].ChildModel.FillCompilerList(CompilerList);
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          ChildModel.FillCompilerList(CompilerList);
+        end;
       end;
 
       for Index := 0 to FGlobalVariables.Count - 1 do
@@ -35649,7 +36200,10 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildItem := LocalModel.ChildModels[ChildIndex];
-      ChildItem.ChildModel.CreateVariables(DataSet);
+      if ChildItem.ChildModel <> nil then
+      begin
+        ChildItem.ChildModel.CreateVariables(DataSet);
+      end;
     end;
   end;
 end;
@@ -35899,10 +36453,13 @@ begin
         for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
         begin
           ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-          ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(DataArray.Name);
-          if (ChildDataArray <> nil) then
+          if ChildModel <> nil then
           begin
-            ChildModel.DataArrayManager.AddDataSetToCache(ChildDataArray);
+            ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(DataArray.Name);
+            if (ChildDataArray <> nil) then
+            begin
+              ChildModel.DataArrayManager.AddDataSetToCache(ChildDataArray);
+            end;
           end;
         end;
       end;
@@ -36006,7 +36563,10 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-      ChildModel.DataArrayManager.CacheDataArrays;
+      if ChildModel <> nil then
+      begin
+        ChildModel.DataArrayManager.CacheDataArrays;
+      end;
     end;
   end;
 end;
@@ -39824,8 +40384,11 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       AChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-      ChildArray := AChildModel.DataArrayManager.GetDataSetByName(ADataArray.Name);
-      AChildModel.DataArrayManager.RemoveDataSet(ChildArray);
+      if AChildModel <> nil then
+      begin
+        ChildArray := AChildModel.DataArrayManager.GetDataSetByName(ADataArray.Name);
+        AChildModel.DataArrayManager.RemoveDataSet(ChildArray);
+      end;
     end;
   end;
   FDataSets.Remove(ADataArray);
@@ -42307,7 +42870,10 @@ begin
     for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
     begin
       ChildItem := LocalModel.ChildModels[ChildIndex];
-      ChildItem.ChildModel.RemoveVariables(DataSetName, Orientation, EvaluatedAt);
+      if ChildItem.ChildModel <> nil then
+      begin
+        ChildItem.ChildModel.RemoveVariables(DataSetName, Orientation, EvaluatedAt);
+      end;
     end;
   end;
 end;
@@ -42877,6 +43443,7 @@ procedure TCustomModel.UpdateHfb(Sender: TObject);
 var
   PhastModel: TPhastModel;
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   frmProgressMM.Caption := 'Progress';
   frmProgressMM.Show;
@@ -42898,7 +43465,11 @@ begin
     begin
       for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
-        PhastModel.ChildModels[ChildIndex].ChildModel.UpdateHfb(Sender);
+        ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          ChildModel.UpdateHfb(Sender);
+        end;
       end;
     end;
   end;
@@ -43431,15 +44002,21 @@ begin
       for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
         ChildModel := ChildModels[ChildIndex].ChildModel;
-        (ChildModel.Grid as TModflowGrid).UpdateCellElevations;
+        if ChildModel <> nil then
+        begin
+          (ChildModel.Grid as TModflowGrid).UpdateCellElevations;
+        end;
       end;
-
 
       NumberOfSteps := CountStepsInExport+1;
       for ChildIndex2 := 0 to ChildModels.Count - 1 do
       begin
-        NumberOfSteps := NumberOfSteps +
-          ChildModels[ChildIndex2].ChildModel.CountStepsInExport;
+        ChildModel := ChildModels[ChildIndex2].ChildModel;
+        if ChildModel <> nil then
+        begin
+          NumberOfSteps := NumberOfSteps +
+            ChildModels[ChildIndex2].ChildModel.CountStepsInExport;
+        end;
       end;
 
       frmProgressMM.pbProgress.Max := NumberOfSteps;
@@ -43466,8 +44043,11 @@ begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
         begin
           ChildModel := ChildModels[ChildIndex].ChildModel;
-          ListFileName := (ChildModel.NameFileWriter as TNameFileWriter).ListFileName;
-          ListFileNames.Add(ListFileName);
+          if ChildModel <> nil then
+          begin
+            ListFileName := (ChildModel.NameFileWriter as TNameFileWriter).ListFileName;
+            ListFileNames.Add(ListFileName);
+          end;
         end;
 
         BatchFileLocation := WriteModflowBatchFile(
@@ -43486,12 +44066,15 @@ begin
           for ChildIndex := 0 to ChildModels.Count - 1 do
           begin
             ChildModel := ChildModels[ChildIndex].ChildModel;
-            if ChildModel.ModflowPackages.ModPath.IsSelected then
+            if ChildModel <> nil then
             begin
-              ChildFileName := ChangeFileExt(FileName, '');
-              ChildFileName := ChildFileName + '_' + ChildModel.ModelNameForDos;
-              ChildModel.ExportModpathModel(ChangeFileExt(ChildFileName, '.mpn'), False,
-                NewBudgetFileForModpath, True);
+              if ChildModel.ModflowPackages.ModPath.IsSelected then
+              begin
+                ChildFileName := ChangeFileExt(FileName, '');
+                ChildFileName := ChildFileName + '_' + ChildModel.ModelNameForDos;
+                ChildModel.ExportModpathModel(ChangeFileExt(ChildFileName, '.mpn'), False,
+                  NewBudgetFileForModpath, True);
+              end;
             end;
           end;
         end;
@@ -43504,11 +44087,14 @@ begin
           for ChildIndex := 0 to ChildModels.Count - 1 do
           begin
             ChildModel := ChildModels[ChildIndex].ChildModel;
-            if ChildModel.ModflowPackages.ZoneBudget.IsSelected then
+            if ChildModel <> nil then
             begin
-              ChildFileName := ChangeFileExt(FileName, '');
-              ChildFileName := ChildFileName + '_' + ChildModel.ModelNameForDos;
-              ChildModel.ExportZoneBudgetModel(ChangeFileExt(ChildFileName, StrZbzones), False, True);
+              if ChildModel.ModflowPackages.ZoneBudget.IsSelected then
+              begin
+                ChildFileName := ChangeFileExt(FileName, '');
+                ChildFileName := ChildFileName + '_' + ChildModel.ModelNameForDos;
+                ChildModel.ExportZoneBudgetModel(ChangeFileExt(ChildFileName, StrZbzones), False, True);
+              end;
             end;
           end;
         end;
@@ -43971,7 +44557,10 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildModel.ClearPval;
+      if ChildModel <> nil then
+      begin
+        ChildModel.ClearPval;
+      end;
     end;
 
     Application.ProcessMessages;
@@ -43983,13 +44572,16 @@ begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
-      ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
+      if ChildModel <> nil then
       begin
-        Exit;
+        ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
+        ChildModel.InternalExportModflowModel(ChildNameFile, True);
       end;
-      ChildModel.InternalExportModflowModel(ChildNameFile, True);
     end;
   finally
     FreeSfrWriter;
@@ -45413,12 +46005,15 @@ begin
               for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
               begin
                 ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-                ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
-                ChildModel.ExportLakePackage(ChildNameFile);
-                Application.ProcessMessages;
-                if not frmProgressMM.ShouldContinue then
+                if ChildModel <> nil then
                 begin
-                  Exit;
+                  ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
+                  ChildModel.ExportLakePackage(ChildNameFile);
+                  Application.ProcessMessages;
+                  if not frmProgressMM.ShouldContinue then
+                  begin
+                    Exit;
+                  end;
                 end;
               end;
             end;
@@ -45464,12 +46059,15 @@ begin
                 for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
                 begin
                   ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-                  WriterList.Add(ChildModel.SfrWriter as TModflowSFR_Writer);
-                  ChildModel.EvaluateSfrPackage;
-                  Application.ProcessMessages;
-                  if not frmProgressMM.ShouldContinue then
+                  if ChildModel <> nil then
                   begin
-                    Exit;
+                    WriterList.Add(ChildModel.SfrWriter as TModflowSFR_Writer);
+                    ChildModel.EvaluateSfrPackage;
+                    Application.ProcessMessages;
+                    if not frmProgressMM.ShouldContinue then
+                    begin
+                      Exit;
+                    end;
                   end;
                 end;
                 (SfrWriter as TModflowSFR_Writer).AssociateLgrSubSegments(WriterList);
@@ -45509,24 +46107,27 @@ begin
               for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
               begin
                 ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-                ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
-                ChildModel.ExportSfrPackage(ChildNameFile);
-                Application.ProcessMessages;
-                if not frmProgressMM.ShouldContinue then
+                if ChildModel <> nil then
                 begin
-                  Exit;
-                end;
-                ChildModel.ExportUzfPackage(ChildNameFile);
-                Application.ProcessMessages;
-                if not frmProgressMM.ShouldContinue then
-                begin
-                  Exit;
-                end;
-                ChildModel.ExportFarmProcess(ChildNameFile);
-                Application.ProcessMessages;
-                if not frmProgressMM.ShouldContinue then
-                begin
-                  Exit;
+                  ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
+                  ChildModel.ExportSfrPackage(ChildNameFile);
+                  Application.ProcessMessages;
+                  if not frmProgressMM.ShouldContinue then
+                  begin
+                    Exit;
+                  end;
+                  ChildModel.ExportUzfPackage(ChildNameFile);
+                  Application.ProcessMessages;
+                  if not frmProgressMM.ShouldContinue then
+                  begin
+                    Exit;
+                  end;
+                  ChildModel.ExportFarmProcess(ChildNameFile);
+                  Application.ProcessMessages;
+                  if not frmProgressMM.ShouldContinue then
+                  begin
+                    Exit;
+                  end;
                 end;
               end;
             end;
@@ -45548,12 +46149,15 @@ begin
                 for ChildIndex := 0 to ParentPhastModel.ChildModels.Count - 1 do
                 begin
                   ChildModel := ParentPhastModel.ChildModels[ChildIndex].ChildModel;
-                  WriterList.Add(ChildModel.SfrWriter as TModflowSFR_Writer);
-                  ChildModel.EvaluateSfrPackage;
-                  Application.ProcessMessages;
-                  if not frmProgressMM.ShouldContinue then
+                  if ChildModel <> nil then
                   begin
-                    Exit;
+                    WriterList.Add(ChildModel.SfrWriter as TModflowSFR_Writer);
+                    ChildModel.EvaluateSfrPackage;
+                    Application.ProcessMessages;
+                    if not frmProgressMM.ShouldContinue then
+                    begin
+                      Exit;
+                    end;
                   end;
                 end;
                 (ParentPhastModel.SfrWriter as TModflowSFR_Writer).AssociateLgrSubSegments(WriterList);
@@ -47893,12 +48497,14 @@ function TChildModel.EdgeIndex: integer;
 var
   PhastModel: TPhastModel;
   ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   PhastModel := ParentModel as TPhastModel;
   result := 0;
   for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
   begin
-    if PhastModel.ChildModels[ChildIndex].ChildModel = self then
+    ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+    if ChildModel = self then
     begin
       result := ChildIndex +2;
       if ModelSelection in [msModflowLGR] then

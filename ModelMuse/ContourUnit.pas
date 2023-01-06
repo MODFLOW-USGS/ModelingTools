@@ -1536,57 +1536,60 @@ begin
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-      AnActiveDataSet := ChildModel.DataArrayManager.GetDataSetByName(rsActive);
-      EvaluateActive(Active, AnActiveDataSet);
-      case ViewDirection of
-        vdTop:
-          begin
-            if ChildModel.Grid.TopContourDataSet = nil then
+      if ChildModel <> nil then
+      begin
+        AnActiveDataSet := ChildModel.DataArrayManager.GetDataSetByName(rsActive);
+        EvaluateActive(Active, AnActiveDataSet);
+        case ViewDirection of
+          vdTop:
             begin
-              Continue;
+              if ChildModel.Grid.TopContourDataSet = nil then
+              begin
+                Continue;
+              end;
+              EvaluateMinMax(ChildMaxValue, ChildMinValue, ChildMinPositive, DSValues, Active,
+                ChildModel.Grid.TopContourDataSet,
+                ChildModel.Grid.SelectedLayer);
             end;
-            EvaluateMinMax(ChildMaxValue, ChildMinValue, ChildMinPositive, DSValues, Active,
-              ChildModel.Grid.TopContourDataSet,
-              ChildModel.Grid.SelectedLayer);
-          end;
-        vdFront:
-          begin
-            if ChildModel.Grid.FrontContourDataSet = nil then
+          vdFront:
             begin
-              Continue;
+              if ChildModel.Grid.FrontContourDataSet = nil then
+              begin
+                Continue;
+              end;
+              EvaluateMinMax(ChildMaxValue, ChildMinValue, ChildMinPositive, DSValues, Active,
+                ChildModel.Grid.FrontContourDataSet,
+                ChildModel.Grid.SelectedRow);
             end;
-            EvaluateMinMax(ChildMaxValue, ChildMinValue, ChildMinPositive, DSValues, Active,
-              ChildModel.Grid.FrontContourDataSet,
-              ChildModel.Grid.SelectedRow);
-          end;
-        vdSide:
-          begin
-            if ChildModel.Grid.SideContourDataSet = nil then
+          vdSide:
             begin
-              Continue;
+              if ChildModel.Grid.SideContourDataSet = nil then
+              begin
+                Continue;
+              end;
+              EvaluateMinMax(ChildMaxValue, ChildMinValue, ChildMinPositive, DSValues, Active,
+                ChildModel.Grid.SideContourDataSet,
+                ChildModel.Grid.SelectedColumn);
             end;
-            EvaluateMinMax(ChildMaxValue, ChildMinValue, ChildMinPositive, DSValues, Active,
-              ChildModel.Grid.SideContourDataSet,
-              ChildModel.Grid.SelectedColumn);
-          end;
-        else
-          Assert(False);
-      end;
-      if MinValue > ChildMinValue then
-      begin
-        MinValue := ChildMinValue;
-      end;
-      if MaxValue < ChildMaxValue then
-      begin
-        MaxValue := ChildMaxValue;
-      end;
-      if MinPositive = 0 then
-      begin
-        MinPositive := ChildMinPositive;
-      end
-      else if ChildMinPositive < MinPositive then
-      begin
-        MinPositive := ChildMinPositive;
+          else
+            Assert(False);
+        end;
+        if MinValue > ChildMinValue then
+        begin
+          MinValue := ChildMinValue;
+        end;
+        if MaxValue < ChildMaxValue then
+        begin
+          MaxValue := ChildMaxValue;
+        end;
+        if MinPositive = 0 then
+        begin
+          MinPositive := ChildMinPositive;
+        end
+        else if ChildMinPositive < MinPositive then
+        begin
+          MinPositive := ChildMinPositive;
+        end;
       end;
     end;
   end;
