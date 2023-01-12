@@ -23756,8 +23756,8 @@ begin
       if ChildModel <> nil then
       begin
         LocalModflowPackages := ChildModel.ModflowPackages;
-        result :=
-          LocalModflowPackages.FarmProcess4.IsSelected
+        result := (ModelSelection =  msModflowOwhm2)
+          and LocalModflowPackages.FarmProcess4.IsSelected
           and (LocalModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
         if result then
         begin
@@ -23794,8 +23794,8 @@ begin
       if ChildModel <> nil then
       begin
         LocalModflowPackages := ChildModel.ModflowPackages;
-        result :=
-          LocalModflowPackages.FarmProcess4.IsSelected
+        result := (ModelSelection =  msModflowOwhm2)
+          and LocalModflowPackages.FarmProcess4.IsSelected
           and LocalModflowPackages.FarmClimate4.TransientPrecipUsed(nil);
         if result then
         begin
@@ -23827,8 +23827,8 @@ begin
       if ChildModel <> nil then
       begin
         LocalModflowPackages := ChildModel.ModflowPackages;
-        result :=
-          LocalModflowPackages.FarmProcess4.IsSelected
+        result := (ModelSelection =  msModflowOwhm2)
+          and LocalModflowPackages.FarmProcess4.IsSelected
           and LocalModflowPackages.FarmClimate4.TransientEvapUsed(nil);
         if result then
         begin
