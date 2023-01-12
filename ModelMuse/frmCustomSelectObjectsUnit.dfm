@@ -1,21 +1,19 @@
 inherited frmCustomSelectObjects: TfrmCustomSelectObjects
   Caption = 'frmCustomSelectObjects'
   ClientHeight = 414
-  ClientWidth = 422
   ExplicitWidth = 438
-  ExplicitHeight = 453
-  PixelsPerInch = 96
+  ExplicitHeight = 452
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
     Top = 373
-    Width = 422
+    Width = 426
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 1
     DesignSize = (
-      422
+      426
       41)
     object btnClose: TBitBtn
       Left = 330
@@ -41,7 +39,7 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
   object vstObjects: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 422
+    Width = 426
     Height = 373
     Align = alClient
     Colors.BorderColor = 15987699
@@ -75,6 +73,7 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
     OnStateChange = vstObjectsStateChange
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+    ExplicitWidth = 422
     Columns = <>
   end
 end

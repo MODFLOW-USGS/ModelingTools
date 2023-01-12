@@ -819,7 +819,11 @@ begin
             AnElement := Mesh.ElementsI2D[Index];
             APoint := AnElement.Center;
             APoint.y := APoint.y*Anisotropy;
+  {$IF CompilerVersion > 28}
             FNodeOrElementQuadTree.AddPoint(APoint.x, APoint.y, AnElement);
+            {$ELSE}
+            FNodeOrElementQuadTree.AddPoint(APoint.x, APoint.y, Pointer(AnElement));
+            {$ENDIF}
           end;
         end;
       eaNodes:
@@ -827,7 +831,11 @@ begin
           for Index := 0 to Mesh.NodeCount - 1 do
           begin
             ANode := Mesh.NodesI2D[Index];
+  {$IF CompilerVersion > 28}
             FNodeOrElementQuadTree.AddPoint(ANode.Location.x, ANode.Location.y*Anisotropy, ANode);
+            {$ELSE}
+            FNodeOrElementQuadTree.AddPoint(ANode.Location.x, ANode.Location.y*Anisotropy, Pointer(ANode));
+            {$ENDIF}
           end;
         end;
     end;

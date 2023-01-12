@@ -244,7 +244,9 @@ begin
   rdeZetaSurfaceNumber.Max := frmGoPhast.PhastModel.ModflowPackages.SwiPackage.NumberOfSurfaces;
   rdeZetaSurfaceNumber.IntegerValue := 1;
   comboTreatment.ItemIndex := 0;
+  {$IF CompilerVersion > 28}
   comboMultiStatFlag.Items.ClearAndResetID;
+  {$ENDIF}
   comboMultiStatFlag.Items.Assign(ObservationStatFlagLabels);
   frameSwiObs.Grid.BeginUpdate;
   try

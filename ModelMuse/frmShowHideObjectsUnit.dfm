@@ -13,6 +13,7 @@ inherited frmShowHideObjects: TfrmShowHideObjects
     Top = 256
     Height = 158
     ExplicitTop = 256
+    ExplicitWidth = 422
     ExplicitHeight = 158
     inherited btnClose: TBitBtn
       Left = 322

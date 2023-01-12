@@ -1,4 +1,10 @@
 inherited frameScreenObjectCustomFmp4Boundary: TframeScreenObjectCustomFmp4Boundary
+  inherited pnlBottom: TPanel
+    inherited seNumberOfTimes: TJvSpinEdit
+      Height = 23
+      ExplicitHeight = 23
+    end
+  end
   inherited pnlGrid: TPanel
     inherited rdgModflowBoundary: TRbwDataGrid4
       Columns = <

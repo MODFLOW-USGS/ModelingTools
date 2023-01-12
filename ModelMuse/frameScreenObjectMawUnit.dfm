@@ -32,39 +32,43 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     TabOrder = 1
     object tabWell: TTabSheet
       Caption = 'Well definition'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblRadius: TLabel
         Left = 3
         Top = 19
-        Width = 35
-        Height = 15
+        Width = 32
+        Height = 13
         Caption = 'Radius'
       end
       object lblBottom: TLabel
         Left = 3
         Top = 46
-        Width = 40
-        Height = 15
+        Width = 34
+        Height = 13
         Caption = 'Bottom'
       end
       object lblStartingHead: TLabel
         Left = 3
         Top = 73
-        Width = 98
-        Height = 15
+        Width = 93
+        Height = 13
         Caption = 'Starting head (strt)'
       end
       object lblConductanceEquation: TLabel
         Left = 3
         Top = 100
-        Width = 179
-        Height = 15
+        Width = 160
+        Height = 13
         Caption = 'Conductance equation (condeqn)'
       end
       object edWellRadius: TJvComboEdit
         Left = 108
         Top = 16
         Width = 322
-        Height = 23
+        Height = 21
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -94,7 +98,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Left = 108
         Top = 43
         Width = 322
-        Height = 23
+        Height = 21
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -124,7 +128,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Left = 141
         Top = 70
         Width = 289
-        Height = 23
+        Height = 21
         ButtonWidth = 50
         DisabledColor = clBtnFace
         Glyph.Data = {
@@ -154,13 +158,13 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Left = 255
         Top = 97
         Width = 175
-        Height = 25
+        Height = 23
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 175
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 19
+        ItemHeight = 17
         ItemIndex = 0
         TabOrder = 3
         OnChange = comboConductEqChange
@@ -195,6 +199,10 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     object tabWellScreens: TTabSheet
       Caption = 'Well screens'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inline frameWellScreens: TframeGrid
         Left = 0
         Top = 0
@@ -210,9 +218,9 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           ExplicitTop = 184
           ExplicitWidth = 541
           inherited lbNumber: TLabel
-            Width = 124
+            Width = 111
             Caption = 'Number of well screens'
-            ExplicitWidth = 124
+            ExplicitWidth = 111
           end
           inherited sbAdd: TSpeedButton
             Left = 382
@@ -342,9 +350,13 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     object tabTransient: TTabSheet
       Caption = 'Transient'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object pnlBottom: TPanel
         Left = 0
-        Top = 184
+        Top = 186
         Width = 541
         Height = 46
         Align = alBottom
@@ -357,8 +369,8 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         object lblNumTimes: TLabel
           Left = 64
           Top = 15
-          Width = 90
-          Height = 15
+          Width = 78
+          Height = 13
           Caption = 'Number of times'
         end
         object seNumberOfTimes: TJvSpinEdit
@@ -434,7 +446,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Left = 0
         Top = 0
         Width = 541
-        Height = 184
+        Height = 186
         Align = alClient
         TabOrder = 0
         ExplicitHeight = 179
@@ -449,23 +461,23 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           object lblFormula: TLabel
             Left = 232
             Top = 5
-            Width = 44
-            Height = 15
+            Width = 38
+            Height = 13
             Alignment = taCenter
             Caption = 'Formula'
           end
           object lblStatus: TLabel
             Left = 128
             Top = 5
-            Width = 32
-            Height = 15
+            Width = 31
+            Height = 13
             Caption = 'Status'
           end
           object lblRateLimitation: TLabel
             Left = 352
             Top = 5
-            Width = 77
-            Height = 15
+            Width = 68
+            Height = 13
             Caption = 'Rate limitation'
           end
           object rdeFormula: TRbwDataEntry
@@ -485,7 +497,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             Left = 128
             Top = 27
             Width = 98
-            Height = 25
+            Height = 23
             Style = csOwnerDrawVariable
             ButtonStyle = fsLighter
             Color = clBtnFace
@@ -493,7 +505,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             Enabled = False
             ImageHeight = 0
             ImageWidth = 0
-            ItemHeight = 19
+            ItemHeight = 17
             ItemIndex = -1
             TabOrder = 0
             OnChange = comboStatusChange
@@ -513,7 +525,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             Left = 352
             Top = 27
             Width = 70
-            Height = 25
+            Height = 23
             Style = csOwnerDrawVariable
             ButtonStyle = fsLighter
             Color = clBtnFace
@@ -521,7 +533,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             Enabled = False
             ImageHeight = 0
             ImageWidth = 0
-            ItemHeight = 19
+            ItemHeight = 17
             ItemIndex = -1
             TabOrder = 2
             OnChange = comboRateLimitationChange
@@ -542,7 +554,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           Left = 1
           Top = 57
           Width = 539
-          Height = 126
+          Height = 128
           Align = alClient
           ColCount = 16
           FixedCols = 0
@@ -958,6 +970,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitHeight = 126
           ColWidths = (
             64
             64
@@ -981,11 +994,15 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     object tabGwt: TTabSheet
       Caption = 'GWT'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object splSplit: TSplitter
         Left = 121
         Top = 0
         Width = 5
-        Height = 230
+        Height = 232
         ExplicitLeft = 8
         ExplicitHeight = 225
       end
@@ -993,7 +1010,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Left = 0
         Top = 0
         Width = 121
-        Height = 230
+        Height = 232
         PageDefault = 0
         PageList = jplGwt
         Align = alLeft
@@ -1008,7 +1025,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Left = 126
         Top = 0
         Width = 415
-        Height = 230
+        Height = 232
         PropagateEnable = False
         Align = alClient
         ExplicitHeight = 225

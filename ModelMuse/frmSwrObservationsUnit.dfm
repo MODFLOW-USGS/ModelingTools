@@ -7,6 +7,7 @@ inherited frmSwrObservations: TfrmSwrObservations
   OnResize = FormResize
   ExplicitWidth = 648
   ExplicitHeight = 398
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0

@@ -504,7 +504,9 @@ begin
     PickList.Add(StrWellRadius0);
     PickList.Add(StrEqualsHeadInCell);
     PickList.Add(StrConductance0);
+  {$IF CompilerVersion > 28}
     comboConductance.Items.ClearAndResetID;
+  {$ENDIF}
     comboConductance.Items.Assign(PickList);
 
     AColumn := rdgModflowBoundary.Columns[Ord(mcWaterLevelLimitType)];
@@ -515,7 +517,9 @@ begin
     PickList.Clear;
     PickList.Add(StrAbsoluteDDAbsent);
     PickList.Add(StrRelativeDDPresent);
+  {$IF CompilerVersion > 28}
     comboWaterLevelLimit.Items.ClearAndResetID;
+  {$ENDIF}
     comboWaterLevelLimit.Items.Assign(PickList);
 
     AColumn := rdgModflowBoundary.Columns[Ord(mcPumpingLimitType)];
@@ -527,7 +531,9 @@ begin
     PickList.Add(StrNoLimits);
     PickList.Add(StrAbsoluteRatesQCUT);
     PickList.Add(StrRelativeRatesQC);
+  {$IF CompilerVersion > 28}
     comboPumpingLevelLimit.Items.ClearAndResetID;
+  {$ENDIF}
     comboPumpingLevelLimit.Items.Assign(PickList);
 
     rdgModflowBoundary.Cells[Ord(mcStartTime), 0] := StrStartingTime;

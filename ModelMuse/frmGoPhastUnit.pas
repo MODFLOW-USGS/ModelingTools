@@ -28,7 +28,8 @@ uses System.UITypes,
   JvSpin, JvHint, frmRunMt3dmsUnit, JvExControls, JvArrowButton,
   frmExportModpathShapefileUnit, SutraMeshUnit, frmSwrObservationsUnit,
   JvExStdCtrls, JvCombobox, JvListComb, FootprintGridUnit, frmRunFootprintUnit,
-  System.ImageList, System.Actions, ModflowIrregularMeshUnit, JvComponentBase,
+  System.ImageList,
+  System.Actions, ModflowIrregularMeshUnit, JvComponentBase,
   JvBalloonHint, frmRunPestUnit, frmRunParRepUnit, System.Generics.Collections;
 
   { TODO : 
@@ -11920,8 +11921,13 @@ begin
       tbSelectClick(tbSelect);
 
       frmFileProgress := TfrmProgressMM.Create(nil);
+  {$IF CompilerVersion > 28}
       FFileStream := TBufferedFileStream.Create(FileName,
         fmOpenRead or fmShareDenyWrite, ReadWritePermissions);
+  {$ELSE}
+      FFileStream := TFileStream.Create(FileName,
+        fmOpenRead or fmShareDenyWrite, ReadWritePermissions);
+  {$ENDIF}
       try
         FFileStream.Position := 0;
         FFileSize := FFileStream.Size;

@@ -4136,6 +4136,7 @@ begin
   CreateFarmCropIDNode(AScreenObject);
   CreateFarmPrecipNode(AScreenObject);
   CreateFarmRefEvapNode(AScreenObject);
+  CreateFmp4EfficiencyNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);

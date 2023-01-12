@@ -6,7 +6,11 @@ uses
   CustomModflowWriterUnit, ModflowMvrUnit, GoPhastTypes,
   System.Generics.Collections, PhastModelUnit, ModflowCellUnit, System.Classes,
   ModflowPackageSelectionUnit, ScreenObjectUnit, ModflowBoundaryUnit,
-  OrderedCollectionUnit, System.Hash, System.Generics.Defaults,
+  OrderedCollectionUnit,
+  {$IF CompilerVersion > 28}
+  System.Hash,
+  {$ENDIF}
+  System.Generics.Defaults,
   ModflowBoundaryDisplayUnit;
 
 type
@@ -1457,9 +1461,15 @@ end;
 function TMvrReceiverKeyComparer.GetHashCode(
   const Value: TMvrReceiverKey): Integer;
 begin
+  {$IF CompilerVersion > 28}
   Result := THashBobJenkins.GetHashValue(Value.StressPeriod, SizeOf(Value.StressPeriod), 0);
   Result := THashBobJenkins.GetHashValue(Value.ScreenObject, SizeOf(Value.ScreenObject), Result);
   Result := THashBobJenkins.GetHashValue(Value.ReceiverPackage, SizeOf(Value.ReceiverPackage), Result);
+  {$ELSE}
+  Result := BobJenkinsHash(Value.StressPeriod, SizeOf(Value.StressPeriod), 0);
+  Result := BobJenkinsHash(Value.ScreenObject, SizeOf(Value.ScreenObject), Result);
+  Result := BobJenkinsHash(Value.ReceiverPackage, SizeOf(Value.ReceiverPackage), Result);
+  {$ENDIF}
 end;
 
 { TMvrSourceKeyComparer }
@@ -1473,8 +1483,13 @@ end;
 
 function TMvrSourceKeyComparer.GetHashCode(const Value: TMvrSourceKey): Integer;
 begin
+  {$IF CompilerVersion > 28}
   Result := THashBobJenkins.GetHashValue(Value.MvrIndex, SizeOf(Value.MvrIndex), 0);
   Result := THashBobJenkins.GetHashValue(Value.ScreenObject, SizeOf(Value.ScreenObject), Result);
+  {$ELSE}
+  Result := BobJenkinsHash(Value.MvrIndex, SizeOf(Value.MvrIndex), 0);
+  Result := BobJenkinsHash(Value.ScreenObject, SizeOf(Value.ScreenObject), Result);
+  {$ENDIF}
 end;
 
 end.

@@ -323,7 +323,9 @@ begin
   frameMain.lblInitialValueMethod.Caption := StrSTRVAL;
   frameMain.lblInitialValueTabFile.Caption := StrInitialValueTabfil;
 
+  {$IF CompilerVersion > 28}
   comboCulvertType.Items.ClearAndResetID;
+  {$ENDIF}
   comboCulvertType.Items.Assign(rdgCulvert.Columns[Ord(ccCulvertType)].PickList);
 //  cbCulvert.Caption := StrSpecifyLengthsSTR
 
@@ -379,15 +381,25 @@ begin
     TabFiles.Free;
   end;
 
+  {$IF CompilerVersion > 28}
   comboPumpWeirControlType.Items.ClearAndResetID;
+  {$ENDIF}
   comboPumpWeirControlType.Items.Assign(rdgPumpWeir.Columns[Ord(pwcControlType)].PickList);
+  {$IF CompilerVersion > 28}
   comboPumpWeirControlOperated.Items.ClearAndResetID;
+  {$ENDIF}
   comboPumpWeirControlOperated.Items.Assign(rdgPumpWeir.Columns[Ord(pwcControlOperated)].PickList);
+  {$IF CompilerVersion > 28}
   comboPumpWeirCriticalMethod.Items.ClearAndResetID;
+  {$ENDIF}
   comboPumpWeirCriticalMethod.Items.Assign(rdgPumpWeir.Columns[Ord(pwcCriticalMethod)].PickList);
+  {$IF CompilerVersion > 28}
   comboPumpWeirCriticalTabFileName.Items.ClearAndResetID;
+  {$ENDIF}
   comboPumpWeirCriticalTabFileName.Items.Assign(rdgPumpWeir.Columns[Ord(pwcCriticalTabFileName)].PickList);
+  {$IF CompilerVersion > 28}
   comboPumpWeirDischargeTabFile.Items.ClearAndResetID;
+  {$ENDIF}
   comboPumpWeirDischargeTabFile.Items.Assign(rdgPumpWeir.Columns[Ord(pwcDischargeTabFile)].PickList);
 
   DummyEvent := nil;

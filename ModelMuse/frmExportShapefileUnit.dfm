@@ -2,21 +2,23 @@ inherited frmExportShapefile: TfrmExportShapefile
   HelpType = htKeyword
   HelpKeyword = 'Export_Shapefile_Dialog_Box'
   Caption = 'Export Grid Data to Shapefile'
-  ClientHeight = 555
-  ClientWidth = 449
-  ExplicitWidth = 465
-  ExplicitHeight = 594
+  ClientHeight = 554
+  ClientWidth = 445
+  ExplicitWidth = 461
+  ExplicitHeight = 593
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 223
-    Width = 449
+    Top = 222
+    Width = 445
     Height = 332
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 223
+    ExplicitWidth = 449
     DesignSize = (
-      449
+      445
       332)
     object lblElements: TLabel
       Left = 8
@@ -45,7 +47,7 @@ inherited frmExportShapefile: TfrmExportShapefile
     object jfeElements: TJvFilenameEdit
       Left = 8
       Top = 92
-      Width = 433
+      Width = 425
       Height = 26
       DialogKind = dkSave
       DefaultExt = '.shp'
@@ -70,11 +72,12 @@ inherited frmExportShapefile: TfrmExportShapefile
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
       Text = 'jfeElements'
+      ExplicitWidth = 433
     end
     object jfeHorizontalFlowBarrier: TJvFilenameEdit
       Left = 8
       Top = 259
-      Width = 433
+      Width = 425
       Height = 26
       DialogKind = dkSave
       DefaultExt = '.shp'
@@ -99,11 +102,12 @@ inherited frmExportShapefile: TfrmExportShapefile
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 4
       Text = 'JvFilenameEdit1'
+      ExplicitWidth = 433
     end
     object jfeNodes: TJvFilenameEdit
       Left = 8
       Top = 148
-      Width = 433
+      Width = 425
       Height = 26
       DialogKind = dkSave
       DefaultExt = '.shp'
@@ -128,11 +132,12 @@ inherited frmExportShapefile: TfrmExportShapefile
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 2
       Text = 'JvFilenameEdit1'
+      ExplicitWidth = 433
     end
     object rgExportObjectType: TRadioGroup
       Left = 8
       Top = 0
-      Width = 433
+      Width = 425
       Height = 62
       Anchors = [akLeft, akTop, akRight]
       Caption = 'E&xport data sets as...'
@@ -144,6 +149,7 @@ inherited frmExportShapefile: TfrmExportShapefile
         '3D polyhedrons'
         '3D points')
       TabOrder = 0
+      ExplicitWidth = 433
     end
     object rgHfbDimensions: TRadioGroup
       Left = 8
@@ -159,7 +165,7 @@ inherited frmExportShapefile: TfrmExportShapefile
       TabOrder = 3
     end
     object btnCancel: TBitBtn
-      Left = 359
+      Left = 351
       Top = 291
       Width = 82
       Height = 34
@@ -167,9 +173,10 @@ inherited frmExportShapefile: TfrmExportShapefile
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 7
+      ExplicitLeft = 359
     end
     object btnHelp: TBitBtn
-      Left = 183
+      Left = 175
       Top = 291
       Width = 82
       Height = 34
@@ -178,9 +185,10 @@ inherited frmExportShapefile: TfrmExportShapefile
       NumGlyphs = 2
       TabOrder = 5
       OnClick = btnHelpClick
+      ExplicitLeft = 183
     end
     object btnOK: TBitBtn
-      Left = 271
+      Left = 263
       Top = 291
       Width = 82
       Height = 34
@@ -189,11 +197,12 @@ inherited frmExportShapefile: TfrmExportShapefile
       NumGlyphs = 2
       TabOrder = 6
       OnClick = btnOKClick
+      ExplicitLeft = 271
     end
     object comboModel: TComboBox
       Left = 8
       Top = 293
-      Width = 169
+      Width = 161
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
@@ -203,14 +212,16 @@ inherited frmExportShapefile: TfrmExportShapefile
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 449
-    Height = 223
+    Width = 445
+    Height = 222
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 449
+    ExplicitHeight = 223
     DesignSize = (
-      449
-      223)
+      445
+      222)
     object lblExportItems: TLabel
       Left = 8
       Top = 8
@@ -220,7 +231,7 @@ inherited frmExportShapefile: TfrmExportShapefile
       FocusControl = tvExportItems
     end
     object lblTime: TLabel
-      Left = 244
+      Left = 236
       Top = 8
       Width = 106
       Height = 18
@@ -230,27 +241,31 @@ inherited frmExportShapefile: TfrmExportShapefile
       ExplicitLeft = 254
     end
     object lblTimeCount: TLabel
-      Left = 244
-      Top = 119
+      Left = 236
+      Top = 118
       Width = 178
       Height = 18
       Anchors = [akRight, akBottom]
       Caption = '&Number of times to export'
       FocusControl = seTimeCount
+      ExplicitLeft = 244
+      ExplicitTop = 119
     end
     object lblFilter: TLabel
-      Left = 387
-      Top = 194
+      Left = 379
+      Top = 193
       Width = 35
       Height = 18
       Anchors = [akRight, akBottom]
       Caption = 'Filter'
+      ExplicitLeft = 387
+      ExplicitTop = 194
     end
     object rdgTime: TRbwDataGrid4
-      Left = 244
+      Left = 236
       Top = 32
       Width = 197
-      Height = 81
+      Height = 80
       Anchors = [akTop, akRight, akBottom]
       Color = clBtnFace
       ColCount = 1
@@ -293,6 +308,8 @@ inherited frmExportShapefile: TfrmExportShapefile
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
+      ExplicitLeft = 244
+      ExplicitHeight = 81
       ColWidths = (
         64)
       RowHeights = (
@@ -300,8 +317,8 @@ inherited frmExportShapefile: TfrmExportShapefile
         24)
     end
     object seTimeCount: TJvSpinEdit
-      Left = 244
-      Top = 143
+      Left = 236
+      Top = 142
       Width = 197
       Height = 26
       CheckMaxValue = False
@@ -312,12 +329,14 @@ inherited frmExportShapefile: TfrmExportShapefile
       Anchors = [akRight, akBottom]
       TabOrder = 2
       OnChange = seTimeCountChange
+      ExplicitLeft = 244
+      ExplicitTop = 143
     end
     object tvExportItems: TTreeView
       Left = 8
       Top = 31
-      Width = 230
-      Height = 144
+      Width = 222
+      Height = 143
       Anchors = [akLeft, akTop, akRight, akBottom]
       Indent = 20
       ReadOnly = True
@@ -327,8 +346,8 @@ inherited frmExportShapefile: TfrmExportShapefile
     end
     object treeComboFilter: TRbwStringTreeCombo
       Left = 8
-      Top = 191
-      Width = 373
+      Top = 190
+      Width = 365
       Height = 26
       Tree.Left = 0
       Tree.Top = 0
@@ -386,6 +405,8 @@ inherited frmExportShapefile: TfrmExportShapefile
         F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000}
       NumGlyphs = 2
       TabOrder = 3
+      ExplicitTop = 191
+      ExplicitWidth = 373
     end
   end
   object ilCheckImages: TImageList

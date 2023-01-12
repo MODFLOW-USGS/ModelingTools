@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameScreenObjectCustomFmp4BoundaryUnit,
   Vcl.Grids, RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry, Vcl.Buttons, Vcl.Mask,
-  JvExMask, JvSpin, Vcl.ExtCtrls, UndoItemsScreenObjects;
+  JvExMask, JvSpin, Vcl.ExtCtrls, UndoItemsScreenObjects,
+  ModflowFmp4BoundaryUnit;
 
 type
   TframeScreenObjectFmp4Efficiency = class(TframeScreenObjectCustomFmp4Boundary)
@@ -30,6 +31,7 @@ uses
 {$R *.dfm}
 
 { TframeScreenObjectFmp4Efficiency }
+
 
 function TframeScreenObjectFmp4Efficiency.GetBoundary(
   Item: TScreenObjectEditItem): TFmp4Boundary;

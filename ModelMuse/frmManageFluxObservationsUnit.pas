@@ -2536,7 +2536,9 @@ begin
     ChemItem := frmGoPhast.PhastModel.ImmobileComponents[SpeciesIndex];
     Mt3dColumn.PickList.Add(ChemItem.Name)
   end;
+  {$IF CompilerVersion > 28}
   comboMt3dmsSpecies.Items.ClearAndResetID;
+  {$ENDIF}
   comboMt3dmsSpecies.Items.Assign(Mt3dColumn.PickList);
 
   Column := rdgFluxObsTimes.Columns[Ord(fcStatFlag)];

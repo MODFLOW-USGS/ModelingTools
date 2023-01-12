@@ -2,35 +2,37 @@ inherited frmLayers: TfrmLayers
   HelpType = htKeyword
   HelpKeyword = 'MODFLOW_Layer_Groups_Dialog_Box'
   Caption = 'MODFLOW Layer Groups'
-  ClientHeight = 481
-  ClientWidth = 583
+  ClientHeight = 480
+  ClientWidth = 579
   OnResize = FormResize
-  ExplicitWidth = 599
-  ExplicitHeight = 520
+  ExplicitWidth = 595
+  ExplicitHeight = 519
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 137
     Top = 0
     Width = 5
-    Height = 440
+    Height = 439
     ExplicitHeight = 278
   end
   object pcLayerGroups: TPageControl
     Left = 142
     Top = 0
-    Width = 441
-    Height = 440
+    Width = 437
+    Height = 439
     ActivePage = tabBasics
     Align = alClient
     TabOrder = 1
     OnChange = pcLayerGroupsChange
+    ExplicitWidth = 441
+    ExplicitHeight = 440
     object tabBasics: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Basics_Tab'
       Caption = 'Basics'
       DesignSize = (
-        433
-        407)
+        429
+        406)
       object Label1: TLabel
         Left = 3
         Top = 3
@@ -79,7 +81,7 @@ inherited frmLayers: TfrmLayers
       object comboAquiferType: TJvImageComboBox
         Left = 3
         Top = 133
-        Width = 427
+        Width = 419
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -115,7 +117,7 @@ inherited frmLayers: TfrmLayers
       object comboInterblockMethod: TJvImageComboBox
         Left = 3
         Top = 237
-        Width = 427
+        Width = 419
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -147,7 +149,7 @@ inherited frmLayers: TfrmLayers
       object comboVertKMethod: TJvImageComboBox
         Left = 3
         Top = 319
-        Width = 427
+        Width = 419
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -174,16 +176,17 @@ inherited frmLayers: TfrmLayers
       object edName: TRbwEdit
         Left = 3
         Top = 26
-        Width = 427
+        Width = 419
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         OnChange = edNameChange
+        ExplicitWidth = 427
       end
       object cbComputeSaturatedThickness: TJvCheckBox
         Left = 3
         Top = 167
-        Width = 427
+        Width = 419
         Height = 40
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Compute saturated thickness using starting head (LAYTYP)'
@@ -198,6 +201,7 @@ inherited frmLayers: TfrmLayers
         HotTrackFont.Name = 'Arial'
         HotTrackFont.Pitch = fpVariable
         HotTrackFont.Style = []
+        ExplicitWidth = 427
       end
       object rdeAnisotropy: TRbwDataEntry
         Left = 3
@@ -221,7 +225,7 @@ inherited frmLayers: TfrmLayers
       inline frameDiscretization: TframeDiscretization
         Left = 0
         Top = 0
-        Width = 433
+        Width = 437
         Height = 407
         Align = alClient
         TabOrder = 0
@@ -288,7 +292,7 @@ inherited frmLayers: TfrmLayers
           OnExit = frameDiscretizationrdeVDiscretizationExit
         end
         inherited rgMethod: TRadioGroup
-          Height = 289
+          Height = 288
           ExplicitHeight = 289
         end
       end
@@ -496,7 +500,7 @@ inherited frmLayers: TfrmLayers
       object rdgDispersion: TRbwDataGrid4
         Left = 0
         Top = 41
-        Width = 433
+        Width = 437
         Height = 366
         Align = alClient
         ColCount = 4
@@ -615,6 +619,7 @@ inherited frmLayers: TfrmLayers
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 433
         ColWidths = (
           64
           64
@@ -627,10 +632,11 @@ inherited frmLayers: TfrmLayers
       object pnlMultiEdit: TPanel
         Left = 0
         Top = 0
-        Width = 433
+        Width = 437
         Height = 41
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 433
         object rdeMultiDispersionValues: TRbwDataEntry
           Left = 59
           Top = 8
@@ -656,7 +662,7 @@ inherited frmLayers: TfrmLayers
       object rdgConduitLayers: TRbwDataGrid4
         Left = 0
         Top = 41
-        Width = 433
+        Width = 437
         Height = 366
         Align = alClient
         FixedCols = 1
@@ -799,6 +805,7 @@ inherited frmLayers: TfrmLayers
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 433
         ColWidths = (
           64
           64
@@ -815,10 +822,11 @@ inherited frmLayers: TfrmLayers
       object pnl1: TPanel
         Left = 0
         Top = 0
-        Width = 433
+        Width = 437
         Height = 41
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 433
         object rdeConduitLayers: TRbwDataEntry
           Left = 59
           Top = 8
@@ -839,16 +847,18 @@ inherited frmLayers: TfrmLayers
   end
   object Panel4: TPanel
     Left = 0
-    Top = 440
-    Width = 583
+    Top = 439
+    Width = 579
     Height = 41
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 440
+    ExplicitWidth = 583
     DesignSize = (
-      583
+      579
       41)
     object btnHelp: TBitBtn
-      Left = 242
+      Left = 234
       Top = 4
       Width = 108
       Height = 33
@@ -857,9 +867,10 @@ inherited frmLayers: TfrmLayers
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 242
     end
     object btnOK: TBitBtn
-      Left = 356
+      Left = 348
       Top = 4
       Width = 108
       Height = 33
@@ -868,9 +879,10 @@ inherited frmLayers: TfrmLayers
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 356
     end
     object btnCancel: TBitBtn
-      Left = 470
+      Left = 462
       Top = 4
       Width = 108
       Height = 33
@@ -878,15 +890,17 @@ inherited frmLayers: TfrmLayers
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 470
     end
   end
   object Panel3: TPanel
     Left = 0
     Top = 0
     Width = 137
-    Height = 440
+    Height = 439
     Align = alLeft
     TabOrder = 0
+    ExplicitHeight = 440
     object GridPanel1: TGridPanel
       Left = 1
       Top = 407
@@ -1017,7 +1031,7 @@ inherited frmLayers: TfrmLayers
       Left = 1
       Top = 1
       Width = 135
-      Height = 406
+      Height = 405
       Align = alClient
       HideSelection = False
       Indent = 20

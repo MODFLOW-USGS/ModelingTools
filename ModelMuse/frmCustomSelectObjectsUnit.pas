@@ -23,6 +23,8 @@ type
     IsDataSetNode: boolean;
   end;
 
+  // Descendents of @name include @link(TfrmSearch), @link(TfrmShowHideObjects),
+  // @link(TfrmSelectObjectsForEditing), and @link(TfrmExportShapefileObjects).
   TfrmCustomSelectObjects = class(TfrmCustomGoPhast)
     // @name is the panel at the bottom of the form that holds the buttons.
     pnlBottom: TPanel;
@@ -2678,6 +2680,8 @@ end;
 
 destructor TfrmCustomSelectObjects.Destroy;
 begin
+  FreeAndNil(vstObjects);
+
   FExapandedNodes.Free;
   FDataSetLists.Free;
   FDataSetLists := nil;

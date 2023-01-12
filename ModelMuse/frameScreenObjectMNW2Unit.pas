@@ -1266,7 +1266,9 @@ begin
   frmGoPhast.PhastModel.ModflowStressPeriods.
     FillPickListWithEndTimes(rdgTimeTable, Ord(mtcEndTime));
 
+  {$IF CompilerVersion > 28}
   comboQCUT.Items.ClearAndResetID;
+  {$ENDIF}
   for ItemIndex := 0 to rdgTimeTable.Columns[
     Ord(mtcLimitMethod)].PickList.Count - 1 do
   begin

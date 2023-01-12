@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="Prudic2004t2" FileType="bin">
-    <FileName Model_Name="Prudic2004t2" FileType="bin">..\..\..\WRDAPP\mf6.4.0\bin\mf6.exe</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="bin">..\..\..\WRDAPP\mf6.4.1\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="Prudic2004t2" FileType="ancillary">
     <FileName Model_Name="Prudic2004t2" FileType="ancillary">Prudic2004t2.gpt</FileName>

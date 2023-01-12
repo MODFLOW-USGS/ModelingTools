@@ -7,6 +7,7 @@ inherited frmSwrStructures: TfrmSwrStructures
   OnResize = FormResize
   ExplicitWidth = 800
   ExplicitHeight = 602
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -60,6 +61,10 @@ inherited frmSwrStructures: TfrmSwrStructures
     TabOrder = 0
     object tabStructureDefinition: TTabSheet
       Caption = 'Structure Definition'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object splttrMain: TJvNetscapeSplitter
         Left = 0
         Top = 272
@@ -437,6 +442,7 @@ inherited frmSwrStructures: TfrmSwrStructures
               Height = 157
               ColCount = 2
               OnSetEditText = frameStageDischargeGridSetEditText
+              OnEndUpdate = frameStageDischargeGridEndUpdate
               Columns = <
                 item
                   AutoAdjustRowHeights = True
@@ -486,7 +492,6 @@ inherited frmSwrStructures: TfrmSwrStructures
                   CheckStyle = csCheck
                   AutoAdjustColWidths = True
                 end>
-              OnEndUpdate = frameStageDischargeGridEndUpdate
               ExplicitWidth = 278
               ExplicitHeight = 157
             end
@@ -1082,10 +1087,12 @@ inherited frmSwrStructures: TfrmSwrStructures
         Height = 272
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 614
-        ExplicitHeight = 150
+        ExplicitWidth = 774
+        ExplicitHeight = 272
         inherited lblType: TLabel
+          Width = 48
           Height = 18
+          ExplicitWidth = 48
           ExplicitHeight = 18
         end
         inherited lblRestrictions: TLabel
@@ -1174,6 +1181,10 @@ inherited frmSwrStructures: TfrmSwrStructures
     object tabTiming: TTabSheet
       Caption = 'Timing'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inline frameTiming: TframeFormulaGrid
         Left = 0
         Top = 0

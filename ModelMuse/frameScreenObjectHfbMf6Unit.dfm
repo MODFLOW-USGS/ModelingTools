@@ -14,8 +14,8 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
     object lblParameterName: TLabel [1]
       Left = 8
       Top = 48
-      Width = 87
-      Height = 15
+      Width = 79
+      Height = 13
       Margins.Left = 8
       Caption = 'Parameter name'
       Enabled = False
@@ -50,7 +50,7 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
       Left = 283
       Top = 45
       Width = 170
-      Height = 25
+      Height = 23
       Margins.Right = 8
       Style = csOwnerDrawVariable
       Anchors = [akTop, akRight]
@@ -60,7 +60,7 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
       Enabled = False
       ImageHeight = 0
       ImageWidth = 0
-      ItemHeight = 19
+      ItemHeight = 17
       ItemIndex = -1
       TabOrder = 4
       OnChange = comboHfbParametersChange

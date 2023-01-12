@@ -81,13 +81,17 @@ begin
     ofObserved, ofInacative:
       begin
         rdgObservations.Columns[Ord(hocStatFlag)].PickList := ObservationStatFlagLabels;
+  {$IF CompilerVersion > 28}
         comboMultiStatFlag.Items.ClearAndResetID;
+  {$ENDIF}
         comboMultiStatFlag.Items.Assign(ObservationStatFlagLabels);
       end;
     ofPredicted:
       begin
         rdgObservations.Columns[Ord(hocStatFlag)].PickList := PredictionStatFlagLabels;
+  {$IF CompilerVersion > 28}
         comboMultiStatFlag.Items.ClearAndResetID;
+  {$ENDIF}
         comboMultiStatFlag.Items.Assign(PredictionStatFlagLabels);
         for Index := 1 to rdgObservations.RowCount - 1 do
         begin
@@ -272,7 +276,9 @@ var
 begin
   inherited;
   rdgObservations.Columns[Ord(hocStatFlag)].PickList := ObservationStatFlagLabels;
+  {$IF CompilerVersion > 28}
   comboMultiStatFlag.Items.ClearAndResetID;
+  {$ENDIF}
   comboMultiStatFlag.Items.Assign(ObservationStatFlagLabels);
   Column := rdgObservations.Columns[Ord(hocStatFlag)];
   Assert(comboMultiStatFlag.Items.Count = Column.PickList.Count);

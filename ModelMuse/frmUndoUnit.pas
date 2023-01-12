@@ -31,14 +31,14 @@ implementation
 
 constructor TUndoForm.Create(AOwner: TComponent);
 begin
-  inherited;
   FUndoStack := TUndoStack.Create(100);
+  inherited;
 end;
 
 destructor TUndoForm.Destroy;
 begin
-  FUndoStack.Free;
   inherited;
+  FUndoStack.Free;
 end;
 
 end.

@@ -15,13 +15,13 @@ inherited frameHeadObservations: TframeHeadObservations
           Left = 99
           Top = 5
           Width = 89
-          Height = 25
+          Height = 23
           Style = csOwnerDrawVariable
           ButtonStyle = fsLighter
           DroppedWidth = 145
           ImageHeight = 0
           ImageWidth = 0
-          ItemHeight = 19
+          ItemHeight = 17
           ItemIndex = -1
           TabOrder = 1
           OnChange = comboMultiStatFlagChange
@@ -54,18 +54,18 @@ inherited frameHeadObservations: TframeHeadObservations
         end
       end
       inherited Panel2: TPanel
-        Top = 110
+        Top = 112
         ExplicitTop = 112
       end
       inherited rdgObservations: TRbwDataGrid4
-        Height = 75
+        Height = 77
         ExplicitHeight = 75
       end
     end
     inherited tabLayers: TTabSheet
       ExplicitHeight = 186
       inherited Panel4: TPanel
-        Top = 110
+        Top = 112
         ExplicitTop = 112
         inherited seLayers: TJvSpinEdit
           Left = 9
@@ -73,8 +73,8 @@ inherited frameHeadObservations: TframeHeadObservations
         end
       end
       inherited rdgLayers: TRbwDataGrid4
-        Height = 75
-        ExplicitHeight = 75
+        Height = 77
+        ExplicitHeight = 77
       end
     end
   end
@@ -82,6 +82,7 @@ inherited frameHeadObservations: TframeHeadObservations
     Height = 109
     ExplicitHeight = 109
     inherited edObsName: TLabeledEdit
+      EditLabel.ExplicitLeft = 0
       EditLabel.ExplicitTop = -23
       EditLabel.ExplicitWidth = 83
     end

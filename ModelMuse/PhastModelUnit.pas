@@ -10799,12 +10799,14 @@ const
 //               Bug fix: Fixed importing UZF data from a Shapefile.
 //    '5.1.1.5'  Bug fix: Fixed a bug that could cause an access violation
 //                when activating MODFLOW-LGR.
+//    '5.1.1.6'  Enhancement: ModelMuse can now import FHB boundaries from
+//                 Shapefiles.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.5';
+  IIModelVersion = '5.1.1.6';
 
 function IModelVersion: string;
 begin
@@ -23707,7 +23709,7 @@ var
   ChildModel: TChildModel;
   function IsSelected(Model: TCustomModel): Boolean;
   begin
-    Model.ModflowPackages.FarmProcess4.IsSelected
+    result := Model.ModflowPackages.FarmProcess4.IsSelected
     and (Model.ModflowPackages.FarmProcess4.Efficiency.FarmOption = foTransient)
     and (Model.ModflowPackages.FarmProcess4.Efficiency.ArrayList  = alArray)
   end;
@@ -30634,13 +30636,13 @@ begin
     StrMpathDefaultPath);
   if (ModPathLocation = '') or not FileExists(ModPathLocation) then
   begin
-    if FileExists(StrModflowDefaultPath) then
+    if FileExists(StrMpathDefaultPath) then
     begin
-      ModPathLocation := StrModflowDefaultPath;
+      ModPathLocation := StrMpathDefaultPath;
     end
-    else if FileExists(AlternatePath(StrModflowDefaultPath)) then
+    else if FileExists(AlternatePath(StrMpathDefaultPath)) then
     begin
-      ModPathLocation := AlternatePath(StrModflowDefaultPath);
+      ModPathLocation := AlternatePath(StrMpathDefaultPath);
     end;
   end;
 

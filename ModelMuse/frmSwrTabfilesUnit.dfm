@@ -7,6 +7,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
   OnResize = FormResize
   ExplicitWidth = 800
   ExplicitHeight = 424
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0

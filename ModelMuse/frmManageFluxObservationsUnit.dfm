@@ -13,6 +13,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
   OnResize = FormResize
   ExplicitWidth = 808
   ExplicitHeight = 430
+  PixelsPerInch = 96
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 121
@@ -109,6 +110,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       TabOrder = 0
       object tabObservationProperties: TTabSheet
         Caption = 'Observation Properties'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object pnlTop: TPanel
           Left = 0
           Top = 0
@@ -168,6 +173,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           object tabObservationsTimes: TTabSheet
             Caption = 'Observation times and values'
             OnResize = tabObservationsTimesResize
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -205,6 +214,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               UnselectableColor = clBtnFace
               OnBeforeDrawCell = rdgFluxObsTimesBeforeDrawCell
               OnColSize = rdgFluxObsTimesColSize
+              OnEndUpdate = rdgFluxObsTimesEndUpdate
               ColorRangeSelection = False
               OnHorizontalScroll = rdgFluxObsTimesHorizontalScroll
               Columns = <
@@ -358,7 +368,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                   CheckStyle = csCheck
                   AutoAdjustColWidths = False
                 end>
-              OnEndUpdate = rdgFluxObsTimesEndUpdate
               WordWrapRowCaptions = False
               ColWidths = (
                 64
@@ -459,6 +468,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
             Caption = 'Mass flux observation times and values'
             ImageIndex = 2
             TabVisible = False
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -551,6 +564,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               UnselectableColor = clBtnFace
               OnBeforeDrawCell = rdgConcFluxObsTimesBeforeDrawCell
               OnColSize = rdgConcFluxObsTimesColSize
+              OnEndUpdate = rdgConcFluxObsTimesEndUpdate
               ColorRangeSelection = False
               OnHorizontalScroll = rdgConcFluxObsTimesHorizontalScroll
               Columns = <
@@ -725,7 +739,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                   CheckStyle = csCheck
                   AutoAdjustColWidths = False
                 end>
-              OnEndUpdate = rdgConcFluxObsTimesEndUpdate
               WordWrapRowCaptions = False
               ColWidths = (
                 40
@@ -770,6 +783,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           object tabObjects: TTabSheet
             Caption = 'Objects'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -944,6 +961,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       object tabObservationGroupNames: TTabSheet
         Caption = 'Observation Group Names'
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object rdgGroupNames: TRbwDataGrid4
           Left = 0
           Top = 0

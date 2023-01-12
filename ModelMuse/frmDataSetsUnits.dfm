@@ -139,6 +139,10 @@ inherited frmDataSets: TfrmDataSets
     TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         312
         361)
@@ -528,6 +532,10 @@ inherited frmDataSets: TfrmDataSets
       Caption = 'PEST Parameters'
       ImageIndex = 3
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object cbParametersUsed: TCheckBox
         Left = 16
         Top = 17
@@ -541,6 +549,10 @@ inherited frmDataSets: TfrmDataSets
     object tabComment: TTabSheet
       Caption = 'Comment'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Splitter2: TSplitter
         Left = 0
         Top = 169

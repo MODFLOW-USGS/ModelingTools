@@ -39,7 +39,11 @@ type
     FTimes: TRealCollection;
     FGroupName: AnsiString;
     FInputFile: TStreamReader;
+  {$IF CompilerVersion > 28}
     FTimeSeriesDictionary: TCacheDictionary<string, TMf6TimeSeries>;
+    {$ELSE}
+    FTimeSeriesDictionary: TDictionary<string, TMf6TimeSeries>;
+    {$ENDIF}
     FDeleted: Boolean;
     FSortedTimes: TRealList;
     function GetItem(Index: Integer): TTimeSeriesItem;
@@ -89,8 +93,13 @@ type
 
   TTimesSeriesCollections = class(TOrderedCollection)
   private
+  {$IF CompilerVersion > 28}
     FTimeSeriesGroupsDictionary: TCacheDictionary<string, TTimesSeriesCollection>;
     FTimeSeriesDictionary: TCacheDictionary<string, TMf6TimeSeries>;
+  {$ELSE}
+    FTimeSeriesGroupsDictionary: TDictionary<string, TTimesSeriesCollection>;
+    FTimeSeriesDictionary: TDictionary<string, TMf6TimeSeries>;
+  {$ENDIF}
     FTimeSeriesNames: TStringList;
     function GetItem(Index: Integer): TimeSeriesCollectionItem;
     procedure SetItem(Index: Integer; const Value: TimeSeriesCollectionItem);
@@ -186,19 +195,27 @@ begin
 end;
 
 constructor TTimesSeriesCollection.Create(Model: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
 begin
   inherited Create(TTimeSeriesItem, Model);
   if Model = nil then
   begin
-    FTimes := TRealCollection.Create(nil);
+    InvalidateModelEvent := nil;
+    FTimes := TRealCollection.Create(InvalidateModelEvent);
   end
   else
   begin
+    InvalidateModelEvent := Model.Invalidate;
     FSortedTimes := TRealList.Create;
-    FTimes := TRealCollection.Create(Model.Invalidate);
+    FTimes := TRealCollection.Create(InvalidateModelEvent);
     FTimes.OnChange := OnTimesChanged;
   end;
+  {$IF CompilerVersion > 28}
   FTimeSeriesDictionary := TCacheDictionary<string, TMf6TimeSeries>.Create;
+  {$ELSE}
+  FTimeSeriesDictionary := TDictionary<string, TMf6TimeSeries>.Create;
+  {$ENDIF}
 end;
 
 destructor TTimesSeriesCollection.Destroy;
@@ -783,8 +800,13 @@ end;
 constructor TTimesSeriesCollections.Create(Model: TBaseModel);
 begin
   inherited Create(TimeSeriesCollectionItem, Model);
+  {$IF CompilerVersion > 28}
   FTimeSeriesGroupsDictionary := TCacheDictionary<string, TTimesSeriesCollection>.Create;
   FTimeSeriesDictionary := TCacheDictionary<string, TMf6TimeSeries>.Create;
+  {$ELSE}
+  FTimeSeriesGroupsDictionary := TDictionary<string, TTimesSeriesCollection>.Create;
+  FTimeSeriesDictionary := TDictionary<string, TMf6TimeSeries>.Create;
+  {$ENDIF}
 end;
 
 destructor TTimesSeriesCollections.Destroy;
@@ -1035,6 +1057,7 @@ end;
 
 function TCacheDictionary<K,V>.TryGetValue(const Key: K; var Value: V): Boolean;
 begin
+  {$IF CompilerVersion > 28}
   if FUseCachedValue and (Comparer.Equals(Key, FCachedKey)) then
   begin
     Value := FCachedValue;
@@ -1048,6 +1071,9 @@ begin
     FUseCachedValue := True;
     FCachedResult := result;
   end;
+  {$ELSE}
+    result := inherited TryGetValue(Key, Value);
+  {$ENDIF}
 end;
 
 end.

@@ -547,7 +547,9 @@ var
   Index: Integer;
   InterpolatorType: TInterpolatorType;
 begin
+  {$IF CompilerVersion > 28}
   comboInterpolation.Items.ClearAndResetID;
+  {$ENDIF}
   Item := comboInterpolation.Items.Add;
   Item.Text := StrNone;
   for Index := 0 to FInterpolatorList.Count - 1 do

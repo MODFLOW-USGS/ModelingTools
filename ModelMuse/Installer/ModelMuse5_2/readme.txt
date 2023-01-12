@@ -189,6 +189,8 @@ and JVCL in the account of the user from which the installer programs were
 run. This might be different from the account that was used to run the GetIt 
 Package Manager.
 
+Install Graphics32 (see below) before installing GLScene
+
 Installing GLScene
 http://glscene.sourceforge.net
 https://sourceforge.net/projects/glscene/files/GLScene/GLScene%20v1.8/
@@ -223,7 +225,6 @@ The portions of the instructions related to C++ do not apply if GLScene
 is only being installed in Delphi. If asked whether to add the 
 Graphics 32 to the project, select yes.
 
-[DELETE THESE INSTRUCTIONS]
 To compile the design-time package, you may need to edit the search path for 
 the design time Project (Project|Options|Delphi compiler|Search path) so that 
 it includes the dcp and/or bpl
@@ -231,14 +232,16 @@ output directories. For example:
 C:\Users\Public\Documents\Embarcadero\Studio\22.0\DCP
 and 
 C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl
-Then edit the "requires" section of the GLScene Design-time package to 
+
+Then you may need to edit the "requires" section of the GLScene packages to 
 add a requirement for the Graphics32 design-time package. To add a 
 requirement, right-click on the "requires" section of the package in the 
 Projects window and select reference. Then navigate to the DCP directory
 and a the .dcp file for the Graphics32 design-time package.
-[END DELETE THESE INSTRUCTIONS]
+However, the package requirement may be added automatically when building the packages.
 
 Build the runtime package first. Then install the design time package.  
+Only GLScene_RT.dproj and GLScene_DT.dproj are needed for ModelMuse.
 
 Installing Graphics32
 https://sourceforge.net/projects/graphics32/

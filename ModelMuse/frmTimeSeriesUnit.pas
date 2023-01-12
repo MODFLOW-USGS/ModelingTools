@@ -240,6 +240,10 @@ begin
     for GroupIndex := 0 to FTimesSeries. Count - 1 do
     begin
       AGroup := FTimesSeries.Items[GroupIndex].TimesSeriesCollection;
+      if AGroup.Deleted then
+      begin
+        Continue;
+      end;
       if GroupNameList.IndexOf(String(AGroup.GroupName)) >= 0 then
       begin
         DuplicateNames.Add(String(AGroup.GroupName));
@@ -302,9 +306,17 @@ begin
     for GroupIndex := 0 to FTimesSeries. Count - 1 do
     begin
       AGroup := FTimesSeries.Items[GroupIndex].TimesSeriesCollection;
+      if AGroup.Deleted then
+      begin
+        Continue;
+      end;
       for SeriesIndex := 0 to AGroup.Count - 1 do
       begin
         ASeries := AGroup[SeriesIndex].TimeSeries;
+        if ASeries.Deleted then
+        begin
+          Continue;
+        end;
         if SeriesNameList.IndexOf(String(ASeries.SeriesName)) >= 0 then
         begin
           DuplicateNames.Add(String(ASeries.SeriesName));
@@ -386,6 +398,10 @@ begin
   for GroupIndex := 0 to FTimesSeries. Count - 1 do
   begin
     AGroup := FTimesSeries.Items[GroupIndex].TimesSeriesCollection;
+    if AGroup.Deleted then
+    begin
+      Continue;
+    end;
     result := (AGroup.Times.First.Value <= StartTime)
       and (AGroup.Times.Last.Value >= EndTime);
     if not result then

@@ -64,7 +64,9 @@ var
   Item: TJvImageItem;
   Param: TModflowSteadyParameter;
 begin
+  {$IF CompilerVersion > 28}
   comboHfbParameters.Items.ClearAndResetID;
+  {$ENDIF}
   Item := comboHfbParameters.Items.Add;
   Item.Text := StrNone;
   for Index := 0 to frmGoPhast.PhastModel.ModflowSteadyParameters.Count - 1 do

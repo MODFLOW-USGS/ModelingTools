@@ -10,8 +10,14 @@ uses
 
 type
   TframeScreenObjectCustomFmp4Boundary = class(TframeScreenObjectNoParam)
+    procedure rdgModflowBoundarySetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure seNumberOfTimesChange(Sender: TObject);
   private
     FValuesCleared: Boolean;
+    FOnEdited: TNotifyEvent;
+    FGettingData: Boolean;
+    procedure Edited;
     { Private declarations }
   protected
     function GetValueDescription: string; virtual; abstract;
@@ -21,6 +27,7 @@ type
     procedure GetData(List: TScreenObjectEditCollection);
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
+    property OnEdited: TNotifyEvent read FOnEdited write FOnEdited;
     { Public declarations }
   end;
 
@@ -36,6 +43,14 @@ uses
 
 { TframeScreenObjectCustomFmp4Boundary }
 
+procedure TframeScreenObjectCustomFmp4Boundary.Edited;
+begin
+  if Assigned(FOnEdited) and not FGettingData then
+  begin
+    FOnEdited(self);
+  end;
+end;
+
 procedure TframeScreenObjectCustomFmp4Boundary.GetData(
   List: TScreenObjectEditCollection);
 var
@@ -44,38 +59,36 @@ var
   Boundary: TFmp4Boundary;
   Item: TScreenObjectEditItem;
 begin
+  FGettingData := True;
   rdgModflowBoundary.BeginUpdate;
   try
     InitializeGrid;
     FValuesCleared := False;
-    try
-      Assert(List.Count >= 1);
-      FoundFirst := False;
+    Assert(List.Count >= 1);
+    FoundFirst := False;
 //      FirstBoundary := nil;
-      for Index := 0 to List.Count - 1 do
+    for Index := 0 to List.Count - 1 do
+    begin
+      Item := List[Index];
+      Boundary := GetBoundary(Item);
+      if (Boundary <> nil) and Boundary.Used then
       begin
-        Item := List[Index];
-        Boundary := GetBoundary(Item);
-        if (Boundary <> nil) and Boundary.Used then
+        if FoundFirst then
         begin
-          if FoundFirst then
-          begin
 
-          end
-          else
-          begin
-            FoundFirst := True;
-
-          end;
+        end
+        else
+        begin
+          FoundFirst := True;
 
         end;
+
       end;
-
-    finally
-
     end;
+
   finally
     rdgModflowBoundary.EndUpdate;
+    FGettingData := False;
   end;
 end;
 
@@ -92,6 +105,20 @@ begin
     rdgModflowBoundary.EndUpdate;
   end;
 
+end;
+
+procedure TframeScreenObjectCustomFmp4Boundary.rdgModflowBoundarySetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  Edited;
+end;
+
+procedure TframeScreenObjectCustomFmp4Boundary.seNumberOfTimesChange(
+  Sender: TObject);
+begin
+  inherited;
+  Edited
 end;
 
 procedure TframeScreenObjectCustomFmp4Boundary.SetData(

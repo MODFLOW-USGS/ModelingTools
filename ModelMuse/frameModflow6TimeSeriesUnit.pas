@@ -41,6 +41,7 @@ type
     procedure InitializeGrid;
     procedure GetData(ATimesSeriesGroupItem: TimeSeriesCollectionItem; PestNames: TStringList);
     procedure SetData;
+    property GroupItem: TimeSeriesCollectionItem read FTimesSeriesGroupItem;
     { Public declarations }
   end;
 

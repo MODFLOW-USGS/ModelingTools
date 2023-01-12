@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{E5E9B48D-41AF-41FA-87D8-2CA8DF4C4774}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="GR32_RSXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="GR32_DSGN_RSXE6.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="GR32_RSXE6">
+        <MSBuild Projects="GR32_RSXE6.dproj"/>
+    </Target>
+    <Target Name="GR32_RSXE6:Clean">
+        <MSBuild Projects="GR32_RSXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GR32_RSXE6:Make">
+        <MSBuild Projects="GR32_RSXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="GR32_DSGN_RSXE6">
+        <MSBuild Projects="GR32_DSGN_RSXE6.dproj"/>
+    </Target>
+    <Target Name="GR32_DSGN_RSXE6:Clean">
+        <MSBuild Projects="GR32_DSGN_RSXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GR32_DSGN_RSXE6:Make">
+        <MSBuild Projects="GR32_DSGN_RSXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="GR32_RSXE6;GR32_DSGN_RSXE6"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="GR32_RSXE6:Clean;GR32_DSGN_RSXE6:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="GR32_RSXE6:Make;GR32_DSGN_RSXE6:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

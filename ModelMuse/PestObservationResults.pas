@@ -927,8 +927,10 @@ begin
   TempList := TObservationInterfaceList.Create;
   try
     frmGoPhast.PhastModel.FillObsInterfaceItemList(TempList, True);
+  {$IF CompilerVersion > 28}
     FUsedObservations.Capacity := TempList.Count;
     FGuidObs.Capacity := TempList.Count;
+  {$ENDIF}
     for ObsIndex := 0 to TempList.Count - 1 do
     begin
       IObs := TempList[ObsIndex];

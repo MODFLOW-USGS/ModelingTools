@@ -137,6 +137,7 @@ end;
 
 destructor TframeDrawCrossSection.Destroy;
 begin
+  FreeAndNil(vstAvailableDataSets);
   FColors.Free;
   FDataSetDummyObjects.Free;
   inherited;

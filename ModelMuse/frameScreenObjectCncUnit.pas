@@ -49,4 +49,7 @@ begin
   result := StrSpecifiedConcentrat;
 end;
 
+Initialization
+  RegisterClass(TframeScreenObjectCnc);
+
 end.

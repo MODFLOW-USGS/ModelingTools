@@ -30,6 +30,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpType = htKeyword
       HelpKeyword = 'MNW2_Basic_Tab'
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         601
         421)
@@ -214,6 +218,16 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             ExplicitWidth = 268
             ExplicitHeight = 60
           end
+          inherited tabCell: TTabSheet
+            ExplicitTop = 2
+            ExplicitWidth = 218
+            ExplicitHeight = 70
+          end
+          inherited tabLocation: TTabSheet
+            ExplicitTop = 2
+            ExplicitWidth = 218
+            ExplicitHeight = 70
+          end
           inherited tabObject: TTabSheet
             inherited comboObject: TComboBox
               Width = 258
@@ -223,7 +237,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         end
         inherited comboLocationChoice: TJvImageComboBox
           Left = 173
-          ItemIndex = -1
           OnChange = framePumpLocationMethodcomboLocationChoiceChange
           ExplicitLeft = 173
         end
@@ -550,6 +563,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Discharge_Adjustment_Tab'
       Caption = 'Discharge Adjustment'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         601
         421)
@@ -750,6 +767,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Pumping_Rate_Tab'
       Caption = 'Pumping Rate'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object rdgTimeTable: TRbwDataGrid4
         Left = 0
         Top = 65
@@ -1090,6 +1111,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'Well_Screens'
       Caption = 'Well Screens'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel3: TPanel
         Left = 0
         Top = 380
@@ -1425,6 +1450,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
     object tabObservations: TTabSheet
       Caption = 'Calibration'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inline framePestObsMnw2: TframePestObs
         Left = 0
         Top = 0

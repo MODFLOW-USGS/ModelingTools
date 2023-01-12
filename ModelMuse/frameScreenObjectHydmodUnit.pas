@@ -66,7 +66,9 @@ var
   Index: Integer;
   NoDelayItem: TSubNoDelayBedLayerItem;
 begin
+  {$IF CompilerVersion > 28}
   comboNoDelayBed.Items.ClearAndResetID;
+  {$ENDIF}
   if comboLayerGroup.ItemIndex >= 0 then
   begin
     LayerGroup := comboLayerGroup.Items.Objects[comboLayerGroup.ItemIndex]
@@ -206,7 +208,9 @@ begin
   comboLayerGroup.Enabled := frmGoPhast.PhastModel.SubIsSelected;
   comboNoDelayBed.Enabled := frmGoPhast.PhastModel.SubIsSelected;
 
+  {$IF CompilerVersion > 28}
   comboLayerGroup.Items.ClearAndResetID;
+  {$ENDIF}
   LayerStructure := frmGoPhast.PhastModel.LayerStructure;
   for Index := 1 to LayerStructure.Count - 1 do
   begin

@@ -385,7 +385,11 @@ var
       if not Mesh.Is3DMesh then
       begin
         Location := AnElement.Center;
+  {$IF CompilerVersion > 28}
         QuadTree.AddPoint(Location.x, Location.y, AnElement);
+  {$ELSE}
+        QuadTree.AddPoint(Location.x, Location.y, Pointer(AnElement));
+  {$ENDIF}
       end
       else
       begin
@@ -396,7 +400,11 @@ var
           if AnElement3D.Active then
           begin
             Location := AnElement.Center;
+  {$IF CompilerVersion > 28}
             QuadTree.AddPoint(Location.x, Location.y, AnElement);
+  {$ELSE}
+            QuadTree.AddPoint(Location.x, Location.y, Pointer(AnElement));
+  {$ENDIF}
             break;
           end;
         end;
@@ -521,7 +529,11 @@ begin
               if not Mesh.Is3DMesh then
               begin
                 Location := ANode.Location;
+  {$IF CompilerVersion > 28}
                 QuadTree.AddPoint(Location.x, Location.y, ANode);
+  {$ELSE}
+                QuadTree.AddPoint(Location.x, Location.y, Pointer(ANode));
+  {$ENDIF}
               end
               else
               begin
@@ -531,7 +543,11 @@ begin
                   if ANode3D.Active then
                   begin
                     Location := ANode.Location;
+  {$IF CompilerVersion > 28}
                     QuadTree.AddPoint(Location.x, Location.y, ANode);
+  {$ELSE}
+                    QuadTree.AddPoint(Location.x, Location.y, Pointer(ANode));
+  {$ENDIF}
                     break;
                   end;
                 end;

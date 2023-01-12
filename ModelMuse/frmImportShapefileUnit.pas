@@ -77,6 +77,8 @@ type
   TEvtColumns = (evtcStartingTime, evtcEndingTime, evtcParameterName,
     evtRate, evtcSurface, evtcDepth, evtcLayer, evtcConcentration);
 
+  TFhbColumns =  (fhbStartingTime, fhbValue);
+
   TGhbColumns = (ghbcStartingTime, ghbcEndingTime, ghbcParameterName,
     ghbcHead, ghbcConductance, ghbcConcentration);
 
@@ -723,6 +725,8 @@ type
     procedure InitializeBoundaryControlsForCHD;
     procedure InitializeBoundaryControlsForGHB;
     procedure ImportModflowGhbBoundary(AScreenObject: TScreenObject);
+    procedure InitializeBoundaryControlsForFhb;
+    procedure ImportModflowFhbBoundary(AScreenObject: TScreenObject);
     procedure InitializeBoundaryControlsForWEL;
     procedure ImportModflowWelBoundary(AScreenObject: TScreenObject);
     procedure InitializeBoundaryControlsForRIV;
@@ -771,7 +775,7 @@ type
       EvalAt: TEvaluatedAt);
     function DataArrayOrientationOK(DataArray: TDataArray): boolean;
     procedure AddModflowPackageToImportChoices(
-      APackage: TModflowPackageSelection);
+      APackage: TModflowPackageSelection; AddedText: string = '');
     procedure InitializeBoundaryControlsForMnw2;
     procedure ImportModflowMnw2Package(AScreenObject: TScreenObject);
     procedure InitializeBoundaryControlsForMAW;
@@ -866,7 +870,7 @@ uses Math, Contnrs , frmGoPhastUnit, frmProgressUnit,
   System.IOUtils, SutraMeshUnit, SubscriptionUnit, FootPrintUtilities,
   ModflowSfr6Unit, ModflowMawUnit, Modflow6ObsUnit, frameScreenObjectSfr6Unit,
   ModflowBoundaryDisplayUnit, Mt3dUztRchUnit, Mt3dUztSatEtUnit,
-  Mt3dUztUnsatEtUnit, ModflowLakMf6Unit, PestPropertiesUnit;
+  Mt3dUztUnsatEtUnit, ModflowLakMf6Unit, PestPropertiesUnit, ModflowFhbUnit;
 
 resourcestring
   StrParameterName = 'Parameter name';
@@ -1142,6 +1146,8 @@ resourcestring
   StrStreambedRoughness = 'Streambed Roughness';
   StrRCHRechargeRated = 'RCH_RechargeRate%d';
   StrMeasured = 'Measured';
+  StrSpecifiedHeads = 'Specified Heads in ';
+  StrSpecifiedFlows = 'Specified Flows in ';
 
 const
   StrShapeMinX = 'ShapeMinX';
@@ -2308,7 +2314,6 @@ procedure TfrmImportShapefile.GetNewOrExistingBoundaryItem(
   var Param: TModflowTransientListParameter;
   var ParamItem: TModflowParamItem; Boundary: TModflowParamBoundary;
   ItemIndex: integer);
-
 begin
   if Param = nil then
   begin
@@ -2387,7 +2392,7 @@ begin
 end;
 
 procedure TfrmImportShapefile.AddModflowPackageToImportChoices(
-  APackage: TModflowPackageSelection);
+  APackage: TModflowPackageSelection; AddedText: string = '');
 begin
   if frmGoPhast.PhastModel.PackageIsSelected(APackage) then
   begin
@@ -2403,7 +2408,7 @@ begin
 //    begin
 //      comboJoinObjects.ItemIndex := 0;
 //    end;
-    comboBoundaryChoice.Items.AddObject(APackage.PackageIdentifier, APackage);
+    comboBoundaryChoice.Items.AddObject(AddedText + APackage.PackageIdentifier, APackage);
   end;
 end;
 
@@ -6521,6 +6526,136 @@ begin
   end;
 end;
 
+procedure TfrmImportShapefile.ImportModflowFhbBoundary(
+  AScreenObject: TScreenObject);
+var
+  Index: Integer;
+  UseRow: Boolean;
+  Item: TFhbItem;
+  AValue: Extended;
+  AFormula: string;
+  AnItem: TCustomModflowBoundaryItem;
+  Boundary: TFhbHeadBoundary;
+  Count: Integer;
+  ItemName: string;
+  ValueItem: TValueArrayItem;
+  Dummy: Boolean;
+  FlowUsed: Boolean;
+begin
+  FlowUsed := Pos(StrSpecifiedFlows, comboBoundaryChoice.Text) > 0;
+  if FlowUsed then
+  begin
+    AScreenObject.CreateFhbFlowBoundary;
+    Boundary := AScreenObject.ModflowFhbFlowBoundary;
+    (Boundary as TFhbFlowBoundary).FormulaInterpretation :=
+      GetFormulaInterpretation(comboFormulaInterp);
+  end
+  else
+  begin
+    AScreenObject.CreateFhbHeadBoundary;
+    Boundary := AScreenObject.ModflowFhbHeadBoundary;
+  end;
+//  AScreenObject.CreateGhbBoundary;
+//  ParamItem := nil;
+//  StartingConcIndex := Ord(ghbcConcentration);
+//  ConcBoundary := CreateConcBoundary(AScreenObject);
+  Count := 0;
+  for Index := 0 to seBoundaryTimeCount.AsInteger - 1 do
+  begin
+    UseRow := (rdgBoundaryConditions.Cells[Ord(fhbStartingTime), Index + 1] <> '')
+//      and (rdgBoundaryConditions.Cells[Ord(fhbEndingTime), Index + 1] <> '')
+      and (rdgBoundaryConditions.Cells[Ord(fhbValue), Index + 1] <> '');
+    if UseRow then
+    begin
+//      GetTransientParameter(Param, ParameterName, Ord(ghbcParameterName), Index+1);
+//      if (ParameterName <> '') and (Param = nil) then
+//      begin
+//        Continue;
+//      end;
+      if Count < Boundary.Values.Count then
+      begin
+        AnItem := Boundary.Values[Count] as TCustomModflowBoundaryItem;
+      end
+      else
+      begin
+        AnItem := Boundary.Values.Add
+          as TCustomModflowBoundaryItem;
+      end;
+
+//      GetNewOrExistingBoundaryItem(AnItem, ParameterName, Param, ParamItem,
+//        Boundary, Count);
+      Inc(Count);
+      Item := AnItem as TFhbItem;
+
+      AValue := GetRealValueFromText(rdgBoundaryConditions.
+        Cells[Ord(fhbStartingTime), Index + 1], Dummy);
+      Item.StartTime := AValue;
+      if Index + 2 < rdgBoundaryConditions.RowCount then
+      begin
+        AValue := GetRealValueFromText(rdgBoundaryConditions.
+          Cells[Ord(fhbStartingTime), Index + 3], Dummy);
+      end
+      else
+      begin
+        AValue := frmGoPhast.PhastModel.ModflowStressPeriods.Last.EndTime;
+      end;
+      Item.EndTime := AValue;
+
+//      ConcItem := CreateConcItem(ConcBoundary, Index, Item);
+
+      if FCombinedObjects then
+      begin
+//        AValue := GetRealValueFromText(rdgBoundaryConditions.
+//          Cells[Ord(ghbcHead), Index + 1], Dummy);
+//        ItemName := Format(StrGHBBoundaryHeadd, [Index]);
+//        ValueItem := AScreenObject.ImportedValues.ValueItemByName(
+//          ItemName);
+//        if ValueItem = nil then
+//        begin
+//          ValueItem := AScreenObject.
+//            ImportedValues.Add as TValueArrayItem;
+//          ValueItem.Name := ItemName;
+//          ValueItem.Values.DataType := rdtDouble;
+//          ValueItem.Values.Count := 0;
+//          Item.BoundaryValue := rsObjectImportedValuesR + '("' + ItemName + '")';
+//        end;
+//        ValueItem.Values.Add(AValue);
+
+        AValue := GetRealValueFromText(rdgBoundaryConditions.
+          Cells[Ord(fhbValue), Index + 1], Dummy);
+        ItemName := Format(StrGHBConductanced, [Index]);
+        ValueItem := AScreenObject.ImportedValues.ValueItemByName(
+          ItemName);
+        if ValueItem = nil then
+        begin
+          ValueItem := AScreenObject.
+            ImportedValues.Add as TValueArrayItem;
+          ValueItem.Name := ItemName;
+          ValueItem.Values.DataType := rdtDouble;
+          ValueItem.Values.Count := 0;
+          Item.BoundaryValue := rsObjectImportedValuesR + '("' + ItemName + '")';
+        end;
+        ValueItem.Values.Add(AValue);
+
+//        ImportConcItemForCombinedShapes(ConcItem, StartingConcIndex, Index,
+//          AScreenObject);
+      end
+      else
+      begin
+        AFormula := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
+          Ord(ghbcHead), Index + 1]);
+        Item.BoundaryValue := AFormula;
+        AFormula := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
+          Ord(fhbValue), Index + 1]);
+        Item.BoundaryValue := AFormula;
+
+//        ImportConcItemForSeparateShapes(Index, ConcItem,
+//          StartingConcIndex);
+      end;
+    end;
+  end;
+end;
+
 procedure TfrmImportShapefile.InitializeBoundaryControlsForEVT(
   Packages: TModflowPackages);
 var
@@ -6599,6 +6734,72 @@ begin
   begin
     rdgBoundaryConditions.Cells[Ord(evtcLayer), 0] := StrEvapoTranspirationL;
   end;
+end;
+
+procedure TfrmImportShapefile.InitializeBoundaryControlsForFhb;
+var
+  ConductanceInterpUsed: Boolean;
+begin
+  FCombinedObjects := comboJoinObjects.ItemIndex = 1;
+  ConductanceInterpUsed := Pos(StrSpecifiedFlows, comboBoundaryChoice.Text) > 0;
+  if ConductanceInterpUsed then
+  begin
+    plBoundary.ActivePage := jvspConductanceInterp;
+  end
+  else
+  begin
+    plBoundary.ActivePage := jvspNone;
+  end;
+  lblConductanceInterpretation.Caption := StrConductanceInterpre;
+  rdgBoundaryConditions.Enabled := True;
+  rdgBoundaryConditions.ColCount := Ord(fhbValue)+1;
+  AssignColFeatureProperties;
+
+  rdgBoundaryConditions.Columns[Ord(fhbStartingTime)].ComboUsed :=
+    not FCombinedObjects;
+//  rdgBoundaryConditions.Columns[Ord(fhbEndingTime)].ComboUsed :=
+//    not FCombinedObjects;
+  rdgBoundaryConditions.Columns[Ord(fhbValue)].ComboUsed := True;
+
+//  InitializeColumnsForMt3dConc(Ord(ghbcConcentration));
+
+  if FCombinedObjects then
+  begin
+    rdgBoundaryConditions.Columns[Ord(fhbStartingTime)].Format := rcf4Integer;
+//    rdgBoundaryConditions.Columns[Ord(fhbEndingTime)].Format := rcf4Integer;
+  end
+  else
+  begin
+    rdgBoundaryConditions.Columns[Ord(fhbStartingTime)].Format := rcf4String;
+//    rdgBoundaryConditions.Columns[Ord(fhbEndingTime)].Format := rcf4String;
+  end;
+  rdgBoundaryConditions.Columns[Ord(fhbValue)].Format := rcf4String;
+
+  rdgBoundaryConditions.Columns[Ord(fhbStartingTime)].PickList :=
+    FRealFieldNames;
+//  rdgBoundaryConditions.Columns[Ord(fhbEndingTime)].PickList :=
+//    FRealFieldNames;
+  rdgBoundaryConditions.Columns[Ord(fhbValue)].PickList :=
+    FRealFieldGlobalsAndDataSetsNames;
+
+  rdgBoundaryConditions.Cells[Ord(fhbStartingTime), 0] := StrStartingTime;
+//  rdgBoundaryConditions.Cells[Ord(fhbEndingTime), 0] := StrEndingTime;
+  if ConductanceInterpUsed then
+  begin
+    rdgBoundaryConditions.Cells[Ord(fhbValue), 0] := 'Flow Rate';
+    FConductanceCol := Ord(fhbValue);
+  end
+  else
+  begin
+    rdgBoundaryConditions.Cells[Ord(fhbValue), 0] := 'Head';
+    FConductanceCol := -1;
+  end;
+
+  while comboFormulaInterp.Items.Count > 3 do
+  begin
+    comboFormulaInterp.Items.Delete(comboFormulaInterp.Items.Count-1);
+  end;
+  comboFormulaInterp.Items.AddStrings(FStringFieldNames);
 end;
 
 procedure TfrmImportShapefile.InitializeBoundaryControlsForFootprintWell;
@@ -8654,6 +8855,10 @@ begin
         AddModflowPackageToImportChoices(Packages.DrtPackage);
         AddModflowPackageToImportChoices(Packages.EtsPackage);
         AddModflowPackageToImportChoices(Packages.EvtPackage);
+
+        AddModflowPackageToImportChoices(Packages.FhbPackage, StrSpecifiedHeads);
+        AddModflowPackageToImportChoices(Packages.FhbPackage, StrSpecifiedFlows);
+
         AddModflowPackageToImportChoices(Packages.GhbBoundary);
         AddModflowPackageToImportChoices(Packages.HfbPackage);
         AddModflowPackageToImportChoices(Packages.HobPackage);
@@ -11592,6 +11797,10 @@ begin
           begin
             InitializeBoundaryControlsForCFP_Pipe;
             FCombinedObjectsAllowed := False;
+          end
+          else if APackage = Packages.FhbPackage then
+          begin
+            InitializeBoundaryControlsForFhb;
           end;
         end;
       msFootPrint:
@@ -12144,8 +12353,11 @@ begin
           else if Package = Packages.ConduitFlowProcess then
           begin
             ImportModflowCFP_Pipe(AScreenObject);
+          end
+          else if Package = Packages.FhbPackage then
+          begin
+            ImportModflowFhbBoundary(AScreenObject);
           end;
-
         end;
       msFootPrint:
         begin

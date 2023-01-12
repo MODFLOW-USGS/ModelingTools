@@ -14,15 +14,15 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     object lblTimeSeriesCount: TLabel
       Left = 8
       Top = 8
-      Width = 104
-      Height = 13
+      Width = 117
+      Height = 15
       Caption = 'Number of time series'
     end
     object lblTimeCount: TLabel
       Left = 8
       Top = 54
-      Width = 78
-      Height = 13
+      Width = 90
+      Height = 15
       Caption = 'Number of times'
     end
     object seTimeSeriesCount: TJvSpinEdit
