@@ -2584,7 +2584,7 @@ begin
       begin
         frmErrorsAndWarnings.AddWarning(Model, StrTheSWRStreamBotto,
           Format(StrAtRowColumn,
-          [TransientCell.Row, TransientCell.Column, GeoItem.MinimumElevation,
+          [TransientCell.Row+1, TransientCell.Column+1, GeoItem.MinimumElevation,
           TransientCell.VerticalOffSet,
           GeoItem.MinimumElevation + TransientCell.VerticalOffSet, ModelTopElev]), 
           TransientCell.ScreenObject);
@@ -2848,7 +2848,8 @@ begin
           Format(StrTheReachNumber0,
           [AReachObject.FReachData.Reach, AReachObject.FReachData.Cell.Layer+1,
           AReachObject.FReachData.Cell.Row+1, AReachObject.FReachData.Cell.Column+1,
-          (AReachObject.FReachData.ScreenObject as TScreenObject).Name, FReachList.Count]), AReachObject.FReachData.ScreenObject);
+          (AReachObject.FReachData.ScreenObject as TScreenObject).Name, FReachList.Count]),
+          AReachObject.FReachData.ScreenObject);
       end;
       if not AReachObject.FReachData.Grouped then
       begin

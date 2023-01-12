@@ -22,7 +22,7 @@ type
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     procedure InvalidateData(Sender: TObject); override;
   public
-    function ValueDescription: string; override;
+    class function ValueDescription: string; override;
   end;
 
 implementation
@@ -62,7 +62,7 @@ begin
 
 end;
 
-function TFmp4EfficiencyBoundary.ValueDescription: string;
+class function TFmp4EfficiencyBoundary.ValueDescription: string;
 begin
   result := StrFmp4Efficiency;
 end;

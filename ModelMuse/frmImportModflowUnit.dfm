@@ -76,7 +76,7 @@ inherited frmImportModflow: TfrmImportModflow
     Top = 0
     Width = 491
     Height = 340
-    ActivePage = tabModel
+    ActivePage = tabSubmodel
     Align = alClient
     TabOrder = 0
     object tabModel: TTabSheet
@@ -405,7 +405,9 @@ inherited frmImportModflow: TfrmImportModflow
           Top = 102
           Width = 472
           Height = 26
-          Filter = 'Flow Files (*.cbc, *.bud)|*.cbc;*.bud|All files (*.*)|*.*'
+          Filter = 
+            'Flow Files (*.cbc, *.bud, *.cbb)|*.cbc;*.bud;*.cbb|All files (*.' +
+            '*)|*.*'
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 1
           Text = ''

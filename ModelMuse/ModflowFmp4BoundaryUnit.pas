@@ -214,7 +214,7 @@ type
     function Used: boolean; override;
     function NonParameterColumns: integer; override;
     { TODO -cFMP4 : override ValueDescription in each descendent}
-    function ValueDescription: string; virtual; abstract;
+    class function ValueDescription: string; virtual; abstract;
     class function DefaultBoundaryMethod(
       FormulaIndex: integer): TPestParamMethod; override;
     { TODO -cFMP4 : override InvalidateDisplay in each descendent}

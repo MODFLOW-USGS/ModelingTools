@@ -4736,6 +4736,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientFarmIsSelected: Boolean;
     function FarmProcess4TransientRefEtIsSelected: Boolean;
     function FarmProcess4TransientPrecipIsSelected: Boolean;
+    function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -23690,6 +23691,44 @@ begin
         if result then
         begin
           break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  LocalModflowPackages: TModflowPackages;
+  ChildModel: TChildModel;
+  function IsSelected(Model: TCustomModel): Boolean;
+  begin
+    Model.ModflowPackages.FarmProcess4.IsSelected
+    and (Model.ModflowPackages.FarmProcess4.Efficiency.FarmOption = foTransient)
+    and (Model.ModflowPackages.FarmProcess4.Efficiency.ArrayList  = alArray)
+  end;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection =  msModflowOwhm2);
+  if result then
+  begin
+    result := IsSelected(Self);
+    if not result and LgrUsed then
+    begin
+      for ChildIndex := 0 to ChildModels.Count - 1 do
+      begin
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          result := IsSelected(ChildModel);
+          if result then
+          begin
+            break;
+          end;
         end;
       end;
     end;
