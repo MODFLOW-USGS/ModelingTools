@@ -5027,7 +5027,8 @@ Type
     property MnwRPercent: double read GetMnwRPercent
       write SetMnwRPercent;
     property MfFmp4FarmID: TModflowBoundaryDisplayTimeList read FMfFmp4FarmID;
-    function FarmIdUsed (Sender: TObject): boolean;
+    function FarmIdUsed (Sender: TObject): Boolean;
+    function SteadyArrayEfficiencyUsed: Boolean;
   published
     // OUTPUT
     property FarmPrints: TFarmPrints read FFarmPrints write SetFarmPrints;
@@ -25002,6 +25003,12 @@ begin
   SetBooleanProperty(FWELLFIELD, Value);
 end;
 
+function TFarmProcess4.SteadyArrayEfficiencyUsed: Boolean;
+begin
+  result := (Efficiency.FarmOption = foStatic)
+    and (Efficiency.ArrayList = alArray)
+end;
+
 { TFarmProcess4Climate }
 
 procedure TFarmProcess4Climate.Assign(Source: TPersistent);
@@ -25637,7 +25644,7 @@ begin
     FMfFmp4CropID.OnInitialize := InitializeFmp4CropIDDisplay;
     FMfFmp4CropID.OnGetUseList := GetMfFmp4CropIDUseList;
     FMfFmp4CropID.OnTimeListUsed := TransientCropIDUsed;
-    FMfFmp4CropID.Name := 'Land Use ID';
+    FMfFmp4CropID.Name := StrLandUseID;
     if CropLocation = rstTransient then
     begin
       AddTimeList(FMfFmp4CropID);

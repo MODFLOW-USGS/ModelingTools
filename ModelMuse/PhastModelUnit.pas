@@ -496,6 +496,7 @@ const
   StrFarmMaxPumpRate = 'Farm Well Maximum Pumping Rate';
   StrFarmWellFarmID = 'Farm Well Farm-ID';
   StrFarmWellPumpRequired = 'Farm Well Pump Only If Required';
+  StrLandUseID = 'Land Use ID';
 
   StrCfpRecharge = 'Conduit Recharge';
   StrSWR_Rain = 'SWR Rain';
@@ -563,6 +564,7 @@ const
   KRefET = 'Reference_ET';
   KPrecipitation = 'Precipitation';
   KLand_Use_ID = 'Land_Use_ID';
+  KEfficiency = 'Efficiency';
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -2530,6 +2532,7 @@ that affects the model output should also have a comment. }
     function GetAppsMoved: TStringList; virtual; abstract;
     function GetPestStatus: TPestStatus;
     function GetSeparateGwtUsed: Boolean;
+    function FarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -6137,6 +6140,7 @@ resourcestring
   StrRefET = KRefET;
   StrPrecipitation = KPrecipitation;
   StrLand_Use_ID = KLand_Use_ID;
+  StrEfficiency = KEfficiency;
 
 const
   StatFlagStrings : array[Low(TStatFlag)..High(TStatFlag)] of string
@@ -10801,6 +10805,10 @@ const
 //                when activating MODFLOW-LGR.
 //    '5.1.1.6'  Enhancement: ModelMuse can now import FHB boundaries from
 //                 Shapefiles.
+
+//               Enhancement: The RunModel.bat file used by PEST now has code
+//                to show the elapsed time for generating the input files,
+//                running the model, and extracting the model results.
 
 //               Enhancement: Added suport for SUTRA 4.
 
@@ -23705,7 +23713,6 @@ end;
 function TPhastModel.FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
 var
   ChildIndex: Integer;
-  LocalModflowPackages: TModflowPackages;
   ChildModel: TChildModel;
   function IsSelected(Model: TCustomModel): Boolean;
   begin
@@ -35150,6 +35157,18 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmProcess4.SteadyArrayEfficiencyUsed;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+
 function TCustomModel.FarmProcess4SteadyRefETUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
@@ -37079,7 +37098,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 4;
+  OWHM4DataSets  = 5;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -39936,6 +39955,20 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, CLIMATE: PRECIPITATION';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KEfficiency;
+  FDataArrayCreationRecords[Index].DisplayName := StrEfficiency;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadArrayEfficiencyUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, WBS: Efficiency';
   Inc(Index);
 
   {$ENDIF}

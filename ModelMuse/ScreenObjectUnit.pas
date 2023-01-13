@@ -31656,8 +31656,12 @@ end;
 
 function TScreenObject.StoreFmp4EfficiencyBoundary: Boolean;
 begin
+{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (Fmp4EfficiencyBoundary <> nil) and Fmp4EfficiencyBoundary.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TScreenObject.StoreFootprintWell: Boolean;

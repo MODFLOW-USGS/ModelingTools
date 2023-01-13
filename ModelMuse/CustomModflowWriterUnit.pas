@@ -1597,6 +1597,7 @@ begin
     ArchiveBatchFile := TStringList.Create;
     WriteInstuctionsBatchFile := TStringList.Create;
     try
+      ParamEstBatchFile.AddStrings(StartTimeCmdLines);
       Model.AddFilesToDeleteToBatchFile(ParamEstBatchFile, ParamEstBatFileName);
 
       PLPROC_Location := GetPLPROC_Location(FileName, Model);
@@ -1980,6 +1981,7 @@ begin
         end;
       end;
       TFile.Copy(result, BackupRunModflow, True);
+      ParamEstBatchFile.AddStrings(ShowElapsedTimeCmdLines);
       try
         ParamEstBatchFile.SaveToFile(ParamEstBatFileName);
       except

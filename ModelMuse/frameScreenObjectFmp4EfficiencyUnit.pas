@@ -16,6 +16,7 @@ type
   protected
     function GetValueDescription: string; override;
     function GetBoundary(Item: TScreenObjectEditItem): TFmp4Boundary; override;
+    function CreateBoundary: TFmp4Boundary; override;
   public
     { Public declarations }
   end;
@@ -32,6 +33,11 @@ uses
 
 { TframeScreenObjectFmp4Efficiency }
 
+
+function TframeScreenObjectFmp4Efficiency.CreateBoundary: TFmp4Boundary;
+begin
+  result := TFmp4EfficiencyBoundary.Create(nil, nil);
+end;
 
 function TframeScreenObjectFmp4Efficiency.GetBoundary(
   Item: TScreenObjectEditItem): TFmp4Boundary;

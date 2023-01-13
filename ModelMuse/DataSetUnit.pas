@@ -7796,7 +7796,9 @@ begin
     or (Name = StrFarmCropID)
     or (Name = StrFarmMaxPumpRate)
     or (Name = StrFarmWellFarmID)
-    or (Name = StrFarmWellPumpRequired) then
+    or (Name = StrFarmWellPumpRequired)
+    or (Name = StrLandUseID)
+    then
   begin
     Result := btMfFarm;
   end

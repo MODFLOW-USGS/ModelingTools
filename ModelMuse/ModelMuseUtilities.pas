@@ -121,6 +121,10 @@ function Interpolate(X, StartX, EndX, StartY, EndY: double): double;
 
 function RoundSigDigits(ANumber: Extended; SignificantDigits: Integer): Extended;
 
+var
+  StartTimeCmdLines: TStringList;
+  ShowElapsedTimeCmdLines: TStringList;
+
 implementation
 
 uses AnsiStrings, StrUtils, Dialogs, Math, frmGoPhastUnit,
@@ -1274,9 +1278,37 @@ end;
 
 initialization
   ColorParameters := TColorParameters.Create;
+  StartTimeCmdLines := TStringList.Create;
+  ShowElapsedTimeCmdLines := TStringList.Create;
+
+  StartTimeCmdLines.Add('@echo off');
+  StartTimeCmdLines.Add('rem Get start time:');
+  StartTimeCmdLines.Add('for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (');
+  StartTimeCmdLines.Add('   set /A "start=(((%%a*60)+1%%b %% 100)*60+1%%c %% 100)*100+1%%d %% 100"');
+  StartTimeCmdLines.Add(')');
+  StartTimeCmdLines.Add('@echo on');
+
+  ShowElapsedTimeCmdLines.Add('@echo off');
+  ShowElapsedTimeCmdLines.Add('rem Get end time:');
+  ShowElapsedTimeCmdLines.Add('for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (');
+  ShowElapsedTimeCmdLines.Add('   set /A "end=(((%%a*60)+1%%b %% 100)*60+1%%c %% 100)*100+1%%d %% 100"');
+  ShowElapsedTimeCmdLines.Add(')');
+  ShowElapsedTimeCmdLines.Add('');
+  ShowElapsedTimeCmdLines.Add('rem Get elapsed time:');
+  ShowElapsedTimeCmdLines.Add('set /A elapsed=end-start');
+  ShowElapsedTimeCmdLines.Add('');
+  ShowElapsedTimeCmdLines.Add('rem Show elapsed time:');
+  ShowElapsedTimeCmdLines.Add('set /A hh=elapsed/(60*60*100), rest=elapsed%%(60*60*100), mm=rest/(60*100), rest%%=60*100, ss=rest/100, cc=rest%%100');
+  ShowElapsedTimeCmdLines.Add('if %mm% lss 10 set mm=0%mm%');
+  ShowElapsedTimeCmdLines.Add('if %ss% lss 10 set ss=0%ss%');
+  ShowElapsedTimeCmdLines.Add('if %cc% lss 10 set cc=0%cc%');
+  ShowElapsedTimeCmdLines.Add('echo elapsed time: %hh% hours, %mm% minutes %ss%.%cc% seconds');
+  ShowElapsedTimeCmdLines.Add('');
 
 finalization
   ColorParameters.Free;
+  StartTimeCmdLines.Free;
+  ShowElapsedTimeCmdLines.Free;
 
 end.
 

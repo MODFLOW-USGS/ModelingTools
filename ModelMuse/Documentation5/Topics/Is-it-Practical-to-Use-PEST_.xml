@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-01-13T15:29:42.040-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Is it Practical to Use PEST?</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Is it Practical to Use PEST?</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Not all models can be calibrated with PEST because PEST might take too long. The time required to calibrate a model with PEST depends on several factors.</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The number of layers in the model.</text></li>
+    </list>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The time required for the model to run one time.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Time required by PEST to prepare new input files and read the output.</text></li>
+    </list>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The number of parameters being used.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The number of parameters using pilot points.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The number of data sets using parameters.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The number of candidate pilot points.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Where and how the parameters are applied.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If you don&apos;t understand parameters or pilot points read the next two sections </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Parameters_with_Data_Set" styleclass="Normal" translate="true">Using Parameters with Data Sets</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_PEST_Parameters_with_Mod" styleclass="Normal" translate="true">Using PEST Parameters with Model Features</link><text styleclass="Normal" translate="true"> and then come back here.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PEST will run the model many times for each parameter estimation iteration. PEST will treat each pilot point for each base parameter that uses pilot point on each layer as a separate parameter. It will run the model at least once for each parameter in each parameter estimation iteration. As an example, lets estimate the time for one parameter estimation iteration for the following case.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Note: The RunModel.bat used by PEST to run the model will display its elapsed time each time it is run. The time it displays includes both the model run time as well as the time required to generate new input files, run the model, and to read the output.</text></para>
+    <list id="2" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Number of layers = 6</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Time required for the model to run once = 3 minutes</text></li>
+    </list>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Time required by PEST to prepare new input files and read the output: negligible.</text></li>
+    </list>
+    <list id="2" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Number of parameters = 3</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Number of parameters using pilot points = 2</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Parameters are applied to one data set (Kx).</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Number of candidate pilot points = 60</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Where and how the parameters are applied. </text></li>
+      <list id="2" level="1" type="ul" listtype="bullet" formatstring="&#111;" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;">
+        <li styleclass="Normal"><text styleclass="Normal" translate="true">One parameter (K1_2) with pilot points is applied in layers 1 and 2.</text></li>
+        <li styleclass="Normal"><text styleclass="Normal" translate="true">The other parameter (K3_5) with pilot points is applied in layers 3, 4 and 5.</text></li>
+        <li styleclass="Normal"><text styleclass="Normal" translate="true">No parameters are applied to layer 6.</text></li>
+        <li styleclass="Normal"><text styleclass="Normal" translate="true">The parameter without pilot points (RchRate) is used with recharge.</text></li>
+      </list>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The number of pilot points for parameter K1_2 is 60 for layer 1 plus an additional 60 for layer 2 for a total of 120. Each of those pilot points will be treated as a separate parameter by PEST.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The number of pilot points for parameter K3_5 is the number of candidate pilot points times the number of layers to which K3_5 is applied for a total of 180.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">RchRate isn&apos;t used with pilot points, so it is treated as a single parameter.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The total number of parameters that PEST will modify is thus 120 + 180 + 1 = 301.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PEST will run the model at least once for each of the 301 parameters plus a small number of additional runs. Towards the end of the parameter estimation process, it may run it more times. The number of times it runs the model for each parameter depends on </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Parameters_Dialog_Box" anchor="FORCEN" styleclass="Normal" translate="true">FORCEN</link><text styleclass="Normal" translate="true"> which is a property of the parameter groups.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">With 301 parameters and a 3-minute run time per model, one parameter estimation iteration will take approximately 900 minutes or 15 hours. However, the run time of your original model may differ from the run time of the model with modified parameters. The run time might be either shorter or longer in the modified model. If there are 10 parameter estimation iterations, PEST might run for 6 days or more. You might or might not consider that a reasonable amount of time.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are some things you can do to reduce the time PEST requires.</text></para>
+    <list id="3" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Use SVD Assist (see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Singlular_Value_Decompos" styleclass="Normal" translate="true">Using SVD Assist)</link><text styleclass="Normal" translate="true">.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Use a parallel version of PEST such as Parallel PEST or BEOPEST. (See chapter 11 of the PEST documentation.) There is an extra input file, the run management file, required to use Parallel PEST. ModelMuse doesn&apos;t create it for you, but it isn&apos;t a complicated file. BEOPEST does not require a run management file.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

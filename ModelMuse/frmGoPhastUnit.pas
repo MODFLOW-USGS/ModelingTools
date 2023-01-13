@@ -10481,6 +10481,7 @@ begin
         BatchFile := TStringList.Create;
         ParamEstBatFile := TStringList.Create;
         try
+          ParamEstBatFile.AddStrings(StartTimeCmdLines);
           if NetworkDrive then
           begin
             BatchFile.Add('pushd ' + ModelDirectory);
@@ -10545,7 +10546,7 @@ begin
           BatchFile.SaveToFile(BatchFileName);
 
 
-
+          ParamEstBatFile.AddStrings(ShowElapsedTimeCmdLines);
           ParamEstBatFile.SaveToFile(ParamEstBatFileName);
           TFile.Copy(ParamEstBatFileName, BackupParamEstBatFileName, True);
           TFile.Copy(BatchFileName, BackupBatchFileName, True);

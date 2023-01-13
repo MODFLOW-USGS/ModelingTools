@@ -220,6 +220,7 @@ type
     { TODO -cFMP4 : override InvalidateDisplay in each descendent}
     // be sure to overide this
 //    procedure InvalidateDisplay; override;
+    function IsSame(FmpBoundary: TFmp4Boundary): Boolean;
   published
     property PestValueFormula: string read GetPestValueFormula
       write SetPestValueFormula;
@@ -800,6 +801,13 @@ end;
 procedure TFmp4Boundary.HandleChangedValue(Observer: TObserver);
 begin
   InvalidateDisplay;
+end;
+
+function TFmp4Boundary.IsSame(FmpBoundary: TFmp4Boundary): Boolean;
+begin
+  result := (PestValueFormula = FmpBoundary.PestValueFormula)
+    and (PestValueMethod = FmpBoundary.PestValueMethod)
+    and (Values.IsSame(FmpBoundary.Values));
 end;
 
 function TFmp4Boundary.NonParameterColumns: integer;

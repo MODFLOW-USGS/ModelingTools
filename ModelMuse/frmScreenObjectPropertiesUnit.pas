@@ -749,6 +749,9 @@ type
       ARow: Integer; const Value: string);
     procedure frameGwtSRCcomboChemSpeciesChange(Sender: TObject);
     procedure frameObsMf6pgcMainChange(Sender: TObject);
+    procedure frameFmp4EfficiencyrdgModflowBoundarySetEditText(Sender: TObject;
+      ACol, ARow: Integer; const Value: string);
+    procedure frameFmp4EfficiencyseNumberOfTimesChange(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -14343,10 +14346,10 @@ begin
     Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Efficiency in %s',
       [frmGoPhast.PhastModel.ModflowPackages.FarmProcess4.PackageIdentifier]))
       as TJvPageIndexNode;
-    Node.PageIndex := jvspFarmWell.PageIndex;
-    frameFarmWell.pnlCaption.Caption := Node.Text;
+    Node.PageIndex := jvspFmp4Efficiency.PageIndex;
+    frameFmp4Efficiency.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
-    FFarmWell_Node := Node;
+    FFmp4EfficiencyNode := Node;
   end;
 end;
 
@@ -16955,7 +16958,6 @@ var
   ScreenObjectIndex: integer;
   AScreenObject: TScreenObject;
   Boundary: TLakeMf6;
-//  Boundary: TMawBoundary;
 begin
   if not frmGoPhast.PhastModel.LakMf6IsSelected then
   begin
@@ -24053,6 +24055,23 @@ begin
       List.Free;
     end;
   end;
+end;
+
+procedure TfrmScreenObjectProperties.frameFmp4EfficiencyrdgModflowBoundarySetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  frameFmp4Efficiency.rdgModflowBoundarySetEditText(Sender, ACol, ARow,
+    Value);
+
+end;
+
+procedure TfrmScreenObjectProperties.frameFmp4EfficiencyseNumberOfTimesChange(
+  Sender: TObject);
+begin
+  inherited;
+  frameFmp4Efficiency.seNumberOfTimesChange(Sender);
+
 end;
 
 procedure TfrmScreenObjectProperties.frameRVOBrdgObservationGroupsSetEditText(

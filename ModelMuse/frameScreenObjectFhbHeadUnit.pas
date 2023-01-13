@@ -283,7 +283,7 @@ begin
       LastTime :=  StressPeriods.Last.EndTime;
 
       PriorItem := nil;
-      for RowIndex := 1 to rdgModflowBoundary.RowCount - 1 do
+      for RowIndex := 1+PestRowOffset to rdgModflowBoundary.RowCount - 1 do
       begin
         if TryStrToFloat(rdgModflowBoundary.Cells[Ord(fhcTime), RowIndex], ATime)
           and (rdgModflowBoundary.Cells[Ord(fhcHead), RowIndex] <> '') then

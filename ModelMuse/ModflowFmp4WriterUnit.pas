@@ -12,7 +12,7 @@ uses
 type
   TWriteLocation = (wlMain, wlOpenClose, wlOFE, wlCID, wlFID, wlRoot, wlCropUse, wlETR,
     wlEtFrac, wlSwLosses, wlPFLX, wlCropFunc, wlWaterCost, wlDeliveries,
-    wlSemiRouteDeliv, wlSemiRouteReturn, wlCall);
+    wlSemiRouteDeliv, wlSemiRouteReturn, wlCall, wlEfficiency);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -39,19 +39,24 @@ type
     FFarmProcess4: TFarmProcess4;
     FClimatePackage: TFarmProcess4Climate;
     FLandUse: TFarmProcess4LandUse;
+    FACtiveSurfaceCells: array of array of boolean;
     FWriteLocation: TWriteLocation;
+
     FFarmIDs: TList;
     FRefEts: TList;
     FPrecip: TList;
     FCropIDs: TList;
-    FFID_FileStream: TFileStream;
-    FACtiveSurfaceCells: array of array of boolean;
+    FEfficiencies: TList;
+
     FFarmWellID: Integer;
-    FOpenCloseFileStream: TFileStream;
     FBaseName: string;
+
+    FFID_FileStream: TFileStream;
+    FOpenCloseFileStream: TFileStream;
     FPFLX_FileStream: TFileStream;
     FETR_FileStream: TFileStream;
     FCID_FileStream: TFileStream;
+    FEFFICIENCY_FileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -64,9 +69,23 @@ type
     procedure WriteSalinityFlush;
     procedure WriteSurfaceWaterIrrigation;
     procedure WriteFileInternal;
-    procedure EvaluateFarmID;
-    procedure EvaluateCropID;
     procedure EvaluateAll;
+
+    procedure EvaluateFarmID;
+    procedure WriteFarmLocation;
+
+    procedure EvaluateCropID;
+    procedure WriteLandUseLocation;
+
+    procedure EvaluateReferenceET;
+    procedure WriteRefET;
+
+    procedure EvaluatePrecip;
+    procedure WritePrecipitation;
+
+    procedure EvaluateEfficiency;
+    procedure WriteEfficiency;
+
     procedure FreeFileStreams;
     // wbs location
 //    procedure WriteDataSet26(TimeIndex: Integer);
@@ -74,12 +93,6 @@ type
       const ErrorMessage: string);
     procedure EvaluateActiveCells;
     procedure RemoveErrorAndWarningMessages;
-    procedure EvaluateReferenceET;
-    procedure EvaluatePrecip;
-    procedure WriteFarmLocation;
-    procedure WritePrecipitation;
-    procedure WriteRefET;
-    procedure WriteLandUseLocation;
     procedure WriteTransientFmpArrayData(RequiredValues: TRequiredValues);
     function GetTransientList(WriteLocation: TWriteLocation): TList;
     function GetFileStreamName(WriteLocation: TWriteLocation): string;
@@ -182,6 +195,7 @@ begin
   FRefEts := TObjectList.Create;
   FPrecip := TObjectList.Create;
   FCropIDs := TObjectList.Create;
+  FEfficiencies := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -191,6 +205,7 @@ end;
 destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
+  FEfficiencies.Free;
   FCropIDs.Free;
   FPrecip.Free;
   FRefEts.Free;
@@ -232,6 +247,7 @@ begin
   EvaluateReferenceET;
   EvaluatePrecip;
   EvaluateCropID;
+  EvaluateEfficiency;
 end;
 
 procedure TModflowFmp4Writer.EvaluateCropID;
@@ -241,6 +257,17 @@ begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidCropIDInF);
     EvaluateTransientArrayData(wlCID);
   end;
+end;
+
+procedure TModflowFmp4Writer.EvaluateEfficiency;
+begin
+  if (FFarmProcess4.Efficiency.ArrayList = alArray)
+    and (FFarmProcess4.Efficiency.FarmOption = foTransient) then
+  begin
+//    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFarmID);
+    EvaluateTransientArrayData(wlEfficiency);
+  end;
+
 end;
 
 procedure TModflowFmp4Writer.EvaluateFarmID;
@@ -279,6 +306,7 @@ begin
   FreeAndNil(FPFLX_FileStream);
   FreeAndNil(FETR_FileStream);
   FreeAndNil(FCID_FileStream);
+  FreeAndNil(FEFFICIENCY_FileStream);
 
 end;
 
@@ -366,6 +394,16 @@ begin
     wlCall:
       begin
       end;
+    wlEfficiency:
+      begin
+        result := ChangeFileExt(FBaseName, '.EFFICIENCY');
+        if FEFFICIENCY_FileStream = nil then
+        begin
+          FEFFICIENCY_FileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    else Assert(False);
   end;
 end;
 
@@ -391,6 +429,8 @@ begin
     wlSemiRouteDeliv: ;
     wlSemiRouteReturn: ;
     wlCall: ;
+    wlEfficiency: result := ScreenObject.Fmp4EfficiencyBoundary;
+    else Assert(False);
   end;
 end;
 
@@ -416,6 +456,8 @@ begin
     wlSemiRouteDeliv: ;
     wlSemiRouteReturn: ;
     wlCall: ;
+    wlEfficiency: result := FEfficiencies;
+    else Assert(False)
   end;
 end;
 
@@ -827,6 +869,36 @@ procedure TModflowFmp4Writer.WriteConstantU2DREL(const Comment: string;
 begin
   inherited;
 
+end;
+
+procedure TModflowFmp4Writer.WriteEfficiency;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  AFileName := GetFileStreamName(wlEfficiency);
+
+  if (FFarmProcess4.Efficiency.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlEfficiency;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP WBS: Efficiency';
+    RequiredValues.ErrorID := 'FMP WBS: Efficiency';
+    RequiredValues.ID := 'EFFICIENCY';
+    RequiredValues.StaticDataName := KEfficiency;
+    RequiredValues.WriteTransientData :=
+      (FFarmProcess4.Efficiency.FarmOption = foTransient);
+    RequiredValues.CheckProcedure := nil;
+    RequiredValues.CheckError := '';
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteLandUseLocation;
@@ -1248,6 +1320,11 @@ begin
 //          Assert(FCall_FileStream <> nil);
 //          FCall_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlEfficiency:
+        begin
+          Assert(FEFFICIENCY_FileStream <> nil);
+          FEFFICIENCY_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end
       else
         Assert(False);
     end;
@@ -1275,6 +1352,7 @@ begin
   NewLine;
 
   WriteFarmLocation;
+  WriteEfficiency;
 
   if (FFarmProcess4.DeficiencyScenario.FarmOption <> foNotUsed) then
   begin
