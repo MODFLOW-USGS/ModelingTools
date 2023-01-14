@@ -21,11 +21,15 @@ type
   protected
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     procedure InvalidateData(Sender: TObject); override;
+    procedure InvalidateDisplay; override;
   public
     class function ValueDescription: string; override;
   end;
 
 implementation
+
+uses
+  PhastModelUnit, GoPhastTypes;
 
 resourcestring
   StrFmp4Efficiency = 'Fmp4_Efficiency';
@@ -60,6 +64,24 @@ end;
 procedure TFmp4EfficiencyBoundary.InvalidateData(Sender: TObject);
 begin
 
+end;
+
+procedure TFmp4EfficiencyBoundary.InvalidateDisplay;
+var
+  Model: TCustomModel;
+begin
+  inherited;
+  if Used and (ParentModel <> nil) then
+  begin
+    Model := ParentModel as TCustomModel;
+  {$IFDEF OWHMV2}
+    if Model.ModelSelection = msModflowOwhm2 then
+    begin
+      Model.InvalidateMfFmp4Efficiency(self);
+    end
+  {$ENDIF}
+    ;
+  end;
 end;
 
 class function TFmp4EfficiencyBoundary.ValueDescription: string;

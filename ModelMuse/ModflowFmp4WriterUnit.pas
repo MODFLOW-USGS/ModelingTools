@@ -130,6 +130,7 @@ type
     procedure UpdateRefEtDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdatePrecipDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateCropIDDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateEfficiencyDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 
@@ -531,6 +532,73 @@ begin
           DataArray := DataSets[DataSetIndex];
           DataArray.UpToDate := True;
           CheckDataSetZeroOrPositive(DataArray, StrInvalidCropIDInF);
+          DataArray.CacheData;
+        end;
+      end;
+
+      SetTimeListsUpToDate(TimeLists);
+    finally
+      DataSets.Free;
+    end;
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+end;
+
+procedure TModflowFmp4Writer.UpdateEfficiencyDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  DataSets: TList;
+  Efficiency: TModflowBoundaryDisplayTimeList;
+  TimeIndex: integer;
+  TimeListIndex: integer;
+  List: TValueCellList;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  DataArray: TDataArray;
+  EfficiencyIndex: integer;
+  DataSetIndex: integer;
+begin
+  EvaluateActiveCells;
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    RemoveErrorAndWarningMessages;
+    if not (Package as TFarmProcess4).FarmIdUsed(self) then
+    begin
+      UpdateNotUsedDisplay(TimeLists);
+      Exit;
+    end;
+    DataSets := TList.Create;
+    try
+      EvaluateEfficiency;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      Efficiency := TimeLists[0];
+      for TimeIndex := 0 to Efficiency.Count - 1 do
+      begin
+        DataSets.Clear;
+
+        for TimeListIndex := 0 to TimeLists.Count - 1 do
+        begin
+          TimeList := TimeLists[TimeListIndex];
+          DataArray := TimeList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          DataSets.Add(DataArray);
+        end;
+
+        for EfficiencyIndex := 0 to FEfficiencies.Count - 1 do
+        begin
+          List := FEfficiencies[EfficiencyIndex];
+          UpdateCellDisplay(List, DataSets, [], nil, [0]);
+          List.Cache;
+        end;
+        for DataSetIndex := 0 to DataSets.Count - 1 do
+        begin
+          DataArray := DataSets[DataSetIndex];
+          DataArray.UpToDate := True;
+//          CheckDataSetZeroOrPositive(DataArray, StrInvalidFarmID);
           DataArray.CacheData;
         end;
       end;

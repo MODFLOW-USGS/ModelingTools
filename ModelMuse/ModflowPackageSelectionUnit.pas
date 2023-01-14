@@ -4981,6 +4981,7 @@ Type
     FUseMnwCriteria: Boolean;
     FWELLFIELD: Boolean;
     FMfFmp4FarmID: TModflowBoundaryDisplayTimeList;
+    FMfFmp4Efficiency: TModflowBoundaryDisplayTimeList;
     procedure InitializeFarmIdDisplay(Sender: TObject);
     procedure GetMfFmpFarmIDUseList(Sender: TObject; NewUseList: TStringList);
     procedure SetAdded_Crop_Demand_Flux(const Value: TFarmProperty);
@@ -5011,6 +5012,9 @@ Type
     procedure SetUseMnwCriteria(const Value: Boolean);
     procedure SetWELLFIELD(const Value: Boolean);
     procedure InvalidateTransientFarm(Sender: TObject);
+    procedure InvalidateTransientEfficiencyArray(Sender: TObject);
+    procedure InitializeFarmEfficiencyDisplay(Sender: TObject);
+    procedure GetMfFmpFarmEfficiencyUseList(Sender: TObject; NewUseList: TStringList);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5029,6 +5033,8 @@ Type
     property MfFmp4FarmID: TModflowBoundaryDisplayTimeList read FMfFmp4FarmID;
     function FarmIdUsed (Sender: TObject): Boolean;
     function SteadyArrayEfficiencyUsed: Boolean;
+    property MfFmp4Efficiency: TModflowBoundaryDisplayTimeList read FMfFmp4Efficiency;
+    function FarmTransientArrayEfficiencyUsed (Sender: TObject): Boolean;
   published
     // OUTPUT
     property FarmPrints: TFarmPrints read FFarmPrints write SetFarmPrints;
@@ -6747,7 +6753,8 @@ uses Math, Contnrs , PhastModelUnit, ModflowOptionsUnit,
   ModflowSfr6Unit, ModflowMawWriterUnit, ModflowMawUnit, ModflowUzfMf6WriterUnit,
   ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftWriterUnit, ModflowCsubUnit,
   ModflowCSubWriterUnit,
-  ModflowGhbUnit, ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit, ModflowFmp4WriterUnit;
+  ModflowGhbUnit, ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit, ModflowFmp4WriterUnit,
+  ModflowFmp4EfficiencyUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -6881,6 +6888,7 @@ resourcestring
   StrSFREvaporationConc = 'SFR MF6 Evaporation Conc %s';
   StrSFRRunoffConcS = 'SFR MF6 Runoff Conc %s';
   StrSFRInflowConcS = 'SFR MF6 Inflow Conc %s';
+  StrFMP4Efficiency = 'FMP4 Efficiency';
 
 { TModflowPackageSelection }
 
@@ -24713,6 +24721,7 @@ begin
   FAdded_Crop_Demand_Rate := TFarmProperty.Create(InvalidateEvent);
 
   FFarms.OnChangeFarmOption := InvalidateTransientFarm;
+  FEfficiency.OnChangeFarmOption := InvalidateTransientEfficiencyArray;
 
   InitializeVariables;
 
@@ -24729,6 +24738,20 @@ begin
     if Farms.FarmOption = foTransient then
     begin
       AddTimeList(FMfFmp4FarmID);
+    end;
+
+    FMfFmp4Efficiency := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4Efficiency.OnInitialize := InitializeFarmEfficiencyDisplay;
+    FMfFmp4Efficiency.OnGetUseList := GetMfFmpFarmEfficiencyUseList;
+    FMfFmp4Efficiency.OnTimeListUsed := FarmTransientArrayEfficiencyUsed;
+    FMfFmp4Efficiency.Name := StrFMP4Efficiency;
+    FMfFmp4Efficiency.DataType := rdtDouble;
+    FMfFmp4Efficiency.AddMethod := vamReplace;
+    FMfFmp4Efficiency.Orientation := dsoTop;
+    if (FEfficiency.FarmOption = foTransient)
+       and (FEfficiency.ArrayList = alArray) then
+    begin
+      AddTimeList(FMfFmp4Efficiency);
     end;
   end;
 
@@ -24747,6 +24770,7 @@ begin
   FEfficiency.Free;
   FFarms.Free;
 
+  FMfFmp4Efficiency.Free;
   FMfFmp4FarmID.Free;
   FStoredMnwQClose.Free;
   FStoredMnwHPercent.Free;
@@ -24754,10 +24778,46 @@ begin
   inherited;
 end;
 
+function TFarmProcess4.FarmTransientArrayEfficiencyUsed(Sender: TObject): Boolean;
+begin
+  result := PackageUsed(Sender)
+    and frmGoPhast.PhastModel.FarmProcess4TransientEfficiencyArrayUsed(Sender);
+end;
+
 function TFarmProcess4.FarmIdUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
     and frmGoPhast.PhastModel.FarmProcess4TransientFarmsUsed(Sender);
+end;
+
+procedure TFarmProcess4.GetMfFmpFarmEfficiencyUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  PhastModel: TCustomModel;
+  Boundary: TFmp4EfficiencyBoundary;
+begin
+  PhastModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    Boundary := ScreenObject.Fmp4EfficiencyBoundary;
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      for ValueIndex := 0 to Boundary.Values.Count -1 do
+      begin
+        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(0, NewUseList, Item, 'FMP4 Efficiency');
+      end;
+    end;
+  end;
 end;
 
 procedure TFarmProcess4.GetMfFmpFarmIDUseList(Sender: TObject;
@@ -24803,6 +24863,37 @@ end;
 function TFarmProcess4.GetMnwRPercent: double;
 begin
   result := StoredMnwRPercent.Value;
+end;
+
+procedure TFarmProcess4.InitializeFarmEfficiencyDisplay(Sender: TObject);
+var
+  List: TModflowBoundListOfTimeLists;
+  FarmWriter: TModflowFmp4Writer;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  List := TModflowBoundListOfTimeLists.Create;
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    List.Add(MfFmp4Efficiency);
+
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.CreateDataSets;
+    end;
+
+    FarmWriter.UpdateEfficiencyDisplay(List);
+
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.ComputeAverage;
+    end;
+  finally
+    FarmWriter.Free;
+    List.Free;
+  end;
 end;
 
 procedure TFarmProcess4.InitializeFarmIdDisplay(Sender: TObject);
@@ -24860,6 +24951,23 @@ begin
   FAdded_Demand_Runoff_Split.Initialize;
   FAdded_Crop_Demand_Flux.Initialize;
   FAdded_Crop_Demand_Rate.Initialize;
+end;
+
+procedure TFarmProcess4.InvalidateTransientEfficiencyArray(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if (Efficiency.FarmOption = foTransient)
+      and (Efficiency.ArrayList = alArray) then
+    begin
+      AddTimeList(FMfFmp4Efficiency);
+    end
+    else
+    begin
+      RemoveTimeList(FMfFmp4Efficiency);
+    end;
+  end;
+  InvalidateModel;
 end;
 
 procedure TFarmProcess4.InvalidateTransientFarm(Sender: TObject);

@@ -30514,6 +30514,7 @@ object TTaskHistory
       Categories.Strings = (
         'Documentation'
         'FMP'
-        'PEST')
+        'PEST'
+        'Graphics')
     end>
 end

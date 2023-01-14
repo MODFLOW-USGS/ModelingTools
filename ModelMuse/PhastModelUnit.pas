@@ -2574,6 +2574,7 @@ that affects the model output should also have a comment. }
     function GetPestProperties: TPestProperties; virtual; abstract;
     procedure SetPestProperties(const Value: TPestProperties); virtual; abstract;
     function GetFilesToDelete: TStrings; virtual; abstract;
+    function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -2896,6 +2897,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4SteadyRefETUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4SteadyCropsUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; virtual;
+    function FarmProcess4TransientEfficiencyArrayUsed(Sender: TObject): boolean; virtual;
 
     function GroundSurfaceUsed(Sender: TObject): boolean; virtual;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; virtual;
@@ -3219,6 +3221,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4Precip(Sender: TObject);
     procedure InvalidateMfFmp4Evap(Sender: TObject);
     procedure InvalidateMfFmp4CropID(Sender: TObject);
+    procedure InvalidateMfFmp4Efficiency(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4294,6 +4297,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientFarmsUsed(Sender: TObject): boolean; override;
     function FarmProcess4SteadyCropsUsed(Sender: TObject): boolean; override;
     function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; override;
+    function FarmProcess4TransientEfficiencyArrayUsed(Sender: TObject): Boolean; override;
 //    function GroundSurfaceUsed(Sender: TObject): boolean; override;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; override;
     function UzfInitialInfiltrationUsed(Sender: TObject): boolean; override;
@@ -4739,7 +4743,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientFarmIsSelected: Boolean;
     function FarmProcess4TransientRefEtIsSelected: Boolean;
     function FarmProcess4TransientPrecipIsSelected: Boolean;
-    function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
+    function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean; override;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -23710,34 +23714,36 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
+begin
+    result := (ModelSelection =  msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and (ModflowPackages.FarmProcess4.Efficiency.FarmOption = foTransient)
+    and (ModflowPackages.FarmProcess4.Efficiency.ArrayList  = alArray)
+end;
+
 function TPhastModel.FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
   function IsSelected(Model: TCustomModel): Boolean;
   begin
-    result := Model.ModflowPackages.FarmProcess4.IsSelected
-    and (Model.ModflowPackages.FarmProcess4.Efficiency.FarmOption = foTransient)
-    and (Model.ModflowPackages.FarmProcess4.Efficiency.ArrayList  = alArray)
+    result := Model.FarmProcess4TransientEfficiencyArrayIsSelected;
   end;
 begin
   {$IFDEF OWHMV2}
-  result := (ModelSelection =  msModflowOwhm2);
-  if result then
+  result := inherited FarmProcess4TransientEfficiencyArrayIsSelected;
+  if not result and LgrUsed then
   begin
-    result := IsSelected(Self);
-    if not result and LgrUsed then
+    for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
-      for ChildIndex := 0 to ChildModels.Count - 1 do
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
       begin
-        ChildModel := ChildModels[ChildIndex].ChildModel;
-        if ChildModel <> nil then
+        result := IsSelected(ChildModel);
+        if result then
         begin
-          result := IsSelected(ChildModel);
-          if result then
-          begin
-            break;
-          end;
+          break;
         end;
       end;
     end;
@@ -23745,6 +23751,12 @@ begin
   {$ELSE}
   result := False;
   {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientEfficiencyArrayUsed(
+  Sender: TObject): Boolean;
+begin
+  result := FarmProcess4TransientEfficiencyArrayIsSelected;
 end;
 
 function TPhastModel.FarmProcess4TransientFarmIsSelected: Boolean;
@@ -26254,6 +26266,11 @@ end;
 procedure TCustomModel.InvalidateMfFmp4CropID(Sender: TObject);
 begin
   ModflowPackages.FarmLandUse.MfFmp4CropID.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4Efficiency(Sender: TObject);
+begin
+  ModflowPackages.FarmProcess4.MfFmp4Efficiency.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4Evap(Sender: TObject);
@@ -35187,6 +35204,17 @@ begin
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.IsSelected
     and (ModflowPackages.FarmLandUse.CropLocation = rstTransient);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientEfficiencyArrayUsed(
+  Sender: TObject): boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmProcess4TransientEfficiencyArrayIsSelected
   {$ELSE}
   result := False;
   {$ENDIF}
