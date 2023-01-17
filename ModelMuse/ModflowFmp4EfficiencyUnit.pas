@@ -21,8 +21,8 @@ type
   protected
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     procedure InvalidateData(Sender: TObject); override;
-    procedure InvalidateDisplay; override;
   public
+    procedure InvalidateDisplay; override;
     class function ValueDescription: string; override;
   end;
 
@@ -63,7 +63,7 @@ end;
 
 procedure TFmp4EfficiencyBoundary.InvalidateData(Sender: TObject);
 begin
-
+  InvalidateDisplay;
 end;
 
 procedure TFmp4EfficiencyBoundary.InvalidateDisplay;
