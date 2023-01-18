@@ -10815,9 +10815,11 @@ const
 //                when activating MODFLOW-LGR.
 //    '5.1.1.6'  Enhancement: ModelMuse can now import FHB boundaries from
 //                Shapefiles.
-
-//               Enhancement: The Show and Hide Objects dialog  box now has
+//    '5.1.1.7'  Enhancement: The Show and Hide Objects dialog  box now has
 //                "Calibration Data Sets" as a new category.
+//               Enhancement: ModelMuse can now export FHB data to shapefiles
+//                in the "File|Export|Shapefile|Objects to Shapefile" dialog
+//                box.
 
 //               Enhancement: The RunModel.bat file used by PEST now has code
 //                to show the elapsed time for generating the input files,
@@ -10827,7 +10829,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.6';
+  IIModelVersion = '5.1.1.7';
 
 function IModelVersion: string;
 begin
@@ -23725,10 +23727,14 @@ end;
 
 function TCustomModel.FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
 begin
+  {$IFDEF OWHMV2}
     result := (ModelSelection =  msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmProcess4.Efficiency.FarmOption = foTransient)
     and (ModflowPackages.FarmProcess4.Efficiency.ArrayList  = alArray)
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;

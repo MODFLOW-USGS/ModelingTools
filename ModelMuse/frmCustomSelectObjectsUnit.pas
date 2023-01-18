@@ -2389,7 +2389,7 @@ begin
     if FvstCalibrationDataSetsNode = nil then
     begin
       FvstCalibrationDataSetsNode := vstObjects.InsertNode(
-        vstObjects.RootNode, amAddChildFirst);
+        FvstDataSetRootNode, amInsertAfter);
       vstObjects.ReinitNode(FvstCalibrationDataSetsNode, False);
     end;
     InitializeNodeData(FvstCalibrationDataSetsNode, nil);

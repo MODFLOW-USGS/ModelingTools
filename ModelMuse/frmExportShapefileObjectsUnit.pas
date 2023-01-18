@@ -10,6 +10,9 @@ uses System.Types, System.UITypes,
   frmCustomGoPhastUnit;
 
 type
+  TFhbBoundaryType = (fbtFlow, fbtHead);
+  TFhbBoundaryTypes = set of TFhbBoundaryType;
+
   TFieldDefinition = record
     DataArray: TDataArray;
     FieldName: AnsiString;
@@ -23,6 +26,7 @@ type
   TBoundaryName = class(TObject)
     Name: string;
     BoundaryType: TBoundaryType;
+    FhbBoundaryType: TFhbBoundaryType;
   end;
 
   TfrmExportShapefileObjects = class(TfrmCustomSelectObjects)
@@ -87,6 +91,7 @@ type
     FTimeCount: Integer;
     FTimeBoundaryFound: Boolean;
     FMaxHeadObsTimes: Integer;
+    FFhbBoundaryTypes: TFhbBoundaryTypes;
     procedure GetData;
     procedure CenterLabels;
     procedure SetCheckedNodes(Sender: TBaseVirtualTree);
@@ -141,7 +146,7 @@ uses ClassificationUnit, PhastModelUnit, FastGEO,
   ModflowSfrReachUnit, ModflowSfrFlows, ModflowSfrChannelUnit,
   ModflowSfrEquationUnit, ModflowSfrSegment, ModflowSfrUnsatSegment,
   ModflowPackageSelectionUnit, ModflowMawUnit, ModflowSfr6Unit, ModflowStrUnit,
-  Mt3dmsChemUnit;
+  Mt3dmsChemUnit, ModflowFhbUnit;
 
 resourcestring
   StrDataSet0sOb = ' Data set = %0:s; Object = %1:s';
@@ -444,6 +449,10 @@ begin
       begin
           result := True;
       end;
+    btMfFhb:
+      begin
+          result := True;
+      end;
   end;
 end;
 
@@ -655,6 +664,17 @@ begin
       btMAW:
         begin
           if ScreenObject.StoreModflowMawBoundary then
+          begin
+            result := True;
+          end;
+        end;
+      btMfFhb:
+        begin
+          if ScreenObject.StoreModflowFhbFlowBoundary and (fbtFlow in FFhbBoundaryTypes) then
+          begin
+            result := True;
+          end;
+          if ScreenObject.StoreModflowFhbHeadBoundary and (fbtHead in FFhbBoundaryTypes) then
           begin
             result := True;
           end;
@@ -2157,6 +2177,9 @@ var
     MawItem: TMawItem;
     SSmBoundry: TMt3dmsConcBoundary;
     Mt3dConcItem: TMt3dmsConcItem;
+    FhbFlowBoundary: TFhbFlowBoundary;
+    FhbTimeItem: TFhbItem;
+    FhbHeadBoundary: TFhbHeadBoundary;
   begin
     StartIndex := BoundaryDataSetStart;
     if FTimeBoundaryFound then
@@ -4560,6 +4583,87 @@ var
               end
             end;
           end;
+        btMfFhb:
+          begin
+            if (fbtFlow in FFhbBoundaryTypes) and (BoundaryName.FhbBoundaryType = fbtFlow) then
+            begin
+              FhbFlowBoundary := AScreenObject.ModflowFhbFlowBoundary;
+              if FhbFlowBoundary = nil then
+              begin
+                Formula := FMissingValueString;
+                for TimeIndex := 0 to TimeList.Count - 1 do
+                begin
+                  XBaseShapeFile.UpdFieldStr(
+                    FFieldDefinitions[StartIndex].FieldName, Formula);
+                  Inc(StartIndex);
+                end;
+              end
+              else
+              begin
+                Values := nil;
+                if FhbFlowBoundary.Values.Count > 0 then
+                begin
+                  Values := FhbFlowBoundary.Values;
+                end;
+                Assert(Values.Count > 0);
+                for TimeIndex := 0 to TimeList.Count - 1 do
+                begin
+                  FhbTimeItem := Values.GetItemByStartTime(
+                    TimeList[TimeIndex]) as TFhbItem;
+                  if FhbTimeItem = nil then
+                  begin
+                    Formula := FMissingValueString;
+                  end
+                  else
+                  begin
+                    Formula := AnsiString(FhbTimeItem.BoundaryValue);
+                  end;
+                  XBaseShapeFile.UpdFieldStr(
+                    FFieldDefinitions[StartIndex].FieldName, Formula);
+                  Inc(StartIndex);
+                end;
+              end;
+            end;
+            if (fbtHead in FFhbBoundaryTypes) and (BoundaryName.FhbBoundaryType = fbtHead) then
+            begin
+              FhbHeadBoundary := AScreenObject.ModflowFhbHeadBoundary;
+              if FhbHeadBoundary = nil then
+              begin
+                Formula := FMissingValueString;
+                for TimeIndex := 0 to TimeList.Count - 1 do
+                begin
+                  XBaseShapeFile.UpdFieldStr(
+                    FFieldDefinitions[StartIndex].FieldName, Formula);
+                  Inc(StartIndex);
+                end;
+              end
+              else
+              begin
+                Values := nil;
+                if FhbHeadBoundary.Values.Count > 0 then
+                begin
+                  Values := FhbHeadBoundary.Values;
+                end;
+                Assert(Values.Count > 0);
+                for TimeIndex := 0 to TimeList.Count - 1 do
+                begin
+                  FhbTimeItem := Values.GetItemByStartTime(
+                    TimeList[TimeIndex]) as TFhbItem;
+                  if FhbTimeItem = nil then
+                  begin
+                    Formula := FMissingValueString;
+                  end
+                  else
+                  begin
+                    Formula := AnsiString(FhbTimeItem.BoundaryValue);
+                  end;
+                  XBaseShapeFile.UpdFieldStr(
+                    FFieldDefinitions[StartIndex].FieldName, Formula);
+                  Inc(StartIndex);
+                end;
+              end;
+            end;
+          end
         else
           Assert(False);
       end;
@@ -5181,6 +5285,19 @@ begin
         BoundName.Name := BoundaryClassificationObject.ClassificationName;
         BoundName.BoundaryType := BoundaryClassificationObject.BoundaryType;
         FBoundaryNames.AddObject(BoundName.Name, BoundName);
+        if BoundName.BoundaryType= btMfFhb then
+        begin
+          if BoundaryClassificationObject.ClassificationName = 'FHB Flows' then
+          begin
+            Include(FFhbBoundaryTypes, fbtFlow);
+            BoundName.FhbBoundaryType := fbtFlow;
+          end
+          else
+          begin
+            Include(FFhbBoundaryTypes, fbtHead);
+            BoundName.FhbBoundaryType := fbtHead;
+          end;
+        end;
       end
       else if not (Sender.CheckState[Node] in [csCheckedNormal, csCheckedPressed]) then
       begin
@@ -5209,6 +5326,17 @@ begin
           Exclude(FSelectedBoundaries, BoundaryClassificationObject.BoundaryType);
         end;
 
+        if BoundaryClassificationObject.BoundaryType= btMfFhb then
+        begin
+          if BoundaryClassificationObject.ClassificationName = 'FHB Flows' then
+          begin
+            Exclude(FFhbBoundaryTypes, fbtFlow);
+          end
+          else
+          begin
+            Exclude(FFhbBoundaryTypes, fbtHead);
+          end;
+        end;
       end;
     end;
   end;

@@ -2671,10 +2671,8 @@ view. }
     procedure SetModflowStrBoundary(const Value: TStrBoundary);
     function GetModflowFhbHeadBoundary: TFhbHeadBoundary;
     procedure SetModflowFhbHeadBoundary(const Value: TFhbHeadBoundary);
-    function StoreModflowFhbHeadBoundary: Boolean;
     function GetModflowFhbFlowBoundary: TFhbFlowBoundary;
     procedure SetModflowFhbFlowBoundary(const Value: TFhbFlowBoundary);
-    function StoreModflowFhbFlowBoundary: Boolean;
     function Get_SetValuesByInterpolation: boolean;
     procedure SetModflowFmpWellBoundary(const Value: TFmpWellBoundary);
     function GetModflowFmpWellBoundary: TFmpWellBoundary;
@@ -3287,6 +3285,8 @@ view. }
     function StoreModflowStrBoundary: Boolean;
     function StoreModflowSfr6Boundary: Boolean;
     function StoreModflowMawBoundary: Boolean;
+    function StoreModflowFhbHeadBoundary: Boolean;
+    function StoreModflowFhbFlowBoundary: Boolean;
     // @name determines whether @link(WellBoundary) is stored.
     function StoreWell: boolean;
     // @name determines whether @link(FluxBoundary) is stored.

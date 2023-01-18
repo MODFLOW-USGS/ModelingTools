@@ -5,8 +5,8 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
   ClientHeight = 422
   ClientWidth = 617
   OnResize = FormResize
-  ExplicitWidth = 633
-  ExplicitHeight = 461
+  ExplicitWidth = 629
+  ExplicitHeight = 460
   TextHeight = 18
   object splLeft: TSplitter [0]
     Left = 257
@@ -32,8 +32,8 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     Width = 617
     Height = 166
     TabOrder = 4
-    ExplicitTop = 256
-    ExplicitWidth = 617
+    ExplicitTop = 255
+    ExplicitWidth = 613
     ExplicitHeight = 166
     object lblMissingData: TLabel [0]
       Left = 120
@@ -43,25 +43,25 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       Caption = 'Missing data value'
     end
     inherited btnClose: TBitBtn
-      Left = 421
+      Left = 417
       Top = 126
       Caption = '&OK'
       Kind = bkOK
       TabOrder = 6
       OnClick = btnCloseClick
-      ExplicitLeft = 421
+      ExplicitLeft = 413
       ExplicitTop = 126
     end
     inherited btnHelp: TBitBtn
-      Left = 326
+      Left = 322
       Top = 126
       TabOrder = 5
       OnClick = btnHelpClick
-      ExplicitLeft = 326
+      ExplicitLeft = 318
       ExplicitTop = 126
     end
     object BitBtn1: TBitBtn
-      Left = 516
+      Left = 512
       Top = 126
       Width = 89
       Height = 33
@@ -69,6 +69,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 7
+      ExplicitLeft = 508
     end
     object rdeMissingData: TRbwDataEntry
       Left = 8
@@ -181,6 +182,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     Height = 41
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 613
     object lblObjects: TLabel
       Left = 314
       Top = 11
@@ -248,6 +250,8 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     Enabled = False
     ItemHeight = 18
     TabOrder = 3
+    ExplicitLeft = 492
+    ExplicitHeight = 214
   end
   object sdShapefile: TSaveDialog
     DefaultExt = '.shp'

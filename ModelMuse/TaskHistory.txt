@@ -170,7 +170,7 @@ object TTaskHistory
     end
     item
       Name = 'Export Shapefile'
-      Display = False
+      Display = True
     end
     item
       Name = 'MODPATH'
@@ -30534,5 +30534,10 @@ object TTaskHistory
         'core code'
         'FMP'
         'Dialog boxes')
+    end
+    item
+      Date = 44944.000000000000000000
+      Categories.Strings = (
+        'Export Shapefile')
     end>
 end
