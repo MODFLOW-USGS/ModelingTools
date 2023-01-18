@@ -30516,5 +30516,23 @@ object TTaskHistory
         'FMP'
         'PEST'
         'Graphics')
+    end
+    item
+      Date = 44940.000000000000000000
+    end
+    item
+      Date = 44941.000000000000000000
+    end
+    item
+      Date = 44942.000000000000000000
+    end
+    item
+      Date = 44943.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Documentation'
+        'core code'
+        'FMP'
+        'Dialog boxes')
     end>
 end

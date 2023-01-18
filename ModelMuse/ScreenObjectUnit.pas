@@ -48,7 +48,7 @@ uses
   MeshRenumberingTypes, Modflow6ObsUnit, ModflowLakMf6Unit, ModflowMvrUnit,
   ModflowUzfMf6Unit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
   ModflowSubsidenceDefUnit, PointCollectionUnit, ModflowGwtSpecifiedConcUnit,
-  ModflowFmp4EfficiencyUnit;
+  ModflowFmp4EfficiencyUnit, ModflowFmp4EfficiencyImprovementUnit;
 
 type
   //
@@ -1459,6 +1459,7 @@ view. }
     FGwtCncBoundary: TCncBoundary;
     FGwtSrcBoundary: TSrcBoundary;
     FFmp4EfficiencyBoundary: TFmp4EfficiencyBoundary;
+    FFmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1572,6 +1573,9 @@ view. }
     // FMP4
     property Fmp4EfficiencyBoundary: TFmp4EfficiencyBoundary
       read FFmp4EfficiencyBoundary write FFmp4EfficiencyBoundary;
+    property Fmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary
+      read FFmp4EfficiencyImprovementBoundary
+      write FFmp4EfficiencyImprovementBoundary;
 
     // Be sure to update Invalidate, FreeUnusedBoundaries,
     // StopTalkingToAnyone, UsesATime, ReplaceATime, Destroy,
@@ -2793,6 +2797,11 @@ view. }
     procedure SetFmp4EfficiencyBoundary(const Value: TFmp4EfficiencyBoundary);
     function StoreFmp4EfficiencyBoundary: Boolean;
     procedure CreateFmp4EfficiencyBoundary;
+    function GetFmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary;
+    procedure SetFmp4EfficiencyImprovementBoundary(
+      const Value: TFmp4EfficiencyImprovementBoundary);
+    function StoreFmp4EfficiencyImprovementBoundary: Boolean;
+    procedure CreateFmp4EfficiencyImprovementBoundary;
 //    procedure SetVerticesArePilotPoints(const Value: Boolean);
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4125,7 +4134,12 @@ view. }
     property Fmp4EfficiencyBoundary: TFmp4EfficiencyBoundary
       read GetFmp4EfficiencyBoundary write SetFmp4EfficiencyBoundary
       stored StoreFmp4EfficiencyBoundary;
-      
+    property Fmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary
+      read GetFmp4EfficiencyImprovementBoundary write SetFmp4EfficiencyImprovementBoundary
+      stored StoreFmp4EfficiencyImprovementBoundary;
+
+
+
 
     { TODO :
 Consider making SectionStarts private and only exposing SectionStart,
@@ -6793,6 +6807,7 @@ begin
   GwtCncBoundary := AScreenObject.GwtCncBoundary;
   GwtSrcBoundary := AScreenObject.GwtSrcBoundary;
   Fmp4EfficiencyBoundary := AScreenObject.Fmp4EfficiencyBoundary;
+  Fmp4EfficiencyImprovementBoundary := AScreenObject.Fmp4EfficiencyImprovementBoundary;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9592,6 +9607,11 @@ begin
       Fmp4EfficiencyBoundary.InvalidateDisplay;
     end;
     
+    if Fmp4EfficiencyImprovementBoundary <> nil then
+    begin
+      Fmp4EfficiencyImprovementBoundary.InvalidateDisplay;
+    end;
+
 //    if Mt3dmsTransObservations <> nil then
 //    begin
 //      Mt3dmsTransObservations.InvalidateDisplay;
@@ -19139,6 +19159,23 @@ begin
   else
   begin
     result := ModflowBoundaries.FFmp4EfficiencyBoundary;
+  end;
+end;
+
+function TScreenObject.GetFmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateFmp4EfficiencyImprovementBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4EfficiencyImprovementBoundary;
   end;
 end;
 
@@ -31367,6 +31404,24 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetFmp4EfficiencyImprovementBoundary(
+  const Value: TFmp4EfficiencyImprovementBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4EfficiencyImprovementBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4EfficiencyImprovementBoundary);
+  end
+  else
+  begin
+    CreateFmp4EfficiencyImprovementBoundary;
+    ModflowBoundaries.FFmp4EfficiencyImprovementBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetLeakyBoundary(const Value: TLeakyBoundary);
 begin
   if Value = nil then
@@ -31659,6 +31714,16 @@ begin
 {$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (Fmp4EfficiencyBoundary <> nil) and Fmp4EfficiencyBoundary.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreFmp4EfficiencyImprovementBoundary: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (Fmp4EfficiencyImprovementBoundary <> nil) and Fmp4EfficiencyImprovementBoundary.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -37352,6 +37417,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateFmp4EfficiencyImprovementBoundary;
+begin
+  if (ModflowBoundaries.FFmp4EfficiencyImprovementBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4EfficiencyImprovementBoundary :=
+      TFmp4EfficiencyImprovementBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateWelBoundary;
 begin
   if (ModflowBoundaries.FModflowWellBoundary = nil) then
@@ -40683,6 +40757,20 @@ begin
     FFmp4EfficiencyBoundary.Assign(Source.FFmp4EfficiencyBoundary);
   end;
 
+  if Source.Fmp4EfficiencyImprovementBoundary = nil then
+  begin
+    FreeAndNil(Fmp4EfficiencyImprovementBoundary);
+  end
+  else
+  begin
+    if Fmp4EfficiencyImprovementBoundary = nil then
+    begin
+      Fmp4EfficiencyImprovementBoundary :=
+        TFmp4EfficiencyImprovementBoundary.Create(Model, FScreenObject);
+    end;
+    Fmp4EfficiencyImprovementBoundary.Assign(Source.Fmp4EfficiencyImprovementBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -40701,6 +40789,7 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmp4EfficiencyImprovementBoundary.Free;
   FFmp4EfficiencyBoundary.Free;
   FGwtSrcBoundary.Free;
   FGwtCncBoundary.Free;
@@ -41004,6 +41093,12 @@ begin
     FreeAndNil(FFmp4EfficiencyBoundary);
   end;
 
+  if (FFmp4EfficiencyImprovementBoundary <> nil)
+    and not FFmp4EfficiencyImprovementBoundary.Used then
+  begin
+    FreeAndNil(FFmp4EfficiencyImprovementBoundary);
+  end;
+
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -41287,6 +41382,12 @@ begin
   begin
     FFmp4EfficiencyBoundary.Invalidate;
   end;
+
+  if Fmp4EfficiencyImprovementBoundary <> nil then
+  begin
+    Fmp4EfficiencyImprovementBoundary.Invalidate;
+  end;
+
 end;
 
 procedure TModflowBoundaries.Loaded;
@@ -41610,7 +41711,12 @@ begin
   begin
     FFmp4EfficiencyBoundary.RemoveModelLink(AModel);
   end;
-  
+
+  if Fmp4EfficiencyImprovementBoundary <> nil then
+  begin
+    Fmp4EfficiencyImprovementBoundary.RemoveModelLink(AModel);
+  end;
+
   {
     FModflow6Obs: TModflow6Obs;
     FModflowLak6: TLakeMf6;
@@ -41938,6 +42044,11 @@ begin
     FFmp4EfficiencyBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4EfficiencyImprovementBoundary <> nil then
+  begin
+    FFmp4EfficiencyImprovementBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -42262,6 +42373,12 @@ begin
   begin
     FFmp4EfficiencyBoundary.StopTalkingToAnyone;
   end;
+
+  if FFmp4EfficiencyImprovementBoundary <> nil then
+  begin
+    FFmp4EfficiencyImprovementBoundary.StopTalkingToAnyone;
+  end;
+
 end;
 
 function TModflowBoundaries.UsesAnMt3dTime(ATime: Double): Boolean;
@@ -42764,6 +42881,15 @@ begin
   if FFmp4EfficiencyBoundary <> nil then
   begin
     Result := FFmp4EfficiencyBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4EfficiencyImprovementBoundary <> nil then
+  begin
+    Result := FFmp4EfficiencyImprovementBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

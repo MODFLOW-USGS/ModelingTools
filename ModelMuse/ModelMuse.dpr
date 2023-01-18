@@ -779,7 +779,9 @@ uses
   ModflowFmp4BoundaryUnit in 'ModflowFmp4BoundaryUnit.pas',
   ModflowFmp4EfficiencyUnit in 'ModflowFmp4EfficiencyUnit.pas',
   frameScreenObjectCustomFmp4BoundaryUnit in 'frameScreenObjectCustomFmp4BoundaryUnit.pas' {frameScreenObjectCustomFmp4Boundary: TFrame},
-  frameScreenObjectFmp4EfficiencyUnit in 'frameScreenObjectFmp4EfficiencyUnit.pas' {frameScreenObjectFmp4Efficiency: TFrame};
+  frameScreenObjectFmp4EfficiencyUnit in 'frameScreenObjectFmp4EfficiencyUnit.pas' {frameScreenObjectFmp4Efficiency: TFrame},
+  ModflowFmp4EfficiencyImprovementUnit in 'ModflowFmp4EfficiencyImprovementUnit.pas',
+  frameScreenObjectFmp4EfficiencyImprovementUnit in 'frameScreenObjectFmp4EfficiencyImprovementUnit.pas' {frameScreenObjectFmp4EfficiencyImprovement: TFrame};
 
 {$R *.res}
 
@@ -795,6 +797,7 @@ begin
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
   Application.CreateForm(TfrmColors, frmColors);
+  Application.CreateForm(TframeScreenObjectFmp4EfficiencyImprovement, frameScreenObjectFmp4EfficiencyImprovement);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

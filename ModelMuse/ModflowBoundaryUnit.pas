@@ -2399,7 +2399,7 @@ end;
 
 destructor TModflowBoundary.Destroy;
 begin
-  FValues.Free;
+  FreeAndNil(FValues);
   inherited;
 end;
 
@@ -2437,7 +2437,7 @@ end;
 
 function TModflowBoundary.Used: boolean;
 begin
-  result := Values.Used;
+  result := (Values <> nil) and Values.Used;
 end;
 
 procedure TModflowScreenObjectProperty.AddBoundaryTimes(

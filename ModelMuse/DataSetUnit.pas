@@ -1682,6 +1682,7 @@ resourcestring
 
 const
   MaxSmallArraySize = 1000000;
+  StrParamNameSuffix = '_Parameter_Names';
 
 //function GetQuantum(NewSize: Integer): TSPAQuantum;
 
@@ -1767,7 +1768,7 @@ resourcestring
   '.';
   StrTheDefaultFormula = 'The default formula for %0:s returns a value of th' +
   'e wrong type. The formula is %1:s.';
-  StrSParameterNames = '%s_Parameter_Names';
+  StrSParameterNames = '%s' + StrParamNameSuffix;
   StrSMultipliedByAP = '%s multiplied by a parameter value';
   StrMODFLOW6MVR = 'MODFLOW 6 MVR';
   StrNoPESTParameterAs = 'No PEST parameter assigned';

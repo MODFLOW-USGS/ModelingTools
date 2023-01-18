@@ -12,7 +12,8 @@ uses
 type
   TWriteLocation = (wlMain, wlOpenClose, wlOFE, wlCID, wlFID, wlRoot, wlCropUse, wlETR,
     wlEtFrac, wlSwLosses, wlPFLX, wlCropFunc, wlWaterCost, wlDeliveries,
-    wlSemiRouteDeliv, wlSemiRouteReturn, wlCall, wlEfficiency);
+    wlSemiRouteDeliv, wlSemiRouteReturn, wlCall, wlEfficiency,
+    wlEfficiencyImprovement);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -47,6 +48,7 @@ type
     FPrecip: TList;
     FCropIDs: TList;
     FEfficiencies: TList;
+    FEfficiencyImprovements: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -57,6 +59,7 @@ type
     FETR_FileStream: TFileStream;
     FCID_FileStream: TFileStream;
     FEFFICIENCY_FileStream: TFileStream;
+    FEFFICIENCY_IMPROVEMENT_FileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -86,10 +89,15 @@ type
     procedure EvaluateEfficiency;
     procedure WriteEfficiency;
 
+    procedure EvaluateEfficiencyImprovement;
+    procedure WriteEfficiencyImprovement;
+
     procedure FreeFileStreams;
     // wbs location
 //    procedure WriteDataSet26(TimeIndex: Integer);
     procedure CheckDataSetZeroOrPositive(IntegerArray: TDataArray;
+      const ErrorMessage: string);
+    procedure CheckDataSetBetweenZeroAndOne(RealArray: TDataArray;
       const ErrorMessage: string);
     procedure EvaluateActiveCells;
     procedure RemoveErrorAndWarningMessages;
@@ -131,6 +139,8 @@ type
     procedure UpdatePrecipDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateCropIDDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateEfficiencyDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateEfficiencyImprovementDisplay(TimeLists: TModflowBoundListOfTimeLists);
+
   end;
 
 
@@ -143,12 +153,53 @@ uses
 
 resourcestring
   StrUndefinedError = 'Undefined %s in one or more stress periods';
+  StrInvalidEfficiencyV = 'Invalid Efficiency value';
+  StrInvalidEfficiencyI = 'Invalid Efficiency Improvement value';
 
 { TModflowFmp4Writer }
 
 function TModflowFmp4Writer.CellType: TValueCellType;
 begin
   result := TFmpWell_Cell;
+end;
+
+procedure TModflowFmp4Writer.CheckDataSetBetweenZeroAndOne(
+  RealArray: TDataArray; const ErrorMessage: string);
+var
+  ColIndex: Integer;
+  RowIndex: Integer;
+begin
+  Assert(RealArray <> nil);
+  for RowIndex := 0 to Model.Grid.RowCount - 1 do
+  begin
+    for ColIndex := 0 to Model.Grid.ColumnCount - 1 do
+    begin
+      if FACtiveSurfaceCells[RowIndex, ColIndex] then
+      begin
+        if RealArray.IsValue[0, RowIndex, ColIndex] then
+        begin
+          if RealArray.DataType = rdtInteger then
+          begin
+            if (RealArray.IntegerData[0, RowIndex, ColIndex] < 0)
+              or (RealArray.IntegerData[0, RowIndex, ColIndex] > 1) then
+            begin
+              frmErrorsAndWarnings.AddError(Model, ErrorMessage,
+                Format(StrRow0dColumn, [RowIndex + 1, ColIndex + 1]));
+            end;
+          end
+          else
+          begin
+            if (RealArray.RealData[0, RowIndex, ColIndex] < 0)
+              or (RealArray.RealData[0, RowIndex, ColIndex] > 1) then
+            begin
+              frmErrorsAndWarnings.AddError(Model, ErrorMessage,
+                Format(StrRow0dColumn, [RowIndex + 1, ColIndex + 1]));
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TModflowFmp4Writer.CheckDataSetZeroOrPositive(IntegerArray: TDataArray;
@@ -197,6 +248,7 @@ begin
   FPrecip := TObjectList.Create;
   FCropIDs := TObjectList.Create;
   FEfficiencies := TObjectList.Create;
+  FEfficiencyImprovements := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -206,6 +258,7 @@ end;
 destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
+  FEfficiencyImprovements.Free;
   FEfficiencies.Free;
   FCropIDs.Free;
   FPrecip.Free;
@@ -249,6 +302,7 @@ begin
   EvaluatePrecip;
   EvaluateCropID;
   EvaluateEfficiency;
+  EvaluateEfficiencyImprovement;
 end;
 
 procedure TModflowFmp4Writer.EvaluateCropID;
@@ -265,10 +319,19 @@ begin
   if (FFarmProcess4.Efficiency.ArrayList = alArray)
     and (FFarmProcess4.Efficiency.FarmOption = foTransient) then
   begin
-//    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFarmID);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidEfficiencyV);
     EvaluateTransientArrayData(wlEfficiency);
   end;
 
+end;
+
+procedure TModflowFmp4Writer.EvaluateEfficiencyImprovement;
+begin
+  if FFarmProcess4.FarmTransientArrayEfficiencyImprovementUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidEfficiencyI);
+    EvaluateTransientArrayData(wlEfficiencyImprovement);
+  end;
 end;
 
 procedure TModflowFmp4Writer.EvaluateFarmID;
@@ -308,6 +371,7 @@ begin
   FreeAndNil(FETR_FileStream);
   FreeAndNil(FCID_FileStream);
   FreeAndNil(FEFFICIENCY_FileStream);
+  FreeAndNil(FEFFICIENCY_IMPROVEMENT_FileStream);
 
 end;
 
@@ -404,6 +468,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlEfficiencyImprovement:
+      begin
+        result := ChangeFileExt(FBaseName, '.EFFICIENCY_IMPROVEMENT');
+        if FEFFICIENCY_IMPROVEMENT_FileStream = nil then
+        begin
+          FEFFICIENCY_IMPROVEMENT_FileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -431,6 +504,7 @@ begin
     wlSemiRouteReturn: ;
     wlCall: ;
     wlEfficiency: result := ScreenObject.Fmp4EfficiencyBoundary;
+    wlEfficiencyImprovement: result := ScreenObject.Fmp4EfficiencyImprovementBoundary;
     else Assert(False);
   end;
 end;
@@ -458,6 +532,7 @@ begin
     wlSemiRouteReturn: ;
     wlCall: ;
     wlEfficiency: result := FEfficiencies;
+    wlEfficiencyImprovement: result := FEfficiencyImprovements;
     else Assert(False)
   end;
 end;
@@ -591,6 +666,73 @@ begin
         for EfficiencyIndex := 0 to FEfficiencies.Count - 1 do
         begin
           List := FEfficiencies[EfficiencyIndex];
+          UpdateCellDisplay(List, DataSets, [], nil, [0]);
+          List.Cache;
+        end;
+        for DataSetIndex := 0 to DataSets.Count - 1 do
+        begin
+          DataArray := DataSets[DataSetIndex];
+          DataArray.UpToDate := True;
+//          CheckDataSetZeroOrPositive(DataArray, StrInvalidFarmID);
+          DataArray.CacheData;
+        end;
+      end;
+
+      SetTimeListsUpToDate(TimeLists);
+    finally
+      DataSets.Free;
+    end;
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+end;
+
+procedure TModflowFmp4Writer.UpdateEfficiencyImprovementDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  DataSets: TList;
+  EfficiencyImprovement: TModflowBoundaryDisplayTimeList;
+  TimeIndex: integer;
+  TimeListIndex: integer;
+  List: TValueCellList;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  DataArray: TDataArray;
+  EfficiencyIndex: integer;
+  DataSetIndex: integer;
+begin
+  EvaluateActiveCells;
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    RemoveErrorAndWarningMessages;
+    if not (Package as TFarmProcess4).FarmIdUsed(self) then
+    begin
+      UpdateNotUsedDisplay(TimeLists);
+      Exit;
+    end;
+    DataSets := TList.Create;
+    try
+      EvaluateEfficiencyImprovement;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      EfficiencyImprovement := TimeLists[0];
+      for TimeIndex := 0 to EfficiencyImprovement.Count - 1 do
+      begin
+        DataSets.Clear;
+
+        for TimeListIndex := 0 to TimeLists.Count - 1 do
+        begin
+          TimeList := TimeLists[TimeListIndex];
+          DataArray := TimeList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          DataSets.Add(DataArray);
+        end;
+
+        for EfficiencyIndex := 0 to FEfficiencyImprovements.Count - 1 do
+        begin
+          List := FEfficiencyImprovements[EfficiencyIndex];
           UpdateCellDisplay(List, DataSets, [], nil, [0]);
           List.Cache;
         end;
@@ -944,6 +1086,11 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
 begin
+  if FFarmProcess4.Efficiency.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
   AFileName := GetFileStreamName(wlEfficiency);
 
   if (FFarmProcess4.Efficiency.ArrayList = alArray) then
@@ -958,8 +1105,44 @@ begin
     RequiredValues.StaticDataName := KEfficiency;
     RequiredValues.WriteTransientData :=
       (FFarmProcess4.Efficiency.FarmOption = foTransient);
-    RequiredValues.CheckProcedure := nil;
-    RequiredValues.CheckError := '';
+    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+    RequiredValues.CheckError := StrInvalidEfficiencyV;
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+
+  end;
+
+end;
+
+procedure TModflowFmp4Writer.WriteEfficiencyImprovement;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FFarmProcess4.EfficiencyImprovement.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlEfficiencyImprovement);
+
+  if (FFarmProcess4.EfficiencyImprovement.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlEfficiencyImprovement;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP WBS: Efficiency Improvement';
+    RequiredValues.ErrorID := 'FMP WBS: Efficiency Improvement';
+    RequiredValues.ID := 'EFFICIENCY_IMPROVEMENT';
+    RequiredValues.StaticDataName := KEfficiencyImprovement;
+    RequiredValues.WriteTransientData :=
+      (FFarmProcess4.EfficiencyImprovement.FarmOption = foTransient);
+    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+    RequiredValues.CheckError := StrInvalidEfficiencyI;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -1039,6 +1222,11 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
 begin
+  if FFarmProcess4.Farms.FarmOption = foNotUsed then
+  begin
+    Assert(False);
+  end;
+
   AFileName := GetFileStreamName(wlFID);
 
   RequiredValues.WriteLocation := wlFID;
@@ -1392,7 +1580,12 @@ begin
         begin
           Assert(FEFFICIENCY_FileStream <> nil);
           FEFFICIENCY_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
-        end
+        end;
+      wlEfficiencyImprovement:
+        begin
+          Assert(FEFFICIENCY_IMPROVEMENT_FileStream <> nil);
+          FEFFICIENCY_IMPROVEMENT_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -1421,6 +1614,7 @@ begin
 
   WriteFarmLocation;
   WriteEfficiency;
+  WriteEfficiencyImprovement;
 
   if (FFarmProcess4.DeficiencyScenario.FarmOption <> foNotUsed) then
   begin

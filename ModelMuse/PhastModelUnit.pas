@@ -565,6 +565,7 @@ const
   KPrecipitation = 'Precipitation';
   KLand_Use_ID = 'Land_Use_ID';
   KEfficiency = 'Efficiency';
+  KEfficiencyImprovement = 'Efficiency_Improvement';
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -2532,7 +2533,8 @@ that affects the model output should also have a comment. }
     function GetAppsMoved: TStringList; virtual; abstract;
     function GetPestStatus: TPestStatus;
     function GetSeparateGwtUsed: Boolean;
-    function FarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): boolean;
+    function FarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): Boolean;
+    function FarmProcess4SteadArrayEfficiencyImprovementUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2575,6 +2577,7 @@ that affects the model output should also have a comment. }
     procedure SetPestProperties(const Value: TPestProperties); virtual; abstract;
     function GetFilesToDelete: TStrings; virtual; abstract;
     function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean; virtual;
+    function FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3222,6 +3225,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4Evap(Sender: TObject);
     procedure InvalidateMfFmp4CropID(Sender: TObject);
     procedure InvalidateMfFmp4Efficiency(Sender: TObject);
+    procedure InvalidateMfFmp4EfficiencyImprovement(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4744,6 +4748,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientRefEtIsSelected: Boolean;
     function FarmProcess4TransientPrecipIsSelected: Boolean;
     function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean; override;
+    function FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean; override;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -6145,6 +6150,7 @@ resourcestring
   StrPrecipitation = KPrecipitation;
   StrLand_Use_ID = KLand_Use_ID;
   StrEfficiency = KEfficiency;
+  StrEfficiencyImprovement = KEfficiencyImprovement;
 
 const
   StatFlagStrings : array[Low(TStatFlag)..High(TStatFlag)] of string
@@ -10808,7 +10814,10 @@ const
 //    '5.1.1.5'  Bug fix: Fixed a bug that could cause an access violation
 //                when activating MODFLOW-LGR.
 //    '5.1.1.6'  Enhancement: ModelMuse can now import FHB boundaries from
-//                 Shapefiles.
+//                Shapefiles.
+
+//               Enhancement: The Show and Hide Objects dialog  box now has
+//                "Calibration Data Sets" as a new category.
 
 //               Enhancement: The RunModel.bat file used by PEST now has code
 //                to show the elapsed time for generating the input files,
@@ -23759,6 +23768,33 @@ begin
   result := FarmProcess4TransientEfficiencyArrayIsSelected;
 end;
 
+function TPhastModel.FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited FarmProcess4TransientEfficiencyImprovementArrayIsSelected;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.FarmProcess4TransientEfficiencyImprovementArrayIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientFarmIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -26271,6 +26307,11 @@ end;
 procedure TCustomModel.InvalidateMfFmp4Efficiency(Sender: TObject);
 begin
   ModflowPackages.FarmProcess4.MfFmp4Efficiency.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4EfficiencyImprovement(Sender: TObject);
+begin
+  ModflowPackages.FarmProcess4.MfFmp4EfficiencyImprovement.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4Evap(Sender: TObject);
@@ -35174,6 +35215,18 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4SteadArrayEfficiencyImprovementUsed(
+  Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmProcess4.SteadyArrayEfficiencyImprovmentUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
@@ -35215,6 +35268,16 @@ begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and FarmProcess4TransientEfficiencyArrayIsSelected
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.FarmTransientArrayEfficiencyImprovementUsed(nil);
   {$ELSE}
   result := False;
   {$ENDIF}
@@ -37126,7 +37189,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 5;
+  OWHM4DataSets  = 6;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -39996,8 +40059,23 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
-    'MODFLOW-OWHM version 2, WBS: Efficiency';
+    'MODFLOW-OWHM version 2, WBS: EFFICIENCY';
   Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KEfficiencyImprovement;
+  FDataArrayCreationRecords[Index].DisplayName := StrEfficiencyImprovement;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadArrayEfficiencyImprovementUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, WBS: EFFICIENCY_IMPROVEMENT';
+  Inc(Index);
+
 
   {$ENDIF}
 

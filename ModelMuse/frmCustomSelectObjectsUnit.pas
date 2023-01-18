@@ -5,7 +5,7 @@ interface
 uses
   System.Types, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Contnrs, frmCustomGoPhastUnit, VirtualTrees, StdCtrls, Buttons,
-  ExtCtrls, ScreenObjectUnit;
+  ExtCtrls, ScreenObjectUnit, DataSetUnit;
 
 type
   TVisibleGroupState = (vgsUndefined, vgsUnChecked, vgsChecked, vgs3State);
@@ -59,6 +59,7 @@ type
       var NewState: TCheckState; var Allowed: Boolean);
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
+    function IsCalibrationDataSet(DataArray: TDataArray): Boolean;
   private
     // See @link(CanEdit).
     FCanEdit: boolean;
@@ -254,6 +255,8 @@ type
     FvstPhastBoundaryConditionsRoot: PVirtualNode;
     // @name holds a PVirtualNode for each @link(TScreenObject).
     FvstAllObjectsNode: PVirtualNode;
+    FvstCalibrationDataSetsNode: PVirtualNode;
+    FCalibrationDataSetsList: TObjectList;
     // @name holds lists of
     // @link(TScreenObject)s that set particular
     // @link(TDataArray)s.
@@ -374,6 +377,7 @@ type
     // @name sets @link(FvstAllObjectsNode),
     // @link(FvstSizeNode),
     // @link(FvstDataSetRootNode),
+    // @Link(FvstCalibrationDataSetsNode),
     // @link(FvstPhastBoundaryConditionsRoot),
     // @link(FvstModflowBoundaryConditionsRoot),
     // @link(FvstSpecifiedHeadNode),
@@ -431,6 +435,7 @@ resourcestring
   StrSetGridElementSize = 'Set Grid Element Size';
   StrSetMeshElementSize = 'Set Mesh Element Size';
   StrDataSets = 'Data Sets';
+  StrCalibrationDataSets = 'Calibration Data Sets';
   StrPhastBoundaryConditions = 'PHAST Boundary Conditions';
   StrSpecifiedHeadPhast = 'Specified Head';
   StrSpecifiedFlux = 'Specified Flux';
@@ -445,7 +450,7 @@ implementation
 
 uses StrUtils, ModflowPackagesUnit, ModflowPackageSelectionUnit,
   GoPhastTypes, frmGoPhastUnit, PhastModelUnit, SubscriptionUnit,
-  ModflowHfbUnit, ModflowSfrUnit, ModflowEvtUnit, ModflowGageUnit, DataSetUnit,
+  ModflowHfbUnit, ModflowSfrUnit, ModflowEvtUnit, ModflowGageUnit,
   ModpathParticleUnit, ModflowUzfUnit, ModflowHobUnit, ModflowRchUnit,
   ModflowEtsUnit, ModflowBoundaryUnit, ClassificationUnit, ModflowDrtUnit,
   SutraOptionsUnit, Modflow6ObsUnit, ModflowSfr6Unit, ModflowLakMf6Unit,
@@ -558,6 +563,11 @@ begin
     else if Node = FvstDataSetRootNode then
     begin
       Data.Caption := StrDataSets;
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstCalibrationDataSetsNode then
+    begin
+      Data.Caption := StrCalibrationDataSets;
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstLeakyNode then
@@ -1127,7 +1137,8 @@ begin
       end;
     end;
 
-    If Sender.NodeParent[ParentNode] = FvstDataSetRootNode then
+    If (Sender.NodeParent[ParentNode] = FvstDataSetRootNode)
+      or (Sender.NodeParent[ParentNode] = FvstCalibrationDataSetsNode) then
     begin
       ParentNode.CheckType := ctTriStateCheckBox;
     end;
@@ -1150,6 +1161,10 @@ begin
     if FDataSetLists <> nil then
     begin
       FDataSetLists.Remove(Data.ScreenObjects);
+    end;
+    if FCalibrationDataSetsList <> nil then
+    begin
+      FCalibrationDataSetsList.Remove(Data.ScreenObjects);
     end;
     Data.ScreenObjects := nil;
   end;
@@ -1198,8 +1213,10 @@ begin
     end;
     CellText := AScreenObject.Name;
     ParentNode := Sender.NodeParent[Node];
-    while (ParentNode <> nil) and (Sender.NodeParent[ParentNode]
-      <> FvstDataSetRootNode) do
+    while (ParentNode <> nil)
+      and (Sender.NodeParent[ParentNode] <> FvstDataSetRootNode)
+      and (Sender.NodeParent[ParentNode] <> FvstCalibrationDataSetsNode)
+      do
     begin
       ParentNode := Sender.NodeParent[ParentNode];
     end;
@@ -1240,8 +1257,10 @@ begin
         + AScreenObject.FootprintWell.Withdrawal;
     end;
 
-    If (ParentNode <> nil) and (Sender.NodeParent[ParentNode]
-      = FvstDataSetRootNode) then
+    If (ParentNode <> nil)
+      and ((Sender.NodeParent[ParentNode] = FvstDataSetRootNode)
+      or (Sender.NodeParent[ParentNode] = FvstCalibrationDataSetsNode))
+      then
     begin
       DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
       for Index := 0 to DataArrayManager.DataSetCount -1 do
@@ -1310,6 +1329,7 @@ var
   MwtObs: TMwtObs;
   UztObs: TUztObs;
   SpeciesIndex: Integer;
+  DataSetClassification: string;
   Procedure InitializeData(Node: PVirtualNode);
   var
     Data: PMyRec;
@@ -1417,11 +1437,25 @@ begin
     for DataSetIndex := 0 to AScreenObject.DataSetCount - 1 do
     begin
       DataArray := AScreenObject.DataSets[DataSetIndex];
+      DataSetClassification := DataArray.FullClassification + '|' + DataArray.Name;
       Position :=
-        DataSetList.IndexOf(DataArray.FullClassification + '|' + DataArray.Name);
+        DataSetList.IndexOf(DataSetClassification);
       if Position < 0 then
       begin
         // The data set has been deleted.
+        Continue;
+      end;
+
+      vstDataSetNode := PVirtualNode(DataSetList.Objects[Position]);
+      InitializeData(vstDataSetNode);
+
+      DataSetClassification := StringReplace(DataSetClassification, StrDataSets,
+        StrCalibrationDataSets, []);
+      Position :=
+        DataSetList.IndexOf(DataSetClassification);
+      if Position < 0 then
+      begin
+        // The data is not a calibration data set.
         Continue;
       end;
 
@@ -2167,6 +2201,7 @@ begin
             NodeDeleted := True;
             vstObjects.DeleteNode(Node);
             if (ParentNode <> FvstDataSetRootNode)
+              and (ParentNode <> FvstCalibrationDataSetsNode)
               and (ParentNodes.IndexOf(ParentNode) < 0) then
             begin
               ParentNodes.Add(ParentNode);
@@ -2204,6 +2239,32 @@ begin
       NodeList.Free;
     end;
 
+    NodeList := TList.Create;
+    try
+      ChildCount := vstObjects.ChildCount[FvstCalibrationDataSetsNode];
+      for NodeIndex := 0 to ChildCount - 1 do
+      begin
+        if NodeIndex = 0 then
+        begin
+          GroupNode := vstObjects.GetFirstChild(FvstCalibrationDataSetsNode)
+        end
+        else
+        begin
+          GroupNode := vstObjects.GetNextSibling(GroupNode);
+        end;
+        NodeList.Add(GroupNode)
+      end;
+
+      for NodeIndex := 0 to NodeList.Count - 1 do
+      begin
+        GroupNode := NodeList[NodeIndex];
+        vstCheckDeleteNode(GroupNode);
+      end;
+    finally
+      NodeList.Free;
+    end;
+
+    vstCheckDeleteNode(FvstCalibrationDataSetsNode);
     vstCheckDeleteNode(FvstDataSetRootNode);
     vstCheckDeleteNode(FvstRefinementNode);
     vstCheckDeleteNode(FvstSizeNode);
@@ -2249,7 +2310,7 @@ var
       List.Clear;
     end;
   end;
-  procedure FindOrCreateClassificationNode;
+  procedure FindOrCreateClassificationNode(ALevelDescription: string);
   begin
     ClassificationPosition :=
       DataSetClassifications.IndexOf(ALevelDescription);
@@ -2325,10 +2386,18 @@ begin
     end;
     InitializeNodeData(FvstDataSetRootNode, nil);
 
+    if FvstCalibrationDataSetsNode = nil then
+    begin
+      FvstCalibrationDataSetsNode := vstObjects.InsertNode(
+        vstObjects.RootNode, amAddChildFirst);
+      vstObjects.ReinitNode(FvstCalibrationDataSetsNode, False);
+    end;
+    InitializeNodeData(FvstCalibrationDataSetsNode, nil);
+
     if FvstPhastBoundaryConditionsRoot = nil then
     begin
       FvstPhastBoundaryConditionsRoot := vstObjects.InsertNode(
-        FvstDataSetRootNode, amInsertAfter);
+        FvstCalibrationDataSetsNode, amInsertAfter);
       vstObjects.ReinitNode(FvstPhastBoundaryConditionsRoot, False);
     end;
     InitializeNodeData(FvstPhastBoundaryConditionsRoot, nil);
@@ -2591,6 +2660,7 @@ begin
     PriorNode := FvstFootprintWellNode;
 
     FDataSetLists.Clear;
+    FCalibrationDataSetsList.Clear;
 
     vstObjects.ChildCount[FvstDataSetRootNode] := 0;
     DataSetClassifications := TStringList.Create;
@@ -2631,13 +2701,13 @@ begin
                 begin
                   ALevelDescription := Copy(Classification, 1, Pred(SeparatorPosition));
 
-                  FindOrCreateClassificationNode;
+                  FindOrCreateClassificationNode(ALevelDescription);
 
                   SeparatorPosition := PosEx('|', Classification,
                     Succ(SeparatorPosition));
                 end;
                 ALevelDescription := Classification;
-                FindOrCreateClassificationNode;
+                FindOrCreateClassificationNode(ALevelDescription);
 
                 vstObjects.ChildCount[DataSetGroupNode] :=
                   vstObjects.ChildCount[DataSetGroupNode] + 1;
@@ -2673,6 +2743,93 @@ begin
     finally
       DataSetClassifications.Free;
     end;
+
+    DataSetClassifications := TStringList.Create;
+    try
+      DataSetClassifications.AddObject('Calibration Data Sets', TObject(FvstCalibrationDataSetsNode));
+
+      ClassificationObjectOwnerList := TObjectList.Create;
+      try
+    // Create lists used for sorting the nodes.
+        HufDataArrays := TClassificationList.Create;
+        ClassificationObjects:= TClassificationList.Create;
+        LayerGroupList := TClassificationList.Create;
+        SutraLayerGroupList := TClassificationList.Create;
+        try
+          FillDataSetLists(HufDataArrays,
+            LayerGroupList, SutraLayerGroupList,
+            ClassificationObjects,
+            ClassificationObjectOwnerList,
+            IsCalibrationDataSet);
+
+          SortedClassifiedDataSets := TStringList.Create;
+          try
+            ClassifyListedObjects(SortedClassifiedDataSets, ClassificationObjects,
+              [LayerGroupList, SutraLayerGroupList, HufDataArrays]);
+
+            for DataSetIndex := 0 to SortedClassifiedDataSets.Count - 1 do
+            begin
+              Classification := SortedClassifiedDataSets[DataSetIndex];
+              Classification := StringReplace(Classification, StrDataSets,
+                StrCalibrationDataSets, []);
+              ClassificationObject := SortedClassifiedDataSets.
+                Objects[DataSetIndex] as TDataSetClassification;
+              if ClassificationObject <> nil then
+              begin
+
+                DataSet := ClassificationObject.DataArray;
+                Classification := DataSet.FullClassification;
+                Classification := StringReplace(Classification, StrDataSets,
+                  StrCalibrationDataSets, []);
+                ParentNode := FvstCalibrationDataSetsNode;
+                Assert(Classification <> '');
+                SeparatorPosition := Pos('|', Classification);
+                while SeparatorPosition > 0 do
+                begin
+                  ALevelDescription := Copy(Classification, 1, Pred(SeparatorPosition));
+
+                  FindOrCreateClassificationNode(ALevelDescription);
+
+                  SeparatorPosition := PosEx('|', Classification,
+                    Succ(SeparatorPosition));
+                end;
+                ALevelDescription := Classification;
+                FindOrCreateClassificationNode(ALevelDescription);
+
+                vstObjects.ChildCount[DataSetGroupNode] :=
+                  vstObjects.ChildCount[DataSetGroupNode] + 1;
+
+                vstDataSetNode := vstObjects.GetLastChild(DataSetGroupNode);
+
+                Data := vstObjects.GetNodeData(vstDataSetNode);
+                Data.Caption := DataSet.Name;
+
+                ListOfObjects := TList.Create;
+                FCalibrationDataSetsList.Add(ListOfObjects);
+
+                InitializeNodeData(vstDataSetNode, ListOfObjects);
+
+                Data.IsDataSetNode := True;
+                Data.Classification := Classification + '|' + DataSet.Name;
+
+                DataSetList.AddObject(Data.Classification, TObject(vstDataSetNode));
+              end;
+            end;
+          finally
+            SortedClassifiedDataSets.Free;
+          end;
+        finally
+          SutraLayerGroupList.Free;
+          LayerGroupList.Free;
+          ClassificationObjects.Free;
+          HufDataArrays.Free;
+        end;
+      finally
+        ClassificationObjectOwnerList.Free;
+      end;
+    finally
+      DataSetClassifications.Free;
+    end
   finally
     vstObjects.EndUpdate;
   end;
@@ -2685,6 +2842,8 @@ begin
   FExapandedNodes.Free;
   FDataSetLists.Free;
   FDataSetLists := nil;
+  FCalibrationDataSetsList.Free;
+  FCalibrationDataSetsList := nil;
 
   FAllObjectsList.Free;
   FLeakyList.Free;
@@ -2804,6 +2963,7 @@ begin
   vstObjects.NodeDataSize := SizeOf(TMyRec);
 
   FDataSetLists:= TObjectList.Create;
+  FCalibrationDataSetsList := TObjectList.Create;
 
   FAllObjectsList:= TList.Create;
   FLeakyList:= TList.Create;
@@ -2940,6 +3100,7 @@ begin
   FvstSizeNode := nil;
   FvstRefinementNode := nil;
   FvstDataSetRootNode := nil;
+  FvstCalibrationDataSetsNode := nil;
   FvstPhastBoundaryConditionsRoot := nil;
   FvstModflowBoundaryConditionsRoot := nil;
   FvstSpecifiedHeadNode := nil;
@@ -3185,6 +3346,13 @@ begin
   end;
 end;
 
+function TfrmCustomSelectObjects.IsCalibrationDataSet(
+  DataArray: TDataArray): Boolean;
+begin
+  result := DataArray.PestParametersUsed
+    or (Pos(StrParamNameSuffix, DataArray.Name) > 0);
+end;
+
 procedure TfrmCustomSelectObjects.SortScreenObjectLists;
 var
   Index: integer;
@@ -3304,6 +3472,11 @@ begin
   for Index := 0 to FDataSetLists.Count - 1 do
   begin
     List := FDataSetLists[Index] as TList;
+    List.Sort(ScreenObjectCompare);
+  end;
+  for Index := 0 to FCalibrationDataSetsList.Count - 1 do
+  begin
+    List := FCalibrationDataSetsList[Index] as TList;
     List.Sort(ScreenObjectCompare);
   end;
 end;
@@ -3537,6 +3710,7 @@ begin
   vstObjects.BeginUpdate;
   try
     if (Node = FvstDataSetRootNode)
+      or (Node = FvstCalibrationDataSetsNode)
       or (Node = FvstPhastBoundaryConditionsRoot)
       or (Node = FvstModflowBoundaryConditionsRoot)
       or (Node = FvstSutraFeaturesNode)
@@ -3741,6 +3915,10 @@ begin
       begin
         UpdateDataSetChildren(vstNode);
       end
+      else if (vstNode = FvstCalibrationDataSetsNode) then
+      begin
+        UpdateDataSetChildren(vstNode);
+      end
       else
       begin
         UpdateChildCheck(vstNode);
@@ -3840,6 +4018,7 @@ begin
     SetRootNodeStates(FvstFootprintFeaturesNode);
     UpdateChildCheck(FvstModpathRoot);
     SetRootNodeStates(FvstDataSetRootNode);
+    SetRootNodeStates(FvstCalibrationDataSetsNode);
     UpdateChildCheck(FvstChildModelNode);
     UpdateChildCheck(FvstSizeNode);
     UpdateChildCheck(FvstRefinementNode);

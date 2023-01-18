@@ -1,8 +1,7 @@
 inherited frmCustomSelectObjects: TfrmCustomSelectObjects
   Caption = 'frmCustomSelectObjects'
   ClientHeight = 414
-  ExplicitWidth = 438
-  ExplicitHeight = 452
+  ExplicitHeight = 453
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -73,7 +72,6 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
     OnStateChange = vstObjectsStateChange
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-    ExplicitWidth = 422
     Columns = <>
   end
 end

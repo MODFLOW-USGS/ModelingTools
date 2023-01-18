@@ -51,7 +51,8 @@ uses System.UITypes, Windows,
   frameScreenObjectTabbedUnit, frameScreenObjectCSubUnit, framePestObsUnit,
   frameSubPestObsUnit, framePestObsCaptionedUnit, SutraPestObsUnit,
   frameScreenObjectCncUnit, frameCustomGwtBoundaryUnit, frameScreenObjectSrcUnit,
-  frameScreenObjectCustomFmp4BoundaryUnit, frameScreenObjectFmp4EfficiencyUnit;
+  frameScreenObjectCustomFmp4BoundaryUnit, frameScreenObjectFmp4EfficiencyUnit,
+  frameScreenObjectFmp4EfficiencyImprovementUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -407,6 +408,8 @@ type
     frameGwtSRC: TframeScreenObjectSrc;
     jvspFmp4Efficiency: TJvStandardPage;
     frameFmp4Efficiency: TframeScreenObjectFmp4Efficiency;
+    jvspFmp4EfficiencyImprovement: TJvStandardPage;
+    frameFmp4EfficiencyImprovement: TframeScreenObjectFmp4EfficiencyImprovement;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1740,6 +1743,7 @@ type
     FGwtCnc_Node: TJvPageIndexNode;
     FGwtSrc_Node: TJvPageIndexNode;
     FFmp4EfficiencyNode: TJvPageIndexNode;
+    FFmp4EfficiencyImprovementNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2252,8 +2256,11 @@ type
     function IsChdEndHeadColumn(ACol: Integer): Boolean;
     procedure UpdateUzfScrollWidth;
     procedure CreateFmp4EfficiencyNode;
-    procedure Fmp4EfficiencChanged(Sender: TObject);
+    procedure Fmp4EfficiencyChanged(Sender: TObject);
     procedure GetFmp4EfficiencyBoundary(const ScreenObjectList: TList);
+    procedure CreateFmp4EfficiencyImprovementNode;
+    procedure Fmp4EfficiencyImprovementChanged(Sender: TObject);
+    procedure GetFmp4EfficiencyImprovementBoundary(const ScreenObjectList: TList);
 //    function GetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer): Boolean;
 //    procedure SetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer;
 //      const Value: Boolean);
@@ -2553,7 +2560,8 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowSubsidenceDefUnit, frmManageSutraBoundaryObservationsUnit,
   framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit, ModflowRivUnit,
   ModflowResUnit, Modflow6TimeSeriesCollectionsUnit, Modflow6TimeSeriesUnit,
-  ModflowGwtSpecifiedConcUnit, PestPropertiesUnit, ModflowFmp4EfficiencyUnit;
+  ModflowGwtSpecifiedConcUnit, PestPropertiesUnit, ModflowFmp4EfficiencyUnit,
+  ModflowFmp4EfficiencyImprovementUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -3992,6 +4000,10 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4EfficiencyImprovementNode then
+    begin
+      // do nothing
+    end
 
 
     else
@@ -4140,6 +4152,7 @@ begin
   CreateFarmPrecipNode(AScreenObject);
   CreateFarmRefEvapNode(AScreenObject);
   CreateFmp4EfficiencyNode;
+  CreateFmp4EfficiencyImprovementNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -4962,6 +4975,8 @@ begin
         BoundaryNodeList.Add(FUZF_Mf6_Node);
         BoundaryNodeList.Add(FCSUB_Node);
         BoundaryNodeList.Add(FFmp4EfficiencyNode);
+        BoundaryNodeList.Add(FFmp4EfficiencyImprovementNode);
+
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -5818,11 +5833,20 @@ begin
   end;
 end;
 
-procedure TfrmScreenObjectProperties.Fmp4EfficiencChanged(Sender: TObject);
+procedure TfrmScreenObjectProperties.Fmp4EfficiencyChanged(Sender: TObject);
 begin
   if (FFmp4EfficiencyNode <> nil) and (FFmp4EfficiencyNode.StateIndex <> 3) then
   begin
     FFmp4EfficiencyNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4EfficiencyImprovementChanged(
+  Sender: TObject);
+begin
+  if (FFmp4EfficiencyImprovementNode <> nil) and (FFmp4EfficiencyImprovementNode.StateIndex <> 3) then
+  begin
+    FFmp4EfficiencyImprovementNode.StateIndex := 2;
   end;
 end;
 
@@ -5894,7 +5918,8 @@ begin
   frameRIP.OnChange := RipChanged;
   frameMAW.OnEdited := MawChanged;
   frameCSUB.OnEdited := CSubChanged;
-  frameFmp4Efficiency.OnEdited := Fmp4EfficiencChanged;
+  frameFmp4Efficiency.OnEdited := Fmp4EfficiencyChanged;
+  frameFmp4EfficiencyImprovement.OnEdited := Fmp4EfficiencyImprovementChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7111,8 +7136,10 @@ begin
   begin
     AllowChange := True;
   end
-
-
+  else if (Node = FFmp4EfficiencyImprovementNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8052,9 +8079,17 @@ begin
   begin
     frameFmp4Efficiency.SetData(FNewProperties,
       (FFmp4EfficiencyNode.StateIndex = 2),
-      (FFmp4EfficiencyNode.StateIndex = 1) and frmGoPhast.PhastModel.FarmProcess4TransientEfficiencyArrayIsSelected);
+      (FFmp4EfficiencyNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientEfficiencyArrayIsSelected);
   end;
 
+  if (FFmp4EfficiencyImprovementNode <> nil) then
+  begin
+    frameFmp4EfficiencyImprovement.SetData(FNewProperties,
+      (FFmp4EfficiencyImprovementNode.StateIndex = 2),
+      (FFmp4EfficiencyImprovementNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientEfficiencyImprovementArrayIsSelected);
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.UpdateVertices;
@@ -14336,6 +14371,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4EfficiencyImprovementNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4EfficiencyImprovementNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientEfficiencyImprovementArrayIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Efficiency Improvement in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmProcess4.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4EfficiencyImprovement.PageIndex;
+    frameFmp4EfficiencyImprovement.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4EfficiencyImprovementNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4EfficiencyNode;
 var
   Node: TJvPageIndexNode;
@@ -16951,6 +17003,32 @@ begin
   frameFmp4Efficiency.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4EfficiencyImprovementBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4EfficiencyImprovementBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientEfficiencyImprovementArrayIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.Fmp4EfficiencyImprovementBoundary;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4EfficiencyImprovementNode <> nil then
+  begin
+    FFmp4EfficiencyImprovementNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4EfficiencyImprovement.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetLakeMf6Boundary(
   const ScreenObjectList: TList);
 var
@@ -17416,6 +17494,7 @@ begin
   GetUzMf6Boundary(AScreenObjectList);
 
   GetFmp4EfficiencyBoundary(AScreenObjectList);
+  GetFmp4EfficiencyImprovementBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 
