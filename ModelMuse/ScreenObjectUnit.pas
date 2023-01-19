@@ -48,7 +48,8 @@ uses
   MeshRenumberingTypes, Modflow6ObsUnit, ModflowLakMf6Unit, ModflowMvrUnit,
   ModflowUzfMf6Unit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
   ModflowSubsidenceDefUnit, PointCollectionUnit, ModflowGwtSpecifiedConcUnit,
-  ModflowFmp4EfficiencyUnit, ModflowFmp4EfficiencyImprovementUnit;
+  ModflowFmp4EfficiencyUnit, ModflowFmp4EfficiencyImprovementUnit,
+  ModflowFmp4BareRunoffFractionUnit;
 
 type
   //
@@ -1460,6 +1461,7 @@ view. }
     FGwtSrcBoundary: TSrcBoundary;
     FFmp4EfficiencyBoundary: TFmp4EfficiencyBoundary;
     FFmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary;
+    FFmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1576,6 +1578,9 @@ view. }
     property Fmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary
       read FFmp4EfficiencyImprovementBoundary
       write FFmp4EfficiencyImprovementBoundary;
+    property Fmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary
+      read FFmp4BareRunoffFractionBoundary
+      write FFmp4BareRunoffFractionBoundary;
 
     // Be sure to update Invalidate, FreeUnusedBoundaries,
     // StopTalkingToAnyone, UsesATime, ReplaceATime, Destroy,
@@ -2800,7 +2805,11 @@ view. }
       const Value: TFmp4EfficiencyImprovementBoundary);
     function StoreFmp4EfficiencyImprovementBoundary: Boolean;
     procedure CreateFmp4EfficiencyImprovementBoundary;
-//    procedure SetVerticesArePilotPoints(const Value: Boolean);
+    function GetFmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary;
+    procedure SetFmp4BareRunoffFractionBoundary(
+      const Value: TFmp4BareRunoffFractionBoundary);
+    function StoreFmp4BareRunoffFractionBoundary: Boolean;
+    procedure CreateFmp4BareRunoffFractionBoundary;
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
     procedure DeleteExtraSections;
@@ -4137,6 +4146,9 @@ view. }
     property Fmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary
       read GetFmp4EfficiencyImprovementBoundary write SetFmp4EfficiencyImprovementBoundary
       stored StoreFmp4EfficiencyImprovementBoundary;
+    property Fmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary
+      read GetFmp4BareRunoffFractionBoundary write SetFmp4BareRunoffFractionBoundary
+      stored StoreFmp4BareRunoffFractionBoundary;
 
 
 
@@ -6808,6 +6820,7 @@ begin
   GwtSrcBoundary := AScreenObject.GwtSrcBoundary;
   Fmp4EfficiencyBoundary := AScreenObject.Fmp4EfficiencyBoundary;
   Fmp4EfficiencyImprovementBoundary := AScreenObject.Fmp4EfficiencyImprovementBoundary;
+  Fmp4BareRunoffFractionBoundary := AScreenObject.Fmp4BareRunoffFractionBoundary;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9612,7 +9625,12 @@ begin
       Fmp4EfficiencyImprovementBoundary.InvalidateDisplay;
     end;
 
-//    if Mt3dmsTransObservations <> nil then
+    if Fmp4BareRunoffFractionBoundary <> nil then
+    begin
+      Fmp4BareRunoffFractionBoundary.InvalidateDisplay;
+    end;
+
+    //    if Mt3dmsTransObservations <> nil then
 //    begin
 //      Mt3dmsTransObservations.InvalidateDisplay;
 //    end;
@@ -19143,6 +19161,23 @@ function TScreenObject.GetFluxBoundary: TFluxBoundary;
 begin
   CreatePhastFluxBoundary;
   result := FFluxBoundary
+end;
+
+function TScreenObject.GetFmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateFmp4BareRunoffFractionBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4BareRunoffFractionBoundary;
+  end;
 end;
 
 function TScreenObject.GetFmp4EfficiencyBoundary: TFmp4EfficiencyBoundary;
@@ -31386,6 +31421,24 @@ begin
   InvalidateModel;
 end;
 
+procedure TScreenObject.SetFmp4BareRunoffFractionBoundary(
+  const Value: TFmp4BareRunoffFractionBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4BareRunoffFractionBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4BareRunoffFractionBoundary);
+  end
+  else
+  begin
+    CreateFmp4BareRunoffFractionBoundary;
+    ModflowBoundaries.FFmp4BareRunoffFractionBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetFmp4EfficiencyBoundary(
   const Value: TFmp4EfficiencyBoundary);
 begin
@@ -31707,6 +31760,16 @@ begin
   result := (FFluxBoundary <> nil) and
     ((FluxBoundary.BoundaryValue.Count > 0)
     or (FluxBoundary.Solution.Count > 0));
+end;
+
+function TScreenObject.StoreFmp4BareRunoffFractionBoundary: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (Fmp4BareRunoffFractionBoundary <> nil) and Fmp4BareRunoffFractionBoundary.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TScreenObject.StoreFmp4EfficiencyBoundary: Boolean;
@@ -37408,6 +37471,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateFmp4BareRunoffFractionBoundary;
+begin
+  if (ModflowBoundaries.FFmp4BareRunoffFractionBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4BareRunoffFractionBoundary :=
+      TFmp4BareRunoffFractionBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateFmp4EfficiencyBoundary;
 begin
   if (ModflowBoundaries.FFmp4EfficiencyBoundary = nil) then
@@ -40771,6 +40843,20 @@ begin
     Fmp4EfficiencyImprovementBoundary.Assign(Source.Fmp4EfficiencyImprovementBoundary);
   end;
 
+  if Source.Fmp4BareRunoffFractionBoundary = nil then
+  begin
+    FreeAndNil(Fmp4BareRunoffFractionBoundary);
+  end
+  else
+  begin
+    if Fmp4BareRunoffFractionBoundary = nil then
+    begin
+      Fmp4BareRunoffFractionBoundary :=
+        TFmp4BareRunoffFractionBoundary.Create(Model, FScreenObject);
+    end;
+    Fmp4BareRunoffFractionBoundary.Assign(Source.Fmp4BareRunoffFractionBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -40789,6 +40875,7 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmp4BareRunoffFractionBoundary.Free;
   FFmp4EfficiencyImprovementBoundary.Free;
   FFmp4EfficiencyBoundary.Free;
   FGwtSrcBoundary.Free;
@@ -41099,6 +41186,12 @@ begin
     FreeAndNil(FFmp4EfficiencyImprovementBoundary);
   end;
 
+  if (FFmp4BareRunoffFractionBoundary <> nil)
+    and not FFmp4BareRunoffFractionBoundary.Used then
+  begin
+    FreeAndNil(FFmp4BareRunoffFractionBoundary);
+  end;
+
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -41386,6 +41479,11 @@ begin
   if Fmp4EfficiencyImprovementBoundary <> nil then
   begin
     Fmp4EfficiencyImprovementBoundary.Invalidate;
+  end;
+
+  if Fmp4BareRunoffFractionBoundary <> nil then
+  begin
+    Fmp4BareRunoffFractionBoundary.Invalidate;
   end;
 
 end;
@@ -41715,6 +41813,11 @@ begin
   if Fmp4EfficiencyImprovementBoundary <> nil then
   begin
     Fmp4EfficiencyImprovementBoundary.RemoveModelLink(AModel);
+  end;
+
+  if Fmp4BareRunoffFractionBoundary <> nil then
+  begin
+    Fmp4BareRunoffFractionBoundary.RemoveModelLink(AModel);
   end;
 
   {
@@ -42049,6 +42152,11 @@ begin
     FFmp4EfficiencyImprovementBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4BareRunoffFractionBoundary <> nil then
+  begin
+    FFmp4BareRunoffFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -42377,6 +42485,11 @@ begin
   if FFmp4EfficiencyImprovementBoundary <> nil then
   begin
     FFmp4EfficiencyImprovementBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4BareRunoffFractionBoundary <> nil then
+  begin
+    FFmp4BareRunoffFractionBoundary.StopTalkingToAnyone;
   end;
 
 end;
@@ -42890,6 +43003,15 @@ begin
   if FFmp4EfficiencyImprovementBoundary <> nil then
   begin
     Result := FFmp4EfficiencyImprovementBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4BareRunoffFractionBoundary <> nil then
+  begin
+    Result := FFmp4BareRunoffFractionBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

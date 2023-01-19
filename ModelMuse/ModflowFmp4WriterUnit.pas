@@ -13,13 +13,23 @@ type
   TWriteLocation = (wlMain, wlOpenClose, wlOFE, wlCID, wlFID, wlRoot, wlCropUse, wlETR,
     wlEtFrac, wlSwLosses, wlPFLX, wlCropFunc, wlWaterCost, wlDeliveries,
     wlSemiRouteDeliv, wlSemiRouteReturn, wlCall, wlEfficiency,
-    wlEfficiencyImprovement);
+    wlEfficiencyImprovement, wlBareRunoffFraction);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
   TCheckDataSet = procedure (IntegerArray: TDataArray;
     const ErrorMessage: string) of object;
 
+  TTransientDataUsed = function (Sender: TObject): Boolean of object;
+
+  TEvaluateProcedure = procedure of object;
+
+  TUpdateRequirements = record
+    EvaluateProcedure: TEvaluateProcedure;
+    TransientDataUsed: TTransientDataUsed;
+    WriteLocation: TWriteLocation;
+    TimeLists: TModflowBoundListOfTimeLists;
+  end;
 
   TRequiredValues = record
     WriteLocation: TWriteLocation;
@@ -49,6 +59,7 @@ type
     FCropIDs: TList;
     FEfficiencies: TList;
     FEfficiencyImprovements: TList;
+    FBareRunoffFractions: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -60,6 +71,7 @@ type
     FCID_FileStream: TFileStream;
     FEFFICIENCY_FileStream: TFileStream;
     FEFFICIENCY_IMPROVEMENT_FileStream: TFileStream;
+    FBARE_RUNOFF_FRACTION_FileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -92,6 +104,9 @@ type
     procedure EvaluateEfficiencyImprovement;
     procedure WriteEfficiencyImprovement;
 
+    procedure EvaluateBareRunoffFraction;
+    procedure WriteBareRunoffFraction;
+
     procedure FreeFileStreams;
     // wbs location
 //    procedure WriteDataSet26(TimeIndex: Integer);
@@ -108,6 +123,9 @@ type
       WriteLocation: TWriteLocation): TModflowBoundary;
     procedure EvaluateTransientArrayData(WriteLocation: TWriteLocation);
     procedure WriteFmpArrayData(AFileName: string; RequiredValues: TRequiredValues);
+    procedure UpdateDisplay(UpdateRequirements: TUpdateRequirements);
+    function TransientCropUsed(Sender: TObject): Boolean;
+    function TransientRefEtUsed(Sender: TObject): Boolean;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -140,7 +158,7 @@ type
     procedure UpdateCropIDDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateEfficiencyDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateEfficiencyImprovementDisplay(TimeLists: TModflowBoundListOfTimeLists);
-
+    procedure UpdateBareRunoffFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 
@@ -155,6 +173,7 @@ resourcestring
   StrUndefinedError = 'Undefined %s in one or more stress periods';
   StrInvalidEfficiencyV = 'Invalid Efficiency value';
   StrInvalidEfficiencyI = 'Invalid Efficiency Improvement value';
+  StrInvalidBareRunoff = 'Invalid Bare Runoff Fraction value';
 
 { TModflowFmp4Writer }
 
@@ -249,6 +268,7 @@ begin
   FCropIDs := TObjectList.Create;
   FEfficiencies := TObjectList.Create;
   FEfficiencyImprovements := TObjectList.Create;
+  FBareRunoffFractions := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -258,6 +278,7 @@ end;
 destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
+  FBareRunoffFractions.Free;
   FEfficiencyImprovements.Free;
   FEfficiencies.Free;
   FCropIDs.Free;
@@ -303,6 +324,16 @@ begin
   EvaluateCropID;
   EvaluateEfficiency;
   EvaluateEfficiencyImprovement;
+  EvaluateBareRunoffFraction;
+end;
+
+procedure TModflowFmp4Writer.EvaluateBareRunoffFraction;
+begin
+  if FFarmProcess4.TransientArrayBareRunoffFractionDisplayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidBareRunoff);
+    EvaluateTransientArrayData(wlBareRunoffFraction);
+  end;
 end;
 
 procedure TModflowFmp4Writer.EvaluateCropID;
@@ -316,8 +347,8 @@ end;
 
 procedure TModflowFmp4Writer.EvaluateEfficiency;
 begin
-  if (FFarmProcess4.Efficiency.ArrayList = alArray)
-    and (FFarmProcess4.Efficiency.FarmOption = foTransient) then
+  if (FFarmProcess4.EfficiencyOptions.ArrayList = alArray)
+    and (FFarmProcess4.EfficiencyOptions.FarmOption = foTransient) then
   begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidEfficiencyV);
     EvaluateTransientArrayData(wlEfficiency);
@@ -327,7 +358,7 @@ end;
 
 procedure TModflowFmp4Writer.EvaluateEfficiencyImprovement;
 begin
-  if FFarmProcess4.FarmTransientArrayEfficiencyImprovementUsed(nil) then
+  if FFarmProcess4.TransientArrayEfficiencyImprovementUsed(nil) then
   begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidEfficiencyI);
     EvaluateTransientArrayData(wlEfficiencyImprovement);
@@ -372,6 +403,7 @@ begin
   FreeAndNil(FCID_FileStream);
   FreeAndNil(FEFFICIENCY_FileStream);
   FreeAndNil(FEFFICIENCY_IMPROVEMENT_FileStream);
+  FreeAndNil(FBARE_RUNOFF_FRACTION_FileStream);
 
 end;
 
@@ -477,6 +509,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlBareRunoffFraction:
+      begin
+        result := ChangeFileExt(FBaseName, '.BARE_RUNOFF_FRACTION');
+        if FBARE_RUNOFF_FRACTION_FileStream = nil then
+        begin
+          FBARE_RUNOFF_FRACTION_FileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -505,6 +546,7 @@ begin
     wlCall: ;
     wlEfficiency: result := ScreenObject.Fmp4EfficiencyBoundary;
     wlEfficiencyImprovement: result := ScreenObject.Fmp4EfficiencyImprovementBoundary;
+    wlBareRunoffFraction: result := ScreenObject.Fmp4BareRunoffFractionBoundary;
     else Assert(False);
   end;
 end;
@@ -533,6 +575,7 @@ begin
     wlCall: ;
     wlEfficiency: result := FEfficiencies;
     wlEfficiencyImprovement: result := FEfficiencyImprovements;
+    wlBareRunoffFraction: result := FBareRunoffFractions;
     else Assert(False)
   end;
 end;
@@ -553,52 +596,93 @@ begin
 
 end;
 
-procedure TModflowFmp4Writer.UpdateCropIDDisplay(
+procedure TModflowFmp4Writer.UpdateBareRunoffFractionDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
   DataSets: TList;
-  CropID: TModflowBoundaryDisplayTimeList;
+  BareRunoffFraction: TModflowBoundaryDisplayTimeList;
   TimeIndex: integer;
   TimeListIndex: integer;
   List: TValueCellList;
   TimeList: TModflowBoundaryDisplayTimeList;
   DataArray: TDataArray;
-  CropIDIndex: integer;
+  EfficiencyIndex: integer;
   DataSetIndex: integer;
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateBareRunoffFraction;
+  UpdateRequirements.TransientDataUsed := (Package as TFarmProcess4).TransientArrayBareRunoffFractionDisplayUsed;
+  UpdateRequirements.WriteLocation := wlBareRunoffFraction;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+function TModflowFmp4Writer.TransientCropUsed(Sender: TObject): Boolean;
+begin
+  result := FLandUse.CropLocation = rstTransient;
+end;
+
+procedure TModflowFmp4Writer.UpdateCropIDDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateCropID;
+  UpdateRequirements.TransientDataUsed := TransientCropUsed;
+  UpdateRequirements.WriteLocation := wlCID;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateDisplay(
+  UpdateRequirements: TUpdateRequirements);
+var
+  DataSets: TList;
+  Efficiency: TModflowBoundaryDisplayTimeList;
+  TimeIndex: integer;
+  TimeListIndex: integer;
+  List: TValueCellList;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  DataArray: TDataArray;
+  EfficiencyIndex: integer;
+  DataSetIndex: integer;
+  BoundaryLists: TList;
 begin
   EvaluateActiveCells;
   frmErrorsAndWarnings.BeginUpdate;
   try
     RemoveErrorAndWarningMessages;
-    if FLandUse.CropLocation <> rstTransient then
+    if not UpdateRequirements.TransientDataUsed(self) then
     begin
-      UpdateNotUsedDisplay(TimeLists);
+      UpdateNotUsedDisplay(UpdateRequirements.TimeLists);
       Exit;
     end;
     DataSets := TList.Create;
     try
-      EvaluateCropID;
+      UpdateRequirements.EvaluateProcedure;
       if not frmProgressMM.ShouldContinue then
       begin
         Exit;
       end;
 
-      CropID := TimeLists[0];
-      for TimeIndex := 0 to CropID.Count - 1 do
+      Efficiency := UpdateRequirements.TimeLists[0];
+      for TimeIndex := 0 to Efficiency.Count - 1 do
       begin
         DataSets.Clear;
 
-        for TimeListIndex := 0 to TimeLists.Count - 1 do
+        for TimeListIndex := 0 to UpdateRequirements.TimeLists.Count - 1 do
         begin
-          TimeList := TimeLists[TimeListIndex];
+          TimeList := UpdateRequirements.TimeLists[TimeListIndex];
           DataArray := TimeList[TimeIndex]
             as TModflowBoundaryDisplayDataArray;
           DataSets.Add(DataArray);
         end;
 
-        for CropIDIndex := 0 to FCropIDs.Count - 1 do
+        BoundaryLists := GetTransientList(UpdateRequirements.WriteLocation);
+        for EfficiencyIndex := 0 to BoundaryLists.Count - 1 do
         begin
-          List := FCropIDs[CropIDIndex];
+          List := BoundaryLists[EfficiencyIndex];
           UpdateCellDisplay(List, DataSets, [], nil, [0]);
           List.Cache;
         end;
@@ -606,12 +690,12 @@ begin
         begin
           DataArray := DataSets[DataSetIndex];
           DataArray.UpToDate := True;
-          CheckDataSetZeroOrPositive(DataArray, StrInvalidCropIDInF);
+//          CheckDataSetZeroOrPositive(DataArray, StrInvalidFarmID);
           DataArray.CacheData;
         end;
       end;
 
-      SetTimeListsUpToDate(TimeLists);
+      SetTimeListsUpToDate(UpdateRequirements.TimeLists);
     finally
       DataSets.Free;
     end;
@@ -623,267 +707,52 @@ end;
 procedure TModflowFmp4Writer.UpdateEfficiencyDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
-  DataSets: TList;
-  Efficiency: TModflowBoundaryDisplayTimeList;
-  TimeIndex: integer;
-  TimeListIndex: integer;
-  List: TValueCellList;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  DataArray: TDataArray;
-  EfficiencyIndex: integer;
-  DataSetIndex: integer;
+  UpdateRequirements: TUpdateRequirements;
 begin
-  EvaluateActiveCells;
-  frmErrorsAndWarnings.BeginUpdate;
-  try
-    RemoveErrorAndWarningMessages;
-    if not (Package as TFarmProcess4).FarmIdUsed(self) then
-    begin
-      UpdateNotUsedDisplay(TimeLists);
-      Exit;
-    end;
-    DataSets := TList.Create;
-    try
-      EvaluateEfficiency;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      Efficiency := TimeLists[0];
-      for TimeIndex := 0 to Efficiency.Count - 1 do
-      begin
-        DataSets.Clear;
-
-        for TimeListIndex := 0 to TimeLists.Count - 1 do
-        begin
-          TimeList := TimeLists[TimeListIndex];
-          DataArray := TimeList[TimeIndex]
-            as TModflowBoundaryDisplayDataArray;
-          DataSets.Add(DataArray);
-        end;
-
-        for EfficiencyIndex := 0 to FEfficiencies.Count - 1 do
-        begin
-          List := FEfficiencies[EfficiencyIndex];
-          UpdateCellDisplay(List, DataSets, [], nil, [0]);
-          List.Cache;
-        end;
-        for DataSetIndex := 0 to DataSets.Count - 1 do
-        begin
-          DataArray := DataSets[DataSetIndex];
-          DataArray.UpToDate := True;
-//          CheckDataSetZeroOrPositive(DataArray, StrInvalidFarmID);
-          DataArray.CacheData;
-        end;
-      end;
-
-      SetTimeListsUpToDate(TimeLists);
-    finally
-      DataSets.Free;
-    end;
-  finally
-    frmErrorsAndWarnings.EndUpdate;
-  end;
+  UpdateRequirements.EvaluateProcedure := EvaluateEfficiency;
+  UpdateRequirements.TransientDataUsed := (Package as TFarmProcess4).
+    FarmTransientArrayEfficiencyUsed;
+  UpdateRequirements.WriteLocation := wlEfficiency;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
 end;
 
 procedure TModflowFmp4Writer.UpdateEfficiencyImprovementDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
-  DataSets: TList;
-  EfficiencyImprovement: TModflowBoundaryDisplayTimeList;
-  TimeIndex: integer;
-  TimeListIndex: integer;
-  List: TValueCellList;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  DataArray: TDataArray;
-  EfficiencyIndex: integer;
-  DataSetIndex: integer;
+  UpdateRequirements: TUpdateRequirements;
 begin
-  EvaluateActiveCells;
-  frmErrorsAndWarnings.BeginUpdate;
-  try
-    RemoveErrorAndWarningMessages;
-    if not (Package as TFarmProcess4).FarmIdUsed(self) then
-    begin
-      UpdateNotUsedDisplay(TimeLists);
-      Exit;
-    end;
-    DataSets := TList.Create;
-    try
-      EvaluateEfficiencyImprovement;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      EfficiencyImprovement := TimeLists[0];
-      for TimeIndex := 0 to EfficiencyImprovement.Count - 1 do
-      begin
-        DataSets.Clear;
-
-        for TimeListIndex := 0 to TimeLists.Count - 1 do
-        begin
-          TimeList := TimeLists[TimeListIndex];
-          DataArray := TimeList[TimeIndex]
-            as TModflowBoundaryDisplayDataArray;
-          DataSets.Add(DataArray);
-        end;
-
-        for EfficiencyIndex := 0 to FEfficiencyImprovements.Count - 1 do
-        begin
-          List := FEfficiencyImprovements[EfficiencyIndex];
-          UpdateCellDisplay(List, DataSets, [], nil, [0]);
-          List.Cache;
-        end;
-        for DataSetIndex := 0 to DataSets.Count - 1 do
-        begin
-          DataArray := DataSets[DataSetIndex];
-          DataArray.UpToDate := True;
-//          CheckDataSetZeroOrPositive(DataArray, StrInvalidFarmID);
-          DataArray.CacheData;
-        end;
-      end;
-
-      SetTimeListsUpToDate(TimeLists);
-    finally
-      DataSets.Free;
-    end;
-  finally
-    frmErrorsAndWarnings.EndUpdate;
-  end;
+  UpdateRequirements.EvaluateProcedure := EvaluateEfficiencyImprovement;
+  UpdateRequirements.TransientDataUsed := (Package as TFarmProcess4).
+    TransientArrayEfficiencyImprovementUsed;
+  UpdateRequirements.WriteLocation := wlEfficiencyImprovement;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
 end;
 
 procedure TModflowFmp4Writer.UpdateFarmIDDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
-  DataSets: TList;
-  FarmID: TModflowBoundaryDisplayTimeList;
-  TimeIndex: integer;
-  TimeListIndex: integer;
-  List: TValueCellList;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  DataArray: TDataArray;
-  FarmIDIndex: integer;
-  DataSetIndex: integer;
+  UpdateRequirements: TUpdateRequirements;
 begin
-  EvaluateActiveCells;
-  frmErrorsAndWarnings.BeginUpdate;
-  try
-    RemoveErrorAndWarningMessages;
-    if not (Package as TFarmProcess4).FarmIdUsed(self) then
-    begin
-      UpdateNotUsedDisplay(TimeLists);
-      Exit;
-    end;
-    DataSets := TList.Create;
-    try
-      EvaluateFarmID;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      FarmID := TimeLists[0];
-      for TimeIndex := 0 to FarmID.Count - 1 do
-      begin
-        DataSets.Clear;
-
-        for TimeListIndex := 0 to TimeLists.Count - 1 do
-        begin
-          TimeList := TimeLists[TimeListIndex];
-          DataArray := TimeList[TimeIndex]
-            as TModflowBoundaryDisplayDataArray;
-          DataSets.Add(DataArray);
-        end;
-
-        for FarmIDIndex := 0 to FFarmIDs.Count - 1 do
-        begin
-          List := FFarmIDs[FarmIDIndex];
-          UpdateCellDisplay(List, DataSets, [], nil, [0]);
-          List.Cache;
-        end;
-        for DataSetIndex := 0 to DataSets.Count - 1 do
-        begin
-          DataArray := DataSets[DataSetIndex];
-          DataArray.UpToDate := True;
-          CheckDataSetZeroOrPositive(DataArray, StrInvalidFarmID);
-          DataArray.CacheData;
-        end;
-      end;
-
-      SetTimeListsUpToDate(TimeLists);
-    finally
-      DataSets.Free;
-    end;
-  finally
-    frmErrorsAndWarnings.EndUpdate;
-  end;
+  UpdateRequirements.EvaluateProcedure := EvaluateFarmID;
+  UpdateRequirements.TransientDataUsed := (Package as TFarmProcess4).
+    FarmIdUsed;
+  UpdateRequirements.WriteLocation := wlFID;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
 end;
 
 procedure TModflowFmp4Writer.UpdatePrecipDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
-  DataSets: TList;
-  PrecipRate: TModflowBoundaryDisplayTimeList;
-  TimeIndex: integer;
-  TimeListIndex: integer;
-  List: TValueCellList;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  DataArray: TDataArray;
-  PrecipIndex: integer;
-  DataSetIndex: integer;
+  UpdateRequirements: TUpdateRequirements;
 begin
-  frmErrorsAndWarnings.BeginUpdate;
-  try
-    RemoveErrorAndWarningMessages;
-    if not FClimatePackage.TransientPrecipUsed(self) then
-    begin
-      UpdateNotUsedDisplay(TimeLists);
-      Exit;
-    end;
-    DataSets := TList.Create;
-    try
-      EvaluatePrecip;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      PrecipRate := TimeLists[0];
-      for TimeIndex := 0 to PrecipRate.Count - 1 do
-      begin
-        DataSets.Clear;
-
-        for TimeListIndex := 0 to TimeLists.Count - 1 do
-        begin
-          TimeList := TimeLists[TimeListIndex];
-          DataArray := TimeList[TimeIndex]
-            as TModflowBoundaryDisplayDataArray;
-          DataSets.Add(DataArray);
-        end;
-
-        for PrecipIndex := 0 to FPrecip.Count - 1 do
-        begin
-          List := FPrecip[PrecipIndex];
-          UpdateCellDisplay(List, DataSets, [], nil, [0]);
-          List.Cache;
-        end;
-        for DataSetIndex := 0 to DataSets.Count - 1 do
-        begin
-          DataArray := DataSets[DataSetIndex];
-          DataArray.UpToDate := True;
-          DataArray.CacheData;
-        end;
-      end;
-
-      SetTimeListsUpToDate(TimeLists);
-    finally
-      DataSets.Free;
-    end;
-  finally
-    frmErrorsAndWarnings.EndUpdate;
-  end;
+  UpdateRequirements.EvaluateProcedure := EvaluatePrecip;
+  UpdateRequirements.TransientDataUsed := FClimatePackage.TransientPrecipUsed;
+  UpdateRequirements.WriteLocation := wlPFLX;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
 end;
 
 procedure TModflowFmp4Writer.WriteFmpArrayData(AFileName: string; RequiredValues: TRequiredValues);
@@ -954,74 +823,61 @@ begin
   end;
 end;
 
+function TModflowFmp4Writer.TransientRefEtUsed(Sender: TObject): Boolean;
+begin
+  result := FClimatePackage.ReferenceET.FarmOption = foTransient;
+end;
+
 procedure TModflowFmp4Writer.UpdateRefEtDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
-  DataSets: TList;
-  EvapRate: TModflowBoundaryDisplayTimeList;
-  TimeIndex: integer;
-  TimeListIndex: integer;
-  List: TValueCellList;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  DataArray: TDataArray;
-  EtIndex: integer;
-  DataSetIndex: integer;
+  UpdateRequirements: TUpdateRequirements;
 begin
-  frmErrorsAndWarnings.BeginUpdate;
-  try
-    RemoveErrorAndWarningMessages;
-    if not FClimatePackage.TransientEvapUsed(self) then
-    begin
-      UpdateNotUsedDisplay(TimeLists);
-      Exit;
-    end;
-    DataSets := TList.Create;
-    try
-      EvaluateReferenceET;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      EvapRate := TimeLists[0];
-      for TimeIndex := 0 to EvapRate.Count - 1 do
-      begin
-        DataSets.Clear;
-
-        for TimeListIndex := 0 to TimeLists.Count - 1 do
-        begin
-          TimeList := TimeLists[TimeListIndex];
-          DataArray := TimeList[TimeIndex]
-            as TModflowBoundaryDisplayDataArray;
-          DataSets.Add(DataArray);
-        end;
-
-        for EtIndex := 0 to FRefEts.Count - 1 do
-        begin
-          List := FRefEts[EtIndex];
-          UpdateCellDisplay(List, DataSets, [], nil, [0]);
-          List.Cache;
-        end;
-        for DataSetIndex := 0 to DataSets.Count - 1 do
-        begin
-          DataArray := DataSets[DataSetIndex];
-          DataArray.UpToDate := True;
-          DataArray.CacheData;
-        end;
-      end;
-
-      SetTimeListsUpToDate(TimeLists);
-    finally
-      DataSets.Free;
-    end;
-  finally
-    frmErrorsAndWarnings.EndUpdate;
-  end;
+  UpdateRequirements.EvaluateProcedure := EvaluateReferenceET;
+  UpdateRequirements.TransientDataUsed := TransientRefEtUsed;
+  UpdateRequirements.WriteLocation := wlETR;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
 end;
 
 procedure TModflowFmp4Writer.WriteAllotments;
 begin
 
+end;
+
+procedure TModflowFmp4Writer.WriteBareRunoffFraction;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlBareRunoffFraction);
+
+  if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlBareRunoffFraction;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP WBS: BARE_RUNOFF_FRACTION';
+    RequiredValues.ErrorID := 'FMP WBS: BARE_RUNOFF_FRACTION';
+    RequiredValues.ID := 'BARE_RUNOFF_FRACTION';
+    RequiredValues.StaticDataName := KBareRunoffFraction;
+    RequiredValues.WriteTransientData :=
+      (FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foTransient);
+    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+    RequiredValues.CheckError := StrInvalidBareRunoff;
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteCell(Cell: TValueCell;
@@ -1086,14 +942,14 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
 begin
-  if FFarmProcess4.Efficiency.FarmOption = foNotUsed then
+  if FFarmProcess4.EfficiencyOptions.FarmOption = foNotUsed then
   begin
     Exit;
   end;
 
   AFileName := GetFileStreamName(wlEfficiency);
 
-  if (FFarmProcess4.Efficiency.ArrayList = alArray) then
+  if (FFarmProcess4.EfficiencyOptions.ArrayList = alArray) then
   begin
     RequiredValues.WriteLocation := wlEfficiency;
     RequiredValues.DefaultValue := 0;
@@ -1104,7 +960,7 @@ begin
     RequiredValues.ID := 'EFFICIENCY';
     RequiredValues.StaticDataName := KEfficiency;
     RequiredValues.WriteTransientData :=
-      (FFarmProcess4.Efficiency.FarmOption = foTransient);
+      (FFarmProcess4.EfficiencyOptions.FarmOption = foTransient);
     RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
     RequiredValues.CheckError := StrInvalidEfficiencyV;
 
@@ -1586,6 +1442,11 @@ begin
           Assert(FEFFICIENCY_IMPROVEMENT_FileStream <> nil);
           FEFFICIENCY_IMPROVEMENT_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlBareRunoffFraction:
+        begin
+          Assert(FBARE_RUNOFF_FRACTION_FileStream <> nil);
+          FBARE_RUNOFF_FRACTION_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -1635,6 +1496,8 @@ begin
     end;
     NewLine;
   end;
+
+  WriteBareRunoffFraction;
 
   WriteString('END WATER_BALANCE_SUBREGION');
   NewLine;

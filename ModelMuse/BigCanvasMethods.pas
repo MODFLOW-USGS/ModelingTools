@@ -36,7 +36,7 @@ procedure DrawBigTextBitmap32(const BitMap32: TBitmap32; const Location: TPoint;
 procedure DrawBigTextCanvas(const Canvas: TCanvas; const Location: TPoint;
   const Text: string; const Font: TFont);
 procedure DrawBigText(const Graphic: TPersistent; const Location: TPoint;
-  const Text: string; const Font: TFont);
+  const Text: string; Font: TFont = nil);
 
 
 {@abstract(@name draws a polygon on BitMap.)
@@ -1062,7 +1062,7 @@ begin
 end;
 
 procedure DrawBigText(const Graphic: TPersistent; const Location: TPoint;
-  const Text: string; const Font: TFont);
+  const Text: string; Font: TFont = nil);
 var
   Bitmap: TBitmap32;
   Canvas: TCanvas;
@@ -1071,14 +1071,23 @@ begin
   begin
     Exit;
   end;
+
   if Graphic is TBitmap32 then
   begin
     Bitmap := TBitmap32(Graphic);
+    if Font = nil then
+    begin
+      Font := Bitmap.Font;
+    end;
     DrawBigTextBitmap32(Bitmap, Location, Text, Font);
   end
   else
   begin
     Canvas := Graphic as TCanvas;
+    if Font = nil then
+    begin
+      Font := Canvas.Font;
+    end;
     DrawBigTextCanvas(Canvas, Location, Text, Font);
   end;
 end;

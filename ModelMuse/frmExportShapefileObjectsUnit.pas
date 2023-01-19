@@ -51,6 +51,7 @@ type
     splRight: TSplitter;
     lblTimes: TLabel;
     rgView: TRadioGroup;
+    btnToggleTimes: TButton;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure vstDataSetsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
@@ -64,6 +65,7 @@ type
     procedure btnCloseClick(Sender: TObject);
     procedure splRightMoved(Sender: TObject);
     procedure rgViewClick(Sender: TObject);
+    procedure btnToggleTimesClick(Sender: TObject);
   protected
     function ShouldCheckBoxBeChecked(ScreenObject: TScreenObject): boolean;
       override;
@@ -262,6 +264,17 @@ begin
   else
   begin
     ModalResult := mrNone;
+  end;
+end;
+
+procedure TfrmExportShapefileObjects.btnToggleTimesClick(Sender: TObject);
+var
+  TimeIndex: Integer;
+begin
+  inherited;
+  for TimeIndex := 0 to chklstTimes.Items.Count - 1 do
+  begin
+    chklstTimes.Checked[TimeIndex] := not chklstTimes.Checked[TimeIndex];
   end;
 end;
 

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-04-28T16:35:17.323-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-01-19T12:22:56.364-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">PEST Observation Results Pane</title>
   <body>
     <header>
@@ -22,6 +22,6 @@
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Legend Tab</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The symbols on the Legend tab indicate the value associated with different symbol sizes displayed on the top view of the model.</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Graph Tab</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Graph tab displays a graph of either simulated values, residual, or weighted residual vs. observed values. If the user clicks on a point in the graph, the view will be shifted to put the object associated with the graph point in the center of the top, front, or side view of the ModelMuse main window and the object will be selected. The user can select to plot direct observations, prior information, or both.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Graph tab displays a graph of either simulated values, residual, or weighted residual vs. observed values. If the user clicks on a point in the graph, the observation name will be displayed above the point, the view will be shifted to put the object associated with the graph point in the center of the top, front, or side view of the ModelMuse main window, and the object will be selected. The user can select to plot direct observations, prior information, or both.When the user clicks Apply, any labeled observations will also be labeled in the ModelMuse main window.</text></para>
   </body>
 </topic>

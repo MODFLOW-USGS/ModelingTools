@@ -147,7 +147,7 @@ implementation
 
 uses
   PestObsUnit, frmGoPhastUnit, UndoItemsScreenObjects, frmGoToUnit, xygraph,
-  System.Math, Contnrs;
+  System.Math, Contnrs, xycommon;
 
 type
   TGridCrack = class(TRbwDataGrid4);
@@ -501,6 +501,8 @@ begin
     FSelectedObsItem := qtreeObservations.NearestPointsFirstData
       (xyexportb.xw, xyexportb.yw[1]);
     btnHightlightObjectsClick(nil);
+    FSelectedObsItem.PlotLabel := not FSelectedObsItem.PlotLabel;
+    PlotValues;
   end;
 end;
 
@@ -531,6 +533,9 @@ var
   Count: Integer;
   SimList: TList<TPestObsResult>;
   ObsItem: TPestObsResult;
+  CoordX: Integer;
+  CoordY: Integer;
+//  SimItem: TPestObsResult;
   function NearlyTheSame(const X, Y: extended): boolean;
   const
     Epsilon = 1e-6;
@@ -540,17 +545,7 @@ var
   end;
   function OkSimValue(ASimulatedValue: Double): Boolean;
   begin
-//    if NearlyTheSame(HobDry, ASimulatedValue)
-//      or NearlyTheSame(HDry, ASimulatedValue)
-//      or NearlyTheSame(HNoFlow, ASimulatedValue)
-//       then
-//    begin
-//      Result := False;
-//    end
-//    else
-//    begin
-      result := True;
-//    end;
+    result := True;
   end;
   function OkItem(ObsItem: TPestObsResult): Boolean;
   begin
@@ -622,11 +617,6 @@ begin
         if OkSimValue(SimValue) then
         begin
           SimList.Add(ObsItem);
-//          if rgGraphType.ItemIndex = 1 then
-//          begin
-//            SimValue := ObsItem.Residual;
-//          end;
-//          Inc(Count);
           if Initialized then
           begin
             if SimValue < SimulatedMin then
@@ -739,6 +729,20 @@ begin
         end;
 
         xyfinish;
+
+        for index := 0 to SimList.Count - 1 do
+        begin
+          ObsItem := SimList[index];
+          if ObsItem.PlotLabel then
+          begin
+            SimValue := GetPlotValue(ObsItem);
+
+//            xytext(clBlack, ObsItem.Name, ObsItem.Measured, SimValue, 0, -10, 2);
+            xyusertoabs(ObsItem.Measured, SimValue, CoordX, CoordY);
+            simpletext(clBlack, ObsItem.Name, CoordX, CoordY-10, 0,0);
+//            pbObservations.Canvas.TextOut(CoordX, CoordY, ObsItem.Name);
+          end;
+        end;
       except on E: exception do
         begin
           ShowMessage(e.message);

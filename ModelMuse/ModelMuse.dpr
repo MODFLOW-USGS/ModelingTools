@@ -781,7 +781,9 @@ uses
   frameScreenObjectCustomFmp4BoundaryUnit in 'frameScreenObjectCustomFmp4BoundaryUnit.pas' {frameScreenObjectCustomFmp4Boundary: TFrame},
   frameScreenObjectFmp4EfficiencyUnit in 'frameScreenObjectFmp4EfficiencyUnit.pas' {frameScreenObjectFmp4Efficiency: TFrame},
   ModflowFmp4EfficiencyImprovementUnit in 'ModflowFmp4EfficiencyImprovementUnit.pas',
-  frameScreenObjectFmp4EfficiencyImprovementUnit in 'frameScreenObjectFmp4EfficiencyImprovementUnit.pas' {frameScreenObjectFmp4EfficiencyImprovement: TFrame};
+  frameScreenObjectFmp4EfficiencyImprovementUnit in 'frameScreenObjectFmp4EfficiencyImprovementUnit.pas' {frameScreenObjectFmp4EfficiencyImprovement: TFrame},
+  ModflowFmp4BareRunoffFractionUnit in 'ModflowFmp4BareRunoffFractionUnit.pas',
+  frameScreenObjectBareRunoffFractionUnit in 'frameScreenObjectBareRunoffFractionUnit.pas' {frameScreenObjectBareRunoffFraction: TFrame};
 
 {$R *.res}
 

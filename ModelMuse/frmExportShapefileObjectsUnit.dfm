@@ -35,6 +35,9 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     ExplicitTop = 255
     ExplicitWidth = 613
     ExplicitHeight = 166
+    DesignSize = (
+      617
+      166)
     object lblMissingData: TLabel [0]
       Left = 120
       Top = 62
@@ -43,25 +46,25 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       Caption = 'Missing data value'
     end
     inherited btnClose: TBitBtn
-      Left = 417
+      Left = 413
       Top = 126
       Caption = '&OK'
       Kind = bkOK
       TabOrder = 6
       OnClick = btnCloseClick
-      ExplicitLeft = 413
+      ExplicitLeft = 409
       ExplicitTop = 126
     end
     inherited btnHelp: TBitBtn
-      Left = 322
+      Left = 318
       Top = 126
       TabOrder = 5
       OnClick = btnHelpClick
-      ExplicitLeft = 318
+      ExplicitLeft = 314
       ExplicitTop = 126
     end
     object BitBtn1: TBitBtn
-      Left = 512
+      Left = 508
       Top = 126
       Width = 89
       Height = 33
@@ -69,7 +72,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 7
-      ExplicitLeft = 508
+      ExplicitLeft = 504
     end
     object rdeMissingData: TRbwDataEntry
       Left = 8
@@ -151,7 +154,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     object rgView: TRadioGroup
       Left = 326
       Top = 6
-      Width = 203
+      Width = 164
       Height = 89
       Caption = 'Export objects on'
       ItemIndex = 0
@@ -161,6 +164,16 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
         'Side view')
       TabOrder = 1
       OnClick = rgViewClick
+    end
+    object btnToggleTimes: TButton
+      Left = 504
+      Top = 16
+      Width = 75
+      Height = 49
+      Caption = 'Toggle all Times'
+      TabOrder = 8
+      WordWrap = True
+      OnClick = btnToggleTimesClick
     end
   end
   inherited vstObjects: TVirtualStringTree

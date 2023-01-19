@@ -1,0 +1,2 @@
+inherited frameScreenObjectBareRunoffFraction: TframeScreenObjectBareRunoffFraction
+end

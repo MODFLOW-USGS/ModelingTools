@@ -39,6 +39,7 @@ type
     FWeightText: string;
     FWeightedMeasuredText: string;
     FResidualText: string;
+    FPlotLabel: Boolean;
     procedure SetGroupName(const Value: string);
     procedure SetMeasured(const Value: double);
     procedure SetMeasurementStdDeviation(const Value: double);
@@ -84,6 +85,7 @@ type
     procedure SetWeightedResidualText(const Value: string);
     procedure SetWeightText(const Value: string);
     procedure SetResidualText(const Value: string);
+    procedure SetPlotLabel(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -124,6 +126,7 @@ type
     property MeasurementStdDeviationText: string read FMeasurementStdDeviationText write SetMeasurementStdDeviationText;
     property NaturalWeightText: string read FNaturalWeightText write SetNaturalWeightText;
     property Visible: Boolean read FVisible write SetVisible;
+    property PlotLabel: Boolean read FPlotLabel write SetPlotLabel stored True;
   end;
 
   TPestObsCollection = class(TPhastCollection)
@@ -279,6 +282,7 @@ begin
     MeasurementStdDeviationText := ObsSource.MeasurementStdDeviationText;
     NaturalWeightText := ObsSource.NaturalWeightText;
     FScreenObject := ObsSource.ScreenObject;
+    PlotLabel := ObsSource.PlotLabel;
   end
   else
   begin
@@ -421,6 +425,10 @@ begin
   end;
   APolygon := nil;
   DrawBigPolygon32(BitMap, Color, Color, 0.1, Points, APolygon, False, True);
+  if PlotLabel then
+  begin
+    DrawBigText(BitMap, Point(XCenter, YCenter), Name);
+  end;
 end;
 
 function TPestObsResult.GetMeasured: double;
@@ -549,6 +557,11 @@ end;
 procedure TPestObsResult.SetOriginalOrder(const Value: Integer);
 begin
   SetIntegerProperty(FOriginalOrder, Value);
+end;
+
+procedure TPestObsResult.SetPlotLabel(const Value: Boolean);
+begin
+  FPlotLabel := Value;
 end;
 
 procedure TPestObsResult.SetResidual(const Value: double);
