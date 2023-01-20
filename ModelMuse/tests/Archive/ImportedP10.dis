@@ -1,4 +1,4 @@
-# Discretization File created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Discretization File created on 1/20/2023 by ModelMuse version 5.1.1.8.
 # MT3DMS Benchmark Test Problem #10
 # 3-D Flow and Transport
 # Upper left corner: (0, 0)
@@ -26,4 +26,4 @@ CONSTANT     7.550000000000E+002  # BOTM, Layer 1
 CONSTANT     7.300000000000E+002  # BOTM, Layer 2
 CONSTANT     7.050000000000E+002  # BOTM, Layer 3
 CONSTANT     6.800000000000E+002  # BOTM, Layer 4
-  1.000000000000E+003      1  1.000000000000E+000  SS # PERLEN NSTP TSMULT Ss/tr (Stress period 1)
+  1.000000000000E+003      1  1.000000000000E+000  SS # PERLEN NSTP TSMULT Ss/tr (Stress period 1) Time =  0.000000000000E+000  -  1.000000000000E+003 

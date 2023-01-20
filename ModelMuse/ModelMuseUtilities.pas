@@ -1302,7 +1302,7 @@ initialization
   ShowElapsedTimeCmdLines.Add('if %mm% lss 10 set mm=0%mm%');
   ShowElapsedTimeCmdLines.Add('if %ss% lss 10 set ss=0%ss%');
   ShowElapsedTimeCmdLines.Add('if %cc% lss 10 set cc=0%cc%');
-  ShowElapsedTimeCmdLines.Add('echo elapsed time: %hh% hours, %mm% minutes %ss%.%cc% seconds');
+  ShowElapsedTimeCmdLines.Add('echo elapsed time: %hh% hours, %mm% minutes %ss%' + FormatSettings.DecimalSeparator + '%cc% seconds');
   ShowElapsedTimeCmdLines.Add('');
 
 finalization

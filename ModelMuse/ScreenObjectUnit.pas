@@ -49,7 +49,8 @@ uses
   ModflowUzfMf6Unit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
   ModflowSubsidenceDefUnit, PointCollectionUnit, ModflowGwtSpecifiedConcUnit,
   ModflowFmp4EfficiencyUnit, ModflowFmp4EfficiencyImprovementUnit,
-  ModflowFmp4BareRunoffFractionUnit;
+  ModflowFmp4BareRunoffFractionUnit,
+  ModflowFmp4BarePrecipitationConsumptionFractionUnit;
 
 type
   //
@@ -1462,6 +1463,7 @@ view. }
     FFmp4EfficiencyBoundary: TFmp4EfficiencyBoundary;
     FFmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary;
     FFmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary;
+    FFmp4BarePrecipitationConsumptionFractionBoundary: TFmp4BarePrecipitationConsumptionFractionBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1581,6 +1583,10 @@ view. }
     property Fmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary
       read FFmp4BareRunoffFractionBoundary
       write FFmp4BareRunoffFractionBoundary;
+    property Fmp4BarePrecipitationConsumptionFractionBoundary:
+      TFmp4BarePrecipitationConsumptionFractionBoundary
+      read FFmp4BarePrecipitationConsumptionFractionBoundary
+      write FFmp4BarePrecipitationConsumptionFractionBoundary;
 
     // Be sure to update Invalidate, FreeUnusedBoundaries,
     // StopTalkingToAnyone, UsesATime, ReplaceATime, Destroy,
@@ -2810,6 +2816,12 @@ view. }
       const Value: TFmp4BareRunoffFractionBoundary);
     function StoreFmp4BareRunoffFractionBoundary: Boolean;
     procedure CreateFmp4BareRunoffFractionBoundary;
+    function GetFmp4BarePrecipitationConsumptionFractionBoundary:
+      TFmp4BarePrecipitationConsumptionFractionBoundary;
+    procedure SetFmp4BarePrecipitationConsumptionFractionBoundary(
+      const Value: TFmp4BarePrecipitationConsumptionFractionBoundary);
+    function StoreFmp4BarePrecipitationConsumptionFractionBoundary: Boolean;
+    procedure CreateFmp4BarePrecipitationConsumptionFractionBoundary;
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
     procedure DeleteExtraSections;
@@ -4149,6 +4161,11 @@ view. }
     property Fmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary
       read GetFmp4BareRunoffFractionBoundary write SetFmp4BareRunoffFractionBoundary
       stored StoreFmp4BareRunoffFractionBoundary;
+    property Fmp4BarePrecipitationConsumptionFractionBoundary:
+      TFmp4BarePrecipitationConsumptionFractionBoundary
+      read GetFmp4BarePrecipitationConsumptionFractionBoundary
+      write SetFmp4BarePrecipitationConsumptionFractionBoundary
+      stored StoreFmp4BarePrecipitationConsumptionFractionBoundary;
 
 
 
@@ -6821,6 +6838,7 @@ begin
   Fmp4EfficiencyBoundary := AScreenObject.Fmp4EfficiencyBoundary;
   Fmp4EfficiencyImprovementBoundary := AScreenObject.Fmp4EfficiencyImprovementBoundary;
   Fmp4BareRunoffFractionBoundary := AScreenObject.Fmp4BareRunoffFractionBoundary;
+  Fmp4BarePrecipitationConsumptionFractionBoundary := AScreenObject.Fmp4BarePrecipitationConsumptionFractionBoundary;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9628,6 +9646,11 @@ begin
     if Fmp4BareRunoffFractionBoundary <> nil then
     begin
       Fmp4BareRunoffFractionBoundary.InvalidateDisplay;
+    end;
+
+    if Fmp4BarePrecipitationConsumptionFractionBoundary <> nil then
+    begin
+      Fmp4BarePrecipitationConsumptionFractionBoundary.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -19161,6 +19184,23 @@ function TScreenObject.GetFluxBoundary: TFluxBoundary;
 begin
   CreatePhastFluxBoundary;
   result := FFluxBoundary
+end;
+
+function TScreenObject.GetFmp4BarePrecipitationConsumptionFractionBoundary: TFmp4BarePrecipitationConsumptionFractionBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateFmp4BarePrecipitationConsumptionFractionBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4BarePrecipitationConsumptionFractionBoundary;
+  end;
 end;
 
 function TScreenObject.GetFmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary;
@@ -31421,6 +31461,24 @@ begin
   InvalidateModel;
 end;
 
+procedure TScreenObject.SetFmp4BarePrecipitationConsumptionFractionBoundary(
+  const Value: TFmp4BarePrecipitationConsumptionFractionBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4BarePrecipitationConsumptionFractionBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4BarePrecipitationConsumptionFractionBoundary);
+  end
+  else
+  begin
+    CreateFmp4BarePrecipitationConsumptionFractionBoundary;
+    ModflowBoundaries.FFmp4BarePrecipitationConsumptionFractionBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetFmp4BareRunoffFractionBoundary(
   const Value: TFmp4BareRunoffFractionBoundary);
 begin
@@ -31762,11 +31820,23 @@ begin
     or (FluxBoundary.Solution.Count > 0));
 end;
 
+function TScreenObject.StoreFmp4BarePrecipitationConsumptionFractionBoundary: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (Fmp4BarePrecipitationConsumptionFractionBoundary <> nil)
+    and Fmp4BarePrecipitationConsumptionFractionBoundary.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreFmp4BareRunoffFractionBoundary: Boolean;
 begin
 {$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
-    and (Fmp4BareRunoffFractionBoundary <> nil) and Fmp4BareRunoffFractionBoundary.Used;
+    and (Fmp4BareRunoffFractionBoundary <> nil)
+    and Fmp4BareRunoffFractionBoundary.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -37471,6 +37541,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateFmp4BarePrecipitationConsumptionFractionBoundary;
+begin
+  if (ModflowBoundaries.FFmp4BarePrecipitationConsumptionFractionBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4BarePrecipitationConsumptionFractionBoundary :=
+      TFmp4BarePrecipitationConsumptionFractionBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateFmp4BareRunoffFractionBoundary;
 begin
   if (ModflowBoundaries.FFmp4BareRunoffFractionBoundary = nil) then
@@ -40857,6 +40936,21 @@ begin
     Fmp4BareRunoffFractionBoundary.Assign(Source.Fmp4BareRunoffFractionBoundary);
   end;
 
+  if Source.Fmp4BarePrecipitationConsumptionFractionBoundary = nil then
+  begin
+    FreeAndNil(Fmp4BarePrecipitationConsumptionFractionBoundary);
+  end
+  else
+  begin
+    if Fmp4BarePrecipitationConsumptionFractionBoundary = nil then
+    begin
+      Fmp4BarePrecipitationConsumptionFractionBoundary :=
+        TFmp4BarePrecipitationConsumptionFractionBoundary.Create(Model, FScreenObject);
+    end;
+    Fmp4BarePrecipitationConsumptionFractionBoundary.Assign(
+      Source.Fmp4BarePrecipitationConsumptionFractionBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -40875,6 +40969,7 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmp4BarePrecipitationConsumptionFractionBoundary.Free;
   FFmp4BareRunoffFractionBoundary.Free;
   FFmp4EfficiencyImprovementBoundary.Free;
   FFmp4EfficiencyBoundary.Free;
@@ -41192,6 +41287,12 @@ begin
     FreeAndNil(FFmp4BareRunoffFractionBoundary);
   end;
 
+  if (FFmp4BarePrecipitationConsumptionFractionBoundary <> nil)
+    and not FFmp4BarePrecipitationConsumptionFractionBoundary.Used then
+  begin
+    FreeAndNil(FFmp4BarePrecipitationConsumptionFractionBoundary);
+  end;
+
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -41485,6 +41586,12 @@ begin
   begin
     Fmp4BareRunoffFractionBoundary.Invalidate;
   end;
+
+  if FFmp4BarePrecipitationConsumptionFractionBoundary <> nil then
+  begin
+    FFmp4BarePrecipitationConsumptionFractionBoundary.Invalidate;
+  end;
+
 
 end;
 
@@ -41820,6 +41927,10 @@ begin
     Fmp4BareRunoffFractionBoundary.RemoveModelLink(AModel);
   end;
 
+  if Fmp4BarePrecipitationConsumptionFractionBoundary <> nil then
+  begin
+    Fmp4BarePrecipitationConsumptionFractionBoundary.RemoveModelLink(AModel);
+  end;
   {
     FModflow6Obs: TModflow6Obs;
     FModflowLak6: TLakeMf6;
@@ -42157,6 +42268,11 @@ begin
     FFmp4BareRunoffFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4BarePrecipitationConsumptionFractionBoundary <> nil then
+  begin
+    FFmp4BarePrecipitationConsumptionFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -42490,6 +42606,11 @@ begin
   if FFmp4BareRunoffFractionBoundary <> nil then
   begin
     FFmp4BareRunoffFractionBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4BarePrecipitationConsumptionFractionBoundary <> nil then
+  begin
+    FFmp4BarePrecipitationConsumptionFractionBoundary.StopTalkingToAnyone;
   end;
 
 end;
@@ -43012,6 +43133,15 @@ begin
   if FFmp4BareRunoffFractionBoundary <> nil then
   begin
     Result := FFmp4BareRunoffFractionBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4BarePrecipitationConsumptionFractionBoundary <> nil then
+  begin
+    Result := FFmp4BarePrecipitationConsumptionFractionBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

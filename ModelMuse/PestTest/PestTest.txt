@@ -1,4 +1,4 @@
-..\Release\Win32\ModelMuse.exe
+..\Debug\Win32\ModelMuse.exe
 1928
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml

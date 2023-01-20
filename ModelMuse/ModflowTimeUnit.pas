@@ -1089,7 +1089,10 @@ begin
       else Assert(False);
     end;
     DisWriter.WriteString(' # PERLEN NSTP TSMULT Ss/tr (Stress period '
-      + IntToStr(Index+1) + ')');
+      + IntToStr(Index+1) + ') Time =');
+    DisWriter.WriteFloat(StressPeriod.StartTime);
+    DisWriter.WriteString(' -');
+    DisWriter.WriteFloat(StressPeriod.EndTime);
     DisWriter.NewLine;
 
     if (Count = 1) then

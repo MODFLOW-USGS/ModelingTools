@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="HighestActivePhast" FileType="bin">
-    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.7.15968\bin\hdf5.dll</FileName>
-    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.7.15968\bin\phast.bat</FileName>
-    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.7.15968\bin\phasthdf.exe</FileName>
-    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.7.15968\bin\phastinput.exe</FileName>
-    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.7.15968\bin\phast-msmpi.exe</FileName>
-    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.7.15968\bin\phast-mt.exe</FileName>
-    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.7.15968\bin\szip.dll</FileName>
-    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.7.15968\bin\zlib.dll</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files (x86)\USGS\phast-1.5.1\bin\hdf5.dll</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files (x86)\USGS\phast-1.5.1\bin\phasthdf.exe</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files (x86)\USGS\phast-1.5.1\bin\phastinput.exe</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files (x86)\USGS\phast-1.5.1\bin\phast-msmpi.exe</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files (x86)\USGS\phast-1.5.1\bin\phast-mt.exe</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files (x86)\USGS\phast-1.5.1\bin\szip.dll</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files (x86)\USGS\phast-1.5.1\bin\zlib.dll</FileName>
   </bin>
   <ancillary Model_Name="HighestActivePhast" FileType="ancillary">
     <FileName Model_Name="HighestActivePhast" FileType="ancillary">HighestActivePhast.gpt</FileName>

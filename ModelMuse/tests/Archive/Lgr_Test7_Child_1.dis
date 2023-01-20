@@ -1,4 +1,4 @@
-# Discretization File created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Discretization File created on 1/19/2023 by ModelMuse version 5.1.1.8.
 # Upper left corner: (3750, -3750)
 # Lower left corner: (3750, -9250)
 # Upper right corner: (9250, -3750)
@@ -28,4 +28,4 @@ CONSTANT     7.700000000000E+001  # BOTM, Layer 4 Child layer 10
 CONSTANT     7.366666666667E+001  # BOTM, Layer 5 Child layer 11
 CONSTANT     7.033333333333E+001  # BOTM, Layer 5 Child layer 12
 CONSTANT     6.700000000000E+001  # BOTM, Layer 5 Child layer 13
-  5.000000000000E+003    100  1.020000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 1)
+  5.000000000000E+003    100  1.020000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 1) Time =  0.000000000000E+000  -  5.000000000000E+003 

@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, GoPhastTypes, OrderedCollectionUnit, DataSetUnit,
   ModpathParticleUnit, ModflowBoundaryDisplayUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, Mt3dmsChemSpeciesUnit, System.Generics.Collections,
-  Mt3dSftUnit, ModflowCSubInterbed;
+  Mt3dSftUnit, ModflowCSubInterbed, ModflowFmp4BoundaryUnit;
 
 const
   KSfrDefaultPicardIterations = 100;
@@ -4950,12 +4950,29 @@ Type
     property ExternalScaleFileName: string read FExternalScaleFileName write SetExternalScaleFileName;
   end;
 
+  TUpdateDisplay = procedure (TimeLists: TModflowBoundListOfTimeLists) of object;
+
+  TInitializeDisplayOptions = record
+    Display: TModflowBoundaryDisplayTimeList;
+    UpdateDisplay: TUpdateDisplay;
+  end;
+
+  TGetBoundary = function(ScreenObject: TScreenObject): TModflowBoundary of object;
+
+  TGetUseListOptions = record
+    GetBoundary: TGetBoundary;
+    Description: string;
+  end;
+
   TCustomFarm4 = class(TModflowPackageSelection)
   protected
     procedure SetFarmOptionProperty(var Field: TFarmOption;
       const Value: TFarmOption);
     procedure SetArrayListProperty(var Field: TArrayList;
       const Value: TArrayList);
+    procedure InitializeFarmDisplay(DisplayOptions: TInitializeDisplayOptions);
+    procedure GetUseList(Sender: TObject; NewUseList: TStringList;
+      GetUseListOptions: TGetUseListOptions);
   end;
 
   TFarmProcess4 = class(TCustomFarm4)
@@ -4984,8 +5001,7 @@ Type
     FMfFmp4Efficiency: TModflowBoundaryDisplayTimeList;
     FMfFmp4EfficiencyImprovement: TModflowBoundaryDisplayTimeList;
     FBareRunoffFractionDisplay: TModflowBoundaryDisplayTimeList;
-    procedure InitializeFarmIdDisplay(Sender: TObject);
-    procedure GetMfFmpFarmIDUseList(Sender: TObject; NewUseList: TStringList);
+    FBarePrecipitationConsumptionFractionDisplay: TModflowBoundaryDisplayTimeList;
     procedure SetAdded_Crop_Demand_Flux(const Value: TFarmProperty);
     procedure SetAdded_Demand_Runoff_Split(const Value: TFarmProperty);
     procedure SetBare_Precipitation_Consumption_Fraction(
@@ -5013,16 +5029,41 @@ Type
     procedure SetFarmPrints(const Value: TFarmPrints);
     procedure SetUseMnwCriteria(const Value: Boolean);
     procedure SetWELLFIELD(const Value: Boolean);
+
+    function GetFarmBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeFarmIdDisplay(Sender: TObject);
+    procedure GetMfFmpFarmIDUseList(Sender: TObject; NewUseList: TStringList);
     procedure InvalidateTransientFarm(Sender: TObject);
-    procedure InvalidateTransientEfficiencyArray(Sender: TObject);
+
+    function GetEfficiencyBoundary(
+      ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeFarmEfficiencyDisplay(Sender: TObject);
-    procedure GetMfFmpFarmEfficiencyUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetMfFmpFarmEfficiencyUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure InvalidateTransientEfficiencyArray(Sender: TObject);
+
+    function GetEfficiencyImprovementBoundary(
+      ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeFarmEfficiencyImprovementDisplay(Sender: TObject);
-    procedure GetMfFmpFarmEfficiencyImprovementUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetMfFmpFarmEfficiencyImprovementUseList(Sender: TObject;
+      NewUseList: TStringList);
     procedure InvalidateTransientEfficiencyImprovementArray(Sender: TObject);
+
+    function GetBareRunoffFractionBoundary(
+      ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeBareRunoffFractionDisplay(Sender: TObject);
-    procedure GetBareRunoffFractionDisplayUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetBareRunoffFractionDisplayUseList(Sender: TObject;
+      NewUseList: TStringList);
     procedure InvalidateTransientArrayRunoffFractionDisplay(Sender: TObject);
+
+    function GetBarePrecipitationConsumptionFractionBoundary(
+      ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeBarePrecipitationConsumptionFractionDisplay(
+      Sender: TObject);
+    procedure GetBarePrecipitationConsumptionFractionDisplayUseList(
+      Sender: TObject; NewUseList: TStringList);
+    procedure InvalidateTransientArrayPrecipitationConsumptionFractionDisplay(
+      Sender: TObject);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5038,20 +5079,32 @@ Type
     // MNWCLOSE  RPCT
     property MnwRPercent: double read GetMnwRPercent
       write SetMnwRPercent;
+
     property FarmID: TModflowBoundaryDisplayTimeList read FFarmID;
-    function FarmIdUsed (Sender: TObject): Boolean;
-    function SteadyArrayEfficiencyUsed: Boolean;
+    function TransientFarmIdUsed (Sender: TObject): Boolean;
+
     property MfFmp4Efficiency: TModflowBoundaryDisplayTimeList
       read FMfFmp4Efficiency;
     function FarmTransientArrayEfficiencyUsed (Sender: TObject): Boolean;
+    function SteadyArrayEfficiencyUsed: Boolean;
+
     property MfFmp4EfficiencyImprovement: TModflowBoundaryDisplayTimeList
       read FMfFmp4EfficiencyImprovement;
     function TransientArrayEfficiencyImprovementUsed(Sender: TObject): Boolean;
     function SteadyArrayEfficiencyImprovmentUsed(Sender: TObject): Boolean;
+
     property BareRunoffFractionDisplay: TModflowBoundaryDisplayTimeList
       read FBareRunoffFractionDisplay;
-    function TransientArrayBareRunoffFractionDisplayUsed(Sender: TObject): Boolean;
+    function TransientArrayBareRunoffFractionDisplayUsed(
+      Sender: TObject): Boolean;
     function SteadyArrayBareRunoffFractionDisplayUsed(Sender: TObject): Boolean;
+
+    property BarePrecipitationConsumptionFractionDisplay: TModflowBoundaryDisplayTimeList
+      read FBarePrecipitationConsumptionFractionDisplay;
+    function TransientArrayBarePrecipitationConsumptionFractionDisplayUsed(
+      Sender: TObject): Boolean;
+    function SteadyArrayBarePrecipitationConsumptionFractionDisplayUsed
+      (Sender: TObject): Boolean;
   published
     // OUTPUT
     property FarmPrints: TFarmPrints read FFarmPrints write SetFarmPrints;
@@ -5152,12 +5205,17 @@ Type
     procedure SetReferenceET(const Value: TFarmProperty);
     procedure SetDirectRechargeOption(const Value: TDirectRechargeOption);
     procedure SetPrecipPotConsum(const Value: TPrecipPotConsum);
+
+    function GetRefEtBoundary(ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeFarmRefEtDisplay(Sender: TObject);
-    procedure InitializeFarmPrecipDisplay(Sender: TObject);
     procedure GetMfFmpEvapUseList(Sender: TObject; NewUseList: TStringList);
-    procedure OnChangeRefEtOption(Sender: TObject);
+    procedure InvalidateRefEt(Sender: TObject);
+
+    function GetPrecipBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeFarmPrecipDisplay(Sender: TObject);
     procedure GetMfFmpPrecipUseList(Sender: TObject; NewUseList: TStringList);
-    procedure OnChangePrecipOption(Sender: TObject);
+    procedure InvalidatePrecip(Sender: TObject);
+
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5408,9 +5466,11 @@ Type
     procedure SetLandUsePrints(const Value: TLandUsePrints);
     procedure SetCropLocation(const Value: TRequiredSteadyTransient);
     procedure SetConsumptiveUse(const Value: TFarmProperty);
+    function TransientCropIDUsed(Sender: TObject): boolean;
+
+    function GetCropIDBoundary(ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeFmp4CropIDDisplay(Sender: TObject);
     procedure GetMfFmp4CropIDUseList(Sender: TObject; NewUseList: TStringList);
-    function TransientCropIDUsed(Sender: TObject): boolean;
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -6805,7 +6865,7 @@ resourcestring
   StrMNW2WellRadius = 'MNW2 Well Radius';
   StrSSMConcentration = 'SSM Concentration';
   StrSSMSinkConcentrati = 'SSM Sink Concentration';
-  StrFMPCripID = 'FMP Crip ID';
+  StrFMPCropID = 'FMP Crop ID';
   StrFMPEvaporation = 'FMP Evaporation';
   StrFMPFarmID = 'FMP Farm ID';
   StrFMPFarmWellFarmI = 'FMP Farm Well Farm ID';
@@ -16558,7 +16618,7 @@ begin
       for ValueIndex := 0 to Boundary.Values.Count -1 do
       begin
         Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
-        UpdateUseList(0, NewUseList, Item, StrFMPCripID);
+        UpdateUseList(0, NewUseList, Item, StrFMPCropID);
       end;
     end;
   end;
@@ -19954,7 +20014,7 @@ begin
 
   FStoredOuterHclose := TRealStorage.Create;
   FStoredOuterHclose.OnChange := OnValueChanged;
-  
+
   FStoredOuterRClose := TRealStorage.Create;
   FStoredOuterRClose.OnChange := OnValueChanged;
 
@@ -20037,11 +20097,11 @@ begin
   end
   else if Complexity = scoSimple then
   begin
-    result := sllaCg 
+    result := sllaCg
   end
   else
   begin
-    result := sllaBiCgStab 
+    result := sllaBiCgStab
   end;
 end;
 
@@ -24744,6 +24804,7 @@ begin
   FEfficiency.OnChangeFarmOption := InvalidateTransientEfficiencyArray;
   FEfficiencyImprovement.OnChangeFarmOption := InvalidateTransientEfficiencyImprovementArray;
   FBare_Runoff_Fraction.OnChangeFarmOption := InvalidateTransientArrayRunoffFractionDisplay;
+  FBare_Precipitation_Consumption_Fraction.OnChangeFarmOption := InvalidateTransientArrayPrecipitationConsumptionFractionDisplay;
 
   InitializeVariables;
 
@@ -24752,7 +24813,7 @@ begin
     FFarmID := TModflowBoundaryDisplayTimeList.Create(Model);
     FFarmID.OnInitialize := InitializeFarmIdDisplay;
     FFarmID.OnGetUseList := GetMfFmpFarmIDUseList;
-    FFarmID.OnTimeListUsed := FarmIdUsed;
+    FFarmID.OnTimeListUsed := TransientFarmIdUsed;
     FFarmID.Name := StrFarmID2;
     FFarmID.DataType := rdtInteger;
     FFarmID.AddMethod := vamReplace;
@@ -24803,6 +24864,21 @@ begin
     begin
       AddTimeList(FBareRunoffFractionDisplay);
     end;
+
+    FBarePrecipitationConsumptionFractionDisplay := TModflowBoundaryDisplayTimeList.Create(Model);
+    FBarePrecipitationConsumptionFractionDisplay.OnInitialize := InitializeBarePrecipitationConsumptionFractionDisplay;
+    FBarePrecipitationConsumptionFractionDisplay.OnGetUseList := GetBarePrecipitationConsumptionFractionDisplayUseList;
+    FBarePrecipitationConsumptionFractionDisplay.OnTimeListUsed := TransientArrayBarePrecipitationConsumptionFractionDisplayUsed;
+    FBarePrecipitationConsumptionFractionDisplay.Name := 'FMP4 Bare Precipitation Consumption Fraction ';
+    FBarePrecipitationConsumptionFractionDisplay.DataType := rdtDouble;
+    FBarePrecipitationConsumptionFractionDisplay.AddMethod := vamReplace;
+    FBarePrecipitationConsumptionFractionDisplay.Orientation := dsoTop;
+    if (FBare_Runoff_Fraction.FarmOption = foTransient)
+       and (FBare_Runoff_Fraction.ArrayList = alArray) then
+    begin
+      AddTimeList(FBarePrecipitationConsumptionFractionDisplay);
+    end;
+
   end;
 
 end;
@@ -24820,6 +24896,7 @@ begin
   FEfficiency.Free;
   FFarms.Free;
 
+  FBarePrecipitationConsumptionFractionDisplay.Free;
   FBareRunoffFractionDisplay.Free;
   FMfFmp4EfficiencyImprovement.Free;
   FMfFmp4Efficiency.Free;
@@ -24828,6 +24905,13 @@ begin
   FStoredMnwHPercent.Free;
   FStoredMnwRPercent.Free;
   inherited;
+end;
+
+function TFarmProcess4.TransientArrayBarePrecipitationConsumptionFractionDisplayUsed(
+  Sender: TObject): Boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Bare_Precipitation_Consumption_Fraction.FarmOption = foTransient);
 end;
 
 function TFarmProcess4.TransientArrayBareRunoffFractionDisplayUsed(
@@ -24849,133 +24933,94 @@ end;
 function TFarmProcess4.FarmTransientArrayEfficiencyUsed(Sender: TObject): Boolean;
 begin
   result := PackageUsed(Sender)
-    and frmGoPhast.PhastModel.FarmProcess4TransientEfficiencyArrayUsed(Sender);
+    and (EfficiencyOptions.FarmOption = foTransient)
+    and (EfficiencyOptions.ArrayList = alArray);
 end;
 
-function TFarmProcess4.FarmIdUsed(Sender: TObject): boolean;
+function TFarmProcess4.TransientFarmIdUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and frmGoPhast.PhastModel.FarmProcess4TransientFarmsUsed(Sender);
+    and (Farms.FarmOption = foTransient)
+end;
+
+function TFarmProcess4.GetBarePrecipitationConsumptionFractionBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.Fmp4BarePrecipitationConsumptionFractionBoundary;
+end;
+
+procedure TFarmProcess4.GetBarePrecipitationConsumptionFractionDisplayUseList(
+  Sender: TObject; NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetBarePrecipitationConsumptionFractionBoundary;
+  GetUseListOptions.Description := 'FMP4 Bare Precipitation Consumption Fraction';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
+function TFarmProcess4.GetBareRunoffFractionBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.Fmp4BareRunoffFractionBoundary;
 end;
 
 procedure TFarmProcess4.GetBareRunoffFractionDisplayUseList(Sender: TObject;
   NewUseList: TStringList);
 var
-  ScreenObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-  Item: TCustomModflowBoundaryItem;
-  ValueIndex: Integer;
-  PhastModel: TCustomModel;
-  Boundary: TFmp4BareRunoffFractionBoundary;
+  GetUseListOptions: TGetUseListOptions;
 begin
-  PhastModel := FModel as TCustomModel;
-  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
-  begin
-    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
-    if ScreenObject.Deleted then
-    begin
-      Continue;
-    end;
-    Boundary := ScreenObject.Fmp4BareRunoffFractionBoundary;
-    if (Boundary <> nil) and Boundary.Used then
-    begin
-      for ValueIndex := 0 to Boundary.Values.Count -1 do
-      begin
-        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
-        UpdateUseList(0, NewUseList, Item, 'FMP4 Bare Runoff Fraction');
-      end;
-    end;
-  end;
+  GetUseListOptions.GetBoundary := Self.GetBareRunoffFractionBoundary;
+  GetUseListOptions.Description := 'FMP4 Bare Runoff Fraction';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
+function TFarmProcess4.GetEfficiencyBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.Fmp4EfficiencyBoundary;
+end;
+
+function TFarmProcess4.GetEfficiencyImprovementBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.Fmp4EfficiencyImprovementBoundary;
+end;
+
+function TFarmProcess4.GetFarmBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmpFarmID;
 end;
 
 procedure TFarmProcess4.GetMfFmpFarmEfficiencyImprovementUseList(
   Sender: TObject; NewUseList: TStringList);
 var
-  ScreenObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-  Item: TCustomModflowBoundaryItem;
-  ValueIndex: Integer;
-  PhastModel: TCustomModel;
-  Boundary: TFmp4EfficiencyImprovementBoundary;
+  GetUseListOptions: TGetUseListOptions;
 begin
-  PhastModel := FModel as TCustomModel;
-  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
-  begin
-    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
-    if ScreenObject.Deleted then
-    begin
-      Continue;
-    end;
-    Boundary := ScreenObject.Fmp4EfficiencyImprovementBoundary;
-    if (Boundary <> nil) and Boundary.Used then
-    begin
-      for ValueIndex := 0 to Boundary.Values.Count -1 do
-      begin
-        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
-        UpdateUseList(0, NewUseList, Item, 'FMP4 Efficiency');
-      end;
-    end;
-  end;
+  GetUseListOptions.GetBoundary := Self.GetEfficiencyImprovementBoundary;
+  GetUseListOptions.Description := 'FMP4 Efficiency Improvement';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 procedure TFarmProcess4.GetMfFmpFarmEfficiencyUseList(Sender: TObject;
   NewUseList: TStringList);
 var
-  ScreenObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-  Item: TCustomModflowBoundaryItem;
-  ValueIndex: Integer;
-  PhastModel: TCustomModel;
-  Boundary: TFmp4EfficiencyBoundary;
+  GetUseListOptions: TGetUseListOptions;
 begin
-  PhastModel := FModel as TCustomModel;
-  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
-  begin
-    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
-    if ScreenObject.Deleted then
-    begin
-      Continue;
-    end;
-    Boundary := ScreenObject.Fmp4EfficiencyBoundary;
-    if (Boundary <> nil) and Boundary.Used then
-    begin
-      for ValueIndex := 0 to Boundary.Values.Count -1 do
-      begin
-        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
-        UpdateUseList(0, NewUseList, Item, 'FMP4 Efficiency');
-      end;
-    end;
-  end;
+  GetUseListOptions.GetBoundary := Self.GetEfficiencyBoundary;
+  GetUseListOptions.Description := 'FMP4 Efficiency';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 procedure TFarmProcess4.GetMfFmpFarmIDUseList(Sender: TObject;
   NewUseList: TStringList);
 var
-  ScreenObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-  Item: TCustomModflowBoundaryItem;
-  ValueIndex: Integer;
-  PhastModel: TCustomModel;
-  Boundary: TFmpFarmIDBoundary;
+  GetUseListOptions: TGetUseListOptions;
 begin
-  PhastModel := FModel as TCustomModel;
-  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
-  begin
-    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
-    if ScreenObject.Deleted then
-    begin
-      Continue;
-    end;
-    Boundary := ScreenObject.ModflowFmpFarmID;
-    if (Boundary <> nil) and Boundary.Used then
-    begin
-      for ValueIndex := 0 to Boundary.Values.Count -1 do
-      begin
-        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
-        UpdateUseList(0, NewUseList, Item, StrFMPFarmID);
-      end;
-    end;
-  end;
+  GetUseListOptions.GetBoundary := Self.GetFarmBoundary;
+  GetUseListOptions.Description := StrFMPFarmID;
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 function TFarmProcess4.GetMnwHPercent: double;
@@ -24993,128 +25038,80 @@ begin
   result := StoredMnwRPercent.Value;
 end;
 
-procedure TFarmProcess4.InitializeBareRunoffFractionDisplay(Sender: TObject);
+procedure TFarmProcess4.InitializeBarePrecipitationConsumptionFractionDisplay(
+  Sender: TObject);
 var
-  List: TModflowBoundListOfTimeLists;
   FarmWriter: TModflowFmp4Writer;
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
+  DisplayOptions: TInitializeDisplayOptions;
 begin
-  List := TModflowBoundListOfTimeLists.Create;
   FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
   try
-    List.Add(FBareRunoffFractionDisplay);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.CreateDataSets;
-    end;
-
-    FarmWriter.UpdateBareRunoffFractionDisplay(List);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.ComputeAverage;
-    end;
+    DisplayOptions.Display := FBarePrecipitationConsumptionFractionDisplay;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateBarePrecipitationConsumptionFractionDisplay;
+    InitializeFarmDisplay(DisplayOptions)
   finally
     FarmWriter.Free;
-    List.Free;
+  end;
+end;
+
+procedure TFarmProcess4.InitializeBareRunoffFractionDisplay(Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := FBareRunoffFractionDisplay;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateBareRunoffFractionDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
   end;
 end;
 
 procedure TFarmProcess4.InitializeFarmEfficiencyDisplay(Sender: TObject);
 var
-  List: TModflowBoundListOfTimeLists;
   FarmWriter: TModflowFmp4Writer;
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
+  DisplayOptions: TInitializeDisplayOptions;
 begin
-  List := TModflowBoundListOfTimeLists.Create;
   FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
   try
-    List.Add(MfFmp4Efficiency);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.CreateDataSets;
-    end;
-
-    FarmWriter.UpdateEfficiencyDisplay(List);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.ComputeAverage;
-    end;
+    DisplayOptions.Display := MfFmp4Efficiency;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateEfficiencyDisplay;
+    InitializeFarmDisplay(DisplayOptions)
   finally
     FarmWriter.Free;
-    List.Free;
   end;
 end;
 
 procedure TFarmProcess4.InitializeFarmEfficiencyImprovementDisplay(
   Sender: TObject);
 var
-  List: TModflowBoundListOfTimeLists;
   FarmWriter: TModflowFmp4Writer;
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
+  DisplayOptions: TInitializeDisplayOptions;
 begin
-  List := TModflowBoundListOfTimeLists.Create;
   FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
   try
-    List.Add(MfFmp4EfficiencyImprovement);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.CreateDataSets;
-    end;
-
-    FarmWriter.UpdateEfficiencyImprovementDisplay(List);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.ComputeAverage;
-    end;
+    DisplayOptions.Display := MfFmp4EfficiencyImprovement;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateEfficiencyImprovementDisplay;
+    InitializeFarmDisplay(DisplayOptions)
   finally
     FarmWriter.Free;
-    List.Free;
   end;
 end;
 
 procedure TFarmProcess4.InitializeFarmIdDisplay(Sender: TObject);
 var
-  List: TModflowBoundListOfTimeLists;
   FarmWriter: TModflowFmp4Writer;
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
+  DisplayOptions: TInitializeDisplayOptions;
 begin
-  List := TModflowBoundListOfTimeLists.Create;
   FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
   try
-    List.Add(FarmID);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.CreateDataSets;
-    end;
-
-    FarmWriter.UpdateFarmIDDisplay(List);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.ComputeAverage;
-    end;
+    DisplayOptions.Display := FarmID;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateFarmIDDisplay;
+    InitializeFarmDisplay(DisplayOptions)
   finally
     FarmWriter.Free;
-    List.Free;
   end;
 end;
 
@@ -25142,6 +25139,23 @@ begin
   FAdded_Demand_Runoff_Split.Initialize;
   FAdded_Crop_Demand_Flux.Initialize;
   FAdded_Crop_Demand_Rate.Initialize;
+end;
+
+procedure TFarmProcess4.InvalidateTransientArrayPrecipitationConsumptionFractionDisplay(
+  Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientArrayBarePrecipitationConsumptionFractionDisplayUsed(Sender) then
+    begin
+      AddTimeList(FBarePrecipitationConsumptionFractionDisplay);
+    end
+    else
+    begin
+      RemoveTimeList(FBarePrecipitationConsumptionFractionDisplay);
+    end;
+  end;
+  InvalidateModel;
 end;
 
 procedure TFarmProcess4.InvalidateTransientArrayRunoffFractionDisplay(
@@ -25222,12 +25236,6 @@ procedure TFarmProcess4.SetAdded_Demand_Runoff_Split(const Value: TFarmProperty)
 begin
   FAdded_Demand_Runoff_Split.Assign(Value);
 end;
-
-//procedure TFarmProcess4.SetBareRunoffFractionDisplay(
-//  const Value: TModflowBoundaryDisplayTimeList);
-//begin
-//  FBareRunoffFractionDisplay := Value;
-//end;
 
 procedure TFarmProcess4.SetBare_Precipitation_Consumption_Fraction(
   const Value: TFarmProperty);
@@ -25344,6 +25352,13 @@ begin
   SetBooleanProperty(FWELLFIELD, Value);
 end;
 
+function TFarmProcess4.SteadyArrayBarePrecipitationConsumptionFractionDisplayUsed(
+  Sender: TObject): Boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Bare_Precipitation_Consumption_Fraction.FarmOption = foStatic);
+end;
+
 function TFarmProcess4.SteadyArrayBareRunoffFractionDisplayUsed(
   Sender: TObject): Boolean;
 begin
@@ -25432,8 +25447,8 @@ begin
 
   InitializeVariables;
 
-  FReferenceET.OnChangeFarmOption := OnChangeRefEtOption;
-  FPrecipitation.OnChangeFarmOption := OnChangePrecipOption;
+  FReferenceET.OnChangeFarmOption := InvalidateRefEt;
+  FPrecipitation.OnChangeFarmOption := InvalidatePrecip;
 
 end;
 
@@ -25466,122 +25481,62 @@ end;
 procedure TFarmProcess4Climate.GetMfFmpEvapUseList(Sender: TObject;
   NewUseList: TStringList);
 var
-  ScreenObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-  Item: TCustomModflowBoundaryItem;
-  ValueIndex: Integer;
-  PhastModel: TCustomModel;
-  Boundary: TFmpRefEvapBoundary;
+  GetUseListOptions: TGetUseListOptions;
 begin
-  PhastModel := FModel as TCustomModel;
-  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
-  begin
-    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
-    if ScreenObject.Deleted then
-    begin
-      Continue;
-    end;
-    Boundary := ScreenObject.ModflowFmpRefEvap;
-    if (Boundary <> nil) and Boundary.Used then
-    begin
-      for ValueIndex := 0 to Boundary.Values.Count -1 do
-      begin
-        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
-        UpdateUseList(0, NewUseList, Item, StrFMPEvaporation);
-      end;
-    end;
-  end;
+  GetUseListOptions.GetBoundary := Self.GetRefEtBoundary;
+  GetUseListOptions.Description := StrFMPEvaporation;
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 procedure TFarmProcess4Climate.GetMfFmpPrecipUseList(Sender: TObject;
   NewUseList: TStringList);
 var
-  ScreenObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-  Item: TCustomModflowBoundaryItem;
-  ValueIndex: Integer;
-  PhastModel: TCustomModel;
-  Boundary: TFmpPrecipBoundary;
+  GetUseListOptions: TGetUseListOptions;
 begin
-  PhastModel := FModel as TCustomModel;
-  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
-  begin
-    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
-    if ScreenObject.Deleted then
-    begin
-      Continue;
-    end;
-    Boundary := ScreenObject.ModflowFmpPrecip;
-    if (Boundary <> nil) and Boundary.Used then
-    begin
-      for ValueIndex := 0 to Boundary.Values.Count -1 do
-      begin
-        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
-        UpdateUseList(0, NewUseList, Item, StrFMPPrecipitation);
-      end;
-    end;
-  end;
+  GetUseListOptions.GetBoundary := Self.GetPrecipBoundary;
+  GetUseListOptions.Description := StrFMPPrecipitation;
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
+function TFarmProcess4Climate.GetPrecipBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmpPrecip;
+end;
+
+function TFarmProcess4Climate.GetRefEtBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  Result := ScreenObject.ModflowFmpRefEvap;
 end;
 
 procedure TFarmProcess4Climate.InitializeFarmPrecipDisplay(Sender: TObject);
 var
-  List: TModflowBoundListOfTimeLists;
   FarmWriter: TModflowFmp4Writer;
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
+  DisplayOptions: TInitializeDisplayOptions;
 begin
-  List := TModflowBoundListOfTimeLists.Create;
   FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
   try
-    List.Add(MfFmp4Precip);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.CreateDataSets;
-    end;
-
-    FarmWriter.UpdatePrecipDisplay(List);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.ComputeAverage;
-    end;
+    DisplayOptions.Display := MfFmp4Precip;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdatePrecipDisplay;
+    InitializeFarmDisplay(DisplayOptions)
   finally
     FarmWriter.Free;
-    List.Free;
   end;
 end;
 
 procedure TFarmProcess4Climate.InitializeFarmRefEtDisplay(Sender: TObject);
 var
-  List: TModflowBoundListOfTimeLists;
   FarmWriter: TModflowFmp4Writer;
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
+  DisplayOptions: TInitializeDisplayOptions;
 begin
-  List := TModflowBoundListOfTimeLists.Create;
   FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
   try
-    List.Add(MfFmp4EvapRate);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.CreateDataSets;
-    end;
-
-    FarmWriter.UpdateRefEtDisplay(List);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.ComputeAverage;
-    end;
+    DisplayOptions.Display := MfFmp4EvapRate;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateRefEtDisplay;
+    InitializeFarmDisplay(DisplayOptions)
   finally
     FarmWriter.Free;
-    List.Free;
   end;
 end;
 
@@ -25598,7 +25553,8 @@ begin
   FPrecipPotConsum := ppcLength;
 end;
 
-procedure TFarmProcess4Climate.OnChangePrecipOption(Sender: TObject);
+
+procedure TFarmProcess4Climate.InvalidatePrecip(Sender: TObject);
 begin
   if FModel <> nil  then
   begin
@@ -25614,7 +25570,7 @@ begin
   InvalidateModel;
 end;
 
-procedure TFarmProcess4Climate.OnChangeRefEtOption(Sender: TObject);
+procedure TFarmProcess4Climate.InvalidateRefEt(Sender: TObject);
 begin
   if FModel <> nil  then
   begin
@@ -26033,34 +25989,20 @@ begin
   inherited;
 end;
 
+function TFarmProcess4LandUse.GetCropIDBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmpCropID;
+end;
+
 procedure TFarmProcess4LandUse.GetMfFmp4CropIDUseList(Sender: TObject;
   NewUseList: TStringList);
 var
-  ScreenObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-  Item: TCustomModflowBoundaryItem;
-  ValueIndex: Integer;
-  PhastModel: TCustomModel;
-  Boundary: TFmpCropIDBoundary;
+  GetUseListOptions: TGetUseListOptions;
 begin
-  PhastModel := FModel as TCustomModel;
-  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
-  begin
-    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
-    if ScreenObject.Deleted then
-    begin
-      Continue;
-    end;
-    Boundary := ScreenObject.ModflowFmpCropID;
-    if (Boundary <> nil) and Boundary.Used then
-    begin
-      for ValueIndex := 0 to Boundary.Values.Count -1 do
-      begin
-        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
-        UpdateUseList(0, NewUseList, Item, StrFMPCripID);
-      end;
-    end;
-  end;
+  GetUseListOptions.GetBoundary := Self.GetCropIDBoundary;
+  GetUseListOptions.Description := StrFMPCropID;
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 function TFarmProcess4LandUse.GetMinimumBareFraction: double;
@@ -26075,32 +26017,16 @@ end;
 
 procedure TFarmProcess4LandUse.InitializeFmp4CropIDDisplay(Sender: TObject);
 var
-  List: TModflowBoundListOfTimeLists;
   FarmWriter: TModflowFmp4Writer;
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
+  DisplayOptions: TInitializeDisplayOptions;
 begin
-  List := TModflowBoundListOfTimeLists.Create;
   FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
   try
-    List.Add(MfFmp4CropID);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.CreateDataSets;
-    end;
-
-    FarmWriter.UpdateCropIDDisplay(List);
-
-    for Index := 0 to List.Count - 1 do
-    begin
-      TimeList := List[Index];
-      TimeList.ComputeAverage;
-    end;
+    DisplayOptions.Display := MfFmp4CropID;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateCropIDDisplay;
+    InitializeFarmDisplay(DisplayOptions)
   finally
     FarmWriter.Free;
-    List.Free;
   end;
 end;
 
@@ -26673,6 +26599,63 @@ end;
 procedure TFarmProperty.SetUnitConversionScaleFactor(const Value: string);
 begin
   SetStringProperty(FUnitConversionScaleFactor, Value);
+end;
+
+procedure TCustomFarm4.GetUseList(Sender: TObject; NewUseList: TStringList;
+  GetUseListOptions: TGetUseListOptions);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  PhastModel: TCustomModel;
+  Boundary: TModflowBoundary;
+begin
+  PhastModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    Boundary := GetUseListOptions.GetBoundary(ScreenObject);
+
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      for ValueIndex := 0 to Boundary.Values.Count -1 do
+      begin
+        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(0, NewUseList, Item, GetUseListOptions.Description);
+      end;
+    end;
+  end;
+end;
+
+procedure TCustomFarm4.InitializeFarmDisplay(DisplayOptions
+  : TInitializeDisplayOptions);
+var
+  List: TModflowBoundListOfTimeLists;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  List := TModflowBoundListOfTimeLists.Create;
+  try
+    List.Add(DisplayOptions.Display);
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.CreateDataSets;
+    end;
+    DisplayOptions.UpdateDisplay(List);
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.ComputeAverage;
+    end;
+  finally
+    List.Free;
+  end;
 end;
 
 end.

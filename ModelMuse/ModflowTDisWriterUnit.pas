@@ -247,6 +247,10 @@ begin
     end;
     WriteString(' # perlen nstp tsmult, Stress period ');
     WriteInteger(StressPeriodIndex+1);
+    WriteString(' Time =');
+    WriteFloat(AStressPeriod.StartTime);
+    WriteString(' -');
+    WriteFloat(AStressPeriod.EndTime);
     NewLine;
   end;
 

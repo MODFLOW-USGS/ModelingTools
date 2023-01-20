@@ -1,4 +1,4 @@
-# Discretization File created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Discretization File created on 1/20/2023 by ModelMuse version 5.1.1.8.
 # Hypothetical simulator of lake and surficial aquifer interaction. ------------
 # Shows convergence to equilibrium in transient mode.
 # Upper left corner: (0, 0)
@@ -20,4 +20,4 @@ CONSTANT     9.700000000000E+001  # BOTM, Layer 2
 CONSTANT     8.700000000000E+001  # BOTM, Layer 3
 CONSTANT     7.700000000000E+001  # BOTM, Layer 4
 CONSTANT     6.700000000000E+001  # BOTM, Layer 5
-  1.000000000000E+000      1  1.000000000000E+000  SS # PERLEN NSTP TSMULT Ss/tr (Stress period 1)
+  1.000000000000E+000      1  1.000000000000E+000  SS # PERLEN NSTP TSMULT Ss/tr (Stress period 1) Time =  0.000000000000E+000  -  1.000000000000E+000 

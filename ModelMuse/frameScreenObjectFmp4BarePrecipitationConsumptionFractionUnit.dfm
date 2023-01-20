@@ -1,0 +1,2 @@
+inherited frameScreenObjectFmp4BarePrecipitationConsumptionFraction: TframeScreenObjectFmp4BarePrecipitationConsumptionFraction
+end

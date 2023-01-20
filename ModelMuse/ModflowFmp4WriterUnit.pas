@@ -13,7 +13,8 @@ type
   TWriteLocation = (wlMain, wlOpenClose, wlOFE, wlCID, wlFID, wlRoot, wlCropUse, wlETR,
     wlEtFrac, wlSwLosses, wlPFLX, wlCropFunc, wlWaterCost, wlDeliveries,
     wlSemiRouteDeliv, wlSemiRouteReturn, wlCall, wlEfficiency,
-    wlEfficiencyImprovement, wlBareRunoffFraction);
+    wlEfficiencyImprovement, wlBareRunoffFraction,
+    wlBarePrecipitationConsumptionFraction);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -60,6 +61,7 @@ type
     FEfficiencies: TList;
     FEfficiencyImprovements: TList;
     FBareRunoffFractions: TList;
+    FBarePrecipitationConsumptionFractions: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -72,6 +74,7 @@ type
     FEFFICIENCY_FileStream: TFileStream;
     FEFFICIENCY_IMPROVEMENT_FileStream: TFileStream;
     FBARE_RUNOFF_FRACTION_FileStream: TFileStream;
+    FBarePrecipitationConsumptionFractionFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -106,6 +109,9 @@ type
 
     procedure EvaluateBareRunoffFraction;
     procedure WriteBareRunoffFraction;
+
+    procedure EvaluateBarePrecipitationConsumptionFraction;
+    procedure WriteBarePrecipitationConsumptionFraction;
 
     procedure FreeFileStreams;
     // wbs location
@@ -157,8 +163,12 @@ type
     procedure UpdatePrecipDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateCropIDDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateEfficiencyDisplay(TimeLists: TModflowBoundListOfTimeLists);
-    procedure UpdateEfficiencyImprovementDisplay(TimeLists: TModflowBoundListOfTimeLists);
-    procedure UpdateBareRunoffFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateEfficiencyImprovementDisplay(
+      TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateBareRunoffFractionDisplay(
+      TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateBarePrecipitationConsumptionFractionDisplay(
+      TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 
@@ -269,6 +279,7 @@ begin
   FEfficiencies := TObjectList.Create;
   FEfficiencyImprovements := TObjectList.Create;
   FBareRunoffFractions := TObjectList.Create;
+  FBarePrecipitationConsumptionFractions := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -278,6 +289,7 @@ end;
 destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
+  FBarePrecipitationConsumptionFractions.Free;
   FBareRunoffFractions.Free;
   FEfficiencyImprovements.Free;
   FEfficiencies.Free;
@@ -325,6 +337,16 @@ begin
   EvaluateEfficiency;
   EvaluateEfficiencyImprovement;
   EvaluateBareRunoffFraction;
+  EvaluateBarePrecipitationConsumptionFraction
+end;
+
+procedure TModflowFmp4Writer.EvaluateBarePrecipitationConsumptionFraction;
+begin
+  if FFarmProcess4.TransientArrayBarePrecipitationConsumptionFractionDisplayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidBareRunoff);
+    EvaluateTransientArrayData(wlBarePrecipitationConsumptionFraction);
+  end;
 end;
 
 procedure TModflowFmp4Writer.EvaluateBareRunoffFraction;
@@ -518,6 +540,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlBarePrecipitationConsumptionFraction:
+      begin
+        result := ChangeFileExt(FBaseName, '.BARE_PRECIPITATION_CONSUMPTION_FRACTION');
+        if FBarePrecipitationConsumptionFractionFileStream = nil then
+        begin
+          FBarePrecipitationConsumptionFractionFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -547,6 +578,7 @@ begin
     wlEfficiency: result := ScreenObject.Fmp4EfficiencyBoundary;
     wlEfficiencyImprovement: result := ScreenObject.Fmp4EfficiencyImprovementBoundary;
     wlBareRunoffFraction: result := ScreenObject.Fmp4BareRunoffFractionBoundary;
+    wlBarePrecipitationConsumptionFraction: result := ScreenObject.Fmp4BarePrecipitationConsumptionFractionBoundary;
     else Assert(False);
   end;
 end;
@@ -576,6 +608,7 @@ begin
     wlEfficiency: result := FEfficiencies;
     wlEfficiencyImprovement: result := FEfficiencyImprovements;
     wlBareRunoffFraction: result := FBareRunoffFractions;
+    wlBarePrecipitationConsumptionFraction: result := FBarePrecipitationConsumptionFractions;
     else Assert(False)
   end;
 end;
@@ -596,18 +629,30 @@ begin
 
 end;
 
-procedure TModflowFmp4Writer.UpdateBareRunoffFractionDisplay(
+procedure TModflowFmp4Writer.UpdateBarePrecipitationConsumptionFractionDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
-  DataSets: TList;
-  BareRunoffFraction: TModflowBoundaryDisplayTimeList;
-  TimeIndex: integer;
-  TimeListIndex: integer;
-  List: TValueCellList;
-  TimeList: TModflowBoundaryDisplayTimeList;
-  DataArray: TDataArray;
-  EfficiencyIndex: integer;
-  DataSetIndex: integer;
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateBarePrecipitationConsumptionFraction;
+  UpdateRequirements.TransientDataUsed := (Package as TFarmProcess4).TransientArrayBarePrecipitationConsumptionFractionDisplayUsed;
+  UpdateRequirements.WriteLocation := wlBarePrecipitationConsumptionFraction;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateBareRunoffFractionDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+//var
+//  DataSets: TList;
+//  BareRunoffFraction: TModflowBoundaryDisplayTimeList;
+//  TimeIndex: integer;
+//  TimeListIndex: integer;
+//  List: TValueCellList;
+//  TimeList: TModflowBoundaryDisplayTimeList;
+//  DataArray: TDataArray;
+//  EfficiencyIndex: integer;
+//  DataSetIndex: integer;
 var
   UpdateRequirements: TUpdateRequirements;
 begin
@@ -737,7 +782,7 @@ var
 begin
   UpdateRequirements.EvaluateProcedure := EvaluateFarmID;
   UpdateRequirements.TransientDataUsed := (Package as TFarmProcess4).
-    FarmIdUsed;
+    TransientFarmIdUsed;
   UpdateRequirements.WriteLocation := wlFID;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
@@ -843,6 +888,41 @@ end;
 procedure TModflowFmp4Writer.WriteAllotments;
 begin
 
+end;
+
+procedure TModflowFmp4Writer.WriteBarePrecipitationConsumptionFraction;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlBarePrecipitationConsumptionFraction);
+
+  if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlBarePrecipitationConsumptionFraction;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP WBS: BARE_RUNOFF_FRACTION';
+    RequiredValues.ErrorID := 'FMP WBS: BARE_RUNOFF_FRACTION';
+    RequiredValues.ID := 'BARE_RUNOFF_FRACTION';
+    RequiredValues.StaticDataName := KBarePrecipitationConsumptionFraction;
+    RequiredValues.WriteTransientData :=
+      (FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foTransient);
+    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+    RequiredValues.CheckError := StrInvalidBareRunoff;
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteBareRunoffFraction;
@@ -1447,6 +1527,11 @@ begin
           Assert(FBARE_RUNOFF_FRACTION_FileStream <> nil);
           FBARE_RUNOFF_FRACTION_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlBarePrecipitationConsumptionFraction:
+        begin
+          Assert(FBarePrecipitationConsumptionFractionFileStream <> nil);
+          FBarePrecipitationConsumptionFractionFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -1498,6 +1583,7 @@ begin
   end;
 
   WriteBareRunoffFraction;
+  WriteBarePrecipitationConsumptionFraction;
 
   WriteString('END WATER_BALANCE_SUBREGION');
   NewLine;

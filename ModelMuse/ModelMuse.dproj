@@ -1950,6 +1950,12 @@
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="ModflowFmp4BarePrecipitationConsumptionFractionUnit.pas"/>
+        <DCCReference Include="frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit.pas">
+            <Form>frameScreenObjectFmp4BarePrecipitationConsumptionFraction</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

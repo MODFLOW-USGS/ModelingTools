@@ -783,7 +783,9 @@ uses
   ModflowFmp4EfficiencyImprovementUnit in 'ModflowFmp4EfficiencyImprovementUnit.pas',
   frameScreenObjectFmp4EfficiencyImprovementUnit in 'frameScreenObjectFmp4EfficiencyImprovementUnit.pas' {frameScreenObjectFmp4EfficiencyImprovement: TFrame},
   ModflowFmp4BareRunoffFractionUnit in 'ModflowFmp4BareRunoffFractionUnit.pas',
-  frameScreenObjectBareRunoffFractionUnit in 'frameScreenObjectBareRunoffFractionUnit.pas' {frameScreenObjectBareRunoffFraction: TFrame};
+  frameScreenObjectBareRunoffFractionUnit in 'frameScreenObjectBareRunoffFractionUnit.pas' {frameScreenObjectBareRunoffFraction: TFrame},
+  ModflowFmp4BarePrecipitationConsumptionFractionUnit in 'ModflowFmp4BarePrecipitationConsumptionFractionUnit.pas',
+  frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit in 'frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit.pas' {frameScreenObjectFmp4BarePrecipitationConsumptionFraction: TFrame};
 
 {$R *.res}
 

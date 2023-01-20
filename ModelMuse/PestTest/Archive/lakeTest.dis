@@ -1,4 +1,4 @@
-# Discretization File created on 7/7/2021 by ModelMuse version 4.3.0.56.
+# Discretization File created on 1/19/2023 by ModelMuse version 5.1.1.8.
 # Upper left corner: (0, 0)
 # Lower left corner: (0, -1000)
 # Upper right corner: (1000, 0)
@@ -18,6 +18,6 @@ CONSTANT    -2.000000000000E+001  # BOTM, Middle Aquifer
 CONSTANT    -2.333333333333E+001  # BOTM, Lower Aquifer Layer 1
 CONSTANT    -2.666666666667E+001  # BOTM, Lower Aquifer Layer 2
 CONSTANT    -3.000000000000E+001  # BOTM, Lower Aquifer Layer 3
-  1.000000000000E+000      1  1.000000000000E+000  SS # PERLEN NSTP TSMULT Ss/tr (Stress period 1)
-  1.000000000000E+001     10  1.000000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 2)
-  1.000000000000E+001     10  1.000000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 3)
+  1.000000000000E+000      1  1.000000000000E+000  SS # PERLEN NSTP TSMULT Ss/tr (Stress period 1) Time = -1.000000000000E+000  -  0.000000000000E+000 
+  1.000000000000E+001     10  1.000000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 2) Time =  0.000000000000E+000  -  1.000000000000E+001 
+  1.000000000000E+001     10  1.000000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 3) Time =  1.000000000000E+001  -  2.000000000000E+001 

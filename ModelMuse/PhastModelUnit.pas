@@ -567,6 +567,7 @@ const
   KEfficiency = 'Efficiency';
   KEfficiencyImprovement = 'Efficiency_Improvement';
   KBareRunoffFraction = 'Bare_Runoff_Fraction';
+  KBarePrecipitationConsumptionFraction = 'Bare Precipitation Consumption Fraction';
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -2537,6 +2538,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): Boolean;
     function FarmProcess4SteadArrayEfficiencyImprovementUsed(Sender: TObject): Boolean;
     function FarmProcess4SteadArrayBareRunoffFractionUsed(Sender: TObject): Boolean;
+    function FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(Sender: TObject): Boolean;
 
   protected
     function GetGwtUsed: Boolean; override;
@@ -2582,6 +2584,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean; virtual;
+    function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3231,6 +3234,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4Efficiency(Sender: TObject);
     procedure InvalidateMfFmp4EfficiencyImprovement(Sender: TObject);
     procedure InvalidateMfFmp4BareRunoffFraction(Sender: TObject);
+    procedure InvalidateMfFmp4BarePrecipitationConsumptionFraction(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4755,6 +4759,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean; override;
     function FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean; override;
     function FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean; override;
+    function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; override;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -6158,6 +6163,7 @@ resourcestring
   StrEfficiency = KEfficiency;
   StrEfficiencyImprovement = KEfficiencyImprovement;
   StrBareRunoffFraction = KBareRunoffFraction;
+  StrBarePrecipitationConsumptionFraction = KBarePrecipitationConsumptionFraction;
 
 const
   StatFlagStrings : array[Low(TStatFlag)..High(TStatFlag)] of string
@@ -23708,6 +23714,33 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -26341,6 +26374,12 @@ end;
 procedure TCustomModel.InvalidateMfFhbHeads(Sender: TObject);
 begin
   ModflowPackages.FhbPackage.MfFhbHeads.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4BarePrecipitationConsumptionFraction(
+  Sender: TObject);
+begin
+  ModflowPackages.FarmProcess4.BarePrecipitationConsumptionFractionDisplay.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4BareRunoffFraction(Sender: TObject);
@@ -35264,6 +35303,18 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(
+  Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmProcess4.SteadyArrayBarePrecipitationConsumptionFractionDisplayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4SteadArrayBareRunoffFractionUsed(
   Sender: TObject): Boolean;
 begin
@@ -35306,6 +35357,16 @@ begin
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmClimate4.StaticEvapUsed(Sender));
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.TransientArrayBarePrecipitationConsumptionFractionDisplayUsed(nil);
   {$ELSE}
   result := False;
   {$ENDIF}
@@ -37260,7 +37321,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 7;
+  OWHM4DataSets  = 8;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -40159,6 +40220,20 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, WBS: BARE_RUNOFF_FRACTION';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KBarePrecipitationConsumptionFraction;
+  FDataArrayCreationRecords[Index].DisplayName := StrBarePrecipitationConsumptionFraction;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION';
   Inc(Index);
   {$ENDIF}
 
