@@ -1,0 +1,228 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{9C1DB3C1-4C00-4C23-9D0A-01E9274FD050}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="addbtn95\addbtn95_XE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ade\AdeXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ButtonEdit\ButtonEditPkgXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="datagrid\datagridPkgXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="GLWidget\GlWidgetXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="MMJLabel\MMJLabelXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ModelCube\ModelCubeXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="QMostRecentlyUsedFiles\MostRecentFilesXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Quadtree\QuadTreePkgXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="QZoomBox2\ZoomBox2_XE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwController\RbwControllerPackageXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwDataGrid\RbwDataGridDXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwDynamicCursor\DynamicCursorXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwEdit\RbwEditXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwParser\RbwParserXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwRollup\RbwRollupPanelXE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwRuler\RbwRulerXE6.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="addbtn95_XE6">
+        <MSBuild Projects="addbtn95\addbtn95_XE6.dproj"/>
+    </Target>
+    <Target Name="addbtn95_XE6:Clean">
+        <MSBuild Projects="addbtn95\addbtn95_XE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="addbtn95_XE6:Make">
+        <MSBuild Projects="addbtn95\addbtn95_XE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="AdeXE6">
+        <MSBuild Projects="ade\AdeXE6.dproj"/>
+    </Target>
+    <Target Name="AdeXE6:Clean">
+        <MSBuild Projects="ade\AdeXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="AdeXE6:Make">
+        <MSBuild Projects="ade\AdeXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ButtonEditPkgXE6">
+        <MSBuild Projects="ButtonEdit\ButtonEditPkgXE6.dproj"/>
+    </Target>
+    <Target Name="ButtonEditPkgXE6:Clean">
+        <MSBuild Projects="ButtonEdit\ButtonEditPkgXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ButtonEditPkgXE6:Make">
+        <MSBuild Projects="ButtonEdit\ButtonEditPkgXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="datagridPkgXE6">
+        <MSBuild Projects="datagrid\datagridPkgXE6.dproj"/>
+    </Target>
+    <Target Name="datagridPkgXE6:Clean">
+        <MSBuild Projects="datagrid\datagridPkgXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="datagridPkgXE6:Make">
+        <MSBuild Projects="datagrid\datagridPkgXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="GlWidgetXE6">
+        <MSBuild Projects="GLWidget\GlWidgetXE6.dproj"/>
+    </Target>
+    <Target Name="GlWidgetXE6:Clean">
+        <MSBuild Projects="GLWidget\GlWidgetXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GlWidgetXE6:Make">
+        <MSBuild Projects="GLWidget\GlWidgetXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MMJLabelXE6">
+        <MSBuild Projects="MMJLabel\MMJLabelXE6.dproj"/>
+    </Target>
+    <Target Name="MMJLabelXE6:Clean">
+        <MSBuild Projects="MMJLabel\MMJLabelXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MMJLabelXE6:Make">
+        <MSBuild Projects="MMJLabel\MMJLabelXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ModelCubeXE6">
+        <MSBuild Projects="ModelCube\ModelCubeXE6.dproj"/>
+    </Target>
+    <Target Name="ModelCubeXE6:Clean">
+        <MSBuild Projects="ModelCube\ModelCubeXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ModelCubeXE6:Make">
+        <MSBuild Projects="ModelCube\ModelCubeXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MostRecentFilesXE6">
+        <MSBuild Projects="QMostRecentlyUsedFiles\MostRecentFilesXE6.dproj"/>
+    </Target>
+    <Target Name="MostRecentFilesXE6:Clean">
+        <MSBuild Projects="QMostRecentlyUsedFiles\MostRecentFilesXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MostRecentFilesXE6:Make">
+        <MSBuild Projects="QMostRecentlyUsedFiles\MostRecentFilesXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="QuadTreePkgXE6">
+        <MSBuild Projects="Quadtree\QuadTreePkgXE6.dproj"/>
+    </Target>
+    <Target Name="QuadTreePkgXE6:Clean">
+        <MSBuild Projects="Quadtree\QuadTreePkgXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="QuadTreePkgXE6:Make">
+        <MSBuild Projects="Quadtree\QuadTreePkgXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ZoomBox2_XE6">
+        <MSBuild Projects="QZoomBox2\ZoomBox2_XE6.dproj"/>
+    </Target>
+    <Target Name="ZoomBox2_XE6:Clean">
+        <MSBuild Projects="QZoomBox2\ZoomBox2_XE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ZoomBox2_XE6:Make">
+        <MSBuild Projects="QZoomBox2\ZoomBox2_XE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwControllerPackageXE6">
+        <MSBuild Projects="RbwController\RbwControllerPackageXE6.dproj"/>
+    </Target>
+    <Target Name="RbwControllerPackageXE6:Clean">
+        <MSBuild Projects="RbwController\RbwControllerPackageXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwControllerPackageXE6:Make">
+        <MSBuild Projects="RbwController\RbwControllerPackageXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwDataGridDXE6">
+        <MSBuild Projects="RbwDataGrid\RbwDataGridDXE6.dproj"/>
+    </Target>
+    <Target Name="RbwDataGridDXE6:Clean">
+        <MSBuild Projects="RbwDataGrid\RbwDataGridDXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwDataGridDXE6:Make">
+        <MSBuild Projects="RbwDataGrid\RbwDataGridDXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DynamicCursorXE6">
+        <MSBuild Projects="RbwDynamicCursor\DynamicCursorXE6.dproj"/>
+    </Target>
+    <Target Name="DynamicCursorXE6:Clean">
+        <MSBuild Projects="RbwDynamicCursor\DynamicCursorXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DynamicCursorXE6:Make">
+        <MSBuild Projects="RbwDynamicCursor\DynamicCursorXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwEditXE6">
+        <MSBuild Projects="RbwEdit\RbwEditXE6.dproj"/>
+    </Target>
+    <Target Name="RbwEditXE6:Clean">
+        <MSBuild Projects="RbwEdit\RbwEditXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwEditXE6:Make">
+        <MSBuild Projects="RbwEdit\RbwEditXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwParserXE6">
+        <MSBuild Projects="RbwParser\RbwParserXE6.dproj"/>
+    </Target>
+    <Target Name="RbwParserXE6:Clean">
+        <MSBuild Projects="RbwParser\RbwParserXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwParserXE6:Make">
+        <MSBuild Projects="RbwParser\RbwParserXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwRollupPanelXE6">
+        <MSBuild Projects="RbwRollup\RbwRollupPanelXE6.dproj"/>
+    </Target>
+    <Target Name="RbwRollupPanelXE6:Clean">
+        <MSBuild Projects="RbwRollup\RbwRollupPanelXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwRollupPanelXE6:Make">
+        <MSBuild Projects="RbwRollup\RbwRollupPanelXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwRulerXE6">
+        <MSBuild Projects="RbwRuler\RbwRulerXE6.dproj"/>
+    </Target>
+    <Target Name="RbwRulerXE6:Clean">
+        <MSBuild Projects="RbwRuler\RbwRulerXE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwRulerXE6:Make">
+        <MSBuild Projects="RbwRuler\RbwRulerXE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="addbtn95_XE6;AdeXE6;ButtonEditPkgXE6;datagridPkgXE6;GlWidgetXE6;MMJLabelXE6;ModelCubeXE6;MostRecentFilesXE6;QuadTreePkgXE6;ZoomBox2_XE6;RbwControllerPackageXE6;RbwDataGridDXE6;DynamicCursorXE6;RbwEditXE6;RbwParserXE6;RbwRollupPanelXE6;RbwRulerXE6"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="addbtn95_XE6:Clean;AdeXE6:Clean;ButtonEditPkgXE6:Clean;datagridPkgXE6:Clean;GlWidgetXE6:Clean;MMJLabelXE6:Clean;ModelCubeXE6:Clean;MostRecentFilesXE6:Clean;QuadTreePkgXE6:Clean;ZoomBox2_XE6:Clean;RbwControllerPackageXE6:Clean;RbwDataGridDXE6:Clean;DynamicCursorXE6:Clean;RbwEditXE6:Clean;RbwParserXE6:Clean;RbwRollupPanelXE6:Clean;RbwRulerXE6:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="addbtn95_XE6:Make;AdeXE6:Make;ButtonEditPkgXE6:Make;datagridPkgXE6:Make;GlWidgetXE6:Make;MMJLabelXE6:Make;ModelCubeXE6:Make;MostRecentFilesXE6:Make;QuadTreePkgXE6:Make;ZoomBox2_XE6:Make;RbwControllerPackageXE6:Make;RbwDataGridDXE6:Make;DynamicCursorXE6:Make;RbwEditXE6:Make;RbwParserXE6:Make;RbwRollupPanelXE6:Make;RbwRulerXE6:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
