@@ -501,11 +501,13 @@ end;
 procedure TUndoSoils.DoCommand;
 begin
   frmGoPhast.PhastModel.FmpSoils := FNewSoils;
+  frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
 end;
 
 procedure TUndoSoils.Undo;
 begin
   frmGoPhast.PhastModel.FmpSoils := FOldSoils;
+  frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
 end;
 
 end.

@@ -17,7 +17,6 @@ inherited framePackageFmp4Soils: TframePackageFmp4Soils
     RowCount = 3
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
     TabOrder = 1
-    OnSelectCell = rdgSoilsSelectCell
     ExtendedAutoDistributeText = False
     AutoMultiEdit = False
     AutoDistributeText = False

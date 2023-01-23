@@ -568,6 +568,7 @@ const
   KEfficiencyImprovement = 'Efficiency_Improvement';
   KBareRunoffFraction = 'Bare_Runoff_Fraction';
   KBarePrecipitationConsumptionFraction = 'Bare Precipitation Consumption Fraction';
+  KCapillary_Fringe = 'Capillary_Fringe';
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -640,7 +641,7 @@ resourcestring
   StrMODFLOWFHBHeads = 'FHB Heads';
   StrMODFLOWFHBFlows = 'FHB Flows';
 //  StrFarmID = 'Farm_ID';
-  StrSoilID = 'Soil_ID';
+  StrSoilID = KSoilID;
   StrFootprintInputClassification = 'WellFootprint';
   StrTheFollowingObjectNoCells = 'The following objects do not assign proper' +
   'ties to any cells.';
@@ -2539,6 +2540,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4SteadArrayEfficiencyImprovementUsed(Sender: TObject): Boolean;
     function FarmProcess4SteadArrayBareRunoffFractionUsed(Sender: TObject): Boolean;
     function FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(Sender: TObject): Boolean;
+    function CapillaryFringeUsed(Sender: TObject): Boolean;
 
   protected
     function GetGwtUsed: Boolean; override;
@@ -2908,6 +2910,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4SteadyCropsUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4TransientEfficiencyArrayUsed(Sender: TObject): boolean; virtual;
+    function SoilIDUsed(Sender: TObject): boolean; virtual;
 
     function GroundSurfaceUsed(Sender: TObject): boolean; virtual;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; virtual;
@@ -4311,6 +4314,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4SteadyCropsUsed(Sender: TObject): boolean; override;
     function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; override;
     function FarmProcess4TransientEfficiencyArrayUsed(Sender: TObject): Boolean; override;
+    function SoilIDUsed(Sender: TObject): boolean; override;
 //    function GroundSurfaceUsed(Sender: TObject): boolean; override;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; override;
     function UzfInitialInfiltrationUsed(Sender: TObject): boolean; override;
@@ -6164,6 +6168,8 @@ resourcestring
   StrEfficiencyImprovement = KEfficiencyImprovement;
   StrBareRunoffFraction = KBareRunoffFraction;
   StrBarePrecipitationConsumptionFraction = KBarePrecipitationConsumptionFraction;
+  StrCapillary_Fringe = KCapillary_Fringe;
+
 
 const
   StatFlagStrings : array[Low(TStatFlag)..High(TStatFlag)] of string
@@ -10841,12 +10847,15 @@ const
 //                on the graph and in the ModelMuse main window.
 //               Enhancement: The Export Objects to Shapefile dialog box now
 //                has an button to toggle all the times to export.
+//    '5.1.1.9'  Enhancement: The Export Objects to Shapefile dialog box now
+//                allows data to be exported to a CSV file instead of to
+//                an XBase file.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.8';
+  IIModelVersion = '5.1.1.9';
 
 function IModelVersion: string;
 begin
@@ -13250,6 +13259,17 @@ end;
 procedure TPhastModel.SetOwnsScreenObjects(const Value: boolean);
 begin
   (FScreenObjectList as TObjectList).OwnsObjects := Value;
+end;
+
+function TCustomModel.CapillaryFringeUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmSoil4.CapFringeArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 function TCustomModel.CellToPoint(ACell: TCellLocation; EvalAt: TEvaluatedAt): TPoint3D;
@@ -24804,6 +24824,26 @@ begin
       if ChildModel <> nil then
       begin
         result := result or ChildModel.ModflowPackages.SipPackage.IsSelected;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.SoilIDUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited SoilIDUsed(Sender);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.SoilIDUsed(Sender);
       end;
     end;
   end;
@@ -37321,7 +37361,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 8;
+  OWHM4DataSets  = 9;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -38868,7 +38908,7 @@ begin
   FDataArrayCreationRecords[Index].DisplayName := StrSoilID;
   FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcessUsed;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SoilIDUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -40235,6 +40275,20 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION';
   Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KCapillary_Fringe;
+  FDataArrayCreationRecords[Index].DisplayName := StrCapillary_Fringe;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CapillaryFringeUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, SOIL: CAPILLARY_FRINGE';
+  Inc(Index);
   {$ENDIF}
 
   // See ArrayCount.
@@ -41413,6 +41467,21 @@ end;
 function TCustomModel.GasPhaseUsed(Sender: TObject): boolean;
 begin
   result := ChemistryUsed(Sender) and ChemistryOptions.UseGasPhases;
+end;
+
+function TCustomModel.SoilIDUsed(Sender: TObject): boolean;
+begin
+  result := FarmProcessUsed(Sender);
+{$IFDEF OWHMV2}
+  if not result then
+  begin
+    result := (ModelSelection = msModflowOwhm2)
+      and ModflowPackages.FarmProcess4.IsSelected
+      and ModflowPackages.FarmSoil4.IsSelected
+      and (FmpSoils.Count > 0);
+  end;
+{$ENDIF}
+
 end;
 
 function TCustomModel.SolidSolutionUsed(Sender: TObject): boolean;

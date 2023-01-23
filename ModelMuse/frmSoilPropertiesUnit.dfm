@@ -5,9 +5,8 @@ inherited frmSoilProperties: TfrmSoilProperties
   ClientHeight = 305
   ClientWidth = 681
   OnResize = FormResize
-  ExplicitWidth = 697
-  ExplicitHeight = 344
-  PixelsPerInch = 96
+  ExplicitWidth = 693
+  ExplicitHeight = 343
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -17,6 +16,8 @@ inherited frmSoilProperties: TfrmSoilProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 260
+    ExplicitWidth = 677
     object btnCancel: TBitBtn
       Left = 586
       Top = 6
@@ -54,13 +55,13 @@ inherited frmSoilProperties: TfrmSoilProperties
     Height = 261
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 681
-    ExplicitHeight = 261
+    ExplicitWidth = 677
+    ExplicitHeight = 260
     inherited Panel: TPanel
       Top = 220
       Width = 681
-      ExplicitTop = 220
-      ExplicitWidth = 681
+      ExplicitTop = 219
+      ExplicitWidth = 677
       inherited lbNumber: TLabel
         Width = 108
         Height = 18
@@ -69,15 +70,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 358
+        Left = 356
         ExplicitLeft = 316
       end
       inherited sbInsert: TSpeedButton
-        Left = 424
+        Left = 422
         ExplicitLeft = 374
       end
       inherited sbDelete: TSpeedButton
-        Left = 489
+        Left = 486
         ExplicitLeft = 432
       end
       inherited seNumber: TJvSpinEdit
@@ -320,18 +321,18 @@ inherited frmSoilProperties: TfrmSoilProperties
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitWidth = 681
-      ExplicitHeight = 163
+      ExplicitWidth = 677
+      ExplicitHeight = 162
     end
     inherited pnlTop: TPanel
       Width = 681
-      ExplicitWidth = 681
+      ExplicitWidth = 677
       inherited edFormula: TLabeledEdit
         Height = 26
         EditLabel.Width = 57
         EditLabel.Height = 18
+        EditLabel.ExplicitLeft = 128
         EditLabel.ExplicitTop = 9
-        EditLabel.ExplicitWidth = 57
         EditLabel.ExplicitHeight = 18
         ExplicitHeight = 26
       end

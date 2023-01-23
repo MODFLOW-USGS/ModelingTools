@@ -2,16 +2,16 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
   HelpType = htKeyword
   HelpKeyword = 'Export_Objects_to_Shapefile'
   Caption = 'Export Objects as Shapefile'
-  ClientHeight = 422
+  ClientHeight = 483
   ClientWidth = 617
   OnResize = FormResize
   ExplicitWidth = 629
-  ExplicitHeight = 460
+  ExplicitHeight = 521
   TextHeight = 18
   object splLeft: TSplitter [0]
     Left = 257
     Top = 41
-    Height = 215
+    Height = 231
     OnMoved = splLeftMoved
     ExplicitLeft = 304
     ExplicitTop = 128
@@ -20,7 +20,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
   object splRight: TSplitter [1]
     Left = 493
     Top = 41
-    Height = 215
+    Height = 231
     Align = alRight
     OnMoved = splRightMoved
     ExplicitLeft = 496
@@ -28,16 +28,16 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     ExplicitHeight = 100
   end
   inherited pnlBottom: TPanel
-    Top = 256
+    Top = 272
     Width = 617
-    Height = 166
+    Height = 211
     TabOrder = 4
-    ExplicitTop = 255
-    ExplicitWidth = 613
-    ExplicitHeight = 166
+    ExplicitTop = 272
+    ExplicitWidth = 617
+    ExplicitHeight = 211
     DesignSize = (
       617
-      166)
+      211)
     object lblMissingData: TLabel [0]
       Left = 120
       Top = 62
@@ -46,33 +46,32 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       Caption = 'Missing data value'
     end
     inherited btnClose: TBitBtn
-      Left = 413
-      Top = 126
+      Left = 409
+      Top = 166
       Caption = '&OK'
       Kind = bkOK
       TabOrder = 6
       OnClick = btnCloseClick
       ExplicitLeft = 409
-      ExplicitTop = 126
+      ExplicitTop = 166
     end
     inherited btnHelp: TBitBtn
-      Left = 318
-      Top = 126
+      Left = 314
+      Top = 166
       TabOrder = 5
       OnClick = btnHelpClick
       ExplicitLeft = 314
-      ExplicitTop = 126
+      ExplicitTop = 166
     end
     object BitBtn1: TBitBtn
-      Left = 508
-      Top = 126
+      Left = 504
+      Top = 166
       Width = 89
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 7
-      ExplicitLeft = 504
     end
     object rdeMissingData: TRbwDataEntry
       Left = 8
@@ -152,7 +151,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       TabOrder = 2
     end
     object rgView: TRadioGroup
-      Left = 326
+      Left = 314
       Top = 6
       Width = 164
       Height = 89
@@ -168,19 +167,31 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     object btnToggleTimes: TButton
       Left = 504
       Top = 16
-      Width = 75
+      Width = 89
       Height = 49
       Caption = 'Toggle all Times'
       TabOrder = 8
       WordWrap = True
       OnClick = btnToggleTimesClick
     end
+    object rgExportMethod: TRadioGroup
+      Left = 314
+      Top = 101
+      Width = 279
+      Height = 59
+      Caption = 'Data export method'
+      ItemIndex = 0
+      Items.Strings = (
+        'Shapefile attributes'
+        'Comma-separated value file')
+      TabOrder = 9
+    end
   end
   inherited vstObjects: TVirtualStringTree
     Left = 260
     Top = 41
     Width = 233
-    Height = 215
+    Height = 231
     TabOrder = 2
     OnChecked = vstObjectsChecked
     ExplicitLeft = 260
@@ -222,7 +233,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     Left = 0
     Top = 41
     Width = 257
-    Height = 215
+    Height = 231
     Align = alLeft
     Colors.BorderColor = 15987699
     Colors.DisabledColor = clGray
@@ -252,13 +263,14 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     OnGetText = vstDataSetsGetText
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+    ExplicitHeight = 215
     Columns = <>
   end
   object chklstTimes: TCheckListBox
     Left = 496
     Top = 41
     Width = 121
-    Height = 215
+    Height = 231
     Align = alRight
     Enabled = False
     ItemHeight = 18

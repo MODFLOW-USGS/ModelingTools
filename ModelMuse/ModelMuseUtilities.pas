@@ -603,7 +603,6 @@ begin
         SetLength(Root, MaximumFieldNameLength - Length(Suffix));
       end;
       FieldName := Root + Suffix;
-//      FieldName := FixShapeFileFieldName(FieldName);
     until (Fields.IndexOf(string(FieldName)) < 0);
   end;
 

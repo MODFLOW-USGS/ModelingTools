@@ -52,6 +52,7 @@ type
     lblTimes: TLabel;
     rgView: TRadioGroup;
     btnToggleTimes: TButton;
+    rgExportMethod: TRadioGroup;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure vstDataSetsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
@@ -94,6 +95,8 @@ type
     FTimeBoundaryFound: Boolean;
     FMaxHeadObsTimes: Integer;
     FFhbBoundaryTypes: TFhbBoundaryTypes;
+    FFieldNames: TStringList;
+    FCsvWriter: TStreamWriter;
     procedure GetData;
     procedure CenterLabels;
     procedure SetCheckedNodes(Sender: TBaseVirtualTree);
@@ -112,6 +115,7 @@ type
     procedure AssignFieldName(FieldNames: TStringList; DataArrayIndex: Integer);
     procedure FillFieldDefinitions(FieldDefinitions: TStringList);
     procedure CreateDataBase(FieldDefinitions: TStringList);
+    procedure CreateCsvFile(FieldNames: TStringList);
     procedure DefineShapeGeometry(AScreenObject: TScreenObject;
       BreakObject: boolean);
     procedure InitializeDataBase;
@@ -148,7 +152,7 @@ uses ClassificationUnit, PhastModelUnit, FastGEO,
   ModflowSfrReachUnit, ModflowSfrFlows, ModflowSfrChannelUnit,
   ModflowSfrEquationUnit, ModflowSfrSegment, ModflowSfrUnsatSegment,
   ModflowPackageSelectionUnit, ModflowMawUnit, ModflowSfr6Unit, ModflowStrUnit,
-  Mt3dmsChemUnit, ModflowFhbUnit;
+  Mt3dmsChemUnit, ModflowFhbUnit, System.IOUtils;
 
 resourcestring
   StrDataSet0sOb = ' Data set = %0:s; Object = %1:s';
@@ -160,7 +164,9 @@ resourcestring
   StrYouMustSelectAtL = 'You must select at least one object on the %s';
   StrThereWasAnErrorI = 'There was an error in opening the database file ass' +
   'ociated with this Shapefile. The error message was "%s"  If the Shapefile' +
-  ' is open in another program, try closing the other program.';
+  ' is open in another program, try closing the other program. If the error ' +
+  'was about the size of the size of the records being to large, try ' +
+  'exporting the data as a CSV file rather than Shapefile attributes.';
   StrTheFileSizeOfThe2GB = 'The file size of the dBASE file (%g) for this Sh' +
   'apefile exceeds 2 GB. It may not be useable in some software. Do you want' +
   ' to continue?';
@@ -783,14 +789,17 @@ begin
       end;
     end;
 
-    DBaseFileSize := FSelectedScreenObjects.Count * XBaseShapeFile.RecordLength;
-    if DBaseFileSize >= MaxInt then
+    if rgExportMethod.ItemIndex = 0 then
     begin
-      Beep;
-      if MessageDlg(Format(StrTheFileSizeOfThe2GB, [DBaseFileSize]),
-      mtWarning, [mbYes, mbNo], 0) <> mrYes then
+      DBaseFileSize := FSelectedScreenObjects.Count * XBaseShapeFile.RecordLength;
+      if DBaseFileSize >= MaxInt then
       begin
-        Exit;
+        Beep;
+        if MessageDlg(Format(StrTheFileSizeOfThe2GB, [DBaseFileSize]),
+        mtWarning, [mbYes, mbNo], 0) <> mrYes then
+        begin
+          Exit;
+        end;
       end;
     end;
 
@@ -825,7 +834,10 @@ begin
       FShapeFileWriter.Free;
     end;
   finally
-    XBaseShapeFile.Active := False;
+    if rgExportMethod.ItemIndex = 0 then
+    begin
+      XBaseShapeFile.Active := False;
+    end;
   end;
 
   if FShowWarning then
@@ -1302,36 +1314,27 @@ procedure TfrmExportShapefileObjects.AssignFieldName(FieldNames: TStringList;
   DataArrayIndex: Integer);
 var
   FieldName: AnsiString;
-//  Root: AnsiString;
-//  SuffixValue: Integer;
-//  Suffix: AnsiString;
 const
   MaximumFieldNameLength = 10;
 begin
-  FieldName := AnsiString(UpperCase(
-    FFieldDefinitions[DataArrayIndex].DataArray.Name));
-  if Length(FieldName) > MaximumFieldNameLength then
+  if rgExportMethod.ItemIndex = 0 then
   begin
-    SetLength(FieldName, MaximumFieldNameLength);
+    FieldName := AnsiString(UpperCase(
+      FFieldDefinitions[DataArrayIndex].DataArray.Name));
+    if Length(FieldName) > MaximumFieldNameLength then
+    begin
+      SetLength(FieldName, MaximumFieldNameLength);
+    end;
+    FieldName := FixShapeFileFieldName(FieldName, FieldNames);
+    FFieldDefinitions[DataArrayIndex].FieldName := FieldName;
+    FieldNames.Add(string(FieldName));
+  end
+  else
+  begin
+    FFieldDefinitions[DataArrayIndex].FieldName :=
+      FFieldDefinitions[DataArrayIndex].DataArray.Name;
+    FieldNames.Add(FFieldDefinitions[DataArrayIndex].DataArray.Name);
   end;
-  FieldName := FixShapeFileFieldName(FieldName, FieldNames);
-//  if FieldNames.IndexOf(string(FieldName)) >= 0 then
-//  begin
-//    Root := FieldName;
-//    SuffixValue := 0;
-//    repeat
-//      Inc(SuffixValue);
-//      Suffix := AnsiString(IntToStr(SuffixValue));
-//      if Length(Root) + Length(Suffix) > MaximumFieldNameLength then
-//      begin
-//        SetLength(Root, MaximumFieldNameLength - Length(Suffix));
-//      end;
-//      FieldName := Root + Suffix;
-//      FieldName := FixShapeFileFieldName(FieldName);
-//    until (FieldNames.IndexOf(string(FieldName)) < 0);
-//  end;
-  FFieldDefinitions[DataArrayIndex].FieldName := FieldName;
-  FieldNames.Add(string(FieldName));
 end;
 
 procedure TfrmExportShapefileObjects.FillFieldDefinitions(
@@ -1365,6 +1368,19 @@ begin
     end;
     FieldDefinitions.Add(string(FieldDefinition));
   end;
+end;
+
+procedure TfrmExportShapefileObjects.CreateCsvFile(FieldNames: TStringList);
+var
+  CsvFileName: string;
+begin
+  CsvFileName := ChangeFileExt(sdShapefile.FileName, '.csv');
+  if FileExists(CsvFileName) then
+  begin
+    DeleteFile(CsvFileName);
+  end;
+  FCsvWriter := TFile.CreateText(CsvFileName);
+  FCsvWriter.WriteLine(FieldNames.CommaText);
 end;
 
 procedure TfrmExportShapefileObjects.CreateDataBase(
@@ -1687,14 +1703,20 @@ begin
         BoundaryName := FBoundaryNames.Objects[BoundIndex] as TBoundaryName;
         FieldName := StringReplace(BoundaryName.Name,
           ' ', '', [rfReplaceAll, rfIgnoreCase]);
-        FieldName := UpperCase(FieldName);
+        if rgExportMethod.ItemIndex = 0 then
+        begin
+          FieldName := UpperCase(FieldName);
+        end;
         if BoundaryName.BoundaryType = btMfObs then
         begin
           Continue;
         end
         else if BoundaryName.BoundaryType = btMfHfb then
         begin
-          FieldName := Copy(FieldName, 1, MaximumFieldNameLength);
+          if rgExportMethod.ItemIndex = 0 then
+          begin
+            FieldName := Copy(FieldName, 1, MaximumFieldNameLength);
+          end;
           FFieldDefinitions[StartIndex].DataArray := nil;
           FFieldDefinitions[StartIndex].FieldType := 'C';
           FFieldDefinitions[StartIndex].FieldName := AnsiString(FieldName);
@@ -1709,7 +1731,10 @@ begin
           and (BoundaryName.Name <> StrMnw2ReactivationPumping)
           then
         begin
-          FieldName := Copy(FieldName, 1, MaximumFieldNameLength);
+          if rgExportMethod.ItemIndex = 0 then
+          begin
+            FieldName := Copy(FieldName, 1, MaximumFieldNameLength);
+          end;
           FFieldDefinitions[StartIndex].DataArray := nil;
           FFieldDefinitions[StartIndex].FieldType := 'C';
           FFieldDefinitions[StartIndex].FieldName := AnsiString(FieldName);
@@ -1870,7 +1895,10 @@ begin
           begin
             FieldName := 'DO_UNSA_KZ';
           end;
-          FieldName := Copy(FieldName, 1, MaxLength);
+          if rgExportMethod.ItemIndex = 0 then
+          begin
+            FieldName := Copy(FieldName, 1, MaxLength);
+          end;
           for TimeIndex := 1 to FTimeCount do
           begin
             FFieldDefinitions[StartIndex].DataArray := nil;
@@ -1956,7 +1984,10 @@ begin
 //        end
         else
         begin
-          FieldName := Copy(FieldName, 1, MaxLength);
+          if rgExportMethod.ItemIndex = 0 then
+          begin
+            FieldName := Copy(FieldName, 1, MaxLength);
+          end;
           for TimeIndex := 1 to FTimeCount do
           begin
             FFieldDefinitions[StartIndex].DataArray := nil;
@@ -2053,12 +2084,21 @@ begin
     // last item above (LOW_Z).
 
     Assert(Length(FFieldDefinitions) = FieldNames.Count);
-    FieldDefinitions := TStringList.Create;
-    try
-      FillFieldDefinitions(FieldDefinitions);
-      CreateDataBase(FieldDefinitions);
-    finally
-      FieldDefinitions.Free;
+    if rgExportMethod.ItemIndex = 0 then
+    begin
+      FieldDefinitions := TStringList.Create;
+      try
+        FillFieldDefinitions(FieldDefinitions);
+        CreateDataBase(FieldDefinitions);
+      finally
+        FieldDefinitions.Free;
+      end;
+    end
+    else
+    begin
+      CreateCsvFile(FieldNames);
+      FFieldNames.Assign(FieldNames);
+      FFieldNames.caseSensitive := False;
     end;
   finally
     FieldNames.Free;
@@ -2107,6 +2147,8 @@ begin
   end;
 end;
 
+
+
 procedure TfrmExportShapefileObjects.AssignFieldValues(
   AScreenObject: TScreenObject; BreakObject: boolean);
 var
@@ -2125,6 +2167,53 @@ var
   BoundaryDataSetStart: Integer;
   TimeList: TList<Double>;
   TimeIndex: Integer;
+  FieldValues: TStringList;
+  ALine: string;
+  Procedure UpdFieldStr(FieldName, Data: AnsiString ) ;
+  var
+    FieldPosition: Integer;
+  begin
+    if rgExportMethod.ItemIndex = 0 then
+    begin
+      XBaseShapeFile.UpdFieldStr(FieldName, Data)
+    end
+    else
+    begin
+      FieldPosition := FFieldNames.IndexOf(FieldName);
+      Assert(FieldPosition >= 0);
+      FieldValues[FieldPosition] := Data;
+    end;
+  end;
+  Procedure UpdFieldNum(FieldName : WString ; Data: Extended );
+  var
+    FieldPosition: Integer;
+  begin
+    if rgExportMethod.ItemIndex = 0 then
+    begin
+      XBaseShapeFile.UpdFieldNum(FieldName, Data);
+    end
+    else
+    begin
+      FieldPosition := FFieldNames.IndexOf(FieldName);
+      Assert(FieldPosition >= 0);
+      FieldValues[FieldPosition] := FortranFloatToStr(Data);
+    end;
+  end;
+  Procedure UpdFieldInt(FieldName : AnsiString ; Data: Integer ) ;
+  var
+    FieldPosition: Integer;
+  begin
+    if rgExportMethod.ItemIndex = 0 then
+    begin
+      XBaseShapeFile.UpdFieldInt(FieldName, Data);
+    end
+    else
+    begin
+      FieldPosition := FFieldNames.IndexOf(FieldName);
+      Assert(FieldPosition >= 0);
+      FieldValues[FieldPosition] := IntToStr(Data);
+    end;
+  end;
   procedure AssignBoundaryData;
   var
     TimeIndex: Integer;
@@ -2200,7 +2289,7 @@ var
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         FloatValue := TimeList[TimeIndex];
-        XBaseShapeFile.UpdFieldNum(
+        UpdFieldNum(
           FFieldDefinitions[StartIndex].FieldName, FloatValue);
         Inc(StartIndex);
       end;
@@ -2223,7 +2312,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2253,7 +2342,7 @@ var
                 begin
                   Formula := AnsiString(WellTimeItem.PumpingRate);
                 end;
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2267,7 +2356,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2308,7 +2397,7 @@ var
                     Assert(False);
                   end;
                 end;
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2322,7 +2411,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2363,7 +2452,7 @@ var
                     Assert(False);
                   end;
                 end;
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2377,7 +2466,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2422,7 +2511,7 @@ var
                     Assert(False);
                   end;
                 end;
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2436,7 +2525,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2481,7 +2570,7 @@ var
                     Assert(False);
                   end;
                 end;
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2495,7 +2584,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2536,7 +2625,7 @@ var
                     Assert(False);
                   end;
                 end;
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2550,7 +2639,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2582,7 +2671,7 @@ var
                   begin
                     Formula := AnsiString(EtTimeItem.EvapotranspirationRate);
                   end;
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end;
@@ -2633,7 +2722,7 @@ var
                       Assert(False);
                     end;
                   end;
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
@@ -2646,7 +2735,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -2665,7 +2754,7 @@ var
                     begin
                       Formula := AnsiString(EtLayerItem.EvapotranspirationLayer);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -2685,7 +2774,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2717,7 +2806,7 @@ var
                   begin
                     Formula := AnsiString(EtTimeItem.EvapotranspirationRate);
                   end;
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end;
@@ -2750,7 +2839,7 @@ var
                       Assert(False);
                     end;
                   end;
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
@@ -2763,7 +2852,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -2782,7 +2871,7 @@ var
                     begin
                       Formula := AnsiString(EtLayerItem.EvapotranspirationLayer);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -2802,7 +2891,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2834,7 +2923,7 @@ var
                   begin
                     Formula := AnsiString(RchTimeItem.RechargeRate);
                   end;
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end;
@@ -2847,7 +2936,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -2866,7 +2955,7 @@ var
                     begin
                       Formula := AnsiString(RchLayerItem.RechargeLayer);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -2887,7 +2976,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -2899,7 +2988,7 @@ var
                 Formula := AnsiString(IntToStr(SfrBoundary.SegmentNumber));
                 for TimeIndex := 0 to TimeList.Count - 1 do
                 begin
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end;
@@ -2916,7 +3005,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -2935,7 +3024,7 @@ var
                     begin
                       Formula := AnsiString(IntToStr(ParamIcalcTimeItem.ICalc));
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -2949,7 +3038,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -2968,7 +3057,7 @@ var
                     begin
                       Formula := AnsiString(SfrTimeItem.ReachLength);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -2982,7 +3071,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3001,7 +3090,7 @@ var
                     begin
                       Formula := AnsiString(SfrTimeItem.StreambedElevation);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3015,7 +3104,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3034,7 +3123,7 @@ var
                     begin
                       Formula := AnsiString(SfrTimeItem.StreamSlope);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3048,7 +3137,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3067,7 +3156,7 @@ var
                     begin
                       Formula := AnsiString(SfrTimeItem.StreamBedThickness);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3081,7 +3170,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3100,7 +3189,7 @@ var
                     begin
                       Formula := AnsiString(SfrTimeItem.HydraulicConductivity);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3114,7 +3203,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3133,7 +3222,7 @@ var
                     begin
                       Formula := AnsiString(SfrTimeItem.SaturatedWaterContent);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3147,7 +3236,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3166,7 +3255,7 @@ var
                     begin
                       Formula := AnsiString(SfrTimeItem.InitialWaterContent);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3180,7 +3269,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3199,7 +3288,7 @@ var
                     begin
                       Formula := AnsiString(SfrTimeItem.BrooksCoreyExponent);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3213,7 +3302,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3232,7 +3321,7 @@ var
                     begin
                       Formula := AnsiString(SfrTimeItem.VerticalK);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3246,7 +3335,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3265,7 +3354,7 @@ var
                     begin
                       Formula := AnsiString(IntToStr(ParamIcalcTimeItem.OutflowSegment));
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3279,7 +3368,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3298,7 +3387,7 @@ var
                     begin
                       Formula := AnsiString(IntToStr(ParamIcalcTimeItem.DiversionSegment));
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3312,7 +3401,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3331,7 +3420,7 @@ var
                     begin
                       Formula := AnsiString(IntToStr(ParamIcalcTimeItem.IPRIOR));
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3348,7 +3437,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3386,7 +3475,7 @@ var
                         Assert(False);
                       end;
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3401,7 +3490,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3431,7 +3520,7 @@ var
                         Assert(False);
                       end;
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3449,7 +3538,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3487,7 +3576,7 @@ var
                         Assert(False);
                       end;
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3506,7 +3595,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3548,7 +3637,7 @@ var
                         Assert(False);
                       end;
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3567,7 +3656,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3609,7 +3698,7 @@ var
                         Assert(False);
                       end;
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3627,7 +3716,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3665,7 +3754,7 @@ var
                         Assert(False);
                       end;
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3683,7 +3772,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3721,7 +3810,7 @@ var
                         Assert(False);
                       end;
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3736,7 +3825,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -3751,7 +3840,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3770,7 +3859,7 @@ var
                     begin
                       Formula := AnsiString(RchTimeItem.RechargeRate);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3784,7 +3873,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3803,7 +3892,7 @@ var
                     begin
                       Formula := AnsiString(EtTimeItem.EvapotranspirationRate);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3817,7 +3906,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3836,7 +3925,7 @@ var
                     begin
                       Formula := AnsiString(UzfExtinctDepthItem.UzfExtinctDepth);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -3850,7 +3939,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -3869,7 +3958,7 @@ var
                     begin
                       Formula := AnsiString(UzfWaterContentItem.UzfWaterContent);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -3893,7 +3982,7 @@ var
             begin
               Formula := AnsiString(HeadObservations.ObservationName);
             end;
-            XBaseShapeFile.UpdFieldStr('OBSNAME', Formula);
+            UpdFieldStr('OBSNAME', Formula);
 
             if (HeadObservations = nil) then
             begin
@@ -3903,7 +3992,7 @@ var
             begin
               IntValue := Ord(HeadObservations.Purpose);
             end;
-            XBaseShapeFile.UpdFieldInt('OBSTYPE', IntValue);
+            UpdFieldInt('OBSTYPE', IntValue);
 
             if FMaxHeadObsTimes > 1 then
             begin
@@ -3915,7 +4004,7 @@ var
               begin
                 IntValue := Ord(HeadObservations.MultiObsMethod);
               end;
-              XBaseShapeFile.UpdFieldInt('ITT', IntValue);
+              UpdFieldInt('ITT', IntValue);
             end;
 
             for TimeIndex := 1 to FMaxHeadObsTimes do
@@ -3937,7 +4026,7 @@ var
               begin
                 FloatValue := HobItem.Time;
               end;
-              XBaseShapeFile.UpdFieldNum(WString('O_TIME' + IntToStr(TimeIndex)),
+              UpdFieldNum(WString('O_TIME' + IntToStr(TimeIndex)),
                 FloatValue);
 
               if HobItem = nil then
@@ -3948,7 +4037,7 @@ var
               begin
                 FloatValue := HobItem.Head;
               end;
-              XBaseShapeFile.UpdFieldNum(WString('O_HEAD' + IntToStr(TimeIndex)),
+              UpdFieldNum(WString('O_HEAD' + IntToStr(TimeIndex)),
                 FloatValue);
 
               if HobItem = nil then
@@ -3959,7 +4048,7 @@ var
               begin
                 FloatValue := HobItem.Statistic;
               end;
-              XBaseShapeFile.UpdFieldNum(WString('O_STAT' + IntToStr(TimeIndex)),
+              UpdFieldNum(WString('O_STAT' + IntToStr(TimeIndex)),
                 FloatValue);
 
               if HobItem = nil then
@@ -3970,7 +4059,7 @@ var
               begin
                 IntValue := Ord(HobItem.StatFlag);
               end;
-              XBaseShapeFile.UpdFieldInt('O_SF' + AnsiString(IntToStr(TimeIndex)),
+              UpdFieldInt('O_SF' + AnsiString(IntToStr(TimeIndex)),
                 IntValue);
             end;
 
@@ -3982,7 +4071,7 @@ var
             if Mnw2Boundary = nil then
             begin
               Formula := FMissingValueString;
-              XBaseShapeFile.UpdFieldStr(
+              UpdFieldStr(
                 FFieldDefinitions[StartIndex].FieldName, Formula);
               Inc(StartIndex);
             end
@@ -4002,63 +4091,63 @@ var
                 if BoundaryName.Name = StrWellRadius then
                 begin
                   Formula := AnsiString(MnwSpatialItem.WellRadius);
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
                 else if BoundaryName.Name = StrSkinRadius then
                 begin
                   Formula := AnsiString(MnwSpatialItem.SkinRadius);
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
                 else if BoundaryName.Name = StrSkinK then
                 begin
                   Formula := AnsiString(MnwSpatialItem.SkinK);
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
                 else if BoundaryName.Name = StrB then
                 begin
                   Formula := AnsiString(MnwSpatialItem.B);
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
                 else if BoundaryName.Name = StrC then
                 begin
                   Formula := AnsiString(MnwSpatialItem.C);
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
                 else if BoundaryName.Name = StrP then
                 begin
                   Formula := AnsiString(MnwSpatialItem.P);
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
                 else if BoundaryName.Name = StrCellToWellConductance then
                 begin
                   Formula := AnsiString(MnwSpatialItem.CellToWellConductance);
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
                 else if BoundaryName.Name = StrPartialPenetration then
                 begin
                   Formula := AnsiString(MnwSpatialItem.CellToWellConductance);
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
                 else if BoundaryName.Name = StrPartialPenetration then
                 begin
                   Formula := AnsiString(MnwSpatialItem.PartialPenetration);
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end
@@ -4085,7 +4174,7 @@ var
                     begin
                       Formula := AnsiString(Mnw2TimeItem.PumpingRate);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -4113,7 +4202,7 @@ var
                     begin
                       Formula := AnsiString(Mnw2TimeItem.HeadCapacityMultiplier);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -4141,7 +4230,7 @@ var
                     begin
                       Formula := AnsiString(Mnw2TimeItem.LimitingWaterLevel);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -4169,7 +4258,7 @@ var
                     begin
                       Formula := AnsiString(Mnw2TimeItem.InactivationPumpingRate);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -4197,7 +4286,7 @@ var
                     begin
                       Formula := AnsiString(Mnw2TimeItem.ReactivationPumpingRate);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end
@@ -4217,7 +4306,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -4230,7 +4319,7 @@ var
                   Formula := FMissingValueString;
                   for TimeIndex := 0 to TimeList.Count - 1 do
                   begin
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -4249,7 +4338,7 @@ var
                     begin
                       Formula := AnsiString(Mt3dConcItem.Mt3dmsConcRate[0]);
                     end;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                     Inc(StartIndex);
                   end;
@@ -4286,7 +4375,7 @@ var
                 Assert(False);
               end;
             end;
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             Inc(StartIndex);
           end;
@@ -4297,14 +4386,14 @@ var
             begin
               if StrBoundary <> nil then
               begin
-                XBaseShapeFile.UpdFieldInt(
+                UpdFieldInt(
                   FFieldDefinitions[StartIndex].FieldName,
                   StrBoundary.SegmentNumber);
               end
               else
               begin
                 Formula := FMissingValueString;
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
               end;
               Inc(StartIndex);
@@ -4334,7 +4423,7 @@ var
                 Formula := FMissingValueString;
                 for TimeIndex := 0 to TimeList.Count - 1 do
                 begin
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end;
@@ -4348,69 +4437,69 @@ var
                   if StrItem = nil then
                   begin
                     Formula := FMissingValueString;
-                    XBaseShapeFile.UpdFieldStr(
+                    UpdFieldStr(
                       FFieldDefinitions[StartIndex].FieldName, Formula);
                   end
                   else
                   begin
                     if BoundaryName.Name = StrModflowStrDownstreamSegment then
                     begin
-                      XBaseShapeFile.UpdFieldInt(
+                      UpdFieldInt(
                         FFieldDefinitions[StartIndex].FieldName,
                         StrItem.OutflowSegment);
                     end
                     else if BoundaryName.Name = StrModflowStrDiversionSegment then
                     begin
-                      XBaseShapeFile.UpdFieldInt(
+                      UpdFieldInt(
                         FFieldDefinitions[StartIndex].FieldName,
                         StrItem.DiversionSegment);
                     end
                     else if BoundaryName.Name = StrSTRStreamTopElev then
                     begin
                       Formula := AnsiString(StrItem.BedTop);
-                      XBaseShapeFile.UpdFieldStr(
+                      UpdFieldStr(
                         FFieldDefinitions[StartIndex].FieldName, Formula);
                     end
                     else if BoundaryName.Name = StrSTRStreamBottomElev then
                     begin
                       Formula := AnsiString(StrItem.BedBottom);
-                      XBaseShapeFile.UpdFieldStr(
+                      UpdFieldStr(
                         FFieldDefinitions[StartIndex].FieldName, Formula);
                     end
                     else if BoundaryName.Name = StrSTRStreamStage then
                     begin
                       Formula := AnsiString(StrItem.Stage);
-                      XBaseShapeFile.UpdFieldStr(
+                      UpdFieldStr(
                         FFieldDefinitions[StartIndex].FieldName, Formula);
                     end
                     else if BoundaryName.Name = StrSTRStreamConductance then
                     begin
                       Formula := AnsiString(StrItem.Conductance);
-                      XBaseShapeFile.UpdFieldStr(
+                      UpdFieldStr(
                         FFieldDefinitions[StartIndex].FieldName, Formula);
                     end
                     else if BoundaryName.Name = StrSTRStreamFlow then
                     begin
                       Formula := AnsiString(StrItem.Flow);
-                      XBaseShapeFile.UpdFieldStr(
+                      UpdFieldStr(
                         FFieldDefinitions[StartIndex].FieldName, Formula);
                     end
                     else if BoundaryName.Name = StrSTRStreamWidth then
                     begin
                       Formula := AnsiString(StrItem.Width);
-                      XBaseShapeFile.UpdFieldStr(
+                      UpdFieldStr(
                         FFieldDefinitions[StartIndex].FieldName, Formula);
                     end
                     else if BoundaryName.Name = StrSTRStreamSlope then
                     begin
                       Formula := AnsiString(StrItem.Slope);
-                      XBaseShapeFile.UpdFieldStr(
+                      UpdFieldStr(
                         FFieldDefinitions[StartIndex].FieldName, Formula);
                     end
                     else if BoundaryName.Name = StrSTRStreamRoughness then
                     begin
                       Formula := AnsiString(StrItem.Roughness);
-                      XBaseShapeFile.UpdFieldStr(
+                      UpdFieldStr(
                         FFieldDefinitions[StartIndex].FieldName, Formula);
                     end
                     else
@@ -4443,7 +4532,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -4510,7 +4599,7 @@ var
                     Assert(False);
                   end;
                 end;
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end
@@ -4532,7 +4621,7 @@ var
               Formula := FMissingValueString;
               for TimeIndex := 0 to TimeList.Count - 1 do
               begin
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end;
@@ -4590,7 +4679,7 @@ var
                     Assert(False);
                   end;
                 end;
-                XBaseShapeFile.UpdFieldStr(
+                UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
                 Inc(StartIndex);
               end
@@ -4606,7 +4695,7 @@ var
                 Formula := FMissingValueString;
                 for TimeIndex := 0 to TimeList.Count - 1 do
                 begin
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end;
@@ -4631,7 +4720,7 @@ var
                   begin
                     Formula := AnsiString(FhbTimeItem.BoundaryValue);
                   end;
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end;
@@ -4645,7 +4734,7 @@ var
                 Formula := FMissingValueString;
                 for TimeIndex := 0 to TimeList.Count - 1 do
                 begin
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end;
@@ -4670,7 +4759,7 @@ var
                   begin
                     Formula := AnsiString(FhbTimeItem.BoundaryValue);
                   end;
-                  XBaseShapeFile.UpdFieldStr(
+                  UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
                   Inc(StartIndex);
                 end;
@@ -4688,7 +4777,7 @@ var
     if cbExportName.Checked then
     begin
       Formula := AnsiString(AScreenObject.Name + SectionString);
-      XBaseShapeFile.UpdFieldStr(
+      UpdFieldStr(
         FFieldDefinitions[StartIndex].FieldName, Formula);
       if Length(Formula) > 254 then
       begin
@@ -4705,22 +4794,22 @@ var
         ecZero:
           begin
             Formula := AnsiString(FMissingValueString);
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             Inc(StartIndex);
 
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             Inc(StartIndex);
 
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             Inc(StartIndex);
           end;
         ecOne:
           begin
             Formula := AnsiString(AScreenObject.ElevationFormula);
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             if Length(Formula) > 254 then
             begin
@@ -4732,23 +4821,23 @@ var
             Inc(StartIndex);
 
             Formula := AnsiString(FMissingValueString);
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             Inc(StartIndex);
 
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             Inc(StartIndex);
           end;
         ecTwo:
           begin
             Formula := AnsiString(FMissingValueString);
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             Inc(StartIndex);
 
             Formula := AnsiString(AScreenObject.HigherElevationFormula);
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             if Length(Formula) > 254 then
             begin
@@ -4760,7 +4849,7 @@ var
             Inc(StartIndex);
 
             Formula := AnsiString(AScreenObject.LowerElevationFormula);
-            XBaseShapeFile.UpdFieldStr(
+            UpdFieldStr(
               FFieldDefinitions[StartIndex].FieldName, Formula);
             if Length(Formula) > 254 then
             begin
@@ -4779,7 +4868,16 @@ var
   end;
 begin
   TimeList:= TList<Double>.Create;
+  FieldValues := TStringList.Create;
   try
+    if rgExportMethod.ItemIndex = 1 then
+    begin
+      FieldValues.Capacity := FFieldNames.Count;
+      for FieldIndex := 0 to FFieldNames.Count - 1 do
+      begin
+        FieldValues.Add('');
+      end;
+    end;
     TimeList.Capacity := FTimeCount;
     if FTimeCount > 0 then
     begin
@@ -4800,7 +4898,10 @@ begin
     begin
       for SectionIndex := 0 to AScreenObject.SectionCount - 1 do
       begin
-        XBaseShapeFile.AppendBlank;
+        if rgExportMethod.ItemIndex = 0 then
+        begin
+          XBaseShapeFile.AppendBlank;
+        end;
         for FieldIndex := 0 to BoundaryDataSetStart - 1 do
         begin
           DataArray := FFieldDefinitions[FieldIndex].DataArray;
@@ -4926,49 +5027,67 @@ begin
               end;
             end;
           end;
-          case FFieldDefinitions[FieldIndex].FieldType of
-            'C':
-              begin
-                XBaseShapeFile.UpdFieldStr(
-                  FFieldDefinitions[FieldIndex].FieldName, Formula);
-                if Length(Formula) > 254 then
+          if rgExportMethod.ItemIndex = 0 then
+          begin
+            case FFieldDefinitions[FieldIndex].FieldType of
+              'C':
                 begin
-                  frmErrorsAndWarnings.AddWarning(frmGoPhast.PhastModel,
-                    StrFormulaTruncatedTo, Format(StrDataSet0sOb,
-                    [DataArray.Name, AScreenObject.Name]), AScreenObject);
-                  FShowWarning := True;
+                  UpdFieldStr(
+                    FFieldDefinitions[FieldIndex].FieldName, Formula);
+                  if Length(Formula) > 254 then
+                  begin
+                    frmErrorsAndWarnings.AddWarning(frmGoPhast.PhastModel,
+                      StrFormulaTruncatedTo, Format(StrDataSet0sOb,
+                      [DataArray.Name, AScreenObject.Name]), AScreenObject);
+                    FShowWarning := True;
+                  end;
                 end;
-              end;
-            'F':
-              begin
-                XBaseShapeFile.UpdFieldNum(
-                  FFieldDefinitions[FieldIndex].FieldName, FloatValue);
-              end;
-      //      'L':
-      //        begin
-      //          XBaseShapeFile.UpdFieldInt(
-      //            FFieldDefinitions[FieldIndex].FieldName, IntValue);
-      //        end;
-            'N':
-              begin
-                XBaseShapeFile.UpdFieldInt(
-                  FFieldDefinitions[FieldIndex].FieldName, IntValue);
-              end;
+              'F':
+                begin
+                  UpdFieldNum(
+                    FFieldDefinitions[FieldIndex].FieldName, FloatValue);
+                end;
+        //      'L':
+        //        begin
+        //          XBaseShapeFile.UpdFieldInt(
+        //            FFieldDefinitions[FieldIndex].FieldName, IntValue);
+        //        end;
+              'N':
+                begin
+                  UpdFieldInt(
+                    FFieldDefinitions[FieldIndex].FieldName, IntValue);
+                end;
+            else
+              Assert(False);
+            end;
+          end
           else
-            Assert(False);
+          begin
+
           end;
         end;
         SectionString := '_' + IntToStr(SectionIndex+1);
         AssignBoundaryData;
         AssignExtraData;
 
-        XBaseShapeFile.PostChanges;
-        XBaseShapeFile.GotoNext;
+        if rgExportMethod.ItemIndex = 0 then
+        begin
+          XBaseShapeFile.PostChanges;
+          XBaseShapeFile.GotoNext;
+        end
+        else
+        begin
+          ALine := FieldValues.CommaText;
+          FCsvWriter.WriteLine(ALine);
+        end;
       end;
     end
     else
     begin
-      XBaseShapeFile.AppendBlank;
+      if rgExportMethod.ItemIndex = 0 then
+      begin
+        XBaseShapeFile.AppendBlank;
+      end;
       for FieldIndex := 0 to BoundaryDataSetStart - 1 do
       begin
         DataArray := FFieldDefinitions[FieldIndex].DataArray;
@@ -5049,7 +5168,7 @@ begin
         case FFieldDefinitions[FieldIndex].FieldType of
           'C':
             begin
-              XBaseShapeFile.UpdFieldStr(
+              UpdFieldStr(
                 FFieldDefinitions[FieldIndex].FieldName, Formula);
               if Length(Formula) > 254 then
               begin
@@ -5061,7 +5180,7 @@ begin
             end;
           'F':
             begin
-              XBaseShapeFile.UpdFieldNum(
+              UpdFieldNum(
                 FFieldDefinitions[FieldIndex].FieldName, FloatValue);
             end;
     //      'L':
@@ -5071,7 +5190,7 @@ begin
     //        end;
           'N':
             begin
-              XBaseShapeFile.UpdFieldInt(
+              UpdFieldInt(
                 FFieldDefinitions[FieldIndex].FieldName, IntValue);
             end;
         else
@@ -5081,11 +5200,20 @@ begin
       SectionString := '';
       AssignBoundaryData;
       AssignExtraData;
-      XBaseShapeFile.PostChanges;
-      XBaseShapeFile.GotoNext;
+      if rgExportMethod.ItemIndex = 0 then
+      begin
+        XBaseShapeFile.PostChanges;
+        XBaseShapeFile.GotoNext;
+      end
+      else
+      begin
+        ALine := FieldValues.CommaText;
+        FCsvWriter.WriteLine(ALine);
+      end;
     end;
   finally
     TimeList.Free;
+    FieldValues.Free;
   end;
 end;
 
@@ -5140,7 +5268,8 @@ end;
 procedure TfrmExportShapefileObjects.FormCreate(Sender: TObject);
 begin
   inherited;
-  FBoundaryNames:= TStringList.Create;
+  FFieldNames := TStringList.Create;
+  FBoundaryNames := TStringList.Create;
   FBoundaryNames.OwnsObjects := True;
   FBoundaryNames.Sorted := true;
   vstDataSets.Width := (vstDataSets.Width + vstObjects.Width) div 2;
@@ -5167,6 +5296,8 @@ begin
   FSelectedScreenObjects.Free;
 
   FBoundaryNames.Free;
+  FFieldNames.Free;
+  FCsvWriter.Free;
 end;
 
 procedure TfrmExportShapefileObjects.FormResize(Sender: TObject);

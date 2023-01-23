@@ -1,5 +1,5 @@
 {@abstract(@name is used to define a series of @link(TCustomUndo)s that
-  relate to @link(TScreenObject)s.)  
+  relate to @link(TScreenObject)s.)
   @author(Richard B. Winston <rbwinst@usgs.gov>)}
 unit UndoItemsScreenObjects;
 
@@ -1529,7 +1529,7 @@ begin
   end;
   FUndoEditFluxObservations.DoCommand;
   FShouldUpdateShowHideObjects := True;
-  UpdateDisplay;
+//  UpdateDisplay;
   UpdateChildGrids;
   WarnSfrLengthProblem;
 

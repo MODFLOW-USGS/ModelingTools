@@ -1335,6 +1335,7 @@ var
     Data: PMyRec;
   begin
     Data := vstObjects.GetNodeData(Node);
+    Assert(Data.ScreenObjects <> nil);
     Data.ScreenObjects.Add(AScreenObject);
     PutInOtherObjects := False;
     if ShouldCheckBoxBeChecked(AScreenObject) then
@@ -2037,7 +2038,7 @@ var
     Data: PMyRec;
   begin
     Data := vstObjects.GetNodeData(Node);
-    If Data.ScreenObjects <> nil then
+    If (Data <> nil) and (Data.ScreenObjects <> nil) then
     begin
       vstObjects.ChildCount[Node] := Data.ScreenObjects.Count;
     end;
@@ -2744,6 +2745,7 @@ begin
       DataSetClassifications.Free;
     end;
 
+    vstObjects.ChildCount[FvstCalibrationDataSetsNode] := 0;
     DataSetClassifications := TStringList.Create;
     try
       DataSetClassifications.AddObject('Calibration Data Sets', TObject(FvstCalibrationDataSetsNode));
@@ -3517,7 +3519,7 @@ begin
         SetRootNodeStates(ChildNode);
       end;
       ChildData := vstObjects.GetNodeData(ChildNode);
-      if ChildData.ScreenObjects <> nil then
+      if (ChildData <> nil) and (ChildData.ScreenObjects <> nil) then
       begin
         UpdateChildCheck(ChildNode);
         StateChanged := False;
@@ -3622,7 +3624,8 @@ begin
     // Convert vstObjects.ChildCount[Node] from Cardinal to integer to
     // prevent Interger overflow when  vstObjects.ChildCount[Node] = 0.
     ChildCount := vstObjects.ChildCount[Node];
-    Assert(Data.ScreenObjects.Count= ChildCount);
+    Assert((Data <> nil) and (Data.ScreenObjects <> nil));
+    Assert(Data.ScreenObjects.Count = ChildCount);
     for Index := 0 to ChildCount -1 do
     begin
       AScreenObject := Data.ScreenObjects[Index];
@@ -3737,7 +3740,7 @@ begin
             ChildNode := Sender.GetNextSibling(ChildNode);
           end;
           Data := Sender.GetNodeData(ChildNode);
-          if Data.ScreenObjects <> nil then
+          if (Data <> nil) and (Data.ScreenObjects <> nil) then
           begin
             case Sender.CheckState[Node] of
               csUncheckedNormal:
@@ -4012,16 +4015,21 @@ begin
   try
     UpdateChildCheck(FvstAllObjectsNode);
     UpdateChildCheck(FvstOtherObjectsNode);
+
     SetRootNodeStates(FvstPhastBoundaryConditionsRoot);
     SetRootNodeStates(FvstModflowBoundaryConditionsRoot);
     SetRootNodeStates(FvstSutraFeaturesNode);
     SetRootNodeStates(FvstFootprintFeaturesNode);
+
     UpdateChildCheck(FvstModpathRoot);
+
     SetRootNodeStates(FvstDataSetRootNode);
     SetRootNodeStates(FvstCalibrationDataSetsNode);
+
     UpdateChildCheck(FvstChildModelNode);
     UpdateChildCheck(FvstSizeNode);
     UpdateChildCheck(FvstRefinementNode);
+
     SetRootNodeStates(FvstObsMf6Node);
     SetRootNodeStates(FvstCalibrationObsMf6Node);
   finally

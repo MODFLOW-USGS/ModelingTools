@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-01-23T18:27:14.990-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Export Objects to Shapefile Dialog Box</title>
   <body>
     <header>
@@ -8,30 +8,31 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Export Objects to Shapefile</text><text styleclass="Normal" translate="true"> dialog box is used to export the geometry of objects and formulas for data sets or some MODFLOW Features to a Shapefile. The </text><text styleclass="Strong" translate="true">Export Objects to Shapefile</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">File|Export|Shapefile|Objects to Shapefile...</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">To export the objects, do the following</text></para>
-    <list id="4" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+    <list id="0" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Select the data sets or features to export in the tree control on the left (</text><text styleclass="Strong" translate="true">Data sets to export</text><text styleclass="Normal" translate="true">). </text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Select the objects to export in the tree control in the middle (</text><text styleclass="Strong" translate="true">Objects to export</text><text styleclass="Normal" translate="true">). Only objects that set the values of one or more of the selected data sets will be listed in this tree control.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">If you are exporting MODFLOW features (except Horizontal Flow Barriers), you also need to select the times to export.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">If you wish to export the object name or its elevation formulas, use the appropriate check boxes.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">If you wish to export the values to a comma-separated value (CSV) file instead of to Shapefile attributes, make that selection with the </text><text styleclass="Strong" translate="true">Data export method</text><text styleclass="Normal" translate="true"> radio buttons. if there a a large number of data values to export, exporting the a CSV file will generally work even if exporting to Shapefile attributes does not.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Select the type of Shape you want to export using the radio buttons in the </text><text styleclass="Strong" translate="true">Export as</text><text styleclass="Normal" translate="true"> box. Only the radio buttons for types compatible with all the selected objects will be enabled.</text></li>
     </list>
-    <list id="5" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="margin-left:24px; font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="margin-left:24px; font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Point shapes have only a single vertex. This option is only available if all the objects are point objects</text></li>
       <li styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Multipoint shapes have one or more vertices but have no line segments connecting the vertices. This option is always available.</text></li>
       <li styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Polyline shapes have one or more vertices and may have line segments connecting some of the vertices. This option is always available.</text></li>
       <li styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Polygon shapes consist entirely of one or more polygons. This option is only available if all the sections of all the selected objects represent polygons. If any of the polygons in an object intersects another polygon in the same object, the polygons will be restructured so that they do not overlap.</text></li>
     </list>
-    <list id="4" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+    <list id="0" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Choose a value to represent missing data in the </text><text styleclass="Strong" translate="true">Missing data value</text><text styleclass="Normal" translate="true"> edit box.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Click the </text><text styleclass="Strong" translate="true">OK</text><text styleclass="Normal" translate="true"> button.</text></li>
     </list>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If all the objects that are exported have simple numeric or true/false values for their formulas for the exported data sets, those values will be exported as numeric values. (True will be exported as 1; false will be exported as 0.) If any of the formulas is something other than a numeric or true/false value, all the formulas will be exported as text. Formulas for MODFLOW features are always exported as text.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Shapefiles exported from ModelMuse do not contain information about the projection used for the model. You may need to supply the projection to use the Shapefile correctly.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">See also:</text></para>
-    <list id="6" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="2" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_Shapefile_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Import Shapefile</link><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_Shapefile_Dialog_Box" styleclass="Normal" translate="true"> dialog box</link></li>
     </list>
-    <list id="7" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Shapefile_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Export Grid Data to Shapefile</link><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Shapefile_Dialog_Box" styleclass="Normal" translate="true"> dialog box</link></li>
     </list>
   </body>

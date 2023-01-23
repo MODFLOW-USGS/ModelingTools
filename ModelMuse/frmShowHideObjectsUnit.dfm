@@ -10,24 +10,23 @@ inherited frmShowHideObjects: TfrmShowHideObjects
   OnKeyUp = FormKeyUp
   TextHeight = 18
   inherited pnlBottom: TPanel
-    Top = 256
+    Top = 255
     Height = 158
-    ExplicitTop = 256
-    ExplicitWidth = 422
+    ExplicitTop = 254
     ExplicitHeight = 158
     inherited btnClose: TBitBtn
-      Left = 322
+      Left = 318
       Top = 109
       TabOrder = 2
-      ExplicitLeft = 322
+      ExplicitLeft = 314
       ExplicitTop = 109
     end
     inherited btnHelp: TBitBtn
-      Left = 322
+      Left = 318
       Top = 70
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 322
+      ExplicitLeft = 314
       ExplicitTop = 70
     end
     object grpShowOrSelect: TGroupBox
@@ -85,7 +84,7 @@ inherited frmShowHideObjects: TfrmShowHideObjects
       end
     end
     object btnEditAllSelected: TButton
-      Left = 322
+      Left = 318
       Top = 6
       Width = 89
       Height = 58
@@ -96,7 +95,7 @@ inherited frmShowHideObjects: TfrmShowHideObjects
     end
   end
   inherited vstObjects: TVirtualStringTree
-    Height = 256
+    Height = 255
     Images = ilAngles
     PopupMenu = pmSelectEdit
     OnChecked = vstObjectsChecked
@@ -105,7 +104,7 @@ inherited frmShowHideObjects: TfrmShowHideObjects
     OnPaintText = vstObjectsPaintText
     OnGetImageIndexEx = vstObjectsGetImageIndexEx
     OnMouseDown = vstObjectsMouseDown
-    ExplicitHeight = 256
+    ExplicitHeight = 255
   end
   object pmSelectEdit: TPopupMenu
     Left = 144

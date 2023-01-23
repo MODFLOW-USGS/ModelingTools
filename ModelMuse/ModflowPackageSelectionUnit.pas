@@ -5177,6 +5177,7 @@ Type
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     procedure InitializeVariables; override;
+    function CapFringeArrayUsed(Sender: TObject): Boolean;
   published
     // CAPILLARY_FRINGE
     property CapFringe: TFarmProperty read FCapFringe write SetCapFringe;
@@ -26363,6 +26364,13 @@ begin
     SurfVertK := Soil.SurfVertK;
   end;
   inherited;
+end;
+
+function TFarmProcess4Soil.CapFringeArrayUsed(Sender: TObject): Boolean;
+begin
+  result := IsSelected
+    and (CapFringe.FarmOption  = foStatic)
+    and (CapFringe.ArrayList = alArray);
 end;
 
 constructor TFarmProcess4Soil.Create(Model: TBaseModel);

@@ -1,23 +1,25 @@
 inherited frmCustomSelectObjects: TfrmCustomSelectObjects
   Caption = 'frmCustomSelectObjects'
-  ClientHeight = 414
-  ExplicitHeight = 452
+  ClientHeight = 413
+  ClientWidth = 422
+  ExplicitWidth = 434
+  ExplicitHeight = 451
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 373
-    Width = 426
+    Top = 372
+    Width = 422
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 372
-    ExplicitWidth = 422
+    ExplicitTop = 371
+    ExplicitWidth = 418
     DesignSize = (
-      426
+      422
       41)
     object btnClose: TBitBtn
-      Left = 326
+      Left = 310
       Top = 4
       Width = 89
       Height = 33
@@ -25,10 +27,10 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 330
+      ExplicitLeft = 306
     end
     object btnHelp: TBitBtn
-      Left = 233
+      Left = 217
       Top = 4
       Width = 89
       Height = 33
@@ -36,14 +38,14 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 237
+      ExplicitLeft = 213
     end
   end
   object vstObjects: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 426
-    Height = 373
+    Width = 422
+    Height = 372
     Align = alClient
     Colors.BorderColor = 15987699
     Colors.DisabledColor = clGray

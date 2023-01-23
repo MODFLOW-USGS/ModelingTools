@@ -14,7 +14,7 @@ type
     wlEtFrac, wlSwLosses, wlPFLX, wlCropFunc, wlWaterCost, wlDeliveries,
     wlSemiRouteDeliv, wlSemiRouteReturn, wlCall, wlEfficiency,
     wlEfficiencyImprovement, wlBareRunoffFraction,
-    wlBarePrecipitationConsumptionFraction);
+    wlBarePrecipitationConsumptionFraction, wlCapillaryFringe, wlSoilID);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -75,6 +75,9 @@ type
     FEFFICIENCY_IMPROVEMENT_FileStream: TFileStream;
     FBARE_RUNOFF_FRACTION_FileStream: TFileStream;
     FBarePrecipitationConsumptionFractionFileStream: TFileStream;
+    FSoil4: TFarmProcess4Soil;
+    FCapillaryFringeFileStream: TFileStream;
+    FSoilIdStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -112,6 +115,9 @@ type
 
     procedure EvaluateBarePrecipitationConsumptionFraction;
     procedure WriteBarePrecipitationConsumptionFraction;
+
+    procedure WriteCapillaryFringe;
+    procedure WriteSoilID;
 
     procedure FreeFileStreams;
     // wbs location
@@ -171,7 +177,6 @@ type
       TimeLists: TModflowBoundListOfTimeLists);
   end;
 
-
 implementation
 
 uses
@@ -184,6 +189,8 @@ resourcestring
   StrInvalidEfficiencyV = 'Invalid Efficiency value';
   StrInvalidEfficiencyI = 'Invalid Efficiency Improvement value';
   StrInvalidBareRunoff = 'Invalid Bare Runoff Fraction value';
+  StrInvalidPrecipConsumpRunoff = 'Invalid Bare Precipitation Consumption Fraction value';
+  StrInvalidCapillaryFringe = 'Invalid Capillary Fringe value';
 
 { TModflowFmp4Writer }
 
@@ -284,6 +291,7 @@ begin
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
   FLandUse := Model.ModflowPackages.FarmLandUse;
+  FSoil4 := Model.ModflowPackages.FarmSoil4;
 end;
 
 destructor TModflowFmp4Writer.Destroy;
@@ -344,7 +352,7 @@ procedure TModflowFmp4Writer.EvaluateBarePrecipitationConsumptionFraction;
 begin
   if FFarmProcess4.TransientArrayBarePrecipitationConsumptionFractionDisplayUsed(nil) then
   begin
-    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidBareRunoff);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidPrecipConsumpRunoff);
     EvaluateTransientArrayData(wlBarePrecipitationConsumptionFraction);
   end;
 end;
@@ -420,12 +428,16 @@ end;
 procedure TModflowFmp4Writer.FreeFileStreams;
 begin
   FreeAndNil(FFID_FileStream);
+  FreeAndNil(FOpenCloseFileStream);
   FreeAndNil(FPFLX_FileStream);
   FreeAndNil(FETR_FileStream);
   FreeAndNil(FCID_FileStream);
   FreeAndNil(FEFFICIENCY_FileStream);
   FreeAndNil(FEFFICIENCY_IMPROVEMENT_FileStream);
   FreeAndNil(FBARE_RUNOFF_FRACTION_FileStream);
+  FreeAndNil(FBarePrecipitationConsumptionFractionFileStream);
+  FreeAndNil(FCapillaryFringeFileStream);
+  FreeAndNil(FSoilIdStream);
 
 end;
 
@@ -549,6 +561,24 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlCapillaryFringe:
+      begin
+        result := ChangeFileExt(FBaseName, '.CAPILLARY_FRINGE');
+        if FCapillaryFringeFileStream = nil then
+        begin
+          FCapillaryFringeFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlSoilID:
+      begin
+        result := ChangeFileExt(FBaseName, '.SOIL_ID');
+        if FSoilIdStream = nil then
+        begin
+          FSoilIdStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -578,7 +608,10 @@ begin
     wlEfficiency: result := ScreenObject.Fmp4EfficiencyBoundary;
     wlEfficiencyImprovement: result := ScreenObject.Fmp4EfficiencyImprovementBoundary;
     wlBareRunoffFraction: result := ScreenObject.Fmp4BareRunoffFractionBoundary;
-    wlBarePrecipitationConsumptionFraction: result := ScreenObject.Fmp4BarePrecipitationConsumptionFractionBoundary;
+    wlBarePrecipitationConsumptionFraction: result :=
+      ScreenObject.Fmp4BarePrecipitationConsumptionFractionBoundary;
+    wlCapillaryFringe: ;
+    wlSoilID: ;
     else Assert(False);
   end;
 end;
@@ -609,6 +642,8 @@ begin
     wlEfficiencyImprovement: result := FEfficiencyImprovements;
     wlBareRunoffFraction: result := FBareRunoffFractions;
     wlBarePrecipitationConsumptionFraction: result := FBarePrecipitationConsumptionFractions;
+    wlCapillaryFringe: ;
+    wlSoilID: ;
     else Assert(False)
   end;
 end;
@@ -915,7 +950,7 @@ begin
     RequiredValues.WriteTransientData :=
       (FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foTransient);
     RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-    RequiredValues.CheckError := StrInvalidBareRunoff;
+    RequiredValues.CheckError := StrInvalidPrecipConsumpRunoff;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -951,6 +986,40 @@ begin
       (FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foTransient);
     RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
     RequiredValues.CheckError := StrInvalidBareRunoff;
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteCapillaryFringe;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FSoil4.CapFringe.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlCapillaryFringe);
+
+  if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlCapillaryFringe;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP SOIL: CAPILLARY_FRINGE';
+    RequiredValues.ErrorID := 'FMP SOIL: CAPILLARY_FRINGE';
+    RequiredValues.ID := 'CAPILLARY_FRINGE';
+    RequiredValues.StaticDataName := KCapillary_Fringe;
+    RequiredValues.WriteTransientData := False;
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+    RequiredValues.CheckError := StrInvalidCapillaryFringe;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -1000,7 +1069,7 @@ begin
           FWriteLocation := OldLocation
         end;
       end;
-    wlCID, wlFID:
+    wlCID, wlFID, wlSoilID:
       begin
         inherited;
       end
@@ -1407,12 +1476,53 @@ end;
 
 procedure TModflowFmp4Writer.WriteSoil;
 begin
+  if not FSoil4.IsSelected then
+  begin
+    Exit;
+  end;
   WriteString('BEGIN SOIL');
   NewLine;
+
+  WriteCapillaryFringe;
+  WriteSoilID;
 
   WriteString('END SOIL');
   NewLine;
   NewLine;
+end;
+
+procedure TModflowFmp4Writer.WriteSoilID;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FSoil4.CapFringe.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlSoilID);
+
+  if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlSoilID;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP SOIL: SOIL_ID ';
+    RequiredValues.ErrorID := 'FMP SOIL: SOIL_ID ';
+    RequiredValues.ID := 'SOIL_ID ';
+    RequiredValues.StaticDataName := KSoilID;
+    RequiredValues.WriteTransientData := False;
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+    RequiredValues.CheckError := 'Invalid Soil ID value';
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteString(const Value: AnsiString);
@@ -1531,6 +1641,16 @@ begin
         begin
           Assert(FBarePrecipitationConsumptionFractionFileStream <> nil);
           FBarePrecipitationConsumptionFractionFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlCapillaryFringe:
+        begin
+          Assert(FCapillaryFringeFileStream <> nil);
+          FCapillaryFringeFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlSoilID:
+        begin
+          Assert(FSoilIdStream <> nil);
+          FSoilIdStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);

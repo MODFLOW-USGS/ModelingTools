@@ -30556,5 +30556,20 @@ object TTaskHistory
         'FMP'
         'Refactoring'
         'Testing')
+    end
+    item
+      Date = 44947.000000000000000000
+    end
+    item
+      Date = 44948.000000000000000000
+    end
+    item
+      Date = 44949.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Bug fix'
+        'Dialog boxes'
+        'Export Shapefile'
+        'FMP')
     end>
 end
