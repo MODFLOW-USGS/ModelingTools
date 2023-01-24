@@ -30571,5 +30571,11 @@ object TTaskHistory
         'Dialog boxes'
         'Export Shapefile'
         'FMP')
+    end
+    item
+      Date = 44950.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'core code')
     end>
 end

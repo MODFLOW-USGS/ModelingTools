@@ -128,6 +128,7 @@ var
   OriginalFractionDischargeDivertedFormula: string;
   FractionDischargeDivertedParam: TModflowSteadyParameter;
   ADataArray: TDataArray;
+  ModifiedValue: Double;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidLakeNode);
   CellLocPointer := Addr(CellLocation);
@@ -341,7 +342,7 @@ begin
             begin
               LakeNodeRecord.InitialStagePestFormula := GetPestTemplateFormula(
                 LakeNodeRecord.InitialStage, OriginalInitialStageFormula,
-                '',  ppmMultiply, CellLocPointer, ScreenObject);
+                '',  ppmMultiply, CellLocPointer, ScreenObject, ModifiedValue);
               ExtendedTemplateFormula(LakeNodeRecord.InitialStagePestFormula);
             end
             else
@@ -353,7 +354,7 @@ begin
             begin
               LakeNodeRecord.InitialUPestFormula := GetPestTemplateFormula(
                 LakeNodeRecord.InitialU, OriginalInitialUFormula,
-                '',  ppmMultiply, CellLocPointer, ScreenObject);
+                '',  ppmMultiply, CellLocPointer, ScreenObject, ModifiedValue);
               ExtendedTemplateFormula(LakeNodeRecord.InitialUPestFormula);
             end
             else
@@ -366,7 +367,7 @@ begin
               LakeNodeRecord.RechargeFractionPestFormula :=
                 GetPestTemplateFormula( LakeNodeRecord.RechargeFraction,
                 OriginalFractionRechargeDivertedFormula,
-                '',  ppmMultiply, CellLocPointer, ScreenObject);
+                '',  ppmMultiply, CellLocPointer, ScreenObject, ModifiedValue);
               ExtendedTemplateFormula(LakeNodeRecord.RechargeFractionPestFormula);
             end
             else
@@ -379,7 +380,7 @@ begin
               LakeNodeRecord.DischargeFractionPestFormula :=
                 GetPestTemplateFormula( LakeNodeRecord.DischargeFraction,
                 OriginalFractionDischargeDivertedFormula,
-                '',  ppmMultiply, CellLocPointer, ScreenObject);
+                '',  ppmMultiply, CellLocPointer, ScreenObject, ModifiedValue);
               ExtendedTemplateFormula(LakeNodeRecord.DischargeFractionPestFormula);
             end
             else

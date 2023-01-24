@@ -277,6 +277,7 @@ var
   HigherUPestNames: TStringList;
   HigherFlowUPestNames: TStringList;
   BoundaryActiveData: TDataArray;
+  ModifiedValue: Double;
   procedure InitializeTimeList(ListOfTimeLists: TObjectList<TSutraTimeList>;
     FormulaIndex: Integer; Descripion: string; PestNames: TStringList);
   var
@@ -648,7 +649,7 @@ begin
                   if (U1Name <> '') or (U1SeriesName <> '') then
                   begin
                     U1.Formula := GetPestTemplateFormula(U1.Value, U1Name,
-                      U1SeriesName, U1SeriesMethod, CellLocPointer, nil);
+                      U1SeriesName, U1SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(U1.Formula);
                   end
                   else
@@ -662,7 +663,7 @@ begin
                   if (U2Name <> '') or (U2SeriesName <> '') then
                   begin
                     U2.Formula := GetPestTemplateFormula(U2.Value, U2Name,
-                      U2SeriesName, U2SeriesMethod, CellLocPointer, nil);
+                      U2SeriesName, U2SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(U2.Formula);
                   end
                   else
@@ -676,7 +677,7 @@ begin
                   if (QU1Name <> '') or (QU1SeriesName <> '') then
                   begin
                     QU1.Formula := GetPestTemplateFormula(QU1.Value, QU1Name,
-                      QU1SeriesName, QU1SeriesMethod, CellLocPointer, nil);
+                      QU1SeriesName, QU1SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(QU1.Formula);
                   end
                   else
@@ -690,7 +691,7 @@ begin
                   if (QU2Name <> '') or (QU2SeriesName <> '') then
                   begin
                     QU2.Formula := GetPestTemplateFormula(QU2.Value, QU2Name,
-                      QU2SeriesName, QU2SeriesMethod, CellLocPointer, nil);
+                      QU2SeriesName, QU2SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(QU2.Formula);
                   end
                   else

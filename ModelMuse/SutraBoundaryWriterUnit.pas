@@ -517,13 +517,14 @@ var
     Formulas: T3DSparseStringArray; const Multiplier: string = '');
   var
     Formula: string;
+    ModifiedValue: double;
   begin
     if (PestSeriesName <> '') or (PestName <> '') then
     begin
       Formula := GetPestTemplateFormula(
         DataSet.RealData[LayerIndex, RowIndex,
         ColIndex], PestName, PestSeriesName,
-        PestSeriesMethod, CellLocationAddr, nil);
+        PestSeriesMethod, CellLocationAddr, nil, ModifiedValue);
       if Multiplier <> '' then
       begin
         Formula := Format('(%0:s) * (%1:s)', [Formula, Multiplier]);
@@ -549,13 +550,15 @@ var
     DataSet, MergedDataSet: TDataArray; FormulasUsed: T2DSparseBooleanArray;
     Formulas: T3DSparseStringArray; Out Formula: string;
     const Multiplier: string ='');
+  var
+    ModifiedValue: Double;
   begin
     if (PestSeriesName <> '') or (PestName <> '') then
     begin
       Formula := GetPestTemplateFormula(
         DataSet.RealData[LayerIndex, RowIndex,
         ColIndex], PestName, PestSeriesName,
-        PestSeriesMethod, CellLocationAddr, nil);
+        PestSeriesMethod, CellLocationAddr, nil, ModifiedValue);
       if Multiplier <> '' then
       begin
         Formula := Format('(%0:s) * (%1:s)', [Formula, Multiplier]);

@@ -5,8 +5,8 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
   ClientHeight = 483
   ClientWidth = 617
   OnResize = FormResize
-  ExplicitWidth = 629
-  ExplicitHeight = 521
+  ExplicitWidth = 633
+  ExplicitHeight = 522
   TextHeight = 18
   object splLeft: TSplitter [0]
     Left = 257
@@ -275,8 +275,6 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     Enabled = False
     ItemHeight = 18
     TabOrder = 3
-    ExplicitLeft = 492
-    ExplicitHeight = 214
   end
   object sdShapefile: TSaveDialog
     DefaultExt = '.shp'

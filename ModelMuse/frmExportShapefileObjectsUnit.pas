@@ -1332,7 +1332,7 @@ begin
   else
   begin
     FFieldDefinitions[DataArrayIndex].FieldName :=
-      FFieldDefinitions[DataArrayIndex].DataArray.Name;
+      AnsiString(FFieldDefinitions[DataArrayIndex].DataArray.Name);
     FieldNames.Add(FFieldDefinitions[DataArrayIndex].DataArray.Name);
   end;
 end;
@@ -2179,9 +2179,9 @@ var
     end
     else
     begin
-      FieldPosition := FFieldNames.IndexOf(FieldName);
+      FieldPosition := FFieldNames.IndexOf(string(FieldName));
       Assert(FieldPosition >= 0);
-      FieldValues[FieldPosition] := Data;
+      FieldValues[FieldPosition] := string(Data);
     end;
   end;
   Procedure UpdFieldNum(FieldName : WString ; Data: Extended );
@@ -2194,7 +2194,7 @@ var
     end
     else
     begin
-      FieldPosition := FFieldNames.IndexOf(FieldName);
+      FieldPosition := FFieldNames.IndexOf(string(FieldName));
       Assert(FieldPosition >= 0);
       FieldValues[FieldPosition] := FortranFloatToStr(Data);
     end;
@@ -2209,7 +2209,7 @@ var
     end
     else
     begin
-      FieldPosition := FFieldNames.IndexOf(FieldName);
+      FieldPosition := FFieldNames.IndexOf(string(FieldName));
       Assert(FieldPosition >= 0);
       FieldValues[FieldPosition] := IntToStr(Data);
     end;

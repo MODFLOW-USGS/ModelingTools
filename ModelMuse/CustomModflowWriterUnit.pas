@@ -115,18 +115,18 @@ type
     procedure WritePestTemplateLine(AFileName: string);
     function GetPestTemplateFormula(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
-      ACell: PCellLocation; const AScreenObject: TObject): string;
+      ACell: PCellLocation; const AScreenObject: TObject; var ModifiedValue: double): string;
     function GetPestTemplateFormulaOrValue(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
       ACell: PCellLocation; const AScreenObject: TObject): string;
-    procedure WritePestTemplateFormula(Value: double; PestParValue: string;
+    function WritePestTemplateFormula(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
       ACell: TValueCell; FixedLength: Integer = 0;
-      ChangeSign: Boolean = False); overload;
-    procedure WritePestTemplateFormula(Value: double; PestParValue: string;
+      ChangeSign: Boolean = False): double ; overload;
+    function WritePestTemplateFormula(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
       ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer = 0;
-      ChangeSign: Boolean = False); overload;
+      ChangeSign: Boolean = False): double; overload;
     procedure WritePestTemplateFormulaOrValue(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
       ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer = 0;
@@ -301,8 +301,12 @@ end;
     // Write a value or a formula for EnhancedTemplateProcessor for a
     // boundary condition cell. Index is used to access the appropiate
     // value, PEST name, PEST Series name and PEST series method.
-    procedure WriteValueOrFormula(Cell: TValueCell; Index: integer;
-      FixedLength: Integer = 0; ChangeSign: Boolean = False);
+    // The result is the value that will be written to the file as
+    // modified by applicable the PEST variables.
+    // the result will be zero if a MODFLOW 6 time series name will be
+    // written.
+    function WriteValueOrFormula(Cell: TValueCell; Index: integer;
+      FixedLength: Integer = 0; ChangeSign: Boolean = False): double;
 
     procedure WritePestFormulaOrValue(const PestName, PestSeriesName: string;
       PestMethod: TPestParamMethod; Value: double);
@@ -2932,9 +2936,9 @@ begin
   end;
 end;
 
-procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
+function TCustomFileWriter.WritePestTemplateFormula(Value: double;
   PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
-  ACell: TValueCell; FixedLength: Integer; ChangeSign: Boolean);
+  ACell: TValueCell; FixedLength: Integer; ChangeSign: Boolean): double;
 var
   ACellLocation: TCellLocation;
   CellLocAddr: PCellLocation;
@@ -2952,15 +2956,15 @@ begin
     ScreenObject := nil;
   end;
 
-  WritePestTemplateFormula(Value, PestParValue, PestSeriesValue, Method,
+  result := WritePestTemplateFormula(Value, PestParValue, PestSeriesValue, Method,
     CellLocAddr, ScreenObject, FixedLength, ChangeSign);
 
 end;
 
-procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
+function TCustomFileWriter.WritePestTemplateFormula(Value: double;
   PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
   ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer;
-  ChangeSign: Boolean);
+  ChangeSign: Boolean): double;
 var
   Formula: string;
   OldDecimalSeparator: Char;
@@ -2969,10 +2973,11 @@ begin
   FormatSettings.DecimalSeparator := '.';
   try
     Formula := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
-      Method, ACell, AScreenObject as TScreenObject);
+      Method, ACell, AScreenObject as TScreenObject, result);
     if ChangeSign then
     begin
       Formula := '-1*(' + Formula + ')';
+      result := -result;
     end;
     if Formula <> '' then
     begin
@@ -2997,6 +3002,7 @@ begin
       begin
         Assert(False);
       end;
+      Result := Value
     end;
   finally
     FormatSettings.DecimalSeparator := OldDecimalSeparator;
@@ -3317,7 +3323,7 @@ end;
 
 function TCustomFileWriter.GetPestTemplateFormula(Value: double; PestParValue,
   PestSeriesValue: string; Method: TPestParamMethod; ACell: PCellLocation;
-  const AScreenObject: TObject): string;
+  const AScreenObject: TObject; var ModifiedValue: double): string;
 var
   TemplateCharacter: string;
   ArrayTemplateCharacter: string;
@@ -3532,6 +3538,7 @@ begin
     begin
       GetSeriesData(SeriesReplacement, Value);
       GetCellData(CellValueReplacement, Value);
+      ModifiedValue := Value;
 
       if (CellValueReplacement <> '') and (SeriesReplacement <> '') then
       begin
@@ -3552,6 +3559,7 @@ begin
     else if (PestParValue <> '') then
     begin
       GetCellData(CellValueReplacement, Value);
+      ModifiedValue := Value;
       if (CellValueReplacement <> '') then
       begin
         result := Format('%0:g * %1:s',
@@ -3562,6 +3570,7 @@ begin
     begin
       Assert(PestSeriesValue <> '');
       GetSeriesData(SeriesReplacement, Value);
+      ModifiedValue := Value;
       if SeriesReplacement <> '' then
       begin
         result := Format('%0:g  %1:s %2:s',
@@ -3576,6 +3585,8 @@ end;
 function TCustomFileWriter.GetPestTemplateFormulaOrValue(Value: double;
   PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
   ACell: PCellLocation; const AScreenObject: TObject): string;
+var
+  ModifiedValue: double;
 begin
   if (PestParValue = '') and (PestSeriesValue = '') then
   begin
@@ -3584,7 +3595,7 @@ begin
   else
   begin
     result := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
-      Method, ACell, AScreenObject);
+      Method, ACell, AScreenObject, ModifiedValue);
   end;
 end;
 
@@ -6958,6 +6969,7 @@ var
     PestSeriesName: string;
     PestSeriesMethod: TPestParamMethod;
     ACellLocation: TCellLocation;
+    ModifiedValue: Double;
   begin
     for CellIndex := 0 to CellList.Count - 1 do
     begin
@@ -7004,7 +7016,7 @@ var
                 ACellLocation := Cell.CellLocation;
                 Formula := GetPestTemplateFormula(Value, PestName, PestSeriesName,
                   PestSeriesMethod, PCellLocation(Addr(ACellLocation)),
-                  Cell.ScreenObject as TScreenObject);
+                  Cell.ScreenObject as TScreenObject, ModifiedValue);
                 if Formula = '' then
                 begin
                   IsFormula := False;
@@ -10865,8 +10877,8 @@ begin
 //  FMainFileStream := nil;
 end;
 
-procedure TCustomModflowWriter.WriteValueOrFormula(Cell: TValueCell;
-  Index: integer; FixedLength: Integer; ChangeSign: Boolean);
+function TCustomModflowWriter.WriteValueOrFormula(Cell: TValueCell;
+  Index: integer; FixedLength: Integer; ChangeSign: Boolean): double;
 var
   Value: double;
   PestItem: string;
@@ -10886,6 +10898,7 @@ begin
       begin
         WriteString(' ');
         WriteString(TimeSeriesName);
+        result := 0;
         Exit;
       end;
     end;
@@ -10905,8 +10918,8 @@ begin
       ((PestItem <> '') or (PestSeries <> '')) then
     begin
       PestMethod := Cell.PestSeriesMethod[Index];
-      WritePestTemplateFormula(Value, PestItem, PestSeries, PestMethod, Cell,
-        FixedLength, ChangeSign);
+      result := WritePestTemplateFormula(Value, PestItem, PestSeries,
+        PestMethod, Cell, FixedLength, ChangeSign);
     end
     else
     begin
@@ -10926,6 +10939,7 @@ begin
       begin
         Assert(False);
       end;
+      result := Value;
 
       if PestItem <> '' then
       begin

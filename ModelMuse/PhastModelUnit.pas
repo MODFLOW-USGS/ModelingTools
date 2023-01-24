@@ -10850,12 +10850,14 @@ const
 //    '5.1.1.9'  Enhancement: The Export Objects to Shapefile dialog box now
 //                allows data to be exported to a CSV file instead of to
 //                an XBase file.
+//    '5.1.1.10' Bug fix: Fixed bug in creating PLPROC scripts for modifying
+//                data sets with large number of layers.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.9';
+  IIModelVersion = '5.1.1.10';
 
 function IModelVersion: string;
 begin

@@ -67,6 +67,7 @@ type
     FDataArrayID: string;
     FPilotPointFiles: TPilotPointFiles;
     FPrefix: string;
+    FParamValuesFileNameRoot: string;
     procedure WriteTemplateFile(const AFileName: string;
       ScriptChoice: TScriptChoice);
     procedure WriteValuesFile(const AFileName: string);
@@ -722,7 +723,7 @@ var
   PLPROC_Location: string;
   ModelDirectory: string;
 begin
-  ScriptFileName := ChangeFileExt(FParamValuesFileName, StrKrigfactorsscript);
+  ScriptFileName := FParamValuesFileNameRoot + StrKrigfactorsscript;
   ModelDirectory := ExtractFileDir(ScriptFileName);
   OpenFile(ScriptFileName);
   try
@@ -977,78 +978,83 @@ begin
     FDataArray.ColumnCount);
 
   // Write values to be modified by PEST.
-  FParamValuesFileName := ChangeFileExt(ChangeFileExt(AFileName, ''), '.' + FDataArray.Name)
-    + Extension;
-  OpenFile(FParamValuesFileName);
-  try
-    WriteString(' Index');
-    for LayerIndex := 0 to FDataArray.LayerCount - 1 do
-    begin
+  FParamValuesFileNameRoot := ChangeFileExt(ChangeFileExt(AFileName, ''), '.'
+    + FDataArray.Name);
+
+  for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+  begin
+    FParamValuesFileName := FParamValuesFileNameRoot + IntToStr(LayerIndex+1)
+       + '_' + Extension;
+    OpenFile(FParamValuesFileName);
+    try
+      WriteString(' Index');
+
       SListName := Format('s_PIndex%0:d', [LayerIndex + 1]);
       WriteString(' ' + SListName);
 
       PListName := Format('p_Value%0:d', [LayerIndex + 1]);
       WriteString(' ' + PListName);
-    end;
-    NewLine;
 
-    ID := 1;
-    for RowIndex := 0 to FParamDataArray.RowCount - 1 do
-    begin
-      for ColIndex := 0 to FParamDataArray.ColumnCount - 1 do
+      NewLine;
+
+      ID := 1;
+      for RowIndex := 0 to FParamDataArray.RowCount - 1 do
       begin
-        WriteInteger(ID);
-        for LayerIndex := 0 to FParamDataArray.LayerCount - 1 do
+        for ColIndex := 0 to FParamDataArray.ColumnCount - 1 do
         begin
-          AName := LowerCase(FParamDataArray.StringData[
-            LayerIndex, RowIndex, ColIndex]);
-          if (AName = '') then
-          begin
-            PIndex := -1;
-          end
-          else
-          begin
-            PIndex := FPNames.IndexOf(AName);
-          end;
-
-          if FDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
-          begin
-            DataValue := FDataArray.RealData[LayerIndex, RowIndex, ColIndex]
-          end
-          else
-          begin
-            DataValue := 0
-          end;
-          if PIndex >= 0 then
-          begin
-            AParam := FPNames.Objects[PIndex] as TModflowSteadyParameter;
-            FUsedParamList.AddObject(AParam.ParameterName, AParam);
-            if AParam.Value <> 0 then
+          WriteInteger(ID);
+//          for LayerIndex := 0 to FParamDataArray.LayerCount - 1 do
+//          begin
+            AName := LowerCase(FParamDataArray.StringData[
+              LayerIndex, RowIndex, ColIndex]);
+            if (AName = '') then
             begin
-              FValues[LayerIndex, RowIndex, ColIndex] :=
-                DataValue / AParam.Value;
+              PIndex := -1;
             end
             else
             begin
-              FValues[LayerIndex, RowIndex, ColIndex] := DataValue;
-//                FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+              PIndex := FPNames.IndexOf(AName);
             end;
-          end
-          else
-          begin
-            FValues[LayerIndex, RowIndex, ColIndex] := DataValue
-//              FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-          end;
-          WriteInteger(PIndex + 1);
-          WriteFloat(FValues[LayerIndex, RowIndex, ColIndex]);
-          FZoneNumbers[LayerIndex, RowIndex, ColIndex] := PIndex;
+
+            if FDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+            begin
+              DataValue := FDataArray.RealData[LayerIndex, RowIndex, ColIndex]
+            end
+            else
+            begin
+              DataValue := 0
+            end;
+            if PIndex >= 0 then
+            begin
+              AParam := FPNames.Objects[PIndex] as TModflowSteadyParameter;
+              FUsedParamList.AddObject(AParam.ParameterName, AParam);
+              if AParam.Value <> 0 then
+              begin
+                FValues[LayerIndex, RowIndex, ColIndex] :=
+                  DataValue / AParam.Value;
+              end
+              else
+              begin
+                FValues[LayerIndex, RowIndex, ColIndex] := DataValue;
+  //                FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+              end;
+            end
+            else
+            begin
+              FValues[LayerIndex, RowIndex, ColIndex] := DataValue
+  //              FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            end;
+            WriteInteger(PIndex + 1);
+            WriteFloat(FValues[LayerIndex, RowIndex, ColIndex]);
+            FZoneNumbers[LayerIndex, RowIndex, ColIndex] := PIndex;
+//          end;
+          Inc(ID);
+          NewLine;
         end;
-        Inc(ID);
-        NewLine;
       end;
+    finally
+      CloseFile;
     end;
-  finally
-    CloseFile;
   end;
 end;
 
@@ -1070,7 +1076,7 @@ var
   ParamIndex: Integer;
   Root: string;
 begin
-  ScriptFileName := ChangeFileExt(FParamValuesFileName, '.script');
+  ScriptFileName := FParamValuesFileNameRoot + '.script';
   if ScriptChoice = scWriteTemplate then
   begin
     ScriptFileName := ScriptFileName + '.tpl';
@@ -1099,9 +1105,9 @@ begin
     WriteString('#Read data to modify');
     NewLine;
     {$REGION 'Data set values'}
-    ColIndex := 2;
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
+      ColIndex := 2;
       if Model.ModelSelection = msModflow2015 then
       begin
         WriteString(Format('read_list_file(reference_clist=''%0:s%1:d'',skiplines=1, &',
@@ -1123,7 +1129,8 @@ begin
         [PListName, ColIndex]));
       Inc(ColIndex);
       NewLine;
-      WriteString(Format('  file=''%s'')', [ExtractFileName(FParamValuesFileName)]));
+      WriteString(Format('  file=''%0:s%1:d_%2:s'')',
+        [ExtractFileName(FParamValuesFileNameRoot), (LayerIndex+1), Extension]));
       NewLine;
     end;
     NewLine;

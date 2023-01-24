@@ -325,6 +325,7 @@ var
   CellLocPointer: PCellLocation;
   HigherFlowRatePestNamesList: TStringListObjectList;
   BoundaryActiveData: TDataArray;
+  ModifiedValue: Double;
   procedure InitializeTimeList(ListOfTimeLists: TObjectList<TSutraTimeList>;
     FormulaIndex: Integer; Descripion: string; PestNames: TStringList);
   var
@@ -754,7 +755,7 @@ begin
                   if (P1Name <> '') or (P1SeriesName <> '') then
                   begin
                     P1.Formula := GetPestTemplateFormula(P1.Value, P1Name,
-                      P1SeriesName, P1SeriesMethod, CellLocPointer, nil);
+                      P1SeriesName, P1SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(P1.Formula);
                   end
                   else
@@ -768,7 +769,7 @@ begin
                   if (P2Name <> '') or (P2SeriesName <> '') then
                   begin
                     P2.Formula := GetPestTemplateFormula(P2.Value, P2Name,
-                      P2SeriesName, P2SeriesMethod, CellLocPointer, nil);
+                      P2SeriesName, P2SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(P2.Formula);
                   end
                   else
@@ -782,7 +783,7 @@ begin
                   if (Flow1Name <> '') or (Flow1SeriesName <> '') then
                   begin
                     Q1.Formula := GetPestTemplateFormula(Q1.Value, Flow1Name,
-                      Flow1SeriesName, Flow1SeriesMethod, CellLocPointer, nil);
+                      Flow1SeriesName, Flow1SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(Q1.Formula);
                   end
                   else
@@ -796,7 +797,7 @@ begin
                   if (Flow2Name <> '') or (Flow2SeriesName <> '') then
                   begin
                     Q2.Formula := GetPestTemplateFormula(Q2.Value, Flow2Name,
-                      Flow2SeriesName, Flow2SeriesMethod, CellLocPointer, nil);
+                      Flow2SeriesName, Flow2SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(Q1.Formula);
                   end
                   else
@@ -810,7 +811,7 @@ begin
                   if (U1Name <> '') or (U1SeriesName <> '') then
                   begin
                     U1.Formula := GetPestTemplateFormula(U1.Value, U1Name,
-                      U1SeriesName, U1SeriesMethod, CellLocPointer, nil);
+                      U1SeriesName, U1SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(U1.Formula);
                   end
                   else
@@ -824,7 +825,7 @@ begin
                   if (U2Name <> '') or (U2SeriesName <> '') then
                   begin
                     U2.Formula := GetPestTemplateFormula(U2.Value, U2Name,
-                      U2SeriesName, U2SeriesMethod, CellLocPointer, nil);
+                      U2SeriesName, U2SeriesMethod, CellLocPointer, nil, ModifiedValue);
                     ExtendedTemplateFormula(U2.Formula);
                   end
                   else

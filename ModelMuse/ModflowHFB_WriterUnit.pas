@@ -2054,6 +2054,7 @@ var
   HydraulicConductivityFormula: string;
   ThicknessFormula: string;
   ExtendedTemplateCharacter: string;
+  ModifiedValue: Double;
 //  Method: TPestParamMethod;
 begin
   ModelLayer := Writer.Model.
@@ -2100,7 +2101,7 @@ begin
 //          Method := ppmMultiply;
           HydraulicConductivityFormula := Writer.GetPestTemplateFormula(
             HydraulicConductivity, FPestHydraulicConductivityName,
-            '', ppmMultiply, nil, nil);
+            '', ppmMultiply, nil, nil, ModifiedValue);
         end
         else
         begin
@@ -2113,7 +2114,7 @@ begin
 //          Method := FPestThicknessSeriesMethod;
           ThicknessFormula := Writer.GetPestTemplateFormula(
             Thickness, FPestThicknessName,
-            '', ppmMultiply, nil, nil);
+            '', ppmMultiply, nil, nil, ModifiedValue);
         end
         else
         begin
@@ -2345,6 +2346,7 @@ var
   ThicknessFormula: string;
   ExtendedTemplateCharacter: string;
   Method: TPestParamMethod;
+  ModifiedValue: Double;
 begin
     { Add PEST support for PEST here }
     // handle pest parameter
@@ -2429,7 +2431,7 @@ begin
               Method := FPestHydraulicConductivitySeriesMethods[FPriorIndex];
               HydraulicConductivityFormula := Writer.GetPestTemplateFormula(
                 HydraulicConductivity, PestHydraulicConductivityName,
-                PestHydraulicConductivitySeriesName, Method, nil, nil);
+                PestHydraulicConductivitySeriesName, Method, nil, nil, ModifiedValue);
             end
             else
             begin
@@ -2442,7 +2444,7 @@ begin
               Method := FPestThicknessSeriesMethods[FPriorIndex];
               ThicknessFormula := Writer.GetPestTemplateFormula(
                 Thickness, PestThicknessName,
-                PestThicknessSeriesName, Method, nil, nil);
+                PestThicknessSeriesName, Method, nil, nil, ModifiedValue);
             end
             else
             begin
