@@ -76,10 +76,12 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
-        <Debugger_RunParams>&quot;test\TestInput.txt.tpl&quot; &quot;test\HufTest8.pval&quot;</Debugger_RunParams>
-        <Debugger_CWD>C:\ModelingTools\EnhancedTemplateProcessor</Debugger_CWD>
+        <Debugger_RunParams>SutraTest1b.FluxBcs.tpl SutraTest1b.pval</Debugger_RunParams>
+        <Debugger_CWD>C:\ModelingTools\ModelMuse\PracticeModel</Debugger_CWD>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>(None)</Manifest_File>
+        <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
+        <DCC_MapFile>3</DCC_MapFile>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>

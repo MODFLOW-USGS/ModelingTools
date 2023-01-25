@@ -72,6 +72,7 @@ type
     FArrayDelimiter: Char;
     FArrayDictionary: TArrayDictionary;
     FOldDecimalSeparator: Char;
+    FLineIndex: integer;
     procedure CreateArrayNameReader;
     procedure WriteUsage;
     procedure WriteParameters;
@@ -92,6 +93,7 @@ type
   end;
 
 procedure ProcessTemplate;
+procedure WriteErrorLog(E: Exception);
 
 implementation
 
@@ -156,9 +158,45 @@ resourcestring
   rsUnmatchedArr = 'Unmatched array delimiters in "%0:s".';
   rsMissingArray = 'missing array between array delimiters in "%0:s".';
   rsUnableToConv = 'Unable to convert "%0:s" to a number in "%1:s".';
+  StrTemplateLineD = sLineBreak + ' Template line: %d';
+  StrUnableToEvaluateT = 'Unable to evaluate the formula "%0:s" ' +
+  sLineBreak +
+  'in "%1:s." ' +
+  sLineBreak +
+  'The error message was "%:2s"';
 
 const
   ValidArrayNameCharacters = ['A'..'Z', 'a'..'z', '0'..'9', '_'];
+
+procedure WriteErrorLog(E: Exception);
+var
+{$IFDEF FPC}
+  FErrorLog: TSimpleStreamWriter;
+{$ELSE}
+  FErrorLog: TStreamWriter;
+{$ENDIF}
+begin
+  {$IFDEF FPC}
+  FErrorLog := TSimpleStreamWriter.Create('EnhancedTemplateProcessorErrorLog.txt', True);
+  {$ELSE}
+  FErrorLog := TStreamWriter.Create('EnhancedTemplateProcessorErrorLog.txt', True);
+  {$ENDIF}
+  try
+    FErrorLog.WriteLine(DateTimeToStr(Now));
+    FErrorLog.WriteLine(E.Message);
+    E := E.InnerException;
+    while E <> nil do
+    begin
+      FErrorLog.WriteLine(E.Message);
+      E := E.InnerException;
+    end;
+    FErrorLog.WriteLine;
+    FErrorLog.WriteLine;
+  finally
+    FErrorLog.Free;
+  end;
+
+end;
 
 procedure ProcessTemplate;
 var
@@ -337,7 +375,7 @@ procedure TParameterProcessor.OpenFiles;
 begin
   if ExtractFileExt(FTemplateFileName) = '' then
   begin
-    raise EBadFileName.Create('Template files must have an extension');
+    raise EBadFileName.Create('Template files must have an extension' + Format(StrTemplateLineD,[FLineIndex]));
   end;
   {$IFDEF FPC}
   FTemplateFile := TSimpleStreamReader.Create(FTemplateFileName);
@@ -389,7 +427,7 @@ begin
   end;
 
   try
-
+    FLineIndex := 0;
     GetFileNames;
     OpenFiles;
     ReadPValFile;
@@ -419,6 +457,7 @@ var
   StartArrayNameFile: Integer;
   EndArrayNameFile: Integer;
   ArrayNameLength: Integer;
+  ErrorMessages: string;
   function CountFormulaDelimiterBefore(APosition: Integer): integer;
   var
     FormulaDelimiterPosition: Integer;
@@ -458,7 +497,7 @@ var
     if ArrayEnd <= 0 then
     begin
       raise ESubstituteArrayError.Create(Format(rsUnmatchedArr,
-            [OriginalLine]));
+            [OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
     end;
 
 
@@ -466,7 +505,7 @@ var
     if (OpenBracePosition <= 0) or (OpenBracePosition > ArrayEnd) then
     begin
       raise ESubstituteArrayError.Create(Format(rsMissingArray,
-            [OriginalLine]));
+            [OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
     end;
 
     Splitter := TStringList.Create;
@@ -477,14 +516,14 @@ var
         if ArrayEnd <= 0 then
         begin
           raise ESubstituteArrayError.Create(Format(rsUnmatchedArr,
-                [OriginalLine]));
+                [OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
 
         OpenBracePosition := PosEx('[', ALine, ArrayStart);
         if (OpenBracePosition <= 0) or (OpenBracePosition > ArrayEnd) then
         begin
           raise ESubstituteArrayError.Create(Format(rsMissingArray,
-                [OriginalLine]));
+                [OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
 
         CloseBracePosition := PosEx(']', ALine, OpenBracePosition);
@@ -492,7 +531,7 @@ var
           or (CloseBracePosition > ArrayEnd) then
         begin
           raise ESubstituteArrayError.Create(Format(rsUnmatchedAnd,
-            [OriginalLine]));
+            [OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
         StartIndex := Succ(ArrayStart);
         for CharIndex := Pred(OpenBracePosition) downto Succ(ArrayStart) do
@@ -507,24 +546,24 @@ var
         if ArrayName = '' then
         begin
           raise ESubstituteArrayError.Create(Format(rsTheCharacter,
-            [OriginalLine]));
+            [OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
         if not FArrayDictionary.TryGetValue(UpperCase(ArrayName), ArrayRecord) then
         begin
-          raise ESubstituteArrayError.Create(Format(rsAnArrayNamed, [ArrayName]));
+          raise ESubstituteArrayError.Create(Format(rsAnArrayNamed, [ArrayName]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
 
         Splitter.DelimitedText := Copy(ALine, OpenBracePosition+1, CloseBracePosition-OpenBracePosition-1);
         if Splitter.Count <> 3 then
         begin
           raise ESubstituteArrayError.Create(Format(rsThereMustBeT,
-            [ArrayName, ALine]));
+            [ArrayName, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
 
         if not TryStrToInt(Splitter[0], LayerIndex) then
         begin
           raise ESubstituteArrayError.Create(Format(rsInvalidLayer,
-            [ArrayName, ALine]));
+            [ArrayName, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
         end
         else
         begin
@@ -532,14 +571,14 @@ var
           if (LayerIndex < 0) or (LayerIndex >= Length(ArrayRecord.Values)) then
           begin
             raise ESubstituteArrayError.Create(Format(rsInvalidLayer,
-              [ArrayName, ALine]));
+              [ArrayName, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
           end;
         end;
 
         if not TryStrToInt(Splitter[1], RowIndex) then
         begin
           raise ESubstituteArrayError.Create(Format(rsInvalidRowIn,
-            [ArrayName, ALine]));
+            [ArrayName, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
         end
         else
         begin
@@ -547,14 +586,14 @@ var
           if (RowIndex < 0) or (RowIndex >= Length(ArrayRecord.Values[0])) then
           begin
             raise ESubstituteArrayError.Create(Format(rsInvalidRowIn,
-              [ArrayName, ALine]));
+              [ArrayName, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
           end;
         end;
 
         if not TryStrToInt(Splitter[2], ColIndex) then
         begin
           raise ESubstituteArrayError.Create(Format(rsInvalidColum,
-            [ArrayName, ALine]));
+            [ArrayName, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
         end
         else
         begin
@@ -562,7 +601,7 @@ var
           if (ColIndex < 0) or (ColIndex >= Length(ArrayRecord.Values[0,0])) then
           begin
             raise ESubstituteArrayError.Create(Format(rsInvalidColum,
-              [ArrayName, ALine]));
+              [ArrayName, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
           end;
         end;
         LineStart := Copy(ALine, 1, ArrayStart-1);
@@ -570,7 +609,7 @@ var
         if AvailableSpace < 1 then
         begin
             raise ESubstituteArrayError.Create(Format(rsTooLittleSpa, [
-              OriginalLine]));
+              OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
         ReplacementString := MaxPrecisionFloatToStr(ArrayRecord.Values[
           LayerIndex,RowIndex,ColIndex], AvailableSpace);
@@ -618,7 +657,7 @@ begin
       if EndPos = 0 then
       begin
         raise EUnmatchedDelimiter.Create(Format(StrUnmatchedDelimiter,
-          ['parameter', OriginalLine]));
+          ['parameter', OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
       end;
 
       TemplateParameterName := Copy(ALine, Succ(StartPosition), EndPos-StartPosition-1);
@@ -640,12 +679,12 @@ begin
         if Length(ReplacementString) > AvailableLength then
         begin
           raise ENotEnoughPrecision.Create(Format(StrNotEnoughSpace,
-            [TemplateParameterName, OriginalLine, StartPosition, EndPos]));
+            [TemplateParameterName, OriginalLine, StartPosition, EndPos]) + Format(StrTemplateLineD,[FLineIndex]));
         end
         else if not TryStrToFloat(Trim(ReplacementString), AValue) then
         begin
           raise EConvertError.Create(Format(StrConversionProblem,
-            [ReplacementString, OriginalLine]));
+            [ReplacementString, OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
         ALine := Copy(ALine, 1, Pred(StartPosition)) + ReplacementString
           + Copy(ALine, Succ(EndPos), MaxInt);
@@ -654,7 +693,7 @@ begin
       else
       begin
         raise EBadParamName.Create(Format(StrNoParameterNamed,
-          [Trim(TemplateParameterName)]));
+          [Trim(TemplateParameterName)]) + Format(StrTemplateLineD,[FLineIndex]));
       end;
     end;
   end;
@@ -665,7 +704,7 @@ begin
     if EndPos = 0 then
     begin
       raise EUnmatchedDelimiter.Create(Format(StrUnmatchedDelimiter,
-        ['formula', OriginalLine]));
+        ['formula', OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
     end;
 
     Formula := Trim(Copy(ALine, Succ(StartPosition), EndPos-StartPosition-1));
@@ -678,8 +717,9 @@ begin
       AValue := FParser.CurrentExpression.DoubleResult;
     except on E: Exception do
       begin
-        raise ECompileError.Create(Format('Unable to evaluate the formula "%0:s" in "%1:s." The error message was "%:2s"',
-          [OriginalFormula, OriginalLine, E.Message]));
+        ErrorMessages := E.Message;
+        Exception.RaiseOuterException(ECompileError.Create(Format(StrUnableToEvaluateT,
+          [OriginalFormula, OriginalLine, ErrorMessages]) + Format(StrTemplateLineD,[FLineIndex])));
       end;
     end;
     ReplacementString := MaxPrecisionFloatToStr(AValue, AvailableLength);
@@ -687,12 +727,12 @@ begin
     if Length(ReplacementString) > AvailableLength then
     begin
       raise ENotEnoughPrecision.Create(Format(StrNotEnoughSpace,
-        [TemplateParameterName, OriginalLine, StartPosition, StartFormula]));
+        [TemplateParameterName, OriginalLine, StartPosition, StartFormula]) + Format(StrTemplateLineD,[FLineIndex]));
     end
     else if not TryStrToFloat(Trim(ReplacementString), AValue) then
     begin
       raise EConvertError.Create(Format(StrConversionProblem,
-        [ReplacementString, OriginalLine]));
+        [ReplacementString, OriginalLine]) + Format(StrTemplateLineD,[FLineIndex]));
     end;
     ALine := Copy(ALine, 1, Pred(StartPosition)) + ReplacementString
       + Copy(ALine, Succ(EndPos), MaxInt);
@@ -710,7 +750,7 @@ begin
     ALine := FArrayNameReader.ReadLine;
     if Length(ALine) <> 1 then
     begin
-      raise EReadArrayError.Create(rsTheFirstLine);
+      raise EReadArrayError.Create(rsTheFirstLine + Format(StrTemplateLineD,[FLineIndex]));
     end;
     FArrayDelimiter := ALine[1];
     while not FArrayNameReader.EndOfStream do
@@ -753,43 +793,43 @@ begin
   if OpenBracePosition < 2 then
   begin
     raise EReadArrayError.Create(Format(rsWhileAttempt,
-      [FArrayNamesFile, '[', ALine]));
+      [FArrayNamesFile, '[', ALine]) + Format(StrTemplateLineD,[FLineIndex]));
   end;
   CloseBracePosition := Pos(']', ALine);
   if CloseBracePosition < 3 then
   begin
     raise EReadArrayError.Create(Format(rsWhileAttempt,
-      [FArrayNamesFile, ']', ALine]));
+      [FArrayNamesFile, ']', ALine]) + Format(StrTemplateLineD,[FLineIndex]));
   end;
   if OpenBracePosition > CloseBracePosition then
   begin
     raise EReadArrayError.Create(Format(rsWhileAttempt2,
-      [FArrayNamesFile, ALine]));
+      [FArrayNamesFile, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
   end;
   ArrayName := Trim(Copy(ALine, 1, OpenBracePosition -1));
   if ArrayName = '' then
   begin
     raise EReadArrayError.Create(Format(rsWhileReading ,
-      [FArrayNamesFile, ALine]));
+      [FArrayNamesFile, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
   end;
   for CharIndex := 1 to Length(ArrayName) do
   begin
     if not (ArrayName[CharIndex] in ValidArrayNameCharacters) then
     begin
       raise EReadArrayError.Create(Format(rsInvalidArray,
-      [ArrayName, ALine, FArrayNamesFile]));
+      [ArrayName, ALine, FArrayNamesFile]) + Format(StrTemplateLineD,[FLineIndex]));
     end;
   end;
   if FArrayDictionary.ContainsKey(UpperCase(ArrayName)) then
   begin
     raise EReadArrayError.Create(Format(rsTheArrayName ,
-      [ArrayName, FArrayNamesFile]));
+      [ArrayName, FArrayNamesFile]) + Format(StrTemplateLineD,[FLineIndex]));
   end;
   FileNames := Trim(Copy(ALine, CloseBracePosition+1, MAXINT));
   if FileNames = '' then
   begin
     raise EReadArrayError.Create(Format(rsWhileReading2,
-      [FArrayNamesFile, ALine]));
+      [FArrayNamesFile, ALine]) + Format(StrTemplateLineD,[FLineIndex]));
   end;
 
   FileNameList := TStringList.Create;
@@ -801,7 +841,7 @@ begin
       if not FileExists(FileNameList[FileIndex]) then
       begin
         raise EReadArrayError.Create(Format(rsWhileReading3,
-          [FArrayNamesFile, FileNameList[FileIndex], ALine]));
+          [FArrayNamesFile, FileNameList[FileIndex], ALine]) + Format(StrTemplateLineD,[FLineIndex]));
       end;
     end;
     //FileNames := ExpandFileName(FileNames);
@@ -817,22 +857,22 @@ begin
       if Splitter.Count <> 3 then
       begin
         raise EReadArrayError.Create(Format(rsWhileReading4,
-          [ArrayName, ALine, FArrayNamesFile]));
+          [ArrayName, ALine, FArrayNamesFile]) + Format(StrTemplateLineD,[FLineIndex]));
       end;
       if not TryStrToInt(Splitter[0], LayerCount) then
       begin
         raise EReadArrayError.Create(Format(rsUnableToRead,
-          ['layers', ArrayName, ALine, FArrayNamesFile, Splitter[0]]));
+          ['layers', ArrayName, ALine, FArrayNamesFile, Splitter[0]]) + Format(StrTemplateLineD,[FLineIndex]));
       end;
       if not TryStrToInt(Splitter[1], RowCount) then
       begin
         raise EReadArrayError.Create(Format(rsUnableToRead,
-          ['rows', ArrayName, ALine, FArrayNamesFile, Splitter[1]]));
+          ['rows', ArrayName, ALine, FArrayNamesFile, Splitter[1]]) + Format(StrTemplateLineD,[FLineIndex]));
       end;
       if not TryStrToInt(Splitter[2], ColumnCount) then
       begin
         raise EReadArrayError.Create(Format(rsUnableToRead,
-          ['columns', ArrayName, ALine, FArrayNamesFile, Splitter[2]]));
+          ['columns', ArrayName, ALine, FArrayNamesFile, Splitter[2]]) + Format(StrTemplateLineD,[FLineIndex]));
       end;
       NamedArray.ArrayName:= ArrayName;
       SetLength(NamedArray.Values, LayerCount, RowCount, ColumnCount);
@@ -856,12 +896,12 @@ begin
             if not TryStrToFloat(Splitter[NumberIndex], ANumber) then
             begin
               raise EReadArrayError.Create(Format(rsUnableToConv,
-                [Splitter[NumberIndex], FileNames]));
+                [Splitter[NumberIndex], FileNames]) + Format(StrTemplateLineD,[FLineIndex]));
             end;
             if LayerIndex >= LayerCount then
             begin
               raise EReadArrayError.Create(Format(rsThereAreTooM,
-                [ArrayName, FileNames]));
+                [ArrayName, FileNames]) + Format(StrTemplateLineD,[FLineIndex]));
             end;
             NamedArray.Values[LayerIndex, RowIndex, ColIndex] := ANumber;
             Inc(ColIndex);
@@ -893,7 +933,7 @@ begin
         if LayerIndex <> LayerCount then
         begin
           raise EReadArrayError.Create(Format(rsThereAreNotE,
-            [ArrayName, FileNames]));
+            [ArrayName, FileNames]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
       finally
         ArrayFile.Free;
@@ -915,6 +955,7 @@ begin
   ReadTemplateHeader;
   while not FTemplateFile.EndOfStream do
   begin
+    Inc(FLineIndex);
     ALine := FTemplateFile.ReadLine;
     ProcessTemplateLine(ALine);
   end;
@@ -957,7 +998,7 @@ begin
       end
       else
       begin
-        raise EReadParamCountError.Create(StrUnableToReadTheN)
+        raise EReadParamCountError.Create(StrUnableToReadTheN + Format(StrTemplateLineD,[FLineIndex]))
       end;
     end;
 
@@ -989,7 +1030,7 @@ begin
         Splitter.DelimitedText := ALine;
         if Splitter.Count <> 2 then
         begin
-          raise EReadParamError.Create(Format(StrInThePVALFile, [ALine]));
+          raise EReadParamError.Create(Format(StrInThePVALFile, [ALine]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
         AParameter.ParameterName := Splitter[0];
         ValueString := Splitter[1];
@@ -1022,7 +1063,7 @@ begin
         else
         begin
           raise EReadParamError.Create(Format(StrInThePVALFileNoConvert,
-            [Splitter[1], ALine]));
+            [Splitter[1], ALine]) + Format(StrTemplateLineD,[FLineIndex]));
         end;
       end;
     finally
@@ -1032,7 +1073,7 @@ begin
     if MF2005ParamCount <> ParameterCount then
     begin
       raise EReadParamError.Create(Format(StrErrorReadingPVALF,
-        [MF2005ParamCount, ParameterCount]));
+        [MF2005ParamCount, ParameterCount]) + Format(StrTemplateLineD,[FLineIndex]));
     end;
 
   end;
@@ -1054,15 +1095,16 @@ var
       end
       else
       begin
-        raise EBadDelimiter.Create(Format(StrErrorReadingThePa, ['formula']));
+        raise EBadDelimiter.Create(Format(StrErrorReadingThePa, ['formula']) + Format(StrTemplateLineD,[FLineIndex]));
       end;
     end
     else
     begin
-      raise EBadDelimiter.Create(StrErrorReadingTheFo);
+      raise EBadDelimiter.Create(StrErrorReadingTheFo + Format(StrTemplateLineD,[FLineIndex]));
     end;
   end;
 begin
+  Inc(FLineIndex);
   ALine := FTemplateFile.ReadLine;
   ID := Copy(ALine, 1, 4);
   if (ID = 'ptf ') or (ID = 'jtf ') then
@@ -1071,13 +1113,14 @@ begin
     if Length(TemplateString) = 1 then
     begin
       FParameterDelimiter := TemplateString[1];
+      Inc(FLineIndex);
       ALine := FTemplateFile.ReadLine;
       ID := Copy(ALine, 1, 4);
       ReadFormulaDelimiter;
     end
     else
     begin
-      raise EBadDelimiter.Create(Format(StrErrorReadingThePa, ['parameter']));
+      raise EBadDelimiter.Create(Format(StrErrorReadingThePa, ['parameter']) + Format(StrTemplateLineD,[FLineIndex]));
     end;
   end
   else
@@ -1088,7 +1131,7 @@ begin
   if FParameterDelimiter = FFormulaDelimiter then
   begin
     raise EBadDelimiter.Create(Format(StrDuplicateDelimiters,
-      [FParameterDelimiter]));
+      [FParameterDelimiter]) + Format(StrTemplateLineD,[FLineIndex]));
   end;
 end;
 

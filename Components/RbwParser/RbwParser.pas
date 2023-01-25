@@ -2078,8 +2078,9 @@ resourcestring
   StrErrorUnableToEva2 = 'Error: Unable to evaluate %0:s function when the f' +
   'irst argument evaluates to %1:d because the number of arguments supplied ' +
   'to the function was %2:d instead of at least %3:d.';
-  StrUnableToEvaluate = 'Unable to evaluate "%0:s". The error message was %1' +
-  ':s';
+  StrUnableToEvaluate = 'Unable to evaluate "%0:s". ' + sLineBreak +
+  'The error message was %1:s' + sLineBreak +
+  'The class name was %2:s';
 
 const
   ValidCharacters = ['A'..'Z', 'a'..'z', '0'..'9', '_'];
@@ -3085,8 +3086,8 @@ begin
             self.SpecialImplementorList);
         except on E: ErbwParserError do
           begin
-            raise ErbwParserError.Create(
-              Format(StrUnableToEvaluate, [AString, E.Message]));
+            Exception.RaiseOuterException(ErbwParserError.Create(
+              Format(StrUnableToEvaluate, [AString, E.Message, E.ClassName])));
           end;
         end;
       if FCurrentExpression <> nil then
@@ -4007,11 +4008,11 @@ begin
                   end;
                 except on E: ERbwParserError do
                   begin
-                    raise ERbwParserError.Create(Format(StrErrorInArgumentNu,
+                    Exception.RaiseOuterException(ERbwParserError.Create(Format(StrErrorInArgumentNu,
                       [VarIndex2 + 1,
                       PriorExpression.Name,
                       Strings[Index],
-                      E.Message]));
+                      E.Message])));
                   end;
                 end;
                 VariableList.Free;
@@ -4121,12 +4122,13 @@ begin
     on E: ERbwParserError do
     begin
       CleanUp;
-      raise ERbwParserError.Create(E.Message);
+      raise ;
     end;
     on E: Exception do
     begin
       CleanUp;
-      raise ERbwParserError.Create(E.Message);
+      Exception.RaiseOuterException(ERbwParserError.Create(
+        E.ClassName + ': ' + E.Message));
     end;
   end
 end;
@@ -4445,9 +4447,9 @@ begin
     try
       AnArgument := Objects[Index + 1] as TConstant;
     except on EInvalidCast do
-      raise ErbwParserError.Create(Format(StrErrorInParsing03,
+      Exception.RaiseOuterException(ErbwParserError.Create(Format(StrErrorInParsing03,
         [string(OperatorDefinition.OperatorName),
-        Strings[Index + 1]]));
+        Strings[Index + 1]])));
     end;
     if (OperatorDefinition.ArgumentDefinitions.Count < 1) then
     begin

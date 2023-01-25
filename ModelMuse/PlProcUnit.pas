@@ -77,6 +77,7 @@ type
     procedure ReadDiscretization(const AFileName: string);
     procedure SaveKrigingFactors(const AFileName: string);
     procedure WriteKrigingFactorsScript(const AFileName: string);
+    procedure SetParamValuesFileName(var FileIndexUnit: Integer);
   protected
     class function Extension: string; override;
   public
@@ -110,6 +111,7 @@ type
   TSutraEleDisWriter  = class(TCustomFileWriter)
   private
     FInputFileName: string;
+    procedure GetInputFileName(var FileIndex: Integer; const AFileName: string);
   protected
     class function Extension: string; override;
   public
@@ -254,10 +256,11 @@ type
 implementation
 
 uses
-  ModflowParameterUnit, OrderedCollectionUnit, SutraOptionsUnit;
+  ModflowParameterUnit, OrderedCollectionUnit, SutraOptionsUnit, System.Math;
 
 const
   KDisName = 'cl_Discretization';
+  DataToWriteCount = 3;
 
 type
   PDouble = ^Double;
@@ -716,6 +719,19 @@ begin
   end;
 end;
 
+procedure TParameterZoneWriter.SetParamValuesFileName(var FileIndexUnit: Integer);
+begin
+  if FileIndexUnit = 0 then
+  begin
+    FParamValuesFileName := FParamValuesFileNameRoot + Extension;
+  end
+  else
+  begin
+    FParamValuesFileName := FParamValuesFileNameRoot + '_' + IntToStr(FileIndexUnit) + Extension;
+  end;
+  Inc(FileIndexUnit);
+end;
+
 procedure TParameterZoneWriter.WriteKrigingFactorsScript(
   const AFileName: string);
 var
@@ -971,6 +987,10 @@ var
   SListName: string;
   PListName: string;
   DataValue: Double;
+  FileIndexUnit: Integer;
+//  OpenedFile: Boolean;
+  MaxLayer: Integer;
+  InnerLayerIndex: Integer;
 begin
   SetLength(FZoneNumbers, FDataArray.LayerCount, FDataArray.RowCount,
     FDataArray.ColumnCount);
@@ -981,79 +1001,91 @@ begin
   FParamValuesFileNameRoot := ChangeFileExt(ChangeFileExt(AFileName, ''), '.'
     + FDataArray.Name);
 
+  FileIndexUnit := 0;
   for LayerIndex := 0 to FDataArray.LayerCount - 1 do
   begin
-    FParamValuesFileName := FParamValuesFileNameRoot + IntToStr(LayerIndex+1)
-       + '_' + Extension;
-    OpenFile(FParamValuesFileName);
-    try
-      WriteString(' Index');
-
-      SListName := Format('s_PIndex%0:d', [LayerIndex + 1]);
-      WriteString(' ' + SListName);
-
-      PListName := Format('p_Value%0:d', [LayerIndex + 1]);
-      WriteString(' ' + PListName);
-
-      NewLine;
-
-      ID := 1;
-      for RowIndex := 0 to FParamDataArray.RowCount - 1 do
-      begin
-        for ColIndex := 0 to FParamDataArray.ColumnCount - 1 do
+//    OpenedFile := False;
+    if (LayerIndex mod DataToWriteCount) = 0 then
+    begin
+      SetParamValuesFileName(FileIndexUnit);
+      OpenFile(FParamValuesFileName);
+      try
+//        Inc(FileIndexUnit);
+//        OpenedFile := True;
+        MaxLayer := Min(FDataArray.LayerCount, LayerIndex+DataToWriteCount);
+        for InnerLayerIndex := LayerIndex to MaxLayer - 1 do
         begin
-          WriteInteger(ID);
-//          for LayerIndex := 0 to FParamDataArray.LayerCount - 1 do
-//          begin
-            AName := LowerCase(FParamDataArray.StringData[
-              LayerIndex, RowIndex, ColIndex]);
-            if (AName = '') then
-            begin
-              PIndex := -1;
-            end
-            else
-            begin
-              PIndex := FPNames.IndexOf(AName);
-            end;
+          WriteString(' Index');
 
-            if FDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+          SListName := Format('s_PIndex%0:d', [InnerLayerIndex + 1]);
+          WriteString(' ' + SListName);
+
+          PListName := Format('p_Value%0:d', [InnerLayerIndex + 1]);
+          WriteString(' ' + PListName);
+        end;
+        NewLine;
+
+        ID := 1;
+        for RowIndex := 0 to FParamDataArray.RowCount - 1 do
+        begin
+          for ColIndex := 0 to FParamDataArray.ColumnCount - 1 do
+          begin
+            WriteInteger(ID);
+            for InnerLayerIndex := LayerIndex to MaxLayer - 1 do
             begin
-              DataValue := FDataArray.RealData[LayerIndex, RowIndex, ColIndex]
-            end
-            else
-            begin
-              DataValue := 0
-            end;
-            if PIndex >= 0 then
-            begin
-              AParam := FPNames.Objects[PIndex] as TModflowSteadyParameter;
-              FUsedParamList.AddObject(AParam.ParameterName, AParam);
-              if AParam.Value <> 0 then
+              AName := LowerCase(FParamDataArray.StringData[
+                InnerLayerIndex, RowIndex, ColIndex]);
+              if (AName = '') then
               begin
-                FValues[LayerIndex, RowIndex, ColIndex] :=
-                  DataValue / AParam.Value;
+                PIndex := -1;
               end
               else
               begin
-                FValues[LayerIndex, RowIndex, ColIndex] := DataValue;
-  //                FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+                PIndex := FPNames.IndexOf(AName);
               end;
-            end
-            else
-            begin
-              FValues[LayerIndex, RowIndex, ColIndex] := DataValue
-  //              FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+
+              if FDataArray.IsValue[InnerLayerIndex, RowIndex, ColIndex] then
+              begin
+                DataValue := FDataArray.RealData[InnerLayerIndex, RowIndex, ColIndex]
+              end
+              else
+              begin
+                DataValue := 0
+              end;
+              if PIndex >= 0 then
+              begin
+                AParam := FPNames.Objects[PIndex] as TModflowSteadyParameter;
+                FUsedParamList.AddObject(AParam.ParameterName, AParam);
+                if AParam.Value <> 0 then
+                begin
+                  FValues[InnerLayerIndex, RowIndex, ColIndex] :=
+                    DataValue / AParam.Value;
+                end
+                else
+                begin
+                  FValues[InnerLayerIndex, RowIndex, ColIndex] := DataValue;
+    //                FDataArray.RealData[InnerLayerIndex, RowIndex, ColIndex];
+                end;
+              end
+              else
+              begin
+                FValues[InnerLayerIndex, RowIndex, ColIndex] := DataValue
+    //              FDataArray.RealData[InnerLayerIndex, RowIndex, ColIndex];
+              end;
+              WriteInteger(PIndex + 1);
+              WriteFloat(FValues[InnerLayerIndex, RowIndex, ColIndex]);
+              FZoneNumbers[InnerLayerIndex, RowIndex, ColIndex] := PIndex;
             end;
-            WriteInteger(PIndex + 1);
-            WriteFloat(FValues[LayerIndex, RowIndex, ColIndex]);
-            FZoneNumbers[LayerIndex, RowIndex, ColIndex] := PIndex;
-//          end;
-          Inc(ID);
-          NewLine;
+            Inc(ID);
+            NewLine;
+          end;
         end;
+      finally
+//        if OpenedFile then
+//        begin
+          CloseFile;
+//        end;
       end;
-    finally
-      CloseFile;
     end;
   end;
 end;
@@ -1105,8 +1137,14 @@ begin
     WriteString('#Read data to modify');
     NewLine;
     {$REGION 'Data set values'}
+    FileIndex := 0;
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
+      if (LayerIndex mod DataToWriteCount) = 0 then
+      begin
+        SetParamValuesFileName(FileIndex);
+      end;
+
       ColIndex := 2;
       if Model.ModelSelection = msModflow2015 then
       begin
@@ -1129,8 +1167,8 @@ begin
         [PListName, ColIndex]));
       Inc(ColIndex);
       NewLine;
-      WriteString(Format('  file=''%0:s%1:d_%2:s'')',
-        [ExtractFileName(FParamValuesFileNameRoot), (LayerIndex+1), Extension]));
+      WriteString(Format('  file=''%0:s'')',
+        [ExtractFileName(FParamValuesFileName)]));
       NewLine;
     end;
     NewLine;
@@ -1375,54 +1413,78 @@ var
   AnElement: TSutraElement2D;
   Location: TPoint2D;
   AnElement3D: TSutraElement3D;
-  LayerIndex: Integer;
+  InnerLayerIndex: Integer;
   SutraMesh3D: TSutraMesh3D;
+  FileIndex: Integer;
+  LayerIndex: Integer;
+  MaxLayer: Integer;
 begin
-  FInputFileName := FileName(AFileName);
-  OpenFile(FInputFileName);
-  try
-    SutraMesh3D := Model.SutraMesh;
-    SutraMesh2D := SutraMesh3D.Mesh2D;
-    WriteString(' Index X Y Element_Number2D');
-    if SutraMesh3D.MeshType = mt3D then
+  FileIndex := 0;
+
+  for LayerIndex := 0 to SutraMesh3D.LayerCount-1 do
+  begin
+    if (LayerIndex mod DataToWriteCount) = 0 then
     begin
-      for LayerIndex := 0 to SutraMesh3D.LayerCount-1 do
-      begin
-        WriteString(Format('Z_%0:d ElementNumber3D_%0:d Active_%0:d', [LayerIndex+1]));
-      end;
-    end;
-    NewLine;
-    for ElementIndex := 0 to SutraMesh2D.Elements.Count - 1 do
-    begin
-      AnElement := SutraMesh2D.Elements[ElementIndex];
-      WriteInteger(ElementIndex + 1);
-      Location := AnElement.Center;
-      WriteFloat(Location.x);
-      WriteFloat(Location.y);
-      WriteInteger(AnElement.ElementNumber+1);
-      if SutraMesh3D.MeshType = mt3D then
-      begin
-        for LayerIndex := 0 to SutraMesh3D.LayerCount-1 do
+      GetInputFileName(FileIndex, AFileName);
+      OpenFile(FInputFileName);
+      try
+        MaxLayer := Min(LayerIndex+DataToWriteCount, SutraMesh3D.LayerCount);
+        SutraMesh3D := Model.SutraMesh;
+        SutraMesh2D := SutraMesh3D.Mesh2D;
+        WriteString(' Index X Y Element_Number2D');
+        if SutraMesh3D.MeshType = mt3D then
         begin
-          AnElement3D := SutraMesh3D.ElementArray[LayerIndex, ElementIndex];
-          WriteFloat(AnElement3D.CenterElevation);
-          WriteInteger(AnElement3D.ElementNumber+1);
-          if AnElement3D.Active then
+          for InnerLayerIndex := LayerIndex to MaxLayer-1 do
           begin
-            WriteInteger(1);
-          end
-          else
-          begin
-            WriteInteger(0);
+            WriteString(Format(' Z_%0:d ElementNumber3D_%0:d Active_%0:d', [InnerLayerIndex+1]));
           end;
         end;
+        NewLine;
+        for ElementIndex := 0 to SutraMesh2D.Elements.Count - 1 do
+        begin
+          AnElement := SutraMesh2D.Elements[ElementIndex];
+          WriteInteger(ElementIndex + 1);
+          Location := AnElement.Center;
+          WriteFloat(Location.x);
+          WriteFloat(Location.y);
+          WriteInteger(AnElement.ElementNumber+1);
+          if SutraMesh3D.MeshType = mt3D then
+          begin
+            for InnerLayerIndex := LayerIndex to MaxLayer-1 do
+            begin
+              AnElement3D := SutraMesh3D.ElementArray[InnerLayerIndex, ElementIndex];
+              WriteFloat(AnElement3D.CenterElevation);
+              WriteInteger(AnElement3D.ElementNumber+1);
+              if AnElement3D.Active then
+              begin
+                WriteInteger(1);
+              end
+              else
+              begin
+                WriteInteger(0);
+              end;
+            end;
+          end;
+          NewLine;
+        end;
+      finally
+        CloseFile;
       end;
-      NewLine;
     end;
-
-  finally
-    CloseFile;
   end;
+end;
+
+procedure TSutraEleDisWriter.GetInputFileName(var FileIndex: Integer; const AFileName: string);
+begin
+  if FileIndex = 0 then
+  begin
+    FInputFileName := FileName(AFileName);
+  end
+  else
+  begin
+    FInputFileName := ChangeFileExt(AFileName, '') + '_' + IntToStr(FileIndex) + Extension;
+  end;
+  Inc(FileIndex);
 end;
 
 { TSutraNodeDataWriter }
@@ -3834,6 +3896,8 @@ var
   LayerCount: Integer;
   LayerIndex: Integer;
   ColIndex: Integer;
+  FileIndex: Integer;
+  FileNameAddition: string;
 begin
   Mesh := Model.SutraMesh;
   if Mesh.MeshType = mt3D then
@@ -3858,11 +3922,26 @@ begin
   WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
   NewLine;
 
+  FileIndex := 0;
+//  FileNameAddition := '';
   if Mesh.MeshType = mt3D then
   begin
     ColIndex := 5;
     for LayerIndex := 1 to LayerCount do
     begin
+      if ((LayerIndex-1) mod DataToWriteCount) = 0 then
+      begin
+        if FileIndex = 0 then
+        begin
+          FileNameAddition := '';
+        end
+        else
+        begin
+          FileNameAddition := '_' + IntToStr(FileIndex);
+        end;
+        Inc(FileIndex);
+        ColIndex := 5;
+      end;
       WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
       NewLine;
       WriteString(Format('  plist=p_z%0:d;column=%1:d, &',
@@ -3877,7 +3956,14 @@ begin
         [LayerIndex, ColIndex]));
       NewLine;
       Inc(ColIndex);
-      WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
+//      if FileNameAddition = '' then
+//      begin
+//        WriteString(Format('  id_type=''indexed'',file=''%0:s.c_ele'')', [FRoot]));
+//      end
+//      else
+//      begin
+        WriteString(Format('  id_type=''indexed'',file=''%0:s%1:s.c_ele'')', [FRoot, FileNameAddition]));
+//      end;
       NewLine;
     end;
     NewLine;

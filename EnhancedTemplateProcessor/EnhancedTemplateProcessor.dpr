@@ -8,6 +8,11 @@ program EnhancedTemplateProcessor;
 {$R *.res}
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   System.SysUtils,
   ProcessTemplateUnit in 'ProcessTemplateUnit.pas',
   DisclaimerTextUnit in '..\ModelMuse\DisclaimerTextUnit.pas';
@@ -25,6 +30,9 @@ begin
     writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
   except
     on E: Exception do
+    begin
       Writeln(E.ClassName, ': ', E.Message);
+      WriteErrorLog(E);
+    end;
   end;
 end.
