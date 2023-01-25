@@ -184,14 +184,16 @@ begin
   try
     FErrorLog.WriteLine(DateTimeToStr(Now));
     FErrorLog.WriteLine(E.Message);
+  {$IFNDEF FPC}
     E := E.InnerException;
     while E <> nil do
     begin
       FErrorLog.WriteLine(E.Message);
       E := E.InnerException;
     end;
-    FErrorLog.WriteLine;
-    FErrorLog.WriteLine;
+  {$ENDIF}
+    FErrorLog.WriteLine(' ');
+    FErrorLog.WriteLine(' ');
   finally
     FErrorLog.Free;
   end;
@@ -718,8 +720,13 @@ begin
     except on E: Exception do
       begin
         ErrorMessages := E.Message;
+      {$IFDEF FPC}
+        raise ECompileError.Create(Format(StrUnableToEvaluateT,
+          [OriginalFormula, OriginalLine, ErrorMessages]) + Format(StrTemplateLineD,[FLineIndex]));
+      {$ELSE}
         Exception.RaiseOuterException(ECompileError.Create(Format(StrUnableToEvaluateT,
           [OriginalFormula, OriginalLine, ErrorMessages]) + Format(StrTemplateLineD,[FLineIndex])));
+      {$ENDIF}
       end;
     end;
     ReplacementString := MaxPrecisionFloatToStr(AValue, AvailableLength);

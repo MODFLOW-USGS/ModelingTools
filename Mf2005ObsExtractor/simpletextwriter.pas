@@ -40,7 +40,7 @@ type
 
   TSimpleStreamWriter = class(TFileStream)
   public
-    Constructor Create(const AFileName: string);
+    Constructor Create(const AFileName: string; Append: Boolean = False);
     procedure WriteLine(Value: Ansistring);
   end;
 
@@ -48,9 +48,18 @@ implementation
 
 { TSimpleStreamWriter }
 
-constructor TSimpleStreamWriter.Create(const AFileName: string);
+constructor TSimpleStreamWriter.Create(const AFileName: string; Append: Boolean = False);
 begin
-  inherited Create(AFileName, fmCreate or fmShareDenyWrite);
+  if Append then
+  begin
+    inherited Create(Filename, fmOpenWrite);
+    Seek(0, soEnd);
+  end
+  else
+  begin
+    inherited Create(AFileName, fmCreate or fmShareDenyWrite);
+  end;
+
 end;
 
 procedure TSimpleStreamWriter.WriteLine(Value: Ansistring);

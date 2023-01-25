@@ -1143,9 +1143,9 @@ begin
       if (LayerIndex mod DataToWriteCount) = 0 then
       begin
         SetParamValuesFileName(FileIndex);
+        ColIndex := 2;
       end;
 
-      ColIndex := 2;
       if Model.ModelSelection = msModflow2015 then
       begin
         WriteString(Format('read_list_file(reference_clist=''%0:s%1:d'',skiplines=1, &',

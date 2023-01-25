@@ -3086,8 +3086,13 @@ begin
             self.SpecialImplementorList);
         except on E: ErbwParserError do
           begin
+          {$IFDEF FPC}
+            raise ErbwParserError.Create(
+              Format(StrUnableToEvaluate, [AString, E.Message, E.ClassName]));
+          {$ELSE}
             Exception.RaiseOuterException(ErbwParserError.Create(
               Format(StrUnableToEvaluate, [AString, E.Message, E.ClassName])));
+          {$ENDIF}
           end;
         end;
       if FCurrentExpression <> nil then
@@ -4008,11 +4013,19 @@ begin
                   end;
                 except on E: ERbwParserError do
                   begin
+                  {$IFDEF FPC}
+                    raise ERbwParserError.Create(Format(StrErrorInArgumentNu,
+                      [VarIndex2 + 1,
+                      PriorExpression.Name,
+                      Strings[Index],
+                      E.Message]));
+                  {$ELSE}
                     Exception.RaiseOuterException(ERbwParserError.Create(Format(StrErrorInArgumentNu,
                       [VarIndex2 + 1,
                       PriorExpression.Name,
                       Strings[Index],
                       E.Message])));
+                  {$ENDIF}
                   end;
                 end;
                 VariableList.Free;
@@ -4127,8 +4140,13 @@ begin
     on E: Exception do
     begin
       CleanUp;
+    {$IFDEF FPC}
+      raise ERbwParserError.Create(
+        E.ClassName + ': ' + E.Message);
+    {$ELSE}
       Exception.RaiseOuterException(ERbwParserError.Create(
         E.ClassName + ': ' + E.Message));
+    {$ENDIF}
     end;
   end
 end;
@@ -4447,9 +4465,15 @@ begin
     try
       AnArgument := Objects[Index + 1] as TConstant;
     except on EInvalidCast do
+    {$IFDEF FPC}
+      raise ErbwParserError.Create(Format(StrErrorInParsing03,
+        [string(OperatorDefinition.OperatorName),
+        Strings[Index + 1]]));
+    {$ELSE}
       Exception.RaiseOuterException(ErbwParserError.Create(Format(StrErrorInParsing03,
         [string(OperatorDefinition.OperatorName),
         Strings[Index + 1]])));
+    {$ENDIF}
     end;
     if (OperatorDefinition.ArgumentDefinitions.Count < 1) then
     begin
