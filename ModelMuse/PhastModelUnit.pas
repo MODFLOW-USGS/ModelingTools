@@ -824,7 +824,7 @@ resourcestring
   Str0sMultipliedByT = '%0:s multiplied by the parameter value for "%1:s."';
 
 type
-  TEvaluationType = (etExport, etDisplay);
+  TEvaluationType = (etExport, etDisplay, etExportCSV);
 
   // @name represents how PHAST results are printed - XY orientation or
   // XZ orientation.
@@ -2961,6 +2961,7 @@ that affects the model output should also have a comment. }
     procedure ExportModflowModel(const FileName: string;
       RunModel, ExportModpath, NewBudgetFileForModpath, ExportZoneBudget,
       ShowWarning: boolean);
+    procedure ExportWellCsv(const FileName: string);
     procedure ExportModpathModel(FileName: string;
       RunModel, NewBudgetFile: boolean; EmbeddedExport: boolean = False);
     procedure ExportZoneBudgetModel(FileName: string;
@@ -45326,6 +45327,25 @@ begin
   if ModflowPackages.UzfPackage.IsSelected then
   begin
     frmProgressMM.StepIt;
+  end;
+end;
+
+procedure TCustomModel.ExportWellCsv(const FileName: string);
+var
+  WellWriter: TModflowWEL_Writer;
+begin
+  frmProgressMM.ShouldContinue := True;
+  if not PrepareModflowFullStressPeriods(True) then
+  begin
+    Exit;
+  end;
+
+  WellWriter := TModflowWEL_Writer.Create(self, etExportCsv);
+  try
+    WellWriter.MvrWriter := nil;
+    WellWriter.WriteFile(FileName);
+  finally
+    WellWriter.Free;
   end;
 end;
 

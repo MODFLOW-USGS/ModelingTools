@@ -1137,6 +1137,7 @@ begin
     WriteString('#Read data to modify');
     NewLine;
     {$REGION 'Data set values'}
+    ColIndex := 2;
     FileIndex := 0;
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
@@ -1420,7 +1421,7 @@ var
   MaxLayer: Integer;
 begin
   FileIndex := 0;
-
+  SutraMesh3D := Model.SutraMesh;
   for LayerIndex := 0 to SutraMesh3D.LayerCount-1 do
   begin
     if (LayerIndex mod DataToWriteCount) = 0 then
@@ -1429,7 +1430,6 @@ begin
       OpenFile(FInputFileName);
       try
         MaxLayer := Min(LayerIndex+DataToWriteCount, SutraMesh3D.LayerCount);
-        SutraMesh3D := Model.SutraMesh;
         SutraMesh2D := SutraMesh3D.Mesh2D;
         WriteString(' Index X Y Element_Number2D');
         if SutraMesh3D.MeshType = mt3D then
@@ -1993,8 +1993,8 @@ var
   Sutra4DataSetName: string;
   SutraDataArray: TDataArray;
   Sutra4FileRoot: string;
-  Abbreviation: string;
-  PilotPointFiles: TPilotPointFiles;
+//  Abbreviation: string;
+//  PilotPointFiles: TPilotPointFiles;
   procedure HandleDataArray(DataID: string; DataArray: TDataArray;
     PilotPointFiles: TPilotPointFiles; FileName: string);
   var
@@ -2057,8 +2057,8 @@ begin
     SutraDataArray := Model.DataArrayManager.GetDataSetByName(Sutra4DataSetName);
     Sutra4FileRoot := FRoot +  '.' + SutraDataArray.Name + '.Factors';
     FSutra4DataSetRoots.Add(Sutra4FileRoot);
-    Abbreviation := FDataSetAbbreviations[Sutra4Index];
-    PilotPointFiles :=  FSutra4PilotPointFiles[Sutra4Index];
+//    Abbreviation := FDataSetAbbreviations[Sutra4Index];
+//    PilotPointFiles :=  FSutra4PilotPointFiles[Sutra4Index];
 //    HandleDataArray(Abbreviation, SutraDataArray, PilotPointFiles, Sutra4FileRoot);
   end;
 
@@ -2072,7 +2072,7 @@ var
   ColIndex: Integer;
   ParameterIndex: Integer;
   AParam: TModflowSteadyParameter;
-  PIndex: Integer;
+//  PIndex: Integer;
   FileIndex: Integer;
   FileProperties: TPilotPointFileObject;
   UsedFileProperties: TPilotPointFileObject;
@@ -2319,7 +2319,7 @@ begin
           NewLine;
 
           UsedFileProperties := nil;
-          PIndex := 0;
+//          PIndex := 0;
           for FileIndex := 0 to FThicknessPilotPointFiles.Count - 1 do
           begin
             FileProperties := FThicknessPilotPointFiles[FileIndex];
@@ -2327,7 +2327,7 @@ begin
               and (FileProperties.Layer = LayerIndex) then
             begin
               UsedFileProperties := FileProperties;
-              PIndex := FileIndex;
+//              PIndex := FileIndex;
               break;
             end;
           end;
@@ -2385,7 +2385,7 @@ begin
           NewLine;
 
           UsedFileProperties := nil;
-          PIndex := 0;
+//          PIndex := 0;
           for FileIndex := 0 to FPorosityPilotPointFiles.Count - 1 do
           begin
             FileProperties := FPorosityPilotPointFiles[FileIndex];
@@ -2393,7 +2393,7 @@ begin
               and (FileProperties.Layer = LayerIndex) then
             begin
               UsedFileProperties := FileProperties;
-              PIndex := FileIndex;
+//              PIndex := FileIndex;
               break;
             end;
           end;
@@ -2461,7 +2461,7 @@ begin
               NewLine;
 
               UsedFileProperties := nil;
-              PIndex := 0;
+//              PIndex := 0;
               for FileIndex := 0 to Sutra4PilotPointFiles.Count - 1 do
               begin
                 FileProperties := Sutra4PilotPointFiles[FileIndex];
@@ -2469,7 +2469,7 @@ begin
                   and (FileProperties.Layer = LayerIndex) then
                 begin
                   UsedFileProperties := FileProperties;
-                  PIndex := FileIndex;
+//                  PIndex := FileIndex;
                   break;
                 end;
               end;
@@ -3406,9 +3406,9 @@ var
   Mesh: TSutraMesh3D;
   LayerCount: Integer;
   LayerIndex: Integer;
-  ColIndex: Integer;
-  ParameterIndex: Integer;
-  AParam: TModflowSteadyParameter;
+//  ColIndex: Integer;
+//  ParameterIndex: Integer;
+//  AParam: TModflowSteadyParameter;
   Options: TSutraOptions;
   DataArray: TDataArray;
   UsedDataRoots: TStringList;
@@ -3416,22 +3416,37 @@ var
   RootIndex: Integer;
   PestAnisotropyOptions: TSutraPestAnisotropyOptions;
   ReferenceDataArray: TDataArray;
+  PmaxColIndex: Integer;
+  PmidColIndex: Integer;
+  PMinColIndex: Integer;
+  Angle1ColIndex: Integer;
+  Angle2ColIndex: Integer;
+  Angle3ColIndex: Integer;
+  AlmaxColIndex: Integer;
+  AlMidColIndex: Integer;
+  AlminColIndex: Integer;
+  AtmaxColIndex: Integer;
+  AtmidColIndex: Integer;
+  AtMinColIndex: Integer;
+  SigmasColIndex: Integer;
+  SigmaaColIndex: Integer;
+  UnsatColIndex: Integer;
   procedure ReadData(DataArray: TDataArray; const DataRoot: string;
-    AnisotropyUsed: Boolean);
+    AnisotropyUsed: Boolean; Var ColIndex: integer);
   var
-    LayerIndex: Integer;
+//    LayerIndex: Integer;
 //    ArrayFileName: string;
 //    ReferenceFileName: string;
 //    Anistropy: array of double;
 //    ReferenceValue: double;
-    ColIndex: Integer;
+//    ColIndex: Integer;
     AnisotropyWriter: TAnisotropyWriter;
     procedure ImportArrayFile;
     var
-      LayerIndex: Integer;
+//      LayerIndex: Integer;
       ArrayFileName: string;
     begin
-      for LayerIndex := 1 to LayerCount do
+//      for LayerIndex := 1 to LayerCount do
       begin
         WriteString(Format('  p_%0:s%1:d=new_plist(reference_clist=''cl_Discretization'',value=1.0)',
           [DataRoot, LayerIndex]));
@@ -3442,9 +3457,9 @@ var
         WriteString(Format('  p_%0:s%1:d.read_list_as_array(file=''%2:s'')',
           [DataRoot, LayerIndex, ArrayFileName]));
         NewLine;
-        WriteString(Format('  s_%0:sPar%1:d=new_slist(reference_clist=''cl_Discretization'',value=%1:d)',
-          [DataRoot, LayerIndex]));
-        NewLine;
+//        WriteString(Format('  s_%0:sPar%1:d=new_slist(reference_clist=''cl_Discretization'',value=%1:d)',
+//          [DataRoot, LayerIndex]));
+//        NewLine;
       end;
     end;
   begin
@@ -3474,7 +3489,7 @@ var
       else if not DataArray.PestParametersUsed then
       begin
 
-        for LayerIndex := 1 to LayerCount do
+//        for LayerIndex := 1 to LayerCount do
         begin
           // PLPROC has a limit of 5 s_lists per call of read_list_file.
           // To avoid reaching that limit, a separate call is used for each layer.
@@ -3492,9 +3507,9 @@ var
           NewLine;
           Inc(ColIndex);
 
-          WriteString(Format('  slist=s_%0:sPar%1:d;column=%2:d, &',
-            [DataRoot, LayerIndex, ColIndex]));
-          NewLine;
+//          WriteString(Format('  slist=s_%0:sPar%1:d;column=%2:d, &',
+//            [DataRoot, LayerIndex, ColIndex]));
+//          NewLine;
           Inc(ColIndex);
 
           WriteString(Format('  file=''%0:s.%1:s'')',
@@ -3506,7 +3521,7 @@ var
       begin
         ImportArrayFile;
       end;
-      NewLine;
+//      NewLine;
     end;
   end;
 begin
@@ -3546,271 +3561,338 @@ begin
     ReadDiscretization;
     {$ENDREGION}
 
-    WriteString('#Read data to modify');
-    NewLine;
-    {$REGION 'Unsaturated zone'}
-    WriteString('# Read Unsaturated Zone');
-    NewLine;
-    ColIndex := 2;
+    PmaxColIndex := 1;
+    PmidColIndex := 1;
+    PMinColIndex := 1;
+    Angle1ColIndex := 1;
+    Angle2ColIndex := 1;
+    Angle3ColIndex := 1;
+    AlmaxColIndex := 1;
+    AlMidColIndex := 1;
+    AlminColIndex := 1;
+    AtmaxColIndex := 1;
+    AtmidColIndex := 1;
+    AtMinColIndex := 1;
+    SigmasColIndex := 1;
+    SigmaaColIndex := 1;
+    UnsatColIndex := 2;
+
     for LayerIndex := 1 to LayerCount do
     begin
+      WriteString('# Layer ');
+      WriteInteger(LayerIndex);
+      NewLine;
+      WriteString('#Read data to modify');
+      NewLine;
+      {$REGION 'Unsaturated zone'}
+      WriteString('# Read Unsaturated Zone');
+      NewLine;
+//    UnsatColIndex := 2;
       WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
       NewLine;
 
       if Mesh.MeshType = mt3D then
       begin
-        Inc(ColIndex,2);
+        Inc(UnsatColIndex,2);
       end;
 
-      WriteString(Format('  slist=s_LREG%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+      WriteString(Format('  slist=s_LREG%0:d;column=%1:d, &', [LayerIndex, UnsatColIndex]));
       NewLine;
-      Inc(ColIndex);
+      Inc(UnsatColIndex);
 
       WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, KUnsatRegionElements]));
       NewLine;
-    end;
-    NewLine;
-    {$ENDREGION}
 
-    {$REGION 'PMAX'}
-    DataArray := nil;
-    case Options.TransportChoice of
-      tcSolute, tcEnergy, tcFreezing:
-        DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumPermeability);
-      tcSoluteHead:
-        DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumK);
-      else Assert(False);
-    end;
-//    DataRoot := 'PMAX';
-    ReadData(DataArray,  'PMAX', False);
-    ReferenceDataArray := DataArray;
-    {$ENDREGION}
+//      NewLine;
+      {$ENDREGION}
 
-    {$REGION 'PMID'}
-    DataArray := nil;
-    if Mesh.MeshType = mt3D then
-    begin
+      {$REGION 'PMAX'}
+      DataArray := nil;
       case Options.TransportChoice of
         tcSolute, tcEnergy, tcFreezing:
-          DataArray := Model.DataArrayManager.GetDataSetByName(KMiddlePermeability);
+          DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumPermeability);
         tcSoluteHead:
-          DataArray := Model.DataArrayManager.GetDataSetByName(KMiddleK);
+          DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumK);
         else Assert(False);
       end;
-    end
-    else
-    begin
+  //    DataRoot := 'PMAX';
+      ReadData(DataArray,  'PMAX', False, PmaxColIndex);
+      ReferenceDataArray := DataArray;
+      {$ENDREGION}
+
+      {$REGION 'PMID'}
       DataArray := nil;
-    end;
-    ReadData(DataArray, 'PMID',
-      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UsePmaxPmidAnisotropy);
-    {$ENDREGION}
-
-    {$REGION 'PMIN'}
-    DataArray := nil;
-    case Options.TransportChoice of
-      tcSolute, tcEnergy, tcFreezing:
-        DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumPermeability);
-      tcSoluteHead:
-        DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumK);
-      else Assert(False);
-    end;
-    ReadData(DataArray, 'PMIN',
-      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UsePmaxPminAnisotropy);
-    {$ENDREGION}
-
-    {$REGION 'ANGLE1'}
-    DataArray := Model.DataArrayManager.GetDataSetByName(KHorizontalAngle);
-    ReadData(DataArray, 'ANGLE1', False);
-    {$ENDREGION}
-
-    {$REGION 'ANGLE2'}
-    if Mesh.MeshType = mt3D then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(KVerticalAngle);
-    end
-    else
-    begin
-      DataArray := nil;
-    end;
-    ReadData(DataArray, 'ANGLE2', False);
-    {$ENDREGION}
-
-    {$REGION 'ANGLE3'}
-    if Mesh.MeshType = mt3D then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(KRotationalAngle);
-    end
-    else
-    begin
-      DataArray := nil;
-    end;
-    ReadData(DataArray, 'ANGLE3', False);
-    {$ENDREGION}
-
-    {$REGION 'ALMAX'}
-    DataArray := Model.DataArrayManager.GetDataSetByName(KMaxLongitudinalDisp);
-    ReadData(DataArray, 'ALMAX', False);
-    ReferenceDataArray := DataArray;
-    {$ENDREGION}
-
-    {$REGION 'ALMID'}
-    if Mesh.MeshType = mt3D then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(KMidLongitudinalDisp);
-    end
-    else
-    begin
-      DataArray := nil;
-    end;
-    ReadData(DataArray, 'ALMID',
-      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UseAlmaxAlmidAnisotropy);
-    {$ENDREGION}
-
-    {$REGION 'ALMIN'}
-    DataArray := Model.DataArrayManager.GetDataSetByName(KMinLongitudinalDisp);
-    ReadData(DataArray, 'ALMIN',
-      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UseAlmaxAlminAnisotropy);
-    {$ENDREGION}
-
-    {$REGION 'ATMAX'}
-    DataArray := Model.DataArrayManager.GetDataSetByName(KMaxTransverseDisp);
-    ReadData(DataArray, 'ATMAX', False);
-    ReferenceDataArray := DataArray;
-    {$ENDREGION}
-
-    {$REGION 'ATMID'}
-    if Mesh.MeshType = mt3D then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(KMidTransverseDisp);
-    end
-    else
-    begin
-      DataArray := nil;
-    end;
-    ReadData(DataArray, 'ATMID',
-      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UseAtmaxAtmidAnisotropy);
-    {$ENDREGION}
-
-    {$REGION 'ATMIN'}
-    DataArray := Model.DataArrayManager.GetDataSetByName(KMinTransverseDisp);
-    ReadData(DataArray, 'ATMIN',
-      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UseAtmaxAtminAnisotropy);
-    {$ENDREGION}
-
-  {$REGION 'SIGMAS'}
-    if Model.Sutra4EnergyUsed(nil) then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(KScaledSolidGrainThermalConductivity);
-    end
-    else
-    begin
-      DataArray := nil;
-    end;
-    ReadData(DataArray, 'SIGMAS', False);
-  {$ENDREGION}
-
- {$REGION 'SIGMAA'}
-   if Model.Sutra4EnergyUsed(nil) then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(KScaledEffectiveAirThermalConductivity);
-    end
-    else
-    begin
-      DataArray := nil;
-    end;
-    ReadData(DataArray, 'SIGMAA', False);
- {$ENDREGION}
-
-    WriteString('#Read parameter values');
-    NewLine;
-    {$REGION 'Parameter values'}
-    for ParameterIndex := 0 to FParameterNames.Count - 1 do
-    begin
-      AParam := FParameterNames.Objects[ParameterIndex]
-        as TModflowSteadyParameter;
-      if AParam.UsePilotPoints then
+      if Mesh.MeshType = mt3D then
       begin
-        Continue;
-      end;
-      if ScriptChoice = scWriteScript then
-      begin
-        WriteString('#');
-      end;
-      WriteString(Format('%0:s = %1:s                        %0:s%1:s',
-        [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
-      NewLine;
-      if ScriptChoice = scWriteTemplate then
-      begin
-        WriteString('#');
-      end;
-      WriteString(Format('%0:s = %1:g',
-        [AParam.ParameterName, AParam.Value]));
-      NewLine;
-    end;
-    NewLine;
-    {$ENDREGION}
-
-    {$REGION 'Apply parameters'}
-    WriteString('# applying parameter values');
-    NewLine;
-
-    WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
-      ['cl_Discretization']));
-    NewLine;
-
-    for ParameterIndex := 0 to FParameterNames.Count - 1 do
-    begin
-      AParam := FParameterNames.Objects[ParameterIndex]
-        as TModflowSteadyParameter;
-      WriteString(Format('# applying parameter %s', [AParam.ParameterName]));
-      NewLine;
-      for RootIndex := 0 to UsedDataRoots.Count-1 do
-      begin
-        DataRoot := UsedDataRoots[RootIndex];
-        for LayerIndex := 0 to LayerCount - 1 do
-        begin
-          if AParam.UsePilotPoints then
-          begin
-            Continue;
-          end
-          else
-          begin
-//            WriteString('    # Substituting parameter values in zones');
-//            NewLine;
-//            WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
-//              [LayerIndex+1, AParam.ParameterName, ParameterIndex+1, DataRoot]));
-//            NewLine;
-          end;
+        case Options.TransportChoice of
+          tcSolute, tcEnergy, tcFreezing:
+            DataArray := Model.DataArrayManager.GetDataSetByName(KMiddlePermeability);
+          tcSoluteHead:
+            DataArray := Model.DataArrayManager.GetDataSetByName(KMiddleK);
+          else Assert(False);
         end;
+      end
+      else
+      begin
+        DataArray := nil;
       end;
-      NewLine;
-    end;
+      ReadData(DataArray, 'PMID',
+        ReferenceDataArray.PestParametersUsed
+        and PestAnisotropyOptions.UsePmaxPmidAnisotropy, PmidColIndex);
+      {$ENDREGION}
+
+      {$REGION 'PMIN'}
+      DataArray := nil;
+      case Options.TransportChoice of
+        tcSolute, tcEnergy, tcFreezing:
+          DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumPermeability);
+        tcSoluteHead:
+          DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumK);
+        else Assert(False);
+      end;
+      ReadData(DataArray, 'PMIN',
+        ReferenceDataArray.PestParametersUsed
+        and PestAnisotropyOptions.UsePmaxPminAnisotropy, PMinColIndex);
+      {$ENDREGION}
+
+      {$REGION 'ANGLE1'}
+      DataArray := Model.DataArrayManager.GetDataSetByName(KHorizontalAngle);
+      ReadData(DataArray, 'ANGLE1', False, Angle1ColIndex);
+      {$ENDREGION}
+
+      {$REGION 'ANGLE2'}
+      if Mesh.MeshType = mt3D then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(KVerticalAngle);
+      end
+      else
+      begin
+        DataArray := nil;
+      end;
+      ReadData(DataArray, 'ANGLE2', False, Angle2ColIndex);
+      {$ENDREGION}
+
+      {$REGION 'ANGLE3'}
+      if Mesh.MeshType = mt3D then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(KRotationalAngle);
+      end
+      else
+      begin
+        DataArray := nil;
+      end;
+      ReadData(DataArray, 'ANGLE3', False, Angle3ColIndex);
+      {$ENDREGION}
+
+      {$REGION 'ALMAX'}
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMaxLongitudinalDisp);
+      ReadData(DataArray, 'ALMAX', False, AlmaxColIndex);
+      ReferenceDataArray := DataArray;
+      {$ENDREGION}
+
+      {$REGION 'ALMID'}
+      if Mesh.MeshType = mt3D then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(KMidLongitudinalDisp);
+      end
+      else
+      begin
+        DataArray := nil;
+      end;
+      ReadData(DataArray, 'ALMID',
+        ReferenceDataArray.PestParametersUsed
+        and PestAnisotropyOptions.UseAlmaxAlmidAnisotropy, AlMidColIndex);
+      {$ENDREGION}
+
+      {$REGION 'ALMIN'}
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMinLongitudinalDisp);
+      ReadData(DataArray, 'ALMIN',
+        ReferenceDataArray.PestParametersUsed
+        and PestAnisotropyOptions.UseAlmaxAlminAnisotropy, AlminColIndex);
+      {$ENDREGION}
+
+      {$REGION 'ATMAX'}
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMaxTransverseDisp);
+      ReadData(DataArray, 'ATMAX', False, AtmaxColIndex);
+      ReferenceDataArray := DataArray;
+      {$ENDREGION}
+
+      {$REGION 'ATMID'}
+      if Mesh.MeshType = mt3D then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(KMidTransverseDisp);
+      end
+      else
+      begin
+        DataArray := nil;
+      end;
+      ReadData(DataArray, 'ATMID',
+        ReferenceDataArray.PestParametersUsed
+        and PestAnisotropyOptions.UseAtmaxAtmidAnisotropy, AtmidColIndex);
+      {$ENDREGION}
+
+      {$REGION 'ATMIN'}
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMinTransverseDisp);
+      ReadData(DataArray, 'ATMIN',
+        ReferenceDataArray.PestParametersUsed
+        and PestAnisotropyOptions.UseAtmaxAtminAnisotropy, AtMinColIndex);
+      {$ENDREGION}
+
+    {$REGION 'SIGMAS'}
+      if Model.Sutra4EnergyUsed(nil) then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(KScaledSolidGrainThermalConductivity);
+      end
+      else
+      begin
+        DataArray := nil;
+      end;
+      ReadData(DataArray, 'SIGMAS', False, SigmasColIndex);
     {$ENDREGION}
 
-    {$REGION 'Write values'}
-    WriteString('# Write new data values');
-    NewLine;
-    if Mesh.MeshType = mt3D then
-    begin
-      for LayerIndex := 1 to LayerCount do
+   {$REGION 'SIGMAA'}
+     if Model.Sutra4EnergyUsed(nil) then
       begin
-        WriteString('write_column_data_file(header = ''no'', &');
+        DataArray := Model.DataArrayManager.GetDataSetByName(KScaledEffectiveAirThermalConductivity);
+      end
+      else
+      begin
+        DataArray := nil;
+      end;
+      ReadData(DataArray, 'SIGMAA', False, SigmaaColIndex);
+   {$ENDREGION}
+
+  //    WriteString('#Read parameter values');
+  //    NewLine;
+      {$REGION 'Parameter values'}
+      {
+      // The parameters already applied to the individual data sets
+      // in separate scripts. before they are read.
+
+      for ParameterIndex := 0 to FParameterNames.Count - 1 do
+      begin
+        AParam := FParameterNames.Objects[ParameterIndex]
+          as TModflowSteadyParameter;
+        if AParam.UsePilotPoints then
+        begin
+          Continue;
+        end;
+        if ScriptChoice = scWriteScript then
+        begin
+          WriteString('#');
+        end;
+        WriteString(Format('%0:s = %1:s                        %0:s%1:s',
+          [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
         NewLine;
-        WriteString(Format('  file=''%s.15B_%1:d'';delim="space", &',
-          [FRoot, LayerIndex]));
+        if ScriptChoice = scWriteTemplate then
+        begin
+          WriteString('#');
+        end;
+        WriteString(Format('%0:s = %1:g',
+          [AParam.ParameterName, AParam.Value]));
         NewLine;
-        WriteString(Format('  select=(s_Active_%d == 1), &',
-          [LayerIndex]));
-        NewLine;
-        WriteString(Format('  slist=''s_EN3D%0:d'', &', [LayerIndex]));
-        NewLine;
-        WriteString(Format('  slist=s_LREG%0:d, &', [LayerIndex]));
+      end;
+      NewLine;
+      }
+      {$ENDREGION}
+
+      {$REGION 'Apply parameters'}
+  {
+      // The parameters already applied to the individual data sets
+      // in separate scripts. before they are read.
+
+      WriteString('# applying parameter values');
+      NewLine;
+
+      WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
+        ['cl_Discretization']));
+      NewLine;
+
+      for ParameterIndex := 0 to FParameterNames.Count - 1 do
+      begin
+        AParam := FParameterNames.Objects[ParameterIndex]
+          as TModflowSteadyParameter;
+        WriteString(Format('# applying parameter %s', [AParam.ParameterName]));
         NewLine;
         for RootIndex := 0 to UsedDataRoots.Count-1 do
         begin
           DataRoot := UsedDataRoots[RootIndex];
-          WriteString(Format('  plist=p_%1:s%0:d', [LayerIndex, DataRoot]));
+          for LayerIndex := 0 to LayerCount - 1 do
+          begin
+            if AParam.UsePilotPoints then
+            begin
+              Continue;
+            end
+            else
+            begin
+  //            WriteString('    # Substituting parameter values in zones');
+  //            NewLine;
+  //            WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
+  //              [LayerIndex+1, AParam.ParameterName, ParameterIndex+1, DataRoot]));
+  //            NewLine;
+            end;
+          end;
+        end;
+        NewLine;
+      end;
+      }
+      {$ENDREGION}
+
+      {$REGION 'Write values'}
+      WriteString('# Write new data values');
+      NewLine;
+      if Mesh.MeshType = mt3D then
+      begin
+        begin
+          WriteString('write_column_data_file(header = ''no'', &');
+          NewLine;
+          WriteString(Format('  file=''%s.15B_%1:d'';delim="space", &',
+            [FRoot, LayerIndex]));
+          NewLine;
+          WriteString(Format('  select=(s_Active_%d == 1), &',
+            [LayerIndex]));
+          NewLine;
+          WriteString(Format('  slist=''s_EN3D%0:d'', &', [LayerIndex]));
+          NewLine;
+          WriteString(Format('  slist=s_LREG%0:d, &', [LayerIndex]));
+          NewLine;
+          for RootIndex := 0 to UsedDataRoots.Count-1 do
+          begin
+            DataRoot := UsedDataRoots[RootIndex];
+            WriteString(Format('  plist=p_%1:s%0:d', [LayerIndex, DataRoot]));
+            if RootIndex = UsedDataRoots.Count-1 then
+            begin
+              WriteString(')');
+            end
+            else
+            begin
+              WriteString(', &');
+            end;
+            NewLine;
+          end;
+
+          WriteString(Format('s_EN3D%0:d.remove()', [LayerIndex]));
+          NewLine;
+          WriteString(Format('s_LREG%0:d.remove()', [LayerIndex]));
+          NewLine;
+          NewLine;
+
+        end;
+      end
+      else
+      begin
+        WriteString('write_column_data_file(header = ''no'', &');
+        NewLine;
+        WriteString(Format('  file=''%s.15B'';delim="space", &', [FRoot]));
+        NewLine;
+        WriteString('  clist_spec=''id'', &');
+        NewLine;
+        WriteString('  slist=s_LREG1, &');
+        NewLine;
+        for RootIndex := 0 to UsedDataRoots.Count-1 do
+        begin
+          DataRoot := UsedDataRoots[RootIndex];
+          WriteString(Format('  plist=p_%s1', [DataRoot]));
           if RootIndex = UsedDataRoots.Count-1 then
           begin
             WriteString(')');
@@ -3822,33 +3904,8 @@ begin
           NewLine;
         end;
       end;
-    end
-    else
-    begin
-      WriteString('write_column_data_file(header = ''no'', &');
-      NewLine;
-      WriteString(Format('  file=''%s.15B'';delim="space", &', [FRoot]));
-      NewLine;
-      WriteString('  clist_spec=''id'', &');
-      NewLine;
-      WriteString('  slist=s_LREG1, &');
-      NewLine;
-      for RootIndex := 0 to UsedDataRoots.Count-1 do
-      begin
-        DataRoot := UsedDataRoots[RootIndex];
-        WriteString(Format('  plist=p_%s1', [DataRoot]));
-        if RootIndex = UsedDataRoots.Count-1 then
-        begin
-          WriteString(')');
-        end
-        else
-        begin
-          WriteString(', &');
-        end;
-        NewLine;
-      end;
+      {$ENDREGION}
     end;
-    {$ENDREGION}
   finally
     CloseFile;
     UsedDataRoots.Free;

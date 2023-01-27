@@ -553,6 +553,8 @@ type
     acModflowOwhmV2: TAction;
     acRunModflowOWHM_V2: TAction;
     MODFLOWOWHMV21: TMenuItem;
+    WellsToCsv1: TMenuItem;
+    dlgSaveBoundaryCsv: TSaveDialog;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -758,6 +760,7 @@ type
     procedure acSutra40ActiveExecute(Sender: TObject);
     procedure acModflowOwhmV2Execute(Sender: TObject);
     procedure acRunModflowOWHM_V2Execute(Sender: TObject);
+    procedure WellsToCsv1Click(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -3135,6 +3138,17 @@ begin
   if frmErrorsAndWarnings.WindowState = wsMinimized then
   begin
     frmErrorsAndWarnings.WindowState := wsNormal
+  end;
+end;
+
+procedure TfrmGoPhast.WellsToCsv1Click(Sender: TObject);
+begin
+  inherited;
+  // ExportWellCsv is untested with PEST parameters.
+  // Then menu item for this has its visible property set to False.
+  if dlgSaveBoundaryCsv.Execute then
+  begin
+    PhastModel.ExportWellCsv(dlgSaveBoundaryCsv.FileName);
   end;
 end;
 

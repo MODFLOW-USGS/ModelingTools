@@ -4,7 +4,7 @@ inherited frmGoPhast: TfrmGoPhast
   HelpType = htKeyword
   HelpKeyword = 'Main_Window'
   Caption = 'GoPhast'
-  ClientHeight = 568
+  ClientHeight = 563
   ClientWidth = 784
   KeyPreview = True
   Menu = mmMainMenu
@@ -17,12 +17,14 @@ inherited frmGoPhast: TfrmGoPhast
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
   OnResize = FormResize
+  ExplicitLeft = 3
+  ExplicitTop = 3
   ExplicitWidth = 796
   ExplicitHeight = 626
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
     Left = 0
-    Top = 397
+    Top = 392
     Width = 784
     Height = 10
     Cursor = crVSplit
@@ -40,15 +42,16 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 0
     Top = 196
     Width = 784
-    Height = 201
+    Height = 196
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
+    ExplicitHeight = 201
     object splitVertTop: TJvNetscapeSplitter
       Left = 545
       Top = 0
-      Height = 201
+      Height = 196
       Hint = 'Click and drag to resize the windows.'
       Align = alRight
       MinSize = 1
@@ -64,14 +67,14 @@ inherited frmGoPhast: TfrmGoPhast
       Left = 0
       Top = 0
       Width = 545
-      Height = 201
+      Height = 196
       Align = alClient
       TabOrder = 0
       TabStop = True
       ExplicitWidth = 545
       ExplicitHeight = 201
       inherited rulVertical: TRbwRuler
-        Height = 147
+        Height = 142
         ExplicitTop = 39
         ExplicitHeight = 173
       end
@@ -87,15 +90,15 @@ inherited frmGoPhast: TfrmGoPhast
       end
       inherited ZoomBox: TQRbwZoomBox2
         Width = 496
-        Height = 147
+        Height = 142
         Image32.Left = 1
         Image32.Top = 1
         Image32.Width = 494
-        Image32.Height = 145
+        Image32.Height = 140
         Image32.Align = alClient
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 494
-        Image32.ExplicitHeight = 145
+        Image32.ExplicitHeight = 140
         ExplicitWidth = 492
         ExplicitHeight = 146
       end
@@ -108,7 +111,7 @@ inherited frmGoPhast: TfrmGoPhast
       Left = 555
       Top = 0
       Width = 229
-      Height = 201
+      Height = 196
       Align = alRight
       TabOrder = 1
       TabStop = True
@@ -117,7 +120,7 @@ inherited frmGoPhast: TfrmGoPhast
       ExplicitHeight = 201
       inherited rulVertical: TRbwRuler
         Left = 180
-        Height = 147
+        Height = 142
         Align = alRight
         RulerPosition = rpRight
         ExplicitLeft = 194
@@ -151,17 +154,17 @@ inherited frmGoPhast: TfrmGoPhast
       inherited ZoomBox: TQRbwZoomBox2
         Left = 0
         Width = 180
-        Height = 147
+        Height = 142
         ExaggerationDirection = edHorizontal
         HorizontalDirection = hdLeft
         Image32.Left = 1
         Image32.Top = 1
         Image32.Width = 178
-        Image32.Height = 145
+        Image32.Height = 140
         Image32.Align = alClient
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
-        Image32.ExplicitHeight = 145
+        Image32.ExplicitHeight = 140
         ExplicitLeft = 0
         ExplicitWidth = 180
         ExplicitHeight = 146
@@ -174,7 +177,7 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 407
+    Top = 402
     Width = 784
     Height = 133
     Align = alBottom
@@ -185,6 +188,7 @@ inherited frmGoPhast: TfrmGoPhast
     ParentDoubleBuffered = False
     TabOrder = 2
     OnMouseMove = pnlLowerRightMouseMove
+    ExplicitTop = 407
     object splitVertBottom: TJvNetscapeSplitter
       Left = 545
       Top = 0
@@ -282,7 +286,7 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object sbMain: TStatusBar
     Left = 0
-    Top = 540
+    Top = 535
     Width = 784
     Height = 28
     Hint = 'Drag with the mouse to resize status bar panels'
@@ -1391,6 +1395,11 @@ inherited frmGoPhast: TfrmGoPhast
         end
         object miExportSutra2DMesh: TMenuItem
           Action = acExportSutra2DMesh
+        end
+        object WellsToCsv1: TMenuItem
+          Caption = 'Wells to CSV'
+          Visible = False
+          OnClick = WellsToCsv1Click
         end
       end
       object miFilesToArchive: TMenuItem
@@ -9903,5 +9912,11 @@ inherited frmGoPhast: TfrmGoPhast
     object miExportPESTcontrolfile: TMenuItem
       Action = acRunPest
     end
+  end
+  object dlgSaveBoundaryCsv: TSaveDialog
+    DefaultExt = '.csv'
+    Filter = 'CSV files|*.csv'
+    Left = 720
+    Top = 72
   end
 end

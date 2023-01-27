@@ -478,15 +478,35 @@ begin
     // handle multiply or add
   Inc(FBoundaryIndex);
 
+  if FEvaluationType = etExportCsv then
+  begin
+    WriteFloat(FStartTime);
+    WriteString(',');
+  end;
+
   Well_Cell := Cell as TWell_Cell;
+
   LocalLayer := Model.
     DataSetLayerToModflowLayer(Well_Cell.Layer);
+
   WriteInteger(LocalLayer);
+  if FEvaluationType = etExportCsv then
+  begin
+    WriteString(',');
+  end;
   if not Model.DisvUsed then
   begin
     WriteInteger(Well_Cell.Row+1);
+    if FEvaluationType = etExportCsv then
+    begin
+      WriteString(',');
+    end;
   end;
   WriteInteger(Well_Cell.Column+1);
+    if FEvaluationType = etExportCsv then
+    begin
+      WriteString(',');
+    end;
 
   if (Well_Cell.PumpingRatePest <> '')
     or (Well_Cell.PumpingRatePestSeries <> '') then
@@ -525,46 +545,69 @@ begin
     end;
     WriteModflowParamFormula(ParameterName, Well_Cell.PumpingRatePest,
       MultiplierValue, Well_Cell);
+    if FEvaluationType = etExportCsv then
+    begin
+      WriteString(',');
+    end;
   end
   else
   begin
     WriteValueOrFormula(Well_Cell, WelPumpingRatePosition);
+    if FEvaluationType = etExportCsv then
+    begin
+      WriteString(',');
+    end;
   end;
 
   WriteIface(Well_Cell.IFace);
 
   if Model.GwtUsed then
   begin
+    if FEvaluationType = etExportCsv then
+    begin
+      WriteString(',');
+    end;
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
       WriteValueOrFormula(Well_Cell, WelStartConcentration + SpeciesIndex);
+      if (FEvaluationType = etExportCsv)
+        and (SpeciesIndex < Model.MobileComponents.Count - 1) then
+      begin
+        WriteString(',');
+      end;
     end;
   end;
 
 
-  WriteBoundName(Well_Cell);
-  if Model.DisvUsed then
+  if FEvaluationType <> etExportCsv then
   begin
-    WriteString(' # ' + DataSetIdentifier + ' Layer cell2d '
-      + VariableIdentifiers + ' ');
-  end
-  else
-  begin
-    WriteString(' # ' + DataSetIdentifier + ' Layer Row Column '
-      + VariableIdentifiers + ' ');
+    WriteBoundName(Well_Cell);
+    if Model.DisvUsed then
+    begin
+      WriteString(' # ' + DataSetIdentifier + ' Layer cell2d '
+        + VariableIdentifiers + ' ');
+    end
+    else
+    begin
+      WriteString(' # ' + DataSetIdentifier + ' Layer Row Column '
+        + VariableIdentifiers + ' ');
+    end;
+    // The annotation identifies the object used to define the well.
+    // This can be helpful in identifying when used with PEST.
+    WriteString(Well_Cell.PumpingRateAnnotation);
   end;
-  // The annotation identifies the object used to define the well.
-  // This can be helpful in identifying when used with PEST.
-  WriteString(Well_Cell.PumpingRateAnnotation);
   NewLine;
 
-  if Well_Cell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then
+  if FEvaluationType <> etExportCsv then
   begin
-    MvrKey.StressPeriod := FStressPeriod;
-    MvrKey.Index := FBoundaryIndex;
-    MvrKey.SourceKey.MvrIndex := Well_Cell.MvrIndex;
-    MvrKey.SourceKey.ScreenObject := Well_Cell.ScreenObject;
-    TModflowMvrWriter(MvrWriter).AddMvrSource(MvrKey);
+    if Well_Cell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then
+    begin
+      MvrKey.StressPeriod := FStressPeriod;
+      MvrKey.Index := FBoundaryIndex;
+      MvrKey.SourceKey.MvrIndex := Well_Cell.MvrIndex;
+      MvrKey.SourceKey.ScreenObject := Well_Cell.ScreenObject;
+      TModflowMvrWriter(MvrWriter).AddMvrSource(MvrKey);
+    end;
   end;
 end;
 
@@ -693,7 +736,14 @@ begin
   begin
     Exit;
   end;
-  FNameOfFile := FileName(AFileName);
+  if FEvaluationType = etExportCsv then
+  begin
+    FNameOfFile := AFileName;
+  end
+  else
+  begin
+    FNameOfFile := FileName(AFileName);
+  end;
   FInputFileName := FNameOfFile;
 
   Evaluate;
@@ -705,23 +755,26 @@ begin
 
   WriteFileInternal;
 
-  if Model.ModelSelection = msModflow2015 then
+  if FEvaluationType <> etExportCsv then
   begin
-    WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
-  end;
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
+    end;
 
-  if  Model.PestUsed and (FPestParamUsed
-    or ((Model.ModelSelection = msModflow2015) and (FParamValues.Count > 0))) then
-  begin
-    frmErrorsAndWarnings.BeginUpdate;
-    try
-      FNameOfFile := FNameOfFile + '.tpl';
-      WritePestTemplateLine(FNameOfFile);
-      WritingTemplate := True;
-      WriteFileInternal;
+    if  Model.PestUsed and (FPestParamUsed
+      or ((Model.ModelSelection = msModflow2015) and (FParamValues.Count > 0))) then
+    begin
+      frmErrorsAndWarnings.BeginUpdate;
+      try
+        FNameOfFile := FNameOfFile + '.tpl';
+        WritePestTemplateLine(FNameOfFile);
+        WritingTemplate := True;
+        WriteFileInternal;
 
-    finally
-      frmErrorsAndWarnings.EndUpdate;
+      finally
+        frmErrorsAndWarnings.EndUpdate;
+      end;
     end;
   end;
 end;
@@ -734,93 +787,101 @@ begin
     frmProgressMM.AddMessage(StrWritingWELPackage);
     frmProgressMM.AddMessage(StrWritingDataSet0);
 
-    WriteTemplateHeader;
-
-    WriteDataSet0;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
+    if FEvaluationType = etExportCsv then
     begin
-      Exit;
-    end;
-
-    if Model.ModelSelection = msModflow2015 then
-    begin
-      frmProgressMM.AddMessage(StrWritingOptions);
-      WriteOptionsMF6(FNameOfFile);
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingDimensions);
-      WriteDimensionsMF6;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      if MAXBOUND = 0 then
-      begin
-        frmErrorsAndWarnings.AddWarning(Model, StrNoWellsDefined, StrTheWellPackageIs);
-        Exit;
-      end;
+      WriteString('Time,Layer,Row,Column,Q,IFACE');
+      NewLine;
     end
     else
     begin
-      frmProgressMM.AddMessage(StrWritingDataSet1);
-      WriteDataSet1;
+      WriteTemplateHeader;
+
+      WriteDataSet0;
       Application.ProcessMessages;
       if not frmProgressMM.ShouldContinue then
       begin
         Exit;
       end;
 
-      if (Model.ModelSelection = msModflowNWT) and (Model.NWT_Format = nf1_1) then
+      if Model.ModelSelection = msModflow2015 then
       begin
-        frmProgressMM.AddMessage('  Writing OPTIONS block.');
-        WriteNWT_Options;
+        frmProgressMM.AddMessage(StrWritingOptions);
+        WriteOptionsMF6(FNameOfFile);
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
+
+        frmProgressMM.AddMessage(StrWritingDimensions);
+        WriteDimensionsMF6;
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
+
+        if MAXBOUND = 0 then
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, StrNoWellsDefined, StrTheWellPackageIs);
+          Exit;
+        end;
+      end
+      else
+      begin
+        frmProgressMM.AddMessage(StrWritingDataSet1);
+        WriteDataSet1;
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
+
+        if (Model.ModelSelection = msModflowNWT) and (Model.NWT_Format = nf1_1) then
+        begin
+          frmProgressMM.AddMessage('  Writing OPTIONS block.');
+          WriteNWT_Options;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+        end;
+
+        frmProgressMM.AddMessage(StrWritingDataSet2);
+        WriteDataSet2;
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
+
+        if MXACTW = 0 then
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, StrNoWellsDefined, StrTheWellPackageIs);
+          Exit;
+        end;
+      end;
+
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrWEL),
+          FNameOfFile, foInput, Model, False, 'WEL-1');
+      end;
+
+      if (Model.ModelSelection = msModflowNWT) and (Model.NWT_Format = nf1_0) then
+      begin
+        frmProgressMM.AddMessage('  Writing Data Set 2b.');
+        WriteDataSet2b;
         Application.ProcessMessages;
         if not frmProgressMM.ShouldContinue then
         begin
           Exit;
         end;
       end;
-
-      frmProgressMM.AddMessage(StrWritingDataSet2);
-      WriteDataSet2;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      if MXACTW = 0 then
-      begin
-        frmErrorsAndWarnings.AddWarning(Model, StrNoWellsDefined, StrTheWellPackageIs);
-        Exit;
-      end;
     end;
 
-    if not WritingTemplate then
-    begin
-      WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrWEL),
-        FNameOfFile, foInput, Model, False, 'WEL-1');
-    end;
-
-    if (Model.ModelSelection = msModflowNWT) and (Model.NWT_Format = nf1_0) then
-    begin
-      frmProgressMM.AddMessage('  Writing Data Set 2b.');
-      WriteDataSet2b;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-    end;
-
-//    if Model.ModelSelection <> msModflow2015 then
+//    if FEvaluationType <> etExportCsv then
     begin
       frmProgressMM.AddMessage(StrWritingDataSets3and4);
       WriteDataSets3And4;

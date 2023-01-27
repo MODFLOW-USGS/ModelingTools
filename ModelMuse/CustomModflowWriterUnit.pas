@@ -746,6 +746,7 @@ end;
     FStressPeriod: Integer;
     FBoundaryIndex: Integer;
   protected
+    FStartTime: Double;
     procedure WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
       ErrorRoot: string; const TimeIndex: integer); virtual;
     // @name counts the maximum number of cells used in any stress period. This
@@ -5767,7 +5768,7 @@ begin
       end;
       FNumInstList[Position] := NUMINST;
       Parval := Param.Value;
-      if Model.ModelSelection <> msModflow2015 then
+      if (Model.ModelSelection <> msModflow2015) and (FEvaluationType <> etExportCsv) then
       begin
         WriteString(PARNAM);
         WriteString(PARTYP);
@@ -5809,7 +5810,7 @@ begin
 //        CellList.CheckRestore;
         if CellList.Count > 0 then
         begin
-          if Model.ModelSelection  = msModflow2015 then
+          if (Model.ModelSelection  = msModflow2015) or (FEvaluationType = etExportCsv) then
           begin
             List := FValues[TimeIndex];
             for CellIndex := 0 to CellList.Count - 1 do
@@ -5919,6 +5920,7 @@ begin
   try
     for TimeIndex := 0 to FValues.Count - 1 do
     begin
+      FStartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
       FStressPeriod := TimeIndex;
       FBoundaryIndex := 0;
       Application.ProcessMessages;
@@ -5941,7 +5943,7 @@ begin
             Format(StrStressPeriod0d, [TimeIndex+1]));
         end;
 
-        if Model.ModelSelection <> msModflow2015 then
+        if (Model.ModelSelection <> msModflow2015) and (FEvaluationType <> etExportCsv) then
         begin
           // data set 5;
           WriteInteger(ITMP);
@@ -5959,7 +5961,10 @@ begin
           begin
             Continue;
           end;
-          WriteBeginPeriod(TimeIndex);
+          if FEvaluationType <> etExportCsv then
+          begin
+            WriteBeginPeriod(TimeIndex);
+          end;
         end;
         // data set 6
         if ITMP > 0 then
@@ -5973,11 +5978,14 @@ begin
             Exit;
           end;
         end;
-        if Model.ModelSelection = msModflow2015 then
+        if (Model.ModelSelection = msModflow2015) or (FEvaluationType = etExportCsv) then
         begin
           WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
             StrOneOrMoreSParam, TimeIndex);
-          WriteEndPeriod;
+          if FEvaluationType <> etExportCsv then
+          begin
+            WriteEndPeriod;
+          end;
         end;
         if TimeIndex = FValues.Count - 1 then
         begin

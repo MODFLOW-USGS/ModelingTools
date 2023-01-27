@@ -1,34 +1,31 @@
 inherited frmProgressMM: TfrmProgressMM
   Left = 384
   Top = 254
-  Width = 448
-  Height = 222
-  VertScrollBar.Range = 0
   ActiveControl = memoMessages
   Caption = 'Progress'
-  ExplicitWidth = 448
-  ExplicitHeight = 222
-  PixelsPerInch = 96
+  ClientHeight = 235
   TextHeight = 18
   object memoMessages: TMemo
     Left = 0
     Top = 61
-    Width = 440
-    Height = 127
+    Width = 426
+    Height = 174
     Align = alClient
     ScrollBars = ssBoth
     TabOrder = 0
+    ExplicitWidth = 440
+    ExplicitHeight = 127
   end
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 440
+    Width = 426
     Height = 61
     Align = alTop
     ParentColor = True
     TabOrder = 1
     DesignSize = (
-      440
+      426
       61)
     object lblProgress: TLabel
       Left = 8
@@ -40,20 +37,20 @@ inherited frmProgressMM: TfrmProgressMM
     object pbProgress: TProgressBar
       Left = 8
       Top = 8
-      Width = 409
+      Width = 405
       Height = 18
       Anchors = [akLeft, akTop, akRight]
       Step = 1
       TabOrder = 0
+      ExplicitWidth = 409
     end
     object btnAbort: TBitBtn
-      Left = 342
+      Left = 338
       Top = 30
       Width = 75
       Height = 25
       Anchors = [akTop, akRight]
       Caption = 'Abort'
-      DoubleBuffered = True
       Glyph.Data = {
         DE010000424DDE01000000000000760000002800000024000000120000000100
         0400000000006801000000000000000000001000000000000000000000000000
@@ -72,10 +69,10 @@ inherited frmProgressMM: TfrmProgressMM
         3333333333333333333888330000333333333333333333333333333333333333
         0000}
       NumGlyphs = 2
-      ParentDoubleBuffered = False
       TabOrder = 1
       Visible = False
       OnClick = btnAbortClick
+      ExplicitLeft = 342
     end
   end
 end

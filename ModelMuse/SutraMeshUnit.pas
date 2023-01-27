@@ -1896,7 +1896,7 @@ begin
               {$IFDEF DEBUG}
               SetLength(FCellOutline, 0);
               Beep;
-              ShowMessage(IntToStr(Number));
+              ShowMessage('TSutraNode2D.Number = ' + IntToStr(Number));
               Exit;
               {$ELSE}
               raise Exception.Create(Format(StrErrorGeneratingCel, [Number + 1]));
@@ -4146,7 +4146,7 @@ begin
     end;
   {$IFDEF DEBUG}
     except
-      ShowMessage(IntToStr(ElementIndex));
+      ShowMessage('ElementIndex = ' + IntToStr(ElementIndex));
     end;
   {$ENDIF}
   end;
@@ -5721,7 +5721,9 @@ begin
     end;
 
 //    Epsilon := Sqr(Max(MaxX-MinX, MaxY-MinY)/10000000);
-    Epsilon := (MaxX-MinX)*(MaxY-MinY)/10000;
+//    Epsilon := (MaxX-MinX)*(MaxY-MinY)/10000;
+//    Epsilon := (MaxX-MinX)*(MaxY-MinY)/50000;
+    Epsilon := (MaxX-MinX)*(MaxY-MinY)/100000;
 //    P2.NumberOfContours := 1;
 //    P2.VertexCount[0] := 4;
 
@@ -8429,7 +8431,7 @@ begin
                 except
                   begin
                   {$IFDEF DEBUG}
-                    showMessage(IntToStr(Node.Number));
+                    showMessage('TSutraNode3D.Number =' + IntToStr(Node.Number));
                   {$ENDIF}
                     raise;
                   end;
