@@ -10831,21 +10831,13 @@ procedure TCustomFileWriter.OpenTempFile(const FileName: string);
 begin
   Assert(FFileStream <> nil);
   FFileStreamList.Add(FFileStream);
-//  Assert(FMainFileStream = nil);
-//  FMainFileStream := FFileStream;
   FFileStream := TFileStream.Create(FileName, fmCreate or fmShareDenyWrite);
 end;
 
 class function TCustomFileWriter.PestUtilityProgramPath(UtilityProgramName,
   AFileName: string): string;
 begin
-//  result := IncludeTrailingPathDelimiter(ExtractFileDir(AFileName))
-//     + UtilityProgramName;
   try
-//    if TFile.Exists(result) then
-//    begin
-//      Exit;
-//    end;
     result := IncludeTrailingPathDelimiter
       (frmGoPhast.PhastModel.ProgramLocations.PestDirectory) + UtilityProgramName;
     if TFile.Exists(result) then
@@ -10878,11 +10870,9 @@ end;
 procedure TCustomFileWriter.CloseTempFile;
 begin
   Assert(FFileStreamList.Count > 0);
-//  Assert(FMainFileStream <> nil);
   FreeAndNil(FFileStream);
   FFileStream := FFileStreamList.Last;
   FFileStreamList.Delete(FFileStreamList.Count-1);
-//  FMainFileStream := nil;
 end;
 
 function TCustomModflowWriter.WriteValueOrFormula(Cell: TValueCell;
