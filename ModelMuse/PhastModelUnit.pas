@@ -31397,6 +31397,8 @@ begin
   FCanDrawContours := True;
   FSutraPestScripts := TStringList.Create;
   FPestTemplateLines := TStringList.Create;
+  FPestTemplateLines.Sorted := True;
+  FPestTemplateLines.Duplicates := dupIgnore;
   FKrigfactorsScriptLines := TStringList.Create;
 
   FBinaryFiles := TStringList.Create;

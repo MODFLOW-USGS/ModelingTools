@@ -1,5 +1,5 @@
 {
-This unit defines function that can be used to communicate with PLPROC.
+This unit defines functions that can be used to communicate with PLPROC.
 http://www.pesthomepage.org/About_Us.php
 }
 unit PlProcUnit;
@@ -242,7 +242,7 @@ type
     procedure WritePilotPointFiles(Prefix: string);
     procedure GetUsedParameters;
     procedure WriteKrigingFactors;
-    procedure ReadPilotPoints;
+    procedure ReadPilotPoints(Layer: integer);
     procedure SaveKrigingFactors;
     function GetKrigFactorRoot: string;
     procedure ReadDiscretization;
@@ -4013,11 +4013,12 @@ begin
   end
 end;
 
-procedure TSutraInitCondScriptWriter.ReadPilotPoints;
+procedure TSutraInitCondScriptWriter.ReadPilotPoints(Layer: integer);
 var
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
-  procedure HandlePilotPointList(PilotPointFiles: TPilotPointFiles; const DataId: string);
+  procedure HandlePilotPointList(PilotPointFiles: TPilotPointFiles;
+    const DataId: string);
   var
     PPIndex: Integer;
     FileProperties: TPilotPointFileObject;
@@ -4026,7 +4027,8 @@ var
     for PPIndex := 0 to PilotPointFiles.Count - 1 do
     begin
       FileProperties := PilotPointFiles[PPIndex];
-      if FileProperties.Parameter = AParam then
+      if (FileProperties.Parameter = AParam)
+        and (FileProperties.Layer + 1 = Layer) then
       begin
         WriteString(Format('%0:s_PilotPoints%d = read_list_file(skiplines=0,dimensions=2, &',
           [DataId, PPIndex+1]));
@@ -4035,7 +4037,6 @@ var
           [DataId, AParam.ParameterName, FileProperties.Layer + 1]);
         WriteString(Format('  plist=''%0:s'';column=%1:d, &',
           [PListName, 5]));
-//          Inc(ColIndex);
         NewLine;
         WriteString(Format('  id_type=''character'',file=''%s'')',
           [ExtractFileName(FileProperties.FileName)]));
@@ -4122,6 +4123,8 @@ var
   PIndex: Integer;
   FileNameAddition: string;
   FileToReadIndex: Integer;
+  DisColIndex: Integer;
+  DataColIndex: Integer;
 begin
   if ScriptChoice = scWriteTemplate then
   begin
@@ -4142,94 +4145,6 @@ begin
     WriteString('#Script for PLPROC');
     NewLine;
     NewLine;
-
-    if Mesh.MeshType = mt3D then
-    begin
-      LayerCount := Mesh.LayerCount + 1;
-    end
-    else
-    begin
-      LayerCount := 1;
-    end;
-
-    {$REGION 'Node discretization'}
-    ReadDiscretization;
-
-    if FMesh.MeshType = mt3D then
-    begin
-      Read3DDiscretization
-    end;
-    {$ENDREGION}
-
-    WriteString('#Read data to modify');
-    NewLine;
-    {$REGION data}
-    WriteString(Format('# Read %s', [FDataArrayName]));
-    NewLine;
-    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
-    NewLine;
-    ColIndex := 1;
-
-    WriteString(Format('  slist=s_NN2D_Data;column=%d, &', [ColIndex]));
-    NewLine;
-    Inc(ColIndex);
-
-    WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, FDataArrayName]));
-    NewLine;
-
-    WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
-      ['cl_Discretization']));
-    NewLine;
-
-    FileNameAddition := '';
-    FileToReadIndex := 0;
-    for LayerIndex := 1 to LayerCount do
-    begin
-      if (LayerIndex > 1) and ((LayerIndex-1) mod DataToWriteCount = 0) then
-      begin
-        Inc(FileToReadIndex);
-        if LayerIndex = 0 then
-        begin
-          FileNameAddition := '';
-        end
-        else
-        begin
-          FileNameAddition := '_' + IntToStr(FileToReadIndex);
-        end;
-        ColIndex := 2;
-      end;
-//      WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
-//        ['cl_Discretization']));
-
-      // PLPROC has a limit of 5 s_lists per call of read_list_file.
-      // To avoid reaching that limit, a separate call is used for each layer.
-      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
-      NewLine;
-      if Mesh.MeshType = mt3D then
-      begin
-        Inc(ColIndex);
-
-        WriteString(Format('  slist=s_Layer%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
-        NewLine;
-        Inc(ColIndex);
-      end;
-
-      WriteString(Format('  plist=p_%2:s%0:d;column=%1:d, &', [LayerIndex, ColIndex, 'Data']));
-      NewLine;
-      Inc(ColIndex);
-
-      WriteString(Format('  slist=s_%2:sPar%0:d;column=%1:d, &', [LayerIndex, ColIndex, 'Data']));
-      NewLine;
-      Inc(ColIndex);
-      WriteString(Format('  file=''%0:s.%1:s%2:s'')', [FRoot, FDataArrayName, FileNameAddition]));
-      NewLine;
-//      WriteString('temp.remove()');
-//      NewLine;
-    end;
-    NewLine;
-    {$ENDREGION}
-
-    ReadPilotPoints;
 
     WriteString('#Read parameter values');
     NewLine;
@@ -4260,25 +4175,186 @@ begin
     NewLine;
     {$ENDREGION}
 
-    {$REGION 'Apply parameters'}
-    WriteString('# applying parameter values');
-    NewLine;
 
     if Mesh.MeshType = mt3D then
     begin
+      LayerCount := Mesh.LayerCount + 1;
+    end
+    else
+    begin
+      LayerCount := 1;
+    end;
+
+    if FMesh.MeshType = mt3D then
+    begin
+      Read3DDiscretization;
       WriteString(Format('temp3D=new_plist(reference_clist=%s,value=0.0)',
         ['cl_Discretization3D']));
       NewLine;
+      NewLine;
     end;
 
-    for ParameterIndex := 0 to FParameterNames.Count - 1 do
+    if FMesh.MeshType = mt3D then
     begin
-      AParam := FParameterNames.Objects[ParameterIndex]
-        as TModflowSteadyParameter;
-      WriteString(Format('# applying parameter %s', [AParam.ParameterName]));
+      LayerCount := FMesh.LayerCount + 1;
+    end
+    else
+    begin
+      LayerCount := 1;
+    end;
+
+    WriteString('#Read SUTRA node information file');
+    NewLine;
+    WriteString('cl_Discretization = read_list_file(skiplines=1,dimensions=2, &');
+    NewLine;
+    WriteString('  plist=p_x;column=2, &');
+    NewLine;
+    WriteString('  plist=p_y;column=3, &');
+    NewLine;
+    WriteString('  slist=s_NN2D;column=4, &');
+    NewLine;
+    WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
+    NewLine;
+
+//    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+//    NewLine;
+//    ColIndex := 1;
+//
+//    WriteString(Format('  slist=s_NN2D_Data;column=%d, &', [ColIndex]));
+//    NewLine;
+//    Inc(ColIndex);
+//
+//    WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, FDataArrayName]));
+//    NewLine;
+
+    WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
+      ['cl_Discretization']));
+    NewLine;
+    NewLine;
+
+    DisColIndex := 5;
+    for LayerIndex := 1 to LayerCount do
+    begin
+      WriteString('# Layer');
+      WriteInteger(LayerIndex);
       NewLine;
-      for LayerIndex := 1 to LayerCount do
+      {$REGION 'Node discretization'}
+      if FMesh.MeshType = mt3D then
       begin
+        FileNameAddition := '';
+        FileIndex := 0;
+        if (LayerIndex > 1) and (((LayerIndex -1) mod DataToWriteCount) =  0) then
+        begin
+          Inc(FileIndex);
+          if LayerIndex = 0 then
+          begin
+            FileNameAddition := '';
+          end
+          else
+          begin
+            FileNameAddition := '.' + IntToStr(FileIndex);
+          end;
+          DisColIndex := 5;
+        end;
+        // PLPROC has a limit of 5 s_lists per call of read_list_file.
+        // To avoid reaching that limit, a separate call is used for each layer.
+//        WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+//        NewLine;
+//        WriteString(Format('  plist=p_z%0:d;column=%1:d, &', [LayerIndex, DisColIndex]));
+//        NewLine;
+//        Inc(DisColIndex);
+//        WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &', [LayerIndex, DisColIndex]));
+//        NewLine;
+//        Inc(DisColIndex);
+//        WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &', [LayerIndex, DisColIndex]));
+//        NewLine;
+//        Inc(DisColIndex);
+//        WriteString(Format('  id_type=''indexed'',file=''%0:s%1:s.c_nod'')', [FRoot, FileNameAddition]));
+//        NewLine;
+      end;
+     {$ENDREGION}
+//    end;
+    NewLine;
+
+//    for LayerIndex := 1 to LayerCount do
+//    begin
+      ReadPilotPoints(LayerIndex);
+//    end;
+
+
+      WriteString('#Read data to modify');
+      NewLine;
+      {$REGION data}
+      WriteString(Format('# Read %s', [FDataArrayName]));
+      NewLine;
+
+
+      WriteString('temp.remove()');
+      NewLine;
+      WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
+        ['cl_Discretization']));
+      NewLine;
+      NewLine;
+
+      FileNameAddition := '';
+      FileToReadIndex := 0;
+      DataColIndex := 2;
+//    for LayerIndex := 1 to LayerCount do
+//    begin
+      if (LayerIndex > 1) and ((LayerIndex-1) mod DataToWriteCount = 0) then
+      begin
+        Inc(FileToReadIndex);
+        if LayerIndex = 0 then
+        begin
+          FileNameAddition := '';
+        end
+        else
+        begin
+          FileNameAddition := '_' + IntToStr(FileToReadIndex);
+        end;
+        DataColIndex := 2;
+      end;
+
+      // PLPROC has a limit of 5 s_lists per call of read_list_file.
+      // To avoid reaching that limit, a separate call is used for each layer.
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
+      if Mesh.MeshType = mt3D then
+      begin
+        Inc(DataColIndex);
+
+//        WriteString(Format('  slist=s_Layer%0:d;column=%1:d, &', [LayerIndex, DataColIndex]));
+//        NewLine;
+        Inc(DataColIndex);
+      end;
+
+      WriteString(Format('  plist=p_%2:s%0:d;column=%1:d, &', [LayerIndex, DataColIndex, 'Data']));
+      NewLine;
+      Inc(DataColIndex);
+
+      WriteString(Format('  slist=s_%2:sPar%0:d;column=%1:d, &', [LayerIndex, DataColIndex, 'Data']));
+      NewLine;
+      Inc(DataColIndex);
+      WriteString(Format('  file=''%0:s.%1:s%2:s'')', [FRoot, FDataArrayName, FileNameAddition]));
+      NewLine;
+//      WriteString('temp.remove()');
+//      NewLine;
+//    end;
+      NewLine;
+      {$ENDREGION}
+
+      {$REGION 'Apply parameters'}
+      WriteString('# applying parameter values');
+      NewLine;
+
+      for ParameterIndex := 0 to FParameterNames.Count - 1 do
+      begin
+        AParam := FParameterNames.Objects[ParameterIndex]
+          as TModflowSteadyParameter;
+        WriteString(Format('# applying parameter %s', [AParam.ParameterName]));
+        NewLine;
+//      for LayerIndex := 1 to LayerCount do
+//      begin
         if AParam.UsePilotPoints then
         begin
           WriteString('    # Substituting interpolated values');
@@ -4343,23 +4419,34 @@ begin
 //          NewLine;
         end;
 
-      end;
-      NewLine;
-    end;
-    {$ENDREGION}
+//      end;
+        NewLine;
 
-    if Mesh.MeshType = mt3D then
-    begin
-      WriteString('    # Apply values to 3D mesh');
-      NewLine;
-      for LayerIndex := 1 to LayerCount do
-      begin
-        WriteString(Format('temp3D(select=(s_Layer3D.eq.%0:d)) &', [LayerIndex]));
-        NewLine;
-        WriteString(Format('  =  p_Data%0:d.assign_by_relation(relate=slist;source=s_NN2D;target=s_NN2D_3D)', [LayerIndex]));
-        NewLine;
       end;
+    {$ENDREGION}
+      WriteString(Format('s_DataPar%0:d.remove()', [LayerIndex]));
+      NewLine;
+      NewLine;
+
+      if Mesh.MeshType = mt3D then
+      begin
+        WriteString('# Apply values to 3D mesh');
+        NewLine;
+  //      for LayerIndex := 1 to LayerCount do
+        begin
+          WriteString(Format('temp3D(select=(s_Layer3D.eq.%0:d)) &', [LayerIndex]));
+          NewLine;
+          WriteString(Format('  =  p_Data%0:d.assign_by_relation(relate=slist;source=s_NN2D;target=s_NN2D_3D)', [LayerIndex]));
+          NewLine;
+        end;
+      end;
+
+      WriteString(Format('p_Data%0:d.remove()', [LayerIndex]));
+      NewLine;
+      NewLine;
     end;
+
+
 
     WriteString('# Write new data values');
     NewLine;
@@ -4522,7 +4609,17 @@ var
   PilotPointsUsed: Boolean;
   PLPROC_Location: string;
   ModelDirectory: string;
+  LayerCount: Integer;
+  LayerIndex: Integer;
 begin
+  if FMesh.MeshType = mt3D then
+  begin
+    LayerCount := FMesh.LayerCount + 1;
+  end
+  else
+  begin
+    LayerCount := 1;
+  end;
   PilotPointsUsed := FPilotPointFiles.Count > 0;
   if PilotPointsUsed then
   begin
@@ -4532,7 +4629,11 @@ begin
       WriteString('#Script for PLPROC for saving kriging factors');
       NewLine;
       NewLine;
-      ReadPilotPoints;
+      for LayerIndex := 1 to LayerCount do
+      begin
+        ReadPilotPoints(LayerIndex);
+      end;
+
       ReadDiscretization;
       SaveKrigingFactors;
       PLPROC_Location := GetPLPROC_Location(FFileName, Model);
