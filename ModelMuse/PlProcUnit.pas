@@ -2146,6 +2146,7 @@ var
   LayerIndex2D: Integer;
   FileNameAddition: string;
   FileIndexNumber: Integer;
+  PriorDataSetColIndex: Integer;
 begin
   if ScriptChoice = scWriteTemplate then
   begin
@@ -2225,6 +2226,7 @@ begin
     FileIndexNumber := 0;
     PorosityColIndex := 2;
     UnsatColIndex := 2;
+    PriorDataSetColIndex := 2;
     DataSetColIndex := 2;
     for LayerIndex := 1 to LayerCount do
     begin
@@ -2234,10 +2236,11 @@ begin
         FileNameAddition := '_' + IntToStr(FileIndexNumber);
         PorosityColIndex := 2;
         UnsatColIndex := 2;
-        DataSetColIndex := 2;
+        PriorDataSetColIndex := 2;
       end;
       WriteString('# Layer');
       WriteInteger(LayerIndex);
+      NewLine;
       NewLine;
 
       ReadNodeDiscretization(True, LayerIndex);
@@ -2319,6 +2322,7 @@ begin
       begin
         for Sutra4Index := 0 to FDataSetNames.Count - 1 do
         begin
+          DataSetColIndex := PriorDataSetColIndex;
           DataSetName := FDataSetNames[Sutra4Index];
           ID := FDataSetAbbreviations[Sutra4Index];
           if DataSetName = '' then
@@ -2371,6 +2375,7 @@ begin
             NewLine;
           end;
         end;
+        PriorDataSetColIndex := DataSetColIndex;
       end;
       {$ENDREGION}
 
@@ -2628,7 +2633,7 @@ begin
           for Sutra4Index := 0 to FDataSetAbbreviations.Count - 1 do
           begin
             ID := FDataSetAbbreviations[Sutra4Index];
-            WriteString(Format('plist=p_%0:s%1:d.remove()', [ID,LayerIndex]));
+            WriteString(Format('p_%0:s%1:d.remove()', [ID,LayerIndex]));
             NewLine;
           end;
         end
@@ -2677,7 +2682,6 @@ begin
       {$ENDREGION}
       NewLine;
 
-      WriteString('report_all_entities(file=14b.txt)')
 
     end;
   finally
@@ -2783,21 +2787,30 @@ begin
         // Z coordinate
         WriteString(Format('  plist=p_z%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
         NewLine;
-        Inc(ColIndex);
+      end;
+      Inc(ColIndex);
+      if (LayerIndex = LayerToRead) or (LayerToRead = -1) then
+      begin
         // 3D node number
         if ReadSLists then
         begin
           WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
           NewLine;
         end;
-        Inc(ColIndex);
+      end;
+      Inc(ColIndex);
+      if (LayerIndex = LayerToRead) or (LayerToRead = -1) then
+      begin
         // Active or not
         if ReadSLists then
         begin
           WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
           NewLine;
         end;
-        Inc(ColIndex);
+      end;
+      Inc(ColIndex);
+      if (LayerIndex = LayerToRead) or (LayerToRead = -1) then
+      begin
         WriteString(Format('  id_type=''indexed'',file=''%0:s%1:s.c_nod'')', [FRoot, NameAddition]));
         NewLine;
       end;
