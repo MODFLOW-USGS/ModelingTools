@@ -20,8 +20,8 @@ if exist "SutraTest2a_Object13.OBC" del "SutraTest2a_Object13.OBC"
 if exist "SutraTest2a_Observatio.OBC" del "SutraTest2a_Observatio.OBC"
 if exist "SutraTest2a_ObsSchec.OBS" del "SutraTest2a_ObsSchec.OBS"
 "EnhancedTemplateProcessor.exe" SutraTest2a.FluxBcs.tpl SutraTest2a.pval
-"EnhancedTemplateProcessor.exe" SutraTest2a.SPecPBcs.tpl SutraTest2a.pval
 "EnhancedTemplateProcessor.exe" SutraTest2a.inp.tpl SutraTest2a.pval
+"EnhancedTemplateProcessor.exe" SutraTest2a.SPecPBcs.tpl SutraTest2a.pval
 "sutra_2_2.exe"
 "SutraObsExtractor.exe" SutraTest2a.soe_ev
 @echo off

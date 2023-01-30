@@ -29,11 +29,11 @@ if exist "Rocky2D_IrregularS4Interpolate.smy" del "Rocky2D_IrregularS4Interpolat
 "plproc.exe" Rocky2D_IrregularS4Interpolate.ScaledEffectiveAirThermalConductivity.script
 "plproc.exe" Rocky2D_IrregularS4Interpolate.Solid_Matrix_Compressibility.script
 "plproc.exe" Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat.script
-"plproc.exe" 'Rocky2D_IrregularS4Interpolate.14B.script'
 "EnhancedTemplateProcessor.exe" arrays\Rocky2D_IrregularS4Interpolate.Middle_Permeability_1.arrays.tpl
 "EnhancedTemplateProcessor.exe" arrays\Rocky2D_IrregularS4Interpolate.Middle_Permeability_2.arrays.tpl
 "EnhancedTemplateProcessor.exe" arrays\Rocky2D_IrregularS4Interpolate.Minimum_Permeability_1.arrays.tpl
 "EnhancedTemplateProcessor.exe" arrays\Rocky2D_IrregularS4Interpolate.Minimum_Permeability_2.arrays.tpl
+"plproc.exe" 'Rocky2D_IrregularS4Interpolate.14B.script'
 "plproc.exe" 'Rocky2D_IrregularS4Interpolate.15B.script'
 "sutra_4_0.exe"
 "SutraObsExtractor.exe" Rocky2D_IrregularS4Interpolate.soe_ev

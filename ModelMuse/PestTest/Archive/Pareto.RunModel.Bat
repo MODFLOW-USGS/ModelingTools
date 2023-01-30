@@ -20,12 +20,12 @@ if exist "Pareto.lst" del "Pareto.lst"
 if exist "Pareto.ob_gw_out_head.csv" del "Pareto.ob_gw_out_head.csv"
 if exist "Pareto.OuterSolution.CSV" del "Pareto.OuterSolution.CSV"
 "EnhancedTemplateProcessor.exe" Pareto.chd.tpl Pareto.pval
-"EnhancedTemplateProcessor.exe" Pareto.ghb.tpl Pareto.pval
-"EnhancedTemplateProcessor.exe" Pareto.wel.tpl Pareto.pval
-"EnhancedTemplateProcessor.exe" Pareto.riv.tpl Pareto.pval
 "EnhancedTemplateProcessor.exe" Pareto.drn.tpl Pareto.pval
-"EnhancedTemplateProcessor.exe" Pareto.rch.tpl Pareto.pval
 "EnhancedTemplateProcessor.exe" Pareto.evt.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.ghb.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.rch.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.riv.tpl Pareto.pval
+"EnhancedTemplateProcessor.exe" Pareto.wel.tpl Pareto.pval
 mf6.exe
 "Mf6ObsExtractor.exe" Pareto.Mf6ExtractValues
 @echo off

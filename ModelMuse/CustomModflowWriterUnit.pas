@@ -5957,7 +5957,7 @@ begin
 
         if Model.ModelSelection = msModflow2015 then
         begin
-          if (ITMP < 0) and (NP = 0) then
+          if (ITMP < 0) and (NP = 0) and (FEvaluationType <> etExportCsv) then
           begin
             Continue;
           end;
@@ -5967,7 +5967,7 @@ begin
           end;
         end;
         // data set 6
-        if ITMP > 0 then
+        if (ITMP > 0) or ((ITMP < 0) and (FEvaluationType = etExportCsv)) then
         begin
           DoBeforeWriteCells;
           WriteAndCheckCells(VariableIdentifiers, DataSetIdentifier, List,

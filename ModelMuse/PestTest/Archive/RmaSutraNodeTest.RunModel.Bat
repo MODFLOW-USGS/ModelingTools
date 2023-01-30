@@ -25,10 +25,10 @@ if exist "RmaSutraNodeTest_Head_Obs6.OBC" del "RmaSutraNodeTest_Head_Obs6.OBC"
 if exist "RmaSutraNodeTest_Head_Obs7.OBC" del "RmaSutraNodeTest_Head_Obs7.OBC"
 if exist "RmaSutraNodeTest_Head_Obs8.OBC" del "RmaSutraNodeTest_Head_Obs8.OBC"
 "plproc.exe" RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script
-"EnhancedTemplateProcessor.exe" RmaSutraNodeTest.FluxBcs.tpl RmaSutraNodeTest.pval
 "EnhancedTemplateProcessor.exe" arrays\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity_1.arrays.tpl
-"plproc.exe" 'RmaSutraNodeTest.15B.script'
+"EnhancedTemplateProcessor.exe" RmaSutraNodeTest.FluxBcs.tpl RmaSutraNodeTest.pval
 "EnhancedTemplateProcessor.exe" RmaSutraNodeTest.inp.tpl RmaSutraNodeTest.pval
+"plproc.exe" 'RmaSutraNodeTest.15B.script'
 "sutra_3_0.exe"
 "SutraObsExtractor.exe" RmaSutraNodeTest.soe_ev
 @echo off

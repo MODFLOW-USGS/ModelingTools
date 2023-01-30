@@ -45,6 +45,8 @@ type
     jvcrtprcs1: TJvCreateProcess;
     miRefreshAll: TMenuItem;
     jvcrtprcsRunModelMuse: TJvCreateProcess;
+    cbRunModels: TCheckBox;
+    jvcpRunModel: TJvCreateProcess;
     procedure btnBrowseClick(Sender: TObject);
     procedure btnRunTestsClick(Sender: TObject);
     procedure Exit1Click(Sender: TObject);
@@ -506,6 +508,7 @@ begin
     begin
       ModelFileName := ParentNode.Text;
       ModelDirectory := ExtractFileDir(ModelFileName);
+
       StatusBar1.SimpleText := 'testing ' + ModelFileName;
 
       ChildNode := ParentNode.getFirstChild;
@@ -582,7 +585,10 @@ begin
             LocalErrorMessage) then
           begin
             Assert(FileExists(OutputFileName));
-            DeleteFile(OutputFileName);
+            if not cbRunModels.Checked then
+            begin
+              DeleteFile(OutputFileName);
+            end;
             ChildNode.StateIndex := 1;
             if ParentNode.StateIndex < ChildNode.StateIndex then
             begin
@@ -609,7 +615,10 @@ begin
           if CompareModflowFiles(OutputFileName, ArchiveFileName, LocalErrorMessage) then
           begin
             Assert(FileExists(OutputFileName));
-            DeleteFile(OutputFileName);
+            if not cbRunModels.Checked then
+            begin
+              DeleteFile(OutputFileName);
+            end;
             ChildNode.StateIndex := 1;
             if ParentNode.StateIndex < ChildNode.StateIndex then
             begin
@@ -640,6 +649,13 @@ begin
       if FileExists(BatName) then
       begin
         DeleteFile(BatName);
+      end;
+      if cbRunModels.Checked then
+      begin
+        jvcpRunModel.CommandLine := IncludeTrailingPathDelimiter(ModelDirectory)
+          + 'RunModel.Bat';
+        jvcpRunModel.Run;
+
       end;
       ParentNode := ParentNode.getNextSibling;
     end;

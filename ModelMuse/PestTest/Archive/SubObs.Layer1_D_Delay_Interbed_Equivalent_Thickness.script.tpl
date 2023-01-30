@@ -1,17 +1,19 @@
 ptf @
 #Script for PLPROC
 
+#Read parameter values
+Sub = @                        Sub@
+# Pilot points are not used with Sub.
+
 #Read MODFLOW-2005 grid information file
 cl_Discretization = read_mf_grid_specs(file="SubObs.gsf")
+# Layer     1
+
 #Read data to modify
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_PIndex1;column=2, &
   plist=p_Value1;column=3, &
   file='SubObs.Layer1_D_Delay_Interbed_Equivalent_Thickness.PstValues')
-
-#Read parameter values
-Sub = @                        Sub@
-# Pilot points are not used with Sub.
 
 # Modfify data values
 temp1=new_plist(reference_clist=cl_Discretization,value=0.0)
@@ -24,3 +26,9 @@ temp1=new_plist(reference_clist=cl_Discretization,value=0.0)
 write_column_data_file(header='no', &
   file='arrays\SubObs.Layer1_D_Delay_Interbed_Equivalent_Thickness_1.arrays';delim="space", &
   plist=p_Value1)
+
+# Remove sLists and pLists
+s_PIndex1.remove()
+p_Value1.remove()
+temp1.remove()
+

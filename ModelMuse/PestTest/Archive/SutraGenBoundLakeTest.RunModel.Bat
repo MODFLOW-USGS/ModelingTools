@@ -29,9 +29,9 @@ if exist "SutraGenBoundLakeTest_Object7.OBS" del "SutraGenBoundLakeTest_Object7.
 "plproc.exe" SutraGenBoundLakeTest.Lake_Bottom.script
 "EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.GfbBCS.tpl SutraGenBoundLakeTest.pval
 "EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.GtbBCS.tpl SutraGenBoundLakeTest.pval
-"EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.lkin.tpl SutraGenBoundLakeTest.pval
-"EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.lkar.tpl SutraGenBoundLakeTest.pval
 "EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.inp.tpl SutraGenBoundLakeTest.pval
+"EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.lkar.tpl SutraGenBoundLakeTest.pval
+"EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.lkin.tpl SutraGenBoundLakeTest.pval
 "sutra_3_0.exe"
 "SutraObsExtractor.exe" SutraGenBoundLakeTest.soe_ev
 @echo off

@@ -20,12 +20,12 @@ if exist "Prediction.lst" del "Prediction.lst"
 if exist "Prediction.ob_gw_out_head.csv" del "Prediction.ob_gw_out_head.csv"
 if exist "Prediction.OuterSolution.CSV" del "Prediction.OuterSolution.CSV"
 "EnhancedTemplateProcessor.exe" Prediction.chd.tpl Prediction.pval
-"EnhancedTemplateProcessor.exe" Prediction.ghb.tpl Prediction.pval
-"EnhancedTemplateProcessor.exe" Prediction.wel.tpl Prediction.pval
-"EnhancedTemplateProcessor.exe" Prediction.riv.tpl Prediction.pval
 "EnhancedTemplateProcessor.exe" Prediction.drn.tpl Prediction.pval
-"EnhancedTemplateProcessor.exe" Prediction.rch.tpl Prediction.pval
 "EnhancedTemplateProcessor.exe" Prediction.evt.tpl Prediction.pval
+"EnhancedTemplateProcessor.exe" Prediction.ghb.tpl Prediction.pval
+"EnhancedTemplateProcessor.exe" Prediction.rch.tpl Prediction.pval
+"EnhancedTemplateProcessor.exe" Prediction.riv.tpl Prediction.pval
+"EnhancedTemplateProcessor.exe" Prediction.wel.tpl Prediction.pval
 mf6.exe
 "Mf6ObsExtractor.exe" Prediction.Mf6ExtractValues
 @echo off

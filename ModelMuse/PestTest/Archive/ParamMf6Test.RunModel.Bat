@@ -20,12 +20,12 @@ if exist "ParamMf6Test.lst" del "ParamMf6Test.lst"
 if exist "ParamMf6Test.ob_gw_out_head.csv" del "ParamMf6Test.ob_gw_out_head.csv"
 if exist "ParamMf6Test.OuterSolution.CSV" del "ParamMf6Test.OuterSolution.CSV"
 "EnhancedTemplateProcessor.exe" ParamMf6Test.chd.tpl ParamMf6Test.pval
-"EnhancedTemplateProcessor.exe" ParamMf6Test.ghb.tpl ParamMf6Test.pval
-"EnhancedTemplateProcessor.exe" ParamMf6Test.wel.tpl ParamMf6Test.pval
-"EnhancedTemplateProcessor.exe" ParamMf6Test.riv.tpl ParamMf6Test.pval
 "EnhancedTemplateProcessor.exe" ParamMf6Test.drn.tpl ParamMf6Test.pval
-"EnhancedTemplateProcessor.exe" ParamMf6Test.rch.tpl ParamMf6Test.pval
 "EnhancedTemplateProcessor.exe" ParamMf6Test.evt.tpl ParamMf6Test.pval
+"EnhancedTemplateProcessor.exe" ParamMf6Test.ghb.tpl ParamMf6Test.pval
+"EnhancedTemplateProcessor.exe" ParamMf6Test.rch.tpl ParamMf6Test.pval
+"EnhancedTemplateProcessor.exe" ParamMf6Test.riv.tpl ParamMf6Test.pval
+"EnhancedTemplateProcessor.exe" ParamMf6Test.wel.tpl ParamMf6Test.pval
 mf6.exe
 "Mf6ObsExtractor.exe" ParamMf6Test.Mf6ExtractValues
 @echo off

@@ -97,10 +97,10 @@ if exist "MF6_TestSfrMawLakMvrUzf.water-content_ob.csv" del "MF6_TestSfrMawLakMv
 if exist "mfsim.lst" del "mfsim.lst"
 "plproc.exe" MF6_TestSfrMawLakMvrUzf.UZF6_Surface_Depression_Depth.script
 "plproc.exe" MF6_TestSfrMawLakMvrUzf.SfrWidth.script
-"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.sfr.tpl MF6_TestSfrMawLakMvrUzf.pval
-"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.maw6.tpl MF6_TestSfrMawLakMvrUzf.pval
-"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.lak6.tpl MF6_TestSfrMawLakMvrUzf.pval
 "EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.3.laktab.tpl MF6_TestSfrMawLakMvrUzf.pval
+"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.lak6.tpl MF6_TestSfrMawLakMvrUzf.pval
+"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.maw6.tpl MF6_TestSfrMawLakMvrUzf.pval
+"EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.sfr.tpl MF6_TestSfrMawLakMvrUzf.pval
 "EnhancedTemplateProcessor.exe" MF6_TestSfrMawLakMvrUzf.uzf.tpl MF6_TestSfrMawLakMvrUzf.pval
 mf6.exe
 "Mf6ObsExtractor.exe" MF6_TestSfrMawLakMvrUzf.Mf6ExtractValues

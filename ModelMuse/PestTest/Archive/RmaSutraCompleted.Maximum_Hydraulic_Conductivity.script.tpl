@@ -1,6 +1,10 @@
 ptf $
 #Script for PLPROC
 
+#Read parameter values
+K = $                        K$
+# Pilot points are used with K.
+
 #Read pilot point data
 PMXPilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
   plist='K_1';column=5, &
@@ -9,15 +13,13 @@ PMXPilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
 cl_Discretization = read_list_file(skiplines=1,dimensions=2, &
   id_type='indexed',file='RmaSutraCompleted.c_ele')
 
+# Layer     1
+
 #Read data to modify
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_PIndex1;column=2, &
   plist=p_Value1;column=3, &
   file='RmaSutraCompleted.Maximum_Hydraulic_Conductivity.PstValues')
-
-#Read parameter values
-K = $                        K$
-# Pilot points are used with K.
 
 # Modfify data values
 temp1=new_plist(reference_clist=cl_Discretization,value=0.0)
@@ -34,3 +36,9 @@ temp1=new_plist(reference_clist=cl_Discretization,value=0.0)
 write_column_data_file(header='no', &
   file='arrays\RmaSutraCompleted.Maximum_Hydraulic_Conductivity_1.arrays';delim="space", &
   plist=p_Value1)
+
+# Remove sLists and pLists
+s_PIndex1.remove()
+K_1.remove()
+temp1.remove()
+

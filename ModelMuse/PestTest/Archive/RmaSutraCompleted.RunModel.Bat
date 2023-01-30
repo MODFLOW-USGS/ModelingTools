@@ -26,10 +26,10 @@ if exist "RmaSutraCompleted_Head_Obs7.OBC" del "RmaSutraCompleted_Head_Obs7.OBC"
 if exist "RmaSutraCompleted_Head_Obs8.OBC" del "RmaSutraCompleted_Head_Obs8.OBC"
 if exist "RmaSutraCompleted_TIME_STEPS.OBS" del "RmaSutraCompleted_TIME_STEPS.OBS"
 "plproc.exe" RmaSutraCompleted.Maximum_Hydraulic_Conductivity.script
-"EnhancedTemplateProcessor.exe" RmaSutraCompleted.FluxBcs.tpl RmaSutraCompleted.pval
 "EnhancedTemplateProcessor.exe" arrays\RmaSutraCompleted.Minimum_Hydraulic_Conductivity_1.arrays.tpl
-"plproc.exe" 'RmaSutraCompleted.15B.script'
+"EnhancedTemplateProcessor.exe" RmaSutraCompleted.FluxBcs.tpl RmaSutraCompleted.pval
 "EnhancedTemplateProcessor.exe" RmaSutraCompleted.inp.tpl RmaSutraCompleted.pval
+"plproc.exe" 'RmaSutraCompleted.15B.script'
 "sutra_2_2.exe"
 "SutraObsExtractor.exe" RmaSutraCompleted.soe_ev
 @echo off

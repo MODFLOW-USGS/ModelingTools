@@ -11,10 +11,8 @@ object frmMain: TfrmMain
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Menu = MainMenu1
-  OldCreateOrder = True
   OnClose = FormClose
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
@@ -31,6 +29,7 @@ object frmMain: TfrmMain
     Height = 115
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 501
     DesignSize = (
       838
       115)
@@ -132,6 +131,7 @@ object frmMain: TfrmMain
       Anchors = [akLeft, akTop, akRight]
       Step = 1
       TabOrder = 6
+      ExplicitWidth = 650
     end
     object BitBtn1: TBitBtn
       Left = 551
@@ -170,6 +170,14 @@ object frmMain: TfrmMain
       TabOrder = 5
       Text = 'fedlBeyondCompareLocation'
     end
+    object cbRunModels: TCheckBox
+      Left = 616
+      Top = 48
+      Width = 97
+      Height = 17
+      Caption = 'Run models'
+      TabOrder = 7
+    end
   end
   object StatusBar1: TStatusBar
     Left = 0
@@ -178,6 +186,8 @@ object frmMain: TfrmMain
     Height = 19
     Panels = <>
     SimplePanel = True
+    ExplicitTop = 621
+    ExplicitWidth = 834
   end
   object tvModflow: TTreeView
     Left = 0
@@ -192,6 +202,8 @@ object frmMain: TfrmMain
     TabOrder = 0
     OnCustomDrawItem = tvModflowCustomDrawItem
     OnDblClick = tvModflowDblClick
+    ExplicitWidth = 834
+    ExplicitHeight = 410
   end
   object memoErrors: TMemo
     Left = 0
@@ -201,6 +213,8 @@ object frmMain: TfrmMain
     Align = alBottom
     ScrollBars = ssBoth
     TabOrder = 1
+    ExplicitTop = 417
+    ExplicitWidth = 834
   end
   object odSelectGoPhast: TOpenDialog
     Filter = '*.exe|*.exe'
@@ -371,5 +385,9 @@ object frmMain: TfrmMain
     WaitForTerminate = False
     Left = 648
     Top = 272
+  end
+  object jvcpRunModel: TJvCreateProcess
+    Left = 512
+    Top = 160
   end
 end

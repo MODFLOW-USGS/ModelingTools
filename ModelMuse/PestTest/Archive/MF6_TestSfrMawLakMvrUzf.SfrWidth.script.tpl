@@ -1,6 +1,10 @@
 ptf @
 #Script for PLPROC
 
+#Read parameter values
+Sfr1 = @                        Sfr1@
+# Pilot points are not used with Sfr1.
+
 #Read MODFLOW 6 grid information file
 cl_Discretization1 = read_mf6_grid_specs(file='MF6_TestSfrMawLakMvrUzf.dis.grb', &
   dimensions=2, &
@@ -20,15 +24,13 @@ cl_Discretization3 = read_mf6_grid_specs(file='MF6_TestSfrMawLakMvrUzf.dis.grb',
 
 
 
+# Layer     1
+
 #Read data to modify
 read_list_file(reference_clist='cl_Discretization1',skiplines=1, &
   slist=s_PIndex1;column=2, &
   plist=p_Value1;column=3, &
   file='MF6_TestSfrMawLakMvrUzf.SfrWidth.PstValues')
-
-#Read parameter values
-Sfr1 = @                        Sfr1@
-# Pilot points are not used with Sfr1.
 
 # Modfify data values
 temp1=new_plist(reference_clist=cl_Discretization1,value=0.0)
@@ -41,3 +43,9 @@ temp1=new_plist(reference_clist=cl_Discretization1,value=0.0)
 write_column_data_file(header='no', &
   file='arrays\MF6_TestSfrMawLakMvrUzf.SfrWidth_1.arrays';delim="space", &
   plist=p_Value1)
+
+# Remove sLists and pLists
+s_PIndex1.remove()
+p_Value1.remove()
+temp1.remove()
+

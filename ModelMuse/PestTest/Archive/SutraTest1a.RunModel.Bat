@@ -46,17 +46,17 @@ if exist "SutraTest1a_TIME_STEPS.OBS" del "SutraTest1a_TIME_STEPS.OBS"
 "plproc.exe" SutraTest1a.Nodal_Porosity.script
 "plproc.exe" SutraTest1a.Maximum_Permeability.script
 "plproc.exe" SutraTest1a.MyMult.script
-"EnhancedTemplateProcessor.exe" SutraTest1a.FluxBcs.tpl SutraTest1a.pval
-"EnhancedTemplateProcessor.exe" SutraTest1a.SPecPBcs.tpl SutraTest1a.pval
-"plproc.exe" 'SutraTest1a.14B.script'
 "EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_1.arrays.tpl
 "EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_2.arrays.tpl
 "EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_3.arrays.tpl
 "EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_1.arrays.tpl
 "EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_2.arrays.tpl
 "EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_3.arrays.tpl
-"plproc.exe" 'SutraTest1a.15B.script'
+"EnhancedTemplateProcessor.exe" SutraTest1a.FluxBcs.tpl SutraTest1a.pval
 "EnhancedTemplateProcessor.exe" SutraTest1a.inp.tpl SutraTest1a.pval
+"EnhancedTemplateProcessor.exe" SutraTest1a.SPecPBcs.tpl SutraTest1a.pval
+"plproc.exe" 'SutraTest1a.14B.script'
+"plproc.exe" 'SutraTest1a.15B.script'
 "sutra_2_2.exe"
 "SutraObsExtractor.exe" SutraTest1a.soe_ev
 @echo off

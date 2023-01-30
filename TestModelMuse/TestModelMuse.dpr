@@ -1,6 +1,11 @@
 program TestModelMuse;
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   Forms,
   frmMainUnit in 'frmMainUnit.pas' {frmMain},
   IniFileUtilities in 'IniFileUtilities.pas';
