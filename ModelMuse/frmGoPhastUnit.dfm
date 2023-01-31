@@ -1394,6 +1394,7 @@ inherited frmGoPhast: TfrmGoPhast
         end
         object WellsToCsv1: TMenuItem
           Caption = 'Wells to CSV'
+          Visible = False
           OnClick = WellsToCsv1Click
         end
       end

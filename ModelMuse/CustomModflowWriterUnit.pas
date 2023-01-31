@@ -1536,6 +1536,8 @@ var
   SimCount: Integer;
   ChemIndex: Integer;
   ChemExt: string;
+//  BackupMfsimName: string;
+//  CopyLine: WideString;
 begin
 
   ADirectory:= GetCurrentDir;
@@ -1549,6 +1551,7 @@ begin
       + FileRoot + StrRunModelBat;
     ParamEstBatFileName := IncludeTrailingPathDelimiter(result)
       + StrRunModelBat;
+
     WriteInstructionBatFileName := IncludeTrailingPathDelimiter(result)
       + 'WriteInstructions.Bat';
     BackupRunModflow := IncludeTrailingPathDelimiter(result)
@@ -1668,7 +1671,9 @@ begin
       end
       else
       begin
+//        BackupMfsimName := FileRoot + 'mfsim.nam';
         MfsimName := 'mfsim.nam';
+//        CopyLine := Format('if exist "%0:s" copy /Y "%0:s" "%1:s"', [BackupMfsimName, MfsimName]);
         MfListName := 'mfsim.lst';
         SimCount := frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount;
         for SimIndex := 0 to SimCount -1 do
@@ -1676,7 +1681,7 @@ begin
           SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.
             SimFileNames[SimIndex]);
           ListFileName := ChangeFileExt(SimFileName, '.lst');
-          if SimCount > 1 then
+//          if SimCount > 1 then
           begin
             BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"',
               [SimFileName, MfsimName]));

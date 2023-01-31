@@ -1,6 +1,10 @@
 ptf $
 #Script for PLPROC
 
+#Read parameter values
+Density = $                        Density$
+# Pilot points are used with Density.
+
 #Read pilot point data
 PilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
   plist='Density_1';column=5, &
@@ -15,23 +19,13 @@ PilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
 cl_Discretization = read_list_file(skiplines=1,dimensions=2, &
   id_type='indexed',file='Rocky2D_IrregularS4Interpolate.c_nod')
 
+# Layer     1
+
 #Read data to modify
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_PIndex1;column=2, &
   plist=p_Value1;column=3, &
   file='Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat.PstValues')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_PIndex2;column=4, &
-  plist=p_Value2;column=5, &
-  file='Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat.PstValues')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_PIndex3;column=6, &
-  plist=p_Value3;column=7, &
-  file='Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat.PstValues')
-
-#Read parameter values
-Density = $                        Density$
-# Pilot points are used with Density.
 
 # Modfify data values
 temp1=new_plist(reference_clist=cl_Discretization,value=0.0)
@@ -43,6 +37,26 @@ temp1=new_plist(reference_clist=cl_Discretization,value=0.0)
       transform='none')
     # Write interpolated values in zones
     p_Value1(select=(s_PIndex1 == 1)) = temp1
+
+#Write new data values
+write_column_data_file(header='no', &
+  file='arrays\Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat_1.arrays';delim="space", &
+  plist=p_Value1)
+
+# Remove sLists and pLists
+s_PIndex1.remove()
+Density_1.remove()
+temp1.remove()
+
+# Layer     2
+
+#Read data to modify
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_PIndex2;column=4, &
+  plist=p_Value2;column=5, &
+  file='Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat.PstValues')
+
+# Modfify data values
 temp2=new_plist(reference_clist=cl_Discretization,value=0.0)
 # Setting values for layer     2
   # Setting values for parameter Density
@@ -52,6 +66,26 @@ temp2=new_plist(reference_clist=cl_Discretization,value=0.0)
       transform='none')
     # Write interpolated values in zones
     p_Value2(select=(s_PIndex2 == 1)) = temp2
+
+#Write new data values
+write_column_data_file(header='no', &
+  file='arrays\Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat_2.arrays';delim="space", &
+  plist=p_Value2)
+
+# Remove sLists and pLists
+s_PIndex2.remove()
+Density_2.remove()
+temp2.remove()
+
+# Layer     3
+
+#Read data to modify
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_PIndex3;column=6, &
+  plist=p_Value3;column=7, &
+  file='Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat.PstValues')
+
+# Modfify data values
 temp3=new_plist(reference_clist=cl_Discretization,value=0.0)
 # Setting values for layer     3
   # Setting values for parameter Density
@@ -64,11 +98,11 @@ temp3=new_plist(reference_clist=cl_Discretization,value=0.0)
 
 #Write new data values
 write_column_data_file(header='no', &
-  file='arrays\Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat_1.arrays';delim="space", &
-  plist=p_Value1)
-write_column_data_file(header='no', &
-  file='arrays\Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat_2.arrays';delim="space", &
-  plist=p_Value2)
-write_column_data_file(header='no', &
   file='arrays\Rocky2D_IrregularS4Interpolate.Solid_Grain_Specific_Heat_3.arrays';delim="space", &
   plist=p_Value3)
+
+# Remove sLists and pLists
+s_PIndex3.remove()
+Density_3.remove()
+temp3.remove()
+

@@ -24,6 +24,7 @@ if exist "RmaSutraNodeTest_Head_Obs5.OBC" del "RmaSutraNodeTest_Head_Obs5.OBC"
 if exist "RmaSutraNodeTest_Head_Obs6.OBC" del "RmaSutraNodeTest_Head_Obs6.OBC"
 if exist "RmaSutraNodeTest_Head_Obs7.OBC" del "RmaSutraNodeTest_Head_Obs7.OBC"
 if exist "RmaSutraNodeTest_Head_Obs8.OBC" del "RmaSutraNodeTest_Head_Obs8.OBC"
+if exist "RmaSutraNodeTest.SUTRA.FIL" copy /Y "RmaSutraNodeTest.SUTRA.FIL" "SUTRA.FIL"
 "plproc.exe" RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script
 "EnhancedTemplateProcessor.exe" arrays\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity_1.arrays.tpl
 "EnhancedTemplateProcessor.exe" RmaSutraNodeTest.FluxBcs.tpl RmaSutraNodeTest.pval

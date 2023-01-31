@@ -186,6 +186,7 @@ type
     reMonitor: TJvRichEdit;
     memoDisclaimer: TMemo;
     cbModflow6: TCheckBox;
+    cbClose: TCheckBox;
     procedure btnRunClick(Sender: TObject);
     procedure timerReadOutputTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -533,7 +534,8 @@ begin
 end;
 
 type
-  TCommandLineState = (clsUnknown, clsModelName, clsNameFile, clsModflowVersion);
+  TCommandLineState = (clsUnknown, clsModelName, clsNameFile, clsModflowVersion,
+    clClose);
 
 procedure TfrmMonitor.FormCreate(Sender: TObject);
 var
@@ -627,6 +629,11 @@ var
   NormalTermination: Boolean;
   Index: Integer;
 begin
+  if cbClose.Checked then
+  begin
+    Close;
+    Exit;
+  end;
   btnStopModel.Enabled := False;
   lblModelDone.Visible := True;
 
@@ -1189,6 +1196,7 @@ const
   ModelNameOption = '-m';
   NameFileOption = '-n';
   Mf6Option = '-mv';
+  CloseOption = '-c';
 begin
   if FAlreadyStarted then
   begin
@@ -1216,6 +1224,12 @@ begin
       else if LowerCaseParam = Mf6Option then
       begin
         State := clsModflowVersion;
+        Continue;
+      end
+      else if LowerCaseParam = CloseOption then
+      begin
+        State := clClose;
+        cbClose.Checked := True;
         Continue;
       end;
       case State of

@@ -22,6 +22,7 @@ if exist "SutraTest4_ObsSched1.OBS" del "SutraTest4_ObsSched1.OBS"
 if exist "SutraTest4_ObsSched2.OBS" del "SutraTest4_ObsSched2.OBS"
 if exist "SutraTest4_TIME_STEPS.OBC" del "SutraTest4_TIME_STEPS.OBC"
 if exist "SutraTest4_TIME_STEPS.OBS" del "SutraTest4_TIME_STEPS.OBS"
+if exist "SutraTest4.SUTRA.FIL" copy /Y "SutraTest4.SUTRA.FIL" "SUTRA.FIL"
 "EnhancedTemplateProcessor.exe" SutraTest4.FluxBcs.tpl SutraTest4.pval
 "EnhancedTemplateProcessor.exe" SutraTest4.inp.tpl SutraTest4.pval
 "EnhancedTemplateProcessor.exe" SutraTest4.SPecPBcs.tpl SutraTest4.pval

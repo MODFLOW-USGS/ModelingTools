@@ -1,74 +1,6 @@
 # ptf $
 #Script for PLPROC
 
-#Read SUTRA node information file
-cl_Discretization = read_list_file(skiplines=1,dimensions=2, &
-  plist=p_x;column=2, &
-  plist=p_y;column=3, &
-  slist=s_NN2D;column=4, &
-  id_type='indexed',file='SutraTest1a.c_nod')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_z1;column=5, &
-  slist=s_NN3D1;column=6, &
-  slist=s_Active_1;column=7, &
-  id_type='indexed',file='SutraTest1a.c_nod')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_z2;column=8, &
-  slist=s_NN3D2;column=9, &
-  slist=s_Active_2;column=10, &
-  id_type='indexed',file='SutraTest1a.c_nod')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_z3;column=11, &
-  slist=s_NN3D3;column=12, &
-  slist=s_Active_3;column=13, &
-  id_type='indexed',file='SutraTest1a.c_nod')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_z4;column=14, &
-  slist=s_NN3D4;column=15, &
-  slist=s_Active_4;column=16, &
-  id_type='indexed',file='SutraTest1a.c_nod')
-
-#Read pilot point data
-
-# Read data to modify
-# Read porosity
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  file='SutraTest1a.Nodal_Porosity')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_Layer1;column=3, &
-  plist=p_Porosity1;column=4, &
-  slist=s_PorPar1;column=5, &
-  file='SutraTest1a.Nodal_Porosity')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_Layer2;column=7, &
-  plist=p_Porosity2;column=8, &
-  slist=s_PorPar2;column=9, &
-  file='SutraTest1a.Nodal_Porosity')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_Layer3;column=11, &
-  plist=p_Porosity3;column=12, &
-  slist=s_PorPar3;column=13, &
-  file='SutraTest1a.Nodal_Porosity')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_Layer4;column=15, &
-  plist=p_Porosity4;column=16, &
-  slist=s_PorPar4;column=17, &
-  file='SutraTest1a.Nodal_Porosity')
-
-# Read Unsaturated Zone
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_Unsat_Region1;column=4, &
-  file='SutraTest1a.Region_Nodes')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_Unsat_Region2;column=7, &
-  file='SutraTest1a.Region_Nodes')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_Unsat_Region3;column=10, &
-  file='SutraTest1a.Region_Nodes')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  slist=s_Unsat_Region4;column=13, &
-  file='SutraTest1a.Region_Nodes')
-
 #Read parameter values
 #a = $                        a$
 a = 1.1
@@ -77,37 +9,53 @@ conc1 = 0.1
 #conc2 = $                        conc2$
 conc2 = 0.2
 
+#Read SUTRA node information file
+cl_Discretization = read_list_file(skiplines=1,dimensions=2, &
+  plist=p_x;column=2, &
+  plist=p_y;column=3, &
+  slist=s_NN2D;column=4, &
+  id_type='indexed',file='SutraTest1a.c_nod')
+
 temp=new_plist(reference_clist=cl_Discretization,value=0.0)
+#Read pilot point data
+
+# Read data to modify
+# Layer     1
+
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  plist=p_z1;column=5, &
+  slist=s_NN3D1;column=6, &
+  slist=s_Active_1;column=7, &
+  id_type='indexed',file='SutraTest1a.c_nod')
+
+
+# Read porosity
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_Layer1;column=3, &
+  plist=p_Porosity1;column=4, &
+  slist=s_PorPar1;column=5, &
+  file='SutraTest1a.Nodal_Porosity')
+
+# Read Unsaturated Zone
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_Unsat_Region1;column=4, &
+  file='SutraTest1a.Region_Nodes')
+
 # applying parameter values
 # applying parameter a
     # Substituting parameter values in zones
 p_Porosity1(select=(s_PorPar1 == 1)) = p_Porosity1 * a
-    # Substituting parameter values in zones
-p_Porosity2(select=(s_PorPar2 == 1)) = p_Porosity2 * a
-    # Substituting parameter values in zones
-p_Porosity3(select=(s_PorPar3 == 1)) = p_Porosity3 * a
-    # Substituting parameter values in zones
-p_Porosity4(select=(s_PorPar4 == 1)) = p_Porosity4 * a
 
 # applying parameter conc1
     # Substituting parameter values in zones
 p_Porosity1(select=(s_PorPar1 == 2)) = p_Porosity1 * conc1
-    # Substituting parameter values in zones
-p_Porosity2(select=(s_PorPar2 == 2)) = p_Porosity2 * conc1
-    # Substituting parameter values in zones
-p_Porosity3(select=(s_PorPar3 == 2)) = p_Porosity3 * conc1
-    # Substituting parameter values in zones
-p_Porosity4(select=(s_PorPar4 == 2)) = p_Porosity4 * conc1
 
 # applying parameter conc2
     # Substituting parameter values in zones
 p_Porosity1(select=(s_PorPar1 == 3)) = p_Porosity1 * conc2
-    # Substituting parameter values in zones
-p_Porosity2(select=(s_PorPar2 == 3)) = p_Porosity2 * conc2
-    # Substituting parameter values in zones
-p_Porosity3(select=(s_PorPar3 == 3)) = p_Porosity3 * conc2
-    # Substituting parameter values in zones
-p_Porosity4(select=(s_PorPar4 == 3)) = p_Porosity4 * conc2
+
+# removing unneeded slists.
+s_PorPar1.remove()
 
 # Write new data values
 write_column_data_file(header = 'no', &
@@ -119,6 +67,52 @@ write_column_data_file(header = 'no', &
   plist=p_y, &
   plist=p_z1, &
   plist=p_Porosity1)
+
+# remove unneeded slists and plists.
+s_Active_1.remove()
+s_NN3D1.remove()
+s_Unsat_Region1.remove()
+p_z1.remove()
+p_Porosity1.remove()
+
+# Layer     2
+
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  plist=p_z2;column=8, &
+  slist=s_NN3D2;column=9, &
+  slist=s_Active_2;column=10, &
+  id_type='indexed',file='SutraTest1a.c_nod')
+
+
+# Read porosity
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_Layer2;column=7, &
+  plist=p_Porosity2;column=8, &
+  slist=s_PorPar2;column=9, &
+  file='SutraTest1a.Nodal_Porosity')
+
+# Read Unsaturated Zone
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_Unsat_Region2;column=7, &
+  file='SutraTest1a.Region_Nodes')
+
+# applying parameter values
+# applying parameter a
+    # Substituting parameter values in zones
+p_Porosity2(select=(s_PorPar2 == 1)) = p_Porosity2 * a
+
+# applying parameter conc1
+    # Substituting parameter values in zones
+p_Porosity2(select=(s_PorPar2 == 2)) = p_Porosity2 * conc1
+
+# applying parameter conc2
+    # Substituting parameter values in zones
+p_Porosity2(select=(s_PorPar2 == 3)) = p_Porosity2 * conc2
+
+# removing unneeded slists.
+s_PorPar2.remove()
+
+# Write new data values
 write_column_data_file(header = 'no', &
   file='SutraTest1a.14B_2';delim="space", &
   select=(s_Active_2 == 1), &
@@ -128,6 +122,52 @@ write_column_data_file(header = 'no', &
   plist=p_y, &
   plist=p_z2, &
   plist=p_Porosity2)
+
+# remove unneeded slists and plists.
+s_Active_2.remove()
+s_NN3D2.remove()
+s_Unsat_Region2.remove()
+p_z2.remove()
+p_Porosity2.remove()
+
+# Layer     3
+
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  plist=p_z3;column=11, &
+  slist=s_NN3D3;column=12, &
+  slist=s_Active_3;column=13, &
+  id_type='indexed',file='SutraTest1a.c_nod')
+
+
+# Read porosity
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_Layer3;column=11, &
+  plist=p_Porosity3;column=12, &
+  slist=s_PorPar3;column=13, &
+  file='SutraTest1a.Nodal_Porosity')
+
+# Read Unsaturated Zone
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_Unsat_Region3;column=10, &
+  file='SutraTest1a.Region_Nodes')
+
+# applying parameter values
+# applying parameter a
+    # Substituting parameter values in zones
+p_Porosity3(select=(s_PorPar3 == 1)) = p_Porosity3 * a
+
+# applying parameter conc1
+    # Substituting parameter values in zones
+p_Porosity3(select=(s_PorPar3 == 2)) = p_Porosity3 * conc1
+
+# applying parameter conc2
+    # Substituting parameter values in zones
+p_Porosity3(select=(s_PorPar3 == 3)) = p_Porosity3 * conc2
+
+# removing unneeded slists.
+s_PorPar3.remove()
+
+# Write new data values
 write_column_data_file(header = 'no', &
   file='SutraTest1a.14B_3';delim="space", &
   select=(s_Active_3 == 1), &
@@ -137,6 +177,52 @@ write_column_data_file(header = 'no', &
   plist=p_y, &
   plist=p_z3, &
   plist=p_Porosity3)
+
+# remove unneeded slists and plists.
+s_Active_3.remove()
+s_NN3D3.remove()
+s_Unsat_Region3.remove()
+p_z3.remove()
+p_Porosity3.remove()
+
+# Layer     4
+
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  plist=p_z4;column=14, &
+  slist=s_NN3D4;column=15, &
+  slist=s_Active_4;column=16, &
+  id_type='indexed',file='SutraTest1a.c_nod')
+
+
+# Read porosity
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_Layer4;column=15, &
+  plist=p_Porosity4;column=16, &
+  slist=s_PorPar4;column=17, &
+  file='SutraTest1a.Nodal_Porosity')
+
+# Read Unsaturated Zone
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
+  slist=s_Unsat_Region4;column=13, &
+  file='SutraTest1a.Region_Nodes')
+
+# applying parameter values
+# applying parameter a
+    # Substituting parameter values in zones
+p_Porosity4(select=(s_PorPar4 == 1)) = p_Porosity4 * a
+
+# applying parameter conc1
+    # Substituting parameter values in zones
+p_Porosity4(select=(s_PorPar4 == 2)) = p_Porosity4 * conc1
+
+# applying parameter conc2
+    # Substituting parameter values in zones
+p_Porosity4(select=(s_PorPar4 == 3)) = p_Porosity4 * conc2
+
+# removing unneeded slists.
+s_PorPar4.remove()
+
+# Write new data values
 write_column_data_file(header = 'no', &
   file='SutraTest1a.14B_4';delim="space", &
   select=(s_Active_4 == 1), &
@@ -146,3 +232,11 @@ write_column_data_file(header = 'no', &
   plist=p_y, &
   plist=p_z4, &
   plist=p_Porosity4)
+
+# remove unneeded slists and plists.
+s_Active_4.remove()
+s_NN3D4.remove()
+s_Unsat_Region4.remove()
+p_z4.remove()
+p_Porosity4.remove()
+

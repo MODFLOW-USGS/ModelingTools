@@ -25,6 +25,7 @@ if exist "SutraGenBoundLakeTest.rst" del "SutraGenBoundLakeTest.rst"
 if exist "SutraGenBoundLakeTest.smy" del "SutraGenBoundLakeTest.smy"
 if exist "SutraGenBoundLakeTest_Object7.OBC" del "SutraGenBoundLakeTest_Object7.OBC"
 if exist "SutraGenBoundLakeTest_Object7.OBS" del "SutraGenBoundLakeTest_Object7.OBS"
+if exist "SutraGenBoundLakeTest.SUTRA.FIL" copy /Y "SutraGenBoundLakeTest.SUTRA.FIL" "SUTRA.FIL"
 "plproc.exe" SutraGenBoundLakeTest.TestDS.script
 "plproc.exe" SutraGenBoundLakeTest.Lake_Bottom.script
 "EnhancedTemplateProcessor.exe" SutraGenBoundLakeTest.GfbBCS.tpl SutraGenBoundLakeTest.pval

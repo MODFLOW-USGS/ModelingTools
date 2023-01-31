@@ -43,6 +43,7 @@ if exist "SutraTest1a_ObsSched2.OBS" del "SutraTest1a_ObsSched2.OBS"
 if exist "SutraTest1a_SCHED_1.OBC" del "SutraTest1a_SCHED_1.OBC"
 if exist "SutraTest1a_TIME_STEPS.OBC" del "SutraTest1a_TIME_STEPS.OBC"
 if exist "SutraTest1a_TIME_STEPS.OBS" del "SutraTest1a_TIME_STEPS.OBS"
+if exist "SutraTest1a.SUTRA.FIL" copy /Y "SutraTest1a.SUTRA.FIL" "SUTRA.FIL"
 "plproc.exe" SutraTest1a.Nodal_Porosity.script
 "plproc.exe" SutraTest1a.Maximum_Permeability.script
 "plproc.exe" SutraTest1a.MyMult.script

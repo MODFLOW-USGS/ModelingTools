@@ -27,6 +27,7 @@ if exist "SutraTest5.rst" del "SutraTest5.rst"
 if exist "SutraTest5.smy" del "SutraTest5.smy"
 if exist "SutraTest5_Observatio.OBC" del "SutraTest5_Observatio.OBC"
 if exist "SutraTest5_ObsSchec.OBS" del "SutraTest5_ObsSchec.OBS"
+if exist "SutraTest5.SUTRA.FIL" copy /Y "SutraTest5.SUTRA.FIL" "SUTRA.FIL"
 "plproc.exe" SutraTest5.Maximum_Permeability.script
 "plproc.exe" SutraTest5.Minimum_Permeability.script
 "plproc.exe" SutraTest5.Middle_Permeability.script

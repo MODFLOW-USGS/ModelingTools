@@ -25,6 +25,7 @@ if exist "RmaSutraCompleted_Head_Obs6.OBC" del "RmaSutraCompleted_Head_Obs6.OBC"
 if exist "RmaSutraCompleted_Head_Obs7.OBC" del "RmaSutraCompleted_Head_Obs7.OBC"
 if exist "RmaSutraCompleted_Head_Obs8.OBC" del "RmaSutraCompleted_Head_Obs8.OBC"
 if exist "RmaSutraCompleted_TIME_STEPS.OBS" del "RmaSutraCompleted_TIME_STEPS.OBS"
+if exist "RmaSutraCompleted.SUTRA.FIL" copy /Y "RmaSutraCompleted.SUTRA.FIL" "SUTRA.FIL"
 "plproc.exe" RmaSutraCompleted.Maximum_Hydraulic_Conductivity.script
 "EnhancedTemplateProcessor.exe" arrays\RmaSutraCompleted.Minimum_Hydraulic_Conductivity_1.arrays.tpl
 "EnhancedTemplateProcessor.exe" RmaSutraCompleted.FluxBcs.tpl RmaSutraCompleted.pval

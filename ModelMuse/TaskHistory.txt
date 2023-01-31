@@ -30613,5 +30613,14 @@ object TTaskHistory
         'Testing'
         'PEST'
         'Pest parameter substitution')
+    end
+    item
+      Date = 44957.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Testing'
+        'PEST'
+        'Pest parameter substitution'
+        'Running MODFLOW ModelMonitor')
     end>
 end

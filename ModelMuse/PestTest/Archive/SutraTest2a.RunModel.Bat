@@ -19,6 +19,7 @@ if exist "SutraTest2a.smy" del "SutraTest2a.smy"
 if exist "SutraTest2a_Object13.OBC" del "SutraTest2a_Object13.OBC"
 if exist "SutraTest2a_Observatio.OBC" del "SutraTest2a_Observatio.OBC"
 if exist "SutraTest2a_ObsSchec.OBS" del "SutraTest2a_ObsSchec.OBS"
+if exist "SutraTest2a.SUTRA.FIL" copy /Y "SutraTest2a.SUTRA.FIL" "SUTRA.FIL"
 "EnhancedTemplateProcessor.exe" SutraTest2a.FluxBcs.tpl SutraTest2a.pval
 "EnhancedTemplateProcessor.exe" SutraTest2a.inp.tpl SutraTest2a.pval
 "EnhancedTemplateProcessor.exe" SutraTest2a.SPecPBcs.tpl SutraTest2a.pval

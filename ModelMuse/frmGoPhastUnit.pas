@@ -10092,6 +10092,9 @@ var
   BackupBatchFileName: string;
   ArrayDir: string;
   EnhancedTemplateProcLoc: string;
+  BackupSutraFileName: string;
+  CopyLine: string;
+  SutraFilName: string;
   procedure AddPestDataArraysToDictionary(InputPestDataArrays: TArray<TDataArray>);
   var
     DataArray: TDataArray;
@@ -10489,8 +10492,11 @@ begin
         FileRoot := ChangeFileExt(ExtractFileName(FileName), '.');
         ParamEstBatFileName := BatchFileName + StrRunModelBat;
         BackupParamEstBatFileName := BatchFileName + FileRoot + StrRunModelBat;
+        BackupSutraFileName := FileRoot + 'SUTRA.FIL';
+        SutraFilName := 'SUTRA.FIL';
         BackupBatchFileName := BatchFileName + FileRoot + 'RunSutra.bat';
         BatchFileName := BatchFileName + 'RunSutra.bat';
+        CopyLine := Format('if exist "%0:s" copy /Y "%0:s" "%1:s"', [BackupSutraFileName, SutraFilName]);
 
         BatchFile := TStringList.Create;
         ParamEstBatFile := TStringList.Create;
@@ -10503,6 +10509,8 @@ begin
           end;
 
           PhastModel.AddFilesToDeleteToBatchFile(ParamEstBatFile, ParamEstBatFileName);
+          ParamEstBatFile.Add(CopyLine);
+          BatchFile.Add(CopyLine);
           PLPROC_Location := GetPLPROC_Location(FileName, PhastModel);
           if PhastModel.PestUsed then
           begin

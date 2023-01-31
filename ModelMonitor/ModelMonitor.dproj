@@ -3,12 +3,12 @@
         <ProjectGuid>{F0692F37-5658-4D31-AE39-86AE5A7161EF}</ProjectGuid>
         <MainSource>ModelMonitor.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>19.5</ProjectVersion>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -64,8 +64,8 @@
         <Icon_MainIcon>VIEWER1.ICO</Icon_MainIcon>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=U.S. Geological Survey;FileDescription=;FileVersion=1.12.0.0;InternalName=;LegalCopyright=Public Domain;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.12.0.0;Comments=;Last Compile=2012-06-07 12:11</VerInfo_Keys>
-        <VerInfo_MinorVer>12</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=U.S. Geological Survey;FileDescription=;FileVersion=1.13.0.0;InternalName=;LegalCopyright=Public Domain;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.13.0.0;Comments=;Last Compile=2012-06-07 12:11</VerInfo_Keys>
+        <VerInfo_MinorVer>13</VerInfo_MinorVer>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;VCLTee;$(DCC_Namespace)</DCC_Namespace>
         <DCC_UnitSearchPath>C:\PROGRA~1\Jedi\jcl\lib\d10\debug;C:\Colab\GWModelTools\ModelMuse\FastCode;C:\Colab\GWModelTools\ModelMuse;D:\Colab\GWModelTools\ModelMuse\FastCode;D:\Colab\GWModelTools\ModelMuse;C:\ModelingTools\ModelMuse;C:\ModelingTools\ModelMuse\FastCode;D:\ModelingTools\ModelMuse;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_ExeOutput>..\ModelMuse\$(Config)\$(Platform)</DCC_ExeOutput>
@@ -107,9 +107,10 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_Keys>CompanyName=;FileVersion=1.11.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.11.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <VerInfo_Keys>CompanyName=;FileVersion=1.12.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.11.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>
         <BT_BuildType>Debug</BT_BuildType>
+        <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
+        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <Debugger_RunParams>-m C:\WRDAPP\MODFLO~1.9\src\MySrc\Mf_Nwt\Debug\Mf_Nwt.exe -n C:\support\Misut\SEPT14~1\C1M1_S~1.NAM</Debugger_RunParams>
@@ -118,6 +119,9 @@
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <BT_BuildType>Debug</BT_BuildType>
         <VerInfo_MinorVer>11</VerInfo_MinorVer>
+        <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
+        <DCC_DebugInformation>2</DCC_DebugInformation>
+        <DCC_LocalDebugSymbols>true</DCC_LocalDebugSymbols>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
@@ -133,8 +137,9 @@
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <BT_BuildType>Debug</BT_BuildType>
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
-        <Debugger_RunParams>-m C:\WRDAPP\MFOWHM2_3\mf-owhm-debug.exe -n FMP4Test.nam</Debugger_RunParams>
-        <Debugger_CWD>C:\ModelingTools\ModelMuse\PracticeModels</Debugger_CWD>
+        <Debugger_RunParams>-m C:\WRDAPP\MF2005.1_12\bin\mf2005.exe -n GhbTest.nam -c</Debugger_RunParams>
+        <Debugger_CWD>C:\ModelingTools\ModelMuse\PracticeModel\NewPestTest</Debugger_CWD>
+        <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
@@ -143,6 +148,7 @@
         <Debugger_RunParams>-m C:\WRDAPP\mf6.3.0\bin\mf6.exe -n mfsim.nam -mv 6</Debugger_RunParams>
         <Debugger_CWD>C:\ModelingTools\ModelMuse\PracticeModels</Debugger_CWD>
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
+        <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">

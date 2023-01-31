@@ -18,6 +18,7 @@ if exist "FreezingWallPest_N_3233.OBS" del "FreezingWallPest_N_3233.OBS"
 if exist "FreezingWallPest_N_4209.OBS" del "FreezingWallPest_N_4209.OBS"
 if exist "FreezingWallPest_N_5185.OBS" del "FreezingWallPest_N_5185.OBS"
 if exist "FreezingWallPest_N_6161.OBS" del "FreezingWallPest_N_6161.OBS"
+if exist "FreezingWallPest.SUTRA.FIL" copy /Y "FreezingWallPest.SUTRA.FIL" "SUTRA.FIL"
 "EnhancedTemplateProcessor.exe" FreezingWallPest.inp.tpl FreezingWallPest.pval
 "sutra_4_0.exe"
 "SutraObsExtractor.exe" FreezingWallPest.soe_ev

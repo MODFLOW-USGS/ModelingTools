@@ -1,3 +1,4 @@
+if exist "RmaSutraCompleted.SUTRA.FIL" copy /Y "RmaSutraCompleted.SUTRA.FIL" "SUTRA.FIL"
 "plproc.exe" 'RmaSutraCompleted.Maximum_Hydraulic_Conductivity.krig_factors_script'
 "sutra_2_2.exe"
 "SutraObsExtractor.exe" RmaSutraCompleted.soe_i

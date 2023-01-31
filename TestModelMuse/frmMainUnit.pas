@@ -6,9 +6,12 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, Menus, Spin, ComCtrls, Buttons, ImgList,
   Mask, JvExMask, JvToolEdit, IniFiles, JvComponentBase, JvCreateProcess,
-  System.ImageList;
+  System.ImageList, System.IOUtils;
+
 
 type
+  TCompareResult = (crSame, crDifferent, crMissing);
+
   TfrmMain = class(TForm)
     Panel1: TPanel;
     odSelectGoPhast: TOpenDialog;
@@ -46,7 +49,6 @@ type
     miRefreshAll: TMenuItem;
     jvcrtprcsRunModelMuse: TJvCreateProcess;
     cbRunModels: TCheckBox;
-    jvcpRunModel: TJvCreateProcess;
     procedure btnBrowseClick(Sender: TObject);
     procedure btnRunTestsClick(Sender: TObject);
     procedure Exit1Click(Sender: TObject);
@@ -69,7 +71,7 @@ type
     MainIniFile: TMemIniFile;
     function TestFiles(out ErrorMessage: string): boolean;
     function CompareModflowFiles(const OutputFileName, ArchiveFileName: string;
-      out ErrorMessage: string): boolean;
+      out ErrorMessage: string): TCompareResult;
     function ComparePhastFiles(
       const OutputFileName, ArchiveFileName: string; var ErrorMessage: string): Boolean;
     procedure AddModelOutputFiles(Node: TTreeNode; InputFiles: TStringList);
@@ -174,7 +176,7 @@ begin
 end;
 
 function TfrmMain.CompareModflowFiles(const OutputFileName, ArchiveFileName: string;
-  out ErrorMessage: string): boolean;
+  out ErrorMessage: string): TCompareResult;
 const
   TenSeconds = 1 / 24/ 360;
   OneSecond = 1/24/3600;
@@ -189,7 +191,7 @@ var
   PestTemplate: Boolean;
   ReadArraysLine: Boolean;
 begin
-  result := True;
+  result := crSame;
   ErrorMessage:= '';
   ArchiveFile := TStringList.Create;
   OutputFile := TStringList.Create;
@@ -207,7 +209,7 @@ begin
           begin
             if (Now - StartingTime) > (seTimeDelay.Value * OneSecond) then
             begin
-              result := False;
+              result := crMissing;
               ErrorMessage := 'error opening ' + OutputFileName + '.';
               Exit;
             end
@@ -221,13 +223,13 @@ begin
     end
     else
     begin
-      result := False;
+      result := crMissing;
       ErrorMessage := OutputFileName + ' does not exist.';
       Exit;
     end;
     if ArchiveFile.Count <> OutputFile.Count  then
     begin
-      result := False;
+      result := crDifferent;
       ErrorMessage := OutputFileName + ' and ' + ArchiveFileName
         + ' are not the same length.';
       Exit;
@@ -285,17 +287,24 @@ begin
           Continue;
         end;
       end;
-      result := ArchiveLine = OutputLine;
-      if (not Result) and AxmlFile then
+      if ArchiveLine = OutputLine then
+      begin
+        result := crSame;
+      end
+      else
+      begin
+        result := crDifferent;
+      end;
+      if (result <> crSame) and AxmlFile then
       begin
         if (Pos('C:\', ArchiveLine) > 0) or (Pos('C:\', OutputLine) > 0)  then
         begin
-          result := True;
+          result := crSame;
         end;
 
       end;
 
-      if not result then
+      if result <> crSame then
       begin
         ErrorMessage := 'Line ' + IntToStr(Index+1) + ' of ' +
           OutputFileName + ' and ' + ArchiveFileName
@@ -455,12 +464,24 @@ var
   LocalErrorMessage: string;
   InArrays: Boolean;
   CommandLine: string;
+  CompResult: TCompareResult;
+  RunModelLines: TStringList;
+  RunLines: TStringList;
+  RunAllModelFileName: string;
+  RunIndex: Integer;
+  RunFile: TStringList;
+  LineIndex: Integer;
+  ALine: string;
 begin
   AllFilesTheSame := True;
   ErrorMessage := '';
+  ModelDirectory := '';
   result := True;
   GoPhastExeName := edGoPhast.Text;
   OutPutFiles := TStringList.Create;
+  RunModelLines := TStringList.Create;
+  RunLines := TStringList.Create;
+  RunFile := TStringList.Create;
   try
     pbFiles.Max := tvModflow.Items.Count;
     pbFiles.Position := 0;
@@ -524,6 +545,30 @@ begin
       while ChildNode <> nil do
       begin
         OutputFileName := ChildNode.Text;
+        if Pos('RunModel.Bat', OutputFileName) > 1 then
+        begin
+          OutputFileName := ExtractFileName(OutputFileName);
+          if OutputFileName <> 'RunModel.Bat' then
+          begin
+            RunModelLines.Add(OutputFileName);
+          end;
+        end;
+        if Pos('RunSutra.bat', OutputFileName) > 1 then
+        begin
+          OutputFileName := ExtractFileName(OutputFileName);
+          if OutputFileName <> 'RunSutra.bat' then
+          begin
+            RunLines.Add(OutputFileName);
+          end;
+        end;
+        if Pos('RunModflow.Bat', OutputFileName) > 1 then
+        begin
+          OutputFileName := ExtractFileName(OutputFileName);
+          if OutputFileName <> 'RunModflow.Bat' then
+          begin
+            RunLines.Add(OutputFileName);
+          end;
+        end;
         InArrays := Pos('\arrays\',OutputFileName) > 0;
         OutputFileName := ExtractFileName(OutputFileName);
         if InArrays then
@@ -612,7 +657,8 @@ begin
         end
         else
         begin
-          if CompareModflowFiles(OutputFileName, ArchiveFileName, LocalErrorMessage) then
+          CompResult := CompareModflowFiles(OutputFileName, ArchiveFileName, LocalErrorMessage);
+          if CompResult = crSame then
           begin
             Assert(FileExists(OutputFileName));
             if not cbRunModels.Checked then
@@ -632,7 +678,7 @@ begin
             memoErrors.Lines.Add(OutputFileName);
             memoErrors.Lines.Add(LocalErrorMessage);
             memoErrors.Lines.Add('');
-            ChildNode.StateIndex := 2;
+            ChildNode.StateIndex := Ord(CompResult) + 1;
             if ParentNode.StateIndex < ChildNode.StateIndex then
             begin
               ParentNode.StateIndex := ChildNode.StateIndex
@@ -646,21 +692,59 @@ begin
       end;
       ParentNode.Collapse(False);
       BatName := ModelDirectory + '\RunModflow.Bat';
-      if FileExists(BatName) then
+      if FileExists(BatName) and not cbRunModels.Checked then
       begin
         DeleteFile(BatName);
       end;
-      if cbRunModels.Checked then
-      begin
-        jvcpRunModel.CommandLine := IncludeTrailingPathDelimiter(ModelDirectory)
-          + 'RunModel.Bat';
-        jvcpRunModel.Run;
-
-      end;
       ParentNode := ParentNode.getNextSibling;
+    end;
+    if cbRunModels.Checked and (RunModelLines.Count > 0) then
+    begin
+      Assert(ModelDirectory <> '');
+      Assert(RunLines.Count = RunModelLines.Count);
+      for RunIndex := 0 to RunLines.Count - 1 do
+      begin
+        RunFile.LoadFromFile(RunLines[RunIndex]);
+        for LineIndex := 0 to RunFile.Count - 1 do
+        begin
+          ALine := RunFile[LineIndex];
+          if ALine = 'pause' then
+          begin
+            RunFile[LineIndex]  := ''
+          end;
+          if Pos('ModelMonitor.exe', ALine) > 0 then
+          begin
+            ALine := ALine + ' -c';
+            RunFile[LineIndex] := ALine;
+          end;
+          if Pos('Start', ALine) = 1 then
+          begin
+            RunFile[LineIndex] := '';
+          end;
+          if Pos('start', ALine) = 1 then
+          begin
+            RunFile[LineIndex] := '';
+          end;
+        end;
+        RunFile.Add('Exit');
+        RunFile.SaveToFile(RunLines[RunIndex]);
+      end;
+      RunLines.AddStrings(RunModelLines);
+      for LineIndex := 0 to RunLines.Count - 1 do
+      begin
+        RunLines[LineIndex] := 'start /WAIT ' + RunLines[LineIndex];
+      end;
+      RunLines.Add('pause');
+      RunAllModelFileName := IncludeTrailingPathDelimiter(ModelDirectory)+'RunAllModel.Bat';
+      RunLines.SaveToFile(RunAllModelFileName);
+      jvcrtprcsRunModelMuse.CommandLine := RunAllModelFileName;
+      jvcrtprcsRunModelMuse.Run;
     end;
   finally
     OutPutFiles.Free;
+    RunModelLines.Free;
+    RunLines.Free;
+    RunFile.Free;
   end;
 end;
 
@@ -719,7 +803,7 @@ begin
   if not FileExists(OutputFileName) then
   begin
     Beep;
-    MessageDlg(OutputFileName + 'does not exist',
+    MessageDlg(OutputFileName + ' does not exist',
       mtError, [mbOK], 0);
     Exit;
   end;
@@ -738,7 +822,7 @@ begin
   if not FileExists(OutputFileName) then
   begin
     Beep;
-    MessageDlg(OutputFileName + 'does not exist',
+    MessageDlg(OutputFileName + ' does not exist',
       mtError, [mbOK], 0);
     Exit;
   end;

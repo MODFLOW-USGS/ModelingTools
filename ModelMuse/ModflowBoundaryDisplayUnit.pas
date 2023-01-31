@@ -7,6 +7,8 @@ uses Windows, SysUtils, Classes, DataSetUnit, SparseDataSets, ZLib,
 
 type
   TModflowBoundaryDisplayDataArray = class(TCustomBoundaryRealSparseDataSet)
+  protected
+    function GetAnnotation(const Layer, Row, Col: integer): string; override;
   public
     procedure InitializeDisplayArray(DefaultValue: Double); override;
   published
@@ -239,6 +241,19 @@ uses SparseArrayUnit, PhastModelUnit, frmGoPhastUnit,
 //  end;
 //end;
 
+function TModflowBoundaryDisplayDataArray.GetAnnotation(const Layer, Row,
+  Col: integer): string;
+begin
+  if CellCount[Layer, Row, Col] = 0 then
+  begin
+    result := StrNoValueAssigned
+  end
+  else
+  begin
+    result := inherited;
+  end;
+end;
+
 procedure TModflowBoundaryDisplayDataArray.InitializeDisplayArray(
   DefaultValue: Double);
 var
@@ -271,12 +286,13 @@ begin
       for ColIndex := 0 to LocalModel.ColumnCount - 1 do
       begin
         inherited SetRealData(LayerIndex, RowIndex, ColIndex, DefaultValue);
-        inherited SetAnnotation(LayerIndex, RowIndex, ColIndex, StrNoValueAssigned);
+        // Setting the annotation here can cause a stack overflow.
+        // It needs to be done elsewhere
+//        inherited SetAnnotation(LayerIndex, RowIndex, ColIndex, StrNoValueAssigned);
         CellCount[LayerIndex, RowIndex, ColIndex] := 0;
       end;
     end;
   end;
-
 end;
 
 //procedure TModflowBoundaryDisplayDataArray.LabelAsSum;

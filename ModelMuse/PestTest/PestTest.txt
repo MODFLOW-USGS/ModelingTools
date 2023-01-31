@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1928
+1922
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1373,7 +1373,6 @@ DryCells.gpt
 SutraTest5.gpt
 	Archive\SutraTest5.15B
 	Archive\SutraTest5.15B.script
-	Archive\SutraTest5.15B.script.tpl
 	Archive\SutraTest5.15B_1
 	Archive\SutraTest5.15B_2
 	Archive\SutraTest5.15B_3
@@ -1442,7 +1441,6 @@ SutraTest1a.gpt
 	Archive\SutraTest1a.14B_4
 	Archive\SutraTest1a.15B
 	Archive\SutraTest1a.15B.script
-	Archive\SutraTest1a.15B.script.tpl
 	Archive\SutraTest1a.15B_1
 	Archive\SutraTest1a.15B_2
 	Archive\SutraTest1a.15B_3
@@ -1516,7 +1514,6 @@ SutraTest1a.gpt
 RmaSutraNodeTest.gpt
 	Archive\RmaSutraNodeTest.15B
 	Archive\RmaSutraNodeTest.15B.script
-	Archive\RmaSutraNodeTest.15B.script.tpl
 	Archive\RmaSutraNodeTest.Angle_Horizontal
 	Archive\RmaSutraNodeTest.axml
 	Archive\RmaSutraNodeTest.c_ele
@@ -1563,7 +1560,6 @@ RmaSutraNodeTest.gpt
 RmaSutraCompleted.gpt
 	Archive\RmaSutraCompleted.15B
 	Archive\RmaSutraCompleted.15B.script
-	Archive\RmaSutraCompleted.15B.script.tpl
 	Archive\RmaSutraCompleted.Angle_Horizontal
 	Archive\RmaSutraCompleted.axml
 	Archive\RmaSutraCompleted.c_ele
@@ -1680,7 +1676,6 @@ Rocky2D_IrregularS4Interpolate.gpt
 	Archive\Rocky2D_IrregularS4Interpolate.14B_3
 	Archive\Rocky2D_IrregularS4Interpolate.15B
 	Archive\Rocky2D_IrregularS4Interpolate.15B.script
-	Archive\Rocky2D_IrregularS4Interpolate.15B.script.tpl
 	Archive\Rocky2D_IrregularS4Interpolate.15B_1
 	Archive\Rocky2D_IrregularS4Interpolate.15B_2
 	Archive\Rocky2D_IrregularS4Interpolate.Angle_Horizontal
@@ -1831,7 +1826,6 @@ Rocky2D_IrregularS4NoInterpolate.gpt
 	Archive\Rocky2D_IrregularS4NoInterpolate.14B_3
 	Archive\Rocky2D_IrregularS4NoInterpolate.15B
 	Archive\Rocky2D_IrregularS4NoInterpolate.15B.script
-	Archive\Rocky2D_IrregularS4NoInterpolate.15B.script.tpl
 	Archive\Rocky2D_IrregularS4NoInterpolate.15B_1
 	Archive\Rocky2D_IrregularS4NoInterpolate.15B_2
 	Archive\Rocky2D_IrregularS4NoInterpolate.Angle_Horizontal

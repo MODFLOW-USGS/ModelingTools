@@ -37,18 +37,12 @@ cl_Discretization = read_list_file(skiplines=1,dimensions=2, &
   id_type='indexed',file='Rocky2D_IrregularS4Interpolate.c_nod')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_z1;column=5, &
-  slist=s_NN3D1;column=6, &
-  slist=s_Active_1;column=7, &
   id_type='indexed',file='Rocky2D_IrregularS4Interpolate.c_nod')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_z2;column=8, &
-  slist=s_NN3D2;column=9, &
-  slist=s_Active_2;column=10, &
   id_type='indexed',file='Rocky2D_IrregularS4Interpolate.c_nod')
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_z3;column=11, &
-  slist=s_NN3D3;column=12, &
-  slist=s_Active_3;column=13, &
   id_type='indexed',file='Rocky2D_IrregularS4Interpolate.c_nod')
 
 #Save Kriging factors

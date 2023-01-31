@@ -22,6 +22,7 @@ if exist "Rocky2D_IrregularS4Interpolate.lst" del "Rocky2D_IrregularS4Interpolat
 if exist "Rocky2D_IrregularS4Interpolate.nod" del "Rocky2D_IrregularS4Interpolate.nod"
 if exist "Rocky2D_IrregularS4Interpolate.rst" del "Rocky2D_IrregularS4Interpolate.rst"
 if exist "Rocky2D_IrregularS4Interpolate.smy" del "Rocky2D_IrregularS4Interpolate.smy"
+if exist "Rocky2D_IrregularS4Interpolate.SUTRA.FIL" copy /Y "Rocky2D_IrregularS4Interpolate.SUTRA.FIL" "SUTRA.FIL"
 "plproc.exe" Rocky2D_IrregularS4Interpolate.Nodal_Porosity.script
 "plproc.exe" Rocky2D_IrregularS4Interpolate.SolidMatrixCompressibility.script
 "plproc.exe" Rocky2D_IrregularS4Interpolate.Maximum_Permeability.script

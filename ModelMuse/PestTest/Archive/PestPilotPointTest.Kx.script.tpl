@@ -1,6 +1,12 @@
 ptf @
 #Script for PLPROC
 
+#Read parameter values
+Hk1 = @                        Hk1@
+# Pilot points are used with Hk1.
+Hk2 = @                        Hk2@
+# Pilot points are used with Hk2.
+
 #Read pilot point data
 KPilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk1_1';column=5, &
@@ -40,25 +46,13 @@ cl_Discretization3 = read_mf6_grid_specs(file='PestPilotPointTest.dis.grb', &
 
 
 
+# Layer     1
+
 #Read data to modify
 read_list_file(reference_clist='cl_Discretization1',skiplines=1, &
   slist=s_PIndex1;column=2, &
   plist=p_Value1;column=3, &
   file='PestPilotPointTest.Kx.PstValues')
-read_list_file(reference_clist='cl_Discretization2',skiplines=1, &
-  slist=s_PIndex2;column=4, &
-  plist=p_Value2;column=5, &
-  file='PestPilotPointTest.Kx.PstValues')
-read_list_file(reference_clist='cl_Discretization3',skiplines=1, &
-  slist=s_PIndex3;column=6, &
-  plist=p_Value3;column=7, &
-  file='PestPilotPointTest.Kx.PstValues')
-
-#Read parameter values
-Hk1 = @                        Hk1@
-# Pilot points are used with Hk1.
-Hk2 = @                        Hk2@
-# Pilot points are used with Hk2.
 
 # Modfify data values
 temp1=new_plist(reference_clist=cl_Discretization1,value=0.0)
@@ -77,6 +71,26 @@ temp1=new_plist(reference_clist=cl_Discretization1,value=0.0)
       transform='log')
     # Write interpolated values in zones
     p_Value1(select=(s_PIndex1 == 2)) = temp1
+
+#Write new data values
+write_column_data_file(header='no', &
+  file='arrays\PestPilotPointTest.Kx_1.arrays';delim="space", &
+  plist=p_Value1)
+
+# Remove sLists and pLists
+s_PIndex1.remove()
+Hk2_1.remove()
+temp1.remove()
+
+# Layer     2
+
+#Read data to modify
+read_list_file(reference_clist='cl_Discretization2',skiplines=1, &
+  slist=s_PIndex2;column=4, &
+  plist=p_Value2;column=5, &
+  file='PestPilotPointTest.Kx.PstValues')
+
+# Modfify data values
 temp2=new_plist(reference_clist=cl_Discretization2,value=0.0)
 # Setting values for layer     2
   # Setting values for parameter Hk1
@@ -93,6 +107,26 @@ temp2=new_plist(reference_clist=cl_Discretization2,value=0.0)
       transform='log')
     # Write interpolated values in zones
     p_Value2(select=(s_PIndex2 == 2)) = temp2
+
+#Write new data values
+write_column_data_file(header='no', &
+  file='arrays\PestPilotPointTest.Kx_2.arrays';delim="space", &
+  plist=p_Value2)
+
+# Remove sLists and pLists
+s_PIndex2.remove()
+Hk2_2.remove()
+temp2.remove()
+
+# Layer     3
+
+#Read data to modify
+read_list_file(reference_clist='cl_Discretization3',skiplines=1, &
+  slist=s_PIndex3;column=6, &
+  plist=p_Value3;column=7, &
+  file='PestPilotPointTest.Kx.PstValues')
+
+# Modfify data values
 temp3=new_plist(reference_clist=cl_Discretization3,value=0.0)
 # Setting values for layer     3
   # Setting values for parameter Hk1
@@ -112,11 +146,11 @@ temp3=new_plist(reference_clist=cl_Discretization3,value=0.0)
 
 #Write new data values
 write_column_data_file(header='no', &
-  file='arrays\PestPilotPointTest.Kx_1.arrays';delim="space", &
-  plist=p_Value1)
-write_column_data_file(header='no', &
-  file='arrays\PestPilotPointTest.Kx_2.arrays';delim="space", &
-  plist=p_Value2)
-write_column_data_file(header='no', &
   file='arrays\PestPilotPointTest.Kx_3.arrays';delim="space", &
   plist=p_Value3)
+
+# Remove sLists and pLists
+s_PIndex3.remove()
+Hk2_3.remove()
+temp3.remove()
+
