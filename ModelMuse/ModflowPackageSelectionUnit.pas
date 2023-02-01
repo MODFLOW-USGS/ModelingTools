@@ -5178,6 +5178,7 @@ Type
     destructor Destroy; override;
     procedure InitializeVariables; override;
     function CapFringeArrayUsed(Sender: TObject): Boolean;
+    function SurfaceKArrayUsed(Sender: TObject): Boolean;
   published
     // CAPILLARY_FRINGE
     property CapFringe: TFarmProperty read FCapFringe write SetCapFringe;
@@ -5199,6 +5200,7 @@ Type
     FPrecipPotConsum: TPrecipPotConsum;
     FMfFmp4EvapRate: TModflowBoundaryDisplayTimeList;
     FMfFmp4Precip: TModflowBoundaryDisplayTimeList;
+    FMfFmp4EvapBare: TModflowBoundaryDisplayTimeList;
     procedure SetDirect_Recharge(const Value: TFarmProperty);
     procedure SetPotential_Evaporation_Bare(const Value: TFarmProperty);
     procedure SetPrecipitation(const Value: TFarmProperty);
@@ -5217,6 +5219,11 @@ Type
     procedure GetMfFmpPrecipUseList(Sender: TObject; NewUseList: TStringList);
     procedure InvalidatePrecip(Sender: TObject);
 
+    function GetBareEvapBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeBareEvapDisplay(Sender: TObject);
+    procedure GetBareEvapUseList(Sender: TObject; NewUseList: TStringList);
+    procedure InvalidateBareEvap(Sender: TObject);
+
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5226,10 +5233,16 @@ Type
     procedure InitializeVariables; override;
     function TransientEvapUsed (Sender: TObject): boolean;
     function TransientPrecipUsed (Sender: TObject): boolean;
+    function TransientBareEvapUsed (Sender: TObject): boolean;
     function StaticEvapUsed (Sender: TObject): boolean;
     function StaticPrecipUsed (Sender: TObject): boolean;
+    function StaticBareEvapUsed (Sender: TObject): boolean;
+    // REFERENCE_ET
     property MfFmp4EvapRate: TModflowBoundaryDisplayTimeList read FMfFmp4EvapRate;
+    // PRECIPITATION
     property MfFmp4Precip: TModflowBoundaryDisplayTimeList read FMfFmp4Precip;
+    // POTENTIAL_EVAPORATION_BARE
+    property MfFmp4EvapBare: TModflowBoundaryDisplayTimeList read FMfFmp4EvapBare;
   published
     // Climate
     // PRECIPITATION
@@ -6970,6 +6983,7 @@ resourcestring
   StrFMP4Efficiency = 'FMP4 Efficiency';
   StrFMP4EfficiencyImpr = 'FMP4 Efficiency Improvement';
   StrFMP4BareRunoffFra = 'FMP4 Bare Runoff Fraction';
+  StrFMP4PotentialEvapor = 'FMP Potential Evaporation Bare';
 
 { TModflowPackageSelection }
 
@@ -25442,7 +25456,17 @@ begin
     FMfFmp4Precip.Name := StrFarmPrecip;
     if FPrecipitation.FarmOption = foTransient then
     begin
-    AddTimeList(FMfFmp4Precip);
+      AddTimeList(FMfFmp4Precip);
+    end;
+
+    FMfFmp4EvapBare := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4EvapBare.OnInitialize := InitializeBareEvapDisplay;
+    FMfFmp4EvapBare.OnGetUseList := GetBareEvapUseList;
+    FMfFmp4EvapBare.OnTimeListUsed := TransientBareEvapUsed;
+    FMfFmp4EvapBare.Name := StrPotentialEvaporatio;
+    if Potential_Evaporation_Bare.FarmOption = foTransient then
+    begin
+      AddTimeList(FMfFmp4EvapBare);
     end;
   end;
 
@@ -25450,11 +25474,13 @@ begin
 
   FReferenceET.OnChangeFarmOption := InvalidateRefEt;
   FPrecipitation.OnChangeFarmOption := InvalidatePrecip;
+  FPotential_Evaporation_Bare.OnChangeFarmOption := InvalidateBareEvap;
 
 end;
 
 destructor TFarmProcess4Climate.Destroy;
 begin
+  FMfFmp4EvapBare.Free;
   FMfFmp4EvapRate.Free;
   FMfFmp4Precip.Free;
 
@@ -25467,6 +25493,12 @@ begin
   inherited;
 end;
 
+function TFarmProcess4Climate.TransientBareEvapUsed(Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Potential_Evaporation_Bare.FarmOption = foTransient);
+end;
+
 function TFarmProcess4Climate.TransientEvapUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
@@ -25477,6 +25509,22 @@ function TFarmProcess4Climate.TransientPrecipUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
     and (Precipitation.FarmOption = foTransient);
+end;
+
+function TFarmProcess4Climate.GetBareEvapBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmpBareEvap;
+end;
+
+procedure TFarmProcess4Climate.GetBareEvapUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetBareEvapBoundary;
+  GetUseListOptions.Description := StrFMP4PotentialEvapor;
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 procedure TFarmProcess4Climate.GetMfFmpEvapUseList(Sender: TObject;
@@ -25509,6 +25557,21 @@ function TFarmProcess4Climate.GetRefEtBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
   Result := ScreenObject.ModflowFmpRefEvap;
+end;
+
+procedure TFarmProcess4Climate.InitializeBareEvapDisplay(Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := MfFmp4EvapBare;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateEvapBareDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
 end;
 
 procedure TFarmProcess4Climate.InitializeFarmPrecipDisplay(Sender: TObject);
@@ -25554,6 +25617,22 @@ begin
   FPrecipPotConsum := ppcLength;
 end;
 
+
+procedure TFarmProcess4Climate.InvalidateBareEvap(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if Potential_Evaporation_Bare.FarmOption = foTransient then
+    begin
+      AddTimeList(MfFmp4EvapBare);
+    end
+    else
+    begin
+      RemoveTimeList(MfFmp4EvapBare);
+    end;
+  end;
+  InvalidateModel;
+end;
 
 procedure TFarmProcess4Climate.InvalidatePrecip(Sender: TObject);
 begin
@@ -25632,6 +25711,12 @@ end;
 procedure TFarmProcess4Climate.SetReferenceET(const Value: TFarmProperty);
 begin
   FReferenceET.Assign(Value);
+end;
+
+function TFarmProcess4Climate.StaticBareEvapUsed(Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Potential_Evaporation_Bare.FarmOption = foStatic);
 end;
 
 function TFarmProcess4Climate.StaticEvapUsed(Sender: TObject): boolean;
@@ -26417,6 +26502,13 @@ procedure TFarmProcess4Soil.SetSurfVertK(const Value: TFarmProperty);
 begin
   FSurfVertK.Assign(Value);
 //  SetArrayListProperty(FSurfVertKArrayList, Value);
+end;
+
+function TFarmProcess4Soil.SurfaceKArrayUsed(Sender: TObject): Boolean;
+begin
+  result := IsSelected
+    and (SurfVertK.FarmOption  = foStatic)
+    and (SurfVertK.ArrayList = alArray);
 end;
 
 { TCustomFarm4 }

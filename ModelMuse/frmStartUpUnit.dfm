@@ -81,7 +81,7 @@ inherited frmStartUp: TfrmStartUp
     Height = 359
     HelpType = htKeyword
     HelpKeyword = 'Initial_Grid_Dialog_Box'
-    ActivePage = tabInitialModflowGrid
+    ActivePage = tabModelChoice
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange

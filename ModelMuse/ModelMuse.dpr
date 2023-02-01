@@ -785,7 +785,9 @@ uses
   ModflowFmp4BareRunoffFractionUnit in 'ModflowFmp4BareRunoffFractionUnit.pas',
   frameScreenObjectBareRunoffFractionUnit in 'frameScreenObjectBareRunoffFractionUnit.pas' {frameScreenObjectBareRunoffFraction: TFrame},
   ModflowFmp4BarePrecipitationConsumptionFractionUnit in 'ModflowFmp4BarePrecipitationConsumptionFractionUnit.pas',
-  frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit in 'frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit.pas' {frameScreenObjectFmp4BarePrecipitationConsumptionFraction: TFrame};
+  frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit in 'frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit.pas' {frameScreenObjectFmp4BarePrecipitationConsumptionFraction: TFrame},
+  ModflowFmp4PotentialEvapBareUnit in 'ModflowFmp4PotentialEvapBareUnit.pas',
+  frameScreenObjectFmp4BareEvapUnit in 'frameScreenObjectFmp4BareEvapUnit.pas' {frameScreenObjectFmp4BareEvap: TFrame};
 
 {$R *.res}
 

@@ -497,6 +497,7 @@ const
   StrFarmWellFarmID = 'Farm Well Farm-ID';
   StrFarmWellPumpRequired = 'Farm Well Pump Only If Required';
   StrLandUseID = 'Land Use ID';
+  StrPotentialEvaporatio = 'Potential Evaporation Bare';
 
   StrCfpRecharge = 'Conduit Recharge';
   StrSWR_Rain = 'SWR Rain';
@@ -569,6 +570,9 @@ const
   KBareRunoffFraction = 'Bare_Runoff_Fraction';
   KBarePrecipitationConsumptionFraction = 'Bare Precipitation Consumption Fraction';
   KCapillary_Fringe = 'Capillary_Fringe';
+  KSurfaceK = 'Surface_Vert_K';
+  KPotential_Evap_Bare = 'Potential_Evap_Bare';
+
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -2541,6 +2545,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4SteadArrayBareRunoffFractionUsed(Sender: TObject): Boolean;
     function FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(Sender: TObject): Boolean;
     function CapillaryFringeUsed(Sender: TObject): Boolean;
+    function SurfaceKUsed(Sender: TObject): Boolean;
+    function PotentialEvapBareUsed(Sender: TObject): Boolean;
 
   protected
     function GetGwtUsed: Boolean; override;
@@ -2587,6 +2593,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; virtual;
+    function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3239,6 +3246,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4EfficiencyImprovement(Sender: TObject);
     procedure InvalidateMfFmp4BareRunoffFraction(Sender: TObject);
     procedure InvalidateMfFmp4BarePrecipitationConsumptionFraction(Sender: TObject);
+    procedure InvalidateMfFmp4BareEvap(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4765,6 +4773,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean; override;
     function FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean; override;
     function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; override;
+    function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; override;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -6170,6 +6179,8 @@ resourcestring
   StrBareRunoffFraction = KBareRunoffFraction;
   StrBarePrecipitationConsumptionFraction = KBarePrecipitationConsumptionFraction;
   StrCapillary_Fringe = KCapillary_Fringe;
+  StrSurfaceK = KSurfaceK;
+  StrPotential_Evap_Bare = KPotential_Evap_Bare;
 
 
 const
@@ -23741,6 +23752,33 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientBareEvapArrayIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited FarmProcess4TransientBareEvapArrayIsSelected;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.FarmProcess4TransientBareEvapArrayIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -26421,6 +26459,11 @@ end;
 procedure TCustomModel.InvalidateMfFhbHeads(Sender: TObject);
 begin
   ModflowPackages.FhbPackage.MfFhbHeads.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4BareEvap(Sender: TObject);
+begin
+  ModflowPackages.FarmClimate4.MfFmp4EvapBare.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4BarePrecipitationConsumptionFraction(
@@ -35411,6 +35454,17 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientBareEvapArrayIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmClimate4.TransientBareEvapUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -37370,7 +37424,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 9;
+  OWHM4DataSets  = 11;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -40298,9 +40352,41 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, SOIL: CAPILLARY_FRINGE';
   Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KSurfaceK;
+  FDataArrayCreationRecords[Index].DisplayName := StrSurfaceK;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SurfaceKUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, SOIL: SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KPotential_Evap_Bare;
+  FDataArrayCreationRecords[Index].DisplayName := StrPotential_Evap_Bare;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.PotentialEvapBareUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, CLIMATE: POTENTIAL_EVAPORATION_BARE';
+  Inc(Index);
+
   {$ENDIF}
 
-  // See ArrayCount.
+
+
+//StrSurfaceK = KSurfaceK;
+  // See ArrayCount above.
   Assert(Length(FDataArrayCreationRecords) = Index);
 end;
 
@@ -41264,6 +41350,17 @@ begin
 //    and (ModflowPackages.ModPath.IsSelected or ModflowPackages.Mt3dBasic.IsSelected));
 end;
 
+function TCustomModel.PotentialEvapBareUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmClimate4.StaticBareEvapUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.SpecificStorageUsed(Sender: TObject): boolean;
 begin
   result := False;
@@ -41314,6 +41411,17 @@ begin
   result := ((ModelSelection = msPhast) and not InitialWaterTableUsed(Sender))
     or ((ModelSelection in SutraSelection)
     and (SutraOptions.TransportChoice = tcSoluteHead));
+end;
+
+function TCustomModel.SurfaceKUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmSoil4.SurfaceKArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 function TCustomModel.SurfacesUsed(Sender: TObject): boolean;

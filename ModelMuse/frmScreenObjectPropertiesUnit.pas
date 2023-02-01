@@ -54,7 +54,8 @@ uses System.UITypes, Windows,
   frameScreenObjectCustomFmp4BoundaryUnit, frameScreenObjectFmp4EfficiencyUnit,
   frameScreenObjectFmp4EfficiencyImprovementUnit,
   frameScreenObjectBareRunoffFractionUnit,
-  frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit;
+  frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit,
+  frameScreenObjectFmp4BareEvapUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -416,6 +417,8 @@ type
     frameFmp4BareRunoffFraction: TframeScreenObjectBareRunoffFraction;
     jvspFmp4BarePrecipitationConsumptionFraction: TJvStandardPage;
     frameFmp4BarePrecipitationConsumptionFraction: TframeScreenObjectFmp4BarePrecipitationConsumptionFraction;
+    jvspFmp4BareEvap: TJvStandardPage;
+    frameFmp4BareEvap: TframeScreenObjectFmp4BareEvap;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1752,6 +1755,7 @@ type
     FFmp4EfficiencyImprovementNode: TJvPageIndexNode;
     FFmp4BareRunoffFractionNode: TJvPageIndexNode;
     FFmp4BarePrecipitationConsumptionFractionNode: TJvPageIndexNode;
+    FFmp4BareEvapNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2275,6 +2279,9 @@ type
     procedure CreateFmp4BarePrecipitationConsumptionFractionNode;
     procedure Fmp4BarePrecipitationConsumptionFractionChanged(Sender: TObject);
     procedure GetFmp4BarePrecipitationConsumptionFractionBoundary(const ScreenObjectList: TList);
+    procedure Fmp4BareEvapChanged(Sender: TObject);
+    procedure CreateFmp4BareEvapNode;
+    procedure GetFmp4BareEvapBoundary(const ScreenObjectList: TList);
 //    function GetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer): Boolean;
 //    procedure SetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer;
 //      const Value: Boolean);
@@ -2576,7 +2583,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowResUnit, Modflow6TimeSeriesCollectionsUnit, Modflow6TimeSeriesUnit,
   ModflowGwtSpecifiedConcUnit, PestPropertiesUnit, ModflowFmp4EfficiencyUnit,
   ModflowFmp4EfficiencyImprovementUnit, ModflowFmp4BareRunoffFractionUnit,
-  ModflowFmp4BarePrecipitationConsumptionFractionUnit;
+  ModflowFmp4BarePrecipitationConsumptionFractionUnit, ModflowFmp4PotentialEvapBareUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4027,6 +4034,10 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4BareEvapNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4177,6 +4188,7 @@ begin
   CreateFmp4EfficiencyImprovementNode;
   CreateFmp4BareRunoffFractionNode;
   CreateFmp4BarePrecipitationConsumptionFractionNode;
+  CreateFmp4BareEvapNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -5002,6 +5014,7 @@ begin
         BoundaryNodeList.Add(FFmp4EfficiencyImprovementNode);
         BoundaryNodeList.Add(FFmp4BareRunoffFractionNode);
         BoundaryNodeList.Add(FFmp4BarePrecipitationConsumptionFractionNode);
+        BoundaryNodeList.Add(FFmp4BareEvapNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -5858,10 +5871,20 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4BareEvapChanged(Sender: TObject);
+begin
+  if (FFmp4BareEvapNode <> nil)
+    and (FFmp4BareEvapNode.StateIndex <> 3) then
+  begin
+    FFmp4BareEvapNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4BarePrecipitationConsumptionFractionChanged(
   Sender: TObject);
 begin
-  if (FFmp4BarePrecipitationConsumptionFractionNode <> nil) and (FFmp4BarePrecipitationConsumptionFractionNode.StateIndex <> 3) then
+  if (FFmp4BarePrecipitationConsumptionFractionNode <> nil)
+    and (FFmp4BarePrecipitationConsumptionFractionNode.StateIndex <> 3) then
   begin
     FFmp4BarePrecipitationConsumptionFractionNode.StateIndex := 2;
   end;
@@ -5964,7 +5987,9 @@ begin
   frameFmp4Efficiency.OnEdited := Fmp4EfficiencyChanged;
   frameFmp4EfficiencyImprovement.OnEdited := Fmp4EfficiencyImprovementChanged;
   frameFmp4BareRunoffFraction.OnEdited := Fmp4BareRunoffFractionChanged;
-  frameFmp4BarePrecipitationConsumptionFraction.OnEdited := Fmp4BarePrecipitationConsumptionFractionChanged;
+  frameFmp4BarePrecipitationConsumptionFraction.OnEdited :=
+    Fmp4BarePrecipitationConsumptionFractionChanged;
+  frameFmp4BarePrecipitationConsumptionFraction.OnEdited := Fmp4BareEvapChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7193,6 +7218,10 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4BareEvapNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8158,6 +8187,14 @@ begin
       (FFmp4BarePrecipitationConsumptionFractionNode.StateIndex = 2),
       (FFmp4BarePrecipitationConsumptionFractionNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected);
+  end;
+
+  if (FFmp4BareEvapNode <> nil) then
+  begin
+    frameFmp4BarePrecipitationConsumptionFraction.SetData(FNewProperties,
+      (FFmp4BareEvapNode.StateIndex = 2),
+      (FFmp4BareEvapNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientBareEvapArrayIsSelected);
   end;
 end;
 
@@ -14440,6 +14477,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4BareEvapNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4BareEvapNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientBareEvapArrayIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Potential Evaporation Bare in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmClimate4.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4BareEvap.PageIndex;
+    frameFmp4BarePrecipitationConsumptionFraction.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4BareEvapNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4BarePrecipitationConsumptionFractionNode;
 var
   Node: TJvPageIndexNode;
@@ -17080,6 +17134,32 @@ begin
   frameMAW.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4BareEvapBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4BareEvapBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientBareEvapArrayIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmpBareEvap;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4BareEvapNode <> nil then
+  begin
+    FFmp4BareEvapNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4BarePrecipitationConsumptionFraction.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetFmp4BarePrecipitationConsumptionFractionBoundary(
   const ScreenObjectList: TList);
 var
@@ -17652,6 +17732,7 @@ begin
   GetFmp4EfficiencyImprovementBoundary(AScreenObjectList);
   GetFmp4BareRunoffFractionBoundary(AScreenObjectList);
   GetFmp4BarePrecipitationConsumptionFractionBoundary(AScreenObjectList);
+  GetFmp4BareEvapBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 

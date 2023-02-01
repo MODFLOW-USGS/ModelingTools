@@ -14,7 +14,8 @@ type
     wlEtFrac, wlSwLosses, wlPFLX, wlCropFunc, wlWaterCost, wlDeliveries,
     wlSemiRouteDeliv, wlSemiRouteReturn, wlCall, wlEfficiency,
     wlEfficiencyImprovement, wlBareRunoffFraction,
-    wlBarePrecipitationConsumptionFraction, wlCapillaryFringe, wlSoilID);
+    wlBarePrecipitationConsumptionFraction, wlCapillaryFringe, wlSoilID,
+    wlSurfaceK, wlBareEvap);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -78,6 +79,7 @@ type
     FSoil4: TFarmProcess4Soil;
     FCapillaryFringeFileStream: TFileStream;
     FSoilIdStream: TFileStream;
+    FSurfaceKFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -116,8 +118,12 @@ type
     procedure EvaluateBarePrecipitationConsumptionFraction;
     procedure WriteBarePrecipitationConsumptionFraction;
 
+    procedure EvaluateBareEvap;
+    procedure WriteBareEvap;
+
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
+    procedure WriteSurfaceK;
 
     procedure FreeFileStreams;
     // wbs location
@@ -175,6 +181,7 @@ type
       TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateBarePrecipitationConsumptionFractionDisplay(
       TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateEvapBareDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -191,6 +198,7 @@ resourcestring
   StrInvalidBareRunoff = 'Invalid Bare Runoff Fraction value';
   StrInvalidPrecipConsumpRunoff = 'Invalid Bare Precipitation Consumption Fraction value';
   StrInvalidCapillaryFringe = 'Invalid Capillary Fringe value';
+  StrInvalidPotentialEv = 'Invalid Potential Evaporation Bare value';
 
 { TModflowFmp4Writer }
 
@@ -345,7 +353,17 @@ begin
   EvaluateEfficiency;
   EvaluateEfficiencyImprovement;
   EvaluateBareRunoffFraction;
-  EvaluateBarePrecipitationConsumptionFraction
+  EvaluateBarePrecipitationConsumptionFraction;
+  EvaluateBareEvap;
+end;
+
+procedure TModflowFmp4Writer.EvaluateBareEvap;
+begin
+  if FClimatePackage.TransientBareEvapUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidPotentialEv);
+    EvaluateTransientArrayData(wlBareEvap);
+  end;
 end;
 
 procedure TModflowFmp4Writer.EvaluateBarePrecipitationConsumptionFraction;
@@ -438,7 +456,7 @@ begin
   FreeAndNil(FBarePrecipitationConsumptionFractionFileStream);
   FreeAndNil(FCapillaryFringeFileStream);
   FreeAndNil(FSoilIdStream);
-
+  FreeAndNil(FSurfaceKFileStream);
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -579,6 +597,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlSurfaceK:
+      begin
+        result := ChangeFileExt(FBaseName, '.SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY');
+        if FSurfaceKFileStream = nil then
+        begin
+          FSurfaceKFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -612,6 +639,7 @@ begin
       ScreenObject.Fmp4BarePrecipitationConsumptionFractionBoundary;
     wlCapillaryFringe: ;
     wlSoilID: ;
+    wlSurfaceK: ;
     else Assert(False);
   end;
 end;
@@ -644,6 +672,7 @@ begin
     wlBarePrecipitationConsumptionFraction: result := FBarePrecipitationConsumptionFractions;
     wlCapillaryFringe: ;
     wlSoilID: ;
+    wlSurfaceK: ;
     else Assert(False)
   end;
 end;
@@ -810,6 +839,19 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.UpdateEvapBareDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateBareEvap;
+  UpdateRequirements.TransientDataUsed := FClimatePackage.
+    TransientBareEvapUsed;
+  UpdateRequirements.WriteLocation := wlBareEvap;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
 procedure TModflowFmp4Writer.UpdateFarmIDDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
@@ -925,6 +967,41 @@ begin
 
 end;
 
+procedure TModflowFmp4Writer.WriteBareEvap;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FClimatePackage.Potential_Evaporation_Bare.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlBareEvap);
+
+  if (FClimatePackage.Potential_Evaporation_Bare.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlBareEvap;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP CLIMATE: POTENTIAL_EVAPORATION_BARE';
+    RequiredValues.ErrorID := 'FMP CLIMATE: POTENTIAL_EVAPORATION_BARE';
+    RequiredValues.ID := 'POTENTIAL_EVAPORATION_BARE';
+    RequiredValues.StaticDataName := KPotential_Evap_Bare;
+    RequiredValues.WriteTransientData :=
+      (FClimatePackage.Potential_Evaporation_Bare.FarmOption = foTransient);
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+    RequiredValues.CheckError := StrInvalidPotentialEv;
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteBarePrecipitationConsumptionFraction;
 var
   AFileName: string;
@@ -1007,7 +1084,7 @@ begin
 
   AFileName := GetFileStreamName(wlCapillaryFringe);
 
-  if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
+  if (FSoil4.CapFringe.ArrayList = alArray) then
   begin
     RequiredValues.WriteLocation := wlCapillaryFringe;
     RequiredValues.DefaultValue := 0;
@@ -1044,6 +1121,7 @@ begin
 
     WritePrecipitation;
     WriteRefET;
+    WriteBareEvap;
 
     WriteString('END CLIMATE');
     NewLine;
@@ -1485,6 +1563,7 @@ begin
 
   WriteCapillaryFringe;
   WriteSoilID;
+  WriteSurfaceK;
 
   WriteString('END SOIL');
   NewLine;
@@ -1649,8 +1728,13 @@ begin
         end;
       wlSoilID:
         begin
-          Assert(FSoilIdStream <> nil);
-          FSoilIdStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+          Assert(FSurfaceKFileStream <> nil);
+          FSurfaceKFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlSurfaceK:
+        begin
+          Assert(FSurfaceKFileStream <> nil);
+          FSurfaceKFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);
@@ -1661,6 +1745,40 @@ end;
 procedure TModflowFmp4Writer.WriteSupplyWell;
 begin
 
+end;
+
+procedure TModflowFmp4Writer.WriteSurfaceK;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FSoil4.SurfVertK.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlSurfaceK);
+
+  if (FSoil4.SurfVertK.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlSurfaceK;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP SOIL: SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
+    RequiredValues.ErrorID := 'FMP SOIL: SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
+    RequiredValues.ID := 'SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
+    RequiredValues.StaticDataName := KSurfaceK;
+    RequiredValues.WriteTransientData := False;
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+    RequiredValues.CheckError := 'Invalid Surface Vertical K value';
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteSurfaceWater;
