@@ -572,6 +572,7 @@ const
   KCapillary_Fringe = 'Capillary_Fringe';
   KSurfaceK = 'Surface_Vert_K';
   KPotential_Evap_Bare = 'Potential_Evap_Bare';
+  KDirectRecharge = 'Direct_Recharge';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2547,6 +2548,7 @@ that affects the model output should also have a comment. }
     function CapillaryFringeUsed(Sender: TObject): Boolean;
     function SurfaceKUsed(Sender: TObject): Boolean;
     function PotentialEvapBareUsed(Sender: TObject): Boolean;
+    function DirectRechargeUsed(Sender: TObject): Boolean;
 
   protected
     function GetGwtUsed: Boolean; override;
@@ -2594,6 +2596,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; virtual;
+    function FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3247,6 +3250,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4BareRunoffFraction(Sender: TObject);
     procedure InvalidateMfFmp4BarePrecipitationConsumptionFraction(Sender: TObject);
     procedure InvalidateMfFmp4BareEvap(Sender: TObject);
+    procedure InvalidateMfFmp4DirectRecharge(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4774,6 +4778,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean; override;
     function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; override;
     function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; override;
+    function FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean; override;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -6181,6 +6186,7 @@ resourcestring
   StrCapillary_Fringe = KCapillary_Fringe;
   StrSurfaceK = KSurfaceK;
   StrPotential_Evap_Bare = KPotential_Evap_Bare;
+  StrDirectRecharge = KDirectRecharge;
 
 
 const
@@ -23861,6 +23867,33 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited FarmProcess4TransientDirectRechargeArrayIsSelected;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.FarmProcess4TransientDirectRechargeArrayIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -26482,6 +26515,11 @@ begin
   ModflowPackages.FarmLandUse.MfFmp4CropID.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfFmp4DirectRecharge(Sender: TObject);
+begin
+  ModflowPackages.FarmClimate4.MfFmp4DirectRecharge.Invalidate;
+end;
+
 procedure TCustomModel.InvalidateMfFmp4Efficiency(Sender: TObject);
 begin
   ModflowPackages.FarmProcess4.MfFmp4Efficiency.Invalidate;
@@ -26700,6 +26738,17 @@ end;
 procedure TCustomModel.InvalidateMfSfrDownstreamUnsatKz(Sender: TObject);
 begin
   ModflowPackages.SfrPackage.MfSfrDownstreamUnsatKz.Invalidate;
+end;
+
+function TCustomModel.DirectRechargeUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmClimate4.StaticDirectRechargeUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 procedure TCustomModel.DischargeRoutingUpdate;
@@ -35497,6 +35546,17 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmClimate4.TransientDirectRechargeUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4TransientEfficiencyArrayUsed(
   Sender: TObject): boolean;
 begin
@@ -37424,7 +37484,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 11;
+  OWHM4DataSets  = 12;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -40379,6 +40439,20 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, CLIMATE: POTENTIAL_EVAPORATION_BARE';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KDirectRecharge;
+  FDataArrayCreationRecords[Index].DisplayName := StrDirectRecharge;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.DirectRechargeUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, CLIMATE: DIRECT_RECHARGE';
   Inc(Index);
 
   {$ENDIF}

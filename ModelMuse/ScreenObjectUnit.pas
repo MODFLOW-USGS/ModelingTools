@@ -50,7 +50,8 @@ uses
   ModflowSubsidenceDefUnit, PointCollectionUnit, ModflowGwtSpecifiedConcUnit,
   ModflowFmp4EfficiencyUnit, ModflowFmp4EfficiencyImprovementUnit,
   ModflowFmp4BareRunoffFractionUnit, ModflowFmp4PotentialEvapBareUnit,
-  ModflowFmp4BarePrecipitationConsumptionFractionUnit;
+  ModflowFmp4BarePrecipitationConsumptionFractionUnit,
+  ModflowFmp4DirectRechargeUnit;
 
 type
   //
@@ -1464,7 +1465,8 @@ view. }
     FFmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary;
     FFmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary;
     FFmp4BarePrecipitationConsumptionFractionBoundary: TFmp4BarePrecipitationConsumptionFractionBoundary;
-    FModflowFmpBareEvap: TFmp4BareEvapBoundary;
+    FFmp4BareEvap: TFmp4BareEvapBoundary;
+    FFmp4DirectRechargeBoundary: TFmp4DirectRechargeBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1588,8 +1590,10 @@ view. }
       TFmp4BarePrecipitationConsumptionFractionBoundary
       read FFmp4BarePrecipitationConsumptionFractionBoundary
       write FFmp4BarePrecipitationConsumptionFractionBoundary;
-    property ModflowFmpBareEvap: TFmp4BareEvapBoundary read FModflowFmpBareEvap
-      write FModflowFmpBareEvap;
+    property Fmp4BareEvap: TFmp4BareEvapBoundary read FFmp4BareEvap
+      write FFmp4BareEvap;
+    property Fmp4DirectRechargeBoundary: TFmp4DirectRechargeBoundary
+      read FFmp4DirectRechargeBoundary write FFmp4DirectRechargeBoundary;
 
     // Be sure to update
     // TModflowBoundaries.Invalidate,
@@ -2836,6 +2840,11 @@ view. }
     procedure SetModflowFmpBareEvap(const Value: TFmp4BareEvapBoundary);
     function StoreModflowFmpBareEvap: Boolean;
     procedure CreateModflowFmpBareEvap;
+    function GetModflowFmpDirectRecharge: TFmp4DirectRechargeBoundary;
+    procedure SetModflowFmpDirectRecharge(
+      const Value: TFmp4DirectRechargeBoundary);
+    function StoreModflowFmpDirectRecharge: Boolean;
+    procedure CreateModflowFmpDirectRecharge;
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
     procedure DeleteExtraSections;
@@ -4183,6 +4192,9 @@ view. }
     property ModflowFmpBareEvap: TFmp4BareEvapBoundary
       read GetModflowFmpBareEvap write SetModflowFmpBareEvap
       Stored StoreModflowFmpBareEvap;
+    property ModflowFmpDirectRecharge: TFmp4DirectRechargeBoundary
+      read GetModflowFmpDirectRecharge write SetModflowFmpDirectRecharge
+      Stored StoreModflowFmpDirectRecharge;
 
 
 
@@ -6853,6 +6865,7 @@ begin
   Fmp4BareRunoffFractionBoundary := AScreenObject.Fmp4BareRunoffFractionBoundary;
   Fmp4BarePrecipitationConsumptionFractionBoundary := AScreenObject.Fmp4BarePrecipitationConsumptionFractionBoundary;
   ModflowFmpBareEvap := AScreenObject.ModflowFmpBareEvap;
+  ModflowFmpDirectRecharge := AScreenObject.ModflowFmpDirectRecharge;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9670,6 +9683,11 @@ begin
     if ModflowFmpBareEvap <> nil then
     begin
       ModflowFmpBareEvap.InvalidateDisplay;
+    end;
+
+    if ModflowFmpDirectRecharge <> nil then
+    begin
+      ModflowFmpDirectRecharge.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -13995,16 +14013,16 @@ procedure TScreenObject.SetModflowFmpBareEvap(
 begin
   if (Value = nil) or not Value.Used then
   begin
-    if ModflowBoundaries.FModflowFmpBareEvap <> nil then
+    if ModflowBoundaries.FFmp4BareEvap <> nil then
     begin
       InvalidateModel;
     end;
-    FreeAndNil(ModflowBoundaries.FModflowFmpBareEvap);
+    FreeAndNil(ModflowBoundaries.FFmp4BareEvap);
   end
   else
   begin
-    ModflowFmpBareEvap;
-    ModflowBoundaries.FModflowFmpBareEvap.Assign(Value);
+    CreateModflowFmpBareEvap;
+    ModflowBoundaries.FFmp4BareEvap.Assign(Value);
   end;
 end;
 
@@ -14022,6 +14040,24 @@ begin
   begin
     CreateFarmCropID;
     ModflowBoundaries.FFmpCropIDBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmpDirectRecharge(
+  const Value: TFmp4DirectRechargeBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4DirectRechargeBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4DirectRechargeBoundary);
+  end
+  else
+  begin
+    CreateModflowFmpDirectRecharge;
+    ModflowBoundaries.FFmp4DirectRechargeBoundary.Assign(Value);
   end;
 end;
 
@@ -32022,14 +32058,28 @@ end;
 
 function TScreenObject.StoreModflowFmpBareEvap: Boolean;
 begin
+{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmpBareEvap <> nil) and ModflowFmpBareEvap.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmpCropID: Boolean;
 begin
   result := (FModflowBoundaries <> nil)
     and (ModflowFmpCropID <> nil) and ModflowFmpCropID.Used;
+end;
+
+function TScreenObject.StoreModflowFmpDirectRecharge: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmpDirectRecharge <> nil) and ModflowFmpDirectRecharge.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmpFarmID: Boolean;
@@ -33017,7 +33067,7 @@ begin
   end
   else
   begin
-    result := ModflowBoundaries.FModflowFmpBareEvap;
+    result := ModflowBoundaries.FFmp4BareEvap;
   end;
 end;
 
@@ -33035,6 +33085,23 @@ begin
   else
   begin
     result := ModflowBoundaries.FFmpCropIDBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmpDirectRecharge: TFmp4DirectRechargeBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowFmpDirectRecharge;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4DirectRechargeBoundary;
   end;
 end;
 
@@ -37712,10 +37779,19 @@ end;
 
 procedure TScreenObject.CreateModflowFmpBareEvap;
 begin
-  if (ModflowBoundaries.FModflowFmpBareEvap = nil) then
+  if (ModflowBoundaries.FFmp4BareEvap = nil) then
   begin
-    ModflowBoundaries.FModflowFmpBareEvap :=
+    ModflowBoundaries.FFmp4BareEvap :=
       TFmp4BareEvapBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowFmpDirectRecharge;
+begin
+  if (ModflowBoundaries.FFmp4DirectRechargeBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4DirectRechargeBoundary :=
+      TFmp4DirectRechargeBoundary.Create(FModel, self);
   end;
 end;
 
@@ -41019,18 +41095,32 @@ begin
       Source.Fmp4BarePrecipitationConsumptionFractionBoundary);
   end;
 
-  if Source.FModflowFmpBareEvap = nil then
+  if Source.FFmp4BareEvap = nil then
   begin
-    FreeAndNil(FModflowFmpBareEvap);
+    FreeAndNil(FFmp4BareEvap);
   end
   else
   begin
-    if FModflowFmpBareEvap = nil then
+    if FFmp4BareEvap = nil then
     begin
-      FModflowFmpBareEvap :=
+      FFmp4BareEvap :=
         TFmp4BareEvapBoundary.Create(Model, FScreenObject);
     end;
-    FModflowFmpBareEvap.Assign(Source.FModflowFmpBareEvap);
+    FFmp4BareEvap.Assign(Source.FFmp4BareEvap);
+  end;
+
+  if Source.FFmp4DirectRechargeBoundary = nil then
+  begin
+    FreeAndNil(FFmp4DirectRechargeBoundary);
+  end
+  else
+  begin
+    if FFmp4DirectRechargeBoundary = nil then
+    begin
+      FFmp4DirectRechargeBoundary :=
+        TFmp4DirectRechargeBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4DirectRechargeBoundary.Assign(Source.FFmp4DirectRechargeBoundary);
   end;
 
   FreeUnusedBoundaries;
@@ -41051,7 +41141,8 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
-  FModflowFmpBareEvap.Free;
+  FFmp4DirectRechargeBoundary.Free;
+  FFmp4BareEvap.Free;
   FFmp4BarePrecipitationConsumptionFractionBoundary.Free;
   FFmp4BareRunoffFractionBoundary.Free;
   FFmp4EfficiencyImprovementBoundary.Free;
@@ -41376,10 +41467,16 @@ begin
     FreeAndNil(FFmp4BarePrecipitationConsumptionFractionBoundary);
   end;
 
-  if (FModflowFmpBareEvap <> nil)
-    and not FModflowFmpBareEvap.Used then
+  if (FFmp4BareEvap <> nil)
+    and not FFmp4BareEvap.Used then
   begin
-    FreeAndNil(FModflowFmpBareEvap);
+    FreeAndNil(FFmp4BareEvap);
+  end;
+
+  if (FFmp4DirectRechargeBoundary <> nil)
+    and not FFmp4DirectRechargeBoundary.Used then
+  begin
+    FreeAndNil(FFmp4DirectRechargeBoundary);
   end;
 
 end;
@@ -41681,9 +41778,14 @@ begin
     FFmp4BarePrecipitationConsumptionFractionBoundary.Invalidate;
   end;
 
-  if FModflowFmpBareEvap <> nil then
+  if FFmp4BareEvap <> nil then
   begin
-    FModflowFmpBareEvap.Invalidate;
+    FFmp4BareEvap.Invalidate;
+  end;
+
+  if FFmp4DirectRechargeBoundary <> nil then
+  begin
+    FFmp4DirectRechargeBoundary.Invalidate;
   end;
 
 end;
@@ -42025,9 +42127,14 @@ begin
     Fmp4BarePrecipitationConsumptionFractionBoundary.RemoveModelLink(AModel);
   end;
 
-  if FModflowFmpBareEvap <> nil then
+  if FFmp4BareEvap <> nil then
   begin
-    FModflowFmpBareEvap.RemoveModelLink(AModel);
+    FFmp4BareEvap.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4DirectRechargeBoundary <> nil then
+  begin
+    FFmp4DirectRechargeBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -42371,9 +42478,14 @@ begin
     FFmp4BarePrecipitationConsumptionFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
-  if FModflowFmpBareEvap <> nil then
+  if FFmp4BareEvap <> nil then
   begin
-    FModflowFmpBareEvap.Values.ReplaceATime(OldTime, NewTime);
+    FFmp4BareEvap.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmp4DirectRechargeBoundary <> nil then
+  begin
+    FFmp4DirectRechargeBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
   Invalidate;
@@ -42716,9 +42828,14 @@ begin
     FFmp4BarePrecipitationConsumptionFractionBoundary.StopTalkingToAnyone;
   end;
 
-  if FModflowFmpBareEvap <> nil then
+  if FFmp4BareEvap <> nil then
   begin
-    FModflowFmpBareEvap.StopTalkingToAnyone;
+    FFmp4BareEvap.StopTalkingToAnyone;
+  end;
+
+  if FFmp4DirectRechargeBoundary <> nil then
+  begin
+    FFmp4DirectRechargeBoundary.StopTalkingToAnyone;
   end;
 
 end;
@@ -43256,9 +43373,18 @@ begin
     end;
   end;
 
-  if FModflowFmpBareEvap <> nil then
+  if FFmp4BareEvap <> nil then
   begin
-    Result := FModflowFmpBareEvap.Values.UsesATime(ATime);
+    Result := FFmp4BareEvap.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4DirectRechargeBoundary <> nil then
+  begin
+    Result := FFmp4DirectRechargeBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

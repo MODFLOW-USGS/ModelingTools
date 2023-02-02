@@ -55,7 +55,7 @@ uses System.UITypes, Windows,
   frameScreenObjectFmp4EfficiencyImprovementUnit,
   frameScreenObjectBareRunoffFractionUnit,
   frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit,
-  frameScreenObjectFmp4BareEvapUnit;
+  frameScreenObjectFmp4BareEvapUnit, frameScreenObjectFmp4DirectRechargeUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -419,6 +419,8 @@ type
     frameFmp4BarePrecipitationConsumptionFraction: TframeScreenObjectFmp4BarePrecipitationConsumptionFraction;
     jvspFmp4BareEvap: TJvStandardPage;
     frameFmp4BareEvap: TframeScreenObjectFmp4BareEvap;
+    jvspFmp4DirectRecharge: TJvStandardPage;
+    frameFmp4DirectRecharge: TframeScreenObjectFmp4DirectRecharge;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1756,6 +1758,7 @@ type
     FFmp4BareRunoffFractionNode: TJvPageIndexNode;
     FFmp4BarePrecipitationConsumptionFractionNode: TJvPageIndexNode;
     FFmp4BareEvapNode: TJvPageIndexNode;
+    FFmp4DirectRechargeNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2282,6 +2285,9 @@ type
     procedure Fmp4BareEvapChanged(Sender: TObject);
     procedure CreateFmp4BareEvapNode;
     procedure GetFmp4BareEvapBoundary(const ScreenObjectList: TList);
+    procedure Fmp4DirectRechargeChanged(Sender: TObject);
+    procedure CreateFmp4DirectRechargeNode;
+    procedure GetFmp4DirectRechargeBoundary(const ScreenObjectList: TList);
 //    function GetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer): Boolean;
 //    procedure SetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer;
 //      const Value: Boolean);
@@ -2583,7 +2589,8 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowResUnit, Modflow6TimeSeriesCollectionsUnit, Modflow6TimeSeriesUnit,
   ModflowGwtSpecifiedConcUnit, PestPropertiesUnit, ModflowFmp4EfficiencyUnit,
   ModflowFmp4EfficiencyImprovementUnit, ModflowFmp4BareRunoffFractionUnit,
-  ModflowFmp4BarePrecipitationConsumptionFractionUnit, ModflowFmp4PotentialEvapBareUnit;
+  ModflowFmp4BarePrecipitationConsumptionFractionUnit,
+  ModflowFmp4PotentialEvapBareUnit, ModflowFmp4DirectRechargeUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4038,6 +4045,10 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4DirectRechargeNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4189,6 +4200,7 @@ begin
   CreateFmp4BareRunoffFractionNode;
   CreateFmp4BarePrecipitationConsumptionFractionNode;
   CreateFmp4BareEvapNode;
+  CreateFmp4DirectRechargeNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -5015,6 +5027,7 @@ begin
         BoundaryNodeList.Add(FFmp4BareRunoffFractionNode);
         BoundaryNodeList.Add(FFmp4BarePrecipitationConsumptionFractionNode);
         BoundaryNodeList.Add(FFmp4BareEvapNode);
+        BoundaryNodeList.Add(FFmp4DirectRechargeNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -5899,6 +5912,15 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4DirectRechargeChanged(Sender: TObject);
+begin
+  if (FFmp4DirectRechargeNode <> nil)
+    and (FFmp4DirectRechargeNode.StateIndex <> 3) then
+  begin
+    FFmp4DirectRechargeNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4EfficiencyChanged(Sender: TObject);
 begin
   if (FFmp4EfficiencyNode <> nil) and (FFmp4EfficiencyNode.StateIndex <> 3) then
@@ -5989,7 +6011,8 @@ begin
   frameFmp4BareRunoffFraction.OnEdited := Fmp4BareRunoffFractionChanged;
   frameFmp4BarePrecipitationConsumptionFraction.OnEdited :=
     Fmp4BarePrecipitationConsumptionFractionChanged;
-  frameFmp4BarePrecipitationConsumptionFraction.OnEdited := Fmp4BareEvapChanged;
+  frameFmp4BareEvap.OnEdited := Fmp4BareEvapChanged;
+  frameFmp4DirectRecharge.OnEdited := Fmp4DirectRechargeChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7222,6 +7245,10 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4DirectRechargeNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8191,10 +8218,18 @@ begin
 
   if (FFmp4BareEvapNode <> nil) then
   begin
-    frameFmp4BarePrecipitationConsumptionFraction.SetData(FNewProperties,
+    frameFmp4BareEvap.SetData(FNewProperties,
       (FFmp4BareEvapNode.StateIndex = 2),
       (FFmp4BareEvapNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientBareEvapArrayIsSelected);
+  end;
+
+  if (FFmp4DirectRechargeNode <> nil) then
+  begin
+    frameFmp4DirectRecharge.SetData(FNewProperties,
+      (FFmp4DirectRechargeNode.StateIndex = 2),
+      (FFmp4DirectRechargeNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientDirectRechargeArrayIsSelected);
   end;
 end;
 
@@ -14488,7 +14523,7 @@ begin
       [frmGoPhast.PhastModel.ModflowPackages.FarmClimate4.PackageIdentifier]))
       as TJvPageIndexNode;
     Node.PageIndex := jvspFmp4BareEvap.PageIndex;
-    frameFmp4BarePrecipitationConsumptionFraction.pnlCaption.Caption := Node.Text;
+    frameFmp4BareEvap.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FFmp4BareEvapNode := Node;
   end;
@@ -14525,6 +14560,23 @@ begin
     frameFmp4BareRunoffFraction.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FFmp4BareRunoffFractionNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4DirectRechargeNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4DirectRechargeNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientDirectRechargeArrayIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Direct Recharge in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmClimate4.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4DirectRecharge.PageIndex;
+    frameFmp4DirectRecharge.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4DirectRechargeNode := Node;
   end;
 end;
 
@@ -17157,7 +17209,7 @@ begin
   begin
     FFmp4BareEvapNode.StateIndex := Ord(State)+1;
   end;
-  frameFmp4BarePrecipitationConsumptionFraction.GetData(FNewProperties);
+  frameFmp4BareEvap.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetFmp4BarePrecipitationConsumptionFractionBoundary(
@@ -17210,6 +17262,32 @@ begin
     FFmp4BareRunoffFractionNode.StateIndex := Ord(State)+1;
   end;
   frameFmp4BareRunoffFraction.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4DirectRechargeBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4DirectRechargeBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientDirectRechargeArrayIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmpDirectRecharge;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4DirectRechargeNode <> nil then
+  begin
+    FFmp4DirectRechargeNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4DirectRecharge.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetFmp4EfficiencyBoundary(
@@ -17733,6 +17811,7 @@ begin
   GetFmp4BareRunoffFractionBoundary(AScreenObjectList);
   GetFmp4BarePrecipitationConsumptionFractionBoundary(AScreenObjectList);
   GetFmp4BareEvapBoundary(AScreenObjectList);
+  GetFmp4DirectRechargeBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 

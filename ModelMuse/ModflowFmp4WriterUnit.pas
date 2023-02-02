@@ -15,7 +15,7 @@ type
     wlSemiRouteDeliv, wlSemiRouteReturn, wlCall, wlEfficiency,
     wlEfficiencyImprovement, wlBareRunoffFraction,
     wlBarePrecipitationConsumptionFraction, wlCapillaryFringe, wlSoilID,
-    wlSurfaceK, wlBareEvap);
+    wlSurfaceK, wlBareEvap, wlDirectRecharge);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -45,6 +45,8 @@ type
     WriteTransientData: Boolean;
     CheckProcedure: TCheckDataSet;
     CheckError: string;
+    Option: string;
+    FarmProperty: TFarmProperty;
   end;
 
   TModflowFmp4Writer = class(TCustomListWriter)
@@ -63,6 +65,8 @@ type
     FEfficiencyImprovements: TList;
     FBareRunoffFractions: TList;
     FBarePrecipitationConsumptionFractions: TList;
+    FEvapBare: TList;
+    FDirectRecharge: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -80,6 +84,8 @@ type
     FCapillaryFringeFileStream: TFileStream;
     FSoilIdStream: TFileStream;
     FSurfaceKFileStream: TFileStream;
+    FEvapBareFileStream: TFileStream;
+    FDirectRechargeFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -120,6 +126,9 @@ type
 
     procedure EvaluateBareEvap;
     procedure WriteBareEvap;
+
+    procedure EvaluateDirectRecharge;
+    procedure WriteDirectRecharge;
 
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
@@ -182,6 +191,7 @@ type
     procedure UpdateBarePrecipitationConsumptionFractionDisplay(
       TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateEvapBareDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateDirectRechargeDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -295,6 +305,8 @@ begin
   FEfficiencyImprovements := TObjectList.Create;
   FBareRunoffFractions := TObjectList.Create;
   FBarePrecipitationConsumptionFractions := TObjectList.Create;
+  FEvapBare := TObjectList.Create;
+  FDirectRecharge := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -305,6 +317,9 @@ end;
 destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
+
+  FDirectRecharge.Free;
+  FEvapBare.Free;
   FBarePrecipitationConsumptionFractions.Free;
   FBareRunoffFractions.Free;
   FEfficiencyImprovements.Free;
@@ -355,6 +370,7 @@ begin
   EvaluateBareRunoffFraction;
   EvaluateBarePrecipitationConsumptionFraction;
   EvaluateBareEvap;
+  EvaluateDirectRecharge;
 end;
 
 procedure TModflowFmp4Writer.EvaluateBareEvap;
@@ -390,6 +406,15 @@ begin
   begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidCropIDInF);
     EvaluateTransientArrayData(wlCID);
+  end;
+end;
+
+procedure TModflowFmp4Writer.EvaluateDirectRecharge;
+begin
+  if FClimatePackage.TransientDirectRechargeUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Direct Recharge value');
+    EvaluateTransientArrayData(wlDirectRecharge);
   end;
 end;
 
@@ -457,6 +482,9 @@ begin
   FreeAndNil(FCapillaryFringeFileStream);
   FreeAndNil(FSoilIdStream);
   FreeAndNil(FSurfaceKFileStream);
+  FreeAndNil(FEvapBareFileStream);
+  FreeAndNil(FDirectRechargeFileStream);
+
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -606,6 +634,24 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlBareEvap:
+      begin
+        result := ChangeFileExt(FBaseName, '.POTENTIAL_EVAPORATION_BARE');
+        if FEvapBareFileStream = nil then
+        begin
+          FEvapBareFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlDirectRecharge:
+      begin
+        result := ChangeFileExt(FBaseName, '.DIRECT_RECHARGE');
+        if FDirectRechargeFileStream = nil then
+        begin
+          FDirectRechargeFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -640,6 +686,8 @@ begin
     wlCapillaryFringe: ;
     wlSoilID: ;
     wlSurfaceK: ;
+    wlBareEvap: result := ScreenObject.ModflowFmpBareEvap;
+    wlDirectRecharge: result := ScreenObject.ModflowFmpDirectRecharge;
     else Assert(False);
   end;
 end;
@@ -673,6 +721,8 @@ begin
     wlCapillaryFringe: ;
     wlSoilID: ;
     wlSurfaceK: ;
+    wlBareEvap: result := FEvapBare;
+    wlDirectRecharge: result := FDirectRecharge;
     else Assert(False)
   end;
 end;
@@ -740,6 +790,19 @@ begin
   UpdateRequirements.EvaluateProcedure := EvaluateCropID;
   UpdateRequirements.TransientDataUsed := TransientCropUsed;
   UpdateRequirements.WriteLocation := wlCID;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateDirectRechargeDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateDirectRecharge;
+  UpdateRequirements.TransientDataUsed := FClimatePackage.
+    TransientDirectRechargeUsed;
+  UpdateRequirements.WriteLocation := wlDirectRecharge;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
 end;
@@ -880,32 +943,82 @@ end;
 procedure TModflowFmp4Writer.WriteFmpArrayData(AFileName: string; RequiredValues: TRequiredValues);
 var
   DataArray: TDataArray;
+  ExternalFileName: string;
 begin
+  if RequiredValues.FarmProperty <> nil then
+  begin
+    if RequiredValues.FarmProperty.UnitConversionScaleFactor <> '' then
+    begin
+      WriteString('  INTERNAL SF ');
+      WriteString(RequiredValues.FarmProperty.UnitConversionScaleFactor);
+      NewLine;
+    end;
+    ExternalFileName := RequiredValues.FarmProperty.ExternalFileName;
+
+//    if RequiredValues.FarmProperty.ExternalScaleFileName <> '' then
+//    begin
+//      WriteString('  INTERNAL SF ')
+//      WriteString(RequiredValues.FarmProperty.ExternalScaleFileName);
+//      NewLine;
+//    end;
+
+  end
+  else
+  begin
+    ExternalFileName := ''
+  end;
+
   WriteString('  ');
   WriteString(RequiredValues.ID);
   WriteString(' ');
   if RequiredValues.WriteTransientData then
   begin
     WriteString('TRANSIENT ARRAY DATAFILE ');
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
-    WriteTransientFmpArrayData(RequiredValues);
+    if RequiredValues.Option <> '' then
+    begin
+      WriteString(RequiredValues.Option + ' ');
+    end;
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExternalFileName);
+      NewLine;
+//      WriteTransientFmpArrayData(RequiredValues);
+    end
+    else
+    begin
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      WriteTransientFmpArrayData(RequiredValues);
+    end;
   end
   else
   begin
     WriteString('STATIC ARRAY DATAFILE ');
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
-    FWriteLocation := RequiredValues.WriteLocation;
-    try
-      DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
-      WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
-      if Assigned(RequiredValues.CheckProcedure) then
-      begin
-        RequiredValues.CheckProcedure(DataArray, RequiredValues.CheckError);
+    if RequiredValues.Option <> '' then
+    begin
+      WriteString(RequiredValues.Option + ' ');
+    end;
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExternalFileName);
+      NewLine;
+    end
+    else
+    begin
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      FWriteLocation := RequiredValues.WriteLocation;
+      try
+        DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
+        WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
+        if Assigned(RequiredValues.CheckProcedure) then
+        begin
+          RequiredValues.CheckProcedure(DataArray, RequiredValues.CheckError);
+        end;
+      finally
+        FWriteLocation := wlMain;
       end;
-    finally
-      FWriteLocation := wlMain;
+
     end;
   end;
 end;
@@ -993,6 +1106,8 @@ begin
       (FClimatePackage.Potential_Evaporation_Bare.FarmOption = foTransient);
     RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
     RequiredValues.CheckError := StrInvalidPotentialEv;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FClimatePackage.Potential_Evaporation_Bare;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -1007,14 +1122,14 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
 begin
-  if FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foNotUsed then
+  if FFarmProcess4.Bare_Precipitation_Consumption_Fraction.FarmOption = foNotUsed then
   begin
     Exit;
   end;
 
   AFileName := GetFileStreamName(wlBarePrecipitationConsumptionFraction);
 
-  if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
+  if (FFarmProcess4.Bare_Precipitation_Consumption_Fraction.ArrayList = alArray) then
   begin
     RequiredValues.WriteLocation := wlBarePrecipitationConsumptionFraction;
     RequiredValues.DefaultValue := 0;
@@ -1025,9 +1140,11 @@ begin
     RequiredValues.ID := 'BARE_RUNOFF_FRACTION';
     RequiredValues.StaticDataName := KBarePrecipitationConsumptionFraction;
     RequiredValues.WriteTransientData :=
-      (FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foTransient);
+      (FFarmProcess4.Bare_Precipitation_Consumption_Fraction.FarmOption = foTransient);
     RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
     RequiredValues.CheckError := StrInvalidPrecipConsumpRunoff;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FFarmProcess4.Bare_Precipitation_Consumption_Fraction;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -1063,6 +1180,8 @@ begin
       (FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foTransient);
     RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
     RequiredValues.CheckError := StrInvalidBareRunoff;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FFarmProcess4.Bare_Runoff_Fraction;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -1097,6 +1216,8 @@ begin
     RequiredValues.WriteTransientData := False;
     RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
     RequiredValues.CheckError := StrInvalidCapillaryFringe;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FSoil4.CapFringe;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -1122,6 +1243,12 @@ begin
     WritePrecipitation;
     WriteRefET;
     WriteBareEvap;
+
+    WriteString('  REFERENCE_ET_TO_BARE');
+    WriteFloat(FClimatePackage.RefEtToBare);
+    NewLine;
+
+    WriteDirectRecharge;
 
     WriteString('END CLIMATE');
     NewLine;
@@ -1164,6 +1291,46 @@ begin
 
 end;
 
+procedure TModflowFmp4Writer.WriteDirectRecharge;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FClimatePackage.Direct_Recharge.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlDirectRecharge);
+
+  if (FClimatePackage.Direct_Recharge.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlDirectRecharge;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP CLIMATE: DIRECT_RECHARGE';
+    RequiredValues.ErrorID := 'FMP CLIMATE: DIRECT_RECHARGE';
+    RequiredValues.ID := 'DIRECT_RECHARGE';
+    RequiredValues.StaticDataName := KDirectRecharge;
+    RequiredValues.WriteTransientData :=
+      (FClimatePackage.Direct_Recharge.FarmOption = foTransient);
+    RequiredValues.CheckProcedure := nil;
+    RequiredValues.CheckError :=  'Invalid Direct Recharge value';
+    case FClimatePackage.DirectRechargeOption of
+      droFlux: RequiredValues.Option := 'FLUX';
+      droRate: RequiredValues.Option := 'RATE';
+    end;
+    RequiredValues.FarmProperty := FClimatePackage.Direct_Recharge;
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteEfficiency;
 var
   AFileName: string;
@@ -1190,6 +1357,8 @@ begin
       (FFarmProcess4.EfficiencyOptions.FarmOption = foTransient);
     RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
     RequiredValues.CheckError := StrInvalidEfficiencyV;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FFarmProcess4.EfficiencyOptions;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -1226,6 +1395,8 @@ begin
       (FFarmProcess4.EfficiencyImprovement.FarmOption = foTransient);
     RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
     RequiredValues.CheckError := StrInvalidEfficiencyI;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FFarmProcess4.EfficiencyImprovement;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -1253,6 +1424,8 @@ begin
   RequiredValues.WriteTransientData := FLandUse.CropLocation = rstTransient;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.CheckError := StrInvalidCropIDInF;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := nil;
 
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
@@ -1323,6 +1496,8 @@ begin
   RequiredValues.WriteTransientData := FFarmProcess4.Farms.FarmOption = foTransient;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.CheckError := StrInvalidFarmID;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := nil;
 
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
@@ -1516,6 +1691,8 @@ begin
   RequiredValues.WriteTransientData := FClimatePackage.TransientPrecipUsed(Self);
   RequiredValues.CheckProcedure := nil;
   RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FClimatePackage.Precipitation;
 
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
@@ -1543,6 +1720,8 @@ begin
   RequiredValues.WriteTransientData := FClimatePackage.TransientEvapUsed(Self);
   RequiredValues.CheckProcedure := nil;
   RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := nil;
 
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
@@ -1595,6 +1774,8 @@ begin
     RequiredValues.WriteTransientData := False;
     RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
     RequiredValues.CheckError := 'Invalid Soil ID value';
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FFarmProcess4.Bare_Runoff_Fraction;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end
@@ -1736,6 +1917,16 @@ begin
           Assert(FSurfaceKFileStream <> nil);
           FSurfaceKFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlBareEvap:
+        begin
+          Assert(FEvapBareFileStream <> nil);
+          FEvapBareFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlDirectRecharge:
+        begin
+          Assert(FDirectRechargeFileStream <> nil);
+          FDirectRechargeFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -1772,6 +1963,8 @@ begin
     RequiredValues.WriteTransientData := False;
     RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
     RequiredValues.CheckError := 'Invalid Surface Vertical K value';
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FSoil4.SurfVertK;
 
     WriteFmpArrayData(AFileName, RequiredValues);
   end

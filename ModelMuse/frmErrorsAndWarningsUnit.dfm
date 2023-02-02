@@ -4,22 +4,23 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
   Caption = 'Errors and Warnings'
   ClientWidth = 472
   OnResize = FormResize
-  ExplicitWidth = 488
-  ExplicitHeight = 273
-  PixelsPerInch = 96
+  ExplicitWidth = 484
+  ExplicitHeight = 271
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 193
+    Top = 192
     Width = 472
     Height = 41
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 191
+    ExplicitWidth = 468
     DesignSize = (
       472
       41)
     object btnClose: TBitBtn
-      Left = 374
+      Left = 370
       Top = 4
       Width = 89
       Height = 33
@@ -27,9 +28,10 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 366
     end
     object btnHelp: TBitBtn
-      Left = 279
+      Left = 275
       Top = 4
       Width = 89
       Height = 33
@@ -38,6 +40,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
+      ExplicitLeft = 271
     end
     object btnSave: TButton
       Left = 88
@@ -71,7 +74,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
     Left = 0
     Top = 0
     Width = 472
-    Height = 193
+    Height = 192
     Align = alClient
     Colors.BorderColor = 15987699
     Colors.DisabledColor = clGray

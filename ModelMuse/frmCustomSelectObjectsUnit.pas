@@ -1448,7 +1448,16 @@ begin
       end;
 
       vstDataSetNode := PVirtualNode(DataSetList.Objects[Position]);
+    {$IFDEF DEBUG}
+      try
+    {$ENDIF}
       InitializeData(vstDataSetNode);
+    {$IFDEF DEBUG}
+      except
+        ShowMessage(AScreenObject.Name);
+        raise
+      end;
+    {$ENDIF}
 
       DataSetClassification := StringReplace(DataSetClassification, StrDataSets,
         StrCalibrationDataSets, []);

@@ -1,0 +1,2 @@
+inherited frameScreenObjectFmp4DirectRecharge: TframeScreenObjectFmp4DirectRecharge
+end

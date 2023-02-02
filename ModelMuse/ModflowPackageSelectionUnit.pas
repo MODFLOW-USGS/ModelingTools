@@ -5201,6 +5201,8 @@ Type
     FMfFmp4EvapRate: TModflowBoundaryDisplayTimeList;
     FMfFmp4Precip: TModflowBoundaryDisplayTimeList;
     FMfFmp4EvapBare: TModflowBoundaryDisplayTimeList;
+    FMfFmp4DirectRecharge: TModflowBoundaryDisplayTimeList;
+    FStoredRefEtToBare: TRealStorage;
     procedure SetDirect_Recharge(const Value: TFarmProperty);
     procedure SetPotential_Evaporation_Bare(const Value: TFarmProperty);
     procedure SetPrecipitation(const Value: TFarmProperty);
@@ -5208,6 +5210,7 @@ Type
     procedure SetReferenceET(const Value: TFarmProperty);
     procedure SetDirectRechargeOption(const Value: TDirectRechargeOption);
     procedure SetPrecipPotConsum(const Value: TPrecipPotConsum);
+    procedure SetStoredRefEtToBare(const Value: TRealStorage);
 
     function GetRefEtBoundary(ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeFarmRefEtDisplay(Sender: TObject);
@@ -5224,6 +5227,13 @@ Type
     procedure GetBareEvapUseList(Sender: TObject; NewUseList: TStringList);
     procedure InvalidateBareEvap(Sender: TObject);
 
+    function GetDirectRechargeBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeDirectRechargeDisplay(Sender: TObject);
+    procedure GetDirectRechargeUseList(Sender: TObject; NewUseList: TStringList);
+    procedure InvalidateDirectRecharge(Sender: TObject);
+    function GetRefEtToBare: double;
+    procedure SetRefEtToBare(const Value: double);
+
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5232,18 +5242,26 @@ Type
     destructor Destroy; override;
     procedure InitializeVariables; override;
     function TransientEvapUsed (Sender: TObject): boolean;
-    function TransientPrecipUsed (Sender: TObject): boolean;
-    function TransientBareEvapUsed (Sender: TObject): boolean;
     function StaticEvapUsed (Sender: TObject): boolean;
+    function TransientPrecipUsed (Sender: TObject): boolean;
     function StaticPrecipUsed (Sender: TObject): boolean;
+    function TransientBareEvapUsed (Sender: TObject): boolean;
     function StaticBareEvapUsed (Sender: TObject): boolean;
+    function TransientDirectRechargeUsed (Sender: TObject): boolean;
+    function StaticDirectRechargeUsed (Sender: TObject): boolean;
+
+    property RefEtToBare: double read GetRefEtToBare write SetRefEtToBare;
     // REFERENCE_ET
     property MfFmp4EvapRate: TModflowBoundaryDisplayTimeList read FMfFmp4EvapRate;
     // PRECIPITATION
     property MfFmp4Precip: TModflowBoundaryDisplayTimeList read FMfFmp4Precip;
     // POTENTIAL_EVAPORATION_BARE
     property MfFmp4EvapBare: TModflowBoundaryDisplayTimeList read FMfFmp4EvapBare;
+    // DIRECT_RECHARGE
+    property MfFmp4DirectRecharge: TModflowBoundaryDisplayTimeList read FMfFmp4DirectRecharge;
   published
+    property StoredRefEtToBare: TRealStorage read FStoredRefEtToBare
+      write SetStoredRefEtToBare;
     // Climate
     // PRECIPITATION
     property Precipitation: TFarmProperty read FPrecipitation
@@ -25412,6 +25430,7 @@ begin
     Precipitation_Potential_Consumption := Climate.Precipitation_Potential_Consumption;
     DirectRechargeOption := Climate.DirectRechargeOption;
     PrecipPotConsum := Climate.PrecipPotConsum;
+    RefEtToBare := Climate.RefEtToBare;
   end;
   inherited;
 end;
@@ -25430,6 +25449,9 @@ begin
   begin
     InvalidateEvent := Model.Invalidate;
   end;
+
+  FStoredRefEtToBare := TRealStorage.Create;
+  FStoredRefEtToBare.OnChange := InvalidateEvent;
 
   FReferenceET := TFarmProperty.Create(InvalidateEvent);
   FPotential_Evaporation_Bare := TFarmProperty.Create(InvalidateEvent);
@@ -25468,6 +25490,16 @@ begin
     begin
       AddTimeList(FMfFmp4EvapBare);
     end;
+
+    FMfFmp4DirectRecharge := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4DirectRecharge.OnInitialize := InitializeDirectRechargeDisplay;
+    FMfFmp4DirectRecharge.OnGetUseList := GetDirectRechargeUseList;
+    FMfFmp4DirectRecharge.OnTimeListUsed := TransientDirectRechargeUsed;
+    FMfFmp4DirectRecharge.Name := 'Direct Recharge';
+    if Direct_Recharge.FarmOption = foTransient then
+    begin
+      AddTimeList(FMfFmp4DirectRecharge);
+    end;
   end;
 
   InitializeVariables;
@@ -25475,11 +25507,13 @@ begin
   FReferenceET.OnChangeFarmOption := InvalidateRefEt;
   FPrecipitation.OnChangeFarmOption := InvalidatePrecip;
   FPotential_Evaporation_Bare.OnChangeFarmOption := InvalidateBareEvap;
+  FDirect_Recharge.OnChangeFarmOption := InvalidateDirectRecharge;
 
 end;
 
 destructor TFarmProcess4Climate.Destroy;
 begin
+  FMfFmp4DirectRecharge.Free;
   FMfFmp4EvapBare.Free;
   FMfFmp4EvapRate.Free;
   FMfFmp4Precip.Free;
@@ -25490,6 +25524,8 @@ begin
   FDirect_Recharge.Free;
   FPrecipitation_Potential_Consumption.Free;
 
+  FStoredRefEtToBare.Free;
+
   inherited;
 end;
 
@@ -25497,6 +25533,13 @@ function TFarmProcess4Climate.TransientBareEvapUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
     and (Potential_Evaporation_Bare.FarmOption = foTransient);
+end;
+
+function TFarmProcess4Climate.TransientDirectRechargeUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Direct_Recharge.FarmOption = foTransient);
 end;
 
 function TFarmProcess4Climate.TransientEvapUsed(Sender: TObject): boolean;
@@ -25524,6 +25567,22 @@ var
 begin
   GetUseListOptions.GetBoundary := Self.GetBareEvapBoundary;
   GetUseListOptions.Description := StrFMP4PotentialEvapor;
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
+function TFarmProcess4Climate.GetDirectRechargeBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmpDirectRecharge;
+end;
+
+procedure TFarmProcess4Climate.GetDirectRechargeUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetDirectRechargeBoundary;
+  GetUseListOptions.Description := 'FMP Direct Recharge';
   GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
@@ -25559,6 +25618,11 @@ begin
   Result := ScreenObject.ModflowFmpRefEvap;
 end;
 
+function TFarmProcess4Climate.GetRefEtToBare: double;
+begin
+  result := StoredRefEtToBare.Value;
+end;
+
 procedure TFarmProcess4Climate.InitializeBareEvapDisplay(Sender: TObject);
 var
   FarmWriter: TModflowFmp4Writer;
@@ -25568,6 +25632,21 @@ begin
   try
     DisplayOptions.Display := MfFmp4EvapBare;
     DisplayOptions.UpdateDisplay := FarmWriter.UpdateEvapBareDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
+procedure TFarmProcess4Climate.InitializeDirectRechargeDisplay(Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := MfFmp4DirectRecharge;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateDirectRechargeDisplay;
     InitializeFarmDisplay(DisplayOptions)
   finally
     FarmWriter.Free;
@@ -25613,6 +25692,8 @@ begin
   FDirect_Recharge.Initialize;
   FPrecipitation_Potential_Consumption.Initialize;
 
+  RefEtToBare := 0.5;
+
   FDirectRechargeOption := droFlux;
   FPrecipPotConsum := ppcLength;
 end;
@@ -25629,6 +25710,22 @@ begin
     else
     begin
       RemoveTimeList(MfFmp4EvapBare);
+    end;
+  end;
+  InvalidateModel;
+end;
+
+procedure TFarmProcess4Climate.InvalidateDirectRecharge(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if Direct_Recharge.FarmOption = foTransient then
+    begin
+      AddTimeList(MfFmp4DirectRecharge);
+    end
+    else
+    begin
+      RemoveTimeList(MfFmp4DirectRecharge);
     end;
   end;
   InvalidateModel;
@@ -25713,10 +25810,27 @@ begin
   FReferenceET.Assign(Value);
 end;
 
+procedure TFarmProcess4Climate.SetRefEtToBare(const Value: double);
+begin
+  StoredRefEtToBare.Value := Value;
+end;
+
+procedure TFarmProcess4Climate.SetStoredRefEtToBare(const Value: TRealStorage);
+begin
+  FStoredRefEtToBare.Assign(Value);
+end;
+
 function TFarmProcess4Climate.StaticBareEvapUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
     and (Potential_Evaporation_Bare.FarmOption = foStatic);
+end;
+
+function TFarmProcess4Climate.StaticDirectRechargeUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Direct_Recharge.FarmOption = foStatic);
 end;
 
 function TFarmProcess4Climate.StaticEvapUsed(Sender: TObject): boolean;

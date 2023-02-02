@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, framePackageUnit, RbwController,
-  Vcl.StdCtrls, ModflowPackageSelectionUnit, Vcl.Grids, RbwDataGrid4;
+  Vcl.StdCtrls, ModflowPackageSelectionUnit, Vcl.Grids, RbwDataGrid4,
+  ArgusDataEntry;
 
 type
   TClimateColumns = (ccName, ccFrequency, ccOther, ccScaleFactor,
@@ -15,6 +16,8 @@ type
 
   TframePackageFmp4Climate = class(TframePackage)
     rdgClimate: TRbwDataGrid4;
+    rdeRefEtToBare: TRbwDataEntry;
+    lblRefEtToBare: TLabel;
     procedure rdgClimateSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
   private
@@ -92,6 +95,9 @@ var
 begin
   inherited;
   ClimatePkg := Package as TFarmProcess4Climate;
+
+  rdeRefEtToBare.RealValue := ClimatePkg.RefEtToBare;
+
   GetFarmProperty(ClimatePkg.Precipitation, Ord(crPrecip));
   GetFarmProperty(ClimatePkg.ReferenceET, Ord(crRefEt));
   GetFarmProperty(ClimatePkg.Potential_Evaporation_Bare, Ord(crPotEtBare));
@@ -202,6 +208,8 @@ var
 begin
   inherited;
   ClimatePkg := Package as TFarmProcess4Climate;
+
+  ClimatePkg.RefEtToBare := rdeRefEtToBare.RealValue;
 
   SetFarmProperty(ClimatePkg.Precipitation, crPrecip);
   SetFarmProperty(ClimatePkg.ReferenceET, crRefEt);

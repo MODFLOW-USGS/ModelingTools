@@ -6,15 +6,22 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
   DesignSize = (
     435
     432)
+  object lblRefEtToBare: TLabel [2]
+    Left = 167
+    Top = 163
+    Width = 178
+    Height = 15
+    Caption = 'Reference ET to Bare'
+  end
   inherited memoComments: TMemo
     Width = 404
     ExplicitWidth = 404
   end
-  object rdgClimate: TRbwDataGrid4 [3]
+  object rdgClimate: TRbwDataGrid4 [4]
     Left = 0
-    Top = 157
+    Top = 192
     Width = 435
-    Height = 275
+    Height = 240
     Align = alBottom
     ColCount = 6
     Enabled = False
@@ -181,6 +188,18 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+  end
+  object rdeRefEtToBare: TRbwDataEntry [5]
+    Left = 16
+    Top = 160
+    Width = 145
+    Height = 22
+    TabOrder = 2
+    Text = '0.5'
+    DataType = dtReal
+    Max = 1.000000000000000000
+    CheckMin = True
+    ChangeDisabledColor = True
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
