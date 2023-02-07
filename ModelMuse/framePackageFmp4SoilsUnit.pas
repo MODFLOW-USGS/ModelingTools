@@ -14,6 +14,8 @@ type
 
   TframePackageFmp4Soils = class(TframePackage)
     rdgSoils: TRbwDataGrid4;
+    procedure rdgSoilsSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     procedure InitializeGrid;
     { Private declarations }
@@ -88,6 +90,22 @@ procedure TframePackageFmp4Soils.Loaded;
 begin
   inherited;
   InitializeGrid;
+end;
+
+procedure TframePackageFmp4Soils.rdgSoilsSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+var
+  SoilColumn: TSoilColumns;
+begin
+  inherited;
+  if ARow > 0 then
+  begin
+    SoilColumn := TSoilColumns(ACol);
+    if SoilColumn in [scScaleFactor, scExternalFile, scScaleExternal] then
+    begin
+      CanSelect := rdgSoils.ItemIndex[Ord(scFrequency), ARow] > 0;
+    end;
+  end;
 end;
 
 procedure TframePackageFmp4Soils.SetData(Package: TModflowPackageSelection);

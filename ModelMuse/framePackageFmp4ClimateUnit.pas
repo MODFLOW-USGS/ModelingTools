@@ -142,6 +142,7 @@ procedure TframePackageFmp4Climate.rdgClimateSelectCell(Sender: TObject; ACol,
 var
   ClimateRows: TClimateRows;
   Column: TRbwColumn4;
+  ItemIndex: Integer;
 begin
   inherited;
   if ACol = Ord(ccOther) then
@@ -158,6 +159,22 @@ begin
       else
       begin
         Column.PickList := LengthFraction;
+      end;
+    end;
+  end;
+  if ACol = Ord(ccExternalFile) then
+  begin
+    CanSelect := rdgClimate.ItemIndex[Ord(ccFrequency), ARow] > 0;
+  end;
+  if ACol in [Ord(ccScaleFactor), Ord(ccScaleExternal)] then
+  begin
+    ItemIndex := rdgClimate.ItemIndex[Ord(ccFrequency), ARow];
+    CanSelect := ItemIndex > 0;
+    if CanSelect then
+    begin
+      if ItemIndex = 2 then
+      begin
+        CanSelect := (rdgClimate.Cells[Ord(ccExternalFile), ARow] = '');
       end;
     end;
   end;

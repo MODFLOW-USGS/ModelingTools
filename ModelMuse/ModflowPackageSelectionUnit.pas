@@ -5203,6 +5203,7 @@ Type
     FMfFmp4EvapBare: TModflowBoundaryDisplayTimeList;
     FMfFmp4DirectRecharge: TModflowBoundaryDisplayTimeList;
     FStoredRefEtToBare: TRealStorage;
+    FMfFmp4PrecipPotConsumption: TModflowBoundaryDisplayTimeList;
     procedure SetDirect_Recharge(const Value: TFarmProperty);
     procedure SetPotential_Evaporation_Bare(const Value: TFarmProperty);
     procedure SetPrecipitation(const Value: TFarmProperty);
@@ -5211,6 +5212,8 @@ Type
     procedure SetDirectRechargeOption(const Value: TDirectRechargeOption);
     procedure SetPrecipPotConsum(const Value: TPrecipPotConsum);
     procedure SetStoredRefEtToBare(const Value: TRealStorage);
+    function GetRefEtToBare: double;
+    procedure SetRefEtToBare(const Value: double);
 
     function GetRefEtBoundary(ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeFarmRefEtDisplay(Sender: TObject);
@@ -5231,8 +5234,11 @@ Type
     procedure InitializeDirectRechargeDisplay(Sender: TObject);
     procedure GetDirectRechargeUseList(Sender: TObject; NewUseList: TStringList);
     procedure InvalidateDirectRecharge(Sender: TObject);
-    function GetRefEtToBare: double;
-    procedure SetRefEtToBare(const Value: double);
+
+    function GetPrecipPotConsumptionBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializePrecipPotConsumptionDisplay(Sender: TObject);
+    procedure GetPrecipPotConsumptionUseList(Sender: TObject; NewUseList: TStringList);
+    procedure InvalidatePrecipPotConsumption(Sender: TObject);
 
   public
     procedure Assign(Source: TPersistent); override;
@@ -5249,6 +5255,8 @@ Type
     function StaticBareEvapUsed (Sender: TObject): boolean;
     function TransientDirectRechargeUsed (Sender: TObject): boolean;
     function StaticDirectRechargeUsed (Sender: TObject): boolean;
+    function TransientPrecipPotConsumptionUsed (Sender: TObject): boolean;
+    function StaticPrecipPotConsumptionUsed (Sender: TObject): boolean;
 
     property RefEtToBare: double read GetRefEtToBare write SetRefEtToBare;
     // REFERENCE_ET
@@ -5258,7 +5266,11 @@ Type
     // POTENTIAL_EVAPORATION_BARE
     property MfFmp4EvapBare: TModflowBoundaryDisplayTimeList read FMfFmp4EvapBare;
     // DIRECT_RECHARGE
-    property MfFmp4DirectRecharge: TModflowBoundaryDisplayTimeList read FMfFmp4DirectRecharge;
+    property MfFmp4DirectRecharge: TModflowBoundaryDisplayTimeList
+      read FMfFmp4DirectRecharge;
+    //PRECIPITATION_POTENTIAL_CONSUMPTION
+    property MfFmp4PrecipPotConsumption: TModflowBoundaryDisplayTimeList
+      read FMfFmp4PrecipPotConsumption;
   published
     property StoredRefEtToBare: TRealStorage read FStoredRefEtToBare
       write SetStoredRefEtToBare;
@@ -24944,7 +24956,8 @@ function TFarmProcess4.TransientArrayBarePrecipitationConsumptionFractionDisplay
   Sender: TObject): Boolean;
 begin
   result := PackageUsed(Sender)
-    and (Bare_Precipitation_Consumption_Fraction.FarmOption = foTransient);
+    and (Bare_Precipitation_Consumption_Fraction.FarmOption = foTransient)
+    and (Bare_Precipitation_Consumption_Fraction.ExternalFileName = '')
 end;
 
 function TFarmProcess4.TransientArrayBareRunoffFractionDisplayUsed(
@@ -24952,7 +24965,8 @@ function TFarmProcess4.TransientArrayBareRunoffFractionDisplayUsed(
 begin
   result := PackageUsed(Sender)
     and (Bare_Runoff_Fraction.FarmOption = foTransient)
-    and (Bare_Runoff_Fraction.ArrayList = alArray);
+    and (Bare_Runoff_Fraction.ArrayList = alArray)
+    and (Bare_Runoff_Fraction.ExternalFileName = '')
 end;
 
 function TFarmProcess4.TransientArrayEfficiencyImprovementUsed(
@@ -24960,20 +24974,23 @@ function TFarmProcess4.TransientArrayEfficiencyImprovementUsed(
 begin
   result := PackageUsed(Sender)
     and (EfficiencyImprovement.FarmOption = foTransient)
-    and (EfficiencyImprovement.ArrayList = alArray);
+    and (EfficiencyImprovement.ArrayList = alArray)
+    and (EfficiencyImprovement.ExternalFileName = '')
 end;
 
 function TFarmProcess4.FarmTransientArrayEfficiencyUsed(Sender: TObject): Boolean;
 begin
   result := PackageUsed(Sender)
     and (EfficiencyOptions.FarmOption = foTransient)
-    and (EfficiencyOptions.ArrayList = alArray);
+    and (EfficiencyOptions.ArrayList = alArray)
+    and (EfficiencyOptions.ExternalFileName = '')
 end;
 
 function TFarmProcess4.TransientFarmIdUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
     and (Farms.FarmOption = foTransient)
+    and (Farms.ExternalFileName = '')
 end;
 
 function TFarmProcess4.GetBarePrecipitationConsumptionFractionBoundary(
@@ -25389,7 +25406,8 @@ function TFarmProcess4.SteadyArrayBarePrecipitationConsumptionFractionDisplayUse
   Sender: TObject): Boolean;
 begin
   result := PackageUsed(Sender)
-    and (Bare_Precipitation_Consumption_Fraction.FarmOption = foStatic);
+    and (Bare_Precipitation_Consumption_Fraction.FarmOption = foStatic)
+    and (Bare_Precipitation_Consumption_Fraction.ExternalFileName = '')
 end;
 
 function TFarmProcess4.SteadyArrayBareRunoffFractionDisplayUsed(
@@ -25397,7 +25415,8 @@ function TFarmProcess4.SteadyArrayBareRunoffFractionDisplayUsed(
 begin
   result := PackageUsed(Sender)
     and (Bare_Runoff_Fraction.FarmOption = foStatic)
-    and (Bare_Runoff_Fraction.ArrayList = alArray);
+    and (Bare_Runoff_Fraction.ArrayList = alArray)
+    and (Bare_Runoff_Fraction.ExternalFileName = '')
 end;
 
 function TFarmProcess4.SteadyArrayEfficiencyImprovmentUsed(
@@ -25405,13 +25424,16 @@ function TFarmProcess4.SteadyArrayEfficiencyImprovmentUsed(
 begin
   result := PackageUsed(Sender)
     and (EfficiencyImprovement.FarmOption = foStatic)
-    and (EfficiencyImprovement.ArrayList = alArray);
+    and (EfficiencyImprovement.ArrayList = alArray)
+    and (EfficiencyImprovement.ExternalFileName = '')
 end;
 
 function TFarmProcess4.SteadyArrayEfficiencyUsed: Boolean;
 begin
   result := (EfficiencyOptions.FarmOption = foStatic)
     and (EfficiencyOptions.ArrayList = alArray)
+    and (EfficiencyOptions.ExternalFileName = '')
+    and (EfficiencyImprovement.ExternalFileName = '')
 end;
 
 { TFarmProcess4Climate }
@@ -25500,6 +25522,16 @@ begin
     begin
       AddTimeList(FMfFmp4DirectRecharge);
     end;
+
+    FMfFmp4PrecipPotConsumption := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4PrecipPotConsumption.OnInitialize := InitializePrecipPotConsumptionDisplay;
+    FMfFmp4PrecipPotConsumption.OnGetUseList := GetPrecipPotConsumptionUseList;
+    FMfFmp4PrecipPotConsumption.OnTimeListUsed := TransientPrecipPotConsumptionUsed;
+    FMfFmp4PrecipPotConsumption.Name := 'Precipitation Potential Consumption';
+    if TransientPrecipPotConsumptionUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4PrecipPotConsumption);
+    end;
   end;
 
   InitializeVariables;
@@ -25508,11 +25540,13 @@ begin
   FPrecipitation.OnChangeFarmOption := InvalidatePrecip;
   FPotential_Evaporation_Bare.OnChangeFarmOption := InvalidateBareEvap;
   FDirect_Recharge.OnChangeFarmOption := InvalidateDirectRecharge;
-
+  FPrecipitation_Potential_Consumption.OnChangeFarmOption :=
+    InvalidatePrecipPotConsumption;
 end;
 
 destructor TFarmProcess4Climate.Destroy;
 begin
+  FMfFmp4PrecipPotConsumption.Free;
   FMfFmp4DirectRecharge.Free;
   FMfFmp4EvapBare.Free;
   FMfFmp4EvapRate.Free;
@@ -25532,26 +25566,38 @@ end;
 function TFarmProcess4Climate.TransientBareEvapUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (Potential_Evaporation_Bare.FarmOption = foTransient);
+    and (Potential_Evaporation_Bare.FarmOption = foTransient)
+    and (Potential_Evaporation_Bare.ExternalFileName = '');
 end;
 
 function TFarmProcess4Climate.TransientDirectRechargeUsed(
   Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (Direct_Recharge.FarmOption = foTransient);
+    and (Direct_Recharge.FarmOption = foTransient)
+    and (Direct_Recharge.ExternalFileName = '');
 end;
 
 function TFarmProcess4Climate.TransientEvapUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (ReferenceET.FarmOption = foTransient);
+    and (ReferenceET.FarmOption = foTransient)
+    and (ReferenceET.ExternalFileName = '');
+end;
+
+function TFarmProcess4Climate.TransientPrecipPotConsumptionUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Precipitation_Potential_Consumption.FarmOption = foTransient)
+    and (Precipitation_Potential_Consumption.ExternalFileName = '');
 end;
 
 function TFarmProcess4Climate.TransientPrecipUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (Precipitation.FarmOption = foTransient);
+    and (Precipitation.FarmOption = foTransient)
+    and (Precipitation.ExternalFileName = '');
 end;
 
 function TFarmProcess4Climate.GetBareEvapBoundary(
@@ -25610,6 +25656,22 @@ function TFarmProcess4Climate.GetPrecipBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
   result := ScreenObject.ModflowFmpPrecip;
+end;
+
+function TFarmProcess4Climate.GetPrecipPotConsumptionBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmpPrecipPotConsumption;
+end;
+
+procedure TFarmProcess4Climate.GetPrecipPotConsumptionUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetPrecipPotConsumptionBoundary;
+  GetUseListOptions.Description := 'FMP Precipitation Potential Consumption';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 function TFarmProcess4Climate.GetRefEtBoundary(
@@ -25683,6 +25745,22 @@ begin
   end;
 end;
 
+procedure TFarmProcess4Climate.InitializePrecipPotConsumptionDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := MfFmp4PrecipPotConsumption;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdatePrecipPotConsumptionDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
 procedure TFarmProcess4Climate.InitializeVariables;
 begin
   inherited;
@@ -25703,7 +25781,7 @@ procedure TFarmProcess4Climate.InvalidateBareEvap(Sender: TObject);
 begin
   if FModel <> nil  then
   begin
-    if Potential_Evaporation_Bare.FarmOption = foTransient then
+    if TransientBareEvapUsed(nil) then
     begin
       AddTimeList(MfFmp4EvapBare);
     end
@@ -25719,7 +25797,7 @@ procedure TFarmProcess4Climate.InvalidateDirectRecharge(Sender: TObject);
 begin
   if FModel <> nil  then
   begin
-    if Direct_Recharge.FarmOption = foTransient then
+    if TransientDirectRechargeUsed(nil) then
     begin
       AddTimeList(MfFmp4DirectRecharge);
     end
@@ -25735,7 +25813,7 @@ procedure TFarmProcess4Climate.InvalidatePrecip(Sender: TObject);
 begin
   if FModel <> nil  then
   begin
-    if Precipitation.FarmOption = foTransient then
+    if TransientPrecipUsed(nil) then
     begin
       AddTimeList(MfFmp4Precip);
     end
@@ -25747,11 +25825,27 @@ begin
   InvalidateModel;
 end;
 
+procedure TFarmProcess4Climate.InvalidatePrecipPotConsumption(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientPrecipPotConsumptionUsed(nil) then
+    begin
+      AddTimeList(MfFmp4PrecipPotConsumption);
+    end
+    else
+    begin
+      RemoveTimeList(MfFmp4PrecipPotConsumption);
+    end;
+  end;
+  InvalidateModel;
+end;
+
 procedure TFarmProcess4Climate.InvalidateRefEt(Sender: TObject);
 begin
   if FModel <> nil  then
   begin
-    if ReferenceET.FarmOption = foTransient then
+    if TransientEvapUsed(nil) then
     begin
       AddTimeList(MfFmp4EvapRate);
     end
@@ -25823,26 +25917,38 @@ end;
 function TFarmProcess4Climate.StaticBareEvapUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (Potential_Evaporation_Bare.FarmOption = foStatic);
+    and (Potential_Evaporation_Bare.FarmOption = foStatic)
+    and (Potential_Evaporation_Bare.ExternalFileName = '');
 end;
 
 function TFarmProcess4Climate.StaticDirectRechargeUsed(
   Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (Direct_Recharge.FarmOption = foStatic);
+    and (Direct_Recharge.FarmOption = foStatic)
+    and (Direct_Recharge.ExternalFileName = '');
 end;
 
 function TFarmProcess4Climate.StaticEvapUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (ReferenceET.FarmOption = foStatic);
+    and (ReferenceET.FarmOption = foStatic)
+    and (ReferenceET.ExternalFileName = '');
+end;
+
+function TFarmProcess4Climate.StaticPrecipPotConsumptionUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Precipitation_Potential_Consumption.FarmOption = foStatic)
+    and (Precipitation_Potential_Consumption.ExternalFileName = '');
 end;
 
 function TFarmProcess4Climate.StaticPrecipUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (Precipitation.FarmOption = foStatic);
+    and (Precipitation.FarmOption = foStatic)
+    and (Precipitation.ExternalFileName = '');
 end;
 
 { TFarmProcess4SurfaceWater }
@@ -26569,7 +26675,8 @@ function TFarmProcess4Soil.CapFringeArrayUsed(Sender: TObject): Boolean;
 begin
   result := IsSelected
     and (CapFringe.FarmOption  = foStatic)
-    and (CapFringe.ArrayList = alArray);
+    and (CapFringe.ArrayList = alArray)
+    and (CapFringe.ExternalFileName = '');
 end;
 
 constructor TFarmProcess4Soil.Create(Model: TBaseModel);
@@ -26622,7 +26729,8 @@ function TFarmProcess4Soil.SurfaceKArrayUsed(Sender: TObject): Boolean;
 begin
   result := IsSelected
     and (SurfVertK.FarmOption  = foStatic)
-    and (SurfVertK.ArrayList = alArray);
+    and (SurfVertK.ArrayList = alArray)
+    and (SurfVertK.ExternalFileName = '');
 end;
 
 { TCustomFarm4 }

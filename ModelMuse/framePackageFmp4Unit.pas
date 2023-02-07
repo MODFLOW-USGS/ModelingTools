@@ -207,13 +207,14 @@ var
   Column: TRbwColumn4;
   FarmRow: TFarm4Rows;
   FarmColumn: TFarm4Columns;
+  ItemIndex: Integer;
 begin
   inherited;
   if (ACol >= rdgFarms.FixedCols) and (ACol < rdgFarms.ColCount) then
   begin
     FarmColumn := TFarm4Columns(ACol);
     case FarmColumn of
-      fcName, fcExternal: ; // do nothing
+      fcName: ; // do nothing
       fcTransient:
         begin
           if not rdgFarms.Drawing then
@@ -240,12 +241,22 @@ begin
           FarmRow := TFarm4Rows(ARow);
           CanSelect := FarmRow = frDeficiency;
         end;
+      fcExternal:
+        begin
+          CanSelect := rdgFarms.ItemIndex[Ord(fcTransient), ARow] > 0;
+        end;
       fcSFac, fcExternalSFac:
         begin
           FarmRow := TFarm4Rows(ARow);
-          CanSelect := FarmRow in [frEfficiency, frBareRunoffFraction,
+          ItemIndex := rdgFarms.ItemIndex[Ord(fcTransient), ARow];
+          CanSelect := (FarmRow in [frEfficiency, frBareRunoffFraction,
             frBarePrecip, frAddedDemandSplit, frAddedDemandFlux,
-            frAddedDemandRate];
+            frAddedDemandRate])
+            and (ItemIndex > 0);
+          if CanSelect and (ItemIndex = 2) then
+          begin
+            CanSelect := rdgFarms.Cells[Ord(fcExternal), ARow] = '';
+          end;
         end;
     end;
   end;

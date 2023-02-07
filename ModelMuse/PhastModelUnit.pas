@@ -573,6 +573,7 @@ const
   KSurfaceK = 'Surface_Vert_K';
   KPotential_Evap_Bare = 'Potential_Evap_Bare';
   KDirectRecharge = 'Direct_Recharge';
+  KPrecipPotConsumption = 'Precip_Pot_Consumption';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2549,7 +2550,7 @@ that affects the model output should also have a comment. }
     function SurfaceKUsed(Sender: TObject): Boolean;
     function PotentialEvapBareUsed(Sender: TObject): Boolean;
     function DirectRechargeUsed(Sender: TObject): Boolean;
-
+    function PrecipPotConsumptionUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2597,6 +2598,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean; virtual;
+    function FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3251,6 +3253,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4BarePrecipitationConsumptionFraction(Sender: TObject);
     procedure InvalidateMfFmp4BareEvap(Sender: TObject);
     procedure InvalidateMfFmp4DirectRecharge(Sender: TObject);
+    procedure InvalidateMfFmp4PrecipPotConsumption(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4779,6 +4782,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; override;
     function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; override;
     function FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean; override;
+    function FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean; override;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -6187,6 +6191,7 @@ resourcestring
   StrSurfaceK = KSurfaceK;
   StrPotential_Evap_Bare = KPotential_Evap_Bare;
   StrDirectRecharge = KDirectRecharge;
+  StrPrecipPotConsumption = KPrecipPotConsumption;
 
 
 const
@@ -24041,6 +24046,33 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited FarmProcess4TransientPrecipPotConsumptionArrayIsSelected;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.FarmProcess4TransientPrecipPotConsumptionArrayIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientRefEtIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -26545,6 +26577,11 @@ begin
   ModflowPackages.FarmClimate4.MfFmp4Precip.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfFmp4PrecipPotConsumption(Sender: TObject);
+begin
+  ModflowPackages.FarmClimate4.MfFmp4PrecipPotConsumption.Invalidate;
+end;
+
 procedure TCustomModel.InvalidateMfFmpCropID(Sender: TObject);
 begin
   ModflowPackages.FarmProcess.MfFmpCropID.Invalidate;
@@ -28036,6 +28073,17 @@ begin
   begin
     Inc(result);
   end;
+end;
+
+function TCustomModel.PrecipPotConsumptionUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmClimate4.StaticPrecipPotConsumptionUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 function TCustomModel.PrepareModflowFullStressPeriods(ShowWarning: boolean): Boolean;
@@ -35589,6 +35637,17 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmClimate4.TransientPrecipPotConsumptionUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcessUsed(Sender: TObject): boolean;
 begin
   result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
@@ -37484,7 +37543,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 12;
+  OWHM4DataSets  = 13;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -40454,6 +40513,22 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, CLIMATE: DIRECT_RECHARGE';
   Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KPrecipPotConsumption;
+  FDataArrayCreationRecords[Index].DisplayName := StrPrecipPotConsumption;
+  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.PrecipPotConsumptionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, CLIMATE: PRECIPITATION_POTENTIAL_CONSUMPTION';
+  Inc(Index);
+
+//  StrPrecipPotConsumption = KPrecipPotConsumption;
 
   {$ENDIF}
 

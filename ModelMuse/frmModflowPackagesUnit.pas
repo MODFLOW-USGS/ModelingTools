@@ -387,6 +387,8 @@ type
     procedure TimerBringToFrontTimer(Sender: TObject);
     procedure frameGridMobileGridSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure framePkgFmp4SoilsrdgSoilsSelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -1553,6 +1555,14 @@ procedure TfrmModflowPackages.framePkgEVTrcSelectionControllerEnabledChange(
 begin
   inherited;
   EnableEvtModpathOption;
+end;
+
+procedure TfrmModflowPackages.framePkgFmp4SoilsrdgSoilsSelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  framePkgFmp4Soils.rdgSoilsSelectCell(Sender, ACol, ARow, CanSelect);
+
 end;
 
 procedure TfrmModflowPackages.framePkgFrmjvplFarmChange(Sender: TObject);

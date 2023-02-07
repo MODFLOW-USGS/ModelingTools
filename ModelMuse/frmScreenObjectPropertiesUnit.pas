@@ -55,7 +55,8 @@ uses System.UITypes, Windows,
   frameScreenObjectFmp4EfficiencyImprovementUnit,
   frameScreenObjectBareRunoffFractionUnit,
   frameScreenObjectFmp4BarePrecipitationConsumptionFractionUnit,
-  frameScreenObjectFmp4BareEvapUnit, frameScreenObjectFmp4DirectRechargeUnit;
+  frameScreenObjectFmp4BareEvapUnit, frameScreenObjectFmp4DirectRechargeUnit,
+  frameScreenObjectFmp4PrecipPotConsumptionUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -421,6 +422,8 @@ type
     frameFmp4BareEvap: TframeScreenObjectFmp4BareEvap;
     jvspFmp4DirectRecharge: TJvStandardPage;
     frameFmp4DirectRecharge: TframeScreenObjectFmp4DirectRecharge;
+    jvspFmp4PrecipPotConsumption: TJvStandardPage;
+    frameFmp4PrecipPotConsumption: TframeScreenObjectFmp4PrecipPotConsumption;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1759,6 +1762,7 @@ type
     FFmp4BarePrecipitationConsumptionFractionNode: TJvPageIndexNode;
     FFmp4BareEvapNode: TJvPageIndexNode;
     FFmp4DirectRechargeNode: TJvPageIndexNode;
+    FFmp4PrecipPotConsumptionNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2288,6 +2292,9 @@ type
     procedure Fmp4DirectRechargeChanged(Sender: TObject);
     procedure CreateFmp4DirectRechargeNode;
     procedure GetFmp4DirectRechargeBoundary(const ScreenObjectList: TList);
+    procedure Fmp4PrecipPotConsumptionChanged(Sender: TObject);
+    procedure CreateFmp4PrecipPotConsumptionNode;
+    procedure GetFmp4PrecipPotConsumptionBoundary(const ScreenObjectList: TList);
 //    function GetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer): Boolean;
 //    procedure SetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer;
 //      const Value: Boolean);
@@ -2590,7 +2597,8 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowGwtSpecifiedConcUnit, PestPropertiesUnit, ModflowFmp4EfficiencyUnit,
   ModflowFmp4EfficiencyImprovementUnit, ModflowFmp4BareRunoffFractionUnit,
   ModflowFmp4BarePrecipitationConsumptionFractionUnit,
-  ModflowFmp4PotentialEvapBareUnit, ModflowFmp4DirectRechargeUnit;
+  ModflowFmp4PotentialEvapBareUnit, ModflowFmp4DirectRechargeUnit,
+  ModflowFmp4PrecipPotConsumptionUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4049,6 +4057,10 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4PrecipPotConsumptionNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4201,6 +4213,7 @@ begin
   CreateFmp4BarePrecipitationConsumptionFractionNode;
   CreateFmp4BareEvapNode;
   CreateFmp4DirectRechargeNode;
+  CreateFmp4PrecipPotConsumptionNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -5028,6 +5041,7 @@ begin
         BoundaryNodeList.Add(FFmp4BarePrecipitationConsumptionFractionNode);
         BoundaryNodeList.Add(FFmp4BareEvapNode);
         BoundaryNodeList.Add(FFmp4DirectRechargeNode);
+        BoundaryNodeList.Add(FFmp4PrecipPotConsumptionNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -5938,6 +5952,16 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4PrecipPotConsumptionChanged(
+  Sender: TObject);
+begin
+  if (FFmp4PrecipPotConsumptionNode <> nil)
+    and (FFmp4PrecipPotConsumptionNode.StateIndex <> 3) then
+  begin
+    FFmp4PrecipPotConsumptionNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.FormClose(Sender: TObject;
   var Action: TCloseAction);
 var
@@ -6013,6 +6037,7 @@ begin
     Fmp4BarePrecipitationConsumptionFractionChanged;
   frameFmp4BareEvap.OnEdited := Fmp4BareEvapChanged;
   frameFmp4DirectRecharge.OnEdited := Fmp4DirectRechargeChanged;
+  frameFmp4PrecipPotConsumption.OnEdited := Fmp4PrecipPotConsumptionChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7249,6 +7274,10 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4PrecipPotConsumptionNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8230,6 +8259,14 @@ begin
       (FFmp4DirectRechargeNode.StateIndex = 2),
       (FFmp4DirectRechargeNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientDirectRechargeArrayIsSelected);
+  end;
+
+  if (FFmp4PrecipPotConsumptionNode <> nil) then
+  begin
+    frameFmp4PrecipPotConsumption.SetData(FNewProperties,
+      (FFmp4PrecipPotConsumptionNode.StateIndex = 2),
+      (FFmp4PrecipPotConsumptionNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientPrecipPotConsumptionArrayIsSelected);
   end;
 end;
 
@@ -14580,6 +14617,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4PrecipPotConsumptionNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4PrecipPotConsumptionNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientPrecipPotConsumptionArrayIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Precipitation Potential Consumption in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmClimate4.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4PrecipPotConsumption.PageIndex;
+    frameFmp4PrecipPotConsumption.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4PrecipPotConsumptionNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4EfficiencyImprovementNode;
 var
   Node: TJvPageIndexNode;
@@ -17342,6 +17396,32 @@ begin
   frameFmp4EfficiencyImprovement.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4PrecipPotConsumptionBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4PrecipPotConsumptionBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientPrecipPotConsumptionArrayIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmpPrecipPotConsumption;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4PrecipPotConsumptionNode <> nil then
+  begin
+    FFmp4PrecipPotConsumptionNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4PrecipPotConsumption.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetLakeMf6Boundary(
   const ScreenObjectList: TList);
 var
@@ -17812,6 +17892,7 @@ begin
   GetFmp4BarePrecipitationConsumptionFractionBoundary(AScreenObjectList);
   GetFmp4BareEvapBoundary(AScreenObjectList);
   GetFmp4DirectRechargeBoundary(AScreenObjectList);
+  GetFmp4PrecipPotConsumptionBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 

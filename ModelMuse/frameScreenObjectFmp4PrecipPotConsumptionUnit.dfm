@@ -1,0 +1,2 @@
+inherited frameScreenObjectFmp4PrecipPotConsumption: TframeScreenObjectFmp4PrecipPotConsumption
+end
