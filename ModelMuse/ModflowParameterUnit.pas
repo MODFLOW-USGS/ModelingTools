@@ -34,6 +34,7 @@ type
     FIsUsedInTemplate: Boolean;
     FStoredVertSpatialContinuityPriorInfoWeight: TRealStorage;
     FStoredHorizontalSpatialContinuityPriorInfoWeight: TRealStorage;
+    FUsedDirectly: Boolean;
     // See @link(MultiplierName).
     procedure SetMultiplierName(const Value: string);
     // See @link(UseMultiplier).
@@ -79,6 +80,7 @@ type
     procedure SetHorizontalSpatialContinuityPriorInfoWeight(
       const Value: double);
     procedure SetVertSpatialContinuityPriorInfoWeight(const Value: double);
+    procedure SetUsedDirectly(const Value: Boolean);
   protected
     // Besides setting the name of the parameter, @name also updates the
     // names of the @link(TDataArray)s used to define multiplier and zone
@@ -144,6 +146,11 @@ type
     property StoredVertSpatialContinuityPriorInfoWeight: TRealStorage
       read FStoredVertSpatialContinuityPriorInfoWeight
       write SetStoredVertSpatialContinuityPriorInfoWeight Stored True;
+    // @name is set to @True if this parameter is substituted directly
+    // into a template rather than being the parent of pilot point
+    // parameters.
+    property UsedDirectly: Boolean read FUsedDirectly write SetUsedDirectly
+      stored True;
   end;
 
   // @name is a collection of @link(TModflowSteadyParameter)s.
@@ -186,6 +193,7 @@ type
     function CountParameters(ParamTypes: TParameterTypes): integer;
     function IsDataSetUsed(AnObject: TObject): boolean;
     function GetParamByName(Const AName: string): TModflowSteadyParameter;
+    procedure SetAllParametersUnused;
   end;
 
 var
@@ -250,6 +258,7 @@ end;
 constructor TModflowSteadyParameter.Create(Collection: TCollection);
 begin
   inherited;
+  FUsedDirectly := True;
   FUseHorizontalSpatialContinuityPriorInfo := True;
   FUseVertSpatialContinuityPriorInfo := True;
   FMultiplierArrayNames:= TStringList.Create;
@@ -702,6 +711,11 @@ begin
   SetBooleanProperty(FUseVertSpatialContinuityPriorInfo, Value);
 end;
 
+procedure TModflowSteadyParameter.SetUsedDirectly(const Value: Boolean);
+begin
+  FUsedDirectly := Value;
+end;
+
 procedure TModflowSteadyParameter.SetUseHorizontalSpatialContinuityPriorInfo(
   const Value: Boolean);
 begin
@@ -1046,6 +1060,16 @@ end;
 function TModflowSteadyParameters.ArrayNameCount: integer;
 begin
   result := FArrayNames.Count;
+end;
+
+procedure TModflowSteadyParameters.SetAllParametersUnused;
+var
+  ParamIndex: Integer;
+begin
+  for ParamIndex := 0 to Count - 1 do
+  begin
+    Items[ParamIndex].UsedDirectly := False;
+  end;
 end;
 
 procedure TModflowSteadyParameters.SetItems(Index: integer;

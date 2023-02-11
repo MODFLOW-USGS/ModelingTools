@@ -476,6 +476,7 @@ type
     FPilotPointsUsed: Boolean;
     FSuppressCache: Boolean;
     FPestArrayFileNames: TStringList;
+    FTemplateNeeded: Boolean;
     // See @link(TwoDInterpolatorClass).
     function GetTwoDInterpolatorClass: string;
     // @name is called if an invalid formula has been specified.
@@ -563,6 +564,7 @@ type
     procedure SetPestParametersAllowed(const Value: Boolean);
     procedure SetPilotPointsUsed(const Value: Boolean);
     function GetPestArrayFileNames: TStringList;
+    procedure SetTemplateNeeded(const Value: Boolean);
   protected
     // See @link(DimensionsChanged).
     FDimensionsChanged: boolean;
@@ -978,6 +980,8 @@ type
       write SetUsedPestParameters;
     property PestParametersAllowed: Boolean read FPestParametersAllowed
       write SetPestParametersAllowed stored True;
+    property TemplateNeeded: Boolean read FTemplateNeeded
+      write SetTemplateNeeded stored True;
   end;
 
   TDataArrayList = TList<TDataArray>;
@@ -3795,6 +3799,11 @@ begin
     end;
     frmDisplayData.UpdateLabelsAndLegend;
   end;
+end;
+
+procedure TDataArray.SetTemplateNeeded(const Value: Boolean);
+begin
+  FTemplateNeeded := Value;
 end;
 
 procedure TDataArray.SetTwoDInterpolator(const Value: TCustom2DInterpolater);
@@ -8381,6 +8390,7 @@ begin
   begin
     SourceDataArray := TDataArray(Source);
     PestParametersUsed := SourceDataArray.PestParametersUsed;
+    TemplateNeeded := SourceDataArray.TemplateNeeded;
     if SourceDataArray.FReadDataFromFile then
     begin
       FReadDataFromFile := True;

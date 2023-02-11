@@ -3349,6 +3349,7 @@ var
     SeriesParam := Model.GetPestParameterByName(PestSeriesValue);
     if SeriesParam <> nil then
     begin
+      SeriesParam.UsedDirectly := True;
       SeriesParam.IsUsedInTemplate := True;
 	    SeriesValue := SeriesParam.Value;
       Model.WritePValAndTemplate(SeriesParam.ParameterName, SeriesParam.Value,
@@ -3449,6 +3450,7 @@ var
     Param := Model.GetPestParameterByName(PestParValue);
     if Param <> nil then
     begin
+      Param.UsedDirectly := True;
       Param.IsUsedInTemplate := True;
 	    ModifierValue := Param.Value;
       Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param, True);
@@ -10303,7 +10305,8 @@ begin
         if Param <> nil then
         begin
           Param.IsUsedInTemplate := True;
-          Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param, True);
+          Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param,
+            Param.UsedDirectly);
           FPestParamUsed := True;
         end
         else if Layer >= 0 then
@@ -10628,6 +10631,7 @@ var
     if Param <> nil then
     begin
       Param.IsUsedInTemplate := True;
+      Param.UsedDirectly := True;
 	    ModifierValue := Param.Value;
       //WriteTemplateReplace(PestParValue);
       Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param, True);

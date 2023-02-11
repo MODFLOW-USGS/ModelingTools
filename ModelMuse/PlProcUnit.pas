@@ -68,6 +68,7 @@ type
     FPilotPointFiles: TPilotPointFiles;
     FPrefix: string;
     FParamValuesFileNameRoot: string;
+    FTemplateNeeded: Boolean;
     procedure WriteTemplateFile(const AFileName: string;
       ScriptChoice: TScriptChoice);
     procedure WriteValuesFile(const AFileName: string);
@@ -680,6 +681,10 @@ var
 begin
   FPrefix := Prefix;
   FDataArray := DataArray;
+  if FDataArray <> nil then
+  begin
+    FDataArray.TemplateNeeded := False;
+  end;
   FDataArrayID := DataArrayID;
   FParamDataArray := Model.DataArrayManager.GetDataSetByName
     (FDataArray.ParamDataSetName);
@@ -707,8 +712,12 @@ begin
     begin
       WriteKrigingFactorsScript(AFileName);
     end;
+    FTemplateNeeded := False;
     WriteTemplateFile(AFileName, scWriteScript);
-    WriteTemplateFile(AFileName, scWriteTemplate);
+    if FTemplateNeeded then
+    begin
+      WriteTemplateFile(AFileName, scWriteTemplate);
+    end;
     AddParametersToPVAL;
 
     Model.DataArrayManager.AddDataSetToCache(FDataArray);
@@ -1067,13 +1076,11 @@ begin
                 else
                 begin
                   FValues[InnerLayerIndex, RowIndex, ColIndex] := DataValue;
-    //                FDataArray.RealData[InnerLayerIndex, RowIndex, ColIndex];
                 end;
               end
               else
               begin
                 FValues[InnerLayerIndex, RowIndex, ColIndex] := DataValue
-    //              FDataArray.RealData[InnerLayerIndex, RowIndex, ColIndex];
               end;
               WriteInteger(PIndex + 1);
               WriteFloat(FValues[InnerLayerIndex, RowIndex, ColIndex]);
@@ -1084,10 +1091,7 @@ begin
           end;
         end;
       finally
-//        if OpenedFile then
-//        begin
-          CloseFile;
-//        end;
+        CloseFile;
       end;
     end;
   end;
@@ -1099,7 +1103,6 @@ var
   ScriptFileName: string;
   ParameterIndex: Integer;
   ModelInputFileName: string;
-//  InnerLayerIndex: Integer;
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
   ColIndex: Integer;
@@ -1225,95 +1228,99 @@ begin
       NewLine;
       {$REGION 'Modify data values'}
 
-//      for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+      if Model.ModelSelection = msModflow2015 then
       begin
-        if Model.ModelSelection = msModflow2015 then
-        begin
-          WriteString(Format('temp%1:d=new_plist(reference_clist=%0:s%1:d,value=0.0)',
-            [KDisName, LayerIndex+1]));
-        end
-        else
-        begin
-          WriteString(Format('temp%1:d=new_plist(reference_clist=%0:s,value=0.0)',
-            [KDisName, LayerIndex+1]));
-        end;
-        NewLine;
-        WriteString('# Setting values for layer');
-        WriteInteger(LayerIndex + 1);
-        NewLine;
-        for ParameterIndex := 0 to FUsedParamList.Count - 1 do
-        begin
-          AParam := FUsedParamList.Objects[ParameterIndex]
-            as TModflowSteadyParameter;
-          ParamIndex := FPNames.IndexOf(AParam.ParameterName);
+        WriteString(Format('temp%1:d=new_plist(reference_clist=%0:s%1:d,value=0.0)',
+          [KDisName, LayerIndex+1]));
+      end
+      else
+      begin
+        WriteString(Format('temp%1:d=new_plist(reference_clist=%0:s,value=0.0)',
+          [KDisName, LayerIndex+1]));
+      end;
+      NewLine;
+      WriteString('# Setting values for layer');
+      WriteInteger(LayerIndex + 1);
+      NewLine;
+      for ParameterIndex := 0 to FUsedParamList.Count - 1 do
+      begin
+        AParam := FUsedParamList.Objects[ParameterIndex]
+          as TModflowSteadyParameter;
+        ParamIndex := FPNames.IndexOf(AParam.ParameterName);
 
-          WriteString('  # Setting values for parameter ');
-          WriteString(AParam.ParameterName);
+        WriteString('  # Setting values for parameter ');
+        WriteString(AParam.ParameterName);
+        NewLine;
+        UsedFileProperties := nil;
+        if AParam.UsePilotPoints then
+        begin
+          WriteString('    # Substituting interpolated values');
           NewLine;
-          UsedFileProperties := nil;
-          if AParam.UsePilotPoints then
+
+          PIndex := 0;
+          for FileIndex := 0 to FPilotPointFiles.Count - 1 do
           begin
-            WriteString('    # Substituting interpolated values');
-            NewLine;
-
-            PIndex := 0;
-            for FileIndex := 0 to FPilotPointFiles.Count - 1 do
+            FileProperties := FPilotPointFiles[FileIndex];
+            if (FileProperties.Parameter = AParam)
+              and (FileProperties.Layer = LayerIndex) then
             begin
-              FileProperties := FPilotPointFiles[FileIndex];
-              if (FileProperties.Parameter = AParam)
-                and (FileProperties.Layer = LayerIndex) then
-              begin
-                UsedFileProperties := FileProperties;
-                PIndex := FileIndex;
-                break;
-              end;
+              UsedFileProperties := FileProperties;
+              PIndex := FileIndex;
+              break;
             end;
+          end;
 
-            if UsedFileProperties <> nil then
+          if UsedFileProperties <> nil then
+          begin
+            PListName := Format('%0:s_%1:d',
+              [AParam.ParameterName, LayerIndex+1]);
+            WriteString('    # Get interpolated values');
+            NewLine;
+            WriteString(Format(
+              '    temp%3:d=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
+              [PListName, ExtractFileName(FKrigingFactorsFile), PIndex+1, LayerIndex+1]));
+            NewLine;
+            if AParam.Transform = ptLog then
             begin
-              PListName := Format('%0:s_%1:d',
-                [AParam.ParameterName, LayerIndex+1]);
-              WriteString('    # Get interpolated values');
-              NewLine;
-              WriteString(Format(
-                '    temp%3:d=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
-                [PListName, ExtractFileName(FKrigingFactorsFile), PIndex+1, LayerIndex+1]));
-              NewLine;
-              if AParam.Transform = ptLog then
-              begin
-                WriteString('      transform=''log'')');
-              end
-              else
-              begin
-                WriteString('      transform=''none'')');
-              end;
-              NewLine;
-              WriteString('    # Write interpolated values in zones');
-              NewLine;
-              WriteString(Format(
-                '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp%0:d',
-                [LayerIndex + 1, ParamIndex+1]));
-              NewLine;
+              WriteString('      transform=''log'')');
             end
             else
             begin
-              WriteString(Format(
-                '    # no interpolated values defined for parameter %1:s in layer %0:d',
-                [LayerIndex+1, AParam.ParameterName]));
-              NewLine;
+              WriteString('      transform=''none'')');
             end;
-          end;
-          if (UsedFileProperties = nil) then
-          begin
-            WriteString('    # Substituting parameter values in zones');
+            NewLine;
+            WriteString('    # Write interpolated values in zones');
             NewLine;
             WriteString(Format(
-              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
-              [LayerIndex + 1, ParamIndex+1, AParam.ParameterName]));
+              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp%0:d',
+              [LayerIndex + 1, ParamIndex+1]));
+            NewLine;
+          end
+          else
+          begin
+            WriteString(Format(
+              '    # no interpolated values defined for parameter %1:s in layer %0:d',
+              [LayerIndex+1, AParam.ParameterName]));
             NewLine;
           end;
         end;
+        if (UsedFileProperties = nil) then
+        begin
+          AParam.UsedDirectly := True;
+          FTemplateNeeded := True;
+          if FDataArray <> nil then
+          begin
+            FDataArray.TemplateNeeded := True;
+          end;
+          WriteString('    # Substituting parameter values in zones');
+          NewLine;
+          WriteString(Format(
+            '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
+            [LayerIndex + 1, ParamIndex+1, AParam.ParameterName]));
+          NewLine;
+        end;
       end;
+
       NewLine;
       {$ENDREGION}
 

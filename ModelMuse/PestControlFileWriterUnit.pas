@@ -247,7 +247,9 @@ begin
   for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
   begin
     ASteadyParam := Model.ModflowSteadyParameters[ParamIndex];
-    if (ASteadyParam.ParameterType in UsedTypes){ and not ASteadyParam.UsePilotPoints} then
+    if (ASteadyParam.ParameterType in UsedTypes)
+      and (ASteadyParam.UsedDirectly or (ASteadyParam.ParameterType <> ptPEST))
+    { and not ASteadyParam.UsePilotPoints} then
     begin
       Inc(result);
     end;
@@ -668,12 +670,13 @@ begin
         begin
           if (ASteadyParam.Transform in [ptNoTransform, ptLog]) then
           begin
-            if ASteadyParam.UseInitialValuePriorInfo then
+            if ASteadyParam.UseInitialValuePriorInfo
+              and (ASteadyParam.UsedDirectly or (ASteadyParam.ParameterType <> ptPEST)) then
             begin
               WriteInitialValueEquation(ASteadyParam, ASteadyParam.Value, '', nil);
             end;
-            if (ASteadyParam is TModflowSteadyParameter)
-              and TModflowSteadyParameter(ASteadyParam).UsePilotPoints then
+
+            if ASteadyParam.UsePilotPoints then
             begin
               PilotPointParameters.AddObject(ASteadyParam.ParameterName, ASteadyParam);
             end;
@@ -836,14 +839,11 @@ begin
   for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
   begin
     AParam := Model.ModflowSteadyParameters[ParamIndex];
-    if AParam.ParameterType in UsedTypes then
+    if (AParam.ParameterType in UsedTypes)
+      and (AParam.UsedDirectly or (AParam.ParameterType <> ptPEST)) then
     begin
-//      if not (AParam is TModflowSteadyParameter)
-//        {or not TModflowSteadyParameter(AParam).UsePilotPoints} then
-//      begin
-        result := 1;
-        break;
-//      end;
+      result := 1;
+      break;
     end;
   end;
 
@@ -878,7 +878,7 @@ begin
     for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
     begin
       ADataArray := Model.DataArrayManager[DSIndex];
-      if ADataArray.PestParametersUsed then
+      if ADataArray.PestParametersUsed and ADataArray.TemplateNeeded then
       begin
         Inc(result);
       end;
@@ -1526,7 +1526,7 @@ begin
     for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
     begin
       ADataArray := Model.DataArrayManager[DSIndex];
-      if ADataArray.PestParametersUsed then
+      if ADataArray.PestParametersUsed and ADataArray.TemplateNeeded then
       begin
         INFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
           '.' + ADataArray.Name + '.script' ));
@@ -2076,7 +2076,9 @@ begin
         begin
           PilotPointParameters.AddObject(AParam.ParameterName, AParam);
         end;
-//        else
+
+        if (AParam as TModflowSteadyParameter).UsedDirectly
+          or (AParam.ParameterType <> ptPEST) then
         begin
           WriteParameter(AParam);
           FUsePval := True;

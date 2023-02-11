@@ -2,7 +2,7 @@ object frmTaskHistory: TfrmTaskHistory
   Left = 0
   Top = 0
   Caption = 'Task History'
-  ClientHeight = 341
+  ClientHeight = 412
   ClientWidth = 643
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -11,27 +11,23 @@ object frmTaskHistory: TfrmTaskHistory
   Font.Name = 'Tahoma'
   Font.Style = []
   Menu = MainMenu1
-  OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 19
   object PageControl1: TPageControl
     Left = 0
     Top = 29
     Width = 643
-    Height = 312
-    ActivePage = tabEffort
+    Height = 383
+    ActivePage = tabCumEffort
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
+    ExplicitWidth = 637
+    ExplicitHeight = 303
     object tabSetup: TTabSheet
       Caption = 'Setup'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblStartDate: TLabel
         Left = 3
         Top = 3
@@ -51,7 +47,7 @@ object frmTaskHistory: TfrmTaskHistory
         Left = 195
         Top = 3
         Width = 437
-        Height = 272
+        Height = 343
         Align = alRight
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColCount = 2
@@ -59,7 +55,9 @@ object frmTaskHistory: TfrmTaskHistory
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
+        OnEnter = rdgCategoriesEnter
         OnExit = rdgCategoriesExit
+        OnSelectCell = rdgCategoriesSelectCell
         OnSetEditText = rdgCategoriesSetEditText
         ExtendedAutoDistributeText = False
         AutoMultiEdit = False
@@ -73,6 +71,7 @@ object frmTaskHistory: TfrmTaskHistory
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -96,6 +95,7 @@ object frmTaskHistory: TfrmTaskHistory
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -118,6 +118,7 @@ object frmTaskHistory: TfrmTaskHistory
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 272
       end
       object dtpStartDate: TDateTimePicker
         Left = 3
@@ -144,15 +145,11 @@ object frmTaskHistory: TfrmTaskHistory
     object tabData: TTabSheet
       Caption = 'Data'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgTaskHistory: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 635
-        Height = 237
+        Height = 308
         Align = alClient
         ColCount = 2
         FixedCols = 1
@@ -166,11 +163,13 @@ object frmTaskHistory: TfrmTaskHistory
         AutoIncreaseRowCount = True
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
+        OnEndUpdate = rdgTaskHistoryEndUpdate
         OnStateChange = rdgTaskHistoryStateChange
         ColorRangeSelection = False
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -194,6 +193,7 @@ object frmTaskHistory: TfrmTaskHistory
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -215,16 +215,17 @@ object frmTaskHistory: TfrmTaskHistory
             CheckStyle = csCheck
             AutoAdjustColWidths = False
           end>
-        OnEndUpdate = rdgTaskHistoryEndUpdate
         WordWrapRowCaptions = False
+        ExplicitHeight = 237
       end
       object Panel1: TPanel
         Left = 0
-        Top = 237
+        Top = 308
         Width = 635
         Height = 41
         Align = alBottom
         TabOrder = 1
+        ExplicitTop = 237
         object lblDayCount: TLabel
           Left = 0
           Top = 9
@@ -382,14 +383,15 @@ object frmTaskHistory: TfrmTaskHistory
       ImageIndex = 2
       object chartEffort: TChart
         Left = 0
-        Top = 0
+        Top = 41
         Width = 635
-        Height = 278
+        Height = 308
         Legend.Visible = False
         Title.Font.Height = -16
         Title.Text.Strings = (
           'Effort')
         BottomAxis.LabelsFormat.Font.Height = -16
+        BottomAxis.LabelsSeparation = 1
         LeftAxis.LabelsFormat.Font.Height = -16
         LeftAxis.Title.Caption = 'Total Days'
         LeftAxis.Title.Font.Height = -16
@@ -397,10 +399,13 @@ object frmTaskHistory: TfrmTaskHistory
         Align = alClient
         Color = clWindow
         TabOrder = 0
+        ExplicitTop = 72
+        ExplicitHeight = 206
         DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object serTotalEffort: TBarSeries
-          Marks.Style = smsLabelValue
+          HoverElement = []
+          Marks.Style = smsLabel
           Marks.MultiLine = True
           Title = 'Effort'
           XValues.Name = 'X'
@@ -409,19 +414,37 @@ object frmTaskHistory: TfrmTaskHistory
           YValues.Order = loNone
         end
       end
+      object pnl1: TPanel
+        Left = 0
+        Top = 0
+        Width = 635
+        Height = 41
+        Align = alTop
+        TabOrder = 1
+        ExplicitLeft = 96
+        ExplicitTop = 40
+        ExplicitWidth = 185
+        object cbPartialDayEffort: TCheckBox
+          Left = 19
+          Top = 8
+          Width = 206
+          Height = 17
+          Caption = 'Partial day effort'
+          Checked = True
+          State = cbChecked
+          TabOrder = 0
+          OnClick = cbPartialDayEffortClick
+        end
+      end
     end
     object tabCumEffort: TTabSheet
       Caption = 'Cumulative Effort'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object chartCumEffort: TChart
         Left = 0
-        Top = 0
+        Top = 41
         Width = 635
-        Height = 278
+        Height = 308
         Legend.CheckBoxes = True
         Legend.Font.Height = -16
         Title.Font.Height = -16
@@ -437,8 +460,32 @@ object frmTaskHistory: TfrmTaskHistory
         OnGetAxisLabel = chartCumEffortGetAxisLabel
         Align = alClient
         TabOrder = 0
+        ExplicitLeft = -3
+        ExplicitTop = 72
+        ExplicitHeight = 293
         DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
+      end
+      object pnl2: TPanel
+        Left = 0
+        Top = 0
+        Width = 635
+        Height = 41
+        Align = alTop
+        TabOrder = 1
+        ExplicitLeft = -24
+        ExplicitTop = -6
+        object cbPartialDayEffort1Cumulative: TCheckBox
+          Left = 19
+          Top = 8
+          Width = 206
+          Height = 17
+          Caption = 'Partial day effort'
+          Checked = True
+          State = cbChecked
+          TabOrder = 0
+          OnClick = cbPartialDayEffort1CumulativeClick
+        end
       end
     end
   end
@@ -450,6 +497,7 @@ object frmTaskHistory: TfrmTaskHistory
     Caption = 'ToolBar'
     Images = ImageList1
     TabOrder = 1
+    ExplicitWidth = 637
     object ToolButton1: TToolButton
       Left = 0
       Top = 0
@@ -500,8 +548,8 @@ object frmTaskHistory: TfrmTaskHistory
   end
   object OpenDialog1: TOpenDialog
     Filter = 'Text files|*.txt|All files|*.*'
-    Left = 336
-    Top = 8
+    Left = 456
+    Top = 65528
   end
   object SaveDialog1: TSaveDialog
     Filter = 'Text files|*.txt|All files|*.*'
@@ -509,8 +557,8 @@ object frmTaskHistory: TfrmTaskHistory
     Top = 16
   end
   object ImageList1: TImageList
-    Left = 344
-    Top = 64
+    Left = 360
+    Top = 40
     Bitmap = {
       494C010103000500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010

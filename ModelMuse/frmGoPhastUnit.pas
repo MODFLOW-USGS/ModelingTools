@@ -10170,6 +10170,7 @@ begin
     end;
     PhastModel.PestProperties.PriorInfoObservationGroups.Clear;
     PhastModel.ClearPestPriorInfoGroupData;
+    PhastModel.ModflowSteadyParameters.SetAllParametersUnused;
   end;
 
   PhastModel.ClearPval;

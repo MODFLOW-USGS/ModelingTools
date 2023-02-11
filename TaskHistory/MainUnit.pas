@@ -42,6 +42,10 @@ type
     ImageList1: TImageList;
     btnCopy: TBitBtn;
     btnPaste: TBitBtn;
+    pnl1: TPanel;
+    cbPartialDayEffort: TCheckBox;
+    pnl2: TPanel;
+    cbPartialDayEffort1Cumulative: TCheckBox;
     procedure seCategoryCountChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure seDayCountChange(Sender: TObject);
@@ -65,6 +69,11 @@ type
       Series: TChartSeries; ValueIndex: Integer; var LabelText: string);
     procedure btnCopyClick(Sender: TObject);
     procedure rdgCategoriesExit(Sender: TObject);
+    procedure rdgCategoriesSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure rdgCategoriesEnter(Sender: TObject);
+    procedure cbPartialDayEffortClick(Sender: TObject);
+    procedure cbPartialDayEffort1CumulativeClick(Sender: TObject);
   private
     FTaskHistory: TTaskHistory;
     FReadingFile: Boolean;
@@ -72,10 +81,14 @@ type
     FSettingClassification: Boolean;
     FSettingTaskHistoryGrid: Boolean;
     FModified: Boolean;
+    FRowToEdit: Integer;
+    FOriginalText: string;
+    FNewText: string;
     procedure SetUpTaskHistoryGrid;
     procedure SetUpClassificationGrid;
     procedure UpdateEffortChart;
     procedure UpdateCumulativeEffortChart;
+    procedure UpdateNames(ARow: Integer);
     { Private declarations }
   public
     { Public declarations }
@@ -99,6 +112,16 @@ end;
 procedure TfrmTaskHistory.btnPasteClick(Sender: TObject);
 begin
   rdgTaskHistory.DistributeText(1,1, Clipboard.AsText);
+end;
+
+procedure TfrmTaskHistory.cbPartialDayEffort1CumulativeClick(Sender: TObject);
+begin
+  UpdateCumulativeEffortChart;
+end;
+
+procedure TfrmTaskHistory.cbPartialDayEffortClick(Sender: TObject);
+begin
+  UpdateEffortChart;
 end;
 
 procedure TfrmTaskHistory.chartCumEffortGetAxisLabel(Sender: TChartAxis;
@@ -432,8 +455,15 @@ begin
           ClassItem := ClassificationList[ClassIndex];
           if HistItem.Categories.IndexOf(ClassItem.Name) >= 0 then
           begin
-            Values[ClassIndex] := Values[ClassIndex]
-              + 1/HistItem.Categories.Count
+            if cbPartialDayEffort1Cumulative.Checked then
+            begin
+              Values[ClassIndex] := Values[ClassIndex]
+                + 1/HistItem.Categories.Count;
+            end
+            else
+            begin
+              Values[ClassIndex] := Values[ClassIndex] + 1;
+            end;
           end;
         end;
         Total := Total + 1;
@@ -448,6 +478,38 @@ begin
   finally
     ClassificationList.Free;
     SeriesList.Free;
+  end;
+end;
+
+procedure TfrmTaskHistory.UpdateNames(ARow: Integer);
+var
+  Item: TClassificationItem;
+  Value: string;
+  HistIndex: Integer;
+  HistItem: TDateHistoryItem;
+  NamePosition: Integer;
+begin
+  if (FRowToEdit > 0) and ((FOriginalText <> '') or (FNewText <> ''))
+    and (ARow - 1 < FTaskHistory.Classification.Count) then
+  begin
+    Item := FTaskHistory.Classification.Items[ARow - 1] as TClassificationItem;
+    Value := rdgCategories.Cells[0, FRowToEdit];
+    if Item.Name <> Value then
+    begin
+      for HistIndex := 0 to FTaskHistory.History.Count - 1 do
+      begin
+        HistItem := FTaskHistory.History.Items[HistIndex] as TDateHistoryItem;
+        NamePosition := HistItem.Categories.IndexOf(Item.Name);
+        if NamePosition >= 0 then
+        begin
+          HistItem.Categories[NamePosition] := Value;
+        end;
+      end;
+      Item.Name := Value;
+      SetUpTaskHistoryGrid;
+    end;
+    FRowToEdit := -1;
+    FOriginalText := '';
   end;
 end;
 
@@ -472,7 +534,14 @@ begin
         HistItem := FTaskHistory.History.Items[HistIndex] as TDateHistoryItem;
         if HistItem.Categories.IndexOf(ClassItem.Name) >= 0 then
         begin
-          AValue := AValue + 1/HistItem.Categories.Count;
+          if cbPartialDayEffort.Checked then
+          begin
+            AValue := AValue + 1/HistItem.Categories.Count;
+          end
+          else
+          begin
+            AValue := AValue + 1;
+          end;
         end;
       end;
       serTotalEffort.AddBar(AValue, ClassItem.Name, clRed);
@@ -535,10 +604,35 @@ begin
   end;
 end;
 
+procedure TfrmTaskHistory.rdgCategoriesEnter(Sender: TObject);
+begin
+  FRowToEdit := -1;
+  FOriginalText := '';
+end;
+
 procedure TfrmTaskHistory.rdgCategoriesExit(Sender: TObject);
 begin
+  UpdateNames(FRowToEdit);
+
   seCategoryCount.AsInteger := rdgCategories.RowCount -1;
   SetUpClassificationGrid;
+end;
+
+procedure TfrmTaskHistory.rdgCategoriesSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+begin
+  if rdgCategories.Drawing then
+  begin
+    Exit;
+  end;
+
+  UpdateNames(ARow);
+
+  if ACol = 0 then
+  begin
+    FRowToEdit := ARow;
+    FOriginalText := rdgCategories.Cells[ACol, ARow];
+  end;
 end;
 
 procedure TfrmTaskHistory.rdgCategoriesSetEditText(Sender: TObject; ACol,
@@ -559,21 +653,22 @@ begin
         rdgCategories.Checked[ACol, ARow] := True;
         Item.Display := True;
       end;
-      Item := FTaskHistory.Classification.Items[ARow-1] as TClassificationItem;
-      if Item.Name <> Value then
-      begin
-        for HistIndex := 0 to FTaskHistory.History.Count - 1 do
-        begin
-          HistItem := FTaskHistory.History.Items[HistIndex] as TDateHistoryItem;
-          NamePosition := HistItem.Categories.IndexOf(Item.Name);
-          if NamePosition >= 0 then
-          begin
-            HistItem.Categories[NamePosition] := Value;
-          end;
-        end;
-        Item.Name := Value;
-        SetUpTaskHistoryGrid;
-      end;
+      FNewText := Value;
+//      Item := FTaskHistory.Classification.Items[ARow-1] as TClassificationItem;
+//      if Item.Name <> Value then
+//      begin
+//        for HistIndex := 0 to FTaskHistory.History.Count - 1 do
+//        begin
+//          HistItem := FTaskHistory.History.Items[HistIndex] as TDateHistoryItem;
+//          NamePosition := HistItem.Categories.IndexOf(Item.Name);
+//          if NamePosition >= 0 then
+//          begin
+//            HistItem.Categories[NamePosition] := Value;
+//          end;
+//        end;
+//        Item.Name := Value;
+//        SetUpTaskHistoryGrid;
+//      end;
     end;
   finally
     rdgCategories.EndUpdate

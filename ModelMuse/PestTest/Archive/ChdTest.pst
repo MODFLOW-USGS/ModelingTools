@@ -2,7 +2,7 @@ pcf
 * control data
 restart estimation # RSTFLE PESTMODE
      3     1     1     3    10     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
-     2     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
+     1     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
   1.000000000000E+001  -3.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
   3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
   1.000000000000E-001      1  0.000000000000E+000  noaui nosenreuse boundscale # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE
@@ -47,7 +47,6 @@ RunModel.Bat
 
 * model input/output
 ChdTest.ptf ChdTest.pval
-ChdTest.Kx.script.tpl ChdTest.Kx.script
 ChdTest.PestIns ChdTest.Mf2005Values
 
 * prior information

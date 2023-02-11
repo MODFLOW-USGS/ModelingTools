@@ -418,7 +418,7 @@ begin
     and WritingTemplate
     and ( Riv_Cell.ConductanceParameterName <> '') then
   begin
-    // PEST parameters are not allowed to be combined
+    // PEST parameters now are allowed to be combined
     // with MF-2005 style parameters.
     ParameterName := Riv_Cell.ConductanceParameterName;
     if Riv_Cell.ConductanceParameterValue = 0 then

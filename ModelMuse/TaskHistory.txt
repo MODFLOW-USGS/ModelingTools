@@ -162,7 +162,7 @@ object TTaskHistory
     end
     item
       Name = 'Running MODFLOW ModelMonitor'
-      Display = True
+      Display = False
     end
     item
       Name = 'HFB'
@@ -406,7 +406,7 @@ object TTaskHistory
     end
     item
       Name = 'MVR'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS LKT'
@@ -30655,5 +30655,21 @@ object TTaskHistory
       Date = 44965.000000000000000000
       Categories.Strings = (
         'Video')
+    end
+    item
+      Date = 44966.000000000000000000
+    end
+    item
+      Date = 44967.000000000000000000
+      Categories.Strings = (
+        'Testing'
+        'core code')
+    end
+    item
+      Date = 44968.000000000000000000
+      Categories.Strings = (
+        'Pest parameter substitution'
+        'PEST'
+        'Testing')
     end>
 end

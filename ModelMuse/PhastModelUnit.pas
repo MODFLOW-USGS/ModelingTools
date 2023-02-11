@@ -10878,7 +10878,10 @@ const
 //    '5.1.1.11' Bug fix: Completed fixing bug in creating PLPROC scripts for
 //                modifying data sets with large number of layers.
 //               Bug fix: Fixed a bug that could cause a stack overflow when
-//                displaying data
+//                displaying data.
+
+//              Bug fix: ModelMuse does not include parameters in the model                 
+//               if they are not needed.
 
 //               Enhancement: Added suport for SUTRA 4.
 
@@ -44072,6 +44075,7 @@ procedure TCustomModel.WritePValAndTemplate(const ParameterName: string;
 var
   NewLine: string;
   TemplateLine: string;
+  SteadyParam: TModflowSteadyParameter;
 begin
   NewLine := ParameterName + ' ' + FortranFloatToStr(Value);
   TemplateLine := ParameterName + ' ' + UcodeDelimiter + ParameterName
@@ -44082,7 +44086,8 @@ begin
     begin
       Exit;
     end;
-    if (not (Parameter as TModflowSteadyParameter).UsePilotPoints)
+    SteadyParam := Parameter as TModflowSteadyParameter;
+    if ((not SteadyParam.UsePilotPoints) and SteadyParam.UsedDirectly)
       or DirectAddRequired then
     begin
       Parameter.AddedToPval := True;
@@ -45393,6 +45398,7 @@ begin
         begin
           PestProperties.PriorInfoObservationGroups.Clear;
           ClearPestPriorInfoGroupData;
+          ModflowSteadyParameters.SetAllParametersUnused;
         end;
         InternalExportModflowModel(FileName, False);
       finally

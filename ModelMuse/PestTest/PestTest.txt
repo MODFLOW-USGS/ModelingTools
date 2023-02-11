@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1922
+1918
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -55,7 +55,6 @@ PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.Kx.krig_factors_script
 	Archive\PestPilotPointTest.Kx.PstValues
 	Archive\PestPilotPointTest.Kx.script
-	Archive\PestPilotPointTest.Kx.script.tpl
 	Archive\PestPilotPointTest.Ky.Hk1.1.Cov.txt
 	Archive\PestPilotPointTest.Ky.Hk1.1.CreateCov.Bat
 	Archive\PestPilotPointTest.Ky.Hk1.1.Mkppstat_Input.txt
@@ -101,7 +100,6 @@ PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.Ky.krig_factors_script
 	Archive\PestPilotPointTest.Ky.PstValues
 	Archive\PestPilotPointTest.Ky.script
-	Archive\PestPilotPointTest.Ky.script.tpl
 	Archive\PestPilotPointTest.Mf6ExtractValues
 	Archive\PestPilotPointTest.Mf6WriteIns
 	Archive\PestPilotPointTest.mfsim.nam
@@ -556,7 +554,6 @@ ChdTest.gpt
 	Archive\ChdTest.jtf
 	Archive\ChdTest.Kx.PstValues
 	Archive\ChdTest.Kx.script
-	Archive\ChdTest.Kx.script.tpl
 	Archive\ChdTest.lpf
 	Archive\ChdTest.Mf2005ExtractValues
 	Archive\ChdTest.Mf2005WriteIns
@@ -671,7 +668,6 @@ EtsTest.gpt
 	Archive\EtsTest.jtf
 	Archive\EtsTest.Kx.PstValues
 	Archive\EtsTest.Kx.script
-	Archive\EtsTest.Kx.script.tpl
 	Archive\EtsTest.lpf
 	Archive\EtsTest.Mf2005ExtractValues
 	Archive\EtsTest.Mf2005WriteIns
@@ -882,7 +878,6 @@ StreamTest1.gpt
 	Archive\StreamTest1.jtf
 	Archive\StreamTest1.Kx.PstValues
 	Archive\StreamTest1.Kx.script
-	Archive\StreamTest1.Kx.script.tpl
 	Archive\StreamTest1.lpf
 	Archive\StreamTest1.Mf2005ExtractValues
 	Archive\StreamTest1.Mf2005WriteIns
@@ -1538,7 +1533,6 @@ RmaSutraNodeTest.gpt
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.krig_factors_script
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.PstValues
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script
-	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script.tpl
 	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity
 	Archive\RmaSutraNodeTest.Nodal_Porosity
 	Archive\RmaSutraNodeTest.Nodal_Thickness
@@ -1560,6 +1554,7 @@ RmaSutraNodeTest.gpt
 RmaSutraCompleted.gpt
 	Archive\RmaSutraCompleted.15B
 	Archive\RmaSutraCompleted.15B.script
+	Archive\RmaSutraCompleted.15B.script.tpl
 	Archive\RmaSutraCompleted.Angle_Horizontal
 	Archive\RmaSutraCompleted.axml
 	Archive\RmaSutraCompleted.c_ele
@@ -1584,7 +1579,6 @@ RmaSutraCompleted.gpt
 	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.krig_factors_script
 	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.PstValues
 	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.script
-	Archive\RmaSutraCompleted.Maximum_Hydraulic_Conductivity.script.tpl
 	Archive\RmaSutraCompleted.Minimum_Hydraulic_Conductivity
 	Archive\RmaSutraCompleted.Nodal_Porosity
 	Archive\RmaSutraCompleted.Nodal_Thickness
@@ -1676,6 +1670,7 @@ Rocky2D_IrregularS4Interpolate.gpt
 	Archive\Rocky2D_IrregularS4Interpolate.14B_3
 	Archive\Rocky2D_IrregularS4Interpolate.15B
 	Archive\Rocky2D_IrregularS4Interpolate.15B.script
+	Archive\Rocky2D_IrregularS4Interpolate.15B.script.tpl
 	Archive\Rocky2D_IrregularS4Interpolate.15B_1
 	Archive\Rocky2D_IrregularS4Interpolate.15B_2
 	Archive\Rocky2D_IrregularS4Interpolate.Angle_Horizontal
@@ -1826,6 +1821,7 @@ Rocky2D_IrregularS4NoInterpolate.gpt
 	Archive\Rocky2D_IrregularS4NoInterpolate.14B_3
 	Archive\Rocky2D_IrregularS4NoInterpolate.15B
 	Archive\Rocky2D_IrregularS4NoInterpolate.15B.script
+	Archive\Rocky2D_IrregularS4NoInterpolate.15B.script.tpl
 	Archive\Rocky2D_IrregularS4NoInterpolate.15B_1
 	Archive\Rocky2D_IrregularS4NoInterpolate.15B_2
 	Archive\Rocky2D_IrregularS4NoInterpolate.Angle_Horizontal

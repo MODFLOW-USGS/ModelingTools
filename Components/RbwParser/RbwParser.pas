@@ -4462,6 +4462,7 @@ begin
       raise ErbwParserError.Create(Format(StrErrorInParsing02,
         [string(OperatorDefinition.OperatorName), Strings[Index + 1]]));
     end;
+    AnArgument := nil;
     try
       AnArgument := Objects[Index + 1] as TConstant;
     except on EInvalidCast do
