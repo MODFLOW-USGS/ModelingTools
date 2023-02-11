@@ -1,8 +1,8 @@
 pcf
 * control data
 restart estimation # RSTFLE PESTMODE
-    58    10     2    58     6     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
-     3     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
+    57    10     2    57     5     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
+     2     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
   1.000000000000E+001  -3.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
   3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
   1.000000000000E-001      3  0.000000000000E+000  noaui nosenreuse boundscale # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE
@@ -16,7 +16,7 @@ restart estimation # RSTFLE PESTMODE
 
 * lsqr
      0 # LSQRMODE
-  1.000000000000E-004   1.000000000000E-004   1.000000000000E+003    232 # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM
+  1.000000000000E-004   1.000000000000E-004   1.000000000000E+003    228 # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM
      1 # LSQRWRITE
 
 * parameter groups
@@ -24,7 +24,6 @@ KGrp relative  1.000000000000E-002   0.000000000000E+000  switch  1.500000000000
 WellGr relative  1.000000000000E-002   0.000000000000E+000  switch  1.500000000000E+000  parabolic
 
 * parameter data
-K log factor  1.000000000000E+000   1.000000000000E-002   1.000000000000E+002  KGrp  1.000000000000E+000   0.000000000000E+000 
 Seepage none factor  1.000000000000E+000   1.000000000000E-003   1.000000000000E+002  WellGr  1.000000000000E+000   0.000000000000E+000 
 # Parameters in the PMX1_ family are pilot point parameters related to K in layer      1 in data set Maximum_Hydraulic_Conductivity
 PMX1_1 log factor  1.000000000000E-004   1.000000000000E-006   1.000000000000E-002  KGrp  1.000000000000E+000   0.000000000000E+000 
@@ -89,8 +88,7 @@ Heads
 SPFlows
 Comparisons
 regul_Grp1
-regul_Grp2
-regul_Grp3 RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.Cov.txt
+regul_Grp2 RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.Cov.txt
 
 * observation data
 Head_Obs1_P  6.900000000000E+001   1.000000000000E+000  Heads
@@ -109,126 +107,123 @@ RunModel.Bat
 
 * model input/output
 RmaSutraNodeTest.ptf RmaSutraNodeTest.pval
-RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script.tpl RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script
 RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.pp.tpl RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.pp
 RmaSutraNodeTest.PestIns RmaSutraNodeTest.SutraValues
 
 * prior information
-# Equation for initial value for parameter K.
- eq_1          1.0 * log(K) = 0       1     regul_Grp1
 # Equation for initial value for parameter Seepage.
- eq_2          1.0 * Seepage = 1       1     regul_Grp2
+ eq_1          1.0 * Seepage = 1       1     regul_Grp1
 # Equation for initial value for parameter PMX1_1.
- eq_3          1.0 * log(PMX1_1) = -4       1     regul_Grp3
+ eq_2          1.0 * log(PMX1_1) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_2.
- eq_4          1.0 * log(PMX1_2) = -4       1     regul_Grp3
+ eq_3          1.0 * log(PMX1_2) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_3.
- eq_5          1.0 * log(PMX1_3) = -4       1     regul_Grp3
+ eq_4          1.0 * log(PMX1_3) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_4.
- eq_6          1.0 * log(PMX1_4) = -4       1     regul_Grp3
+ eq_5          1.0 * log(PMX1_4) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_5.
- eq_7          1.0 * log(PMX1_5) = -4       1     regul_Grp3
+ eq_6          1.0 * log(PMX1_5) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_6.
- eq_8          1.0 * log(PMX1_6) = -4       1     regul_Grp3
+ eq_7          1.0 * log(PMX1_6) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_7.
- eq_9          1.0 * log(PMX1_7) = -4       1     regul_Grp3
+ eq_8          1.0 * log(PMX1_7) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_8.
- eq_10          1.0 * log(PMX1_8) = -4       1     regul_Grp3
+ eq_9          1.0 * log(PMX1_8) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_9.
- eq_11          1.0 * log(PMX1_9) = -4       1     regul_Grp3
+ eq_10          1.0 * log(PMX1_9) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_10.
- eq_12          1.0 * log(PMX1_10) = -4       1     regul_Grp3
+ eq_11          1.0 * log(PMX1_10) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_11.
- eq_13          1.0 * log(PMX1_11) = -4       1     regul_Grp3
+ eq_12          1.0 * log(PMX1_11) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_12.
- eq_14          1.0 * log(PMX1_12) = -4       1     regul_Grp3
+ eq_13          1.0 * log(PMX1_12) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_13.
- eq_15          1.0 * log(PMX1_13) = -4       1     regul_Grp3
+ eq_14          1.0 * log(PMX1_13) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_14.
- eq_16          1.0 * log(PMX1_14) = -4       1     regul_Grp3
+ eq_15          1.0 * log(PMX1_14) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_15.
- eq_17          1.0 * log(PMX1_15) = -4       1     regul_Grp3
+ eq_16          1.0 * log(PMX1_15) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_16.
- eq_18          1.0 * log(PMX1_16) = -4       1     regul_Grp3
+ eq_17          1.0 * log(PMX1_16) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_17.
- eq_19          1.0 * log(PMX1_17) = -4       1     regul_Grp3
+ eq_18          1.0 * log(PMX1_17) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_18.
- eq_20          1.0 * log(PMX1_18) = -4       1     regul_Grp3
+ eq_19          1.0 * log(PMX1_18) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_19.
- eq_21          1.0 * log(PMX1_19) = -4       1     regul_Grp3
+ eq_20          1.0 * log(PMX1_19) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_20.
- eq_22          1.0 * log(PMX1_20) = -4       1     regul_Grp3
+ eq_21          1.0 * log(PMX1_20) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_21.
- eq_23          1.0 * log(PMX1_21) = -4       1     regul_Grp3
+ eq_22          1.0 * log(PMX1_21) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_22.
- eq_24          1.0 * log(PMX1_22) = -4       1     regul_Grp3
+ eq_23          1.0 * log(PMX1_22) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_23.
- eq_25          1.0 * log(PMX1_23) = -4       1     regul_Grp3
+ eq_24          1.0 * log(PMX1_23) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_24.
- eq_26          1.0 * log(PMX1_24) = -4       1     regul_Grp3
+ eq_25          1.0 * log(PMX1_24) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_25.
- eq_27          1.0 * log(PMX1_25) = -4       1     regul_Grp3
+ eq_26          1.0 * log(PMX1_25) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_26.
- eq_28          1.0 * log(PMX1_26) = -4       1     regul_Grp3
+ eq_27          1.0 * log(PMX1_26) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_27.
- eq_29          1.0 * log(PMX1_27) = -4       1     regul_Grp3
+ eq_28          1.0 * log(PMX1_27) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_28.
- eq_30          1.0 * log(PMX1_28) = -4       1     regul_Grp3
+ eq_29          1.0 * log(PMX1_28) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_29.
- eq_31          1.0 * log(PMX1_29) = -4       1     regul_Grp3
+ eq_30          1.0 * log(PMX1_29) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_30.
- eq_32          1.0 * log(PMX1_30) = -4       1     regul_Grp3
+ eq_31          1.0 * log(PMX1_30) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_31.
- eq_33          1.0 * log(PMX1_31) = -4       1     regul_Grp3
+ eq_32          1.0 * log(PMX1_31) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_32.
- eq_34          1.0 * log(PMX1_32) = -4       1     regul_Grp3
+ eq_33          1.0 * log(PMX1_32) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_33.
- eq_35          1.0 * log(PMX1_33) = -4       1     regul_Grp3
+ eq_34          1.0 * log(PMX1_33) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_34.
- eq_36          1.0 * log(PMX1_34) = -4       1     regul_Grp3
+ eq_35          1.0 * log(PMX1_34) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_35.
- eq_37          1.0 * log(PMX1_35) = -4       1     regul_Grp3
+ eq_36          1.0 * log(PMX1_35) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_36.
- eq_38          1.0 * log(PMX1_36) = -4       1     regul_Grp3
+ eq_37          1.0 * log(PMX1_36) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_37.
- eq_39          1.0 * log(PMX1_37) = -4       1     regul_Grp3
+ eq_38          1.0 * log(PMX1_37) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_38.
- eq_40          1.0 * log(PMX1_38) = -4       1     regul_Grp3
+ eq_39          1.0 * log(PMX1_38) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_39.
- eq_41          1.0 * log(PMX1_39) = -4       1     regul_Grp3
+ eq_40          1.0 * log(PMX1_39) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_40.
- eq_42          1.0 * log(PMX1_40) = -4       1     regul_Grp3
+ eq_41          1.0 * log(PMX1_40) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_41.
- eq_43          1.0 * log(PMX1_41) = -4       1     regul_Grp3
+ eq_42          1.0 * log(PMX1_41) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_42.
- eq_44          1.0 * log(PMX1_42) = -4       1     regul_Grp3
+ eq_43          1.0 * log(PMX1_42) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_43.
- eq_45          1.0 * log(PMX1_43) = -4       1     regul_Grp3
+ eq_44          1.0 * log(PMX1_43) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_44.
- eq_46          1.0 * log(PMX1_44) = -4       1     regul_Grp3
+ eq_45          1.0 * log(PMX1_44) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_45.
- eq_47          1.0 * log(PMX1_45) = -4       1     regul_Grp3
+ eq_46          1.0 * log(PMX1_45) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_46.
- eq_48          1.0 * log(PMX1_46) = -4       1     regul_Grp3
+ eq_47          1.0 * log(PMX1_46) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_47.
- eq_49          1.0 * log(PMX1_47) = -4       1     regul_Grp3
+ eq_48          1.0 * log(PMX1_47) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_48.
- eq_50          1.0 * log(PMX1_48) = -4       1     regul_Grp3
+ eq_49          1.0 * log(PMX1_48) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_49.
- eq_51          1.0 * log(PMX1_49) = -4       1     regul_Grp3
+ eq_50          1.0 * log(PMX1_49) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_50.
- eq_52          1.0 * log(PMX1_50) = -4       1     regul_Grp3
+ eq_51          1.0 * log(PMX1_50) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_51.
- eq_53          1.0 * log(PMX1_51) = -4       1     regul_Grp3
+ eq_52          1.0 * log(PMX1_51) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_52.
- eq_54          1.0 * log(PMX1_52) = -4       1     regul_Grp3
+ eq_53          1.0 * log(PMX1_52) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_53.
- eq_55          1.0 * log(PMX1_53) = -4       1     regul_Grp3
+ eq_54          1.0 * log(PMX1_53) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_54.
- eq_56          1.0 * log(PMX1_54) = -4       1     regul_Grp3
+ eq_55          1.0 * log(PMX1_54) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_55.
- eq_57          1.0 * log(PMX1_55) = -4       1     regul_Grp3
+ eq_56          1.0 * log(PMX1_55) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_56.
- eq_58          1.0 * log(PMX1_56) = -4       1     regul_Grp3
+ eq_57          1.0 * log(PMX1_56) = -4       1     regul_Grp2
 # Equations for horizontal continuity in layers 1 for parameter K.
 

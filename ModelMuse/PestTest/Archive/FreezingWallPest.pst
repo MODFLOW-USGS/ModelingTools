@@ -1,8 +1,8 @@
 pcf
 * control data
 restart regularisation # RSTFLE PESTMODE
-     1     0     0     1     1     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
-     1     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
+     0     0     0     0     0     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
+     0     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
   1.000000000000E+001   2.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
   3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
   1.000000000000E-001      3  0.000000000000E+000  noaui nosenreuse boundscale # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE
@@ -16,16 +16,14 @@ restart regularisation # RSTFLE PESTMODE
 
 * lsqr
      0 # LSQRMODE
-  1.000000000000E-004   1.000000000000E-004   1.000000000000E+003      4 # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM
+  1.000000000000E-004   1.000000000000E-004   1.000000000000E+003      0 # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM
      1 # LSQRWRITE
 
 * parameter groups
 
 * parameter data
-MinWater none relative  1.000000000000E-001   0.000000000000E+000   1.000000000000E+000  none  1.000000000000E+000   0.000000000000E+000 
 
 * observation groups
-regul_Grp1
 
 * observation data
 
@@ -33,12 +31,7 @@ regul_Grp1
 RunModel.Bat
 
 * model input/output
-FreezingWallPest.ptf FreezingWallPest.pval
 FreezingWallPest.PestIns FreezingWallPest.SutraValues
-
-* prior information
-# Equation for initial value for parameter MinWater.
- eq_1          1.0 * MinWater = 0.1       1     regul_Grp1
 
 * regularisation
   1.000000000000E-010   1.050000000000E-010   1.000000000000E-001  nomemsave

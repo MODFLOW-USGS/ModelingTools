@@ -1,8 +1,8 @@
 pcf
 * control data
 restart estimation # RSTFLE PESTMODE
-    58    10     2   199     7     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
-     3     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
+    57    10     2   198     6     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
+     2     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
   1.000000000000E+001   2.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
   3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
   1.000000000000E-001      3  0.000000000000E+000  noaui nosenreuse boundscale # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE
@@ -16,7 +16,7 @@ restart estimation # RSTFLE PESTMODE
 
 * lsqr
      0 # LSQRMODE
-  1.000000000000E-004   1.000000000000E-004   1.000000000000E+003    232 # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM
+  1.000000000000E-004   1.000000000000E-004   1.000000000000E+003    228 # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM
      1 # LSQRWRITE
 
 * parameter groups
@@ -24,7 +24,6 @@ KGrp relative  1.000000000000E-002   0.000000000000E+000  switch  1.500000000000
 WellGr relative  1.000000000000E-002   0.000000000000E+000  switch  1.500000000000E+000  parabolic
 
 * parameter data
-K log factor  1.000000000000E+000   1.000000000000E-002   1.000000000000E+002  KGrp  1.000000000000E+000   0.000000000000E+000 
 Seepage none factor  1.000000000000E+000   1.000000000000E-003   1.000000000000E+002  WellGr  1.000000000000E+000   0.000000000000E+000 
 # Parameters in the PMX1_ family are pilot point parameters related to K in layer      1 in data set Maximum_Hydraulic_Conductivity
 PMX1_1 log factor  1.000000000000E-004   1.000000000000E-006   1.000000000000E-002  KGrp  1.000000000000E+000   0.000000000000E+000 
@@ -89,9 +88,8 @@ Heads
 SP_Flows
 Comparisons
 regul_Grp1
-regul_Grp2
-regul_Grp3 RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.Cov.txt
-regul_Grp4
+regul_Grp2 RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.Cov.txt
+regul_Grp3
 
 * observation data
 Head_Obs1_P  6.900000000000E+001   1.000000000000E+000  Heads
@@ -110,267 +108,264 @@ RunModel.Bat
 
 * model input/output
 RmaSutraCompleted.ptf RmaSutraCompleted.pval
-RmaSutraCompleted.Maximum_Hydraulic_Conductivity.script.tpl RmaSutraCompleted.Maximum_Hydraulic_Conductivity.script
 RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.pp.tpl RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.pp
 RmaSutraCompleted.PestIns RmaSutraCompleted.SutraValues
 
 * prior information
-# Equation for initial value for parameter K.
- eq_1          1.0 * log(K) = 0       1     regul_Grp1
 # Equation for initial value for parameter Seepage.
- eq_2          1.0 * Seepage = 1       1     regul_Grp2
+ eq_1          1.0 * Seepage = 1       1     regul_Grp1
 # Equation for initial value for parameter PMX1_1.
- eq_3          1.0 * log(PMX1_1) = -4       1     regul_Grp3
+ eq_2          1.0 * log(PMX1_1) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_2.
- eq_4          1.0 * log(PMX1_2) = -4       1     regul_Grp3
+ eq_3          1.0 * log(PMX1_2) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_3.
- eq_5          1.0 * log(PMX1_3) = -4       1     regul_Grp3
+ eq_4          1.0 * log(PMX1_3) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_4.
- eq_6          1.0 * log(PMX1_4) = -4       1     regul_Grp3
+ eq_5          1.0 * log(PMX1_4) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_5.
- eq_7          1.0 * log(PMX1_5) = -4       1     regul_Grp3
+ eq_6          1.0 * log(PMX1_5) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_6.
- eq_8          1.0 * log(PMX1_6) = -4       1     regul_Grp3
+ eq_7          1.0 * log(PMX1_6) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_7.
- eq_9          1.0 * log(PMX1_7) = -4       1     regul_Grp3
+ eq_8          1.0 * log(PMX1_7) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_8.
- eq_10          1.0 * log(PMX1_8) = -4       1     regul_Grp3
+ eq_9          1.0 * log(PMX1_8) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_9.
- eq_11          1.0 * log(PMX1_9) = -4       1     regul_Grp3
+ eq_10          1.0 * log(PMX1_9) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_10.
- eq_12          1.0 * log(PMX1_10) = -4       1     regul_Grp3
+ eq_11          1.0 * log(PMX1_10) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_11.
- eq_13          1.0 * log(PMX1_11) = -4       1     regul_Grp3
+ eq_12          1.0 * log(PMX1_11) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_12.
- eq_14          1.0 * log(PMX1_12) = -4       1     regul_Grp3
+ eq_13          1.0 * log(PMX1_12) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_13.
- eq_15          1.0 * log(PMX1_13) = -4       1     regul_Grp3
+ eq_14          1.0 * log(PMX1_13) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_14.
- eq_16          1.0 * log(PMX1_14) = -4       1     regul_Grp3
+ eq_15          1.0 * log(PMX1_14) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_15.
- eq_17          1.0 * log(PMX1_15) = -4       1     regul_Grp3
+ eq_16          1.0 * log(PMX1_15) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_16.
- eq_18          1.0 * log(PMX1_16) = -4       1     regul_Grp3
+ eq_17          1.0 * log(PMX1_16) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_17.
- eq_19          1.0 * log(PMX1_17) = -4       1     regul_Grp3
+ eq_18          1.0 * log(PMX1_17) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_18.
- eq_20          1.0 * log(PMX1_18) = -4       1     regul_Grp3
+ eq_19          1.0 * log(PMX1_18) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_19.
- eq_21          1.0 * log(PMX1_19) = -4       1     regul_Grp3
+ eq_20          1.0 * log(PMX1_19) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_20.
- eq_22          1.0 * log(PMX1_20) = -4       1     regul_Grp3
+ eq_21          1.0 * log(PMX1_20) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_21.
- eq_23          1.0 * log(PMX1_21) = -4       1     regul_Grp3
+ eq_22          1.0 * log(PMX1_21) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_22.
- eq_24          1.0 * log(PMX1_22) = -4       1     regul_Grp3
+ eq_23          1.0 * log(PMX1_22) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_23.
- eq_25          1.0 * log(PMX1_23) = -4       1     regul_Grp3
+ eq_24          1.0 * log(PMX1_23) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_24.
- eq_26          1.0 * log(PMX1_24) = -4       1     regul_Grp3
+ eq_25          1.0 * log(PMX1_24) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_25.
- eq_27          1.0 * log(PMX1_25) = -4       1     regul_Grp3
+ eq_26          1.0 * log(PMX1_25) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_26.
- eq_28          1.0 * log(PMX1_26) = -4       1     regul_Grp3
+ eq_27          1.0 * log(PMX1_26) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_27.
- eq_29          1.0 * log(PMX1_27) = -4       1     regul_Grp3
+ eq_28          1.0 * log(PMX1_27) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_28.
- eq_30          1.0 * log(PMX1_28) = -4       1     regul_Grp3
+ eq_29          1.0 * log(PMX1_28) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_29.
- eq_31          1.0 * log(PMX1_29) = -4       1     regul_Grp3
+ eq_30          1.0 * log(PMX1_29) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_30.
- eq_32          1.0 * log(PMX1_30) = -4       1     regul_Grp3
+ eq_31          1.0 * log(PMX1_30) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_31.
- eq_33          1.0 * log(PMX1_31) = -4       1     regul_Grp3
+ eq_32          1.0 * log(PMX1_31) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_32.
- eq_34          1.0 * log(PMX1_32) = -4       1     regul_Grp3
+ eq_33          1.0 * log(PMX1_32) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_33.
- eq_35          1.0 * log(PMX1_33) = -4       1     regul_Grp3
+ eq_34          1.0 * log(PMX1_33) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_34.
- eq_36          1.0 * log(PMX1_34) = -4       1     regul_Grp3
+ eq_35          1.0 * log(PMX1_34) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_35.
- eq_37          1.0 * log(PMX1_35) = -4       1     regul_Grp3
+ eq_36          1.0 * log(PMX1_35) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_36.
- eq_38          1.0 * log(PMX1_36) = -4       1     regul_Grp3
+ eq_37          1.0 * log(PMX1_36) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_37.
- eq_39          1.0 * log(PMX1_37) = -4       1     regul_Grp3
+ eq_38          1.0 * log(PMX1_37) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_38.
- eq_40          1.0 * log(PMX1_38) = -4       1     regul_Grp3
+ eq_39          1.0 * log(PMX1_38) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_39.
- eq_41          1.0 * log(PMX1_39) = -4       1     regul_Grp3
+ eq_40          1.0 * log(PMX1_39) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_40.
- eq_42          1.0 * log(PMX1_40) = -4       1     regul_Grp3
+ eq_41          1.0 * log(PMX1_40) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_41.
- eq_43          1.0 * log(PMX1_41) = -4       1     regul_Grp3
+ eq_42          1.0 * log(PMX1_41) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_42.
- eq_44          1.0 * log(PMX1_42) = -4       1     regul_Grp3
+ eq_43          1.0 * log(PMX1_42) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_43.
- eq_45          1.0 * log(PMX1_43) = -4       1     regul_Grp3
+ eq_44          1.0 * log(PMX1_43) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_44.
- eq_46          1.0 * log(PMX1_44) = -4       1     regul_Grp3
+ eq_45          1.0 * log(PMX1_44) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_45.
- eq_47          1.0 * log(PMX1_45) = -4       1     regul_Grp3
+ eq_46          1.0 * log(PMX1_45) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_46.
- eq_48          1.0 * log(PMX1_46) = -4       1     regul_Grp3
+ eq_47          1.0 * log(PMX1_46) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_47.
- eq_49          1.0 * log(PMX1_47) = -4       1     regul_Grp3
+ eq_48          1.0 * log(PMX1_47) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_48.
- eq_50          1.0 * log(PMX1_48) = -4       1     regul_Grp3
+ eq_49          1.0 * log(PMX1_48) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_49.
- eq_51          1.0 * log(PMX1_49) = -4       1     regul_Grp3
+ eq_50          1.0 * log(PMX1_49) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_50.
- eq_52          1.0 * log(PMX1_50) = -4       1     regul_Grp3
+ eq_51          1.0 * log(PMX1_50) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_51.
- eq_53          1.0 * log(PMX1_51) = -4       1     regul_Grp3
+ eq_52          1.0 * log(PMX1_51) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_52.
- eq_54          1.0 * log(PMX1_52) = -4       1     regul_Grp3
+ eq_53          1.0 * log(PMX1_52) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_53.
- eq_55          1.0 * log(PMX1_53) = -4       1     regul_Grp3
+ eq_54          1.0 * log(PMX1_53) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_54.
- eq_56          1.0 * log(PMX1_54) = -4       1     regul_Grp3
+ eq_55          1.0 * log(PMX1_54) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_55.
- eq_57          1.0 * log(PMX1_55) = -4       1     regul_Grp3
+ eq_56          1.0 * log(PMX1_55) = -4       1     regul_Grp2
 # Equation for initial value for parameter PMX1_56.
- eq_58          1.0 * log(PMX1_56) = -4       1     regul_Grp3
+ eq_57          1.0 * log(PMX1_56) = -4       1     regul_Grp2
 # Equations for horizontal continuity in layers 1 for parameter K.
- eq_59          1.0 * log(PMX1_1) - 1.0 * log(PMX1_8) = 0.0       1     regul_Grp4
- eq_60          1.0 * log(PMX1_1) - 1.0 * log(PMX1_2) = 0.0       1     regul_Grp4
- eq_61          1.0 * log(PMX1_1) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp4
- eq_62          1.0 * log(PMX1_2) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp4
- eq_63          1.0 * log(PMX1_2) - 1.0 * log(PMX1_3) = 0.0       1     regul_Grp4
- eq_64          1.0 * log(PMX1_2) - 1.0 * log(PMX1_10) = 0.0       1     regul_Grp4
- eq_65          1.0 * log(PMX1_3) - 1.0 * log(PMX1_4) = 0.0       1     regul_Grp4
- eq_66          1.0 * log(PMX1_3) - 1.0 * log(PMX1_10) = 0.0       1     regul_Grp4
- eq_67          1.0 * log(PMX1_3) - 1.0 * log(PMX1_11) = 0.0       1     regul_Grp4
- eq_68          1.0 * log(PMX1_3) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp4
- eq_69          1.0 * log(PMX1_4) - 1.0 * log(PMX1_11) = 0.0       1     regul_Grp4
- eq_70          1.0 * log(PMX1_4) - 1.0 * log(PMX1_5) = 0.0       1     regul_Grp4
- eq_71          1.0 * log(PMX1_4) - 1.0 * log(PMX1_12) = 0.0       1     regul_Grp4
- eq_72          1.0 * log(PMX1_4) - 1.0 * log(PMX1_10) = 0.0       1     regul_Grp4
- eq_73          1.0 * log(PMX1_5) - 1.0 * log(PMX1_12) = 0.0       1     regul_Grp4
- eq_74          1.0 * log(PMX1_5) - 1.0 * log(PMX1_6) = 0.0       1     regul_Grp4
- eq_75          1.0 * log(PMX1_5) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp4
- eq_76          1.0 * log(PMX1_5) - 1.0 * log(PMX1_11) = 0.0       1     regul_Grp4
- eq_77          1.0 * log(PMX1_6) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp4
- eq_78          1.0 * log(PMX1_6) - 1.0 * log(PMX1_7) = 0.0       1     regul_Grp4
- eq_79          1.0 * log(PMX1_6) - 1.0 * log(PMX1_14) = 0.0       1     regul_Grp4
- eq_80          1.0 * log(PMX1_6) - 1.0 * log(PMX1_12) = 0.0       1     regul_Grp4
- eq_81          1.0 * log(PMX1_7) - 1.0 * log(PMX1_14) = 0.0       1     regul_Grp4
- eq_82          1.0 * log(PMX1_7) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp4
- eq_83          1.0 * log(PMX1_8) - 1.0 * log(PMX1_15) = 0.0       1     regul_Grp4
- eq_84          1.0 * log(PMX1_8) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp4
- eq_85          1.0 * log(PMX1_8) - 1.0 * log(PMX1_2) = 0.0       1     regul_Grp4
- eq_86          1.0 * log(PMX1_8) - 1.0 * log(PMX1_16) = 0.0       1     regul_Grp4
- eq_87          1.0 * log(PMX1_9) - 1.0 * log(PMX1_16) = 0.0       1     regul_Grp4
- eq_88          1.0 * log(PMX1_9) - 1.0 * log(PMX1_10) = 0.0       1     regul_Grp4
- eq_89          1.0 * log(PMX1_10) - 1.0 * log(PMX1_11) = 0.0       1     regul_Grp4
- eq_90          1.0 * log(PMX1_10) - 1.0 * log(PMX1_17) = 0.0       1     regul_Grp4
- eq_91          1.0 * log(PMX1_11) - 1.0 * log(PMX1_18) = 0.0       1     regul_Grp4
- eq_92          1.0 * log(PMX1_11) - 1.0 * log(PMX1_12) = 0.0       1     regul_Grp4
- eq_93          1.0 * log(PMX1_12) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp4
- eq_94          1.0 * log(PMX1_12) - 1.0 * log(PMX1_19) = 0.0       1     regul_Grp4
- eq_95          1.0 * log(PMX1_13) - 1.0 * log(PMX1_20) = 0.0       1     regul_Grp4
- eq_96          1.0 * log(PMX1_13) - 1.0 * log(PMX1_14) = 0.0       1     regul_Grp4
- eq_97          1.0 * log(PMX1_14) - 1.0 * log(PMX1_21) = 0.0       1     regul_Grp4
- eq_98          1.0 * log(PMX1_14) - 1.0 * log(PMX1_20) = 0.0       1     regul_Grp4
- eq_99          1.0 * log(PMX1_15) - 1.0 * log(PMX1_22) = 0.0       1     regul_Grp4
- eq_100          1.0 * log(PMX1_15) - 1.0 * log(PMX1_16) = 0.0       1     regul_Grp4
- eq_101          1.0 * log(PMX1_15) - 1.0 * log(PMX1_23) = 0.0       1     regul_Grp4
- eq_102          1.0 * log(PMX1_15) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp4
- eq_103          1.0 * log(PMX1_16) - 1.0 * log(PMX1_17) = 0.0       1     regul_Grp4
- eq_104          1.0 * log(PMX1_16) - 1.0 * log(PMX1_23) = 0.0       1     regul_Grp4
- eq_105          1.0 * log(PMX1_17) - 1.0 * log(PMX1_24) = 0.0       1     regul_Grp4
- eq_106          1.0 * log(PMX1_17) - 1.0 * log(PMX1_18) = 0.0       1     regul_Grp4
- eq_107          1.0 * log(PMX1_18) - 1.0 * log(PMX1_19) = 0.0       1     regul_Grp4
- eq_108          1.0 * log(PMX1_18) - 1.0 * log(PMX1_25) = 0.0       1     regul_Grp4
- eq_109          1.0 * log(PMX1_19) - 1.0 * log(PMX1_20) = 0.0       1     regul_Grp4
- eq_110          1.0 * log(PMX1_19) - 1.0 * log(PMX1_26) = 0.0       1     regul_Grp4
- eq_111          1.0 * log(PMX1_20) - 1.0 * log(PMX1_21) = 0.0       1     regul_Grp4
- eq_112          1.0 * log(PMX1_20) - 1.0 * log(PMX1_27) = 0.0       1     regul_Grp4
- eq_113          1.0 * log(PMX1_21) - 1.0 * log(PMX1_28) = 0.0       1     regul_Grp4
- eq_114          1.0 * log(PMX1_21) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp4
- eq_115          1.0 * log(PMX1_21) - 1.0 * log(PMX1_27) = 0.0       1     regul_Grp4
- eq_116          1.0 * log(PMX1_22) - 1.0 * log(PMX1_29) = 0.0       1     regul_Grp4
- eq_117          1.0 * log(PMX1_22) - 1.0 * log(PMX1_23) = 0.0       1     regul_Grp4
- eq_118          1.0 * log(PMX1_22) - 1.0 * log(PMX1_16) = 0.0       1     regul_Grp4
- eq_119          1.0 * log(PMX1_22) - 1.0 * log(PMX1_30) = 0.0       1     regul_Grp4
- eq_120          1.0 * log(PMX1_23) - 1.0 * log(PMX1_24) = 0.0       1     regul_Grp4
- eq_121          1.0 * log(PMX1_23) - 1.0 * log(PMX1_30) = 0.0       1     regul_Grp4
- eq_122          1.0 * log(PMX1_24) - 1.0 * log(PMX1_25) = 0.0       1     regul_Grp4
- eq_123          1.0 * log(PMX1_24) - 1.0 * log(PMX1_31) = 0.0       1     regul_Grp4
- eq_124          1.0 * log(PMX1_25) - 1.0 * log(PMX1_32) = 0.0       1     regul_Grp4
- eq_125          1.0 * log(PMX1_25) - 1.0 * log(PMX1_26) = 0.0       1     regul_Grp4
- eq_126          1.0 * log(PMX1_26) - 1.0 * log(PMX1_27) = 0.0       1     regul_Grp4
- eq_127          1.0 * log(PMX1_26) - 1.0 * log(PMX1_33) = 0.0       1     regul_Grp4
- eq_128          1.0 * log(PMX1_27) - 1.0 * log(PMX1_28) = 0.0       1     regul_Grp4
- eq_129          1.0 * log(PMX1_27) - 1.0 * log(PMX1_34) = 0.0       1     regul_Grp4
- eq_130          1.0 * log(PMX1_28) - 1.0 * log(PMX1_35) = 0.0       1     regul_Grp4
- eq_131          1.0 * log(PMX1_28) - 1.0 * log(PMX1_20) = 0.0       1     regul_Grp4
- eq_132          1.0 * log(PMX1_28) - 1.0 * log(PMX1_34) = 0.0       1     regul_Grp4
- eq_133          1.0 * log(PMX1_29) - 1.0 * log(PMX1_36) = 0.0       1     regul_Grp4
- eq_134          1.0 * log(PMX1_29) - 1.0 * log(PMX1_30) = 0.0       1     regul_Grp4
- eq_135          1.0 * log(PMX1_29) - 1.0 * log(PMX1_37) = 0.0       1     regul_Grp4
- eq_136          1.0 * log(PMX1_29) - 1.0 * log(PMX1_23) = 0.0       1     regul_Grp4
- eq_137          1.0 * log(PMX1_30) - 1.0 * log(PMX1_31) = 0.0       1     regul_Grp4
- eq_138          1.0 * log(PMX1_30) - 1.0 * log(PMX1_37) = 0.0       1     regul_Grp4
- eq_139          1.0 * log(PMX1_31) - 1.0 * log(PMX1_32) = 0.0       1     regul_Grp4
- eq_140          1.0 * log(PMX1_31) - 1.0 * log(PMX1_38) = 0.0       1     regul_Grp4
- eq_141          1.0 * log(PMX1_32) - 1.0 * log(PMX1_33) = 0.0       1     regul_Grp4
- eq_142          1.0 * log(PMX1_32) - 1.0 * log(PMX1_39) = 0.0       1     regul_Grp4
- eq_143          1.0 * log(PMX1_33) - 1.0 * log(PMX1_34) = 0.0       1     regul_Grp4
- eq_144          1.0 * log(PMX1_33) - 1.0 * log(PMX1_40) = 0.0       1     regul_Grp4
- eq_145          1.0 * log(PMX1_34) - 1.0 * log(PMX1_41) = 0.0       1     regul_Grp4
- eq_146          1.0 * log(PMX1_34) - 1.0 * log(PMX1_35) = 0.0       1     regul_Grp4
- eq_147          1.0 * log(PMX1_35) - 1.0 * log(PMX1_42) = 0.0       1     regul_Grp4
- eq_148          1.0 * log(PMX1_35) - 1.0 * log(PMX1_27) = 0.0       1     regul_Grp4
- eq_149          1.0 * log(PMX1_35) - 1.0 * log(PMX1_41) = 0.0       1     regul_Grp4
- eq_150          1.0 * log(PMX1_36) - 1.0 * log(PMX1_43) = 0.0       1     regul_Grp4
- eq_151          1.0 * log(PMX1_36) - 1.0 * log(PMX1_37) = 0.0       1     regul_Grp4
- eq_152          1.0 * log(PMX1_36) - 1.0 * log(PMX1_30) = 0.0       1     regul_Grp4
- eq_153          1.0 * log(PMX1_36) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp4
- eq_154          1.0 * log(PMX1_37) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp4
- eq_155          1.0 * log(PMX1_37) - 1.0 * log(PMX1_38) = 0.0       1     regul_Grp4
- eq_156          1.0 * log(PMX1_38) - 1.0 * log(PMX1_39) = 0.0       1     regul_Grp4
- eq_157          1.0 * log(PMX1_38) - 1.0 * log(PMX1_45) = 0.0       1     regul_Grp4
- eq_158          1.0 * log(PMX1_39) - 1.0 * log(PMX1_46) = 0.0       1     regul_Grp4
- eq_159          1.0 * log(PMX1_39) - 1.0 * log(PMX1_40) = 0.0       1     regul_Grp4
- eq_160          1.0 * log(PMX1_40) - 1.0 * log(PMX1_41) = 0.0       1     regul_Grp4
- eq_161          1.0 * log(PMX1_40) - 1.0 * log(PMX1_47) = 0.0       1     regul_Grp4
- eq_162          1.0 * log(PMX1_41) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp4
- eq_163          1.0 * log(PMX1_41) - 1.0 * log(PMX1_42) = 0.0       1     regul_Grp4
- eq_164          1.0 * log(PMX1_42) - 1.0 * log(PMX1_49) = 0.0       1     regul_Grp4
- eq_165          1.0 * log(PMX1_42) - 1.0 * log(PMX1_34) = 0.0       1     regul_Grp4
- eq_166          1.0 * log(PMX1_42) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp4
- eq_167          1.0 * log(PMX1_43) - 1.0 * log(PMX1_50) = 0.0       1     regul_Grp4
- eq_168          1.0 * log(PMX1_43) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp4
- eq_169          1.0 * log(PMX1_43) - 1.0 * log(PMX1_51) = 0.0       1     regul_Grp4
- eq_170          1.0 * log(PMX1_43) - 1.0 * log(PMX1_37) = 0.0       1     regul_Grp4
- eq_171          1.0 * log(PMX1_44) - 1.0 * log(PMX1_45) = 0.0       1     regul_Grp4
- eq_172          1.0 * log(PMX1_44) - 1.0 * log(PMX1_51) = 0.0       1     regul_Grp4
- eq_173          1.0 * log(PMX1_45) - 1.0 * log(PMX1_52) = 0.0       1     regul_Grp4
- eq_174          1.0 * log(PMX1_45) - 1.0 * log(PMX1_46) = 0.0       1     regul_Grp4
- eq_175          1.0 * log(PMX1_46) - 1.0 * log(PMX1_47) = 0.0       1     regul_Grp4
- eq_176          1.0 * log(PMX1_46) - 1.0 * log(PMX1_53) = 0.0       1     regul_Grp4
- eq_177          1.0 * log(PMX1_47) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp4
- eq_178          1.0 * log(PMX1_47) - 1.0 * log(PMX1_54) = 0.0       1     regul_Grp4
- eq_179          1.0 * log(PMX1_48) - 1.0 * log(PMX1_49) = 0.0       1     regul_Grp4
- eq_180          1.0 * log(PMX1_48) - 1.0 * log(PMX1_55) = 0.0       1     regul_Grp4
- eq_181          1.0 * log(PMX1_49) - 1.0 * log(PMX1_56) = 0.0       1     regul_Grp4
- eq_182          1.0 * log(PMX1_49) - 1.0 * log(PMX1_41) = 0.0       1     regul_Grp4
- eq_183          1.0 * log(PMX1_49) - 1.0 * log(PMX1_55) = 0.0       1     regul_Grp4
- eq_184          1.0 * log(PMX1_50) - 1.0 * log(PMX1_51) = 0.0       1     regul_Grp4
- eq_185          1.0 * log(PMX1_50) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp4
- eq_186          1.0 * log(PMX1_51) - 1.0 * log(PMX1_52) = 0.0       1     regul_Grp4
- eq_187          1.0 * log(PMX1_51) - 1.0 * log(PMX1_45) = 0.0       1     regul_Grp4
- eq_188          1.0 * log(PMX1_52) - 1.0 * log(PMX1_53) = 0.0       1     regul_Grp4
- eq_189          1.0 * log(PMX1_52) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp4
- eq_190          1.0 * log(PMX1_52) - 1.0 * log(PMX1_46) = 0.0       1     regul_Grp4
- eq_191          1.0 * log(PMX1_53) - 1.0 * log(PMX1_54) = 0.0       1     regul_Grp4
- eq_192          1.0 * log(PMX1_53) - 1.0 * log(PMX1_47) = 0.0       1     regul_Grp4
- eq_193          1.0 * log(PMX1_53) - 1.0 * log(PMX1_45) = 0.0       1     regul_Grp4
- eq_194          1.0 * log(PMX1_54) - 1.0 * log(PMX1_55) = 0.0       1     regul_Grp4
- eq_195          1.0 * log(PMX1_54) - 1.0 * log(PMX1_46) = 0.0       1     regul_Grp4
- eq_196          1.0 * log(PMX1_54) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp4
- eq_197          1.0 * log(PMX1_55) - 1.0 * log(PMX1_56) = 0.0       1     regul_Grp4
- eq_198          1.0 * log(PMX1_55) - 1.0 * log(PMX1_47) = 0.0       1     regul_Grp4
- eq_199          1.0 * log(PMX1_56) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp4
+ eq_58          1.0 * log(PMX1_1) - 1.0 * log(PMX1_8) = 0.0       1     regul_Grp3
+ eq_59          1.0 * log(PMX1_1) - 1.0 * log(PMX1_2) = 0.0       1     regul_Grp3
+ eq_60          1.0 * log(PMX1_1) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp3
+ eq_61          1.0 * log(PMX1_2) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp3
+ eq_62          1.0 * log(PMX1_2) - 1.0 * log(PMX1_3) = 0.0       1     regul_Grp3
+ eq_63          1.0 * log(PMX1_2) - 1.0 * log(PMX1_10) = 0.0       1     regul_Grp3
+ eq_64          1.0 * log(PMX1_3) - 1.0 * log(PMX1_4) = 0.0       1     regul_Grp3
+ eq_65          1.0 * log(PMX1_3) - 1.0 * log(PMX1_10) = 0.0       1     regul_Grp3
+ eq_66          1.0 * log(PMX1_3) - 1.0 * log(PMX1_11) = 0.0       1     regul_Grp3
+ eq_67          1.0 * log(PMX1_3) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp3
+ eq_68          1.0 * log(PMX1_4) - 1.0 * log(PMX1_11) = 0.0       1     regul_Grp3
+ eq_69          1.0 * log(PMX1_4) - 1.0 * log(PMX1_5) = 0.0       1     regul_Grp3
+ eq_70          1.0 * log(PMX1_4) - 1.0 * log(PMX1_12) = 0.0       1     regul_Grp3
+ eq_71          1.0 * log(PMX1_4) - 1.0 * log(PMX1_10) = 0.0       1     regul_Grp3
+ eq_72          1.0 * log(PMX1_5) - 1.0 * log(PMX1_12) = 0.0       1     regul_Grp3
+ eq_73          1.0 * log(PMX1_5) - 1.0 * log(PMX1_6) = 0.0       1     regul_Grp3
+ eq_74          1.0 * log(PMX1_5) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp3
+ eq_75          1.0 * log(PMX1_5) - 1.0 * log(PMX1_11) = 0.0       1     regul_Grp3
+ eq_76          1.0 * log(PMX1_6) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp3
+ eq_77          1.0 * log(PMX1_6) - 1.0 * log(PMX1_7) = 0.0       1     regul_Grp3
+ eq_78          1.0 * log(PMX1_6) - 1.0 * log(PMX1_14) = 0.0       1     regul_Grp3
+ eq_79          1.0 * log(PMX1_6) - 1.0 * log(PMX1_12) = 0.0       1     regul_Grp3
+ eq_80          1.0 * log(PMX1_7) - 1.0 * log(PMX1_14) = 0.0       1     regul_Grp3
+ eq_81          1.0 * log(PMX1_7) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp3
+ eq_82          1.0 * log(PMX1_8) - 1.0 * log(PMX1_15) = 0.0       1     regul_Grp3
+ eq_83          1.0 * log(PMX1_8) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp3
+ eq_84          1.0 * log(PMX1_8) - 1.0 * log(PMX1_2) = 0.0       1     regul_Grp3
+ eq_85          1.0 * log(PMX1_8) - 1.0 * log(PMX1_16) = 0.0       1     regul_Grp3
+ eq_86          1.0 * log(PMX1_9) - 1.0 * log(PMX1_16) = 0.0       1     regul_Grp3
+ eq_87          1.0 * log(PMX1_9) - 1.0 * log(PMX1_10) = 0.0       1     regul_Grp3
+ eq_88          1.0 * log(PMX1_10) - 1.0 * log(PMX1_11) = 0.0       1     regul_Grp3
+ eq_89          1.0 * log(PMX1_10) - 1.0 * log(PMX1_17) = 0.0       1     regul_Grp3
+ eq_90          1.0 * log(PMX1_11) - 1.0 * log(PMX1_18) = 0.0       1     regul_Grp3
+ eq_91          1.0 * log(PMX1_11) - 1.0 * log(PMX1_12) = 0.0       1     regul_Grp3
+ eq_92          1.0 * log(PMX1_12) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp3
+ eq_93          1.0 * log(PMX1_12) - 1.0 * log(PMX1_19) = 0.0       1     regul_Grp3
+ eq_94          1.0 * log(PMX1_13) - 1.0 * log(PMX1_20) = 0.0       1     regul_Grp3
+ eq_95          1.0 * log(PMX1_13) - 1.0 * log(PMX1_14) = 0.0       1     regul_Grp3
+ eq_96          1.0 * log(PMX1_14) - 1.0 * log(PMX1_21) = 0.0       1     regul_Grp3
+ eq_97          1.0 * log(PMX1_14) - 1.0 * log(PMX1_20) = 0.0       1     regul_Grp3
+ eq_98          1.0 * log(PMX1_15) - 1.0 * log(PMX1_22) = 0.0       1     regul_Grp3
+ eq_99          1.0 * log(PMX1_15) - 1.0 * log(PMX1_16) = 0.0       1     regul_Grp3
+ eq_100          1.0 * log(PMX1_15) - 1.0 * log(PMX1_23) = 0.0       1     regul_Grp3
+ eq_101          1.0 * log(PMX1_15) - 1.0 * log(PMX1_9) = 0.0       1     regul_Grp3
+ eq_102          1.0 * log(PMX1_16) - 1.0 * log(PMX1_17) = 0.0       1     regul_Grp3
+ eq_103          1.0 * log(PMX1_16) - 1.0 * log(PMX1_23) = 0.0       1     regul_Grp3
+ eq_104          1.0 * log(PMX1_17) - 1.0 * log(PMX1_24) = 0.0       1     regul_Grp3
+ eq_105          1.0 * log(PMX1_17) - 1.0 * log(PMX1_18) = 0.0       1     regul_Grp3
+ eq_106          1.0 * log(PMX1_18) - 1.0 * log(PMX1_19) = 0.0       1     regul_Grp3
+ eq_107          1.0 * log(PMX1_18) - 1.0 * log(PMX1_25) = 0.0       1     regul_Grp3
+ eq_108          1.0 * log(PMX1_19) - 1.0 * log(PMX1_20) = 0.0       1     regul_Grp3
+ eq_109          1.0 * log(PMX1_19) - 1.0 * log(PMX1_26) = 0.0       1     regul_Grp3
+ eq_110          1.0 * log(PMX1_20) - 1.0 * log(PMX1_21) = 0.0       1     regul_Grp3
+ eq_111          1.0 * log(PMX1_20) - 1.0 * log(PMX1_27) = 0.0       1     regul_Grp3
+ eq_112          1.0 * log(PMX1_21) - 1.0 * log(PMX1_28) = 0.0       1     regul_Grp3
+ eq_113          1.0 * log(PMX1_21) - 1.0 * log(PMX1_13) = 0.0       1     regul_Grp3
+ eq_114          1.0 * log(PMX1_21) - 1.0 * log(PMX1_27) = 0.0       1     regul_Grp3
+ eq_115          1.0 * log(PMX1_22) - 1.0 * log(PMX1_29) = 0.0       1     regul_Grp3
+ eq_116          1.0 * log(PMX1_22) - 1.0 * log(PMX1_23) = 0.0       1     regul_Grp3
+ eq_117          1.0 * log(PMX1_22) - 1.0 * log(PMX1_16) = 0.0       1     regul_Grp3
+ eq_118          1.0 * log(PMX1_22) - 1.0 * log(PMX1_30) = 0.0       1     regul_Grp3
+ eq_119          1.0 * log(PMX1_23) - 1.0 * log(PMX1_24) = 0.0       1     regul_Grp3
+ eq_120          1.0 * log(PMX1_23) - 1.0 * log(PMX1_30) = 0.0       1     regul_Grp3
+ eq_121          1.0 * log(PMX1_24) - 1.0 * log(PMX1_25) = 0.0       1     regul_Grp3
+ eq_122          1.0 * log(PMX1_24) - 1.0 * log(PMX1_31) = 0.0       1     regul_Grp3
+ eq_123          1.0 * log(PMX1_25) - 1.0 * log(PMX1_32) = 0.0       1     regul_Grp3
+ eq_124          1.0 * log(PMX1_25) - 1.0 * log(PMX1_26) = 0.0       1     regul_Grp3
+ eq_125          1.0 * log(PMX1_26) - 1.0 * log(PMX1_27) = 0.0       1     regul_Grp3
+ eq_126          1.0 * log(PMX1_26) - 1.0 * log(PMX1_33) = 0.0       1     regul_Grp3
+ eq_127          1.0 * log(PMX1_27) - 1.0 * log(PMX1_28) = 0.0       1     regul_Grp3
+ eq_128          1.0 * log(PMX1_27) - 1.0 * log(PMX1_34) = 0.0       1     regul_Grp3
+ eq_129          1.0 * log(PMX1_28) - 1.0 * log(PMX1_35) = 0.0       1     regul_Grp3
+ eq_130          1.0 * log(PMX1_28) - 1.0 * log(PMX1_20) = 0.0       1     regul_Grp3
+ eq_131          1.0 * log(PMX1_28) - 1.0 * log(PMX1_34) = 0.0       1     regul_Grp3
+ eq_132          1.0 * log(PMX1_29) - 1.0 * log(PMX1_36) = 0.0       1     regul_Grp3
+ eq_133          1.0 * log(PMX1_29) - 1.0 * log(PMX1_30) = 0.0       1     regul_Grp3
+ eq_134          1.0 * log(PMX1_29) - 1.0 * log(PMX1_37) = 0.0       1     regul_Grp3
+ eq_135          1.0 * log(PMX1_29) - 1.0 * log(PMX1_23) = 0.0       1     regul_Grp3
+ eq_136          1.0 * log(PMX1_30) - 1.0 * log(PMX1_31) = 0.0       1     regul_Grp3
+ eq_137          1.0 * log(PMX1_30) - 1.0 * log(PMX1_37) = 0.0       1     regul_Grp3
+ eq_138          1.0 * log(PMX1_31) - 1.0 * log(PMX1_32) = 0.0       1     regul_Grp3
+ eq_139          1.0 * log(PMX1_31) - 1.0 * log(PMX1_38) = 0.0       1     regul_Grp3
+ eq_140          1.0 * log(PMX1_32) - 1.0 * log(PMX1_33) = 0.0       1     regul_Grp3
+ eq_141          1.0 * log(PMX1_32) - 1.0 * log(PMX1_39) = 0.0       1     regul_Grp3
+ eq_142          1.0 * log(PMX1_33) - 1.0 * log(PMX1_34) = 0.0       1     regul_Grp3
+ eq_143          1.0 * log(PMX1_33) - 1.0 * log(PMX1_40) = 0.0       1     regul_Grp3
+ eq_144          1.0 * log(PMX1_34) - 1.0 * log(PMX1_41) = 0.0       1     regul_Grp3
+ eq_145          1.0 * log(PMX1_34) - 1.0 * log(PMX1_35) = 0.0       1     regul_Grp3
+ eq_146          1.0 * log(PMX1_35) - 1.0 * log(PMX1_42) = 0.0       1     regul_Grp3
+ eq_147          1.0 * log(PMX1_35) - 1.0 * log(PMX1_27) = 0.0       1     regul_Grp3
+ eq_148          1.0 * log(PMX1_35) - 1.0 * log(PMX1_41) = 0.0       1     regul_Grp3
+ eq_149          1.0 * log(PMX1_36) - 1.0 * log(PMX1_43) = 0.0       1     regul_Grp3
+ eq_150          1.0 * log(PMX1_36) - 1.0 * log(PMX1_37) = 0.0       1     regul_Grp3
+ eq_151          1.0 * log(PMX1_36) - 1.0 * log(PMX1_30) = 0.0       1     regul_Grp3
+ eq_152          1.0 * log(PMX1_36) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp3
+ eq_153          1.0 * log(PMX1_37) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp3
+ eq_154          1.0 * log(PMX1_37) - 1.0 * log(PMX1_38) = 0.0       1     regul_Grp3
+ eq_155          1.0 * log(PMX1_38) - 1.0 * log(PMX1_39) = 0.0       1     regul_Grp3
+ eq_156          1.0 * log(PMX1_38) - 1.0 * log(PMX1_45) = 0.0       1     regul_Grp3
+ eq_157          1.0 * log(PMX1_39) - 1.0 * log(PMX1_46) = 0.0       1     regul_Grp3
+ eq_158          1.0 * log(PMX1_39) - 1.0 * log(PMX1_40) = 0.0       1     regul_Grp3
+ eq_159          1.0 * log(PMX1_40) - 1.0 * log(PMX1_41) = 0.0       1     regul_Grp3
+ eq_160          1.0 * log(PMX1_40) - 1.0 * log(PMX1_47) = 0.0       1     regul_Grp3
+ eq_161          1.0 * log(PMX1_41) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp3
+ eq_162          1.0 * log(PMX1_41) - 1.0 * log(PMX1_42) = 0.0       1     regul_Grp3
+ eq_163          1.0 * log(PMX1_42) - 1.0 * log(PMX1_49) = 0.0       1     regul_Grp3
+ eq_164          1.0 * log(PMX1_42) - 1.0 * log(PMX1_34) = 0.0       1     regul_Grp3
+ eq_165          1.0 * log(PMX1_42) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp3
+ eq_166          1.0 * log(PMX1_43) - 1.0 * log(PMX1_50) = 0.0       1     regul_Grp3
+ eq_167          1.0 * log(PMX1_43) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp3
+ eq_168          1.0 * log(PMX1_43) - 1.0 * log(PMX1_51) = 0.0       1     regul_Grp3
+ eq_169          1.0 * log(PMX1_43) - 1.0 * log(PMX1_37) = 0.0       1     regul_Grp3
+ eq_170          1.0 * log(PMX1_44) - 1.0 * log(PMX1_45) = 0.0       1     regul_Grp3
+ eq_171          1.0 * log(PMX1_44) - 1.0 * log(PMX1_51) = 0.0       1     regul_Grp3
+ eq_172          1.0 * log(PMX1_45) - 1.0 * log(PMX1_52) = 0.0       1     regul_Grp3
+ eq_173          1.0 * log(PMX1_45) - 1.0 * log(PMX1_46) = 0.0       1     regul_Grp3
+ eq_174          1.0 * log(PMX1_46) - 1.0 * log(PMX1_47) = 0.0       1     regul_Grp3
+ eq_175          1.0 * log(PMX1_46) - 1.0 * log(PMX1_53) = 0.0       1     regul_Grp3
+ eq_176          1.0 * log(PMX1_47) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp3
+ eq_177          1.0 * log(PMX1_47) - 1.0 * log(PMX1_54) = 0.0       1     regul_Grp3
+ eq_178          1.0 * log(PMX1_48) - 1.0 * log(PMX1_49) = 0.0       1     regul_Grp3
+ eq_179          1.0 * log(PMX1_48) - 1.0 * log(PMX1_55) = 0.0       1     regul_Grp3
+ eq_180          1.0 * log(PMX1_49) - 1.0 * log(PMX1_56) = 0.0       1     regul_Grp3
+ eq_181          1.0 * log(PMX1_49) - 1.0 * log(PMX1_41) = 0.0       1     regul_Grp3
+ eq_182          1.0 * log(PMX1_49) - 1.0 * log(PMX1_55) = 0.0       1     regul_Grp3
+ eq_183          1.0 * log(PMX1_50) - 1.0 * log(PMX1_51) = 0.0       1     regul_Grp3
+ eq_184          1.0 * log(PMX1_50) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp3
+ eq_185          1.0 * log(PMX1_51) - 1.0 * log(PMX1_52) = 0.0       1     regul_Grp3
+ eq_186          1.0 * log(PMX1_51) - 1.0 * log(PMX1_45) = 0.0       1     regul_Grp3
+ eq_187          1.0 * log(PMX1_52) - 1.0 * log(PMX1_53) = 0.0       1     regul_Grp3
+ eq_188          1.0 * log(PMX1_52) - 1.0 * log(PMX1_44) = 0.0       1     regul_Grp3
+ eq_189          1.0 * log(PMX1_52) - 1.0 * log(PMX1_46) = 0.0       1     regul_Grp3
+ eq_190          1.0 * log(PMX1_53) - 1.0 * log(PMX1_54) = 0.0       1     regul_Grp3
+ eq_191          1.0 * log(PMX1_53) - 1.0 * log(PMX1_47) = 0.0       1     regul_Grp3
+ eq_192          1.0 * log(PMX1_53) - 1.0 * log(PMX1_45) = 0.0       1     regul_Grp3
+ eq_193          1.0 * log(PMX1_54) - 1.0 * log(PMX1_55) = 0.0       1     regul_Grp3
+ eq_194          1.0 * log(PMX1_54) - 1.0 * log(PMX1_46) = 0.0       1     regul_Grp3
+ eq_195          1.0 * log(PMX1_54) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp3
+ eq_196          1.0 * log(PMX1_55) - 1.0 * log(PMX1_56) = 0.0       1     regul_Grp3
+ eq_197          1.0 * log(PMX1_55) - 1.0 * log(PMX1_47) = 0.0       1     regul_Grp3
+ eq_198          1.0 * log(PMX1_56) - 1.0 * log(PMX1_48) = 0.0       1     regul_Grp3
 
