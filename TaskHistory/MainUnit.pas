@@ -53,6 +53,8 @@ type
     rdgReport: TRbwDataGrid4;
     btnGenerateReport: TButton;
     btnCopyReport: TButton;
+    tabAbout: TTabSheet;
+    memoAbout: TMemo;
     procedure seCategoryCountChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure seDayCountChange(Sender: TObject);
@@ -109,7 +111,7 @@ var
 implementation
 
 uses
-  Math;
+  Math, DisclaimerTextUnit;
 
 {$R *.dfm}
 
@@ -275,6 +277,7 @@ begin
   rdgCategories.Cells[1,0] := 'Display';
   rdgTaskHistory.Cells[0,0] := 'Date';
   PageControl1.ActivePageIndex := 0;
+  memoAbout.Lines.Add(DisclaimerString);
 end;
 
 procedure TfrmTaskHistory.seDayCountChange(Sender: TObject);

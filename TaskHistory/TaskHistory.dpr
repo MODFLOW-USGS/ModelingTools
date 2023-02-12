@@ -8,7 +8,8 @@ uses
   madListModules,
   Forms,
   MainUnit in 'MainUnit.pas' {frmTaskHistory},
-  TaskHistoryUnit in 'TaskHistoryUnit.pas';
+  TaskHistoryUnit in 'TaskHistoryUnit.pas',
+  DisclaimerTextUnit in '..\ModelMuse\DisclaimerTextUnit.pas';
 
 {$R *.res}
 

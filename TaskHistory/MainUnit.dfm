@@ -20,7 +20,7 @@ object frmTaskHistory: TfrmTaskHistory
     Top = 29
     Width = 643
     Height = 383
-    ActivePage = tabReport
+    ActivePage = tabAbout
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
@@ -651,6 +651,28 @@ object frmTaskHistory: TfrmTaskHistory
         ExplicitTop = 104
         ExplicitWidth = 320
         ExplicitHeight = 120
+      end
+    end
+    object tabAbout: TTabSheet
+      Caption = 'About'
+      ImageIndex = 5
+      object memoAbout: TMemo
+        Left = 0
+        Top = 0
+        Width = 635
+        Height = 349
+        Align = alClient
+        Lines.Strings = (
+          'Public Domain'
+          'by Richard B. Winston'
+          'rbwinst@usgs.gov'
+          '')
+        ReadOnly = True
+        TabOrder = 0
+        ExplicitLeft = 224
+        ExplicitTop = 128
+        ExplicitWidth = 185
+        ExplicitHeight = 89
       end
     end
   end
