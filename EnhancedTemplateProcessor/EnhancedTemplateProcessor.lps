@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units Count="6">
+      <Unit0>
+        <Filename Value="EnhancedTemplateProcessor.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="ProcessTemplateUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="705"/>
+        <CursorPos X="13" Y="724"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\Components\RbwParser\RbwParser.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="3998"/>
+        <CursorPos X="27" Y="4017"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\Mf2005ObsExtractor\simpletextwriter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SimpleTextWriter"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="25"/>
+        <CursorPos X="15" Y="44"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="..\ModelMuse\DisclaimerTextUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UsageCount Value="21"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="1014"/>
+        <CursorPos X="57" Y="1035"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit5>
+    </Units>
+    <JumpHistory Count="13" HistoryIndex="12">
+      <Position1>
+        <Filename Value="EnhancedTemplateProcessor.lpr"/>
+      </Position1>
+      <Position2>
+        <Filename Value="..\Components\RbwParser\RbwParser.pas"/>
+        <Caret Line="3090" Column="13" TopLine="3070"/>
+      </Position2>
+      <Position3>
+        <Filename Value="..\Components\RbwParser\RbwParser.pas"/>
+        <Caret Line="2611" Column="33" TopLine="2591"/>
+      </Position3>
+      <Position4>
+        <Filename Value="..\Components\RbwParser\RbwParser.pas"/>
+        <Caret Line="3090" Column="16" TopLine="3069"/>
+      </Position4>
+      <Position5>
+        <Filename Value="..\Components\RbwParser\RbwParser.pas"/>
+        <Caret Line="4017" Column="27" TopLine="3998"/>
+      </Position5>
+      <Position6>
+        <Filename Value="ProcessTemplateUnit.pas"/>
+        <Caret Line="180" Column="89" TopLine="161"/>
+      </Position6>
+      <Position7>
+        <Filename Value="..\Mf2005ObsExtractor\simpletextwriter.pas"/>
+        <Caret Line="43" Column="30" TopLine="24"/>
+      </Position7>
+      <Position8>
+        <Filename Value="..\Mf2005ObsExtractor\simpletextwriter.pas"/>
+        <Caret Line="40" Column="51" TopLine="24"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\Mf2005ObsExtractor\simpletextwriter.pas"/>
+        <Caret Line="51" Column="52" TopLine="24"/>
+      </Position9>
+      <Position10>
+        <Filename Value="..\Mf2005ObsExtractor\simpletextwriter.pas"/>
+        <Caret Line="56" Column="20" TopLine="24"/>
+      </Position10>
+      <Position11>
+        <Filename Value="ProcessTemplateUnit.pas"/>
+        <Caret Line="193" Column="24" TopLine="175"/>
+      </Position11>
+      <Position12>
+        <Filename Value="ProcessTemplateUnit.pas"/>
+        <Caret Line="194" Column="24" TopLine="175"/>
+      </Position12>
+      <Position13>
+        <Filename Value="ProcessTemplateUnit.pas"/>
+        <Caret Line="196" Column="29" TopLine="176"/>
+      </Position13>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
