@@ -61,6 +61,8 @@ type
     lblUZT: TLabel;
     lblLAK: TLabel;
     lblLKT: TLabel;
+    pnl1: TPanel;
+    spl1: TSplitter;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);

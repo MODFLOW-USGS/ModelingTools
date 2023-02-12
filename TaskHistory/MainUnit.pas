@@ -9,6 +9,8 @@ uses
   Buttons, ImgList, ToolWin, VclTee.TeeGDIPlus, System.ImageList;
 
 type
+  TReportColumns = (rcName, rcFractionalDays, rcTotalDays, rcFirstDate, rcLastDate);
+
   TfrmTaskHistory = class(TForm)
     PageControl1: TPageControl;
     tabSetup: TTabSheet;
@@ -46,6 +48,11 @@ type
     cbPartialDayEffort: TCheckBox;
     pnl2: TPanel;
     cbPartialDayEffort1Cumulative: TCheckBox;
+    tabReport: TTabSheet;
+    Panel2: TPanel;
+    rdgReport: TRbwDataGrid4;
+    btnGenerateReport: TButton;
+    btnCopyReport: TButton;
     procedure seCategoryCountChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure seDayCountChange(Sender: TObject);
@@ -74,6 +81,8 @@ type
     procedure rdgCategoriesEnter(Sender: TObject);
     procedure cbPartialDayEffortClick(Sender: TObject);
     procedure cbPartialDayEffort1CumulativeClick(Sender: TObject);
+    procedure btnGenerateReportClick(Sender: TObject);
+    procedure btnCopyReportClick(Sender: TObject);
   private
     FTaskHistory: TTaskHistory;
     FReadingFile: Boolean;
@@ -107,6 +116,65 @@ uses
 procedure TfrmTaskHistory.btnCopyClick(Sender: TObject);
 begin
   rdgTaskHistory.CopyAllCellsToClipboard;
+end;
+
+procedure TfrmTaskHistory.btnCopyReportClick(Sender: TObject);
+begin
+  rdgReport.CopyAllCellsToClipboard;
+end;
+
+procedure TfrmTaskHistory.btnGenerateReportClick(Sender: TObject);
+var
+  ClassIndex: Integer;
+  ClassItem: TClassificationItem;
+  TotalValue: Integer;
+  FractionalValue: double;
+  HistIndex: Integer;
+  HistItem: TDateHistoryItem;
+  FirstDate: TDate;
+  LastDate: TDate;
+begin
+  rdgReport.BeginUpdate;
+  try
+    rdgReport.Cells[Ord(rcName), 0] := 'Item Name';
+    rdgReport.Cells[Ord(rcFractionalDays), 0] := 'Fractional Days';
+    rdgReport.Cells[Ord(rcTotalDays), 0] := 'Total Days';
+    rdgReport.Cells[Ord(rcFirstDate), 0] := 'First Date';
+    rdgReport.Cells[Ord(rcLastDate), 0] := 'Last Date';
+    rdgReport.RowCount := FTaskHistory.Classification.Count + 1;
+
+    for ClassIndex := 0 to FTaskHistory.Classification.Count - 1 do
+    begin
+      ClassItem := FTaskHistory.Classification.Items[ClassIndex]
+        as TClassificationItem;
+      rdgReport.Cells[Ord(rcName), ClassIndex+1] := ClassItem.Name;
+
+      FirstDate := -1000;
+      LastDate := -1000;
+      TotalValue := 0;
+      FractionalValue := 0.;
+      for HistIndex := 0 to FTaskHistory.History.Count - 1 do
+      begin
+        HistItem := FTaskHistory.History.Items[HistIndex] as TDateHistoryItem;
+        if HistItem.Categories.IndexOf(ClassItem.Name) >= 0 then
+        begin
+          if FirstDate = -1000 then
+          begin
+            FirstDate := HistItem.Date;
+          end;
+          LastDate := HistItem.Date;
+          FractionalValue := FractionalValue + 1/HistItem.Categories.Count;
+          TotalValue := TotalValue + 1;
+        end;
+      end;
+      rdgReport.Cells[Ord(rcFractionalDays), ClassIndex+1] := Format('%f', [FractionalValue]);
+      rdgReport.Cells[Ord(rcTotalDays), ClassIndex+1] := Format('%d', [TotalValue]);
+      rdgReport.Cells[Ord(rcFirstDate), ClassIndex+1] := DateToStr(FirstDate);
+      rdgReport.Cells[Ord(rcLastDate), ClassIndex+1] := DateToStr(LastDate);
+    end;
+  finally
+    rdgReport.EndUpdate;
+  end;
 end;
 
 procedure TfrmTaskHistory.btnPasteClick(Sender: TObject);

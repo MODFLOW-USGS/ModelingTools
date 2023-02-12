@@ -20,12 +20,10 @@ object frmTaskHistory: TfrmTaskHistory
     Top = 29
     Width = 643
     Height = 383
-    ActivePage = tabCumEffort
+    ActivePage = tabReport
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
-    ExplicitWidth = 637
-    ExplicitHeight = 303
     object tabSetup: TTabSheet
       Caption = 'Setup'
       object lblStartDate: TLabel
@@ -118,7 +116,6 @@ object frmTaskHistory: TfrmTaskHistory
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 272
       end
       object dtpStartDate: TDateTimePicker
         Left = 3
@@ -216,7 +213,6 @@ object frmTaskHistory: TfrmTaskHistory
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 237
       end
       object Panel1: TPanel
         Left = 0
@@ -225,7 +221,6 @@ object frmTaskHistory: TfrmTaskHistory
         Height = 41
         Align = alBottom
         TabOrder = 1
-        ExplicitTop = 237
         object lblDayCount: TLabel
           Left = 0
           Top = 9
@@ -399,8 +394,6 @@ object frmTaskHistory: TfrmTaskHistory
         Align = alClient
         Color = clWindow
         TabOrder = 0
-        ExplicitTop = 72
-        ExplicitHeight = 206
         DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object serTotalEffort: TBarSeries
@@ -421,9 +414,6 @@ object frmTaskHistory: TfrmTaskHistory
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitLeft = 96
-        ExplicitTop = 40
-        ExplicitWidth = 185
         object cbPartialDayEffort: TCheckBox
           Left = 19
           Top = 8
@@ -460,9 +450,8 @@ object frmTaskHistory: TfrmTaskHistory
         OnGetAxisLabel = chartCumEffortGetAxisLabel
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = -3
-        ExplicitTop = 72
-        ExplicitHeight = 293
+        ExplicitWidth = 631
+        ExplicitHeight = 307
         DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
       end
@@ -473,8 +462,7 @@ object frmTaskHistory: TfrmTaskHistory
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitLeft = -24
-        ExplicitTop = -6
+        ExplicitWidth = 631
         object cbPartialDayEffort1Cumulative: TCheckBox
           Left = 19
           Top = 8
@@ -488,6 +476,183 @@ object frmTaskHistory: TfrmTaskHistory
         end
       end
     end
+    object tabReport: TTabSheet
+      Caption = 'Report'
+      ImageIndex = 4
+      object Panel2: TPanel
+        Left = 0
+        Top = 308
+        Width = 635
+        Height = 41
+        Align = alBottom
+        TabOrder = 0
+        ExplicitLeft = 240
+        ExplicitTop = 288
+        ExplicitWidth = 185
+        object btnGenerateReport: TButton
+          Left = 8
+          Top = 6
+          Width = 153
+          Height = 25
+          Caption = 'Generate Report'
+          TabOrder = 0
+          OnClick = btnGenerateReportClick
+        end
+        object btnCopyReport: TButton
+          Left = 176
+          Top = 6
+          Width = 225
+          Height = 25
+          Caption = 'Copy Report to Clipboard'
+          TabOrder = 1
+          OnClick = btnCopyReportClick
+        end
+      end
+      object rdgReport: TRbwDataGrid4
+        Left = 0
+        Top = 0
+        Width = 635
+        Height = 308
+        Align = alClient
+        FixedCols = 1
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+        TabOrder = 1
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
+        AutoDistributeText = False
+        AutoIncreaseColCount = False
+        AutoIncreaseRowCount = False
+        SelectedRowOrColumnColor = clAqua
+        UnselectableColor = clBtnFace
+        ColorRangeSelection = False
+        Columns = <
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end>
+        WordWrapRowCaptions = False
+        ExplicitLeft = 176
+        ExplicitTop = 104
+        ExplicitWidth = 320
+        ExplicitHeight = 120
+      end
+    end
   end
   object ToolBar: TToolBar
     Left = 0
@@ -497,7 +662,7 @@ object frmTaskHistory: TfrmTaskHistory
     Caption = 'ToolBar'
     Images = ImageList1
     TabOrder = 1
-    ExplicitWidth = 637
+    ExplicitWidth = 639
     object ToolButton1: TToolButton
       Left = 0
       Top = 0
@@ -522,7 +687,8 @@ object frmTaskHistory: TfrmTaskHistory
   end
   object MainMenu1: TMainMenu
     Images = ImageList1
-    Left = 256
+    Left = 216
+    Top = 104
     object File1: TMenuItem
       Caption = 'File'
       object Open1: TMenuItem

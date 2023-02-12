@@ -3,7 +3,7 @@
         <ProjectGuid>{FD44D5AC-43AD-4854-9DDC-BC499BB4B632}</ProjectGuid>
         <ProjectVersion>19.5</ProjectVersion>
         <MainSource>TaskHistory.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>

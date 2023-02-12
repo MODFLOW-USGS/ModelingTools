@@ -18,7 +18,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Top = 71
     Width = 590
     Height = 448
-    ActivePage = tabCalibration
+    ActivePage = tabUZF
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -349,50 +349,15 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabUZF: TTabSheet
       Caption = 'UZF'
       ImageIndex = 4
+      DesignSize = (
+        582
+        418)
       object lblDepthFraction: TLabel
         Left = 159
         Top = 331
         Width = 316
         Height = 15
         Caption = 'Fraction of cell height in water content observations (depth)'
-      end
-      object lblUZF: TLabel
-        Left = 3
-        Top = 9
-        Width = 21
-        Height = 15
-        Caption = 'UZF'
-      end
-      object lblUZT: TLabel
-        Left = 272
-        Top = 8
-        Width = 21
-        Height = 15
-        Caption = 'UZT'
-      end
-      object chklstUZF: TCheckListBox
-        Left = 3
-        Top = 35
-        Width = 262
-        Height = 262
-        ItemHeight = 15
-        Items.Strings = (
-          'Recharge to the aquifer from UZF (uzf-gwrch)'
-          'UZF Discharge to land surface (uzf-gwd)'
-          'UZF Discharge available to MVR package (uzf-gwd-to-mvr)'
-          'UZF groundwater evapotranspiration (uzf-gwet)'
-          'UZF specified infiltration rate (infiltration)'
-          'Inflow from MVR package to UZF (from-mvr)'
-          'UZF rejected infiltration (rej-inf)'
-          
-            'UZF rejected infiltration available to MVR package (rej-inf-to-m' +
-            'vr)'
-          'UZF unsaturated zone evapotranspiration (uzet)'
-          'UZF storage flow rate (storage)'
-          'Net UZF infiltration (net-infiltration)'
-          'UZF unsaturated zone water content (water-content)')
-        TabOrder = 0
-        OnClick = chklstUZFClick
       end
       object rdeDepthFraction: TRbwDataEntry
         Left = 8
@@ -401,7 +366,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Height = 22
         Color = clBtnFace
         Enabled = False
-        TabOrder = 1
+        TabOrder = 0
         Text = '0.5'
         DataType = dtReal
         Max = 1.000000000000000000
@@ -409,22 +374,96 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         CheckMin = True
         ChangeDisabledColor = True
       end
-      object chklstUZT: TCheckListBox
-        Left = 271
-        Top = 35
-        Width = 308
-        Height = 262
-        ItemHeight = 15
-        Items.Strings = (
-          'UZT_Concentration'
-          'UZT_Storage'
-          'UZT_FromMvr'
-          'UZT_Mass_Flow_Rate (UZT)'
-          'UZT_Infiltration'
-          'UZT_Rejected_Infiltration'
-          'UZT_ET'
-          'UZT_Rej_Infil_to_MVR')
-        TabOrder = 2
+      object pnl1: TPanel
+        Left = 2
+        Top = 3
+        Width = 577
+        Height = 310
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 1
+        object lblUZF: TLabel
+          Left = 3
+          Top = 9
+          Width = 21
+          Height = 15
+          Caption = 'UZF'
+        end
+        object lblUZT: TLabel
+          Left = 272
+          Top = 8
+          Width = 21
+          Height = 15
+          Caption = 'UZT'
+        end
+        object spl1: TSplitter
+          AlignWithMargins = True
+          Left = 263
+          Top = 31
+          Width = 5
+          Height = 278
+          Margins.Left = 0
+          Margins.Top = 30
+          Margins.Right = 0
+          Margins.Bottom = 0
+          ExplicitTop = 1
+          ExplicitHeight = 308
+        end
+        object chklstUZF: TCheckListBox
+          AlignWithMargins = True
+          Left = 1
+          Top = 31
+          Width = 262
+          Height = 275
+          Margins.Left = 0
+          Margins.Top = 30
+          Margins.Right = 0
+          Align = alLeft
+          ItemHeight = 15
+          Items.Strings = (
+            'Recharge to the aquifer from UZF (uzf-gwrch)'
+            'UZF Discharge to land surface (uzf-gwd)'
+            'UZF Discharge available to MVR package (uzf-gwd-to-mvr)'
+            'UZF groundwater evapotranspiration (uzf-gwet)'
+            'UZF specified infiltration rate (infiltration)'
+            'Inflow from MVR package to UZF (from-mvr)'
+            'UZF rejected infiltration (rej-inf)'
+            
+              'UZF rejected infiltration available to MVR package (rej-inf-to-m' +
+              'vr)'
+            'UZF unsaturated zone evapotranspiration (uzet)'
+            'UZF storage flow rate (storage)'
+            'Net UZF infiltration (net-infiltration)'
+            'UZF unsaturated zone water content (water-content)')
+          ScrollWidth = 400
+          TabOrder = 0
+          OnClick = chklstUZFClick
+        end
+        object chklstUZT: TCheckListBox
+          AlignWithMargins = True
+          Left = 268
+          Top = 31
+          Width = 308
+          Height = 278
+          Margins.Left = 0
+          Margins.Top = 30
+          Margins.Right = 0
+          Margins.Bottom = 0
+          Align = alClient
+          ItemHeight = 15
+          Items.Strings = (
+            'UZT_Concentration'
+            'UZT_Storage'
+            'UZT_FromMvr'
+            'UZT_Mass_Flow_Rate (UZT)'
+            'UZT_Infiltration'
+            'UZT_Rejected_Infiltration'
+            'UZT_ET'
+            'UZT_Rej_Infil_to_MVR')
+          TabOrder = 1
+          ExplicitLeft = 269
+          ExplicitTop = 35
+          ExplicitHeight = 262
+        end
       end
     end
     object tabCSUB: TTabSheet
@@ -550,6 +589,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           inherited frameObservations: TframeGrid
             Width = 578
             Height = 222
+            ExplicitTop = 17
             ExplicitWidth = 578
             ExplicitHeight = 222
             inherited Panel: TPanel
@@ -570,7 +610,9 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
                 ExplicitLeft = 517
               end
               inherited seNumber: TJvSpinEdit
+                Height = 23
                 OnChange = frameObservationsseNumberChange
+                ExplicitHeight = 23
               end
             end
             inherited Grid: TRbwDataGrid4
@@ -588,9 +630,12 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           ExplicitWidth = 582
           inherited frameObsComparisons: TframeGrid
             Width = 578
+            ExplicitTop = 17
             ExplicitWidth = 578
+            ExplicitHeight = 153
             inherited Panel: TPanel
               Width = 578
+              ExplicitTop = 118
               ExplicitWidth = 578
               inherited sbAdd: TSpeedButton
                 Left = 447
@@ -603,6 +648,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
               inherited sbDelete: TSpeedButton
                 Left = 517
                 ExplicitLeft = 517
+              end
+              inherited seNumber: TJvSpinEdit
+                Height = 23
+                ExplicitHeight = 23
               end
             end
             inherited Grid: TRbwDataGrid4
@@ -626,7 +675,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       Left = 6
       Top = 19
       Width = 278
-      Height = 21
+      Height = 23
       EditLabel.Width = 197
       EditLabel.Height = 15
       EditLabel.Caption = 'Observation location name (obsnam)'

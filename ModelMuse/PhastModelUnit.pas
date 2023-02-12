@@ -10879,15 +10879,14 @@ const
 //                modifying data sets with large number of layers.
 //               Bug fix: Fixed a bug that could cause a stack overflow when
 //                displaying data.
-
-//              Bug fix: ModelMuse does not include parameters in the model                 
-//               if they are not needed.
+//    '5.1.1.12' Bug fix: ModelMuse does not include parameters in the model
+//                if they are not needed.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.11';
+  IIModelVersion = '5.1.1.12';
 
 function IModelVersion: string;
 begin
