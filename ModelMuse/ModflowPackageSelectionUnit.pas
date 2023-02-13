@@ -26392,6 +26392,7 @@ end;
 
 destructor TFarmProcess4LandUse.Destroy;
 begin
+  FMfFmp4CropCoefficient.Free;
   FMfFmp4CropID.Free;
 
   FLandUseFraction.Free;

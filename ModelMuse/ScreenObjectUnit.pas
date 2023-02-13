@@ -6906,6 +6906,7 @@ begin
   ModflowFmpDirectRecharge := AScreenObject.ModflowFmpDirectRecharge;
   ModflowFmpPrecipPotConsumption := AScreenObject.ModflowFmpPrecipPotConsumption;
   ModflowFmp4NrdInfilLocationBoundary := AScreenObject.ModflowFmp4NrdInfilLocationBoundary;
+  ModflowFmp4CropCoefficient := AScreenObject.ModflowFmp4CropCoefficient;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9689,6 +9690,11 @@ begin
     if ModflowFmp4NrdInfilLocationBoundary <> nil then
     begin
       ModflowFmp4NrdInfilLocationBoundary.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4CropCoefficient <> nil then
+    begin
+      ModflowFmp4CropCoefficient.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
