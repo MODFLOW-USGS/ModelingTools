@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-15T10:27:25.070-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-02-13T17:17:20.347-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -28,6 +28,16 @@
           <para styleclass="Normal">If MULTIPLE_LAND_USE_PER_CELL is specified then then all ARRAY style input is <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW by NCOL</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; (each NROW by NCOL specifies the spatial input for each crop)</para>
           <para styleclass="Normal">One of these two keywords must be present within the Land_Use block. The keywords indicate if the FMP should simulate a single-land use per model cell or allow for more than one (multiple) land-use type per model cell.</para>
+          <para styleclass="Normal">See also:</para>
+          <para styleclass="Normal">LOCATION</para>
+          <para styleclass="Normal">LAND_USE_AREA_FRACTION</para>
+          <para styleclass="Normal">CROP_COEFFICIENT</para>
+          <para styleclass="Normal">CONSUMPTIVE_USE</para>
+          <para styleclass="Normal">ROOT_DEPTH</para>
+          <para styleclass="Normal">IRRIGATION</para>
+          <para styleclass="Normal">EVAPORATION_IRRIGATION_FRACTION</para>
+          <para styleclass="Normal">SURFACEWATER_LOSS_FRACTION_PRECIPITATION</para>
+          <para styleclass="Normal">ADDED_DEMAND</para>
         </td>
       </tr>
     </table></para>

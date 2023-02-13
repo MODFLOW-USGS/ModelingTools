@@ -30680,6 +30680,7 @@ object TTaskHistory
     item
       Date = 44970.000000000000000000
       Categories.Strings = (
-        'FMP')
+        'FMP'
+        'Documentation')
     end>
 end
