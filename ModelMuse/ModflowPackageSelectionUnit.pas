@@ -5316,6 +5316,7 @@ Type
     FSurfaceWaterPrints: TSurfaceWaterPrints;
     FSemiRoutedDeliveryUpperLimit: TFarmProperty;
     FNRDOption: TNRDOption;
+    FMfFmp4NrdInfilLocation: TModflowBoundaryDisplayTimeList;
     procedure SetNon_Routed_Delivery(const Value: TFarmProperty);
     procedure SetNrd_Infiltration_Location(const Value: TFarmProperty);
     procedure SetRebuild_Fully_Routed_Return(const Value: Boolean);
@@ -5329,6 +5330,12 @@ Type
     procedure SetSurfaceWaterPrints(const Value: TSurfaceWaterPrints);
     procedure SetSemiRoutedDeliveryUpperLimit(const Value: TFarmProperty);
     procedure SetNRDOption(const Value: TNRDOption);
+
+    function GetNrdInfilLocationBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeNrdInfilLocationDisplay(Sender: TObject);
+    procedure GetNrdInfilLocationUseList(Sender: TObject; NewUseList: TStringList);
+    procedure InvalidateNrdInfilLocation(Sender: TObject);
+
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5339,6 +5346,13 @@ Type
     property Semi_Routed_Delivery_Closure_Tolerance: double
       read GetSemi_Routed_Delivery_Closure_Tolerance
       write SetSemi_Routed_Delivery_Closure_Tolerance;
+
+    // NRD_INFILTRATION_LOCATION
+    function TransientNrdInfilLocationUsed (Sender: TObject): boolean;
+    function StaticNrdInfilLocationUsed (Sender: TObject): boolean;
+    property MfFmp4NrdInfilLocation: TModflowBoundaryDisplayTimeList
+      read FMfFmp4NrdInfilLocation;
+
   published
     // Surface Water
     // NON_ROUTED_DELIVERY
@@ -5486,6 +5500,7 @@ Type
     FLandUsePrints: TLandUsePrints;
     FConsumptiveUse: TFarmProperty;
     FMfFmp4CropID: TModflowBoundaryDisplayTimeList;
+    FMfFmp4CropCoefficient: TModflowBoundaryDisplayTimeList;
     procedure SetAddedDemand(const Value: TFarmProperty);
     procedure SetCropCoeff(const Value: TFarmProperty);
     procedure SetET_IrrigFracCorrection(const Value: TFarmProperty);
@@ -5515,6 +5530,13 @@ Type
     function GetCropIDBoundary(ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeFmp4CropIDDisplay(Sender: TObject);
     procedure GetMfFmp4CropIDUseList(Sender: TObject; NewUseList: TStringList);
+
+
+    function GetCropCoefficientBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeCropCoefficientDisplay(Sender: TObject);
+    procedure GetCropCoefficientUseList(Sender: TObject; NewUseList: TStringList);
+    procedure InvalidateCropCoefficient(Sender: TObject);
+
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5529,6 +5551,10 @@ Type
     property RelaxFracHeadChange: double read GetRelaxFracHeadChange
       write SetRelaxFracHeadChange;
     property MfFmp4CropID: TModflowBoundaryDisplayTimeList read FMfFmp4CropID;
+
+    function TransientCropCoefficientarrayUsed (Sender: TObject): boolean;
+    function StaticCropCoefficientArrayUsed (Sender: TObject): boolean;
+    property MfFmp4CropCoefficient: TModflowBoundaryDisplayTimeList read FMfFmp4CropCoefficient;
   published
     // LAND_USE
     // {SINGLE_LAND_USE_PER_CELL, or MULTIPLE_LAND_USE_PER_CELL}
@@ -25488,7 +25514,7 @@ begin
     FMfFmp4EvapRate.OnGetUseList := GetMfFmpEvapUseList;
     FMfFmp4EvapRate.OnTimeListUsed := TransientEvapUsed;
     FMfFmp4EvapRate.Name := StrFarmEvap;
-    if ReferenceET.FarmOption = foTransient then
+    if TransientEvapUsed(nil) then
     begin
       AddTimeList(FMfFmp4EvapRate);
     end;
@@ -25498,7 +25524,7 @@ begin
     FMfFmp4Precip.OnGetUseList := GetMfFmpPrecipUseList;
     FMfFmp4Precip.OnTimeListUsed := TransientPrecipUsed;
     FMfFmp4Precip.Name := StrFarmPrecip;
-    if FPrecipitation.FarmOption = foTransient then
+    if TransientPrecipUsed(nil) then
     begin
       AddTimeList(FMfFmp4Precip);
     end;
@@ -25508,7 +25534,7 @@ begin
     FMfFmp4EvapBare.OnGetUseList := GetBareEvapUseList;
     FMfFmp4EvapBare.OnTimeListUsed := TransientBareEvapUsed;
     FMfFmp4EvapBare.Name := StrPotentialEvaporatio;
-    if Potential_Evaporation_Bare.FarmOption = foTransient then
+    if TransientBareEvapUsed(nil) then
     begin
       AddTimeList(FMfFmp4EvapBare);
     end;
@@ -25518,7 +25544,7 @@ begin
     FMfFmp4DirectRecharge.OnGetUseList := GetDirectRechargeUseList;
     FMfFmp4DirectRecharge.OnTimeListUsed := TransientDirectRechargeUsed;
     FMfFmp4DirectRecharge.Name := 'Direct Recharge';
-    if Direct_Recharge.FarmOption = foTransient then
+    if TransientDirectRechargeUsed(nil) then
     begin
       AddTimeList(FMfFmp4DirectRecharge);
     end;
@@ -25996,14 +26022,31 @@ begin
   FSemiRoutedDeliveryUpperLimit := TFarmProperty.Create(InvalidateEvent);
   FNon_Routed_Delivery := TFarmProperty.Create(InvalidateEvent);
   FSemi_Routed_Delivery := TFarmProperty.Create(InvalidateEvent);
-//  FSemi_Routed_Delivery := TFarmProperty.Create(InvalidateEvent);
   FReturnChoice := TFarmProperty.Create(InvalidateEvent);
 
+  if Model <> nil then
+  begin
+    FMfFmp4NrdInfilLocation := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4NrdInfilLocation.OnInitialize := InitializeNrdInfilLocationDisplay;
+    FMfFmp4NrdInfilLocation.OnGetUseList := GetNrdInfilLocationUseList;
+    FMfFmp4NrdInfilLocation.OnTimeListUsed := TransientNrdInfilLocationUsed;
+    FMfFmp4NrdInfilLocation.Name := 'Non-Routed Delivery Infiltration Location';
+    if TransientNrdInfilLocationUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4NrdInfilLocation);
+    end;
+
+  end;
   InitializeVariables;
+
+  Nrd_Infiltration_Location.OnChangeFarmOption := InvalidateNrdInfilLocation;
+
 end;
 
 destructor TFarmProcess4SurfaceWater.Destroy;
 begin
+  FMfFmp4NrdInfilLocation.Free;
+
   FNrd_Infiltration_Location.Free;
   FSemiRoutedDeliveryLowerLimit.Free;
   FSemiRoutedDeliveryUpperLimit.Free;
@@ -26015,9 +26058,41 @@ begin
   inherited;
 end;
 
+function TFarmProcess4SurfaceWater.GetNrdInfilLocationBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4NrdInfilLocationBoundary;
+end;
+
+procedure TFarmProcess4SurfaceWater.GetNrdInfilLocationUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetNrdInfilLocationBoundary;
+  GetUseListOptions.Description := 'FMP Non-Routed Delivery Infiltration Location';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
 function TFarmProcess4SurfaceWater.GetSemi_Routed_Delivery_Closure_Tolerance: double;
 begin
   result := StoredSemi_Routed_Delivery_Closure_Tolerance.Value;
+end;
+
+procedure TFarmProcess4SurfaceWater.InitializeNrdInfilLocationDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := MfFmp4NrdInfilLocation;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateNrdInfilLocationDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
 end;
 
 procedure TFarmProcess4SurfaceWater.InitializeVariables;
@@ -26035,6 +26110,22 @@ begin
   FSurfaceWaterPrints := [];
   FRebuild_Fully_Routed_Return := False;
   FNRDOption := nrdoRate;
+end;
+
+procedure TFarmProcess4SurfaceWater.InvalidateNrdInfilLocation(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientNrdInfilLocationUsed(nil) then
+    begin
+      AddTimeList(MfFmp4NrdInfilLocation);
+    end
+    else
+    begin
+      RemoveTimeList(MfFmp4NrdInfilLocation);
+    end;
+  end;
+  InvalidateModel;
 end;
 
 procedure TFarmProcess4SurfaceWater.SetNon_Routed_Delivery(
@@ -26107,6 +26198,22 @@ begin
     FSurfaceWaterPrints := Value;
     InvalidateModel;
   end;
+end;
+
+function TFarmProcess4SurfaceWater.StaticNrdInfilLocationUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Nrd_Infiltration_Location.FarmOption = foStatic)
+    and (Nrd_Infiltration_Location.ExternalFileName = '');
+end;
+
+function TFarmProcess4SurfaceWater.TransientNrdInfilLocationUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Nrd_Infiltration_Location.FarmOption = foTransient)
+    and (Nrd_Infiltration_Location.ExternalFileName = '');
 end;
 
 { TFarmProcess4Wells }
@@ -26268,7 +26375,19 @@ begin
     begin
       AddTimeList(FMfFmp4CropID);
     end;
+
+    FMfFmp4CropCoefficient := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4CropCoefficient.OnInitialize := InitializeCropCoefficientDisplay;
+    FMfFmp4CropCoefficient.OnGetUseList := GetCropCoefficientUseList;
+    FMfFmp4CropCoefficient.OnTimeListUsed := TransientCropCoefficientarrayUsed;
+    FMfFmp4CropCoefficient.Name := 'Crop Coefficient';
+    if TransientCropCoefficientarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4CropCoefficient);
+    end;
   end;
+
+  CropCoeff.OnChangeFarmOption := InvalidateCropCoefficient;
 end;
 
 destructor TFarmProcess4LandUse.Destroy;
@@ -26295,6 +26414,22 @@ begin
   inherited;
 end;
 
+function TFarmProcess4LandUse.GetCropCoefficientBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4CropCoefficient;
+end;
+
+procedure TFarmProcess4LandUse.GetCropCoefficientUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetCropCoefficientBoundary;
+  GetUseListOptions.Description := 'FMP Crop Coefficients';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
 function TFarmProcess4LandUse.GetCropIDBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
@@ -26319,6 +26454,22 @@ end;
 function TFarmProcess4LandUse.GetRelaxFracHeadChange: double;
 begin
   result := StoredRelaxFracHeadChange.Value;
+end;
+
+procedure TFarmProcess4LandUse.InitializeCropCoefficientDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := MfFmp4CropCoefficient;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateCropCoefficentDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
 end;
 
 procedure TFarmProcess4LandUse.InitializeFmp4CropIDDisplay(Sender: TObject);
@@ -26359,6 +26510,22 @@ begin
   FNoCropUseMeansBareSoil.Initialize;
   FET_IrrigFracCorrection.Initialize;
   inherited;
+end;
+
+procedure TFarmProcess4LandUse.InvalidateCropCoefficient(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientCropCoefficientarrayUsed(nil) then
+    begin
+      AddTimeList(MfFmp4CropCoefficient);
+    end
+    else
+    begin
+      RemoveTimeList(MfFmp4CropCoefficient);
+    end;
+  end;
+  InvalidateModel;
 end;
 
 procedure TFarmProcess4LandUse.SetAddedDemand(const Value: TFarmProperty);
@@ -26498,6 +26665,22 @@ end;
 procedure TFarmProcess4LandUse.SetTranspirationFraction(const Value: TFarmProperty);
 begin
   FTranspirationFraction.Assign(Value);
+end;
+
+function TFarmProcess4LandUse.StaticCropCoefficientArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (CropCoeff.FarmOption = foStatic)
+    and (CropCoeff.ArrayList = alArray) ;
+end;
+
+function TFarmProcess4LandUse.TransientCropCoefficientarrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (CropCoeff.FarmOption = foTransient)
+    and (CropCoeff.ArrayList = alArray) ;
 end;
 
 function TFarmProcess4LandUse.TransientCropIDUsed(Sender: TObject): boolean;

@@ -1,0 +1,2 @@
+inherited frameScreenObjectFmp4NrdInfilLoc: TframeScreenObjectFmp4NrdInfilLoc
+end

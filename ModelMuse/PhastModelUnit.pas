@@ -574,6 +574,8 @@ const
   KPotential_Evap_Bare = 'Potential_Evap_Bare';
   KDirectRecharge = 'Direct_Recharge';
   KPrecipPotConsumption = 'Precip_Pot_Consumption';
+  KNRD_Infiltration_Location = 'NRD_Infiltration_Location';
+  KCropCoefficient = 'Crop_Coefficient';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2551,6 +2553,8 @@ that affects the model output should also have a comment. }
     function PotentialEvapBareUsed(Sender: TObject): Boolean;
     function DirectRechargeUsed(Sender: TObject): Boolean;
     function PrecipPotConsumptionUsed(Sender: TObject): Boolean;
+    function NrdInfilLocationUsed(Sender: TObject): Boolean;
+    function CropCoefficentUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2599,6 +2603,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean; virtual;
+    function FarmProcess4TransientNrdInfilLocIsSelected: Boolean; virtual;
+    function FarmProcess4TransientCropCoefficientIsSelected: Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3254,6 +3260,8 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4BareEvap(Sender: TObject);
     procedure InvalidateMfFmp4DirectRecharge(Sender: TObject);
     procedure InvalidateMfFmp4PrecipPotConsumption(Sender: TObject);
+    procedure InvalidateMfFmp4NrdInfilLocation(Sender: TObject);
+    procedure InvalidateMfFmp4CropCoefficient(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4783,6 +4791,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; override;
     function FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean; override;
     function FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean; override;
+    function FarmProcess4TransientNrdInfilLocIsSelected: Boolean; override;
+    function FarmProcess4TransientCropCoefficientIsSelected: Boolean; override;
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -6192,6 +6202,8 @@ resourcestring
   StrPotential_Evap_Bare = KPotential_Evap_Bare;
   StrDirectRecharge = KDirectRecharge;
   StrPrecipPotConsumption = KPrecipPotConsumption;
+  StrNRD_Infiltration_Location = KNRD_Infiltration_Location;
+  StrCropCoefficient = KCropCoefficient;
 
 
 const
@@ -23846,6 +23858,34 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientCropCoefficientIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientCropCoefficientIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientCropsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -24013,6 +24053,33 @@ end;
 function TPhastModel.FarmProcess4TransientFarmsUsed(Sender: TObject): boolean;
 begin
   result := FarmProcess4TransientFarmIsSelected;
+end;
+
+function TPhastModel.FarmProcess4TransientNrdInfilLocIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.FarmProcess4TransientNrdInfilLocIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientPrecipIsSelected: Boolean;
@@ -26544,6 +26611,11 @@ begin
   ModflowPackages.FarmProcess4.BareRunoffFractionDisplay.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfFmp4CropCoefficient(Sender: TObject);
+begin
+  ModflowPackages.FarmLandUse.MfFmp4CropCoefficient.Invalidate;
+end;
+
 procedure TCustomModel.InvalidateMfFmp4CropID(Sender: TObject);
 begin
   ModflowPackages.FarmLandUse.MfFmp4CropID.Invalidate;
@@ -26572,6 +26644,11 @@ end;
 procedure TCustomModel.InvalidateMfFmp4FarmID(Sender: TObject);
 begin
   ModflowPackages.FarmProcess4.FarmID.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4NrdInfilLocation(Sender: TObject);
+begin
+  ModflowPackages.FarmSurfaceWater4.MfFmp4NrdInfilLocation.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4Precip(Sender: TObject);
@@ -35494,6 +35571,7 @@ begin
   {$ENDIF}
 end;
 
+
 function TCustomModel.FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(
   Sender: TObject): Boolean;
 begin
@@ -35584,6 +35662,17 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientCropCoefficientIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientCropCoefficientarrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4TransientCropsUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
@@ -35634,6 +35723,17 @@ begin
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientNrdInfilLocIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmSurfaceWater4.TransientNrdInfilLocationUsed(nil);
   {$ELSE}
   result := False;
   {$ENDIF}
@@ -36715,6 +36815,17 @@ begin
   end;
 end;
 
+function TCustomModel.CropCoefficentUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.StaticCropCoefficientArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 procedure TCustomModel.CrossSectionChanged(Sender: TObject);
 begin
   if (csDestroying in ComponentState) or Clearing then
@@ -37545,7 +37656,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 13;
+  OWHM4DataSets  = 15;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -40530,7 +40641,36 @@ begin
     'MODFLOW-OWHM version 2, CLIMATE: PRECIPITATION_POTENTIAL_CONSUMPTION';
   Inc(Index);
 
-//  StrPrecipPotConsumption = KPrecipPotConsumption;
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtInteger;
+  FDataArrayCreationRecords[Index].Name := KNRD_Infiltration_Location;
+  FDataArrayCreationRecords[Index].DisplayName := StrNRD_Infiltration_Location;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.NrdInfilLocationUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, SURFACE_WATER: NRD_INFILTRATION_LOCATION';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KCropCoefficient;
+  FDataArrayCreationRecords[Index].DisplayName := StrCropCoefficient;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CropCoefficentUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE: CROP_COEFFICIENT';
+  Inc(Index);
+
+
+  //  StrCropCoefficient = KCropCoefficient;
 
   {$ENDIF}
 
@@ -42683,6 +42823,17 @@ function TCustomModel.NpfUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msModflow2015)
     and ModflowPackages.NpfPackage.IsSelected;
+end;
+
+function TCustomModel.NrdInfilLocationUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmSurfaceWater4.StaticNrdInfilLocationUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 function TCustomModel.NumberOfMt3dChemComponents: integer;

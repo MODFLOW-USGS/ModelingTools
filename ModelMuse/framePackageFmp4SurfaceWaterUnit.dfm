@@ -9,7 +9,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
     Top = 157
     Width = 422
     Height = 293
-    VertScrollBar.Position = 181
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -19,12 +18,12 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
     HeaderFont.Name = 'Segoe UI'
     HeaderFont.Style = []
     TabOrder = 1
-    object cpnlSalinityFlush: TCategoryPanel
-      Top = 63
+    object cpnlSurfaceWater: TCategoryPanel
+      Top = 244
       Height = 290
-      Caption = 'cpnlSalinityFlush'
+      Caption = 'Surface Water'
       TabOrder = 0
-      object rdgSalinityFlush: TRbwDataGrid4
+      object rdgSurfaceWater: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 399
@@ -36,7 +35,7 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
         RowCount = 7
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
-        OnSelectCell = rdgSalinityFlushSelectCell
+        OnSelectCell = rdgSurfaceWaterSelectCell
         ExtendedAutoDistributeText = False
         AutoMultiEdit = False
         AutoDistributeText = False
@@ -198,11 +197,10 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 232
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = -28
+      Top = 153
       Height = 91
       Caption = 'Options'
       Enabled = False
@@ -239,7 +237,7 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       end
     end
     object cpnlPrint: TCategoryPanel
-      Top = -181
+      Top = 0
       Height = 153
       Caption = 'Print'
       TabOrder = 2
@@ -250,6 +248,7 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
         Height = 127
         Align = alClient
         Enabled = False
+        ItemHeight = 15
         Items.Strings = (
           'PRINT SFR_DELIVERY'
           'PRINT SFR_DELIVERY_BY_WBS'
@@ -279,7 +278,7 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
         Control = cbRebuild_Fully_Routed_Return
       end
       item
-        Control = rdgSalinityFlush
+        Control = rdgSurfaceWater
       end>
   end
 end

@@ -791,7 +791,13 @@ uses
   ModflowFmp4DirectRechargeUnit in 'ModflowFmp4DirectRechargeUnit.pas',
   frameScreenObjectFmp4DirectRechargeUnit in 'frameScreenObjectFmp4DirectRechargeUnit.pas' {frameScreenObjectFmp4DirectRecharge: TFrame},
   ModflowFmp4PrecipPotConsumptionUnit in 'ModflowFmp4PrecipPotConsumptionUnit.pas',
-  frameScreenObjectFmp4PrecipPotConsumptionUnit in 'frameScreenObjectFmp4PrecipPotConsumptionUnit.pas' {frameScreenObjectFmp4PrecipPotConsumption: TFrame};
+  frameScreenObjectFmp4PrecipPotConsumptionUnit in 'frameScreenObjectFmp4PrecipPotConsumptionUnit.pas' {frameScreenObjectFmp4PrecipPotConsumption: TFrame},
+  ModflowFmp4NrdInfilLocationUnit in 'ModflowFmp4NrdInfilLocationUnit.pas',
+  frameScreenObjectFmp4NrdInfilLocUnit in 'frameScreenObjectFmp4NrdInfilLocUnit.pas' {frameScreenObjectFmp4NrdInfilLoc: TFrame},
+  ModflowFmp4IntBoundaryUnit in 'ModflowFmp4IntBoundaryUnit.pas',
+  frameScreenObjectCustomFmp4IntBoundaryUnit in 'frameScreenObjectCustomFmp4IntBoundaryUnit.pas' {frameScreenObjectCustomFmp4IntBoundary: TFrame},
+  ModflowFmp4CropCoefficientUnit in 'ModflowFmp4CropCoefficientUnit.pas',
+  frameScreenObjecFmp4CropCoefficientUnit in 'frameScreenObjecFmp4CropCoefficientUnit.pas' {frameScreenObjecFmp4CropCoefficient: TFrame};
 
 {$R *.res}
 

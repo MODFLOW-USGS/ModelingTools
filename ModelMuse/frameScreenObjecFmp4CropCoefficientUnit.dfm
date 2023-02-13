@@ -1,0 +1,2 @@
+inherited frameScreenObjecFmp4CropCoefficient: TframeScreenObjecFmp4CropCoefficient
+end

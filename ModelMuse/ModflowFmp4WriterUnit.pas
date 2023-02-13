@@ -15,7 +15,8 @@ type
     wlSemiRouteDeliv, wlSemiRouteReturn, wlCall, wlEfficiency,
     wlEfficiencyImprovement, wlBareRunoffFraction,
     wlBarePrecipitationConsumptionFraction, wlCapillaryFringe, wlSoilID,
-    wlSurfaceK, wlBareEvap, wlDirectRecharge, wlPrecipPotConsumption);
+    wlSurfaceK, wlBareEvap, wlDirectRecharge, wlPrecipPotConsumption,
+    wlNrdInfilLoc, wlCropCoefficient);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -54,6 +55,8 @@ type
     FFarmProcess4: TFarmProcess4;
     FClimatePackage: TFarmProcess4Climate;
     FLandUse: TFarmProcess4LandUse;
+    FSurfaceWater4: TFarmProcess4SurfaceWater;
+
     FACtiveSurfaceCells: array of array of boolean;
     FWriteLocation: TWriteLocation;
 
@@ -68,6 +71,8 @@ type
     FEvapBare: TList;
     FDirectRecharge: TList;
     FPrecipPotConsumption: TList;
+    FNrdInfilLocation: TList;
+    FCropCoefficient: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -88,6 +93,8 @@ type
     FEvapBareFileStream: TFileStream;
     FDirectRechargeFileStream: TFileStream;
     FPrecipPotConsumptionFileStream: TFileStream;
+    FNrdInfilLocationFileStream: TFileStream;
+    FCropcoefficientFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -135,6 +142,12 @@ type
     procedure EvaluatePrecipPotConsumption;
     procedure WritePrecipPotConsumption;
 
+    procedure EvaluateNrdInfilLocation;
+    procedure WriteNrdInfilLocation;
+
+    procedure EvaluateCropCoefficient;
+    procedure WriteCropCoefficient;
+
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
     procedure WriteSurfaceK;
@@ -143,6 +156,8 @@ type
     // wbs location
 //    procedure WriteDataSet26(TimeIndex: Integer);
     procedure CheckDataSetZeroOrPositive(IntegerArray: TDataArray;
+      const ErrorMessage: string);
+    procedure CheckDataSetZeroOrGETen(IntegerArray: TDataArray;
       const ErrorMessage: string);
     procedure CheckDataSetBetweenZeroAndOne(RealArray: TDataArray;
       const ErrorMessage: string);
@@ -198,6 +213,8 @@ type
     procedure UpdateEvapBareDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateDirectRechargeDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdatePrecipPotConsumptionDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateNrdInfilLocationDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateCropCoefficentDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -262,6 +279,41 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.CheckDataSetZeroOrGETen(IntegerArray: TDataArray;
+  const ErrorMessage: string);
+var
+  ColIndex: Integer;
+  RowIndex: Integer;
+  Value: Integer;
+begin
+  Assert(IntegerArray <> nil);
+  for RowIndex := 0 to Model.Grid.RowCount - 1 do
+  begin
+    for ColIndex := 0 to Model.Grid.ColumnCount - 1 do
+    begin
+      if FACtiveSurfaceCells[RowIndex, ColIndex] then
+      begin
+        if IntegerArray.IsValue[0, RowIndex, ColIndex] then
+        begin
+          if IntegerArray.DataType = rdtInteger then
+          begin
+            Value := IntegerArray.IntegerData[0, RowIndex, ColIndex];
+            if not ((Value = 0) or (Value >= 10)) then
+            begin
+              frmErrorsAndWarnings.AddError(Model, ErrorMessage,
+                Format(StrRow0dColumn, [RowIndex + 1, ColIndex + 1]));
+            end;
+          end
+          else
+          begin
+            Assert(False);
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
 procedure TModflowFmp4Writer.CheckDataSetZeroOrPositive(IntegerArray: TDataArray;
   const ErrorMessage: string);
 var
@@ -314,17 +366,22 @@ begin
   FEvapBare := TObjectList.Create;
   FDirectRecharge := TObjectList.Create;
   FPrecipPotConsumption := TObjectList.Create;
+  FNrdInfilLocation := TObjectList.Create;
+  FCropCoefficient := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
   FLandUse := Model.ModflowPackages.FarmLandUse;
   FSoil4 := Model.ModflowPackages.FarmSoil4;
+  FSurfaceWater4 := Model.ModflowPackages.FarmSurfaceWater4;
 end;
 
 destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
 
+  FCropCoefficient.Free;
+  FNrdInfilLocation.Free;
   FPrecipPotConsumption.Free;
   FDirectRecharge.Free;
   FEvapBare.Free;
@@ -380,6 +437,8 @@ begin
   EvaluateBareEvap;
   EvaluateDirectRecharge;
   EvaluatePrecipPotConsumption;
+  EvaluateNrdInfilLocation;
+  EvaluateCropCoefficient;
 end;
 
 procedure TModflowFmp4Writer.EvaluateBareEvap;
@@ -406,6 +465,15 @@ begin
   begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidBareRunoff);
     EvaluateTransientArrayData(wlBareRunoffFraction);
+  end;
+end;
+
+procedure TModflowFmp4Writer.EvaluateCropCoefficient;
+begin
+  if FLandUse.TransientCropCoefficientarrayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Crop Coefficient value');
+    EvaluateTransientArrayData(wlCropCoefficient);
   end;
 end;
 
@@ -449,10 +517,19 @@ end;
 
 procedure TModflowFmp4Writer.EvaluateFarmID;
 begin
-  if FFarmProcess4.Farms.FarmOption = foTransient then
+  if FFarmProcess4.TransientFarmIdUsed(nil) then
   begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFarmID);
     EvaluateTransientArrayData(wlFID);
+  end;
+end;
+
+procedure TModflowFmp4Writer.EvaluateNrdInfilLocation;
+begin
+  if FSurfaceWater4.TransientNrdInfilLocationUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Non-Routed Delivery Infiltration Location in Farm Process');
+    EvaluateTransientArrayData(wlNrdInfilLoc);
   end;
 end;
 
@@ -503,6 +580,8 @@ begin
   FreeAndNil(FEvapBareFileStream);
   FreeAndNil(FDirectRechargeFileStream);
   FreeAndNil(FPrecipPotConsumptionFileStream);
+  FreeAndNil(FNrdInfilLocationFileStream);
+  FreeAndNil(FCropcoefficientFileStream);
 
 end;
 
@@ -680,6 +759,24 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlNrdInfilLoc:
+      begin
+        result := ChangeFileExt(FBaseName, '.NRD_INFILTRATION_LOCATION');
+        if FNrdInfilLocationFileStream = nil then
+        begin
+          FNrdInfilLocationFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlCropCoefficient:
+      begin
+        result := ChangeFileExt(FBaseName, '.CROP_COEFFICIENT');
+        if FCropcoefficientFileStream = nil then
+        begin
+          FCropcoefficientFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -717,6 +814,8 @@ begin
     wlBareEvap: result := ScreenObject.ModflowFmpBareEvap;
     wlDirectRecharge: result := ScreenObject.ModflowFmpDirectRecharge;
     wlPrecipPotConsumption: result := ScreenObject.ModflowFmpPrecipPotConsumption;
+    wlNrdInfilLoc: result := ScreenObject.ModflowFmp4NrdInfilLocationBoundary;
+    wlCropCoefficient: result := ScreenObject.ModflowFmp4CropCoefficient;
     else Assert(False);
   end;
 end;
@@ -753,6 +852,8 @@ begin
     wlBareEvap: result := FEvapBare;
     wlDirectRecharge: result := FDirectRecharge;
     wlPrecipPotConsumption: result := FPrecipPotConsumption;
+    wlNrdInfilLoc: result := FNrdInfilLocation;
+    wlCropCoefficient: result := FCropCoefficient;
     else Assert(False)
   end;
 end;
@@ -810,6 +911,20 @@ end;
 function TModflowFmp4Writer.TransientCropUsed(Sender: TObject): Boolean;
 begin
   result := FLandUse.CropLocation = rstTransient;
+end;
+
+procedure TModflowFmp4Writer.UpdateCropCoefficentDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateCropCoefficient;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientCropCoefficientarrayUsed;
+  UpdateRequirements.WriteLocation := wlCropCoefficient;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+
 end;
 
 procedure TModflowFmp4Writer.UpdateCropIDDisplay(
@@ -954,6 +1069,19 @@ begin
   UpdateRequirements.TransientDataUsed := (Package as TFarmProcess4).
     TransientFarmIdUsed;
   UpdateRequirements.WriteLocation := wlFID;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateNrdInfilLocationDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateNrdInfilLocation;
+  UpdateRequirements.TransientDataUsed := FSurfaceWater4.
+    TransientNrdInfilLocationUsed;
+  UpdateRequirements.WriteLocation := wlNrdInfilLoc;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
 end;
@@ -1347,7 +1475,7 @@ begin
           FWriteLocation := OldLocation
         end;
       end;
-    wlCID, wlFID, wlSoilID:
+    wlCID, wlFID, wlSoilID, wlNrdInfilLoc:
       begin
         inherited;
       end
@@ -1362,6 +1490,43 @@ procedure TModflowFmp4Writer.WriteConstantU2DREL(const Comment: string;
 begin
   inherited;
 
+end;
+
+procedure TModflowFmp4Writer.WriteCropCoefficient;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FLandUse.CropCoeff.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlCropCoefficient);
+
+  if (FLandUse.CropCoeff.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlCropCoefficient;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP LAND_USE: CROP_COEFFICIENT';
+    RequiredValues.ErrorID := 'FMP LAND_USE: CROP_COEFFICIENT';
+    RequiredValues.ID := 'CROP_COEFFICIENT';
+    RequiredValues.StaticDataName := KCropCoefficient;
+    RequiredValues.WriteTransientData :=
+      (FLandUse.CropCoeff.FarmOption = foTransient);
+    RequiredValues.CheckError :=  'Invalid Crop Coefficient value';
+    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FLandUse.CropCoeff;
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+    Assert(False);
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteDirectRecharge;
@@ -1501,6 +1666,43 @@ begin
   RequiredValues.FarmProperty := nil;
 
   WriteFmpArrayData(AFileName, RequiredValues);
+end;
+
+procedure TModflowFmp4Writer.WriteNrdInfilLocation;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FSurfaceWater4.Nrd_Infiltration_Location.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlNrdInfilLoc);
+
+  if (FSurfaceWater4.Nrd_Infiltration_Location.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlNrdInfilLoc;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtInteger;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION';
+    RequiredValues.ErrorID := 'FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION';
+    RequiredValues.ID := 'NRD_INFILTRATION_LOCATION';
+    RequiredValues.StaticDataName := KNRD_Infiltration_Location;
+    RequiredValues.WriteTransientData :=
+      (FSurfaceWater4.Nrd_Infiltration_Location.FarmOption = foTransient);
+    RequiredValues.CheckError :=  'Invalid Non-Routed Delivery Infiltration Location value';
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrGETen;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FSurfaceWater4.Nrd_Infiltration_Location;
+
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+    Assert(False);
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteTransientFmpArrayData(RequiredValues: TRequiredValues);
@@ -1701,6 +1903,7 @@ begin
     NewLine;
 
     WriteLandUseLocation;
+    WriteCropCoefficient;
 
     // remove this.
     WriteString('  ROOT_DEPTH STATIC CONSTANT 0.00001');
@@ -2052,6 +2255,16 @@ begin
           Assert(FPrecipPotConsumptionFileStream <> nil);
           FPrecipPotConsumptionFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlNrdInfilLoc:
+        begin
+          Assert(FNrdInfilLocationFileStream <> nil);
+          FNrdInfilLocationFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlCropCoefficient:
+        begin
+          Assert(FCropcoefficientFileStream <> nil);
+          FCropcoefficientFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -2101,7 +2314,17 @@ end;
 
 procedure TModflowFmp4Writer.WriteSurfaceWater;
 begin
+  if FSurfaceWater4.IsSelected then
+  begin
+    WriteString('BEGIN SURFACE_WATER');
+    NewLine;
 
+    WriteNrdInfilLocation;
+
+    WriteString('END SURFACE_WATER');
+    NewLine;
+    NewLine;
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteSurfaceWaterIrrigation;
