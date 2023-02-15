@@ -35,8 +35,8 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       object lblSegmentNumber: TLabel
         Left = 134
         Top = 17
-        Width = 81
-        Height = 13
+        Width = 92
+        Height = 15
         Caption = 'Segment number'
       end
       object rdgFormulas: TRbwDataGrid4
@@ -140,7 +140,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 0
         Top = 0
         Width = 539
-        Height = 173
+        Height = 171
         Align = alClient
         TabOrder = 0
         ExplicitHeight = 166
@@ -155,8 +155,8 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           object lblFormula: TLabel
             Left = 136
             Top = 5
-            Width = 38
-            Height = 13
+            Width = 44
+            Height = 15
             Alignment = taCenter
             Caption = 'Formula'
           end
@@ -178,7 +178,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           Left = 1
           Top = 51
           Width = 537
-          Height = 121
+          Height = 119
           Align = alClient
           ColCount = 3
           FixedCols = 0
@@ -275,12 +275,11 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitHeight = 119
         end
       end
       object pnlBottom: TPanel
         Left = 0
-        Top = 173
+        Top = 171
         Width = 539
         Height = 46
         Align = alBottom
@@ -293,8 +292,8 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         object lblNumTimes: TLabel
           Left = 64
           Top = 15
-          Width = 78
-          Height = 13
+          Width = 90
+          Height = 15
           Caption = 'Number of times'
         end
         object seNumberOfTimes: TJvSpinEdit
@@ -374,13 +373,13 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 0
         Top = 0
         Width = 539
-        Height = 219
+        Height = 217
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 539
         ExplicitHeight = 212
         inherited Panel: TPanel
-          Top = 178
+          Top = 176
           Width = 539
           ExplicitTop = 171
           ExplicitWidth = 539
@@ -404,7 +403,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         end
         inherited Grid: TRbwDataGrid4
           Width = 539
-          Height = 178
+          Height = 176
           OnSetEditText = frmgrdDownstreamSegmentsGridSetEditText
           Columns = <
             item
@@ -443,13 +442,13 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 0
         Top = 0
         Width = 539
-        Height = 219
+        Height = 217
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 539
         ExplicitHeight = 212
         inherited Panel: TPanel
-          Top = 178
+          Top = 176
           Width = 539
           ExplicitTop = 171
           ExplicitWidth = 539
@@ -473,7 +472,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         end
         inherited Grid: TRbwDataGrid4
           Width = 539
-          Height = 178
+          Height = 176
           ColCount = 2
           OnSetEditText = frmgrdDiversionsGridSetEditText
           Columns = <
@@ -545,7 +544,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 121
         Top = 0
         Width = 5
-        Height = 219
+        Height = 217
         ExplicitLeft = 8
         ExplicitHeight = 212
       end
@@ -553,7 +552,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 0
         Top = 0
         Width = 121
-        Height = 219
+        Height = 217
         PageDefault = 0
         PageList = jplGwt
         Align = alLeft
@@ -566,9 +565,10 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 126
         Top = 0
         Width = 413
-        Height = 219
+        Height = 217
         PropagateEnable = False
         Align = alClient
+        ExplicitHeight = 219
       end
     end
   end

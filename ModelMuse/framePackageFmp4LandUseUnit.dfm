@@ -13,7 +13,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     Top = 111
     Width = 422
     Height = 405
-    VertScrollBar.Position = 281
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -24,10 +23,11 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlDataSets: TCategoryPanel
-      Top = 63
+      Top = 344
       Height = 338
       Caption = 'Land Use Data Sets'
       TabOrder = 0
+      ExplicitWidth = 418
       object rdgLandUse: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -198,39 +198,41 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 395
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = -52
+      Top = 229
       Height = 115
       Caption = 'Land Use Options'
       TabOrder = 1
+      ExplicitWidth = 418
       object lblLandUsePerCell: TLabel
         Left = 168
         Top = 11
-        Width = 80
-        Height = 13
+        Width = 88
+        Height = 15
         Caption = 'Land use per cell'
       end
       object lblMinimumBareFraction: TLabel
         Left = 167
         Top = 35
-        Width = 105
-        Height = 13
+        Width = 123
+        Height = 15
         Caption = 'Minimum bare fraction'
       end
       object lblRelaxFracHeadChange: TLabel
         Left = 167
         Top = 63
-        Width = 165
-        Height = 13
+        Width = 178
+        Height = 15
         Caption = 'Relaxation factor for head change'
       end
       object comboLandUsePerCell: TComboBox
         Left = 13
         Top = 3
         Width = 145
-        Height = 21
+        Height = 23
         Enabled = False
         ItemIndex = 0
         TabOrder = 0
@@ -269,10 +271,11 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
     end
     object cpnlPrint: TCategoryPanel
-      Top = -281
+      Top = 0
       Height = 229
       Caption = 'Print'
       TabOrder = 2
+      ExplicitWidth = 418
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
@@ -280,7 +283,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
         Height = 162
         Align = alClient
         Enabled = False
-        ItemHeight = 13
+        ItemHeight = 15
         Items.Strings = (
           'PRINT BYWBS'
           'PRINT BYWBS_BYCROP'
@@ -302,15 +305,15 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
         object lblSpecifyCrops: TLabel
           Left = 164
           Top = 8
-          Width = 102
-          Height = 13
+          Width = 112
+          Height = 15
           Caption = 'Specify crops to print'
         end
         object comboSpecifyCrops: TComboBox
           Left = 13
           Top = 6
           Width = 145
-          Height = 21
+          Height = 23
           Style = csDropDownList
           Enabled = False
           ItemIndex = 0

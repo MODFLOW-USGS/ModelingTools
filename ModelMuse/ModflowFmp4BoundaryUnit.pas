@@ -40,7 +40,7 @@ type
     property Fmp4Array: TFmp4Array read GetFmp4Array;
   end;
 
-  // @name represents a MODFLOW reference evapotranspiration in the Farm Process
+  // @name represents a value in the Farm Process
   // for one time interval.
   // @name is stored by @link(TFmp4Collection).
   TFmp4Item = class(TCustomModflowBoundaryItem)
@@ -74,7 +74,7 @@ type
 
   TFmp4TimeListLink = class(TTimeListsModelLink)
   private
-    // @name is used to compute the recharge rates for a series of
+    // @name is used to compute the values for a series of
     // cells over a series of time intervals.
     FFmp4ValueData: TModflowTimeList;
   protected
@@ -90,7 +90,7 @@ type
 
   TFmp4TimeListLinkClass = class of TFmp4TimeListLink;
 
-  // @name represents MODFLOW Farm Process reference evapotranspiration boundaries
+  // @name represents MODFLOW Farm Process values
   // for a series of time intervals.
   TFmp4Collection = class(TCustomMF_ArrayBoundColl)
   private
@@ -157,8 +157,7 @@ type
   end;
 
 
-  // @name represents the MODFLOW Farm Process reference evapotranspiration
-  // boundaries associated with
+  // @name represents the MODFLOW Farm Process values associated with
   // a single @link(TScreenObject).
   //
   // @seealso(TFmp4Collection)

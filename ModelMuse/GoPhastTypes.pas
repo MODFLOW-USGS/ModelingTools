@@ -313,6 +313,25 @@ type
     Property SpeciesCount: Integer read FSpeciesCount write SetSpeciesCount;
   end;
 
+  // @name is used in FMP4
+  TLandUseData = record
+  private
+    FLandUseCount: Integer;
+    procedure SetLandUseCount(const Value: Integer);
+  public
+    Values: array of double;
+    ValueAnnotations: array of string;
+    ValuePestNames: array of string;
+    ValuePestSeriesNames: array of string;
+    ValuePestSeriesMethods: array of TPestParamMethod;
+    ValueTimeSeriesNames: array of string;
+    procedure Assign(const Item: TLandUseData);
+    procedure Cache(Comp: TCompressionStream; Strings: TStringList);
+    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+    procedure RecordStrings(Strings: TStringList);
+    Property LandUseCount: Integer read FLandUseCount write SetLandUseCount;
+  end;
+
 
 const
   ModflowSelection = [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
@@ -2552,6 +2571,127 @@ begin
 end;
 
 
+
+{ TLandUseData }
+
+procedure TLandUseData.Assign(const Item: TLandUseData);
+begin
+  self := Item;
+  SetLength(Values, Length(Values));
+  SetLength(ValueAnnotations, Length(ValueAnnotations));
+  SetLength(ValuePestNames, Length(ValuePestNames));
+  SetLength(ValuePestSeriesNames, Length(ValuePestSeriesNames));
+  SetLength(ValuePestSeriesMethods, Length(ValuePestSeriesMethods));
+  SetLength(ValueTimeSeriesNames, Length(ValueTimeSeriesNames));
+end;
+
+procedure TLandUseData.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  Index: Integer;
+  Count: Integer;
+begin
+  Count := Length(Values);
+  WriteCompInt(Comp, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompReal(Comp, Values[Index]);
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ValueAnnotations[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ValuePestNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ValuePestSeriesNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Ord(ValuePestSeriesMethods[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ValueTimeSeriesNames[Index]));
+  end;
+end;
+
+procedure TLandUseData.RecordStrings(Strings: TStringList);
+var
+  Index: Integer;
+begin
+  for Index := 0 to Length(ValueAnnotations) - 1 do
+  begin
+    Strings.Add(ValueAnnotations[Index]);
+  end;
+  for Index := 0 to Length(ValuePestNames) - 1 do
+  begin
+    Strings.Add(ValuePestNames[Index]);
+  end;
+  for Index := 0 to Length(ValuePestSeriesNames) - 1 do
+  begin
+    Strings.Add(ValuePestSeriesNames[Index]);
+  end;
+  for Index := 0 to Length(ValueTimeSeriesNames) - 1 do
+  begin
+    Strings.Add(ValueTimeSeriesNames[Index]);
+  end;
+end;
+
+procedure TLandUseData.Restore(Decomp: TDecompressionStream;
+  Annotations: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
+begin
+  Count := ReadCompInt(Decomp);
+  SetLength(Values, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    Values[Index] := ReadCompReal(Decomp);
+  end;
+  SetLength(ValueAnnotations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ValueAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ValuePestNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ValuePestNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ValuePestSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ValuePestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ValuePestSeriesMethods, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ValuePestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
+  end;
+  SetLength(ValueTimeSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ValueTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+end;
+
+procedure TLandUseData.SetLandUseCount(const Value: Integer);
+begin
+  if FLandUseCount <> Value then
+  begin
+    FLandUseCount := Value;
+    SetLength(Values, FLandUseCount);
+    SetLength(ValueAnnotations, FLandUseCount);
+    SetLength(ValuePestNames, FLandUseCount);
+    SetLength(ValuePestSeriesNames, FLandUseCount);
+    SetLength(ValuePestSeriesMethods, FLandUseCount);
+    SetLength(ValueTimeSeriesNames, FLandUseCount);
+  end;
+end;
 
 initialization
   InitializeStatTypeLabels;

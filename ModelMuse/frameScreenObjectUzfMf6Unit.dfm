@@ -537,8 +537,6 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Indent = 19
         TabOrder = 0
         Items.Links = {00000000}
-        ExplicitLeft = 8
-        ExplicitHeight = 177
       end
       object jplGwt: TJvPageList
         Left = 126

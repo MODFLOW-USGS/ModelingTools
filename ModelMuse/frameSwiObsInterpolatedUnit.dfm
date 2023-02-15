@@ -29,9 +29,9 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
       ExplicitTop = 94
       ExplicitWidth = 568
       inherited lbNumber: TLabel
-        Width = 138
+        Width = 155
         Caption = 'Number of observation times'
-        ExplicitWidth = 138
+        ExplicitWidth = 155
       end
       inherited sbAdd: TSpeedButton
         Left = 297
@@ -217,28 +217,28 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
     object lblZetaSurfaceNumber: TLabel
       Left = 0
       Top = 6
-      Width = 100
-      Height = 13
+      Width = 109
+      Height = 15
       Caption = 'Zeta surface number'
     end
     object lblTreatment: TLabel
       Left = 200
       Top = 6
-      Width = 50
-      Height = 13
+      Width = 53
+      Height = 15
       Caption = 'Treatment'
     end
     object comboMultiStatFlag: TJvImageComboBox
       Left = 91
       Top = 51
       Width = 89
-      Height = 23
+      Height = 25
       Style = csOwnerDrawVariable
       ButtonStyle = fsLighter
       DroppedWidth = 145
       ImageHeight = 0
       ImageWidth = 0
-      ItemHeight = 17
+      ItemHeight = 19
       ItemIndex = -1
       TabOrder = 2
       OnChange = comboMultiStatFlagChange
@@ -289,7 +289,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
       Left = 200
       Top = 25
       Width = 145
-      Height = 21
+      Height = 23
       Style = csDropDownList
       ItemIndex = 0
       TabOrder = 1

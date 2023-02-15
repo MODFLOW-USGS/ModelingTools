@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-02-13T17:17:20.347-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-02-15T07:54:27.383-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -33,8 +33,8 @@
           <para styleclass="Normal">LAND_USE_AREA_FRACTION</para>
           <para styleclass="Normal">CROP_COEFFICIENT</para>
           <para styleclass="Normal">CONSUMPTIVE_USE</para>
-          <para styleclass="Normal">ROOT_DEPTH</para>
           <para styleclass="Normal">IRRIGATION</para>
+          <para styleclass="Normal">ROOT_DEPTH</para>
           <para styleclass="Normal">EVAPORATION_IRRIGATION_FRACTION</para>
           <para styleclass="Normal">SURFACEWATER_LOSS_FRACTION_PRECIPITATION</para>
           <para styleclass="Normal">ADDED_DEMAND</para>

@@ -4,9 +4,8 @@ inherited frmCropProperties: TfrmCropProperties
   Caption = 'Farm Crop Properties'
   ClientHeight = 522
   ClientWidth = 683
-  ExplicitWidth = 699
-  ExplicitHeight = 561
-  PixelsPerInch = 96
+  ExplicitWidth = 695
+  ExplicitHeight = 560
   TextHeight = 18
   object splitterMain: TJvNetscapeSplitter
     Left = 225
@@ -35,6 +34,7 @@ inherited frmCropProperties: TfrmCropProperties
     OnChange = jvpltvMainChange
     OnCustomDrawItem = jvpltvMainCustomDrawItem
     Items.Links = {00000000}
+    ExplicitHeight = 477
   end
   object jplMain: TJvPageList
     Left = 235
@@ -45,6 +45,8 @@ inherited frmCropProperties: TfrmCropProperties
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
+    ExplicitWidth = 444
+    ExplicitHeight = 477
     object jvspCropName: TJvStandardPage
       Left = 0
       Top = 0
@@ -53,6 +55,8 @@ inherited frmCropProperties: TfrmCropProperties
       HelpType = htKeyword
       HelpKeyword = 'Crops_Pane'
       Caption = 'jvspCropName'
+      ExplicitWidth = 444
+      ExplicitHeight = 477
       inline frameCropName: TframeFormulaGrid
         Left = 0
         Top = 0
@@ -60,13 +64,13 @@ inherited frmCropProperties: TfrmCropProperties
         Height = 478
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 448
-        ExplicitHeight = 478
+        ExplicitWidth = 444
+        ExplicitHeight = 477
         inherited Panel: TPanel
           Top = 437
           Width = 448
-          ExplicitTop = 437
-          ExplicitWidth = 448
+          ExplicitTop = 436
+          ExplicitWidth = 444
           inherited lbNumber: TLabel
             Top = 6
             Width = 115
@@ -103,18 +107,18 @@ inherited frmCropProperties: TfrmCropProperties
           OnSetEditText = frameCropNameGridSetEditText
           OnBeforeDrawCell = frameCropNameGridBeforeDrawCell
           OnButtonClick = GridButtonClick
-          ExplicitWidth = 448
-          ExplicitHeight = 380
+          ExplicitWidth = 444
+          ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
           Width = 448
-          ExplicitWidth = 448
+          ExplicitWidth = 444
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
             EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 9
-            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 18
             ExplicitHeight = 26
           end
@@ -182,8 +186,8 @@ inherited frmCropProperties: TfrmCropProperties
             Height = 26
             EditLabel.Width = 57
             EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 9
-            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 18
             ExplicitHeight = 26
           end
@@ -251,8 +255,8 @@ inherited frmCropProperties: TfrmCropProperties
             Height = 26
             EditLabel.Width = 57
             EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 9
-            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 18
             ExplicitHeight = 26
           end
@@ -320,8 +324,8 @@ inherited frmCropProperties: TfrmCropProperties
             Height = 26
             EditLabel.Width = 57
             EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 9
-            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 18
             ExplicitHeight = 26
           end
@@ -389,8 +393,8 @@ inherited frmCropProperties: TfrmCropProperties
             Height = 26
             EditLabel.Width = 57
             EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 9
-            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 18
             ExplicitHeight = 26
           end
@@ -459,8 +463,8 @@ inherited frmCropProperties: TfrmCropProperties
             Height = 26
             EditLabel.Width = 57
             EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 9
-            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 18
             ExplicitHeight = 26
           end
@@ -476,6 +480,8 @@ inherited frmCropProperties: TfrmCropProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 477
+    ExplicitWidth = 679
     object btnCancel: TBitBtn
       Left = 502
       Top = 6

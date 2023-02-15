@@ -635,6 +635,7 @@ type
     property Value: string read GetValue write SetValue;
   end;
 
+  // @name is used in groundwater transport in MODFLOW 6
   TGwtConcStringValueItem = class(TCustomStringValueItem)
     constructor Create(Collection: TCollection); override;
   end;
@@ -649,6 +650,7 @@ type
       AScreenObject: TObject; ParentCollection: TCustomNonSpatialBoundColl);
   end;
 
+  // @name is used in groundwater transport in MODFLOW 6
   TGwtConcStringCollection = class(TCustomStringCollection)
   private
     FUsedForPestSeries: Boolean;
@@ -656,7 +658,8 @@ type
     procedure SetItems(Index: Integer; const Value: TGwtConcStringValueItem);
     procedure SetUsedForPestSeries(const Value: Boolean);
   public
-    property UsedForPestSeries: Boolean read FUsedForPestSeries write SetUsedForPestSeries;
+    property UsedForPestSeries: Boolean read FUsedForPestSeries
+      write SetUsedForPestSeries;
     constructor Create(Model: TBaseModel; AScreenObject: TObject;
       ParentCollection: TCustomMF_BoundColl);
     property Items[Index: Integer]: TGwtConcStringValueItem read GetItems
@@ -5189,5 +5192,6 @@ begin
     Value := '0';
   end;
 end;
+
 
 end.

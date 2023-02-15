@@ -1466,6 +1466,7 @@ end;
 procedure TUndoCrops.DoCommand;
 begin
   frmGoPhast.PhastModel.FmpCrops := FNewCrops;
+  frmGoPhast.PhastModel.FmpCrops.UpdateAllDataArrays;
 end;
 
 procedure TUndoCrops.Undo;
@@ -1474,6 +1475,7 @@ var
   AFarm: TFarm;
 begin
   frmGoPhast.PhastModel.FmpCrops := FOldCrops;
+  frmGoPhast.PhastModel.FmpCrops.UpdateAllDataArrays;
   Assert(frmGoPhast.PhastModel.Farms.Count = FFarmList.Count);
   for index := 0 to FFarmList.Count - 1 do
   begin

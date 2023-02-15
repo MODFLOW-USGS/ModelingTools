@@ -349,6 +349,30 @@ type
     FEvapFractionsCollection: TEvapFractionsCollection;
     FLossesCollection: TLossesCollection;
     FCropWaterUseCollection: TCropWaterUseCollection;
+    FCropCoefficientDisplayName: string;
+    FCropCoefficientDataArrayName: string;
+    FRootDepthDataArrayName: string;
+    FIrrigationDataArrayName: string;
+    FConsumptiveUseDataArrayName: string;
+    FSWLossFractionIrrigationDataArrayName: string;
+    FAddedDemandDataArrayName: string;
+    FEvaporationIrrigationDataArrayName: string;
+    FSWLossFractionPrecipDataArrayName: string;
+    FAddedDemandDisplayName: string;
+    FEvaporationIrrigationDisplayName: string;
+    FIrrigationDisplayName: string;
+    FRootDepthDisplayName: string;
+    FSWLossFractionPrecipDisplayName: string;
+    FSWLossFractionIrrigationDisplayName: string;
+    FConsumptiveUseDisplayName: string;
+    procedure SetCropCoefficientDataArrayName(const NewName: string);
+    procedure SetAddedDemandDataArrayName(const NewName: string);
+    procedure SetConsumptiveUseDataArrayName(const NewName: string);
+    procedure SetEvaporationIrrigationDataArrayName(const NewName: string);
+    procedure SetIrrigationDataArrayName(const NewName: string);
+    procedure SetRootDepthDataArrayName(const NewName: string);
+    procedure SetSWLossFractionIrrigationDataArrayName(const NewName: string);
+    procedure SetSWLossFractionPrecipDataArrayName(const NewName: string);
     function GetBaseTemperature: string;
     function GetBeginningRootDepth: string;
     function GetCoefficient0: string;
@@ -387,6 +411,7 @@ type
     procedure SetLossesCollection(const Value: TLossesCollection);
     function GetFallow: string;
     procedure SetFallow(const Value: string);
+    procedure UpdateAllDataArrays;
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -457,7 +482,65 @@ type
     // FMP Data Set 27a
     property CropWaterUseCollection: TCropWaterUseCollection
       read FCropWaterUseCollection write SetCropWaterUseCollection;
+  // FMP4
+    property CropCoefficientDataArrayName: string
+      read FCropCoefficientDataArrayName write SetCropCoefficientDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property ConsumptiveUseDataArrayName: string
+      read FConsumptiveUseDataArrayName write SetConsumptiveUseDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property IrrigationDataArrayName: string
+      read FIrrigationDataArrayName write SetIrrigationDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property RootDepthDataArrayName: string
+      read FRootDepthDataArrayName write SetRootDepthDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property EvaporationIrrigationDataArrayName: string
+      read FEvaporationIrrigationDataArrayName write SetEvaporationIrrigationDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property SWLossFractionIrrigationDataArrayName: string
+      read FSWLossFractionIrrigationDataArrayName write SetSWLossFractionIrrigationDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property SWLossFractionPrecipDataArrayName: string
+      read FSWLossFractionPrecipDataArrayName write SetSWLossFractionPrecipDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property AddedDemandDataArrayName: string
+      read FAddedDemandDataArrayName write SetAddedDemandDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
   end;
+
+//  StrConsumptiveUsePrefix = KConsumptiveUsePrefix;
+//  StrIrrigationPrefix = KIrrigationPrefix;
+//  StrRootDepthPrefix = KRootDepthPrefix;
+//  StrEvaporationIrrigationPrefix = KEvaporationIrrigationPrefix;
+//  StrSWLossFractionIrrigationPrefix = KSWLossFractionIrrigationPrefix;
+//  StrSWLossFractionPrecipPrefix = KSWLossFractionPrecipPrefix;
+//  StrAddedDemandPrefix = KAddedDemandPrefix;
+
 
   TCropCollection = class(TCustomFarmCollection)
   private
@@ -475,6 +558,7 @@ type
     property CropArray: TCropArray read FCropArray;
     property Items[Index: Integer]: TCropItem read GetItems write SetItems; default;
     procedure EvaluateCrops;
+    procedure UpdateAllDataArrays;
   end;
 
 implementation
@@ -482,7 +566,27 @@ implementation
 uses
   ScreenObjectUnit, frmGoPhastUnit, frmErrorsAndWarningsUnit,
   RbwParser, frmFormulaErrorsUnit, PhastModelUnit, ModflowPackageSelectionUnit,
-  GlobalVariablesUnit, LockedGlobalVariableChangers;
+  GlobalVariablesUnit, LockedGlobalVariableChangers, UpdateDataArrayUnit;
+
+const
+  KCropCoefficientPrefix = 'Crop_Coefficient_';
+  KConsumptiveUsePrefix = 'Consumptive_Use_';
+  KIrrigationPrefix = 'Irrigatiion_';
+  KRootDepthPrefix = 'Root_Depth_';
+  KEvaporationIrrigationPrefix = 'Evaporation_Irrigation_';
+  KSWLossFractionPrecipPrefix = 'SW_Loss_Fraction_Precip_';
+  KSWLossFractionIrrigationPrefix = 'SW_Loss_Fraction_Irrigation_';
+  KAddedDemandPrefix = 'Added_Demand_';
+
+resourcestring
+  StrCropCoefficientPrefix = KCropCoefficientPrefix;
+  StrConsumptiveUsePrefix = KConsumptiveUsePrefix;
+  StrIrrigationPrefix = KIrrigationPrefix;
+  StrRootDepthPrefix = KRootDepthPrefix;
+  StrEvaporationIrrigationPrefix = KEvaporationIrrigationPrefix;
+  StrSWLossFractionIrrigationPrefix = KSWLossFractionIrrigationPrefix;
+  StrSWLossFractionPrecipPrefix = KSWLossFractionPrecipPrefix;
+  StrAddedDemandPrefix = KAddedDemandPrefix;
 
 //const
 //  RootingDepthPosition = 0;
@@ -1580,6 +1684,18 @@ begin
     LossesCollection := SourceItem.LossesCollection;
     CropFunctionCollection := SourceItem.CropFunctionCollection;
     CropWaterUseCollection := SourceItem.CropWaterUseCollection;
+
+    // This is done differently in TChemSpeciesItem
+    // There the field is first assign then set to an empty string
+    // and then the property is assigned.
+    CropCoefficientDataArrayName := SourceItem.CropCoefficientDataArrayName;
+    ConsumptiveUseDataArrayName := SourceItem.ConsumptiveUseDataArrayName;
+    IrrigationDataArrayName := SourceItem.IrrigationDataArrayName;
+    RootDepthDataArrayName := SourceItem.RootDepthDataArrayName;
+    EvaporationIrrigationDataArrayName := SourceItem.EvaporationIrrigationDataArrayName;
+    SWLossFractionIrrigationDataArrayName := SourceItem.SWLossFractionIrrigationDataArrayName;
+    SWLossFractionPrecipDataArrayName := SourceItem.SWLossFractionPrecipDataArrayName;
+    AddedDemandDataArrayName := SourceItem.AddedDemandDataArrayName;
   end;
   inherited;
 end;
@@ -1948,7 +2064,16 @@ begin
       and EvapFractionsCollection.IsSame(OtherItem.EvapFractionsCollection)
       and LossesCollection.IsSame(OtherItem.LossesCollection)
       and CropFunctionCollection.IsSame(OtherItem.CropFunctionCollection)
-      and CropWaterUseCollection.IsSame(OtherItem.CropWaterUseCollection);
+      and CropWaterUseCollection.IsSame(OtherItem.CropWaterUseCollection)
+
+      and (CropCoefficientDataArrayName = OtherItem.CropCoefficientDataArrayName)
+      and (ConsumptiveUseDataArrayName = OtherItem.ConsumptiveUseDataArrayName)
+      and (IrrigationDataArrayName = OtherItem.IrrigationDataArrayName)
+      and (RootDepthDataArrayName = OtherItem.RootDepthDataArrayName)
+      and (EvaporationIrrigationDataArrayName = OtherItem.EvaporationIrrigationDataArrayName)
+      and (SWLossFractionIrrigationDataArrayName = OtherItem.SWLossFractionIrrigationDataArrayName)
+      and (SWLossFractionPrecipDataArrayName = OtherItem.SWLossFractionPrecipDataArrayName)
+      and (AddedDemandDataArrayName = OtherItem.AddedDemandDataArrayName)
   end;
 end;
 
@@ -2017,6 +2142,39 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FFallow,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
+end;
+
+procedure TCropItem.SetAddedDemandDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleAddedDemandUsed;
+    UpdateDat.OldDataArrayName := FAddedDemandDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FAddedDemandDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: ADDED_DEMAND';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FAddedDemandDataArrayName, NewName);
 end;
 
 procedure TCropItem.SetBaseTemperature(const Value: string);
@@ -2107,6 +2265,72 @@ begin
   end;
 end;
 
+procedure TCropItem.SetConsumptiveUseDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleConsumptiveUseUsed;
+    UpdateDat.OldDataArrayName := FConsumptiveUseDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FConsumptiveUseDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: CONSUMPTIVE_USE';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FConsumptiveUseDataArrayName, NewName);
+end;
+
+procedure TCropItem.SetCropCoefficientDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleCropCoefficientUsed;
+    UpdateDat.OldDataArrayName := FCropCoefficientDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FCropCoefficientDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: CROP_COEFFICIENT';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FCropCoefficientDataArrayName, NewName);
+end;
+
 procedure TCropItem.SetCropFunctionCollection(
   const Value: TCropFunctionCollection);
 begin
@@ -2121,6 +2345,8 @@ var
   AFarm: TFarm;
   CropEffIndex: Integer;
   AFarmEff: TFarmEfficienciesItem;
+  OldRoot: string;
+  NewRoot: string;
 begin
   if (FCropName <> Value) and (Model <> nil)
     and not (csReading in Model.ComponentState) then
@@ -2160,6 +2386,81 @@ begin
           end;
         end;
       end;
+
+      if SameText(FCropName, Value) then
+      begin
+        OldRoot := GenerateNewRoot(FCropName);
+        NewRoot := GenerateNewRoot(Value);
+
+        FCropCoefficientDisplayName := StringReplace(FCropCoefficientDisplayName,
+          OldRoot,NewRoot, []);
+        CropCoefficientDataArrayName := StringReplace(CropCoefficientDataArrayName,
+          OldRoot,NewRoot, []);
+
+        FConsumptiveUseDisplayName := StringReplace(FConsumptiveUseDisplayName,
+          OldRoot,NewRoot, []);
+        ConsumptiveUseDataArrayName := StringReplace(ConsumptiveUseDataArrayName,
+          OldRoot,NewRoot, []);
+
+        FIrrigationDisplayName := StringReplace(FIrrigationDisplayName,
+          OldRoot,NewRoot, []);
+        IrrigationDataArrayName := StringReplace(IrrigationDataArrayName,
+          OldRoot,NewRoot, []);
+
+        FRootDepthDisplayName := StringReplace(FRootDepthDisplayName,
+          OldRoot,NewRoot, []);
+        RootDepthDataArrayName := StringReplace(RootDepthDataArrayName,
+          OldRoot,NewRoot, []);
+
+        FEvaporationIrrigationDisplayName := StringReplace(FEvaporationIrrigationDisplayName,
+          OldRoot,NewRoot, []);
+        EvaporationIrrigationDataArrayName := StringReplace(EvaporationIrrigationDataArrayName,
+          OldRoot,NewRoot, []);
+
+        FSWLossFractionPrecipDisplayName := StringReplace(FSWLossFractionPrecipDisplayName,
+          OldRoot,NewRoot, []);
+        SWLossFractionPrecipDataArrayName := StringReplace(SWLossFractionPrecipDataArrayName,
+          OldRoot,NewRoot, []);
+
+        FSWLossFractionIrrigationDisplayName := StringReplace(FSWLossFractionIrrigationDisplayName,
+          OldRoot,NewRoot, []);
+        SWLossFractionIrrigationDataArrayName := StringReplace(SWLossFractionIrrigationDataArrayName,
+          OldRoot,NewRoot, []);
+
+        FAddedDemandDisplayName := StringReplace(FAddedDemandDisplayName,
+          OldRoot,NewRoot, []);
+        AddedDemandDataArrayName := StringReplace(AddedDemandDataArrayName,
+          OldRoot,NewRoot, []);
+      end
+      else
+      begin
+
+        FCropCoefficientDisplayName := GenerateNewRoot(StrCropCoefficientPrefix + Value);
+        CropCoefficientDataArrayName := GenerateNewRoot(KCropCoefficientPrefix + Value);
+
+        FConsumptiveUseDisplayName := GenerateNewRoot(StrConsumptiveUsePrefix + Value);
+        ConsumptiveUseDataArrayName := GenerateNewRoot(KConsumptiveUsePrefix + Value);
+
+        FIrrigationDisplayName := GenerateNewRoot(StrIrrigationPrefix + Value);
+        IrrigationDataArrayName := GenerateNewRoot(KIrrigationPrefix + Value);
+
+        FRootDepthDisplayName := GenerateNewRoot(StrRootDepthPrefix + Value);
+        RootDepthDataArrayName := GenerateNewRoot(KRootDepthPrefix + Value);
+
+        FEvaporationIrrigationDisplayName := GenerateNewRoot(StrEvaporationIrrigationPrefix + Value);
+        EvaporationIrrigationDataArrayName := GenerateNewRoot(KEvaporationIrrigationPrefix + Value);
+
+        FSWLossFractionPrecipDisplayName := GenerateNewRoot(StrSWLossFractionPrecipPrefix + Value);
+        SWLossFractionPrecipDataArrayName := GenerateNewRoot(KSWLossFractionPrecipPrefix + Value);
+
+        FSWLossFractionIrrigationDisplayName := GenerateNewRoot(StrSWLossFractionIrrigationPrefix + Value);
+        SWLossFractionIrrigationDataArrayName := GenerateNewRoot(KSWLossFractionIrrigationPrefix + Value);
+
+        FAddedDemandDisplayName := GenerateNewRoot(StrAddedDemandPrefix + Value);
+        AddedDemandDataArrayName := GenerateNewRoot(KAddedDemandPrefix + Value);
+      end;
+
+
       FCropName := Value;
       InvalidateModel;
     end;
@@ -2183,6 +2484,39 @@ procedure TCropItem.SetEvapFractionsCollection(
   const Value: TEvapFractionsCollection);
 begin
   FEvapFractionsCollection.Assign(Value);
+end;
+
+procedure TCropItem.SetEvaporationIrrigationDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleEvaporationIrrigationUsed;
+    UpdateDat.OldDataArrayName := FEvaporationIrrigationDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FEvaporationIrrigationDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: EVAPORATION_IRRIGATION_FRACTION';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FEvaporationIrrigationDataArrayName, NewName);
 end;
 
 procedure TCropItem.SetFallow(const Value: string);
@@ -2223,6 +2557,39 @@ begin
   begin
     UpdateFormulaBlocks(Value, IrrigatedPosition, FIrrigated);
   end;
+end;
+
+procedure TCropItem.SetIrrigationDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleIrrigationUsed;
+    UpdateDat.OldDataArrayName := FIrrigationDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FIrrigationDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: IRRIGATION';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FIrrigationDataArrayName, NewName);
 end;
 
 procedure TCropItem.SetLossesCollection(const Value: TLossesCollection);
@@ -2286,11 +2653,128 @@ begin
   end;
 end;
 
+procedure TCropItem.SetRootDepthDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleRootDepthUsed;
+    UpdateDat.OldDataArrayName := FRootDepthDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FRootDepthDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: ROOT_DEPTH';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FRootDepthDataArrayName, NewName);
+end;
+
 procedure TCropItem.SetRootGrowthCoefficient(const Value: string);
 begin
   if FRootGrowthCoefficient.Formula <> Value then
   begin
     UpdateFormulaBlocks(Value, RootGrowthCoefficientPosition, FRootGrowthCoefficient);
+  end;
+end;
+
+procedure TCropItem.SetSWLossFractionIrrigationDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleSWLossFractionPrecipUsed;
+    UpdateDat.OldDataArrayName := FSWLossFractionPrecipDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FSWLossFractionPrecipDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: SURFACEWATER_LOSS_FRACTION_IRRIGATION';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FSWLossFractionPrecipDataArrayName, NewName);
+end;
+
+procedure TCropItem.SetSWLossFractionPrecipDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleSWLossFractionIrrigationUsed;
+    UpdateDat.OldDataArrayName := FSWLossFractionIrrigationDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FSWLossFractionIrrigationDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FSWLossFractionIrrigationDataArrayName, NewName);
+end;
+
+procedure TCropItem.UpdateAllDataArrays;
+begin
+  if (Collection as TCropCollection).Model <> nil then
+  begin
+    // Reassigning the name will cause the data set to be created if it is
+    // needed.
+    CropCoefficientDataArrayName := CropCoefficientDataArrayName;
+    ConsumptiveUseDataArrayName := ConsumptiveUseDataArrayName;
+    IrrigationDataArrayName := IrrigationDataArrayName;
+    RootDepthDataArrayName := RootDepthDataArrayName;
+    EvaporationIrrigationDataArrayName := EvaporationIrrigationDataArrayName;
+    SWLossFractionPrecipDataArrayName := SWLossFractionPrecipDataArrayName;
+    SWLossFractionIrrigationDataArrayName := SWLossFractionIrrigationDataArrayName;
+    AddedDemandDataArrayName := AddedDemandDataArrayName;
   end;
 end;
 
@@ -2784,6 +3268,16 @@ end;
 procedure TCropCollection.SetItems(Index: Integer; const Value: TCropItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+procedure TCropCollection.UpdateAllDataArrays;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].UpdateAllDataArrays;
+  end;
 end;
 
 end.

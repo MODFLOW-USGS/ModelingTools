@@ -52,7 +52,7 @@ Type
     FAlternativeClassification: string;
     FOnSelectionChange: TNotifyEvent;
     FSpeciesIndex: Integer;
-    procedure InvalidateModel;
+    procedure InvalidateModel; virtual;
     procedure SetComments(const Value: TStrings);
     procedure SetOnSelectionChange(const Value: TNotifyEvent);
     procedure SetNewtonFormulation(const Value: TNewtonFormulation);
@@ -5536,7 +5536,8 @@ Type
     procedure InitializeCropCoefficientDisplay(Sender: TObject);
     procedure GetCropCoefficientUseList(Sender: TObject; NewUseList: TStringList);
     procedure InvalidateCropCoefficient(Sender: TObject);
-
+  protected
+    procedure InvalidateModel; Override;
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -26529,6 +26530,15 @@ begin
   InvalidateModel;
 end;
 
+procedure TFarmProcess4LandUse.InvalidateModel;
+begin
+  inherited;
+  if FModel <> nil then
+  begin
+    (FModel as TCustomModel).FmpCrops.UpdateAllDataArrays;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.SetAddedDemand(const Value: TFarmProperty);
 begin
   FAddedDemand.Assign(Value);
@@ -26673,7 +26683,8 @@ function TFarmProcess4LandUse.StaticCropCoefficientArrayUsed(
 begin
   result := PackageUsed(Sender)
     and (CropCoeff.FarmOption = foStatic)
-    and (CropCoeff.ArrayList = alArray) ;
+    and (CropCoeff.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
 end;
 
 function TFarmProcess4LandUse.TransientCropCoefficientarrayUsed(
@@ -26681,7 +26692,8 @@ function TFarmProcess4LandUse.TransientCropCoefficientarrayUsed(
 begin
   result := PackageUsed(Sender)
     and (CropCoeff.FarmOption = foTransient)
-    and (CropCoeff.ArrayList = alArray) ;
+    and (CropCoeff.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
 end;
 
 function TFarmProcess4LandUse.TransientCropIDUsed(Sender: TObject): boolean;

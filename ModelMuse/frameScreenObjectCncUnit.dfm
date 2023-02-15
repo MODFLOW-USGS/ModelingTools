@@ -5,9 +5,5 @@ inherited frameScreenObjectCnc: TframeScreenObjectCnc
       Top = 43
       ExplicitTop = 43
     end
-    inherited seNumberOfTimes: TJvSpinEdit
-      Height = 21
-      ExplicitHeight = 21
-    end
   end
 end

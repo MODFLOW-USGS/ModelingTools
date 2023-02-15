@@ -26,13 +26,13 @@ type
     class function ValueDescription: string; override;
   end;
 
+resourcestring
+  StrFmp4CropCoefficient = 'Fmp4_Crop_Coefficient';
+
 implementation
 
 uses
   PhastModelUnit, GoPhastTypes;
-
-resourcestring
-  StrFmp4CropCoefficient = 'Fmp4_Crop_Coefficient';
 
 { TFmp4CropCoefficientTimeListLink }
 

@@ -797,7 +797,8 @@ uses
   ModflowFmp4IntBoundaryUnit in 'ModflowFmp4IntBoundaryUnit.pas',
   frameScreenObjectCustomFmp4IntBoundaryUnit in 'frameScreenObjectCustomFmp4IntBoundaryUnit.pas' {frameScreenObjectCustomFmp4IntBoundary: TFrame},
   ModflowFmp4CropCoefficientUnit in 'ModflowFmp4CropCoefficientUnit.pas',
-  frameScreenObjecFmp4CropCoefficientUnit in 'frameScreenObjecFmp4CropCoefficientUnit.pas' {frameScreenObjecFmp4CropCoefficient: TFrame};
+  frameScreenObjecFmp4CropCoefficientUnit in 'frameScreenObjecFmp4CropCoefficientUnit.pas' {frameScreenObjecFmp4CropCoefficient: TFrame},
+  UpdateDataArrayUnit in 'UpdateDataArrayUnit.pas';
 
 {$R *.res}
 

@@ -132,7 +132,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Width = 50
         Height = 28
         EditLabel.Width = 99
-        EditLabel.Height = 15
+        EditLabel.Height = 28
         EditLabel.Caption = 'Mass unit (MUNIT)'
         Enabled = False
         LabelPosition = lpRight

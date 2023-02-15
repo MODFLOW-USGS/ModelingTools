@@ -136,6 +136,7 @@ object frameIface: TframeIface
       Height = 146
       Camera = GLCamera1
       FieldOfView = 111.183052062988300000
+      PenAsTouch = False
       TabOrder = 2
     end
   end

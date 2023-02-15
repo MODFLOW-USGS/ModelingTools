@@ -9,7 +9,7 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
   object lblRefEtToBare: TLabel [2]
     Left = 167
     Top = 163
-    Width = 178
+    Width = 107
     Height = 15
     Caption = 'Reference ET to Bare'
   end

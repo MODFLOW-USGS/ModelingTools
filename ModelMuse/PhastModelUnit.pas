@@ -2929,6 +2929,15 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4TransientEfficiencyArrayUsed(Sender: TObject): boolean; virtual;
     function SoilIDUsed(Sender: TObject): boolean; virtual;
+//    function MultipleCropCoefficentUsed(Sender: TObject): Boolean;
+    function MultipleCropCoefficientUsed(Sender: TObject): Boolean;
+    function MultipleConsumptiveUseUsed(Sender: TObject): Boolean;
+    function MultipleIrrigationUsed(Sender: TObject): Boolean;
+    function MultipleRootDepthUsed(Sender: TObject): Boolean;
+    function MultipleEvaporationIrrigationUsed(Sender: TObject): Boolean;
+    function MultipleSWLossFractionPrecipUsed(Sender: TObject): Boolean;
+    function MultipleSWLossFractionIrrigationUsed(Sender: TObject): Boolean;
+    function MultipleAddedDemandUsed(Sender: TObject): Boolean;
 
     function GroundSurfaceUsed(Sender: TObject): boolean; virtual;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; virtual;
@@ -42767,57 +42776,54 @@ begin
   result := ModflowPackages.Mt3dLkt.IsSelected;
 end;
 
-//procedure TCustomModel.NotifyPestObsGroupNameDestroy(
-//  Group: TPestObservationGroup);
-//var
-//  ItemIndex: Integer;
-//  ObsGroup: TFluxObservationGroup;
-//begin
-//  for ItemIndex := 0 to HeadFluxObservations.Count - 1 do
-//  begin
-//    ObsGroup := HeadFluxObservations[ItemIndex];
-//    if ObsGroup.PestObservationGroup = Group then
-//    begin
-//      ObsGroup.PestObservationGroup := nil;
-//    end;
-//  end;
-//
-//  for ItemIndex := 0 to DrainObservations.Count - 1 do
-//  begin
-//    ObsGroup := DrainObservations[ItemIndex];
-//    if ObsGroup.PestObservationGroup = Group then
-//    begin
-//      ObsGroup.PestObservationGroup := nil;
-//    end;
-//  end;
-//
-//  for ItemIndex := 0 to GhbObservations.Count - 1 do
-//  begin
-//    ObsGroup := GhbObservations[ItemIndex];
-//    if ObsGroup.PestObservationGroup = Group then
-//    begin
-//      ObsGroup.PestObservationGroup := nil;
-//    end;
-//  end;
-//
-//  for ItemIndex := 0 to RiverObservations.Count - 1 do
-//  begin
-//    ObsGroup := RiverObservations[ItemIndex];
-//    if ObsGroup.PestObservationGroup = Group then
-//    begin
-//      ObsGroup.PestObservationGroup := nil;
-//    end;
-//  end;
-//
-//  for ItemIndex := 0 to StreamObservations.Count - 1 do
-//  begin
-//    ObsGroup := StreamObservations[ItemIndex];
-//    if ObsGroup.PestObservationGroup = Group then
-//    begin
-//      ObsGroup.PestObservationGroup := nil;
-//    end;
-//  end;
-//end;
+function TCustomModel.MultipleAddedDemandUsed(Sender: TObject): Boolean;
+begin
+
+end;
+
+function TCustomModel.MultipleConsumptiveUseUsed(Sender: TObject): Boolean;
+begin
+
+end;
+
+function TCustomModel.MultipleCropCoefficientUsed(Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.CropCoeff.FarmOption = foStatic)
+    and (FarmLandUse.CropCoeff.ArrayList = alArray);
+end;
+
+function TCustomModel.MultipleEvaporationIrrigationUsed(
+  Sender: TObject): Boolean;
+begin
+
+end;
+
+function TCustomModel.MultipleIrrigationUsed(Sender: TObject): Boolean;
+begin
+
+end;
+
+function TCustomModel.MultipleRootDepthUsed(Sender: TObject): Boolean;
+begin
+
+end;
+
+function TCustomModel.MultipleSWLossFractionIrrigationUsed(
+  Sender: TObject): Boolean;
+begin
+
+end;
+
+function TCustomModel.MultipleSWLossFractionPrecipUsed(
+  Sender: TObject): Boolean;
+begin
+
+end;
 
 function TCustomModel.NpfUsed(Sender: TObject): boolean;
 begin

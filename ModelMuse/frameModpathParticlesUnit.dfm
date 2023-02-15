@@ -22,8 +22,8 @@ object frameModpathParticles: TframeModpathParticles
     object lblTimeCount: TLabel
       Left = 468
       Top = 245
-      Width = 29
-      Height = 13
+      Width = 33
+      Height = 15
       Caption = 'Count'
     end
     object sbAddTime: TSpeedButton
@@ -108,7 +108,7 @@ object frameModpathParticles: TframeModpathParticles
       Left = 16
       Top = 136
       Width = 105
-      Height = 52
+      Height = 60
       Caption = 
         'Image hidden because your computer may not be able to display it' +
         '.'
@@ -137,6 +137,7 @@ object frameModpathParticles: TframeModpathParticles
       Height = 144
       Camera = GLCamera
       FieldOfView = 104.002532958984400000
+      PenAsTouch = False
       TabOrder = 4
     end
     object plParticlePlacement: TJvPageList
@@ -156,7 +157,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 64
           Top = 101
           Width = 47
-          Height = 52
+          Height = 60
           Caption = 'Number of rows in X direction'
           WordWrap = True
         end
@@ -164,7 +165,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 64
           Top = 136
           Width = 47
-          Height = 52
+          Height = 60
           Caption = 'Number of rows in Y direction'
           WordWrap = True
         end
@@ -172,7 +173,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 64
           Top = 171
           Width = 47
-          Height = 52
+          Height = 60
           Caption = 'Number of rows in Z direction'
           WordWrap = True
         end
@@ -277,24 +278,24 @@ object frameModpathParticles: TframeModpathParticles
         object lblCylParticleCount: TLabel
           Left = 72
           Top = 90
-          Width = 80
-          Height = 39
+          Width = 61
+          Height = 60
           Caption = 'Number of particles around cylinder'
           WordWrap = True
         end
         object lblClylLayerCount: TLabel
           Left = 72
           Top = 125
-          Width = 85
-          Height = 26
+          Width = 61
+          Height = 45
           Caption = 'Number of layers of particles'
           WordWrap = True
         end
         object lblCylRadius: TLabel
           Left = 72
           Top = 160
-          Width = 71
-          Height = 13
+          Width = 79
+          Height = 15
           Caption = 'Cylinder radius'
         end
         object rgCylinderOrientation: TRadioGroup
@@ -354,24 +355,24 @@ object frameModpathParticles: TframeModpathParticles
         object lblSpherParticleCount: TLabel
           Left = 72
           Top = 90
-          Width = 80
-          Height = 39
+          Width = 79
+          Height = 45
           Caption = 'Number of particles around sphere '
           WordWrap = True
         end
         object lblSpherelLayerCount: TLabel
           Left = 72
           Top = 125
-          Width = 85
-          Height = 26
+          Width = 61
+          Height = 45
           Caption = 'Number of layers of particles'
           WordWrap = True
         end
         object lblSphereRadius: TLabel
           Left = 72
           Top = 160
-          Width = 66
-          Height = 13
+          Width = 71
+          Height = 15
           Caption = 'Sphere radius'
         end
         object rgSphereOrientation: TRadioGroup
@@ -567,8 +568,8 @@ object frameModpathParticles: TframeModpathParticles
           object lblCount: TLabel
             Left = 71
             Top = 14
-            Width = 29
-            Height = 13
+            Width = 33
+            Height = 15
             Caption = 'Count'
           end
           object sbDeleteRow: TSpeedButton

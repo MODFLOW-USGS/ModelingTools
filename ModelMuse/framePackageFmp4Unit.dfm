@@ -31,6 +31,7 @@ inherited framePackageFmp4: TframePackageFmp4
       Height = 319
       Caption = 'Water Balance Subregion Options (Farm Options)'
       TabOrder = 0
+      ExplicitWidth = 185
       object rdgFarms: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -228,6 +229,7 @@ inherited framePackageFmp4: TframePackageFmp4
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 548
       end
     end
     object cpnlOptions: TCategoryPanel
@@ -235,6 +237,7 @@ inherited framePackageFmp4: TframePackageFmp4
       Height = 123
       Caption = 'Options'
       TabOrder = 1
+      ExplicitWidth = 571
       object cbAllowPrinting: TCheckBox
         Left = 8
         Top = 8
@@ -271,7 +274,7 @@ inherited framePackageFmp4: TframePackageFmp4
       Height = 242
       Caption = 'MNW2 Closure Criteria'
       TabOrder = 2
-      ExplicitTop = 30
+      ExplicitWidth = 571
       object lblQClose: TLabel
         Left = 74
         Top = 82
@@ -365,6 +368,7 @@ inherited framePackageFmp4: TframePackageFmp4
       Height = 292
       Caption = 'Print'
       TabOrder = 3
+      ExplicitWidth = 185
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0

@@ -14,10 +14,6 @@ inherited frameScreenObjectCondParam: TframeScreenObjectCondParam
       Height = 15
       Caption = 'Conductance interpretation'
     end
-    inherited seNumberOfTimes: TJvSpinEdit
-      Height = 21
-      ExplicitHeight = 21
-    end
     inherited comboTimeSeriesInterpolation: TComboBox
       TabOrder = 4
     end

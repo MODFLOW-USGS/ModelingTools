@@ -234,7 +234,7 @@ uses
   frmGoPhastUnit, ScreenObjectUnit, Mt3dmsChemUnit, Mt3dmsTobUnit,
   Mt3dUztRchUnit, Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit,
   frameMt3dLktPkgUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowPackagesUnit,
-  ModflowGwtSpecifiedConcUnit;
+  ModflowGwtSpecifiedConcUnit, UpdateDataArrayUnit;
 
 const
   kInitConcPrefix = 'Initial_Concentration_';
@@ -399,6 +399,8 @@ var
 begin
   if Collection.Model <> nil then
   begin
+    // Reassigning the name will cause the data set to be created if it is
+    // needed.
     InitialConcDataArrayName := InitialConcDataArrayName;
     SorbOrImmobInitialConcDataArrayName := SorbOrImmobInitialConcDataArrayName;
     FirstSorbParamDataArrayName := FirstSorbParamDataArrayName;
@@ -479,48 +481,62 @@ procedure TChemSpeciesItem.UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
   AssociatedDataSets: string; ShouldCreate: boolean;
   const Classification: string);
 var
-  DataArray: TDataArray;
-  LocalModel: TPhastModel;
+//  DataArray: TDataArray;
+//  LocalModel: TPhastModel;
+  UpdataDat: TUpdataDataArrayRecord;
 begin
   if Collection.Model <> nil then
   begin
-    LocalModel := Collection.Model as TPhastModel;
-    if not (csLoading in LocalModel.ComponentState) then
-    begin
-      DataArray := LocalModel.DataArrayManager.GetDataSetByName(NewName);
-      if DataArray = nil then
-      begin
-        DataArray := LocalModel.DataArrayManager.
-          GetDataSetByName(OldDataArrayName);
-      end;
-      if DataArray <> nil then
-      begin
-        if DataArray.Name <> NewName then
-        begin
-          LocalModel.RenameDataArray(DataArray, NewName, NewDisplayName);
-        end;
-      end;
-      if DataArray = nil then
-      begin
-        if ShouldCreate then
-        begin
-          // create a new data array.
-          DataArray := LocalModel.DataArrayManager.CreateNewDataArray(
-            TDataArray, NewName, NewFormula, NewDisplayName,
-            [dcName, dcType, dcOrientation, dcEvaluatedAt],
-            rdtDouble, eaBlocks, dso3D, Classification);
-        end;
-      end;
-      if DataArray <> nil then
-      begin
-        LocalModel.ThreeDGridObserver.TalksTo(DataArray);
-        DataArray.UpdateDimensions(LocalModel.LayerCount,
-          LocalModel.RowCount, LocalModel.ColumnCount);
-        DataArray.OnDataSetUsed := OnDataSetUsed;
-        DataArray.AssociatedDataSets := AssociatedDataSets;
-        DataArray.Classification := Classification;
-      end;
-    end;
+    UpdataDat.Model := Collection.Model;
+    UpdataDat.OnDataSetUsed := OnDataSetUsed;
+    UpdataDat.OldDataArrayName := OldDataArrayName;
+    UpdataDat.NewName := NewName;
+    UpdataDat.NewDisplayName := NewDisplayName;
+    UpdataDat.NewFormula := NewFormula;
+    UpdataDat.AssociatedDataSets := AssociatedDataSets;
+    UpdataDat.ShouldCreate := ShouldCreate;
+    UpdataDat.Classification := Classification;
+    UpdataDat.Orientation := dso3D;
+
+    UpdateOrCreateDataArray(UpdataDat);
+
+//    LocalModel := Collection.Model as TPhastModel;
+//    if not (csLoading in LocalModel.ComponentState) then
+//    begin
+//      DataArray := LocalModel.DataArrayManager.GetDataSetByName(NewName);
+//      if DataArray = nil then
+//      begin
+//        DataArray := LocalModel.DataArrayManager.
+//          GetDataSetByName(OldDataArrayName);
+//      end;
+//      if DataArray <> nil then
+//      begin
+//        if DataArray.Name <> NewName then
+//        begin
+//          LocalModel.RenameDataArray(DataArray, NewName, NewDisplayName);
+//        end;
+//      end;
+//      if DataArray = nil then
+//      begin
+//        if ShouldCreate then
+//        begin
+//          // create a new data array.
+//          DataArray := LocalModel.DataArrayManager.CreateNewDataArray(
+//            TDataArray, NewName, NewFormula, NewDisplayName,
+//            [dcName, dcType, dcOrientation, dcEvaluatedAt],
+//            rdtDouble, eaBlocks, dso3D, Classification);
+//        end;
+//      end;
+//      if DataArray <> nil then
+//      begin
+//        LocalModel.ThreeDGridObserver.TalksTo(DataArray);
+//        DataArray.UpdateDimensions(LocalModel.LayerCount,
+//          LocalModel.RowCount, LocalModel.ColumnCount);
+//        DataArray.OnDataSetUsed := OnDataSetUsed;
+//        DataArray.AssociatedDataSets := AssociatedDataSets;
+//        DataArray.Classification := Classification;
+//      end;
+//    end;
   end;
 end;
 
