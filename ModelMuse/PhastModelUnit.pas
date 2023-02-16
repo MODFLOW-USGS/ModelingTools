@@ -576,6 +576,7 @@ const
   KPrecipPotConsumption = 'Precip_Pot_Consumption';
   KNRD_Infiltration_Location = 'NRD_Infiltration_Location';
   KCropCoefficient = 'Crop_Coefficient';
+  KLandUseAreaFraction = 'Land_Use_Area_Fraction';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2554,7 +2555,8 @@ that affects the model output should also have a comment. }
     function DirectRechargeUsed(Sender: TObject): Boolean;
     function PrecipPotConsumptionUsed(Sender: TObject): Boolean;
     function NrdInfilLocationUsed(Sender: TObject): Boolean;
-    function CropCoefficentUsed(Sender: TObject): Boolean;
+    function CropCoefficientUsed(Sender: TObject): Boolean;
+    function LandUseAreaFractionUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2605,6 +2607,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientNrdInfilLocIsSelected: Boolean; virtual;
     function FarmProcess4TransientCropCoefficientIsSelected: Boolean; virtual;
+    function FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -2929,14 +2932,23 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4TransientEfficiencyArrayUsed(Sender: TObject): boolean; virtual;
     function SoilIDUsed(Sender: TObject): boolean; virtual;
-//    function MultipleCropCoefficentUsed(Sender: TObject): Boolean;
+    // LAND_USE_AREA_FRACTION
+    function MultipleLandUseFractionsUsed(Sender: TObject): Boolean;
+    // CROP_COEFFICIENT
     function MultipleCropCoefficientUsed(Sender: TObject): Boolean;
+    // CONSUMPTIVE_USE
     function MultipleConsumptiveUseUsed(Sender: TObject): Boolean;
+    // IRRIGATION
     function MultipleIrrigationUsed(Sender: TObject): Boolean;
+    // ROOT_DEPTH
     function MultipleRootDepthUsed(Sender: TObject): Boolean;
+    // EVAPORATION_IRRIGATION_FRACTION
     function MultipleEvaporationIrrigationUsed(Sender: TObject): Boolean;
+    // SURFACEWATER_LOSS_FRACTION_PRECIPITATION
     function MultipleSWLossFractionPrecipUsed(Sender: TObject): Boolean;
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION
     function MultipleSWLossFractionIrrigationUsed(Sender: TObject): Boolean;
+    // ADDED_DEMAND
     function MultipleAddedDemandUsed(Sender: TObject): Boolean;
 
     function GroundSurfaceUsed(Sender: TObject): boolean; virtual;
@@ -3271,6 +3283,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4PrecipPotConsumption(Sender: TObject);
     procedure InvalidateMfFmp4NrdInfilLocation(Sender: TObject);
     procedure InvalidateMfFmp4CropCoefficient(Sender: TObject);
+    procedure InvalidateMfFmp4LandUseAreaFraction(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4802,6 +4815,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean; override;
     function FarmProcess4TransientNrdInfilLocIsSelected: Boolean; override;
     function FarmProcess4TransientCropCoefficientIsSelected: Boolean; override;
+    function FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean; override;
+
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
@@ -6213,6 +6228,7 @@ resourcestring
   StrPrecipPotConsumption = KPrecipPotConsumption;
   StrNRD_Infiltration_Location = KNRD_Infiltration_Location;
   StrCropCoefficient = KCropCoefficient;
+  StrLandUseAreaFraction = KLandUseAreaFraction;
 
 
 const
@@ -24064,6 +24080,34 @@ begin
   result := FarmProcess4TransientFarmIsSelected;
 end;
 
+function TPhastModel.FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientLandUseAreaFractionIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientNrdInfilLocIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -26653,6 +26697,11 @@ end;
 procedure TCustomModel.InvalidateMfFmp4FarmID(Sender: TObject);
 begin
   ModflowPackages.FarmProcess4.FarmID.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4LandUseAreaFraction(Sender: TObject);
+begin
+  ModflowPackages.FarmLandUse.MfFmp4LandUseAreaFraction.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4NrdInfilLocation(Sender: TObject);
@@ -35737,6 +35786,17 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientLandUseAreaFractionarrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4TransientNrdInfilLocIsSelected: Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -36824,7 +36884,7 @@ begin
   end;
 end;
 
-function TCustomModel.CropCoefficentUsed(Sender: TObject): Boolean;
+function TCustomModel.CropCoefficientUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -37665,7 +37725,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 15;
+  OWHM4DataSets  = 16;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -40671,15 +40731,28 @@ begin
   FDataArrayCreationRecords[Index].DisplayName := StrCropCoefficient;
   FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CropCoefficentUsed;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CropCoefficientUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, LAND_USE: CROP_COEFFICIENT';
   Inc(Index);
 
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KLandUseAreaFraction;
+  FDataArrayCreationRecords[Index].DisplayName := StrLandUseAreaFraction;
+  FDataArrayCreationRecords[Index].Formula := '1';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.LandUseAreaFractionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE: LAND_USE_AREA_FRACTION';
+  Inc(Index);
 
-  //  StrCropCoefficient = KCropCoefficient;
+//  StrLandUseAreaFraction = KLandUseAreaFraction;
 
   {$ENDIF}
 
@@ -41959,6 +42032,17 @@ begin
   result := FLakScreenObjects;
 end;
 
+function TCustomModel.LandUseAreaFractionUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.StaticLandUseAreaFractionArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.UzfPackageUsed(Sender: TObject): boolean;
 begin
   result := ModflowUsed(Sender) and (ModelSelection <> msModflow2015)
@@ -42777,13 +42861,25 @@ begin
 end;
 
 function TCustomModel.MultipleAddedDemandUsed(Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
 begin
-
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.AddedDemand.FarmOption = foStatic)
+    and (FarmLandUse.AddedDemand.ArrayList = alArray);
 end;
 
 function TCustomModel.MultipleConsumptiveUseUsed(Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
 begin
-
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.ConsumptiveUse.FarmOption = foStatic)
+    and (FarmLandUse.ConsumptiveUse.ArrayList = alArray);
 end;
 
 function TCustomModel.MultipleCropCoefficientUsed(Sender: TObject): Boolean;
@@ -42799,30 +42895,71 @@ end;
 
 function TCustomModel.MultipleEvaporationIrrigationUsed(
   Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
 begin
-
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.EvapIrrigationFraction.FarmOption = foStatic)
+    and (FarmLandUse.EvapIrrigationFraction.ArrayList = alArray);
 end;
 
 function TCustomModel.MultipleIrrigationUsed(Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
 begin
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.Irrigation.FarmOption = foStatic)
+    and (FarmLandUse.Irrigation.ArrayList = alArray);
+end;
 
+function TCustomModel.MultipleLandUseFractionsUsed(Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.LandUseFraction.FarmOption = foStatic)
+    and (FarmLandUse.LandUseFraction.ArrayList = alArray);
 end;
 
 function TCustomModel.MultipleRootDepthUsed(Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
 begin
-
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.RootDepth.FarmOption = foStatic)
+    and (FarmLandUse.RootDepth.ArrayList = alArray);
 end;
 
 function TCustomModel.MultipleSWLossFractionIrrigationUsed(
   Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
 begin
-
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.FractionOfIrrigationToSurfaceWater.FarmOption = foStatic)
+    and (FarmLandUse.FractionOfIrrigationToSurfaceWater.ArrayList = alArray);
 end;
 
 function TCustomModel.MultipleSWLossFractionPrecipUsed(
   Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
 begin
-
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.FractionOfPrecipToSurfaceWater.FarmOption = foStatic)
+    and (FarmLandUse.FractionOfPrecipToSurfaceWater.ArrayList = alArray);
 end;
 
 function TCustomModel.NpfUsed(Sender: TObject): boolean;

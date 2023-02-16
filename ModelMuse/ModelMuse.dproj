@@ -1993,6 +1993,13 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="UpdateDataArrayUnit.pas"/>
+        <DCCReference Include="ModflowFmp4LandUseAreaFractionUnit.pas"/>
+        <DCCReference Include="frameScreenObjectLandUseAreaFractionUnit.pas">
+            <Form>frameScreenObjectLandUseAreaFraction</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="ModflowFmp4LandUseBoundaryUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

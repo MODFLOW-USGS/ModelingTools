@@ -57,7 +57,6 @@ var
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMissingGeoReferenc);
 
-
   FFileName := ChangeFileExt(AFileName, '');
   case SubModelType of
     smtMain: ;

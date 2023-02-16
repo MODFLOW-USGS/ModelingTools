@@ -5501,6 +5501,7 @@ Type
     FConsumptiveUse: TFarmProperty;
     FMfFmp4CropID: TModflowBoundaryDisplayTimeList;
     FMfFmp4CropCoefficient: TModflowBoundaryDisplayTimeList;
+    FMfFmp4LandUseAreaFraction: TModflowBoundaryDisplayTimeList;
     procedure SetAddedDemand(const Value: TFarmProperty);
     procedure SetCropCoeff(const Value: TFarmProperty);
     procedure SetET_IrrigFracCorrection(const Value: TFarmProperty);
@@ -5525,17 +5526,23 @@ Type
     procedure SetLandUsePrints(const Value: TLandUsePrints);
     procedure SetCropLocation(const Value: TRequiredSteadyTransient);
     procedure SetConsumptiveUse(const Value: TFarmProperty);
+
     function TransientCropIDUsed(Sender: TObject): boolean;
 
     function GetCropIDBoundary(ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeFmp4CropIDDisplay(Sender: TObject);
     procedure GetMfFmp4CropIDUseList(Sender: TObject; NewUseList: TStringList);
 
+    function GetLandUseAreaFractionBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeLandUseAreaFractionDisplay(Sender: TObject);
+    procedure GetLandUseAreaFractionUseList(Sender: TObject; NewUseList: TStringList);
+    procedure InvalidateLandUseAreaFraction(Sender: TObject);
 
     function GetCropCoefficientBoundary(ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeCropCoefficientDisplay(Sender: TObject);
     procedure GetCropCoefficientUseList(Sender: TObject; NewUseList: TStringList);
     procedure InvalidateCropCoefficient(Sender: TObject);
+    procedure InvalidateTransientCropID;
   protected
     procedure InvalidateModel; Override;
   public
@@ -5551,11 +5558,18 @@ Type
     // RELAXATION_FACTOR_HEAD_CHANGE
     property RelaxFracHeadChange: double read GetRelaxFracHeadChange
       write SetRelaxFracHeadChange;
+
     property MfFmp4CropID: TModflowBoundaryDisplayTimeList read FMfFmp4CropID;
+
+    function TransientLandUseAreaFractionarrayUsed (Sender: TObject): boolean;
+    function StaticLandUseAreaFractionArrayUsed (Sender: TObject): boolean;
+    property MfFmp4LandUseAreaFraction: TModflowBoundaryDisplayTimeList
+      read FMfFmp4LandUseAreaFraction;
 
     function TransientCropCoefficientarrayUsed (Sender: TObject): boolean;
     function StaticCropCoefficientArrayUsed (Sender: TObject): boolean;
-    property MfFmp4CropCoefficient: TModflowBoundaryDisplayTimeList read FMfFmp4CropCoefficient;
+    property MfFmp4CropCoefficient: TModflowBoundaryDisplayTimeList
+      read FMfFmp4CropCoefficient;
   published
     // LAND_USE
     // {SINGLE_LAND_USE_PER_CELL, or MULTIPLE_LAND_USE_PER_CELL}
@@ -26377,6 +26391,16 @@ begin
       AddTimeList(FMfFmp4CropID);
     end;
 
+    FMfFmp4LandUseAreaFraction := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4LandUseAreaFraction.OnInitialize := InitializeLandUseAreaFractionDisplay;
+    FMfFmp4LandUseAreaFraction.OnGetUseList := GetLandUseAreaFractionUseList;
+    FMfFmp4LandUseAreaFraction.OnTimeListUsed := TransientLandUseAreaFractionarrayUsed;
+    FMfFmp4LandUseAreaFraction.Name := 'Land Use Area Fraction';
+    if TransientLandUseAreaFractionarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4LandUseAreaFraction);
+    end;
+
     FMfFmp4CropCoefficient := TModflowBoundaryDisplayTimeList.Create(Model);
     FMfFmp4CropCoefficient.OnInitialize := InitializeCropCoefficientDisplay;
     FMfFmp4CropCoefficient.OnGetUseList := GetCropCoefficientUseList;
@@ -26389,11 +26413,16 @@ begin
   end;
 
   CropCoeff.OnChangeFarmOption := InvalidateCropCoefficient;
+  CropCoeff.OnChangeArrayList := InvalidateCropCoefficient;
+
+  FLandUseFraction.OnChangeFarmOption := InvalidateLandUseAreaFraction;
+  FLandUseFraction.OnChangeArrayList := InvalidateLandUseAreaFraction;
 end;
 
 destructor TFarmProcess4LandUse.Destroy;
 begin
   FMfFmp4CropCoefficient.Free;
+  FMfFmp4LandUseAreaFraction.Free;
   FMfFmp4CropID.Free;
 
   FLandUseFraction.Free;
@@ -26436,6 +26465,22 @@ function TFarmProcess4LandUse.GetCropIDBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
   result := ScreenObject.ModflowFmpCropID;
+end;
+
+function TFarmProcess4LandUse.GetLandUseAreaFractionBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4LandUseAreaFraction;
+end;
+
+procedure TFarmProcess4LandUse.GetLandUseAreaFractionUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetLandUseAreaFractionBoundary;
+  GetUseListOptions.Description := 'FMP Land Use Area Fraction';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 procedure TFarmProcess4LandUse.GetMfFmp4CropIDUseList(Sender: TObject;
@@ -26489,6 +26534,22 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InitializeLandUseAreaFractionDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := MfFmp4LandUseAreaFraction;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateLandUseAreaFractionDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InitializeVariables;
 begin
   MinimumBareFraction :=  0.000001;
@@ -26530,12 +26591,34 @@ begin
   InvalidateModel;
 end;
 
+procedure TFarmProcess4LandUse.InvalidateLandUseAreaFraction(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientLandUseAreaFractionarrayUsed(nil) then
+    begin
+      AddTimeList(MfFmp4LandUseAreaFraction);
+    end
+    else
+    begin
+      RemoveTimeList(MfFmp4LandUseAreaFraction);
+    end;
+  end;
+  InvalidateModel;
+end;
+
 procedure TFarmProcess4LandUse.InvalidateModel;
+var
+  Crops: TCropCollection;
 begin
   inherited;
   if FModel <> nil then
   begin
-    (FModel as TCustomModel).FmpCrops.UpdateAllDataArrays;
+    Crops := (FModel as TCustomModel).FmpCrops;
+    if Crops <> nil then
+    begin
+      Crops.UpdateAllDataArrays;
+    end;
   end;
 end;
 
@@ -26594,6 +26677,9 @@ begin
   begin
     FLandUseOption := Value;
     InvalidateModel;
+    InvalidateTransientCropID;
+    InvalidateLandUseAreaFraction(nil);
+    InvalidateCropCoefficient(nil);
   end;
 end;
 
@@ -26643,17 +26729,7 @@ begin
   if FCropLocation <> Value then
   begin
     FCropLocation := Value;
-    if FModel <> nil then
-    begin
-      if FCropLocation = rstTransient then
-      begin
-        AddTimeList(MfFmp4CropID);
-      end
-      else
-      begin
-        RemoveTimeList(MfFmp4CropID);
-      end;
-    end;
+    InvalidateTransientCropID;
     InvalidateModel;
   end;
 end;
@@ -26687,6 +26763,30 @@ begin
     and (LandUseOption = luoSingle);
 end;
 
+procedure TFarmProcess4LandUse.InvalidateTransientCropID;
+begin
+  if FModel <> nil then
+  begin
+    if TransientCropIDUsed(nil) then
+    begin
+      AddTimeList(MfFmp4CropID);
+    end
+    else
+    begin
+      RemoveTimeList(MfFmp4CropID);
+    end;
+  end;
+end;
+
+function TFarmProcess4LandUse.StaticLandUseAreaFractionArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (LandUseFraction.FarmOption = foTransient)
+    and (LandUseFraction.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
 function TFarmProcess4LandUse.TransientCropCoefficientarrayUsed(
   Sender: TObject): boolean;
 begin
@@ -26699,7 +26799,17 @@ end;
 function TFarmProcess4LandUse.TransientCropIDUsed(Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (CropLocation = rstTransient);
+    and (CropLocation = rstTransient)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.TransientLandUseAreaFractionarrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (LandUseFraction.FarmOption = foTransient)
+    and (LandUseFraction.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
 end;
 
 { TFarmSalinityFlush }

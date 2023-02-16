@@ -16,7 +16,7 @@ type
     wlEfficiencyImprovement, wlBareRunoffFraction,
     wlBarePrecipitationConsumptionFraction, wlCapillaryFringe, wlSoilID,
     wlSurfaceK, wlBareEvap, wlDirectRecharge, wlPrecipPotConsumption,
-    wlNrdInfilLoc, wlCropCoefficient);
+    wlNrdInfilLoc, wlLandUseAreaFraction, wlCropCoefficient);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -48,6 +48,7 @@ type
     CheckError: string;
     Option: string;
     FarmProperty: TFarmProperty;
+    LandUseStaticFileNames: TStringList;
   end;
 
   TModflowFmp4Writer = class(TCustomListWriter)
@@ -72,6 +73,7 @@ type
     FDirectRecharge: TList;
     FPrecipPotConsumption: TList;
     FNrdInfilLocation: TList;
+    FLandUseAreaFraction: TList;
     FCropCoefficient: TList;
 
     FFarmWellID: Integer;
@@ -95,6 +97,7 @@ type
     FPrecipPotConsumptionFileStream: TFileStream;
     FNrdInfilLocationFileStream: TFileStream;
     FCropcoefficientFileStream: TFileStream;
+    FLandUseAreaFractionFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -145,6 +148,9 @@ type
     procedure EvaluateNrdInfilLocation;
     procedure WriteNrdInfilLocation;
 
+    procedure EvaluateLandUseAreaFraction;
+    procedure WriteLandUseAreaFraction;
+
     procedure EvaluateCropCoefficient;
     procedure WriteCropCoefficient;
 
@@ -170,9 +176,13 @@ type
       WriteLocation: TWriteLocation): TModflowBoundary;
     procedure EvaluateTransientArrayData(WriteLocation: TWriteLocation);
     procedure WriteFmpArrayData(AFileName: string; RequiredValues: TRequiredValues);
+    procedure WriteLandUseArrayData(AFileName: string; RequiredValues: TRequiredValues);
     procedure UpdateDisplay(UpdateRequirements: TUpdateRequirements);
     function TransientCropUsed(Sender: TObject): Boolean;
     function TransientRefEtUsed(Sender: TObject): Boolean;
+    procedure GetScaleFactorsAndExternalFile(RequiredValues: TRequiredValues; var UnitConversionScaleFactor: string; var ExternalFileName: string; var ExternalScaleFileName: string);
+    procedure WriteScaleFactorsAndID(RequiredValues: TRequiredValues; UnitConversionScaleFactor: string; ExternalScaleFileName: string);
+    procedure WriteLandUseOption;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -214,6 +224,7 @@ type
     procedure UpdateDirectRechargeDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdatePrecipPotConsumptionDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateNrdInfilLocationDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateLandUseAreaFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateCropCoefficentDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
@@ -367,6 +378,7 @@ begin
   FDirectRecharge := TObjectList.Create;
   FPrecipPotConsumption := TObjectList.Create;
   FNrdInfilLocation := TObjectList.Create;
+  FLandUseAreaFraction := TObjectList.Create;
   FCropCoefficient := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
@@ -381,6 +393,7 @@ begin
   FreeFileStreams;
 
   FCropCoefficient.Free;
+  FLandUseAreaFraction.Free;
   FNrdInfilLocation.Free;
   FPrecipPotConsumption.Free;
   FDirectRecharge.Free;
@@ -438,6 +451,7 @@ begin
   EvaluateDirectRecharge;
   EvaluatePrecipPotConsumption;
   EvaluateNrdInfilLocation;
+  EvaluateLandUseAreaFraction;
   EvaluateCropCoefficient;
 end;
 
@@ -524,6 +538,15 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.EvaluateLandUseAreaFraction;
+begin
+  if FLandUse.TransientLandUseAreaFractionarrayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Land Use Area Fraction');
+    EvaluateTransientArrayData(wlLandUseAreaFraction);
+  end;
+end;
+
 procedure TModflowFmp4Writer.EvaluateNrdInfilLocation;
 begin
   if FSurfaceWater4.TransientNrdInfilLocationUsed(nil) then
@@ -581,6 +604,7 @@ begin
   FreeAndNil(FDirectRechargeFileStream);
   FreeAndNil(FPrecipPotConsumptionFileStream);
   FreeAndNil(FNrdInfilLocationFileStream);
+  FreeAndNil(FLandUseAreaFractionFileStream);
   FreeAndNil(FCropcoefficientFileStream);
 
 end;
@@ -768,6 +792,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlLandUseAreaFraction:
+      begin
+        result := ChangeFileExt(FBaseName, '.LAND_USE_AREA_FRACTION');
+        if FLandUseAreaFractionFileStream = nil then
+        begin
+          FLandUseAreaFractionFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     wlCropCoefficient:
       begin
         result := ChangeFileExt(FBaseName, '.CROP_COEFFICIENT');
@@ -815,6 +848,7 @@ begin
     wlDirectRecharge: result := ScreenObject.ModflowFmpDirectRecharge;
     wlPrecipPotConsumption: result := ScreenObject.ModflowFmpPrecipPotConsumption;
     wlNrdInfilLoc: result := ScreenObject.ModflowFmp4NrdInfilLocationBoundary;
+    wlLandUseAreaFraction: result := ScreenObject.ModflowFmp4LandUseAreaFraction;
     wlCropCoefficient: result := ScreenObject.ModflowFmp4CropCoefficient;
     else Assert(False);
   end;
@@ -853,6 +887,7 @@ begin
     wlDirectRecharge: result := FDirectRecharge;
     wlPrecipPotConsumption: result := FPrecipPotConsumption;
     wlNrdInfilLoc: result := FNrdInfilLocation;
+    wlLandUseAreaFraction: result := FLandUseAreaFraction;
     wlCropCoefficient: result := FCropCoefficient;
     else Assert(False)
   end;
@@ -924,7 +959,56 @@ begin
   UpdateRequirements.WriteLocation := wlCropCoefficient;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
+end;
 
+procedure TModflowFmp4Writer.WriteLandUseOption;
+begin
+  case FLandUse.LandUseOption of
+    luoSingle:
+      begin
+        WriteString('  SINGLE_LAND_USE_PER_CELL');
+      end;
+    luoMultiple:
+      begin
+        WriteString('  MULTIPLE_LAND_USE_PER_CELL');
+      end;
+  end;
+  NewLine;
+end;
+
+procedure TModflowFmp4Writer.WriteScaleFactorsAndID(RequiredValues: TRequiredValues; UnitConversionScaleFactor: string; ExternalScaleFileName: string);
+begin
+  if UnitConversionScaleFactor <> '' then
+  begin
+    WriteString('  INTERNAL SF ');
+    WriteString(UnitConversionScaleFactor);
+    NewLine;
+  end;
+  if ExternalScaleFileName <> '' then
+  begin
+    WriteString('  SFAC OPEN/CLOSE ');
+    WriteString(ExternalScaleFileName);
+    NewLine;
+  end;
+  WriteString('  ');
+  WriteString(RequiredValues.ID);
+  WriteString(' ');
+end;
+
+procedure TModflowFmp4Writer.GetScaleFactorsAndExternalFile(RequiredValues: TRequiredValues; var UnitConversionScaleFactor: string; var ExternalFileName: string; var ExternalScaleFileName: string);
+begin
+  if RequiredValues.FarmProperty <> nil then
+  begin
+    UnitConversionScaleFactor := RequiredValues.FarmProperty.UnitConversionScaleFactor;
+    ExternalFileName := RequiredValues.FarmProperty.ExternalFileName;
+    ExternalScaleFileName := RequiredValues.FarmProperty.ExternalScaleFileName;
+  end
+  else
+  begin
+    UnitConversionScaleFactor := '';
+    ExternalFileName := '';
+    ExternalScaleFileName := '';
+  end;
 end;
 
 procedure TModflowFmp4Writer.UpdateCropIDDisplay(
@@ -1073,6 +1157,19 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.UpdateLandUseAreaFractionDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateLandUseAreaFraction;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientLandUseAreaFractionarrayUsed;
+  UpdateRequirements.WriteLocation := wlLandUseAreaFraction;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
 procedure TModflowFmp4Writer.UpdateNrdInfilLocationDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
@@ -1118,23 +1215,8 @@ var
   ExternalScaleFileName: string;
   UnitConversionScaleFactor: string;
 begin
-  if RequiredValues.FarmProperty <> nil then
-  begin
-//    if RequiredValues.FarmProperty.UnitConversionScaleFactor <> '' then
-//    begin
-//      WriteString('  INTERNAL SF ');
-//      WriteString(RequiredValues.FarmProperty.UnitConversionScaleFactor);
-//      NewLine;
-//    end;
-    UnitConversionScaleFactor := RequiredValues.FarmProperty.UnitConversionScaleFactor;
-    ExternalFileName := RequiredValues.FarmProperty.ExternalFileName;
-    ExternalScaleFileName := RequiredValues.FarmProperty.ExternalScaleFileName;
-  end
-  else
-  begin
-    ExternalFileName := '';
-    ExternalScaleFileName := '';
-  end;
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
 
   if RequiredValues.WriteTransientData then
   begin
@@ -1150,7 +1232,6 @@ begin
     begin
       WriteString(ExternalFileName);
       NewLine;
-//      WriteTransientFmpArrayData(RequiredValues);
     end
     else
     begin
@@ -1161,28 +1242,24 @@ begin
   end
   else
   begin
-    if UnitConversionScaleFactor <> '' then
-    begin
-      WriteString('  INTERNAL SF ');
-      WriteString(UnitConversionScaleFactor);
-      NewLine;
-    end;
-    if ExternalScaleFileName <> '' then
-    begin
-      WriteString('  SFAC OPEN/CLOSE ');
-      WriteString(ExternalScaleFileName);
-      NewLine;
-    end;
-    WriteString('  ');
-    WriteString(RequiredValues.ID);
-    WriteString(' ');
+    WriteScaleFactorsAndID(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+
     if RequiredValues.Option <> '' then
     begin
       WriteString(RequiredValues.Option + ' ');
     end;
-    DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
-    DataArray.Initialize;
-    if DataArray.IsUniform = iuTrue then
+    DataArray := nil;
+    if ExternalFileName = '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
+      Assert(DataArray <> nil);
+    end;
+    if (DataArray <> nil) then
+    begin
+      DataArray.Initialize;
+    end;
+    if (DataArray <> nil) and (DataArray.IsUniform = iuTrue) then
     begin
       WriteString('STATIC CONSTANT ');
       if DataArray.DataType = rdtDouble then
@@ -1496,6 +1573,8 @@ procedure TModflowFmp4Writer.WriteCropCoefficient;
 var
   AFileName: string;
   RequiredValues: TRequiredValues;
+  DataArrayNames: TStringList;
+  CropIndex: Integer;
 begin
   if FLandUse.CropCoeff.FarmOption = foNotUsed then
   begin
@@ -1521,7 +1600,25 @@ begin
     RequiredValues.Option := '';
     RequiredValues.FarmProperty := FLandUse.CropCoeff;
 
-    WriteFmpArrayData(AFileName, RequiredValues);
+    if FLandUse.LandUseOption = luoSingle then
+    begin
+      WriteFmpArrayData(AFileName, RequiredValues);
+    end
+    else
+    begin
+      DataArrayNames := TStringList.Create;
+      try
+        for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+        begin
+          DataArrayNames.Add(
+            Model.FmpCrops[CropIndex].CropCoefficientDataArrayName);
+        end;
+        RequiredValues.LandUseStaticFileNames := DataArrayNames;
+        WriteLandUseArrayData(AFileName, RequiredValues);
+      finally
+        DataArrayNames.Free;
+      end;
+    end;
   end
   else
   begin
@@ -1651,21 +1748,24 @@ var
 begin
   AFileName := GetFileStreamName(wlCID);
 
-  RequiredValues.WriteLocation := wlCID;
-  RequiredValues.DefaultValue := 0;
-  RequiredValues.DataType := rdtInteger;
-  RequiredValues.DataTypeIndex := 0;
-  RequiredValues.Comment := 'FMP LAND_USE: Location';
-  RequiredValues.ErrorID := 'FMP LAND_USE: Location';
-  RequiredValues.ID := 'LOCATION';
-  RequiredValues.StaticDataName := KLand_Use_ID;
-  RequiredValues.WriteTransientData := FLandUse.CropLocation = rstTransient;
-  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := StrInvalidCropIDInF;
-  RequiredValues.Option := '';
-  RequiredValues.FarmProperty := nil;
+  if FLandUse.LandUseOption = luoSingle then
+  begin
+    RequiredValues.WriteLocation := wlCID;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtInteger;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP LAND_USE: Location';
+    RequiredValues.ErrorID := 'FMP LAND_USE: Location';
+    RequiredValues.ID := 'LOCATION';
+    RequiredValues.StaticDataName := KLand_Use_ID;
+    RequiredValues.WriteTransientData := FLandUse.CropLocation = rstTransient;
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+    RequiredValues.CheckError := StrInvalidCropIDInF;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := nil;
 
-  WriteFmpArrayData(AFileName, RequiredValues);
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteNrdInfilLocation;
@@ -1872,7 +1972,7 @@ begin
   NewLine;
 
   WriteString('  NCROP');
-  WriteInteger(1);
+  WriteInteger(Model.FmpCrops.Count);
   NewLine;
 
   WriteString('  NSOIL');
@@ -1898,11 +1998,10 @@ begin
     WriteString('BEGIN LAND_USE');
     NewLine;
 
-    // remove this.
-    WriteString('  SINGLE_LAND_USE_PER_CELL');
-    NewLine;
+    WriteLandUseOption;
 
     WriteLandUseLocation;
+    WriteLandUseAreaFraction;
     WriteCropCoefficient;
 
     // remove this.
@@ -1912,6 +2011,159 @@ begin
     WriteString('END LAND_USE');
     NewLine;
     NewLine;
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteLandUseAreaFraction;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  DataArrayNames: TStringList;
+  CropIndex: Integer;
+begin
+  if FLandUse.LandUseFraction.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlLandUseAreaFraction);
+
+  if (FLandUse.LandUseFraction.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlLandUseAreaFraction;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP LAND_USE: LAND_USE_AREA_FRACTION';
+    RequiredValues.ErrorID := 'FMP LAND_USE: LAND_USE_AREA_FRACTION';
+    RequiredValues.ID := 'LAND_USE_AREA_FRACTION';
+    RequiredValues.StaticDataName := KLandUseAreaFraction;
+    RequiredValues.WriteTransientData :=
+      (FLandUse.LandUseFraction.FarmOption = foTransient);
+    RequiredValues.CheckError :=  'Invalid Land Use Area Fraction value';
+    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FLandUse.LandUseFraction;
+    if FLandUse.LandUseOption = luoSingle then
+    begin
+      WriteFmpArrayData(AFileName, RequiredValues);
+    end
+    else
+    begin
+      DataArrayNames := TStringList.Create;
+      try
+        for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+        begin
+          DataArrayNames.Add(
+            Model.FmpCrops[CropIndex].LandUseAreaFractionDataArrayName);
+        end;
+        RequiredValues.LandUseStaticFileNames := DataArrayNames;
+        WriteLandUseArrayData(AFileName, RequiredValues);
+      finally
+        DataArrayNames.Free;
+      end;
+    end;
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteLandUseArrayData(AFileName: string;
+  RequiredValues: TRequiredValues);
+var
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  DataSetList: TList;
+  IsConstant: Boolean;
+  index: Integer;
+  DataArray: TDataArray;
+  ConstantValue: double;
+begin
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+
+  if RequiredValues.WriteTransientData then
+  begin
+    Assert(False)
+  end
+  else
+  begin
+    WriteScaleFactorsAndID(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+
+    Assert(RequiredValues.Option = '');
+
+    if ExternalFileName <> '' then
+    begin
+      WriteString('STATIC ARRAY DATAFILE ');
+      WriteString(ExternalFileName);
+      NewLine;
+    end
+    else
+    begin
+      Assert(RequiredValues.LandUseStaticFileNames <> nil);
+      DataSetList := TList.Create;
+      try
+        IsConstant := True;
+        ConstantValue := 0.0;
+        for index := 0 to RequiredValues.LandUseStaticFileNames.Count - 1 do
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(
+            RequiredValues.LandUseStaticFileNames[index]);
+          DataSetList.Add(DataArray);
+          Assert(DataArray <> nil);
+          DataArray.Initialize;
+          if DataArray.IsUniform <> iuTrue then
+          begin
+            IsConstant := False;
+          end;
+          if IsConstant then
+          begin
+            if (index = 0) then
+            begin
+              ConstantValue := DataArray.RealData[0,0,0];
+            end
+            else
+            begin
+              IsConstant := ConstantValue = DataArray.RealData[0,0,0];
+            end;
+          end;
+        end;
+
+        if IsConstant then
+        begin
+          WriteString('STATIC CONSTANT ');
+          WriteFloat(ConstantValue);
+          NewLine;
+        end
+        else
+        begin
+          WriteString('STATIC ARRAY DATAFILE ');
+          WriteString(ExtractFileName(AFileName));
+          NewLine;
+          FWriteLocation := RequiredValues.WriteLocation;
+          try
+            for Index := 0 to DataSetList.Count -1 do
+            begin
+              DataArray := DataSetList[Index];
+              WriteArray(DataArray, 0, RequiredValues.ErrorID, '',
+                RequiredValues.ID, False, False, True);
+              if Assigned(RequiredValues.CheckProcedure) then
+              begin
+                RequiredValues.CheckProcedure(DataArray, RequiredValues.CheckError);
+              end;
+            end;
+          finally
+            FWriteLocation := wlMain;
+          end;
+        end;
+      finally
+        DataSetList.Free;
+      end;
+    end;
   end;
 end;
 
@@ -2259,6 +2511,11 @@ begin
         begin
           Assert(FNrdInfilLocationFileStream <> nil);
           FNrdInfilLocationFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlLandUseAreaFraction:
+        begin
+          Assert(FLandUseAreaFractionFileStream <> nil);
+          FLandUseAreaFractionFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlCropCoefficient:
         begin

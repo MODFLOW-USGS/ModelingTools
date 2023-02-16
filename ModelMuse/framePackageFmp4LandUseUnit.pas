@@ -36,6 +36,7 @@ type
     cpnlDataSets: TCategoryPanel;
     procedure rdgLandUseSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
+    procedure comboLandUsePerCellChange(Sender: TObject);
   private
     procedure InitializeGrid;
     { Private declarations }
@@ -75,6 +76,16 @@ resourcestring
 {$R *.dfm}
 
 { TframePackageFmp4LandUse }
+
+procedure TframePackageFmp4LandUse.comboLandUsePerCellChange(Sender: TObject);
+begin
+  inherited;
+  if (comboLandUsePerCell.ItemIndex = 1)
+    and (rdgLandUse.ItemIndex[Ord(socTransient), Ord(sorLandUseFraction)] = 0) then
+  begin
+    rdgLandUse.ItemIndex[Ord(socTransient), Ord(sorLandUseFraction)] := 1
+  end;
+end;
 
 procedure TframePackageFmp4LandUse.GetData(Package: TModflowPackageSelection);
 var
@@ -238,7 +249,7 @@ begin
     socTransient: ;
     socArray:
       begin
-        CanSelect := SoilRow in [sorLandUseFraction, sorCropCoeff,
+        CanSelect := SoilRow in [sorLandUseFraction, sorCropCoeff, sorConsumptiveUse,
           sorIrrigation, sorRootDepth, sorTranspirationFraction,
           sorEvapIrrigationFraction, sorFractionOfPrecipToSurfaceWater,
           sorFractionOfIrrigationToSurfaceWater, sorAddedDemand];
@@ -250,6 +261,16 @@ begin
           sorEvapIrrigationFraction, sorFractionOfPrecipToSurfaceWater,
           sorFractionOfIrrigationToSurfaceWater, sorPondDepth, sorAddedDemand]
       end;
+  end;
+  if (SoilRow = sorSoilLocation) and (comboLandUsePerCell.ItemIndex <> 0) then
+  begin
+    CanSelect := False;
+  end;
+  if (SoilColumns in [socArray, socSFAC, socFile, socSfacFile])
+    and (ARow >= Ord(sorConsumptiveUse))
+    and (rdgLandUse.ItemIndex[Ord(socTransient), ARow] <= 0) then
+  begin
+    CanSelect := False;
   end;
 end;
 
@@ -331,6 +352,11 @@ begin
     StaticTransient.IndexOf(rdgLandUse.Cells[Ord(socTransient), Ord(sorSoilLocation)]));
 
   SetFarmProperty(LandUsePackage.LandUseFraction, sorLandUseFraction);
+  if (LandUsePackage.LandUseOption = luoMultiple)
+    and (LandUsePackage.LandUseFraction.FarmOption = foNotUsed) then
+  begin
+    LandUsePackage.LandUseFraction.FarmOption := foStatic
+  end;
   LandUsePackage.SpecifyCropsToPrint := SetFarmOption(comboSpecifyCrops);
   SetFarmProperty(LandUsePackage.CropCoeff, sorCropCoeff);
   SetFarmProperty(LandUsePackage.Irrigation, sorIrrigation);

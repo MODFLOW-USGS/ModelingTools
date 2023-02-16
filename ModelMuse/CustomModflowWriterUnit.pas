@@ -216,7 +216,7 @@ type
     procedure WriteArray(const DataArray: TDataArray; const LayerIndex: integer;
       const Comment: string;  NoValueAssignedAnnotation: string;
       const MF6_Arrayname: string; CacheArray: boolean = True;
-      ShouldWriteHeader: Boolean = True); virtual;
+      ShouldWriteHeader: Boolean = True; ForceFullArray: Boolean = False); virtual;
     {
     @name returns whether or not PEST parameters are used with DataArray in the
     layer designated by LayerIndex.
@@ -339,8 +339,9 @@ end;
         identifying the data set being written.)
     }
     procedure WriteArray(const DataArray: TDataArray; const LayerIndex: integer;
-      const Comment: string;  NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
-      CacheArray: Boolean = True; ShouldWriteHeader: Boolean = True); override;
+      const Comment: string;  NoValueAssignedAnnotation: string;
+      const MF6_Arrayname: string; CacheArray: Boolean = True;
+      ShouldWriteHeader: Boolean = True; ForceFullArray: Boolean = False); override;
     // @name writes value to the output file using the U2DINT format in MODFLOW
     // or the IARRAY array reader in MT3DMS depending on the value of
     // @link(FArrayWritingFormat)
@@ -3643,7 +3644,8 @@ end;
 procedure TCustomModflowWriter.WriteArray(const DataArray: TDataArray;
   const LayerIndex: integer; const Comment: string;
   NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
-  CacheArray: Boolean = True; ShouldWriteHeader: Boolean = True);
+  CacheArray: Boolean = True; ShouldWriteHeader: Boolean = True;
+  ForceFullArray: Boolean = False);
 var
   RealValue: double;
   IntValue: integer;
@@ -3728,7 +3730,7 @@ begin
   else
   begin
     Uniform := CheckArrayUniform(LayerIndex, DataArray, IntValue, BoolValue, RealValue);
-    if Uniform then
+    if Uniform and not ForceFullArray then
     begin
       case DataArray.DataType of
         rdtDouble:
@@ -3801,7 +3803,8 @@ end;
 procedure TCustomFileWriter.WriteArray(const DataArray: TDataArray;
   const LayerIndex: integer; const Comment: string;
   NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
-  CacheArray: Boolean = True; ShouldWriteHeader: Boolean = True);
+  CacheArray: Boolean = True; ShouldWriteHeader: Boolean = True;
+  ForceFullArray: Boolean = False);
 var
   LayerArrayWriter: TLayerArrayWriter;
   ArrayFileName: string;

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-02-15T07:54:27.383-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-02-16T08:43:19.727-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -61,7 +61,7 @@
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
           <para styleclass="Normal">If MULTIPLE_LAND_USE_PER_CELL then it is required to specify LAND_USE_AREA_FRACTION</para>
           <para styleclass="Normal"> which indicates the portion of each model cell that each crop uses/its area.</para>
-          <para styleclass="Normal"> If SINGLE_LAND_USE_PER_CELL is specified then LAND_USE_AREA_FRACTION is optional an specifies</para>
+          <para styleclass="Normal"> If SINGLE_LAND_USE_PER_CELL is specified then LAND_USE_AREA_FRACTION is optional and specifies</para>
           <para styleclass="Normal"> &#160; the area that the land use covers for that specific surface cell and the rest is considered bare/fallow land</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> MULTIPLE_LAND_USE_PER_CELL =&gt; <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NCROP">NCROP</link>*NROW by NCOL Float array with numbers from 0.0 to 1.0,</para>

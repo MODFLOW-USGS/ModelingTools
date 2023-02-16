@@ -59,7 +59,8 @@ uses System.UITypes, Windows,
   frameScreenObjectFmp4PrecipPotConsumptionUnit,
   frameScreenObjectFmp4NrdInfilLocUnit,
   frameScreenObjectCustomFmp4IntBoundaryUnit,
-  frameScreenObjecFmp4CropCoefficientUnit;
+  frameScreenObjecFmp4CropCoefficientUnit,
+  frameScreenObjectLandUseAreaFractionUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -431,6 +432,8 @@ type
     frameFmp4NrdInfilLocation: TframeScreenObjectFmp4NrdInfilLoc;
     jvspFmp4CropCoefficient: TJvStandardPage;
     frameFmp4CropCoefficient: TframeScreenObjecFmp4CropCoefficient;
+    jvspFmp4LandUseAreaFraction: TJvStandardPage;
+    frameFmp4LandUseAreaFraction: TframeScreenObjectLandUseAreaFraction;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1772,6 +1775,7 @@ type
     FFmp4PrecipPotConsumptionNode: TJvPageIndexNode;
     FFmp4NrdInfilLocationNode: TJvPageIndexNode;
     FFmp4CropCoefficientNode: TJvPageIndexNode;
+    FFmp4LandUseAreaFractionNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2310,6 +2314,10 @@ type
     procedure CreateFmp4NrdInfilLocationNode;
     procedure GetFmp4NrdInfilLocationBoundary(const ScreenObjectList: TList);
 
+    procedure Fmp4LandUseAreaFractionChanged(Sender: TObject);
+    procedure CreateFmp4LandUseAreaFractionNode;
+    procedure GetFmp4LandUseAreaFractionBoundary(const ScreenObjectList: TList);
+
     procedure Fmp4CropCoefficientChanged(Sender: TObject);
     procedure CreateFmp4CropCoefficientNode;
     procedure GetFmp4CropCoefficientBoundary(const ScreenObjectList: TList);
@@ -2613,7 +2621,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowFmp4BarePrecipitationConsumptionFractionUnit,
   ModflowFmp4PotentialEvapBareUnit, ModflowFmp4DirectRechargeUnit,
   ModflowFmp4PrecipPotConsumptionUnit, ModflowFmp4NrdInfilLocationUnit,
-  ModflowFmp4CropCoefficientUnit;
+  ModflowFmp4CropCoefficientUnit, ModflowFmp4LandUseAreaFractionUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4084,6 +4092,10 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4LandUseAreaFractionNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4238,6 +4250,7 @@ begin
   CreateFmp4DirectRechargeNode;
   CreateFmp4PrecipPotConsumptionNode;
   CreateFmp4NrdInfilLocationNode;
+  CreateFmp4LandUseAreaFractionNode;
   CreateFmp4CropCoefficientNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
@@ -5069,6 +5082,7 @@ begin
         BoundaryNodeList.Add(FFmp4PrecipPotConsumptionNode);
         BoundaryNodeList.Add(FFmp4NrdInfilLocationNode);
         BoundaryNodeList.Add(FFmp4CropCoefficientNode);
+        BoundaryNodeList.Add(FFmp4LandUseAreaFractionNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -5989,6 +6003,16 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4LandUseAreaFractionChanged(
+  Sender: TObject);
+begin
+  if (FFmp4LandUseAreaFractionNode <> nil)
+    and (FFmp4LandUseAreaFractionNode.StateIndex <> 3) then
+  begin
+    FFmp4LandUseAreaFractionNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4NrdInfilLocationChanged(
   Sender: TObject);
 begin
@@ -6087,6 +6111,7 @@ begin
   frameFmp4PrecipPotConsumption.OnEdited := Fmp4PrecipPotConsumptionChanged;
   frameFmp4NrdInfilLocation.OnEdited := Fmp4NrdInfilLocationChanged;
   frameFmp4CropCoefficient.OnEdited := Fmp4CropCoefficientChanged;
+  frameFmp4LandUseAreaFraction.OnEdited := Fmp4LandUseAreaFractionChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7335,6 +7360,10 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4LandUseAreaFractionNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8332,6 +8361,14 @@ begin
       (FFmp4NrdInfilLocationNode.StateIndex = 2),
       (FFmp4NrdInfilLocationNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientNrdInfilLocIsSelected);
+  end;
+
+  if (FFmp4LandUseAreaFractionNode <> nil) then
+  begin
+    frameFmp4LandUseAreaFraction.SetData(FNewProperties,
+      (FFmp4LandUseAreaFractionNode.StateIndex = 2),
+      (FFmp4LandUseAreaFractionNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientLandUseAreaFractionIsSelected);
   end;
 
   if (FFmp4CropCoefficientNode <> nil) then
@@ -14758,6 +14795,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4LandUseAreaFractionNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4LandUseAreaFractionNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientLandUseAreaFractionIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Land Use Area Fraction in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4LandUseAreaFraction.PageIndex;
+    frameFmp4LandUseAreaFraction.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4LandUseAreaFractionNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4NrdInfilLocationNode;
 var
   Node: TJvPageIndexNode;
@@ -17529,6 +17583,32 @@ begin
   frameFmp4EfficiencyImprovement.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4LandUseAreaFractionBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4LandUseAreaFractionBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientLandUseAreaFractionIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4LandUseAreaFraction;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4LandUseAreaFractionNode <> nil then
+  begin
+    FFmp4LandUseAreaFractionNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4LandUseAreaFraction.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetFmp4NrdInfilLocationBoundary(
   const ScreenObjectList: TList);
 var
@@ -18053,6 +18133,7 @@ begin
   GetFmp4DirectRechargeBoundary(AScreenObjectList);
   GetFmp4PrecipPotConsumptionBoundary(AScreenObjectList);
   GetFmp4NrdInfilLocationBoundary(AScreenObjectList);
+  GetFmp4LandUseAreaFractionBoundary(AScreenObjectList);
   GetFmp4CropCoefficientBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;

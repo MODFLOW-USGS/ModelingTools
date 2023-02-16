@@ -349,6 +349,7 @@ type
     FEvapFractionsCollection: TEvapFractionsCollection;
     FLossesCollection: TLossesCollection;
     FCropWaterUseCollection: TCropWaterUseCollection;
+    FLandUseAreaFractionDataArrayName: string;
     FCropCoefficientDisplayName: string;
     FCropCoefficientDataArrayName: string;
     FRootDepthDataArrayName: string;
@@ -365,6 +366,8 @@ type
     FSWLossFractionPrecipDisplayName: string;
     FSWLossFractionIrrigationDisplayName: string;
     FConsumptiveUseDisplayName: string;
+    FLandUseAreaFractionDisplayName: string;
+    procedure SetLandUseAreaFractionDataArrayName(const NewName: string);
     procedure SetCropCoefficientDataArrayName(const NewName: string);
     procedure SetAddedDemandDataArrayName(const NewName: string);
     procedure SetConsumptiveUseDataArrayName(const NewName: string);
@@ -483,6 +486,12 @@ type
     property CropWaterUseCollection: TCropWaterUseCollection
       read FCropWaterUseCollection write SetCropWaterUseCollection;
   // FMP4
+    property LandUseAreaFractionDataArrayName: string
+      read FLandUseAreaFractionDataArrayName write SetLandUseAreaFractionDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
     property CropCoefficientDataArrayName: string
       read FCropCoefficientDataArrayName write SetCropCoefficientDataArrayName
     {$IFNDEF OWHMV2}
@@ -569,6 +578,7 @@ uses
   GlobalVariablesUnit, LockedGlobalVariableChangers, UpdateDataArrayUnit;
 
 const
+  KLandUseFractionPrefix  = 'Land_Use_Area_Fraction_';
   KCropCoefficientPrefix = 'Crop_Coefficient_';
   KConsumptiveUsePrefix = 'Consumptive_Use_';
   KIrrigationPrefix = 'Irrigatiion_';
@@ -579,6 +589,7 @@ const
   KAddedDemandPrefix = 'Added_Demand_';
 
 resourcestring
+  StrLandUseFractionPrefix  = KLandUseFractionPrefix;
   StrCropCoefficientPrefix = KCropCoefficientPrefix;
   StrConsumptiveUsePrefix = KConsumptiveUsePrefix;
   StrIrrigationPrefix = KIrrigationPrefix;
@@ -1688,6 +1699,7 @@ begin
     // This is done differently in TChemSpeciesItem
     // There the field is first assign then set to an empty string
     // and then the property is assigned.
+    LandUseAreaFractionDataArrayName := SourceItem.LandUseAreaFractionDataArrayName;
     CropCoefficientDataArrayName := SourceItem.CropCoefficientDataArrayName;
     ConsumptiveUseDataArrayName := SourceItem.ConsumptiveUseDataArrayName;
     IrrigationDataArrayName := SourceItem.IrrigationDataArrayName;
@@ -2066,6 +2078,7 @@ begin
       and CropFunctionCollection.IsSame(OtherItem.CropFunctionCollection)
       and CropWaterUseCollection.IsSame(OtherItem.CropWaterUseCollection)
 
+      and (LandUseAreaFractionDataArrayName = OtherItem.LandUseAreaFractionDataArrayName)
       and (CropCoefficientDataArrayName = OtherItem.CropCoefficientDataArrayName)
       and (ConsumptiveUseDataArrayName = OtherItem.ConsumptiveUseDataArrayName)
       and (IrrigationDataArrayName = OtherItem.IrrigationDataArrayName)
@@ -2392,6 +2405,11 @@ begin
         OldRoot := GenerateNewRoot(FCropName);
         NewRoot := GenerateNewRoot(Value);
 
+        FLandUseAreaFractionDisplayName := StringReplace(FLandUseAreaFractionDisplayName,
+          OldRoot,NewRoot, []);
+        LandUseAreaFractionDataArrayName := StringReplace(LandUseAreaFractionDataArrayName,
+          OldRoot,NewRoot, []);
+
         FCropCoefficientDisplayName := StringReplace(FCropCoefficientDisplayName,
           OldRoot,NewRoot, []);
         CropCoefficientDataArrayName := StringReplace(CropCoefficientDataArrayName,
@@ -2434,6 +2452,8 @@ begin
       end
       else
       begin
+        FLandUseAreaFractionDisplayName := GenerateNewRoot(StrLandUseFractionPrefix + Value);
+        LandUseAreaFractionDataArrayName := GenerateNewRoot(KLandUseFractionPrefix + Value);
 
         FCropCoefficientDisplayName := GenerateNewRoot(StrCropCoefficientPrefix + Value);
         CropCoefficientDataArrayName := GenerateNewRoot(KCropCoefficientPrefix + Value);
@@ -2590,6 +2610,39 @@ begin
   end;
 
   SetCaseSensitiveStringProperty(FIrrigationDataArrayName, NewName);
+end;
+
+procedure TCropItem.SetLandUseAreaFractionDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleLandUseFractionsUsed;
+    UpdateDat.OldDataArrayName := FLandUseAreaFractionDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FLandUseAreaFractionDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: LAND_USE_AREA_FRACTION';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FLandUseAreaFractionDataArrayName, NewName);
 end;
 
 procedure TCropItem.SetLossesCollection(const Value: TLossesCollection);
@@ -2767,6 +2820,7 @@ begin
   begin
     // Reassigning the name will cause the data set to be created if it is
     // needed.
+    LandUseAreaFractionDataArrayName := LandUseAreaFractionDataArrayName;
     CropCoefficientDataArrayName := CropCoefficientDataArrayName;
     ConsumptiveUseDataArrayName := ConsumptiveUseDataArrayName;
     IrrigationDataArrayName := IrrigationDataArrayName;

@@ -24,15 +24,14 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     TabOrder = 1
     object cpnlDataSets: TCategoryPanel
       Top = 344
-      Height = 338
+      Height = 550
       Caption = 'Land Use Data Sets'
       TabOrder = 0
-      ExplicitWidth = 418
       object rdgLandUse: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 399
-        Height = 312
+        Height = 524
         Align = alClient
         ColCount = 6
         Enabled = False
@@ -198,7 +197,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 395
       end
     end
     object cpnlOptions: TCategoryPanel
@@ -206,7 +204,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       Height = 115
       Caption = 'Land Use Options'
       TabOrder = 1
-      ExplicitWidth = 418
       object lblLandUsePerCell: TLabel
         Left = 168
         Top = 11
@@ -237,6 +234,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
         ItemIndex = 0
         TabOrder = 0
         Text = 'Single'
+        OnChange = comboLandUsePerCellChange
         Items.Strings = (
           'Single'
           'Multiple')
@@ -275,7 +273,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       Height = 229
       Caption = 'Print'
       TabOrder = 2
-      ExplicitWidth = 418
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
