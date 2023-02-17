@@ -281,7 +281,17 @@ type
     constructor Create(Model: TBaseModel);
     property Items[const Index: Integer]: TPestMethodItem read GetItems
       write SetItems; default;
+  end;
 
+  TLandUsePestMethodCollection = class(TEnhancedOrderedCollection)
+  protected
+    function GetItems(const Index: Integer): TPestMethodItem; virtual;
+    procedure SetItems(const Index: Integer; const Value: TPestMethodItem);
+    function GetCount: Integer; override;
+  public
+    constructor Create(Model: TBaseModel);
+    property Items[const Index: Integer]: TPestMethodItem read GetItems
+      write SetItems; default;
   end;
 
   TCustomObjectOrderedCollection = class(TEnhancedOrderedCollection)
@@ -2135,6 +2145,52 @@ end;
 
 procedure TPPObsGrpCollection.SetItem(Index: Integer;
   const Value: TPilotPointObsGrp);
+begin
+  inherited Items[Index] := Value;
+end;
+
+{ TLandUsePestMethodCollection }
+
+constructor TLandUsePestMethodCollection.Create(Model: TBaseModel);
+begin
+  inherited Create(TPestMethodItem, Model);
+end;
+
+function TLandUsePestMethodCollection.GetCount: Integer;
+var
+  LocalModel: TCustomModel;
+begin
+  if (Model <> nil) and Model.GwtUsed  then
+  begin
+    LocalModel := Model as TCustomModel;
+    if inherited GetCount < LocalModel.FmpCrops.Count then
+    begin
+      inherited Count := LocalModel.FmpCrops.Count
+    end;
+  end;
+  result := inherited;
+end;
+
+function TLandUsePestMethodCollection.GetItems(
+  const Index: Integer): TPestMethodItem;
+var
+  LocalModel: TCustomModel;
+begin
+  LocalModel := Model as TCustomModel;
+  if LocalModel = nil then
+  begin
+    LocalModel := frmGoPhast.PhastModel;
+  end;
+  if (LocalModel <> nil)
+    and (Count < LocalModel.FmpCrops.Count) then
+  begin
+    Count := LocalModel.FmpCrops.Count;
+  end;
+  result := inherited Items[Index] as TPestMethodItem;
+end;
+
+procedure TLandUsePestMethodCollection.SetItems(const Index: Integer;
+  const Value: TPestMethodItem);
 begin
   inherited Items[Index] := Value;
 end;

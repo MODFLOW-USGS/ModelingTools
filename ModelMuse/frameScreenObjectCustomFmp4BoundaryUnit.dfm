@@ -1,46 +1,49 @@
 inherited frameScreenObjectCustomFmp4Boundary: TframeScreenObjectCustomFmp4Boundary
-  Width = 205
-  Height = 266
-  ExplicitWidth = 205
-  ExplicitHeight = 266
+  Width = 410
+  Height = 308
+  ExplicitWidth = 410
+  ExplicitHeight = 308
   inherited pnlBottom: TPanel
-    Top = 220
-    Width = 205
-    ExplicitTop = 220
-    ExplicitWidth = 205
+    Top = 262
+    Width = 410
+    ExplicitTop = 262
+    ExplicitWidth = 410
+    DesignSize = (
+      410
+      46)
     inherited seNumberOfTimes: TJvSpinEdit
       Height = 23
       ExplicitHeight = 23
     end
     inherited btnDelete: TBitBtn
-      Left = 117
-      ExplicitLeft = 117
+      Left = 322
+      ExplicitLeft = 322
     end
     inherited btnInsert: TBitBtn
-      Left = 33
-      ExplicitLeft = 33
+      Left = 238
+      ExplicitLeft = 238
     end
   end
   inherited pnlTop: TPanel
-    Width = 205
-    ExplicitWidth = 205
+    Width = 410
+    ExplicitWidth = 410
     inherited pnlCaption: TPanel
-      Width = 203
-      ExplicitWidth = 203
+      Width = 408
+      ExplicitWidth = 408
     end
   end
   inherited pnlGrid: TPanel
-    Width = 205
-    Height = 195
-    ExplicitWidth = 205
-    ExplicitHeight = 195
+    Width = 410
+    Height = 237
+    ExplicitWidth = 410
+    ExplicitHeight = 237
     inherited pnlEditGrid: TPanel
-      Width = 203
-      ExplicitWidth = 203
+      Width = 408
+      ExplicitWidth = 408
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 203
-      Height = 143
+      Width = 408
+      Height = 185
       Columns = <
         item
           AutoAdjustRowHeights = False
@@ -114,8 +117,8 @@ inherited frameScreenObjectCustomFmp4Boundary: TframeScreenObjectCustomFmp4Bound
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 203
-      ExplicitHeight = 143
+      ExplicitWidth = 408
+      ExplicitHeight = 185
     end
   end
 end

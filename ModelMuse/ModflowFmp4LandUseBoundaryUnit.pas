@@ -4,7 +4,7 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, GoPhastTypes;
+  SubscriptionUnit, SparseDataSets, GoPhastTypes, System.Generics.Collections;
 
 type
   {
@@ -74,6 +74,7 @@ type
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    // Is RemoveFormulaObjects needed?
     procedure RemoveFormulaObjects; override;
     // See @link(BoundaryFormula).
     function GetBoundaryFormula(Index: integer): string; override;
@@ -97,24 +98,24 @@ type
   private
     // @name is used to compute the values for a series of
     // cells over a series of time intervals.
+    // @name descends from TObjectList.
     FLandUseList: TModflowTimeLists;
-//    FFmp4LandUseValueData: TModflowTimeList;
-    // @name must be assigned in Create by descendents.
-    FOnInvalidateLanduse: TNotifyEvent;
     procedure AddLandUseTimeLists(CropIndex: Integer);
     procedure RemoveLandUseTimeLists(CropIndex: Integer);
     procedure UpdateLandUseTimeLists; virtual;
-    procedure CreateTimeLists;
   protected
+    // @name must be assigned in Create by descendents.
+    FOnInvalidateLanduse: TNotifyEvent;
+    procedure CreateTimeLists; override;
     // override CreateTimeLists in descendents
 //    procedure CreateTimeLists; override;
-//    property Fmp4LandUseValueData: TModflowTimeList read FFmp4LandUseValueData;
     { TODO -cFMP4 : override GetDescription  in each descendent}
     class function GetDescription: string; virtual; abstract;
-    { TODO -cFMP4 : override AssignInvalidateEvent  in each descendent}
-    procedure AssignInvalidateEvent; virtual; abstract;
+    // override in descendents
+    function MultipleCropsPerCellUsed: Boolean; virtual; abstract;
   public
     Destructor Destroy; override;
+    procedure CreateLandUseTimeLists;
   end;
 
   TFmp4TimeListLinkClass = class of TFmp4LandUseTimeListLink;
@@ -125,6 +126,8 @@ type
   private
     procedure InvalidateLandUseValues(Sender: TObject);
   protected
+    // override in descendents
+    function MultipleCropsPerCellUsed: Boolean; virtual; abstract;
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual;
     { TODO -cFMP4 : override GetTimeListLinkClass  in each descendent}
     // override this
@@ -150,6 +153,7 @@ type
     // TCustomMF_BoundColl.SetBoundaryStartAndEndTime)
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel); override;
+    procedure CreateLandUseTimeLists(AModel: TBaseModel);
   end;
 
   TFmp4CollectionClass = class of TFmp4LandUseCollection;
@@ -161,8 +165,12 @@ type
   private
     FValues: TFmp4LandUseRecord;
     FStressPeriod: integer;
-    function GetFmp4LandUseValue: double;
-    function GetFmp4LandUseAnnotation: string;
+    function GetLandUseAnnotation(const Index: Integer): string;
+    function GetLandUsePestName(const Index: Integer): string;
+    function GetLandUsePestSeriesMethod(const Index: Integer): TPestParamMethod;
+    function GetLandUsePestSeriesName(const Index: Integer): string;
+    function GetLandUseTimeSeriesName(const Index: Integer): string;
+    function GetLandUseValue(const Index: Integer): double;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -178,11 +186,27 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TFmp4LandUseRecord read FValues write FValues;
-    property Fmp4LandUseValue: double read GetFmp4LandUseValue;
-    property Fmp4ValueAnnotation: string read GetFmp4LandUseAnnotation;
+    // LandUses
+    property LandUseValues[const Index: Integer]: double
+      read GetLandUseValue;
+    property LandUseAnnotations[const Index: Integer]: string
+      read GetLandUseAnnotation;
+    property LandUsePestNames[const Index: Integer]: string
+      read GetLandUsePestName;
+    property LandUsePestSeriesNames[const Index: Integer]: string
+      read GetLandUsePestSeriesName;
+    property LandUsePestSeriesMethods[const Index: Integer]: TPestParamMethod
+      read GetLandUsePestSeriesMethod;
+    property LandUseTimeSeriesNames[const Index: Integer]: string
+      read GetLandUseTimeSeriesName;
   end;
 
 
@@ -192,17 +216,18 @@ type
   // @seealso(TFmp4LandUseCollection)
   TFmp4LandUseBoundary = class(TModflowBoundary)
   private
-    FPestValueMethod: TPestParamMethod;
-    FPestValueFormula: TFormulaObject;
-    FPestValueObserver: TObserver;
     FUsedObserver: TObserver;
-    function GetPestValueFormula: string;
-    procedure SetPestValueFormula(const Value: string);
-    procedure SetPestValueMethod(const Value: TPestParamMethod);
-    procedure RemoveFormulaObjects;
+    FPestLandUseFormulas: TLandUseStringCollection;
+    FPestLandUseMethods: TLandUsePestMethodCollection;
+    FLandUseObservers: TObserverList;
+    procedure SetPestLandUseFormulas(const Value: TLandUseStringCollection);
+    procedure SetPestLandUseMethods(const Value: TLandUsePestMethodCollection);
+    function GetLandUseObserver(const Index: Integer): TObserver;
   protected
+    function MultipleCropsPerCellUsed: Boolean; virtual; abstract;
+    procedure InvalidateLandUseData(Sender: TObject); virtual; abstract;
     { TODO -cFMP4 : override GetPestValueObserver in each descendent}
-    function GetPestValueObserver: TObserver;
+//    function GetPestValueObserver: TObserver;
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
     // @link(TFmp4LandUse_Cell)s for that stress period.
@@ -216,6 +241,7 @@ type
 
     procedure HandleChangedValue(Observer: TObserver); //override;
     { TODO -cFMP4 : override GetUsedObserver in each descendent}
+    // Is GetUsedObserver needed?
     function GetUsedObserver: TObserver;
     procedure CreateFormulaObjects; //override;
     procedure CreateObservers; //override;
@@ -225,9 +251,10 @@ type
     function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
-    property PestValueObserver: TObserver read GetPestValueObserver;
     function BoundaryObserverPrefix: string; override;
-    procedure InvalidateData(Sender: TObject); virtual; abstract;
+//    procedure InvalidateData(Sender: TObject); virtual; abstract;
+    property LandUseObserver[const Index: Integer]: TObserver
+      read GetLandUseObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -248,12 +275,13 @@ type
     { TODO -cFMP4 : override InvalidateDisplay in each descendent}
     // be sure to overide this
 //    procedure InvalidateDisplay; override;
+    procedure CreateLandUseTimeLists(AModel: TBaseModel);
     function IsSame(FmpBoundary: TFmp4LandUseBoundary): Boolean;
   published
-    property PestValueFormula: string read GetPestValueFormula
-      write SetPestValueFormula;
-    property PestValueMethod: TPestParamMethod read FPestValueMethod
-      write SetPestValueMethod;
+    property PestLandUseFormulas: TLandUseStringCollection
+      read FPestLandUseFormulas write SetPestLandUseFormulas;
+    property PestLandUseMethods: TLandUsePestMethodCollection
+      read FPestLandUseMethods write SetPestLandUseMethods;
   end;
 
 implementation
@@ -261,9 +289,6 @@ implementation
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
   AbstractGridUnit, ModflowPackageSelectionUnit;
-
-//const
-//  Fmp4Position = 0;
 
 function LandUseCount(Model: TCustomModel): Integer;
 begin
@@ -306,7 +331,6 @@ end;
 procedure TFmp4LandUseItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TFmp4LandUseCollection;
-  FmpObserver: TObserver;
   LandUseIndex: Integer;
 begin
   ParentCollection := Collection as TFmp4LandUseCollection;
@@ -387,12 +411,6 @@ begin
 
 end;
 
-//function TFmp4LandUseItem.GetFmp4LandUseValues: TLandUseStringCollection;
-//begin
-//  Result := FFmp4LandUseValue.Formula;
-//  ResetItemObserver(Fmp4Position);
-//end;
-
 function TFmp4LandUseItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
   Item: TFmp4LandUseItem;
@@ -408,6 +426,7 @@ end;
 
 procedure TFmp4LandUseItem.RemoveFormulaObjects;
 begin
+  // Is RemoveFormulaObjects needed?
 //  frmGoPhast.PhastModel.FormulaManager.Remove(FFmp4LandUseValue,
 //    GlobalRemoveModflowBoundaryItemSubscription,
 //    GlobalRestoreModflowBoundaryItemSubscription, self);
@@ -431,11 +450,6 @@ begin
   FFmp4LandUseValues.Assign(Value);
 end;
 
-//procedure TFmp4LandUseItem.SetFmp4LandUseValues(const Value: TLandUseStringCollection);
-//begin
-//  UpdateFormulaBlocks(Value, Fmp4Position, FFmp4LandUseValue);
-//end;
-
 { TFmp4LandUseCollection }
 
 procedure TFmp4LandUseCollection.AddSpecificBoundary(AModel: TBaseModel);
@@ -448,7 +462,6 @@ procedure TFmp4LandUseCollection.AssignArrayCellValues(DataSets: TList;
   PestMethods: TPestMethodList;
   PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
-  Fmp4LandUseArray: TDataArray;
   Boundary: TFmp4LandUseStorage;
   LayerIndex: Integer;
   RowIndex: Integer;
@@ -461,117 +474,207 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  CropIndex: Integer;
+  ConcentrationArray: TDataArray;
+  LocalConcentrationPestSeries: string;
+  LocalConcentrationPestMethod: TPestParamMethod;
+  ConcentrationPestItems: TStringList;
+  LocalConcentrationPest: string;
+  ConcentrationTimeItems: TStringList;
+  LocalConcentrationTimeSeries: string;
 begin
-{
   LocalModel := AModel as TCustomModel;
-  BoundaryIndex := 0;
-  Fmp4LandUseArray := DataSets[Fmp4Position];
   Boundary := Boundaries[ItemIndex, AModel] as TFmp4LandUseStorage;
-  Fmp4LandUseArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
-    LayerMax, RowMax, ColMax);
-  if LayerMin >= 0 then
+  if MultipleCropsPerCellUsed then
   begin
-    for LayerIndex := LayerMin to LayerMax do
+    for CropIndex := 0 to LocalModel.FmpCrops.Count - 1 do
     begin
-      if LocalModel.IsLayerSimulated(LayerIndex) then
+      ConcentrationArray := DataSets[CropIndex];
+      ConcentrationArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
+        LayerMax, RowMax, ColMax);
+
+      LocalConcentrationPestSeries := PestSeries[CropIndex];
+      LocalConcentrationPestMethod := PestMethods[CropIndex];
+      ConcentrationPestItems := PestItemNames[CropIndex];
+      LocalConcentrationPest := ConcentrationPestItems[ItemIndex];
+      ConcentrationTimeItems := TimeSeriesNames[CropIndex];
+      LocalConcentrationTimeSeries := ConcentrationTimeItems[ItemIndex];
+
+      BoundaryIndex := 0;
+      if LayerMin >= 0 then
       begin
-        for RowIndex := RowMin to RowMax do
+        for LayerIndex := LayerMin to LayerMax do
         begin
-          for ColIndex := ColMin to ColMax do
+          if LocalModel.IsLayerSimulated(LayerIndex) then
           begin
-            if Fmp4LandUseArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+            for RowIndex := RowMin to RowMax do
             begin
-              with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+              for ColIndex := ColMin to ColMax do
               begin
-                Cell.Layer := LayerIndex;
-                Cell.Row := RowIndex;
-                Cell.Column := ColIndex;
-//                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
-                Fmp4LandUseValue := Fmp4LandUseArray.
-                  RealData[LayerIndex, RowIndex, ColIndex];
-                Fmp4ValueAnnotation := Fmp4LandUseArray.
-                  Annotation[LayerIndex, RowIndex, ColIndex];
+                if ConcentrationArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+                begin
+                  with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+                  begin
+                    LandUseData.Values[CropIndex] := ConcentrationArray.
+                      RealData[LayerIndex, RowIndex, ColIndex];
+                    LandUseData.ValueAnnotations[CropIndex] := ConcentrationArray.
+                      Annotation[LayerIndex, RowIndex, ColIndex];
+                    LandUseData.ValuePestNames[CropIndex] := LocalConcentrationPest;
+                    LandUseData.ValuePestSeriesNames[CropIndex] := LocalConcentrationPestSeries;
+                    LandUseData.ValuePestSeriesMethods[CropIndex] := LocalConcentrationPestMethod;
+                    LandUseData.ValueTimeSeriesNames[CropIndex] := LocalConcentrationTimeSeries;
+                  end;
+                  Inc(BoundaryIndex);
+                end;
               end;
-              Inc(BoundaryIndex);
             end;
           end;
         end;
       end;
+      ConcentrationArray.CacheData;
     end;
   end;
-  Fmp4LandUseArray.CacheData;
+
   Boundary.CacheData;
-  }
+end;
+
+procedure TFmp4LandUseCollection.CreateLandUseTimeLists(AModel: TBaseModel);
+var
+  Link: TFmp4LandUseTimeListLink;
+begin
+  inherited;
+  Link := TimeListLink.GetLink(AModel) as TFmp4LandUseTimeListLink;
+  Link.CreateLandUseTimeLists;
 end;
 
 procedure TFmp4LandUseCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
   PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
-  TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
   Index: Integer;
   Item: TFmp4LandUseItem;
   ScreenObject: TScreenObject;
   ALink: TFmp4LandUseTimeListLink;
-  Fmp4LandUseValueData: TModflowTimeList;
-  DataArrayIndex: Integer;
-  DataArray: TTransientRealSparseDataSet;
-  Grid: TCustomModelGrid;
   RowIndex: Integer;
   ColIndex: Integer;
   LayerIndex: Integer;
-  ShouldRemove: Boolean;
+  LocalModel: TCustomModel;
+  ItemFormula: string;
+  CropCount: Integer;
+  CropIndex: Integer;
+  LandUseSeriesName: string;
+  LandUseMethod: TPestParamMethod;
+  LandUseItems: TStringList;
+  LandUseTimeSeriesItems: TStringList;
+  LandUsePestItemList: TList<TStringList>;
+  LandUseTimeSeriesItemList: TList<TStringList>;
+  LandUsenData: TModflowTimeList;
 begin
-{
-  ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
-  SetLength(BoundaryValues, Count);
-  for Index := 0 to Count - 1 do
-  begin
-    Item := Items[Index] as TFmp4LandUseItem;
-    BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.Fmp4LandUseValue;
-  end;
-  ALink := TimeListLink.GetLink(AModel) as TFmp4LandUseTimeListLink;
-  Fmp4LandUseValueData := ALink.FFmp4LandUseValueData;
-  Fmp4LandUseValueData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(Fmp4LandUseValueData.Count = Count);
+  LandUsePestItemList := TList<TStringList>.Create;
+  LandUseTimeSeriesItemList := TList<TStringList>.Create;
+  try
+    LocalModel := AModel as TCustomModel;
+    ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
+    SetLength(BoundaryValues, Count);
+    CropCount := LocalModel.FmpCrops.Count;
 
-  if PackageAssignmentMethod(AModel) = umAdd then
-  begin
-    Grid := (AModel as TCustomModel).Grid;
-    for DataArrayIndex := 0 to Fmp4LandUseValueData.Count - 1 do
+    if MultipleCropsPerCellUsed then
     begin
-      DataArray := Fmp4LandUseValueData[DataArrayIndex] as TTransientRealSparseDataSet;
-      for RowIndex := 0 to Grid.RowCount - 1 do
+      for CropIndex := 0 to CropCount - 1 do
       begin
-        for ColIndex := 0 to Grid.ColumnCount - 1 do
-        begin
-          ShouldRemove := False;
-          for LayerIndex := Grid.LayerCount -1 downto 0 do
-          begin
-            if ShouldRemove then
-            begin
-              DataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
-            end
-            else
-            begin
-              ShouldRemove := DataArray.IsValue[LayerIndex, RowIndex, ColIndex];
-            end;
-          end;
-        end;
+        LandUseSeriesName := BoundaryGroup.PestBoundaryFormula[0 + CropIndex];
+        PestSeries.Add(LandUseSeriesName);
+        LandUseMethod := BoundaryGroup.PestBoundaryMethod[0 + CropIndex];
+        PestMethods.Add(LandUseMethod);
+
+        LandUseItems := TStringList.Create;
+        PestItemNames.Add(LandUseItems);
+        LandUsePestItemList.Add(LandUseItems);
+
+        LandUseTimeSeriesItems := TStringList.Create;
+        TimeSeriesNames.Add(LandUseTimeSeriesItems);
+        LandUseTimeSeriesItemList.Add(LandUseTimeSeriesItems);
       end;
     end;
-  end;
 
-  ClearBoundaries(AModel);
-  SetBoundaryCapacity(Fmp4LandUseValueData.Count, AModel);
-  for TimeIndex := 0 to Fmp4LandUseValueData.Count - 1 do
-  begin
-    AddBoundary(TFmp4LandUseStorage.Create(AModel));
+    ALink := TimeListLink.GetLink(AModel) as TFmp4LandUseTimeListLink;
+
+    if MultipleCropsPerCellUsed then
+    begin
+      for CropIndex := 0 to CropCount - 1 do
+      begin
+        for Index := 0 to Count - 1 do
+        begin
+          Item := Items[Index] as TFmp4LandUseItem;
+          BoundaryValues[Index].Time := Item.StartTime;
+
+          LandUseSeriesName := BoundaryGroup.PestBoundaryFormula[0 + CropIndex];
+          LandUseMethod := BoundaryGroup.PestBoundaryMethod[0 + CropIndex];
+          LandUseItems := LandUsePestItemList[CropIndex];
+          LandUseTimeSeriesItems := LandUseTimeSeriesItemList[CropIndex];
+          ItemFormula := Item.Fmp4LandUseValues[CropIndex].Value;
+          AssignBoundaryFormula(AModel, LandUseSeriesName, LandUseMethod,
+            LandUseItems, LandUseTimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+        end;
+
+        LandUsenData := ALink.FLandUseList[CropIndex];
+        LandUsenData.Initialize(BoundaryValues, ScreenObject, lctUse);
+        Assert(LandUsenData.Count = Count);
+      end;
+    end;
+
+//    if PackageAssignmentMethod(AModel) = umAdd then
+//    begin
+//      RowCount := LocalModel.RowCount;
+//      ColumnCount := LocalModel.ColumnCount;
+//      LayerCount := LocalModel.LayerCount;
+//      for DataArrayIndex := 0 to RechargeRateData.Count - 1 do
+//      begin
+//        DataArray := RechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
+//        for RowIndex := 0 to RowCount - 1 do
+//        begin
+//          for ColIndex := 0 to ColumnCount - 1 do
+//          begin
+//            ShouldRemove := False;
+//            for LayerIndex := LayerCount -1 downto 0 do
+//            begin
+//              if ShouldRemove then
+//              begin
+//                DataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
+//                if MultipleCropsPerCellUsed then
+//                begin
+//                  for CropIndex := 0 to CropCount - 1 do
+//                  begin
+//                    LandUsenData := ALink.FLandUseList[CropIndex];
+//                    ConcDataArray := LandUsenData[DataArrayIndex] as TTransientRealSparseDataSet;
+//                    ConcDataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
+//                  end;
+//                end;
+//              end
+//              else
+//              begin
+//                ShouldRemove := DataArray.IsValue[LayerIndex, RowIndex, ColIndex];
+//              end;
+//            end;
+//          end;
+//        end;
+//      end;
+//    end;
+
+    ClearBoundaries(AModel);
+    if MultipleCropsPerCellUsed then
+    begin
+      for CropIndex := 0 to CropCount - 1 do
+      begin
+        LandUsenData := ALink.FLandUseList[CropIndex];
+        ListOfTimeLists.Add(LandUsenData);
+      end;
+    end;
+  finally
+    LandUseTimeSeriesItemList.Free;
+    LandUsePestItemList.Free;
   end;
-  ListOfTimeLists.Add(Fmp4LandUseValueData);
-  }
 end;
 
 procedure TFmp4LandUseCollection.InvalidateLandUseValues(Sender: TObject);
@@ -648,6 +751,7 @@ end;
 function TFmp4LandUseCollection.PackageAssignmentMethod(
   AModel: TBaseModel): TUpdateMethod;
 begin
+  // This could be made a property of the package.
   result := umAssign;
 end;
 
@@ -682,14 +786,41 @@ end;
 
 function TFmp4LandUse_Cell.GetIntegerValue(Index: integer; AModel: TBaseModel): integer;
 begin
-{
   result := 0;
-  case Index of
-    Fmp4Position: result := (AModel as TCustomModel).
-      DataSetLayerToModflowLayer(Layer);
-    else Assert(False);
-  end;
-  }
+  Assert(False);
+end;
+
+function TFmp4LandUse_Cell.GetLandUseAnnotation(const Index: Integer): string;
+begin
+  result := FValues.LandUseData.ValueAnnotations[Index];
+end;
+
+function TFmp4LandUse_Cell.GetLandUsePestName(const Index: Integer): string;
+begin
+  result := FValues.LandUseData.ValuePestNames[Index];
+end;
+
+function TFmp4LandUse_Cell.GetLandUsePestSeriesMethod(
+  const Index: Integer): TPestParamMethod;
+begin
+  result := FValues.LandUseData.ValuePestSeriesMethods[Index];
+end;
+
+function TFmp4LandUse_Cell.GetLandUsePestSeriesName(
+  const Index: Integer): string;
+begin
+  result := FValues.LandUseData.ValueTimeSeriesNames[Index];
+end;
+
+function TFmp4LandUse_Cell.GetLandUseTimeSeriesName(
+  const Index: Integer): string;
+begin
+  result := FValues.LandUseData.ValueTimeSeriesNames[Index];
+end;
+
+function TFmp4LandUse_Cell.GetLandUseValue(const Index: Integer): double;
+begin
+  result := FValues.LandUseData.Values[Index];
 end;
 
 function TFmp4LandUse_Cell.GetLayer: integer;
@@ -697,40 +828,35 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TFmp4LandUse_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  result := FValues.LandUseData.ValueTimeSeriesNames[Index];
+end;
+
+function TFmp4LandUse_Cell.GetPestName(Index: Integer): string;
+begin
+  result := FValues.LandUseData.ValueTimeSeriesNames[Index];
+end;
+
+function TFmp4LandUse_Cell.GetPestSeriesMethod(
+  Index: Integer): TPestParamMethod;
+begin
+  result := FValues.LandUseData.ValuePestSeriesMethods[Index];
+end;
+
+function TFmp4LandUse_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  result := FValues.LandUseData.ValueTimeSeriesNames[Index];
+end;
+
 function TFmp4LandUse_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
-{
-  result := '';
-  case Index of
-    Fmp4Position: result := Fmp4ValueAnnotation;
-    else Assert(False);
-  end;
-  }
+  Result := FValues.LandUseData.ValueAnnotations[Index];
 end;
 
 function TFmp4LandUse_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
-{
-  result := 0;
-  case Index of
-    Fmp4Position: result := Fmp4LandUseValue;
-    else Assert(False);
-  end;
-  }
-end;
-
-function TFmp4LandUse_Cell.GetFmp4LandUseValue: double;
-begin
-{
-  result := Values.Fmp4LandUseValue;
-  }
-end;
-
-function TFmp4LandUse_Cell.GetFmp4LandUseAnnotation: string;
-begin
-{
-  result := Values.Fmp4ValueAnnotation;
-  }
+  Result := FValues.LandUseData.Values[Index];
 end;
 
 function TFmp4LandUse_Cell.GetRow: integer;
@@ -766,6 +892,12 @@ begin
   FValues.Cell.Layer := Value;
 end;
 
+procedure TFmp4LandUse_Cell.SetMf6TimeSeriesName(Index: Integer;
+  const Value: string);
+begin
+  FValues.LandUseData.ValueTimeSeriesNames[Index] := Value;
+end;
+
 procedure TFmp4LandUse_Cell.SetRow(const Value: integer);
 begin
   FValues.Cell.Row := Value;
@@ -780,8 +912,8 @@ begin
   if Source is TFmp4LandUseBoundary then
   begin
     FmpSource := TFmp4LandUseBoundary(Source);
-    PestValueFormula := FmpSource.PestValueFormula;
-    PestValueMethod := FmpSource.PestValueMethod;
+    PestLandUseFormulas := FmpSource.PestLandUseFormulas;
+    PestLandUseMethods := FmpSource.PestLandUseMethods;
   end;
   inherited;
 
@@ -846,25 +978,46 @@ end;
 constructor TFmp4LandUseBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
+  FPestLandUseFormulas:= TLandUseStringCollection.Create(Model, ScreenObject, nil);
+  FPestLandUseFormulas.UsedForPestSeries := True;
+  FPestLandUseMethods := TLandUsePestMethodCollection.Create(Model);
+  FLandUseObservers := TObserverList.Create;
+
   CreateFormulaObjects;
   CreateBoundaryObserver;
   CreateObservers;
-
-  PestValueFormula := '';
-  PestValueMethod := DefaultBoundaryMethod(0);
-
 end;
 
 procedure TFmp4LandUseBoundary.CreateFormulaObjects;
+var
+  CropIndex: Integer;
+  LocalModel: TPhastModel;
 begin
-  FPestValueFormula := CreateFormulaObjectBlocks(dsoTop);
+  LocalModel := ParentModel as TPhastModel;
+  if (LocalModel <> nil) and MultipleCropsPerCellUsed then
+  begin
+    for CropIndex := 0 to LocalModel.FmpCrops.Count - 1 do
+    begin
+      FPestLandUseFormulas.Add;
+    end;
+  end;
+end;
+
+procedure TFmp4LandUseBoundary.CreateLandUseTimeLists(AModel: TBaseModel);
+begin
+  (Values as TFmp4LanduseCollection).CreateLandUseTimeLists(AModel);
 end;
 
 procedure TFmp4LandUseBoundary.CreateObservers;
+var
+  Index: Integer;
 begin
   if ScreenObject <> nil then
   begin
-    FObserverList.Add(PestValueObserver);
+    for Index := 0 to FPestLandUseFormulas.Count - 1 do
+    begin
+      FObserverList.Add(LandUseObserver[Index]);
+    end;
   end;
 end;
 
@@ -875,9 +1028,17 @@ begin
 end;
 
 destructor TFmp4LandUseBoundary.Destroy;
+var
+  Index: Integer;
 begin
-  PestValueFormula := '';
-  RemoveFormulaObjects;
+  for Index := 0 to FPestLandUseFormulas.Count - 1 do
+  begin
+    FPestLandUseFormulas[Index].Value := '';
+  end;
+  inherited;
+  FPestLandUseMethods.Free;
+  FPestLandUseFormulas.Free;
+  FLandUseObservers.Free;
 
   inherited;
 end;
@@ -900,59 +1061,38 @@ begin
   ClearBoundaries(AModel);
 end;
 
+function TFmp4LandUseBoundary.GetLandUseObserver(
+  const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FLandUseObservers.Count do
+  begin
+    CreateObserver(Format('LandUse_%d', [Index+1]), AObserver, nil);
+    FLandUseObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidateLandUseData;
+  end;
+  result := FLandUseObservers[Index];
+end;
+
 function TFmp4LandUseBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
-{
-  case FormulaIndex of
-    Fmp4Position:
-      begin
-        result := PestValueFormula;
-      end;
-    else
-      begin
-        Assert(False);
-      end;
+  result := '';
+  while FormulaIndex >= PestLandUseFormulas.Count do
+  begin
+    PestLandUseFormulas.Add;
   end;
-  }
+  result := PestLandUseFormulas[FormulaIndex].Value;
 end;
 
 function TFmp4LandUseBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
-{
-  case FormulaIndex of
-    Fmp4Position:
-      begin
-        result := FPestValueMethod;
-      end;
-    else
-      begin
-        result := DefaultBoundaryMethod(FormulaIndex);
-        Assert(False);
-      end;
-  end;
-  }
-end;
-
-function TFmp4LandUseBoundary.GetPestValueFormula: string;
-begin
-{
-  Result := FPestValueFormula.Formula;
-  if ScreenObject <> nil then
+  while FormulaIndex >= FPestLandUseMethods.Count do
   begin
-    ResetBoundaryObserver(Fmp4Position);
+    FPestLandUseMethods.Add;
   end;
-  }
-end;
-
-function TFmp4LandUseBoundary.GetPestValueObserver: TObserver;
-begin
-  if FPestValueObserver = nil then
-  begin
-    CreateObserver(ValueDescription + '_Pest_', FPestValueObserver, nil);
-    FPestValueObserver.OnUpToDateSet := InvalidateData;
-  end;
-  result := FPestValueObserver;
+  result := FPestLandUseMethods[FormulaIndex].PestParamMethod;
 end;
 
 function TFmp4LandUseBoundary.GetUsedObserver: TObserver;
@@ -971,9 +1111,8 @@ end;
 
 function TFmp4LandUseBoundary.IsSame(FmpBoundary: TFmp4LandUseBoundary): Boolean;
 begin
-  result := (PestValueFormula = FmpBoundary.PestValueFormula)
-    and (PestValueMethod = FmpBoundary.PestValueMethod)
-    and (Values.IsSame(FmpBoundary.Values));
+  result := PestLandUseFormulas.IsSame(FmpBoundary.PestLandUseFormulas)
+    and PestLandUseMethods.IsSame(FmpBoundary.PestLandUseMethods)
 end;
 
 function TFmp4LandUseBoundary.NonParameterColumns: integer;
@@ -981,58 +1120,36 @@ begin
   result := inherited NonParameterColumns;
 end;
 
-procedure TFmp4LandUseBoundary.RemoveFormulaObjects;
-begin
-  frmGoPhast.PhastModel.FormulaManager.Remove(FPestValueFormula,
-    GlobalRemoveMFBoundarySubscription,
-    GlobalRestoreMFBoundarySubscription, self);
-end;
-
 procedure TFmp4LandUseBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
-{
-  case FormulaIndex of
-    Fmp4Position:
-      begin
-        PestValueFormula := Value;
-      end;
-    else
-      begin
-        inherited;
-        Assert(False);
-      end;
+  while FormulaIndex >= PestLandUseFormulas.Count do
+  begin
+    PestLandUseFormulas.Add;
   end;
-  }
+  PestLandUseFormulas[FormulaIndex].Value := Value;
 end;
 
 procedure TFmp4LandUseBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
-{
-  case FormulaIndex of
-    Fmp4Position:
-      begin
-        FPestValueMethod := Value;
-      end;
-    else
-      begin
-        Assert(False);
-      end;
+  while FormulaIndex >= FPestLandUseMethods.Count do
+  begin
+    FPestLandUseMethods.Add;
   end;
-  }
+  FPestLandUseMethods[FormulaIndex].PestParamMethod := Value;
 end;
 
-procedure TFmp4LandUseBoundary.SetPestValueFormula(const Value: string);
+procedure TFmp4LandUseBoundary.SetPestLandUseFormulas(
+  const Value: TLandUseStringCollection);
 begin
-{
-  UpdateFormulaBlocks(Value, Fmp4Position, FPestValueFormula);
-  }
+  FPestLandUseFormulas.Assign(Value);
 end;
 
-procedure TFmp4LandUseBoundary.SetPestValueMethod(const Value: TPestParamMethod);
+procedure TFmp4LandUseBoundary.SetPestLandUseMethods(
+  const Value: TLandUsePestMethodCollection);
 begin
-  FPestValueMethod := Value;
+  FPestLandUseMethods.Assign(Value);
 end;
 
 function TFmp4LandUseBoundary.Used: boolean;
@@ -1136,7 +1253,6 @@ end;
 procedure TFmp4LandUseTimeListLink.AddLandUseTimeLists(CropIndex: Integer);
 var
   LandTimeList: TModflowTimeList;
-  LocalModel: TCustomModel;
   PhastModel: TPhastModel;
 begin
   PhastModel := frmGoPhast.PhastModel;
@@ -1145,40 +1261,68 @@ begin
   LandTimeList.ParamDescription := LandTimeList.NonParamDescription;
   if Model <> nil then
   begin
-    LocalModel := Model as TCustomModel;
     LandTimeList.OnInvalidate := FOnInvalidateLanduse
-//    LandTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
   end;
   AddTimeList(LandTimeList);
   FLandUseList.Add(LandTimeList);
 end;
 
-procedure TFmp4LandUseTimeListLink.CreateTimeLists;
+procedure TFmp4LandUseTimeListLink.CreateLandUseTimeLists;
 var
   PhastModel: TPhastModel;
   CropIndex: Integer;
+  LandUseTimeList: TModflowTimeList;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if MultipleCropsPerCellUsed then
+  begin
+    CropIndex := 0;
+    while CropIndex < PhastModel.FmpCrops.Count do
+    begin
+      if CropIndex < FLandUseList.Count then
+      begin
+        LandUseTimeList := FLandUseList[CropIndex];
+        LandUseTimeList.NonParamDescription := PhastModel.FmpCrops[CropIndex].CropName;
+        LandUseTimeList.ParamDescription :=  LandUseTimeList.NonParamDescription;
+      end
+      else
+      begin
+        LandUseTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+        LandUseTimeList.NonParamDescription := PhastModel.FmpCrops[CropIndex].CropName;
+        LandUseTimeList.ParamDescription :=  LandUseTimeList.NonParamDescription;
+        if Model <> nil then
+        begin
+          LandUseTimeList.OnInvalidate := FOnInvalidateLanduse;
+        end;
+        AddTimeList(LandUseTimeList);
+        FLandUseList.Add(LandUseTimeList);
+      end;
+      Inc(CropIndex);
+    end;
+    while FLandUseList.Count > PhastModel.FmpCrops.Count do
+    begin
+      LandUseTimeList := FLandUseList.Last;
+      RemoveTimeList(LandUseTimeList);
+      FLandUseList.Create.Delete(FLandUseList.Count--1);
+    end;
+  end
+  else
+  begin
+    for CropIndex := 0 to FLandUseList.Count - 1 do
+    begin
+      LandUseTimeList := FLandUseList[CropIndex];
+      RemoveTimeList(LandUseTimeList);
+    end;
+    FLandUseList.Clear;
+  end;
+end;
+
+procedure TFmp4LandUseTimeListLink.CreateTimeLists;
 begin
   inherited;
   FLandUseList := TModflowTimeLists.Create;
 
-//  FPumpingRateData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-//  FPumpingRateData.NonParamDescription := StrPumpingRate;
-//  FPumpingRateData.ParamDescription := StrPumpingRateMultip;
-//  if Model <> nil then
-//  begin
-//    FPumpingRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfWellPumpage;
-//  end;
-//  AddTimeList(FPumpingRateData);
-
-  PhastModel := frmGoPhast.PhastModel;
-//  if PhastModel.GwtUsed then
-  begin
-    for CropIndex := 0 to LandUseCount(PhastModel) - 1 do
-    begin
-      AddLandUseTimeLists(CropIndex);
-    end;
-  end;
-
+  CreateLandUseTimeLists;
 end;
 
 destructor TFmp4LandUseTimeListLink.Destroy;
@@ -1198,7 +1342,7 @@ end;
 
 procedure TFmp4LandUseTimeListLink.UpdateLandUseTimeLists;
 begin
-  //
+  CreateLandUseTimeLists;
 end;
 
 { TLandUseStringValueItem }

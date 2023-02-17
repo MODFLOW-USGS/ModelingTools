@@ -1,4 +1,4 @@
-unit frameScreenObjectCustomFmp4BoundaryUnit;
+unit frameScreenObjectCustomFmp4MultBoundaryUnit;
 
 interface
 
@@ -6,26 +6,27 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameScreenObjectNoParamUnit, Vcl.Grids,
   RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry, Vcl.Buttons, Vcl.Mask, JvExMask,
-  JvSpin, Vcl.ExtCtrls, ModflowFmp4BoundaryUnit, UndoItemsScreenObjects;
+  JvSpin, Vcl.ExtCtrls, ModflowFmp4LandUseBoundaryUnit, UndoItemsScreenObjects,
+  ModflowFmpCropUnit;
 
 type
-   TFmpColumns = (fcStartTime, fcEndTime, fcValue);
+   TFmpLanduseColumns = (fclStartTime, fclEndTime, fclValue);
 
-  TframeScreenObjectCustomFmp4Boundary = class(TframeScreenObjectNoParam)
+  TframeScreenObjectCustomFmp4MultBoundary = class(TframeScreenObjectNoParam)
+    procedure seNumberOfTimesChange(Sender: TObject);
     procedure rdgModflowBoundarySetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
-    procedure seNumberOfTimesChange(Sender: TObject);
   private
-    FValuesCleared: Boolean;
     FOnEdited: TNotifyEvent;
     FGettingData: Boolean;
     FCleared: Boolean;
-    procedure Edited;
+    FValuesCleared: Boolean;
+    FCrops: TCropCollection;
     { Private declarations }
+    procedure Edited;
   protected
-    function GetValueDescription: string; virtual; abstract;
-    function GetBoundary(Item: TScreenObjectEditItem): TFmp4Boundary; virtual; abstract;
-    function CreateBoundary: TFmp4Boundary; virtual; abstract;
+    function GetBoundary(Item: TScreenObjectEditItem): TFmp4LandUseBoundary; virtual; abstract;
+    function CreateBoundary: TFmp4LandUseBoundary; virtual; abstract;
     procedure InitializeGrid;
   public
     procedure GetData(List: TScreenObjectEditCollection);
@@ -36,18 +37,18 @@ type
   end;
 
 var
-  frameScreenObjectCustomFmp4Boundary: TframeScreenObjectCustomFmp4Boundary;
+  frameScreenObjectCustomFmp4MultBoundary: TframeScreenObjectCustomFmp4MultBoundary;
 
 implementation
 
 uses
-  ScreenObjectUnit, ModflowBoundaryUnit, GoPhastTypes;
+  frmGoPhastUnit, GoPhastTypes;
 
 {$R *.dfm}
 
-{ TframeScreenObjectCustomFmp4Boundary }
+{ TframeScreenObjectCustomFmp4MultBoundary }
 
-procedure TframeScreenObjectCustomFmp4Boundary.Edited;
+procedure TframeScreenObjectCustomFmp4MultBoundary.Edited;
 begin
   if Assigned(FOnEdited) and not FGettingData then
   begin
@@ -56,17 +57,18 @@ begin
   end;
 end;
 
-procedure TframeScreenObjectCustomFmp4Boundary.GetData(
+procedure TframeScreenObjectCustomFmp4MultBoundary.GetData(
   List: TScreenObjectEditCollection);
 var
   Index: Integer;
-  Boundary: TFmp4Boundary;
+  Boundary: TFmp4LandUseBoundary;
   Item: TScreenObjectEditItem;
-  FirstBoundary: TFmp4Boundary;
+  FirstBoundary: TFmp4LandUseBoundary;
   ValueIndex: Integer;
-  FmpItem: TFmp4Item;
+  FmpItem: TFmp4LandUseItem;
   RowIndex: Integer;
   ColIndex: Integer;
+  CropIndex: Integer;
 begin
   FGettingData := True;
   rdgModflowBoundary.BeginUpdate;
@@ -87,8 +89,11 @@ begin
           if not FirstBoundary.IsSame(Boundary) then
           begin
             FCleared := True;
-            PestMethodAssigned[Ord(fcValue)] := False;
-            PestModifierAssigned[Ord(fcValue)] := False;
+            for CropIndex := 0 to FCrops.Count -1 do
+            begin
+              PestMethodAssigned[Ord(fclValue)+CropIndex] := False;
+              PestModifierAssigned[Ord(fclValue)+CropIndex] := False;
+            end;
             for RowIndex := 1 + PestRowOffset to rdgModflowBoundary.RowCount - 1 do
             begin
               for ColIndex := 0 to rdgModflowBoundary.ColCount - 1 do
@@ -101,16 +106,22 @@ begin
         else
         begin
           FirstBoundary := Boundary;
-          PestMethod[Ord(fcValue)] := Boundary.PestBoundaryMethod[0];
-          PestModifier[Ord(fcValue)] := Boundary.PestBoundaryFormula[0];
+          for CropIndex := 0 to FCrops.Count -1 do
+          begin
+            PestMethod[Ord(fclValue)+CropIndex] := Boundary.PestBoundaryMethod[CropIndex];
+            PestModifier[Ord(fclValue)+CropIndex] := Boundary.PestBoundaryFormula[CropIndex];
+          end;
           seNumberOfTimes.AsInteger := FirstBoundary.Values.Count;
           for ValueIndex := 0 to FirstBoundary.Values.Count - 1 do
           begin
-            FmpItem := FirstBoundary.Values[ValueIndex] as TFmp4Item;
+            FmpItem := FirstBoundary.Values[ValueIndex] as TFmp4LandUseItem;
             RowIndex := ValueIndex + 1 + PestRowOffset;
-            rdgModflowBoundary.Cells[Ord(fcStartTime), RowIndex] := FloatToStr(FmpItem.StartTime);
-            rdgModflowBoundary.Cells[Ord(fcEndTime), RowIndex] := FloatToStr(FmpItem.EndTime);
-            rdgModflowBoundary.Cells[Ord(fcValue), RowIndex] := FmpItem.BoundaryFormula[0];
+            rdgModflowBoundary.Cells[Ord(fclStartTime), RowIndex] := FloatToStr(FmpItem.StartTime);
+            rdgModflowBoundary.Cells[Ord(fclEndTime), RowIndex] := FloatToStr(FmpItem.EndTime);
+            for CropIndex := 0 to FCrops.Count -1 do
+            begin
+              rdgModflowBoundary.Cells[Ord(fclValue)+CropIndex, RowIndex] := FmpItem.BoundaryFormula[CropIndex];
+            end;
           end;
         end;
       end;
@@ -121,13 +132,20 @@ begin
   end;
 end;
 
-procedure TframeScreenObjectCustomFmp4Boundary.InitializeGrid;
+procedure TframeScreenObjectCustomFmp4MultBoundary.InitializeGrid;
+var
+  CropIndex: Integer;
 begin
   ConductanceColumn := -1;
   rdgModflowBoundary.BeginUpdate;
   try
+    FCrops := frmGoPhast.PhastModel.FmpCrops;
+    rdgModflowBoundary.ColCount := FCrops.Count +2;
     InitializeNoParamFrame(nil);
-    rdgModflowBoundary.Cells[2,0] := GetValueDescription;
+    for CropIndex := 0 to FCrops.Count - 1 do
+    begin
+      rdgModflowBoundary.Cells[CropIndex+2, 0] := FCrops[CropIndex].CropName;
+    end;
     GetStartTimes(0);
     GetEndTimes(1);
   finally
@@ -135,32 +153,33 @@ begin
   end;
 end;
 
-procedure TframeScreenObjectCustomFmp4Boundary.rdgModflowBoundarySetEditText(
+procedure TframeScreenObjectCustomFmp4MultBoundary.rdgModflowBoundarySetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
   Edited;
 end;
 
-procedure TframeScreenObjectCustomFmp4Boundary.seNumberOfTimesChange(
+procedure TframeScreenObjectCustomFmp4MultBoundary.seNumberOfTimesChange(
   Sender: TObject);
 begin
   inherited;
-  Edited
+  Edited;
 end;
 
-procedure TframeScreenObjectCustomFmp4Boundary.SetData(
+procedure TframeScreenObjectCustomFmp4MultBoundary.SetData(
   List: TScreenObjectEditCollection; SetAll, ClearAll: boolean);
 var
-  NewBoundary: TFmp4Boundary;
+  NewBoundary: TFmp4LandUseBoundary;
   RowIndex: Integer;
   StartTime: double;
   Endtime: double;
-  FmpItem: TFmp4Item;
+  FmpItem: TFmp4LandUseItem;
   ScreenObjectIndex: Integer;
   Item: TScreenObjectEditItem;
-  Boundary: TFmp4Boundary;
+  Boundary: TFmp4LandUseBoundary;
   BoundaryUsed: Boolean;
+  CropIndex: Integer;
 begin
   if FCleared then
   begin
@@ -174,19 +193,26 @@ begin
       NewBoundary := CreateBoundary;
       for RowIndex := 1+PestRowOffset to rdgModflowBoundary.RowCount - 1 do
       begin
-        if TryStrToFloat(rdgModflowBoundary.Cells[Ord(fcStartTime), RowIndex], StartTime)
-          and TryStrToFloat(rdgModflowBoundary.Cells[Ord(fcEndTime), RowIndex], Endtime)
-          and (rdgModflowBoundary.Cells[Ord(fcValue), RowIndex] <> '') then
+        if TryStrToFloat(rdgModflowBoundary.Cells[Ord(fclStartTime), RowIndex], StartTime)
+          and TryStrToFloat(rdgModflowBoundary.Cells[Ord(fclEndTime), RowIndex], Endtime)
+//          and (rdgModflowBoundary.Cells[Ord(fclValue), RowIndex] <> '')
+          then
         begin
-          FmpItem := NewBoundary.Values.Add as TFmp4Item;
+          FmpItem := NewBoundary.Values.Add as TFmp4LandUseItem;
           FmpItem.StartTime := StartTime;
           FmpItem.EndTime := Endtime;
-          FmpItem.FmpValue :=
-            rdgModflowBoundary.Cells[Ord(fcValue), RowIndex];
+          for CropIndex := 0 to FCrops.Count -1 do
+          begin
+            FmpItem.Fmp4LandUseValues[CropIndex].Value :=
+              rdgModflowBoundary.Cells[Ord(fclValue)+CropIndex, RowIndex];
+          end;
         end;
       end;
-      NewBoundary.PestBoundaryMethod[0] := PestMethod[Ord(fcValue)];
-      NewBoundary.PestBoundaryFormula[0] := PestModifier[Ord(fcValue)];
+      for CropIndex := 0 to FCrops.Count -1 do
+      begin
+        NewBoundary.PestBoundaryMethod[CropIndex] := PestMethod[Ord(fclValue)+CropIndex];
+        NewBoundary.PestBoundaryFormula[CropIndex] := PestModifier[Ord(fclValue)+CropIndex];
+      end;
     end;
     for ScreenObjectIndex := 0 to List.Count - 1 do
     begin

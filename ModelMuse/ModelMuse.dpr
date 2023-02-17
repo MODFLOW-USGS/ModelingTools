@@ -801,7 +801,8 @@ uses
   UpdateDataArrayUnit in 'UpdateDataArrayUnit.pas',
   ModflowFmp4LandUseAreaFractionUnit in 'ModflowFmp4LandUseAreaFractionUnit.pas',
   frameScreenObjectLandUseAreaFractionUnit in 'frameScreenObjectLandUseAreaFractionUnit.pas' {frameScreenObjectLandUseAreaFraction: TFrame},
-  ModflowFmp4LandUseBoundaryUnit in 'ModflowFmp4LandUseBoundaryUnit.pas';
+  ModflowFmp4LandUseBoundaryUnit in 'ModflowFmp4LandUseBoundaryUnit.pas',
+  frameScreenObjectCustomFmp4MultBoundaryUnit in 'frameScreenObjectCustomFmp4MultBoundaryUnit.pas' {frameScreenObjectCustomFmp4MultBoundary: TFrame};
 
 {$R *.res}
 

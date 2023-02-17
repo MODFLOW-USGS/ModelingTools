@@ -26782,7 +26782,7 @@ function TFarmProcess4LandUse.StaticLandUseAreaFractionArrayUsed(
   Sender: TObject): boolean;
 begin
   result := PackageUsed(Sender)
-    and (LandUseFraction.FarmOption = foTransient)
+    and (LandUseFraction.FarmOption = foStatic)
     and (LandUseFraction.ArrayList = alArray)
     and (LandUseOption = luoSingle);
 end;

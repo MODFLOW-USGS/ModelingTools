@@ -1475,6 +1475,7 @@ view. }
     FFmp4NrdInfilLocationBoundary: TFmp4NrdInfilLocationBoundary;
     FFmp4CropCoefficientBoundary: TFmp4CropCoefficientBoundary;
     FFmp4LandUseAreaFractionBoundary: TFmp4LandUseAreaFractionBoundary;
+    FFmp4MultLandUseAreaFractionBoundary: TFmp4MultLandUseAreaFractionBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1610,6 +1611,8 @@ view. }
       read FFmp4LandUseAreaFractionBoundary write FFmp4LandUseAreaFractionBoundary;
     property Fmp4CropCoefficientBoundary: TFmp4CropCoefficientBoundary
       read FFmp4CropCoefficientBoundary write FFmp4CropCoefficientBoundary;
+    property Fmp4MultLandUseAreaFractionBoundary: TFmp4MultLandUseAreaFractionBoundary
+      read FFmp4MultLandUseAreaFractionBoundary write FFmp4MultLandUseAreaFractionBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -2885,6 +2888,12 @@ view. }
       const Value: TFmp4LandUseAreaFractionBoundary);
     function StoreModflowFmp4LandUseAreaFraction: Boolean;
     procedure CreateModflowFmp4LandUseAreaFractionBoundary;
+
+    function GetModflowFmp4MultLandUseAreaFraction: TFmp4MultLandUseAreaFractionBoundary;
+    procedure SetModflowFmp4MultLandUseAreaFraction(
+      const Value: TFmp4MultLandUseAreaFractionBoundary);
+    function StoreModflowFmp4MultLandUseAreaFraction: Boolean;
+    procedure CreateModflowMultFmp4LandUseAreaFractionBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4249,6 +4258,11 @@ view. }
     property ModflowFmp4CropCoefficient: TFmp4CropCoefficientBoundary
       read GetModflowFmp4CropCoefficient write SetModflowFmp4CropCoefficient
       Stored StoreModflowFmp4CropCoefficient;
+
+    property ModflowFmp4MultLandUseAreaFraction: TFmp4MultLandUseAreaFractionBoundary
+      read GetModflowFmp4MultLandUseAreaFraction
+      write SetModflowFmp4MultLandUseAreaFraction
+      stored StoreModflowFmp4MultLandUseAreaFraction;
 
     { TODO :
 Consider making SectionStarts private and only exposing SectionStart,
@@ -6921,6 +6935,7 @@ begin
   ModflowFmp4NrdInfilLocationBoundary := AScreenObject.ModflowFmp4NrdInfilLocationBoundary;
   ModflowFmp4LandUseAreaFraction := AScreenObject.ModflowFmp4LandUseAreaFraction;
   ModflowFmp4CropCoefficient := AScreenObject.ModflowFmp4CropCoefficient;
+  ModflowFmp4MultLandUseAreaFraction := AScreenObject.ModflowFmp4MultLandUseAreaFraction;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -6990,7 +7005,9 @@ begin
   BoundarArray :=
     frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(rsModflowSpecifiedHead);
   if ((ModflowChdBoundary <> nil) and ModflowChdBoundary.Used)
-    or ((frmGoPhast.ModelSelection <> msModflow2015) and (ModflowFhbHeadBoundary <> nil) and ModflowFhbHeadBoundary.Used) then
+    or ((frmGoPhast.ModelSelection <> msModflow2015)
+      and (ModflowFhbHeadBoundary <> nil)
+      and ModflowFhbHeadBoundary.Used) then
   begin
     DSIndex := IndexOfDataSet(BoundarArray);
     if DSIndex < 0 then
@@ -9714,6 +9731,11 @@ begin
     if ModflowFmp4CropCoefficient <> nil then
     begin
       ModflowFmp4CropCoefficient.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultLandUseAreaFraction <> nil then
+    begin
+      ModflowFmp4MultLandUseAreaFraction.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -14085,6 +14107,24 @@ begin
   begin
     CreateModflowFmp4LandUseAreaFractionBoundary;
     ModflowBoundaries.FFmp4LandUseAreaFractionBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4MultLandUseAreaFraction(
+  const Value: TFmp4MultLandUseAreaFractionBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4MultLandUseAreaFractionBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4MultLandUseAreaFractionBoundary);
+  end
+  else
+  begin
+    CreateModflowMultFmp4LandUseAreaFractionBoundary;
+    ModflowBoundaries.FFmp4MultLandUseAreaFractionBoundary.Assign(Value);
   end;
 end;
 
@@ -32174,6 +32214,16 @@ begin
 {$ENDIF}
 end;
 
+function TScreenObject.StoreModflowFmp4MultLandUseAreaFraction: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultLandUseAreaFraction <> nil) and ModflowFmp4MultLandUseAreaFraction.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowFmp4NrdInfilLocationBoundary: Boolean;
 begin
 {$IFDEF OWHMV2}
@@ -33240,6 +33290,23 @@ begin
   else
   begin
     result := ModflowBoundaries.Fmp4LandUseAreaFractionBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4MultLandUseAreaFraction: TFmp4MultLandUseAreaFractionBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultFmp4LandUseAreaFractionBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4MultLandUseAreaFractionBoundary;
   end;
 end;
 
@@ -38037,6 +38104,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateModflowMultFmp4LandUseAreaFractionBoundary;
+begin
+  if (ModflowBoundaries.FFmp4MultLandUseAreaFractionBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4MultLandUseAreaFractionBoundary :=
+      TFmp4MultLandUseAreaFractionBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateModflowMvr;
 begin
   if (ModflowBoundaries.FModflowMvr = nil) then
@@ -41421,6 +41497,20 @@ begin
     FFmp4CropCoefficientBoundary.Assign(Source.FFmp4CropCoefficientBoundary);
   end;
 
+  if Source.FFmp4MultLandUseAreaFractionBoundary = nil then
+  begin
+    FreeAndNil(FFmp4MultLandUseAreaFractionBoundary);
+  end
+  else
+  begin
+    if FFmp4MultLandUseAreaFractionBoundary = nil then
+    begin
+      FFmp4MultLandUseAreaFractionBoundary :=
+        TFmp4MultLandUseAreaFractionBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4MultLandUseAreaFractionBoundary.Assign(Source.FFmp4MultLandUseAreaFractionBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -41439,6 +41529,7 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmp4MultLandUseAreaFractionBoundary.Free;
   FFmp4CropCoefficientBoundary.Free;
   FFmp4LandUseAreaFractionBoundary.Free;
   FFmp4NrdInfilLocationBoundary.Free;
@@ -41805,6 +41896,12 @@ begin
     FreeAndNil(FFmp4CropCoefficientBoundary);
   end;
 
+  if (FFmp4MultLandUseAreaFractionBoundary <> nil)
+    and not FFmp4MultLandUseAreaFractionBoundary.Used then
+  begin
+    FreeAndNil(FFmp4MultLandUseAreaFractionBoundary);
+  end;
+
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -42132,6 +42229,11 @@ begin
   if FFmp4CropCoefficientBoundary <> nil then
   begin
     FFmp4CropCoefficientBoundary.Invalidate;
+  end;
+
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    FFmp4MultLandUseAreaFractionBoundary.Invalidate;
   end;
 
 end;
@@ -42501,6 +42603,11 @@ begin
   if FFmp4CropCoefficientBoundary <> nil then
   begin
     FFmp4CropCoefficientBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    FFmp4MultLandUseAreaFractionBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -42874,6 +42981,11 @@ begin
     FFmp4CropCoefficientBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    FFmp4MultLandUseAreaFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -43242,6 +43354,11 @@ begin
   if FFmp4CropCoefficientBoundary <> nil then
   begin
     FFmp4CropCoefficientBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    FFmp4MultLandUseAreaFractionBoundary.StopTalkingToAnyone;
   end;
 
 end;
@@ -43827,6 +43944,15 @@ begin
   if FFmp4CropCoefficientBoundary <> nil then
   begin
     Result := FFmp4CropCoefficientBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    Result := FFmp4MultLandUseAreaFractionBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;
