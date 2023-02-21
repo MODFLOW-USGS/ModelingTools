@@ -435,9 +435,18 @@ begin
           TopicName := ANode.Attributes[StrTopic];
           if TopicName <> '' then
           begin
-            frmNewVideos.memoNewVideos.Lines.Add(TopicName);
+            frmNewVideos.memoNewVideos.Lines.Add(TopicName + ': ' + ANode.Text);
+          end
+          else
+          begin
+            frmNewVideos.memoNewVideos.Lines.Add(ANode.Name);
           end;
+        end
+        else
+        begin
+          frmNewVideos.memoNewVideos.Lines.Add(ANode.Name);
         end;
+        frmNewVideos.memoNewVideos.Lines.Add('');
       end;
     finally
       frmNewVideos.memoNewVideos.Lines.EndUpdate;

@@ -49,6 +49,7 @@ type
     Option: string;
     FarmProperty: TFarmProperty;
     LandUseStaticFileNames: TStringList;
+    MaxDataTypeIndex: Integer;
   end;
 
   TModflowFmp4Writer = class(TCustomListWriter)
@@ -175,6 +176,7 @@ type
     function GetFmpBoundary(ScreenObject: TScreenObject;
       WriteLocation: TWriteLocation): TModflowBoundary;
     procedure EvaluateTransientArrayData(WriteLocation: TWriteLocation);
+//    procedure EvaluateMultTransientArrayData(WriteLocation: TWriteLocation);
     procedure WriteFmpArrayData(AFileName: string; RequiredValues: TRequiredValues);
     procedure WriteLandUseArrayData(AFileName: string; RequiredValues: TRequiredValues);
     procedure UpdateDisplay(UpdateRequirements: TUpdateRequirements);
@@ -540,12 +542,19 @@ end;
 
 procedure TModflowFmp4Writer.EvaluateLandUseAreaFraction;
 begin
-  if FLandUse.TransientLandUseAreaFractionarrayUsed(nil) then
+  if FLandUse.TransientLandUseAreaFractionArrayUsed(nil)
+    or FLandUse.TransientLandUseAreaFractionMultArrayUsed(nil) then
   begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Land Use Area Fraction');
     EvaluateTransientArrayData(wlLandUseAreaFraction);
   end;
 end;
+
+//procedure TModflowFmp4Writer.EvaluateMultTransientArrayData(
+//  WriteLocation: TWriteLocation);
+//begin
+//
+//end;
 
 procedure TModflowFmp4Writer.EvaluateNrdInfilLocation;
 begin
@@ -848,7 +857,17 @@ begin
     wlDirectRecharge: result := ScreenObject.ModflowFmpDirectRecharge;
     wlPrecipPotConsumption: result := ScreenObject.ModflowFmpPrecipPotConsumption;
     wlNrdInfilLoc: result := ScreenObject.ModflowFmp4NrdInfilLocationBoundary;
-    wlLandUseAreaFraction: result := ScreenObject.ModflowFmp4LandUseAreaFraction;
+    wlLandUseAreaFraction:
+      begin
+        if FLandUse.LandUseOption = luoSingle then
+        begin
+          result := ScreenObject.ModflowFmp4LandUseAreaFraction;
+        end
+        else
+        begin
+          result := ScreenObject.ModflowFmp4MultLandUseAreaFraction;
+        end;
+      end;
     wlCropCoefficient: result := ScreenObject.ModflowFmp4CropCoefficient;
     else Assert(False);
   end;
@@ -1375,6 +1394,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP CLIMATE: POTENTIAL_EVAPORATION_BARE';
     RequiredValues.ErrorID := 'FMP CLIMATE: POTENTIAL_EVAPORATION_BARE';
     RequiredValues.ID := 'POTENTIAL_EVAPORATION_BARE';
@@ -1412,6 +1432,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP WBS: BARE_RUNOFF_FRACTION';
     RequiredValues.ErrorID := 'FMP WBS: BARE_RUNOFF_FRACTION';
     RequiredValues.ID := 'BARE_RUNOFF_FRACTION';
@@ -1449,6 +1470,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP WBS: BARE_RUNOFF_FRACTION';
     RequiredValues.ErrorID := 'FMP WBS: BARE_RUNOFF_FRACTION';
     RequiredValues.ID := 'BARE_RUNOFF_FRACTION';
@@ -1486,6 +1508,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP SOIL: CAPILLARY_FRINGE';
     RequiredValues.ErrorID := 'FMP SOIL: CAPILLARY_FRINGE';
     RequiredValues.ID := 'CAPILLARY_FRINGE';
@@ -1589,6 +1612,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP LAND_USE: CROP_COEFFICIENT';
     RequiredValues.ErrorID := 'FMP LAND_USE: CROP_COEFFICIENT';
     RequiredValues.ID := 'CROP_COEFFICIENT';
@@ -1644,6 +1668,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP CLIMATE: DIRECT_RECHARGE';
     RequiredValues.ErrorID := 'FMP CLIMATE: DIRECT_RECHARGE';
     RequiredValues.ID := 'DIRECT_RECHARGE';
@@ -1684,6 +1709,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP WBS: Efficiency';
     RequiredValues.ErrorID := 'FMP WBS: Efficiency';
     RequiredValues.ID := 'EFFICIENCY';
@@ -1722,6 +1748,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP WBS: Efficiency Improvement';
     RequiredValues.ErrorID := 'FMP WBS: Efficiency Improvement';
     RequiredValues.ID := 'EFFICIENCY_IMPROVEMENT';
@@ -1754,6 +1781,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtInteger;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP LAND_USE: Location';
     RequiredValues.ErrorID := 'FMP LAND_USE: Location';
     RequiredValues.ID := 'LOCATION';
@@ -1786,6 +1814,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtInteger;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION';
     RequiredValues.ErrorID := 'FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION';
     RequiredValues.ID := 'NRD_INFILTRATION_LOCATION';
@@ -1812,6 +1841,7 @@ var
   TransList: TList;
   StressPeriodIndex: Integer;
   CheckAssigned: Boolean;
+  DataTypeIndex: Integer;
 begin
   TransList := GetTransientList(RequiredValues.WriteLocation);
 
@@ -1831,13 +1861,17 @@ begin
       Dummy := nil;
       try
         WriteCommentLine(Format('Stress Period %d', [StressPeriodIndex+1]));
-        WriteTransient2DArray(RequiredValues.Comment, RequiredValues.DataTypeIndex,
-          RequiredValues.DataType, RequiredValues.DefaultValue,
-          ValueCellList, umAssign, False, Dummy, RequiredValues.ID,
-          (not CheckAssigned), False);
-        if CheckAssigned then
+        for DataTypeIndex := RequiredValues.DataTypeIndex to
+          RequiredValues.MaxDataTypeIndex do
         begin
-          RequiredValues.CheckProcedure(Dummy, RequiredValues.CheckError);
+          WriteTransient2DArray(RequiredValues.Comment, DataTypeIndex,
+            RequiredValues.DataType, RequiredValues.DefaultValue,
+            ValueCellList, umAssign, False, Dummy, RequiredValues.ID,
+            (not CheckAssigned), False);
+          if CheckAssigned then
+          begin
+            RequiredValues.CheckProcedure(Dummy, RequiredValues.CheckError);
+          end;
         end;
       finally
         Dummy.Free;
@@ -1864,6 +1898,7 @@ begin
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtInteger;
   RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
   RequiredValues.Comment := 'FMP WBS: Location';
   RequiredValues.ErrorID := 'FMP WBS: Location';
   RequiredValues.ID := 'LOCATION';
@@ -2034,6 +2069,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP LAND_USE: LAND_USE_AREA_FRACTION';
     RequiredValues.ErrorID := 'FMP LAND_USE: LAND_USE_AREA_FRACTION';
     RequiredValues.ID := 'LAND_USE_AREA_FRACTION';
@@ -2050,17 +2086,25 @@ begin
     end
     else
     begin
-      DataArrayNames := TStringList.Create;
-      try
-        for CropIndex := 0 to Model.FmpCrops.Count - 1 do
-        begin
-          DataArrayNames.Add(
-            Model.FmpCrops[CropIndex].LandUseAreaFractionDataArrayName);
+      if RequiredValues.WriteTransientData then
+      begin
+        RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
+        WriteFmpArrayData(AFileName, RequiredValues);
+      end
+      else
+      begin
+        DataArrayNames := TStringList.Create;
+        try
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            DataArrayNames.Add(
+              Model.FmpCrops[CropIndex].LandUseAreaFractionDataArrayName);
+          end;
+          RequiredValues.LandUseStaticFileNames := DataArrayNames;
+          WriteLandUseArrayData(AFileName, RequiredValues);
+        finally
+          DataArrayNames.Free;
         end;
-        RequiredValues.LandUseStaticFileNames := DataArrayNames;
-        WriteLandUseArrayData(AFileName, RequiredValues);
-      finally
-        DataArrayNames.Free;
       end;
     end;
   end
@@ -2212,6 +2256,7 @@ begin
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
   RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
   RequiredValues.Comment := 'Data Set 33: PFLX';
   RequiredValues.ErrorID := 'FMP CLIMATE: PRECIPITATION';
   RequiredValues.ID := 'PRECIPITATION';
@@ -2243,6 +2288,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP CLIMATE: PRECIPITATION_POTENTIAL_CONSUMPTION';
     RequiredValues.ErrorID := 'FMP CLIMATE: PRECIPITATION_POTENTIAL_CONSUMPTION';
     RequiredValues.ID := 'PRECIPITATION_POTENTIAL_CONSUMPTION';
@@ -2288,6 +2334,7 @@ begin
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
   RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
   RequiredValues.Comment := 'Data Set 30b: ETR';
   RequiredValues.ErrorID := 'FMP CLIMATE: REFERENCE_ET';
   RequiredValues.ID := 'REFERENCE_ET';
@@ -2342,6 +2389,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP SOIL: SOIL_ID ';
     RequiredValues.ErrorID := 'FMP SOIL: SOIL_ID ';
     RequiredValues.ID := 'SOIL_ID ';
@@ -2551,6 +2599,7 @@ begin
     RequiredValues.DefaultValue := 0;
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP SOIL: SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
     RequiredValues.ErrorID := 'FMP SOIL: SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
     RequiredValues.ID := 'SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';

@@ -5,7 +5,7 @@ inherited frmNewVideos: TfrmNewVideos
     AlignWithMargins = True
     Left = 4
     Top = 4
-    Width = 416
+    Width = 418
     Height = 18
     Margins.Left = 4
     Margins.Top = 4
@@ -19,20 +19,21 @@ inherited frmNewVideos: TfrmNewVideos
   object memoNewVideos: TMemo
     Left = 0
     Top = 26
-    Width = 424
-    Height = 149
+    Width = 426
+    Height = 157
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
     Align = alClient
-    ScrollBars = ssBoth
+    ReadOnly = True
+    ScrollBars = ssVertical
     TabOrder = 0
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 175
-    Width = 424
+    Top = 183
+    Width = 426
     Height = 51
     Margins.Left = 4
     Margins.Top = 4
@@ -41,9 +42,6 @@ inherited frmNewVideos: TfrmNewVideos
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 50
-    ExplicitTop = 160
-    ExplicitWidth = 231
     object btnVideoPage: TButton
       Left = 16
       Top = 10

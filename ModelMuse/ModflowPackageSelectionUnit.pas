@@ -5561,10 +5561,11 @@ Type
 
     property MfFmp4CropID: TModflowBoundaryDisplayTimeList read FMfFmp4CropID;
 
-    function TransientLandUseAreaFractionarrayUsed (Sender: TObject): boolean;
+    function TransientLandUseAreaFractionArrayUsed (Sender: TObject): boolean;
     function StaticLandUseAreaFractionArrayUsed (Sender: TObject): boolean;
     property MfFmp4LandUseAreaFraction: TModflowBoundaryDisplayTimeList
       read FMfFmp4LandUseAreaFraction;
+    function TransientLandUseAreaFractionMultArrayUsed (Sender: TObject): boolean;
 
     function TransientCropCoefficientarrayUsed (Sender: TObject): boolean;
     function StaticCropCoefficientArrayUsed (Sender: TObject): boolean;
@@ -26810,6 +26811,15 @@ begin
     and (LandUseFraction.FarmOption = foTransient)
     and (LandUseFraction.ArrayList = alArray)
     and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.TransientLandUseAreaFractionMultArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (LandUseFraction.FarmOption = foTransient)
+    and (LandUseFraction.ArrayList = alArray)
+    and (LandUseOption = luoMultiple);
 end;
 
 { TFarmSalinityFlush }

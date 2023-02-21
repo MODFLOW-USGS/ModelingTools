@@ -2608,6 +2608,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientNrdInfilLocIsSelected: Boolean; virtual;
     function FarmProcess4TransientCropCoefficientIsSelected: Boolean; virtual;
     function FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean; virtual;
+    function FarmProcess4TransientLandUseAreaFractionMultIsSelected: Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -4816,6 +4817,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientNrdInfilLocIsSelected: Boolean; override;
     function FarmProcess4TransientCropCoefficientIsSelected: Boolean; override;
     function FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean; override;
+    function FarmProcess4TransientLandUseAreaFractionMultIsSelected: Boolean; override;
 
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
@@ -24108,6 +24110,34 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientLandUseAreaFractionMultIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientLandUseAreaFractionMultIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientNrdInfilLocIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -35791,7 +35821,18 @@ begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
-    and ModflowPackages.FarmLandUse.TransientLandUseAreaFractionarrayUsed(nil);
+    and ModflowPackages.FarmLandUse.TransientLandUseAreaFractionArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientLandUseAreaFractionMultIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientLandUseAreaFractionMultArrayUsed(nil);
   {$ELSE}
   result := False;
   {$ENDIF}

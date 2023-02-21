@@ -32,6 +32,9 @@ type
   // Multiple land use per cell
 
   TFmp4MultLandUseFractionTimeListLink = class(TFmp4LandUseTimeListLink)
+  protected
+    class function GetDescription: string; override;
+    function MultipleCropsPerCellUsed: Boolean; override;
   public
     Constructor Create(AModel: TBaseModel; ABoundary: TCustomMF_BoundColl); override;
   end;
@@ -194,7 +197,30 @@ end;
 
 class function TFmp4MultLandUseAreaFractionBoundary.ValueDescription: string;
 begin
-  result := 'Land Use Area Fractions';
+  result := 'Land_Use_Area_Fractions';
+end;
+
+class function TFmp4MultLandUseFractionTimeListLink.GetDescription: string;
+begin
+  result := 'Land_Use_Area_Fractions';
+end;
+
+function TFmp4MultLandUseFractionTimeListLink.MultipleCropsPerCellUsed: Boolean;
+var
+  LocalModel: TCustomModel;
+  LandUse: TFarmProcess4LandUse;
+begin
+  result := False;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    LandUse := LocalModel.ModflowPackages.FarmLandUse;
+    result := (LocalModel.ModelSelection = msModflowOwhm2)
+      and LandUse.IsSelected
+      and (LandUse.LandUseOption = luoMultiple)
+      and (LandUse.LandUseFraction.FarmOption = foTransient)
+      and (LandUse.LandUseFraction.ArrayList = alArray)
+  end;
 end;
 
 end.

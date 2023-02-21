@@ -1,0 +1,2 @@
+inherited frameScreenObjectMultLandUseAreaFraction: TframeScreenObjectMultLandUseAreaFraction
+end

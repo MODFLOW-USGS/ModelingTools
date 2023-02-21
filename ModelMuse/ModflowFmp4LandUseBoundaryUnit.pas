@@ -515,6 +515,9 @@ begin
                 begin
                   with Boundary.Fmp4LandUseArray[BoundaryIndex] do
                   begin
+                    Cell.Layer := LayerIndex;
+                    Cell.Row := RowIndex;
+                    Cell.Column := ColIndex;
                     LandUseData.Values[CropIndex] := ConcentrationArray.
                       RealData[LayerIndex, RowIndex, ColIndex];
                     LandUseData.ValueAnnotations[CropIndex] := ConcentrationArray.
@@ -570,6 +573,7 @@ var
   LandUsePestItemList: TList<TStringList>;
   LandUseTimeSeriesItemList: TList<TStringList>;
   LandUsenData: TModflowTimeList;
+  TimeIndex: Integer;
 begin
   LandUsePestItemList := TList<TStringList>.Create;
   LandUseTimeSeriesItemList := TList<TStringList>.Create;
@@ -663,6 +667,11 @@ begin
 //    end;
 
     ClearBoundaries(AModel);
+    for TimeIndex := 0 to Count - 1 do
+    begin
+      AddSpecificBoundary(AModel);
+    end;
+
     if MultipleCropsPerCellUsed then
     begin
       for CropIndex := 0 to CropCount - 1 do
@@ -757,9 +766,18 @@ end;
 
 procedure TFmp4LandUseCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel);
+var
+  Index: Integer;
+  CropCount: Integer;
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TFmp4LandUseStorage).FFmp4LandUseArray,
     BoundaryCount);
+  CropCount := (AModel as TCustomModel).FmpCrops.Count;
+  for Index := 0 to BoundaryCount - 1 do
+  begin
+    TFmp4LandUseStorage(Boundaries[ItemIndex, AModel]).
+      FFmp4LandUseArray[Index].LandUseData.LandUseCount := CropCount;
+  end;
   inherited;
 end;
 
@@ -1040,7 +1058,7 @@ begin
   FPestLandUseFormulas.Free;
   FLandUseObservers.Free;
 
-  inherited;
+//  inherited;
 end;
 
 procedure TFmp4LandUseBoundary.GetCellValues(ValueTimeList: TList;
