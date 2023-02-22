@@ -202,6 +202,7 @@ resourcestring
   StrTheSFRSegmentDefi = 'The SFR segment defined by %s doesn''t appear to i' +
   'ntersect any active cells.';
   StrStartingConcentratio = 'StartingConcentration_%s';
+  StrDivideByZeroInSF = 'Divide by zero in SFR package';
 
 { TModflowSFR_MF6_Writer }
 
@@ -741,9 +742,22 @@ begin
             end;
           end;
         end;
-        Expression.Evaluate;
-        ASegment.FSteadyValues[CellIndex].BoundaryValue[FormulaIndex] := Expression.DoubleResult;
-        AnnotationString := ASegment.FScreenObject.IntersectAnnotation(Formula, nil);
+        try
+          Expression.Evaluate;
+          ASegment.FSteadyValues[CellIndex].BoundaryValue[FormulaIndex] := Expression.DoubleResult;
+          AnnotationString := ASegment.FScreenObject.IntersectAnnotation(Formula, nil);
+        except on E: EZeroDivide do
+          begin
+            ASegment.FSteadyValues[CellIndex].BoundaryValue[FormulaIndex] := 0;
+            if AnnotationString <> E.Message then
+            begin
+              AnnotationString := E.Message;
+            end;
+            frmErrorsAndWarnings.AddWarning(Model, StrDivideByZeroInSF,
+            Format('Object = %0:s; Formual = %1:s', [ASegment.FScreenObject.Name, Formula])
+             , ASegment.FScreenObject);
+          end;
+        end;
         ASegment.FSteadyValues[CellIndex].BoundaryAnnotation[FormulaIndex] := AnnotationString;
         ASegment.FSteadyValues[CellIndex].PestParamName[FormulaIndex] := PestParamName;
 
@@ -845,6 +859,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrDownstreamSFRSegme);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrStreamTimeExtended);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInactiveStreamPeri);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrDivideByZeroInSF);
 
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingPairO);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObject);

@@ -386,7 +386,7 @@ object TTaskHistory
     end
     item
       Name = 'SFR MODFLOW-6'
-      Display = False
+      Display = True
     end
     item
       Name = 'MAW'
@@ -30717,5 +30717,12 @@ object TTaskHistory
       Date = 44978.000000000000000000
       Categories.Strings = (
         'FMP')
+    end
+    item
+      Date = 44979.000000000000000000
+      Categories.Strings = (
+        'SFR MODFLOW-6'
+        'Bug fix'
+        'Documentation')
     end>
 end

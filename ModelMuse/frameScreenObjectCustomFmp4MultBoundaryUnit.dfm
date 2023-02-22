@@ -5,4 +5,9 @@ inherited frameScreenObjectCustomFmp4MultBoundary: TframeScreenObjectCustomFmp4M
       ExplicitHeight = 23
     end
   end
+  inherited pnlGrid: TPanel
+    inherited rdgModflowBoundary: TRbwDataGrid4
+      ExplicitHeight = 194
+    end
+  end
 end

@@ -2,19 +2,20 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
   HelpType = htKeyword
   HelpKeyword = 'Errors_and_Warnings_Dialog_Box'
   Caption = 'Errors and Warnings'
+  ClientHeight = 235
   ClientWidth = 472
   OnResize = FormResize
   ExplicitWidth = 484
-  ExplicitHeight = 271
+  ExplicitHeight = 273
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 192
+    Top = 194
     Width = 472
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 191
+    ExplicitTop = 192
     ExplicitWidth = 468
     DesignSize = (
       472
@@ -74,7 +75,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
     Left = 0
     Top = 0
     Width = 472
-    Height = 192
+    Height = 194
     Align = alClient
     Colors.BorderColor = 15987699
     Colors.DisabledColor = clGray
@@ -106,6 +107,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
     OnMeasureItem = vstWarningsAndErrorsMeasureItem
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+    ExplicitHeight = 193
     Columns = <
       item
         Position = 0

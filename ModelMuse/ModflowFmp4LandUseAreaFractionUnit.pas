@@ -142,6 +142,7 @@ var
   LandUse: TFarmProcess4LandUse;
 begin
   result := False;
+{$IFDEF OWHMV2}
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
@@ -152,6 +153,7 @@ begin
       and (LandUse.LandUseFraction.FarmOption = foTransient)
       and (LandUse.LandUseFraction.ArrayList = alArray)
   end;
+{$ENDIF}
 end;
 
 { TFmp4MultLandUseAreaFractionBoundary }
@@ -183,6 +185,7 @@ var
   LandUse: TFarmProcess4LandUse;
 begin
   result := False;
+{$IFDEF OWHMV2}
   if ParentModel <> nil then
   begin
     LocalModel := ParentModel as TCustomModel;
@@ -193,6 +196,7 @@ begin
       and (LandUse.LandUseFraction.FarmOption = foTransient)
       and (LandUse.LandUseFraction.ArrayList = alArray)
   end;
+{$ENDIF}
 end;
 
 class function TFmp4MultLandUseAreaFractionBoundary.ValueDescription: string;
@@ -211,6 +215,7 @@ var
   LandUse: TFarmProcess4LandUse;
 begin
   result := False;
+{$IFDEF OWHMV2}
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
@@ -221,6 +226,7 @@ begin
       and (LandUse.LandUseFraction.FarmOption = foTransient)
       and (LandUse.LandUseFraction.ArrayList = alArray)
   end;
+{$ENDIF}
 end;
 
 end.

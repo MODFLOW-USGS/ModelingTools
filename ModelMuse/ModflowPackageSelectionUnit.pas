@@ -5502,6 +5502,7 @@ Type
     FMfFmp4CropID: TModflowBoundaryDisplayTimeList;
     FMfFmp4CropCoefficient: TModflowBoundaryDisplayTimeList;
     FMfFmp4LandUseAreaFraction: TModflowBoundaryDisplayTimeList;
+    FMultLandUseAreaFractions: TMfBoundDispObjectList;
     procedure SetAddedDemand(const Value: TFarmProperty);
     procedure SetCropCoeff(const Value: TFarmProperty);
     procedure SetET_IrrigFracCorrection(const Value: TFarmProperty);
@@ -5543,6 +5544,9 @@ Type
     procedure GetCropCoefficientUseList(Sender: TObject; NewUseList: TStringList);
     procedure InvalidateCropCoefficient(Sender: TObject);
     procedure InvalidateTransientCropID;
+    procedure UpdateMultLandUseLists(IsUsed: Boolean;
+      List: TMfBoundDispObjectList; OnInitialize: TNotifyEvent;
+      OnGetUseList: TOnGetConcUseList; const NameFormat: string);
   protected
     procedure InvalidateModel; Override;
   public
@@ -5571,6 +5575,8 @@ Type
     function StaticCropCoefficientArrayUsed (Sender: TObject): boolean;
     property MfFmp4CropCoefficient: TModflowBoundaryDisplayTimeList
       read FMfFmp4CropCoefficient;
+    procedure AddRemoveRenameLandUseTimeLists;
+
   published
     // LAND_USE
     // {SINGLE_LAND_USE_PER_CELL, or MULTIPLE_LAND_USE_PER_CELL}
@@ -26313,6 +26319,11 @@ end;
 
 { TFarmLandUse }
 
+procedure TFarmProcess4LandUse.AddRemoveRenameLandUseTimeLists;
+begin
+
+end;
+
 procedure TFarmProcess4LandUse.Assign(Source: TPersistent);
 var
   LandUse: TFarmProcess4LandUse;
@@ -26411,6 +26422,9 @@ begin
     begin
       AddTimeList(FMfFmp4CropCoefficient);
     end;
+
+    FMultLandUseAreaFractions := TMfBoundDispObjectList.Create;
+
   end;
 
   CropCoeff.OnChangeFarmOption := InvalidateCropCoefficient;
@@ -26422,6 +26436,8 @@ end;
 
 destructor TFarmProcess4LandUse.Destroy;
 begin
+  FMultLandUseAreaFractions.Free;
+
   FMfFmp4CropCoefficient.Free;
   FMfFmp4LandUseAreaFraction.Free;
   FMfFmp4CropID.Free;
@@ -26820,6 +26836,49 @@ begin
     and (LandUseFraction.FarmOption = foTransient)
     and (LandUseFraction.ArrayList = alArray)
     and (LandUseOption = luoMultiple);
+end;
+
+procedure TFarmProcess4LandUse.UpdateMultLandUseLists(IsUsed: Boolean;
+  List: TMfBoundDispObjectList; OnInitialize: TNotifyEvent;
+  OnGetUseList: TOnGetConcUseList; const NameFormat: string);
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  Crops: TCropCollection;
+//  Components: TMobileChemSpeciesCollection;
+begin
+  if IsUsed then
+  begin
+    Crops := frmGoPhast.PhastModel.FmpCrops;
+    while List.Count > Crops.Count do
+    begin
+      TimeList := List[List.Count-1];
+      RemoveTimeList(TimeList);
+      List.Delete(List.Count-1);
+    end;
+    while List.Count < Crops.Count do
+    begin
+      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      AddTimeList(TimeList);
+      List.Add(TimeList);
+      TimeList.OnInitialize := OnInitialize;
+      TimeList.OnGetUseList := OnGetUseList;
+    end;
+    for Index := 0 to Crops.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.Name := Format(NameFormat, [Crops[Index].CropName])
+    end;
+  end
+  else
+  begin
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      RemoveTimeList(TimeList);
+    end;
+    List.Clear;
+  end;
 end;
 
 { TFarmSalinityFlush }

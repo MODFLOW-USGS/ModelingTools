@@ -10920,12 +10920,20 @@ const
 //                displaying data.
 //    '5.1.1.12' Bug fix: ModelMuse does not include parameters in the model
 //                if they are not needed.
+//    '5.1.1.13' Enhancement: When converting the SFR package in MODFLOW-2005
+//                to the SFR package in MODFLOW 6, the formula for the top
+//                of the stream bed now ensures that the top of the stream
+//                bed minus the bed thickness is always higher than the bottom
+//                of the cell.
+//    '5.1.1.13' Enhancement: When converting the SFR package in MODFLOW-2005
+//                to the SFR package in MODFLOW 6, the upstream fraction for
+//                any diversion segments is set to zero.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.12';
+  IIModelVersion = '5.1.1.13';
 
 function IModelVersion: string;
 begin
@@ -42341,6 +42349,9 @@ begin
             Sfr6Item := UpstreamObject.ModflowSfr6Boundary.Values[TimeIndex] as TSfrMf6Item;
             Sfr6Item.DiversionCount := Sfr6Item.DiversionCount+1;
             Sfr6Item.DiversionFormulas[Sfr6Item.DiversionCount-1] := SfrItem.Flow;
+
+            Sfr6Item := AScreenObject.ModflowSfr6Boundary.Values[TimeIndex] as TSfrMf6Item;
+            Sfr6Item.UpstreamFraction := '0';
           end;
         end;
       end;
@@ -42905,33 +42916,45 @@ function TCustomModel.MultipleAddedDemandUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
+{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.AddedDemand.FarmOption = foStatic)
     and (FarmLandUse.AddedDemand.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.MultipleConsumptiveUseUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
+{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.ConsumptiveUse.FarmOption = foStatic)
     and (FarmLandUse.ConsumptiveUse.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.MultipleCropCoefficientUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
+{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.CropCoeff.FarmOption = foStatic)
     and (FarmLandUse.CropCoeff.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.MultipleEvaporationIrrigationUsed(
@@ -42939,44 +42962,60 @@ function TCustomModel.MultipleEvaporationIrrigationUsed(
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
+{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.EvapIrrigationFraction.FarmOption = foStatic)
     and (FarmLandUse.EvapIrrigationFraction.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.MultipleIrrigationUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
+{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.Irrigation.FarmOption = foStatic)
     and (FarmLandUse.Irrigation.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.MultipleLandUseFractionsUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
+{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.LandUseFraction.FarmOption = foStatic)
     and (FarmLandUse.LandUseFraction.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.MultipleRootDepthUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
+{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.RootDepth.FarmOption = foStatic)
     and (FarmLandUse.RootDepth.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.MultipleSWLossFractionIrrigationUsed(
@@ -42984,11 +43023,15 @@ function TCustomModel.MultipleSWLossFractionIrrigationUsed(
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
+{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.FractionOfIrrigationToSurfaceWater.FarmOption = foStatic)
     and (FarmLandUse.FractionOfIrrigationToSurfaceWater.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.MultipleSWLossFractionPrecipUsed(
@@ -42996,11 +43039,15 @@ function TCustomModel.MultipleSWLossFractionPrecipUsed(
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
+{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.FractionOfPrecipToSurfaceWater.FarmOption = foStatic)
     and (FarmLandUse.FractionOfPrecipToSurfaceWater.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.NpfUsed(Sender: TObject): boolean;

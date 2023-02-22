@@ -3075,6 +3075,12 @@ var
 //  DiversionItem: TSDiversionItem;
   SourceStr: TStrBoundary;
   StrItem: TStrItem;
+  STop: string;
+  LayerNumber: string;
+  LayerBoundaryPosition: string;
+  STopParen: string;
+  LocalScreenObject: TScreenObject;
+  EFormula: string;
 //  DiversionSeg: TSDiversionItem;
 begin
   if Source is TSfrMf6Boundary then
@@ -3128,6 +3134,8 @@ begin
   end
   else if Source is TSfrBoundary then
   begin
+    LocalScreenObject := ScreenObject as TScreenObject;
+
     SourceSfrMf2005 := TSfrBoundary(Source);
     SegmentNumber := SourceSfrMf2005.SegmentNumber;
     LocalModel := frmGoPhast.PhastModel;
@@ -3148,7 +3156,12 @@ begin
         + UpstreamSegment.StreamWidth
         + ', 0, '
         + DownstreamSegment.StreamWidth
-        + ', 1)'
+        + ', 1)';
+      if LocalScreenObject.Count <= 1 then
+      begin
+        ReachWidth := '(' +UpstreamSegment.StreamWidth + ' + '
+          + DownstreamSegment.StreamWidth + ')/2';
+      end;
     end;
 
 
@@ -3161,46 +3174,97 @@ begin
     end
     else
     begin
-      Gradient := '((' + UpstreamSegment.StreambedElevation
-        + ') - (' + DownstreamSegment.StreambedElevation
-        + '))/'
-        + StrObjectLength;
-        
-      if UpstreamSegment.StreambedElevation <> DownstreamSegment.StreambedElevation then
+      if LocalScreenObject.Count <= 1 then
       begin
-        StreambedTop := 'Interpolate(FractionOfObjectLength, ('
-          + UpstreamSegment.StreambedElevation
-          + '), 0, ('
-          + DownstreamSegment.StreambedElevation
-          + '), 1)';
+        Gradient := '((' + UpstreamSegment.StreambedElevation
+          + ') - (' + DownstreamSegment.StreambedElevation
+          + '))/'
+          + ReachLength;
       end
-      else
+	  else
+	  begin
+        Gradient := '((' + UpstreamSegment.StreambedElevation
+          + ') - (' + DownstreamSegment.StreambedElevation
+          + '))/'
+          + StrObjectLength;
+	  end;
+
+      if UpstreamSegment.StreambedThickness <> DownstreamSegment.StreambedThickness then
       begin
-        StreambedTop := UpstreamSegment.StreambedElevation;
-      end; 
-                                       
-      if UpstreamSegment.StreambedThickness <> DownstreamSegment.StreambedThickness then      
-      begin      
         StreambedThickness := 'Interpolate(FractionOfObjectLength, ('
           + UpstreamSegment.StreambedThickness
           + '), 0, ('
           + DownstreamSegment.StreambedThickness
           + '), 1)';
-      end          
-      else      
-      begin      
+        if LocalScreenObject.Count <= 1 then
+        begin
+          StreambedThickness := '(' +UpstreamSegment.StreambedThickness + ' + '
+            + DownstreamSegment.StreambedThickness + ')/2';
+        end;
+      end
+      else
+      begin
         StreambedThickness := UpstreamSegment.StreambedThickness;
-      end;    
-              
-      if UpstreamSegment.HydraulicConductivity <> DownstreamSegment.HydraulicConductivity then      
+      end;
+
+      if UpstreamSegment.StreambedElevation <> DownstreamSegment.StreambedElevation then
+      begin
+
+        STop := 'Interpolate(FractionOfObjectLength, ('
+          + UpstreamSegment.StreambedElevation
+          + '), 0, ('
+          + DownstreamSegment.StreambedElevation
+          + '), 1)';
+        if LocalScreenObject.Count <= 1 then
+        begin
+          STop := '(' +UpstreamSegment.StreambedElevation + ' + '
+            + DownstreamSegment.StreambedElevation + ')/2';
+        end;
+        STopParen := '(' + STop + ')';
+      end
+      else
+      begin
+        STop := UpstreamSegment.StreambedElevation;
+        STopParen := STop;
+      end;
+
+      case LocalScreenObject.ElevationCount of
+        ecZero:
+          begin
+            StreambedTop := STop;
+          end;
+        ecOne:
+          begin
+            EFormula := LocalScreenObject.ElevationFormula;
+            LayerNumber := 'Min((ElevationToLayer(' + EFormula + ') + 1), LayerCount)';
+            LayerBoundaryPosition := 'LayerBoundaryPosition('+ LayerNumber + ')';
+            StreambedTop := 'If((' + STopParen + '-' + StreambedThickness + ' <= ' + LayerBoundaryPosition + ') , '
+              + '(' + LayerBoundaryPosition + '+' + StreambedThickness + ' + 0.001), ' + STopParen + ')';
+          end;
+        ecTwo:
+          begin
+            EFormula := LocalScreenObject.HigherElevationFormula;
+            LayerNumber := 'Min((ElevationToLayer(' + EFormula + ') + 1), LayerCount)';
+            LayerBoundaryPosition := 'LayerBoundaryPosition('+ LayerNumber + ')';
+            StreambedTop := 'If((' + STopParen + '+' + StreambedThickness + ' <= ' + LayerBoundaryPosition + ') , '
+              + '(' + LayerBoundaryPosition + '+' + StreambedThickness + ' + 0.001), ' + STopParen + ')';
+          end;
+      end;
+  
+      if UpstreamSegment.HydraulicConductivity <> DownstreamSegment.HydraulicConductivity then
       begin      
         HydraulicConductivity := 'Interpolate(FractionOfObjectLength, ('
           + UpstreamSegment.HydraulicConductivity
           + '), 0, ('
           + DownstreamSegment.HydraulicConductivity
           + '), 1)';
-      end          
-      else      
+        if LocalScreenObject.Count <= 1 then
+        begin
+          HydraulicConductivity := '(' +UpstreamSegment.HydraulicConductivity + ' + '
+            + DownstreamSegment.HydraulicConductivity + ')/2';
+        end;
+      end
+      else
       begin      
         HydraulicConductivity := UpstreamSegment.HydraulicConductivity;
       end;            
@@ -3270,6 +3334,11 @@ begin
           + '(' + DownstreamSegment.StreambedElevation + ') + ('
             + DownstreamSegment.StreamDepth + ')'
           + '), 1)';
+        if LocalScreenObject.Count <= 1 then
+        begin
+          SfrMf6Item.Stage := '(' +UpstreamSegment.StreamDepth + ' + '
+            + DownstreamSegment.StreamDepth + ')/2';
+        end;
       end;
 
       FlowItem := SourceSfrMf2005.SegmentFlows[ItemIndex] as TSfrSegmentFlowItem;
