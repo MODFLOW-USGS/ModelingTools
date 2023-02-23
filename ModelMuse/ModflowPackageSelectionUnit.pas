@@ -32,6 +32,7 @@ Type
   TNewtonFormulation = (nfOff, nfOn);
 
   TOnGetConcUseList = procedure (Sender: TObject; NewUseList: TStringList) of object;
+  TGetBoundary = function(ScreenObject: TScreenObject): TModflowBoundary of object;
 
   TModflowPackageSelection = class(TPersistent)
   private
@@ -76,7 +77,9 @@ Type
     procedure SetRealProperty(var Field: real; const Value: real);
     procedure SetStringProperty(var Field: string; const Value: string);
     procedure UpdatePkgUseList(NewUseList: TStringList;
-      ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
+      ParamType: TParameterType; DataIndex: integer; const DisplayName: string); overload;
+    procedure UpdatePkgUseList(NewUseList: TStringList;
+      GetBoundary: TGetBoundary; DataIndex: integer; const DisplayName: string); overload;
     procedure UpdateConcentrationLists(List: TMfBoundDispObjectList;
       OnInitialize: TNotifyEvent; OnGetUseList: TOnGetConcUseList;
       const NameFormat: string);
@@ -2177,6 +2180,7 @@ Type
     procedure SetSaveGwtBudgetCsv(const Value: Boolean);
     procedure UpdatePkgUseList(NewUseList: TStringList;
       DataIndex: integer; const DisplayName: string);
+    function GetSfr6Boundary(ScreenObject: TScreenObject): TModflowBoundary;
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -4957,8 +4961,6 @@ Type
     UpdateDisplay: TUpdateDisplay;
   end;
 
-  TGetBoundary = function(ScreenObject: TScreenObject): TModflowBoundary of object;
-
   TGetUseListOptions = record
     GetBoundary: TGetBoundary;
     Description: string;
@@ -5476,6 +5478,10 @@ Type
     lupPrintET_ByFarmByCrop, lupPrintRowCol);
   TLandUsePrints = set of TLandUsePrint;
 
+  TInitializeLandUseDisplayOptions = record
+    Display: array of TModflowBoundaryDisplayTimeList;
+    UpdateDisplay: TUpdateDisplay;
+  end;
 
   TFarmProcess4LandUse = class(TCustomFarm4)
   private
@@ -5534,9 +5540,17 @@ Type
     procedure InitializeFmp4CropIDDisplay(Sender: TObject);
     procedure GetMfFmp4CropIDUseList(Sender: TObject; NewUseList: TStringList);
 
+    // Land use area fractions for single land use per cell
     function GetLandUseAreaFractionBoundary(ScreenObject: TScreenObject): TModflowBoundary;
     procedure InitializeLandUseAreaFractionDisplay(Sender: TObject);
     procedure GetLandUseAreaFractionUseList(Sender: TObject; NewUseList: TStringList);
+    // Land use area fractions for multiple land uses per cell
+    procedure GetMultLandUseFractionsUseList(Sender: TObject;
+      NewUseList: TStringList);
+    function GetMultLandUseAreaFractionBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeMultLandUseAreaFractionDisplay(Sender: TObject);
+    procedure UpdateMultTransientLandUseAreaFractionArrays;
+    // Land use area fractions for both single and multiple land uses per cell
     procedure InvalidateLandUseAreaFraction(Sender: TObject);
 
     function GetCropCoefficientBoundary(ScreenObject: TScreenObject): TModflowBoundary;
@@ -5544,9 +5558,11 @@ Type
     procedure GetCropCoefficientUseList(Sender: TObject; NewUseList: TStringList);
     procedure InvalidateCropCoefficient(Sender: TObject);
     procedure InvalidateTransientCropID;
+
     procedure UpdateMultLandUseLists(IsUsed: Boolean;
       List: TMfBoundDispObjectList; OnInitialize: TNotifyEvent;
       OnGetUseList: TOnGetConcUseList; const NameFormat: string);
+    procedure InitializeLandUseDisplay(DisplayOptions: TInitializeLandUseDisplayOptions);
   protected
     procedure InvalidateModel; Override;
   public
@@ -5565,18 +5581,22 @@ Type
 
     property MfFmp4CropID: TModflowBoundaryDisplayTimeList read FMfFmp4CropID;
 
+    // Land use area fractions for single land use per cell
     function TransientLandUseAreaFractionArrayUsed (Sender: TObject): boolean;
     function StaticLandUseAreaFractionArrayUsed (Sender: TObject): boolean;
     property MfFmp4LandUseAreaFraction: TModflowBoundaryDisplayTimeList
       read FMfFmp4LandUseAreaFraction;
+    // Land use area fractions for multiple land uses per cell
     function TransientLandUseAreaFractionMultArrayUsed (Sender: TObject): boolean;
+    procedure InvalidateMultTransientLandUseAreaFractionArrays;
 
     function TransientCropCoefficientarrayUsed (Sender: TObject): boolean;
     function StaticCropCoefficientArrayUsed (Sender: TObject): boolean;
     property MfFmp4CropCoefficient: TModflowBoundaryDisplayTimeList
       read FMfFmp4CropCoefficient;
-    procedure AddRemoveRenameLandUseTimeLists;
 
+    procedure InvalidateAll;
+    procedure Loaded;
   published
     // LAND_USE
     // {SINGLE_LAND_USE_PER_CELL, or MULTIPLE_LAND_USE_PER_CELL}
@@ -7062,6 +7082,7 @@ resourcestring
   StrFMP4EfficiencyImpr = 'FMP4 Efficiency Improvement';
   StrFMP4BareRunoffFra = 'FMP4 Bare Runoff Fraction';
   StrFMP4PotentialEvapor = 'FMP Potential Evaporation Bare';
+  StrLandUseAreaFracti = 'Land Use Area Fractions %s';
 
 { TModflowPackageSelection }
 
@@ -7263,6 +7284,36 @@ begin
 
   (FModel as TCustomModel).UpdateDisplayUseList(NewUseList,
     ParamType, DataIndex, DisplayName);
+end;
+
+procedure TModflowPackageSelection.UpdatePkgUseList(NewUseList: TStringList;
+  GetBoundary: TGetBoundary; DataIndex: integer; const DisplayName: string);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  ABoundary: TModflowBoundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := GetBoundary(ScreenObject);
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(DataIndex, NewUseList, Item, DisplayName);
+      end;
+    end;
+  end;
 end;
 
 procedure TModflowPackageSelection.UpdateUseList(DataIndex: integer;
@@ -16584,6 +16635,7 @@ begin
     FMfFmpEvapRate.OnGetUseList := GetMfFmpEvapUseList;
     FMfFmpEvapRate.OnTimeListUsed := EvapUsed;
     FMfFmpEvapRate.Name := StrFarmEvap;
+    FMfFmpEvapRate.AddMethod := vamReplace;
     AddTimeList(FMfFmpEvapRate);
 
     FMfFmpPrecip := TModflowBoundaryDisplayTimeList.Create(Model);
@@ -16591,6 +16643,7 @@ begin
     FMfFmpPrecip.OnGetUseList := GetMfFmpPrecipUseList;
     FMfFmpPrecip.OnTimeListUsed := PrecipUsed;
     FMfFmpPrecip.Name := StrFarmPrecip;
+    FMfFmpPrecip.AddMethod := vamReplace;
     AddTimeList(FMfFmpPrecip);
 
     FMfFmpFarmID := TModflowBoundaryDisplayTimeList.Create(Model);
@@ -16618,6 +16671,7 @@ begin
     FMfFmpMaxPumpingRate.OnGetUseList := GetMfFmpMaxPumpRateUseList;
     FMfFmpMaxPumpingRate.OnTimeListUsed := FarmWellsUsed;
     FMfFmpMaxPumpingRate.Name := StrFarmMaxPumpRate;
+    FMfFmpMaxPumpingRate.AddMethod := vamReplace;
     AddTimeList(FMfFmpMaxPumpingRate);
 
     FMfFmpFarmWellFarmID := TModflowBoundaryDisplayTimeList.Create(Model);
@@ -16625,6 +16679,7 @@ begin
     FMfFmpFarmWellFarmID.OnGetUseList := GetMfFmpFarmWellFarmIDUseList;
     FMfFmpFarmWellFarmID.OnTimeListUsed := FarmWellsUsed;
     FMfFmpFarmWellFarmID.Name := StrFarmWellFarmID;
+    FMfFmpFarmWellFarmID.AddMethod := vamReplace;
     AddTimeList(FMfFmpFarmWellFarmID);
 
     FMfFmpFarmWellPumpIfRequired := TModflowBoundaryDisplayTimeList.Create(Model);
@@ -16632,6 +16687,7 @@ begin
     FMfFmpFarmWellPumpIfRequired.OnGetUseList := GetMfFmpFarmWellPumpIfRequiredUseList;
     FMfFmpFarmWellPumpIfRequired.OnTimeListUsed := FarmWellsPumpRequiredUsed;
     FMfFmpFarmWellPumpIfRequired.Name := StrFarmWellPumpRequired;
+    FMfFmpFarmWellPumpIfRequired.AddMethod := vamReplace;
     AddTimeList(FMfFmpFarmWellPumpIfRequired);
   end;
 
@@ -21473,6 +21529,12 @@ begin
   GetSfr6UseList(SfrMf6RunoffPosition, NewUseList, StrSFR6Runoff);
 end;
 
+function TSfrModflow6PackageSelection.GetSfr6Boundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowSfr6Boundary;
+end;
+
 procedure TSfrModflow6PackageSelection.GetSfr6UseList(DataIndex: integer;
   NewUseList: TStringList; const DisplayName: string);
 var
@@ -21738,7 +21800,8 @@ end;
 procedure TSfrModflow6PackageSelection.UpdatePkgUseList(NewUseList: TStringList;
   DataIndex: integer; const DisplayName: string);
 begin
-
+  inherited UpdatePkgUseList(NewUseList, GetSfr6Boundary,
+    DataIndex, DisplayName)
 end;
 
 { TMawPackage }
@@ -25536,6 +25599,7 @@ begin
     FMfFmp4EvapRate.OnGetUseList := GetMfFmpEvapUseList;
     FMfFmp4EvapRate.OnTimeListUsed := TransientEvapUsed;
     FMfFmp4EvapRate.Name := StrFarmEvap;
+    FMfFmp4EvapRate.AddMethod := vamReplace;
     if TransientEvapUsed(nil) then
     begin
       AddTimeList(FMfFmp4EvapRate);
@@ -25546,6 +25610,7 @@ begin
     FMfFmp4Precip.OnGetUseList := GetMfFmpPrecipUseList;
     FMfFmp4Precip.OnTimeListUsed := TransientPrecipUsed;
     FMfFmp4Precip.Name := StrFarmPrecip;
+    FMfFmp4Precip.AddMethod := vamReplace;
     if TransientPrecipUsed(nil) then
     begin
       AddTimeList(FMfFmp4Precip);
@@ -25556,6 +25621,7 @@ begin
     FMfFmp4EvapBare.OnGetUseList := GetBareEvapUseList;
     FMfFmp4EvapBare.OnTimeListUsed := TransientBareEvapUsed;
     FMfFmp4EvapBare.Name := StrPotentialEvaporatio;
+    FMfFmp4EvapBare.AddMethod := vamReplace;
     if TransientBareEvapUsed(nil) then
     begin
       AddTimeList(FMfFmp4EvapBare);
@@ -25566,6 +25632,7 @@ begin
     FMfFmp4DirectRecharge.OnGetUseList := GetDirectRechargeUseList;
     FMfFmp4DirectRecharge.OnTimeListUsed := TransientDirectRechargeUsed;
     FMfFmp4DirectRecharge.Name := 'Direct Recharge';
+    FMfFmp4DirectRecharge.AddMethod := vamReplace;
     if TransientDirectRechargeUsed(nil) then
     begin
       AddTimeList(FMfFmp4DirectRecharge);
@@ -25576,6 +25643,7 @@ begin
     FMfFmp4PrecipPotConsumption.OnGetUseList := GetPrecipPotConsumptionUseList;
     FMfFmp4PrecipPotConsumption.OnTimeListUsed := TransientPrecipPotConsumptionUsed;
     FMfFmp4PrecipPotConsumption.Name := 'Precipitation Potential Consumption';
+    FMfFmp4PrecipPotConsumption.AddMethod := vamReplace;
     if TransientPrecipPotConsumptionUsed(nil) then
     begin
       AddTimeList(FMfFmp4PrecipPotConsumption);
@@ -26053,6 +26121,7 @@ begin
     FMfFmp4NrdInfilLocation.OnGetUseList := GetNrdInfilLocationUseList;
     FMfFmp4NrdInfilLocation.OnTimeListUsed := TransientNrdInfilLocationUsed;
     FMfFmp4NrdInfilLocation.Name := 'Non-Routed Delivery Infiltration Location';
+    FMfFmp4NrdInfilLocation.AddMethod := vamReplace;
     if TransientNrdInfilLocationUsed(nil) then
     begin
       AddTimeList(FMfFmp4NrdInfilLocation);
@@ -26319,9 +26388,11 @@ end;
 
 { TFarmLandUse }
 
-procedure TFarmProcess4LandUse.AddRemoveRenameLandUseTimeLists;
+procedure TFarmProcess4LandUse.InvalidateAll;
 begin
-
+  InvalidateTransientCropID;
+  InvalidateLandUseAreaFraction(nil);
+  InvalidateCropCoefficient(nil);
 end;
 
 procedure TFarmProcess4LandUse.Assign(Source: TPersistent);
@@ -26398,6 +26469,7 @@ begin
     FMfFmp4CropID.OnGetUseList := GetMfFmp4CropIDUseList;
     FMfFmp4CropID.OnTimeListUsed := TransientCropIDUsed;
     FMfFmp4CropID.Name := StrLandUseID;
+    FMfFmp4CropID.AddMethod := vamReplace;
     if CropLocation = rstTransient then
     begin
       AddTimeList(FMfFmp4CropID);
@@ -26408,6 +26480,7 @@ begin
     FMfFmp4LandUseAreaFraction.OnGetUseList := GetLandUseAreaFractionUseList;
     FMfFmp4LandUseAreaFraction.OnTimeListUsed := TransientLandUseAreaFractionarrayUsed;
     FMfFmp4LandUseAreaFraction.Name := 'Land Use Area Fraction';
+    FMfFmp4LandUseAreaFraction.AddMethod := vamReplace;
     if TransientLandUseAreaFractionarrayUsed(nil) then
     begin
       AddTimeList(FMfFmp4LandUseAreaFraction);
@@ -26418,6 +26491,7 @@ begin
     FMfFmp4CropCoefficient.OnGetUseList := GetCropCoefficientUseList;
     FMfFmp4CropCoefficient.OnTimeListUsed := TransientCropCoefficientarrayUsed;
     FMfFmp4CropCoefficient.Name := 'Crop Coefficient';
+    FMfFmp4CropCoefficient.AddMethod := vamReplace;
     if TransientCropCoefficientarrayUsed(nil) then
     begin
       AddTimeList(FMfFmp4CropCoefficient);
@@ -26515,6 +26589,24 @@ begin
   result := StoredMinimumBareFraction.Value;
 end;
 
+function TFarmProcess4LandUse.GetMultLandUseAreaFractionBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4MultLandUseAreaFraction;
+end;
+
+procedure TFarmProcess4LandUse.GetMultLandUseFractionsUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FMultLandUseAreaFractions.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+  DataSetName := Format(StrLandUseAreaFracti,
+     [frmGoPhast.PhastModel.fmpCrops[Index].CropName]);
+  UpdatePkgUseList(NewUseList, GetMultLandUseAreaFractionBoundary, Index, DataSetName);
+end;
+
 function TFarmProcess4LandUse.GetRelaxFracHeadChange: double;
 begin
   result := StoredRelaxFracHeadChange.Value;
@@ -26562,6 +26654,58 @@ begin
     DisplayOptions.Display := MfFmp4LandUseAreaFraction;
     DisplayOptions.UpdateDisplay := FarmWriter.UpdateLandUseAreaFractionDisplay;
     InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InitializeLandUseDisplay(
+  DisplayOptions: TInitializeLandUseDisplayOptions);
+var
+  List: TModflowBoundListOfTimeLists;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  List := TModflowBoundListOfTimeLists.Create;
+  try
+    for Index := 0 to Length(DisplayOptions.Display) - 1 do
+    begin
+      TimeList := DisplayOptions.Display[Index];
+      List.Add(TimeList);
+      TimeList.CreateDataSets;
+    end;
+//    for Index := 0 to List.Count - 1 do
+//    begin
+//      TimeList := List[Index];
+//      TimeList.CreateDataSets;
+//    end;
+    DisplayOptions.UpdateDisplay(List);
+    for Index := 0 to List.Count - 1 do
+    begin
+      TimeList := List[Index];
+      TimeList.ComputeAverage;
+    end;
+  finally
+    List.Free;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InitializeMultLandUseAreaFractionDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeLandUseDisplayOptions;
+  index: Integer;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    SetLength(DisplayOptions.Display, (FModel as TCustomModel).FmpCrops.Count);
+    for index := 0 to Length(DisplayOptions.Display) - 1 do
+    begin
+      DisplayOptions.Display[index] := FMultLandUseAreaFractions[index];
+    end;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateMultLandUseAreaFractionDisplay;
+    InitializeLandUseDisplay(DisplayOptions);
   finally
     FarmWriter.Free;
   end;
@@ -26620,6 +26764,7 @@ begin
     begin
       RemoveTimeList(MfFmp4LandUseAreaFraction);
     end;
+    UpdateMultTransientLandUseAreaFractionArrays;
   end;
   InvalidateModel;
 end;
@@ -26636,6 +26781,16 @@ begin
     begin
       Crops.UpdateAllDataArrays;
     end;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InvalidateMultTransientLandUseAreaFractionArrays;
+var
+  index: Integer;
+begin
+  for index := 0 to FMultLandUseAreaFractions.Count - 1 do
+  begin
+    FMultLandUseAreaFractions[index].Invalidate;
   end;
 end;
 
@@ -26694,9 +26849,7 @@ begin
   begin
     FLandUseOption := Value;
     InvalidateModel;
-    InvalidateTransientCropID;
-    InvalidateLandUseAreaFraction(nil);
-    InvalidateCropCoefficient(nil);
+    InvalidateAll;
   end;
 end;
 
@@ -26795,6 +26948,11 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.Loaded;
+begin
+  InvalidateAll;
+end;
+
 function TFarmProcess4LandUse.StaticLandUseAreaFractionArrayUsed(
   Sender: TObject): boolean;
 begin
@@ -26859,6 +27017,7 @@ begin
     while List.Count < Crops.Count do
     begin
       TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      TimeList.AddMethod := vamReplace;
       AddTimeList(TimeList);
       List.Add(TimeList);
       TimeList.OnInitialize := OnInitialize;
@@ -26879,6 +27038,15 @@ begin
     end;
     List.Clear;
   end;
+end;
+
+procedure TFarmProcess4LandUse.UpdateMultTransientLandUseAreaFractionArrays;
+begin
+  UpdateMultLandUseLists(TransientLandUseAreaFractionMultArrayUsed(nil),
+    FMultLandUseAreaFractions,
+    InitializeMultLandUseAreaFractionDisplay,
+    GetMultLandUseFractionsUseList,
+    StrLandUseAreaFracti);
 end;
 
 { TFarmSalinityFlush }

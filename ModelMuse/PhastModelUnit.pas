@@ -10928,12 +10928,14 @@ const
 //    '5.1.1.13' Enhancement: When converting the SFR package in MODFLOW-2005
 //                to the SFR package in MODFLOW 6, the upstream fraction for
 //                any diversion segments is set to zero.
+//    '5.1.1.14' Bug fix: Fixed bug that would prevent elevations from being
+//                updated if the front and side views were hidden.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.13';
+  IIModelVersion = '5.1.1.14';
 
 function IModelVersion: string;
 begin
@@ -26740,6 +26742,7 @@ end;
 procedure TCustomModel.InvalidateMfFmp4LandUseAreaFraction(Sender: TObject);
 begin
   ModflowPackages.FarmLandUse.MfFmp4LandUseAreaFraction.Invalidate;
+  ModflowPackages.FarmLandUse.InvalidateMultTransientLandUseAreaFractionArrays;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4NrdInfilLocation(Sender: TObject);

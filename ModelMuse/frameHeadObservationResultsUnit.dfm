@@ -432,7 +432,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 339
       end
       object pnlValueControls: TPanel
         Left = 0
@@ -570,7 +569,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
       Left = 8
       Top = 6
       Width = 180
-      Height = 21
+      Height = 23
       Style = csDropDownList
       TabOrder = 0
       OnChange = comboModelsChange

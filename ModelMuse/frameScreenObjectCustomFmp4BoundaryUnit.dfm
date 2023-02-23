@@ -39,7 +39,7 @@ inherited frameScreenObjectCustomFmp4Boundary: TframeScreenObjectCustomFmp4Bound
     ExplicitHeight = 237
     inherited pnlEditGrid: TPanel
       Width = 408
-      ExplicitWidth = 409
+      ExplicitWidth = 408
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
       Width = 408
@@ -117,8 +117,8 @@ inherited frameScreenObjectCustomFmp4Boundary: TframeScreenObjectCustomFmp4Bound
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 409
-      ExplicitHeight = 186
+      ExplicitWidth = 408
+      ExplicitHeight = 185
     end
   end
 end

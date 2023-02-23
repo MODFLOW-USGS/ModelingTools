@@ -97,7 +97,7 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
         Left = 3
         Top = 85
         Width = 145
-        Height = 21
+        Height = 23
         Style = csDropDownList
         TabOrder = 1
         OnChange = comboTimeToPlotChange
@@ -193,7 +193,7 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
         Left = 3
         Top = 346
         Width = 241
-        Height = 21
+        Height = 23
         Style = csDropDownList
         TabOrder = 9
         Visible = False

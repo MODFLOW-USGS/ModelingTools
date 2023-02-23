@@ -38,15 +38,15 @@ object frameSwrObsDisplay: TframeSwrObsDisplay
     object lblAnimationInterval: TLabel
       Left = 280
       Top = 102
-      Width = 136
-      Height = 16
+      Width = 126
+      Height = 15
       Caption = 'Animation interval (sec)'
     end
     object lblObservationFile: TLabel
       Left = 7
       Top = 19
-      Width = 119
-      Height = 16
+      Width = 108
+      Height = 15
       Caption = 'SWR observation file'
     end
     object fedObservationFile: TJvFilenameEdit
@@ -61,13 +61,14 @@ object frameSwrObsDisplay: TframeSwrObsDisplay
       DialogTitle = 'Browse for SWR Observation Output Files'
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
+      Text = ''
       OnChange = fedObservationFileChange
     end
     object comboObservationType: TComboBox
       Left = 7
       Top = 68
       Width = 113
-      Height = 24
+      Height = 23
       Style = csDropDownList
       ItemIndex = 0
       TabOrder = 1
@@ -144,6 +145,7 @@ object frameSwrObsDisplay: TframeSwrObsDisplay
     Columns = <
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -166,8 +168,6 @@ object frameSwrObsDisplay: TframeSwrObsDisplay
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitTop = 97
-    ExplicitHeight = 143
   end
   object jvtmrAnimate: TJvTimer
     Enabled = False

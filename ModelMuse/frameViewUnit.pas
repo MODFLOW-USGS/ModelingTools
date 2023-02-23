@@ -588,7 +588,7 @@ uses GR32_Polygons, frmGoPhastUnit, CursorsFoiledAgain, Math, RbwParser,
   CustomModflowWriterUnit, frmProgressUnit, SutraMeshUnit, frmDisplayDataUnit,
   frmCustomGoPhastUnit, VectorDisplayUnit, Generics.Collections,
   DrawMeshTypesUnit, MeshRenumberingTypes, ModelMuseUtilities,
-  PestPropertiesUnit;
+  PestPropertiesUnit, ModflowGridUnit;
 
 resourcestring
   StrTheSImageCanNo = 'The %s  image can not be shown at this magnification.' +
@@ -798,11 +798,20 @@ begin
   if (Grid <> nil) and Grid.ElevationsNeedUpdating then
   begin
     frmGoPhast.sbMain.Repaint;
+    if Grid is TModflowGrid then
+    begin
+      TModflowGrid(Grid).UpdateCellElevations;
+    end
+    else
+    begin
+      Assert(False);
+    end;
     Exit;
   end;
   Mesh := frmGoPhast.PhastModel.Mesh3D;
   if (Mesh <> nil) and Mesh.ElevationsNeedUpdating then
   begin
+    Mesh.CheckUpdateElevations;
     frmGoPhast.sbMain.Repaint;
     Exit;
   end;

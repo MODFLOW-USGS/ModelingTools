@@ -2856,6 +2856,10 @@ procedure TCropCollection.Assign(Source: TPersistent);
 begin
   FreeAndNil(FFarmList);
   inherited;
+  if Model <> nil then
+  begin
+    (Model as TCustomModel).ModflowPackages.FarmLandUse.InvalidateAll;
+  end;
 end;
 
 destructor TCropCollection.Destroy;

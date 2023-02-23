@@ -248,7 +248,7 @@ inherited frameContourData: TframeContourData
         Width = 121
         Height = 150
         DoubleBuffered = False
-        ItemHeight = 13
+        ItemHeight = 15
         ParentDoubleBuffered = False
         TabOrder = 6
         OnClickCheck = clbxModelClickCheck

@@ -17,27 +17,27 @@ object frameCustomColor: TframeCustomColor
       Caption = 'Selection'
       DesignSize = (
         562
-        393)
+        398)
       object lblDataSet: TLabel
         Left = 8
         Top = 4
-        Width = 207
-        Height = 20
+        Width = 164
+        Height = 15
         Caption = 'Data set or boundary condition'
       end
       object lblColorScheme: TLabel
         Left = 8
         Top = 239
-        Width = 90
-        Height = 20
+        Width = 73
+        Height = 15
         Anchors = [akLeft, akBottom]
         Caption = 'Color scheme'
       end
       object lblCycles: TLabel
         Left = 456
         Top = 266
-        Width = 41
-        Height = 20
+        Width = 34
+        Height = 15
         Anchors = [akRight, akBottom]
         Caption = 'Cycles'
       end
@@ -53,23 +53,23 @@ object frameCustomColor: TframeCustomColor
       object lblColorAdjustment: TLabel
         Left = 8
         Top = 342
-        Width = 114
-        Height = 20
+        Width = 92
+        Height = 15
         Anchors = [akLeft, akBottom]
         Caption = 'Color adjustment'
       end
       object lblComment: TLabel
         Left = 8
         Top = 61
-        Width = 198
-        Height = 20
+        Width = 157
+        Height = 15
         Caption = 'Data set comment (read only)'
       end
       object comboColorScheme: TComboBox
         Left = 8
         Top = 252
         Width = 442
-        Height = 28
+        Height = 23
         Style = csDropDownList
         Anchors = [akLeft, akRight, akBottom]
         DropDownCount = 12
@@ -169,9 +169,26 @@ object frameCustomColor: TframeCustomColor
         Height = 28
         Tree.Left = 0
         Tree.Top = 0
-        Tree.Width = 622
-        Tree.Height = 433
+        Tree.Width = 628
+        Tree.Height = 442
         Tree.Align = alClient
+        Tree.Colors.BorderColor = 15987699
+        Tree.Colors.DisabledColor = clGray
+        Tree.Colors.DropMarkColor = 15385233
+        Tree.Colors.DropTargetColor = 15385233
+        Tree.Colors.DropTargetBorderColor = 15385233
+        Tree.Colors.FocusedSelectionColor = 15385233
+        Tree.Colors.FocusedSelectionBorderColor = 15385233
+        Tree.Colors.GridLineColor = 15987699
+        Tree.Colors.HeaderHotColor = clBlack
+        Tree.Colors.HotColor = clBlack
+        Tree.Colors.SelectionRectangleBlendColor = 15385233
+        Tree.Colors.SelectionRectangleBorderColor = 15385233
+        Tree.Colors.SelectionTextColor = clBlack
+        Tree.Colors.TreeLineColor = 9471874
+        Tree.Colors.UnfocusedColor = clGray
+        Tree.Colors.UnfocusedSelectionColor = clWhite
+        Tree.Colors.UnfocusedSelectionBorderColor = clWhite
         Tree.Header.AutoSizeIndex = 0
         Tree.Header.MainColumn = -1
         Tree.TabOrder = 0
@@ -245,41 +262,41 @@ object frameCustomColor: TframeCustomColor
       ImageIndex = 1
       DesignSize = (
         562
-        393)
+        398)
       object lblLowerLimit: TLabel
         Left = 8
         Top = 3
-        Width = 74
-        Height = 20
+        Width = 59
+        Height = 15
         Caption = 'Lower limit'
       end
       object lblUpperLimit: TLabel
         Left = 299
         Top = 3
-        Width = 75
-        Height = 20
+        Width = 59
+        Height = 15
         Caption = 'Upper limit'
       end
       object lblValuesToIgnore: TLabel
         Left = 8
         Top = 81
-        Width = 107
-        Height = 20
+        Width = 84
+        Height = 15
         Caption = 'Values to ignore'
       end
       object lblNumberOfValuesToIgnore: TLabel
         Left = 130
         Top = 373
-        Width = 182
-        Height = 20
+        Width = 145
+        Height = 15
         Anchors = [akLeft, akBottom]
         Caption = 'Number of values to ignore'
       end
       object lblEpsilon: TLabel
         Left = 203
         Top = 81
-        Width = 163
-        Height = 20
+        Width = 129
+        Height = 15
         Caption = 'Epsilon (margin of error)'
       end
       inline frameCheck3DMax: TframeDisplayLimit
@@ -300,7 +317,6 @@ object frameCustomColor: TframeCustomColor
           Left = 89
           TabOrder = 1
           ExplicitLeft = 89
-          ExplicitHeight = 28
         end
       end
       inline frameCheck3DMin: TframeDisplayLimit
@@ -314,9 +330,6 @@ object frameCustomColor: TframeCustomColor
         ExplicitTop = 24
         inherited rdeLimit: TRbwDataEntry
           Height = 28
-          ExplicitHeight = 28
-        end
-        inherited comboBoolLimit: TComboBox
           ExplicitHeight = 28
         end
       end
@@ -346,6 +359,7 @@ object frameCustomColor: TframeCustomColor
         AutoIncreaseRowCount = True
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
+        OnEndUpdate = rdgValuesToIgnoreEndUpdate
         ColorRangeSelection = False
         Columns = <
           item
@@ -372,7 +386,6 @@ object frameCustomColor: TframeCustomColor
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        OnEndUpdate = rdgValuesToIgnoreEndUpdate
         WordWrapRowCaptions = False
       end
       object seNumberOfValuesToIgnore: TJvSpinEdit
@@ -407,7 +420,7 @@ object frameCustomColor: TframeCustomColor
         Left = 206
         Top = 0
         Width = 356
-        Height = 393
+        Height = 398
         Align = alClient
         ExplicitLeft = 224
         ExplicitTop = -2
@@ -418,7 +431,7 @@ object frameCustomColor: TframeCustomColor
         Left = 201
         Top = 0
         Width = 5
-        Height = 393
+        Height = 398
         ExplicitLeft = 218
         ExplicitHeight = 400
       end
@@ -426,26 +439,27 @@ object frameCustomColor: TframeCustomColor
         Left = 0
         Top = 0
         Width = 201
-        Height = 393
+        Height = 398
         Align = alLeft
         BevelInner = bvRaised
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitHeight = 393
         DesignSize = (
           201
-          393)
+          398)
         object lblMethod: TLabel
           Left = 8
           Top = 6
-          Width = 52
-          Height = 20
+          Width = 42
+          Height = 15
           Caption = 'Method'
         end
         object lblColorLegendRows: TLabel
           Left = 8
           Top = 303
-          Width = 107
-          Height = 20
+          Width = 86
+          Height = 15
           Anchors = [akLeft, akBottom]
           Caption = 'Number of rows'
         end
@@ -453,7 +467,7 @@ object frameCustomColor: TframeCustomColor
           Left = 8
           Top = 27
           Width = 145
-          Height = 28
+          Height = 23
           Style = csDropDownList
           ItemIndex = 0
           TabOrder = 0
@@ -497,6 +511,7 @@ object frameCustomColor: TframeCustomColor
           AutoIncreaseRowCount = True
           SelectedRowOrColumnColor = clAqua
           UnselectableColor = clBtnFace
+          OnEndUpdate = rdgLegendEndUpdate
           OnStateChange = rdgLegendStateChange
           ColorRangeSelection = False
           Columns = <
@@ -524,7 +539,6 @@ object frameCustomColor: TframeCustomColor
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = rdgLegendEndUpdate
           WordWrapRowCaptions = False
         end
         object btnFont: TButton

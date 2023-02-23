@@ -9,78 +9,78 @@ object frameVectors: TframeVectors
   object lblScale: TLabel
     Left = 3
     Top = 64
-    Width = 124
-    Height = 20
+    Width = 97
+    Height = 15
     Caption = 'Scaling factor (2D)'
   end
   object lblMaxColor: TLabel
     Left = 3
     Top = 197
-    Width = 104
-    Height = 20
+    Width = 85
+    Height = 15
     Caption = 'Maximum color'
   end
   object lblMidColor: TLabel
     Left = 3
     Top = 249
-    Width = 85
-    Height = 20
+    Width = 67
+    Height = 15
     Caption = 'Middle color'
   end
   object lblMinColor: TLabel
     Left = 3
     Top = 301
-    Width = 101
-    Height = 20
+    Width = 83
+    Height = 15
     Caption = 'Minimum color'
   end
   object lblVelocityColor: TLabel
     Left = 3
     Top = 355
-    Width = 90
-    Height = 20
+    Width = 71
+    Height = 15
     Caption = 'Velocity color'
   end
   object lblVectorSource: TLabel
     Left = 3
     Top = 8
-    Width = 89
-    Height = 20
+    Width = 71
+    Height = 15
     Caption = 'Vector source'
   end
   object lblScale3D: TLabel
     Left = 3
     Top = 110
-    Width = 124
-    Height = 20
+    Width = 97
+    Height = 15
     Caption = 'Scaling factor (3D)'
   end
   object lblMinSpacing2D: TLabel
     Left = 154
     Top = 64
-    Width = 238
-    Height = 20
+    Width = 191
+    Height = 15
     Caption = 'Minimum vector spacing 2D (pixels)'
   end
   object lblMinHorizontalSpacing3D: TLabel
     Left = 154
     Top = 110
-    Width = 212
-    Height = 20
+    Width = 170
+    Height = 15
     Caption = 'Minimum horizontal spacing 3D'
   end
   object lblMinVerticalSpacing3D: TLabel
     Left = 154
     Top = 157
-    Width = 193
-    Height = 20
+    Width = 155
+    Height = 15
     Caption = 'Minimum vertical spacing 3D'
   end
   object lblLineThickness: TLabel
     Left = 3
     Top = 425
-    Width = 90
-    Height = 20
+    Width = 74
+    Height = 15
     Caption = 'Line thickness'
   end
   object rdeScale: TRbwDataEntry
@@ -101,7 +101,7 @@ object frameVectors: TframeVectors
     Left = 3
     Top = 27
     Width = 302
-    Height = 28
+    Height = 23
     Style = csDropDownList
     TabOrder = 0
     OnChange = comboVectorSourceChange

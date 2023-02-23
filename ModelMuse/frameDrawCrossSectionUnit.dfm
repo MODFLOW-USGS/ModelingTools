@@ -127,8 +127,8 @@ object frameDrawCrossSection: TframeDrawCrossSection
       object lblDataSets: TLabel
         Left = 8
         Top = 8
-        Width = 80
-        Height = 13
+        Width = 85
+        Height = 15
         Caption = 'Data sets to plot'
       end
       object lstSelectedDataSets: TListBox
@@ -160,15 +160,15 @@ object frameDrawCrossSection: TframeDrawCrossSection
       object lblLayers: TLabel
         Left = 11
         Top = 3
-        Width = 66
-        Height = 13
+        Width = 71
+        Height = 15
         Caption = 'Layers to plot'
       end
       object lblLineThickness: TLabel
         Left = 82
         Top = 107
-        Width = 66
-        Height = 13
+        Width = 74
+        Height = 15
         Caption = 'Line thickness'
       end
       object clbLayers: TJvCheckListBox
@@ -181,7 +181,7 @@ object frameDrawCrossSection: TframeDrawCrossSection
         Margins.Bottom = 30
         Align = alClient
         DoubleBuffered = False
-        ItemHeight = 20
+        ItemHeight = 15
         ParentDoubleBuffered = False
         TabOrder = 0
       end

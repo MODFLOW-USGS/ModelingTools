@@ -138,7 +138,7 @@ inherited frameColorGrid: TframeColorGrid
         Left = 420
         Top = 26
         Width = 85
-        Height = 21
+        Height = 23
         Anchors = [akTop, akRight]
         TabOrder = 2
         Text = '0'

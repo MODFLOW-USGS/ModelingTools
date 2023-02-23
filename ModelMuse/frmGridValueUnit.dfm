@@ -7,14 +7,14 @@ inherited frmGridValue: TfrmGridValue
   KeyPreview = True
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitWidth = 664
-  ExplicitHeight = 552
+  ExplicitWidth = 660
+  ExplicitHeight = 551
   DesignSize = (
     648
     513)
   TextHeight = 18
   object btnHelp: TBitBtn
-    Left = 452
+    Left = 448
     Top = 473
     Width = 89
     Height = 33
@@ -23,9 +23,11 @@ inherited frmGridValue: TfrmGridValue
     NumGlyphs = 2
     TabOrder = 1
     OnClick = btnHelpClick
+    ExplicitLeft = 444
+    ExplicitTop = 472
   end
   object btnClose: TBitBtn
-    Left = 549
+    Left = 545
     Top = 473
     Width = 89
     Height = 33
@@ -33,6 +35,8 @@ inherited frmGridValue: TfrmGridValue
     Kind = bkClose
     NumGlyphs = 2
     TabOrder = 2
+    ExplicitLeft = 541
+    ExplicitTop = 472
   end
   object pnlTabs: TPanel
     Left = 0
@@ -42,6 +46,8 @@ inherited frmGridValue: TfrmGridValue
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
+    ExplicitWidth = 644
+    ExplicitHeight = 466
     object splAllDataSets: TSplitter
       Left = 441
       Top = 1
@@ -97,6 +103,7 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Current Data'
       LabelWidth = 27
       ExpandedWidth = 413
+      ExplicitHeight = 464
       DesignSize = (
         440
         465)
@@ -136,6 +143,7 @@ inherited frmGridValue: TfrmGridValue
         Anchors = [akLeft, akBottom]
         Caption = 'Higher 3rd dimension coordinate'
         TabOrder = 14
+        ExplicitTop = 411
       end
       object lblLower3rdDimensionCoordinate: TStaticText
         Left = 40
@@ -145,6 +153,7 @@ inherited frmGridValue: TfrmGridValue
         Anchors = [akLeft, akBottom]
         Caption = 'Lower 3rd dimension coordinate'
         TabOrder = 15
+        ExplicitTop = 432
       end
       object lblSection: TStaticText
         Left = 40
@@ -154,6 +163,7 @@ inherited frmGridValue: TfrmGridValue
         Anchors = [akLeft, akBottom]
         Caption = 'Section'
         TabOrder = 12
+        ExplicitTop = 364
       end
       object lblSelectedObject: TStaticText
         Left = 40
@@ -163,6 +173,7 @@ inherited frmGridValue: TfrmGridValue
         Anchors = [akLeft, akBottom]
         Caption = 'Selected object'
         TabOrder = 10
+        ExplicitTop = 319
       end
       object lblVertex: TStaticText
         Left = 40
@@ -172,6 +183,7 @@ inherited frmGridValue: TfrmGridValue
         Anchors = [akLeft, akBottom]
         Caption = 'Nearest vertex'
         TabOrder = 11
+        ExplicitTop = 343
       end
       object lblColumnWidth: TStaticText
         Left = 169
@@ -239,6 +251,7 @@ inherited frmGridValue: TfrmGridValue
         Anchors = [akLeft, akBottom]
         Caption = 'Show selected object 3rd dimension coordinates'
         TabOrder = 13
+        ExplicitTop = 388
       end
       object comboModel: TComboBox
         Left = 169
@@ -259,6 +272,7 @@ inherited frmGridValue: TfrmGridValue
         ScrollBars = ssVertical
         TabOrder = 9
         OnKeyUp = memoExplanationKeyUp
+        ExplicitHeight = 121
       end
     end
     object rrlAllDataSets: TRbwRollupPanel
@@ -280,6 +294,7 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'All Data Sets'
       LabelWidth = 27
       ExpandedWidth = 399
+      ExplicitHeight = 464
       DesignSize = (
         27
         465)
@@ -306,6 +321,7 @@ inherited frmGridValue: TfrmGridValue
         Caption = 'Update'
         TabOrder = 4
         OnClick = btnUpdateClick
+        ExplicitTop = 428
       end
       object edSelectValue: TEdit
         Left = 77
@@ -326,6 +342,7 @@ inherited frmGridValue: TfrmGridValue
         ScrollBars = ssVertical
         TabOrder = 3
         OnKeyUp = memoExplanationKeyUp
+        ExplicitHeight = 334
       end
       object virttreecomboDataSets: TRbwStringTreeCombo
         Left = 32
@@ -409,6 +426,7 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Pathline'
       LabelWidth = 27
       ExpandedWidth = 399
+      ExplicitHeight = 464
       object pnlPathline: TPanel
         Left = 28
         Top = 1
@@ -418,6 +436,7 @@ inherited frmGridValue: TfrmGridValue
         Caption = 'pnlPathline'
         ShowCaption = False
         TabOrder = 1
+        ExplicitHeight = 462
         object rdgPathline: TRbwDataGrid4
           Left = 1
           Top = 1
@@ -535,6 +554,7 @@ inherited frmGridValue: TfrmGridValue
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitHeight = 424
         end
         object pnlPathLength: TPanel
           Left = 1
@@ -543,6 +563,7 @@ inherited frmGridValue: TfrmGridValue
           Height = 36
           Align = alBottom
           TabOrder = 1
+          ExplicitTop = 425
           object lblLength: TLabel
             Left = 7
             Top = 6
@@ -579,6 +600,7 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'End Point'
       LabelWidth = 27
       ExpandedWidth = 399
+      ExplicitHeight = 464
       object pnlEndpoint: TPanel
         Left = 28
         Top = 1
@@ -588,6 +610,7 @@ inherited frmGridValue: TfrmGridValue
         Caption = 'pnlEndpoint'
         ShowCaption = False
         TabOrder = 1
+        ExplicitHeight = 462
         object pnlEndPoints: TPanel
           Left = 1
           Top = 356
@@ -595,13 +618,14 @@ inherited frmGridValue: TfrmGridValue
           Height = 106
           Align = alBottom
           TabOrder = 1
+          ExplicitTop = 355
           object lbledtReleaseTime: TLabeledEdit
             Left = 136
             Top = 6
             Width = 121
             Height = 26
             EditLabel.Width = 92
-            EditLabel.Height = 18
+            EditLabel.Height = 26
             EditLabel.Caption = 'Release time'
             LabelPosition = lpLeft
             ReadOnly = True
@@ -614,7 +638,7 @@ inherited frmGridValue: TfrmGridValue
             Width = 121
             Height = 26
             EditLabel.Width = 119
-            EditLabel.Height = 18
+            EditLabel.Height = 26
             EditLabel.Caption = 'Termination code'
             LabelPosition = lpLeft
             ReadOnly = True
@@ -627,7 +651,7 @@ inherited frmGridValue: TfrmGridValue
             Width = 121
             Height = 26
             EditLabel.Width = 93
-            EditLabel.Height = 18
+            EditLabel.Height = 26
             EditLabel.Caption = 'Tracking time'
             LabelPosition = lpLeft
             ReadOnly = True
@@ -728,6 +752,7 @@ inherited frmGridValue: TfrmGridValue
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitHeight = 354
         end
       end
     end
@@ -750,6 +775,7 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Surface Water Routing'
       LabelWidth = 27
       ExpandedWidth = 383
+      ExplicitHeight = 464
       object pnlSWR: TPanel
         Left = 28
         Top = 1
@@ -759,6 +785,7 @@ inherited frmGridValue: TfrmGridValue
         Caption = 'pnlSWR'
         ShowCaption = False
         TabOrder = 1
+        ExplicitHeight = 462
         object pnlSwrReaches: TPanel
           Left = 1
           Top = 1
@@ -772,10 +799,11 @@ inherited frmGridValue: TfrmGridValue
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 103
+            Width = 371
             Height = 18
             Align = alTop
             Caption = 'SWR Reaches'
+            ExplicitWidth = 103
           end
           object rdgSwrReaches: TRbwDataGrid4
             Left = 1
@@ -902,14 +930,16 @@ inherited frmGridValue: TfrmGridValue
           Height = 261
           Align = alClient
           TabOrder = 1
+          ExplicitHeight = 260
           object lblSwrStructures: TLabel
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 111
+            Width = 371
             Height = 18
             Align = alTop
             Caption = 'SWR Structures'
+            ExplicitWidth = 111
           end
           object rdgSwrStructures: TRbwDataGrid4
             Left = 1
@@ -1003,6 +1033,7 @@ inherited frmGridValue: TfrmGridValue
                 AutoAdjustColWidths = False
               end>
             WordWrapRowCaptions = False
+            ExplicitHeight = 234
             ColWidths = (
               64
               64
@@ -1030,6 +1061,7 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Ghost Node Correction'
       LabelWidth = 27
       ExpandedWidth = 412
+      ExplicitHeight = 464
       object rdgGhostNode: TRbwDataGrid4
         Left = 40
         Top = 9
@@ -1168,8 +1200,7 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'XT3D Data'
       LabelWidth = 27
       ExpandedWidth = 288
-      ExplicitLeft = 597
-      ExplicitTop = 2
+      ExplicitHeight = 464
       object lblAngle1: TLabel
         Left = 40
         Top = 76

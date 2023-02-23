@@ -1067,6 +1067,7 @@ procedure TModflowPackages.Loaded;
 begin
   Mt3dSft.Loaded;
   CsubPackage.Loaded;
+  FarmLandUse.Loaded;
 end;
 
 procedure TModflowPackages.Reset;
@@ -1152,7 +1153,6 @@ begin
   FarmAllotments.InitializeVariables;
   FarmLandUse.InitializeVariables;
   FarmSalinityFlush.InitializeVariables;
-
 end;
 
 

@@ -227,6 +227,7 @@ type
     procedure UpdatePrecipPotConsumptionDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateNrdInfilLocationDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateLandUseAreaFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateMultLandUseAreaFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateCropCoefficentDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
@@ -1059,13 +1060,13 @@ procedure TModflowFmp4Writer.UpdateDisplay(
   UpdateRequirements: TUpdateRequirements);
 var
   DataSets: TList;
-  Efficiency: TModflowBoundaryDisplayTimeList;
+  ATimeList: TModflowBoundaryDisplayTimeList;
   TimeIndex: integer;
   TimeListIndex: integer;
   List: TValueCellList;
   TimeList: TModflowBoundaryDisplayTimeList;
   DataArray: TDataArray;
-  EfficiencyIndex: integer;
+  Index: integer;
   DataSetIndex: integer;
   BoundaryLists: TList;
 begin
@@ -1086,8 +1087,8 @@ begin
         Exit;
       end;
 
-      Efficiency := UpdateRequirements.TimeLists[0];
-      for TimeIndex := 0 to Efficiency.Count - 1 do
+      ATimeList := UpdateRequirements.TimeLists[0];
+      for TimeIndex := 0 to ATimeList.Count - 1 do
       begin
         DataSets.Clear;
 
@@ -1100,10 +1101,10 @@ begin
         end;
 
         BoundaryLists := GetTransientList(UpdateRequirements.WriteLocation);
-        for EfficiencyIndex := 0 to BoundaryLists.Count - 1 do
+        for Index := 0 to BoundaryLists.Count - 1 do
         begin
-          List := BoundaryLists[EfficiencyIndex];
-          UpdateCellDisplay(List, DataSets, [], nil, [0]);
+          List := BoundaryLists[Index];
+          UpdateCellDisplay(List, DataSets, [], nil, []);
           List.Cache;
         end;
         for DataSetIndex := 0 to DataSets.Count - 1 do
@@ -1184,6 +1185,19 @@ begin
   UpdateRequirements.EvaluateProcedure := EvaluateLandUseAreaFraction;
   UpdateRequirements.TransientDataUsed := FLandUse.
     TransientLandUseAreaFractionarrayUsed;
+  UpdateRequirements.WriteLocation := wlLandUseAreaFraction;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateMultLandUseAreaFractionDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateLandUseAreaFraction;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientLandUseAreaFractionMultArrayUsed;
   UpdateRequirements.WriteLocation := wlLandUseAreaFraction;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
