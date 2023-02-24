@@ -16,7 +16,7 @@ type
     wlEfficiencyImprovement, wlBareRunoffFraction,
     wlBarePrecipitationConsumptionFraction, wlCapillaryFringe, wlSoilID,
     wlSurfaceK, wlBareEvap, wlDirectRecharge, wlPrecipPotConsumption,
-    wlNrdInfilLoc, wlLandUseAreaFraction, wlCropCoefficient);
+    wlNrdInfilLoc, wlLandUseAreaFraction, wlCropCoefficient, wlConsumptiveUse);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -58,6 +58,7 @@ type
     FClimatePackage: TFarmProcess4Climate;
     FLandUse: TFarmProcess4LandUse;
     FSurfaceWater4: TFarmProcess4SurfaceWater;
+    FSoils: TFarmProcess4Soil;
 
     FACtiveSurfaceCells: array of array of boolean;
     FWriteLocation: TWriteLocation;
@@ -76,6 +77,7 @@ type
     FNrdInfilLocation: TList;
     FLandUseAreaFraction: TList;
     FCropCoefficient: TList;
+    FConsumptiveUse: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -99,6 +101,7 @@ type
     FNrdInfilLocationFileStream: TFileStream;
     FCropcoefficientFileStream: TFileStream;
     FLandUseAreaFractionFileStream: TFileStream;
+    FConsumptiveUseFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -155,6 +158,9 @@ type
     procedure EvaluateCropCoefficient;
     procedure WriteCropCoefficient;
 
+    procedure EvaluateConsumptiveUse;
+    procedure WriteConsumptiveUse;
+
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
     procedure WriteSurfaceK;
@@ -182,8 +188,11 @@ type
     procedure UpdateDisplay(UpdateRequirements: TUpdateRequirements);
     function TransientCropUsed(Sender: TObject): Boolean;
     function TransientRefEtUsed(Sender: TObject): Boolean;
-    procedure GetScaleFactorsAndExternalFile(RequiredValues: TRequiredValues; var UnitConversionScaleFactor: string; var ExternalFileName: string; var ExternalScaleFileName: string);
-    procedure WriteScaleFactorsAndID(RequiredValues: TRequiredValues; UnitConversionScaleFactor: string; ExternalScaleFileName: string);
+    procedure GetScaleFactorsAndExternalFile(RequiredValues: TRequiredValues;
+      var UnitConversionScaleFactor: string; var ExternalFileName: string;
+      var ExternalScaleFileName: string);
+    procedure WriteScaleFactorsAndID(RequiredValues: TRequiredValues;
+      UnitConversionScaleFactor: string; ExternalScaleFileName: string);
     procedure WriteLandUseOption;
   protected
     class function Extension: string; override;
@@ -228,7 +237,10 @@ type
     procedure UpdateNrdInfilLocationDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateLandUseAreaFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateMultLandUseAreaFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
-    procedure UpdateCropCoefficentDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateCropCoefficientDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateMultCropCoefficientDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateConsumptiveUseDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateMultConsumptiveUseDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -383,18 +395,21 @@ begin
   FNrdInfilLocation := TObjectList.Create;
   FLandUseAreaFraction := TObjectList.Create;
   FCropCoefficient := TObjectList.Create;
+  FConsumptiveUse := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
   FLandUse := Model.ModflowPackages.FarmLandUse;
   FSoil4 := Model.ModflowPackages.FarmSoil4;
   FSurfaceWater4 := Model.ModflowPackages.FarmSurfaceWater4;
+  FSoils := Model.ModflowPackages.FarmSoil4;
 end;
 
 destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
 
+  FConsumptiveUse.Free;
   FCropCoefficient.Free;
   FLandUseAreaFraction.Free;
   FNrdInfilLocation.Free;
@@ -456,6 +471,7 @@ begin
   EvaluateNrdInfilLocation;
   EvaluateLandUseAreaFraction;
   EvaluateCropCoefficient;
+  EvaluateConsumptiveUse;
 end;
 
 procedure TModflowFmp4Writer.EvaluateBareEvap;
@@ -485,9 +501,20 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.EvaluateConsumptiveUse;
+begin
+  if FLandUse.TransientConsumptiveUsearrayUsed(nil)
+    or FLandUse.TransientConsumptiveUseMultArrayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Consumptive Use value');
+    EvaluateTransientArrayData(wlConsumptiveUse);
+  end;
+end;
+
 procedure TModflowFmp4Writer.EvaluateCropCoefficient;
 begin
-  if FLandUse.TransientCropCoefficientarrayUsed(nil) then
+  if FLandUse.TransientCropCoefficientarrayUsed(nil)
+    or FLandUse.TransientCropCoefficientMultArrayUsed(nil) then
   begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Crop Coefficient value');
     EvaluateTransientArrayData(wlCropCoefficient);
@@ -616,7 +643,7 @@ begin
   FreeAndNil(FNrdInfilLocationFileStream);
   FreeAndNil(FLandUseAreaFractionFileStream);
   FreeAndNil(FCropcoefficientFileStream);
-
+  FreeAndNil(FConsumptiveUseFileStream);
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -820,6 +847,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlConsumptiveUse:
+      begin
+        result := ChangeFileExt(FBaseName, '.CONSUMPTIVE_USE');
+        if FConsumptiveUseFileStream = nil then
+        begin
+          FConsumptiveUseFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -869,7 +905,28 @@ begin
           result := ScreenObject.ModflowFmp4MultLandUseAreaFraction;
         end;
       end;
-    wlCropCoefficient: result := ScreenObject.ModflowFmp4CropCoefficient;
+    wlCropCoefficient:
+      begin
+        if FLandUse.LandUseOption = luoSingle then
+        begin
+          result := ScreenObject.ModflowFmp4CropCoefficient;
+        end
+        else
+        begin
+          result := ScreenObject.ModflowFmp4MultCropCoefficient;
+        end;
+      end;
+    wlConsumptiveUse:
+      begin
+        if FLandUse.LandUseOption = luoSingle then
+        begin
+          result := ScreenObject.ModflowFmp4ConsumptiveUse;
+        end
+        else
+        begin
+          result := ScreenObject.ModflowFmp4MultConsumptiveUse;
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -909,6 +966,7 @@ begin
     wlNrdInfilLoc: result := FNrdInfilLocation;
     wlLandUseAreaFraction: result := FLandUseAreaFraction;
     wlCropCoefficient: result := FCropCoefficient;
+    wlConsumptiveUse: result := FConsumptiveUse;
     else Assert(False)
   end;
 end;
@@ -968,7 +1026,20 @@ begin
   result := FLandUse.CropLocation = rstTransient;
 end;
 
-procedure TModflowFmp4Writer.UpdateCropCoefficentDisplay(
+procedure TModflowFmp4Writer.UpdateConsumptiveUseDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateConsumptiveUse;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientConsumptiveUsearrayUsed;
+  UpdateRequirements.WriteLocation := wlConsumptiveUse;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateCropCoefficientDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
   UpdateRequirements: TUpdateRequirements;
@@ -1186,6 +1257,32 @@ begin
   UpdateRequirements.TransientDataUsed := FLandUse.
     TransientLandUseAreaFractionarrayUsed;
   UpdateRequirements.WriteLocation := wlLandUseAreaFraction;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateMultConsumptiveUseDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateConsumptiveUse;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientConsumptiveUseMultArrayUsed;
+  UpdateRequirements.WriteLocation := wlConsumptiveUse;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateMultCropCoefficientDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateCropCoefficient;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientCropCoefficientMultArrayUsed;
+  UpdateRequirements.WriteLocation := wlCropCoefficient;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
 end;
@@ -1447,9 +1544,9 @@ begin
     RequiredValues.DataType := rdtDouble;
     RequiredValues.DataTypeIndex := 0;
     RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP WBS: BARE_RUNOFF_FRACTION';
-    RequiredValues.ErrorID := 'FMP WBS: BARE_RUNOFF_FRACTION';
-    RequiredValues.ID := 'BARE_RUNOFF_FRACTION';
+    RequiredValues.Comment := 'FMP WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION';
+    RequiredValues.ErrorID := 'FMP WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION';
+    RequiredValues.ID := 'BARE_PRECIPITATION_CONSUMPTION_FRACTION';
     RequiredValues.StaticDataName := KBarePrecipitationConsumptionFraction;
     RequiredValues.WriteTransientData :=
       (FFarmProcess4.Bare_Precipitation_Consumption_Fraction.FarmOption = foTransient);
@@ -1606,6 +1703,72 @@ begin
 
 end;
 
+procedure TModflowFmp4Writer.WriteConsumptiveUse;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  DataArrayNames: TStringList;
+  CropIndex: Integer;
+begin
+  if FLandUse.ConsumptiveUse.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlConsumptiveUse);
+
+  if (FLandUse.ConsumptiveUse.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlConsumptiveUse;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP LAND_USE: CONSUMPTIVE_USE';
+    RequiredValues.ErrorID := 'FMP LAND_USE: CONSUMPTIVE_USE';
+    RequiredValues.ID := 'CONSUMPTIVE_USE';
+    RequiredValues.StaticDataName := KConsumptiveUse;
+    RequiredValues.WriteTransientData :=
+      (FLandUse.ConsumptiveUse.FarmOption = foTransient);
+    RequiredValues.CheckError :=  'Invalid Consumptive Use value';
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FLandUse.ConsumptiveUse;
+
+    if FLandUse.LandUseOption = luoSingle then
+    begin
+      WriteFmpArrayData(AFileName, RequiredValues);
+    end
+    else
+    begin
+      if RequiredValues.WriteTransientData then
+      begin
+        RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
+        WriteFmpArrayData(AFileName, RequiredValues);
+      end
+      else
+      begin
+        DataArrayNames := TStringList.Create;
+        try
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            DataArrayNames.Add(
+              Model.FmpCrops[CropIndex].ConsumptiveUseDataArrayName);
+          end;
+          RequiredValues.LandUseStaticFileNames := DataArrayNames;
+          WriteLandUseArrayData(AFileName, RequiredValues);
+        finally
+          DataArrayNames.Free;
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteCropCoefficient;
 var
   AFileName: string;
@@ -1634,7 +1797,7 @@ begin
     RequiredValues.WriteTransientData :=
       (FLandUse.CropCoeff.FarmOption = foTransient);
     RequiredValues.CheckError :=  'Invalid Crop Coefficient value';
-    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
     RequiredValues.Option := '';
     RequiredValues.FarmProperty := FLandUse.CropCoeff;
 
@@ -1644,17 +1807,25 @@ begin
     end
     else
     begin
-      DataArrayNames := TStringList.Create;
-      try
-        for CropIndex := 0 to Model.FmpCrops.Count - 1 do
-        begin
-          DataArrayNames.Add(
-            Model.FmpCrops[CropIndex].CropCoefficientDataArrayName);
+      if RequiredValues.WriteTransientData then
+      begin
+        RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
+        WriteFmpArrayData(AFileName, RequiredValues);
+      end
+      else
+      begin
+        DataArrayNames := TStringList.Create;
+        try
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            DataArrayNames.Add(
+              Model.FmpCrops[CropIndex].CropCoefficientDataArrayName);
+          end;
+          RequiredValues.LandUseStaticFileNames := DataArrayNames;
+          WriteLandUseArrayData(AFileName, RequiredValues);
+        finally
+          DataArrayNames.Free;
         end;
-        RequiredValues.LandUseStaticFileNames := DataArrayNames;
-        WriteLandUseArrayData(AFileName, RequiredValues);
-      finally
-        DataArrayNames.Free;
       end;
     end;
   end
@@ -1760,7 +1931,7 @@ begin
   begin
     RequiredValues.WriteLocation := wlEfficiencyImprovement;
     RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataType := rdtInteger;
     RequiredValues.DataTypeIndex := 0;
     RequiredValues.MaxDataTypeIndex := 0;
     RequiredValues.Comment := 'FMP WBS: Efficiency Improvement';
@@ -1872,12 +2043,12 @@ begin
       end;
       ValueCellList := TransList[StressPeriodIndex];
       CheckAssigned := Assigned(RequiredValues.CheckProcedure);
-      Dummy := nil;
-      try
-        WriteCommentLine(Format('Stress Period %d', [StressPeriodIndex+1]));
-        for DataTypeIndex := RequiredValues.DataTypeIndex to
-          RequiredValues.MaxDataTypeIndex do
-        begin
+      WriteCommentLine(Format('Stress Period %d', [StressPeriodIndex+1]));
+      for DataTypeIndex := RequiredValues.DataTypeIndex to
+        RequiredValues.MaxDataTypeIndex do
+      begin
+        Dummy := nil;
+        try
           WriteTransient2DArray(RequiredValues.Comment, DataTypeIndex,
             RequiredValues.DataType, RequiredValues.DefaultValue,
             ValueCellList, umAssign, False, Dummy, RequiredValues.ID,
@@ -1886,9 +2057,9 @@ begin
           begin
             RequiredValues.CheckProcedure(Dummy, RequiredValues.CheckError);
           end;
+        finally
+          Dummy.Free;
         end;
-      finally
-        Dummy.Free;
       end;
     end;
   finally
@@ -2027,7 +2198,7 @@ begin
   WriteString('  NSOIL');
   if Model.ModflowPackages.FarmSoil4.IsSelected then
   begin
-    WriteInteger(0);
+    WriteInteger(Model.FmpSoils.Count);
   end
   else
   begin
@@ -2052,6 +2223,7 @@ begin
     WriteLandUseLocation;
     WriteLandUseAreaFraction;
     WriteCropCoefficient;
+    WriteConsumptiveUse;
 
     // remove this.
     WriteString('  ROOT_DEPTH STATIC CONSTANT 0.00001');
@@ -2390,36 +2562,29 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
 begin
-  if FSoil4.CapFringe.FarmOption = foNotUsed then
+  if not FSoil4.IsSelected then
   begin
     Exit;
   end;
 
   AFileName := GetFileStreamName(wlSoilID);
 
-  if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
-  begin
-    RequiredValues.WriteLocation := wlSoilID;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP SOIL: SOIL_ID ';
-    RequiredValues.ErrorID := 'FMP SOIL: SOIL_ID ';
-    RequiredValues.ID := 'SOIL_ID ';
-    RequiredValues.StaticDataName := KSoilID;
-    RequiredValues.WriteTransientData := False;
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-    RequiredValues.CheckError := 'Invalid Soil ID value';
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FFarmProcess4.Bare_Runoff_Fraction;
+  RequiredValues.WriteLocation := wlSoilID;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SOIL: SOIL_ID ';
+  RequiredValues.ErrorID := 'FMP SOIL: SOIL_ID ';
+  RequiredValues.ID := 'SOIL_ID ';
+  RequiredValues.StaticDataName := KSoilID;
+  RequiredValues.WriteTransientData := False;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := 'Invalid Soil ID value';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := nil;
 
-    WriteFmpArrayData(AFileName, RequiredValues);
-  end
-  else
-  begin
-
-  end;
+  WriteFmpArrayData(AFileName, RequiredValues);
 end;
 
 procedure TModflowFmp4Writer.WriteString(const Value: AnsiString);
@@ -2546,8 +2711,8 @@ begin
         end;
       wlSoilID:
         begin
-          Assert(FSurfaceKFileStream <> nil);
-          FSurfaceKFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+          Assert(FSoilIdStream <> nil);
+          FSoilIdStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlSurfaceK:
         begin
@@ -2583,6 +2748,11 @@ begin
         begin
           Assert(FCropcoefficientFileStream <> nil);
           FCropcoefficientFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlConsumptiveUse:
+        begin
+          Assert(FConsumptiveUseFileStream <> nil);
+          FConsumptiveUseFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);

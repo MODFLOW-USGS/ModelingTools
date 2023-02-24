@@ -1,0 +1,2 @@
+inherited frameScreenObjectMultConsumptiveUse: TframeScreenObjectMultConsumptiveUse
+end

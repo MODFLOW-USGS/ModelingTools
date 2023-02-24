@@ -803,7 +803,11 @@ uses
   frameScreenObjectLandUseAreaFractionUnit in 'frameScreenObjectLandUseAreaFractionUnit.pas' {frameScreenObjectLandUseAreaFraction: TFrame},
   ModflowFmp4LandUseBoundaryUnit in 'ModflowFmp4LandUseBoundaryUnit.pas',
   frameScreenObjectCustomFmp4MultBoundaryUnit in 'frameScreenObjectCustomFmp4MultBoundaryUnit.pas' {frameScreenObjectCustomFmp4MultBoundary: TFrame},
-  frameScreenObjectMultLandUseAreaFractionUnit in 'frameScreenObjectMultLandUseAreaFractionUnit.pas' {frameScreenObjectMultLandUseAreaFraction: TFrame};
+  frameScreenObjectMultLandUseAreaFractionUnit in 'frameScreenObjectMultLandUseAreaFractionUnit.pas' {frameScreenObjectMultLandUseAreaFraction: TFrame},
+  frameScreenObjectMultCropCoefficientsUnit in 'frameScreenObjectMultCropCoefficientsUnit.pas' {frameScreenObjectMultCropCoefficients: TFrame},
+  ModflowFmp4ConsumptiveUseUnit in 'ModflowFmp4ConsumptiveUseUnit.pas',
+  frameScreenObjecFmp4ConsumptiveUseUnit in 'frameScreenObjecFmp4ConsumptiveUseUnit.pas' {frameScreenObjecFmp4ConsumptiveUse: TFrame},
+  frameScreenObjectMultConsumptiveUseUnit in 'frameScreenObjectMultConsumptiveUseUnit.pas' {frameScreenObjectMultConsumptiveUse: TFrame};
 
 {$R *.res}
 

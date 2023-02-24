@@ -1,4 +1,4 @@
-unit ModflowFmp4CropCoefficientUnit;
+unit ModflowFmp4ConsumptiveUseUnit;
 
 interface
 
@@ -8,18 +8,18 @@ uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit,
 type
   // Single land use per cell
 
-  TFmp4CropCoefficientTimeListLink  = class(TFmp4TimeListLink)
+  TFmp4ConsumptiveUseTimeListLink  = class(TFmp4TimeListLink)
   protected
     class function GetDescription: string; override;
     procedure AssignInvalidateEvent; override;
   end;
 
-  TFmp4CropCoefficientCollection = class(TFmp4Collection)
+  TFmp4ConsumptiveUseCollection = class(TFmp4Collection)
   protected
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
-  TFmp4CropCoefficientBoundary = class(TFmp4Boundary)
+  TFmp4ConsumptiveUseBoundary = class(TFmp4Boundary)
   private
   protected
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
@@ -31,7 +31,7 @@ type
 
   // Multiple land use per cell
 
-  TFmp4MultCropCoefficientTimeListLink = class(TFmp4LandUseTimeListLink)
+  TFmp4MultConsumptiveUseTimeListLink = class(TFmp4LandUseTimeListLink)
   protected
     class function GetDescription: string; override;
     function MultipleCropsPerCellUsed: Boolean; override;
@@ -39,12 +39,12 @@ type
     Constructor Create(AModel: TBaseModel; ABoundary: TCustomMF_BoundColl); override;
   end;
 
-  TFmp4MultCropCoefficientCollection = class(TFmp4LandUseCollection)
+  TFmp4MultConsumptiveUseCollection = class(TFmp4LandUseCollection)
     function MultipleCropsPerCellUsed: Boolean; override;
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
-  TFmp4MultCropCoefficientBoundary = class(TFmp4LandUseBoundary)
+  TFmp4MultConsumptiveUseBoundary = class(TFmp4LandUseBoundary)
   protected
     function MultipleCropsPerCellUsed: Boolean; override;
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
@@ -56,46 +56,46 @@ type
 
 
 resourcestring
-  StrFmp4CropCoefficient = 'Fmp4_Crop_Coefficient';
+  StrFmp4ConsumptiveUse = 'Fmp4_Consumptive_Use';
 
 implementation
 
 uses
   PhastModelUnit, ModflowPackageSelectionUnit;
 
-{ TFmp4CropCoefficientTimeListLink }
+{ TFmp4ConsumptiveUseTimeListLink }
 
-procedure TFmp4CropCoefficientTimeListLink.AssignInvalidateEvent;
+procedure TFmp4ConsumptiveUseTimeListLink.AssignInvalidateEvent;
 begin
 //  inherited;
 
 end;
 
-class function TFmp4CropCoefficientTimeListLink.GetDescription: string;
+class function TFmp4ConsumptiveUseTimeListLink.GetDescription: string;
 begin
-  result := StrFmp4CropCoefficient;
+  result := StrFmp4ConsumptiveUse;
 end;
 
-{ TFmp4CropCoefficientCollection }
+{ TFmp4ConsumptiveUseCollection }
 
-class function TFmp4CropCoefficientCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TFmp4ConsumptiveUseCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
-  result := TFmp4CropCoefficientTimeListLink;
+  result := TFmp4ConsumptiveUseTimeListLink;
 end;
 
-{ TFmp4CropCoefficientBoundary }
+{ TFmp4ConsumptiveUseBoundary }
 
-class function TFmp4CropCoefficientBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
+class function TFmp4ConsumptiveUseBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
-  result := TFmp4CropCoefficientCollection;
+  result := TFmp4ConsumptiveUseCollection;
 end;
 
-procedure TFmp4CropCoefficientBoundary.InvalidateData(Sender: TObject);
+procedure TFmp4ConsumptiveUseBoundary.InvalidateData(Sender: TObject);
 begin
   InvalidateDisplay;
 end;
 
-procedure TFmp4CropCoefficientBoundary.InvalidateDisplay;
+procedure TFmp4ConsumptiveUseBoundary.InvalidateDisplay;
 var
   Model: TCustomModel;
 begin
@@ -106,36 +106,36 @@ begin
   {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
-      Model.InvalidateMfFmp4CropCoefficient(self);
+      Model.InvalidateMfFmp4ConsumptiveUse(self);
     end
   {$ENDIF}
     ;
   end;
 end;
 
-class function TFmp4CropCoefficientBoundary.ValueDescription: string;
+class function TFmp4ConsumptiveUseBoundary.ValueDescription: string;
 begin
-  result := StrFmp4CropCoefficient;
+  result := StrFmp4ConsumptiveUse;
 end;
 
-{ TFmp4MultCropCoefficientTimeListLink }
+{ TFmp4MultConsumptiveUseTimeListLink }
 
-constructor TFmp4MultCropCoefficientTimeListLink.Create(AModel: TBaseModel;
+constructor TFmp4MultConsumptiveUseTimeListLink.Create(AModel: TBaseModel;
   ABoundary: TCustomMF_BoundColl);
 begin
   inherited;
   if AModel <> nil then
   begin
-    FOnInvalidateLanduse := (AModel as TCustomModel).InvalidateMfFmp4CropCoefficient;
+    FOnInvalidateLanduse := (AModel as TCustomModel).InvalidateMfFmp4ConsumptiveUse;
   end;
 end;
 
-class function TFmp4MultCropCoefficientTimeListLink.GetDescription: string;
+class function TFmp4MultConsumptiveUseTimeListLink.GetDescription: string;
 begin
-  result := 'Crop_Coefficients';
+  result := 'Consumptive_Use';
 end;
 
-function TFmp4MultCropCoefficientTimeListLink.MultipleCropsPerCellUsed: Boolean;
+function TFmp4MultConsumptiveUseTimeListLink.MultipleCropsPerCellUsed: Boolean;
 var
   LocalModel: TCustomModel;
   LandUse: TFarmProcess4LandUse;
@@ -149,20 +149,20 @@ begin
     result := (LocalModel.ModelSelection = msModflowOwhm2)
       and LandUse.IsSelected
       and (LandUse.LandUseOption = luoMultiple)
-      and (LandUse.CropCoeff.FarmOption = foTransient)
-      and (LandUse.CropCoeff.ArrayList = alArray)
+      and (LandUse.ConsumptiveUse.FarmOption = foTransient)
+      and (LandUse.ConsumptiveUse.ArrayList = alArray)
   end;
 {$ENDIF}
 end;
 
-{ TFmp4MultCropCoefficientCollection }
+{ TFmp4MultConsumptiveUseCollection }
 
-class function TFmp4MultCropCoefficientCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TFmp4MultConsumptiveUseCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
-  result := TFmp4MultCropCoefficientTimeListLink;
+  result := TFmp4MultConsumptiveUseTimeListLink;
 end;
 
-function TFmp4MultCropCoefficientCollection.MultipleCropsPerCellUsed: Boolean;
+function TFmp4MultConsumptiveUseCollection.MultipleCropsPerCellUsed: Boolean;
 var
   LocalModel: TCustomModel;
   LandUse: TFarmProcess4LandUse;
@@ -176,25 +176,25 @@ begin
     result := (LocalModel.ModelSelection = msModflowOwhm2)
       and LandUse.IsSelected
       and (LandUse.LandUseOption = luoMultiple)
-      and (LandUse.CropCoeff.FarmOption = foTransient)
-      and (LandUse.CropCoeff.ArrayList = alArray)
+      and (LandUse.ConsumptiveUse.FarmOption = foTransient)
+      and (LandUse.ConsumptiveUse.ArrayList = alArray)
   end;
 {$ENDIF}
 end;
 
-{ TFmp4MultCropCoefficientBoundary }
+{ TFmp4MultConsumptiveUseBoundary }
 
-class function TFmp4MultCropCoefficientBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
+class function TFmp4MultConsumptiveUseBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
-  result := TFmp4MultCropCoefficientCollection;
+  result := TFmp4MultConsumptiveUseCollection;
 end;
 
-procedure TFmp4MultCropCoefficientBoundary.InvalidateDisplay;
+procedure TFmp4MultConsumptiveUseBoundary.InvalidateDisplay;
 begin
   InvalidateLandUseData(nil);
 end;
 
-procedure TFmp4MultCropCoefficientBoundary.InvalidateLandUseData(
+procedure TFmp4MultConsumptiveUseBoundary.InvalidateLandUseData(
   Sender: TObject);
 var
   Model: TCustomModel;
@@ -206,14 +206,14 @@ begin
   {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
-      Model.InvalidateMfFmp4CropCoefficient(self);
+      Model.InvalidateMfFmp4ConsumptiveUse(self);
     end
   {$ENDIF}
     ;
   end;
 end;
 
-function TFmp4MultCropCoefficientBoundary.MultipleCropsPerCellUsed: Boolean;
+function TFmp4MultConsumptiveUseBoundary.MultipleCropsPerCellUsed: Boolean;
 var
   LocalModel: TCustomModel;
   LandUse: TFarmProcess4LandUse;
@@ -227,15 +227,15 @@ begin
     result := (LocalModel.ModelSelection = msModflowOwhm2)
       and LandUse.IsSelected
       and (LandUse.LandUseOption = luoMultiple)
-      and (LandUse.CropCoeff.FarmOption = foTransient)
-      and (LandUse.CropCoeff.ArrayList = alArray)
+      and (LandUse.ConsumptiveUse.FarmOption = foTransient)
+      and (LandUse.ConsumptiveUse.ArrayList = alArray)
   end;
 {$ENDIF}
 end;
 
-class function TFmp4MultCropCoefficientBoundary.ValueDescription: string;
+class function TFmp4MultConsumptiveUseBoundary.ValueDescription: string;
 begin
-  result := 'Crop_Coefficients';
+  result := 'Consumptive_Use';
 end;
 
 end.

@@ -55,7 +55,7 @@ uses
   ModflowFmp4BarePrecipitationConsumptionFractionUnit,
   ModflowFmp4DirectRechargeUnit, ModflowFmp4PrecipPotConsumptionUnit,
   ModflowFmp4NrdInfilLocationUnit, ModflowFmp4CropCoefficientUnit,
-  ModflowFmp4LandUseAreaFractionUnit;
+  ModflowFmp4LandUseAreaFractionUnit, ModflowFmp4ConsumptiveUseUnit;
 
 type
   //
@@ -1476,6 +1476,9 @@ view. }
     FFmp4CropCoefficientBoundary: TFmp4CropCoefficientBoundary;
     FFmp4LandUseAreaFractionBoundary: TFmp4LandUseAreaFractionBoundary;
     FFmp4MultLandUseAreaFractionBoundary: TFmp4MultLandUseAreaFractionBoundary;
+    FFmpMultCropCoefficientBoundary: TFmp4MultCropCoefficientBoundary;
+    FFmp4ConsumptiveUseBoundary: TFmp4ConsumptiveUseBoundary;
+    FFmpMultConsumptiveUseBoundary: TFmp4MultConsumptiveUseBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1609,10 +1612,16 @@ view. }
       read FFmp4NrdInfilLocationBoundary write FFmp4NrdInfilLocationBoundary;
     property Fmp4LandUseAreaFractionBoundary: TFmp4LandUseAreaFractionBoundary
       read FFmp4LandUseAreaFractionBoundary write FFmp4LandUseAreaFractionBoundary;
-    property Fmp4CropCoefficientBoundary: TFmp4CropCoefficientBoundary
-      read FFmp4CropCoefficientBoundary write FFmp4CropCoefficientBoundary;
     property Fmp4MultLandUseAreaFractionBoundary: TFmp4MultLandUseAreaFractionBoundary
       read FFmp4MultLandUseAreaFractionBoundary write FFmp4MultLandUseAreaFractionBoundary;
+    property Fmp4CropCoefficientBoundary: TFmp4CropCoefficientBoundary
+      read FFmp4CropCoefficientBoundary write FFmp4CropCoefficientBoundary;
+    property FmpMultCropCoefficientBoundary: TFmp4MultCropCoefficientBoundary
+      read FFmpMultCropCoefficientBoundary write FFmpMultCropCoefficientBoundary;
+    property Fmp4ConsumptiveUseBoundary: TFmp4ConsumptiveUseBoundary
+      read FFmp4ConsumptiveUseBoundary write FFmp4ConsumptiveUseBoundary;
+    property FmpMultConsumptiveUseBoundary: TFmp4MultConsumptiveUseBoundary
+      read FFmpMultConsumptiveUseBoundary write FFmpMultConsumptiveUseBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -2877,12 +2886,6 @@ view. }
     function StoreModflowFmp4NrdInfilLocationBoundary: Boolean;
     procedure CreateModflowFmp4NrdInfilLocation;
 
-    function GetModflowFmp4CropCoefficient: TFmp4CropCoefficientBoundary;
-    procedure SetModflowFmp4CropCoefficient(
-      const Value: TFmp4CropCoefficientBoundary);
-    function StoreModflowFmp4CropCoefficient: Boolean;
-    procedure CreateModflowFmp4CropCoefficientBoundary;
-
     function GetModflowFmp4LandUseAreaFraction: TFmp4LandUseAreaFractionBoundary;
     procedure SetModflowFmp4LandUseAreaFraction(
       const Value: TFmp4LandUseAreaFractionBoundary);
@@ -2894,6 +2897,30 @@ view. }
       const Value: TFmp4MultLandUseAreaFractionBoundary);
     function StoreModflowFmp4MultLandUseAreaFraction: Boolean;
     procedure CreateModflowMultFmp4LandUseAreaFractionBoundary;
+
+    function GetModflowFmp4CropCoefficient: TFmp4CropCoefficientBoundary;
+    procedure SetModflowFmp4CropCoefficient(
+      const Value: TFmp4CropCoefficientBoundary);
+    function StoreModflowFmp4CropCoefficient: Boolean;
+    procedure CreateModflowFmp4CropCoefficientBoundary;
+
+    function GetModflowFmp4MultCropCoefficient: TFmp4MultCropCoefficientBoundary;
+    procedure SetModflowFmp4MultCropCoefficient(
+      const Value: TFmp4MultCropCoefficientBoundary);
+    function StoreModflowFmp4MultCropCoefficient: Boolean;
+    procedure CreateModflowMultCropCoefficientBoundary;
+
+    function GetModflowFmp4ConsumptiveUse: TFmp4ConsumptiveUseBoundary;
+    procedure SetModflowFmp4ConsumptiveUse(
+      const Value: TFmp4ConsumptiveUseBoundary);
+    function StoreModflowFmp4ConsumptiveUse: Boolean;
+    procedure CreateModflowConsumptiveUseBoundary;
+
+    function GetModflowFmp4MultConsumptiveUse: TFmp4MultConsumptiveUseBoundary;
+    procedure SetModflowFmp4MultConsumptiveUse(
+      const Value: TFmp4MultConsumptiveUseBoundary);
+    function StoreModflowFmp4MultConsumptiveUse: Boolean;
+    procedure CreateModflowMultConsumptiveUseBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4255,14 +4282,23 @@ view. }
       read GetModflowFmp4LandUseAreaFraction
       write SetModflowFmp4LandUseAreaFraction
       stored StoreModflowFmp4LandUseAreaFraction;
-    property ModflowFmp4CropCoefficient: TFmp4CropCoefficientBoundary
-      read GetModflowFmp4CropCoefficient write SetModflowFmp4CropCoefficient
-      Stored StoreModflowFmp4CropCoefficient;
-
     property ModflowFmp4MultLandUseAreaFraction: TFmp4MultLandUseAreaFractionBoundary
       read GetModflowFmp4MultLandUseAreaFraction
       write SetModflowFmp4MultLandUseAreaFraction
       stored StoreModflowFmp4MultLandUseAreaFraction;
+    property ModflowFmp4CropCoefficient: TFmp4CropCoefficientBoundary
+      read GetModflowFmp4CropCoefficient write SetModflowFmp4CropCoefficient
+      Stored StoreModflowFmp4CropCoefficient;
+    property ModflowFmp4MultCropCoefficient: TFmp4MultCropCoefficientBoundary
+      read GetModflowFmp4MultCropCoefficient write SetModflowFmp4MultCropCoefficient
+      Stored StoreModflowFmp4MultCropCoefficient;
+    property ModflowFmp4ConsumptiveUse: TFmp4ConsumptiveUseBoundary
+      read GetModflowFmp4ConsumptiveUse write SetModflowFmp4ConsumptiveUse
+      Stored StoreModflowFmp4ConsumptiveUse;
+    property ModflowFmp4MultConsumptiveUse: TFmp4MultConsumptiveUseBoundary
+      read GetModflowFmp4MultConsumptiveUse write SetModflowFmp4MultConsumptiveUse
+      Stored StoreModflowFmp4MultConsumptiveUse;
+
 
     { TODO :
 Consider making SectionStarts private and only exposing SectionStart,
@@ -6934,8 +6970,11 @@ begin
   ModflowFmpPrecipPotConsumption := AScreenObject.ModflowFmpPrecipPotConsumption;
   ModflowFmp4NrdInfilLocationBoundary := AScreenObject.ModflowFmp4NrdInfilLocationBoundary;
   ModflowFmp4LandUseAreaFraction := AScreenObject.ModflowFmp4LandUseAreaFraction;
-  ModflowFmp4CropCoefficient := AScreenObject.ModflowFmp4CropCoefficient;
   ModflowFmp4MultLandUseAreaFraction := AScreenObject.ModflowFmp4MultLandUseAreaFraction;
+  ModflowFmp4CropCoefficient := AScreenObject.ModflowFmp4CropCoefficient;
+  ModflowFmp4MultCropCoefficient := AScreenObject.ModflowFmp4MultCropCoefficient;
+  ModflowFmp4ConsumptiveUse := AScreenObject.ModflowFmp4ConsumptiveUse;
+  ModflowFmp4MultConsumptiveUse := AScreenObject.ModflowFmp4MultConsumptiveUse;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9728,14 +9767,29 @@ begin
       ModflowFmp4LandUseAreaFraction.InvalidateDisplay;
     end;
 
+    if ModflowFmp4MultLandUseAreaFraction <> nil then
+    begin
+      ModflowFmp4MultLandUseAreaFraction.InvalidateDisplay;
+    end;
+
     if ModflowFmp4CropCoefficient <> nil then
     begin
       ModflowFmp4CropCoefficient.InvalidateDisplay;
     end;
 
-    if ModflowFmp4MultLandUseAreaFraction <> nil then
+    if ModflowFmp4MultCropCoefficient <> nil then
     begin
-      ModflowFmp4MultLandUseAreaFraction.InvalidateDisplay;
+      ModflowFmp4MultCropCoefficient.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4ConsumptiveUse <> nil then
+    begin
+      ModflowFmp4ConsumptiveUse.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultConsumptiveUse <> nil then
+    begin
+      ModflowFmp4MultConsumptiveUse.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -14074,6 +14128,24 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetModflowFmp4ConsumptiveUse(
+  const Value: TFmp4ConsumptiveUseBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4ConsumptiveUseBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4ConsumptiveUseBoundary);
+  end
+  else
+  begin
+    CreateModflowConsumptiveUseBoundary;
+    ModflowBoundaries.FFmp4ConsumptiveUseBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetModflowFmp4CropCoefficient(
   const Value: TFmp4CropCoefficientBoundary);
 begin
@@ -14107,6 +14179,42 @@ begin
   begin
     CreateModflowFmp4LandUseAreaFractionBoundary;
     ModflowBoundaries.FFmp4LandUseAreaFractionBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4MultConsumptiveUse(
+  const Value: TFmp4MultConsumptiveUseBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultConsumptiveUseBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultConsumptiveUseBoundary);
+  end
+  else
+  begin
+    CreateModflowMultConsumptiveUseBoundary;
+    ModflowBoundaries.FFmpMultConsumptiveUseBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4MultCropCoefficient(
+  const Value: TFmp4MultCropCoefficientBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultCropCoefficientBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultCropCoefficientBoundary);
+  end
+  else
+  begin
+    CreateModflowMultCropCoefficientBoundary;
+    ModflowBoundaries.FFmpMultCropCoefficientBoundary.Assign(Value);
   end;
 end;
 
@@ -32194,6 +32302,16 @@ begin
     and (ModflowFhbHeadBoundary <> nil) and ModflowFhbHeadBoundary.Used;
 end;
 
+function TScreenObject.StoreModflowFmp4ConsumptiveUse: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4ConsumptiveUse <> nil) and ModflowFmp4ConsumptiveUse.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowFmp4CropCoefficient: Boolean;
 begin
 {$IFDEF OWHMV2}
@@ -32209,6 +32327,26 @@ begin
 {$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4LandUseAreaFraction <> nil) and ModflowFmp4LandUseAreaFraction.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4MultConsumptiveUse: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultConsumptiveUse <> nil) and ModflowFmp4MultConsumptiveUse.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4MultCropCoefficient: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultCropCoefficient <> nil) and ModflowFmp4MultCropCoefficient.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -33259,6 +33397,23 @@ begin
   end;
 end;
 
+function TScreenObject.GetModflowFmp4ConsumptiveUse: TFmp4ConsumptiveUseBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowConsumptiveUseBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4ConsumptiveUseBoundary;
+  end;
+end;
+
 function TScreenObject.GetModflowFmp4CropCoefficient: TFmp4CropCoefficientBoundary;
 begin
   if (FModel = nil)
@@ -33290,6 +33445,40 @@ begin
   else
   begin
     result := ModflowBoundaries.Fmp4LandUseAreaFractionBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4MultConsumptiveUse: TFmp4MultConsumptiveUseBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultConsumptiveUseBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultConsumptiveUseBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4MultCropCoefficient: TFmp4MultCropCoefficientBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultCropCoefficientBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultCropCoefficientBoundary;
   end;
 end;
 
@@ -38050,6 +38239,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateModflowConsumptiveUseBoundary;
+begin
+  if (ModflowBoundaries.FFmp4ConsumptiveUseBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4ConsumptiveUseBoundary :=
+      TFmp4ConsumptiveUseBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateModflowFmp4CropCoefficientBoundary;
 begin
   if (ModflowBoundaries.FFmp4CropCoefficientBoundary = nil) then
@@ -38101,6 +38299,24 @@ begin
   begin
     ModflowBoundaries.FFmp4PrecipPotConsumptionBoundary :=
       TFmp4PrecipPotConsumptionBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowMultConsumptiveUseBoundary;
+begin
+  if (ModflowBoundaries.FFmpMultConsumptiveUseBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultConsumptiveUseBoundary :=
+      TFmp4MultConsumptiveUseBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowMultCropCoefficientBoundary;
+begin
+  if (ModflowBoundaries.FFmpMultCropCoefficientBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultCropCoefficientBoundary :=
+      TFmp4MultCropCoefficientBoundary.Create(FModel, self);
   end;
 end;
 
@@ -41483,6 +41699,20 @@ begin
     FFmp4LandUseAreaFractionBoundary.Assign(Source.FFmp4LandUseAreaFractionBoundary);
   end;
 
+  if Source.FFmp4MultLandUseAreaFractionBoundary = nil then
+  begin
+    FreeAndNil(FFmp4MultLandUseAreaFractionBoundary);
+  end
+  else
+  begin
+    if FFmp4MultLandUseAreaFractionBoundary = nil then
+    begin
+      FFmp4MultLandUseAreaFractionBoundary :=
+        TFmp4MultLandUseAreaFractionBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4MultLandUseAreaFractionBoundary.Assign(Source.FFmp4MultLandUseAreaFractionBoundary);
+  end;
+
   if Source.FFmp4CropCoefficientBoundary = nil then
   begin
     FreeAndNil(FFmp4CropCoefficientBoundary);
@@ -41497,18 +41727,46 @@ begin
     FFmp4CropCoefficientBoundary.Assign(Source.FFmp4CropCoefficientBoundary);
   end;
 
-  if Source.FFmp4MultLandUseAreaFractionBoundary = nil then
+  if Source.FFmpMultCropCoefficientBoundary = nil then
   begin
-    FreeAndNil(FFmp4MultLandUseAreaFractionBoundary);
+    FreeAndNil(FFmpMultCropCoefficientBoundary);
   end
   else
   begin
-    if FFmp4MultLandUseAreaFractionBoundary = nil then
+    if FFmpMultCropCoefficientBoundary = nil then
     begin
-      FFmp4MultLandUseAreaFractionBoundary :=
-        TFmp4MultLandUseAreaFractionBoundary.Create(Model, FScreenObject);
+      FFmpMultCropCoefficientBoundary :=
+        TFmp4MultCropCoefficientBoundary.Create(Model, FScreenObject);
     end;
-    FFmp4MultLandUseAreaFractionBoundary.Assign(Source.FFmp4MultLandUseAreaFractionBoundary);
+    FFmpMultCropCoefficientBoundary.Assign(Source.FFmpMultCropCoefficientBoundary);
+  end;
+
+  if Source.FFmp4ConsumptiveUseBoundary = nil then
+  begin
+    FreeAndNil(FFmp4ConsumptiveUseBoundary);
+  end
+  else
+  begin
+    if FFmp4ConsumptiveUseBoundary = nil then
+    begin
+      FFmp4ConsumptiveUseBoundary :=
+        TFmp4ConsumptiveUseBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4ConsumptiveUseBoundary.Assign(Source.FFmp4ConsumptiveUseBoundary);
+  end;
+
+  if Source.FFmpMultConsumptiveUseBoundary = nil then
+  begin
+    FreeAndNil(FFmpMultConsumptiveUseBoundary);
+  end
+  else
+  begin
+    if FFmpMultConsumptiveUseBoundary = nil then
+    begin
+      FFmpMultConsumptiveUseBoundary :=
+        TFmp4MultConsumptiveUseBoundary.Create(Model, FScreenObject);
+    end;
+    FFmpMultConsumptiveUseBoundary.Assign(Source.FFmpMultConsumptiveUseBoundary);
   end;
 
   FreeUnusedBoundaries;
@@ -41529,8 +41787,11 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
-  FFmp4MultLandUseAreaFractionBoundary.Free;
+  FFmpMultConsumptiveUseBoundary.Free;
+  FFmp4ConsumptiveUseBoundary.Free;
+  FFmpMultCropCoefficientBoundary.Free;
   FFmp4CropCoefficientBoundary.Free;
+  FFmp4MultLandUseAreaFractionBoundary.Free;
   FFmp4LandUseAreaFractionBoundary.Free;
   FFmp4NrdInfilLocationBoundary.Free;
   FFmp4PrecipPotConsumptionBoundary.Free;
@@ -41890,16 +42151,34 @@ begin
     FreeAndNil(FFmp4LandUseAreaFractionBoundary);
   end;
 
+  if (FFmp4MultLandUseAreaFractionBoundary <> nil)
+    and not FFmp4MultLandUseAreaFractionBoundary.Used then
+  begin
+    FreeAndNil(FFmp4MultLandUseAreaFractionBoundary);
+  end;
+
   if (FFmp4CropCoefficientBoundary <> nil)
     and not FFmp4CropCoefficientBoundary.Used then
   begin
     FreeAndNil(FFmp4CropCoefficientBoundary);
   end;
 
-  if (FFmp4MultLandUseAreaFractionBoundary <> nil)
-    and not FFmp4MultLandUseAreaFractionBoundary.Used then
+  if (FFmpMultCropCoefficientBoundary <> nil)
+    and not FFmpMultCropCoefficientBoundary.Used then
   begin
-    FreeAndNil(FFmp4MultLandUseAreaFractionBoundary);
+    FreeAndNil(FFmpMultCropCoefficientBoundary);
+  end;
+
+  if (FFmp4ConsumptiveUseBoundary <> nil)
+    and not FFmp4ConsumptiveUseBoundary.Used then
+  begin
+    FreeAndNil(FFmp4ConsumptiveUseBoundary);
+  end;
+
+  if (FFmpMultConsumptiveUseBoundary <> nil)
+    and not FFmpMultConsumptiveUseBoundary.Used then
+  begin
+    FreeAndNil(FFmpMultConsumptiveUseBoundary);
   end;
 
 end;
@@ -42226,14 +42505,29 @@ begin
     FFmp4LandUseAreaFractionBoundary.Invalidate;
   end;
 
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    FFmp4MultLandUseAreaFractionBoundary.Invalidate;
+  end;
+
   if FFmp4CropCoefficientBoundary <> nil then
   begin
     FFmp4CropCoefficientBoundary.Invalidate;
   end;
 
-  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  if FFmpMultCropCoefficientBoundary <> nil then
   begin
-    FFmp4MultLandUseAreaFractionBoundary.Invalidate;
+    FFmpMultCropCoefficientBoundary.Invalidate;
+  end;
+
+  if FFmp4ConsumptiveUseBoundary <> nil then
+  begin
+    FFmp4ConsumptiveUseBoundary.Invalidate;
+  end;
+
+  if FFmpMultConsumptiveUseBoundary <> nil then
+  begin
+    FFmpMultConsumptiveUseBoundary.Invalidate;
   end;
 
 end;
@@ -42600,14 +42894,29 @@ begin
     FFmp4LandUseAreaFractionBoundary.RemoveModelLink(AModel);
   end;
 
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    FFmp4MultLandUseAreaFractionBoundary.RemoveModelLink(AModel);
+  end;
+
   if FFmp4CropCoefficientBoundary <> nil then
   begin
     FFmp4CropCoefficientBoundary.RemoveModelLink(AModel);
   end;
 
-  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  if FFmpMultCropCoefficientBoundary <> nil then
   begin
-    FFmp4MultLandUseAreaFractionBoundary.RemoveModelLink(AModel);
+    FFmpMultCropCoefficientBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4ConsumptiveUseBoundary <> nil then
+  begin
+    FFmp4ConsumptiveUseBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmpMultConsumptiveUseBoundary <> nil then
+  begin
+    FFmpMultConsumptiveUseBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -42976,14 +43285,29 @@ begin
     FFmp4LandUseAreaFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    FFmp4MultLandUseAreaFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   if FFmp4CropCoefficientBoundary <> nil then
   begin
     FFmp4CropCoefficientBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
-  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  if FFmpMultCropCoefficientBoundary <> nil then
   begin
-    FFmp4MultLandUseAreaFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
+    FFmpMultCropCoefficientBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmp4ConsumptiveUseBoundary <> nil then
+  begin
+    FFmp4ConsumptiveUseBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmpMultConsumptiveUseBoundary <> nil then
+  begin
+    FFmpMultConsumptiveUseBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
   Invalidate;
@@ -43351,14 +43675,29 @@ begin
     FFmp4LandUseAreaFractionBoundary.StopTalkingToAnyone;
   end;
 
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    FFmp4MultLandUseAreaFractionBoundary.StopTalkingToAnyone;
+  end;
+
   if FFmp4CropCoefficientBoundary <> nil then
   begin
     FFmp4CropCoefficientBoundary.StopTalkingToAnyone;
   end;
 
-  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  if FFmpMultCropCoefficientBoundary <> nil then
   begin
-    FFmp4MultLandUseAreaFractionBoundary.StopTalkingToAnyone;
+    FFmpMultCropCoefficientBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4ConsumptiveUseBoundary <> nil then
+  begin
+    FFmp4ConsumptiveUseBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmpMultConsumptiveUseBoundary <> nil then
+  begin
+    FFmpMultConsumptiveUseBoundary.StopTalkingToAnyone;
   end;
 
 end;
@@ -43941,6 +44280,15 @@ begin
     end;
   end;
 
+  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  begin
+    Result := FFmp4MultLandUseAreaFractionBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
   if FFmp4CropCoefficientBoundary <> nil then
   begin
     Result := FFmp4CropCoefficientBoundary.Values.UsesATime(ATime);
@@ -43950,9 +44298,27 @@ begin
     end;
   end;
 
-  if FFmp4MultLandUseAreaFractionBoundary <> nil then
+  if FFmpMultCropCoefficientBoundary <> nil then
   begin
-    Result := FFmp4MultLandUseAreaFractionBoundary.Values.UsesATime(ATime);
+    Result := FFmpMultCropCoefficientBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4ConsumptiveUseBoundary <> nil then
+  begin
+    Result := FFmp4ConsumptiveUseBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmpMultConsumptiveUseBoundary <> nil then
+  begin
+    Result := FFmpMultConsumptiveUseBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

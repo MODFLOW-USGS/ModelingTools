@@ -276,12 +276,25 @@ end;
 
 procedure TframePackageFmp4LandUse.SetData(Package: TModflowPackageSelection);
   function SetFarmOptionGrid(Row: TSoilOptionRows): TFarmOption;
+  var
+    Index: Integer;
   begin
-    Result := TFarmOption(DontUseStaticTransient.IndexOf(rdgLandUse.Cells[Ord(socTransient), Ord(Row)]));
+    Index := DontUseStaticTransient.IndexOf(rdgLandUse.Cells[Ord(socTransient), Ord(Row)]);
+    if Index < 0 then
+    begin
+      Index := 0
+    end;
+    Result := TFarmOption(Index);
   end;
   function SetArrayListGrid(Row: TSoilOptionRows): TArrayList;
+  var
+    ItemIndex: Integer;
   begin
-    result := TArrayList(rdgLandUse.ItemIndex[Ord(socArray), Ord(Row)]);
+    ItemIndex := rdgLandUse.ItemIndex[Ord(socArray), Ord(Row)];
+    if ItemIndex >= 0 then
+    begin
+      result := TArrayList(ItemIndex);
+    end;
   end;
   procedure SetFarmProperty(FarmProperty: TFarmProperty; ARow: TSoilOptionRows);
   var
@@ -359,6 +372,7 @@ begin
   end;
   LandUsePackage.SpecifyCropsToPrint := SetFarmOption(comboSpecifyCrops);
   SetFarmProperty(LandUsePackage.CropCoeff, sorCropCoeff);
+  SetFarmProperty(LandUsePackage.ConsumptiveUse, sorConsumptiveUse);
   SetFarmProperty(LandUsePackage.Irrigation, sorIrrigation);
   SetFarmProperty(LandUsePackage.RootDepth, sorRootDepth);
   SetFarmProperty(LandUsePackage.RootPressure, sorRootPressure);
