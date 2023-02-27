@@ -320,6 +320,7 @@ type
     procedure SetLandUseCount(const Value: Integer);
   public
     Values: array of double;
+    IntValues: array of Integer;
     ValueAnnotations: array of string;
     ValuePestNames: array of string;
     ValuePestSeriesNames: array of string;
@@ -2578,6 +2579,7 @@ procedure TLandUseData.Assign(const Item: TLandUseData);
 begin
   self := Item;
   SetLength(Values, Length(Values));
+  SetLength(IntValues, Length(IntValues));
   SetLength(ValueAnnotations, Length(ValueAnnotations));
   SetLength(ValuePestNames, Length(ValuePestNames));
   SetLength(ValuePestSeriesNames, Length(ValuePestSeriesNames));
@@ -2595,6 +2597,10 @@ begin
   for Index := 0 to Count - 1 do
   begin
     WriteCompReal(Comp, Values[Index]);
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, IntValues[Index]);
   end;
   for Index := 0 to Count - 1 do
   begin
@@ -2652,6 +2658,11 @@ begin
   begin
     Values[Index] := ReadCompReal(Decomp);
   end;
+  SetLength(IntValues, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    IntValues[Index] := ReadCompInt(Decomp);
+  end;
   SetLength(ValueAnnotations, Count);
   for Index := 0 to Count - 1 do
   begin
@@ -2685,6 +2696,7 @@ begin
   begin
     FLandUseCount := Value;
     SetLength(Values, FLandUseCount);
+    SetLength(IntValues, FLandUseCount);
     SetLength(ValueAnnotations, FLandUseCount);
     SetLength(ValuePestNames, FLandUseCount);
     SetLength(ValuePestSeriesNames, FLandUseCount);

@@ -1,0 +1,2 @@
+inherited frameScreenObjectMultIrrigation: TframeScreenObjectMultIrrigation
+end

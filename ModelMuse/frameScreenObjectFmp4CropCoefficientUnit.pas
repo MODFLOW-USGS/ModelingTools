@@ -1,4 +1,4 @@
-unit frameScreenObjecFmp4CropCoefficientUnit;
+unit frameScreenObjectFmp4CropCoefficientUnit;
 
 interface
 
@@ -9,7 +9,7 @@ uses
   JvExMask, JvSpin, Vcl.ExtCtrls, UndoItemsScreenObjects, ModflowFmp4BoundaryUnit;
 
 type
-  TframeScreenObjecFmp4CropCoefficient = class(TframeScreenObjectCustomFmp4Boundary)
+  TframeScreenObjectFmp4CropCoefficient = class(TframeScreenObjectCustomFmp4Boundary)
   private
     { Private declarations }
   protected
@@ -21,7 +21,7 @@ type
   end;
 
 var
-  frameScreenObjecFmp4CropCoefficient: TframeScreenObjecFmp4CropCoefficient;
+  frameScreenObjectFmp4CropCoefficient: TframeScreenObjectFmp4CropCoefficient;
 
 implementation
 
@@ -32,18 +32,18 @@ uses
 
 { TframeScreenObjectCustomFmp4Boundary1 }
 
-function TframeScreenObjecFmp4CropCoefficient.CreateBoundary: TFmp4Boundary;
+function TframeScreenObjectFmp4CropCoefficient.CreateBoundary: TFmp4Boundary;
 begin
   result := TFmp4CropCoefficientBoundary.Create(nil, nil);
 end;
 
-function TframeScreenObjecFmp4CropCoefficient.GetBoundary(
+function TframeScreenObjectFmp4CropCoefficient.GetBoundary(
   Item: TScreenObjectEditItem): TFmp4Boundary;
 begin
   result := Item.ScreenObject.ModflowFmp4CropCoefficient;
 end;
 
-function TframeScreenObjecFmp4CropCoefficient.GetValueDescription: string;
+function TframeScreenObjectFmp4CropCoefficient.GetValueDescription: string;
 begin
   result := TFmp4CropCoefficientBoundary.ValueDescription;
 end;

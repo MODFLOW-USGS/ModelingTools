@@ -5,7 +5,7 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, GoPhastTypes;
+  SubscriptionUnit, SparseDataSets, GoPhastTypes, RbwParser;
 
 type
   {
@@ -14,6 +14,7 @@ type
   TFmp4Record = record
     Cell: TCellLocation;
     FmpValue: double;
+    FmpIntValue: Integer;
     StartingTime: double;
     EndingTime: double;
     FmpValueAnnotation: string;
@@ -84,7 +85,9 @@ type
     class function GetDescription: string; virtual; abstract;
     { TODO -cFMP4 : override AssignInvalidateEvent  in each descendent}
     procedure AssignInvalidateEvent; virtual; abstract;
+    function GetDefaultDataType: TRbwDataType; virtual;
   public
+    property DefaultDataType: TRbwDataType read GetDefaultDataType;
     Destructor Destroy; override;
   end;
 
@@ -134,6 +137,7 @@ type
     FStressPeriod: integer;
     function GetFmp4Value: double;
     function GetFmp4Annotation: string;
+    function GetFmp4IntValue: Integer;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -153,6 +157,7 @@ type
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TFmp4Record read FValues write FValues;
     property FmpValue: double read GetFmp4Value;
+    property FmpIntValue: Integer read GetFmp4IntValue;
     property FmpValueAnnotation: string read GetFmp4Annotation;
   end;
 
@@ -229,7 +234,7 @@ type
 
 implementation
 
-uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
+uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
   AbstractGridUnit;
 
@@ -361,31 +366,65 @@ begin
     LayerMax, RowMax, ColMax);
   if LayerMin >= 0 then
   begin
-    for LayerIndex := LayerMin to LayerMax do
+    if Fmp4Array.DataType = rdtDouble then
     begin
-      if LocalModel.IsLayerSimulated(LayerIndex) then
+      for LayerIndex := LayerMin to LayerMax do
       begin
-        for RowIndex := RowMin to RowMax do
+        if LocalModel.IsLayerSimulated(LayerIndex) then
         begin
-          for ColIndex := ColMin to ColMax do
+          for RowIndex := RowMin to RowMax do
           begin
-            if Fmp4Array.IsValue[LayerIndex, RowIndex, ColIndex] then
+            for ColIndex := ColMin to ColMax do
             begin
-              with Boundary.Fmp4Array[BoundaryIndex] do
+              if Fmp4Array.IsValue[LayerIndex, RowIndex, ColIndex] then
               begin
-                Cell.Layer := LayerIndex;
-                Cell.Row := RowIndex;
-                Cell.Column := ColIndex;
-//                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
-                FmpValue := Fmp4Array.
-                  RealData[LayerIndex, RowIndex, ColIndex];
-                FmpValueAnnotation := Fmp4Array.
-                  Annotation[LayerIndex, RowIndex, ColIndex];
+                with Boundary.Fmp4Array[BoundaryIndex] do
+                begin
+                  Cell.Layer := LayerIndex;
+                  Cell.Row := RowIndex;
+                  Cell.Column := ColIndex;
+  //                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
+                  FmpValue := Fmp4Array.
+                    RealData[LayerIndex, RowIndex, ColIndex];
+                  FmpValueAnnotation := Fmp4Array.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                end;
+                Inc(BoundaryIndex);
               end;
-              Inc(BoundaryIndex);
             end;
           end;
         end;
+      end;
+    end
+    else
+    begin
+      Assert(Fmp4Array.DataType = rdtInteger);
+      for LayerIndex := LayerMin to LayerMax do
+      begin
+        if LocalModel.IsLayerSimulated(LayerIndex) then
+        begin
+          for RowIndex := RowMin to RowMax do
+          begin
+            for ColIndex := ColMin to ColMax do
+            begin
+              if Fmp4Array.IsValue[LayerIndex, RowIndex, ColIndex] then
+              begin
+                with Boundary.Fmp4Array[BoundaryIndex] do
+                begin
+                  Cell.Layer := LayerIndex;
+                  Cell.Row := RowIndex;
+                  Cell.Column := ColIndex;
+  //                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
+                  FmpIntValue := Fmp4Array.
+                    IntegerData[LayerIndex, RowIndex, ColIndex];
+                  FmpValueAnnotation := Fmp4Array.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                end;
+                Inc(BoundaryIndex);
+              end;
+            end;
+          end;
+        end
       end;
     end;
   end;
@@ -526,15 +565,17 @@ end;
 function TFmp4_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
-  Assert(False);
+  case Index of
+    Fmp4Position: result := FmpValueAnnotation;
+    else Assert(False);
+  end;
 end;
 
 function TFmp4_Cell.GetIntegerValue(Index: integer; AModel: TBaseModel): integer;
 begin
   result := 0;
   case Index of
-    Fmp4Position: result := (AModel as TCustomModel).
-      DataSetLayerToModflowLayer(Layer);
+    Fmp4Position: result := FmpIntValue;
     else Assert(False);
   end;
 end;
@@ -570,6 +611,11 @@ end;
 function TFmp4_Cell.GetFmp4Annotation: string;
 begin
   result := Values.FmpValueAnnotation;
+end;
+
+function TFmp4_Cell.GetFmp4IntValue: Integer;
+begin
+  result := Values.FmpIntValue;
 end;
 
 function TFmp4_Cell.GetRow: integer;
@@ -941,6 +987,7 @@ procedure TFmp4Record.Cache(Comp: TCompressionStream; Strings: TStringList);
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, FmpValue);
+  WriteCompInt(Comp, FmpIntValue);
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(FmpValueAnnotation));
@@ -955,6 +1002,7 @@ procedure TFmp4Record.Restore(Decomp: TDecompressionStream; Annotations: TString
 begin
   Cell := ReadCompCell(Decomp);
   FmpValue := ReadCompReal(Decomp);
+  FmpIntValue := ReadCompInt(Decomp);
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
   FmpValueAnnotation := Annotations[ReadCompInt(Decomp)];
@@ -966,6 +1014,7 @@ procedure TFmp4TimeListLink.CreateTimeLists;
 begin
   inherited;
   FFmp4ValueData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FFmp4ValueData.DataType := DefaultDataType;
   FFmp4ValueData.NonParamDescription := GetDescription;
   FFmp4ValueData.ParamDescription := ' ' + LowerCase(GetDescription);
   AddTimeList(FFmp4ValueData);
@@ -979,6 +1028,11 @@ destructor TFmp4TimeListLink.Destroy;
 begin
   FFmp4ValueData.Free;
   inherited;
+end;
+
+function TFmp4TimeListLink.GetDefaultDataType: TRbwDataType;
+begin
+  result := rdtDouble;
 end;
 
 end.

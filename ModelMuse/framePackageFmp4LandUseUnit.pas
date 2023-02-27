@@ -291,10 +291,11 @@ procedure TframePackageFmp4LandUse.SetData(Package: TModflowPackageSelection);
     ItemIndex: Integer;
   begin
     ItemIndex := rdgLandUse.ItemIndex[Ord(socArray), Ord(Row)];
-    if ItemIndex >= 0 then
+    if ItemIndex < 0 then
     begin
-      result := TArrayList(ItemIndex);
+      ItemIndex := 0;
     end;
+    result := TArrayList(ItemIndex);
   end;
   procedure SetFarmProperty(FarmProperty: TFarmProperty; ARow: TSoilOptionRows);
   var

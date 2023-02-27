@@ -581,7 +581,7 @@ const
   KLandUseFractionPrefix  = 'Land_Use_Area_Fraction_';
   KCropCoefficientPrefix = 'Crop_Coefficient_';
   KConsumptiveUsePrefix = 'Consumptive_Use_';
-  KIrrigationPrefix = 'Irrigatiion_';
+  KIrrigationPrefix = 'Irrigation_';
   KRootDepthPrefix = 'Root_Depth_';
   KEvaporationIrrigationPrefix = 'Evaporation_Irrigation_';
   KSWLossFractionPrecipPrefix = 'SW_Loss_Fraction_Precip_';
@@ -2183,6 +2183,7 @@ begin
   {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtDouble;
     UpdateOrCreateDataArray(UpdateDat);
 
   end;
@@ -2304,6 +2305,7 @@ begin
   {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtDouble;
     UpdateOrCreateDataArray(UpdateDat);
 
   end;
@@ -2337,6 +2339,7 @@ begin
   {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtDouble;
     UpdateOrCreateDataArray(UpdateDat);
 
   end;
@@ -2532,6 +2535,7 @@ begin
   {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtDouble;
     UpdateOrCreateDataArray(UpdateDat);
 
   end;
@@ -2605,6 +2609,7 @@ begin
   {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtInteger;
     UpdateOrCreateDataArray(UpdateDat);
 
   end;
@@ -2638,6 +2643,7 @@ begin
   {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtDouble;
     UpdateOrCreateDataArray(UpdateDat);
 
   end;
@@ -2732,6 +2738,7 @@ begin
   {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtDouble;
     UpdateOrCreateDataArray(UpdateDat);
 
   end;
@@ -2774,6 +2781,7 @@ begin
   {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtDouble;
     UpdateOrCreateDataArray(UpdateDat);
 
   end;
@@ -2807,6 +2815,7 @@ begin
   {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtDouble;
     UpdateOrCreateDataArray(UpdateDat);
 
   end;

@@ -555,6 +555,8 @@ type
     MODFLOWOWHMV21: TMenuItem;
     WellsToCsv1: TMenuItem;
     dlgSaveBoundaryCsv: TSaveDialog;
+    acFarmIrrigationTypes: TAction;
+    IrrigationTypes1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -761,6 +763,7 @@ type
     procedure acModflowOwhmV2Execute(Sender: TObject);
     procedure acRunModflowOWHM_V2Execute(Sender: TObject);
     procedure WellsToCsv1Click(Sender: TObject);
+    procedure acFarmIrrigationTypesExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -2170,7 +2173,7 @@ uses
   PlProcUnit, PestControlFileWriterUnit, SutraImportUnit, frmSvdaPrepInputUnit,
   frmSupCalcUnit, PestPropertiesUnit,
   frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit,
-  frmTimeSeriesUnit, System.StrUtils;
+  frmTimeSeriesUnit, System.StrUtils, frmIrrigationTypesUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -2796,6 +2799,12 @@ procedure TfrmGoPhast.acFarmCropsExecute(Sender: TObject);
 begin
   inherited;
   ShowAForm(TfrmCropProperties);
+end;
+
+procedure TfrmGoPhast.acFarmIrrigationTypesExecute(Sender: TObject);
+begin
+  inherited;
+  ShowAForm(TfrmIrrigationTypes);
 end;
 
 procedure TfrmGoPhast.acFarmSoilsExecute(Sender: TObject);
@@ -3524,6 +3533,7 @@ begin
   {$ifndef OWHMV2}
   acModflowOwhmV2.Visible := False;
   acRunModflowOWHM_V2.Visible := False;
+  acFarmIrrigationTypes.Visible := False;
   {$ENDIF}
   tbarEditScreenObjects.Width := 227;
   tbarView.Width := 176;
@@ -4496,6 +4506,10 @@ begin
   , msModflowOwhm2
   {$ENDIF}
   ];
+
+  {$IFDEF OWHMV2}
+  acFarmIrrigationTypes.Visible := PhastModel.ModelSelection = msModflowOwhm2;
+  {$ENDIF}
 
   EnableFarmMenuItems;
 

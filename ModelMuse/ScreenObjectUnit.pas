@@ -55,7 +55,8 @@ uses
   ModflowFmp4BarePrecipitationConsumptionFractionUnit,
   ModflowFmp4DirectRechargeUnit, ModflowFmp4PrecipPotConsumptionUnit,
   ModflowFmp4NrdInfilLocationUnit, ModflowFmp4CropCoefficientUnit,
-  ModflowFmp4LandUseAreaFractionUnit, ModflowFmp4ConsumptiveUseUnit;
+  ModflowFmp4LandUseAreaFractionUnit, ModflowFmp4ConsumptiveUseUnit,
+  ModflowFmp4IrrigationSpatialUnit;
 
 type
   //
@@ -1479,6 +1480,8 @@ view. }
     FFmpMultCropCoefficientBoundary: TFmp4MultCropCoefficientBoundary;
     FFmp4ConsumptiveUseBoundary: TFmp4ConsumptiveUseBoundary;
     FFmpMultConsumptiveUseBoundary: TFmp4MultConsumptiveUseBoundary;
+    FFmp4IrrigationBoundary: TFmp4IrrigationBoundary;
+    FFmpMultIrrigationBoundary: TFmp4MultIrrigationBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1622,6 +1625,10 @@ view. }
       read FFmp4ConsumptiveUseBoundary write FFmp4ConsumptiveUseBoundary;
     property FmpMultConsumptiveUseBoundary: TFmp4MultConsumptiveUseBoundary
       read FFmpMultConsumptiveUseBoundary write FFmpMultConsumptiveUseBoundary;
+    property Fmp4IrrigationBoundary: TFmp4IrrigationBoundary
+      read FFmp4IrrigationBoundary write FFmp4IrrigationBoundary;
+    property FmpMultIrrigationBoundary: TFmp4MultIrrigationBoundary
+      read FFmpMultIrrigationBoundary write FFmpMultIrrigationBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -2921,6 +2928,17 @@ view. }
       const Value: TFmp4MultConsumptiveUseBoundary);
     function StoreModflowFmp4MultConsumptiveUse: Boolean;
     procedure CreateModflowMultConsumptiveUseBoundary;
+
+    function GetModflowFmp4Irrigation: TFmp4IrrigationBoundary;
+    procedure SetModflowFmp4Irrigation(const Value: TFmp4IrrigationBoundary);
+    function StoreModflowFmp4Irrigation: Boolean;
+    procedure CreateModflowIrrigationBoundary;
+
+    function GetModflowFmp4MultIrrigation: TFmp4MultIrrigationBoundary;
+    procedure SetModflowFmp4MultIrrigation(
+      const Value: TFmp4MultIrrigationBoundary);
+    function StoreModflowFmp4MultIrrigation: Boolean;
+    procedure CreateModflowMultIrrigationBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4298,6 +4316,12 @@ view. }
     property ModflowFmp4MultConsumptiveUse: TFmp4MultConsumptiveUseBoundary
       read GetModflowFmp4MultConsumptiveUse write SetModflowFmp4MultConsumptiveUse
       Stored StoreModflowFmp4MultConsumptiveUse;
+    property ModflowFmp4Irrigation: TFmp4IrrigationBoundary
+      read GetModflowFmp4Irrigation write SetModflowFmp4Irrigation
+      Stored StoreModflowFmp4Irrigation;
+    property ModflowFmp4MultIrrigation: TFmp4MultIrrigationBoundary
+      read GetModflowFmp4MultIrrigation write SetModflowFmp4MultIrrigation
+      Stored StoreModflowFmp4MultIrrigation;
 
 
     { TODO :
@@ -6975,6 +6999,8 @@ begin
   ModflowFmp4MultCropCoefficient := AScreenObject.ModflowFmp4MultCropCoefficient;
   ModflowFmp4ConsumptiveUse := AScreenObject.ModflowFmp4ConsumptiveUse;
   ModflowFmp4MultConsumptiveUse := AScreenObject.ModflowFmp4MultConsumptiveUse;
+  ModflowFmp4Irrigation := AScreenObject.ModflowFmp4Irrigation;
+  ModflowFmp4MultIrrigation := AScreenObject.ModflowFmp4MultIrrigation;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9790,6 +9816,16 @@ begin
     if ModflowFmp4MultConsumptiveUse <> nil then
     begin
       ModflowFmp4MultConsumptiveUse.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4Irrigation <> nil then
+    begin
+      ModflowFmp4Irrigation.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultIrrigation <> nil then
+    begin
+      ModflowFmp4MultIrrigation.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -14164,6 +14200,24 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetModflowFmp4Irrigation(
+  const Value: TFmp4IrrigationBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4IrrigationBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4IrrigationBoundary);
+  end
+  else
+  begin
+    CreateModflowIrrigationBoundary;
+    ModflowBoundaries.FFmp4IrrigationBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetModflowFmp4LandUseAreaFraction(
   const Value: TFmp4LandUseAreaFractionBoundary);
 begin
@@ -14215,6 +14269,24 @@ begin
   begin
     CreateModflowMultCropCoefficientBoundary;
     ModflowBoundaries.FFmpMultCropCoefficientBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4MultIrrigation(
+  const Value: TFmp4MultIrrigationBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultIrrigationBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultIrrigationBoundary);
+  end
+  else
+  begin
+    CreateModflowMultIrrigationBoundary;
+    ModflowBoundaries.FFmpMultIrrigationBoundary.Assign(Value);
   end;
 end;
 
@@ -32322,6 +32394,16 @@ begin
 {$ENDIF}
 end;
 
+function TScreenObject.StoreModflowFmp4Irrigation: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4Irrigation <> nil) and ModflowFmp4Irrigation.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowFmp4LandUseAreaFraction: Boolean;
 begin
 {$IFDEF OWHMV2}
@@ -32347,6 +32429,16 @@ begin
 {$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultCropCoefficient <> nil) and ModflowFmp4MultCropCoefficient.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4MultIrrigation: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultIrrigation <> nil) and ModflowFmp4MultIrrigation.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -33431,6 +33523,23 @@ begin
   end;
 end;
 
+function TScreenObject.GetModflowFmp4Irrigation: TFmp4IrrigationBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowIrrigationBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4IrrigationBoundary;
+  end;
+end;
+
 function TScreenObject.GetModflowFmp4LandUseAreaFraction: TFmp4LandUseAreaFractionBoundary;
 begin
   if (FModel = nil)
@@ -33479,6 +33588,23 @@ begin
   else
   begin
     result := ModflowBoundaries.FmpMultCropCoefficientBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4MultIrrigation: TFmp4MultIrrigationBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultIrrigationBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultIrrigationBoundary;
   end;
 end;
 
@@ -38302,6 +38428,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateModflowIrrigationBoundary;
+begin
+  if (ModflowBoundaries.FFmp4IrrigationBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4IrrigationBoundary :=
+      TFmp4IrrigationBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateModflowMultConsumptiveUseBoundary;
 begin
   if (ModflowBoundaries.FFmpMultConsumptiveUseBoundary = nil) then
@@ -38326,6 +38461,15 @@ begin
   begin
     ModflowBoundaries.FFmp4MultLandUseAreaFractionBoundary :=
       TFmp4MultLandUseAreaFractionBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowMultIrrigationBoundary;
+begin
+  if (ModflowBoundaries.FFmpMultIrrigationBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultIrrigationBoundary :=
+      TFmp4MultIrrigationBoundary.Create(FModel, self);
   end;
 end;
 
@@ -41769,6 +41913,34 @@ begin
     FFmpMultConsumptiveUseBoundary.Assign(Source.FFmpMultConsumptiveUseBoundary);
   end;
 
+  if Source.FFmp4IrrigationBoundary = nil then
+  begin
+    FreeAndNil(FFmp4IrrigationBoundary);
+  end
+  else
+  begin
+    if FFmp4IrrigationBoundary = nil then
+    begin
+      FFmp4IrrigationBoundary :=
+        TFmp4IrrigationBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4IrrigationBoundary.Assign(Source.FFmp4IrrigationBoundary);
+  end;
+
+  if Source.FFmpMultIrrigationBoundary = nil then
+  begin
+    FreeAndNil(FFmpMultIrrigationBoundary);
+  end
+  else
+  begin
+    if FFmpMultIrrigationBoundary = nil then
+    begin
+      FFmpMultIrrigationBoundary :=
+        TFmp4MultIrrigationBoundary.Create(Model, FScreenObject);
+    end;
+    FFmpMultIrrigationBoundary.Assign(Source.FFmpMultIrrigationBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -41787,6 +41959,8 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmpMultIrrigationBoundary.Free;
+  FFmp4IrrigationBoundary.Free;
   FFmpMultConsumptiveUseBoundary.Free;
   FFmp4ConsumptiveUseBoundary.Free;
   FFmpMultCropCoefficientBoundary.Free;
@@ -42181,6 +42355,18 @@ begin
     FreeAndNil(FFmpMultConsumptiveUseBoundary);
   end;
 
+  if (FFmp4IrrigationBoundary <> nil)
+    and not FFmp4IrrigationBoundary.Used then
+  begin
+    FreeAndNil(FFmp4IrrigationBoundary);
+  end;
+
+  if (FFmpMultIrrigationBoundary <> nil)
+    and not FFmpMultIrrigationBoundary.Used then
+  begin
+    FreeAndNil(FFmpMultIrrigationBoundary);
+  end;
+
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -42528,6 +42714,16 @@ begin
   if FFmpMultConsumptiveUseBoundary <> nil then
   begin
     FFmpMultConsumptiveUseBoundary.Invalidate;
+  end;
+
+  if FFmp4IrrigationBoundary <> nil then
+  begin
+    FFmp4IrrigationBoundary.Invalidate;
+  end;
+
+  if FFmpMultIrrigationBoundary <> nil then
+  begin
+    FFmpMultIrrigationBoundary.Invalidate;
   end;
 
 end;
@@ -42917,6 +43113,16 @@ begin
   if FFmpMultConsumptiveUseBoundary <> nil then
   begin
     FFmpMultConsumptiveUseBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4IrrigationBoundary <> nil then
+  begin
+    FFmp4IrrigationBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmpMultIrrigationBoundary <> nil then
+  begin
+    FFmpMultIrrigationBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -43310,6 +43516,16 @@ begin
     FFmpMultConsumptiveUseBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4IrrigationBoundary <> nil then
+  begin
+    FFmp4IrrigationBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmpMultIrrigationBoundary <> nil then
+  begin
+    FFmpMultIrrigationBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -43698,6 +43914,16 @@ begin
   if FFmpMultConsumptiveUseBoundary <> nil then
   begin
     FFmpMultConsumptiveUseBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4IrrigationBoundary <> nil then
+  begin
+    FFmp4IrrigationBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmpMultIrrigationBoundary <> nil then
+  begin
+    FFmpMultIrrigationBoundary.StopTalkingToAnyone;
   end;
 
 end;
@@ -44319,6 +44545,24 @@ begin
   if FFmpMultConsumptiveUseBoundary <> nil then
   begin
     Result := FFmpMultConsumptiveUseBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4IrrigationBoundary <> nil then
+  begin
+    Result := FFmp4IrrigationBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmpMultIrrigationBoundary <> nil then
+  begin
+    Result := FFmpMultIrrigationBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

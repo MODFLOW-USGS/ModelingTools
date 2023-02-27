@@ -1,4 +1,4 @@
-unit frameScreenObjecFmp4ConsumptiveUseUnit;
+unit frameScreenObjectFmp4ConsumptiveUseUnit;
 
 interface
 
@@ -9,7 +9,7 @@ uses
   JvExMask, JvSpin, Vcl.ExtCtrls, UndoItemsScreenObjects, ModflowFmp4BoundaryUnit;
 
 type
-  TframeScreenObjecFmp4ConsumptiveUse = class(TframeScreenObjectCustomFmp4Boundary)
+  TframeScreenObjectFmp4ConsumptiveUse = class(TframeScreenObjectCustomFmp4Boundary)
   private
     { Private declarations }
   protected
@@ -21,7 +21,7 @@ type
   end;
 
 var
-  frameScreenObjecFmp4ConsumptiveUse: TframeScreenObjecFmp4ConsumptiveUse;
+  frameScreenObjectFmp4ConsumptiveUse: TframeScreenObjectFmp4ConsumptiveUse;
 
 implementation
 
@@ -30,20 +30,20 @@ uses
 
 {$R *.dfm}
 
-{ TframeScreenObjecFmp4ConsumptiveUse }
+{ TframeScreenObjectFmp4ConsumptiveUse }
 
-function TframeScreenObjecFmp4ConsumptiveUse.CreateBoundary: TFmp4Boundary;
+function TframeScreenObjectFmp4ConsumptiveUse.CreateBoundary: TFmp4Boundary;
 begin
   result := TFmp4ConsumptiveUseBoundary.Create(nil, nil);
 end;
 
-function TframeScreenObjecFmp4ConsumptiveUse.GetBoundary(
+function TframeScreenObjectFmp4ConsumptiveUse.GetBoundary(
   Item: TScreenObjectEditItem): TFmp4Boundary;
 begin
   result := Item.ScreenObject.ModflowFmp4ConsumptiveUse;
 end;
 
-function TframeScreenObjecFmp4ConsumptiveUse.GetValueDescription: string;
+function TframeScreenObjectFmp4ConsumptiveUse.GetValueDescription: string;
 begin
   result := TFmp4ConsumptiveUseBoundary.ValueDescription;
 end;

@@ -46,7 +46,7 @@ uses System.UITypes,
   Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
   PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit, ObsInterfaceUnit,
   PilotPointDataUnit, SvdaPrepPropertiesUnit, PestObservationResults,
-  Modflow6TimeSeriesCollectionsUnit;
+  Modflow6TimeSeriesCollectionsUnit, ModflowFmpIrrigationUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -578,6 +578,7 @@ const
   KCropCoefficient = 'Crop_Coefficient';
   KLandUseAreaFraction = 'Land_Use_Area_Fraction';
   KConsumptiveUse = 'Consumptive_Use';
+  KIrrigation = 'Irrigation';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2559,6 +2560,7 @@ that affects the model output should also have a comment. }
     function CropCoefficientUsed(Sender: TObject): Boolean;
     function LandUseAreaFractionUsed(Sender: TObject): Boolean;
     function ConsumptiveUseUsed(Sender: TObject): Boolean;
+    function IrrigationUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2614,6 +2616,11 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientCropCoefficientMultIsSelected: Boolean; virtual;
     function FarmProcess4TransientConsumptiveUseIsSelected: Boolean; virtual;
     function FarmProcess4TransientConsumptiveUseMultIsSelected: Boolean; virtual;
+    function FarmProcess4TransientIrrigationIsSelected: Boolean; virtual;
+    function FarmProcess4TransientIrrigationMultIsSelected: Boolean; virtual;
+
+    function GetIrrigationTypes: TIrrigationCollection; virtual; abstract;
+    procedure SetIrrigationTypes(const Value: TIrrigationCollection); virtual; abstract;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -2748,6 +2755,8 @@ that affects the model output should also have a comment. }
     property FmpAllotment: TAllotmentCollection read GetFmpAllotment
        write SetFmpAllotment;
     property Farms: TFarmCollection read GetFarms write SetFarms;
+    property IrrigationTypes: TIrrigationCollection read GetIrrigationTypes
+      write SetIrrigationTypes;
     property ParentModel: TCustomModel read GetParentModel;
     procedure DrawSfrStreamLinkages(const BitMap: TPersistent;
       const ZoomBox: TQRbwZoomBox2);
@@ -3291,6 +3300,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4LandUseAreaFraction(Sender: TObject);
     procedure InvalidateMfFmp4CropCoefficient(Sender: TObject);
     procedure InvalidateMfFmp4ConsumptiveUse(Sender: TObject);
+    procedure InvalidateMfFmp4Irrigation(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4018,6 +4028,7 @@ that affects the model output should also have a comment. }
     FSupCalcProperties: TSupCalcProperties;
     FTimesSeries: TTimesSeriesCollections;
     FAppsMoved: TStringList;
+    FIrrigationTypes: TIrrigationCollection;
     //     See @link(OwnsScreenObjects).
     function GetOwnsScreenObjects: boolean;
 //     See @link(ObjectList).
@@ -4341,6 +4352,8 @@ that affects the model output should also have a comment. }
     procedure SetPestProperties(const Value: TPestProperties); override;
     function GetFilesToDelete: TStrings; override;
     function GetAppsMoved: TStringList; override;
+    function GetIrrigationTypes: TIrrigationCollection; override;
+    procedure SetIrrigationTypes(const Value: TIrrigationCollection); override;
   public
 //    function Mt3dMSUsed(Sender: TObject): boolean; override;
     function Mt3dMS_StrictUsed(Sender: TObject): boolean; override;
@@ -4827,6 +4840,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientCropCoefficientMultIsSelected: Boolean; override;
     function FarmProcess4TransientConsumptiveUseIsSelected: Boolean; override;
     function FarmProcess4TransientConsumptiveUseMultIsSelected: Boolean; override;
+    function FarmProcess4TransientIrrigationIsSelected: Boolean; override;
+    function FarmProcess4TransientIrrigationMultIsSelected: Boolean; override;
 
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
@@ -5072,6 +5087,9 @@ that affects the model output should also have a comment. }
     property FmpAllotment: TAllotmentCollection read GetFmpAllotment
        write SetFmpAllotment;
     property Farms: TFarmCollection read GetFarms write SetFarms;
+  {$IFDEF OWHMV2}
+    property IrrigationTypes;
+  {$ENDIF}
   {$IFDEF LinkedRasters}
     property LinkedRasters;
   {$ENDIF}
@@ -5326,6 +5344,8 @@ that affects the model output should also have a comment. }
     function GetMf6TimesSeries: TTimesSeriesCollections; override;
     procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections); override;
     function GetAppsMoved: TStringList; override;
+    function GetIrrigationTypes: TIrrigationCollection; override;
+    procedure SetIrrigationTypes(const Value: TIrrigationCollection); override;
   public
     property CanUpdateGrid: Boolean read FCanUpdateGrid write SetCanUpdateGrid;
     function LayerGroupUsed(LayerGroup: TLayerGroup): boolean; override;
@@ -6241,6 +6261,7 @@ resourcestring
   StrCropCoefficient = KCropCoefficient;
   StrLandUseAreaFraction = KLandUseAreaFraction;
   StrConsumptiveUse = KConsumptiveUse;
+  StrKIrrigation = KIrrigation;
 
 
 const
@@ -11662,6 +11683,7 @@ begin
     ParamGroups := SourceModel.ParamGroups;
     SvdaPrepProperties := SourceModel.SvdaPrepProperties;
     SupCalcProperties := SourceModel.SupCalcProperties;
+    IrrigationTypes := SourceModel.IrrigationTypes;
   end;
   inherited;
 
@@ -11893,6 +11915,7 @@ begin
   FFmpClimate := TClimateCollection.Create(self);
   FFmpAllotment := TAllotmentCollection.Create(self);
   FFarms := TFarmCollection.Create(self);
+  FIrrigationTypes := TIrrigationCollection.Create(self);;
 
   FLinkedRasters := TLinkedRasterCollection.Create(Invalidate);
 
@@ -12448,6 +12471,7 @@ begin
     AllObserversStopTalking;
     FFootprintProperties.Free;
 
+    FIrrigationTypes.Free;
     FFarms.Free;
     FFmpAllotment.Free;
     FFmpClimate.Free;
@@ -13683,6 +13707,11 @@ begin
   Result := FImmobileComponents;
 end;
 
+function TPhastModel.GetIrrigationTypes: TIrrigationCollection;
+begin
+  result := FIrrigationTypes;
+end;
+
 procedure TPhastModel.SetHeight(const Value: integer);
 begin
   if GuiSettings <> nil then
@@ -13700,6 +13729,11 @@ procedure TPhastModel.SetImmobileComponents(
   const Value: TChemSpeciesCollection);
 begin
   FImmobileComponents.Assign(Value);
+end;
+
+procedure TPhastModel.SetIrrigationTypes(const Value: TIrrigationCollection);
+begin
+  FIrrigationTypes.Assign(Value);
 end;
 
 procedure TPhastModel.SetLayerStructure(const Value: TLayerStructure);
@@ -24186,6 +24220,62 @@ begin
   result := FarmProcess4TransientFarmIsSelected;
 end;
 
+function TPhastModel.FarmProcess4TransientIrrigationIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientIrrigationIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientIrrigationMultIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientIrrigationMultIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -26840,6 +26930,12 @@ begin
   ModflowPackages.FarmProcess4.FarmID.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfFmp4Irrigation(Sender: TObject);
+begin
+  ModflowPackages.FarmLandUse.MfFmp4Irrigation.Invalidate;
+  ModflowPackages.FarmLandUse.InvalidateMultTransienIrrigationArrays;
+end;
+
 procedure TCustomModel.InvalidateMfFmp4LandUseAreaFraction(Sender: TObject);
 begin
   ModflowPackages.FarmLandUse.MfFmp4LandUseAreaFraction.Invalidate;
@@ -29105,6 +29201,17 @@ end;
 procedure TCustomModel.InvalidateUztUnsatConc(Sender: TObject);
 begin
   ModflowPackages.Mt3dUnsatTransport.SatConcentrations.Invalidate;
+end;
+
+function TCustomModel.IrrigationUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.StaticIrrigationArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 function TCustomModel.IsLayerConfined(const LayerID: integer): boolean;
@@ -35961,6 +36068,28 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientIrrigationIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientIrrigationArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientIrrigationMultIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientIrrigationMultArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -37911,7 +38040,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 17;
+  OWHM4DataSets  = 18;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -40952,7 +41081,22 @@ begin
     'MODFLOW-OWHM version 2, LAND_USE: CONSUMPTIVE_USE';
   Inc(Index);
 
-//    StrConsumptiveUse = KConsumptiveUse;
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtInteger;
+  FDataArrayCreationRecords[Index].Name := KIrrigation;
+  FDataArrayCreationRecords[Index].DisplayName := StrKIrrigation;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.IrrigationUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE: IRRIGATION';
+  Inc(Index);
+
+//    StrKIrrigation = KIrrigation;
+
 
   {$ENDIF}
 
@@ -43144,7 +43288,9 @@ begin
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.Irrigation.FarmOption = foStatic)
-    and (FarmLandUse.Irrigation.ArrayList = alArray);
+    and (FarmLandUse.Irrigation.ArrayList = alArray)
+    and (IrrigationTypes.Count > 0)
+    ;
 {$ELSE}
    result := False;
 {$ENDIF}
@@ -49954,6 +50100,11 @@ begin
   end;
 end;
 
+function TChildModel.GetIrrigationTypes: TIrrigationCollection;
+begin
+  result := ParentModel.GetIrrigationTypes;
+end;
+
 function TChildModel.GetLayerGroupByLayer(const Layer: integer): TLayerGroup;
 begin
   result := inherited GetLayerGroupByLayer(ChildLayerToParentLayer(Layer));
@@ -50527,6 +50678,11 @@ procedure TChildModel.SetImmobileComponents(
   const Value: TChemSpeciesCollection);
 begin
   ParentModel.SetImmobileComponents(Value);
+end;
+
+procedure TChildModel.SetIrrigationTypes(const Value: TIrrigationCollection);
+begin
+  ParentModel.SetIrrigationTypes(Value);
 end;
 
 procedure TChildModel.SetLayerStructure(const Value: TLayerStructure);

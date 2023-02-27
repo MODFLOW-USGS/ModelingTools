@@ -1,4 +1,4 @@
-inherited frameScreenObjecFmp4ConsumptiveUse: TframeScreenObjecFmp4ConsumptiveUse
+inherited frameScreenObjectFmp4ConsumptiveUse: TframeScreenObjectFmp4ConsumptiveUse
   inherited pnlTop: TPanel
     inherited pnlCaption: TPanel
       ExplicitWidth = 408

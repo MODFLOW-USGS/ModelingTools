@@ -9,9 +9,8 @@ inherited frmImportPoints: TfrmImportPoints
   ClientWidth = 585
   KeyPreview = True
   OnKeyUp = FormKeyUp
-  ExplicitWidth = 601
-  ExplicitHeight = 557
-  PixelsPerInch = 96
+  ExplicitWidth = 597
+  ExplicitHeight = 556
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -21,11 +20,13 @@ inherited frmImportPoints: TfrmImportPoints
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 468
+    ExplicitWidth = 581
     DesignSize = (
       585
       49)
     object btnCancel: TBitBtn
-      Left = 496
+      Left = 492
       Top = 6
       Width = 83
       Height = 33
@@ -33,9 +34,10 @@ inherited frmImportPoints: TfrmImportPoints
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 488
     end
     object btnOK: TBitBtn
-      Left = 407
+      Left = 403
       Top = 6
       Width = 83
       Height = 33
@@ -44,9 +46,10 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 399
     end
     object btnHelp: TBitBtn
-      Left = 318
+      Left = 314
       Top = 6
       Width = 83
       Height = 33
@@ -55,6 +58,7 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 310
     end
   end
   object pcImportPoints: TPageControl
@@ -65,6 +69,8 @@ inherited frmImportPoints: TfrmImportPoints
     ActivePage = tabData
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 581
+    ExplicitHeight = 468
     object tabControls: TTabSheet
       Caption = 'Controls'
       object pnlRadioGroups: TPanel
@@ -283,6 +289,8 @@ inherited frmImportPoints: TfrmImportPoints
         Align = alBottom
         ParentColor = True
         TabOrder = 1
+        ExplicitTop = 389
+        ExplicitWidth = 573
         object lblRows: TLabel
           Left = 115
           Top = 13
@@ -345,6 +353,7 @@ inherited frmImportPoints: TfrmImportPoints
         AutoIncreaseRowCount = True
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
+        OnEndUpdate = dgDataEndUpdate
         ColorRangeSelection = False
         OnDistributeTextProgress = dgDataDistributeTextProgress
         Columns = <
@@ -396,8 +405,9 @@ inherited frmImportPoints: TfrmImportPoints
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        OnEndUpdate = dgDataEndUpdate
         WordWrapRowCaptions = False
+        ExplicitWidth = 573
+        ExplicitHeight = 389
         ColWidths = (
           64
           64)

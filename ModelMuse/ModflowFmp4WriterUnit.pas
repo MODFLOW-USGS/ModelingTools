@@ -16,7 +16,8 @@ type
     wlEfficiencyImprovement, wlBareRunoffFraction,
     wlBarePrecipitationConsumptionFraction, wlCapillaryFringe, wlSoilID,
     wlSurfaceK, wlBareEvap, wlDirectRecharge, wlPrecipPotConsumption,
-    wlNrdInfilLoc, wlLandUseAreaFraction, wlCropCoefficient, wlConsumptiveUse);
+    wlNrdInfilLoc, wlLandUseAreaFraction, wlCropCoefficient, wlConsumptiveUse,
+    wlIrrigation);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -78,6 +79,7 @@ type
     FLandUseAreaFraction: TList;
     FCropCoefficient: TList;
     FConsumptiveUse: TList;
+    FIrrigation: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -102,6 +104,7 @@ type
     FCropcoefficientFileStream: TFileStream;
     FLandUseAreaFractionFileStream: TFileStream;
     FConsumptiveUseFileStream: TFileStream;
+    FIrrigationFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -160,6 +163,9 @@ type
 
     procedure EvaluateConsumptiveUse;
     procedure WriteConsumptiveUse;
+
+    procedure EvaluateIrrigation;
+    procedure WriteIrrigation;
 
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
@@ -241,6 +247,8 @@ type
     procedure UpdateMultCropCoefficientDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateConsumptiveUseDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateMultConsumptiveUseDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateIrrigationDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateMultIrrigationDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -396,6 +404,7 @@ begin
   FLandUseAreaFraction := TObjectList.Create;
   FCropCoefficient := TObjectList.Create;
   FConsumptiveUse := TObjectList.Create;
+  FIrrigation := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -409,6 +418,7 @@ destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
 
+  FIrrigation.Free;
   FConsumptiveUse.Free;
   FCropCoefficient.Free;
   FLandUseAreaFraction.Free;
@@ -472,6 +482,7 @@ begin
   EvaluateLandUseAreaFraction;
   EvaluateCropCoefficient;
   EvaluateConsumptiveUse;
+  EvaluateIrrigation;
 end;
 
 procedure TModflowFmp4Writer.EvaluateBareEvap;
@@ -568,6 +579,16 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.EvaluateIrrigation;
+begin
+  if FLandUse.TransientIrrigationarrayUsed(nil)
+    or FLandUse.TransientIrrigationMultArrayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Irrigation value');
+    EvaluateTransientArrayData(wlIrrigation);
+  end;
+end;
+
 procedure TModflowFmp4Writer.EvaluateLandUseAreaFraction;
 begin
   if FLandUse.TransientLandUseAreaFractionArrayUsed(nil)
@@ -644,6 +665,7 @@ begin
   FreeAndNil(FLandUseAreaFractionFileStream);
   FreeAndNil(FCropcoefficientFileStream);
   FreeAndNil(FConsumptiveUseFileStream);
+  FreeAndNil(FIrrigationFileStream);
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -856,6 +878,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlIrrigation:
+      begin
+        result := ChangeFileExt(FBaseName, '.IRRIGATION');
+        if FIrrigationFileStream = nil then
+        begin
+          FIrrigationFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -927,6 +958,17 @@ begin
           result := ScreenObject.ModflowFmp4MultConsumptiveUse;
         end;
       end;
+    wlIrrigation:
+      begin
+        if FLandUse.LandUseOption = luoSingle then
+        begin
+          result := ScreenObject.ModflowFmp4Irrigation;
+        end
+        else
+        begin
+          result := ScreenObject.ModflowFmp4MultIrrigation;
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -967,6 +1009,7 @@ begin
     wlLandUseAreaFraction: result := FLandUseAreaFraction;
     wlCropCoefficient: result := FCropCoefficient;
     wlConsumptiveUse: result := FConsumptiveUse;
+    wlIrrigation: result := FIrrigation;
     else Assert(False)
   end;
 end;
@@ -1248,6 +1291,19 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.UpdateIrrigationDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateIrrigation;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientIrrigationarrayUsed;
+  UpdateRequirements.WriteLocation := wlIrrigation;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
 procedure TModflowFmp4Writer.UpdateLandUseAreaFractionDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
@@ -1283,6 +1339,19 @@ begin
   UpdateRequirements.TransientDataUsed := FLandUse.
     TransientCropCoefficientMultArrayUsed;
   UpdateRequirements.WriteLocation := wlCropCoefficient;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateMultIrrigationDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateIrrigation;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientIrrigationMultArrayUsed;
+  UpdateRequirements.WriteLocation := wlIrrigation;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
 end;
@@ -2206,9 +2275,79 @@ begin
   end;
   NewLine;
 
+  WriteString('  NIRRIGATE');
+  WriteInteger(Model.IrrigationTypes.Count);
+  NewLine;
+
   WriteString('END');
   NewLine;
   NewLine;
+end;
+
+procedure TModflowFmp4Writer.WriteIrrigation;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  DataArrayNames: TStringList;
+  CropIndex: Integer;
+begin
+  if FLandUse.Irrigation.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlIrrigation);
+
+  if (FLandUse.Irrigation.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlIrrigation;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtInteger;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP LAND_USE: IRRIGATION';
+    RequiredValues.ErrorID := 'FMP LAND_USE: IRRIGATION';
+    RequiredValues.ID := 'IRRIGATION';
+    RequiredValues.StaticDataName := KIrrigation;
+    RequiredValues.WriteTransientData :=
+      (FLandUse.Irrigation.FarmOption = foTransient);
+    RequiredValues.CheckError :=  'Invalid Irrigation value';
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FLandUse.Irrigation;
+
+    if FLandUse.LandUseOption = luoSingle then
+    begin
+      WriteFmpArrayData(AFileName, RequiredValues);
+    end
+    else
+    begin
+      if RequiredValues.WriteTransientData then
+      begin
+        RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
+        WriteFmpArrayData(AFileName, RequiredValues);
+      end
+      else
+      begin
+        DataArrayNames := TStringList.Create;
+        try
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            DataArrayNames.Add(
+              Model.FmpCrops[CropIndex].IrrigationDataArrayName);
+          end;
+          RequiredValues.LandUseStaticFileNames := DataArrayNames;
+          WriteLandUseArrayData(AFileName, RequiredValues);
+        finally
+          DataArrayNames.Free;
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    Assert(False);
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteLandUse;
@@ -2224,6 +2363,7 @@ begin
     WriteLandUseAreaFraction;
     WriteCropCoefficient;
     WriteConsumptiveUse;
+    WriteIrrigation;
 
     // remove this.
     WriteString('  ROOT_DEPTH STATIC CONSTANT 0.00001');
@@ -2753,6 +2893,11 @@ begin
         begin
           Assert(FConsumptiveUseFileStream <> nil);
           FConsumptiveUseFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlIrrigation:
+        begin
+          Assert(FIrrigationFileStream <> nil);
+          FIrrigationFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);

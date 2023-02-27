@@ -5515,6 +5515,8 @@ Type
     FMultLandUseAreaFractions: TMfBoundDispObjectList;
     FMfFmp4ConsumptiveUse: TModflowBoundaryDisplayTimeList;
     FMultConsumptiveUses: TMfBoundDispObjectList;
+    FMfFmp4Irrigation: TModflowBoundaryDisplayTimeList;
+    FMultIrrigations: TMfBoundDispObjectList;
     procedure SetAddedDemand(const Value: TFarmProperty);
     procedure SetCropCoeff(const Value: TFarmProperty);
     procedure SetET_IrrigFracCorrection(const Value: TFarmProperty);
@@ -5582,8 +5584,21 @@ Type
       NewUseList: TStringList);
     procedure InitializeMultConsumptiveUsesDisplay(Sender: TObject);
     procedure UpdateMultConsumptiveUsesArrays;
-    // Consumptive uset arrays for single and multiple land uses per cell
+    // Consumptive use arrays for single and multiple land uses per cell
     procedure InvalidateConsumptiveUse(Sender: TObject);
+
+    // Irrigation array for single land use per cell
+    function GetIrrigationBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeIrrigationDisplay(Sender: TObject);
+    procedure GetIrrigationUseList(Sender: TObject; NewUseList: TStringList);
+    // Irrigation arrays for multiple land uses per cell
+    function GetMultIrrigationBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure GetMultIrrigationsUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure InitializeMultIrrigationsDisplay(Sender: TObject);
+    procedure UpdateMultIrrigationsArrays;
+    // Irrigation arrays for single and multiple land uses per cell
+    procedure InvalidateIrrigation(Sender: TObject);
 
     procedure InvalidateTransientCropID;
 
@@ -5627,7 +5642,7 @@ Type
     function TransientCropCoefficientMultArrayUsed (Sender: TObject): boolean;
     procedure InvalidateMultTransienCropCoefficientArrays;
 
-    // Consumptive uset array for single land use per cell
+    // Consumptive use array for single land use per cell
     function TransientConsumptiveUseArrayUsed (Sender: TObject): boolean;
     function StaticConsumptiveUseArrayUsed (Sender: TObject): boolean;
     property MfFmp4ConsumptiveUse: TModflowBoundaryDisplayTimeList
@@ -5635,6 +5650,15 @@ Type
     // Consumptive use arrays for multiple land uses per cell
     function TransientConsumptiveUseMultArrayUsed (Sender: TObject): boolean;
     procedure InvalidateMultTransienConsumptiveUseArrays;
+
+    // Irrigation array for single land use per cell
+    function TransientIrrigationArrayUsed (Sender: TObject): boolean;
+    function StaticIrrigationArrayUsed (Sender: TObject): boolean;
+    property MfFmp4Irrigation: TModflowBoundaryDisplayTimeList
+      read FMfFmp4Irrigation;
+    // Irrigation arrays for multiple land uses per cell
+    function TransientIrrigationMultArrayUsed (Sender: TObject): boolean;
+    procedure InvalidateMultTransienIrrigationArrays;
 
     procedure InvalidateAll;
     procedure Loaded;
@@ -7126,6 +7150,7 @@ resourcestring
   StrLandUseAreaFracti = 'Land Use Area Fractions %s';
   StrCropCoefficientsS = 'Crop Coefficients %s';
   StrConsumptiveUsesS = 'Consumptive Use %s';
+  StrIrrigationsS = 'Irrigation %s';
 
 { TModflowPackageSelection }
 
@@ -26437,6 +26462,7 @@ begin
   InvalidateLandUseAreaFraction(nil);
   InvalidateCropCoefficient(nil);
   InvalidateConsumptiveUse(nil);
+  InvalidateIrrigation(nil);
 end;
 
 procedure TFarmProcess4LandUse.Assign(Source: TPersistent);
@@ -26552,10 +26578,21 @@ begin
       AddTimeList(FMfFmp4ConsumptiveUse);
     end;
 
+    FMfFmp4Irrigation := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4Irrigation.OnInitialize := InitializeIrrigationDisplay;
+    FMfFmp4Irrigation.OnGetUseList := GetIrrigationUseList;
+    FMfFmp4Irrigation.OnTimeListUsed := TransientIrrigationarrayUsed;
+    FMfFmp4Irrigation.Name := 'Irrigation';
+    FMfFmp4Irrigation.AddMethod := vamReplace;
+    if TransientIrrigationarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4Irrigation);
+    end;
+
     FMultLandUseAreaFractions := TMfBoundDispObjectList.Create;
     FMultCropCoefficients := TMfBoundDispObjectList.Create;
     FMultConsumptiveUses := TMfBoundDispObjectList.Create;
-
+    FMultIrrigations := TMfBoundDispObjectList.Create;
   end;
 
   FLandUseFraction.OnChangeFarmOption := InvalidateLandUseAreaFraction;
@@ -26566,14 +26603,19 @@ begin
 
   ConsumptiveUse.OnChangeFarmOption := InvalidateConsumptiveUse;
   ConsumptiveUse.OnChangeArrayList := InvalidateConsumptiveUse;
+
+  Irrigation.OnChangeFarmOption := InvalidateIrrigation;
+  Irrigation.OnChangeArrayList := InvalidateIrrigation;
 end;
 
 destructor TFarmProcess4LandUse.Destroy;
 begin
+  FMultIrrigations.Free;
   FMultConsumptiveUses.Free;
   FMultCropCoefficients.Free;
   FMultLandUseAreaFractions.Free;
 
+  FMfFmp4Irrigation.Free;
   FMfFmp4ConsumptiveUse.Free;
   FMfFmp4CropCoefficient.Free;
   FMfFmp4LandUseAreaFraction.Free;
@@ -26635,6 +26677,22 @@ function TFarmProcess4LandUse.GetCropIDBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
   result := ScreenObject.ModflowFmpCropID;
+end;
+
+function TFarmProcess4LandUse.GetIrrigationBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4Irrigation;
+end;
+
+procedure TFarmProcess4LandUse.GetIrrigationUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetIrrigationBoundary;
+  GetUseListOptions.Description := 'FMP Irrigation';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 function TFarmProcess4LandUse.GetLandUseAreaFractionBoundary(
@@ -26705,6 +26763,24 @@ begin
   UpdatePkgUseList(NewUseList, GetMultCropCoefficientBoundary, Index, DataSetName);
 end;
 
+function TFarmProcess4LandUse.GetMultIrrigationBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4MultIrrigation;
+end;
+
+procedure TFarmProcess4LandUse.GetMultIrrigationsUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FMultIrrigations.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+  DataSetName := Format(StrIrrigationsS,
+     [frmGoPhast.PhastModel.fmpCrops[Index].CropName]);
+  UpdatePkgUseList(NewUseList, GetMultIrrigationBoundary, Index, DataSetName);
+end;
+
 function TFarmProcess4LandUse.GetMultLandUseAreaFractionBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
@@ -26768,6 +26844,21 @@ begin
   try
     DisplayOptions.Display := MfFmp4CropID;
     DisplayOptions.UpdateDisplay := FarmWriter.UpdateCropIDDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InitializeIrrigationDisplay(Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := FMfFmp4Irrigation;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateIrrigationDisplay;
     InitializeFarmDisplay(DisplayOptions)
   finally
     FarmWriter.Free;
@@ -26858,6 +26949,27 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InitializeMultIrrigationsDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeLandUseDisplayOptions;
+  index: Integer;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    SetLength(DisplayOptions.Display, (FModel as TCustomModel).FmpCrops.Count);
+    for index := 0 to Length(DisplayOptions.Display) - 1 do
+    begin
+      DisplayOptions.Display[index] := FMultIrrigations[index];
+    end;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateMultIrrigationDisplay;
+    InitializeLandUseDisplay(DisplayOptions);
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InitializeMultLandUseAreaFractionDisplay(
   Sender: TObject);
 var
@@ -26938,6 +27050,23 @@ begin
   InvalidateModel;
 end;
 
+procedure TFarmProcess4LandUse.InvalidateIrrigation(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientIrrigationarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4Irrigation);
+    end
+    else
+    begin
+      RemoveTimeList(FMfFmp4Irrigation);
+    end;
+    UpdateMultIrrigationsArrays;
+  end;
+  InvalidateModel;
+end;
+
 procedure TFarmProcess4LandUse.InvalidateLandUseAreaFraction(Sender: TObject);
 begin
   if FModel <> nil  then
@@ -26987,6 +27116,16 @@ begin
   for index := 0 to FMultCropCoefficients.Count - 1 do
   begin
     FMultCropCoefficients[index].Invalidate;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InvalidateMultTransienIrrigationArrays;
+var
+  index: Integer;
+begin
+  for index := 0 to FMultIrrigations.Count - 1 do
+  begin
+    FMultIrrigations[index].Invalidate;
   end;
 end;
 
@@ -27148,6 +27287,29 @@ begin
     and (LandUseOption = luoSingle);
 end;
 
+function TFarmProcess4LandUse.StaticIrrigationArrayUsed(
+  Sender: TObject): boolean;
+var
+  LocalModel: TCustomModel;
+begin
+  result := PackageUsed(Sender)
+    and (Irrigation.FarmOption = foStatic)
+    and (Irrigation.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+  if result then
+  begin
+    if FModel = nil then
+    begin
+      LocalModel := FModel as TCustomModel;
+    end
+    else
+    begin
+      LocalModel := frmGoPhast.PhastModel;
+    end;
+    result := LocalModel.IrrigationTypes.Count > 0;
+  end;  
+end;
+
 procedure TFarmProcess4LandUse.InvalidateTransientCropID;
 begin
   if FModel <> nil then
@@ -27220,6 +27382,52 @@ begin
     and (LandUseOption = luoSingle);
 end;
 
+function TFarmProcess4LandUse.TransientIrrigationArrayUsed(
+  Sender: TObject): boolean;
+var
+  LocalModel: TCustomModel;
+begin
+  result := PackageUsed(Sender)
+    and (Irrigation.FarmOption = foTransient)
+    and (Irrigation.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+  if result then
+  begin
+    if FModel = nil then
+    begin
+      LocalModel := FModel as TCustomModel;
+    end
+    else
+    begin
+      LocalModel := frmGoPhast.PhastModel;
+    end;
+    result := LocalModel.IrrigationTypes.Count > 0;
+  end;  
+end;
+
+function TFarmProcess4LandUse.TransientIrrigationMultArrayUsed(
+  Sender: TObject): boolean;
+var
+  LocalModel: TCustomModel;
+begin
+  result := PackageUsed(Sender)
+    and (Irrigation.FarmOption = foTransient)
+    and (Irrigation.ArrayList = alArray)
+    and (LandUseOption = luoMultiple);
+  if result then
+  begin
+    if FModel = nil then
+    begin
+      LocalModel := FModel as TCustomModel;
+    end
+    else
+    begin
+      LocalModel := frmGoPhast.PhastModel;
+    end;
+    result := LocalModel.IrrigationTypes.Count > 0;
+  end;  
+end;
+
 function TFarmProcess4LandUse.TransientLandUseAreaFractionarrayUsed(
   Sender: TObject): boolean;
 begin
@@ -27254,6 +27462,15 @@ begin
     InitializeMultCropCoefficientsDisplay,
     GetMultCropCoefficientsUseList,
     StrCropCoefficientsS);
+end;
+
+procedure TFarmProcess4LandUse.UpdateMultIrrigationsArrays;
+begin
+  UpdateMultLandUseLists(TransientIrrigationMultArrayUsed(nil),
+    FMultIrrigations,
+    InitializeMultIrrigationsDisplay,
+    GetMultIrrigationsUseList,
+    StrIrrigationsS);
 end;
 
 procedure TFarmProcess4LandUse.UpdateMultLandUseLists(IsUsed: Boolean;

@@ -112,7 +112,8 @@ type
 
   {@name is designed to allow @link(TOrderedCollection) to identify
     changed and new items during @link(TOrderedCollection.Assign
-    TOrderedCollection.Assign).}
+    TOrderedCollection.Assign).
+    Descendents need to override @link(IsSame) and @link(Assign).}
   TOrderedItem = class(TCollectionItem)
   private
     {@name is the ID of a @classname that has been assigned to this

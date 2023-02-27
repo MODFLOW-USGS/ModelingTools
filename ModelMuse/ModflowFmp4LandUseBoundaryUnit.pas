@@ -4,7 +4,8 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, GoPhastTypes, System.Generics.Collections;
+  SubscriptionUnit, SparseDataSets, GoPhastTypes, System.Generics.Collections,
+  RbwParser;
 
 type
   {
@@ -113,9 +114,11 @@ type
     class function GetDescription: string; virtual; abstract;
     // override in descendents
     function MultipleCropsPerCellUsed: Boolean; virtual; abstract;
+    function GetDefaultDataType: TRbwDataType; virtual;
   public
     Destructor Destroy; override;
     procedure CreateLandUseTimeLists;
+    property DefaultDataType: TRbwDataType read GetDefaultDataType;
   end;
 
   TFmp4TimeListLinkClass = class of TFmp4LandUseTimeListLink;
@@ -286,7 +289,7 @@ type
 
 implementation
 
-uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
+uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
   AbstractGridUnit, ModflowPackageSelectionUnit;
 
@@ -475,13 +478,13 @@ var
   RowMax: Integer;
   ColMax: Integer;
   CropIndex: Integer;
-  ConcentrationArray: TDataArray;
-  LocalConcentrationPestSeries: string;
-  LocalConcentrationPestMethod: TPestParamMethod;
-  ConcentrationPestItems: TStringList;
-  LocalConcentrationPest: string;
-  ConcentrationTimeItems: TStringList;
-  LocalConcentrationTimeSeries: string;
+  LandUseArray: TDataArray;
+  LocalLandUsePestSeries: string;
+  LocalLandUsePestMethod: TPestParamMethod;
+  LandUsePestItems: TStringList;
+  LocalLandUsePest: string;
+  LandUseTimeItems: TStringList;
+  LocalLandUseTimeSeries: string;
 begin
   LocalModel := AModel as TCustomModel;
   Boundary := Boundaries[ItemIndex, AModel] as TFmp4LandUseStorage;
@@ -489,52 +492,92 @@ begin
   begin
     for CropIndex := 0 to LocalModel.FmpCrops.Count - 1 do
     begin
-      ConcentrationArray := DataSets[CropIndex];
-      ConcentrationArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
+      LandUseArray := DataSets[CropIndex];
+      LandUseArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
         LayerMax, RowMax, ColMax);
 
-      LocalConcentrationPestSeries := PestSeries[CropIndex];
-      LocalConcentrationPestMethod := PestMethods[CropIndex];
-      ConcentrationPestItems := PestItemNames[CropIndex];
-      LocalConcentrationPest := ConcentrationPestItems[ItemIndex];
-      ConcentrationTimeItems := TimeSeriesNames[CropIndex];
-      LocalConcentrationTimeSeries := ConcentrationTimeItems[ItemIndex];
+      LocalLandUsePestSeries := PestSeries[CropIndex];
+      LocalLandUsePestMethod := PestMethods[CropIndex];
+      LandUsePestItems := PestItemNames[CropIndex];
+      LocalLandUsePest := LandUsePestItems[ItemIndex];
+      LandUseTimeItems := TimeSeriesNames[CropIndex];
+      LocalLandUseTimeSeries := LandUseTimeItems[ItemIndex];
 
       BoundaryIndex := 0;
-      if LayerMin >= 0 then
+      if LandUseArray.DataType = rdtDouble then
       begin
-        for LayerIndex := LayerMin to LayerMax do
+        if LayerMin >= 0 then
         begin
-          if LocalModel.IsLayerSimulated(LayerIndex) then
+          for LayerIndex := LayerMin to LayerMax do
           begin
-            for RowIndex := RowMin to RowMax do
+            if LocalModel.IsLayerSimulated(LayerIndex) then
             begin
-              for ColIndex := ColMin to ColMax do
+              for RowIndex := RowMin to RowMax do
               begin
-                if ConcentrationArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+                for ColIndex := ColMin to ColMax do
                 begin
-                  with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+                  if LandUseArray.IsValue[LayerIndex, RowIndex, ColIndex] then
                   begin
-                    Cell.Layer := LayerIndex;
-                    Cell.Row := RowIndex;
-                    Cell.Column := ColIndex;
-                    LandUseData.Values[CropIndex] := ConcentrationArray.
-                      RealData[LayerIndex, RowIndex, ColIndex];
-                    LandUseData.ValueAnnotations[CropIndex] := ConcentrationArray.
-                      Annotation[LayerIndex, RowIndex, ColIndex];
-                    LandUseData.ValuePestNames[CropIndex] := LocalConcentrationPest;
-                    LandUseData.ValuePestSeriesNames[CropIndex] := LocalConcentrationPestSeries;
-                    LandUseData.ValuePestSeriesMethods[CropIndex] := LocalConcentrationPestMethod;
-                    LandUseData.ValueTimeSeriesNames[CropIndex] := LocalConcentrationTimeSeries;
+                    with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+                    begin
+                      Cell.Layer := LayerIndex;
+                      Cell.Row := RowIndex;
+                      Cell.Column := ColIndex;
+                      LandUseData.Values[CropIndex] := LandUseArray.
+                        RealData[LayerIndex, RowIndex, ColIndex];
+                      LandUseData.ValueAnnotations[CropIndex] := LandUseArray.
+                        Annotation[LayerIndex, RowIndex, ColIndex];
+                      LandUseData.ValuePestNames[CropIndex] := LocalLandUsePest;
+                      LandUseData.ValuePestSeriesNames[CropIndex] := LocalLandUsePestSeries;
+                      LandUseData.ValuePestSeriesMethods[CropIndex] := LocalLandUsePestMethod;
+                      LandUseData.ValueTimeSeriesNames[CropIndex] := LocalLandUseTimeSeries;
+                    end;
+                    Inc(BoundaryIndex);
                   end;
-                  Inc(BoundaryIndex);
+                end;
+              end;
+            end;
+          end;
+        end;
+      end
+      else
+      begin
+        Assert(LandUseArray.DataType = rdtInteger);
+        if LayerMin >= 0 then
+        begin
+          for LayerIndex := LayerMin to LayerMax do
+          begin
+            if LocalModel.IsLayerSimulated(LayerIndex) then
+            begin
+              for RowIndex := RowMin to RowMax do
+              begin
+                for ColIndex := ColMin to ColMax do
+                begin
+                  if LandUseArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+                  begin
+                    with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+                    begin
+                      Cell.Layer := LayerIndex;
+                      Cell.Row := RowIndex;
+                      Cell.Column := ColIndex;
+                      LandUseData.IntValues[CropIndex] := LandUseArray.
+                        IntegerData[LayerIndex, RowIndex, ColIndex];
+                      LandUseData.ValueAnnotations[CropIndex] := LandUseArray.
+                        Annotation[LayerIndex, RowIndex, ColIndex];
+                      LandUseData.ValuePestNames[CropIndex] := LocalLandUsePest;
+                      LandUseData.ValuePestSeriesNames[CropIndex] := LocalLandUsePestSeries;
+                      LandUseData.ValuePestSeriesMethods[CropIndex] := LocalLandUsePestMethod;
+                      LandUseData.ValueTimeSeriesNames[CropIndex] := LocalLandUseTimeSeries;
+                    end;
+                    Inc(BoundaryIndex);
+                  end;
                 end;
               end;
             end;
           end;
         end;
       end;
-      ConcentrationArray.CacheData;
+      LandUseArray.CacheData;
     end;
   end;
 
@@ -798,14 +841,12 @@ end;
 
 function TFmp4LandUse_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
-  result := '';
-  Assert(False);
+  Result := FValues.LandUseData.ValueAnnotations[Index];
 end;
 
 function TFmp4LandUse_Cell.GetIntegerValue(Index: integer; AModel: TBaseModel): integer;
 begin
-  result := 0;
-  Assert(False);
+  Result := FValues.LandUseData.IntValues[Index];
 end;
 
 function TFmp4LandUse_Cell.GetLandUseAnnotation(const Index: Integer): string;
@@ -1308,6 +1349,7 @@ begin
         LandUseTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
         LandUseTimeList.NonParamDescription := PhastModel.FmpCrops[CropIndex].CropName;
         LandUseTimeList.ParamDescription :=  LandUseTimeList.NonParamDescription;
+        LandUseTimeList.DataType := DefaultDataType;
         if Model <> nil then
         begin
           LandUseTimeList.OnInvalidate := FOnInvalidateLanduse;
@@ -1347,6 +1389,11 @@ destructor TFmp4LandUseTimeListLink.Destroy;
 begin
   FLandUseList.Free;
   inherited;
+end;
+
+function TFmp4LandUseTimeListLink.GetDefaultDataType: TRbwDataType;
+begin
+  result := rdtDouble;
 end;
 
 procedure TFmp4LandUseTimeListLink.RemoveLandUseTimeLists(CropIndex: Integer);

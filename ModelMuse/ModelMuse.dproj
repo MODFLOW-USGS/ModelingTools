@@ -3,7 +3,7 @@
         <ProjectGuid>{DBACE99F-0221-4660-936F-15A30233FA90}</ProjectGuid>
         <MainSource>ModelMuse.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
@@ -1987,9 +1987,8 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="ModflowFmp4CropCoefficientUnit.pas"/>
-        <DCCReference Include="frameScreenObjecFmp4CropCoefficientUnit.pas">
-            <Form>frameScreenObjecFmp4CropCoefficient</Form>
-            <FormType>dfm</FormType>
+        <DCCReference Include="frameScreenObjectFmp4CropCoefficientUnit.pas">
+            <Form>frameScreenObjectFmp4CropCoefficient</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="UpdateDataArrayUnit.pas"/>
@@ -2015,13 +2014,29 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="ModflowFmp4ConsumptiveUseUnit.pas"/>
-        <DCCReference Include="frameScreenObjecFmp4ConsumptiveUseUnit.pas">
-            <Form>frameScreenObjecFmp4ConsumptiveUse</Form>
+        <DCCReference Include="frameScreenObjectFmp4ConsumptiveUseUnit.pas">
+            <Form>frameScreenObjectFmp4ConsumptiveUse</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="frameScreenObjectMultConsumptiveUseUnit.pas">
             <Form>frameScreenObjectMultConsumptiveUse</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="ModflowFmpIrrigationUnit.pas"/>
+        <DCCReference Include="frmIrrigationTypesUnit.pas">
+            <Form>frmIrrigationTypes</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="ModflowFmp4IrrigationSpatialUnit.pas"/>
+        <DCCReference Include="frameScreenObjectMultIrrigationUnit.pas">
+            <Form>frameScreenObjectMultIrrigation</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="frameScreenObjectFmp4IrrigationUnit.pas">
+            <Form>frameScreenObjectFmp4Irrigation</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -2086,7 +2101,19 @@
                 <DeployFile LocalName="Beta\Win32\ModelMuse.exe" Configuration="Beta" Class="ProjectOutput"/>
                 <DeployFile LocalName="Beta\Win64\ModelMuse.exe" Configuration="Beta" Class="ProjectOutput"/>
                 <DeployFile LocalName="Debug\Win32\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="Debug\Win32\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>ModelMuse.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Debug\Win32\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols"/>
+                <DeployFile LocalName="Debug\Win32\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win32">
+                        <RemoteName>ModelMuse.rsm</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win64">

@@ -2163,6 +2163,10 @@ inherited frmGoPhast: TfrmGoPhast
           Action = acFarmCrops
           GroupIndex = 1
         end
+        object IrrigationTypes1: TMenuItem
+          Action = acFarmIrrigationTypes
+          GroupIndex = 1
+        end
         object FarmSoils1: TMenuItem
           Action = acFarmSoils
           GroupIndex = 1
@@ -3747,6 +3751,11 @@ inherited frmGoPhast: TfrmGoPhast
       Hint = 'Run MODFLOW-OWHM version 2'
       ImageIndex = 72
       OnExecute = acRunModflowOWHM_V2Execute
+    end
+    object acFarmIrrigationTypes: TAction
+      Category = 'Model'
+      Caption = 'Irrigation Types...'
+      OnExecute = acFarmIrrigationTypesExecute
     end
   end
   object ilDisabledImageList: TImageList

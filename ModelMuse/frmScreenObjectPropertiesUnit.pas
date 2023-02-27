@@ -59,13 +59,14 @@ uses System.UITypes, Windows,
   frameScreenObjectFmp4PrecipPotConsumptionUnit,
   frameScreenObjectFmp4NrdInfilLocUnit,
   frameScreenObjectCustomFmp4IntBoundaryUnit,
-  frameScreenObjecFmp4CropCoefficientUnit,
+  frameScreenObjectFmp4CropCoefficientUnit,
   frameScreenObjectLandUseAreaFractionUnit,
   frameScreenObjectCustomFmp4MultBoundaryUnit,
   frameScreenObjectMultLandUseAreaFractionUnit,
   frameScreenObjectMultCropCoefficientsUnit,
-  frameScreenObjecFmp4ConsumptiveUseUnit,
-  frameScreenObjectMultConsumptiveUseUnit;
+  frameScreenObjectFmp4ConsumptiveUseUnit,
+  frameScreenObjectMultConsumptiveUseUnit, frameScreenObjectFmp4IrrigationUnit,
+  frameScreenObjectMultIrrigationUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -440,13 +441,17 @@ type
     jvspFmp4LandUseAreaFractionMult: TJvStandardPage;
     frameMultLandUseAreaFraction: TframeScreenObjectMultLandUseAreaFraction;
     jvspFmp4CropCoefficient: TJvStandardPage;
-    frameFmp4CropCoefficient: TframeScreenObjecFmp4CropCoefficient;
+    frameFmp4CropCoefficient: TframeScreenObjectFmp4CropCoefficient;
     jvspFmp4CropCoefficientMult: TJvStandardPage;
     frameFmp4MultCropCoefficients: TframeScreenObjectMultCropCoefficients;
     jvspFmp4ConsumptiveUse: TJvStandardPage;
-    frameFmp4ConsumptiveUse: TframeScreenObjecFmp4ConsumptiveUse;
+    frameFmp4ConsumptiveUse: TframeScreenObjectFmp4ConsumptiveUse;
     jvspFmp4ConsumptiveUseMult: TJvStandardPage;
     frameFmp4MultConsumptiveUse: TframeScreenObjectMultConsumptiveUse;
+    jvspFmp4Irrigation: TJvStandardPage;
+    frameFmp4Irrigation: TframeScreenObjectFmp4Irrigation;
+    jvspFmp4IrrigationMult: TJvStandardPage;
+    frameFmp4MultIrrigation: TframeScreenObjectMultIrrigation;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1793,6 +1798,8 @@ type
     FFmp4MultCropCoefficientNode: TJvPageIndexNode;
     FFmp4ConsumptiveUseNode: TJvPageIndexNode;
     FFmp4MultConsumptiveUseNode: TJvPageIndexNode;
+    FFmp4IrrigationNode: TJvPageIndexNode;
+    FFmp4MultIrrigationNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2355,6 +2362,14 @@ type
     procedure CreateFmp4MultConsumptiveUseNode;
     procedure GetFmp4MultConsumptiveUseBoundary(const ScreenObjectList: TList);
 
+    procedure Fmp4IrrigationChanged(Sender: TObject);
+    procedure CreateFmp4IrrigationNode;
+    procedure GetFmp4IrrigationBoundary(const ScreenObjectList: TList);
+
+    procedure Fmp4MultIrrigationChanged(Sender: TObject);
+    procedure CreateFmp4MultIrrigationNode;
+    procedure GetFmp4MultIrrigationBoundary(const ScreenObjectList: TList);
+
     // @name is set to @true when the @classname has stored values of the
     // @link(TScreenObject)s being edited.
     property IsLoaded: boolean read FIsLoaded write SetIsLoaded;
@@ -2655,7 +2670,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowFmp4PotentialEvapBareUnit, ModflowFmp4DirectRechargeUnit,
   ModflowFmp4PrecipPotConsumptionUnit, ModflowFmp4NrdInfilLocationUnit,
   ModflowFmp4CropCoefficientUnit, ModflowFmp4LandUseAreaFractionUnit,
-  ModflowFmp4ConsumptiveUseUnit;
+  ModflowFmp4ConsumptiveUseUnit, ModflowFmp4IrrigationSpatialUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4146,6 +4161,14 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4IrrigationNode then
+    begin
+      // do nothing
+    end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4MultIrrigationNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4306,6 +4329,8 @@ begin
   CreateFmp4MultCropCoefficientNode;
   CreateFmp4ConsumptiveUseNode;
   CreateFmp4MultConsumptiveUseNode;
+  CreateFmp4IrrigationNode;
+  CreateFmp4MultIrrigationNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -5141,6 +5166,8 @@ begin
         BoundaryNodeList.Add(FFmp4MultCropCoefficientNode);
         BoundaryNodeList.Add(FFmp4ConsumptiveUseNode);
         BoundaryNodeList.Add(FFmp4MultConsumptiveUseNode);
+        BoundaryNodeList.Add(FFmp4IrrigationNode);
+        BoundaryNodeList.Add(FFmp4MultIrrigationNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -6070,6 +6097,15 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4IrrigationChanged(Sender: TObject);
+begin
+  if (FFmp4IrrigationNode <> nil)
+    and (FFmp4IrrigationNode.StateIndex <> 3) then
+  begin
+    FFmp4IrrigationNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4LandUseAreaFractionChanged(
   Sender: TObject);
 begin
@@ -6097,6 +6133,15 @@ begin
     and (FFmp4MultCropCoefficientNode.StateIndex <> 3) then
   begin
     FFmp4MultCropCoefficientNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4MultIrrigationChanged(Sender: TObject);
+begin
+  if (FFmp4MultIrrigationNode <> nil)
+    and (FFmp4MultIrrigationNode.StateIndex <> 3) then
+  begin
+    FFmp4MultIrrigationNode.StateIndex := 2;
   end;
 end;
 
@@ -6213,6 +6258,8 @@ begin
   frameFmp4MultCropCoefficients.OnEdited := Fmp4MultCropCoefficientChanged;
   frameFmp4ConsumptiveUse.OnEdited := Fmp4ConsumptiveUseChanged;
   frameFmp4MultConsumptiveUse.OnEdited := Fmp4MultConsumptiveUseChanged;
+  frameFmp4Irrigation.OnEdited := Fmp4IrrigationChanged;
+  frameFmp4MultIrrigation.OnEdited := Fmp4MultIrrigationChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7481,6 +7528,14 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4IrrigationNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FFmp4MultIrrigationNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8526,6 +8581,22 @@ begin
       (FFmp4MultConsumptiveUseNode.StateIndex = 2),
       (FFmp4MultConsumptiveUseNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientConsumptiveUseMultIsSelected);
+  end;
+
+  if (FFmp4IrrigationNode <> nil) then
+  begin
+    frameFmp4Irrigation.SetData(FNewProperties,
+      (FFmp4IrrigationNode.StateIndex = 2),
+      (FFmp4IrrigationNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientIrrigationIsSelected);
+  end;
+
+  if (FFmp4MultIrrigationNode <> nil) then
+  begin
+    frameFmp4MultIrrigation.SetData(FNewProperties,
+      (FFmp4MultIrrigationNode.StateIndex = 2),
+      (FFmp4MultIrrigationNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientIrrigationMultIsSelected);
   end;
 end;
 
@@ -14961,6 +15032,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4IrrigationNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4IrrigationNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientIrrigationIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Irrigation in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4Irrigation.PageIndex;
+    frameFmp4Irrigation.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4IrrigationNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4LandUseAreaFractionNode;
 var
   Node: TJvPageIndexNode;
@@ -15009,6 +15097,23 @@ begin
     frameFmp4MultCropCoefficients.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FFmp4MultCropCoefficientNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4MultIrrigationNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4MultIrrigationNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientIrrigationMultIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Irrigaton in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4IrrigationMult.PageIndex;
+    frameFmp4MultIrrigation.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4MultIrrigationNode := Node;
   end;
 end;
 
@@ -17826,6 +17931,32 @@ begin
   frameFmp4EfficiencyImprovement.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4IrrigationBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4IrrigationBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientIrrigationIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4Irrigation;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4IrrigationNode <> nil then
+  begin
+    FFmp4IrrigationNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4Irrigation.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetFmp4LandUseAreaFractionBoundary(
   const ScreenObjectList: TList);
 var
@@ -17902,6 +18033,32 @@ begin
     FFmp4MultCropCoefficientNode.StateIndex := Ord(State)+1;
   end;
   frameFmp4MultCropCoefficients.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4MultIrrigationBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4MultIrrigationBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientIrrigationMultIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4MultIrrigation;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4MultIrrigationNode <> nil then
+  begin
+    FFmp4MultIrrigationNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4MultIrrigation.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetFmp4MultLandUseAreaFractionBoundary(
@@ -18460,6 +18617,8 @@ begin
   GetFmp4MultCropCoefficientBoundary(AScreenObjectList);
   GetFmp4ConsumptiveUseBoundary(AScreenObjectList);
   GetFmp4MultConsumptiveUseBoundary(AScreenObjectList);
+  GetFmp4IrrigationBoundary(AScreenObjectList);
+  GetFmp4MultIrrigationBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 

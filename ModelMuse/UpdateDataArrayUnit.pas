@@ -3,7 +3,7 @@ unit UpdateDataArrayUnit;
 interface
 
 uses
-  Classes, DataSetUnit, GoPhastTypes;
+  Classes, DataSetUnit, GoPhastTypes, RbwParser;
 
 type
   TUpdataDataArrayRecord = record
@@ -16,7 +16,8 @@ type
     AssociatedDataSets: string;
     ShouldCreate: Boolean;
     Classification: string;
-    Orientation: TDataSetOrientation
+    Orientation: TDataSetOrientation;
+    DataType: TRbwDataType;
   end;
 
 procedure UpdateOrCreateDataArray(const UpdataDat: TUpdataDataArrayRecord); overload;
@@ -24,7 +25,7 @@ procedure UpdateOrCreateDataArray(const UpdataDat: TUpdataDataArrayRecord); over
 implementation
 
 uses
-  PhastModelUnit, RbwParser;
+  PhastModelUnit;
 
 procedure UpdateOrCreateDataArray(const UpdataDat: TUpdataDataArrayRecord); overload;
 var
@@ -56,7 +57,8 @@ begin
         DataArray := LocalModel.DataArrayManager.CreateNewDataArray(
           TDataArray, UpdataDat.NewName, UpdataDat.NewFormula, UpdataDat.NewDisplayName,
           [dcName, dcType, dcOrientation, dcEvaluatedAt],
-          rdtDouble, eaBlocks, UpdataDat.Orientation, UpdataDat.Classification);
+          UpdataDat.DataType, eaBlocks, UpdataDat.Orientation,
+          UpdataDat.Classification);
       end;
     end;
     if DataArray <> nil then
