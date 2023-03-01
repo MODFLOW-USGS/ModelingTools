@@ -1,0 +1,2 @@
+inherited frameScreenObjectFmp4RootDepth: TframeScreenObjectFmp4RootDepth
+end

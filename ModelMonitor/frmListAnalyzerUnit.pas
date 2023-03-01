@@ -1886,7 +1886,7 @@ begin
               for LineIndex := 0 to Lines.Count - 1 do
               begin
                 ALine := Lines[LineIndex];
-                if Trim(ALine) = '' then
+                if (Trim(ALine) = '') or ((Trim(ALine) = '1')) then
                 begin
                   EndFound := True;
                   break;

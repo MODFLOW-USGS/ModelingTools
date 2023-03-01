@@ -66,7 +66,8 @@ uses System.UITypes, Windows,
   frameScreenObjectMultCropCoefficientsUnit,
   frameScreenObjectFmp4ConsumptiveUseUnit,
   frameScreenObjectMultConsumptiveUseUnit, frameScreenObjectFmp4IrrigationUnit,
-  frameScreenObjectMultIrrigationUnit;
+  frameScreenObjectMultIrrigationUnit, frameScreenObjectFmp4RootDepthUnit,
+  frameScreenObjectMultRootDepthUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -452,6 +453,10 @@ type
     frameFmp4Irrigation: TframeScreenObjectFmp4Irrigation;
     jvspFmp4IrrigationMult: TJvStandardPage;
     frameFmp4MultIrrigation: TframeScreenObjectMultIrrigation;
+    jvspFmp4RootDepth: TJvStandardPage;
+    frameFmp4RootDepth: TframeScreenObjectFmp4RootDepth;
+    jvspFmp4RootDepthMult: TJvStandardPage;
+    frameFmp4MultRootDepth: TframeScreenObjectMultRootDepth;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1800,6 +1805,8 @@ type
     FFmp4MultConsumptiveUseNode: TJvPageIndexNode;
     FFmp4IrrigationNode: TJvPageIndexNode;
     FFmp4MultIrrigationNode: TJvPageIndexNode;
+    FFmp4RootDepthNode: TJvPageIndexNode;
+    FFmp4MultRootDepthNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2370,6 +2377,14 @@ type
     procedure CreateFmp4MultIrrigationNode;
     procedure GetFmp4MultIrrigationBoundary(const ScreenObjectList: TList);
 
+    procedure Fmp4RootDepthChanged(Sender: TObject);
+    procedure CreateFmp4RootDepthNode;
+    procedure GetFmp4RootDepthBoundary(const ScreenObjectList: TList);
+
+    procedure Fmp4MultRootDepthChanged(Sender: TObject);
+    procedure CreateFmp4MultRootDepthNode;
+    procedure GetFmp4MultRootDepthBoundary(const ScreenObjectList: TList);
+
     // @name is set to @true when the @classname has stored values of the
     // @link(TScreenObject)s being edited.
     property IsLoaded: boolean read FIsLoaded write SetIsLoaded;
@@ -2670,7 +2685,8 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowFmp4PotentialEvapBareUnit, ModflowFmp4DirectRechargeUnit,
   ModflowFmp4PrecipPotConsumptionUnit, ModflowFmp4NrdInfilLocationUnit,
   ModflowFmp4CropCoefficientUnit, ModflowFmp4LandUseAreaFractionUnit,
-  ModflowFmp4ConsumptiveUseUnit, ModflowFmp4IrrigationSpatialUnit;
+  ModflowFmp4ConsumptiveUseUnit, ModflowFmp4IrrigationSpatialUnit,
+  ModflowFmp4RootDepthUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4169,6 +4185,14 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4RootDepthNode then
+    begin
+      // do nothing
+    end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4MultRootDepthNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4331,6 +4355,8 @@ begin
   CreateFmp4MultConsumptiveUseNode;
   CreateFmp4IrrigationNode;
   CreateFmp4MultIrrigationNode;
+  CreateFmp4RootDepthNode;
+  CreateFmp4MultRootDepthNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -5168,6 +5194,8 @@ begin
         BoundaryNodeList.Add(FFmp4MultConsumptiveUseNode);
         BoundaryNodeList.Add(FFmp4IrrigationNode);
         BoundaryNodeList.Add(FFmp4MultIrrigationNode);
+        BoundaryNodeList.Add(FFmp4RootDepthNode);
+        BoundaryNodeList.Add(FFmp4MultRootDepthNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -6155,6 +6183,15 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4MultRootDepthChanged(Sender: TObject);
+begin
+  if (FFmp4MultRootDepthNode <> nil)
+    and (FFmp4MultRootDepthNode.StateIndex <> 3) then
+  begin
+    FFmp4MultRootDepthNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4NrdInfilLocationChanged(
   Sender: TObject);
 begin
@@ -6172,6 +6209,15 @@ begin
     and (FFmp4PrecipPotConsumptionNode.StateIndex <> 3) then
   begin
     FFmp4PrecipPotConsumptionNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4RootDepthChanged(Sender: TObject);
+begin
+  if (FFmp4RootDepthNode <> nil)
+    and (FFmp4RootDepthNode.StateIndex <> 3) then
+  begin
+    FFmp4RootDepthNode.StateIndex := 2;
   end;
 end;
 
@@ -6260,6 +6306,8 @@ begin
   frameFmp4MultConsumptiveUse.OnEdited := Fmp4MultConsumptiveUseChanged;
   frameFmp4Irrigation.OnEdited := Fmp4IrrigationChanged;
   frameFmp4MultIrrigation.OnEdited := Fmp4MultIrrigationChanged;
+  frameFmp4RootDepth.OnEdited := Fmp4RootDepthChanged;
+  frameFmp4MultRootDepth.OnEdited := Fmp4MultRootDepthChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7536,6 +7584,14 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4RootDepthNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FFmp4MultRootDepthNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8597,6 +8653,22 @@ begin
       (FFmp4MultIrrigationNode.StateIndex = 2),
       (FFmp4MultIrrigationNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientIrrigationMultIsSelected);
+  end;
+
+  if (FFmp4RootDepthNode <> nil) then
+  begin
+    frameFmp4RootDepth.SetData(FNewProperties,
+      (FFmp4RootDepthNode.StateIndex = 2),
+      (FFmp4RootDepthNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientRootDepthIsSelected);
+  end;
+
+  if (FFmp4MultRootDepthNode <> nil) then
+  begin
+    frameFmp4MultRootDepth.SetData(FNewProperties,
+      (FFmp4MultRootDepthNode.StateIndex = 2),
+      (FFmp4MultRootDepthNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientRootDepthMultIsSelected);
   end;
 end;
 
@@ -14998,6 +15070,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4RootDepthNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4RootDepthNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientRootDepthIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Root Depth in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4RootDepth.PageIndex;
+    frameFmp4RootDepth.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4RootDepthNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4EfficiencyImprovementNode;
 var
   Node: TJvPageIndexNode;
@@ -15131,6 +15220,23 @@ begin
     frameMultLandUseAreaFraction.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FFmp4MultLandUseAreaFractionNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4MultRootDepthNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4MultRootDepthNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientRootDepthMultIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Root Depth in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4RootDepthMult.PageIndex;
+    frameFmp4MultRootDepth.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4MultRootDepthNode := Node;
   end;
 end;
 
@@ -18087,6 +18193,32 @@ begin
   frameMultLandUseAreaFraction.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4MultRootDepthBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4MultRootDepthBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientRootDepthMultIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4MultRootDepth;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4MultRootDepthNode <> nil then
+  begin
+    FFmp4MultRootDepthNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4MultRootDepth.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetFmp4NrdInfilLocationBoundary(
   const ScreenObjectList: TList);
 var
@@ -18137,6 +18269,32 @@ begin
     FFmp4PrecipPotConsumptionNode.StateIndex := Ord(State)+1;
   end;
   frameFmp4PrecipPotConsumption.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4RootDepthBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4RootDepthBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientRootDepthIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4RootDepth;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4RootDepthNode <> nil then
+  begin
+    FFmp4RootDepthNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4RootDepth.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetLakeMf6Boundary(
@@ -18619,6 +18777,8 @@ begin
   GetFmp4MultConsumptiveUseBoundary(AScreenObjectList);
   GetFmp4IrrigationBoundary(AScreenObjectList);
   GetFmp4MultIrrigationBoundary(AScreenObjectList);
+  GetFmp4RootDepthBoundary(AScreenObjectList);
+  GetFmp4MultRootDepthBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 

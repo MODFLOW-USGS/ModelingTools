@@ -25,6 +25,8 @@ object frameFileListHandler: TframeFileListHandler
     OnMouseMove = vstIndexLinesMouseMove
     OnNodeClick = vstIndexLinesNodeClick
     OnNodeDblClick = vstIndexLinesNodeDblClick
+    Touch.InteractiveGestures = [igPan, igPressAndTap]
+    Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
     Columns = <>
   end
 end

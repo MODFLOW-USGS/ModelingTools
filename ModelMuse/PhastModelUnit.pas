@@ -579,6 +579,7 @@ const
   KLandUseAreaFraction = 'Land_Use_Area_Fraction';
   KConsumptiveUse = 'Consumptive_Use';
   KIrrigation = 'Irrigation';
+  KRootDepth = 'RootDepth';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2561,6 +2562,7 @@ that affects the model output should also have a comment. }
     function LandUseAreaFractionUsed(Sender: TObject): Boolean;
     function ConsumptiveUseUsed(Sender: TObject): Boolean;
     function IrrigationUsed(Sender: TObject): Boolean;
+    function RootDepthUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2618,6 +2620,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientConsumptiveUseMultIsSelected: Boolean; virtual;
     function FarmProcess4TransientIrrigationIsSelected: Boolean; virtual;
     function FarmProcess4TransientIrrigationMultIsSelected: Boolean; virtual;
+    function FarmProcess4TransientRootDepthIsSelected: Boolean; virtual;
+    function FarmProcess4TransientRootDepthMultIsSelected: Boolean; virtual;
 
     function GetIrrigationTypes: TIrrigationCollection; virtual; abstract;
     procedure SetIrrigationTypes(const Value: TIrrigationCollection); virtual; abstract;
@@ -3301,6 +3305,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4CropCoefficient(Sender: TObject);
     procedure InvalidateMfFmp4ConsumptiveUse(Sender: TObject);
     procedure InvalidateMfFmp4Irrigation(Sender: TObject);
+    procedure InvalidateMfFmp4RootDepth(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4842,6 +4847,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientConsumptiveUseMultIsSelected: Boolean; override;
     function FarmProcess4TransientIrrigationIsSelected: Boolean; override;
     function FarmProcess4TransientIrrigationMultIsSelected: Boolean; override;
+    function FarmProcess4TransientRootDepthIsSelected: Boolean; override;
+    function FarmProcess4TransientRootDepthMultIsSelected: Boolean; override;
 
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
@@ -6262,6 +6269,7 @@ resourcestring
   StrLandUseAreaFraction = KLandUseAreaFraction;
   StrConsumptiveUse = KConsumptiveUse;
   StrKIrrigation = KIrrigation;
+  StrKRootDepth = KRootDepth;
 
 
 const
@@ -24452,6 +24460,62 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientRootDepthIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientRootDepthIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientRootDepthMultIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientRootDepthMultIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.Farm4ProcessUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -26955,6 +27019,12 @@ end;
 procedure TCustomModel.InvalidateMfFmp4PrecipPotConsumption(Sender: TObject);
 begin
   ModflowPackages.FarmClimate4.MfFmp4PrecipPotConsumption.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4RootDepth(Sender: TObject);
+begin
+  ModflowPackages.FarmLandUse.MfFmp4RootDepth.Invalidate;
+  ModflowPackages.FarmLandUse.InvalidateMultTransienRootDepthArrays;
 end;
 
 procedure TCustomModel.InvalidateMfFmpCropID(Sender: TObject);
@@ -36134,6 +36204,28 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientRootDepthIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientRootDepthArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientRootDepthMultIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientRootDepthMultArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcessUsed(Sender: TObject): boolean;
 begin
   result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
@@ -38040,7 +38132,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 18;
+  OWHM4DataSets  = 19;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -41095,6 +41187,20 @@ begin
     'MODFLOW-OWHM version 2, LAND_USE: IRRIGATION';
   Inc(Index);
 
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KRootDepth;
+  FDataArrayCreationRecords[Index].DisplayName := StrKRootDepth;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.RootDepthUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE: ROOT_DEPTH';
+  Inc(Index);
+
 //    StrKIrrigation = KIrrigation;
 
 
@@ -42463,6 +42569,17 @@ end;
 function TCustomModel.ModflowUsed(Sender: TObject): boolean;
 begin
   result := ModelSelection in ModflowSelection;
+end;
+
+function TCustomModel.RootDepthUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.StaticRootDepthArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 function TCustomModel.RouteUzfDischarge(Sender: TObject): boolean;

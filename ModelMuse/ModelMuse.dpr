@@ -812,7 +812,10 @@ uses
   frmIrrigationTypesUnit in 'frmIrrigationTypesUnit.pas' {frmIrrigationTypes},
   ModflowFmp4IrrigationSpatialUnit in 'ModflowFmp4IrrigationSpatialUnit.pas',
   frameScreenObjectMultIrrigationUnit in 'frameScreenObjectMultIrrigationUnit.pas' {frameScreenObjectMultIrrigation: TFrame},
-  frameScreenObjectFmp4IrrigationUnit in 'frameScreenObjectFmp4IrrigationUnit.pas' {frameScreenObjectFmp4Irrigation: TFrame};
+  frameScreenObjectFmp4IrrigationUnit in 'frameScreenObjectFmp4IrrigationUnit.pas' {frameScreenObjectFmp4Irrigation: TFrame},
+  ModflowFmp4RootDepthUnit in 'ModflowFmp4RootDepthUnit.pas',
+  frameScreenObjectFmp4RootDepthUnit in 'frameScreenObjectFmp4RootDepthUnit.pas' {frameScreenObjectFmp4RootDepth: TFrame},
+  frameScreenObjectMultRootDepthUnit in 'frameScreenObjectMultRootDepthUnit.pas' {frameScreenObjectMultRootDepth: TFrame};
 
 {$R *.res}
 

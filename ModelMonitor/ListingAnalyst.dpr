@@ -1,6 +1,11 @@
 program ListingAnalyst;
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   Forms,
   frmListAnalyzerUnit in 'frmListAnalyzerUnit.pas' {frmMain},
   FileIndexUnit in 'FileIndexUnit.pas',

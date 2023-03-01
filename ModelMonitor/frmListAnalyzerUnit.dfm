@@ -11,13 +11,11 @@ object frmMain: TfrmMain
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
-  OldCreateOrder = True
   Scaled = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 19
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 273
@@ -41,6 +39,7 @@ object frmMain: TfrmMain
     Images = ilTabFaces
     MultiLine = True
     TabOrder = 1
+    ExplicitHeight = 392
     object tabIndex: TTabSheet
       Caption = 'Contents'
       ImageIndex = -1
@@ -56,6 +55,23 @@ object frmMain: TfrmMain
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
           Height = 356
+          Colors.BorderColor = 15987699
+          Colors.DisabledColor = clGray
+          Colors.DropMarkColor = 15385233
+          Colors.DropTargetColor = 15385233
+          Colors.DropTargetBorderColor = 15385233
+          Colors.FocusedSelectionColor = 15385233
+          Colors.FocusedSelectionBorderColor = 15385233
+          Colors.GridLineColor = 15987699
+          Colors.HeaderHotColor = clBlack
+          Colors.HotColor = clBlack
+          Colors.SelectionRectangleBlendColor = 15385233
+          Colors.SelectionRectangleBorderColor = 15385233
+          Colors.SelectionTextColor = clBlack
+          Colors.TreeLineColor = 9471874
+          Colors.UnfocusedColor = clGray
+          Colors.UnfocusedSelectionColor = 15385233
+          Colors.UnfocusedSelectionBorderColor = 15385233
           DefaultNodeHeight = 19
           OnNodeDblClick = frameListingvstIndexLinesNodeDblClick
           ExplicitWidth = 265
@@ -78,6 +94,23 @@ object frmMain: TfrmMain
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
           Height = 356
+          Colors.BorderColor = 15987699
+          Colors.DisabledColor = clGray
+          Colors.DropMarkColor = 15385233
+          Colors.DropTargetColor = 15385233
+          Colors.DropTargetBorderColor = 15385233
+          Colors.FocusedSelectionColor = 15385233
+          Colors.FocusedSelectionBorderColor = 15385233
+          Colors.GridLineColor = 15987699
+          Colors.HeaderHotColor = clBlack
+          Colors.HotColor = clBlack
+          Colors.SelectionRectangleBlendColor = 15385233
+          Colors.SelectionRectangleBorderColor = 15385233
+          Colors.SelectionTextColor = clBlack
+          Colors.TreeLineColor = 9471874
+          Colors.UnfocusedColor = clGray
+          Colors.UnfocusedSelectionColor = 15385233
+          Colors.UnfocusedSelectionBorderColor = 15385233
           DefaultNodeHeight = 19
           OnCompareNodes = frameSortedvstIndexLinesCompareNodes
           ExplicitWidth = 265
@@ -97,10 +130,27 @@ object frmMain: TfrmMain
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 356
+        ExplicitHeight = 355
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
           Height = 356
+          Colors.BorderColor = 15987699
+          Colors.DisabledColor = clGray
+          Colors.DropMarkColor = 15385233
+          Colors.DropTargetColor = 15385233
+          Colors.DropTargetBorderColor = 15385233
+          Colors.FocusedSelectionColor = 15385233
+          Colors.FocusedSelectionBorderColor = 15385233
+          Colors.GridLineColor = 15987699
+          Colors.HeaderHotColor = clBlack
+          Colors.HotColor = clBlack
+          Colors.SelectionRectangleBlendColor = 15385233
+          Colors.SelectionRectangleBorderColor = 15385233
+          Colors.SelectionTextColor = clBlack
+          Colors.TreeLineColor = 9471874
+          Colors.UnfocusedColor = clGray
+          Colors.UnfocusedSelectionColor = 15385233
+          Colors.UnfocusedSelectionBorderColor = 15385233
           DefaultNodeHeight = 19
           ExplicitWidth = 265
           ExplicitHeight = 356
@@ -123,6 +173,23 @@ object frmMain: TfrmMain
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
           Height = 356
+          Colors.BorderColor = 15987699
+          Colors.DisabledColor = clGray
+          Colors.DropMarkColor = 15385233
+          Colors.DropTargetColor = 15385233
+          Colors.DropTargetBorderColor = 15385233
+          Colors.FocusedSelectionColor = 15385233
+          Colors.FocusedSelectionBorderColor = 15385233
+          Colors.GridLineColor = 15987699
+          Colors.HeaderHotColor = clBlack
+          Colors.HotColor = clBlack
+          Colors.SelectionRectangleBlendColor = 15385233
+          Colors.SelectionRectangleBorderColor = 15385233
+          Colors.SelectionTextColor = clBlack
+          Colors.TreeLineColor = 9471874
+          Colors.UnfocusedColor = clGray
+          Colors.UnfocusedSelectionColor = 15385233
+          Colors.UnfocusedSelectionBorderColor = 15385233
           DefaultNodeHeight = 19
           TreeOptions.SelectionOptions = [toSimpleDrawSelection]
           ExplicitWidth = 265
@@ -138,6 +205,7 @@ object frmMain: TfrmMain
     Height = 79
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 788
     object lblLineCount: TLabel
       Left = 311
       Top = 21
@@ -286,6 +354,8 @@ object frmMain: TfrmMain
     ActivePage = tabLines
     Align = alClient
     TabOrder = 2
+    ExplicitWidth = 505
+    ExplicitHeight = 392
     object tabLines: TTabSheet
       Caption = 'Lines'
       TabVisible = False
@@ -301,6 +371,8 @@ object frmMain: TfrmMain
         PageSize = 0
         TabOrder = 2
         OnScroll = sbLinesScroll
+        ExplicitLeft = 475
+        ExplicitHeight = 382
       end
       object jvrchdtLines: TJvRichEdit
         Left = 89
@@ -322,6 +394,8 @@ object frmMain: TfrmMain
         OnClick = memoLinesClick
         OnSelectionChange = redtLines1SelectionChange
         OnVerticalScroll = jvrchdtLinesVerticalScroll
+        ExplicitWidth = 386
+        ExplicitHeight = 382
       end
       object jreLineNumbers: TJvRichEdit
         Left = 0
@@ -340,6 +414,7 @@ object frmMain: TfrmMain
         SelText = ''
         TabOrder = 0
         WordWrap = False
+        ExplicitHeight = 382
       end
     end
     object tabTable: TTabSheet
@@ -509,6 +584,8 @@ object frmMain: TfrmMain
     Height = 23
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 471
+    ExplicitWidth = 788
     object lblFileCount: TLabel
       Left = 4
       Top = 2
@@ -525,6 +602,7 @@ object frmMain: TfrmMain
       Max = 1000
       Step = 1
       TabOrder = 0
+      ExplicitWidth = 651
     end
   end
   object OpenDialog1: TOpenDialog

@@ -17,7 +17,7 @@ type
     wlBarePrecipitationConsumptionFraction, wlCapillaryFringe, wlSoilID,
     wlSurfaceK, wlBareEvap, wlDirectRecharge, wlPrecipPotConsumption,
     wlNrdInfilLoc, wlLandUseAreaFraction, wlCropCoefficient, wlConsumptiveUse,
-    wlIrrigation);
+    wlIrrigation, wlRootDepth);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -80,6 +80,7 @@ type
     FCropCoefficient: TList;
     FConsumptiveUse: TList;
     FIrrigation: TList;
+    FRootDepth: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -105,6 +106,7 @@ type
     FLandUseAreaFractionFileStream: TFileStream;
     FConsumptiveUseFileStream: TFileStream;
     FIrrigationFileStream: TFileStream;
+    FRootDepthFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -166,6 +168,9 @@ type
 
     procedure EvaluateIrrigation;
     procedure WriteIrrigation;
+
+    procedure EvaluateRootDepth;
+    procedure WriteRootDepth;
 
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
@@ -249,6 +254,8 @@ type
     procedure UpdateMultConsumptiveUseDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateIrrigationDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateMultIrrigationDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateRootDepthDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateMultRootDepthDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -405,6 +412,7 @@ begin
   FCropCoefficient := TObjectList.Create;
   FConsumptiveUse := TObjectList.Create;
   FIrrigation := TObjectList.Create;
+  FRootDepth := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -418,6 +426,7 @@ destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
 
+  FRootDepth.Free;
   FIrrigation.Free;
   FConsumptiveUse.Free;
   FCropCoefficient.Free;
@@ -483,6 +492,7 @@ begin
   EvaluateCropCoefficient;
   EvaluateConsumptiveUse;
   EvaluateIrrigation;
+  EvaluateRootDepth;
 end;
 
 procedure TModflowFmp4Writer.EvaluateBareEvap;
@@ -639,6 +649,16 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.EvaluateRootDepth;
+begin
+  if FLandUse.TransientRootDeptharrayUsed(nil)
+    or FLandUse.TransientRootDepthMultArrayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Root Depth value');
+    EvaluateTransientArrayData(wlRootDepth);
+  end;
+end;
+
 class function TModflowFmp4Writer.Extension: string;
 begin
   Result := '.fmp';
@@ -666,6 +686,7 @@ begin
   FreeAndNil(FCropcoefficientFileStream);
   FreeAndNil(FConsumptiveUseFileStream);
   FreeAndNil(FIrrigationFileStream);
+  FreeAndNil(FRootDepthFileStream);
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -887,6 +908,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlRootDepth:
+      begin
+        result := ChangeFileExt(FBaseName, '.ROOT_DEPTH');
+        if FRootDepthFileStream = nil then
+        begin
+          FRootDepthFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -969,6 +999,17 @@ begin
           result := ScreenObject.ModflowFmp4MultIrrigation;
         end;
       end;
+    wlRootDepth:
+      begin
+        if FLandUse.LandUseOption = luoSingle then
+        begin
+          result := ScreenObject.ModflowFmp4RootDepth;
+        end
+        else
+        begin
+          result := ScreenObject.ModflowFmp4MultRootDepth;
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -1010,6 +1051,7 @@ begin
     wlCropCoefficient: result := FCropCoefficient;
     wlConsumptiveUse: result := FConsumptiveUse;
     wlIrrigation: result := FIrrigation;
+    wlRootDepth: result := FRootDepth;
     else Assert(False)
   end;
 end;
@@ -1369,6 +1411,19 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.UpdateMultRootDepthDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateRootDepth;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientRootDepthMultArrayUsed;
+  UpdateRequirements.WriteLocation := wlRootDepth;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
 procedure TModflowFmp4Writer.UpdateNrdInfilLocationDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
@@ -1547,6 +1602,19 @@ begin
   UpdateRequirements.EvaluateProcedure := EvaluateReferenceET;
   UpdateRequirements.TransientDataUsed := TransientRefEtUsed;
   UpdateRequirements.WriteLocation := wlETR;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateRootDepthDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateRootDepth;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientRootDeptharrayUsed;
+  UpdateRequirements.WriteLocation := wlRootDepth;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
 end;
@@ -2364,9 +2432,9 @@ begin
     WriteCropCoefficient;
     WriteConsumptiveUse;
     WriteIrrigation;
+    WriteRootDepth;
 
     // remove this.
-    WriteString('  ROOT_DEPTH STATIC CONSTANT 0.00001');
     NewLine;
 
     WriteString('END LAND_USE');
@@ -2674,6 +2742,72 @@ begin
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
 
+procedure TModflowFmp4Writer.WriteRootDepth;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  DataArrayNames: TStringList;
+  CropIndex: Integer;
+begin
+  if FLandUse.RootDepth.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlRootDepth);
+
+  if (FLandUse.RootDepth.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlRootDepth;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP LAND_USE: ROOT_DEPTH';
+    RequiredValues.ErrorID := 'FMP LAND_USE: ROOT_DEPTH';
+    RequiredValues.ID := 'ROOT_DEPTH';
+    RequiredValues.StaticDataName := KRootDepth;
+    RequiredValues.WriteTransientData :=
+      (FLandUse.RootDepth.FarmOption = foTransient);
+    RequiredValues.CheckError :=  'Invalid Root Depth value';
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FLandUse.RootDepth;
+
+    if FLandUse.LandUseOption = luoSingle then
+    begin
+      WriteFmpArrayData(AFileName, RequiredValues);
+    end
+    else
+    begin
+      if RequiredValues.WriteTransientData then
+      begin
+        RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
+        WriteFmpArrayData(AFileName, RequiredValues);
+      end
+      else
+      begin
+        DataArrayNames := TStringList.Create;
+        try
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            DataArrayNames.Add(
+              Model.FmpCrops[CropIndex].RootDepthDataArrayName);
+          end;
+          RequiredValues.LandUseStaticFileNames := DataArrayNames;
+          WriteLandUseArrayData(AFileName, RequiredValues);
+        finally
+          DataArrayNames.Free;
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteSalinityFlush;
 begin
 
@@ -2898,6 +3032,11 @@ begin
         begin
           Assert(FIrrigationFileStream <> nil);
           FIrrigationFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlRootDepth:
+        begin
+          Assert(FRootDepthFileStream <> nil);
+          FRootDepthFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);

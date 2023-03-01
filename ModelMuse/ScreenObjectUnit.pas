@@ -56,7 +56,7 @@ uses
   ModflowFmp4DirectRechargeUnit, ModflowFmp4PrecipPotConsumptionUnit,
   ModflowFmp4NrdInfilLocationUnit, ModflowFmp4CropCoefficientUnit,
   ModflowFmp4LandUseAreaFractionUnit, ModflowFmp4ConsumptiveUseUnit,
-  ModflowFmp4IrrigationSpatialUnit;
+  ModflowFmp4IrrigationSpatialUnit, ModflowFmp4RootDepthUnit;
 
 type
   //
@@ -1482,6 +1482,8 @@ view. }
     FFmpMultConsumptiveUseBoundary: TFmp4MultConsumptiveUseBoundary;
     FFmp4IrrigationBoundary: TFmp4IrrigationBoundary;
     FFmpMultIrrigationBoundary: TFmp4MultIrrigationBoundary;
+    FFmp4RootDepthBoundary: TFmp4RootDepthBoundary;
+    FFmpMultRootDepthBoundary: TFmp4MultRootDepthBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1629,6 +1631,10 @@ view. }
       read FFmp4IrrigationBoundary write FFmp4IrrigationBoundary;
     property FmpMultIrrigationBoundary: TFmp4MultIrrigationBoundary
       read FFmpMultIrrigationBoundary write FFmpMultIrrigationBoundary;
+    property Fmp4RootDepthBoundary: TFmp4RootDepthBoundary
+      read FFmp4RootDepthBoundary write FFmp4RootDepthBoundary;
+    property FmpMultRootDepthBoundary: TFmp4MultRootDepthBoundary
+      read FFmpMultRootDepthBoundary write FFmpMultRootDepthBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -2939,6 +2945,17 @@ view. }
       const Value: TFmp4MultIrrigationBoundary);
     function StoreModflowFmp4MultIrrigation: Boolean;
     procedure CreateModflowMultIrrigationBoundary;
+
+    function GetModflowFmp4RootDepth: TFmp4RootDepthBoundary;
+    procedure SetModflowFmp4RootDepth(const Value: TFmp4RootDepthBoundary);
+    function StoreModflowFmp4RootDepth: Boolean;
+    procedure CreateModflowRootDepthBoundary;
+
+    function GetModflowFmp4MultRootDepth: TFmp4MultRootDepthBoundary;
+    procedure SetModflowFmp4MultRootDepth(
+      const Value: TFmp4MultRootDepthBoundary);
+    function StoreModflowFmp4MultRootDepth: Boolean;
+    procedure CreateModflowMultRootDepthBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4322,6 +4339,12 @@ view. }
     property ModflowFmp4MultIrrigation: TFmp4MultIrrigationBoundary
       read GetModflowFmp4MultIrrigation write SetModflowFmp4MultIrrigation
       Stored StoreModflowFmp4MultIrrigation;
+    property ModflowFmp4RootDepth: TFmp4RootDepthBoundary
+      read GetModflowFmp4RootDepth write SetModflowFmp4RootDepth
+      Stored StoreModflowFmp4RootDepth;
+    property ModflowFmp4MultRootDepth: TFmp4MultRootDepthBoundary
+      read GetModflowFmp4MultRootDepth write SetModflowFmp4MultRootDepth
+      Stored StoreModflowFmp4MultRootDepth;
 
 
     { TODO :
@@ -7001,6 +7024,8 @@ begin
   ModflowFmp4MultConsumptiveUse := AScreenObject.ModflowFmp4MultConsumptiveUse;
   ModflowFmp4Irrigation := AScreenObject.ModflowFmp4Irrigation;
   ModflowFmp4MultIrrigation := AScreenObject.ModflowFmp4MultIrrigation;
+  ModflowFmp4RootDepth := AScreenObject.ModflowFmp4RootDepth;
+  ModflowFmp4MultRootDepth := AScreenObject.ModflowFmp4MultRootDepth;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9826,6 +9851,16 @@ begin
     if ModflowFmp4MultIrrigation <> nil then
     begin
       ModflowFmp4MultIrrigation.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4RootDepth <> nil then
+    begin
+      ModflowFmp4RootDepth.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultRootDepth <> nil then
+    begin
+      ModflowFmp4MultRootDepth.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -14308,6 +14343,24 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetModflowFmp4MultRootDepth(
+  const Value: TFmp4MultRootDepthBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultRootDepthBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultRootDepthBoundary);
+  end
+  else
+  begin
+    CreateModflowMultRootDepthBoundary;
+    ModflowBoundaries.FFmpMultRootDepthBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetModflowFmp4NrdInfilLocationBoundary(
   const Value: TFmp4NrdInfilLocationBoundary);
 begin
@@ -14323,6 +14376,24 @@ begin
   begin
     CreateModflowFmp4NrdInfilLocation;
     ModflowBoundaries.FFmp4NrdInfilLocationBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4RootDepth(
+  const Value: TFmp4RootDepthBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4RootDepthBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4RootDepthBoundary);
+  end
+  else
+  begin
+    CreateModflowRootDepthBoundary;
+    ModflowBoundaries.FFmp4RootDepthBoundary.Assign(Value);
   end;
 end;
 
@@ -32454,11 +32525,31 @@ begin
 {$ENDIF}
 end;
 
+function TScreenObject.StoreModflowFmp4MultRootDepth: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultRootDepth <> nil) and ModflowFmp4MultRootDepth.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowFmp4NrdInfilLocationBoundary: Boolean;
 begin
 {$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4NrdInfilLocationBoundary <> nil) and ModflowFmp4NrdInfilLocationBoundary.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4RootDepth: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4RootDepth <> nil) and ModflowFmp4RootDepth.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -33625,6 +33716,23 @@ begin
   end;
 end;
 
+function TScreenObject.GetModflowFmp4MultRootDepth: TFmp4MultRootDepthBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultRootDepthBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultRootDepthBoundary;
+  end;
+end;
+
 function TScreenObject.GetModflowFmp4NrdInfilLocationBoundary: TFmp4NrdInfilLocationBoundary;
 begin
   if (FModel = nil)
@@ -33639,6 +33747,23 @@ begin
   else
   begin
     result := ModflowBoundaries.FFmp4NrdInfilLocationBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4RootDepth: TFmp4RootDepthBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowRootDepthBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4RootDepthBoundary;
   end;
 end;
 
@@ -38473,12 +38598,30 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateModflowMultRootDepthBoundary;
+begin
+  if (ModflowBoundaries.FFmpMultRootDepthBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultRootDepthBoundary :=
+      TFmp4MultRootDepthBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateModflowMvr;
 begin
   if (ModflowBoundaries.FModflowMvr = nil) then
   begin
     ModflowBoundaries.FModflowMvr :=
       TMvrBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowRootDepthBoundary;
+begin
+  if (ModflowBoundaries.FFmp4RootDepthBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4RootDepthBoundary :=
+      TFmp4RootDepthBoundary.Create(FModel, self);
   end;
 end;
 
@@ -41941,6 +42084,34 @@ begin
     FFmpMultIrrigationBoundary.Assign(Source.FFmpMultIrrigationBoundary);
   end;
 
+  if Source.FFmp4RootDepthBoundary = nil then
+  begin
+    FreeAndNil(FFmp4RootDepthBoundary);
+  end
+  else
+  begin
+    if FFmp4RootDepthBoundary = nil then
+    begin
+      FFmp4RootDepthBoundary :=
+        TFmp4RootDepthBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4RootDepthBoundary.Assign(Source.FFmp4RootDepthBoundary);
+  end;
+
+  if Source.FFmpMultRootDepthBoundary = nil then
+  begin
+    FreeAndNil(FFmpMultRootDepthBoundary);
+  end
+  else
+  begin
+    if FFmpMultRootDepthBoundary = nil then
+    begin
+      FFmpMultRootDepthBoundary :=
+        TFmp4MultRootDepthBoundary.Create(Model, FScreenObject);
+    end;
+    FFmpMultRootDepthBoundary.Assign(Source.FFmpMultRootDepthBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -41959,6 +42130,8 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmpMultRootDepthBoundary.Free;
+  FFmp4RootDepthBoundary.Free;
   FFmpMultIrrigationBoundary.Free;
   FFmp4IrrigationBoundary.Free;
   FFmpMultConsumptiveUseBoundary.Free;
@@ -42367,6 +42540,17 @@ begin
     FreeAndNil(FFmpMultIrrigationBoundary);
   end;
 
+  if (FFmp4RootDepthBoundary <> nil)
+    and not FFmp4RootDepthBoundary.Used then
+  begin
+    FreeAndNil(FFmp4RootDepthBoundary);
+  end;
+
+  if (FFmpMultRootDepthBoundary <> nil)
+    and not FFmpMultRootDepthBoundary.Used then
+  begin
+    FreeAndNil(FFmpMultRootDepthBoundary);
+  end;
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -42726,6 +42910,15 @@ begin
     FFmpMultIrrigationBoundary.Invalidate;
   end;
 
+  if FFmp4RootDepthBoundary <> nil then
+  begin
+    FFmp4RootDepthBoundary.Invalidate;
+  end;
+
+  if FFmpMultRootDepthBoundary <> nil then
+  begin
+    FFmpMultRootDepthBoundary.Invalidate;
+  end;
 end;
 
 procedure TModflowBoundaries.Loaded;
@@ -43123,6 +43316,16 @@ begin
   if FFmpMultIrrigationBoundary <> nil then
   begin
     FFmpMultIrrigationBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4RootDepthBoundary <> nil then
+  begin
+    FFmp4RootDepthBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmpMultRootDepthBoundary <> nil then
+  begin
+    FFmpMultRootDepthBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -43526,6 +43729,16 @@ begin
     FFmpMultIrrigationBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4RootDepthBoundary <> nil then
+  begin
+    FFmp4RootDepthBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmpMultRootDepthBoundary <> nil then
+  begin
+    FFmpMultRootDepthBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -43926,6 +44139,15 @@ begin
     FFmpMultIrrigationBoundary.StopTalkingToAnyone;
   end;
 
+  if FFmp4RootDepthBoundary <> nil then
+  begin
+    FFmp4RootDepthBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmpMultRootDepthBoundary <> nil then
+  begin
+    FFmpMultRootDepthBoundary.StopTalkingToAnyone;
+  end;
 end;
 
 function TModflowBoundaries.UsesAnMt3dTime(ATime: Double): Boolean;
@@ -44569,6 +44791,23 @@ begin
     end;
   end;
 
+  if FFmp4RootDepthBoundary <> nil then
+  begin
+    Result := FFmp4RootDepthBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmpMultRootDepthBoundary <> nil then
+  begin
+    Result := FFmpMultRootDepthBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
 end;
 
 { TSelectedCells }

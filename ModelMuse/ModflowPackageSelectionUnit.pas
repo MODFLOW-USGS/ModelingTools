@@ -5517,6 +5517,8 @@ Type
     FMultConsumptiveUses: TMfBoundDispObjectList;
     FMfFmp4Irrigation: TModflowBoundaryDisplayTimeList;
     FMultIrrigations: TMfBoundDispObjectList;
+    FMfFmp4RootDepth: TModflowBoundaryDisplayTimeList;
+    FMultRootDepths: TMfBoundDispObjectList;
     procedure SetAddedDemand(const Value: TFarmProperty);
     procedure SetCropCoeff(const Value: TFarmProperty);
     procedure SetET_IrrigFracCorrection(const Value: TFarmProperty);
@@ -5600,6 +5602,19 @@ Type
     // Irrigation arrays for single and multiple land uses per cell
     procedure InvalidateIrrigation(Sender: TObject);
 
+    // Root Depth array for single land use per cell
+    function GetRootDepthBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeRootDepthDisplay(Sender: TObject);
+    procedure GetRootDepthUseList(Sender: TObject; NewUseList: TStringList);
+    // Root Depth arrays for multiple land uses per cell
+    function GetMultRootDepthBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure GetMultRootDepthsUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure InitializeMultRootDepthsDisplay(Sender: TObject);
+    procedure UpdateMultRootDepthsArrays;
+    // Root Depth arrays for single and multiple land uses per cell
+    procedure InvalidateRootDepth(Sender: TObject);
+
     procedure InvalidateTransientCropID;
 
     procedure UpdateMultLandUseLists(IsUsed: Boolean;
@@ -5659,6 +5674,15 @@ Type
     // Irrigation arrays for multiple land uses per cell
     function TransientIrrigationMultArrayUsed (Sender: TObject): boolean;
     procedure InvalidateMultTransienIrrigationArrays;
+
+    // Root Depth array for single land use per cell
+    function TransientRootDepthArrayUsed (Sender: TObject): boolean;
+    function StaticRootDepthArrayUsed (Sender: TObject): boolean;
+    property MfFmp4RootDepth: TModflowBoundaryDisplayTimeList
+      read FMfFmp4RootDepth;
+    // Root Depth arrays for multiple land uses per cell
+    function TransientRootDepthMultArrayUsed (Sender: TObject): boolean;
+    procedure InvalidateMultTransienRootDepthArrays;
 
     procedure InvalidateAll;
     procedure Loaded;
@@ -7151,6 +7175,7 @@ resourcestring
   StrCropCoefficientsS = 'Crop Coefficients %s';
   StrConsumptiveUsesS = 'Consumptive Use %s';
   StrIrrigationsS = 'Irrigation %s';
+  StrRootDepthsS = 'Root Depth %s';
 
 { TModflowPackageSelection }
 
@@ -26463,6 +26488,7 @@ begin
   InvalidateCropCoefficient(nil);
   InvalidateConsumptiveUse(nil);
   InvalidateIrrigation(nil);
+  InvalidateRootDepth(nil);
 end;
 
 procedure TFarmProcess4LandUse.Assign(Source: TPersistent);
@@ -26589,10 +26615,22 @@ begin
       AddTimeList(FMfFmp4Irrigation);
     end;
 
+    FMfFmp4RootDepth := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4RootDepth.OnInitialize := InitializeRootDepthDisplay;
+    FMfFmp4RootDepth.OnGetUseList := GetRootDepthUseList;
+    FMfFmp4RootDepth.OnTimeListUsed := TransientRootDeptharrayUsed;
+    FMfFmp4RootDepth.Name := 'RootDepth';
+    FMfFmp4RootDepth.AddMethod := vamReplace;
+    if TransientRootDeptharrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4RootDepth);
+    end;
+
     FMultLandUseAreaFractions := TMfBoundDispObjectList.Create;
     FMultCropCoefficients := TMfBoundDispObjectList.Create;
     FMultConsumptiveUses := TMfBoundDispObjectList.Create;
     FMultIrrigations := TMfBoundDispObjectList.Create;
+    FMultRootDepths := TMfBoundDispObjectList.Create;
   end;
 
   FLandUseFraction.OnChangeFarmOption := InvalidateLandUseAreaFraction;
@@ -26606,15 +26644,20 @@ begin
 
   Irrigation.OnChangeFarmOption := InvalidateIrrigation;
   Irrigation.OnChangeArrayList := InvalidateIrrigation;
+
+  RootDepth.OnChangeFarmOption := InvalidateRootDepth;
+  RootDepth.OnChangeArrayList := InvalidateRootDepth;
 end;
 
 destructor TFarmProcess4LandUse.Destroy;
 begin
+  FMultRootDepths.Free;
   FMultIrrigations.Free;
   FMultConsumptiveUses.Free;
   FMultCropCoefficients.Free;
   FMultLandUseAreaFractions.Free;
 
+  FMfFmp4RootDepth.Free;
   FMfFmp4Irrigation.Free;
   FMfFmp4ConsumptiveUse.Free;
   FMfFmp4CropCoefficient.Free;
@@ -26799,9 +26842,43 @@ begin
   UpdatePkgUseList(NewUseList, GetMultLandUseAreaFractionBoundary, Index, DataSetName);
 end;
 
+function TFarmProcess4LandUse.GetMultRootDepthBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4MultRootDepth;
+end;
+
+procedure TFarmProcess4LandUse.GetMultRootDepthsUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FMultRootDepths.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+  DataSetName := Format(StrRootDepthsS,
+     [frmGoPhast.PhastModel.fmpCrops[Index].CropName]);
+  UpdatePkgUseList(NewUseList, GetMultRootDepthBoundary, Index, DataSetName);
+end;
+
 function TFarmProcess4LandUse.GetRelaxFracHeadChange: double;
 begin
   result := StoredRelaxFracHeadChange.Value;
+end;
+
+function TFarmProcess4LandUse.GetRootDepthBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4RootDepth;
+end;
+
+procedure TFarmProcess4LandUse.GetRootDepthUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetRootDepthBoundary;
+  GetUseListOptions.Description := 'FMP RootDepth';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 procedure TFarmProcess4LandUse.InitializeConsumptiveUseDisplay(Sender: TObject);
@@ -26991,6 +27068,41 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InitializeMultRootDepthsDisplay(Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeLandUseDisplayOptions;
+  index: Integer;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    SetLength(DisplayOptions.Display, (FModel as TCustomModel).FmpCrops.Count);
+    for index := 0 to Length(DisplayOptions.Display) - 1 do
+    begin
+      DisplayOptions.Display[index] := FMultRootDepths[index];
+    end;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateMultRootDepthDisplay;
+    InitializeLandUseDisplay(DisplayOptions);
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InitializeRootDepthDisplay(Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := FMfFmp4RootDepth;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateRootDepthDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InitializeVariables;
 begin
   MinimumBareFraction :=  0.000001;
@@ -27129,6 +27241,16 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InvalidateMultTransienRootDepthArrays;
+var
+  index: Integer;
+begin
+  for index := 0 to FMultRootDepths.Count - 1 do
+  begin
+    FMultRootDepths[index].Invalidate;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InvalidateMultTransientLandUseAreaFractionArrays;
 var
   index: Integer;
@@ -27137,6 +27259,23 @@ begin
   begin
     FMultLandUseAreaFractions[index].Invalidate;
   end;
+end;
+
+procedure TFarmProcess4LandUse.InvalidateRootDepth(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientRootDeptharrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4RootDepth);
+    end
+    else
+    begin
+      RemoveTimeList(FMfFmp4RootDepth);
+    end;
+    UpdateMultRootDepthsArrays;
+  end;
+  InvalidateModel;
 end;
 
 procedure TFarmProcess4LandUse.SetAddedDemand(const Value: TFarmProperty);
@@ -27339,6 +27478,17 @@ begin
     and (LandUseOption = luoSingle);
 end;
 
+function TFarmProcess4LandUse.StaticRootDepthArrayUsed(
+  Sender: TObject): boolean;
+var
+  LocalModel: TCustomModel;
+begin
+  result := PackageUsed(Sender)
+    and (RootDepth.FarmOption = foStatic)
+    and (RootDepth.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
 function TFarmProcess4LandUse.TransientConsumptiveUseArrayUsed(
   Sender: TObject): boolean;
 begin
@@ -27402,7 +27552,7 @@ begin
       LocalModel := frmGoPhast.PhastModel;
     end;
     result := LocalModel.IrrigationTypes.Count > 0;
-  end;  
+  end;
 end;
 
 function TFarmProcess4LandUse.TransientIrrigationMultArrayUsed(
@@ -27443,6 +27593,24 @@ begin
   result := PackageUsed(Sender)
     and (LandUseFraction.FarmOption = foTransient)
     and (LandUseFraction.ArrayList = alArray)
+    and (LandUseOption = luoMultiple);
+end;
+
+function TFarmProcess4LandUse.TransientRootDepthArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (RootDepth.FarmOption = foTransient)
+    and (RootDepth.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.TransientRootDepthMultArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (RootDepth.FarmOption = foTransient)
+    and (RootDepth.ArrayList = alArray)
     and (LandUseOption = luoMultiple);
 end;
 
@@ -27514,6 +27682,15 @@ begin
     end;
     List.Clear;
   end;
+end;
+
+procedure TFarmProcess4LandUse.UpdateMultRootDepthsArrays;
+begin
+  UpdateMultLandUseLists(TransientRootDepthMultArrayUsed(nil),
+    FMultRootDepths,
+    InitializeMultRootDepthsDisplay,
+    GetMultRootDepthsUseList,
+    StrRootDepthsS);
 end;
 
 procedure TFarmProcess4LandUse.UpdateMultTransientLandUseAreaFractionArrays;
