@@ -9,10 +9,12 @@ uses
   ModflowPackageSelectionUnit, ArgusDataEntry;
 
 type
-  TSoilOptionColumns = (socName, socTransient, socArray, {socOther,} socSFAC,
+  TSoilOptionColumns = (socName, socTransient, socArray, socOther, socSFAC,
     socFile, socSfacFile);
+
   TSoilOptionRows = (sorName, sorSoilLocation, sorLandUseFraction,
-    sorCropCoeff, sorConsumptiveUse, sorIrrigation, sorRootDepth, sorRootPressure,
+    sorCropCoeff, sorConsumptiveUse, sorIrrigation, sorRootDepth,
+    sorRootPressure, sorGroundwaterRootInteraction,
     sorTranspirationFraction, sorEvapIrrigationFraction,
     sorFractionOfPrecipToSurfaceWater, sorFractionOfIrrigationToSurfaceWater,
     sorPondDepth, sorAddedDemand, sorNoCropUseMeansBareSoil,
@@ -72,6 +74,12 @@ resourcestring
   StrAddedDemand = 'Added demand';
   StrNoCropMeansBareS = 'No crop means bare soil';
   StrETIrrigFracCorr = 'ET irrig. frac. correction';
+  StrGroundwaterRootInt = 'Groundwater Root Interaction';
+  StrOption = 'Option';
+
+var
+  ByCropIrrigate: TStringList;
+  LengthRate: TStringList;
 
 {$R *.dfm}
 
@@ -169,6 +177,7 @@ begin
     GetFarmProperty(LandUsePackage.Irrigation, Ord(sorIrrigation));
     GetFarmProperty(LandUsePackage.RootDepth, Ord(sorRootDepth));
     GetFarmProperty(LandUsePackage.RootPressure, Ord(sorRootPressure));
+    GetFarmProperty(LandUsePackage.GroundwaterRootInteraction, Ord(sorGroundwaterRootInteraction));
     GetFarmProperty(LandUsePackage.TranspirationFraction, Ord(sorTranspirationFraction));
     GetFarmProperty(LandUsePackage.EvapIrrigationFraction, Ord(sorEvapIrrigationFraction));
     GetFarmProperty(LandUsePackage.FractionOfPrecipToSurfaceWater, Ord(sorFractionOfPrecipToSurfaceWater));
@@ -177,6 +186,14 @@ begin
     GetFarmProperty(LandUsePackage.AddedDemand, Ord(sorAddedDemand));
     GetFarmProperty(LandUsePackage.NoCropUseMeansBareSoil, Ord(sorNoCropUseMeansBareSoil));
     GetFarmProperty(LandUsePackage.ET_IrrigFracCorrection, Ord(sorET_IrrigFracCorrection));
+
+    rdgLandUse.Cells[Ord(socOther), Ord(sorEvapIrrigationFraction)] :=
+      ByCropIrrigate[Ord(LandUsePackage.EvapIrrigationOption)];
+    rdgLandUse.Cells[Ord(socOther), Ord(sorFractionOfIrrigationToSurfaceWater)] :=
+      ByCropIrrigate[Ord(LandUsePackage.FractionOfPrecipToSurfaceWaterIrrigationOption)];
+    rdgLandUse.Cells[Ord(socOther), Ord(sorAddedDemand)] :=
+      LengthRate[Ord(LandUsePackage.AddedDemandOption)];
+
   finally
     rdgLandUse.EndUpdate;
   end;
@@ -190,6 +207,8 @@ begin
 
     rdgLandUse.Cells[Ord(socTransient), Ord(sorName)] := StrFrequency;
     rdgLandUse.Cells[Ord(socArray), Ord(sorName)] := StrArrayOrList;
+    rdgLandUse.Cells[Ord(socOther), Ord(sorName)] := StrOption;
+
     rdgLandUse.Cells[Ord(socSFAC), Ord(sorName)] := StrUnitConversionScal;
     rdgLandUse.Cells[Ord(socFile), Ord(sorName)] := StrExternallyGenerated;
     rdgLandUse.Cells[Ord(socSfacFile), Ord(sorName)] := StrExternallyGeneratedSfac;
@@ -201,6 +220,7 @@ begin
     rdgLandUse.Cells[Ord(socName), Ord(sorIrrigation)] := StrIrrigation;
     rdgLandUse.Cells[Ord(socName), Ord(sorRootDepth)] := StrRootDepth;
     rdgLandUse.Cells[Ord(socName), Ord(sorRootPressure)] := StrRootPressure;
+    rdgLandUse.Cells[Ord(socName), Ord(sorGroundwaterRootInteraction)] := StrGroundwaterRootInt;
     rdgLandUse.Cells[Ord(socName), Ord(sorTranspirationFraction)] := StrTranspirationFracti;
     rdgLandUse.Cells[Ord(socName), Ord(sorEvapIrrigationFraction)] := StrEvapIrrigFraction;
     rdgLandUse.Cells[Ord(socName), Ord(sorFractionOfPrecipToSurfaceWater)] := StrFractionOfPrecip;
@@ -237,9 +257,26 @@ begin
     begin
       Column.PickList := StaticTransient;
     end
+    else if ARow = Ord(sorGroundwaterRootInteraction) then
+    begin
+      Column.PickList := DontUseStatic;
+    end
     else
     begin
       Column.PickList := DontUseStaticTransient;
+    end;
+  end;
+
+  if (ACol = Ord(socOther)) and not rdgLandUse.Drawing then
+  begin
+    Column := rdgLandUse.Columns[Ord(socOther)];
+    if ARow in [Ord(sorEvapIrrigationFraction), Ord(sorFractionOfIrrigationToSurfaceWater)] then
+    begin
+      Column.PickList := ByCropIrrigate;
+    end
+    else if ARow in [Ord(sorAddedDemand)] then
+    begin
+      Column.PickList := LengthRate
     end;
   end;
 
@@ -249,8 +286,9 @@ begin
     socTransient: ;
     socArray:
       begin
-        CanSelect := SoilRow in [sorLandUseFraction, sorCropCoeff, sorConsumptiveUse,
-          sorIrrigation, sorRootDepth, sorTranspirationFraction,
+        CanSelect := SoilRow in [sorLandUseFraction, sorCropCoeff,
+          sorConsumptiveUse, sorIrrigation, sorRootDepth,
+          sorGroundwaterRootInteraction, sorTranspirationFraction,
           sorEvapIrrigationFraction, sorFractionOfPrecipToSurfaceWater,
           sorFractionOfIrrigationToSurfaceWater, sorAddedDemand];
       end;
@@ -260,6 +298,13 @@ begin
           sorConsumptiveUse, sorRootDepth, sorTranspirationFraction,
           sorEvapIrrigationFraction, sorFractionOfPrecipToSurfaceWater,
           sorFractionOfIrrigationToSurfaceWater, sorPondDepth, sorAddedDemand]
+      end;
+    socOther:
+      begin
+        CanSelect := (SoilRow in [sorEvapIrrigationFraction,
+          sorFractionOfIrrigationToSurfaceWater, sorAddedDemand])
+          and (rdgLandUse.ItemIndex[Ord(socArray), ARow] = 1)
+          and (rdgLandUse.ItemIndex[Ord(socTransient), ARow] > 0)
       end;
   end;
   if (SoilRow = sorSoilLocation) and (comboLandUsePerCell.ItemIndex <> 0) then
@@ -377,6 +422,8 @@ begin
   SetFarmProperty(LandUsePackage.Irrigation, sorIrrigation);
   SetFarmProperty(LandUsePackage.RootDepth, sorRootDepth);
   SetFarmProperty(LandUsePackage.RootPressure, sorRootPressure);
+  SetFarmProperty(LandUsePackage.GroundwaterRootInteraction, sorGroundwaterRootInteraction);
+
   SetFarmProperty(LandUsePackage.TranspirationFraction, sorTranspirationFraction);
   SetFarmProperty(LandUsePackage.EvapIrrigationFraction, sorEvapIrrigationFraction);
   SetFarmProperty(LandUsePackage.FractionOfPrecipToSurfaceWater, sorFractionOfPrecipToSurfaceWater);
@@ -385,6 +432,27 @@ begin
   SetFarmProperty(LandUsePackage.AddedDemand, sorAddedDemand);
   SetFarmProperty(LandUsePackage.NoCropUseMeansBareSoil, sorNoCropUseMeansBareSoil);
   SetFarmProperty(LandUsePackage.ET_IrrigFracCorrection, sorET_IrrigFracCorrection);
+
+  LandUsePackage.EvapIrrigationOption := TIrrigationOption(ByCropIrrigate.IndexOf
+    (rdgLandUse.Cells[Ord(socOther), Ord(sorEvapIrrigationFraction)]));
+  LandUsePackage.FractionOfPrecipToSurfaceWaterIrrigationOption := TIrrigationOption(ByCropIrrigate.IndexOf
+    (rdgLandUse.Cells[Ord(socOther), Ord(sorFractionOfIrrigationToSurfaceWater)]));
+  LandUsePackage.AddedDemandOption := TDemandOption(LengthRate.IndexOf
+    (rdgLandUse.Cells[Ord(socOther), Ord(sorAddedDemand)]));
+
 end;
+
+initialization
+  ByCropIrrigate := TStringList.Create;
+  ByCropIrrigate.Add('By Crop');
+  ByCropIrrigate.Add('By Irrigate');
+
+  LengthRate := TStringList.Create;
+  LengthRate.Add('Length');
+  LengthRate.Add('Rate');
+
+finalization
+  ByCropIrrigate.Free;
+  LengthRate.Free;
 
 end.

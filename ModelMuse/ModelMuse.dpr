@@ -815,7 +815,10 @@ uses
   frameScreenObjectFmp4IrrigationUnit in 'frameScreenObjectFmp4IrrigationUnit.pas' {frameScreenObjectFmp4Irrigation: TFrame},
   ModflowFmp4RootDepthUnit in 'ModflowFmp4RootDepthUnit.pas',
   frameScreenObjectFmp4RootDepthUnit in 'frameScreenObjectFmp4RootDepthUnit.pas' {frameScreenObjectFmp4RootDepth: TFrame},
-  frameScreenObjectMultRootDepthUnit in 'frameScreenObjectMultRootDepthUnit.pas' {frameScreenObjectMultRootDepth: TFrame};
+  frameScreenObjectMultRootDepthUnit in 'frameScreenObjectMultRootDepthUnit.pas' {frameScreenObjectMultRootDepth: TFrame},
+  ModflowFmp4TranspirationFractionUnit in 'ModflowFmp4TranspirationFractionUnit.pas',
+  frameScreenObjectFmp4TranspirationFractionUnit in 'frameScreenObjectFmp4TranspirationFractionUnit.pas' {frameScreenObjectFmp4TranspirationFraction: TFrame},
+  frameScreenObjectMultTranspirationFractionUnit in 'frameScreenObjectMultTranspirationFractionUnit.pas' {frameScreenObjectMultTranspirationFraction: TFrame};
 
 {$R *.res}
 

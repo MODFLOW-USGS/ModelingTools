@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-02-16T08:43:19.727-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-02T16:01:48.404-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -284,7 +284,7 @@
           <para styleclass="Normal">5 = Full Interaction &#160;==&gt; HAS Anoxia/Soil Stress Reduction, HAS Root-Groundwater Uptake &#160;(DEFAULT)</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">INT, optional flag that specifies the crop root processes that are simulated, which are a function of the water table elevation and capillary fringe. The first process is the ability to consume groundwater directly called root-groundwater uptake (RGU). No RGU indicates that the crop’s potential transpiration can only be satisfied from surface sources (precipitation and irrigation). The other processes reduce in potential transpiration due to anoxia or soil-stress. The flag must be set to one of the following levels: </para>
-          <para styleclass="Normal"><table styleclass="Default" rowcount="6" colcount="4">
+          <para styleclass="Normal"><table styleclass="Default" rowcount="6" colcount="4" style="cell-padding:2px; cell-spacing:2px;">
             <tr style="vertical-align:top">
               <td>
                 <para styleclass="Normal">Level</para>

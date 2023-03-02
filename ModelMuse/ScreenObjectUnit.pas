@@ -56,7 +56,8 @@ uses
   ModflowFmp4DirectRechargeUnit, ModflowFmp4PrecipPotConsumptionUnit,
   ModflowFmp4NrdInfilLocationUnit, ModflowFmp4CropCoefficientUnit,
   ModflowFmp4LandUseAreaFractionUnit, ModflowFmp4ConsumptiveUseUnit,
-  ModflowFmp4IrrigationSpatialUnit, ModflowFmp4RootDepthUnit;
+  ModflowFmp4IrrigationSpatialUnit, ModflowFmp4RootDepthUnit,
+  ModflowFmp4TranspirationFractionUnit;
 
 type
   //
@@ -1484,6 +1485,8 @@ view. }
     FFmpMultIrrigationBoundary: TFmp4MultIrrigationBoundary;
     FFmp4RootDepthBoundary: TFmp4RootDepthBoundary;
     FFmpMultRootDepthBoundary: TFmp4MultRootDepthBoundary;
+    FFmp4TranspirationFractionBoundary: TFmp4TranspirationFractionBoundary;
+    FFmpMultTranspirationFractionBoundary: TFmp4MultTranspirationFractionBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1635,6 +1638,10 @@ view. }
       read FFmp4RootDepthBoundary write FFmp4RootDepthBoundary;
     property FmpMultRootDepthBoundary: TFmp4MultRootDepthBoundary
       read FFmpMultRootDepthBoundary write FFmpMultRootDepthBoundary;
+    property Fmp4TranspirationFractionBoundary: TFmp4TranspirationFractionBoundary
+      read FFmp4TranspirationFractionBoundary write FFmp4TranspirationFractionBoundary;
+    property FmpMultTranspirationFractionBoundary: TFmp4MultTranspirationFractionBoundary
+      read FFmpMultTranspirationFractionBoundary write FFmpMultTranspirationFractionBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -2956,6 +2963,18 @@ view. }
       const Value: TFmp4MultRootDepthBoundary);
     function StoreModflowFmp4MultRootDepth: Boolean;
     procedure CreateModflowMultRootDepthBoundary;
+
+    function GetModflowFmp4TranspirationFraction: TFmp4TranspirationFractionBoundary;
+    procedure SetModflowFmp4TranspirationFraction(
+      const Value: TFmp4TranspirationFractionBoundary);
+    function StoreModflowFmp4TranspirationFraction: Boolean;
+    procedure CreateModflowTranspirationFractionBoundary;
+
+    function GetModflowFmp4MultTranspirationFraction: TFmp4MultTranspirationFractionBoundary;
+    procedure SetModflowFmp4MultTranspirationFraction(
+      const Value: TFmp4MultTranspirationFractionBoundary);
+    function StoreModflowFmp4MultTranspirationFraction: Boolean;
+    procedure CreateModflowMultTranspirationFractionBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4345,6 +4364,12 @@ view. }
     property ModflowFmp4MultRootDepth: TFmp4MultRootDepthBoundary
       read GetModflowFmp4MultRootDepth write SetModflowFmp4MultRootDepth
       Stored StoreModflowFmp4MultRootDepth;
+    property ModflowFmp4TranspirationFraction: TFmp4TranspirationFractionBoundary
+      read GetModflowFmp4TranspirationFraction write SetModflowFmp4TranspirationFraction
+      Stored StoreModflowFmp4TranspirationFraction;
+    property ModflowFmp4MultTranspirationFraction: TFmp4MultTranspirationFractionBoundary
+      read GetModflowFmp4MultTranspirationFraction write SetModflowFmp4MultTranspirationFraction
+      Stored StoreModflowFmp4MultTranspirationFraction;
 
 
     { TODO :
@@ -7026,6 +7051,8 @@ begin
   ModflowFmp4MultIrrigation := AScreenObject.ModflowFmp4MultIrrigation;
   ModflowFmp4RootDepth := AScreenObject.ModflowFmp4RootDepth;
   ModflowFmp4MultRootDepth := AScreenObject.ModflowFmp4MultRootDepth;
+  ModflowFmp4TranspirationFraction := AScreenObject.ModflowFmp4TranspirationFraction;
+  ModflowFmp4MultTranspirationFraction := AScreenObject.ModflowFmp4MultTranspirationFraction;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9861,6 +9888,16 @@ begin
     if ModflowFmp4MultRootDepth <> nil then
     begin
       ModflowFmp4MultRootDepth.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4TranspirationFraction <> nil then
+    begin
+      ModflowFmp4TranspirationFraction.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultTranspirationFraction <> nil then
+    begin
+      ModflowFmp4MultTranspirationFraction.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -14361,6 +14398,24 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetModflowFmp4MultTranspirationFraction(
+  const Value: TFmp4MultTranspirationFractionBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultTranspirationFractionBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultTranspirationFractionBoundary);
+  end
+  else
+  begin
+    CreateModflowMultTranspirationFractionBoundary;
+    ModflowBoundaries.FFmpMultTranspirationFractionBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetModflowFmp4NrdInfilLocationBoundary(
   const Value: TFmp4NrdInfilLocationBoundary);
 begin
@@ -14394,6 +14449,24 @@ begin
   begin
     CreateModflowRootDepthBoundary;
     ModflowBoundaries.FFmp4RootDepthBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4TranspirationFraction(
+  const Value: TFmp4TranspirationFractionBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4TranspirationFractionBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4TranspirationFractionBoundary);
+  end
+  else
+  begin
+    CreateModflowTranspirationFractionBoundary;
+    ModflowBoundaries.FFmp4TranspirationFractionBoundary.Assign(Value);
   end;
 end;
 
@@ -32535,6 +32608,16 @@ begin
 {$ENDIF}
 end;
 
+function TScreenObject.StoreModflowFmp4MultTranspirationFraction: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultTranspirationFraction <> nil) and ModflowFmp4MultTranspirationFraction.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowFmp4NrdInfilLocationBoundary: Boolean;
 begin
 {$IFDEF OWHMV2}
@@ -32550,6 +32633,16 @@ begin
 {$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4RootDepth <> nil) and ModflowFmp4RootDepth.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4TranspirationFraction: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4TranspirationFraction <> nil) and ModflowFmp4TranspirationFraction.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -33733,6 +33826,23 @@ begin
   end;
 end;
 
+function TScreenObject.GetModflowFmp4MultTranspirationFraction: TFmp4MultTranspirationFractionBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultTranspirationFractionBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultTranspirationFractionBoundary;
+  end;
+end;
+
 function TScreenObject.GetModflowFmp4NrdInfilLocationBoundary: TFmp4NrdInfilLocationBoundary;
 begin
   if (FModel = nil)
@@ -33764,6 +33874,23 @@ begin
   else
   begin
     result := ModflowBoundaries.Fmp4RootDepthBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4TranspirationFraction: TFmp4TranspirationFractionBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowTranspirationFractionBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4TranspirationFractionBoundary;
   end;
 end;
 
@@ -38607,6 +38734,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateModflowMultTranspirationFractionBoundary;
+begin
+  if (ModflowBoundaries.FFmpMultTranspirationFractionBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultTranspirationFractionBoundary :=
+      TFmp4MultTranspirationFractionBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateModflowMvr;
 begin
   if (ModflowBoundaries.FModflowMvr = nil) then
@@ -38622,6 +38758,15 @@ begin
   begin
     ModflowBoundaries.FFmp4RootDepthBoundary :=
       TFmp4RootDepthBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowTranspirationFractionBoundary;
+begin
+  if (ModflowBoundaries.FFmp4TranspirationFractionBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4TranspirationFractionBoundary :=
+      TFmp4TranspirationFractionBoundary.Create(FModel, self);
   end;
 end;
 
@@ -42112,6 +42257,34 @@ begin
     FFmpMultRootDepthBoundary.Assign(Source.FFmpMultRootDepthBoundary);
   end;
 
+  if Source.FFmp4TranspirationFractionBoundary = nil then
+  begin
+    FreeAndNil(FFmp4TranspirationFractionBoundary);
+  end
+  else
+  begin
+    if FFmp4TranspirationFractionBoundary = nil then
+    begin
+      FFmp4TranspirationFractionBoundary :=
+        TFmp4TranspirationFractionBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4TranspirationFractionBoundary.Assign(Source.FFmp4TranspirationFractionBoundary);
+  end;
+
+  if Source.FFmpMultTranspirationFractionBoundary = nil then
+  begin
+    FreeAndNil(FFmpMultTranspirationFractionBoundary);
+  end
+  else
+  begin
+    if FFmpMultTranspirationFractionBoundary = nil then
+    begin
+      FFmpMultTranspirationFractionBoundary :=
+        TFmp4MultTranspirationFractionBoundary.Create(Model, FScreenObject);
+    end;
+    FFmpMultTranspirationFractionBoundary.Assign(Source.FFmpMultTranspirationFractionBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -42130,6 +42303,8 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmpMultTranspirationFractionBoundary.Free;
+  FFmp4TranspirationFractionBoundary.Free;
   FFmpMultRootDepthBoundary.Free;
   FFmp4RootDepthBoundary.Free;
   FFmpMultIrrigationBoundary.Free;
@@ -42551,6 +42726,18 @@ begin
   begin
     FreeAndNil(FFmpMultRootDepthBoundary);
   end;
+
+  if (FFmp4TranspirationFractionBoundary <> nil)
+    and not FFmp4TranspirationFractionBoundary.Used then
+  begin
+    FreeAndNil(FFmp4TranspirationFractionBoundary);
+  end;
+
+  if (FFmpMultTranspirationFractionBoundary <> nil)
+    and not FFmpMultTranspirationFractionBoundary.Used then
+  begin
+    FreeAndNil(FFmpMultTranspirationFractionBoundary);
+  end;
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -42918,6 +43105,16 @@ begin
   if FFmpMultRootDepthBoundary <> nil then
   begin
     FFmpMultRootDepthBoundary.Invalidate;
+  end;
+
+  if FFmp4TranspirationFractionBoundary <> nil then
+  begin
+    FFmp4TranspirationFractionBoundary.Invalidate;
+  end;
+
+  if FFmpMultTranspirationFractionBoundary <> nil then
+  begin
+    FFmpMultTranspirationFractionBoundary.Invalidate;
   end;
 end;
 
@@ -43326,6 +43523,16 @@ begin
   if FFmpMultRootDepthBoundary <> nil then
   begin
     FFmpMultRootDepthBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4TranspirationFractionBoundary <> nil then
+  begin
+    FFmp4TranspirationFractionBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmpMultTranspirationFractionBoundary <> nil then
+  begin
+    FFmpMultTranspirationFractionBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -43739,6 +43946,16 @@ begin
     FFmpMultRootDepthBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4TranspirationFractionBoundary <> nil then
+  begin
+    FFmp4TranspirationFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmpMultTranspirationFractionBoundary <> nil then
+  begin
+    FFmpMultTranspirationFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -44147,6 +44364,16 @@ begin
   if FFmpMultRootDepthBoundary <> nil then
   begin
     FFmpMultRootDepthBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4TranspirationFractionBoundary <> nil then
+  begin
+    FFmp4TranspirationFractionBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmpMultTranspirationFractionBoundary <> nil then
+  begin
+    FFmpMultTranspirationFractionBoundary.StopTalkingToAnyone;
   end;
 end;
 
@@ -44803,6 +45030,24 @@ begin
   if FFmpMultRootDepthBoundary <> nil then
   begin
     Result := FFmpMultRootDepthBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4TranspirationFractionBoundary <> nil then
+  begin
+    Result := FFmp4TranspirationFractionBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmpMultTranspirationFractionBoundary <> nil then
+  begin
+    Result := FFmpMultTranspirationFractionBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

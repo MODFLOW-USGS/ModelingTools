@@ -1,4 +1,4 @@
-unit ModflowFmp4RootDepthUnit;
+unit ModflowFmp4TranspirationFractionUnit;
 
 interface
 
@@ -8,18 +8,18 @@ uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit,
 type
   // Single land use per cell
 
-  TFmp4RootDepthTimeListLink  = class(TFmp4TimeListLink)
+  TFmp4TranspirationFractionTimeListLink  = class(TFmp4TimeListLink)
   protected
     class function GetDescription: string; override;
     procedure AssignInvalidateEvent; override;
   end;
 
-  TFmp4RootDepthCollection = class(TFmp4Collection)
+  TFmp4TranspirationFractionCollection = class(TFmp4Collection)
   protected
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
-  TFmp4RootDepthBoundary = class(TFmp4Boundary)
+  TFmp4TranspirationFractionBoundary = class(TFmp4Boundary)
   private
   protected
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
@@ -31,7 +31,7 @@ type
 
   // Multiple land use per cell
 
-  TFmp4MultRootDepthTimeListLink = class(TFmp4LandUseTimeListLink)
+  TFmp4MultTranspirationFractionTimeListLink = class(TFmp4LandUseTimeListLink)
   protected
     class function GetDescription: string; override;
     function MultipleCropsPerCellUsed: Boolean; override;
@@ -39,12 +39,12 @@ type
     Constructor Create(AModel: TBaseModel; ABoundary: TCustomMF_BoundColl); override;
   end;
 
-  TFmp4MultRootDepthCollection = class(TFmp4LandUseCollection)
+  TFmp4MultTranspirationFractionCollection = class(TFmp4LandUseCollection)
     function MultipleCropsPerCellUsed: Boolean; override;
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   end;
 
-  TFmp4MultRootDepthBoundary = class(TFmp4LandUseBoundary)
+  TFmp4MultTranspirationFractionBoundary = class(TFmp4LandUseBoundary)
   protected
     function MultipleCropsPerCellUsed: Boolean; override;
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
@@ -54,48 +54,47 @@ type
     procedure InvalidateDisplay; override;
   end;
 
-
 resourcestring
-  StrFmp4RootDepth = 'Fmp4_Root_Depth';
+  StrFmp4TranspirationFraction = 'Fmp4_Transpiration_Fraction';
 
 implementation
 
 uses
   PhastModelUnit, ModflowPackageSelectionUnit;
 
-{ TFmp4RootDepthTimeListLink }
+{ TFmp4TranspirationFractionTimeListLink }
 
-procedure TFmp4RootDepthTimeListLink.AssignInvalidateEvent;
+procedure TFmp4TranspirationFractionTimeListLink.AssignInvalidateEvent;
 begin
 //  inherited;
 
 end;
 
-class function TFmp4RootDepthTimeListLink.GetDescription: string;
+class function TFmp4TranspirationFractionTimeListLink.GetDescription: string;
 begin
-  result := StrFmp4RootDepth;
+  result := StrFmp4TranspirationFraction;
 end;
 
-{ TFmp4RootDepthCollection }
+{ TFmp4TranspirationFractionCollection }
 
-class function TFmp4RootDepthCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TFmp4TranspirationFractionCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
-  result := TFmp4RootDepthTimeListLink;
+  result := TFmp4TranspirationFractionTimeListLink;
 end;
 
-{ TFmp4RootDepthBoundary }
+{ TFmp4TranspirationFractionBoundary }
 
-class function TFmp4RootDepthBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
+class function TFmp4TranspirationFractionBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
-  result := TFmp4RootDepthCollection;
+  result := TFmp4TranspirationFractionCollection;
 end;
 
-procedure TFmp4RootDepthBoundary.InvalidateData(Sender: TObject);
+procedure TFmp4TranspirationFractionBoundary.InvalidateData(Sender: TObject);
 begin
   InvalidateDisplay;
 end;
 
-procedure TFmp4RootDepthBoundary.InvalidateDisplay;
+procedure TFmp4TranspirationFractionBoundary.InvalidateDisplay;
 var
   Model: TCustomModel;
 begin
@@ -106,36 +105,36 @@ begin
   {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
-      Model.InvalidateMfFmp4RootDepth(self);
+      Model.InvalidateMfFmp4TranspirationFraction(self);
     end
   {$ENDIF}
     ;
   end;
 end;
 
-class function TFmp4RootDepthBoundary.ValueDescription: string;
+class function TFmp4TranspirationFractionBoundary.ValueDescription: string;
 begin
-  result := StrFmp4RootDepth;
+  result := StrFmp4TranspirationFraction;
 end;
 
-{ TFmp4MultRootDepthTimeListLink }
+{ TFmp4MultTranspirationFractionTimeListLink }
 
-constructor TFmp4MultRootDepthTimeListLink.Create(AModel: TBaseModel;
+constructor TFmp4MultTranspirationFractionTimeListLink.Create(AModel: TBaseModel;
   ABoundary: TCustomMF_BoundColl);
 begin
   inherited;
   if AModel <> nil then
   begin
-    FOnInvalidateLanduse := (AModel as TCustomModel).InvalidateMfFmp4RootDepth;
+    FOnInvalidateLanduse := (AModel as TCustomModel).InvalidateMfFmp4TranspirationFraction;
   end;
 end;
 
-class function TFmp4MultRootDepthTimeListLink.GetDescription: string;
+class function TFmp4MultTranspirationFractionTimeListLink.GetDescription: string;
 begin
-  result := 'Root_Depth';
+  result := 'Transpiration_Fraction';
 end;
 
-function TFmp4MultRootDepthTimeListLink.MultipleCropsPerCellUsed: Boolean;
+function TFmp4MultTranspirationFractionTimeListLink.MultipleCropsPerCellUsed: Boolean;
 var
   LocalModel: TCustomModel;
   LandUse: TFarmProcess4LandUse;
@@ -149,20 +148,20 @@ begin
     result := (LocalModel.ModelSelection = msModflowOwhm2)
       and LandUse.IsSelected
       and (LandUse.LandUseOption = luoMultiple)
-      and (LandUse.RootDepth.FarmOption = foTransient)
-      and (LandUse.RootDepth.ArrayList = alArray)
+      and (LandUse.TranspirationFraction.FarmOption = foTransient)
+      and (LandUse.TranspirationFraction.ArrayList = alArray)
   end;
 {$ENDIF}
 end;
 
-{ TFmp4MultRootDepthCollection }
+{ TFmp4MultTranspirationFractionCollection }
 
-class function TFmp4MultRootDepthCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
+class function TFmp4MultTranspirationFractionCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
-  result := TFmp4MultRootDepthTimeListLink;
+  result := TFmp4MultTranspirationFractionTimeListLink;
 end;
 
-function TFmp4MultRootDepthCollection.MultipleCropsPerCellUsed: Boolean;
+function TFmp4MultTranspirationFractionCollection.MultipleCropsPerCellUsed: Boolean;
 var
   LocalModel: TCustomModel;
   LandUse: TFarmProcess4LandUse;
@@ -176,25 +175,25 @@ begin
     result := (LocalModel.ModelSelection = msModflowOwhm2)
       and LandUse.IsSelected
       and (LandUse.LandUseOption = luoMultiple)
-      and (LandUse.RootDepth.FarmOption = foTransient)
-      and (LandUse.RootDepth.ArrayList = alArray)
+      and (LandUse.TranspirationFraction.FarmOption = foTransient)
+      and (LandUse.TranspirationFraction.ArrayList = alArray)
   end;
 {$ENDIF}
 end;
 
-{ TFmp4MultRootDepthBoundary }
+{ TFmp4MultTranspirationFractionBoundary }
 
-class function TFmp4MultRootDepthBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
+class function TFmp4MultTranspirationFractionBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
-  result := TFmp4MultRootDepthCollection;
+  result := TFmp4MultTranspirationFractionCollection;
 end;
 
-procedure TFmp4MultRootDepthBoundary.InvalidateDisplay;
+procedure TFmp4MultTranspirationFractionBoundary.InvalidateDisplay;
 begin
   InvalidateLandUseData(nil);
 end;
 
-procedure TFmp4MultRootDepthBoundary.InvalidateLandUseData(
+procedure TFmp4MultTranspirationFractionBoundary.InvalidateLandUseData(
   Sender: TObject);
 var
   Model: TCustomModel;
@@ -206,14 +205,14 @@ begin
   {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
-      Model.InvalidateMfFmp4RootDepth(self);
+      Model.InvalidateMfFmp4TranspirationFraction(self);
     end
   {$ENDIF}
     ;
   end;
 end;
 
-function TFmp4MultRootDepthBoundary.MultipleCropsPerCellUsed: Boolean;
+function TFmp4MultTranspirationFractionBoundary.MultipleCropsPerCellUsed: Boolean;
 var
   LocalModel: TCustomModel;
   LandUse: TFarmProcess4LandUse;
@@ -227,15 +226,15 @@ begin
     result := (LocalModel.ModelSelection = msModflowOwhm2)
       and LandUse.IsSelected
       and (LandUse.LandUseOption = luoMultiple)
-      and (LandUse.RootDepth.FarmOption = foTransient)
-      and (LandUse.RootDepth.ArrayList = alArray)
+      and (LandUse.TranspirationFraction.FarmOption = foTransient)
+      and (LandUse.TranspirationFraction.ArrayList = alArray)
   end;
 {$ENDIF}
 end;
 
-class function TFmp4MultRootDepthBoundary.ValueDescription: string;
+class function TFmp4MultTranspirationFractionBoundary.ValueDescription: string;
 begin
-  result := 'Root_Depth';
+  result := 'Transpiration_Fraction';
 end;
 
 end.

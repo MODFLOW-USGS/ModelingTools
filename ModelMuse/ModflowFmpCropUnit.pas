@@ -367,6 +367,10 @@ type
     FSWLossFractionIrrigationDisplayName: string;
     FConsumptiveUseDisplayName: string;
     FLandUseAreaFractionDisplayName: string;
+    FGroundwaterRootInteractionDataArrayName: string;
+    FGroundwaterRootInteractionDisplayName: string;
+    FTranspirationFractionDataArrayName: string;
+    FTranspirationFractionDisplayName: string;
     procedure SetLandUseAreaFractionDataArrayName(const NewName: string);
     procedure SetCropCoefficientDataArrayName(const NewName: string);
     procedure SetAddedDemandDataArrayName(const NewName: string);
@@ -376,6 +380,8 @@ type
     procedure SetRootDepthDataArrayName(const NewName: string);
     procedure SetSWLossFractionIrrigationDataArrayName(const NewName: string);
     procedure SetSWLossFractionPrecipDataArrayName(const NewName: string);
+    procedure SetGroundwaterRootInteractionDataArrayName(const NewName: string);
+    procedure SetTranspirationFractionDataArrayName(const NewName: string);
     function GetBaseTemperature: string;
     function GetBeginningRootDepth: string;
     function GetCoefficient0: string;
@@ -516,6 +522,21 @@ type
       stored False
     {$ENDIF}
     ;
+
+    property GroundwaterRootInteractionDataArrayName: string
+      read FGroundwaterRootInteractionDataArrayName write SetGroundwaterRootInteractionDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property TranspirationFractionDataArrayName: string
+      read FTranspirationFractionDataArrayName write SetTranspirationFractionDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+
+
     property EvaporationIrrigationDataArrayName: string
       read FEvaporationIrrigationDataArrayName write SetEvaporationIrrigationDataArrayName
     {$IFNDEF OWHMV2}
@@ -583,6 +604,8 @@ const
   KConsumptiveUsePrefix = 'Consumptive_Use_';
   KIrrigationPrefix = 'Irrigation_';
   KRootDepthPrefix = 'Root_Depth_';
+  KGroundwaterRootInteractionPrefix = 'Groundwater_Root_Interaction_';
+  KTranspirationFractionPrefix = 'Transpiration_Fraction_';
   KEvaporationIrrigationPrefix = 'Evaporation_Irrigation_';
   KSWLossFractionPrecipPrefix = 'SW_Loss_Fraction_Precip_';
   KSWLossFractionIrrigationPrefix = 'SW_Loss_Fraction_Irrigation_';
@@ -594,6 +617,8 @@ resourcestring
   StrConsumptiveUsePrefix = KConsumptiveUsePrefix;
   StrIrrigationPrefix = KIrrigationPrefix;
   StrRootDepthPrefix = KRootDepthPrefix;
+  StrGroundwaterRootInteractionPrefix = KGroundwaterRootInteractionPrefix;
+  StrTranspirationFractionPrefix = KTranspirationFractionPrefix;
   StrEvaporationIrrigationPrefix = KEvaporationIrrigationPrefix;
   StrSWLossFractionIrrigationPrefix = KSWLossFractionIrrigationPrefix;
   StrSWLossFractionPrecipPrefix = KSWLossFractionPrecipPrefix;
@@ -1704,6 +1729,8 @@ begin
     ConsumptiveUseDataArrayName := SourceItem.ConsumptiveUseDataArrayName;
     IrrigationDataArrayName := SourceItem.IrrigationDataArrayName;
     RootDepthDataArrayName := SourceItem.RootDepthDataArrayName;
+    GroundwaterRootInteractionDataArrayName := SourceItem.GroundwaterRootInteractionDataArrayName;
+    TranspirationFractionDataArrayName := SourceItem.TranspirationFractionDataArrayName;
     EvaporationIrrigationDataArrayName := SourceItem.EvaporationIrrigationDataArrayName;
     SWLossFractionIrrigationDataArrayName := SourceItem.SWLossFractionIrrigationDataArrayName;
     SWLossFractionPrecipDataArrayName := SourceItem.SWLossFractionPrecipDataArrayName;
@@ -2083,6 +2110,8 @@ begin
       and (ConsumptiveUseDataArrayName = OtherItem.ConsumptiveUseDataArrayName)
       and (IrrigationDataArrayName = OtherItem.IrrigationDataArrayName)
       and (RootDepthDataArrayName = OtherItem.RootDepthDataArrayName)
+      and (GroundwaterRootInteractionDataArrayName = OtherItem.GroundwaterRootInteractionDataArrayName)
+      and (TranspirationFractionDataArrayName = OtherItem.TranspirationFractionDataArrayName)
       and (EvaporationIrrigationDataArrayName = OtherItem.EvaporationIrrigationDataArrayName)
       and (SWLossFractionIrrigationDataArrayName = OtherItem.SWLossFractionIrrigationDataArrayName)
       and (SWLossFractionPrecipDataArrayName = OtherItem.SWLossFractionPrecipDataArrayName)
@@ -2433,6 +2462,16 @@ begin
         RootDepthDataArrayName := StringReplace(RootDepthDataArrayName,
           OldRoot,NewRoot, []);
 
+        FGroundwaterRootInteractionDisplayName := StringReplace(FGroundwaterRootInteractionDisplayName,
+          OldRoot,NewRoot, []);
+        GroundwaterRootInteractionDataArrayName := StringReplace(GroundwaterRootInteractionDataArrayName,
+          OldRoot,NewRoot, []);
+
+        FTranspirationFractionDisplayName := StringReplace(FTranspirationFractionDisplayName,
+          OldRoot,NewRoot, []);
+        TranspirationFractionDataArrayName := StringReplace(TranspirationFractionDataArrayName,
+          OldRoot,NewRoot, []);
+
         FEvaporationIrrigationDisplayName := StringReplace(FEvaporationIrrigationDisplayName,
           OldRoot,NewRoot, []);
         EvaporationIrrigationDataArrayName := StringReplace(EvaporationIrrigationDataArrayName,
@@ -2469,6 +2508,12 @@ begin
 
         FRootDepthDisplayName := GenerateNewRoot(StrRootDepthPrefix + Value);
         RootDepthDataArrayName := GenerateNewRoot(KRootDepthPrefix + Value);
+
+        FGroundwaterRootInteractionDisplayName := GenerateNewRoot(StrGroundwaterRootInteractionPrefix + Value);
+        GroundwaterRootInteractionDataArrayName := GenerateNewRoot(KGroundwaterRootInteractionPrefix + Value);
+
+        FTranspirationFractionDisplayName := GenerateNewRoot(StrTranspirationFractionPrefix + Value);
+        TranspirationFractionDataArrayName := GenerateNewRoot(KTranspirationFractionPrefix + Value);
 
         FEvaporationIrrigationDisplayName := GenerateNewRoot(StrEvaporationIrrigationPrefix + Value);
         EvaporationIrrigationDataArrayName := GenerateNewRoot(KEvaporationIrrigationPrefix + Value);
@@ -2555,6 +2600,48 @@ procedure TCropItem.SetFmpRootDepthCollection(
   const Value: TFmpRootDepthCollection);
 begin
   FFmpRootDepthCollection.Assign(Value);
+end;
+
+procedure TCropItem.SetGroundwaterRootInteractionDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleGroundwaterRootInteractionUsed;
+    UpdateDat.OldDataArrayName := FGroundwaterRootInteractionDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FGroundwaterRootInteractionDisplayName;
+    UpdateDat.NewFormula := '5';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: GROUNDWATER_ROOT_INTERACTION' + sLineBreak
+    + '0 = No Transpiration' + sLineBreak
+    + '1 = No Groundwater Interaction' + sLineBreak
+    + '2 = Has Anoxia/Soil Stress Loss, NO Root-Groundwater Uptake' + sLineBreak
+    + '3 = Has Root-Groundwater Uptake, NO Anoxia/Soil Stress Loss' + sLineBreak
+    + '4 = Has Root-Groundwater Uptake and Soil Stress Loss, NO Anoxia Loss' + sLineBreak
+    + '5 = Full Interaction' + sLineBreak
+    + 'It is recommended to only use option 1, 3, or 5. If keyword is not specified, the default value is 5.';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtInteger;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FGroundwaterRootInteractionDataArrayName, NewName);
 end;
 
 procedure TCropItem.SetIndex(Value: Integer);
@@ -2823,6 +2910,40 @@ begin
   SetCaseSensitiveStringProperty(FSWLossFractionIrrigationDataArrayName, NewName);
 end;
 
+procedure TCropItem.SetTranspirationFractionDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleTranspirationFractionUsed;
+    UpdateDat.OldDataArrayName := FTranspirationFractionDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FTranspirationFractionDisplayName;
+    UpdateDat.NewFormula := '0';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: ROOT_DEPTH';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtDouble;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FTranspirationFractionDataArrayName, NewName);
+end;
+
 procedure TCropItem.UpdateAllDataArrays;
 begin
   if (Collection as TCropCollection).Model <> nil then
@@ -2834,6 +2955,8 @@ begin
     ConsumptiveUseDataArrayName := ConsumptiveUseDataArrayName;
     IrrigationDataArrayName := IrrigationDataArrayName;
     RootDepthDataArrayName := RootDepthDataArrayName;
+    GroundwaterRootInteractionDataArrayName := GroundwaterRootInteractionDataArrayName;
+    TranspirationFractionDataArrayName := TranspirationFractionDataArrayName;
     EvaporationIrrigationDataArrayName := EvaporationIrrigationDataArrayName;
     SWLossFractionPrecipDataArrayName := SWLossFractionPrecipDataArrayName;
     SWLossFractionIrrigationDataArrayName := SWLossFractionIrrigationDataArrayName;

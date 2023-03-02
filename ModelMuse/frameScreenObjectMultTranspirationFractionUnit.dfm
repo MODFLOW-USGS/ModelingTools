@@ -1,0 +1,2 @@
+inherited frameScreenObjectMultTranspirationFraction: TframeScreenObjectMultTranspirationFraction
+end

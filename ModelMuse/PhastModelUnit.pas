@@ -580,6 +580,8 @@ const
   KConsumptiveUse = 'Consumptive_Use';
   KIrrigation = 'Irrigation';
   KRootDepth = 'RootDepth';
+  KGWRootInteraction = 'GW_Root_Interaction';
+  KTranspirationFraction = 'TranspirationFraction';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2563,6 +2565,8 @@ that affects the model output should also have a comment. }
     function ConsumptiveUseUsed(Sender: TObject): Boolean;
     function IrrigationUsed(Sender: TObject): Boolean;
     function RootDepthUsed(Sender: TObject): Boolean;
+    function GwRootInteractionUsed(Sender: TObject): Boolean;
+    function TranspirationFractionUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2622,6 +2626,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientIrrigationMultIsSelected: Boolean; virtual;
     function FarmProcess4TransientRootDepthIsSelected: Boolean; virtual;
     function FarmProcess4TransientRootDepthMultIsSelected: Boolean; virtual;
+    function FarmProcess4TransientTranspirationFractionIsSelected: Boolean; virtual;
+    function FarmProcess4TransientTranspirationFractionMultIsSelected: Boolean; virtual;
 
     function GetIrrigationTypes: TIrrigationCollection; virtual; abstract;
     procedure SetIrrigationTypes(const Value: TIrrigationCollection); virtual; abstract;
@@ -2961,6 +2967,10 @@ that affects the model output should also have a comment. }
     function MultipleIrrigationUsed(Sender: TObject): Boolean;
     // ROOT_DEPTH
     function MultipleRootDepthUsed(Sender: TObject): Boolean;
+    // GROUNDWATER_ROOT_INTERACTION
+    function MultipleGroundwaterRootInteractionUsed(Sender: TObject): Boolean;
+    // TRANSPIRATION_FRACTION
+    function MultipleTranspirationFractionUsed(Sender: TObject): Boolean;
     // EVAPORATION_IRRIGATION_FRACTION
     function MultipleEvaporationIrrigationUsed(Sender: TObject): Boolean;
     // SURFACEWATER_LOSS_FRACTION_PRECIPITATION
@@ -3306,6 +3316,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4ConsumptiveUse(Sender: TObject);
     procedure InvalidateMfFmp4Irrigation(Sender: TObject);
     procedure InvalidateMfFmp4RootDepth(Sender: TObject);
+    procedure InvalidateMfFmp4TranspirationFraction(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4849,6 +4860,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientIrrigationMultIsSelected: Boolean; override;
     function FarmProcess4TransientRootDepthIsSelected: Boolean; override;
     function FarmProcess4TransientRootDepthMultIsSelected: Boolean; override;
+    function FarmProcess4TransientTranspirationFractionIsSelected: Boolean; override;
+    function FarmProcess4TransientTranspirationFractionMultIsSelected: Boolean; override;
 
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
@@ -6270,6 +6283,8 @@ resourcestring
   StrConsumptiveUse = KConsumptiveUse;
   StrKIrrigation = KIrrigation;
   StrKRootDepth = KRootDepth;
+  StrGWRootInteraction = KGWRootInteraction;
+  StrKTranspirationFraction = KTranspirationFraction;
 
 
 const
@@ -24516,6 +24531,62 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientTranspirationFractionIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientTranspirationFractionIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientTranspirationFractionMultIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientTranspirationFractionMultIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.Farm4ProcessUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -27025,6 +27096,12 @@ procedure TCustomModel.InvalidateMfFmp4RootDepth(Sender: TObject);
 begin
   ModflowPackages.FarmLandUse.MfFmp4RootDepth.Invalidate;
   ModflowPackages.FarmLandUse.InvalidateMultTransienRootDepthArrays;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4TranspirationFraction(Sender: TObject);
+begin
+  ModflowPackages.FarmLandUse.MfFmp4TranspirationFraction.Invalidate;
+  ModflowPackages.FarmLandUse.InvalidateMultTransienTranspirationFractionArrays;
 end;
 
 procedure TCustomModel.InvalidateMfFmpCropID(Sender: TObject);
@@ -33108,6 +33185,17 @@ begin
   end;
 end;
 
+function TCustomModel.TranspirationFractionUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.StaticTranspirationFractionArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.TRPT: TOneDRealArray;
 begin
   result := LayerStructure.TRPT;
@@ -36226,6 +36314,28 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientTranspirationFractionIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientTranspirationFractionArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientTranspirationFractionMultIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientTranspirationFractionMultArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcessUsed(Sender: TObject): boolean;
 begin
   result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
@@ -38132,7 +38242,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 19;
+  OWHM4DataSets  = 21;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -41201,8 +41311,42 @@ begin
     'MODFLOW-OWHM version 2, LAND_USE: ROOT_DEPTH';
   Inc(Index);
 
-//    StrKIrrigation = KIrrigation;
+    FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtInteger;
+  FDataArrayCreationRecords[Index].Name := KGWRootInteraction;
+  FDataArrayCreationRecords[Index].DisplayName := StrGWRootInteraction;
+  FDataArrayCreationRecords[Index].Formula := '5';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.GwRootInteractionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE: GROUNDWATER_ROOT_INTERACTION' + sLineBreak
+    + '0 = No Transpiration' + sLineBreak
+    + '1 = No Groundwater Interaction' + sLineBreak
+    + '2 = Has Anoxia/Soil Stress Loss, NO Root-Groundwater Uptake' + sLineBreak
+    + '3 = Has Root-Groundwater Uptake, NO Anoxia/Soil Stress Loss' + sLineBreak
+    + '4 = Has Root-Groundwater Uptake and Soil Stress Loss, NO Anoxia Loss' + sLineBreak
+    + '5 = Full Interaction' + sLineBreak
+    + 'It is recommended to only use option 1, 3, or 5. If keyword is not specified, the default value is 5.';
+  Inc(Index);
 
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KTranspirationFraction;
+  FDataArrayCreationRecords[Index].DisplayName := StrKTranspirationFraction;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.TranspirationFractionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE: TRANSPIRATION_FRACTION';
+  Inc(Index);
+
+  //  StrGWRootInteraction = KGWRootInteraction;
 
   {$ENDIF}
 
@@ -43396,6 +43540,22 @@ begin
 {$ENDIF}
 end;
 
+function TCustomModel.MultipleGroundwaterRootInteractionUsed(
+  Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+{$IFDEF OWHMV2}
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.GroundwaterRootInteraction.FarmOption = foStatic)
+    and (FarmLandUse.GroundwaterRootInteraction.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
+end;
+
 function TCustomModel.MultipleIrrigationUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
@@ -43470,6 +43630,22 @@ begin
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.FractionOfPrecipToSurfaceWater.FarmOption = foStatic)
     and (FarmLandUse.FractionOfPrecipToSurfaceWater.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
+end;
+
+function TCustomModel.MultipleTranspirationFractionUsed(
+  Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
+begin
+{$IFDEF OWHMV2}
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmLandUse.TranspirationFraction.FarmOption = foStatic)
+    and (FarmLandUse.TranspirationFraction.ArrayList = alArray);
 {$ELSE}
    result := False;
 {$ENDIF}
@@ -52488,6 +52664,17 @@ end;
 function TCustomModel.GroundSurfaceUsed(Sender: TObject): boolean;
 begin
   result := UzfPackageUsed(Sender) or FarmProcessUsed(Sender);
+end;
+
+function TCustomModel.GwRootInteractionUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.StaticGwRootInteractionArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 function TCustomModel.GwtDispUsed(Sender: TObject): boolean;

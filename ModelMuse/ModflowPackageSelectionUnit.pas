@@ -5483,6 +5483,9 @@ Type
     UpdateDisplay: TUpdateDisplay;
   end;
 
+  TIrrigationOption = (ioByCrop, ioByIrrigate);
+  TDemandOption = (doLength, doRate);
+
   TFarmProcess4LandUse = class(TCustomFarm4)
   private
     FLandUseFraction: TFarmProperty;
@@ -5519,6 +5522,12 @@ Type
     FMultIrrigations: TMfBoundDispObjectList;
     FMfFmp4RootDepth: TModflowBoundaryDisplayTimeList;
     FMultRootDepths: TMfBoundDispObjectList;
+    FGroundwaterRootInteraction: TFarmProperty;
+    FMultTranspirationFractions: TMfBoundDispObjectList;
+    FMfFmp4TranspirationFraction: TModflowBoundaryDisplayTimeList;
+    FEvapIrrigationOption: TIrrigationOption;
+    FFractionOfPrecipToSurfaceWaterIrrigationOption: TIrrigationOption;
+    FAddedDemandOption: TDemandOption;
     procedure SetAddedDemand(const Value: TFarmProperty);
     procedure SetCropCoeff(const Value: TFarmProperty);
     procedure SetET_IrrigFracCorrection(const Value: TFarmProperty);
@@ -5615,12 +5624,30 @@ Type
     // Root Depth arrays for single and multiple land uses per cell
     procedure InvalidateRootDepth(Sender: TObject);
 
+    // Transpiration Fraction array for single land use per cell
+    function GetTranspirationFractionBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeTranspirationFractionDisplay(Sender: TObject);
+    procedure GetTranspirationFractionUseList(Sender: TObject; NewUseList: TStringList);
+    // Transpiration Fraction arrays for multiple land uses per cell
+    function GetMultTranspirationFractionBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure GetMultTranspirationFractionsUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure InitializeMultTranspirationFractionsDisplay(Sender: TObject);
+    procedure UpdateMultTranspirationFractionsArrays;
+    // Transpiration Fraction arrays for single and multiple land uses per cell
+    procedure InvalidateTranspirationFraction(Sender: TObject);
+
     procedure InvalidateTransientCropID;
 
     procedure UpdateMultLandUseLists(IsUsed: Boolean;
       List: TMfBoundDispObjectList; OnInitialize: TNotifyEvent;
       OnGetUseList: TOnGetConcUseList; const NameFormat: string);
     procedure InitializeLandUseDisplay(DisplayOptions: TInitializeLandUseDisplayOptions);
+    procedure SetGroundwaterRootInteraction(const Value: TFarmProperty);
+    procedure SetEvapIrrigationOption(const Value: TIrrigationOption);
+    procedure SetFractionOfPrecipToSurfaceWaterIrrigationOption(
+      const Value: TIrrigationOption);
+    procedure SetAddedDemandOption(const Value: TDemandOption);
   protected
     procedure InvalidateModel; Override;
   public
@@ -5684,6 +5711,17 @@ Type
     function TransientRootDepthMultArrayUsed (Sender: TObject): boolean;
     procedure InvalidateMultTransienRootDepthArrays;
 
+    function StaticGwRootInteractionArrayUsed (Sender: TObject): boolean;
+
+    // Transpiration Fraction array for single land use per cell
+    function TransientTranspirationFractionArrayUsed (Sender: TObject): boolean;
+    function StaticTranspirationFractionArrayUsed (Sender: TObject): boolean;
+    property MfFmp4TranspirationFraction: TModflowBoundaryDisplayTimeList
+      read FMfFmp4TranspirationFraction;
+    // Transpiration Fraction arrays for multiple land uses per cell
+    function TransientTranspirationFractionMultArrayUsed (Sender: TObject): boolean;
+    procedure InvalidateMultTransienTranspirationFractionArrays;
+
     procedure InvalidateAll;
     procedure Loaded;
   published
@@ -5725,12 +5763,17 @@ Type
     // ROOT_PRESSURE
     property RootPressure: TFarmProperty read FRootPressure
       write SetRootPressure;
+    // GROUNDWATER_ROOT_INTERACTION
+    property GroundwaterRootInteraction: TFarmProperty
+      read FGroundwaterRootInteraction write SetGroundwaterRootInteraction;
     // TRANSPIRATION_FRACTION
     property TranspirationFraction: TFarmProperty
       read FTranspirationFraction write SetTranspirationFraction;
     // EVAPORATION_IRRIGATION_FRACTION
     property EvapIrrigationFraction: TFarmProperty
       read FEvapIrrigationFraction write SetEvapIrrigationFraction;
+    property EvapIrrigationOption: TIrrigationOption read FEvapIrrigationOption
+      write SetEvapIrrigationOption;
     // SURFACEWATER_LOSS_FRACTION_PRECIPITATION
     property FractionOfPrecipToSurfaceWater: TFarmProperty
       read FFractionOfPrecipToSurfaceWater
@@ -5739,12 +5782,17 @@ Type
     property FractionOfIrrigationToSurfaceWater: TFarmProperty
       read FFractionOfIrrigationToSurfaceWater
       write SetFractionOfIrrigationToSurfaceWater;
+    property FractionOfPrecipToSurfaceWaterIrrigationOption: TIrrigationOption
+      read FFractionOfPrecipToSurfaceWaterIrrigationOption
+      write SetFractionOfPrecipToSurfaceWaterIrrigationOption;
     // POND_DEPTH;
     property PondDepth: TFarmProperty read FPondDepth
       write SetPondDepth;
     // ADDED_DEMAND
     property AddedDemand: TFarmProperty read FAddedDemand
       write SetAddedDemand;
+    property AddedDemandOption: TDemandOption read FAddedDemandOption
+      write SetAddedDemandOption;
     // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
     property NoCropUseMeansBareSoil: TFarmProperty
       read FNoCropUseMeansBareSoil write SetNoCropUseMeansBareSoil;
@@ -7176,6 +7224,7 @@ resourcestring
   StrConsumptiveUsesS = 'Consumptive Use %s';
   StrIrrigationsS = 'Irrigation %s';
   StrRootDepthsS = 'Root Depth %s';
+  StrTranspirationFractionsS = 'Transpiration Fraction %s';
 
 { TModflowPackageSelection }
 
@@ -26489,6 +26538,7 @@ begin
   InvalidateConsumptiveUse(nil);
   InvalidateIrrigation(nil);
   InvalidateRootDepth(nil);
+  InvalidateTranspirationFraction(nil);
 end;
 
 procedure TFarmProcess4LandUse.Assign(Source: TPersistent);
@@ -26508,14 +26558,18 @@ begin
     CropCoeff := LandUse.CropCoeff;
     ConsumptiveUse := LandUse.ConsumptiveUse;
     Irrigation := LandUse.Irrigation;
+    GroundwaterRootInteraction := LandUse.GroundwaterRootInteraction;
     RootDepth := LandUse.RootDepth;
     RootPressure := LandUse.RootPressure;
     TranspirationFraction := LandUse.TranspirationFraction;
     EvapIrrigationFraction := LandUse.EvapIrrigationFraction;
+    EvapIrrigationOption := LandUse.EvapIrrigationOption;
     FractionOfPrecipToSurfaceWater := LandUse.FractionOfPrecipToSurfaceWater;
+    FractionOfPrecipToSurfaceWaterIrrigationOption := LandUse.FractionOfPrecipToSurfaceWaterIrrigationOption;
     FractionOfIrrigationToSurfaceWater := LandUse.FractionOfIrrigationToSurfaceWater;
     PondDepth := LandUse.PondDepth;
     AddedDemand := LandUse.AddedDemand;
+    AddedDemandOption := LandUse.AddedDemandOption;
     NoCropUseMeansBareSoil := LandUse.NoCropUseMeansBareSoil;
     ET_IrrigFracCorrection := LandUse.ET_IrrigFracCorrection;
   end;
@@ -26550,6 +26604,7 @@ begin
   FRootPressure := TFarmProperty.Create(InvalidateEvent);
   FRootDepth := TFarmProperty.Create(InvalidateEvent);
   FIrrigation := TFarmProperty.Create(InvalidateEvent);
+  FGroundwaterRootInteraction := TFarmProperty.Create(InvalidateEvent);
   FFractionOfIrrigationToSurfaceWater := TFarmProperty.Create(InvalidateEvent);
   FEvapIrrigationFraction := TFarmProperty.Create(InvalidateEvent);
   FNoCropUseMeansBareSoil := TFarmProperty.Create(InvalidateEvent);
@@ -26619,11 +26674,23 @@ begin
     FMfFmp4RootDepth.OnInitialize := InitializeRootDepthDisplay;
     FMfFmp4RootDepth.OnGetUseList := GetRootDepthUseList;
     FMfFmp4RootDepth.OnTimeListUsed := TransientRootDeptharrayUsed;
-    FMfFmp4RootDepth.Name := 'RootDepth';
+    FMfFmp4RootDepth.Name := 'Root Depth';
     FMfFmp4RootDepth.AddMethod := vamReplace;
     if TransientRootDeptharrayUsed(nil) then
     begin
       AddTimeList(FMfFmp4RootDepth);
+    end;
+
+
+    FMfFmp4TranspirationFraction := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4TranspirationFraction.OnInitialize := InitializeTranspirationFractionDisplay;
+    FMfFmp4TranspirationFraction.OnGetUseList := GetTranspirationFractionUseList;
+    FMfFmp4TranspirationFraction.OnTimeListUsed := TransientTranspirationFractionarrayUsed;
+    FMfFmp4TranspirationFraction.Name := 'Transpiration Fraction';
+    FMfFmp4TranspirationFraction.AddMethod := vamReplace;
+    if TransientTranspirationFractionarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4TranspirationFraction);
     end;
 
     FMultLandUseAreaFractions := TMfBoundDispObjectList.Create;
@@ -26631,6 +26698,7 @@ begin
     FMultConsumptiveUses := TMfBoundDispObjectList.Create;
     FMultIrrigations := TMfBoundDispObjectList.Create;
     FMultRootDepths := TMfBoundDispObjectList.Create;
+    FMultTranspirationFractions := TMfBoundDispObjectList.Create;
   end;
 
   FLandUseFraction.OnChangeFarmOption := InvalidateLandUseAreaFraction;
@@ -26647,16 +26715,21 @@ begin
 
   RootDepth.OnChangeFarmOption := InvalidateRootDepth;
   RootDepth.OnChangeArrayList := InvalidateRootDepth;
+
+  TranspirationFraction.OnChangeFarmOption := InvalidateTranspirationFraction;
+  TranspirationFraction.OnChangeArrayList := InvalidateTranspirationFraction;
 end;
 
 destructor TFarmProcess4LandUse.Destroy;
 begin
+  FMultTranspirationFractions.Free;
   FMultRootDepths.Free;
   FMultIrrigations.Free;
   FMultConsumptiveUses.Free;
   FMultCropCoefficients.Free;
   FMultLandUseAreaFractions.Free;
 
+  FMfFmp4TranspirationFraction.Free;
   FMfFmp4RootDepth.Free;
   FMfFmp4Irrigation.Free;
   FMfFmp4ConsumptiveUse.Free;
@@ -26673,6 +26746,7 @@ begin
   FRootPressure.Free;
   FRootDepth.Free;
   FIrrigation.Free;
+  FGroundwaterRootInteraction.Free;
   FFractionOfIrrigationToSurfaceWater.Free;
   FEvapIrrigationFraction.Free;
   FNoCropUseMeansBareSoil.Free;
@@ -26860,6 +26934,24 @@ begin
   UpdatePkgUseList(NewUseList, GetMultRootDepthBoundary, Index, DataSetName);
 end;
 
+function TFarmProcess4LandUse.GetMultTranspirationFractionBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4MultTranspirationFraction;
+end;
+
+procedure TFarmProcess4LandUse.GetMultTranspirationFractionsUseList(
+  Sender: TObject; NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FMultTranspirationFractions.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+  DataSetName := Format(StrTranspirationFractionsS,
+     [frmGoPhast.PhastModel.fmpCrops[Index].CropName]);
+  UpdatePkgUseList(NewUseList, GetMultTranspirationFractionBoundary, Index, DataSetName);
+end;
+
 function TFarmProcess4LandUse.GetRelaxFracHeadChange: double;
 begin
   result := StoredRelaxFracHeadChange.Value;
@@ -26877,7 +26969,23 @@ var
   GetUseListOptions: TGetUseListOptions;
 begin
   GetUseListOptions.GetBoundary := Self.GetRootDepthBoundary;
-  GetUseListOptions.Description := 'FMP RootDepth';
+  GetUseListOptions.Description := 'FMP Root Depth';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
+function TFarmProcess4LandUse.GetTranspirationFractionBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4TranspirationFraction;
+end;
+
+procedure TFarmProcess4LandUse.GetTranspirationFractionUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetTranspirationFractionBoundary;
+  GetUseListOptions.Description := 'FMP Transpiration Fraction';
   GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
@@ -27088,6 +27196,27 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InitializeMultTranspirationFractionsDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeLandUseDisplayOptions;
+  index: Integer;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    SetLength(DisplayOptions.Display, (FModel as TCustomModel).FmpCrops.Count);
+    for index := 0 to Length(DisplayOptions.Display) - 1 do
+    begin
+      DisplayOptions.Display[index] := FMultTranspirationFractions[index];
+    end;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateMultTranspirationFractionDisplay;
+    InitializeLandUseDisplay(DisplayOptions);
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InitializeRootDepthDisplay(Sender: TObject);
 var
   FarmWriter: TModflowFmp4Writer;
@@ -27103,8 +27232,27 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InitializeTranspirationFractionDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := FMfFmp4TranspirationFraction;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateTranspirationFractionDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InitializeVariables;
 begin
+  FEvapIrrigationOption := ioByCrop;
+  FFractionOfPrecipToSurfaceWaterIrrigationOption := ioByCrop;
+  FAddedDemandOption := doLength;
   MinimumBareFraction :=  0.000001;
   RelaxFracHeadChange := 1;
   FLandUseOption := luoSingle;
@@ -27115,6 +27263,7 @@ begin
   FCropCoeff.Initialize;
   FConsumptiveUse.Initialize;
   FIrrigation.Initialize;
+  FGroundwaterRootInteraction.Initialize;
   FRootDepth.Initialize;
   FRootPressure.Initialize;
   FTranspirationFraction.Initialize;
@@ -27261,6 +27410,16 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InvalidateMultTransienTranspirationFractionArrays;
+var
+  index: Integer;
+begin
+  for index := 0 to FMultTranspirationFractions.Count - 1 do
+  begin
+    FMultTranspirationFractions[index].Invalidate;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InvalidateRootDepth(Sender: TObject);
 begin
   if FModel <> nil  then
@@ -27281,6 +27440,15 @@ end;
 procedure TFarmProcess4LandUse.SetAddedDemand(const Value: TFarmProperty);
 begin
   FAddedDemand.Assign(Value);
+end;
+
+procedure TFarmProcess4LandUse.SetAddedDemandOption(const Value: TDemandOption);
+begin
+  if FAddedDemandOption <> Value then
+  begin
+    InvalidateModel;
+    FAddedDemandOption := Value;
+  end;
 end;
 
 procedure TFarmProcess4LandUse.SetConsumptiveUse(const Value: TFarmProperty);
@@ -27305,6 +27473,16 @@ begin
   FEvapIrrigationFraction.Assign(Value);
 end;
 
+procedure TFarmProcess4LandUse.SetEvapIrrigationOption(
+  const Value: TIrrigationOption);
+begin
+  if FEvapIrrigationOption <> Value then
+  begin
+    InvalidateModel;
+    FEvapIrrigationOption := Value;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.SetFractionOfIrrigationToSurfaceWater(
   const Value: TFarmProperty);
 begin
@@ -27315,6 +27493,22 @@ procedure TFarmProcess4LandUse.SetFractionOfPrecipToSurfaceWater(
   const Value: TFarmProperty);
 begin
   FFractionOfPrecipToSurfaceWater.Assign(Value);
+end;
+
+procedure TFarmProcess4LandUse.SetFractionOfPrecipToSurfaceWaterIrrigationOption(
+  const Value: TIrrigationOption);
+begin
+  if FFractionOfPrecipToSurfaceWaterIrrigationOption <> Value then
+  begin
+    InvalidateModel;
+    FFractionOfPrecipToSurfaceWaterIrrigationOption := Value;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.SetGroundwaterRootInteraction(
+  const Value: TFarmProperty);
+begin
+  FGroundwaterRootInteraction.Assign(Value);
 end;
 
 procedure TFarmProcess4LandUse.SetIrrigation(const Value: TFarmProperty);
@@ -27426,6 +27620,17 @@ begin
     and (LandUseOption = luoSingle);
 end;
 
+function TFarmProcess4LandUse.StaticGwRootInteractionArrayUsed(
+  Sender: TObject): boolean;
+var
+  LocalModel: TCustomModel;
+begin
+  result := PackageUsed(Sender)
+    and (GroundwaterRootInteraction.FarmOption = foStatic)
+    and (GroundwaterRootInteraction.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
 function TFarmProcess4LandUse.StaticIrrigationArrayUsed(
   Sender: TObject): boolean;
 var
@@ -27464,6 +27669,23 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InvalidateTranspirationFraction(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientTranspirationFractionarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4TranspirationFraction);
+    end
+    else
+    begin
+      RemoveTimeList(FMfFmp4TranspirationFraction);
+    end;
+    UpdateMultTranspirationFractionsArrays;
+  end;
+  InvalidateModel;
+end;
+
 procedure TFarmProcess4LandUse.Loaded;
 begin
   InvalidateAll;
@@ -27486,6 +27708,15 @@ begin
   result := PackageUsed(Sender)
     and (RootDepth.FarmOption = foStatic)
     and (RootDepth.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.StaticTranspirationFractionArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (TranspirationFraction.FarmOption = foStatic)
+    and (TranspirationFraction.ArrayList = alArray)
     and (LandUseOption = luoSingle);
 end;
 
@@ -27614,6 +27845,24 @@ begin
     and (LandUseOption = luoMultiple);
 end;
 
+function TFarmProcess4LandUse.TransientTranspirationFractionArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (TranspirationFraction.FarmOption = foTransient)
+    and (TranspirationFraction.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.TransientTranspirationFractionMultArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (TranspirationFraction.FarmOption = foTransient)
+    and (TranspirationFraction.ArrayList = alArray)
+    and (LandUseOption = luoMultiple);
+end;
+
 procedure TFarmProcess4LandUse.UpdateMultConsumptiveUsesArrays;
 begin
   UpdateMultLandUseLists(TransientConsumptiveUseMultArrayUsed(nil),
@@ -27700,6 +27949,15 @@ begin
     InitializeMultLandUseAreaFractionDisplay,
     GetMultLandUseFractionsUseList,
     StrLandUseAreaFracti);
+end;
+
+procedure TFarmProcess4LandUse.UpdateMultTranspirationFractionsArrays;
+begin
+  UpdateMultLandUseLists(TransientTranspirationFractionMultArrayUsed(nil),
+    FMultTranspirationFractions,
+    InitializeMultTranspirationFractionsDisplay,
+    GetMultTranspirationFractionsUseList,
+    StrTranspirationFractionsS);
 end;
 
 { TFarmSalinityFlush }

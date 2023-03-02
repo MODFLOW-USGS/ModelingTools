@@ -13,6 +13,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     Top = 111
     Width = 422
     Height = 405
+    VertScrollBar.Position = 401
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -23,21 +24,20 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlDataSets: TCategoryPanel
-      Top = 344
+      Top = -57
       Height = 550
       Caption = 'Land Use Data Sets'
       TabOrder = 0
-      ExplicitWidth = 185
       object rdgLandUse: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 399
         Height = 524
         Align = alClient
-        ColCount = 6
+        ColCount = 7
         Enabled = False
         FixedCols = 1
-        RowCount = 16
+        RowCount = 17
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
         OnSelectCell = rdgLandUseSelectCell
@@ -138,6 +138,33 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
             ButtonWidth = 20
             CheckMax = False
             CheckMin = False
+            ComboUsed = True
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            PickList.Strings = (
+              'By_Crop'
+              'By_Irrigate')
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
             ComboUsed = False
             Format = rcf4String
             LimitToList = False
@@ -201,11 +228,10 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 229
+      Top = -172
       Height = 115
       Caption = 'Land Use Options'
       TabOrder = 1
-      ExplicitWidth = 185
       object lblLandUsePerCell: TLabel
         Left = 168
         Top = 11
@@ -271,11 +297,10 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
     end
     object cpnlPrint: TCategoryPanel
-      Top = 0
+      Top = -401
       Height = 229
       Caption = 'Print'
       TabOrder = 2
-      ExplicitWidth = 185
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0

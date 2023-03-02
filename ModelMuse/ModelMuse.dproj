@@ -2051,6 +2051,17 @@
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="ModflowFmp4TranspirationFractionUnit.pas"/>
+        <DCCReference Include="frameScreenObjectFmp4TranspirationFractionUnit.pas">
+            <Form>frameScreenObjectFmp4TranspirationFraction</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="frameScreenObjectMultTranspirationFractionUnit.pas">
+            <Form>frameScreenObjectMultTranspirationFraction</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

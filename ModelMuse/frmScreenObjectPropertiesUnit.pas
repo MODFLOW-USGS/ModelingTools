@@ -67,7 +67,9 @@ uses System.UITypes, Windows,
   frameScreenObjectFmp4ConsumptiveUseUnit,
   frameScreenObjectMultConsumptiveUseUnit, frameScreenObjectFmp4IrrigationUnit,
   frameScreenObjectMultIrrigationUnit, frameScreenObjectFmp4RootDepthUnit,
-  frameScreenObjectMultRootDepthUnit;
+  frameScreenObjectMultRootDepthUnit,
+  frameScreenObjectFmp4TranspirationFractionUnit,
+  frameScreenObjectMultTranspirationFractionUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -457,6 +459,10 @@ type
     frameFmp4RootDepth: TframeScreenObjectFmp4RootDepth;
     jvspFmp4RootDepthMult: TJvStandardPage;
     frameFmp4MultRootDepth: TframeScreenObjectMultRootDepth;
+    jvspFmp4TranspirationFraction: TJvStandardPage;
+    frameFmp4TranspirationFraction: TframeScreenObjectFmp4TranspirationFraction;
+    jvspFmp4TranspirationFractionMult: TJvStandardPage;
+    frameFmp4MultTranspirationFraction: TframeScreenObjectMultTranspirationFraction;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1807,6 +1813,8 @@ type
     FFmp4MultIrrigationNode: TJvPageIndexNode;
     FFmp4RootDepthNode: TJvPageIndexNode;
     FFmp4MultRootDepthNode: TJvPageIndexNode;
+    FFmp4TranspirationFractionNode: TJvPageIndexNode;
+    FFmp4MultTranspirationFractionNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2385,6 +2393,14 @@ type
     procedure CreateFmp4MultRootDepthNode;
     procedure GetFmp4MultRootDepthBoundary(const ScreenObjectList: TList);
 
+    procedure Fmp4TranspirationFractionChanged(Sender: TObject);
+    procedure CreateFmp4TranspirationFractionNode;
+    procedure GetFmp4TranspirationFractionBoundary(const ScreenObjectList: TList);
+
+    procedure Fmp4MultTranspirationFractionChanged(Sender: TObject);
+    procedure CreateFmp4MultTranspirationFractionNode;
+    procedure GetFmp4MultTranspirationFractionBoundary(const ScreenObjectList: TList);
+
     // @name is set to @true when the @classname has stored values of the
     // @link(TScreenObject)s being edited.
     property IsLoaded: boolean read FIsLoaded write SetIsLoaded;
@@ -2686,7 +2702,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowFmp4PrecipPotConsumptionUnit, ModflowFmp4NrdInfilLocationUnit,
   ModflowFmp4CropCoefficientUnit, ModflowFmp4LandUseAreaFractionUnit,
   ModflowFmp4ConsumptiveUseUnit, ModflowFmp4IrrigationSpatialUnit,
-  ModflowFmp4RootDepthUnit;
+  ModflowFmp4RootDepthUnit, ModflowFmp4TranspirationFractionUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4193,6 +4209,14 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4TranspirationFractionNode then
+    begin
+      // do nothing
+    end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4MultTranspirationFractionNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4357,6 +4381,8 @@ begin
   CreateFmp4MultIrrigationNode;
   CreateFmp4RootDepthNode;
   CreateFmp4MultRootDepthNode;
+  CreateFmp4TranspirationFractionNode;
+  CreateFmp4MultTranspirationFractionNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -5196,6 +5222,8 @@ begin
         BoundaryNodeList.Add(FFmp4MultIrrigationNode);
         BoundaryNodeList.Add(FFmp4RootDepthNode);
         BoundaryNodeList.Add(FFmp4MultRootDepthNode);
+        BoundaryNodeList.Add(FFmp4TranspirationFractionNode);
+        BoundaryNodeList.Add(FFmp4MultTranspirationFractionNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -6192,6 +6220,16 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4MultTranspirationFractionChanged(
+  Sender: TObject);
+begin
+  if (FFmp4MultTranspirationFractionNode <> nil)
+    and (FFmp4MultTranspirationFractionNode.StateIndex <> 3) then
+  begin
+    FFmp4MultTranspirationFractionNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4NrdInfilLocationChanged(
   Sender: TObject);
 begin
@@ -6218,6 +6256,16 @@ begin
     and (FFmp4RootDepthNode.StateIndex <> 3) then
   begin
     FFmp4RootDepthNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4TranspirationFractionChanged(
+  Sender: TObject);
+begin
+  if (FFmp4TranspirationFractionNode <> nil)
+    and (FFmp4TranspirationFractionNode.StateIndex <> 3) then
+  begin
+    FFmp4TranspirationFractionNode.StateIndex := 2;
   end;
 end;
 
@@ -6308,6 +6356,8 @@ begin
   frameFmp4MultIrrigation.OnEdited := Fmp4MultIrrigationChanged;
   frameFmp4RootDepth.OnEdited := Fmp4RootDepthChanged;
   frameFmp4MultRootDepth.OnEdited := Fmp4MultRootDepthChanged;
+  frameFmp4TranspirationFraction.OnEdited := Fmp4TranspirationFractionChanged;
+  frameFmp4MultTranspirationFraction.OnEdited := Fmp4MultTranspirationFractionChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7592,6 +7642,14 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4TranspirationFractionNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FFmp4MultTranspirationFractionNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8669,6 +8727,22 @@ begin
       (FFmp4MultRootDepthNode.StateIndex = 2),
       (FFmp4MultRootDepthNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientRootDepthMultIsSelected);
+  end;
+
+  if (FFmp4TranspirationFractionNode <> nil) then
+  begin
+    frameFmp4TranspirationFraction.SetData(FNewProperties,
+      (FFmp4TranspirationFractionNode.StateIndex = 2),
+      (FFmp4TranspirationFractionNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientTranspirationFractionIsSelected);
+  end;
+
+  if (FFmp4MultTranspirationFractionNode <> nil) then
+  begin
+    frameFmp4MultTranspirationFraction.SetData(FNewProperties,
+      (FFmp4MultTranspirationFractionNode.StateIndex = 2),
+      (FFmp4MultTranspirationFractionNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientTranspirationFractionMultIsSelected);
   end;
 end;
 
@@ -15087,6 +15161,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4TranspirationFractionNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4TranspirationFractionNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientTranspirationFractionIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Transpiration Fraction in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4TranspirationFraction.PageIndex;
+    frameFmp4TranspirationFraction.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4TranspirationFractionNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4EfficiencyImprovementNode;
 var
   Node: TJvPageIndexNode;
@@ -15237,6 +15328,23 @@ begin
     frameFmp4MultRootDepth.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FFmp4MultRootDepthNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4MultTranspirationFractionNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4MultTranspirationFractionNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientTranspirationFractionMultIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Transpiration Fraction in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4TranspirationFractionMult.PageIndex;
+    frameFmp4MultTranspirationFraction.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4MultTranspirationFractionNode := Node;
   end;
 end;
 
@@ -18219,6 +18327,32 @@ begin
   frameFmp4MultRootDepth.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4MultTranspirationFractionBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4MultTranspirationFractionBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientTranspirationFractionMultIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4MultTranspirationFraction;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4MultTranspirationFractionNode <> nil then
+  begin
+    FFmp4MultTranspirationFractionNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4MultTranspirationFraction.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetFmp4NrdInfilLocationBoundary(
   const ScreenObjectList: TList);
 var
@@ -18295,6 +18429,32 @@ begin
     FFmp4RootDepthNode.StateIndex := Ord(State)+1;
   end;
   frameFmp4RootDepth.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4TranspirationFractionBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4TranspirationFractionBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientTranspirationFractionIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4TranspirationFraction;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4TranspirationFractionNode <> nil then
+  begin
+    FFmp4TranspirationFractionNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4TranspirationFraction.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetLakeMf6Boundary(
@@ -18779,6 +18939,8 @@ begin
   GetFmp4MultIrrigationBoundary(AScreenObjectList);
   GetFmp4RootDepthBoundary(AScreenObjectList);
   GetFmp4MultRootDepthBoundary(AScreenObjectList);
+  GetFmp4TranspirationFractionBoundary(AScreenObjectList);
+  GetFmp4MultTranspirationFractionBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 
