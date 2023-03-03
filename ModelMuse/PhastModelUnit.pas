@@ -581,7 +581,8 @@ const
   KIrrigation = 'Irrigation';
   KRootDepth = 'RootDepth';
   KGWRootInteraction = 'GW_Root_Interaction';
-  KTranspirationFraction = 'TranspirationFraction';
+  KTranspirationFraction = 'Transpiration_Fraction';
+  KEvaporationIrrigationFraction = 'Evaporation_Irrigation_Fraction';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2567,6 +2568,7 @@ that affects the model output should also have a comment. }
     function RootDepthUsed(Sender: TObject): Boolean;
     function GwRootInteractionUsed(Sender: TObject): Boolean;
     function TranspirationFractionUsed(Sender: TObject): Boolean;
+    function EvaporationIrrigationFractionUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2628,6 +2630,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientRootDepthMultIsSelected: Boolean; virtual;
     function FarmProcess4TransientTranspirationFractionIsSelected: Boolean; virtual;
     function FarmProcess4TransientTranspirationFractionMultIsSelected: Boolean; virtual;
+    function FarmProcess4TransientEvaporationIrrigationFractionIsSelected: Boolean; virtual;
+    function FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected: Boolean; virtual;
 
     function GetIrrigationTypes: TIrrigationCollection; virtual; abstract;
     procedure SetIrrigationTypes(const Value: TIrrigationCollection); virtual; abstract;
@@ -3317,6 +3321,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4Irrigation(Sender: TObject);
     procedure InvalidateMfFmp4RootDepth(Sender: TObject);
     procedure InvalidateMfFmp4TranspirationFraction(Sender: TObject);
+    procedure InvalidateMfFmp4EvaporationIrrigationFraction(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4862,6 +4867,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientRootDepthMultIsSelected: Boolean; override;
     function FarmProcess4TransientTranspirationFractionIsSelected: Boolean; override;
     function FarmProcess4TransientTranspirationFractionMultIsSelected: Boolean; override;
+    function FarmProcess4TransientEvaporationIrrigationFractionIsSelected: Boolean; override;
+    function FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected: Boolean; override;
 
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
@@ -6285,6 +6292,7 @@ resourcestring
   StrKRootDepth = KRootDepth;
   StrGWRootInteraction = KGWRootInteraction;
   StrKTranspirationFraction = KTranspirationFraction;
+  StrKEvaporationIrrigationFraction = KEvaporationIrrigationFraction;
 
 
 const
@@ -10984,12 +10992,16 @@ const
 //                any diversion segments is set to zero.
 //    '5.1.1.14' Bug fix: Fixed bug that would prevent elevations from being
 //                updated if the front and side views were hidden.
+//    '5.1.1.15' Enhancement: When exporting contours to Shapefiles,
+//                ModelMuse can now export a separate Shapefile for each layer.
+//               Enhancement: ModelMuse can now import Vertex values based on
+//                vertex locations in the Object Properties dialog box.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.14';
+  IIModelVersion = '5.1.1.15';
 
 function IModelVersion: string;
 begin
@@ -24205,6 +24217,62 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientEvaporationIrrigationFractionIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientEvaporationIrrigationFractionIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientFarmIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -27058,6 +27126,13 @@ end;
 procedure TCustomModel.InvalidateMfFmp4Evap(Sender: TObject);
 begin
   ModflowPackages.FarmClimate4.MfFmp4EvapRate.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4EvaporationIrrigationFraction(
+  Sender: TObject);
+begin
+  ModflowPackages.FarmLandUse.MfFmp4EvaporationIrrigationFraction.Invalidate;
+  ModflowPackages.FarmLandUse.InvalidateMultTransienEvaporationIrrigationFractionArrays;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4FarmID(Sender: TObject);
@@ -36215,6 +36290,28 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientEvaporationIrrigationFractionIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientEvaporationIrrigationFractionArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientEvaporationIrrigationFractionMultArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4TransientFarmsUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
@@ -38242,12 +38339,12 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 21;
+  OWHM4DataSets  = 22;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
   GWTDataSets = 5;
-{$IFDEF Sutra4}
+{$IFDEF SUTRA4}
   ArrayCount = 167 + GWTDataSets + OWHM4DataSets;
 {$ELSE}
   ArrayCount = 157 + GWTDataSets + OWHM4DataSets;
@@ -41344,6 +41441,20 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, LAND_USE: TRANSPIRATION_FRACTION';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KEvaporationIrrigationFraction;
+  FDataArrayCreationRecords[Index].DisplayName := StrKEvaporationIrrigationFraction;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.EvaporationIrrigationFractionUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE: EVAPORATION_IRRIGATION_FRACTION';
   Inc(Index);
 
   //  StrGWRootInteraction = KGWRootInteraction;
@@ -46603,6 +46714,18 @@ end;
 procedure TCustomModel.EvaluateSfrPackage;
 begin
   (SfrWriter as TModflowSFR_Writer).Evaluate;
+end;
+
+function TCustomModel.EvaporationIrrigationFractionUsed(
+  Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.StaticEvaporationIrrigationFractionArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 procedure TCustomModel.ExportFarmProcess(const FileName: string);

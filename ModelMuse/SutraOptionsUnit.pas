@@ -902,28 +902,28 @@ type
     // Data set 9: COMPI
     property StoredIceCompressibility: TRealStorage
       read FStoredIceCompressibility write SetStoredIceCompressibility
-    {$IFNDEF Sutra4}
+    {$IFNDEF SUTRA4}
       stored False
     {$ENDIF}
       ;
     // Data set 9: CI
     property StoredIceSpecificHeat: TRealStorage read FStoredIceSpecificHeat
       write SetStoredIceSpecificHeat
-    {$IFNDEF Sutra4}
+    {$IFNDEF SUTRA4}
       stored False
     {$ENDIF}
       ;
     // Data set 9: SIGMAI
     property StoredIceThermalConductivity: TRealStorage
       read FStoredIceThermalConductivity write SetStoredIceThermalConductivity
-    {$IFNDEF Sutra4}
+    {$IFNDEF SUTRA4}
       stored False
     {$ENDIF}
       ;
     // Data set 9: RHOI
     property StoredIceDensity: TRealStorage read FStoredIceDensity
       write SetStoredIceDensity
-    {$IFNDEF Sutra4}
+    {$IFNDEF SUTRA4}
       stored False
     {$ENDIF}
       ;

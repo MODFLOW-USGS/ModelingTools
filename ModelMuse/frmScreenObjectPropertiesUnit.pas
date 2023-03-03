@@ -69,7 +69,9 @@ uses System.UITypes, Windows,
   frameScreenObjectMultIrrigationUnit, frameScreenObjectFmp4RootDepthUnit,
   frameScreenObjectMultRootDepthUnit,
   frameScreenObjectFmp4TranspirationFractionUnit,
-  frameScreenObjectMultTranspirationFractionUnit;
+  frameScreenObjectMultTranspirationFractionUnit,
+  frameScreenObjectFmp4EvaporationIrrigationFractionUnit,
+  frameScreenObjectMultEvaporationIrrigationFractionUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -463,6 +465,14 @@ type
     frameFmp4TranspirationFraction: TframeScreenObjectFmp4TranspirationFraction;
     jvspFmp4TranspirationFractionMult: TJvStandardPage;
     frameFmp4MultTranspirationFraction: TframeScreenObjectMultTranspirationFraction;
+    Panel4: TPanel;
+    btnImportVertexValues: TButton;
+    Panel5: TPanel;
+    Button1: TButton;
+    jvspFmp4EvaporationIrrigationFraction: TJvStandardPage;
+    jvspFmp4EvaporationIrrigationFractionMult: TJvStandardPage;
+    frameFmp4EvaporationIrrigationFraction: TframeScreenObjectFmp4EvaporationIrrigationFraction;
+    frameFmp4MultEvaporationIrrigationFraction: TframeScreenObjectMultEvaporationIrrigationFraction;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -808,6 +818,7 @@ type
     procedure frameFmp4EfficiencyrdgModflowBoundarySetEditText(Sender: TObject;
       ACol, ARow: Integer; const Value: string);
     procedure frameFmp4EfficiencyseNumberOfTimesChange(Sender: TObject);
+    procedure btnImportVertexValuesClick(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -1815,6 +1826,8 @@ type
     FFmp4MultRootDepthNode: TJvPageIndexNode;
     FFmp4TranspirationFractionNode: TJvPageIndexNode;
     FFmp4MultTranspirationFractionNode: TJvPageIndexNode;
+    FFmp4EvaporationIrrigationFractionNode: TJvPageIndexNode;
+    FFmp4MultEvaporationIrrigationFractionNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2401,6 +2414,14 @@ type
     procedure CreateFmp4MultTranspirationFractionNode;
     procedure GetFmp4MultTranspirationFractionBoundary(const ScreenObjectList: TList);
 
+    procedure Fmp4EvaporationIrrigationFractionChanged(Sender: TObject);
+    procedure CreateFmp4EvaporationIrrigationFractionNode;
+    procedure GetFmp4EvaporationIrrigationFractionBoundary(const ScreenObjectList: TList);
+
+    procedure Fmp4MultEvaporationIrrigationFractionChanged(Sender: TObject);
+    procedure CreateFmp4MultEvaporationIrrigationFractionNode;
+    procedure GetFmp4MultEvaporationIrrigationFractionBoundary(const ScreenObjectList: TList);
+
     // @name is set to @true when the @classname has stored values of the
     // @link(TScreenObject)s being edited.
     property IsLoaded: boolean read FIsLoaded write SetIsLoaded;
@@ -2702,7 +2723,9 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowFmp4PrecipPotConsumptionUnit, ModflowFmp4NrdInfilLocationUnit,
   ModflowFmp4CropCoefficientUnit, ModflowFmp4LandUseAreaFractionUnit,
   ModflowFmp4ConsumptiveUseUnit, ModflowFmp4IrrigationSpatialUnit,
-  ModflowFmp4RootDepthUnit, ModflowFmp4TranspirationFractionUnit;
+  ModflowFmp4RootDepthUnit, ModflowFmp4TranspirationFractionUnit,
+  frmImportVertexValuesUnit, QuadTreeClass,
+  ModflowFmp4EvaporationIrrigationFractionUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4217,6 +4240,14 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4EvaporationIrrigationFractionNode then
+    begin
+      // do nothing
+    end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4MultEvaporationIrrigationFractionNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4383,6 +4414,8 @@ begin
   CreateFmp4MultRootDepthNode;
   CreateFmp4TranspirationFractionNode;
   CreateFmp4MultTranspirationFractionNode;
+  CreateFmp4EvaporationIrrigationFractionNode;
+  CreateFmp4MultEvaporationIrrigationFractionNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -5224,6 +5257,8 @@ begin
         BoundaryNodeList.Add(FFmp4MultRootDepthNode);
         BoundaryNodeList.Add(FFmp4TranspirationFractionNode);
         BoundaryNodeList.Add(FFmp4MultTranspirationFractionNode);
+        BoundaryNodeList.Add(FFmp4EvaporationIrrigationFractionNode);
+        BoundaryNodeList.Add(FFmp4MultEvaporationIrrigationFractionNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -6153,6 +6188,16 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4EvaporationIrrigationFractionChanged(
+  Sender: TObject);
+begin
+  if (FFmp4EvaporationIrrigationFractionNode <> nil)
+    and (FFmp4EvaporationIrrigationFractionNode.StateIndex <> 3) then
+  begin
+    FFmp4EvaporationIrrigationFractionNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4IrrigationChanged(Sender: TObject);
 begin
   if (FFmp4IrrigationNode <> nil)
@@ -6189,6 +6234,16 @@ begin
     and (FFmp4MultCropCoefficientNode.StateIndex <> 3) then
   begin
     FFmp4MultCropCoefficientNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4MultEvaporationIrrigationFractionChanged(
+  Sender: TObject);
+begin
+  if (FFmp4MultEvaporationIrrigationFractionNode <> nil)
+    and (FFmp4MultEvaporationIrrigationFractionNode.StateIndex <> 3) then
+  begin
+    FFmp4MultEvaporationIrrigationFractionNode.StateIndex := 2;
   end;
 end;
 
@@ -6358,6 +6413,8 @@ begin
   frameFmp4MultRootDepth.OnEdited := Fmp4MultRootDepthChanged;
   frameFmp4TranspirationFraction.OnEdited := Fmp4TranspirationFractionChanged;
   frameFmp4MultTranspirationFraction.OnEdited := Fmp4MultTranspirationFractionChanged;
+  frameFmp4EvaporationIrrigationFraction.OnEdited := Fmp4EvaporationIrrigationFractionChanged;
+  frameFmp4MultEvaporationIrrigationFraction.OnEdited := Fmp4MultEvaporationIrrigationFractionChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7650,6 +7707,14 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4EvaporationIrrigationFractionNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FFmp4MultEvaporationIrrigationFractionNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -7856,9 +7921,16 @@ var
   ValuePosition: Integer;
   ValueItem: TPointValue;
   AValue: Double;
+  PPItem: TPointValuesItem;
 begin
   if tabVertexValues.TabVisible then
   begin
+    while AScreenObject.PointPositionValues.Count < rdgVertexValues.RowCount - 1 do
+    begin
+      PPItem := AScreenObject.PointPositionValues.Add;
+      RowIndex := AScreenObject.PointPositionValues.Count;
+      PPItem.Position := rdgVertexValues.IntegerValueDefault[0, RowIndex, 0]-1;
+    end;
     Assert(AScreenObject.PointPositionValues.Count =
       rdgVertexValues.RowCount - 1);
     for RowIndex := rdgVertexValues.RowCount - 1 downto 1 do
@@ -8743,6 +8815,22 @@ begin
       (FFmp4MultTranspirationFractionNode.StateIndex = 2),
       (FFmp4MultTranspirationFractionNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientTranspirationFractionMultIsSelected);
+  end;
+
+  if (FFmp4EvaporationIrrigationFractionNode <> nil) then
+  begin
+    frameFmp4EvaporationIrrigationFraction.SetData(FNewProperties,
+      (FFmp4EvaporationIrrigationFractionNode.StateIndex = 2),
+      (FFmp4EvaporationIrrigationFractionNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientEvaporationIrrigationFractionIsSelected);
+  end;
+
+  if (FFmp4MultEvaporationIrrigationFractionNode <> nil) then
+  begin
+    frameFmp4MultEvaporationIrrigationFraction.SetData(FNewProperties,
+      (FFmp4MultEvaporationIrrigationFractionNode.StateIndex = 2),
+      (FFmp4MultEvaporationIrrigationFractionNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected);
   end;
 end;
 
@@ -11629,12 +11717,16 @@ begin
       end;
       ScreenObject.Comment := memoComments.Text;
       AScreenObject.Comment := memoComments.Text;
-      SetVertexValues(ScreenObject);
+
     end;
     for Index := 0 to FNewProperties.Count - 1 do
     begin
       Item := FNewProperties[Index];
       ScreenObject := Item.ScreenObject;
+      if FNewProperties.Count = 1 then
+      begin
+        SetVertexValues(ScreenObject);
+      end;
       Assert(ScreenObject <> nil);
 
       if rdeQuadTreeRefinement.Enabled
@@ -15212,6 +15304,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4EvaporationIrrigationFractionNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4EvaporationIrrigationFractionNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientEvaporationIrrigationFractionIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Evaporation Irrigation Fraction in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4EvaporationIrrigationFraction.PageIndex;
+    frameFmp4EvaporationIrrigationFraction.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4EvaporationIrrigationFractionNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4IrrigationNode;
 var
   Node: TJvPageIndexNode;
@@ -15277,6 +15386,23 @@ begin
     frameFmp4MultCropCoefficients.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FFmp4MultCropCoefficientNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4MultEvaporationIrrigationFractionNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4MultEvaporationIrrigationFractionNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Evaporation Irrigation Fraction in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4EvaporationIrrigationFractionMult.PageIndex;
+    frameFmp4MultEvaporationIrrigationFraction.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4MultEvaporationIrrigationFractionNode := Node;
   end;
 end;
 
@@ -18145,6 +18271,32 @@ begin
   frameFmp4EfficiencyImprovement.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4EvaporationIrrigationFractionBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4EvaporationIrrigationFractionBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientEvaporationIrrigationFractionIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4EvaporationIrrigationFraction;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4EvaporationIrrigationFractionNode <> nil then
+  begin
+    FFmp4EvaporationIrrigationFractionNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4EvaporationIrrigationFraction.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetFmp4IrrigationBoundary(
   const ScreenObjectList: TList);
 var
@@ -18247,6 +18399,32 @@ begin
     FFmp4MultCropCoefficientNode.StateIndex := Ord(State)+1;
   end;
   frameFmp4MultCropCoefficients.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4MultEvaporationIrrigationFractionBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4MultEvaporationIrrigationFractionBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4MultEvaporationIrrigationFraction;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4MultEvaporationIrrigationFractionNode <> nil then
+  begin
+    FFmp4MultEvaporationIrrigationFractionNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4MultEvaporationIrrigationFraction.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetFmp4MultIrrigationBoundary(
@@ -18941,6 +19119,8 @@ begin
   GetFmp4MultRootDepthBoundary(AScreenObjectList);
   GetFmp4TranspirationFractionBoundary(AScreenObjectList);
   GetFmp4MultTranspirationFractionBoundary(AScreenObjectList);
+  GetFmp4EvaporationIrrigationFractionBoundary(AScreenObjectList);
+  GetFmp4MultEvaporationIrrigationFractionBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 
@@ -24145,6 +24325,145 @@ begin
     Assert(False);
   end;
   EnableOK_Button;
+end;
+
+procedure TfrmScreenObjectProperties.btnImportVertexValuesClick(
+  Sender: TObject);
+var
+  QuadTree: TRbwQuadTree;
+  PointIndex: Integer;
+  APoint: TPoint2D;
+  VertexNumbers: TStringList;
+  Keys: TStringList;
+  RowIndex: Integer;
+  Items: TStrings;
+  Grid: TRbwDataGrid4;
+  X: Double;
+  Y: Double;
+  VertexNumber: String;
+  VIndex: Integer;
+  ColIndex: Integer;
+  ExistingKeyColumns: array of Integer;
+  KeyIndex: Integer;
+  KeyColumn: Integer;
+  VValue: string;
+  AScreenObject: TScreenObject;
+begin
+  inherited;
+  if FScreenObject <> nil then
+  begin
+    AScreenObject := FScreenObject
+  end
+  else
+  begin
+    if FScreenObjectList.Count <> 1 then
+    begin
+      Exit;
+    end;
+    AScreenObject := FScreenObjectList[0];
+  end;
+
+  if AScreenObject = nil then
+  begin
+    Exit;
+  end;
+  Application.CreateForm(TfrmImportVertexValues, frmImportVertexValues);
+  try
+    if frmImportVertexValues.ShowModal = mrOK then
+    begin
+      QuadTree := TRbwQuadTree.Create(nil);
+      VertexNumbers := TStringList.Create;
+      Keys := TStringList.Create;
+      try
+        QuadTree.XMax := AScreenObject.MaxX;
+        QuadTree.XMin := AScreenObject.MinX;
+        QuadTree.YMax := AScreenObject.MaxY;
+        QuadTree.YMin := AScreenObject.MinY;
+        for PointIndex := 0 to AScreenObject.Count - 1 do
+        begin
+          APoint := AScreenObject.Points[PointIndex];
+          QuadTree.AddPoint(APoint.x, APoint.y, Pointer(PointIndex));
+        end;
+
+        if tabVertexValues.TabVisible then
+        begin
+          VertexNumbers.Assign(rdgVertexValues.Cols[0]);
+          VertexNumbers.Delete(0);
+          Keys.Assign(rdgVertexValues.Rows[0]);
+          Keys.Delete(0);
+        end
+        else
+        begin
+          ClearGrid(rdgVertexValues);
+          rdgVertexValues.RowCount := 1;
+          rdgVertexValues.ColCount := 2;
+        end;
+
+        Keys.CaseSensitive := False;
+
+        Items := frmImportVertexValues.memoKeys.Lines;
+        for RowIndex := 0 to Items.Count - 1 do
+        begin
+          if Keys.IndexOf(Items[RowIndex]) < 0 then
+          begin
+            Keys.Add(Items[RowIndex]);
+          end;
+        end;
+        Keys.Insert(0, StrVertexNumbers);
+        rdgVertexValues.ColCount := Keys.Count;
+        rdgVertexValues.Rows[0].Assign(Keys);
+        Keys.Delete(0);
+        SetLength(ExistingKeyColumns, Items.Count);
+        for RowIndex := 0 to Items.Count - 1 do
+        begin
+          ExistingKeyColumns[RowIndex] := Keys.IndexOf(Items[RowIndex]) + 1;
+        end;
+
+        Grid := frmImportVertexValues.frameValues.Grid;
+        for RowIndex := 1 to Grid.RowCount - 1 do
+        begin
+          if TryStrToFloat(Grid.Cells[0,RowIndex], X)
+            and TryStrToFloat(Grid.Cells[1,RowIndex], Y) then
+          begin
+            VertexNumber := IntToStr(Integer(QuadTree.NearestPointsFirstData(X, Y))+1);
+            VIndex := VertexNumbers.IndexOf(VertexNumber);
+            if VIndex < 0 then
+            begin
+              VertexNumbers.Add(VertexNumber);
+              rdgVertexValues.RowCount := rdgVertexValues.RowCount + 1;
+              rdgVertexValues.FixedRows := 1;
+              rdgVertexValues.Cells[0, rdgVertexValues.RowCount-1] := VertexNumber;
+              VIndex := rdgVertexValues.RowCount-1;
+              for ColIndex := 1 to rdgVertexValues.ColCount - 1 do
+              begin
+                rdgVertexValues.Cells[ColIndex, VIndex] := '';
+              end;
+            end
+            else
+            begin
+              Inc(VIndex);
+            end;
+            for KeyIndex := 2 to Grid.ColCount - 1 do
+            begin
+              VValue := Trim(Grid.Cells[KeyIndex, RowIndex]);
+              if VValue <> '' then
+              begin
+                KeyColumn := ExistingKeyColumns[KeyIndex-2];
+                rdgVertexValues.Cells[KeyColumn,VIndex] := VValue;
+              end;
+            end;
+          end;
+        end;
+        tabVertexValues.TabVisible := True;
+      finally
+        Keys.Free;
+        VertexNumbers.Free;
+        QuadTree.Free;
+      end;
+    end;
+  finally
+    frmImportVertexValues.Free;
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.edHighZExit(Sender: TObject);

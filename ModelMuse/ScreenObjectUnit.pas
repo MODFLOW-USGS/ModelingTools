@@ -57,7 +57,8 @@ uses
   ModflowFmp4NrdInfilLocationUnit, ModflowFmp4CropCoefficientUnit,
   ModflowFmp4LandUseAreaFractionUnit, ModflowFmp4ConsumptiveUseUnit,
   ModflowFmp4IrrigationSpatialUnit, ModflowFmp4RootDepthUnit,
-  ModflowFmp4TranspirationFractionUnit;
+  ModflowFmp4TranspirationFractionUnit,
+  ModflowFmp4EvaporationIrrigationFractionUnit;
 
 type
   //
@@ -1487,6 +1488,8 @@ view. }
     FFmpMultRootDepthBoundary: TFmp4MultRootDepthBoundary;
     FFmp4TranspirationFractionBoundary: TFmp4TranspirationFractionBoundary;
     FFmpMultTranspirationFractionBoundary: TFmp4MultTranspirationFractionBoundary;
+    FFmpMultEvaporationIrrigationFractionBoundary: TFmp4MultEvaporationIrrigationFractionBoundary;
+    FFmp4EvaporationIrrigationFractionBoundary: TFmp4EvaporationIrrigationFractionBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1642,6 +1645,10 @@ view. }
       read FFmp4TranspirationFractionBoundary write FFmp4TranspirationFractionBoundary;
     property FmpMultTranspirationFractionBoundary: TFmp4MultTranspirationFractionBoundary
       read FFmpMultTranspirationFractionBoundary write FFmpMultTranspirationFractionBoundary;
+    property Fmp4EvaporationIrrigationFractionBoundary: TFmp4EvaporationIrrigationFractionBoundary
+      read FFmp4EvaporationIrrigationFractionBoundary write FFmp4EvaporationIrrigationFractionBoundary;
+    property FmpMultEvaporationIrrigationFractionBoundary: TFmp4MultEvaporationIrrigationFractionBoundary
+      read FFmpMultEvaporationIrrigationFractionBoundary write FFmpMultEvaporationIrrigationFractionBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -2975,6 +2982,18 @@ view. }
       const Value: TFmp4MultTranspirationFractionBoundary);
     function StoreModflowFmp4MultTranspirationFraction: Boolean;
     procedure CreateModflowMultTranspirationFractionBoundary;
+
+    function GetModflowFmp4EvaporationIrrigationFraction: TFmp4EvaporationIrrigationFractionBoundary;
+    procedure SetModflowFmp4EvaporationIrrigationFraction(
+      const Value: TFmp4EvaporationIrrigationFractionBoundary);
+    function StoreModflowFmp4EvaporationIrrigationFraction: Boolean;
+    procedure CreateModflowEvaporationIrrigationFractionBoundary;
+
+    function GetModflowFmp4MultEvaporationIrrigationFraction: TFmp4MultEvaporationIrrigationFractionBoundary;
+    procedure SetModflowFmp4MultEvaporationIrrigationFraction(
+      const Value: TFmp4MultEvaporationIrrigationFractionBoundary);
+    function StoreModflowFmp4MultEvaporationIrrigationFraction: Boolean;
+    procedure CreateModflowMultEvaporationIrrigationFractionBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4370,6 +4389,12 @@ view. }
     property ModflowFmp4MultTranspirationFraction: TFmp4MultTranspirationFractionBoundary
       read GetModflowFmp4MultTranspirationFraction write SetModflowFmp4MultTranspirationFraction
       Stored StoreModflowFmp4MultTranspirationFraction;
+    property ModflowFmp4EvaporationIrrigationFraction: TFmp4EvaporationIrrigationFractionBoundary
+      read GetModflowFmp4EvaporationIrrigationFraction write SetModflowFmp4EvaporationIrrigationFraction
+      Stored StoreModflowFmp4EvaporationIrrigationFraction;
+    property ModflowFmp4MultEvaporationIrrigationFraction: TFmp4MultEvaporationIrrigationFractionBoundary
+      read GetModflowFmp4MultEvaporationIrrigationFraction write SetModflowFmp4MultEvaporationIrrigationFraction
+      Stored StoreModflowFmp4MultEvaporationIrrigationFraction;
 
 
     { TODO :
@@ -7053,6 +7078,8 @@ begin
   ModflowFmp4MultRootDepth := AScreenObject.ModflowFmp4MultRootDepth;
   ModflowFmp4TranspirationFraction := AScreenObject.ModflowFmp4TranspirationFraction;
   ModflowFmp4MultTranspirationFraction := AScreenObject.ModflowFmp4MultTranspirationFraction;
+  ModflowFmp4EvaporationIrrigationFraction := AScreenObject.ModflowFmp4EvaporationIrrigationFraction;
+  ModflowFmp4MultEvaporationIrrigationFraction := AScreenObject.ModflowFmp4MultEvaporationIrrigationFraction;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9898,6 +9925,16 @@ begin
     if ModflowFmp4MultTranspirationFraction <> nil then
     begin
       ModflowFmp4MultTranspirationFraction.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4EvaporationIrrigationFraction <> nil then
+    begin
+      ModflowFmp4EvaporationIrrigationFraction.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultEvaporationIrrigationFraction <> nil then
+    begin
+      ModflowFmp4MultEvaporationIrrigationFraction.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -14272,6 +14309,24 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetModflowFmp4EvaporationIrrigationFraction(
+  const Value: TFmp4EvaporationIrrigationFractionBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4EvaporationIrrigationFractionBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4EvaporationIrrigationFractionBoundary);
+  end
+  else
+  begin
+    CreateModflowEvaporationIrrigationFractionBoundary;
+    ModflowBoundaries.FFmp4EvaporationIrrigationFractionBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetModflowFmp4Irrigation(
   const Value: TFmp4IrrigationBoundary);
 begin
@@ -14341,6 +14396,24 @@ begin
   begin
     CreateModflowMultCropCoefficientBoundary;
     ModflowBoundaries.FFmpMultCropCoefficientBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4MultEvaporationIrrigationFraction(
+  const Value: TFmp4MultEvaporationIrrigationFractionBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultEvaporationIrrigationFractionBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultEvaporationIrrigationFractionBoundary);
+  end
+  else
+  begin
+    CreateModflowMultEvaporationIrrigationFractionBoundary;
+    ModflowBoundaries.FFmpMultEvaporationIrrigationFractionBoundary.Assign(Value);
   end;
 end;
 
@@ -32538,6 +32611,16 @@ begin
 {$ENDIF}
 end;
 
+function TScreenObject.StoreModflowFmp4EvaporationIrrigationFraction: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4EvaporationIrrigationFraction <> nil) and ModflowFmp4EvaporationIrrigationFraction.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowFmp4Irrigation: Boolean;
 begin
 {$IFDEF OWHMV2}
@@ -32573,6 +32656,16 @@ begin
 {$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultCropCoefficient <> nil) and ModflowFmp4MultCropCoefficient.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4MultEvaporationIrrigationFraction: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultEvaporationIrrigationFraction <> nil) and ModflowFmp4MultEvaporationIrrigationFraction.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -33707,6 +33800,23 @@ begin
   end;
 end;
 
+function TScreenObject.GetModflowFmp4EvaporationIrrigationFraction: TFmp4EvaporationIrrigationFractionBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowEvaporationIrrigationFractionBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4EvaporationIrrigationFractionBoundary;
+  end;
+end;
+
 function TScreenObject.GetModflowFmp4Irrigation: TFmp4IrrigationBoundary;
 begin
   if (FModel = nil)
@@ -33772,6 +33882,23 @@ begin
   else
   begin
     result := ModflowBoundaries.FmpMultCropCoefficientBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4MultEvaporationIrrigationFraction: TFmp4MultEvaporationIrrigationFractionBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultEvaporationIrrigationFractionBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultEvaporationIrrigationFractionBoundary;
   end;
 end;
 
@@ -38626,6 +38753,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateModflowEvaporationIrrigationFractionBoundary;
+begin
+  if (ModflowBoundaries.FFmp4EvaporationIrrigationFractionBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4EvaporationIrrigationFractionBoundary :=
+      TFmp4EvaporationIrrigationFractionBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateModflowFmp4CropCoefficientBoundary;
 begin
   if (ModflowBoundaries.FFmp4CropCoefficientBoundary = nil) then
@@ -38704,6 +38840,15 @@ begin
   begin
     ModflowBoundaries.FFmpMultCropCoefficientBoundary :=
       TFmp4MultCropCoefficientBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowMultEvaporationIrrigationFractionBoundary;
+begin
+  if (ModflowBoundaries.FFmpMultEvaporationIrrigationFractionBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultEvaporationIrrigationFractionBoundary :=
+      TFmp4MultEvaporationIrrigationFractionBoundary.Create(FModel, self);
   end;
 end;
 
@@ -42285,6 +42430,34 @@ begin
     FFmpMultTranspirationFractionBoundary.Assign(Source.FFmpMultTranspirationFractionBoundary);
   end;
 
+  if Source.FFmp4EvaporationIrrigationFractionBoundary = nil then
+  begin
+    FreeAndNil(FFmp4EvaporationIrrigationFractionBoundary);
+  end
+  else
+  begin
+    if FFmp4EvaporationIrrigationFractionBoundary = nil then
+    begin
+      FFmp4EvaporationIrrigationFractionBoundary :=
+        TFmp4EvaporationIrrigationFractionBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4EvaporationIrrigationFractionBoundary.Assign(Source.FFmp4EvaporationIrrigationFractionBoundary);
+  end;
+
+  if Source.FFmpMultEvaporationIrrigationFractionBoundary = nil then
+  begin
+    FreeAndNil(FFmpMultEvaporationIrrigationFractionBoundary);
+  end
+  else
+  begin
+    if FFmpMultEvaporationIrrigationFractionBoundary = nil then
+    begin
+      FFmpMultEvaporationIrrigationFractionBoundary :=
+        TFmp4MultEvaporationIrrigationFractionBoundary.Create(Model, FScreenObject);
+    end;
+    FFmpMultEvaporationIrrigationFractionBoundary.Assign(Source.FFmpMultEvaporationIrrigationFractionBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -42303,6 +42476,8 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmpMultEvaporationIrrigationFractionBoundary.Free;
+  FFmp4EvaporationIrrigationFractionBoundary.Free;
   FFmpMultTranspirationFractionBoundary.Free;
   FFmp4TranspirationFractionBoundary.Free;
   FFmpMultRootDepthBoundary.Free;
@@ -42738,6 +42913,18 @@ begin
   begin
     FreeAndNil(FFmpMultTranspirationFractionBoundary);
   end;
+
+  if (FFmp4EvaporationIrrigationFractionBoundary <> nil)
+    and not FFmp4EvaporationIrrigationFractionBoundary.Used then
+  begin
+    FreeAndNil(FFmp4EvaporationIrrigationFractionBoundary);
+  end;
+
+  if (FFmpMultEvaporationIrrigationFractionBoundary <> nil)
+    and not FFmpMultEvaporationIrrigationFractionBoundary.Used then
+  begin
+    FreeAndNil(FFmpMultEvaporationIrrigationFractionBoundary);
+  end;
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -43115,6 +43302,16 @@ begin
   if FFmpMultTranspirationFractionBoundary <> nil then
   begin
     FFmpMultTranspirationFractionBoundary.Invalidate;
+  end;
+
+  if FFmp4EvaporationIrrigationFractionBoundary <> nil then
+  begin
+    FFmp4EvaporationIrrigationFractionBoundary.Invalidate;
+  end;
+
+  if FFmpMultEvaporationIrrigationFractionBoundary <> nil then
+  begin
+    FFmpMultEvaporationIrrigationFractionBoundary.Invalidate;
   end;
 end;
 
@@ -43533,6 +43730,16 @@ begin
   if FFmpMultTranspirationFractionBoundary <> nil then
   begin
     FFmpMultTranspirationFractionBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4EvaporationIrrigationFractionBoundary <> nil then
+  begin
+    FFmp4EvaporationIrrigationFractionBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmpMultEvaporationIrrigationFractionBoundary <> nil then
+  begin
+    FFmpMultEvaporationIrrigationFractionBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -43956,6 +44163,16 @@ begin
     FFmpMultTranspirationFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4EvaporationIrrigationFractionBoundary <> nil then
+  begin
+    FFmp4EvaporationIrrigationFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmpMultEvaporationIrrigationFractionBoundary <> nil then
+  begin
+    FFmpMultEvaporationIrrigationFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -44374,6 +44591,16 @@ begin
   if FFmpMultTranspirationFractionBoundary <> nil then
   begin
     FFmpMultTranspirationFractionBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4EvaporationIrrigationFractionBoundary <> nil then
+  begin
+    FFmp4EvaporationIrrigationFractionBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmpMultEvaporationIrrigationFractionBoundary <> nil then
+  begin
+    FFmpMultEvaporationIrrigationFractionBoundary.StopTalkingToAnyone;
   end;
 end;
 
@@ -45048,6 +45275,24 @@ begin
   if FFmpMultTranspirationFractionBoundary <> nil then
   begin
     Result := FFmpMultTranspirationFractionBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4EvaporationIrrigationFractionBoundary <> nil then
+  begin
+    Result := FFmp4EvaporationIrrigationFractionBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmpMultEvaporationIrrigationFractionBoundary <> nil then
+  begin
+    Result := FFmpMultEvaporationIrrigationFractionBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-03T13:05:52.005-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Vertex Values Tab</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Vertex Values Tab</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">If values are associated with particular vertices, those values may be edited on the Vertex Values tab. Only the values may be edited, not the vertices or keys with which they are associated. Those may only be edited in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Strong" translate="true">Vertex Values</link><text styleclass="Normal" translate="true"> dialog box. The values can be used in a variety of functions. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_VertexValue" styleclass="Normal" translate="true">Object_VertexValue</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If values are associated with particular vertices, those values may be edited on the Vertex Values tab. Only the values may be edited, not the vertices or keys with which they are associated. Those may only be edited in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Strong" translate="true">Vertex Values</link><text styleclass="Normal" translate="true"> dialog box. The values can be used in a variety of functions. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_VertexValue" styleclass="Normal" translate="true">Object_VertexValue</link><text styleclass="Normal" translate="true">. If desired, vertex values can be imported by clicking the Import Vertex Values button. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import-Vertex-Values-Dialog-Bo" styleclass="Strong" translate="true">Import Vertex Values</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
   </body>
 </topic>

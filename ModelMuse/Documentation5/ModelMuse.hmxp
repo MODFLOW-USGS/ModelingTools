@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4406</config-value>
+      <config-value name="autohelpstart">4410</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -641,7 +641,7 @@ document.write('</frameset>');
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">3</config-value>
+          <config-value name="lastexport">0</config-value>
         </config-group>
       </config-group>
       <config-group name="richard">
@@ -1135,6 +1135,7 @@ document.write('</frameset>');
       <helpcontext-number href="Importing_GWT_model" value="4092"/>
       <helpcontext-number href="Importing_Meshes" value="4019"/>
       <helpcontext-number href="Importing_MODFLOW_Models" value="3485"/>
+      <helpcontext-number href="Import-Vertex-Values-Dialog-Bo" value="4410"/>
       <helpcontext-number href="IMS_variable_values_for_the_av" value="4128"/>
       <helpcontext-number href="Inefficiency_Losses_to_Surface" value="3813"/>
       <helpcontext-number href="Initial_Concentrations_in_Lake" value="4099"/>
@@ -1199,6 +1200,7 @@ document.write('</frameset>');
       <helpcontext-number href="LayerCenter" value="3574"/>
       <helpcontext-number href="LayerCount" value="490"/>
       <helpcontext-number href="LayerHeight" value="500"/>
+      <helpcontext-number href="Layers-to-Export-Dialog-Box" value="4409"/>
       <helpcontext-number href="Leaky_And_Well_Boundaries" value="3130"/>
       <helpcontext-number href="Length" value="1200"/>
       <helpcontext-number href="LGR_tab" value="3601"/>

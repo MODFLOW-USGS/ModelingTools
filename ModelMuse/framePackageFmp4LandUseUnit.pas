@@ -301,10 +301,20 @@ begin
       end;
     socOther:
       begin
-        CanSelect := (SoilRow in [sorEvapIrrigationFraction,
-          sorFractionOfIrrigationToSurfaceWater, sorAddedDemand])
-          and (rdgLandUse.ItemIndex[Ord(socArray), ARow] = 1)
-          and (rdgLandUse.ItemIndex[Ord(socTransient), ARow] > 0)
+        if (SoilRow in [sorEvapIrrigationFraction,
+          sorFractionOfIrrigationToSurfaceWater]) then
+        begin
+          CanSelect := (rdgLandUse.ItemIndex[Ord(socArray), ARow] = 1)
+            and (rdgLandUse.ItemIndex[Ord(socTransient), ARow] > 0)
+        end
+        else if SoilRow = sorAddedDemand then
+        begin
+          CanSelect := (rdgLandUse.ItemIndex[Ord(socTransient), ARow] > 0);
+        end
+        else
+        begin
+          CanSelect := False;
+        end;
       end;
   end;
   if (SoilRow = sorSoilLocation) and (comboLandUsePerCell.ItemIndex <> 0) then
@@ -448,8 +458,8 @@ initialization
   ByCropIrrigate.Add('By Irrigate');
 
   LengthRate := TStringList.Create;
-  LengthRate.Add('Length');
-  LengthRate.Add('Rate');
+  LengthRate.Add('Length (L/T)');
+  LengthRate.Add('Rate (L^3/T)');
 
 finalization
   ByCropIrrigate.Free;

@@ -1,0 +1,2 @@
+inherited frameScreenObjectMultEvaporationIrrigationFraction: TframeScreenObjectMultEvaporationIrrigationFraction
+end

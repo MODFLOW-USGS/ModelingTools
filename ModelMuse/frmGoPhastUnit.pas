@@ -862,6 +862,7 @@ type
     procedure CheckSvdaActivated;
     function PestVersionOK: Boolean;
     function DataForMt3dUsgsSaved: Boolean;
+    function GetContourDataSet: TDataArray;
   published
     // @name is the TAction for @link(miAddVerticalGridLine)
     // and @link(tbAddVerticalBoundary).
@@ -2082,6 +2083,7 @@ type
     procedure WMExitSizeMove(var Message: TMessage); message WM_EXITSIZEMOVE;
     procedure EnablePilotPointItems;
     procedure UpdateControlsEnabledOrVisible;
+    property ContourDataSet: TDataArray read GetContourDataSet;
     { Public declarations }
   end;
 
@@ -2173,7 +2175,8 @@ uses
   PlProcUnit, PestControlFileWriterUnit, SutraImportUnit, frmSvdaPrepInputUnit,
   frmSupCalcUnit, PestPropertiesUnit,
   frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit,
-  frmTimeSeriesUnit, System.StrUtils, frmIrrigationTypesUnit;
+  frmTimeSeriesUnit, System.StrUtils, frmIrrigationTypesUnit,
+  frmLayersToExportUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -4717,6 +4720,19 @@ begin
 
   acPEST.Enabled := ModelSelection in (ModflowSelection + SutraSelection);
 
+end;
+
+function TfrmGoPhast.GetContourDataSet: TDataArray;
+begin
+  if Grid <> nil then
+  begin
+    result := Grid.TopContourDataSet;
+  end
+  else
+  begin
+    Assert(PhastModel.Mesh3D <> nil);
+    result := PhastModel.Mesh3D.TopContourDataSet;
+  end;
 end;
 
 function TfrmGoPhast.DataForMt3dUsgsSaved: Boolean;
@@ -8667,20 +8683,26 @@ end;
 procedure TfrmGoPhast.miContourstoShapefileClick(Sender: TObject);
 var
   ContourExporter: TContourExtractor;
-  ContourDataSet: TDataArray;
+  LocalContourDataSet: TDataArray;
   LocalModel: TCustomModel;
+  LayersToExport: array of Integer;
+  CurrentLayer: Integer;
+  LayerIndex: Integer;
+  Extension: string;
+  procedure ExportShapeFile(const FileName: string);
+  begin
+    ContourExporter := TContourExtractor.Create(LocalModel);
+    try
+      ContourExporter.CreateShapes(LocalModel.ContourLegend.Values,
+        LocalContourDataSet, FileName, LocalModel.ContourLabelSpacing);
+    finally
+      ContourExporter.Free;
+    end;
+  end;
 begin
   inherited;
-  if Grid <> nil then
-  begin
-    ContourDataSet := Grid.TopContourDataSet;
-  end
-  else
-  begin
-    Assert(PhastModel.Mesh3D <> nil);
-    ContourDataSet := PhastModel.Mesh3D.TopContourDataSet;
-  end;
-  if ContourDataSet = nil then
+  LocalContourDataSet := ContourDataSet;
+  if LocalContourDataSet = nil then
   begin
     Beep;
     MessageDlg(StrYouMustContourDat, mtWarning, [mbOK], 0);
@@ -8693,7 +8715,7 @@ begin
   else
   begin
     sdShapefile.FileName := IncludeTrailingPathDelimiter(GetCurrentDir)
-      + ContourDataSet.Name + '.shp';
+      + LocalContourDataSet.Name + '.shp';
     if sdShapefile.Execute then
     begin
       if FExportModpathShapeFileModelChoice > 0 then
@@ -8701,7 +8723,7 @@ begin
         LocalModel := PhastModel.ChildModels[FExportModpathShapeFileModelChoice-1].ChildModel;
         if LocalModel <> nil then
         begin
-          ContourDataSet := LocalModel.Grid.TopContourDataSet;
+          LocalContourDataSet := LocalModel.Grid.TopContourDataSet;
         end;
       end
       else
@@ -8711,12 +8733,61 @@ begin
 
       if LocalModel <> nil then
       begin
-        ContourExporter := TContourExtractor.Create(LocalModel);
-        try
-          ContourExporter.CreateShapes(LocalModel.ContourLegend.Values,
-            ContourDataSet, sdShapefile.FileName, LocalModel.ContourLabelSpacing);
-        finally
-          ContourExporter.Free;
+        if LocalContourDataSet.LayerCount > 1 then
+        begin
+          Application.CreateForm(TfrmLayersToExport, frmLayersToExport);
+          try
+            frmLayersToExport.clbSelectedLayers.Checked[
+              LocalModel.SelectedLayer] := True;
+            if frmLayersToExport.ShowModal = mrOK then
+            begin
+              case frmLayersToExport.rgLayersToExport.ItemIndex of
+                0:
+                  begin
+                    ExportShapeFile(sdShapefile.FileName);
+                  end;
+                1:
+                  begin
+                    CurrentLayer := LocalModel.SelectedLayer;
+                    try
+                      for LayerIndex := 0 to LocalContourDataSet.LayerCount - 1 do
+                      begin
+                        if frmLayersToExport.clbSelectedLayers.Checked[LayerIndex] then
+                        begin
+                          LocalModel.SelectedLayer := LayerIndex;
+                          Application.ProcessMessages;
+                          Extension := '.' + InttoStr(LayerIndex + 1) + '.shp';
+                          ExportShapeFile(ChangeFileExt(sdShapefile.FileName, Extension));
+                        end;
+                      end;
+                    finally
+                      LocalModel.SelectedLayer := CurrentLayer;
+                    end;
+                  end;
+                2:
+                  begin
+                    CurrentLayer := LocalModel.SelectedLayer;
+                    try
+                      for LayerIndex := 0 to LocalContourDataSet.LayerCount - 1 do
+                      begin
+                        LocalModel.SelectedLayer := LayerIndex;
+                        Application.ProcessMessages;
+                        Extension := InttoStr(LayerIndex + 1) + '.shp';
+                        ExportShapeFile(ChangeFileExt(sdShapefile.FileName, Extension));
+                      end;
+                    finally
+                      LocalModel.SelectedLayer := CurrentLayer;
+                    end;
+                  end;
+              end;
+            end;
+          finally
+            frmLayersToExport.Free;
+          end;
+        end
+        else
+        begin
+          ExportShapeFile(sdShapefile.FileName);
         end;
       end;
     end;

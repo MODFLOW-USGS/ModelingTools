@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-03-03T12:55:14.697-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Layers to Export Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Layers to Export Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Layers to Export dialog box appears when the user selects &quot;</text><text styleclass="Strong" translate="true">File|Export|Shapefile|Contours to Shapefile</text><text styleclass="Normal" translate="true">&quot; and the data set for the contours has more than one layer. The user is given the choice of exporting just the contours for the current layer, selected layers, or all the layers. If the user chooses the &quot;selected layers&quot; option, the user chooses the layer for which contours will be exported in the check-list on the right. The contours for each layer will be exported to a separate data set. The layer number will be indicated at the end of the file name. For example, if the user chooses to export contours for Kx, the files would be named Kx.1.shp, Kx.2.shp, Kx.3.shp, ...</text></para>
+  </body>
+</topic>

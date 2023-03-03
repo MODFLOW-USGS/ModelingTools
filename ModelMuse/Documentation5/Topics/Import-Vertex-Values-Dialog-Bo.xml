@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-03-03T13:03:05.428-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Import Vertex Values Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Import Vertex Values Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Import Vertex Values dialog box is displayed by selecting the </text><text styleclass="Strong" translate="true">Import Vertex Values</text><text styleclass="Normal" translate="true"> button on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Tab" styleclass="Strong" translate="true">Vertex Values</link><text styleclass="Normal" translate="true"> or the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertices_Tab" styleclass="Strong" translate="true">Vertices</link><text styleclass="Normal" translate="true"> tabs of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Strong" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. The user enters the keys for which values will be imported in the text box on the left and enters X and Y coordinates and values in the table on the right. The values will be associated with the vertex nearest to the specified coordinates.</text></para>
+  </body>
+</topic>

@@ -826,6 +826,9 @@
       <topicref type="topic" id="400248187515546" build="ALL" modified="2009-07-30T21:30:02.093Z" icon="0" href="Export_Objects_to_Shapefile">
         <caption translate="true">Export Objects to Shapefile Dialog Box</caption>
       </topicref>
+      <topicref type="topic" id="449886202684490" build="ALL" modified="2023-03-03T12:43:29.852Z" icon="0" href="Layers-to-Export-Dialog-Box">
+        <caption translate="true">Layers to Export Dialog Box</caption>
+      </topicref>
       <topicref type="topic" id="425556320971557" build="ALL" modified="2017-09-03T13:08:26.985Z" icon="0" href="Export_Model_Outline_Dialog_Bo">
         <caption translate="true">Export Model Outline or Grid Lines Dialog Box</caption>
       </topicref>
@@ -1335,6 +1338,9 @@
         <topicref type="topic" id="402916447232028" build="ALL" modified="2022-01-24T16:34:53.338Z" icon="0" href="Comments_Tab">
           <caption translate="true">Comments/Captions Tab</caption>
         </topicref>
+      </topicref>
+      <topicref type="topic" id="449884644197369" build="ALL" modified="2023-03-03T12:53:25.360Z" icon="0" href="Import-Vertex-Values-Dialog-Bo">
+        <caption translate="true">Import Vertex Values Dialog Box</caption>
       </topicref>
       <topicref type="topic" id="400565242417587" build="ALL" modified="2022-01-24T16:34:53.342Z" icon="0" href="Select_Objects_for_Editing">
         <caption translate="true">Select Objects for Editing or Deletion Dialog Box</caption>

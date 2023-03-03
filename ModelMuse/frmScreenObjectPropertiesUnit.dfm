@@ -2463,7 +2463,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 577
         Height = 475
-        ActivePage = jvspFmp4TranspirationFractionMult
+        ActivePage = jvspFmp4EvaporationIrrigationFractionMult
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -15447,6 +15447,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                ExplicitLeft = 6
+                ExplicitTop = 52
                 ExplicitWidth = 575
                 ExplicitHeight = 352
               end
@@ -15756,6 +15758,134 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             TabStop = True
             ExplicitLeft = 40
             ExplicitTop = 64
+            inherited pnlBottom: TPanel
+              Top = 429
+              Width = 577
+              inherited lblNumTimes: TLabel
+                Width = 119
+                Height = 19
+                ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited seNumberOfTimes: TJvSpinEdit
+                Height = 27
+                ExplicitHeight = 27
+              end
+              inherited btnDelete: TBitBtn
+                Left = 489
+              end
+              inherited btnInsert: TBitBtn
+                Left = 405
+              end
+            end
+            inherited pnlTop: TPanel
+              Width = 577
+              inherited pnlCaption: TPanel
+                Width = 575
+              end
+            end
+            inherited pnlGrid: TPanel
+              Width = 577
+              Height = 404
+              inherited pnlEditGrid: TPanel
+                Width = 575
+                inherited lblFormula: TLabel
+                  Width = 59
+                  Height = 19
+                  ExplicitWidth = 59
+                  ExplicitHeight = 19
+                end
+              end
+              inherited rdgModflowBoundary: TRbwDataGrid4
+                Width = 575
+                Height = 352
+                OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+              end
+            end
+          end
+        end
+        object jvspFmp4EvaporationIrrigationFraction: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 577
+          Height = 475
+          Caption = 'jvspFmp4EvaporationIrrigationFraction'
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          inline frameFmp4EvaporationIrrigationFraction: TframeScreenObjectFmp4EvaporationIrrigationFraction
+            Left = 0
+            Top = 0
+            Width = 577
+            Height = 475
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitLeft = 32
+            ExplicitTop = 40
+            inherited pnlBottom: TPanel
+              Top = 429
+              Width = 577
+              inherited lblNumTimes: TLabel
+                Width = 119
+                Height = 19
+                ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited seNumberOfTimes: TJvSpinEdit
+                Height = 27
+                ExplicitHeight = 27
+              end
+              inherited btnDelete: TBitBtn
+                Left = 489
+              end
+              inherited btnInsert: TBitBtn
+                Left = 405
+              end
+            end
+            inherited pnlTop: TPanel
+              Width = 577
+              inherited pnlCaption: TPanel
+                Width = 575
+              end
+            end
+            inherited pnlGrid: TPanel
+              Width = 577
+              Height = 404
+              inherited pnlEditGrid: TPanel
+                Width = 575
+                inherited lblFormula: TLabel
+                  Width = 59
+                  Height = 19
+                  ExplicitWidth = 59
+                  ExplicitHeight = 19
+                end
+              end
+              inherited rdgModflowBoundary: TRbwDataGrid4
+                Width = 575
+                Height = 352
+                OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+              end
+            end
+          end
+        end
+        object jvspFmp4EvaporationIrrigationFractionMult: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 577
+          Height = 475
+          Caption = 'jvspFmp4EvaporationIrrigationFractionMult'
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          inline frameFmp4MultEvaporationIrrigationFraction: TframeScreenObjectMultEvaporationIrrigationFraction
+            Left = 0
+            Top = 0
+            Width = 577
+            Height = 475
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitLeft = 32
+            ExplicitTop = 48
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
@@ -17084,7 +17214,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Left = 0
         Top = 0
         Width = 772
-        Height = 475
+        Height = 434
         Align = alClient
         DefaultColWidth = 25
         FixedCols = 2
@@ -17236,6 +17366,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 475
         ColWidths = (
           25
           25
@@ -17249,6 +17380,26 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           24
           24)
       end
+      object Panel5: TPanel
+        Left = 0
+        Top = 434
+        Width = 772
+        Height = 41
+        Align = alBottom
+        TabOrder = 1
+        ExplicitLeft = 168
+        ExplicitTop = 304
+        ExplicitWidth = 185
+        object Button1: TButton
+          Left = 16
+          Top = 6
+          Width = 185
+          Height = 25
+          Caption = 'Import Vertex Values'
+          TabOrder = 0
+          OnClick = btnImportVertexValuesClick
+        end
+      end
     end
     object tabVertexValues: TTabSheet
       HelpType = htKeyword
@@ -17261,9 +17412,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Left = 0
         Top = 0
         Width = 772
-        Height = 475
+        Height = 434
         Align = alClient
+        ColCount = 2
         FixedCols = 1
+        RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
         ExtendedAutoDistributeText = False
@@ -17322,92 +17475,35 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             CaseSensitivePicklist = False
             CheckStyle = csCheck
             AutoAdjustColWidths = False
-          end
-          item
-            AutoAdjustRowHeights = False
-            AutoAdjustCaptionRowHeights = False
-            ButtonCaption = '...'
-            ButtonFont.Charset = DEFAULT_CHARSET
-            ButtonFont.Color = clWindowText
-            ButtonFont.Height = -11
-            ButtonFont.Name = 'Tahoma'
-            ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
-            CheckMax = False
-            CheckMin = False
-            ComboUsed = False
-            Format = rcf4String
-            LimitToList = False
-            MaxLength = 0
-            ParentButtonFont = False
-            WordWrapCaptions = False
-            WordWrapCells = False
-            CaseSensitivePicklist = False
-            CheckStyle = csCheck
-            AutoAdjustColWidths = False
-          end
-          item
-            AutoAdjustRowHeights = False
-            AutoAdjustCaptionRowHeights = False
-            ButtonCaption = '...'
-            ButtonFont.Charset = DEFAULT_CHARSET
-            ButtonFont.Color = clWindowText
-            ButtonFont.Height = -11
-            ButtonFont.Name = 'Tahoma'
-            ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
-            CheckMax = False
-            CheckMin = False
-            ComboUsed = False
-            Format = rcf4String
-            LimitToList = False
-            MaxLength = 0
-            ParentButtonFont = False
-            WordWrapCaptions = False
-            WordWrapCells = False
-            CaseSensitivePicklist = False
-            CheckStyle = csCheck
-            AutoAdjustColWidths = False
-          end
-          item
-            AutoAdjustRowHeights = False
-            AutoAdjustCaptionRowHeights = False
-            ButtonCaption = '...'
-            ButtonFont.Charset = DEFAULT_CHARSET
-            ButtonFont.Color = clWindowText
-            ButtonFont.Height = -11
-            ButtonFont.Name = 'Tahoma'
-            ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
-            CheckMax = False
-            CheckMin = False
-            ComboUsed = False
-            Format = rcf4String
-            LimitToList = False
-            MaxLength = 0
-            ParentButtonFont = False
-            WordWrapCaptions = False
-            WordWrapCells = False
-            CaseSensitivePicklist = False
-            CheckStyle = csCheck
-            AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 475
         ColWidths = (
-          64
-          64
-          64
           64
           64)
         RowHeights = (
           24
-          24
-          24
-          24
           24)
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 434
+        Width = 772
+        Height = 41
+        Align = alBottom
+        TabOrder = 1
+        ExplicitLeft = 168
+        ExplicitTop = 304
+        ExplicitWidth = 185
+        object btnImportVertexValues: TButton
+          Left = 16
+          Top = 6
+          Width = 185
+          Height = 25
+          Caption = 'Import Vertex Values'
+          TabOrder = 0
+          OnClick = btnImportVertexValuesClick
+        end
       end
     end
     object tabImportedData: TTabSheet

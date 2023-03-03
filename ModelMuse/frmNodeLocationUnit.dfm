@@ -4,8 +4,8 @@ inherited frmNodeLocation: TfrmNodeLocation
   Caption = 'Node Location'
   ClientHeight = 264
   ClientWidth = 399
-  ExplicitWidth = 417
-  ExplicitHeight = 309
+  ExplicitWidth = 411
+  ExplicitHeight = 302
   PixelsPerInch = 120
   TextHeight = 18
   object pnlBase: TPanel
@@ -16,12 +16,13 @@ inherited frmNodeLocation: TfrmNodeLocation
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 349
+    ExplicitTop = 222
+    ExplicitWidth = 395
     DesignSize = (
       399
       41)
     object btnHelp: TBitBtn
-      Left = 58
+      Left = 54
       Top = 4
       Width = 108
       Height = 33
@@ -30,10 +31,10 @@ inherited frmNodeLocation: TfrmNodeLocation
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 8
+      ExplicitLeft = 50
     end
     object btnOK: TBitBtn
-      Left = 172
+      Left = 168
       Top = 4
       Width = 108
       Height = 33
@@ -42,10 +43,10 @@ inherited frmNodeLocation: TfrmNodeLocation
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 122
+      ExplicitLeft = 164
     end
     object btnCancel: TBitBtn
-      Left = 286
+      Left = 282
       Top = 4
       Width = 108
       Height = 33
@@ -53,7 +54,7 @@ inherited frmNodeLocation: TfrmNodeLocation
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 236
+      ExplicitLeft = 278
     end
   end
   object rdgNodes: TRbwDataGrid4
@@ -74,10 +75,10 @@ inherited frmNodeLocation: TfrmNodeLocation
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBtnFace
     ColorRangeSelection = False
-    ColorSelectedRow = True
     Columns = <
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -96,10 +97,12 @@ inherited frmNodeLocation: TfrmNodeLocation
         WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = True
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -118,10 +121,12 @@ inherited frmNodeLocation: TfrmNodeLocation
         WordWrapCaptions = False
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = True
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -140,9 +145,12 @@ inherited frmNodeLocation: TfrmNodeLocation
         WordWrapCaptions = False
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
-    ExplicitWidth = 349
+    WordWrapRowCaptions = False
+    ExplicitWidth = 395
+    ExplicitHeight = 222
     RowHeights = (
       24
       24
