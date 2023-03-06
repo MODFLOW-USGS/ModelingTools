@@ -30782,6 +30782,7 @@ object TTaskHistory
       Categories.Strings = (
         'Documentation'
         'FMP'
-        'core code')
+        'core code'
+        'Bug fix')
     end>
 end
