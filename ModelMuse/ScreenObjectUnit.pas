@@ -58,7 +58,9 @@ uses
   ModflowFmp4LandUseAreaFractionUnit, ModflowFmp4ConsumptiveUseUnit,
   ModflowFmp4IrrigationSpatialUnit, ModflowFmp4RootDepthUnit,
   ModflowFmp4TranspirationFractionUnit,
-  ModflowFmp4EvaporationIrrigationFractionUnit;
+  ModflowFmp4EvaporationIrrigationFractionUnit,
+  ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
+  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit;
 
 type
   //
@@ -1490,6 +1492,10 @@ view. }
     FFmpMultTranspirationFractionBoundary: TFmp4MultTranspirationFractionBoundary;
     FFmpMultEvaporationIrrigationFractionBoundary: TFmp4MultEvaporationIrrigationFractionBoundary;
     FFmp4EvaporationIrrigationFractionBoundary: TFmp4EvaporationIrrigationFractionBoundary;
+    FFmpMultFractionOfPrecipToSurfaceWaterBoundary: TFmp4MultFractionOfPrecipToSurfaceWaterBoundary;
+    FFmp4FractionOfPrecipToSurfaceWaterBoundary: TFmp4FractionOfPrecipToSurfaceWaterBoundary;
+    FFmpMultFractionOfIrrigToSurfaceWaterBoundary: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary;
+    FFmp4FractionOfIrrigToSurfaceWaterBoundary: TFmp4FractionOfIrrigToSurfaceWaterBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1649,6 +1655,14 @@ view. }
       read FFmp4EvaporationIrrigationFractionBoundary write FFmp4EvaporationIrrigationFractionBoundary;
     property FmpMultEvaporationIrrigationFractionBoundary: TFmp4MultEvaporationIrrigationFractionBoundary
       read FFmpMultEvaporationIrrigationFractionBoundary write FFmpMultEvaporationIrrigationFractionBoundary;
+    property Fmp4FractionOfPrecipToSurfaceWaterBoundary: TFmp4FractionOfPrecipToSurfaceWaterBoundary
+      read FFmp4FractionOfPrecipToSurfaceWaterBoundary write FFmp4FractionOfPrecipToSurfaceWaterBoundary;
+    property FmpMultFractionOfPrecipToSurfaceWaterBoundary: TFmp4MultFractionOfPrecipToSurfaceWaterBoundary
+      read FFmpMultFractionOfPrecipToSurfaceWaterBoundary write FFmpMultFractionOfPrecipToSurfaceWaterBoundary;
+    property Fmp4FractionOfIrrigToSurfaceWaterBoundary: TFmp4FractionOfIrrigToSurfaceWaterBoundary
+      read FFmp4FractionOfIrrigToSurfaceWaterBoundary write FFmp4FractionOfIrrigToSurfaceWaterBoundary;
+    property FmpMultFractionOfIrrigToSurfaceWaterBoundary: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary
+      read FFmpMultFractionOfIrrigToSurfaceWaterBoundary write FFmpMultFractionOfIrrigToSurfaceWaterBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -2994,6 +3008,30 @@ view. }
       const Value: TFmp4MultEvaporationIrrigationFractionBoundary);
     function StoreModflowFmp4MultEvaporationIrrigationFraction: Boolean;
     procedure CreateModflowMultEvaporationIrrigationFractionBoundary;
+
+    function GetModflowFmp4FractionOfPrecipToSurfaceWater: TFmp4FractionOfPrecipToSurfaceWaterBoundary;
+    procedure SetModflowFmp4FractionOfPrecipToSurfaceWater(
+      const Value: TFmp4FractionOfPrecipToSurfaceWaterBoundary);
+    function StoreModflowFmp4FractionOfPrecipToSurfaceWater: Boolean;
+    procedure CreateModflowFractionOfPrecipToSurfaceWaterBoundary;
+
+    function GetModflowFmp4MultFractionOfPrecipToSurfaceWater: TFmp4MultFractionOfPrecipToSurfaceWaterBoundary;
+    procedure SetModflowFmp4MultFractionOfPrecipToSurfaceWater(
+      const Value: TFmp4MultFractionOfPrecipToSurfaceWaterBoundary);
+    function StoreModflowFmp4MultFractionOfPrecipToSurfaceWater: Boolean;
+    procedure CreateModflowMultFractionOfPrecipToSurfaceWaterBoundary;
+
+    function GetModflowFmp4FractionOfIrrigToSurfaceWater: TFmp4FractionOfIrrigToSurfaceWaterBoundary;
+    procedure SetModflowFmp4FractionOfIrrigToSurfaceWater(
+      const Value: TFmp4FractionOfIrrigToSurfaceWaterBoundary);
+    function StoreModflowFmp4FractionOfIrrigToSurfaceWater: Boolean;
+    procedure CreateModflowFractionOfIrrigToSurfaceWaterBoundary;
+
+    function GetModflowFmp4MultFractionOfIrrigToSurfaceWater: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary;
+    procedure SetModflowFmp4MultFractionOfIrrigToSurfaceWater(
+      const Value: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary);
+    function StoreModflowFmp4MultFractionOfIrrigToSurfaceWater: Boolean;
+    procedure CreateModflowMultFractionOfIrrigToSurfaceWaterBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4395,6 +4433,18 @@ view. }
     property ModflowFmp4MultEvaporationIrrigationFraction: TFmp4MultEvaporationIrrigationFractionBoundary
       read GetModflowFmp4MultEvaporationIrrigationFraction write SetModflowFmp4MultEvaporationIrrigationFraction
       Stored StoreModflowFmp4MultEvaporationIrrigationFraction;
+    property ModflowFmp4FractionOfPrecipToSurfaceWater: TFmp4FractionOfPrecipToSurfaceWaterBoundary
+      read GetModflowFmp4FractionOfPrecipToSurfaceWater write SetModflowFmp4FractionOfPrecipToSurfaceWater
+      Stored StoreModflowFmp4FractionOfPrecipToSurfaceWater;
+    property ModflowFmp4MultFractionOfPrecipToSurfaceWater: TFmp4MultFractionOfPrecipToSurfaceWaterBoundary
+      read GetModflowFmp4MultFractionOfPrecipToSurfaceWater write SetModflowFmp4MultFractionOfPrecipToSurfaceWater
+      Stored StoreModflowFmp4MultFractionOfPrecipToSurfaceWater;
+    property ModflowFmp4FractionOfIrrigToSurfaceWater: TFmp4FractionOfIrrigToSurfaceWaterBoundary
+      read GetModflowFmp4FractionOfIrrigToSurfaceWater write SetModflowFmp4FractionOfIrrigToSurfaceWater
+      Stored StoreModflowFmp4FractionOfIrrigToSurfaceWater;
+    property ModflowFmp4MultFractionOfIrrigToSurfaceWater: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary
+      read GetModflowFmp4MultFractionOfIrrigToSurfaceWater write SetModflowFmp4MultFractionOfIrrigToSurfaceWater
+      Stored StoreModflowFmp4MultFractionOfIrrigToSurfaceWater;
 
 
     { TODO :
@@ -7080,6 +7130,10 @@ begin
   ModflowFmp4MultTranspirationFraction := AScreenObject.ModflowFmp4MultTranspirationFraction;
   ModflowFmp4EvaporationIrrigationFraction := AScreenObject.ModflowFmp4EvaporationIrrigationFraction;
   ModflowFmp4MultEvaporationIrrigationFraction := AScreenObject.ModflowFmp4MultEvaporationIrrigationFraction;
+  ModflowFmp4FractionOfPrecipToSurfaceWater := AScreenObject.ModflowFmp4FractionOfPrecipToSurfaceWater;
+  ModflowFmp4MultFractionOfPrecipToSurfaceWater := AScreenObject.ModflowFmp4MultFractionOfPrecipToSurfaceWater;
+  ModflowFmp4FractionOfIrrigToSurfaceWater := AScreenObject.ModflowFmp4FractionOfIrrigToSurfaceWater;
+  ModflowFmp4MultFractionOfIrrigToSurfaceWater := AScreenObject.ModflowFmp4MultFractionOfIrrigToSurfaceWater;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9935,6 +9989,26 @@ begin
     if ModflowFmp4MultEvaporationIrrigationFraction <> nil then
     begin
       ModflowFmp4MultEvaporationIrrigationFraction.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4FractionOfPrecipToSurfaceWater <> nil then
+    begin
+      ModflowFmp4FractionOfPrecipToSurfaceWater.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultFractionOfPrecipToSurfaceWater <> nil then
+    begin
+      ModflowFmp4MultFractionOfPrecipToSurfaceWater.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4FractionOfIrrigToSurfaceWater <> nil then
+    begin
+      ModflowFmp4FractionOfIrrigToSurfaceWater.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultFractionOfIrrigToSurfaceWater <> nil then
+    begin
+      ModflowFmp4MultFractionOfIrrigToSurfaceWater.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -14327,6 +14401,42 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetModflowFmp4FractionOfIrrigToSurfaceWater(
+  const Value: TFmp4FractionOfIrrigToSurfaceWaterBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4FractionOfIrrigToSurfaceWaterBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4FractionOfIrrigToSurfaceWaterBoundary);
+  end
+  else
+  begin
+    CreateModflowFractionOfIrrigToSurfaceWaterBoundary;
+    ModflowBoundaries.FFmp4FractionOfIrrigToSurfaceWaterBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4FractionOfPrecipToSurfaceWater(
+  const Value: TFmp4FractionOfPrecipToSurfaceWaterBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4FractionOfPrecipToSurfaceWaterBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4FractionOfPrecipToSurfaceWaterBoundary);
+  end
+  else
+  begin
+    CreateModflowFractionOfPrecipToSurfaceWaterBoundary;
+    ModflowBoundaries.FFmp4FractionOfPrecipToSurfaceWaterBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetModflowFmp4Irrigation(
   const Value: TFmp4IrrigationBoundary);
 begin
@@ -14414,6 +14524,42 @@ begin
   begin
     CreateModflowMultEvaporationIrrigationFractionBoundary;
     ModflowBoundaries.FFmpMultEvaporationIrrigationFractionBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4MultFractionOfIrrigToSurfaceWater(
+  const Value: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultFractionOfIrrigToSurfaceWaterBoundary);
+  end
+  else
+  begin
+    CreateModflowMultFractionOfIrrigToSurfaceWaterBoundary;
+    ModflowBoundaries.FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4MultFractionOfPrecipToSurfaceWater(
+  const Value: TFmp4MultFractionOfPrecipToSurfaceWaterBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultFractionOfPrecipToSurfaceWaterBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultFractionOfPrecipToSurfaceWaterBoundary);
+  end
+  else
+  begin
+    CreateModflowMultFractionOfPrecipToSurfaceWaterBoundary;
+    ModflowBoundaries.FFmpMultFractionOfPrecipToSurfaceWaterBoundary.Assign(Value);
   end;
 end;
 
@@ -32621,6 +32767,26 @@ begin
 {$ENDIF}
 end;
 
+function TScreenObject.StoreModflowFmp4FractionOfIrrigToSurfaceWater: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4FractionOfIrrigToSurfaceWater <> nil) and ModflowFmp4FractionOfIrrigToSurfaceWater.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4FractionOfPrecipToSurfaceWater: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4FractionOfPrecipToSurfaceWater <> nil) and ModflowFmp4FractionOfPrecipToSurfaceWater.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowFmp4Irrigation: Boolean;
 begin
 {$IFDEF OWHMV2}
@@ -32666,6 +32832,26 @@ begin
 {$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultEvaporationIrrigationFraction <> nil) and ModflowFmp4MultEvaporationIrrigationFraction.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4MultFractionOfIrrigToSurfaceWater: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultFractionOfIrrigToSurfaceWater <> nil) and ModflowFmp4MultFractionOfIrrigToSurfaceWater.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4MultFractionOfPrecipToSurfaceWater: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultFractionOfPrecipToSurfaceWater <> nil) and ModflowFmp4MultFractionOfPrecipToSurfaceWater.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -33817,6 +34003,40 @@ begin
   end;
 end;
 
+function TScreenObject.GetModflowFmp4FractionOfIrrigToSurfaceWater: TFmp4FractionOfIrrigToSurfaceWaterBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowFractionOfIrrigToSurfaceWaterBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4FractionOfIrrigToSurfaceWaterBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4FractionOfPrecipToSurfaceWater: TFmp4FractionOfPrecipToSurfaceWaterBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowFractionOfPrecipToSurfaceWaterBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4FractionOfPrecipToSurfaceWaterBoundary;
+  end;
+end;
+
 function TScreenObject.GetModflowFmp4Irrigation: TFmp4IrrigationBoundary;
 begin
   if (FModel = nil)
@@ -33899,6 +34119,40 @@ begin
   else
   begin
     result := ModflowBoundaries.FmpMultEvaporationIrrigationFractionBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4MultFractionOfIrrigToSurfaceWater: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultFractionOfIrrigToSurfaceWaterBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultFractionOfIrrigToSurfaceWaterBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4MultFractionOfPrecipToSurfaceWater: TFmp4MultFractionOfPrecipToSurfaceWaterBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultFractionOfPrecipToSurfaceWaterBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultFractionOfPrecipToSurfaceWaterBoundary;
   end;
 end;
 
@@ -38816,6 +39070,24 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateModflowFractionOfIrrigToSurfaceWaterBoundary;
+begin
+  if (ModflowBoundaries.FFmp4FractionOfIrrigToSurfaceWaterBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4FractionOfIrrigToSurfaceWaterBoundary :=
+      TFmp4FractionOfIrrigToSurfaceWaterBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowFractionOfPrecipToSurfaceWaterBoundary;
+begin
+  if (ModflowBoundaries.FFmp4FractionOfPrecipToSurfaceWaterBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4FractionOfPrecipToSurfaceWaterBoundary :=
+      TFmp4FractionOfPrecipToSurfaceWaterBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateModflowIrrigationBoundary;
 begin
   if (ModflowBoundaries.FFmp4IrrigationBoundary = nil) then
@@ -38858,6 +39130,24 @@ begin
   begin
     ModflowBoundaries.FFmp4MultLandUseAreaFractionBoundary :=
       TFmp4MultLandUseAreaFractionBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowMultFractionOfIrrigToSurfaceWaterBoundary;
+begin
+  if (ModflowBoundaries.FFmpMultFractionOfIrrigToSurfaceWaterBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultFractionOfIrrigToSurfaceWaterBoundary :=
+      TFmp4MultFractionOfIrrigToSurfaceWaterBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowMultFractionOfPrecipToSurfaceWaterBoundary;
+begin
+  if (ModflowBoundaries.FFmpMultFractionOfPrecipToSurfaceWaterBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultFractionOfPrecipToSurfaceWaterBoundary :=
+      TFmp4MultFractionOfPrecipToSurfaceWaterBoundary.Create(FModel, self);
   end;
 end;
 
@@ -42458,6 +42748,62 @@ begin
     FFmpMultEvaporationIrrigationFractionBoundary.Assign(Source.FFmpMultEvaporationIrrigationFractionBoundary);
   end;
 
+  if Source.FFmp4FractionOfPrecipToSurfaceWaterBoundary = nil then
+  begin
+    FreeAndNil(FFmp4FractionOfPrecipToSurfaceWaterBoundary);
+  end
+  else
+  begin
+    if FFmp4FractionOfPrecipToSurfaceWaterBoundary = nil then
+    begin
+      FFmp4FractionOfPrecipToSurfaceWaterBoundary :=
+        TFmp4FractionOfPrecipToSurfaceWaterBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4FractionOfPrecipToSurfaceWaterBoundary.Assign(Source.FFmp4FractionOfPrecipToSurfaceWaterBoundary);
+  end;
+
+  if Source.FFmpMultFractionOfPrecipToSurfaceWaterBoundary = nil then
+  begin
+    FreeAndNil(FFmpMultFractionOfPrecipToSurfaceWaterBoundary);
+  end
+  else
+  begin
+    if FFmpMultFractionOfPrecipToSurfaceWaterBoundary = nil then
+    begin
+      FFmpMultFractionOfPrecipToSurfaceWaterBoundary :=
+        TFmp4MultFractionOfPrecipToSurfaceWaterBoundary.Create(Model, FScreenObject);
+    end;
+    FFmpMultFractionOfPrecipToSurfaceWaterBoundary.Assign(Source.FFmpMultFractionOfPrecipToSurfaceWaterBoundary);
+  end;
+
+  if Source.FFmp4FractionOfIrrigToSurfaceWaterBoundary = nil then
+  begin
+    FreeAndNil(FFmp4FractionOfIrrigToSurfaceWaterBoundary);
+  end
+  else
+  begin
+    if FFmp4FractionOfIrrigToSurfaceWaterBoundary = nil then
+    begin
+      FFmp4FractionOfIrrigToSurfaceWaterBoundary :=
+        TFmp4FractionOfIrrigToSurfaceWaterBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4FractionOfIrrigToSurfaceWaterBoundary.Assign(Source.FFmp4FractionOfIrrigToSurfaceWaterBoundary);
+  end;
+
+  if Source.FFmpMultFractionOfIrrigToSurfaceWaterBoundary = nil then
+  begin
+    FreeAndNil(FFmpMultFractionOfIrrigToSurfaceWaterBoundary);
+  end
+  else
+  begin
+    if FFmpMultFractionOfIrrigToSurfaceWaterBoundary = nil then
+    begin
+      FFmpMultFractionOfIrrigToSurfaceWaterBoundary :=
+        TFmp4MultFractionOfIrrigToSurfaceWaterBoundary.Create(Model, FScreenObject);
+    end;
+    FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Assign(Source.FFmpMultFractionOfIrrigToSurfaceWaterBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -42476,6 +42822,10 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Free;
+  FFmp4FractionOfIrrigToSurfaceWaterBoundary.Free;
+  FFmpMultFractionOfPrecipToSurfaceWaterBoundary.Free;
+  FFmp4FractionOfPrecipToSurfaceWaterBoundary.Free;
   FFmpMultEvaporationIrrigationFractionBoundary.Free;
   FFmp4EvaporationIrrigationFractionBoundary.Free;
   FFmpMultTranspirationFractionBoundary.Free;
@@ -42925,6 +43275,30 @@ begin
   begin
     FreeAndNil(FFmpMultEvaporationIrrigationFractionBoundary);
   end;
+
+  if (FFmp4FractionOfPrecipToSurfaceWaterBoundary <> nil)
+    and not FFmp4FractionOfPrecipToSurfaceWaterBoundary.Used then
+  begin
+    FreeAndNil(FFmp4FractionOfPrecipToSurfaceWaterBoundary);
+  end;
+
+  if (FFmpMultFractionOfPrecipToSurfaceWaterBoundary <> nil)
+    and not FFmpMultFractionOfPrecipToSurfaceWaterBoundary.Used then
+  begin
+    FreeAndNil(FFmpMultFractionOfPrecipToSurfaceWaterBoundary);
+  end;
+
+  if (FFmp4FractionOfIrrigToSurfaceWaterBoundary <> nil)
+    and not FFmp4FractionOfIrrigToSurfaceWaterBoundary.Used then
+  begin
+    FreeAndNil(FFmp4FractionOfIrrigToSurfaceWaterBoundary);
+  end;
+
+  if (FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil)
+    and not FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Used then
+  begin
+    FreeAndNil(FFmpMultFractionOfIrrigToSurfaceWaterBoundary);
+  end;
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -43312,6 +43686,26 @@ begin
   if FFmpMultEvaporationIrrigationFractionBoundary <> nil then
   begin
     FFmpMultEvaporationIrrigationFractionBoundary.Invalidate;
+  end;
+
+  if FFmp4FractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    FFmp4FractionOfPrecipToSurfaceWaterBoundary.Invalidate;
+  end;
+
+  if FFmpMultFractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    FFmpMultFractionOfPrecipToSurfaceWaterBoundary.Invalidate;
+  end;
+
+  if FFmp4FractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    FFmp4FractionOfIrrigToSurfaceWaterBoundary.Invalidate;
+  end;
+
+  if FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Invalidate;
   end;
 end;
 
@@ -43740,6 +44134,26 @@ begin
   if FFmpMultEvaporationIrrigationFractionBoundary <> nil then
   begin
     FFmpMultEvaporationIrrigationFractionBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4FractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    FFmp4FractionOfPrecipToSurfaceWaterBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmpMultFractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    FFmpMultFractionOfPrecipToSurfaceWaterBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4FractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    FFmp4FractionOfIrrigToSurfaceWaterBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    FFmpMultFractionOfIrrigToSurfaceWaterBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -44173,6 +44587,26 @@ begin
     FFmpMultEvaporationIrrigationFractionBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4FractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    FFmp4FractionOfPrecipToSurfaceWaterBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmpMultFractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    FFmpMultFractionOfPrecipToSurfaceWaterBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmp4FractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    FFmp4FractionOfIrrigToSurfaceWaterBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -44601,6 +45035,26 @@ begin
   if FFmpMultEvaporationIrrigationFractionBoundary <> nil then
   begin
     FFmpMultEvaporationIrrigationFractionBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4FractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    FFmp4FractionOfPrecipToSurfaceWaterBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmpMultFractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    FFmpMultFractionOfPrecipToSurfaceWaterBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4FractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    FFmp4FractionOfIrrigToSurfaceWaterBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    FFmpMultFractionOfIrrigToSurfaceWaterBoundary.StopTalkingToAnyone;
   end;
 end;
 
@@ -45293,6 +45747,42 @@ begin
   if FFmpMultEvaporationIrrigationFractionBoundary <> nil then
   begin
     Result := FFmpMultEvaporationIrrigationFractionBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4FractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    Result := FFmp4FractionOfPrecipToSurfaceWaterBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmpMultFractionOfPrecipToSurfaceWaterBoundary <> nil then
+  begin
+    Result := FFmpMultFractionOfPrecipToSurfaceWaterBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4FractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    Result := FFmp4FractionOfIrrigToSurfaceWaterBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
+  begin
+    Result := FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-03-02T16:01:48.404-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-06T09:45:48.950-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -431,7 +431,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="SURFACEWATER_LOSS_FRACTION_PRECIPITATION"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,A,L]</para>
-          <para styleclass="Normal">Any precipitation not consumed by the crop either becomes an inefficient loss.</para>
+          <para styleclass="Normal">Any precipitation not consumed by the crop becomes an inefficient loss.</para>
           <para styleclass="Normal"> &#160; &#160;The inefficient loss becomes either runoff or deep percolation.</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">SURFACEWATER_LOSS_FRACTION_PRECIPITATION indicates</para>

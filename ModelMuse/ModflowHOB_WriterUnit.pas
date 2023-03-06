@@ -10,6 +10,9 @@ uses System.UITypes, Winapi.Windows, SysUtils, Math, Classes, Contnrs,
 type
   TModflowHobWriter = class(TCustomPackageWriter)
   private
+    const
+      Epsilon = 5e-8;
+    var
     NH: Integer;
     MOBS: Integer;
     MAXM: Integer;
@@ -131,8 +134,7 @@ var
 begin
   WrongObservationTypesDefined := False;
   FStartTime := Model.ModflowFullStressPeriods[0].StartTime;
-  FEndTime := Model.ModflowFullStressPeriods[
-    Model.ModflowFullStressPeriods.Count-1].EndTime;
+  FEndTime := Model.ModflowFullStressPeriods.Last.EndTime;
   IUHOBSV := Model.UnitNumbers.UnitNumber(StrIUHOBSV);
   NH := 0;
   MOBS := 0;
@@ -186,7 +188,7 @@ begin
         end;
 
         ObservationTimeCount := Observations.Values.
-          CountObservationTimes(FStartTime, FEndTime);
+          CountObservationTimes(FStartTime, FEndTime, Epsilon);
         NH := NH + ObservationTimeCount;
 
         if CellList.Count > 1 then
@@ -204,21 +206,23 @@ begin
             Item := Observations.Values.HobItems[ObsIndex];
             if (Item.Time > FEndTime) and (FEvaluationType = etExport) then
             begin
-              ErrorMessage := Format(StrObjectSTimeG,
-                [ScreenObject.Name, Item.Time]);
-//              ErrorMessage := 'Object: ' + ScreenObject.Name
-//                + '; Time: ' + FloatToStr(Item.Time);
-              frmErrorsAndWarnings.AddError(Model,
-                InvalidEndObsTime, ErrorMessage, ScreenObject);
+              if ((Item.Time - FEndTime)/(Abs(Item.Time) + Abs(FEndTime))) > Epsilon then
+              begin
+                ErrorMessage := Format(StrObjectSTimeG,
+                  [ScreenObject.Name, Item.Time]);
+                frmErrorsAndWarnings.AddError(Model,
+                  InvalidEndObsTime, ErrorMessage, ScreenObject);
+              end;
             end;
             if (Item.Time < FStartTime) and (FEvaluationType = etExport) then
             begin
-              ErrorMessage := Format(StrObjectSTimeG,
-                [ScreenObject.Name, Item.Time]);
-//              ErrorMessage := 'Object: ' + ScreenObject.Name
-//                + '; Time: ' + FloatToStr(Item.Time);
-              frmErrorsAndWarnings.AddError(Model,
-                InvalidStartObsTime, ErrorMessage, ScreenObject);
+              if ((FStartTime - Item.Time)/(Abs(FStartTime) + Abs(Item.Time))) > Epsilon then
+              begin
+                ErrorMessage := Format(StrObjectSTimeG,
+                  [ScreenObject.Name, Item.Time]);
+                frmErrorsAndWarnings.AddError(Model,
+                  InvalidStartObsTime, ErrorMessage, ScreenObject);
+              end;
             end;
           end;
         end;
@@ -523,6 +527,7 @@ var
   Comment: string;
   ReferenceStressPeriodIndex: Integer;
   IREFSP: integer;
+  WriteObs: Boolean;
 begin
   if Observations.Values.Count > 1 then
   begin
@@ -539,7 +544,16 @@ begin
         SetLength(OBSNAM, 12);
       end;
       Item := Observations.Values.HobItems[ObsIndex];
-      if (FStartTime <= Item.Time) and (Item.Time <= FEndTime) then
+      WriteObs := (FStartTime <= Item.Time) and (Item.Time <= FEndTime);
+      if not WriteObs then
+      begin
+        WriteObs := ((Item.Time - FStartTime)/(Abs(FStartTime) + Abs(Item.Time))) < Epsilon;
+      end;
+      if not WriteObs then
+      begin
+        WriteObs := ((FEndTime - Item.Time)/(Abs(FEndTime) + Abs(Item.Time))) < Epsilon;
+      end;
+      if WriteObs then
       begin
         ReferenceStressPeriodIndex := FStartingTimes.IndexOfClosest(Item.Time);
         if (FStartingTimes[ReferenceStressPeriodIndex] > Item.Time) then
@@ -890,7 +904,7 @@ begin
   ROW := Cell.Row+1;
   COLUMN := Cell.Column+1;
   ObservationTimeCount := Observations.Values.
-    CountObservationTimes(FStartTime, FEndTime);
+    CountObservationTimes(FStartTime, FEndTime, Epsilon);
   TOFFSET := Cell.Time - FStartingTimes[ReferenceStressPeriodIndex];
   if ObservationTimeCount = 1 then
   begin

@@ -5530,6 +5530,10 @@ Type
     FAddedDemandOption: TDemandOption;
     FMfFmp4EvaporationIrrigationFraction: TModflowBoundaryDisplayTimeList;
     FMultEvaporationIrrigationFractions: TMfBoundDispObjectList;
+    FMfFmp4FractionOfPrecipToSurfaceWater: TModflowBoundaryDisplayTimeList;
+    FMultFractionOfPrecipToSurfaceWaters: TMfBoundDispObjectList;
+    FMfFmp4FractionOfIrrigToSurfaceWater: TModflowBoundaryDisplayTimeList;
+    FMultFractionOfIrrigToSurfaceWaters: TMfBoundDispObjectList;
     procedure SetAddedDemand(const Value: TFarmProperty);
     procedure SetCropCoeff(const Value: TFarmProperty);
     procedure SetET_IrrigFracCorrection(const Value: TFarmProperty);
@@ -5652,6 +5656,32 @@ Type
     // EVAPORATION_IRRIGATION_FRACTION arrays for single and multiple land uses per cell
     procedure InvalidateEvaporationIrrigationFraction(Sender: TObject);
 
+    // SURFACEWATER_LOSS_FRACTION_PRECIPITATION array for single land use per cell
+    function GetFractionOfPrecipToSurfaceWaterBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeFractionOfPrecipToSurfaceWaterDisplay(Sender: TObject);
+    procedure GetFractionOfPrecipToSurfaceWaterUseList(Sender: TObject; NewUseList: TStringList);
+    // SURFACEWATER_LOSS_FRACTION_PRECIPITATION arrays for multiple land uses per cell
+    function GetMultFractionOfPrecipToSurfaceWaterBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure GetMultFractionOfPrecipToSurfaceWatersUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure InitializeMultFractionOfPrecipToSurfaceWatersDisplay(Sender: TObject);
+    procedure UpdateMultFractionOfPrecipToSurfaceWatersArrays;
+    // SURFACEWATER_LOSS_FRACTION_PRECIPITATION arrays for single and multiple land uses per cell
+    procedure InvalidateFractionOfPrecipToSurfaceWater(Sender: TObject);
+
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION array for single land use per cell
+    function GetFractionOfIrrigToSurfaceWaterBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeFractionOfIrrigToSurfaceWaterDisplay(Sender: TObject);
+    procedure GetFractionOfIrrigToSurfaceWaterUseList(Sender: TObject; NewUseList: TStringList);
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION arrays for multiple land uses per cell
+    function GetMultFractionOfIrrigToSurfaceWaterBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure GetMultFractionOfIrrigToSurfaceWatersUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure InitializeMultFractionOfIrrigToSurfaceWatersDisplay(Sender: TObject);
+    procedure UpdateMultFractionOfIrrigToSurfaceWatersArrays;
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION arrays for single and multiple land uses per cell
+    procedure InvalidateFractionOfIrrigToSurfaceWater(Sender: TObject);
+
     procedure InvalidateTransientCropID;
 
     procedure UpdateMultLandUseLists(IsUsed: Boolean;
@@ -5745,6 +5775,24 @@ Type
     // EVAPORATION_IRRIGATION_FRACTION arrays for multiple land uses per cell
     function TransientEvaporationIrrigationFractionMultArrayUsed (Sender: TObject): boolean;
     procedure InvalidateMultTransienEvaporationIrrigationFractionArrays;
+
+    // SURFACEWATER_LOSS_FRACTION_PRECIPITATION array for single land use per cell
+    function TransientFractionOfPrecipToSurfaceWaterArrayUsed (Sender: TObject): boolean;
+    function StaticFractionOfPrecipToSurfaceWaterArrayUsed (Sender: TObject): boolean;
+    property MfFmp4FractionOfPrecipToSurfaceWater: TModflowBoundaryDisplayTimeList
+      read FMfFmp4FractionOfPrecipToSurfaceWater;
+    // SURFACEWATER_LOSS_FRACTION_PRECIPITATION arrays for multiple land uses per cell
+    function TransientFractionOfPrecipToSurfaceWaterMultArrayUsed (Sender: TObject): boolean;
+    procedure InvalidateMultTransienFractionOfPrecipToSurfaceWaterArrays;
+
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION array for single land use per cell
+    function TransientFractionOfIrrigToSurfaceWaterArrayUsed (Sender: TObject): boolean;
+    function StaticFractionOfIrrigToSurfaceWaterArrayUsed (Sender: TObject): boolean;
+    property MfFmp4FractionOfIrrigToSurfaceWater: TModflowBoundaryDisplayTimeList
+      read FMfFmp4FractionOfIrrigToSurfaceWater;
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION arrays for multiple land uses per cell
+    function TransientFractionOfIrrigToSurfaceWaterMultArrayUsed (Sender: TObject): boolean;
+    procedure InvalidateMultTransienFractionOfIrrigToSurfaceWaterArrays;
 
     procedure InvalidateAll;
     procedure Loaded;
@@ -7249,7 +7297,9 @@ resourcestring
   StrIrrigationsS = 'Irrigation %s';
   StrRootDepthsS = 'Root Depth %s';
   StrTranspirationFractionsS = 'Transpiration Fraction %s';
-  StrEvaporationIrrigationFractionsS = 'Evaporatoin Irrigation Fraction %s';
+  StrEvaporationIrrigationFractionsS = 'Evaporation Irrigation Fraction %s';
+  StrFractionOfPrecipToSurfaceWatersS = 'Frac Excess Precip to SW %s';
+  StrFractionOfIrrigToSurfaceWatersS = 'Frac Excess Irrig to SW %s';
 
 { TModflowPackageSelection }
 
@@ -26565,6 +26615,8 @@ begin
   InvalidateRootDepth(nil);
   InvalidateTranspirationFraction(nil);
   InvalidateEvaporationIrrigationFraction(nil);
+  InvalidateFractionOfPrecipToSurfaceWater(nil);
+  InvalidateFractionOfIrrigToSurfaceWater(nil);
 end;
 
 procedure TFarmProcess4LandUse.Assign(Source: TPersistent);
@@ -26722,11 +26774,33 @@ begin
     FMfFmp4EvaporationIrrigationFraction.OnInitialize := InitializeEvaporationIrrigationFractionDisplay;
     FMfFmp4EvaporationIrrigationFraction.OnGetUseList := GetEvaporationIrrigationFractionUseList;
     FMfFmp4EvaporationIrrigationFraction.OnTimeListUsed := TransientEvaporationIrrigationFractionarrayUsed;
-    FMfFmp4EvaporationIrrigationFraction.Name := 'Transpiration Fraction';
+    FMfFmp4EvaporationIrrigationFraction.Name := 'Evaporation Irrigation Fraction';
     FMfFmp4EvaporationIrrigationFraction.AddMethod := vamReplace;
     if TransientEvaporationIrrigationFractionarrayUsed(nil) then
     begin
       AddTimeList(FMfFmp4EvaporationIrrigationFraction);
+    end;
+
+    FMfFmp4FractionOfPrecipToSurfaceWater := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4FractionOfPrecipToSurfaceWater.OnInitialize := InitializeFractionOfPrecipToSurfaceWaterDisplay;
+    FMfFmp4FractionOfPrecipToSurfaceWater.OnGetUseList := GetFractionOfPrecipToSurfaceWaterUseList;
+    FMfFmp4FractionOfPrecipToSurfaceWater.OnTimeListUsed := TransientFractionOfPrecipToSurfaceWaterarrayUsed;
+    FMfFmp4FractionOfPrecipToSurfaceWater.Name := 'Fraction of Excess Precip to SW';
+    FMfFmp4FractionOfPrecipToSurfaceWater.AddMethod := vamReplace;
+    if TransientFractionOfPrecipToSurfaceWaterarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4FractionOfPrecipToSurfaceWater);
+    end;
+
+    FMfFmp4FractionOfIrrigToSurfaceWater := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4FractionOfIrrigToSurfaceWater.OnInitialize := InitializeFractionOfIrrigToSurfaceWaterDisplay;
+    FMfFmp4FractionOfIrrigToSurfaceWater.OnGetUseList := GetFractionOfIrrigToSurfaceWaterUseList;
+    FMfFmp4FractionOfIrrigToSurfaceWater.OnTimeListUsed := TransientFractionOfIrrigToSurfaceWaterarrayUsed;
+    FMfFmp4FractionOfIrrigToSurfaceWater.Name := 'Fraction of Excess Irrig to SW';
+    FMfFmp4FractionOfIrrigToSurfaceWater.AddMethod := vamReplace;
+    if TransientFractionOfIrrigToSurfaceWaterarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4FractionOfIrrigToSurfaceWater);
     end;
 
     FMultLandUseAreaFractions := TMfBoundDispObjectList.Create;
@@ -26736,6 +26810,8 @@ begin
     FMultRootDepths := TMfBoundDispObjectList.Create;
     FMultTranspirationFractions := TMfBoundDispObjectList.Create;
     FMultEvaporationIrrigationFractions := TMfBoundDispObjectList.Create;
+    FMultFractionOfPrecipToSurfaceWaters := TMfBoundDispObjectList.Create;
+    FMultFractionOfIrrigToSurfaceWaters := TMfBoundDispObjectList.Create;
   end;
 
   FLandUseFraction.OnChangeFarmOption := InvalidateLandUseAreaFraction;
@@ -26758,10 +26834,18 @@ begin
 
   EvapIrrigationFraction.OnChangeFarmOption := InvalidateEvaporationIrrigationFraction;
   EvapIrrigationFraction.OnChangeArrayList := InvalidateEvaporationIrrigationFraction;
+
+  FractionOfPrecipToSurfaceWater.OnChangeFarmOption := InvalidateFractionOfPrecipToSurfaceWater;
+  FractionOfPrecipToSurfaceWater.OnChangeArrayList := InvalidateFractionOfPrecipToSurfaceWater;
+
+  FractionOfIrrigationToSurfaceWater.OnChangeFarmOption := InvalidateFractionOfIrrigToSurfaceWater;
+  FractionOfIrrigationToSurfaceWater.OnChangeArrayList := InvalidateFractionOfIrrigToSurfaceWater;
 end;
 
 destructor TFarmProcess4LandUse.Destroy;
 begin
+  FMultFractionOfIrrigToSurfaceWaters.Free;
+  FMultFractionOfPrecipToSurfaceWaters.Free;
   FMultEvaporationIrrigationFractions.Free;
   FMultTranspirationFractions.Free;
   FMultRootDepths.Free;
@@ -26770,6 +26854,8 @@ begin
   FMultCropCoefficients.Free;
   FMultLandUseAreaFractions.Free;
 
+  FMfFmp4FractionOfIrrigToSurfaceWater.Free;
+  FMfFmp4FractionOfPrecipToSurfaceWater.Free;
   FMfFmp4EvaporationIrrigationFraction.Free;
   FMfFmp4TranspirationFraction.Free;
   FMfFmp4RootDepth.Free;
@@ -26851,6 +26937,38 @@ var
 begin
   GetUseListOptions.GetBoundary := Self.GetEvaporationIrrigationFractionBoundary;
   GetUseListOptions.Description := 'FMP Evaporation Irrigation Fraction';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
+function TFarmProcess4LandUse.GetFractionOfIrrigToSurfaceWaterBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4FractionOfIrrigToSurfaceWater;
+end;
+
+procedure TFarmProcess4LandUse.GetFractionOfIrrigToSurfaceWaterUseList(
+  Sender: TObject; NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetFractionOfIrrigToSurfaceWaterBoundary;
+  GetUseListOptions.Description := 'FMP Frac Excess Irrig to SW';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
+function TFarmProcess4LandUse.GetFractionOfPrecipToSurfaceWaterBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4FractionOfPrecipToSurfaceWater;
+end;
+
+procedure TFarmProcess4LandUse.GetFractionOfPrecipToSurfaceWaterUseList(
+  Sender: TObject; NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetFractionOfPrecipToSurfaceWaterBoundary;
+  GetUseListOptions.Description := 'Frac Excess Precip to SW';
   GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
@@ -26954,6 +27072,42 @@ begin
   DataSetName := Format(StrEvaporationIrrigationFractionsS,
      [frmGoPhast.PhastModel.fmpCrops[Index].CropName]);
   UpdatePkgUseList(NewUseList, GetMultEvaporationIrrigationFractionBoundary, Index, DataSetName);
+end;
+
+function TFarmProcess4LandUse.GetMultFractionOfIrrigToSurfaceWaterBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4MultFractionOfIrrigToSurfaceWater;
+end;
+
+procedure TFarmProcess4LandUse.GetMultFractionOfIrrigToSurfaceWatersUseList(
+  Sender: TObject; NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FMultFractionOfIrrigToSurfaceWaters.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+  DataSetName := Format(StrFractionOfIrrigToSurfaceWatersS,
+     [frmGoPhast.PhastModel.fmpCrops[Index].CropName]);
+  UpdatePkgUseList(NewUseList, GetMultFractionOfIrrigToSurfaceWaterBoundary, Index, DataSetName);
+end;
+
+function TFarmProcess4LandUse.GetMultFractionOfPrecipToSurfaceWaterBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4MultFractionOfPrecipToSurfaceWater;
+end;
+
+procedure TFarmProcess4LandUse.GetMultFractionOfPrecipToSurfaceWatersUseList(
+  Sender: TObject; NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FMultFractionOfPrecipToSurfaceWaters.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+  DataSetName := Format(StrFractionOfPrecipToSurfaceWatersS,
+     [frmGoPhast.PhastModel.fmpCrops[Index].CropName]);
+  UpdatePkgUseList(NewUseList, GetMultFractionOfPrecipToSurfaceWaterBoundary, Index, DataSetName);
 end;
 
 function TFarmProcess4LandUse.GetMultIrrigationBoundary(
@@ -27127,6 +27281,38 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InitializeFractionOfIrrigToSurfaceWaterDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := FMfFmp4FractionOfIrrigToSurfaceWater;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateFractionOfIrrigToSurfaceWaterDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InitializeFractionOfPrecipToSurfaceWaterDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := FMfFmp4FractionOfPrecipToSurfaceWater;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateFractionOfPrecipToSurfaceWaterDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InitializeIrrigationDisplay(Sender: TObject);
 var
   FarmWriter: TModflowFmp4Writer;
@@ -27241,6 +27427,48 @@ begin
       DisplayOptions.Display[index] := FMultEvaporationIrrigationFractions[index];
     end;
     DisplayOptions.UpdateDisplay := FarmWriter.UpdateMultEvaporationIrrigationFractionDisplay;
+    InitializeLandUseDisplay(DisplayOptions);
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InitializeMultFractionOfIrrigToSurfaceWatersDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeLandUseDisplayOptions;
+  index: Integer;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    SetLength(DisplayOptions.Display, (FModel as TCustomModel).FmpCrops.Count);
+    for index := 0 to Length(DisplayOptions.Display) - 1 do
+    begin
+      DisplayOptions.Display[index] := FMultFractionOfIrrigToSurfaceWaters[index];
+    end;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateMultFractionOfIrrigToSurfaceWaterDisplay;
+    InitializeLandUseDisplay(DisplayOptions);
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InitializeMultFractionOfPrecipToSurfaceWatersDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeLandUseDisplayOptions;
+  index: Integer;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    SetLength(DisplayOptions.Display, (FModel as TCustomModel).FmpCrops.Count);
+    for index := 0 to Length(DisplayOptions.Display) - 1 do
+    begin
+      DisplayOptions.Display[index] := FMultFractionOfPrecipToSurfaceWaters[index];
+    end;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateMultFractionOfPrecipToSurfaceWaterDisplay;
     InitializeLandUseDisplay(DisplayOptions);
   finally
     FarmWriter.Free;
@@ -27442,6 +27670,42 @@ begin
   InvalidateModel;
 end;
 
+procedure TFarmProcess4LandUse.InvalidateFractionOfIrrigToSurfaceWater(
+  Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientFractionOfIrrigToSurfaceWaterarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4FractionOfIrrigToSurfaceWater);
+    end
+    else
+    begin
+      RemoveTimeList(FMfFmp4FractionOfIrrigToSurfaceWater);
+    end;
+    UpdateMultFractionOfIrrigToSurfaceWatersArrays;
+  end;
+  InvalidateModel;
+end;
+
+procedure TFarmProcess4LandUse.InvalidateFractionOfPrecipToSurfaceWater(
+  Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientFractionOfPrecipToSurfaceWaterarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4FractionOfPrecipToSurfaceWater);
+    end
+    else
+    begin
+      RemoveTimeList(FMfFmp4FractionOfPrecipToSurfaceWater);
+    end;
+    UpdateMultFractionOfPrecipToSurfaceWatersArrays;
+  end;
+  InvalidateModel;
+end;
+
 procedure TFarmProcess4LandUse.InvalidateIrrigation(Sender: TObject);
 begin
   if FModel <> nil  then
@@ -27518,6 +27782,26 @@ begin
   for index := 0 to FMultEvaporationIrrigationFractions.Count - 1 do
   begin
     FMultEvaporationIrrigationFractions[index].Invalidate;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InvalidateMultTransienFractionOfIrrigToSurfaceWaterArrays;
+var
+  index: Integer;
+begin
+  for index := 0 to FMultFractionOfIrrigToSurfaceWaters.Count - 1 do
+  begin
+    FMultFractionOfIrrigToSurfaceWaters[index].Invalidate;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InvalidateMultTransienFractionOfPrecipToSurfaceWaterArrays;
+var
+  index: Integer;
+begin
+  for index := 0 to FMultFractionOfPrecipToSurfaceWaters.Count - 1 do
+  begin
+    FMultFractionOfPrecipToSurfaceWaters[index].Invalidate;
   end;
 end;
 
@@ -27770,6 +28054,24 @@ begin
     and (LandUseOption = luoSingle);
 end;
 
+function TFarmProcess4LandUse.StaticFractionOfIrrigToSurfaceWaterArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (FractionOfIrrigationToSurfaceWater.FarmOption = foStatic)
+    and (FractionOfIrrigationToSurfaceWater.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.StaticFractionOfPrecipToSurfaceWaterArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (FractionOfPrecipToSurfaceWater.FarmOption = foStatic)
+    and (FractionOfPrecipToSurfaceWater.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
 function TFarmProcess4LandUse.StaticGwRootInteractionArrayUsed(
   Sender: TObject): boolean;
 var
@@ -27931,6 +28233,42 @@ begin
     and (LandUseOption = luoMultiple);
 end;
 
+function TFarmProcess4LandUse.TransientFractionOfIrrigToSurfaceWaterArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (FractionOfIrrigationToSurfaceWater.FarmOption = foTransient)
+    and (FractionOfIrrigationToSurfaceWater.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.TransientFractionOfIrrigToSurfaceWaterMultArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (FractionOfIrrigationToSurfaceWater.FarmOption = foTransient)
+    and (FractionOfIrrigationToSurfaceWater.ArrayList = alArray)
+    and (LandUseOption = luoMultiple);
+end;
+
+function TFarmProcess4LandUse.TransientFractionOfPrecipToSurfaceWaterArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (FractionOfPrecipToSurfaceWater.FarmOption = foTransient)
+    and (FractionOfPrecipToSurfaceWater.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.TransientFractionOfPrecipToSurfaceWaterMultArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (FractionOfPrecipToSurfaceWater.FarmOption = foTransient)
+    and (FractionOfPrecipToSurfaceWater.ArrayList = alArray)
+    and (LandUseOption = luoMultiple);
+end;
+
 function TFarmProcess4LandUse.TransientIrrigationArrayUsed(
   Sender: TObject): boolean;
 var
@@ -28056,6 +28394,24 @@ begin
     InitializeMultEvaporationIrrigationFractionsDisplay,
     GetMultEvaporationIrrigationFractionsUseList,
     StrEvaporationIrrigationFractionsS);
+end;
+
+procedure TFarmProcess4LandUse.UpdateMultFractionOfIrrigToSurfaceWatersArrays;
+begin
+  UpdateMultLandUseLists(TransientFractionOfIrrigToSurfaceWaterMultArrayUsed(nil),
+    FMultFractionOfIrrigToSurfaceWaters,
+    InitializeMultFractionOfIrrigToSurfaceWatersDisplay,
+    GetMultFractionOfIrrigToSurfaceWatersUseList,
+    StrFractionOfIrrigToSurfaceWatersS);
+end;
+
+procedure TFarmProcess4LandUse.UpdateMultFractionOfPrecipToSurfaceWatersArrays;
+begin
+  UpdateMultLandUseLists(TransientFractionOfPrecipToSurfaceWaterMultArrayUsed(nil),
+    FMultFractionOfPrecipToSurfaceWaters,
+    InitializeMultFractionOfPrecipToSurfaceWatersDisplay,
+    GetMultFractionOfPrecipToSurfaceWatersUseList,
+    StrFractionOfPrecipToSurfaceWatersS);
 end;
 
 procedure TFarmProcess4LandUse.UpdateMultIrrigationsArrays;

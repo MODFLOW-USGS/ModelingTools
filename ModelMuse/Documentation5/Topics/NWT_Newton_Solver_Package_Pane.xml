@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-06T08:18:55.642-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">NWT: Newton Solver Package Pane</title>
   <body>
     <header>
@@ -12,10 +12,15 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The options that are required if </text><text styleclass="Strong" translate="true">Options</text><text styleclass="Normal" translate="true"> is set to &quot;Specified&quot; are on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Additional_Options_Tab_Newton_" styleclass="Strong" translate="true">Additional Options</link><text styleclass="Normal" translate="true"> tab.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The options that are required if </text><text styleclass="Strong" translate="true">Options</text><text styleclass="Normal" translate="true"> is set to &quot;Specified&quot; and </text><text styleclass="Strong" translate="true">LINMETH</text><text styleclass="Normal" translate="true"> is set to GMRES are on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="_GMRES_Variables_Tab_Newton_So" styleclass="Strong" translate="true">GMRES Variables</link><text styleclass="Normal" translate="true"> tab.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The options that are required if </text><text styleclass="Strong" translate="true">Options</text><text styleclass="Normal" translate="true"> is set to &quot;Specified&quot; and </text><text styleclass="Strong" translate="true">LINMETH</text><text styleclass="Normal" translate="true"> is set to Chi MD are on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Chi_MD_Variables_Tab_Newton_So" styleclass="Strong" translate="true">Chi MD Variables</link><text styleclass="Normal" translate="true"> tab.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When the Well package in MODFLOW-NWT is used, a warning similar to the following will always be printed to the listing file.</text></para>
+    <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;" translate="true"> NEGATIVE PUMPING RATES WILL BE REDUCED IF HEAD </text></para>
+    <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;" translate="true"> FALLS WITHIN THE INTERVAL PHIRAMP TIMES THE CELL </text></para>
+    <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;" translate="true"> THICKNESS. THE VALUE SPECIFIED FOR PHIRAMP IS &#160;0.10000E+00</text></para>
+    <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"><text style="font-family:&apos;Courier New&apos;; font-size:12pt; color:#000000;" translate="true"> WELLS WITH REDUCED PUMPING WILL BE REPORTED TO FILE UNIT NUMBER &#160;141</text></para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true"> </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true"> </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">&#32;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">&#32;</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

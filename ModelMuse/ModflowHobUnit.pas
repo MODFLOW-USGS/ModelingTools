@@ -160,7 +160,7 @@ type
     property ObservationColumnOffset: double read FObservationColumnOffset;
     property ObservationHeads[AModel: TBaseModel]: TObservationTimeList
       read GetObservationHeads;
-    function CountObservationTimes(StartTime, EndTime: double): integer;
+    function CountObservationTimes(StartTime, EndTime, Epsilon: double): integer;
   end;
 
   THob_Cell = class(TValueCell)
@@ -757,7 +757,7 @@ end;
 { THobCollection }
 
 function THobCollection.CountObservationTimes(StartTime,
-  EndTime: double): integer;
+  EndTime, Epsilon: double): integer;
 var
   Index: Integer;
   Item: THobItem;
@@ -767,6 +767,14 @@ begin
   begin
     Item := HobItems[Index];
     if (StartTime <= Item.Time) and (Item.Time <= EndTime) then
+    begin
+      Inc(result);
+    end
+    else if ((Item.Time - StartTime)/(Abs(Item.Time) + Abs(StartTime))) < Epsilon then
+    begin
+      Inc(result);
+    end
+    else if ((EndTime - Item.Time)/(Abs(Item.Time) + Abs(EndTime))) < Epsilon then
     begin
       Inc(result);
     end;

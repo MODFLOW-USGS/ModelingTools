@@ -1,0 +1,2 @@
+inherited frameScreenObjectMultFractionOfIrrigToSurfaceWater: TframeScreenObjectMultFractionOfIrrigToSurfaceWater
+end

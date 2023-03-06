@@ -18,7 +18,8 @@ type
     wlSurfaceK, wlBareEvap, wlDirectRecharge, wlPrecipPotConsumption,
     wlNrdInfilLoc, wlLandUseAreaFraction, wlCropCoefficient, wlConsumptiveUse,
     wlIrrigation, wlRootDepth, wlGwRootInteraction, wlTranspirationFraction,
-    wlEvaporationIrrigationFraction);
+    wlEvaporationIrrigationFraction, wlFractionOfPrecipToSurfaceWater,
+    wlFractionOfIrrigToSurfaceWater);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -84,6 +85,8 @@ type
     FRootDepth: TList;
     FTranspirationFraction: TList;
     FEvaporationIrrigationFraction: TList;
+    FFractionOfPrecipToSurfaceWater: TList;
+    FFractionOfIrrigToSurfaceWater: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -113,6 +116,8 @@ type
     FGwRootInteractionStream: TFileStream;
     FTranspirationFractionFileStream: TFileStream;
     FEvaporationIrrigationFractionFileStream: TFileStream;
+    FFractionOfPrecipToSurfaceWaterFileStream: TFileStream;
+    FFractionOfIrrigToSurfaceWaterFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteWaterBalanceSubregion;
@@ -185,6 +190,12 @@ type
 
     procedure EvaluateEvaporationIrrigationFraction;
     procedure WriteEvaporationIrrigationFraction;
+
+    procedure EvaluateFractionOfPrecipToSurfaceWater;
+    procedure WriteFractionOfPrecipToSurfaceWater;
+
+    procedure EvaluateFractionOfIrrigToSurfaceWater;
+    procedure WriteFractionOfIrrigToSurfaceWater;
 
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
@@ -276,6 +287,10 @@ type
     procedure UpdateMultTranspirationFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateEvaporationIrrigationFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateMultEvaporationIrrigationFractionDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateFractionOfPrecipToSurfaceWaterDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateMultFractionOfPrecipToSurfaceWaterDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateFractionOfIrrigToSurfaceWaterDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateMultFractionOfIrrigToSurfaceWaterDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -462,6 +477,8 @@ begin
   FRootDepth := TObjectList.Create;
   FTranspirationFraction := TObjectList.Create;
   FEvaporationIrrigationFraction := TObjectList.Create;
+  FFractionOfPrecipToSurfaceWater := TObjectList.Create;
+  FFractionOfIrrigToSurfaceWater := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -475,6 +492,8 @@ destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
 
+  FFractionOfIrrigToSurfaceWater.Free;
+  FFractionOfPrecipToSurfaceWater.Free;
   FEvaporationIrrigationFraction.Free;
   FTranspirationFraction.Free;
   FRootDepth.Free;
@@ -546,6 +565,8 @@ begin
   EvaluateRootDepth;
   EvaluateTranspirationFraction;
   EvaluateEvaporationIrrigationFraction;
+  EvaluateFractionOfPrecipToSurfaceWater;
+  EvaluateFractionOfIrrigToSurfaceWater;
 end;
 
 procedure TModflowFmp4Writer.EvaluateBareEvap;
@@ -652,6 +673,26 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.EvaluateFractionOfIrrigToSurfaceWater;
+begin
+  if FLandUse.TransientFractionOfIrrigToSurfaceWaterarrayUsed(nil)
+    or FLandUse.TransientFractionOfIrrigToSurfaceWaterMultArrayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Fraction of Unconsumed Irrig to Surface Water value');
+    EvaluateTransientArrayData(wlFractionOfIrrigToSurfaceWater);
+  end;
+end;
+
+procedure TModflowFmp4Writer.EvaluateFractionOfPrecipToSurfaceWater;
+begin
+  if FLandUse.TransientFractionOfPrecipToSurfaceWaterarrayUsed(nil)
+    or FLandUse.TransientFractionOfPrecipToSurfaceWaterMultArrayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Fraction of Unconsumed Precip to Surface Water value');
+    EvaluateTransientArrayData(wlFractionOfPrecipToSurfaceWater);
+  end;
+end;
+
 procedure TModflowFmp4Writer.EvaluateIrrigation;
 begin
   if FLandUse.TransientIrrigationarrayUsed(nil)
@@ -753,6 +794,8 @@ begin
   FreeAndNil(FGwRootInteractionStream);
   FreeAndNil(FTranspirationFractionFileStream);
   FreeAndNil(FEvaporationIrrigationFractionFileStream);
+  FreeAndNil(FFractionOfPrecipToSurfaceWaterFileStream);
+  FreeAndNil(FFractionOfIrrigToSurfaceWaterFileStream);
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -1010,6 +1053,24 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlFractionOfPrecipToSurfaceWater:
+      begin
+        result := ChangeFileExt(FBaseName, '.SURFACEWATER_LOSS_FRACTION_PRECIPITATION');
+        if FFractionOfPrecipToSurfaceWaterFileStream = nil then
+        begin
+          FFractionOfPrecipToSurfaceWaterFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlFractionOfIrrigToSurfaceWater:
+      begin
+        result := ChangeFileExt(FBaseName, '.SURFACEWATER_LOSS_FRACTION_IRRIGATION');
+        if FFractionOfIrrigToSurfaceWaterFileStream = nil then
+        begin
+          FFractionOfIrrigToSurfaceWaterFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -1126,6 +1187,28 @@ begin
           result := ScreenObject.ModflowFmp4MultEvaporationIrrigationFraction;
         end;
       end;
+    wlFractionOfPrecipToSurfaceWater:
+      begin
+        if FLandUse.LandUseOption = luoSingle then
+        begin
+          result := ScreenObject.ModflowFmp4FractionOfPrecipToSurfaceWater;
+        end
+        else
+        begin
+          result := ScreenObject.ModflowFmp4MultFractionOfPrecipToSurfaceWater;
+        end;
+      end;
+    wlFractionOfIrrigToSurfaceWater:
+      begin
+        if FLandUse.LandUseOption = luoSingle then
+        begin
+          result := ScreenObject.ModflowFmp4FractionOfIrrigToSurfaceWater;
+        end
+        else
+        begin
+          result := ScreenObject.ModflowFmp4MultFractionOfIrrigToSurfaceWater;
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -1171,6 +1254,8 @@ begin
     wlGwRootInteraction: ;
     wlTranspirationFraction: result := FTranspirationFraction;
     wlEvaporationIrrigationFraction: result := FEvaporationIrrigationFraction;
+    wlFractionOfPrecipToSurfaceWater: result := FFractionOfPrecipToSurfaceWater;
+    wlFractionOfIrrigToSurfaceWater: result := FFractionOfIrrigToSurfaceWater;
     else Assert(False)
   end;
 end;
@@ -1465,6 +1550,32 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.UpdateFractionOfIrrigToSurfaceWaterDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateFractionOfIrrigToSurfaceWater;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientFractionOfIrrigToSurfaceWaterarrayUsed;
+  UpdateRequirements.WriteLocation := wlFractionOfIrrigToSurfaceWater;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateFractionOfPrecipToSurfaceWaterDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateFractionOfPrecipToSurfaceWater;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientFractionOfPrecipToSurfaceWaterarrayUsed;
+  UpdateRequirements.WriteLocation := wlFractionOfPrecipToSurfaceWater;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
 procedure TModflowFmp4Writer.UpdateIrrigationDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
@@ -1526,6 +1637,32 @@ begin
   UpdateRequirements.TransientDataUsed := FLandUse.
     TransientEvaporationIrrigationFractionMultArrayUsed;
   UpdateRequirements.WriteLocation := wlEvaporationIrrigationFraction;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateMultFractionOfIrrigToSurfaceWaterDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateFractionOfIrrigToSurfaceWater;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientFractionOfIrrigToSurfaceWaterMultArrayUsed;
+  UpdateRequirements.WriteLocation := wlFractionOfIrrigToSurfaceWater;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateMultFractionOfPrecipToSurfaceWaterDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateFractionOfPrecipToSurfaceWater;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientFractionOfPrecipToSurfaceWaterMultArrayUsed;
+  UpdateRequirements.WriteLocation := wlFractionOfPrecipToSurfaceWater;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
 end;
@@ -1709,6 +1846,138 @@ begin
 
       end;
     end;
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteFractionOfIrrigToSurfaceWater;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  DataArrayNames: TStringList;
+  CropIndex: Integer;
+begin
+  if FLandUse.FractionOfIrrigationToSurfaceWater.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlFractionOfIrrigToSurfaceWater);
+
+  if (FLandUse.FractionOfIrrigationToSurfaceWater.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlFractionOfIrrigToSurfaceWater;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_IRRIGATION';
+    RequiredValues.ErrorID := 'FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_IRRIGATION';
+    RequiredValues.ID := 'SURFACEWATER_LOSS_FRACTION_IRRIGATION';
+    RequiredValues.StaticDataName := KFractionOfIrrigToSurfaceWater;
+    RequiredValues.WriteTransientData :=
+      (FLandUse.FractionOfIrrigationToSurfaceWater.FarmOption = foTransient);
+    RequiredValues.CheckError :=  'Invalid Fraction of Unconsumed Irrig. to Surface Water value';
+    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FLandUse.FractionOfIrrigationToSurfaceWater;
+
+    if FLandUse.LandUseOption = luoSingle then
+    begin
+      WriteFmpArrayData(AFileName, RequiredValues);
+    end
+    else
+    begin
+      if RequiredValues.WriteTransientData then
+      begin
+        RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
+        WriteFmpArrayData(AFileName, RequiredValues);
+      end
+      else
+      begin
+        DataArrayNames := TStringList.Create;
+        try
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            DataArrayNames.Add(
+              Model.FmpCrops[CropIndex].SWLossFractionIrrigationDataArrayName);
+          end;
+          RequiredValues.LandUseStaticFileNames := DataArrayNames;
+          WriteLandUseArrayData(AFileName, RequiredValues);
+        finally
+          DataArrayNames.Free;
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteFractionOfPrecipToSurfaceWater;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  DataArrayNames: TStringList;
+  CropIndex: Integer;
+begin
+  if FLandUse.FractionOfPrecipToSurfaceWater.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlFractionOfPrecipToSurfaceWater);
+
+  if (FLandUse.FractionOfPrecipToSurfaceWater.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlFractionOfPrecipToSurfaceWater;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
+    RequiredValues.ErrorID := 'FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
+    RequiredValues.ID := 'SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
+    RequiredValues.StaticDataName := KFractionOfPrecipToSurfaceWater;
+    RequiredValues.WriteTransientData :=
+      (FLandUse.FractionOfPrecipToSurfaceWater.FarmOption = foTransient);
+    RequiredValues.CheckError :=  'Invalid Fraction of Unconsumed Precip. to Surface Water value';
+    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+    RequiredValues.Option := '';
+    RequiredValues.FarmProperty := FLandUse.FractionOfPrecipToSurfaceWater;
+
+    if FLandUse.LandUseOption = luoSingle then
+    begin
+      WriteFmpArrayData(AFileName, RequiredValues);
+    end
+    else
+    begin
+      if RequiredValues.WriteTransientData then
+      begin
+        RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
+        WriteFmpArrayData(AFileName, RequiredValues);
+      end
+      else
+      begin
+        DataArrayNames := TStringList.Create;
+        try
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            DataArrayNames.Add(
+              Model.FmpCrops[CropIndex].SWLossFractionPrecipDataArrayName);
+          end;
+          RequiredValues.LandUseStaticFileNames := DataArrayNames;
+          WriteLandUseArrayData(AFileName, RequiredValues);
+        finally
+          DataArrayNames.Free;
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    Assert(False);
   end;
 end;
 
@@ -2436,7 +2705,7 @@ begin
           WriteTransient2DArray(RequiredValues.Comment, DataTypeIndex,
             RequiredValues.DataType, RequiredValues.DefaultValue,
             ValueCellList, umAssign, False, Dummy, RequiredValues.ID,
-            (not CheckAssigned), False);
+            (not CheckAssigned), False, (FLandUse.LandUseOption = luoMultiple));
           if CheckAssigned then
           begin
             RequiredValues.CheckProcedure(Dummy, RequiredValues.CheckError);
@@ -2805,6 +3074,8 @@ begin
     WriteGroundwaterRootInteraction;
     WriteTranspirationFraction;
     WriteEvaporationIrrigationFraction;
+    WriteFractionOfPrecipToSurfaceWater;
+    WriteFractionOfIrrigToSurfaceWater;
 
     // remove this.
     NewLine;
@@ -3424,6 +3695,16 @@ begin
         begin
           Assert(FEvaporationIrrigationFractionFileStream <> nil);
           FEvaporationIrrigationFractionFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlFractionOfPrecipToSurfaceWater:
+        begin
+          Assert(FFractionOfPrecipToSurfaceWaterFileStream <> nil);
+          FFractionOfPrecipToSurfaceWaterFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlFractionOfIrrigToSurfaceWater:
+        begin
+          Assert(FFractionOfIrrigToSurfaceWaterFileStream <> nil);
+          FFractionOfIrrigToSurfaceWaterFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);

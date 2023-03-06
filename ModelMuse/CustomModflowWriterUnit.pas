@@ -279,7 +279,8 @@ end;
       DataTypeIndex: Integer; DataType: TRbwDataType; DefaultValue: Double;
       List: TList; AssignmentMethod: TUpdateMethod; AdjustForLGR: boolean;
       var TransientArray: TDataArray; const MF6_ArrayName: string;
-      FreeArray: boolean = True; ShouldWriteHeader: Boolean = True);
+      FreeArray: boolean = True; ShouldWriteHeader: Boolean = True;
+      ForceFullArray: Boolean = False);
     procedure WriteMf6_DataSet(DataArray: TDataArray; const ID: string);
     // SAVE_FLOWS
     procedure WriteSaveFlowsOption;
@@ -6957,7 +6958,8 @@ procedure TCustomModflowWriter.WriteTransient2DArray(const Comment: string;
   DataTypeIndex: Integer; DataType: TRbwDataType; DefaultValue: Double;
   List: TList; AssignmentMethod: TUpdateMethod; AdjustForLGR: boolean;
   var TransientArray: TDataArray; const MF6_ArrayName: string;
-  FreeArray: boolean = True; ShouldWriteHeader: Boolean = True);
+  FreeArray: boolean = True; ShouldWriteHeader: Boolean = True;
+  ForceFullArray: Boolean = False);
 var
   ColIndex: Integer;
   RowIndex: Integer;
@@ -7257,7 +7259,8 @@ begin
     end
     else
     begin
-      WriteArray(ExportArray, 0, Comment, DummyAnnotation, MF6_ArrayName, False, ShouldWriteHeader);
+      WriteArray(ExportArray, 0, Comment, DummyAnnotation, MF6_ArrayName, False,
+        ShouldWriteHeader, ForceFullArray);
     end;
   finally
     if FreeArray then

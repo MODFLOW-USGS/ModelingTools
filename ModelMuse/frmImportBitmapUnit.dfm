@@ -7,8 +7,8 @@ inherited frmImportBitmap: TfrmImportBitmap
   Caption = 'Import Image'
   ClientHeight = 549
   ClientWidth = 782
-  ExplicitWidth = 800
-  ExplicitHeight = 596
+  ExplicitWidth = 794
+  ExplicitHeight = 587
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 369
@@ -24,6 +24,8 @@ inherited frmImportBitmap: TfrmImportBitmap
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 420
+    ExplicitWidth = 778
     DesignSize = (
       782
       128)
@@ -65,7 +67,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       OnClick = rgViewDirectionClick
     end
     object btnOK: TBitBtn
-      Left = 587
+      Left = 583
       Top = 87
       Width = 91
       Height = 33
@@ -94,9 +96,10 @@ inherited frmImportBitmap: TfrmImportBitmap
       NumGlyphs = 2
       TabOrder = 7
       OnClick = btnOKClick
+      ExplicitLeft = 579
     end
     object btnCancel: TBitBtn
-      Left = 684
+      Left = 680
       Top = 87
       Width = 91
       Height = 33
@@ -104,6 +107,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 8
+      ExplicitLeft = 676
     end
     object edName: TEdit
       Left = 322
@@ -114,7 +118,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       TabOrder = 4
     end
     object btnHelp: TBitBtn
-      Left = 492
+      Left = 488
       Top = 87
       Width = 91
       Height = 33
@@ -123,6 +127,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       NumGlyphs = 2
       TabOrder = 6
       OnClick = btnHelpClick
+      ExplicitLeft = 484
     end
     object cbVisible: TCheckBox
       Left = 280
@@ -448,6 +453,7 @@ inherited frmImportBitmap: TfrmImportBitmap
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+    ExplicitHeight = 420
     ColWidths = (
       64
       64
@@ -466,6 +472,8 @@ inherited frmImportBitmap: TfrmImportBitmap
     Height = 421
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 406
+    ExplicitHeight = 420
     object ZoomBox: TQRbwZoomBox2
       Left = 0
       Top = 0

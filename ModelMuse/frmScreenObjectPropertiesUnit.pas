@@ -71,7 +71,11 @@ uses System.UITypes, Windows,
   frameScreenObjectFmp4TranspirationFractionUnit,
   frameScreenObjectMultTranspirationFractionUnit,
   frameScreenObjectFmp4EvaporationIrrigationFractionUnit,
-  frameScreenObjectMultEvaporationIrrigationFractionUnit;
+  frameScreenObjectMultEvaporationIrrigationFractionUnit,
+  frameScreenObjectFmp4FractionOfPrecipToSurfaceWaterUnit,
+  frameScreenObjectMultFractionOfPrecipToSurfaceWaterUnit,
+  frameScreenObjectFmp4FractionOfIrrigToSurfaceWaterUnit,
+  frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -473,6 +477,14 @@ type
     jvspFmp4EvaporationIrrigationFractionMult: TJvStandardPage;
     frameFmp4EvaporationIrrigationFraction: TframeScreenObjectFmp4EvaporationIrrigationFraction;
     frameFmp4MultEvaporationIrrigationFraction: TframeScreenObjectMultEvaporationIrrigationFraction;
+    jvspFmp4FractionOfPrecipToSurfaceWater: TJvStandardPage;
+    frameFmp4FractionOfPrecipToSurfaceWater: TframeScreenObjectFmp4FractionOfPrecipToSurfaceWater;
+    jvspFmp4FractionOfPrecipToSurfaceWaterMult: TJvStandardPage;
+    frameFmp4MultFractionOfPrecipToSurfaceWater: TframeScreenObjectMultFractionOfPrecipToSurfaceWater;
+    jvspFmp4FractionOfIrrigToSurfaceWater: TJvStandardPage;
+    jvspFmp4FractionOfIrrigToSurfaceWaterMult: TJvStandardPage;
+    frameFmp4FractionOfIrrigToSurfaceWater: TframeScreenObjectFmp4FractionOfIrrigToSurfaceWater;
+    frameFmp4MultFractionOfIrrigToSurfaceWater: TframeScreenObjectMultFractionOfIrrigToSurfaceWater;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1828,6 +1840,10 @@ type
     FFmp4MultTranspirationFractionNode: TJvPageIndexNode;
     FFmp4EvaporationIrrigationFractionNode: TJvPageIndexNode;
     FFmp4MultEvaporationIrrigationFractionNode: TJvPageIndexNode;
+    FFmp4FractionOfPrecipToSurfaceWaterNode: TJvPageIndexNode;
+    FFmp4MultFractionOfPrecipToSurfaceWaterNode: TJvPageIndexNode;
+    FFmp4FractionOfIrrigToSurfaceWaterNode: TJvPageIndexNode;
+    FFmp4MultFractionOfIrrigToSurfaceWaterNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2422,6 +2438,22 @@ type
     procedure CreateFmp4MultEvaporationIrrigationFractionNode;
     procedure GetFmp4MultEvaporationIrrigationFractionBoundary(const ScreenObjectList: TList);
 
+    procedure Fmp4FractionOfPrecipToSurfaceWaterChanged(Sender: TObject);
+    procedure CreateFmp4FractionOfPrecipToSurfaceWaterNode;
+    procedure GetFmp4FractionOfPrecipToSurfaceWaterBoundary(const ScreenObjectList: TList);
+
+    procedure Fmp4MultFractionOfPrecipToSurfaceWaterChanged(Sender: TObject);
+    procedure CreateFmp4MultFractionOfPrecipToSurfaceWaterNode;
+    procedure GetFmp4MultFractionOfPrecipToSurfaceWaterBoundary(const ScreenObjectList: TList);
+
+    procedure Fmp4FractionOfIrrigToSurfaceWaterChanged(Sender: TObject);
+    procedure CreateFmp4FractionOfIrrigToSurfaceWaterNode;
+    procedure GetFmp4FractionOfIrrigToSurfaceWaterBoundary(const ScreenObjectList: TList);
+
+    procedure Fmp4MultFractionOfIrrigToSurfaceWaterChanged(Sender: TObject);
+    procedure CreateFmp4MultFractionOfIrrigToSurfaceWaterNode;
+    procedure GetFmp4MultFractionOfIrrigToSurfaceWaterBoundary(const ScreenObjectList: TList);
+
     // @name is set to @true when the @classname has stored values of the
     // @link(TScreenObject)s being edited.
     property IsLoaded: boolean read FIsLoaded write SetIsLoaded;
@@ -2725,7 +2757,9 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowFmp4ConsumptiveUseUnit, ModflowFmp4IrrigationSpatialUnit,
   ModflowFmp4RootDepthUnit, ModflowFmp4TranspirationFractionUnit,
   frmImportVertexValuesUnit, QuadTreeClass,
-  ModflowFmp4EvaporationIrrigationFractionUnit;
+  ModflowFmp4EvaporationIrrigationFractionUnit,
+  ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
+  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4248,6 +4282,22 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4FractionOfPrecipToSurfaceWaterNode then
+    begin
+      // do nothing
+    end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4MultFractionOfPrecipToSurfaceWaterNode then
+    begin
+      // do nothing
+    end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4FractionOfIrrigToSurfaceWaterNode then
+    begin
+      // do nothing
+    end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4MultFractionOfIrrigToSurfaceWaterNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4416,6 +4466,10 @@ begin
   CreateFmp4MultTranspirationFractionNode;
   CreateFmp4EvaporationIrrigationFractionNode;
   CreateFmp4MultEvaporationIrrigationFractionNode;
+  CreateFmp4FractionOfPrecipToSurfaceWaterNode;
+  CreateFmp4MultFractionOfPrecipToSurfaceWaterNode;
+  CreateFmp4FractionOfIrrigToSurfaceWaterNode;
+  CreateFmp4MultFractionOfIrrigToSurfaceWaterNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -5259,6 +5313,10 @@ begin
         BoundaryNodeList.Add(FFmp4MultTranspirationFractionNode);
         BoundaryNodeList.Add(FFmp4EvaporationIrrigationFractionNode);
         BoundaryNodeList.Add(FFmp4MultEvaporationIrrigationFractionNode);
+        BoundaryNodeList.Add(FFmp4FractionOfPrecipToSurfaceWaterNode);
+        BoundaryNodeList.Add(FFmp4MultFractionOfPrecipToSurfaceWaterNode);
+        BoundaryNodeList.Add(FFmp4FractionOfIrrigToSurfaceWaterNode);
+        BoundaryNodeList.Add(FFmp4MultFractionOfIrrigToSurfaceWaterNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -6198,6 +6256,26 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4FractionOfIrrigToSurfaceWaterChanged(
+  Sender: TObject);
+begin
+  if (FFmp4FractionOfIrrigToSurfaceWaterNode <> nil)
+    and (FFmp4FractionOfIrrigToSurfaceWaterNode.StateIndex <> 3) then
+  begin
+    FFmp4FractionOfIrrigToSurfaceWaterNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4FractionOfPrecipToSurfaceWaterChanged(
+  Sender: TObject);
+begin
+  if (FFmp4FractionOfPrecipToSurfaceWaterNode <> nil)
+    and (FFmp4FractionOfPrecipToSurfaceWaterNode.StateIndex <> 3) then
+  begin
+    FFmp4FractionOfPrecipToSurfaceWaterNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4IrrigationChanged(Sender: TObject);
 begin
   if (FFmp4IrrigationNode <> nil)
@@ -6244,6 +6322,26 @@ begin
     and (FFmp4MultEvaporationIrrigationFractionNode.StateIndex <> 3) then
   begin
     FFmp4MultEvaporationIrrigationFractionNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4MultFractionOfIrrigToSurfaceWaterChanged(
+  Sender: TObject);
+begin
+  if (FFmp4MultFractionOfIrrigToSurfaceWaterNode <> nil)
+    and (FFmp4MultFractionOfIrrigToSurfaceWaterNode.StateIndex <> 3) then
+  begin
+    FFmp4MultFractionOfIrrigToSurfaceWaterNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4MultFractionOfPrecipToSurfaceWaterChanged(
+  Sender: TObject);
+begin
+  if (FFmp4MultFractionOfPrecipToSurfaceWaterNode <> nil)
+    and (FFmp4MultFractionOfPrecipToSurfaceWaterNode.StateIndex <> 3) then
+  begin
+    FFmp4MultFractionOfPrecipToSurfaceWaterNode.StateIndex := 2;
   end;
 end;
 
@@ -6415,6 +6513,10 @@ begin
   frameFmp4MultTranspirationFraction.OnEdited := Fmp4MultTranspirationFractionChanged;
   frameFmp4EvaporationIrrigationFraction.OnEdited := Fmp4EvaporationIrrigationFractionChanged;
   frameFmp4MultEvaporationIrrigationFraction.OnEdited := Fmp4MultEvaporationIrrigationFractionChanged;
+  frameFmp4FractionOfPrecipToSurfaceWater.OnEdited := Fmp4FractionOfPrecipToSurfaceWaterChanged;
+  frameFmp4MultFractionOfPrecipToSurfaceWater.OnEdited := Fmp4MultFractionOfPrecipToSurfaceWaterChanged;
+  frameFmp4FractionOfIrrigToSurfaceWater.OnEdited := Fmp4FractionOfIrrigToSurfaceWaterChanged;
+  frameFmp4MultFractionOfIrrigToSurfaceWater.OnEdited := Fmp4MultFractionOfIrrigToSurfaceWaterChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7715,6 +7817,22 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4FractionOfPrecipToSurfaceWaterNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FFmp4MultFractionOfPrecipToSurfaceWaterNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FFmp4FractionOfIrrigToSurfaceWaterNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FFmp4MultFractionOfIrrigToSurfaceWaterNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8832,6 +8950,39 @@ begin
       (FFmp4MultEvaporationIrrigationFractionNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected);
   end;
+
+  if (FFmp4FractionOfPrecipToSurfaceWaterNode <> nil) then
+  begin
+    frameFmp4FractionOfPrecipToSurfaceWater.SetData(FNewProperties,
+      (FFmp4FractionOfPrecipToSurfaceWaterNode.StateIndex = 2),
+      (FFmp4FractionOfPrecipToSurfaceWaterNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterIsSelected);
+  end;
+
+  if (FFmp4MultFractionOfPrecipToSurfaceWaterNode <> nil) then
+  begin
+    frameFmp4MultFractionOfPrecipToSurfaceWater.SetData(FNewProperties,
+      (FFmp4MultFractionOfPrecipToSurfaceWaterNode.StateIndex = 2),
+      (FFmp4MultFractionOfPrecipToSurfaceWaterNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterMultIsSelected);
+  end;
+
+  if (FFmp4FractionOfIrrigToSurfaceWaterNode <> nil) then
+  begin
+    frameFmp4FractionOfIrrigToSurfaceWater.SetData(FNewProperties,
+      (FFmp4FractionOfIrrigToSurfaceWaterNode.StateIndex = 2),
+      (FFmp4FractionOfIrrigToSurfaceWaterNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterIsSelected);
+  end;
+
+  if (FFmp4MultFractionOfIrrigToSurfaceWaterNode <> nil) then
+  begin
+    frameFmp4MultFractionOfIrrigToSurfaceWater.SetData(FNewProperties,
+      (FFmp4MultFractionOfIrrigToSurfaceWaterNode.StateIndex = 2),
+      (FFmp4MultFractionOfIrrigToSurfaceWaterNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected);
+  end;
+
 end;
 
 procedure TfrmScreenObjectProperties.UpdateVertices;
@@ -15321,6 +15472,40 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4FractionOfIrrigToSurfaceWaterNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4FractionOfIrrigToSurfaceWaterNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Frac Excess Irrig to SW in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4FractionOfIrrigToSurfaceWater.PageIndex;
+    frameFmp4FractionOfIrrigToSurfaceWater.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4FractionOfIrrigToSurfaceWaterNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4FractionOfPrecipToSurfaceWaterNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4FractionOfPrecipToSurfaceWaterNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Frac Excess Precip to SW in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4FractionOfPrecipToSurfaceWater.PageIndex;
+    frameFmp4FractionOfPrecipToSurfaceWater.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4FractionOfPrecipToSurfaceWaterNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4IrrigationNode;
 var
   Node: TJvPageIndexNode;
@@ -15403,6 +15588,40 @@ begin
     frameFmp4MultEvaporationIrrigationFraction.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FFmp4MultEvaporationIrrigationFractionNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4MultFractionOfIrrigToSurfaceWaterNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4MultFractionOfIrrigToSurfaceWaterNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Frac Excess Irrig to SW in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4FractionOfIrrigToSurfaceWaterMult.PageIndex;
+    frameFmp4MultFractionOfIrrigToSurfaceWater.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4MultFractionOfIrrigToSurfaceWaterNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4MultFractionOfPrecipToSurfaceWaterNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4MultFractionOfPrecipToSurfaceWaterNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterMultIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Frac Excess Precip to SW in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4FractionOfPrecipToSurfaceWaterMult.PageIndex;
+    frameFmp4MultFractionOfPrecipToSurfaceWater.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4MultFractionOfPrecipToSurfaceWaterNode := Node;
   end;
 end;
 
@@ -18297,6 +18516,58 @@ begin
   frameFmp4EvaporationIrrigationFraction.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4FractionOfIrrigToSurfaceWaterBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4FractionOfIrrigToSurfaceWaterBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4FractionOfIrrigToSurfaceWater;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4FractionOfIrrigToSurfaceWaterNode <> nil then
+  begin
+    FFmp4FractionOfIrrigToSurfaceWaterNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4FractionOfIrrigToSurfaceWater.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4FractionOfPrecipToSurfaceWaterBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4FractionOfPrecipToSurfaceWaterBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4FractionOfPrecipToSurfaceWater;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4FractionOfPrecipToSurfaceWaterNode <> nil then
+  begin
+    FFmp4FractionOfPrecipToSurfaceWaterNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4FractionOfPrecipToSurfaceWater.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetFmp4IrrigationBoundary(
   const ScreenObjectList: TList);
 var
@@ -18425,6 +18696,58 @@ begin
     FFmp4MultEvaporationIrrigationFractionNode.StateIndex := Ord(State)+1;
   end;
   frameFmp4MultEvaporationIrrigationFraction.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4MultFractionOfIrrigToSurfaceWaterBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4MultFractionOfIrrigToSurfaceWater;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4MultFractionOfIrrigToSurfaceWaterNode <> nil then
+  begin
+    FFmp4MultFractionOfIrrigToSurfaceWaterNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4MultFractionOfIrrigToSurfaceWater.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4MultFractionOfPrecipToSurfaceWaterBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4MultFractionOfPrecipToSurfaceWaterBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterMultIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4MultFractionOfPrecipToSurfaceWater;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4MultFractionOfPrecipToSurfaceWaterNode <> nil then
+  begin
+    FFmp4MultFractionOfPrecipToSurfaceWaterNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4MultFractionOfPrecipToSurfaceWater.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetFmp4MultIrrigationBoundary(
@@ -19121,6 +19444,10 @@ begin
   GetFmp4MultTranspirationFractionBoundary(AScreenObjectList);
   GetFmp4EvaporationIrrigationFractionBoundary(AScreenObjectList);
   GetFmp4MultEvaporationIrrigationFractionBoundary(AScreenObjectList);
+  GetFmp4FractionOfPrecipToSurfaceWaterBoundary(AScreenObjectList);
+  GetFmp4MultFractionOfPrecipToSurfaceWaterBoundary(AScreenObjectList);
+  GetFmp4FractionOfIrrigToSurfaceWaterBoundary(AScreenObjectList);
+  GetFmp4MultFractionOfIrrigToSurfaceWaterBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 

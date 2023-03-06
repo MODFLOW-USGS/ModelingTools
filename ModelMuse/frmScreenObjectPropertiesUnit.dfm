@@ -709,8 +709,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Caption = 'Formula'
           end
           object btnDataSetFormula: TButton
-            Left = 318
-            Top = -3
+            Left = 382
+            Top = 1
             Width = 89
             Height = 25
             Anchors = [akTop, akRight]
@@ -764,7 +764,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           object reDataSetFormula: TRichEdit
             Left = 6
             Top = 28
-            Width = 401
+            Width = 467
             Height = 152
             Anchors = [akLeft, akTop, akRight, akBottom]
             Enabled = False
@@ -2463,7 +2463,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 577
         Height = 475
-        ActivePage = jvspFmp4EvaporationIrrigationFractionMult
+        ActivePage = jvspFmp4FractionOfIrrigToSurfaceWaterMult
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -15886,6 +15886,266 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             TabStop = True
             ExplicitLeft = 32
             ExplicitTop = 48
+            inherited pnlBottom: TPanel
+              Top = 429
+              Width = 577
+              inherited lblNumTimes: TLabel
+                Width = 119
+                Height = 19
+                ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited seNumberOfTimes: TJvSpinEdit
+                Height = 27
+                ExplicitHeight = 27
+              end
+              inherited btnDelete: TBitBtn
+                Left = 489
+              end
+              inherited btnInsert: TBitBtn
+                Left = 405
+              end
+            end
+            inherited pnlTop: TPanel
+              Width = 577
+              inherited pnlCaption: TPanel
+                Width = 575
+              end
+            end
+            inherited pnlGrid: TPanel
+              Width = 577
+              Height = 404
+              inherited pnlEditGrid: TPanel
+                Width = 575
+                inherited lblFormula: TLabel
+                  Width = 59
+                  Height = 19
+                  ExplicitWidth = 59
+                  ExplicitHeight = 19
+                end
+              end
+              inherited rdgModflowBoundary: TRbwDataGrid4
+                Width = 575
+                Height = 352
+                OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+              end
+            end
+          end
+        end
+        object jvspFmp4FractionOfPrecipToSurfaceWater: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 577
+          Height = 475
+          Caption = 'jvspFmp4FractionOfPrecipToSurfaceWater'
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          inline frameFmp4FractionOfPrecipToSurfaceWater: TframeScreenObjectFmp4FractionOfPrecipToSurfaceWater
+            Left = 0
+            Top = 0
+            Width = 577
+            Height = 475
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitLeft = 64
+            ExplicitTop = 64
+            inherited pnlBottom: TPanel
+              Top = 429
+              Width = 577
+              inherited lblNumTimes: TLabel
+                Width = 119
+                Height = 19
+                ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited seNumberOfTimes: TJvSpinEdit
+                Height = 27
+                ExplicitHeight = 27
+              end
+              inherited btnDelete: TBitBtn
+                Left = 489
+              end
+              inherited btnInsert: TBitBtn
+                Left = 405
+              end
+            end
+            inherited pnlTop: TPanel
+              Width = 577
+              inherited pnlCaption: TPanel
+                Width = 575
+              end
+            end
+            inherited pnlGrid: TPanel
+              Width = 577
+              Height = 404
+              inherited pnlEditGrid: TPanel
+                Width = 575
+                inherited lblFormula: TLabel
+                  Width = 59
+                  Height = 19
+                  ExplicitWidth = 59
+                  ExplicitHeight = 19
+                end
+              end
+              inherited rdgModflowBoundary: TRbwDataGrid4
+                Width = 575
+                Height = 352
+                OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+              end
+            end
+          end
+        end
+        object jvspFmp4FractionOfPrecipToSurfaceWaterMult: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 577
+          Height = 475
+          Caption = 'jvspFmp4FractionOfPrecipToSurfaceWaterMult'
+          ExplicitLeft = -4
+          ExplicitTop = -2
+          inline frameFmp4MultFractionOfPrecipToSurfaceWater: TframeScreenObjectMultFractionOfPrecipToSurfaceWater
+            Left = 0
+            Top = 0
+            Width = 577
+            Height = 475
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitLeft = 40
+            ExplicitTop = 40
+            inherited pnlBottom: TPanel
+              Top = 429
+              Width = 577
+              inherited lblNumTimes: TLabel
+                Width = 119
+                Height = 19
+                ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited seNumberOfTimes: TJvSpinEdit
+                Height = 27
+                ExplicitHeight = 27
+              end
+              inherited btnDelete: TBitBtn
+                Left = 489
+              end
+              inherited btnInsert: TBitBtn
+                Left = 405
+              end
+            end
+            inherited pnlTop: TPanel
+              Width = 577
+              inherited pnlCaption: TPanel
+                Width = 575
+              end
+            end
+            inherited pnlGrid: TPanel
+              Width = 577
+              Height = 404
+              inherited pnlEditGrid: TPanel
+                Width = 575
+                inherited lblFormula: TLabel
+                  Width = 59
+                  Height = 19
+                  ExplicitWidth = 59
+                  ExplicitHeight = 19
+                end
+              end
+              inherited rdgModflowBoundary: TRbwDataGrid4
+                Width = 575
+                Height = 352
+                OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+              end
+            end
+          end
+        end
+        object jvspFmp4FractionOfIrrigToSurfaceWater: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 577
+          Height = 475
+          Caption = 'jvspFmp4FractionOfIrrigToSurfaceWater'
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          inline frameFmp4FractionOfIrrigToSurfaceWater: TframeScreenObjectFmp4FractionOfIrrigToSurfaceWater
+            Left = 0
+            Top = 0
+            Width = 577
+            Height = 475
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitLeft = 56
+            ExplicitTop = 48
+            inherited pnlBottom: TPanel
+              Top = 429
+              Width = 577
+              inherited lblNumTimes: TLabel
+                Width = 119
+                Height = 19
+                ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited seNumberOfTimes: TJvSpinEdit
+                Height = 27
+                ExplicitHeight = 27
+              end
+              inherited btnDelete: TBitBtn
+                Left = 489
+              end
+              inherited btnInsert: TBitBtn
+                Left = 405
+              end
+            end
+            inherited pnlTop: TPanel
+              Width = 577
+              inherited pnlCaption: TPanel
+                Width = 575
+              end
+            end
+            inherited pnlGrid: TPanel
+              Width = 577
+              Height = 404
+              inherited pnlEditGrid: TPanel
+                Width = 575
+                inherited lblFormula: TLabel
+                  Width = 59
+                  Height = 19
+                  ExplicitWidth = 59
+                  ExplicitHeight = 19
+                end
+              end
+              inherited rdgModflowBoundary: TRbwDataGrid4
+                Width = 575
+                Height = 352
+                OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                ExplicitLeft = 6
+                ExplicitTop = 58
+                ExplicitWidth = 575
+                ExplicitHeight = 352
+              end
+            end
+          end
+        end
+        object jvspFmp4FractionOfIrrigToSurfaceWaterMult: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 577
+          Height = 475
+          Caption = 'jvspFmp4FractionOfIrrigToSurfaceWaterMult'
+          ExplicitLeft = 6
+          ExplicitTop = -2
+          inline frameFmp4MultFractionOfIrrigToSurfaceWater: TframeScreenObjectMultFractionOfIrrigToSurfaceWater
+            Left = 0
+            Top = 0
+            Width = 577
+            Height = 475
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitLeft = 64
+            ExplicitTop = 64
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577

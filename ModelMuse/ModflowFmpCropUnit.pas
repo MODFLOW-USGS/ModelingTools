@@ -522,7 +522,6 @@ type
       stored False
     {$ENDIF}
     ;
-
     property GroundwaterRootInteractionDataArrayName: string
       read FGroundwaterRootInteractionDataArrayName write SetGroundwaterRootInteractionDataArrayName
     {$IFNDEF OWHMV2}
@@ -535,22 +534,20 @@ type
       stored False
     {$ENDIF}
     ;
-
-
     property EvaporationIrrigationDataArrayName: string
       read FEvaporationIrrigationDataArrayName write SetEvaporationIrrigationDataArrayName
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
-    property SWLossFractionIrrigationDataArrayName: string
-      read FSWLossFractionIrrigationDataArrayName write SetSWLossFractionIrrigationDataArrayName
+    property SWLossFractionPrecipDataArrayName: string
+      read FSWLossFractionPrecipDataArrayName write SetSWLossFractionPrecipDataArrayName
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
-    property SWLossFractionPrecipDataArrayName: string
-      read FSWLossFractionPrecipDataArrayName write SetSWLossFractionPrecipDataArrayName
+    property SWLossFractionIrrigationDataArrayName: string
+      read FSWLossFractionIrrigationDataArrayName write SetSWLossFractionIrrigationDataArrayName
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -607,8 +604,8 @@ const
   KGroundwaterRootInteractionPrefix = 'Groundwater_Root_Interaction_';
   KTranspirationFractionPrefix = 'Transpiration_Fraction_';
   KEvaporationIrrigationPrefix = 'Evaporation_Irrigation_';
-  KSWLossFractionPrecipPrefix = 'SW_Loss_Fraction_Precip_';
-  KSWLossFractionIrrigationPrefix = 'SW_Loss_Fraction_Irrigation_';
+  KSWLossFractionPrecipPrefix = 'Frac_Unconsumed_Precip_to_SW_';
+  KSWLossFractionIrrigationPrefix = 'Frac_Unconsumed_Irrigation_to_SW_';
   KAddedDemandPrefix = 'Added_Demand_';
 
 resourcestring
@@ -2855,10 +2852,10 @@ begin
     FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
 
     UpdateDat.Model := LocalModel;
-    UpdateDat.OnDataSetUsed := LocalModel.MultipleSWLossFractionPrecipUsed;
-    UpdateDat.OldDataArrayName := FSWLossFractionPrecipDataArrayName;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleSWLossFractionIrrigationUsed;
+    UpdateDat.OldDataArrayName := FSWLossFractionIrrigationDataArrayName;
     UpdateDat.NewName := NewName;
-    UpdateDat.NewDisplayName := FSWLossFractionPrecipDisplayName;
+    UpdateDat.NewDisplayName := FSWLossFractionIrrigationDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: SURFACEWATER_LOSS_FRACTION_IRRIGATION';
   {$IFDEF OWHMV2}
@@ -2873,7 +2870,7 @@ begin
 
   end;
 
-  SetCaseSensitiveStringProperty(FSWLossFractionPrecipDataArrayName, NewName);
+  SetCaseSensitiveStringProperty(FSWLossFractionIrrigationDataArrayName, NewName);
 end;
 
 procedure TCropItem.SetSWLossFractionPrecipDataArrayName(const NewName: string);
@@ -2889,10 +2886,10 @@ begin
     FarmLandUse := LocalModel.ModflowPackages.FarmLandUse;
 
     UpdateDat.Model := LocalModel;
-    UpdateDat.OnDataSetUsed := LocalModel.MultipleSWLossFractionIrrigationUsed;
-    UpdateDat.OldDataArrayName := FSWLossFractionIrrigationDataArrayName;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleSWLossFractionPrecipUsed;
+    UpdateDat.OldDataArrayName := FSWLossFractionPrecipDataArrayName;
     UpdateDat.NewName := NewName;
-    UpdateDat.NewDisplayName := FSWLossFractionIrrigationDisplayName;
+    UpdateDat.NewDisplayName := FSWLossFractionPrecipDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
   {$IFDEF OWHMV2}
@@ -2907,7 +2904,7 @@ begin
 
   end;
 
-  SetCaseSensitiveStringProperty(FSWLossFractionIrrigationDataArrayName, NewName);
+  SetCaseSensitiveStringProperty(FSWLossFractionPrecipDataArrayName, NewName);
 end;
 
 procedure TCropItem.SetTranspirationFractionDataArrayName(const NewName: string);
