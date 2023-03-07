@@ -19,7 +19,7 @@ type
     wlNrdInfilLoc, wlLandUseAreaFraction, wlCropCoefficient, wlConsumptiveUse,
     wlIrrigation, wlRootDepth, wlGwRootInteraction, wlTranspirationFraction,
     wlEvaporationIrrigationFraction, wlFractionOfPrecipToSurfaceWater,
-    wlFractionOfIrrigToSurfaceWater);
+    wlFractionOfIrrigToSurfaceWater, wlAddedDemand);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -87,6 +87,7 @@ type
     FEvaporationIrrigationFraction: TList;
     FFractionOfPrecipToSurfaceWater: TList;
     FFractionOfIrrigToSurfaceWater: TList;
+    FAddedDemand: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -118,8 +119,10 @@ type
     FEvaporationIrrigationFractionFileStream: TFileStream;
     FFractionOfPrecipToSurfaceWaterFileStream: TFileStream;
     FFractionOfIrrigToSurfaceWaterFileStream: TFileStream;
+    FAddedDemandFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
+    procedure WriteOptions;
     procedure WriteWaterBalanceSubregion;
     procedure WriteSoil;
     procedure WriteClimate;
@@ -197,9 +200,13 @@ type
     procedure EvaluateFractionOfIrrigToSurfaceWater;
     procedure WriteFractionOfIrrigToSurfaceWater;
 
+    procedure EvaluateAddedDemand;
+    procedure WriteAddedDemand;
+
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
     procedure WriteSurfaceK;
+    procedure WriteLandUsePrintOptions;
 
     procedure FreeFileStreams;
     // wbs location
@@ -291,6 +298,8 @@ type
     procedure UpdateMultFractionOfPrecipToSurfaceWaterDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateFractionOfIrrigToSurfaceWaterDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateMultFractionOfIrrigToSurfaceWaterDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateAddedDemandDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateMultAddedDemandDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -479,6 +488,7 @@ begin
   FEvaporationIrrigationFraction := TObjectList.Create;
   FFractionOfPrecipToSurfaceWater := TObjectList.Create;
   FFractionOfIrrigToSurfaceWater := TObjectList.Create;
+  FAddedDemand := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -492,6 +502,7 @@ destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
 
+  FAddedDemand.Free;
   FFractionOfIrrigToSurfaceWater.Free;
   FFractionOfPrecipToSurfaceWater.Free;
   FEvaporationIrrigationFraction.Free;
@@ -543,6 +554,16 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.EvaluateAddedDemand;
+begin
+  if FLandUse.TransientAddedDemandarrayUsed(nil)
+    or FLandUse.TransientAddedDemandMultArrayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Added Demand value');
+    EvaluateTransientArrayData(wlAddedDemand);
+  end;
+end;
+
 procedure TModflowFmp4Writer.EvaluateAll;
 begin
   EvaluateActiveCells;
@@ -567,6 +588,7 @@ begin
   EvaluateEvaporationIrrigationFraction;
   EvaluateFractionOfPrecipToSurfaceWater;
   EvaluateFractionOfIrrigToSurfaceWater;
+  EvaluateAddedDemand;
 end;
 
 procedure TModflowFmp4Writer.EvaluateBareEvap;
@@ -796,6 +818,7 @@ begin
   FreeAndNil(FEvaporationIrrigationFractionFileStream);
   FreeAndNil(FFractionOfPrecipToSurfaceWaterFileStream);
   FreeAndNil(FFractionOfIrrigToSurfaceWaterFileStream);
+  FreeAndNil(FAddedDemandFileStream);
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -1071,6 +1094,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlAddedDemand:
+      begin
+        result := ChangeFileExt(FBaseName, '.ADDED_DEMAND');
+        if FAddedDemandFileStream = nil then
+        begin
+          FAddedDemandFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -1209,6 +1241,17 @@ begin
           result := ScreenObject.ModflowFmp4MultFractionOfIrrigToSurfaceWater;
         end;
       end;
+    wlAddedDemand:
+      begin
+        if FLandUse.LandUseOption = luoSingle then
+        begin
+          result := ScreenObject.ModflowFmp4AddedDemand;
+        end
+        else
+        begin
+          result := ScreenObject.ModflowFmp4MultAddedDemand;
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -1256,6 +1299,7 @@ begin
     wlEvaporationIrrigationFraction: result := FEvaporationIrrigationFraction;
     wlFractionOfPrecipToSurfaceWater: result := FFractionOfPrecipToSurfaceWater;
     wlFractionOfIrrigToSurfaceWater: result := FFractionOfIrrigToSurfaceWater;
+    wlAddedDemand: result := FAddedDemand;
     else Assert(False)
   end;
 end;
@@ -1274,6 +1318,19 @@ end;
 procedure TModflowFmp4Writer.RemoveErrorAndWarningMessages;
 begin
 
+end;
+
+procedure TModflowFmp4Writer.UpdateAddedDemandDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateAddedDemand;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientAddedDemandarrayUsed;
+  UpdateRequirements.WriteLocation := wlAddedDemand;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
 end;
 
 procedure TModflowFmp4Writer.UpdateBarePrecipitationConsumptionFractionDisplay(
@@ -1354,6 +1411,87 @@ begin
       end;
   end;
   NewLine;
+end;
+
+procedure TModflowFmp4Writer.WriteLandUsePrintOptions;
+var
+  PrintOption: TLandUsePrint;
+  OutputFile: string;
+begin
+  if Model.ModflowOutputControl.PrintInputArrays
+    or Model.ModflowOutputControl.PrintInputCellLists then
+  begin
+    WriteString('  PRINT INPUT ');
+    OutputFile := ChangeFileExt(FInputFileName, '.Crop_Input');
+    WriteString(ExtractFileName(OutputFile));
+    Model.AddModelOutputFile(OutputFile);
+    NewLine;
+  end;
+  for PrintOption in FLandUse.LandUsePrints do
+  begin
+    case PrintOption of
+      lupPrintByFarm:
+        begin
+          WriteString('  PRINT BYWBS ');
+          OutputFile := ChangeFileExt(FInputFileName, '.CropOutput_ByWBS');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      lupPrintByFarmByCrop:
+        begin
+          WriteString('  PRINT BYWBS_BYCROP ');
+          OutputFile := ChangeFileExt(FInputFileName, '.CropOutput_ByWBS_ByCrop');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      lupPrintByCrop:
+        begin
+          WriteString('  PRINT BYCROP ');
+          OutputFile := ChangeFileExt(FInputFileName, '.CropOutput_ByCrop');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      lupPrintBare:
+        begin
+          WriteString('  PRINT BARE ');
+          OutputFile := ChangeFileExt(FInputFileName, '.CropOutput_Bare');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      lupPrintByCell:
+        begin
+          WriteString('  PRINT ALL ');
+          OutputFile := ChangeFileExt(FInputFileName, '.CropOutput_All');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      lupPrintByCellVerbose:
+        begin
+          WriteString('  PRINT ALL_VERBOSE ');
+          OutputFile := ChangeFileExt(FInputFileName, '.CropOutput_All_VERBOSE');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      lupPrintET_ByFarmByCrop:
+        begin
+          WriteString('  PRINT ET_BYWBS_BYCROP ');
+          OutputFile := ChangeFileExt(FInputFileName, '.CropOutput_ET_ByWBS_ByCrop');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      lupPrintRowCol:
+        begin
+
+        end;
+    end;
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteScaleFactorsAndID(RequiredValues: TRequiredValues; UnitConversionScaleFactor: string; ExternalScaleFileName: string);
@@ -1598,6 +1736,19 @@ begin
   UpdateRequirements.TransientDataUsed := FLandUse.
     TransientLandUseAreaFractionarrayUsed;
   UpdateRequirements.WriteLocation := wlLandUseAreaFraction;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateMultAddedDemandDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateAddedDemand;
+  UpdateRequirements.TransientDataUsed := FLandUse.
+    TransientAddedDemandMultArrayUsed;
+  UpdateRequirements.WriteLocation := wlAddedDemand;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
 end;
@@ -2067,6 +2218,81 @@ begin
   UpdateRequirements.WriteLocation := wlTranspirationFraction;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.WriteAddedDemand;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  DataArrayNames: TStringList;
+  CropIndex: Integer;
+begin
+  if FLandUse.AddedDemand.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlAddedDemand);
+
+  if (FLandUse.AddedDemand.ArrayList = alArray) then
+  begin
+    RequiredValues.WriteLocation := wlAddedDemand;
+    RequiredValues.DefaultValue := 0;
+    RequiredValues.DataType := rdtDouble;
+    RequiredValues.DataTypeIndex := 0;
+    RequiredValues.MaxDataTypeIndex := 0;
+    RequiredValues.Comment := 'FMP LAND_USE: ADDED_DEMAND';
+    RequiredValues.ErrorID := 'FMP LAND_USE: ADDED_DEMAND';
+    RequiredValues.ID := 'ADDED_DEMAND';
+    RequiredValues.StaticDataName := KAddedDemand;
+    RequiredValues.WriteTransientData :=
+      (FLandUse.AddedDemand.FarmOption = foTransient);
+    RequiredValues.CheckError :=  'Invalid Added Demand value';
+    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+    case FLandUse.AddedDemandOption of
+      doLength:
+        begin
+          RequiredValues.Option := 'LENGTH';
+        end;
+      doRate:
+        begin
+          RequiredValues.Option := 'RATE';
+        end;
+    end;
+    RequiredValues.FarmProperty := FLandUse.AddedDemand;
+
+    if FLandUse.LandUseOption = luoSingle then
+    begin
+      WriteFmpArrayData(AFileName, RequiredValues);
+    end
+    else
+    begin
+      if RequiredValues.WriteTransientData then
+      begin
+        RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
+        WriteFmpArrayData(AFileName, RequiredValues);
+      end
+      else
+      begin
+        DataArrayNames := TStringList.Create;
+        try
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            DataArrayNames.Add(
+              Model.FmpCrops[CropIndex].AddedDemandDataArrayName);
+          end;
+          RequiredValues.LandUseStaticFileNames := DataArrayNames;
+          WriteLandUseArrayData(AFileName, RequiredValues);
+        finally
+          DataArrayNames.Free;
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    Assert(False);
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteAllotments;
@@ -2887,6 +3113,7 @@ begin
     WriteDataSet0;
     WriteGobalDimension;
     WriteOutput;
+    WriteOptions;
     WriteWaterBalanceSubregion;
     WriteSoil;
     WriteClimate;
@@ -3067,6 +3294,7 @@ begin
 
     WriteLandUseLocation;
     WriteLandUseAreaFraction;
+    WriteLandUsePrintOptions;
     WriteCropCoefficient;
     WriteConsumptiveUse;
     WriteIrrigation;
@@ -3076,8 +3304,14 @@ begin
     WriteEvaporationIrrigationFraction;
     WriteFractionOfPrecipToSurfaceWater;
     WriteFractionOfIrrigToSurfaceWater;
+    WriteAddedDemand;
 
-    // remove this.
+    WriteString('  MIN_BARE_FRACTION');
+    WriteFloat(FLandUse.MinimumBareFraction);
+    NewLine;
+
+    WriteString('  RELAXATION_FACTOR_HEAD_CHANGE');
+    WriteFloat(FLandUse.RelaxFracHeadChange);
     NewLine;
 
     WriteString('END LAND_USE');
@@ -3175,7 +3409,10 @@ begin
     WriteScaleFactorsAndID(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
 
-    Assert(RequiredValues.Option = '');
+    if RequiredValues.Option <> '' then
+    begin
+      WriteString(RequiredValues.Option + ' ');
+    end;
 
     if ExternalFileName <> '' then
     begin
@@ -3248,18 +3485,183 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteOptions;
+begin
+  if not FFarmProcess4.Print or FFarmProcess4.WELLFIELD
+    or FFarmProcess4.Recompute or FFarmProcess4.UseMnwCriteria then
+  begin
+    WriteString('BEGIN OPTIONS');
+    NewLine;
+
+    if not FFarmProcess4.Print then
+    begin
+      WriteString('  NOPRINT');
+      NewLine;
+    end;
+
+    if  FFarmProcess4.WELLFIELD then
+    begin
+      WriteString('  WELLFIELD');
+      NewLine;
+    end;
+
+    if  FFarmProcess4.Recompute then
+    begin
+      WriteString('  RECOMP_Q_BD');
+      NewLine;
+    end;
+
+    if  FFarmProcess4.UseMnwCriteria then
+    begin
+      WriteString('  MNWCLOSE');
+      WriteFloat(FFarmProcess4.MnwQClose);
+      WriteFloat(FFarmProcess4.MnwHPercent);
+      WriteFloat(FFarmProcess4.MnwRPercent);
+      NewLine;
+    end;
+
+    WriteString('END OPTIONS');
+    NewLine;
+    NewLine;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteOutput;
+var
+  WaterUse: TFarmPrint;
+  OutputFile: string;
 begin
   WriteString('BEGIN OUTPUT');
   NewLine;
 
-
-  if fpWbs_Water_Use in FFarmProcess4.FarmPrints then
+  for WaterUse in FFarmProcess4.FarmPrints do
   begin
-    WriteString('  WBS_WATER_USE ');
-    WriteString(ExtractFileName(ChangeFileExt(FBaseName, '.WBS_WATER_USE')));
-    NewLine;
+    case WaterUse of
+      fpWbs_Water_Use:
+        begin
+          WriteString('  WBS_WATER_USE ');
+          OutputFile := ChangeFileExt(FInputFileName, '.WBS_WATER_USE');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpFarm_Demand_Supply_Summary:
+        begin
+          WriteString('  FARM_DEMAND_SUPPLY_SUMMARY ');
+          OutputFile := ChangeFileExt(FInputFileName, '.FARM_DEMAND_SUPPLY_SUMMARY');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpFarm_Budget:
+        begin
+          WriteString('  FARM_BUDGET ');
+          OutputFile := ChangeFileExt(FInputFileName, '.FARM_BUDGET');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpFarm_Budget_Compact:
+        begin
+          WriteString('  FARM_BUDGET_COMPACT ');
+          OutputFile := ChangeFileExt(FInputFileName, '.FARM_BUDGET_COMPACT');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpFarm_Net_Recharge_Array:
+        begin
+          WriteString('  FARM_NET_RECHARGE_ARRAY ');
+          OutputFile := ChangeFileExt(FInputFileName, '.FARM_NET_RECHARGE_ARRAY');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpFarm_Net_Recharge_List:
+        begin
+          WriteString('  FARM_NET_RECHARGE_LIST ');
+          OutputFile := ChangeFileExt(FInputFileName, '.FARM_NET_RECHARGE_LIST');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpEvapotranspiration_SummarySum:
+        begin
+          WriteString('  EVAPOTRANSPIRATION_SUMMARY SUM ');
+          OutputFile := ChangeFileExt(FInputFileName, '.EVAPOTRANSPIRATION_SUMMARY_SUM');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpEvapotranspiration_SummarySeparate:
+        begin
+          WriteString('  EVAPOTRANSPIRATION_SUMMARY SEPARATE ');
+          OutputFile := ChangeFileExt(FInputFileName, '.EVAPOTRANSPIRATION_SUMMARY_SEPARATE');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpEt_List:
+        begin
+          WriteString('  ET_LIST ');
+          OutputFile := ChangeFileExt(FInputFileName, '.ET_LIST');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpFarm_Well_Summary:
+        begin
+          WriteString('  FARM_WELL_SUMMARY ');
+          OutputFile := ChangeFileExt(FInputFileName, '.FARM_WELL_SUMMARY');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpLandscape_Runoff:
+        begin
+          WriteString('  LANDSCAPE_RUNOFF COMPACT ');
+          OutputFile := ChangeFileExt(FInputFileName, '.LANDSCAPE_RUNOFF');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpDeep_Percolation:
+        begin
+          WriteString('  DEEP_PERCOLATION COMPACT ');
+          OutputFile := ChangeFileExt(FInputFileName, '.DEEP_PERCOLATION');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+    end;
   end;
+
+  case FFarmProcess4.Routing_Information of
+    foNotUsed: ; // do nothing
+    foStatic:
+      begin
+          WriteString('  ROUTING_INFORMATION STATIC ');
+          OutputFile := ChangeFileExt(FInputFileName, '.ROUTING_INFORMATION');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+      end;
+    foTransient:
+      begin
+          WriteString('  ROUTING_INFORMATION TRANSIENT ');
+          OutputFile := ChangeFileExt(FInputFileName, '.ROUTING_INFORMATION');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+      end;
+  end;
+
+//  {ET_LIST,  FARM_WELL_SUMMARY,   LANDSCAPE_RUNOFF [COMPACT]}
+//  fpEt_List, fpFarm_Well_Summary, fpLandscape_Runoff,
+//  {DEEP_PERCOLATION    [COMPACT]}
+//  fpDeep_Percolation);
+
+//  TFarmPrint = (
 
   WriteString('END OUTPUT');
   NewLine;
@@ -3462,6 +3864,13 @@ begin
   begin
     Exit;
   end;
+  if Model.FmpSoils.Count = 0 then
+  begin
+    frmErrorsAndWarnings.AddError(Model, 'No soils defined',
+      'No soils are defined, so the FMP4 SOIL block is skipped.');
+    Exit;
+  end;
+
   WriteString('BEGIN SOIL');
   NewLine;
 
@@ -3705,6 +4114,11 @@ begin
         begin
           Assert(FFractionOfIrrigToSurfaceWaterFileStream <> nil);
           FFractionOfIrrigToSurfaceWaterFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlAddedDemand:
+        begin
+          Assert(FAddedDemandFileStream <> nil);
+          FAddedDemandFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);

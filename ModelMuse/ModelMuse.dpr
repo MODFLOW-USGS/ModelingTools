@@ -829,7 +829,10 @@ uses
   frameScreenObjectMultFractionOfPrecipToSurfaceWaterUnit in 'frameScreenObjectMultFractionOfPrecipToSurfaceWaterUnit.pas' {frameScreenObjectMultFractionOfPrecipToSurfaceWater: TFrame},
   ModflowFmp4FractionOfIrrigToSurfaceWaterUnit in 'ModflowFmp4FractionOfIrrigToSurfaceWaterUnit.pas',
   frameScreenObjectFmp4FractionOfIrrigToSurfaceWaterUnit in 'frameScreenObjectFmp4FractionOfIrrigToSurfaceWaterUnit.pas' {frameScreenObjectFmp4FractionOfIrrigToSurfaceWater: TFrame},
-  frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit in 'frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit.pas' {frameScreenObjectMultFractionOfIrrigToSurfaceWater: TFrame};
+  frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit in 'frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit.pas' {frameScreenObjectMultFractionOfIrrigToSurfaceWater: TFrame},
+  ModflowFmp4AddedDemandUnit in 'ModflowFmp4AddedDemandUnit.pas',
+  frameScreenObjectFmp4AddedDemandUnit in 'frameScreenObjectFmp4AddedDemandUnit.pas' {frameScreenObjectFmp4AddedDemand: TFrame},
+  frameScreenObjectMultAddedDemandUnit in 'frameScreenObjectMultAddedDemandUnit.pas' {frameScreenObjectMultAddedDemand: TFrame};
 
 {$R *.res}
 

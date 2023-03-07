@@ -75,7 +75,8 @@ uses System.UITypes, Windows,
   frameScreenObjectFmp4FractionOfPrecipToSurfaceWaterUnit,
   frameScreenObjectMultFractionOfPrecipToSurfaceWaterUnit,
   frameScreenObjectFmp4FractionOfIrrigToSurfaceWaterUnit,
-  frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit;
+  frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit,
+  frameScreenObjectFmp4AddedDemandUnit, frameScreenObjectMultAddedDemandUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -485,6 +486,10 @@ type
     jvspFmp4FractionOfIrrigToSurfaceWaterMult: TJvStandardPage;
     frameFmp4FractionOfIrrigToSurfaceWater: TframeScreenObjectFmp4FractionOfIrrigToSurfaceWater;
     frameFmp4MultFractionOfIrrigToSurfaceWater: TframeScreenObjectMultFractionOfIrrigToSurfaceWater;
+    jvspFmp4AddedDemand: TJvStandardPage;
+    jvspFmp4AddedDemandMult: TJvStandardPage;
+    frameFmp4AddedDemand: TframeScreenObjectFmp4AddedDemand;
+    frameFmp4MultAddedDemand: TframeScreenObjectMultAddedDemand;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1844,6 +1849,8 @@ type
     FFmp4MultFractionOfPrecipToSurfaceWaterNode: TJvPageIndexNode;
     FFmp4FractionOfIrrigToSurfaceWaterNode: TJvPageIndexNode;
     FFmp4MultFractionOfIrrigToSurfaceWaterNode: TJvPageIndexNode;
+    FFmp4AddedDemandNode: TJvPageIndexNode;
+    FFmp4MultAddedDemandNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2454,6 +2461,14 @@ type
     procedure CreateFmp4MultFractionOfIrrigToSurfaceWaterNode;
     procedure GetFmp4MultFractionOfIrrigToSurfaceWaterBoundary(const ScreenObjectList: TList);
 
+    procedure Fmp4AddedDemandChanged(Sender: TObject);
+    procedure CreateFmp4AddedDemandNode;
+    procedure GetFmp4AddedDemandBoundary(const ScreenObjectList: TList);
+
+    procedure Fmp4MultAddedDemandChanged(Sender: TObject);
+    procedure CreateFmp4MultAddedDemandNode;
+    procedure GetFmp4MultAddedDemandBoundary(const ScreenObjectList: TList);
+
     // @name is set to @true when the @classname has stored values of the
     // @link(TScreenObject)s being edited.
     property IsLoaded: boolean read FIsLoaded write SetIsLoaded;
@@ -2759,7 +2774,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   frmImportVertexValuesUnit, QuadTreeClass,
   ModflowFmp4EvaporationIrrigationFractionUnit,
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
-  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit;
+  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4298,6 +4313,14 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4AddedDemandNode then
+    begin
+      // do nothing
+    end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4MultAddedDemandNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4470,6 +4493,8 @@ begin
   CreateFmp4MultFractionOfPrecipToSurfaceWaterNode;
   CreateFmp4FractionOfIrrigToSurfaceWaterNode;
   CreateFmp4MultFractionOfIrrigToSurfaceWaterNode;
+  CreateFmp4AddedDemandNode;
+  CreateFmp4MultAddedDemandNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -5317,6 +5342,8 @@ begin
         BoundaryNodeList.Add(FFmp4MultFractionOfPrecipToSurfaceWaterNode);
         BoundaryNodeList.Add(FFmp4FractionOfIrrigToSurfaceWaterNode);
         BoundaryNodeList.Add(FFmp4MultFractionOfIrrigToSurfaceWaterNode);
+        BoundaryNodeList.Add(FFmp4AddedDemandNode);
+        BoundaryNodeList.Add(FFmp4MultAddedDemandNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -6173,6 +6200,15 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4AddedDemandChanged(Sender: TObject);
+begin
+  if (FFmp4AddedDemandNode <> nil)
+    and (FFmp4AddedDemandNode.StateIndex <> 3) then
+  begin
+    FFmp4AddedDemandNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4BareEvapChanged(Sender: TObject);
 begin
   if (FFmp4BareEvapNode <> nil)
@@ -6292,6 +6328,16 @@ begin
     and (FFmp4LandUseAreaFractionNode.StateIndex <> 3) then
   begin
     FFmp4LandUseAreaFractionNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4MultAddedDemandChanged(
+  Sender: TObject);
+begin
+  if (FFmp4MultAddedDemandNode <> nil)
+    and (FFmp4MultAddedDemandNode.StateIndex <> 3) then
+  begin
+    FFmp4MultAddedDemandNode.StateIndex := 2;
   end;
 end;
 
@@ -6517,6 +6563,8 @@ begin
   frameFmp4MultFractionOfPrecipToSurfaceWater.OnEdited := Fmp4MultFractionOfPrecipToSurfaceWaterChanged;
   frameFmp4FractionOfIrrigToSurfaceWater.OnEdited := Fmp4FractionOfIrrigToSurfaceWaterChanged;
   frameFmp4MultFractionOfIrrigToSurfaceWater.OnEdited := Fmp4MultFractionOfIrrigToSurfaceWaterChanged;
+  frameFmp4AddedDemand.OnEdited := Fmp4AddedDemandChanged;
+  frameFmp4MultAddedDemand.OnEdited := Fmp4MultAddedDemandChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7833,6 +7881,14 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4AddedDemandNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FFmp4MultAddedDemandNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -8981,6 +9037,22 @@ begin
       (FFmp4MultFractionOfIrrigToSurfaceWaterNode.StateIndex = 2),
       (FFmp4MultFractionOfIrrigToSurfaceWaterNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected);
+  end;
+
+  if (FFmp4AddedDemandNode <> nil) then
+  begin
+    frameFmp4AddedDemand.SetData(FNewProperties,
+      (FFmp4AddedDemandNode.StateIndex = 2),
+      (FFmp4AddedDemandNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientAddedDemandIsSelected);
+  end;
+
+  if (FFmp4MultAddedDemandNode <> nil) then
+  begin
+    frameFmp4MultAddedDemand.SetData(FNewProperties,
+      (FFmp4MultAddedDemandNode.StateIndex = 2),
+      (FFmp4MultAddedDemandNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientAddedDemandMultIsSelected);
   end;
 
 end;
@@ -15268,6 +15340,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4AddedDemandNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4AddedDemandNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientAddedDemandIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Added Demand in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4AddedDemand.PageIndex;
+    frameFmp4AddedDemand.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4AddedDemandNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4BareEvapNode;
 var
   Node: TJvPageIndexNode;
@@ -15537,6 +15626,23 @@ begin
     frameFmp4LandUseAreaFraction.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FFmp4LandUseAreaFractionNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4MultAddedDemandNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4MultAddedDemandNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientAddedDemandMultIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Added Demand in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4AddedDemandMult.PageIndex;
+    frameFmp4MultAddedDemand.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4MultAddedDemandNode := Node;
   end;
 end;
 
@@ -18282,6 +18388,32 @@ begin
   frameMAW.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4AddedDemandBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4AddedDemandBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientAddedDemandIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4AddedDemand;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4AddedDemandNode <> nil then
+  begin
+    FFmp4AddedDemandNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4AddedDemand.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetFmp4BareEvapBoundary(
   const ScreenObjectList: TList);
 var
@@ -18618,6 +18750,32 @@ begin
     FFmp4LandUseAreaFractionNode.StateIndex := Ord(State)+1;
   end;
   frameFmp4LandUseAreaFraction.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4MultAddedDemandBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4MultAddedDemandBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientAddedDemandMultIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4MultAddedDemand;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4MultAddedDemandNode <> nil then
+  begin
+    FFmp4MultAddedDemandNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4MultAddedDemand.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetFmp4MultConsumptiveUseBoundary(
@@ -19448,6 +19606,8 @@ begin
   GetFmp4MultFractionOfPrecipToSurfaceWaterBoundary(AScreenObjectList);
   GetFmp4FractionOfIrrigToSurfaceWaterBoundary(AScreenObjectList);
   GetFmp4MultFractionOfIrrigToSurfaceWaterBoundary(AScreenObjectList);
+  GetFmp4AddedDemandBoundary(AScreenObjectList);
+  GetFmp4MultAddedDemandBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 

@@ -12,8 +12,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitWidth = 792
-  ExplicitHeight = 592
+  ExplicitWidth = 796
+  ExplicitHeight = 593
   TextHeight = 19
   object pageMain: TPageControl
     Left = 0
@@ -2456,14 +2456,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           006F0075006E00640061007200790020007000610063006B0061006700650029
           00}
         Items.Links = {020000000000000000000000}
-        ExplicitHeight = 474
       end
       object jvplModflowBoundaries: TJvPageList
         Left = 195
         Top = 0
         Width = 577
         Height = 475
-        ActivePage = jvspFmp4FractionOfIrrigToSurfaceWaterMult
+        ActivePage = jvspFmp4AddedDemand
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -6053,7 +6052,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboMultiIprior: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                 end
@@ -8860,9 +8858,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 577
               ExplicitHeight = 453
               inherited tabBasic: TTabSheet
-                inherited comboLossType: TJvImageComboBox
-                  ItemIndex = -1
-                end
                 inherited edPartialPenetration: TJvComboEdit
                   Left = 227
                   OnButtonClick = frameScreenObjectSFRjceButtonClick
@@ -11013,7 +11008,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboRouteType: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                   inherited cbbObservationTypes: TJvCheckedComboBox
@@ -12314,7 +12308,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited comboConductEq: TJvImageComboBox
                   Height = 29
                   ItemHeight = 23
-                  ItemIndex = -1
                   ExplicitHeight = 29
                 end
               end
@@ -15447,8 +15440,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                ExplicitLeft = 6
-                ExplicitTop = 52
                 ExplicitWidth = 575
                 ExplicitHeight = 352
               end
@@ -15534,8 +15525,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 577
           Height = 475
           Caption = 'jvspFmp4RootDepth'
-          ExplicitWidth = 573
-          ExplicitHeight = 474
           inline frameFmp4RootDepth: TframeScreenObjectFmp4RootDepth
             Left = 0
             Top = 0
@@ -15544,13 +15533,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitWidth = 573
-            ExplicitHeight = 474
+            ExplicitWidth = 577
+            ExplicitHeight = 475
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
-              ExplicitTop = 428
-              ExplicitWidth = 573
+              ExplicitTop = 429
+              ExplicitWidth = 577
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -15563,29 +15552,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 485
-                ExplicitLeft = 481
+                ExplicitLeft = 485
               end
               inherited btnInsert: TBitBtn
                 Left = 401
-                ExplicitLeft = 397
+                ExplicitLeft = 401
               end
             end
             inherited pnlTop: TPanel
               Width = 577
-              ExplicitWidth = 573
+              ExplicitWidth = 577
               inherited pnlCaption: TPanel
                 Width = 575
-                ExplicitWidth = 571
+                ExplicitWidth = 575
               end
             end
             inherited pnlGrid: TPanel
               Width = 577
               Height = 404
-              ExplicitWidth = 573
-              ExplicitHeight = 403
+              ExplicitWidth = 577
+              ExplicitHeight = 404
               inherited pnlEditGrid: TPanel
                 Width = 575
-                ExplicitWidth = 571
+                ExplicitWidth = 575
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -15597,8 +15586,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                ExplicitWidth = 571
-                ExplicitHeight = 351
+                ExplicitWidth = 575
+                ExplicitHeight = 352
               end
             end
           end
@@ -15682,8 +15671,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 577
           Height = 475
           Caption = 'jvspFmp4TranspirationFraction'
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           inline frameFmp4TranspirationFraction: TframeScreenObjectFmp4TranspirationFraction
             Left = 0
             Top = 0
@@ -15692,11 +15679,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 56
-            ExplicitTop = 48
+            ExplicitWidth = 577
+            ExplicitHeight = 475
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
+              ExplicitTop = 429
+              ExplicitWidth = 577
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -15709,22 +15698,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 489
+                ExplicitLeft = 489
               end
               inherited btnInsert: TBitBtn
                 Left = 405
+                ExplicitLeft = 405
               end
             end
             inherited pnlTop: TPanel
               Width = 577
+              ExplicitWidth = 577
               inherited pnlCaption: TPanel
                 Width = 575
+                ExplicitWidth = 575
               end
             end
             inherited pnlGrid: TPanel
               Width = 577
               Height = 404
+              ExplicitWidth = 577
+              ExplicitHeight = 404
               inherited pnlEditGrid: TPanel
                 Width = 575
+                ExplicitWidth = 575
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -15736,6 +15732,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                ExplicitWidth = 575
+                ExplicitHeight = 352
               end
             end
           end
@@ -15746,8 +15744,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 577
           Height = 475
           Caption = 'jvspFmp4TranspirationFractionMult'
-          ExplicitLeft = 6
-          ExplicitTop = -2
           inline frameFmp4MultTranspirationFraction: TframeScreenObjectMultTranspirationFraction
             Left = 0
             Top = 0
@@ -15756,11 +15752,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 40
-            ExplicitTop = 64
+            ExplicitWidth = 577
+            ExplicitHeight = 475
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
+              ExplicitTop = 429
+              ExplicitWidth = 577
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -15773,22 +15771,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 489
+                ExplicitLeft = 489
               end
               inherited btnInsert: TBitBtn
                 Left = 405
+                ExplicitLeft = 405
               end
             end
             inherited pnlTop: TPanel
               Width = 577
+              ExplicitWidth = 577
               inherited pnlCaption: TPanel
                 Width = 575
+                ExplicitWidth = 575
               end
             end
             inherited pnlGrid: TPanel
               Width = 577
               Height = 404
+              ExplicitWidth = 577
+              ExplicitHeight = 404
               inherited pnlEditGrid: TPanel
                 Width = 575
+                ExplicitWidth = 575
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -15800,6 +15805,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                ExplicitWidth = 575
+                ExplicitHeight = 352
               end
             end
           end
@@ -15810,8 +15817,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 577
           Height = 475
           Caption = 'jvspFmp4EvaporationIrrigationFraction'
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           inline frameFmp4EvaporationIrrigationFraction: TframeScreenObjectFmp4EvaporationIrrigationFraction
             Left = 0
             Top = 0
@@ -15820,11 +15825,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 32
-            ExplicitTop = 40
+            ExplicitWidth = 577
+            ExplicitHeight = 475
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
+              ExplicitTop = 429
+              ExplicitWidth = 577
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -15837,22 +15844,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 489
+                ExplicitLeft = 489
               end
               inherited btnInsert: TBitBtn
                 Left = 405
+                ExplicitLeft = 405
               end
             end
             inherited pnlTop: TPanel
               Width = 577
+              ExplicitWidth = 577
               inherited pnlCaption: TPanel
                 Width = 575
+                ExplicitWidth = 575
               end
             end
             inherited pnlGrid: TPanel
               Width = 577
               Height = 404
+              ExplicitWidth = 577
+              ExplicitHeight = 404
               inherited pnlEditGrid: TPanel
                 Width = 575
+                ExplicitWidth = 575
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -15864,6 +15878,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                ExplicitWidth = 575
+                ExplicitHeight = 352
               end
             end
           end
@@ -15874,8 +15890,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 577
           Height = 475
           Caption = 'jvspFmp4EvaporationIrrigationFractionMult'
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           inline frameFmp4MultEvaporationIrrigationFraction: TframeScreenObjectMultEvaporationIrrigationFraction
             Left = 0
             Top = 0
@@ -15884,11 +15898,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 32
-            ExplicitTop = 48
+            ExplicitWidth = 577
+            ExplicitHeight = 475
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
+              ExplicitTop = 429
+              ExplicitWidth = 577
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -15901,22 +15917,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 489
+                ExplicitLeft = 489
               end
               inherited btnInsert: TBitBtn
                 Left = 405
+                ExplicitLeft = 405
               end
             end
             inherited pnlTop: TPanel
               Width = 577
+              ExplicitWidth = 577
               inherited pnlCaption: TPanel
                 Width = 575
+                ExplicitWidth = 575
               end
             end
             inherited pnlGrid: TPanel
               Width = 577
               Height = 404
+              ExplicitWidth = 577
+              ExplicitHeight = 404
               inherited pnlEditGrid: TPanel
                 Width = 575
+                ExplicitWidth = 575
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -15928,6 +15951,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                ExplicitWidth = 575
+                ExplicitHeight = 352
               end
             end
           end
@@ -15938,8 +15963,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 577
           Height = 475
           Caption = 'jvspFmp4FractionOfPrecipToSurfaceWater'
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           inline frameFmp4FractionOfPrecipToSurfaceWater: TframeScreenObjectFmp4FractionOfPrecipToSurfaceWater
             Left = 0
             Top = 0
@@ -15948,11 +15971,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 64
-            ExplicitTop = 64
+            ExplicitWidth = 577
+            ExplicitHeight = 475
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
+              ExplicitTop = 429
+              ExplicitWidth = 577
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -15965,22 +15990,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 489
+                ExplicitLeft = 489
               end
               inherited btnInsert: TBitBtn
                 Left = 405
+                ExplicitLeft = 405
               end
             end
             inherited pnlTop: TPanel
               Width = 577
+              ExplicitWidth = 577
               inherited pnlCaption: TPanel
                 Width = 575
+                ExplicitWidth = 575
               end
             end
             inherited pnlGrid: TPanel
               Width = 577
               Height = 404
+              ExplicitWidth = 577
+              ExplicitHeight = 404
               inherited pnlEditGrid: TPanel
                 Width = 575
+                ExplicitWidth = 575
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -15992,6 +16024,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                ExplicitWidth = 575
+                ExplicitHeight = 352
               end
             end
           end
@@ -16002,8 +16036,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 577
           Height = 475
           Caption = 'jvspFmp4FractionOfPrecipToSurfaceWaterMult'
-          ExplicitLeft = -4
-          ExplicitTop = -2
           inline frameFmp4MultFractionOfPrecipToSurfaceWater: TframeScreenObjectMultFractionOfPrecipToSurfaceWater
             Left = 0
             Top = 0
@@ -16012,11 +16044,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 40
-            ExplicitTop = 40
+            ExplicitWidth = 577
+            ExplicitHeight = 475
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
+              ExplicitTop = 429
+              ExplicitWidth = 577
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -16029,22 +16063,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 489
+                ExplicitLeft = 489
               end
               inherited btnInsert: TBitBtn
                 Left = 405
+                ExplicitLeft = 405
               end
             end
             inherited pnlTop: TPanel
               Width = 577
+              ExplicitWidth = 577
               inherited pnlCaption: TPanel
                 Width = 575
+                ExplicitWidth = 575
               end
             end
             inherited pnlGrid: TPanel
               Width = 577
               Height = 404
+              ExplicitWidth = 577
+              ExplicitHeight = 404
               inherited pnlEditGrid: TPanel
                 Width = 575
+                ExplicitWidth = 575
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -16056,6 +16097,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                ExplicitWidth = 575
+                ExplicitHeight = 352
               end
             end
           end
@@ -16066,8 +16109,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 577
           Height = 475
           Caption = 'jvspFmp4FractionOfIrrigToSurfaceWater'
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           inline frameFmp4FractionOfIrrigToSurfaceWater: TframeScreenObjectFmp4FractionOfIrrigToSurfaceWater
             Left = 0
             Top = 0
@@ -16076,11 +16117,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 56
-            ExplicitTop = 48
+            ExplicitWidth = 577
+            ExplicitHeight = 475
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
+              ExplicitTop = 429
+              ExplicitWidth = 577
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -16093,22 +16136,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 489
+                ExplicitLeft = 489
               end
               inherited btnInsert: TBitBtn
                 Left = 405
+                ExplicitLeft = 405
               end
             end
             inherited pnlTop: TPanel
               Width = 577
+              ExplicitWidth = 577
               inherited pnlCaption: TPanel
                 Width = 575
+                ExplicitWidth = 575
               end
             end
             inherited pnlGrid: TPanel
               Width = 577
               Height = 404
+              ExplicitWidth = 577
+              ExplicitHeight = 404
               inherited pnlEditGrid: TPanel
                 Width = 575
+                ExplicitWidth = 575
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -16120,8 +16170,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 575
                 Height = 352
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                ExplicitLeft = 6
-                ExplicitTop = 58
                 ExplicitWidth = 575
                 ExplicitHeight = 352
               end
@@ -16134,8 +16182,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 577
           Height = 475
           Caption = 'jvspFmp4FractionOfIrrigToSurfaceWaterMult'
-          ExplicitLeft = 6
-          ExplicitTop = -2
           inline frameFmp4MultFractionOfIrrigToSurfaceWater: TframeScreenObjectMultFractionOfIrrigToSurfaceWater
             Left = 0
             Top = 0
@@ -16144,8 +16190,147 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 64
-            ExplicitTop = 64
+            ExplicitWidth = 577
+            ExplicitHeight = 475
+            inherited pnlBottom: TPanel
+              Top = 429
+              Width = 577
+              ExplicitTop = 429
+              ExplicitWidth = 577
+              inherited lblNumTimes: TLabel
+                Width = 119
+                Height = 19
+                ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited seNumberOfTimes: TJvSpinEdit
+                Height = 27
+                ExplicitHeight = 27
+              end
+              inherited btnDelete: TBitBtn
+                Left = 489
+                ExplicitLeft = 489
+              end
+              inherited btnInsert: TBitBtn
+                Left = 405
+                ExplicitLeft = 405
+              end
+            end
+            inherited pnlTop: TPanel
+              Width = 577
+              ExplicitWidth = 577
+              inherited pnlCaption: TPanel
+                Width = 575
+                ExplicitWidth = 575
+              end
+            end
+            inherited pnlGrid: TPanel
+              Width = 577
+              Height = 404
+              ExplicitWidth = 577
+              ExplicitHeight = 404
+              inherited pnlEditGrid: TPanel
+                Width = 575
+                ExplicitWidth = 575
+                inherited lblFormula: TLabel
+                  Width = 59
+                  Height = 19
+                  ExplicitWidth = 59
+                  ExplicitHeight = 19
+                end
+              end
+              inherited rdgModflowBoundary: TRbwDataGrid4
+                Width = 575
+                Height = 352
+                OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                ExplicitWidth = 575
+                ExplicitHeight = 352
+              end
+            end
+          end
+        end
+        object jvspFmp4AddedDemand: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 577
+          Height = 475
+          Caption = 'jvspFmp4AddedDemand'
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          inline frameFmp4AddedDemand: TframeScreenObjectFmp4AddedDemand
+            Left = 0
+            Top = 0
+            Width = 577
+            Height = 475
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitLeft = 56
+            ExplicitTop = 32
+            inherited pnlBottom: TPanel
+              Top = 429
+              Width = 577
+              inherited lblNumTimes: TLabel
+                Width = 119
+                Height = 19
+                ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited seNumberOfTimes: TJvSpinEdit
+                Height = 27
+                ExplicitHeight = 27
+              end
+              inherited btnDelete: TBitBtn
+                Left = 489
+              end
+              inherited btnInsert: TBitBtn
+                Left = 405
+              end
+            end
+            inherited pnlTop: TPanel
+              Width = 577
+              inherited pnlCaption: TPanel
+                Width = 575
+              end
+            end
+            inherited pnlGrid: TPanel
+              Width = 577
+              Height = 404
+              inherited pnlEditGrid: TPanel
+                Width = 575
+                inherited lblFormula: TLabel
+                  Width = 59
+                  Height = 19
+                  ExplicitWidth = 59
+                  ExplicitHeight = 19
+                end
+              end
+              inherited rdgModflowBoundary: TRbwDataGrid4
+                Width = 575
+                Height = 352
+                OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+              end
+            end
+          end
+        end
+        object jvspFmp4AddedDemandMult: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 577
+          Height = 475
+          Caption = 'jvspFmp4AddedDemandMult'
+          ExplicitLeft = 6
+          ExplicitTop = -2
+          inline frameFmp4MultAddedDemand: TframeScreenObjectMultAddedDemand
+            Left = 0
+            Top = 0
+            Width = 577
+            Height = 475
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitLeft = 80
+            ExplicitTop = 40
             inherited pnlBottom: TPanel
               Top = 429
               Width = 577
@@ -17626,7 +17811,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 475
         ColWidths = (
           25
           25
@@ -17647,9 +17831,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Height = 41
         Align = alBottom
         TabOrder = 1
-        ExplicitLeft = 168
-        ExplicitTop = 304
-        ExplicitWidth = 185
         object Button1: TButton
           Left = 16
           Top = 6
@@ -17737,7 +17918,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 475
         ColWidths = (
           64
           64)
@@ -17752,9 +17932,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Height = 41
         Align = alBottom
         TabOrder = 1
-        ExplicitLeft = 168
-        ExplicitTop = 304
-        ExplicitWidth = 185
         object btnImportVertexValues: TButton
           Left = 16
           Top = 6
@@ -17897,7 +18074,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           AlignWithMargins = True
           Left = 16
           Top = 19
-          Width = 427
+          Width = 402
           Height = 57
           Margins.Top = 10
           Anchors = [akLeft, akTop, akRight]
@@ -17906,7 +18083,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             'ou can describe it here so you will understand how it works late' +
             'r.'
           WordWrap = True
-          ExplicitWidth = 431
         end
         object memoComments: TMemo
           Left = 2
@@ -18097,8 +18273,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 512
-    ExplicitWidth = 776
     DesignSize = (
       780
       41)
@@ -18130,7 +18304,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
-      ExplicitLeft = 523
     end
     object btnCancel: TBitBtn
       Left = 622
@@ -18142,7 +18315,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 5
       OnClick = btnCancelClick
-      ExplicitLeft = 618
     end
     object btnHelp: TBitBtn
       Left = 432
@@ -18154,7 +18326,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 428
     end
     object btnCopyVertices: TButton
       Left = 4

@@ -5073,6 +5073,7 @@ Type
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     procedure InitializeVariables; override;
+    // MNWCLOSE QClose
     property MnwQClose: double read GetMnwQClose
       write SetMnwQClose;
     // MNWCLOSE  HPCT
@@ -5534,6 +5535,8 @@ Type
     FMultFractionOfPrecipToSurfaceWaters: TMfBoundDispObjectList;
     FMfFmp4FractionOfIrrigToSurfaceWater: TModflowBoundaryDisplayTimeList;
     FMultFractionOfIrrigToSurfaceWaters: TMfBoundDispObjectList;
+    FMfFmp4AddedDemand: TModflowBoundaryDisplayTimeList;
+    FMultAddedDemands: TMfBoundDispObjectList;
     procedure SetAddedDemand(const Value: TFarmProperty);
     procedure SetCropCoeff(const Value: TFarmProperty);
     procedure SetET_IrrigFracCorrection(const Value: TFarmProperty);
@@ -5682,6 +5685,19 @@ Type
     // SURFACEWATER_LOSS_FRACTION_IRRIGATION arrays for single and multiple land uses per cell
     procedure InvalidateFractionOfIrrigToSurfaceWater(Sender: TObject);
 
+    // ADDED_DEMAND array for single land use per cell
+    function GetAddedDemandBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeAddedDemandDisplay(Sender: TObject);
+    procedure GetAddedDemandUseList(Sender: TObject; NewUseList: TStringList);
+    // ADDED_DEMAND arrays for multiple land uses per cell
+    function GetMultAddedDemandBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure GetMultAddedDemandsUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure InitializeMultAddedDemandsDisplay(Sender: TObject);
+    procedure UpdateMultAddedDemandsArrays;
+    // ADDED_DEMAND arrays for single and multiple land uses per cell
+    procedure InvalidateAddedDemand(Sender: TObject);
+
     procedure InvalidateTransientCropID;
 
     procedure UpdateMultLandUseLists(IsUsed: Boolean;
@@ -5793,6 +5809,15 @@ Type
     // SURFACEWATER_LOSS_FRACTION_IRRIGATION arrays for multiple land uses per cell
     function TransientFractionOfIrrigToSurfaceWaterMultArrayUsed (Sender: TObject): boolean;
     procedure InvalidateMultTransienFractionOfIrrigToSurfaceWaterArrays;
+
+    // ADDED_DEMAND array for single land use per cell
+    function TransientAddedDemandArrayUsed (Sender: TObject): boolean;
+    function StaticAddedDemandArrayUsed (Sender: TObject): boolean;
+    property MfFmp4AddedDemand: TModflowBoundaryDisplayTimeList
+      read FMfFmp4AddedDemand;
+    // ADDED_DEMAND arrays for multiple land uses per cell
+    function TransientAddedDemandMultArrayUsed (Sender: TObject): boolean;
+    procedure InvalidateMultTransienAddedDemandArrays;
 
     procedure InvalidateAll;
     procedure Loaded;
@@ -7300,6 +7325,7 @@ resourcestring
   StrEvaporationIrrigationFractionsS = 'Evaporation Irrigation Fraction %s';
   StrFractionOfPrecipToSurfaceWatersS = 'Frac Excess Precip to SW %s';
   StrFractionOfIrrigToSurfaceWatersS = 'Frac Excess Irrig to SW %s';
+  StrAddedDemandsS = 'Added Demand %s';
 
 { TModflowPackageSelection }
 
@@ -26605,6 +26631,23 @@ end;
 
 { TFarmLandUse }
 
+procedure TFarmProcess4LandUse.InvalidateAddedDemand(Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientAddedDemandarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4AddedDemand);
+    end
+    else
+    begin
+      RemoveTimeList(FMfFmp4AddedDemand);
+    end;
+    UpdateMultAddedDemandsArrays;
+  end;
+  InvalidateModel;
+end;
+
 procedure TFarmProcess4LandUse.InvalidateAll;
 begin
   InvalidateTransientCropID;
@@ -26617,6 +26660,7 @@ begin
   InvalidateEvaporationIrrigationFraction(nil);
   InvalidateFractionOfPrecipToSurfaceWater(nil);
   InvalidateFractionOfIrrigToSurfaceWater(nil);
+  InvalidateAddedDemand(nil);
 end;
 
 procedure TFarmProcess4LandUse.Assign(Source: TPersistent);
@@ -26803,6 +26847,17 @@ begin
       AddTimeList(FMfFmp4FractionOfIrrigToSurfaceWater);
     end;
 
+    FMfFmp4AddedDemand := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4AddedDemand.OnInitialize := InitializeAddedDemandDisplay;
+    FMfFmp4AddedDemand.OnGetUseList := GetAddedDemandUseList;
+    FMfFmp4AddedDemand.OnTimeListUsed := TransientAddedDemandarrayUsed;
+    FMfFmp4AddedDemand.Name := 'Added Demand';
+    FMfFmp4AddedDemand.AddMethod := vamReplace;
+    if TransientAddedDemandarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4AddedDemand);
+    end;
+
     FMultLandUseAreaFractions := TMfBoundDispObjectList.Create;
     FMultCropCoefficients := TMfBoundDispObjectList.Create;
     FMultConsumptiveUses := TMfBoundDispObjectList.Create;
@@ -26812,6 +26867,7 @@ begin
     FMultEvaporationIrrigationFractions := TMfBoundDispObjectList.Create;
     FMultFractionOfPrecipToSurfaceWaters := TMfBoundDispObjectList.Create;
     FMultFractionOfIrrigToSurfaceWaters := TMfBoundDispObjectList.Create;
+    FMultAddedDemands := TMfBoundDispObjectList.Create;
   end;
 
   FLandUseFraction.OnChangeFarmOption := InvalidateLandUseAreaFraction;
@@ -26840,10 +26896,14 @@ begin
 
   FractionOfIrrigationToSurfaceWater.OnChangeFarmOption := InvalidateFractionOfIrrigToSurfaceWater;
   FractionOfIrrigationToSurfaceWater.OnChangeArrayList := InvalidateFractionOfIrrigToSurfaceWater;
+
+  AddedDemand.OnChangeFarmOption := InvalidateAddedDemand;
+  AddedDemand.OnChangeArrayList := InvalidateAddedDemand;
 end;
 
 destructor TFarmProcess4LandUse.Destroy;
 begin
+  FMultAddedDemands.Free;
   FMultFractionOfIrrigToSurfaceWaters.Free;
   FMultFractionOfPrecipToSurfaceWaters.Free;
   FMultEvaporationIrrigationFractions.Free;
@@ -26854,6 +26914,7 @@ begin
   FMultCropCoefficients.Free;
   FMultLandUseAreaFractions.Free;
 
+  FMfFmp4AddedDemand.Free;
   FMfFmp4FractionOfIrrigToSurfaceWater.Free;
   FMfFmp4FractionOfPrecipToSurfaceWater.Free;
   FMfFmp4EvaporationIrrigationFraction.Free;
@@ -26884,6 +26945,22 @@ begin
   FStoredRelaxFracHeadChange.Free;
   FStoredMinimumBareFraction.Free;
   inherited;
+end;
+
+function TFarmProcess4LandUse.GetAddedDemandBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4AddedDemand;
+end;
+
+procedure TFarmProcess4LandUse.GetAddedDemandUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetAddedDemandBoundary;
+  GetUseListOptions.Description := 'FMP Added Demand';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 function TFarmProcess4LandUse.GetConsumptiveUseBoundary(
@@ -27019,6 +27096,24 @@ begin
   result := StoredMinimumBareFraction.Value;
 end;
 
+
+function TFarmProcess4LandUse.GetMultAddedDemandBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4MultAddedDemand;
+end;
+
+procedure TFarmProcess4LandUse.GetMultAddedDemandsUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FMultAddedDemands.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+  DataSetName := Format(StrAddedDemandsS,
+     [frmGoPhast.PhastModel.fmpCrops[Index].CropName]);
+  UpdatePkgUseList(NewUseList, GetMultAddedDemandBoundary, Index, DataSetName);
+end;
 
 function TFarmProcess4LandUse.GetMultConsumptiveUseBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
@@ -27219,6 +27314,21 @@ begin
   GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
+procedure TFarmProcess4LandUse.InitializeAddedDemandDisplay(Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := FMfFmp4AddedDemand;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateAddedDemandDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InitializeConsumptiveUseDisplay(Sender: TObject);
 var
   FarmWriter: TModflowFmp4Writer;
@@ -27367,6 +27477,27 @@ begin
     end;
   finally
     List.Free;
+  end;
+end;
+
+procedure TFarmProcess4LandUse.InitializeMultAddedDemandsDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeLandUseDisplayOptions;
+  index: Integer;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    SetLength(DisplayOptions.Display, (FModel as TCustomModel).FmpCrops.Count);
+    for index := 0 to Length(DisplayOptions.Display) - 1 do
+    begin
+      DisplayOptions.Display[index] := FMultAddedDemands[index];
+    end;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateMultAddedDemandDisplay;
+    InitializeLandUseDisplay(DisplayOptions);
+  finally
+    FarmWriter.Free;
   end;
 end;
 
@@ -27755,6 +27886,16 @@ begin
   end;
 end;
 
+procedure TFarmProcess4LandUse.InvalidateMultTransienAddedDemandArrays;
+var
+  index: Integer;
+begin
+  for index := 0 to FMultAddedDemands.Count - 1 do
+  begin
+    FMultAddedDemands[index].Invalidate;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.InvalidateMultTransienConsumptiveUseArrays;
 var
   index: Integer;
@@ -28027,6 +28168,15 @@ begin
   FTranspirationFraction.Assign(Value);
 end;
 
+function TFarmProcess4LandUse.StaticAddedDemandArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (AddedDemand.FarmOption = foStatic)
+    and (AddedDemand.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
 function TFarmProcess4LandUse.StaticConsumptiveUseArrayUsed(
   Sender: TObject): boolean;
 begin
@@ -28170,6 +28320,24 @@ begin
     and (TranspirationFraction.FarmOption = foStatic)
     and (TranspirationFraction.ArrayList = alArray)
     and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.TransientAddedDemandArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (AddedDemand.FarmOption = foTransient)
+    and (AddedDemand.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4LandUse.TransientAddedDemandMultArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (AddedDemand.FarmOption = foTransient)
+    and (AddedDemand.ArrayList = alArray)
+    and (LandUseOption = luoMultiple);
 end;
 
 function TFarmProcess4LandUse.TransientConsumptiveUseArrayUsed(
@@ -28367,6 +28535,15 @@ begin
     and (TranspirationFraction.FarmOption = foTransient)
     and (TranspirationFraction.ArrayList = alArray)
     and (LandUseOption = luoMultiple);
+end;
+
+procedure TFarmProcess4LandUse.UpdateMultAddedDemandsArrays;
+begin
+  UpdateMultLandUseLists(TransientAddedDemandMultArrayUsed(nil),
+    FMultAddedDemands,
+    InitializeMultAddedDemandsDisplay,
+    GetMultAddedDemandsUseList,
+    StrAddedDemandsS);
 end;
 
 procedure TFarmProcess4LandUse.UpdateMultConsumptiveUsesArrays;

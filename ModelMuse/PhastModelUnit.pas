@@ -585,6 +585,7 @@ const
   KEvaporationIrrigationFraction = 'Evaporation_Irrigation_Fraction';
   KFractionOfPrecipToSurfaceWater = 'Frac_Unconsumed_Precip_to_SW';
   KFractionOfIrrigToSurfaceWater = 'Frac_Unconsumed_Irrig_to_SW';
+  KAddedDemand = 'Added_Demand';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2573,6 +2574,7 @@ that affects the model output should also have a comment. }
     function EvaporationIrrigationFractionUsed(Sender: TObject): Boolean;
     function FractionOfPrecipToSurfaceWaterUsed(Sender: TObject): Boolean;
     function FractionOfIrrigToSurfaceWaterUsed(Sender: TObject): Boolean;
+    function AddedDemandUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2640,6 +2642,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientFractionOfPrecipToSurfaceWaterMultIsSelected: Boolean; virtual;
     function FarmProcess4TransientFractionOfIrrigToSurfaceWaterIsSelected: Boolean; virtual;
     function FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected: Boolean; virtual;
+    function FarmProcess4TransientAddedDemandIsSelected: Boolean; virtual;
+    function FarmProcess4TransientAddedDemandMultIsSelected: Boolean; virtual;
 
     function GetIrrigationTypes: TIrrigationCollection; virtual; abstract;
     procedure SetIrrigationTypes(const Value: TIrrigationCollection); virtual; abstract;
@@ -3332,6 +3336,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4EvaporationIrrigationFraction(Sender: TObject);
     procedure InvalidateMfFmp4FractionOfPrecipToSurfaceWater(Sender: TObject);
     procedure InvalidateMfFmp4FractionOfIrrigToSurfaceWater(Sender: TObject);
+    procedure InvalidateMfFmp4AddedDemand(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4883,6 +4888,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientFractionOfPrecipToSurfaceWaterMultIsSelected: Boolean; override;
     function FarmProcess4TransientFractionOfIrrigToSurfaceWaterIsSelected: Boolean; override;
     function FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected: Boolean; override;
+    function FarmProcess4TransientAddedDemandIsSelected: Boolean; override;
+    function FarmProcess4TransientAddedDemandMultIsSelected: Boolean; override;
 
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
@@ -6309,6 +6316,7 @@ resourcestring
   StrKEvaporationIrrigationFraction = KEvaporationIrrigationFraction;
   StrKFractionOfPrecipToSurfaceWater = KFractionOfPrecipToSurfaceWater;
   StrKFractionOfIrrigToSurfaceWater = KFractionOfIrrigToSurfaceWater;
+  StrKAddedDemand = KAddedDemand;
 
 
 const
@@ -23912,6 +23920,62 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientAddedDemandIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientAddedDemandIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientAddedDemandMultIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientAddedDemandMultIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientBareEvapArrayIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -27204,6 +27268,12 @@ end;
 procedure TCustomModel.InvalidateMfFhbHeads(Sender: TObject);
 begin
   ModflowPackages.FhbPackage.MfFhbHeads.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4AddedDemand(Sender: TObject);
+begin
+  ModflowPackages.FarmLandUse.MfFmp4AddedDemand.Invalidate;
+  ModflowPackages.FarmLandUse.InvalidateMultTransienAddedDemandArrays;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4BareEvap(Sender: TObject);
@@ -34472,6 +34542,17 @@ begin
   result := DataArrayManager.AddDataSet(DataSet);
 end;
 
+function TCustomModel.AddedDemandUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.StaticAddedDemandArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 procedure TCustomModel.AddExternalFile(AFileName: string);
 begin
   TestAddModelModelFile(AFileName, FExternalFiles);
@@ -36311,6 +36392,28 @@ begin
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmClimate4.StaticEvapUsed(Sender));
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientAddedDemandIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientAddedDemandArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientAddedDemandMultIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.TransientAddedDemandMultArrayUsed(nil);
   {$ELSE}
   result := False;
   {$ENDIF}
@@ -38552,7 +38655,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 24;
+  OWHM4DataSets  = 25;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -41698,6 +41801,20 @@ begin
     'MODFLOW-OWHM version 2, LAND_USE: SURFACEWATER_LOSS_FRACTION_IRRIGATION';
   Inc(Index);
 
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KAddedDemand;
+  FDataArrayCreationRecords[Index].DisplayName := StrKAddedDemand;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.AddedDemandUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE: ADDED_DEMAND';
+  Inc(Index);
   {$ENDIF}
 
 //StrSurfaceK = KSurfaceK;

@@ -60,7 +60,7 @@ uses
   ModflowFmp4TranspirationFractionUnit,
   ModflowFmp4EvaporationIrrigationFractionUnit,
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
-  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit;
+  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit;
 
 type
   //
@@ -1496,6 +1496,8 @@ view. }
     FFmp4FractionOfPrecipToSurfaceWaterBoundary: TFmp4FractionOfPrecipToSurfaceWaterBoundary;
     FFmpMultFractionOfIrrigToSurfaceWaterBoundary: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary;
     FFmp4FractionOfIrrigToSurfaceWaterBoundary: TFmp4FractionOfIrrigToSurfaceWaterBoundary;
+    FFmp4AddedDemandBoundary: TFmp4AddedDemandBoundary;
+    FFmpMultAddedDemandBoundary: TFmp4MultAddedDemandBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1663,6 +1665,10 @@ view. }
       read FFmp4FractionOfIrrigToSurfaceWaterBoundary write FFmp4FractionOfIrrigToSurfaceWaterBoundary;
     property FmpMultFractionOfIrrigToSurfaceWaterBoundary: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary
       read FFmpMultFractionOfIrrigToSurfaceWaterBoundary write FFmpMultFractionOfIrrigToSurfaceWaterBoundary;
+    property Fmp4AddedDemandBoundary: TFmp4AddedDemandBoundary
+      read FFmp4AddedDemandBoundary write FFmp4AddedDemandBoundary;
+    property FmpMultAddedDemandBoundary: TFmp4MultAddedDemandBoundary
+      read FFmpMultAddedDemandBoundary write FFmpMultAddedDemandBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -3032,6 +3038,17 @@ view. }
       const Value: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary);
     function StoreModflowFmp4MultFractionOfIrrigToSurfaceWater: Boolean;
     procedure CreateModflowMultFractionOfIrrigToSurfaceWaterBoundary;
+
+    function GetModflowFmp4AddedDemand: TFmp4AddedDemandBoundary;
+    procedure SetModflowFmp4AddedDemand(const Value: TFmp4AddedDemandBoundary);
+    function StoreModflowFmp4AddedDemand: Boolean;
+    procedure CreateModflowAddedDemandBoundary;
+
+    function GetModflowFmp4MultAddedDemand: TFmp4MultAddedDemandBoundary;
+    procedure SetModflowFmp4MultAddedDemand(
+      const Value: TFmp4MultAddedDemandBoundary);
+    function StoreModflowFmp4MultAddedDemand: Boolean;
+    procedure CreateModflowMultAddedDemandBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4445,6 +4462,12 @@ view. }
     property ModflowFmp4MultFractionOfIrrigToSurfaceWater: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary
       read GetModflowFmp4MultFractionOfIrrigToSurfaceWater write SetModflowFmp4MultFractionOfIrrigToSurfaceWater
       Stored StoreModflowFmp4MultFractionOfIrrigToSurfaceWater;
+    property ModflowFmp4AddedDemand: TFmp4AddedDemandBoundary
+      read GetModflowFmp4AddedDemand write SetModflowFmp4AddedDemand
+      Stored StoreModflowFmp4AddedDemand;
+    property ModflowFmp4MultAddedDemand: TFmp4MultAddedDemandBoundary
+      read GetModflowFmp4MultAddedDemand write SetModflowFmp4MultAddedDemand
+      Stored StoreModflowFmp4MultAddedDemand;
 
 
     { TODO :
@@ -7134,6 +7157,8 @@ begin
   ModflowFmp4MultFractionOfPrecipToSurfaceWater := AScreenObject.ModflowFmp4MultFractionOfPrecipToSurfaceWater;
   ModflowFmp4FractionOfIrrigToSurfaceWater := AScreenObject.ModflowFmp4FractionOfIrrigToSurfaceWater;
   ModflowFmp4MultFractionOfIrrigToSurfaceWater := AScreenObject.ModflowFmp4MultFractionOfIrrigToSurfaceWater;
+  ModflowFmp4AddedDemand := AScreenObject.ModflowFmp4AddedDemand;
+  ModflowFmp4MultAddedDemand := AScreenObject.ModflowFmp4MultAddedDemand;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -10009,6 +10034,16 @@ begin
     if ModflowFmp4MultFractionOfIrrigToSurfaceWater <> nil then
     begin
       ModflowFmp4MultFractionOfIrrigToSurfaceWater.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4AddedDemand <> nil then
+    begin
+      ModflowFmp4AddedDemand.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultAddedDemand <> nil then
+    begin
+      ModflowFmp4MultAddedDemand.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -14347,6 +14382,24 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetModflowFmp4AddedDemand(
+  const Value: TFmp4AddedDemandBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4AddedDemandBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4AddedDemandBoundary);
+  end
+  else
+  begin
+    CreateModflowAddedDemandBoundary;
+    ModflowBoundaries.FFmp4AddedDemandBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetModflowFmp4ConsumptiveUse(
   const Value: TFmp4ConsumptiveUseBoundary);
 begin
@@ -14470,6 +14523,24 @@ begin
   begin
     CreateModflowFmp4LandUseAreaFractionBoundary;
     ModflowBoundaries.FFmp4LandUseAreaFractionBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowFmp4MultAddedDemand(
+  const Value: TFmp4MultAddedDemandBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultAddedDemandBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultAddedDemandBoundary);
+  end
+  else
+  begin
+    CreateModflowMultAddedDemandBoundary;
+    ModflowBoundaries.FFmpMultAddedDemandBoundary.Assign(Value);
   end;
 end;
 
@@ -32737,6 +32808,16 @@ begin
     and (ModflowFhbHeadBoundary <> nil) and ModflowFhbHeadBoundary.Used;
 end;
 
+function TScreenObject.StoreModflowFmp4AddedDemand: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4AddedDemand <> nil) and ModflowFmp4AddedDemand.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowFmp4ConsumptiveUse: Boolean;
 begin
 {$IFDEF OWHMV2}
@@ -32802,6 +32883,16 @@ begin
 {$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4LandUseAreaFraction <> nil) and ModflowFmp4LandUseAreaFraction.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4MultAddedDemand: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultAddedDemand <> nil) and ModflowFmp4MultAddedDemand.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -33952,6 +34043,23 @@ begin
   end;
 end;
 
+function TScreenObject.GetModflowFmp4AddedDemand: TFmp4AddedDemandBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowAddedDemandBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4AddedDemandBoundary;
+  end;
+end;
+
 function TScreenObject.GetModflowFmp4ConsumptiveUse: TFmp4ConsumptiveUseBoundary;
 begin
   if (FModel = nil)
@@ -34068,6 +34176,23 @@ begin
   else
   begin
     result := ModflowBoundaries.Fmp4LandUseAreaFractionBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowFmp4MultAddedDemand: TFmp4MultAddedDemandBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultAddedDemandBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultAddedDemandBoundary;
   end;
 end;
 
@@ -38998,6 +39123,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateModflowAddedDemandBoundary;
+begin
+  if (ModflowBoundaries.FFmp4AddedDemandBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4AddedDemandBoundary :=
+      TFmp4AddedDemandBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateModflowConsumptiveUseBoundary;
 begin
   if (ModflowBoundaries.FFmp4ConsumptiveUseBoundary = nil) then
@@ -39094,6 +39228,15 @@ begin
   begin
     ModflowBoundaries.FFmp4IrrigationBoundary :=
       TFmp4IrrigationBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateModflowMultAddedDemandBoundary;
+begin
+  if (ModflowBoundaries.FFmpMultAddedDemandBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultAddedDemandBoundary :=
+      TFmp4MultAddedDemandBoundary.Create(FModel, self);
   end;
 end;
 
@@ -42804,6 +42947,34 @@ begin
     FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Assign(Source.FFmpMultFractionOfIrrigToSurfaceWaterBoundary);
   end;
 
+  if Source.FFmp4AddedDemandBoundary = nil then
+  begin
+    FreeAndNil(FFmp4AddedDemandBoundary);
+  end
+  else
+  begin
+    if FFmp4AddedDemandBoundary = nil then
+    begin
+      FFmp4AddedDemandBoundary :=
+        TFmp4AddedDemandBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4AddedDemandBoundary.Assign(Source.FFmp4AddedDemandBoundary);
+  end;
+
+  if Source.FFmpMultAddedDemandBoundary = nil then
+  begin
+    FreeAndNil(FFmpMultAddedDemandBoundary);
+  end
+  else
+  begin
+    if FFmpMultAddedDemandBoundary = nil then
+    begin
+      FFmpMultAddedDemandBoundary :=
+        TFmp4MultAddedDemandBoundary.Create(Model, FScreenObject);
+    end;
+    FFmpMultAddedDemandBoundary.Assign(Source.FFmpMultAddedDemandBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -42822,6 +42993,8 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmpMultAddedDemandBoundary.Free;
+  FFmp4AddedDemandBoundary.Free;
   FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Free;
   FFmp4FractionOfIrrigToSurfaceWaterBoundary.Free;
   FFmpMultFractionOfPrecipToSurfaceWaterBoundary.Free;
@@ -43299,6 +43472,18 @@ begin
   begin
     FreeAndNil(FFmpMultFractionOfIrrigToSurfaceWaterBoundary);
   end;
+
+  if (FFmp4AddedDemandBoundary <> nil)
+    and not FFmp4AddedDemandBoundary.Used then
+  begin
+    FreeAndNil(FFmp4AddedDemandBoundary);
+  end;
+
+  if (FFmpMultAddedDemandBoundary <> nil)
+    and not FFmpMultAddedDemandBoundary.Used then
+  begin
+    FreeAndNil(FFmpMultAddedDemandBoundary);
+  end;
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -43706,6 +43891,16 @@ begin
   if FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
   begin
     FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Invalidate;
+  end;
+
+  if FFmp4AddedDemandBoundary <> nil then
+  begin
+    FFmp4AddedDemandBoundary.Invalidate;
+  end;
+
+  if FFmpMultAddedDemandBoundary <> nil then
+  begin
+    FFmpMultAddedDemandBoundary.Invalidate;
   end;
 end;
 
@@ -44154,6 +44349,16 @@ begin
   if FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
   begin
     FFmpMultFractionOfIrrigToSurfaceWaterBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4AddedDemandBoundary <> nil then
+  begin
+    FFmp4AddedDemandBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmpMultAddedDemandBoundary <> nil then
+  begin
+    FFmpMultAddedDemandBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -44607,6 +44812,16 @@ begin
     FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4AddedDemandBoundary <> nil then
+  begin
+    FFmp4AddedDemandBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmpMultAddedDemandBoundary <> nil then
+  begin
+    FFmpMultAddedDemandBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -45055,6 +45270,16 @@ begin
   if FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
   begin
     FFmpMultFractionOfIrrigToSurfaceWaterBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4AddedDemandBoundary <> nil then
+  begin
+    FFmp4AddedDemandBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmpMultAddedDemandBoundary <> nil then
+  begin
+    FFmpMultAddedDemandBoundary.StopTalkingToAnyone;
   end;
 end;
 
@@ -45783,6 +46008,24 @@ begin
   if FFmpMultFractionOfIrrigToSurfaceWaterBoundary <> nil then
   begin
     Result := FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4AddedDemandBoundary <> nil then
+  begin
+    Result := FFmp4AddedDemandBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmpMultAddedDemandBoundary <> nil then
+  begin
+    Result := FFmpMultAddedDemandBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

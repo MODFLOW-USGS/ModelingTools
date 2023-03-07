@@ -1,0 +1,2 @@
+inherited frameScreenObjectMultAddedDemand: TframeScreenObjectMultAddedDemand
+end
