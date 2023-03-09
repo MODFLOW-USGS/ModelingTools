@@ -1864,7 +1864,7 @@ Type
     FStressPeriods: TArrayStressPeriodArray;
     FZoneImporter: TMultZoneImporter;
     FQuadTree: TRbwQuadTree;
-    FPointLists: TList;
+    FPointLists: TObjectList<TPointList>;
     FEpsilon: Real;
     FRequiredType: string;
     FReuseLayerIndicator: TBooleanDynArray;
@@ -12635,7 +12635,7 @@ begin
     end;
   end;
 
-  FPointLists:= TObjectList.Create;
+  FPointLists:= TObjectList<TPointList>.Create;
   ContourCreator:= TContourCreator.Create(100);
   try
     InitializeEpsilon;
@@ -12744,7 +12744,7 @@ begin
     end;
   end;
 
-  FPointLists:= TObjectList.Create;
+  FPointLists:= TObjectList<TPointList>.Create;
 
   ContourCreator:= TContourCreator.Create(100);
   try
@@ -12875,7 +12875,7 @@ begin
     Exit;
   end;
 
-  FPointLists:= TObjectList.Create;
+  FPointLists:= TObjectList<TPointList>.Create;
   ContourCreator:= TContourCreator.Create(100);
   try
     ContourCreator.EvaluatedAt := eaBlocks;

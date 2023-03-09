@@ -11023,12 +11023,14 @@ const
 //    '5.1.1.16' Bug fix: Fixed bug that could cause head observations in
 //                the Head Observation package to be skipped if their times
 //                were at the beginning or end of the simulation.
+//    '5.1.1.17' Bug fix: Fixed a bug in exporting contours to Shapefiles
+//                that would cause an assertion failure.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.16';
+  IIModelVersion = '5.1.1.17';
 
 function IModelVersion: string;
 begin

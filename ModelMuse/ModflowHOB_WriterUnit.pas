@@ -11,7 +11,7 @@ type
   TModflowHobWriter = class(TCustomPackageWriter)
   private
     const
-      Epsilon = 5e-8;
+      Epsilon = HobEpsilon;
     var
     NH: Integer;
     MOBS: Integer;
@@ -204,25 +204,19 @@ begin
           for ObsIndex := 0 to Observations.Values.Count - 1 do
           begin
             Item := Observations.Values.HobItems[ObsIndex];
-            if (Item.Time > FEndTime) and (FEvaluationType = etExport) then
+            if TimeIsToLate(Item.Time, FEndTime) and (FEvaluationType = etExport) then
             begin
-              if ((Item.Time - FEndTime)/(Abs(Item.Time) + Abs(FEndTime))) > Epsilon then
-              begin
-                ErrorMessage := Format(StrObjectSTimeG,
-                  [ScreenObject.Name, Item.Time]);
-                frmErrorsAndWarnings.AddError(Model,
-                  InvalidEndObsTime, ErrorMessage, ScreenObject);
-              end;
+              ErrorMessage := Format(StrObjectSTimeG,
+                [ScreenObject.Name, Item.Time]);
+              frmErrorsAndWarnings.AddError(Model,
+                InvalidEndObsTime, ErrorMessage, ScreenObject);
             end;
-            if (Item.Time < FStartTime) and (FEvaluationType = etExport) then
+            if TimeIsToEarly(Item.Time, FStartTime) and (FEvaluationType = etExport) then
             begin
-              if ((FStartTime - Item.Time)/(Abs(FStartTime) + Abs(Item.Time))) > Epsilon then
-              begin
-                ErrorMessage := Format(StrObjectSTimeG,
-                  [ScreenObject.Name, Item.Time]);
-                frmErrorsAndWarnings.AddError(Model,
-                  InvalidStartObsTime, ErrorMessage, ScreenObject);
-              end;
+              ErrorMessage := Format(StrObjectSTimeG,
+                [ScreenObject.Name, Item.Time]);
+              frmErrorsAndWarnings.AddError(Model,
+                InvalidStartObsTime, ErrorMessage, ScreenObject);
             end;
           end;
         end;

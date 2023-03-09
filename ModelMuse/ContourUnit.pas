@@ -317,14 +317,17 @@ end;
 
 procedure TContourCreator.ConvertAndDrawSegments(Sender: TObject;
   const SegmentArray: TLine2DArray);
-var
-  SegmentI: array[0..3] of TPoint;
+const
+  MaxLengthOfSegMentArray = 2;
+var2
+  SegmentI: array[0..MaxLengthOfSegMentArray-1] of TPoint;
   Index: Integer;
   CenterX: Int64;
   CenterY: Int64;
   PositionIndex: Int64;
   Exaggeration: double;
 begin
+  Assert(Length(SegmentArray) <= MaxLengthOfSegMentArray);
   Exaggeration := 1.0;
   if frmGoPhast.ModelSelection in SutraSelection then
   begin

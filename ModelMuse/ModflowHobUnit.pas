@@ -275,6 +275,9 @@ type
     property CellLists[Index: integer]: TObsCellList read GetCellList; default;
   end;
 
+  function TimeIsToEarly(Time, EarliestTime: double): Boolean;
+  function TimeIsToLate(Time, LastTime: double): Boolean;
+
 resourcestring
   StrHeadObservationsError = 'Head observations can only be defined using ' +
     'objects with a single vertex.  The following objects need to be fixed.';
@@ -282,6 +285,7 @@ resourcestring
 
 const
   StrHobout = '.hob_out';
+  HobEpsilon = 5e-8;
 
 implementation
 
@@ -293,6 +297,24 @@ resourcestring
   ErrorRoot = 'Error: Duplicate head observation times';
   EarlyTimeWarning = 'Head observation times earlier than the beginning of the first stress period will be ignored.';
   LateTimeWarning = 'Head observation times later than the end of the last stress period will be ignored.';
+
+function TimeIsToEarly(Time, EarliestTime: double): Boolean;
+begin
+  result := Time < EarliestTime;
+  if result then
+  begin
+    result := ((EarliestTime - Time)/(Abs(EarliestTime) + Abs(Time))) > HobEpsilon;
+  end;
+end;
+
+function TimeIsToLate(Time, LastTime: double): Boolean;
+begin
+  result := Time > LastTime;
+  if result then
+  begin
+    result := ((Time - LastTime)/(Abs(Time) + Abs(LastTime))) > HobEpsilon;
+  end;
+end;
 
 { THob_Cell }
 
@@ -979,7 +1001,7 @@ begin
           Continue;
         end;
 
-        if Time < EarliestAllowedTime then
+        if TimeIsToEarly(Time, EarliestAllowedTime) then
         begin
           EarlyTimes := EarlyTimes + ' ' + FloatToStr(Time);
           Continue;
@@ -987,8 +1009,11 @@ begin
 
         if Time > LatestAllowedTime then
         begin
-          LateTimes := LateTimes + ' ' + FloatToStr(Time);
-          Continue;
+          if ((Time - LatestAllowedTime)/(Abs(Time) + Abs(LatestAllowedTime))) > HobEpsilon then
+          begin
+            LateTimes := LateTimes + ' ' + FloatToStr(Time);
+            Continue;
+          end;
         end;
 
         Times.Add(Time);

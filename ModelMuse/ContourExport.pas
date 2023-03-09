@@ -4,12 +4,14 @@ interface
 
 uses System.UITypes, System.Types, Classes, FastGeo, QuadtreeClass, RealListUnit, AbstractGridUnit,
   DataSetUnit, SysUtils, GoPhastTypes, ContourUnit, ValueArrayStorageUnit,
-  PhastModelUnit, Vcl.Dialogs;
+  PhastModelUnit, Vcl.Dialogs, System.Generics.Collections;
 
 type
   TPointList = class(TObject)
   private
-    FPoints: array of TPoint2D;
+    FPoints: TPoint2DArray;
+    function GetFirst: TPoint2D;
+    function GetLast: TPoint2D;
   strict private
     FCount: integer;
     procedure Grow;
@@ -21,9 +23,14 @@ type
     function Add(Point: TPoint2D): integer;
     property Capacity: integer read GetCapacity write SetCapacity;
     property Count: integer read FCount;
-    property Points[Index: integer]: TPoint2D read GetPoint write SetPoint;
+    property Points[Index: integer]: TPoint2D read GetPoint write SetPoint; default;
     procedure Insert(Position: integer; Point: TPoint2D);
+    property First: TPoint2D read GetFirst;
+    property Last: TPoint2D read GetLast;
+    procedure Reverse;
   end;
+
+  TListOfPointLists = TObjectList<TPointList>;
 
   TContourExtractor = class(TCustomContourCreator)
   private
@@ -32,7 +39,7 @@ type
     // @name contains instances of @link(TPointList).
     // @name is instantiated as a TObjectList.
     // @name is filled in @link(ImportSegments).
-    FPointLists: TList;
+    FPointLists: TListOfPointLists;
     FEpsilon: Real;
     FModelGrid: TCustomModelGrid;
     FAlgorithm: TContourAlg;
@@ -40,6 +47,7 @@ type
     procedure ImportSegments(Sender: TObject; const Segments: TLine2DArray);
     procedure InitializeQuadTree;
     procedure InitializeEpsilon;
+    procedure MergePointLists;
   public
     procedure CreateShapes(ValueList: TValueArrayStorage; DataArray: TDataArray;
       FileName: string; LabelSpacing: integer);
@@ -52,7 +60,7 @@ type
 // PointLists is filled with @link(TPointList)s.
 procedure GlobalImportSegments(Sender: TObject;
   const Segments: TLine2DArray; Epsilon: Real;
-  QuadTree: TRbwQuadTree; PointLists: TList);
+  QuadTree: TRbwQuadTree; PointLists: TObjectList<TPointList>);
 
 procedure GlobalInitializeQuadTree(var QuadTree: TRbwQuadTree;
   ModelGrid: TCustomModelGrid);
@@ -64,223 +72,26 @@ implementation
 uses
   frmGoPhastUnit, Contnrs, Math,
   ShapefileUnit, XBase1, frmExportShapefileUnit, RbwParser, ModelMuseUtilities,
-  LineStorage, SutraMeshUnit;
+  LineStorage, SutraMeshUnit, ScreenObjectUnit, UndoItemsScreenObjects;
 
 procedure GlobalImportSegments(Sender: TObject;
   const Segments: TLine2DArray; Epsilon: Real;
-  QuadTree: TRbwQuadTree; PointLists: TList);
+  QuadTree: TRbwQuadTree; PointLists: TObjectList<TPointList>);
 var
   Index: Integer;
-  Segment: TLine2D;
-  Line1, Line2, Line3: TPointList;
-  X1, Y1: double;
-  X2, Y2: double;
   APoint: TPoint2D;
   PointIndex: Integer;
-  APointer: Pointer;
   Exaggeration: double;
   LineIndex: Integer;
   ALine: TPointList;
-  function SamePoint(X1, X2, Y1, Y2: double): boolean;
-  begin
-    result := Sqr(X1-X2) + Sqr(Y1-Y2) < Epsilon;
-  end;
+  NewLine: TPointList;
 begin
   for Index := 0 to Length(Segments) - 1 do
   begin
-    Segment := Segments[Index];
-    if SamePoint(Segment[1].x, Segment[2].x, Segment[1].y, Segment[2].y) then
-    begin
-      Continue;
-    end;
-    X1 := Segment[1].x;
-    Y1 := Segment[1].y;
-    if QuadTree.Count > 0 then
-    begin
-      QuadTree.FirstNearestPoint(X1, Y1, APointer);
-      Line1 := APointer;
-    end
-    else
-    begin
-      Line1 := nil;
-    end;
-    if Line1 <> nil then
-    begin
-      if not SamePoint(X1, Segment[1].x, Y1, Segment[1].Y) then
-      begin
-        Line1 := nil;
-      end;
-    end;
-
-    X2 := Segment[2].x;
-    Y2 := Segment[2].y;
-    if QuadTree.Count > 0 then
-    begin
-      QuadTree.FirstNearestPoint(X2, Y2, APointer);
-      Line2 := APointer;
-    end
-    else
-    begin
-      Line2 := nil;
-    end;
-    if Line2 <> nil then
-    begin
-      if not SamePoint(X2, Segment[2].x, Y2, Segment[2].Y) then
-      begin
-        Line2 := nil;
-      end;
-    end;
-    if (Line1 = nil) and (Line2 = nil) then
-    begin
-	  // create a new contour
-      Line1 := TPointList.Create;
-      PointLists.Add(Line1);
-      Line1.Add(Segment[1]);
-      Line1.Add(Segment[2]);
-      QuadTree.AddPoint(Segment[1].x, Segment[1].y, Line1);
-      QuadTree.AddPoint(Segment[2].x, Segment[2].y, Line1);
-    end
-    else if (Line1 = nil) then
-    begin
-	  // add point to the beginning or end of Line2
-      APoint := Line2.Points[Line2.Count-1];
-      if SamePoint(Segment[2].x, APoint.x, Segment[2].y, APoint.y) then
-      begin
-        Line2.Add(Segment[1]);
-      end
-      else
-      begin
-        APoint := Line2.Points[0];
-        Assert(SamePoint(Segment[2].x, APoint.x, Segment[2].y, APoint.y));
-        Line2.Insert(0, Segment[1]);
-      end;
-      QuadTree.RemovePoint(X2, Y2, Line2);
-      QuadTree.AddPoint(Segment[1].x, Segment[1].y, Line2);
-    end
-    else if (Line2 = nil) then
-    begin
-	  // add point to the beginning or end of Line1
-      APoint := Line1.Points[Line1.Count-1];
-      if SamePoint(Segment[1].x, APoint.x, Segment[1].y, APoint.y) then
-      begin
-        Line1.Add(Segment[2]);
-      end
-      else
-      begin
-        APoint := Line1.Points[0];
-        Assert(SamePoint(Segment[1].x, APoint.x, Segment[1].y, APoint.y));
-        Line1.Insert(0, Segment[2]);
-      end;
-      QuadTree.RemovePoint(X1, Y1, Line1);
-      QuadTree.AddPoint(Segment[2].x, Segment[2].y, Line1);
-    end
-    else if (Line2 = Line1) then
-    begin
-	  // Join two ends of the contour into a closed contour.
-      APoint := Line1.Points[Line1.Count-1];
-      if SamePoint(Segment[1].x, APoint.x, Segment[1].y, APoint.y) then
-      begin
-        Line1.Add(Segment[2]);
-      end
-      else
-      begin
-        APoint := Line1.Points[0];
-        Assert(SamePoint(Segment[1].x, APoint.x, Segment[1].y, APoint.y));
-        Line1.Insert(0, Segment[2]);
-      end;
-      QuadTree.RemovePoint(X1, Y1, Line1);
-      QuadTree.RemovePoint(X2, Y2, Line1);
-    end
-    else
-    begin
-	  // Make a connection between Line1 and Line2.
-      APoint := Line1.Points[Line1.Count-1];
-      if   (SamePoint(Segment[1].x, APoint.x, Segment[1].y, APoint.y))
-        or (SamePoint(Segment[2].x, APoint.x, Segment[2].y, APoint.y)) then
-      begin
-        // Add to end of line 1
-        if Line1.Capacity < Line1.Count + Line2.Count then
-        begin
-          Line1.Capacity := Line1.Count + Line2.Count
-        end;
-        APoint := Line2.Points[Line2.Count-1];
-        if   (SamePoint(Segment[1].x, APoint.x, Segment[1].y, APoint.y))
-          or (SamePoint(Segment[2].x, APoint.x, Segment[2].y, APoint.y)) then
-        begin
-          APoint := Line2.Points[0];
-          QuadTree.RemovePoint(APoint.x, APoint.y, Line2);
-          // Add end of line 2 to end of line 1
-          for PointIndex := Line2.Count - 1 downto 0 do
-          begin
-            Line1.Add(Line2.Points[PointIndex]);
-          end;
-        end
-        else
-        begin
-          APoint := Line2.Points[Line2.Count - 1];
-          QuadTree.RemovePoint(APoint.x, APoint.y, Line2);
-          // Join beginning of line 2 to end of line 1
-          for PointIndex := 0 to Line2.Count - 1 do
-          begin
-            Line1.Add(Line2.Points[PointIndex]);
-          end;
-        end;
-        QuadTree.RemovePoint(X1, Y1, Line1);
-        QuadTree.RemovePoint(X2, Y2, Line2);
-        QuadTree.AddPoint(APoint.x, APoint.y, Line1);
-        PointLists.Remove(Line2);
-      end
-      else
-      begin
-        APoint := Line2.Points[Line2.Count-1];
-        if   (SamePoint(Segment[1].x, APoint.x, Segment[1].y, APoint.y))
-          or (SamePoint(Segment[2].x, APoint.x, Segment[2].y, APoint.y)) then
-        begin
-          // Add beginning of line 1 to end of line2
-          if Line2.Capacity < Line1.Count + Line2.Count then
-          begin
-            Line2.Capacity := Line1.Count + Line2.Count;
-          end;
-          APoint := Line1.Points[Line1.Count - 1];
-          QuadTree.RemovePoint(APoint.x, APoint.y, Line1);
-          for PointIndex := 0 to Line1.Count - 1 do
-          begin
-            Line2.Add(Line1.Points[PointIndex]);
-          end;
-          QuadTree.RemovePoint(X1, Y1, Line1);
-          QuadTree.RemovePoint(X2, Y2, Line2);
-          QuadTree.AddPoint(APoint.x, APoint.y, Line2);
-          PointLists.Remove(Line1);
-        end
-        else
-        begin
-          // Join beginning of line 1 to beginning of line 2
-          Line3 := TPointList.Create;
-          PointLists.Add(Line3);
-          Line3.Capacity := Line1.Count + Line2.Count;
-          for PointIndex := Line1.Count - 1 downto 0 do
-          begin
-            Line3.Add(Line1.Points[PointIndex]);
-          end;
-          for PointIndex := 0 to Line2.Count - 1 do
-          begin
-            Line3.Add(Line2.Points[PointIndex]);
-          end;
-          QuadTree.RemovePoint(X1, Y1, Line1);
-          QuadTree.RemovePoint(X2, Y2, Line2);
-
-          APoint := Line1.Points[Line1.Count - 1];
-          QuadTree.RemovePoint(APoint.x, APoint.y, Line1);
-          QuadTree.AddPoint(APoint.x, APoint.y, Line3);
-
-          APoint := Line2.Points[Line2.Count - 1];
-          QuadTree.RemovePoint(APoint.x, APoint.y, Line2);
-          QuadTree.AddPoint(APoint.x, APoint.y, Line3);
-          PointLists.Remove(Line1);
-          PointLists.Remove(Line2);
-        end;
-      end;
-    end;
+    NewLine := TPointList.Create;
+    NewLine.Add(Segments[Index][1]);
+    NewLine.Add(Segments[Index][2]);
+    PointLists.Add(NewLine);
   end;
   Exaggeration := 1;
   if (frmGoPhast.ModelSelection in [msSutra22, msSutra30, msSutra40])
@@ -371,6 +182,16 @@ begin
   result := Length(FPoints);
 end;
 
+function TPointList.GetFirst: TPoint2D;
+begin
+  result := FPoints[0];
+end;
+
+function TPointList.GetLast: TPoint2D;
+begin
+  result := FPoints[Count-1];
+end;
+
 function TPointList.GetPoint(Index: integer): TPoint2D;
 begin
   result := FPoints[Index];
@@ -416,6 +237,19 @@ begin
   end;
 end;
 
+procedure TPointList.Reverse;
+var
+  NewPoints: TPoint2DArray;
+  Index: Integer;
+begin
+  SetLength(NewPoints, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    NewPoints[Index] := FPoints[Count-1-Index];
+  end;
+  FPoints := NewPoints;
+end;
+
 procedure TPointList.SetCapacity(const Value: integer);
 begin
   SetLength(FPoints, Value);
@@ -433,6 +267,144 @@ begin
   FModel := (Model as TCustomModel);
   FModelGrid := FModel.Grid;
   Mesh := FModel.DrawMesh;
+end;
+
+procedure TContourExtractor.MergePointLists;
+var
+  index: Integer;
+  PointList: TPointList;
+  APoint: TPoint2D;
+  Data: TQuadPointArray;
+//  TestObject: TScreenObject;
+//  ScreenObjects: TList;
+//  FirstPoint: TPoint2D;
+//  LastPoint: TPoint2D;
+//  NewPointLists: TListOfPointLists;
+//  ScreenObjectIndex: Integer;
+//  Undo: TUndoMergeObjects;
+  Merged: Boolean;
+  OtherPointList: TPointList;
+  APoint1: TPoint2D;
+  APoint2: TPoint2D;
+//  FoundFirst: Boolean;
+  PointerArray: TPointerArray;
+  Closed: Boolean;
+  CloseDist: double;
+//  TestDistance: double;
+//  MinDist: Double;
+  procedure MergeLines;
+  var
+    DataIndex: Integer;
+  PointIndex: Integer;
+    ArrayIndex: Integer;
+  begin
+        APoint := PointList.Last;
+        FQuadTree.FindNearestPoints(APoint.x, APoint.y, 2, Data);
+        OtherPointList := nil;
+        for ArrayIndex := 0 to Length(Data) - 1 do
+        begin
+          PointerArray := Data[ArrayIndex].Data;
+          for DataIndex := 0 to Length(PointerArray) - 1 do
+          begin
+            OtherPointList := PointerArray[DataIndex];
+            if OtherPointList = PointList then
+            begin
+              OtherPointList := nil;
+            end;
+            if OtherPointList <> nil then
+            begin
+              Break;
+            end;
+          end;
+          if OtherPointList <> nil then
+          begin
+            Break;
+          end;
+        end;
+
+//        if Length(Data) > 1 then
+        begin
+//          ScreenObjects.Clear;
+          try
+
+//            for DataIndex := 0 to Length(Data) - 1 do
+//            begin
+//              OtherPointList := Data[DataIndex];
+//              if OtherPointList <> PointList then
+//              begin
+//                break;
+//              end;
+//            end;
+              if OtherPointList <> nil then
+              begin
+                if Distance(APoint, OtherPointList.First) > Distance(APoint, OtherPointList.Last) then
+                begin
+                  OtherPointList.Reverse;
+                end;
+                if Distance(APoint, OtherPointList.First) < FEpsilon then
+                begin
+                  APoint2 := PointList.Last;
+                  FQuadTree.RemovePoint(APoint2.x, APoint2.y, PointList);
+                  for PointIndex := 1 to OtherPointList.Count - 1 do
+                  begin
+                    PointList.Add(OtherPointList[PointIndex]);
+                  end;
+                  APoint1 := OtherPointList.First;
+                  APoint2 := OtherPointList.Last;
+                  FQuadTree.RemovePoint(APoint1.x, APoint1.y, OtherPointList);
+                  FQuadTree.RemovePoint(APoint2.x, APoint2.y, OtherPointList);
+                  APoint2 := PointList.Last;
+                  FQuadTree.AddPoint(APoint2.x, APoint2.y, PointList);
+                  FPointLists.Remove(OtherPointList);
+                  Merged := True;
+                end;
+              end;
+          finally
+  //          ScreenObjects.Free;
+          end;
+        end  end;
+begin
+  Merged := True;
+  while Merged do
+  begin
+    Merged := False;
+    InitializeQuadTree;
+//    FoundFirst := False;
+    for index := 0 to FPointLists.Count - 1 do
+    begin
+      PointList := FPointLists[index];
+      APoint1 := PointList.First;
+      FQuadTree.AddPoint(APoint1.x, APoint1.y, PointList);
+      APoint2 := PointList.Last;
+      FQuadTree.AddPoint(APoint2.x, APoint2.y, PointList);
+    end;
+
+    for index := FPointLists.Count - 1 downto 0 do
+    begin
+      PointList := FPointLists[index];
+      MergeLines;
+    end;
+    for index := FPointLists.Count - 1 downto 0 do
+    begin
+      PointList.Reverse;
+      MergeLines;
+    end;
+  end;
+  for index := 0 to FPointLists.Count - 1 do
+  begin
+    PointList := FPointLists[index];
+    APoint1 := PointList.First;
+    APoint2 := PointList.Last;
+    CloseDist := Distance(PointList.First, PointList.Last);
+    if CloseDist < FEpsilon then
+    begin
+      Closed := CloseDist = 0;
+      if not Closed then
+      begin
+        PointList.Add(PointList.First);
+      end;
+    end;
+  end;
 end;
 
 procedure TContourExtractor.CreateShapes(ValueList: TValueArrayStorage;
@@ -463,6 +435,11 @@ var
   Location: TLocation;
   FieldNames: TStringList;
   MinPositive: Double;
+  RowIndex: Integer;
+  MinRowWidth: double;
+  TestValue: double;
+  MinColWidth: double;
+  ColIndex: Integer;
   procedure MakeShapesFromContourLines;
   var
     ContourIndex: integer;
@@ -686,12 +663,35 @@ begin
             begin
               if Assigned(Grid) then
               begin
-                FPointLists:= TObjectList.Create;
+                FPointLists:= TListOfPointLists.Create;
                 ContourCreator:= TContourCreator.Create(LabelSpacing);
                 try
                   InitializeEpsilon;
                   ContourCreator.EvaluatedAt := DataArray.EvaluatedAt;
                   ContourCreator.Grid := Grid;
+
+                  MinRowWidth := FModel.Grid.RowWidth[0];
+//                  MinRowWidth := Grid.
+                  for RowIndex := 1 to FModel.Grid.RowCount - 1 do
+                  begin
+                    TestValue := FModel.Grid.RowWidth[RowIndex];
+                    if TestValue < MinRowWidth then
+                    begin
+                      MinRowWidth := TestValue;
+                    end;
+                  end;
+                  MinColWidth := FModel.Grid.ColumnWidth[0];
+//                  MinColWidth := Grid.
+                  for ColIndex := 1 to FModel.Grid.ColumnCount - 1 do
+                  begin
+                    TestValue := FModel.Grid.ColumnWidth[ColIndex];
+                    if TestValue < MinColWidth then
+                    begin
+                      MinColWidth := TestValue;
+                    end;
+                  end;
+                  FEpsilon := Sqrt(Sqr(MinRowWidth) + Sqr(MinColWidth))/4;
+
                   ContourCreator.OnExtractSegments := ImportSegments;
 
                   Assert(ValueList.Count = Length(Contours.ContourValues));
@@ -705,6 +705,14 @@ begin
 
                     if (FPointLists.Count> 0) then
                     begin
+                      try
+                        MergePointLists;
+                      except on E: Exception do
+                      begin
+                        ShowMessage(ValueIndex.ToString);
+                        raise;
+                      end;
+                      end;
                       ShapeFileWriter.Capacity := ShapeFileWriter.Capacity
                         + FPointLists.Count;
                       for PointListIndex := 0 to FPointLists.Count - 1 do
@@ -725,7 +733,12 @@ begin
                             end
                             else
                             begin
+                              try
                               PointsForShape.Add(@PointList.FPoints[PointIndex])
+                              except
+                                ShowMessage(ValueIndex.ToString + ' ' + PointListIndex.ToString + ' ' + PointIndex.ToString);
+                                raise;
+                              end
                             end;
                           end;
                           if PointsForShape.Count > 0 then

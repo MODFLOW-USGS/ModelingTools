@@ -20598,8 +20598,15 @@ begin
     InvalidateModel;
     FDeleted := Value;
     Selected := False;
-    LocalModel := FModel as TPhastModel;
-    Grid := LocalModel.Grid;
+    if FModel <> nil then
+    begin
+      LocalModel := FModel as TPhastModel;
+      Grid := LocalModel.Grid;
+    end
+    else
+    begin
+      Grid := nil;
+    end;
     if Grid <> nil then
     begin
       Grid.NeedToRecalculateCellColors;
