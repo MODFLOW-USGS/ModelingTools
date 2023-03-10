@@ -25,6 +25,9 @@ var
 
 implementation
 
+uses
+  frmGoPhastUnit, GoPhastTypes, ModflowUzfWriterUnit;
+
 {$R *.dfm}
 
 { TframePackageLayerChoice }
@@ -50,6 +53,14 @@ begin
   inherited SetData(Package);
   SourcePkg := Package as TCustomLayerPackageSelection;
   SourcePkg.LayerOption := TLayerOption(comboLayerOption.ItemIndex);
+  if (SourcePkg.LayerOption = loWaterTable)
+    and (frmGoPhast.ModelSelection <> msModflowNWT) then
+  begin
+    Beep;
+    MessageDlg(StrTheOptionToHaveU, mtWarning, [mbOK], 0);
+//    frmErrorsAndWarnings.AddError(Model, StrIllegalUZFRecharge,
+//      StrTheOptionToHaveU)
+  end;
 end;
 
 end.

@@ -192,7 +192,7 @@ C3------Find the last non-blank character.
    20 CONTINUE
 C
 C4------Print the line up to the last non-blank character if IOUT>0.
-       
+
    30 IF (IOUT.GT.0) then
         WRITE(IOUT, *) 'COMMENT:'
         WRITE(IOUT,'(A200)') LINE(1:I)
@@ -255,9 +255,9 @@ C2------Check for and decode EXTERNAL and OPEN/CLOSE records.
          IN=I
 C          TEST IF EXTERNAL FILE IS OPEN
          INQUIRE( UNIT=IN, OPENED=LVAL )
-         IF ( LVAL.EQ. .FALSE. ) THEN
+         IF ( LVAL.EQV. .FALSE. ) THEN
            WRITE ( CERR,110 ) IN
-  110    FORMAT('External unit ', I4,' is not open')     
+  110    FORMAT('External unit ', I4,' is not open')
            WRITE ( IOUT,'(1X,A)' ) CERR
            CALL USTOP(CERR)
          END IF
@@ -284,7 +284,7 @@ C          SEE FORM VARIABLE IN openspec.inc
          IN=NUNOPN
 C          TEST IF OPEN\CLOSE FILE EXISTS
          INQUIRE( FILE=FNAME, EXIST=LVAL )
-         IF ( LVAL.EQ. .FALSE. ) THEN
+         IF ( LVAL.EQV. .FALSE. ) THEN
            WRITE ( IOUT,112 ) LINE(ISTART:ISTOP)
   112      FORMAT('Specified OPEN/CLOSE file ',(A),' does not exit')
            CALL USTOP('Specified OPEN/CLOSE file does not exit')
@@ -379,9 +379,9 @@ C5E-----Get the optional values from the line
         END IF
 C
 240     CONTINUE
-      ENDIF 
+      ENDIF
 C
-C6----SCALE THE DATA AND CHECK 
+C6----SCALE THE DATA AND CHECK
       DO 250 II=LSTBEG,N
       K=RLIST(1,II)
       I=RLIST(2,II)
@@ -714,7 +714,7 @@ C7------PRINT COLUMN NUMBERS AT TOP OF PAGE.
 C
 C8------PRINT EACH ROW IN THE ARRAY.
 500   DO 510 I=1,II
-      
+
 C----------------FORMAT 60I1
   501 WRITE(IOUT,*) (IA(J,I),J=1,JJ)
 C
@@ -890,7 +890,7 @@ C6------IF PRINT CODE (IPRN) >0 OR =0 THEN PRINT ARRAY VALUES.
         DO 380 I=1,II
           Do 380 J=1,JJ
             if (A(J,I).NE.A(J,I)) A(J,I) = 0
-  380   CONTINUE      
+  380   CONTINUE
         DO 400 I=1,II
            WRITE(IOUT, *) (A(J,I),J=1,JJ)
   400   CONTINUE

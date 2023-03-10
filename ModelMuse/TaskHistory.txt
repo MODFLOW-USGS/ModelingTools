@@ -30795,5 +30795,14 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'core code')
+    end
+    item
+      Date = 44994.000000000000000000
+    end
+    item
+      Date = 44995.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'FMP')
     end>
 end

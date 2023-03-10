@@ -76,7 +76,8 @@ inherited framePackageUZF: TframePackageUZF
       Items.Strings = (
         'Top layer (1)'
         'Specified layer (2)'
-        'Top active cell (3)')
+        'Top active cell (3)'
+        'Water table (4)')
       ExplicitLeft = 16
       ExplicitTop = 24
     end

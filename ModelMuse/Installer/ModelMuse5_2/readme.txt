@@ -135,7 +135,7 @@ or help are in the "ModelMuse Examples\data" folder.
 E. COMPILING
 
 The 32 and 64-bit version of ModelMuse and ModelMonitor are compiled with 
-Delphi 11.1 from Embarcadero.
+Delphi 11.2 from Embarcadero.
 http://www.embarcadero.com/ 
 It can also be compiled using the free community edition
 of Delphi from Embarcadero.
@@ -144,11 +144,13 @@ https://www.embarcadero.com/products/delphi/starter
 The help system for ModelMuse is compiled with Help and Manual version 8
 from EC Software. http://www.helpandmanual.com/
 
-MF2005_Importer is compiled with the Intel Fortran compiler.
+MF2005_Importer is compiled with the MinGW and MinGW64 GFortran compilers.
+https://sourceforge.net/projects/mingw/
+https://winlibs.com/
 
 EnhancedTemplateProcessor, Mf6ObsExtractor, Mf2005ObsExtractor, and 
 SutraObsExtractor are compiled with Lazarus (https://www.lazarus-ide.org/).
-They can also be compiled with Delphi 11.1
+They can also be compiled with Delphi 11.2
 
 ModelMuse uses a number of custom components that must be installed 
 in Delphi before compiling ModelMuse.  Some are included  

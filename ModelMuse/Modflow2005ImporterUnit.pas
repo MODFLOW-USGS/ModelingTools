@@ -19698,7 +19698,7 @@ begin
   begin
     NUZTOP := 1;
   end;
-  if NUZTOP > 3 then
+  if NUZTOP > 4 then
   begin
     NUZTOP := 3;
   end;
@@ -20264,7 +20264,8 @@ begin
     FImporter.UpdateProgress;
     FGages.ArrayLength := NUZGAG;
   end
-  else if ALabel = 'NUZTOP IUZFOPT IRUNFLG IETFLG IUZFCB1 IUZFCB2 NUZGAG:' then
+  else if ALabel = 'NUZTOP IUZFOPT IRUNFLG IETFLG IUZFCB1 IUZFCB2 NUZGAG:'
+     then
   begin
     Read(FImporter.FFile, NUZTOP);
     Read(FImporter.FFile, IUZFOPT);
@@ -20578,7 +20579,7 @@ begin
   end
   else
   begin
-    Assert(False);
+    Assert(False, 'Unrecognized label: ' + ALabel);
   end;
 end;
 

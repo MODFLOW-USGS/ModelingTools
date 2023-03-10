@@ -55,6 +55,11 @@ type
     class function ObservationOutputExtension: string; override;
   end;
 
+resourcestring
+  StrIllegalUZFRecharge = 'Illegal UZF recharge and discharge option';
+  StrTheOptionToHaveU = 'The option to have UZF recharge and discharge apply' +
+  ' to the water table is only available in MODFLOW-NWT.';
+
 implementation
 
 uses ModflowUnitNumbers, DataSetUnit, ModflowUzfUnit, frmErrorsAndWarningsUnit,
@@ -130,6 +135,7 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, NoAssignmentErrorRoot);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrIllegalUZFRecharge);
     frmProgressMM.AddMessage(StrEvaluatingUZFPacka);
     CountGages;
 
@@ -688,9 +694,19 @@ begin
       begin
         NUZTOP := 3;
       end;
+    loWaterTable:
+      begin
+        NUZTOP := 4;
+      end
     else
       Assert(False);
   end;
+  if (NUZTOP = 4) and (Model.ModelSelection <> msModflowNWT) then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrIllegalUZFRecharge,
+      StrTheOptionToHaveU)
+  end;
+
   if Model.ModflowPackages.UzfPackage.RouteDischargeToStreams
     and (Model.ModflowPackages.SfrPackage.IsSelected
     or Model.ModflowPackages.LakPackage.IsSelected

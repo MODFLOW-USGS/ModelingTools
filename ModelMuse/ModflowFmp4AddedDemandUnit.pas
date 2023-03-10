@@ -131,7 +131,7 @@ end;
 
 class function TFmp4MultAddedDemandTimeListLink.GetDescription: string;
 begin
-  result := 'Transpiration_Fraction';
+  result := 'Added_Demand';
 end;
 
 function TFmp4MultAddedDemandTimeListLink.MultipleCropsPerCellUsed: Boolean;

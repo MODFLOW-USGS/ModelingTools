@@ -1,7 +1,7 @@
 C
 C     VERSION 1.02 SWR1 for MODFLOW NWT
 C     CHANGES
-C     o IF RTMIN IS ZERO SET RTMIN TO THE MINIMUM DELT FOR THE CURRENT MODFLOW 
+C     o IF RTMIN IS ZERO SET RTMIN TO THE MINIMUM DELT FOR THE CURRENT MODFLOW
 C       STRESS PERIOD - ITSPMIN SET TO 1
 C     o IF RTMAX IS ZERO SET RTMAX TO DELT FOR THE CURRENT MODFLOW TIMESTEP -
 C       ITSPMAX VARIABLE SET TO 1
@@ -14,7 +14,7 @@ C     o UPSTREAM-WEIGHTING OPTION FOR DIFFUSIVE-WAVE FLOW BETWEEN
 C       CONNECTED REACH GROUPS
 C     o SWR OBSERVATIONS
 C     o STAGE DEPENDENT EXTERNAL BOUNDARY STRUCTURE
-C     o ADDED DIRECT RUNOFF OPTION 
+C     o ADDED DIRECT RUNOFF OPTION
 C     o GLOBAL AND ABSOLUTE TOLA OPTIONS
 C     o ADDED OPENMP FUNCTIONALITY TO GSOL BLAS-1 TYPE ROUTINES
 C     o L2 NORM AND FRACTIONAL TOLR OPTIONS
@@ -23,11 +23,11 @@ C       AND NEGATIVE TERMS SEPARATELY FOR EACH REACH AND TO DIFFERENCE
 C       THE DIFFERENCE IN POSITIVE AND THE DIFFERENCE IN NEGATIVE
 C       TERMS AND DIVIDE BY THE AVERAGE OF POSITIVE AND NEGATIVE
 C       MODFLOW TERMS.
-C         value = ( swrpos - mfpos ) - ( swrneg - mfneg ) / mfaverage      
-C     o ADDED OPTION FOR USING CURRENT STAGE (FROM THE LAST ITERATION) IN A SPECIFIED REACH 
-C       TO DEFINE THE INITIAL STAGE IN A SPECIFIED REACH - A NEGATIVE REACH NUMBER IS 
+C         value = ( swrpos - mfpos ) - ( swrneg - mfneg ) / mfaverage
+C     o ADDED OPTION FOR USING CURRENT STAGE (FROM THE LAST ITERATION) IN A SPECIFIED REACH
+C       TO DEFINE THE INITIAL STAGE IN A SPECIFIED REACH - A NEGATIVE REACH NUMBER IS
 C       SPECIFIED AND THE RSTAGE VALUE IS THE REACH USED TO DEFINE THE STAGE. ONLY APPLIES TO
-C       REACH STAGE DATA SPECIFIED USING LIST INPUT      
+C       REACH STAGE DATA SPECIFIED USING LIST INPUT
 C
 C     o MINOR MODIFICATIONS TO EXISTING FUNCTIONALITY:
 C         - LATERAL FLOW FROM ACTIVE REACH GROUPS TO CONSTANT STAGE REACH GROUPS
@@ -36,7 +36,7 @@ C           CONSTANT STAGE REACH GROUP FLOW TERMS ARE STILL REPORTED AS CONSTANT
 C           FLOW IN THE GLOBAL BUDGET. THIS MODIFICATION WAS MADE TO MAKE IT EASIER
 C           TO DETERMINE LATERAL FLOW TO OR FROM EXTERNAL BOUNDARIES. OTHER SWR
 C           OUTPUT HAVE NOT BEEN MODIFIED.
-C         - SEPARATED QAQ FLOW TO ACTIVE AND CONSTANT HEAD MODFLOW CELLS IN QAQ 
+C         - SEPARATED QAQ FLOW TO ACTIVE AND CONSTANT HEAD MODFLOW CELLS IN QAQ
 C           DISCREPANCY BETWEEN MODFLOW AND SWR SUMMARY WRITTEN TO THE LISTING FILE.
 C
 C     o MINOR BUG FIXES IN:
@@ -45,14 +45,14 @@ C         - STRUCTURE EXTERNAL TIME SERIES WHEN ONE EXTERNAL TIME SERIES
 C           IS USED FOR MORE THAN ONE STRUCTURE
 C         - WRITING COMPACT BUDGET DATA FOR SWR GWET FROM ALL REACHES OTHER
 C           THAN CELL-BASED REACHES (IGEOTYPE=5)
-      
+
 !C
 !C-----------------------------------------------------------------------------
 !C       START - DUMMY MODULES FOR MODFLOW NWT - COMMENT OUT IF MODFLOW-NWT
 !C       DUMMY GWFNWTMODULE MODULE FOR MODFLOW NWT
 !      MODULE GWFNWTMODULE
-!        IMPLICIT NONE                                                     
-!        DOUBLE PRECISION, PARAMETER :: HEPS = 1.0E-7                      
+!        IMPLICIT NONE
+!        DOUBLE PRECISION, PARAMETER :: HEPS = 1.0E-7
 !        DOUBLE PRECISION, SAVE, DIMENSION(:), POINTER :: A
 !        INTEGER, SAVE, DIMENSION(:), POINTER :: IA, JA
 !        INTEGER, SAVE, DIMENSION(:, :, :), POINTER :: Icell
@@ -60,11 +60,11 @@ C           THAN CELL-BASED REACHES (IGEOTYPE=5)
 !C
 !C       DUMMY GWFUPWMODULE MODULE FOR MODFLOW NWT
 !      MODULE GWFUPWMODULE
-!        REAL, SAVE, POINTER, DIMENSION(:,:,:) :: HKUPW     
+!        REAL, SAVE, POINTER, DIMENSION(:,:,:) :: HKUPW
 !      END MODULE GWFUPWMODULE
 !C       END   - DUMMY MODULES FOR MODFLOW NWT - COMMENT OUT IF MODFLOW-NWT
 !C-----------------------------------------------------------------------------
-C      
+C
       MODULE GWFSWRMODULE
         CHARACTER(LEN=64),PARAMETER :: VERSION_SWR =
      +'$Id: gwf2swr7.f 1.03 2013-09-24 15:00:00Z jdhughes $'
@@ -88,7 +88,7 @@ C---------INVARIANT PARAMETERS
         DOUBLEPRECISION, PARAMETER  :: NEARZERO     = EPSILON(1.0D-00)
         DOUBLEPRECISION, PARAMETER  :: DMISSING     = -999.D0
         DOUBLEPRECISION, PARAMETER  :: GRAVITY      = 9.80665D0
-        DOUBLEPRECISION, PARAMETER  :: DTWOPI       = 
+        DOUBLEPRECISION, PARAMETER  :: DTWOPI       =
      2                      6.283185307179586476925286766559005768394D+0
 C
 C---------SWR DATA TYPE DEFINITIONS
@@ -174,10 +174,10 @@ C         STRUCTURE OPERATION VARIABLES
           DOUBLEPRECISION :: STRMAX          = DZERO
           INTEGER         :: ISTROSTG        = IZERO
           INTEGER         :: ISTRTAB         = IZERO
-          INTEGER         :: ISTRTSTYPE      = IZERO           
+          INTEGER         :: ISTRTSTYPE      = IZERO
           DOUBLEPRECISION, DIMENSION(:), ALLOCATABLE :: STRELEV
           DOUBLEPRECISION, DIMENSION(:), ALLOCATABLE :: STRQ
-C         CALCULATED STRUCTURE VARIABLES 
+C         CALCULATED STRUCTURE VARIABLES
           DOUBLEPRECISION :: STRTOPINI       = DZERO
           DOUBLEPRECISION :: STRBOTINI       = DZERO
           DOUBLEPRECISION :: STRTOP0         = DZERO
@@ -296,7 +296,7 @@ C-----------BICGSTAB
           DOUBLEPRECISION, DIMENSION(:),   ALLOCATABLE :: SHATBCGS
           DOUBLEPRECISION, DIMENSION(:),   ALLOCATABLE :: VBCGS
           DOUBLEPRECISION, DIMENSION(:),   ALLOCATABLE :: TBCGS
-C-----------GMRES          
+C-----------GMRES
           DOUBLEPRECISION, DIMENSION(:),   ALLOCATABLE :: RGMR
           DOUBLEPRECISION, DIMENSION(:),   ALLOCATABLE :: ZGMR
           DOUBLEPRECISION, DIMENSION(:),   ALLOCATABLE :: DGMR
@@ -405,7 +405,7 @@ C           REACH CONNECTIVITY
           INTEGER,  DIMENSION(:), ALLOCATABLE :: ISTRRCH
           INTEGER                             :: NCONN = IZERO
           INTEGER,  DIMENSION(:), ALLOCATABLE :: IN
-          INTEGER,  DIMENSION(:), ALLOCATABLE :: IR 
+          INTEGER,  DIMENSION(:), ALLOCATABLE :: IR
           INTEGER,  DIMENSION(:), ALLOCATABLE :: ILOC
 C           PROGRAM CALCULATED DATA
           DOUBLEPRECISION :: STAGE           = DZERO
@@ -561,7 +561,7 @@ C         SWR VARIABLES
         INTEGER,SAVE,POINTER          :: KMFITER
         DOUBLEPRECISION,SAVE,POINTER  :: SWRHEPS
         DOUBLEPRECISION,SAVE,POINTER  :: SWRDZMAX
-C---------STORAGE MAPPING FOR COORDINATE INVARIANT FLOW (QM) IN MODEL-BASED CELLS 
+C---------STORAGE MAPPING FOR COORDINATE INVARIANT FLOW (QM) IN MODEL-BASED CELLS
         INTEGER,SAVE,POINTER          :: IGEOCI
         INTEGER,SAVE,DIMENSION(:,:), POINTER  :: IQMCI
         DOUBLEPRECISION,SAVE,DIMENSION(:,:), POINTER  :: SFMCI
@@ -717,7 +717,7 @@ C         SWR VARIABLES
           INTEGER,POINTER          :: KMFITER
           DOUBLEPRECISION,POINTER  :: SWRHEPS
           DOUBLEPRECISION,POINTER  :: SWRDZMAX
-C-----------STORAGE MAPPING FOR COORDINATE INVARIANT FLOW (QM) IN MODEL-BASED CELLS 
+C-----------STORAGE MAPPING FOR COORDINATE INVARIANT FLOW (QM) IN MODEL-BASED CELLS
           INTEGER,POINTER          :: IGEOCI
           INTEGER,DIMENSION(:,:), POINTER  :: IQMCI
           DOUBLEPRECISION,DIMENSION(:,:), POINTER  :: SFMCI
@@ -749,7 +749,7 @@ C-----------PRINT DATA
 
         TYPE(GWFSWRTYPE),SAVE      :: GWFSWRDAT(10)
       END MODULE GWFSWRMODULE
-      
+
       MODULE GWFSWRINTERFACE
         INTERFACE
 C-----------ASSUMED SHAPE INTERFACE FOR SORTING A PASSED VECTOR
@@ -759,7 +759,7 @@ C-----------ASSUMED SHAPE INTERFACE FOR SORTING A PASSED VECTOR
 C-----------ASSUMED SHAPE INTERFACE FOR CREATING A VECTOR OF UNIQUE VALUES
 C           IN A PASSED VECTOR POSSIBLY CONTAINING DUPLICATES
           SUBROUTINE SSWR_UNIQVALUES(A)
-            DOUBLEPRECISION, DIMENSION(:), 
+            DOUBLEPRECISION, DIMENSION(:),
      2        ALLOCATABLE, INTENT(INOUT) :: A
           END SUBROUTINE SSWR_UNIQVALUES
 C-----------ASSUMED SHAPE INTERFACE FOR LINEARLY INTERPOLATING THE Y AT Z
@@ -788,7 +788,7 @@ C     ******************************************************************
 C
 C     SPECIFICATIONS:
 C     ------------------------------------------------------------------
-!      USE OMP_LIB 
+!      USE OMP_LIB
       USE GLOBAL,      ONLY:IOUT,NCOL,NROW,NLAY,IBOUND,IFREFM,
      2                      NPER,PERLEN,NSTP,TSMULT
       USE GWFBCFMODULE,ONLY:HYB=>HY,LCB=>LAYCON
@@ -848,40 +848,40 @@ C     + + + LOCAL TYPE FOR SWR1 OPTIONS
       CHARACTER (LEN= 35) :: ctemp
       INTEGER, PARAMETER  :: nopt = 34
       INTEGER             :: ifound
-      TYPE (toptions), DIMENSION(nopt) :: swroptions = 
-     1  (/ toptions('PRINT_SWR_TO_SCREEN                ', 0, 0,  0),  
-     2     toptions('SAVE_SWRDT                         ', 0, 1,  0),  
-     3     toptions('SAVE_CONVERGENCE_HISTORY           ', 0, 1,  0),  
-     4     toptions('SAVE_RIVER_PACKAGE                 ', 0, 1,  5),  
-     5     toptions('SAVE_RIVER_PACKAGE_ALL             ', 0, 1,  4),  
-     6     toptions('SAVE_AVERAGE_RESULTS               ', 0, 0,  0),  
-     7     toptions('USE_TABFILES                       ', 0, 0,  0),  
-     8     toptions('USE_NONCONVERGENCE_CONTINUE        ', 0, 0,  0),  
-     9     toptions('USE_UPSTREAM_WEIGHTING             ', 0, 0,  0),  
-     Z     toptions('USE_INEXACT_NEWTON                 ', 0, 0,  0),  
-     1     toptions('USE_STEADYSTATE_STORAGE            ', 0, 0,  0),  
-     2     toptions('USE_LAGGED_OPR_DATA                ', 0, 0,  0),  
-     3     toptions('USE_LINEAR_DEPTH_SCALING           ', 0, 0,  0),  
-     4     toptions('USE_DIAGONAL_SCALING               ', 0, 0, 15),  
-     5     toptions('USE_L2NORM_SCALING                 ', 0, 0, 14),  
-     6     toptions('USE_RCMREORDERING                  ', 0, 0, 17),  
-     7     toptions('USE_RCMREORDERING_IF_IMPROVEMENT   ', 0, 0, 16),  
-     8     toptions('USE_STAGE_TRANSFORM                ', 0, 0,  0),  
-     9     toptions('USE_WEIGHTED_HEADS                 ', 0, 0,  0),  
-     Z     toptions('USE_IMPLICIT_NEWTON_CORRECTION     ', 0, 0, 21),  
-     1     toptions('USE_EXPLICIT_NEWTON_CORRECTION     ', 0, 0, 20),  
-     2     toptions('USE_ORIGINAL_2D_QM_FORMULATION     ', 0, 0, 23),  
-     3     toptions('USE_IMPLICIT_INVARIATE_QM          ', 0, 0, 22),  
-     4     toptions('USE_SOURCECELL_INVARIATE_QM        ', 0, 0,  0),  
-     5     toptions('USE_FRACTIONAL_TOLR                ', 0, 0, 26),  
-     6     toptions('USE_L2NORM_TOLR                    ', 0, 0, 25),  
-     7     toptions('SAVE_SWROBSERVATIONS               ', 0, 1, 28),  
-     8     toptions('SAVE_SWROBSERVATIONS_ALL           ', 0, 1, 27),  
-     9     toptions('USE_MULTICORE                      ', 0, 1,  0),  
-     Z     toptions('USE_MULTICORE_VECTOR               ', 0, 1,  0),  
-     1     toptions('USE_DIRECT_RUNOFF                  ', 0, 1,  0),  
-     2     toptions('USE_GLOBAL_TOLA                    ', 0, 0, 33),  
-     3     toptions('USE_ABSOLUTE_TOLA                  ', 0, 0, 32),  
+      TYPE (toptions), DIMENSION(nopt) :: swroptions =
+     1  (/ toptions('PRINT_SWR_TO_SCREEN                ', 0, 0,  0),
+     2     toptions('SAVE_SWRDT                         ', 0, 1,  0),
+     3     toptions('SAVE_CONVERGENCE_HISTORY           ', 0, 1,  0),
+     4     toptions('SAVE_RIVER_PACKAGE                 ', 0, 1,  5),
+     5     toptions('SAVE_RIVER_PACKAGE_ALL             ', 0, 1,  4),
+     6     toptions('SAVE_AVERAGE_RESULTS               ', 0, 0,  0),
+     7     toptions('USE_TABFILES                       ', 0, 0,  0),
+     8     toptions('USE_NONCONVERGENCE_CONTINUE        ', 0, 0,  0),
+     9     toptions('USE_UPSTREAM_WEIGHTING             ', 0, 0,  0),
+     Z     toptions('USE_INEXACT_NEWTON                 ', 0, 0,  0),
+     1     toptions('USE_STEADYSTATE_STORAGE            ', 0, 0,  0),
+     2     toptions('USE_LAGGED_OPR_DATA                ', 0, 0,  0),
+     3     toptions('USE_LINEAR_DEPTH_SCALING           ', 0, 0,  0),
+     4     toptions('USE_DIAGONAL_SCALING               ', 0, 0, 15),
+     5     toptions('USE_L2NORM_SCALING                 ', 0, 0, 14),
+     6     toptions('USE_RCMREORDERING                  ', 0, 0, 17),
+     7     toptions('USE_RCMREORDERING_IF_IMPROVEMENT   ', 0, 0, 16),
+     8     toptions('USE_STAGE_TRANSFORM                ', 0, 0,  0),
+     9     toptions('USE_WEIGHTED_HEADS                 ', 0, 0,  0),
+     Z     toptions('USE_IMPLICIT_NEWTON_CORRECTION     ', 0, 0, 21),
+     1     toptions('USE_EXPLICIT_NEWTON_CORRECTION     ', 0, 0, 20),
+     2     toptions('USE_ORIGINAL_2D_QM_FORMULATION     ', 0, 0, 23),
+     3     toptions('USE_IMPLICIT_INVARIATE_QM          ', 0, 0, 22),
+     4     toptions('USE_SOURCECELL_INVARIATE_QM        ', 0, 0,  0),
+     5     toptions('USE_FRACTIONAL_TOLR                ', 0, 0, 26),
+     6     toptions('USE_L2NORM_TOLR                    ', 0, 0, 25),
+     7     toptions('SAVE_SWROBSERVATIONS               ', 0, 1, 28),
+     8     toptions('SAVE_SWROBSERVATIONS_ALL           ', 0, 1, 27),
+     9     toptions('USE_MULTICORE                      ', 0, 1,  0),
+     Z     toptions('USE_MULTICORE_VECTOR               ', 0, 1,  0),
+     1     toptions('USE_DIRECT_RUNOFF                  ', 0, 1,  0),
+     2     toptions('USE_GLOBAL_TOLA                    ', 0, 0, 33),
+     3     toptions('USE_ABSOLUTE_TOLA                  ', 0, 0, 32),
      4     toptions('END                                ', 0, 0,  0) /)
 C     + + + FUNCTIONS + + +
       DOUBLEPRECISION :: SSWR_R2D
@@ -925,7 +925,7 @@ C     + + + OUTPUT FORMATS + + +
 !     2        /1X,'OPTION',1X,'OPTION KEYWORD',21X,1X,' FILE UNIT',
 !     3        /1X,6('-'),1X,35('-'),1X,10('-'))
 !02002 FORMAT(  1X,I6,1X,A35,1X,A10)
-!02003 FORMAT(  1X,53('-'))     
+!02003 FORMAT(  1X,53('-'))
 !02010 FORMAT(/1X,'NUMBER OF REACHES                         =',I5,
 !     2       /1X,'SURFACE WATER ONLY SIMULATION (>0=TRUE)   =',I5,
 !     3       /1X,'LENGTH CONVERSION FACTOR                  =',G15.7,
@@ -1025,7 +1025,7 @@ C     + + + CODE + + +
       ALLOCATE(ISFRUNIT)
       ALLOCATE(INWTUNIT)
 C       AUXILIARY VARIABLES
-      ALLOCATE(NAUX) 
+      ALLOCATE(NAUX)
       ALLOCATE(NQAQCONN)
       ALLOCATE(SWRAUX(20))
 C
@@ -1214,16 +1214,16 @@ C                 TERMINATE READING SWR1 OPTIONS SINCE "END" KEYWORD ENCOUNTERED
                   EXIT SWROPT
                 END IF
 C                 TERMINATE SEARCH SINCE THE KEYWORD HAS BEEN FOUND
-                EXIT ROPTIONSL               
+                EXIT ROPTIONSL
               END IF
             END IF
           END DO ROPTIONSL
 !          IF ( ifound.EQ.0 ) THEN
-!            WRITE (IOUT,*) 'UNRECOGNIZED SWR1 OPTION: ', 
+!            WRITE (IOUT,*) 'UNRECOGNIZED SWR1 OPTION: ',
 !     2                      line(istart:istop)
 !          END IF
         END DO SWROPT
-C         PRINT SUMMARY OF OPTIONS SPECIFIED        
+C         PRINT SUMMARY OF OPTIONS SPECIFIED
         IF ( icnt.GT.0 ) THEN
 !          WRITE (IOUT,2001)
           POPTIONSL: DO i = 1, (nopt - 1)
@@ -1305,13 +1305,13 @@ C           USE_ORIGINAL_2D_QM_FORMULATION
           IF ( swroptions(22)%ioptionused.NE.0 ) ICIQM       =  0
 C           USE_IMPLICIT_INVARIATE_QM
           IF ( swroptions(23)%ioptionused.NE.0 ) ICIQM       = -1
-C           USE_SOURCECELL_INVARIATE_QM          
+C           USE_SOURCECELL_INVARIATE_QM
           IF ( swroptions(24)%ioptionused.NE.0 ) ICIBL       =  0
-C           USE_FRACTIONAL_TOLR          
+C           USE_FRACTIONAL_TOLR
           IF ( swroptions(25)%ioptionused.NE.0 ) IFTOLR      =  1
-C           USE_L2NORM_TOLR          
+C           USE_L2NORM_TOLR
           IF ( swroptions(26)%ioptionused.NE.0 ) IL2NORMTOLR =  1
-C           SAVE_SWROBSERVATIONS 
+C           SAVE_SWROBSERVATIONS
           IF ( swroptions(27)%ioptionused.NE.0 ) THEN
             ISWRPOBS = swroptions(27)%iunit
           END IF
@@ -1326,7 +1326,7 @@ C           USE_MULTICORE
             IF ( NCORESM.LT.1 ) THEN
               NCORESM = 1
             END IF
-!            maxcores = OMP_GET_MAX_THREADS() - 1 
+!            maxcores = OMP_GET_MAX_THREADS() - 1
 !            IF ( NCORESM.GT.maxcores ) THEN
 !              NCORESM = maxcores
 !            END IF
@@ -1337,7 +1337,7 @@ C           USE_MULTICORE_VECTOR
             IF ( NCORESV.LT.1 ) THEN
               NCORESV = 1
             END IF
-!            maxcores = OMP_GET_MAX_THREADS() - 1 
+!            maxcores = OMP_GET_MAX_THREADS() - 1
 !            IF ( NCORESV.GT.maxcores ) THEN
 !              NCORESV = maxcores
 !            END IF
@@ -1350,9 +1350,9 @@ C           USE_DIRECT_RUNOFF
               CALL USTOP('DIRECT RUNOFF UNIT MUST BE >= 0')
             END IF
           END IF
-C           USE_GLOBAL_TOLA          
+C           USE_GLOBAL_TOLA
           IF ( swroptions(32)%ioptionused.NE.0 ) ITOLAOPT    =  1
-C           USE_ABSOLUTE_TOLA          
+C           USE_ABSOLUTE_TOLA
           IF ( swroptions(33)%ioptionused.NE.0 ) ITOLAOPT    =  2
         END IF
       END IF READ1B
@@ -1371,7 +1371,7 @@ C         SOLUTION CONTROLS - INPUT ITEM 2
       CALL URWORD(line, lloc, istart, istop, 3, ival,      r, IOUT, In)
       TIMECONV = SSWR_R2D(r)
       CALL URWORD(line, lloc, istart, istop, 3, ival, RTIME, IOUT, In)
-      IF ( RTIME.LT.RZERO ) 
+      IF ( RTIME.LT.RZERO )
      2  CALL USTOP('RTINI MUST BE GREATER THAN ZERO')
       CALL URWORD(line, lloc, istart, istop, 3, ival, RTMIN, IOUT, In)
       ITSPMIN = 0
@@ -1383,7 +1383,7 @@ C         SOLUTION CONTROLS - INPUT ITEM 2
       CALL URWORD(line, lloc, istart, istop, 3, ival, RTMAX, IOUT, In)
       ITSPMAX = 0
       IF ( RTMAX.LT.RZERO ) THEN
-        CALL USTOP('RTMAX MUST BE GREATER THAN ZERO') 
+        CALL USTOP('RTMAX MUST BE GREATER THAN ZERO')
       ELSE IF ( RTMAX.EQ.RZERO ) THEN
         ITSPMAX = 1
       END IF
@@ -1392,21 +1392,21 @@ C         SOLUTION CONTROLS - INPUT ITEM 2
       RSWRPRN  = RTPRN
       RSWRPRN0 = RTPRN
       IF ( RTMAX.LT.RTMIN .AND. ITSPMAX.EQ.0 ) THEN
-        CALL USTOP('RTMAX MUST BE GREATER THAN OR EQUAL TO RTMIN') 
+        CALL USTOP('RTMAX MUST BE GREATER THAN OR EQUAL TO RTMIN')
       END IF
       IF ( RTIME.LT.RTMIN .AND. ITSPMIN.EQ.0 ) THEN
-        CALL USTOP('RTINI MUST BE GREATER THAN OR EQUAL TO RTMIN') 
+        CALL USTOP('RTINI MUST BE GREATER THAN OR EQUAL TO RTMIN')
       END IF
       IF ( RTIME.GT.RTMAX .AND. ITSPMAX.EQ.0 ) THEN
-        CALL USTOP('RTINI MUST BE LESS THAN OR EQUAL TO RTMAX') 
+        CALL USTOP('RTINI MUST BE LESS THAN OR EQUAL TO RTMAX')
       END IF
       CALL URWORD(line, lloc, istart, istop, 3, ival, RTMULT, IOUT, In)
       IF ( RTMULT.LT.RONE ) THEN
-        CALL USTOP('RTMULT MUST BE GREATER THAN OR EQUAL TO 1') 
+        CALL USTOP('RTMULT MUST BE GREATER THAN OR EQUAL TO 1')
       END IF
       CALL URWORD(line, lloc, istart, istop, 2,NTMULT,     r, IOUT, In)
       IF ( NTMULT.LT.1 ) THEN
-        CALL USTOP('NTMULT MUST BE GREATER THAN OR EQUAL TO 1') 
+        CALL USTOP('NTMULT MUST BE GREATER THAN OR EQUAL TO 1')
       END IF
       CALL URWORD(line, lloc, istart, istop, 3, ival, r, IOUT, In)
       DMINGRAD = SSWR_R2D(r)
@@ -1436,8 +1436,8 @@ C       ANY OF THESE VARIABLES
         END IF
       END IF
       WRITE(IOUT, '(A90)') 'DLENCONV, TIMECONV, RTINI, RTMIN, RTMAX,
-     1 RTPRN, RTMULT, NTMULT, DMINGRAD, DMNDEPTH:'      
-      WRITE(IOUT, *) DLENCONV, TIMECONV, RTIME, RTMIN, RTMAX, RTPRN, 
+     1 RTPRN, RTMULT, NTMULT, DMINGRAD, DMNDEPTH:'
+      WRITE(IOUT, *) DLENCONV, TIMECONV, RTIME, RTMIN, RTMAX, RTPRN,
      1   RTMULT, NTMULT, DMINGRAD, DMINDPTH
 C     SET RTSTMAX NOW THAT RTMAX IS FINAL FOR AT LEAST THE FIRST STRESS PERIOD
       RTSTMAX = RTMAX
@@ -1473,20 +1473,20 @@ C         SOLVER PARAMETERS - INPUT ITEM 3
       CALL URDCOM(In,IOUT,line)
       CALL URWORD(line, lloc, istart, istop, 2,ISOLVER,    r, IOUT, In)
       IF ( ISOLVER.LT.1 ) THEN
-        CALL USTOP('ISOLVER MUST MUST BE GREATER THAN 0') 
+        CALL USTOP('ISOLVER MUST MUST BE GREATER THAN 0')
       END IF
       IF ( ISOLVER.GT.3 ) THEN
-        CALL USTOP('ISOLVER MUST MUST BE 1, 2, OR 3') 
+        CALL USTOP('ISOLVER MUST MUST BE 1, 2, OR 3')
       END IF
       SOLVERTEXT = csolver(ISOLVER)
       CALL URWORD(line, lloc, istart, istop, 2, NOUTER,    r, IOUT, In)
       IF ( NOUTER.LT.1 ) THEN
-        CALL USTOP('NOUTER MUST NOT EQUAL 0') 
+        CALL USTOP('NOUTER MUST NOT EQUAL 0')
       END IF
       CALL URWORD(line, lloc, istart, istop, 2, NINNER,    r, IOUT, In)
       IF ( ISOLVER.GT.1 .AND. NINNER.LT.1 ) THEN
         CALL USTOP('NINNER MUST BE GREATER THAN 0 IF '//
-     2             'ISOLVER GREATER THAN 1') 
+     2             'ISOLVER GREATER THAN 1')
       END IF
       CALL URWORD(line, lloc, istart, istop, 2, IBT,       r, IOUT, In)
       CALL URWORD(line, lloc, istart, istop, 3, ival,      r, IOUT, In)
@@ -1514,10 +1514,10 @@ C-------RESET DAMPTR IF .LE. ZERO
       IF (ISOLVER.GT.1) THEN
         CALL URWORD(line, lloc, istart, istop, 2, IPC, r, IOUT, In)
         IF ( IPC.LT.0 ) THEN
-          CALL USTOP('IPC MUST BE GREATER THAN OR EQUAL TO 0') 
+          CALL USTOP('IPC MUST BE GREATER THAN OR EQUAL TO 0')
         END IF
         IF ( IPC.GT.4 ) THEN
-          CALL USTOP('IPC MUST BE LESS THAN 4') 
+          CALL USTOP('IPC MUST BE LESS THAN 4')
         END IF
         WRITE(IOUT,*) 'IPC:'
         WRITE(IOUT,*) IPC
@@ -1558,19 +1558,19 @@ C
 C-------OUTPUT SWR PROBLEM DIMENSION AND SOLVER DATA
 !      WRITE (IOUT,2010) NREACHES, ISWRONLY,
 !     2                  DLENCONV, TIMECONV, DMINGRAD, DUPDPTH, DMINDPTH,
-!     3                  cswght(ISWRUPWT), cdscale(IDPTHSCL), 
+!     3                  cswght(ISWRUPWT), cdscale(IDPTHSCL),
 !     4                  ciciqm(ICIQM),
 !     5                  RTMIN, RTMAX, RTIME, RTPRN, RTMULT, NTMULT,
-!     6                  DMAXRAI, DMAXSTG, DMAXINF, 
+!     6                  DMAXRAI, DMAXSTG, DMAXINF,
 !     7                  ISWRCB, ISWRPRGF, ISWRPSTG, ISWRPQAQ, ISWRPQM,
 !     8                  ISWRPSTR, (ISWRPFRN>0)
-!      WRITE (IOUT,2020) SOLVERTEXT, cipc(IPC), cscale(IJACSCL), 
+!      WRITE (IOUT,2020) SOLVERTEXT, cipc(IPC), cscale(IJACSCL),
 !     2                  NOUTER, NINNER, (ISWRCONT>0)
 !      IF ( IPC.EQ.4 ) THEN
 !        WRITE (IOUT,2025) NLEVELS, DROPTOL
 !      END IF
-!      WRITE (IOUT,2040) TOLS, TOLR, (INEXCTNWT>0), TOLA, 
-!     2                  DAMPSS, DAMPTR, (ISSSTOR>0), IPRSWR, MUTSWR, 
+!      WRITE (IOUT,2040) TOLS, TOLR, (INEXCTNWT>0), TOLA,
+!     2                  DAMPSS, DAMPTR, (ISSSTOR>0), IPRSWR, MUTSWR,
 !     3                  (IBT>1)
 !     IF (IBT.GT.1) THEN
 !        WRITE (IOUT,2050) IBT, IBTPRT
@@ -1644,7 +1644,7 @@ C-------ALLOCATE SPACE FOR DATA OF KNOWN SIZE
         ALLOCATE(SFMCI(1,1))
       END IF
 C
-C-------READ REACH DATA 
+C-------READ REACH DATA
 C       REACH DATA - INPUT ITEM 4A
       CALL SSWRDSOUT('4A')
       CALL SSWR_RD_COMM(In)
@@ -1655,19 +1655,19 @@ C       READ REACH NUMBER
         irch = INT(rlist(1,i))
         IF (irch.GT.NREACHES) CALL USTOP('4A: REACHNO EXCEEDS NREACHES')
         IF (irch.LT.1)        CALL USTOP('4A: REACHNO LESS THAN ONE')
-C         EQUATION METHOD          
+C         EQUATION METHOD
         REACH(irch)%IREACH     = irch
-C         EQUATION METHOD          
+C         EQUATION METHOD
         REACH(irch)%IROUTETYPE = INT(rlist(2,i))
 C         USER DEFINED REACH GROUP NUMBER
         REACH(irch)%IRGNUM     = INT(rlist(3,i))
-C         LAYER          
+C         LAYER
         REACH(irch)%KRCH       = INT(rlist(4,i))
-C         ROW          
+C         ROW
         REACH(irch)%IRCH       = INT(rlist(5,i))
-C         COL          
+C         COL
         REACH(irch)%JRCH       = INT(rlist(6,i))
-C         REACH LENGTH (DLEN)          
+C         REACH LENGTH (DLEN)
         r = rlist(7,i)
         REACH(irch)%DLEN       = SSWR_R2D(r)
 C         SET ROUTING TYPE
@@ -1690,7 +1690,7 @@ C         SET ROUTING TYPE
 C       CLEAN UP TEMPORARY LIST STORAGE
       DEALLOCATE (rlist)
 C
-C-------READ REACH DATA 
+C-------READ REACH DATA
 C       REACH DATA - INPUT ITEM 4B - FULL CONNECTIVITY
       CALL SSWRDSOUT('4B')
       CALL SSWR_RD_COMM(In)
@@ -1726,8 +1726,8 @@ C         IMPLICIT QM MAGNITUDE
           REACH(irch)%ISTRCONN(n) = 0
 C           EXPLICIT QM MAGNITUDE
           IF ( ICIQM.GT.0 ) REACH(irch)%SFM(n) = DZERO
-          WRITE(IOUT,*) 'ICONN:' 
-          WRITE(IOUT,*) iconn 
+          WRITE(IOUT,*) 'ICONN:'
+          WRITE(IOUT,*) iconn
         END DO
       END DO
 C       DETERMINE IF CONNECTIVITY DATA FOR 4B IS READ FROM AN
@@ -1743,7 +1743,7 @@ C---------ALLOCATE SPACE FOR REACH GROUP DATA
 C
       ALLOCATE ( FROUDE )
 C
-C-------WRITE REACH DATA 
+C-------WRITE REACH DATA
       idw = 0
 !      WRITE (IOUT,2060)
       DO i = 1, NREACHES
@@ -1769,7 +1769,7 @@ C       NO NEED TO OUTPUT THE LOCATION AND MAGNITUDE OF THE MAXIMUM
 C       VELOCITY AND FROUDE NUMBER IF SIMULATION DOES NOT CONTAIN
 C       DIFFUSIVE WAVE REACHES OR REACH GROUPS
       IF ( idw.LT.1 ) ISWRPFRN = 0
-C      
+C
 C-------WRITE REACH GROUP REACH DATA
 !      WRITE (IOUT,2080)
 !      DO i = 1, NRCHGRP
@@ -1830,7 +1830,7 @@ C---------DATASET 4D - TABULAR DATA SPECIFICATIONS
             END SELECT
             WRITE(IOUT,*) 'CTABTYPE:'
             WRITE(IOUT,*) line(istart:istop)
-            
+
             TABDATA(itab)%ITABTYPE = ival
             CALL URWORD(line, lloc, istart, istop, 2, ival, r, IOUT, In)
             TABDATA(itab)%ITABUNIT = ival
@@ -1865,7 +1865,7 @@ C             TABULAR RAINFALL, EVAPORATION, LATERAL INFLOW, AND STAGE DATA
                     TABDATA(itab)%ITABRCH(i) = i
                   END DO
                 CASE DEFAULT
-                  READ (line(istart:istop),*,IOSTAT=ierr) ival 
+                  READ (line(istart:istop),*,IOSTAT=ierr) ival
                   IF ( ierr.NE.0 ) THEN
                     WRITE (IOUT,2130) itab
                     CALL USTOP('SWR 4D: COULD NOT PARSE NTABRCH')
@@ -1890,7 +1890,7 @@ C             FROM A SWR STAGE OUTPUT FILE
               DO i = 1, TABDATA(itab)%NTABRCH
                 TABDATA(itab)%STGRES(i)%INTP = TABDATA(itab)%TSDATA%INTP
               END DO
-            END IF     
+            END IF
 C-------------READ TABULAR DATA INTO MEMORY
             iu = TABDATA(itab)%ITABUNIT
             IF ( TABDATA(itab)%ISTGRES.NE.0 ) THEN
@@ -1917,7 +1917,7 @@ C-------WRITE SUMMARY OF TABULAR DATA TO OUTPUT FILE
 !        DO n = 1, NTABS
 !          i = TABDATA(n)%ITABTYPE
 !          WRITE (IOUT,2150) ctab(i), TABDATA(n)%ITABUNIT,
-!     2      cintp(TABDATA(n)%TSDATA%INTP), 
+!     2      cintp(TABDATA(n)%TSDATA%INTP),
 !     3      ( TABDATA(n)%ITABRCH(j),j=1,TABDATA(n)%NTABRCH )
 !        END DO
 !      END IF
@@ -1935,7 +1935,7 @@ C-------DETERMINE NTMAX
               ierr = 1
               WRITE (IOUT,'(1X,2(A,1X,I10,1X),2(A,1X,G10.3,1X),A)')
      2          'MODFLOW STRESS PERIOD', n,
-     3          'TIME STEP', i, 
+     3          'TIME STEP', i,
      4          ': RTMAX (', RTMAX, ') EXCEEDS DELT (', rt, ')'
             END IF
             totim = totim + rt
@@ -1984,14 +1984,14 @@ C       TIME STEP, THE MAXIMUM NUMBER OF PRINT TIMES PER
 C       MODFLOW TIME STEP, AND 2 TO ACCOUNT FOR ADDITIONAL
 C       TIME SLIVERS AT THE BEGINNING AND END OF A MODFLOW
 C       TIME STEP
-      NTMAX = NTMAX + NPMAX + 1      
+      NTMAX = NTMAX + NPMAX + 1
 C
 C---------ALLOCATE SPACE FOR SOLUTION DATA SIZED USING NTMAX
 C         CALLABLE SUBROUTINE TO ALLOW FOR EXPANSION OF DATA BY
 C         ADAPTIVE TIME STEP ALGORITHM
       CALL SSWR_ALLO_SOLN(NTMAX,0)
 C
-C-------ALLOCATE AND INITIALIZE SPACE FOR PRINTING REACH AND 
+C-------ALLOCATE AND INITIALIZE SPACE FOR PRINTING REACH AND
 C       REACH GROUP STAGE DATA
       ALLOCATE(RSTAGEP(NREACHES,NPMAX))
       DO i = 1, NREACHES
@@ -2128,7 +2128,7 @@ C---------MAKE SURE CONFINED AQUIFER ARE NOT SIMULATED
         HK => HKU  !NEWTON
       ELSE
         WRITE (IOUT,2120)
-        CALL USTOP('FLOW PACKAGE SPECIFIED INCONSISTENT WITH SWR') 
+        CALL USTOP('FLOW PACKAGE SPECIFIED INCONSISTENT WITH SWR')
       END IF
 C
 C       SET SWRHEPS TO HEPS IF USING NEWTON
@@ -2186,7 +2186,7 @@ C
 C-------RETURN.
       RETURN
       END SUBROUTINE GWF2SWR7AR
-      
+
       SUBROUTINE GWF2SWR7RP(In,Kkper,Igrid)
 C     ******************************************************************
 C     READ STRESS PERIOD DATA FOR SWR
@@ -2194,8 +2194,8 @@ C     ******************************************************************
 C
 C     SPECIFICATIONS:
 C     ------------------------------------------------------------------
-      USE GLOBAL,      ONLY: IOUT, ISSFLG, 
-     +                       NCOL, NROW, NLAY, 
+      USE GLOBAL,      ONLY: IOUT, ISSFLG,
+     +                       NCOL, NROW, NLAY,
      +                       IFREFM, IBOUND
       USE GWFSWRMODULE
       USE GWFSWRINTERFACE
@@ -2273,7 +2273,7 @@ C     + + + DATA + + +
      4            'EXTERNAL STRUCTURE BOUNDARY   ',
      5            'SFR PACKAGE INFLOW BOUNDARY   ',
      6            'STAGE-DEPENDENT FLUX BOUNDARY '/
-      
+
 C     ------------------------------------------------------------------
 C
 C     + + + INPUT FORMATS + + +
@@ -2295,7 +2295,7 @@ C     + + + OUTPUT FORMATS + + +
      2       I10,/3X,' IS LESS THAN ZERO OR GREATER THAN NREACHES [',
      3       I10,']')
 !2021  FORMAT(//1X,'STAGE DATA FOR STRESS PERIOD',1X,I10,/,
-!     2       1X,'REACH',1X,'     STAGE',1X,'    STATUS',/,1X,27('-')) 
+!     2       1X,'REACH',1X,'     STAGE',1X,'    STATUS',/,1X,27('-'))
 !2022  FORMAT(1X,I5,1X,G10.3,1X,2X,A8)
 !2030  FORMAT(//1X,'SURFACE-WATER ROUTING GENERIC GEOMETRY DATA ',
 !     2       'FOR STRESS PERIOD',I10,//1X,
@@ -2366,7 +2366,7 @@ C     + + + OUTPUT FORMATS + + +
 !     2  'REACH GROUP =',1X,I5,1X,'IS DEFINED AS A',1X,
 !     2  'CONSTANT STAGE ELEMENT',/,12X,'BUT REACH =',1X,I5,1X,
 !     3  'IS DEFINED WITH A ISWRBND (',I5,') GREATER THAN -1.',/,12X,
-!     5  'TO RESOLVE THE INCONSISTENCY ISWRBND IS BEING RESET TO -999.') 
+!     5  'TO RESOLVE THE INCONSISTENCY ISWRBND IS BEING RESET TO -999.')
 !2150  FORMAT(//1X,'REACH OFFSETS FOR STRESS PERIOD',
 !     2       /1X,10(I10,1X),100(:/1X,10(I10,1X)))
 !2160  FORMAT(1X,109('-'),/1X,10(F10.4,1X),100(:/1X,10(F10.4,1X)))
@@ -2401,7 +2401,7 @@ C     + + + OUTPUT FORMATS + + +
 !4110  FORMAT(1X,2(I10,1X),A10,1X,I10)
 !4120  FORMAT(1X,43('-'))
 !4221  FORMAT(//1X,'AUXILIARY VARIABLES DATA FOR STRESS PERIOD',1X,I10,/,
-!     2       1X,'REACH',20(:1X,A16)) 
+!     2       1X,'REACH',20(:1X,A16))
 !4222  FORMAT(1X,'-----',20(:A17))
 !4223  FORMAT(1X,I5,20(:7X,G10.3))
 C
@@ -2459,7 +2459,7 @@ C-------READ REST OF STRESS PERIOD DATA FLAGS - INPUT ITEM 5
       CALL URWORD(line, lloc, istart, istop, 2, IPTFLG, r, IOUT, In)
       WRITE(IOUT,*) 'ITMP, IRDBND, IRDRAI, IRDEVP, IRDLIN, IRDGEO,
      1 IRDSTR, IRDSTG, IPTFLG:'
-      WRITE(IOUT,*) ITMP, IRDBND, IRDRAI, IRDEVP, IRDLIN, IRDGEO,  
+      WRITE(IOUT,*) ITMP, IRDBND, IRDRAI, IRDEVP, IRDLIN, IRDGEO,
      1 IRDSTR, IRDSTG, IPTFLG
       IF ( NAUX.GT.0 ) THEN
         CALL URWORD(line, lloc, istart, istop, 2, IRDAUX, r,-IOUT, In)
@@ -2601,11 +2601,11 @@ C---------WRITE SUMMARY OF BOUNDARIES FOR EACH REACH GROUP
 C         AND COUNT THE NUMBER OF ACTIVE REACH GROUPS
         ibndfail = 0
         NACTIVE  = 0
-!        WRITE (IOUT,'(//2X,A,/1X,4(A10,1X),/1X,4(10("-"),1X))') 
+!        WRITE (IOUT,'(//2X,A,/1X,4(A10,1X),/1X,4(10("-"),1X))')
 !     2    'SUMMARY OF SWR REACH BOUNDARY CONDITIONS',
 !     3    '       IRG','  INACTIVE','  CONSTANT','    ACTIVE'
         DO n = 1, NRCHGRP
-!          WRITE (IOUT,'(1X,4(I10,1X))') 
+!          WRITE (IOUT,'(1X,4(I10,1X))')
 !     2      n, iinactive(n), iconstant(n), iactive(n)
 C           INCREMENT THE NUMBER OF ACTIVE REACH GROUPS
           IF ( iactive(n).GT.0 ) NACTIVE = NACTIVE + 1
@@ -2628,12 +2628,12 @@ C---------CHECK FOR CORRECT SPECIFICATION OF BOUNDARIES FOR REACH GROUPS
             irg = REACH(i)%IRG
             IF ( REACH(i)%ISWRBND.GT.0 ) THEN
               IF ( RCHGRP(irg)%CONSTANT ) THEN
-                WRITE (IOUT,'(/1X,A,1X,I5,1X,A)') 
+                WRITE (IOUT,'(/1X,A,1X,I5,1X,A)')
      2            'ALL REACHES IN RCHGRP',irg,
      3            'SHOULD BE SPECIFIED AS CONSTANT STAGE REACHES'
               END IF
               IF ( RCHGRP(irg)%INACTIVE ) THEN
-                WRITE (IOUT,'(/1X,A,1X,I5,1X,A)') 
+                WRITE (IOUT,'(/1X,A,1X,I5,1X,A)')
      2            'ALL REACHES IN RCHGRP',irg,
      3            'SHOULD BE SPECIFIED AS INACTIVE REACHES'
               END IF
@@ -2641,7 +2641,7 @@ C---------CHECK FOR CORRECT SPECIFICATION OF BOUNDARIES FOR REACH GROUPS
           END DO
           CALL USTOP('ERROR SPECIFYING ISWRBND')
         END IF
-C        
+C
 C---------WRITE SUMMARY OF CONSTANT STAGE REACH GROUPS
         k = 0
 !        WRITE (IOUT,2141)
@@ -2662,7 +2662,7 @@ C-------CLEAN UP TEMPORARY SWR BOUNDARY STORAGE
       END IF
 C
 C-------REACH RAINFALL DATA
-      IF ( IRDRAI.GT.0 ) THEN      
+      IF ( IRDRAI.GT.0 ) THEN
         CALL SSWRDSOUT('7A')
         CALL SSWR_RD_COMM(In)
         ALLOCATE (rlist(2,IRDRAI))
@@ -2699,7 +2699,7 @@ C       PROCESS 2D DATA
         DEALLOCATE( r2d )
       END IF
 C       REACH EVAPORATION DATA
-      IF ( IRDEVP.GT.0 ) THEN      
+      IF ( IRDEVP.GT.0 ) THEN
         CALL SSWRDSOUT('8A')
         CALL SSWR_RD_COMM(In)
         ALLOCATE (rlist(2,IRDEVP))
@@ -2719,7 +2719,7 @@ C         READ REACH NUMBER
 C         CLEAN UP TEMPORARY LIST STORAGE
         DEALLOCATE (rlist)
 C         2D EVAPORATION DATA
-      ELSE IF ( IRDEVP.LT.0 ) THEN      
+      ELSE IF ( IRDEVP.LT.0 ) THEN
          CALL SSWRDSOUT('8B')
         ALLOCATE( r2d(NCOL,NROW) )
         kk = 0
@@ -2736,7 +2736,7 @@ C       PROCESS 2D DATA
         DEALLOCATE( r2d )
       END IF
 C       REACH LATERAL INFLOW DATA
-      IF ( IRDLIN.GT.0 ) THEN      
+      IF ( IRDLIN.GT.0 ) THEN
         CALL SSWRDSOUT('9A')
         ALLOCATE (rlist(2,IRDLIN))
         CALL SSWRLSTRD(In,IOUT,2,IRDLIN,rlist,0)
@@ -2766,8 +2766,8 @@ C       PROCESS 2D DATA
           i = REACH(irch)%IRCH  !ROW
           j = REACH(irch)%JRCH  !COL
           irg  = REACH(irch)%IRG
-          fact = REACH(irch)%DLEN / RCHGRP(irg)%DLEN 
-          REACH(irch)%QLATFLOW = fact * SSWR_R2D( r2d(j,i) ) 
+          fact = REACH(irch)%DLEN / RCHGRP(irg)%DLEN
+          REACH(irch)%QLATFLOW = fact * SSWR_R2D( r2d(j,i) )
 !          WRITE(IOUT,*) 'ILINRCH QLATFLOW;'
 !          WRITE(IOUT,*) irch, REACH(irch)%QLATFLOW
         END DO
@@ -2807,7 +2807,7 @@ C             WRITE DATA
 !     2        REACH(i)%QLATFLOW
           END DO
         END IF
-      END IF      
+      END IF
 C
 C-------GEOMETRY DATA
       IF ( IRDGEO.GT.IZERO ) THEN
@@ -2821,7 +2821,7 @@ C         DATA SET 10
 C         READ REACH NUMBER
           irch = INT(rlist(1,i))
           IF ( irch.LT.1 .OR. irch.GT.NREACHES ) THEN
-            WRITE (IOUT,2019) 
+            WRITE (IOUT,2019)
      2                   'INPUT ITEM 10: SWR REACH GEOMETRY DEFINITION',
      3                   i, 'REACH', irch, NREACHES
             CALL USTOP(' ')
@@ -2834,13 +2834,13 @@ C         READ REACH NUMBER
             RCHGRP(irg)%IRGUPDATE = 1
             REACH(irch)%GZSHIFT = SSWR_R2D(rlist(3,i))
             WRITE(IOUT,*) 'IGMODRCH IGEONUMR GZSHIFT:'
-            WRITE(IOUT,*) irch, REACH(irch)%IGEONUM, 
+            WRITE(IOUT,*) irch, REACH(irch)%IGEONUM,
      1           REACH(irch)%GZSHIFT
           END IF
         END DO
 C         CLEAN UP TEMPORARY LIST STORAGE
         DEALLOCATE (rlist)
-C         GET UNIQUE GEOMETRY NUMBERS      
+C         GET UNIQUE GEOMETRY NUMBERS
         CALL SSWR_UNIQVALUES(ug)
 C       DATA SET 11A-11C - GEOMETRY DATA
         CALL SSWRDSOUT('11')
@@ -2857,7 +2857,7 @@ C           INITIALIZE DATA
           gcnd        = DZERO
           glk         = DZERO
           gcndln      = DZERO
-C           READ GENERIC GEOMETRY DATA        
+C           READ GENERIC GEOMETRY DATA
           CALL SSWR_RD_COMM(iut)
           lloc = 1
           CALL URDCOM(iut,IOUT,LINE)
@@ -2941,7 +2941,7 @@ C           LEAKANCE DATA
             WRITE(IOUT,*) 'GETEXTD:'
             WRITE(IOUT,*) GETEXTD
           END IF
-C          
+C
 C-----------READ IRREGULAR GEOMETRY AND SPECIFIED RATING CURVE
           IF (igeotype.EQ.3 .OR. igeotype.EQ.4) THEN
             CALL SSWR_RD_COMM(iut)
@@ -2966,10 +2966,10 @@ C-----------READ IRREGULAR GEOMETRY AND SPECIFIED RATING CURVE
               ELSE IF ( igeotype.EQ.4 ) THEN
                 WRITE(IOUT,*), 'ELEV(I) VOL(I) WETPER(I) SAREA(I)
      1 XAREA(I):'
-                WRITE(IOUT,*), geostor(j,1), geostor(j,2), 
+                WRITE(IOUT,*), geostor(j,1), geostor(j,2),
      1           geostor(j,3), geostor(j,4), geostor(j,5)
               END IF
-              
+
             END DO
             DEALLOCATE (rlist)
           END IF
@@ -2982,7 +2982,7 @@ C-----------FILL EACH REACH WITH SPECIFIED GEOMETRY DATA
      2        gmanning,gwidth,gbelev,gsslope,
      3        gcnd,glk,gcndln,getextd,geostor)
 C-------------SET STARTING AND ENDING LAYER
-            CALL SSWR_SET_RCHLAY(irch)         
+            CALL SSWR_SET_RCHLAY(irch)
           END DO FILLRCH
 C
 C-----------DETERMINE IF ANY QAQ CALCULATIONS ARE PERFORMED
@@ -2996,11 +2996,11 @@ C
 C--------RECALCULATE THE TOTAL NUMBER OF QAQ CONNECTIONS
           NQAQCONN = 0
           CQAQCONN: DO irch = 1, NREACHES
-            NQAQCONN = NQAQCONN + 
+            NQAQCONN = NQAQCONN +
      2        REACH(irch)%LAYEND - REACH(irch)%LAYSTR + 1
           END DO CQAQCONN
 C
-C--------WRITE GEOMETRY DATA TO OUTPUT FILE 
+C--------WRITE GEOMETRY DATA TO OUTPUT FILE
           IF (IPTFLG.GT.IZERO) THEN
 !            IF (i.EQ.1) WRITE (IOUT,2030) Kkper
             creach = '          '
@@ -3033,10 +3033,10 @@ C             POTENTIAL SURFACE STORAGE COVERING THE ENTIRE CELL (E.G. LAKE)
 !            IF ( igeotype.EQ.5 ) THEN
 !              WRITE (creach(8),2110) getextd
 !            END IF
-!            WRITE (IOUT,2060) i, igeonum, 
+!            WRITE (IOUT,2060) i, igeonum,
 !     2        igeotype, igcndop, ngeopts,
-!     3        (creach(k),k=1,8)   
-          END IF        
+!     3        (creach(k),k=1,8)
+          END IF
 C           CLEAN UP TEMPORARY STORAGE
           DEALLOCATE(geostor)
         END DO
@@ -3069,7 +3069,7 @@ C       RESET TWO-DIMENSIONAL GEOMETRY DATA
         END DO
       END IF
 C
-C       OUTPUT IRREGULAR CROSS-SECTION DATA      
+C       OUTPUT IRREGULAR CROSS-SECTION DATA
       IF ( IPTFLG.GT.IZERO .AND. IRDGEO.GT.0 ) THEN
 C         RAW DATA
         DO irch = 1, NREACHES
@@ -3079,7 +3079,7 @@ C         RAW DATA
 !          IF (igeotype.EQ.3) THEN
 !              WRITE (IOUT,2061) irch
 !              DO j = 1, ngeopts
-!                WRITE (IOUT,2062) j, 
+!                WRITE (IOUT,2062) j,
 !     2          REACH(irch)%IRRGEO%XB(j),REACH(irch)%IRRGEO%ELEVB(j)
 !            END DO
 !          ELSE IF (igeotype.EQ.4) THEN
@@ -3087,12 +3087,12 @@ C         RAW DATA
 !            DO j = 1, ngeopts
 !              WRITE (IOUT,2064) j, REACH(irch)%GEO%ELEV(j),
 !     2          REACH(irch)%GEO%XAREA(j), REACH(irch)%GEO%VOL(j),
-!     3          REACH(irch)%GEO%WETPER(j), 
+!     3          REACH(irch)%GEO%WETPER(j),
 !     4          REACH(irch)%GEO%TOPWID(j), REACH(irch)%GEO%SAREA(j)
 !            END DO
 !          END IF
         END DO
-C         PROCESSED DATA        
+C         PROCESSED DATA
 !        WRITE (IOUT,2171)
         WPROGDATA: DO irch = 1, NREACHES
           IF (REACH(irch)%IGEONUM.LT.1) CYCLE WPROGDATA
@@ -3100,7 +3100,7 @@ C         PROCESSED DATA
 !          DO j = 1, REACH(irch)%GEO%NGEOPTS
 !            WRITE (IOUT,2173) j, REACH(irch)%GEO%ELEV(j),
 !     2        REACH(irch)%GEO%XAREA(j), REACH(irch)%GEO%VOL(j),
-!     3        REACH(irch)%GEO%WETPER(j), 
+!     3        REACH(irch)%GEO%WETPER(j),
 !     4        REACH(irch)%GEO%TOPWID(j), REACH(irch)%GEO%SAREA(j)
 !          END DO
         END DO WPROGDATA
@@ -3117,7 +3117,7 @@ C         DATA SET 12
         DO i = 1, IRDSTR
           irch = INT(rlist(1,i))
           IF ( irch.LT.1 .OR. irch.GT.NREACHES ) THEN
-            WRITE (IOUT,2019) 
+            WRITE (IOUT,2019)
      2                  'INPUT ITEM 12: SWR REACH STRUCTURE DEFINITION',
      3                  i, 'REACH', irch, NREACHES
             CALL USTOP(' ')
@@ -3155,7 +3155,7 @@ C           ERROR WITH  DATA
             CALL USTOP('ISTRRCH.LT.1 OR .GT.NREACHES')
           END IF
           CALL URWORD(line,lloc,istart,istop,2,istrnum,r,IOUT,iut)
-          IF ( istrnum.LT.1 .OR. 
+          IF ( istrnum.LT.1 .OR.
      2         istrnum.GT.REACH(istrrch)%NSTRUCT ) THEN
             CALL USTOP('ISTRNUM.LT.1 OR .GT.REACH(ISTRRCH)%NSTRUCT')
           END IF
@@ -3175,7 +3175,7 @@ C           GET STRUCTURE TYPE
           CALL URWORD(line,lloc,istart,istop,2,istrtype,r,IOUT,iut)
           REACH(istrrch)%STRUCT(istrnum)%ISTRTYPE = ABS( istrtype )
           WRITE(IOUT,*) 'ISTRRCH ISTRNUM ISTRCONN ISTRTYPE:'
-          WRITE(IOUT,*) ISTRRCH, ISTRNUM, ISTRCONN, ISTRTYPE 
+          WRITE(IOUT,*) ISTRRCH, ISTRNUM, ISTRCONN, ISTRTYPE
           SELECT CASE( ABS(istrtype) )
 C             NO STRUCTURE
             CASE (0)
@@ -3195,18 +3195,18 @@ C                 CRITICAL-DEPTH BOUNDARY CONDITION
               END IF
               IF ( istrtype.LT.0 ) THEN
                 CALL URWORD(line,lloc,istart,istop,3,ival,r,IOUT,iut)
-                REACH(istrrch)%STRUCT(istrnum)%STRINV = SSWR_R2D(r) 
+                REACH(istrrch)%STRUCT(istrnum)%STRINV = SSWR_R2D(r)
                 WRITE(IOUT,*) 'STRINV:'
-                WRITE(IOUT,*) REACH(istrrch)%STRUCT(istrnum)%STRINV 
+                WRITE(IOUT,*) REACH(istrrch)%STRUCT(istrnum)%STRINV
                 istrtype = ABS( istrtype )
               ELSE
-                REACH(istrrch)%STRUCT(istrnum)%STRINV = 
+                REACH(istrrch)%STRUCT(istrnum)%STRINV =
      2            REACH(istrrch)%GEO%ELEV(1) + SMALL
               END IF
 C               TEST USE OF STRLEN AND STRLEN2 FOR UNCONTROLLED FLOW STRUCTURES - JDH 11/28/2012
               CALL URWORD(line,lloc,istart,istop,3,ival,r,-IOUT,iut)
               IF ( r.LE.RZERO ) THEN
-                REACH(istrrch)%STRUCT(istrnum)%STRLEN = 
+                REACH(istrrch)%STRUCT(istrnum)%STRLEN =
      2            REACH(istrrch)%DLEN
               ELSE
                 REACH(istrrch)%STRUCT(istrnum)%STRLEN = SSWR_R2D(r)
@@ -3216,7 +3216,7 @@ C               TEST USE OF STRLEN AND STRLEN2 FOR UNCONTROLLED FLOW STRUCTURES 
               IF ( istrconn.GT.0 ) THEN
                 CALL URWORD(line,lloc,istart,istop,3,ival,r,-IOUT,iut)
                 IF ( r.LE.RZERO ) THEN
-                  REACH(istrrch)%STRUCT(istrnum)%STRLEN2 = 
+                  REACH(istrrch)%STRUCT(istrnum)%STRLEN2 =
      2              REACH(istrconn)%DLEN
                 ELSE
                   REACH(istrrch)%STRUCT(istrnum)%STRLEN2 = SSWR_R2D(r)
@@ -3249,7 +3249,7 @@ C             SPECIFIED H-Q RELATION
               ALLOCATE (rlist(2,ival))
               CALL SSWRLSTRD(iut,IOUT,2,ival,rlist,0)
               DO n = 1, ival
-                REACH(istrrch)%STRUCT(istrnum)%STRELEV(n) = 
+                REACH(istrrch)%STRUCT(istrnum)%STRELEV(n) =
      2            SSWR_R2D( rlist(1,n) )
                 REACH(istrrch)%STRUCT(istrnum)%STRQ(n) =
      2            SSWR_R2D( rlist(2,n) )
@@ -3306,9 +3306,9 @@ C               FIXED AND MOVABLE CREST WEIR
               CALL URWORD(line,lloc,istart,istop,3,ival,r,IOUT,iut)
               REACH(istrrch)%STRUCT(istrnum)%STRVAL = SSWR_R2D(r)
 C               UPDATE GATE BOTTOM
-              REACH(istrrch)%STRUCT(istrnum)%STRBOT0 = 
+              REACH(istrrch)%STRUCT(istrnum)%STRBOT0 =
      2          REACH(istrrch)%STRUCT(istrnum)%STRINV + SSWR_R2D(r)
-              REACH(istrrch)%STRUCT(istrnum)%STRBOTINI = 
+              REACH(istrrch)%STRUCT(istrnum)%STRBOTINI =
      2          REACH(istrrch)%STRUCT(istrnum)%STRINV + SSWR_R2D(r)
               CALL URWORD(line,lloc,istart,istop,2,ival,r,IOUT,iut)
               REACH(istrrch)%STRUCT(istrnum)%ISTRDIR = ival
@@ -3339,9 +3339,9 @@ C               FIXED AND OPERABLE GATED SPILLWAY
               CALL URWORD(line,lloc,istart,istop,3,ival,r,IOUT,iut)
               REACH(istrrch)%STRUCT(istrnum)%STRVAL = SSWR_R2D(r)
 C               UPDATE GATE TOP
-              REACH(istrrch)%STRUCT(istrnum)%STRTOP0 = 
+              REACH(istrrch)%STRUCT(istrnum)%STRTOP0 =
      2          REACH(istrrch)%STRUCT(istrnum)%STRINV + SSWR_R2D(r)
-              REACH(istrrch)%STRUCT(istrnum)%STRTOPINI = 
+              REACH(istrrch)%STRUCT(istrnum)%STRTOPINI =
      2          REACH(istrrch)%STRUCT(istrnum)%STRINV + SSWR_R2D(r)
               CALL URWORD(line,lloc,istart,istop,2,ival,r,IOUT,iut)
               REACH(istrrch)%STRUCT(istrnum)%ISTRDIR = ival
@@ -3404,7 +3404,7 @@ C             STAGE-DEPENDENT FLUX STRUCTURE
                 END IF
               END IF
 C
-C             UNDEFINED STRUCTURE TYPE              
+C             UNDEFINED STRUCTURE TYPE
             CASE DEFAULT
           END SELECT
 C
@@ -3421,7 +3421,7 @@ C           ADDITIONAL BOUNDARY STRUCTURE DATA FOR COUPLING TO SFR
               WRITE(IOUT,*) REACH(istrrch)%STRUCT(istrnum)%ISFRRCH
               CALL SSWR_SETSFR_STRM(REACH(istrrch)%STRUCT(istrnum))
             END IF
-          END IF          
+          END IF
 C           ALLOCATE SPACE FOR RECALCULATING STRUCTURE FLOWS
           IF ( ABS(istrtype).EQ.3 .OR. ABS(istrtype).EQ.8 .OR.
      2         ABS(istrtype).EQ.9 .OR. ABS(istrtype).EQ.10 .OR.
@@ -3562,7 +3562,7 @@ C           DATASET 13B - STRUCTURE OPERATION DATA
      2                     'SPECIFIED AS ITABTYPE=5')
               END IF
             END IF
-          END IF OPRDATA   
+          END IF OPRDATA
         END DO
 C         CHECK IF ANY STRUCURE CONNECTION ERRORS DETECTED
         ierr = SUM( istrerr )
@@ -3574,9 +3574,9 @@ C         RECALCULATE NUMBER OF STRUCTURES IN EACH REACH GROUP
         DO n = 1, NRCHGRP
           RCHGRP(n)%NSTRUCT  = IZERO
           RCHGRP(n)%BCSTRUCT = IZERO
-          DO i = 1, RCHGRP(n)%NRGREACH  
+          DO i = 1, RCHGRP(n)%NRGREACH
             irch = RCHGRP(n)%REACH(i)
-            RCHGRP(n)%NSTRUCT = RCHGRP(n)%NSTRUCT + 
+            RCHGRP(n)%NSTRUCT = RCHGRP(n)%NSTRUCT +
      2                           REACH(irch)%NSTRUCT
             IF ( REACH(irch)%BCSTRUCT.GT.0 ) THEN
               RCHGRP(n)%BCSTRUCT = 1
@@ -3591,22 +3591,22 @@ C         WRITE STRUCTURE DATA
             DO j = 1, REACH(i)%NSTRUCT
               cstruct = '          '
               IF (REACH(i)%STRUCT(j)%STRWID.LT.DZERO) THEN
-                WRITE (IOUT,2100) i, 0, 'STRWID', 
+                WRITE (IOUT,2100) i, 0, 'STRWID',
      2                            REACH(i)%STRUCT(j)%STRWID
                 CALL USTOP(' ')
               END IF
               IF (REACH(i)%STRUCT(j)%STRCD.LT.DZERO) THEN
-                WRITE (IOUT,2100) i, j, 'STRCD', 
+                WRITE (IOUT,2100) i, j, 'STRCD',
      2                            REACH(i)%STRUCT(j)%STRCD
                 CALL USTOP(' ')
               END IF
               IF (REACH(i)%STRUCT(j)%STRCD2.LT.DZERO) THEN
-                WRITE (IOUT,2100) i, j, 'STRCD2', 
+                WRITE (IOUT,2100) i, j, 'STRCD2',
      2                            REACH(i)%STRUCT(j)%STRCD2
                 CALL USTOP(' ')
               END IF
               IF (REACH(i)%STRUCT(j)%STRCD3.LT.DZERO) THEN
-                WRITE (IOUT,2100) i, j, 'STRCD3', 
+                WRITE (IOUT,2100) i, j, 'STRCD3',
      2                            REACH(i)%STRUCT(j)%STRCD3
                 CALL USTOP(' ')
               END IF
@@ -3631,8 +3631,8 @@ C                 UNCONTROLLED FLOW
 !                  ELSE
 !                    cstruct(11) = 'UNKN. CON.'
 !                  END IF
-C                 TEST USE OF STRLEN AND STRLEN2 FOR UNCONTROLLED FLOW STRUCTURES - JDH 11/28/2012 - JDH 11/28/2012                  
-!                  WRITE (cstruct( 8),2110) REACH(i)%STRUCT(j)%STRLEN + 
+C                 TEST USE OF STRLEN AND STRLEN2 FOR UNCONTROLLED FLOW STRUCTURES - JDH 11/28/2012 - JDH 11/28/2012
+!                  WRITE (cstruct( 8),2110) REACH(i)%STRUCT(j)%STRLEN +
 !     2                                     REACH(i)%STRUCT(j)%STRLEN2
 C                 SPECIFIED DISCHARGE
                 CASE (3)
@@ -3644,7 +3644,7 @@ C                 SPECIFIED DISCHARGE
 !                  END IF
 C                 SPECIFIED H-Q RELATION
                 CASE (4)
-C                 CULVERTS              
+C                 CULVERTS
                 CASE (5)
 !                  WRITE (cstruct( 1),2110) REACH(i)%STRUCT(j)%STRCD
 !                  WRITE (cstruct( 2),2110) REACH(i)%STRUCT(j)%STRCD2
@@ -3663,7 +3663,7 @@ C                 CULVERTS
 !                  ELSE
 !                    cstruct(11) = 'BIDIR FLOW'
 !                  END IF
-C                 FIXED AND OPERABLE CREST WEIRS              
+C                 FIXED AND OPERABLE CREST WEIRS
                 CASE (6,8)
 !                  WRITE (cstruct( 1),2110) REACH(i)%STRUCT(j)%STRCD
 !                  WRITE (cstruct( 3),2110) REACH(i)%STRUCT(j)%STRCD3
@@ -3719,9 +3719,9 @@ C-----------WRITE SUMMARY OF RATING CURVE STRUCTURES
 !                IF ( indx.EQ.0 ) WRITE (IOUT,4280)
                 indx = indx + 1
 !                DO istrpts = 1, REACH(i)%STRUCT(j)%NSTRPTS
-!                  WRITE (cstruct( 1),2110) 
+!                  WRITE (cstruct( 1),2110)
 !     2              REACH(i)%STRUCT(j)%STRELEV(istrpts)
-!                  WRITE (cstruct( 2),2110) 
+!                  WRITE (cstruct( 2),2110)
 !     2              REACH(i)%STRUCT(j)%STRQ(istrpts)
 !                  WRITE (IOUT,2120) i, j, REACH(i)%STRUCT(j)%ISTRTYPE,
 !     2                              REACH(i)%STRUCT(j)%ISTRCONN,
@@ -3795,7 +3795,7 @@ C               ERROR CHECKING
 C                 EVALUATE IF MORE THAN ONE ISTRTYPE=11 SPECIFIED FOR
 C                 A REACH
               IF ( istrtype.EQ.11 ) THEN
-                istr11 = istr11 + 1 
+                istr11 = istr11 + 1
                 IF ( istr11.GT.1 ) ierr11 = ierr11 + 1
               END IF
 C                 EVALUATE IF MORE THAN ONE SFR REACH IS SPECIFIED AS THE
@@ -3804,7 +3804,7 @@ C                 DISCHARGE LOCATION FOR SWR STRUCTURES IN A SINGLE SWR REACH
               IF ( isfrstrm.NE.istrm0 ) THEN
                 ierrstrm = ierrstrm + 1
               END IF
-              istrm0 = isfrstrm 
+              istrm0 = isfrstrm
 C               WRITE SFR DATA
 !              IF ( indx.EQ.0 ) WRITE (IOUT,4260)
               indx = indx + 1
@@ -3910,7 +3910,7 @@ C             READ REACH NUMBER
             iotherrch = 0
             IF (irchstg.LT.0 ) THEN
               IF ( Kkper.EQ.1 ) THEN
-                WRITE (IOUT,*) 
+                WRITE (IOUT,*)
      2                     'STAGE CANNOT BE SPECIFIED USING ANOTHER '//
      3                     'REACH FOR THE FIRST STRESS PERIOD'
                 CALL USTOP('STAGE CANNOT BE SPECIFIED USING ANOTHER '//
@@ -3919,7 +3919,7 @@ C             READ REACH NUMBER
               irchstg = ABS(irchstg)
               iotherrch = INT(rlist(2,i))
               IF ( iotherrch.LT.1 .AND. irchstg.LE.iotherrch ) THEN
-                WRITE (IOUT,*) 
+                WRITE (IOUT,*)
      2                     'INVALID SOURCE REACH DEFINING STAGE FOR '//
      3                     'ANOTHER REACH SPECIFIED'
                 CALL USTOP('INVALID SOURCE REACH DEFINING STAGE FOR '//
@@ -3956,7 +3956,7 @@ C           PROCESS 2D DATA
 !              WRITE(IOUT,*) 'IRCHSTG STAGE:'
 !              WRITE(IOUT,*) istage(irch), dstage(irch)
           END DO
-C           DEALLOCATE TEMPORARY STORAGE FOR 2D STAGE DATA      
+C           DEALLOCATE TEMPORARY STORAGE FOR 2D STAGE DATA
           DEALLOCATE( stage2d )
         END IF
 C         UPDATE OFFSETS FOR RCHGRP
@@ -3994,11 +3994,11 @@ C       IRDSTG.EQ.0
         DO i = 1, NREACHES
           REACH(i)%STAGE = REACH(i)%GBELEV + DMINDPTH
         END DO
-        IRDSTG = NREACHES  
+        IRDSTG = NREACHES
       END IF
 C       END OF REACH DATA
-C         
-C-------SET REACH OFFSET RELATIVE TO GROUP ELEVATION FOR EACH REACH AND 
+C
+C-------SET REACH OFFSET RELATIVE TO GROUP ELEVATION FOR EACH REACH AND
 C         DOWNSTREAM REACH FOR EACH REACH GROUP (RCHGRP)
       IF ( IRDGEO.GT.0 .OR. IRDSTG.GT.0 ) THEN
 C
@@ -4014,12 +4014,12 @@ C             WRITE HEADER IF IT HAS NOT BEEN WRITTEN ALREADY
 !              WRITE (IOUT,2180)
               writece = .TRUE.
             END IF
-C             WRITE DATA            
+C             WRITE DATA
             k = RCHGRP(i)%IRG
 !            WRITE (IOUT,2190) i, k
             DO j = 1, SIZE(RCHGRP(k)%RGELEV)
               depth = RCHGRP(k)%RGELEV(j) - RCHGRP(k)%RGELEV(1)
-!              WRITE (IOUT,2200) j, 
+!              WRITE (IOUT,2200) j,
 !     2            RCHGRP(k)%RGELEV(j), depth, RCHGRP(k)%RGVOL(j)
             END DO
           END DO
@@ -4086,7 +4086,7 @@ C---------ALLOCATE NECESSARY MEMORY FOR QCONN ON FIRST STRESS PERIOD
 C         WRITE CONNECTIVITY DATA TO OUTPUT FILE
         IF (IPTFLG.GT.0) THEN
 C           WRITE SUMMARY OF REACH GROUPS
-!          WRITE (IOUT,2360) NRCHGRP 
+!          WRITE (IOUT,2360) NRCHGRP
 C           WRITE PROBLEM DIMENSION DATA FOR NEWTON SOLVER
 !          IF ( IRDBND.GT.0 ) THEN
 !            IF ( ISOLVER.LT.2 ) THEN
@@ -4133,11 +4133,11 @@ C           IRCHN AND IRCHC FOR RG
 !            WRITE (IOUT,2320)
 !            DO n = 1, NRCHGRP
 !              j = MAX(RCHGRP(n)%NCONN,1)
-!              WRITE (IOUT,2330) n, RCHGRP(n)%IRGNUM,(i,i=1,j) 
-!              WRITE (IOUT,2230)     
+!              WRITE (IOUT,2330) n, RCHGRP(n)%IRGNUM,(i,i=1,j)
+!              WRITE (IOUT,2230)
 !              ccerch = '     NONE     '
 !              DO i = 1, RCHGRP(n)%NCONN
-!                WRITE (ccerch(i),'(I5,1X,A2,1X,I5,1X)') 
+!                WRITE (ccerch(i),'(I5,1X,A2,1X,I5,1X)')
 !     2            RCHGRP(n)%IRCHN(i),'TO',RCHGRP(n)%IRCHC(i)
 !              END DO
 !              WRITE (IOUT,2350) 'IRCHC',
@@ -4191,7 +4191,7 @@ C               REACH CONNECTION AND REACH GROUP
       END IF
 C
 C
-C-------INITIALIZE IRG AND REACH VOLUMES ON FIRST STRESS PERIOD 
+C-------INITIALIZE IRG AND REACH VOLUMES ON FIRST STRESS PERIOD
 C       BASED ON UPDATED STAGES AND VOLUMES
       IF ( Kkper.EQ.1 ) THEN
         CALL SSWR_SET_INITVOL()
@@ -4216,10 +4216,10 @@ C-------RETURN
 
 !      SUBROUTINE GWF2SWR7AD(Kper,Igrid,Iunitsub)
 C     ******************************************************************
-C     UPDATE PREVIOUS GROUP CONDITIONS WITH RESULTS FROM 
+C     UPDATE PREVIOUS GROUP CONDITIONS WITH RESULTS FROM
 C     THE LAST TIMESTEP
 C
-C     COMPUTE SURFACE-WATER ROUTING STRUCTURE FLOWS FOR TIME STEP AT 
+C     COMPUTE SURFACE-WATER ROUTING STRUCTURE FLOWS FOR TIME STEP AT
 C     SURFACE-WATER REACHES WITH TIME-VARYING DATA.
 C     ******************************************************************
 C
@@ -4227,7 +4227,7 @@ C     SPECIFICATIONS:
 C     ------------------------------------------------------------------
 !      SUBROUTINE GWF2SWR7EX_A(Igrid,Iflag,Nlen,Imap,Rval)
 C     *****************************************************************
-C     FILL THE EXTERNAL FLOW ACCUMULATORS QUZFLOW AND QEXTFLOW FOR 
+C     FILL THE EXTERNAL FLOW ACCUMULATORS QUZFLOW AND QEXTFLOW FOR
 C       THE SWR PROCESS USING AN ARRAY
 C
 C     THIS SUBROUTINE IS CALLED EXTERNAL TO THE SWR PROCESS.
@@ -4237,13 +4237,13 @@ C         TO THE SWR PROCESS.
 C
 C       Iflag IS AN INTEGER FLAG THAT IDENTIFIES THE APPROPRIATE EXTERNAL
 C         REACH FLOW TERM TO ADD THE VALUE (Rval) TO.  CURRENTLY Iflag=1
-C         IDENTIFIES Rval IS ADDED TO QUZFLOW AND ANY OTHER VALUE RESULTS 
+C         IDENTIFIES Rval IS ADDED TO QUZFLOW AND ANY OTHER VALUE RESULTS
 C         IN Rval BEING ADDED TO QEXTFLOW.
 C
-C       Nlen IS THE LENGTH OF THE MAPPING (Imap) AND VALUE (Rval) 
+C       Nlen IS THE LENGTH OF THE MAPPING (Imap) AND VALUE (Rval)
 C         VECTORS.
 C
-C       Imap IS A MAPPING VECTOR TO IDENTIFIES THE REACH NUMBER 
+C       Imap IS A MAPPING VECTOR TO IDENTIFIES THE REACH NUMBER
 C         ASSOCIATED WITH THE DATA IN Rval.  IF Iflag=1, IUZFOFFS
 C         IS SUBTRACTED FROM Imap TO DETERMINE THE SWR REACH NUMBER.
 C
@@ -4253,9 +4253,9 @@ C         ADDED TO QUZFLOW OR QEXTFLOW WHICH IS ADDED TO THE CONTINUITY
 C         EQUATION SOLVED FOR EACH REACH GROUP.
 C
 C       IEXTFLOW IS SET TO ZERO AT THE END OF THE GWF2SWR7FM SUBROUTINE
-C         WHICH INDICATES THE QUZFLOW AND QEXTFLOW ACCUMULATORS ARE TO 
+C         WHICH INDICATES THE QUZFLOW AND QEXTFLOW ACCUMULATORS ARE TO
 C         BE RESET TO ZERO AT THE BEGINNING OF THE GWF2SWR7EX SUBROUTINE.
-C         AFTER SETTING QUZFLOW AND QEXTFLOW TO ZERO IEXTFLOW IS SET 
+C         AFTER SETTING QUZFLOW AND QEXTFLOW TO ZERO IEXTFLOW IS SET
 C         TO ONE.
 C
 C       POSITIVE Rval VALUES INDICATE A SOURCE OF WATER TO A REACH.
@@ -4307,7 +4307,7 @@ C         AUXILIARY VARIABLES
         DEALLOCATE(GWFSWRDAT(Igrid)%SWRAUX)
         DEALLOCATE(GWFSWRDAT(Igrid)%AUX)
         DEALLOCATE(GWFSWRDAT(Igrid)%AUXROW)
-C        
+C
         DEALLOCATE(GWFSWRDAT(Igrid)%NREACHES)
         DEALLOCATE(GWFSWRDAT(Igrid)%ISWRONLY)
         DEALLOCATE(GWFSWRDAT(Igrid)%ISWRCB)
@@ -4448,7 +4448,7 @@ C---------DIRECT RUNOFF
         DEALLOCATE(GWFSWRDAT(Igrid)%DROIMAP)
         DEALLOCATE(GWFSWRDAT(Igrid)%DRORMULT)
         DEALLOCATE(GWFSWRDAT(Igrid)%DRORVAL)
-C---------DERIVED TYPES        
+C---------DERIVED TYPES
         DEALLOCATE(GWFSWRDAT(Igrid)%TABDATA)
         DEALLOCATE(GWFSWRDAT(Igrid)%OBSDATA)
         DEALLOCATE(GWFSWRDAT(Igrid)%REACH)
@@ -4481,7 +4481,7 @@ C         AUXILIARY VARIABLES
         SWRAUX=>GWFSWRDAT(Igrid)%SWRAUX
         AUX=>GWFSWRDAT(Igrid)%AUX
         AUXROW=>GWFSWRDAT(Igrid)%AUXROW
-C        
+C
         NREACHES=>GWFSWRDAT(Igrid)%NREACHES
         ISWRONLY=>GWFSWRDAT(Igrid)%ISWRONLY
         ISWRCB=>GWFSWRDAT(Igrid)%ISWRCB
@@ -4623,7 +4623,7 @@ C---------DIRECT RUNOFF
         DROIMAP=>GWFSWRDAT(Igrid)%DROIMAP
         DRORMULT=>GWFSWRDAT(Igrid)%DRORMULT
         DRORVAL=>GWFSWRDAT(Igrid)%DRORVAL
-C---------DERIVED TYPES        
+C---------DERIVED TYPES
         TABDATA=>GWFSWRDAT(Igrid)%TABDATA
         OBSDATA=>GWFSWRDAT(Igrid)%OBSDATA
         REACH=>GWFSWRDAT(Igrid)%REACH
@@ -4666,7 +4666,7 @@ C
         GWFSWRDAT(Igrid)%ISWRPSTR=>ISWRPSTR
         GWFSWRDAT(Igrid)%ISWRPFRN=>ISWRPFRN
         GWFSWRDAT(Igrid)%ISWROPT=>ISWROPT
-C         SWR1 OPTIONS        
+C         SWR1 OPTIONS
         GWFSWRDAT(Igrid)%ISWRSCRN=>ISWRSCRN
         GWFSWRDAT(Igrid)%ISWRSDT=>ISWRSDT
         GWFSWRDAT(Igrid)%ISWRCNV=>ISWRCNV
@@ -4797,7 +4797,7 @@ C---------DIRECT RUNOFF
         GWFSWRDAT(Igrid)%DROIMAP=>DROIMAP
         GWFSWRDAT(Igrid)%DRORMULT=>DRORMULT
         GWFSWRDAT(Igrid)%DRORVAL=>DRORVAL
-C---------DERIVED TYPES        
+C---------DERIVED TYPES
         GWFSWRDAT(Igrid)%TABDATA=>TABDATA
         GWFSWRDAT(Igrid)%OBSDATA=>OBSDATA
         GWFSWRDAT(Igrid)%REACH=>REACH
@@ -4861,7 +4861,7 @@ C       + + + LOCAL DEFINITIONS + + +
         DOUBLEPRECISION, DIMENSION(:), ALLOCATABLE :: b
 C       + + + FUNCTIONS + + +
 C       + + + CODE + + +
-C---------SORT A IN INCREASING ORDER            
+C---------SORT A IN INCREASING ORDER
         CALL SSWR_SORT(A)
 C---------DETERMINE THE NUMBER OF UNIQUE VALUES
         count = 1
@@ -4968,7 +4968,7 @@ C     + + + LOCAL DEFINITIONS + + +
         DOUBLE PRECISION :: d
 C     + + + FUNCTIONS + + +
 C     + + + CODE + + +
-        d = A 
+        d = A
         A = B
         B = d
         RETURN
@@ -4985,7 +4985,7 @@ C     + + + LOCAL DEFINITIONS + + +
 C     + + + FUNCTIONS + + +
 C     + + + CODE + + +
         IF (MASK) THEN
-            d = A 
+            d = A
             A = B
             B = d
         END IF
@@ -5006,7 +5006,7 @@ C     + + + LOCAL DEFINITIONS + + +
         READ (CR,*) D
         RETURN
       END FUNCTION SSWR_R2D
-      
+
 C-------SIMPLE FUNCTION FOR LINEAR INTERPOLATION OF TWO VECTORS
 C       FUNCTION ASSUMES X DATA IS SORTED IN ASCENDING ORDER
       DOUBLEPRECISION FUNCTION SSWR_LININT(X,Y,Z) RESULT(v)
@@ -5096,10 +5096,10 @@ C---------BETWEEN LOWEST AND HIGHEST VALUE IN CURRENT INTERVAL
 C---------RETURN
         RETURN
       END FUNCTION SSWR_RLININT
-      
+
 C
 C-------CHECK IF VALID STRUCTURE CONNECTION SPECIFIED
-      INTEGER FUNCTION SSWR_CHKSTR(Istrrch,Istrconn,Istrnum,Istrerr) 
+      INTEGER FUNCTION SSWR_CHKSTR(Istrrch,Istrconn,Istrnum,Istrerr)
      2   RESULT(ierr)
         USE GWFSWRMODULE
         USE GLOBAL,       ONLY: IOUT
@@ -5131,7 +5131,7 @@ C---------IDENTIFY IF Istrconn IS A VALID CONNECTION
         ierr = 1
         Istrerr(Istrrch) = Istrerr(Istrrch) + 1
 C---------WRITE ERROR INFORMATION
-        IF ( SUM( istrerr ).EQ.1 ) WRITE (IOUT,2000) 
+        IF ( SUM( istrerr ).EQ.1 ) WRITE (IOUT,2000)
         WRITE (IOUT,2010) Istrrch, Istrnum, Istrconn
 C---------RETURN
         RETURN
@@ -5172,7 +5172,7 @@ C     + + + OUTPUT FORMATS + + +
 2050   FORMAT(1X,59('-'))
 
 2060   FORMAT(1X,'REACHES',7X,3(A14,1X),:100(/1X,14X,3(A14,1X)))
-     
+
 C     + + + CODE + + +
 C
 C---------FIND UNIQUE CONNECTIONS FOR EACH REACH AND ELIMINATE ANY DUPLICATE CONNECTIONS
@@ -5230,11 +5230,11 @@ C---------WRITE REACH CONNECTIVITY TO OUTPUT FILE
 !        WRITE (IOUT,2030)
         DO irch1 = 1, NREACHES
           nconn1 = REACH(irch1)%NCONN
-!          WRITE (IOUT,2040) irch1, (i,i=1,nconn1) 
-!          WRITE (IOUT,2050)     
+!          WRITE (IOUT,2040) irch1, (i,i=1,nconn1)
+!          WRITE (IOUT,2050)
           ccerch = '     NONE     '
           DO n = 1, nconn1
-!            WRITE (ccerch(n),'(I5,1X,A2,1X,I5,1X)') 
+!            WRITE (ccerch(n),'(I5,1X,A2,1X,I5,1X)')
 !     2          irch1,'TO',REACH(irch1)%ICONN(n)
           END DO
 !          WRITE (IOUT,2060) (ccerch(i),i=1,MAX(nconn1,1))
@@ -5305,7 +5305,7 @@ C---------CREATE UNIQUE MAPPING OF IRGNUM TO IRG
           DO i = 1, NREACHES
             IF (REACH(i)%IRGNUM.EQ.irgnumlist(n)) REACH(i)%IRG = n
           END DO
-        END DO        
+        END DO
 C
 C---------ALLOCATE SPACE FOR RCHGRP(n)%REACH FOR SIMULATION
         DO n = 1, NRCHGRP
@@ -5346,7 +5346,7 @@ C         THE ONE CONNECTION TO A SINGLE REACH GROUP
                 END IF
                 imaxconn = MAXVAL( irgconn )
                 IF ( imaxconn.GT.1 ) THEN
-C                   WRITE HEADER FOR ERROR                  
+C                   WRITE HEADER FOR ERROR
                   IF ( icount.LT.1 ) THEN
 !                    WRITE (IOUT,2000)
                   END IF
@@ -5378,12 +5378,12 @@ C         REACHES IN A REACH GROUP
               iroutetype2 = REACH(irch2)%IROUTETYPE
               croutetype2 = REACH(irch2)%CROUTETYPE
               IF ( croutetype2.NE.croutetype1 ) THEN
-C                 WRITE HEADER FOR ERROR                  
+C                 WRITE HEADER FOR ERROR
                 IF ( icount.LT.1 ) THEN
                   WRITE (IOUT,2030)
                 END IF
                 icount = icount + 1
-                WRITE (IOUT,2040) icount, irch2, 
+                WRITE (IOUT,2040) icount, irch2,
      2                            iroutetype2, iroutetype1
               END IF
             END DO
@@ -5412,10 +5412,10 @@ C
 C-------ALLOCATE MEMORY FOR RCHGRP DATA
       SUBROUTINE SSWR_SET_CONN()
         USE GLOBAL,          ONLY: IOUT, NCOL, NROW
-        USE GWFSWRMODULE,    ONLY: IZERO, DZERO, DONE, IRCMRORD, 
-     2                             IPC, NLEVELS, IPTFLG, 
-     3                             NREACHES, REACH, 
-     4                             IRDBND, ISOLVER, NINNER, 
+        USE GWFSWRMODULE,    ONLY: IZERO, DZERO, DONE, IRCMRORD,
+     2                             IPC, NLEVELS, IPTFLG,
+     3                             NREACHES, REACH,
+     4                             IRDBND, ISOLVER, NINNER,
      5                             NRCHGRP, NSOLRG, NACTIVE, RCHGRP, JAC
         USE GWFSWRINTERFACE, ONLY: SSWR_SORT
         IMPLICIT NONE
@@ -5476,7 +5476,7 @@ C-----------DETERMINE THE NUMBER OF CONNECTIONS
             iimpc   = IZERO
 C             EVALUATE FULL REACH CONNECTIVITY FOR RG IN OTHER REACHES
 C             - IMPLICIT STARTING 1D CONNECTIONS FOR RG
-            FRC: DO i = 1, RCHGRP(n)%NRGREACH  
+            FRC: DO i = 1, RCHGRP(n)%NRGREACH
               irch = RCHGRP(n)%REACH(i)
               irg  = REACH(irch)%IRG
               ICONNECTED: IF (REACH(irch)%NCONN.GT.IZERO) THEN
@@ -5494,7 +5494,7 @@ C             REACH GROUP CONNECTIONS
             RCHGRP(n)%NCONN = ilen
 C             ADD DIAGONAL + CONNECTIONS TO NNZ
             innz = innz + 1 + ilen
-C             ALLOCATE AND FILL FULL STARTING CONNECTIONS        
+C             ALLOCATE AND FILL FULL STARTING CONNECTIONS
             IF (RCHGRP(n)%NCONN.GT.IZERO) THEN
               ALLOCATE (RCHGRP(n)%IRCHC(RCHGRP(n)%NCONN))
               ALLOCATE (RCHGRP(n)%IRCHN(RCHGRP(n)%NCONN))
@@ -5580,14 +5580,14 @@ C             DEALLOCATE TEMPORARY SOLVER STORAGE
                 DEALLOCATE (JAC%HGMR)
                 DEALLOCATE (JAC%VGMR)
             END SELECT
-          END IF 
+          END IF
 C           CREATE MAPPING ARRAY
           NSOLRG = ilen
           isolrg = MAX( 1, NSOLRG )
           ALLOCATE (JAC%IA(isolrg+1),JAC%IU(isolrg))
           ALLOCATE (JAC%ICMAP(NRCHGRP))
           ALLOCATE (JAC%ISMAP(isolrg))
-C           INITIALIZE ARRAYS          
+C           INITIALIZE ARRAYS
           DO n = 1, isolrg+1
             JAC%IA(n) = IZERO
           END DO
@@ -5595,7 +5595,7 @@ C           INITIALIZE ARRAYS
             JAC%IU(n)    = IZERO
             JAC%ISMAP(n) = IZERO
           END DO
-C           INITIALIZE REACH GROUP ARRAYS          
+C           INITIALIZE REACH GROUP ARRAYS
           DO n = 1, NRCHGRP
             JAC%ICMAP(n) = IZERO
           END DO
@@ -5627,7 +5627,7 @@ C             IN JA ROW POINTERS - REPRESENTS THE DIAGONAL ELEMENT
                 icon(n) = icon(n) + 1
               END IF
             END DO
-          END DO          
+          END DO
           JAC%NNZ = innz
           innz = MAX( 1, JAC%NNZ )
           JAC%IA(NSOLRG+1) = JAC%NNZ + 1
@@ -5637,7 +5637,7 @@ C-----------ALLOCATE, INITIALIZE, AND FILL JA
           DO i = 1, innz
             JAC%JA(i) = IZERO
           END DO
-C           FILL JA   
+C           FILL JA
           IF ( NSOLRG.GT.0 ) innz = 0
           DO n = 1, NSOLRG
             irg = JAC%ISMAP(n)
@@ -5677,7 +5677,7 @@ C             TEST FOR LOWER RIGHT OF MATRIX WHERE NO UPPER PRESENT
 C             SET JAC%IU TO THE LAST ENTRY
             IF (JAC%IU(n).EQ.IZERO) JAC%IU(n) = JAC%IA(n+1) - 1
             DEALLOCATE(dcolptr)
-          END DO       
+          END DO
 C
 C-----------CALCULATE INITIAL BANDWIDTH FOR DIRECT SOLVER AND SET JAC%NHALFB
           DO n = 1, NSOLRG
@@ -5713,8 +5713,8 @@ C-----------REVERSE CUTHILL MCKEE REORDERING
             END DO
 !            CALL GSOL_GENRCM( NSOLRG, JAC%NNZ-NSOLRG, iadj, jadj, ircm )
 !            CALL GSOL_PERM_INVERSE3( isolrg, ircm, ircm_inv )
-C             CALCULATE BANDWIDTH OF THE RCM REORDERED NODES            
-!            nbw = GSOL_ADJ_PERM_BANDWIDTH( NSOLRG, JAC%NNZ-NSOLRG, 
+C             CALCULATE BANDWIDTH OF THE RCM REORDERED NODES
+!            nbw = GSOL_ADJ_PERM_BANDWIDTH( NSOLRG, JAC%NNZ-NSOLRG,
 !     2                                     iadj, jadj, ircm, ircm_inv )
 !            WRITE (IOUT,2000) JAC%NBW, nbw
 
@@ -5727,7 +5727,7 @@ C             CALCULATE BANDWIDTH OF THE RCM REORDERED NODES
 C
 C-------------TEST IF RCM REORDERING SHOULD BE USED
             iusercm = 0
-            IF (   IRCMRORD.GT.0 .OR. 
+            IF (   IRCMRORD.GT.0 .OR.
      2           ( IRCMRORD.LT.0 .AND. nbw.LT.JAC%NBW ) ) iusercm = 1
 C
 C-------------FILL TEMPORARY ARRAYS WITH CURRENT VALUES AND
@@ -5870,7 +5870,7 @@ C           ALLOCATE MEMORY AS NEEDED FOR SOLUTION VECTORS/MATRICES
             END IF
           ELSE
             ALLOCATE(JAC%FJACC(innz))
-C             INITIALIZE            
+C             INITIALIZE
             DO n = 1, innz
               JAC%FJACC(n) = DZERO
             END DO
@@ -5970,15 +5970,15 @@ C         SET REACHES WITH STRUCTURES TO NEGATIVE REACH NUMBERS
             DO ii = 1, REACH(irch)%NCONN
               irchconn = REACH(irch)%ICONN(ii)
               IF ( istrconn.EQ.irchconn ) THEN
-                REACH(irch)%IRGCONN(ii)  = 
+                REACH(irch)%IRGCONN(ii)  =
      2            -ABS( REACH(irch)%IRGCONN(ii) )
                 REACH(irch)%ISTRCONN(ii) = irch
                 DO jj = 1, REACH(irchconn)%NCONN
                   jrchconn = REACH(irchconn)%ICONN(jj)
                   IF ( jrchconn.EQ.irch ) THEN
-                    REACH(irchconn)%IRGCONN(jj) = 
+                    REACH(irchconn)%IRGCONN(jj) =
      2                -ABS( REACH(irchconn)%IRGCONN(jj) )
-                    REACH(irchconn)%ISTRCONN(jj) = irch 
+                    REACH(irchconn)%ISTRCONN(jj) = irch
                   END IF
                 END DO
               END IF
@@ -5993,7 +5993,7 @@ C         SET REACHES WITH STRUCTURES TO NEGATIVE REACH NUMBERS
           END IF
         END DO
         DO n = 1, NRCHGRP
-          DO i = 1, RCHGRP(n)%NCONN  
+          DO i = 1, RCHGRP(n)%NCONN
             irch     = ABS( RCHGRP(n)%IRCHN(i) )
             irchconn = ABS( RCHGRP(n)%IRCHC(i) )
 C             FIND CONNECTIONS THAT ARE STRUCTURE CONTROLLED
@@ -6009,7 +6009,7 @@ C                     SET SYMMETRIC CONNECTION FOR STRUCTURE
                     DO nn = 1, RCHGRP(irchconnrg)%NCONN
                       irch2     = ABS( RCHGRP(irchconnrg)%IRCHN(nn) )
                       irchconn2 = ABS( RCHGRP(irchconnrg)%IRCHC(nn) )
-                      IF ( irchconn.EQ.irch2 .AND. 
+                      IF ( irchconn.EQ.irch2 .AND.
      2                     irch.EQ.irchconn2 ) THEN
                         RCHGRP(irchconnrg)%IRCHN(nn)   = -irch2
                         RCHGRP(irchconnrg)%IRCHC(nn)   = -irchconn2
@@ -6027,26 +6027,26 @@ C         SET UP SIMPLE CONNECTION INFORMATION FOR
 C         UNCONTROLLED CONNECTIONS
         DO n = 1, NRCHGRP
           iconn = RCHGRP(n)%NCONN
-          IF ( iconn.LT.1 ) CYCLE 
-C-----------ALLOCATE AND INITIALIZE ESTIMATED UNMANAGED FLOWS 
-          IF ( JAC%IALLO.LT.1 ) THEN          
-            ALLOCATE ( RCHGRP(n)%IN(iconn), 
-     2                 RCHGRP(n)%IR(iconn), 
-     3                 RCHGRP(n)%ILOC(iconn) ) 
+          IF ( iconn.LT.1 ) CYCLE
+C-----------ALLOCATE AND INITIALIZE ESTIMATED UNMANAGED FLOWS
+          IF ( JAC%IALLO.LT.1 ) THEN
+            ALLOCATE ( RCHGRP(n)%IN(iconn),
+     2                 RCHGRP(n)%IR(iconn),
+     3                 RCHGRP(n)%ILOC(iconn) )
           END IF
-          RCHGRP(n)%IN   = IZERO 
-          RCHGRP(n)%IR   = IZERO 
+          RCHGRP(n)%IN   = IZERO
+          RCHGRP(n)%IR   = IZERO
           RCHGRP(n)%ILOC = IZERO
-C-----------FILL RCHGRP(n)%ir                                                       
-          ic = 1 
-          IF ( RCHGRP(n)%NCONN.GT.IZERO ) THEN 
-            DO nc = 1, RCHGRP(n)%NCONN 
+C-----------FILL RCHGRP(n)%ir
+          ic = 1
+          IF ( RCHGRP(n)%NCONN.GT.IZERO ) THEN
+            DO nc = 1, RCHGRP(n)%NCONN
               RCHGRP(n)%IR(ic)   = ABS( RCHGRP(n)%IRCHN(nc) )
-              RCHGRP(n)%ILOC(ic) = 0 
-              RCHGRP(n)%IN(ic)   = ABS( RCHGRP(n)%IRCHC(nc) ) 
-              ic = ic + 1 
-            END DO 
-          END IF 
+              RCHGRP(n)%ILOC(ic) = 0
+              RCHGRP(n)%IN(ic)   = ABS( RCHGRP(n)%IRCHC(nc) )
+              ic = ic + 1
+            END DO
+          END IF
         END DO
 C
 C---------SET FLAG INDICATING JAC HAS BEEN ALLOCATED
@@ -6056,7 +6056,7 @@ C---------RETURN
         RETURN
       END SUBROUTINE SSWR_SET_CONN
 C
-C-------CALCULATE REACH OFFSETS FROM STAGE DATA READ FOR 
+C-------CALCULATE REACH OFFSETS FROM STAGE DATA READ FOR
 C       STRESS PERIOD (INPUT ITEM 14)
       SUBROUTINE SSWR_SET_RCHOFF(Istage,Dstage)
         USE GWFSWRMODULE
@@ -6106,7 +6106,7 @@ C           SET LOCATION OF MINIMUM STAGE IN REACH GROUP AND
 C             REACH OFFSET
           RCHGRP(n)%ICALCRCH = ismin
           DO i = 1, NREACHES
-            IF (REACH(i)%CROUTETYPE.EQ.'TP' .AND. 
+            IF (REACH(i)%CROUTETYPE.EQ.'TP' .AND.
      2          REACH(i)%IRG.EQ.irg) THEN
               REACH(i)%OFFSET = s(i) - smin
             END IF
@@ -6128,8 +6128,8 @@ C---------RETURN
         RETURN
       END SUBROUTINE SSWR_SET_RCHOFF
 C
-C-------CALCULATE STAGE-VOLUME-WETTED PERIMETER-SURFACE AREA-CROSS-SECTIONAL AREA 
-C       RELATION FOR REACH      
+C-------CALCULATE STAGE-VOLUME-WETTED PERIMETER-SURFACE AREA-CROSS-SECTIONAL AREA
+C       RELATION FOR REACH
       SUBROUTINE SSWR_CALC_RCHGEODATA(Irch,Igeotype,Igcndop,Ngeopts,
      2        Gmanning,Gwidth,Gbelev,Gsslope,
      3        Gcnd,Glk,Gcndln,Getextd,Geostor)
@@ -6180,7 +6180,7 @@ C       SET GETEXTD FOR REACHES COVERING ENTIRE CELLS
           REACH(irch)%GETEXTD = DZERO
       END SELECT
 C
-C       SET FLAG FOR CALCULATION OF QAQ TERMS     
+C       SET FLAG FOR CALCULATION OF QAQ TERMS
       SELECT CASE (Igcndop)
         CASE (0)
           IF ( Gcnd.GT.DZERO )  REACH(irch)%ICALCQAQ = 1
@@ -6200,14 +6200,14 @@ C       SET FLAG FOR CALCULATION OF QAQ TERMS
         gzshift = REACH(irch)%GZSHIFT !+ REACH(irch)%GCUMSUB
         REACH(irch)%IRRGEO%ELEVB(:) = Geostor(:,2) + gzshift
       END IF
-C      
+C
 C         CLEAN UP LEVEL GROUP RATING CURVE DATA
       IF (REACH(irch)%GEO%NGEOPTS.GT.0) THEN
-        DEALLOCATE (REACH(irch)%GEO%ELEV,  
-     2              REACH(irch)%GEO%XAREA, REACH(irch)%GEO%VOL, 
+        DEALLOCATE (REACH(irch)%GEO%ELEV,
+     2              REACH(irch)%GEO%XAREA, REACH(irch)%GEO%VOL,
      3              REACH(irch)%GEO%WETPER,
      4              REACH(irch)%GEO%TOPWID,
-     5              REACH(irch)%GEO%SAREA) 
+     5              REACH(irch)%GEO%SAREA)
         REACH(irch)%GEO%NGEOPTS = IZERO
       END IF
 C
@@ -6262,7 +6262,7 @@ C       REALLOCATE
           nlen = 5 + 9
           dz = DZERO
           IF ( zg.GT.bottom ) THEN
-            dz = (zg - bottom + 1.0D-6) / 10.0D0 
+            dz = (zg - bottom + 1.0D-6) / 10.0D0
           END IF
           ALLOCATE (uz(nlen))
           uz(1) = bottom
@@ -6282,17 +6282,17 @@ C             ADD TOPOGRAPHY AND MAXIMUM ELEVATION + 10
           nlen = ngeopts + 4 + 9
           ALLOCATE (uz(nlen))
           uz(1:Ngeopts) = REACH(irch)%IRRGEO%ELEVB
-          uz(Ngeopts+1) = 
+          uz(Ngeopts+1) =
      2      MINVAL(uz(1:Ngeopts)) + 1.0D-6
           uz(Ngeopts+2) = zg
           uz(Ngeopts+3) = zg + 1.0D-6
-          uz(Ngeopts+4) = 
+          uz(Ngeopts+4) =
      2     MAXVAL(uz(1:Ngeopts+3)) + 10.0D0
-          dz = (MAXVAL(uz(1:Ngeopts)) - 
+          dz = (MAXVAL(uz(1:Ngeopts)) -
      2       MINVAL(uz(1:Ngeopts)) + 1.0D-6) / 10.0D0
-          uz(Ngeopts+5) = 
+          uz(Ngeopts+5) =
      2       uz(Ngeopts+1) + dz
-          DO ipos = (Ngeopts+6), 
+          DO ipos = (Ngeopts+6),
      2              (Ngeopts + 4 + 9)
             uz(ipos) = uz(ipos-1) + dz
           END DO
@@ -6302,12 +6302,12 @@ C             ADD TOPOGRAPHY AND MAXIMUM ELEVATION + 10
           nlen = Ngeopts
         END SELECT
         REACH(irch)%GEO%NGEOPTS = nlen
-        ALLOCATE (REACH(irch)%GEO%ELEV(nlen), 
-     2            REACH(irch)%GEO%XAREA(nlen), 
-     3            REACH(irch)%GEO%VOL(nlen), 
-     4            REACH(irch)%GEO%WETPER(nlen), 
+        ALLOCATE (REACH(irch)%GEO%ELEV(nlen),
+     2            REACH(irch)%GEO%XAREA(nlen),
+     3            REACH(irch)%GEO%VOL(nlen),
+     4            REACH(irch)%GEO%WETPER(nlen),
      5            REACH(irch)%GEO%TOPWID(nlen),
-     6            REACH(irch)%GEO%SAREA(nlen)) 
+     6            REACH(irch)%GEO%SAREA(nlen))
 C
 C         FILL ELEV AND CALCULATE XAREA, VOLUME, WETTED PERIMETER, AND TOP WIDTH
         SELECT CASE (Igeotype)
@@ -6315,14 +6315,14 @@ C         FILL ELEV AND CALCULATE XAREA, VOLUME, WETTED PERIMETER, AND TOP WIDTH
 C             ELEVATIONS
             REACH(irch)%GEO%ELEV      = uz
 C             DATA FOR BOTTOM ELEVATION
-            REACH(irch)%GEO%WETPER(1) = DZERO  
+            REACH(irch)%GEO%WETPER(1) = DZERO
             REACH(irch)%GEO%TOPWID(1) = DZERO
             REACH(irch)%GEO%XAREA(1)  = DZERO
             REACH(irch)%GEO%VOL(1)    = DZERO
             REACH(irch)%GEO%SAREA(1)  = DZERO
             DO ipos = 2, nlen
               dx = DZERO
-              dz = REACH(irch)%GEO%ELEV(ipos) - 
+              dz = REACH(irch)%GEO%ELEV(ipos) -
      2             REACH(irch)%GEO%ELEV(ipos-1)
               side = DZERO
               IF (Gsslope.GT.DZERO) THEN
@@ -6342,10 +6342,10 @@ C             DATA FOR BOTTOM ELEVATION
               ar = (tw0 + wpc * dx) * dz
               REACH(irch)%GEO%XAREA(ipos) = a0 + ar
               REACH(irch)%GEO%VOL(ipos) = (a0 + ar) * length
-              REACH(irch)%GEO%WETPER(ipos) = 
+              REACH(irch)%GEO%WETPER(ipos) =
      2                                      wp0 + DTWO * wpc * side
               REACH(irch)%GEO%TOPWID(ipos) = tw0 + DTWO * wpc * dx
-              REACH(irch)%GEO%SAREA(ipos) = 
+              REACH(irch)%GEO%SAREA(ipos) =
      2            sa0 + DTWO * wpc * dx * length
             END DO
 C           IRREGULAR CROSS-SECTION
@@ -6357,14 +6357,14 @@ C           IRREGULAR CROSS-SECTION
             REACH(irch)%GEO%TOPWID = DZERO
             REACH(irch)%GEO%SAREA  = DZERO
             ALLOCATE(a(nlen),wp(nlen),tw(nlen),sa(nlen))
-            DO j = 2, Ngeopts      
-              dy   = ABS(REACH(irch)%IRRGEO%ELEVB(j) - 
+            DO j = 2, Ngeopts
+              dy   = ABS(REACH(irch)%IRRGEO%ELEVB(j) -
      2                   REACH(irch)%IRRGEO%ELEVB(j-1))
-              dx   = (REACH(irch)%IRRGEO%XB(j) - 
+              dx   = (REACH(irch)%IRRGEO%XB(j) -
      2                REACH(irch)%IRRGEO%XB(j-1))
               dydx = DZERO
               IF (ABS(dx).GT.DZERO) dydx = dy / dx
-C               INITIALIZE XAREA, PERIMETER, AND TOP_WIDTH 
+C               INITIALIZE XAREA, PERIMETER, AND TOP_WIDTH
               a  = DZERO
               wp = DZERO
               tw = DZERO
@@ -6373,7 +6373,7 @@ C             EVALUATE XAREA BELOW EACH UNIQUE DEPTH
                 wpc = DONE
                 z2 = uz(i)
                 z1 = z2
-                IF (i.GT.1) z1 = uz(i-1) 
+                IF (i.GT.1) z1 = uz(i-1)
                 IF (z1.GT.zg .AND. z2.GT.zg) wpc = DZERO
                 IF (j == 2) THEN
                   wpc = wpc * DONE
@@ -6391,7 +6391,7 @@ C             EVALUATE XAREA BELOW EACH UNIQUE DEPTH
                   sa0 = sa(i-1)
                 END IF
 C                 DEPTHS BELOW BOTH POINTS
-                IF (uz(i).LE.REACH(irch)%IRRGEO%ELEVB(j) .AND. 
+                IF (uz(i).LE.REACH(irch)%IRRGEO%ELEVB(j) .AND.
      2              uz(i).LE.REACH(irch)%IRRGEO%ELEVB(j-1)) THEN
                   tw(i) = DZERO
                   wp(i) = DZERO
@@ -6399,9 +6399,9 @@ C                 DEPTHS BELOW BOTH POINTS
                   sa(i) = DZERO
 C                 DEPTHS ABOVE ONE POINT BUT BELOW THE OTHER POINT
 C                   COMBINATION OF RECTANGULAR AND TRIANGULAR AREAS
-                ELSE IF (uz(i).LE.REACH(irch)%IRRGEO%ELEVB(j) .OR. 
+                ELSE IF (uz(i).LE.REACH(irch)%IRRGEO%ELEVB(j) .OR.
      2                   uz(i).LE.REACH(irch)%IRRGEO%ELEVB(j-1)) THEN
-                  dx = REACH(irch)%IRRGEO%XB(j) - 
+                  dx = REACH(irch)%IRRGEO%XB(j) -
      2                 REACH(irch)%IRRGEO%XB(j-1)
                   IF (ABS(dydx).GT.DZERO) dx = dh / dydx
 C                   LAST AREA +     RECT. AREA      + TRI. AREA
@@ -6411,7 +6411,7 @@ C                   LAST AREA +     RECT. AREA      + TRI. AREA
                   a(i)  =  a0 + tw0 * dh + dx * dh / DTWO
 C                 DEPTHS ABOVE BOTH POINTS - ALL RECTANGULAR AREAS
                 ELSE
-                  dx = REACH(irch)%IRRGEO%XB(j) - 
+                  dx = REACH(irch)%IRRGEO%XB(j) -
      2                 REACH(irch)%IRRGEO%XB(j-1)
 C                   LAST AREA + RECT. AREA
                   a(i)  =  a0 + dx * dh
@@ -6426,18 +6426,18 @@ C                   LAST AREA + RECT. AREA
               END DO
 C               ACCUMULATE GEOMETRY TERMS IN CROSS-SECTION GEOMETRY STRUCTURE
 C                 WITHIN CHANNEL
-              REACH(irch)%GEO%XAREA(:)  = 
+              REACH(irch)%GEO%XAREA(:)  =
      2          REACH(irch)%GEO%XAREA(:)  + a(:)
-              REACH(irch)%GEO%VOL(:)    = 
+              REACH(irch)%GEO%VOL(:)    =
      2          REACH(irch)%GEO%VOL(:)    + a(:) * length
-              REACH(irch)%GEO%WETPER(:) = 
+              REACH(irch)%GEO%WETPER(:) =
      2          REACH(irch)%GEO%WETPER(:) + wp(:)
-              REACH(irch)%GEO%TOPWID(:) = 
+              REACH(irch)%GEO%TOPWID(:) =
      2          REACH(irch)%GEO%TOPWID(:) + tw(:)
-              REACH(irch)%GEO%SAREA(:)  = 
+              REACH(irch)%GEO%SAREA(:)  =
      2          REACH(irch)%GEO%SAREA(:)  + sa(:)
             END DO
-            uz = uz        
+            uz = uz
           CASE (4)
             REACH(irch)%GEO%ELEV   = Geostor(:,1) + gzshift
             REACH(irch)%GEO%VOL    = Geostor(:,2)
@@ -6449,7 +6449,7 @@ C                 WITHIN CHANNEL
 C             ELEVATIONS
             REACH(irch)%GEO%ELEV      = uz
 C             DATA FOR BOTTOM ELEVATION
-            REACH(irch)%GEO%WETPER    = width  
+            REACH(irch)%GEO%WETPER    = width
             REACH(irch)%GEO%TOPWID    = width
             REACH(irch)%GEO%XAREA     = DZERO
             REACH(irch)%GEO%VOL       = DZERO
@@ -6475,11 +6475,11 @@ C-----------CLEANUP TEMPORARY STORAGE
         IF (ALLOCATED(uz)) DEALLOCATE (uz)
         IF (ALLOCATED(a))  DEALLOCATE (a,wp,tw,sa)
 C
-C---------RETURN        
+C---------RETURN
         RETURN
       END SUBROUTINE SSWR_CALC_RCHGEODATA
 
-      SUBROUTINE SSWR_SET_RCHLAY(irch)         
+      SUBROUTINE SSWR_SET_RCHLAY(irch)
         USE GLOBAL,      ONLY:IOUT,NCOL,NROW,NLAY,BOTM,LBOTM
         USE GWFSWRMODULE
         IMPLICIT NONE
@@ -6533,7 +6533,7 @@ C     + + + CODE + + +
         REACH(irch)%LAYEND   = kbot
       END IF
 C
-C---------RETURN        
+C---------RETURN
         RETURN
       END SUBROUTINE SSWR_SET_RCHLAY
 
@@ -6599,10 +6599,10 @@ C-----------CLEANUP TEMPORARY STORAGE
           DEALLOCATE (uz)
         END DO
 C
-C---------RETURN        
+C---------RETURN
         RETURN
       END SUBROUTINE SSWR_CALC_RATCURVE
-      
+
       SUBROUTINE SSWR_VOL2STG_UPDATE()
         USE GLOBAL,      ONLY:IOUT
         USE GWFSWRMODULE
@@ -6641,7 +6641,7 @@ C---------ALLOCATE LOCAL STORAGE
       ALLOCATE ( vp(NRCHGRP)  )
       ALLOCATE ( vpc(NRCHGRP) )
       ALLOCATE ( vr(NREACHES) )
-C---------CALCULATE VOLUME IN EACH REACH AND 
+C---------CALCULATE VOLUME IN EACH REACH AND
 C         IN EACH REACH GROUP
         vr = DZERO
         vp = DZERO
@@ -6657,14 +6657,14 @@ C         IN EACH REACH GROUP
           END DO
         END DO
 C
-C---------CALCULATE GROUP STAGE BASED ON CALCULATED VOLUME 
+C---------CALCULATE GROUP STAGE BASED ON CALCULATED VOLUME
 C         IN EACH GROUP (I.E., REACH GROUP)
 C         ALSO UPDATE STAGE FOR EACH REACH IN GROUP
         DO i = 1, NRCHGRP
           IF (RCHGRP(i)%CONSTANT) CYCLE
           IF (RCHGRP(i)%IRGUPDATE.LT.1) CYCLE
           ps = SSWR_RG_STG(RCHGRP(i),vp(i))
-          DO j = 1, RCHGRP(i)%NRGREACH  
+          DO j = 1, RCHGRP(i)%NRGREACH
             irch = RCHGRP(i)%REACH(j)
             REACH(irch)%STAGE = ps + REACH(irch)%OFFSET
           END DO
@@ -6680,7 +6680,7 @@ C         ISSUE WARNING IF CONDITION OCCURS
         DO i = 1, NRCHGRP
           IF (RCHGRP(i)%CONSTANT) CYCLE
           IF (RCHGRP(i)%IRGUPDATE.LT.1) CYCLE
-          DO j = 1, RCHGRP(i)%NRGREACH  
+          DO j = 1, RCHGRP(i)%NRGREACH
             irch = RCHGRP(i)%REACH(j)
             s = REACH(irch)%STAGE
             vr(irch) = SSWR_LININT(REACH(irch)%GEO%ELEV,
@@ -6738,7 +6738,7 @@ C     + + + INPUT FORMATS + + +
 C     + + + OUTPUT FORMATS + + +
 C     + + + CODE + + +
         celength = RCHGRP(Ice)%DLEN
-        DO i = 1, RCHGRP(Ice)%NRGREACH  
+        DO i = 1, RCHGRP(Ice)%NRGREACH
           n    = RCHGRP(Ice)%REACH(i)
           dlen = REACH(n)%DLEN
           fact = dlen / celength
@@ -6815,7 +6815,7 @@ C---------READ BASE DIRECT RUNOFF VALUE
         IF ( irdrval.GT.0 ) THEN
           CALL SSWR_RD_COMM(iu)
           CALL U2DREL(DRORVAL(:,:),aname(3),NROW,NCOL,k,iu,IOUT)
-C-----------MULTIPLY DIRECT RUNOFF RATE BY CELL AREA TO GET VOLUMETRIC RATE.         
+C-----------MULTIPLY DIRECT RUNOFF RATE BY CELL AREA TO GET VOLUMETRIC RATE.
           DO i = 1,NROW
             DO j = 1,NCOL
               DRORVAL(j,i) = DRORVAL(j,i)*DELR(j)*DELC(i)
@@ -6833,12 +6833,12 @@ C
 C
 C
 C-------WRAPPER FOR CONSOLIDATED OUTER ITERATIONS (NON-LINEAR NEWTON STEP)
-C       AND ALL LINEAR SOLVERS 
+C       AND ALL LINEAR SOLVERS
 !      SUBROUTINE SSWR_GSOLWRP(Iouter,Isoln,X,Check)
 C
 C     FORWARD DIFFERENCE JACOBIAN - MODIFIED CRS FORMAT
       SUBROUTINE SSWR_FDJACC(P,Fvec,Vs,Df)
-        USE GWFSWRMODULE, ONLY: DZERO, DONE, DTWO, NEARZERO, TIMECONV, 
+        USE GWFSWRMODULE, ONLY: DZERO, DONE, DTWO, NEARZERO, TIMECONV,
      2                          NREACHES, NRCHGRP, NSOLRG, JAC
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
@@ -6896,7 +6896,7 @@ C     + + + DUMMY ARGUMENTS + + +
         DOUBLEPRECISION, DIMENSION(NRCHGRP), INTENT(IN)    :: P
         DOUBLEPRECISION, DIMENSION(NRCHGRP), INTENT(INOUT) :: F
 C     + + + LOCAL DEFINITIONS + + +
-        INTEGER :: i 
+        INTEGER :: i
 C     + + + FUNCTIONS + + +
         DOUBLEPRECISION :: SSWR_CALC_RGTERMS
 C     + + + CODE + + +
@@ -6943,7 +6943,7 @@ C     + + + CODE + + +
         v     = DZERO
         v0    = DZERO
 C
-C---------CALCULATE INITIAL VOLUME          
+C---------CALCULATE INITIAL VOLUME
 C         TRANSIENT
         IF (ISWRSS.LT.1) THEN
           v0 = SSWR_RG_VOL(RCHGRP(Irg),GSTAGE(Irg,ISWRDT-1))
@@ -6980,7 +6980,7 @@ C---------GET ESTIMATE OF CURRENT TERMS
         e  = SSWR_RG_QEV(RCHGRP(Irg),ps)
         b  = SSWR_RG_QAQ(RCHGRP(Irg),ps)
         qm = SSWR_RG_QM(RCHGRP(Irg),P)
-        bc = SSWR_RG_QBC(RCHGRP(Irg),P) 
+        bc = SSWR_RG_QBC(RCHGRP(Irg),P)
         c  = SSWR_RG_QCS(RCHGRP(Irg),in,r,e,b,qm,bc)
 C         TRANSIENT
         IF (ISWRSS.LT.1) THEN
@@ -6996,7 +6996,7 @@ C           PSUEDO-TRANSIENT CONTINUATION APPROACH
           END IF
         END IF
 C           ELIMINATE VOLUME CHANGE FOR CONSTANT STAGE REACH GROUPS
-C           FROM RESIDUAL CALCULATION 
+C           FROM RESIDUAL CALCULATION
           IF ( RCHGRP(Irg)%CONSTANT ) v = v0
 C---------BACKWARD DIFFERENCE - ALL TERMS ARE RATES
         value = in + r + e + b + qm + bc + c + v0 - v
@@ -7028,7 +7028,7 @@ C     + + + FUNCTIONS + + +
 C     + + + CODE + + +
         S = DZERO
         DO i = 1, NRCHGRP
-          DO j = 1, RCHGRP(i)%NRGREACH  
+          DO j = 1, RCHGRP(i)%NRGREACH
             irch = RCHGRP(i)%REACH(j)
             S(irch) = Ps(i) + REACH(irch)%OFFSET
           END DO
@@ -7057,7 +7057,7 @@ C     + + + CODE + + +
           icalcrch = RCHGRP(n)%ICALCRCH
           ps = REACH(icalcrch)%STAGE
           RCHGRP(n)%STAGE = ps
-          DO i = 1, RCHGRP(n)%NRGREACH  
+          DO i = 1, RCHGRP(n)%NRGREACH
             irch =   RCHGRP(n)%REACH(i)
             s  = ps + REACH(irch)%OFFSET
             v = SSWR_LININT(REACH(irch)%GEO%ELEV,
@@ -7073,7 +7073,7 @@ C---------RETURN
       SUBROUTINE SSWR_RG_UPDATE
      2           (Rg,V,Rainfall,Evap,Qaqflow,Qbcflow,Crflow)
         USE GWFSWRMODULE, ONLY: DZERO, REACH,
-     2                          TRCHGRP, 
+     2                          TRCHGRP,
      3                          ISWRSS, ISWRDT, SWRDT,
      4                          RSTAGE, GSTAGE
         USE GWFSWRINTERFACE, ONLY: SSWR_LININT
@@ -7120,7 +7120,7 @@ C---------CALCULATE REACH TERMS
         einf = DZERO
         qpos = DZERO
         qneg = DZERO
-        DO nr = 1, Rg%NRGREACH  
+        DO nr = 1, Rg%NRGREACH
           irch  = Rg%REACH(nr)
 C-----------ADD LATERAL INFLOW: [RATE]
           linf = linf + REACH(irch)%QLATFLOW
@@ -7138,24 +7138,24 @@ C-----------UNCONTROLLED AND CONTROLLED OUTFLOW
         Rg%CURRENT%QAQFLOW    = Qaqflow
         Rg%CURRENT%QLATFLOW   = linf
         Rg%CURRENT%QUZFLOW    = uinf
-        Rg%CURRENT%QMPOSFLOW  = qpos        
+        Rg%CURRENT%QMPOSFLOW  = qpos
         Rg%CURRENT%QMNEGFLOW  = qneg
-        Rg%CURRENT%QEXTFLOW   = einf        
-        Rg%CURRENT%QBCFLOW    = Qbcflow        
+        Rg%CURRENT%QEXTFLOW   = einf
+        Rg%CURRENT%QBCFLOW    = Qbcflow
 C---------BOUNDARY FLOW RESULTING FROM CHANGE IN CONSTANT STAGES
         cv = DZERO
         IF ( Rg%CONSTANT ) THEN
           cv = -Rg%CURRENT%DVOLUME
         END IF
         Rg%CURRENT%QCRFLOW    = Crflow + cv
-C        
+C
 C---------GET RCHGRP STAGE
         ps = SSWR_RG_STG(Rg, Rg%CURRENT%VOLUME)
         Rg%STAGE = ps
-C        
+C
 C---------UPDATE REACH DATA FOR CURRENT SWR TIMESTEP
 C         BASED ON NEW VOLUME
-        DO nr = 1, Rg%NRGREACH  
+        DO nr = 1, Rg%NRGREACH
           irch = Rg%REACH(nr)
 C           UPDATE STAGE
           IF (.NOT.Rg%CONSTANT) THEN
@@ -7172,19 +7172,19 @@ C           UPDATE DVOLUME
             REACH(irch)%CURRENT%DVOLUME = (rv0 - rv) / SWRDT
 C-------------BOUNDARY FLOW RESULTING FROM CHANGE IN CONSTANT STAGES
             IF ( Rg%CONSTANT ) THEN
-              REACH(irch)%CURRENT%QCRFLOW = 
+              REACH(irch)%CURRENT%QCRFLOW =
      2          REACH(irch)%CURRENT%QCRFLOW + (rv - rv0) / SWRDT
             END IF
           ELSE
             REACH(irch)%CURRENT%DVOLUME = DZERO
           END IF
         END DO
-C---------RETURN        
+C---------RETURN
         RETURN
       END SUBROUTINE SSWR_RG_UPDATE
 
 C
-C-------SUBROUTINE TO CALCULATE INCREMENTAL AND CUMULATIVE 
+C-------SUBROUTINE TO CALCULATE INCREMENTAL AND CUMULATIVE
 C       SURFACE WATER ROUTING BUDGET FOR MODEL
 !      SUBROUTINE SSWRBUDGET(Kper,Kstp,
 !     2                      Qaqcumin,Qaqincin,Qaqcumout,Qaqincout)
@@ -7199,9 +7199,9 @@ C-------SUBROUTINE TO OUTPUT SUMMARY REACH STAGE DATA TO ISWRPSTG
         USE GWFSWRMODULE, ONLY: IZERO, RZERO, DZERO, DONE,
      2                          ISWRSAVG, RTPRN, NPMAX, NREACHES, REACH,
      3                          ISWRPSTG, ISWRPQAQ, ISWRSRIV, ISWRPSTR,
-     4                          NUMTIME, SWRHEADER, SWRDT, 
+     4                          NUMTIME, SWRHEADER, SWRDT,
      5                          ISWRDT, SWRTIME, RSTAGE, RSTAGEP,
-     6                          NOBS, IOBSSTG, IOBSDEP, IOBSRBOT, 
+     6                          NOBS, IOBSSTG, IOBSDEP, IOBSRBOT,
      7                          OBSDATA, DOBS
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
@@ -7273,10 +7273,10 @@ C             INCREMENT PRINT COUNTER
             IF ( ip.GT.NPMAX ) EXIT OTIME !HACK
           END DO OTIME
         END IF
-C         RESET PRINT DATA FOR REACH AFTER PRINTING IF 
+C         RESET PRINT DATA FOR REACH AFTER PRINTING IF
 C         DATA IS BEING AVERAGED AND NOT NEEDED LATER
         IF ( ISWRSAVG.NE.0 ) THEN
-          IF ( ISWRPQAQ.EQ.0 .AND. ISWRSRIV.EQ.0 .AND. 
+          IF ( ISWRPQAQ.EQ.0 .AND. ISWRSRIV.EQ.0 .AND.
      2         ISWRPSTR.EQ.0 ) THEN
             ip = 1
             ETIME: DO n = 1, NUMTIME
@@ -7321,13 +7321,13 @@ C-------SUBROUTINE TO OUTPUT SUMMARY QAQFLOW DATA TO ISWRPQAQ
       SUBROUTINE SSWR_P_QAQFLOW(Kper,Kstp)
         USE GWFBASMODULE, ONLY: DELT, TOTIM
         USE GLOBAL,       ONLY: NLAY, IFREFM, ISSFLG, HNEW, HOLD
-        USE GWFSWRMODULE, ONLY: IZERO, RZERO, DZERO, DONE, 
-     2                          ISWRSRIV, ISWRALLRIV, ISWRSAVG, 
+        USE GWFSWRMODULE, ONLY: IZERO, RZERO, DZERO, DONE,
+     2                          ISWRSRIV, ISWRALLRIV, ISWRSAVG,
      3                          RTPRN, NPMAX, NREACHES, REACH, RCHGRP,
-     4                          ISWRPSTG, ISWRPQAQ, ISWRPSTR,  
+     4                          ISWRPSTG, ISWRPQAQ, ISWRPSTR,
      5                          NUMTIME, SWRHEADER, ISWRDT, SWRDT,
      6                          SWRTIME, RSTAGE, RSTAGEP,
-     7                          NOBS, IOBSQAQ, OBSDATA, DOBS     
+     7                          NOBS, IOBSQAQ, OBSDATA, DOBS
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
         INTEGER, INTENT(IN) :: Kper
@@ -7367,7 +7367,7 @@ C     + + + OUTPUT FORMATS + + +
      5         'TOTIM',1X,G10.3)
 C     + + + CODE + + +
         iu   = ABS( ISWRPQAQ )
-        iriv = ABS( ISWRSRIV ) 
+        iriv = ABS( ISWRSRIV )
 C---------WRITE FILE HEADER IF FIRST CALL TO SWR BUDGET SUBROUTINE
         IF ( SWRHEADER.EQ.0 ) THEN
 !          IF ( ISWRPQAQ.GT.IZERO ) THEN
@@ -7385,8 +7385,8 @@ C-----------CALCULATE THE MAXIMUM NUMBER OF RIV CELLS
                 mxactr = mxactr + 1
               END IF
             END DO
-          END IF        
-C-----------WRITE DATASET 0 AND 2 TO THE MODFLOW RIV PACKAGE 
+          END IF
+C-----------WRITE DATASET 0 AND 2 TO THE MODFLOW RIV PACKAGE
 C           GENERATED BY SWR1
 !          IF ( ISWRSRIV.GT.0 ) THEN
 !            WRITE (iriv,'(A)') '#MODFLOW RIV PACKAGE CREATED BY SWR1'
@@ -7424,26 +7424,26 @@ C-------------CALCULATE BASEFLOW FOR THIS TIME
 C-------------LOOP THROUGH EACH LAYER
             PLAYERS: DO kl = REACH(irch)%LAYSTR, REACH(irch)%LAYEND
               IF ( ISWRSAVG.NE.0 ) THEN
-                REACH(irch)%QAQRSLTS(ip,kl)%WETTEDPERIMETER = 
-     2            REACH(irch)%QAQRSLTS(ip,kl)%WETTEDPERIMETER + 
+                REACH(irch)%QAQRSLTS(ip,kl)%WETTEDPERIMETER =
+     2            REACH(irch)%QAQRSLTS(ip,kl)%WETTEDPERIMETER +
      3            REACH(irch)%CURRENTQAQ(kl)%WETTEDPERIMETER * dt*pfact
-                REACH(irch)%QAQRSLTS(ip,kl)%CONDUCTANCE     = 
-     2            REACH(irch)%QAQRSLTS(ip,kl)%CONDUCTANCE     + 
+                REACH(irch)%QAQRSLTS(ip,kl)%CONDUCTANCE     =
+     2            REACH(irch)%QAQRSLTS(ip,kl)%CONDUCTANCE     +
      3            REACH(irch)%CURRENTQAQ(kl)%CONDUCTANCE     * dt*pfact
-                REACH(irch)%QAQRSLTS(ip,kl)%HEADDIFFERENCE  = 
-     2            REACH(irch)%QAQRSLTS(ip,kl)%HEADDIFFERENCE  + 
+                REACH(irch)%QAQRSLTS(ip,kl)%HEADDIFFERENCE  =
+     2            REACH(irch)%QAQRSLTS(ip,kl)%HEADDIFFERENCE  +
      3            REACH(irch)%CURRENTQAQ(kl)%HEADDIFFERENCE  * dt*pfact
-                REACH(irch)%QAQRSLTS(ip,kl)%QAQFLOW         = 
-     2            REACH(irch)%QAQRSLTS(ip,kl)%QAQFLOW         + 
+                REACH(irch)%QAQRSLTS(ip,kl)%QAQFLOW         =
+     2            REACH(irch)%QAQRSLTS(ip,kl)%QAQFLOW         +
      3            REACH(irch)%CURRENTQAQ(kl)%QAQFLOW         * dt*pfact
               ELSE IF ( SWRTIME(n)%ITPRN.GT.0 ) THEN
-                REACH(irch)%QAQRSLTS(ip,kl)%WETTEDPERIMETER = 
+                REACH(irch)%QAQRSLTS(ip,kl)%WETTEDPERIMETER =
      2            REACH(irch)%CURRENTQAQ(kl)%WETTEDPERIMETER
-                REACH(irch)%QAQRSLTS(ip,kl)%CONDUCTANCE     = 
+                REACH(irch)%QAQRSLTS(ip,kl)%CONDUCTANCE     =
      2            REACH(irch)%CURRENTQAQ(kl)%CONDUCTANCE
-                REACH(irch)%QAQRSLTS(ip,kl)%HEADDIFFERENCE  = 
+                REACH(irch)%QAQRSLTS(ip,kl)%HEADDIFFERENCE  =
      2            REACH(irch)%CURRENTQAQ(kl)%HEADDIFFERENCE
-                REACH(irch)%QAQRSLTS(ip,kl)%QAQFLOW         = 
+                REACH(irch)%QAQRSLTS(ip,kl)%QAQFLOW         =
      2            REACH(irch)%CURRENTQAQ(kl)%QAQFLOW
               END IF
             END DO PLAYERS
@@ -7482,7 +7482,7 @@ C           WRITE DATASET 5 FOR MODFLOW RIV PACKAGE
               h     = ( DONE - fdelt ) * h0 + fdelt * h1
 !              IF ( ISWRPQAQ.GT.IZERO ) THEN
 !                WRITE (iu,2010) swrtot, dt, Kper, Kstp,
-!     2             n, irch, kl, REACH(irch)%GBELEV, 
+!     2             n, irch, kl, REACH(irch)%GBELEV,
 !     3             RSTAGEP(irch,ip),
 !     3             RSTAGEP(irch,ip) - REACH(irch)%GBELEV, h,
 !     4             REACH(irch)%QAQRSLTS(ip,kl)%WETTEDPERIMETER,
@@ -7490,7 +7490,7 @@ C           WRITE DATASET 5 FOR MODFLOW RIV PACKAGE
 !     6             REACH(irch)%QAQRSLTS(ip,kl)%HEADDIFFERENCE,
 !     7             REACH(irch)%QAQRSLTS(ip,kl)%QAQFLOW
 !              ELSE IF ( ISWRPQAQ.LT.IZERO ) THEN
-!                WRITE (iu) kl, REACH(irch)%GBELEV, 
+!                WRITE (iu) kl, REACH(irch)%GBELEV,
 !     2             RSTAGEP(irch,ip),
 !     3             RSTAGEP(irch,ip) - REACH(irch)%GBELEV, h,
 !     4             REACH(irch)%QAQRSLTS(ip,kl)%WETTEDPERIMETER,
@@ -7501,7 +7501,7 @@ C           WRITE DATASET 5 FOR MODFLOW RIV PACKAGE
 C               WRITE DATASET 6 FOR MODFLOW RIV PACKAGE
               IF ( ISWRSRIV.GT.0 ) THEN
                 c = REACH(irch)%QAQRSLTS(ip,kl)%CONDUCTANCE
-                IF ( REACH(irch)%ISWRBND.EQ.0 .AND. 
+                IF ( REACH(irch)%ISWRBND.EQ.0 .AND.
      2               ISWRALLRIV.NE.0 ) THEN
                   c = DZERO
                 END IF
@@ -7509,17 +7509,17 @@ C               WRITE DATASET 6 FOR MODFLOW RIV PACKAGE
 !     2               ( REACH(irch)%ISWRBND.EQ.0 .AND.
 !     3                 ISWRALLRIV.NE.0 ) ) THEN
 !                  IF ( IFREFM.EQ.0 ) THEN
-!                    WRITE (iriv,2020) kl, ir, jc, 
+!                    WRITE (iriv,2020) kl, ir, jc,
 !     2                RSTAGEP(irch,ip),
 !     3                c, REACH(irch)%GBELEV, irch
 !                  ELSE
-!                    WRITE (iriv,2025) kl, ir, jc, 
+!                    WRITE (iriv,2025) kl, ir, jc,
 !     2                RSTAGEP(irch,ip),
 !     3                c, REACH(irch)%GBELEV, irch
 !                  END IF
 !                END IF
               END IF
-C               RESET PRINT DATA FOR REACH AFTER PRINTING IF 
+C               RESET PRINT DATA FOR REACH AFTER PRINTING IF
 C               DATA IS BEING AVERAGED AND IS NOT NEEDED LATER
               IF ( ISWRSAVG.NE.0 ) THEN
                 IF ( ISWRPSTR.EQ.0 ) THEN
@@ -7535,7 +7535,7 @@ C               DATA IS BEING AVERAGED AND IS NOT NEEDED LATER
 C           INCREMENT PRINT COUNTER
           ip = ip + 1
           IF ( ip.GT.NPMAX ) EXIT OTIME !HACK
-        END DO OTIME 
+        END DO OTIME
 C---------SAVE BASEFLOW OBSERVATIONS
         IF ( IOBSQAQ.GT.0 ) THEN
           DO iobs = 1, NOBS
@@ -7563,13 +7563,13 @@ C-----------------LOOP THROUGH EACH LAYER
                   SELECT CASE (iobstype)
                     CASE ( 20 )
                       DOBS(iobs,n) = DOBS(iobs,n) +
-     2                  REACH(irch)%CURRENTQAQ(kl)%QAQFLOW 
+     2                  REACH(irch)%CURRENTQAQ(kl)%QAQFLOW
                     CASE ( 21 )
                       DOBS(iobs,n) = DOBS(iobs,n) +
-     2                  REACH(irch)%CURRENTQAQ(kl)%CONDUCTANCE 
+     2                  REACH(irch)%CURRENTQAQ(kl)%CONDUCTANCE
                     CASE ( 22 )
                       DOBS(iobs,n) = DOBS(iobs,n) +
-     2                  REACH(irch)%CURRENTQAQ(kl)%WETTEDPERIMETER 
+     2                  REACH(irch)%CURRENTQAQ(kl)%WETTEDPERIMETER
                     END SELECT
                 END DO
               END DO
@@ -7588,11 +7588,11 @@ C-------SUBROUTINE TO OUTPUT SUMMARY STRUCTURE FLOW DATA TO ISWRPSTR
         USE GWFBASMODULE, ONLY: DELT, TOTIM
         USE GWFSWRMODULE, ONLY: IZERO, RZERO, DZERO, DONE, DMISSING,
      2                          ISWRSAVG, RTPRN, NPMAX, NREACHES, REACH,
-     3                          ISWRPSTG, ISWRPQAQ, ISWRPSTR,  
+     3                          ISWRPSTG, ISWRPQAQ, ISWRPSTR,
      4                          NUMTIME, SWRHEADER, SWRDT,
-     5                          ISWRDT, SWRTIME, 
+     5                          ISWRDT, SWRTIME,
      6                          RSTAGE, GSTAGE, RSTAGEP,
-     7                          NOBS, IOBSSTR, OBSDATA, DOBS     
+     7                          NOBS, IOBSSTR, OBSDATA, DOBS
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
         INTEGER, INTENT(IN) :: Kper
@@ -7662,7 +7662,7 @@ C---------FILL PRINT ARRAYS
                   CASE ( 4 )
                   CASE ( 5 )
                   CASE ( 6 )
-                    t = REACH(irch)%STRUCT(istr)%STRINV + 
+                    t = REACH(irch)%STRUCT(istr)%STRINV +
      2                  REACH(irch)%STRUCT(istr)%STRVAL
                     b = REACH(irch)%STRUCT(istr)%STRINV
                     o   = t - b
@@ -7682,16 +7682,16 @@ C---------FILL PRINT ARRAYS
                 END SELECT
                 IF ( ISWRSAVG.NE.0 ) THEN
                   REACH(irch)%STRUCT(istr)%RSLTS(ip)%TOP     =
-     2              REACH(irch)%STRUCT(istr)%RSLTS(ip)%TOP     + 
+     2              REACH(irch)%STRUCT(istr)%RSLTS(ip)%TOP     +
      3              t * dt * pfact
                   REACH(irch)%STRUCT(istr)%RSLTS(ip)%BOTTOM  =
-     2              REACH(irch)%STRUCT(istr)%RSLTS(ip)%BOTTOM  + 
+     2              REACH(irch)%STRUCT(istr)%RSLTS(ip)%BOTTOM  +
      3              b * dt * pfact
                   REACH(irch)%STRUCT(istr)%RSLTS(ip)%OPENING =
-     2              REACH(irch)%STRUCT(istr)%RSLTS(ip)%OPENING + 
+     2              REACH(irch)%STRUCT(istr)%RSLTS(ip)%OPENING +
      3              o * dt * pfact
                   REACH(irch)%STRUCT(istr)%RSLTS(ip)%FLOW    =
-     2              REACH(irch)%STRUCT(istr)%RSLTS(ip)%FLOW    + 
+     2              REACH(irch)%STRUCT(istr)%RSLTS(ip)%FLOW    +
      3              REACH(irch)%STRUCT(istr)%CURRENT%FLOW * dt * pfact
                 ELSE IF ( SWRTIME(n)%ITPRN.GT.0 ) THEN
                   REACH(irch)%STRUCT(istr)%RSLTS(ip)%TOP     = t
@@ -7763,7 +7763,7 @@ C               DATA THAT ARE WRITTEN FOR EACH REACH
 !                END IF
               END DO
             END DO
-C             RESET PRINT DATA FOR REACH AFTER PRINTING IF 
+C             RESET PRINT DATA FOR REACH AFTER PRINTING IF
 C             DATA IS BEING AVERAGED AND NOT NEEDED LATER
             IF ( ISWRSAVG.NE.0 ) THEN
               DO irch = 1, NREACHES
@@ -7779,7 +7779,7 @@ C             DATA IS BEING AVERAGED AND NOT NEEDED LATER
 C             INCREMENT PRINT COUNTER
             ip = ip + 1
             IF ( ip.GT.NPMAX ) EXIT OTIME !HACK
-          END DO OTIME  
+          END DO OTIME
         END IF
 C---------SAVE STRUCTURE FLOW OBSERVATION DATA
         IF ( IOBSSTR.GT.0 ) THEN
@@ -7794,16 +7794,16 @@ C---------SAVE STRUCTURE FLOW OBSERVATION DATA
                 q = SSWR_CALC_QM(irch,GSTAGE(:,n))
                 SELECT CASE ( iobstype )
                   CASE (30)
-                    DOBS(iobs,n) = 
+                    DOBS(iobs,n) =
      2               -REACH(irch)%STRUCT(istr)%CURRENT%FLOW
                   CASE (31)
-                    DOBS(iobs,n) = 
+                    DOBS(iobs,n) =
      2                REACH(irch)%STRUCT(istr)%CURRENT%TOP
                   CASE (32)
-                    DOBS(iobs,n) = 
+                    DOBS(iobs,n) =
      2                REACH(irch)%STRUCT(istr)%CURRENT%BOTTOM
                   CASE (33)
-                    DOBS(iobs,n) = 
+                    DOBS(iobs,n) =
      2                REACH(irch)%STRUCT(istr)%CURRENT%OPENING
                 END SELECT
               END DO
@@ -7821,7 +7821,7 @@ C-------SUBROUTINE TO OUTPUT SUMMARY FROUDE NUMBER DATA TO IOUT
 C
 C  SURFACE-WATER ROUTING CALCULATION FUNCTIONS
 C
-C-------PASSED VOLUME WILL ALWAYS RETURN STAGE AT DEFINED "DOWNSTREAM" 
+C-------PASSED VOLUME WILL ALWAYS RETURN STAGE AT DEFINED "DOWNSTREAM"
 C       REACH OF REACH GROUP
       DOUBLEPRECISION FUNCTION SSWR_RG_STG(Rg,V) RESULT(s)
         USE GWFSWRMODULE, ONLY: IZERO, DZERO, DTWO, TRCHGRP, REACH
@@ -7851,7 +7851,7 @@ C     + + + CODE + + +
         maxoff = -1.0D9
         ts0    =  1.0D9
 C---------FIND MINIMUM STAGE, MAXIMUM STAGE, AND MAXIMUM OFFSET
-        DO nr = 1, Rg%NRGREACH  
+        DO nr = 1, Rg%NRGREACH
           irch = Rg%REACH(nr)
           IF (REACH(irch)%OFFSET.GT.maxoff) THEN
             maxoff = REACH(irch)%OFFSET
@@ -7899,7 +7899,7 @@ C           CHECK FOR INFINITE LOOP
           IF (ibs.GT.100) THEN
             s = ts
             RETURN
-          END IF          
+          END IF
           IF ( (rl * r).GT.DZERO ) THEN
             gsl = ts
             vl  = tv
@@ -7931,7 +7931,7 @@ C     + + + FUNCTIONS + + +
         DOUBLEPRECISION  :: SSWR_CALC_VOL
 C     + + + CODE + + +
         value = DZERO
-        DO nr = 1, Rg%NRGREACH  
+        DO nr = 1, Rg%NRGREACH
           irch  = Rg%REACH(nr)
           rs    = St + REACH(irch)%OFFSET
           vr    = SSWR_CALC_VOL(irch,rs)
@@ -7957,10 +7957,10 @@ C---------RETURN
         RETURN
       END FUNCTION SSWR_CALC_VOL
 C
-C-------INFLOW IS SPECIFIED LATERAL INFLOW (QLATFLOW), INFLOW FROM THE UZF 
+C-------INFLOW IS SPECIFIED LATERAL INFLOW (QLATFLOW), INFLOW FROM THE UZF
 C       PACKAGE (QUZFLOW), AND INFLOW FROM EXTERNAL SOURCES (QEXTFLOW).
       DOUBLEPRECISION FUNCTION SSWR_RG_QLI(Rg) RESULT(value)
-        USE GWFSWRMODULE, ONLY: DZERO, REACH, TRCHGRP 
+        USE GWFSWRMODULE, ONLY: DZERO, REACH, TRCHGRP
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
         TYPE (TRCHGRP), INTENT(INOUT) :: Rg
@@ -7975,7 +7975,7 @@ C     + + + FUNCTIONS + + +
 C     + + + CODE + + +
         value = DZERO
 C         FILL WITH CURRENT ESTIMATE
-        DO nr = 1, Rg%NRGREACH  
+        DO nr = 1, Rg%NRGREACH
           latinf = DZERO
           uzfinf = DZERO
           irch   = Rg%REACH(nr)
@@ -8006,7 +8006,7 @@ C         DO NOT EVALUATE INACTIVE REACHES
         IF ( REACH(irch)%ISWRBND.EQ.0 ) GOTO 9999
 C
         value = REACH(irch)%QLATFLOW
-C---------REACH DATA FOR SWR TIMESTEP          
+C---------REACH DATA FOR SWR TIMESTEP
         REACH(Irch)%CURRENT%QLATFLOW = value
 C---------RETURN
 09999   RETURN
@@ -8024,7 +8024,7 @@ C         DO NOT EVALUATE INACTIVE REACHES
         IF ( REACH(irch)%ISWRBND.EQ.0 ) GOTO 9999
 C
         value = REACH(irch)%QUZFLOW
-C---------REACH DATA FOR SWR TIMESTEP          
+C---------REACH DATA FOR SWR TIMESTEP
         REACH(Irch)%CURRENT%QUZFLOW = value
 C---------RETURN
 09999   RETURN
@@ -8042,12 +8042,12 @@ C         DO NOT EVALUATE INACTIVE REACHES
         IF ( REACH(irch)%ISWRBND.EQ.0 ) GOTO 9999
 C
         value = REACH(irch)%QEXTFLOW
-C---------REACH DATA FOR SWR TIMESTEP          
+C---------REACH DATA FOR SWR TIMESTEP
         REACH(Irch)%CURRENT%QEXTFLOW = value
 C---------RETURN
 09999   RETURN
       END FUNCTION SSWR_CALC_QEX
-    
+
       DOUBLEPRECISION FUNCTION SSWR_RG_QPR(Rg) result(value)
         USE GWFSWRMODULE, ONLY: DZERO, NEARZERO, REACH, TRCHGRP
         IMPLICIT NONE
@@ -8063,7 +8063,7 @@ C     + + + CODE + + +
         value = DZERO
 C         DO NOT EVALUATE INACTIVE REACH GROUPS
         IF ( Rg%INACTIVE ) RETURN
-        DO nr = 1, Rg%NRGREACH  
+        DO nr = 1, Rg%NRGREACH
           irch = Rg%REACH(nr)
           r    = SSWR_CALC_QPR(irch)
 C-----------RATE
@@ -8099,7 +8099,7 @@ C         DO NOT EVALUATE REACHES WITH ZERO RAINFALL RATES
 C---------SURFACE AREA
         sa    = REACH(Irch)%RAINAREA
         r     = sa * r
-C---------REACH DATA FOR SWR TIMESTEP          
+C---------REACH DATA FOR SWR TIMESTEP
         REACH(Irch)%CURRENT%RAIN = r
 C---------RATE
         value = r
@@ -8108,7 +8108,7 @@ C---------RETURN
       END FUNCTION SSWR_CALC_QPR
 
       DOUBLEPRECISION FUNCTION SSWR_RG_QEV(Rg,Gs) RESULT(value)
-        USE GWFSWRMODULE, ONLY: DZERO, NEARZERO, REACH, TRCHGRP, 
+        USE GWFSWRMODULE, ONLY: DZERO, NEARZERO, REACH, TRCHGRP,
      2                          DMINDPTH, DUPDPTH
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
@@ -8125,7 +8125,7 @@ C     + + + CODE + + +
         value = DZERO
 C         DO NOT EVALUATE INACTIVE REACH GROUPS
         IF ( Rg%INACTIVE ) RETURN
-        DO nr = 1, Rg%NRGREACH  
+        DO nr = 1, Rg%NRGREACH
           irch   = Rg%REACH(nr)
           rs     = Gs + REACH(irch)%OFFSET
           e      = SSWR_CALC_QEV(irch,rs)
@@ -8179,7 +8179,7 @@ C---------SURFACE AREA
      2                    REACH(Irch)%GEO%SAREA,Rs)
         e   = -sa * e
         swe = -sa * swe
-C---------REACH DATA FOR SWR TIMESTEP          
+C---------REACH DATA FOR SWR TIMESTEP
         REACH(Irch)%CURRENT%EVAP     = e
         REACH(Irch)%CURRENT%QPOTGWET = MIN( DZERO, swe - e )
 C---------RATE
@@ -8188,8 +8188,8 @@ C---------RETURN
 09999   RETURN
       END FUNCTION SSWR_CALC_QEV
 
-C-------REACH GROUP AQUIFER-REACH FLOW GROUNDWATER HEAD      
-      SUBROUTINE SSWR_UPDATE_QAQHGW()    
+C-------REACH GROUP AQUIFER-REACH FLOW GROUNDWATER HEAD
+      SUBROUTINE SSWR_UPDATE_QAQHGW()
         USE GLOBAL,       ONLY: NCOL,NROW,NLAY,HNEW
         USE GWFSWRMODULE
         IMPLICIT NONE
@@ -8209,15 +8209,15 @@ C     + + + CODE + + +
         END DO
 C---------RETURN
         RETURN
-      END SUBROUTINE SSWR_UPDATE_QAQHGW    
+      END SUBROUTINE SSWR_UPDATE_QAQHGW
 c
-C-------REACH GROUP AQUIFER-REACH FLOW ESTIMATE      
+C-------REACH GROUP AQUIFER-REACH FLOW ESTIMATE
       DOUBLEPRECISION FUNCTION SSWR_RG_QAQ(Rg,Gs) RESULT(value)
         USE GWFSWRMODULE, ONLY: DZERO, DONE, NEARZERO,
      2                          DMINDPTH, DUPDPTH,
-     3                          REACH, 
-     4                          TRCHGRP, ISWRDT, SWRDT, HK, 
-     5                          ISWRSS, 
+     3                          REACH,
+     4                          TRCHGRP, ISWRDT, SWRDT, HK,
+     5                          ISWRSS,
      6                          INWTCORR, INWTCNT
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
@@ -8252,17 +8252,17 @@ C         UPDATE REACH GROUP INFLOW AND OUTFLOW
         END IF
 C---------RETURN
         RETURN
-      END FUNCTION SSWR_RG_QAQ    
+      END FUNCTION SSWR_RG_QAQ
 
-C-------REACH AQUIFER-REACH FLOW ESTIMATE - SWR1      
+C-------REACH AQUIFER-REACH FLOW ESTIMATE - SWR1
       DOUBLEPRECISION FUNCTION SSWR_CALC_QAQ(Rch,Rs) RESULT(value)
         USE GLOBAL,       ONLY: NCOL,NROW,NLAY,HNEW,HOLD,
      2                          IBOUND,BOTM,LBOTM
         USE GWFBASMODULE, ONLY: HDRY
         USE GWFSWRMODULE, ONLY: DZERO, DONE, NEARZERO,
      2                          DMINDPTH, DUPDPTH,
-     3                          TREACH, ISWRDT, SWRDT, HK, 
-     4                          ISWRSS, 
+     3                          TREACH, ISWRDT, SWRDT, HK,
+     4                          ISWRSS,
      5                          INWTUNIT, INWTCORR, INWTCNT,
      6                          SWRTIME, KMFITER, SWRHEPS
         USE GWFSWRINTERFACE, ONLY: SSWR_LININT
@@ -8326,7 +8326,7 @@ C---------CALCULATE QAQFLOW FOR REACH
           Rch%CURRENTQAQ(k)%QAQFLOW        = DZERO
           Rch%CURRENTQAQ(k)%CONDUCTANCE    = DZERO
           Rch%CURRENTQAQ(k)%HEADDIFFERENCE = DZERO
-C           DO NOT EVALUATE REACHES WITH ZERO CONDUCTANCES 
+C           DO NOT EVALUATE REACHES WITH ZERO CONDUCTANCES
           IF ( Rch%ICALCQAQ.LT.1 ) CYCLE LAYERS
 C           DO NOT EVALUATE REACHES WITH NO UNDERLYING ACTIVE CELLS
           IF ( kact.GT.NLAY ) CYCLE LAYERS
@@ -8350,7 +8350,7 @@ C-----------CALCULATE MAXIMUM INCREMENTAL WETTED PERIMETER FOR CURRENT HEAD
           IF (k.EQ.1) zgtop = MAX(wps,zgtop)
           wptop = SSWR_LININT(Rch%GEO%ELEV,
      2                        Rch%GEO%WETPER,zgtop)
-            
+
           wpbot = SSWR_LININT(Rch%GEO%ELEV,
      2                        Rch%GEO%WETPER,zgbot)
           twp = wptop
@@ -8408,12 +8408,12 @@ C-----------RATE - WITH SIGN CHANGE
 C           USING MODFLOW CONVENTION
 C           POSITIVE IS A SOURCE FOR MODFLOW
 C           NEGATIVE IS A SINK   FOR MODFLOW
-C-----------REACH DATA FOR CURRENT SWR TIMESTEP          
+C-----------REACH DATA FOR CURRENT SWR TIMESTEP
           Rch%CURRENTQAQ(k)%QAQFLOW        = cond * hd
           Rch%CURRENTQAQ(k)%CONDUCTANCE    = cond
           Rch%CURRENTQAQ(k)%HEADDIFFERENCE = hd
-C-----------REACH DATA FOR SWR TIMESTEP          
-          Rch%CURRENT%QAQFLOW = 
+C-----------REACH DATA FOR SWR TIMESTEP
+          Rch%CURRENT%QAQFLOW =
      2      Rch%CURRENT%QAQFLOW - cond * hd
 C---------FILL NEWTON CORRECTION TERMS
           IF ( INWTCORR.NE.0 ) THEN
@@ -8431,21 +8431,21 @@ C---------FILL NEWTON CORRECTION TERMS
               Rch%QAQNWT(ISWRDT,k)%RHS2   = rh
               Rch%QAQNWT(ISWRDT,k)%CONDN2 = hc
             END IF
-          END IF     
+          END IF
         END DO LAYERS
 C---------RETURN
 09999   RETURN
-      END FUNCTION SSWR_CALC_QAQ    
+      END FUNCTION SSWR_CALC_QAQ
 C
-C-------REACH AQUIFER-REACH FLOW ESTIMATE - MODFLOW      
+C-------REACH AQUIFER-REACH FLOW ESTIMATE - MODFLOW
       DOUBLEPRECISION FUNCTION SSWR_CALC_MFQAQ(Rch,Rs) RESULT(value)
         USE GLOBAL,       ONLY: NCOL,NROW,NLAY,HNEW,HOLD,
      2                          IBOUND,BOTM,LBOTM
         USE GWFBASMODULE, ONLY: HDRY
         USE GWFSWRMODULE, ONLY: DZERO, DONE, NEARZERO,
      2                          DMINDPTH, DUPDPTH,
-     3                          TREACH, ISWRDT, SWRDT, HK, 
-     4                          ISWRSS, 
+     3                          TREACH, ISWRDT, SWRDT, HK,
+     4                          ISWRSS,
      5                          INWTUNIT, INWTCORR, INWTCNT,
      6                          SWRTIME, KMFITER, SWRHEPS
         USE GWFSWRINTERFACE, ONLY: SSWR_LININT
@@ -8503,7 +8503,7 @@ C---------CALCULATE QAQFLOW FOR REACH
           Rch%CURRENTQAQ(k)%QAQFLOW        = DZERO
           Rch%CURRENTQAQ(k)%CONDUCTANCE    = DZERO
           Rch%CURRENTQAQ(k)%HEADDIFFERENCE = DZERO
-C           DO NOT EVALUATE REACHES WITH ZERO CONDUCTANCES 
+C           DO NOT EVALUATE REACHES WITH ZERO CONDUCTANCES
           IF ( Rch%ICALCQAQ.LT.1 ) CYCLE LAYERS
 C           DO NOT EVALUATE REACHES WITH NO UNDERLYING ACTIVE CELLS
           IF ( kact.GT.NLAY ) CYCLE LAYERS
@@ -8526,7 +8526,7 @@ C-----------CALCULATE MAXIMUM INCREMENTAL WETTED PERIMETER FOR CURRENT HEAD
           IF (k.EQ.1) zgtop = MAX(wps,zgtop)
           wptop = SSWR_LININT(Rch%GEO%ELEV,
      2                        Rch%GEO%WETPER,zgtop)
-            
+
           wpbot = SSWR_LININT(Rch%GEO%ELEV,
      2                        Rch%GEO%WETPER,zgbot)
           twp = wptop
@@ -8580,17 +8580,17 @@ C-----------RATE - WITH SIGN CHANGE
 C           USING MODFLOW CONVENTION
 C           POSITIVE IS A SOURCE FOR MODFLOW
 C           NEGATIVE IS A SINK   FOR MODFLOW
-C-----------REACH DATA FOR CURRENT SWR TIMESTEP          
+C-----------REACH DATA FOR CURRENT SWR TIMESTEP
           Rch%CURRENTQAQ(k)%QAQFLOW        = cond * hd
           Rch%CURRENTQAQ(k)%CONDUCTANCE    = cond
           Rch%CURRENTQAQ(k)%HEADDIFFERENCE = hd
         END DO LAYERS
 C---------RETURN
 09999   RETURN
-      END FUNCTION SSWR_CALC_MFQAQ    
+      END FUNCTION SSWR_CALC_MFQAQ
 
 C-------REACH STRUCTURE FLOW CALCULATION
-      DOUBLEPRECISION FUNCTION SSWR_CALC_SFLOW(Rch,Irch,Idsrch,P) 
+      DOUBLEPRECISION FUNCTION SSWR_CALC_SFLOW(Rch,Irch,Idsrch,P)
      2                         RESULT(value)
         USE GWFSWRMODULE
         USE GWFSWRINTERFACE, ONLY: SSWR_LININT
@@ -8642,7 +8642,7 @@ C---------FILL SFR ARRAYS
         IF ( isfr.GT.0 ) THEN
           SEG(2,iseg) = qsfr
         END IF
-C---------RETURN        
+C---------RETURN
         RETURN
       END FUNCTION SSWR_CALC_SFLOW
 
@@ -8659,12 +8659,12 @@ C
 C---------INITIALIZE VARIABLES
         value       = DONE
         SELECT CASE (Istrdir)
-C           U/S FLOW - ONLY NEGATIVE VALUES ALLOWED                
+C           U/S FLOW - ONLY NEGATIVE VALUES ALLOWED
           CASE (:-1)
             IF ( Q.GT.DZERO ) VALUE = DZERO
           CASE (0)
             value = DONE
-C           D/S FLOW - ONLY POSITIVE VALUES ALLOWED                
+C           D/S FLOW - ONLY POSITIVE VALUES ALLOWED
           CASE (1:)
             IF ( Q.LT.DZERO ) VALUE = DZERO
         END SELECT
@@ -8672,13 +8672,13 @@ C
 C---------RETURN
         RETURN
       END FUNCTION SWR_STR_DIRCORR
-      
-      DOUBLEPRECISION FUNCTION SSWR_CALC_CFLOW(Ustage,Dstage,Str) 
+
+      DOUBLEPRECISION FUNCTION SSWR_CALC_CFLOW(Ustage,Dstage,Str)
      2                         RESULT(value)
-        USE GWFSWRMODULE, ONLY: DZERO, DONEHALF, DONETHIRD, DTWOTHIRDS, 
+        USE GWFSWRMODULE, ONLY: DZERO, DONEHALF, DONETHIRD, DTWOTHIRDS,
      2                          DTHREEHALVES, DONE, DTWO, DTWOPI,
-     3                          NEARZERO, 
-     4                          TSTRUCT, 
+     3                          NEARZERO,
+     4                          TSTRUCT,
      5                          GRAVITY, DLENCONV, TIMECONV
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
@@ -8771,11 +8771,11 @@ C
 C---------RETURN
         RETURN
       END FUNCTION SSWR_CALC_CFLOW
-      
+
       DOUBLEPRECISION FUNCTION SSWR_CALC_OSFLOW(Ustage,Dstage,
      2                                          Gelev,Strinv,Strwid,
      3                                          Cw,Co,Se) RESULT(value)
-        USE GWFSWRMODULE, ONLY: DZERO, DONEHALF, DTWOTHIRDS, 
+        USE GWFSWRMODULE, ONLY: DZERO, DONEHALF, DTWOTHIRDS,
      2                          DTHREEHALVES, DONE, DTWO,
      3                          NEARZERO,
      5                          ISWRDT, NTMAX,
@@ -8806,7 +8806,7 @@ C     + + + CODE + + +
 C
 C---------INITIALIZE VARIABLES
         value       = DZERO
-        mult        = DONE  
+        mult        = DONE
         dcrit       = DZERO
         gcrit       = DONE
         f           = DONE
@@ -8873,7 +8873,7 @@ C       DOI: 10.1061/(ASCE)0733-9429(2009)135:7(602)
       DOUBLEPRECISION FUNCTION SSWR_CALC_GSFLOW(Ustage,Dstage,
      2                                          Gelev,Strinv,Strwid,
      3                                          C1,C2,C3) RESULT(value)
-        USE GWFSWRMODULE, ONLY: DZERO, DONETHIRD, DONEHALF, DTWOTHIRDS, 
+        USE GWFSWRMODULE, ONLY: DZERO, DONETHIRD, DONEHALF, DTWOTHIRDS,
      2                          DONE, DTHREE,
      3                          NEARZERO,
      4                          GRAVITY, DLENCONV, TIMECONV
@@ -8932,7 +8932,7 @@ C
 C---------CALCULATE THE CRITICAL DEPTH (yc)
         yc = ( d ** DTWOTHIRDS ) * ( dus ** DONETHIRD ) *
      2       ( C1 + C2 * gcrit ) *
-     3       ( ( 1 - dcrit ) ** C3 )    
+     3       ( ( 1 - dcrit ) ** C3 )
 C
 C---------CONVERT GRAVITY TO CORRECT UNITS
         g = GRAVITY * DLENCONV * TIMECONV * TIMECONV
@@ -8990,7 +8990,7 @@ C
 C---------UPDATE RTIME WHICH IS USED TO DEFINE SWRDT
         n      = ITABTIME
         SELECT CASE ( TABDATA(n)%TSDATA%INTP )
-C           NONE AND AVERAGE            
+C           NONE AND AVERAGE
           CASE (1,2)
             rtime1 = Rtime0 + RTMIN
             t      = TABDATA(n)%TSDATA%NEXTTIME
@@ -9002,7 +9002,7 @@ C             UPDATE DVAL
      2                    TABDATA(n)%TSDATA)
 C           INTERPOLATE
           CASE (3)
-            TABDATA(n)%TSDATA%DVAL = 
+            TABDATA(n)%TSDATA%DVAL =
      2        SSWR_RLININT(TABDATA(n)%TSDATA%T(:),
      2                     TABDATA(n)%TSDATA%V(:),Rtime0)
         END SELECT
@@ -9014,7 +9014,7 @@ C---------RETURN
 
       SUBROUTINE SSWR_GET_TABS(Rtime0,Rtime1)
         USE GLOBAL,       ONLY: IOUT
-        USE GWFSWRMODULE, ONLY: IZERO, DZERO, DONE, 
+        USE GWFSWRMODULE, ONLY: IZERO, DZERO, DONE,
      2                          NTABS, NREACHES, TABDATA, REACH,
      3                          RCHGRP
         USE GWFSWRINTERFACE, ONLY: SSWR_RLININT, SSWR_LININT
@@ -9038,7 +9038,7 @@ C           SKIP TABULAR DATA SPECIFYING SWRDT
 C           SKIP TABULAR DATA USING SWR STAGE RESULTS
           IF ( TABDATA(n)%ISTGRES.NE.0 ) CYCLE LTAB
           SELECT CASE ( TABDATA(n)%TSDATA%INTP )
-C             NONE AND AVERAGE            
+C             NONE AND AVERAGE
             CASE (1,2)
               t  = TABDATA(n)%TSDATA%NEXTTIME
 C               EVALUATE IF DATA NEEDS TO BE RETRIEVED FROM MEMORY
@@ -9046,14 +9046,14 @@ C               EVALUATE IF DATA NEEDS TO BE RETRIEVED FROM MEMORY
      2                      TABDATA(n)%TSDATA)
 C             INTERPOLATE
             CASE (3)
-              TABDATA(n)%TSDATA%DVAL = 
+              TABDATA(n)%TSDATA%DVAL =
      2          SSWR_RLININT(TABDATA(n)%TSDATA%T(:),
      3                       TABDATA(n)%TSDATA%V(:),Rtime1)
           END SELECT
 C-----------SET TEMPORARY VALUE v
           v = TABDATA(n)%TSDATA%DVAL
 C-----------EVALUATE EACH REACH USING CURRENT TABULAR DATA ITEM
-          LREACHES: DO nr = 1, TABDATA(n)%NTABRCH  
+          LREACHES: DO nr = 1, TABDATA(n)%NTABRCH
             irch   = TABDATA(n)%ITABRCH(nr)
             SELECT CASE ( TABDATA(n)%ITABTYPE )
 C               RAINFALL
@@ -9081,10 +9081,10 @@ C---------UPDATE TABULAR DATA FROM SWR STAGE RESULTS FILES
         LSTGRES: DO n = 1, NTABS
 C           SKIP TABULAR DATA NOT USING SWR STAGE RESULTS
           IF ( TABDATA(n)%ISTGRES.LT.1 ) CYCLE LSTGRES
-          LSTGRCH: DO nr = 1, TABDATA(n)%NTABRCH  
+          LSTGRCH: DO nr = 1, TABDATA(n)%NTABRCH
             irch   = TABDATA(n)%ITABRCH(nr)
             SELECT CASE ( TABDATA(n)%STGRES(nr)%INTP )
-C             NONE AND AVERAGE            
+C             NONE AND AVERAGE
             CASE (1,2)
               t  = TABDATA(n)%STGRES(nr)%NEXTTIME
 C               EVALUATE IF DATA NEEDS TO BE RETRIEVED FROM MEMORY
@@ -9092,7 +9092,7 @@ C               EVALUATE IF DATA NEEDS TO BE RETRIEVED FROM MEMORY
      2                      TABDATA(n)%STGRES(nr))
 C               INTERPOLATE
               CASE (3)
-                TABDATA(n)%STGRES(nr)%DVAL = 
+                TABDATA(n)%STGRES(nr)%DVAL =
      2            SSWR_RLININT(TABDATA(n)%STGRES(nr)%T(:),
      3                         TABDATA(n)%STGRES(nr)%V(:),Rtime1)
             END SELECT
@@ -9112,10 +9112,10 @@ C---------RETURN
         RETURN
       END SUBROUTINE SSWR_GET_TABS
 
-      SUBROUTINE SSWR_GET_STRGATE(Rtime0,Rtime1) 
+      SUBROUTINE SSWR_GET_STRGATE(Rtime0,Rtime1)
         USE GLOBAL,       ONLY: IOUT
-        USE GWFSWRMODULE, ONLY: IZERO, DZERO, DONE, 
-     2                          NREACHES, NRCHGRP, REACH, RCHGRP,  
+        USE GWFSWRMODULE, ONLY: IZERO, DZERO, DONE,
+     2                          NREACHES, NRCHGRP, REACH, RCHGRP,
      3                          ISWRDT, SWRDT, IADTIME,
      4                          NTABS, TABDATA
         USE GWFSWRINTERFACE, ONLY: SSWR_RLININT
@@ -9141,19 +9141,19 @@ C-----------DO NOT EVALUATE INACTIVE REACH GROUPS
 C-----------DO NOT EVALUATE IF NO STRUCTURES IN CURRENT REACH GROUP
           IF ( RCHGRP(n)%NSTRUCT.LT.1 ) CYCLE LRG
 C-----------EVALUATE EACH REACH IN THE REACH GROUP
-          LREACHES: DO nr = 1, RCHGRP(n)%NRGREACH  
+          LREACHES: DO nr = 1, RCHGRP(n)%NRGREACH
             irch   = RCHGRP(n)%REACH(nr)
 C             DO NOT EVALUATE INACTIVE REACHES
             IF ( ABS( REACH(irch)%ISWRBND ).LT.1 ) CYCLE LREACHES
             LSTRUCTURE: DO nn = 1, REACH(irch)%NSTRUCT
               istrtype   = REACH(irch)%STRUCT(nn)%ISTRTYPE
               istrtstype = REACH(irch)%STRUCT(nn)%ISTRTSTYPE
-C               DO NOT EVALUATE STRUCTURES THAT ARE NOT OPERATED USING 
+C               DO NOT EVALUATE STRUCTURES THAT ARE NOT OPERATED USING
 C               TIMESERIES DATA
               IF ( istrtstype.LT.1 ) CYCLE LSTRUCTURE
               itab = REACH(irch)%STRUCT(nn)%ISTRTAB
               SELECT CASE ( TABDATA(itab)%TSDATA%INTP )
-C                 NONE AND AVERAGE            
+C                 NONE AND AVERAGE
                 CASE (1,2)
                   t  = TABDATA(itab)%TSDATA%NEXTTIME
 C                   EVALUATE IF DATA NEEDS TO BE RETRIEVED FROM MEMORY
@@ -9163,7 +9163,7 @@ C                   EVALUATE IF DATA NEEDS TO BE RETRIEVED FROM MEMORY
                   END IF
 C                 INTERPOLATE
                 CASE (3)
-                  TABDATA(itab)%TSDATA%DVAL = 
+                  TABDATA(itab)%TSDATA%DVAL =
      2              SSWR_RLININT(TABDATA(itab)%TSDATA%T(:),
      2                           TABDATA(itab)%TSDATA%V(:),Rtime1)
               END SELECT
@@ -9171,7 +9171,7 @@ C                 INTERPOLATE
               SELECT CASE ( istrtstype )
 C                 STRCRIT
                 CASE (1)
-                  REACH(irch)%STRUCT(nn)%STRCRIT = 
+                  REACH(irch)%STRUCT(nn)%STRCRIT =
      2              REACH(irch)%STRUCT(nn)%STRVAL
 C                 STRVAL
                 CASE (2)
@@ -9191,15 +9191,15 @@ C---------RETURN
 C       UPDATE OPERABLE STRUCTURE DISCHARGE (PUMP) RATES, GATE
 C       LEVELS FOR ALL OPERABLE STRUCTURES, AND STRVAL FOR ALL
 C       STAGE-DEPENDENT FLUX STRUCTURES
-!      SUBROUTINE SWR_CALC_STRVALS(P) 
+!      SUBROUTINE SWR_CALC_STRVALS(P)
 
 C       SET OPERABLE STRUCTURE DISCHARGE (PUMP) RATES AND GATE
 C       LEVELS FOR ALL OPERABLE STRUCTURES TO VALUE SAVED FOR SWR1
 C       TIMESTEP Nt
-      SUBROUTINE SWR_SET_STRVALS(Irch,Nt) 
-        USE GWFSWRMODULE, ONLY: IZERO, DZERO, DONE, 
+      SUBROUTINE SWR_SET_STRVALS(Irch,Nt)
+        USE GWFSWRMODULE, ONLY: IZERO, DZERO, DONE,
      2                          ISWRPSTR, ILAGSTROPR,
-     3                          NREACHES, NRCHGRP, REACH, RCHGRP,  
+     3                          NREACHES, NRCHGRP, REACH, RCHGRP,
      4                          ISWRDT, SWRDT, RSTAGE
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
@@ -9215,7 +9215,7 @@ C     + + + CODE + + +
 C         DO NOT EVALUATE INACTIVE REACHES
         IF ( ABS( REACH(Irch)%ISWRBND ).LT.1 ) GOTO 9999
 C         DO NOT EVALUATE REACHES WITHOUT OPERABLE STRUCTURES
-        IF ( REACH(Irch)%NOPR.LT.1 ) GOTO 9999            
+        IF ( REACH(Irch)%NOPR.LT.1 ) GOTO 9999
 C         SET CURRENT VALUE FOR STRUCTURE TO VALUE SAVED FOR TIME Nt
         LSTRUCTURE: DO nn = 1, REACH(Irch)%NSTRUCT
           istrtype = REACH(irch)%STRUCT(nn)%ISTRTYPE
@@ -9297,7 +9297,7 @@ C---------DO NOT EVALUATE INACTIVE REACH GROUPS
 C---------MAKE SURE REACH GROUP IS CONNECTED TO ADJACENT REACH GROUPS
         IF ( Rg%NCONN.LT.1 ) RETURN
 C
-C---------EVALUATE QM FLOW FOR EACH REACH GROUP AS A RATE        
+C---------EVALUATE QM FLOW FOR EACH REACH GROUP AS A RATE
         qpos = DZERO
         qneg = DZERO
         REACHINRCHGRP: DO nr = 1, Rg%NRGREACH
@@ -9306,7 +9306,7 @@ C---------EVALUATE QM FLOW FOR EACH REACH GROUP AS A RATE
           qpos = qpos + REACH(irch)%CURRENT%QMPOSFLOW
           qneg = qneg + REACH(irch)%CURRENT%QMNEGFLOW
         END DO REACHINRCHGRP
-C        
+C
 C---------ADD ESTIMATE OF UNMANAGED AND MANAGED FLOW TO RCHGRP VALUE
         Rg%CURRENT%QMPOSFLOW = qpos
         Rg%CURRENT%QMNEGFLOW = qneg
@@ -9318,11 +9318,11 @@ C         UPDATE REACH GROUP INFLOW AND OUTFLOW
         ELSE
             Rg%OUTFLOW = Rg%OUTFLOW - value
         END IF
-C---------RETURN        
+C---------RETURN
         RETURN
       END FUNCTION SSWR_RG_QM
 
-      DOUBLEPRECISION FUNCTION SSWR_CALC_QM(Irch,Gs) 
+      DOUBLEPRECISION FUNCTION SSWR_CALC_QM(Irch,Gs)
      2  RESULT(value)
         USE GWFSWRMODULE
         USE GWFSWRINTERFACE, ONLY: SSWR_LININT
@@ -9350,7 +9350,7 @@ C     + + + FUNCTIONS + + +
 C     + + + CODE + + +
         value = DZERO
 C
-C---------EVALUATE QM FLOW FOR EACH REACH CONNECTION AS A RATE        
+C---------EVALUATE QM FLOW FOR EACH REACH CONNECTION AS A RATE
         REACH(Irch)%RPOSFLOW          = DZERO
         REACH(Irch)%CURRENT%QMPOSFLOW = DZERO
         REACH(Irch)%RNEGFLOW          = DZERO
@@ -9367,7 +9367,7 @@ C---------LOOP THROUGH EACH CONNECTION IN REACH
           ia    = Irch
           ja    = REACH(Irch)%ICONN(ic)
           i     = imult * ia
-          j     = imult * ja 
+          j     = imult * ja
 C           SKIP CONNECTION IF CONNECTED REACH IS INACTIVE
           IF ( REACH(ja)%ISWRBND.EQ.0 ) CYCLE EACHRCHCONN
 C           CALCULATE PARAMETERS NEEDED FOR BOTH METHODS
@@ -9377,7 +9377,7 @@ C           CALCULATE PARAMETERS NEEDED FOR BOTH METHODS
           jcoli   = REACH(ia)%JRCH
           irowj   = REACH(ja)%IRCH
           jcolj   = REACH(ja)%JRCH
-C           STAGES          
+C           STAGES
           si  = Gs(irgi) + REACH(ia)%OFFSET
           sj  = Gs(irgj) + REACH(ja)%OFFSET
 C           STRUCTURE-CONTROLLED FLOW
@@ -9386,7 +9386,7 @@ C           STRUCTURE-CONTROLLED FLOW
 C             SEND REACH TO STRUCTURE CALL TO RETURN TOTAL FLOW FOR CONNECTION
             jstrrch = ja
             mult    = -DONE
-C             CHECK IF EVALUATING STRUCTURE FLOW IN REACH WITH STRUCTURE (ia) 
+C             CHECK IF EVALUATING STRUCTURE FLOW IN REACH WITH STRUCTURE (ia)
 C             OR REACH ON THE DOWNSTREAM END OF STRUCTURE (ja)
             IF ( istrrch.NE.ia ) THEN
               jstrrch = ia
@@ -9405,14 +9405,14 @@ C             UNCONTROLLED FLOW ONLY FOR DIFFUSIVE-WAVE APPROXIMATION CONNECTION
      3                          Gs)
           END IF
 C           POSITIVE FLOW - INFLOW TO REACH
-          IF ( q.GT.DZERO ) THEN 
+          IF ( q.GT.DZERO ) THEN
             REACH(ia)%RPOSFLOW          = REACH(ia)%RPOSFLOW + q
-            REACH(ia)%CURRENT%QMPOSFLOW = 
+            REACH(ia)%CURRENT%QMPOSFLOW =
      2        REACH(ia)%CURRENT%QMPOSFLOW + q
 C           NEGATIVE FLOW
           ELSE
             REACH(ia)%RNEGFLOW          = REACH(ia)%RNEGFLOW + q
-            REACH(ia)%CURRENT%QMNEGFLOW = 
+            REACH(ia)%CURRENT%QMNEGFLOW =
      2        REACH(ia)%CURRENT%QMNEGFLOW + q
           END IF
 C           CALCULATE DEPTH AND CROSS-SECTIONAL AREA FOR CONNECTION
@@ -9430,11 +9430,11 @@ C           FILL QCONN
 
         value = REACH(Irch)%CURRENT%QMPOSFLOW +
      2          REACH(Irch)%CURRENT%QMNEGFLOW
-C---------RETURN        
+C---------RETURN
         RETURN
       END FUNCTION SSWR_CALC_QM
 
-      DOUBLEPRECISION FUNCTION SSWR_CALC_QM2CH(Irch,Gs) 
+      DOUBLEPRECISION FUNCTION SSWR_CALC_QM2CH(Irch,Gs)
      2  RESULT(value)
         USE GWFSWRMODULE
         USE GWFSWRINTERFACE, ONLY: SSWR_LININT
@@ -9472,7 +9472,7 @@ C---------LOOP THROUGH EACH CONNECTION IN REACH
           ia    = Irch
           ja    = REACH(Irch)%ICONN(ic)
           i     = imult * ia
-          j     = imult * ja 
+          j     = imult * ja
 C           SKIP CONNECTION IF CONNECTED REACH IS NOT CONSTANT
           IF ( REACH(ja)%ISWRBND.GE.0 ) CYCLE EACHRCHCONN
 C           CALCULATE PARAMETERS NEEDED FOR BOTH METHODS
@@ -9482,7 +9482,7 @@ C           CALCULATE PARAMETERS NEEDED FOR BOTH METHODS
           jcoli   = REACH(ia)%JRCH
           irowj   = REACH(ja)%IRCH
           jcolj   = REACH(ja)%JRCH
-C           STAGES          
+C           STAGES
           si  = Gs(irgi) + REACH(ia)%OFFSET
           sj  = Gs(irgj) + REACH(ja)%OFFSET
 C           STRUCTURE-CONTROLLED FLOW
@@ -9491,7 +9491,7 @@ C           STRUCTURE-CONTROLLED FLOW
 C             SEND REACH TO STRUCTURE CALL TO RETURN TOTAL FLOW FOR CONNECTION
             jstrrch = ja
             mult    = -DONE
-C             CHECK IF EVALUATING STRUCTURE FLOW IN REACH WITH STRUCTURE (ia) 
+C             CHECK IF EVALUATING STRUCTURE FLOW IN REACH WITH STRUCTURE (ia)
 C             OR REACH ON THE DOWNSTREAM END OF STRUCTURE (ja)
             IF ( istrrch.NE.ia ) THEN
               jstrrch = ia
@@ -9511,11 +9511,11 @@ C             UNCONTROLLED FLOW ONLY FOR DIFFUSIVE-WAVE APPROXIMATION CONNECTION
           END IF
           value = value + q
         END DO EACHRCHCONN
-C---------RETURN        
+C---------RETURN
         RETURN
       END FUNCTION SSWR_CALC_QM2CH
 
-      DOUBLEPRECISION FUNCTION SSWR_RG_QBC(Rg,Gs) 
+      DOUBLEPRECISION FUNCTION SSWR_RG_QBC(Rg,Gs)
      2  RESULT(value)
         USE GWFSWRMODULE, ONLY: DZERO, DONE, NRCHGRP, TRCHGRP, REACH
         IMPLICIT NONE
@@ -9552,7 +9552,7 @@ C---------RETURN
         RETURN
       END FUNCTION SSWR_RG_QBC
 
-      DOUBLEPRECISION FUNCTION SSWR_CALC_QBC(Irch,Gs) 
+      DOUBLEPRECISION FUNCTION SSWR_CALC_QBC(Irch,Gs)
      2  RESULT(value)
         USE GWFSWRMODULE, ONLY: DZERO, DONE, NRCHGRP, REACH
         IMPLICIT NONE
@@ -9572,14 +9572,14 @@ C         DO NOT EVALUATE INACTIVE REACHES
         idsrch = 0
         q      = SSWR_CALC_SFLOW(REACH(Irch),Irch,idsrch,Gs)
         q      = -q
-C---------REACH DATA FOR SWR TIMESTEP          
+C---------REACH DATA FOR SWR TIMESTEP
 09999   REACH(irch)%CURRENT%QBCFLOW = q
         value  = q
 C---------RETURN
         RETURN
       END FUNCTION SSWR_CALC_QBC
 
-      DOUBLEPRECISION FUNCTION SSWR_RG_QCS(Rg,In,R,E,B,Qm,Bc) 
+      DOUBLEPRECISION FUNCTION SSWR_RG_QCS(Rg,In,R,E,B,Qm,Bc)
      2  RESULT(value)
         USE GWFSWRMODULE, ONLY: DZERO, DONE, TRCHGRP, REACH
         IMPLICIT NONE
@@ -9602,7 +9602,7 @@ C           DEFICIT IN FLOW TERMS.
         IF (Rg%CONSTANT) THEN
           value = -DONE * (In + R + E + B + Qm + Bc)
 C           EVALUATE EACH REACH
-          DO nr = 1, Rg%NRGREACH  
+          DO nr = 1, Rg%NRGREACH
             irch  = Rg%REACH(nr)
             q     = SSWR_CALC_QCS(irch)
           END DO
@@ -9636,7 +9636,7 @@ C-----------REACH DATA FOR SWR TIMESTEP
           rr    = REACH(Irch)%CURRENT%RAIN
           re    = REACH(Irch)%CURRENT%EVAP
           rb    = REACH(Irch)%CURRENT%QAQFLOW
-          rqm   = REACH(Irch)%CURRENT%QMPOSFLOW + 
+          rqm   = REACH(Irch)%CURRENT%QMPOSFLOW +
      2            REACH(Irch)%CURRENT%QMNEGFLOW
           rbc   = REACH(Irch)%CURRENT%QBCFLOW
           value = -DONE * (ri+rr+re+rb+rqm+rbc)
@@ -9674,7 +9674,7 @@ C---------RETURN
         RETURN
       END FUNCTION SSWR_BUDGET_QCS
 C
-C-------INFLOW IS SPECIFIED INFLOW, UPSTREAM INFLOW, DOWNSTREAM INFLOW, 
+C-------INFLOW IS SPECIFIED INFLOW, UPSTREAM INFLOW, DOWNSTREAM INFLOW,
 C       AND LATERAL INFLOW
       DOUBLEPRECISION FUNCTION SSWR_RG_QINF(Rg) RESULT(value)
         USE GWFSWRMODULE, ONLY: DZERO, REACH, TRCHGRP
@@ -9694,7 +9694,7 @@ C     + + + CODE + + +
 C---------DO NOT EVALUATE INACTIVE REACH GROUPS
         IF ( Rg%INACTIVE ) RETURN
 C--------FILL WITH CURRENT ESTIMATE
-        DO nr = 1, Rg%NRGREACH  
+        DO nr = 1, Rg%NRGREACH
           irch   = Rg%REACH(nr)
 C           ONLY CALCULATE FOR ACTIVE REACHES
           IF ( REACH(irch)%ISWRBND.LT.1 ) CYCLE
@@ -9705,7 +9705,7 @@ C           ONLY CALCULATE FOR ACTIVE REACHES
           r      = REACH(irch)%CURRENT%RAIN
           qaq    = MAX( DZERO,   REACH(irch)%CURRENT%QAQFLOW )
           qneg   = MAX( DZERO, ( REACH(irch)%CURRENT%QMNEGFLOW ) )
-          value  = value + 
+          value  = value +
      2             qpos + latinf + uzfinf + extinf + r + qaq + qneg
         END DO
 C---------RETURN
@@ -9823,7 +9823,7 @@ C
         sfm   = sf
         IF ( ICIQM.NE.0 ) THEN
           IF ( J.NE.IZERO ) THEN
-            IF ( REACH(I)%IGEOTYPE.EQ.5 .AND. 
+            IF ( REACH(I)%IGEOTYPE.EQ.5 .AND.
      2           REACH(J)%IGEOTYPE.EQ.5 ) THEN
 C               EXPLICIT QM MAGNITUDE
               IF ( ICIQM.GT.0 ) THEN
@@ -9844,18 +9844,18 @@ C         IS LESS THAN USER SPECIFIED MINIMUM WATER SURFACE GRADIENT
         IF ( sfm.LT.DMINGRAD .OR. (sfm-NEARZERO).LT.DZERO ) RETURN
 C         UPSTREAM WEIGHTING OF UNCONTROLLED FLOW BETWEEN CONNECTED REACHES
         IF ( ISWRUPWT.NE.0 .AND. J.NE.IZERO ) THEN
-          IF ( psj.GT.psi ) THEN 
+          IF ( psj.GT.psi ) THEN
             a = aj
             p = pj
-          ELSE 
+          ELSE
             a = ai
             p = pi
-          END IF 
-        END IF 
+          END IF
+        END IF
 C         DO NOT PROCEED WITH QM FLOW CALCULATION IF WETTED PERIMETER
 C         IS LESS THAN OR EQUAL TO DZERO
         IF ( p.LE.DZERO ) RETURN
-C         
+C
         sfmi = DONE / SQRT( sfm )
 C         GAUCKLER-MANNING-STRICKLER COEFFICIENT
         gsm   = ( DONE / r )
@@ -9879,14 +9879,14 @@ C         SCALE OF BED RESISTANCE (gsm)
           IF ( psj.EQ.DMISSING ) THEN
             g = GRAVITY * DLENCONV * TIMECONV * TIMECONV
             c = -1.0D0
-            value = c * a * SQRT( g * hr ) 
+            value = c * a * SQRT( g * hr )
           END IF
         END IF
-C       
+C
 C---------RETURN
         RETURN
       END FUNCTION SSWR_CALC_UFLOW
-      
+
       CHARACTER (LEN=17) FUNCTION SSWR_BDCHAR(R) RESULT(value)
         USE GWFSWRMODULE, ONLY: DZERO
         IMPLICIT NONE
@@ -9942,18 +9942,18 @@ C     + + + CODE + + +
         DO i = 1, NREACHES
           IF ( REACH(i)%RAIN.GT.rmax ) rmax = REACH(i)%RAIN
         END DO
-        value = rmax / DMAXRAI  
+        value = rmax / DMAXRAI
 C---------RETURN
         RETURN
       END FUNCTION SSWRMXRN
 C
 C-------CALCULATE SMALL DEPTH SCALING FACTOR FOR DIFFUSIVE WAVE
-C       FLOW, QAQFLOW, AND EVAPORATION 
+C       FLOW, QAQFLOW, AND EVAPORATION
 C       VALUE OF 1.0 (UNSCALED) ABOVE DUPDPTH
 C       S-CURVE FUNCTION BETWEEN DUPDPTH AND DMINDPTH
 C       VALUE OF 0.0 BELOW DMINDPTH
       DOUBLEPRECISION FUNCTION SSWR_CALC_DPTHFACT(D,U,L) RESULT(value)
-        USE GWFSWRMODULE, ONLY: IZERO, DZERO, DONE, 
+        USE GWFSWRMODULE, ONLY: IZERO, DZERO, DONE,
      2                          DMINDPTH, DUPDPTH, IDPTHSCL
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
@@ -9992,27 +9992,27 @@ C---------RETURN
       END FUNCTION SSWR_CALC_DPTHFACT
 C
 C + + + SOLVER SUBROUTINES AND FUNCTIONS + + +
-C                                                                       
+C
 C-------BACKTRACKING BASED ON THE L2NORM OF THE RESIDUAL
 C       MINIMIZATION USING BRENT'S METHOD
-!      SUBROUTINE SSWRBTBM(I,Rn0,Rn,R,X0,X) 
-      
+!      SUBROUTINE SSWRBTBM(I,Rn0,Rn,R,X0,X)
+
       SUBROUTINE SHIFT4(A,B,C,D)
         IMPLICIT NONE
-C     + + + DUMMY ARGUMENTS + + +                                       
+C     + + + DUMMY ARGUMENTS + + +
         DOUBLEPRECISION, INTENT(OUT)   :: A
         DOUBLEPRECISION, INTENT(INOUT) :: B
         DOUBLEPRECISION, INTENT(INOUT) :: C
         DOUBLEPRECISION, INTENT(IN)    :: D
-C     + + + CODE + + +                                       
+C     + + + CODE + + +
         A = B
         B = C
         C = D
-C---------RETURN                                                        
-        RETURN 
+C---------RETURN
+        RETURN
       END SUBROUTINE SHIFT4
 C
-C-------MAP GENERIC SOLUTION (NSOLRG) VECTOR TO GENERIC 
+C-------MAP GENERIC SOLUTION (NSOLRG) VECTOR TO GENERIC
 C       FULL COMPUTATION ELEMENT (NRCHGRP) VECTOR
       SUBROUTINE SSWRS2C(S,F)
         USE GWFSWRMODULE, ONLY: NRCHGRP, NSOLRG, JAC
@@ -10052,7 +10052,7 @@ C     + + + CODE + + +
 C---------RETURN
         RETURN
       END SUBROUTINE SSWRC2S
-      
+
       SUBROUTINE SSWREXTRD(Iswr,Iout,Iut,Iclose)
 C     ******************************************************************
 C     Determine if data should be processed from an internal, external,
@@ -10187,7 +10187,7 @@ C2--------Check for and decode EXTERNAL and OPEN/CLOSE records.
 C
 C3--------Setup indirgs for reading the list
         nread = Ldim - Naux
-C3A-------Advance to first       
+C3A-------Advance to first
         CALL SSWR_RD_COMM(in)
 C
 C4--------Read the list.
@@ -10229,7 +10229,7 @@ C     ******************************************************************
      2                          TSWRTIME,
      3                          DZERO,
      4                          INWTCORR, NREACHES, REACH,
-     5                          NRCHGRP, RCHGRP, 
+     5                          NRCHGRP, RCHGRP,
      6                          NTMAX, NPMAX, RTIME, SWRTIME,
      8                          RSTAGE, GSTAGE
         IMPLICIT NONE
@@ -10255,7 +10255,7 @@ C     + + + OUTPUT FORMATS + + +
 C     + + + CODE + + +
         id = 0
         IF (Ira.NE.0) THEN
-!          WRITE (IOUT,'(//1X,A,1X,I10,1X,A,1X,I10)') 
+!          WRITE (IOUT,'(//1X,A,1X,I10,1X,A,1X,I10)')
 !     2      'REALLOCATING SOLUTION SPACE:', NTMAX, 'TO', L
           id = 1
           ALLOCATE( r(NREACHES) )
@@ -10350,7 +10350,7 @@ C---------DEALLOCATE TEMPORARY STORAGE
 
           DEALLOCATE( rs )
           DEALLOCATE( gs )
-C---------INITIALIZE SWRTIME AND RSTAGE          
+C---------INITIALIZE SWRTIME AND RSTAGE
         ELSE
           DO n = 1, NTMAX
             SWRTIME(n)%SWRDT = RTIME
@@ -10368,7 +10368,7 @@ C---------INITIALIZE SWRTIME AND RSTAGE
         END IF
 C
 C---------RETURN
-        RETURN      
+        RETURN
       END SUBROUTINE SSWR_ALLO_SOLN
 
       SUBROUTINE SSWR_SET_SOLSUM(Is,Ds)
@@ -10381,7 +10381,7 @@ C     ******************************************************************
         IMPLICIT NONE
 C     + + + DUMMY ARGUMENTS + + +
         INTEGER, INTENT(INOUT), ALLOCATABLE, DIMENSION(:,:) :: Is
-        DOUBLEPRECISION, INTENT(INOUT), ALLOCATABLE, 
+        DOUBLEPRECISION, INTENT(INOUT), ALLOCATABLE,
      +    DIMENSION(:,:) :: Ds
 C     + + + LOCAL DEFINITIONS + + +
         INTEGER :: nold
@@ -10424,7 +10424,7 @@ C---------DEALLOCATE TEMPORARY STORAGE
       END IF
 C
 C---------RETURN
-        RETURN      
+        RETURN
       END SUBROUTINE SSWR_SET_SOLSUM
 
       SUBROUTINE SSWRVADJ(DVZ)
@@ -10466,7 +10466,7 @@ C
 C           CALCULATE CUMULATIVE SUBSIDANCE FOR THE REACH
           REACH(irch)%GCUMSUB = REACH(irch)%GCUMSUB - z
           IF ( ABS(z).GT.DZERO ) THEN
-C             ADJUST CURRENT STAGE FOR THE REACH          
+C             ADJUST CURRENT STAGE FOR THE REACH
             REACH(irch)%STAGE = REACH(irch)%STAGE - z
 C             ADJUST GEOMETRY FOR THE REACH
             RCHGRP(irg)%IRGUPDATE = 1
@@ -10476,22 +10476,22 @@ C             ADJUST GEOMETRY FOR THE REACH
             REACH(irch)%GTELEV = REACH(irch)%GTELEV - z
             REACH(irch)%GBELEV = REACH(irch)%GBELEV - z
 C             RESET STARTING AND ENDING LAYER
-            CALL SSWR_SET_RCHLAY(irch)         
+            CALL SSWR_SET_RCHLAY(irch)
 C             ADJUST STRUCTURE DATA FOR REACH
             DO ns = 1, REACH(irch)%NSTRUCT
               istrtype =  REACH(irch)%STRUCT(ns)%ISTRTYPE
 C               ADJUST STRUCTURE INVERT
-              REACH(irch)%STRUCT(ns)%STRINV = 
+              REACH(irch)%STRUCT(ns)%STRINV =
      2          REACH(irch)%STRUCT(ns)%STRINV - z
 C               ADJUST OTHER VERTICALLY TRANSLATABLE ELEVATIONS
               SELECT CASE ( istrtype )
                 CASE (4)
                   DO nt = 1, REACH(irch)%STRUCT(ns)%NSTRPTS
-                    REACH(irch)%STRUCT(ns)%STRELEV(nt) = 
+                    REACH(irch)%STRUCT(ns)%STRELEV(nt) =
      2                REACH(irch)%STRUCT(ns)%STRELEV(nt) - z
                   END DO
                 CASE (5)
-                  REACH(irch)%STRUCT(ns)%STRINV2 = 
+                  REACH(irch)%STRUCT(ns)%STRINV2 =
      2              REACH(irch)%STRUCT(ns)%STRINV2 - z
                 CASE (6,7,8,9,10)
                   REACH(irch)%STRUCT(ns)%STRTOP =
@@ -10507,7 +10507,7 @@ C           PRINT VERTICAL ADJUSTMENT FOR THE REACH
 !              WRITE(IOUT,2000)
               ifirst = 0
             END IF
-!            WRITE(IOUT,2010) irch, -z, 
+!            WRITE(IOUT,2010) irch, -z,
 !     2                       REACH(irch)%GCUMSUB, REACH(irch)%GBELEV
           END IF
         END DO
@@ -10523,10 +10523,10 @@ C---------RECALCULATE STAGE-VOLUME RELATION FOR EACH REACH GROUP
         CALL SSWR_CALC_RATCURVE()
 C
 C---------RETURN
-        RETURN      
+        RETURN
       END SUBROUTINE SSWRVADJ
-      
-      DOUBLEPRECISION FUNCTION SSWR_SFLOW(Str,Irch,P) 
+
+      DOUBLEPRECISION FUNCTION SSWR_SFLOW(Str,Irch,P)
      2  RESULT(value)
         USE GWFSWRMODULE
         USE GWFSWRINTERFACE, ONLY: SSWR_LININT
@@ -10582,7 +10582,7 @@ C     + + + CODE + + +
         idsrchrg  = 0
         isfrstrm  = Str%ISFRSTRM
         IF ( idsrch.GT.0 ) idsrchrg  = REACH(Idsrch)%IRG
-        stage = P(irchrg) + REACH(Irch)%OFFSET  
+        stage = P(irchrg) + REACH(Irch)%OFFSET
 C         RESET dstage FOR CULVERTS TO DOWNSTREAM CULVERT
 C         INVERT TO ENSURE INLET CONTROL IF CULVERT SPECIFIED
 C         IN A REACH WITHOUT A DOWNSTREAM CONNECTION
@@ -10591,14 +10591,14 @@ C         IN A REACH WITHOUT A DOWNSTREAM CONNECTION
         END IF
 C         SET dstage USING DOWNSTREAM STAGE WHERE APPROPRIATE
         IF ( Idsrch.GT.0 ) THEN
-          dstage = P(idsrchrg) + REACH(Idsrch)%OFFSET  
+          dstage = P(idsrchrg) + REACH(Idsrch)%OFFSET
         END IF
 C         CALCULATE STRUCTURE FLOW FOR EACH STRUCTURE TYPE
         SELECT CASE ( istrtype )
 C           NO STRUCTURE
           CASE (0)
             RETURN
-C           SPECIFIED STAGE - LIMITED TO EXCESS VOLUME 
+C           SPECIFIED STAGE - LIMITED TO EXCESS VOLUME
           CASE (1)
             IF ( stage.GT.strcrit ) THEN
               v  = SSWR_RG_VOL(RCHGRP(irchrg),P(irchrg))
@@ -10670,7 +10670,7 @@ C               FIXED CREST WEIR FORMULA
             q = SSWR_CALC_OSFLOW(stage,dstage,
      2              strtop,strinv,strwid,
      3              strcd,strcd2,strcd3)
-C                 APPLY DIRECTIONAL CORRECTION                
+C                 APPLY DIRECTIONAL CORRECTION
             fact = SWR_STR_DIRCORR(istrdir,q)
             q = q * fact
 C             SPECIFIED GATE LEVEL GATED SPILLWAY
@@ -10679,7 +10679,7 @@ C             SPECIFIED GATE LEVEL GATED SPILLWAY
             q = SSWR_CALC_OSFLOW(stage,dstage,
      2              strtop,strinv,
      3              strwid,strcd,strcd2,strcd3)
-C                 APPLY DIRECTIONAL CORRECTION                
+C                 APPLY DIRECTIONAL CORRECTION
             fact = SWR_STR_DIRCORR(istrdir,q)
             q = q * fact
 C               MOVABLE CREST WEIR FORMULA
@@ -10687,7 +10687,7 @@ C               MOVABLE CREST WEIR FORMULA
             q = SSWR_CALC_OSFLOW(stage,dstage,
      2              strtop,strbot,
      3              strwid,strcd,strcd2,strcd3)
-C               APPLY DIRECTIONAL CORRECTION                
+C               APPLY DIRECTIONAL CORRECTION
             fact = SWR_STR_DIRCORR(istrdir,q)
             q = q * fact
 C             GATED SPILLWAY
@@ -10695,7 +10695,7 @@ C             GATED SPILLWAY
             q = SSWR_CALC_OSFLOW(stage,dstage,
      2              strtop,strbot,
      3              strwid,strcd,strcd2,strcd3)
-C                 APPLY DIRECTIONAL CORRECTION                
+C                 APPLY DIRECTIONAL CORRECTION
             fact = SWR_STR_DIRCORR(istrdir,q)
             q = q * fact
 C             GENERALIZED SPILLWAY EQUATION
@@ -10703,18 +10703,18 @@ C             GENERALIZED SPILLWAY EQUATION
             q = SSWR_CALC_GSFLOW(stage,dstage,
      2              strtop,strbot,strwid,
      3              strcd,strcd2,strcd3)
-C                 APPLY DIRECTIONAL CORRECTION                
+C                 APPLY DIRECTIONAL CORRECTION
             fact = SWR_STR_DIRCORR(istrdir,q)
             q = q * fact
 C             SFR INFLOW STRUCTURE
           CASE (11)
             q = SSWR_CALC_SFRFLOW(isfrstrm)
-C                 APPLY DIRECTIONAL CORRECTION                
+C                 APPLY DIRECTIONAL CORRECTION
         END SELECT
         value = q
 C
 C---------RETURN
-        RETURN      
+        RETURN
       END FUNCTION SSWR_SFLOW
 
       SUBROUTINE SSWR_CALC_DEPTHAREA(I,J,
@@ -10780,10 +10780,10 @@ C     + + + CODE + + +
         A     = alphai * ai + alphaj * aj
 C
 C---------RETURN
-        RETURN      
+        RETURN
       END SUBROUTINE SSWR_CALC_DEPTHAREA
-      
-      
+
+
 C-------READ SWR STAGE DATA INTO MEMORY
       SUBROUTINE SSWR_RDSTGRES(Iu,Totim,TABDATA)
         USE GLOBAL,       ONLY: IOUT
@@ -10832,7 +10832,7 @@ C---------DETERMINE THE NUMBER OF ENTRIES
         DO
           IF ( Iu.GT.0 ) THEN
             READ ( iut,*,IOSTAT=ios ) swrt, swrdt, kkper, kkstp, kkswr,
-     2                                (s(n),n=1,NREACHES)       
+     2                                (s(n),n=1,NREACHES)
           ELSE
             READ ( iut,IOSTAT=ios ) swrt, swrdt, kkper, kkstp, kkswr,
      2                              (s(n),n=1,NREACHES)
@@ -10864,7 +10864,7 @@ C---------REWIND THE FILE, ALLOCATE MEMORY, AND READ DATA
         DO i = 2, idata - 1
           IF ( Iu.GT.0 ) THEN
             READ ( iut,* ) swrt, swrdt, kkper, kkstp, kkswr,
-     2                     (s(n),n=1,NREACHES)       
+     2                     (s(n),n=1,NREACHES)
           ELSE
             READ ( iut ) swrt, swrdt, kkper, kkstp, kkswr,
      2                   (s(n),n=1,NREACHES)
@@ -10891,7 +10891,7 @@ C---------CLEAN UP TEMPORARY STORAGE
         DEALLOCATE( s )
 C
 C---------RETURN
-        RETURN      
+        RETURN
       END SUBROUTINE SSWR_RDSTGRES
 
 C-------READ TABULAR DATA INTO MEMORY
@@ -10932,7 +10932,7 @@ C---------LOOK FOR KEYWORDS IN ASCII FILES
           CALL SSWR_RD_COMM(iut)
           lloc = 1
           CALL URDCOM(iut,IOUT,line)
-          DO 
+          DO
             CALL URWORD(line,lloc,istart,istop,0,iv,rv,IOUT,Iu)
             IF ( istart.GE.200 ) EXIT
             SELECT CASE (line(istart:istop))
@@ -10958,7 +10958,7 @@ C---------LOOK FOR KEYWORDS IN ASCII FILES
           END DO
         END IF
 C---------BACKSPACE FILE IF KEYWORD ARGUMENTS ARE NOT PRESENT
-        IF ( kwargs.NE.1 ) BACKSPACE( Iu ) 
+        IF ( kwargs.NE.1 ) BACKSPACE( Iu )
         IF ( Iu.GT.0 ) CALL SSWR_RD_COMM(iut)
 C---------DETERMINE THE NUMBER OF ENTRIES
         DO
@@ -11019,7 +11019,7 @@ C---------SKIP
         END DO
 C
 C---------RETURN
-        RETURN      
+        RETURN
       END SUBROUTINE SSWR_RDTABDATA
 
       SUBROUTINE SSWRGTTS(Rtime0,Rtime1,TSDATA)
@@ -11092,14 +11092,14 @@ C     + + + CODE + + +
           ipos = ipos + 1
         END DO GETTS
 C
-C       
+C
         TSDATA%IPOS     = ipos
         TSDATA%NEXTTIME = t1
 C
 C---------RETURN
-        RETURN      
+        RETURN
       END SUBROUTINE SSWRGTTS
-      
+
       SUBROUTINE SSWR_SETSFR_STRM(Str)
         USE GWFSWRMODULE, ONLY: IZERO, TSTRUCT
         USE GWFSFRMODULE, ONLY: NSTRM, ISTRM
@@ -11129,7 +11129,7 @@ C---------RESET ISFRRCH IF isfrseg AND isfrrch ARE NOT FOUND
         IF ( ifound.LT.1 ) Str%ISFRRCH = IZERO
 C
 C---------RETURN
-        RETURN      
+        RETURN
       END SUBROUTINE SSWR_SETSFR_STRM
 
 !      SUBROUTINE SSWR_PCNVG(Kkper,Kkstp)
@@ -11145,12 +11145,15 @@ C     + + + DUMMY ARGUMENTS + + +
         DOUBLEPRECISION, INTENT(INOUT) :: Ts
 C     + + + LOCAL DEFINITIONS + + +
         DOUBLEPRECISION :: dt
+        REAL T1_Local
 C     + + + FUNCTIONS + + +
 C     + + + CODE + + +
         IF ( It.EQ.0 ) THEN
           T1 = SECNDS(0.0)
         ELSE
-          dt = SECNDS(T1)
+          T1_Local = T1
+! RBW     The argument of secnds must be of kind 4
+          dt = SECNDS(T1_Local)
           Ts = Ts + dt
         END IF
 C---------RETURN
@@ -11205,7 +11208,7 @@ C---------CALCULATE DERIVATIVE AND INSERT IN THE NEWTON A MATRIX
         cond2 = REACH(irch)%QAQNWT(n,kl)%CONDN2 * dtscale
         drhs  = ( rhs1  - rhs2  ) * hepsinv
         dcond = ( cond1 - cond2 ) * hepsinv
-C---------ACCUMULATE THE NEWTON CORRECTION TERMS THAT WILL BE APPLIED TO 
+C---------ACCUMULATE THE NEWTON CORRECTION TERMS THAT WILL BE APPLIED TO
 C         HCOF IF A MODFLOW-2005 MODEL OR A MATRIX IF A MODFLOW-NWT MODEL.
         hc = hc + dcond * h - drhs
 C
@@ -11252,7 +11255,7 @@ C---------REACH DATA
 C---------GET ROW & COLUMN OF CELL CONTAINING REACH.
         ir      = Rch%IRCH
         jc      = Rch%JRCH
-C---------DO NOT EVALUATE REACHES WITH ZERO CONDUCTANCES 
+C---------DO NOT EVALUATE REACHES WITH ZERO CONDUCTANCES
         IF ( Rch%ICALCQAQ.LT.1 ) RETURN
 C---------EVALUATE EACH TIME
         TIMES: DO n = 1, NUMTIME
@@ -11266,7 +11269,7 @@ C-----------CALCULATE BASEFLOW FOR THIS TIME
           irch   = Rch%IREACH
           rs     = RSTAGE(irch,n)
           q      = SSWR_CALC_MFQAQ(Rch,rs)
-C-----------PROCESS           
+C-----------PROCESS
           LAYERS: DO kl = Rch%LAYSTR, Rch%LAYEND
 C-------------SET RATE
             rrate = DZERO
@@ -11274,7 +11277,7 @@ C-------------SET RATE
 C-------------SET GROUNDWATER LAYER TO USE
             kk    = MAX( kl, kact )
 C-------------IF CELL IS CONSTANT-HEAD MOVE ON TO NEXT LAYER FOR REACH.
-            IF( IBOUND(jc,ir,kk).LT.0 ) CYCLE LAYERS  
+            IF( IBOUND(jc,ir,kk).LT.0 ) CYCLE LAYERS
             h0    = REAL( HOLD(jc,ir,kk), 8 )
             h1    = HNEW(jc,ir,kk)
             fdelt = SWRTIME(n)%FDELT
@@ -11300,11 +11303,11 @@ C-------------CALCULATE AQUIFER-REACH EXCHANGE USING APPROPRIATE METHOD
               Pvalue    = Pvalue + rrate
             END IF
           END DO LAYERS
-        END DO TIMES      
+        END DO TIMES
 C---------RETURN
 9999    RETURN
       END SUBROUTINE SSWR_MFQAQ
-      
+
       DOUBLEPRECISION FUNCTION SSWR_KELLEY_PERTB(V) RESULT(value)
         USE, INTRINSIC :: IEEE_ARITHMETIC
         USE GWFSWRMODULE, ONLY: DZERO, DONE
@@ -11330,8 +11333,8 @@ C        value = MAX( e * ABS( V ) , e ) * sgn
 C---------RETURN
 9999    RETURN
       END FUNCTION SSWR_KELLEY_PERTB
-      
-      DOUBLEPRECISION FUNCTION SSWR_CALC_MAGQM(I,J,Gsi,Gsj,Dl,P) 
+
+      DOUBLEPRECISION FUNCTION SSWR_CALC_MAGQM(I,J,Gsi,Gsj,Dl,P)
      2  RESULT(value)
         USE GWFSWRMODULE
         USE GLOBAL,       ONLY: NCOL, NROW, DELR, DELC
@@ -11389,7 +11392,7 @@ C         I-J CONNECTION IN X-DIRECTION - ALONG A ROW
         ELSE
           ixcon = 1
         END IF
-C         DETERMINE REACH TO USE TO DETERMINE THE GRADIENT 
+C         DETERMINE REACH TO USE TO DETERMINE THE GRADIENT
 C         FOR FACE(IJ)
         IF ( sf.LT.DZERO ) THEN
           ieval  = I
@@ -11421,7 +11424,7 @@ C         I-J CONNECTION IN Y-DIRECTION - EVALUATE ADJACENT COLUMNS
         END IF
         jrchm1  = 0
         jrchp1  = 0
-C         DETERMINE THE REACH NUMBERS FOR THE TWO CELLS USED TO 
+C         DETERMINE THE REACH NUMBERS FOR THE TWO CELLS USED TO
 C         DETERMINE THE GRADIENT FOR FACE(IJ)
         IF ( jrowm1.GE.1 .AND. jcolm1.GE.1 ) THEN
           jrchm1 = IQMCI(jcolm1,jrowm1)
@@ -11453,10 +11456,10 @@ C         GRADIENT FOR FACE(IJ)
           dsm1   = psm1 - peval
 C           I-J CONNECTION IN X-DIRECTION - EVALUATE ADJACENT ROWS
           IF ( ixcon.NE.0 ) THEN
-            dlm1 = ( DELC(irchrow) + DELC(jrowm1) ) * DONEHALF 
+            dlm1 = ( DELC(irchrow) + DELC(jrowm1) ) * DONEHALF
 C           I-J CONNECTION IN Y-DIRECTION - EVALUATE ADJACENT COLUMNS
           ELSE
-            dlm1 = ( DELR(irchcol) + DELC(jcolm1) ) * DONEHALF 
+            dlm1 = ( DELR(irchcol) + DELC(jcolm1) ) * DONEHALF
           END IF
           sfm1   = dsm1 / dlm1
           isgnm1 = 1
@@ -11474,10 +11477,10 @@ C           I-J CONNECTION IN Y-DIRECTION - EVALUATE ADJACENT COLUMNS
           dsp1  = psp1 - peval
 C           I-J CONNECTION IN X-DIRECTION - EVALUATE ADJACENT ROWS
           IF ( ixcon.NE.0 ) THEN
-            dlp1  = ( DELC(irchrow) + DELC(jrowp1) ) * DONEHALF 
+            dlp1  = ( DELC(irchrow) + DELC(jrowp1) ) * DONEHALF
 C           I-J CONNECTION IN Y-DIRECTION - EVALUATE ADJACENT COLUMNS
           ELSE
-            dlp1  = ( DELR(irchcol) + DELC(jcolp1) ) * DONEHALF 
+            dlp1  = ( DELR(irchcol) + DELC(jcolp1) ) * DONEHALF
           END IF
           sfp1  = dsp1 / dlp1
           isgnp1 = 1
@@ -11497,7 +11500,7 @@ C---------RETURN
 9999    RETURN
       END FUNCTION SSWR_CALC_MAGQM
 
-      DOUBLEPRECISION FUNCTION SSWR_CALC_BILINMAGQM(I,J,Gsi,Gsj,Dl,P) 
+      DOUBLEPRECISION FUNCTION SSWR_CALC_BILINMAGQM(I,J,Gsi,Gsj,Dl,P)
      2  RESULT(value)
         USE GWFSWRMODULE
         USE GLOBAL,       ONLY: NCOL, NROW, DELR, DELC
@@ -11740,7 +11743,7 @@ C---------GET CALCULATED STAGE GARDIENT MAGNITUDE
 C---------RETURN
 9999    RETURN
       END FUNCTION SSWR_GET_MAGQM
-      
+
       DOUBLEPRECISION FUNCTION SSWR_CALC_FTOLR(R) RESULT(value)
         USE GWFSWRMODULE
         IMPLICIT NONE

@@ -60,7 +60,8 @@ uses
   ModflowFmp4TranspirationFractionUnit,
   ModflowFmp4EvaporationIrrigationFractionUnit,
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
-  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit;
+  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
+  ModflowFmp4CropHasSalinityDemandUnit;
 
 type
   //
@@ -1498,6 +1499,8 @@ view. }
     FFmp4FractionOfIrrigToSurfaceWaterBoundary: TFmp4FractionOfIrrigToSurfaceWaterBoundary;
     FFmp4AddedDemandBoundary: TFmp4AddedDemandBoundary;
     FFmpMultAddedDemandBoundary: TFmp4MultAddedDemandBoundary;
+    FFmp4CropHasSalinityDemandBoundary: TFmp4CropHasSalinityDemandBoundary;
+    FFmpMultCropHasSalinityDemandBoundary: TFmp4MultCropHasSalinityDemandBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1669,6 +1672,10 @@ view. }
       read FFmp4AddedDemandBoundary write FFmp4AddedDemandBoundary;
     property FmpMultAddedDemandBoundary: TFmp4MultAddedDemandBoundary
       read FFmpMultAddedDemandBoundary write FFmpMultAddedDemandBoundary;
+    property Fmp4CropHasSalinityDemandBoundary: TFmp4CropHasSalinityDemandBoundary
+      read FFmp4CropHasSalinityDemandBoundary write FFmp4CropHasSalinityDemandBoundary;
+    property FmpMultCropHasSalinityDemandBoundary: TFmp4MultCropHasSalinityDemandBoundary
+      read FFmpMultCropHasSalinityDemandBoundary write FFmpMultCropHasSalinityDemandBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -3049,6 +3056,18 @@ view. }
       const Value: TFmp4MultAddedDemandBoundary);
     function StoreModflowFmp4MultAddedDemand: Boolean;
     procedure CreateModflowMultAddedDemandBoundary;
+
+    function GetModflowFmp4CropHasSalinityDemand: TFmp4CropHasSalinityDemandBoundary;
+    procedure SetModflowFmp4CropHasSalinityDemand(
+      const Value: TFmp4CropHasSalinityDemandBoundary);
+    function StoreModflowFmp4CropHasSalinityDemand: Boolean;
+    procedure CreateModflowCropHasSalinityDemandBoundary;
+
+    function GetModflowFmp4MultCropHasSalinityDemand: TFmp4MultCropHasSalinityDemandBoundary;
+    procedure SetModflowFmp4MultCropHasSalinityDemand(
+      const Value: TFmp4MultCropHasSalinityDemandBoundary);
+    function StoreModflowFmp4MultCropHasSalinityDemand: Boolean;
+    procedure CreateModflowMultCropHasSalinityDemandBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4468,6 +4487,12 @@ view. }
     property ModflowFmp4MultAddedDemand: TFmp4MultAddedDemandBoundary
       read GetModflowFmp4MultAddedDemand write SetModflowFmp4MultAddedDemand
       Stored StoreModflowFmp4MultAddedDemand;
+    property ModflowFmp4CropHasSalinityDemand: TFmp4CropHasSalinityDemandBoundary
+      read GetModflowFmp4CropHasSalinityDemand write SetModflowFmp4CropHasSalinityDemand
+      Stored StoreModflowFmp4CropHasSalinityDemand;
+    property ModflowFmp4MultCropHasSalinityDemand: TFmp4MultCropHasSalinityDemandBoundary
+      read GetModflowFmp4MultCropHasSalinityDemand write SetModflowFmp4MultCropHasSalinityDemand
+      Stored StoreModflowFmp4MultCropHasSalinityDemand;
 
 
     { TODO :
@@ -14436,6 +14461,12 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetModflowFmp4CropHasSalinityDemand(
+  const Value: TFmp4CropHasSalinityDemandBoundary);
+begin
+
+end;
+
 procedure TScreenObject.SetModflowFmp4EvaporationIrrigationFraction(
   const Value: TFmp4EvaporationIrrigationFractionBoundary);
 begin
@@ -14578,6 +14609,12 @@ begin
     CreateModflowMultCropCoefficientBoundary;
     ModflowBoundaries.FFmpMultCropCoefficientBoundary.Assign(Value);
   end;
+end;
+
+procedure TScreenObject.SetModflowFmp4MultCropHasSalinityDemand(
+  const Value: TFmp4MultCropHasSalinityDemandBoundary);
+begin
+
 end;
 
 procedure TScreenObject.SetModflowFmp4MultEvaporationIrrigationFraction(
@@ -32845,6 +32882,11 @@ begin
 {$ENDIF}
 end;
 
+function TScreenObject.StoreModflowFmp4CropHasSalinityDemand: Boolean;
+begin
+
+end;
+
 function TScreenObject.StoreModflowFmp4EvaporationIrrigationFraction: Boolean;
 begin
 {$IFDEF OWHMV2}
@@ -32923,6 +32965,11 @@ begin
 {$ELSE}
   result := False;
 {$ENDIF}
+end;
+
+function TScreenObject.StoreModflowFmp4MultCropHasSalinityDemand: Boolean;
+begin
+
 end;
 
 function TScreenObject.StoreModflowFmp4MultEvaporationIrrigationFraction: Boolean;
@@ -34101,6 +34148,11 @@ begin
   end;
 end;
 
+function TScreenObject.GetModflowFmp4CropHasSalinityDemand: TFmp4CropHasSalinityDemandBoundary;
+begin
+
+end;
+
 function TScreenObject.GetModflowFmp4EvaporationIrrigationFraction: TFmp4EvaporationIrrigationFractionBoundary;
 begin
   if (FModel = nil)
@@ -34235,6 +34287,11 @@ begin
   begin
     result := ModflowBoundaries.FmpMultCropCoefficientBoundary;
   end;
+end;
+
+function TScreenObject.GetModflowFmp4MultCropHasSalinityDemand: TFmp4MultCropHasSalinityDemandBoundary;
+begin
+
 end;
 
 function TScreenObject.GetModflowFmp4MultEvaporationIrrigationFraction: TFmp4MultEvaporationIrrigationFractionBoundary;
@@ -39148,6 +39205,11 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateModflowCropHasSalinityDemandBoundary;
+begin
+
+end;
+
 procedure TScreenObject.CreateModflowEvaporationIrrigationFractionBoundary;
 begin
   if (ModflowBoundaries.FFmp4EvaporationIrrigationFractionBoundary = nil) then
@@ -39263,6 +39325,11 @@ begin
     ModflowBoundaries.FFmpMultCropCoefficientBoundary :=
       TFmp4MultCropCoefficientBoundary.Create(FModel, self);
   end;
+end;
+
+procedure TScreenObject.CreateModflowMultCropHasSalinityDemandBoundary;
+begin
+
 end;
 
 procedure TScreenObject.CreateModflowMultEvaporationIrrigationFractionBoundary;

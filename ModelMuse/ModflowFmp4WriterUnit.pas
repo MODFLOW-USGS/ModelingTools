@@ -300,6 +300,8 @@ type
     procedure UpdateMultFractionOfIrrigToSurfaceWaterDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateAddedDemandDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateMultAddedDemandDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateHasSalinityDemandDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateMultHasSalinityDemandDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -1714,6 +1716,12 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.UpdateHasSalinityDemandDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+begin
+
+end;
+
 procedure TModflowFmp4Writer.UpdateIrrigationDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
@@ -1816,6 +1824,12 @@ begin
   UpdateRequirements.WriteLocation := wlFractionOfPrecipToSurfaceWater;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateMultHasSalinityDemandDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+begin
+
 end;
 
 procedure TModflowFmp4Writer.UpdateMultIrrigationDisplay(

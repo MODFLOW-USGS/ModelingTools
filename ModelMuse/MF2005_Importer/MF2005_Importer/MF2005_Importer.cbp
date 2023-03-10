@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="MF2005_Importer" />
+		<Option pch_mode="2" />
+		<Option compiler="gnu_fortran_compiler_x64" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/MF2005_Importer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gnu_fortran_compiler_x64" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add option="-static-libgcc" />
+					<Add option="-static-libstdc++" />
+					<Add library="../../../../../mingw64/lib/libgfortran.a" />
+					<Add library="../../../../../mingw64/lib/libquadmath.a" />
+					<Add library="../../../../../mingw64/lib/gcc/x86_64-w64-mingw32/12.2.0/libgcc.a" />
+					<Add library="../../../../../mingw64/x86_64-w64-mingw32/lib/libwinpthread.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/MF2005_Importer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gnu_fortran_compiler_x64" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="../../../../../mingw64/lib/libgfortran.a" />
+					<Add library="../../../../../mingw64/lib/libquadmath.a" />
+					<Add library="../../../../../mingw64/lib/gcc/x86_64-w64-mingw32/12.2.0/libgcc.a" />
+					<Add library="../../../../../mingw64/x86_64-w64-mingw32/lib/libwinpthread.a" />
+				</Linker>
+			</Target>
+			<Target title="Release32">
+				<Option output="bin/Release32/MF2005_Importer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release32/" />
+				<Option type="1" />
+				<Option compiler="gfortran" />
+				<Linker>
+					<Add option="-static-libgcc" />
+					<Add option="-static-libstdc++" />
+					<Add library="../../../../../MinGW/lib/gcc/mingw32/6.3.0/libgcc.a" />
+					<Add library="../../../../../MinGW/lib/gcc/mingw32/6.3.0/libgfortran.a" />
+					<Add library="../../../../../MinGW/lib/gcc/mingw32/6.3.0/libquadmath.a" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Linker>
+			<Add option="-static-libgcc" />
+			<Add option="-static-libstdc++" />
+		</Linker>
+		<Unit filename="../NWT1_gmres.f90">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../NWT1_module.f">
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="../NWT1_solver.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../NWT1_xmd.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../NWT1_xmdlib.f">
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="../de47.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gmg7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2bas7.f">
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="../gwf2bcf7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2chd7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2drn7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2drt7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2ets7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2evt7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2fhb7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2gag7.f">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../gwf2ghb7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2hfb7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2huf7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2hydmod7.f">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../gwf2ibs7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2lak7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2lpf7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2mnw27.f">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../gwf2mnw2i7.f">
+			<Option weight="3" />
+		</Unit>
+		<Unit filename="../gwf2mnw7.f">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../gwf2rch7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2res7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2riv7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2sfr7.f">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../gwf2str7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2sub7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2swi27.f">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../gwf2swr7_NWT.f">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../gwf2swt7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2upw1.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwf2uzf1.f">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../gwf2wel7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../gwfsfrmodule.f">
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="../hufutl7.f">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../lmt7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../lmt7.inc" />
+		<Unit filename="../mf2005.f">
+			<Option weight="3" />
+		</Unit>
+		<Unit filename="../obs2bas7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../obs2chd7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../obs2drn7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../obs2ghb7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../obs2riv7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../obs2str7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../parutl7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../pcg7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../pcgn2.f90">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../sip7.f">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../utl7.f">
+			<Option weight="0" />
+		</Unit>
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

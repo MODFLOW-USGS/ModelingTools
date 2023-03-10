@@ -8685,7 +8685,7 @@ var
   ContourExporter: TContourExtractor;
   LocalContourDataSet: TDataArray;
   LocalModel: TCustomModel;
-  LayersToExport: array of Integer;
+//  LayersToExport: array of Integer;
   CurrentLayer: Integer;
   LayerIndex: Integer;
   Extension: string;

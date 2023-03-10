@@ -832,7 +832,8 @@ uses
   frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit in 'frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit.pas' {frameScreenObjectMultFractionOfIrrigToSurfaceWater: TFrame},
   ModflowFmp4AddedDemandUnit in 'ModflowFmp4AddedDemandUnit.pas',
   frameScreenObjectFmp4AddedDemandUnit in 'frameScreenObjectFmp4AddedDemandUnit.pas' {frameScreenObjectFmp4AddedDemand: TFrame},
-  frameScreenObjectMultAddedDemandUnit in 'frameScreenObjectMultAddedDemandUnit.pas' {frameScreenObjectMultAddedDemand: TFrame};
+  frameScreenObjectMultAddedDemandUnit in 'frameScreenObjectMultAddedDemandUnit.pas' {frameScreenObjectMultAddedDemand: TFrame},
+  ModflowFmp4CropHasSalinityDemandUnit in 'ModflowFmp4CropHasSalinityDemandUnit.pas';
 
 {$R *.res}
 

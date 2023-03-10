@@ -1393,7 +1393,8 @@ Type
     property StoredAtsOuterMaxFraction: TRealStorage read FStoredAtsOuterMaxFraction write SetStoredAtsOuterMaxFraction;
   end;
 
-  TLayerOption = (loTop, loSpecified, loTopActive);
+  // loWaterTable is only available for UZF in MODFLOW-NWT
+  TLayerOption = (loTop, loSpecified, loTopActive, loWaterTable);
 
   // @name is used for MODFLOW packages in which
   // the user specifies an array of layer numbers
@@ -4966,6 +4967,11 @@ Type
     Description: string;
   end;
 
+  TInitializeLandUseDisplayOptions = record
+    Display: array of TModflowBoundaryDisplayTimeList;
+    UpdateDisplay: TUpdateDisplay;
+  end;
+
   TCustomFarm4 = class(TModflowPackageSelection)
   protected
     procedure SetFarmOptionProperty(var Field: TFarmOption;
@@ -4975,6 +4981,11 @@ Type
     procedure InitializeFarmDisplay(DisplayOptions: TInitializeDisplayOptions);
     procedure GetUseList(Sender: TObject; NewUseList: TStringList;
       GetUseListOptions: TGetUseListOptions);
+    procedure InitializeLandUseDisplay(
+      DisplayOptions: TInitializeLandUseDisplayOptions);
+    procedure UpdateMultLandUseLists(IsUsed: Boolean;
+      List: TMfBoundDispObjectList; OnInitialize: TNotifyEvent;
+      OnGetUseList: TOnGetConcUseList; const NameFormat: string);
   end;
 
   TFarmProcess4 = class(TCustomFarm4)
@@ -5479,11 +5490,6 @@ Type
     lupPrintET_ByFarmByCrop, lupPrintRowCol);
   TLandUsePrints = set of TLandUsePrint;
 
-  TInitializeLandUseDisplayOptions = record
-    Display: array of TModflowBoundaryDisplayTimeList;
-    UpdateDisplay: TUpdateDisplay;
-  end;
-
   TIrrigationOption = (ioByCrop, ioByIrrigate);
   TDemandOption = (doLength, doRate);
 
@@ -5700,10 +5706,6 @@ Type
 
     procedure InvalidateTransientCropID;
 
-    procedure UpdateMultLandUseLists(IsUsed: Boolean;
-      List: TMfBoundDispObjectList; OnInitialize: TNotifyEvent;
-      OnGetUseList: TOnGetConcUseList; const NameFormat: string);
-    procedure InitializeLandUseDisplay(DisplayOptions: TInitializeLandUseDisplayOptions);
     procedure SetGroundwaterRootInteraction(const Value: TFarmProperty);
     procedure SetEvapIrrigationOption(const Value: TIrrigationOption);
     procedure SetFractionOfPrecipToSurfaceWaterIrrigationOption(
@@ -5921,6 +5923,8 @@ Type
     FFarmSaltConcentrationsChoice: TFarmProperty;
     FStoredExpressionMin: TRealStorage;
     FSalinityFlushPrints: TSalinityFlushPrints;
+    FMfFmp4CropHasSalinityDemand: TModflowBoundaryDisplayTimeList;
+    FMultCropHasSalinityDemands: TMfBoundDispObjectList;
     procedure SetCropExtraWaterChoice(const Value: TFarmProperty);
     procedure SetCropLeachRequirementChoice(const Value: TFarmProperty);
     procedure SetCropMaxLeachChoice(const Value: TFarmProperty);
@@ -5933,6 +5937,25 @@ Type
     function GetExpressionMin: double;
     procedure SetStoredExpressionMin(const Value: TRealStorage);
     procedure SetSalinityFlushPrints(const Value: TSalinityFlushPrints);
+
+    // CROP_HAS_SALINITY_DEMAND array for single land use per cell
+    function GetCropHasSalinityDemandBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeCropHasSalinityDemandDisplay(Sender: TObject);
+    procedure GetCropHasSalinityDemandUseList(Sender: TObject; NewUseList: TStringList);
+    // CROP_HAS_SALINITY_DEMAND arrays for multiple land uses per cell
+    function GetMultCropHasSalinityDemandBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure GetMultCropHasSalinityDemandsUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure InitializeMultCropHasSalinityDemandsDisplay(Sender: TObject);
+    procedure UpdateMultCropHasSalinityDemandsArrays;
+    // CROP_HAS_SALINITY_DEMAND arrays for single and multiple land uses per cell
+    procedure InvalidateCropHasSalinityDemand(Sender: TObject);
+
+    function GetFLandUseOption: TLandUseOption;
+
+  protected
+    procedure InvalidateModel; Override;
+    property LandUseOption: TLandUseOption read GetFLandUseOption;
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5942,6 +5965,17 @@ Type
     procedure InitializeVariables; override;
     // EXPRESSION_VARIABLE_NEARZERO
     property ExpressionMin: double read GetExpressionMin write SetExpressionMin;
+
+    // CROP_HAS_SALINITY_DEMAND array for single land use per cell
+    function TransientCropHasSalinityDemandArrayUsed (Sender: TObject): boolean;
+    function StaticCropHasSalinityDemandArrayUsed (Sender: TObject): boolean;
+    property MfFmp4CropHasSalinityDemand: TModflowBoundaryDisplayTimeList
+      read FMfFmp4CropHasSalinityDemand;
+    // CROP_HAS_SALINITY_DEMAND arrays for multiple land uses per cell
+    function TransientCropHasSalinityDemandMultArrayUsed (Sender: TObject): boolean;
+    procedure InvalidateMultTransienCropHasSalinityDemandArrays;
+
+    procedure InvalidateAll;
   published
     // PRINT BYFARM,   PRINT BYFARM_BYCROP,   PRINT ALL,
     // PRINT INPUT (use default from model)
@@ -7326,6 +7360,7 @@ resourcestring
   StrFractionOfPrecipToSurfaceWatersS = 'Frac Excess Precip to SW %s';
   StrFractionOfIrrigToSurfaceWatersS = 'Frac Excess Irrig to SW %s';
   StrAddedDemandsS = 'Added Demand %s';
+  StrHasSalinityDemandsS = 'Crop Has Salinity Demand %s';
 
 { TModflowPackageSelection }
 
@@ -27454,7 +27489,7 @@ begin
   end;
 end;
 
-procedure TFarmProcess4LandUse.InitializeLandUseDisplay(
+procedure TCustomFarm4.InitializeLandUseDisplay(
   DisplayOptions: TInitializeLandUseDisplayOptions);
 var
   List: TModflowBoundListOfTimeLists;
@@ -28600,7 +28635,7 @@ begin
     StrIrrigationsS);
 end;
 
-procedure TFarmProcess4LandUse.UpdateMultLandUseLists(IsUsed: Boolean;
+procedure TCustomFarm4.UpdateMultLandUseLists(IsUsed: Boolean;
   List: TMfBoundDispObjectList; OnInitialize: TNotifyEvent;
   OnGetUseList: TOnGetConcUseList; const NameFormat: string);
 var
@@ -28718,11 +28753,32 @@ begin
   FCropLeachRequirementChoice := TFarmProperty.Create(InvalidateEvent);
   FFarmSaltConcentrationsChoice := TFarmProperty.Create(InvalidateEvent);
 
+  if Model <> nil then
+  begin
+    FMfFmp4CropHasSalinityDemand := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmp4CropHasSalinityDemand.OnInitialize := InitializeCropHasSalinityDemandDisplay;
+    FMfFmp4CropHasSalinityDemand.OnGetUseList := GetCropHasSalinityDemandUseList;
+    FMfFmp4CropHasSalinityDemand.OnTimeListUsed := TransientCropHasSalinityDemandarrayUsed;
+    FMfFmp4CropHasSalinityDemand.Name := 'Crop_Has_Salinity_Demand';
+    FMfFmp4CropHasSalinityDemand.AddMethod := vamReplace;
+    if TransientCropHasSalinityDemandarrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4CropHasSalinityDemand);
+    end;
+
+
+    FMultCropHasSalinityDemands := TMfBoundDispObjectList.Create;
+  end;
+
   InitializeVariables;
 end;
 
 destructor TFarmProcess4SalinityFlush.Destroy;
 begin
+  FMfFmp4CropHasSalinityDemand.Free;
+
+  FMultCropHasSalinityDemands.Free;
+
   FFarmIrrigationUniformityChoice.Free;
   FCropExtraWaterChoice.Free;
   FCropMaxLeachChoice.Free;
@@ -28740,6 +28796,83 @@ begin
   result := StoredExpressionMin.Value;
 end;
 
+function TFarmProcess4SalinityFlush.GetFLandUseOption: TLandUseOption;
+begin
+  Assert(FModel <> nil);
+  result := (FModel as TCustomModel).ModflowPackages.FarmLandUse.LandUseOption;
+end;
+
+function TFarmProcess4SalinityFlush.GetCropHasSalinityDemandBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4CropHasSalinityDemand;
+end;
+
+procedure TFarmProcess4SalinityFlush.GetCropHasSalinityDemandUseList(
+  Sender: TObject; NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetCropHasSalinityDemandBoundary;
+  GetUseListOptions.Description := 'FMP Has Salinity Demand';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
+function TFarmProcess4SalinityFlush.GetMultCropHasSalinityDemandBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.ModflowFmp4MultCropHasSalinityDemand;
+end;
+
+procedure TFarmProcess4SalinityFlush.GetMultCropHasSalinityDemandsUseList(
+  Sender: TObject; NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FMultCropHasSalinityDemands.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
+  DataSetName := Format(StrHasSalinityDemandsS,
+     [frmGoPhast.PhastModel.fmpCrops[Index].CropName]);
+  UpdatePkgUseList(NewUseList, GetMultCropHasSalinityDemandBoundary, Index, DataSetName);
+end;
+
+procedure TFarmProcess4SalinityFlush.InitializeCropHasSalinityDemandDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := FMfFmp4CropHasSalinityDemand;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateHasSalinityDemandDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
+procedure TFarmProcess4SalinityFlush.InitializeMultCropHasSalinityDemandsDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeLandUseDisplayOptions;
+  index: Integer;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    SetLength(DisplayOptions.Display, (FModel as TCustomModel).FmpCrops.Count);
+    for index := 0 to Length(DisplayOptions.Display) - 1 do
+    begin
+      DisplayOptions.Display[index] := FMultCropHasSalinityDemands[index];
+    end;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateMultHasSalinityDemandDisplay;
+    InitializeLandUseDisplay(DisplayOptions);
+  finally
+    FarmWriter.Free;
+  end;
+end;
+
 procedure TFarmProcess4SalinityFlush.InitializeVariables;
 begin
   inherited;
@@ -28753,6 +28886,57 @@ begin
   FCropMaxLeachChoice.Initialize;
   FCropLeachRequirementChoice.Initialize;
   FCropExtraWaterChoice.Initialize;
+
+  CropSalinityDemandChoice.OnChangeFarmOption := InvalidateCropHasSalinityDemand;
+  CropSalinityDemandChoice.OnChangeArrayList := InvalidateCropHasSalinityDemand;
+end;
+
+procedure TFarmProcess4SalinityFlush.InvalidateAll;
+begin
+  InvalidateCropHasSalinityDemand(nil);
+end;
+
+procedure TFarmProcess4SalinityFlush.InvalidateCropHasSalinityDemand(
+  Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientCropHasSalinityDemandArrayUsed(nil) then
+    begin
+      AddTimeList(FMfFmp4CropHasSalinityDemand);
+    end
+    else
+    begin
+      RemoveTimeList(FMfFmp4CropHasSalinityDemand);
+    end;
+    UpdateMultCropHasSalinityDemandsArrays;
+  end;
+  InvalidateModel;
+end;
+
+procedure TFarmProcess4SalinityFlush.InvalidateModel;
+var
+  Crops: TCropCollection;
+begin
+  inherited;
+  if FModel <> nil then
+  begin
+    Crops := (FModel as TCustomModel).FmpCrops;
+    if Crops <> nil then
+    begin
+      Crops.UpdateAllDataArrays;
+    end;
+  end;
+end;
+
+procedure TFarmProcess4SalinityFlush.InvalidateMultTransienCropHasSalinityDemandArrays;
+var
+  index: Integer;
+begin
+  for index := 0 to FMultCropHasSalinityDemands.Count - 1 do
+  begin
+    FMultCropHasSalinityDemands[index].Invalidate;
+  end;
 end;
 
 procedure TFarmProcess4SalinityFlush.SetCropExtraWaterChoice(const Value: TFarmProperty);
@@ -28818,6 +29002,42 @@ end;
 procedure TFarmProcess4SalinityFlush.SetStoredExpressionMin(const Value: TRealStorage);
 begin
   FStoredExpressionMin.Assign(Value);
+end;
+
+function TFarmProcess4SalinityFlush.StaticCropHasSalinityDemandArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (CropSalinityDemandChoice.FarmOption = foStatic)
+    and (CropSalinityDemandChoice.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4SalinityFlush.TransientCropHasSalinityDemandArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (CropSalinityDemandChoice.FarmOption = foTransient)
+    and (CropSalinityDemandChoice.ArrayList = alArray)
+    and (LandUseOption = luoSingle);
+end;
+
+function TFarmProcess4SalinityFlush.TransientCropHasSalinityDemandMultArrayUsed(
+  Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender)
+    and (CropSalinityDemandChoice.FarmOption = foTransient)
+    and (CropSalinityDemandChoice.ArrayList = alArray)
+    and (LandUseOption = luoMultiple);
+end;
+
+procedure TFarmProcess4SalinityFlush.UpdateMultCropHasSalinityDemandsArrays;
+begin
+  UpdateMultLandUseLists(TransientCropHasSalinityDemandMultArrayUsed(nil),
+    FMultCropHasSalinityDemands,
+    InitializeMultCropHasSalinityDemandsDisplay,
+    GetMultCropHasSalinityDemandsUseList,
+    StrHasSalinityDemandsS);
 end;
 
 { TFarmProcess4Soil }

@@ -318,8 +318,8 @@ end;
 procedure TContourCreator.ConvertAndDrawSegments(Sender: TObject;
   const SegmentArray: TLine2DArray);
 const
-  MaxLengthOfSegMentArray = 2;
-var2
+  MaxLengthOfSegMentArray = 4;
+var
   SegmentI: array[0..MaxLengthOfSegMentArray-1] of TPoint;
   Index: Integer;
   CenterX: Int64;
@@ -340,6 +340,7 @@ begin
       end;
     end;
   end;
+  Assert(Length(SegmentArray) <= MaxLengthOfSegMentArray);
   for Index := 0 to Length(SegmentArray) - 1 do
   begin
     PositionIndex := Index;

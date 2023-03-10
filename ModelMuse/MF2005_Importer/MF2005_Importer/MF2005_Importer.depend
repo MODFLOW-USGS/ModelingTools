@@ -1,0 +1,107 @@
+# depslib dependency file v1.0
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2bas7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwfsfrmodule.f
+
+1678469357 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\nwt1_module.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\nwt1_xmdlib.f
+
+1678457307 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\utl7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\de47.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gmg7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2bcf7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2chd7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2drn7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2drt7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2ets7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2evt7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2fhb7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2ghb7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2hfb7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2huf7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2ibs7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2lak7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2lpf7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2rch7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2res7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2riv7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2str7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2sub7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2swt7.f
+
+1678469828 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2upw1.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2wel7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\lmt7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\nwt1_gmres.f90
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\nwt1_solver.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\nwt1_xmd.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\obs2bas7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\obs2chd7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\obs2drn7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\obs2ghb7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\obs2riv7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\obs2str7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\parutl7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\pcg7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\pcgn2.f90
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\sip7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2gag7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2hydmod7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2mnw27.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2mnw7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2sfr7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2swi27.f
+
+1678472584 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2uzf1.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\hufutl7.f
+
+1678457677 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2swr7_nwt.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\gwf2mnw2i7.f
+
+1673283922 source:c:\modelingtools\modelmuse\mf2005_importer\workfolder\mf2005.f
+

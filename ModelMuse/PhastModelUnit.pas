@@ -579,13 +579,14 @@ const
   KLandUseAreaFraction = 'Land_Use_Area_Fraction';
   KConsumptiveUse = 'Consumptive_Use';
   KIrrigation = 'Irrigation';
-  KRootDepth = 'RootDepth';
+  KRootDepth = 'Root_Depth';
   KGWRootInteraction = 'GW_Root_Interaction';
   KTranspirationFraction = 'Transpiration_Fraction';
   KEvaporationIrrigationFraction = 'Evaporation_Irrigation_Fraction';
   KFractionOfPrecipToSurfaceWater = 'Frac_Unconsumed_Precip_to_SW';
   KFractionOfIrrigToSurfaceWater = 'Frac_Unconsumed_Irrig_to_SW';
   KAddedDemand = 'Added_Demand';
+  KCropHasSalinityDemand = 'Crop_Has_Salinity_Demand';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2575,6 +2576,7 @@ that affects the model output should also have a comment. }
     function FractionOfPrecipToSurfaceWaterUsed(Sender: TObject): Boolean;
     function FractionOfIrrigToSurfaceWaterUsed(Sender: TObject): Boolean;
     function AddedDemandUsed(Sender: TObject): Boolean;
+    function CropHasSalinityDemandUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2644,6 +2646,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected: Boolean; virtual;
     function FarmProcess4TransientAddedDemandIsSelected: Boolean; virtual;
     function FarmProcess4TransientAddedDemandMultIsSelected: Boolean; virtual;
+    function FarmProcess4TransientCropHasSalinityDemandIsSelected: Boolean; virtual;
+    function FarmProcess4TransientCropHasSalinityDemandMultIsSelected: Boolean; virtual;
 
     function GetIrrigationTypes: TIrrigationCollection; virtual; abstract;
     procedure SetIrrigationTypes(const Value: TIrrigationCollection); virtual; abstract;
@@ -2995,6 +2999,8 @@ that affects the model output should also have a comment. }
     function MultipleSWLossFractionIrrigationUsed(Sender: TObject): Boolean;
     // ADDED_DEMAND
     function MultipleAddedDemandUsed(Sender: TObject): Boolean;
+    // CROP_HAS_SALINITY_DEMAND
+    function MultipleCropHasSalinityDemandUsed(Sender: TObject): Boolean;
 
     function GroundSurfaceUsed(Sender: TObject): boolean; virtual;
     function UzfUnsatVertKUsed(Sender: TObject): boolean; virtual;
@@ -3337,6 +3343,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4FractionOfPrecipToSurfaceWater(Sender: TObject);
     procedure InvalidateMfFmp4FractionOfIrrigToSurfaceWater(Sender: TObject);
     procedure InvalidateMfFmp4AddedDemand(Sender: TObject);
+    procedure InvalidateMfFmp4CropHasSalinityDemand(Sender: TObject);
 
     procedure InvalidateMfSwrRainfall(Sender: TObject);
     procedure InvalidateMfSwrEvaporation(Sender: TObject);
@@ -4890,6 +4897,8 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected: Boolean; override;
     function FarmProcess4TransientAddedDemandIsSelected: Boolean; override;
     function FarmProcess4TransientAddedDemandMultIsSelected: Boolean; override;
+    function FarmProcess4TransientCropHasSalinityDemandIsSelected: Boolean; override;
+    function FarmProcess4TransientCropHasSalinityDemandMultIsSelected: Boolean; override;
 
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
@@ -6310,13 +6319,14 @@ resourcestring
   StrLandUseAreaFraction = KLandUseAreaFraction;
   StrConsumptiveUse = KConsumptiveUse;
   StrKIrrigation = KIrrigation;
-  StrKRootDepth = KRootDepth;
+  StrRootDepth = KRootDepth;
   StrGWRootInteraction = KGWRootInteraction;
-  StrKTranspirationFraction = KTranspirationFraction;
-  StrKEvaporationIrrigationFraction = KEvaporationIrrigationFraction;
-  StrKFractionOfPrecipToSurfaceWater = KFractionOfPrecipToSurfaceWater;
-  StrKFractionOfIrrigToSurfaceWater = KFractionOfIrrigToSurfaceWater;
-  StrKAddedDemand = KAddedDemand;
+  StrTranspirationFraction = KTranspirationFraction;
+  StrEvaporationIrrigationFraction = KEvaporationIrrigationFraction;
+  StrFractionOfPrecipToSurfaceWater = KFractionOfPrecipToSurfaceWater;
+  StrFractionOfIrrigToSurfaceWater = KFractionOfIrrigToSurfaceWater;
+  StrAddedDemand = KAddedDemand;
+  StrCropHasSalinityDemand = KCropHasSalinityDemand;
 
 
 const
@@ -11025,12 +11035,14 @@ const
 //                were at the beginning or end of the simulation.
 //    '5.1.1.17' Bug fix: Fixed a bug in exporting contours to Shapefiles
 //                that would cause an assertion failure.
+//    '5.1.1.18  Bug fix: Fixed importing of MODFLOW-NWT models in which
+//                the UZF variable NUZTOP is set to 4.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.17';
+  IIModelVersion = '5.1.1.18';
 
 function IModelVersion: string;
 begin
@@ -24508,6 +24520,62 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientCropHasSalinityDemandIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientCropHasSalinityDemandIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TPhastModel.FarmProcess4TransientCropHasSalinityDemandMultIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.
+          FarmProcess4TransientCropHasSalinityDemandMultIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientIrrigationIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -27355,6 +27423,12 @@ procedure TCustomModel.InvalidateMfFmp4FractionOfPrecipToSurfaceWater(
 begin
   ModflowPackages.FarmLandUse.MfFmp4FractionOfPrecipToSurfaceWater.Invalidate;
   ModflowPackages.FarmLandUse.InvalidateMultTransienFractionOfPrecipToSurfaceWaterArrays;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4CropHasSalinityDemand(Sender: TObject);
+begin
+  ModflowPackages.FarmSalinityFlush.MfFmp4CropHasSalinityDemand.Invalidate;
+  ModflowPackages.FarmSalinityFlush.InvalidateMultTransienCropHasSalinityDemandArrays;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4Irrigation(Sender: TObject);
@@ -36617,6 +36691,30 @@ begin
   {$ENDIF}
 end;
 
+function TCustomModel.FarmProcess4TransientCropHasSalinityDemandIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.IsSelected
+    and ModflowPackages.FarmSalinityFlush.TransientCropHasSalinityDemandArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientCropHasSalinityDemandMultIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.IsSelected
+    and ModflowPackages.FarmSalinityFlush.TransientCropHasSalinityDemandMultArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4TransientIrrigationIsSelected: Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -38657,15 +38755,15 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 25;
+  OWHM4DataSets  = 26;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
-  GWTDataSets = 5;
+//  GWTDataSets = 5;
 {$IFDEF SUTRA4}
-  ArrayCount = 167 + GWTDataSets + OWHM4DataSets;
+  ArrayCount = 172 + OWHM4DataSets;
 {$ELSE}
-  ArrayCount = 157 + GWTDataSets + OWHM4DataSets;
+  ArrayCount = 162 + OWHM4DataSets;
 {$ENDIF}
 var
   Index: integer;
@@ -41716,7 +41814,7 @@ begin
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KRootDepth;
-  FDataArrayCreationRecords[Index].DisplayName := StrKRootDepth;
+  FDataArrayCreationRecords[Index].DisplayName := StrRootDepth;
   FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.RootDepthUsed;
@@ -41751,7 +41849,7 @@ begin
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KTranspirationFraction;
-  FDataArrayCreationRecords[Index].DisplayName := StrKTranspirationFraction;
+  FDataArrayCreationRecords[Index].DisplayName := StrTranspirationFraction;
   FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.TranspirationFractionUsed;
@@ -41765,7 +41863,7 @@ begin
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KEvaporationIrrigationFraction;
-  FDataArrayCreationRecords[Index].DisplayName := StrKEvaporationIrrigationFraction;
+  FDataArrayCreationRecords[Index].DisplayName := StrEvaporationIrrigationFraction;
   FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.EvaporationIrrigationFractionUsed;
@@ -41779,7 +41877,7 @@ begin
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KFractionOfPrecipToSurfaceWater;
-  FDataArrayCreationRecords[Index].DisplayName := StrKFractionOfPrecipToSurfaceWater;
+  FDataArrayCreationRecords[Index].DisplayName := StrFractionOfPrecipToSurfaceWater;
   FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FractionOfPrecipToSurfaceWaterUsed;
@@ -41793,7 +41891,7 @@ begin
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KFractionOfIrrigToSurfaceWater;
-  FDataArrayCreationRecords[Index].DisplayName := StrKFractionOfIrrigToSurfaceWater;
+  FDataArrayCreationRecords[Index].DisplayName := StrFractionOfIrrigToSurfaceWater;
   FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FractionOfIrrigToSurfaceWaterUsed;
@@ -41803,12 +41901,11 @@ begin
     'MODFLOW-OWHM version 2, LAND_USE: SURFACEWATER_LOSS_FRACTION_IRRIGATION';
   Inc(Index);
 
-
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KAddedDemand;
-  FDataArrayCreationRecords[Index].DisplayName := StrKAddedDemand;
+  FDataArrayCreationRecords[Index].DisplayName := StrAddedDemand;
   FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.AddedDemandUsed;
@@ -41817,6 +41914,23 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, LAND_USE: ADDED_DEMAND';
   Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtInteger;
+  FDataArrayCreationRecords[Index].Name := KCropHasSalinityDemand;
+  FDataArrayCreationRecords[Index].DisplayName := StrCropHasSalinityDemand;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CropHasSalinityDemandUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, SALINITY_FLUSH_IRRIGATION: CROP_HAS_SALINITY_DEMAND';
+
+
+  Inc(Index);
+
   {$ENDIF}
 
 //StrSurfaceK = KSurfaceK;
@@ -43496,6 +43610,18 @@ begin
     and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow)
 end;
 
+function TCustomModel.CropHasSalinityDemandUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.IsSelected
+    and ModflowPackages.FarmSalinityFlush.StaticCropHasSalinityDemandArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.HorizAnisotropyMf6Used(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msModflow2015)
@@ -44018,6 +44144,25 @@ begin
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.GroundwaterRootInteraction.FarmOption = foStatic)
     and (FarmLandUse.GroundwaterRootInteraction.ArrayList = alArray);
+{$ELSE}
+   result := False;
+{$ENDIF}
+end;
+
+function TCustomModel.MultipleCropHasSalinityDemandUsed(Sender: TObject): Boolean;
+var
+  FarmLandUse: TFarmProcess4LandUse;
+  FarmSalinityFlush: TFarmProcess4SalinityFlush;
+begin
+{$IFDEF OWHMV2}
+  FarmLandUse := ModflowPackages.FarmLandUse;
+  FarmSalinityFlush := ModflowPackages.FarmSalinityFlush;
+  result := (ModelSelection = msModflowOwhm2)
+    and FarmLandUse.IsSelected
+    and FarmSalinityFlush.IsSelected
+    and (FarmLandUse.LandUseOption = luoMultiple)
+    and (FarmSalinityFlush.CropSalinityDemandChoice.FarmOption = foStatic)
+    and (FarmSalinityFlush.CropSalinityDemandChoice.ArrayList = alArray);
 {$ELSE}
    result := False;
 {$ENDIF}

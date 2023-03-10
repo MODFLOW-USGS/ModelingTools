@@ -1,11 +1,11 @@
       MODULE GWFUPWMODULE
-      IMPLICIT NONE                                                     
-      DOUBLE PRECISION, PARAMETER :: HEPS = 1.0E-7                      
+      IMPLICIT NONE
+      DOUBLE PRECISION, PARAMETER :: HEPS = 1.0E-7
       DOUBLE PRECISION, PARAMETER :: CLOSEZERO = 1.0E-15
-      DOUBLE PRECISION,PARAMETER :: BIG = 1.0D20 
-      DOUBLE PRECISION,PARAMETER :: SMALL = 1.0D-5     
-      DOUBLE PRECISION, SAVE, DIMENSION(:), POINTER :: Sn, So 
-      INTEGER, SAVE,   POINTER :: Iuupw        
+      DOUBLE PRECISION,PARAMETER :: BIG = 1.0D20
+      DOUBLE PRECISION,PARAMETER :: SMALL = 1.0D-5
+      DOUBLE PRECISION, SAVE, DIMENSION(:), POINTER :: Sn, So
+      INTEGER, SAVE,   POINTER :: Iuupw
 ! Cell property data
         INTEGER, SAVE,   POINTER ::IUPWCB,IWDFLG,IWETIT,IHDWET,IPHDRY
         INTEGER, SAVE,   POINTER ::ISFAC,ICONCV,ITHFLG,NOCVCO,NOVFC
@@ -24,8 +24,8 @@
         REAL,    SAVE,   POINTER, DIMENSION(:,:,:) ::SC2UPW
         REAL,    SAVE,   POINTER, DIMENSION(:,:,:) ::HANI
         REAL,    SAVE,   POINTER, DIMENSION(:,:,:) ::WETDRY
-        REAL,    SAVE,   POINTER, DIMENSION(:,:,:) ::HKUPW     
-      TYPE GWFUPWTYPE   
+        REAL,    SAVE,   POINTER, DIMENSION(:,:,:) ::HKUPW
+      TYPE GWFUPWTYPE
         INTEGER, POINTER :: Iuupw
 ! Cell property data
         INTEGER, POINTER ::IUPWCB,IWDFLG,IWETIT,IHDWET,IPHDRY
@@ -47,16 +47,16 @@
         REAL,      POINTER, DIMENSION(:,:,:) ::HANI
         REAL,      POINTER, DIMENSION(:,:,:) ::WETDRY
         REAL,      POINTER, DIMENSION(:,:,:) ::HKUPW
-      END TYPE GWFUPWTYPE                                               
-      TYPE (GWFUPWTYPE) , SAVE::Gwfupwdat(10)                           
+      END TYPE GWFUPWTYPE
+      TYPE (GWFUPWTYPE) , SAVE::Gwfupwdat(10)
       END MODULE GWFUPWMODULE
 !
- 
+
 !
 !-------SUBROUTINE GWF2UPW1AR
 !
       SUBROUTINE GWF2UPW1AR(In, Igrid)
- 
+
       USE GLOBAL,     ONLY:NCOL,NROW,NLAY,ITRSS,LAYHDT,LAYHDS,LAYCBD,
      1                     NCNFBD,IBOUND,BUFF,BOTM,NBOTM,DELR,DELC,IOUT,
      2                     LBOTM,HNEW
@@ -193,10 +193,10 @@ C3B-----GET OPTIONS.
 !     1    'For data defined by parameters, do not check to see if ',
 !     2        'parameters define data at all cells')
       END IF
-      
+
 	WRITE(IOUT, *) 'ISFAC, ICONCV, ITHFLG, NOCVCO, NOVFC, NOPCHK:'
 	WRITE(IOUT, *) ISFAC, ICONCV, ITHFLG, NOCVCO, NOVFC, NOPCHK
-      
+
       IF(LLOC.LT.200) GO TO 20
 C
 C4------ALLOCATE AND READ LAYTYP, LAYAVG, CHANI, LAYVKA, LAYWET, LAYSTRT.
@@ -224,7 +224,7 @@ C4A-----PRINT A TABLE OF VALUES FOR LAYTYP, LAYAVG, CHANI, LAYVKA, LAYWET.
 !     2 '       LAYVKA           LAYWET',/1X,75('-'))
       DO 50 K=1,NLAY
 
-      WRITE(IOUT,*) 
+      WRITE(IOUT,*)
 	1  'K,LAYTYPUPW(K),LAYAVG(K),CHANI(K),LAYVKAUPW(K),LAYWET(K):'
       WRITE(IOUT,*) K,LAYTYPUPW(K),LAYAVG(K),CHANI(K),LAYVKAUPW(K),
      1     LAYWET(K)
@@ -540,7 +540,7 @@ C8------PREPARE AND CHECK LPF DATA.
 !      CALL SGWF2UPWN()
 C9------Calculate constant part of conductance. Conductance includes
 C       cell thickness for confined conditions.
-!      DO K=1,NLAY     
+!      DO K=1,NLAY
 !        IF(LAYAVG(K).EQ.0) THEN
 !          IF ( LAYTYPUPW(K).GT.0 ) THEN
 !            CALL SGWF2UPW1HHARM(K)
@@ -635,7 +635,7 @@ C      SPECIFICATIONS:
 C     ------------------------------------------------------------------
 !      SUBROUTINE SGWF2UPW1HLOG(K)
 C     ******************************************************************
-C-----COMPUTE CONSTANT PART OF HORIZONTAL CONDUCTANCE USING LOGARITHMIC 
+C-----COMPUTE CONSTANT PART OF HORIZONTAL CONDUCTANCE USING LOGARITHMIC
 C-----MEAN HYDRAULIC CONDUCTIVITY -- ACTIVATED BY LAYAVG=1
 C     ******************************************************************
 C
@@ -644,9 +644,9 @@ C     ------------------------------------------------------------------
 !
 !      SUBROUTINE SGWF2UPW1HUNCNF(K)
 C     ******************************************************************
-C-----COMPUTE CONSTANT PART OF HORIZONTAL CONDUCTANCE USING ARITHMETIC 
-C-----MEAN CELL THICKNESS AND LOGARITHMIC MEAN HYDRAULIC CONDUCTIVITY. 
-C-----THIS IS DIFFERENT FROM SGWF2UPW1HLOG FOR CONFINED LAYERS. 
+C-----COMPUTE CONSTANT PART OF HORIZONTAL CONDUCTANCE USING ARITHMETIC
+C-----MEAN CELL THICKNESS AND LOGARITHMIC MEAN HYDRAULIC CONDUCTIVITY.
+C-----THIS IS DIFFERENT FROM SGWF2UPW1HLOG FOR CONFINED LAYERS.
 C-----ACTIVATED BY LAYAVG=2
 C     ******************************************************************
 C
@@ -664,7 +664,7 @@ C     ------------------------------------------------------------------
 C
 !      SUBROUTINE SGWF2UPW1HLOGCON(K)
 C     ******************************************************************
-C-----COMPUTE THE HORIZONTAL CONDUCTANCE FOR CONFINED CELLS BASED ON THE 
+C-----COMPUTE THE HORIZONTAL CONDUCTANCE FOR CONFINED CELLS BASED ON THE
 C-----LOGARITHMIC  MEAN HYDRAULIC CONDUCTIVITY -- ACTIVATED BY LAYAVG=1
 C     ******************************************************************
 C
@@ -673,8 +673,8 @@ C     ------------------------------------------------------------------
 !
 !      SUBROUTINE SGWF2UPW1HUNCNFCON(K)
 C     ******************************************************************
-C-----COMPUTE HORIZONTAL CONDUCTANCE FOR CONFINED CELLS USING ARITHMETIC 
-C-----MEAN CELL THICKNESS AND LOGARITHMIC MEAN HYDRAULIC CONDUCTIVITY.  
+C-----COMPUTE HORIZONTAL CONDUCTANCE FOR CONFINED CELLS USING ARITHMETIC
+C-----MEAN CELL THICKNESS AND LOGARITHMIC MEAN HYDRAULIC CONDUCTIVITY.
 C-----ACTIVATED BY LAYAVG=2
 C     ******************************************************************
 C
@@ -720,22 +720,22 @@ C     ------------------------------------------------------------------
 !     ------------------------------------------------------------------
 !     ARGUMENTS
 !     ------------------------------------------------------------------
-      INTEGER Igrid    
+      INTEGER Igrid
 !     ------------------------------------------------------------------
 ! Deallocate UPW data.
         DEALLOCATE(Gwfupwdat(IGRID)%Sn)
         DEALLOCATE(Gwfupwdat(IGRID)%So)
         DEALLOCATE(Gwfupwdat(IGRID)%IUPWCB)
-        DEALLOCATE(Gwfupwdat(IGRID)%IWDFLG)
-        DEALLOCATE(Gwfupwdat(IGRID)%IWETIT)
-        DEALLOCATE(Gwfupwdat(IGRID)%IHDWET)
+!        DEALLOCATE(Gwfupwdat(IGRID)%IWDFLG)
+!        DEALLOCATE(Gwfupwdat(IGRID)%IWETIT)
+!        DEALLOCATE(Gwfupwdat(IGRID)%IHDWET)
         DEALLOCATE(Gwfupwdat(IGRID)%IPHDRY)
         DEALLOCATE(Gwfupwdat(IGRID)%ISFAC)
         DEALLOCATE(Gwfupwdat(IGRID)%ICONCV)
         DEALLOCATE(Gwfupwdat(IGRID)%ITHFLG)
         DEALLOCATE(Gwfupwdat(IGRID)%NOCVCO)
         DEALLOCATE(Gwfupwdat(IGRID)%NOVFC)
-        DEALLOCATE(Gwfupwdat(IGRID)%WETFCT)
+!        DEALLOCATE(Gwfupwdat(IGRID)%WETFCT)
         DEALLOCATE(Gwfupwdat(IGRID)%LAYTYPUPW)
         DEALLOCATE(Gwfupwdat(IGRID)%LAYAVG)
         DEALLOCATE(Gwfupwdat(IGRID)%CHANI)
@@ -752,9 +752,9 @@ C     ------------------------------------------------------------------
         DEALLOCATE(Gwfupwdat(IGRID)%HKUPW)
         DEALLOCATE(Gwfupwdat(IGRID)%IBOUND2)
       END SUBROUTINE GWF2UPW1DA
- 
- 
- 
+
+
+
       SUBROUTINE SGWF2UPW1PNT(Igrid)
       USE GWFUPWMODULE
       IMPLICIT NONE
@@ -763,7 +763,7 @@ C     ------------------------------------------------------------------
 !     ------------------------------------------------------------------
 !     ARGUMENTS
 !     ------------------------------------------------------------------
-      INTEGER Igrid   
+      INTEGER Igrid
 !     ------------------------------------------------------------------
 ! Cell property data
         Sn=>Gwfupwdat(IGRID)%Sn
