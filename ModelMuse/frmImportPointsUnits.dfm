@@ -26,7 +26,7 @@ inherited frmImportPoints: TfrmImportPoints
       585
       49)
     object btnCancel: TBitBtn
-      Left = 492
+      Left = 488
       Top = 6
       Width = 83
       Height = 33
@@ -34,10 +34,10 @@ inherited frmImportPoints: TfrmImportPoints
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 488
+      ExplicitLeft = 484
     end
     object btnOK: TBitBtn
-      Left = 403
+      Left = 399
       Top = 6
       Width = 83
       Height = 33
@@ -46,10 +46,10 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 399
+      ExplicitLeft = 395
     end
     object btnHelp: TBitBtn
-      Left = 314
+      Left = 310
       Top = 6
       Width = 83
       Height = 33
@@ -58,7 +58,7 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 310
+      ExplicitLeft = 306
     end
   end
   object pcImportPoints: TPageControl
@@ -66,7 +66,7 @@ inherited frmImportPoints: TfrmImportPoints
     Top = 0
     Width = 585
     Height = 469
-    ActivePage = tabData
+    ActivePage = tabControls
     Align = alClient
     TabOrder = 0
     ExplicitWidth = 581

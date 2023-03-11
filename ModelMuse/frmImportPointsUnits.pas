@@ -21,6 +21,7 @@ type
   TFootprintWellColumns = (fwcWithdrawal, fwcObjectName);
 
   TObsUtilColumns = (oucName, oucObsType);
+  TCalibObsColumns = (cocGroup, cocTime, cocValue, cocWeight);
 
   {@abstract(@name is the command used to import
     points or reverse the import.)}
@@ -210,7 +211,7 @@ uses Clipbrd, Contnrs, GoPhastTypes, frmGoPhastUnit, RbwParser,
   frameHeadObservationsUnit, IntListUnit, framePackageHobUnit, ModflowHobUnit,
   frameCustomCellObservationUnit, FootprintPropertiesUnit, FootprintBoundary,
   System.Character, MeshRenumberingTypes, ModflowBoundaryDisplayUnit,
-  Modflow6ObsUnit;
+  Modflow6ObsUnit, PestPropertiesUnit;
 
 {$R *.dfm}
 
@@ -359,6 +360,7 @@ end;
 procedure TfrmImportPoints.UpdateObsUtilColumns;
 const
   RequiredColumns = Ord(High(TObsUtilColumns)) + 1;
+  RequiredPestColumns = Ord(High(TCalibObsColumns)) + 1;
 var
   FirstColumn: Integer;
   ColumnIndex: Integer;
@@ -367,7 +369,14 @@ begin
    //TObsUtilColumns = (oucName, oucObsType);
 
   FirstColumn := rgElevationCount.ItemIndex + 2;
-  dgData.ColCount := FirstColumn + RequiredColumns;
+  if frmGoPhast.PhastModel.PestProperties.PestStatus = psInactive then
+  begin
+    dgData.ColCount := FirstColumn + RequiredColumns;
+  end
+  else
+  begin
+    dgData.ColCount := FirstColumn + RequiredColumns + RequiredPestColumns;
+  end;
   for ColumnIndex := FirstColumn to dgData.ColCount - 1 do
   begin
     AColumn := dgData.Columns[ColumnIndex];
@@ -378,8 +387,19 @@ begin
   end;
   dgData.Cells[FirstColumn,0] := 'Name';
   dgData.Cells[FirstColumn+1,0] := 'Observation type';
+  if frmGoPhast.PhastModel.PestProperties.PestStatus <> psInactive then
+  begin
+    dgData.Cells[FirstColumn+2+Ord(cocGroup),0] := 'Observation group';
+    dgData.Cells[FirstColumn+2+Ord(cocTime),0] := 'Time';
+    dgData.Cells[FirstColumn+2+Ord(cocValue),0] := 'Observed value';
+    dgData.Cells[FirstColumn+2+Ord(cocWeight),0] := 'Weight';
 
-  AColumn := dgData.Columns[dgData.ColCount - 1];
+    dgData.Columns[FirstColumn+2+Ord(cocTime)].Format := rcf4Real;
+    dgData.Columns[FirstColumn+2+Ord(cocValue)].Format := rcf4Real;
+    dgData.Columns[FirstColumn+2+Ord(cocWeight)].Format := rcf4Real;
+  end;
+
+  AColumn := dgData.Columns[FirstColumn+1];
   AColumn.PickList.Add('Head');
   AColumn.PickList.Add('Drawdown');
   AColumn.PickList.Add('CHD Flows');
@@ -1075,6 +1095,7 @@ var
   ObGeneral: TObGeneral;
   SpecifiedHeadArray: TDataArray;
   FormulaPosition: Integer;
+  CalibObs: TMf6CalibrationObs;
 begin
   InvalidRow := False;
   Values := TRealList.Create;
@@ -1105,7 +1126,7 @@ begin
           // skip the name column.
           Values.Add(0);
         end
-        else if (Package = Packages.Mf6ObservationUtility) and (ColIndex = dgData.ColCount - 1) then
+        else if (Package = Packages.Mf6ObservationUtility) and (ColIndex = FRequiredCols +1) then
         begin
           ObsType := dgData.ItemIndex[ColIndex, RowIndex];
           if ObsType < 0 then
@@ -1119,6 +1140,10 @@ begin
         begin
           // skip the name column.
           Values.Add(0);
+        end
+        else if (Package = Packages.Mf6ObservationUtility) and (ColIndex > FRequiredCols+1) then
+        begin
+          // skip the calibration observations columns.
         end
         else
         begin
@@ -1224,6 +1249,32 @@ begin
         begin
           ObGeneral := TObGeneral(ObsType);
           Mf6Obs.General := Mf6Obs.General + [ObGeneral];
+        end;
+
+        if frmGoPhast.PhastModel.PestProperties.PestStatus <> psInactive then
+        begin
+          if (dgData.Cells[FRequiredCols+2 + Ord(cocTime),RowIndex] <> '')
+            and (dgData.Cells[FRequiredCols+2 + Ord(cocValue),RowIndex] <> '') then
+          begin
+            CalibObs := Mf6Obs.CalibrationObservations.Add;
+            if dgData.Cells[FRequiredCols,RowIndex] = '' then
+            begin
+              CalibObs.Name := Mf6Obs.Name + '_'
+                + IntToStr(Mf6Obs.CalibrationObservations.Count);
+            end
+            else
+            begin
+              CalibObs.Name := dgData.Cells[FRequiredCols,RowIndex];
+            end;
+            CalibObs.Time :=
+              dgData.RealValueDefault[FRequiredCols+2 + Ord(cocTime),RowIndex, 0];
+            CalibObs.ObservedValue :=
+              dgData.RealValueDefault[FRequiredCols+2 + Ord(cocValue),RowIndex, 0];
+            CalibObs.Weight :=
+              dgData.RealValueDefault[FRequiredCols+2 + Ord(cocWeight),RowIndex, 1];
+            CalibObs.ObSeries := osGeneral;
+            CalibObs.ObGeneral := ObGeneral;
+          end;
         end;
       end
       else
