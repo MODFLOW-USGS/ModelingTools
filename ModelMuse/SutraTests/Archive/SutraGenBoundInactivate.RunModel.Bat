@@ -4,6 +4,7 @@ for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (
    set /A "start=(((%%a*60)+1%%b %% 100)*60+1%%c %% 100)*100+1%%d %% 100"
 )
 @echo on
+if exist "SutraGenBoundInactivate.SUTRA.FIL" copy /Y "SutraGenBoundInactivate.SUTRA.FIL" "SUTRA.FIL"
 "C:\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe"
 @echo off
 rem Get end time:

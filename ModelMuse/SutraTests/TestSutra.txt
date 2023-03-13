@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-146
+148
 SutraTest1.gpt
 	Archive\SutraTest1.axml
 	Archive\SutraTest1.c_ele
@@ -91,6 +91,8 @@ SutraTest6.gpt
 	Archive\SutraTest6.UFluxBcs
 	Archive\usgs.SutraTest6.reference
 Island3D_InitialPressure.gpt
+	Archive\Island3D_InitialPressure.1.c_ele
+	Archive\Island3D_InitialPressure.1.c_nod
 	Archive\Island3D_InitialPressure.axml
 	Archive\Island3D_InitialPressure.c_ele
 	Archive\Island3D_InitialPressure.c_nod

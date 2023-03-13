@@ -1534,7 +1534,7 @@ begin
   end
   else
   begin
-    FInputFileName := ChangeFileExt(AFileName, '') + '_' + IntToStr(FileIndex) + Extension;
+    FInputFileName := ChangeFileExt(AFileName, '') + '.' + IntToStr(FileIndex) + Extension;
   end;
   Inc(FileIndex);
 end;
@@ -3592,7 +3592,7 @@ begin
           end
           else
           begin
-            FileNameAddition := '_' + IntToStr(DisFileIndex);
+            FileNameAddition := '.' + IntToStr(DisFileIndex);
           end;
           Inc(DisFileIndex);
           DisColIndex := 5;
