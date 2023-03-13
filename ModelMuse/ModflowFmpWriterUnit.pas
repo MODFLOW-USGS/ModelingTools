@@ -15,7 +15,6 @@ type
     wlEtFrac, wlSwLosses, wlPFLX, wlCropFunc, wlWaterCost, wlDeliveries,
     wlSemiRouteDeliv, wlSemiRouteReturn, wlCall);
 
-  TTestRealValueOkProcedure = reference to procedure (Value: double);
   TTestIntValueOkProcedure = reference to procedure (Value: Integer);
 
   TModflowFmpWriter = class(TCustomListWriter)
@@ -125,12 +124,6 @@ type
     function GetCropConsumptiveUseFlag: Integer;
     function GetConsumptiveUseFlag: Integer;
     function GetPrecipitationFlag: integer;
-    function EvaluateValueFromGlobalFormula(Formula: string;
-      ErrorObject: TObject; const DataSetErrorString: string;
-      const OKTypes: TRbwDataTypes): TExpression;
-    procedure WriteFloatValueFromGlobalFormula(Formula: string;
-      ErrorObject: TObject; const DataSetErrorString: string;
-      TestProc: TTestRealValueOkProcedure = nil);
     procedure WriteIntegerValueFromGlobalFormula(Formula: string;
       ErrorObject: TObject; const DataSetErrorString: string;
       TestValue: TTestIntValueOkProcedure = nil);
@@ -152,7 +145,6 @@ type
     procedure EvaluateActiveCells;
     procedure CheckIntegerDataSet(IntegerArray: TDataArray;
       const ErrorMessage: string);
-    function GetObjectString(ErrorObject: TObject): string;
     procedure WriteFileInternal;
     procedure FreeFileStreams;
   protected
@@ -211,6 +203,11 @@ resourcestring
   's';
   StrRow0dColumn = 'Row: %0:d; Column: %1:d';
   StrInvalidCropIDInF = 'Invalid Crop ID in Farm Process.';
+  StrSoilS = 'Soil: %s';
+  StrCropS = 'Crop: %s';
+  StrClimateStartingTim = 'Climate starting time: %d';
+  StrErrorInFarmD = 'Error in Farm %d.';
+  StrTheFormulaShouldReal = 'The formula should result in a real number';
 
 implementation
 
@@ -228,10 +225,8 @@ resourcestring
   StrWritingDataSet2c = '  Writing Data Set 2c.';
 //  StrWritingDataSets3and4 = '  Writing Data Sets 3 and 4.';
   StrWritingDataSets = '  Writing Data Sets 22 to 39.';
-  StrSoilS = 'Soil: %s';
   StrCapillaryFringe = 'Capillary Fringe';
   StrRootingDepth = 'Rooting Depth';
-  StrCropS = 'Crop: %s';
   StrTranspiratoryFracti = 'Transpiratory fraction of consumptive use';
   StrEvaporativeFraction = 'Evaporative fraction of consumptive use related ' +
   'to precipitation ';
@@ -300,8 +295,6 @@ resourcestring
   StrInvalidFarmSurface = 'Invalid Farm surface water flow option';
   StrIRDFLInTheFarmPr = 'IRDFL in the Farm Process must be equal to 0 if the' +
   ' SFR package is not selected.';
-  StrClimateStartingTim = 'Climate starting time: %d';
-  StrErrorInFarmD = 'Error in Farm %d.';
   StrFarmD = 'Farm %d';
   StrFarmCostsHaveNot = 'Farm Costs have not been defined';
   StrInFarmDFarmC = 'In farm # %d, farm costs have not been defined';
@@ -317,7 +310,6 @@ resourcestring
   StrInvalidSoilIDInF = 'Invalid Soil ID in Farm Process';
   StrTheFormulaShouldR = 'The formula should result in a Boolean';
   StrTheFormulaShouldInt = 'The formula should result in an integer';
-  StrTheFormulaShouldReal = 'The formula should result in a real number';
 //  StrFMPFarmsNotDefine = 'FMP Farms not defined in one or more stress period' +
 //  's';
   StrUndefinedFMPRefere = 'Undefined FMP Reference Evapotranspiration in one' +
@@ -2670,13 +2662,13 @@ var
   AFarm: TFarm;
 begin
   result := 0;
-  
+
   if not Model.ModflowPackages.SfrPackage.IsSelected
     and not Model.ModflowPackages.SwrPackage.IsSelected then
   begin
     Exit;
   end;
-  
+
   for index := 0 to FFarms.Count - 1 do
   begin
     AFarm := FFarms[index];
@@ -4117,136 +4109,6 @@ begin
     frmErrorsAndWarnings.EndUpdate;
   end;
 
-end;
-
-function TModflowFmpWriter.GetObjectString(ErrorObject: TObject): string;
-var
-  ACrop: TCropItem;
-  AClimate: TClimateItem;
-  Farm: TFarm;
-  ASoil: TSoilItem;
-  AScreenObject: TScreenObject;
-begin
-  if ErrorObject = nil then
-  begin
-    result := '';
-  end
-  else if ErrorObject is TSoilItem then
-  begin
-    ASoil := TSoilItem(ErrorObject);
-    result := Format(StrSoilS, [ASoil.SoilName]);
-  end
-  else if ErrorObject is TCropItem then
-  begin
-    ACrop := TCropItem(ErrorObject);
-    result := Format(StrCropS, [ACrop.CropName]);
-  end
-  else if ErrorObject is TClimateItem then
-  begin
-    AClimate := TClimateItem(ErrorObject);
-    result := Format(StrClimateStartingTim, [AClimate.StartTime]);
-  end
-  else if ErrorObject is TFarm then
-  begin
-    Farm := TFarm(ErrorObject);
-    result := Format(StrErrorInFarmD, [Farm.FarmID]);
-  end
-  else if ErrorObject is TScreenObject then
-  begin
-    AScreenObject := TScreenObject(ErrorObject);
-    result := AScreenObject.Name;
-  end
-  else
-  begin
-    Assert(False);
-  end;
-end;
-
-function TModflowFmpWriter.EvaluateValueFromGlobalFormula(Formula: string;
-  ErrorObject: TObject; const DataSetErrorString: string;
-  const OKTypes: TRbwDataTypes): TExpression;
-var
-  Compiler: TRbwParser;
-  ErrorFormula: string;
-  ObjectString: string;
-begin
-  Compiler := Model.ParentModel.rpThreeDFormulaCompiler;
-
-  ErrorFormula := Formula;
-
-  try
-    Compiler.Compile(Formula)
-  except on E: ERbwParserError do
-    begin
-      ObjectString := GetObjectString(ErrorObject);
-      frmFormulaErrors.AddFormulaError(ObjectString,
-        DataSetErrorString, ErrorFormula, E.Message);
-      Formula := '0';
-      Compiler.Compile(Formula);
-      // send error message
-    end;
-  end;
-  result := Compiler.CurrentExpression;
-  if result = nil then
-  begin
-    Formula := '0';
-    Compiler.Compile(Formula);
-    result := Compiler.CurrentExpression;
-  end;
-  if not (result.ResultType in OKTypes) then
-  begin
-    ObjectString := GetObjectString(ErrorObject);
-    frmFormulaErrors.AddFormulaError(ObjectString,
-      DataSetErrorString, ErrorFormula, StrInvalidResultType);
-    if rdtInteger in OKTypes then
-    begin
-      Formula := '0';
-    end
-    else if rdtBoolean in OKTypes then
-    begin
-      Formula := 'False';
-    end
-    else if rdtString in OKTypes then
-    begin
-      Formula := '""';
-    end
-    else
-    begin
-      Assert(False);
-
-    Compiler.Compile(Formula);
-    // send error message
-    result := Compiler.CurrentExpression;
-    end;
-  end;
-
-  result.Evaluate;
-end;
-
-procedure TModflowFmpWriter.WriteFloatValueFromGlobalFormula(Formula: string;
-  ErrorObject: TObject; const DataSetErrorString: string;
-  TestProc: TTestRealValueOkProcedure = nil);
-var
-  Value: double;
-  Expression: TExpression;
-begin
-  Expression := EvaluateValueFromGlobalFormula(Formula, ErrorObject,
-    DataSetErrorString, [rdtDouble, rdtInteger]);
-  if Expression.ResultType in [rdtDouble, rdtInteger] then
-  begin
-    Value := Expression.DoubleResult;
-    WriteFloatCondensed(Value);
-    if Assigned(TestProc) then
-    begin
-      TestProc(Value);
-    end;
-  end
-  else
-  begin
-    WriteFloatCondensed(0);
-    frmFormulaErrors.AddFormulaError(GetObjectString(ErrorObject), DataSetErrorString,
-      Formula, StrTheFormulaShouldReal);
-  end;
 end;
 
 procedure TModflowFmpWriter.WriteIntegerValueFromGlobalFormula(Formula: string;

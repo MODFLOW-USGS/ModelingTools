@@ -1,6 +1,7 @@
 inherited frmIrrigationTypes: TfrmIrrigationTypes
   Caption = 'Irrigation Types'
   ClientHeight = 235
+  ExplicitWidth = 438
   TextHeight = 18
   inline frameIrrigationTypes: TframeGrid
     Left = 0
@@ -9,13 +10,13 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     Height = 186
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 426
+    ExplicitWidth = 422
     ExplicitHeight = 185
     inherited Panel: TPanel
-      Top = 144
-      Width = 430
+      Top = 145
+      Width = 426
       ExplicitTop = 144
-      ExplicitWidth = 426
+      ExplicitWidth = 422
       inherited lbNumber: TLabel
         Width = 179
         Height = 18
@@ -24,15 +25,15 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 332
+        Left = 326
         ExplicitLeft = 332
       end
       inherited sbInsert: TSpeedButton
-        Left = 361
+        Left = 353
         ExplicitLeft = 361
       end
       inherited sbDelete: TSpeedButton
-        Left = 390
+        Left = 384
         ExplicitLeft = 390
       end
       inherited seNumber: TJvSpinEdit
@@ -42,9 +43,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 430
-      Height = 144
+      Width = 426
+      Height = 145
       ColCount = 2
+      DefaultColWidth = 65
       FixedCols = 1
       OnEndUpdate = frameIrrigationTypesGridEndUpdate
       Columns = <
@@ -96,11 +98,8 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 426
+      ExplicitWidth = 422
       ExplicitHeight = 144
-      ColWidths = (
-        64
-        288)
     end
   end
   object pnlBottom: TPanel
@@ -112,11 +111,12 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     ParentColor = True
     TabOrder = 1
     ExplicitTop = 185
+    ExplicitWidth = 422
     DesignSize = (
       426
       49)
     object btnCancel: TBitBtn
-      Left = 329
+      Left = 321
       Top = 6
       Width = 83
       Height = 33
@@ -124,10 +124,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 333
+      ExplicitLeft = 317
     end
     object btnOK: TBitBtn
-      Left = 240
+      Left = 232
       Top = 6
       Width = 83
       Height = 33
@@ -136,10 +136,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 244
+      ExplicitLeft = 228
     end
     object btnHelp: TBitBtn
-      Left = 151
+      Left = 143
       Top = 6
       Width = 83
       Height = 33
@@ -147,7 +147,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 155
+      ExplicitLeft = 139
     end
   end
 end

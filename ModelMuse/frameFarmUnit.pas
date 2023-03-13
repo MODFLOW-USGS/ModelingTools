@@ -8,7 +8,7 @@ uses
   Mask, JvExMask, JvSpin, ExtCtrls, ComCtrls, frameGridUnit,
   frameFormulaGridUnit, JvgPage, frameDeliveryGridUnit, frameFarmDiversionUnit,
   UndoItemsScreenObjects, ModflowFmpFarmUnit, RbwDataGrid4, ModflowFmpCropUnit,
-  ClassificationUnit, RbwParser;
+  ClassificationUnit, RbwParser, ModflowFmpIrrigationUnit;
 
 type
   TframeFarm = class(TframeScreenObject)
@@ -92,7 +92,8 @@ type
     procedure GetGwAllotmentForFirstFarm(FirstFarm: TFarm);
     procedure GetMaxTimeAndCountForCrops(var MaxIndex, MaxTimeCount: Integer;
       AFarm: TFarm);
-    procedure SetCropEfficiencies(Farm: TFarm; Crops: TCropCollection);
+    procedure SetCropEfficiencies(Farm: TFarm; Crops: TCropCollection;
+      IrrigationTypes: TIrrigationCollection);
     procedure SetFarmCosts(Farm: TFarm);
     procedure SetWaterRights(Farm: TFarm);
     procedure SetGwAllotment(Farm: TFarm);
@@ -324,8 +325,8 @@ begin
         for ItemIndex := 1 to FarmList.Count - 1 do
         begin
           AFarm := FarmList[ItemIndex];
-          if not AFarm.FarmEfficiencyCollection.IsSame(
-            FirstFarm.FarmEfficiencyCollection) then
+          if not AFarm.CurrentFarmEfficiencyCollection.IsSame(
+            FirstFarm.CurrentFarmEfficiencyCollection) then
           begin
             ClearGrid(frameFormulaGridCrops.Grid);
             frameFormulaGridCrops.seNumber.AsInteger := 0;
@@ -729,7 +730,7 @@ begin
 
   if MaxIndex >= 0 then
   begin
-    FarmEff := AFarm.FarmEfficiencyCollection[MaxIndex];
+    FarmEff := AFarm.CurrentFarmEfficiencyCollection[MaxIndex];
     Grid := frameFormulaGridCrops.Grid;
     for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
     begin
@@ -738,9 +739,9 @@ begin
       Grid.Cells[Ord(ccEndTime), TimeIndex+1] := FloatToStr(TimeItem.EndTime);
     end;
 
-    for CropIndex := 0 to AFarm.FarmEfficiencyCollection.Count - 1 do
+    for CropIndex := 0 to AFarm.CurrentFarmEfficiencyCollection.Count - 1 do
     begin
-      FarmEff := AFarm.FarmEfficiencyCollection[CropIndex];
+      FarmEff := AFarm.CurrentFarmEfficiencyCollection[CropIndex];
       for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
       begin
         TimeItem := FarmEff.CropEfficiency[TimeIndex];
@@ -781,6 +782,8 @@ var
   StartTimes: TStringList;
   EndTimes: TStringList;
   ColIndex: Integer;
+  IrrigationType: TIrrigationItem;
+  IrrigationTypes: TIrrigationCollection;
 begin
   seFarmId.AsInteger := 0;
   edFarmName.Text := '';
@@ -806,37 +809,76 @@ begin
     frameFormulaGridCrops.FirstFormulaColumn := Ord(ccCrop);
     Grid := frameFormulaGridCrops.Grid;
     ClearGrid(Grid);
-    Crops := frmGoPhast.PhastModel.FmpCrops;
-    Grid.ColCount := Crops.Count + 2;
-    Grid.BeginUpdate;
-    try
-      Grid.Cells[Ord(ccStartTime), 0] := StrStartingTime;
-      Grid.Cells[Ord(ccEndTime), 0] := StrEndingTime;
-      Grid.Columns[Ord(ccStartTime)].PickList := StartTimes;
-      Grid.Columns[Ord(ccEndTime)].PickList := EndTimes;
-      for CropIndex := 0 to Crops.Count - 1 do
-      begin
-        ACrop := Crops[CropIndex];
-        Grid.Cells[Ord(ccCrop) + CropIndex, 0] :=
-          Format(StrCropEfficiency, [ACrop.CropName]);
-        Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
-        Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
-        Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
-        Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
-        Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := True;
-        Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustRowHeights := True;
+    if frmGoPhast.ModelSelection = msModflowFmp then
+    begin
+      Crops := frmGoPhast.PhastModel.FmpCrops;
+      Grid.ColCount := Crops.Count + 2;
+      Grid.BeginUpdate;
+      try
+        Grid.Cells[Ord(ccStartTime), 0] := StrStartingTime;
+        Grid.Cells[Ord(ccEndTime), 0] := StrEndingTime;
+        Grid.Columns[Ord(ccStartTime)].PickList := StartTimes;
+        Grid.Columns[Ord(ccEndTime)].PickList := EndTimes;
+        for CropIndex := 0 to Crops.Count - 1 do
+        begin
+          ACrop := Crops[CropIndex];
+          Grid.Cells[Ord(ccCrop) + CropIndex, 0] :=
+            Format(StrCropEfficiency, [ACrop.CropName]);
+          Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
+          Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
+          Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
+          Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
+          Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := True;
+          Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustRowHeights := True;
+        end;
+      finally
+        Grid.EndUpdate;
       end;
-    finally
-      Grid.EndUpdate;
-    end;
-    Grid.BeginUpdate;
-    try
-      for CropIndex := 0 to Crops.Count - 1 do
-      begin
-        Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := False;
+      Grid.BeginUpdate;
+      try
+        for CropIndex := 0 to Crops.Count - 1 do
+        begin
+          Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := False;
+        end;
+      finally
+        Grid.EndUpdate;
       end;
-    finally
-      Grid.EndUpdate;
+    end
+    else
+    begin
+      Assert(frmGoPhast.ModelSelection = msModflowOwhm2);
+      IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
+      Grid.ColCount := IrrigationTypes.Count + 2;
+      Grid.BeginUpdate;
+      try
+        Grid.Cells[Ord(ccStartTime), 0] := StrStartingTime;
+        Grid.Cells[Ord(ccEndTime), 0] := StrEndingTime;
+        Grid.Columns[Ord(ccStartTime)].PickList := StartTimes;
+        Grid.Columns[Ord(ccEndTime)].PickList := EndTimes;
+        for CropIndex := 0 to IrrigationTypes.Count - 1 do
+        begin
+          IrrigationType := IrrigationTypes[CropIndex];
+          Grid.Cells[Ord(ccCrop) + CropIndex, 0] :=
+            Format(StrCropEfficiency, [IrrigationType.Name]);
+          Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
+          Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
+          Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
+          Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
+          Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := True;
+          Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustRowHeights := True;
+        end;
+      finally
+        Grid.EndUpdate;
+      end;
+      Grid.BeginUpdate;
+      try
+        for CropIndex := 0 to IrrigationTypes.Count - 1 do
+        begin
+          Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := False;
+        end;
+      finally
+        Grid.EndUpdate;
+      end;
     end;
     frameFormulaGridCrops.LayoutMultiRowEditControls;
 
@@ -942,6 +984,7 @@ var
   Farm: TFarm;
   Crops: TCropCollection;
   IntValue: Integer;
+  IrrigationTypes: TIrrigationCollection;
 begin
   if {FarmCreated or} FChangedID then
   begin
@@ -956,13 +999,14 @@ begin
   if {FarmCreated or} FChangedCrops then
   begin
     Crops := frmGoPhast.PhastModel.FmpCrops;
+    IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
     for index := 0 to FarmList.Count - 1 do
     begin
       Farm := FarmList[index];
 //        Farm := Item.ScreenObject.ModflowFmpFarm;
       if Farm <> nil then
       begin
-        SetCropEfficiencies(Farm, Crops);
+        SetCropEfficiencies(Farm, Crops, IrrigationTypes);
       end;
     end;
   end;
@@ -1133,7 +1177,8 @@ begin
   end;
 end;
 
-procedure TframeFarm.SetCropEfficiencies(Farm: TFarm; Crops: TCropCollection);
+procedure TframeFarm.SetCropEfficiencies(Farm: TFarm; Crops: TCropCollection;
+  IrrigationTypes: TIrrigationCollection);
 var
   EndTime: Double;
   EfficienciesItem: TFarmEfficienciesItem;
@@ -1150,15 +1195,30 @@ var
   RowIndex: Integer;
   ARow: Integer;
 begin
-  EfficiencyCollection := Farm.FarmEfficiencyCollection;
-  for CropIndex := EfficiencyCollection.Count to Crops.Count - 1 do
+  EfficiencyCollection := Farm.CurrentFarmEfficiencyCollection;
+  if frmGoPhast.ModelSelection = msModflowFmp then
   begin
-    EfficienciesItem := EfficiencyCollection.Add;
-    EfficienciesItem.CropEfficiency.CropName := Crops[CropIndex].CropName;
-  end;
-  while EfficiencyCollection.Count > Crops.Count do
+    for CropIndex := EfficiencyCollection.Count to Crops.Count - 1 do
+    begin
+      EfficienciesItem := EfficiencyCollection.Add;
+      EfficienciesItem.CropEfficiency.CropName := Crops[CropIndex].CropName;
+    end;
+    while EfficiencyCollection.Count > Crops.Count do
+    begin
+      EfficiencyCollection.Last.Free;
+    end;
+  end
+  else
   begin
-    EfficiencyCollection.Last.Free;
+    for CropIndex := EfficiencyCollection.Count to IrrigationTypes.Count - 1 do
+    begin
+      EfficienciesItem := EfficiencyCollection.Add;
+      EfficienciesItem.CropEfficiency.CropName := IrrigationTypes[CropIndex].Name;
+    end;
+    while EfficiencyCollection.Count > IrrigationTypes.Count do
+    begin
+      EfficiencyCollection.Last.Free;
+    end;
   end;
   StartTimes := TList<Double>.Create;
   EndTimes := TList<Double>.Create;
@@ -1211,12 +1271,12 @@ var
   CropIndex: Integer;
 begin
   MaxTimeCount := 0;
-  Assert(frameFormulaGridCrops.Grid.ColCount = AFarm.FarmEfficiencyCollection.Count + 2);
-  Assert(AFarm.FarmEfficiencyCollection.Count > 0);
+  Assert(frameFormulaGridCrops.Grid.ColCount = AFarm.CurrentFarmEfficiencyCollection.Count + 2);
+  Assert(AFarm.CurrentFarmEfficiencyCollection.Count > 0);
   MaxIndex := -1;
-  for CropIndex := 0 to AFarm.FarmEfficiencyCollection.Count - 1 do
+  for CropIndex := 0 to AFarm.CurrentFarmEfficiencyCollection.Count - 1 do
   begin
-    FarmEff := AFarm.FarmEfficiencyCollection[CropIndex];
+    FarmEff := AFarm.CurrentFarmEfficiencyCollection[CropIndex];
     if MaxTimeCount <= FarmEff.CropEfficiency.Count then
     begin
       MaxTimeCount := FarmEff.CropEfficiency.Count;

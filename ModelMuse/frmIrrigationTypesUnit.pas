@@ -8,7 +8,7 @@ uses
   frameGridUnit, Vcl.StdCtrls, Vcl.Buttons, UndoItems, ModflowFmpIrrigationUnit;
 
 type
-  TIrrigationColumn = (icNumber, icName);
+  TIrrigationColumn = (icNumber, icName {, icEfficiency});
 
   TfrmIrrigationTypes = class(TfrmCustomGoPhast)
     frameIrrigationTypes: TframeGrid;
@@ -25,6 +25,7 @@ type
     FGettingData: Boolean;
     procedure GetData;
     procedure SetData;
+    procedure InitializeGrid;
     { Private declarations }
   public
     destructor Destroy; override;
@@ -98,6 +99,13 @@ begin
   end;
 end;
 
+procedure TfrmIrrigationTypes.InitializeGrid;
+begin
+  frameIrrigationTypes.Grid.Cells[Ord(icName), 0] := 'Irrigation Type';
+//  frameIrrigationTypes.Grid.Cells[Ord(icEfficiency), 0] := 'Efficiency';
+  frameIrrigationTypes.Grid.Cells[Ord(icNumber), 1] := '1';
+end;
+
 procedure TfrmIrrigationTypes.GetData;
 var
   Index: Integer;
@@ -108,13 +116,14 @@ begin
     FIrrigationTypes.Assign(frmGoPhast.PhastModel.IrrigationTypes);
     frameIrrigationTypes.Grid.BeginUpdate;
     try
-      frameIrrigationTypes.Grid.Cells[Ord(icName), 0] := 'Irrigation Type';
-      frameIrrigationTypes.Grid.Cells[Ord(icNumber), 1] := '1';
+      InitializeGrid;
       frameIrrigationTypes.seNumber.AsInteger := FIrrigationTypes.Count;
       for Index := 0 to FIrrigationTypes.Count - 1 do
       begin
         frameIrrigationTypes.Grid.Cells[Ord(icNumber), Index+1] := IntToStr(Index+1);
         frameIrrigationTypes.Grid.Cells[Ord(icName), Index+1] := FIrrigationTypes[Index].Name;
+//        frameIrrigationTypes.Grid.RealValue[Ord(icEfficiency), Index+1] := FIrrigationTypes[Index].Efficiency;
+
         frameIrrigationTypes.Grid.Objects[Ord(icName), Index+1] := FIrrigationTypes[Index];
       end;
     finally
@@ -168,6 +177,7 @@ begin
     end;
     IrrigationItem.Index := RowIndex -1;
     IrrigationItem.Name := frameIrrigationTypes.Grid.Cells[Ord(icName), RowIndex];
+//    IrrigationItem.Efficiency := frameIrrigationTypes.Grid.RealValueDefault[Ord(icEfficiency), RowIndex, 0];
   end;
 
   if FIrrigationTypes.IsSame(frmGoPhast.PhastModel.IrrigationTypes) then

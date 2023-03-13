@@ -181,10 +181,12 @@ type
     procedure SetColumn(const Value: integer); override;
     procedure SetLayer(const Value: integer); override;
     procedure SetRow(const Value: integer); override;
+    function GetBooleanValue(Index: integer; AModel: TBaseModel): boolean; override;
     function GetIntegerValue(Index: integer; AModel: TBaseModel): integer; override;
     function GetRealValue(Index: integer; AModel: TBaseModel): double; override;
     function GetRealAnnotation(Index: integer; AModel: TBaseModel): string; override;
     function GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string; override;
+    function GetBooleanAnnotation(Index: integer; AModel: TBaseModel): string; override;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
@@ -504,83 +506,125 @@ begin
       LocalLandUseTimeSeries := LandUseTimeItems[ItemIndex];
 
       BoundaryIndex := 0;
-      if LandUseArray.DataType = rdtDouble then
-      begin
-        if LayerMin >= 0 then
-        begin
-          for LayerIndex := LayerMin to LayerMax do
+      case LandUseArray.DataType of
+        rdtDouble:
           begin
-            if LocalModel.IsLayerSimulated(LayerIndex) then
+            if LayerMin >= 0 then
             begin
-              for RowIndex := RowMin to RowMax do
+              for LayerIndex := LayerMin to LayerMax do
               begin
-                for ColIndex := ColMin to ColMax do
+                if LocalModel.IsLayerSimulated(LayerIndex) then
                 begin
-                  if LandUseArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+                  for RowIndex := RowMin to RowMax do
                   begin
-                    with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+                    for ColIndex := ColMin to ColMax do
                     begin
-                      Cell.Layer := LayerIndex;
-                      Cell.Row := RowIndex;
-                      Cell.Column := ColIndex;
-                      LandUseData.Values[CropIndex] := LandUseArray.
-                        RealData[LayerIndex, RowIndex, ColIndex];
-                      LandUseData.ValueAnnotations[CropIndex] := LandUseArray.
-                        Annotation[LayerIndex, RowIndex, ColIndex];
-                      LandUseData.ValuePestNames[CropIndex] := LocalLandUsePest;
-                      LandUseData.ValuePestSeriesNames[CropIndex] := LocalLandUsePestSeries;
-                      LandUseData.ValuePestSeriesMethods[CropIndex] := LocalLandUsePestMethod;
-                      LandUseData.ValueTimeSeriesNames[CropIndex] := LocalLandUseTimeSeries;
+                      if LandUseArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+                      begin
+                        with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+                        begin
+                          Cell.Layer := LayerIndex;
+                          Cell.Row := RowIndex;
+                          Cell.Column := ColIndex;
+                          LandUseData.Values[CropIndex] := LandUseArray.
+                            RealData[LayerIndex, RowIndex, ColIndex];
+                          LandUseData.ValueAnnotations[CropIndex] := LandUseArray.
+                            Annotation[LayerIndex, RowIndex, ColIndex];
+                          LandUseData.ValuePestNames[CropIndex] := LocalLandUsePest;
+                          LandUseData.ValuePestSeriesNames[CropIndex] := LocalLandUsePestSeries;
+                          LandUseData.ValuePestSeriesMethods[CropIndex] := LocalLandUsePestMethod;
+                          LandUseData.ValueTimeSeriesNames[CropIndex] := LocalLandUseTimeSeries;
+                        end;
+                        Inc(BoundaryIndex);
+                      end;
                     end;
-                    Inc(BoundaryIndex);
                   end;
                 end;
               end;
-            end;
+            end
           end;
-        end;
-      end
-      else
-      begin
-        Assert(LandUseArray.DataType = rdtInteger);
-        if LayerMin >= 0 then
-        begin
-          for LayerIndex := LayerMin to LayerMax do
+        rdtInteger:
           begin
-            if LocalModel.IsLayerSimulated(LayerIndex) then
+            if LayerMin >= 0 then
             begin
-              for RowIndex := RowMin to RowMax do
+              for LayerIndex := LayerMin to LayerMax do
               begin
-                for ColIndex := ColMin to ColMax do
+                if LocalModel.IsLayerSimulated(LayerIndex) then
                 begin
-                  if LandUseArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+                  for RowIndex := RowMin to RowMax do
                   begin
-                    with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+                    for ColIndex := ColMin to ColMax do
                     begin
-                      Cell.Layer := LayerIndex;
-                      Cell.Row := RowIndex;
-                      Cell.Column := ColIndex;
-                      LandUseData.IntValues[CropIndex] := LandUseArray.
-                        IntegerData[LayerIndex, RowIndex, ColIndex];
-                      LandUseData.ValueAnnotations[CropIndex] := LandUseArray.
-                        Annotation[LayerIndex, RowIndex, ColIndex];
-                      LandUseData.ValuePestNames[CropIndex] := LocalLandUsePest;
-                      LandUseData.ValuePestSeriesNames[CropIndex] := LocalLandUsePestSeries;
-                      LandUseData.ValuePestSeriesMethods[CropIndex] := LocalLandUsePestMethod;
-                      LandUseData.ValueTimeSeriesNames[CropIndex] := LocalLandUseTimeSeries;
+                      if LandUseArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+                      begin
+                        with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+                        begin
+                          Cell.Layer := LayerIndex;
+                          Cell.Row := RowIndex;
+                          Cell.Column := ColIndex;
+                          LandUseData.IntValues[CropIndex] := LandUseArray.
+                            IntegerData[LayerIndex, RowIndex, ColIndex];
+                          LandUseData.ValueAnnotations[CropIndex] := LandUseArray.
+                            Annotation[LayerIndex, RowIndex, ColIndex];
+                          LandUseData.ValuePestNames[CropIndex] := LocalLandUsePest;
+                          LandUseData.ValuePestSeriesNames[CropIndex] := LocalLandUsePestSeries;
+                          LandUseData.ValuePestSeriesMethods[CropIndex] := LocalLandUsePestMethod;
+                          LandUseData.ValueTimeSeriesNames[CropIndex] := LocalLandUseTimeSeries;
+                        end;
+                        Inc(BoundaryIndex);
+                      end;
                     end;
-                    Inc(BoundaryIndex);
                   end;
                 end;
               end;
-            end;
+            end
           end;
-        end;
+        rdtBoolean:
+          begin
+            if LayerMin >= 0 then
+            begin
+              for LayerIndex := LayerMin to LayerMax do
+              begin
+                if LocalModel.IsLayerSimulated(LayerIndex) then
+                begin
+                  for RowIndex := RowMin to RowMax do
+                  begin
+                    for ColIndex := ColMin to ColMax do
+                    begin
+                      if LandUseArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+                      begin
+                        with Boundary.Fmp4LandUseArray[BoundaryIndex] do
+                        begin
+                          Cell.Layer := LayerIndex;
+                          Cell.Row := RowIndex;
+                          Cell.Column := ColIndex;
+                          LandUseData.IntValues[CropIndex] := Ord(LandUseArray.
+                            BooleanData[LayerIndex, RowIndex, ColIndex]);
+                          LandUseData.ValueAnnotations[CropIndex] := LandUseArray.
+                            Annotation[LayerIndex, RowIndex, ColIndex];
+                          LandUseData.ValuePestNames[CropIndex] := LocalLandUsePest;
+                          LandUseData.ValuePestSeriesNames[CropIndex] := LocalLandUsePestSeries;
+                          LandUseData.ValuePestSeriesMethods[CropIndex] := LocalLandUsePestMethod;
+                          LandUseData.ValueTimeSeriesNames[CropIndex] := LocalLandUseTimeSeries;
+                        end;
+                        Inc(BoundaryIndex);
+                      end;
+                    end;
+                  end;
+                end;
+              end;
+            end
+          end;
+        rdtString:
+          begin
+            Assert(False);
+          end;
+        else
+          Assert(False);
       end;
       LandUseArray.CacheData;
     end;
   end;
-
   Boundary.CacheData;
 end;
 
@@ -602,9 +646,9 @@ var
   Item: TFmp4LandUseItem;
   ScreenObject: TScreenObject;
   ALink: TFmp4LandUseTimeListLink;
-  RowIndex: Integer;
-  ColIndex: Integer;
-  LayerIndex: Integer;
+//  RowIndex: Integer;
+//  ColIndex: Integer;
+//  LayerIndex: Integer;
   LocalModel: TCustomModel;
   ItemFormula: string;
   CropCount: Integer;
@@ -670,44 +714,6 @@ begin
         Assert(LandUsenData.Count = Count);
       end;
     end;
-
-//    if PackageAssignmentMethod(AModel) = umAdd then
-//    begin
-//      RowCount := LocalModel.RowCount;
-//      ColumnCount := LocalModel.ColumnCount;
-//      LayerCount := LocalModel.LayerCount;
-//      for DataArrayIndex := 0 to RechargeRateData.Count - 1 do
-//      begin
-//        DataArray := RechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
-//        for RowIndex := 0 to RowCount - 1 do
-//        begin
-//          for ColIndex := 0 to ColumnCount - 1 do
-//          begin
-//            ShouldRemove := False;
-//            for LayerIndex := LayerCount -1 downto 0 do
-//            begin
-//              if ShouldRemove then
-//              begin
-//                DataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
-//                if MultipleCropsPerCellUsed then
-//                begin
-//                  for CropIndex := 0 to CropCount - 1 do
-//                  begin
-//                    LandUsenData := ALink.FLandUseList[CropIndex];
-//                    ConcDataArray := LandUsenData[DataArrayIndex] as TTransientRealSparseDataSet;
-//                    ConcDataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
-//                  end;
-//                end;
-//              end
-//              else
-//              begin
-//                ShouldRemove := DataArray.IsValue[LayerIndex, RowIndex, ColIndex];
-//              end;
-//            end;
-//          end;
-//        end;
-//      end;
-//    end;
 
     ClearBoundaries(AModel);
     for TimeIndex := 0 to Count - 1 do
@@ -832,6 +838,18 @@ begin
   inherited;
   Values.Cache(Comp, Strings);
   WriteCompInt(Comp, StressPeriod);
+end;
+
+function TFmp4LandUse_Cell.GetBooleanAnnotation(Index: integer;
+  AModel: TBaseModel): string;
+begin
+  result := FValues.LandUseData.ValueAnnotations[Index];
+end;
+
+function TFmp4LandUse_Cell.GetBooleanValue(Index: integer;
+  AModel: TBaseModel): boolean;
+begin
+  result := FValues.LandUseData.IntValues[Index] <> 0;
 end;
 
 function TFmp4LandUse_Cell.GetColumn: integer;

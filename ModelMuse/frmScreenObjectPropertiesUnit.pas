@@ -76,7 +76,9 @@ uses System.UITypes, Windows,
   frameScreenObjectMultFractionOfPrecipToSurfaceWaterUnit,
   frameScreenObjectFmp4FractionOfIrrigToSurfaceWaterUnit,
   frameScreenObjectMultFractionOfIrrigToSurfaceWaterUnit,
-  frameScreenObjectFmp4AddedDemandUnit, frameScreenObjectMultAddedDemandUnit;
+  frameScreenObjectFmp4AddedDemandUnit, frameScreenObjectMultAddedDemandUnit,
+  frameScreenObjectFmp4CropHasSalinityRequirementUnit,
+  frameScreenObjectMultCropHasSalinityDemandUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -490,6 +492,10 @@ type
     jvspFmp4AddedDemandMult: TJvStandardPage;
     frameFmp4AddedDemand: TframeScreenObjectFmp4AddedDemand;
     frameFmp4MultAddedDemand: TframeScreenObjectMultAddedDemand;
+    jvspFmp4CropHasSalinityDemand: TJvStandardPage;
+    jvspFmp4CropHasSalinityDemandMult: TJvStandardPage;
+    frameFmp4CropHasSalinityDemand: TframeScreenObjectFmp4CropHasSalinityRequirement;
+    frameFmp4MultCropHasSalinityDemand: TframeScreenObjectMultCropHasSalinityDemand;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1851,6 +1857,8 @@ type
     FFmp4MultFractionOfIrrigToSurfaceWaterNode: TJvPageIndexNode;
     FFmp4AddedDemandNode: TJvPageIndexNode;
     FFmp4MultAddedDemandNode: TJvPageIndexNode;
+    FFmp4CropHasSalinityDemandNode: TJvPageIndexNode;
+    FFmp4MultCropHasSalinityDemandNode: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2469,6 +2477,14 @@ type
     procedure CreateFmp4MultAddedDemandNode;
     procedure GetFmp4MultAddedDemandBoundary(const ScreenObjectList: TList);
 
+    procedure Fmp4CropHasSalinityDemandChanged(Sender: TObject);
+    procedure CreateFmp4CropHasSalinityDemandNode;
+    procedure GetFmp4CropHasSalinityDemandBoundary(const ScreenObjectList: TList);
+
+    procedure Fmp4MultCropHasSalinityDemandChanged(Sender: TObject);
+    procedure CreateFmp4MultCropHasSalinityDemandNode;
+    procedure GetFmp4MultCropHasSalinityDemandBoundary(const ScreenObjectList: TList);
+
     // @name is set to @true when the @classname has stored values of the
     // @link(TScreenObject)s being edited.
     property IsLoaded: boolean read FIsLoaded write SetIsLoaded;
@@ -2774,7 +2790,8 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   frmImportVertexValuesUnit, QuadTreeClass,
   ModflowFmp4EvaporationIrrigationFractionUnit,
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
-  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit;
+  ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
+  ModflowFmp4CropHasSalinityDemandUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4321,6 +4338,14 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4CropHasSalinityDemandNode then
+    begin
+      // do nothing
+    end
+    else if jvtlModflowBoundaryNavigator.Selected = FFmp4MultCropHasSalinityDemandNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4495,6 +4520,8 @@ begin
   CreateFmp4MultFractionOfIrrigToSurfaceWaterNode;
   CreateFmp4AddedDemandNode;
   CreateFmp4MultAddedDemandNode;
+  CreateFmp4CropHasSalinityDemandNode;
+  CreateFmp4MultCropHasSalinityDemandNode;
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
@@ -6256,6 +6283,16 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.Fmp4CropHasSalinityDemandChanged(
+  Sender: TObject);
+begin
+  if (FFmp4CropHasSalinityDemandNode <> nil)
+    and (FFmp4CropHasSalinityDemandNode.StateIndex <> 3) then
+  begin
+    FFmp4CropHasSalinityDemandNode.StateIndex := 2;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.Fmp4DirectRechargeChanged(Sender: TObject);
 begin
   if (FFmp4DirectRechargeNode <> nil)
@@ -6358,6 +6395,16 @@ begin
     and (FFmp4MultCropCoefficientNode.StateIndex <> 3) then
   begin
     FFmp4MultCropCoefficientNode.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.Fmp4MultCropHasSalinityDemandChanged(
+  Sender: TObject);
+begin
+  if (FFmp4MultCropHasSalinityDemandNode <> nil)
+    and (FFmp4MultCropHasSalinityDemandNode.StateIndex <> 3) then
+  begin
+    FFmp4MultCropHasSalinityDemandNode.StateIndex := 2;
   end;
 end;
 
@@ -6565,6 +6612,8 @@ begin
   frameFmp4MultFractionOfIrrigToSurfaceWater.OnEdited := Fmp4MultFractionOfIrrigToSurfaceWaterChanged;
   frameFmp4AddedDemand.OnEdited := Fmp4AddedDemandChanged;
   frameFmp4MultAddedDemand.OnEdited := Fmp4MultAddedDemandChanged;
+  frameFmp4CropHasSalinityDemand.OnEdited := Fmp4CropHasSalinityDemandChanged;
+  frameFmp4MultCropHasSalinityDemand.OnEdited := Fmp4MultCropHasSalinityDemandChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -7889,6 +7938,14 @@ begin
   begin
     AllowChange := True;
   end
+  else if (Node = FFmp4CropHasSalinityDemandNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FFmp4MultCropHasSalinityDemandNode) then
+  begin
+    AllowChange := True;
+  end
 
 //  end
 //  else if (Node = FMt3dms_Node) then
@@ -9055,6 +9112,21 @@ begin
       and frmGoPhast.PhastModel.FarmProcess4TransientAddedDemandMultIsSelected);
   end;
 
+  if (FFmp4CropHasSalinityDemandNode <> nil) then
+  begin
+    frameFmp4CropHasSalinityDemand.SetData(FNewProperties,
+      (FFmp4CropHasSalinityDemandNode.StateIndex = 2),
+      (FFmp4CropHasSalinityDemandNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientCropHasSalinityDemandIsSelected);
+  end;
+
+  if (FFmp4MultCropHasSalinityDemandNode <> nil) then
+  begin
+    frameFmp4MultCropHasSalinityDemand.SetData(FNewProperties,
+      (FFmp4MultCropHasSalinityDemandNode.StateIndex = 2),
+      (FFmp4MultCropHasSalinityDemandNode.StateIndex = 1)
+      and frmGoPhast.PhastModel.FarmProcess4TransientCropHasSalinityDemandMultIsSelected);
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.UpdateVertices;
@@ -15442,6 +15514,23 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.CreateFmp4CropHasSalinityDemandNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4CropHasSalinityDemandNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientCropHasSalinityDemandIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Crop has Salinity Demand in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4CropHasSalinityDemand.PageIndex;
+    frameFmp4CropHasSalinityDemand.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4CropHasSalinityDemandNode := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateFmp4DirectRechargeNode;
 var
   Node: TJvPageIndexNode;
@@ -15677,6 +15766,23 @@ begin
     frameFmp4MultCropCoefficients.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FFmp4MultCropCoefficientNode := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateFmp4MultCropHasSalinityDemandNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FFmp4MultCropHasSalinityDemandNode := nil;
+  if frmGoPhast.PhastModel.FarmProcess4TransientCropHasSalinityDemandMultIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Crop has Salinity Demand in %s',
+      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspFmp4CropHasSalinityDemandMult.PageIndex;
+    frameFmp4MultCropHasSalinityDemand.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FFmp4MultCropHasSalinityDemandNode := Node;
   end;
 end;
 
@@ -18544,6 +18650,32 @@ begin
   frameFmp4CropCoefficient.GetData(FNewProperties);
 end;
 
+procedure TfrmScreenObjectProperties.GetFmp4CropHasSalinityDemandBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4CropHasSalinityDemandBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientCropHasSalinityDemandIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4CropHasSalinityDemand;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4CropHasSalinityDemandNode <> nil then
+  begin
+    FFmp4CropHasSalinityDemandNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4CropHasSalinityDemand.GetData(FNewProperties);
+end;
+
 procedure TfrmScreenObjectProperties.GetFmp4DirectRechargeBoundary(
   const ScreenObjectList: TList);
 var
@@ -18828,6 +18960,32 @@ begin
     FFmp4MultCropCoefficientNode.StateIndex := Ord(State)+1;
   end;
   frameFmp4MultCropCoefficients.GetData(FNewProperties);
+end;
+
+procedure TfrmScreenObjectProperties.GetFmp4MultCropHasSalinityDemandBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TFmp4MultCropHasSalinityDemandBoundary;
+begin
+  if not frmGoPhast.PhastModel.FarmProcess4TransientCropHasSalinityDemandMultIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowFmp4MultCropHasSalinityDemand;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FFmp4MultCropHasSalinityDemandNode <> nil then
+  begin
+    FFmp4MultCropHasSalinityDemandNode.StateIndex := Ord(State)+1;
+  end;
+  frameFmp4MultCropHasSalinityDemand.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetFmp4MultEvaporationIrrigationFractionBoundary(
@@ -19608,6 +19766,8 @@ begin
   GetFmp4MultFractionOfIrrigToSurfaceWaterBoundary(AScreenObjectList);
   GetFmp4AddedDemandBoundary(AScreenObjectList);
   GetFmp4MultAddedDemandBoundary(AScreenObjectList);
+  GetFmp4CropHasSalinityDemandBoundary(AScreenObjectList);
+  GetFmp4MultCropHasSalinityDemandBoundary(AScreenObjectList);
 
   SetSelectedMfBoundaryNode;
 
@@ -23211,6 +23371,11 @@ begin
     begin
       Assert(False);
     end;
+  end
+  else if (DataGrid.Owner = frameFmp4CropHasSalinityDemand)
+    or (DataGrid.Owner = frameFmp4MultCropHasSalinityDemand) then
+  begin
+    ResultType := rdtBoolean;
   end
   else if (DataGrid.Owner is TframeScreenObjectNoParam) then
   begin
@@ -29504,6 +29669,11 @@ begin
       or (DataGrid = frameMAW.rdgModflowBoundary)
       or (DataGrid = frameMAW.frameWellScreens.Grid)
       then
+    begin
+      Orientation := dsoTop;
+    end
+    else if (DataGrid.Owner is TframeScreenObjectCustomFmp4Boundary)
+      or (DataGrid.Owner is TframeScreenObjectCustomFmp4MultBoundary) then
     begin
       Orientation := dsoTop;
     end

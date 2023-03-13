@@ -2115,6 +2115,16 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="ModflowFmp4CropHasSalinityDemandUnit.pas"/>
+        <DCCReference Include="frameScreenObjectFmp4CropHasSalinityRequirementUnit.pas">
+            <Form>frameScreenObjectFmp4CropHasSalinityRequirement</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="frameScreenObjectMultCropHasSalinityDemandUnit.pas">
+            <Form>frameScreenObjectMultCropHasSalinityDemand</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

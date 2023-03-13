@@ -371,6 +371,8 @@ type
     FGroundwaterRootInteractionDisplayName: string;
     FTranspirationFractionDataArrayName: string;
     FTranspirationFractionDisplayName: string;
+    FCropHasSalinityDemandDataArrayName: string;
+    FCropHasSalinityDemandDisplayName: string;
     procedure SetLandUseAreaFractionDataArrayName(const NewName: string);
     procedure SetCropCoefficientDataArrayName(const NewName: string);
     procedure SetAddedDemandDataArrayName(const NewName: string);
@@ -382,6 +384,7 @@ type
     procedure SetSWLossFractionPrecipDataArrayName(const NewName: string);
     procedure SetGroundwaterRootInteractionDataArrayName(const NewName: string);
     procedure SetTranspirationFractionDataArrayName(const NewName: string);
+    procedure SetCropHasSalinityDemandDataArrayName(const NewName: string);
     function GetBaseTemperature: string;
     function GetBeginningRootDepth: string;
     function GetCoefficient0: string;
@@ -558,6 +561,12 @@ type
       stored False
     {$ENDIF}
     ;
+    property CropHasSalinityDemandDataArrayName: string
+      read FCropHasSalinityDemandDataArrayName write SetCropHasSalinityDemandDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
   end;
 
 //  StrConsumptiveUsePrefix = KConsumptiveUsePrefix;
@@ -607,6 +616,7 @@ const
   KSWLossFractionPrecipPrefix = 'Frac_Unconsumed_Precip_to_SW_';
   KSWLossFractionIrrigationPrefix = 'Frac_Unconsumed_Irrigation_to_SW_';
   KAddedDemandPrefix = 'Added_Demand_';
+  KCropHasSalinityDemandPrefix = 'Crop_Has_Salinity_Demand_';
 
 resourcestring
   StrLandUseFractionPrefix  = KLandUseFractionPrefix;
@@ -620,6 +630,7 @@ resourcestring
   StrSWLossFractionIrrigationPrefix = KSWLossFractionIrrigationPrefix;
   StrSWLossFractionPrecipPrefix = KSWLossFractionPrecipPrefix;
   StrAddedDemandPrefix = KAddedDemandPrefix;
+  StrCropHasSalinityDemandPrefix = KCropHasSalinityDemandPrefix;
 
 //const
 //  RootingDepthPosition = 0;
@@ -1732,6 +1743,7 @@ begin
     SWLossFractionIrrigationDataArrayName := SourceItem.SWLossFractionIrrigationDataArrayName;
     SWLossFractionPrecipDataArrayName := SourceItem.SWLossFractionPrecipDataArrayName;
     AddedDemandDataArrayName := SourceItem.AddedDemandDataArrayName;
+    CropHasSalinityDemandDataArrayName := SourceItem.CropHasSalinityDemandDataArrayName;
   end;
   inherited;
 end;
@@ -2113,6 +2125,7 @@ begin
       and (SWLossFractionIrrigationDataArrayName = OtherItem.SWLossFractionIrrigationDataArrayName)
       and (SWLossFractionPrecipDataArrayName = OtherItem.SWLossFractionPrecipDataArrayName)
       and (AddedDemandDataArrayName = OtherItem.AddedDemandDataArrayName)
+      and (CropHasSalinityDemandDataArrayName = OtherItem.CropHasSalinityDemandDataArrayName)
   end;
 end;
 
@@ -2379,6 +2392,40 @@ begin
   FCropFunctionCollection.Assign(Value);
 end;
 
+procedure TCropItem.SetCropHasSalinityDemandDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  UpdateDat: TUpdataDataArrayRecord;
+  FarmSalinityFlush: TFarmProcess4SalinityFlush;
+begin
+  LocalModel := (Collection as TCropCollection).Model as TPhastModel;
+
+  if LocalModel <> nil then
+  begin
+    FarmSalinityFlush := LocalModel.ModflowPackages.FarmSalinityFlush;
+
+    UpdateDat.Model := LocalModel;
+    UpdateDat.OnDataSetUsed := LocalModel.MultipleCropHasSalinityDemandUsed;
+    UpdateDat.OldDataArrayName := FCropHasSalinityDemandDataArrayName;
+    UpdateDat.NewName := NewName;
+    UpdateDat.NewDisplayName := FCropHasSalinityDemandDisplayName;
+    UpdateDat.NewFormula := 'False';
+    UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: CROP_HAS_SALINITY_DEMAND';
+  {$IFDEF OWHMV2}
+    UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
+  {$ELSE}
+    UpdateDat.ShouldCreate := False;
+  {$ENDIF}
+    UpdateDat.Classification := StrFmp2Classifiation;
+    UpdateDat.Orientation := dsoTop;
+    UpdateDat.DataType := rdtBoolean;
+    UpdateOrCreateDataArray(UpdateDat);
+
+  end;
+
+  SetCaseSensitiveStringProperty(FCropHasSalinityDemandDataArrayName, NewName);
+end;
+
 procedure TCropItem.SetCropName(Value: string);
 var
   ChangeGlobals: TDefineGlobalIntegerObject;
@@ -2488,6 +2535,11 @@ begin
           OldRoot,NewRoot, []);
         AddedDemandDataArrayName := StringReplace(AddedDemandDataArrayName,
           OldRoot,NewRoot, []);
+
+        FCropHasSalinityDemandDisplayName := StringReplace(FCropHasSalinityDemandDisplayName,
+          OldRoot,NewRoot, []);
+        CropHasSalinityDemandDataArrayName := StringReplace(CropHasSalinityDemandDataArrayName,
+          OldRoot,NewRoot, []);
       end
       else
       begin
@@ -2523,6 +2575,9 @@ begin
 
         FAddedDemandDisplayName := GenerateNewRoot(StrAddedDemandPrefix + Value);
         AddedDemandDataArrayName := GenerateNewRoot(KAddedDemandPrefix + Value);
+
+        FCropHasSalinityDemandDisplayName := GenerateNewRoot(StrCropHasSalinityDemandPrefix + Value);
+        CropHasSalinityDemandDataArrayName := GenerateNewRoot(KCropHasSalinityDemandPrefix + Value);
       end;
 
 
@@ -2958,6 +3013,7 @@ begin
     SWLossFractionPrecipDataArrayName := SWLossFractionPrecipDataArrayName;
     SWLossFractionIrrigationDataArrayName := SWLossFractionIrrigationDataArrayName;
     AddedDemandDataArrayName := AddedDemandDataArrayName;
+    CropHasSalinityDemandDataArrayName := CropHasSalinityDemandDataArrayName;
   end;
 end;
 

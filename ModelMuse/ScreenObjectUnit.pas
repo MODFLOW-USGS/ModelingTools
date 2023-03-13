@@ -7184,6 +7184,8 @@ begin
   ModflowFmp4MultFractionOfIrrigToSurfaceWater := AScreenObject.ModflowFmp4MultFractionOfIrrigToSurfaceWater;
   ModflowFmp4AddedDemand := AScreenObject.ModflowFmp4AddedDemand;
   ModflowFmp4MultAddedDemand := AScreenObject.ModflowFmp4MultAddedDemand;
+  ModflowFmp4CropHasSalinityDemand := AScreenObject.ModflowFmp4CropHasSalinityDemand;
+  ModflowFmp4MultCropHasSalinityDemand := AScreenObject.ModflowFmp4MultCropHasSalinityDemand;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -10069,6 +10071,16 @@ begin
     if ModflowFmp4MultAddedDemand <> nil then
     begin
       ModflowFmp4MultAddedDemand.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4CropHasSalinityDemand <> nil then
+    begin
+      ModflowFmp4CropHasSalinityDemand.InvalidateDisplay;
+    end;
+
+    if ModflowFmp4MultCropHasSalinityDemand <> nil then
+    begin
+      ModflowFmp4MultCropHasSalinityDemand.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -14464,7 +14476,19 @@ end;
 procedure TScreenObject.SetModflowFmp4CropHasSalinityDemand(
   const Value: TFmp4CropHasSalinityDemandBoundary);
 begin
-
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4CropHasSalinityDemandBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4CropHasSalinityDemandBoundary);
+  end
+  else
+  begin
+    CreateModflowCropHasSalinityDemandBoundary;
+    ModflowBoundaries.FFmp4CropHasSalinityDemandBoundary.Assign(Value);
+  end;
 end;
 
 procedure TScreenObject.SetModflowFmp4EvaporationIrrigationFraction(
@@ -14614,7 +14638,19 @@ end;
 procedure TScreenObject.SetModflowFmp4MultCropHasSalinityDemand(
   const Value: TFmp4MultCropHasSalinityDemandBoundary);
 begin
-
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmpMultCropHasSalinityDemandBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmpMultCropHasSalinityDemandBoundary);
+  end
+  else
+  begin
+    CreateModflowMultCropHasSalinityDemandBoundary;
+    ModflowBoundaries.FFmpMultCropHasSalinityDemandBoundary.Assign(Value);
+  end;
 end;
 
 procedure TScreenObject.SetModflowFmp4MultEvaporationIrrigationFraction(
@@ -32884,7 +32920,12 @@ end;
 
 function TScreenObject.StoreModflowFmp4CropHasSalinityDemand: Boolean;
 begin
-
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4CropHasSalinityDemand <> nil) and ModflowFmp4CropHasSalinityDemand.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4EvaporationIrrigationFraction: Boolean;
@@ -32969,7 +33010,12 @@ end;
 
 function TScreenObject.StoreModflowFmp4MultCropHasSalinityDemand: Boolean;
 begin
-
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowFmp4MultCropHasSalinityDemand <> nil) and ModflowFmp4MultCropHasSalinityDemand.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultEvaporationIrrigationFraction: Boolean;
@@ -34150,7 +34196,19 @@ end;
 
 function TScreenObject.GetModflowFmp4CropHasSalinityDemand: TFmp4CropHasSalinityDemandBoundary;
 begin
-
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowCropHasSalinityDemandBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4CropHasSalinityDemandBoundary;
+  end;
 end;
 
 function TScreenObject.GetModflowFmp4EvaporationIrrigationFraction: TFmp4EvaporationIrrigationFractionBoundary;
@@ -34291,7 +34349,19 @@ end;
 
 function TScreenObject.GetModflowFmp4MultCropHasSalinityDemand: TFmp4MultCropHasSalinityDemandBoundary;
 begin
-
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateModflowMultCropHasSalinityDemandBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FmpMultCropHasSalinityDemandBoundary;
+  end;
 end;
 
 function TScreenObject.GetModflowFmp4MultEvaporationIrrigationFraction: TFmp4MultEvaporationIrrigationFractionBoundary;
@@ -39207,7 +39277,11 @@ end;
 
 procedure TScreenObject.CreateModflowCropHasSalinityDemandBoundary;
 begin
-
+  if (ModflowBoundaries.FFmp4CropHasSalinityDemandBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4CropHasSalinityDemandBoundary :=
+      TFmp4CropHasSalinityDemandBoundary.Create(FModel, self);
+  end;
 end;
 
 procedure TScreenObject.CreateModflowEvaporationIrrigationFractionBoundary;
@@ -39329,7 +39403,11 @@ end;
 
 procedure TScreenObject.CreateModflowMultCropHasSalinityDemandBoundary;
 begin
-
+  if (ModflowBoundaries.FFmpMultCropHasSalinityDemandBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmpMultCropHasSalinityDemandBoundary :=
+      TFmp4MultCropHasSalinityDemandBoundary.Create(FModel, self);
+  end;
 end;
 
 procedure TScreenObject.CreateModflowMultEvaporationIrrigationFractionBoundary;
@@ -43049,6 +43127,34 @@ begin
     FFmpMultAddedDemandBoundary.Assign(Source.FFmpMultAddedDemandBoundary);
   end;
 
+  if Source.FFmp4CropHasSalinityDemandBoundary = nil then
+  begin
+    FreeAndNil(FFmp4CropHasSalinityDemandBoundary);
+  end
+  else
+  begin
+    if FFmp4CropHasSalinityDemandBoundary = nil then
+    begin
+      FFmp4CropHasSalinityDemandBoundary :=
+        TFmp4CropHasSalinityDemandBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4CropHasSalinityDemandBoundary.Assign(Source.FFmp4CropHasSalinityDemandBoundary);
+  end;
+
+  if Source.FFmpMultCropHasSalinityDemandBoundary = nil then
+  begin
+    FreeAndNil(FFmpMultCropHasSalinityDemandBoundary);
+  end
+  else
+  begin
+    if FFmpMultCropHasSalinityDemandBoundary = nil then
+    begin
+      FFmpMultCropHasSalinityDemandBoundary :=
+        TFmp4MultCropHasSalinityDemandBoundary.Create(Model, FScreenObject);
+    end;
+    FFmpMultCropHasSalinityDemandBoundary.Assign(Source.FFmpMultCropHasSalinityDemandBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -43067,6 +43173,8 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmpMultCropHasSalinityDemandBoundary.Free;
+  FFmp4CropHasSalinityDemandBoundary.Free;
   FFmpMultAddedDemandBoundary.Free;
   FFmp4AddedDemandBoundary.Free;
   FFmpMultFractionOfIrrigToSurfaceWaterBoundary.Free;
@@ -43558,6 +43666,18 @@ begin
   begin
     FreeAndNil(FFmpMultAddedDemandBoundary);
   end;
+
+  if (FFmp4CropHasSalinityDemandBoundary <> nil)
+    and not FFmp4CropHasSalinityDemandBoundary.Used then
+  begin
+    FreeAndNil(FFmp4CropHasSalinityDemandBoundary);
+  end;
+
+  if (FFmpMultCropHasSalinityDemandBoundary <> nil)
+    and not FFmpMultCropHasSalinityDemandBoundary.Used then
+  begin
+    FreeAndNil(FFmpMultCropHasSalinityDemandBoundary);
+  end;
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -43975,6 +44095,16 @@ begin
   if FFmpMultAddedDemandBoundary <> nil then
   begin
     FFmpMultAddedDemandBoundary.Invalidate;
+  end;
+
+  if FFmp4CropHasSalinityDemandBoundary <> nil then
+  begin
+    FFmp4CropHasSalinityDemandBoundary.Invalidate;
+  end;
+
+  if FFmpMultCropHasSalinityDemandBoundary <> nil then
+  begin
+    FFmpMultCropHasSalinityDemandBoundary.Invalidate;
   end;
 end;
 
@@ -44433,6 +44563,16 @@ begin
   if FFmpMultAddedDemandBoundary <> nil then
   begin
     FFmpMultAddedDemandBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmp4CropHasSalinityDemandBoundary <> nil then
+  begin
+    FFmp4CropHasSalinityDemandBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FFmpMultCropHasSalinityDemandBoundary <> nil then
+  begin
+    FFmpMultCropHasSalinityDemandBoundary.RemoveModelLink(AModel);
   end;
   {
     FModflow6Obs: TModflow6Obs;
@@ -44896,6 +45036,16 @@ begin
     FFmpMultAddedDemandBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4CropHasSalinityDemandBoundary <> nil then
+  begin
+    FFmp4CropHasSalinityDemandBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FFmpMultCropHasSalinityDemandBoundary <> nil then
+  begin
+    FFmpMultCropHasSalinityDemandBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -45354,6 +45504,16 @@ begin
   if FFmpMultAddedDemandBoundary <> nil then
   begin
     FFmpMultAddedDemandBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4CropHasSalinityDemandBoundary <> nil then
+  begin
+    FFmp4CropHasSalinityDemandBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmpMultCropHasSalinityDemandBoundary <> nil then
+  begin
+    FFmpMultCropHasSalinityDemandBoundary.StopTalkingToAnyone;
   end;
 end;
 
@@ -46100,6 +46260,24 @@ begin
   if FFmpMultAddedDemandBoundary <> nil then
   begin
     Result := FFmpMultAddedDemandBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4CropHasSalinityDemandBoundary <> nil then
+  begin
+    Result := FFmp4CropHasSalinityDemandBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmpMultCropHasSalinityDemandBoundary <> nil then
+  begin
+    Result := FFmpMultCropHasSalinityDemandBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

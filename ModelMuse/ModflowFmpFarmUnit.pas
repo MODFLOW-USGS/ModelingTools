@@ -357,11 +357,13 @@ type
   private
     function GetItem(Index: Integer): TFarmEfficienciesItem;
     procedure SetItem(Index: Integer; const Value: TFarmEfficienciesItem);
+    function GetFirst: TFarmEfficienciesItem;
   public
     function Add: TFarmEfficienciesItem;
     constructor Create(Model: TBaseModel);
     property Items[Index: Integer]: TFarmEfficienciesItem read GetItem
       write SetItem; default;
+    property First: TFarmEfficienciesItem read GetFirst;
   end;
 
   TFarm = class(TOrderedItem)
@@ -375,6 +377,7 @@ type
     FFarmEfficiencyCollection: TFarmEfficiencyCollection;
     FGwAllotment: TAllotmentCollection;
     FFarmName: string;
+    FFarmIrrigationEfficiencyCollection: TFarmEfficiencyCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -390,6 +393,11 @@ type
       Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean); virtual;
     procedure SetFarmName(const Value: string);
+    procedure SetFarmIrrigationEfficiencyCollection(
+      const Value: TFarmEfficiencyCollection);
+    function GetCurrentFarmEfficiencyCollection: TFarmEfficiencyCollection;
+    procedure SetCurrentFarmEfficiencyCollection(
+      const Value: TFarmEfficiencyCollection);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -399,6 +407,9 @@ type
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean); virtual;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    property CurrentFarmEfficiencyCollection: TFarmEfficiencyCollection
+      read GetCurrentFarmEfficiencyCollection
+      write SetCurrentFarmEfficiencyCollection;
   published
     // FID, FMP Data set 6.
     property FarmId: Integer read FFarmId write SetFarmId;
@@ -424,6 +435,15 @@ type
     property GwAllotment: TAllotmentCollection read FGwAllotment
       write SetGwAllotment;
     property FarmName: string read FFarmName write SetFarmName;
+
+    // irrigation efficiency in OWHM verison 2
+    property FarmIrrigationEfficiencyCollection: TFarmEfficiencyCollection
+      read FFarmIrrigationEfficiencyCollection
+      write SetFarmIrrigationEfficiencyCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
   TFarmCollection = class(TEnhancedOrderedCollection)
@@ -436,6 +456,7 @@ type
     function Add: TFarm;
     function Last: TFarm;
     procedure Loaded;
+    procedure Sort;
   end;
 
   TFarmList = TList<TFarm>;
@@ -445,7 +466,7 @@ implementation
 
 uses
   ScreenObjectUnit, FastGEO, PhastModelUnit, ModflowGridUnit,
-  ModflowFmpCropUnit;
+  ModflowFmpCropUnit, frmGoPhastUnit;
 
 { TFarmCostsItem }
 
@@ -1147,6 +1168,8 @@ begin
     WaterRights := SourceFarm.WaterRights;
     GwAllotment := SourceFarm.GwAllotment;
     FarmName := SourceFarm.FarmName;
+
+    FarmIrrigationEfficiencyCollection := SourceFarm.FarmIrrigationEfficiencyCollection;
   end
   else
   begin
@@ -1190,10 +1213,14 @@ begin
   FSemiRoutedReturnFlow := TSemiRoutedDeliveriesAndReturnFlowCollection.Create(LocalModel);
   FFarmCostsCollection := TFarmCostsCollection.Create(LocalModel);
   FGwAllotment := TAllotmentCollection.Create(LocalModel);
+
+  FFarmIrrigationEfficiencyCollection := TFarmEfficiencyCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FFarmIrrigationEfficiencyCollection.Free;
+
   FGwAllotment.Free;
   FFarmCostsCollection.Free;
   FSemiRoutedReturnFlow.Free;
@@ -1202,6 +1229,22 @@ begin
   FWaterRights.Free;
   FFarmEfficiencyCollection.Free;
   inherited;
+end;
+
+function TFarm.GetCurrentFarmEfficiencyCollection: TFarmEfficiencyCollection;
+begin
+  if frmGophast.ModelSelection = msModflowFmp then
+  begin
+    result := FarmEfficiencyCollection;
+  end
+  else
+  begin
+    {$IFDEF OWHMV2}
+    result := FarmIrrigationEfficiencyCollection;
+    {$ELSE}
+    Assert(False);
+    {$ENDIF}
+  end;
 end;
 
 procedure TFarm.Loaded;
@@ -1229,8 +1272,27 @@ begin
       and WaterRights.IsSame(SourceFarm.WaterRights)
       and GwAllotment.IsSame(SourceFarm.GwAllotment)
       and (FarmName = SourceFarm.FarmName)
+
+      and FFarmIrrigationEfficiencyCollection.IsSame(SourceFarm.FFarmIrrigationEfficiencyCollection)
   end;
 
+end;
+
+procedure TFarm.SetCurrentFarmEfficiencyCollection(
+  const Value: TFarmEfficiencyCollection);
+begin
+  if frmGophast.ModelSelection = msModflowFmp then
+  begin
+    FarmEfficiencyCollection := Value;
+  end
+  else
+  begin
+    {$IFDEF OWHMV2}
+    FarmIrrigationEfficiencyCollection := Value;
+    {$ELSE}
+    Assert(False);
+    {$ENDIF}
+  end;
 end;
 
 procedure TFarm.SetDeliveryParamCollection(
@@ -1259,6 +1321,12 @@ begin
 //    FFarmId := Value;
 //    InvalidateModel;
 //  end;
+end;
+
+procedure TFarm.SetFarmIrrigationEfficiencyCollection(
+  const Value: TFarmEfficiencyCollection);
+begin
+  FFarmIrrigationEfficiencyCollection.Assign(Value)
 end;
 
 procedure TFarm.SetFarmName(const Value: string);
@@ -1297,7 +1365,6 @@ var
   EffIndex: Integer;
   EfficiencyCol: TCropEfficiencyCollection;
 begin
-//{$IFDEF FMP2}
   AddBoundaryTimes(FWaterRights, Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
   AddBoundaryTimes(FSemiRoutedDeliveries, Times, StartTestTime, EndTestTime,
@@ -1308,32 +1375,38 @@ begin
     StartRangeExtended, EndRangeExtended);
   AddBoundaryTimes(FGwAllotment, Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
-//{$ENDIF}
 
   for EffIndex := 0 to FFarmEfficiencyCollection.Count - 1 do
   begin
     EfficiencyCol := FFarmEfficiencyCollection[EffIndex].FCropEfficiency;
-//  {$IFDEF FMP2}
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
-//  {$ENDIF}
   end;
 
   for DelivIndex := 0 to FDeliveryParamCollection.Count - 1 do
   begin
     Deliv := FDeliveryParamCollection[DelivIndex].FDeliveryParam;
-//  {$IFDEF FMP2}
     AddBoundaryTimes(Deliv, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
-//  {$ENDIF}
   end;
 
+  for EffIndex := 0 to FFarmIrrigationEfficiencyCollection.Count - 1 do
+  begin
+    EfficiencyCol := FFarmIrrigationEfficiencyCollection[EffIndex].FCropEfficiency;
+  {$IFDEF OWHMV2}
+    AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
+      StartRangeExtended, EndRangeExtended);
+  {$ENDIF}
+  end;
 
 end;
 
 function TFarm.Used: boolean;
 begin
-  result := FarmEfficiencyCollection.Count > 0;
+  result := (FarmEfficiencyCollection.Count > 0)
+  {$IFDEF OWHMV2}
+    or (FarmIrrigationEfficiencyCollection.Count > 0)
+  {$ENDIF}
 end;
 
 { TWaterRightsItem }
@@ -1800,6 +1873,11 @@ begin
   result := DiversionChoice = rtLocation;
 end;
 
+function TFarmEfficiencyCollection.GetFirst: TFarmEfficienciesItem;
+begin
+  result := First as TFarmEfficienciesItem;
+end;
+
 function TFarmEfficiencyCollection.GetItem(
   Index: Integer): TFarmEfficienciesItem;
 begin
@@ -1848,6 +1926,11 @@ end;
 procedure TFarmCollection.SetItem(Index: Integer; const Value: TFarm);
 begin
   inherited Items[index] := Value;
+end;
+
+procedure TFarmCollection.Sort;
+begin
+  Assert(False);
 end;
 
 end.

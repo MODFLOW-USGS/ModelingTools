@@ -41917,10 +41917,10 @@ begin
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
-  FDataArrayCreationRecords[Index].DataType := rdtInteger;
+  FDataArrayCreationRecords[Index].DataType := rdtBoolean;
   FDataArrayCreationRecords[Index].Name := KCropHasSalinityDemand;
   FDataArrayCreationRecords[Index].DisplayName := StrCropHasSalinityDemand;
-  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Formula := 'False';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CropHasSalinityDemandUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;

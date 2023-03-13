@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabReturnFlowLocation
+    ActivePage = tabCrops
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -186,6 +186,7 @@ inherited frameFarm: TframeFarm
             Height = 24
             EditLabel.Width = 47
             EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
             EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
@@ -234,10 +235,11 @@ inherited frameFarm: TframeFarm
           Width = 185
           Height = 24
           EditLabel.Width = 66
-          EditLabel.Height = 16
+          EditLabel.Height = 24
           EditLabel.Caption = 'Farm name'
           LabelPosition = lpRight
           TabOrder = 2
+          Text = ''
           OnChange = seFarmIdChange
         end
       end
@@ -546,6 +548,7 @@ inherited frameFarm: TframeFarm
             Height = 24
             EditLabel.Width = 47
             EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
             EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
@@ -627,9 +630,7 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 16
           end
           inherited lblY: TLabel
-            Width = 7
             Height = 16
-            ExplicitWidth = 7
             ExplicitHeight = 16
           end
           inherited lblRow: TLabel
@@ -639,9 +640,7 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 16
           end
           inherited lblCol: TLabel
-            Width = 43
             Height = 16
-            ExplicitWidth = 43
             ExplicitHeight = 16
           end
           inherited edFormula: TLabeledEdit
@@ -744,9 +743,7 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 16
           end
           inherited lblY: TLabel
-            Width = 7
             Height = 16
-            ExplicitWidth = 7
             ExplicitHeight = 16
           end
           inherited lblRow: TLabel
@@ -756,9 +753,7 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 16
           end
           inherited lblCol: TLabel
-            Width = 43
             Height = 16
-            ExplicitWidth = 43
             ExplicitHeight = 16
           end
           inherited edFormula: TLabeledEdit
@@ -1069,6 +1064,7 @@ inherited frameFarm: TframeFarm
             EditLabel.Width = 51
             EditLabel.Height = 16
             EditLabel.Caption = 'Formula '
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
             EditLabel.ExplicitWidth = 51
             EditLabel.ExplicitHeight = 16
@@ -1213,6 +1209,7 @@ inherited frameFarm: TframeFarm
             Height = 24
             EditLabel.Width = 47
             EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
             EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16

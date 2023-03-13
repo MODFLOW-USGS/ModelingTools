@@ -1,0 +1,2 @@
+inherited frameScreenObjectMultCropHasSalinityDemand: TframeScreenObjectMultCropHasSalinityDemand
+end

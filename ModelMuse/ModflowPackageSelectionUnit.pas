@@ -5955,7 +5955,6 @@ Type
 
   protected
     procedure InvalidateModel; Override;
-    property LandUseOption: TLandUseOption read GetFLandUseOption;
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5976,6 +5975,7 @@ Type
     procedure InvalidateMultTransienCropHasSalinityDemandArrays;
 
     procedure InvalidateAll;
+    property LandUseOption: TLandUseOption read GetFLandUseOption;
   published
     // PRINT BYFARM,   PRINT BYFARM_BYCROP,   PRINT ALL,
     // PRINT INPUT (use default from model)

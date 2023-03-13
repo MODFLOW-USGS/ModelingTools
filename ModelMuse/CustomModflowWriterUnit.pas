@@ -6,7 +6,11 @@ unit CustomModflowWriterUnit;
 
 interface
 
-uses Mt3dmsChemSpeciesUnit, Vcl.Forms, System.SysUtils, PestPropertiesUnit,
+uses ModflowFmpFarmUnit, ModflowFmpClimateUnit, ModflowFmpCropUnit,
+  ModflowFmpSoilUnit,
+  Mt3dmsChemSpeciesUnit, Vcl.Forms,
+  System.SysUtils,
+  PestPropertiesUnit,
   Windows, Types,
   LayerStructureUnit,
   ModflowTimeUnit,
@@ -59,6 +63,8 @@ type
       }
   TErrorType = (etError, etWarning);
   TArrayWritingFormat = (awfModflow, awfMt3dms, awfModflow_6);
+
+  TTestRealValueOkProcedure = reference to procedure (Value: double);
 
   TBoundaryFlowObservationLocation = record
 //    FCell: TCellLocation;
@@ -812,6 +818,13 @@ end;
     // @name is used to write additional auxillary variables such as
     // chemical species names with GWT.
     procedure WriteAdditionalAuxVariables; virtual;
+    function GetObjectString(ErrorObject: TObject): string;
+    function EvaluateValueFromGlobalFormula(Formula: string;
+      ErrorObject: TObject; const DataSetErrorString: string;
+      const OKTypes: TRbwDataTypes): TExpression;
+    procedure WriteFloatValueFromGlobalFormula(Formula: string;
+      ErrorObject: TObject; const DataSetErrorString: string;
+      TestProc: TTestRealValueOkProcedure = nil);
   public
     // @name is used to update the display of transient data used to color the
     // grid.
@@ -1206,7 +1219,7 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   Modflow6ObsWriterUnit, ModflowTimeSeriesWriterUnit,
   ModflowTimeSeriesUnit, ModflowMvrWriterUnit, PlProcUnit,
   framePestObsCaptionedUnit, PestObsExtractorInputWriterUnit,
-  System.AnsiStrings, ModflowMf6TimeSeriesWriterUnit;
+  System.AnsiStrings, ModflowMf6TimeSeriesWriterUnit, ModflowFmpWriterUnit;
 
 resourcestring
   StrTheFollowingParameSkip = 'The following %s parameters are being skipped ' +
@@ -7118,6 +7131,28 @@ var
               else Assert(False);
             end;
           end;
+        rdtBoolean:
+          begin
+            case AssignmentMethod of
+              umAssign:
+                begin
+                  ExportArray.BooleanData[0, Cell.Row, Cell.Column] :=
+                    Cell.BooleanValue[DataTypeIndex, Model];
+                  ExportArray.Annotation[0, Cell.Row, Cell.Column] :=
+                    Cell.BooleanAnnotation[DataTypeIndex, Model];
+                end;
+              umAdd:
+                begin
+                  ExportArray.BooleanData[0, Cell.Row, Cell.Column] :=
+                    ExportArray.BooleanData[0, Cell.Row, Cell.Column]
+                    or Cell.BooleanValue[DataTypeIndex, Model];
+                  ExportArray.Annotation[0, Cell.Row, Cell.Column] :=
+                    ExportArray.Annotation[0, Cell.Row, Cell.Column]
+                    + Cell.BooleanAnnotation[DataTypeIndex, Model];
+                end;
+              else Assert(False);
+            end;
+          end;
       else
         Assert(False);
       end;
@@ -7165,6 +7200,10 @@ begin
           rdtInteger:
             begin
               ExportArray.IntegerData[0, RowIndex, ColIndex] := IntDefaultValue;
+            end;
+          rdtBoolean:
+            begin
+              ExportArray.BooleanData[0, RowIndex, ColIndex] := IntDefaultValue <> 0;
             end;
         else
           Assert(False);
@@ -11241,6 +11280,133 @@ begin
   WriteString('END PACKAGEDATA');
   NewLine;
   NewLine;
+end;
+
+function TCustomListWriter.GetObjectString(ErrorObject: TObject): string;
+var
+  ACrop: TCropItem;
+  AClimate: TClimateItem;
+  Farm: TFarm;
+  ASoil: TSoilItem;
+  AScreenObject: TScreenObject;
+begin
+  if ErrorObject = nil then
+  begin
+    result := '';
+  end
+  else if ErrorObject is TSoilItem then
+  begin
+    ASoil := TSoilItem(ErrorObject);
+    result := Format(StrSoilS, [ASoil.SoilName]);
+  end
+  else if ErrorObject is TCropItem then
+  begin
+    ACrop := TCropItem(ErrorObject);
+    result := Format(StrCropS, [ACrop.CropName]);
+  end
+  else if ErrorObject is TClimateItem then
+  begin
+    AClimate := TClimateItem(ErrorObject);
+    result := Format(StrClimateStartingTim, [AClimate.StartTime]);
+  end
+  else if ErrorObject is TFarm then
+  begin
+    Farm := TFarm(ErrorObject);
+    result := Format(StrErrorInFarmD, [Farm.FarmID]);
+  end
+  else if ErrorObject is TScreenObject then
+  begin
+    AScreenObject := TScreenObject(ErrorObject);
+    result := AScreenObject.Name;
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+function TCustomListWriter.EvaluateValueFromGlobalFormula(Formula: string;
+  ErrorObject: TObject; const DataSetErrorString: string;
+  const OKTypes: TRbwDataTypes): TExpression;
+var
+  Compiler: TRbwParser;
+  ErrorFormula: string;
+  ObjectString: string;
+begin
+  Compiler := Model.ParentModel.rpThreeDFormulaCompiler;
+  ErrorFormula := Formula;
+  try
+    Compiler.Compile(Formula)
+  except
+    on E: ERbwParserError do
+    begin
+      ObjectString := GetObjectString(ErrorObject);
+      frmFormulaErrors.AddFormulaError(ObjectString, DataSetErrorString,
+        ErrorFormula, E.Message);
+      Formula := '0';
+      Compiler.Compile(Formula);
+      // send error message
+    end;
+  end;
+  result := Compiler.CurrentExpression;
+  if result = nil then
+  begin
+    Formula := '0';
+    Compiler.Compile(Formula);
+    result := Compiler.CurrentExpression;
+  end;
+  if not(result.ResultType in OKTypes) then
+  begin
+    ObjectString := GetObjectString(ErrorObject);
+    frmFormulaErrors.AddFormulaError(ObjectString, DataSetErrorString,
+      ErrorFormula, StrInvalidResultType);
+    if rdtInteger in OKTypes then
+    begin
+      Formula := '0';
+    end
+    else if rdtBoolean in OKTypes then
+    begin
+      Formula := 'False';
+    end
+    else if rdtString in OKTypes then
+    begin
+      Formula := '""';
+    end
+    else
+    begin
+      Assert(False);
+      Compiler.Compile(Formula);
+      // send error message
+      result := Compiler.CurrentExpression;
+    end;
+  end;
+  result.Evaluate;
+end;
+
+procedure TCustomListWriter.WriteFloatValueFromGlobalFormula(Formula: string;
+  ErrorObject: TObject; const DataSetErrorString: string;
+  TestProc: TTestRealValueOkProcedure = nil);
+var
+  Value: double;
+  Expression: TExpression;
+begin
+  Expression := EvaluateValueFromGlobalFormula(Formula, ErrorObject,
+    DataSetErrorString, [rdtDouble, rdtInteger]);
+  if Expression.ResultType in [rdtDouble, rdtInteger] then
+  begin
+    Value := Expression.DoubleResult;
+    WriteFloatCondensed(Value);
+    if Assigned(TestProc) then
+    begin
+      TestProc(Value);
+    end;
+  end
+  else
+  begin
+    WriteFloatCondensed(0);
+    frmFormulaErrors.AddFormulaError(GetObjectString(ErrorObject),
+      DataSetErrorString, Formula, StrTheFormulaShouldReal);
+  end;
 end;
 
 initialization

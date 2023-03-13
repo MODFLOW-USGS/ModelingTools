@@ -1450,6 +1450,11 @@ type
     procedure UpdateNotifiers; override;
   end;
 
+  TTransientBooleanSparseDataSet = class(TBooleanSparseDataSet)
+  protected
+    procedure UpdateNotifiers; override;
+  end;
+
   TOnGetUseList = procedure (Sender: TObject;
     NewUseList: TStringList) of object;
 
@@ -9847,6 +9852,14 @@ begin
     FBooleanValues := T3DSparseBooleanArray.Create(GetQuantum(NumberOfLayers),
       GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
   end;
+end;
+
+{ TTransientBooleanSparseDataSet }
+
+procedure TTransientBooleanSparseDataSet.UpdateNotifiers;
+begin
+  // do nothing
+//  inherited;
 end;
 
 initialization

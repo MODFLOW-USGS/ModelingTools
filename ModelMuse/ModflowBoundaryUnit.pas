@@ -1809,6 +1809,11 @@ begin
             DataArray := TTransientIntegerSparseDataSet.Create(LocalModel);
             DataArray.DataType := rdtInteger;
           end;
+        rdtBoolean:
+          begin
+            DataArray := TTransientBooleanSparseDataSet.Create(LocalModel);
+            DataArray.DataType := rdtBoolean;
+          end;
         else Assert(False);
       end;
       DataArray.Name := ValidName(NonParamDescription) + '_' + IntToStr(Index+1);

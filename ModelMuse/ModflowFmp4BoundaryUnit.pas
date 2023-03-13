@@ -85,6 +85,8 @@ type
     class function GetDescription: string; virtual; abstract;
     { TODO -cFMP4 : override AssignInvalidateEvent  in each descendent}
     procedure AssignInvalidateEvent; virtual; abstract;
+    // Override to assign an integer data type or any data type other than
+    // double.
     function GetDefaultDataType: TRbwDataType; virtual;
   public
     property DefaultDataType: TRbwDataType read GetDefaultDataType;
@@ -145,10 +147,12 @@ type
     procedure SetColumn(const Value: integer); override;
     procedure SetLayer(const Value: integer); override;
     procedure SetRow(const Value: integer); override;
+    function GetBooleanValue(Index: integer; AModel: TBaseModel): Boolean; override;
     function GetIntegerValue(Index: integer; AModel: TBaseModel): integer; override;
     function GetRealValue(Index: integer; AModel: TBaseModel): double; override;
     function GetRealAnnotation(Index: integer; AModel: TBaseModel): string; override;
     function GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string; override;
+    function GetBooleanAnnotation(Index: integer; AModel: TBaseModel): string; override;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
@@ -366,66 +370,105 @@ begin
     LayerMax, RowMax, ColMax);
   if LayerMin >= 0 then
   begin
-    if Fmp4Array.DataType = rdtDouble then
-    begin
-      for LayerIndex := LayerMin to LayerMax do
-      begin
-        if LocalModel.IsLayerSimulated(LayerIndex) then
+    case Fmp4Array.DataType of
+      rdtDouble:
         begin
-          for RowIndex := RowMin to RowMax do
+          for LayerIndex := LayerMin to LayerMax do
           begin
-            for ColIndex := ColMin to ColMax do
+            if LocalModel.IsLayerSimulated(LayerIndex) then
             begin
-              if Fmp4Array.IsValue[LayerIndex, RowIndex, ColIndex] then
+              for RowIndex := RowMin to RowMax do
               begin
-                with Boundary.Fmp4Array[BoundaryIndex] do
+                for ColIndex := ColMin to ColMax do
                 begin
-                  Cell.Layer := LayerIndex;
-                  Cell.Row := RowIndex;
-                  Cell.Column := ColIndex;
-  //                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
-                  FmpValue := Fmp4Array.
-                    RealData[LayerIndex, RowIndex, ColIndex];
-                  FmpValueAnnotation := Fmp4Array.
-                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  if Fmp4Array.IsValue[LayerIndex, RowIndex, ColIndex] then
+                  begin
+                    with Boundary.Fmp4Array[BoundaryIndex] do
+                    begin
+                      Cell.Layer := LayerIndex;
+                      Cell.Row := RowIndex;
+                      Cell.Column := ColIndex;
+      //                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
+                      FmpValue := Fmp4Array.
+                        RealData[LayerIndex, RowIndex, ColIndex];
+                      FmpValueAnnotation := Fmp4Array.
+                        Annotation[LayerIndex, RowIndex, ColIndex];
+                    end;
+                    Inc(BoundaryIndex);
+                  end;
                 end;
-                Inc(BoundaryIndex);
               end;
             end;
           end;
         end;
-      end;
-    end
-    else
-    begin
-      Assert(Fmp4Array.DataType = rdtInteger);
-      for LayerIndex := LayerMin to LayerMax do
-      begin
-        if LocalModel.IsLayerSimulated(LayerIndex) then
+      rdtInteger:
         begin
-          for RowIndex := RowMin to RowMax do
+          for LayerIndex := LayerMin to LayerMax do
           begin
-            for ColIndex := ColMin to ColMax do
+            if LocalModel.IsLayerSimulated(LayerIndex) then
             begin
-              if Fmp4Array.IsValue[LayerIndex, RowIndex, ColIndex] then
+              for RowIndex := RowMin to RowMax do
               begin
-                with Boundary.Fmp4Array[BoundaryIndex] do
+                for ColIndex := ColMin to ColMax do
                 begin
-                  Cell.Layer := LayerIndex;
-                  Cell.Row := RowIndex;
-                  Cell.Column := ColIndex;
-  //                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
-                  FmpIntValue := Fmp4Array.
-                    IntegerData[LayerIndex, RowIndex, ColIndex];
-                  FmpValueAnnotation := Fmp4Array.
-                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  if Fmp4Array.IsValue[LayerIndex, RowIndex, ColIndex] then
+                  begin
+                    with Boundary.Fmp4Array[BoundaryIndex] do
+                    begin
+                      Cell.Layer := LayerIndex;
+                      Cell.Row := RowIndex;
+                      Cell.Column := ColIndex;
+      //                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
+                      FmpIntValue := Fmp4Array.
+                        IntegerData[LayerIndex, RowIndex, ColIndex];
+                      FmpValueAnnotation := Fmp4Array.
+                        Annotation[LayerIndex, RowIndex, ColIndex];
+                    end;
+                    Inc(BoundaryIndex);
+                  end;
                 end;
-                Inc(BoundaryIndex);
               end;
-            end;
-          end;
-        end
-      end;
+            end
+          end
+        end;
+      rdtBoolean:
+        begin
+          for LayerIndex := LayerMin to LayerMax do
+          begin
+            if LocalModel.IsLayerSimulated(LayerIndex) then
+            begin
+              for RowIndex := RowMin to RowMax do
+              begin
+                for ColIndex := ColMin to ColMax do
+                begin
+                  if Fmp4Array.IsValue[LayerIndex, RowIndex, ColIndex] then
+                  begin
+                    with Boundary.Fmp4Array[BoundaryIndex] do
+                    begin
+                      Cell.Layer := LayerIndex;
+                      Cell.Row := RowIndex;
+                      Cell.Column := ColIndex;
+      //                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
+                      FmpIntValue := Ord(Fmp4Array.
+                        BooleanData[LayerIndex, RowIndex, ColIndex]);
+                      FmpValueAnnotation := Fmp4Array.
+                        Annotation[LayerIndex, RowIndex, ColIndex];
+                    end;
+                    Inc(BoundaryIndex);
+                  end;
+                end;
+              end;
+            end
+          end
+        end;
+      rdtString:
+        begin
+          Assert(False);
+        end;
+      else
+        begin
+          Assert(False);
+        end;
     end;
   end;
   Fmp4Array.CacheData;
@@ -555,6 +598,26 @@ begin
   inherited;
   Values.Cache(Comp, Strings);
   WriteCompInt(Comp, StressPeriod);
+end;
+
+function TFmp4_Cell.GetBooleanAnnotation(Index: integer;
+  AModel: TBaseModel): string;
+begin
+  result := '';
+  case Index of
+    Fmp4Position: result := FmpValueAnnotation;
+    else Assert(False);
+  end;
+end;
+
+function TFmp4_Cell.GetBooleanValue(Index: integer;
+  AModel: TBaseModel): Boolean;
+begin
+  result := False;
+  case Index of
+    Fmp4Position: result := FmpIntValue <> 0;
+    else Assert(False);
+  end;
 end;
 
 function TFmp4_Cell.GetColumn: integer;
