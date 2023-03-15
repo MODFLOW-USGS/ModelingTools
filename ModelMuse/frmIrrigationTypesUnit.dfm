@@ -1,7 +1,7 @@
 inherited frmIrrigationTypes: TfrmIrrigationTypes
   Caption = 'Irrigation Types'
   ClientHeight = 235
-  ExplicitWidth = 438
+  ExplicitHeight = 273
   TextHeight = 18
   inline frameIrrigationTypes: TframeGrid
     Left = 0

@@ -37,6 +37,7 @@ type
     property FarmList: TFarmList read GetFarmList;
   public
     constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
     property Items[Index: Integer]: TIrrigationItem read GetItems
       write SetItems; default;
   end;
@@ -65,7 +66,6 @@ end;
 
 constructor TIrrigationItem.Create(Collection: TCollection);
 var
-//  OnChange: TNotifyEvent;
   LocalModel: TPhastModel;
   FarmList: TFarmList;
   FarmIndex: Integer;
@@ -74,17 +74,6 @@ var
   AFarmEff: TFarmEfficienciesItem;
 begin
   inherited;
-//  LocalModel := Model;
-//  if LocalModel = nil then
-//  begin
-//    OnChange := nil;
-//  end
-//  else
-//  begin
-//    OnChange := (LocalModel as TCustomModel).Invalidate;
-//  end;
-//  FStoredEfficiency := TRealStorage.Create(OnChange);
-//  FStoredEfficiency.Value := 1;
 
   if (Model <> nil) and (Name <> '') then
   begin
@@ -99,6 +88,15 @@ begin
         for CropEffIndex := 0 to AFarm.FarmIrrigationEfficiencyCollection.Count - 1 do
         begin
           AFarmEff := AFarm.FarmIrrigationEfficiencyCollection[CropEffIndex];
+          if AFarmEff.CropEfficiency.CropName = Name then
+          begin
+            AFarmEff.Free;
+            break;
+          end;
+        end;
+        for CropEffIndex := 0 to AFarm.FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
+        begin
+          AFarmEff := AFarm.FarmIrrigationEfficiencyImprovementCollection[CropEffIndex];
           if AFarmEff.CropEfficiency.CropName = Name then
           begin
             AFarmEff.Free;
@@ -150,6 +148,7 @@ var
   AFarm: TFarm;
   AFarmEff: TFarmEfficienciesItem;
   CropEffIndex: Integer;
+  FoundMatch: Boolean;
 begin
   if (FName <> Value) and (Model <> nil)
     and not (csReading in Model.ComponentState) then
@@ -173,15 +172,53 @@ begin
             AFarm := FarmList[FarmIndex];
             if FName = '' then
             begin
-              AFarmEff := AFarm.FarmIrrigationEfficiencyCollection.Add;
-              AFarmEff.CropEfficiency.CropName := Value;
-              AFarmEff.Index := index;
+              FoundMatch := False;
+              for CropEffIndex := 0 to AFarm.FarmIrrigationEfficiencyCollection.Count - 1 do
+              begin
+                AFarmEff := AFarm.FarmIrrigationEfficiencyCollection[CropEffIndex];
+                if AFarmEff.CropEfficiency.CropName = Value then
+                begin
+                  FoundMatch := True;
+                  break;
+                end;
+              end;
+              if not FoundMatch then
+              begin
+                AFarmEff := AFarm.FarmIrrigationEfficiencyCollection.Add;
+                AFarmEff.CropEfficiency.CropName := Value;
+                AFarmEff.Index := index;
+              end;
+              FoundMatch := False;
+              for CropEffIndex := 0 to AFarm.FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
+              begin
+                AFarmEff := AFarm.FarmIrrigationEfficiencyImprovementCollection[CropEffIndex];
+                if AFarmEff.CropEfficiency.CropName = Value then
+                begin
+                  FoundMatch := True;
+                  break;
+                end;
+              end;
+              if not FoundMatch then
+              begin
+                AFarmEff := AFarm.FarmIrrigationEfficiencyImprovementCollection.Add;
+                AFarmEff.CropEfficiency.CropName := Value;
+                AFarmEff.Index := index;
+              end;
             end
             else
             begin
               for CropEffIndex := 0 to AFarm.FarmIrrigationEfficiencyCollection.Count - 1 do
               begin
                 AFarmEff := AFarm.FarmIrrigationEfficiencyCollection[CropEffIndex];
+                if AFarmEff.CropEfficiency.CropName = FName then
+                begin
+                  AFarmEff.CropEfficiency.CropName := Value;
+                  break;
+                end;
+              end;
+              for CropEffIndex := 0 to AFarm.FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
+              begin
+                AFarmEff := AFarm.FarmIrrigationEfficiencyImprovementCollection[CropEffIndex];
                 if AFarmEff.CropEfficiency.CropName = FName then
                 begin
                   AFarmEff.CropEfficiency.CropName := Value;
@@ -214,6 +251,12 @@ end;
 constructor TIrrigationCollection.Create(Model: TBaseModel);
 begin
   inherited Create(TIrrigationItem, Model);
+end;
+
+destructor TIrrigationCollection.Destroy;
+begin
+  FFarmList.Free;
+  inherited;
 end;
 
 function TIrrigationCollection.GetFarmList: TFarmList;

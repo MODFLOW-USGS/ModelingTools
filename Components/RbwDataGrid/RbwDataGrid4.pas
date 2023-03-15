@@ -5122,7 +5122,7 @@ begin
       FillCaptionList(CellCaption, CellList, AvailableWidth);
       for CaptionIndex := 0 to CellList.Count - 1 do
       begin
-        Temp := Canvas.TextWidth(CellList[CaptionIndex]) + 4;
+        Temp := Canvas.TextWidth(CellList[CaptionIndex]) + 24;
         if Temp > result then
         begin
           result := Temp;

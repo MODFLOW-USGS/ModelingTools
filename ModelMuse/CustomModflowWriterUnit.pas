@@ -825,6 +825,8 @@ end;
     procedure WriteFloatValueFromGlobalFormula(Formula: string;
       ErrorObject: TObject; const DataSetErrorString: string;
       TestProc: TTestRealValueOkProcedure = nil);
+    procedure WriteBooleanValueFromGlobalFormula(Formula: string;
+      ErrorObject: TObject; const DataSetErrorString: string);
   public
     // @name is used to update the display of transient data used to color the
     // grid.
@@ -5910,6 +5912,35 @@ begin
     begin
       Exit;
     end;
+  end;
+end;
+
+procedure TCustomListWriter.WriteBooleanValueFromGlobalFormula(Formula: string;
+  ErrorObject: TObject; const DataSetErrorString: string);
+var
+  Expression: TExpression;
+  Value: Boolean;
+begin
+  Expression := EvaluateValueFromGlobalFormula(Formula, ErrorObject,
+    DataSetErrorString, [rdtBoolean]);
+
+  if Expression.ResultType = rdtBoolean then
+  begin
+    Value := Expression.BooleanResult;
+    if Value then
+    begin
+      WriteInteger(1);
+    end
+    else
+    begin
+      WriteInteger(0);
+    end;
+  end
+  else
+  begin
+    WriteInteger(0);
+    frmFormulaErrors.AddFormulaError(GetObjectString(ErrorObject), DataSetErrorString,
+      Formula, StrTheFormulaShouldR);
   end;
 end;
 

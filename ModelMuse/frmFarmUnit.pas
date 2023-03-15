@@ -100,7 +100,7 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, ModflowFmpCropUnit;
+  frmGoPhastUnit, ModflowFmpCropUnit, GoPhastTypes;
 
 {$R *.dfm}
 
@@ -266,6 +266,14 @@ procedure TfrmFarm.GetData;
 var
   ANode: PVirtualNode;
 begin
+  if frmGoPhast.ModelSelection = msModflowFMP then
+  begin
+    frameFarm.tabCrops.Caption := 'Crop Efficiencies';
+  end
+  else
+  begin
+    frameFarm.tabCrops.Caption := 'Irrigation Efficiencies';
+  end;
   FFarms.Assign(frmGoPhast.PhastModel.Farms);
   vstFarms.HasChildren[vstFarms.RootNode] := FFarms.Count > 0;
   vstFarms.ChildCount[vstFarms.RootNode] := FFarms.Count;

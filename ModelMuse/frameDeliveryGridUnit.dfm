@@ -26,8 +26,8 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
     object lblNumberOfDeliveryTypes: TLabel [4]
       Left = 247
       Top = 6
-      Width = 41
-      Height = 52
+      Width = 44
+      Height = 60
       Caption = 'Number of delivery types'
       WordWrap = True
       OnClick = lblNumberOfDeliveryTypesClick
@@ -51,6 +51,7 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -74,6 +75,7 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -104,13 +106,12 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
     object lblHowUsed: TLabel [0]
       Left = 255
       Top = 11
-      Width = 47
-      Height = 13
+      Width = 53
+      Height = 15
       Caption = 'How used'
       Enabled = False
     end
     inherited edFormula: TLabeledEdit
-      EditLabel.ExplicitLeft = 0
       EditLabel.ExplicitTop = -16
       EditLabel.ExplicitWidth = 50
     end
@@ -121,7 +122,7 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
       Left = 255
       Top = 30
       Width = 105
-      Height = 21
+      Height = 23
       Style = csDropDownList
       Enabled = False
       TabOrder = 1

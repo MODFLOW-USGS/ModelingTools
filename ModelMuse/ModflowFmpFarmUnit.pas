@@ -330,6 +330,7 @@ type
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
     property Items[Index: Integer]: TCropEfficiencyItem read GetItem
       write SetItem;  default;
+    function First: TCropEfficiencyItem;
   published
     property CropName: string read FCropName write SetCropName;
   end;
@@ -351,7 +352,8 @@ type
   end;
 
   // name defines a farm.
-  // @name represents the crop efficiencies for all crops for one farm over
+  // @name represents the crop or irrigation efficiencies or efficiency improvements 
+  // for all crops or irrigation types for one farm over
   // multiple time periods. FMP Data sets 7 or 24.
   TFarmEfficiencyCollection = class(TEnhancedOrderedCollection)
   private
@@ -378,6 +380,7 @@ type
     FGwAllotment: TAllotmentCollection;
     FFarmName: string;
     FFarmIrrigationEfficiencyCollection: TFarmEfficiencyCollection;
+    FFarmIrrigationEfficiencyImprovementCollection: TFarmEfficiencyCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -397,6 +400,8 @@ type
       const Value: TFarmEfficiencyCollection);
     function GetCurrentFarmEfficiencyCollection: TFarmEfficiencyCollection;
     procedure SetCurrentFarmEfficiencyCollection(
+      const Value: TFarmEfficiencyCollection);
+    procedure SetFarmIrrigationEfficiencyImprovementCollection(
       const Value: TFarmEfficiencyCollection);
   public
     function Used: boolean;
@@ -440,6 +445,14 @@ type
     property FarmIrrigationEfficiencyCollection: TFarmEfficiencyCollection
       read FFarmIrrigationEfficiencyCollection
       write SetFarmIrrigationEfficiencyCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    // irrigation efficiency improvement in OWHM verison 2
+    property FarmIrrigationEfficiencyImprovementCollection: TFarmEfficiencyCollection
+      read FFarmIrrigationEfficiencyImprovementCollection
+      write SetFarmIrrigationEfficiencyImprovementCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -1026,6 +1039,11 @@ begin
   inherited;
 end;
 
+function TCropEfficiencyCollection.First: TCropEfficiencyItem;
+begin
+  result := inherited First as TCropEfficiencyItem;
+end;
+
 function TCropEfficiencyCollection.GetItem(Index: Integer): TCropEfficiencyItem;
 begin
   result := inherited Items[index] as TCropEfficiencyItem;
@@ -1170,6 +1188,7 @@ begin
     FarmName := SourceFarm.FarmName;
 
     FarmIrrigationEfficiencyCollection := SourceFarm.FarmIrrigationEfficiencyCollection;
+    FarmIrrigationEfficiencyImprovementCollection := SourceFarm.FarmIrrigationEfficiencyImprovementCollection;
   end
   else
   begin
@@ -1215,10 +1234,12 @@ begin
   FGwAllotment := TAllotmentCollection.Create(LocalModel);
 
   FFarmIrrigationEfficiencyCollection := TFarmEfficiencyCollection.Create(LocalModel);
+  FFarmIrrigationEfficiencyImprovementCollection := TFarmEfficiencyCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FFarmIrrigationEfficiencyImprovementCollection.Free;
   FFarmIrrigationEfficiencyCollection.Free;
 
   FGwAllotment.Free;
@@ -1273,7 +1294,8 @@ begin
       and GwAllotment.IsSame(SourceFarm.GwAllotment)
       and (FarmName = SourceFarm.FarmName)
 
-      and FFarmIrrigationEfficiencyCollection.IsSame(SourceFarm.FFarmIrrigationEfficiencyCollection)
+      and FarmIrrigationEfficiencyCollection.IsSame(SourceFarm.FarmIrrigationEfficiencyCollection)
+      and FarmIrrigationEfficiencyImprovementCollection.IsSame(SourceFarm.FarmIrrigationEfficiencyImprovementCollection)
   end;
 
 end;
@@ -1329,6 +1351,12 @@ begin
   FFarmIrrigationEfficiencyCollection.Assign(Value)
 end;
 
+procedure TFarm.SetFarmIrrigationEfficiencyImprovementCollection(
+  const Value: TFarmEfficiencyCollection);
+begin
+  FFarmIrrigationEfficiencyImprovementCollection.Assign(Value);
+end;
+
 procedure TFarm.SetFarmName(const Value: string);
 begin
   SetCaseSensitiveStringProperty(FFarmName, Value);
@@ -1378,7 +1406,7 @@ begin
 
   for EffIndex := 0 to FFarmEfficiencyCollection.Count - 1 do
   begin
-    EfficiencyCol := FFarmEfficiencyCollection[EffIndex].FCropEfficiency;
+    EfficiencyCol := FFarmEfficiencyCollection[EffIndex].CropEfficiency;
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
   end;
@@ -1390,9 +1418,18 @@ begin
       StartRangeExtended, EndRangeExtended);
   end;
 
-  for EffIndex := 0 to FFarmIrrigationEfficiencyCollection.Count - 1 do
+  for EffIndex := 0 to FarmIrrigationEfficiencyCollection.Count - 1 do
   begin
-    EfficiencyCol := FFarmIrrigationEfficiencyCollection[EffIndex].FCropEfficiency;
+    EfficiencyCol := FarmIrrigationEfficiencyCollection[EffIndex].CropEfficiency;
+  {$IFDEF OWHMV2}
+    AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
+      StartRangeExtended, EndRangeExtended);
+  {$ENDIF}
+  end;
+
+  for EffIndex := 0 to FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
+  begin
+    EfficiencyCol := FarmIrrigationEfficiencyImprovementCollection[EffIndex].CropEfficiency;
   {$IFDEF OWHMV2}
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
@@ -1875,7 +1912,7 @@ end;
 
 function TFarmEfficiencyCollection.GetFirst: TFarmEfficienciesItem;
 begin
-  result := First as TFarmEfficienciesItem;
+  result := inherited First as TFarmEfficienciesItem;
 end;
 
 function TFarmEfficiencyCollection.GetItem(
@@ -1928,9 +1965,37 @@ begin
   inherited Items[index] := Value;
 end;
 
-procedure TFarmCollection.Sort;
+function CompareFarms(Item1, Item2: Pointer): Integer;
+var
+  Farm1: TFarm;
+  Farm2: TFarm;
 begin
-  Assert(False);
+  Farm1 := Item1;
+  Farm2 := Item2;
+  result := Farm1.FarmId - Farm2.FarmId;
+end;
+
+procedure TFarmCollection.Sort;
+var
+  List: TList;
+  Index: Integer;
+  AFarm: TFarm;
+begin
+  List := TList.Create;
+  try
+    for Index := 0 to Count - 1 do
+    begin
+      List.Add(Items[index]);
+    end;
+    List.Sort(CompareFarms);
+    for Index := 0 to List.Count - 1 do
+    begin
+      AFarm := List[index];
+      AFarm.Index := Index;
+    end;
+  finally
+    List.Free;
+  end;
 end;
 
 end.

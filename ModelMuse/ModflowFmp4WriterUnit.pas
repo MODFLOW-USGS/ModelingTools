@@ -1541,7 +1541,9 @@ begin
   end;
 end;
 
-procedure TModflowFmp4Writer.WriteScaleFactorsAndID(RequiredValues: TRequiredValues; UnitConversionScaleFactor: string; ExternalScaleFileName: string);
+procedure TModflowFmp4Writer.WriteScaleFactorsAndID(
+  RequiredValues: TRequiredValues; UnitConversionScaleFactor: string;
+  ExternalScaleFileName: string);
 begin
   if UnitConversionScaleFactor <> '' then
   begin
@@ -1560,7 +1562,9 @@ begin
   WriteString(' ');
 end;
 
-procedure TModflowFmp4Writer.GetScaleFactorsAndExternalFile(RequiredValues: TRequiredValues; var UnitConversionScaleFactor: string; var ExternalFileName: string; var ExternalScaleFileName: string);
+procedure TModflowFmp4Writer.GetScaleFactorsAndExternalFile(
+  RequiredValues: TRequiredValues; var UnitConversionScaleFactor: string;
+  var ExternalFileName: string; var ExternalScaleFileName: string);
 begin
   if RequiredValues.FarmProperty <> nil then
   begin
@@ -2841,31 +2845,11 @@ var
   OFE: TFarmEfficienciesItem;
   FarmID: Integer;
   InnerFarmIndex: Integer;
-  procedure WriteOFE(OFE: TFarmEfficienciesItem);
-  var
-    IrrigateIndex: Integer;
-    Formula: string;
-  begin
-    WriteInteger(FarmID + 1);
-    if OFE = nil then
-    begin
-      for IrrigateIndex := 0 to IrrigationTypes.Count - 1 do
-      begin
-        WriteFloat(1);
-      end;
-    end
-    else
-    begin
-      Assert(IrrigationTypes.Count = OFE.CropEfficiency.Count);
-      for IrrigateIndex := 0 to IrrigationTypes.Count - 1 do
-      begin
-        Formula := OFE.CropEfficiency[IrrigateIndex].Efficiency;
-        WriteFloatValueFromGlobalFormula(Formula,
-          AFarm, IrrigationTypes[IrrigateIndex].Name);
-      end;
-    end;
-    NewLine;
-  end;
+  IrrIndex: Integer;
+  OfeItem: TCropEfficiencyItem;
+  Formula: string;
+  TimeIndex: Integer;
+  StartTime: Double;
 begin
   if FFarmProcess4.EfficiencyOptions.FarmOption = foNotUsed then
   begin
@@ -2874,65 +2858,140 @@ begin
 
   AFileName := GetFileStreamName(wlEfficiency);
 
+  RequiredValues.WriteLocation := wlEfficiency;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: Efficiency';
+  RequiredValues.ErrorID := 'FMP WBS: Efficiency';
+  RequiredValues.ID := 'EFFICIENCY';
+  RequiredValues.StaticDataName := KEfficiency;
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.EfficiencyOptions.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := StrInvalidEfficiencyV;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FFarmProcess4.EfficiencyOptions;
+
   if (FFarmProcess4.EfficiencyOptions.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlEfficiency;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP WBS: Efficiency';
-    RequiredValues.ErrorID := 'FMP WBS: Efficiency';
-    RequiredValues.ID := 'EFFICIENCY';
-    RequiredValues.StaticDataName := KEfficiency;
-    RequiredValues.WriteTransientData :=
-      (FFarmProcess4.EfficiencyOptions.FarmOption = foTransient);
-    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-    RequiredValues.CheckError := StrInvalidEfficiencyV;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FFarmProcess4.EfficiencyOptions;
-
     WriteFmpArrayData(AFileName, RequiredValues);
   end
   else
   begin
-    Model.Farms.Sort;
     IrrigationTypes := Model.IrrigationTypes;
     GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
       ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsAndID(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
     if ExternalFileName = '' then
     begin
       if RequiredValues.WriteTransientData then
       begin
-
+        WriteString('TRANSIENT LIST DATAFILE ');
       end
       else
       begin
-        FarmID := 1;
-        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        WriteString('STATIC LIST DATAFILE ');
+      end;
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+        if RequiredValues.WriteTransientData then
         begin
-          AFarm := Model.Farms[FarmIndex];
-          for InnerFarmIndex := FarmIndex + 1 to AFarm.ID - 1 do
+          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
           begin
-            OFE := nil;
-            WriteOFE(OFE);
-            Inc(FarmID);
-          end;
-          if AFarm.FarmIrrigationEfficiencyCollection.Count > 0 then
-          begin
-            OFE := AFarm.FarmIrrigationEfficiencyCollection.First;
-          end
-          else
-          begin
-            OFE := nil;
-          end;
-          WriteOFE(OFE);
-          Inc(FarmID);
-        end;
+            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
 
+            FarmID := 1;
+            for FarmIndex := 0 to Model.Farms.Count - 1 do
+            begin
+              AFarm := Model.Farms[FarmIndex];
+              for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+              begin
+                WriteInteger(FarmID);
+                for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+                begin
+                  WriteFloat(1);
+                end;
+                Inc(FarmID);
+                NewLine;
+              end;
+              Assert(AFarm.FarmIrrigationEfficiencyCollection.Count
+                = IrrigationTypes.Count);
+              Assert(FarmID = AFarm.FarmId);
+              WriteInteger(AFarm.FarmId);
+              for IrrIndex := 0 to AFarm.FarmIrrigationEfficiencyCollection.Count - 1 do
+              begin
+                OFE := AFarm.FarmIrrigationEfficiencyCollection[IrrIndex];
+                OfeItem := OFE.CropEfficiency.
+                  ItemByStartTime(StartTime) as TCropEfficiencyItem;
+
+                if OfeItem <> nil then
+                begin
+                  Formula := OfeItem.Efficiency;
+                  WriteFloatValueFromGlobalFormula(Formula,
+                    AFarm, IrrigationTypes[IrrIndex].Name);
+                end
+                else
+                begin
+                  WriteFloat(1);
+                end;
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+
+
+          end;
+        end
+        else
+        begin
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+              begin
+                WriteFloat(1);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(AFarm.FarmIrrigationEfficiencyCollection.Count
+              = IrrigationTypes.Count);
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+            for IrrIndex := 0 to AFarm.FarmIrrigationEfficiencyCollection.Count - 1 do
+            begin
+              OFE := AFarm.FarmIrrigationEfficiencyCollection[IrrIndex];
+              if OFE.CropEfficiency.Count > 0 then
+              begin
+                OfeItem := OFE.CropEfficiency.First;
+                Formula := OfeItem.Efficiency;
+                WriteFloatValueFromGlobalFormula(Formula,
+                  AFarm, IrrigationTypes[IrrIndex].Name);
+              end
+              else
+              begin
+                WriteFloat(1);
+              end;
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+
+        end;
+      finally
+        FWriteLocation := wlMain;
       end;
     end;
-    end;
+  end;
 
 end;
 
@@ -2943,7 +3002,17 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  IrrigateIndex: Integer;
+  IrrigationTypes: TIrrigationCollection;
+  TimeIndex: Integer;
+  StartTime: Double;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  IrrIndex: Integer;
+  OFE: TFarmEfficienciesItem;
+  OfeItem: TCropEfficiencyItem;
+  Formula: string;
 begin
   if FFarmProcess4.EfficiencyImprovement.FarmOption = foNotUsed then
   begin
@@ -2952,50 +3021,138 @@ begin
 
   AFileName := GetFileStreamName(wlEfficiencyImprovement);
 
+  RequiredValues.WriteLocation := wlEfficiencyImprovement;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: Efficiency Improvement';
+  RequiredValues.ErrorID := 'FMP WBS: Efficiency Improvement';
+  RequiredValues.ID := 'EFFICIENCY_IMPROVEMENT';
+  RequiredValues.StaticDataName := KEfficiencyImprovement;
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.EfficiencyImprovement.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := StrInvalidEfficiencyI;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FFarmProcess4.EfficiencyImprovement;
+
   if (FFarmProcess4.EfficiencyImprovement.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlEfficiencyImprovement;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtInteger;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP WBS: Efficiency Improvement';
-    RequiredValues.ErrorID := 'FMP WBS: Efficiency Improvement';
-    RequiredValues.ID := 'EFFICIENCY_IMPROVEMENT';
-    RequiredValues.StaticDataName := KEfficiencyImprovement;
-    RequiredValues.WriteTransientData :=
-      (FFarmProcess4.EfficiencyImprovement.FarmOption = foTransient);
-    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-    RequiredValues.CheckError := StrInvalidEfficiencyI;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FFarmProcess4.EfficiencyImprovement;
-
     WriteFmpArrayData(AFileName, RequiredValues);
   end
   else
   begin
-    if RequiredValues.WriteTransientData then
+    IrrigationTypes := Model.IrrigationTypes;
+    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+      ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsAndID(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+    if ExternalFileName = '' then
     begin
-
-    end
-    else
-    begin
-      GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
-        ExternalFileName, ExternalScaleFileName);
-
-      if RequiredValues.Option <> '' then
+      if RequiredValues.WriteTransientData then
       begin
-        WriteString(RequiredValues.Option + ' ');
+        WriteString('TRANSIENT LIST DATAFILE ');
+      end
+      else
+      begin
+        WriteString('STATIC LIST DATAFILE ');
       end;
-
-      if ExternalFileName = '' then
-      begin
-//        for IrrigateIndex := 0 to Model.IrrigationTypes.Count - 1 do
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+        if RequiredValues.WriteTransientData then
         begin
+          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+          begin
+            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+            FarmID := 1;
+            for FarmIndex := 0 to Model.Farms.Count - 1 do
+            begin
+              AFarm := Model.Farms[FarmIndex];
+              for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+              begin
+                WriteInteger(FarmID);
+                for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+                begin
+                  WriteInteger(0);
+                end;
+                Inc(FarmID);
+                NewLine;
+              end;
+              Assert(AFarm.FarmIrrigationEfficiencyImprovementCollection.Count
+                = IrrigationTypes.Count);
+              Assert(FarmID = AFarm.FarmId);
+              WriteInteger(AFarm.FarmId);
+              for IrrIndex := 0 to AFarm.FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
+              begin
+                OFE := AFarm.FarmIrrigationEfficiencyImprovementCollection[IrrIndex];
+                OfeItem := OFE.CropEfficiency.
+                  ItemByStartTime(StartTime) as TCropEfficiencyItem;
+
+                if OfeItem <> nil then
+                begin
+                  Formula := OfeItem.Efficiency;
+                  WriteBooleanValueFromGlobalFormula(Formula,
+                    AFarm, IrrigationTypes[IrrIndex].Name);
+                end
+                else
+                begin
+                  WriteInteger(0);
+                end;
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+
+
+          end;
+        end
+        else
+        begin
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+              begin
+                WriteInteger(0);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(AFarm.FarmIrrigationEfficiencyImprovementCollection.Count
+              = IrrigationTypes.Count);
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+            for IrrIndex := 0 to AFarm.FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
+            begin
+              OFE := AFarm.FarmIrrigationEfficiencyImprovementCollection[IrrIndex];
+              if OFE.CropEfficiency.Count > 0 then
+              begin
+                OfeItem := OFE.CropEfficiency.First;
+                Formula := OfeItem.Efficiency;
+                WriteBooleanValueFromGlobalFormula(Formula,
+                  AFarm, IrrigationTypes[IrrIndex].Name);
+              end
+              else
+              begin
+                WriteInteger(0);
+              end;
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
 
         end;
+      finally
+        FWriteLocation := wlMain;
       end;
-
     end;
   end;
 end;
@@ -3363,20 +3520,13 @@ begin
 end;
 
 procedure TModflowFmp4Writer.WriteGobalDimension;
-var
-  Index: Integer;
-  AFarm: TFarm;
 begin
   WriteString('BEGIN GLOBAL DIMENSION');
   NewLine;
 
+  Model.Farms.Sort;
+  FNWBS := Model.Farms.Last.FarmId;
   WriteString('  NWBS');
-  FNWBS := 0;
-  for Index := 0 to Model.Farms.Count - 1 do
-  begin
-    AFarm := Model.Farms[Index];
-    FNWBS := Max(0, AFarm.FarmId);
-  end;
   WriteInteger(FNWBS);
   NewLine;
 
@@ -4451,7 +4601,6 @@ procedure TModflowFmp4Writer.WriteFarmNames;
 var
   FarmIndex: Integer;
   AFarm: TFarm;
-  FarmName: string;
   FarmNames: array of string;
 begin
   WriteString('  WBS_NAME INTERNAL');
@@ -4461,7 +4610,7 @@ begin
     SetLength(FarmNames, FNWBS + 1);
     for FarmIndex := 1 to Model.Farms.Count do
     begin
-      FarmNames[FarmIndex] := 'Unused';
+      FarmNames[FarmIndex] := ' Unused';
     end;
     for FarmIndex := 0 to Model.Farms.Count - 1 do
     begin

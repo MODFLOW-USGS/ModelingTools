@@ -50936,32 +50936,56 @@ end;
 
 function TChildModel.GetFarms: TFarmCollection;
 begin
-  result := ParentModel.GetFarms;
+  result := nil;
+  if ParentModel <> nil then
+  begin
+    result := ParentModel.GetFarms;
+  end;
 end;
 
 function TChildModel.GetFilesToDelete: TStrings;
 begin
-  result := ParentModel.FilesToDelete;
+  result := nil;
+  if ParentModel <> nil then
+  begin
+    result := ParentModel.FilesToDelete;
+  end;
 end;
 
 function TChildModel.GetFmpAllotment: TAllotmentCollection;
 begin
-  result := ParentModel.GetFmpAllotment;
+  result := nil;
+  if ParentModel <> nil then
+  begin
+    result := ParentModel.GetFmpAllotment;
+  end;
 end;
 
 function TChildModel.GetFmpClimate: TClimateCollection;
 begin
-  result := ParentModel.GetFmpClimate;
+  result := nil;
+  if ParentModel <> nil then
+  begin
+    result := ParentModel.GetFmpClimate;
+  end;
 end;
 
 function TChildModel.GetFmpCrops: TCropCollection;
 begin
-  result := ParentModel.GetFmpCrops;
+  result := nil;
+  if ParentModel <> nil then
+  begin
+    result := ParentModel.GetFmpCrops;
+  end;
 end;
 
 function TChildModel.GetFmpSoils: TSoilCollection;
 begin
-  result := ParentModel.GetFmpSoils;
+  result := nil;
+  if ParentModel <> nil then
+  begin
+    result := ParentModel.GetFmpSoils;
+  end;
 end;
 
 function TChildModel.GetFootprintProperties: TFootprintProperties;

@@ -28259,8 +28259,6 @@ end;
 
 function TFarmProcess4LandUse.StaticGwRootInteractionArrayUsed(
   Sender: TObject): boolean;
-var
-  LocalModel: TCustomModel;
 begin
   result := PackageUsed(Sender)
     and (GroundwaterRootInteraction.FarmOption = foStatic)
@@ -28339,8 +28337,6 @@ end;
 
 function TFarmProcess4LandUse.StaticRootDepthArrayUsed(
   Sender: TObject): boolean;
-var
-  LocalModel: TCustomModel;
 begin
   result := PackageUsed(Sender)
     and (RootDepth.FarmOption = foStatic)

@@ -127,8 +127,6 @@ type
     procedure WriteIntegerValueFromGlobalFormula(Formula: string;
       ErrorObject: TObject; const DataSetErrorString: string;
       TestValue: TTestIntValueOkProcedure = nil);
-    procedure WriteBooleanValueFromGlobalFormula(Formula: string;
-      ErrorObject: TObject; const DataSetErrorString: string);
     function GetCropBenefitsFlag: integer;
     function GetWaterCostCoefficientsFlag: integer;
     function GetMaxNonRoutedDelivery: integer;
@@ -208,6 +206,7 @@ resourcestring
   StrClimateStartingTim = 'Climate starting time: %d';
   StrErrorInFarmD = 'Error in Farm %d.';
   StrTheFormulaShouldReal = 'The formula should result in a real number';
+  StrTheFormulaShouldR = 'The formula should result in a Boolean';
 
 implementation
 
@@ -308,7 +307,6 @@ resourcestring
 //  StrInvalidFarmID = 'Invalid Farm ID in Farm Process';
 //  StrRow0dColumn = 'Row: %0:d; Column: %1:d';
   StrInvalidSoilIDInF = 'Invalid Soil ID in Farm Process';
-  StrTheFormulaShouldR = 'The formula should result in a Boolean';
   StrTheFormulaShouldInt = 'The formula should result in an integer';
 //  StrFMPFarmsNotDefine = 'FMP Farms not defined in one or more stress period' +
 //  's';
@@ -4159,35 +4157,6 @@ procedure TModflowFmpWriter.DoBeforeWriteCells;
 begin
   inherited;
   WriteNwtOptions;
-end;
-
-procedure TModflowFmpWriter.WriteBooleanValueFromGlobalFormula(Formula: string;
-  ErrorObject: TObject; const DataSetErrorString: string);
-var
-  Expression: TExpression;
-  Value: Boolean;
-begin
-  Expression := EvaluateValueFromGlobalFormula(Formula, ErrorObject,
-    DataSetErrorString, [rdtBoolean]);
-
-  if Expression.ResultType = rdtBoolean then
-  begin
-    Value := Expression.BooleanResult;
-    if Value then
-    begin
-      WriteInteger(1);
-    end
-    else
-    begin
-      WriteInteger(0);
-    end;
-  end
-  else
-  begin
-    WriteInteger(0);
-    frmFormulaErrors.AddFormulaError(GetObjectString(ErrorObject), DataSetErrorString,
-      Formula, StrTheFormulaShouldR);
-  end;
 end;
 
 procedure TModflowFmpWriter.WriteDataSet9;
