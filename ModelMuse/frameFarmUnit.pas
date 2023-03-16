@@ -991,7 +991,11 @@ begin
     end
     else
     begin
+    {$IFDEF OWHMV2}
       Assert(frmGoPhast.ModelSelection = msModflowOwhm2);
+    {$ELSE}
+      Assert(False);
+    {$ENDIF}
       IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
       Grid.ColCount := IrrigationTypes.Count + 2;
       Grid.BeginUpdate;

@@ -15,6 +15,7 @@ type
     btnHelp: TBitBtn;
     btnOK: TBitBtn;
     btnCancel: TBitBtn;
+    rgExportAs: TRadioGroup;
     procedure rgLayersToExportClick(Sender: TObject);
     procedure FormCreate(Sender: TObject); override;
   private
@@ -62,6 +63,7 @@ procedure TfrmLayersToExport.rgLayersToExportClick(Sender: TObject);
 begin
   inherited;
   clbSelectedLayers.Enabled := rgLayersToExport.ItemIndex = 1;
+  rgExportAs.Enabled := rgLayersToExport.ItemIndex >= 1;
 end;
 
 end.

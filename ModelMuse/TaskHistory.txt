@@ -30833,5 +30833,12 @@ object TTaskHistory
         'Dialog boxes'
         'Refactoring'
         'Testing')
+    end
+    item
+      Date = 45001.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Export Shapefile'
+        'Documentation')
     end>
 end

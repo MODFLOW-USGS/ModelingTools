@@ -1701,7 +1701,22 @@ begin
       for BoundIndex := 0 to FBoundaryNames.Count - 1 do
       begin
         BoundaryName := FBoundaryNames.Objects[BoundIndex] as TBoundaryName;
-        FieldName := StringReplace(BoundaryName.Name,
+        FieldName := BoundaryName.Name;
+        if FieldName = StrMAWWellElevation then
+        begin
+          FieldName := StrMAWWellElevationShort
+        end
+        else if FieldName = StrMAWWellConductance then
+        begin
+          FieldName := StrMAWWellConductanceShort
+        end
+        else if FieldName = StrMAWWellRedLength then
+        begin
+          FieldName := StrMAWWellRedLengthShort
+        end;
+
+
+        FieldName := StringReplace(FieldName,
           ' ', '', [rfReplaceAll, rfIgnoreCase]);
         if rgExportMethod.ItemIndex = 0 then
         begin
@@ -4673,6 +4688,10 @@ var
                   else if BoundaryName.Name = StrMAWScalingLength then
                   begin
                     Formula := AnsiString(MawItem.ScalingLength);
+                  end
+                  else if BoundaryName.Name = StrMAWWellRedLength then
+                  begin
+                    Formula := AnsiString(MawItem.FlowingWellReductionLength);
                   end
                   else
                   begin

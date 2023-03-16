@@ -435,6 +435,12 @@ const
   StrMAWWellElevation = 'MAW Flowing Well Elevation';
   StrMAWWellConductance = 'MAW Flowing Well Conductance';
   StrMAWWellRedLength = 'MAW Flowing Well Reduction Length';
+
+  StrMAWWellElevationShort = 'MAW FW Elevation';
+  StrMAWWellConductanceShort = 'MAW FW Conductance';
+  StrMAWWellRedLengthShort = 'MAW FW Reduction Length';
+
+
   StrMAWWellRate = 'MAW Well Rate';
   StrMAWWellHead = 'MAW Well Head';
   StrMAWWellLimit = 'MAW Well Limit';
@@ -11026,8 +11032,8 @@ const
 //                any diversion segments is set to zero.
 //    '5.1.1.14' Bug fix: Fixed bug that would prevent elevations from being
 //                updated if the front and side views were hidden.
-//    '5.1.1.15' Enhancement: When exporting contours to Shapefiles,
-//                ModelMuse can now export a separate Shapefile for each layer.
+//    '5.1.1.15'
+//
 //               Enhancement: ModelMuse can now import Vertex values based on
 //                vertex locations in the Object Properties dialog box.
 //    '5.1.1.16' Bug fix: Fixed bug that could cause head observations in
@@ -11037,12 +11043,15 @@ const
 //                that would cause an assertion failure.
 //    '5.1.1.18  Bug fix: Fixed importing of MODFLOW-NWT models in which
 //                the UZF variable NUZTOP is set to 4.
+//    '5.1.1.19' Enhancement: When exporting contours to Shapefiles,
+//                ModelMuse can now export contours for multiple layers.
+
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.18';
+  IIModelVersion = '5.1.1.19';
 
 function IModelVersion: string;
 begin

@@ -4,7 +4,8 @@ interface
 
 uses System.UITypes, System.Types, Classes, FastGeo, QuadtreeClass, RealListUnit, AbstractGridUnit,
   DataSetUnit, SysUtils, GoPhastTypes, ContourUnit, ValueArrayStorageUnit,
-  PhastModelUnit, Vcl.Dialogs, System.Generics.Collections;
+  PhastModelUnit, Vcl.Dialogs, System.Generics.Collections, XBase1,
+  ShapefileUnit;
 
 type
   TPointList = class(TObject)
@@ -43,14 +44,20 @@ type
     FEpsilon: Real;
     FModelGrid: TCustomModelGrid;
     FAlgorithm: TContourAlg;
+    FShapeDataBase: TXBase;
+    FShapeFileWriter: TShapefileGeometryWriter;
+    FFileName: string;
     // @name is the event handler for TContourCreator.OnExtractSegments
     procedure ImportSegments(Sender: TObject; const Segments: TLine2DArray);
     procedure InitializeQuadTree;
     procedure InitializeEpsilon;
     procedure MergePointLists;
   public
+    // If contours for multiple layers will be created, specify the file name,
+    // the first time @name is called. For subsequent calls, the file name
+    // should be an empty string.
     procedure CreateShapes(ValueList: TValueArrayStorage; DataArray: TDataArray;
-      FileName: string; LabelSpacing: integer);
+      FileName: string; LabelSpacing: integer; LayerNumber: Integer = -1);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     Constructor Create(Model: TBaseModel);
@@ -71,7 +78,7 @@ implementation
 
 uses
   frmGoPhastUnit, Contnrs, Math,
-  ShapefileUnit, XBase1, frmExportShapefileUnit, RbwParser, ModelMuseUtilities,
+  frmExportShapefileUnit, RbwParser, ModelMuseUtilities,
   LineStorage, SutraMeshUnit, ScreenObjectUnit, UndoItemsScreenObjects;
 
 procedure GlobalImportSegments(Sender: TObject;
@@ -264,9 +271,12 @@ end;
 
 constructor TContourExtractor.Create(Model: TBaseModel);
 begin
+  FFileName := '';
   FModel := (Model as TCustomModel);
   FModelGrid := FModel.Grid;
   Mesh := FModel.DrawMesh;
+  FShapeDataBase := TXBase.Create(nil);
+  FShapeFileWriter := TShapefileGeometryWriter.Create(stPolyLine, True);
 end;
 
 procedure TContourExtractor.MergePointLists;
@@ -275,120 +285,143 @@ var
   PointList: TPointList;
   APoint: TPoint2D;
   Data: TQuadPointArray;
-//  TestObject: TScreenObject;
-//  ScreenObjects: TList;
-//  FirstPoint: TPoint2D;
-//  LastPoint: TPoint2D;
-//  NewPointLists: TListOfPointLists;
-//  ScreenObjectIndex: Integer;
-//  Undo: TUndoMergeObjects;
   Merged: Boolean;
   OtherPointList: TPointList;
   APoint1: TPoint2D;
   APoint2: TPoint2D;
-//  FoundFirst: Boolean;
   PointerArray: TPointerArray;
   Closed: Boolean;
   CloseDist: double;
-//  TestDistance: double;
-//  MinDist: Double;
-  procedure MergeLines;
+  CandidateLines: TList;
+  MergeCount: Integer;
+  procedure MergeLines(PointsToMerge: Integer);
   var
     DataIndex: Integer;
-  PointIndex: Integer;
+    PointIndex: Integer;
     ArrayIndex: Integer;
+    MinIndex: Integer;
+    CandiateList: TPointList;
+    MinDistance: double;
+    CandidateIndex: Integer;
+    TestDistance: Double;
+    PIndex: Integer;
   begin
-        APoint := PointList.Last;
-        FQuadTree.FindNearestPoints(APoint.x, APoint.y, 2, Data);
-        OtherPointList := nil;
-        for ArrayIndex := 0 to Length(Data) - 1 do
+    CandidateLines.Clear;
+    APoint := PointList.Last;
+    FQuadTree.FindNearestPoints(APoint.x, APoint.y, PointsToMerge, Data);
+    OtherPointList := nil;
+    for ArrayIndex := 0 to Length(Data) - 1 do
+    begin
+      PointerArray := Data[ArrayIndex].Data;
+      for DataIndex := 0 to Length(PointerArray) - 1 do
+      begin
+        OtherPointList := PointerArray[DataIndex];
+        if OtherPointList = PointList then
         begin
-          PointerArray := Data[ArrayIndex].Data;
-          for DataIndex := 0 to Length(PointerArray) - 1 do
-          begin
-            OtherPointList := PointerArray[DataIndex];
-            if OtherPointList = PointList then
-            begin
-              OtherPointList := nil;
-            end;
-            if OtherPointList <> nil then
-            begin
-              Break;
-            end;
-          end;
-          if OtherPointList <> nil then
-          begin
-            Break;
-          end;
+          OtherPointList := nil;
         end;
-
-//        if Length(Data) > 1 then
+        if OtherPointList <> nil then
         begin
-//          ScreenObjects.Clear;
-          try
+          CandidateLines.Add(OtherPointList);
+        end;
+      end;
+    end;
+    if CandidateLines.Count = 0 then
+    begin
+      Exit;
+    end
+    else if CandidateLines.Count = 1 then
+    begin
+      OtherPointList := CandidateLines[0];
+    end
+    else
+    begin
+      MinIndex := 0;
+      OtherPointList := CandidateLines[0];
+      MinDistance := Min( Distance(OtherPointList.First, APoint),
+        Distance(OtherPointList.Last, APoint));
+      for CandidateIndex := 1 to CandidateLines.Count - 1 do
+      begin
+        CandiateList := CandidateLines[CandidateIndex];
+        TestDistance := Min( Distance(CandiateList.First, APoint),
+          Distance(CandiateList.Last, APoint));
+        if MinDistance > TestDistance then
+        begin
+          OtherPointList := CandiateList;
+          MinDistance := TestDistance;
+        end;
+      end;
+    end;
 
-//            for DataIndex := 0 to Length(Data) - 1 do
-//            begin
-//              OtherPointList := Data[DataIndex];
-//              if OtherPointList <> PointList then
-//              begin
-//                break;
-//              end;
-//            end;
-              if OtherPointList <> nil then
-              begin
-                if Distance(APoint, OtherPointList.First) > Distance(APoint, OtherPointList.Last) then
-                begin
-                  OtherPointList.Reverse;
-                end;
-                if Distance(APoint, OtherPointList.First) < FEpsilon then
-                begin
-                  APoint2 := PointList.Last;
-                  FQuadTree.RemovePoint(APoint2.x, APoint2.y, PointList);
-                  for PointIndex := 1 to OtherPointList.Count - 1 do
-                  begin
-                    PointList.Add(OtherPointList[PointIndex]);
-                  end;
-                  APoint1 := OtherPointList.First;
-                  APoint2 := OtherPointList.Last;
-                  FQuadTree.RemovePoint(APoint1.x, APoint1.y, OtherPointList);
-                  FQuadTree.RemovePoint(APoint2.x, APoint2.y, OtherPointList);
-                  APoint2 := PointList.Last;
-                  FQuadTree.AddPoint(APoint2.x, APoint2.y, PointList);
-                  FPointLists.Remove(OtherPointList);
-                  Merged := True;
-                end;
-              end;
-          finally
-  //          ScreenObjects.Free;
-          end;
-        end  end;
+    if OtherPointList <> nil then
+    begin
+      if Distance(APoint, OtherPointList.First) > Distance(APoint, OtherPointList.Last) then
+      begin
+        OtherPointList.Reverse;
+      end;
+      if Distance(APoint, OtherPointList.First) < FEpsilon then
+      begin
+        APoint2 := PointList.Last;
+        FQuadTree.RemovePoint(APoint2.x, APoint2.y, PointList);
+        for PointIndex := 1 to OtherPointList.Count - 1 do
+        begin
+          PointList.Add(OtherPointList[PointIndex]);
+        end;
+        APoint1 := OtherPointList.First;
+        APoint2 := OtherPointList.Last;
+        FQuadTree.RemovePoint(APoint1.x, APoint1.y, OtherPointList);
+        FQuadTree.RemovePoint(APoint2.x, APoint2.y, OtherPointList);
+        APoint2 := PointList.Last;
+        FQuadTree.AddPoint(APoint2.x, APoint2.y, PointList);
+        PIndex := FPointLists.IndexOf(OtherPointList);
+        Assert(PIndex >= 0);
+        FPointLists[PIndex] := nil;
+        Merged := True;
+      end;
+    end
+  end;
 begin
-  Merged := True;
-  while Merged do
+  CandidateLines := TList.Create;
+  try
+  for MergeCount := 1 to 2 do
   begin
-    Merged := False;
-    InitializeQuadTree;
-//    FoundFirst := False;
-    for index := 0 to FPointLists.Count - 1 do
+    Merged := True;
+    while Merged do
     begin
-      PointList := FPointLists[index];
-      APoint1 := PointList.First;
-      FQuadTree.AddPoint(APoint1.x, APoint1.y, PointList);
-      APoint2 := PointList.Last;
-      FQuadTree.AddPoint(APoint2.x, APoint2.y, PointList);
-    end;
+      Merged := False;
+      InitializeQuadTree;
+      for index := 0 to FPointLists.Count - 1 do
+      begin
+        PointList := FPointLists[index];
+        APoint1 := PointList.First;
+        FQuadTree.AddPoint(APoint1.x, APoint1.y, PointList);
+        APoint2 := PointList.Last;
+        FQuadTree.AddPoint(APoint2.x, APoint2.y, PointList);
+      end;
 
-    for index := FPointLists.Count - 1 downto 0 do
-    begin
-      PointList := FPointLists[index];
-      MergeLines;
+      for index := FPointLists.Count - 1 downto 0 do
+      begin
+        PointList := FPointLists[index];
+        if PointList <> nil then
+        begin
+          MergeLines(MergeCount);
+        end;
+      end;
+      FPointLists.Pack;
+      for index := FPointLists.Count - 1 downto 0 do
+      begin
+        PointList := FPointLists[index];
+        if PointList <> nil then
+        begin
+          PointList.Reverse;
+          MergeLines(MergeCount);
+        end;
+      end;
+      FPointLists.Pack;
     end;
-    for index := FPointLists.Count - 1 downto 0 do
-    begin
-      PointList.Reverse;
-      MergeLines;
-    end;
+  end;
+  finally
+    CandidateLines.Free;
   end;
   for index := 0 to FPointLists.Count - 1 do
   begin
@@ -408,7 +441,7 @@ begin
 end;
 
 procedure TContourExtractor.CreateShapes(ValueList: TValueArrayStorage;
-  DataArray: TDataArray; FileName: string; LabelSpacing: integer);
+  DataArray: TDataArray; FileName: string; LabelSpacing: integer; LayerNumber: Integer = -1);
 var
   ContourCreator: TContourCreator;
   ValueIndex: Integer;
@@ -416,12 +449,10 @@ var
   PointList: TPointList;
   PointIndex: Integer;
   PointsForShape: TList;
-  ShapeFileWriter: TShapefileGeometryWriter;
   Shape: TShapeObject;
   PPoint: TPoint2DPtr;
   Fields: TStringList;
   FieldName: AnsiString;
-  ShapeDataBase: TXBase;
   FieldDescription: AnsiString;
   MinValue, MaxValue: double;
   DSValues: TStringList;
@@ -431,7 +462,6 @@ var
   APlot: TLineList;
   ContVals: TRealList;
   AContourLine: TLine;
-//  ContourIndex: Integer;
   Location: TLocation;
   FieldNames: TStringList;
   MinPositive: Double;
@@ -440,6 +470,7 @@ var
   TestValue: double;
   MinColWidth: double;
   ColIndex: Integer;
+  LayerFieldName: AnsiString;
   procedure MakeShapesFromContourLines;
   var
     ContourIndex: integer;
@@ -465,7 +496,7 @@ var
     Assert(PlotList.Count = 1);
     APlot := PlotList[0];
     APlot.MergeLines;
-    ShapeFileWriter.Capacity := APlot.Count;
+    FShapeFileWriter.Capacity := FShapeFileWriter.Count + APlot.Count;
     for ContourIndex := 0 to APlot.Count - 1 do
     begin
       AContourLine := APlot[ContourIndex];
@@ -491,33 +522,37 @@ var
           Shape.FPoints[PointIndex].X := Location.x;
           Shape.FPoints[PointIndex].Y := Location.y/Exaggeration;
         end;
-        ShapeFileWriter.AddShape(Shape);
+        FShapeFileWriter.AddShape(Shape);
 
-        ShapeDataBase.AppendBlank;
+        FShapeDataBase.AppendBlank;
         case DataArray.DataType of
           rdtDouble:
-            ShapeDataBase.UpdFieldNum(FieldName,
+            FShapeDataBase.UpdFieldNum(FieldName,
               ValueList.RealValues[ValueIndex]);
           rdtInteger:
-            ShapeDataBase.UpdFieldInt(FieldName,
+            FShapeDataBase.UpdFieldInt(FieldName,
               ValueList.IntValues[ValueIndex]);
           rdtBoolean:
             if ValueList.BooleanValues[ValueIndex] then
             begin
-              ShapeDataBase.UpdFieldInt(FieldName, 1);
+              FShapeDataBase.UpdFieldInt(FieldName, 1);
             end
             else
             begin
-              ShapeDataBase.UpdFieldInt(FieldName, 0);
+              FShapeDataBase.UpdFieldInt(FieldName, 0);
             end;
           rdtString:
-            ShapeDataBase.UpdFieldStr(FieldName,
+            FShapeDataBase.UpdFieldStr(FieldName,
               AnsiString(ValueList.StringValues[ValueIndex]));
           else
             Assert(False);
         end;
+        if LayerNumber > 0 then
+        begin
+          FShapeDataBase.UpdFieldInt(LayerFieldName, LayerNumber);
+        end;
 
-        ShapeDataBase.PostChanges;
+        FShapeDataBase.PostChanges;
       except
         Shape.Free;
         raise;
@@ -525,16 +560,8 @@ var
     end
   end;
 begin
-
   DataSet := DataArray;
   FAlgorithm := DataSet.ContourAlg;
-//  {$IFDEF SUTRA}
-//  if (DataSet.Model as TCustomModel).ModelSelection = msSutra22 then
-//  begin
-//    FAlgorithm := caACM626
-//  end;
-//  {$ENDIF}
-
 
   if Assigned(FModelGrid) then
   begin
@@ -545,36 +572,17 @@ begin
   begin
     Assert(Assigned(Mesh));
   end;
-//  case FAlgorithm of
-//    caSimple:
-//      begin
-//        if Assigned(Grid) then
-//        begin
-//          ActiveDataSet := frmGoPhast.PhastModel.DataArrayManager.
-//            GetDataSetByName(rsActive);
-//          Assert(Assigned(ActiveDataSet));
-//        end
-//        else
-//        begin
-//          Assert(Assigned(Mesh));
-//        end;
-//      end;
-//    caACM626:
-//      begin
-        if Assigned(Grid) then
-        begin
-          ActiveDataSet := FModel.DataArrayManager.
-            GetDataSetByName(rsActive);
-          Assert(Assigned(ActiveDataSet));
-        end
-        else
-        begin
-          Assert(Assigned(Mesh));
-        end;
-//      end
-//    else Assert(False);
-//  end;
 
+  if Assigned(Grid) then
+  begin
+    ActiveDataSet := FModel.DataArrayManager.
+      GetDataSetByName(rsActive);
+    Assert(Assigned(ActiveDataSet));
+  end
+  else
+  begin
+    Assert(Assigned(Mesh));
+  end;
 
   ViewDirection := vdTop;
 //  Assert(Grid <> nil);
@@ -587,7 +595,6 @@ begin
     case FAlgorithm of
       caSimple:
         begin
-
           if Assigned(Grid) then
           begin
             AssignGridValues(MinValue, MaxValue, MinPositive, FModel.SelectedLayer,
@@ -615,8 +622,9 @@ begin
       else Assert(False);
     end;
 
-    ShapeDataBase := TXBase.Create(nil);
-    try
+    if FileName <> '' then
+    begin
+      FFileName := FileName;
       Fields := TStringList.Create;
       FieldNames := TStringList.Create;
       try
@@ -637,8 +645,15 @@ begin
         end;
         FieldDescription := FieldName + '=' + FieldFormat;
         Fields.Add(string(FieldDescription));
+        if LayerNumber > 0 then
+        begin
+          LayerFieldName := 'LAYER';
+          FieldFormat := 'N';
+          FieldDescription := LayerFieldName + '=' + FieldFormat;
+          Fields.Add(string(FieldDescription));
+        end;
         try
-          InitializeDataBase(FileName, ShapeDataBase, Fields);
+          InitializeDataBase(FileName, FShapeDataBase, Fields);
         except
           on E: EFOpenError do
           begin
@@ -655,194 +670,188 @@ begin
         Fields.Free;
         FieldNames.Free;
       end;
+    end;
 
-      ShapeFileWriter := TShapefileGeometryWriter.Create(stPolyLine, True);
-      try
-        case FAlgorithm of
-          caSimple:
-            begin
-              if Assigned(Grid) then
-              begin
-                FPointLists:= TListOfPointLists.Create;
-                ContourCreator:= TContourCreator.Create(LabelSpacing);
-                try
-                  InitializeEpsilon;
-                  ContourCreator.EvaluatedAt := DataArray.EvaluatedAt;
-                  ContourCreator.Grid := Grid;
+    case FAlgorithm of
+      caSimple:
+        begin
+          if Assigned(Grid) then
+          begin
+            FPointLists:= TListOfPointLists.Create;
+            ContourCreator:= TContourCreator.Create(LabelSpacing);
+            try
+              InitializeEpsilon;
+              ContourCreator.EvaluatedAt := DataArray.EvaluatedAt;
+              ContourCreator.Grid := Grid;
 
-                  MinRowWidth := FModel.Grid.RowWidth[0];
+              MinRowWidth := FModel.Grid.RowWidth[0];
 //                  MinRowWidth := Grid.
-                  for RowIndex := 1 to FModel.Grid.RowCount - 1 do
-                  begin
-                    TestValue := FModel.Grid.RowWidth[RowIndex];
-                    if TestValue < MinRowWidth then
-                    begin
-                      MinRowWidth := TestValue;
-                    end;
-                  end;
-                  MinColWidth := FModel.Grid.ColumnWidth[0];
+              for RowIndex := 1 to FModel.Grid.RowCount - 1 do
+              begin
+                TestValue := FModel.Grid.RowWidth[RowIndex];
+                if TestValue < MinRowWidth then
+                begin
+                  MinRowWidth := TestValue;
+                end;
+              end;
+              MinColWidth := FModel.Grid.ColumnWidth[0];
 //                  MinColWidth := Grid.
-                  for ColIndex := 1 to FModel.Grid.ColumnCount - 1 do
+              for ColIndex := 1 to FModel.Grid.ColumnCount - 1 do
+              begin
+                TestValue := FModel.Grid.ColumnWidth[ColIndex];
+                if TestValue < MinColWidth then
+                begin
+                  MinColWidth := TestValue;
+                end;
+              end;
+              FEpsilon := Sqrt(Sqr(MinRowWidth) + Sqr(MinColWidth))/4;
+
+              ContourCreator.OnExtractSegments := ImportSegments;
+
+              Assert(ValueList.Count = Length(Contours.ContourValues));
+              for ValueIndex := 0 to ValueList.Count - 1 do
+              begin
+                ContourCreator.Value := Contours.ContourValues[ValueIndex];
+
+                InitializeQuadTree;
+                FPointLists.Clear;
+                ContourCreator.ExtractContour;
+
+                if (FPointLists.Count> 0) then
+                begin
+                  try
+                    MergePointLists;
+                  except on E: Exception do
                   begin
-                    TestValue := FModel.Grid.ColumnWidth[ColIndex];
-                    if TestValue < MinColWidth then
-                    begin
-                      MinColWidth := TestValue;
-                    end;
+                    ShowMessage(ValueIndex.ToString);
+                    raise;
                   end;
-                  FEpsilon := Sqrt(Sqr(MinRowWidth) + Sqr(MinColWidth))/4;
-
-                  ContourCreator.OnExtractSegments := ImportSegments;
-
-                  Assert(ValueList.Count = Length(Contours.ContourValues));
-                  for ValueIndex := 0 to ValueList.Count - 1 do
+                  end;
+                  FShapeFileWriter.Capacity := FShapeFileWriter.Capacity
+                    + FPointLists.Count;
+                  for PointListIndex := 0 to FPointLists.Count - 1 do
                   begin
-                    ContourCreator.Value := Contours.ContourValues[ValueIndex];
-
-                    InitializeQuadTree;
-                    FPointLists.Clear;
-                    ContourCreator.ExtractContour;
-
-                    if (FPointLists.Count> 0) then
-                    begin
-                      try
-                        MergePointLists;
-                      except on E: Exception do
+                    PointsForShape := TList.Create;
+                    try
+                      PointList := FPointLists[PointListIndex];
+                      for PointIndex := 0 to PointList.Count - 1 do
                       begin
-                        ShowMessage(ValueIndex.ToString);
-                        raise;
-                      end;
-                      end;
-                      ShapeFileWriter.Capacity := ShapeFileWriter.Capacity
-                        + FPointLists.Count;
-                      for PointListIndex := 0 to FPointLists.Count - 1 do
-                      begin
-                        PointsForShape := TList.Create;
-                        try
-                          PointList := FPointLists[PointListIndex];
-                          for PointIndex := 0 to PointList.Count - 1 do
+                        if (PointIndex > 0) and (PointIndex < PointList.Count - 1) then
+                        begin
+                          if not Collinear(PointList.Points[PointIndex-1],
+                            PointList.Points[PointIndex],
+                            PointList.Points[PointIndex+1]) then
                           begin
-                            if (PointIndex > 0) and (PointIndex < PointList.Count - 1) then
-                            begin
-                              if not Collinear(PointList.Points[PointIndex-1],
-                                PointList.Points[PointIndex],
-                                PointList.Points[PointIndex+1]) then
-                              begin
-                                PointsForShape.Add(@PointList.FPoints[PointIndex])
-                              end;
-                            end
-                            else
-                            begin
-                              try
-                              PointsForShape.Add(@PointList.FPoints[PointIndex])
-                              except
-                                ShowMessage(ValueIndex.ToString + ' ' + PointListIndex.ToString + ' ' + PointIndex.ToString);
-                                raise;
-                              end
-                            end;
+                            PointsForShape.Add(@PointList.FPoints[PointIndex])
                           end;
-                          if PointsForShape.Count > 0 then
-                          begin
-                            Shape := TShapeObject.Create;
-                            try
-                              Shape.FNumPoints := PointsForShape.Count;
-                              Shape.FShapeType := stPolyLine;
-                              SetLength(Shape.FPoints, PointsForShape.Count);
-                              Shape.FNumParts := 1;
-                              SetLength(Shape.FParts, 1);
-                              Shape.FParts[0] := 0;
-                              SetLength(Shape.FPartTypes, 0);
-                              for PointIndex := 0 to PointsForShape.Count - 1 do
-                              begin
-                                PPoint := PointsForShape[PointIndex];
-                                Shape.FPoints[PointIndex].X := PPoint.x;
-                                Shape.FPoints[PointIndex].Y := PPoint.y;
-                              end;
-                              ShapeFileWriter.AddShape(Shape);
-
-                              ShapeDataBase.AppendBlank;
-                              case DataArray.DataType of
-                                rdtDouble:
-                                  ShapeDataBase.UpdFieldNum(FieldName, ValueList.RealValues[ValueIndex]);
-                                rdtInteger:
-                                  ShapeDataBase.UpdFieldInt(FieldName, ValueList.IntValues[ValueIndex]);
-                                rdtBoolean:
-                                  if ValueList.BooleanValues[ValueIndex] then
-                                  begin
-                                    ShapeDataBase.UpdFieldInt(FieldName, 1);
-                                  end
-                                  else
-                                  begin
-                                    ShapeDataBase.UpdFieldInt(FieldName, 0);
-                                  end;
-                                rdtString:
-                                  ShapeDataBase.UpdFieldStr(FieldName, AnsiString(ValueList.StringValues[ValueIndex]));
-                                else
-                                  Assert(False);
-                              end;
-
-                              ShapeDataBase.PostChanges;
-                            except
-                              Shape.Free;
-                              raise;
-                            end;
-                          end;
-                        finally
-                          PointsForShape.Free;
+                        end
+                        else
+                        begin
+                          try
+                          PointsForShape.Add(@PointList.FPoints[PointIndex])
+                          except
+                            ShowMessage(ValueIndex.ToString + ' ' + PointListIndex.ToString + ' ' + PointIndex.ToString);
+                            raise;
+                          end
                         end;
                       end;
+                      if PointsForShape.Count > 0 then
+                      begin
+                        Shape := TShapeObject.Create;
+                        try
+                          Shape.FNumPoints := PointsForShape.Count;
+                          Shape.FShapeType := stPolyLine;
+                          SetLength(Shape.FPoints, PointsForShape.Count);
+                          Shape.FNumParts := 1;
+                          SetLength(Shape.FParts, 1);
+                          Shape.FParts[0] := 0;
+                          SetLength(Shape.FPartTypes, 0);
+                          for PointIndex := 0 to PointsForShape.Count - 1 do
+                          begin
+                            PPoint := PointsForShape[PointIndex];
+                            Shape.FPoints[PointIndex].X := PPoint.x;
+                            Shape.FPoints[PointIndex].Y := PPoint.y;
+                          end;
+                          FShapeFileWriter.AddShape(Shape);
+
+                          FShapeDataBase.AppendBlank;
+                          case DataArray.DataType of
+                            rdtDouble:
+                              FShapeDataBase.UpdFieldNum(FieldName, ValueList.RealValues[ValueIndex]);
+                            rdtInteger:
+                              FShapeDataBase.UpdFieldInt(FieldName, ValueList.IntValues[ValueIndex]);
+                            rdtBoolean:
+                              if ValueList.BooleanValues[ValueIndex] then
+                              begin
+                                FShapeDataBase.UpdFieldInt(FieldName, 1);
+                              end
+                              else
+                              begin
+                                FShapeDataBase.UpdFieldInt(FieldName, 0);
+                              end;
+                            rdtString:
+                              FShapeDataBase.UpdFieldStr(FieldName, AnsiString(ValueList.StringValues[ValueIndex]));
+                            else
+                              Assert(False);
+                          end;
+
+                          FShapeDataBase.PostChanges;
+                        except
+                          Shape.Free;
+                          raise;
+                        end;
+                      end;
+                    finally
+                      PointsForShape.Free;
                     end;
                   end;
-  //                ShapeFileWriter.WriteToFile(FileName, ChangeFileExt(FileName, '.shx'));
-                finally
-                  ContourCreator.Free;
-                  FPointLists.Free;
-                end;
-              end
-              else
-              begin
-                ContVals := TRealList.Create;
-                try
-                  ContVals.Capacity := ValueList.Count;
-                  for ValueIndex := 0 to ValueList.Count - 1 do
-                  begin
-                    ContVals.Add(Contours.ContourValues[ValueIndex]);
-                  end;
-                  CreateSimpleContoursFromMesh(Contours.ContourValues);
-                  MakeShapesFromContourLines;
-                finally
-                  ContVals.Free;
                 end;
               end;
+//                ShapeFileWriter.WriteToFile(FileName, ChangeFileExt(FileName, '.shx'));
+            finally
+              ContourCreator.Free;
+              FPointLists.Free;
             end;
-          caACM626:
-            begin
-              ContVals := TRealList.Create;
-              try
-                ContVals.Capacity := ValueList.Count;
-                SetLength(C, ValueList.Count);
-                for ValueIndex := 0 to ValueList.Count - 1 do
-                begin
-                  C[ValueIndex] := Contours.ContourValues[ValueIndex];
-                  ContVals.Add(Contours.ContourValues[ValueIndex]);
-                end;
-                PerformAlg626(C);
-                MakeShapesFromContourLines;
-              finally
-                ContVals.Free;
+          end
+          else
+          begin
+            ContVals := TRealList.Create;
+            try
+              ContVals.Capacity := ValueList.Count;
+              for ValueIndex := 0 to ValueList.Count - 1 do
+              begin
+                ContVals.Add(Contours.ContourValues[ValueIndex]);
               end;
-
-            end
-          else Assert(False);
+              CreateSimpleContoursFromMesh(Contours.ContourValues);
+              MakeShapesFromContourLines;
+            finally
+              ContVals.Free;
+            end;
+          end;
         end;
-        ShapeFileWriter.WriteToFile(FileName, ChangeFileExt(FileName, '.shx'));
-      finally
-        ShapeFileWriter.Free;
-      end;
-    finally
-      ShapeDataBase.Active := False;
-      ShapeDataBase.Free;
+      caACM626:
+        begin
+          ContVals := TRealList.Create;
+          try
+            ContVals.Capacity := ValueList.Count;
+            SetLength(C, ValueList.Count);
+            for ValueIndex := 0 to ValueList.Count - 1 do
+            begin
+              C[ValueIndex] := Contours.ContourValues[ValueIndex];
+              ContVals.Add(Contours.ContourValues[ValueIndex]);
+            end;
+            PerformAlg626(C);
+            MakeShapesFromContourLines;
+          finally
+            ContVals.Free;
+          end;
+
+        end
+      else Assert(False);
     end;
+//  finally
+//  end;
+//    end;
   finally
     DSValues.Free;
     FreeAndNil(PlotList);
@@ -851,6 +860,15 @@ end;
 
 destructor TContourExtractor.Destroy;
 begin
+  FShapeDataBase.Active := False;
+  FShapeDataBase.Free;
+
+  if FFileName <> '' then
+  begin
+    FShapeFileWriter.WriteToFile(FFileName, ChangeFileExt(FFileName, '.shx'));
+  end;
+  FShapeFileWriter.Free;
+
   FQuadTree.Free;
   inherited;
 end;

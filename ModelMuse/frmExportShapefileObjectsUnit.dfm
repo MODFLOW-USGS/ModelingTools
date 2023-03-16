@@ -2,25 +2,25 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
   HelpType = htKeyword
   HelpKeyword = 'Export_Objects_to_Shapefile'
   Caption = 'Export Objects as Shapefile'
-  ClientHeight = 483
-  ClientWidth = 617
+  ClientHeight = 482
+  ClientWidth = 613
   OnResize = FormResize
-  ExplicitWidth = 633
-  ExplicitHeight = 522
+  ExplicitWidth = 629
+  ExplicitHeight = 521
   TextHeight = 18
   object splLeft: TSplitter [0]
     Left = 257
     Top = 41
-    Height = 231
+    Height = 230
     OnMoved = splLeftMoved
     ExplicitLeft = 304
     ExplicitTop = 128
     ExplicitHeight = 100
   end
   object splRight: TSplitter [1]
-    Left = 493
+    Left = 489
     Top = 41
-    Height = 231
+    Height = 230
     Align = alRight
     OnMoved = splRightMoved
     ExplicitLeft = 496
@@ -28,15 +28,15 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     ExplicitHeight = 100
   end
   inherited pnlBottom: TPanel
-    Top = 272
-    Width = 617
+    Top = 271
+    Width = 613
     Height = 211
     TabOrder = 4
     ExplicitTop = 272
     ExplicitWidth = 617
     ExplicitHeight = 211
     DesignSize = (
-      617
+      613
       211)
     object lblMissingData: TLabel [0]
       Left = 120
@@ -46,7 +46,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       Caption = 'Missing data value'
     end
     inherited btnClose: TBitBtn
-      Left = 409
+      Left = 401
       Top = 166
       Caption = '&OK'
       Kind = bkOK
@@ -56,7 +56,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       ExplicitTop = 166
     end
     inherited btnHelp: TBitBtn
-      Left = 314
+      Left = 306
       Top = 166
       TabOrder = 5
       OnClick = btnHelpClick
@@ -64,7 +64,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       ExplicitTop = 166
     end
     object BitBtn1: TBitBtn
-      Left = 504
+      Left = 496
       Top = 166
       Width = 89
       Height = 33
@@ -72,6 +72,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 7
+      ExplicitLeft = 504
     end
     object rdeMissingData: TRbwDataEntry
       Left = 8
@@ -190,8 +191,8 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
   inherited vstObjects: TVirtualStringTree
     Left = 260
     Top = 41
-    Width = 233
-    Height = 231
+    Width = 229
+    Height = 230
     TabOrder = 2
     OnChecked = vstObjectsChecked
     ExplicitLeft = 260
@@ -202,11 +203,10 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 617
+    Width = 613
     Height = 41
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 613
     object lblObjects: TLabel
       Left = 314
       Top = 11
@@ -233,7 +233,7 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     Left = 0
     Top = 41
     Width = 257
-    Height = 231
+    Height = 230
     Align = alLeft
     Colors.BorderColor = 15987699
     Colors.DisabledColor = clGray
@@ -267,10 +267,10 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     Columns = <>
   end
   object chklstTimes: TCheckListBox
-    Left = 496
+    Left = 492
     Top = 41
     Width = 121
-    Height = 231
+    Height = 230
     Align = alRight
     Enabled = False
     ItemHeight = 18

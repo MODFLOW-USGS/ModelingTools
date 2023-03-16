@@ -1148,6 +1148,8 @@ resourcestring
   StrMeasured = 'Measured';
   StrSpecifiedHeads = 'Specified Heads in ';
   StrSpecifiedFlows = 'Specified Flows in ';
+  StrOneOrMorePointsW = 'One or more points were skipped because they would ' +
+  'have caused an imported object to intersect itself.';
 
 const
   StrShapeMinX = 'ShapeMinX';
@@ -9532,7 +9534,9 @@ var
   AScreenObjectName: string;
   ErrorMessages: TStringList;
   FieldIndex: Integer;
+  SkippedPoint: Boolean;
 begin
+  SkippedPoint := False;
   CombinedPointIndex := -1;
   frmProgressMM.ShouldContinue := True;
   ZValues := nil;
@@ -10315,13 +10319,19 @@ begin
                             if NewSection or (PriorPoint.x <> PointRecord.x)
                               or (PriorPoint.y <> PointRecord.y) then
                             begin
-                              if ConvertUnits then
-                              begin
-                                AScreenObject.AddPoint(ConvertPoint2D(PointRecord, FromUnits, ToUnits), NewSection);
-                              end
-                              else
-                              begin
-                                AScreenObject.AddPoint(PointRecord, NewSection);
+                              try
+                                if ConvertUnits then
+                                begin
+                                  AScreenObject.AddPoint(ConvertPoint2D(PointRecord, FromUnits, ToUnits), NewSection);
+                                end
+                                else
+                                begin
+                                  AScreenObject.AddPoint(PointRecord, NewSection);
+                                end;
+                              except on EScreenObjectError do
+                                begin
+                                  SkippedPoint := True;
+                                end;
                               end;
                             end;
                           end
@@ -10331,13 +10341,19 @@ begin
                             if NewSection or (PriorPoint.x <> PointRecord.x)
                               or (PriorPoint.y <> PointRecord.y) then
                             begin
-                              if ConvertUnits then
-                              begin
-                                AScreenObject.AddPoint(ConvertPoint2D(PointRecord, FromUnits, ToUnits), NewSection);
-                              end
-                              else
-                              begin
-                                AScreenObject.AddPoint(PointRecord, NewSection);
+                              try
+                                if ConvertUnits then
+                                begin
+                                  AScreenObject.AddPoint(ConvertPoint2D(PointRecord, FromUnits, ToUnits), NewSection);
+                                end
+                                else
+                                begin
+                                  AScreenObject.AddPoint(PointRecord, NewSection);
+                                end;
+                              except on EScreenObjectError do
+                                begin
+                                  SkippedPoint := True;
+                                end;
                               end;
                             end;
                           end;
@@ -10774,6 +10790,10 @@ begin
         Beep;
         MessageDlg(Format(StrThereWasAnErrorP, [E.Message]), mtError, [mbOK], 0);
       end;
+  end;
+  if SkippedPoint then
+  begin
+    MessageDlg(StrOneOrMorePointsW, mtWarning, [mbOK], 0);
   end;
 end;
 

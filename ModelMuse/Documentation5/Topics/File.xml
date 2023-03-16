@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-03-03T12:57:55.635-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-16T18:01:25.821-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">File</title>
   <body>
     <header>
@@ -377,7 +377,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export|Shapefile|Contours to Shapefile</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"><anchor id="ExportContoursToShapefile" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Export the contours currently displayed on the top view of the model to a Shapefile. If the data set for the contours has multiple layers, You can export separate Shapefiles for each layer. You must </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Contour_Data_Dialog_Box" styleclass="Table Cell" translate="true">contour data</link><text styleclass="Table Cell" translate="true"> on the top view of the model to use this command. </text><text styleclass="Normal" translate="true">Shapefiles exported from ModelMuse do not contain information about the projection used for the model. You may need to supply the projection to use the Shapefile correctly. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Layers-to-Export-Dialog-Box" styleclass="Strong" translate="true">Layers to Export</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+          <para styleclass="Table Cell"><anchor id="ExportContoursToShapefile" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Export the contours currently displayed data set on the top view of the model to a Shapefile. If the data set for the contours has multiple layers, the contours can be exported to a separate Shapefile for each layer or to a single Shapefile. The layer number will be included as an attribute in the Shapefiles if contours for multiple layers are exported. You must </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Contour_Data_Dialog_Box" styleclass="Table Cell" translate="true">contour data</link><text styleclass="Table Cell" translate="true"> on the top view of the model to use this command. </text><text styleclass="Normal" translate="true">Shapefiles exported from ModelMuse do not contain information about the projection used for the model. You may need to supply the projection to use the Shapefile correctly. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Layers-to-Export-Dialog-Box" styleclass="Strong" translate="true">Layers to Export</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

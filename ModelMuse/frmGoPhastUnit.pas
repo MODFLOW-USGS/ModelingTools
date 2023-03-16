@@ -8689,15 +8689,17 @@ var
   CurrentLayer: Integer;
   LayerIndex: Integer;
   Extension: string;
-  procedure ExportShapeFile(const FileName: string);
+  FileName: TFileName;
+  procedure ExportShapeFile(const FileName: string; Layer: Integer = -1);
   begin
-    ContourExporter := TContourExtractor.Create(LocalModel);
-    try
-      ContourExporter.CreateShapes(LocalModel.ContourLegend.Values,
-        LocalContourDataSet, FileName, LocalModel.ContourLabelSpacing);
-    finally
+    if frmLayersToExport.rgExportAs.Enabled
+      and (frmLayersToExport.rgExportAs.ItemIndex = 1) then
+    begin
       ContourExporter.Free;
+      ContourExporter := TContourExtractor.Create(LocalModel);
     end;
+    ContourExporter.CreateShapes(LocalModel.ContourLegend.Values,
+      LocalContourDataSet, FileName, LocalModel.ContourLabelSpacing, Layer);
   end;
 begin
   inherited;
@@ -8714,6 +8716,7 @@ begin
   end
   else
   begin
+    ContourExporter := nil;
     sdShapefile.FileName := IncludeTrailingPathDelimiter(GetCurrentDir)
       + LocalContourDataSet.Name + '.shp';
     if sdShapefile.Execute then
@@ -8733,61 +8736,87 @@ begin
 
       if LocalModel <> nil then
       begin
-        if LocalContourDataSet.LayerCount > 1 then
-        begin
-          Application.CreateForm(TfrmLayersToExport, frmLayersToExport);
-          try
-            frmLayersToExport.clbSelectedLayers.Checked[
-              LocalModel.SelectedLayer] := True;
-            if frmLayersToExport.ShowModal = mrOK then
-            begin
-              case frmLayersToExport.rgLayersToExport.ItemIndex of
-                0:
-                  begin
-                    ExportShapeFile(sdShapefile.FileName);
-                  end;
-                1:
-                  begin
-                    CurrentLayer := LocalModel.SelectedLayer;
-                    try
-                      for LayerIndex := 0 to LocalContourDataSet.LayerCount - 1 do
-                      begin
-                        if frmLayersToExport.clbSelectedLayers.Checked[LayerIndex] then
+        ContourExporter := TContourExtractor.Create(LocalModel);
+        try
+          if LocalContourDataSet.LayerCount > 1 then
+          begin
+            Application.CreateForm(TfrmLayersToExport, frmLayersToExport);
+            try
+              frmLayersToExport.clbSelectedLayers.Checked[
+                LocalModel.SelectedLayer] := True;
+              if frmLayersToExport.ShowModal = mrOK then
+              begin
+                FileName := sdShapefile.FileName;
+                Screen.Cursor := crHourGlass;
+                case frmLayersToExport.rgLayersToExport.ItemIndex of
+                  0:
+                    begin
+                      ExportShapeFile(sdShapefile.FileName);
+                    end;
+                  1:
+                    begin
+                      CurrentLayer := LocalModel.SelectedLayer;
+                      CanDraw := False;
+                      try
+                        for LayerIndex := 0 to LocalContourDataSet.LayerCount - 1 do
+                        begin
+                          if frmLayersToExport.clbSelectedLayers.Checked[LayerIndex] then
+                          begin
+                            LocalModel.SelectedLayer := LayerIndex;
+                            Application.ProcessMessages;
+                            if frmLayersToExport.rgExportAs.ItemIndex = 1 then
+                            begin
+                              FileName := ChangeFileExt(sdShapefile.FileName,
+                                '.Layer' + IntToStr(LayerIndex + 1) + '.shp');
+                            end;
+                            ExportShapeFile(FileName, LayerIndex + 1);
+                            FileName := '';
+                          end;
+                        end;
+                      finally
+                        LocalModel.SelectedLayer := CurrentLayer;
+                        CanDraw := True;
+                      end;
+                    end;
+                  2:
+                    begin
+                      CurrentLayer := LocalModel.SelectedLayer;
+                      CanDraw := False;
+                      try
+                        for LayerIndex := 0 to LocalContourDataSet.LayerCount - 1 do
                         begin
                           LocalModel.SelectedLayer := LayerIndex;
                           Application.ProcessMessages;
-                          Extension := '.' + InttoStr(LayerIndex + 1) + '.shp';
-                          ExportShapeFile(ChangeFileExt(sdShapefile.FileName, Extension));
+                          if frmLayersToExport.rgExportAs.ItemIndex = 1 then
+                          begin
+                            FileName := ChangeFileExt(sdShapefile.FileName,
+                              '.Layer' + IntToStr(LayerIndex + 1) + '.shp');
+                          end;
+                          ExportShapeFile(FileName, LayerIndex + 1);
+                          FileName := '';
                         end;
+                      finally
+                        LocalModel.SelectedLayer := CurrentLayer;
+                        CanDraw := True;
                       end;
-                    finally
-                      LocalModel.SelectedLayer := CurrentLayer;
                     end;
-                  end;
-                2:
-                  begin
-                    CurrentLayer := LocalModel.SelectedLayer;
-                    try
-                      for LayerIndex := 0 to LocalContourDataSet.LayerCount - 1 do
-                      begin
-                        LocalModel.SelectedLayer := LayerIndex;
-                        Application.ProcessMessages;
-                        Extension := InttoStr(LayerIndex + 1) + '.shp';
-                        ExportShapeFile(ChangeFileExt(sdShapefile.FileName, Extension));
-                      end;
-                    finally
-                      LocalModel.SelectedLayer := CurrentLayer;
-                    end;
-                  end;
+                end;
               end;
+            finally
+              frmLayersToExport.Free;
             end;
-          finally
-            frmLayersToExport.Free;
+          end
+          else
+          begin
+            ExportShapeFile(sdShapefile.FileName);
           end;
-        end
-        else
-        begin
-          ExportShapeFile(sdShapefile.FileName);
+        finally
+          ContourExporter.Free;
+          if Screen.Cursor = crHourGlass then
+          begin
+            Screen.Cursor := crDefault;
+          end;
+
         end;
       end;
     end;
