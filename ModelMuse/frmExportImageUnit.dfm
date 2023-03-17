@@ -2,17 +2,17 @@ inherited frmExportImage: TfrmExportImage
   HelpType = htKeyword
   HelpKeyword = 'Export_Image_Dialog_Box'
   Caption = 'Export Image'
-  ClientHeight = 555
-  ClientWidth = 721
+  ClientHeight = 554
+  ClientWidth = 717
   ShowHint = True
   OnClose = FormClose
-  ExplicitWidth = 737
-  ExplicitHeight = 594
+  ExplicitWidth = 733
+  ExplicitHeight = 593
   TextHeight = 18
   object JvNetscapeSplitter2: TJvNetscapeSplitter
     Left = 249
     Top = 0
-    Height = 450
+    Height = 449
     Align = alLeft
     MinSize = 3
     Maximized = False
@@ -26,10 +26,11 @@ inherited frmExportImage: TfrmExportImage
     Left = 0
     Top = 0
     Width = 249
-    Height = 450
+    Height = 449
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitHeight = 450
     object CatPanelGroup: TCategoryPanelGroup
       Left = 0
       Top = 0
@@ -82,12 +83,12 @@ inherited frmExportImage: TfrmExportImage
             Align = alBottom
             TabOrder = 0
             DesignSize = (
-              243
+              226
               84)
             object rgDisplayChoice: TRadioGroup
               Left = 3
               Top = 6
-              Width = 236
+              Width = 219
               Height = 43
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Display choice'
@@ -97,6 +98,7 @@ inherited frmExportImage: TfrmExportImage
                 'Color grid'
                 'Contour data')
               TabOrder = 0
+              ExplicitWidth = 236
             end
             object btnPreview: TButton
               Left = 3
@@ -143,7 +145,7 @@ inherited frmExportImage: TfrmExportImage
           object rdgDataSets: TRbwDataGrid4
             Left = 0
             Top = 178
-            Width = 243
+            Width = 226
             Height = 98
             Align = alClient
             ColCount = 2
@@ -209,6 +211,7 @@ inherited frmExportImage: TfrmExportImage
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
+            ExplicitWidth = 243
             ColWidths = (
               19
               64)
@@ -216,7 +219,7 @@ inherited frmExportImage: TfrmExportImage
           object vstDataSets: TVirtualStringTree
             Left = 0
             Top = 0
-            Width = 243
+            Width = 226
             Height = 168
             Align = alTop
             Colors.BorderColor = 15987699
@@ -248,6 +251,7 @@ inherited frmExportImage: TfrmExportImage
             OnInitNode = vstDataSetsInitNode
             Touch.InteractiveGestures = [igPan, igPressAndTap]
             Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+            ExplicitWidth = 243
             Columns = <>
           end
         end
@@ -259,6 +263,7 @@ inherited frmExportImage: TfrmExportImage
         Collapsed = True
         TabOrder = 1
         OnExpand = cpTextExpand
+        ExplicitWidth = 245
         ExpandedHeight = 386
         object pnlText: TPanel
           Left = 0
@@ -544,13 +549,15 @@ inherited frmExportImage: TfrmExportImage
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 450
-    Width = 721
+    Top = 449
+    Width = 717
     Height = 105
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 450
+    ExplicitWidth = 721
     DesignSize = (
-      721
+      717
       105)
     object lblSavedSettings: TLabel
       Left = 6
@@ -561,7 +568,7 @@ inherited frmExportImage: TfrmExportImage
       FocusControl = comboSavedSettings
     end
     object btnHelp: TBitBtn
-      Left = 629
+      Left = 621
       Top = 6
       Width = 87
       Height = 26
@@ -570,9 +577,10 @@ inherited frmExportImage: TfrmExportImage
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnHelpClick
+      ExplicitLeft = 629
     end
     object btnClose: TBitBtn
-      Left = 629
+      Left = 621
       Top = 38
       Width = 87
       Height = 26
@@ -581,6 +589,7 @@ inherited frmExportImage: TfrmExportImage
       NumGlyphs = 2
       TabOrder = 7
       OnClick = btnCloseClick
+      ExplicitLeft = 629
     end
     object btnSaveSettings: TButton
       Left = 223
@@ -605,7 +614,7 @@ inherited frmExportImage: TfrmExportImage
       OnDropDown = comboSavedSettingsDropDown
     end
     object btnRefresh: TBitBtn
-      Left = 408
+      Left = 400
       Top = 6
       Width = 87
       Height = 58
@@ -627,6 +636,7 @@ inherited frmExportImage: TfrmExportImage
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnRefreshClick
+      ExplicitLeft = 408
     end
     object btnManageSettings: TButton
       Left = 316
@@ -639,7 +649,7 @@ inherited frmExportImage: TfrmExportImage
       OnClick = btnManageSettingsClick
     end
     object btnSaveImage1: TJvBitBtn
-      Left = 501
+      Left = 493
       Top = 38
       Width = 122
       Height = 26
@@ -667,9 +677,10 @@ inherited frmExportImage: TfrmExportImage
       HotTrackFont.Name = 'Arial'
       HotTrackFont.Pitch = fpVariable
       HotTrackFont.Style = []
+      ExplicitLeft = 501
     end
     object JvBitBtn1: TJvBitBtn
-      Left = 501
+      Left = 493
       Top = 6
       Width = 122
       Height = 26
@@ -697,6 +708,7 @@ inherited frmExportImage: TfrmExportImage
       HotTrackFont.Name = 'Arial'
       HotTrackFont.Pitch = fpVariable
       HotTrackFont.Style = []
+      ExplicitLeft = 501
     end
     object btnCopySettings: TBitBtn
       Left = 224
@@ -834,10 +846,12 @@ inherited frmExportImage: TfrmExportImage
   object scrollBoxPreview: TScrollBox
     Left = 259
     Top = 0
-    Width = 462
-    Height = 450
+    Width = 458
+    Height = 449
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 462
+    ExplicitHeight = 450
     object imagePreview: TImage
       Left = 4
       Top = -1

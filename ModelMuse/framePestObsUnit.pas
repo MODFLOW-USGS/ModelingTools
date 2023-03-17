@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameGridUnit,
   Vcl.StdCtrls, Vcl.ExtCtrls, System.Generics.Collections, Vcl.Grids,
-  PestObsUnit;
+  PestObsUnit, GoPhastTypes;
 
 type
   TPestObsColumns = (pocName, pocType, pocGroup, pocTime, pocValue, pocWeight, pocComment);
@@ -33,8 +33,8 @@ type
     procedure frameObsComparisonsseNumberChange(Sender: TObject);
   private
     FObservationsName: string;
-    FMatchedCells1: TList<Integer>;
-    FMatchedCells2: TList<Integer>;
+    FMatchedCells1: TGenericIntegerList;
+    FMatchedCells2: TGenericIntegerList;
     FOnControlsChange: TNotifyEvent;
     FGettingData: Boolean;
     procedure UpdatedSelectedCell;
@@ -82,8 +82,8 @@ uses
 constructor TframePestObs.Create(AOwner: TComponent);
 begin
   inherited;
-  FMatchedCells1 := TList<Integer>.Create;
-  FMatchedCells2 := TList<Integer>.Create;
+  FMatchedCells1 := TGenericIntegerList.Create;
+  FMatchedCells2 := TGenericIntegerList.Create;
 end;
 
 destructor TframePestObs.Destroy;

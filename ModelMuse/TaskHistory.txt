@@ -30840,5 +30840,13 @@ object TTaskHistory
         'Bug fix'
         'Export Shapefile'
         'Documentation')
+    end
+    item
+      Date = 45002.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Export Shapefile'
+        'FMP'
+        'Refactoring')
     end>
 end

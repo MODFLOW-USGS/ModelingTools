@@ -2621,6 +2621,9 @@ var
   TimeLists: TStringList;
   TimeListIndex: Integer;
   EdgeDisplay: TEdgeDisplayEdit;
+  TimesToUse: TRealList;
+  UsedTimesIndex: Integer;
+  ATime: Double;
 begin
   Screen.Cursor := crHourGlass;
   try
@@ -2687,7 +2690,6 @@ begin
               Assert(TimeListIndex >= 0);
               TimeList := TimeLists.Objects[TimeListIndex] as TCustomTimeList;
             end;
-            TimeList.Initialize;
             if TimeList is TPhastTimeList then
             begin
               NodeTimeLists.Add(TimeList);
@@ -2712,6 +2714,30 @@ begin
           end;
         end;
       end;
+
+      TimesToUse := TRealList.Create;
+      try
+        for UsedTimesIndex := 1 to rdgTime.RowCount - 1 do
+        begin
+          if TryStrToFloat(rdgTime.Cells[0, UsedTimesIndex], ATime) then
+          begin
+            TimesToUse.Add(ATime);
+          end;
+        end;
+        for TimeListIndex := 0 to ElementTimeLists.Count - 1 do
+        begin
+          TimeList := ElementTimeLists[TimeListIndex];
+          TimeList.Invalidate;
+        end;
+        for TimeListIndex := 0 to ElementTimeLists.Count - 1 do
+        begin
+          TimeList := ElementTimeLists[TimeListIndex];
+          TimeList.Initialize(TimesToUse);
+        end;
+      finally
+        TimesToUse.Free;
+      end;
+
       ExportNodeShapes(NodeDataSets, NodeTimeLists);
       ExportElementShapes(ElementDataSets, ElementTimeLists);
       ExportHfbShapes(HfbEdits);

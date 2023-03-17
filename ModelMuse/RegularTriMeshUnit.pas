@@ -31,7 +31,7 @@ var
   APoint: TPoint;
   StartIndex: Integer;
   PointIndex: Integer;
-  Neighbors: TList<Integer>;
+  Neighbors: TGenericIntegerList;
   ADirection: TPoint;
   TestPoint: TPoint;
   IadjIndex: Integer;
@@ -69,7 +69,7 @@ begin
   IadjIndex := 0;
   IEndIndex := 0;
 
-  Neighbors := TList<Integer>.Create;
+  Neighbors := TGenericIntegerList.Create;
   try
     for ColIndex := 0 to ColCount - 1 do
     begin

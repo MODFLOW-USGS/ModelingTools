@@ -137,8 +137,8 @@ type
   TSfrStreamPlot = class(TObject)
   private
     FStreamObject: TObject;
-    FOutflowSegments: TList<Integer>;
-    FDiversionSegments: TList<Integer>;
+    FOutflowSegments: TGenericIntegerList;
+    FDiversionSegments: TGenericIntegerList;
     procedure SetStreamObject(const Value: TObject);
   public
     Segment: Integer;
@@ -147,8 +147,8 @@ type
     constructor Create;
     destructor Destroy; override;
     property StreamObject: TObject read FStreamObject write SetStreamObject;
-    property OutflowSegments: TList<Integer> read FOutflowSegments;
-    property DiversionSegments: TList<Integer> read FDiversionSegments;
+    property OutflowSegments: TGenericIntegerList read FOutflowSegments;
+    property DiversionSegments: TGenericIntegerList read FDiversionSegments;
   end;
 
   TLakePlot = class(TObject)
@@ -162,7 +162,7 @@ type
 
   TSwrReachPlot = class(TObject)
   private
-    FNeighbors: TList<Integer>;
+    FNeighbors: TGenericIntegerList;
     FLayer: Integer;
     FScreenObject: TObject;
     FRow: Integer;
@@ -1736,8 +1736,8 @@ end;
 
 constructor TSfrStreamPlot.Create;
 begin
-  FOutflowSegments := TList<Integer>.Create;
-  FDiversionSegments := TList<Integer>.Create
+  FOutflowSegments := TGenericIntegerList.Create;
+  FDiversionSegments := TGenericIntegerList.Create
 end;
 
 destructor TSfrStreamPlot.Destroy;
@@ -1940,7 +1940,7 @@ end;
 
 constructor TSwrReachPlot.Create;
 begin
-  FNeighbors := TList<Integer>.Create;
+  FNeighbors := TGenericIntegerList.Create;
 end;
 
 destructor TSwrReachPlot.Destroy;

@@ -28693,8 +28693,8 @@ var
   ReachIndex: Integer;
   ObjectIndex: Integer;
   StartTimes: TList<double>;
-  InvalidTribIndexes: TList<integer>;
-  InvalidBoundaryNumbers: TList<integer>;
+  InvalidTribIndexes: TGenericIntegerList;
+  InvalidBoundaryNumbers: TGenericIntegerList;
   InvalidTribObjects: TList<TStrItem>;
 //  ErrorFound: boolean;
   procedure AddSegment;
@@ -29358,9 +29358,9 @@ begin
   SegmentsNumbers := TListOfTIntegerList.Create;
   Segments := TSegmentListList.Create;
   StartTimes := TList<double>.Create;
-  InvalidTribIndexes := TList<integer>.Create;
+  InvalidTribIndexes := TGenericIntegerList.Create;
   InvalidTribObjects := TList<TStrItem>.Create;
-  InvalidBoundaryNumbers := TList<integer>.Create;
+  InvalidBoundaryNumbers := TGenericIntegerList.Create;
   try
     if NP = 0 then
     {$REGION 'MyRegion'}
@@ -33434,7 +33434,7 @@ var
   VVItem: TPointValue;
   ConnectionIndex: Integer;
   AConnection: TSwrConnectionItem;
-  IntList: TList<Integer>;
+  IntList: TGenericIntegerList;
   StressPeriodIndex: Integer;
   ActiveIndex: Integer;
   StageIndex: Integer;
@@ -33524,7 +33524,7 @@ var
 begin
   FScreenObjectIndex := 0;
   LocationList := TList.Create;
-  IntList := TList<Integer>.Create;
+  IntList := TGenericIntegerList.Create;
   try
     for ReachIndex := 0 to FReachArray.ArrayLength - 1 do
     begin

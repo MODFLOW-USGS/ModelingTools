@@ -1236,7 +1236,7 @@ var
   Y: Double;
   FirstData: TPointerArray;
   SecondData: TPointerArray;
-  TestList: System.Generics.Collections.TList<Integer>;
+  TestList: TGenericIntegerList;
   OtherElementIndex: Integer;
   LocationIndex: Integer;
   AnElementNumber: Integer;
@@ -1334,7 +1334,7 @@ begin
         X := ASegment[2].X;
         Y := ASegment[2].Y;
         LocationQuadTree.FindClosestPointsData(X, Y, SecondData);
-        TestList := TList<Integer>.Create;
+        TestList := TGenericIntegerList.Create;
         try
           OtherElementIndex := -1;
           for LocationIndex := 0 to Length(FirstData) - 1 do

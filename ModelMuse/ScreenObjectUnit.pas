@@ -61,7 +61,7 @@ uses
   ModflowFmp4EvaporationIrrigationFractionUnit,
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
   ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
-  ModflowFmp4CropHasSalinityDemandUnit;
+  ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit;
 
 type
   //
@@ -1501,6 +1501,7 @@ view. }
     FFmpMultAddedDemandBoundary: TFmp4MultAddedDemandBoundary;
     FFmp4CropHasSalinityDemandBoundary: TFmp4CropHasSalinityDemandBoundary;
     FFmpMultCropHasSalinityDemandBoundary: TFmp4MultCropHasSalinityDemandBoundary;
+    FFmp4AddedDemandRunoffSplitBoundary: TFmp4AddedDemandRunoffSplitBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1624,6 +1625,10 @@ view. }
       TFmp4BarePrecipitationConsumptionFractionBoundary
       read FFmp4BarePrecipitationConsumptionFractionBoundary
       write FFmp4BarePrecipitationConsumptionFractionBoundary;
+    property Fmp4AddedDemandRunoffSplitBoundary:
+      TFmp4AddedDemandRunoffSplitBoundary
+      read FFmp4AddedDemandRunoffSplitBoundary
+      write FFmp4AddedDemandRunoffSplitBoundary;
     property Fmp4BareEvap: TFmp4BareEvapBoundary read FFmp4BareEvap
       write FFmp4BareEvap;
     property Fmp4DirectRechargeBoundary: TFmp4DirectRechargeBoundary
@@ -2912,16 +2917,19 @@ view. }
       const Value: TFmp4BareRunoffFractionBoundary);
     function StoreFmp4BareRunoffFractionBoundary: Boolean;
     procedure CreateFmp4BareRunoffFractionBoundary;
+
     function GetFmp4BarePrecipitationConsumptionFractionBoundary:
       TFmp4BarePrecipitationConsumptionFractionBoundary;
     procedure SetFmp4BarePrecipitationConsumptionFractionBoundary(
       const Value: TFmp4BarePrecipitationConsumptionFractionBoundary);
     function StoreFmp4BarePrecipitationConsumptionFractionBoundary: Boolean;
     procedure CreateFmp4BarePrecipitationConsumptionFractionBoundary;
+
     function GetModflowFmpBareEvap: TFmp4BareEvapBoundary;
     procedure SetModflowFmpBareEvap(const Value: TFmp4BareEvapBoundary);
     function StoreModflowFmpBareEvap: Boolean;
     procedure CreateModflowFmpBareEvap;
+
     function GetModflowFmpDirectRecharge: TFmp4DirectRechargeBoundary;
     procedure SetModflowFmpDirectRecharge(
       const Value: TFmp4DirectRechargeBoundary);
@@ -3068,6 +3076,12 @@ view. }
       const Value: TFmp4MultCropHasSalinityDemandBoundary);
     function StoreModflowFmp4MultCropHasSalinityDemand: Boolean;
     procedure CreateModflowMultCropHasSalinityDemandBoundary;
+
+    function GetFmp4AddedDemandRunoffSplitBoundary: TFmp4AddedDemandRunoffSplitBoundary;
+    procedure SetFmp4AddedDemandRunoffSplitBoundary(
+      const Value: TFmp4AddedDemandRunoffSplitBoundary);
+    function StoreFmp4AddedDemandRunoffSplitBoundary: Boolean;
+    procedure CreateFmp4AddedDemandRunoffSplitBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4413,6 +4427,11 @@ view. }
       read GetFmp4BarePrecipitationConsumptionFractionBoundary
       write SetFmp4BarePrecipitationConsumptionFractionBoundary
       stored StoreFmp4BarePrecipitationConsumptionFractionBoundary;
+    property Fmp4AddedDemandRunoffSplitBoundary:
+      TFmp4AddedDemandRunoffSplitBoundary
+      read GetFmp4AddedDemandRunoffSplitBoundary
+      write SetFmp4AddedDemandRunoffSplitBoundary
+      stored StoreFmp4AddedDemandRunoffSplitBoundary;
     property ModflowFmpBareEvap: TFmp4BareEvapBoundary
       read GetModflowFmpBareEvap write SetModflowFmpBareEvap
       Stored StoreModflowFmpBareEvap;
@@ -7186,6 +7205,7 @@ begin
   ModflowFmp4MultAddedDemand := AScreenObject.ModflowFmp4MultAddedDemand;
   ModflowFmp4CropHasSalinityDemand := AScreenObject.ModflowFmp4CropHasSalinityDemand;
   ModflowFmp4MultCropHasSalinityDemand := AScreenObject.ModflowFmp4MultCropHasSalinityDemand;
+  Fmp4AddedDemandRunoffSplitBoundary := AScreenObject.Fmp4AddedDemandRunoffSplitBoundary;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -10081,6 +10101,11 @@ begin
     if ModflowFmp4MultCropHasSalinityDemand <> nil then
     begin
       ModflowFmp4MultCropHasSalinityDemand.InvalidateDisplay;
+    end;
+
+    if Fmp4AddedDemandRunoffSplitBoundary <> nil then
+    begin
+      Fmp4AddedDemandRunoffSplitBoundary.InvalidateDisplay;
     end;
 
     //    if Mt3dmsTransObservations <> nil then
@@ -20082,6 +20107,23 @@ function TScreenObject.GetFluxBoundary: TFluxBoundary;
 begin
   CreatePhastFluxBoundary;
   result := FFluxBoundary
+end;
+
+function TScreenObject.GetFmp4AddedDemandRunoffSplitBoundary: TFmp4AddedDemandRunoffSplitBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateFmp4AddedDemandRunoffSplitBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.Fmp4AddedDemandRunoffSplitBoundary;
+  end;
 end;
 
 function TScreenObject.GetFmp4BarePrecipitationConsumptionFractionBoundary: TFmp4BarePrecipitationConsumptionFractionBoundary;
@@ -32366,6 +32408,24 @@ begin
   InvalidateModel;
 end;
 
+procedure TScreenObject.SetFmp4AddedDemandRunoffSplitBoundary(
+  const Value: TFmp4AddedDemandRunoffSplitBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FFmp4AddedDemandRunoffSplitBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FFmp4AddedDemandRunoffSplitBoundary);
+  end
+  else
+  begin
+    CreateFmp4AddedDemandRunoffSplitBoundary;
+    ModflowBoundaries.FFmp4AddedDemandRunoffSplitBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetFmp4BarePrecipitationConsumptionFractionBoundary(
   const Value: TFmp4BarePrecipitationConsumptionFractionBoundary);
 begin
@@ -32723,6 +32783,16 @@ begin
   result := (FFluxBoundary <> nil) and
     ((FluxBoundary.BoundaryValue.Count > 0)
     or (FluxBoundary.Solution.Count > 0));
+end;
+
+function TScreenObject.StoreFmp4AddedDemandRunoffSplitBoundary: Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (FModflowBoundaries <> nil)
+    and (Fmp4AddedDemandRunoffSplitBoundary <> nil) and Fmp4AddedDemandRunoffSplitBoundary.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TScreenObject.StoreFmp4BarePrecipitationConsumptionFractionBoundary: Boolean;
@@ -39148,6 +39218,15 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateFmp4AddedDemandRunoffSplitBoundary;
+begin
+  if (ModflowBoundaries.FFmp4AddedDemandRunoffSplitBoundary = nil) then
+  begin
+    ModflowBoundaries.FFmp4AddedDemandRunoffSplitBoundary :=
+      TFmp4AddedDemandRunoffSplitBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateFmp4BarePrecipitationConsumptionFractionBoundary;
 begin
   if (ModflowBoundaries.FFmp4BarePrecipitationConsumptionFractionBoundary = nil) then
@@ -43155,6 +43234,20 @@ begin
     FFmpMultCropHasSalinityDemandBoundary.Assign(Source.FFmpMultCropHasSalinityDemandBoundary);
   end;
 
+  if Source.FFmp4AddedDemandRunoffSplitBoundary = nil then
+  begin
+    FreeAndNil(FFmp4AddedDemandRunoffSplitBoundary);
+  end
+  else
+  begin
+    if FFmp4AddedDemandRunoffSplitBoundary = nil then
+    begin
+      FFmp4AddedDemandRunoffSplitBoundary :=
+        TFmp4AddedDemandRunoffSplitBoundary.Create(Model, FScreenObject);
+    end;
+    FFmp4AddedDemandRunoffSplitBoundary.Assign(Source.FFmp4AddedDemandRunoffSplitBoundary);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -43173,6 +43266,7 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FFmp4AddedDemandRunoffSplitBoundary.Free;
   FFmpMultCropHasSalinityDemandBoundary.Free;
   FFmp4CropHasSalinityDemandBoundary.Free;
   FFmpMultAddedDemandBoundary.Free;
@@ -43678,6 +43772,12 @@ begin
   begin
     FreeAndNil(FFmpMultCropHasSalinityDemandBoundary);
   end;
+
+  if (FFmp4AddedDemandRunoffSplitBoundary <> nil)
+    and not FFmp4AddedDemandRunoffSplitBoundary.Used then
+  begin
+    FreeAndNil(FFmp4AddedDemandRunoffSplitBoundary);
+  end;
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -44105,6 +44205,11 @@ begin
   if FFmpMultCropHasSalinityDemandBoundary <> nil then
   begin
     FFmpMultCropHasSalinityDemandBoundary.Invalidate;
+  end;
+
+  if FFmp4AddedDemandRunoffSplitBoundary <> nil then
+  begin
+    FFmp4AddedDemandRunoffSplitBoundary.Invalidate;
   end;
 end;
 
@@ -44574,6 +44679,12 @@ begin
   begin
     FFmpMultCropHasSalinityDemandBoundary.RemoveModelLink(AModel);
   end;
+
+  if FFmp4AddedDemandRunoffSplitBoundary <> nil then
+  begin
+    FFmp4AddedDemandRunoffSplitBoundary.RemoveModelLink(AModel);
+  end;
+
   {
     FModflow6Obs: TModflow6Obs;
     FModflowLak6: TLakeMf6;
@@ -45046,6 +45157,11 @@ begin
     FFmpMultCropHasSalinityDemandBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FFmp4AddedDemandRunoffSplitBoundary <> nil then
+  begin
+    FFmp4AddedDemandRunoffSplitBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   Invalidate;
 end;
 
@@ -45514,6 +45630,11 @@ begin
   if FFmpMultCropHasSalinityDemandBoundary <> nil then
   begin
     FFmpMultCropHasSalinityDemandBoundary.StopTalkingToAnyone;
+  end;
+
+  if FFmp4AddedDemandRunoffSplitBoundary <> nil then
+  begin
+    FFmp4AddedDemandRunoffSplitBoundary.StopTalkingToAnyone;
   end;
 end;
 
@@ -46278,6 +46399,15 @@ begin
   if FFmpMultCropHasSalinityDemandBoundary <> nil then
   begin
     Result := FFmpMultCropHasSalinityDemandBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FFmp4AddedDemandRunoffSplitBoundary <> nil then
+  begin
+    Result := FFmp4AddedDemandRunoffSplitBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

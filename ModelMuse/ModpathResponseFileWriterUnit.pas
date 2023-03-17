@@ -843,7 +843,7 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   IDomainDataArray: TDataArray;
-  CellList: TList<Integer>;
+  CellList: TGenericIntegerList;
   CellID: Integer;
   CellIndex: Integer;
 begin
@@ -862,7 +862,7 @@ begin
   end;
 
 //  CellBudgetCount := 0;
-  CellList := TList<Integer>.Create;
+  CellList := TGenericIntegerList.Create;
   CellID := 0;
   try
     for LayerIndex := 0 to BudgetDataArray.LayerCount - 1 do

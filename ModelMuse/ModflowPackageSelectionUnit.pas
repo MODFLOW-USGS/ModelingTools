@@ -5015,6 +5015,7 @@ Type
     FMfFmp4EfficiencyImprovement: TModflowBoundaryDisplayTimeList;
     FBareRunoffFractionDisplay: TModflowBoundaryDisplayTimeList;
     FBarePrecipitationConsumptionFractionDisplay: TModflowBoundaryDisplayTimeList;
+    FAddedDemandRunoffSplitDisplay: TModflowBoundaryDisplayTimeList;
     procedure SetAdded_Crop_Demand_Flux(const Value: TFarmProperty);
     procedure SetAdded_Demand_Runoff_Split(const Value: TFarmProperty);
     procedure SetBare_Precipitation_Consumption_Fraction(
@@ -5077,6 +5078,15 @@ Type
       Sender: TObject; NewUseList: TStringList);
     procedure InvalidateTransientArrayPrecipitationConsumptionFractionDisplay(
       Sender: TObject);
+
+    function GetAddedDemandRunoffSplitBoundary(
+      ScreenObject: TScreenObject): TModflowBoundary;
+    procedure InitializeAddedDemandRunoffSplitDisplay(
+      Sender: TObject);
+    procedure GetAddedDemandRunoffSplitDisplayUseList(
+      Sender: TObject; NewUseList: TStringList);
+    procedure InvalidateTransientArrayAddedDemandRunoffSplitDisplay(
+      Sender: TObject);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5118,6 +5128,13 @@ Type
     function TransientArrayBarePrecipitationConsumptionFractionDisplayUsed(
       Sender: TObject): Boolean;
     function SteadyArrayBarePrecipitationConsumptionFractionDisplayUsed
+      (Sender: TObject): Boolean;
+
+    property AddedDemandRunoffSplitDisplay: TModflowBoundaryDisplayTimeList
+      read FAddedDemandRunoffSplitDisplay;
+    function TransientArrayAddedDemandRunoffSplitDisplayUsed(
+      Sender: TObject): Boolean;
+    function SteadyArrayAddedDemandRunoffSplitDisplayUsed
       (Sender: TObject): Boolean;
   published
     // OUTPUT
@@ -5172,10 +5189,10 @@ Type
     // ADDED_DEMAND_RUNOFF_SPLIT
     property Added_Demand_Runoff_Split: TFarmProperty
       read FAdded_Demand_Runoff_Split write SetAdded_Demand_Runoff_Split;
-    // ADDED_CROP_DEMAND FLUX or ADDED_CROP_DEMAND RATE
+    // ADDED_CROP_DEMAND FLUX
     property Added_Crop_Demand_Flux: TFarmProperty read FAdded_Crop_Demand_Flux
       write SetAdded_Crop_Demand_Flux;
-    // ADDED_CROP_DEMAND FLUX or ADDED_CROP_DEMAND RATE
+    // ADDED_CROP_DEMAND RATE
     property Added_Crop_Demand_Rate: TFarmProperty read FAdded_Crop_Demand_Rate
       write SeAdded_Crop_Demand_Rate;
   end;
@@ -6856,7 +6873,7 @@ Type
     FWritePlantGroupET: TWritePlantGroupET;
     FMfRipLandElevation: TModflowBoundaryDisplayTimeList;
     FCoverageTimeLists: TObjectModflowBoundListOfTimeLists;
-    FCoverageIDs: TList<Integer>;
+    FCoverageIDs: TGenericIntegerList;
     procedure SetWritePlantGroupET(const Value: TWritePlantGroupET);
     procedure GetMfRipLandElevationUseList(Sender: TObject;
       NewUseList: TStringList);
@@ -21072,7 +21089,7 @@ begin
     AddTimeList(MfRipLandElevation);
 
     FCoverageTimeLists:= TObjectModflowBoundListOfTimeLists.Create;
-    FCoverageIDs := TList<Integer>.Create;
+    FCoverageIDs := TGenericIntegerList.Create;
 
     InitializeVariables;
   end;
@@ -21198,7 +21215,7 @@ var
   PlantGroups: TRipPlantGroups;
   PlantGroupIndex: Integer;
 //  APlantGroup: TObject;
-  NewPlantGroupIDs: TList<Integer>;
+  NewPlantGroupIDs: TGenericIntegerList;
   APlantGroup: TRipPlantGroup;
   NewID: Integer;
   OldId: Integer;
@@ -21212,7 +21229,7 @@ begin
     begin
       RemoveTimeList(FCoverageTimeLists[TimeListIndex])
     end;
-    NewPlantGroupIDs := TList<Integer>.Create;
+    NewPlantGroupIDs := TGenericIntegerList.Create;
     try
       ParentModel := (FModel as TCustomModel).ParentModel
         as TPhastModel;
@@ -25236,9 +25253,18 @@ begin
 
   FFarms.OnChangeFarmOption := InvalidateTransientFarm;
   FEfficiency.OnChangeFarmOption := InvalidateTransientEfficiencyArray;
+  FEfficiency.OnChangeArrayList := InvalidateTransientEfficiencyArray;
+
   FEfficiencyImprovement.OnChangeFarmOption := InvalidateTransientEfficiencyImprovementArray;
+  FEfficiencyImprovement.OnChangeArrayList := InvalidateTransientEfficiencyImprovementArray;
+
   FBare_Runoff_Fraction.OnChangeFarmOption := InvalidateTransientArrayRunoffFractionDisplay;
+  FBare_Runoff_Fraction.OnChangeArrayList := InvalidateTransientArrayRunoffFractionDisplay;
+
   FBare_Precipitation_Consumption_Fraction.OnChangeFarmOption := InvalidateTransientArrayPrecipitationConsumptionFractionDisplay;
+
+  FAdded_Demand_Runoff_Split.OnChangeFarmOption := InvalidateTransientArrayAddedDemandRunoffSplitDisplay;
+  FAdded_Demand_Runoff_Split.OnChangeArrayList := InvalidateTransientArrayAddedDemandRunoffSplitDisplay;
 
   InitializeVariables;
 
@@ -25303,7 +25329,7 @@ begin
     FBarePrecipitationConsumptionFractionDisplay.OnInitialize := InitializeBarePrecipitationConsumptionFractionDisplay;
     FBarePrecipitationConsumptionFractionDisplay.OnGetUseList := GetBarePrecipitationConsumptionFractionDisplayUseList;
     FBarePrecipitationConsumptionFractionDisplay.OnTimeListUsed := TransientArrayBarePrecipitationConsumptionFractionDisplayUsed;
-    FBarePrecipitationConsumptionFractionDisplay.Name := 'FMP4 Bare Precipitation Consumption Fraction ';
+    FBarePrecipitationConsumptionFractionDisplay.Name := 'FMP4 Bare Precipitation Consumption Fraction';
     FBarePrecipitationConsumptionFractionDisplay.DataType := rdtDouble;
     FBarePrecipitationConsumptionFractionDisplay.AddMethod := vamReplace;
     FBarePrecipitationConsumptionFractionDisplay.Orientation := dsoTop;
@@ -25313,6 +25339,19 @@ begin
       AddTimeList(FBarePrecipitationConsumptionFractionDisplay);
     end;
 
+    FAddedDemandRunoffSplitDisplay := TModflowBoundaryDisplayTimeList.Create(Model);
+    FAddedDemandRunoffSplitDisplay.OnInitialize := InitializeAddedDemandRunoffSplitDisplay;
+    FAddedDemandRunoffSplitDisplay.OnGetUseList := GetAddedDemandRunoffSplitDisplayUseList;
+    FAddedDemandRunoffSplitDisplay.OnTimeListUsed := TransientArrayAddedDemandRunoffSplitDisplayUsed;
+    FAddedDemandRunoffSplitDisplay.Name := 'FMP4 Added Demand Runoff Split';
+    FAddedDemandRunoffSplitDisplay.DataType := rdtDouble;
+    FAddedDemandRunoffSplitDisplay.AddMethod := vamReplace;
+    FAddedDemandRunoffSplitDisplay.Orientation := dsoTop;
+    if (Added_Demand_Runoff_Split.FarmOption = foTransient)
+       and (Added_Demand_Runoff_Split.ArrayList = alArray) then
+    begin
+      AddTimeList(FAddedDemandRunoffSplitDisplay);
+    end;
   end;
 
 end;
@@ -25330,6 +25369,7 @@ begin
   FEfficiency.Free;
   FFarms.Free;
 
+  FAddedDemandRunoffSplitDisplay.Free;
   FBarePrecipitationConsumptionFractionDisplay.Free;
   FBareRunoffFractionDisplay.Free;
   FMfFmp4EfficiencyImprovement.Free;
@@ -25339,6 +25379,15 @@ begin
   FStoredMnwHPercent.Free;
   FStoredMnwRPercent.Free;
   inherited;
+end;
+
+function TFarmProcess4.TransientArrayAddedDemandRunoffSplitDisplayUsed(
+  Sender: TObject): Boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Added_Demand_Runoff_Split.FarmOption = foTransient)
+    and (Added_Demand_Runoff_Split.ArrayList = alArray)
+    and (Added_Demand_Runoff_Split.ExternalFileName = '')
 end;
 
 function TFarmProcess4.TransientArrayBarePrecipitationConsumptionFractionDisplayUsed(
@@ -25380,6 +25429,22 @@ begin
   result := PackageUsed(Sender)
     and (Farms.FarmOption = foTransient)
     and (Farms.ExternalFileName = '')
+end;
+
+function TFarmProcess4.GetAddedDemandRunoffSplitBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.Fmp4AddedDemandRunoffSplitBoundary;
+end;
+
+procedure TFarmProcess4.GetAddedDemandRunoffSplitDisplayUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  GetUseListOptions: TGetUseListOptions;
+begin
+  GetUseListOptions.GetBoundary := Self.GetAddedDemandRunoffSplitBoundary;
+  GetUseListOptions.Description := 'FMP4 Added Demand Runoff Split';
+  GetUseList(Sender, NewUseList, GetUseListOptions);
 end;
 
 function TFarmProcess4.GetBarePrecipitationConsumptionFractionBoundary(
@@ -25475,6 +25540,22 @@ end;
 function TFarmProcess4.GetMnwRPercent: double;
 begin
   result := StoredMnwRPercent.Value;
+end;
+
+procedure TFarmProcess4.InitializeAddedDemandRunoffSplitDisplay(
+  Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  DisplayOptions: TInitializeDisplayOptions;
+begin
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    DisplayOptions.Display := FAddedDemandRunoffSplitDisplay;
+    DisplayOptions.UpdateDisplay := FarmWriter.UpdateAddedDemandRunoffSplitDisplay;
+    InitializeFarmDisplay(DisplayOptions)
+  finally
+    FarmWriter.Free;
+  end;
 end;
 
 procedure TFarmProcess4.InitializeBarePrecipitationConsumptionFractionDisplay(
@@ -25578,6 +25659,23 @@ begin
   FAdded_Demand_Runoff_Split.Initialize;
   FAdded_Crop_Demand_Flux.Initialize;
   FAdded_Crop_Demand_Rate.Initialize;
+end;
+
+procedure TFarmProcess4.InvalidateTransientArrayAddedDemandRunoffSplitDisplay(
+  Sender: TObject);
+begin
+  if FModel <> nil  then
+  begin
+    if TransientArrayAddedDemandRunoffSplitDisplayUsed(Sender) then
+    begin
+      AddTimeList(FAddedDemandRunoffSplitDisplay);
+    end
+    else
+    begin
+      RemoveTimeList(FAddedDemandRunoffSplitDisplay);
+    end;
+  end;
+  InvalidateModel;
 end;
 
 procedure TFarmProcess4.InvalidateTransientArrayPrecipitationConsumptionFractionDisplay(
@@ -25789,6 +25887,15 @@ end;
 procedure TFarmProcess4.SetWELLFIELD(const Value: Boolean);
 begin
   SetBooleanProperty(FWELLFIELD, Value);
+end;
+
+function TFarmProcess4.SteadyArrayAddedDemandRunoffSplitDisplayUsed(
+  Sender: TObject): Boolean;
+begin
+  result := PackageUsed(Sender)
+    and (Added_Demand_Runoff_Split.FarmOption = foStatic)
+    and (Added_Demand_Runoff_Split.ArrayList = alArray)
+    and (Added_Demand_Runoff_Split.ExternalFileName = '')
 end;
 
 function TFarmProcess4.SteadyArrayBarePrecipitationConsumptionFractionDisplayUsed(

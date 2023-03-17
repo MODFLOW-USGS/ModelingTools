@@ -315,7 +315,7 @@ var
   ObsIndex: Integer;
   UzfObs: TUzfObservation;
   CellList: TCellAssignmentList;
-  CellNumbers: TList<Integer>;
+  CellNumbers: TGenericIntegerList;
   CellIndex: Integer;
   ACell: TCellAssignment;
   DepthFraction: double;
@@ -340,7 +340,7 @@ begin
       DisvGrid := nil;
     end;
 
-    CellNumbers := TList<Integer>.Create;
+    CellNumbers := TGenericIntegerList.Create;
     DepthFractions := TList<double>.Create;
     CellList := TCellAssignmentList.Create;
     try

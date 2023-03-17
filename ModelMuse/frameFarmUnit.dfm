@@ -59,18 +59,18 @@ inherited frameFarm: TframeFarm
         Align = alClient
         TabOrder = 1
         ExplicitTop = 65
-        ExplicitWidth = 578
-        ExplicitHeight = 279
+        ExplicitWidth = 577
+        ExplicitHeight = 277
         inherited Panel: TPanel
           Top = 236
           Width = 577
-          ExplicitTop = 238
-          ExplicitWidth = 578
+          ExplicitTop = 236
+          ExplicitWidth = 577
           inherited lbNumber: TLabel
-            Width = 107
+            Width = 95
             Height = 16
             Caption = 'Number of times'
-            ExplicitWidth = 107
+            ExplicitWidth = 95
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -175,22 +175,22 @@ inherited frameFarm: TframeFarm
               CheckStyle = csCheck
               AutoAdjustColWidths = False
             end>
-          ExplicitWidth = 578
-          ExplicitHeight = 181
+          ExplicitWidth = 577
+          ExplicitHeight = 179
           RowHeights = (
             27
             27)
         end
         inherited pnlTop: TPanel
           Width = 577
-          ExplicitWidth = 578
+          ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 53
+            EditLabel.Width = 47
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 53
+            EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
             OnChange = frameFormulaGridCropsedFormulaChange
             ExplicitHeight = 24
@@ -205,11 +205,10 @@ inherited frameFarm: TframeFarm
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 578
         object lblFarmId: TLabel
           Left = 130
           Top = 34
-          Width = 85
+          Width = 79
           Height = 16
           Caption = 'Farm ID (FID)'
         end
@@ -231,14 +230,13 @@ inherited frameFarm: TframeFarm
           BevelInner = bvRaised
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitWidth = 578
         end
         object edFarmName: TLabeledEdit
           Left = 256
           Top = 31
           Width = 185
           Height = 24
-          EditLabel.Width = 73
+          EditLabel.Width = 66
           EditLabel.Height = 24
           EditLabel.Caption = 'Farm name'
           LabelPosition = lpRight
@@ -258,8 +256,6 @@ inherited frameFarm: TframeFarm
         Height = 342
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 224
-        ExplicitTop = 96
         ExplicitWidth = 577
         ExplicitHeight = 342
         inherited Panel: TPanel
@@ -268,9 +264,9 @@ inherited frameFarm: TframeFarm
           ExplicitTop = 301
           ExplicitWidth = 577
           inherited lbNumber: TLabel
-            Width = 51
+            Width = 45
             Height = 16
-            ExplicitWidth = 51
+            ExplicitWidth = 45
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -381,13 +377,84 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 53
+            EditLabel.Width = 47
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 53
+            EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
             OnChange = frameFormulaGridEfficiencyImprovementedFormulaChange
+            ExplicitHeight = 24
+          end
+        end
+      end
+    end
+    object tabAddedDemandRunoffSplit: TTabSheet
+      Caption = 'Added Demand Runoff Split'
+      ImageIndex = 8
+      inline frameAddedDemandRunoffSplit: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 342
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 96
+        ExplicitTop = 24
+        ExplicitWidth = 577
+        ExplicitHeight = 342
+        inherited Panel: TPanel
+          Top = 301
+          Width = 577
+          ExplicitTop = 301
+          ExplicitWidth = 577
+          inherited lbNumber: TLabel
+            Width = 45
+            Height = 16
+            ExplicitWidth = 45
+            ExplicitHeight = 16
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 301
+            OnClick = frameAddedDemandRunoffSplitsbAddClick
+            ExplicitLeft = 301
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 357
+            OnClick = frameAddedDemandRunoffSplitsbInsertClick
+            ExplicitLeft = 357
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 413
+            OnClick = frameAddedDemandRunoffSplitsbDeleteClick
+            ExplicitLeft = 413
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 24
+            OnChange = frameAddedDemandRunoffSplitseNumberChange
+            ExplicitHeight = 24
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 577
+          Height = 244
+          OnSetEditText = frameFormulaGrid1GridSetEditText
+          OnButtonClick = frameAddedDemandRunoffSplitGridButtonClick
+          ExplicitWidth = 577
+          ExplicitHeight = 244
+        end
+        inherited pnlTop: TPanel
+          Width = 577
+          ExplicitWidth = 577
+          inherited edFormula: TLabeledEdit
+            Height = 24
+            EditLabel.Width = 47
+            EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 11
+            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitHeight = 16
+            OnChange = frameFormulaGrid1edFormulaChange
             ExplicitHeight = 24
           end
         end
@@ -405,20 +472,20 @@ inherited frameFarm: TframeFarm
         Height = 342
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 578
-        ExplicitHeight = 344
+        ExplicitWidth = 577
+        ExplicitHeight = 342
         inherited Panel: TPanel
           Top = 300
           Width = 577
           Height = 42
-          ExplicitTop = 302
-          ExplicitWidth = 578
+          ExplicitTop = 300
+          ExplicitWidth = 577
           ExplicitHeight = 42
           inherited lbNumber: TLabel
-            Width = 107
+            Width = 95
             Height = 16
             Caption = 'Number of times'
-            ExplicitWidth = 107
+            ExplicitWidth = 95
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -699,11 +766,11 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 53
+            EditLabel.Width = 47
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 53
+            EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
             OnChange = frameFormulaGridCostsedFormulaChange
             ExplicitHeight = 24
@@ -723,19 +790,17 @@ inherited frameFarm: TframeFarm
         Height = 342
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 578
-        ExplicitHeight = 344
+        ExplicitHeight = 342
         inherited Panel: TPanel
           Top = 300
           Height = 42
-          ExplicitTop = 302
-          ExplicitWidth = 578
+          ExplicitTop = 300
           ExplicitHeight = 42
           inherited lbNumber: TLabel
-            Width = 111
+            Width = 99
             Height = 16
             Caption = 'Number of times '
-            ExplicitWidth = 111
+            ExplicitWidth = 99
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -754,9 +819,9 @@ inherited frameFarm: TframeFarm
             ExplicitWidth = 22
           end
           inherited lblLocationMethod: TLabel
-            Width = 107
+            Width = 94
             Height = 16
-            ExplicitWidth = 107
+            ExplicitWidth = 94
             ExplicitHeight = 16
           end
           inherited seNumber: TJvSpinEdit
@@ -775,53 +840,49 @@ inherited frameFarm: TframeFarm
         end
         inherited pnlTop: TPanel
           inherited lblSfrObjects: TLabel
-            Width = 41
+            Width = 37
             Height = 16
-            ExplicitWidth = 41
+            ExplicitWidth = 37
             ExplicitHeight = 16
           end
           inherited lblPositionChoice: TLabel
-            Width = 99
+            Width = 84
             Height = 16
-            ExplicitWidth = 99
+            ExplicitWidth = 84
             ExplicitHeight = 16
           end
           inherited lblVertexNumber: TLabel
-            Width = 41
+            Width = 37
             Height = 16
-            ExplicitWidth = 41
+            ExplicitWidth = 37
             ExplicitHeight = 16
           end
           inherited lblX: TLabel
-            Width = 9
+            Width = 8
             Height = 16
-            ExplicitWidth = 9
+            ExplicitWidth = 8
             ExplicitHeight = 16
           end
           inherited lblY: TLabel
-            Width = 10
             Height = 16
-            ExplicitWidth = 10
             ExplicitHeight = 16
           end
           inherited lblRow: TLabel
-            Width = 28
+            Width = 25
             Height = 16
-            ExplicitWidth = 28
+            ExplicitWidth = 25
             ExplicitHeight = 16
           end
           inherited lblCol: TLabel
-            Width = 49
             Height = 16
-            ExplicitWidth = 49
             ExplicitHeight = 16
           end
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 57
+            EditLabel.Width = 51
             EditLabel.Height = 16
             EditLabel.Caption = 'Formula '
-            EditLabel.ExplicitWidth = 57
+            EditLabel.ExplicitWidth = 51
             EditLabel.ExplicitHeight = 16
             ExplicitHeight = 24
           end
@@ -868,19 +929,17 @@ inherited frameFarm: TframeFarm
         Height = 342
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 578
-        ExplicitHeight = 344
+        ExplicitHeight = 342
         inherited Panel: TPanel
           Top = 300
           Height = 42
-          ExplicitTop = 302
-          ExplicitWidth = 578
+          ExplicitTop = 300
           ExplicitHeight = 42
           inherited lbNumber: TLabel
-            Width = 111
+            Width = 99
             Height = 16
             Caption = 'Number of times '
-            ExplicitWidth = 111
+            ExplicitWidth = 99
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -899,9 +958,9 @@ inherited frameFarm: TframeFarm
             ExplicitWidth = 22
           end
           inherited lblLocationMethod: TLabel
-            Width = 107
+            Width = 94
             Height = 16
-            ExplicitWidth = 107
+            ExplicitWidth = 94
             ExplicitHeight = 16
           end
           inherited seNumber: TJvSpinEdit
@@ -916,8 +975,7 @@ inherited frameFarm: TframeFarm
         inherited Grid: TRbwDataGrid4
           Height = 243
           OnSetEditText = frameFormulaGridReturnFlowGridSetEditText
-          ExplicitWidth = 578
-          ExplicitHeight = 245
+          ExplicitHeight = 243
           ColWidths = (
             64
             64
@@ -927,53 +985,49 @@ inherited frameFarm: TframeFarm
         end
         inherited pnlTop: TPanel
           inherited lblSfrObjects: TLabel
-            Width = 41
+            Width = 37
             Height = 16
-            ExplicitWidth = 41
+            ExplicitWidth = 37
             ExplicitHeight = 16
           end
           inherited lblPositionChoice: TLabel
-            Width = 99
+            Width = 84
             Height = 16
-            ExplicitWidth = 99
+            ExplicitWidth = 84
             ExplicitHeight = 16
           end
           inherited lblVertexNumber: TLabel
-            Width = 41
+            Width = 37
             Height = 16
-            ExplicitWidth = 41
+            ExplicitWidth = 37
             ExplicitHeight = 16
           end
           inherited lblX: TLabel
-            Width = 9
+            Width = 8
             Height = 16
-            ExplicitWidth = 9
+            ExplicitWidth = 8
             ExplicitHeight = 16
           end
           inherited lblY: TLabel
-            Width = 10
             Height = 16
-            ExplicitWidth = 10
             ExplicitHeight = 16
           end
           inherited lblRow: TLabel
-            Width = 28
+            Width = 25
             Height = 16
-            ExplicitWidth = 28
+            ExplicitWidth = 25
             ExplicitHeight = 16
           end
           inherited lblCol: TLabel
-            Width = 49
             Height = 16
-            ExplicitWidth = 49
             ExplicitHeight = 16
           end
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 57
+            EditLabel.Width = 51
             EditLabel.Height = 16
             EditLabel.Caption = 'Formula '
-            EditLabel.ExplicitWidth = 57
+            EditLabel.ExplicitWidth = 51
             EditLabel.ExplicitHeight = 16
             ExplicitHeight = 24
           end
@@ -1020,24 +1074,24 @@ inherited frameFarm: TframeFarm
         Height = 342
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 578
-        ExplicitHeight = 344
+        ExplicitWidth = 577
+        ExplicitHeight = 342
         inherited Panel: TPanel
           Top = 292
           Width = 577
           Height = 50
-          ExplicitTop = 294
-          ExplicitWidth = 578
+          ExplicitTop = 292
+          ExplicitWidth = 577
           ExplicitHeight = 50
           inherited lbNumber: TLabel
             Top = 6
-            Width = 51
-            Height = 48
+            Width = 49
+            Height = 32
             Caption = 'Number of times'
             WordWrap = True
             ExplicitTop = 6
-            ExplicitWidth = 51
-            ExplicitHeight = 48
+            ExplicitWidth = 49
+            ExplicitHeight = 32
           end
           inherited sbAdd: TSpeedButton
             Left = 432
@@ -1058,10 +1112,10 @@ inherited frameFarm: TframeFarm
             ExplicitTop = 10
           end
           inherited lblNumberOfDeliveryTypes: TLabel
-            Width = 97
+            Width = 82
             Height = 32
             Caption = 'Number of delivery types '
-            ExplicitWidth = 97
+            ExplicitWidth = 82
             ExplicitHeight = 32
           end
           inherited seNumber: TJvSpinEdit
@@ -1134,19 +1188,19 @@ inherited frameFarm: TframeFarm
           Width = 577
           ExplicitWidth = 577
           inherited lblHowUsed: TLabel
-            Width = 64
+            Width = 56
             Height = 16
-            ExplicitWidth = 64
+            ExplicitWidth = 56
             ExplicitHeight = 16
           end
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 57
+            EditLabel.Width = 51
             EditLabel.Height = 16
             EditLabel.Caption = 'Formula '
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 57
+            EditLabel.ExplicitWidth = 51
             EditLabel.ExplicitHeight = 16
             ExplicitHeight = 24
           end
@@ -1169,20 +1223,20 @@ inherited frameFarm: TframeFarm
         Height = 342
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 578
-        ExplicitHeight = 344
+        ExplicitWidth = 577
+        ExplicitHeight = 342
         inherited Panel: TPanel
           Top = 300
           Width = 577
           Height = 42
-          ExplicitTop = 302
-          ExplicitWidth = 578
+          ExplicitTop = 300
+          ExplicitWidth = 577
           ExplicitHeight = 42
           inherited lbNumber: TLabel
-            Width = 111
+            Width = 99
             Height = 16
             Caption = 'Number of times '
-            ExplicitWidth = 111
+            ExplicitWidth = 99
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -1295,11 +1349,12 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 57
+            EditLabel.Width = 51
             EditLabel.Height = 16
             EditLabel.Caption = 'Formula '
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
+            EditLabel.ExplicitWidth = 51
             EditLabel.ExplicitHeight = 16
             OnChange = frameFormulaGridWaterRightsedFormulaChange
             ExplicitHeight = 24
@@ -1319,19 +1374,19 @@ inherited frameFarm: TframeFarm
         Height = 342
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 578
-        ExplicitHeight = 344
+        ExplicitWidth = 577
+        ExplicitHeight = 342
         inherited Panel: TPanel
           Top = 300
           Width = 577
           Height = 42
-          ExplicitTop = 302
-          ExplicitWidth = 578
+          ExplicitTop = 300
+          ExplicitWidth = 577
           ExplicitHeight = 42
           inherited lbNumber: TLabel
-            Width = 51
+            Width = 45
             Height = 16
-            ExplicitWidth = 51
+            ExplicitWidth = 45
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -1442,11 +1497,11 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 53
+            EditLabel.Width = 47
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 53
+            EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
             OnChange = frameGW_AllocationedFormulaChange
             ExplicitHeight = 24

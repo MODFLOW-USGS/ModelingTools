@@ -3,7 +3,8 @@ unit ReadSwrOutputUnit;
 interface
 
 uses
-  System.UITypes, Windows, Types, Generics.Collections, Classes, SysUtils;
+  System.UITypes, Windows, Types, Generics.Collections, Classes, SysUtils,
+  GoPhastTypes;
 
 type
   TSwrFileType = (srtAscii, srtBinary);
@@ -41,8 +42,8 @@ type
     Aquifer_ReachFlow: TList<double>;
     function GetValue(SwrDataType, ReachIndex: Integer): double;
   public
-    ReachNumbers: TList<Integer>;
-    ModelLayers: TList<Integer>;
+    ReachNumbers: TGenericIntegerList;
+    ModelLayers: TGenericIntegerList;
     constructor Create;
     destructor Destroy; override;
     property Value[SwrDataType, ReachIndex: Integer]: double read GetValue;
@@ -68,7 +69,7 @@ type
     Volume: TList<double>;
     function GetValue(SwrDataType, ReachGroupIndex: Integer): double;
   public
-    ReachGroupNumbers: TList<Integer>;
+    ReachGroupNumbers: TGenericIntegerList;
     constructor Create;
     destructor Destroy; override;
     property Value[SwrDataType, ReachGroupIndex: Integer]: double read GetValue;
@@ -362,8 +363,8 @@ end;
 
 constructor TReachExchange.Create;
 begin
-  ReachNumbers := TList<Integer>.Create;
-  ModelLayers := TList<Integer>.Create;
+  ReachNumbers := TGenericIntegerList.Create;
+  ModelLayers := TGenericIntegerList.Create;
   BottomElevations := TList<double>.Create;
   ReachStages := TList<double>.Create;
   ReachDepths := TList<double>.Create;
@@ -448,7 +449,7 @@ begin
   VolumeChange := TList<double>.Create;
   Discrepancy := TList<double>.Create;
   Volume := TList<double>.Create;
-  ReachGroupNumbers := TList<Integer>.Create;
+  ReachGroupNumbers := TGenericIntegerList.Create;
 
 end;
 

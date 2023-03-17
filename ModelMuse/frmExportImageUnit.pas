@@ -2391,7 +2391,7 @@ var
   DataArrayList: TDataArrayObjectList;
   DataArrayIndex: Integer;
   ADataArray: TDataArray;
-  LayersToUse: TList<Integer>;
+  LayersToUse: TGenericIntegerList;
   index: Integer;
   Colors: TList<TColor>;
 //  ACrossSectItem: TDataArrayColor;
@@ -2421,7 +2421,7 @@ begin
     DataArrayList.Free;
     Colors.Free;
   end;
-  LayersToUse := TList<Integer>.Create;
+  LayersToUse := TGenericIntegerList.Create;
   try
     LayersToUse.Capacity := ASetting.CrossSectionLayersToUse.Count;
     for index := 0 to ASetting.CrossSectionLayersToUse.Count - 1 do

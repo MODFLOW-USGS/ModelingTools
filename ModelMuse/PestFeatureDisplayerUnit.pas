@@ -193,7 +193,7 @@ var
   SfrEvaporationValueArrayItem: TValueArrayItem;
   SfrRunoffValueArrayItem: TValueArrayItem;
   SfrUpstreamFractionValueArrayItem: TValueArrayItem;
-  PointsToDelete: TList<Integer>;
+  PointsToDelete: TGenericIntegerList;
   SfrFeature: TSfrFeature;
   PointIndex: Integer;
   LakStageDataArray: TModflowBoundaryDisplayDataArray;
@@ -343,7 +343,7 @@ begin
   InvalidNames:= TStringList.Create;
   NewDataSets := TList.Create;
   ScreenObjectList := TObjectList.Create;
-  PointsToDelete := TList<Integer>.Create;
+  PointsToDelete := TGenericIntegerList.Create;
   Undo := TUndoImportPestModelFeatureDisplay.Create;
   try
     case FFeatureType of

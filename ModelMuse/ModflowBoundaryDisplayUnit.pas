@@ -3,7 +3,7 @@ unit ModflowBoundaryDisplayUnit;
 interface
 
 uses Windows, SysUtils, Classes, DataSetUnit, SparseDataSets, ZLib,
-  GoPhastTypes, System.Generics.Collections;
+  GoPhastTypes, System.Generics.Collections, RealListUnit;
 
 type
   TModflowBoundaryDisplayDataArray = class(TCustomBoundaryRealSparseDataSet)
@@ -29,7 +29,7 @@ type
     FUseList: TStringList;
     procedure CreateNewDataSets; virtual;
   public
-    procedure Initialize; override;
+    procedure Initialize(Times: TRealList = nil); override;
     property OnInitialize: TNotifyEvent read FOnInitialize
       write SetOnInitialize;
     property OnGetUseList: TOnGetUseList read FOnGetUseList
@@ -69,7 +69,7 @@ type
 implementation
 
 uses SparseArrayUnit, PhastModelUnit, frmGoPhastUnit,
-  ModflowTimeUnit, SubscriptionUnit, RealListUnit, ScreenObjectUnit,
+  ModflowTimeUnit, SubscriptionUnit, ScreenObjectUnit,
   ModflowHobUnit, TempFiles, IntListUnit, CustomModflowWriterUnit, 
   frmProgressUnit, Mt3dmsTobUnit;
 
@@ -536,11 +536,13 @@ begin
   inherited;
 end;
 
-procedure TModflowBoundaryDisplayTimeList.Initialize;
+procedure TModflowBoundaryDisplayTimeList.Initialize(Times: TRealList = nil);
 var
   LocalModel: TCustomModel;
   TimeIndex: Integer;
   Index: Integer;
+  UsedTimes: TGenericIntegerList;
+  TIndex: Integer;
 begin
   If UpToDate then Exit;
   Assert(Assigned(OnGetUseList));
@@ -554,24 +556,46 @@ begin
   frmProgressMM.Show;
   LocalModel := Model as TCustomModel;
   LocalModel.UpdateModflowFullStressPeriods;
-  TimeIndex := LocalModel.ModflowFullStressPeriods.
-    FindStressPeriod(LocalModel.ThreeDDisplayTime);
-  if TimeIndex < 0 then
-  begin
-    TimeIndex := 0;
-  end;
-
-  LocalModel.ModflowFullStressPeriods.BeginUpdate;
+  UsedTimes := TGenericIntegerList.Create;
   try
-    for Index := LocalModel.ModflowFullStressPeriods.Count - 1 downto 0 do
+    if Times = nil then
     begin
-      if Index <> TimeIndex then
+      TimeIndex := LocalModel.ModflowFullStressPeriods.
+        FindStressPeriod(LocalModel.ThreeDDisplayTime);
+      if TimeIndex < 0 then
       begin
-        LocalModel.ModflowFullStressPeriods.Delete(Index);
+        TimeIndex := 0;
+      end;
+      UsedTimes.Add(TimeIndex);
+    end
+    else
+    begin
+      for TIndex := 0 to Times.Count - 1 do
+      begin
+        TimeIndex := LocalModel.ModflowFullStressPeriods.
+          FindStressPeriod(Times[TIndex]);
+        if TimeIndex < 0 then
+        begin
+          TimeIndex := 0;
+        end;
+        UsedTimes.Add(TimeIndex);
       end;
     end;
+
+    LocalModel.ModflowFullStressPeriods.BeginUpdate;
+    try
+      for Index := LocalModel.ModflowFullStressPeriods.Count - 1 downto 0 do
+      begin
+        if UsedTimes.IndexOf(Index) < 0 then
+        begin
+          LocalModel.ModflowFullStressPeriods.Delete(Index);
+        end;
+      end;
+    finally
+      LocalModel.ModflowFullStressPeriods.EndUpdate;
+    end;
   finally
-    LocalModel.ModflowFullStressPeriods.EndUpdate;
+    UsedTimes.Free;
   end;
 
   Assert(Assigned(OnInitialize));

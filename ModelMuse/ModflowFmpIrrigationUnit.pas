@@ -9,22 +9,15 @@ type
   TIrrigationItem = class(TOrderedItem)
   private
     FName: string;
-//    FStoredEfficiency: TRealStorage;
     procedure SetName(Value: string);
-//    procedure SetStoredEfficiency(const Value: TRealStorage);
-//    function GetEfficiency: double;
-//    procedure SetEfficiency(const Value: double);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
-//    property Efficiency: double read GetEfficiency write SetEfficiency;
   published
     property Name: string read FName write SetName;
-//    property StoredEfficiency: TRealStorage read FStoredEfficiency
-//      write SetStoredEfficiency;
   end;
 
   TIrrigationCollection = class(TEnhancedOrderedCollection)
@@ -103,6 +96,15 @@ begin
             break;
           end;
         end;
+        for CropEffIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
+        begin
+          AFarmEff := AFarm.AddedDemandRunoffSplitCollection[CropEffIndex];
+          if AFarmEff.CropEfficiency.CropName = Name then
+          begin
+            AFarmEff.Free;
+            break;
+          end;
+        end;
       end;
     end;
   end;
@@ -113,14 +115,8 @@ end;
 
 destructor TIrrigationItem.Destroy;
 begin
-//  FStoredEfficiency.Free;
   inherited;
 end;
-
-//function TIrrigationItem.GetEfficiency: double;
-//begin
-//  result := FStoredEfficiency.Value;
-//end;
 
 function TIrrigationItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
@@ -131,14 +127,8 @@ begin
   begin
     OtherItem := TIrrigationItem(AnotherItem);
     result := (Name  = OtherItem.Name)
-//      and (Efficiency  = OtherItem.Efficiency)
   end;
 end;
-
-//procedure TIrrigationItem.SetEfficiency(const Value: double);
-//begin
-//  FStoredEfficiency.Value := Value;
-//end;
 
 procedure TIrrigationItem.SetName(Value: string);
 var
@@ -188,6 +178,7 @@ begin
                 AFarmEff.CropEfficiency.CropName := Value;
                 AFarmEff.Index := index;
               end;
+
               FoundMatch := False;
               for CropEffIndex := 0 to AFarm.FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
               begin
@@ -204,6 +195,23 @@ begin
                 AFarmEff.CropEfficiency.CropName := Value;
                 AFarmEff.Index := index;
               end;
+
+              FoundMatch := False;
+              for CropEffIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
+              begin
+                AFarmEff := AFarm.AddedDemandRunoffSplitCollection[CropEffIndex];
+                if AFarmEff.CropEfficiency.CropName = Value then
+                begin
+                  FoundMatch := True;
+                  break;
+                end;
+              end;
+              if not FoundMatch then
+              begin
+                AFarmEff := AFarm.AddedDemandRunoffSplitCollection.Add;
+                AFarmEff.CropEfficiency.CropName := Value;
+                AFarmEff.Index := index;
+              end;
             end
             else
             begin
@@ -216,9 +224,20 @@ begin
                   break;
                 end;
               end;
+
               for CropEffIndex := 0 to AFarm.FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
               begin
                 AFarmEff := AFarm.FarmIrrigationEfficiencyImprovementCollection[CropEffIndex];
+                if AFarmEff.CropEfficiency.CropName = FName then
+                begin
+                  AFarmEff.CropEfficiency.CropName := Value;
+                  break;
+                end;
+              end;
+
+              for CropEffIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
+              begin
+                AFarmEff := AFarm.AddedDemandRunoffSplitCollection[CropEffIndex];
                 if AFarmEff.CropEfficiency.CropName = FName then
                 begin
                   AFarmEff.CropEfficiency.CropName := Value;

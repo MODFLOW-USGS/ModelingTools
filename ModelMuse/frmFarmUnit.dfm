@@ -21,24 +21,14 @@ inherited frmFarm: TfrmFarm
     inherited pcMain: TJvgPageControl
       Width = 574
       Height = 421
-      ActivePage = frameFarm.tabCosts
+      ActivePage = frameFarm.tabAddedDemandRunoffSplit
       Font.Pitch = fpVariable
       OnChange = frameFarmpcMainChange
-      ExplicitWidth = 574
-      ExplicitHeight = 421
+      ExplicitWidth = 570
+      ExplicitHeight = 420
       inherited tabCrops: TTabSheet
-        ExplicitWidth = 566
-        ExplicitHeight = 371
         inherited frameFormulaGridCrops: TframeFormulaGrid
-          Width = 566
-          Height = 306
-          ExplicitWidth = 566
-          ExplicitHeight = 306
           inherited Panel: TPanel
-            Top = 265
-            Width = 566
-            ExplicitTop = 265
-            ExplicitWidth = 566
             inherited sbAdd: TSpeedButton
               Left = 289
               ExplicitLeft = 260
@@ -53,16 +43,10 @@ inherited frmFarm: TfrmFarm
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 566
-            Height = 208
             OnSetEditText = frameFormulaGridCropsGridSetEditText
             OnButtonClick = frameFormulaGridCropsGridButtonClick
-            ExplicitWidth = 566
-            ExplicitHeight = 208
           end
           inherited pnlTop: TPanel
-            Width = 566
-            ExplicitWidth = 566
             inherited edFormula: TLabeledEdit
               EditLabel.ExplicitHeight = 18
               OnChange = frameFormulaGridCropsedFormulaChange
@@ -70,44 +54,141 @@ inherited frmFarm: TfrmFarm
           end
         end
         inherited pnlTop: TPanel
-          Width = 566
-          ExplicitWidth = 566
           inherited seFarmId: TJvSpinEdit
             OnChange = frameFarmseFarmIdChange
-          end
-          inherited pnlCaption: TPanel
-            Width = 566
-            ExplicitWidth = 566
           end
           inherited edFarmName: TLabeledEdit
             OnChange = frameFarmedFarmNameChange
           end
         end
       end
-      inherited TabEfficiencyImprovement: TTabSheet
+      inherited tabEfficiencyImprovement: TTabSheet
         ExplicitWidth = 566
         ExplicitHeight = 371
         inherited frameFormulaGridEfficiencyImprovement: TframeFormulaGrid
           Width = 566
           Height = 371
+          ExplicitWidth = 566
+          ExplicitHeight = 371
           inherited Panel: TPanel
             Top = 330
             Width = 566
-            inherited lbNumber: TLabel
-              Width = 45
-              ExplicitWidth = 45
+            ExplicitTop = 330
+            ExplicitWidth = 566
+          end
+          inherited Grid: TRbwDataGrid4
+            Width = 566
+            Height = 273
+            ExplicitWidth = 566
+            ExplicitHeight = 273
+          end
+          inherited pnlTop: TPanel
+            Width = 566
+            ExplicitWidth = 566
+          end
+        end
+      end
+      inherited tabAddedDemandRunoffSplit: TTabSheet
+        ExplicitWidth = 566
+        ExplicitHeight = 371
+        inherited frameAddedDemandRunoffSplit: TframeFormulaGrid
+          Width = 566
+          Height = 371
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          inherited Panel: TPanel
+            Top = 330
+            Width = 566
+            inherited sbAdd: TSpeedButton
+              Left = 295
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 350
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 405
             end
           end
           inherited Grid: TRbwDataGrid4
             Width = 566
             Height = 273
+            ColCount = 3
+            Columns = <
+              item
+                AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = True
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -12
+                ButtonFont.Name = 'Segoe UI'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = True
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = False
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -12
+                ButtonFont.Name = 'Segoe UI'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = False
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = False
+              end>
           end
           inherited pnlTop: TPanel
             Width = 566
-            inherited edFormula: TLabeledEdit
-              EditLabel.Width = 47
-              EditLabel.ExplicitWidth = 47
-            end
           end
         end
       end
@@ -117,23 +198,23 @@ inherited frmFarm: TfrmFarm
         inherited frameFormulaGridCosts: TframeFormulaGrid
           Width = 566
           Height = 371
-          ExplicitWidth = 577
-          ExplicitHeight = 342
+          ExplicitWidth = 562
+          ExplicitHeight = 370
           inherited Panel: TPanel
             Top = 329
             Width = 566
-            ExplicitTop = 300
-            ExplicitWidth = 577
+            ExplicitTop = 328
+            ExplicitWidth = 562
             inherited sbAdd: TSpeedButton
-              Left = 251
+              Left = 249
               ExplicitLeft = 260
             end
             inherited sbInsert: TSpeedButton
-              Left = 297
+              Left = 295
               ExplicitLeft = 308
             end
             inherited sbDelete: TSpeedButton
-              Left = 344
+              Left = 341
               ExplicitLeft = 357
             end
           end
@@ -141,9 +222,12 @@ inherited frmFarm: TfrmFarm
             Width = 566
             Height = 272
             OnSetEditText = frameFormulaGridCostsGridSetEditText
+            ExplicitWidth = 562
+            ExplicitHeight = 271
           end
           inherited pnlTop: TPanel
             Width = 566
+            ExplicitWidth = 562
             inherited edFormula: TLabeledEdit
               EditLabel.ExplicitHeight = 18
             end
@@ -152,17 +236,10 @@ inherited frmFarm: TfrmFarm
       end
       inherited tabDiversionLocation: TTabSheet
         inherited frameFormulaGridDiversion: TframeFarmDiversion
-          ExplicitWidth = 577
-          ExplicitHeight = 342
-          inherited Panel: TPanel
-            ExplicitTop = 300
-            ExplicitWidth = 577
-          end
           inherited Grid: TRbwDataGrid4
             OnSetEditText = frameFormulaGridDiversionGridSetEditText
           end
           inherited pnlTop: TPanel
-            ExplicitWidth = 577
             inherited edFormula: TLabeledEdit
               EditLabel.ExplicitHeight = 18
             end
@@ -170,18 +247,8 @@ inherited frmFarm: TfrmFarm
         end
       end
       inherited tabReturnFlowLocation: TTabSheet
-        ExplicitWidth = 566
-        ExplicitHeight = 371
         inherited frameFormulaGridReturnFlow: TframeFarmDiversion
-          Width = 566
-          Height = 371
-          ExplicitWidth = 562
-          ExplicitHeight = 370
           inherited Panel: TPanel
-            Top = 329
-            Width = 566
-            ExplicitTop = 328
-            ExplicitWidth = 562
             inherited sbAdd: TSpeedButton
               Left = 467
               ExplicitLeft = 471
@@ -196,15 +263,9 @@ inherited frmFarm: TfrmFarm
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 566
-            Height = 272
             OnSetEditText = frameFormulaGridReturnFlowGridSetEditText
-            ExplicitWidth = 562
-            ExplicitHeight = 271
           end
           inherited pnlTop: TPanel
-            Width = 566
-            ExplicitWidth = 562
             inherited edFormula: TLabeledEdit
               EditLabel.ExplicitHeight = 18
             end
@@ -213,8 +274,6 @@ inherited frmFarm: TfrmFarm
       end
       inherited tabNonRoutedDelivery: TTabSheet
         inherited frameDelivery: TframeDeliveryGrid
-          ExplicitWidth = 577
-          ExplicitHeight = 342
           inherited Panel: TPanel
             inherited sbAdd: TSpeedButton
               Left = 356
@@ -239,7 +298,6 @@ inherited frmFarm: TfrmFarm
             OnSetEditText = frameDeliveryGridSetEditText
           end
           inherited pnlTop: TPanel
-            ExplicitWidth = 577
             inherited edFormula: TLabeledEdit
               EditLabel.ExplicitHeight = 18
             end
@@ -458,7 +516,7 @@ inherited frmFarm: TfrmFarm
       759
       41)
     object btnHelp: TBitBtn
-      Left = 414
+      Left = 410
       Top = 4
       Width = 108
       Height = 33
@@ -467,10 +525,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 410
+      ExplicitLeft = 406
     end
     object btnOK: TBitBtn
-      Left = 528
+      Left = 524
       Top = 4
       Width = 108
       Height = 33
@@ -479,10 +537,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 524
+      ExplicitLeft = 520
     end
     object btnCancel: TBitBtn
-      Left = 642
+      Left = 638
       Top = 4
       Width = 108
       Height = 33
@@ -490,7 +548,7 @@ inherited frmFarm: TfrmFarm
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 638
+      ExplicitLeft = 634
     end
   end
 end

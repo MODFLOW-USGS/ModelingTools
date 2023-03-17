@@ -200,7 +200,7 @@ type
     // See @link(OnInvalidate).
     FOnInvalidate: TNotifyEvent;
     FCellList: TList;
-    FSpeciesList: TList<Integer>;
+    FSpeciesList: TGenericIntegerList;
     function GetCellList(Index: integer): TMt3dmsTobsCellList;
   protected
     // @name calls the inherited @link(TCustomTimeList.SetUpToDate)
@@ -883,7 +883,7 @@ constructor TMt3dmsConcObsTimeList.Create(Model: TBaseModel);
 begin
   inherited;
   FCellList := TObjectList.Create;
-  FSpeciesList := TList<Integer>.Create;
+  FSpeciesList := TGenericIntegerList.Create;
 end;
 
 destructor TMt3dmsConcObsTimeList.Destroy;

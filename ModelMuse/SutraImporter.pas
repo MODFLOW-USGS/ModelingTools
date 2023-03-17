@@ -235,7 +235,7 @@ Type
     FBoundaryTimes: TRealList;
 //    FStepToUse: Integer;
     FCurrentStep: Integer;
-    FStepsInFile: TList<Integer>;
+    FStepsInFile: TGenericIntegerList;
     FNSOP1: Integer;
     FNSOU1: Integer;
     FNPBC1: Integer;
@@ -1234,7 +1234,7 @@ begin
   inherited;
   FAllTimes := TRealList.Create;
   FBoundaryTimes := TRealList.Create;
-  FStepsInFile := TList<Integer>.Create;
+  FStepsInFile := TGenericIntegerList.Create;
 end;
 
 destructor TBcsInputReader.Destroy;

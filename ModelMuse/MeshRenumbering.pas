@@ -25,7 +25,7 @@ type
 
   TElementHandler = class(TObject)
     FElement: IElement;
-    FIntegerList: TList<integer>;
+    FIntegerList: TList<Integer>;
     constructor Create(Element: IElement);
     destructor Destroy; override;
   end;
@@ -613,7 +613,7 @@ var
   Node: INode;
 begin
   FElement := Element;
-  FIntegerList := TList<integer>.Create;
+  FIntegerList := TList<Integer>.Create;
   for NodeIndex := 0 to FElement.NodeCount - 1 do
   begin
     Node := FElement.Nodes[NodeIndex];

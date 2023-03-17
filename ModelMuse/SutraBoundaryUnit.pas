@@ -5,7 +5,7 @@ interface
 uses
   GoPhastTypes, Classes, OrderedCollectionUnit, ModflowBoundaryUnit,
   FormulaManagerUnit, Generics.Collections, RbwParser, DataSetUnit,
-  SysUtils, SubscriptionUnit, SutraOptionsUnit;
+  SysUtils, SubscriptionUnit, SutraOptionsUnit, RealListUnit;
 
 type
   TObservationFormat = (ofOBS, ofOBC);
@@ -83,7 +83,7 @@ type
   public
     constructor Create(Model: TBaseModel);
     destructor Destroy; override;
-    procedure Initialize; override;
+    procedure Initialize(Times: TRealList = nil); override;
     property OnInitialize: TNotifyEvent read FOnInitialize
       write SetOnInitialize;
     property UpToDate: boolean read GetUpToDate write SetUpToDate;
@@ -1720,7 +1720,7 @@ begin
   end;
 end;
 
-procedure TSutraMergedTimeList.Initialize;
+procedure TSutraMergedTimeList.Initialize(Times: TRealList = nil);
 var
   index: Integer;
   DataArray: TDataArray;

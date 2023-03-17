@@ -381,6 +381,7 @@ type
     FFarmName: string;
     FFarmIrrigationEfficiencyCollection: TFarmEfficiencyCollection;
     FFarmIrrigationEfficiencyImprovementCollection: TFarmEfficiencyCollection;
+    FAddedDemandRunoffSplitCollection: TFarmEfficiencyCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -402,6 +403,8 @@ type
     procedure SetCurrentFarmEfficiencyCollection(
       const Value: TFarmEfficiencyCollection);
     procedure SetFarmIrrigationEfficiencyImprovementCollection(
+      const Value: TFarmEfficiencyCollection);
+    procedure SetAddedDemandRunoffSplitCollection(
       const Value: TFarmEfficiencyCollection);
   public
     function Used: boolean;
@@ -453,6 +456,14 @@ type
     property FarmIrrigationEfficiencyImprovementCollection: TFarmEfficiencyCollection
       read FFarmIrrigationEfficiencyImprovementCollection
       write SetFarmIrrigationEfficiencyImprovementCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    // ADDED_DEMAND_RUNOFF_SPLIT in OWHM verison 2
+    property AddedDemandRunoffSplitCollection: TFarmEfficiencyCollection
+      read FAddedDemandRunoffSplitCollection
+      write SetAddedDemandRunoffSplitCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -1189,6 +1200,7 @@ begin
 
     FarmIrrigationEfficiencyCollection := SourceFarm.FarmIrrigationEfficiencyCollection;
     FarmIrrigationEfficiencyImprovementCollection := SourceFarm.FarmIrrigationEfficiencyImprovementCollection;
+    AddedDemandRunoffSplitCollection := SourceFarm.AddedDemandRunoffSplitCollection;
   end
   else
   begin
@@ -1235,10 +1247,12 @@ begin
 
   FFarmIrrigationEfficiencyCollection := TFarmEfficiencyCollection.Create(LocalModel);
   FFarmIrrigationEfficiencyImprovementCollection := TFarmEfficiencyCollection.Create(LocalModel);
+  FAddedDemandRunoffSplitCollection := TFarmEfficiencyCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FAddedDemandRunoffSplitCollection.Free;
   FFarmIrrigationEfficiencyImprovementCollection.Free;
   FFarmIrrigationEfficiencyCollection.Free;
 
@@ -1294,10 +1308,20 @@ begin
       and GwAllotment.IsSame(SourceFarm.GwAllotment)
       and (FarmName = SourceFarm.FarmName)
 
-      and FarmIrrigationEfficiencyCollection.IsSame(SourceFarm.FarmIrrigationEfficiencyCollection)
-      and FarmIrrigationEfficiencyImprovementCollection.IsSame(SourceFarm.FarmIrrigationEfficiencyImprovementCollection)
+      and FarmIrrigationEfficiencyCollection.IsSame(
+        SourceFarm.FarmIrrigationEfficiencyCollection)
+      and FarmIrrigationEfficiencyImprovementCollection.IsSame(
+        SourceFarm.FarmIrrigationEfficiencyImprovementCollection)
+      and AddedDemandRunoffSplitCollection.IsSame(
+        SourceFarm.AddedDemandRunoffSplitCollection)
   end;
 
+end;
+
+procedure TFarm.SetAddedDemandRunoffSplitCollection(
+  const Value: TFarmEfficiencyCollection);
+begin
+  FAddedDemandRunoffSplitCollection.Assign(Value);
 end;
 
 procedure TFarm.SetCurrentFarmEfficiencyCollection(
@@ -1430,6 +1454,15 @@ begin
   for EffIndex := 0 to FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
   begin
     EfficiencyCol := FarmIrrigationEfficiencyImprovementCollection[EffIndex].CropEfficiency;
+  {$IFDEF OWHMV2}
+    AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
+      StartRangeExtended, EndRangeExtended);
+  {$ENDIF}
+  end;
+
+  for EffIndex := 0 to AddedDemandRunoffSplitCollection.Count - 1 do
+  begin
+    EfficiencyCol := AddedDemandRunoffSplitCollection[EffIndex].CropEfficiency;
   {$IFDEF OWHMV2}
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);

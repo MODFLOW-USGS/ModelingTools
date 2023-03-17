@@ -835,7 +835,9 @@ uses
   frameScreenObjectMultAddedDemandUnit in 'frameScreenObjectMultAddedDemandUnit.pas' {frameScreenObjectMultAddedDemand: TFrame},
   ModflowFmp4CropHasSalinityDemandUnit in 'ModflowFmp4CropHasSalinityDemandUnit.pas',
   frameScreenObjectFmp4CropHasSalinityRequirementUnit in 'frameScreenObjectFmp4CropHasSalinityRequirementUnit.pas' {frameScreenObjectFmp4CropHasSalinityRequirement: TFrame},
-  frameScreenObjectMultCropHasSalinityDemandUnit in 'frameScreenObjectMultCropHasSalinityDemandUnit.pas' {frameScreenObjectMultCropHasSalinityDemand: TFrame};
+  frameScreenObjectMultCropHasSalinityDemandUnit in 'frameScreenObjectMultCropHasSalinityDemandUnit.pas' {frameScreenObjectMultCropHasSalinityDemand: TFrame},
+  ModflowFmp4AddedDemandRunoffSplitUnit in 'ModflowFmp4AddedDemandRunoffSplitUnit.pas',
+  frameScreenObjectAddedDemandRunoffSplitUnit in 'frameScreenObjectAddedDemandRunoffSplitUnit.pas' {frameScreenObjectAddedDemandRunoffSplit: TFrame};
 
 {$R *.res}
 

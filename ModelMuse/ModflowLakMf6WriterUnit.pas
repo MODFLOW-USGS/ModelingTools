@@ -1933,7 +1933,7 @@ var
   StressPeriodIndex: Integer;
   FirstTime: Double;
   LastTime: Double;
-  UsedOutlets: TList<Integer>;
+  UsedOutlets: TGenericIntegerList;
   GwtStatus: TGwtBoundaryStatus;
   SpeciesCount: Integer;
 begin
@@ -1941,7 +1941,7 @@ begin
 
   FirstTime := Model.ModflowFullStressPeriods.First.StartTime;
   LastTime := Model.ModflowFullStressPeriods.Last.EndTime;
-  UsedOutlets := TList<Integer>.Create;
+  UsedOutlets := TGenericIntegerList.Create;
   AllTimes := TRealList.Create;
   StressPeriodStartTimes := TRealList.Create;
   try
@@ -2687,7 +2687,7 @@ var
   MvrRegSourceKey: TMvrRegisterKey;
   LocalScreenObject: TScreenObject;
   MvrUsed: Boolean;
-  UsedOutlets: TList<Integer>;
+  UsedOutlets: TGenericIntegerList;
   ReceiverItem: TReceiverItem;
 //  SpeciesIndex: Integer;
 //  ASpecies: TMobileChemSpeciesItem;
@@ -2707,7 +2707,7 @@ begin
 
   FirstTime := Model.ModflowFullStressPeriods.First.StartTime;
   LastTime := Model.ModflowFullStressPeriods.Last.EndTime;
-  UsedOutlets := TList<Integer>.Create;
+  UsedOutlets := TGenericIntegerList.Create;
   AllTimes := TRealList.Create;
   StressPeriodStartTimes := TRealList.Create;
   try

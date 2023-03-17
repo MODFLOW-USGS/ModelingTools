@@ -574,6 +574,7 @@ const
   KEfficiency = 'Efficiency';
   KEfficiencyImprovement = 'Efficiency_Improvement';
   KBareRunoffFraction = 'Bare_Runoff_Fraction';
+  KAddedDemandRunoffSplit = 'Added_Demand_Runoff_Split';
   KBarePrecipitationConsumptionFraction = 'Bare Precipitation Consumption Fraction';
   KCapillary_Fringe = 'Capillary_Fringe';
   KSurfaceK = 'Surface_Vert_K';
@@ -2024,7 +2025,7 @@ that affects the model output should also have a comment. }
 
   TCrossSection = class(TObserver)
   private
-    FLayersToUse: TList<integer>;
+    FLayersToUse: TGenericIntegerList;
     FDataArrays: TDataArrayObjectList;
     FAllLayers: boolean;
     FModel: TCustomModel;
@@ -2564,6 +2565,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): Boolean;
     function FarmProcess4SteadArrayEfficiencyImprovementUsed(Sender: TObject): Boolean;
     function FarmProcess4SteadArrayBareRunoffFractionUsed(Sender: TObject): Boolean;
+    function FarmProcess4SteadArrayAddedDemandRunoffSplitUsed(Sender: TObject): Boolean;
     function FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(Sender: TObject): Boolean;
     function CapillaryFringeUsed(Sender: TObject): Boolean;
     function SurfaceKUsed(Sender: TObject): Boolean;
@@ -2627,6 +2629,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean; virtual;
+    function FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; virtual;
     function FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean; virtual;
@@ -3334,6 +3337,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfFmp4Efficiency(Sender: TObject);
     procedure InvalidateMfFmp4EfficiencyImprovement(Sender: TObject);
     procedure InvalidateMfFmp4BareRunoffFraction(Sender: TObject);
+    procedure InvalidateMfFmp4AddedDemandRunoffSplit(Sender: TObject);
     procedure InvalidateMfFmp4BarePrecipitationConsumptionFraction(Sender: TObject);
     procedure InvalidateMfFmp4BareEvap(Sender: TObject);
     procedure InvalidateMfFmp4DirectRecharge(Sender: TObject);
@@ -4878,6 +4882,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientEfficiencyArrayIsSelected: Boolean; override;
     function FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean; override;
     function FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean; override;
+    function FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected: Boolean; override;
     function FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean; override;
     function FarmProcess4TransientBareEvapArrayIsSelected: Boolean; override;
     function FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean; override;
@@ -6314,6 +6319,7 @@ resourcestring
   StrEfficiency = KEfficiency;
   StrEfficiencyImprovement = KEfficiencyImprovement;
   StrBareRunoffFraction = KBareRunoffFraction;
+  StrAddedDemandRunoffSplit = KAddedDemandRunoffSplit;
   StrBarePrecipitationConsumptionFraction = KBarePrecipitationConsumptionFraction;
   StrCapillary_Fringe = KCapillary_Fringe;
   StrSurfaceK = KSurfaceK;
@@ -11045,13 +11051,15 @@ const
 //                the UZF variable NUZTOP is set to 4.
 //    '5.1.1.19' Enhancement: When exporting contours to Shapefiles,
 //                ModelMuse can now export contours for multiple layers.
+//    '5.1.1.20' Bug fix: Fixed exporting grid data for boundary conditions
+//                to Shapefiles.
 
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.19';
+  IIModelVersion = '5.1.1.20';
 
 function IModelVersion: string;
 begin
@@ -23999,6 +24007,33 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  {$IFDEF OWHMV2}
+  result := inherited FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TPhastModel.FarmProcess4TransientBareEvapArrayIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -27353,6 +27388,11 @@ procedure TCustomModel.InvalidateMfFmp4AddedDemand(Sender: TObject);
 begin
   ModflowPackages.FarmLandUse.MfFmp4AddedDemand.Invalidate;
   ModflowPackages.FarmLandUse.InvalidateMultTransienAddedDemandArrays;
+end;
+
+procedure TCustomModel.InvalidateMfFmp4AddedDemandRunoffSplit(Sender: TObject);
+begin
+  ModflowPackages.FarmProcess4.AddedDemandRunoffSplitDisplay.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmp4BareEvap(Sender: TObject);
@@ -36423,6 +36463,18 @@ begin
 end;
 
 
+function TCustomModel.FarmProcess4SteadArrayAddedDemandRunoffSplitUsed(
+  Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmProcess4.SteadyArrayAddedDemandRunoffSplitDisplayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 function TCustomModel.FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(
   Sender: TObject): Boolean;
 begin
@@ -36499,6 +36551,16 @@ begin
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientAddedDemandMultArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected: Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.TransientArrayAddedDemandRunoffSplitDisplayUsed(nil);
   {$ELSE}
   result := False;
   {$ENDIF}
@@ -38764,7 +38826,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 26;
+  OWHM4DataSets  = 27;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -41677,6 +41739,20 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION';
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KAddedDemandRunoffSplit;
+  FDataArrayCreationRecords[Index].DisplayName := StrAddedDemandRunoffSplit;
+  FDataArrayCreationRecords[Index].Formula := '0.1';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadArrayAddedDemandRunoffSplitUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, WBS: ADDED_DEMAND_RUNOFF_SPLIT';
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
@@ -53534,7 +53610,7 @@ constructor TCrossSection.Create(AModel: TCustomModel);
 begin
   inherited Create(nil);
   FModel := AModel;
-  FLayersToUse := TList<integer>.Create;
+  FLayersToUse := TGenericIntegerList.Create;
   FLayersToUse.OnNotify := LayerChanged;
 
   FDataArrays := TDataArrayObjectList.Create;

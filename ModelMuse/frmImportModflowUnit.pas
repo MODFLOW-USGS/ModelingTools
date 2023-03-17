@@ -6,7 +6,7 @@ uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, Mask, JvExMask, JvToolEdit,
   ArgusDataEntry, ComCtrls, JvPageList, JvExControls, Vcl.ExtCtrls, StrUtils,
-  SubPolygonUnit, Modflow2005ImporterUnit, GrayTabs;
+  SubPolygonUnit, Modflow2005ImporterUnit, GrayTabs, GoPhastTypes;
 
 type
   TfrmImportModflow = class(TfrmCustomGoPhast)
@@ -119,6 +119,8 @@ resourcestring
   StrShapefileOnePart = 'The Shapefile for the submodel outline must have on' +
   'ly one part.';
   StrSDoesNotExist = 'The shapefile that you specified for the submodel boundary, "%s" does not exist';
+  StrErrorReadingS = 'Error reading "%s". Check to make sure that it is the ' +
+  'name file of a MODFLOW-2005 or MODFLOW-NWT model.';
 
 {$IF CompilerVersion < 24}
 // This is a workaround for a bug in SysUtils.DirectoryExists
@@ -191,7 +193,7 @@ var
   Ftype: string;
   Nunit: Integer;
   BadUnitNumberLine: Integer;
-  UnitNumbers: TList<Integer>;
+  UnitNumbers: TGenericIntegerList;
   Fname: string;
   FullFileName: string;
   FileDir: string;
@@ -233,16 +235,16 @@ begin
     BadUnitNumberLine := -1;
     NameFile := TStringList.Create;
     Splitter := TStringList.Create;
-    UnitNumbers := TList<Integer>.Create;
+    UnitNumbers := TGenericIntegerList.Create;
     try
       Splitter.Delimiter := ' ';
       try
       NameFile.LoadFromFile(NameFileName);
       except on ERangeError do
         begin
-      Beep;
-      MessageDlg(Format('Error reading "%s". Check to make sure that it is the name file of a MODFLOW-2005 or MODFLOW-NWT model.', [NameFileName]), mtError, [mbOK], 0);
-      Exit;
+          Beep;
+          MessageDlg(Format(StrErrorReadingS, [NameFileName]), mtError, [mbOK], 0);
+          Exit;
         end;
       end;
       Modflow2000Model := False;

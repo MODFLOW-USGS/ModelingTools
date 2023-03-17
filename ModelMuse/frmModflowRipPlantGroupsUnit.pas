@@ -522,7 +522,7 @@ end;
 
 procedure TfrmModflowRipPlantGroups.SetData;
 var
-  RemovedGroups: TList<Integer>;
+  RemovedGroups: TGenericIntegerList;
   index: Integer;
   OldPlantGroups: TRipPlantGroups;
   AScreenObject: TScreenObject;
@@ -530,7 +530,7 @@ var
   RipBoundary: TRipBoundary;
   GroupIndex: integer;
   RipBoundaries: TList<TRipBoundary>;
-  AddedGroups: TList<Integer>;
+  AddedGroups: TGenericIntegerList;
   APlantGroup: TRipPlantGroup;
   OldObjects: TScreenObjectEditCollection;
   NewObjects: TScreenObjectEditCollection;
@@ -539,8 +539,8 @@ var
 begin
   SelectedPlantGroup := nil;
 
-  RemovedGroups := TList<Integer>.Create;
-  AddedGroups := TList<Integer>.Create;
+  RemovedGroups := TGenericIntegerList.Create;
+  AddedGroups := TGenericIntegerList.Create;
   RipBoundaries := TList<TRipBoundary>.Create;
   OldObjects := TScreenObjectEditCollection.Create;
   NewObjects := TScreenObjectEditCollection.Create;

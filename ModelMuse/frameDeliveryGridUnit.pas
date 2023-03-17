@@ -386,7 +386,7 @@ var
   Delivery: TDeliveryParamCollection;
   StartTimes: TList<Double>;
   EndTimes: TList<Double>;
-  Rows: TList<Integer>;
+  Rows: TGenericIntegerList;
   StartTime: double;
   EndTime: double;
   RowIndex: Integer;
@@ -412,7 +412,7 @@ begin
       end;
       StartTimes := TList<Double>.Create;
       EndTimes := TList<Double>.Create;
-      Rows := TList<Integer>.Create;
+      Rows := TGenericIntegerList.Create;
       try
         for RowIndex := 1 to seNumber.AsInteger do
         begin

@@ -3511,7 +3511,7 @@ end;
 procedure TfrmSelectResultToImport.clDescriptionStateChange(Sender: TObject;
   Index: Integer);
 var
-  ItemList: TList<Integer>;
+  ItemList: TGenericIntegerList;
   ItemIndex: Integer;
   Checked: Boolean;
 begin
@@ -3520,7 +3520,7 @@ begin
   begin
     Exit;
   end;
-  ItemList := FItemDescriptions.Objects[Index] as TList<Integer>;
+  ItemList := FItemDescriptions.Objects[Index] as TGenericIntegerList;
   Checked := clDescription.Checked[Index];
   for ItemIndex := 0 to ItemList.Count - 1 do
   begin
@@ -4015,7 +4015,7 @@ var
     TrimmedDescription: string;
     ItemIndex: Integer;
     ItemPosition: integer;
-    ItemList: TList<Integer>;
+    ItemList: TGenericIntegerList;
     Item: string;
   begin
     TrimmedDescription := Trim(Description);
@@ -4041,11 +4041,11 @@ var
       ItemPosition := FItemDescriptions.IndexOf(Description);
       if ItemPosition >= 0 then
       begin
-        ItemList := FItemDescriptions.Objects[ItemPosition] as TList<Integer>;
+        ItemList := FItemDescriptions.Objects[ItemPosition] as TGenericIntegerList;
       end
       else
       begin
-        ItemList := TList<Integer>.Create;
+        ItemList := TGenericIntegerList.Create;
         FItemDescriptions.AddObject(Description, ItemList);
       end;
       ItemList.Add(ItemIndex);
@@ -4063,11 +4063,11 @@ var
       ItemPosition := FItemTimes.IndexOf(Item);
       if ItemPosition >= 0 then
       begin
-        ItemList := FItemTimes.Objects[ItemPosition] as TList<Integer>;
+        ItemList := FItemTimes.Objects[ItemPosition] as TGenericIntegerList;
       end
       else
       begin
-        ItemList := TList<Integer>.Create;
+        ItemList := TGenericIntegerList.Create;
         FItemTimes.AddObject(Item, ItemList);
       end;
       ItemList.Add(ItemIndex);
@@ -4965,7 +4965,7 @@ end;
 procedure TfrmSelectResultToImport.clTimeStateChange(Sender: TObject;
   Index: Integer);
 var
-  ItemList: TList<Integer>;
+  ItemList: TGenericIntegerList;
   ItemIndex: Integer;
   Checked: Boolean;
 begin
@@ -4974,7 +4974,7 @@ begin
   begin
     Exit;
   end;
-  ItemList := FItemTimes.Objects[Index] as TList<Integer>;
+  ItemList := FItemTimes.Objects[Index] as TGenericIntegerList;
   Checked := clTime.Checked[Index];
   for ItemIndex := 0 to ItemList.Count - 1 do
   begin

@@ -52,6 +52,50 @@ type
       write SetItems; default;
   end;
 
+  // FMP Data Sets 11 and 26
+  TIrrigationRecord = record
+    StartingTime: double;
+    EndingTime: Double;
+    // ROOT
+    Irrigation: Integer;
+    IrrigationAnnotation: string;
+  end;
+
+  TIrrigationItem = class(TCustomZeroFarmItem)
+  private
+    const
+    IrrigationPosition = 0;
+    function GetIrrigation: string;
+    procedure SetIrrigation(const Value: string);
+  protected
+    // See @link(BoundaryFormula).
+    function GetBoundaryFormula(Index: integer): string; override;
+    // See @link(BoundaryFormula).
+    procedure SetBoundaryFormula(Index: integer; const Value: string); override;
+    function BoundaryFormulaCount: integer; override;
+  published
+    property Irrigation: string read GetIrrigation write SetIrrigation;
+  end;
+
+  TFmp4IrrigationCollection = class(TCustomFarmCollection)
+  private
+    FTimeValues: array of TIrrigationRecord;
+    function GetIrrigationTimeValues(Index: integer): TIrrigationRecord;
+    procedure SetIrrigationTimeValues(Index: integer;
+      const Value: TIrrigationRecord);
+    function GetItems(Index: Integer): TIrrigationItem;
+    procedure SetItems(Index: Integer; const Value: TIrrigationItem);
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  public
+    procedure EvaluateBoundaries;
+    property IrrigationTimeValues[Index: integer]: TIrrigationRecord
+      read GetIrrigationTimeValues write SetIrrigationTimeValues;
+    function GetIrrigationTimeValuesFromTime(StartTime: double): TIrrigationRecord;
+    property Items[Index: Integer]: TIrrigationItem read GetItems
+      write SetItems; default;
+  end;
+
   // FMP Data Sets 12 and 28
   TEvapFractionsRecord = record
     StartingTime: double;
@@ -373,6 +417,7 @@ type
     FTranspirationFractionDisplayName: string;
     FCropHasSalinityDemandDataArrayName: string;
     FCropHasSalinityDemandDisplayName: string;
+    FIrrigationCollection: TFmp4IrrigationCollection;
     procedure SetLandUseAreaFractionDataArrayName(const NewName: string);
     procedure SetCropCoefficientDataArrayName(const NewName: string);
     procedure SetAddedDemandDataArrayName(const NewName: string);
@@ -424,6 +469,7 @@ type
     function GetFallow: string;
     procedure SetFallow(const Value: string);
     procedure UpdateAllDataArrays;
+    procedure SetIrrigationCollection(const Value: TFmp4IrrigationCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -550,7 +596,8 @@ type
     {$ENDIF}
     ;
     property SWLossFractionIrrigationDataArrayName: string
-      read FSWLossFractionIrrigationDataArrayName write SetSWLossFractionIrrigationDataArrayName
+      read FSWLossFractionIrrigationDataArrayName
+      write SetSWLossFractionIrrigationDataArrayName
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -562,7 +609,14 @@ type
     {$ENDIF}
     ;
     property CropHasSalinityDemandDataArrayName: string
-      read FCropHasSalinityDemandDataArrayName write SetCropHasSalinityDemandDataArrayName
+      read FCropHasSalinityDemandDataArrayName
+      write SetCropHasSalinityDemandDataArrayName
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property IrrigationCollection: TFmp4IrrigationCollection
+      read FIrrigationCollection write SetIrrigationCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -631,6 +685,7 @@ resourcestring
   StrSWLossFractionPrecipPrefix = KSWLossFractionPrecipPrefix;
   StrAddedDemandPrefix = KAddedDemandPrefix;
   StrCropHasSalinityDemandPrefix = KCropHasSalinityDemandPrefix;
+  StrIncompleteIrrigatio = 'Incomplete Irrigation data';
 
 //const
 //  RootingDepthPosition = 0;
@@ -671,6 +726,7 @@ resourcestring
   StrAssignedUsingS = 'Assigned using %s';
   StrRootingDepthInThe = 'Rooting Depth in the Farm Process';
   StrIncompleteRootingD = 'Incomplete Rooting Depth data';
+  StrIrrigationInThe = 'Irrigation in the Farm Process';
 
   StrIncompleteEvaporativeFractions = 'Incomplete Evaporative Fractions data';
   StrTranspirationFraction = 'Transpiration Fraction in the Farm Process';
@@ -724,26 +780,11 @@ begin
 end;
 
 procedure TRootingDepthItem.SetRootingDepth(const Value: string);
-//var
-//  PhastModel: TPhastModel;
-//  ScreenObj: TObject;
 begin
   if FFormulaObjects[RootingDepthPosition].Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, RootingDepthPosition, FFormulaObjects[RootingDepthPosition]);
-//    PhastModel := Model as TPhastModel;
-//    if (PhastModel <> nil)
-//      and not (csDestroying in PhastModel.ComponentState)
-//      and not PhastModel.Clearing then
-//    begin
-//      ScreenObj := ScreenObject;
-//      if (ScreenObj <> nil)
-//        and (ScreenObj as TScreenObject).CanInvalidateModel then
-//      begin
-//        Assert(False);
-////        PhastModel.InvalidateMfSfrDepthExponent(self);
-//      end;
-//    end;
+    UpdateFormulaBlocks(Value, RootingDepthPosition,
+      FFormulaObjects[RootingDepthPosition]);
   end;
 end;
 
@@ -1729,6 +1770,9 @@ begin
     CropFunctionCollection := SourceItem.CropFunctionCollection;
     CropWaterUseCollection := SourceItem.CropWaterUseCollection;
 
+    IrrigationCollection := SourceItem.IrrigationCollection;
+
+
     // This is done differently in TChemSpeciesItem
     // There the field is first assign then set to an empty string
     // and then the property is assigned.
@@ -1769,6 +1813,8 @@ begin
   FEvapFractionsCollection := TEvapFractionsCollection.Create(Model);
   FLossesCollection := TLossesCollection.Create(Model);
   FCropWaterUseCollection := TCropWaterUseCollection.Create(Model);
+
+  FIrrigationCollection := TFmp4IrrigationCollection.Create(Model);
 
 end;
 
@@ -1844,6 +1890,8 @@ begin
       end;
     end;
   end;
+
+  FIrrigationCollection.Free;
 
   FCropFunctionCollection.Free;
   FFmpRootDepthCollection.Free;
@@ -2113,6 +2161,8 @@ begin
       and LossesCollection.IsSame(OtherItem.LossesCollection)
       and CropFunctionCollection.IsSame(OtherItem.CropFunctionCollection)
       and CropWaterUseCollection.IsSame(OtherItem.CropWaterUseCollection)
+
+      and IrrigationCollection.IsSame(OtherItem.IrrigationCollection)
 
       and (LandUseAreaFractionDataArrayName = OtherItem.LandUseAreaFractionDataArrayName)
       and (CropCoefficientDataArrayName = OtherItem.CropCoefficientDataArrayName)
@@ -2722,6 +2772,11 @@ begin
   end;
 end;
 
+procedure TCropItem.SetIrrigationCollection(const Value: TFmp4IrrigationCollection);
+begin
+  FIrrigationCollection.Assign(Value);
+end;
+
 procedure TCropItem.SetIrrigationDataArrayName(const NewName: string);
 var
   LocalModel: TPhastModel;
@@ -3032,6 +3087,9 @@ begin
     StartRangeExtended, EndRangeExtended);
   CropWaterUseCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
+
+  IrrigationCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
 end;
 
 { TCropCollection }
@@ -3063,9 +3121,14 @@ var
   Index: integer;
   CurrentItem: TCropItem;
   FarmProcess: TFarmProcess;
+  FarmProcess4: TFarmProcess4;
+  FarmLandUse: TFarmProcess4LandUse;
 begin
   PhastModel := Model as TPhastModel;
   FarmProcess := PhastModel.ModflowPackages.FarmProcess;
+  FarmProcess4 := PhastModel.ModflowPackages.FarmProcess4;
+  FarmLandUse := PhastModel.ModflowPackages.FarmLandUse;
+
   SetLength(FCropArray, Count);
   Compiler := PhastModel.rpThreeDFormulaCompiler;
   for Index := 0 to Count - 1 do
@@ -3073,7 +3136,7 @@ begin
     CurrentItem := Items[Index];
     CurrentRecord.CropID := Index+1;
 
-    if FarmProcess.CropConsumptiveConcept = cccConcept1 then
+    if (FarmProcess.CropConsumptiveConcept = cccConcept1) then
     begin
       Expression := nil;
       Formula := CurrentItem.PSI1;
@@ -3453,6 +3516,14 @@ begin
     end;
     FCropArray[Index] := CurrentRecord;
 
+    if FarmProcess.IsSelected and FarmLandUse.IsSelected
+      and (FarmLandUse.Irrigation.FarmOption <> foNotUsed)
+      and (FarmLandUse.Irrigation.ArrayList <> alList)
+      then
+    begin
+      CurrentItem.IrrigationCollection.EvaluateBoundaries;
+    end;
+
     if FarmProcess.RootingDepth = rdSpecified then
     begin
       CurrentItem.FmpRootDepthCollection.EvaluateBoundaries;
@@ -3521,6 +3592,150 @@ begin
   begin
     Items[index].UpdateAllDataArrays;
   end;
+end;
+
+{ TIrrigationItem }
+
+function TIrrigationItem.BoundaryFormulaCount: integer;
+begin
+  Result := 1;
+end;
+
+function TIrrigationItem.GetBoundaryFormula(Index: integer): string;
+begin
+  case Index of
+    0:
+      result := Irrigation;
+    else Assert(False);
+  end;
+end;
+
+function TIrrigationItem.GetIrrigation: string;
+begin
+  Result := FFormulaObjects[IrrigationPosition].Formula;
+  ResetItemObserver(IrrigationPosition);
+end;
+
+procedure TIrrigationItem.SetBoundaryFormula(Index: integer;
+  const Value: string);
+begin
+  case Index of
+    0:
+      Irrigation := Value;
+    else Assert(False);
+  end;
+end;
+
+procedure TIrrigationItem.SetIrrigation(const Value: string);
+begin
+  if FFormulaObjects[IrrigationPosition].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, IrrigationPosition,
+      FFormulaObjects[IrrigationPosition]);
+  end;
+end;
+
+{ TFmp4IrrigationCollection }
+
+procedure TFmp4IrrigationCollection.EvaluateBoundaries;
+var
+  CurrentRecord: TIrrigationRecord;
+  CurrentItem: TIrrigationItem;
+  Compiler: TRbwParser;
+  PhastModel: TPhastModel;
+  Formula: string;
+  Expression: TExpression;
+  Index: integer;
+begin
+  PhastModel := Model as TPhastModel;
+  SetLength(FTimeValues, Count);
+  Compiler := PhastModel.rpThreeDFormulaCompiler;
+  for Index := 0 to Count - 1 do
+  begin
+    CurrentItem := Items[Index] as TIrrigationItem;
+    CurrentRecord.StartingTime := CurrentItem.StartTime;
+    CurrentRecord.EndingTime := CurrentItem.EndTime;
+    Expression := nil;
+    Formula := CurrentItem.Irrigation;
+    CurrentRecord.IrrigationAnnotation := Format(StrAssignedUsingS,
+      [Formula]);
+    try
+      Compiler.Compile(Formula);
+      Expression := Compiler.CurrentExpression;
+      // only global variables are used so there should be no need
+      // to update the variables.
+      Expression.Evaluate;
+    except on E: ERbwParserError do
+      begin
+        frmFormulaErrors.AddFormulaError('',
+          StrIrrigationInThe,
+          Formula, E.Message);
+
+        CurrentItem.Irrigation := '0';
+        Formula := CurrentItem.Irrigation;
+        Compiler.Compile(Formula);
+        Expression := Compiler.CurrentExpression;
+        Expression.Evaluate;
+      end;
+    end;
+    CurrentRecord.Irrigation := Expression.IntegerResult;
+
+    FTimeValues[Index] := CurrentRecord;
+  end;
+end;
+
+function TFmp4IrrigationCollection.GetIrrigationTimeValues(
+  Index: integer): TIrrigationRecord;
+begin
+  Assert((Index >= 0) and (Index < Length(FTimeValues)));
+  result := FTimeValues[Index];
+end;
+
+function TFmp4IrrigationCollection.GetIrrigationTimeValuesFromTime(
+  StartTime: double): TIrrigationRecord;
+var
+  Index: integer;
+  ErrorMessage: string;
+begin
+  Assert(Length(FTimeValues) > 0);
+  result := FTimeValues[0];
+  for Index := 0 to Length(FTimeValues) - 1 do
+  begin
+    if (FTimeValues[Index].StartingTime <= StartTime) then
+    begin
+      result := FTimeValues[Index];
+      if (FTimeValues[Index].EndingTime > StartTime) then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+  ErrorMessage := Format(IDError, [StartTime]);
+  frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
+    StrIncompleteIrrigatio, ErrorMessage);
+end;
+
+function TFmp4IrrigationCollection.GetItems(Index: Integer): TIrrigationItem;
+begin
+  result := inherited Items[Index] as TIrrigationItem;
+end;
+
+class function TFmp4IrrigationCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TIrrigationItem;
+end;
+
+procedure TFmp4IrrigationCollection.SetIrrigationTimeValues(Index: integer;
+  const Value: TIrrigationRecord);
+begin
+  Assert((Index >= 0) and (Index < Length(FTimeValues)));
+  FTimeValues[Index] := Value;
+end;
+
+procedure TFmp4IrrigationCollection.SetItems(Index: Integer;
+  const Value: TIrrigationItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

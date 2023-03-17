@@ -8726,10 +8726,6 @@ procedure TQuadMeshCreator.GetBestLinkWhenSameNode(var ClosestCost: TCost;
 var
   NodeIndex: Integer;
   ANode: TNodeInBoundary;
-//  FirstBoundaryMatchedNodes: TNodeInBoundaryList;
-//  FirstBoundaryMatchedNodesIndices : TList<Integer>;
-//  ABoundaryMatchedNodes: TNodeInBoundaryList;
-//  ABoundaryMatchedNodesIndices: TList<Integer>;
   AngleList: TAngleList;
   CompareItem: TAngleCompareItem;
   PriorNode: TNodeInBoundary;
@@ -8738,8 +8734,6 @@ var
   AnItem: TAngleCompareItem;
   FirstItem: TAngleCompareItem;
   SecondItem: TAngleCompareItem;
-//  SegmentIndex: Integer;
-//  ASegment: TSegment;
   Comparer: TAngleComparer;
 begin
   Assert(ClosestCost <> nil);
@@ -8748,10 +8742,6 @@ begin
   Assert(ClosestCost.FNode1.FNode = ClosestCost.FNode2.FNode);
   Assert(FirstBoundary.Count > 1);
   Assert(ABoundary.Count > 1);
-//  FirstBoundaryMatchedNodes := TNodeInBoundaryList.Create;
-//  FirstBoundaryMatchedNodesIndices :=  TList<Integer>.Create;
-//  ABoundaryMatchedNodes := TNodeInBoundaryList.Create;
-//  ABoundaryMatchedNodesIndices :=  TList<Integer>.Create;
   AngleList := TAngleList.Create;
 
   try

@@ -812,7 +812,7 @@ var
   EarlyTimes: string;
   LateTimes: string;
   ActiveDataSet: TDataArray;
-  InactiveList: TList<Integer>;
+  InactiveList: TGenericIntegerList;
   ListPosition: integer;
   InactiveIndex: Integer;
 begin
@@ -848,7 +848,7 @@ begin
     begin
       CellList := TSwiObsCellList.Create;
       FCellList.Add(CellList);
-      InactiveList := TList<Integer>.Create;
+      InactiveList := TGenericIntegerList.Create;
       try
         Time := ObservationValues.SwiItems[Index].Time;
         if Times.IndexOf(Time) >= 0 then

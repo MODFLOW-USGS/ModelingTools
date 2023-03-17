@@ -1569,7 +1569,7 @@ type
     function IndexOfDataSet(const Data: TDataArray): integer;
 
     // @name assigns values to all the @link(TDataArray)s in @classname.
-    procedure Initialize; virtual; abstract;
+    procedure Initialize(Times: TRealList = nil); virtual; abstract;
     // @name sets UpToDate to false;
     procedure Invalidate; virtual;
 

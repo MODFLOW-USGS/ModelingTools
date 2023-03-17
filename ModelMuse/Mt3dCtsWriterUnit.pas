@@ -5,7 +5,7 @@ interface
 uses
   CustomModflowWriterUnit, PhastModelUnit, Mt3dCtsSystemUnit, System.Classes,
   ModflowPackageSelectionUnit, System.Generics.Collections, ScreenObjectUnit,
-  RbwParser, Vcl.Forms;
+  RbwParser, Vcl.Forms, GoPhastTypes;
 
 type
   TCstSystemList = TList<TCtsSystem>;
@@ -16,8 +16,8 @@ type
     FExtractionWells: TListOfObjects;
     FInjectionWells: TListOfObjects;
     FAllWells: TListOfObjects;
-    FWellCellCounts: TList<Integer>;
-    FUsedWellCounts: TList<Integer>;
+    FWellCellCounts: TGenericIntegerList;
+    FUsedWellCounts: TGenericIntegerList;
     FMt3dCts: TMt3dCtsPackageSelection;
     FWellCountDictionary: TDictionary<TScreenObject, Integer>;
     FUsedWellCountDictionary: TDictionary<TScreenObject, Integer>;
@@ -53,7 +53,7 @@ type
 implementation
 
 uses
-  ModflowUnitNumbers, GoPhastTypes, ModflowTimeUnit, ModflowMnw2Unit,
+  ModflowUnitNumbers, ModflowTimeUnit, ModflowMnw2Unit,
   ModflowWellUnit, ModflowBoundaryUnit, GIS_Functions, frmFormulaErrorsUnit,
   System.SysUtils, frmProgressUnit;
 
@@ -81,9 +81,9 @@ begin
   FExtractionWells := TListOfObjects.Create;
   FInjectionWells:= TListOfObjects.Create;
   FAllWells:= TListOfObjects.Create;
-  FWellCellCounts := TList<Integer>.Create;
+  FWellCellCounts := TGenericIntegerList.Create;
   FWellCountDictionary := TDictionary<TScreenObject, Integer>.Create;
-  FUsedWellCounts := TList<Integer>.Create;
+  FUsedWellCounts := TGenericIntegerList.Create;
   FUsedWellCountDictionary := TDictionary<TScreenObject, Integer>.Create;
   FUsedWelStartsDictionary := TDictionary<TScreenObject, Integer>.Create;
 

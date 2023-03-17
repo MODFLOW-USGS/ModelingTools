@@ -2,25 +2,23 @@ inherited frmImportModflow: TfrmImportModflow
   HelpType = htKeyword
   HelpKeyword = 'Import_MODFLOW_Model_Dialog_Box'
   Caption = 'Import MODFLOW-2005 or -NWT Model'
-  ClientHeight = 445
-  ClientWidth = 491
+  ClientHeight = 444
+  ClientWidth = 487
   ExplicitWidth = 503
   ExplicitHeight = 483
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 340
-    Width = 491
+    Top = 339
+    Width = 487
     Height = 105
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 339
-    ExplicitWidth = 487
     DesignSize = (
-      491
+      487
       105)
     object btnHelp: TBitBtn
-      Left = 222
+      Left = 214
       Top = 4
       Width = 83
       Height = 33
@@ -32,7 +30,7 @@ inherited frmImportModflow: TfrmImportModflow
       ExplicitLeft = 218
     end
     object btnOK: TBitBtn
-      Left = 311
+      Left = 303
       Top = 4
       Width = 83
       Height = 33
@@ -45,7 +43,7 @@ inherited frmImportModflow: TfrmImportModflow
       ExplicitLeft = 307
     end
     object btnCancel: TBitBtn
-      Left = 400
+      Left = 392
       Top = 4
       Width = 83
       Height = 33
@@ -58,40 +56,36 @@ inherited frmImportModflow: TfrmImportModflow
     object pbProgress: TProgressBar
       Left = 1
       Top = 75
-      Width = 489
+      Width = 485
       Height = 29
       Margins.Bottom = 0
       Align = alBottom
       TabOrder = 4
-      ExplicitWidth = 485
     end
     object sbStatusBar: TStatusBar
       Left = 1
       Top = 49
-      Width = 489
+      Width = 485
       Height = 26
       Panels = <>
       ParentFont = True
       SimplePanel = True
       UseSystemFont = False
-      ExplicitWidth = 485
     end
   end
   object pgcMain: TPageControl
     Left = 0
     Top = 0
-    Width = 491
-    Height = 340
+    Width = 487
+    Height = 339
     ActivePage = tabSubmodel
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 487
-    ExplicitHeight = 339
     object tabModel: TTabSheet
       Caption = 'Model'
       DesignSize = (
-        483
-        307)
+        479
+        306)
       object lbl1: TLabel
         Left = 8
         Top = 11
@@ -173,7 +167,7 @@ inherited frmImportModflow: TfrmImportModflow
       object fedNameFile: TJvFilenameEdit
         Left = 87
         Top = 72
-        Width = 392
+        Width = 384
         Height = 26
         Filter = 
           'Name files (*.nam, *.mfn, *.modflow.in)|*.nam;*.mfn;*.modflow.in' +
@@ -227,7 +221,7 @@ inherited frmImportModflow: TfrmImportModflow
       object rgSubmodelChoice: TRadioGroup
         Left = 0
         Top = 0
-        Width = 483
+        Width = 487
         Height = 105
         Align = alTop
         Caption = 'Submodel choice'
@@ -239,12 +233,11 @@ inherited frmImportModflow: TfrmImportModflow
         TabOrder = 0
         WordWrap = True
         OnClick = rgSubmodelChoiceClick
-        ExplicitWidth = 479
       end
       object pglstBoundaySpecification: TJvPageList
         Left = 0
         Top = 105
-        Width = 483
+        Width = 487
         Height = 68
         ActivePage = jvspPolygon
         PropagateEnable = False
@@ -267,8 +260,8 @@ inherited frmImportModflow: TfrmImportModflow
           ExplicitWidth = 479
           ExplicitHeight = 67
           DesignSize = (
-            483
-            68)
+            479
+            67)
           object lblPolygon: TLabel
             Left = 8
             Top = 6
@@ -279,21 +272,22 @@ inherited frmImportModflow: TfrmImportModflow
           object fedPolygon: TJvFilenameEdit
             Left = 8
             Top = 30
-            Width = 472
+            Width = 468
             Height = 26
             Filter = 'Shapefile (*.shp)|*.shp'
             Anchors = [akLeft, akTop, akRight]
             TabOrder = 0
             Text = ''
-            ExplicitWidth = 468
           end
         end
         object jvspColRow: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 483
-          Height = 68
+          Width = 479
+          Height = 67
           Caption = 'jvspColRow'
+          ExplicitWidth = 483
+          ExplicitHeight = 68
           object lblFirstCol: TLabel
             Left = 16
             Top = 12
@@ -378,16 +372,14 @@ inherited frmImportModflow: TfrmImportModflow
       end
       object grpBoundaryConditions: TGroupBox
         Left = 0
-        Top = 173
-        Width = 483
+        Top = 172
+        Width = 479
         Height = 134
         Align = alBottom
         Caption = 'Submodel boundary conditions (optional)'
         TabOrder = 2
-        ExplicitTop = 172
-        ExplicitWidth = 479
         DesignSize = (
-          483
+          479
           134)
         object lblHeads: TLabel
           Left = 8
@@ -408,7 +400,7 @@ inherited frmImportModflow: TfrmImportModflow
         object fedHead: TJvFilenameEdit
           Left = 8
           Top = 48
-          Width = 468
+          Width = 460
           Height = 26
           Filter = 
             'Formatted head file (*.fhd)|*.fhd|Binary head file (*.bhd)|*.bhd' +
@@ -421,7 +413,7 @@ inherited frmImportModflow: TfrmImportModflow
         object fedFlow: TJvFilenameEdit
           Left = 8
           Top = 102
-          Width = 468
+          Width = 460
           Height = 26
           Filter = 
             'Flow Files (*.cbc, *.bud, *.cbb)|*.cbc;*.bud;*.cbb|All files (*.' +

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-14T09:19:39.412-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-17T11:49:22.313-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>WATER_BALANCE_SUBREGION</title>
   <body>
     <header>
@@ -174,11 +174,12 @@
           <para styleclass="Normal"> &#160; split between becoming surface runoff or deep percolation.</para>
           <para styleclass="Normal"> &#160; This fraction is only is a split for the additional demanded water.</para>
           <para styleclass="Normal"></para>
+          <para styleclass="Normal"> &#160; It is the fraction of the added demand that becomes runoff.</para>
+          <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; It does not apply to losses that originate from irrigation required to meet a land use ET</para>
           <para styleclass="Normal"> &#160; &#160; &#160; which is defined in the Land_Use Block with the <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE" anchor="SURFACEWATER_LOSS_FRACTION_IRRIGATION">SURFACEWATER_LOSS_FRACTION_IRRIGATION</link> keyword</para>
           <para styleclass="Normal"> &#160; It must be between 0.0 and 1.0; If not specified then it defaults to 0.1, that is &quot;ADDED_DEMAND_RUNOFF_SPLIT CONSTANT 0.1&quot;</para>
           <para styleclass="Normal"></para>
-          <para styleclass="Normal">At this time additional demand (Added Demand) is defined with the keyword ADDED_CROP_DEMAND and LAND_USE block keyword ADDED_DEMAND</para>
           <para styleclass="Normal">At this time additional demand (Added Demand) is defined with the keyword ADDED_CROP_DEMAND and LAND_USE block keyword <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">ADDED_DEMAND</link></para>
           <para styleclass="Normal">FLOAT, Fraction of any specified additional demand that becomes runoff as opposed to deep percolation. If not specified, the default is 0.1</para>
         </td>

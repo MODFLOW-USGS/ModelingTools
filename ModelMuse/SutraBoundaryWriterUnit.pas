@@ -27,7 +27,7 @@ type
   protected
     procedure CheckSameModel(const Data: TDataArray); override;
   public
-    procedure Initialize; override;
+    procedure Initialize(Times: TRealList = nil); override;
   end;
 
   TLakeInteractionStringList = class(TStringList)
@@ -2630,7 +2630,7 @@ begin
   end;
 end;
 
-procedure TSutraFluxCheckList.Initialize;
+procedure TSutraFluxCheckList.Initialize(Times: TRealList = nil);
 begin
   // do nothig.
 end;

@@ -19,7 +19,8 @@ type
     wlNrdInfilLoc, wlLandUseAreaFraction, wlCropCoefficient, wlConsumptiveUse,
     wlIrrigation, wlRootDepth, wlGwRootInteraction, wlTranspirationFraction,
     wlEvaporationIrrigationFraction, wlFractionOfPrecipToSurfaceWater,
-    wlFractionOfIrrigToSurfaceWater, wlAddedDemand, wlCropHasSalinityDemand);
+    wlFractionOfIrrigToSurfaceWater, wlAddedDemand, wlCropHasSalinityDemand,
+    wlAddedDemandRunoffSplit);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -90,6 +91,7 @@ type
     FFractionOfIrrigToSurfaceWater: TList;
     FAddedDemand: TList;
     FCropHasSalinityDemand: TList;
+    FAddedDemandRunoffSplit: TList;
 
     FFarmWellID: Integer;
     FBaseName: string;
@@ -123,6 +125,7 @@ type
     FFractionOfIrrigToSurfaceWaterFileStream: TFileStream;
     FAddedDemandFileStream: TFileStream;
     FCropHasSalinityDemandFileStream: TFileStream;
+    FAddedDemandRunoffSplitFileStream: TFileStream;
     FNWBS: Integer;
     procedure WriteGobalDimension;
     procedure WriteOutput;
@@ -162,6 +165,9 @@ type
 
     procedure EvaluateBarePrecipitationConsumptionFraction;
     procedure WriteBarePrecipitationConsumptionFraction;
+
+    procedure EvaluateAddedDemandRunoffSplit;
+    procedure WriteAddedDemandRunoffSplit;
 
     procedure EvaluateBareEvap;
     procedure WriteBareEvap;
@@ -310,6 +316,8 @@ type
     procedure UpdateMultAddedDemandDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateHasSalinityDemandDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateMultHasSalinityDemandDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateAddedDemandRunoffSplitDisplay(
+      TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -328,6 +336,7 @@ resourcestring
   StrInvalidPrecipConsumpRunoff = 'Invalid Bare Precipitation Consumption Fraction value';
   StrInvalidCapillaryFringe = 'Invalid Capillary Fringe value';
   StrInvalidPotentialEv = 'Invalid Potential Evaporation Bare value';
+  StrStressPeriodD = 'Stress Period %d';
 
 { TModflowFmp4Writer }
 
@@ -501,6 +510,7 @@ begin
   FFractionOfIrrigToSurfaceWater := TObjectList.Create;
   FAddedDemand := TObjectList.Create;
   FCropHasSalinityDemand := TObjectList.Create;
+  FAddedDemandRunoffSplit := TObjectList.Create;
 
   FFarmProcess4 := Package as TFarmProcess4;
   FClimatePackage := Model.ModflowPackages.FarmClimate4;
@@ -515,6 +525,7 @@ destructor TModflowFmp4Writer.Destroy;
 begin
   FreeFileStreams;
 
+  FAddedDemandRunoffSplit.Free;
   FCropHasSalinityDemand.Free;
   FAddedDemand.Free;
   FFractionOfIrrigToSurfaceWater.Free;
@@ -578,6 +589,15 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.EvaluateAddedDemandRunoffSplit;
+begin
+  if FFarmProcess4.TransientArrayAddedDemandRunoffSplitDisplayUsed(nil) then
+  begin
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, 'Invalid Added Demand Runoff Split value');
+    EvaluateTransientArrayData(wlAddedDemandRunoffSplit);
+  end;
+end;
+
 procedure TModflowFmp4Writer.EvaluateAll;
 begin
   EvaluateActiveCells;
@@ -589,6 +609,7 @@ begin
   EvaluateEfficiencyImprovement;
   EvaluateBareRunoffFraction;
   EvaluateBarePrecipitationConsumptionFraction;
+  EvaluateAddedDemandRunoffSplit;
   EvaluateBareEvap;
   EvaluateDirectRecharge;
   EvaluatePrecipPotConsumption;
@@ -845,6 +866,7 @@ begin
   FreeAndNil(FFractionOfIrrigToSurfaceWaterFileStream);
   FreeAndNil(FAddedDemandFileStream);
   FreeAndNil(FCropHasSalinityDemandFileStream);
+  FreeAndNil(FAddedDemandRunoffSplitFileStream);
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -1138,6 +1160,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlAddedDemandRunoffSplit:
+      begin
+        result := ChangeFileExt(FBaseName, '.ADDED_DEMAND_RUNOFF_SPLIT');
+        if FAddedDemandRunoffSplitFileStream = nil then
+        begin
+          FAddedDemandRunoffSplitFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -1298,6 +1329,10 @@ begin
           result := ScreenObject.ModflowFmp4MultCropHasSalinityDemand;
         end;
       end;
+    wlAddedDemandRunoffSplit:
+      begin
+        result := ScreenObject.Fmp4AddedDemandRunoffSplitBoundary;
+      end;
     else Assert(False);
   end;
 end;
@@ -1347,6 +1382,7 @@ begin
     wlFractionOfIrrigToSurfaceWater: result := FFractionOfIrrigToSurfaceWater;
     wlAddedDemand: result := FAddedDemand;
     wlCropHasSalinityDemand: result := FCropHasSalinityDemand;
+    wlAddedDemandRunoffSplit: result := FAddedDemandRunoffSplit;
     else Assert(False)
   end;
 end;
@@ -1376,6 +1412,19 @@ begin
   UpdateRequirements.TransientDataUsed := FLandUse.
     TransientAddedDemandarrayUsed;
   UpdateRequirements.WriteLocation := wlAddedDemand;
+  UpdateRequirements.TimeLists := TimeLists;
+  UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.UpdateAddedDemandRunoffSplitDisplay(
+  TimeLists: TModflowBoundListOfTimeLists);
+var
+  UpdateRequirements: TUpdateRequirements;
+begin
+  UpdateRequirements.EvaluateProcedure := EvaluateAddedDemandRunoffSplit;
+  UpdateRequirements.TransientDataUsed := FFarmProcess4.
+    TransientArrayAddedDemandRunoffSplitDisplayUsed;
+  UpdateRequirements.WriteLocation := wlAddedDemandRunoffSplit;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
 end;
@@ -2372,6 +2421,169 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteAddedDemandRunoffSplit;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  IrrigationTypes: TIrrigationCollection;
+  TimeIndex: Integer;
+  StartTime: Double;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  IrrIndex: Integer;
+  OFE: TFarmEfficienciesItem;
+  OfeItem: TCropEfficiencyItem;
+  Formula: string;
+begin
+  if FFarmProcess4.Added_Demand_Runoff_Split.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlAddedDemandRunoffSplit);
+
+  RequiredValues.WriteLocation := wlAddedDemandRunoffSplit;
+  RequiredValues.DefaultValue := 0.1;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: ADDED_DEMAND_RUNOFF_SPLIT';
+  RequiredValues.ErrorID := 'FMP WBS: ADDED_DEMAND_RUNOFF_SPLIT';
+  RequiredValues.ID := 'ADDED_DEMAND_RUNOFF_SPLIT';
+  RequiredValues.StaticDataName := KAddedDemandRunoffSplit;
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.Added_Demand_Runoff_Split.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := 'Invalid Added Demand Runoff Split value';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FFarmProcess4.Added_Demand_Runoff_Split;
+
+  if (FFarmProcess4.Added_Demand_Runoff_Split.ArrayList = alArray) then
+  begin
+    WriteFmpArrayData(AFileName, RequiredValues);
+  end
+  else
+  begin
+    IrrigationTypes := Model.IrrigationTypes;
+    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+      ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsAndID(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+    if ExternalFileName = '' then
+    begin
+      if RequiredValues.WriteTransientData then
+      begin
+        WriteString('TRANSIENT LIST DATAFILE ');
+      end
+      else
+      begin
+        WriteString('STATIC LIST DATAFILE ');
+      end;
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+        if RequiredValues.WriteTransientData then
+        begin
+          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+          begin
+            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+            FarmID := 1;
+            for FarmIndex := 0 to Model.Farms.Count - 1 do
+            begin
+              AFarm := Model.Farms[FarmIndex];
+              for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+              begin
+                WriteInteger(FarmID);
+                for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+                begin
+                  WriteFloat(0.1);
+                end;
+                Inc(FarmID);
+                NewLine;
+              end;
+              Assert(AFarm.AddedDemandRunoffSplitCollection.Count
+                = IrrigationTypes.Count);
+              Assert(FarmID = AFarm.FarmId);
+              WriteInteger(AFarm.FarmId);
+              for IrrIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
+              begin
+                OFE := AFarm.AddedDemandRunoffSplitCollection[IrrIndex];
+                OfeItem := OFE.CropEfficiency.
+                  ItemByStartTime(StartTime) as TCropEfficiencyItem;
+
+                if OfeItem <> nil then
+                begin
+                  Formula := OfeItem.Efficiency;
+                  WriteFloatValueFromGlobalFormula(Formula,
+                    AFarm, IrrigationTypes[IrrIndex].Name);
+                end
+                else
+                begin
+                  WriteFloat(0.1);
+                end;
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+
+
+          end;
+        end
+        else
+        begin
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+              begin
+                WriteFloat(0.1);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(AFarm.AddedDemandRunoffSplitCollection.Count
+              = IrrigationTypes.Count);
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+            for IrrIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
+            begin
+              OFE := AFarm.AddedDemandRunoffSplitCollection[IrrIndex];
+              if OFE.CropEfficiency.Count > 0 then
+              begin
+                OfeItem := OFE.CropEfficiency.First;
+                Formula := OfeItem.Efficiency;
+                WriteFloatValueFromGlobalFormula(Formula,
+                  AFarm, IrrigationTypes[IrrIndex].Name);
+              end
+              else
+              begin
+                WriteFloat(0.1);
+              end;
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+
+        end;
+      finally
+        FWriteLocation := wlMain;
+      end;
+    end;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteAllotments;
 begin
 
@@ -2903,6 +3115,8 @@ begin
         begin
           for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
           begin
+            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
             StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
 
             FarmID := 1;
@@ -3066,6 +3280,7 @@ begin
         begin
           for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
           begin
+            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
             StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
 
             FarmID := 1;
@@ -3313,7 +3528,7 @@ begin
       end;
       ValueCellList := TransList[StressPeriodIndex];
       CheckAssigned := Assigned(RequiredValues.CheckProcedure);
-      WriteCommentLine(Format('Stress Period %d', [StressPeriodIndex+1]));
+      WriteCommentLine(Format(StrStressPeriodD, [StressPeriodIndex+1]));
       for DataTypeIndex := RequiredValues.DataTypeIndex to
         RequiredValues.MaxDataTypeIndex do
       begin
@@ -4529,6 +4744,11 @@ begin
           Assert(FCropHasSalinityDemandFileStream <> nil);
           FCropHasSalinityDemandFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlAddedDemandRunoffSplit:
+        begin
+          Assert(FAddedDemandRunoffSplitFileStream <> nil);
+          FAddedDemandRunoffSplitFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -4671,6 +4891,7 @@ begin
 
   WriteBareRunoffFraction;
   WriteBarePrecipitationConsumptionFraction;
+  WriteAddedDemandRunoffSplit;
 
   WriteString('END WATER_BALANCE_SUBREGION');
   NewLine;

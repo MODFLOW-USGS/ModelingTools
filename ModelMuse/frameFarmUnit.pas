@@ -35,6 +35,8 @@ type
     edFarmName: TLabeledEdit;
     tabEfficiencyImprovement: TTabSheet;
     frameFormulaGridEfficiencyImprovement: TframeFormulaGrid;
+    tabAddedDemandRunoffSplit: TTabSheet;
+    frameAddedDemandRunoffSplit: TframeFormulaGrid;
     procedure frameFormulaGridCropsedFormulaChange(Sender: TObject);
     procedure frameFormulaGridCropsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -93,6 +95,15 @@ type
       Sender: TObject);
     procedure frameFormulaGridEfficiencyImprovementGridButtonClick(
       Sender: TObject; ACol, ARow: Integer);
+    procedure frameFormulaGrid1edFormulaChange(Sender: TObject);
+    procedure frameFormulaGrid1GridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameAddedDemandRunoffSplitsbAddClick(Sender: TObject);
+    procedure frameAddedDemandRunoffSplitsbInsertClick(Sender: TObject);
+    procedure frameAddedDemandRunoffSplitsbDeleteClick(Sender: TObject);
+    procedure frameAddedDemandRunoffSplitseNumberChange(Sender: TObject);
+    procedure frameAddedDemandRunoffSplitGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
   private
     FChangedCrops: boolean;
     FChangedCosts: boolean;
@@ -102,8 +113,10 @@ type
     FChanging: Boolean;
     FChangedAllotment: Boolean;
     FEfficiencyImprovementChanged: Boolean;
+    FAddedDemandRunoffSplitChanged: Boolean;
     procedure GetCropEffForFirstFarm(FirstFarm: TFarm);
     procedure GetCropEffImproveForFirstFarm(FirstFarm: TFarm);
+    procedure GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
     procedure GetCostsForFirstFarm(FirstFarm: TFarm);
     procedure GetWaterRightsForFirstFarm(FirstFarm: TFarm);
     procedure GetGwAllotmentForFirstFarm(FirstFarm: TFarm);
@@ -113,6 +126,8 @@ type
       IrrigationTypes: TIrrigationCollection);
     procedure SetCropEfficiencyImprove(Farm: TFarm;
       IrrigationTypes: TIrrigationCollection);
+    procedure SetAddedDemandRunoffSplit(Farm: TFarm;
+      IrrigationTypes: TIrrigationCollection);
     procedure SetFarmCosts(Farm: TFarm);
     procedure SetWaterRights(Farm: TFarm);
     procedure SetGwAllotment(Farm: TFarm);
@@ -120,6 +135,12 @@ type
     property Changing: Boolean read FChanging write FChanging;
     procedure DoChange;
     procedure EditFormula(Grid: TRbwDataGrid4; ACol, ARow: Integer);
+    procedure SetAnEfficiencyCollection(EfficiencyCollection: TFarmEfficiencyCollection;
+      AFrame: TframeFormulaGrid; IrrigationTypes: TIrrigationCollection);
+    procedure InitializeEfficiencyCollectionFrame(
+      StartTimes, EndTimes: TStringList; IrrigationTypes: TIrrigationCollection;
+      AFrame: TframeFormulaGrid; CaptionFormatString: string);
+    procedure GetAnEfficiencyCollection(AFarm: TFarm; AFrame: TframeFormulaGrid; EfficiencyCollection: TFarmEfficiencyCollection);
     { Private declarations }
   public
     procedure InitializeControls;
@@ -184,7 +205,6 @@ end;
 procedure TframeFarm.EditFormula(Grid: TRbwDataGrid4; ACol, ARow: Integer);
 var
   AFormula: string;
-//  frmFormula: TfrmFormula;
   CompiledFormula: TExpression;
   ParentControl: TWinControl;
   ValidTypes: TRbwDataTypes;
@@ -301,6 +321,7 @@ begin
       ClearGrid(frameFormulaGridWaterRights.Grid);
       ClearGrid(frameGW_Allocation.Grid);
       ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
+      ClearGrid(frameAddedDemandRunoffSplit.Grid);
       Enabled := False;
       Exit;
     end;
@@ -327,16 +348,19 @@ begin
       frameFormulaGridWaterRights.Grid.BeginUpdate;
       frameGW_Allocation.Grid.BeginUpdate;
       frameFormulaGridEfficiencyImprovement.Grid.BeginUpdate;
+      frameAddedDemandRunoffSplit.Grid.BeginUpdate;
       try
         ClearGrid(frameFormulaGridCrops.Grid);
         ClearGrid(frameFormulaGridCosts.Grid);
         ClearGrid(frameFormulaGridWaterRights.Grid);
         ClearGrid(frameGW_Allocation.Grid);
         ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
+        ClearGrid(frameAddedDemandRunoffSplit.Grid);
 
         FirstFarm := FarmList[0];
         GetCropEffForFirstFarm(FirstFarm);
         GetCropEffImproveForFirstFarm(FirstFarm);
+        GetAddedDemandRunoffSplitForFirstFarm(FirstFarm);
         GetCostsForFirstFarm(FirstFarm);
         GetWaterRightsForFirstFarm(FirstFarm);
         GetGwAllotmentForFirstFarm(FirstFarm);
@@ -369,6 +393,7 @@ begin
 
         for ItemIndex := 1 to FarmList.Count - 1 do
         begin
+          AFarm := FarmList[ItemIndex];
           if not AFarm.FarmIrrigationEfficiencyImprovementCollection.IsSame(
             FirstFarm.FarmIrrigationEfficiencyImprovementCollection) then
           begin
@@ -414,12 +439,25 @@ begin
           end;
         end;
 
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.AddedDemandRunoffSplitCollection.IsSame(
+            FirstFarm.AddedDemandRunoffSplitCollection) then
+          begin
+            ClearGrid(frameGW_Allocation.Grid);
+            frameGW_Allocation.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
       finally
         frameFormulaGridCrops.Grid.EndUpdate;
         frameFormulaGridEfficiencyImprovement.Grid.EndUpdate;
         frameFormulaGridCosts.Grid.EndUpdate;
         frameFormulaGridWaterRights.Grid.EndUpdate;
         frameGW_Allocation.Grid.EndUpdate;
+        frameAddedDemandRunoffSplit.Grid.EndUpdate;
       end;
 
       frameFormulaGridDiversion.GetData(FarmList, dtDiversion);
@@ -434,6 +472,7 @@ begin
       FChangedID := False;
       FChangedAllotment := false;
       FEfficiencyImprovementChanged := False;
+      FAddedDemandRunoffSplitChanged := False;
     end;
   finally
     Changing := False;
@@ -461,6 +500,45 @@ begin
   end;
 end;
 
+procedure TframeFarm.frameAddedDemandRunoffSplitGridButtonClick(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
+procedure TframeFarm.frameAddedDemandRunoffSplitsbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameAddedDemandRunoffSplit.sbAddClick(Sender);
+  FAddedDemandRunoffSplitChanged := True;
+  DoChange
+end;
+
+procedure TframeFarm.frameAddedDemandRunoffSplitsbDeleteClick(Sender: TObject);
+begin
+  inherited;
+  frameAddedDemandRunoffSplit.sbDeleteClick(Sender);
+  FAddedDemandRunoffSplitChanged := True;
+  DoChange
+end;
+
+procedure TframeFarm.frameAddedDemandRunoffSplitsbInsertClick(Sender: TObject);
+begin
+  inherited;
+  frameAddedDemandRunoffSplit.sbInsertClick(Sender);
+  FAddedDemandRunoffSplitChanged := True;
+  DoChange
+end;
+
+procedure TframeFarm.frameAddedDemandRunoffSplitseNumberChange(Sender: TObject);
+begin
+  inherited;
+  frameAddedDemandRunoffSplit.seNumberChange(Sender);
+  FAddedDemandRunoffSplitChanged := True;
+  DoChange
+end;
+
 procedure TframeFarm.frameDeliveryGridButtonClick(Sender: TObject; ACol,
   ARow: Integer);
 begin
@@ -475,6 +553,22 @@ begin
   frameDelivery.GridSetEditText(Sender, ACol, ARow, Value);
   UpdateNextTimeCell(frameDelivery.Grid, ACol, ARow);
 
+end;
+
+procedure TframeFarm.frameFormulaGrid1edFormulaChange(Sender: TObject);
+begin
+  inherited;
+  frameAddedDemandRunoffSplit.edFormulaChange(Sender);
+  FAddedDemandRunoffSplitChanged := True;
+end;
+
+procedure TframeFarm.frameFormulaGrid1GridSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateNextTimeCell(frameAddedDemandRunoffSplit.Grid, ACol, ARow);
+  DoChange;
+  FAddedDemandRunoffSplitChanged := True;
 end;
 
 procedure TframeFarm.frameFormulaGridCostsedFormulaChange(
@@ -789,6 +883,12 @@ begin
   DoChange;
 end;
 
+procedure TframeFarm.GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
+begin
+  GetAnEfficiencyCollection(FirstFarm, frameAddedDemandRunoffSplit,
+    FirstFarm.AddedDemandRunoffSplitCollection);
+end;
+
 procedure TframeFarm.GetCostsForFirstFarm(
   FirstFarm: TFarm);
 var
@@ -858,42 +958,9 @@ begin
 end;
 
 procedure TframeFarm.GetCropEffImproveForFirstFarm(FirstFarm: TFarm);
-var
-  AFarm: TFarm;
-  CropIndex: Integer;
-  FarmEff: TFarmEfficienciesItem;
-  MaxIndex: Integer;
-  TimeIndex: Integer;
-  TimeItem: TCropEfficiencyItem;
-  Grid: TRbwDataGrid4;
-  MaxTimeCount: Integer;
 begin
-  AFarm := FirstFarm;
-  GetMaxTimeAndCountForCrops(MaxIndex, MaxTimeCount, AFarm);
-  frameFormulaGridEfficiencyImprovement.seNumber.AsInteger := MaxTimeCount;
-  frameFormulaGridEfficiencyImprovement.seNumber.OnChange(frameFormulaGridEfficiencyImprovement.seNumber);
-
-  if MaxIndex >= 0 then
-  begin
-    FarmEff := AFarm.FarmIrrigationEfficiencyImprovementCollection[MaxIndex];
-    Grid := frameFormulaGridEfficiencyImprovement.Grid;
-    for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
-    begin
-      TimeItem := FarmEff.CropEfficiency[TimeIndex];
-      Grid.Cells[Ord(ccStartTime), TimeIndex+1] := FloatToStr(TimeItem.StartTime);
-      Grid.Cells[Ord(ccEndTime), TimeIndex+1] := FloatToStr(TimeItem.EndTime);
-    end;
-
-    for CropIndex := 0 to AFarm.FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
-    begin
-      FarmEff := AFarm.FarmIrrigationEfficiencyImprovementCollection[CropIndex];
-      for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
-      begin
-        TimeItem := FarmEff.CropEfficiency[TimeIndex];
-        Grid.Cells[Ord(ccCrop) + CropIndex, TimeIndex+1] := TimeItem.Efficiency;
-      end;
-    end;
-  end;
+  GetAnEfficiencyCollection(FirstFarm, frameFormulaGridEfficiencyImprovement,
+    FirstFarm.FarmIrrigationEfficiencyImprovementCollection);
 end;
 
 procedure TframeFarm.GetWaterRightsForFirstFarm(
@@ -947,6 +1014,7 @@ begin
 
   StartTimes := TStringList.Create;
   EndTimes := TStringList.Create;
+  IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
   try
     // set up Crops grid.
     StressPeriods.FillStringsWithStartTimes(StartTimes);
@@ -996,7 +1064,6 @@ begin
     {$ELSE}
       Assert(False);
     {$ENDIF}
-      IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
       Grid.ColCount := IrrigationTypes.Count + 2;
       Grid.BeginUpdate;
       try
@@ -1031,40 +1098,13 @@ begin
     end;
     frameFormulaGridCrops.LayoutMultiRowEditControls;
 
-    Grid := frameFormulaGridEfficiencyImprovement.Grid;
-    IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
-    Grid.ColCount := IrrigationTypes.Count + 2;
-    Grid.BeginUpdate;
-    try
-      Grid.Cells[Ord(ccStartTime), 0] := StrStartingTime;
-      Grid.Cells[Ord(ccEndTime), 0] := StrEndingTime;
-      Grid.Columns[Ord(ccStartTime)].PickList := StartTimes;
-      Grid.Columns[Ord(ccEndTime)].PickList := EndTimes;
-      for CropIndex := 0 to IrrigationTypes.Count - 1 do
-      begin
-        IrrigationType := IrrigationTypes[CropIndex];
-        Grid.Cells[Ord(ccCrop) + CropIndex, 0] :=
-          Format('%s efficiency improvement', [IrrigationType.Name]);
-        Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
-        Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
-        Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
-        Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
-        Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := True;
-        Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustRowHeights := True;
-      end;
-    finally
-      Grid.EndUpdate;
-    end;
-    Grid.BeginUpdate;
-    try
-      for CropIndex := 0 to IrrigationTypes.Count - 1 do
-      begin
-        Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := False;
-      end;
-    finally
-      Grid.EndUpdate;
-    end;
-    frameFormulaGridEfficiencyImprovement.LayoutMultiRowEditControls;
+    InitializeEfficiencyCollectionFrame(StartTimes, EndTimes,
+      IrrigationTypes, frameFormulaGridEfficiencyImprovement,
+      '%s efficiency improvement');
+
+    InitializeEfficiencyCollectionFrame(StartTimes, EndTimes,
+      IrrigationTypes, frameAddedDemandRunoffSplit,
+      '%s added demanand runoff split');
 
     Grid := frameFormulaGridCosts.Grid;
     ClearGrid(Grid);
@@ -1170,7 +1210,7 @@ var
   IntValue: Integer;
   IrrigationTypes: TIrrigationCollection;
 begin
-  if {FarmCreated or} FChangedID then
+  if FChangedID then
   begin
     IntValue := seFarmId.AsInteger;
     for index := 0 to FarmList.Count - 1 do
@@ -1180,27 +1220,26 @@ begin
       Farm.FarmName := edFarmName.Text;
     end;
   end;
-  if {FarmCreated or} FChangedCrops then
+  if FChangedCrops then
   begin
     Crops := frmGoPhast.PhastModel.FmpCrops;
     IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
     for index := 0 to FarmList.Count - 1 do
     begin
       Farm := FarmList[index];
-//        Farm := Item.ScreenObject.ModflowFmpFarm;
       if Farm <> nil then
       begin
         SetCropEfficiencies(Farm, Crops, IrrigationTypes);
       end;
     end;
   end;
+
   if FEfficiencyImprovementChanged then
   begin
     IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
     for index := 0 to FarmList.Count - 1 do
     begin
       Farm := FarmList[index];
-//        Farm := Item.ScreenObject.ModflowFmpFarm;
       if Farm <> nil then
       begin
         SetCropEfficiencyImprove(Farm, IrrigationTypes);
@@ -1208,7 +1247,20 @@ begin
     end;
   end;
 
-  if {armCreated or} FChangedCosts then
+  if FAddedDemandRunoffSplitChanged then
+  begin
+    IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetAddedDemandRunoffSplit(Farm, IrrigationTypes);
+      end;
+    end;
+  end;
+
+  if FChangedCosts then
   begin
     for index := 0 to FarmList.Count - 1 do
     begin
@@ -1219,7 +1271,7 @@ begin
       end;
     end;
   end;
-  if {FarmCreated or} FChangedWaterRights then
+  if FChangedWaterRights then
   begin
     for index := 0 to FarmList.Count - 1 do
     begin
@@ -1252,6 +1304,162 @@ begin
   if {FarmCreated or} frameDelivery.DataChanged then
   begin
     frameDelivery.SetData(FarmList);
+  end;
+end;
+
+procedure TframeFarm.GetAnEfficiencyCollection(AFarm: TFarm;
+  AFrame: TframeFormulaGrid; EfficiencyCollection: TFarmEfficiencyCollection);
+var
+  MaxIndex: Integer;
+  MaxTimeCount: Integer;
+  FarmEff: TFarmEfficienciesItem;
+  Grid: TRbwDataGrid4;
+  TimeIndex: Integer;
+  TimeItem: TCropEfficiencyItem;
+  CropIndex: Integer;
+begin
+  GetMaxTimeAndCountForCrops(MaxIndex, MaxTimeCount, AFarm);
+  AFrame.seNumber.AsInteger := MaxTimeCount;
+  AFrame.seNumber.OnChange(AFrame.seNumber);
+  if MaxIndex >= 0 then
+  begin
+    FarmEff := EfficiencyCollection[MaxIndex];
+    Grid := AFrame.Grid;
+    for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
+    begin
+      TimeItem := FarmEff.CropEfficiency[TimeIndex];
+      Grid.Cells[Ord(ccStartTime), TimeIndex + 1] := FloatToStr(TimeItem.StartTime);
+      Grid.Cells[Ord(ccEndTime), TimeIndex + 1] := FloatToStr(TimeItem.EndTime);
+    end;
+    for CropIndex := 0 to EfficiencyCollection.Count - 1 do
+    begin
+      FarmEff := EfficiencyCollection[CropIndex];
+      for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
+      begin
+        TimeItem := FarmEff.CropEfficiency[TimeIndex];
+        Grid.Cells[Ord(ccCrop) + CropIndex, TimeIndex + 1] := TimeItem.Efficiency;
+      end;
+    end;
+  end;
+end;
+
+procedure TframeFarm.InitializeEfficiencyCollectionFrame
+  (StartTimes, EndTimes: TStringList; IrrigationTypes: TIrrigationCollection;
+  AFrame: TframeFormulaGrid; CaptionFormatString: string);
+var
+  CropIndex: Integer;
+  Grid: TRbwDataGrid4;
+  IrrigationType: TIrrigationItem;
+begin
+  Grid := AFrame.Grid;
+  IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
+  Grid.ColCount := IrrigationTypes.Count + 2;
+  Grid.BeginUpdate;
+  try
+    Grid.Cells[Ord(ccStartTime), 0] := StrStartingTime;
+    Grid.Cells[Ord(ccEndTime), 0] := StrEndingTime;
+    Grid.Columns[Ord(ccStartTime)].PickList := StartTimes;
+    Grid.Columns[Ord(ccEndTime)].PickList := EndTimes;
+    for CropIndex := 0 to IrrigationTypes.Count - 1 do
+    begin
+      IrrigationType := IrrigationTypes[CropIndex];
+      Grid.Cells[Ord(ccCrop) + CropIndex, 0] := Format(CaptionFormatString, [IrrigationType.Name]);
+      Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
+      Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
+      Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
+      Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
+      Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := True;
+      Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustRowHeights := True;
+    end;
+  finally
+    Grid.EndUpdate;
+  end;
+  Grid.BeginUpdate;
+  try
+    for CropIndex := 0 to IrrigationTypes.Count - 1 do
+    begin
+      Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := False;
+    end;
+  finally
+    Grid.EndUpdate;
+  end;
+  AFrame.LayoutMultiRowEditControls;
+end;
+
+procedure TframeFarm.SetAddedDemandRunoffSplit(Farm: TFarm;
+  IrrigationTypes: TIrrigationCollection);
+begin
+  SetAnEfficiencyCollection(Farm.AddedDemandRunoffSplitCollection,
+    frameAddedDemandRunoffSplit, IrrigationTypes);
+end;
+
+procedure TframeFarm.SetAnEfficiencyCollection(EfficiencyCollection: TFarmEfficiencyCollection;
+  AFrame: TframeFormulaGrid; IrrigationTypes: TIrrigationCollection);
+var
+  CropIndex: Integer;
+  EfficienciesItem: TFarmEfficienciesItem;
+  StartTimes: System.Generics.Collections.TList<Double>;
+  EndTimes: System.Generics.Collections.TList<Double>;
+  Rows: TGenericIntegerList;
+  Grid: TRbwDataGrid4;
+  RowIndex: Integer;
+  StartTime: Double;
+  EndTime: Double;
+  CropEfficiency: TCropEfficiencyCollection;
+  ColIndex: Integer;
+  ARow: Integer;
+  EfficiencyItem: TCropEfficiencyItem;
+begin
+  for CropIndex := EfficiencyCollection.Count to IrrigationTypes.Count - 1 do
+  begin
+    EfficienciesItem := EfficiencyCollection.Add;
+    EfficienciesItem.CropEfficiency.CropName := IrrigationTypes[CropIndex].Name;
+  end;
+  while EfficiencyCollection.Count > IrrigationTypes.Count do
+  begin
+    EfficiencyCollection.Last.Free;
+  end;
+  StartTimes := TList<Double>.Create;
+  EndTimes := TList<Double>.Create;
+  Rows := TGenericIntegerList.Create;
+  try
+    Grid := AFrame.Grid;
+    for RowIndex := 1 to AFrame.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex], EndTime) then
+      begin
+        Rows.Add(RowIndex);
+        StartTimes.Add(StartTime);
+        EndTimes.Add(EndTime);
+      end;
+    end;
+    for CropIndex := 0 to EfficiencyCollection.Count - 1 do
+    begin
+      EfficienciesItem := EfficiencyCollection[CropIndex];
+      CropEfficiency := EfficienciesItem.CropEfficiency;
+      while CropEfficiency.Count > Rows.Count do
+      begin
+        CropEfficiency.Last.Free;
+      end;
+      while CropEfficiency.Count < Rows.Count do
+      begin
+        CropEfficiency.Add;
+      end;
+      ColIndex := CropIndex + Ord(ccCrop);
+      for RowIndex := 0 to Rows.Count - 1 do
+      begin
+        ARow := Rows[RowIndex];
+        EfficiencyItem := CropEfficiency[RowIndex];
+        EfficiencyItem.StartTime := StartTimes[RowIndex];
+        EfficiencyItem.EndTime := EndTimes[RowIndex];
+        EfficiencyItem.Efficiency := Grid.Cells[ColIndex, ARow];
+      end;
+    end;
+  finally
+    StartTimes.Free;
+    EndTimes.Free;
+    Rows.Free;
   end;
 end;
 
@@ -1384,7 +1592,7 @@ var
   StartTime: Double;
   Grid: TRbwDataGrid4;
   EfficiencyItem: TCropEfficiencyItem;
-  Rows: Generics.Collections.TList<Integer>;
+  Rows: TGenericIntegerList;
   EfficiencyCollection: TFarmEfficiencyCollection;
   CropEfficiency: TCropEfficiencyCollection;
   StartTimes: Generics.Collections.TList<Double>;
@@ -1420,7 +1628,7 @@ begin
   end;
   StartTimes := TList<Double>.Create;
   EndTimes := TList<Double>.Create;
-  Rows := TList<Integer>.Create;
+  Rows := TGenericIntegerList.Create;
   try
     Grid := frameFormulaGridCrops.Grid;
     for RowIndex := 1 to frameFormulaGridCrops.seNumber.AsInteger do
@@ -1464,75 +1672,9 @@ end;
 
 procedure TframeFarm.SetCropEfficiencyImprove(Farm: TFarm;
   IrrigationTypes: TIrrigationCollection);
-var
-  EndTime: Double;
-  EfficienciesItem: TFarmEfficienciesItem;
-  ColIndex: Integer;
-  StartTime: Double;
-  Grid: TRbwDataGrid4;
-  EfficiencyItem: TCropEfficiencyItem;
-  Rows: Generics.Collections.TList<Integer>;
-  EfficiencyCollection: TFarmEfficiencyCollection;
-  CropEfficiency: TCropEfficiencyCollection;
-  StartTimes: Generics.Collections.TList<Double>;
-  CropIndex: Integer;
-  EndTimes: Generics.Collections.TList<Double>;
-  RowIndex: Integer;
-  ARow: Integer;
 begin
-  EfficiencyCollection := Farm.FarmIrrigationEfficiencyImprovementCollection;
-  for CropIndex := EfficiencyCollection.Count to IrrigationTypes.Count - 1 do
-  begin
-    EfficienciesItem := EfficiencyCollection.Add;
-    EfficienciesItem.CropEfficiency.CropName := IrrigationTypes[CropIndex].Name;
-  end;
-  while EfficiencyCollection.Count > IrrigationTypes.Count do
-  begin
-    EfficiencyCollection.Last.Free;
-  end;
-
-  StartTimes := TList<Double>.Create;
-  EndTimes := TList<Double>.Create;
-  Rows := TList<Integer>.Create;
-  try
-    Grid := frameFormulaGridEfficiencyImprovement.Grid;
-    for RowIndex := 1 to frameFormulaGridEfficiencyImprovement.seNumber.AsInteger do
-    begin
-      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex], StartTime)
-        and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex], EndTime) then
-      begin
-        Rows.Add(RowIndex);
-        StartTimes.Add(StartTime);
-        EndTimes.Add(EndTime);
-      end;
-    end;
-    for CropIndex := 0 to EfficiencyCollection.Count - 1 do
-    begin
-      EfficienciesItem := EfficiencyCollection[CropIndex];
-      CropEfficiency := EfficienciesItem.CropEfficiency;
-      while CropEfficiency.Count > Rows.Count do
-      begin
-        CropEfficiency.Last.Free;
-      end;
-      while CropEfficiency.Count < Rows.Count do
-      begin
-        CropEfficiency.Add;
-      end;
-      ColIndex := CropIndex + Ord(ccCrop);
-      for RowIndex := 0 to Rows.Count - 1 do
-      begin
-        ARow := Rows[RowIndex];
-        EfficiencyItem := CropEfficiency[RowIndex];
-        EfficiencyItem.StartTime := StartTimes[RowIndex];
-        EfficiencyItem.EndTime := EndTimes[RowIndex];
-        EfficiencyItem.Efficiency := Grid.Cells[ColIndex, ARow];
-      end;
-    end;
-  finally
-    StartTimes.Free;
-    EndTimes.Free;
-    Rows.Free;
-  end;
+  SetAnEfficiencyCollection(Farm.FarmIrrigationEfficiencyImprovementCollection,
+    frameFormulaGridEfficiencyImprovement, IrrigationTypes);
 end;
 
 procedure TframeFarm.GetMaxTimeAndCountForCrops(

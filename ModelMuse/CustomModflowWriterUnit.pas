@@ -621,7 +621,7 @@ end;
    files that allow for both parameter and non-parameter cells.}
   TCustomParameterTransientWriter = class(TCustomTransientWriter)
   private
-    FNumInstList: TList<Integer>;
+    FNumInstList: TGenericIntegerList;
     procedure StorePotentialObservationLocationsAndNames;
   protected
     FParameterNames: TStringList;
@@ -7357,7 +7357,7 @@ begin
   FUsedInstanceNames.Sorted := True;
   // FParameterNames should not be sorted.
   FParameterNames := TStringList.Create;
-  FNumInstList := TList<Integer>.Create;
+  FNumInstList := TGenericIntegerList.Create;
 
 end;
 

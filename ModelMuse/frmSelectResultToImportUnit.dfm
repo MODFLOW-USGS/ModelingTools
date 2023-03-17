@@ -2,38 +2,41 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   HelpType = htKeyword
   HelpKeyword = 'Select_Results_to_Import_Dialog_Box'
   Caption = ' Select Model Results to Import'
-  ClientHeight = 462
-  ClientWidth = 647
-  ExplicitWidth = 663
-  ExplicitHeight = 501
+  ClientHeight = 461
+  ClientWidth = 643
+  ExplicitWidth = 659
+  ExplicitHeight = 500
   TextHeight = 18
   object lblColorGrid: TLabel
     Left = 8
-    Top = 355
+    Top = 354
     Width = 231
     Height = 18
     Anchors = [akLeft, akBottom]
     Caption = 'Data used to color or contour grid'
+    ExplicitTop = 355
   end
   object lblClassification: TLabel
     Left = 224
-    Top = 282
+    Top = 281
     Width = 94
     Height = 18
     Anchors = [akLeft, akBottom]
     Caption = 'Classification'
+    ExplicitTop = 282
   end
   object lblPrefix: TLabel
     Left = 496
-    Top = 280
+    Top = 279
     Width = 40
     Height = 18
     Anchors = [akLeft, akBottom]
     Caption = 'Prefix'
+    ExplicitTop = 280
   end
   object btnHelp: TBitBtn
-    Left = 355
-    Top = 407
+    Left = 347
+    Top = 406
     Width = 91
     Height = 47
     Anchors = [akRight, akBottom]
@@ -41,10 +44,12 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     NumGlyphs = 2
     TabOrder = 7
     OnClick = btnHelpClick
+    ExplicitLeft = 355
+    ExplicitTop = 407
   end
   object btnOK: TBitBtn
-    Left = 452
-    Top = 407
+    Left = 444
+    Top = 406
     Width = 91
     Height = 47
     Anchors = [akRight, akBottom]
@@ -53,21 +58,25 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     NumGlyphs = 2
     TabOrder = 8
     OnClick = btnOKClick
+    ExplicitLeft = 452
+    ExplicitTop = 407
   end
   object btnCancel: TBitBtn
-    Left = 549
-    Top = 407
+    Left = 541
+    Top = 406
     Width = 91
     Height = 47
     Anchors = [akRight, akBottom]
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 9
+    ExplicitLeft = 549
+    ExplicitTop = 407
   end
   object comboColorGrid: TComboBox
     Left = 8
-    Top = 375
-    Width = 631
+    Top = 374
+    Width = 623
     Height = 26
     Style = csDropDownList
     Anchors = [akLeft, akRight, akBottom]
@@ -75,7 +84,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   end
   object btnSelectAll: TButton
     Left = 8
-    Top = 407
+    Top = 406
     Width = 91
     Height = 47
     Anchors = [akLeft, akBottom]
@@ -83,10 +92,11 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     TabOrder = 5
     WordWrap = True
     OnClick = btnSelectAllClick
+    ExplicitTop = 407
   end
   object btnSelectNone: TButton
     Left = 105
-    Top = 407
+    Top = 406
     Width = 91
     Height = 47
     Anchors = [akLeft, akBottom]
@@ -94,11 +104,12 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     TabOrder = 6
     WordWrap = True
     OnClick = btnSelectNoneClick
+    ExplicitTop = 407
   end
   object rgDisplayChoice: TRadioGroup
     Left = 8
-    Top = 307
-    Width = 631
+    Top = 306
+    Width = 623
     Height = 42
     Anchors = [akLeft, akRight, akBottom]
     Caption = 'Display choice'
@@ -109,21 +120,25 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
       'Contour grid'
       'Neither')
     TabOrder = 3
+    ExplicitTop = 307
+    ExplicitWidth = 631
   end
   object pnlSelections: TPanel
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 641
-    Height = 270
+    Width = 637
+    Height = 269
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 641
+    ExplicitHeight = 270
     object splitData: TSplitter
       Left = 0
       Top = 125
-      Width = 641
+      Width = 645
       Height = 5
       Cursor = crVSplit
       Align = alTop
@@ -132,7 +147,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
       ExplicitWidth = 510
     end
     object splMultiSelect: TSplitter
-      Left = 363
+      Left = 367
       Top = 130
       Width = 5
       Height = 140
@@ -143,7 +158,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     object rdgModels: TRbwDataGrid4
       Left = 0
       Top = 0
-      Width = 641
+      Width = 645
       Height = 125
       Align = alTop
       ColCount = 3
@@ -236,6 +251,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
+      ExplicitWidth = 641
       ColWidths = (
         20
         20
@@ -247,7 +263,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     object clData: TJvCheckListBox
       Left = 0
       Top = 130
-      Width = 363
+      Width = 367
       Height = 140
       Align = alClient
       DoubleBuffered = False
@@ -257,13 +273,15 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
       OnClickCheck = clDataClickCheck
     end
     object pnlMultiSelect: TPanel
-      Left = 368
+      Left = 364
       Top = 130
       Width = 273
-      Height = 140
+      Height = 139
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 2
+      ExplicitLeft = 368
+      ExplicitHeight = 140
       object spl1: TSplitter
         Left = 0
         Top = 81
@@ -299,7 +317,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   end
   object comboClassification: TComboBox
     Left = 8
-    Top = 279
+    Top = 278
     Width = 210
     Height = 26
     Anchors = [akLeft, akBottom]
@@ -308,13 +326,14 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   end
   object edPrefix: TRbwEdit
     Left = 355
-    Top = 279
+    Top = 278
     Width = 121
     Height = 26
     Anchors = [akLeft, akBottom]
     Color = clBtnFace
     Enabled = False
     TabOrder = 2
+    ExplicitTop = 279
   end
   object odSelectFiles: TJvOpenDialog
     Filter = 

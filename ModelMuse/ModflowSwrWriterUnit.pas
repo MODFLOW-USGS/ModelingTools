@@ -29,7 +29,7 @@ type
     FStuctureDict: TObjectDictionary<Integer,TStructureList>;
     FDirectRunoffFileName: string;
     NREACHES: integer;
-    FTabUnitList: TList<Integer>;
+    FTabUnitList: TGenericIntegerList;
     procedure WriteStressPeriods;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -378,7 +378,7 @@ constructor TModflowSwrWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited;
-  FTabUnitList := TList<Integer>.Create;
+  FTabUnitList := TGenericIntegerList.Create;
   FSwrPackage := Model.ModflowPackages.SwrPackage;
   FReachList:= TObjectList<TReachObject>.Create;
   FEvapValues := TObjectList.Create;
@@ -2752,22 +2752,22 @@ end;
 procedure TModflowSwrWriter.AssignFinalReachNumbers;
 var
   ANumber: Integer;
-  IntList: Generics.Collections.TList<Integer>;
-  GroupIndexes: Generics.Collections.TList<Integer>;
+  IntList: TGenericIntegerList;
+  GroupIndexes: TGenericIntegerList;
   ReachIndex: Integer;
   AReachObject: TReachObject;
   GroupIndex: Integer;
   GroupNumber: Integer;
   NewReachAnnotation, ReachAnnotation: string;
-  CheckList: TList<Integer>;
+  CheckList: TGenericIntegerList;
   ErrorReachIndex: Integer;
   OtherReachObject: TReachObject;
   ErrorReachObject: TReachObject;
 begin
   ReachAnnotation := '';
-  GroupIndexes := TList<Integer>.Create;
-  IntList := TList<Integer>.Create;
-  CheckList := TList<Integer>.Create;
+  GroupIndexes := TGenericIntegerList.Create;
+  IntList := TGenericIntegerList.Create;
+  CheckList := TGenericIntegerList.Create;
   try
     for ReachIndex := 0 to FReachList.Count - 1 do
     begin
@@ -4092,7 +4092,7 @@ var
   ITABUNIT: integer;
   CINTP: String;
   CTABRCH: string;
-  ITABRCH: TList<Integer>;
+  ITABRCH: TGenericIntegerList;
   UsedObjects: TStringList;
   RelativeFileName: string;
   ReachIndex: Integer;
@@ -4100,7 +4100,7 @@ var
 begin
   if Model.SwrTabFiles.Count > 0 then
   begin
-    ITABRCH := TList<Integer>.Create;
+    ITABRCH := TGenericIntegerList.Create;
     try
       for TabFileIndex := 0 to Model.SwrTabFiles.Count - 1 do
       begin

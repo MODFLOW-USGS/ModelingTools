@@ -5,7 +5,7 @@ interface
 uses
   CustomModflowWriterUnit, PhastModelUnit, System.SysUtils, ScreenObjectUnit,
   System.Classes, SutraPestObsUnit, System.Generics.Collections,
-  SutraOptionsUnit, SutraTimeScheduleUnit;
+  SutraOptionsUnit, SutraTimeScheduleUnit, GoPhastTypes;
 
 type
   TExportType = (etInstructions, etExtractedValues);
@@ -56,7 +56,7 @@ const
 implementation
 
 uses
-  GoPhastTypes, SutraMeshUnit, FastGEO, ModelMuseUtilities,
+  SutraMeshUnit, FastGEO, ModelMuseUtilities,
   PestObsUnit, ObservationComparisonsUnit, frmErrorsAndWarningsUnit,
   SutraBoundariesUnit, FluxObservationUnit, RealListUnit, ModflowCellUnit,
   SutraGeneralBoundaryUnit, SutraBoundaryUnit,
@@ -432,7 +432,7 @@ var
   ScreenObject: TScreenObject;
   ABoundary: TSutraGeneralFlowBoundary;
   NodeStart: Integer;
-  NodeStarts: TList<Integer>;
+  NodeStarts: TGenericIntegerList;
   ObsTime: Double;
   procedure UpdateNodeStart(AScreenObject: TScreenObject);
   var
@@ -448,7 +448,7 @@ var
     end;
   end;
 begin
-  NodeStarts := TList<Integer>.Create;
+  NodeStarts := TGenericIntegerList.Create;
   CellLists := TObjectList<TCellAssignmentList>.Create;
   FactorsValuesList := TObjectList<TRealList>.Create;
   CellLocationList := TCellLocationList.Create;
@@ -755,7 +755,7 @@ var
   GenLakeTransInteractionType: TGeneralizedTransportInteractionType;
   StartDictionary: TObservationNodeStartDictionary;
   NodeStart: Integer;
-  NodeStarts: TList<Integer>;
+  NodeStarts: TGenericIntegerList;
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
   ABoundary: TSutraGeneralTransportBoundary;
@@ -775,7 +775,7 @@ var
   end;
 begin
   StartDictionary := TObservationNodeStartDictionary.Create;
-  NodeStarts := TList<Integer>.Create;
+  NodeStarts := TGenericIntegerList.Create;
   CellLists := TObjectList<TCellAssignmentList>.Create;
   FactorsValuesList := TObjectList<TRealList>.Create;
   CellLocationList := TCellLocationList.Create;

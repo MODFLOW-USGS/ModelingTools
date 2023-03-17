@@ -971,7 +971,7 @@ to elements or cells.}
     destructor Destroy; override;
     // @name initializes all the @link(TSparseArrayPhastInterpolationDataSet)s
     // related to the @classname.
-    procedure Initialize; override;
+    procedure Initialize(Times: TRealList = nil); override;
     // @name provides access to the
     // @link(TSparseArrayPhastInterpolationDataSet)s
     // stored in @classname.
@@ -3824,7 +3824,7 @@ begin
   result := inherited Items[Index] as TSparseArrayPhastInterpolationDataSet;
 end;
 
-procedure TPhastTimeList.Initialize;
+procedure TPhastTimeList.Initialize(Times: TRealList = nil);
 var
   ScreenObjectIndex: integer;
   AScreenObject: TScreenObject;
