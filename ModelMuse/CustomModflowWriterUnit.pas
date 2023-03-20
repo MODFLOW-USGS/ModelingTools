@@ -65,6 +65,7 @@ type
   TArrayWritingFormat = (awfModflow, awfMt3dms, awfModflow_6);
 
   TTestRealValueOkProcedure = reference to procedure (Value: double);
+  TTestIntValueOkProcedure = reference to procedure (Value: Integer);
 
   TBoundaryFlowObservationLocation = record
 //    FCell: TCellLocation;
@@ -827,6 +828,9 @@ end;
       TestProc: TTestRealValueOkProcedure = nil);
     procedure WriteBooleanValueFromGlobalFormula(Formula: string;
       ErrorObject: TObject; const DataSetErrorString: string);
+    procedure WriteIntegerValueFromGlobalFormula(Formula: string;
+      ErrorObject: TObject; const DataSetErrorString: string;
+      TestValue: TTestIntValueOkProcedure = nil);
   public
     // @name is used to update the display of transient data used to color the
     // grid.
@@ -1287,6 +1291,7 @@ resourcestring
   StrErrorHandlingTheF = 'Error handling the following name file lines';
   StrMODFLOWTimeSeries = 'MODFLOW time series Interpolated value in series %' +
   '0:s at time %1:g.';
+  StrTheFormulaShouldInt = 'The formula should result in an integer';
 
 const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
@@ -11437,6 +11442,32 @@ begin
     WriteFloatCondensed(0);
     frmFormulaErrors.AddFormulaError(GetObjectString(ErrorObject),
       DataSetErrorString, Formula, StrTheFormulaShouldReal);
+  end;
+end;
+
+procedure TCustomListWriter.WriteIntegerValueFromGlobalFormula(Formula: string;
+  ErrorObject: TObject; const DataSetErrorString: string;
+  TestValue: TTestIntValueOkProcedure = nil);
+var
+  Value: Integer;
+  Expression: TExpression;
+begin
+  Expression := EvaluateValueFromGlobalFormula(Formula, ErrorObject,
+    DataSetErrorString, [rdtInteger]);
+  if Expression.ResultType = rdtInteger then
+  begin
+    Value := Expression.IntegerResult;
+    WriteFreeInteger(Value);
+    if Assigned(TestValue) then
+    begin
+      TestValue(Value);
+    end;
+  end
+  else
+  begin
+    WriteFreeInteger(0);
+    frmFormulaErrors.AddFormulaError(GetObjectString(ErrorObject),
+      DataSetErrorString, Formula, StrTheFormulaShouldInt);
   end;
 end;
 

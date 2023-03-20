@@ -5728,6 +5728,9 @@ Type
     procedure SetFractionOfPrecipToSurfaceWaterIrrigationOption(
       const Value: TIrrigationOption);
     procedure SetAddedDemandOption(const Value: TDemandOption);
+    function GetEvapIrrigateFractionListByCropUsed: Boolean;
+    function GetIrrigationListUsed: Boolean;
+    function GetEvapIrrigateFractionListByIrrigationUsed: Boolean;
   protected
     procedure InvalidateModel; Override;
   public
@@ -5837,6 +5840,10 @@ Type
     // ADDED_DEMAND arrays for multiple land uses per cell
     function TransientAddedDemandMultArrayUsed (Sender: TObject): boolean;
     procedure InvalidateMultTransienAddedDemandArrays;
+
+    property IrrigationListUsed: Boolean read GetIrrigationListUsed;
+    property EvapIrrigateFractionListByCropUsed: Boolean read GetEvapIrrigateFractionListByCropUsed;
+    property EvapIrrigateFractionListByIrrigationUsed: Boolean read GetEvapIrrigateFractionListByIrrigationUsed;
 
     procedure InvalidateAll;
     procedure Loaded;
@@ -27143,6 +27150,20 @@ begin
   result := ScreenObject.ModflowFmpCropID;
 end;
 
+function TFarmProcess4LandUse.GetEvapIrrigateFractionListByCropUsed: Boolean;
+begin
+  result := IsSelected and (EvapIrrigationFraction.FarmOption <> foNotUsed)
+    and (EvapIrrigationFraction.ArrayList = alList)
+    and (EvapIrrigationOption = ioByCrop);
+end;
+
+function TFarmProcess4LandUse.GetEvapIrrigateFractionListByIrrigationUsed: Boolean;
+begin
+  result := IsSelected and (EvapIrrigationFraction.FarmOption <> foNotUsed)
+    and (EvapIrrigationFraction.ArrayList = alList)
+    and (EvapIrrigationOption = ioByIrrigate);
+end;
+
 function TFarmProcess4LandUse.GetEvaporationIrrigationFractionBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
@@ -27195,6 +27216,12 @@ function TFarmProcess4LandUse.GetIrrigationBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
   result := ScreenObject.ModflowFmp4Irrigation;
+end;
+
+function TFarmProcess4LandUse.GetIrrigationListUsed: Boolean;
+begin
+  result := IsSelected and (Irrigation.FarmOption <> foNotUsed)
+    and (Irrigation.ArrayList = alList)
 end;
 
 procedure TFarmProcess4LandUse.GetIrrigationUseList(Sender: TObject;

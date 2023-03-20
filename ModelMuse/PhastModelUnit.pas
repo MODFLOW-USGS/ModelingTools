@@ -2469,6 +2469,7 @@ that affects the model output should also have a comment. }
     procedure UpdateCropFullStressPeriods(TimeList: TRealList);
     procedure UpdateAllotmentFullStressPeriods(TimeList: TRealList);
     procedure UpdateFarmsFullStressPeriods(TimeList: TRealList);
+    procedure UpdateIrrigationTypesFullStressPeriods(TimeList: TRealList);
     procedure SetCrossSection(const Value: TCrossSection);
     procedure SetSwrTabFiles(const Value: TTabFileCollection);
     procedure SetSwrReachGeometry(const Value: TReachGeometryCollection);
@@ -6339,6 +6340,10 @@ resourcestring
   StrFractionOfIrrigToSurfaceWater = KFractionOfIrrigToSurfaceWater;
   StrAddedDemand = KAddedDemand;
   StrCropHasSalinityDemand = KCropHasSalinityDemand;
+  StrIrrigationEarly = 'The specified times for irrigation types include tim' +
+  'es before the beginning of the first stress period.';
+  StrIrrigationLate = 'The specified times for irrigation types include time' +
+  's after the end of the last stress period.';
 
 
 const
@@ -44918,6 +44923,7 @@ begin
       UpdateCropFullStressPeriods(TimeList);
       UpdateAllotmentFullStressPeriods(TimeList);
       UpdateFarmsFullStressPeriods(TimeList);
+      UpdateIrrigationTypesFullStressPeriods(TimeList)
     end;
 
     OutOfStartRangeScreenObjects := TStringList.Create;
@@ -45883,6 +45889,58 @@ begin
     end;
   end;
 
+end;
+
+procedure TCustomModel.UpdateIrrigationTypesFullStressPeriods(
+  TimeList: TRealList);
+var
+  PhastModel: TPhastModel;
+  TestFirstTime: double;
+  LastTestTime: double;
+  OutOfStartRange, OutOfEndRange: Boolean;
+  IrrIndex: integer;
+  IrrigationType: TIrrigationItem;
+//  IrrigationType: TFarm;
+begin
+  if not ModflowPackages.FarmProcess4.IsSelected then
+  begin
+    Exit;
+  end;
+
+  TestFirstTime := TimeList.First;
+  LastTestTime := TimeList.Last;
+
+  if self is TChildModel then
+  begin
+    PhastModel := TChildModel(self).ParentModel as TPhastModel;
+  end
+  else
+  begin
+    PhastModel := self as TPhastModel;
+  end;
+
+//  PhastModel := self as TPhastModel;;
+  OutOfStartRange := False;
+  OutOfEndRange := False;
+
+  PhastModel.IrrigationTypes.UpdateTimes(TimeList, TestFirstTime, LastTestTime,
+      OutOfStartRange, OutOfEndRange);
+
+
+//  PhastModel.FmpAllotment.UpdateTimes(TimeList, TestFirstTime, LastTestTime,
+//      OutOfStartRange, OutOfEndRange);
+
+  if OutOfStartRange then
+  begin
+    frmErrorsAndWarnings.AddWarning(self,
+      StrAnyTimesBeforeThe, StrIrrigationEarly);
+  end;
+
+  if OutOfEndRange then
+  begin
+    frmErrorsAndWarnings.AddWarning(self,
+      StrAnyTimesAfterThe, StrIrrigationLate);
+  end;
 end;
 
 function TCustomModel.GetDataSetCollection: TDataSetCollection;

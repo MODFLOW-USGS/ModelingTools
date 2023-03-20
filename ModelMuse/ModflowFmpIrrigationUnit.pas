@@ -3,13 +3,51 @@ unit ModflowFmpIrrigationUnit;
 interface
 
 uses
-  System.Classes, OrderedCollectionUnit, GoPhastTypes, ModflowFmpFarmUnit;
+  System.Classes, OrderedCollectionUnit, GoPhastTypes, ModflowFmpFarmUnit,
+    ModflowFmpBaseClasses, ModflowBoundaryUnit, RealListUnit;
 
 type
+  TEvapFractionItem = class(TCustomZeroFarmItem)
+  private
+    const
+    EvapIrrigateFractionPosition = 0;
+    function GetEvapIrrigateFraction: string;
+    procedure SetEvapIrrigateFraction(const Value: string);
+  protected
+    // See @link(BoundaryFormula).
+    function GetBoundaryFormula(Index: integer): string; override;
+    // See @link(BoundaryFormula).
+    procedure SetBoundaryFormula(Index: integer; const Value: string); override;
+    function BoundaryFormulaCount: integer; override;
+  published
+    property EvapIrrigateFraction: string read GetEvapIrrigateFraction
+      write SetEvapIrrigateFraction;
+  end;
+
+  // @name represents the choice of irrigation type for one crop.
+  TFmp4EvapFractionCollection = class(TCustomFarmCollection)
+  private
+    function GetItems(Index: Integer): TEvapFractionItem;
+    procedure SetItems(Index: Integer; const Value: TEvapFractionItem);
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  public
+    property Items[Index: Integer]: TEvapFractionItem read GetItems
+      write SetItems; default;
+    function ItemByStartTime(ATime: Double): TEvapFractionItem;
+  end;
+
   TIrrigationItem = class(TOrderedItem)
   private
     FName: string;
+    FEvapFraction: TFmp4EvapFractionCollection;
     procedure SetName(Value: string);
+    procedure SetEvapFraction(const Value: TFmp4EvapFractionCollection);
+    procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
+      var StartRangeExtended, EndRangeExtended: boolean);
+    procedure AddBoundaryTimes(BoundCol: TCustomNonSpatialBoundColl;
+      Times: TRealList; StartTestTime, EndTestTime: double;
+      var StartRangeExtended, EndRangeExtended: boolean); virtual;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -18,6 +56,8 @@ type
     destructor Destroy; override;
   published
     property Name: string read FName write SetName;
+    property EvapFraction: TFmp4EvapFractionCollection read FEvapFraction
+      write SetEvapFraction;
   end;
 
   TIrrigationCollection = class(TEnhancedOrderedCollection)
@@ -26,9 +66,14 @@ type
     function GetItems(Index: Integer): TIrrigationItem;
     procedure SetItems(Index: Integer; const Value: TIrrigationItem);
     function GetFarmList: TFarmList;
+//    procedure AddBoundaryTimes(BoundCol: TCustomNonSpatialBoundColl;
+//      Times: TRealList; StartTestTime, EndTestTime: double;
+//      var StartRangeExtended, EndRangeExtended: boolean);
   protected
     property FarmList: TFarmList read GetFarmList;
   public
+    procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
+      var StartRangeExtended, EndRangeExtended: boolean);
     constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     property Items[Index: Integer]: TIrrigationItem read GetItems
@@ -44,6 +89,59 @@ resourcestring
 
 { TIrrigationItem }
 
+procedure TIrrigationItem.AddBoundaryTimes(BoundCol: TCustomNonSpatialBoundColl;
+  Times: TRealList; StartTestTime, EndTestTime: double; var StartRangeExtended,
+  EndRangeExtended: boolean);
+var
+  BoundaryIndex: Integer;
+  Boundary: TCustomModflowBoundaryItem;
+  SP_Epsilon: Double;
+  CosestIndex: Integer;
+  ExistingTime: Double;
+begin
+  SP_Epsilon := (Model as TCustomModel).SP_Epsilon;
+  for BoundaryIndex := 0 to BoundCol.Count - 1 do
+  begin
+    Boundary := BoundCol[BoundaryIndex] as TCustomModflowBoundaryItem;
+    CosestIndex := Times.IndexOfClosest(Boundary.StartTime);
+    if CosestIndex >= 0 then
+    begin
+      ExistingTime := Times[CosestIndex];
+      if Abs(ExistingTime-Boundary.StartTime) >  SP_Epsilon then
+      begin
+        Times.AddUnique(Boundary.StartTime);
+      end;
+    end;
+    CosestIndex := Times.IndexOfClosest(Boundary.EndTime);
+    if CosestIndex >= 0 then
+    begin
+      ExistingTime := Times[CosestIndex];
+      if Abs(ExistingTime-Boundary.EndTime) >  SP_Epsilon then
+      begin
+        Times.AddUnique(Boundary.EndTime);
+      end;
+    end;
+//    Times.AddUnique(Boundary.StartTime);
+//    Times.AddUnique(Boundary.EndTime);
+    if (Boundary.StartTime < StartTestTime-SP_Epsilon) then
+    begin
+      StartRangeExtended := True;
+    end;
+    if (Boundary.EndTime > EndTestTime+SP_Epsilon) then
+    begin
+      EndRangeExtended := True;
+    end;
+//    if (Boundary.StartTime < StartTestTime) then
+//    begin
+//      StartRangeExtended := True;
+//    end;
+//    if (Boundary.EndTime > EndTestTime) then
+//    begin
+//      EndRangeExtended := True;
+//    end;
+  end;
+end;
+
 procedure TIrrigationItem.Assign(Source: TPersistent);
 var
   SourceItem: TIrrigationItem;
@@ -52,6 +150,7 @@ begin
   begin
     SourceItem := TIrrigationItem(Source);
     Name := SourceItem.Name;
+    EvapFraction := SourceItem.EvapFraction;
 //    Efficiency := SourceItem.Efficiency;
   end;
   inherited;
@@ -109,12 +208,13 @@ begin
     end;
   end;
 
+  FEvapFraction := TFmp4EvapFractionCollection.Create(Model);
 end;
-
 
 
 destructor TIrrigationItem.Destroy;
 begin
+  FEvapFraction.Free;
   inherited;
 end;
 
@@ -127,7 +227,14 @@ begin
   begin
     OtherItem := TIrrigationItem(AnotherItem);
     result := (Name  = OtherItem.Name)
+    and EvapFraction.IsSame(OtherItem.EvapFraction)
   end;
+end;
+
+procedure TIrrigationItem.SetEvapFraction(
+  const Value: TFmp4EvapFractionCollection);
+begin
+  FEvapFraction.Assign(Value);
 end;
 
 procedure TIrrigationItem.SetName(Value: string);
@@ -260,12 +367,79 @@ begin
   end;
 end;
 
-//procedure TIrrigationItem.SetStoredEfficiency(const Value: TRealStorage);
-//begin
-//  FStoredEfficiency.Assign(Value);
-//end;
+procedure TIrrigationItem.UpdateTimes(Times: TRealList; StartTestTime,
+  EndTestTime: double; var StartRangeExtended, EndRangeExtended: boolean);
+begin
+  AddBoundaryTimes(EvapFraction, Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+end;
+
+procedure TIrrigationCollection.UpdateTimes(Times: TRealList; StartTestTime,
+  EndTestTime: double; var StartRangeExtended, EndRangeExtended: boolean);
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].UpdateTimes(Times, StartTestTime, EndTestTime,
+      StartRangeExtended, EndRangeExtended);
+  end;
+end;
 
 { TIrrigationCollection }
+
+//procedure TIrrigationCollection.AddBoundaryTimes(
+//  BoundCol: TCustomNonSpatialBoundColl; Times: TRealList; StartTestTime,
+//  EndTestTime: double; var StartRangeExtended, EndRangeExtended: boolean);
+//var
+//  BoundaryIndex: Integer;
+//  Boundary: TCustomModflowBoundaryItem;
+//  SP_Epsilon: Double;
+//  CosestIndex: Integer;
+//  ExistingTime: Double;
+//begin
+//  SP_Epsilon := (Model as TCustomModel).SP_Epsilon;
+//  for BoundaryIndex := 0 to BoundCol.Count - 1 do
+//  begin
+//    Boundary := BoundCol[BoundaryIndex] as TCustomModflowBoundaryItem;
+//    CosestIndex := Times.IndexOfClosest(Boundary.StartTime);
+//    if CosestIndex >= 0 then
+//    begin
+//      ExistingTime := Times[CosestIndex];
+//      if Abs(ExistingTime-Boundary.StartTime) >  SP_Epsilon then
+//      begin
+//        Times.AddUnique(Boundary.StartTime);
+//      end;
+//    end;
+//    CosestIndex := Times.IndexOfClosest(Boundary.EndTime);
+//    if CosestIndex >= 0 then
+//    begin
+//      ExistingTime := Times[CosestIndex];
+//      if Abs(ExistingTime-Boundary.EndTime) >  SP_Epsilon then
+//      begin
+//        Times.AddUnique(Boundary.EndTime);
+//      end;
+//    end;
+////    Times.AddUnique(Boundary.StartTime);
+////    Times.AddUnique(Boundary.EndTime);
+//    if (Boundary.StartTime < StartTestTime-SP_Epsilon) then
+//    begin
+//      StartRangeExtended := True;
+//    end;
+//    if (Boundary.EndTime > EndTestTime+SP_Epsilon) then
+//    begin
+//      EndRangeExtended := True;
+//    end;
+////    if (Boundary.StartTime < StartTestTime) then
+////    begin
+////      StartRangeExtended := True;
+////    end;
+////    if (Boundary.EndTime > EndTestTime) then
+////    begin
+////      EndRangeExtended := True;
+////    end;
+//  end;
+//end;
 
 constructor TIrrigationCollection.Create(Model: TBaseModel);
 begin
@@ -305,6 +479,91 @@ procedure TIrrigationCollection.SetItems(Index: Integer;
   const Value: TIrrigationItem);
 begin
   inherited Items[index] := Value;
+end;
+
+{ TEvapFractionItem }
+
+function TEvapFractionItem.BoundaryFormulaCount: integer;
+begin
+  result := 1;
+end;
+
+function TEvapFractionItem.GetBoundaryFormula(Index: integer): string;
+begin
+  case Index of
+    EvapIrrigateFractionPosition:
+      result := EvapIrrigateFraction;
+    else Assert(False);
+  end;
+end;
+
+function TEvapFractionItem.GetEvapIrrigateFraction: string;
+begin
+  Result := FFormulaObjects[EvapIrrigateFractionPosition].Formula;
+  ResetItemObserver(EvapIrrigateFractionPosition);
+end;
+
+procedure TEvapFractionItem.SetBoundaryFormula(Index: integer;
+  const Value: string);
+begin
+  case Index of
+    EvapIrrigateFractionPosition:
+      EvapIrrigateFraction := Value;
+    else Assert(False);
+  end;
+end;
+
+procedure TEvapFractionItem.SetEvapIrrigateFraction(const Value: string);
+begin
+  if FFormulaObjects[EvapIrrigateFractionPosition].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, EvapIrrigateFractionPosition,
+      FFormulaObjects[EvapIrrigateFractionPosition]);
+  end;
+end;
+
+{ TFmp4EvapFractionCollection }
+
+function TFmp4EvapFractionCollection.GetItems(
+  Index: Integer): TEvapFractionItem;
+begin
+  result := inherited Items[Index] as TEvapFractionItem;
+end;
+
+function TFmp4EvapFractionCollection.ItemByStartTime(
+  ATime: Double): TEvapFractionItem;
+var
+  TimeIndex: Integer;
+  AnItem: TEvapFractionItem;
+begin
+  result := nil;
+  for TimeIndex := 0 to Count - 1 do
+  begin
+    AnItem := Items[TimeIndex];
+    if AnItem.StartTime <= ATime then
+    begin
+      result := AnItem;
+
+      if AnItem is TCustomModflowBoundaryItem then
+      begin
+        if TCustomModflowBoundaryItem(AnItem).EndTime > ATime then
+        begin
+          Break;
+        end;
+      end;
+    end;
+  end;
+end;
+
+class function TFmp4EvapFractionCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TEvapFractionItem;
+end;
+
+procedure TFmp4EvapFractionCollection.SetItems(Index: Integer;
+  const Value: TEvapFractionItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

@@ -56,17 +56,21 @@ type
   TIrrigationRecord = record
     StartingTime: double;
     EndingTime: Double;
-    // ROOT
     Irrigation: Integer;
     IrrigationAnnotation: string;
+    EvapIrrigateFraction: Double;
+    EvapIrrigateFractionAnnotation: string;
   end;
 
-  TIrrigationItem = class(TCustomZeroFarmItem)
+  TCropIrrigationItem = class(TCustomZeroFarmItem)
   private
     const
     IrrigationPosition = 0;
+    EvapIrrigateFractionPosition = 1;
     function GetIrrigation: string;
     procedure SetIrrigation(const Value: string);
+    function GetEvapIrrigateFraction: string;
+    procedure SetEvapIrrigateFraction(const Value: string);
   protected
     // See @link(BoundaryFormula).
     function GetBoundaryFormula(Index: integer): string; override;
@@ -75,16 +79,19 @@ type
     function BoundaryFormulaCount: integer; override;
   published
     property Irrigation: string read GetIrrigation write SetIrrigation;
+    property EvapIrrigateFraction: string read GetEvapIrrigateFraction
+      write SetEvapIrrigateFraction;
   end;
 
+  // @name represents the choice of irrigation type for one crop.
   TFmp4IrrigationCollection = class(TCustomFarmCollection)
   private
     FTimeValues: array of TIrrigationRecord;
     function GetIrrigationTimeValues(Index: integer): TIrrigationRecord;
     procedure SetIrrigationTimeValues(Index: integer;
       const Value: TIrrigationRecord);
-    function GetItems(Index: Integer): TIrrigationItem;
-    procedure SetItems(Index: Integer; const Value: TIrrigationItem);
+    function GetItems(Index: Integer): TCropIrrigationItem;
+    procedure SetItems(Index: Integer; const Value: TCropIrrigationItem);
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
@@ -92,7 +99,7 @@ type
     property IrrigationTimeValues[Index: integer]: TIrrigationRecord
       read GetIrrigationTimeValues write SetIrrigationTimeValues;
     function GetIrrigationTimeValuesFromTime(StartTime: double): TIrrigationRecord;
-    property Items[Index: Integer]: TIrrigationItem read GetItems
+    property Items[Index: Integer]: TCropIrrigationItem read GetItems
       write SetItems; default;
   end;
 
@@ -3596,37 +3603,56 @@ end;
 
 { TIrrigationItem }
 
-function TIrrigationItem.BoundaryFormulaCount: integer;
+function TCropIrrigationItem.BoundaryFormulaCount: integer;
 begin
-  Result := 1;
+  Result := 2;
 end;
 
-function TIrrigationItem.GetBoundaryFormula(Index: integer): string;
+function TCropIrrigationItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    0:
+    IrrigationPosition:
       result := Irrigation;
+    EvapIrrigateFractionPosition:
+      result := EvapIrrigateFraction;
     else Assert(False);
   end;
 end;
 
-function TIrrigationItem.GetIrrigation: string;
+function TCropIrrigationItem.GetEvapIrrigateFraction: string;
+begin
+  Result := FFormulaObjects[EvapIrrigateFractionPosition].Formula;
+  ResetItemObserver(EvapIrrigateFractionPosition);
+end;
+
+function TCropIrrigationItem.GetIrrigation: string;
 begin
   Result := FFormulaObjects[IrrigationPosition].Formula;
   ResetItemObserver(IrrigationPosition);
 end;
 
-procedure TIrrigationItem.SetBoundaryFormula(Index: integer;
+procedure TCropIrrigationItem.SetBoundaryFormula(Index: integer;
   const Value: string);
 begin
   case Index of
-    0:
+    IrrigationPosition:
       Irrigation := Value;
+    EvapIrrigateFractionPosition:
+      EvapIrrigateFraction := Value;
     else Assert(False);
   end;
 end;
 
-procedure TIrrigationItem.SetIrrigation(const Value: string);
+procedure TCropIrrigationItem.SetEvapIrrigateFraction(const Value: string);
+begin
+  if FFormulaObjects[EvapIrrigateFractionPosition].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, EvapIrrigateFractionPosition,
+      FFormulaObjects[EvapIrrigateFractionPosition]);
+  end;
+end;
+
+procedure TCropIrrigationItem.SetIrrigation(const Value: string);
 begin
   if FFormulaObjects[IrrigationPosition].Formula <> Value then
   begin
@@ -3640,7 +3666,7 @@ end;
 procedure TFmp4IrrigationCollection.EvaluateBoundaries;
 var
   CurrentRecord: TIrrigationRecord;
-  CurrentItem: TIrrigationItem;
+  CurrentItem: TCropIrrigationItem;
   Compiler: TRbwParser;
   PhastModel: TPhastModel;
   Formula: string;
@@ -3652,7 +3678,7 @@ begin
   Compiler := PhastModel.rpThreeDFormulaCompiler;
   for Index := 0 to Count - 1 do
   begin
-    CurrentItem := Items[Index] as TIrrigationItem;
+    CurrentItem := Items[Index] as TCropIrrigationItem;
     CurrentRecord.StartingTime := CurrentItem.StartTime;
     CurrentRecord.EndingTime := CurrentItem.EndTime;
     Expression := nil;
@@ -3715,14 +3741,14 @@ begin
     StrIncompleteIrrigatio, ErrorMessage);
 end;
 
-function TFmp4IrrigationCollection.GetItems(Index: Integer): TIrrigationItem;
+function TFmp4IrrigationCollection.GetItems(Index: Integer): TCropIrrigationItem;
 begin
-  result := inherited Items[Index] as TIrrigationItem;
+  result := inherited Items[Index] as TCropIrrigationItem;
 end;
 
 class function TFmp4IrrigationCollection.ItemClass: TBoundaryItemClass;
 begin
-  result := TIrrigationItem;
+  result := TCropIrrigationItem;
 end;
 
 procedure TFmp4IrrigationCollection.SetIrrigationTimeValues(Index: integer;
@@ -3733,7 +3759,7 @@ begin
 end;
 
 procedure TFmp4IrrigationCollection.SetItems(Index: Integer;
-  const Value: TIrrigationItem);
+  const Value: TCropIrrigationItem);
 begin
   inherited Items[Index] := Value;
 end;

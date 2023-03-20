@@ -15,8 +15,6 @@ type
     wlEtFrac, wlSwLosses, wlPFLX, wlCropFunc, wlWaterCost, wlDeliveries,
     wlSemiRouteDeliv, wlSemiRouteReturn, wlCall);
 
-  TTestIntValueOkProcedure = reference to procedure (Value: Integer);
-
   TModflowFmpWriter = class(TCustomListWriter)
   private
     FFarmProcess: TFarmProcess;
@@ -124,9 +122,6 @@ type
     function GetCropConsumptiveUseFlag: Integer;
     function GetConsumptiveUseFlag: Integer;
     function GetPrecipitationFlag: integer;
-    procedure WriteIntegerValueFromGlobalFormula(Formula: string;
-      ErrorObject: TObject; const DataSetErrorString: string;
-      TestValue: TTestIntValueOkProcedure = nil);
     function GetCropBenefitsFlag: integer;
     function GetWaterCostCoefficientsFlag: integer;
     function GetMaxNonRoutedDelivery: integer;
@@ -307,7 +302,6 @@ resourcestring
 //  StrInvalidFarmID = 'Invalid Farm ID in Farm Process';
 //  StrRow0dColumn = 'Row: %0:d; Column: %1:d';
   StrInvalidSoilIDInF = 'Invalid Soil ID in Farm Process';
-  StrTheFormulaShouldInt = 'The formula should result in an integer';
 //  StrFMPFarmsNotDefine = 'FMP Farms not defined in one or more stress period' +
 //  's';
   StrUndefinedFMPRefere = 'Undefined FMP Reference Evapotranspiration in one' +
@@ -4107,32 +4101,6 @@ begin
     frmErrorsAndWarnings.EndUpdate;
   end;
 
-end;
-
-procedure TModflowFmpWriter.WriteIntegerValueFromGlobalFormula(Formula: string;
-  ErrorObject: TObject; const DataSetErrorString: string;
-  TestValue: TTestIntValueOkProcedure = nil);
-var
-  Value: integer;
-  Expression: TExpression;
-begin
-  Expression := EvaluateValueFromGlobalFormula(Formula, ErrorObject,
-    DataSetErrorString, [rdtInteger]);
-  if Expression.ResultType = rdtInteger then
-  begin
-    Value := Expression.IntegerResult;
-    WriteFreeInteger(Value);
-    if Assigned(TestValue) then
-    begin
-      TestValue(Value);
-    end;
-  end
-  else
-  begin
-    WriteFreeInteger(0);
-    frmFormulaErrors.AddFormulaError(GetObjectString(ErrorObject), DataSetErrorString,
-      Formula, StrTheFormulaShouldInt);
-  end;
 end;
 
 procedure TModflowFmpWriter.WriteNwtOptions;

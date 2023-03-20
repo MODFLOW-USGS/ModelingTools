@@ -49,6 +49,8 @@ type
     frameLosses: TFrameFormulaGrid;
     frameRootDepth: TFrameFormulaGrid;
     rbwprsrGlobal: TRbwParser;
+    jvspIrrigation: TJvStandardPage;
+    frameIrrigation: TframeFormulaGrid;
     procedure FormDestroy(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
     procedure jvpltvMainChange(Sender: TObject; Node: TTreeNode);
@@ -75,6 +77,7 @@ type
       ARow: Integer);
     procedure frameCropNameGridBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameIrrigationGridEndUpdate(Sender: TObject);
   private
     FNameStart: integer;
     FPressureStart: integer;
@@ -90,6 +93,9 @@ type
     FCropFunctions: TCropFunctionCollection;
     FWaterUseCollection: TCropWaterUseCollection;
     FGettingData: Boolean;
+    FIrrigation: TFmp4IrrigationCollection;
+    FFarmProcess4: TFarmProcess4;
+    FFarmLandUse: TFarmProcess4LandUse;
     procedure SetUpCropNameTable(Model: TCustomModel);
     procedure SetCropNameTableColumns(Model: TCustomModel);
     procedure GetCrops(CropCollection: TCropCollection);
@@ -103,6 +109,8 @@ type
     procedure GetCropFunction(CropFunctions: TCropFunctionCollection);
     procedure SetUpCropWaterUseTable(Model: TCustomModel);
     procedure GetCropWaterUseFunction(WaterUseCollection: TCropWaterUseCollection);
+    procedure SetUpIrrigationTable(Model: TCustomModel);
+    procedure GetIrrigation(Irrigation: TFmp4IrrigationCollection);
     procedure GetData;
     procedure SetGridColumnProperties(Grid: TRbwDataGrid4);
     procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
@@ -169,6 +177,9 @@ resourcestring
   StrCropPriceFunction = 'Crop Price Function';
   StrChangeFarmCrops = 'change farm crops';
   StrCrops = 'Crops';
+  StrIrrigationTypeIRR = 'Irrigation type (IRRIGATION)';
+  StrIrrigation = 'Irrigation';
+  StrEvaporationIrrigati = 'Evaporation Irrigation Fraction';
 
 type
   TNameCol = (ncID, ncName);
@@ -184,6 +195,7 @@ type
   TLossesColumns = (lcStart, lcEnd, lcPrecip, lcIrrig);
   TCropFunctionColumns = (cfcStart, cfcEnd, cfcSlope, cfcIntercept, cfcPrice);
   TCropWaterUse = (cwuStart, cwuEnd, cwuCropValue, cwuIrrigated);
+  TIrrigationColumns = (icStart, icEnd, IcIrrigation, icEvapIrrigateFraction);
 
 {$R *.dfm}
 
@@ -305,6 +317,22 @@ begin
   frameEvapFractions.LayoutMultiRowEditControls;
 end;
 
+procedure TfrmCropProperties.SetUpIrrigationTable(Model: TCustomModel);
+begin
+  frameIrrigation.Grid.ColCount := 4;
+  frameIrrigation.Grid.FixedCols := 0;
+  frameIrrigation.Grid.Columns[Ord(icStart)].Format := rcf4Real;
+  frameIrrigation.Grid.Columns[Ord(icEnd)].Format := rcf4Real;
+  frameIrrigation.Grid.Cells[Ord(icStart), 0] := StrStartingTime;
+  frameIrrigation.Grid.Cells[Ord(icEnd), 0] := StrEndingTime;
+  frameIrrigation.Grid.Cells[Ord(icIrrigation), 0] := StrIrrigationTypeIRR;
+  frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), 0] := StrEvaporationIrrigati;
+  SetGridColumnProperties(frameIrrigation.Grid);
+  SetUseButton(frameIrrigation.Grid, Ord(icIrrigation));
+  frameIrrigation.FirstFormulaColumn := 2;
+  frameIrrigation.LayoutMultiRowEditControls;
+end;
+
 procedure TfrmCropProperties.SetUpLossesTable(Model: TCustomModel);
 begin
   frameLosses.Grid.ColCount := 4;
@@ -381,6 +409,13 @@ begin
     if ACol = Ord(cwuIrrigated) then
     begin
       ResultType := rdtBoolean;
+    end
+  end
+  else if (DataGrid = frameIrrigation.Grid)then
+  begin
+    if ACol = Ord(IcIrrigation) then
+    begin
+      ResultType := rdtInteger;
     end
   end
   else if (DataGrid = frameCropName.Grid)then
@@ -470,6 +505,19 @@ begin
     ANode.PageIndex := jvspCropWaterUse.PageIndex;
     ANode.Data := ACrop.CropWaterUseCollection;
   end;
+
+{$IFDEF OWHMV2}
+  if (frmGoPhast.ModelSelection = msModflowOwhm2)
+    and FFarmProcess4.IsSelected and FFarmLandUse.IsSelected
+    and (FFarmLandUse.IrrigationListUsed
+      or FFarmLandUse.EvapIrrigateFractionListByCropUsed) then
+  begin
+    ANode := jvpltvMain.Items.AddChild(CropNode, StrIrrigation) as TJvPageIndexNode;
+    ANode.PageIndex := jvspIrrigation.PageIndex;
+    ANode.Data := ACrop.IrrigationCollection;
+  end;
+{$ENDIF}
+
 end;
 
 procedure TfrmCropProperties.FormCreate(Sender: TObject);
@@ -657,22 +705,6 @@ begin
     begin
       frameCropName.seNumber.AsInteger := ARow
     end;
-//    ItemCount := 0;
-//    for RowIndex := 1 to frameCropName.seNumber.AsInteger do
-//    begin
-//      if frameCropName.Grid.Cells[Ord(ncName), RowIndex] <> '' then
-//      begin
-//        Inc(ItemCount);
-//      end;
-//    end;
-//    while FCrops.Count > ItemCount do
-//    begin
-//      FCrops.Last.Free;
-//    end;
-//    while FCrops.Count < ItemCount do
-//    begin
-//      FCrops.Add;
-//    end;
   end;
 
   ItemIndex := -1;
@@ -931,6 +963,52 @@ begin
   end;
 end;
 
+procedure TfrmCropProperties.frameIrrigationGridEndUpdate(Sender: TObject);
+var
+  RowIndex: Integer;
+  ItemCount: Integer;
+  StartTime: double;
+  EndTime: double;
+  AnItem: TCropIrrigationItem;
+begin
+  inherited;
+  if FGettingData then
+  begin
+    Exit;
+  end;
+
+  frameIrrigation.GridEndUpdate(Sender);
+  if FIrrigation <> nil then
+  begin
+    ItemCount := 0;
+    for RowIndex := 1 to frameIrrigation.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(frameIrrigation.Grid.Cells[
+        Ord(icStart), RowIndex], StartTime)
+        and TryStrToFloat(frameIrrigation.Grid.Cells[
+        Ord(icEnd), RowIndex], EndTime) then
+      begin
+        if ItemCount >= FIrrigation.Count then
+        begin
+          FIrrigation.Add;
+        end;
+        AnItem := FIrrigation[ItemCount];
+        AnItem.StartTime := StartTime;
+        AnItem.EndTime := EndTime;
+        AnItem.Irrigation :=
+          frameIrrigation.Grid.Cells[Ord(IcIrrigation), RowIndex];
+        AnItem.EvapIrrigateFraction :=
+          frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), RowIndex];
+        Inc(ItemCount);
+      end;
+    end;
+    while FIrrigation.Count > ItemCount do
+    begin
+      FIrrigation.Last.Free;
+    end;
+  end
+end;
+
 procedure TfrmCropProperties.frameLossesGridEndUpdate(Sender: TObject);
 var
   RowIndex: Integer;
@@ -1155,6 +1233,7 @@ begin
   SetUpLossesTable(frmGoPhast.PhastModel);
   SetUpCropFunctionTable(frmGoPhast.PhastModel);
   SetUpCropWaterUseTable(frmGoPhast.PhastModel);
+  SetUpIrrigationTable(frmGoPhast.PhastModel);
 
   StartTimes := TStringList.Create;
   EndTimes := TStringList.Create;
@@ -1171,6 +1250,7 @@ begin
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameLosses.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameCropFunction.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameCropWaterUse.Grid);
+    SetStartAndEndTimeLists(StartTimes, EndTimes, frameIrrigation.Grid);
   finally
     EndTimes.Free;
     StartTimes.Free;
@@ -1185,6 +1265,8 @@ begin
   FCropsNode.Data := FCrops;
 
   FFarmProcess := frmGoPhast.PhastModel.ModflowPackages.FarmProcess;
+  FFarmProcess4 := frmGoPhast.PhastModel.ModflowPackages.FarmProcess4;
+  FFarmLandUse := frmGoPhast.PhastModel.ModflowPackages.FarmLandUse;
 
   for CropIndex := 0 to FCrops.Count - 1 do
   begin
@@ -1354,6 +1436,10 @@ begin
       begin
         GetCropWaterUseFunction(TCropWaterUseCollection(AnObject));
       end
+      else if AnObject is TFmp4IrrigationCollection then
+      begin
+        GetIrrigation(TFmp4IrrigationCollection(AnObject));
+      end
       else
         Assert(False);
     finally
@@ -1414,6 +1500,36 @@ begin
     frmGoPhast.PhastModel.RefreshGlobalVariables(CompilerList);
   finally
     CompilerList.Free;
+  end;
+end;
+
+procedure TfrmCropProperties.GetIrrigation(
+  Irrigation: TFmp4IrrigationCollection);
+var
+  ItemIndex: Integer;
+  AnItem: TCropIrrigationItem;
+begin
+  Assert(Irrigation <> nil);
+  FIrrigation := Irrigation;
+  frameIrrigation.ClearGrid;
+  frameIrrigation.seNumber.AsInteger := Irrigation.Count;
+  frameIrrigation.seNumber.OnChange(frameIrrigation.seNumber);
+  if frameIrrigation.seNumber.AsInteger = 0 then
+  begin
+    frameIrrigation.Grid.Row := 1;
+    frameIrrigation.ClearSelectedRow;
+  end;
+  frameIrrigation.Grid.BeginUpdate;
+  try
+    for ItemIndex := 0 to Irrigation.Count - 1 do
+    begin
+      AnItem := Irrigation[ItemIndex];
+      frameIrrigation.Grid.Cells[Ord(rdcStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
+      frameIrrigation.Grid.Cells[Ord(rdcEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
+      frameIrrigation.Grid.Cells[Ord(rdcRootingDepth), ItemIndex+1] := AnItem.Irrigation;
+    end;
+  finally
+    frameIrrigation.Grid.EndUpdate;
   end;
 end;
 
