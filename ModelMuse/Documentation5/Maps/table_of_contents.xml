@@ -3251,6 +3251,9 @@
     <topicref type="topic" id="442953072700395" build="ALL" modified="2021-04-09T08:24:09.044Z" icon="0" href="How_can_I_export_data_from_my_">
       <caption translate="true">How can I export data from my model?</caption>
     </topicref>
+    <topicref type="topic" id="45007110497162" build="ALL" modified="2023-03-21T16:00:54.982Z" icon="0" href="How-can-I-define-a-head-differ">
+      <caption translate="true">How can I define a head difference as a PEST Observation?</caption>
+    </topicref>
   </topicref>
   <topicref type="topic" id="394003498800389" build="ALL" modified="2022-01-24T16:49:01.490Z" icon="0">
     <caption translate="true">Online Guide to MODFLOW</caption>

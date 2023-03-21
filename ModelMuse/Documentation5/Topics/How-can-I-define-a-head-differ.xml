@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-03-21T16:01:29.549-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">How can I define a head difference as a PEST Observation?</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">How can I define a head difference as a PEST Observation?</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">One way is in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Comparisons_Dialog" styleclass="Normal" translate="true">Comparison Observations dialog box</link><text styleclass="Normal" translate="true">. In fact, the difference between any two observations can be defined there.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW 6, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OBS_Observation_Utility_Pane" styleclass="Normal" translate="true">OBS: Observation utility pane</link><text styleclass="Normal" translate="true"> in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties dialog box</link><text styleclass="Normal" translate="true"> can be used to define head difference observations between observations at different times but at the same location.</text></para>
+  </body>
+</topic>

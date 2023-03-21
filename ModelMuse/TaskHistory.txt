@@ -30865,6 +30865,7 @@ object TTaskHistory
       Date = 45006.000000000000000000
       Categories.Strings = (
         'Dialog boxes'
-        'FMP')
+        'FMP'
+        'Documentation')
     end>
 end

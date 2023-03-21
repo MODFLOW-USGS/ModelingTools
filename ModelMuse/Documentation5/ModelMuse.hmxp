@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4410</config-value>
+      <config-value name="autohelpstart">4411</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1104,6 +1104,7 @@ document.write('</frameset>');
       <helpcontext-number href="How_can_I_export_data_from_my_" value="4134"/>
       <helpcontext-number href="How_do_I_plot_head__drawdown_o" value="3996"/>
       <helpcontext-number href="How_do_I_specify_MT3D_Observat" value="3994"/>
+      <helpcontext-number href="How-can-I-define-a-head-differ" value="4411"/>
       <helpcontext-number href="Huf_Head_In_Formula" value="3556"/>
       <helpcontext-number href="HUF2_Hydrogeologic_Unit_Flow" value="3514"/>
       <helpcontext-number href="HYD_HYDMOD_Package" value="3582"/>
