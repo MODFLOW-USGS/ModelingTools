@@ -37,6 +37,8 @@ type
     frameFormulaGridEfficiencyImprovement: TframeFormulaGrid;
     tabAddedDemandRunoffSplit: TTabSheet;
     frameAddedDemandRunoffSplit: TframeFormulaGrid;
+    tabIrrigationUniformity: TTabSheet;
+    frameIrrigationUniformity: TframeFormulaGrid;
     procedure frameFormulaGridCropsedFormulaChange(Sender: TObject);
     procedure frameFormulaGridCropsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -104,6 +106,15 @@ type
     procedure frameAddedDemandRunoffSplitseNumberChange(Sender: TObject);
     procedure frameAddedDemandRunoffSplitGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameIrrigationUniformitysbAddClick(Sender: TObject);
+    procedure frameIrrigationUniformitysbDeleteClick(Sender: TObject);
+    procedure frameIrrigationUniformitysbInsertClick(Sender: TObject);
+    procedure frameIrrigationUniformityseNumberChange(Sender: TObject);
+    procedure frameIrrigationUniformityedFormulaChange(Sender: TObject);
+    procedure frameIrrigationUniformityGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameIrrigationUniformityGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
   private
     FChangedCrops: boolean;
     FChangedCosts: boolean;
@@ -114,9 +125,11 @@ type
     FChangedAllotment: Boolean;
     FEfficiencyImprovementChanged: Boolean;
     FAddedDemandRunoffSplitChanged: Boolean;
+    FIrrigationUniformityChanged: Boolean;
     procedure GetCropEffForFirstFarm(FirstFarm: TFarm);
     procedure GetCropEffImproveForFirstFarm(FirstFarm: TFarm);
     procedure GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
+    procedure GetIrrigationUniformityForFirstFarm(FirstFarm: TFarm);
     procedure GetCostsForFirstFarm(FirstFarm: TFarm);
     procedure GetWaterRightsForFirstFarm(FirstFarm: TFarm);
     procedure GetGwAllotmentForFirstFarm(FirstFarm: TFarm);
@@ -127,6 +140,8 @@ type
     procedure SetCropEfficiencyImprove(Farm: TFarm;
       IrrigationTypes: TIrrigationCollection);
     procedure SetAddedDemandRunoffSplit(Farm: TFarm;
+      IrrigationTypes: TIrrigationCollection);
+    procedure SetIrrigationUniformity(Farm: TFarm;
       IrrigationTypes: TIrrigationCollection);
     procedure SetFarmCosts(Farm: TFarm);
     procedure SetWaterRights(Farm: TFarm);
@@ -322,6 +337,7 @@ begin
       ClearGrid(frameGW_Allocation.Grid);
       ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
       ClearGrid(frameAddedDemandRunoffSplit.Grid);
+      ClearGrid(frameIrrigationUniformity.Grid);
       Enabled := False;
       Exit;
     end;
@@ -349,6 +365,7 @@ begin
       frameGW_Allocation.Grid.BeginUpdate;
       frameFormulaGridEfficiencyImprovement.Grid.BeginUpdate;
       frameAddedDemandRunoffSplit.Grid.BeginUpdate;
+      frameIrrigationUniformity.Grid.BeginUpdate;
       try
         ClearGrid(frameFormulaGridCrops.Grid);
         ClearGrid(frameFormulaGridCosts.Grid);
@@ -356,11 +373,13 @@ begin
         ClearGrid(frameGW_Allocation.Grid);
         ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
         ClearGrid(frameAddedDemandRunoffSplit.Grid);
+        ClearGrid(frameIrrigationUniformity.Grid);
 
         FirstFarm := FarmList[0];
         GetCropEffForFirstFarm(FirstFarm);
         GetCropEffImproveForFirstFarm(FirstFarm);
         GetAddedDemandRunoffSplitForFirstFarm(FirstFarm);
+        GetIrrigationUniformityForFirstFarm(FirstFarm);
         GetCostsForFirstFarm(FirstFarm);
         GetWaterRightsForFirstFarm(FirstFarm);
         GetGwAllotmentForFirstFarm(FirstFarm);
@@ -445,8 +464,20 @@ begin
           if not AFarm.AddedDemandRunoffSplitCollection.IsSame(
             FirstFarm.AddedDemandRunoffSplitCollection) then
           begin
-            ClearGrid(frameGW_Allocation.Grid);
-            frameGW_Allocation.seNumber.AsInteger := 0;
+            ClearGrid(frameAddedDemandRunoffSplit.Grid);
+            frameAddedDemandRunoffSplit.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.IrrigationUniformity.IsSame(
+            FirstFarm.IrrigationUniformity) then
+          begin
+            ClearGrid(frameIrrigationUniformity.Grid);
+            frameIrrigationUniformity.seNumber.AsInteger := 0;
             break;
           end;
         end;
@@ -458,6 +489,7 @@ begin
         frameFormulaGridWaterRights.Grid.EndUpdate;
         frameGW_Allocation.Grid.EndUpdate;
         frameAddedDemandRunoffSplit.Grid.EndUpdate;
+        frameIrrigationUniformity.Grid.EndUpdate;
       end;
 
       frameFormulaGridDiversion.GetData(FarmList, dtDiversion);
@@ -473,6 +505,7 @@ begin
       FChangedAllotment := false;
       FEfficiencyImprovementChanged := False;
       FAddedDemandRunoffSplitChanged := False;
+      FIrrigationUniformityChanged := False;
     end;
   finally
     Changing := False;
@@ -498,6 +531,12 @@ begin
     Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
     Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.Allotment;
   end;
+end;
+
+procedure TframeFarm.GetIrrigationUniformityForFirstFarm(FirstFarm: TFarm);
+begin
+  GetAnEfficiencyCollection(FirstFarm, frameIrrigationUniformity,
+    FirstFarm.IrrigationUniformity);
 end;
 
 procedure TframeFarm.frameAddedDemandRunoffSplitGridButtonClick(Sender: TObject;
@@ -883,6 +922,63 @@ begin
   DoChange;
 end;
 
+procedure TframeFarm.frameIrrigationUniformityedFormulaChange(Sender: TObject);
+begin
+  inherited;
+  frameIrrigationUniformity.edFormulaChange(Sender);
+  FIrrigationUniformityChanged := True;
+  DoChange
+end;
+
+procedure TframeFarm.frameIrrigationUniformityGridButtonClick(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
+procedure TframeFarm.frameIrrigationUniformityGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateNextTimeCell(frameIrrigationUniformity.Grid, ACol, ARow);
+  DoChange;
+  FIrrigationUniformityChanged := True;
+end;
+
+procedure TframeFarm.frameIrrigationUniformitysbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameIrrigationUniformity.sbAddClick(Sender);
+  FIrrigationUniformityChanged := True;
+  DoChange
+end;
+
+procedure TframeFarm.frameIrrigationUniformitysbDeleteClick(Sender: TObject);
+begin
+  inherited;
+  frameIrrigationUniformity.sbDeleteClick(Sender);
+  FIrrigationUniformityChanged := True;
+  DoChange
+end;
+
+procedure TframeFarm.frameIrrigationUniformitysbInsertClick(Sender: TObject);
+begin
+  inherited;
+  FIrrigationUniformityChanged := True;
+  DoChange;
+  frameIrrigationUniformity.sbInsertClick(Sender);
+
+end;
+
+procedure TframeFarm.frameIrrigationUniformityseNumberChange(Sender: TObject);
+begin
+  inherited;
+  frameIrrigationUniformity.seNumberChange(Sender);
+  FIrrigationUniformityChanged := True;
+  DoChange
+end;
+
 procedure TframeFarm.GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
 begin
   GetAnEfficiencyCollection(FirstFarm, frameAddedDemandRunoffSplit,
@@ -1106,6 +1202,10 @@ begin
       IrrigationTypes, frameAddedDemandRunoffSplit,
       '%s added demanand runoff split');
 
+    InitializeEfficiencyCollectionFrame(StartTimes, EndTimes,
+      IrrigationTypes, frameIrrigationUniformity,
+      '%s irrigation uniformity');
+
     Grid := frameFormulaGridCosts.Grid;
     ClearGrid(Grid);
     Grid.BeginUpdate;
@@ -1220,10 +1320,10 @@ begin
       Farm.FarmName := edFarmName.Text;
     end;
   end;
+  IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
   if FChangedCrops then
   begin
     Crops := frmGoPhast.PhastModel.FmpCrops;
-    IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
     for index := 0 to FarmList.Count - 1 do
     begin
       Farm := FarmList[index];
@@ -1236,7 +1336,7 @@ begin
 
   if FEfficiencyImprovementChanged then
   begin
-    IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
+//    IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
     for index := 0 to FarmList.Count - 1 do
     begin
       Farm := FarmList[index];
@@ -1249,13 +1349,25 @@ begin
 
   if FAddedDemandRunoffSplitChanged then
   begin
-    IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
+//    IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
     for index := 0 to FarmList.Count - 1 do
     begin
       Farm := FarmList[index];
       if Farm <> nil then
       begin
         SetAddedDemandRunoffSplit(Farm, IrrigationTypes);
+      end;
+    end;
+  end;
+
+  if FIrrigationUniformityChanged then
+  begin
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetIrrigationUniformity(Farm, IrrigationTypes);
       end;
     end;
   end;
@@ -1360,6 +1472,10 @@ begin
     Grid.Cells[Ord(ccEndTime), 0] := StrEndingTime;
     Grid.Columns[Ord(ccStartTime)].PickList := StartTimes;
     Grid.Columns[Ord(ccEndTime)].PickList := EndTimes;
+    Grid.Columns[Ord(ccStartTime)].ComboUsed := True;
+    Grid.Columns[Ord(ccEndTime)].ComboUsed := True;
+    Grid.Columns[Ord(ccStartTime)].WordWrapCaptions := True;
+    Grid.Columns[Ord(ccEndTime)].WordWrapCaptions := True;
     for CropIndex := 0 to IrrigationTypes.Count - 1 do
     begin
       IrrigationType := IrrigationTypes[CropIndex];
@@ -1581,6 +1697,13 @@ begin
   begin
     GwAllotment.Last.Free;
   end;
+end;
+
+procedure TframeFarm.SetIrrigationUniformity(Farm: TFarm;
+  IrrigationTypes: TIrrigationCollection);
+begin
+  SetAnEfficiencyCollection(Farm.IrrigationUniformity,
+    frameIrrigationUniformity, IrrigationTypes);
 end;
 
 procedure TframeFarm.SetCropEfficiencies(Farm: TFarm; Crops: TCropCollection;

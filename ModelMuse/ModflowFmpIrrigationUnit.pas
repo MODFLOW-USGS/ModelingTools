@@ -11,8 +11,11 @@ type
   private
     const
     EvapIrrigateFractionPosition = 0;
+    SWLossFractionIrrigationPosition = 1;
     function GetEvapIrrigateFraction: string;
     procedure SetEvapIrrigateFraction(const Value: string);
+    function GetSurfaceWaterLossFractionIrrigation: string;
+    procedure SetSurfaceWaterLossFractionIrrigation(const Value: string);
   protected
     // See @link(BoundaryFormula).
     function GetBoundaryFormula(Index: integer): string; override;
@@ -22,6 +25,9 @@ type
   published
     property EvapIrrigateFraction: string read GetEvapIrrigateFraction
       write SetEvapIrrigateFraction;
+    property SurfaceWaterLossFractionIrrigation: string
+      read GetSurfaceWaterLossFractionIrrigation
+      write SetSurfaceWaterLossFractionIrrigation;
   end;
 
   // @name represents the choice of irrigation type for one crop.
@@ -66,9 +72,6 @@ type
     function GetItems(Index: Integer): TIrrigationItem;
     procedure SetItems(Index: Integer; const Value: TIrrigationItem);
     function GetFarmList: TFarmList;
-//    procedure AddBoundaryTimes(BoundCol: TCustomNonSpatialBoundColl;
-//      Times: TRealList; StartTestTime, EndTestTime: double;
-//      var StartRangeExtended, EndRangeExtended: boolean);
   protected
     property FarmList: TFarmList read GetFarmList;
   public
@@ -204,6 +207,15 @@ begin
             break;
           end;
         end;
+        for CropEffIndex := 0 to AFarm.IrrigationUniformity.Count - 1 do
+        begin
+          AFarmEff := AFarm.IrrigationUniformity[CropEffIndex];
+          if AFarmEff.CropEfficiency.CropName = Name then
+          begin
+            AFarmEff.Free;
+            break;
+          end;
+        end;
       end;
     end;
   end;
@@ -319,6 +331,23 @@ begin
                 AFarmEff.CropEfficiency.CropName := Value;
                 AFarmEff.Index := index;
               end;
+
+              FoundMatch := False;
+              for CropEffIndex := 0 to AFarm.IrrigationUniformity.Count - 1 do
+              begin
+                AFarmEff := AFarm.IrrigationUniformity[CropEffIndex];
+                if AFarmEff.CropEfficiency.CropName = Value then
+                begin
+                  FoundMatch := True;
+                  break;
+                end;
+              end;
+              if not FoundMatch then
+              begin
+                AFarmEff := AFarm.IrrigationUniformity.Add;
+                AFarmEff.CropEfficiency.CropName := Value;
+                AFarmEff.Index := index;
+              end;
             end
             else
             begin
@@ -345,6 +374,16 @@ begin
               for CropEffIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
               begin
                 AFarmEff := AFarm.AddedDemandRunoffSplitCollection[CropEffIndex];
+                if AFarmEff.CropEfficiency.CropName = FName then
+                begin
+                  AFarmEff.CropEfficiency.CropName := Value;
+                  break;
+                end;
+              end;
+
+              for CropEffIndex := 0 to AFarm.IrrigationUniformity.Count - 1 do
+              begin
+                AFarmEff := AFarm.IrrigationUniformity[CropEffIndex];
                 if AFarmEff.CropEfficiency.CropName = FName then
                 begin
                   AFarmEff.CropEfficiency.CropName := Value;
@@ -485,7 +524,7 @@ end;
 
 function TEvapFractionItem.BoundaryFormulaCount: integer;
 begin
-  result := 1;
+  result := 2;
 end;
 
 function TEvapFractionItem.GetBoundaryFormula(Index: integer): string;
@@ -493,6 +532,8 @@ begin
   case Index of
     EvapIrrigateFractionPosition:
       result := EvapIrrigateFraction;
+    SWLossFractionIrrigationPosition:
+      result := SurfaceWaterLossFractionIrrigation;
     else Assert(False);
   end;
 end;
@@ -503,12 +544,20 @@ begin
   ResetItemObserver(EvapIrrigateFractionPosition);
 end;
 
+function TEvapFractionItem.GetSurfaceWaterLossFractionIrrigation: string;
+begin
+  Result := FFormulaObjects[SWLossFractionIrrigationPosition].Formula;
+  ResetItemObserver(SWLossFractionIrrigationPosition);
+end;
+
 procedure TEvapFractionItem.SetBoundaryFormula(Index: integer;
   const Value: string);
 begin
   case Index of
     EvapIrrigateFractionPosition:
       EvapIrrigateFraction := Value;
+    SWLossFractionIrrigationPosition:
+      SurfaceWaterLossFractionIrrigation := Value;
     else Assert(False);
   end;
 end;
@@ -519,6 +568,16 @@ begin
   begin
     UpdateFormulaBlocks(Value, EvapIrrigateFractionPosition,
       FFormulaObjects[EvapIrrigateFractionPosition]);
+  end;
+end;
+
+procedure TEvapFractionItem.SetSurfaceWaterLossFractionIrrigation(
+  const Value: string);
+begin
+  if FFormulaObjects[SWLossFractionIrrigationPosition].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, SWLossFractionIrrigationPosition,
+      FFormulaObjects[SWLossFractionIrrigationPosition]);
   end;
 end;
 

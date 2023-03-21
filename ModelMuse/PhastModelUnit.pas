@@ -45898,9 +45898,6 @@ var
   TestFirstTime: double;
   LastTestTime: double;
   OutOfStartRange, OutOfEndRange: Boolean;
-  IrrIndex: integer;
-  IrrigationType: TIrrigationItem;
-//  IrrigationType: TFarm;
 begin
   if not ModflowPackages.FarmProcess4.IsSelected then
   begin

@@ -180,6 +180,7 @@ resourcestring
   StrIrrigationTypeIRR = 'Irrigation type (IRRIGATION)';
   StrIrrigation = 'Irrigation';
   StrEvaporationIrrigati = 'Evaporation Irrigation Fraction';
+  StrSurfaceWaterLossF = 'Surface Water Loss Fraction Irrigation';
 
 type
   TNameCol = (ncID, ncName);
@@ -195,7 +196,8 @@ type
   TLossesColumns = (lcStart, lcEnd, lcPrecip, lcIrrig);
   TCropFunctionColumns = (cfcStart, cfcEnd, cfcSlope, cfcIntercept, cfcPrice);
   TCropWaterUse = (cwuStart, cwuEnd, cwuCropValue, cwuIrrigated);
-  TIrrigationColumns = (icStart, icEnd, IcIrrigation, icEvapIrrigateFraction);
+  TIrrigationColumns = (icStart, icEnd, IcIrrigation, icEvapIrrigateFraction,
+    icSWLossFracIrrigate);
 
 {$R *.dfm}
 
@@ -319,7 +321,7 @@ end;
 
 procedure TfrmCropProperties.SetUpIrrigationTable(Model: TCustomModel);
 begin
-  frameIrrigation.Grid.ColCount := 4;
+  frameIrrigation.Grid.ColCount := 5;
   frameIrrigation.Grid.FixedCols := 0;
   frameIrrigation.Grid.Columns[Ord(icStart)].Format := rcf4Real;
   frameIrrigation.Grid.Columns[Ord(icEnd)].Format := rcf4Real;
@@ -327,6 +329,8 @@ begin
   frameIrrigation.Grid.Cells[Ord(icEnd), 0] := StrEndingTime;
   frameIrrigation.Grid.Cells[Ord(icIrrigation), 0] := StrIrrigationTypeIRR;
   frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), 0] := StrEvaporationIrrigati;
+  frameIrrigation.Grid.Cells[Ord(icSWLossFracIrrigate), 0] := StrSurfaceWaterLossF;
+
   SetGridColumnProperties(frameIrrigation.Grid);
   SetUseButton(frameIrrigation.Grid, Ord(icIrrigation));
   frameIrrigation.FirstFormulaColumn := 2;
@@ -510,7 +514,8 @@ begin
   if (frmGoPhast.ModelSelection = msModflowOwhm2)
     and FFarmProcess4.IsSelected and FFarmLandUse.IsSelected
     and (FFarmLandUse.IrrigationListUsed
-      or FFarmLandUse.EvapIrrigateFractionListByCropUsed) then
+      or FFarmLandUse.EvapIrrigateFractionListByCropUsed
+      or FFarmLandUse.SwLossFracIrrigListByCropUsed) then
   begin
     ANode := jvpltvMain.Items.AddChild(CropNode, StrIrrigation) as TJvPageIndexNode;
     ANode.PageIndex := jvspIrrigation.PageIndex;
@@ -999,6 +1004,8 @@ begin
           frameIrrigation.Grid.Cells[Ord(IcIrrigation), RowIndex];
         AnItem.EvapIrrigateFraction :=
           frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), RowIndex];
+        AnItem.SurfaceWaterLossFractionIrrigation :=
+          frameIrrigation.Grid.Cells[Ord(icSWLossFracIrrigate), RowIndex];
         Inc(ItemCount);
       end;
     end;
@@ -1524,9 +1531,11 @@ begin
     for ItemIndex := 0 to Irrigation.Count - 1 do
     begin
       AnItem := Irrigation[ItemIndex];
-      frameIrrigation.Grid.Cells[Ord(rdcStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
-      frameIrrigation.Grid.Cells[Ord(rdcEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
-      frameIrrigation.Grid.Cells[Ord(rdcRootingDepth), ItemIndex+1] := AnItem.Irrigation;
+      frameIrrigation.Grid.Cells[Ord(icStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
+      frameIrrigation.Grid.Cells[Ord(icEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
+      frameIrrigation.Grid.Cells[Ord(IcIrrigation), ItemIndex+1] := AnItem.Irrigation;
+      frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), ItemIndex+1] := AnItem.EvapIrrigateFraction;
+      frameIrrigation.Grid.Cells[Ord(icSWLossFracIrrigate), ItemIndex+1] := AnItem.SurfaceWaterLossFractionIrrigation;
     end;
   finally
     frameIrrigation.Grid.EndUpdate;

@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabEfficiencyImprovement
+    ActivePage = tabAddedDemandRunoffSplit
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -16,7 +16,7 @@ inherited frameFarm: TframeFarm
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    TabHeight = 40
+    TabHeight = 50
     TabOrder = 0
     TabStop = False
     TabWidth = 80
@@ -55,16 +55,16 @@ inherited frameFarm: TframeFarm
         Left = 0
         Top = 65
         Width = 577
-        Height = 277
+        Height = 267
         Align = alClient
         TabOrder = 1
         ExplicitTop = 65
         ExplicitWidth = 577
-        ExplicitHeight = 277
+        ExplicitHeight = 267
         inherited Panel: TPanel
-          Top = 236
+          Top = 226
           Width = 577
-          ExplicitTop = 236
+          ExplicitTop = 226
           ExplicitWidth = 577
           inherited lbNumber: TLabel
             Width = 95
@@ -98,7 +98,7 @@ inherited frameFarm: TframeFarm
         end
         inherited Grid: TRbwDataGrid4
           Width = 577
-          Height = 179
+          Height = 169
           ColCount = 3
           OnSetEditText = frameFormulaGridCropsGridSetEditText
           OnButtonClick = frameFormulaGridCropsGridButtonClick
@@ -176,7 +176,7 @@ inherited frameFarm: TframeFarm
               AutoAdjustColWidths = False
             end>
           ExplicitWidth = 577
-          ExplicitHeight = 179
+          ExplicitHeight = 169
           RowHeights = (
             27
             27)
@@ -237,7 +237,7 @@ inherited frameFarm: TframeFarm
           Width = 185
           Height = 24
           EditLabel.Width = 66
-          EditLabel.Height = 24
+          EditLabel.Height = 16
           EditLabel.Caption = 'Farm name'
           LabelPosition = lpRight
           TabOrder = 2
@@ -253,13 +253,13 @@ inherited frameFarm: TframeFarm
         Left = 0
         Top = 0
         Width = 577
-        Height = 342
+        Height = 332
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 577
         ExplicitHeight = 342
         inherited Panel: TPanel
-          Top = 301
+          Top = 291
           Width = 577
           ExplicitTop = 301
           ExplicitWidth = 577
@@ -292,7 +292,7 @@ inherited frameFarm: TframeFarm
         end
         inherited Grid: TRbwDataGrid4
           Width = 577
-          Height = 244
+          Height = 234
           ColCount = 3
           OnSetEditText = frameFormulaGridEfficiencyImprovementGridSetEditText
           OnButtonClick = frameFormulaGridEfficiencyImprovementGridButtonClick
@@ -396,17 +396,15 @@ inherited frameFarm: TframeFarm
         Left = 0
         Top = 0
         Width = 577
-        Height = 342
+        Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 96
-        ExplicitTop = 24
         ExplicitWidth = 577
-        ExplicitHeight = 342
+        ExplicitHeight = 332
         inherited Panel: TPanel
-          Top = 301
+          Top = 291
           Width = 577
-          ExplicitTop = 301
+          ExplicitTop = 291
           ExplicitWidth = 577
           inherited lbNumber: TLabel
             Width = 45
@@ -437,11 +435,12 @@ inherited frameFarm: TframeFarm
         end
         inherited Grid: TRbwDataGrid4
           Width = 577
-          Height = 244
+          Height = 234
           OnSetEditText = frameFormulaGrid1GridSetEditText
           OnButtonClick = frameAddedDemandRunoffSplitGridButtonClick
+          ExplicitTop = 60
           ExplicitWidth = 577
-          ExplicitHeight = 244
+          ExplicitHeight = 234
         end
         inherited pnlTop: TPanel
           Width = 577
@@ -460,6 +459,67 @@ inherited frameFarm: TframeFarm
         end
       end
     end
+    object tabIrrigationUniformity: TTabSheet
+      Caption = 'Irrigation Uniformity'
+      ImageIndex = 9
+      inline frameIrrigationUniformity: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 332
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 56
+        ExplicitTop = 32
+        inherited Panel: TPanel
+          Top = 291
+          Width = 577
+          inherited lbNumber: TLabel
+            Width = 45
+            Height = 16
+            ExplicitWidth = 45
+            ExplicitHeight = 16
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 301
+            OnClick = frameIrrigationUniformitysbAddClick
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 357
+            OnClick = frameIrrigationUniformitysbInsertClick
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 413
+            OnClick = frameIrrigationUniformitysbDeleteClick
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 24
+            OnChange = frameIrrigationUniformityseNumberChange
+            ExplicitHeight = 24
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 577
+          Height = 234
+          OnSetEditText = frameIrrigationUniformityGridSetEditText
+          OnButtonClick = frameIrrigationUniformityGridButtonClick
+        end
+        inherited pnlTop: TPanel
+          Width = 577
+          inherited edFormula: TLabeledEdit
+            Height = 24
+            EditLabel.Width = 47
+            EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 11
+            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitHeight = 16
+            OnChange = frameIrrigationUniformityedFormulaChange
+            ExplicitHeight = 24
+          end
+        end
+      end
+    end
     object tabCosts: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Costs'
@@ -469,16 +529,16 @@ inherited frameFarm: TframeFarm
         Left = 0
         Top = 0
         Width = 577
-        Height = 342
+        Height = 332
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 577
-        ExplicitHeight = 342
+        ExplicitHeight = 332
         inherited Panel: TPanel
-          Top = 300
+          Top = 290
           Width = 577
           Height = 42
-          ExplicitTop = 300
+          ExplicitTop = 290
           ExplicitWidth = 577
           ExplicitHeight = 42
           inherited lbNumber: TLabel
@@ -513,7 +573,7 @@ inherited frameFarm: TframeFarm
         end
         inherited Grid: TRbwDataGrid4
           Width = 577
-          Height = 243
+          Height = 233
           ColCount = 10
           OnSetEditText = frameFormulaGridCostsGridSetEditText
           OnButtonClick = frameFormulaGridCostsGridButtonClick
@@ -759,7 +819,7 @@ inherited frameFarm: TframeFarm
               AutoAdjustColWidths = False
             end>
           ExplicitWidth = 577
-          ExplicitHeight = 243
+          ExplicitHeight = 233
         end
         inherited pnlTop: TPanel
           Width = 577
@@ -787,12 +847,12 @@ inherited frameFarm: TframeFarm
         Left = 0
         Top = 0
         Width = 577
-        Height = 342
+        Height = 332
         Align = alClient
         TabOrder = 0
         ExplicitHeight = 342
         inherited Panel: TPanel
-          Top = 300
+          Top = 290
           Height = 42
           ExplicitTop = 300
           ExplicitHeight = 42
@@ -834,9 +894,9 @@ inherited frameFarm: TframeFarm
           end
         end
         inherited Grid: TRbwDataGrid4
-          Height = 243
+          Height = 233
           OnSetEditText = frameFormulaGridDiversionGridSetEditText
-          ExplicitHeight = 243
+          ExplicitHeight = 233
         end
         inherited pnlTop: TPanel
           inherited lblSfrObjects: TLabel
@@ -926,12 +986,12 @@ inherited frameFarm: TframeFarm
         Left = 0
         Top = 0
         Width = 577
-        Height = 342
+        Height = 332
         Align = alClient
         TabOrder = 0
         ExplicitHeight = 342
         inherited Panel: TPanel
-          Top = 300
+          Top = 290
           Height = 42
           ExplicitTop = 300
           ExplicitHeight = 42
@@ -973,9 +1033,9 @@ inherited frameFarm: TframeFarm
           end
         end
         inherited Grid: TRbwDataGrid4
-          Height = 243
+          Height = 233
           OnSetEditText = frameFormulaGridReturnFlowGridSetEditText
-          ExplicitHeight = 243
+          ExplicitHeight = 233
           ColWidths = (
             64
             64
@@ -1071,16 +1131,16 @@ inherited frameFarm: TframeFarm
         Left = 0
         Top = 0
         Width = 577
-        Height = 342
+        Height = 332
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 577
         ExplicitHeight = 342
         inherited Panel: TPanel
-          Top = 292
+          Top = 282
           Width = 577
           Height = 50
-          ExplicitTop = 292
+          ExplicitTop = 282
           ExplicitWidth = 577
           ExplicitHeight = 50
           inherited lbNumber: TLabel
@@ -1129,7 +1189,7 @@ inherited frameFarm: TframeFarm
         end
         inherited Grid: TRbwDataGrid4
           Width = 577
-          Height = 235
+          Height = 225
           OnSetEditText = frameDeliveryGridSetEditText
           OnButtonClick = frameDeliveryGridButtonClick
           Columns = <
@@ -1182,7 +1242,7 @@ inherited frameFarm: TframeFarm
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 577
-          ExplicitHeight = 235
+          ExplicitHeight = 225
         end
         inherited pnlTop: TPanel
           Width = 577
@@ -1220,16 +1280,16 @@ inherited frameFarm: TframeFarm
         Left = 0
         Top = 0
         Width = 577
-        Height = 342
+        Height = 332
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 577
-        ExplicitHeight = 342
+        ExplicitHeight = 332
         inherited Panel: TPanel
-          Top = 300
+          Top = 290
           Width = 577
           Height = 42
-          ExplicitTop = 300
+          ExplicitTop = 290
           ExplicitWidth = 577
           ExplicitHeight = 42
           inherited lbNumber: TLabel
@@ -1264,7 +1324,7 @@ inherited frameFarm: TframeFarm
         end
         inherited Grid: TRbwDataGrid4
           Width = 577
-          Height = 243
+          Height = 233
           ColCount = 3
           OnSetEditText = frameFormulaGridWaterRightsGridSetEditText
           OnButtonClick = frameFormulaGridWaterRightsGridButtonClick
@@ -1342,7 +1402,7 @@ inherited frameFarm: TframeFarm
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 577
-          ExplicitHeight = 243
+          ExplicitHeight = 233
         end
         inherited pnlTop: TPanel
           Width = 577
@@ -1371,13 +1431,13 @@ inherited frameFarm: TframeFarm
         Left = 0
         Top = 0
         Width = 577
-        Height = 342
+        Height = 332
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 577
         ExplicitHeight = 342
         inherited Panel: TPanel
-          Top = 300
+          Top = 290
           Width = 577
           Height = 42
           ExplicitTop = 300
@@ -1412,7 +1472,7 @@ inherited frameFarm: TframeFarm
         end
         inherited Grid: TRbwDataGrid4
           Width = 577
-          Height = 243
+          Height = 233
           ColCount = 3
           OnSetEditText = frameGW_AllocationGridSetEditText
           OnButtonClick = frameGW_AllocationGridButtonClick

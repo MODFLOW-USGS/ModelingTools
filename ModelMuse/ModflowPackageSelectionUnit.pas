@@ -5731,6 +5731,8 @@ Type
     function GetEvapIrrigateFractionListByCropUsed: Boolean;
     function GetIrrigationListUsed: Boolean;
     function GetEvapIrrigateFractionListByIrrigationUsed: Boolean;
+    function GetSwLossFracIrrigListByCropUsed: Boolean;
+    function GetSwLossFracIrrigListByIrrigationUsed: Boolean;
   protected
     procedure InvalidateModel; Override;
   public
@@ -5842,8 +5844,14 @@ Type
     procedure InvalidateMultTransienAddedDemandArrays;
 
     property IrrigationListUsed: Boolean read GetIrrigationListUsed;
-    property EvapIrrigateFractionListByCropUsed: Boolean read GetEvapIrrigateFractionListByCropUsed;
-    property EvapIrrigateFractionListByIrrigationUsed: Boolean read GetEvapIrrigateFractionListByIrrigationUsed;
+    property EvapIrrigateFractionListByCropUsed: Boolean
+      read GetEvapIrrigateFractionListByCropUsed;
+    property EvapIrrigateFractionListByIrrigationUsed: Boolean
+      read GetEvapIrrigateFractionListByIrrigationUsed;
+    property SwLossFracIrrigListByCropUsed: Boolean
+      read GetSwLossFracIrrigListByCropUsed;
+    property SwLossFracIrrigListByIrrigationUsed: Boolean
+      read GetSwLossFracIrrigListByIrrigationUsed;
 
     procedure InvalidateAll;
     procedure Loaded;
@@ -5931,7 +5939,8 @@ Type
   end;
 
                         {PRINT BYFARM,   PRINT BYFARM_BYCROP,   PRINT ALL}
-  TSalinityFlushPrint = (sfpPrintByFarm, sfpPrintByFarmByCrop, sfpPrintAll);
+  TSalinityFlushPrint = (sfpPrintByFarm, sfpPrintByFarmByCrop,
+    sfpPrintByCrop, sfpPrintAll);
   TSalinityFlushPrints = set of TSalinityFlushPrint;
 
 
@@ -27465,6 +27474,20 @@ begin
   GetUseListOptions.GetBoundary := Self.GetRootDepthBoundary;
   GetUseListOptions.Description := 'FMP Root Depth';
   GetUseList(Sender, NewUseList, GetUseListOptions);
+end;
+
+function TFarmProcess4LandUse.GetSwLossFracIrrigListByCropUsed: Boolean;
+begin
+  result := IsSelected and (FractionOfIrrigationToSurfaceWater.FarmOption <> foNotUsed)
+    and (FractionOfIrrigationToSurfaceWater.ArrayList = alList)
+    and (FractionOfPrecipToSurfaceWaterIrrigationOption = ioByCrop);
+end;
+
+function TFarmProcess4LandUse.GetSwLossFracIrrigListByIrrigationUsed: Boolean;
+begin
+  result := IsSelected and (FractionOfIrrigationToSurfaceWater.FarmOption <> foNotUsed)
+    and (FractionOfIrrigationToSurfaceWater.ArrayList = alList)
+    and (FractionOfPrecipToSurfaceWaterIrrigationOption = ioByIrrigate);
 end;
 
 function TFarmProcess4LandUse.GetTranspirationFractionBoundary(

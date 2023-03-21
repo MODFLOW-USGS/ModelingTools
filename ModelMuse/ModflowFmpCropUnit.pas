@@ -52,25 +52,18 @@ type
       write SetItems; default;
   end;
 
-  // FMP Data Sets 11 and 26
-  TIrrigationRecord = record
-    StartingTime: double;
-    EndingTime: Double;
-    Irrigation: Integer;
-    IrrigationAnnotation: string;
-    EvapIrrigateFraction: Double;
-    EvapIrrigateFractionAnnotation: string;
-  end;
-
   TCropIrrigationItem = class(TCustomZeroFarmItem)
   private
     const
     IrrigationPosition = 0;
     EvapIrrigateFractionPosition = 1;
+    SurfWaterLossFracIrrPosition = 2;
     function GetIrrigation: string;
     procedure SetIrrigation(const Value: string);
     function GetEvapIrrigateFraction: string;
     procedure SetEvapIrrigateFraction(const Value: string);
+    function GetSurfaceWaterLossFractionIrrigation: string;
+    procedure SetSurfaceWaterLossFractionIrrigation(const Value: string);
   protected
     // See @link(BoundaryFormula).
     function GetBoundaryFormula(Index: integer): string; override;
@@ -81,24 +74,19 @@ type
     property Irrigation: string read GetIrrigation write SetIrrigation;
     property EvapIrrigateFraction: string read GetEvapIrrigateFraction
       write SetEvapIrrigateFraction;
+    property SurfaceWaterLossFractionIrrigation: string
+      read GetSurfaceWaterLossFractionIrrigation
+      write SetSurfaceWaterLossFractionIrrigation;
   end;
 
   // @name represents the choice of irrigation type for one crop.
   TFmp4IrrigationCollection = class(TCustomFarmCollection)
   private
-    FTimeValues: array of TIrrigationRecord;
-    function GetIrrigationTimeValues(Index: integer): TIrrigationRecord;
-    procedure SetIrrigationTimeValues(Index: integer;
-      const Value: TIrrigationRecord);
     function GetItems(Index: Integer): TCropIrrigationItem;
     procedure SetItems(Index: Integer; const Value: TCropIrrigationItem);
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
-    procedure EvaluateBoundaries;
-    property IrrigationTimeValues[Index: integer]: TIrrigationRecord
-      read GetIrrigationTimeValues write SetIrrigationTimeValues;
-    function GetIrrigationTimeValuesFromTime(StartTime: double): TIrrigationRecord;
     property Items[Index: Integer]: TCropIrrigationItem read GetItems
       write SetItems; default;
   end;
@@ -673,7 +661,7 @@ const
   KRootDepthPrefix = 'Root_Depth_';
   KGroundwaterRootInteractionPrefix = 'Groundwater_Root_Interaction_';
   KTranspirationFractionPrefix = 'Transpiration_Fraction_';
-  KEvaporationIrrigationPrefix = 'Evaporation_Irrigation_';
+  KEvaporationIrrigationPrefix = 'Evaporation_Irrigation_Fraction_';
   KSWLossFractionPrecipPrefix = 'Frac_Unconsumed_Precip_to_SW_';
   KSWLossFractionIrrigationPrefix = 'Frac_Unconsumed_Irrigation_to_SW_';
   KAddedDemandPrefix = 'Added_Demand_';
@@ -3523,13 +3511,13 @@ begin
     end;
     FCropArray[Index] := CurrentRecord;
 
-    if FarmProcess.IsSelected and FarmLandUse.IsSelected
-      and (FarmLandUse.Irrigation.FarmOption <> foNotUsed)
-      and (FarmLandUse.Irrigation.ArrayList <> alList)
-      then
-    begin
-      CurrentItem.IrrigationCollection.EvaluateBoundaries;
-    end;
+//    if FarmProcess.IsSelected and FarmLandUse.IsSelected
+//      and (FarmLandUse.Irrigation.FarmOption <> foNotUsed)
+//      and (FarmLandUse.Irrigation.ArrayList <> alList)
+//      then
+//    begin
+//      CurrentItem.IrrigationCollection.EvaluateBoundaries;
+//    end;
 
     if FarmProcess.RootingDepth = rdSpecified then
     begin
@@ -3605,7 +3593,7 @@ end;
 
 function TCropIrrigationItem.BoundaryFormulaCount: integer;
 begin
-  Result := 2;
+  Result := 3;
 end;
 
 function TCropIrrigationItem.GetBoundaryFormula(Index: integer): string;
@@ -3615,6 +3603,8 @@ begin
       result := Irrigation;
     EvapIrrigateFractionPosition:
       result := EvapIrrigateFraction;
+    SurfWaterLossFracIrrPosition:
+      result := SurfaceWaterLossFractionIrrigation;
     else Assert(False);
   end;
 end;
@@ -3631,6 +3621,12 @@ begin
   ResetItemObserver(IrrigationPosition);
 end;
 
+function TCropIrrigationItem.GetSurfaceWaterLossFractionIrrigation: string;
+begin
+  Result := FFormulaObjects[SurfWaterLossFracIrrPosition].Formula;
+  ResetItemObserver(SurfWaterLossFracIrrPosition);
+end;
+
 procedure TCropIrrigationItem.SetBoundaryFormula(Index: integer;
   const Value: string);
 begin
@@ -3639,6 +3635,8 @@ begin
       Irrigation := Value;
     EvapIrrigateFractionPosition:
       EvapIrrigateFraction := Value;
+    SurfWaterLossFracIrrPosition:
+      SurfaceWaterLossFractionIrrigation := Value;
     else Assert(False);
   end;
 end;
@@ -3661,8 +3659,19 @@ begin
   end;
 end;
 
+procedure TCropIrrigationItem.SetSurfaceWaterLossFractionIrrigation(
+  const Value: string);
+begin
+  if FFormulaObjects[SurfWaterLossFracIrrPosition].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, SurfWaterLossFracIrrPosition,
+      FFormulaObjects[SurfWaterLossFracIrrPosition]);
+  end;
+end;
+
 { TFmp4IrrigationCollection }
 
+{
 procedure TFmp4IrrigationCollection.EvaluateBoundaries;
 var
   CurrentRecord: TIrrigationRecord;
@@ -3709,37 +3718,39 @@ begin
     FTimeValues[Index] := CurrentRecord;
   end;
 end;
+}
 
-function TFmp4IrrigationCollection.GetIrrigationTimeValues(
-  Index: integer): TIrrigationRecord;
-begin
-  Assert((Index >= 0) and (Index < Length(FTimeValues)));
-  result := FTimeValues[Index];
-end;
+//function TFmp4IrrigationCollection.GetIrrigationTimeValues(
+//  Index: integer): TIrrigationRecord;
+//begin
+//  Assert((Index >= 0) and (Index < Length(FTimeValues)));
+//  result := FTimeValues[Index];
+//end;
 
-function TFmp4IrrigationCollection.GetIrrigationTimeValuesFromTime(
-  StartTime: double): TIrrigationRecord;
-var
-  Index: integer;
-  ErrorMessage: string;
-begin
-  Assert(Length(FTimeValues) > 0);
-  result := FTimeValues[0];
-  for Index := 0 to Length(FTimeValues) - 1 do
-  begin
-    if (FTimeValues[Index].StartingTime <= StartTime) then
-    begin
-      result := FTimeValues[Index];
-      if (FTimeValues[Index].EndingTime > StartTime) then
-      begin
-        Exit;
-      end;
-    end;
-  end;
-  ErrorMessage := Format(IDError, [StartTime]);
-  frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
-    StrIncompleteIrrigatio, ErrorMessage);
-end;
+
+//function TFmp4IrrigationCollection.GetIrrigationTimeValuesFromTime(
+//  StartTime: double): TIrrigationRecord;
+//var
+//  Index: integer;
+//  ErrorMessage: string;
+//begin
+//  Assert(Length(FTimeValues) > 0);
+//  result := FTimeValues[0];
+//  for Index := 0 to Length(FTimeValues) - 1 do
+//  begin
+//    if (FTimeValues[Index].StartingTime <= StartTime) then
+//    begin
+//      result := FTimeValues[Index];
+//      if (FTimeValues[Index].EndingTime > StartTime) then
+//      begin
+//        Exit;
+//      end;
+//    end;
+//  end;
+//  ErrorMessage := Format(IDError, [StartTime]);
+//  frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
+//    StrIncompleteIrrigatio, ErrorMessage);
+//end;
 
 function TFmp4IrrigationCollection.GetItems(Index: Integer): TCropIrrigationItem;
 begin
@@ -3751,12 +3762,12 @@ begin
   result := TCropIrrigationItem;
 end;
 
-procedure TFmp4IrrigationCollection.SetIrrigationTimeValues(Index: integer;
-  const Value: TIrrigationRecord);
-begin
-  Assert((Index >= 0) and (Index < Length(FTimeValues)));
-  FTimeValues[Index] := Value;
-end;
+//procedure TFmp4IrrigationCollection.SetIrrigationTimeValues(Index: integer;
+//  const Value: TIrrigationRecord);
+//begin
+//  Assert((Index >= 0) and (Index < Length(FTimeValues)));
+//  FTimeValues[Index] := Value;
+//end;
 
 procedure TFmp4IrrigationCollection.SetItems(Index: Integer;
   const Value: TCropIrrigationItem);

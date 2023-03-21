@@ -13,7 +13,8 @@ uses
 type
   TIrrigationColumn = (icNumber, icName {, icEfficiency});
 
-  TEvapFractionColumns = (efcStart, efcEnd, efcEvaporationFraction);
+  TEvapFractionColumns = (efcStart, efcEnd, efcEvaporationFraction,
+    efcSurfaceWaterLossFractionIrrigate);
 
   TfrmIrrigationTypes = class(TfrmCustomGoPhast)
     frameIrrigationTypes: TframeGrid;
@@ -60,7 +61,8 @@ type
       Grid: TRbwDataGrid4);
     procedure EvapFractionTable(Model: TCustomModel);
     procedure GeEvapFraction(EvapFraction: TFmp4EvapFractionCollection);
-    procedure CreateChildNodes(IrrigationItem: TIrrigationItem; IrrigationNode: TJvPageIndexNode);
+    procedure CreateChildNodes(IrrigationItem: TIrrigationItem;
+      IrrigationNode: TJvPageIndexNode);
     procedure GetIrrigationTypeNames;
     { Private declarations }
   public
@@ -92,6 +94,9 @@ uses
 resourcestring
   StrErrorInFormulaS = 'Error in formula: %s';
   StrEvaporationIrrigati = 'Evaporation Irrigation Fraction';
+  StrSurfaceWaterLossF = 'Surface Water Loss Fraction Irrigation';
+  StrIrrigationFractions = 'Irrigation Fractions';
+  StrIrrigationTypes = 'Irrigation Types';
 
 {$R *.dfm}
 
@@ -182,9 +187,11 @@ begin
   if (frmGoPhast.ModelSelection = msModflowOwhm2)
     and FFarmProcess4.IsSelected and FFarmLandUse.IsSelected
     and (FFarmLandUse.IrrigationListUsed
-      or FFarmLandUse.EvapIrrigateFractionListByIrrigationUsed) then
+      or FFarmLandUse.EvapIrrigateFractionListByIrrigationUsed
+      or FFarmLandUse.SwLossFracIrrigListByIrrigationUsed) then
   begin
-    ANode := jvpltvMain.Items.AddChild(IrrigationNode, StrEvaporationIrrigati) as TJvPageIndexNode;
+    ANode := jvpltvMain.Items.AddChild(
+      IrrigationNode, StrIrrigationFractions) as TJvPageIndexNode;
     ANode.PageIndex := jvspEvapFraction.PageIndex;
     ANode.Data := IrrigationItem.EvapFraction;
   end;
@@ -206,9 +213,12 @@ begin
     frameIrrigationTypes.seNumber.AsInteger := FIrrigationTypes.Count;
     for Index := 0 to FIrrigationTypes.Count - 1 do
     begin
-      frameIrrigationTypes.Grid.Cells[Ord(icNumber), Index + 1] := IntToStr(Index + 1);
-      frameIrrigationTypes.Grid.Cells[Ord(icName), Index + 1] := FIrrigationTypes[Index].Name;
-      frameIrrigationTypes.Grid.Objects[Ord(icName), Index + 1] := FIrrigationTypes[Index];
+      frameIrrigationTypes.Grid.Cells[Ord(icNumber), Index + 1] :=
+        IntToStr(Index + 1);
+      frameIrrigationTypes.Grid.Cells[Ord(icName), Index + 1] :=
+        FIrrigationTypes[Index].Name;
+      frameIrrigationTypes.Grid.Objects[Ord(icName), Index + 1] :=
+        FIrrigationTypes[Index];
     end;
   finally
     frameIrrigationTypes.Grid.EndUpdate;
@@ -336,6 +346,8 @@ begin
         AnItem.EndTime := EndTime;
         AnItem.EvapIrrigateFraction :=
           frameEvaporationFractions.Grid.Cells[Ord(efcEvaporationFraction), RowIndex];
+        AnItem.SurfaceWaterLossFractionIrrigation :=
+          frameEvaporationFractions.Grid.Cells[Ord(efcSurfaceWaterLossFractionIrrigate), RowIndex];
         Inc(ItemCount);
       end;
     end;
@@ -438,6 +450,8 @@ begin
         FloatToStr(AnItem.EndTime);
       frameEvaporationFractions.Grid.Cells[Ord(efcEvaporationFraction), ItemIndex+1] :=
         AnItem.EvapIrrigateFraction;
+      frameEvaporationFractions.Grid.Cells[Ord(efcSurfaceWaterLossFractionIrrigate), ItemIndex+1] :=
+        AnItem.SurfaceWaterLossFractionIrrigation;
     end;
   finally
     frameEvaporationFractions.Grid.EndUpdate;
@@ -482,7 +496,7 @@ begin
     FIrrigationTypes.Assign(frmGoPhast.PhastModel.IrrigationTypes);
     GetIrrigationTypeNames;
 
-    FIrrigationTypesNode := jvpltvMain.Items.Add(nil, 'Irrigation Types') as TJvPageIndexNode;
+    FIrrigationTypesNode := jvpltvMain.Items.Add(nil, StrIrrigationTypes) as TJvPageIndexNode;
     FIrrigationTypesNode.PageIndex := jvspIrrigationTypes.PageIndex;
     FIrrigationTypesNode.Data := FIrrigationTypes;
 
@@ -557,7 +571,6 @@ begin
     end;
     IrrigationItem.Index := RowIndex -1;
     IrrigationItem.Name := frameIrrigationTypes.Grid.Cells[Ord(icName), RowIndex];
-//    IrrigationItem.Efficiency := frameIrrigationTypes.Grid.RealValueDefault[Ord(icEfficiency), RowIndex, 0];
   end;
 
   if FIrrigationTypes.IsSame(frmGoPhast.PhastModel.IrrigationTypes) then
@@ -601,14 +614,16 @@ end;
 
 procedure TfrmIrrigationTypes.EvapFractionTable(Model: TCustomModel);
 begin
-//  TEvapFractionColumns = (efcStart, efcEnd, efcEvaporationFraction);
-  frameEvaporationFractions.Grid.ColCount := 3;
+  frameEvaporationFractions.Grid.ColCount := 4;
   frameEvaporationFractions.Grid.FixedCols := 0;
   frameEvaporationFractions.Grid.Columns[Ord(efcStart)].Format := rcf4Real;
   frameEvaporationFractions.Grid.Columns[Ord(efcEnd)].Format := rcf4Real;
   frameEvaporationFractions.Grid.Cells[Ord(efcStart), 0] := StrStartingTime;
   frameEvaporationFractions.Grid.Cells[Ord(efcEnd), 0] := StrEndingTime;
-  frameEvaporationFractions.Grid.Cells[Ord(efcEvaporationFraction), 0] := StrEvaporationIrrigati;
+  frameEvaporationFractions.Grid.Cells[Ord(efcEvaporationFraction), 0] :=
+    StrEvaporationIrrigati;
+  frameEvaporationFractions.Grid.Cells[Ord(efcSurfaceWaterLossFractionIrrigate), 0] :=
+    StrSurfaceWaterLossF;
   SetGridColumnProperties(frameEvaporationFractions.Grid);
   SetUseButton(frameEvaporationFractions.Grid, Ord(efcEvaporationFraction));
   frameEvaporationFractions.FirstFormulaColumn := 2;
