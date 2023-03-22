@@ -21,13 +21,16 @@ type
     procedure Assign(Source: TPersistent); override;
   end;
 
-  TCustomZeroFarmItem = class(TCustomFarmItem)
+  TCustomDefaultFormulaItem = class(TCustomFarmItem)
   protected
-    procedure SetFormulasToZero;
+    class function DefaultFormula: string; virtual;
+    procedure SetFormulasToDefault;
   public
     constructor Create(Collection: TCollection); override;
     Destructor Destroy; override;
   end;
+
+  TCustomZeroFarmItem = TCustomDefaultFormulaItem;
 
   TCustomFarmCollection = class(TCustomNonSpatialBoundColl)
   public
@@ -37,6 +40,38 @@ type
       StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean);
   end;
+
+  // @name is used to define list properties for MODFLOW OWHM version 2.
+  TOwhmItem = class(TCustomDefaultFormulaItem)
+  private
+  const
+    OwhmValuePosition = 0;
+    function GetOwhmValue: string;
+    procedure SetOwhmValue(const Value: string);
+  protected
+    // See @link(BoundaryFormula).
+    function GetBoundaryFormula(Index: integer): string; override;
+    // See @link(BoundaryFormula).
+    procedure SetBoundaryFormula(Index: integer; const Value: string); override;
+    function BoundaryFormulaCount: integer; override;
+  published
+    property OwhmValue: string read GetOwhmValue write SetOwhmValue;
+
+  end;
+
+  // @name is used to define list properties for MODFLOW OWHM version 2.
+  TOwhmCollection = class(TCustomFarmCollection)
+  private
+    function GetItem(Index: Integer): TOwhmItem;
+    procedure SetItem(Index: Integer; const Value: TOwhmItem);
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  public
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+    property Items[Index: Integer]: TOwhmItem read GetItem
+      write SetItem;  default;
+    function First: TOwhmItem;
+ end;
 
 implementation
 
@@ -125,27 +160,6 @@ end;
 
 { TCustomZeroFarmItem }
 
-constructor TCustomZeroFarmItem.Create(Collection: TCollection);
-begin
-  inherited;
-  SetFormulasToZero;
-end;
-
-destructor TCustomZeroFarmItem.Destroy;
-begin
-  SetFormulasToZero;
-  inherited;
-end;
-
-procedure TCustomZeroFarmItem.SetFormulasToZero;
-var
-  Index: integer;
-begin
-  for Index := 0 to BoundaryFormulaCount - 1 do
-  begin
-    BoundaryFormula[Index] := '0';
-  end;
-end;
 
 { TCustomFarmCollection }
 
@@ -219,6 +233,105 @@ begin
     begin
       EndRangeExtended := True;
     end;
+  end;
+end;
+
+{ TOwhmItem }
+
+function TOwhmItem.BoundaryFormulaCount: integer;
+begin
+  result := 1;
+end;
+
+function TOwhmItem.GetBoundaryFormula(Index: integer): string;
+begin
+  case Index of
+    OwhmValuePosition:
+      result := OwhmValue;
+    else
+      Assert(False);
+  end;
+end;
+
+function TOwhmItem.GetOwhmValue: string;
+begin
+  Result := FFormulaObjects[OwhmValuePosition].Formula;
+  ResetItemObserver(OwhmValuePosition);
+end;
+
+procedure TOwhmItem.SetBoundaryFormula(Index: integer; const Value: string);
+begin
+  case Index of
+    OwhmValuePosition:
+      OwhmValue := Value;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TOwhmItem.SetOwhmValue(const Value: string);
+begin
+  if FFormulaObjects[OwhmValuePosition].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, OwhmValuePosition, FFormulaObjects[OwhmValuePosition]);
+  end;
+end;
+
+{ TOwhmCollection }
+
+function TOwhmCollection.First: TOwhmItem;
+begin
+  result := inherited First as TOwhmItem;
+end;
+
+function TOwhmCollection.GetItem(Index: Integer): TOwhmItem;
+begin
+  result := inherited Items[index] as TOwhmItem;
+end;
+
+function TOwhmCollection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+begin
+  result := (AnOrderedCollection is TOwhmCollection)
+    and inherited IsSame(AnOrderedCollection);
+end;
+
+class function TOwhmCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TOwhmItem;
+end;
+
+procedure TOwhmCollection.SetItem(Index: Integer; const Value: TOwhmItem);
+begin
+  inherited Items[index] := Value;
+end;
+
+{ TCustomDefaultFormulaItem }
+
+constructor TCustomDefaultFormulaItem.Create(Collection: TCollection);
+begin
+  inherited;
+  SetFormulasToDefault;
+end;
+
+class function TCustomDefaultFormulaItem.DefaultFormula: string;
+begin
+  result := '0';
+end;
+
+destructor TCustomDefaultFormulaItem.Destroy;
+begin
+  SetFormulasToDefault;
+  inherited;
+end;
+
+procedure TCustomDefaultFormulaItem.SetFormulasToDefault;
+var
+  Index: integer;
+begin
+  for Index := 0 to BoundaryFormulaCount - 1 do
+  begin
+    BoundaryFormula[Index] := DefaultFormula;
   end;
 end;
 

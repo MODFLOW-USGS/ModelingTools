@@ -297,8 +297,9 @@ type
       write SetItem;  default;
   end;
 
-  // @name represents the crop efficiency for one crop for one farm for one
-  // time period. FMP Data sets 7 or 24.
+  // @name orginally represented the crop efficiency for one crop for one farm
+  // for one time period. FMP Data sets 7 or 24.
+  // It is now used for other purposes too.
   TCropEfficiencyItem = class(TCustomZeroFarmItem)
   private
   const
@@ -315,8 +316,9 @@ type
     property Efficiency: string read GetEfficiency write SetEfficiency;
   end;
 
-  // @name represents the crop efficiencies for one crop for one farm over
-  // multiple time periods. FMP Data sets 7 or 24.
+  // @name orginally represented the crop efficiencies for one crop for one
+  // farm over multiple time periods. FMP Data sets 7 or 24.
+  // It is now used for other purposes too.
   TCropEfficiencyCollection = class(TCustomFarmCollection)
   private
     FCropName: string;
@@ -337,6 +339,7 @@ type
 
   // @name represents the crop efficiencies for one crop for one farm over
   // multiple time periods. FMP Data sets 7 or 24.
+  // It is now used for other purposes too.
   TFarmEfficienciesItem = class(TOrderedItem)
   private
     FCropEfficiency: TCropEfficiencyCollection;
@@ -352,9 +355,10 @@ type
   end;
 
   // name defines a farm.
-  // @name represents the crop or irrigation efficiencies or efficiency improvements 
+  // @name represents the crop or irrigation efficiencies or efficiency improvements
   // for all crops or irrigation types for one farm over
   // multiple time periods. FMP Data sets 7 or 24.
+  // It is now used for other purposes too.
   TFarmEfficiencyCollection = class(TEnhancedOrderedCollection)
   private
     function GetItem(Index: Integer): TFarmEfficienciesItem;
@@ -366,6 +370,16 @@ type
     property Items[Index: Integer]: TFarmEfficienciesItem read GetItem
       write SetItem; default;
     property First: TFarmEfficienciesItem read GetFirst;
+  end;
+
+  TDefaultScenarioItem = class(TOwhmItem)
+  protected
+    class function DefaultFormula: string; override;
+  end;
+
+  TDefaultScenarioCollection = class(TOwhmCollection)
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
   end;
 
   TFarm = class(TOrderedItem)
@@ -383,6 +397,7 @@ type
     FFarmIrrigationEfficiencyImprovementCollection: TFarmEfficiencyCollection;
     FAddedDemandRunoffSplitCollection: TFarmEfficiencyCollection;
     FIrrigationUniformity: TFarmEfficiencyCollection;
+    FDefaultScenario: TDefaultScenarioCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -408,6 +423,7 @@ type
     procedure SetAddedDemandRunoffSplitCollection(
       const Value: TFarmEfficiencyCollection);
     procedure SetIrrigationUniformity(const Value: TFarmEfficiencyCollection);
+    procedure SetDefaultScenario(const Value: TDefaultScenarioCollection);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -473,6 +489,12 @@ type
       // WBS_IRRIGATION_UNIFORMITY in OWHM verison 2
       property IrrigationUniformity: TFarmEfficiencyCollection
         read FIrrigationUniformity write SetIrrigationUniformity
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      property DefaultScenario: TDefaultScenarioCollection read FDefaultScenario
+        write SetDefaultScenario
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -1211,6 +1233,7 @@ begin
     FarmIrrigationEfficiencyImprovementCollection := SourceFarm.FarmIrrigationEfficiencyImprovementCollection;
     AddedDemandRunoffSplitCollection := SourceFarm.AddedDemandRunoffSplitCollection;
     IrrigationUniformity := SourceFarm.IrrigationUniformity;
+    DefaultScenario := SourceFarm.DefaultScenario;
   end
   else
   begin
@@ -1259,10 +1282,12 @@ begin
   FFarmIrrigationEfficiencyImprovementCollection := TFarmEfficiencyCollection.Create(LocalModel);
   FAddedDemandRunoffSplitCollection := TFarmEfficiencyCollection.Create(LocalModel);
   FIrrigationUniformity := TFarmEfficiencyCollection.Create(LocalModel);
+  FDefaultScenario := TDefaultScenarioCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FDefaultScenario.Free;
   FIrrigationUniformity.Free;
   FAddedDemandRunoffSplitCollection.Free;
   FFarmIrrigationEfficiencyImprovementCollection.Free;
@@ -1328,6 +1353,7 @@ begin
         SourceFarm.AddedDemandRunoffSplitCollection)
       and IrrigationUniformity.IsSame(
         SourceFarm.IrrigationUniformity)
+      and DefaultScenario.IsSame(SourceFarm.DefaultScenario)
   end;
 
 end;
@@ -1353,6 +1379,11 @@ begin
     Assert(False);
     {$ENDIF}
   end;
+end;
+
+procedure TFarm.SetDefaultScenario(const Value: TDefaultScenarioCollection);
+begin
+  FDefaultScenario.Assign(Value);
 end;
 
 procedure TFarm.SetDeliveryParamCollection(
@@ -1497,6 +1528,10 @@ begin
   {$ENDIF}
   end;
 
+  {$IFDEF OWHMV2}
+    AddBoundaryTimes(DefaultScenario, Times, StartTestTime, EndTestTime,
+      StartRangeExtended, EndRangeExtended);
+  {$ENDIF}
 end;
 
 function TFarm.Used: boolean;
@@ -2057,6 +2092,20 @@ begin
   finally
     List.Free;
   end;
+end;
+
+{ TDefaultScenarioItem }
+
+class function TDefaultScenarioItem.DefaultFormula: string;
+begin
+  result := '1';
+end;
+
+{ TDefaultScenarioCollection }
+
+class function TDefaultScenarioCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TDefaultScenarioItem;
 end;
 
 end.

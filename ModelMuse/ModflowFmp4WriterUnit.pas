@@ -20,7 +20,7 @@ type
     wlIrrigation, wlRootDepth, wlGwRootInteraction, wlTranspirationFraction,
     wlEvaporationIrrigationFraction, wlFractionOfPrecipToSurfaceWater,
     wlFractionOfIrrigToSurfaceWater, wlAddedDemand, wlCropHasSalinityDemand,
-    wlAddedDemandRunoffSplit, wlIrrigationUniformity);
+    wlAddedDemandRunoffSplit, wlIrrigationUniformity, wlDeficiencyScenario);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -128,6 +128,7 @@ type
     FAddedDemandRunoffSplitFileStream: TFileStream;
     FNWBS: Integer;
     FIrrigationUniformityFileStream: TFileStream;
+    FDeficiencyScenarioFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -160,6 +161,8 @@ type
 
     procedure EvaluateEfficiencyImprovement;
     procedure WriteEfficiencyImprovement;
+
+    procedure WriteDeficiencyScenario;
 
     procedure EvaluateBareRunoffFraction;
     procedure WriteBareRunoffFraction;
@@ -331,7 +334,7 @@ uses
   frmErrorsAndWarningsUnit, ModflowFmpWriterUnit,
   ModflowFmpFarmIdUnit, ModflowUnitNumbers, frmProgressUnit, ModflowFmpEvapUnit,
   ModflowFmpPrecipitationUnit, ModflowFmpFarmUnit, System.Math, System.StrUtils,
-  ModflowFmpIrrigationUnit, ModflowFmpCropUnit;
+  ModflowFmpIrrigationUnit, ModflowFmpCropUnit, ModflowFmpBaseClasses;
 
 resourcestring
   StrUndefinedError = 'Undefined %s in one or more stress periods';
@@ -524,6 +527,143 @@ begin
   FSurfaceWater4 := Model.ModflowPackages.FarmSurfaceWater4;
   FSoils := Model.ModflowPackages.FarmSoil4;
   FSalinityFlush := Model.ModflowPackages.FarmSalinityFlush;
+end;
+
+procedure TModflowFmp4Writer.WriteDeficiencyScenario;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: Double;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  Formula: string;
+  DSItem: TOwhmItem;
+begin
+  if FFarmProcess4.DeficiencyScenario.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlDeficiencyScenario);
+
+  RequiredValues.WriteLocation := wlDeficiencyScenario;
+  RequiredValues.DefaultValue := 1;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: DEFICIENCY_SCENARIO';
+  RequiredValues.ErrorID := 'FMP WBS: DEFICIENCY_SCENARIO';
+  RequiredValues.ID := 'DEFICIENCY_SCENARIO';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.DeficiencyScenario.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := 'Invalid Deficiency Scenario value';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FFarmProcess4.DeficiencyScenario;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsAndID(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+  if ExternalFileName = '' then
+  begin
+    if RequiredValues.WriteTransientData then
+    begin
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              WriteInteger(1);
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            DSItem := AFarm.DefaultScenario.ItemByStartTime(StartTime) as TOwhmItem;
+
+            if DSItem <> nil then
+            begin
+              Formula := DSItem.OwhmValue;
+              WriteIntegerValueFromGlobalFormula(Formula,
+                AFarm, AFarm.FarmName);
+            end
+            else
+            begin
+              WriteInteger(1);
+            end;
+
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            WriteInteger(1);
+            Inc(FarmID);
+            NewLine;
+          end;
+
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          DSItem := AFarm.DefaultScenario.First;
+
+          if DSItem <> nil then
+          begin
+            Formula := DSItem.OwhmValue;
+            WriteIntegerValueFromGlobalFormula(Formula,
+              AFarm, AFarm.FarmName);
+          end
+          else
+          begin
+            WriteInteger(1);
+          end;
+
+          Inc(FarmID);
+          NewLine;
+        end;
+
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
 end;
 
 destructor TModflowFmp4Writer.Destroy;
@@ -873,7 +1013,7 @@ begin
   FreeAndNil(FCropHasSalinityDemandFileStream);
   FreeAndNil(FAddedDemandRunoffSplitFileStream);
   FreeAndNil(FIrrigationUniformityFileStream);
-
+  FreeAndNil(FDeficiencyScenarioFileStream);
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -1185,6 +1325,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlDeficiencyScenario:
+      begin
+        result := ChangeFileExt(FBaseName, '.DEFICIENCY_SCENARIO');
+        if FDeficiencyScenarioFileStream = nil then
+        begin
+          FDeficiencyScenarioFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -1350,6 +1499,7 @@ begin
         result := ScreenObject.Fmp4AddedDemandRunoffSplitBoundary;
       end;
     wlIrrigationUniformity: ;
+    wlDeficiencyScenario: ;
     else Assert(False);
   end;
 end;
@@ -1401,6 +1551,7 @@ begin
     wlCropHasSalinityDemand: result := FCropHasSalinityDemand;
     wlAddedDemandRunoffSplit: result := FAddedDemandRunoffSplit;
     wlIrrigationUniformity: ;
+    wlDeficiencyScenario: ;
     else Assert(False)
   end;
 end;
@@ -5363,6 +5514,11 @@ begin
           Assert(FIrrigationUniformityFileStream <> nil);
           FIrrigationUniformityFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlDeficiencyScenario:
+        begin
+          Assert(FDeficiencyScenarioFileStream <> nil);
+          FDeficiencyScenarioFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -5480,8 +5636,7 @@ begin
   WriteFarmLocation;
   WriteEfficiency;
   WriteEfficiencyImprovement;
-
-  //Deficiency Scenario
+  WriteDeficiencyScenario;
 
   if (FFarmProcess4.DeficiencyScenario.FarmOption <> foNotUsed) then
   begin

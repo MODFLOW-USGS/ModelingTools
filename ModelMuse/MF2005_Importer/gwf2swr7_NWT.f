@@ -1435,8 +1435,8 @@ C       ANY OF THESE VARIABLES
           RTIME = RTMAX
         END IF
       END IF
-      WRITE(IOUT, '(A90)') 'DLENCONV, TIMECONV, RTINI, RTMIN, RTMAX,
-     1 RTPRN, RTMULT, NTMULT, DMINGRAD, DMNDEPTH:'
+      WRITE(IOUT, '(A90)') 'DLENCONV, TIMECONV, RTINI, RTMIN, RTMAX, '
+     1 // 'RTPRN, RTMULT, NTMULT, DMINGRAD, DMNDEPTH:'
       WRITE(IOUT, *) DLENCONV, TIMECONV, RTIME, RTMIN, RTMAX, RTPRN,
      1   RTMULT, NTMULT, DMINGRAD, DMINDPTH
 C     SET RTSTMAX NOW THAT RTMAX IS FINAL FOR AT LEAST THE FIRST STRESS PERIOD
@@ -1506,8 +1506,8 @@ C-------RESET DAMPTR IF .LE. ZERO
       CALL URWORD(line, lloc, istart, istop, 2, IPRSWR,    r, IOUT, In)
       IF ( IPRSWR.LT.1 ) IPRSWR = 999
       CALL URWORD(line, lloc, istart, istop, 2, MUTSWR,    r, IOUT, In)
-      WRITE(IOUT, *) 'ISOLVER,NOUTER,NINNER,IBT,TOLS,TOLR,TOLA,
-     1DAMPSS,DAMPTR,IPRSWR,MUTSWR:'
+      WRITE(IOUT, *) 'ISOLVER,NOUTER,NINNER,IBT,TOLS,TOLR,TOLA,'
+     1 // 'DAMPSS,DAMPTR,IPRSWR,MUTSWR:'
       WRITE(IOUT, *) ISOLVER,NOUTER,NINNER,IBT,TOLS,TOLR,TOLA,
      1  DAMPSS,DAMPTR,IPRSWR,MUTSWR
       IPC    = 0
@@ -2457,8 +2457,8 @@ C-------READ REST OF STRESS PERIOD DATA FLAGS - INPUT ITEM 5
       CALL URWORD(line, lloc, istart, istop, 2, IRDSTR, r, IOUT, In)
       CALL URWORD(line, lloc, istart, istop, 2, IRDSTG, r, IOUT, In)
       CALL URWORD(line, lloc, istart, istop, 2, IPTFLG, r, IOUT, In)
-      WRITE(IOUT,*) 'ITMP, IRDBND, IRDRAI, IRDEVP, IRDLIN, IRDGEO,
-     1 IRDSTR, IRDSTG, IPTFLG:'
+      WRITE(IOUT,*) 'ITMP, IRDBND, IRDRAI, IRDEVP, IRDLIN, IRDGEO,'
+     1 // ' IRDSTR, IRDSTG, IPTFLG:'
       WRITE(IOUT,*) ITMP, IRDBND, IRDRAI, IRDEVP, IRDLIN, IRDGEO,
      1 IRDSTR, IRDSTG, IPTFLG
       IF ( NAUX.GT.0 ) THEN
@@ -2964,8 +2964,8 @@ C-----------READ IRREGULAR GEOMETRY AND SPECIFIED RATING CURVE
                 WRITE(IOUT,*), 'XB(I) ELEVB(I):'
                 WRITE(IOUT,*), geostor(j,1), geostor(j,2)
               ELSE IF ( igeotype.EQ.4 ) THEN
-                WRITE(IOUT,*), 'ELEV(I) VOL(I) WETPER(I) SAREA(I)
-     1 XAREA(I):'
+                WRITE(IOUT,*), 'ELEV(I) VOL(I) WETPER(I) SAREA(I)'
+     1 // ' XAREA(I):'
                 WRITE(IOUT,*), geostor(j,1), geostor(j,2),
      1           geostor(j,3), geostor(j,4), geostor(j,5)
               END IF
@@ -3312,8 +3312,8 @@ C               UPDATE GATE BOTTOM
      2          REACH(istrrch)%STRUCT(istrnum)%STRINV + SSWR_R2D(r)
               CALL URWORD(line,lloc,istart,istop,2,ival,r,IOUT,iut)
               REACH(istrrch)%STRUCT(istrnum)%ISTRDIR = ival
-              WRITE(IOUT,*) 'STRCD, STRCD3, STRINV, STRWID, STRVAL,
-     1 ISTRDIR:'
+              WRITE(IOUT,*) 'STRCD, STRCD3, STRINV, STRWID, STRVAL,'
+     1 // ' ISTRDIR:'
               WRITE(IOUT,*) REACH(istrrch)%STRUCT(istrnum)%STRCD,
      1          REACH(istrrch)%STRUCT(istrnum)%STRCD3,
      2          REACH(istrrch)%STRUCT(istrnum)%STRINV,
@@ -3345,8 +3345,8 @@ C               UPDATE GATE TOP
      2          REACH(istrrch)%STRUCT(istrnum)%STRINV + SSWR_R2D(r)
               CALL URWORD(line,lloc,istart,istop,2,ival,r,IOUT,iut)
               REACH(istrrch)%STRUCT(istrnum)%ISTRDIR = ival
-              WRITE(IOUT,*) 'STRCD, STRCD2, STRCD3, STRINV, STRWID,
-     1 STRVAL, ISTRDIR:'
+              WRITE(IOUT,*) 'STRCD, STRCD2, STRCD3, STRINV, STRWID,'
+     1 // ' STRVAL, ISTRDIR:'
               WRITE(IOUT,*) REACH(istrrch)%STRUCT(istrnum)%STRCD,
      1          REACH(istrrch)%STRUCT(istrnum)%STRCD2,
      1          REACH(istrrch)%STRUCT(istrnum)%STRCD3,

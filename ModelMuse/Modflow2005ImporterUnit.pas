@@ -15845,7 +15845,7 @@ begin
     end
     else
     begin
-      Assert(False);
+      Assert(False, Format('Unrecognized label %s', [ALabel]));
     end;
   end
   else
@@ -15911,7 +15911,7 @@ begin
     else
     begin
 //      ShowMessage(ALabel);
-      Assert(False);
+      Assert(False, Format('Unrecognized label %s', [ALabel]));
     end;
   end;
 end;
@@ -17568,7 +17568,7 @@ begin
   end
   else
   begin
-    Assert(False);
+    Assert(False, Format('Unrecognized label %s', [ALabel]));
   end;
 end;
 
@@ -25830,7 +25830,7 @@ begin
   end
   else
   begin
-    Assert(False);
+    Assert(False, Format('Unrecognized label %s', [ALabel]));
   end;
 
 end;
@@ -28399,7 +28399,7 @@ begin
   end
   else
   begin
-    Assert(False);
+    Assert(False, Format('Unrecognized label %s', [ALabel]));
   end;
 
 end;
@@ -34357,7 +34357,7 @@ begin
   end
   else
   begin
-    Assert(False);
+    Assert(False, Format('Unrecognized label %s', [ALabel]));
   end;
 end;
 
